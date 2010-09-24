@@ -1,6 +1,25 @@
 #
 # Copyright (C) 2010 IBM Corporation and Others, All Rights Reserved.
 #
+all: glurens ii plugs testprog
+
+UNAME=$(shell uname)
+
+ifeq ($(UNAME),Linux)
+LIBPATH_VAR=LD_LIBRARY_PATH
+PLUG_EXTRA_LDFLAGS=-fPIC
+PBLD_EXTRA_FLAGS=-fPIC
+GLUE_EXTRA_CFLAGS= -fPIC
+else
+ifeq ($(UNAME),Darwin)
+LIBPATH_VAR=DYLD_LIBRARY_PATH
+PLUG_EXTRA_LDFLAGS=-exported_symbols_list glue/export.txt -dynamiclib -dynamic
+else
+$(warning **********************************)
+$(warning this script may not know how to handle your $(UNAME) system)
+endif
+endif
+
 
 ## configuration
 # Absolute path to this dir. 
@@ -45,7 +64,7 @@ GLUREN_ICU=$(ICU_TARBALLS_VERS:%=$(BUILD)/%/$(GLUREN_H))
 #?
 CONFIGURE_CMD=
 # Options passed to configure
-CONFIGURE_OPTS=--enable-static --disable-shared --with-data-packaging=static --disable-extras --disable-icuio --disable-layout --disable-tests --disable-samples  $(EXTRA_CONFIGURE_OPTS)
+CONFIGURE_OPTS=--enable-static --disable-shared --with-data-packaging=static --disable-extras --disable-icuio --disable-layout --disable-tests --disable-samples  $(EXTRA_CONFIGURE_OPTS) CFLAGS=$(PBLD_EXTRA_FLAGS) CXXFLAGS=$(PBLD_EXTRA_FLAGS)
 # additional options passed to make
 MAKE_XTRA_OPTS="PKGDATA_MODE=static"
 # additional options passed to make install
@@ -60,7 +79,8 @@ GL_FE_C=$(shell cd $(GLUE) ; ls *_fe.c)
 GL_FE_CXX=$(shell cd $(GLUE) ; ls *_fe.cpp)
 GL_FE_O=$(GL_FE_C:%.c=%.o) $(GL_FE_CPP:%.cpp=%.o)
 # C flags used in Glue compilation
-GLUE_CFLAGS=-I$(INCGLUE)
+GLUE_CFLAGS=-I$(INCGLUE) $(GLUE_EXTRA_CFLAGS)
+
 
 # icu-config switches for compiling: C and C++
 ICU_CONFIG_COMMON=--cppflags
@@ -147,31 +167,28 @@ $(C_INS)/r$(PLUGLIB)/lib/$(PLUGLIB_NAME) $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins
 	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
 
 $(OUT)/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
-	echo "$^	coll_provider_plugin" > $@
+	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $@
 
 TESTPROG=coldiff
 
 testprog: $(PLUGLIB:%=$(OUT)/%/bin/$(TESTPROG))
 
 check: testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
-	ICU_PLUGINS=$(OUT) DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
-	ICU_PLUGINS=$(OUT) DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
-	ICU_PLUGINS=$(OUT) DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
+	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib:out/$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
+	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib:out/$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
+	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
 
 install-check: install-plugs
-	DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
-	DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
-
-#	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX))
+	$(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
+	$(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
 
 $(OUT)/%/bin/$(TESTPROG): $(TESTPROG).cpp
 	-mkdir -p $(OUT)/$*/bin
 	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -o $@ $^
 
-#$(GLOUT)/$%/obj-$(OK)
 $(OUT)/%/lib/$(PLUGLIB_NAME): 
 	-mkdir -p $(OUT)/$*/lib
-	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -dynamiclib -exported_symbols_list glue/export.txt -dynamic -o $@ $(GLOUT)/$*/*.o $(PLUGLIB_TARGET_DATA) $(PLUGLIB_TARGET_STATICS)
+	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) $(PLUG_EXTRA_LDFLAGS) -shared -o $@ $(GLOUT)/$*/*.o $(PLUGLIB_TARGET_DATA) $(PLUGLIB_TARGET_STATICS)
 	cp $@ $(C_INS)/r$*/lib/
 
 $(OUT)/%/lib/$(LIBPROVIDER):  $(GLOUT)/%/obj-$(OK)
@@ -225,13 +242,13 @@ $(BUILD)/%/config.status: $(SRC)/%/ok
 	@echo "Configging" $*
 	-[ -d $(BUILD)/$* ] && rm -rf $(BUILD)/$*
 	mkdir -p $(BUILD)/$*
-	( cd $(BUILD)/$* && $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --
-srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
+	( cd $(BUILD)/$* && $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
 
 # build 
 $(BUILD)/%/ok: $(BUILD)/%/config.status
 	@echo "Building" $*
 	( $(MAKE)  $(MOPTS) -C $(BUILD)/$* all $(MAKE_XTRA_OPTS) )
+	-rm -f $(BUILD)/$*/i18n/uregex*.*
 	touch $@
 
 #	( cd $(BUILD_ICU)/% ; echo tar xvfpz $(ICUS)/icu4c-$*-src.tgz )
