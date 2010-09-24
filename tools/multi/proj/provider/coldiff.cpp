@@ -10,6 +10,8 @@
 #include <unicode/coll.h>
 #include <unicode/uclean.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 
 /* String to use. */
