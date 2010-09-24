@@ -34,7 +34,6 @@ import java.util.Arrays;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
-import com.ibm.icu.lang.UCharacterEnums;
 
 /**
  *
@@ -568,6 +567,7 @@ public class Bidi {
      *    that the source string is missing or empty, or contains neither 
      *    left-to-right nor right-to-left characters. 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte NEUTRAL = 3;
 
@@ -4884,6 +4884,7 @@ public class Bidi {
      * @see #RTL
      * @see #NEUTRAL
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static byte getBaseDirection(CharSequence paragraph) {
         if (paragraph == null || paragraph.length() == 0) {
@@ -4898,10 +4899,10 @@ public class Bidi {
             // U16_NEXT(paragraph, i, length, c) for C++
             c = UCharacter.codePointAt(paragraph, i);
             direction = UCharacter.getDirectionality(c);
-            if (direction == UCharacterEnums.ECharacterDirection.DIRECTIONALITY_LEFT_TO_RIGHT) {
+            if (direction == UCharacterDirection.LEFT_TO_RIGHT) {
                 return LTR;
-            } else if (direction == UCharacterEnums.ECharacterDirection.DIRECTIONALITY_RIGHT_TO_LEFT
-                || direction == UCharacterEnums.ECharacterDirection.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+            } else if (direction == UCharacterDirection.RIGHT_TO_LEFT
+                || direction == UCharacterDirection.RIGHT_TO_LEFT_ARABIC) {
                 return RTL;
             }
 
