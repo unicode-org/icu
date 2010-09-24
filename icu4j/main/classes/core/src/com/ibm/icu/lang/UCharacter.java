@@ -5760,6 +5760,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * or out-of-bounds characters.
      *
      * {@icunote} The return value must be tested using the constants defined in {@link
+     * UCharacterDirection} and its interface {@link
      * UCharacterEnums.ECharacterDirection} since the values are different from the ones
      * defined by <code>java.lang.Character</code>.
      * @param cp the code point to check
