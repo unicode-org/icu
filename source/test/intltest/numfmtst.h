@@ -147,6 +147,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestDecimal();
 
+    void TestExponentParse();
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
