@@ -120,31 +120,59 @@ $(GLOUT)/%/$(OK): $(GLOUT)/%/obj-$(OK)
 PROVIDER=provider
 LIBPROVIDER=lib$(PROVIDER).a
 
-libs: $(ICU_TARBALLS_VERS:%=$(OUT)/%/lib/$(LIBPROVIDER))
-PLUGVERS=4_4_1
+#libs: $(ICU_TARBALLS_VERS:%=$(OUT)/%/lib/$(LIBPROVIDER))
+
+PLUGLIB=4_4_1
+PLUGLIB_MAJ=44
+PLUGLIB_ICU_CONFIG=$(C_INS)/r$(PLUGLIB)/bin/icu-config
+PLUGLIB_SO=$(shell $(PLUGLIB_ICU_CONFIG) --so)
+PLUGLIB_NAME=libicuprov.$(PLUGLIB_MAJ).$(PLUGLIB_SO)
+#PLUGLIB_MAJ=$(echo $(PLUGLIB) | cut -d_ -f-1 | tr -d _ )
 #GLOUT_ICU=$(ICU_TARBALLS_VERS:%=$(GLOUT)/%/$(OK))
+PLUGLIB_TARGETS=3_8_1 4_2_0_1
+PLUGLIB_TARGET_DATA=$(PLUGLIB_TARGETS:%=$(BUILD)/%/data/out/tmp/*.o)
+PLUGLIB_TARGET_STATICS=$(PLUGLIB_TARGETS:%=$(BUILD)/%/[ci]*/*.ao)
+PLUGLIB_OUTLIBS=$(PLUGLIB:%=$(OUT)/%/lib/$(PLUGLIB_NAME))
 
-aplug:
-	echo $(OUT)/$(PLUGVERS)/lib/plug.dylib:
 
-plugs: $(PLUGVERS:%=$(OUT)/%/lib/plug.dylib)
+
+plugs: $(PLUGLIB_OUTLIBS) $(OUT)/$(PLUGLIB_MAJ:%=icuplugins%.txt)
+
+install-plugs: $(C_INS)/r$(PLUGLIB)/lib/$(PLUGLIB_NAME) $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
+	echo "Plugins installed for testing."
+
+#TODO: should be 'install' not 'cp'
+$(C_INS)/r$(PLUGLIB)/lib/$(PLUGLIB_NAME) $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
+	cp $(PLUGLIB_OUTLIBS) $(C_INS)/r$(PLUGLIB)/lib
+	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
+
+$(OUT)/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
+	echo "$^	coll_provider_plugin" > $@
 
 TESTPROG=coldiff
 
-testprog: $(PLUGVERS:%=$(OUT)/%/bin/$(TESTPROG))
+testprog: $(PLUGLIB:%=$(OUT)/%/bin/$(TESTPROG))
 
-test-check: testprog
-	ICU_PLUGINS=. DYLD_LIBRARY_PATH=$(C_INS)/r4_4_1/lib out/4_4_1/bin/coldiff
+check: testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
+	ICU_PLUGINS=$(OUT) DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
+	ICU_PLUGINS=$(OUT) DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
+	ICU_PLUGINS=$(OUT) DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
+
+install-check: install-plugs
+	DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
+	DYLD_LIBRARY_PATH=$(C_INS)/r$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
 
 #	$(shell $(BUILD)/$*/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX))
 
 $(OUT)/%/bin/$(TESTPROG): $(TESTPROG).cpp
-	-mkdir $(OUT)/$*/bin
-	g++ -I$(C_INS)/r$*/include -o $@ $^ -L$(C_INS)/r$*/lib -licuuc -licui18n -licudata
+	-mkdir -p $(OUT)/$*/bin
+	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -o $@ $^
 
 #$(GLOUT)/$%/obj-$(OK)
-$(OUT)/%/lib/plug.dylib: 
-	g++ -dynamiclib -exported_symbols_list export.txt -dynamic -o $@ $(GLOUT)/$*/*.o $(BUILD)/3_8_1/[ci]*/*.ao  $(BUILD)/3_8_1/data/out/tmp/*.o  $(BUILD)/4_2_0_1/[ci]*/*.ao $(BUILD)/4_2_0_1/data/out/tmp/*.o -L$(C_INS)/r$*/lib -licuuc -licui18n -licudata
+$(OUT)/%/lib/$(PLUGLIB_NAME): 
+	-mkdir -p $(OUT)/$*/lib
+	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -dynamiclib -exported_symbols_list glue/export.txt -dynamic -o $@ $(GLOUT)/$*/*.o $(PLUGLIB_TARGET_DATA) $(PLUGLIB_TARGET_STATICS)
+	cp $@ $(C_INS)/r$*/lib/
 
 $(OUT)/%/lib/$(LIBPROVIDER):  $(GLOUT)/%/obj-$(OK)
 	-mkdir -p $(OUT)/$*/lib
@@ -197,7 +225,8 @@ $(BUILD)/%/config.status: $(SRC)/%/ok
 	@echo "Configging" $*
 	-[ -d $(BUILD)/$* ] && rm -rf $(BUILD)/$*
 	mkdir -p $(BUILD)/$*
-	( cd $(BUILD)/$* && $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
+	( cd $(BUILD)/$* && $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --
+srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
 
 # build 
 $(BUILD)/%/ok: $(BUILD)/%/config.status

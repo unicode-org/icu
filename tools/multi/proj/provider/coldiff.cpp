@@ -35,8 +35,9 @@ void setup(UErrorCode &status) {
     fprintf(stderr, "# Collators now available: %d,\t%s\n", count, u_errorName(status));
 }
 
-int main(int argc, const char *argv[]) {
+int main(int /* argc*/ , const char * /*argv*/ []) {
     UErrorCode status = U_ZERO_ERROR;
+    int diffs = 0;
     setup(status);
     if(U_FAILURE(status)) return 1;
     for(int l=0;l<LOCALE_COUNT;l++) {
@@ -49,7 +50,7 @@ int main(int argc, const char *argv[]) {
             char locID[200];
             strcpy(locID, locale[l]);
             if(vers[v]!=NULL) { // NULL = no version
-                strcat(locID, "@provider=ICU");
+                strcat(locID, "@provider=icu");
                 strcat(locID, vers[v]);
             }
             
@@ -67,9 +68,10 @@ int main(int argc, const char *argv[]) {
 
             for(int i=0;i<len;i++) {
                 if(v>0&&i<oldLen&&bytes[i]!=oldBytes[i]) {
-                    printf("*");
+                  diffs++;
+                  printf("*");
                 } else {
-                    printf(" ");
+                  printf(" ");
                 }
                 printf("%02X", (0xFF&bytes[i]));
             }
@@ -81,5 +83,12 @@ int main(int argc, const char *argv[]) {
             memcpy(oldBytes, bytes, len);
         }
     }
+
+    if(diffs==0) {
+      printf("ERROR: 0 differences found between platforms.. are the platforms installed? Try 'icuinfo -L'\n");
+    } else {
+      printf("%d differences found among provider versions. Success!\n", diffs);
+    }
+    
     return 0;
 }

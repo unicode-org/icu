@@ -7,8 +7,9 @@
 *******************************************************************************
 */
 
-#define COLL_FE_DEBUG 1
-
+#ifndef COLL_FE_DEBUG
+#define COLL_FE_DEBUG 0
+#endif
 
 #include <icuglue/icuglue.h>
 #include <unicode/coll.h>
@@ -61,43 +62,44 @@ static UCollationStrength _getUCollationStrength(
  */
 #define GLUE_VER(x) class GLUE_SYM_V( Collator, x ) : public Collator {  \
     \
-    public:  static Collator *create(const Locale &loc, const char *ver); \
-    private: UCollator *_this; GLUE_SYM_V( Collator, x ) ( UCollator* tn ) : _this(tn){} \
-    virtual ~ GLUE_SYM_V ( Collator, x) (); \
-    public: \
-  virtual void* getDynamicClassID() const; \
-  static void* getStaticClassID() ; \
-  virtual Collator* clone() const; \
-  virtual UCollationResult compare(const UnicodeString&, const UnicodeString&, UErrorCode&) const; \
-  virtual UCollationResult compare(const UnicodeString&, const UnicodeString&, int32_t, UErrorCode&) const; \
-  virtual UCollationResult compare(const UChar*, int32_t, const UChar*, int32_t, UErrorCode&) const; \
-  virtual CollationKey& getCollationKey(const UnicodeString&, CollationKey&, UErrorCode&) const; \
-  virtual CollationKey& getCollationKey(const UChar*, int32_t, CollationKey&, UErrorCode&) const; \
-  virtual int32_t hashCode() const; \
-  virtual const Locale getLocale(ULocDataLocaleType, UErrorCode&) const; \
-  virtual ECollationStrength getStrength() const; \
-  virtual void setStrength(ECollationStrength); \
-  virtual void getVersion(uint8_t*) const; \
-  virtual void setAttribute(UColAttribute, UColAttributeValue, UErrorCode&); \
-  virtual UColAttributeValue getAttribute(UColAttribute, UErrorCode&); \
-  virtual uint32_t setVariableTop(const UChar*, int32_t, UErrorCode&); \
-  virtual uint32_t setVariableTop(UnicodeString, UErrorCode&); \
-  virtual void setVariableTop(uint32_t, UErrorCode&); \
-  virtual uint32_t getVariableTop(UErrorCode&) const; \
-  virtual Collator* safeClone(); \
-  virtual int32_t getSortKey(const UnicodeString&, uint8_t*, int32_t) const; \
-  virtual int32_t getSortKey(const UChar*, int32_t, uint8_t*, int32_t) const; \
-  public: static int32_t countAvailable(); \
+  public:  static Collator *create(const Locale &loc, const char *ver); \
+  private: UCollator *_this; GLUE_SYM_V( Collator, x ) ( UCollator* tn ) : _this(tn){} \
+    virtual ~ GLUE_SYM_V ( Collator, x) ();                             \
+  public:                                                               \
+    virtual void* getDynamicClassID() const;                            \
+    static void* getStaticClassID() ;                                   \
+    virtual Collator* clone() const;                                    \
+    virtual UCollationResult compare(const UnicodeString&, const UnicodeString&, UErrorCode&) const; \
+    virtual UCollationResult compare(const UnicodeString&, const UnicodeString&, int32_t, UErrorCode&) const; \
+    virtual UCollationResult compare(const UChar*, int32_t, const UChar*, int32_t, UErrorCode&) const; \
+    virtual CollationKey& getCollationKey(const UnicodeString&, CollationKey&, UErrorCode&) const; \
+    virtual CollationKey& getCollationKey(const UChar*, int32_t, CollationKey&, UErrorCode&) const; \
+    virtual int32_t hashCode() const;                                   \
+    virtual const Locale getLocale(ULocDataLocaleType, UErrorCode&) const; \
+    virtual ECollationStrength getStrength() const;                     \
+    virtual void setStrength(ECollationStrength);                       \
+    virtual void getVersion(uint8_t*) const;                            \
+    virtual void setAttribute(UColAttribute, UColAttributeValue, UErrorCode&); \
+    virtual UColAttributeValue getAttribute(UColAttribute, UErrorCode&); \
+    virtual uint32_t setVariableTop(const UChar*, int32_t, UErrorCode&); \
+    virtual uint32_t setVariableTop(UnicodeString, UErrorCode&);        \
+    virtual void setVariableTop(uint32_t, UErrorCode&);                 \
+    virtual uint32_t getVariableTop(UErrorCode&) const;                 \
+    virtual Collator* safeClone();                                      \
+    virtual int32_t getSortKey(const UnicodeString&, uint8_t*, int32_t) const; \
+    virtual int32_t getSortKey(const UChar*, int32_t, uint8_t*, int32_t) const; \
+  public: static int32_t countAvailable();                              \
   public: static int32_t appendAvailable(UnicodeString* strs, int32_t i, int32_t count); \
-};
+  };
 
+/** ==================================== The following code runs inside the 'target' version (i.e. old ICU) ========== **/
 #if defined ( ICUGLUE_VER )
 
 /* code for some version */
 #include <icuglue/gluren.h>
 
 /**
- uclean.h
+   uclean.h
 */
 U_STABLE void U_EXPORT2
 OICU_u_init(UErrorCode *status);
@@ -195,18 +197,19 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION( GLUE_SYM( Collator ) )
 
 Collator* GLUE_SYM ( Collator ) :: clone() const  {
     UErrorCode status = U_ZERO_ERROR;
+#if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " clone %p -> " , this);
+#endif
     UCollator *clc = OICU_ucol_safeClone( _this, NULL, 0, &status);
+#if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " .. safeclone %s _this %p-> %p " , u_errorName(status), _this, clc);
+#endif
     if(U_FAILURE(status)||clc==NULL) return NULL;
     Collator *c = new GLUE_SYM( Collator ) ( clc );
+#if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " .. wrap(%p) -> %p\n", clc, c);
-//    c->setLocales(getLocale(ULOC_REQUESTED_LOCALE,status),getLocale(ULOC_VALID_LOCALE,status),getLocale(ULOC_ACTUAL_LOCALE,status));
+#endif
 
-//    if(U_FAILURE(status)) {
-//        delete c;
-//        c = NULL;
-//    }
     return c;
 }
 
@@ -230,13 +233,15 @@ UCollationResult GLUE_SYM ( Collator ) :: compare(const UChar* s, int32_t sl, co
 static CollationKey kk;
 
 CollationKey& GLUE_SYM ( Collator ) :: getCollationKey(const UnicodeString&, CollationKey&, UErrorCode&) const  {
-    fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GCK");
+  //#if COLL_FE_DEBUG
+    fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GCK - notimp");
+    //#endif
 return kk;
 }
 
 
 CollationKey& GLUE_SYM ( Collator ) :: getCollationKey(const UChar*, int32_t, CollationKey&, UErrorCode&) const  {
-    fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GKK2");
+    fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GKK2 - notimp");
 return kk;
 }
 
@@ -300,7 +305,9 @@ Collator* GLUE_SYM ( Collator ) :: safeClone()  {
 
 
 int32_t GLUE_SYM ( Collator ) :: getSortKey(const UnicodeString& s, uint8_t*buf, int32_t len) const  {
-//    fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GSK");
+#if COLL_FE_DEBUG
+  fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GSK");
+#endif
     return getSortKey(s.getBuffer(),s.length(), buf, len);
 }
 
@@ -308,7 +315,9 @@ int32_t GLUE_SYM ( Collator ) :: getSortKey(const UnicodeString& s, uint8_t*buf,
 
 
 int32_t GLUE_SYM ( Collator ) :: getSortKey(const UChar*s, int32_t l, uint8_t*d, int32_t b) const  {
+#if COLL_FE_DEBUG
     fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GKS");
+#endif
     return OICU_ucol_getSortKey(_this, s,l,d,b);
 }
 
@@ -326,9 +335,8 @@ int32_t GLUE_SYM ( Collator ) :: getSortKey(const UChar*s, int32_t l, uint8_t*d,
    fprintf(stderr,  "VCF " ICUGLUE_VER_STR " avail %d - init %s\n", avail, u_errorName(status));
 #endif   
     for(int j=0;j<avail;j++) {
-   //    strs[i+j].append("zu_zg_wang@provider=ICU");
          strs[i+j].append(OICU_ucol_getAvailable(j));
-         strs[i+j].append("@provider=ICU");
+         strs[i+j].append("@provider=icu");
          strs[i+j].append( ICUGLUE_VER_STR[0] );  // X_y
          strs[i+j].append( ICUGLUE_VER_STR[2] );  // x_Y
 #if COLL_FE_DEBUG
@@ -347,6 +355,7 @@ int32_t GLUE_SYM ( Collator ) :: getSortKey(const UChar*s, int32_t l, uint8_t*d,
 
 
 #else
+/** ==================================== The following code runs inside the 'provider' version (i.e. current ICU) ========== **/
 
 // define Collator_XX
 #include "icuglue/glver.h"
@@ -381,18 +390,18 @@ Collator *VersionCollatorFactory::createCollator(const Locale &loc) {
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:KWV %s\n", provider);
 #endif
-    if(strncmp(provider,"ICU",3)) return NULL;
+    if(strncmp(provider,"icu",3)) return NULL;
     const char *icuver=provider+3;
-#if 1
+#if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:ICUV %s\n", icuver);
 #endif
     
 #if defined(GLUE_VER)
 #undef GLUE_VER
 #endif
-#define GLUE_VER(x) /*printf("%c/%c|%c/%c\n", icuver[0],(#x)[0],icuver[1],(#x)[2]);*/  if(icuver[0]== (#x)[0] && icuver[1]==(#x)[2]) { Collator *c = glue ## Collator ## x :: create(loc, icuver); fprintf(stderr, "VCF::CC %s -> %p\n", loc.getName(), c); return c; }
+#define GLUE_VER(x) /*printf("%c/%c|%c/%c\n", icuver[0],(#x)[0],icuver[1],(#x)[2]);*/  if(icuver[0]== (#x)[0] && icuver[1]==(#x)[2]) { Collator *c = glue ## Collator ## x :: create(loc, icuver); /*fprintf(stderr, "VCF::CC %s -> %p\n", loc.getName(), c);*/ return c; }
 #include "icuglue/glver.h"
-#if 1
+#if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:CC %s failed\n", loc.getName());
 #endif
 
@@ -405,7 +414,7 @@ static  int32_t gLocCount = 0;
 
 const UnicodeString
 *VersionCollatorFactory::getSupportedIDs(int32_t &count, UErrorCode &status) {
-    if(gLocales==NULL) {
+  if(gLocales==NULL) {
     count = 0;
     
     
@@ -416,14 +425,11 @@ const UnicodeString
 #define GLUE_VER(x) count += glue ## Collator ## x :: countAvailable();
 #include "icuglue/glver.h"
 
-printf("VCF: count=%d\n", count);
-UnicodeString *strs = new  UnicodeString[count];
-int32_t i = 0;
-
-// #if (U_ICU_VERSION_MAJOR_NUM==4) && (U_ICU_VERSION_MINOR_NUM==4)
-//  glueCollator38::appendAvailable(strs,i,count);
-//  glueCollator42::appendAvailable(strs,i,count);
-// #endif
+#if COLL_FE_DEBUG
+    printf("VCF: count=%d\n", count);
+#endif
+    UnicodeString *strs = new  UnicodeString[count];
+    int32_t i = 0;
 
 #if defined(GLUE_VER)
 #undef GLUE_VER
@@ -431,34 +437,35 @@ int32_t i = 0;
 #define GLUE_VER(x) i += glue ## Collator ## x :: appendAvailable(strs, i, count);
 #include "icuglue/glver.h"
 
-printf("VCF: appended count=%d\n", count);
+#if COLL_FE_DEBUG
+    printf("VCF: appended count=%d\n", count);
+#endif
 
     gLocCount = count;
     gLocales = strs;
-}
-count = gLocCount;
-return gLocales;
+  }
+  count = gLocCount;
+  return gLocales;
 }
 
 
-/* test main */
-#if 1
+/* Plugin Code */
+
 #include <stdio.h>
-
 #include <unicode/uversion.h>
 
 static URegistryKey rk = NULL;
 
 void coll_provider_register(UErrorCode &status) {
-    rk = Collator::registerFactory(new VersionCollatorFactory(), status);
+  rk = Collator::registerFactory(new VersionCollatorFactory(), status);
 }
 
 void coll_provider_unregister(UErrorCode &status) {
   Collator::unregister(rk, status);
 }
 
+/* Plugin- only ICU 4.4+ */
 #if (U_ICU_VERSION_MAJOR_NUM > 4) || ((U_ICU_VERSION_MAJOR_NUM==4)&&(U_ICU_VERSION_MINOR_NUM>3))
-/* Plugin */
 #include "unicode/icuplug.h"
 
 U_CAPI UPlugTokenReturn U_EXPORT2 coll_provider_plugin (UPlugData *data, UPlugReason reason, UErrorCode *status);
@@ -481,83 +488,12 @@ U_CAPI UPlugTokenReturn U_EXPORT2 coll_provider_plugin (UPlugData *data, UPlugRe
   }
   return UPLUG_TOKEN;
 }
-#endif
+#else
 
+/* 
+   Note: this ICU version must explicitly call 'coll_provider_plugin'
+*/
 
-#if 0
-void main(int argc, const char *argv[]) {
-    puts("hello");
-    {
-        int32_t count;
-        UErrorCode status = U_ZERO_ERROR;
-        Collator::getAvailableLocales(count);
-        fprintf(stderr,  "Old avail: %d\n", count);
-        StringEnumeration *se = Collator::getAvailableLocales();
-        count = se->count(status);
-        fprintf(stderr,  "Old count avail: %d, %s\n", count, u_errorName(status));
-    }
-    
-    UErrorCode status = U_ZERO_ERROR;
-    coll_provider_register(status);
-    fprintf(stderr,  "Registered VCF: %p, er %s\n", rk, u_errorName(status));
-    {
-        int32_t count;
-        Collator::getAvailableLocales(count);
-        fprintf(stderr,  "New avail: %d\n", count);
-        StringEnumeration *se = Collator::getAvailableLocales();
-        count = se->count(status);
-        fprintf(stderr,  "New count avail: %d, %s\n", count, u_errorName(status));
-#if 0
-        const char *str;
-        for(;(str=se->next(NULL,status))!=NULL;) {
-            fprintf(stderr,  "\t%s", str);
-        }
-#endif
-#if 1
-        const UnicodeString *str;
-        for(;(str=se->snext(status))!=NULL;) {
-            {
-                char foo[999];
-                UnicodeString id2 = UnicodeString(*(str));
-                u_austrcpy(foo, id2.getTerminatedBuffer());
-                fprintf(stderr,  "\t%s", foo);
-            }
-//            fprintf(stderr,  "\t%s", str);
-        }
-#endif
-        puts("\n");
-        
-    }
-    {
-        UErrorCode status = U_ZERO_ERROR;
-        UCollator *a;
-        UCollator *b;
-        UCollator *c;
-        UCollator *d;
-        
-        a = ucol_open("th", &status);
-        fprintf(stderr, "opena %s\n", u_errorName(status));
-        b = ucol_open("ar_SA@provider=ICU40", &status);
-        fprintf(stderr, "opena %s\n", u_errorName(status));
-        c = ucol_open("nn_NO@provider=ICU38", &status);
-        fprintf(stderr, "opena %s\n", u_errorName(status));
-        d = ucol_open("de@provider=ICU38;collation=phonebook", &status);
-        fprintf(stderr, "opena %s\n", u_errorName(status));
-        
-        
-        ucol_close(a);
-        ucol_close(b);
-        ucol_close(c);
-        ucol_close(d);
-    }
-}
+#endif /* plugin */
 
-#endif
-
-#endif
-
-#endif
-
-
-
-
+#endif /* provider side (vs target) */
