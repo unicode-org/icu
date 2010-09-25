@@ -113,7 +113,7 @@ static void TestInt64Parse()
 
     if(U_FAILURE(*status))
     {
-        log_err("Error in unum_open() %s \n", myErrorName(*status));
+        log_data_err("Error in unum_open() %s \n", myErrorName(*status));
         return;
     }
 
