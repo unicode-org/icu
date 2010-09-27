@@ -1338,6 +1338,7 @@ initExpectedSkippables(UnicodeSet skipSets[UNORM_MODE_COUNT], UErrorCode &errorC
             }
         }
     }
+    delete [] combineBackCharsAndCc;
 }
 
 void
