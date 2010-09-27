@@ -223,7 +223,6 @@ icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
-icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneFormat.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.ui.prefs -text
@@ -266,7 +265,6 @@ icu4j/main/tests/collate/.project -text
 icu4j/main/tests/collate/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/collate/collate-tests-build.launch -text
-icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/Counter.java -text
 icu4j/main/tests/core/.classpath -text
 icu4j/main/tests/core/.project -text
 icu4j/main/tests/core/.settings/org.eclipse.jdt.core.prefs -text
@@ -537,7 +535,6 @@ icu4j/main/tests/framework/.classpath -text
 icu4j/main/tests/framework/.project -text
 icu4j/main/tests/framework/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/framework/manifest.stub -text
-icu4j/main/tests/framework/src/com/ibm/icu/dev/test/util/CollectionUtilities.java -text
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
 icu4j/main/tests/localespi/manifest.stub -text
