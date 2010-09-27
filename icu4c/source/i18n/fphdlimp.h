@@ -10,6 +10,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/utypes.h"
 #include "unicode/fieldpos.h"
 #include "unicode/fpositer.h"
 
@@ -18,7 +19,7 @@ U_NAMESPACE_BEGIN
 // utility FieldPositionHandler
 // base class, null implementation
 
-class FieldPositionHandler {
+class FieldPositionHandler: public UMemory {
  public:
   virtual ~FieldPositionHandler();
   virtual void addAttribute(int32_t id, int32_t start, int32_t limit);

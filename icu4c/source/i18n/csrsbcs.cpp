@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2009, International Business Machines
+ *   Copyright (C) 2005-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -1262,7 +1262,7 @@ uint8_t *CharsetRecog_IBM420_ar::unshape(const uint8_t *inputBytes, int32_t inpu
 
 uint8_t *CharsetRecog_IBM420_ar::unshapeLamAlef(const uint8_t *inputBytes, int32_t inputBytesLength, int32_t &length) {
     int32_t bigBufferLength = inputBytesLength * 2;
-    uint8_t *bigBuffer = new uint8_t[bigBufferLength];
+    uint8_t *bigBuffer = (uint8_t *)uprv_malloc(bigBufferLength);
     uint8_t *resultBuffer = NULL;
     
     if (bigBuffer != NULL) {
@@ -1279,14 +1279,14 @@ uint8_t *CharsetRecog_IBM420_ar::unshapeLamAlef(const uint8_t *inputBytes, int32
         }
         
         length = bufferIndex;
-        resultBuffer = new uint8_t[length];
+        resultBuffer = (uint8_t *)uprv_malloc(length);
         if (resultBuffer != NULL) {
             uprv_memcpy(resultBuffer, bigBuffer, length);
         }
     }
     
     if (bigBuffer != NULL) {
-        delete [] bigBuffer;
+        uprv_free(bigBuffer);
     }
     
     return resultBuffer;
@@ -1294,7 +1294,7 @@ uint8_t *CharsetRecog_IBM420_ar::unshapeLamAlef(const uint8_t *inputBytes, int32
 
 void CharsetRecog_IBM420_ar::matchFinish(InputText *textIn) {
     if (deleteBuffer) {
-        delete [] textIn->fInputBytes;
+        uprv_free(textIn->fInputBytes);
         
         textIn->fInputBytes = prev_fInputBytes;
         textIn->fInputLen = prev_fInputBytesLength;
