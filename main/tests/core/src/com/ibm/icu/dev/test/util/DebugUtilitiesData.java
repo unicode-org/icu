@@ -7,7 +7,7 @@
 package com.ibm.icu.dev.test.util;
 
 public class DebugUtilitiesData extends Object {
-    public static final String ICU4C_VERSION="4.4.1";
+    public static final String ICU4C_VERSION="4.4.2";
     public static final int UDebugEnumType = 0;
     public static final int UCalendarDateFields = 1;
     public static final int UCalendarMonths = 2;
