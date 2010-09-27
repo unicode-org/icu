@@ -1761,6 +1761,7 @@ static void TestUTextAPI(void) {
             
             TEST_ASSERT_UTEXT(str_abcinteriordef, &groupText);
             utext_close(&groupText);
+            free(groupChars);
         }
         utext_close(actual);
 
