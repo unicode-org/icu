@@ -396,13 +396,13 @@ public class SpoofCheckerTest extends TestFmwk {
         checkSkeleton(sc, SL, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0627\\u0644\\u0647");
 
         // This mapping exists in the ML and MA tables, does not exist in SL, SA
-        // 0C83 ; 0C03 ; ML # ( ಃ → ః ) KANNADA SIGN VISARGA → TELUGU SIGN VISARGA # {source:513}
+        // 0C83 ; 0C03 ; ML #  KANNADA SIGN VISARGA to TELUGU SIGN VISARGA # {source:513}
         checkSkeleton(sc, SL, "\\u0C83", "\\u0C83");
         checkSkeleton(sc, SA, "\\u0C83", "\\u0C83");
         checkSkeleton(sc, ML, "\\u0C83", "\\u0C03");
         checkSkeleton(sc, MA, "\\u0C83", "\\u0C03");
 
-        // 0391 ; 0041 ; MA # ( Α → A ) GREEK CAPITAL LETTER ALPHA to LATIN CAPITAL LETTER A
+        // 0391 ; 0041 ; MA # GREEK CAPITAL LETTER ALPHA to LATIN CAPITAL LETTER A
         // This mapping exists only in the MA table.
         checkSkeleton(sc, MA, "\\u0391", "A");
         checkSkeleton(sc, SA, "\\u0391", "\\u0391");

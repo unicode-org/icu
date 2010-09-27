@@ -34,14 +34,14 @@ import com.ibm.icu.util.ULocale;
  * might look like in a UI:
  * 
  * <pre>
- *  <b>… A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å …</b>
+ *  <b>... A B C D E F G H I J K L M N O P Q R S T U V W X Y Z  ...</b>
  *  
  *  <b>A</b>
  *     Addison
  *     Albertson
  *     Azensky
  *  <b>B</b>
- *     Bäcker
+ *     Baecker
  *  ...
  * </pre>
  * 
@@ -92,14 +92,14 @@ import com.ibm.icu.util.ULocale;
  * if its bucket is empty. Small buckets could also be combined based on size, such as:
  * 
  * <pre>
- * <b>… A-F G-N O-Z …</b>
+ * <b>... A-F G-N O-Z ...</b>
  * </pre>
  * 
  * <h2>Client Support</h2>
  * <p>
  * Callers can also use the AlphabeticIndex to support sorting on a client that doesn't support collation.
  * <ul>
- * <li>getLabels() can be used to get a list of the labels, such as "…", "A", "B",..., and send that list to the client.
+ * <li>getLabels() can be used to get a list of the labels, such as "...", "A", "B",..., and send that list to the client.
  * </li>
  * <li>When the client has a new name, it sends that name to the server. The server needs to call the following methods,
  * and communicate the bucketIndex and collationKey back to the client.
@@ -297,7 +297,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Get the default label used in the IndexCharacters' locale for underflow, eg the last item in: X Y Z …
+     * Get the default label used in the IndexCharacters' locale for underflow, eg the last item in: X Y Z ...
      * 
      * @return underflow label
      * @draft ICU 4.6
@@ -319,7 +319,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Get the default label used in the IndexCharacters' locale for overflow, eg the first item in: … A B C
+     * Get the default label used in the IndexCharacters' locale for overflow, eg the first item in: ... A B C
      * 
      * @return overflow label
      * @draft ICU 4.6
@@ -342,7 +342,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     /**
      * Get the default label used for abbreviated buckets <i>between</i> other labels. For example, consider the labels
-     * for Latin and Greek are used: X Y Z … &#x0391; &#x0392; &#x0393;.
+     * for Latin and Greek are used: X Y Z ... &#x0391; &#x0392; &#x0393;.
      * 
      * @return inflow label
      * @draft ICU 4.6
