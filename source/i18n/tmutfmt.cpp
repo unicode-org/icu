@@ -496,13 +496,12 @@ TimeUnitFormat::readFromCurrentLocale(EStyle style, const char* key, UErrorCode&
                   }
                   MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCount);
                   if (formatters == NULL) {
-                    // formatters = new MessageFormat*[kTotal];
-                    formatters = (MessageFormat**)uprv_malloc(2*sizeof(MessageFormat*));
+                    formatters = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
                     formatters[kFull] = NULL;
                     formatters[kAbbreviate] = NULL;
                     countToPatterns->put(pluralCount, formatters, err);
                     if (U_FAILURE(err)) {
-                        delete [] formatters;
+                        uprv_free(formatters);
                     }
                   } 
                   if (U_SUCCESS(err)) {
@@ -632,13 +631,12 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
                 }
                 MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
                 if (formatters == NULL) {
-                    //formatters = new MessageFormat*[kTotal];
-                    formatters = (MessageFormat**)uprv_malloc(2*sizeof(MessageFormat*));
+                    formatters = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
                     formatters[kFull] = NULL;
                     formatters[kAbbreviate] = NULL;
                     countToPatterns->put(srcPluralCount, formatters, err);
                     if (U_FAILURE(err)) {
-                        delete [] formatters;
+                        uprv_free(formatters);
                         delete messageFormat;
                     }
                 } 
@@ -693,7 +691,7 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
                 formatters[kAbbreviate] = NULL;
                 countToPatterns->put(srcPluralCount, formatters, err);
                 if (U_FAILURE(err)) {
-                    delete [] formatters;
+                    uprv_free(formatters);
                     delete messageFormat;
                 }
             }
@@ -774,15 +772,14 @@ TimeUnitFormat::copyHash(const Hashtable* source, Hashtable* target, UErrorCode&
             const UnicodeString* key = (UnicodeString*)keyTok.pointer;
             const UHashTok valueTok = element->value;
             const MessageFormat** value = (const MessageFormat**)valueTok.pointer;
-            //MessageFormat** newVal = new MessageFormat*[kTotal];
-            MessageFormat** newVal = (MessageFormat**)uprv_malloc(2*sizeof(MessageFormat*));
+            MessageFormat** newVal = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
             newVal[0] = (MessageFormat*)value[0]->clone();
             newVal[1] = (MessageFormat*)value[1]->clone();
             target->put(UnicodeString(*key), newVal, status);
             if ( U_FAILURE(status) ) {
                 delete newVal[0];
                 delete newVal[1];
-                delete [] newVal;
+                uprv_free(newVal);
                 return;
             }
         }
