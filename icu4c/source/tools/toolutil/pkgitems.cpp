@@ -120,8 +120,6 @@ private:
     int32_t length;
 };
 
-U_NAMESPACE_END
-
 // check a dependency ------------------------------------------------------ ***
 
 /*
@@ -573,8 +571,6 @@ getDataFormat(const uint8_t dataFormat[4]) {
 }
 
 // enumerate dependencies of a package item -------------------------------- ***
-
-U_NAMESPACE_BEGIN
 
 void
 Package::enumDependencies(Item *pItem, void *context, CheckDependency check) {
