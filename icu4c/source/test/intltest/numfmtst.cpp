@@ -2746,6 +2746,7 @@ void NumberFormatTest::TestNumberingSystems() {
     delete fmt4;
     delete fmt5;
     delete fmt6;
+    delete fmt7;
 }
 
 
