@@ -55,6 +55,7 @@
 #include "propname.h"
 #include "rbbidata.h"
 #include "triedict.h"
+#include "utrie2.h"
 
 /* swapping implementations in i18n */
 
