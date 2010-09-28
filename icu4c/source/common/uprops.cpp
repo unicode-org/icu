@@ -23,6 +23,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/unorm2.h"
 #include "unicode/uscript.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
@@ -73,33 +74,39 @@ static UBool isJoinControl(const BinaryProperty &/*prop*/, UChar32 c, UProperty 
     return ubidi_isJoinControl(GET_BIDI_PROPS(), c);
 }
 
-static UBool hasFullCompositionExclusion(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
 #if UCONFIG_NO_NORMALIZATION
+static UBool hasFullCompositionExclusion(const BinaryProperty &, UChar32, UProperty) {
     return FALSE;
+}
 #else
+static UBool hasFullCompositionExclusion(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
     UErrorCode errorCode=U_ZERO_ERROR;
     const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
     return U_SUCCESS(errorCode) && impl->isCompNo(impl->getNorm16(c));
-#endif
 }
+#endif
 
 // UCHAR_NF*_INERT properties
-static UBool isNormInert(const BinaryProperty &/*prop*/, UChar32 c, UProperty which) {
 #if UCONFIG_NO_NORMALIZATION
+static UBool isNormInert(const BinaryProperty &, UChar32, UProperty) {
     return FALSE;
+}
 #else
+static UBool isNormInert(const BinaryProperty &/*prop*/, UChar32 c, UProperty which) {
     UErrorCode errorCode=U_ZERO_ERROR;
     const Normalizer2 *norm2=Normalizer2Factory::getInstance(
         (UNormalizationMode)(which-UCHAR_NFD_INERT+UNORM_NFD), errorCode);
     return U_SUCCESS(errorCode) && norm2->isInert(c);
-#endif
 }
+#endif
 
-static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
 #if UCONFIG_NO_NORMALIZATION
+static UBool changesWhenCasefolded(const BinaryProperty &, UChar32, UProperty) {
     return FALSE;
+}
 #else
+static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     UnicodeString nfd;
     UErrorCode errorCode=U_ZERO_ERROR;
     const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
@@ -136,13 +143,15 @@ static UBool changesWhenCasefolded(const BinaryProperty &/*prop*/, UChar32 c, UP
                        0!=u_strCompare(nfd.getBuffer(), nfd.length(),
                                        dest, destLength, FALSE));
     }
-#endif
 }
+#endif
 
-static UBool changesWhenNFKC_Casefolded(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
 #if UCONFIG_NO_NORMALIZATION
+static UBool changesWhenNFKC_Casefolded(const BinaryProperty &, UChar32, UProperty) {
     return FALSE;
+}
 #else
+static UBool changesWhenNFKC_Casefolded(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     UErrorCode errorCode=U_ZERO_ERROR;
     const Normalizer2Impl *kcf=Normalizer2Factory::getNFKC_CFImpl(errorCode);
     if(U_FAILURE(errorCode)) {
@@ -162,20 +171,22 @@ static UBool changesWhenNFKC_Casefolded(const BinaryProperty &/*prop*/, UChar32 
         }
     }
     return U_SUCCESS(errorCode) && dest!=src;
-#endif
 }
+#endif
 
-static UBool isCanonSegmentStarter(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
 #if UCONFIG_NO_NORMALIZATION
+static UBool isCanonSegmentStarter(const BinaryProperty &, UChar32, UProperty) {
     return FALSE;
+}
 #else
+static UBool isCanonSegmentStarter(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     UErrorCode errorCode=U_ZERO_ERROR;
     const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
     return
         U_SUCCESS(errorCode) && impl->ensureCanonIterData(errorCode) &&
         impl->isCanonSegmentStarter(c);
-#endif
 }
+#endif
 
 static UBool isPOSIX_alnum(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     return u_isalnumPOSIX(c);
@@ -337,13 +348,15 @@ static int32_t biDiGetMaxValue(const IntProperty &/*prop*/, UProperty which) {
     return ubidi_getMaxValue(GET_BIDI_PROPS(), which);
 }
 
-static int32_t getCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
 #if UCONFIG_NO_NORMALIZATION
+static int32_t getCombiningClass(const IntProperty &, UChar32, UProperty) {
     return 0;
-#else
-    return u_getCombiningClass(c);
-#endif
 }
+#else
+static int32_t getCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
+    return u_getCombiningClass(c);
+}
+#endif
 
 static int32_t getGeneralCategory(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
     return (int32_t)u_charType(c);
@@ -398,29 +411,35 @@ static int32_t getHangulSyllableType(const IntProperty &/*prop*/, UChar32 c, UPr
     }
 }
 
+#if UCONFIG_NO_NORMALIZATION
+static int32_t getNormQuickCheck(const IntProperty &, UChar32, UProperty) {
+    return 0;
+}
+#else
 static int32_t getNormQuickCheck(const IntProperty &/*prop*/, UChar32 c, UProperty which) {
-#if UCONFIG_NO_NORMALIZATION
-    return 0;
-#else
     return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK+UNORM_NFD));
-#endif
 }
+#endif
 
+#if UCONFIG_NO_NORMALIZATION
+static int32_t getLeadCombiningClass(const IntProperty &, UChar32, UProperty) {
+    return 0;
+}
+#else
 static int32_t getLeadCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-#if UCONFIG_NO_NORMALIZATION
-    return 0;
-#else
     return getFCD16(c)>>8;
-#endif
 }
+#endif
 
-static int32_t getTrailCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
 #if UCONFIG_NO_NORMALIZATION
+static int32_t getTrailCombiningClass(const IntProperty &, UChar32, UProperty) {
     return 0;
-#else
-    return getFCD16(c)&0xff;
-#endif
 }
+#else
+static int32_t getTrailCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
+    return getFCD16(c)&0xff;
+}
+#endif
 
 static const IntProperty intProps[UCHAR_INT_LIMIT-UCHAR_INT_START]={
     /*
@@ -607,4 +626,5 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
         return kc2.extract(dest, destCapacity, *pErrorCode);
     }
 }
+
 #endif

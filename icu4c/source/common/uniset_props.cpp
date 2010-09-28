@@ -1472,8 +1472,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
 #if !UCONFIG_NO_BREAK_ITERATION
                     UErrorCode status = U_ZERO_ERROR;
                     BreakIterator *bi = BreakIterator::createWordInstance(root, status);
-#endif
                     if (U_SUCCESS(status)) {
+#endif
                         const UnicodeString *pStr;
 
                         for (int32_t j=0; j<strings->size(); ++j) {
@@ -1489,8 +1489,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                             (str = *pStr).foldCase();
                             foldSet.add(str);
                         }
-                    }
 #if !UCONFIG_NO_BREAK_ITERATION
+                    }
                     delete bi;
 #endif
                 }
