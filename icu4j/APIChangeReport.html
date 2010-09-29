@@ -2,37 +2,160 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 4.4 with ICU4J 4.5.1</title>
+<title>ICU4J API Comparison: ICU4J 4.4 with ICU4J 4.5.2</title>
 <!-- Copyright 2010, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 4.4 with ICU4J 4.5.1</h1>
+<h1>ICU4J API Comparison: ICU4J 4.4 with ICU4J 4.5.2</h1>
 
 <hr/>
 <h2>Removed from ICU4J 4.4</h2>
-<p>(no API removed)</p>
-
-<hr/>
-<h2>Deprecated or Obsoleted in ICU4J 4.5.1</h2>
-<p>(no API obsoleted)</p>
-
-<hr/>
-<h2>Changed in ICU4J 4.5.1 (old, new)</h2>
-<p>(no API changed)</p>
-
-<hr/>
-<h2>Promoted to stable in ICU4J 4.5.1</h2>
-<p>(no API promoted)</p>
-
-<hr/>
-<h2>Added in ICU4J 4.5.1</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
+<li>(draft)      public class <i>IndexCharacters</i></li>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+ULocale.Builder
+<ul>
+<li>(draft)      public <i>ULocale.Builder</i>(boolean)</li>
+<li>(draft)      public boolean <i>isLenientVariant</i>()</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Deprecated or Obsoleted in ICU4J 4.5.2</h2>
+<p>(no API obsoleted)</p>
+
+<hr/>
+<h2>Changed in ICU4J 4.5.2 (old, new)</h2>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>    (draft)      public class <i>IllformedLocaleException</i> extends java.lang.IllegalArgumentException</br>
+(draft)      public class <i>IllformedLocaleException</i> extends java.lang.RuntimeException</li>
+</ul>
+
+
+<hr/>
+<h2>Promoted to stable in ICU4J 4.5.2</h2>
+<p>(no API promoted)</p>
+
+<hr/>
+<h2>Added in ICU4J 4.5.2</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter.JoiningGroup
+<ul>
+<li>(stable)     public static final int TEH_MARBUTA_GOAL</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li>(stable)     public static final UCharacter.UnicodeBlock ALCHEMICAL_SYMBOLS</li>
+<li>(stable)     public static final int ALCHEMICAL_SYMBOLS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock BAMUM_SUPPLEMENT</li>
+<li>(stable)     public static final int BAMUM_SUPPLEMENT_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock BATAK</li>
+<li>(stable)     public static final int BATAK_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock BRAHMI</li>
+<li>(stable)     public static final int BRAHMI_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D</li>
+<li>(stable)     public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock EMOTICONS</li>
+<li>(stable)     public static final int EMOTICONS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock ETHIOPIC_EXTENDED_A</li>
+<li>(stable)     public static final int ETHIOPIC_EXTENDED_A_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock KANA_SUPPLEMENT</li>
+<li>(stable)     public static final int KANA_SUPPLEMENT_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock MANDAIC</li>
+<li>(stable)     public static final int MANDAIC_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS</li>
+<li>(stable)     public static final int MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock PLAYING_CARDS</li>
+<li>(stable)     public static final int PLAYING_CARDS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock TRANSPORT_AND_MAP_SYMBOLS</li>
+<li>(stable)     public static final int TRANSPORT_AND_MAP_SYMBOLS_ID</li>
+</ul>
+UProperty
+<ul>
+<li>(draft)      public static final int OTHER_PROPERTY_LIMIT</li>
+<li>(draft)      public static final int OTHER_PROPERTY_START</li>
+<li>(draft)      public static final int SCRIPT_EXTENSIONS</li>
+</ul>
+UScript
+<ul>
+<li>(stable)     public static final int BASSA_VAH</li>
+<li>(stable)     public static final int DUPLOYAN_SHORTAND</li>
+<li>(stable)     public static final int ELBASAN</li>
+<li>(stable)     public static final int GRANTHA</li>
+<li>(stable)     public static final int KPELLE</li>
+<li>(stable)     public static final int LOMA</li>
+<li>(stable)     public static final int MANDAIC</li>
+<li>(stable)     public static final int MENDE</li>
+<li>(stable)     public static final int MEROITIC_CURSIVE</li>
+<li>(stable)     public static final int MEROITIC_HIEROGLYPHS</li>
+<li>(stable)     public static final int NABATAEAN</li>
+<li>(stable)     public static final int OLD_NORTH_ARABIAN</li>
+<li>(stable)     public static final int PALMYRENE</li>
+<li>(stable)     public static final int SINDHI</li>
+<li>(stable)     public static final int WARANG_CITI</li>
+<li>(draft)      public static final java.util.BitSet <i>getScriptExtensions</i>(int, java.util.BitSet)</li>
+<li>(draft)      public static final boolean <i>hasScript</i>(int, int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(draft)      public final class <i>AlphabeticIndex</i></li>
+<li>(draft)      public static class <i>AlphabeticIndex.Bucket</i></li>
+<li>(draft)      public static final class <i>AlphabeticIndex.Bucket.LabelType</i></li>
+<li>(draft)      public static class <i>AlphabeticIndex.Record</i></li>
+<li>(draft)      public static final class <i>IDNA.Error</i></li>
+<li>(draft)      public static final class <i>IDNA.Info</i></li>
+<li>(stable)     public class <i>NumberingSystem</i></li>
+<li>(draft)      public class <i>SpoofChecker</i></li>
+<li>(draft)      public static class <i>SpoofChecker.Builder</i></li>
+<li>(draft)      public static class <i>SpoofChecker.CheckResult</i></li>
+Bidi
+<ul>
+<li>(draft)      public static final byte NEUTRAL</li>
+<li>(draft)      public static byte <i>getBaseDirection</i>(java.lang.CharSequence)</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+<li>(draft)      public char[] <i>getDigits</i>()</li>
+</ul>
 FilteredNormalizer2
 <ul>
 <li>(draft)      public java.lang.String <i>getDecomposition</i>(int)</li>
 <li>(draft)      public java.lang.Appendable <i>normalize</i>(java.lang.CharSequence, java.lang.Appendable)</li>
+</ul>
+IDNA
+<ul>
+<li>(draft)      public static final int CHECK_BIDI</li>
+<li>(draft)      public static final int CHECK_CONTEXTJ</li>
+<li>(draft)      public static final int NONTRANSITIONAL_TO_ASCII</li>
+<li>(draft)      public static final int NONTRANSITIONAL_TO_UNICODE</li>
+<li>(draft)      protected static void <i>addError</i>(IDNA.Info, IDNA.Error)</li>
+<li>(draft)      protected static void <i>addLabelError</i>(IDNA.Info, IDNA.Error)</li>
+<li>(draft)      public static IDNA <i>getUTS46Instance</i>(int)</li>
+<li>(draft)      protected static boolean <i>hasCertainErrors</i>(IDNA.Info, java.util.EnumSet<IDNA.Error>)</li>
+<li>(draft)      protected static boolean <i>hasCertainLabelErrors</i>(IDNA.Info, java.util.EnumSet<IDNA.Error>)</li>
+<li>(draft)      protected static boolean <i>isBiDi</i>(IDNA.Info)</li>
+<li>(draft)      protected static boolean <i>isOkBiDi</i>(IDNA.Info)</li>
+<li>(draft)      public abstract java.lang.StringBuilder <i>labelToASCII</i>(java.lang.CharSequence, java.lang.StringBuilder, IDNA.Info)</li>
+<li>(draft)      public abstract java.lang.StringBuilder <i>labelToUnicode</i>(java.lang.CharSequence, java.lang.StringBuilder, IDNA.Info)</li>
+<li>(draft)      public abstract java.lang.StringBuilder <i>nameToASCII</i>(java.lang.CharSequence, java.lang.StringBuilder, IDNA.Info)</li>
+<li>(draft)      public abstract java.lang.StringBuilder <i>nameToUnicode</i>(java.lang.CharSequence, java.lang.StringBuilder, IDNA.Info)</li>
+<li>(draft)      protected static void <i>promoteAndResetLabelErrors</i>(IDNA.Info)</li>
+<li>(draft)      protected static void <i>resetInfo</i>(IDNA.Info)</li>
+<li>(draft)      protected static void <i>setBiDi</i>(IDNA.Info)</li>
+<li>(draft)      protected static void <i>setNotOkBiDi</i>(IDNA.Info)</li>
+<li>(draft)      protected static void <i>setTransitionalDifferent</i>(IDNA.Info)</li>
 </ul>
 Normalizer2
 <ul>
@@ -48,13 +171,33 @@ ChineseCalendar
 <li>(draft)      public <i>ChineseCalendar</i>(int, int, int, int, int)</li>
 <li>(draft)      public <i>ChineseCalendar</i>(int, int, int, int, int, int, int, int)</li>
 </ul>
+IllformedLocaleException
+<ul>
+<li>(draft)      public <i>IllformedLocaleException</i>()</li>
+</ul>
+LocaleData
+<ul>
+<li>(stable)     public static final int ES_CURRENCY</li>
+<li>(stable)     public static final int ES_INDEX</li>
+<li>(stable)     public static UnicodeSet <i>getExemplarSet</i>(ULocale, int, int)</li>
+</ul>
+ULocale
+<ul>
+<li>(draft)      public java.util.Set<java.lang.String> <i>getUnicodeLocaleAttributes</i>()</li>
+</ul>
+ULocale.Builder
+<ul>
+<li>(draft)      public ULocale.Builder <i>addUnicodeLocaleAttribute</i>(java.lang.String)</li>
+<li>(draft)      public ULocale.Builder <i>removeUnicodeLocaleAttribute</i>(java.lang.String)</li>
+</ul>
 VersionInfo
 <ul>
+<li>(stable)     public static final VersionInfo UNICODE_6_0</li>
 <li>(draft)      public static void <i>main</i>(java.lang.String[])</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Jun 23 22:57:51 EDT 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 29 17:32:01 EDT 2010<br/>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
