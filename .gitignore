@@ -944,10 +944,11 @@ tools/multi/packages/*.tgz
 tools/multi/proj/chello/out
 tools/multi/proj/provider/out
 tools/multi/tmp
-tools/release/java/APIChangeReport.html
+tools/release/java/APIChangeReport*
 tools/release/java/Makefile.local
 tools/release/java/classes
 tools/release/java/lib
+tools/release/java/src/com/ibm/icu/dev/tools/misc/*.class
 tools/trac/IcuCodeTools/*.egg-info
 tools/trac/IcuCodeTools/build
 tools/trac/IcuCodeTools/icucodetools/*.pyc

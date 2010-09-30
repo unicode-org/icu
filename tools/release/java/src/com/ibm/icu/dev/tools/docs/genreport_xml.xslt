@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
 *******************************************************************************
 * Copyright (C) 2008-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-* This is the XSLT for the API Report. 
+* This is the XSLT for the API Report, XML style
 */
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -15,93 +16,67 @@
   <xsl:param name="leftVer" />
   <xsl:param name="rightVer" />
   <xsl:param name="dateTime" />
-  <xsl:param name="rightMilestone" />
   <xsl:param name="nul" />
 
   <xsl:param name="ourYear" />
   
 
   <xsl:template match="/">
-	<xsl:comment>
-	 Copyright (C)  <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved. 
-	</xsl:comment>
-    <html>
-    <head>
-    <title>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </title>
-    <link rel="stylesheet" href="icu4c.css" type="text/css" />
-    </head>
-    
-    <body>
-    
-    <a name="_top"></a>
-    
-    <h1>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </h1>
-    <ul>
-    	<li><a href="#removed">Removed from <xsl:value-of select="$leftVer"/></a></li>
-    	<li><a href="#deprecated">Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#changed">Changed in  <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#promoted">Promoted to stable in <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#added">Added in <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#other">Other existing drafts in <xsl:value-of select="$rightVer" /></a></li>
-    </ul>
-    <hr/>
+    <xsl:comment>
+      Copyright (C)  <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved. 
+    </xsl:comment>
+    <changeReport>
+      <identity>
+	<xsl:attribute name="left">
+	   <xsl:value-of select="$leftVer"/>
+	</xsl:attribute>
+	<xsl:attribute name="right">
+	  <xsl:value-of select="$rightVer" />
+	</xsl:attribute>
+	<xsl:attribute name="generated-date">
+	  <xsl:value-of select="$dateTime" />
+	</xsl:attribute>
+      </identity>
 
-	<a name="removed">
-	    <h2>Removed from <xsl:value-of select="$leftVer"/> </h2>
-    </a>
+      <!-- <link rel="stylesheet" href="icu4c.css" type="text/css" /> -->
+
+      <functions name="removed">
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@rightStatus=$nul]"/>
         </xsl:call-template>
-    <P/><a href="#_top">(jump back to top)</a><hr/>
+      </functions>
 
-	<a name="deprecated">
-    <h2>Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></h2>
-    </a>
+      <functions name="deprecated">
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[(@rightStatus='Deprecated' and @leftStatus!='Deprecated') or (@rightStatus='Obsolete' and @leftStatus!='Obsolete')]"/>
         </xsl:call-template>
-    <P/><a href="#_top">(jump back to top)</a><hr/>
+      </functions>
 
-	<a name="changed">
-    <h2>Changed in  <xsl:value-of select="$rightVer" /> (old, new)</h2>
-    </a>
+      <functions name="changed">
         <xsl:call-template name="genTable">
-            <xsl:with-param name="nodes" select="/list/func[(@leftStatus != $nul) and (@rightStatus != $nul) and ( (@leftStatus != @rightStatus) or (@leftVersion != @rightVersion) ) and not ( (@leftStatus = 'Draft') and (@rightStatus = 'Stable') and (@rightVersion = $rightVer) )]"/>
+            <xsl:with-param name="nodes" select="/list/func[(@leftStatus != $nul) and (@rightStatus != $nul) and ( (@leftStatus != @rightStatus) or (@leftVersion != @rightVersion) )]"/>
         </xsl:call-template>
-    <P/><a href="#_top">(jump back to top)</a><hr/>
+      </functions>
 
-	<a name="promoted">
-    <h2>Promoted to stable in <xsl:value-of select="$rightVer" /></h2>
-    </a>
+      <functions name="promoted">
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@leftStatus != 'Stable' and  @rightStatus = 'Stable']"/>
         </xsl:call-template>
-    <P/><a href="#_top">(jump back to top)</a><hr/>
+      </functions>
     
-    <a name="added">
-    <h2>Added in <xsl:value-of select="$rightVer" /></h2>
-    </a>
+      <functions name="added">
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@leftStatus=$nul]"/>
         </xsl:call-template>
-    <P/><a href="#_top">(jump back to top)</a><hr/>
-    
-    <a name="other">
-    <h2>Other existing drafts in <xsl:value-of select="$rightVer" /></h2>
-    </a>
-    <div class='other'>
+      </functions>
+
+      <functions name="draft">
         <xsl:call-template name="infoTable">
             <xsl:with-param name="nodes" select="/list/func[@rightStatus = 'Draft' and @rightVersion != $rightVer]"/>
         </xsl:call-template>
-    </div>
-    <P/><a href="#_top">(jump back to top)</a><hr/>
-<!--    
-    
--->    
+      </functions>
 
-    <p><i><font size="-1">Contents generated by StableAPI tool on <xsl:value-of select="$dateTime" /><br/>Copyright (C) <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved.</font></i></p>
-    </body>
-    </html>
+    </changeReport>
   </xsl:template>
 
   <xsl:template name="genTable">
@@ -147,7 +122,7 @@
        	            	</xsl:attribute>
                    	</xsl:if>
                 
-                    <xsl:value-of select="@leftStatus" /><xsl:if  test = "@leftStatus = 'Draft' and @rightStatus = 'Stable' and @leftVersion = @rightVersion">»Stable</xsl:if>
+                    <xsl:value-of select="@leftStatus" /><xsl:if  test = "@leftStatus = 'Draft' and @rightStatus = 'Stable' and @leftVersion = @rightVersion">&gt;Stable</xsl:if>
                     <br/> <xsl:value-of select="@leftVersion" />
                 </td>
            	<xsl:if  test = "@leftStatus != 'Draft' or @rightStatus != 'Stable' or @leftVersion != @rightVersion">
@@ -162,7 +137,7 @@
                         <span>              
                             <xsl:value-of select="@rightVersion" />
                         </span>
-                        <xsl:if test ="@leftVersion != @rightVersion and @leftVersion != '' and @rightVersion != '' and @rightStatus = 'Stable' and not ( (@leftStatus = 'Draft') and (@rightStatus = 'Stable') and (@rightVersion = $rightVer) )">
+                        <xsl:if test ="@leftVersion != @rightVersion and @leftVersion != '' and @rightVersion != '' and @rightStatus = 'Stable'">
                             <br/><b title='A stable API changed version.' class='bigwarn'>(changed)</b>
                         </xsl:if>
                         <xsl:if test ="@rightStatus = 'Draft' and @rightVersion != $rightVer">

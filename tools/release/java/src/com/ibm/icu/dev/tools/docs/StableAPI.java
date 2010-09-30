@@ -90,6 +90,8 @@ public class StableAPI {
     private File reportXsl;
     private File resultFile;
     
+    private String milestoneOf = "";
+    
     final private static String nul = "None"; 
 
     public static void main(String[] args) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
@@ -250,6 +252,16 @@ public class StableAPI {
                     String initStr = initVal.getNodeValue().trim().replaceAll("\"","");
                     result = ICU_SPACE_PREFIX+initStr;
                     System.err.println("Detected "+whichVer + " version: " + result);
+                    if(whichVer.equals("new") && result.startsWith("ICU ")) {
+                    		String vers[] = result.substring(4).split("\\.");
+                    		int maj = Integer.parseInt(vers[0]);
+                    		int min = Integer.parseInt(vers[1]);
+                    		if((min%2)==1) {
+                    			milestoneOf = " ("+result+")";
+                    			result = "ICU "+(maj)+"."+(min+1);
+                    			System.err.println("    .. " + milestoneOf + " is a milestone towards " + result);
+                    		}
+                    }
                 }
                 
             }
@@ -269,12 +281,20 @@ public class StableAPI {
                 if(!result.equals(prevVer)) { 
                     System.err.println("Note: Detected " + result + " version but we'll use your requested --"+whichVer+"ver "+prevVer);
                     result = prevVer;
+                	if(!milestoneOf.isEmpty()&&whichVer.equals("new")) {
+                		System.err.println(" .. ignoring milestone indicator " + milestoneOf);
+                		milestoneOf = "";
+                	}
                 } else {
                     System.err.println("Note: You don't need to use  '--"+whichVer+"ver "+result+"' anymore - we detected it correctly.");
                 }
             } else {
                 System.err.println("Note: Didn't detect version so we'll use your requested --"+whichVer+"ver "+prevVer);
             	result = prevVer;
+            	if(!milestoneOf.isEmpty()&&whichVer.equals("new")) {
+            		System.err.println(" .. ignoring milestone indicator " + milestoneOf);
+            		milestoneOf = "";
+            	}
             }
         }
         
@@ -579,6 +599,7 @@ public class StableAPI {
 //        report.setParameter("rightStatus", rightStatus);
         report.setParameter("ourYear", new Integer(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
         report.setParameter("rightVer", rightVer);
+        report.setParameter("rightMilestone", milestoneOf);
         report.setParameter("dateTime", new GregorianCalendar().getTime());
         report.setParameter("nul", nul);
         

@@ -3020,6 +3020,9 @@ tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/build.xml svneol=native#text/xml
 tools/release/java/icu4c.css -text
+tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt -text
+tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt -text
+tools/release/java/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt -text
 tools/trac/IcuCodeTools/icucodetools/__init__.py -text
 tools/trac/IcuCodeTools/icucodetools/dcut.py -text
 tools/trac/IcuCodeTools/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css

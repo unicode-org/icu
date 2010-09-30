@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2006-2009, International Business Machines Corporation and    *
+* Copyright (C) 2006-2010, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU tools. 
@@ -40,11 +40,10 @@
     <target name="apireport" depends="tools">    
         <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
            
-<!-- 
+<!--
             <arg value = "-DELETEME-newver"/>
-            <arg value = "4.2"/>
+            <arg value = "4.6"/>
 -->
-
             
             <arg value = "--olddir"/> 
             <arg value = "${olddir}"/>
@@ -69,6 +68,53 @@
             
             <arg value = "--resultfile"/>
             <arg value = "${basedir}/APIChangeReport.html"/>
+
+            <classpath>
+                <pathelement location="${build.dir}"/>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="${lib.dir}/xalan.jar"/>
+                <pathelement location="${lib.dir}/xercesImpl.jar"/>
+                <pathelement path="."/>
+            </classpath>
+        </java>
+    </target>
+    <target name="apireport_xml" depends="tools">    
+        <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
+
+<!--
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "4.4.1"/>
+    
+-->
+
+<!--        
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "4.6"/>
+-->            
+
+            <arg value = "--olddir"/> 
+            <arg value = "${olddir}"/>
+            
+<!--
+	!! Only need these if you must override. Remove the DELETEME
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "${newver}"/>
+-->
+            
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+            
+            <arg value = "--cppxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt"/>
+            
+            <arg value = "--cxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt"/>
+            
+            <arg value = "--reportxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/genReport_xml.xslt"/>
+            
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.xml"/>
 
             <classpath>
                 <pathelement location="${build.dir}"/>
