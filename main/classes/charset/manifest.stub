@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+
+Name: com/ibm/icu/charset
+Specification-Title: ICU4J Charset
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java Charset
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@

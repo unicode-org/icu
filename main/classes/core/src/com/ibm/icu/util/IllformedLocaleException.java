@@ -1,0 +1,73 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+package com.ibm.icu.util;
+
+/**
+ * Thrown by methods in {@link ULocale} and {@link ULocale.Builder} to
+ * indicate that an argument is not a well-formed BCP 47 tag.
+ * 
+ * @see ULocale
+ * @draft ICU 4.2
+ * @provisional This API might change or be removed in a future release.
+ */
+public class IllformedLocaleException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
+    private int _errIdx = -1;
+
+    /**
+     * Constructs a new <code>IllformedLocaleException</code> with no
+     * detail message and -1 as the error index.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public IllformedLocaleException() {
+        super();
+    }
+
+    /**
+     * Constructs a new <code>IllformedLocaleException</code> with the
+     * given message and -1 as the error index.
+     *
+     * @param message the message
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public IllformedLocaleException(String message) {
+        super(message);
+    }
+
+    /**
+     * Constructs a new <code>IllformedLocaleException</code> with the
+     * given message and the error index.  The error index is the approximate
+     * offset from the start of the ill-formed value to the point where the
+     * parse first detected an error.  A negative error index value indicates
+     * either the error index is not applicable or unknown.
+     *
+     * @param message the message
+     * @param errorIndex the index
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public IllformedLocaleException(String message, int errorIndex) {
+        super(message + ((errorIndex < 0) ? "" : " [at index " + errorIndex + "]"));
+        _errIdx = errorIndex;
+    }
+
+    /**
+     * Returns the index where the error was found. A negative value indicates
+     * either the error index is not applicable or unknown.
+     *
+     * @return the error index
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getErrorIndex() {
+        return _errIdx;
+    }
+}
