@@ -1,0 +1,217 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+/icu4c.css -text
+source/common/common.vcxproj -text
+source/common/common.vcxproj.filters -text
+source/config/mh-haiku -text
+source/data/curr/pool.res -text
+source/data/in/coll/invuca.icu -text
+source/data/in/coll/ucadata.icu -text
+source/data/in/nfc.nrm -text
+source/data/in/nfkc.nrm -text
+source/data/in/nfkc_cf.nrm -text
+source/data/in/pnames.icu -text
+source/data/in/ubidi.icu -text
+source/data/in/ucase.icu -text
+source/data/in/unames.icu -text
+source/data/in/uprops.icu -text
+source/data/in/uts46.nrm -text
+source/data/lang/pool.res -text
+source/data/locales/pool.res -text
+source/data/makedata.vcxproj -text
+source/data/makedata.vcxproj.filters -text
+source/data/region/pool.res -text
+source/data/zone/pool.res -text
+source/extra/uconv/uconv.vcxproj -text
+source/extra/uconv/uconv.vcxproj.filters -text
+source/i18n/i18n.vcxproj -text
+source/i18n/i18n.vcxproj.filters -text
+source/io/io.vcxproj -text
+source/io/io.vcxproj.filters -text
+source/layout/layout.vcxproj -text
+source/layout/layout.vcxproj.filters -text
+source/layoutex/layoutex.vcxproj -text
+source/layoutex/layoutex.vcxproj.filters -text
+source/samples/break/break.vcxproj -text
+source/samples/break/break.vcxproj.filters -text
+source/samples/cal/cal.vcxproj -text
+source/samples/cal/cal.vcxproj.filters -text
+source/samples/case/case.vcxproj -text
+source/samples/case/case.vcxproj.filters -text
+source/samples/citer/citer.vcxproj -text
+source/samples/citer/citer.vcxproj.filters -text
+source/samples/coll/coll.vcxproj -text
+source/samples/coll/coll.vcxproj.filters -text
+source/samples/csdet/csdet.vcxproj -text
+source/samples/csdet/csdet.vcxproj.filters -text
+source/samples/date/date.vcxproj -text
+source/samples/date/date.vcxproj.filters -text
+source/samples/datefmt/datefmt.vcxproj -text
+source/samples/datefmt/datefmt.vcxproj.filters -text
+source/samples/layout/layout.vcxproj -text
+source/samples/layout/layout.vcxproj.filters -text
+source/samples/legacy/legacy.vcxproj -text
+source/samples/legacy/legacy.vcxproj.filters -text
+source/samples/msgfmt/msgfmt.vcxproj -text
+source/samples/msgfmt/msgfmt.vcxproj.filters -text
+source/samples/numfmt/numfmt.vcxproj -text
+source/samples/numfmt/numfmt.vcxproj.filters -text
+source/samples/props/props.vcxproj -text
+source/samples/props/props.vcxproj.filters -text
+source/samples/strsrch/strsrch.vcxproj -text
+source/samples/strsrch/strsrch.vcxproj.filters -text
+source/samples/translit/translit.vcxproj -text
+source/samples/translit/translit.vcxproj.filters -text
+source/samples/uciter8/uciter8.vcxproj -text
+source/samples/uciter8/uciter8.vcxproj.filters -text
+source/samples/ucnv/data02.bin -text
+source/samples/ucnv/ucnv.vcxproj -text
+source/samples/ucnv/ucnv.vcxproj.filters -text
+source/samples/udata/reader.vcxproj -text
+source/samples/udata/reader.vcxproj.filters -text
+source/samples/udata/writer.vcxproj -text
+source/samples/udata/writer.vcxproj.filters -text
+source/samples/ufortune/ufortune.vcxproj -text
+source/samples/ufortune/ufortune.vcxproj.filters -text
+source/samples/ugrep/ugrep.vcxproj -text
+source/samples/ugrep/ugrep.vcxproj.filters -text
+source/samples/uresb/resources.vcxproj -text
+source/samples/uresb/resources.vcxproj.filters -text
+source/samples/uresb/uresb.vcxproj -text
+source/samples/uresb/uresb.vcxproj.filters -text
+source/samples/ustring/ustring.vcxproj -text
+source/samples/ustring/ustring.vcxproj.filters -text
+source/stubdata/stubdata.vcxproj -text
+source/stubdata/stubdata.vcxproj.filters -text
+source/test/cintltst/cintltst.vcxproj -text
+source/test/cintltst/cintltst.vcxproj.filters -text
+source/test/intltest/intltest.vcxproj -text
+source/test/intltest/intltest.vcxproj.filters -text
+source/test/iotest/iotest.vcxproj -text
+source/test/iotest/iotest.vcxproj.filters -text
+source/test/letest/cletest.vcxproj -text
+source/test/letest/cletest.vcxproj.filters -text
+source/test/letest/gendata.vcxproj -text
+source/test/letest/gendata.vcxproj.filters -text
+source/test/letest/letest.vcxproj -text
+source/test/letest/letest.vcxproj.filters -text
+source/test/perf/DateFmtPerf/DateFmtPerf.vcxproj -text
+source/test/perf/DateFmtPerf/DateFmtPerf.vcxproj.filters -text
+source/test/perf/DateFmtPerf/collationdata.h -text
+source/test/perf/README -text
+source/test/perf/charperf/charperf.vcxproj -text
+source/test/perf/charperf/charperf.vcxproj.filters -text
+source/test/perf/collperf/collperf.vcxproj -text
+source/test/perf/collperf/collperf.vcxproj.filters -text
+source/test/perf/convperf/convperf.vcxproj -text
+source/test/perf/convperf/convperf.vcxproj.filters -text
+source/test/perf/normperf/normperf.vcxproj -text
+source/test/perf/normperf/normperf.vcxproj.filters -text
+source/test/perf/strsrchperf/strsrchperf.vcxproj -text
+source/test/perf/strsrchperf/strsrchperf.vcxproj.filters -text
+source/test/perf/ubrkperf/ubrkperf.vcxproj -text
+source/test/perf/ubrkperf/ubrkperf.vcxproj.filters -text
+source/test/perf/ucnvavailperf/ucnvavailperf.vcxproj -text
+source/test/perf/unisetperf/unisetperf.vcxproj -text
+source/test/perf/usetperf/usetperf.vcxproj -text
+source/test/perf/usetperf/usetperf.vcxproj.filters -text
+source/test/perf/ustrperf/stringperf.vcxproj -text
+source/test/perf/ustrperf/stringperf.vcxproj.filters -text
+source/test/perf/utfperf/utfperf.vcxproj -text
+source/test/perf/utfperf/utfperf.vcxproj.filters -text
+source/test/perf/utrie2perf/utrie2perf.vcxproj -text
+source/test/testdata/TestFont1.otf -text
+source/test/testdata/importtest.bin -text
+source/test/testdata/iscii.bin -text
+source/test/testdata/old_e_testtypes.res -text
+source/test/testdata/old_l_testtypes.res -text
+source/test/testdata/uni-text.bin -text
+source/tools/ctestfw/ctestfw.vcxproj -text
+source/tools/ctestfw/ctestfw.vcxproj.filters -text
+source/tools/genbrk/genbrk.vcxproj -text
+source/tools/genbrk/genbrk.vcxproj.filters -text
+source/tools/genccode/genccode.vcxproj -text
+source/tools/genccode/genccode.vcxproj.filters -text
+source/tools/gencfu/gencfu.vcxproj -text
+source/tools/gencfu/gencfu.vcxproj.filters -text
+source/tools/gencmn/gencmn.vcxproj -text
+source/tools/gencmn/gencmn.vcxproj.filters -text
+source/tools/gencnval/gencnval.vcxproj -text
+source/tools/gencnval/gencnval.vcxproj.filters -text
+source/tools/genctd/genctd.vcxproj -text
+source/tools/genctd/genctd.vcxproj.filters -text
+source/tools/gennorm2/gennorm2.vcxproj -text
+source/tools/genrb/derb.vcxproj -text
+source/tools/genrb/derb.vcxproj.filters -text
+source/tools/genrb/genrb.vcxproj -text
+source/tools/genrb/genrb.vcxproj.filters -text
+source/tools/gensprep/gensprep.vcxproj -text
+source/tools/gensprep/gensprep.vcxproj.filters -text
+source/tools/gentest/gentest.vcxproj -text
+source/tools/gentest/gentest.vcxproj.filters -text
+source/tools/icuinfo/icuinfo.vcxproj -text
+source/tools/icuinfo/testplug.vcxproj -text
+source/tools/icuinfo/testplug.vcxproj.filters -text
+source/tools/icupkg/icupkg.vcxproj -text
+source/tools/makeconv/makeconv.vcxproj -text
+source/tools/makeconv/makeconv.vcxproj.filters -text
+source/tools/pkgdata/pkgdata.vcxproj -text
+source/tools/pkgdata/pkgdata.vcxproj.filters -text
+source/tools/toolutil/toolutil.vcxproj -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+
