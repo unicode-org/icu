@@ -886,7 +886,11 @@ public:
     *
     *   @draft ICU 4.6
     */
-    virtual UText *group(UText *dest, int64_t &group_len, UErrorCode &status) const;
+    virtual UText *group(UText *dest, int64_t &group_len, UErrorCode &status) const; 
+
+   /**
+    * @draft ICU 4.6
+    */
     virtual UText *group(int32_t groupNum, UText *dest, int64_t &group_len, UErrorCode &status) const;
 
    /**

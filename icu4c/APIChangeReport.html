@@ -3,15 +3,15 @@
 	--><html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ICU4C API Comparison: 4.4.1 with 4.6 r28256M</title>
+<title>ICU4C API Comparison: 4.4.2 with 4.6 (ICU 4.5.2) r28742M</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="_top"></a>
-<h1>ICU4C API Comparison: 4.4.1 with 4.6 (r28256M)</h1>
+<h1>ICU4C API Comparison: 4.4.2 with 4.6 (ICU 4.5.2) (r28742M)</h1>
 <ul>
 <li>
-<a href="#removed">Removed from 4.4.1</a>
+<a href="#removed">Removed from 4.4.2</a>
 </li>
 <li>
 <a href="#deprecated">Deprecated or Obsoleted in 4.6</a>
@@ -31,52 +31,92 @@
 </ul>
 <hr>
 <a name="removed">
-<h2>Removed from 4.4.1</h2>
+<h2>Removed from 4.4.2</h2>
 </a>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>4.4.1</th><th>4.6</th>
+<th>File</th><th>API</th><th>4.4.2</th><th>4.6</th>
 </tr>
 </THEAD>
 <tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">void DecimalFormatSymbols::setSymbol(ENumberFormatSymbol, const UnicodeString&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">format.h</td><td class="proto">UClassID Format::getDynamicClassID() const =0</td><td class="stabchange">Stable<br>2.0</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fpositer.h</td><td class="proto">UClassID FieldPositionIterator::getDynamicClassID() const</td><td class="">Draft<br>4.4</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">fpositer.h</td><td class="proto">static UClassID FieldPositionIterator::getStaticClassID()</td><td class="">Draft<br>4.4</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint16 LESwaps::swapWord(const le_uint16&amp;)</td><td class="stabchange">Stable<br>2.8</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint32 LESwaps::swapLong(const le_uint32&amp;)</td><td class="stabchange">Stable<br>2.8</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">static UClassID LocaleDisplayNames::getStaticClassID()</td><td class="">Internal<br>4.4 // TODO</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UClassID FilteredNormalizer2::getDynamicClassID() const</td><td class="">Draft<br>4.4</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UClassID Normalizer2::getDynamicClassID() const =0</td><td class="">Draft<br>4.4</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">static UClassID FilteredNormalizer2::getStaticClassID()</td><td class="">Draft<br>4.4</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">static UClassID Normalizer2::getStaticClassID()</td><td class="">Draft<br>4.4</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::region(int32_t, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>4.0</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.8</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::find(int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.4</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::lookingAt(int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.8</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::matches(int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.8</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::appendTail(UText*)</td><td class="">Internal<br>4.4 technology preview</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::getInput(UText*) const</td><td class="">Internal<br>4.4 technology preview</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::group(UText*, MatcherDestIsUTextFlag, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexPattern::patternText() const</td><td class="">Internal<br>4.4 technology preview</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
@@ -95,6 +135,14 @@
 <td class="file">unifilt.h</td><td class="proto">UClassID UnicodeFilter::getDynamicClassID() const =0</td><td class="stabchange">Stable<br>2.2</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_appendTailUText(URegularExpression*, UText*)</td><td class="">Internal<br>4.4 technology preview</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_groupUText(URegularExpression*, int32_t, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -105,7 +153,7 @@
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>4.4.1</th><th>4.6</th>
+<th>File</th><th>API</th><th>4.4.2</th><th>4.6</th>
 </tr>
 </THEAD>
 </table>
@@ -118,9 +166,141 @@
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>4.4.1</th><th>4.6</th>
+<th>File</th><th>API</th><th>4.4.2</th><th>4.6</th>
 </tr>
 </THEAD>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::appendReplacement(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(UText*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher* RegexPattern::matcher(UText*, PatternIsUTextFlag, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::inputText() const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceAll(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceFirst(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">int32_t RegexMatcher::split(UText*, UText*dest[], int32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">int32_t RegexPattern::split(UText*, UText*dest[], int32_t, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">static UBool RegexPattern::matches(UText*, UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">URegularExpression* uregex_openUText(UText*, uint32_t, UParseError*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_getUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_patternUText(const URegularExpression*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_replaceAllUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_replaceFirstUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">int32_t uregex_splitUText(URegularExpression*, UText*destFields[], int32_t, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">void uregex_appendReplacementUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">void uregex_setUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -131,11 +311,11 @@
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>4.4.1</th><th>4.6</th>
+<th>File</th><th>API</th><th>4.4.2</th><th>4.6</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">format.h</td><td class="proto">UBool Format::isLenient()const</td><td class="">None<br>
+<td class="file">dcfmtsym.h</td><td class="proto">void DecimalFormatSymbols::setSymbol(ENumberFormatSymbol, const UnicodeString&amp;, const UBool)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
@@ -146,6 +326,31 @@
 </tr>
 <tr class="row1">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint32 LESwaps::swapLong(le_uint32)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::region(int64_t, int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.0</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::find(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::lookingAt(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::matches(int64_t, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.8</span></span></td>
 </tr>
@@ -159,7 +364,7 @@
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>4.4.1</th><th>4.6</th>
+<th>File</th><th>API</th><th>4.4.2</th><th>4.6</th>
 </tr>
 </THEAD>
 <tr class="row1">
@@ -173,117 +378,220 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">format.h</td><td class="proto">UBool Format::isLenient()const</td><td class="">None<br>
+<td class="file">dcfmtsym.h</td><td class="proto">void DecimalFormatSymbols::setSymbol(ENumberFormatSymbol, const UnicodeString&amp;, const UBool)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">format.h</td><td class="proto">UBool Format::isLenient()const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">format.h</td><td class="proto">void Format::setLenient(UBool)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">IDNAInfo::IDNAInfo()</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">UBool IDNAInfo::hasErrors() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">UBool IDNAInfo::isTransitionalDifferent() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::labelToASCII(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::labelToUnicode(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::nameToASCII(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::nameToUnicode(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">static IDNA* IDNA::createUTS46Instance(uint32_t, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">uint32_t IDNAInfo::getErrors() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">void IDNA::labelToASCII_UTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">void IDNA::labelToUnicodeUTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">void IDNA::nameToASCII_UTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">void IDNA::nameToUnicodeUTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint16 LESwaps::swapWord(le_uint16)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.8</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint32 LESwaps::swapLong(le_uint32)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.8</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UBool FilteredNormalizer2::getDecomposition(UChar32, UnicodeString&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UBool Normalizer2::getDecomposition(UChar32, UnicodeString&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numsys.h</td><td class="proto">#define NUMSYS_NAME_CAPACITY</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numsys.h</td><td class="proto">const char* NumberingSystem::getName()</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">#define REGEXFINDPROGRESS_INTERRUPT</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
 <tr class="row0">
-<td class="file">regex.h</td><td class="proto">void RegexMatcher::getFindProgressCallback(URegexFindProgressCallback*&amp;, const void*&amp;, UErrorCode&amp;)</td><td class="">None<br>
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::region(int64_t, int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.0</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::region(int64_t, int64_t, int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.8</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::find(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::lookingAt(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.8</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UBool RegexMatcher::matches(int64_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::appendTail(UText*, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::getInput(UText*, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::group(UText*, int64_t&amp;, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::group(int32_t, UText*, int64_t&amp;, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>
+<br>
+<span class=""><span></span>
+<br>
+<b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexPattern::patternText(UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">int64_t RegexMatcher::end64(UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">int64_t RegexMatcher::end64(int32_t, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">int64_t RegexMatcher::regionEnd64() const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">int64_t RegexMatcher::regionStart64() const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">int64_t RegexMatcher::start64(UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">int64_t RegexMatcher::start64(int32_t, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">void RegexMatcher::getFindProgressCallback(URegexFindProgressCallback*&amp;, const void*&amp;, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">void RegexMatcher::setFindProgressCallback(URegexFindProgressCallback*, const void*, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ubidi.h</td><td class="proto">UBiDiDirection ubidi_getBaseDirection(const UChar*, int32_t)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
@@ -343,22 +651,117 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">unorm2.h</td><td class="proto">int32_t unorm2_getDecomposition(const UNormalizer2*, UChar32, UChar*, int32_t, UErrorCode*)</td><td class="">None<br>
+<td class="file">uloc.h</td><td class="proto">#define ULOC_KEYWORD_ASSIGN_UNICODE</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">uloc.h</td><td class="proto">#define ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">#define ULOC_KEYWORD_SEPARATOR_UNICODE</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm2.h</td><td class="proto">int32_t unorm2_getDecomposition(const UNormalizer2*, UChar32, UChar*, int32_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">uobject.h</td><td class="proto">#define UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UBool uregex_find64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
 <tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UBool uregex_lookingAt64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UBool uregex_matches64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_appendTailUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_groupUText(URegularExpression*, int32_t, UText*, int64_t*, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_groupUTextDeep(URegularExpression*, int32_t, UText*, UErrorCode*)</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>4.4 technology preview</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">int64_t uregex_end64(URegularExpression*, int32_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">int64_t uregex_regionEnd64(const URegularExpression*, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">int64_t uregex_regionStart64(const URegularExpression*, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">int64_t uregex_start64(URegularExpression*, int32_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">void uregex_getFindProgressCallback(const URegularExpression*, URegexFindProgressCallback**, const void**, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">void uregex_reset64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">uregex.h</td><td class="proto">void uregex_setFindProgressCallback(URegularExpression*, URegexFindProgressCallback*, const void*, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">void uregex_setRegion64(URegularExpression*, int64_t, int64_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">void uregex_setRegionAndStart(URegularExpression*, int64_t, int64_t, int64_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">UBool uscript_hasScript(UChar32, UScriptCode)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">int32_t uscript_getScriptExtensions(UChar32, UScriptCode*, int32_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">vtzone.h</td><td class="proto">static VTimeZone* VTimeZone::createVTimeZoneFromBasicTimeZone(const BasicTimeZone&amp;, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
@@ -373,7 +776,7 @@
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>4.4.1</th><th>4.6</th>
+<th>File</th><th>API</th><th>4.4.2</th><th>4.6</th>
 </tr>
 </THEAD>
 <tr class="row1">
@@ -888,6 +1291,62 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::appendReplacement(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(UText*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher* RegexPattern::matcher(UText*, PatternIsUTextFlag, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::inputText() const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceAll(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceFirst(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">int32_t RegexMatcher::split(UText*, UText*dest[], int32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">int32_t RegexPattern::split(UText*, UText*dest[], int32_t, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">static UBool RegexPattern::matches(UText*, UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">Format* SelectFormat::clone()const</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -1007,21 +1466,7 @@
        	            	">Draft<br>4.4</td>
 </tr>
 <tr class="row1">
-<td class="file">std_string.h</td><td class="proto">#define U_STD_NSQ</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row0">
-<td class="file">std_string.h</td><td class="proto">#define U_STD_NS_USE</td><td class="" colspan="
-       	            		2
-       	            	" align="
-       	            		center
-       	            	">Draft<br>4.2</td>
-</tr>
-<tr class="row1">
-<td class="file">std_string.h</td><td class="proto">#define U_STD_NS</td><td class="" colspan="
+<td class="file">std_string.h</td><td class="proto">#define U_HAVE_STD_STRING</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
@@ -1308,6 +1753,38 @@
        	            	">Draft<br>4.4</td>
 </tr>
 <tr class="row0">
+<td class="file">uregex.h</td><td class="proto">URegularExpression* uregex_openUText(UText*, uint32_t, UParseError*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_getUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_patternUText(const URegularExpression*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_replaceAllUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">UText* uregex_replaceFirstUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">int32_t uregex_splitUText(URegularExpression*, UText*destFields[], int32_t, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">void uregex_appendReplacementUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">void uregex_setUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define SHAPE_TAIL_NEW_UNICODE</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -1502,7 +1979,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI (r27279:27490M) tool on Tue Jun 22 19:38:16 PDT 2010<br>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI (r28741:28742M) tool on Thu Sep 30 11:19:58 PDT 2010<br>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
