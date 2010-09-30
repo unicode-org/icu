@@ -54,6 +54,11 @@ $(TARGET): check-vars $(OLD_ICU)/$(XML) $(NEW_ICU)/$(XML)
 	echo "Remember to run the non-ascii file detector if you get errors."
 	$(ANT) -Dolddir="$(OLD_ICU)/$(XML)" -Dnewdir="$(NEW_ICU)/$(XML)" $(ANT_TARGET)
 
+# check-vars $(OLD_ICU)/$(XML) $(NEW_ICU)/$(XML) 
+APIChangeReport.xml:
+	echo "Remember to run the non-ascii file detector if you get errors."
+	$(ANT) -Dolddir="$(OLD_ICU)/$(XML)" -Dnewdir="$(NEW_ICU)/$(XML)" $(ANT_TARGET)_xml
+
 %/source/doc/xml:	%/source/Doxyfile
 	# don't care what GENERATE_XML is set to previously - set it to yes.
 	@echo running doxyugen .. 
