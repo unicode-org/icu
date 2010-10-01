@@ -1,16 +1,26 @@
-# Copyright (C) 2009 IBM and Others. All Rights Reserved
+# Copyright (C) 2009-2010 IBM and Others. All Rights Reserved
 
-A tool to generate a report of API status changes between two ICU releases
+API Change Report:
 
-        To use the utility
-        1. setup ICU
-            (put the two ICU releases on your machine ^_^ 
-		run 'configure' in both releases (or runConfigureICU)
-	2. create a Makefile.local with these two lines:
+A tool to generate a report of API status changes between two ICU4C releases.
+(ICU4J has a builtin change report generator)
+
+Requirements:
+  - Everything needed to build ICU4C from a command line (UNIX) environment
+  - Doxygen (for generating docs)
+  - Java JDK 1.5+
+  - Apache Ant
+  
+
+To use the utility:
+    1. setup ICU
+            (put the two ICU releases on your machine ^_^  )
+            run 'configure' in both releases (or runConfigureICU)
+            Doxygen must be found during configure.
+	2. create a Makefile.local with just these two lines:
 			OLD_ICU=/xsrl/E/icu-1.0
 			NEW_ICU=/xsrl/E/icu-6.8
-	   ( where these are the paths to the parent of 'source', etc)
-        3. Build the API docs
+	   ( where these are the paths to the parent of 'source', etc)     
+    3. Build the API docs
             make
-	4. allow APIChangeReport.html to cool before use.
- 
+	4. This will create an 'APIChangeReport.html' in this directory. Check it over, then check it in.
