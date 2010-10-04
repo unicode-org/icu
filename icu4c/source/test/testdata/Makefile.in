@@ -103,6 +103,12 @@ ICU_DATA_OPT = -i $(BUILDDIR)
 endif
 endif
 
+CURDIR:=$(CURR_FULL_DIR)
+# current directory should not be blank
+ifeq ($(CURDIR),)
+CURDIR=.
+endif
+
 PKGDATA = $(TOOLBINDIR)/pkgdata -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME)
 PKGDATA_INVOKE:=$(INVOKE) $(PKGDATA_INVOKE_OPTS)
 
