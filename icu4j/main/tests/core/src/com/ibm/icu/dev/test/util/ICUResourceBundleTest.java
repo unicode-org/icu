@@ -439,7 +439,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     public void TestAliases(){
-/*
        String simpleAlias   = "Open";
 
        UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases", testLoader);
@@ -549,34 +548,48 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 errln("Did not get the expected output for testGetStringByIndexAliasing/3. Got: "+s1);
             }
         }
+
+// Note: Following test cases are no longer working because collation data is now in the collation module
+//        {
+//            sub = rb.get("testAliasToTree" );
+//            
+//            ByteBuffer buf = sub.get("standard").get("%%CollationBin").getBinary();
+//            if(buf==null){
+//                errln("Did not get the expected output for %%CollationBin");
+//            }
+//        }
+//
+//        rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"zh_TW");
+//        UResourceBundle b = (UResourceBundle) rb.getObject("collations");
+//        if(b != null){
+//            if(b.get(0).getKey().equals( "default")){
+//                logln("Alias mechanism works");
+//            }else{
+//                errln("Alias mechanism failed for zh_TW collations");
+//            }
+//        }else{
+//            errln("Did not get the expected object for collations");
+//        }
+
+        // Test case for #7996
         {
-            sub = rb.get("testAliasToTree" );
-            
-            ByteBuffer buf = sub.get("standard").get("%%CollationBin").getBinary();
-            if(buf==null){
-                errln("Did not get the expected output for %%CollationBin");
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "te");
+            UResourceBundle table = bundle.get("tableT7996");
+            try {
+                String s = table.getString("a7996");
+                logln("Alias in nested table referring one in sh worked - " + s);
+            } catch (MissingResourceException e) {
+                errln("Alias in nested table referring one in sh failed");
+            }
+
+            try {
+                String s = ((ICUResourceBundle)table).getStringWithFallback("b7996");
+                logln("Alias with /LOCALE/ in nested table in root referring back to another key in the current locale bundle worked - " + s);
+            } catch (MissingResourceException e) {
+                errln("Alias with /LOCALE/ in nested table in root referring back to another key in the current locale bundle failed");
             }
         }
-        // should not get an exception
-        rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_RBNF_BASE_NAME,"fr_BE");
-        String str = rb.getString("SpelloutRules");
-        if(str !=null && str.length()>0){
-            logln("Alias mechanism works");
-        }else{
-            errln("Alias mechanism failed for fr_BE SpelloutRules");
-        }
-        rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"zh_TW");
-        UResourceBundle b = (UResourceBundle) rb.getObject("collations");
-        if(b != null){
-            if(b.get(0).getKey().equals( "default")){
-                logln("Alias mechanism works");
-            }else{
-                errln("Alias mechanism failed for zh_TW collations");
-            }
-        }else{
-            errln("Did not get the expected object for collations");
-        }
-*/
+
     }
     public void TestAlias(){
         logln("Testing %%ALIAS");
@@ -613,20 +626,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
     public void TestCircularAliases(){
-// Aliases no longer supported
-//        try{
-//            UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
-//            UResourceBundle sub = rb.get("aaa");
-//            String s1 = sub.getString();
-//            if(s1!=null){
-//                errln("Did not get the expected exception");
-//            }
-//        }catch(IllegalArgumentException ex){
-//            logln("got expected exception for circular references");
-//        }
-//        catch (MissingResourceException ex) {
-//            warnln("could not load resource data: " + ex.getMessage());
-//        }
+        try{
+            UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
+            UResourceBundle sub = rb.get("aaa");
+            String s1 = sub.getString();
+            if(s1!=null){
+                errln("Did not get the expected exception");
+            }
+        }catch(IllegalArgumentException ex){
+            logln("got expected exception for circular references");
+        }
+        catch (MissingResourceException ex) {
+            warnln("could not load resource data: " + ex.getMessage());
+        }
     }
 
     public void TestGetWithFallback(){
