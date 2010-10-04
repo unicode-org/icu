@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -39,7 +39,7 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
             if (isAlias != null) {
                 isAlias[0] = true;
             }
-            return findResource(_key, _resource, table, requested);
+            return findResource(_key, _resPath, _resource, table, requested);
         case INT:
             return new ICUResourceBundleImpl.ResourceInt(reader, _key, _resPath, _resource, this);
         case INT_VECTOR:
