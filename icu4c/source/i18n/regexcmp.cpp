@@ -58,6 +58,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
 
     fRXPat            = rxp;
     fScanIndex        = 0;
+    fLastChar         = -1;
     fPeekChar         = -1;
     fLineNum          = 1;
     fCharNum          = 0;
