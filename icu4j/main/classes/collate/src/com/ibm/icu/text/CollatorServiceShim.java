@@ -85,8 +85,8 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         // TODO rewrite this to just wrap getAvailableULocales later
         Locale[] result;
         if (service.isDefault()) {
-            ClassLoader cl = getClass().getClassLoader();
-            result = ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
+            result = ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME,
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         } else {
             result = service.getAvailableLocales();
         }
@@ -96,8 +96,8 @@ final class CollatorServiceShim extends Collator.ServiceShim {
     ULocale[] getAvailableULocales() {
         ULocale[] result;
         if (service.isDefault()) {
-            ClassLoader cl = getClass().getClassLoader();
-            result = ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
+            result = ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME,
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         } else {
             result = service.getAvailableULocales();
         }

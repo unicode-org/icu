@@ -567,9 +567,8 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public static Locale[] getAvailableLocales() {
         // TODO make this wrap getAvailableULocales later
         if (shim == null) {
-            ClassLoader cl = Collator.class.getClassLoader();
             return ICUResourceBundle.getAvailableLocales(
-                ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
+                ICUResourceBundle.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         }
         return shim.getAvailableLocales();
     }
@@ -584,9 +583,8 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public static final ULocale[] getAvailableULocales() {
         if (shim == null) {
-            ClassLoader cl = Collator.class.getClassLoader();
             return ICUResourceBundle.getAvailableULocales(
-                ICUResourceBundle.ICU_COLLATION_BASE_NAME, cl);
+                ICUResourceBundle.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         }
         return shim.getAvailableULocales();
     }
@@ -724,8 +722,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public static final ULocale getFunctionalEquivalent(String keyword,
                                                         ULocale locID,
                                                         boolean isAvailable[]) {
-        ClassLoader cl = Collator.class.getClassLoader();
-        return ICUResourceBundle.getFunctionalEquivalent(BASE, cl, RESOURCE,
+        return ICUResourceBundle.getFunctionalEquivalent(BASE, ICUResourceBundle.ICU_DATA_CLASS_LOADER, RESOURCE,
                                                          keyword, locID, isAvailable, true);
     }
 
