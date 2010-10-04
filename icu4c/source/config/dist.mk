@@ -18,6 +18,7 @@ DISTY_DATA=$(DISTY_ICU)/source/data
 DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone
 DISTY_RMDIR=$(DISTY_RMV:%=$(DISTY_DATA)/%)
 DISTY_IN=$(DISTY_DATA)/in
+DOCZIP=icu-docs.zip
 
 SVNTOP=$(top_srcdir)/..
 SVNDOT=$(SVNTOP)/.svn
@@ -47,7 +48,12 @@ $(DISTY_TMP):
 $(DISTY_DOC_ZIP): $(SVNDOT) $(DOCZIP) $(DISTY_FILE_DIR)
 	cp $(DOCZIP) $(DISTY_DOC_ZIP)
 
-$(DISTY_DAT): all-recursive
+$(DISTY_DAT): 
+	echo Missing $@
+	/bin/false
+
+$(DOCZIP):
+	$(MAKE) -C . srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" builddir=. $@
 
 $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP): $(SVNDOT) $(DISTY_DAT) $(DISTY_TMP)
 	@echo "svnversion of $(SVNTOP) is as follows (if this fails, make sure svn is installed..)"
