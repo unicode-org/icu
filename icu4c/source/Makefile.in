@@ -18,7 +18,7 @@ docdir = $(datadir)/doc
 docsubdir = $(PACKAGE)$(ICULIBDASHSUFFIX)/html
 docsubsrchdir = $(docsubdir)/search
 docfilesdir = doc/html
-docfiles = $(docfilesdir)/*.gif $(docfilesdir)/*.png $(docfilesdir)/*.html $(docfilesdir)/*.css $(docfilesdir)/*.tag $(docfilesdir)/installdox
+docfiles = $(docfilesdir)/*.png $(docfilesdir)/*.html $(docfilesdir)/*.css $(docfilesdir)/*.tag $(docfilesdir)/installdox
 docsrchdir = $(docfilesdir)/search
 docsrchfiles = $(docsrchdir)/*
 
