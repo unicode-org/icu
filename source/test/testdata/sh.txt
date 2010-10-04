@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 2005, International Business Machines
+//*   Copyright (C) 2005-2010, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -11,4 +11,8 @@ sh{
 	a2{"a02"}
         a3{"a03"}
     }
- }
+
+    tableT7996 {
+        a7996 {"string a7996 in table7996 for sh"}
+    }
+}

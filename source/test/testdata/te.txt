@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 1998-2005, International Business Machines
+//*   Copyright (C) 1998-2010, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -160,6 +160,10 @@ te
         }
     }
 
+    tableT7996 {
+        a7996:alias {"sh"}
+        c7996 {"string c7996 in tableT7996 for te"}
+    }
 }
 
 //eof
