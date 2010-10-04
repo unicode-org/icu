@@ -1,13 +1,15 @@
 /******************************************************************************
- *   Copyright (C) 2009, International Business Machines
+ *   Copyright (C) 2009-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
 
 #include "flagparser.h"
 #include "filestrm.h"
+#include "cstring.h"
+#include "cmemory.h"
 
-#define LARGE_BUFFER_MAX_SIZE 2048
+#define BUFFER_DEFAULT_SIZE 512
 
 static void extractFlag(char* buffer, int32_t bufferSize, char* flag, int32_t flagSize, UErrorCode *status);
 static int32_t getFlagOffset(const char *buffer, int32_t bufferSize);
@@ -17,7 +19,9 @@ static int32_t getFlagOffset(const char *buffer, int32_t bufferSize);
  */
 U_CAPI void U_EXPORT2
 parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, int32_t numOfFlags, UErrorCode *status) {
-    char buffer[LARGE_BUFFER_MAX_SIZE];
+    int32_t currentBufferSize = BUFFER_DEFAULT_SIZE;
+    char* buffer = uprv_malloc(sizeof(char) * currentBufferSize);
+    UBool allocateMoreSpace = FALSE;
     int32_t i;
 
     FileStream *f = T_FileStream_open(fileName, "r");
@@ -26,17 +30,42 @@ parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, 
         return;
     }
 
-    for (i = 0; i < numOfFlags; i++) {
-        if (T_FileStream_readLine(f, buffer, LARGE_BUFFER_MAX_SIZE) == NULL) {
-            *status = U_FILE_ACCESS_ERROR;
-            break;
-        }
-
-        extractFlag(buffer, LARGE_BUFFER_MAX_SIZE, flagBuffer[i], flagBufferSize, status);
-        if (U_FAILURE(*status)) {
-            break;
-        }
+    if (buffer == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
+
+    do {
+        if (allocateMoreSpace) {
+            allocateMoreSpace = FALSE;
+            currentBufferSize *= 2;
+            uprv_free(buffer);
+            buffer = uprv_malloc(sizeof(char) * currentBufferSize);
+            if (buffer == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
+        for (i = 0; i < numOfFlags; i++) {
+            if (T_FileStream_readLine(f, buffer, currentBufferSize) == NULL) {
+                *status = U_FILE_ACCESS_ERROR;
+                break;
+            }
+
+            if (uprv_strlen(buffer) == (currentBufferSize - 1) && buffer[currentBufferSize-2] != '\n') {
+                /* Allocate more space for buffer if it didnot read the entrire line */
+                allocateMoreSpace = TRUE;
+                T_FileStream_rewind(f);
+                break;
+            } else {
+
+                extractFlag(buffer, currentBufferSize, flagBuffer[i], flagBufferSize, status);
+                if (U_FAILURE(*status)) {
+                    break;
+                }
+            }
+        }
+    } while (allocateMoreSpace && U_SUCCESS(*status));
 
     T_FileStream_close(f);
 }
