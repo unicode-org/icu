@@ -221,7 +221,7 @@ TOOLBINDIR=$(BINDIR)
 TOOLLIBDIR=$(LIBDIR)
 
 # Current full path directory.
-CURR_FULL_DIR=$(shell pwd | sed 's/ /\\ /')
+CURR_FULL_DIR=$(shell pwd | sed 's/ /\\ /g')
 # Current full path directory for use in source code in a -D compiler option.
 CURR_SRCCODE_FULL_DIR=$(shell pwd | sed 's/ /\\ /')
 
