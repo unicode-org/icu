@@ -2066,34 +2066,33 @@ u_getVersion(UVersionInfo versionArray) {
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
-    void *ret = NULL;
-    if(U_FAILURE(*status)) return ret;
-    ret =  dlopen(libName, RTLD_NOW|RTLD_GLOBAL);
-    if(ret==NULL) {
-        perror("dlopen");
-        *status = U_MISSING_RESOURCE_ERROR;
-        /* TODO: read errno and translate. */
-    }
-    return ret;
+  void *ret = NULL;
+  if(U_FAILURE(*status)) return ret;
+  ret =  dlopen(libName, RTLD_NOW|RTLD_GLOBAL);
+  if(ret==NULL) {
+#ifndef U_TRACE_DYLOAD
+    perror("dlopen");
+#endif
+    *status = U_MISSING_RESOURCE_ERROR;
+  }
+  return ret;
 }
 
 U_INTERNAL void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
-    if(U_FAILURE(*status)) return;
-    dlclose(lib);
-    /* TODO: translate errno? */
+  if(U_FAILURE(*status)) return;
+  dlclose(lib);
 }
 
 U_INTERNAL void* U_EXPORT2
 uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
-    void *ret = NULL;
-    if(U_FAILURE(*status)) return ret;
-    ret = dlsym(lib, sym);
-    if(ret == NULL) {
-        *status = U_MISSING_RESOURCE_ERROR;
-        /* TODO: translate errno? */
-    }
-    return ret;
+  void *ret = NULL;
+  if(U_FAILURE(*status)) return ret;
+  ret = dlsym(lib, sym);
+  if(ret == NULL) {
+    *status = U_MISSING_RESOURCE_ERROR;
+  }
+  return ret;
 }
 
 #else
@@ -2102,24 +2101,24 @@ uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
-    if(U_FAILURE(*status)) return NULL;
-    *status = U_UNSUPPORTED_ERROR;
-    return NULL;
+  if(U_FAILURE(*status)) return NULL;
+  *status = U_UNSUPPORTED_ERROR;
+  return NULL;
 }
 
 U_INTERNAL void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
-    if(U_FAILURE(*status)) return;
-    *status = U_UNSUPPORTED_ERROR;
-    return;
+  if(U_FAILURE(*status)) return;
+  *status = U_UNSUPPORTED_ERROR;
+  return;
 }
 
 
 U_INTERNAL void* U_EXPORT2
 uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
-    if(U_FAILURE(*status)) return NULL;
-    *status = U_UNSUPPORTED_ERROR;
-    return NULL;
+  if(U_FAILURE(*status)) return NULL;
+  *status = U_UNSUPPORTED_ERROR;
+  return NULL;
 }
 
 
@@ -2130,49 +2129,49 @@ uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
-   	HMODULE lib = NULL;
-
-	if(U_FAILURE(*status)) return NULL;
-    
-	lib = LoadLibrary(libName);
-
-	if(lib==NULL) {
-		*status = U_MISSING_RESOURCE_ERROR;
-	}
-
-    return (void*)lib;
+  HMODULE lib = NULL;
+  
+  if(U_FAILURE(*status)) return NULL;
+  
+  lib = LoadLibrary(libName);
+  
+  if(lib==NULL) {
+    *status = U_MISSING_RESOURCE_ERROR;
+  }
+  
+  return (void*)lib;
 }
 
 U_INTERNAL void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
-	HMODULE handle = (HMODULE)lib;
-    if(U_FAILURE(*status)) return;
-    
-	FreeLibrary(handle);
-
-    return;
+  HMODULE handle = (HMODULE)lib;
+  if(U_FAILURE(*status)) return;
+  
+  FreeLibrary(handle);
+  
+  return;
 }
 
 
 U_INTERNAL void* U_EXPORT2
 uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
-	HMODULE handle = (HMODULE)lib;
-	void * addr = NULL;
-
-	if(U_FAILURE(*status) || lib==NULL) return NULL;
-   
-	addr = GetProcAddress(handle, sym);
-
-	if(addr==NULL) {
-		DWORD lastError = GetLastError();
-		if(lastError == ERROR_PROC_NOT_FOUND) {
-			*status = U_MISSING_RESOURCE_ERROR;
-		} else {
-			*status = U_UNSUPPORTED_ERROR; /* other unknown error. */
-		}
-	}
-
-    return addr;
+  HMODULE handle = (HMODULE)lib;
+  void * addr = NULL;
+  
+  if(U_FAILURE(*status) || lib==NULL) return NULL;
+  
+  addr = GetProcAddress(handle, sym);
+  
+  if(addr==NULL) {
+    DWORD lastError = GetLastError();
+    if(lastError == ERROR_PROC_NOT_FOUND) {
+      *status = U_MISSING_RESOURCE_ERROR;
+    } else {
+      *status = U_UNSUPPORTED_ERROR; /* other unknown error. */
+    }
+  }
+  
+  return addr;
 }
 
 
