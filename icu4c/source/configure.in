@@ -4,7 +4,7 @@ AC_COPYRIGHT([ Copyright (c) 1999-2010, International Business Machines Corporat
 # Stephen F. Booth, heavily modified by Yves and others
 
 # Check for autoconf version
-AC_PREREQ(2.63)
+AC_PREREQ(2.67)
 
 
 # Process this file with autoconf to produce a configure script
@@ -85,6 +85,11 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 
 AC_SUBST(cross_compiling)
+
+dnl use the pld hack to get ac_fn_cxx_try_link defined globally and not local
+AC_LANG_PUSH([C++])
+AC_LINK_IFELSE([AC_LANG_PROGRAM()])
+AC_LANG_POP([C++])
 
 # make sure install is relative to srcdir - if a script
 if test "$srcdir" = "."; then
