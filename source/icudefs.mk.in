@@ -221,9 +221,9 @@ TOOLBINDIR=$(BINDIR)
 TOOLLIBDIR=$(LIBDIR)
 
 # Current full path directory.
-CURR_FULL_DIR=$(shell pwd)
+CURR_FULL_DIR=$(shell pwd | sed 's/ /\\ /')
 # Current full path directory for use in source code in a -D compiler option.
-CURR_SRCCODE_FULL_DIR=$(shell pwd)
+CURR_SRCCODE_FULL_DIR=$(shell pwd | sed 's/ /\\ /')
 
 # Name flexibility for the library naming scheme.  Any modifications should
 # be made in the mh- file for the specific platform.
