@@ -752,6 +752,7 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t result = 0;
     int32_t currentBufferSize = SMALL_BUFFER_MAX_SIZE;
+    int32_t tmpResult = 0;
 
     /* Initialize pkgdataFlags */
     pkgDataFlags = (char**)uprv_malloc(sizeof(char*) * PKGDATA_FLAGS_SIZE);
@@ -785,12 +786,12 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
           fprintf(stdout, "# Reading options file %s\n", o->options);
         }
         status = U_ZERO_ERROR;
-        parseFlagsFile(o->options, pkgDataFlags, currentBufferSize, (int32_t)PKGDATA_FLAGS_SIZE, &status);
+        tmpResult = parseFlagsFile(o->options, pkgDataFlags, currentBufferSize, (int32_t)PKGDATA_FLAGS_SIZE, &status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
                 uprv_free(pkgDataFlags[i]);
             }
-            currentBufferSize *= 2;
+            currentBufferSize = tmpResult;
         } else if (U_FAILURE(status)) {
             fprintf(stderr,"Unable to open or read \"%s\" option file. status = %s\n", o->options, u_errorName(status));
             return -1;
