@@ -1,10 +1,31 @@
-# Copyright (c) 2008-2009 IBM Corp. and Others. All Rights Reserved
+#
+# Copyright (C) 2008-2010 IBM Corporation and Others. All Rights Reserved
 
-# local definitions can go in Makefile.local
+# local definitions must go in Makefile.local
 # example:
 
+##
+## These two are REQUIRED.
+##
+
+# The version of ICU you will build against, such as:  
+# EXAMPLE: 4.4.2
+PROVIDER_TARGET=4.4.2
+
+# The versions of ICU you want to have available in the plugin. Space separated.  Don't include the PROVIDER_TARGET version.
+# EXAMPLE: 3.8.1  4.2.0.1
+PROVIDER_AVAILABLE=3.8.1 4.2.0.1
+
+
+
+
+
+##
+## following are OPTIONAL
+##
+
 ## debug options
-EXTRA_COMPILE_OPTS=-g
+#EXTRA_COMPILE_OPTS=-g
 
 ## configure options
 #EXTRA_CONFIGURE_OPTS=--with-library-suffix=srl

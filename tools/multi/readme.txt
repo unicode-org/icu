@@ -2,6 +2,13 @@
 # Copyright (c) 2009-2010 IBM Corp. and Others. All Rights Reserved
 #
 
+
+NOTE:
+NOTE: For information about the 'Provider' feature, see proj/provider/readme.txt
+NOTE:
+
+
+
  This directory contains pieces of the 'MultiIcu' feature, which contains
 scripts for building multiple versions of ICU at the same time, and running
 various pieces of code against it.
