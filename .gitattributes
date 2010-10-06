@@ -3015,6 +3015,7 @@ tools/multi/common/Makefile-multi.inc -text
 tools/multi/j/Makefile-j.inc -text
 tools/multi/proj/provider/Makefile.local-sample -text
 tools/multi/proj/provider/icu-config.sed -text
+tools/multi/proj/provider/readme.txt -text
 tools/release/java/.classpath -text
 tools/release/java/.project -text
 tools/release/java/Makefile -text

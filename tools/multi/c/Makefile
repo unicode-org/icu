@@ -23,9 +23,11 @@ INS=$(C_INS)
 SRC=$(C_SRC)
 
 ALLICUS=$(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(BLD)/r%/$(S_BLD))
-IICUS=$(ICUVERS:%=$(INS)/%/$(S_INS)) $(ICUVERS:%=$(INS)/r%/$(S_INS))
+RICUS=$(ICUVERS:%=$(INS)/r%/$(S_INS))
+IICUS=$(ICUVERS:%=$(INS)/%/$(S_INS)) $(RICUS)
 
-APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS)) $(ICUVERS:%=$(BLD)/r%/$(S_BLD)) $(ICUVERS:%=$(INS)/r%/$(S_INS))
+
+APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/r%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS)) $(ICUVERS:%=$(BLD)/r%/$(S_BLD)) $(ICUVERS:%=$(INS)/r%/$(S_INS))
 
 .PRECIOUS: $(APRECIOUS)
 
@@ -97,3 +99,4 @@ all-icus: iicus
 
 iicus: $(BLD) $(IICUS)
 
+ricus: $(RICUS)

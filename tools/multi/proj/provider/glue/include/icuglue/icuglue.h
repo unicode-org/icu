@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -13,7 +13,6 @@
 /* Get utypes.h from whatever ICU we are under */
 #include <unicode/utypes.h>
 
-//#define GLUE_SYM(x) glue ## x ## ICUGLUE_VER
 #define GLUE_SYM_V(x, v) glue ## x ## v
 
 #endif

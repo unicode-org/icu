@@ -17,8 +17,8 @@
 /* String to use. */
 const UChar stuff[] = { 0x30BB, 0x0d4c, 0x53, 0x74, 0x75, 0x66, 0x66, 0x00 }; /* Stuff */
 
-#define VERS_COUNT 3
-const char *vers[VERS_COUNT] = { NULL, "42", "38" }; /* List of ICU versions to test */
+#include "provider_version.h"
+
 
 #define LOCALE_COUNT 4
 const char *locale[LOCALE_COUNT] = { "fi", "en_US", "ja", "ml" }; /* List of locales to test */
@@ -34,7 +34,7 @@ void setup(UErrorCode &status) {
     int32_t count;
     StringEnumeration *se = Collator::getAvailableLocales();
     count = se->count(status);
-    fprintf(stderr, "# Collators now available: %d,\t%s\n", count, u_errorName(status));
+    fprintf(stderr, "# Collators now available: %d,\t%s - %d providers expected.\n", count, u_errorName(status), PROVIDER_COUNT);
 }
 
 int main(int /* argc*/ , const char * /*argv*/ []) {
@@ -42,18 +42,21 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
     int diffs = 0;
     setup(status);
     if(U_FAILURE(status)) return 1;
+
+    int expected = PROVIDER_COUNT;
+
     for(int l=0;l<LOCALE_COUNT;l++) {
         printf("\n");
         uint8_t oldBytes[200];
         int32_t oldLen = -1;
-        for(int v=0;v<VERS_COUNT;v++) {
+        for(int v=0;v<=expected;v++) {
 
             // Construct the locale ID
             char locID[200];
             strcpy(locID, locale[l]);
-            if(vers[v]!=NULL) { // NULL = no version
+            if((v!=expected)) { // -1 = no version
                 strcat(locID, "@provider=icu");
-                strcat(locID, vers[v]);
+                strcat(locID, provider_version[v]);
             }
             
             printf("%28s : ", locID);
@@ -69,7 +72,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             int32_t len = col->getSortKey(stuff, -1, bytes, 200);
 
             for(int i=0;i<len;i++) {
-                if(v>0&&i<oldLen&&bytes[i]!=oldBytes[i]) {
+	      if(i<oldLen&&bytes[i]!=oldBytes[i]) {
                   diffs++;
                   printf("*");
                 } else {
