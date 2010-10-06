@@ -184,6 +184,23 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             return digitArray;
         }
     }
+    
+    /**
+     * Returns the array of characters used as digits, in order from 0 through 9
+     * Package private method - don't need to defensively copy.
+     * @return The array
+     */
+    char[] getDigitsLocal() {
+        if ( digits != null ) {
+            return digits;
+        } else {
+            char [] digitArray = new char[10];
+            for ( int i = 0 ; i < 10 ; i++ ) {
+                digitArray[i] = (char) (zeroDigit + i);
+            }
+            return digitArray;
+        }
+    }
 
     /**
      * Sets the character used for zero.
