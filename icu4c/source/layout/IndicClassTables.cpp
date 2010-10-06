@@ -180,7 +180,7 @@ static const IndicClassTable::CharClass teluCharClasses[] =
 //  http://brahmi.sourceforge.net/docs/KannadaComputing.html
 static const IndicClassTable::CharClass kndaCharClasses[] =
 {
-    _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, // 0C80 - 0C8F
+    _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0C80 - 0C8F
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C90 - 0C9F
     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0CA0 - 0CAF
     _rb, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _dr, _da, // 0CB0 - 0CBF
