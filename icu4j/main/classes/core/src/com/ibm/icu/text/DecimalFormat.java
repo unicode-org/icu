@@ -1206,7 +1206,7 @@ public class DecimalFormat extends NumberFormat {
         // }
 
         int i;
-        char [] digits = symbols.getDigits();
+        char [] digits = symbols.getDigitsLocal();
         
         char grouping = currencySignCount > 0 ? symbols.getMonetaryGroupingSeparator() :
             symbols.getGroupingSeparator();
@@ -2118,7 +2118,7 @@ public class DecimalFormat extends NumberFormat {
             // DigitList, and adjust the exponent as needed.
 
             digits.decimalAt = digits.count = 0;
-            char [] digitSymbols = symbols.getDigits();
+            char [] digitSymbols = symbols.getDigitsLocal();
             char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() : symbols
                     .getDecimalSeparator();
             char grouping = symbols.getGroupingSeparator();
