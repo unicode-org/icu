@@ -3843,10 +3843,16 @@ if test "$GCC" = yes; then
     if test "$CFLAGS" = ""; then
         if test "$ENABLE_DEBUG" = 1; then
             CFLAGS=-g
-            CXXFLAGS=-g
         fi
         if test "$ENABLE_RELEASE" = 1; then
             CFLAGS="$CFLAGS -O2"
+        fi
+    fi
+    if test "$CXXFLAGS" = ""; then
+        if test "$ENABLE_DEBUG" = 1; then
+            CXXFLAGS=-g
+        fi
+        if test "$ENABLE_RELEASE" = 1; then
             CXXFLAGS="$CXXFLAGS -O2"
         fi
     fi
