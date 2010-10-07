@@ -6144,7 +6144,7 @@ void NumberFormatTest::TestExponentParse() {
        ) 
     { 
         errln("ERROR: parse failed - expected 123.0, 3  - returned %d, %i", 
-               result.getDouble(), parsePos); 
+               result.getDouble(), parsePos.getIndex()); 
     } 
 } 
 
