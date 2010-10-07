@@ -77,9 +77,70 @@ AC_SUBST(CPPFLAGS)
 # This variable is needed on z/OS because the C++ compiler only recognizes .C
 _CXX_CXXSUFFIX=cpp
 export _CXX_CXXSUFFIX
+
+# Check whether to build debug libraries
+AC_MSG_CHECKING([whether to build debug libraries])
+enabled=no
+ENABLE_DEBUG=0
+AC_ARG_ENABLE(debug,
+    [  --enable-debug          build debug libraries [default=no]],
+    [ case "${enableval}" in
+         yes|"") enabled=yes; ENABLE_DEBUG=1 ;;
+         *) ;;   
+    esac],  
+)
+AC_MSG_RESULT($enabled)
+AC_SUBST(ENABLE_DEBUG)
+
+# Check whether to build release libraries
+AC_MSG_CHECKING([whether to build release libraries])
+enabled=yes
+ENABLE_RELEASE=1
+AC_ARG_ENABLE(release,
+    [  --enable-release        build release libraries [default=yes]],
+    [ case "${enableval}" in
+         no) enabled=no; ENABLE_RELEASE=0 ;;
+         *) ;;   
+    esac],  
+)
+AC_MSG_RESULT($enabled)
+AC_SUBST(ENABLE_RELEASE)
+
+# Don't use the default C/CXXFLags
+: ${CFLAGS=""}
+: ${CXXFLAGS=""}
+
 # Checks for programs
 AC_PROG_CC
+
+# Ensure that if CFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
+# The release mode use is the default one for autoconf
+if test "$GCC" = yes; then
+    if test "$CFLAGS" = ""; then
+        if test "$ENABLE_DEBUG" = 1; then
+            CFLAGS=-g
+        fi
+        if test "$ENABLE_RELEASE" = 1; then
+            CFLAGS="$CFLAGS -O2"
+        fi
+    fi
+fi
+
 AC_PROG_CXX
+
+# Ensure that if CXXFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
+# The release mode use is the default one for autoconf
+if test "$GXX" = yes; then
+    if test "$CXXFLAGS" = ""; then
+        if test "$ENABLE_DEBUG" = 1; then
+            CXXFLAGS=-g
+        fi
+        if test "$ENABLE_RELEASE" = 1; then
+            CXXFLAGS="$CXXFLAGS -O2"
+        fi
+    fi
+fi
+
 AC_PROG_CPP
 
 AC_PROG_INSTALL
@@ -198,34 +259,6 @@ AC_ARG_ENABLE(static,
 )
 AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_STATIC)
-
-# Check whether to build debug libraries
-AC_MSG_CHECKING([whether to build debug libraries])
-enabled=no
-ENABLE_DEBUG=0
-AC_ARG_ENABLE(debug,
-    [  --enable-debug          build debug libraries [default=no]],
-    [ case "${enableval}" in
-         yes|"") enabled=yes; ENABLE_DEBUG=1 ;;
-         *) ;;
-    esac],
-)
-AC_MSG_RESULT($enabled)
-AC_SUBST(ENABLE_DEBUG)
-
-# Check whether to build release libraries
-AC_MSG_CHECKING([whether to build release libraries])
-enabled=yes
-ENABLE_RELEASE=1
-AC_ARG_ENABLE(release,
-    [  --enable-release        build release libraries [default=yes]],
-    [ case "${enableval}" in
-         no) enabled=no; ENABLE_RELEASE=0 ;;
-         *) ;;
-    esac],
-)
-AC_MSG_RESULT($enabled)
-AC_SUBST(ENABLE_RELEASE)
 
 # Check whether to enable auto cleanup of libraries
 AC_MSG_CHECKING([whether to enable auto cleanup of libraries])

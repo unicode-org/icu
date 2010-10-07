@@ -659,8 +659,6 @@ LIBCFLAGS
 U_USE_GCC_VISIBILITY_ATTRIBUTE
 U_DEFAULT_SHOW_DRAFT
 UCLN_NO_AUTO_CLEANUP
-ENABLE_RELEASE
-ENABLE_DEBUG
 ENABLE_STATIC
 ENABLE_SHARED
 LIB_M
@@ -685,6 +683,8 @@ ac_ct_CC
 LDFLAGS
 CFLAGS
 CC
+ENABLE_RELEASE
+ENABLE_DEBUG
 CPPFLAGS
 target_os
 target_vendor
@@ -747,14 +747,14 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_debug
+enable_release
 with_cross_build
 enable_strict
 enable_64bit_libs
 with_library_bits
 enable_shared
 enable_static
-enable_debug
-enable_release
 enable_auto_cleanup
 enable_draft
 enable_renaming
@@ -1398,12 +1398,12 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-debug          build debug libraries default=no
+  --enable-release        build release libraries default=yes
   --enable-strict         compile with strict compiler options default=yes
   --enable-64bit-libs     (deprecated, use --with-library-bits) build 64-bit libraries default= platform default
   --enable-shared         build shared libraries default=yes
   --enable-static         build static libraries default=no
-  --enable-debug          build debug libraries default=no
-  --enable-release        build release libraries default=yes
   --enable-auto-cleanup   enable auto cleanup of libraries default=no
   --enable-draft          enable draft APIs (and internal APIs) default=yes
   --enable-renaming       add a version suffix to symbols default=yes
@@ -2749,6 +2749,45 @@ test -n "$target_alias" &&
 # This variable is needed on z/OS because the C++ compiler only recognizes .C
 _CXX_CXXSUFFIX=cpp
 export _CXX_CXXSUFFIX
+
+# Check whether to build debug libraries
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build debug libraries" >&5
+$as_echo_n "checking whether to build debug libraries... " >&6; }
+enabled=no
+ENABLE_DEBUG=0
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then :
+  enableval=$enable_debug;  case "${enableval}" in
+         yes|"") enabled=yes; ENABLE_DEBUG=1 ;;
+         *) ;;
+    esac
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enabled" >&5
+$as_echo "$enabled" >&6; }
+
+
+# Check whether to build release libraries
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build release libraries" >&5
+$as_echo_n "checking whether to build release libraries... " >&6; }
+enabled=yes
+ENABLE_RELEASE=1
+# Check whether --enable-release was given.
+if test "${enable_release+set}" = set; then :
+  enableval=$enable_release;  case "${enableval}" in
+         no) enabled=no; ENABLE_RELEASE=0 ;;
+         *) ;;
+    esac
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enabled" >&5
+$as_echo "$enabled" >&6; }
+
+
+# Don't use the default C/CXXFLags
+: ${CFLAGS=""}
+: ${CXXFLAGS=""}
+
 # Checks for programs
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3540,6 +3579,20 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+# Ensure that if CFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
+# The release mode use is the default one for autoconf
+if test "$GCC" = yes; then
+    if test "$CFLAGS" = ""; then
+        if test "$ENABLE_DEBUG" = 1; then
+            CFLAGS=-g
+        fi
+        if test "$ENABLE_RELEASE" = 1; then
+            CFLAGS="$CFLAGS -O2"
+        fi
+    fi
+fi
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3796,6 +3849,20 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+# Ensure that if CXXFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
+# The release mode use is the default one for autoconf
+if test "$GXX" = yes; then
+    if test "$CXXFLAGS" = ""; then
+        if test "$ENABLE_DEBUG" = 1; then
+            CXXFLAGS=-g
+        fi
+        if test "$ENABLE_RELEASE" = 1; then
+            CXXFLAGS="$CXXFLAGS -O2"
+        fi
+    fi
+fi
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -5200,40 +5267,6 @@ if test "${enable_static+set}" = set; then :
 	     yes|"") enabled=yes; ENABLE_STATIC=YES ;;
 	     no) ;;
 	     *) ;;
-    esac
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enabled" >&5
-$as_echo "$enabled" >&6; }
-
-
-# Check whether to build debug libraries
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build debug libraries" >&5
-$as_echo_n "checking whether to build debug libraries... " >&6; }
-enabled=no
-ENABLE_DEBUG=0
-# Check whether --enable-debug was given.
-if test "${enable_debug+set}" = set; then :
-  enableval=$enable_debug;  case "${enableval}" in
-         yes|"") enabled=yes; ENABLE_DEBUG=1 ;;
-         *) ;;
-    esac
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enabled" >&5
-$as_echo "$enabled" >&6; }
-
-
-# Check whether to build release libraries
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build release libraries" >&5
-$as_echo_n "checking whether to build release libraries... " >&6; }
-enabled=yes
-ENABLE_RELEASE=1
-# Check whether --enable-release was given.
-if test "${enable_release+set}" = set; then :
-  enableval=$enable_release;  case "${enableval}" in
-         no) enabled=no; ENABLE_RELEASE=0 ;;
-         *) ;;
     esac
 fi
 
