@@ -3579,20 +3579,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
-# Ensure that if CFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
-# The release mode use is the default one for autoconf
-if test "$GCC" = yes; then
-    if test "$CFLAGS" = ""; then
-        if test "$ENABLE_DEBUG" = 1; then
-            CFLAGS=-g
-        fi
-        if test "$ENABLE_RELEASE" = 1; then
-            CFLAGS="$CFLAGS -O2"
-        fi
-    fi
-fi
-
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3851,14 +3837,16 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-# Ensure that if CXXFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
+# Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
 # The release mode use is the default one for autoconf
-if test "$GXX" = yes; then
-    if test "$CXXFLAGS" = ""; then
+if test "$GCC" = yes; then
+    if test "$CFLAGS" = ""; then
         if test "$ENABLE_DEBUG" = 1; then
+            CFLAGS=-g
             CXXFLAGS=-g
         fi
         if test "$ENABLE_RELEASE" = 1; then
+            CFLAGS="$CFLAGS -O2"
             CXXFLAGS="$CXXFLAGS -O2"
         fi
     fi
