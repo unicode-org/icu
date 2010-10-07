@@ -939,6 +939,7 @@ icu4j/main/tests/translit/out
 icu4j/out
 icu4j/tools/build/out
 icu4j/tools/misc/out
+tools/multi/c/Makefile.local
 tools/multi/packages/*.jar
 tools/multi/packages/*.tgz
 tools/multi/proj/chello/out
