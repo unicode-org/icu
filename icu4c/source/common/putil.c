@@ -693,6 +693,26 @@ static UBool isValidOlsonID(const char *id) {
         || uprv_strcmp(id, "CST6CDT") == 0
         || uprv_strcmp(id, "EST5EDT") == 0);
 }
+
+/* On some Unix-like OS, 'posix' subdirectory in
+   /usr/share/zoneinfo replicates the top-level contents. 'right'
+   subdirectory has the same set of files, but individual files
+   are different from those in the top-level directory or 'posix'
+   because 'right' has files for TAI (Int'l Atomic Time) while 'posix'
+   has files for UTC.
+   When the first match for /etc/localtime is in either of them
+   (usually in posix because 'right' has different file contents),
+   or TZ environment variable points to one of them, createTimeZone
+   fails because, say, 'posix/America/New_York' is not an Olson
+   timezone id ('America/New_York' is). So, we have to remove
+   'posix/' and 'right/' at the beginning. */
+static void removeZoneIDPrefix(const char** id) {
+    if (uprv_strncmp(*id, "posix/", 6) == 0
+        || uprv_strncmp(*id, "right/", 6) == 0)
+    {
+        *id += 6;
+    }
+}
 #endif
 
 #if defined(U_TZNAME) && !defined(U_WINDOWS)
@@ -900,11 +920,12 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
 
     /* Check each entry in the directory. */
     while((dirEntry = readdir(dirp)) != NULL) {
-        if (uprv_strcmp(dirEntry->d_name, SKIP1) != 0 && uprv_strcmp(dirEntry->d_name, SKIP2) != 0) {
+        const char* dirName = dirEntry->d_name;
+        if (uprv_strcmp(dirName, SKIP1) != 0 && uprv_strcmp(dirName, SKIP2) != 0) {
             /* Create a newpath with the new entry to test each entry in the directory. */
             char newpath[MAX_PATH_SIZE];
             uprv_strcpy(newpath, curpath);
-            uprv_strcat(newpath, dirEntry->d_name);
+            uprv_strcat(newpath, dirName);
 
             if ((subDirp = opendir(newpath)) != NULL) {
                 /* If this new path is a directory, make a recursive call with the newpath. */
@@ -921,9 +942,11 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 */
                 if (result != NULL)
                     break;
-            } else if (uprv_strcmp(TZFILE_SKIP, dirEntry->d_name) != 0 && uprv_strcmp(TZFILE_SKIP2, dirEntry->d_name) != 0) {
+            } else if (uprv_strcmp(TZFILE_SKIP, dirName) != 0 && uprv_strcmp(TZFILE_SKIP2, dirName) != 0) {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
-                    uprv_strcpy(SEARCH_TZFILE_RESULT, newpath + (sizeof(TZZONEINFO) - 1));
+                    const char* zoneid = newpath + (sizeof(TZZONEINFO)) - 1;
+                    removeZoneIDPrefix(&zoneid);
+                    uprv_strcpy(SEARCH_TZFILE_RESULT, zoneid);
                     result = SEARCH_TZFILE_RESULT;
                     /* Get out after the first one found. */
                     break;
@@ -962,12 +985,7 @@ uprv_tzname(int n)
     if (tzid != NULL && isValidOlsonID(tzid))
     {
         /* This might be a good Olson ID. */
-        if (uprv_strncmp(tzid, "posix/", 6) == 0
-            || uprv_strncmp(tzid, "right/", 6) == 0)
-        {
-            /* Remove the posix/ or right/ prefix. */
-            tzid += 6;
-        }
+        removeZoneIDPrefix(&tzid);
         return tzid;
     }
     /* else U_TZNAME will give a better result. */
