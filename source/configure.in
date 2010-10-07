@@ -112,30 +112,18 @@ AC_SUBST(ENABLE_RELEASE)
 
 # Checks for programs
 AC_PROG_CC
+AC_PROG_CXX
 
-# Ensure that if CFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
+# Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
 # The release mode use is the default one for autoconf
 if test "$GCC" = yes; then
     if test "$CFLAGS" = ""; then
         if test "$ENABLE_DEBUG" = 1; then
             CFLAGS=-g
-        fi
-        if test "$ENABLE_RELEASE" = 1; then
-            CFLAGS="$CFLAGS -O2"
-        fi
-    fi
-fi
-
-AC_PROG_CXX
-
-# Ensure that if CXXFLAGS was not set when calling configure, set it correctly based on (enable/disable) debug or release option
-# The release mode use is the default one for autoconf
-if test "$GXX" = yes; then
-    if test "$CXXFLAGS" = ""; then
-        if test "$ENABLE_DEBUG" = 1; then
             CXXFLAGS=-g
         fi
         if test "$ENABLE_RELEASE" = 1; then
+            CFLAGS="$CFLAGS -O2"
             CXXFLAGS="$CXXFLAGS -O2"
         fi
     fi
