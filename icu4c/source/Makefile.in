@@ -316,7 +316,7 @@ icu4j-data-install icu4j-data: all tests
 
 # For updating Windows makefiles
 
-WINDOWS_UPDATEFILES=$(srcdir)/data/makedata.mak $(shell find $(srcdir) -name '*.vcproj')
+WINDOWS_UPDATEFILES=$(srcdir)/data/makedata.mak $(shell find $(srcdir) -name '*.vcproj' -o -name '*.vcxproj')
 
 WINDOWS_UPDATEFILES_SED=config/windows-update.sed
 
