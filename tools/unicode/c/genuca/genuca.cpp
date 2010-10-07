@@ -30,12 +30,15 @@
 #include "ucol_imp.h"
 #include "genuca.h"
 #include "uoptions.h"
+#include "uparse.h"
 #include "toolutil.h"
 #include "unewdata.h"
 #include "cstring.h"
 #include "cmemory.h"
 
 #include <stdio.h>
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /*
  * Global - verbosity
@@ -431,15 +434,12 @@ static int32_t hex2num(char hex) {
 
 UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UErrorCode *status) {
     char buffer[2048], primary[100], secondary[100], tertiary[100];
-    UBool detectedContraction;
     int32_t i = 0;
     unsigned int theValue;
     char *pointer = NULL;
     char *commentStart = NULL;
     char *startCodePoint = NULL;
     char *endCodePoint = NULL;
-    char *spacePointer = NULL;
-    char *dashPointer = NULL;
     char *result = fgets(buffer, 2048, data);
     int32_t buflen = (int32_t)uprv_strlen(buffer);
     if(U_FAILURE(*status)) {
@@ -463,7 +463,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
         return NULL; // just a comment, skip whole line
     }
 
-    UCAElements *element = &le; //(UCAElements *)malloc(sizeof(UCAElements));
+    UCAElements *element = &le;
+    memset(element, 0, sizeof(*element));
 
     enum ActionType {
       READCE,
@@ -512,7 +513,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
               {
                   fprintf(stderr, " scanf(hex) failed on !\n ");
               }
-              *(vt[cnt].what) = (UChar)theValue;
+              *(vt[cnt].what) = theValue;
               //if(cnt == 1) { // first implicit
                 // we need to set the value for top next
                 //uint32_t nextTop = ucol_prv_calculateImplicitPrimary(0x4E00); // CJK base
@@ -567,8 +568,6 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
                 fprintf(stdout, "UCA version [%hu.%hu.%hu.%hu]\n", UCAVersion[0], UCAVersion[1], UCAVersion[2], UCAVersion[3]);
               }
             }
-            //element->cPoints[0] = (UChar)theValue;
-            //return element; 
             return NULL;
         }
       }
@@ -576,7 +575,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
       //*status = U_INVALID_FORMAT_ERROR;
       return NULL;
     }
-    element->variableTop = FALSE;
+    // element->variableTop = FALSE; -- see memset() above
 
     startCodePoint = buffer;
     endCodePoint = strchr(startCodePoint, ';');
@@ -589,46 +588,36 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
         *(endCodePoint) = 0;
     }
 
-    memset(element, 0, sizeof(*element));
+    char *pipePointer = strchr(buffer, '|');
+    if (pipePointer != NULL) {
+        // Read the prefix string which precedes the actual string.
+        *pipePointer = 0;
+        element->prefixSize =
+            u_parseString(startCodePoint,
+                          element->prefixChars, LENGTHOF(element->prefixChars),
+                          NULL, status);
+        if(U_FAILURE(*status)) {
+            fprintf(stderr, "error - parsing of prefix \"%s\" failed: %s\n",
+                    startCodePoint, u_errorName(*status));
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
+        }
+        element->prefix = element->prefixChars;
+        startCodePoint = pipePointer + 1;
+    }
 
+    // Read the string which gets the CE(s) assigned.
+    element->cSize =
+        u_parseString(startCodePoint,
+                      element->uchars, LENGTHOF(element->uchars),
+                      NULL, status);
+    if(U_FAILURE(*status)) {
+        fprintf(stderr, "error - parsing of code point(s) \"%s\" failed: %s\n",
+                startCodePoint, u_errorName(*status));
+        *status = U_INVALID_FORMAT_ERROR;
+        return NULL;
+    }
     element->cPoints = element->uchars;
-
-    spacePointer = strchr(buffer, ' ');
-    if(sscanf(buffer, "%4x", &theValue) != 1) /* read first code point */
-    {
-      fprintf(stderr, " scanf(hex) failed!\n ");
-    }
-    element->cPoints[0] = (UChar)theValue;
-
-    if(spacePointer == 0) {
-        detectedContraction = FALSE;
-        element->cSize = 1;
-    } else {
-        dashPointer = strchr(buffer, '|');
-        if (dashPointer != NULL) {
-            // prefix characters
-            element->prefixChars[0] = (UChar)theValue;
-            element->prefixSize = 1;
-            element->prefix = element->prefixChars;
-            sscanf(dashPointer+1, "%4x", &theValue);
-            element->cPoints[0] = (UChar)theValue;
-            element->cSize = 1;
-        }
-        else {
-          // Contractions or surrogate characters.
-            i = 1;
-            detectedContraction = TRUE;
-            while(spacePointer != NULL) {
-                sscanf(spacePointer+1, "%4x", &theValue);
-                element->cPoints[i++] = (UChar)theValue;
-                spacePointer = strchr(spacePointer+1, ' ');
-            }
-            element->cSize = i;
-        }
-
-
-        //fprintf(stderr, "Number of codepoints in contraction: %i\n", i);
-    }
 
     startCodePoint = endCodePoint+1;
 
@@ -1057,9 +1046,14 @@ struct {
     /* first set up constants for implicit calculation */
     uprv_uca_initImplicitConstants(status);
     /* do the closure */
-    int32_t noOfClosures = uprv_uca_canonicalClosure(t, NULL, status);
+    UnicodeSet closed;
+    int32_t noOfClosures = uprv_uca_canonicalClosure(t, NULL, &closed, status);
     if(noOfClosures != 0) {
-      fprintf(stderr, "Warning: %i canonical closures occured!\n", (int)noOfClosures);
+        fprintf(stderr, "Warning: %i canonical closures occured!\n", (int)noOfClosures);
+        UnicodeString pattern;
+        std::string utf8;
+        closed.toPattern(pattern, TRUE).toUTF8String(utf8);
+        fprintf(stderr, "UTF-8 pattern string: %s\n", utf8.c_str());
     }
 
     /* test */
