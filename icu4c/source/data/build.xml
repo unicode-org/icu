@@ -238,6 +238,8 @@
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-w" value="${env.CLDR_DIR}/common/collation" />
                 </args>
+                <!-- http://ant.apache.org/faq.html#xml-entity-include -->
+                &icu-config;
                  <deprecates>
                     <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/>
                     <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/>
