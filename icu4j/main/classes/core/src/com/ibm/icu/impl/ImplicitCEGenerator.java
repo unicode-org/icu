@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2010, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -33,14 +33,50 @@ public class ImplicitCEGenerator {
     
     static final int MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
-    public static final int CJK_BASE = 0x4E00;
-    public static final int CJK_LIMIT = 0x9FFF+1;
-    public static final int CJK_COMPAT_USED_BASE = 0xFA0E;
-    public static final int CJK_COMPAT_USED_LIMIT = 0xFA2F+1;
-    public static final int CJK_A_BASE = 0x3400;
-    public static final int CJK_A_LIMIT = 0x4DBF+1;
-    public static final int CJK_B_BASE = 0x20000;
-    public static final int CJK_B_LIMIT = 0x2A6DF+1;
+//    public static final int CJK_BASE = 0x4E00;
+//    public static final int CJK_LIMIT = 0x9FFF+1;
+//    public static final int CJK_COMPAT_USED_BASE = 0xFA0E;
+//    public static final int CJK_COMPAT_USED_LIMIT = 0xFA2F+1;
+//    public static final int CJK_A_BASE = 0x3400;
+//    public static final int CJK_A_LIMIT = 0x4DBF+1;
+//    public static final int CJK_B_BASE = 0x20000;
+//    public static final int CJK_B_LIMIT = 0x2A6DF+1;
+    
+    public static final int 
+    // 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
+    // 9FCB;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+    CJK_BASE = 0x4E00,
+    CJK_LIMIT = 0x9FCB+1,
+
+    CJK_COMPAT_USED_BASE = 0xFA0E,
+    CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
+
+    //3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
+    //4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
+
+    CJK_A_BASE = 0x3400,
+    CJK_A_LIMIT = 0x4DB5+1,
+
+    //20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
+    //2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
+
+    CJK_B_BASE = 0x20000,
+    CJK_B_LIMIT = 0x2A6D6+1,
+
+    //2A700;<CJK Ideograph Extension C, First>;Lo;0;L;;;;;N;;;;;
+    //2B734;<CJK Ideograph Extension C, Last>;Lo;0;L;;;;;N;;;;;
+
+    CJK_C_BASE = 0x2A700,
+    CJK_C_LIMIT = 0x2B734+1,
+
+    //2B740;<CJK Ideograph Extension D, First>;Lo;0;L;;;;;N;;;;;
+    //2B81D;<CJK Ideograph Extension D, Last>;Lo;0;L;;;;;N;;;;;
+
+    CJK_D_BASE = 0x2B740,
+    CJK_D_LIMIT = 0x2B81D+1
+
+    // when adding to this list, look for all occurrences (in project) of CJK_C_BASE and CJK_C_LIMIT, etc. to check for code that needs changing!!!!
+    ;
     
 //    private void throwError(String title, int cp) {
 //        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + 
@@ -323,7 +359,7 @@ public class ImplicitCEGenerator {
     
     static int NON_CJK_OFFSET = 0x110000;
         
-    static int swapCJK(int i) {
+    public static int swapCJK(int i) {
         
         if (i >= CJK_BASE) {
             if (i < CJK_LIMIT)              return i - CJK_BASE;
@@ -335,6 +371,14 @@ public class ImplicitCEGenerator {
             if (i < CJK_B_BASE)             return i + NON_CJK_OFFSET;
             
             if (i < CJK_B_LIMIT)            return i; // non-BMP-CJK
+            
+            if (i < CJK_C_BASE)             return i + NON_CJK_OFFSET;
+            
+            if (i < CJK_C_LIMIT)            return i; // non-BMP-CJK
+            
+            if (i < CJK_D_BASE)             return i + NON_CJK_OFFSET;
+            
+            if (i < CJK_D_LIMIT)            return i; // non-BMP-CJK
             
             return i + NON_CJK_OFFSET;  // non-CJK
         }
