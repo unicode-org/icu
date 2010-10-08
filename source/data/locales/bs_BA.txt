@@ -3,15 +3,9 @@
 // * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/icu-config.xml & build.xml
+// * Source File:<path>/common/main/bs_BA.xml
 // *
 // ***************************************************************************
-/**
- * validSubLocale of "root"
- */
-xh_ZA{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+bs_BA{
+    Version{"2.0.41.23"}
 }

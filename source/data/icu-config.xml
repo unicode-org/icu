@@ -60,6 +60,7 @@
         <include locales="bo_CN"/>
         <include locales="bo_IN"/>
         <include locales="bs"/>
+        <include locales="bs_BA"/>
         <include locales="ca"/>
         <include locales="ca_ES"/>
         <include locales="cgg"/>

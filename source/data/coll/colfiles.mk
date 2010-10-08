@@ -78,11 +78,10 @@ COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_AE.txt ar_BH.txt\
  pt_BR.txt pt_PT.txt ro_MD.txt ro_RO.txt ru_MD.txt\
  ru_RU.txt ru_UA.txt si_LK.txt sk_SK.txt sl_SI.txt\
  sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
- sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt st.txt st_LS.txt\
- st_ZA.txt sv_FI.txt sv_SE.txt sw.txt sw_KE.txt\
- sw_TZ.txt ta_IN.txt ta_LK.txt te_IN.txt th_TH.txt\
- tr_TR.txt uk_UA.txt ur_IN.txt ur_PK.txt vi_VN.txt\
- xh.txt xh_ZA.txt yo_NG.txt zh_Hans.txt zh_Hans_CN.txt\
+ sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv_FI.txt sv_SE.txt\
+ sw.txt sw_KE.txt sw_TZ.txt ta_IN.txt ta_LK.txt\
+ te_IN.txt th_TH.txt tr_TR.txt uk_UA.txt ur_IN.txt\
+ ur_PK.txt vi_VN.txt yo_NG.txt zh_Hans.txt zh_Hans_CN.txt\
  zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt\
  zu_ZA.txt
 
