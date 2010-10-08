@@ -1177,7 +1177,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
                          DigitList&     digits,
                          UBool          isInteger) const
 {
-    char zero = '0'; 
+    // char zero = '0'; 
     // DigitList returns digits as '0' thru '9', so we will need to 
     // always need to subtract the character 0 to get the numeric value to use for indexing.
 

@@ -1037,7 +1037,7 @@ ucnv_flushCache ()
     int32_t pos;
     int32_t tableDeletedNum = 0;
     const UHashElement *e;
-    UErrorCode status = U_ILLEGAL_ARGUMENT_ERROR;
+    /*UErrorCode status = U_ILLEGAL_ARGUMENT_ERROR;*/
     int32_t i, remaining;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_FLUSH_CACHE);

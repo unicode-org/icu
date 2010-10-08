@@ -45,7 +45,7 @@ parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, 
             buffer = uprv_malloc(sizeof(char) * currentBufferSize);
             if (buffer == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                return;
+                return -1;
             }
         }
         for (i = 0; i < numOfFlags; i++) {

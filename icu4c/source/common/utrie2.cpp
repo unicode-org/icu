@@ -487,7 +487,7 @@ utrie2_swap(const UDataSwapper *ds,
 
 /* enumeration -------------------------------------------------------------- */
 
-#define MIN(a, b) ((a)<(b) ? (a) : (b))
+#define MIN_VALUE(a, b) ((a)<(b) ? (a) : (b))
 
 /* default UTrie2EnumValue() returns the input value itself */
 static uint32_t U_CALLCONV
@@ -569,14 +569,14 @@ enumEitherTrie(const UTrie2 *trie,
                  * This special block has half the normal length.
                  */
                 i2Block=UTRIE2_LSCP_INDEX_2_OFFSET;
-                tempLimit=MIN(0xdc00, limit);
+                tempLimit=MIN_VALUE(0xdc00, limit);
             } else {
                 /*
                  * Switch back to the normal part of the index-2 table.
                  * Enumerate the second half of the surrogates block.
                  */
                 i2Block=0xd800>>UTRIE2_SHIFT_2;
-                tempLimit=MIN(0xe000, limit);
+                tempLimit=MIN_VALUE(0xe000, limit);
             }
         } else {
             /* supplementary code points */
