@@ -100,7 +100,7 @@ static void TestInt64Parse()
     
     char* st1 = "009223372036854775808";
     const int size = 21;
-    const int textLength = size;
+    /*const int textLength = size;*/
     UChar text[21];
     
 	

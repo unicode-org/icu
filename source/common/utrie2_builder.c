@@ -1466,4 +1466,5 @@ utrie2_swapAnyVersion(const UDataSwapper *ds,
             return 0;
         }
     }
+    return 0;
 }

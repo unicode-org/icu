@@ -478,11 +478,11 @@ static void Test_aestrncpy(int32_t line, const uint8_t *expect, const uint8_t *s
   }
   if(!uprv_memcmp(str_buf, expect, AESTRNCPY_SIZE)) {
     log_verbose("\n%s:%d: OK - compared OK.", __FILE__, line);
-    log_verbose("\n%s:%d:         expected: %s", __FILE__, line, dump_binline(expect));
+    log_verbose("\n%s:%d:         expected: %s", __FILE__, line, dump_binline((uint8_t *)expect));
     log_verbose("\n%s:%d:         got     : %s\n", __FILE__, line, dump_binline(str_buf));
   } else {
     log_err    ("\n%s:%d: FAIL: uprv_aestrncpy output differs", __FILE__, line);
-    log_err    ("\n%s:%d:         expected: %s", __FILE__, line, dump_binline(expect));
+    log_err    ("\n%s:%d:         expected: %s", __FILE__, line, dump_binline((uint8_t *)expect));
     log_err    ("\n%s:%d:         got     : %s\n", __FILE__, line, dump_binline(str_buf));
   }
 }

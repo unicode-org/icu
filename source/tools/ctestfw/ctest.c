@@ -11,6 +11,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <ctype.h>
 
 #include "unicode/utrace.h"
 #include "unicode/uclean.h"
@@ -32,7 +33,7 @@
 /**
  *   How many lines of scrollage can go by before we need to remind the user what the test is.
  */
-#define PAGE_SIZE 25
+#define PAGE_SIZE_LIMIT 25
 
 #ifndef SHOW_TIMES
 #define SHOW_TIMES 1
@@ -408,7 +409,7 @@ static void iterateTestsWithLevel ( const TestNode* root,
           if(!ON_LINE) { /* had some output */
             int spaces = FLAG_INDENT-(depth-1);
             log_testinfo_i("} %*s[OK] ", spaces, "---");
-            if((GLOBAL_PRINT_COUNT-myGLOBAL_PRINT_COUNT)>PAGE_SIZE) {
+            if((GLOBAL_PRINT_COUNT-myGLOBAL_PRINT_COUNT)>PAGE_SIZE_LIMIT) {
               log_testinfo(" %s ", pathToFunction); /* in case they forgot. */
             }
           } else {
@@ -451,7 +452,7 @@ static void iterateTestsWithLevel ( const TestNode* root,
     		log_testinfo_i("} "); /* TODO:  summarize subtests */
     		if((depth>1) && (ERROR_COUNT > myERROR_COUNT)) {
     			log_testinfo("[%d %s in %s] ", ERROR_COUNT-myERROR_COUNT, (ERROR_COUNT-myERROR_COUNT)==1?"error":"errors", pathToFunction);
-    		} else if((GLOBAL_PRINT_COUNT-myGLOBAL_PRINT_COUNT)>PAGE_SIZE || (depth<1)) {
+    		} else if((GLOBAL_PRINT_COUNT-myGLOBAL_PRINT_COUNT)>PAGE_SIZE_LIMIT || (depth<1)) {
                   if(pathToFunction[0]) {
                     log_testinfo(" %s ", pathToFunction); /* in case they forgot. */
                   } else {
