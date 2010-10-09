@@ -704,9 +704,9 @@ static UBool isValidOlsonID(const char *id) {
    (usually in posix because 'right' has different file contents),
    or TZ environment variable points to one of them, createTimeZone
    fails because, say, 'posix/America/New_York' is not an Olson
-   timezone id ('America/New_York' is). So, we have to remove
+   timezone id ('America/New_York' is). So, we have to skip
    'posix/' and 'right/' at the beginning. */
-static void removeZoneIDPrefix(const char** id) {
+static void skipZoneIDPrefix(const char** id) {
     if (uprv_strncmp(*id, "posix/", 6) == 0
         || uprv_strncmp(*id, "right/", 6) == 0)
     {
@@ -945,7 +945,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
             } else if (uprv_strcmp(TZFILE_SKIP, dirName) != 0 && uprv_strcmp(TZFILE_SKIP2, dirName) != 0) {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
                     const char* zoneid = newpath + (sizeof(TZZONEINFO)) - 1;
-                    removeZoneIDPrefix(&zoneid);
+                    skipZoneIDPrefix(&zoneid);
                     uprv_strcpy(SEARCH_TZFILE_RESULT, zoneid);
                     result = SEARCH_TZFILE_RESULT;
                     /* Get out after the first one found. */
@@ -985,7 +985,7 @@ uprv_tzname(int n)
     if (tzid != NULL && isValidOlsonID(tzid))
     {
         /* This might be a good Olson ID. */
-        removeZoneIDPrefix(&tzid);
+        skipZoneIDPrefix(&tzid);
         return tzid;
     }
     /* else U_TZNAME will give a better result. */
