@@ -10,7 +10,7 @@
 
 ##############################################################################
 # Keep the following in sync with the version - see common/unicode/uversion.h
-U_ICUDATA_NAME=icudt45
+U_ICUDATA_NAME=icudt46
 ##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=6.0
