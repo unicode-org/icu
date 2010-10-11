@@ -995,6 +995,12 @@ struct {
                 // contractionCEs[1]: '\0' to differentiate with contractions.
                 // contractionCEs[2]: prefix char
                 if (element->prefixSize>0) {
+                    if(element->cSize > 1 || element->prefixSize > 1) {
+                        fprintf(stderr,
+                                "\nCharacter with prefix, "
+                                "either too many characters or prefix too long.\n");
+                        exit(*status);
+                    }
                     if(noOfContractions>=MAX_UCA_CONTRACTION_CES) {
                       fprintf(stderr,
                               "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTION_CES in genuca.cpp. "
