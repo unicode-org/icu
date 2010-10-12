@@ -44,6 +44,7 @@ public:
     void TestSkippable();
     void TestCustomComp();
     void TestCustomFCC();
+    void TestFilteredNormalizer2Coverage();
 
 private:
     UnicodeString canonTests[24][3];

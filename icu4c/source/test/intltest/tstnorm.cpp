@@ -56,6 +56,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(17,TestCustomComp);
         CASE(18,TestCustomFCC);
 #endif
+        CASE(19,TestFilteredNormalizer2Coverage);
         default: name = ""; break;
     }
 }
@@ -1445,6 +1446,32 @@ BasicNormalizerTest::TestCustomFCC() {
         if(result!=expected) {
             errln("custom FCC Normalizer2 did not normalize input %d as expected", i);
         }
+    }
+}
+
+/* Improve code coverage of Normalizer2 */
+void
+BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
+    UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff]"), errorCode);
+    UnicodeString newString1 = UNICODE_STRING_SIMPLE("[^\\u0100-\\u01ff]");
+    UnicodeString newString2 = UNICODE_STRING_SIMPLE("[^\\u0200-\\u02ff]");
+    FilteredNormalizer2 fn2(*nfcNorm2, filter);
+
+    UChar32 char32 = 0x0054;
+
+    if (fn2.isInert(char32)) {
+        errln("FilteredNormalizer2.isInert() failed.");
+    }
+
+    if (fn2.hasBoundaryAfter(char32)) {
+        errln("FilteredNormalizer2.hasBoundaryAfter() failed.");
+    }
+
+    fn2.append(newString1, newString2, errorCode);
+    if (U_FAILURE(errorCode)) {
+        errln("FilteredNormalizer2.append() failed.");
     }
 }
 
