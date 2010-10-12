@@ -610,6 +610,9 @@ class FieldPositionHandler;
  * increment in the pattern itself.  "#,#50" specifies a rounding increment of
  * 50.  "#,##0.05" specifies a rounding increment of 0.05.
  *
+ * <p>In the absense of an explicit rounding increment numbers are
+ * rounded to their formatted width.
+ *
  * <ul>
  * <li>Rounding only affects the string produced by formatting.  It does
  * not affect parsing or change any numerical values.
