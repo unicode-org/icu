@@ -717,6 +717,10 @@ void RegexTest::API_Match() {
         status = U_ZERO_ERROR;
 
         m1->reset(len, status);
+        REGEX_CHECK_STATUS;
+        status = U_ZERO_ERROR;
+
+        m1->reset(len+1, status);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         status = U_ZERO_ERROR;
 
@@ -1752,6 +1756,10 @@ void RegexTest::API_Match_UTF8() {
         status = U_ZERO_ERROR;
 
         m1->reset(input1Len, status);
+        REGEX_CHECK_STATUS;
+        status = U_ZERO_ERROR;
+
+        m1->reset(input1Len+1, status);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         status = U_ZERO_ERROR;
 
