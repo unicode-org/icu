@@ -695,27 +695,33 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
             pointer++;
         }
     }
-    // Rudimentary check for valid bytes in CE weights.
-    // For a more comprehensive check see cintltst /tscoll/citertst/TestCEValidity
-    for (i = 0; i < (int32_t)CEindex; ++i) {
-        uint32_t value = element->CEs[i];
-        uint8_t bytes[4] = {
-            (uint8_t)(value >> 24),
-            (uint8_t)(value >> 16),
-            (uint8_t)(value >> 8),
-            (uint8_t)(value & UCOL_NEW_TERTIARYORDERMASK)
-        };
-        for (int j = 0; j < 4; ++j) {
-            if (0 != bytes[j] && bytes[j] < 3) {
-                fprintf(stderr, "Warning: invalid UCA weight byte %02X for %s\n", bytes[j], buffer);
+    if(element->cSize == 1 && element->cPoints[0] == 0xfffe) {
+        // UCA 6.0 gives U+FFFE a special minimum weight using the
+        // byte 02 which is the merge-sort-key separator and illegal for any
+        // other characters.
+    } else {
+        // Rudimentary check for valid bytes in CE weights.
+        // For a more comprehensive check see cintltst /tscoll/citertst/TestCEValidity
+        for (i = 0; i < (int32_t)CEindex; ++i) {
+            uint32_t value = element->CEs[i];
+            uint8_t bytes[4] = {
+                (uint8_t)(value >> 24),
+                (uint8_t)(value >> 16),
+                (uint8_t)(value >> 8),
+                (uint8_t)(value & UCOL_NEW_TERTIARYORDERMASK)
+            };
+            for (int j = 0; j < 4; ++j) {
+                if (0 != bytes[j] && bytes[j] < 3) {
+                    fprintf(stderr, "Warning: invalid UCA weight byte %02X for %s\n", bytes[j], buffer);
+                    return NULL;
+                }
+            }
+            // Primary second bytes 03 and FF are compression terminators.
+            if (!isContinuation(value) && (bytes[1] == 3 || bytes[1] == 0xFF)) {
+                fprintf(stderr, "Warning: invalid UCA primary second weight byte %02X for %s\n",
+                        bytes[1], buffer);
                 return NULL;
             }
-        }
-        // Primary second bytes 03 and FF are compression terminators.
-        if (!isContinuation(value) && (bytes[1] == 3 || bytes[1] == 0xFF)) {
-            fprintf(stderr, "Warning: invalid UCA primary second weight byte %02X for %s\n",
-                    bytes[1], buffer);
-            return NULL;
         }
     }
 
@@ -899,15 +905,6 @@ write_uca_table(const char *filename,
         return -1;
     }
 
-#if 0
-    IMPLICIT_TAG = 9,
-/*
- *****************************************************************************************
- * NON_CHARACTER FDD0 - FDEF, FFFE, FFFF, 1FFFE, 1FFFF, 2FFFE, 2FFFF,...e.g. **FFFE, **FFFF
- ******************************************************************************************
- */
-#endif
-
 // * set to zero
 struct {
       UChar32 start;
@@ -915,20 +912,10 @@ struct {
       int32_t value;
     } ranges[] =
     {
-#if 0
-      {0xAC00, 0xD7AF, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
-      {0xD800, 0xDBFF, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
-      {0xDC00, 0xDFFF, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
-      {0x3400, 0x4DB5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
-      {0x4E00, 0x9FA5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
-      {0xF900, 0xFA2D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
-      {0x20000, 0x2A6D6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //6 CJK_IMPLICIT_TAG,   /* 0x20000-0x2A6D6*/
-      {0x2F800, 0x2FA1D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
-#endif
       {0xAC00, 0xD7B0, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
       //{0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
       {0xDC00, 0xE000, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
-      // Now directly handled in the collation code by the swapCJK function. 
+      // Now directly handled in the collation code by the swapCJK function.
       //{0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
       //{0x4E00, 0x9FA6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
       //{0xF900, 0xFA2E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
@@ -1013,7 +1000,6 @@ struct {
                     contractionCEs[noOfContractions][2]=element->prefixChars[0];
                     noOfContractions++;
                 }
-                
             }
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
