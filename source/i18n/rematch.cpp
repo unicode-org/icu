@@ -1947,18 +1947,11 @@ RegexMatcher &RegexMatcher::reset(int64_t position, UErrorCode &status) {
     }
     reset();       // Reset also resets the region to be the entire string.
     
-    if (position < 0) {
+    if (position < 0 || position > fActiveLimit) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return *this;
     }
-
-    int64_t nativePos;
-    nativePos = position;
-    if (nativePos < fActiveStart || nativePos >= fActiveLimit) {
-        status = U_INDEX_OUTOFBOUNDS_ERROR;
-        return *this;
-    }
-    fMatchEnd = nativePos;
+    fMatchEnd = position;
     return *this;
 }
 
