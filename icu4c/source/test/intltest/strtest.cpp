@@ -545,6 +545,12 @@ StringTest::TestCharString() {
     if (0 != strcmp(longStr, chStr.data()) || (int32_t)strlen(longStr) != chStr.length()) {
         errln("CharString(longStr) failed.");
     }
+    CharString test("Test", errorCode);
+    CharString copy(test,errorCode);
+    copy.copyFrom(chStr, errorCode);
+    if (0 != strcmp(longStr, copy.data()) || (int32_t)strlen(longStr) != copy.length()) {
+        errln("CharString.copyFrom() failed.");
+    }
     StringPiece sp(chStr.toStringPiece());
     sp.remove_prefix(4);
     chStr.append(sp, errorCode).append(chStr, errorCode);
