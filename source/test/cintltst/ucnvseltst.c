@@ -22,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "propsvec.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -30,11 +31,13 @@
 #define TDSRCPATH  ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING
 
 static void TestSelector(void);
+static void TestUPropsVector(void);
 void addCnvSelTest(TestNode** root);  /* Declaration required to suppress compiler warnings. */
 
 void addCnvSelTest(TestNode** root)
 {
     addTest(root, &TestSelector, "tsconv/ucnvseltst/TestSelector");
+    addTest(root, &TestUPropsVector, "tsconv/ucnvseltst/TestUPropsVector");
 }
 
 static const char **gAvailableNames = NULL;
@@ -499,4 +502,39 @@ static void TestSelector()
   for(i = 0 ; i < 3 ; i++) {
     uset_close(excluded_sets[i]);
   }
+}
+
+/* Improve code coverage of UPropsVectors */
+static void TestUPropsVector() {
+    uint32_t value;
+    UErrorCode errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    UPropsVectors *pv = upvec_open(100, &errorCode);
+    if (pv != NULL) {
+        log_err("Should have returned NULL if UErrorCode is an error.");
+        return;
+    }
+    errorCode = U_ZERO_ERROR;
+    pv = upvec_open(-1, &errorCode);
+    if (pv != NULL || U_SUCCESS(errorCode)) {
+        log_err("Should have returned NULL if column is less than 0.\n");
+        return;
+    }
+    errorCode = U_ZERO_ERROR;
+    pv = upvec_open(100, &errorCode);
+    if (pv == NULL || U_FAILURE(errorCode)) {
+        log_err("Unable to open UPropsVectors.\n");
+        return;
+    }
+
+    if (upvec_getValue(pv, 0, 1) != 0) {
+        log_err("upvec_getValue should return 0.\n");
+    }
+    if (upvec_getRow(pv, 0, NULL, NULL) == NULL) {
+        log_err("upvec_getRow should not return NULL.\n");
+    }
+    if (upvec_getArray(pv, NULL, NULL) != NULL) {
+        log_err("upvec_getArray should return NULL.\n");
+    }
+
+    upvec_close(pv);
 }
