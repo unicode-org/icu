@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,6 +22,7 @@
 #define UCOL_UCAELEMS_H
 
 #include "unicode/utypes.h"
+#include "unicode/uniset.h"
 #include "ucol_tok.h"
 
 #if !UCONFIG_NO_COLLATION
@@ -134,7 +135,10 @@ U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UC
 U_CAPI void U_EXPORT2 uprv_uca_closeTempTable(tempUCATable *t);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status);
 U_CAPI UCATableHeader * U_EXPORT2 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
-U_CAPI int32_t U_EXPORT2 uprv_uca_canonicalClosure(tempUCATable *t, UColTokenParser *src, UErrorCode *status);
+
+U_CAPI int32_t U_EXPORT2
+uprv_uca_canonicalClosure(tempUCATable *t, UColTokenParser *src,
+                          U_NAMESPACE_QUALIFIER UnicodeSet *closed, UErrorCode *status);
 
 U_CDECL_END
 
