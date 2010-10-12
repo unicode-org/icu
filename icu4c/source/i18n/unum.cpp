@@ -26,6 +26,7 @@
 #include "unicode/curramt.h"
 #include "uassert.h"
 #include "cpputils.h"
+#include "cstring.h"
 
 
 U_NAMESPACE_USE
@@ -261,6 +262,51 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   return res.extract(result, resultLength, *status);
 }
 
+
+U_DRAFT int32_t U_EXPORT2 
+unum_formatDecimal(const    UNumberFormat*  fmt,
+            const char *    number,
+            int32_t         length,
+            UChar*          result,
+            int32_t         resultLength,
+            UFieldPosition  *pos, /* 0 if ignore */
+            UErrorCode*     status) {
+
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+    if ((result == NULL && resultLength != 0) || resultLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+
+    FieldPosition fp;
+    if(pos != 0) {
+        fp.setField(pos->field);
+    }
+
+    if (length < 0) {
+        length = uprv_strlen(number);
+    }
+    StringPiece numSP(number, length);
+    Formattable numFmtbl(numSP, *status);
+
+    UnicodeString resultStr;
+    if (resultLength > 0) {
+        // Alias the destination buffer.
+        resultStr.setTo(result, 0, resultLength);
+    }
+    ((const NumberFormat*)fmt)->format(numFmtbl, resultStr, fp, *status);
+    if(pos != 0) {
+        pos->beginIndex = fp.getBeginIndex();
+        pos->endIndex = fp.getEndIndex();
+    }
+    return resultStr.extract(result, resultLength, *status);
+}
+
+
+
+
 U_CAPI int32_t U_EXPORT2 
 unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           double number,
@@ -368,6 +414,38 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
     Formattable res;
     parseRes(res, fmt, text, textLength, parsePos, FALSE, status);
     return res.getDouble(*status);
+}
+
+U_CAPI int32_t U_EXPORT2
+unum_parseDecimal(const UNumberFormat*  fmt,
+            const UChar*    text,
+            int32_t         textLength,
+            int32_t         *parsePos /* 0 = start */,
+            char            *outBuf,
+            int32_t         outBufLength,
+            UErrorCode      *status)
+{
+    if (U_FAILURE(*status)) {
+        return -1;
+    }
+    if ((outBuf == NULL && outBufLength != 0) || outBufLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+    Formattable res;
+    parseRes(res, fmt, text, textLength, parsePos, FALSE, status);
+    StringPiece sp = res.getDecimalNumber(*status);
+    if (U_FAILURE(*status)) {
+       return -1;
+    } else if (sp.size() > outBufLength) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+    } else if (sp.size() == outBufLength) {
+        uprv_strncpy(outBuf, sp.data(), sp.size());
+        *status = U_STRING_NOT_TERMINATED_WARNING;
+    } else {
+        uprv_strcpy(outBuf, sp.data());
+    }
+    return sp.size();
 }
 
 U_CAPI double U_EXPORT2
