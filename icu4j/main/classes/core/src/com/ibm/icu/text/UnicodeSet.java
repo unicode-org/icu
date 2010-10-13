@@ -578,8 +578,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * string to the given <code>StringBuffer</code>.
      */
     private static void _appendToPat(StringBuffer buf, String s, boolean escapeUnprintable) {
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            _appendToPat(buf, UTF16.charAt(s, i), escapeUnprintable);
+        int cp;
+        for (int i = 0; i < s.length(); i += Character.charCount(cp)) {
+            cp = s.codePointAt(i);
+            _appendToPat(buf, cp, escapeUnprintable);
         }
     }
 
