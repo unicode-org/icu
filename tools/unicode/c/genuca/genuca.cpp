@@ -1000,7 +1000,15 @@ write_uca_table(const char *filename,
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
             /* of code points and stuff... we don't want that to happen */
-            addToInverse(element, status);
+            if((element->CEs[0] >> 24) != 2) {
+                // Add every element except for the special minimum-weight character U+FFFE
+                // which has 02 weights.
+                // If we had 02 weights in the invuca table, then tailoring primary
+                // after an ignorable would try to put a weight before 02 which is not valid.
+                // We could fix this in a complicated way in the from-rule-string builder,
+                // but omitting this special element from invuca is simple and effective.
+                addToInverse(element, status);
+            }
             if(!(element->cSize > 1 && element->cPoints[0] == 0xFDD0)) {
               uprv_uca_addAnElement(t, element, status);
             }
