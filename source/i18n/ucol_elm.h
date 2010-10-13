@@ -70,7 +70,6 @@ typedef struct {
     uint32_t sizePrim[128];
     uint32_t sizeSec[128];
     uint32_t sizeTer[128];
-    UBool variableTop;
     UBool caseBit;
     UBool isThai;
 } UCAElements;
