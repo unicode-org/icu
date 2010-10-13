@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,9 +9,13 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 
-public abstract class UnicodeLabel {
+public abstract class UnicodeLabel implements com.ibm.icu.text.Transform<Integer, String> {
     
     public abstract String getValue(int codepoint, boolean isShort);
+    
+    public String transform(Integer codepoint) {
+        return getValue(codepoint, true);
+    }
     
     public String getValue(String s, String separator, boolean withCodePoint) {
         if (s.length() == 1) { // optimize simple case

@@ -9,8 +9,12 @@ package com.ibm.icu.text;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -712,16 +716,52 @@ public class PluralRules implements Serializable {
          return rules.select(number);
      }
 
+     /**
+      * Returns a set of all rule keywords used in this <code>PluralRules</code>
+      * object.  The rule "other" is always present by default.
+      * 
+      * @return The set of keywords.
+      * @stable ICU 3.8
+      */
+     public Set<String> getKeywords() {
+         return keywords;
+     }
+
     /**
-     * Returns a set of all rule keywords used in this <code>PluralRules</code>
-     * object.  The rule "other" is always present by default.
+     * Returns a list of values for which select() would return that keyword, or null if the keyword is not defined.
      * 
-     * @return The set of keywords.
-     * @stable ICU 3.8
+     * @return a list of values matching the keyword.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public Set<String> getKeywords() {
-        return keywords;
-    }
+     public Collection<Double> getSamples(String keyword, int max) {
+         if (!keywords.contains(keyword)) {
+             return null;
+         }
+         LinkedHashSet<Double> results = new LinkedHashSet<Double>();
+         boolean noFractions = true;
+         for (int i = 0; i < 256; ++i) {
+             String foundKeyword = select(i);
+             if (keyword.equals(foundKeyword)) {
+                 results.add((double) i);
+                 if (results.size() >= max) {
+                     break;
+                 }
+             }
+             if (noFractions) {
+                 double fraction = i + ((i % 9) + 1) / 10.0;
+                 foundKeyword = select(fraction);
+                 if (keyword.equals(foundKeyword)) {
+                     results.add(fraction);
+                     if (results.size() >= max) {
+                         break;
+                     }
+                     noFractions = false;
+                 }
+             }
+         }
+         return results;
+     }
 
     /**
      * Returns the set of locales for which PluralRules are known.
