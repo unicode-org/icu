@@ -64,17 +64,17 @@ conversion:table(nofallback) {
         { "UTF-16BE",           :bin{ feff0061 }, "\ufeffa",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
         { "UTF-16BE",           :bin{ fffe0061 }, "\ufffea",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
         // Java "UnicodeBig" requires a BE BOM or no BOM; it consumes the BE BOM
-        { "+UTF-16BE,version=1",:bin{ 00610062 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
-        { "+UnicodeBig",        :bin{ feff0061 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
-        { "+UnicodeBig",        :bin{ fffe0061 }, "\\xFF\\xFEa",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16BE,version=1",:bin{ 00610062 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UnicodeBig",        :bin{ feff0061 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UnicodeBig",        :bin{ fffe0061 }, "\\xFF\\xFEa",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
         // Standard UTF-16LE
         { "UTF-16LE",           :bin{ 61006200 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
         { "UTF-16LE",           :bin{ fffe6100 }, "\ufeffa",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
         { "UTF-16LE",           :bin{ feff6100 }, "\ufffea",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
         // Java "UnicodeLittle" requires an LE BOM or no BOM; it consumes the LE BOM
-        { "+UTF-16LE,version=1",:bin{ 61006200 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
-        { "+UnicodeLittle",     :bin{ fffe6100 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
-        { "+x-UTF-16LE-BOM",    :bin{ feff6100 }, "\\xFE\\xFFa",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16LE,version=1",:bin{ 61006200 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UnicodeLittle",     :bin{ fffe6100 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "x-UTF-16LE-BOM",    :bin{ feff6100 }, "\\xFE\\xFFa",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
 
         // Test ticket 7704: implement Java-compatible "UTF-16" converter.
         // Same as standard UTF-16 but fromUnicode always writes big-endian byte stream.
@@ -979,11 +979,11 @@ conversion:table(nofallback) {
         // Standard UTF-16BE
         { "UTF-16BE", "a", :bin{ 0061 }, :intvector{ 0,0 }, :int{1}, :int{0}, "", "?", "" }
         // Java "UnicodeBig" writes a BOM
-        { "+UnicodeBig", "a", :bin{ feff0061 }, :intvector{ -1,-1,0,0 }, :int{1}, :int{0}, "", "?", "" }
+        { "UnicodeBig", "a", :bin{ feff0061 }, :intvector{ -1,-1,0,0 }, :int{1}, :int{0}, "", "?", "" }
         // Standard UTF-16LE
         { "UTF-16LE", "a", :bin{ 6100 }, :intvector{ 0,0 }, :int{1}, :int{0}, "", "?", "" }
         // Java "UnicodeLittle" writes a BOM
-        { "+UnicodeLittle", "a", :bin{ fffe6100 }, :intvector{ -1,-1,0,0 }, :int{1}, :int{0}, "", "?", "" }
+        { "UnicodeLittle", "a", :bin{ fffe6100 }, :intvector{ -1,-1,0,0 }, :int{1}, :int{0}, "", "?", "" }
 
         // Test ticket 7704: implement Java-compatible "UTF-16" converter.
         // Same as standard UTF-16 but fromUnicode always writes big-endian byte stream.
