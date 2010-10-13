@@ -468,7 +468,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     enum ActionType {
       READCE,
-      READHEX,
+      READHEX1,
+      READHEX2,
       READUCAVERSION
     };
 
@@ -494,32 +495,34 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
                   {"[first trailing",            consts->UCA_FIRST_TRAILING,            READCE},
                   {"[last trailing",             consts->UCA_LAST_TRAILING,             READCE},
 
-                  {"[fixed top",                       &consts->UCA_PRIMARY_TOP_MIN,           READHEX},
-                  {"[fixed first implicit byte",       &consts->UCA_PRIMARY_IMPLICIT_MIN,      READHEX},
-                  {"[fixed last implicit byte",        &consts->UCA_PRIMARY_IMPLICIT_MAX,      READHEX},
-                  {"[fixed first trail byte",          &consts->UCA_PRIMARY_TRAILING_MIN,      READHEX},
-                  {"[fixed last trail byte",           &consts->UCA_PRIMARY_TRAILING_MAX,      READHEX},
-                  {"[fixed first special byte",        &consts->UCA_PRIMARY_SPECIAL_MIN,       READHEX},
-                  {"[fixed last special byte",         &consts->UCA_PRIMARY_SPECIAL_MAX,       READHEX},
-                  {"[variable top = ",                &t->options->variableTopValue,          READHEX},
+                  {"[fixed top",                       &consts->UCA_PRIMARY_TOP_MIN,           READHEX1},
+                  {"[fixed first implicit byte",       &consts->UCA_PRIMARY_IMPLICIT_MIN,      READHEX1},
+                  {"[fixed last implicit byte",        &consts->UCA_PRIMARY_IMPLICIT_MAX,      READHEX1},
+                  {"[fixed first trail byte",          &consts->UCA_PRIMARY_TRAILING_MIN,      READHEX1},
+                  {"[fixed last trail byte",           &consts->UCA_PRIMARY_TRAILING_MAX,      READHEX1},
+                  {"[fixed first special byte",        &consts->UCA_PRIMARY_SPECIAL_MIN,       READHEX1},
+                  {"[fixed last special byte",         &consts->UCA_PRIMARY_SPECIAL_MAX,       READHEX1},
+                  {"[variable top = ",                &t->options->variableTopValue,          READHEX2},
                   {"[UCA version = ",                 NULL,                          READUCAVERSION}
       };
       for (cnt = 0; cnt<sizeof(vt)/sizeof(vt[0]); cnt++) {
         uint32_t vtLen = (uint32_t)uprv_strlen(vt[cnt].name);
         if(uprv_strncmp(buffer, vt[cnt].name, vtLen) == 0) {
-            element->variableTop = TRUE;
-            if(vt[cnt].what_to_do == READHEX) {
-              if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
-              {
-                  fprintf(stderr, " scanf(hex) failed on !\n ");
+            ActionType what_to_do = vt[cnt].what_to_do;
+            if(what_to_do == READHEX1 || what_to_do == READHEX2) {
+              pointer = buffer+vtLen;
+              int32_t numBytes = readElement(&pointer, primary, ']', status);
+              if(numBytes != (what_to_do == READHEX1 ? 1 : 2)) {
+                  fprintf(stderr, "Value of \"%s\" has unexpected number of %d bytes\n",
+                          buffer, (int)numBytes);
+                  return NULL;
               }
-              *(vt[cnt].what) = theValue;
-              //if(cnt == 1) { // first implicit
-                // we need to set the value for top next
-                //uint32_t nextTop = ucol_prv_calculateImplicitPrimary(0x4E00); // CJK base
-                //consts->UCA_NEXT_TOP_VALUE = theValue<<24 | 0x030303;
-              //}
-            } else if (vt[cnt].what_to_do == READCE) { /* vt[cnt].what_to_do == READCE */
+              *(vt[cnt].what) = (uint32_t)uprv_strtoul(primary, &pointer, 16);
+              if(*pointer != 0) {
+                  fprintf(stderr, "Value of \"%s\" is not a hexadecimal number\n", buffer);
+                  return NULL;
+              }
+            } else if (what_to_do == READCE) {
               // TODO: combine & clean up the two CE parsers
               pointer = strchr(buffer+vtLen, '[');
               if(pointer) {
@@ -575,7 +578,6 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
       //*status = U_INVALID_FORMAT_ERROR;
       return NULL;
     }
-    // element->variableTop = FALSE; -- see memset() above
 
     startCodePoint = buffer;
     endCodePoint = strchr(startCodePoint, ';');
@@ -826,7 +828,6 @@ write_uca_table(const char *filename,
     }
     uint32_t line = 0;
     UCAElements *element = NULL;
-    UChar variableTopValue = 0;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
     /* test for NULL */
     if(myD == NULL) {
@@ -884,7 +885,7 @@ write_uca_table(const char *filename,
 
     uprv_memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
 
-    opts->variableTopValue = variableTopValue;
+    opts->variableTopValue = 0;
     opts->strength = UCOL_TERTIARY;
     opts->frenchCollation = UCOL_OFF;
     opts->alternateHandling = UCOL_NON_IGNORABLE; /* attribute for handling variable elements*/
@@ -905,22 +906,22 @@ write_uca_table(const char *filename,
         return -1;
     }
 
-// * set to zero
-struct {
-      UChar32 start;
-      UChar32 end;
-      int32_t value;
+    // * set to zero
+    struct {
+        UChar32 start;
+        UChar32 end;
+        int32_t value;
     } ranges[] =
     {
-      {0xAC00, 0xD7B0, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
-      //{0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
-      {0xDC00, 0xE000, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
-      // Now directly handled in the collation code by the swapCJK function.
-      //{0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
-      //{0x4E00, 0x9FA6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
-      //{0xF900, 0xFA2E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
-      //{0x20000, 0x2A6D7, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //6 CJK_IMPLICIT_TAG,   /* 0x20000-0x2A6D6*/
-      //{0x2F800, 0x2FA1E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
+        {0xAC00, 0xD7B0, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
+        //{0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG, already set in utrie_open() /* D800-DBFF*/
+        {0xDC00, 0xE000, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
+        // Now directly handled in the collation code by the swapCJK function.
+        //{0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
+        //{0x4E00, 0x9FA6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
+        //{0xF900, 0xFA2E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+        //{0x20000, 0x2A6D7, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //6 CJK_IMPLICIT_TAG,   /* 0x20000-0x2A6D6*/
+        //{0x2F800, 0x2FA1E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
     };
     uint32_t i = 0;
 
@@ -938,18 +939,13 @@ struct {
             exit(*status);
         }
 
-        element = readAnElement(data, t, &consts, status);
         line++;
         if(VERBOSE) {
           fprintf(stdout, "%u ", (int)line);
         }
+        element = readAnElement(data, t, &consts, status);
         if(element != NULL) {
             // we have read the line, now do something sensible with the read data!
-
-            // Below stuff was taken care of in readAnElement
-            //if(element->variableTop == TRUE && variableTopValue == 0) {
-            //    t->options->variableTopValue = element->cPoints[0];
-            //}
 
             // if element is a contraction, we want to add it to contractions
             if(element->cSize > 1 && element->cPoints[0] != 0xFDD0) { // this is a contraction
