@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2009, International Business Machines Corporation and
+ * Copyright (c) 2002-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -23,14 +23,14 @@ import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UTF16;
 
 public class UCAConformanceTest extends TestFmwk {
-    
+
     /**
      * @param args
      */
     public static void main(String[] args) {
         new UCAConformanceTest().run(args);
     }
-    
+
     public UCAConformanceTest() {
     }
     protected void init()throws Exception{
@@ -42,33 +42,39 @@ public class UCAConformanceTest extends TestFmwk {
     RuleBasedCollator UCA;
     RuleBasedCollator rbUCA;
     UTF16.StringComparator comparer;
-    
+
     public void TestTableNonIgnorable() {
+        if(skipIfBeforeICU(4, 5, 2)) {
+            return;
+        }
         setCollNonIgnorable(UCA);
         openTestFile("NON_IGNORABLE");
         conformanceTest(UCA);
     }
-    
+
     public void TestTableShifted() {
+        if(skipIfBeforeICU(4, 5, 2)) {
+            return;
+        }
         setCollShifted(UCA);
         openTestFile("SHIFTED");
         conformanceTest(UCA);
     }
-    
+
     public void TestRulesNonIgnorable() {
         initRbUCA();
-        
+
         setCollNonIgnorable(rbUCA);
         openTestFile("NON_IGNORABLE");
         conformanceTest(rbUCA);
     }
-    
+
     public void TestRulesShifted() {
         logln("This test is currently disabled, as it is impossible to "+
         "wholly represent fractional UCA using tailoring rules.");
         return;
         /*        initRbUCA();
-         
+
          if(U_SUCCESS(status)) {
          setCollShifted(rbUCA);
          openTestFile("SHIFTED");
@@ -107,7 +113,7 @@ public class UCAConformanceTest extends TestFmwk {
             }
         }
     }          
-    
+
     private void setCollNonIgnorable(RuleBasedCollator coll) 
     {
         if(coll != null) {
@@ -118,7 +124,7 @@ public class UCAConformanceTest extends TestFmwk {
             coll.setAlternateHandlingShifted(false);
         }
     }
-    
+
     private void setCollShifted(RuleBasedCollator coll) 
     {
         if(coll != null) {
@@ -129,9 +135,9 @@ public class UCAConformanceTest extends TestFmwk {
             coll.setAlternateHandlingShifted(true);
         }
     }
-    
-    
-    
+
+
+
     private void initRbUCA() 
     {
         /*      if(!rbUCA) {
@@ -152,7 +158,7 @@ public class UCAConformanceTest extends TestFmwk {
          }
          */
     }
-    
+
     private String parseString(String line) {
         int i = 0, value;
         StringBuilder result = new StringBuilder(), buffer = new StringBuilder();
@@ -175,20 +181,20 @@ public class UCAConformanceTest extends TestFmwk {
             buffer.setLength(0);
             result.appendCodePoint(value);
         }
-        
+
     }
     private void conformanceTest(RuleBasedCollator coll) {
         if(in == null || coll == null) {
             return;
         }
-        
+
         int lineNo = 0;
-        
+
         String line = null, oldLine = null, buffer = null, oldB = null;
         CollationKey oldSk = null, newSk = null;
-        
+
         int res = 0, cmpres = 0, cmpres2 = 0;
-        
+
         try {
             while ((line = in.readLine()) != null) {
                 lineNo++;
@@ -196,13 +202,13 @@ public class UCAConformanceTest extends TestFmwk {
                     continue;
                 }
                 buffer = parseString(line);
-                
+
                 newSk = coll.getCollationKey(buffer);
                 if(oldSk != null) {
                     res = oldSk.compareTo(newSk);
                     cmpres = coll.compare(oldB, buffer);
                     cmpres2 = coll.compare(buffer, oldB);
-                    
+
                     if(cmpres != -cmpres2) {
                         errln("Compare result not symmetrical on line "+lineNo);
                     }
@@ -211,7 +217,7 @@ public class UCAConformanceTest extends TestFmwk {
                         logln(oldLine);
                         logln(line);
                     }
-                    
+
                     if(res > 0) {
                         errln("Line " + lineNo + " is not greater or equal than previous line");
                         logln(oldLine);
@@ -230,7 +236,7 @@ public class UCAConformanceTest extends TestFmwk {
                         }
                     }
                 }
-                
+
                 oldSk = newSk;
                 oldB = buffer;
                 oldLine = line;
@@ -239,5 +245,5 @@ public class UCAConformanceTest extends TestFmwk {
             errln("Unexpected exception "+e);
         }
     }
-    
+
 }
