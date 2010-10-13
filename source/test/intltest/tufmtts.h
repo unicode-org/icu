@@ -30,6 +30,11 @@ public:
      * Performs API tests
      **/
     void testAPI();
+
+    /**
+     * Performs tests for Greek
+     **/
+    void testGreek();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

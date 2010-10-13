@@ -11,7 +11,7 @@
 #include "unicode/tmutamt.h"
 #include "unicode/tmutfmt.h"
 #include "tufmtts.h"
-
+#include "unicode/ustring.h"
 
 //TODO: put as compilation flag
 //#define TUFMTTS_DEBUG 1
@@ -25,6 +25,7 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     switch (index) {
         TESTCASE(0, testBasic);
         TESTCASE(1, testAPI);
+        TESTCASE(2, testGreek);
         default: name = ""; break;
     }
 }
@@ -201,5 +202,120 @@ void TimeUnitTest::testAPI() {
     delete format;
 }
 
+/* @bug 7902
+ * Tests for Greek Language.
+ */
+void TimeUnitTest::testGreek() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    const char* locales[] = {"el-GR", "el"};
+    TimeUnit::UTimeUnitFields tunits[] = {TimeUnit::UTIMEUNIT_SECOND, TimeUnit::UTIMEUNIT_MINUTE, TimeUnit::UTIMEUNIT_HOUR, TimeUnit::UTIMEUNIT_DAY, TimeUnit::UTIMEUNIT_MONTH, TimeUnit::UTIMEUNIT_YEAR};
+    TimeUnitFormat::EStyle styles[] = {TimeUnitFormat::kFull, TimeUnitFormat::kAbbreviate};
+    const int numbers[] = {1, 7};
+
+    const UChar oneSecond[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03bf, 0};
+    const UChar oneMinute[] = {0x0031, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03cc, 0};
+    const UChar oneHour[] = {0x0031, 0x0020, 0x03ce, 0x03c1, 0x03b1, 0};
+    const UChar oneDay[] = {0x0031, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b1, 0};
+    const UChar oneMonth[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b1, 0x03c2, 0};
+    const UChar oneYear[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x03bf, 0x03c2, 0};
+    const UChar sevenSecond[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
+    const UChar sevenMinute[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
+    const UChar sevenHour[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
+    const UChar sevenDay[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
+    const UChar sevenMonth[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
+    const UChar sevenYear[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x03b7, 0};
+
+    const UnicodeString oneSecondStr(oneSecond);
+    const UnicodeString oneMinuteStr(oneMinute);
+    const UnicodeString oneHourStr(oneHour);
+    const UnicodeString oneDayStr(oneDay);
+    const UnicodeString oneMonthStr(oneMonth);
+    const UnicodeString oneYearStr(oneYear);
+    const UnicodeString sevenSecondStr(sevenSecond);
+    const UnicodeString sevenMinuteStr(sevenMinute);
+    const UnicodeString sevenHourStr(sevenHour);
+    const UnicodeString sevenDayStr(sevenDay);
+    const UnicodeString sevenMonthStr(sevenMonth);
+    const UnicodeString sevenYearStr(sevenYear);
+
+    const UnicodeString expected[] = {oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr,
+                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr,
+                              oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr,
+                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr};
+
+    int counter = 0;
+    for ( unsigned int locIndex = 0;
+        locIndex < sizeof(locales)/sizeof(locales[0]);
+        ++locIndex ) {
+
+        Locale l = Locale::createFromName(locales[locIndex]);
+
+        for ( unsigned int numberIndex = 0;
+            numberIndex < sizeof(numbers)/sizeof(int);
+            ++numberIndex ) {
+
+            for ( unsigned int styleIndex = 0;
+                styleIndex < sizeof(styles)/sizeof(styles[0]);
+                ++styleIndex ) {
+
+                for ( unsigned int unitIndex = 0;
+                    unitIndex < sizeof(tunits)/sizeof(tunits[0]);
+                    ++unitIndex ) {
+
+                    TimeUnitAmount *tamt = new TimeUnitAmount(numbers[numberIndex], tunits[unitIndex], status);
+                    if (U_FAILURE(status)) {
+#ifdef TUFMTTS_DEBUG
+                        std::cout << "Failed to get TimeUnitAmount for " << tunits[unitIndex] << "\n";
+#endif
+                        return;
+                    }
+
+                    TimeUnitFormat *tfmt = new TimeUnitFormat(l, styles[styleIndex], status);
+                    if (U_FAILURE(status)) {
+#ifdef TUFMTTS_DEBUG
+                       std::cout <<  "Failed to get TimeUnitFormat for " << locales[locIndex] << "\n";
+#endif
+                       return;
+                    }
+
+                    Formattable fmt;
+                    UnicodeString str;
+
+                    fmt.adoptObject(tamt);
+                    str = ((Format *)tfmt)->format(fmt, str, status);
+                    if (U_FAILURE(status)) {
+                        delete tfmt;
+#ifdef TUFMTTS_DEBUG
+                        std::cout <<  "Failed to format" << "\n";
+#endif
+                        return;
+                    }
+
+#ifdef TUFMTTS_DEBUG
+                    char tmp[128];    //output
+                    char tmp1[128];    //expected
+                    int len = 0;
+                    u_strToUTF8(tmp, 128, &len, str.getTerminatedBuffer(), str.length(), &status);
+                    u_strToUTF8(tmp1, 128, &len, expected[counter].unescape().getTerminatedBuffer(), expected[counter].unescape().length(), &status);
+                    std::cout <<  "Formatted string : " << tmp << " expected : " << tmp1 << "\n";
+#endif
+                    if (!assertEquals("formatted time string is not expected, locale: " + UnicodeString(locales[locIndex]) + " style: " + (int)styles[styleIndex] + " units: " + (int)tunits[unitIndex], expected[counter], str)) {
+                        delete tfmt;
+                        str.remove();
+                        return;
+                    }
+                    delete tfmt;
+                    str.remove();
+                    ++counter;
+                }
+            }
+        }
+    }
+}
 
 #endif

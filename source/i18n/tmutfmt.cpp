@@ -612,11 +612,17 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
     char parentLocale[ULOC_FULLNAME_CAPACITY];
     uprv_strcpy(parentLocale, locName);
     int32_t locNameLen;
+    int32_t locLevel = 0;    // for example, for locale "el", locLevel=1; locale "el_GR", locLevel=2.
     while ((locNameLen = uloc_getParent(parentLocale, parentLocale,
                                         ULOC_FULLNAME_CAPACITY, &status)) >= 0){
+        ++locLevel;
         // look for pattern for srcPluralCount in locale tree
         UResourceBundle *rb, *unitsRes, *countsToPatternRB;
-        rb = ures_open(NULL, parentLocale, &status);
+        if (locLevel == 1 && locNameLen == 0) { // top level locale
+            rb = ures_open(NULL, locName, &status);
+        } else {
+            rb = ures_open(NULL, parentLocale, &status);
+        }
         unitsRes = ures_getByKey(rb, key, NULL, &status);
         const char* timeUnitName = getTimeUnitName(srcTimeUnitField, status);
         countsToPatternRB = ures_getByKey(unitsRes, timeUnitName, NULL, &status);
@@ -661,6 +667,21 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
             break;
         }
     }
+
+    // if no unitsShort resource was found even after fallback to root locale
+    // then search the units resource fallback from the current level to root
+    if ( locNameLen == 0 && uprv_strcmp(key, gShortUnitsTag) == 0) {
+#ifdef TMUTFMT_DEBUG
+        std::cout << "loop into searchInLocaleChain since Short-Long-Alternative \n";
+#endif
+        searchInLocaleChain(style, gUnitsTag, srcTimeUnitField, srcPluralCount,
+                             searchPluralCount, countToPatterns, err);
+        if (countToPatterns != NULL) {
+            MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
+            if (formatters != NULL && formatters[style] != NULL) return;
+        }
+    }
+
     // if not found the pattern for this plural count at all,
     // fall-back to plural count "other"
     if ( uprv_strcmp(searchPluralCount, gPluralCountOther) == 0 ) {
