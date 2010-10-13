@@ -1060,8 +1060,10 @@ public class TestConversion extends ModuleTest {
         output.rewind();
         
         // remove any BOM signature before checking
-        detectUnicodeSignature(output); // sets the position to after the BOM
-        output = output.slice(); // removes anything before the current position
+        if (!cc.charset.contains("UnicodeLittle") && !cc.charset.contains("UnicodeBig")) {
+            detectUnicodeSignature(output); // sets the position to after the BOM
+            output = output.slice(); // removes anything before the current position
+        }
 
         if (output.limit() != expected.limit()) {
             errln("Test failed: output length does not match expected for charset: " + cc.charset
