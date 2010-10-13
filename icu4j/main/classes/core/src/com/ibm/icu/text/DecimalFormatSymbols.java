@@ -175,7 +175,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     public char[] getDigits() {
         if ( digits != null ) {
-            return (char[])digits.clone();
+            return digits.clone();
         } else {
             char [] digitArray = new char[10];
             for ( int i = 0 ; i < 10 ; i++ ) {
