@@ -49,6 +49,7 @@ README text !eol
 *.tri2 -text
 
 icu4c/icu4c.css -text
+icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/config/mh-haiku -text

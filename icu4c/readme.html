@@ -963,6 +963,31 @@
       build the Debug and Release at the same time, see the <a href=
       "#HowToBuildWindowsBatch">batch configuration note</a> below.</li>
 
+
+      <li>Run the tests. They can be run from the command line or from within Visual Studio.
+
+	 <h4>Running the Tests from the Windows Command Line (cmd)</h4>
+	<ul>
+	   <li>For x86 (32 bit) and Debug, use: <br />
+
+	<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <i>Platform</i> <i>Configuration</i>
+		</tt> <br />
+       </li>
+	<li>So, for example:
+				 <br />
+		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Debug</b>
+		</tt>
+				<br/>  or <br />
+		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Release</b>
+		</tt>
+				<br/>  or <br />
+		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Release</b>
+		</tt></li>
+	</ul>	
+
+         <h4>Running the Tests from within Visual Studio</h4>
+
+	<ol>
       <li>Run the C++ test suite, "intltest". To do this: set the active startup
       project to "intltest", and press Ctrl+F5 to run it. Make sure that it
       passes without any errors.</li>
@@ -974,6 +999,10 @@
       <li>Run the I/O test suite, "iotest". To do this: set the active startup
       project to "iotest", and press Ctrl+F5 to run it. Make sure that it passes
       without any errors.</li>
+
+	</ol>
+
+	</li>
 
       <li>You are now able to develop applications with ICU by using the
       libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
