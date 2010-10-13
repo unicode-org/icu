@@ -125,7 +125,9 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.charset.Charset88591" );
         algorithmicCharsets.put("UTF-16",                "com.ibm.icu.charset.CharsetUTF16" );
         algorithmicCharsets.put("UTF-16BE",              "com.ibm.icu.charset.CharsetUTF16BE" );
+        algorithmicCharsets.put("UTF-16BE,version=1",    "com.ibm.icu.charset.CharsetUTF16BE" );
         algorithmicCharsets.put("UTF-16LE",              "com.ibm.icu.charset.CharsetUTF16LE" );
+        algorithmicCharsets.put("UTF-16LE,version=1",    "com.ibm.icu.charset.CharsetUTF16LE" );
         algorithmicCharsets.put("UTF16_OppositeEndian",  "com.ibm.icu.charset.CharsetUTF16LE" );
         algorithmicCharsets.put("UTF16_PlatformEndian",  "com.ibm.icu.charset.CharsetUTF16" );
         algorithmicCharsets.put("UTF-32",                "com.ibm.icu.charset.CharsetUTF32" );
