@@ -1296,7 +1296,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     utrie_enum(&t->UCA->mapping, NULL, _processUCACompleteIgnorables, t);
 
     // add tailoring characters related canonical closures
-    uprv_uca_canonicalClosure(t, src, status);
+    uprv_uca_canonicalClosure(t, src, NULL, status);
 
     /* still need to produce compatibility closure */
 
