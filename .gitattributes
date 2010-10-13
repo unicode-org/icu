@@ -3,6 +3,7 @@ icu4c/APIChangeReport.html svneol=native#text/html
 icu4c/icu4c.css -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
+icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
