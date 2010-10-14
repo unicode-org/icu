@@ -58,6 +58,7 @@
                 <filter token="SPECVERSION" value="${jar.spec.version}"/>
                 <filter token="IMPLVERSION" value="${jar.impl.version}"/>
                 <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
+                <filter token="EXECENV" value="${jar.exec.env}"/>
             </filterset>
         </copy>
 
@@ -72,16 +73,7 @@
 
     <target name="@src-jar">
         <mkdir dir="${jar.dir}"/>
-
-        <copy file="manifest.stub" todir="${out.dir}">
-            <filterset>
-                <filter token="SPECVERSION" value="${jar.spec.version}"/>
-                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
-                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
-            </filterset>
-        </copy>
-
-        <jar jarfile="${jar.dir}/${src.jar.name}" manifest="${out.dir}/manifest.stub" compress="true">
+        <jar jarfile="${jar.dir}/${src.jar.name}" compress="true">
             <fileset dir="${src.dir}" includes="**/*.java"/>
             <fileset dir="${shared.dir}/licenses">
                 <include name="license.html"/>
