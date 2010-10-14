@@ -14,9 +14,6 @@ import com.ibm.icu.lang.UCharacter;
  */
 class NameUnicodeTransliterator extends Transliterator {
 
-    char openDelimiter;
-    char closeDelimiter;
-
     static final String _ID = "Name-Any";
 
     static final String OPEN_PAT    = "\\N~{~";

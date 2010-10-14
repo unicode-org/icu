@@ -328,7 +328,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    protected synchronized void handleTransliterate(Replaceable text,
+    protected void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
         /* We keep start and limit fixed the entire time,
          * relative to the text -- limit may move numerically if text is
@@ -354,16 +354,18 @@ public class RuleBasedTransliterator extends Transliterator {
          * number of characters n, unless n is so large that 16n exceeds a
          * uint32_t.
          */
-        int loopCount = 0;
-        int loopLimit = (index.limit - index.start) << 4;
-        if (loopLimit < 0) {
-            loopLimit = 0x7FFFFFFF;
-        }
+        synchronized(data)  {
+            int loopCount = 0;
+            int loopLimit = (index.limit - index.start) << 4;
+            if (loopLimit < 0) {
+                loopLimit = 0x7FFFFFFF;
+            }
 
-        while (index.start < index.limit &&
-               loopCount <= loopLimit &&
-               data.ruleSet.transliterate(text, index, incremental)) {
-            ++loopCount;
+            while (index.start < index.limit &&
+                    loopCount <= loopLimit &&
+                    data.ruleSet.transliterate(text, index, incremental)) {
+                ++loopCount;
+            }
         }
     }
 
