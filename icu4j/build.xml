@@ -104,6 +104,8 @@
         <delete dir="${doc.dir}"/>
         <delete dir="${out.dir}"/>
         <delete dir="${module.dir}"/>
+
+        <ant dir="eclipse-build" target="clean" inheritAll="false"/>
     </target>
 
     <!-- meta build targets -->
@@ -316,11 +318,12 @@
         <mkdir dir="${out.dir}"/>
 
         <!-- manifest -->
-        <copy file="${icu4j.core.dir}/manifest.stub" todir="${out.dir}">
+        <copy file="manifest.stub" todir="${out.dir}">
             <filterset>
                 <filter token="SPECVERSION" value="${jar.spec.version}"/>
                 <filter token="IMPLVERSION" value="${jar.impl.version}"/>
                 <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
+                <filter token="EXECENV" value="${jar.exec.env}"/>
             </filterset>
         </copy>
 
@@ -367,19 +370,9 @@
 
     <target name="releaseSrcJars" description="Build ICU4J src jar files for distribution">
         <!-- icu4j src-jar -->
-        <mkdir dir="${out.dir}"/>
-        <copy file="${icu4j.core.dir}/manifest.stub" todir="${out.dir}">
-            <filterset>
-                <filter token="SPECVERSION" value="${jar.spec.version}"/>
-                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
-                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
-            </filterset>
-        </copy>
-
         <mkdir dir="${release.dir}"/>
         <jar jarfile="${release.dir}/${icu4j-src.jar.versioned.file}"
-                compress="true"
-                manifest="${out.dir}/manifest.stub">
+                compress="true">
             <fileset dir="${icu4j.core.dir}/${src.dir}" includes="**/*.java"/>
             <fileset dir="${icu4j.collate.dir}/${src.dir}" includes="**/*.java"/>
             <fileset dir="${icu4j.currdata.dir}/${src.dir}" includes="**/*.java"/>

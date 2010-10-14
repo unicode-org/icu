@@ -546,6 +546,7 @@ icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/translit/translit-tests-build.launch -text
+icu4j/manifest.stub -text
 icu4j/tools/build/icu4j28.api.gz -text
 icu4j/tools/build/icu4j30.api.gz -text
 icu4j/tools/build/icu4j32.api.gz -text
