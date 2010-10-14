@@ -1253,4 +1253,20 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     "when it is not an instance of PatternInfo.");
         }
     }
+    
+    public void TestDateIntervalCoverage() {
+        DateInterval di = new DateInterval(0, 1);
+        
+        if (di.equals("Test")) {
+            errln("Comparison test should fail.");
+        }
+        
+        if (di.toString() == null) {
+            errln("toString should not return null.");
+        }
+        
+        if (di.hashCode() != 1) {
+            errln("hasCode() should return 1.");
+        }
+    }
 }

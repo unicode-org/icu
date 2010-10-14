@@ -154,6 +154,18 @@ public class CurrencyTest extends TestFmwk {
         if (found) {
             errln("found locale" + fu_FU + " in currency locales after unregister");
         }
+        
+        Locale[] locs = Currency.getAvailableLocales();
+        found = false;
+        for (int i = 0; i < locs.length; ++i) {
+            if (locs[i].equals(fu_FU)) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            errln("found locale" + fu_FU + " in currency locales after unregister");
+        }
     }
 
     /**

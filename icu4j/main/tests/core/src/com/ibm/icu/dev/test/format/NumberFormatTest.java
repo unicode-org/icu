@@ -2679,4 +2679,31 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
   
     }
+    
+    public void TestCurrencyAmountCoverage() {
+        CurrencyAmount ca, cb;
+        
+        try {
+            ca = new CurrencyAmount(null, null);
+            errln("NullPointerException should have been thrown.");
+        } catch (NullPointerException ex) {
+        }
+        try {
+            ca = new CurrencyAmount(new Integer(0), null);
+            errln("NullPointerException should have been thrown.");
+        } catch (NullPointerException ex) {
+        }
+        
+        ca = new CurrencyAmount(new Integer(0), Currency.getInstance(new ULocale("ja_JP")));
+        cb = new CurrencyAmount(new Integer(1), Currency.getInstance(new ULocale("ja_JP")));
+        if (ca.equals(null)) {
+            errln("Comparison should return false.");
+        }
+        if (!ca.equals(ca)) {
+            errln("Comparision should return true.");
+        }
+        if (ca.equals(cb)) {
+            errln("Comparison should return false.");
+        }
+    }
 }

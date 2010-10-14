@@ -513,7 +513,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
     {
         return (major << 24) | (minor << 16) | (milli << 8) | micro;
     }
-
+    ///CLOVER:OFF
     /**
      * Main method prints out ICU version information
      * @param args arguments (currently not used)
@@ -582,4 +582,5 @@ public final class VersionInfo implements Comparable<VersionInfo>
 
         return verStr.toString();
     }
+    ///CLOVER:ON
 }
