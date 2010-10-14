@@ -5607,11 +5607,11 @@ static void TestSameStrengthListQwerty(void)
     "&'\\u0071'<\\u0077<\\u0065<\\u0072 &\\u0077<<'\\u0074'<<\\u0079<<\\u0075 &\\u0074<<<\\u0069<<<'\\u006f'<<<\\u0070 &\\u006f=\\u0061='\\u0073'=\\u0064",
     "&\\u0071<*\\u0077\\u0065\\u0072 &\\u0077<<*\\u0074\\u0079\\u0075 &\\u0074<<<*\\u0069\\u006f\\u0070 &\\u006f=*\\u0061\\u0073\\u0064",
 
-    /* Quoted characters also will work if two quoted characters are consecutive.  */
+    /* Quoted characters also will work if two quoted characters are not consecutive.  */
     "&\\u0071<*'\\u0077'\\u0065\\u0072 &\\u0077<<*\\u0074'\\u0079'\\u0075 &\\u0074<<<*\\u0069\\u006f'\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",
 
     /* Consecutive quoted charactes do not work, because a '' will be treated as a quote character. */
-    "&\\u0071<*'\\u0077''\\u0065''\\u0072' &\\u0077<<*'\\u0074''\\u0079''\\u0075' &\\u0074<<<*'\\u0069''\\u006f''\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",
+    /* "&\\u0071<*'\\u0077''\\u0065''\\u0072' &\\u0077<<*'\\u0074''\\u0079''\\u0075' &\\u0074<<<*'\\u0069''\\u006f''\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",*/
 
  };
   doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
@@ -5622,7 +5622,10 @@ static void TestSameStrengthListQuotedQwerty(void)
   const char* strRules[] = {
     "&q<w<e<r &w<<t<<y<<u &t<<<i<<<o<<<p &o=a=s=d",   /* Normal */
     "&q<*wer &w<<*tyu &t<<<*iop &o=*asd",             /* Lists  */
-    "&q<*w'e'r &w<<*'t'yu &t<<<*io'p' &o=*'a's'd'",     /* Lists  */
+    "&q<*w'e'r &w<<*'t'yu &t<<<*io'p' &o=*'a's'd'",   /* Lists with quotes */
+
+    /* Lists with continuous quotes may not work, because '' will be treated as a quote character. */
+    /* "&q<*'w''e''r' &w<<*'t''y''u' &t<<<*'i''o''p' &o=*'a''s''d'", */
    };
   doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
 }
