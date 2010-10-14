@@ -18,6 +18,8 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -29,7 +31,7 @@ import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
-
+import com.ibm.icu.util.UResourceBundleIterator;
 
 public final class ICUResourceBundleTest extends TestFmwk {
     private static final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();
@@ -1067,6 +1069,97 @@ public final class ICUResourceBundleTest extends TestFmwk {
             assertEquals("bundleContainer in testmessages", "testmessages.properties", rb2.getString("bundleContainer"));
         } catch (Throwable t) {
             errln(t.getMessage());
+        }
+    }
+    
+    public void TestUResourceBundleCoverage() {
+        Locale locale = null;
+        ULocale ulocale = null;
+        String baseName = null;
+        UResourceBundle rb1, rb2, rb3, rb4, rb5, rb6, rb7;
+        
+        rb1 = UResourceBundle.getBundleInstance(ulocale);
+        rb2 = UResourceBundle.getBundleInstance(baseName);
+        rb3 = UResourceBundle.getBundleInstance(baseName, ulocale);
+        rb4 = UResourceBundle.getBundleInstance(baseName, locale);
+        
+        rb5 = UResourceBundle.getBundleInstance(baseName, ulocale, this.getClass().getClassLoader());
+        rb6 = UResourceBundle.getBundleInstance(baseName, locale, this.getClass().getClassLoader());
+        try {
+            rb7 = UResourceBundle.getBundleInstance("bogus", Locale.getDefault(), this.getClass().getClassLoader());
+            errln("Should have thrown exception with bogus baseName.");
+        } catch (java.util.MissingResourceException ex) {
+        }
+        if (rb1 == null || rb2 == null || rb3 == null || rb4 == null || rb5 == null || rb6 == null) {
+            errln("Error getting resource bundle.");
+        }
+        
+        rb7 = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestDataElements");
+        
+        rb1.resetBundleCache();
+        
+        try {
+            rb1.getBinary();
+            errln("getBinary() call should have thrown UResourceTypeMismatchException.");
+        } catch (UResourceTypeMismatchException ex) {
+        }
+        try {
+            rb1.getStringArray();
+            errln("getStringArray() call should have thrown UResourceTypeMismatchException.");
+        } catch (UResourceTypeMismatchException ex) {
+        }
+        try {
+            byte [] ba = { 0x00 };
+            rb1.getBinary(ba);
+            errln("getBinary(byte[]) call should have thrown UResourceTypeMismatchException.");
+        } catch (UResourceTypeMismatchException ex) {
+        }
+        try {
+            rb1.getInt();
+            errln("getInt() call should have thrown UResourceTypeMismatchException.");
+        } catch (UResourceTypeMismatchException ex) {
+        }
+        try {
+            rb1.getIntVector();
+            errln("getIntVector() call should have thrown UResourceTypeMismatchException.");
+        } catch (UResourceTypeMismatchException ex) {
+        }
+        try {
+            rb1.getUInt();
+            errln("getUInt() call should have thrown UResourceTypeMismatchException.");
+        } catch (UResourceTypeMismatchException ex) {
+        }
+        if (rb1.getVersion() != null) {
+            errln("getVersion() call should have returned null.");
+        }
+        if (rb7.getType() != UResourceBundle.NONE) {
+            errln("getType() call should have returned NONE.");
+        }
+        if (rb7.getKey() != null) {
+            errln("getKey() call should have returned null.");
+        }
+        if (((ICUResourceBundle)rb1).getResPath() == null) {
+            errln("Error calling getResPath().");
+        }
+        if (((ICUResourceBundle)rb1).findTopLevel(0) == null) {
+            errln("Error calling findTopLevel().");
+        }
+        if (ICUResourceBundle.getFullLocaleNameSet() == null) {
+            errln("Error calling getFullLocaleNameSet().");
+        }
+        UResourceBundleIterator itr = rb1.getIterator();
+        while (itr.hasNext()) {
+            itr.next();
+        }
+        try {
+            itr.next();
+            errln("NoSuchElementException exception should have been thrown.");
+        } catch (NoSuchElementException ex) {
+        }
+        try {
+            itr.nextString();
+            errln("NoSuchElementException exception should have been thrown.");
+        } catch (NoSuchElementException ex) {
         }
     }
 }

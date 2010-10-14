@@ -1212,6 +1212,13 @@ public class TimeZoneRuleTest extends TestFmwk {
         if (rulesetAll.length < ruleset1.length || ruleset1.length < ruleset2.length) {
             errln("FAIL: Number of rules returned by getRules is invalid");
         }
+        
+        int[] offsets_vtzc = new int[2];
+        VTimeZone vtzc = VTimeZone.create("PST");
+        vtzc.getOffsetFromLocal(Calendar.getInstance(vtzc).getTimeInMillis(), VTimeZone.LOCAL_STD, VTimeZone.LOCAL_STD, offsets_vtzc);
+        if (offsets_vtzc[0] > offsets_vtzc[1]) {
+            errln("Error getOffsetFromLocal()");
+        }
     }
 
     public void TestVTimeZoneParse() {
@@ -1429,6 +1436,16 @@ public class TimeZoneRuleTest extends TestFmwk {
         } else if (tzt.getTime() != expectedPrev){
             errln("FAIL: Wrong transition time returned by getPreviousTransition - "
                     + tzt.getTime() + " Expected: " + expectedPrev);
+        }
+    }
+    
+    public void TestBasicTimeZoneCoverage() {
+        BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone("PST");
+        int []offsets = new int[2];
+        
+        btz.getOffsetFromLocal(Calendar.getInstance().getTimeInMillis(), BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
+        if (offsets[0] > offsets[1]) {
+            errln("Error calling getOffsetFromLocal().");
         }
     }
 

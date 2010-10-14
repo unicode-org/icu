@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.LocaleMatcher;
+import com.ibm.icu.util.LocaleMatcher.LanguageMatcherData;
 import com.ibm.icu.util.LocalePriorityList;
 import com.ibm.icu.util.ULocale;
 
@@ -61,6 +62,23 @@ public class LocaleMatcherTest extends TestFmwk {
     assertEquals("en_AU in {en, en_GB, es, es_419}", new ULocale("en_GB"), matcher.getBestMatch("en_AU"));
     assertEquals("es_MX in {en, en_GB, es, es_419}", new ULocale("es_419"), matcher.getBestMatch("es_MX"));
     assertEquals("es_ES in {en, en_GB, es, es_419}", new ULocale("es"), matcher.getBestMatch("es_ES"));
+  }
+  
+  public void TestLocaleMatcherCoverage() {
+      // Add tests for better code coverage
+      LocaleMatcher matcher = new LocaleMatcher(LocalePriorityList.add(null, 0).build() , null);
+      
+      LanguageMatcherData data = new LanguageMatcherData();
+      
+      LanguageMatcherData clone = data.cloneAsThawed();
+      
+      if (clone.equals(data)) {
+          errln("Error cloneAsThawed() is equal.");
+      }
+      
+      if (data.isFrozen()) {
+          errln("Error LanguageMatcherData is frozen!");
+      }
   }
   
   private void assertEquals(Object expected, Object string) {
