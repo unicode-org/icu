@@ -70,7 +70,7 @@ final class BreakTransliterator extends Transliterator {
         | (1<<Character.NON_SPACING_MARK)
         | (1<<Character.ENCLOSING_MARK)
         ;
-    protected void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
+    protected synchronized void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
         boundaryCount = 0;
         int boundary = 0;
         getBreakIterator(); // Lazy-create it if necessary

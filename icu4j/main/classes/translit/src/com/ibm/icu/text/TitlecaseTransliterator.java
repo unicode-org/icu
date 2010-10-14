@@ -57,7 +57,7 @@ class TitlecaseTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    protected void handleTransliterate(Replaceable text,
+    protected synchronized void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
         // TODO reimplement, see ustrcase.c
         // using a real word break iterator

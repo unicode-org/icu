@@ -55,7 +55,7 @@ class UppercaseTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    protected void handleTransliterate(Replaceable text,
+    protected synchronized void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
     if(csp==null) {
         return;
