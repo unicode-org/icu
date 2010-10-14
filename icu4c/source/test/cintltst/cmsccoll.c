@@ -5575,8 +5575,13 @@ static void TestSameStrengthListQuoted(void)
 {
   const char* strRules[] = {
     /* Lists with quoted characters */
+    "&\\u0061<*bcd &b<<*klm &k<<<*xyz &y<*f\\u0067\\u0068e &a=*123",
     "&'\\u0061'<*bcd &b<<*klm &k<<<*xyz &y<*f'\\u0067\\u0068'e &a=*123",
+
+    "&\\u0061<*b\\u0063d &b<<*klm &k<<<*xyz &\\u0079<*fgh\\u0065 &a=*\\u0031\\u0032\\u0033",
     "&'\\u0061'<*b'\\u0063'd &b<<*klm &k<<<*xyz &'\\u0079'<*fgh'\\u0065' &a=*'\\u0031\\u0032\\u0033'",
+
+    "&\\u0061<*\\u0062c\\u0064 &b<<*klm &k<<<*xyz  &y<*fghe &a=*\\u0031\\u0032\\u0033", 
     "&'\\u0061'<*'\\u0062'c'\\u0064' &b<<*klm &k<<<*xyz  &y<*fghe &a=*'\\u0031\\u0032\\u0033'", 
   };
   doTestOneTestCase(rangeTestcases, nRangeTestcases, strRules, LEN(strRules));
@@ -5598,7 +5603,27 @@ static void TestSameStrengthListQwerty(void)
   const char* strRules[] = {
     "&q<w<e<r &w<<t<<y<<u &t<<<i<<<o<<<p &o=a=s=d",   /* Normal */
     "&q<*wer &w<<*tyu &t<<<*iop &o=*asd",             /* Lists  */
-  };
+    "&\\u0071<\\u0077<\\u0065<\\u0072 &\\u0077<<\\u0074<<\\u0079<<\\u0075 &\\u0074<<<\\u0069<<<\\u006f<<<\\u0070 &\\u006f=\\u0061=\\u0073=\\u0064",
+    "&'\\u0071'<\\u0077<\\u0065<\\u0072 &\\u0077<<'\\u0074'<<\\u0079<<\\u0075 &\\u0074<<<\\u0069<<<'\\u006f'<<<\\u0070 &\\u006f=\\u0061='\\u0073'=\\u0064",
+    "&\\u0071<*\\u0077\\u0065\\u0072 &\\u0077<<*\\u0074\\u0079\\u0075 &\\u0074<<<*\\u0069\\u006f\\u0070 &\\u006f=*\\u0061\\u0073\\u0064",
+
+    /* Quoted characters also will work if two quoted characters are consecutive.  */
+    "&\\u0071<*'\\u0077'\\u0065\\u0072 &\\u0077<<*\\u0074'\\u0079'\\u0075 &\\u0074<<<*\\u0069\\u006f'\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",
+
+    /* Consecutive quoted charactes do not work, because a '' will be treated as a quote character. */
+    "&\\u0071<*'\\u0077''\\u0065''\\u0072' &\\u0077<<*'\\u0074''\\u0079''\\u0075' &\\u0074<<<*'\\u0069''\\u006f''\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",
+
+ };
+  doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
+}
+
+static void TestSameStrengthListQuotedQwerty(void)
+{
+  const char* strRules[] = {
+    "&q<w<e<r &w<<t<<y<<u &t<<<i<<<o<<<p &o=a=s=d",   /* Normal */
+    "&q<*wer &w<<*tyu &t<<<*iop &o=*asd",             /* Lists  */
+    "&q<*w'e'r &w<<*'t'yu &t<<<*io'p' &o=*'a's'd'",     /* Lists  */
+   };
   doTestOneTestCase(rangeTestcasesQwerty, nRangeTestcasesQwerty, strRules, LEN(strRules));
 }
 
@@ -5638,6 +5663,65 @@ static void TestSpecialCharacters(void)
     { {0x002d}, {0x0026}, UCOL_LESS },  /* - < & */
   };
   doTestOneTestCase(specialCharacterStrings, LEN(specialCharacterStrings), strRules, LEN(strRules));
+}
+
+static void TestPrivateUseCharacters(void)
+{
+  const char* strRules[] = {
+    /* Normal */
+    "&'\\u5ea7'<'\\uE2D8'<'\\uE2D9'<'\\uE2DA'<'\\uE2DB'<'\\uE2DC'<'\\u4e8d'",
+    "&\\u5ea7<\\uE2D8<\\uE2D9<\\uE2DA<\\uE2DB<\\uE2DC<\\u4e8d", 
+  };
+
+  const static OneTestCase privateUseCharacterStrings[] = {
+    { {0x5ea7}, {0xe2d8}, UCOL_LESS },
+    { {0xe2d8}, {0xe2d9}, UCOL_LESS },
+    { {0xe2d9}, {0xe2da}, UCOL_LESS },
+    { {0xe2da}, {0xe2db}, UCOL_LESS },
+    { {0xe2db}, {0xe2dc}, UCOL_LESS },
+    { {0xe2dc}, {0x4e8d}, UCOL_LESS },
+  };
+  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+}
+
+static void TestPrivateUseCharactersInList(void)
+{
+  const char* strRules[] = {
+    /* List */
+    "&'\\u5ea7'<*'\\uE2D8\\uE2D9\\uE2DA\\uE2DB\\uE2DC\\u4e8d'",
+    /* "&'\\u5ea7'<*\\uE2D8'\\uE2D9\\uE2DA'\\uE2DB'\\uE2DC\\u4e8d'", */
+    "&\\u5ea7<*\\uE2D8\\uE2D9\\uE2DA\\uE2DB\\uE2DC\\u4e8d",
+  };
+
+  const static OneTestCase privateUseCharacterStrings[] = {
+    { {0x5ea7}, {0xe2d8}, UCOL_LESS },
+    { {0xe2d8}, {0xe2d9}, UCOL_LESS },
+    { {0xe2d9}, {0xe2da}, UCOL_LESS },
+    { {0xe2da}, {0xe2db}, UCOL_LESS },
+    { {0xe2db}, {0xe2dc}, UCOL_LESS },
+    { {0xe2dc}, {0x4e8d}, UCOL_LESS },
+  };
+  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+}
+
+static void TestPrivateUseCharactersInRange(void)
+{
+  const char* strRules[] = {
+    /* Range */
+    "&'\\u5ea7'<*'\\uE2D8'-'\\uE2DC\\u4e8d'",
+    "&\\u5ea7<*\\uE2D8-\\uE2DC\\u4e8d",
+    /* "&\\u5ea7<\\uE2D8'\\uE2D8'-'\\uE2D9'\\uE2DA-\\uE2DB\\uE2DC\\u4e8d", */
+  };
+
+  const static OneTestCase privateUseCharacterStrings[] = {
+    { {0x5ea7}, {0xe2d8}, UCOL_LESS },
+    { {0xe2d8}, {0xe2d9}, UCOL_LESS },
+    { {0xe2d9}, {0xe2da}, UCOL_LESS },
+    { {0xe2da}, {0xe2db}, UCOL_LESS },
+    { {0xe2db}, {0xe2dc}, UCOL_LESS },
+    { {0xe2dc}, {0x4e8d}, UCOL_LESS },
+  };
+  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
 }
 
 static void TestInvalidListsAndRanges(void)
@@ -5763,9 +5847,13 @@ void addMiscCollTest(TestNode** root)
     TEST(TestSameStrengthListQuoted);
     TEST(TestSameStrengthListSupplemental);
     TEST(TestSameStrengthListQwerty);
+    TEST(TestSameStrengthListQuotedQwerty);
     TEST(TestSameStrengthListRanges);
     TEST(TestSameStrengthListSupplementalRanges);
     TEST(TestSpecialCharacters);
+    TEST(TestPrivateUseCharacters);
+    TEST(TestPrivateUseCharactersInList);
+    TEST(TestPrivateUseCharactersInRange);
     TEST(TestInvalidListsAndRanges);
 }
 
