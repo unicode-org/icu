@@ -120,7 +120,7 @@ public final class CharsetProviderICU extends CharsetProvider{
                     ret = canonicalName;
                 }/*else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
                     ret = canonicalName;
-                }*/else if(enc.indexOf("x-")==0){
+                }*/else if(enc.indexOf("x-")==0 || enc.indexOf("X-")==0){
                     /* TODO: Match with getJavaCanonicalName method */
                     /*
                     char temp[ UCNV_MAX_CONVERTER_NAME_LENGTH] = {0};
