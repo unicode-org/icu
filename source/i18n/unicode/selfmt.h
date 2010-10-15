@@ -356,7 +356,9 @@ private:
     Hashtable  *parsedValuesHash;
 
     SelectFormat();   // default constructor not implemented.
-    void init(UErrorCode& status);
+    void initHashTable(UErrorCode &status);
+    void cleanHashTable();
+
     //For the applyPattern , classifies char.s in one of the characterClass.
     CharacterClass classifyCharacter(UChar ch) const;
     //Checks if the "other" keyword is present in pattern.
