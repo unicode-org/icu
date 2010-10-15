@@ -1,8 +1,8 @@
 ﻿# Summary: Whole-Script Confusables
 # File: confusablesWholeScript.txt
-# Version: 2.0
-# Generated: 2006-08-15, 04:35:21 GMT
-# Checkin: $Revision: 1.11 $
+# Version: 2.1
+# Generated: 2010-04-13, 01:33:25 GMT
+# Checkin: $Revision: 1.29 $
 #
 # For documentation and usage, see http://www.unicode.org/reports/tr39/
 #
@@ -13,19 +13,25 @@
 
 # Lowercase Only
 
-# Armenian; Cherokee: [հ]
+# Arabic; Latin: [ةۃ]
 
-0570          ; Armn; Cher; L #      (հ)  ARMENIAN SMALL LETTER HO
+0629          ; Arab; Latn; L #      (ة)  ARABIC LETTER TEH MARBUTA
+06C3          ; Arab; Latn; L #      (ۃ)  ARABIC LETTER TEH MARBUTA GOAL
 
-# Total code points: 1
+# Total code points: 2
 
-# Armenian; Cyrillic: [հյօ]
+# Armenian; Cyrillic: [ագզհյոռսօ]
 
+0561          ; Armn; Cyrl; L #      (ա)  ARMENIAN SMALL LETTER AYB
+0563          ; Armn; Cyrl; L #      (գ)  ARMENIAN SMALL LETTER GIM
+0566          ; Armn; Cyrl; L #      (զ)  ARMENIAN SMALL LETTER ZA
 0570          ; Armn; Cyrl; L #      (հ)  ARMENIAN SMALL LETTER HO
 0575          ; Armn; Cyrl; L #      (յ)  ARMENIAN SMALL LETTER YI
+0578          ; Armn; Cyrl; L #      (ո)  ARMENIAN SMALL LETTER VO
+057C..057D    ; Armn; Cyrl; L #  [2] (ռ..ս)  ARMENIAN SMALL LETTER RA..ARMENIAN SMALL LETTER SEH
 0585          ; Armn; Cyrl; L #      (օ)  ARMENIAN SMALL LETTER OH
 
-# Total code points: 3
+# Total code points: 9
 
 # Armenian; Devanagari: [օ]
 
@@ -54,6 +60,12 @@
 
 # Total code points: 1
 
+# Armenian; Hebrew: [օ]
+
+0585          ; Armn; Hebr; L #      (օ)  ARMENIAN SMALL LETTER OH
+
+# Total code points: 1
+
 # Armenian; Kannada: [օ]
 
 0585          ; Armn; Knda; L #      (օ)  ARMENIAN SMALL LETTER OH
@@ -66,8 +78,9 @@
 
 # Total code points: 1
 
-# Armenian; Latin: [գզհյոռսցքօ]
+# Armenian; Latin: [ագզհյոռսցքօ]
 
+0561          ; Armn; Latn; L #      (ա)  ARMENIAN SMALL LETTER AYB
 0563          ; Armn; Latn; L #      (գ)  ARMENIAN SMALL LETTER GIM
 0566          ; Armn; Latn; L #      (զ)  ARMENIAN SMALL LETTER ZA
 0570          ; Armn; Latn; L #      (հ)  ARMENIAN SMALL LETTER HO
@@ -77,7 +90,7 @@
 0581          ; Armn; Latn; L #      (ց)  ARMENIAN SMALL LETTER CO
 0584..0585    ; Armn; Latn; L #  [2] (ք..օ)  ARMENIAN SMALL LETTER KEH..ARMENIAN SMALL LETTER OH
 
-# Total code points: 10
+# Total code points: 11
 
 # Armenian; Malayalam: [օ]
 
@@ -88,6 +101,18 @@
 # Armenian; Myanmar: [օ]
 
 0585          ; Armn; Mymr; L #      (օ)  ARMENIAN SMALL LETTER OH
+
+# Total code points: 1
+
+# Armenian; Sinhala: [օ]
+
+0585          ; Armn; Sinh; L #      (օ)  ARMENIAN SMALL LETTER OH
+
+# Total code points: 1
+
+# Armenian; Tamil: [օ]
+
+0585          ; Armn; Taml; L #      (օ)  ARMENIAN SMALL LETTER OH
 
 # Total code points: 1
 
@@ -109,31 +134,34 @@
 
 # Total code points: 1
 
-# Bengali; Cherokee: [০]
+# Bengali; Devanagari: [ঁ়]
 
-09E6          ; Beng; Cher; L #      (০)  BENGALI DIGIT ZERO
-
-# Total code points: 1
-
-# Bengali; Devanagari: [়]
-
+0981          ; Beng; Deva; L #      (ঁ)  BENGALI SIGN CANDRABINDU
 09BC          ; Beng; Deva; L #      (়)  BENGALI SIGN NUKTA
 
+# Total code points: 2
+
+# Bengali; Greek: [০]
+
+09E6          ; Beng; Grek; L #      (০)  BENGALI DIGIT ZERO
+
 # Total code points: 1
 
-# Bengali; Gujarati: [়]
+# Bengali; Gujarati: [ঁ়]
 
+0981          ; Beng; Gujr; L #      (ঁ)  BENGALI SIGN CANDRABINDU
 09BC          ; Beng; Gujr; L #      (়)  BENGALI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
-# Bengali; Gurmukhi: [়৪৭]
+# Bengali; Gurmukhi: [ঃ়৪৭]
 
+0983          ; Beng; Guru; L #      (ঃ)  BENGALI SIGN VISARGA
 09BC          ; Beng; Guru; L #      (়)  BENGALI SIGN NUKTA
 09EA          ; Beng; Guru; L #      (৪)  BENGALI DIGIT FOUR
 09ED          ; Beng; Guru; L #      (৭)  BENGALI DIGIT SEVEN
 
-# Total code points: 3
+# Total code points: 4
 
 # Bengali; Han: [০]
 
@@ -141,159 +169,72 @@
 
 # Total code points: 1
 
-# Bengali; Latin: [৪]
+# Bengali; Kannada: [ঃ]
 
-09EA          ; Beng; Latn; L #      (৪)  BENGALI DIGIT FOUR
+0983          ; Beng; Knda; L #      (ঃ)  BENGALI SIGN VISARGA
 
 # Total code points: 1
 
-# Bengali; Malayalam: [০]
+# Bengali; Malayalam: [ঃ০]
 
+0983          ; Beng; Mlym; L #      (ঃ)  BENGALI SIGN VISARGA
 09E6          ; Beng; Mlym; L #      (০)  BENGALI DIGIT ZERO
 
+# Total code points: 2
+
+# Bengali; Myanmar: [ঃ]
+
+0983          ; Beng; Mymr; L #      (ঃ)  BENGALI SIGN VISARGA
+
 # Total code points: 1
 
-# Bengali; Mongolian: [০]
+# Bengali; Oriya: [ঁ়০৪৭]
 
-09E6          ; Beng; Mong; L #      (০)  BENGALI DIGIT ZERO
-
-# Total code points: 1
-
-# Bengali; Oriya: [়০৪৭]
-
+0981          ; Beng; Orya; L #      (ঁ)  BENGALI SIGN CANDRABINDU
 09BC          ; Beng; Orya; L #      (়)  BENGALI SIGN NUKTA
 09E6          ; Beng; Orya; L #      (০)  BENGALI DIGIT ZERO
 09EA          ; Beng; Orya; L #      (৪)  BENGALI DIGIT FOUR
 09ED          ; Beng; Orya; L #      (৭)  BENGALI DIGIT SEVEN
 
-# Total code points: 4
+# Total code points: 5
 
-# Cherokee; Armenian: [ᏂᏲ]
+# Bengali; Sinhala: [ঃ]
 
-13C2          ; Cher; Armn; L #      (Ꮒ)  CHEROKEE LETTER NI
-13F2          ; Cher; Armn; L #      (Ᏺ)  CHEROKEE LETTER YO
-
-# Total code points: 2
-
-# Cherokee; Bengali: [Ꮎ]
-
-13BE          ; Cher; Beng; L #      (Ꮎ)  CHEROKEE LETTER NA
+0983          ; Beng; Sinh; L #      (ঃ)  BENGALI SIGN VISARGA
 
 # Total code points: 1
 
-# Cherokee; Cyrillic: [ᎥᎩᎽᏂᏏᏞᏢᏲ]
+# Bengali; Telugu: [ঃ]
 
-13A5          ; Cher; Cyrl; L #      (Ꭵ)  CHEROKEE LETTER V
-13A9          ; Cher; Cyrl; L #      (Ꭹ)  CHEROKEE LETTER GI
-13BD          ; Cher; Cyrl; L #      (Ꮍ)  CHEROKEE LETTER MU
-13C2          ; Cher; Cyrl; L #      (Ꮒ)  CHEROKEE LETTER NI
-13CF          ; Cher; Cyrl; L #      (Ꮟ)  CHEROKEE LETTER SI
-13DE          ; Cher; Cyrl; L #      (Ꮮ)  CHEROKEE LETTER TLE
-13E2          ; Cher; Cyrl; L #      (Ꮲ)  CHEROKEE LETTER TLV
-13F2          ; Cher; Cyrl; L #      (Ᏺ)  CHEROKEE LETTER YO
-
-# Total code points: 8
-
-# Cherokee; Georgian: [ᎩᎽ]
-
-13A9          ; Cher; Geor; L #      (Ꭹ)  CHEROKEE LETTER GI
-13BD          ; Cher; Geor; L #      (Ꮍ)  CHEROKEE LETTER MU
-
-# Total code points: 2
-
-# Cherokee; Greek: [ᎥᏢ]
-
-13A5          ; Cher; Grek; L #      (Ꭵ)  CHEROKEE LETTER V
-13E2          ; Cher; Grek; L #      (Ꮲ)  CHEROKEE LETTER TLV
-
-# Total code points: 2
-
-# Cherokee; Han: [Ꮎ]
-
-13BE          ; Cher; Hani; L #      (Ꮎ)  CHEROKEE LETTER NA
+0983          ; Beng; Telu; L #      (ঃ)  BENGALI SIGN VISARGA
 
 # Total code points: 1
 
-# Cherokee; Latin: [ᎥᎩᎳᎽᏂᏏᏔᏞᏢᏲ]
+# Bengali; Tifinagh: [০]
 
-13A5          ; Cher; Latn; L #      (Ꭵ)  CHEROKEE LETTER V
-13A9          ; Cher; Latn; L #      (Ꭹ)  CHEROKEE LETTER GI
-13B3          ; Cher; Latn; L #      (Ꮃ)  CHEROKEE LETTER LA
-13BD          ; Cher; Latn; L #      (Ꮍ)  CHEROKEE LETTER MU
-13C2          ; Cher; Latn; L #      (Ꮒ)  CHEROKEE LETTER NI
-13CF          ; Cher; Latn; L #      (Ꮟ)  CHEROKEE LETTER SI
-13D4          ; Cher; Latn; L #      (Ꮤ)  CHEROKEE LETTER TA
-13DE          ; Cher; Latn; L #      (Ꮮ)  CHEROKEE LETTER TLE
-13E2          ; Cher; Latn; L #      (Ꮲ)  CHEROKEE LETTER TLV
-13F2          ; Cher; Latn; L #      (Ᏺ)  CHEROKEE LETTER YO
-
-# Total code points: 10
-
-# Cherokee; Malayalam: [Ꮎ]
-
-13BE          ; Cher; Mlym; L #      (Ꮎ)  CHEROKEE LETTER NA
+09E6          ; Beng; Tfng; L #      (০)  BENGALI DIGIT ZERO
 
 # Total code points: 1
 
-# Cherokee; Mongolian: [Ꮎ]
+# Cyrillic; Armenian: [опцјћһөԛԝ]
 
-13BE          ; Cher; Mong; L #      (Ꮎ)  CHEROKEE LETTER NA
-
-# Total code points: 1
-
-# Cherokee; Oriya: [Ꮎ]
-
-13BE          ; Cher; Orya; L #      (Ꮎ)  CHEROKEE LETTER NA
-
-# Total code points: 1
-
-# Cherokee; Canadian_Aboriginal: [ᎪᎫᎳᎻᏏᏔᏙᏞᏢᏧᏴ]
-
-13AA..13AB    ; Cher; Cans; L #  [2] (Ꭺ..Ꭻ)  CHEROKEE LETTER GO..CHEROKEE LETTER GU
-13B3          ; Cher; Cans; L #      (Ꮃ)  CHEROKEE LETTER LA
-13BB          ; Cher; Cans; L #      (Ꮋ)  CHEROKEE LETTER MI
-13CF          ; Cher; Cans; L #      (Ꮟ)  CHEROKEE LETTER SI
-13D4          ; Cher; Cans; L #      (Ꮤ)  CHEROKEE LETTER TA
-13D9          ; Cher; Cans; L #      (Ꮩ)  CHEROKEE LETTER DO
-13DE          ; Cher; Cans; L #      (Ꮮ)  CHEROKEE LETTER TLE
-13E2          ; Cher; Cans; L #      (Ꮲ)  CHEROKEE LETTER TLV
-13E7          ; Cher; Cans; L #      (Ꮷ)  CHEROKEE LETTER TSU
-13F4          ; Cher; Cans; L #      (Ᏼ)  CHEROKEE LETTER YV
-
-# Total code points: 11
-
-# Cyrillic; Armenian: [ојћѳһө]
-
-043E          ; Cyrl; Armn; L #      (о)  CYRILLIC SMALL LETTER O
+043E..043F    ; Cyrl; Armn; L #  [2] (о..п)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER PE
+0446          ; Cyrl; Armn; L #      (ц)  CYRILLIC SMALL LETTER TSE
 0458          ; Cyrl; Armn; L #      (ј)  CYRILLIC SMALL LETTER JE
 045B          ; Cyrl; Armn; L #      (ћ)  CYRILLIC SMALL LETTER TSHE
-0473          ; Cyrl; Armn; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04BB          ; Cyrl; Armn; L #      (һ)  CYRILLIC SMALL LETTER SHHA
 04E9          ; Cyrl; Armn; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
-
-# Total code points: 6
-
-# Cyrillic; Cherokee: [руъіћүұһӀ]
-
-0440          ; Cyrl; Cher; L #      (р)  CYRILLIC SMALL LETTER ER
-0443          ; Cyrl; Cher; L #      (у)  CYRILLIC SMALL LETTER U
-044A          ; Cyrl; Cher; L #      (ъ)  CYRILLIC SMALL LETTER HARD SIGN
-0456          ; Cyrl; Cher; L #      (і)  CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
-045B          ; Cyrl; Cher; L #      (ћ)  CYRILLIC SMALL LETTER TSHE
-04AF          ; Cyrl; Cher; L #      (ү)  CYRILLIC SMALL LETTER STRAIGHT U
-04B1          ; Cyrl; Cher; L #      (ұ)  CYRILLIC SMALL LETTER STRAIGHT U WITH STROKE
-04BB          ; Cyrl; Cher; L #      (һ)  CYRILLIC SMALL LETTER SHHA
-04C0          ; Cyrl; Cher; L #      (Ӏ)  CYRILLIC LETTER PALOCHKA
+051B          ; Cyrl; Armn; L #      (ԛ)  CYRILLIC SMALL LETTER QA
+051D          ; Cyrl; Armn; L #      (ԝ)  CYRILLIC SMALL LETTER WE
 
 # Total code points: 9
 
-# Cyrillic; Devanagari: [оѳө]
+# Cyrillic; Devanagari: [оө]
 
 043E          ; Cyrl; Deva; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Deva; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Deva; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
 # Cyrillic; Georgian: [уүұ]
 
@@ -303,124 +244,140 @@
 
 # Total code points: 3
 
-# Cyrillic; Greek: [ко-рфєіѳѵқҟө]
+# Cyrillic; Greek: [ако-рт-фцєіқҟҭүұӏөԑ]
 
+0430          ; Cyrl; Grek; L #      (а)  CYRILLIC SMALL LETTER A
 043A          ; Cyrl; Grek; L #      (к)  CYRILLIC SMALL LETTER KA
 043E..0440    ; Cyrl; Grek; L #  [3] (о..р)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER ER
-0444          ; Cyrl; Grek; L #      (ф)  CYRILLIC SMALL LETTER EF
+0442..0444    ; Cyrl; Grek; L #  [3] (т..ф)  CYRILLIC SMALL LETTER TE..CYRILLIC SMALL LETTER EF
+0446          ; Cyrl; Grek; L #      (ц)  CYRILLIC SMALL LETTER TSE
 0454          ; Cyrl; Grek; L #      (є)  CYRILLIC SMALL LETTER UKRAINIAN IE
 0456          ; Cyrl; Grek; L #      (і)  CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
-0473          ; Cyrl; Grek; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
-0475          ; Cyrl; Grek; L #      (ѵ)  CYRILLIC SMALL LETTER IZHITSA
 049B          ; Cyrl; Grek; L #      (қ)  CYRILLIC SMALL LETTER KA WITH DESCENDER
 049F          ; Cyrl; Grek; L #      (ҟ)  CYRILLIC SMALL LETTER KA WITH STROKE
+04AD          ; Cyrl; Grek; L #      (ҭ)  CYRILLIC SMALL LETTER TE WITH DESCENDER
+04AF          ; Cyrl; Grek; L #      (ү)  CYRILLIC SMALL LETTER STRAIGHT U
+04B1          ; Cyrl; Grek; L #      (ұ)  CYRILLIC SMALL LETTER STRAIGHT U WITH STROKE
+04CF          ; Cyrl; Grek; L #      (ӏ)  CYRILLIC SMALL LETTER PALOCHKA
 04E9          ; Cyrl; Grek; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
+0511          ; Cyrl; Grek; L #      (ԑ)  CYRILLIC SMALL LETTER REVERSED ZE
 
-# Total code points: 12
+# Total code points: 19
 
-# Cyrillic; Gujarati: [оѳө]
+# Cyrillic; Gujarati: [оө]
 
 043E          ; Cyrl; Gujr; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Gujr; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Gujr; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Gurmukhi: [оѳө]
+# Cyrillic; Gurmukhi: [оө]
 
 043E          ; Cyrl; Guru; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Guru; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Guru; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Kannada: [оѳө]
+# Cyrillic; Hebrew: [оө]
+
+043E          ; Cyrl; Hebr; L #      (о)  CYRILLIC SMALL LETTER O
+04E9          ; Cyrl; Hebr; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
+
+# Total code points: 2
+
+# Cyrillic; Kannada: [оө]
 
 043E          ; Cyrl; Knda; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Knda; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Knda; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Lao: [оѳө]
+# Cyrillic; Lao: [оө]
 
 043E          ; Cyrl; Laoo; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Laoo; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Laoo; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Latin: [агекорсухъ-ьє-іјћѳѵґғқҟҫүұһӀӕәӡөԁ]
+# Cyrillic; Latin: [агеко-ухцъѕіјћҍґғқҟҫҭүұһӏӕөԁԛԝ]
 
 0430          ; Cyrl; Latn; L #      (а)  CYRILLIC SMALL LETTER A
 0433          ; Cyrl; Latn; L #      (г)  CYRILLIC SMALL LETTER GHE
 0435          ; Cyrl; Latn; L #      (е)  CYRILLIC SMALL LETTER IE
 043A          ; Cyrl; Latn; L #      (к)  CYRILLIC SMALL LETTER KA
-043E          ; Cyrl; Latn; L #      (о)  CYRILLIC SMALL LETTER O
-0440..0441    ; Cyrl; Latn; L #  [2] (р..с)  CYRILLIC SMALL LETTER ER..CYRILLIC SMALL LETTER ES
-0443          ; Cyrl; Latn; L #      (у)  CYRILLIC SMALL LETTER U
-0445          ; Cyrl; Latn; L #      (х)  CYRILLIC SMALL LETTER HA
-044A..044C    ; Cyrl; Latn; L #  [3] (ъ..ь)  CYRILLIC SMALL LETTER HARD SIGN..CYRILLIC SMALL LETTER SOFT SIGN
-0454..0456    ; Cyrl; Latn; L #  [3] (є..і)  CYRILLIC SMALL LETTER UKRAINIAN IE..CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
+043E..0443    ; Cyrl; Latn; L #  [6] (о..у)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER U
+0445..0446    ; Cyrl; Latn; L #  [2] (х..ц)  CYRILLIC SMALL LETTER HA..CYRILLIC SMALL LETTER TSE
+044A          ; Cyrl; Latn; L #      (ъ)  CYRILLIC SMALL LETTER HARD SIGN
+0455..0456    ; Cyrl; Latn; L #  [2] (ѕ..і)  CYRILLIC SMALL LETTER DZE..CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
 0458          ; Cyrl; Latn; L #      (ј)  CYRILLIC SMALL LETTER JE
 045B          ; Cyrl; Latn; L #      (ћ)  CYRILLIC SMALL LETTER TSHE
-0473          ; Cyrl; Latn; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
-0475          ; Cyrl; Latn; L #      (ѵ)  CYRILLIC SMALL LETTER IZHITSA
+048D          ; Cyrl; Latn; L #      (ҍ)  CYRILLIC SMALL LETTER SEMISOFT SIGN
 0491          ; Cyrl; Latn; L #      (ґ)  CYRILLIC SMALL LETTER GHE WITH UPTURN
 0493          ; Cyrl; Latn; L #      (ғ)  CYRILLIC SMALL LETTER GHE WITH STROKE
 049B          ; Cyrl; Latn; L #      (қ)  CYRILLIC SMALL LETTER KA WITH DESCENDER
 049F          ; Cyrl; Latn; L #      (ҟ)  CYRILLIC SMALL LETTER KA WITH STROKE
 04AB          ; Cyrl; Latn; L #      (ҫ)  CYRILLIC SMALL LETTER ES WITH DESCENDER
+04AD          ; Cyrl; Latn; L #      (ҭ)  CYRILLIC SMALL LETTER TE WITH DESCENDER
 04AF          ; Cyrl; Latn; L #      (ү)  CYRILLIC SMALL LETTER STRAIGHT U
 04B1          ; Cyrl; Latn; L #      (ұ)  CYRILLIC SMALL LETTER STRAIGHT U WITH STROKE
 04BB          ; Cyrl; Latn; L #      (һ)  CYRILLIC SMALL LETTER SHHA
-04C0          ; Cyrl; Latn; L #      (Ӏ)  CYRILLIC LETTER PALOCHKA
+04CF          ; Cyrl; Latn; L #      (ӏ)  CYRILLIC SMALL LETTER PALOCHKA
 04D5          ; Cyrl; Latn; L #      (ӕ)  CYRILLIC SMALL LIGATURE A IE
-04D9          ; Cyrl; Latn; L #      (ә)  CYRILLIC SMALL LETTER SCHWA
-04E1          ; Cyrl; Latn; L #      (ӡ)  CYRILLIC SMALL LETTER ABKHASIAN DZE
 04E9          ; Cyrl; Latn; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 0501          ; Cyrl; Latn; L #      (ԁ)  CYRILLIC SMALL LETTER KOMI DE
+051B          ; Cyrl; Latn; L #      (ԛ)  CYRILLIC SMALL LETTER QA
+051D          ; Cyrl; Latn; L #      (ԝ)  CYRILLIC SMALL LETTER WE
 
 # Total code points: 33
 
-# Cyrillic; Malayalam: [оѳө]
+# Cyrillic; Malayalam: [оө]
 
 043E          ; Cyrl; Mlym; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Mlym; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Mlym; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Myanmar: [оѳө]
+# Cyrillic; Myanmar: [оө]
 
 043E          ; Cyrl; Mymr; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Mymr; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Mymr; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Telugu: [оѳө]
+# Cyrillic; Sinhala: [оө]
+
+043E          ; Cyrl; Sinh; L #      (о)  CYRILLIC SMALL LETTER O
+04E9          ; Cyrl; Sinh; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
+
+# Total code points: 2
+
+# Cyrillic; Tamil: [оө]
+
+043E          ; Cyrl; Taml; L #      (о)  CYRILLIC SMALL LETTER O
+04E9          ; Cyrl; Taml; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
+
+# Total code points: 2
+
+# Cyrillic; Telugu: [оө]
 
 043E          ; Cyrl; Telu; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Telu; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Telu; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Thai: [оѳө]
+# Cyrillic; Thai: [оө]
 
 043E          ; Cyrl; Thai; L #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Thai; L #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Thai; L #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Canadian_Aboriginal: [рхъӀԁ]
+# Cyrillic; Canadian_Aboriginal: [рхъҍԁ]
 
 0440          ; Cyrl; Cans; L #      (р)  CYRILLIC SMALL LETTER ER
 0445          ; Cyrl; Cans; L #      (х)  CYRILLIC SMALL LETTER HA
 044A          ; Cyrl; Cans; L #      (ъ)  CYRILLIC SMALL LETTER HARD SIGN
-04C0          ; Cyrl; Cans; L #      (Ӏ)  CYRILLIC LETTER PALOCHKA
+048D          ; Cyrl; Cans; L #      (ҍ)  CYRILLIC SMALL LETTER SEMISOFT SIGN
 0501          ; Cyrl; Cans; L #      (ԁ)  CYRILLIC SMALL LETTER KOMI DE
 
 # Total code points: 5
@@ -431,11 +388,12 @@
 
 # Total code points: 1
 
-# Devanagari; Bengali: [़]
+# Devanagari; Bengali: [ँ़]
 
+0901          ; Deva; Beng; L #      (ँ)  DEVANAGARI SIGN CANDRABINDU
 093C          ; Deva; Beng; L #      (़)  DEVANAGARI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Devanagari; Cyrillic: [०]
 
@@ -449,9 +407,9 @@
 
 # Total code points: 1
 
-# Devanagari; Gujarati: [ं़ऽुू्०२-४८]
+# Devanagari; Gujarati: [ँ-ः़ऽुू्०२-४८]
 
-0902          ; Deva; Gujr; L #      (ं)  DEVANAGARI SIGN ANUSVARA
+0901..0903    ; Deva; Gujr; L #  [3] (ँ..ः)  DEVANAGARI SIGN CANDRABINDU..DEVANAGARI SIGN VISARGA
 093C..093D    ; Deva; Gujr; L #  [2] (़..ऽ)  DEVANAGARI SIGN NUKTA..DEVANAGARI SIGN AVAGRAHA
 0941..0942    ; Deva; Gujr; L #  [2] (ु..ू)  DEVANAGARI VOWEL SIGN U..DEVANAGARI VOWEL SIGN UU
 094D          ; Deva; Gujr; L #      (्)  DEVANAGARI SIGN VIRAMA
@@ -459,7 +417,7 @@
 0968..096A    ; Deva; Gujr; L #  [3] (२..४)  DEVANAGARI DIGIT TWO..DEVANAGARI DIGIT FOUR
 096E          ; Deva; Gujr; L #      (८)  DEVANAGARI DIGIT EIGHT
 
-# Total code points: 11
+# Total code points: 13
 
 # Devanagari; Gurmukhi: [ं़ॆ्०]
 
@@ -471,12 +429,11 @@
 
 # Total code points: 5
 
-# Devanagari; Hebrew: [ं॔]
+# Devanagari; Hebrew: [०]
 
-0902          ; Deva; Hebr; L #      (ं)  DEVANAGARI SIGN ANUSVARA
-0954          ; Deva; Hebr; L #      (॔)  DEVANAGARI ACUTE ACCENT
+0966          ; Deva; Hebr; L #      (०)  DEVANAGARI DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 1
 
 # Devanagari; Kannada: [०]
 
@@ -508,17 +465,25 @@
 
 # Total code points: 1
 
-# Devanagari; Oriya: [़]
+# Devanagari; Oriya: [ँ़]
 
+0901          ; Deva; Orya; L #      (ँ)  DEVANAGARI SIGN CANDRABINDU
 093C          ; Deva; Orya; L #      (़)  DEVANAGARI SIGN NUKTA
 
+# Total code points: 2
+
+# Devanagari; Sinhala: [०]
+
+0966          ; Deva; Sinh; L #      (०)  DEVANAGARI DIGIT ZERO
+
 # Total code points: 1
 
-# Devanagari; Tamil: [ं]
+# Devanagari; Tamil: [ं०]
 
 0902          ; Deva; Taml; L #      (ं)  DEVANAGARI SIGN ANUSVARA
+0966          ; Deva; Taml; L #      (०)  DEVANAGARI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Devanagari; Telugu: [०]
 
@@ -532,15 +497,15 @@
 
 # Total code points: 1
 
-# Georgian; Cherokee: [ყ]
-
-10E7          ; Geor; Cher; L #      (ყ)  GEORGIAN LETTER QAR
-
-# Total code points: 1
-
 # Georgian; Cyrillic: [ყ]
 
 10E7          ; Geor; Cyrl; L #      (ყ)  GEORGIAN LETTER QAR
+
+# Total code points: 1
+
+# Georgian; Greek: [ყ]
+
+10E7          ; Geor; Grek; L #      (ყ)  GEORGIAN LETTER QAR
 
 # Total code points: 1
 
@@ -550,97 +515,148 @@
 
 # Total code points: 1
 
-# Greek; Armenian: [δηου]
+# Greek; Armenian: [δηοπσυ]
 
 03B4          ; Grek; Armn; L #      (δ)  GREEK SMALL LETTER DELTA
 03B7          ; Grek; Armn; L #      (η)  GREEK SMALL LETTER ETA
-03BF          ; Grek; Armn; L #      (ο)  GREEK SMALL LETTER OMICRON
+03BF..03C0    ; Grek; Armn; L #  [2] (ο..π)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER PI
+03C3          ; Grek; Armn; L #      (σ)  GREEK SMALL LETTER SIGMA
 03C5          ; Grek; Armn; L #      (υ)  GREEK SMALL LETTER UPSILON
 
-# Total code points: 4
+# Total code points: 6
 
-# Greek; Cherokee: [ιρ]
+# Greek; Bengali: [θ]
 
-03B9          ; Grek; Cher; L #      (ι)  GREEK SMALL LETTER IOTA
-03C1          ; Grek; Cher; L #      (ρ)  GREEK SMALL LETTER RHO
+03B8          ; Grek; Beng; L #      (θ)  GREEK SMALL LETTER THETA
+
+# Total code points: 1
+
+# Greek; Cyrillic: [αγεηικο-ρσ-φ]
+
+03B1          ; Grek; Cyrl; L #      (α)  GREEK SMALL LETTER ALPHA
+03B3          ; Grek; Cyrl; L #      (γ)  GREEK SMALL LETTER GAMMA
+03B5          ; Grek; Cyrl; L #      (ε)  GREEK SMALL LETTER EPSILON
+03B7          ; Grek; Cyrl; L #      (η)  GREEK SMALL LETTER ETA
+03B9..03BA    ; Grek; Cyrl; L #  [2] (ι..κ)  GREEK SMALL LETTER IOTA..GREEK SMALL LETTER KAPPA
+03BF..03C1    ; Grek; Cyrl; L #  [3] (ο..ρ)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER RHO
+03C3..03C6    ; Grek; Cyrl; L #  [4] (σ..φ)  GREEK SMALL LETTER SIGMA..GREEK SMALL LETTER PHI
+
+# Total code points: 13
+
+# Greek; Devanagari: [οσ]
+
+03BF          ; Grek; Deva; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Deva; L #      (σ)  GREEK SMALL LETTER SIGMA
 
 # Total code points: 2
 
-# Greek; Cyrillic: [εικνο-ρφ]
+# Greek; Georgian: [γ]
 
-03B5          ; Grek; Cyrl; L #      (ε)  GREEK SMALL LETTER EPSILON
-03B9..03BA    ; Grek; Cyrl; L #  [2] (ι..κ)  GREEK SMALL LETTER IOTA..GREEK SMALL LETTER KAPPA
-03BD          ; Grek; Cyrl; L #      (ν)  GREEK SMALL LETTER NU
-03BF..03C1    ; Grek; Cyrl; L #  [3] (ο..ρ)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER RHO
-03C6          ; Grek; Cyrl; L #      (φ)  GREEK SMALL LETTER PHI
-
-# Total code points: 8
-
-# Greek; Devanagari: [ο]
-
-03BF          ; Grek; Deva; L #      (ο)  GREEK SMALL LETTER OMICRON
+03B3          ; Grek; Geor; L #      (γ)  GREEK SMALL LETTER GAMMA
 
 # Total code points: 1
 
-# Greek; Gujarati: [ο]
+# Greek; Gujarati: [οσ]
 
 03BF          ; Grek; Gujr; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Gujr; L #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Gurmukhi: [ο]
+# Greek; Gurmukhi: [οσ]
 
 03BF          ; Grek; Guru; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Guru; L #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Han: [θ]
+
+03B8          ; Grek; Hani; L #      (θ)  GREEK SMALL LETTER THETA
 
 # Total code points: 1
 
-# Greek; Kannada: [ο]
+# Greek; Hebrew: [νοσ]
+
+03BD          ; Grek; Hebr; L #      (ν)  GREEK SMALL LETTER NU
+03BF          ; Grek; Hebr; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Hebr; L #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 3
+
+# Greek; Kannada: [οσ]
 
 03BF          ; Grek; Knda; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Knda; L #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Lao: [ο]
+# Greek; Lao: [οσ]
 
 03BF          ; Grek; Laoo; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Laoo; L #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Latin: [εηικνορυ]
+# Greek; Latin: [α-γηικνο-ρσ-υ]
 
-03B5          ; Grek; Latn; L #      (ε)  GREEK SMALL LETTER EPSILON
+03B1..03B3    ; Grek; Latn; L #  [3] (α..γ)  GREEK SMALL LETTER ALPHA..GREEK SMALL LETTER GAMMA
 03B7          ; Grek; Latn; L #      (η)  GREEK SMALL LETTER ETA
 03B9..03BA    ; Grek; Latn; L #  [2] (ι..κ)  GREEK SMALL LETTER IOTA..GREEK SMALL LETTER KAPPA
 03BD          ; Grek; Latn; L #      (ν)  GREEK SMALL LETTER NU
-03BF          ; Grek; Latn; L #      (ο)  GREEK SMALL LETTER OMICRON
-03C1          ; Grek; Latn; L #      (ρ)  GREEK SMALL LETTER RHO
-03C5          ; Grek; Latn; L #      (υ)  GREEK SMALL LETTER UPSILON
+03BF..03C1    ; Grek; Latn; L #  [3] (ο..ρ)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER RHO
+03C3..03C5    ; Grek; Latn; L #  [3] (σ..υ)  GREEK SMALL LETTER SIGMA..GREEK SMALL LETTER UPSILON
 
-# Total code points: 8
+# Total code points: 13
 
-# Greek; Malayalam: [ο]
+# Greek; Malayalam: [θοσ]
 
+03B8          ; Grek; Mlym; L #      (θ)  GREEK SMALL LETTER THETA
 03BF          ; Grek; Mlym; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Mlym; L #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 3
 
-# Greek; Myanmar: [ο]
+# Greek; Myanmar: [οσ]
 
 03BF          ; Grek; Mymr; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Mymr; L #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Oriya: [θ]
+
+03B8          ; Grek; Orya; L #      (θ)  GREEK SMALL LETTER THETA
 
 # Total code points: 1
 
-# Greek; Telugu: [ο]
+# Greek; Sinhala: [οσ]
+
+03BF          ; Grek; Sinh; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Sinh; L #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Tamil: [οσ]
+
+03BF          ; Grek; Taml; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Taml; L #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Telugu: [οσ]
 
 03BF          ; Grek; Telu; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Telu; L #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Thai: [ο]
+# Greek; Thai: [οσ]
 
 03BF          ; Grek; Thai; L #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Thai; L #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
 # Greek; Canadian_Aboriginal: [δρ]
 
@@ -649,17 +665,24 @@
 
 # Total code points: 2
 
+# Greek; Tifinagh: [θ]
+
+03B8          ; Grek; Tfng; L #      (θ)  GREEK SMALL LETTER THETA
+
+# Total code points: 1
+
 # Gujarati; Armenian: [૦]
 
 0AE6          ; Gujr; Armn; L #      (૦)  GUJARATI DIGIT ZERO
 
 # Total code points: 1
 
-# Gujarati; Bengali: [઼]
+# Gujarati; Bengali: [ઁ઼]
 
+0A81          ; Gujr; Beng; L #      (ઁ)  GUJARATI SIGN CANDRABINDU
 0ABC          ; Gujr; Beng; L #      (઼)  GUJARATI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Gujarati; Cyrillic: [૦]
 
@@ -667,9 +690,9 @@
 
 # Total code points: 1
 
-# Gujarati; Devanagari: [ં઼ઽુૂ્૦૨-૪૮]
+# Gujarati; Devanagari: [ઁ-ઃ઼ઽુૂ્૦૨-૪૮]
 
-0A82          ; Gujr; Deva; L #      (ં)  GUJARATI SIGN ANUSVARA
+0A81..0A83    ; Gujr; Deva; L #  [3] (ઁ..ઃ)  GUJARATI SIGN CANDRABINDU..GUJARATI SIGN VISARGA
 0ABC..0ABD    ; Gujr; Deva; L #  [2] (઼..ઽ)  GUJARATI SIGN NUKTA..GUJARATI SIGN AVAGRAHA
 0AC1..0AC2    ; Gujr; Deva; L #  [2] (ુ..ૂ)  GUJARATI VOWEL SIGN U..GUJARATI VOWEL SIGN UU
 0ACD          ; Gujr; Deva; L #      (્)  GUJARATI SIGN VIRAMA
@@ -677,7 +700,7 @@
 0AE8..0AEA    ; Gujr; Deva; L #  [3] (૨..૪)  GUJARATI DIGIT TWO..GUJARATI DIGIT FOUR
 0AEE          ; Gujr; Deva; L #      (૮)  GUJARATI DIGIT EIGHT
 
-# Total code points: 11
+# Total code points: 13
 
 # Gujarati; Greek: [૦]
 
@@ -694,9 +717,9 @@
 
 # Total code points: 4
 
-# Gujarati; Hebrew: [ં]
+# Gujarati; Hebrew: [૦]
 
-0A82          ; Gujr; Hebr; L #      (ં)  GUJARATI SIGN ANUSVARA
+0AE6          ; Gujr; Hebr; L #      (૦)  GUJARATI DIGIT ZERO
 
 # Total code points: 1
 
@@ -730,17 +753,25 @@
 
 # Total code points: 1
 
-# Gujarati; Oriya: [઼]
+# Gujarati; Oriya: [ઁ઼]
 
+0A81          ; Gujr; Orya; L #      (ઁ)  GUJARATI SIGN CANDRABINDU
 0ABC          ; Gujr; Orya; L #      (઼)  GUJARATI SIGN NUKTA
 
+# Total code points: 2
+
+# Gujarati; Sinhala: [૦]
+
+0AE6          ; Gujr; Sinh; L #      (૦)  GUJARATI DIGIT ZERO
+
 # Total code points: 1
 
-# Gujarati; Tamil: [ં]
+# Gujarati; Tamil: [ં૦]
 
 0A82          ; Gujr; Taml; L #      (ં)  GUJARATI SIGN ANUSVARA
+0AE6          ; Gujr; Taml; L #      (૦)  GUJARATI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gujarati; Telugu: [૦]
 
@@ -760,13 +791,14 @@
 
 # Total code points: 1
 
-# Gurmukhi; Bengali: [਼੧੪]
+# Gurmukhi; Bengali: [ਃ਼੧੪]
 
+0A03          ; Guru; Beng; L #      (ਃ)  GURMUKHI SIGN VISARGA
 0A3C          ; Guru; Beng; L #      (਼)  GURMUKHI SIGN NUKTA
 0A67          ; Guru; Beng; L #      (੧)  GURMUKHI DIGIT ONE
 0A6A          ; Guru; Beng; L #      (੪)  GURMUKHI DIGIT FOUR
 
-# Total code points: 3
+# Total code points: 4
 
 # Gurmukhi; Cyrillic: [੦]
 
@@ -799,17 +831,18 @@
 
 # Total code points: 4
 
-# Gurmukhi; Hebrew: [ਂ]
+# Gurmukhi; Hebrew: [੦]
 
-0A02          ; Guru; Hebr; L #      (ਂ)  GURMUKHI SIGN BINDI
+0A66          ; Guru; Hebr; L #      (੦)  GURMUKHI DIGIT ZERO
 
 # Total code points: 1
 
-# Gurmukhi; Kannada: [੦]
+# Gurmukhi; Kannada: [ਃ੦]
 
+0A03          ; Guru; Knda; L #      (ਃ)  GURMUKHI SIGN VISARGA
 0A66          ; Guru; Knda; L #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Lao: [੦]
 
@@ -817,24 +850,25 @@
 
 # Total code points: 1
 
-# Gurmukhi; Latin: [੦੪]
+# Gurmukhi; Latin: [੦]
 
 0A66          ; Guru; Latn; L #      (੦)  GURMUKHI DIGIT ZERO
-0A6A          ; Guru; Latn; L #      (੪)  GURMUKHI DIGIT FOUR
+
+# Total code points: 1
+
+# Gurmukhi; Malayalam: [ਃ੦]
+
+0A03          ; Guru; Mlym; L #      (ਃ)  GURMUKHI SIGN VISARGA
+0A66          ; Guru; Mlym; L #      (੦)  GURMUKHI DIGIT ZERO
 
 # Total code points: 2
 
-# Gurmukhi; Malayalam: [੦]
+# Gurmukhi; Myanmar: [ਃ੦]
 
-0A66          ; Guru; Mlym; L #      (੦)  GURMUKHI DIGIT ZERO
-
-# Total code points: 1
-
-# Gurmukhi; Myanmar: [੦]
-
+0A03          ; Guru; Mymr; L #      (ਃ)  GURMUKHI SIGN VISARGA
 0A66          ; Guru; Mymr; L #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Oriya: [਼੧੪]
 
@@ -844,17 +878,26 @@
 
 # Total code points: 3
 
-# Gurmukhi; Tamil: [ਂ]
+# Gurmukhi; Sinhala: [ਃ੦]
+
+0A03          ; Guru; Sinh; L #      (ਃ)  GURMUKHI SIGN VISARGA
+0A66          ; Guru; Sinh; L #      (੦)  GURMUKHI DIGIT ZERO
+
+# Total code points: 2
+
+# Gurmukhi; Tamil: [ਂ੦]
 
 0A02          ; Guru; Taml; L #      (ਂ)  GURMUKHI SIGN BINDI
+0A66          ; Guru; Taml; L #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Gurmukhi; Telugu: [੦]
+# Gurmukhi; Telugu: [ਃ੦]
 
+0A03          ; Guru; Telu; L #      (ਃ)  GURMUKHI SIGN VISARGA
 0A66          ; Guru; Telu; L #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Thai: [੦]
 
@@ -868,9 +911,9 @@
 
 # Total code points: 1
 
-# Han; Cherokee: [〇]
+# Han; Greek: [〇]
 
-3007          ; Hani; Cher; L #      (〇)  IDEOGRAPHIC NUMBER ZERO
+3007          ; Hani; Grek; L #      (〇)  IDEOGRAPHIC NUMBER ZERO
 
 # Total code points: 1
 
@@ -880,75 +923,130 @@
 
 # Total code points: 1
 
-# Han; Mongolian: [〇]
-
-3007          ; Hani; Mong; L #      (〇)  IDEOGRAPHIC NUMBER ZERO
-
-# Total code points: 1
-
 # Han; Oriya: [〇]
 
 3007          ; Hani; Orya; L #      (〇)  IDEOGRAPHIC NUMBER ZERO
 
 # Total code points: 1
 
-# Hebrew; Devanagari: [ֹׁׂ֜ׄ]
+# Han; Tifinagh: [〇]
 
-059C          ; Hebr; Deva; L #      (֜)  HEBREW ACCENT GERESH
-05B9          ; Hebr; Deva; L #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Deva; L #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Deva; L #      (ׄ)  HEBREW MARK UPPER DOT
+3007          ; Hani; Tfng; L #      (〇)  IDEOGRAPHIC NUMBER ZERO
 
-# Total code points: 5
+# Total code points: 1
 
-# Hebrew; Gujarati: [ֹׁׂׄ]
+# Hebrew; Armenian: [ס]
 
-05B9          ; Hebr; Gujr; L #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Gujr; L #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Gujr; L #      (ׄ)  HEBREW MARK UPPER DOT
+05E1          ; Hebr; Armn; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Cyrillic: [ס]
+
+05E1          ; Hebr; Cyrl; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Devanagari: [ס]
+
+05E1          ; Hebr; Deva; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Greek: [טס]
+
+05D8          ; Hebr; Grek; L #      (ט)  HEBREW LETTER TET
+05E1          ; Hebr; Grek; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 2
+
+# Hebrew; Gujarati: [ס]
+
+05E1          ; Hebr; Gujr; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Gurmukhi: [ס]
+
+05E1          ; Hebr; Guru; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Kannada: [ס]
+
+05E1          ; Hebr; Knda; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Lao: [ס]
+
+05E1          ; Hebr; Laoo; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Latin: [וטיןסװױ]
+
+05D5          ; Hebr; Latn; L #      (ו)  HEBREW LETTER VAV
+05D8..05D9    ; Hebr; Latn; L #  [2] (ט..י)  HEBREW LETTER TET..HEBREW LETTER YOD
+05DF          ; Hebr; Latn; L #      (ן)  HEBREW LETTER FINAL NUN
+05E1          ; Hebr; Latn; L #      (ס)  HEBREW LETTER SAMEKH
+05F0..05F1    ; Hebr; Latn; L #  [2] (װ..ױ)  HEBREW LIGATURE YIDDISH DOUBLE VAV..HEBREW LIGATURE YIDDISH VAV YOD
+
+# Total code points: 7
+
+# Hebrew; Malayalam: [ס]
+
+05E1          ; Hebr; Mlym; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Myanmar: [ס]
+
+05E1          ; Hebr; Mymr; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Sinhala: [ס]
+
+05E1          ; Hebr; Sinh; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Tamil: [ס]
+
+05E1          ; Hebr; Taml; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Telugu: [ס]
+
+05E1          ; Hebr; Telu; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Thai: [ס]
+
+05E1          ; Hebr; Thai; L #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Canadian_Aboriginal: [ויןױ]
+
+05D5          ; Hebr; Cans; L #      (ו)  HEBREW LETTER VAV
+05D9          ; Hebr; Cans; L #      (י)  HEBREW LETTER YOD
+05DF          ; Hebr; Cans; L #      (ן)  HEBREW LETTER FINAL NUN
+05F1          ; Hebr; Cans; L #      (ױ)  HEBREW LIGATURE YIDDISH VAV YOD
 
 # Total code points: 4
 
-# Hebrew; Gurmukhi: [ֹׁׂׄ]
+# Hebrew; Tifinagh: [ויןױ]
 
-05B9          ; Hebr; Guru; L #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Guru; L #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Guru; L #      (ׄ)  HEBREW MARK UPPER DOT
+05D5          ; Hebr; Tfng; L #      (ו)  HEBREW LETTER VAV
+05D9          ; Hebr; Tfng; L #      (י)  HEBREW LETTER YOD
+05DF          ; Hebr; Tfng; L #      (ן)  HEBREW LETTER FINAL NUN
+05F1          ; Hebr; Tfng; L #      (ױ)  HEBREW LIGATURE YIDDISH VAV YOD
 
 # Total code points: 4
-
-# Hebrew; Khmer: [֯]
-
-05AF          ; Hebr; Khmr; L #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
-
-# Hebrew; Lao: [֯]
-
-05AF          ; Hebr; Laoo; L #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
-
-# Hebrew; Myanmar: [֯]
-
-05AF          ; Hebr; Mymr; L #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
-
-# Hebrew; Tamil: [ֹׁׂ֯ׄ]
-
-05AF          ; Hebr; Taml; L #      (֯)  HEBREW MARK MASORA CIRCLE
-05B9          ; Hebr; Taml; L #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Taml; L #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Taml; L #      (ׄ)  HEBREW MARK UPPER DOT
-
-# Total code points: 5
-
-# Hebrew; Thai: [֯]
-
-05AF          ; Hebr; Thai; L #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
 
 # Hiragana; Katakana: [へ]
 
@@ -962,6 +1060,12 @@
 0CE6          ; Knda; Armn; L #      (೦)  KANNADA DIGIT ZERO
 
 # Total code points: 2
+
+# Kannada; Bengali: [ಃ]
+
+0C83          ; Knda; Beng; L #      (ಃ)  KANNADA SIGN VISARGA
+
+# Total code points: 1
 
 # Kannada; Cyrillic: [ಂ೦]
 
@@ -991,10 +1095,17 @@
 
 # Total code points: 2
 
-# Kannada; Gurmukhi: [ಂ೦]
+# Kannada; Gurmukhi: [ಂಃ೦]
 
-0C82          ; Knda; Guru; L #      (ಂ)  KANNADA SIGN ANUSVARA
+0C82..0C83    ; Knda; Guru; L #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
 0CE6          ; Knda; Guru; L #      (೦)  KANNADA DIGIT ZERO
+
+# Total code points: 3
+
+# Kannada; Hebrew: [ಂ೦]
+
+0C82          ; Knda; Hebr; L #      (ಂ)  KANNADA SIGN ANUSVARA
+0CE6          ; Knda; Hebr; L #      (೦)  KANNADA DIGIT ZERO
 
 # Total code points: 2
 
@@ -1012,17 +1123,31 @@
 
 # Total code points: 2
 
-# Kannada; Malayalam: [ಂ೦]
+# Kannada; Malayalam: [ಂಃ೦]
 
-0C82          ; Knda; Mlym; L #      (ಂ)  KANNADA SIGN ANUSVARA
+0C82..0C83    ; Knda; Mlym; L #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
 0CE6          ; Knda; Mlym; L #      (೦)  KANNADA DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
-# Kannada; Myanmar: [ಂ೦]
+# Kannada; Myanmar: [ಂಃ೦]
 
-0C82          ; Knda; Mymr; L #      (ಂ)  KANNADA SIGN ANUSVARA
+0C82..0C83    ; Knda; Mymr; L #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
 0CE6          ; Knda; Mymr; L #      (೦)  KANNADA DIGIT ZERO
+
+# Total code points: 3
+
+# Kannada; Sinhala: [ಂಃ೦]
+
+0C82..0C83    ; Knda; Sinh; L #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
+0CE6          ; Knda; Sinh; L #      (೦)  KANNADA DIGIT ZERO
+
+# Total code points: 3
+
+# Kannada; Tamil: [ಂ೦]
+
+0C82          ; Knda; Taml; L #      (ಂ)  KANNADA SIGN ANUSVARA
+0CE6          ; Knda; Taml; L #      (೦)  KANNADA DIGIT ZERO
 
 # Total code points: 2
 
@@ -1055,18 +1180,11 @@
 
 # Total code points: 1
 
-# Khmer; Hebrew: [ំ]
-
-17C6          ; Khmr; Hebr; L #      (ំ)  KHMER SIGN NIKAHIT
-
-# Total code points: 1
-
-# Khmer; Lao: [ំ់]
+# Khmer; Lao: [ំ]
 
 17C6          ; Khmr; Laoo; L #      (ំ)  KHMER SIGN NIKAHIT
-17CB          ; Khmr; Laoo; L #      (់)  KHMER SIGN BANTOC
 
-# Total code points: 2
+# Total code points: 1
 
 # Khmer; Myanmar: [ំ]
 
@@ -1080,13 +1198,12 @@
 
 # Total code points: 1
 
-# Khmer; Thai: [ិ-ឺំ់]
+# Khmer; Thai: [ិ-ឺំ]
 
 17B7..17BA    ; Khmr; Thai; L #  [4] (ិ..ឺ)  KHMER VOWEL SIGN I..KHMER VOWEL SIGN YY
 17C6          ; Khmr; Thai; L #      (ំ)  KHMER SIGN NIKAHIT
-17CB          ; Khmr; Thai; L #      (់)  KHMER SIGN BANTOC
 
-# Total code points: 6
+# Total code points: 5
 
 # Lao; Armenian: [໐]
 
@@ -1124,9 +1241,9 @@
 
 # Total code points: 1
 
-# Lao; Hebrew: [ໍ]
+# Lao; Hebrew: [໐]
 
-0ECD          ; Laoo; Hebr; L #      (ໍ)  LAO NIGGAHITA
+0ED0          ; Laoo; Hebr; L #      (໐)  LAO DIGIT ZERO
 
 # Total code points: 1
 
@@ -1136,12 +1253,11 @@
 
 # Total code points: 1
 
-# Lao; Khmer: [່ໍ]
+# Lao; Khmer: [ໍ]
 
-0EC8          ; Laoo; Khmr; L #      (່)  LAO TONE MAI EK
 0ECD          ; Laoo; Khmr; L #      (ໍ)  LAO NIGGAHITA
 
-# Total code points: 2
+# Total code points: 1
 
 # Lao; Latin: [໐]
 
@@ -1162,11 +1278,18 @@
 
 # Total code points: 2
 
-# Lao; Tamil: [ໍ]
+# Lao; Sinhala: [໐]
 
-0ECD          ; Laoo; Taml; L #      (ໍ)  LAO NIGGAHITA
+0ED0          ; Laoo; Sinh; L #      (໐)  LAO DIGIT ZERO
 
 # Total code points: 1
+
+# Lao; Tamil: [ໍ໐]
+
+0ECD          ; Laoo; Taml; L #      (ໍ)  LAO NIGGAHITA
+0ED0          ; Laoo; Taml; L #      (໐)  LAO DIGIT ZERO
+
+# Total code points: 2
 
 # Lao; Telugu: [໐]
 
@@ -1187,279 +1310,231 @@
 
 # Total code points: 15
 
-# Latin; Armenian: [f-hjlnoquøħƒƞơǥǿɠɵʊʋ]
+# Latin; Arabic: [ö]
 
-0066..0068    ; Latn; Armn; L #  [3] (f..h)  LATIN SMALL LETTER F..LATIN SMALL LETTER H
-006A          ; Latn; Armn; L #      (j)  LATIN SMALL LETTER J
-006C          ; Latn; Armn; L #      (l)  LATIN SMALL LETTER L
-006E..006F    ; Latn; Armn; L #  [2] (n..o)  LATIN SMALL LETTER N..LATIN SMALL LETTER O
-0071          ; Latn; Armn; L #      (q)  LATIN SMALL LETTER Q
-0075          ; Latn; Armn; L #      (u)  LATIN SMALL LETTER U
-00F8          ; Latn; Armn; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
-0127          ; Latn; Armn; L #      (ħ)  LATIN SMALL LETTER H WITH STROKE
-0192          ; Latn; Armn; L #      (ƒ)  LATIN SMALL LETTER F WITH HOOK
-019E          ; Latn; Armn; L #      (ƞ)  LATIN SMALL LETTER N WITH LONG RIGHT LEG
-01A1          ; Latn; Armn; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01E5          ; Latn; Armn; L #      (ǥ)  LATIN SMALL LETTER G WITH STROKE
-01FF          ; Latn; Armn; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0260          ; Latn; Armn; L #      (ɠ)  LATIN SMALL LETTER G WITH HOOK
-0275          ; Latn; Armn; L #      (ɵ)  LATIN SMALL LETTER BARRED O
-028A..028B    ; Latn; Armn; L #  [2] (ʊ..ʋ)  LATIN SMALL LETTER UPSILON..LATIN SMALL LETTER V WITH HOOK
-
-# Total code points: 20
-
-# Latin; Bengali: [ȣ]
-
-0223          ; Latn; Beng; L #      (ȣ)  LATIN SMALL LETTER OU
+00F6          ; Latn; Arab; L #      (ö)  LATIN SMALL LETTER O WITH DIAERESIS
 
 # Total code points: 1
 
-# Latin; Cherokee: [bhilpwyħıłƃƚƥƴɓɨɩɯ]
+# Latin; Armenian: [f-hjnoqu-wøħơ]
 
-0062          ; Latn; Cher; L #      (b)  LATIN SMALL LETTER B
-0068..0069    ; Latn; Cher; L #  [2] (h..i)  LATIN SMALL LETTER H..LATIN SMALL LETTER I
-006C          ; Latn; Cher; L #      (l)  LATIN SMALL LETTER L
-0070          ; Latn; Cher; L #      (p)  LATIN SMALL LETTER P
-0077          ; Latn; Cher; L #      (w)  LATIN SMALL LETTER W
-0079          ; Latn; Cher; L #      (y)  LATIN SMALL LETTER Y
-0127          ; Latn; Cher; L #      (ħ)  LATIN SMALL LETTER H WITH STROKE
-0131          ; Latn; Cher; L #      (ı)  LATIN SMALL LETTER DOTLESS I
-0142          ; Latn; Cher; L #      (ł)  LATIN SMALL LETTER L WITH STROKE
-0183          ; Latn; Cher; L #      (ƃ)  LATIN SMALL LETTER B WITH TOPBAR
-019A          ; Latn; Cher; L #      (ƚ)  LATIN SMALL LETTER L WITH BAR
-01A5          ; Latn; Cher; L #      (ƥ)  LATIN SMALL LETTER P WITH HOOK
-01B4          ; Latn; Cher; L #      (ƴ)  LATIN SMALL LETTER Y WITH HOOK
-0253          ; Latn; Cher; L #      (ɓ)  LATIN SMALL LETTER B WITH HOOK
-0268..0269    ; Latn; Cher; L #  [2] (ɨ..ɩ)  LATIN SMALL LETTER I WITH STROKE..LATIN SMALL LETTER IOTA
-026F          ; Latn; Cher; L #      (ɯ)  LATIN SMALL LETTER TURNED M
+0066..0068    ; Latn; Armn; L #  [3] (f..h)  LATIN SMALL LETTER F..LATIN SMALL LETTER H
+006A          ; Latn; Armn; L #      (j)  LATIN SMALL LETTER J
+006E..006F    ; Latn; Armn; L #  [2] (n..o)  LATIN SMALL LETTER N..LATIN SMALL LETTER O
+0071          ; Latn; Armn; L #      (q)  LATIN SMALL LETTER Q
+0075..0077    ; Latn; Armn; L #  [3] (u..w)  LATIN SMALL LETTER U..LATIN SMALL LETTER W
+00F8          ; Latn; Armn; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
+0127          ; Latn; Armn; L #      (ħ)  LATIN SMALL LETTER H WITH STROKE
+01A1          ; Latn; Armn; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
 
-# Total code points: 18
+# Total code points: 13
 
-# Latin; Cyrillic: [a-eh-jloprsvxyæøđħıĸłƃƅƌƚơƥƴƽǝǿɓɖɗəɛɨɩɵʒ]
+# Latin; Cyrillic: [a-eh-kn-yæçøđħıĸŧơ]
 
 0061..0065    ; Latn; Cyrl; L #  [5] (a..e)  LATIN SMALL LETTER A..LATIN SMALL LETTER E
-0068..006A    ; Latn; Cyrl; L #  [3] (h..j)  LATIN SMALL LETTER H..LATIN SMALL LETTER J
-006C          ; Latn; Cyrl; L #      (l)  LATIN SMALL LETTER L
-006F..0070    ; Latn; Cyrl; L #  [2] (o..p)  LATIN SMALL LETTER O..LATIN SMALL LETTER P
-0072..0073    ; Latn; Cyrl; L #  [2] (r..s)  LATIN SMALL LETTER R..LATIN SMALL LETTER S
-0076          ; Latn; Cyrl; L #      (v)  LATIN SMALL LETTER V
-0078..0079    ; Latn; Cyrl; L #  [2] (x..y)  LATIN SMALL LETTER X..LATIN SMALL LETTER Y
-00E6          ; Latn; Cyrl; L #      (æ)  LATIN SMALL LETTER AE
+0068..006B    ; Latn; Cyrl; L #  [4] (h..k)  LATIN SMALL LETTER H..LATIN SMALL LETTER K
+006E..0079    ; Latn; Cyrl; L # [12] (n..y)  LATIN SMALL LETTER N..LATIN SMALL LETTER Y
+00E6..00E7    ; Latn; Cyrl; L #  [2] (æ..ç)  LATIN SMALL LETTER AE..LATIN SMALL LETTER C WITH CEDILLA
 00F8          ; Latn; Cyrl; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 0111          ; Latn; Cyrl; L #      (đ)  LATIN SMALL LETTER D WITH STROKE
 0127          ; Latn; Cyrl; L #      (ħ)  LATIN SMALL LETTER H WITH STROKE
 0131          ; Latn; Cyrl; L #      (ı)  LATIN SMALL LETTER DOTLESS I
 0138          ; Latn; Cyrl; L #      (ĸ)  LATIN SMALL LETTER KRA
-0142          ; Latn; Cyrl; L #      (ł)  LATIN SMALL LETTER L WITH STROKE
-0183          ; Latn; Cyrl; L #      (ƃ)  LATIN SMALL LETTER B WITH TOPBAR
-0185          ; Latn; Cyrl; L #      (ƅ)  LATIN SMALL LETTER TONE SIX
-018C          ; Latn; Cyrl; L #      (ƌ)  LATIN SMALL LETTER D WITH TOPBAR
-019A          ; Latn; Cyrl; L #      (ƚ)  LATIN SMALL LETTER L WITH BAR
+0167          ; Latn; Cyrl; L #      (ŧ)  LATIN SMALL LETTER T WITH STROKE
 01A1          ; Latn; Cyrl; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01A5          ; Latn; Cyrl; L #      (ƥ)  LATIN SMALL LETTER P WITH HOOK
-01B4          ; Latn; Cyrl; L #      (ƴ)  LATIN SMALL LETTER Y WITH HOOK
-01BD          ; Latn; Cyrl; L #      (ƽ)  LATIN SMALL LETTER TONE FIVE
-01DD          ; Latn; Cyrl; L #      (ǝ)  LATIN SMALL LETTER TURNED E
-01FF          ; Latn; Cyrl; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0253          ; Latn; Cyrl; L #      (ɓ)  LATIN SMALL LETTER B WITH HOOK
-0256..0257    ; Latn; Cyrl; L #  [2] (ɖ..ɗ)  LATIN SMALL LETTER D WITH TAIL..LATIN SMALL LETTER D WITH HOOK
-0259          ; Latn; Cyrl; L #      (ə)  LATIN SMALL LETTER SCHWA
-025B          ; Latn; Cyrl; L #      (ɛ)  LATIN SMALL LETTER OPEN E
-0268..0269    ; Latn; Cyrl; L #  [2] (ɨ..ɩ)  LATIN SMALL LETTER I WITH STROKE..LATIN SMALL LETTER IOTA
-0275          ; Latn; Cyrl; L #      (ɵ)  LATIN SMALL LETTER BARRED O
-0292          ; Latn; Cyrl; L #      (ʒ)  LATIN SMALL LETTER EZH
 
-# Total code points: 42
+# Total code points: 30
 
-# Latin; Devanagari: [oøơǿɵ]
+# Latin; Devanagari: [oøơ]
 
 006F          ; Latn; Deva; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Deva; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Deva; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Deva; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Deva; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Georgian: [yƴ]
+# Latin; Georgian: [y]
 
 0079          ; Latn; Geor; L #      (y)  LATIN SMALL LETTER Y
-01B4          ; Latn; Geor; L #      (ƴ)  LATIN SMALL LETTER Y WITH HOOK
 
-# Total code points: 2
+# Total code points: 1
 
-# Latin; Greek: [in-puvøıĸƞơƥǿɛɨɩɵʊʋ]
+# Latin; Greek: [aikn-pt-vyßøıĸŧơ]
 
+0061          ; Latn; Grek; L #      (a)  LATIN SMALL LETTER A
 0069          ; Latn; Grek; L #      (i)  LATIN SMALL LETTER I
+006B          ; Latn; Grek; L #      (k)  LATIN SMALL LETTER K
 006E..0070    ; Latn; Grek; L #  [3] (n..p)  LATIN SMALL LETTER N..LATIN SMALL LETTER P
-0075..0076    ; Latn; Grek; L #  [2] (u..v)  LATIN SMALL LETTER U..LATIN SMALL LETTER V
+0074..0076    ; Latn; Grek; L #  [3] (t..v)  LATIN SMALL LETTER T..LATIN SMALL LETTER V
+0079          ; Latn; Grek; L #      (y)  LATIN SMALL LETTER Y
+00DF          ; Latn; Grek; L #      (ß)  LATIN SMALL LETTER SHARP S
 00F8          ; Latn; Grek; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 0131          ; Latn; Grek; L #      (ı)  LATIN SMALL LETTER DOTLESS I
 0138          ; Latn; Grek; L #      (ĸ)  LATIN SMALL LETTER KRA
-019E          ; Latn; Grek; L #      (ƞ)  LATIN SMALL LETTER N WITH LONG RIGHT LEG
+0167          ; Latn; Grek; L #      (ŧ)  LATIN SMALL LETTER T WITH STROKE
 01A1          ; Latn; Grek; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01A5          ; Latn; Grek; L #      (ƥ)  LATIN SMALL LETTER P WITH HOOK
-01FF          ; Latn; Grek; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-025B          ; Latn; Grek; L #      (ɛ)  LATIN SMALL LETTER OPEN E
-0268..0269    ; Latn; Grek; L #  [2] (ɨ..ɩ)  LATIN SMALL LETTER I WITH STROKE..LATIN SMALL LETTER IOTA
-0275          ; Latn; Grek; L #      (ɵ)  LATIN SMALL LETTER BARRED O
-028A..028B    ; Latn; Grek; L #  [2] (ʊ..ʋ)  LATIN SMALL LETTER UPSILON..LATIN SMALL LETTER V WITH HOOK
 
-# Total code points: 19
+# Total code points: 16
 
-# Latin; Gujarati: [oøơǿɵ]
+# Latin; Gujarati: [oøơ]
 
 006F          ; Latn; Gujr; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Gujr; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Gujr; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Gujr; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Gujr; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Gurmukhi: [oøơǿȣɵ]
+# Latin; Gurmukhi: [oøơ]
 
 006F          ; Latn; Guru; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Guru; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Guru; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Guru; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0223          ; Latn; Guru; L #      (ȣ)  LATIN SMALL LETTER OU
-0275          ; Latn; Guru; L #      (ɵ)  LATIN SMALL LETTER BARRED O
+
+# Total code points: 3
+
+# Latin; Hebrew: [lovøłơ]
+
+006C          ; Latn; Hebr; L #      (l)  LATIN SMALL LETTER L
+006F          ; Latn; Hebr; L #      (o)  LATIN SMALL LETTER O
+0076          ; Latn; Hebr; L #      (v)  LATIN SMALL LETTER V
+00F8          ; Latn; Hebr; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
+0142          ; Latn; Hebr; L #      (ł)  LATIN SMALL LETTER L WITH STROKE
+01A1          ; Latn; Hebr; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
 
 # Total code points: 6
 
-# Latin; Kannada: [oøơǿɵ]
+# Latin; Kannada: [oøơ]
 
 006F          ; Latn; Knda; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Knda; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Knda; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Knda; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Knda; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Lao: [oøơǿɵ]
+# Latin; Lao: [oøơ]
 
 006F          ; Latn; Laoo; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Laoo; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Laoo; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Laoo; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Laoo; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Malayalam: [oøơǿɵ]
+# Latin; Malayalam: [oøơ]
 
 006F          ; Latn; Mlym; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Mlym; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Mlym; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Mlym; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Mlym; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Myanmar: [oøơǿɵ]
+# Latin; Myanmar: [oøơ]
 
 006F          ; Latn; Mymr; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Mymr; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Mymr; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Mymr; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Mymr; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Oriya: [ȣ]
+# Latin; Sinhala: [oøơ]
 
-0223          ; Latn; Orya; L #      (ȣ)  LATIN SMALL LETTER OU
+006F          ; Latn; Sinh; L #      (o)  LATIN SMALL LETTER O
+00F8          ; Latn; Sinh; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
+01A1          ; Latn; Sinh; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
 
-# Total code points: 1
+# Total code points: 3
 
-# Latin; Telugu: [oøơǿɵ]
+# Latin; Tamil: [oøơ]
+
+006F          ; Latn; Taml; L #      (o)  LATIN SMALL LETTER O
+00F8          ; Latn; Taml; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
+01A1          ; Latn; Taml; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
+
+# Total code points: 3
+
+# Latin; Telugu: [oøơ]
 
 006F          ; Latn; Telu; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Telu; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Telu; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Telu; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Telu; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Thai: [oøơǿɵ]
+# Latin; Thai: [oøơ]
 
 006F          ; Latn; Thai; L #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Thai; L #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Thai; L #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Thai; L #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Thai; L #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Canadian_Aboriginal: [bdlmpwxđłƃƌƚƥɓɖɗɯ]
+# Latin; Canadian_Aboriginal: [bdlpxđł]
 
 0062          ; Latn; Cans; L #      (b)  LATIN SMALL LETTER B
 0064          ; Latn; Cans; L #      (d)  LATIN SMALL LETTER D
-006C..006D    ; Latn; Cans; L #  [2] (l..m)  LATIN SMALL LETTER L..LATIN SMALL LETTER M
+006C          ; Latn; Cans; L #      (l)  LATIN SMALL LETTER L
 0070          ; Latn; Cans; L #      (p)  LATIN SMALL LETTER P
-0077..0078    ; Latn; Cans; L #  [2] (w..x)  LATIN SMALL LETTER W..LATIN SMALL LETTER X
+0078          ; Latn; Cans; L #      (x)  LATIN SMALL LETTER X
 0111          ; Latn; Cans; L #      (đ)  LATIN SMALL LETTER D WITH STROKE
 0142          ; Latn; Cans; L #      (ł)  LATIN SMALL LETTER L WITH STROKE
-0183          ; Latn; Cans; L #      (ƃ)  LATIN SMALL LETTER B WITH TOPBAR
-018C          ; Latn; Cans; L #      (ƌ)  LATIN SMALL LETTER D WITH TOPBAR
-019A          ; Latn; Cans; L #      (ƚ)  LATIN SMALL LETTER L WITH BAR
-01A5          ; Latn; Cans; L #      (ƥ)  LATIN SMALL LETTER P WITH HOOK
-0253          ; Latn; Cans; L #      (ɓ)  LATIN SMALL LETTER B WITH HOOK
-0256..0257    ; Latn; Cans; L #  [2] (ɖ..ɗ)  LATIN SMALL LETTER D WITH TAIL..LATIN SMALL LETTER D WITH HOOK
-026F          ; Latn; Cans; L #      (ɯ)  LATIN SMALL LETTER TURNED M
 
-# Total code points: 17
+# Total code points: 7
 
-# Malayalam; Armenian: [ം]
+# Latin; Tifinagh: [lł]
+
+006C          ; Latn; Tfng; L #      (l)  LATIN SMALL LETTER L
+0142          ; Latn; Tfng; L #      (ł)  LATIN SMALL LETTER L WITH STROKE
+
+# Total code points: 2
+
+# Malayalam; Armenian: [ം൦]
 
 0D02          ; Mlym; Armn; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Armn; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Bengali: [ഠ]
+# Malayalam; Bengali: [ഃഠ]
 
+0D03          ; Mlym; Beng; L #      (ഃ)  MALAYALAM SIGN VISARGA
 0D20          ; Mlym; Beng; L #      (ഠ)  MALAYALAM LETTER TTHA
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Cherokee: [ഠ]
-
-0D20          ; Mlym; Cher; L #      (ഠ)  MALAYALAM LETTER TTHA
-
-# Total code points: 1
-
-# Malayalam; Cyrillic: [ം]
+# Malayalam; Cyrillic: [ം൦]
 
 0D02          ; Mlym; Cyrl; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Cyrl; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Devanagari: [ം]
+# Malayalam; Devanagari: [ം൦]
 
 0D02          ; Mlym; Deva; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Deva; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Greek: [ം]
+# Malayalam; Greek: [ംഠ൦]
 
 0D02          ; Mlym; Grek; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D20          ; Mlym; Grek; L #      (ഠ)  MALAYALAM LETTER TTHA
+0D66          ; Mlym; Grek; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
-# Malayalam; Gujarati: [ം]
+# Malayalam; Gujarati: [ം൦]
 
 0D02          ; Mlym; Gujr; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Gujr; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Gurmukhi: [ം]
+# Malayalam; Gurmukhi: [ംഃ൦]
 
-0D02          ; Mlym; Guru; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D02..0D03    ; Mlym; Guru; L #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Guru; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
 # Malayalam; Han: [ഠ]
 
@@ -1467,35 +1542,40 @@
 
 # Total code points: 1
 
-# Malayalam; Kannada: [ം]
+# Malayalam; Hebrew: [ം൦]
 
-0D02          ; Mlym; Knda; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D02          ; Mlym; Hebr; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Hebr; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Lao: [ം]
+# Malayalam; Kannada: [ംഃ൦]
+
+0D02..0D03    ; Mlym; Knda; L #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Knda; L #      (൦)  MALAYALAM DIGIT ZERO
+
+# Total code points: 3
+
+# Malayalam; Lao: [ം൦]
 
 0D02          ; Mlym; Laoo; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Laoo; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Latin: [ം]
+# Malayalam; Latin: [ം൦]
 
 0D02          ; Mlym; Latn; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Latn; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Malayalam; Mongolian: [ഠ]
+# Malayalam; Myanmar: [ംഃ൦]
 
-0D20          ; Mlym; Mong; L #      (ഠ)  MALAYALAM LETTER TTHA
+0D02..0D03    ; Mlym; Mymr; L #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Mymr; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
-
-# Malayalam; Myanmar: [ം]
-
-0D02          ; Mlym; Mymr; L #      (ം)  MALAYALAM SIGN ANUSVARA
-
-# Total code points: 1
+# Total code points: 3
 
 # Malayalam; Oriya: [ഠ]
 
@@ -1503,62 +1583,45 @@
 
 # Total code points: 1
 
-# Malayalam; Sinhala: [ന്]
+# Malayalam; Sinhala: [ംഃന്൦]
 
+0D02..0D03    ; Mlym; Sinh; L #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
 0D28          ; Mlym; Sinh; L #      (ന)  MALAYALAM LETTER NA
 0D4D          ; Mlym; Sinh; L #      (്)  MALAYALAM SIGN VIRAMA
+0D66          ; Mlym; Sinh; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 5
 
-# Malayalam; Tamil: [ഉജണഴി-ൃ]
+# Malayalam; Tamil: [ംഉജണഴശിീ൦]
 
+0D02          ; Mlym; Taml; L #      (ം)  MALAYALAM SIGN ANUSVARA
 0D09          ; Mlym; Taml; L #      (ഉ)  MALAYALAM LETTER U
 0D1C          ; Mlym; Taml; L #      (ജ)  MALAYALAM LETTER JA
 0D23          ; Mlym; Taml; L #      (ണ)  MALAYALAM LETTER NNA
 0D34          ; Mlym; Taml; L #      (ഴ)  MALAYALAM LETTER LLLA
-0D3F..0D43    ; Mlym; Taml; L #  [5] (ി..ൃ)  MALAYALAM VOWEL SIGN I..MALAYALAM VOWEL SIGN VOCALIC R
+0D36          ; Mlym; Taml; L #      (ശ)  MALAYALAM LETTER SHA
+0D3F..0D40    ; Mlym; Taml; L #  [2] (ി..ീ)  MALAYALAM VOWEL SIGN I..MALAYALAM VOWEL SIGN II
+0D66          ; Mlym; Taml; L #      (൦)  MALAYALAM DIGIT ZERO
 
 # Total code points: 9
 
-# Malayalam; Telugu: [ം]
+# Malayalam; Telugu: [ംഃ൦]
 
-0D02          ; Mlym; Telu; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D02..0D03    ; Mlym; Telu; L #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Telu; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
-# Malayalam; Thai: [ം]
+# Malayalam; Thai: [ം൦]
 
 0D02          ; Mlym; Thai; L #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Thai; L #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Mongolian; Bengali: [᠐]
+# Malayalam; Tifinagh: [ഠ]
 
-1810          ; Mong; Beng; L #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Cherokee: [᠐]
-
-1810          ; Mong; Cher; L #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Han: [᠐]
-
-1810          ; Mong; Hani; L #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Malayalam: [᠐]
-
-1810          ; Mong; Mlym; L #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Oriya: [᠐]
-
-1810          ; Mong; Orya; L #      (᠐)  MONGOLIAN DIGIT ZERO
+0D20          ; Mlym; Tfng; L #      (ഠ)  MALAYALAM LETTER TTHA
 
 # Total code points: 1
 
@@ -1568,6 +1631,12 @@
 1040          ; Mymr; Armn; L #      (၀)  MYANMAR DIGIT ZERO
 
 # Total code points: 2
+
+# Myanmar; Bengali: [း]
+
+1038          ; Mymr; Beng; L #      (း)  MYANMAR SIGN VISARGA
+
+# Total code points: 1
 
 # Myanmar; Cyrillic: [ဝ၀]
 
@@ -1597,25 +1666,28 @@
 
 # Total code points: 2
 
-# Myanmar; Gurmukhi: [ဝ၀]
+# Myanmar; Gurmukhi: [ဝး၀]
 
 101D          ; Mymr; Guru; L #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Guru; L #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Guru; L #      (၀)  MYANMAR DIGIT ZERO
 
+# Total code points: 3
+
+# Myanmar; Hebrew: [ဝ၀]
+
+101D          ; Mymr; Hebr; L #      (ဝ)  MYANMAR LETTER WA
+1040          ; Mymr; Hebr; L #      (၀)  MYANMAR DIGIT ZERO
+
 # Total code points: 2
 
-# Myanmar; Hebrew: [ံ]
-
-1036          ; Mymr; Hebr; L #      (ံ)  MYANMAR SIGN ANUSVARA
-
-# Total code points: 1
-
-# Myanmar; Kannada: [ဝ၀]
+# Myanmar; Kannada: [ဝး၀]
 
 101D          ; Mymr; Knda; L #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Knda; L #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Knda; L #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
 # Myanmar; Khmer: [ံ]
 
@@ -1638,25 +1710,37 @@
 
 # Total code points: 2
 
-# Myanmar; Malayalam: [ဝ၀]
+# Myanmar; Malayalam: [ဝး၀]
 
 101D          ; Mymr; Mlym; L #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Mlym; L #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Mlym; L #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
-# Myanmar; Tamil: [ံ]
+# Myanmar; Sinhala: [ဝး၀]
 
+101D          ; Mymr; Sinh; L #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Sinh; L #      (း)  MYANMAR SIGN VISARGA
+1040          ; Mymr; Sinh; L #      (၀)  MYANMAR DIGIT ZERO
+
+# Total code points: 3
+
+# Myanmar; Tamil: [ဝံ၀]
+
+101D          ; Mymr; Taml; L #      (ဝ)  MYANMAR LETTER WA
 1036          ; Mymr; Taml; L #      (ံ)  MYANMAR SIGN ANUSVARA
+1040          ; Mymr; Taml; L #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
-# Myanmar; Telugu: [ဝ၀]
+# Myanmar; Telugu: [ဝး၀]
 
 101D          ; Mymr; Telu; L #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Telu; L #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Telu; L #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
 # Myanmar; Thai: [ဝံ၀]
 
@@ -1666,32 +1750,37 @@
 
 # Total code points: 3
 
-# Oriya; Bengali: [ଃ଼୦୨]
+# Oriya; Bengali: [ଁଃଠ଼୦୨]
 
+0B01          ; Orya; Beng; L #      (ଁ)  ORIYA SIGN CANDRABINDU
 0B03          ; Orya; Beng; L #      (ଃ)  ORIYA SIGN VISARGA
+0B20          ; Orya; Beng; L #      (ଠ)  ORIYA LETTER TTHA
 0B3C          ; Orya; Beng; L #      (଼)  ORIYA SIGN NUKTA
 0B66          ; Orya; Beng; L #      (୦)  ORIYA DIGIT ZERO
 0B68          ; Orya; Beng; L #      (୨)  ORIYA DIGIT TWO
 
-# Total code points: 4
+# Total code points: 6
 
-# Oriya; Cherokee: [୦]
+# Oriya; Devanagari: [ଁ଼]
 
-0B66          ; Orya; Cher; L #      (୦)  ORIYA DIGIT ZERO
-
-# Total code points: 1
-
-# Oriya; Devanagari: [଼]
-
+0B01          ; Orya; Deva; L #      (ଁ)  ORIYA SIGN CANDRABINDU
 0B3C          ; Orya; Deva; L #      (଼)  ORIYA SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Gujarati: [଼]
+# Oriya; Greek: [ଠ୦]
 
+0B20          ; Orya; Grek; L #      (ଠ)  ORIYA LETTER TTHA
+0B66          ; Orya; Grek; L #      (୦)  ORIYA DIGIT ZERO
+
+# Total code points: 2
+
+# Oriya; Gujarati: [ଁ଼]
+
+0B01          ; Orya; Gujr; L #      (ଁ)  ORIYA SIGN CANDRABINDU
 0B3C          ; Orya; Gujr; L #      (଼)  ORIYA SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Oriya; Gurmukhi: [ଃ଼୨]
 
@@ -1701,60 +1790,174 @@
 
 # Total code points: 3
 
-# Oriya; Han: [୦]
+# Oriya; Han: [ଠ୦]
 
+0B20          ; Orya; Hani; L #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Hani; L #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Latin: [ଃ]
+# Oriya; Malayalam: [ଠ୦]
 
-0B03          ; Orya; Latn; L #      (ଃ)  ORIYA SIGN VISARGA
-
-# Total code points: 1
-
-# Oriya; Malayalam: [୦]
-
+0B20          ; Orya; Mlym; L #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Mlym; L #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Mongolian: [୦]
+# Oriya; Tifinagh: [ଠ୦]
 
-0B66          ; Orya; Mong; L #      (୦)  ORIYA DIGIT ZERO
-
-# Total code points: 1
-
-# Sinhala; Malayalam: [ඌ]
-
-0D8C          ; Sinh; Mlym; L #      (ඌ)  SINHALA LETTER UUYANNA
-
-# Total code points: 1
-
-# Tamil; Devanagari: [்]
-
-0BCD          ; Taml; Deva; L #      (்)  TAMIL SIGN VIRAMA
-
-# Total code points: 1
-
-# Tamil; Gujarati: [்]
-
-0BCD          ; Taml; Gujr; L #      (்)  TAMIL SIGN VIRAMA
-
-# Total code points: 1
-
-# Tamil; Gurmukhi: [்]
-
-0BCD          ; Taml; Guru; L #      (்)  TAMIL SIGN VIRAMA
-
-# Total code points: 1
-
-# Tamil; Hebrew: [ஂ்]
-
-0B82          ; Taml; Hebr; L #      (ஂ)  TAMIL SIGN ANUSVARA
-0BCD          ; Taml; Hebr; L #      (்)  TAMIL SIGN VIRAMA
+0B20          ; Orya; Tfng; L #      (ଠ)  ORIYA LETTER TTHA
+0B66          ; Orya; Tfng; L #      (୦)  ORIYA DIGIT ZERO
 
 # Total code points: 2
+
+# Sinhala; Armenian: [ං]
+
+0D82          ; Sinh; Armn; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Bengali: [ඃ]
+
+0D83          ; Sinh; Beng; L #      (ඃ)  SINHALA SIGN VISARGAYA
+
+# Total code points: 1
+
+# Sinhala; Cyrillic: [ං]
+
+0D82          ; Sinh; Cyrl; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Devanagari: [ං]
+
+0D82          ; Sinh; Deva; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Greek: [ං]
+
+0D82          ; Sinh; Grek; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Gujarati: [ං]
+
+0D82          ; Sinh; Gujr; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Gurmukhi: [ංඃ]
+
+0D82..0D83    ; Sinh; Guru; L #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Hebrew: [ං]
+
+0D82          ; Sinh; Hebr; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Kannada: [ංඃ]
+
+0D82..0D83    ; Sinh; Knda; L #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Lao: [ං]
+
+0D82          ; Sinh; Laoo; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Latin: [ං]
+
+0D82          ; Sinh; Latn; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Malayalam: [ංඃඌ]
+
+0D82..0D83    ; Sinh; Mlym; L #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+0D8C          ; Sinh; Mlym; L #      (ඌ)  SINHALA LETTER UUYANNA
+
+# Total code points: 3
+
+# Sinhala; Myanmar: [ංඃ]
+
+0D82..0D83    ; Sinh; Mymr; L #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Tamil: [ං]
+
+0D82          ; Sinh; Taml; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Telugu: [ංඃ]
+
+0D82..0D83    ; Sinh; Telu; L #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Thai: [ං]
+
+0D82          ; Sinh; Thai; L #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Tamil; Armenian: [௦]
+
+0BE6          ; Taml; Armn; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Cyrillic: [௦]
+
+0BE6          ; Taml; Cyrl; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Devanagari: [்௦]
+
+0BCD          ; Taml; Deva; L #      (்)  TAMIL SIGN VIRAMA
+0BE6          ; Taml; Deva; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Greek: [௦]
+
+0BE6          ; Taml; Grek; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Gujarati: [்௦]
+
+0BCD          ; Taml; Gujr; L #      (்)  TAMIL SIGN VIRAMA
+0BE6          ; Taml; Gujr; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Gurmukhi: [்௦]
+
+0BCD          ; Taml; Guru; L #      (்)  TAMIL SIGN VIRAMA
+0BE6          ; Taml; Guru; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Hebrew: [௦]
+
+0BE6          ; Taml; Hebr; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Kannada: [௦]
+
+0BE6          ; Taml; Knda; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
 
 # Tamil; Khmer: [ஂ]
 
@@ -1762,36 +1965,58 @@
 
 # Total code points: 1
 
-# Tamil; Lao: [ஂ]
+# Tamil; Lao: [ஂ௦]
 
 0B82          ; Taml; Laoo; L #      (ஂ)  TAMIL SIGN ANUSVARA
+0BE6          ; Taml; Laoo; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Latin: [௦]
+
+0BE6          ; Taml; Latn; L #      (௦)  TAMIL DIGIT ZERO
 
 # Total code points: 1
 
-# Tamil; Malayalam: [உஐஜணழிூ௨]
+# Tamil; Malayalam: [உஐஜணழஶி௦௨]
 
 0B89          ; Taml; Mlym; L #      (உ)  TAMIL LETTER U
 0B90          ; Taml; Mlym; L #      (ஐ)  TAMIL LETTER AI
 0B9C          ; Taml; Mlym; L #      (ஜ)  TAMIL LETTER JA
 0BA3          ; Taml; Mlym; L #      (ண)  TAMIL LETTER NNA
 0BB4          ; Taml; Mlym; L #      (ழ)  TAMIL LETTER LLLA
+0BB6          ; Taml; Mlym; L #      (ஶ)  TAMIL LETTER SHA
 0BBF          ; Taml; Mlym; L #      (ி)  TAMIL VOWEL SIGN I
-0BC2          ; Taml; Mlym; L #      (ூ)  TAMIL VOWEL SIGN UU
+0BE6          ; Taml; Mlym; L #      (௦)  TAMIL DIGIT ZERO
 0BE8          ; Taml; Mlym; L #      (௨)  TAMIL DIGIT TWO
 
-# Total code points: 8
+# Total code points: 9
 
-# Tamil; Myanmar: [ஂ]
+# Tamil; Myanmar: [ஂ௦]
 
 0B82          ; Taml; Mymr; L #      (ஂ)  TAMIL SIGN ANUSVARA
+0BE6          ; Taml; Mymr; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Sinhala: [௦]
+
+0BE6          ; Taml; Sinh; L #      (௦)  TAMIL DIGIT ZERO
 
 # Total code points: 1
 
-# Tamil; Thai: [ஂ]
+# Tamil; Telugu: [௦]
+
+0BE6          ; Taml; Telu; L #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Thai: [ஂ௦]
 
 0B82          ; Taml; Thai; L #      (ஂ)  TAMIL SIGN ANUSVARA
+0BE6          ; Taml; Thai; L #      (௦)  TAMIL DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Telugu; Armenian: [ం౦]
 
@@ -1799,6 +2024,12 @@
 0C66          ; Telu; Armn; L #      (౦)  TELUGU DIGIT ZERO
 
 # Total code points: 2
+
+# Telugu; Bengali: [ః]
+
+0C03          ; Telu; Beng; L #      (ః)  TELUGU SIGN VISARGA
+
+# Total code points: 1
 
 # Telugu; Cyrillic: [ం౦]
 
@@ -1828,10 +2059,17 @@
 
 # Total code points: 2
 
-# Telugu; Gurmukhi: [ం౦]
+# Telugu; Gurmukhi: [ంః౦]
 
-0C02          ; Telu; Guru; L #      (ం)  TELUGU SIGN ANUSVARA
+0C02..0C03    ; Telu; Guru; L #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
 0C66          ; Telu; Guru; L #      (౦)  TELUGU DIGIT ZERO
+
+# Total code points: 3
+
+# Telugu; Hebrew: [ం౦]
+
+0C02          ; Telu; Hebr; L #      (ం)  TELUGU SIGN ANUSVARA
+0C66          ; Telu; Hebr; L #      (౦)  TELUGU DIGIT ZERO
 
 # Total code points: 2
 
@@ -1866,17 +2104,31 @@
 
 # Total code points: 2
 
-# Telugu; Malayalam: [ం౦]
+# Telugu; Malayalam: [ంః౦]
 
-0C02          ; Telu; Mlym; L #      (ం)  TELUGU SIGN ANUSVARA
+0C02..0C03    ; Telu; Mlym; L #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
 0C66          ; Telu; Mlym; L #      (౦)  TELUGU DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
-# Telugu; Myanmar: [ం౦]
+# Telugu; Myanmar: [ంః౦]
 
-0C02          ; Telu; Mymr; L #      (ం)  TELUGU SIGN ANUSVARA
+0C02..0C03    ; Telu; Mymr; L #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
 0C66          ; Telu; Mymr; L #      (౦)  TELUGU DIGIT ZERO
+
+# Total code points: 3
+
+# Telugu; Sinhala: [ంః౦]
+
+0C02..0C03    ; Telu; Sinh; L #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
+0C66          ; Telu; Sinh; L #      (౦)  TELUGU DIGIT ZERO
+
+# Total code points: 3
+
+# Telugu; Tamil: [ం౦]
+
+0C02          ; Telu; Taml; L #      (ం)  TELUGU SIGN ANUSVARA
+0C66          ; Telu; Taml; L #      (౦)  TELUGU DIGIT ZERO
 
 # Total code points: 2
 
@@ -1923,9 +2175,9 @@
 
 # Total code points: 1
 
-# Thai; Hebrew: [ํ]
+# Thai; Hebrew: [๐]
 
-0E4D          ; Thai; Hebr; L #      (ํ)  THAI CHARACTER NIKHAHIT
+0E50          ; Thai; Hebr; L #      (๐)  THAI DIGIT ZERO
 
 # Total code points: 1
 
@@ -1935,13 +2187,12 @@
 
 # Total code points: 1
 
-# Thai; Khmer: [ิ-ื่ํ]
+# Thai; Khmer: [ิ-ืํ]
 
 0E34..0E37    ; Thai; Khmr; L #  [4] (ิ..ื)  THAI CHARACTER SARA I..THAI CHARACTER SARA UEE
-0E48          ; Thai; Khmr; L #      (่)  THAI CHARACTER MAI EK
 0E4D          ; Thai; Khmr; L #      (ํ)  THAI CHARACTER NIKHAHIT
 
-# Total code points: 6
+# Total code points: 5
 
 # Thai; Lao: [จบปฝ-ฟยุู่-๋ํ๐]
 
@@ -1975,11 +2226,18 @@
 
 # Total code points: 2
 
-# Thai; Tamil: [ํ]
+# Thai; Sinhala: [๐]
 
-0E4D          ; Thai; Taml; L #      (ํ)  THAI CHARACTER NIKHAHIT
+0E50          ; Thai; Sinh; L #      (๐)  THAI DIGIT ZERO
 
 # Total code points: 1
+
+# Thai; Tamil: [ํ๐]
+
+0E4D          ; Thai; Taml; L #      (ํ)  THAI CHARACTER NIKHAHIT
+0E50          ; Thai; Taml; L #      (๐)  THAI DIGIT ZERO
+
+# Total code points: 2
 
 # Thai; Telugu: [๐]
 
@@ -1993,40 +2251,18 @@
 
 # Total code points: 1
 
-# Canadian_Aboriginal; Cherokee: [ᐧᐯᑭᑶᑷᒍᒘᒙᒪᒶᒷᔯᔰᕼᖯᗅᗯᗷ]
-
-1427          ; Cans; Cher; L #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
-142F          ; Cans; Cher; L #      (ᐯ)  CANADIAN SYLLABICS PE
-146D          ; Cans; Cher; L #      (ᑭ)  CANADIAN SYLLABICS KI
-1476..1477    ; Cans; Cher; L #  [2] (ᑶ..ᑷ)  CANADIAN SYLLABICS KWI..CANADIAN SYLLABICS WEST-CREE KWI
-148D          ; Cans; Cher; L #      (ᒍ)  CANADIAN SYLLABICS CO
-1498..1499    ; Cans; Cher; L #  [2] (ᒘ..ᒙ)  CANADIAN SYLLABICS CWO..CANADIAN SYLLABICS WEST-CREE CWO
-14AA          ; Cans; Cher; L #      (ᒪ)  CANADIAN SYLLABICS MA
-14B6..14B7    ; Cans; Cher; L #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
-152F..1530    ; Cans; Cher; L #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
-157C          ; Cans; Cher; L #      (ᕼ)  CANADIAN SYLLABICS NUNAVUT H
-15AF          ; Cans; Cher; L #      (ᖯ)  CANADIAN SYLLABICS AIVILIK B
-15C5          ; Cans; Cher; L #      (ᗅ)  CANADIAN SYLLABICS CARRIER GHO
-15EF          ; Cans; Cher; L #      (ᗯ)  CANADIAN SYLLABICS CARRIER GU
-15F7          ; Cans; Cher; L #      (ᗷ)  CANADIAN SYLLABICS CARRIER KHE
-
-# Total code points: 18
-
-# Canadian_Aboriginal; Cyrillic: [ᐧᑭᑯᑶᑷᑺᑻᒪᒶᒷᔯᔰᕁᕽᖯ]
+# Canadian_Aboriginal; Cyrillic: [ᐧᑭᑯᑶᑷᑺᑻᕁᕽᖯ]
 
 1427          ; Cans; Cyrl; L #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
 146D          ; Cans; Cyrl; L #      (ᑭ)  CANADIAN SYLLABICS KI
 146F          ; Cans; Cyrl; L #      (ᑯ)  CANADIAN SYLLABICS KO
 1476..1477    ; Cans; Cyrl; L #  [2] (ᑶ..ᑷ)  CANADIAN SYLLABICS KWI..CANADIAN SYLLABICS WEST-CREE KWI
 147A..147B    ; Cans; Cyrl; L #  [2] (ᑺ..ᑻ)  CANADIAN SYLLABICS KWO..CANADIAN SYLLABICS WEST-CREE KWO
-14AA          ; Cans; Cyrl; L #      (ᒪ)  CANADIAN SYLLABICS MA
-14B6..14B7    ; Cans; Cyrl; L #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
-152F..1530    ; Cans; Cyrl; L #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
 1541          ; Cans; Cyrl; L #      (ᕁ)  CANADIAN SYLLABICS SAYISI YI
 157D          ; Cans; Cyrl; L #      (ᕽ)  CANADIAN SYLLABICS HK
 15AF          ; Cans; Cyrl; L #      (ᖯ)  CANADIAN SYLLABICS AIVILIK B
 
-# Total code points: 15
+# Total code points: 10
 
 # Canadian_Aboriginal; Greek: [ᐧᑭᑶᑷᕷ]
 
@@ -2037,7 +2273,16 @@
 
 # Total code points: 5
 
-# Canadian_Aboriginal; Latin: [ᐧᑭᑯᑶᑷᑺᑻᒪᒶᒷᔯᔰᕁᕽᖯᗯᗰ]
+# Canadian_Aboriginal; Hebrew: [ᐧᒪᒶᒷᔯᔰ]
+
+1427          ; Cans; Hebr; L #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
+14AA          ; Cans; Hebr; L #      (ᒪ)  CANADIAN SYLLABICS MA
+14B6..14B7    ; Cans; Hebr; L #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
+152F..1530    ; Cans; Hebr; L #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
+
+# Total code points: 6
+
+# Canadian_Aboriginal; Latin: [ᐧᑭᑯᑶᑷᑺᑻᒪᒶᒷᔯᔰᕁᕽᖯ]
 
 1427          ; Cans; Latn; L #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
 146D          ; Cans; Latn; L #      (ᑭ)  CANADIAN SYLLABICS KI
@@ -2050,12 +2295,86 @@
 1541          ; Cans; Latn; L #      (ᕁ)  CANADIAN SYLLABICS SAYISI YI
 157D          ; Cans; Latn; L #      (ᕽ)  CANADIAN SYLLABICS HK
 15AF          ; Cans; Latn; L #      (ᖯ)  CANADIAN SYLLABICS AIVILIK B
-15EF..15F0    ; Cans; Latn; L #  [2] (ᗯ..ᗰ)  CANADIAN SYLLABICS CARRIER GU..CANADIAN SYLLABICS CARRIER GO
 
-# Total code points: 17
+# Total code points: 15
+
+# Canadian_Aboriginal; Tifinagh: [ᐃᐎᐏᐧᐯᐱᒪᒶᒷᔯᔰ]
+
+1403          ; Cans; Tfng; L #      (ᐃ)  CANADIAN SYLLABICS I
+140E..140F    ; Cans; Tfng; L #  [2] (ᐎ..ᐏ)  CANADIAN SYLLABICS WI..CANADIAN SYLLABICS WEST-CREE WI
+1427          ; Cans; Tfng; L #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
+142F          ; Cans; Tfng; L #      (ᐯ)  CANADIAN SYLLABICS PE
+1431          ; Cans; Tfng; L #      (ᐱ)  CANADIAN SYLLABICS PI
+14AA          ; Cans; Tfng; L #      (ᒪ)  CANADIAN SYLLABICS MA
+14B6..14B7    ; Cans; Tfng; L #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
+152F..1530    ; Cans; Tfng; L #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
+
+# Total code points: 11
+
+# Tifinagh; Bengali: [ⴱⵔ]
+
+2D31          ; Tfng; Beng; L #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Beng; L #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Greek: [ⴱⵔ]
+
+2D31          ; Tfng; Grek; L #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Grek; L #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Han: [ⴱⵔ]
+
+2D31          ; Tfng; Hani; L #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Hani; L #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Hebrew: [ⵏ]
+
+2D4F          ; Tfng; Hebr; L #      (ⵏ)  TIFINAGH LETTER YAN
+
+# Total code points: 1
+
+# Tifinagh; Latin: [ⵏ]
+
+2D4F          ; Tfng; Latn; L #      (ⵏ)  TIFINAGH LETTER YAN
+
+# Total code points: 1
+
+# Tifinagh; Malayalam: [ⴱⵔ]
+
+2D31          ; Tfng; Mlym; L #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Mlym; L #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Oriya: [ⴱⵔ]
+
+2D31          ; Tfng; Orya; L #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Orya; L #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Canadian_Aboriginal: [ⴷⴸⵏⵠ]
+
+2D37..2D38    ; Tfng; Cans; L #  [2] (ⴷ..ⴸ)  TIFINAGH LETTER YAD..TIFINAGH LETTER YADH
+2D4F          ; Tfng; Cans; L #      (ⵏ)  TIFINAGH LETTER YAN
+2D60          ; Tfng; Cans; L #      (ⵠ)  TIFINAGH LETTER YAV
+
+# Total code points: 4
 
 
 # Any-Case
+
+# Arabic; Latin: [ةۃ]
+
+0629          ; Arab; Latn; A #      (ة)  ARABIC LETTER TEH MARBUTA
+06C3          ; Arab; Latn; A #      (ۃ)  ARABIC LETTER TEH MARBUTA GOAL
+
+# Total code points: 2
 
 # Armenian; Bengali: [Օ]
 
@@ -2063,22 +2382,22 @@
 
 # Total code points: 1
 
-# Armenian; Cherokee: [Օհ]
-
-0555          ; Armn; Cher; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
-0570          ; Armn; Cher; A #      (հ)  ARMENIAN SMALL LETTER HO
-
-# Total code points: 2
-
-# Armenian; Cyrillic: [ՅՕհյօ]
+# Armenian; Cyrillic: [ՅՏՓՕագզհյոռսօ]
 
 0545          ; Armn; Cyrl; A #      (Յ)  ARMENIAN CAPITAL LETTER YI
+054F          ; Armn; Cyrl; A #      (Տ)  ARMENIAN CAPITAL LETTER TIWN
+0553          ; Armn; Cyrl; A #      (Փ)  ARMENIAN CAPITAL LETTER PIWR
 0555          ; Armn; Cyrl; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
+0561          ; Armn; Cyrl; A #      (ա)  ARMENIAN SMALL LETTER AYB
+0563          ; Armn; Cyrl; A #      (գ)  ARMENIAN SMALL LETTER GIM
+0566          ; Armn; Cyrl; A #      (զ)  ARMENIAN SMALL LETTER ZA
 0570          ; Armn; Cyrl; A #      (հ)  ARMENIAN SMALL LETTER HO
 0575          ; Armn; Cyrl; A #      (յ)  ARMENIAN SMALL LETTER YI
+0578          ; Armn; Cyrl; A #      (ո)  ARMENIAN SMALL LETTER VO
+057C..057D    ; Armn; Cyrl; A #  [2] (ռ..ս)  ARMENIAN SMALL LETTER RA..ARMENIAN SMALL LETTER SEH
 0585          ; Armn; Cyrl; A #      (օ)  ARMENIAN SMALL LETTER OH
 
-# Total code points: 5
+# Total code points: 13
 
 # Armenian; Devanagari: [օ]
 
@@ -2086,15 +2405,16 @@
 
 # Total code points: 1
 
-# Armenian; Greek: [Օծոռսօ]
+# Armenian; Greek: [ՓՕծոռսօ]
 
+0553          ; Armn; Grek; A #      (Փ)  ARMENIAN CAPITAL LETTER PIWR
 0555          ; Armn; Grek; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
 056E          ; Armn; Grek; A #      (ծ)  ARMENIAN SMALL LETTER CA
 0578          ; Armn; Grek; A #      (ո)  ARMENIAN SMALL LETTER VO
 057C..057D    ; Armn; Grek; A #  [2] (ռ..ս)  ARMENIAN SMALL LETTER RA..ARMENIAN SMALL LETTER SEH
 0585          ; Armn; Grek; A #      (օ)  ARMENIAN SMALL LETTER OH
 
-# Total code points: 6
+# Total code points: 7
 
 # Armenian; Gujarati: [օ]
 
@@ -2114,6 +2434,12 @@
 
 # Total code points: 1
 
+# Armenian; Hebrew: [օ]
+
+0585          ; Armn; Hebr; A #      (օ)  ARMENIAN SMALL LETTER OH
+
+# Total code points: 1
+
 # Armenian; Kannada: [օ]
 
 0585          ; Armn; Knda; A #      (օ)  ARMENIAN SMALL LETTER OH
@@ -2126,10 +2452,12 @@
 
 # Total code points: 1
 
-# Armenian; Latin: [ԳՕգզհյոռսցքօ]
+# Armenian; Latin: [ՍՏՕագզհյոռսցքօ]
 
-0533          ; Armn; Latn; A #      (Գ)  ARMENIAN CAPITAL LETTER GIM
+054D          ; Armn; Latn; A #      (Ս)  ARMENIAN CAPITAL LETTER SEH
+054F          ; Armn; Latn; A #      (Տ)  ARMENIAN CAPITAL LETTER TIWN
 0555          ; Armn; Latn; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
+0561          ; Armn; Latn; A #      (ա)  ARMENIAN SMALL LETTER AYB
 0563          ; Armn; Latn; A #      (գ)  ARMENIAN SMALL LETTER GIM
 0566          ; Armn; Latn; A #      (զ)  ARMENIAN SMALL LETTER ZA
 0570          ; Armn; Latn; A #      (հ)  ARMENIAN SMALL LETTER HO
@@ -2139,7 +2467,7 @@
 0581          ; Armn; Latn; A #      (ց)  ARMENIAN SMALL LETTER CO
 0584..0585    ; Armn; Latn; A #  [2] (ք..օ)  ARMENIAN SMALL LETTER KEH..ARMENIAN SMALL LETTER OH
 
-# Total code points: 12
+# Total code points: 14
 
 # Armenian; Malayalam: [Օօ]
 
@@ -2147,12 +2475,6 @@
 0585          ; Armn; Mlym; A #      (օ)  ARMENIAN SMALL LETTER OH
 
 # Total code points: 2
-
-# Armenian; Mongolian: [Օ]
-
-0555          ; Armn; Mong; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
-
-# Total code points: 1
 
 # Armenian; Myanmar: [օ]
 
@@ -2163,6 +2485,18 @@
 # Armenian; Oriya: [Օ]
 
 0555          ; Armn; Orya; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
+
+# Total code points: 1
+
+# Armenian; Sinhala: [օ]
+
+0585          ; Armn; Sinh; A #      (օ)  ARMENIAN SMALL LETTER OH
+
+# Total code points: 1
+
+# Armenian; Tamil: [օ]
+
+0585          ; Armn; Taml; A #      (օ)  ARMENIAN SMALL LETTER OH
 
 # Total code points: 1
 
@@ -2178,9 +2512,17 @@
 
 # Total code points: 1
 
-# Armenian; Canadian_Aboriginal: [ծ]
+# Armenian; Canadian_Aboriginal: [ՈՍծ]
 
+0548          ; Armn; Cans; A #      (Ո)  ARMENIAN CAPITAL LETTER VO
+054D          ; Armn; Cans; A #      (Ս)  ARMENIAN CAPITAL LETTER SEH
 056E          ; Armn; Cans; A #      (ծ)  ARMENIAN SMALL LETTER CA
+
+# Total code points: 3
+
+# Armenian; Tifinagh: [Օ]
+
+0555          ; Armn; Tfng; A #      (Օ)  ARMENIAN CAPITAL LETTER OH
 
 # Total code points: 1
 
@@ -2190,23 +2532,18 @@
 
 # Total code points: 1
 
-# Bengali; Cherokee: [০]
-
-09E6          ; Beng; Cher; A #      (০)  BENGALI DIGIT ZERO
-
-# Total code points: 1
-
 # Bengali; Cyrillic: [০]
 
 09E6          ; Beng; Cyrl; A #      (০)  BENGALI DIGIT ZERO
 
 # Total code points: 1
 
-# Bengali; Devanagari: [়]
+# Bengali; Devanagari: [ঁ়]
 
+0981          ; Beng; Deva; A #      (ঁ)  BENGALI SIGN CANDRABINDU
 09BC          ; Beng; Deva; A #      (়)  BENGALI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Bengali; Greek: [০]
 
@@ -2214,19 +2551,21 @@
 
 # Total code points: 1
 
-# Bengali; Gujarati: [়]
+# Bengali; Gujarati: [ঁ়]
 
+0981          ; Beng; Gujr; A #      (ঁ)  BENGALI SIGN CANDRABINDU
 09BC          ; Beng; Gujr; A #      (়)  BENGALI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
-# Bengali; Gurmukhi: [়৪৭]
+# Bengali; Gurmukhi: [ঃ়৪৭]
 
+0983          ; Beng; Guru; A #      (ঃ)  BENGALI SIGN VISARGA
 09BC          ; Beng; Guru; A #      (়)  BENGALI SIGN NUKTA
 09EA          ; Beng; Guru; A #      (৪)  BENGALI DIGIT FOUR
 09ED          ; Beng; Guru; A #      (৭)  BENGALI DIGIT SEVEN
 
-# Total code points: 3
+# Total code points: 4
 
 # Bengali; Han: [০]
 
@@ -2234,214 +2573,91 @@
 
 # Total code points: 1
 
-# Bengali; Latin: [০৪]
+# Bengali; Kannada: [ঃ]
+
+0983          ; Beng; Knda; A #      (ঃ)  BENGALI SIGN VISARGA
+
+# Total code points: 1
+
+# Bengali; Latin: [০]
 
 09E6          ; Beng; Latn; A #      (০)  BENGALI DIGIT ZERO
-09EA          ; Beng; Latn; A #      (৪)  BENGALI DIGIT FOUR
+
+# Total code points: 1
+
+# Bengali; Malayalam: [ঃ০]
+
+0983          ; Beng; Mlym; A #      (ঃ)  BENGALI SIGN VISARGA
+09E6          ; Beng; Mlym; A #      (০)  BENGALI DIGIT ZERO
 
 # Total code points: 2
 
-# Bengali; Malayalam: [০]
+# Bengali; Myanmar: [ঃ]
 
-09E6          ; Beng; Mlym; A #      (০)  BENGALI DIGIT ZERO
-
-# Total code points: 1
-
-# Bengali; Mongolian: [০]
-
-09E6          ; Beng; Mong; A #      (০)  BENGALI DIGIT ZERO
+0983          ; Beng; Mymr; A #      (ঃ)  BENGALI SIGN VISARGA
 
 # Total code points: 1
 
-# Bengali; Oriya: [়০৪৭]
+# Bengali; Oriya: [ঁ়০৪৭]
 
+0981          ; Beng; Orya; A #      (ঁ)  BENGALI SIGN CANDRABINDU
 09BC          ; Beng; Orya; A #      (়)  BENGALI SIGN NUKTA
 09E6          ; Beng; Orya; A #      (০)  BENGALI DIGIT ZERO
 09EA          ; Beng; Orya; A #      (৪)  BENGALI DIGIT FOUR
 09ED          ; Beng; Orya; A #      (৭)  BENGALI DIGIT SEVEN
 
-# Total code points: 4
+# Total code points: 5
 
-# Cherokee; Armenian: [ᎾᏂᏲ]
+# Bengali; Sinhala: [ঃ]
 
-13BE          ; Cher; Armn; A #      (Ꮎ)  CHEROKEE LETTER NA
-13C2          ; Cher; Armn; A #      (Ꮒ)  CHEROKEE LETTER NI
-13F2          ; Cher; Armn; A #      (Ᏺ)  CHEROKEE LETTER YO
-
-# Total code points: 3
-
-# Cherokee; Bengali: [Ꮎ]
-
-13BE          ; Cher; Beng; A #      (Ꮎ)  CHEROKEE LETTER NA
+0983          ; Beng; Sinh; A #      (ঃ)  BENGALI SIGN VISARGA
 
 # Total code points: 1
 
-# Cherokee; Cyrillic: [ᎥᎩ-ᎬᎱᎷᎻᎽᎾᏀᏂᏏᏕᏙᏚᏞᏟᏢᏦᏧᏲ-Ᏼ]
+# Bengali; Telugu: [ঃ]
 
-13A5          ; Cher; Cyrl; A #      (Ꭵ)  CHEROKEE LETTER V
-13A9..13AC    ; Cher; Cyrl; A #  [4] (Ꭹ..Ꭼ)  CHEROKEE LETTER GI..CHEROKEE LETTER GV
-13B1          ; Cher; Cyrl; A #      (Ꮁ)  CHEROKEE LETTER HU
-13B7          ; Cher; Cyrl; A #      (Ꮇ)  CHEROKEE LETTER LU
-13BB          ; Cher; Cyrl; A #      (Ꮋ)  CHEROKEE LETTER MI
-13BD..13BE    ; Cher; Cyrl; A #  [2] (Ꮍ..Ꮎ)  CHEROKEE LETTER MU..CHEROKEE LETTER NA
-13C0          ; Cher; Cyrl; A #      (Ꮐ)  CHEROKEE LETTER NAH
-13C2          ; Cher; Cyrl; A #      (Ꮒ)  CHEROKEE LETTER NI
-13CF          ; Cher; Cyrl; A #      (Ꮟ)  CHEROKEE LETTER SI
-13D5          ; Cher; Cyrl; A #      (Ꮥ)  CHEROKEE LETTER DE
-13D9..13DA    ; Cher; Cyrl; A #  [2] (Ꮩ..Ꮪ)  CHEROKEE LETTER DO..CHEROKEE LETTER DU
-13DE..13DF    ; Cher; Cyrl; A #  [2] (Ꮮ..Ꮯ)  CHEROKEE LETTER TLE..CHEROKEE LETTER TLI
-13E2          ; Cher; Cyrl; A #      (Ꮲ)  CHEROKEE LETTER TLV
-13E6..13E7    ; Cher; Cyrl; A #  [2] (Ꮶ..Ꮷ)  CHEROKEE LETTER TSO..CHEROKEE LETTER TSU
-13F2..13F4    ; Cher; Cyrl; A #  [3] (Ᏺ..Ᏼ)  CHEROKEE LETTER YO..CHEROKEE LETTER YV
+0983          ; Beng; Telu; A #      (ঃ)  BENGALI SIGN VISARGA
 
-# Total code points: 24
+# Total code points: 1
 
-# Cherokee; Georgian: [ᎩᎽ]
+# Bengali; Tifinagh: [০]
 
-13A9          ; Cher; Geor; A #      (Ꭹ)  CHEROKEE LETTER GI
-13BD          ; Cher; Geor; A #      (Ꮍ)  CHEROKEE LETTER MU
+09E6          ; Beng; Tfng; A #      (০)  BENGALI DIGIT ZERO
+
+# Total code points: 1
+
+# Cyrillic; Armenian: [ЅЗОФопцјћҘһӠӨөԛԝ]
+
+0405          ; Cyrl; Armn; A #      (Ѕ)  CYRILLIC CAPITAL LETTER DZE
+0417          ; Cyrl; Armn; A #      (З)  CYRILLIC CAPITAL LETTER ZE
+041E          ; Cyrl; Armn; A #      (О)  CYRILLIC CAPITAL LETTER O
+0424          ; Cyrl; Armn; A #      (Ф)  CYRILLIC CAPITAL LETTER EF
+043E..043F    ; Cyrl; Armn; A #  [2] (о..п)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER PE
+0446          ; Cyrl; Armn; A #      (ц)  CYRILLIC SMALL LETTER TSE
+0458          ; Cyrl; Armn; A #      (ј)  CYRILLIC SMALL LETTER JE
+045B          ; Cyrl; Armn; A #      (ћ)  CYRILLIC SMALL LETTER TSHE
+0498          ; Cyrl; Armn; A #      (Ҙ)  CYRILLIC CAPITAL LETTER ZE WITH DESCENDER
+04BB          ; Cyrl; Armn; A #      (һ)  CYRILLIC SMALL LETTER SHHA
+04E0          ; Cyrl; Armn; A #      (Ӡ)  CYRILLIC CAPITAL LETTER ABKHASIAN DZE
+04E8..04E9    ; Cyrl; Armn; A #  [2] (Ө..ө)  CYRILLIC CAPITAL LETTER BARRED O..CYRILLIC SMALL LETTER BARRED O
+051B          ; Cyrl; Armn; A #      (ԛ)  CYRILLIC SMALL LETTER QA
+051D          ; Cyrl; Armn; A #      (ԝ)  CYRILLIC SMALL LETTER WE
+
+# Total code points: 16
+
+# Cyrillic; Bengali: [ОӨ]
+
+041E          ; Cyrl; Beng; A #      (О)  CYRILLIC CAPITAL LETTER O
+04E8          ; Cyrl; Beng; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
 
 # Total code points: 2
 
-# Cherokee; Greek: [ᎥᎪᎬᎱᎷᎻᎾᏃᏞᏟᏢᏦᏴ]
-
-13A5          ; Cher; Grek; A #      (Ꭵ)  CHEROKEE LETTER V
-13AA          ; Cher; Grek; A #      (Ꭺ)  CHEROKEE LETTER GO
-13AC          ; Cher; Grek; A #      (Ꭼ)  CHEROKEE LETTER GV
-13B1          ; Cher; Grek; A #      (Ꮁ)  CHEROKEE LETTER HU
-13B7          ; Cher; Grek; A #      (Ꮇ)  CHEROKEE LETTER LU
-13BB          ; Cher; Grek; A #      (Ꮋ)  CHEROKEE LETTER MI
-13BE          ; Cher; Grek; A #      (Ꮎ)  CHEROKEE LETTER NA
-13C3          ; Cher; Grek; A #      (Ꮓ)  CHEROKEE LETTER NO
-13DE..13DF    ; Cher; Grek; A #  [2] (Ꮮ..Ꮯ)  CHEROKEE LETTER TLE..CHEROKEE LETTER TLI
-13E2          ; Cher; Grek; A #      (Ꮲ)  CHEROKEE LETTER TLV
-13E6          ; Cher; Grek; A #      (Ꮶ)  CHEROKEE LETTER TSO
-13F4          ; Cher; Grek; A #      (Ᏼ)  CHEROKEE LETTER YV
-
-# Total code points: 13
-
-# Cherokee; Han: [Ꮎ]
-
-13BE          ; Cher; Hani; A #      (Ꮎ)  CHEROKEE LETTER NA
-
-# Total code points: 1
-
-# Cherokee; Latin: [ᎥᎩ-ᎬᎳᎷᎻᎽᎾᏀᏂᏃᏏᏔᏕᏙᏚᏞᏟᏢᏦᏧᏲ-Ᏼ]
-
-13A5          ; Cher; Latn; A #      (Ꭵ)  CHEROKEE LETTER V
-13A9..13AC    ; Cher; Latn; A #  [4] (Ꭹ..Ꭼ)  CHEROKEE LETTER GI..CHEROKEE LETTER GV
-13B3          ; Cher; Latn; A #      (Ꮃ)  CHEROKEE LETTER LA
-13B7          ; Cher; Latn; A #      (Ꮇ)  CHEROKEE LETTER LU
-13BB          ; Cher; Latn; A #      (Ꮋ)  CHEROKEE LETTER MI
-13BD..13BE    ; Cher; Latn; A #  [2] (Ꮍ..Ꮎ)  CHEROKEE LETTER MU..CHEROKEE LETTER NA
-13C0          ; Cher; Latn; A #      (Ꮐ)  CHEROKEE LETTER NAH
-13C2..13C3    ; Cher; Latn; A #  [2] (Ꮒ..Ꮓ)  CHEROKEE LETTER NI..CHEROKEE LETTER NO
-13CF          ; Cher; Latn; A #      (Ꮟ)  CHEROKEE LETTER SI
-13D4..13D5    ; Cher; Latn; A #  [2] (Ꮤ..Ꮥ)  CHEROKEE LETTER TA..CHEROKEE LETTER DE
-13D9..13DA    ; Cher; Latn; A #  [2] (Ꮩ..Ꮪ)  CHEROKEE LETTER DO..CHEROKEE LETTER DU
-13DE..13DF    ; Cher; Latn; A #  [2] (Ꮮ..Ꮯ)  CHEROKEE LETTER TLE..CHEROKEE LETTER TLI
-13E2          ; Cher; Latn; A #      (Ꮲ)  CHEROKEE LETTER TLV
-13E6..13E7    ; Cher; Latn; A #  [2] (Ꮶ..Ꮷ)  CHEROKEE LETTER TSO..CHEROKEE LETTER TSU
-13F2..13F4    ; Cher; Latn; A #  [3] (Ᏺ..Ᏼ)  CHEROKEE LETTER YO..CHEROKEE LETTER YV
-
-# Total code points: 26
-
-# Cherokee; Malayalam: [Ꮎ]
-
-13BE          ; Cher; Mlym; A #      (Ꮎ)  CHEROKEE LETTER NA
-
-# Total code points: 1
-
-# Cherokee; Mongolian: [Ꮎ]
-
-13BE          ; Cher; Mong; A #      (Ꮎ)  CHEROKEE LETTER NA
-
-# Total code points: 1
-
-# Cherokee; Oriya: [Ꮎ]
-
-13BE          ; Cher; Orya; A #      (Ꮎ)  CHEROKEE LETTER NA
-
-# Total code points: 1
-
-# Cherokee; Canadian_Aboriginal: [ᎪᎫᎳᎻᏏᏔᏙᏞᏢᏧᏴ]
-
-13AA..13AB    ; Cher; Cans; A #  [2] (Ꭺ..Ꭻ)  CHEROKEE LETTER GO..CHEROKEE LETTER GU
-13B3          ; Cher; Cans; A #      (Ꮃ)  CHEROKEE LETTER LA
-13BB          ; Cher; Cans; A #      (Ꮋ)  CHEROKEE LETTER MI
-13CF          ; Cher; Cans; A #      (Ꮟ)  CHEROKEE LETTER SI
-13D4          ; Cher; Cans; A #      (Ꮤ)  CHEROKEE LETTER TA
-13D9          ; Cher; Cans; A #      (Ꮩ)  CHEROKEE LETTER DO
-13DE          ; Cher; Cans; A #      (Ꮮ)  CHEROKEE LETTER TLE
-13E2          ; Cher; Cans; A #      (Ꮲ)  CHEROKEE LETTER TLV
-13E7          ; Cher; Cans; A #      (Ꮷ)  CHEROKEE LETTER TSU
-13F4          ; Cher; Cans; A #      (Ᏼ)  CHEROKEE LETTER YV
-
-# Total code points: 11
-
-# Cyrillic; Armenian: [ЗОојћѲѳҘһӨө]
-
-0417          ; Cyrl; Armn; A #      (З)  CYRILLIC CAPITAL LETTER ZE
-041E          ; Cyrl; Armn; A #      (О)  CYRILLIC CAPITAL LETTER O
-043E          ; Cyrl; Armn; A #      (о)  CYRILLIC SMALL LETTER O
-0458          ; Cyrl; Armn; A #      (ј)  CYRILLIC SMALL LETTER JE
-045B          ; Cyrl; Armn; A #      (ћ)  CYRILLIC SMALL LETTER TSHE
-0472..0473    ; Cyrl; Armn; A #  [2] (Ѳ..ѳ)  CYRILLIC CAPITAL LETTER FITA..CYRILLIC SMALL LETTER FITA
-0498          ; Cyrl; Armn; A #      (Ҙ)  CYRILLIC CAPITAL LETTER ZE WITH DESCENDER
-04BB          ; Cyrl; Armn; A #      (һ)  CYRILLIC SMALL LETTER SHHA
-04E8..04E9    ; Cyrl; Armn; A #  [2] (Ө..ө)  CYRILLIC CAPITAL LETTER BARRED O..CYRILLIC SMALL LETTER BARRED O
-
-# Total code points: 11
-
-# Cyrillic; Bengali: [ОѲӨ]
-
-041E          ; Cyrl; Beng; A #      (О)  CYRILLIC CAPITAL LETTER O
-0472          ; Cyrl; Beng; A #      (Ѳ)  CYRILLIC CAPITAL LETTER FITA
-04E8          ; Cyrl; Beng; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
-
-# Total code points: 3
-
-# Cyrillic; Cherokee: [ЅІЈА-ГЕКМ-ОРСруъіћѲѴҐҒҚҞҢҪүұһӀӇӉӍӨԌ]
-
-0405..0406    ; Cyrl; Cher; A #  [2] (Ѕ..І)  CYRILLIC CAPITAL LETTER DZE..CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
-0408          ; Cyrl; Cher; A #      (Ј)  CYRILLIC CAPITAL LETTER JE
-0410..0413    ; Cyrl; Cher; A #  [4] (А..Г)  CYRILLIC CAPITAL LETTER A..CYRILLIC CAPITAL LETTER GHE
-0415          ; Cyrl; Cher; A #      (Е)  CYRILLIC CAPITAL LETTER IE
-041A          ; Cyrl; Cher; A #      (К)  CYRILLIC CAPITAL LETTER KA
-041C..041E    ; Cyrl; Cher; A #  [3] (М..О)  CYRILLIC CAPITAL LETTER EM..CYRILLIC CAPITAL LETTER O
-0420..0421    ; Cyrl; Cher; A #  [2] (Р..С)  CYRILLIC CAPITAL LETTER ER..CYRILLIC CAPITAL LETTER ES
-0440          ; Cyrl; Cher; A #      (р)  CYRILLIC SMALL LETTER ER
-0443          ; Cyrl; Cher; A #      (у)  CYRILLIC SMALL LETTER U
-044A          ; Cyrl; Cher; A #      (ъ)  CYRILLIC SMALL LETTER HARD SIGN
-0456          ; Cyrl; Cher; A #      (і)  CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
-045B          ; Cyrl; Cher; A #      (ћ)  CYRILLIC SMALL LETTER TSHE
-0472          ; Cyrl; Cher; A #      (Ѳ)  CYRILLIC CAPITAL LETTER FITA
-0474          ; Cyrl; Cher; A #      (Ѵ)  CYRILLIC CAPITAL LETTER IZHITSA
-0490          ; Cyrl; Cher; A #      (Ґ)  CYRILLIC CAPITAL LETTER GHE WITH UPTURN
-0492          ; Cyrl; Cher; A #      (Ғ)  CYRILLIC CAPITAL LETTER GHE WITH STROKE
-049A          ; Cyrl; Cher; A #      (Қ)  CYRILLIC CAPITAL LETTER KA WITH DESCENDER
-049E          ; Cyrl; Cher; A #      (Ҟ)  CYRILLIC CAPITAL LETTER KA WITH STROKE
-04A2          ; Cyrl; Cher; A #      (Ң)  CYRILLIC CAPITAL LETTER EN WITH DESCENDER
-04AA          ; Cyrl; Cher; A #      (Ҫ)  CYRILLIC CAPITAL LETTER ES WITH DESCENDER
-04AF          ; Cyrl; Cher; A #      (ү)  CYRILLIC SMALL LETTER STRAIGHT U
-04B1          ; Cyrl; Cher; A #      (ұ)  CYRILLIC SMALL LETTER STRAIGHT U WITH STROKE
-04BB          ; Cyrl; Cher; A #      (һ)  CYRILLIC SMALL LETTER SHHA
-04C0          ; Cyrl; Cher; A #      (Ӏ)  CYRILLIC LETTER PALOCHKA
-04C7          ; Cyrl; Cher; A #      (Ӈ)  CYRILLIC CAPITAL LETTER EN WITH HOOK
-04C9          ; Cyrl; Cher; A #      (Ӊ)  CYRILLIC CAPITAL LETTER EN WITH TAIL
-04CD          ; Cyrl; Cher; A #      (Ӎ)  CYRILLIC CAPITAL LETTER EM WITH TAIL
-04E8          ; Cyrl; Cher; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
-050C          ; Cyrl; Cher; A #      (Ԍ)  CYRILLIC CAPITAL LETTER KOMI SJE
-
-# Total code points: 36
-
-# Cyrillic; Devanagari: [оѳө]
+# Cyrillic; Devanagari: [оө]
 
 043E          ; Cyrl; Deva; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Deva; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Deva; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
 # Cyrillic; Georgian: [уүұ]
 
@@ -2451,82 +2667,84 @@
 
 # Total code points: 3
 
-# Cyrillic; Greek: [ІАВГЕКМ-ТФХко-сфєіѲѳѵҐҒҚқҞҟҢҪ-ҬҮҰҲӀӇӉӍӨө]
+# Cyrillic; Greek: [ІАВГЕК-РТФХако-рт-фцєіҐҒҚқҞҟҢҬ-ҲӅӇӉӍӏӨөԑ]
 
 0406          ; Cyrl; Grek; A #      (І)  CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 0410          ; Cyrl; Grek; A #      (А)  CYRILLIC CAPITAL LETTER A
 0412..0413    ; Cyrl; Grek; A #  [2] (В..Г)  CYRILLIC CAPITAL LETTER VE..CYRILLIC CAPITAL LETTER GHE
 0415          ; Cyrl; Grek; A #      (Е)  CYRILLIC CAPITAL LETTER IE
-041A          ; Cyrl; Grek; A #      (К)  CYRILLIC CAPITAL LETTER KA
-041C..0422    ; Cyrl; Grek; A #  [7] (М..Т)  CYRILLIC CAPITAL LETTER EM..CYRILLIC CAPITAL LETTER TE
+041A..0420    ; Cyrl; Grek; A #  [7] (К..Р)  CYRILLIC CAPITAL LETTER KA..CYRILLIC CAPITAL LETTER ER
+0422          ; Cyrl; Grek; A #      (Т)  CYRILLIC CAPITAL LETTER TE
 0424..0425    ; Cyrl; Grek; A #  [2] (Ф..Х)  CYRILLIC CAPITAL LETTER EF..CYRILLIC CAPITAL LETTER HA
+0430          ; Cyrl; Grek; A #      (а)  CYRILLIC SMALL LETTER A
 043A          ; Cyrl; Grek; A #      (к)  CYRILLIC SMALL LETTER KA
-043E..0441    ; Cyrl; Grek; A #  [4] (о..с)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER ES
-0444          ; Cyrl; Grek; A #      (ф)  CYRILLIC SMALL LETTER EF
+043E..0440    ; Cyrl; Grek; A #  [3] (о..р)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER ER
+0442..0444    ; Cyrl; Grek; A #  [3] (т..ф)  CYRILLIC SMALL LETTER TE..CYRILLIC SMALL LETTER EF
+0446          ; Cyrl; Grek; A #      (ц)  CYRILLIC SMALL LETTER TSE
 0454          ; Cyrl; Grek; A #      (є)  CYRILLIC SMALL LETTER UKRAINIAN IE
 0456          ; Cyrl; Grek; A #      (і)  CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
-0472..0473    ; Cyrl; Grek; A #  [2] (Ѳ..ѳ)  CYRILLIC CAPITAL LETTER FITA..CYRILLIC SMALL LETTER FITA
-0475          ; Cyrl; Grek; A #      (ѵ)  CYRILLIC SMALL LETTER IZHITSA
 0490          ; Cyrl; Grek; A #      (Ґ)  CYRILLIC CAPITAL LETTER GHE WITH UPTURN
 0492          ; Cyrl; Grek; A #      (Ғ)  CYRILLIC CAPITAL LETTER GHE WITH STROKE
 049A..049B    ; Cyrl; Grek; A #  [2] (Қ..қ)  CYRILLIC CAPITAL LETTER KA WITH DESCENDER..CYRILLIC SMALL LETTER KA WITH DESCENDER
 049E..049F    ; Cyrl; Grek; A #  [2] (Ҟ..ҟ)  CYRILLIC CAPITAL LETTER KA WITH STROKE..CYRILLIC SMALL LETTER KA WITH STROKE
 04A2          ; Cyrl; Grek; A #      (Ң)  CYRILLIC CAPITAL LETTER EN WITH DESCENDER
-04AA..04AC    ; Cyrl; Grek; A #  [3] (Ҫ..Ҭ)  CYRILLIC CAPITAL LETTER ES WITH DESCENDER..CYRILLIC CAPITAL LETTER TE WITH DESCENDER
-04AE          ; Cyrl; Grek; A #      (Ү)  CYRILLIC CAPITAL LETTER STRAIGHT U
-04B0          ; Cyrl; Grek; A #      (Ұ)  CYRILLIC CAPITAL LETTER STRAIGHT U WITH STROKE
-04B2          ; Cyrl; Grek; A #      (Ҳ)  CYRILLIC CAPITAL LETTER HA WITH DESCENDER
-04C0          ; Cyrl; Grek; A #      (Ӏ)  CYRILLIC LETTER PALOCHKA
+04AC..04B2    ; Cyrl; Grek; A #  [7] (Ҭ..Ҳ)  CYRILLIC CAPITAL LETTER TE WITH DESCENDER..CYRILLIC CAPITAL LETTER HA WITH DESCENDER
+04C5          ; Cyrl; Grek; A #      (Ӆ)  CYRILLIC CAPITAL LETTER EL WITH TAIL
 04C7          ; Cyrl; Grek; A #      (Ӈ)  CYRILLIC CAPITAL LETTER EN WITH HOOK
 04C9          ; Cyrl; Grek; A #      (Ӊ)  CYRILLIC CAPITAL LETTER EN WITH TAIL
 04CD          ; Cyrl; Grek; A #      (Ӎ)  CYRILLIC CAPITAL LETTER EM WITH TAIL
+04CF          ; Cyrl; Grek; A #      (ӏ)  CYRILLIC SMALL LETTER PALOCHKA
 04E8..04E9    ; Cyrl; Grek; A #  [2] (Ө..ө)  CYRILLIC CAPITAL LETTER BARRED O..CYRILLIC SMALL LETTER BARRED O
+0511          ; Cyrl; Grek; A #      (ԑ)  CYRILLIC SMALL LETTER REVERSED ZE
 
-# Total code points: 45
+# Total code points: 48
 
-# Cyrillic; Gujarati: [оѳө]
+# Cyrillic; Gujarati: [оө]
 
 043E          ; Cyrl; Gujr; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Gujr; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Gujr; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Gurmukhi: [оѳө]
+# Cyrillic; Gurmukhi: [оө]
 
 043E          ; Cyrl; Guru; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Guru; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Guru; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Han: [ОѲӨ]
+# Cyrillic; Han: [ОӨ]
 
 041E          ; Cyrl; Hani; A #      (О)  CYRILLIC CAPITAL LETTER O
-0472          ; Cyrl; Hani; A #      (Ѳ)  CYRILLIC CAPITAL LETTER FITA
 04E8          ; Cyrl; Hani; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
 
+# Total code points: 2
+
+# Cyrillic; Hebrew: [Іоө]
+
+0406          ; Cyrl; Hebr; A #      (І)  CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
+043E          ; Cyrl; Hebr; A #      (о)  CYRILLIC SMALL LETTER O
+04E9          ; Cyrl; Hebr; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
+
 # Total code points: 3
 
-# Cyrillic; Kannada: [оѳө]
+# Cyrillic; Kannada: [оө]
 
 043E          ; Cyrl; Knda; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Knda; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Knda; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Lao: [оѳө]
+# Cyrillic; Lao: [оө]
 
 043E          ; Cyrl; Laoo; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Laoo; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Laoo; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Latin: [Є-ІЈА-ВЕКМ-ОР-ТХагекорсухъ-ьє-іјћѲ-ѵґғҚқҞҟҢҪ-ҬҮ-ҲһӀӇӉӍӔӕӘәӠӡӨөԁԌ]
+# Cyrillic; Latin: [ЅІЈА-ВЕКМ-ОР-ТХЫЬагеко-ухцъѕіјћҌҍґғҚқҞҟҢҪ-ҲһӇӉӍӏӔӕӨөԁԌԛ-ԝ]
 
-0404..0406    ; Cyrl; Latn; A #  [3] (Є..І)  CYRILLIC CAPITAL LETTER UKRAINIAN IE..CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
+0405..0406    ; Cyrl; Latn; A #  [2] (Ѕ..І)  CYRILLIC CAPITAL LETTER DZE..CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 0408          ; Cyrl; Latn; A #      (Ј)  CYRILLIC CAPITAL LETTER JE
 0410..0412    ; Cyrl; Latn; A #  [3] (А..В)  CYRILLIC CAPITAL LETTER A..CYRILLIC CAPITAL LETTER VE
 0415          ; Cyrl; Latn; A #      (Е)  CYRILLIC CAPITAL LETTER IE
@@ -2534,107 +2752,125 @@
 041C..041E    ; Cyrl; Latn; A #  [3] (М..О)  CYRILLIC CAPITAL LETTER EM..CYRILLIC CAPITAL LETTER O
 0420..0422    ; Cyrl; Latn; A #  [3] (Р..Т)  CYRILLIC CAPITAL LETTER ER..CYRILLIC CAPITAL LETTER TE
 0425          ; Cyrl; Latn; A #      (Х)  CYRILLIC CAPITAL LETTER HA
+042B..042C    ; Cyrl; Latn; A #  [2] (Ы..Ь)  CYRILLIC CAPITAL LETTER YERU..CYRILLIC CAPITAL LETTER SOFT SIGN
 0430          ; Cyrl; Latn; A #      (а)  CYRILLIC SMALL LETTER A
 0433          ; Cyrl; Latn; A #      (г)  CYRILLIC SMALL LETTER GHE
 0435          ; Cyrl; Latn; A #      (е)  CYRILLIC SMALL LETTER IE
 043A          ; Cyrl; Latn; A #      (к)  CYRILLIC SMALL LETTER KA
-043E          ; Cyrl; Latn; A #      (о)  CYRILLIC SMALL LETTER O
-0440..0441    ; Cyrl; Latn; A #  [2] (р..с)  CYRILLIC SMALL LETTER ER..CYRILLIC SMALL LETTER ES
-0443          ; Cyrl; Latn; A #      (у)  CYRILLIC SMALL LETTER U
-0445          ; Cyrl; Latn; A #      (х)  CYRILLIC SMALL LETTER HA
-044A..044C    ; Cyrl; Latn; A #  [3] (ъ..ь)  CYRILLIC SMALL LETTER HARD SIGN..CYRILLIC SMALL LETTER SOFT SIGN
-0454..0456    ; Cyrl; Latn; A #  [3] (є..і)  CYRILLIC SMALL LETTER UKRAINIAN IE..CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
+043E..0443    ; Cyrl; Latn; A #  [6] (о..у)  CYRILLIC SMALL LETTER O..CYRILLIC SMALL LETTER U
+0445..0446    ; Cyrl; Latn; A #  [2] (х..ц)  CYRILLIC SMALL LETTER HA..CYRILLIC SMALL LETTER TSE
+044A          ; Cyrl; Latn; A #      (ъ)  CYRILLIC SMALL LETTER HARD SIGN
+0455..0456    ; Cyrl; Latn; A #  [2] (ѕ..і)  CYRILLIC SMALL LETTER DZE..CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
 0458          ; Cyrl; Latn; A #      (ј)  CYRILLIC SMALL LETTER JE
 045B          ; Cyrl; Latn; A #      (ћ)  CYRILLIC SMALL LETTER TSHE
-0472..0475    ; Cyrl; Latn; A #  [4] (Ѳ..ѵ)  CYRILLIC CAPITAL LETTER FITA..CYRILLIC SMALL LETTER IZHITSA
+048C..048D    ; Cyrl; Latn; A #  [2] (Ҍ..ҍ)  CYRILLIC CAPITAL LETTER SEMISOFT SIGN..CYRILLIC SMALL LETTER SEMISOFT SIGN
 0491          ; Cyrl; Latn; A #      (ґ)  CYRILLIC SMALL LETTER GHE WITH UPTURN
 0493          ; Cyrl; Latn; A #      (ғ)  CYRILLIC SMALL LETTER GHE WITH STROKE
 049A..049B    ; Cyrl; Latn; A #  [2] (Қ..қ)  CYRILLIC CAPITAL LETTER KA WITH DESCENDER..CYRILLIC SMALL LETTER KA WITH DESCENDER
 049E..049F    ; Cyrl; Latn; A #  [2] (Ҟ..ҟ)  CYRILLIC CAPITAL LETTER KA WITH STROKE..CYRILLIC SMALL LETTER KA WITH STROKE
 04A2          ; Cyrl; Latn; A #      (Ң)  CYRILLIC CAPITAL LETTER EN WITH DESCENDER
-04AA..04AC    ; Cyrl; Latn; A #  [3] (Ҫ..Ҭ)  CYRILLIC CAPITAL LETTER ES WITH DESCENDER..CYRILLIC CAPITAL LETTER TE WITH DESCENDER
-04AE..04B2    ; Cyrl; Latn; A #  [5] (Ү..Ҳ)  CYRILLIC CAPITAL LETTER STRAIGHT U..CYRILLIC CAPITAL LETTER HA WITH DESCENDER
+04AA..04B2    ; Cyrl; Latn; A #  [9] (Ҫ..Ҳ)  CYRILLIC CAPITAL LETTER ES WITH DESCENDER..CYRILLIC CAPITAL LETTER HA WITH DESCENDER
 04BB          ; Cyrl; Latn; A #      (һ)  CYRILLIC SMALL LETTER SHHA
-04C0          ; Cyrl; Latn; A #      (Ӏ)  CYRILLIC LETTER PALOCHKA
 04C7          ; Cyrl; Latn; A #      (Ӈ)  CYRILLIC CAPITAL LETTER EN WITH HOOK
 04C9          ; Cyrl; Latn; A #      (Ӊ)  CYRILLIC CAPITAL LETTER EN WITH TAIL
 04CD          ; Cyrl; Latn; A #      (Ӎ)  CYRILLIC CAPITAL LETTER EM WITH TAIL
+04CF          ; Cyrl; Latn; A #      (ӏ)  CYRILLIC SMALL LETTER PALOCHKA
 04D4..04D5    ; Cyrl; Latn; A #  [2] (Ӕ..ӕ)  CYRILLIC CAPITAL LIGATURE A IE..CYRILLIC SMALL LIGATURE A IE
-04D8..04D9    ; Cyrl; Latn; A #  [2] (Ә..ә)  CYRILLIC CAPITAL LETTER SCHWA..CYRILLIC SMALL LETTER SCHWA
-04E0..04E1    ; Cyrl; Latn; A #  [2] (Ӡ..ӡ)  CYRILLIC CAPITAL LETTER ABKHASIAN DZE..CYRILLIC SMALL LETTER ABKHASIAN DZE
 04E8..04E9    ; Cyrl; Latn; A #  [2] (Ө..ө)  CYRILLIC CAPITAL LETTER BARRED O..CYRILLIC SMALL LETTER BARRED O
 0501          ; Cyrl; Latn; A #      (ԁ)  CYRILLIC SMALL LETTER KOMI DE
 050C          ; Cyrl; Latn; A #      (Ԍ)  CYRILLIC CAPITAL LETTER KOMI SJE
+051B..051D    ; Cyrl; Latn; A #  [3] (ԛ..ԝ)  CYRILLIC SMALL LETTER QA..CYRILLIC SMALL LETTER WE
 
-# Total code points: 67
+# Total code points: 66
 
-# Cyrillic; Malayalam: [ОоѲѳӨө]
+# Cyrillic; Malayalam: [ОоӨө]
 
 041E          ; Cyrl; Mlym; A #      (О)  CYRILLIC CAPITAL LETTER O
 043E          ; Cyrl; Mlym; A #      (о)  CYRILLIC SMALL LETTER O
-0472..0473    ; Cyrl; Mlym; A #  [2] (Ѳ..ѳ)  CYRILLIC CAPITAL LETTER FITA..CYRILLIC SMALL LETTER FITA
 04E8..04E9    ; Cyrl; Mlym; A #  [2] (Ө..ө)  CYRILLIC CAPITAL LETTER BARRED O..CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 6
+# Total code points: 4
 
-# Cyrillic; Mongolian: [ОѲӨ]
-
-041E          ; Cyrl; Mong; A #      (О)  CYRILLIC CAPITAL LETTER O
-0472          ; Cyrl; Mong; A #      (Ѳ)  CYRILLIC CAPITAL LETTER FITA
-04E8          ; Cyrl; Mong; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
-
-# Total code points: 3
-
-# Cyrillic; Myanmar: [оѳө]
+# Cyrillic; Myanmar: [оө]
 
 043E          ; Cyrl; Mymr; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Mymr; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Mymr; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Oriya: [ОѲӨ]
+# Cyrillic; Oriya: [ОӨ]
 
 041E          ; Cyrl; Orya; A #      (О)  CYRILLIC CAPITAL LETTER O
-0472          ; Cyrl; Orya; A #      (Ѳ)  CYRILLIC CAPITAL LETTER FITA
 04E8          ; Cyrl; Orya; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Telugu: [оѳө]
+# Cyrillic; Sinhala: [оө]
+
+043E          ; Cyrl; Sinh; A #      (о)  CYRILLIC SMALL LETTER O
+04E9          ; Cyrl; Sinh; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
+
+# Total code points: 2
+
+# Cyrillic; Tamil: [СоҪө]
+
+0421          ; Cyrl; Taml; A #      (С)  CYRILLIC CAPITAL LETTER ES
+043E          ; Cyrl; Taml; A #      (о)  CYRILLIC SMALL LETTER O
+04AA          ; Cyrl; Taml; A #      (Ҫ)  CYRILLIC CAPITAL LETTER ES WITH DESCENDER
+04E9          ; Cyrl; Taml; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
+
+# Total code points: 4
+
+# Cyrillic; Telugu: [оө]
 
 043E          ; Cyrl; Telu; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Telu; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Telu; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Thai: [оѳө]
+# Cyrillic; Thai: [оө]
 
 043E          ; Cyrl; Thai; A #      (о)  CYRILLIC SMALL LETTER O
-0473          ; Cyrl; Thai; A #      (ѳ)  CYRILLIC SMALL LETTER FITA
 04E9          ; Cyrl; Thai; A #      (ө)  CYRILLIC SMALL LETTER BARRED O
 
-# Total code points: 3
+# Total code points: 2
 
-# Cyrillic; Canadian_Aboriginal: [ІЈА-ВНРрхъѴҢӀӇӉԁ]
+# Cyrillic; Canadian_Aboriginal: [ІЈА-ГЛ-НРЬрхъҌҍҐҒҢӅӇӉӍԁ]
 
 0406          ; Cyrl; Cans; A #      (І)  CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 0408          ; Cyrl; Cans; A #      (Ј)  CYRILLIC CAPITAL LETTER JE
-0410..0412    ; Cyrl; Cans; A #  [3] (А..В)  CYRILLIC CAPITAL LETTER A..CYRILLIC CAPITAL LETTER VE
-041D          ; Cyrl; Cans; A #      (Н)  CYRILLIC CAPITAL LETTER EN
+0410..0413    ; Cyrl; Cans; A #  [4] (А..Г)  CYRILLIC CAPITAL LETTER A..CYRILLIC CAPITAL LETTER GHE
+041B..041D    ; Cyrl; Cans; A #  [3] (Л..Н)  CYRILLIC CAPITAL LETTER EL..CYRILLIC CAPITAL LETTER EN
 0420          ; Cyrl; Cans; A #      (Р)  CYRILLIC CAPITAL LETTER ER
+042C          ; Cyrl; Cans; A #      (Ь)  CYRILLIC CAPITAL LETTER SOFT SIGN
 0440          ; Cyrl; Cans; A #      (р)  CYRILLIC SMALL LETTER ER
 0445          ; Cyrl; Cans; A #      (х)  CYRILLIC SMALL LETTER HA
 044A          ; Cyrl; Cans; A #      (ъ)  CYRILLIC SMALL LETTER HARD SIGN
-0474          ; Cyrl; Cans; A #      (Ѵ)  CYRILLIC CAPITAL LETTER IZHITSA
+048C..048D    ; Cyrl; Cans; A #  [2] (Ҍ..ҍ)  CYRILLIC CAPITAL LETTER SEMISOFT SIGN..CYRILLIC SMALL LETTER SEMISOFT SIGN
+0490          ; Cyrl; Cans; A #      (Ґ)  CYRILLIC CAPITAL LETTER GHE WITH UPTURN
+0492          ; Cyrl; Cans; A #      (Ғ)  CYRILLIC CAPITAL LETTER GHE WITH STROKE
 04A2          ; Cyrl; Cans; A #      (Ң)  CYRILLIC CAPITAL LETTER EN WITH DESCENDER
-04C0          ; Cyrl; Cans; A #      (Ӏ)  CYRILLIC LETTER PALOCHKA
+04C5          ; Cyrl; Cans; A #      (Ӆ)  CYRILLIC CAPITAL LETTER EL WITH TAIL
 04C7          ; Cyrl; Cans; A #      (Ӈ)  CYRILLIC CAPITAL LETTER EN WITH HOOK
 04C9          ; Cyrl; Cans; A #      (Ӊ)  CYRILLIC CAPITAL LETTER EN WITH TAIL
+04CD          ; Cyrl; Cans; A #      (Ӎ)  CYRILLIC CAPITAL LETTER EM WITH TAIL
 0501          ; Cyrl; Cans; A #      (ԁ)  CYRILLIC SMALL LETTER KOMI DE
 
-# Total code points: 16
+# Total code points: 24
+
+# Cyrillic; Tifinagh: [ІЕИЛОХҲӅӨ]
+
+0406          ; Cyrl; Tfng; A #      (І)  CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
+0415          ; Cyrl; Tfng; A #      (Е)  CYRILLIC CAPITAL LETTER IE
+0418          ; Cyrl; Tfng; A #      (И)  CYRILLIC CAPITAL LETTER I
+041B          ; Cyrl; Tfng; A #      (Л)  CYRILLIC CAPITAL LETTER EL
+041E          ; Cyrl; Tfng; A #      (О)  CYRILLIC CAPITAL LETTER O
+0425          ; Cyrl; Tfng; A #      (Х)  CYRILLIC CAPITAL LETTER HA
+04B2          ; Cyrl; Tfng; A #      (Ҳ)  CYRILLIC CAPITAL LETTER HA WITH DESCENDER
+04C5          ; Cyrl; Tfng; A #      (Ӆ)  CYRILLIC CAPITAL LETTER EL WITH TAIL
+04E8          ; Cyrl; Tfng; A #      (Ө)  CYRILLIC CAPITAL LETTER BARRED O
+
+# Total code points: 9
 
 # Devanagari; Armenian: [०]
 
@@ -2642,11 +2878,12 @@
 
 # Total code points: 1
 
-# Devanagari; Bengali: [़]
+# Devanagari; Bengali: [ँ़]
 
+0901          ; Deva; Beng; A #      (ँ)  DEVANAGARI SIGN CANDRABINDU
 093C          ; Deva; Beng; A #      (़)  DEVANAGARI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Devanagari; Cyrillic: [०]
 
@@ -2660,9 +2897,9 @@
 
 # Total code points: 1
 
-# Devanagari; Gujarati: [ं़ऽुू्०२-४८]
+# Devanagari; Gujarati: [ँ-ः़ऽुू्०२-४८]
 
-0902          ; Deva; Gujr; A #      (ं)  DEVANAGARI SIGN ANUSVARA
+0901..0903    ; Deva; Gujr; A #  [3] (ँ..ः)  DEVANAGARI SIGN CANDRABINDU..DEVANAGARI SIGN VISARGA
 093C..093D    ; Deva; Gujr; A #  [2] (़..ऽ)  DEVANAGARI SIGN NUKTA..DEVANAGARI SIGN AVAGRAHA
 0941..0942    ; Deva; Gujr; A #  [2] (ु..ू)  DEVANAGARI VOWEL SIGN U..DEVANAGARI VOWEL SIGN UU
 094D          ; Deva; Gujr; A #      (्)  DEVANAGARI SIGN VIRAMA
@@ -2670,7 +2907,7 @@
 0968..096A    ; Deva; Gujr; A #  [3] (२..४)  DEVANAGARI DIGIT TWO..DEVANAGARI DIGIT FOUR
 096E          ; Deva; Gujr; A #      (८)  DEVANAGARI DIGIT EIGHT
 
-# Total code points: 11
+# Total code points: 13
 
 # Devanagari; Gurmukhi: [ं़ॆ्०]
 
@@ -2682,12 +2919,11 @@
 
 # Total code points: 5
 
-# Devanagari; Hebrew: [ं॔]
+# Devanagari; Hebrew: [०]
 
-0902          ; Deva; Hebr; A #      (ं)  DEVANAGARI SIGN ANUSVARA
-0954          ; Deva; Hebr; A #      (॔)  DEVANAGARI ACUTE ACCENT
+0966          ; Deva; Hebr; A #      (०)  DEVANAGARI DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 1
 
 # Devanagari; Kannada: [०]
 
@@ -2719,17 +2955,25 @@
 
 # Total code points: 1
 
-# Devanagari; Oriya: [़]
+# Devanagari; Oriya: [ँ़]
 
+0901          ; Deva; Orya; A #      (ँ)  DEVANAGARI SIGN CANDRABINDU
 093C          ; Deva; Orya; A #      (़)  DEVANAGARI SIGN NUKTA
 
+# Total code points: 2
+
+# Devanagari; Sinhala: [०]
+
+0966          ; Deva; Sinh; A #      (०)  DEVANAGARI DIGIT ZERO
+
 # Total code points: 1
 
-# Devanagari; Tamil: [ं]
+# Devanagari; Tamil: [ं०]
 
 0902          ; Deva; Taml; A #      (ं)  DEVANAGARI SIGN ANUSVARA
+0966          ; Deva; Taml; A #      (०)  DEVANAGARI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Devanagari; Telugu: [०]
 
@@ -2743,15 +2987,15 @@
 
 # Total code points: 1
 
-# Georgian; Cherokee: [ყ]
-
-10E7          ; Geor; Cher; A #      (ყ)  GEORGIAN LETTER QAR
-
-# Total code points: 1
-
 # Georgian; Cyrillic: [ყ]
 
 10E7          ; Geor; Cyrl; A #      (ყ)  GEORGIAN LETTER QAR
+
+# Total code points: 1
+
+# Georgian; Greek: [ყ]
+
+10E7          ; Geor; Grek; A #      (ყ)  GEORGIAN LETTER QAR
 
 # Total code points: 1
 
@@ -2761,159 +3005,193 @@
 
 # Total code points: 1
 
-# Greek; Armenian: [ΘΟδηου]
+# Greek; Armenian: [ΘΟΦδηθοπσυ]
 
 0398          ; Grek; Armn; A #      (Θ)  GREEK CAPITAL LETTER THETA
 039F          ; Grek; Armn; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03A6          ; Grek; Armn; A #      (Φ)  GREEK CAPITAL LETTER PHI
 03B4          ; Grek; Armn; A #      (δ)  GREEK SMALL LETTER DELTA
-03B7          ; Grek; Armn; A #      (η)  GREEK SMALL LETTER ETA
-03BF          ; Grek; Armn; A #      (ο)  GREEK SMALL LETTER OMICRON
+03B7..03B8    ; Grek; Armn; A #  [2] (η..θ)  GREEK SMALL LETTER ETA..GREEK SMALL LETTER THETA
+03BF..03C0    ; Grek; Armn; A #  [2] (ο..π)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER PI
+03C3          ; Grek; Armn; A #      (σ)  GREEK SMALL LETTER SIGMA
 03C5          ; Grek; Armn; A #      (υ)  GREEK SMALL LETTER UPSILON
 
-# Total code points: 6
+# Total code points: 10
 
-# Greek; Bengali: [ΘΟ]
+# Greek; Bengali: [ΘΟθ]
 
 0398          ; Grek; Beng; A #      (Θ)  GREEK CAPITAL LETTER THETA
 039F          ; Grek; Beng; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03B8          ; Grek; Beng; A #      (θ)  GREEK SMALL LETTER THETA
 
-# Total code points: 2
+# Total code points: 3
 
-# Greek; Cherokee: [Α-ΓΕ-ΚΜΟΡΣιρ]
-
-0391..0393    ; Grek; Cher; A #  [3] (Α..Γ)  GREEK CAPITAL LETTER ALPHA..GREEK CAPITAL LETTER GAMMA
-0395..039A    ; Grek; Cher; A #  [6] (Ε..Κ)  GREEK CAPITAL LETTER EPSILON..GREEK CAPITAL LETTER KAPPA
-039C          ; Grek; Cher; A #      (Μ)  GREEK CAPITAL LETTER MU
-039F          ; Grek; Cher; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
-03A1          ; Grek; Cher; A #      (Ρ)  GREEK CAPITAL LETTER RHO
-03A3          ; Grek; Cher; A #      (Σ)  GREEK CAPITAL LETTER SIGMA
-03B9          ; Grek; Cher; A #      (ι)  GREEK SMALL LETTER IOTA
-03C1          ; Grek; Cher; A #      (ρ)  GREEK SMALL LETTER RHO
-
-# Total code points: 15
-
-# Greek; Cyrillic: [Α-ΓΕΗ-ΚΜΟ-ΡΣ-Χεικνο-ςφ]
+# Greek; Cyrillic: [Α-ΓΕΗ-ΜΟ-ΡΤ-Χαγεη-κο-ρσ-φ]
 
 0391..0393    ; Grek; Cyrl; A #  [3] (Α..Γ)  GREEK CAPITAL LETTER ALPHA..GREEK CAPITAL LETTER GAMMA
 0395          ; Grek; Cyrl; A #      (Ε)  GREEK CAPITAL LETTER EPSILON
-0397..039A    ; Grek; Cyrl; A #  [4] (Η..Κ)  GREEK CAPITAL LETTER ETA..GREEK CAPITAL LETTER KAPPA
-039C          ; Grek; Cyrl; A #      (Μ)  GREEK CAPITAL LETTER MU
+0397..039C    ; Grek; Cyrl; A #  [6] (Η..Μ)  GREEK CAPITAL LETTER ETA..GREEK CAPITAL LETTER MU
 039F..03A1    ; Grek; Cyrl; A #  [3] (Ο..Ρ)  GREEK CAPITAL LETTER OMICRON..GREEK CAPITAL LETTER RHO
-03A3..03A7    ; Grek; Cyrl; A #  [5] (Σ..Χ)  GREEK CAPITAL LETTER SIGMA..GREEK CAPITAL LETTER CHI
+03A4..03A7    ; Grek; Cyrl; A #  [4] (Τ..Χ)  GREEK CAPITAL LETTER TAU..GREEK CAPITAL LETTER CHI
+03B1          ; Grek; Cyrl; A #      (α)  GREEK SMALL LETTER ALPHA
+03B3          ; Grek; Cyrl; A #      (γ)  GREEK SMALL LETTER GAMMA
 03B5          ; Grek; Cyrl; A #      (ε)  GREEK SMALL LETTER EPSILON
-03B9..03BA    ; Grek; Cyrl; A #  [2] (ι..κ)  GREEK SMALL LETTER IOTA..GREEK SMALL LETTER KAPPA
-03BD          ; Grek; Cyrl; A #      (ν)  GREEK SMALL LETTER NU
-03BF..03C2    ; Grek; Cyrl; A #  [4] (ο..ς)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER FINAL SIGMA
-03C6          ; Grek; Cyrl; A #      (φ)  GREEK SMALL LETTER PHI
+03B7..03BA    ; Grek; Cyrl; A #  [4] (η..κ)  GREEK SMALL LETTER ETA..GREEK SMALL LETTER KAPPA
+03BF..03C1    ; Grek; Cyrl; A #  [3] (ο..ρ)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER RHO
+03C3..03C6    ; Grek; Cyrl; A #  [4] (σ..φ)  GREEK SMALL LETTER SIGMA..GREEK SMALL LETTER PHI
 
-# Total code points: 26
+# Total code points: 31
 
-# Greek; Devanagari: [ο]
+# Greek; Devanagari: [οσ]
 
 03BF          ; Grek; Deva; A #      (ο)  GREEK SMALL LETTER OMICRON
-
-# Total code points: 1
-
-# Greek; Gujarati: [ο]
-
-03BF          ; Grek; Gujr; A #      (ο)  GREEK SMALL LETTER OMICRON
-
-# Total code points: 1
-
-# Greek; Gurmukhi: [ο]
-
-03BF          ; Grek; Guru; A #      (ο)  GREEK SMALL LETTER OMICRON
-
-# Total code points: 1
-
-# Greek; Han: [ΘΟ]
-
-0398          ; Grek; Hani; A #      (Θ)  GREEK CAPITAL LETTER THETA
-039F          ; Grek; Hani; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03C3          ; Grek; Deva; A #      (σ)  GREEK SMALL LETTER SIGMA
 
 # Total code points: 2
 
-# Greek; Kannada: [ο]
+# Greek; Georgian: [γ]
+
+03B3          ; Grek; Geor; A #      (γ)  GREEK SMALL LETTER GAMMA
+
+# Total code points: 1
+
+# Greek; Gujarati: [οσ]
+
+03BF          ; Grek; Gujr; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Gujr; A #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Gurmukhi: [οσ]
+
+03BF          ; Grek; Guru; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Guru; A #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Han: [ΘΟθ]
+
+0398          ; Grek; Hani; A #      (Θ)  GREEK CAPITAL LETTER THETA
+039F          ; Grek; Hani; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03B8          ; Grek; Hani; A #      (θ)  GREEK SMALL LETTER THETA
+
+# Total code points: 3
+
+# Greek; Hebrew: [Ινοσ]
+
+0399          ; Grek; Hebr; A #      (Ι)  GREEK CAPITAL LETTER IOTA
+03BD          ; Grek; Hebr; A #      (ν)  GREEK SMALL LETTER NU
+03BF          ; Grek; Hebr; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Hebr; A #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 4
+
+# Greek; Kannada: [οσ]
 
 03BF          ; Grek; Knda; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Knda; A #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Lao: [ο]
+# Greek; Lao: [οσ]
 
 03BF          ; Grek; Laoo; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Laoo; A #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Latin: [ΑΒΕ-ΚΜΝΟΡΣ-ΥΧεηικνορςυ]
+# Greek; Latin: [ΑΒΕ-ΚΜΝΟΡΤΥΧα-γη-κνο-ρσ-υ]
 
 0391..0392    ; Grek; Latn; A #  [2] (Α..Β)  GREEK CAPITAL LETTER ALPHA..GREEK CAPITAL LETTER BETA
 0395..039A    ; Grek; Latn; A #  [6] (Ε..Κ)  GREEK CAPITAL LETTER EPSILON..GREEK CAPITAL LETTER KAPPA
 039C..039D    ; Grek; Latn; A #  [2] (Μ..Ν)  GREEK CAPITAL LETTER MU..GREEK CAPITAL LETTER NU
 039F          ; Grek; Latn; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
 03A1          ; Grek; Latn; A #      (Ρ)  GREEK CAPITAL LETTER RHO
-03A3..03A5    ; Grek; Latn; A #  [3] (Σ..Υ)  GREEK CAPITAL LETTER SIGMA..GREEK CAPITAL LETTER UPSILON
+03A4..03A5    ; Grek; Latn; A #  [2] (Τ..Υ)  GREEK CAPITAL LETTER TAU..GREEK CAPITAL LETTER UPSILON
 03A7          ; Grek; Latn; A #      (Χ)  GREEK CAPITAL LETTER CHI
-03B5          ; Grek; Latn; A #      (ε)  GREEK SMALL LETTER EPSILON
-03B7          ; Grek; Latn; A #      (η)  GREEK SMALL LETTER ETA
-03B9..03BA    ; Grek; Latn; A #  [2] (ι..κ)  GREEK SMALL LETTER IOTA..GREEK SMALL LETTER KAPPA
+03B1..03B3    ; Grek; Latn; A #  [3] (α..γ)  GREEK SMALL LETTER ALPHA..GREEK SMALL LETTER GAMMA
+03B7..03BA    ; Grek; Latn; A #  [4] (η..κ)  GREEK SMALL LETTER ETA..GREEK SMALL LETTER KAPPA
 03BD          ; Grek; Latn; A #      (ν)  GREEK SMALL LETTER NU
-03BF          ; Grek; Latn; A #      (ο)  GREEK SMALL LETTER OMICRON
-03C1..03C2    ; Grek; Latn; A #  [2] (ρ..ς)  GREEK SMALL LETTER RHO..GREEK SMALL LETTER FINAL SIGMA
-03C5          ; Grek; Latn; A #      (υ)  GREEK SMALL LETTER UPSILON
+03BF..03C1    ; Grek; Latn; A #  [3] (ο..ρ)  GREEK SMALL LETTER OMICRON..GREEK SMALL LETTER RHO
+03C3..03C5    ; Grek; Latn; A #  [3] (σ..υ)  GREEK SMALL LETTER SIGMA..GREEK SMALL LETTER UPSILON
 
-# Total code points: 25
+# Total code points: 29
 
-# Greek; Malayalam: [ΘΟο]
+# Greek; Malayalam: [ΘΟθοσ]
 
 0398          ; Grek; Mlym; A #      (Θ)  GREEK CAPITAL LETTER THETA
 039F          ; Grek; Mlym; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03B8          ; Grek; Mlym; A #      (θ)  GREEK SMALL LETTER THETA
 03BF          ; Grek; Mlym; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Mlym; A #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 3
+# Total code points: 5
 
-# Greek; Mongolian: [ΘΟ]
+# Greek; Myanmar: [οσ]
 
-0398          ; Grek; Mong; A #      (Θ)  GREEK CAPITAL LETTER THETA
-039F          ; Grek; Mong; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03BF          ; Grek; Mymr; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Mymr; A #      (σ)  GREEK SMALL LETTER SIGMA
 
 # Total code points: 2
 
-# Greek; Myanmar: [ο]
-
-03BF          ; Grek; Mymr; A #      (ο)  GREEK SMALL LETTER OMICRON
-
-# Total code points: 1
-
-# Greek; Oriya: [ΘΟ]
+# Greek; Oriya: [ΘΟθ]
 
 0398          ; Grek; Orya; A #      (Θ)  GREEK CAPITAL LETTER THETA
 039F          ; Grek; Orya; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03B8          ; Grek; Orya; A #      (θ)  GREEK SMALL LETTER THETA
+
+# Total code points: 3
+
+# Greek; Sinhala: [οσ]
+
+03BF          ; Grek; Sinh; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Sinh; A #      (σ)  GREEK SMALL LETTER SIGMA
 
 # Total code points: 2
 
-# Greek; Telugu: [ο]
+# Greek; Tamil: [οσ]
+
+03BF          ; Grek; Taml; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Taml; A #      (σ)  GREEK SMALL LETTER SIGMA
+
+# Total code points: 2
+
+# Greek; Telugu: [οσ]
 
 03BF          ; Grek; Telu; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Telu; A #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Thai: [ο]
+# Greek; Thai: [οσ]
 
 03BF          ; Grek; Thai; A #      (ο)  GREEK SMALL LETTER OMICRON
+03C3          ; Grek; Thai; A #      (σ)  GREEK SMALL LETTER SIGMA
 
-# Total code points: 1
+# Total code points: 2
 
-# Greek; Canadian_Aboriginal: [ΑΒΔΗΙΡΩδρ]
+# Greek; Canadian_Aboriginal: [Α-ΔΗΙΛΜΡΩδρ]
 
-0391..0392    ; Grek; Cans; A #  [2] (Α..Β)  GREEK CAPITAL LETTER ALPHA..GREEK CAPITAL LETTER BETA
-0394          ; Grek; Cans; A #      (Δ)  GREEK CAPITAL LETTER DELTA
+0391..0394    ; Grek; Cans; A #  [4] (Α..Δ)  GREEK CAPITAL LETTER ALPHA..GREEK CAPITAL LETTER DELTA
 0397          ; Grek; Cans; A #      (Η)  GREEK CAPITAL LETTER ETA
 0399          ; Grek; Cans; A #      (Ι)  GREEK CAPITAL LETTER IOTA
+039B..039C    ; Grek; Cans; A #  [2] (Λ..Μ)  GREEK CAPITAL LETTER LAMDA..GREEK CAPITAL LETTER MU
 03A1          ; Grek; Cans; A #      (Ρ)  GREEK CAPITAL LETTER RHO
 03A9          ; Grek; Cans; A #      (Ω)  GREEK CAPITAL LETTER OMEGA
 03B4          ; Grek; Cans; A #      (δ)  GREEK SMALL LETTER DELTA
 03C1          ; Grek; Cans; A #      (ρ)  GREEK SMALL LETTER RHO
+
+# Total code points: 12
+
+# Greek; Tifinagh: [ΔΕΘΙΛΟΣΧθ]
+
+0394..0395    ; Grek; Tfng; A #  [2] (Δ..Ε)  GREEK CAPITAL LETTER DELTA..GREEK CAPITAL LETTER EPSILON
+0398..0399    ; Grek; Tfng; A #  [2] (Θ..Ι)  GREEK CAPITAL LETTER THETA..GREEK CAPITAL LETTER IOTA
+039B          ; Grek; Tfng; A #      (Λ)  GREEK CAPITAL LETTER LAMDA
+039F          ; Grek; Tfng; A #      (Ο)  GREEK CAPITAL LETTER OMICRON
+03A3          ; Grek; Tfng; A #      (Σ)  GREEK CAPITAL LETTER SIGMA
+03A7          ; Grek; Tfng; A #      (Χ)  GREEK CAPITAL LETTER CHI
+03B8          ; Grek; Tfng; A #      (θ)  GREEK SMALL LETTER THETA
 
 # Total code points: 9
 
@@ -2923,11 +3201,12 @@
 
 # Total code points: 1
 
-# Gujarati; Bengali: [઼]
+# Gujarati; Bengali: [ઁ઼]
 
+0A81          ; Gujr; Beng; A #      (ઁ)  GUJARATI SIGN CANDRABINDU
 0ABC          ; Gujr; Beng; A #      (઼)  GUJARATI SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Gujarati; Cyrillic: [૦]
 
@@ -2935,9 +3214,9 @@
 
 # Total code points: 1
 
-# Gujarati; Devanagari: [ં઼ઽુૂ્૦૨-૪૮]
+# Gujarati; Devanagari: [ઁ-ઃ઼ઽુૂ્૦૨-૪૮]
 
-0A82          ; Gujr; Deva; A #      (ં)  GUJARATI SIGN ANUSVARA
+0A81..0A83    ; Gujr; Deva; A #  [3] (ઁ..ઃ)  GUJARATI SIGN CANDRABINDU..GUJARATI SIGN VISARGA
 0ABC..0ABD    ; Gujr; Deva; A #  [2] (઼..ઽ)  GUJARATI SIGN NUKTA..GUJARATI SIGN AVAGRAHA
 0AC1..0AC2    ; Gujr; Deva; A #  [2] (ુ..ૂ)  GUJARATI VOWEL SIGN U..GUJARATI VOWEL SIGN UU
 0ACD          ; Gujr; Deva; A #      (્)  GUJARATI SIGN VIRAMA
@@ -2945,7 +3224,7 @@
 0AE8..0AEA    ; Gujr; Deva; A #  [3] (૨..૪)  GUJARATI DIGIT TWO..GUJARATI DIGIT FOUR
 0AEE          ; Gujr; Deva; A #      (૮)  GUJARATI DIGIT EIGHT
 
-# Total code points: 11
+# Total code points: 13
 
 # Gujarati; Greek: [૦]
 
@@ -2962,9 +3241,9 @@
 
 # Total code points: 4
 
-# Gujarati; Hebrew: [ં]
+# Gujarati; Hebrew: [૦]
 
-0A82          ; Gujr; Hebr; A #      (ં)  GUJARATI SIGN ANUSVARA
+0AE6          ; Gujr; Hebr; A #      (૦)  GUJARATI DIGIT ZERO
 
 # Total code points: 1
 
@@ -2998,17 +3277,25 @@
 
 # Total code points: 1
 
-# Gujarati; Oriya: [઼]
+# Gujarati; Oriya: [ઁ઼]
 
+0A81          ; Gujr; Orya; A #      (ઁ)  GUJARATI SIGN CANDRABINDU
 0ABC          ; Gujr; Orya; A #      (઼)  GUJARATI SIGN NUKTA
 
+# Total code points: 2
+
+# Gujarati; Sinhala: [૦]
+
+0AE6          ; Gujr; Sinh; A #      (૦)  GUJARATI DIGIT ZERO
+
 # Total code points: 1
 
-# Gujarati; Tamil: [ં]
+# Gujarati; Tamil: [ં૦]
 
 0A82          ; Gujr; Taml; A #      (ં)  GUJARATI SIGN ANUSVARA
+0AE6          ; Gujr; Taml; A #      (૦)  GUJARATI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gujarati; Telugu: [૦]
 
@@ -3028,13 +3315,14 @@
 
 # Total code points: 1
 
-# Gurmukhi; Bengali: [਼੧੪]
+# Gurmukhi; Bengali: [ਃ਼੧੪]
 
+0A03          ; Guru; Beng; A #      (ਃ)  GURMUKHI SIGN VISARGA
 0A3C          ; Guru; Beng; A #      (਼)  GURMUKHI SIGN NUKTA
 0A67          ; Guru; Beng; A #      (੧)  GURMUKHI DIGIT ONE
 0A6A          ; Guru; Beng; A #      (੪)  GURMUKHI DIGIT FOUR
 
-# Total code points: 3
+# Total code points: 4
 
 # Gurmukhi; Cyrillic: [੦]
 
@@ -3067,17 +3355,18 @@
 
 # Total code points: 4
 
-# Gurmukhi; Hebrew: [ਂ]
+# Gurmukhi; Hebrew: [੦]
 
-0A02          ; Guru; Hebr; A #      (ਂ)  GURMUKHI SIGN BINDI
+0A66          ; Guru; Hebr; A #      (੦)  GURMUKHI DIGIT ZERO
 
 # Total code points: 1
 
-# Gurmukhi; Kannada: [੦]
+# Gurmukhi; Kannada: [ਃ੦]
 
+0A03          ; Guru; Knda; A #      (ਃ)  GURMUKHI SIGN VISARGA
 0A66          ; Guru; Knda; A #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Lao: [੦]
 
@@ -3085,24 +3374,25 @@
 
 # Total code points: 1
 
-# Gurmukhi; Latin: [੦੪]
+# Gurmukhi; Latin: [੦]
 
 0A66          ; Guru; Latn; A #      (੦)  GURMUKHI DIGIT ZERO
-0A6A          ; Guru; Latn; A #      (੪)  GURMUKHI DIGIT FOUR
+
+# Total code points: 1
+
+# Gurmukhi; Malayalam: [ਃ੦]
+
+0A03          ; Guru; Mlym; A #      (ਃ)  GURMUKHI SIGN VISARGA
+0A66          ; Guru; Mlym; A #      (੦)  GURMUKHI DIGIT ZERO
 
 # Total code points: 2
 
-# Gurmukhi; Malayalam: [੦]
+# Gurmukhi; Myanmar: [ਃ੦]
 
-0A66          ; Guru; Mlym; A #      (੦)  GURMUKHI DIGIT ZERO
-
-# Total code points: 1
-
-# Gurmukhi; Myanmar: [੦]
-
+0A03          ; Guru; Mymr; A #      (ਃ)  GURMUKHI SIGN VISARGA
 0A66          ; Guru; Mymr; A #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Oriya: [਼੧੪]
 
@@ -3112,17 +3402,26 @@
 
 # Total code points: 3
 
-# Gurmukhi; Tamil: [ਂ]
+# Gurmukhi; Sinhala: [ਃ੦]
+
+0A03          ; Guru; Sinh; A #      (ਃ)  GURMUKHI SIGN VISARGA
+0A66          ; Guru; Sinh; A #      (੦)  GURMUKHI DIGIT ZERO
+
+# Total code points: 2
+
+# Gurmukhi; Tamil: [ਂ੦]
 
 0A02          ; Guru; Taml; A #      (ਂ)  GURMUKHI SIGN BINDI
+0A66          ; Guru; Taml; A #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Gurmukhi; Telugu: [੦]
+# Gurmukhi; Telugu: [ਃ੦]
 
+0A03          ; Guru; Telu; A #      (ਃ)  GURMUKHI SIGN VISARGA
 0A66          ; Guru; Telu; A #      (੦)  GURMUKHI DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Gurmukhi; Thai: [੦]
 
@@ -3139,12 +3438,6 @@
 # Han; Bengali: [〇]
 
 3007          ; Hani; Beng; A #      (〇)  IDEOGRAPHIC NUMBER ZERO
-
-# Total code points: 1
-
-# Han; Cherokee: [〇]
-
-3007          ; Hani; Cher; A #      (〇)  IDEOGRAPHIC NUMBER ZERO
 
 # Total code points: 1
 
@@ -3172,75 +3465,137 @@
 
 # Total code points: 1
 
-# Han; Mongolian: [〇]
-
-3007          ; Hani; Mong; A #      (〇)  IDEOGRAPHIC NUMBER ZERO
-
-# Total code points: 1
-
 # Han; Oriya: [〇]
 
 3007          ; Hani; Orya; A #      (〇)  IDEOGRAPHIC NUMBER ZERO
 
 # Total code points: 1
 
-# Hebrew; Devanagari: [ֹׁׂ֜ׄ]
+# Han; Tifinagh: [〇]
 
-059C          ; Hebr; Deva; A #      (֜)  HEBREW ACCENT GERESH
-05B9          ; Hebr; Deva; A #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Deva; A #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Deva; A #      (ׄ)  HEBREW MARK UPPER DOT
+3007          ; Hani; Tfng; A #      (〇)  IDEOGRAPHIC NUMBER ZERO
+
+# Total code points: 1
+
+# Hebrew; Armenian: [ס]
+
+05E1          ; Hebr; Armn; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Cyrillic: [ויןסױ]
+
+05D5          ; Hebr; Cyrl; A #      (ו)  HEBREW LETTER VAV
+05D9          ; Hebr; Cyrl; A #      (י)  HEBREW LETTER YOD
+05DF          ; Hebr; Cyrl; A #      (ן)  HEBREW LETTER FINAL NUN
+05E1          ; Hebr; Cyrl; A #      (ס)  HEBREW LETTER SAMEKH
+05F1          ; Hebr; Cyrl; A #      (ױ)  HEBREW LIGATURE YIDDISH VAV YOD
 
 # Total code points: 5
 
-# Hebrew; Gujarati: [ֹׁׂׄ]
+# Hebrew; Devanagari: [ס]
 
-05B9          ; Hebr; Gujr; A #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Gujr; A #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Gujr; A #      (ׄ)  HEBREW MARK UPPER DOT
+05E1          ; Hebr; Deva; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Greek: [וטיןסױ]
+
+05D5          ; Hebr; Grek; A #      (ו)  HEBREW LETTER VAV
+05D8..05D9    ; Hebr; Grek; A #  [2] (ט..י)  HEBREW LETTER TET..HEBREW LETTER YOD
+05DF          ; Hebr; Grek; A #      (ן)  HEBREW LETTER FINAL NUN
+05E1          ; Hebr; Grek; A #      (ס)  HEBREW LETTER SAMEKH
+05F1          ; Hebr; Grek; A #      (ױ)  HEBREW LIGATURE YIDDISH VAV YOD
+
+# Total code points: 6
+
+# Hebrew; Gujarati: [ס]
+
+05E1          ; Hebr; Gujr; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Gurmukhi: [ס]
+
+05E1          ; Hebr; Guru; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Kannada: [ס]
+
+05E1          ; Hebr; Knda; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Lao: [ס]
+
+05E1          ; Hebr; Laoo; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Latin: [וטיןסװױ]
+
+05D5          ; Hebr; Latn; A #      (ו)  HEBREW LETTER VAV
+05D8..05D9    ; Hebr; Latn; A #  [2] (ט..י)  HEBREW LETTER TET..HEBREW LETTER YOD
+05DF          ; Hebr; Latn; A #      (ן)  HEBREW LETTER FINAL NUN
+05E1          ; Hebr; Latn; A #      (ס)  HEBREW LETTER SAMEKH
+05F0..05F1    ; Hebr; Latn; A #  [2] (װ..ױ)  HEBREW LIGATURE YIDDISH DOUBLE VAV..HEBREW LIGATURE YIDDISH VAV YOD
+
+# Total code points: 7
+
+# Hebrew; Malayalam: [ס]
+
+05E1          ; Hebr; Mlym; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Myanmar: [ס]
+
+05E1          ; Hebr; Mymr; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Sinhala: [ס]
+
+05E1          ; Hebr; Sinh; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Tamil: [ס]
+
+05E1          ; Hebr; Taml; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Telugu: [ס]
+
+05E1          ; Hebr; Telu; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Thai: [ס]
+
+05E1          ; Hebr; Thai; A #      (ס)  HEBREW LETTER SAMEKH
+
+# Total code points: 1
+
+# Hebrew; Canadian_Aboriginal: [ויןױ]
+
+05D5          ; Hebr; Cans; A #      (ו)  HEBREW LETTER VAV
+05D9          ; Hebr; Cans; A #      (י)  HEBREW LETTER YOD
+05DF          ; Hebr; Cans; A #      (ן)  HEBREW LETTER FINAL NUN
+05F1          ; Hebr; Cans; A #      (ױ)  HEBREW LIGATURE YIDDISH VAV YOD
 
 # Total code points: 4
 
-# Hebrew; Gurmukhi: [ֹׁׂׄ]
+# Hebrew; Tifinagh: [ויןױ]
 
-05B9          ; Hebr; Guru; A #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Guru; A #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Guru; A #      (ׄ)  HEBREW MARK UPPER DOT
+05D5          ; Hebr; Tfng; A #      (ו)  HEBREW LETTER VAV
+05D9          ; Hebr; Tfng; A #      (י)  HEBREW LETTER YOD
+05DF          ; Hebr; Tfng; A #      (ן)  HEBREW LETTER FINAL NUN
+05F1          ; Hebr; Tfng; A #      (ױ)  HEBREW LIGATURE YIDDISH VAV YOD
 
 # Total code points: 4
-
-# Hebrew; Khmer: [֯]
-
-05AF          ; Hebr; Khmr; A #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
-
-# Hebrew; Lao: [֯]
-
-05AF          ; Hebr; Laoo; A #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
-
-# Hebrew; Myanmar: [֯]
-
-05AF          ; Hebr; Mymr; A #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
-
-# Hebrew; Tamil: [ֹׁׂ֯ׄ]
-
-05AF          ; Hebr; Taml; A #      (֯)  HEBREW MARK MASORA CIRCLE
-05B9          ; Hebr; Taml; A #      (ֹ)  HEBREW POINT HOLAM
-05C1..05C2    ; Hebr; Taml; A #  [2] (ׁ..ׂ)  HEBREW POINT SHIN DOT..HEBREW POINT SIN DOT
-05C4          ; Hebr; Taml; A #      (ׄ)  HEBREW MARK UPPER DOT
-
-# Total code points: 5
-
-# Hebrew; Thai: [֯]
-
-05AF          ; Hebr; Thai; A #      (֯)  HEBREW MARK MASORA CIRCLE
-
-# Total code points: 1
 
 # Hiragana; Katakana: [へ]
 
@@ -3254,6 +3609,12 @@
 0CE6          ; Knda; Armn; A #      (೦)  KANNADA DIGIT ZERO
 
 # Total code points: 2
+
+# Kannada; Bengali: [ಃ]
+
+0C83          ; Knda; Beng; A #      (ಃ)  KANNADA SIGN VISARGA
+
+# Total code points: 1
 
 # Kannada; Cyrillic: [ಂ೦]
 
@@ -3283,10 +3644,17 @@
 
 # Total code points: 2
 
-# Kannada; Gurmukhi: [ಂ೦]
+# Kannada; Gurmukhi: [ಂಃ೦]
 
-0C82          ; Knda; Guru; A #      (ಂ)  KANNADA SIGN ANUSVARA
+0C82..0C83    ; Knda; Guru; A #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
 0CE6          ; Knda; Guru; A #      (೦)  KANNADA DIGIT ZERO
+
+# Total code points: 3
+
+# Kannada; Hebrew: [ಂ೦]
+
+0C82          ; Knda; Hebr; A #      (ಂ)  KANNADA SIGN ANUSVARA
+0CE6          ; Knda; Hebr; A #      (೦)  KANNADA DIGIT ZERO
 
 # Total code points: 2
 
@@ -3304,17 +3672,31 @@
 
 # Total code points: 2
 
-# Kannada; Malayalam: [ಂ೦]
+# Kannada; Malayalam: [ಂಃ೦]
 
-0C82          ; Knda; Mlym; A #      (ಂ)  KANNADA SIGN ANUSVARA
+0C82..0C83    ; Knda; Mlym; A #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
 0CE6          ; Knda; Mlym; A #      (೦)  KANNADA DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
-# Kannada; Myanmar: [ಂ೦]
+# Kannada; Myanmar: [ಂಃ೦]
 
-0C82          ; Knda; Mymr; A #      (ಂ)  KANNADA SIGN ANUSVARA
+0C82..0C83    ; Knda; Mymr; A #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
 0CE6          ; Knda; Mymr; A #      (೦)  KANNADA DIGIT ZERO
+
+# Total code points: 3
+
+# Kannada; Sinhala: [ಂಃ೦]
+
+0C82..0C83    ; Knda; Sinh; A #  [2] (ಂ..ಃ)  KANNADA SIGN ANUSVARA..KANNADA SIGN VISARGA
+0CE6          ; Knda; Sinh; A #      (೦)  KANNADA DIGIT ZERO
+
+# Total code points: 3
+
+# Kannada; Tamil: [ಂ೦]
+
+0C82          ; Knda; Taml; A #      (ಂ)  KANNADA SIGN ANUSVARA
+0CE6          ; Knda; Taml; A #      (೦)  KANNADA DIGIT ZERO
 
 # Total code points: 2
 
@@ -3347,18 +3729,11 @@
 
 # Total code points: 1
 
-# Khmer; Hebrew: [ំ]
-
-17C6          ; Khmr; Hebr; A #      (ំ)  KHMER SIGN NIKAHIT
-
-# Total code points: 1
-
-# Khmer; Lao: [ំ់]
+# Khmer; Lao: [ំ]
 
 17C6          ; Khmr; Laoo; A #      (ំ)  KHMER SIGN NIKAHIT
-17CB          ; Khmr; Laoo; A #      (់)  KHMER SIGN BANTOC
 
-# Total code points: 2
+# Total code points: 1
 
 # Khmer; Myanmar: [ំ]
 
@@ -3372,13 +3747,12 @@
 
 # Total code points: 1
 
-# Khmer; Thai: [ិ-ឺំ់]
+# Khmer; Thai: [ិ-ឺំ]
 
 17B7..17BA    ; Khmr; Thai; A #  [4] (ិ..ឺ)  KHMER VOWEL SIGN I..KHMER VOWEL SIGN YY
 17C6          ; Khmr; Thai; A #      (ំ)  KHMER SIGN NIKAHIT
-17CB          ; Khmr; Thai; A #      (់)  KHMER SIGN BANTOC
 
-# Total code points: 6
+# Total code points: 5
 
 # Lao; Armenian: [໐]
 
@@ -3416,9 +3790,9 @@
 
 # Total code points: 1
 
-# Lao; Hebrew: [ໍ]
+# Lao; Hebrew: [໐]
 
-0ECD          ; Laoo; Hebr; A #      (ໍ)  LAO NIGGAHITA
+0ED0          ; Laoo; Hebr; A #      (໐)  LAO DIGIT ZERO
 
 # Total code points: 1
 
@@ -3428,12 +3802,11 @@
 
 # Total code points: 1
 
-# Lao; Khmer: [່ໍ]
+# Lao; Khmer: [ໍ]
 
-0EC8          ; Laoo; Khmr; A #      (່)  LAO TONE MAI EK
 0ECD          ; Laoo; Khmr; A #      (ໍ)  LAO NIGGAHITA
 
-# Total code points: 2
+# Total code points: 1
 
 # Lao; Latin: [໐]
 
@@ -3454,11 +3827,18 @@
 
 # Total code points: 2
 
-# Lao; Tamil: [ໍ]
+# Lao; Sinhala: [໐]
 
-0ECD          ; Laoo; Taml; A #      (ໍ)  LAO NIGGAHITA
+0ED0          ; Laoo; Sinh; A #      (໐)  LAO DIGIT ZERO
 
 # Total code points: 1
+
+# Lao; Tamil: [ໍ໐]
+
+0ECD          ; Laoo; Taml; A #      (ໍ)  LAO NIGGAHITA
+0ED0          ; Laoo; Taml; A #      (໐)  LAO DIGIT ZERO
+
+# Total code points: 2
 
 # Lao; Telugu: [໐]
 
@@ -3479,379 +3859,311 @@
 
 # Total code points: 15
 
-# Latin; Armenian: [Of-hjlnoquØøħƒƞ-ơǥǾǿɠɵʊʋ]
+# Latin; Arabic: [ö]
+
+00F6          ; Latn; Arab; A #      (ö)  LATIN SMALL LETTER O WITH DIAERESIS
+
+# Total code points: 1
+
+# Latin; Armenian: [OSUf-hjnoqu-wØøħƠơǾ]
 
 004F          ; Latn; Armn; A #      (O)  LATIN CAPITAL LETTER O
+0053          ; Latn; Armn; A #      (S)  LATIN CAPITAL LETTER S
+0055          ; Latn; Armn; A #      (U)  LATIN CAPITAL LETTER U
 0066..0068    ; Latn; Armn; A #  [3] (f..h)  LATIN SMALL LETTER F..LATIN SMALL LETTER H
 006A          ; Latn; Armn; A #      (j)  LATIN SMALL LETTER J
-006C          ; Latn; Armn; A #      (l)  LATIN SMALL LETTER L
 006E..006F    ; Latn; Armn; A #  [2] (n..o)  LATIN SMALL LETTER N..LATIN SMALL LETTER O
 0071          ; Latn; Armn; A #      (q)  LATIN SMALL LETTER Q
-0075          ; Latn; Armn; A #      (u)  LATIN SMALL LETTER U
+0075..0077    ; Latn; Armn; A #  [3] (u..w)  LATIN SMALL LETTER U..LATIN SMALL LETTER W
 00D8          ; Latn; Armn; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
 00F8          ; Latn; Armn; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 0127          ; Latn; Armn; A #      (ħ)  LATIN SMALL LETTER H WITH STROKE
-0192          ; Latn; Armn; A #      (ƒ)  LATIN SMALL LETTER F WITH HOOK
-019E..01A1    ; Latn; Armn; A #  [4] (ƞ..ơ)  LATIN SMALL LETTER N WITH LONG RIGHT LEG..LATIN SMALL LETTER O WITH HORN
-01E5          ; Latn; Armn; A #      (ǥ)  LATIN SMALL LETTER G WITH STROKE
-01FE..01FF    ; Latn; Armn; A #  [2] (Ǿ..ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE..LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0260          ; Latn; Armn; A #      (ɠ)  LATIN SMALL LETTER G WITH HOOK
-0275          ; Latn; Armn; A #      (ɵ)  LATIN SMALL LETTER BARRED O
-028A..028B    ; Latn; Armn; A #  [2] (ʊ..ʋ)  LATIN SMALL LETTER UPSILON..LATIN SMALL LETTER V WITH HOOK
+01A0..01A1    ; Latn; Armn; A #  [2] (Ơ..ơ)  LATIN CAPITAL LETTER O WITH HORN..LATIN SMALL LETTER O WITH HORN
+01FE          ; Latn; Armn; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
 
-# Total code points: 25
+# Total code points: 19
 
-# Latin; Bengali: [OØƟƠǾȢȣ]
+# Latin; Bengali: [OØƠǾ]
 
 004F          ; Latn; Beng; A #      (O)  LATIN CAPITAL LETTER O
 00D8          ; Latn; Beng; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
-019F..01A0    ; Latn; Beng; A #  [2] (Ɵ..Ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN CAPITAL LETTER O WITH HORN
+01A0          ; Latn; Beng; A #      (Ơ)  LATIN CAPITAL LETTER O WITH HORN
 01FE          ; Latn; Beng; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
-0222..0223    ; Latn; Beng; A #  [2] (Ȣ..ȣ)  LATIN CAPITAL LETTER OU..LATIN SMALL LETTER OU
 
-# Total code points: 7
+# Total code points: 4
 
-# Latin; Cherokee: [A-CEG-MOPSVZbhilpwyØĦħıŁłƁ-ƄƇƓƖ-ƘƚƟƠƤƥƩƴƵǤǾȤɓɨɩɯ]
-
-0041..0043    ; Latn; Cher; A #  [3] (A..C)  LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER C
-0045          ; Latn; Cher; A #      (E)  LATIN CAPITAL LETTER E
-0047..004D    ; Latn; Cher; A #  [7] (G..M)  LATIN CAPITAL LETTER G..LATIN CAPITAL LETTER M
-004F..0050    ; Latn; Cher; A #  [2] (O..P)  LATIN CAPITAL LETTER O..LATIN CAPITAL LETTER P
-0053          ; Latn; Cher; A #      (S)  LATIN CAPITAL LETTER S
-0056          ; Latn; Cher; A #      (V)  LATIN CAPITAL LETTER V
-005A          ; Latn; Cher; A #      (Z)  LATIN CAPITAL LETTER Z
-0062          ; Latn; Cher; A #      (b)  LATIN SMALL LETTER B
-0068..0069    ; Latn; Cher; A #  [2] (h..i)  LATIN SMALL LETTER H..LATIN SMALL LETTER I
-006C          ; Latn; Cher; A #      (l)  LATIN SMALL LETTER L
-0070          ; Latn; Cher; A #      (p)  LATIN SMALL LETTER P
-0077          ; Latn; Cher; A #      (w)  LATIN SMALL LETTER W
-0079          ; Latn; Cher; A #      (y)  LATIN SMALL LETTER Y
-00D8          ; Latn; Cher; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
-0126..0127    ; Latn; Cher; A #  [2] (Ħ..ħ)  LATIN CAPITAL LETTER H WITH STROKE..LATIN SMALL LETTER H WITH STROKE
-0131          ; Latn; Cher; A #      (ı)  LATIN SMALL LETTER DOTLESS I
-0141..0142    ; Latn; Cher; A #  [2] (Ł..ł)  LATIN CAPITAL LETTER L WITH STROKE..LATIN SMALL LETTER L WITH STROKE
-0181..0184    ; Latn; Cher; A #  [4] (Ɓ..Ƅ)  LATIN CAPITAL LETTER B WITH HOOK..LATIN CAPITAL LETTER TONE SIX
-0187          ; Latn; Cher; A #      (Ƈ)  LATIN CAPITAL LETTER C WITH HOOK
-0193          ; Latn; Cher; A #      (Ɠ)  LATIN CAPITAL LETTER G WITH HOOK
-0196..0198    ; Latn; Cher; A #  [3] (Ɩ..Ƙ)  LATIN CAPITAL LETTER IOTA..LATIN CAPITAL LETTER K WITH HOOK
-019A          ; Latn; Cher; A #      (ƚ)  LATIN SMALL LETTER L WITH BAR
-019F..01A0    ; Latn; Cher; A #  [2] (Ɵ..Ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN CAPITAL LETTER O WITH HORN
-01A4..01A5    ; Latn; Cher; A #  [2] (Ƥ..ƥ)  LATIN CAPITAL LETTER P WITH HOOK..LATIN SMALL LETTER P WITH HOOK
-01A9          ; Latn; Cher; A #      (Ʃ)  LATIN CAPITAL LETTER ESH
-01B4..01B5    ; Latn; Cher; A #  [2] (ƴ..Ƶ)  LATIN SMALL LETTER Y WITH HOOK..LATIN CAPITAL LETTER Z WITH STROKE
-01E4          ; Latn; Cher; A #      (Ǥ)  LATIN CAPITAL LETTER G WITH STROKE
-01FE          ; Latn; Cher; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
-0224          ; Latn; Cher; A #      (Ȥ)  LATIN CAPITAL LETTER Z WITH HOOK
-0253          ; Latn; Cher; A #      (ɓ)  LATIN SMALL LETTER B WITH HOOK
-0268..0269    ; Latn; Cher; A #  [2] (ɨ..ɩ)  LATIN SMALL LETTER I WITH STROKE..LATIN SMALL LETTER IOTA
-026F          ; Latn; Cher; A #      (ɯ)  LATIN SMALL LETTER TURNED M
-
-# Total code points: 53
-
-# Latin; Cyrillic: [A-CEG-MOPSTVXYa-eh-jloprsvxyÆØæøđĦħıĸŁłŦƁ-ƅƇƌƎ-ƐƓƖ-ƘƚƟ-ơƤƥƩƬƮƳƴƷƽǝǤǾǿɓɖɗəɛɨɩɵʒ]
+# Latin; Cyrillic: [A-CEG-MOPSTW-Ya-eh-ln-yÆÇØæçøđĦħıĸŁłŦŧƠơǾ]
 
 0041..0043    ; Latn; Cyrl; A #  [3] (A..C)  LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER C
 0045          ; Latn; Cyrl; A #      (E)  LATIN CAPITAL LETTER E
 0047..004D    ; Latn; Cyrl; A #  [7] (G..M)  LATIN CAPITAL LETTER G..LATIN CAPITAL LETTER M
 004F..0050    ; Latn; Cyrl; A #  [2] (O..P)  LATIN CAPITAL LETTER O..LATIN CAPITAL LETTER P
 0053..0054    ; Latn; Cyrl; A #  [2] (S..T)  LATIN CAPITAL LETTER S..LATIN CAPITAL LETTER T
-0056          ; Latn; Cyrl; A #      (V)  LATIN CAPITAL LETTER V
-0058..0059    ; Latn; Cyrl; A #  [2] (X..Y)  LATIN CAPITAL LETTER X..LATIN CAPITAL LETTER Y
+0057..0059    ; Latn; Cyrl; A #  [3] (W..Y)  LATIN CAPITAL LETTER W..LATIN CAPITAL LETTER Y
 0061..0065    ; Latn; Cyrl; A #  [5] (a..e)  LATIN SMALL LETTER A..LATIN SMALL LETTER E
-0068..006A    ; Latn; Cyrl; A #  [3] (h..j)  LATIN SMALL LETTER H..LATIN SMALL LETTER J
-006C          ; Latn; Cyrl; A #      (l)  LATIN SMALL LETTER L
-006F..0070    ; Latn; Cyrl; A #  [2] (o..p)  LATIN SMALL LETTER O..LATIN SMALL LETTER P
-0072..0073    ; Latn; Cyrl; A #  [2] (r..s)  LATIN SMALL LETTER R..LATIN SMALL LETTER S
-0076          ; Latn; Cyrl; A #      (v)  LATIN SMALL LETTER V
-0078..0079    ; Latn; Cyrl; A #  [2] (x..y)  LATIN SMALL LETTER X..LATIN SMALL LETTER Y
-00C6          ; Latn; Cyrl; A #      (Æ)  LATIN CAPITAL LETTER AE
+0068..006C    ; Latn; Cyrl; A #  [5] (h..l)  LATIN SMALL LETTER H..LATIN SMALL LETTER L
+006E..0079    ; Latn; Cyrl; A # [12] (n..y)  LATIN SMALL LETTER N..LATIN SMALL LETTER Y
+00C6..00C7    ; Latn; Cyrl; A #  [2] (Æ..Ç)  LATIN CAPITAL LETTER AE..LATIN CAPITAL LETTER C WITH CEDILLA
 00D8          ; Latn; Cyrl; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
-00E6          ; Latn; Cyrl; A #      (æ)  LATIN SMALL LETTER AE
+00E6..00E7    ; Latn; Cyrl; A #  [2] (æ..ç)  LATIN SMALL LETTER AE..LATIN SMALL LETTER C WITH CEDILLA
 00F8          ; Latn; Cyrl; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 0111          ; Latn; Cyrl; A #      (đ)  LATIN SMALL LETTER D WITH STROKE
 0126..0127    ; Latn; Cyrl; A #  [2] (Ħ..ħ)  LATIN CAPITAL LETTER H WITH STROKE..LATIN SMALL LETTER H WITH STROKE
 0131          ; Latn; Cyrl; A #      (ı)  LATIN SMALL LETTER DOTLESS I
 0138          ; Latn; Cyrl; A #      (ĸ)  LATIN SMALL LETTER KRA
 0141..0142    ; Latn; Cyrl; A #  [2] (Ł..ł)  LATIN CAPITAL LETTER L WITH STROKE..LATIN SMALL LETTER L WITH STROKE
-0166          ; Latn; Cyrl; A #      (Ŧ)  LATIN CAPITAL LETTER T WITH STROKE
-0181..0185    ; Latn; Cyrl; A #  [5] (Ɓ..ƅ)  LATIN CAPITAL LETTER B WITH HOOK..LATIN SMALL LETTER TONE SIX
-0187          ; Latn; Cyrl; A #      (Ƈ)  LATIN CAPITAL LETTER C WITH HOOK
-018C          ; Latn; Cyrl; A #      (ƌ)  LATIN SMALL LETTER D WITH TOPBAR
-018E..0190    ; Latn; Cyrl; A #  [3] (Ǝ..Ɛ)  LATIN CAPITAL LETTER REVERSED E..LATIN CAPITAL LETTER OPEN E
-0193          ; Latn; Cyrl; A #      (Ɠ)  LATIN CAPITAL LETTER G WITH HOOK
-0196..0198    ; Latn; Cyrl; A #  [3] (Ɩ..Ƙ)  LATIN CAPITAL LETTER IOTA..LATIN CAPITAL LETTER K WITH HOOK
-019A          ; Latn; Cyrl; A #      (ƚ)  LATIN SMALL LETTER L WITH BAR
-019F..01A1    ; Latn; Cyrl; A #  [3] (Ɵ..ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN SMALL LETTER O WITH HORN
-01A4..01A5    ; Latn; Cyrl; A #  [2] (Ƥ..ƥ)  LATIN CAPITAL LETTER P WITH HOOK..LATIN SMALL LETTER P WITH HOOK
-01A9          ; Latn; Cyrl; A #      (Ʃ)  LATIN CAPITAL LETTER ESH
-01AC          ; Latn; Cyrl; A #      (Ƭ)  LATIN CAPITAL LETTER T WITH HOOK
-01AE          ; Latn; Cyrl; A #      (Ʈ)  LATIN CAPITAL LETTER T WITH RETROFLEX HOOK
-01B3..01B4    ; Latn; Cyrl; A #  [2] (Ƴ..ƴ)  LATIN CAPITAL LETTER Y WITH HOOK..LATIN SMALL LETTER Y WITH HOOK
-01B7          ; Latn; Cyrl; A #      (Ʒ)  LATIN CAPITAL LETTER EZH
-01BD          ; Latn; Cyrl; A #      (ƽ)  LATIN SMALL LETTER TONE FIVE
-01DD          ; Latn; Cyrl; A #      (ǝ)  LATIN SMALL LETTER TURNED E
-01E4          ; Latn; Cyrl; A #      (Ǥ)  LATIN CAPITAL LETTER G WITH STROKE
-01FE..01FF    ; Latn; Cyrl; A #  [2] (Ǿ..ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE..LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0253          ; Latn; Cyrl; A #      (ɓ)  LATIN SMALL LETTER B WITH HOOK
-0256..0257    ; Latn; Cyrl; A #  [2] (ɖ..ɗ)  LATIN SMALL LETTER D WITH TAIL..LATIN SMALL LETTER D WITH HOOK
-0259          ; Latn; Cyrl; A #      (ə)  LATIN SMALL LETTER SCHWA
-025B          ; Latn; Cyrl; A #      (ɛ)  LATIN SMALL LETTER OPEN E
-0268..0269    ; Latn; Cyrl; A #  [2] (ɨ..ɩ)  LATIN SMALL LETTER I WITH STROKE..LATIN SMALL LETTER IOTA
-0275          ; Latn; Cyrl; A #      (ɵ)  LATIN SMALL LETTER BARRED O
-0292          ; Latn; Cyrl; A #      (ʒ)  LATIN SMALL LETTER EZH
+0166..0167    ; Latn; Cyrl; A #  [2] (Ŧ..ŧ)  LATIN CAPITAL LETTER T WITH STROKE..LATIN SMALL LETTER T WITH STROKE
+01A0..01A1    ; Latn; Cyrl; A #  [2] (Ơ..ơ)  LATIN CAPITAL LETTER O WITH HORN..LATIN SMALL LETTER O WITH HORN
+01FE          ; Latn; Cyrl; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
 
-# Total code points: 86
+# Total code points: 58
 
-# Latin; Devanagari: [oøơǿɵ]
+# Latin; Devanagari: [oøơ]
 
 006F          ; Latn; Deva; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Deva; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Deva; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Deva; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Deva; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Georgian: [yƴ]
+# Latin; Georgian: [y]
 
 0079          ; Latn; Geor; A #      (y)  LATIN SMALL LETTER Y
-01B4          ; Latn; Geor; A #      (ƴ)  LATIN SMALL LETTER Y WITH HOOK
 
-# Total code points: 2
+# Total code points: 1
 
-# Latin; Greek: [A-CEHIK-PTX-Zciln-puvØøĦıĸŁłŦƁƇƖ-ƘƚƝ-ơƤƥƩƬƮƳƵǾǿȤɛɨɩɵʊʋ]
+# Latin; Greek: [ABEHIK-PTX-Zaikln-pt-vyØßøĦıĸŁłŦŧƠơǾ]
 
-0041..0043    ; Latn; Grek; A #  [3] (A..C)  LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER C
+0041..0042    ; Latn; Grek; A #  [2] (A..B)  LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER B
 0045          ; Latn; Grek; A #      (E)  LATIN CAPITAL LETTER E
 0048..0049    ; Latn; Grek; A #  [2] (H..I)  LATIN CAPITAL LETTER H..LATIN CAPITAL LETTER I
 004B..0050    ; Latn; Grek; A #  [6] (K..P)  LATIN CAPITAL LETTER K..LATIN CAPITAL LETTER P
 0054          ; Latn; Grek; A #      (T)  LATIN CAPITAL LETTER T
 0058..005A    ; Latn; Grek; A #  [3] (X..Z)  LATIN CAPITAL LETTER X..LATIN CAPITAL LETTER Z
-0063          ; Latn; Grek; A #      (c)  LATIN SMALL LETTER C
+0061          ; Latn; Grek; A #      (a)  LATIN SMALL LETTER A
 0069          ; Latn; Grek; A #      (i)  LATIN SMALL LETTER I
-006C          ; Latn; Grek; A #      (l)  LATIN SMALL LETTER L
+006B..006C    ; Latn; Grek; A #  [2] (k..l)  LATIN SMALL LETTER K..LATIN SMALL LETTER L
 006E..0070    ; Latn; Grek; A #  [3] (n..p)  LATIN SMALL LETTER N..LATIN SMALL LETTER P
-0075..0076    ; Latn; Grek; A #  [2] (u..v)  LATIN SMALL LETTER U..LATIN SMALL LETTER V
+0074..0076    ; Latn; Grek; A #  [3] (t..v)  LATIN SMALL LETTER T..LATIN SMALL LETTER V
+0079          ; Latn; Grek; A #      (y)  LATIN SMALL LETTER Y
 00D8          ; Latn; Grek; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
+00DF          ; Latn; Grek; A #      (ß)  LATIN SMALL LETTER SHARP S
 00F8          ; Latn; Grek; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 0126          ; Latn; Grek; A #      (Ħ)  LATIN CAPITAL LETTER H WITH STROKE
 0131          ; Latn; Grek; A #      (ı)  LATIN SMALL LETTER DOTLESS I
 0138          ; Latn; Grek; A #      (ĸ)  LATIN SMALL LETTER KRA
 0141..0142    ; Latn; Grek; A #  [2] (Ł..ł)  LATIN CAPITAL LETTER L WITH STROKE..LATIN SMALL LETTER L WITH STROKE
-0166          ; Latn; Grek; A #      (Ŧ)  LATIN CAPITAL LETTER T WITH STROKE
-0181          ; Latn; Grek; A #      (Ɓ)  LATIN CAPITAL LETTER B WITH HOOK
-0187          ; Latn; Grek; A #      (Ƈ)  LATIN CAPITAL LETTER C WITH HOOK
-0196..0198    ; Latn; Grek; A #  [3] (Ɩ..Ƙ)  LATIN CAPITAL LETTER IOTA..LATIN CAPITAL LETTER K WITH HOOK
-019A          ; Latn; Grek; A #      (ƚ)  LATIN SMALL LETTER L WITH BAR
-019D..01A1    ; Latn; Grek; A #  [5] (Ɲ..ơ)  LATIN CAPITAL LETTER N WITH LEFT HOOK..LATIN SMALL LETTER O WITH HORN
-01A4..01A5    ; Latn; Grek; A #  [2] (Ƥ..ƥ)  LATIN CAPITAL LETTER P WITH HOOK..LATIN SMALL LETTER P WITH HOOK
-01A9          ; Latn; Grek; A #      (Ʃ)  LATIN CAPITAL LETTER ESH
-01AC          ; Latn; Grek; A #      (Ƭ)  LATIN CAPITAL LETTER T WITH HOOK
-01AE          ; Latn; Grek; A #      (Ʈ)  LATIN CAPITAL LETTER T WITH RETROFLEX HOOK
-01B3          ; Latn; Grek; A #      (Ƴ)  LATIN CAPITAL LETTER Y WITH HOOK
-01B5          ; Latn; Grek; A #      (Ƶ)  LATIN CAPITAL LETTER Z WITH STROKE
-01FE..01FF    ; Latn; Grek; A #  [2] (Ǿ..ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE..LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0224          ; Latn; Grek; A #      (Ȥ)  LATIN CAPITAL LETTER Z WITH HOOK
-025B          ; Latn; Grek; A #      (ɛ)  LATIN SMALL LETTER OPEN E
-0268..0269    ; Latn; Grek; A #  [2] (ɨ..ɩ)  LATIN SMALL LETTER I WITH STROKE..LATIN SMALL LETTER IOTA
-0275          ; Latn; Grek; A #      (ɵ)  LATIN SMALL LETTER BARRED O
-028A..028B    ; Latn; Grek; A #  [2] (ʊ..ʋ)  LATIN SMALL LETTER UPSILON..LATIN SMALL LETTER V WITH HOOK
+0166..0167    ; Latn; Grek; A #  [2] (Ŧ..ŧ)  LATIN CAPITAL LETTER T WITH STROKE..LATIN SMALL LETTER T WITH STROKE
+01A0..01A1    ; Latn; Grek; A #  [2] (Ơ..ơ)  LATIN CAPITAL LETTER O WITH HORN..LATIN SMALL LETTER O WITH HORN
+01FE          ; Latn; Grek; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
 
-# Total code points: 59
+# Total code points: 39
 
-# Latin; Gujarati: [oøơǿɵ]
+# Latin; Gujarati: [oøơ]
 
 006F          ; Latn; Gujr; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Gujr; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Gujr; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Gujr; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Gujr; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Gurmukhi: [oøơǿȢȣɵ]
+# Latin; Gurmukhi: [oøơ]
 
 006F          ; Latn; Guru; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Guru; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Guru; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Guru; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0222..0223    ; Latn; Guru; A #  [2] (Ȣ..ȣ)  LATIN CAPITAL LETTER OU..LATIN SMALL LETTER OU
-0275          ; Latn; Guru; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 7
+# Total code points: 3
 
-# Latin; Han: [OØƟƠǾ]
+# Latin; Han: [OØƠǾ]
 
 004F          ; Latn; Hani; A #      (O)  LATIN CAPITAL LETTER O
 00D8          ; Latn; Hani; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
-019F..01A0    ; Latn; Hani; A #  [2] (Ɵ..Ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN CAPITAL LETTER O WITH HORN
+01A0          ; Latn; Hani; A #      (Ơ)  LATIN CAPITAL LETTER O WITH HORN
 01FE          ; Latn; Hani; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
 
-# Total code points: 5
+# Total code points: 4
 
-# Latin; Kannada: [oøơǿɵ]
+# Latin; Hebrew: [ILlovøŁłơ]
+
+0049          ; Latn; Hebr; A #      (I)  LATIN CAPITAL LETTER I
+004C          ; Latn; Hebr; A #      (L)  LATIN CAPITAL LETTER L
+006C          ; Latn; Hebr; A #      (l)  LATIN SMALL LETTER L
+006F          ; Latn; Hebr; A #      (o)  LATIN SMALL LETTER O
+0076          ; Latn; Hebr; A #      (v)  LATIN SMALL LETTER V
+00F8          ; Latn; Hebr; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
+0141..0142    ; Latn; Hebr; A #  [2] (Ł..ł)  LATIN CAPITAL LETTER L WITH STROKE..LATIN SMALL LETTER L WITH STROKE
+01A1          ; Latn; Hebr; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
+
+# Total code points: 9
+
+# Latin; Kannada: [oøơ]
 
 006F          ; Latn; Knda; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Knda; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Knda; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Knda; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Knda; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Lao: [oøơǿɵ]
+# Latin; Lao: [oøơ]
 
 006F          ; Latn; Laoo; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Laoo; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Laoo; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Laoo; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Laoo; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Malayalam: [OoØøƟ-ơǾǿɵ]
+# Latin; Malayalam: [OoØøƠơǾ]
 
 004F          ; Latn; Mlym; A #      (O)  LATIN CAPITAL LETTER O
 006F          ; Latn; Mlym; A #      (o)  LATIN SMALL LETTER O
 00D8          ; Latn; Mlym; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
 00F8          ; Latn; Mlym; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
-019F..01A1    ; Latn; Mlym; A #  [3] (Ɵ..ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN SMALL LETTER O WITH HORN
-01FE..01FF    ; Latn; Mlym; A #  [2] (Ǿ..ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE..LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Mlym; A #      (ɵ)  LATIN SMALL LETTER BARRED O
+01A0..01A1    ; Latn; Mlym; A #  [2] (Ơ..ơ)  LATIN CAPITAL LETTER O WITH HORN..LATIN SMALL LETTER O WITH HORN
+01FE          ; Latn; Mlym; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
 
-# Total code points: 10
+# Total code points: 7
 
-# Latin; Mongolian: [OØƟƠǾ]
-
-004F          ; Latn; Mong; A #      (O)  LATIN CAPITAL LETTER O
-00D8          ; Latn; Mong; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
-019F..01A0    ; Latn; Mong; A #  [2] (Ɵ..Ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN CAPITAL LETTER O WITH HORN
-01FE          ; Latn; Mong; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
-
-# Total code points: 5
-
-# Latin; Myanmar: [oøơǿɵ]
+# Latin; Myanmar: [oøơ]
 
 006F          ; Latn; Mymr; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Mymr; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Mymr; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Mymr; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Mymr; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Oriya: [OØƟƠǾȢȣ]
+# Latin; Oriya: [OØƠǾ]
 
 004F          ; Latn; Orya; A #      (O)  LATIN CAPITAL LETTER O
 00D8          ; Latn; Orya; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
-019F..01A0    ; Latn; Orya; A #  [2] (Ɵ..Ơ)  LATIN CAPITAL LETTER O WITH MIDDLE TILDE..LATIN CAPITAL LETTER O WITH HORN
+01A0          ; Latn; Orya; A #      (Ơ)  LATIN CAPITAL LETTER O WITH HORN
 01FE          ; Latn; Orya; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
-0222..0223    ; Latn; Orya; A #  [2] (Ȣ..ȣ)  LATIN CAPITAL LETTER OU..LATIN SMALL LETTER OU
 
-# Total code points: 7
+# Total code points: 4
 
-# Latin; Telugu: [oøơǿɵ]
+# Latin; Sinhala: [oøơ]
+
+006F          ; Latn; Sinh; A #      (o)  LATIN SMALL LETTER O
+00F8          ; Latn; Sinh; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
+01A1          ; Latn; Sinh; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
+
+# Total code points: 3
+
+# Latin; Tamil: [CoÇøơ]
+
+0043          ; Latn; Taml; A #      (C)  LATIN CAPITAL LETTER C
+006F          ; Latn; Taml; A #      (o)  LATIN SMALL LETTER O
+00C7          ; Latn; Taml; A #      (Ç)  LATIN CAPITAL LETTER C WITH CEDILLA
+00F8          ; Latn; Taml; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
+01A1          ; Latn; Taml; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
+
+# Total code points: 5
+
+# Latin; Telugu: [oøơ]
 
 006F          ; Latn; Telu; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Telu; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Telu; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Telu; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Telu; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Thai: [oøơǿɵ]
+# Latin; Thai: [oøơ]
 
 006F          ; Latn; Thai; A #      (o)  LATIN SMALL LETTER O
 00F8          ; Latn; Thai; A #      (ø)  LATIN SMALL LETTER O WITH STROKE
 01A1          ; Latn; Thai; A #      (ơ)  LATIN SMALL LETTER O WITH HORN
-01FF          ; Latn; Thai; A #      (ǿ)  LATIN SMALL LETTER O WITH STROKE AND ACUTE
-0275          ; Latn; Thai; A #      (ɵ)  LATIN SMALL LETTER BARRED O
 
-# Total code points: 5
+# Total code points: 3
 
-# Latin; Canadian_Aboriginal: [ABDFH-JLPRVbdlmpwxÐĐđĦŁłƁ-ƄƉƊƌƑƖƗƚƤ-Ʀɓɖɗɯ]
+# Latin; Canadian_Aboriginal: [ABDFH-JLMPRUVbdlpxÐĐđĦŁł]
 
 0041..0042    ; Latn; Cans; A #  [2] (A..B)  LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER B
 0044          ; Latn; Cans; A #      (D)  LATIN CAPITAL LETTER D
 0046          ; Latn; Cans; A #      (F)  LATIN CAPITAL LETTER F
 0048..004A    ; Latn; Cans; A #  [3] (H..J)  LATIN CAPITAL LETTER H..LATIN CAPITAL LETTER J
-004C          ; Latn; Cans; A #      (L)  LATIN CAPITAL LETTER L
+004C..004D    ; Latn; Cans; A #  [2] (L..M)  LATIN CAPITAL LETTER L..LATIN CAPITAL LETTER M
 0050          ; Latn; Cans; A #      (P)  LATIN CAPITAL LETTER P
 0052          ; Latn; Cans; A #      (R)  LATIN CAPITAL LETTER R
-0056          ; Latn; Cans; A #      (V)  LATIN CAPITAL LETTER V
+0055..0056    ; Latn; Cans; A #  [2] (U..V)  LATIN CAPITAL LETTER U..LATIN CAPITAL LETTER V
 0062          ; Latn; Cans; A #      (b)  LATIN SMALL LETTER B
 0064          ; Latn; Cans; A #      (d)  LATIN SMALL LETTER D
-006C..006D    ; Latn; Cans; A #  [2] (l..m)  LATIN SMALL LETTER L..LATIN SMALL LETTER M
+006C          ; Latn; Cans; A #      (l)  LATIN SMALL LETTER L
 0070          ; Latn; Cans; A #      (p)  LATIN SMALL LETTER P
-0077..0078    ; Latn; Cans; A #  [2] (w..x)  LATIN SMALL LETTER W..LATIN SMALL LETTER X
+0078          ; Latn; Cans; A #      (x)  LATIN SMALL LETTER X
 00D0          ; Latn; Cans; A #      (Ð)  LATIN CAPITAL LETTER ETH
 0110..0111    ; Latn; Cans; A #  [2] (Đ..đ)  LATIN CAPITAL LETTER D WITH STROKE..LATIN SMALL LETTER D WITH STROKE
 0126          ; Latn; Cans; A #      (Ħ)  LATIN CAPITAL LETTER H WITH STROKE
 0141..0142    ; Latn; Cans; A #  [2] (Ł..ł)  LATIN CAPITAL LETTER L WITH STROKE..LATIN SMALL LETTER L WITH STROKE
-0181..0184    ; Latn; Cans; A #  [4] (Ɓ..Ƅ)  LATIN CAPITAL LETTER B WITH HOOK..LATIN CAPITAL LETTER TONE SIX
-0189..018A    ; Latn; Cans; A #  [2] (Ɖ..Ɗ)  LATIN CAPITAL LETTER AFRICAN D..LATIN CAPITAL LETTER D WITH HOOK
-018C          ; Latn; Cans; A #      (ƌ)  LATIN SMALL LETTER D WITH TOPBAR
-0191          ; Latn; Cans; A #      (Ƒ)  LATIN CAPITAL LETTER F WITH HOOK
-0196..0197    ; Latn; Cans; A #  [2] (Ɩ..Ɨ)  LATIN CAPITAL LETTER IOTA..LATIN CAPITAL LETTER I WITH STROKE
-019A          ; Latn; Cans; A #      (ƚ)  LATIN SMALL LETTER L WITH BAR
-01A4..01A6    ; Latn; Cans; A #  [3] (Ƥ..Ʀ)  LATIN CAPITAL LETTER P WITH HOOK..LATIN LETTER YR
-0253          ; Latn; Cans; A #      (ɓ)  LATIN SMALL LETTER B WITH HOOK
-0256..0257    ; Latn; Cans; A #  [2] (ɖ..ɗ)  LATIN SMALL LETTER D WITH TAIL..LATIN SMALL LETTER D WITH HOOK
-026F          ; Latn; Cans; A #      (ɯ)  LATIN SMALL LETTER TURNED M
 
-# Total code points: 42
+# Total code points: 24
 
-# Malayalam; Armenian: [ംഠ]
+# Latin; Tifinagh: [EILOVXlØŁłƠǾ]
+
+0045          ; Latn; Tfng; A #      (E)  LATIN CAPITAL LETTER E
+0049          ; Latn; Tfng; A #      (I)  LATIN CAPITAL LETTER I
+004C          ; Latn; Tfng; A #      (L)  LATIN CAPITAL LETTER L
+004F          ; Latn; Tfng; A #      (O)  LATIN CAPITAL LETTER O
+0056          ; Latn; Tfng; A #      (V)  LATIN CAPITAL LETTER V
+0058          ; Latn; Tfng; A #      (X)  LATIN CAPITAL LETTER X
+006C          ; Latn; Tfng; A #      (l)  LATIN SMALL LETTER L
+00D8          ; Latn; Tfng; A #      (Ø)  LATIN CAPITAL LETTER O WITH STROKE
+0141..0142    ; Latn; Tfng; A #  [2] (Ł..ł)  LATIN CAPITAL LETTER L WITH STROKE..LATIN SMALL LETTER L WITH STROKE
+01A0          ; Latn; Tfng; A #      (Ơ)  LATIN CAPITAL LETTER O WITH HORN
+01FE          ; Latn; Tfng; A #      (Ǿ)  LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
+
+# Total code points: 12
+
+# Malayalam; Armenian: [ംഠ൦]
 
 0D02          ; Mlym; Armn; A #      (ം)  MALAYALAM SIGN ANUSVARA
 0D20          ; Mlym; Armn; A #      (ഠ)  MALAYALAM LETTER TTHA
+0D66          ; Mlym; Armn; A #      (൦)  MALAYALAM DIGIT ZERO
+
+# Total code points: 3
+
+# Malayalam; Bengali: [ഃഠ]
+
+0D03          ; Mlym; Beng; A #      (ഃ)  MALAYALAM SIGN VISARGA
+0D20          ; Mlym; Beng; A #      (ഠ)  MALAYALAM LETTER TTHA
 
 # Total code points: 2
 
-# Malayalam; Bengali: [ഠ]
-
-0D20          ; Mlym; Beng; A #      (ഠ)  MALAYALAM LETTER TTHA
-
-# Total code points: 1
-
-# Malayalam; Cherokee: [ഠ]
-
-0D20          ; Mlym; Cher; A #      (ഠ)  MALAYALAM LETTER TTHA
-
-# Total code points: 1
-
-# Malayalam; Cyrillic: [ംഠ]
+# Malayalam; Cyrillic: [ംഠ൦]
 
 0D02          ; Mlym; Cyrl; A #      (ം)  MALAYALAM SIGN ANUSVARA
 0D20          ; Mlym; Cyrl; A #      (ഠ)  MALAYALAM LETTER TTHA
+0D66          ; Mlym; Cyrl; A #      (൦)  MALAYALAM DIGIT ZERO
+
+# Total code points: 3
+
+# Malayalam; Devanagari: [ം൦]
+
+0D02          ; Mlym; Deva; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Deva; A #      (൦)  MALAYALAM DIGIT ZERO
 
 # Total code points: 2
 
-# Malayalam; Devanagari: [ം]
-
-0D02          ; Mlym; Deva; A #      (ം)  MALAYALAM SIGN ANUSVARA
-
-# Total code points: 1
-
-# Malayalam; Greek: [ംഠ]
+# Malayalam; Greek: [ംഠ൦]
 
 0D02          ; Mlym; Grek; A #      (ം)  MALAYALAM SIGN ANUSVARA
 0D20          ; Mlym; Grek; A #      (ഠ)  MALAYALAM LETTER TTHA
+0D66          ; Mlym; Grek; A #      (൦)  MALAYALAM DIGIT ZERO
+
+# Total code points: 3
+
+# Malayalam; Gujarati: [ം൦]
+
+0D02          ; Mlym; Gujr; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Gujr; A #      (൦)  MALAYALAM DIGIT ZERO
 
 # Total code points: 2
 
-# Malayalam; Gujarati: [ം]
+# Malayalam; Gurmukhi: [ംഃ൦]
 
-0D02          ; Mlym; Gujr; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D02..0D03    ; Mlym; Guru; A #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Guru; A #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
-
-# Malayalam; Gurmukhi: [ം]
-
-0D02          ; Mlym; Guru; A #      (ം)  MALAYALAM SIGN ANUSVARA
-
-# Total code points: 1
+# Total code points: 3
 
 # Malayalam; Han: [ഠ]
 
@@ -3859,36 +4171,41 @@
 
 # Total code points: 1
 
-# Malayalam; Kannada: [ം]
+# Malayalam; Hebrew: [ം൦]
 
-0D02          ; Mlym; Knda; A #      (ം)  MALAYALAM SIGN ANUSVARA
-
-# Total code points: 1
-
-# Malayalam; Lao: [ം]
-
-0D02          ; Mlym; Laoo; A #      (ം)  MALAYALAM SIGN ANUSVARA
-
-# Total code points: 1
-
-# Malayalam; Latin: [ംഠ]
-
-0D02          ; Mlym; Latn; A #      (ം)  MALAYALAM SIGN ANUSVARA
-0D20          ; Mlym; Latn; A #      (ഠ)  MALAYALAM LETTER TTHA
+0D02          ; Mlym; Hebr; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Hebr; A #      (൦)  MALAYALAM DIGIT ZERO
 
 # Total code points: 2
 
-# Malayalam; Mongolian: [ഠ]
+# Malayalam; Kannada: [ംഃ൦]
 
-0D20          ; Mlym; Mong; A #      (ഠ)  MALAYALAM LETTER TTHA
+0D02..0D03    ; Mlym; Knda; A #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Knda; A #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
-# Malayalam; Myanmar: [ം]
+# Malayalam; Lao: [ം൦]
 
-0D02          ; Mlym; Mymr; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D02          ; Mlym; Laoo; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Laoo; A #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
+
+# Malayalam; Latin: [ംഠ൦]
+
+0D02          ; Mlym; Latn; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D20          ; Mlym; Latn; A #      (ഠ)  MALAYALAM LETTER TTHA
+0D66          ; Mlym; Latn; A #      (൦)  MALAYALAM DIGIT ZERO
+
+# Total code points: 3
+
+# Malayalam; Myanmar: [ംഃ൦]
+
+0D02..0D03    ; Mlym; Mymr; A #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Mymr; A #      (൦)  MALAYALAM DIGIT ZERO
+
+# Total code points: 3
 
 # Malayalam; Oriya: [ഠ]
 
@@ -3896,86 +4213,45 @@
 
 # Total code points: 1
 
-# Malayalam; Sinhala: [ന്]
+# Malayalam; Sinhala: [ംഃന്൦]
 
+0D02..0D03    ; Mlym; Sinh; A #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
 0D28          ; Mlym; Sinh; A #      (ന)  MALAYALAM LETTER NA
 0D4D          ; Mlym; Sinh; A #      (്)  MALAYALAM SIGN VIRAMA
+0D66          ; Mlym; Sinh; A #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 5
 
-# Malayalam; Tamil: [ഉജണഴി-ൃ]
+# Malayalam; Tamil: [ംഉജണഴശിീ൦]
 
+0D02          ; Mlym; Taml; A #      (ം)  MALAYALAM SIGN ANUSVARA
 0D09          ; Mlym; Taml; A #      (ഉ)  MALAYALAM LETTER U
 0D1C          ; Mlym; Taml; A #      (ജ)  MALAYALAM LETTER JA
 0D23          ; Mlym; Taml; A #      (ണ)  MALAYALAM LETTER NNA
 0D34          ; Mlym; Taml; A #      (ഴ)  MALAYALAM LETTER LLLA
-0D3F..0D43    ; Mlym; Taml; A #  [5] (ി..ൃ)  MALAYALAM VOWEL SIGN I..MALAYALAM VOWEL SIGN VOCALIC R
+0D36          ; Mlym; Taml; A #      (ശ)  MALAYALAM LETTER SHA
+0D3F..0D40    ; Mlym; Taml; A #  [2] (ി..ീ)  MALAYALAM VOWEL SIGN I..MALAYALAM VOWEL SIGN II
+0D66          ; Mlym; Taml; A #      (൦)  MALAYALAM DIGIT ZERO
 
 # Total code points: 9
 
-# Malayalam; Telugu: [ം]
+# Malayalam; Telugu: [ംഃ൦]
 
-0D02          ; Mlym; Telu; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D02..0D03    ; Mlym; Telu; A #  [2] (ം..ഃ)  MALAYALAM SIGN ANUSVARA..MALAYALAM SIGN VISARGA
+0D66          ; Mlym; Telu; A #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
-# Malayalam; Thai: [ം]
+# Malayalam; Thai: [ം൦]
 
 0D02          ; Mlym; Thai; A #      (ം)  MALAYALAM SIGN ANUSVARA
+0D66          ; Mlym; Thai; A #      (൦)  MALAYALAM DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Mongolian; Armenian: [᠐]
+# Malayalam; Tifinagh: [ഠ]
 
-1810          ; Mong; Armn; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Bengali: [᠐]
-
-1810          ; Mong; Beng; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Cherokee: [᠐]
-
-1810          ; Mong; Cher; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Cyrillic: [᠐]
-
-1810          ; Mong; Cyrl; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Greek: [᠐]
-
-1810          ; Mong; Grek; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Han: [᠐]
-
-1810          ; Mong; Hani; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Latin: [᠐]
-
-1810          ; Mong; Latn; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Malayalam: [᠐]
-
-1810          ; Mong; Mlym; A #      (᠐)  MONGOLIAN DIGIT ZERO
-
-# Total code points: 1
-
-# Mongolian; Oriya: [᠐]
-
-1810          ; Mong; Orya; A #      (᠐)  MONGOLIAN DIGIT ZERO
+0D20          ; Mlym; Tfng; A #      (ഠ)  MALAYALAM LETTER TTHA
 
 # Total code points: 1
 
@@ -3985,6 +4261,12 @@
 1040          ; Mymr; Armn; A #      (၀)  MYANMAR DIGIT ZERO
 
 # Total code points: 2
+
+# Myanmar; Bengali: [း]
+
+1038          ; Mymr; Beng; A #      (း)  MYANMAR SIGN VISARGA
+
+# Total code points: 1
 
 # Myanmar; Cyrillic: [ဝ၀]
 
@@ -4014,25 +4296,28 @@
 
 # Total code points: 2
 
-# Myanmar; Gurmukhi: [ဝ၀]
+# Myanmar; Gurmukhi: [ဝး၀]
 
 101D          ; Mymr; Guru; A #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Guru; A #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Guru; A #      (၀)  MYANMAR DIGIT ZERO
 
+# Total code points: 3
+
+# Myanmar; Hebrew: [ဝ၀]
+
+101D          ; Mymr; Hebr; A #      (ဝ)  MYANMAR LETTER WA
+1040          ; Mymr; Hebr; A #      (၀)  MYANMAR DIGIT ZERO
+
 # Total code points: 2
 
-# Myanmar; Hebrew: [ံ]
-
-1036          ; Mymr; Hebr; A #      (ံ)  MYANMAR SIGN ANUSVARA
-
-# Total code points: 1
-
-# Myanmar; Kannada: [ဝ၀]
+# Myanmar; Kannada: [ဝး၀]
 
 101D          ; Mymr; Knda; A #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Knda; A #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Knda; A #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
 # Myanmar; Khmer: [ံ]
 
@@ -4055,25 +4340,37 @@
 
 # Total code points: 2
 
-# Myanmar; Malayalam: [ဝ၀]
+# Myanmar; Malayalam: [ဝး၀]
 
 101D          ; Mymr; Mlym; A #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Mlym; A #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Mlym; A #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
-# Myanmar; Tamil: [ံ]
+# Myanmar; Sinhala: [ဝး၀]
 
+101D          ; Mymr; Sinh; A #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Sinh; A #      (း)  MYANMAR SIGN VISARGA
+1040          ; Mymr; Sinh; A #      (၀)  MYANMAR DIGIT ZERO
+
+# Total code points: 3
+
+# Myanmar; Tamil: [ဝံ၀]
+
+101D          ; Mymr; Taml; A #      (ဝ)  MYANMAR LETTER WA
 1036          ; Mymr; Taml; A #      (ံ)  MYANMAR SIGN ANUSVARA
+1040          ; Mymr; Taml; A #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 3
 
-# Myanmar; Telugu: [ဝ၀]
+# Myanmar; Telugu: [ဝး၀]
 
 101D          ; Mymr; Telu; A #      (ဝ)  MYANMAR LETTER WA
+1038          ; Mymr; Telu; A #      (း)  MYANMAR SIGN VISARGA
 1040          ; Mymr; Telu; A #      (၀)  MYANMAR DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
 # Myanmar; Thai: [ဝံ၀]
 
@@ -4083,50 +4380,51 @@
 
 # Total code points: 3
 
-# Oriya; Armenian: [୦]
+# Oriya; Armenian: [ଠ୦]
 
+0B20          ; Orya; Armn; A #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Armn; A #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Bengali: [ଃ଼୦୨]
+# Oriya; Bengali: [ଁଃଠ଼୦୨]
 
+0B01          ; Orya; Beng; A #      (ଁ)  ORIYA SIGN CANDRABINDU
 0B03          ; Orya; Beng; A #      (ଃ)  ORIYA SIGN VISARGA
+0B20          ; Orya; Beng; A #      (ଠ)  ORIYA LETTER TTHA
 0B3C          ; Orya; Beng; A #      (଼)  ORIYA SIGN NUKTA
 0B66          ; Orya; Beng; A #      (୦)  ORIYA DIGIT ZERO
 0B68          ; Orya; Beng; A #      (୨)  ORIYA DIGIT TWO
 
-# Total code points: 4
+# Total code points: 6
 
-# Oriya; Cherokee: [୦]
+# Oriya; Cyrillic: [ଠ୦]
 
-0B66          ; Orya; Cher; A #      (୦)  ORIYA DIGIT ZERO
-
-# Total code points: 1
-
-# Oriya; Cyrillic: [୦]
-
+0B20          ; Orya; Cyrl; A #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Cyrl; A #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Devanagari: [଼]
+# Oriya; Devanagari: [ଁ଼]
 
+0B01          ; Orya; Deva; A #      (ଁ)  ORIYA SIGN CANDRABINDU
 0B3C          ; Orya; Deva; A #      (଼)  ORIYA SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Greek: [୦]
+# Oriya; Greek: [ଠ୦]
 
+0B20          ; Orya; Grek; A #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Grek; A #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Gujarati: [଼]
+# Oriya; Gujarati: [ଁ଼]
 
+0B01          ; Orya; Gujr; A #      (ଁ)  ORIYA SIGN CANDRABINDU
 0B3C          ; Orya; Gujr; A #      (଼)  ORIYA SIGN NUKTA
 
-# Total code points: 1
+# Total code points: 2
 
 # Oriya; Gurmukhi: [ଃ଼୨]
 
@@ -4136,61 +4434,182 @@
 
 # Total code points: 3
 
-# Oriya; Han: [୦]
+# Oriya; Han: [ଠ୦]
 
+0B20          ; Orya; Hani; A #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Hani; A #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Latin: [ଃ୦]
+# Oriya; Latin: [ଠ୦]
 
-0B03          ; Orya; Latn; A #      (ଃ)  ORIYA SIGN VISARGA
+0B20          ; Orya; Latn; A #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Latn; A #      (୦)  ORIYA DIGIT ZERO
 
 # Total code points: 2
 
-# Oriya; Malayalam: [୦]
+# Oriya; Malayalam: [ଠ୦]
 
+0B20          ; Orya; Mlym; A #      (ଠ)  ORIYA LETTER TTHA
 0B66          ; Orya; Mlym; A #      (୦)  ORIYA DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Oriya; Mongolian: [୦]
+# Oriya; Tifinagh: [ଠ୦]
 
-0B66          ; Orya; Mong; A #      (୦)  ORIYA DIGIT ZERO
-
-# Total code points: 1
-
-# Sinhala; Malayalam: [ඌ]
-
-0D8C          ; Sinh; Mlym; A #      (ඌ)  SINHALA LETTER UUYANNA
-
-# Total code points: 1
-
-# Tamil; Devanagari: [்]
-
-0BCD          ; Taml; Deva; A #      (்)  TAMIL SIGN VIRAMA
-
-# Total code points: 1
-
-# Tamil; Gujarati: [்]
-
-0BCD          ; Taml; Gujr; A #      (்)  TAMIL SIGN VIRAMA
-
-# Total code points: 1
-
-# Tamil; Gurmukhi: [்]
-
-0BCD          ; Taml; Guru; A #      (்)  TAMIL SIGN VIRAMA
-
-# Total code points: 1
-
-# Tamil; Hebrew: [ஂ்]
-
-0B82          ; Taml; Hebr; A #      (ஂ)  TAMIL SIGN ANUSVARA
-0BCD          ; Taml; Hebr; A #      (்)  TAMIL SIGN VIRAMA
+0B20          ; Orya; Tfng; A #      (ଠ)  ORIYA LETTER TTHA
+0B66          ; Orya; Tfng; A #      (୦)  ORIYA DIGIT ZERO
 
 # Total code points: 2
+
+# Sinhala; Armenian: [ං]
+
+0D82          ; Sinh; Armn; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Bengali: [ඃ]
+
+0D83          ; Sinh; Beng; A #      (ඃ)  SINHALA SIGN VISARGAYA
+
+# Total code points: 1
+
+# Sinhala; Cyrillic: [ං]
+
+0D82          ; Sinh; Cyrl; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Devanagari: [ං]
+
+0D82          ; Sinh; Deva; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Greek: [ං]
+
+0D82          ; Sinh; Grek; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Gujarati: [ං]
+
+0D82          ; Sinh; Gujr; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Gurmukhi: [ංඃ]
+
+0D82..0D83    ; Sinh; Guru; A #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Hebrew: [ං]
+
+0D82          ; Sinh; Hebr; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Kannada: [ංඃ]
+
+0D82..0D83    ; Sinh; Knda; A #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Lao: [ං]
+
+0D82          ; Sinh; Laoo; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Latin: [ං]
+
+0D82          ; Sinh; Latn; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Malayalam: [ංඃඌ]
+
+0D82..0D83    ; Sinh; Mlym; A #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+0D8C          ; Sinh; Mlym; A #      (ඌ)  SINHALA LETTER UUYANNA
+
+# Total code points: 3
+
+# Sinhala; Myanmar: [ංඃ]
+
+0D82..0D83    ; Sinh; Mymr; A #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Tamil: [ං]
+
+0D82          ; Sinh; Taml; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Sinhala; Telugu: [ංඃ]
+
+0D82..0D83    ; Sinh; Telu; A #  [2] (ං..ඃ)  SINHALA SIGN ANUSVARAYA..SINHALA SIGN VISARGAYA
+
+# Total code points: 2
+
+# Sinhala; Thai: [ං]
+
+0D82          ; Sinh; Thai; A #      (ං)  SINHALA SIGN ANUSVARAYA
+
+# Total code points: 1
+
+# Tamil; Armenian: [௦]
+
+0BE6          ; Taml; Armn; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Cyrillic: [ௐ௦]
+
+0BD0          ; Taml; Cyrl; A #      (ௐ)  TAMIL OM
+0BE6          ; Taml; Cyrl; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Devanagari: [்௦]
+
+0BCD          ; Taml; Deva; A #      (்)  TAMIL SIGN VIRAMA
+0BE6          ; Taml; Deva; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Greek: [௦]
+
+0BE6          ; Taml; Grek; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Gujarati: [்௦]
+
+0BCD          ; Taml; Gujr; A #      (்)  TAMIL SIGN VIRAMA
+0BE6          ; Taml; Gujr; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Gurmukhi: [்௦]
+
+0BCD          ; Taml; Guru; A #      (்)  TAMIL SIGN VIRAMA
+0BE6          ; Taml; Guru; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Hebrew: [௦]
+
+0BE6          ; Taml; Hebr; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Kannada: [௦]
+
+0BE6          ; Taml; Knda; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
 
 # Tamil; Khmer: [ஂ]
 
@@ -4198,36 +4617,59 @@
 
 # Total code points: 1
 
-# Tamil; Lao: [ஂ]
+# Tamil; Lao: [ஂ௦]
 
 0B82          ; Taml; Laoo; A #      (ஂ)  TAMIL SIGN ANUSVARA
+0BE6          ; Taml; Laoo; A #      (௦)  TAMIL DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
-# Tamil; Malayalam: [உஐஜணழிூ௨]
+# Tamil; Latin: [ௐ௦]
+
+0BD0          ; Taml; Latn; A #      (ௐ)  TAMIL OM
+0BE6          ; Taml; Latn; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Malayalam: [உஐஜணழஶி௦௨]
 
 0B89          ; Taml; Mlym; A #      (உ)  TAMIL LETTER U
 0B90          ; Taml; Mlym; A #      (ஐ)  TAMIL LETTER AI
 0B9C          ; Taml; Mlym; A #      (ஜ)  TAMIL LETTER JA
 0BA3          ; Taml; Mlym; A #      (ண)  TAMIL LETTER NNA
 0BB4          ; Taml; Mlym; A #      (ழ)  TAMIL LETTER LLLA
+0BB6          ; Taml; Mlym; A #      (ஶ)  TAMIL LETTER SHA
 0BBF          ; Taml; Mlym; A #      (ி)  TAMIL VOWEL SIGN I
-0BC2          ; Taml; Mlym; A #      (ூ)  TAMIL VOWEL SIGN UU
+0BE6          ; Taml; Mlym; A #      (௦)  TAMIL DIGIT ZERO
 0BE8          ; Taml; Mlym; A #      (௨)  TAMIL DIGIT TWO
 
-# Total code points: 8
+# Total code points: 9
 
-# Tamil; Myanmar: [ஂ]
+# Tamil; Myanmar: [ஂ௦]
 
 0B82          ; Taml; Mymr; A #      (ஂ)  TAMIL SIGN ANUSVARA
+0BE6          ; Taml; Mymr; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 2
+
+# Tamil; Sinhala: [௦]
+
+0BE6          ; Taml; Sinh; A #      (௦)  TAMIL DIGIT ZERO
 
 # Total code points: 1
 
-# Tamil; Thai: [ஂ]
+# Tamil; Telugu: [௦]
+
+0BE6          ; Taml; Telu; A #      (௦)  TAMIL DIGIT ZERO
+
+# Total code points: 1
+
+# Tamil; Thai: [ஂ௦]
 
 0B82          ; Taml; Thai; A #      (ஂ)  TAMIL SIGN ANUSVARA
+0BE6          ; Taml; Thai; A #      (௦)  TAMIL DIGIT ZERO
 
-# Total code points: 1
+# Total code points: 2
 
 # Telugu; Armenian: [ం౦]
 
@@ -4235,6 +4677,12 @@
 0C66          ; Telu; Armn; A #      (౦)  TELUGU DIGIT ZERO
 
 # Total code points: 2
+
+# Telugu; Bengali: [ః]
+
+0C03          ; Telu; Beng; A #      (ః)  TELUGU SIGN VISARGA
+
+# Total code points: 1
 
 # Telugu; Cyrillic: [ం౦]
 
@@ -4264,10 +4712,17 @@
 
 # Total code points: 2
 
-# Telugu; Gurmukhi: [ం౦]
+# Telugu; Gurmukhi: [ంః౦]
 
-0C02          ; Telu; Guru; A #      (ం)  TELUGU SIGN ANUSVARA
+0C02..0C03    ; Telu; Guru; A #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
 0C66          ; Telu; Guru; A #      (౦)  TELUGU DIGIT ZERO
+
+# Total code points: 3
+
+# Telugu; Hebrew: [ం౦]
+
+0C02          ; Telu; Hebr; A #      (ం)  TELUGU SIGN ANUSVARA
+0C66          ; Telu; Hebr; A #      (౦)  TELUGU DIGIT ZERO
 
 # Total code points: 2
 
@@ -4302,17 +4757,31 @@
 
 # Total code points: 2
 
-# Telugu; Malayalam: [ం౦]
+# Telugu; Malayalam: [ంః౦]
 
-0C02          ; Telu; Mlym; A #      (ం)  TELUGU SIGN ANUSVARA
+0C02..0C03    ; Telu; Mlym; A #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
 0C66          ; Telu; Mlym; A #      (౦)  TELUGU DIGIT ZERO
 
-# Total code points: 2
+# Total code points: 3
 
-# Telugu; Myanmar: [ం౦]
+# Telugu; Myanmar: [ంః౦]
 
-0C02          ; Telu; Mymr; A #      (ం)  TELUGU SIGN ANUSVARA
+0C02..0C03    ; Telu; Mymr; A #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
 0C66          ; Telu; Mymr; A #      (౦)  TELUGU DIGIT ZERO
+
+# Total code points: 3
+
+# Telugu; Sinhala: [ంః౦]
+
+0C02..0C03    ; Telu; Sinh; A #  [2] (ం..ః)  TELUGU SIGN ANUSVARA..TELUGU SIGN VISARGA
+0C66          ; Telu; Sinh; A #      (౦)  TELUGU DIGIT ZERO
+
+# Total code points: 3
+
+# Telugu; Tamil: [ం౦]
+
+0C02          ; Telu; Taml; A #      (ం)  TELUGU SIGN ANUSVARA
+0C66          ; Telu; Taml; A #      (౦)  TELUGU DIGIT ZERO
 
 # Total code points: 2
 
@@ -4359,9 +4828,9 @@
 
 # Total code points: 1
 
-# Thai; Hebrew: [ํ]
+# Thai; Hebrew: [๐]
 
-0E4D          ; Thai; Hebr; A #      (ํ)  THAI CHARACTER NIKHAHIT
+0E50          ; Thai; Hebr; A #      (๐)  THAI DIGIT ZERO
 
 # Total code points: 1
 
@@ -4371,13 +4840,12 @@
 
 # Total code points: 1
 
-# Thai; Khmer: [ิ-ื่ํ]
+# Thai; Khmer: [ิ-ืํ]
 
 0E34..0E37    ; Thai; Khmr; A #  [4] (ิ..ื)  THAI CHARACTER SARA I..THAI CHARACTER SARA UEE
-0E48          ; Thai; Khmr; A #      (่)  THAI CHARACTER MAI EK
 0E4D          ; Thai; Khmr; A #      (ํ)  THAI CHARACTER NIKHAHIT
 
-# Total code points: 6
+# Total code points: 5
 
 # Thai; Lao: [จบปฝ-ฟยุู่-๋ํ๐]
 
@@ -4411,11 +4879,18 @@
 
 # Total code points: 2
 
-# Thai; Tamil: [ํ]
+# Thai; Sinhala: [๐]
 
-0E4D          ; Thai; Taml; A #      (ํ)  THAI CHARACTER NIKHAHIT
+0E50          ; Thai; Sinh; A #      (๐)  THAI DIGIT ZERO
 
 # Total code points: 1
+
+# Thai; Tamil: [ํ๐]
+
+0E4D          ; Thai; Taml; A #      (ํ)  THAI CHARACTER NIKHAHIT
+0E50          ; Thai; Taml; A #      (๐)  THAI DIGIT ZERO
+
+# Total code points: 2
 
 # Thai; Telugu: [๐]
 
@@ -4423,75 +4898,80 @@
 
 # Total code points: 1
 
-# Canadian_Aboriginal; Armenian: [ᕷ]
+# Canadian_Aboriginal; Armenian: [ᐧᑌᑎᑗ-ᑚᕷ]
 
+1427          ; Cans; Armn; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
+144C          ; Cans; Armn; A #      (ᑌ)  CANADIAN SYLLABICS TE
+144E          ; Cans; Armn; A #      (ᑎ)  CANADIAN SYLLABICS TI
+1457..145A    ; Cans; Armn; A #  [4] (ᑗ..ᑚ)  CANADIAN SYLLABICS TWE..CANADIAN SYLLABICS WEST-CREE TWI
 1577          ; Cans; Armn; A #      (ᕷ)  CANADIAN SYLLABICS NUNAVIK HO
 
-# Total code points: 1
+# Total code points: 8
 
-# Canadian_Aboriginal; Cherokee: [ᐧᐯᑭᑶᑷᒍᒘᒙᒪᒶᒷᔯᔰᕼᖯᗅᗯᗷ]
-
-1427          ; Cans; Cher; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
-142F          ; Cans; Cher; A #      (ᐯ)  CANADIAN SYLLABICS PE
-146D          ; Cans; Cher; A #      (ᑭ)  CANADIAN SYLLABICS KI
-1476..1477    ; Cans; Cher; A #  [2] (ᑶ..ᑷ)  CANADIAN SYLLABICS KWI..CANADIAN SYLLABICS WEST-CREE KWI
-148D          ; Cans; Cher; A #      (ᒍ)  CANADIAN SYLLABICS CO
-1498..1499    ; Cans; Cher; A #  [2] (ᒘ..ᒙ)  CANADIAN SYLLABICS CWO..CANADIAN SYLLABICS WEST-CREE CWO
-14AA          ; Cans; Cher; A #      (ᒪ)  CANADIAN SYLLABICS MA
-14B6..14B7    ; Cans; Cher; A #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
-152F..1530    ; Cans; Cher; A #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
-157C          ; Cans; Cher; A #      (ᕼ)  CANADIAN SYLLABICS NUNAVUT H
-15AF          ; Cans; Cher; A #      (ᖯ)  CANADIAN SYLLABICS AIVILIK B
-15C5          ; Cans; Cher; A #      (ᗅ)  CANADIAN SYLLABICS CARRIER GHO
-15EF          ; Cans; Cher; A #      (ᗯ)  CANADIAN SYLLABICS CARRIER GU
-15F7          ; Cans; Cher; A #      (ᗷ)  CANADIAN SYLLABICS CARRIER KHE
-
-# Total code points: 18
-
-# Canadian_Aboriginal; Cyrillic: [ᐧᐯᑭᑯᑶᑷᑺᑻᒍᒘᒙᒪᒶᒷᔯᔰᕁᕼᕽᖯᗅᗷ]
+# Canadian_Aboriginal; Cyrillic: [ᐧᐱᑊᑭᑯᑶᑷᑺᑻᒍᒘᒙᒥᒪᒮᒯᒶᒷᔯᔰᕁᕼᕽᖯᗅᗰᗷ]
 
 1427          ; Cans; Cyrl; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
-142F          ; Cans; Cyrl; A #      (ᐯ)  CANADIAN SYLLABICS PE
+1431          ; Cans; Cyrl; A #      (ᐱ)  CANADIAN SYLLABICS PI
+144A          ; Cans; Cyrl; A #      (ᑊ)  CANADIAN SYLLABICS WEST-CREE P
 146D          ; Cans; Cyrl; A #      (ᑭ)  CANADIAN SYLLABICS KI
 146F          ; Cans; Cyrl; A #      (ᑯ)  CANADIAN SYLLABICS KO
 1476..1477    ; Cans; Cyrl; A #  [2] (ᑶ..ᑷ)  CANADIAN SYLLABICS KWI..CANADIAN SYLLABICS WEST-CREE KWI
 147A..147B    ; Cans; Cyrl; A #  [2] (ᑺ..ᑻ)  CANADIAN SYLLABICS KWO..CANADIAN SYLLABICS WEST-CREE KWO
 148D          ; Cans; Cyrl; A #      (ᒍ)  CANADIAN SYLLABICS CO
 1498..1499    ; Cans; Cyrl; A #  [2] (ᒘ..ᒙ)  CANADIAN SYLLABICS CWO..CANADIAN SYLLABICS WEST-CREE CWO
+14A5          ; Cans; Cyrl; A #      (ᒥ)  CANADIAN SYLLABICS MI
 14AA          ; Cans; Cyrl; A #      (ᒪ)  CANADIAN SYLLABICS MA
+14AE..14AF    ; Cans; Cyrl; A #  [2] (ᒮ..ᒯ)  CANADIAN SYLLABICS MWI..CANADIAN SYLLABICS WEST-CREE MWI
 14B6..14B7    ; Cans; Cyrl; A #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
 152F..1530    ; Cans; Cyrl; A #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
 1541          ; Cans; Cyrl; A #      (ᕁ)  CANADIAN SYLLABICS SAYISI YI
 157C..157D    ; Cans; Cyrl; A #  [2] (ᕼ..ᕽ)  CANADIAN SYLLABICS NUNAVUT H..CANADIAN SYLLABICS HK
 15AF          ; Cans; Cyrl; A #      (ᖯ)  CANADIAN SYLLABICS AIVILIK B
 15C5          ; Cans; Cyrl; A #      (ᗅ)  CANADIAN SYLLABICS CARRIER GHO
+15F0          ; Cans; Cyrl; A #      (ᗰ)  CANADIAN SYLLABICS CARRIER GO
 15F7          ; Cans; Cyrl; A #      (ᗷ)  CANADIAN SYLLABICS CARRIER KHE
 
-# Total code points: 22
+# Total code points: 27
 
-# Canadian_Aboriginal; Greek: [ᐃᐎᐏᐧᑭᑶᑷᒪᒶᒷᔯᔰᕷᕼᗅᗷᘯᘵ]
+# Canadian_Aboriginal; Greek: [ᐃᐎᐏᐧᐱᑊᑭᑶᑷᒥᒪᒮᒯᒶᒷᔯᔰᕷᕼᗅᗰᗷᘯᘵ]
 
 1403          ; Cans; Grek; A #      (ᐃ)  CANADIAN SYLLABICS I
 140E..140F    ; Cans; Grek; A #  [2] (ᐎ..ᐏ)  CANADIAN SYLLABICS WI..CANADIAN SYLLABICS WEST-CREE WI
 1427          ; Cans; Grek; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
+1431          ; Cans; Grek; A #      (ᐱ)  CANADIAN SYLLABICS PI
+144A          ; Cans; Grek; A #      (ᑊ)  CANADIAN SYLLABICS WEST-CREE P
 146D          ; Cans; Grek; A #      (ᑭ)  CANADIAN SYLLABICS KI
 1476..1477    ; Cans; Grek; A #  [2] (ᑶ..ᑷ)  CANADIAN SYLLABICS KWI..CANADIAN SYLLABICS WEST-CREE KWI
+14A5          ; Cans; Grek; A #      (ᒥ)  CANADIAN SYLLABICS MI
 14AA          ; Cans; Grek; A #      (ᒪ)  CANADIAN SYLLABICS MA
+14AE..14AF    ; Cans; Grek; A #  [2] (ᒮ..ᒯ)  CANADIAN SYLLABICS MWI..CANADIAN SYLLABICS WEST-CREE MWI
 14B6..14B7    ; Cans; Grek; A #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
 152F..1530    ; Cans; Grek; A #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
 1577          ; Cans; Grek; A #      (ᕷ)  CANADIAN SYLLABICS NUNAVIK HO
 157C          ; Cans; Grek; A #      (ᕼ)  CANADIAN SYLLABICS NUNAVUT H
 15C5          ; Cans; Grek; A #      (ᗅ)  CANADIAN SYLLABICS CARRIER GHO
+15F0          ; Cans; Grek; A #      (ᗰ)  CANADIAN SYLLABICS CARRIER GO
 15F7          ; Cans; Grek; A #      (ᗷ)  CANADIAN SYLLABICS CARRIER KHE
 162F          ; Cans; Grek; A #      (ᘯ)  CANADIAN SYLLABICS CARRIER LHO
 1635          ; Cans; Grek; A #      (ᘵ)  CANADIAN SYLLABICS CARRIER TLHO
 
-# Total code points: 18
+# Total code points: 24
 
-# Canadian_Aboriginal; Latin: [ᐧᐯᑭᑯᑶᑷᑺᑻᒍᒘᒙᒪᒶᒷᔯᔰᕁᕼᕽᖇᖯᖴᗅᗞᗪᗯᗰᗷ]
+# Canadian_Aboriginal; Hebrew: [ᐧᒪᒶᒷᔯᔰ]
+
+1427          ; Cans; Hebr; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
+14AA          ; Cans; Hebr; A #      (ᒪ)  CANADIAN SYLLABICS MA
+14B6..14B7    ; Cans; Hebr; A #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
+152F..1530    ; Cans; Hebr; A #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
+
+# Total code points: 6
+
+# Canadian_Aboriginal; Latin: [ᐧᐯᑌᑗᑘᑭᑯᑶᑷᑺᑻᒍᒘᒙᒪᒶᒷᔯᔰᕁᕼᕽᖇᖯᖴᗅᗞᗪᗰᗷ]
 
 1427          ; Cans; Latn; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
 142F          ; Cans; Latn; A #      (ᐯ)  CANADIAN SYLLABICS PE
+144C          ; Cans; Latn; A #      (ᑌ)  CANADIAN SYLLABICS TE
+1457..1458    ; Cans; Latn; A #  [2] (ᑗ..ᑘ)  CANADIAN SYLLABICS TWE..CANADIAN SYLLABICS WEST-CREE TWE
 146D          ; Cans; Latn; A #      (ᑭ)  CANADIAN SYLLABICS KI
 146F          ; Cans; Latn; A #      (ᑯ)  CANADIAN SYLLABICS KO
 1476..1477    ; Cans; Latn; A #  [2] (ᑶ..ᑷ)  CANADIAN SYLLABICS KWI..CANADIAN SYLLABICS WEST-CREE KWI
@@ -4509,8 +4989,105 @@
 15C5          ; Cans; Latn; A #      (ᗅ)  CANADIAN SYLLABICS CARRIER GHO
 15DE          ; Cans; Latn; A #      (ᗞ)  CANADIAN SYLLABICS CARRIER THE
 15EA          ; Cans; Latn; A #      (ᗪ)  CANADIAN SYLLABICS CARRIER PE
-15EF..15F0    ; Cans; Latn; A #  [2] (ᗯ..ᗰ)  CANADIAN SYLLABICS CARRIER GU..CANADIAN SYLLABICS CARRIER GO
+15F0          ; Cans; Latn; A #      (ᗰ)  CANADIAN SYLLABICS CARRIER GO
 15F7          ; Cans; Latn; A #      (ᗷ)  CANADIAN SYLLABICS CARRIER KHE
 
-# Total code points: 28
+# Total code points: 30
+
+# Canadian_Aboriginal; Tifinagh: [ᐃᐎᐏᐧᐯᐱᒪᒶᒷᔯᔰ]
+
+1403          ; Cans; Tfng; A #      (ᐃ)  CANADIAN SYLLABICS I
+140E..140F    ; Cans; Tfng; A #  [2] (ᐎ..ᐏ)  CANADIAN SYLLABICS WI..CANADIAN SYLLABICS WEST-CREE WI
+1427          ; Cans; Tfng; A #      (ᐧ)  CANADIAN SYLLABICS FINAL MIDDLE DOT
+142F          ; Cans; Tfng; A #      (ᐯ)  CANADIAN SYLLABICS PE
+1431          ; Cans; Tfng; A #      (ᐱ)  CANADIAN SYLLABICS PI
+14AA          ; Cans; Tfng; A #      (ᒪ)  CANADIAN SYLLABICS MA
+14B6..14B7    ; Cans; Tfng; A #  [2] (ᒶ..ᒷ)  CANADIAN SYLLABICS MWA..CANADIAN SYLLABICS WEST-CREE MWA
+152F..1530    ; Cans; Tfng; A #  [2] (ᔯ..ᔰ)  CANADIAN SYLLABICS YWE..CANADIAN SYLLABICS WEST-CREE YWE
+
+# Total code points: 11
+
+# Tifinagh; Armenian: [ⴱⵔ]
+
+2D31          ; Tfng; Armn; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Armn; A #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Bengali: [ⴱⵔ]
+
+2D31          ; Tfng; Beng; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Beng; A #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Cyrillic: [ⴱⴷⴹⵍⵏⵔⵝ]
+
+2D31          ; Tfng; Cyrl; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D37          ; Tfng; Cyrl; A #      (ⴷ)  TIFINAGH LETTER YAD
+2D39          ; Tfng; Cyrl; A #      (ⴹ)  TIFINAGH LETTER YADD
+2D4D          ; Tfng; Cyrl; A #      (ⵍ)  TIFINAGH LETTER YAL
+2D4F          ; Tfng; Cyrl; A #      (ⵏ)  TIFINAGH LETTER YAN
+2D54          ; Tfng; Cyrl; A #      (ⵔ)  TIFINAGH LETTER YAR
+2D5D          ; Tfng; Cyrl; A #      (ⵝ)  TIFINAGH LETTER YATH
+
+# Total code points: 7
+
+# Tifinagh; Greek: [ⴱⴷⴹⵉⵏⵔⵝⵠ]
+
+2D31          ; Tfng; Grek; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D37          ; Tfng; Grek; A #      (ⴷ)  TIFINAGH LETTER YAD
+2D39          ; Tfng; Grek; A #      (ⴹ)  TIFINAGH LETTER YADD
+2D49          ; Tfng; Grek; A #      (ⵉ)  TIFINAGH LETTER YI
+2D4F          ; Tfng; Grek; A #      (ⵏ)  TIFINAGH LETTER YAN
+2D54          ; Tfng; Grek; A #      (ⵔ)  TIFINAGH LETTER YAR
+2D5D          ; Tfng; Grek; A #      (ⵝ)  TIFINAGH LETTER YATH
+2D60          ; Tfng; Grek; A #      (ⵠ)  TIFINAGH LETTER YAV
+
+# Total code points: 8
+
+# Tifinagh; Han: [ⴱⵔ]
+
+2D31          ; Tfng; Hani; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Hani; A #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Hebrew: [ⵏ]
+
+2D4F          ; Tfng; Hebr; A #      (ⵏ)  TIFINAGH LETTER YAN
+
+# Total code points: 1
+
+# Tifinagh; Latin: [ⴱⴸⴹⵏⵔⵝ]
+
+2D31          ; Tfng; Latn; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D38..2D39    ; Tfng; Latn; A #  [2] (ⴸ..ⴹ)  TIFINAGH LETTER YADH..TIFINAGH LETTER YADD
+2D4F          ; Tfng; Latn; A #      (ⵏ)  TIFINAGH LETTER YAN
+2D54          ; Tfng; Latn; A #      (ⵔ)  TIFINAGH LETTER YAR
+2D5D          ; Tfng; Latn; A #      (ⵝ)  TIFINAGH LETTER YATH
+
+# Total code points: 6
+
+# Tifinagh; Malayalam: [ⴱⵔ]
+
+2D31          ; Tfng; Mlym; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Mlym; A #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Oriya: [ⴱⵔ]
+
+2D31          ; Tfng; Orya; A #      (ⴱ)  TIFINAGH LETTER YAB
+2D54          ; Tfng; Orya; A #      (ⵔ)  TIFINAGH LETTER YAR
+
+# Total code points: 2
+
+# Tifinagh; Canadian_Aboriginal: [ⴷⴸⵏⵠ]
+
+2D37..2D38    ; Tfng; Cans; A #  [2] (ⴷ..ⴸ)  TIFINAGH LETTER YAD..TIFINAGH LETTER YADH
+2D4F          ; Tfng; Cans; A #      (ⵏ)  TIFINAGH LETTER YAN
+2D60          ; Tfng; Cans; A #      (ⵠ)  TIFINAGH LETTER YAV
+
+# Total code points: 4
 
