@@ -2920,4 +2920,60 @@ public class CollationMiscTest extends TestFmwk {
                     "for two different RawCollationKey objects.");
         }
     }
+
+    /* Track7223: CollationElementIterator does not return correct order for Hungarian */
+    public void TestHungarianTailoring(){
+        String rules = new String("&DZ<dzs<<<Dzs<<<DZS" +
+                                  "&G<gy<<<Gy<<<GY" +
+                                  "&L<ly<<<Ly<<<LY" +
+                                  "&N<ny<<<Ny<<<NY" +
+                                  "&S<sz<<<Sz<<<SZ" +
+                                  "&T<ty<<<Ty<<<TY" +
+                                  "&Z<zs<<<Zs<<<ZS" +
+                                  "&O<\u00f6<<<\u00d6<<\u0151<<<\u0150" +
+                                  "&U<\u00fc<<<\u00dc<<\u0171<<<\u0171" +
+                                  "&cs<<<ccs/cs" +
+                                  "&Cs<<<Ccs/cs" +
+                                  "&CS<<<CCS/CS" +
+                                  "&dz<<<ddz/dz" +
+                                  "&Dz<<<Ddz/dz" +
+                                  "&DZ<<<DDZ/DZ" +
+                                  "&dzs<<<ddzs/dzs" +
+                                  "&Dzs<<<Ddzs/dzs" +
+                                  "&DZS<<<DDZS/DZS" +
+                                  "&gy<<<ggy/gy" +
+                                  "&Gy<<<Ggy/gy" +
+                                  "&GY<<<GGY/GY");
+        RuleBasedCollator coll;
+        try {
+            String str1 = "ggy";
+            String str2 = "GGY";
+            coll = new RuleBasedCollator(rules);
+            if (coll.compare("ggy", "GGY") >= 0) {
+                  errln("TestHungarianTailoring.compare(" + str1 + ","+ str2 +
+                        ") was suppose to return -1 ");
+            }
+            CollationKey sortKey1 = coll.getCollationKey(str1);
+            CollationKey sortKey2 = coll.getCollationKey(str2);
+            if (sortKey1.compareTo(sortKey2) >= 0) {
+                  errln("TestHungarianTailoring getCollationKey(\"" + str1 +"\") was suppose "+
+                        "less than getCollationKey(\""+ str2 + "\").");
+                  errln("  getCollationKey(\"ggy\"):" + prettify(sortKey1) +
+                        "  getCollationKey(\"GGY\"):" + prettify(sortKey2));
+            }
+
+            CollationElementIterator iter1 = coll.getCollationElementIterator(str1);
+            CollationElementIterator iter2 = coll.getCollationElementIterator(str2);
+            int ce1, ce2;
+            while((ce1 = iter1.next()) != CollationElementIterator.NULLORDER &&
+                  (ce2 = iter2.next()) != CollationElementIterator.NULLORDER) {
+                if (ce1 > ce2) {
+                  errln("TestHungarianTailoring.CollationElementIterator(" + str1 +
+                      ","+ str2 + ") was suppose to return -1 ");
+                }
+            }
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
+     }
 }
