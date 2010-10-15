@@ -77,7 +77,7 @@ void addUSpoofTest(TestNode** root)
 /*
  *  Identifiers for verifying that spoof checking is minimally alive and working.
  */
-const UChar goodLatin[] = {(UChar)0x75, (UChar)0x77, 0};    /* "uw", all ASCII             */
+const UChar goodLatin[] = {(UChar)0x75, (UChar)0x7a, 0};    /* "uz", all ASCII             */
                                                             /*   (not confusable)          */
 const UChar scMixed[]  = {(UChar)0x73, (UChar)0x0441, 0};   /* "sc", with Cyrillic 'c'     */
                                                             /*   (mixed script, confusable */
@@ -95,8 +95,8 @@ const UChar lll_Latin_b[] = {(UChar)0xff29, (UChar)0x217c, (UChar)0x196, 0};
 
 const UChar lll_Cyrl[]    = {(UChar)0x0406, (UChar)0x04C0, (UChar)0x31, 0};
 
-/* The skeleton transform for all of thes 'lll' lookalikes is all ascii digit 1. */
-const UChar lll_Skel[]    = {(UChar)0x31, (UChar)0x31, (UChar)0x31, 0};  
+/* The skeleton transform for all of thes 'lll' lookalikes is all lower case l. */
+const UChar lll_Skel[]    = {(UChar)0x6c, (UChar)0x6c, (UChar)0x6c, 0};  
 
 /* Provide better code coverage */
 const char goodLatinUTF8[]    = {0x75, 0x77, 0};
