@@ -3255,7 +3255,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     }
 
     if (flags.indexOf((UChar)0x45) >= 0) {  // 'E' flag
-        errln("Expected, but did not get, a pattern compilation error.");
+        errln("%s, Line %d: Expected, but did not get, a pattern compilation error.", srcPath, line);
         goto cleanupAndReturn;
     }
 
