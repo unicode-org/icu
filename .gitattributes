@@ -16,6 +16,7 @@ icu4c/source/data/brkitr/en_US.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en_US_POSIX.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/ja.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_he.txt -text
 icu4c/source/data/brkitr/root.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/sent.txt svneol=native#text/plain
 icu4c/source/data/brkitr/sent_el.txt svneol=native#text/plain
@@ -1866,6 +1867,7 @@ icu4c/source/data/xml/brkitr/el.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
+icu4c/source/data/xml/brkitr/he.xml -text
 icu4c/source/data/xml/brkitr/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/root.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/th.xml svneol=native#text/xml
@@ -1883,6 +1885,8 @@ icu4c/source/data/xml/collation/dz.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/el.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/en.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/en_BE.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/en_US.xml -text
+icu4c/source/data/xml/collation/en_US_POSIX.xml -text
 icu4c/source/data/xml/collation/eo.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/es.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/et.xml svneol=native#text/xml
@@ -1891,6 +1895,7 @@ icu4c/source/data/xml/collation/fa_AF.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/fi.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/fo.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/fr.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/fr_CA.xml -text
 icu4c/source/data/xml/collation/gu.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/haw.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/he.xml svneol=native#text/xml
@@ -1912,6 +1917,7 @@ icu4c/source/data/xml/collation/mk.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/ml.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/mr.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/mt.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/my.xml -text
 icu4c/source/data/xml/collation/nb.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/nn.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/om.xml svneol=native#text/xml
