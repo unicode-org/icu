@@ -102,7 +102,7 @@
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "4.5.2"
+#define U_ICU_DATA_VERSION "4.6"
 
 /*===========================================================================
  * ICU collation framework version information                               
