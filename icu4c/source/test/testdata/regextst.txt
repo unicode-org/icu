@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2009 International Business Machines
+﻿# Copyright (c) 2001-2010 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:
@@ -873,6 +873,11 @@
 "\p{javaWhitespace}+"              "abc\u00a0\u2007\u202f<0> \u0009\u001c\u001f\u2028</0>42"
 "\p{all}+"                         "<0>123\u0000\U0010ffff</0>"
 "\P{all}+"                         "123\u0000\U0010ffff"
+
+# [:word:] is implemented directly by regexp.  Not a java compat property, but PCRE and others.
+
+"[:word:]+"                        ".??$<0>abc123ΓΔΕΖΗ_</0>%%%"
+"\P{WORD}+"                        "<0>.??$</0>abc123ΓΔΕΖΗ_%%%"
 
 #
 #  Errors on unrecognized ASCII letter escape sequences.
