@@ -53,6 +53,7 @@ icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/config/mh-haiku -text
+icu4c/source/data/brkitr/line_he.txt -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/invuca.icu -text
 icu4c/source/data/in/coll/ucadata.icu -text
@@ -70,6 +71,11 @@ icu4c/source/data/locales/pool.res -text
 icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/makedata.vcxproj.filters -text
 icu4c/source/data/region/pool.res -text
+icu4c/source/data/xml/brkitr/he.xml -text
+icu4c/source/data/xml/collation/en_US.xml -text
+icu4c/source/data/xml/collation/en_US_POSIX.xml -text
+icu4c/source/data/xml/collation/fr_CA.xml -text
+icu4c/source/data/xml/collation/my.xml -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text

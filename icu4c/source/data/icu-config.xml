@@ -307,6 +307,8 @@
         <include locales="ms_MY"/>
         <include locales="mt"/> 
         <include locales="mt_MT"/>
+        <include locales="my"/> 
+        <include locales="my_MM"/> 
         <include locales="naq"/>
         <include locales="naq_NA"/>
         <include locales="nb"/>
