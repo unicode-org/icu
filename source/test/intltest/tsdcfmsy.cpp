@@ -124,15 +124,15 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
 
     // Test get currency spacing before the currency.
     status = U_ZERO_ERROR;
-    for (int32_t i = 0; i < (int32_t)DecimalFormatSymbols::kCurrencySpacingCount; i++) {
+    for (int32_t i = 0; i < (int32_t)UNUM_CURRENCY_SPACING_COUNT; i++) {
         UnicodeString enCurrencyPattern = en.getPatternForCurrencySpacing(
-             (DecimalFormatSymbols::ECurrencySpacing)i, TRUE, status);
+             (UCurrencySpacing)i, TRUE, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:en");
             status = U_ZERO_ERROR;
         }
         UnicodeString frCurrencyPattern = fr.getPatternForCurrencySpacing(
-             (DecimalFormatSymbols::ECurrencySpacing)i, TRUE, status);
+             (UCurrencySpacing)i, TRUE, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:fr");
         }
@@ -142,15 +142,15 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     }
     // Test get currencySpacing after the currency.
     status = U_ZERO_ERROR;
-    for (int32_t i = 0; i < DecimalFormatSymbols::kCurrencySpacingCount; i++) {
+    for (int32_t i = 0; i < UNUM_CURRENCY_SPACING_COUNT; i++) {
         UnicodeString enCurrencyPattern = en.getPatternForCurrencySpacing(
-            (DecimalFormatSymbols::ECurrencySpacing)i, FALSE, status);
+            (UCurrencySpacing)i, FALSE, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:en");
             status = U_ZERO_ERROR;
         }
         UnicodeString frCurrencyPattern = fr.getPatternForCurrencySpacing(
-             (DecimalFormatSymbols::ECurrencySpacing)i, FALSE, status);
+             (UCurrencySpacing)i, FALSE, status);
         if(U_FAILURE(status)) {
             errln("Error: cannot get CurrencyMatch for locale:fr");
         }
@@ -161,9 +161,9 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     // Test set curerncySpacing APIs
     status = U_ZERO_ERROR;
     UnicodeString dash = UnicodeString("-");
-    en.setPatternForCurrencySpacing(DecimalFormatSymbols::kInsert, TRUE, dash);
+    en.setPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, TRUE, dash);
     UnicodeString enCurrencyInsert = en.getPatternForCurrencySpacing(
-        DecimalFormatSymbols::kInsert, TRUE, status);
+        UNUM_CURRENCY_INSERT, TRUE, status);
     if (dash != enCurrencyInsert) {
         errln("Error: Failed to setCurrencyInsert for locale:en");
     }
