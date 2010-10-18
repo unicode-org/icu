@@ -575,7 +575,8 @@ TimeUnitFormat::checkConsistency(EStyle style, const char* key, UErrorCode& err)
                     MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCount);
                     if( formatters == NULL || formatters[style] == NULL ) {
                         // look through parents
-                        searchInLocaleChain(style, key,
+                        const char* localeName = fLocale.getName();
+                        searchInLocaleChain(style, key, localeName,
                                             (TimeUnit::UTimeUnitFields)i, 
                                             pluralCount, pluralCount, 
                                             countToPatterns, err);
@@ -598,7 +599,7 @@ TimeUnitFormat::checkConsistency(EStyle style, const char* key, UErrorCode& err)
 // using patterns of plural count "other", 
 // then, "other" is the searchPluralCount.
 void 
-TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
+TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key, const char* localeName,
                                 TimeUnit::UTimeUnitFields srcTimeUnitField,
                                 const char* srcPluralCount,
                                 const char* searchPluralCount, 
@@ -608,21 +609,14 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
         return;
     }
     UErrorCode status = U_ZERO_ERROR;
-    const char *locName = fLocale.getName();
     char parentLocale[ULOC_FULLNAME_CAPACITY];
-    uprv_strcpy(parentLocale, locName);
+    uprv_strcpy(parentLocale, localeName);
     int32_t locNameLen;
-    int32_t locLevel = 0;    // for example, for locale "el", locLevel=1; locale "el_GR", locLevel=2.
     while ((locNameLen = uloc_getParent(parentLocale, parentLocale,
                                         ULOC_FULLNAME_CAPACITY, &status)) >= 0){
-        ++locLevel;
         // look for pattern for srcPluralCount in locale tree
         UResourceBundle *rb, *unitsRes, *countsToPatternRB;
-        if (locLevel == 1 && locNameLen == 0) { // top level locale
-            rb = ures_open(NULL, locName, &status);
-        } else {
-            rb = ures_open(NULL, parentLocale, &status);
-        }
+        rb = ures_open(NULL, parentLocale, &status);
         unitsRes = ures_getByKey(rb, key, NULL, &status);
         const char* timeUnitName = getTimeUnitName(srcTimeUnitField, status);
         countsToPatternRB = ures_getByKey(unitsRes, timeUnitName, NULL, &status);
@@ -663,6 +657,7 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
         ures_close(countsToPatternRB);
         ures_close(unitsRes);
         ures_close(rb);
+        status = U_ZERO_ERROR;
         if ( locNameLen ==0 ) {
             break;
         }
@@ -674,7 +669,10 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
 #ifdef TMUTFMT_DEBUG
         std::cout << "loop into searchInLocaleChain since Short-Long-Alternative \n";
 #endif
-        searchInLocaleChain(style, gUnitsTag, srcTimeUnitField, srcPluralCount,
+        char pLocale[ULOC_FULLNAME_CAPACITY];
+        uprv_strcpy(pLocale, localeName);
+        uprv_strcat(pLocale, "_");    // add an underscore at the tail of locale name.
+        searchInLocaleChain(style, gUnitsTag, pLocale, srcTimeUnitField, srcPluralCount,
                              searchPluralCount, countToPatterns, err);
         if (countToPatterns != NULL) {
             MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
@@ -727,7 +725,7 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key,
         }
     } else {
         // fall back to rule "other", and search in parents
-        searchInLocaleChain(style, key, srcTimeUnitField, srcPluralCount, 
+        searchInLocaleChain(style, key, localeName, srcTimeUnitField, srcPluralCount, 
                             gPluralCountOther, countToPatterns, err);
     }
 }

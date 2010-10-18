@@ -34,7 +34,7 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
  * Test basic
  */
 void TimeUnitTest::testBasic() {
-    const char* locales[] = {"en", "sl", "fr", "zh", "ar", "ru", "zh_Hant"};
+    const char* locales[] = {"en", "sl", "fr", "zh", "ar", "ru", "zh_Hant", "pa"};
     for ( unsigned int locIndex = 0; 
           locIndex < sizeof(locales)/sizeof(locales[0]); 
           ++locIndex ) {
@@ -204,6 +204,9 @@ void TimeUnitTest::testAPI() {
 
 /* @bug 7902
  * Tests for Greek Language.
+ * This tests that requests for short unit names correctly fall back 
+ * to long unit names for a locale where the locale data does not 
+ * provide short unit names. As of CLDR 1.9, Greek is one such language.
  */
 void TimeUnitTest::testGreek() {
     UErrorCode status = U_ZERO_ERROR;
@@ -219,12 +222,12 @@ void TimeUnitTest::testGreek() {
     const UChar oneDay[] = {0x0031, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b1, 0};
     const UChar oneMonth[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b1, 0x03c2, 0};
     const UChar oneYear[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x03bf, 0x03c2, 0};
-    const UChar sevenSecond[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
-    const UChar sevenMinute[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
-    const UChar sevenHour[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
-    const UChar sevenDay[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
-    const UChar sevenMonth[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
-    const UChar sevenYear[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x03b7, 0};
+    const UChar sevenSeconds[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
+    const UChar sevenMinutes[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
+    const UChar sevenHours[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
+    const UChar sevenDays[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
+    const UChar sevenMonths[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
+    const UChar sevenYears[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x03b7, 0};
 
     const UnicodeString oneSecondStr(oneSecond);
     const UnicodeString oneMinuteStr(oneMinute);
@@ -232,21 +235,21 @@ void TimeUnitTest::testGreek() {
     const UnicodeString oneDayStr(oneDay);
     const UnicodeString oneMonthStr(oneMonth);
     const UnicodeString oneYearStr(oneYear);
-    const UnicodeString sevenSecondStr(sevenSecond);
-    const UnicodeString sevenMinuteStr(sevenMinute);
-    const UnicodeString sevenHourStr(sevenHour);
-    const UnicodeString sevenDayStr(sevenDay);
-    const UnicodeString sevenMonthStr(sevenMonth);
-    const UnicodeString sevenYearStr(sevenYear);
+    const UnicodeString sevenSecondsStr(sevenSeconds);
+    const UnicodeString sevenMinutesStr(sevenMinutes);
+    const UnicodeString sevenHoursStr(sevenHours);
+    const UnicodeString sevenDaysStr(sevenDays);
+    const UnicodeString sevenMonthsStr(sevenMonths);
+    const UnicodeString sevenYearsStr(sevenYears);
 
     const UnicodeString expected[] = {oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
                               oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
-                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr,
-                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
                               oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
                               oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
-                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr,
-                              sevenSecondStr, sevenMinuteStr, sevenHourStr, sevenDayStr, sevenMonthStr, sevenYearStr};
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr};
 
     int counter = 0;
     for ( unsigned int locIndex = 0;
@@ -268,7 +271,7 @@ void TimeUnitTest::testGreek() {
                     ++unitIndex ) {
 
                     TimeUnitAmount *tamt = new TimeUnitAmount(numbers[numberIndex], tunits[unitIndex], status);
-                    if (U_FAILURE(status)) {
+                    if (!assertSuccess("generating TimeUnitAmount Object failed", status)) {
 #ifdef TUFMTTS_DEBUG
                         std::cout << "Failed to get TimeUnitAmount for " << tunits[unitIndex] << "\n";
 #endif
@@ -276,7 +279,7 @@ void TimeUnitTest::testGreek() {
                     }
 
                     TimeUnitFormat *tfmt = new TimeUnitFormat(l, styles[styleIndex], status);
-                    if (U_FAILURE(status)) {
+                    if (!assertSuccess("generating TimeUnitFormat Object failed", status)) {
 #ifdef TUFMTTS_DEBUG
                        std::cout <<  "Failed to get TimeUnitFormat for " << locales[locIndex] << "\n";
 #endif
@@ -288,7 +291,7 @@ void TimeUnitTest::testGreek() {
 
                     fmt.adoptObject(tamt);
                     str = ((Format *)tfmt)->format(fmt, str, status);
-                    if (U_FAILURE(status)) {
+                    if (!assertSuccess("formatting relative time failed", status)) {
                         delete tfmt;
 #ifdef TUFMTTS_DEBUG
                         std::cout <<  "Failed to format" << "\n";
