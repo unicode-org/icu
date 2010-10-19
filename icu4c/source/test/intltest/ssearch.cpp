@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2009, International Business Machines
+ *   Copyright (C) 2005-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -1230,7 +1230,7 @@ void SSearchTest::boyerMooreTest()
                                 "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
     int32_t start = -1, end = -1;
 
-    coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    coll = ucol_openFromShortString("LEN_S1", FALSE, NULL, &status);
     if (U_FAILURE(status)) {
         errcheckln(status, "Could not open collator. - %s", u_errorName(status));
         return;
@@ -1378,7 +1378,7 @@ void SSearchTest::bmsTest()
                                 "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
     int32_t start = -1, end = -1;
 
-    coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    coll = ucol_openFromShortString("LEN_S1", FALSE, NULL, &status);
     if (U_FAILURE(status)) {
         errcheckln(status, "Could not open collator. - %s", u_errorName(status));
         return;
