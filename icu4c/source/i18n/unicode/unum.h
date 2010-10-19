@@ -207,17 +207,6 @@ typedef enum UNumberFormatPadPosition {
 } UNumberFormatPadPosition;
 
 /**
- * Constants for specifying currency spacing
- * @draft ICU 4.6
- */
-typedef enum UCurrencySpacing {
-    UNUM_CURRENCY_MATCH,
-    UNUM_CURRENCY_SURROUNDING_MATCH,
-    UNUM_CURRENCY_INSERT,
-    UNUM_CURRENCY_SPACING_COUNT
-} UCurrencySpacing;
-
-/**
  * Create and return a new UNumberFormat for formatting and parsing
  * numbers.  A UNumberFormat may be used to format numbers by calling
  * {@link #unum_format }, and to parse numbers by calling {@link #unum_parse }.
