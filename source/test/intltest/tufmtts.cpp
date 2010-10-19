@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008-2009, International Business Machines Corporation and
+ * Copyright (c) 2008-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -11,7 +11,7 @@
 #include "unicode/tmutamt.h"
 #include "unicode/tmutfmt.h"
 #include "tufmtts.h"
-
+#include "unicode/ustring.h"
 
 //TODO: put as compilation flag
 //#define TUFMTTS_DEBUG 1
@@ -25,6 +25,7 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     switch (index) {
         TESTCASE(0, testBasic);
         TESTCASE(1, testAPI);
+        TESTCASE(2, testGreek);
         default: name = ""; break;
     }
 }
@@ -33,7 +34,7 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
  * Test basic
  */
 void TimeUnitTest::testBasic() {
-    const char* locales[] = {"en", "sl", "fr", "zh", "ar", "ru", "zh_Hant"};
+    const char* locales[] = {"en", "sl", "fr", "zh", "ar", "ru", "zh_Hant", "pa"};
     for ( unsigned int locIndex = 0; 
           locIndex < sizeof(locales)/sizeof(locales[0]); 
           ++locIndex ) {
@@ -201,5 +202,123 @@ void TimeUnitTest::testAPI() {
     delete format;
 }
 
+/* @bug 7902
+ * Tests for Greek Language.
+ * This tests that requests for short unit names correctly fall back 
+ * to long unit names for a locale where the locale data does not 
+ * provide short unit names. As of CLDR 1.9, Greek is one such language.
+ */
+void TimeUnitTest::testGreek() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    const char* locales[] = {"el-GR", "el"};
+    TimeUnit::UTimeUnitFields tunits[] = {TimeUnit::UTIMEUNIT_SECOND, TimeUnit::UTIMEUNIT_MINUTE, TimeUnit::UTIMEUNIT_HOUR, TimeUnit::UTIMEUNIT_DAY, TimeUnit::UTIMEUNIT_MONTH, TimeUnit::UTIMEUNIT_YEAR};
+    TimeUnitFormat::EStyle styles[] = {TimeUnitFormat::kFull, TimeUnitFormat::kAbbreviate};
+    const int numbers[] = {1, 7};
+
+    const UChar oneSecond[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03bf, 0};
+    const UChar oneMinute[] = {0x0031, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03cc, 0};
+    const UChar oneHour[] = {0x0031, 0x0020, 0x03ce, 0x03c1, 0x03b1, 0};
+    const UChar oneDay[] = {0x0031, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b1, 0};
+    const UChar oneMonth[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b1, 0x03c2, 0};
+    const UChar oneYear[] = {0x0031, 0x0020, 0x03ad, 0x03c4, 0x03bf, 0x03c2, 0};
+    const UChar sevenSeconds[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
+    const UChar sevenMinutes[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
+    const UChar sevenHours[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
+    const UChar sevenDays[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
+    const UChar sevenMonths[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
+    const UChar sevenYears[] = {0x0037, 0x0020, 0x03ad, 0x03c4, 0x03b7, 0};
+
+    const UnicodeString oneSecondStr(oneSecond);
+    const UnicodeString oneMinuteStr(oneMinute);
+    const UnicodeString oneHourStr(oneHour);
+    const UnicodeString oneDayStr(oneDay);
+    const UnicodeString oneMonthStr(oneMonth);
+    const UnicodeString oneYearStr(oneYear);
+    const UnicodeString sevenSecondsStr(sevenSeconds);
+    const UnicodeString sevenMinutesStr(sevenMinutes);
+    const UnicodeString sevenHoursStr(sevenHours);
+    const UnicodeString sevenDaysStr(sevenDays);
+    const UnicodeString sevenMonthsStr(sevenMonths);
+    const UnicodeString sevenYearsStr(sevenYears);
+
+    const UnicodeString expected[] = {oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
+                              oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
+                              sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr};
+
+    int counter = 0;
+    for ( unsigned int locIndex = 0;
+        locIndex < sizeof(locales)/sizeof(locales[0]);
+        ++locIndex ) {
+
+        Locale l = Locale::createFromName(locales[locIndex]);
+
+        for ( unsigned int numberIndex = 0;
+            numberIndex < sizeof(numbers)/sizeof(int);
+            ++numberIndex ) {
+
+            for ( unsigned int styleIndex = 0;
+                styleIndex < sizeof(styles)/sizeof(styles[0]);
+                ++styleIndex ) {
+
+                for ( unsigned int unitIndex = 0;
+                    unitIndex < sizeof(tunits)/sizeof(tunits[0]);
+                    ++unitIndex ) {
+
+                    TimeUnitAmount *tamt = new TimeUnitAmount(numbers[numberIndex], tunits[unitIndex], status);
+                    if (!assertSuccess("generating TimeUnitAmount Object failed", status)) {
+#ifdef TUFMTTS_DEBUG
+                        std::cout << "Failed to get TimeUnitAmount for " << tunits[unitIndex] << "\n";
+#endif
+                        return;
+                    }
+
+                    TimeUnitFormat *tfmt = new TimeUnitFormat(l, styles[styleIndex], status);
+                    if (!assertSuccess("generating TimeUnitFormat Object failed", status)) {
+#ifdef TUFMTTS_DEBUG
+                       std::cout <<  "Failed to get TimeUnitFormat for " << locales[locIndex] << "\n";
+#endif
+                       return;
+                    }
+
+                    Formattable fmt;
+                    UnicodeString str;
+
+                    fmt.adoptObject(tamt);
+                    str = ((Format *)tfmt)->format(fmt, str, status);
+                    if (!assertSuccess("formatting relative time failed", status)) {
+                        delete tfmt;
+#ifdef TUFMTTS_DEBUG
+                        std::cout <<  "Failed to format" << "\n";
+#endif
+                        return;
+                    }
+
+#ifdef TUFMTTS_DEBUG
+                    char tmp[128];    //output
+                    char tmp1[128];    //expected
+                    int len = 0;
+                    u_strToUTF8(tmp, 128, &len, str.getTerminatedBuffer(), str.length(), &status);
+                    u_strToUTF8(tmp1, 128, &len, expected[counter].unescape().getTerminatedBuffer(), expected[counter].unescape().length(), &status);
+                    std::cout <<  "Formatted string : " << tmp << " expected : " << tmp1 << "\n";
+#endif
+                    if (!assertEquals("formatted time string is not expected, locale: " + UnicodeString(locales[locIndex]) + " style: " + (int)styles[styleIndex] + " units: " + (int)tunits[unitIndex], expected[counter], str)) {
+                        delete tfmt;
+                        str.remove();
+                        return;
+                    }
+                    delete tfmt;
+                    str.remove();
+                    ++counter;
+                }
+            }
+        }
+    }
+}
 
 #endif
