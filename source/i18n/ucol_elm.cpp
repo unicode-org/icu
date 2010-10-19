@@ -1402,12 +1402,13 @@ U_CDECL_END
 #ifdef UCOL_DEBUG
 // This is a debug function to print the contents of a trie.
 // It is used in conjuction with the code around utrie_unserialize call
-void enumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+UBool enumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
     if(start<0x10000) {
         fprintf(stdout, "%08X, %08X, %08X\n", start, limit, value);
     } else {
         fprintf(stdout, "%08X=%04X %04X, %08X=%04X %04X, %08X\n", start, UTF16_LEAD(start), UTF16_TRAIL(start), limit, UTF16_LEAD(limit), UTF16_TRAIL(limit), value);
     }
+    return TRUE;
 }
 
 int32_t 
@@ -1541,7 +1542,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
         if(U_SUCCESS(*status)) {
             utrie_enum(&UCAt, NULL, enumRange, NULL);
         }
-        trieWord = UTRIE_GET32_FROM_LEAD(UCAt, 0xDC01) 
+        trieWord = UTRIE_GET32_FROM_LEAD(&UCAt, 0xDC01);
     }
 #endif
     tableOffset += paddedsize(mappingSize);

@@ -1947,7 +1947,7 @@ static void TestShortString(void)
         uint32_t   expectedIdentifier;
     } testCases[] = {
         /*
-         * The following expectedOutput contains a collation weight (2D00 from UCA 5.2)
+         * The following expectedOutput contains a collation weight (2700 from UCA 6.0)
          * which is the primary weight for the T character (U+0041) in the input.
          * When that character gets a different weight in FractionalUCA.txt,
          * the expectedOutput needs to be adjusted.
@@ -1955,7 +1955,7 @@ static void TestShortString(void)
          * in such a way that the absolute weight for 'A' changes,
          * we will get a test failure here and need to adjust the test case.
          */
-        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2D00_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2700_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
 
         {"LEN_RUS_NO_AS_S4","AS_LROOT_NO_S4", NULL, U_USING_DEFAULT_WARNING, 0, 0 },
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },

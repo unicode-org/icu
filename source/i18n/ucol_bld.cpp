@@ -512,8 +512,10 @@ static uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_t
         }
     }
 
-    if(low == 0) {
-        low = 0x01000000;
+    if(low < 0x02000000) {
+        // We must not use CE weight byte 02, so we set it as the minimum lower bound.
+        // See http://site.icu-project.org/design/collation/bytes
+        low = 0x02000000;
     }
 
     if(strength == UCOL_SECONDARY) { /* similar as simple */
@@ -761,7 +763,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
         fprintf(stderr, "gapsLo[%i] [%08X %08X %08X]\n", j, lh->gapsLo[j*3], lh->gapsLo[j*3+1], lh->gapsLo[j*3+2]);
         fprintf(stderr, "gapsHi[%i] [%08X %08X %08X]\n", j, lh->gapsHi[j*3], lh->gapsHi[j*3+1], lh->gapsHi[j*3+2]);
     }
-    tok=lh->first[UCOL_TOK_POLARITY_POSITIVE];
+    tok=&lh->first[UCOL_TOK_POLARITY_POSITIVE];
 
     do {
         fprintf(stderr,"%i", tok->strength);
@@ -769,7 +771,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
     } while(tok != NULL);
     fprintf(stderr, "\n");
 
-    tok=lh->first[UCOL_TOK_POLARITY_POSITIVE];
+    tok=&lh->first[UCOL_TOK_POLARITY_POSITIVE];
 
     do {
         fprintf(stderr,"%i", tok->toInsert);

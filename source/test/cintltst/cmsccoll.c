@@ -3102,8 +3102,15 @@ static void TestVariableTopSetting(void) {
         varTop1 = ucol_setVariableTop(coll, conts, 3, &status);
       }
       if(U_FAILURE(status)) {
-        log_err("Couldn't set variable top to a contraction %04X %04X %04X\n",
-          *conts, *(conts+1), *(conts+2));
+        if(status == U_PRIMARY_TOO_LONG_ERROR) {
+          /* ucol_setVariableTop() is documented to not accept 3-byte primaries,
+           * therefore it is not an error when it complains about them. */
+          log_verbose("Couldn't set variable top to a contraction %04X %04X %04X - U_PRIMARY_TOO_LONG_ERROR\n",
+                      *conts, *(conts+1), *(conts+2));
+        } else {
+          log_err("Couldn't set variable top to a contraction %04X %04X %04X - %s\n",
+                  *conts, *(conts+1), *(conts+2), u_errorName(status));
+        }
         status = U_ZERO_ERROR;
       }
       conts+=3;
@@ -3153,10 +3160,11 @@ static void TestVariableTopSetting(void) {
 
 static void TestNonChars(void) {
   static const char *test[] = {
-    "\\u0000",
-    "\\uFFFE", "\\uFFFF",
-      "\\U0001FFFE", "\\U0001FFFF",
-      "\\U0002FFFE", "\\U0002FFFF",
+      "\\u0000",  /* ignorable */
+      "\\uFFFE",  /* special merge-sort character with minimum non-ignorable weights */
+      "\\uFDD0", "\\uFDEF",
+      "\\U0001FFFE", "\\U0001FFFF",  /* UCA 6.0: noncharacters are treated like unassigned, */
+      "\\U0002FFFE", "\\U0002FFFF",  /* not like ignorable. */
       "\\U0003FFFE", "\\U0003FFFF",
       "\\U0004FFFE", "\\U0004FFFF",
       "\\U0005FFFE", "\\U0005FFFF",
@@ -3170,7 +3178,8 @@ static void TestNonChars(void) {
       "\\U000DFFFE", "\\U000DFFFF",
       "\\U000EFFFE", "\\U000EFFFF",
       "\\U000FFFFE", "\\U000FFFFF",
-      "\\U0010FFFE", "\\U0010FFFF"
+      "\\U0010FFFE", "\\U0010FFFF",
+      "\\uFFFF"  /* special character with maximum primary weight */
   };
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open("en_US", &status);
@@ -3178,7 +3187,7 @@ static void TestNonChars(void) {
   log_verbose("Test non characters\n");
 
   if(U_SUCCESS(status)) {
-    genericOrderingTestWithResult(coll, test, 35, UCOL_EQUAL);
+    genericOrderingTestWithResult(coll, test, 35, UCOL_LESS);
   } else {
     log_err_status(status, "Unable to open collator\n");
   }
@@ -3634,13 +3643,31 @@ static void TestRuleOptions(void) {
         {  "c", "b", "\\u0009", "a", "\\u000a" }, 5
     },
 
+    /*
+     * These strings contain the last character before [variable top]
+     * and the first and second characters (by primary weights) after it.
+     * See FractionalUCA.txt. For example:
+        [last variable [0C FE, 05, 05]] # U+10A7F OLD SOUTH ARABIAN NUMERIC INDICATOR
+        [variable top = 0C FE]
+        [first regular [0D 0A, 05, 05]] # U+0060 GRAVE ACCENT
+       and
+        00B4; [0D 0C, 05, 05]
+     *
+     * Note: Starting with UCA 6.0, the [variable top] collation element
+     * is not the weight of any character or string,
+     * which means that LAST_VARIABLE_CHAR_STRING sorts before [last variable].
+     */
+#define LAST_VARIABLE_CHAR_STRING "\\U00010A7F"
+#define FIRST_REGULAR_CHAR_STRING "\\u0060"
+#define SECOND_REGULAR_CHAR_STRING "\\u00B4"
+
     { "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
-        {  "c", "b", "\\uD834\\uDF71", "a", "\\u02d0" }, 5
+        { LAST_VARIABLE_CHAR_STRING, "c", "b", /* [last variable] */ "a", FIRST_REGULAR_CHAR_STRING }, 5
     },
 
     { "&[first regular]<a"
       "&[before 1][first regular]<b",
-      { "b", "\\u02d0", "a", "\\u02d1"}, 4
+      { "b", FIRST_REGULAR_CHAR_STRING, "a", SECOND_REGULAR_CHAR_STRING }, 4
     },
 
     /*
@@ -3648,11 +3675,17 @@ static void TestRuleOptions(void) {
      * has to match the character that has the [last regular] weight
      * which changes with each UCA version.
      * See the bottom of FractionalUCA.txt which says something like
-     *   [last regular [CE 27, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
+        [last regular [7A FE, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
+     *
+     * Note: Starting with UCA 6.0, the [last regular] collation element
+     * is not the weight of any character or string,
+     * which means that LAST_REGULAR_CHAR_STRING sorts before [last regular].
      */
+#define LAST_REGULAR_CHAR_STRING "\\U0001342E"
+
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
-        { "b", "\\U0001342E", "a", "\\u4e00" }, 4
+        { LAST_REGULAR_CHAR_STRING, "b", /* [last regular] */ "a", "\\u4e00" }, 4
     },
 
     { "&[before 1][first implicit]<b"
@@ -3670,7 +3703,7 @@ static void TestRuleOptions(void) {
       "&[last secondary ignorable]<<y"
       "&[last tertiary ignorable]<<<w"
       "&[top]<u",
-      {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7
+      {"\\ufffb",  "w", "y", "\\u20e3", "x", LAST_VARIABLE_CHAR_STRING, "z", "u"}, 7
     }
 
   };

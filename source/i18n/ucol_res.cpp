@@ -397,9 +397,9 @@ ucol_openRules( const UChar        *rules,
         /* so something might be done here... or on lower level */
 #ifdef UCOL_DEBUG
         if(*status == U_ILLEGAL_ARGUMENT_ERROR) {
-            fprintf(stderr, "bad option starting at offset %i\n", src.current-src.source);
+            fprintf(stderr, "bad option starting at offset %i\n", (int)(src.current-src.source));
         } else {
-            fprintf(stderr, "invalid rule just before offset %i\n", src.current-src.source);
+            fprintf(stderr, "invalid rule just before offset %i\n", (int)(src.current-src.source));
         }
 #endif
         goto cleanup;
