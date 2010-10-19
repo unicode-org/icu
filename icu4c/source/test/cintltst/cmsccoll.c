@@ -1394,6 +1394,7 @@ static void RamsRulesTest(void) {
                 uprv_strcmp("en_US_POSIX", locName)==0 ||
                 uprv_strcmp("km", locName)==0 ||
                 uprv_strcmp("km_KH", locName)==0 ||
+                uprv_strcmp("my", locName)==0 ||
                 uprv_strcmp("si", locName)==0 ||
                 uprv_strcmp("si_LK", locName)==0 ||
                 uprv_strcmp("zh", locName)==0 ||
