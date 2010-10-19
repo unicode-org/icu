@@ -508,7 +508,7 @@ ucol_nextWeight(WeightRange ranges[], int32_t *pRangeCount) {
     }
 }
 
-#ifdef UCOL_DEBUG
+#if 0 // #ifdef UCOL_DEBUG
 
 static void
 testAlloc(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, UBool enumerate) {

@@ -35,6 +35,7 @@
 #include "cstring.h"
 #include "ucol_imp.h"
 #include "ucol_tok.h"
+#include "uparse.h"
 #include <stdio.h>
 
 extern uint8_t ucol_uprv_getCaseBits(const UChar *, uint32_t, UErrorCode *);
@@ -1028,41 +1029,40 @@ static int32_t hex2num(char hex) {
 * @param codepoints array for storage, assuming size > 5
 * @return position at the end of the codepoint section
 */
-static char * getCodePoints(char *str, UChar *codepoints, UChar *contextCPs) {
-    char *pStartCP = str;
-    char *pEndCP   = str + 4;
-
-    *codepoints = (UChar)((hex2num(*pStartCP) << 12) |
-                          (hex2num(*(pStartCP + 1)) << 8) |
-                          (hex2num(*(pStartCP + 2)) << 4) |
-                          (hex2num(*(pStartCP + 3))));
-    if (*pEndCP == '|' || *(pEndCP+1) == '|') {
-        /* pre-context rule */
-        pStartCP = pEndCP;
-        while (*pStartCP==' ' || *pStartCP== '|' ) {
-            pStartCP++;
-        }
-        pEndCP = pStartCP+4;
-        *contextCPs = *codepoints;
-        *(++codepoints) = (UChar)((hex2num(*pStartCP) << 12) |
-                                  (hex2num(*(pStartCP + 1)) << 8) |
-                                  (hex2num(*(pStartCP + 2)) << 4) |
-                                  (hex2num(*(pStartCP + 3))));
-        contextCPs++;
-    }
-    *contextCPs = 0;
-    codepoints ++;
-    while (*pEndCP != ';') {
-        pStartCP = pEndCP + 1;
-        *codepoints = (UChar)((hex2num(*pStartCP) << 12) |
-                          (hex2num(*(pStartCP + 1)) << 8) |
-                          (hex2num(*(pStartCP + 2)) << 4) |
-                          (hex2num(*(pStartCP + 3))));
-        codepoints ++;
-        pEndCP = pStartCP + 4;
-    }
+static char *getCodePoints(char *str, UChar *codepoints, UChar *contextCPs) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    char *semi = uprv_strchr(str, ';');
+    char *pipe = uprv_strchr(str, '|');
+    char *s;
     *codepoints = 0;
-    return pEndCP + 1;
+    *contextCPs = 0;
+    if(semi == NULL) {
+        log_err("expected semicolon after code point string in FractionalUCA.txt %s\n", str);
+        return str;
+    }
+    if(pipe != NULL) {
+        int32_t contextLength;
+        *pipe = 0;
+        contextLength = u_parseString(str, contextCPs, 99, NULL, &errorCode);
+        *pipe = '|';
+        if(U_FAILURE(errorCode)) {
+            log_err("error parsing precontext string from FractionalUCA.txt %s\n", str);
+            return str;
+        }
+        /* prepend the precontext string to the codepoints */
+        u_memcpy(codepoints, contextCPs, contextLength);
+        codepoints += contextLength;
+        /* start of the code point string */
+        s = pipe + 1;
+    } else {
+        s = str;
+    }
+    u_parseString(s, codepoints, 99, NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("error parsing code point string from FractionalUCA.txt %s\n", str);
+        return str;
+    }
+    return semi + 1;
 }
 
 /**
@@ -1262,7 +1262,7 @@ static FileStream * getFractionalUCA(void)
 */
 static void TestCEs() {
     FileStream *file = NULL;
-    char        line[1024];
+    char        line[2048];
     char       *str;
     UChar       codepoints[10];
     uint32_t    ces[20];
@@ -1525,7 +1525,6 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
     UBool result = FALSE;
     UBool primaryDone = FALSE, secondaryDone = FALSE, tertiaryDone = FALSE;
     const char * collLocale;
-    char codepointText[5*MAX_CODEPOINTS_TO_SHOW + 5];
 
     if (U_FAILURE(status)) {
         log_err("Error creating iterator for testing validity\n");
@@ -1546,6 +1545,22 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
         }
         if (ce == 0) {
             continue;
+        }
+        if (ce == 0x02000202) {
+            /* special CE for merge-sort character */
+            if (*codepoints == 0xFFFE /* && length == 1 */) {
+                /*
+                 * Note: We should check for length==1 but the token parser appears
+                 * to give us trailing NUL characters.
+                 * TODO: Ticket #8047: Change TestCEValidity to use ucol_getTailoredSet()
+                 *                     rather than the internal collation rule parser
+                 */
+                continue;
+            } else {
+                log_err("Special 02/02/02 weight for code point U+%04X [len %d] != U+FFFE\n",
+                        (int)*codepoints, (int)length);
+                break;
+            }
         }
         primary   = UCOL_PRIMARYORDER(ce);
         p1 = primary >> 8;
@@ -1603,8 +1618,7 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
                 break;
             }
             if (tertiary <= 2) {
-                showCodepoints(codepoints, length, codepointText);
-                log_err("Tertiary byte of %08lX out of range: locale %s, codepoints %s\n", (long)ce, collLocale, codepointText);
+                log_err("Tertiary byte of %08lX out of range\n", (long)ce);
                 break;
             }
             tertiaryDone = FALSE;
@@ -1656,14 +1670,18 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
             if (tertiary == 0) {
                 tertiaryDone = TRUE;
             } else if (tertiary <= 2) {
-                showCodepoints(codepoints, length, codepointText);
-                log_err("Tertiary byte of %08lX out of range: locale %s, codepoints %s\n", (long)ce, collLocale, codepointText);
+                log_err("Tertiary byte of %08lX out of range\n", (long)ce);
                 break;
             }
         }
-   }
-   ucol_closeElements(iter);
-   return result;
+    }
+    if (!result) {
+        char codepointText[5*MAX_CODEPOINTS_TO_SHOW + 5];
+        showCodepoints(codepoints, length, codepointText);
+        log_err("Locale: %s  Code point string: %s\n", collLocale, codepointText);
+    }
+    ucol_closeElements(iter);
+    return result;
 }
 
 static void TestCEValidity()
@@ -1676,7 +1694,7 @@ static void TestCEValidity()
     char        locale[][11] = {"fr_FR", "ko_KR", "sh_YU", "th_TH", "zh_CN", "zh__PINYIN"};
     const char *loc;
     FileStream *file = NULL;
-    char        line[1024];
+    char        line[2048];
     UChar       codepoints[10];
     int         count = 0;
     int         maxCount = 0;
@@ -1883,7 +1901,7 @@ static void TestSortKeyValidity(void)
     /* tailored locales */
     char        locale[][6] = {"fr_FR", "ko_KR", "sh_YU", "th_TH", "zh_CN"};
     FileStream *file = NULL;
-    char        line[1024];
+    char        line[2048];
     UChar       codepoints[10];
     int         count = 0;
     UChar       contextCPs[5];
@@ -1906,6 +1924,10 @@ static void TestSortKeyValidity(void)
         }
 
         getCodePoints(line, codepoints, contextCPs);
+        if(codepoints[0] == 0xFFFE) {
+            /* Skip special merge-sort character U+FFFE which has otherwise illegal 02 weight bytes. */
+            continue;
+        }
         checkSortKeyValidity(coll, codepoints, u_strlen(codepoints));
     }
 
@@ -1976,6 +1998,10 @@ static void TestSortKeyValidity(void)
                 uprv_memcpy(codepoints, src.source + chOffset,
                                                        chLen * sizeof(UChar));
                 codepoints[chLen] = 0;
+                if(codepoints[0] == 0xFFFE) {
+                    /* Skip special merge-sort character U+FFFE which has otherwise illegal 02 weight bytes. */
+                    continue;
+                }
                 checkSortKeyValidity(coll, codepoints, chLen);
             }
             free(rulesCopy);

@@ -1284,23 +1284,23 @@ void CollationAPITest::TestMaxExpansion()
 
         size = coll.getMaxExpansion(order);
         if (U_FAILURE(status) || size < count) {
-            errln("Failure at codepoint %d, maximum expansion count < %d\n",
-                  ch, count);
+            errln("Failure at codepoint U+%04X, maximum expansion count %d < %d",
+                  ch, size, count);
         }
     }
 
     /* testing for exact max expansion */
+    int32_t size;
     ch = 0;
     while (ch < 0x61) {
         uint32_t order;
-        int32_t  size;
         str.setCharAt(0, ch);
         iter->setText(str, status);
         order = iter->previous(status);
         size  = coll.getMaxExpansion(order);
         if (U_FAILURE(status) || size != 1) {
-            errln("Failure at codepoint %d, maximum expansion count < %d\n",
-                ch, 1);
+            errln("Failure at codepoint U+%04X, maximum expansion count %d < %d",
+                  ch, size, 1);
         }
         ch ++;
     }
@@ -1309,29 +1309,29 @@ void CollationAPITest::TestMaxExpansion()
     str.setTo(ch);
     iter->setText(str, status);
     temporder = iter->previous(status);
-
-    if (U_FAILURE(status) || coll.getMaxExpansion(temporder) != 3) {
-        errln("Failure at codepoint %d, maximum expansion count != %d\n",
-              ch, 3);
+    size = coll.getMaxExpansion(temporder);
+    if (U_FAILURE(status) || size != 3) {
+        errln("Failure at codepoint U+%04X, CE %08x, maximum expansion count %d != %d",
+              ch, temporder, size, 3);
     }
 
     ch = 0x64;
     str.setTo(ch);
     iter->setText(str, status);
     temporder = iter->previous(status);
-
-    if (U_FAILURE(status) || coll.getMaxExpansion(temporder) != 1) {
-        errln("Failure at codepoint %d, maximum expansion count != %d\n",
-                ch, 3);
+    size = coll.getMaxExpansion(temporder);
+    if (U_FAILURE(status) || size != 1) {
+        errln("Failure at codepoint U+%04X, CE %08x, maximum expansion count %d != %d",
+              ch, temporder, size, 1);
     }
 
     str.setTo(unassigned);
     iter->setText(str, status);
     sorder = iter->previous(status);
-
-    if (U_FAILURE(status) || coll.getMaxExpansion(sorder) != 2) {
-        errln("Failure at supplementary codepoints, maximum expansion count < %d\n",
-              2);
+    size = coll.getMaxExpansion(sorder);
+    if (U_FAILURE(status) || size != 2) {
+        errln("Failure at supplementary codepoints, maximum expansion count %d < %d",
+              size, 2);
     }
 
     /* testing jamo */
@@ -1339,9 +1339,10 @@ void CollationAPITest::TestMaxExpansion()
     str.setTo(ch);
     iter->setText(str, status);
     temporder = iter->previous(status);
-    if (U_FAILURE(status) || coll.getMaxExpansion(temporder) > 3) {
-        errln("Failure at codepoint %d, maximum expansion count > %d\n",
-              ch, 3);
+    size = coll.getMaxExpansion(temporder);
+    if (U_FAILURE(status) || size > 3) {
+        errln("Failure at codepoint U+%04X, maximum expansion count %d > %d",
+              ch, size, 3);
     }
 
     delete iter;
@@ -1352,9 +1353,10 @@ void CollationAPITest::TestMaxExpansion()
     RuleBasedCollator jamocoll(rule, status);
     iter = jamocoll.createCollationElementIterator(str);
     temporder = iter->previous(status);
-    if (U_FAILURE(status) || iter->getMaxExpansion(temporder) != 6) {
-        errln("Failure at codepoint %d, maximum expansion count > %d\n",
-              ch, 5);
+    size = iter->getMaxExpansion(temporder);
+    if (U_FAILURE(status) || size != 6) {
+        errln("Failure at codepoint U+%04X, maximum expansion count %d > %d",
+              ch, size, 5);
     }
 
     delete iter;

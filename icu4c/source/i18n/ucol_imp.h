@@ -300,6 +300,10 @@ typedef struct collIterate : public U_NAMESPACE_QUALIFIER UMemory {
 
   UCharIterator *iterator;
   /*int32_t iteratorIndex;*/
+
+  // The offsetBuffer should probably be a UVector32, but helper functions
+  // are an improvement over duplicated code.
+  void appendOffset(int32_t offset, UErrorCode &errorCode);
 } collIterate;
 
 #else
@@ -630,7 +634,8 @@ ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *val
 #define getExpansionSuffix(coleiter) ((coleiter)->iteratordata_.CEpos - (coleiter)->iteratordata_.toReturn)
 #define setExpansionSuffix(coleiter, offset) ((coleiter)->iteratordata_.toReturn = (coleiter)->iteratordata_.CEpos - leftoverces)
 
-/* This is an enum that lists magic special byte values from the fractional UCA */
+/* This is an enum that lists magic special byte values from the fractional UCA.
+ * See also http://site.icu-project.org/design/collation/bytes */
 /* TODO: all the #defines that refer to special byte values from the UCA should be changed to point here */
 
 enum {
@@ -642,9 +647,9 @@ enum {
     UCOL_BYTE_FIRST_TAILORED = 0x04,
     UCOL_BYTE_COMMON = 0x05,
     UCOL_BYTE_FIRST_UCA = UCOL_BYTE_COMMON,
-    UCOL_CODAN_PLACEHOLDER = 0x27,
-    UCOL_BYTE_LAST_LATIN_PRIMARY = 0x4C,
-    UCOL_BYTE_FIRST_NON_LATIN_PRIMARY = 0x4D,
+    /* TODO: Make the following values dynamic since they change with almost every UCA version. */
+    UCOL_CODAN_PLACEHOLDER = 0x12,
+    UCOL_BYTE_FIRST_NON_LATIN_PRIMARY = 0x5B,
     UCOL_BYTE_UNSHIFTED_MAX = 0xFF
 }; 
 
