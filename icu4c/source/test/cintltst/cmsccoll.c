@@ -1390,13 +1390,18 @@ static void RamsRulesTest(void) {
                 log_verbose("Don't know how to test Phonebook because the reset is on an expanding character\n");
                 continue;
             }
-            if (uprv_strcmp("km", locName)==0 ||
+            if (uprv_strcmp("bn", locName)==0 ||
+                uprv_strcmp("en_US_POSIX", locName)==0 ||
+                uprv_strcmp("km", locName)==0 ||
                 uprv_strcmp("km_KH", locName)==0 ||
                 uprv_strcmp("si", locName)==0 ||
                 uprv_strcmp("si_LK", locName)==0 ||
                 uprv_strcmp("zh", locName)==0 ||
-                uprv_strcmp("zh_Hant", locName)==0 ) {
-                    continue;  /* TODO: enable these locale tests after trac#6040 is fixed. */
+                uprv_strcmp("zh_Hant", locName)==0
+            ) {
+                log_verbose("Don't know how to test %s. "
+                            "TODO: Fix ticket #6040 and reenable RamsRulesTest for this locale.\n");
+                continue;
             }
             log_verbose("Testing locale %s\n", locName);
             coll = ucol_open(locName, &status);
@@ -4490,19 +4495,19 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                              UErrorCode* status);
 }
 */
-    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr",
+    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "de",
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
-        assertEquals("getFunctionalEquivalent(fr)", "fr", loc);
-        assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
+        assertEquals("getFunctionalEquivalent(de)", "de", loc);
+        assertTrue("getFunctionalEquivalent(de).isAvailable==TRUE",
                    isAvailable == TRUE);
     }
 
-    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr_FR",
+    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "de_DE",
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
-        assertEquals("getFunctionalEquivalent(fr_FR)", "fr", loc);
-        assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==TRUE",
+        assertEquals("getFunctionalEquivalent(de_DE)", "de", loc);
+        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==TRUE",
                    isAvailable == TRUE);
     }
 }
