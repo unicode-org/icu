@@ -238,7 +238,7 @@ private:
     void checkConsistency(EStyle style, const char* key, UErrorCode& status);
 
     // fill in fTimeUnitToCountToPatterns from locale fall-back chain
-    void searchInLocaleChain(EStyle style, const char* key,
+    void searchInLocaleChain(EStyle style, const char* key, const char* localeName,
                              TimeUnit::UTimeUnitFields field, const char*,
                              const char*, Hashtable*, UErrorCode&);
 
