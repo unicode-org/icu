@@ -680,13 +680,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestLocaleDisplayNames() {
         ULocale[] locales = ULocale.getAvailableLocales();
         for (int i = 0; i < locales.length; ++i) {
-            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
+            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i]) && (locales[i].getLanguage().compareTo("ti") != 0)){ // TODO: restore test for ti_* when cldrbug 3058 is fixed
                  errln("Could not get localized country for "+ locales[i]);
             }
             if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])){
                 errln("Could not get localized language for "+ locales[i]);
             }
-            if(!hasLocalizedCountryFor(locales[i], locales[i])){
+            if(!hasLocalizedCountryFor(locales[i], locales[i]) && (locales[i].getLanguage().compareTo("ti") != 0)){ // TODO: restore test for ti_* when cldrbug 3058 is fixed
                 errln("Could not get localized country for "+ locales[i]);
                 hasLocalizedCountryFor(locales[i], locales[i]);
             }

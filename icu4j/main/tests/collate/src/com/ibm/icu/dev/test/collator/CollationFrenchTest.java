@@ -119,7 +119,7 @@ public class CollationFrenchTest extends TestFmwk{
 
     }
     protected void init()throws Exception{
-        myCollation = Collator.getInstance(Locale.FRENCH);
+        myCollation = Collator.getInstance(Locale.CANADA_FRENCH);
     }
      
     // perform tests with strength TERTIARY

@@ -341,21 +341,21 @@ public class CollationServiceTest extends TestFmwk {
 
         boolean isAvailable[] = new boolean[1];
         ULocale equiv = Collator.getFunctionalEquivalent(KW[0],
-                                                         new ULocale("fr"),
+                                                         new ULocale("de"),
                                                          isAvailable);
-        if (assertTrue("getFunctionalEquivalent(fr)!=null", equiv!=null)) {
-            assertEquals("getFunctionalEquivalent(fr)", "fr", equiv.toString());
+        if (assertTrue("getFunctionalEquivalent(de)!=null", equiv!=null)) {
+            assertEquals("getFunctionalEquivalent(de)", "de", equiv.toString());
         }
-        assertTrue("getFunctionalEquivalent(fr).isAvailable==true",
+        assertTrue("getFunctionalEquivalent(de).isAvailable==true",
                    isAvailable[0] == true);
         
         equiv = Collator.getFunctionalEquivalent(KW[0],
-                                                 new ULocale("fr_FR"),
+                                                 new ULocale("de_DE"),
                                                  isAvailable);
-        if (assertTrue("getFunctionalEquivalent(fr_FR)!=null", equiv!=null)) {
-            assertEquals("getFunctionalEquivalent(fr_FR)", "fr", equiv.toString());
+        if (assertTrue("getFunctionalEquivalent(de_DE)!=null", equiv!=null)) {
+            assertEquals("getFunctionalEquivalent(de_DE)", "de", equiv.toString());
         }
-        assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==true",
+        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==true",
                    isAvailable[0] == true);
 
         equiv = Collator.getFunctionalEquivalent(KW[0], new ULocale("zh_Hans"));
@@ -444,22 +444,22 @@ public class CollationServiceTest extends TestFmwk {
     
     public void TestGetKeywordValues(){
         final String[][] PREFERRED = {
-            {"und",             "standard", "search"},
-            {"en_US",           "standard", "search"},
-            {"en_029",          "standard", "search"},
-            {"de_DE",           "standard", "phonebook", "search"},
-            {"de_Latn_DE",      "standard", "phonebook", "search"},
-            {"zh",              "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
-            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
-            {"zh_CN",           "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
-            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "search"},
-            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "search"},
-            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search"},
-            {"es_ES",           "standard", "traditional", "search"},
-            {"es__TRADITIONAL", "traditional", "standard", "search"},
-            {"und@collation=phonebook",     "standard", "search"},
-            {"de_DE@collation=big5han",     "standard", "phonebook", "search"},
-            {"zzz@collation=xxx",           "standard", "search"},
+            {"und",             "standard", "ducet", "search"},
+            {"en_US",           "standard", "ducet", "search"},
+            {"en_029",          "standard", "ducet", "search"},
+            {"de_DE",           "standard", "phonebook", "search", "ducet"},
+            {"de_Latn_DE",      "standard", "phonebook", "search", "ducet"},
+            {"zh",              "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search"},
+            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search"},
+            {"zh_CN",           "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search"},
+            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search"},
+            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search"},
+            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search"},
+            {"es_ES",           "standard", "search", "traditional", "ducet"},
+            {"es__TRADITIONAL", "traditional", "search", "standard", "ducet"},
+            {"und@collation=phonebook",     "standard", "ducet", "search"},
+            {"de_DE@collation=big5han",     "standard", "phonebook", "search", "ducet"},
+            {"zzz@collation=xxx",           "standard", "ducet", "search"},
         };
 
         for (int i = 0; i < PREFERRED.length; i++) {
