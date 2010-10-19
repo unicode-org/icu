@@ -401,9 +401,9 @@ public class CollationRegressionTest extends TestFmwk {
     public void Test4062418(/* char* par */) {
         RuleBasedCollator c = null;
         try {
-            c = (RuleBasedCollator) Collator.getInstance(Locale.FRANCE);
+            c = (RuleBasedCollator) Collator.getInstance(Locale.CANADA_FRENCH);
         } catch (Exception e) {
-            errln("Failed to create collator for Locale::FRANCE()");
+            errln("Failed to create collator for Locale.CANADA_FRENCH");
             return;
         }
         c.setStrength(Collator.SECONDARY);
@@ -457,9 +457,9 @@ public class CollationRegressionTest extends TestFmwk {
     public void Test4066696(/* char* par */) {
         RuleBasedCollator c = null;
         try {
-            c = (RuleBasedCollator)Collator.getInstance(Locale.FRANCE);
+            c = (RuleBasedCollator)Collator.getInstance(Locale.CANADA_FRENCH);
         } catch(Exception e) {
-            errln("Failure creating collator for Locale::getFrance()");
+            errln("Failure creating collator for Locale.CANADA_FRENCH");
             return;
         }
         c.setStrength(Collator.SECONDARY);
@@ -752,10 +752,10 @@ public class CollationRegressionTest extends TestFmwk {
     public void Test4132736(/* char* par */) {
         Collator c = null;
         try {
-            c = Collator.getInstance(Locale.FRANCE);
+            c = Collator.getInstance(Locale.CANADA_FRENCH);
             c.setStrength(Collator.TERTIARY);
         } catch (Exception e) {
-            errln("Failed to create a collator for Locale::getFrance()");
+            errln("Failed to create a collator for Locale.CANADA_FRENCH");
         }
     
         String test1[] = {

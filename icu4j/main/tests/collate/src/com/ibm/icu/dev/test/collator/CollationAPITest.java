@@ -498,13 +498,13 @@ public class CollationAPITest extends TestFmwk {
                    "The default collation should be returned.");
         Collator frCol = null;
         try {
-            frCol = Collator.getInstance(Locale.FRANCE);
+            frCol = Collator.getInstance(Locale.CANADA_FRENCH);
         } catch (Exception e) {
-            errln("Creating French collator failed.");
+            errln("Creating fr_CA collator failed.");
             return;
         }
     
-        doAssert(!(frCol.equals(junk)), "The junk is the same as the French collator.");
+        doAssert(!(frCol.equals(junk)), "The junk is the same as the fr_CA collator.");
         logln("Collator property test ended.");
     
     }

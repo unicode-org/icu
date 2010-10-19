@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -625,23 +625,23 @@ public class RbnfTest extends TestFmwk {
         String[][] testDataDefault = {
             { "101", "ett\u00ADhundra\u00ADett" },
             { "123", "ett\u00ADhundra\u00ADtjugo\u00ADtre" },
-            { "1,001", "ettusen ett" },
-            { "1,100", "ettusen ett\u00ADhundra" },
-            { "1,101", "ettusen ett\u00ADhundra\u00ADett" },
-            { "1,234", "ettusen tv\u00e5\u00ADhundra\u00ADtrettio\u00ADfyra" },
+            { "1,001", "et\u00ADtusen ett" },
+            { "1,100", "et\u00ADtusen ett\u00ADhundra" },
+            { "1,101", "et\u00ADtusen ett\u00ADhundra\u00ADett" },
+            { "1,234", "et\u00ADtusen tv\u00e5\u00ADhundra\u00ADtrettio\u00ADfyra" },
             { "10,001", "tio\u00ADtusen ett" },
             { "11,000", "elva\u00ADtusen" },
             { "12,000", "tolv\u00ADtusen" },
-            { "20,000", "tjugo-tusen" },
-            { "21,000", "tjugo\u00ADett-tusen" },
-            { "21,001", "tjugo\u00ADett-tusen ett" },
-            { "200,000", "tv\u00e5\u00ADhundra-tusen" },
-            { "201,000", "tv\u00e5\u00ADhundra\u00ADett-tusen" },
-            { "200,200", "tv\u00e5\u00ADhundra-tusen tv\u00e5\u00ADhundra" },
+            { "20,000", "tjugo\u00ADtusen" },
+            { "21,000", "tjugo\u00ADet\u00ADtusen" },
+            { "21,001", "tjugo\u00ADet\u00ADtusen ett" },
+            { "200,000", "tv\u00e5\u00ADhundra\u00ADtusen" },
+            { "201,000", "tv\u00e5\u00ADhundra\u00ADet\u00ADtusen" },
+            { "200,200", "tv\u00e5\u00ADhundra\u00ADtusen tv\u00e5\u00ADhundra" },
             { "2,002,000", "tv\u00e5 miljoner tv\u00e5\u00ADtusen" },
-            { "12,345,678", "tolv miljoner tre\u00ADhundra\u00ADfyrtio\u00ADfem-tusen sex\u00ADhundra\u00ADsjuttio\u00AD\u00e5tta" },
-            { "123,456.789", "ett\u00ADhundra\u00ADtjugo\u00ADtre-tusen fyra\u00ADhundra\u00ADfemtio\u00ADsex komma sju \u00e5tta nio" },
-            { "-12,345.678", "minus tolv\u00ADtusen tre\u00ADhundra\u00ADfyrtio\u00ADfem komma sex sju \u00e5tta" }
+            { "12,345,678", "tolv miljoner tre\u00ADhundra\u00ADfyrtio\u00ADfem\u00ADtusen sex\u00ADhundra\u00ADsjuttio\u00AD\u00e5tta" },
+            { "123,456.789", "ett\u00ADhundra\u00ADtjugo\u00ADtre\u00ADtusen fyra\u00ADhundra\u00ADfemtio\u00ADsex komma sju \u00e5tta nio" },
+            { "-12,345.678", "minus tolv\u00ADtusen tre\u00ADhundra\u00ADfyrtio\u00ADfem komma sex sju \u00e5tta" },
         };
 
         logln("testing default rules");
@@ -662,7 +662,7 @@ public class RbnfTest extends TestFmwk {
         String[][] testDataYear = {
             { "101", "ett\u00adhundra\u00adett" },
             { "900", "nio\u00adhundra" },
-            { "1,001", "ettusen ett" },
+            { "1,001", "et\u00adtusen ett" },
             { "1,100", "elva\u00adhundra" },
             { "1,101", "elva\u00adhundra\u00adett" },
             { "1,234", "tolv\u00adhundra\u00adtrettio\u00adfyra" },
