@@ -1343,7 +1343,7 @@ void TestGetLocale() {
     { "sr_RS", "sr_Cyrl_RS", "sr" },
     { "sh_YU", "sr_Latn_RS", "hr" }, /* this used to be sh, but now sh collation aliases hr */
     { "en_BE_FOO", "en_BE", "root" },
-    { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
+    { "de_DE_NONEXISTANT", "de_DE", "de" }
   };
 
   /* test opening collators for different locales */
@@ -1961,7 +1961,7 @@ static void TestShortString(void)
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"Xqde_DE@collation=phonebookq_S3_EX","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
-        {"LFR_FO", "LFR", NULL, U_ZERO_ERROR, 0, 0 },
+        {"LFR_FO", "FO_LROOT", NULL, U_USING_DEFAULT_WARNING, 0, 0 },
         {"SO_LX_AS", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 8, 0 },
         {"S3_ASS_MMM", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 5, 0 }
     };
@@ -2262,26 +2262,26 @@ static void TestDefaultKeyword(void) {
 
 static void TestGetKeywordValuesForLocale(void) {
 #define PREFERRED_SIZE 16
-#define MAX_NUMBER_OF_KEYWORDS 7
+#define MAX_NUMBER_OF_KEYWORDS 8
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
-            { "und",            "standard", "search", NULL, NULL, NULL, NULL, NULL },
-            { "en_US",          "standard", "search", NULL, NULL, NULL, NULL, NULL },
-            { "en_029",         "standard", "search", NULL, NULL, NULL, NULL, NULL },
-            { "de_DE",          "standard", "phonebook", "search", NULL, NULL, NULL, NULL },
-            { "de_Latn_DE",     "standard", "phonebook", "search", NULL, NULL, NULL, NULL },
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search" },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search" },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search" },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "search" },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "search" },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "search" },
-            { "es_ES",          "standard", "traditional", "search", NULL, NULL, NULL, NULL },
-            { "es__TRADITIONAL","traditional", "standard", "search", NULL, NULL, NULL, NULL },
-            { "und@collation=phonebook",    "standard", "search", NULL, NULL, NULL, NULL, NULL },
-            { "de_DE@collation=big5han",    "standard", "phonebook", "search", NULL, NULL, NULL, NULL },
-            { "zzz@collation=xxx",          "standard", "search", NULL, NULL, NULL, NULL, NULL }
+            { "und",            "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
+            { "en_US",          "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
+            { "en_029",         "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE",          "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
+            { "de_Latn_DE",     "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
+            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search" },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search" },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
+            { "es_ES",          "standard", "search", "traditional", "ducet", NULL, NULL, NULL, NULL },
+            { "es__TRADITIONAL","traditional", "search", "standard", "ducet", NULL, NULL, NULL, NULL },
+            { "und@collation=phonebook",    "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE@collation=big5han",    "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
+            { "zzz@collation=xxx",          "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL }
     };
-    const int32_t expectedLength[PREFERRED_SIZE] = { 2, 2, 2, 3, 3, 7, 7, 7, 7, 7, 7, 3, 3, 2, 3, 2 };
+    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 8, 8, 8, 8, 8, 8, 4, 4, 3, 4, 3 };
 
     UErrorCode status = U_ZERO_ERROR;
     UEnumeration *keywordValues = NULL;

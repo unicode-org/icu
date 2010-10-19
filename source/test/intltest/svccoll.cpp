@@ -573,19 +573,19 @@ void CollationServiceTest::TestSeparateTree() {
 
     UBool isAvailable;
     Locale equiv = Collator::getFunctionalEquivalent("collation",
-                                                     Locale::createFromName("fr"),
+                                                     Locale::createFromName("de"),
                                                      isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
-    assertEquals("getFunctionalEquivalent(fr)", "fr", equiv.getName());
-    assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
+    assertEquals("getFunctionalEquivalent(de)", "de", equiv.getName());
+    assertTrue("getFunctionalEquivalent(de).isAvailable==TRUE",
                isAvailable == TRUE);
 
     equiv = Collator::getFunctionalEquivalent("collation",
-                                              Locale::createFromName("fr_FR"),
+                                              Locale::createFromName("de_DE"),
                                               isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
-    assertEquals("getFunctionalEquivalent(fr_FR)", "fr", equiv.getName());
-    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==TRUE",
+    assertEquals("getFunctionalEquivalent(de_DE)", "de", equiv.getName());
+    assertTrue("getFunctionalEquivalent(de_DE).isAvailable==TRUE",
                isAvailable == TRUE);
 }
 

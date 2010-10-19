@@ -239,10 +239,10 @@ CollationAPITest::TestProperty(/* char* par */)
 
     doAssert(((RuleBasedCollator *)col)->getRules() == ((RuleBasedCollator *)junk)->getRules(),
                "The default collation should be returned.");
-    Collator *frCol = Collator::createInstance(Locale::getFrance(), success);
+    Collator *frCol = Collator::createInstance(Locale::getCanadaFrench(), success);
     if (U_FAILURE(success))
     {
-        errln("Creating French collator failed.");
+        errln("Creating fr_CA collator failed.");
         delete col;
         delete junk;
         return;
@@ -250,11 +250,11 @@ CollationAPITest::TestProperty(/* char* par */)
 
     // If the default locale isn't French, the French and non-French collators
     // should be different
-    if (frCol->getLocale(ULOC_ACTUAL_LOCALE, success) != Locale::getFrench()) {
-        doAssert((*frCol != *junk), "The junk is the same as the French collator.");
+    if (frCol->getLocale(ULOC_ACTUAL_LOCALE, success) != Locale::getCanadaFrench()) {
+        doAssert((*frCol != *junk), "The junk is the same as the fr_CA collator.");
     }
     Collator *aFrCol = frCol->clone();
-    doAssert((*frCol == *aFrCol), "The cloning of a French collator failed.");
+    doAssert((*frCol == *aFrCol), "The cloning of a fr_CA collator failed.");
     logln("Collator property test ended.");
 
     delete col;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -27,7 +27,7 @@ CollationFrenchTest::CollationFrenchTest()
 : myCollation(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = Collator::createInstance(Locale::getFrance(), status);
+    myCollation = Collator::createInstance(Locale::getCanadaFrench(), status);
     if(!myCollation || U_FAILURE(status)) {
         errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
