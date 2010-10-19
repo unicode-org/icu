@@ -662,6 +662,9 @@ public class PluralRules implements Serializable {
     /**
      * Provides access to the predefined <code>PluralRules</code> for a given
      * locale.
+     * ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>. 
+     * For these predefined rules, see CLDR page at
+     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html 
      * 
      * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
