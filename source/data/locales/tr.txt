@@ -39,7 +39,7 @@ tr{
             }
         }
     }
-    Version{"2.0.50.45"}
+    Version{"2.0.50.94"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -359,8 +359,8 @@ tr{
                     y{"dd MMM y E - dd MMM y E"}
                 }
                 yMMMM{
-                    M{"MM – MM yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"MMMM-MMMM y"}
+                    y{"MMMM y - MMMM y"}
                 }
                 yMMMd{
                     M{"dd MMM - dd MMM y"}

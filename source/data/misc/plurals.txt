@@ -20,6 +20,7 @@ plurals:table(nofallback){
         bm{""}
         bn{"set2"}
         bo{""}
+        brx{"set2"}
         bs{"set9"}
         ca{"set2"}
         chr{"set2"}

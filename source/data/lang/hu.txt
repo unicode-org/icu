@@ -617,7 +617,6 @@ hu{
         Phnx{"Főniciai"}
         Plrd{"Pollard fonetikus"}
         Prti{"Feliratos parthian"}
-        Qaai{"Származtatott"}
         Rjng{"Redzsang"}
         Roro{"Rongorongo"}
         Runr{"Runikus"}
@@ -651,6 +650,7 @@ hu{
         Xpeo{"Óperzsa"}
         Xsux{"Ékírásos suméro-akkád"}
         Yiii{"Ji"}
+        Zinh{"Származtatott"}
         Zmth{"Matematikai jelrendszer"}
         Zsym{"Szimbólum"}
         Zxxx{"Íratlan nyelvek kódja"}
@@ -709,7 +709,7 @@ hu{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.50.26"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

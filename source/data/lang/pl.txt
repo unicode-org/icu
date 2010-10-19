@@ -612,7 +612,6 @@ pl{
         Phnx{"fenicki"}
         Plrd{"fonetyczny Pollard'a"}
         Prti{"partyjski inskrypcyjny"}
-        Qaai{"dziedziczone"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runiczne"}
@@ -646,6 +645,7 @@ pl{
         Xpeo{"staroperskie"}
         Xsux{"klinowe sumero-akadyjskie"}
         Yiii{"yi"}
+        Zinh{"dziedziczone"}
         Zmth{"notacja matematyczna"}
         Zsym{"Symbols"}
         Zxxx{"język bez systemu pisma"}
@@ -707,7 +707,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.49.97"}
+    Version{"2.0.50.96"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

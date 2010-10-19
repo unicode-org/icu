@@ -31,7 +31,7 @@ hr{
             }
         }
     }
-    Version{"2.0.50.18"}
+    Version{"2.0.50.96"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -295,8 +295,8 @@ hr{
                     y{"E, dd.MMM.y. - E, dd.MMM.y."}
                 }
                 yMMMM{
-                    M{"MM. - MM.yyyy."}
-                    y{"MM.yyyy. - MM.yyyy."}
+                    M{"LLLL.-LLLL.y."}
+                    y{"LLLL.y. - LLLL.y."}
                 }
                 yMMMd{
                     M{"dd.MMM. - dd.MMM.y."}
@@ -432,6 +432,7 @@ hr{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E, d."}
                 yyyy{"y. G"}
                 yyyyM{"M.y. G"}
                 yyyyMEd{"EEE, d.M.y. G"}

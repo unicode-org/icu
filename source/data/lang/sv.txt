@@ -617,7 +617,6 @@ sv{
         Phnx{"fenikiska"}
         Plrd{"pollardtecken"}
         Prti{"tidig parthianska"}
-        Qaai{"ärvda"}
         Rjng{"rejang"}
         Roro{"rongo-rongo"}
         Runr{"runor"}
@@ -651,6 +650,7 @@ sv{
         Xpeo{"fornpersiska"}
         Xsux{"sumeo-akkadisk kilskrift"}
         Yiii{"yi"}
+        Zinh{"ärvda"}
         Zmth{"matematisk notation"}
         Zsym{"symboler"}
         Zxxx{"oskrivet språk"}
@@ -709,7 +709,7 @@ sv{
         VALENCIA{"valensisk dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.49.64"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

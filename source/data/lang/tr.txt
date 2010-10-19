@@ -616,7 +616,6 @@ tr{
         Phnx{"Fenike"}
         Plrd{"Pollard Fonetik"}
         Prti{"Partça Kitabe Dili"}
-        Qaai{"Kalıtsal"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runik"}
@@ -650,6 +649,7 @@ tr{
         Xpeo{"Eski Fars"}
         Xsux{"Sümer-Akad Çivi Yazısı"}
         Yiii{"Yi"}
+        Zinh{"Kalıtsal"}
         Zmth{"Matematiksel Gösterim"}
         Zsym{"Sembol"}
         Zxxx{"Yazılı Olmayan"}
@@ -713,7 +713,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.0.50.45"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Betik: {0}"}

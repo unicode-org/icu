@@ -68,21 +68,22 @@ CURR_SOURCE = af.txt ak.txt am.txt ar.txt\
  kok.txt kw.txt lag.txt lg.txt lt.txt\
  luo.txt luy.txt lv.txt mas.txt mer.txt\
  mfe.txt mg.txt mk.txt ml.txt mr.txt\
- ms.txt ms_BN.txt mt.txt naq.txt nb.txt\
- nd.txt ne.txt ne_IN.txt nl.txt nn.txt\
- nyn.txt om.txt or.txt pa.txt pa_Arab.txt\
- pa_Arab_PK.txt pa_Guru.txt pa_Guru_IN.txt pl.txt ps.txt\
- pt.txt pt_PT.txt rm.txt ro.txt ro_MD.txt\
- rof.txt ru.txt rw.txt rwk.txt saq.txt\
- seh.txt ses.txt sg.txt shi.txt shi_Latn.txt\
- shi_Latn_MA.txt shi_Tfng.txt si.txt sk.txt sl.txt\
- sn.txt so.txt sq.txt sr.txt sr_Cyrl.txt\
- sr_Cyrl_BA.txt sr_Cyrl_RS.txt sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt\
- sr_Latn_RS.txt sv.txt sw.txt ta.txt te.txt\
- teo.txt th.txt ti.txt to.txt tr.txt\
- tzm.txt tzm_Latn.txt tzm_Latn_MA.txt uk.txt ur.txt\
- uz.txt uz_Arab.txt uz_Arab_AF.txt uz_Cyrl.txt uz_Cyrl_UZ.txt\
- uz_Latn.txt vi.txt vun.txt xog.txt yo.txt\
- zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_HK.txt zh_Hans_SG.txt\
- zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt
+ ms.txt ms_BN.txt mt.txt my.txt naq.txt\
+ nb.txt nd.txt ne.txt ne_IN.txt nl.txt\
+ nn.txt nyn.txt om.txt or.txt pa.txt\
+ pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt pa_Guru_IN.txt pl.txt\
+ ps.txt pt.txt pt_PT.txt rm.txt ro.txt\
+ ro_MD.txt rof.txt ru.txt rw.txt rwk.txt\
+ saq.txt seh.txt ses.txt sg.txt shi.txt\
+ shi_Latn.txt shi_Latn_MA.txt shi_Tfng.txt si.txt sk.txt\
+ sl.txt sn.txt so.txt sq.txt sr.txt\
+ sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_RS.txt sr_Latn.txt sr_Latn_BA.txt\
+ sr_Latn_ME.txt sr_Latn_RS.txt sv.txt sw.txt ta.txt\
+ te.txt teo.txt th.txt ti.txt to.txt\
+ tr.txt tzm.txt tzm_Latn.txt tzm_Latn_MA.txt uk.txt\
+ ur.txt uz.txt uz_Arab.txt uz_Arab_AF.txt uz_Cyrl.txt\
+ uz_Cyrl_UZ.txt uz_Latn.txt vi.txt vun.txt xog.txt\
+ yo.txt zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_HK.txt\
+ zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt\
+ zu.txt
 

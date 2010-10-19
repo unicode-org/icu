@@ -716,6 +716,19 @@ root {
             }
         }
 
+        Latin-ASCII {
+            file {
+                resource:process(transliterator) {"Latin_ASCII.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        ASCII-Latin {
+            file {
+                resource:process(transliterator) {"Latin_ASCII.txt"}
+                direction {"REVERSE"}
+            }
+        }
+
         Latin-Armenian {
             file {
                 resource:process(transliterator) {"Latin_Armenian.txt"}

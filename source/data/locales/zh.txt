@@ -85,7 +85,7 @@ zh{
             }
         }
     }
-    Version{"2.0.50.16"}
+    Version{"2.0.50.96"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -504,6 +504,7 @@ zh{
                 MMM{"LLL"}
                 MMMEd{"M月d日E"}
                 MMMMd{"M月d日"}
+                MMMd{"M月d日"}
                 Md{"M-d"}
                 d{"d日"}
                 h{"ah时"}
@@ -776,6 +777,7 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d日E"}
                 H{"H时"}
                 M{"M月"}
                 MEd{"M-dE"}

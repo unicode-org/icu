@@ -52,7 +52,7 @@ ar{
             }
         }
     }
-    Version{"2.0.50.30"}
+    Version{"2.0.50.96"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -71,6 +71,7 @@ ar{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E، d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MMM{"LLL"}
@@ -162,6 +163,7 @@ ar{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E، d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MMM{"LLL"}
@@ -302,8 +304,8 @@ ar{
                     y{"E، d MMM، y – E، d MMM، y"}
                 }
                 yMMMM{
-                    M{"MM ‏– MM‏-yyyy‏"}
-                    y{"MM –‏ MM–‏yyyy"}
+                    M{"MMMM – MMMM، y"}
+                    y{"MMMM، y – MMMM، y"}
                 }
                 yMMMd{
                     M{"d MMM – d MMM، yyyy"}
@@ -444,6 +446,7 @@ ar{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E، d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MMM{"LLL"}
@@ -746,6 +749,7 @@ ar{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E، d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MMM{"LLL"}

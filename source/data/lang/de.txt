@@ -617,7 +617,6 @@ de{
         Phnx{"Phönizisch"}
         Plrd{"Pollard Phonetisch"}
         Prti{"Prti"}
-        Qaai{"Geerbter Schriftwert"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runenschrift"}
@@ -651,6 +650,7 @@ de{
         Xpeo{"Altpersisch"}
         Xsux{"Sumerisch-akkadische Keilschrift"}
         Yiii{"Yi"}
+        Zinh{"Geerbter Schriftwert"}
         Zmth{"Zmth"}
         Zsym{"Zsym"}
         Zxxx{"Schriftlos"}
@@ -710,7 +710,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.50.25"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

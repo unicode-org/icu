@@ -14,7 +14,7 @@ th{
     collations{
         standard{
             Sequence{" [normalization on ]&[before 1]๏<ฯ<ๆ&๎<<์&ฮ<ํ&า<<<ๅ&ไ<ฺ"}
-            Version{"1.8.99.1"}
+            Version{"1.9"}
         }
     }
 }

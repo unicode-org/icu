@@ -39,7 +39,7 @@ fi{
             }
         }
     }
-    Version{"2.0.50.42"}
+    Version{"2.0.51.9"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -47,7 +47,7 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM y G",
+                "cccc d. MMMM y G",
                 "d. MMMM y G",
                 "d.M.y G",
                 "d.M.y G",
@@ -58,7 +58,7 @@ fi{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"ccc d."}
                 Gy{"y G"}
                 H{"H"}
                 Hm{"H.mm"}
@@ -100,7 +100,7 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM y",
+                "cccc d. MMMM y",
                 "d. MMMM y",
                 "d.M.yyyy",
                 "d.M.yyyy",
@@ -111,7 +111,7 @@ fi{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"ccc d."}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
@@ -508,7 +508,7 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM y G",
+                "cccc d. MMMM y G",
                 "d. MMMM y G",
                 "d.M.y G",
                 "d.M.y G",
@@ -519,7 +519,7 @@ fi{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"ccc d."}
                 Gy{"y G"}
                 H{"H"}
                 Hm{"H.mm"}
@@ -572,7 +572,7 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM y G",
+                "cccc d. MMMM y G",
                 "d. MMMM y G",
                 "d.M.y G",
                 "d.M.y G",
@@ -583,7 +583,7 @@ fi{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"E d."}
+                Ed{"ccc d."}
                 Gy{"y G"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
@@ -608,7 +608,7 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM y G",
+                "cccc d. MMMM y G",
                 "d. MMMM y G",
                 "d.M.y G",
                 "d.M.y G",
@@ -619,7 +619,7 @@ fi{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"E d."}
+                Ed{"ccc d."}
                 Gy{"y G"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}

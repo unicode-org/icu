@@ -616,7 +616,6 @@ lt{
         Phnx{"foenikų"}
         Plrd{"polard fonetinė"}
         Prti{"rašytiniai partų"}
-        Qaai{"paveldėtas"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runų"}
@@ -650,6 +649,7 @@ lt{
         Xpeo{"senieji persų"}
         Xsux{"Šumero Akado dantiraštis"}
         Yiii{"ji"}
+        Zinh{"paveldėtas"}
         Zmth{"matematiniai simboliai"}
         Zsym{"simbolių"}
         Zxxx{"neparašyta"}
@@ -713,7 +713,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

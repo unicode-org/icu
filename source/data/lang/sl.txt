@@ -611,7 +611,6 @@ sl{
         Phnx{"feničanski"}
         Plrd{"Pollardova fonetska pisava"}
         Prti{"Prti"}
-        Qaai{"podedovan"}
         Rjng{"Rjng"}
         Roro{"rongorongo"}
         Runr{"runski"}
@@ -645,6 +644,7 @@ sl{
         Xpeo{"staroperzijski"}
         Xsux{"sumersko-akadski klinopis"}
         Yiii{"Yiii"}
+        Zinh{"podedovan"}
         Zmth{"matematična znamenja"}
         Zsym{"simboli"}
         Zxxx{"nenapisano"}
@@ -703,7 +703,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.0.50.61"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Jezik: {0}"}
         territory{"Regija: {0}"}

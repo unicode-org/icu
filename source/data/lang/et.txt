@@ -589,7 +589,6 @@ et{
         Phag{"phags-pa"}
         Phnx{"foiniikia"}
         Plrd{"Pollardi miao"}
-        Qaai{"päritud"}
         Roro{"rongorongo"}
         Runr{"ruunikiri"}
         Sara{"sarati"}
@@ -617,6 +616,7 @@ et{
         Xpeo{"vanapärsia"}
         Xsux{"sumeri kiilkiri"}
         Yiii{"jii"}
+        Zinh{"päritud"}
         Zsym{"sümbolid"}
         Zxxx{"kirjakeeleta"}
         Zyyy{"üldine"}
@@ -679,7 +679,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}

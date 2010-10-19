@@ -32,6 +32,7 @@ likelySubtags:table(nofallback){
     bn{"bn_Beng_BD"}
     bo{"bo_Tibt_CN"}
     br{"br_Latn_FR"}
+    brx{"brx_Deva_IN"}
     bs{"bs_Latn_BA"}
     ca{"ca_Latn_ES"}
     cch{"cch_Latn_NG"}

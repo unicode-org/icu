@@ -615,7 +615,6 @@ gsw{
         Phnx{"Phönizisch"}
         Plrd{"Pollard Phonetisch"}
         Prti{"Prti"}
-        Qaai{"G’eerbtä Schriftwärt"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runäschrift"}
@@ -649,6 +648,7 @@ gsw{
         Xpeo{"Altpersisch"}
         Xsux{"Sumerisch-akkadischi Keilschrift"}
         Yiii{"Yi"}
+        Zinh{"G’eerbtä Schriftwärt"}
         Zmth{"Zmth"}
         Zsym{"Zsym"}
         Zxxx{"Schriftlosi Schpraach"}
@@ -704,7 +704,7 @@ gsw{
         SOLBA{"Solbica-Mundart"}
         TARASK{"Taraskievica-Rächtschriibig"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Schpraach: {0}"}
         script{"Schrift: {0}"}

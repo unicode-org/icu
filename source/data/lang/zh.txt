@@ -606,7 +606,6 @@ zh{
         Phag{"八思巴文"}
         Phnx{"腓尼基语"}
         Plrd{"波拉德音标文字"}
-        Qaai{"遗传学术语"}
         Rjng{"拉让语"}
         Roro{"朗格朗格文"}
         Runr{"古代北欧文"}
@@ -638,6 +637,7 @@ zh{
         Xpeo{"古波斯语"}
         Xsux{"苏美尔-阿卡德楔形文字"}
         Yiii{"彝语"}
+        Zinh{"遗传学术语"}
         Zxxx{"撤销写入"}
         Zyyy{"通用"}
         Zzzz{"脚本未知或者无效"}
@@ -677,7 +677,7 @@ zh{
         SAAHO{"萨霍"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.50.16"}
+    Version{"2.0.50.96"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

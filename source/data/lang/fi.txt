@@ -617,7 +617,6 @@ fi{
         Phnx{"foinikialainen"}
         Plrd{"Pollardin foneettinen"}
         Prti{"piirtokirjoitusparthialainen"}
-        Qaai{"peritty"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"riimukirjoitus"}
@@ -651,6 +650,7 @@ fi{
         Xpeo{"muinaispersialainen"}
         Xsux{"sumerilais-akkadilainen nuolenpääkirjoitus"}
         Yiii{"yiläinen"}
+        Zinh{"peritty"}
         Zmth{"matemaattinen"}
         Zsym{"symbolit"}
         Zxxx{"kirjoittamaton"}
@@ -720,7 +720,7 @@ fi{
         VALENCIA{"katalaanin valencian murre"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
     }
-    Version{"2.0.50.42"}
+    Version{"2.0.51.9"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

@@ -10,11 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/ar.xml
  */
 ar{
-    Version{"2.0.49.95"}
+    Version{"2.0.50.91"}
     collations{
         standard{
-            Sequence{"&ة=ت&ي<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ<<<ﲐ<<<ﱝ"}
-            Version{"1.8.99.1"}
+            Sequence{"&ت<<ة<<<ﺔ<<<ﺓ&ي<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ<<<ﲐ<<<ﱝ"}
+            Version{"1.9"}
         }
     }
 }

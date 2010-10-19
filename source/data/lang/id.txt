@@ -253,5 +253,5 @@ id{
         PINYIN{"Pinyin Latin"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.0.50.45"}
+    Version{"2.0.50.96"}
 }

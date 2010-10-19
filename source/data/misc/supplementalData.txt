@@ -192,7 +192,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"1.8.99.1"}
+    cldrVersion{"1.9"}
     languageData{
         aa{
             primary{
@@ -825,6 +825,18 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "PK",
+                }
+            }
+        }
+        brx{
+            primary{
+                scripts{
+                    "Deva",
+                }
+            }
+            secondary{
+                territories{
+                    "IN",
                 }
             }
         }

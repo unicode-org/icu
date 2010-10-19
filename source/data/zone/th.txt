@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/th.xml
  */
 th{
-    Version{"2.0.50.45"}
+    Version{"2.0.50.94"}
     zoneStrings{
         "Africa:Accra"{
             ec{"อักกรา"}
