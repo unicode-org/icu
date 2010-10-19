@@ -39,7 +39,7 @@ ro{
             }
         }
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.50.94"}
     calendar{
         buddhist{
             DateTimePatterns{

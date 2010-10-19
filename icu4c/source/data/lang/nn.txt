@@ -620,7 +620,6 @@ nn{
         Phnx{"fønikisk"}
         Plrd{"pollard-fonetisk"}
         Prti{"inskripsjonsparthisk"}
-        Qaai{"nedarva"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runer"}
@@ -654,6 +653,7 @@ nn{
         Xpeo{"gammalpersisk"}
         Xsux{"sumero-akkadisk kileskrift"}
         Yiii{"yi"}
+        Zinh{"nedarva"}
         Zmth{"matematisk notasjon"}
         Zsym{"symbol"}
         Zxxx{"kode for språk utan skrift"}
@@ -714,7 +714,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

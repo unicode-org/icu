@@ -3,15 +3,12 @@
 // * Copyright (C) 2010 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/icu-config.xml & build.xml
+// * Source File:<path>/common/collation/en.xml
 // *
 // ***************************************************************************
 /**
- * validSubLocale of "root"
+ *  ICU <specials> source: <path>/xml/collation/en.xml
  */
 en{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+    Version{"2.0.51.14"}
 }

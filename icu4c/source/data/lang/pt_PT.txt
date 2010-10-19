@@ -109,5 +109,5 @@ pt_PT{
         SOLBA{"dialecto stolvizza/solbica"}
         WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.49.64"}
+    Version{"2.0.50.84"}
 }

@@ -10,11 +10,23 @@
  *  ICU <specials> source: <path>/xml/collation/ca.xml
  */
 ca{
-    Version{"2.0.50.21"}
+    Version{"2.0.50.97"}
     collations{
+        search{
+            Sequence{
+                " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
+                "&ا<<آ<<أ<<إ"
+                "&و<<ؤ"
+                "&ي<<ئ<<ى"
+                "&ه<<ة"
+                "&[last primary ignorable ]<<׳<<״<<ـ<<ٌ<<ٍ<<َ<<ُ<<ِ<<ّ<<ْ<<ฺ"
+                "&L<ŀ=l·<<<Ŀ=L·"
+            }
+            Version{"1.9"}
+        }
         standard{
             Sequence{" [backwards 2]&L<<ŀ=l·<<<Ŀ=L·"}
-            Version{"1.8.99.1"}
+            Version{"1.9"}
         }
     }
 }

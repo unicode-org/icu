@@ -10,15 +10,32 @@
  *  ICU <specials> source: <path>/xml/collation/de.xml
  */
 de{
-    Version{"2.0.50.61"}
+    Version{"2.0.50.97"}
     collations{
         phonebook{
             Sequence{"&a<<ä/e&A<<Ä/E&o<<ö/e&O<<Ö/E&u<<ü/e&U<<Ü/E"}
-            Version{"1.8.99.1"}
+            Version{"1.9"}
+        }
+        search{
+            Sequence{
+                " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
+                "&ا<<آ<<أ<<إ"
+                "&و<<ؤ"
+                "&ي<<ئ<<ى"
+                "&ه<<ة"
+                "&[last primary ignorable ]<<׳<<״<<ـ<<ٌ<<ٍ<<َ<<ُ<<ِ<<ّ<<ْ<<ฺ"
+                "&a<<ä/e"
+                "&A<<Ä/E"
+                "&o<<ö/e"
+                "&O<<Ö/E"
+                "&u<<ü/e"
+                "&U<<Ü/E"
+            }
+            Version{"1.9"}
         }
         standard{
             Sequence{""}
-            Version{"1.8.99.1"}
+            Version{"1.9"}
         }
     }
 }

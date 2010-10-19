@@ -303,5 +303,5 @@ es{
         ZW{"Zimbabue"}
         ZZ{"Región desconocida o no válida"}
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.94"}
 }

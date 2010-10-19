@@ -78,6 +78,7 @@ en{
         bo{"Tibetan"}
         br{"Breton"}
         bra{"Braj"}
+        brx{"Bodo"}
         bs{"Bosnian"}
         btk{"Batak"}
         bua{"Buriat"}
@@ -660,7 +661,6 @@ en{
         Phnx{"Phoenician"}
         Plrd{"Pollard Phonetic"}
         Prti{"Inscriptional Parthian"}
-        Qaai{"Inherited"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runic"}
@@ -696,6 +696,7 @@ en{
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
+        Zinh{"Inherited"}
         Zmth{"Mathematical Notation"}
         Zsym{"Symbols"}
         Zxxx{"Unwritten"}
@@ -806,7 +807,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.50.16"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

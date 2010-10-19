@@ -617,7 +617,6 @@ ca{
         Phnx{"fenici"}
         Plrd{"Pollard Miao"}
         Prti{"parthià inscripcional"}
-        Qaai{"heretat"}
         Rjng{"rejang"}
         Roro{"rongo-rongo"}
         Runr{"rúnic"}
@@ -651,6 +650,7 @@ ca{
         Xpeo{"persa antic"}
         Xsux{"cuneïforme sumeri-accadi"}
         Yiii{"yi"}
+        Zinh{"heretat"}
         Zmth{"notació matemàtica"}
         Zsym{"símbols"}
         Zxxx{"sense escriptura"}
@@ -710,7 +710,7 @@ ca{
         VALENCIA{"valencià"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

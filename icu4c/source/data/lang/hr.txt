@@ -617,7 +617,6 @@ hr{
         Phnx{"feničko pismo"}
         Plrd{"pollard fonetsko pismo"}
         Prti{"pisani parthian"}
-        Qaai{"nasljedno pismo"}
         Rjng{"rejang pismo"}
         Roro{"rongorongo pismo"}
         Runr{"runsko pismo"}
@@ -651,6 +650,7 @@ hr{
         Xpeo{"staro perzijsko pismo"}
         Xsux{"sumersko-akadsko cuneiform pismo"}
         Yiii{"Yi pismo"}
+        Zinh{"nasljedno pismo"}
         Zmth{"matematičko znakovlje"}
         Zsym{"simboli"}
         Zxxx{"nepisani jezik"}
@@ -710,7 +710,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.50.18"}
+    Version{"2.0.50.96"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

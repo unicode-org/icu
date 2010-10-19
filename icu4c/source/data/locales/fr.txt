@@ -42,7 +42,7 @@ fr{
             }
         }
     }
-    Version{"2.0.50.25"}
+    Version{"2.0.50.94"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -281,7 +281,7 @@ fr{
                     a{"HH – HH"}
                 }
                 Hm{
-                    H{"HH:mm-HH:mm"}
+                    H{"HH:mm – HH:mm"}
                     a{"HH:mm – HH:mm"}
                     m{"HH:mm – HH:mm"}
                 }
