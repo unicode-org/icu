@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -196,11 +196,12 @@ DataDrivenCollatorTest::processTest(TestData *testData) {
         if(U_SUCCESS(status)) {
           logln("Testing collator for rules "+testSetting);
         } else {
-          errln("Unable to instantiate collator for rules "+testSetting);
+          errln("Unable to instantiate collator for rules "+testSetting+" - "+u_errorName(status));
           return;
         }
       } else {
         errln("No collator definition!");
+        return;
       }
     }
     

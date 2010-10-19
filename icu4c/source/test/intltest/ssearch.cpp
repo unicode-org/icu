@@ -74,6 +74,7 @@ SSearchTest::~SSearchTest()
 
 void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char *params )
 {
+    static const UVersionInfo icu47 = { 4, 7, 0, 0 };
     if (exec) logln("TestSuite SSearchTest: ");
     switch (index) {
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -82,7 +83,7 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
             break;
 
         case 1: name = "offsetTest";
-            if (exec) offsetTest();
+            if (exec && isICUVersionAtLeast(icu47)) offsetTest();
             break;
 
         case 2: name = "monkeyTest";
@@ -90,7 +91,7 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
             break;
 
         case 3: name = "bmMonkeyTest";
-            if (exec) bmMonkeyTest(params);
+            if (exec && isICUVersionAtLeast(icu47)) bmMonkeyTest(params);
             break;
 
         case 4: name = "boyerMooreTest";

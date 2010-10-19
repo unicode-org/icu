@@ -204,7 +204,8 @@ Unicode 6.0 update
 - update source/data/unidata/UCARules.txt with UCA_Rules_SHORT.txt
 - update Han-implicit ranges for new CJK extensions:
   swapCJK() in ucol.cpp & ImplicitCEGenerator.java
-- genuca: allow bytes 02 for U+FFFE, new merge-sort character
+- genuca: allow bytes 02 for U+FFFE, new merge-sort character;
+  do not add it into invuca so that tailoring primary-after an ignorable works
 - genuca: permit space between [variable top] bytes
 - ucol.cpp: treat noncharacters like unassigned rather than ignorable
 - run makeuca.sh:
