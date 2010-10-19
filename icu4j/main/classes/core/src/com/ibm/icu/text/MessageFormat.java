@@ -338,65 +338,25 @@ import com.ibm.icu.util.ULocale;
  * </pre>
  * </blockquote>
  *
- * <p>For more sophisticated patterns, you can use a <code>ChoiceFormat</code> to get
- * output such as:
- * <blockquote>
+ * <p>
+ * <strong>Creating internationalized messages that include plural forms, you
+ * can use a PluralFormat:</strong>
  * <pre>
- * MessageFormat form = new MessageFormat("The disk \"{1}\" contains {0}.");
- * double[] filelimits = {0,1,2};
- * String[] filepart = {"no files","one file","{0,number} files"};
- * ChoiceFormat fileform = new ChoiceFormat(filelimits, filepart);
- * form.setFormatByArgumentIndex(0, fileform);
- *
- * Object[] testArgs = {new Long(12373), "MyDisk"};
- *
- * System.out.println(form.format(testArgs));
- *
- * // output, with different testArgs
- * output: The disk "MyDisk" contains no files.
- * output: The disk "MyDisk" contains one file.
- * output: The disk "MyDisk" contains 1,273 files.
+ * MessageFormat msgFmt = new MessageFormat("{0, plural, " +
+ *     "one{{0, number, C''''est #,##0.0#  fichier}} " +
+ *     "other {Ce sont # fichiers}} dans la liste.",
+ *     new ULocale("fr"));
+ * Object args[] = {new Long(0)};
+ * System.out.println(msgFmt.format(args));
+ * args = {new Long(3)};
+ * System.out.println(msgFmt.format(args));
+ * 
+ * Produces the output:<br />
+ * <code>C'est 0,0 fichier dans la liste.</code><br />
+ * <code>Ce sont 3 fichiers dans la liste."</code>
  * </pre>
- * </blockquote>
- * You can either do this programmatically, as in the above example,
- * or by using a pattern (see
- * {@link ChoiceFormat}
- * for more information) as in:
- * <blockquote>
- * <pre>
- * form.applyPattern(
- *    "There {0,choice,0#are no files|1#is one file|1&lt;are {0,number,integer} files}.");
- * </pre>
- * </blockquote>
- *
- * <p><strong>Note:</strong> As we see above, the string produced
- * by a <code>ChoiceFormat</code> in <code>MessageFormat</code> is treated specially;
- * occurances of '{' are used to indicated subformats, and cause recursion.
- * If you create both a <code>MessageFormat</code> and <code>ChoiceFormat</code>
- * programmatically (instead of using the string patterns), then be careful not to
- * produce a format that recurses on itself, which will cause an infinite loop.
- *
- * <p>When a single argument is parsed more than once in the string, the last match
- * will be the final result of the parsing.  For example,
- * <pre>
- * MessageFormat mf = new MessageFormat("{0,number,#.##}, {0,number,#.#}");
- * Object[] objs = {new Double(3.1415)};
- * String result = mf.format( objs );
- * // result now equals "3.14, 3.1"
- * objs = null;
- * objs = mf.parse(result, new ParsePosition(0));
- * // objs now equals {new Double(3.1)}
- * </pre>
- *
- * <p>Likewise, parsing with a MessageFormat object using patterns containing
- * multiple occurances of the same argument would return the last match.  For
- * example,
- * <pre>
- * MessageFormat mf = new MessageFormat("{0}, {0}, {0}");
- * String forParsing = "x, y, z";
- * Object[] objs = mf.parse(forParsing, new ParsePosition(0));
- * // result now equals {new String("z")}
- * </pre>
+ * Please check {@link PluralFormat} and {@link PluralRules} for details.
+ * </p>
  *
  * <h4><a name="synchronization">Synchronization</a></h4>
  *
