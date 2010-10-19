@@ -671,7 +671,9 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key, const char* l
 #endif
         char pLocale[ULOC_FULLNAME_CAPACITY];
         uprv_strcpy(pLocale, localeName);
-        uprv_strcat(pLocale, "_");    // add an underscore at the tail of locale name.
+        // Add an underscore at the tail of locale name,
+        // so that searchInLocaleChain will check the current locale before falling back
+        uprv_strcat(pLocale, "_");
         searchInLocaleChain(style, gUnitsTag, pLocale, srcTimeUnitField, srcPluralCount,
                              searchPluralCount, countToPatterns, err);
         if (countToPatterns != NULL) {
