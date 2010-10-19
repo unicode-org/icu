@@ -149,92 +149,6 @@ eu{
         zh_Hant{"txinera (tradizionala)"}
         zu{"zuluera"}
     }
-    Scripts{
-        Arab{"Arab"}
-        Armi{"Armi"}
-        Armn{"Armn"}
-        Avst{"Avst"}
-        Bali{"Bali"}
-        Batk{"Batk"}
-        Beng{"Beng"}
-        Blis{"Blis"}
-        Bopo{"Bopo"}
-        Brah{"Brah"}
-        Brai{"Brai"}
-        Bugi{"Bugi"}
-        Buhd{"Buhd"}
-        Cakm{"Cakm"}
-        Cari{"Cari"}
-        Cham{"Cham"}
-        Cher{"Txer"}
-        Cirt{"Cirt"}
-        Copt{"Copt"}
-        Cprt{"Cprt"}
-        Cyrl{"Cyrl"}
-        Deva{"Deva"}
-        Dsrt{"Dsrt"}
-        Egyd{"Egyd"}
-        Egyh{"Egyh"}
-        Egyp{"Egyp"}
-        Ethi{"Etiop"}
-        Geok{"Geok"}
-        Geor{"Geor"}
-        Glag{"Glag"}
-        Goth{"Goth"}
-        Grek{"Grek"}
-        Gujr{"Gujr"}
-        Guru{"Guru"}
-        Hang{"Hang"}
-        Hani{"Hani"}
-        Hano{"Hano"}
-        Hans{"Hans"}
-        Hant{"Hant"}
-        Hebr{"Hebr"}
-        Hira{"Hira"}
-        Hrkt{"Hrkt"}
-        Inds{"Inds"}
-        Java{"Java"}
-        Jpan{"Jpon"}
-        Kali{"Kali"}
-        Kana{"Kana"}
-        Khar{"Khar"}
-        Khmr{"Khmr"}
-        Knda{"Knda"}
-        Kore{"Kore"}
-        Kthi{"Kthi"}
-        Lana{"Lana"}
-        Laoo{"Laoo"}
-        Latf{"Latf"}
-        Latg{"Latg"}
-        Latn{"Latn"}
-        Lepc{"Lepc"}
-        Limb{"Limb"}
-        Lina{"Lina"}
-        Linb{"Linb"}
-        Lyci{"Lyci"}
-        Lydi{"Lydi"}
-        Mand{"Mand"}
-        Mani{"Mani"}
-        Maya{"Maia"}
-        Mero{"Mero"}
-        Mlym{"Mlym"}
-        Mong{"Mong"}
-        Moon{"Moon"}
-        Mtei{"Mtei"}
-        Mymr{"Mymr"}
-        Nkoo{"Nkoo"}
-        Phli{"Phli"}
-        Phlv{"Phlv"}
-        Prti{"Prti"}
-        Qaai{"Qaai"}
-        Syre{"Syre"}
-        Syrn{"Syrn"}
-        Talu{"Talu"}
-        Zmth{"Zmth"}
-        Zxxx{"Zxxx"}
-        Zyyy{"Zyyy"}
-        Zzzz{"Zzzz"}
-    }
     Types{
         calendar{
             buddhist{"egutegi budista"}
@@ -262,7 +176,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.50.48"}
+    Version{"2.0.50.95"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -14,7 +14,7 @@ bg{
     collations{
         standard{
             Sequence{"[suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкУуЧчЫыЭэѴѵ] ]"}
-            Version{"1.8.99.1"}
+            Version{"1.9"}
         }
     }
 }

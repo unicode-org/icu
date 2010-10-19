@@ -42,7 +42,7 @@ nl{
             }
         }
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.96"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -61,6 +61,7 @@ nl{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E d-M"}
@@ -110,6 +111,7 @@ nl{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E d-M"}
@@ -310,8 +312,8 @@ nl{
                     y{"E d MMM y - E d MMM y"}
                 }
                 yMMMM{
-                    M{"MM–MM – yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"MMMM-MMMM y"}
+                    y{"MMMM y - MMMM y"}
                 }
                 yMMMd{
                     M{"d MMM - d MMM y"}
@@ -428,6 +430,7 @@ nl{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E d-M"}
@@ -494,6 +497,7 @@ nl{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E d-M"}
@@ -537,6 +541,7 @@ nl{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E d-M"}

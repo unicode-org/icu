@@ -39,7 +39,7 @@ ca{
             }
         }
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.50.94"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -270,8 +270,8 @@ ca{
                     y{"E d MMM 'de' y - E d MMM 'de' y"}
                 }
                 yMMMM{
-                    M{"MM – MM-yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"LLLL-LLLL 'de' y"}
+                    y{"LLLL 'de' y - LLLL 'de' y"}
                 }
                 yMMMd{
                     M{"d MMM - d MMM 'de' y"}

@@ -18,7 +18,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.49.64"}
+    Version{"2.0.50.84"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -63,8 +63,13 @@ pt_PT{
                 "{1} {0}",
             }
             availableFormats{
-                hm{"h:mm"}
-                hms{"h:mm:ss"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
                 yyQ{"QQQ 'de' yy"}

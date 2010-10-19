@@ -598,7 +598,6 @@ bs{
         Phnx{"feničansko pismo"}
         Plrd{"polard fonetsko pismo"}
         Prti{"pisani partian"}
-        Qaai{"nasledno pismo"}
         Rjng{"rejang pismo"}
         Roro{"rongorongo pismo"}
         Runr{"runsko pismo"}
@@ -632,6 +631,7 @@ bs{
         Xpeo{"staropersijsko pismo"}
         Xsux{"sumersko-akadsko kuneiform pismo"}
         Yiii{"ji pismo"}
+        Zinh{"nasledno pismo"}
         Zmth{"matematička notacija"}
         Zsym{"simboli"}
         Zxxx{"nepisani jezik"}
@@ -640,7 +640,7 @@ bs{
     }
     Types:alias{"sr_Latn"}
     Variants:alias{"sr_Latn"}
-    Version{"2.0.50.46"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

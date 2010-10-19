@@ -295,7 +295,6 @@ ro{
         Mong{"mongolă"}
         Mymr{"birmană"}
         Phnx{"feniciană"}
-        Qaai{"moștenită"}
         Runr{"runică"}
         Sinh{"singaleză"}
         Syrc{"siriacă"}
@@ -306,6 +305,7 @@ ro{
         Tibt{"tibetană"}
         Xpeo{"persană veche"}
         Xsux{"cuneiformă sumero-akkadiană"}
+        Zinh{"moștenită"}
         Zxxx{"nescrisă"}
         Zyyy{"comună"}
         Zzzz{"scriere necunoscută sau nevalidă"}
@@ -336,7 +336,7 @@ ro{
         PINYIN{"Pinyin"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

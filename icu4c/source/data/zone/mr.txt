@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mr.xml
  */
 mr{
-    Version{"2.0.50.30"}
+    Version{"2.0.50.94"}
     zoneStrings{
         "meta:Acre"{
             ld{"ऐकर ग्रीष्म वेळ"}

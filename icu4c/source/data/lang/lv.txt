@@ -571,7 +571,6 @@ lv{
         Orya{"oriju"}
         Osma{"osmaņu turku"}
         Phnx{"feniķiešu"}
-        Qaai{"mantotā"}
         Roro{"rongorongo"}
         Runr{"rūnu raksts"}
         Samr{"samariešu"}
@@ -589,6 +588,7 @@ lv{
         Xpeo{"senperiešu"}
         Xsux{"šumeru-akadiešu ķīļraksts"}
         Yiii{"ji"}
+        Zinh{"mantotā"}
         Zmth{"matemātiskais pieraksts"}
         Zsym{"simboli"}
         Zxxx{"bez rakstības"}
@@ -638,7 +638,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

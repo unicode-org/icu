@@ -616,7 +616,6 @@ sr_Latn{
         Phnx{"Feničansko pismo"}
         Plrd{"polard fonetsko pismo"}
         Prti{"pisani partian"}
-        Qaai{"nasledno pismo"}
         Rjng{"rejang pismo"}
         Roro{"rongorongo pismo"}
         Runr{"runsko pismo"}
@@ -650,6 +649,7 @@ sr_Latn{
         Xpeo{"Staropersijsko pismo"}
         Xsux{"sumersko-akadsko kuneiform pismo"}
         Yiii{"ji pismo"}
+        Zinh{"nasledno pismo"}
         Zmth{"matematička notacija"}
         Zsym{"simboli"}
         Zxxx{"Nepisani jezik"}
@@ -707,7 +707,7 @@ sr_Latn{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"2.0.48.46"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

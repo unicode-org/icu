@@ -14,6 +14,7 @@ icu4c/source/data/brkitr/el.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en_US.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en_US_POSIX.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/brkitr/he.txt -text
 icu4c/source/data/brkitr/ja.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_he.txt -text
@@ -249,6 +250,8 @@ icu4c/source/data/coll/ms_BN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/ms_MY.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/mt_MT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/coll/my.txt -text
+icu4c/source/data/coll/my_MM.txt -text
 icu4c/source/data/coll/nb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/nb_NO.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/nl.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -493,6 +496,7 @@ icu4c/source/data/curr/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ms_BN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/curr/my.txt -text
 icu4c/source/data/curr/naq.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/nb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/nb_NO.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -742,6 +746,7 @@ icu4c/source/data/lang/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/lang/my.txt -text
 icu4c/source/data/lang/naq.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/nb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/nb_NO.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1160,6 +1165,8 @@ icu4c/source/data/locales/ms_BN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ms_MY.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/mt_MT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/locales/my.txt -text
+icu4c/source/data/locales/my_MM.txt -text
 icu4c/source/data/locales/naq.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/naq_NA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/nb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1532,6 +1539,7 @@ icu4c/source/data/region/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/region/my.txt -text
 icu4c/source/data/region/naq.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/nb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/nb_NO.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1750,6 +1758,7 @@ icu4c/source/data/translit/Kannada_Telugu.txt svneol=native#text/plain%3Bcharset
 icu4c/source/data/translit/Kazakh_Latin_BGN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/translit/Kirghiz_Latin_BGN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/translit/Korean_Latin_BGN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/translit/Latin_ASCII.txt -text
 icu4c/source/data/translit/Latin_Armenian.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/translit/Latin_Bengali.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/translit/Latin_ConjoiningJamo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2169,6 +2178,7 @@ icu4c/source/data/zone/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/zone/my.txt -text
 icu4c/source/data/zone/naq.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/nb.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/nb_NO.txt svneol=native#text/plain%3Bcharset%3Dutf-8

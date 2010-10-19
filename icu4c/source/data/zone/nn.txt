@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nn.xml
  */
 nn{
-    Version{"2.0.48.64"}
+    Version{"2.0.50.94"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}

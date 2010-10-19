@@ -224,5 +224,5 @@ ee{
             "Zimbabwetɔwoƒɛgadudu",
         }
     }
-    Version{"2.0.50.34"}
+    Version{"2.0.50.66"}
 }

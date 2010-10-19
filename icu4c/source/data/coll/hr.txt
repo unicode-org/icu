@@ -10,18 +10,35 @@
  *  ICU <specials> source: <path>/xml/collation/hr.xml
  */
 hr{
-    Version{"2.0.49.40"}
+    Version{"2.0.50.97"}
     collations{
-        standard{
+        search{
             Sequence{
+                " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
+                "&ا<<آ<<أ<<إ"
+                "&و<<ؤ"
+                "&ي<<ئ<<ى"
+                "&ه<<ة"
+                "&[last primary ignorable ]<<׳<<״<<ـ<<ٌ<<ٍ<<َ<<ُ<<ِ<<ّ<<ْ<<ฺ"
                 "&C<č<<<Č<ć<<<Ć"
-                "&D<dž=ǆ<<<dŽ<<<Dž=ǅ<<<DŽ=Ǆ<đ<<<Đ"
-                "&L<lj=ǉ<<<lJ<<<Lj=ǈ<<<LJ=Ǉ"
-                "&N<nj=ǌ<<<nJ<<<Nj=ǋ<<<NJ=Ǌ"
+                "&D<dž<<<ǆ<<<Dž<<<ǅ<<<DŽ<<<Ǆ<đ<<<Đ"
+                "&L<lj<<<ǉ<<<Lj<<<ǈ<<<LJ<<<Ǉ"
+                "&N<nj<<<ǌ<<<Nj<<<ǋ<<<NJ<<<Ǌ"
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"1.8.99.1"}
+            Version{"1.9"}
+        }
+        standard{
+            Sequence{
+                "&C<č<<<Č<ć<<<Ć"
+                "&D<dž<<<ǆ<<<Dž<<<ǅ<<<DŽ<<<Ǆ<đ<<<Đ"
+                "&L<lj<<<ǉ<<<Lj<<<ǈ<<<LJ<<<Ǉ"
+                "&N<nj<<<ǌ<<<Nj<<<ǋ<<<NJ<<<Ǌ"
+                "&S<š<<<Š"
+                "&Z<ž<<<Ž"
+            }
+            Version{"1.9"}
         }
     }
 }

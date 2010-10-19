@@ -621,7 +621,6 @@ nb{
         Phnx{"fønikisk"}
         Plrd{"pollard-fonetisk"}
         Prti{"inskripsjonsparthisk"}
-        Qaai{"nedarvet"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runer"}
@@ -655,6 +654,7 @@ nb{
         Xpeo{"gammelpersisk"}
         Xsux{"sumersk-akkadisk kileskrift"}
         Yiii{"yi"}
+        Zinh{"nedarvet"}
         Zmth{"matematisk notasjon"}
         Zsym{"symboler"}
         Zxxx{"språk uten skrift"}
@@ -714,7 +714,7 @@ nb{
         VALENCIA{"valensisk dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.96"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

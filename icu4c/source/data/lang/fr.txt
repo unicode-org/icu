@@ -617,7 +617,6 @@ fr{
         Phnx{"phénicien"}
         Plrd{"phonétique de Pollard"}
         Prti{"parthe des inscriptions"}
-        Qaai{"hérité"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runique"}
@@ -651,6 +650,7 @@ fr{
         Xpeo{"cunéiforme persépolitain"}
         Xsux{"cunéiforme suméro-akkadien"}
         Yiii{"yi"}
+        Zinh{"hérité"}
         Zmth{"notation mathématique"}
         Zsym{"symboles"}
         Zxxx{"non écrit"}
@@ -710,7 +710,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.50.25"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

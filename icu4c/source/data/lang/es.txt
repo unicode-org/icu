@@ -609,7 +609,6 @@ es{
         Phag{"phags-pa"}
         Phnx{"fenicio"}
         Plrd{"Pollard Miao"}
-        Qaai{"heredado"}
         Rjng{"rejang"}
         Roro{"rongo-rongo"}
         Runr{"rúnico"}
@@ -641,6 +640,7 @@ es{
         Xpeo{"persa antiguo"}
         Xsux{"cuneiforme sumerio-acadio"}
         Yiii{"yi"}
+        Zinh{"heredado"}
         Zsym{"símbolos"}
         Zxxx{"no escrito"}
         Zyyy{"común"}
@@ -681,7 +681,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

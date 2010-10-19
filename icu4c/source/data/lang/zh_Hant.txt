@@ -605,7 +605,6 @@ zh_Hant{
         Phag{"八思巴文"}
         Phnx{"腓尼基文"}
         Plrd{"柏格理拼音符"}
-        Qaai{"Qaai"}
         Rjng{"拉讓文"}
         Roro{"朗格朗格象形文"}
         Runr{"古北歐文字"}
@@ -672,7 +671,7 @@ zh_Hant{
         SAAHO{"SAAHO"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.50.16"}
+    Version{"2.0.50.94"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}
