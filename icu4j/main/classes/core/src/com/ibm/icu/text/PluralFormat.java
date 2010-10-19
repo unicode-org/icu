@@ -51,7 +51,9 @@ import com.ibm.icu.util.ULocale;
  *     need not worry about the plural cases of a language. On the flip side,
  *     the localizer does not have to specify the plural cases; he can simply
  *     use the predefined keywords. The whole plural formatting of messages can
- *     be done using localized patterns from resource bundles.
+ *     be done using localized patterns from resource bundles. For predefined plural 
+ *     rules, see CLDR <i>Language Plural Rules</i> page at  
+ *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html 
  * </ul>
  * </p>
  * <h4>Usage of <code>PluralFormat</code></h4>
@@ -73,7 +75,8 @@ import com.ibm.icu.util.ULocale;
  * space characters. Each clause assigns the message <code><i>message</i></code>
  * to the plural case identified by <code><i>caseKeyword</i></code>.
  * </p><p>
- * You always have to define a message text for the default plural case
+ * There are 6 predefined case keywords in ICU - 'zero', 'one', 'two', 'few', 'many' and 
+ * 'other'. You always have to define a message text for the default plural case 
  * "<code>other</code>" which is contained in every rule set. If the plural
  * rules of the <code>PluralFormat</code> object do not contain a plural case
  * identified by <code><i>caseKeyword</i></code>, an
