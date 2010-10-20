@@ -48,6 +48,11 @@ static const char *const TESTZIDS[] = {
         "Etc/GMT+8"
 };
 
+static UBool hasEquivalentTransitions(/*const*/ BasicTimeZone& tz1, /*const*/BasicTimeZone& tz2,
+                                        UDate start, UDate end,
+                                        UBool ignoreDstAmount, int32_t maxTransitionTimeDelta,
+                                        UErrorCode& status);
+
 class TestZIDEnumeration : public StringEnumeration {
 public:
     TestZIDEnumeration(UBool all = FALSE);
@@ -786,12 +791,6 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        if (!isICUVersionAtLeast(ICU_453)) {
-            // See ticket#7008
-            if (*tzid == UnicodeString("Asia/Amman")) {
-                continue;
-            }
-        }
         BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
         vtz_org->setTZURL("http://source.icu-project.org/timezone");
@@ -841,8 +840,15 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
                     if (avail) {
                         if (!vtz_new->hasEquivalentTransitions(*tz, trans.getTime(),
                                 endTime, TRUE, status)) {
-                            errln("FAIL: VTimeZone for " + *tzid +
-                                " is not equivalent to its OlsonTimeZone corresponding.");
+                            int32_t maxDelta = 1000;
+                            if (!hasEquivalentTransitions(*vtz_new, *tz, trans.getTime() + maxDelta,
+                                endTime, TRUE, maxDelta, status)) {
+                                errln("FAIL: VTimeZone for " + *tzid +
+                                    " is not equivalent to its OlsonTimeZone corresponding.");
+                            } else {
+                                logln("VTimeZone for " + *tzid +
+                                    "  differs from its OlsonTimeZone corresponding with maximum transition time delta - " + maxDelta);
+                            }
                         }
                         if (U_FAILURE(status)) {
                             errln("FAIL: error status is returned from hasEquivalentTransition");
@@ -885,12 +891,6 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        if (!isICUVersionAtLeast(ICU_453)) {
-            // See ticket#7008
-            if (*tzid == UnicodeString("Asia/Amman")) {
-                continue;
-            }
-        }
         BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
         VTimeZone *vtz_new = NULL;
@@ -930,8 +930,16 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
                         if (avail) {
                             if (!vtz_new->hasEquivalentTransitions(*tz, trans.getTime(),
                                     endTime, TRUE, status)) {
-                                errln("FAIL: VTimeZone for " + *tzid +
-                                    " is not equivalent to its OlsonTimeZone corresponding.");
+                                int32_t maxDelta = 1000;
+                                if (!hasEquivalentTransitions(*vtz_new, *tz, trans.getTime() + maxDelta,
+                                    endTime, TRUE, maxDelta, status)) {
+                                    errln("FAIL: VTimeZone for " + *tzid +
+                                        " is not equivalent to its OlsonTimeZone corresponding.");
+                                } else {
+                                    logln("VTimeZone for " + *tzid +
+                                        "  differs from its OlsonTimeZone corresponding with maximum transition time delta - " + maxDelta);
+                                }
+
                             }
                             if (U_FAILURE(status)) {
                                 errln("FAIL: error status is returned from hasEquivalentTransition");
@@ -2509,6 +2517,105 @@ TimeZoneRuleTest::compareTransitionsDescending(BasicTimeZone& z1, BasicTimeZone&
         }
     }
 }
+
+// Slightly modified version of BasicTimeZone::hasEquivalentTransitions.
+// This version returns TRUE if transition time delta is within the given
+// delta range.
+static UBool hasEquivalentTransitions(/*const*/ BasicTimeZone& tz1, /*const*/BasicTimeZone& tz2,
+                                        UDate start, UDate end,
+                                        UBool ignoreDstAmount, int32_t maxTransitionTimeDelta,
+                                        UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (tz1.hasSameRules(tz2)) {
+        return TRUE;
+    }
+    // Check the offsets at the start time
+    int32_t raw1, raw2, dst1, dst2;
+    tz1.getOffset(start, FALSE, raw1, dst1, status);
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    tz2.getOffset(start, FALSE, raw2, dst2, status);
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (ignoreDstAmount) {
+        if ((raw1 + dst1 != raw2 + dst2)
+            || (dst1 != 0 && dst2 == 0)
+            || (dst1 == 0 && dst2 != 0)) {
+            return FALSE;
+        }
+    } else {
+        if (raw1 != raw2 || dst1 != dst2) {
+            return FALSE;
+        }            
+    }
+    // Check transitions in the range
+    UDate time = start;
+    TimeZoneTransition tr1, tr2;
+    while (TRUE) {
+        UBool avail1 = tz1.getNextTransition(time, FALSE, tr1);
+        UBool avail2 = tz2.getNextTransition(time, FALSE, tr2);
+
+        if (ignoreDstAmount) {
+            // Skip a transition which only differ the amount of DST savings
+            while (TRUE) {
+                if (avail1
+                        && tr1.getTime() <= end
+                        && (tr1.getFrom()->getRawOffset() + tr1.getFrom()->getDSTSavings()
+                                == tr1.getTo()->getRawOffset() + tr1.getTo()->getDSTSavings())
+                        && (tr1.getFrom()->getDSTSavings() != 0 && tr1.getTo()->getDSTSavings() != 0)) {
+                    tz1.getNextTransition(tr1.getTime(), FALSE, tr1);
+                } else {
+                    break;
+                }
+            }
+            while (TRUE) {
+                if (avail2
+                        && tr2.getTime() <= end
+                        && (tr2.getFrom()->getRawOffset() + tr2.getFrom()->getDSTSavings()
+                                == tr2.getTo()->getRawOffset() + tr2.getTo()->getDSTSavings())
+                        && (tr2.getFrom()->getDSTSavings() != 0 && tr2.getTo()->getDSTSavings() != 0)) {
+                    tz2.getNextTransition(tr2.getTime(), FALSE, tr2);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        UBool inRange1 = (avail1 && tr1.getTime() <= end);
+        UBool inRange2 = (avail2 && tr2.getTime() <= end);
+        if (!inRange1 && !inRange2) {
+            // No more transition in the range
+            break;
+        }
+        if (!inRange1 || !inRange2) {
+            return FALSE;
+        }
+        double delta = tr1.getTime() >= tr2.getTime() ? tr1.getTime() - tr2.getTime() : tr2.getTime() - tr1.getTime();
+        if (delta > (double)maxTransitionTimeDelta) {
+            return FALSE;
+        }
+        if (ignoreDstAmount) {
+            if (tr1.getTo()->getRawOffset() + tr1.getTo()->getDSTSavings()
+                        != tr2.getTo()->getRawOffset() + tr2.getTo()->getDSTSavings()
+                    || (tr1.getTo()->getDSTSavings() != 0 &&  tr2.getTo()->getDSTSavings() == 0)
+                    || (tr1.getTo()->getDSTSavings() == 0 &&  tr2.getTo()->getDSTSavings() != 0)) {
+                return FALSE;
+            }
+        } else {
+            if (tr1.getTo()->getRawOffset() != tr2.getTo()->getRawOffset() ||
+                tr1.getTo()->getDSTSavings() != tr2.getTo()->getDSTSavings()) {
+                return FALSE;
+            }
+        }
+        time = tr1.getTime() > tr2.getTime() ? tr1.getTime() : tr2.getTime();
+    }
+    return TRUE;
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
