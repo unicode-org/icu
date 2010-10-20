@@ -72,17 +72,27 @@ BasicTimeZone::hasEquivalentTransitions(/*const*/ BasicTimeZone& tz, UDate start
 
         if (ignoreDstAmount) {
             // Skip a transition which only differ the amount of DST savings
-            if (avail1
-                    && (tr1.getFrom()->getRawOffset() + tr1.getFrom()->getDSTSavings()
-                            == tr1.getTo()->getRawOffset() + tr1.getTo()->getDSTSavings())
-                    && (tr1.getFrom()->getDSTSavings() != 0 && tr1.getTo()->getDSTSavings() != 0)) {
-                getNextTransition(tr1.getTime(), FALSE, tr1);
+            while (TRUE) {
+                if (avail1
+                        && tr1.getTime() <= end
+                        && (tr1.getFrom()->getRawOffset() + tr1.getFrom()->getDSTSavings()
+                                == tr1.getTo()->getRawOffset() + tr1.getTo()->getDSTSavings())
+                        && (tr1.getFrom()->getDSTSavings() != 0 && tr1.getTo()->getDSTSavings() != 0)) {
+                    getNextTransition(tr1.getTime(), FALSE, tr1);
+                } else {
+                    break;
+                }
             }
-            if (avail2
-                    && (tr2.getFrom()->getRawOffset() + tr2.getFrom()->getDSTSavings()
-                            == tr2.getTo()->getRawOffset() + tr2.getTo()->getDSTSavings())
-                    && (tr2.getFrom()->getDSTSavings() != 0 && tr2.getTo()->getDSTSavings() != 0)) {
-                getNextTransition(tr2.getTime(), FALSE, tr2);
+            while (TRUE) {
+                if (avail2
+                        && tr2.getTime() <= end
+                        && (tr2.getFrom()->getRawOffset() + tr2.getFrom()->getDSTSavings()
+                                == tr2.getTo()->getRawOffset() + tr2.getTo()->getDSTSavings())
+                        && (tr2.getFrom()->getDSTSavings() != 0 && tr2.getTo()->getDSTSavings() != 0)) {
+                    tz.getNextTransition(tr2.getTime(), FALSE, tr2);
+                } else {
+                    break;
+                }
             }
         }
 
