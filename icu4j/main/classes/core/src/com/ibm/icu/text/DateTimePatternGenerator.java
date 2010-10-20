@@ -1624,8 +1624,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     // - "field" is the field from the found pattern.
                     //
                     // The adjusted field should consist of characters from the originally requested
-                    // skeleton, except in the case of HOUR or MONTH, in which case it should consist of
-                    // characters from the found pattern.
+                    // skeleton, except in the case of HOUR or MONTH or WEEKDAY, in which case it should
+                    // consist of characters from the found pattern.
                     //
                     // The length of the adjusted field (adjFieldLen) should match that in the originally
                     // requested skeleton, except that in the following cases the length of the adjusted field
@@ -1644,6 +1644,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     
                     String reqField = inputRequest.original[type];
                     int reqFieldLen = reqField.length();
+                    if ( reqField.charAt(0) == 'E' && reqFieldLen < 3 ) {
+                        reqFieldLen = 3; // 1-3 for E are equivalent to 3 for c,e
+                    }
                     int adjFieldLen = reqFieldLen;
                     DateTimeMatcher matcherWithSkeleton = patternWithMatcher.matcherWithSkeleton;
                     if ( (type == HOUR && (options & MATCH_HOUR_FIELD_LENGTH)==0) ||
@@ -1660,7 +1663,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             adjFieldLen = field.length();
                         }
                     }
-                    char c = (type != HOUR && type != MONTH)? reqField.charAt(0): field.charAt(0);
+                    char c = (type != HOUR && type != MONTH && type != WEEKDAY)? reqField.charAt(0): field.charAt(0);
                     field = "";
                     for (int i = adjFieldLen; i > 0; --i) field += c;
                 }
@@ -1729,7 +1732,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
 
     static private String[] CANONICAL_ITEMS = {
-        "G", "y", "Q", "M", "w", "W", "e", 
+        "G", "y", "Q", "M", "w", "W", "E", 
         "d", "D", "F", 
         "H", "m", "s", "S", "v"
     };
@@ -1824,10 +1827,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'w', WEEK_OF_YEAR, NUMERIC, 1, 2},
         {'W', WEEK_OF_MONTH, NUMERIC + DELTA, 1},
 
-        {'e', WEEKDAY, NUMERIC + DELTA, 1, 2},
-        {'e', WEEKDAY, SHORT - DELTA, 3},
-        {'e', WEEKDAY, LONG - DELTA, 4},
-        {'e', WEEKDAY, NARROW - DELTA, 5},
         {'E', WEEKDAY, SHORT, 1, 3},
         {'E', WEEKDAY, LONG, 4},
         {'E', WEEKDAY, NARROW, 5},
@@ -1835,6 +1834,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'c', WEEKDAY, SHORT - 2*DELTA, 3},
         {'c', WEEKDAY, LONG - 2*DELTA, 4},
         {'c', WEEKDAY, NARROW - 2*DELTA, 5},
+        {'e', WEEKDAY, NUMERIC + DELTA, 1, 2}, // 'e' is currently not used in CLDR data, should not be canonical
+        {'e', WEEKDAY, SHORT - DELTA, 3},
+        {'e', WEEKDAY, LONG - DELTA, 4},
+        {'e', WEEKDAY, NARROW - DELTA, 5},
 
         {'d', DAY, NUMERIC, 1, 2},
         {'D', DAY_OF_YEAR, NUMERIC + DELTA, 1, 3},
