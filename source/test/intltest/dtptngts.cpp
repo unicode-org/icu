@@ -33,7 +33,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
-#define MAX_LOCALE   8  
+#define MAX_LOCALE   9  
 
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
@@ -41,136 +41,180 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
 void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 {
     UnicodeString patternData[] = {
-        UnicodeString("yM"),
-        UnicodeString("yMMM"),
-        UnicodeString("yMd"),
-        UnicodeString("yMMMd"),
-        UnicodeString("Md"),
-        UnicodeString("MMMd"),
-        UnicodeString("yQQQ"),
-        UnicodeString("hhmm"),
-        UnicodeString("HHmm"),
-        UnicodeString("jjmm"),
-        UnicodeString("mmss"),
-        UnicodeString("yyyyMMMM"),
+        UnicodeString("yM"),        // 00
+        UnicodeString("yMMM"),      // 01
+        UnicodeString("yMd"),       // 02
+        UnicodeString("yMMMd"),     // 03
+        UnicodeString("Md"),        // 04
+        UnicodeString("MMMd"),      // 05
+        UnicodeString("yQQQ"),      // 06
+        UnicodeString("hhmm"),      // 07
+        UnicodeString("HHmm"),      // 08
+        UnicodeString("jjmm"),      // 09
+        UnicodeString("mmss"),      // 10
+        UnicodeString("yyyyMMMM"),  // 11
+        UnicodeString("MMMEd"),     // 12
+        UnicodeString("Ed"),        // 13
         UnicodeString(),
      };
      
     const char* testLocale[MAX_LOCALE][4] = {
-        {"en", "US", "", ""},
-        {"en", "US", "", "calendar=japanese"},
-        {"zh", "Hans", "CN", ""},
-        {"de", "DE", "", ""},
-        {"fi", "", "", ""},
-        {"ja", "", "", ""},
-        {"ja", "", "", "calendar=japanese"},
-        {"zh", "TW", "", "calendar=roc"},
+        {"en", "US", "", ""},                   // 0
+        {"en", "US", "", "calendar=japanese"},  // 1
+        {"de", "DE", "", ""},                   // 2
+        {"fi", "", "", ""},                     // 3
+        {"ja", "", "", ""},                     // 4
+        {"ja", "", "", "calendar=japanese"},    // 5
+        {"zh", "Hans", "CN", ""},               // 6
+        {"zh", "TW", "", "calendar=roc"},       // 7
+        {"ru", "", "", ""},                     // 8
      };
-     
+    
+    // For Weds, Jan 13, 1999, 23:58:59
     UnicodeString patternResults[] = {
-        UnicodeString("1/1999"),                              // en_US
-        UnicodeString("Jan 1999"),
-        UnicodeString("1/13/1999"),
-        UnicodeString("Jan 13, 1999"),
-        UnicodeString("1/13"),
-        UnicodeString("Jan 13"),
-        UnicodeString("Q1 1999"),
-        UnicodeString("11:58 PM"),
-        UnicodeString("23:58"),
-        UnicodeString("11:58 PM"),                            // en_US  9: jjmm
-        UnicodeString("58:59"),
-        UnicodeString("January 1999"),                        // en_US 11: yyyyMMMM
+        // en_US                                              // 0 en_US
+        UnicodeString("1/1999"),                              // 00: yM
+        UnicodeString("Jan 1999"),                            // 01: yMMM
+        UnicodeString("1/13/1999"),                           // 02: yMd
+        UnicodeString("Jan 13, 1999"),                        // 03: yMMMd
+        UnicodeString("1/13"),                                // 04: Md
+        UnicodeString("Jan 13"),                              // 05: MMMd
+        UnicodeString("Q1 1999"),                             // 06: yQQQ
+        UnicodeString("11:58 PM"),                            // 07: hhmm
+        UnicodeString("23:58"),                               // 08: HHmm
+        UnicodeString("11:58 PM"),                            // 09: jjmm
+        UnicodeString("58:59"),                               // 10: mmss
+        UnicodeString("January 1999"),                        // 11: yyyyMMMM
+        UnicodeString("Wed, Jan 13"),                         // 12: MMMEd -> EEE, MMM d"
+        UnicodeString("13 Wed"),                              // 13: Ed    -> d EEE
 
-        UnicodeString("1/11 Heisei"),                         // en_US@calendar=japanese  0: yM
-        UnicodeString("Jan 11 Heisei"),                       // en_US@calendar=japanese  1: yMMM
-        UnicodeString("H 11-01-13"),                          // en_US@calendar=japanese  2: yMd
-        UnicodeString("H 11 Jan 13"),                         // en_US@calendar=japanese  3: yMMMd
-        UnicodeString("1/13"),                                // en_US@calendar=japanese  4: Md
-        UnicodeString("Jan 13"),                              // en_US@calendar=japanese  5: MMMd
-        UnicodeString("Q1 11 Heisei"),                        // en_US@calendar=japanese  6: yQQQ
-        UnicodeString("11:58 PM"),                            // en_US@calendar=japanese  7: hhmm
-        UnicodeString("23:58"),                               // en_US@calendar=japanese  8: HHmm
-        UnicodeString("11:58 PM"),                            // en_US@calendar=japanese  9: jjmm
-        UnicodeString("58:59"),                               // en_US@calendar=japanese 10: mmss
-        UnicodeString("January 11 Heisei"),                   // en_US@calendar=japanese 11: yyyyMMMM
+        // en_US@calendar=japanese                            // 1 en_US@calendar=japanese
+        UnicodeString("1/11 Heisei"),                         //  0: yM
+        UnicodeString("Jan 11 Heisei"),                       //  1: yMMM
+        UnicodeString("H 11-01-13"),                          //  2: yMd
+        UnicodeString("H 11 Jan 13"),                         //  3: yMMMd
+        UnicodeString("1/13"),                                //  4: Md
+        UnicodeString("Jan 13"),                              //  5: MMMd
+        UnicodeString("Q1 11 Heisei"),                        //  6: yQQQ
+        UnicodeString("11:58 PM"),                            //  7: hhmm
+        UnicodeString("23:58"),                               //  8: HHmm
+        UnicodeString("11:58 PM"),                            //  9: jjmm
+        UnicodeString("58:59"),                               // 10: mmss
+        UnicodeString("January 11 Heisei"),                   // 11: yyyyMMMM
+        UnicodeString("Wed, Jan 13"),                         // 12: MMMEd -> EEE, MMM d"
+        UnicodeString("13 Wed"),                              // 13: Ed    -> d EEE
 
-        UnicodeString("1999-1", -1, US_INV),                  // zh_Hans_CN: yM
-        CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)
-        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
-        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"), // zh_Hans_CN: yMMMd -> yyyy\u5E74MMMd\u65E5 (fixed expected result per ticket:6626:)
-        UnicodeString("1-13"),
-        CharsToUnicodeString("1\\u670813\\u65E5"),            // zh_Hans_CN: MMMd  -> MMMd\u65E5 (fixed expected result per ticket:6626:)
-        CharsToUnicodeString("1999\\u5E741\\u5B63"),
-        CharsToUnicodeString("\\u4E0B\\u534811:58"),
-        UnicodeString("23:58"),
-        CharsToUnicodeString("\\u4E0B\\u534811:58"),          // zh_Hans_CN  9: jjmm
-        UnicodeString("58:59"),
-        CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN 11: yyyyMMMM  -> yyyy\u5E74MMM
+        // de_DE                                              // 2 de_DE
+        UnicodeString("1.1999"),                              // 00: yM
+        UnicodeString("Jan 1999"),                            // 01: yMMM
+        UnicodeString("13.1.1999"),                           // 02: yMd
+        UnicodeString("13. Jan 1999"),                        // 03: yMMMd
+        UnicodeString("13.1."),                               // 04: Md
+        UnicodeString("13. Jan"),                             // 05: MMMd
+        UnicodeString("Q1 1999"),                             // 06: yQQQ
+        UnicodeString("11:58 nachm."),                        // 07: hhmm
+        UnicodeString("23:58"),                               // 08: HHmm
+        UnicodeString("23:58"),                               // 09: jjmm
+        UnicodeString("58:59"),                               // 10: mmss
+        UnicodeString("Januar 1999"),                         // 11: yyyyMMMM
+        UnicodeString("Mi., 13. Jan"),                        // 12: MMMEd -> EEE, d. MMM
+        UnicodeString("Mi., 13."),                             // 13: Ed   -> EEE, d.
 
-        UnicodeString("1.1999"),  // de_DE
-        UnicodeString("Jan 1999"),
-        UnicodeString("13.1.1999"),
-        UnicodeString("13. Jan 1999"),
-        UnicodeString("13.1."),
-        UnicodeString("13. Jan"),
-        UnicodeString("Q1 1999"),
-        UnicodeString("11:58 nachm."),
-        UnicodeString("23:58"),
-        UnicodeString("23:58"),                               // de  9: jjmm
-        UnicodeString("58:59"),
-        UnicodeString("Januar 1999"),                         // de 11: yyyyMMMM
+        // fi                                                 // 3 fi
+        UnicodeString("1.1999"),                              // 00: yM (fixed expected result per ticket:6626:)
+        UnicodeString("tammi 1999"),                          // 01: yMMM
+        UnicodeString("13.1.1999"),                           // 02: yMd
+        UnicodeString("13. tammikuuta 1999"),                 // 03: yMMMd
+        UnicodeString("13.1."),                               // 04: Md
+        UnicodeString("13. tammikuuta"),                      // 05: MMMd
+        UnicodeString("1. nelj. 1999"),                       // 06: yQQQ
+        UnicodeString("11.58 ip."),                           // 07: hhmm
+        UnicodeString("23.58"),                               // 08: HHmm
+        UnicodeString("23.58"),                               // 09: jjmm
+        UnicodeString("58.59"),                               // 10: mmss
+        UnicodeString("tammikuu 1999"),                       // 11: yyyyMMMM
+        UnicodeString("ke 13. tammikuuta"),                   // 12: MMMEd -> EEE d. MMM
+        UnicodeString("ke 13."),                              // 13: Ed    -> ccc d.
 
-        UnicodeString("1.1999"),                              // fi  0: yM (fixed expected result per ticket:6626:)
-        UnicodeString("tammi 1999"),                          // fi  1: yMMM
-        UnicodeString("13.1.1999"),
-        UnicodeString("13. tammikuuta 1999"),                 // fi  3: yMMMd
-        UnicodeString("13.1."),
-        UnicodeString("13. tammikuuta"),                      // fi  5: MMMd
-        UnicodeString("1. nelj. 1999"),
-        UnicodeString("11.58 ip."),                           // fi  7: hhmm
-        UnicodeString("23.58"),
-        UnicodeString("23.58"),                               // fi  9: jjmm
-        UnicodeString("58.59"),
-        UnicodeString("tammikuu 1999"),                       // fi 11: yyyyMMMM
+        // ja                                                             // 4 ja
+        UnicodeString("1999/1"),                                          // 00: yM    -> y/M
+        CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 01: yMMM  -> y\u5E74M\u6708
+        UnicodeString("1999/1/13"),                                       // 02: yMd   -> y/M/d
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),             // 03: yMMMd -> y\u5E74M\u6708d\u65E5
+        UnicodeString("1/13"),                                            // 04: Md    -> M/d
+        CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5
+        UnicodeString("1999Q1"),                                          // 06: yQQQ  -> yQQQ
+        CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // 07: hhmm
+        UnicodeString("23:58"),                                           // 08: HHmm  -> HH:mm
+        UnicodeString("23:58"),                                           // 09: jjmm
+        UnicodeString("58:59"),                                           // 10: mmss  -> mm:ss
+        CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 11: yyyyMMMM  -> y\u5E74M\u6708
+        CharsToUnicodeString("1\\u670813\\u65E5(\\u6C34)"),               // 12: MMMEd -> M\u6708d\u65E5(EEE)
+        CharsToUnicodeString("13\\u65E5(\\u6C34)"),                       // 13: Ed    -> d\u65E5(EEE)
 
-        UnicodeString("1999/1"),                              // ja 0: yM    -> y/M
-        CharsToUnicodeString("1999\\u5E741\\u6708"),          // ja 1: yMMM  -> y\u5E74M\u6708
-        UnicodeString("1999/1/13"),                           // ja 2: yMd   -> y/M/d
-        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"), // ja 3: yMMMd -> y\u5E74M\u6708d\u65E5
-        UnicodeString("1/13"),                                // ja 4: Md    -> M/d
-        CharsToUnicodeString("1\\u670813\\u65E5"),            // ja 5: MMMd  -> M\u6708d\u65E5
-        UnicodeString("1999Q1"),                              // ja 6: yQQQ  -> yQQQ
-        CharsToUnicodeString("\\u5348\\u5F8C11:58"),          // ja 7: hhmm
-        UnicodeString("23:58"),                               // ja 8: HHmm  -> HH:mm
-        UnicodeString("23:58"),                               // ja 9: jjmm
-        UnicodeString("58:59"),                               // ja 10: mmss  -> mm:ss
-        CharsToUnicodeString("1999\\u5E741\\u6708"),          // ja 11: yyyyMMMM  -> y\u5E74M\u6708
+        // ja@calendar=japanese                                           // 5 ja@calendar=japanese
+        CharsToUnicodeString("\\u5E73\\u621011/1"),                       // 00: yM    -> Gy/m
+        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u6708"),          // 01: yMMM  -> Gy\u5E74M\u6708
+        CharsToUnicodeString("\\u5E73\\u621011/1/13"),                    // 02: yMd   -> Gy/m/d
+        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u670813\\u65E5"), // 03: yMMMd -> Gy\u5E74M\u6708d\u65E5
+        UnicodeString("1/13"),                                            // 04: Md    -> M/d
+        CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5
+        CharsToUnicodeString("\\u5E73\\u621011/Q1"),                      // 06: yQQQ  -> Gy/QQQ
+        CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // 07: hhmm  ->
+        UnicodeString("23:58"),                                           // 08: HHmm  -> HH:mm          (as for ja)
+        UnicodeString("23:58"),                                           // 09: jjmm
+        UnicodeString("58:59"),                                           // 10: mmss  -> mm:ss          (as for ja)
+        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u6708"),          // 11: yyyyMMMM  -> Gyyyy\u5E74M\u6708
+        CharsToUnicodeString("1\\u670813\\u65E5(\\u6C34)"),               // 12: MMMEd -> M\u6708d\u65E5(EEE)
+        CharsToUnicodeString("13\\u65E5(\\u6C34)"),                       // 13: Ed    -> d\u65E5(EEE)
 
-        CharsToUnicodeString("\\u5E73\\u621011/1"),                       // ja@japanese 0: yM    -> Gy/m
-        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u6708"),          // ja@japanese 1: yMMM  -> Gy\u5E74M\u6708
-        CharsToUnicodeString("\\u5E73\\u621011/1/13"),                    // ja@japanese 2: yMd   -> Gy/m/d
-        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u670813\\u65E5"), // ja@japanese 3: yMMMd -> Gy\u5E74M\u6708d\u65E5
-        UnicodeString("1/13"),                                            // ja@japanese 4: Md    -> M/d
-        CharsToUnicodeString("1\\u670813\\u65E5"),                        // ja@japanese 5: MMMd  -> M\u6708d\u65E5
-        CharsToUnicodeString("\\u5E73\\u621011/Q1"),                      // ja@japanese 6: yQQQ  -> Gy/QQQ
-        CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // ja@japanese 7: hhmm  ->
-        UnicodeString("23:58"),                                           // ja@japanese 8: HHmm  -> HH:mm          (as for ja)
-        UnicodeString("23:58"),                                           // ja@japanese 9: jjmm
-        UnicodeString("58:59"),                                           // ja@japanese 10: mmss  -> mm:ss          (as for ja)
-        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u6708"),          // ja@japanese 11: yyyyMMMM  -> Gyyyy\u5E74M\u6708
+        // zh_Hans_CN                                                     // 6 zh_Hans_CN
+        UnicodeString("1999-1", -1, US_INV),                              // 00: yM
+        CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 01: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),             // 02: yMd
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),             // 03: yMMMd -> yyyy\u5E74MMMd\u65E5 (fixed expected result per ticket:6626:)
+        UnicodeString("1-13"),                                            // 04: Md
+        CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> MMMd\u65E5 (fixed expected result per ticket:6626:)
+        CharsToUnicodeString("1999\\u5E741\\u5B63"),                      // 06: yQQQ
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 07: hhmm
+        UnicodeString("23:58"),                                           // 08: HHmm
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 09: jjmm
+        UnicodeString("58:59"),                                           // 10: mmss
+        CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 11: yyyyMMMM  -> yyyy\u5E74MMM
+        CharsToUnicodeString("1\\u670813\\u65E5\\u5468\\u4E09"),          // 12: MMMEd -> MMMd\u65E5EEE
+        CharsToUnicodeString("13\\u65E5\\u5468\\u4E09"),                  // 13: Ed    -> d\u65E5EEE
 
-        CharsToUnicodeString("\\u6C11\\u570B88/1"),                       // zh_TW@roc 0: yM    -> Gy/M
-        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // zh_TW@roc 1: yMMM  -> Gy\u5E74M\u6708
-        CharsToUnicodeString("\\u6C11\\u570B88/1/13"),                    // zh_TW@roc 2: yMd   -> Gy/M/d
-        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u670813\\u65E5"), // zh_TW@roc 3: yMMMd -> Gy\u5E74M\u6708d\u65E5
-        UnicodeString("1/13"),                                            // zh_TW@roc 4: Md    -> M/d
-        CharsToUnicodeString("1\\u670813\\u65E5"),                        // zh_TW@roc 5: MMMd  ->M\u6708d\u65E5
-        CharsToUnicodeString("\\u6C11\\u570B88 1\\u5B63"),                // zh_TW@roc 6: yQQQ  -> Gy QQQ
-        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // zh_TW@roc 7: hhmm  ->
-        UnicodeString("23:58"),                                           // zh_TW@roc 8: HHmm  ->
-        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // zh_TW@roc 9: jjmm
-        UnicodeString("58:59"),                                           // zh_TW@roc 10: mmss  ->
-        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // zh_TW@roc 11: yyyyMMMM  -> Gy\u5E74M\u670
+        // zh_TW@calendar=roc                                             // 7 zh_TW@calendar=roc 
+        CharsToUnicodeString("\\u6C11\\u570B88/1"),                       // 00: yM    -> Gy/M
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // 01: yMMM  -> Gy\u5E74M\u6708
+        CharsToUnicodeString("\\u6C11\\u570B88/1/13"),                    // 02: yMd   -> Gy/M/d
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u670813\\u65E5"), // 03: yMMMd -> Gy\u5E74M\u6708d\u65E5
+        UnicodeString("1/13"),                                            // 04: Md    -> M/d
+        CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  ->M\u6708d\u65E5
+        CharsToUnicodeString("\\u6C11\\u570B88 1\\u5B63"),                // 06: yQQQ  -> Gy QQQ
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 07: hhmm  ->
+        UnicodeString("23:58"),                                           // 08: HHmm  ->
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 09: jjmm
+        UnicodeString("58:59"),                                           // 10: mmss  ->
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // 11: yyyyMMMM  -> Gy\u5E74M\u670
+        CharsToUnicodeString("1\\u670813\\u65E5\\u9031\\u4E09"),          // 12: MMMEd -> M\u6708d\u65E5EEE
+        CharsToUnicodeString("13\\u65E5(\\u9031\\u4E09)"),                // 13: Ed    -> d\u65E5(EEE)
+
+        // ru                                                             // 8 ru
+        UnicodeString("1.1999"),                                          // 00: yM    -> M.y
+        CharsToUnicodeString("\\u044F\\u043D\\u0432. 1999"),              // 01: yMMM  -> LLL y
+        UnicodeString("13.1.1999"),                                       // 02: yMd   -> d.M.y
+        CharsToUnicodeString("13 \\u044F\\u043D\\u0432. 1999\\u00A0\\u0433."), // 03: yMMMd -> d MMM y
+        UnicodeString("13.1"),                                            // 04: Md    -> d.M
+        CharsToUnicodeString("13 \\u044F\\u043D\\u0432."),                // 05: MMMd  -> d MMM
+        CharsToUnicodeString("1999 1-\\u0439 \\u043A\\u0432."),           // 06: yQQQ  -> y QQQ
+        UnicodeString("11:58 PM"),                                        // 07: hhmm  -> hh:mm a
+        UnicodeString("23:58"),                                           // 08: HHmm  -> HH:mm
+        UnicodeString("23:58"),                                           // 09: jjmm  -> HH:mm
+        UnicodeString("58:59"),                                           // 10: mmss  -> mm:ss
+        CharsToUnicodeString("\\u042F\\u043D\\u0432\\u0430\\u0440\\u044C 1999"), // 11: yyyyMMMM -> LLLL y
+        CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432."), // 12: MMMEd -> ccc, d MMM
+        CharsToUnicodeString("\\u0441\\u0440, 13"),                       // 13: Ed    -> EEE, d
 
         UnicodeString(),
     };
@@ -526,7 +570,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             resultDate = sdf.format(testDate, resultDate);
             if ( resultDate != patternResults[resultIndex] ) {
                 errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1) + UnicodeString("], localeIndex ") + localeIndex +
-                      UnicodeString(". Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
+                      UnicodeString(". Got: \"") + resultDate + UnicodeString("\" Expected: \"") + patternResults[resultIndex] + "\"" );
             }
             
             resultIndex++;
