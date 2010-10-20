@@ -136,17 +136,27 @@ public abstract class BasicTimeZone extends TimeZone {
 
             if (ignoreDstAmount) {
                 // Skip a transition which only differ the amount of DST savings
-                if (tr1 != null
-                        && (tr1.getFrom().getRawOffset() + tr1.getFrom().getDSTSavings()
-                                == tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings())
-                        && (tr1.getFrom().getDSTSavings() != 0 && tr1.getTo().getDSTSavings() != 0)) {
-                    tr1 = getNextTransition(tr1.getTime(), false);
+                while (true) {
+                    if (tr1 != null
+                            && tr1.getTime() <= end
+                            && (tr1.getFrom().getRawOffset() + tr1.getFrom().getDSTSavings()
+                                    == tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings())
+                            && (tr1.getFrom().getDSTSavings() != 0 && tr1.getTo().getDSTSavings() != 0)) {
+                        tr1 = getNextTransition(tr1.getTime(), false);
+                    } else {
+                        break;
+                    }
                 }
-                if (tr2 != null
-                        && (tr2.getFrom().getRawOffset() + tr2.getFrom().getDSTSavings()
-                                == tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings())
-                        && (tr2.getFrom().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() != 0)) {
-                    tr2 = getNextTransition(tr2.getTime(), false);
+                while (true) {
+                    if (tr2 != null
+                            && tr2.getTime() <= end
+                            && (tr2.getFrom().getRawOffset() + tr2.getFrom().getDSTSavings()
+                                    == tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings())
+                            && (tr2.getFrom().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() != 0)) {
+                        tr2 = ((BasicTimeZone)tz).getNextTransition(tr2.getTime(), false);
+                    } else {
+                        break;
+                    }
                 }
             }
 

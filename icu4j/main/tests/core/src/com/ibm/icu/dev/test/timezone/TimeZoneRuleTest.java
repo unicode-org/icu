@@ -436,9 +436,6 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         String[] tzids = getTestZIDs();
         for (int i = 0; i < tzids.length; i++) {
-            if (skipIfBeforeICU(4,5,2) && tzids[i].equals("Asia/Amman")) { // ticket#7008
-                continue;
-            }
             BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
             VTimeZone vtz_org = VTimeZone.create(tzids[i]);
             vtz_org.setTZURL("http://source.icu-project.org/timezone");
@@ -488,7 +485,12 @@ public class TimeZoneRuleTest extends TestFmwk {
             TimeZoneTransition tzt = olsontz.getNextTransition(startTime, false);
             if (tzt != null) {
                 if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, true)) {
-                    errln("FAIL: VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding.");
+                    int maxDelta = 1000;
+                    if (!hasEquivalentTransitions(vtz_new, olsontz, tzt.getTime() + maxDelta, endTime, true, maxDelta)) {
+                        errln("FAIL: VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding.");
+                    } else {
+                        logln("VTimeZone for " + tzids[i] + " differs from its OlsonTimeZone corresponding with maximum transition time delta - " + maxDelta);
+                    }
                 }
                 if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, false)) {
                     logln("VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding in strict comparison mode.");
@@ -513,9 +515,6 @@ public class TimeZoneRuleTest extends TestFmwk {
         for (int n = 0; n < startTimes.length; n++) {
             long startTime = startTimes[n];
             for (int i = 0; i < tzids.length; i++) {
-                if (skipIfBeforeICU(4,5,2) && tzids[i].equals("Asia/Amman")) { // ticket#7008
-                    continue;
-                }
                 BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
                 VTimeZone vtz_org = VTimeZone.create(tzids[i]);
                 VTimeZone vtz_new = null;
@@ -546,10 +545,15 @@ public class TimeZoneRuleTest extends TestFmwk {
                 TimeZoneTransition tzt = olsontz.getNextTransition(startTime, false);
                 if (tzt != null) {
                     if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, true)) {
-                        errln("FAIL: VTimeZone for " + tzids[i] + "(>=" + startTime + ") is not equivalent to its OlsonTimeZone corresponding.");
+                        int maxDelta = 1000;
+                        if (!hasEquivalentTransitions(vtz_new, olsontz, tzt.getTime() + maxDelta, endTime, true, maxDelta)) {
+                            errln("FAIL: VTimeZone for " + tzids[i] + "(>=" + startTime + ") is not equivalent to its OlsonTimeZone corresponding.");
+                        } else {
+                            logln("VTimeZone for " + tzids[i] + "(>=" + startTime + ")  differs from its OlsonTimeZone corresponding with maximum transition time delta - " + maxDelta);
+                        }
                     }
                 }
-            }            
+            }
         }
     }
 
@@ -1676,5 +1680,107 @@ public class TimeZoneRuleTest extends TestFmwk {
         utcCal.clear();
         utcCal.set(year, month, dayOfMonth);
         return utcCal.getTimeInMillis();
+    }
+
+    /*
+     * Slightly modified version of BasicTimeZone#hasEquivalentTransitions.
+     * This version returns true if transition time delta is within the given
+     * delta range.
+     */
+    private static boolean hasEquivalentTransitions(BasicTimeZone tz1, BasicTimeZone tz2,
+                                            long start, long end, 
+                                            boolean ignoreDstAmount, int maxTransitionTimeDelta) {
+        if (tz1.hasSameRules(tz2)) {
+            return true;
+        }
+
+        // Check the offsets at the start time
+        int[] offsets1 = new int[2];
+        int[] offsets2 = new int[2];
+
+        tz1.getOffset(start, false, offsets1);
+        tz2.getOffset(start, false, offsets2);
+
+        if (ignoreDstAmount) {
+            if ((offsets1[0] + offsets1[1] != offsets2[0] + offsets2[1])
+                || (offsets1[1] != 0 && offsets2[1] == 0)
+                || (offsets1[1] == 0 && offsets2[1] != 0)) {
+                return false;
+            }
+        } else {
+            if (offsets1[0] != offsets2[0] || offsets1[1] != offsets2[1]) {
+                return false;
+            }
+        }
+
+        // Check transitions in the range
+        long time = start;
+        while (true) {
+            TimeZoneTransition tr1 = tz1.getNextTransition(time, false);
+            TimeZoneTransition tr2 = tz2.getNextTransition(time, false);
+
+            if (ignoreDstAmount) {
+                // Skip a transition which only differ the amount of DST savings
+                while (true) {
+                    if (tr1 != null
+                            && tr1.getTime() <= end
+                            && (tr1.getFrom().getRawOffset() + tr1.getFrom().getDSTSavings()
+                                    == tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings())
+                            && (tr1.getFrom().getDSTSavings() != 0 && tr1.getTo().getDSTSavings() != 0)) {
+                        tr1 = tz1.getNextTransition(tr1.getTime(), false);
+                    } else {
+                        break;
+                    }
+                }
+                while (true) {
+                    if (tr2 != null
+                            && tr2.getTime() <= end
+                            && (tr2.getFrom().getRawOffset() + tr2.getFrom().getDSTSavings()
+                                    == tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings())
+                            && (tr2.getFrom().getDSTSavings() != 0 && tr2.getTo().getDSTSavings() != 0)) {
+                        tr2 = tz2.getNextTransition(tr2.getTime(), false);
+                    } else {
+                        break;
+                    }
+                }            }
+
+            boolean inRange1 = false;
+            boolean inRange2 = false;
+            if (tr1 != null) {
+                if (tr1.getTime() <= end) {
+                    inRange1 = true;
+                }
+            }
+            if (tr2 != null) {
+                if (tr2.getTime() <= end) {
+                    inRange2 = true;
+                }
+            }
+            if (!inRange1 && !inRange2) {
+                // No more transition in the range
+                break;
+            }
+            if (!inRange1 || !inRange2) {
+                return false;
+            }
+            if (Math.abs(tr1.getTime() - tr2.getTime()) > maxTransitionTimeDelta) {
+                return false;
+            }
+            if (ignoreDstAmount) {
+                if (tr1.getTo().getRawOffset() + tr1.getTo().getDSTSavings()
+                            != tr2.getTo().getRawOffset() + tr2.getTo().getDSTSavings()
+                        || tr1.getTo().getDSTSavings() != 0 &&  tr2.getTo().getDSTSavings() == 0
+                        || tr1.getTo().getDSTSavings() == 0 &&  tr2.getTo().getDSTSavings() != 0) {
+                    return false;
+                }
+            } else {
+                if (tr1.getTo().getRawOffset() != tr2.getTo().getRawOffset() ||
+                    tr1.getTo().getDSTSavings() != tr2.getTo().getDSTSavings()) {
+                    return false;
+                }
+            }
+            time = tr1.getTime() > tr2.getTime() ? tr1.getTime() : tr2.getTime();
+        }
+        return true;
     }
 }
