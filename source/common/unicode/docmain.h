@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
@@ -178,6 +178,10 @@
  *     <td>uidna.h</td>
  *     <td>uidna.h C API</td>
  *   </tr>
+ *   <tr>
+ *     <td>Identifier Spoofing & Confusability</td>
+ *     <td>uspoof.h</td>
+ *     <td>uspoof.h C API</td>
  *   <tr>
  *     <td>Universal Time Scale</td>
  *     <td>utmscale.h</td>
