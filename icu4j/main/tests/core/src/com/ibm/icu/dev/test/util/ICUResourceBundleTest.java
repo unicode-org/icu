@@ -14,12 +14,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
-import java.util.Locale;
-import java.util.NoSuchElementException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -30,8 +30,8 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceTypeMismatchException;
 import com.ibm.icu.util.UResourceBundleIterator;
+import com.ibm.icu.util.UResourceTypeMismatchException;
 
 public final class ICUResourceBundleTest extends TestFmwk {
     private static final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();
@@ -1096,7 +1096,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         
         rb7 = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestDataElements");
         
-        rb1.resetBundleCache();
+        UResourceBundle.resetBundleCache();
         
         try {
             rb1.getBinary();
