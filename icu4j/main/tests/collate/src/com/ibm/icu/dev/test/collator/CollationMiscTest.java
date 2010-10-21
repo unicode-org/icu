@@ -578,10 +578,11 @@ public class CollationMiscTest extends TestFmwk {
 
     public void TestNonChars() {
         String test[] = {
-            "\u0000",
-            "\uFFFE", "\uFFFF",
-            "\\U0001FFFE", "\\U0001FFFF",
-            "\\U0002FFFE", "\\U0002FFFF",
+            "\u0000",  /* ignorable */
+            "\uFFFE",  /* special merge-sort character with minimum non-ignorable weights */
+            "\uFDD0", "\uFDEF",
+            "\\U0001FFFE", "\\U0001FFFF",  /* UCA 6.0: noncharacters are treated like unassigned, */
+            "\\U0002FFFE", "\\U0002FFFF",  /* not like ignorable. */
             "\\U0003FFFE", "\\U0003FFFF",
             "\\U0004FFFE", "\\U0004FFFF",
             "\\U0005FFFE", "\\U0005FFFF",
@@ -595,7 +596,8 @@ public class CollationMiscTest extends TestFmwk {
             "\\U000DFFFE", "\\U000DFFFF",
             "\\U000EFFFE", "\\U000EFFFF",
             "\\U000FFFFE", "\\U000FFFFF",
-            "\\U0010FFFE", "\\U0010FFFF"
+            "\\U0010FFFE", "\\U0010FFFF",
+            "\uFFFF"  /* special character with maximum primary weight */
         };
         Collator coll = null;
         try {
@@ -606,7 +608,7 @@ public class CollationMiscTest extends TestFmwk {
         }
         // logln("Test non characters");
 
-        genericOrderingTestWithResult(coll, test, 0);
+        genericOrderingTestWithResult(coll, test, -1);
     }
 
     public void TestExtremeCompression() {
