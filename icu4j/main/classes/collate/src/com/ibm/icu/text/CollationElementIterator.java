@@ -1981,11 +1981,6 @@ public final class CollationElementIterator
      */
     private int nextImplicit(int codepoint)
     {
-        if (!UCharacter.isLegal(codepoint)) {
-            // synwee to check with vladimir on the range of isNonChar()
-            // illegal code value, use completely ignoreable!
-            return IGNORABLE;
-        }
         int result = RuleBasedCollator.impCEGen_.getImplicitFromCodePoint(codepoint);
         m_CEBuffer_[0] = (result & RuleBasedCollator.CE_PRIMARY_MASK_)
                          | 0x00000505;
@@ -2613,9 +2608,6 @@ public final class CollationElementIterator
      */
     private int previousImplicit(int codepoint)
     {
-        if (!UCharacter.isLegal(codepoint)) {
-            return IGNORABLE; // illegal code value, completely ignoreable!
-        }
         int result = RuleBasedCollator.impCEGen_.getImplicitFromCodePoint(codepoint);
         m_CEBufferSize_ = 2;
         m_CEBufferOffset_ = 1;
