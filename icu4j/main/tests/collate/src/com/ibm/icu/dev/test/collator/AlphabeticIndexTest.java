@@ -184,9 +184,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             missingScripts.removeAll(s);
         }
         if (missingScripts.size() != 0) {
-            if (!skipIfBeforeICU(4,5,2)) { // ticket#7968
-                errln("Missing character from: " + missingScripts);
-            }
+            errln("Missing character from: " + missingScripts);
         }
     }
 
