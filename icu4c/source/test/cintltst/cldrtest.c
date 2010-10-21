@@ -16,12 +16,6 @@
 #include "locmap.h"
 #include "uresimp.h"
 
-/*--------------------------------------------------------------------
-  Time bomb - allows temporary behavior that expires at a given
-              release
- ---------------------------------------------------------------------*/
-static const UVersionInfo ICU_37 = {3,7,0,0};
-
 /*
 returns a new UnicodeSet that is a flattened form of the original
 UnicodeSet.
@@ -807,7 +801,7 @@ TestConsistentCountryInfo(void) {
 static int32_t
 findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize,
                       const UChar *exemplarCharacters, int32_t exemplarLen,
-                      UBool ignoreNumbers) {
+                      UBool ignoreNumbers, UChar* badCharPtr) {
     UErrorCode errorCode = U_ZERO_ERROR;
     USet *origSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
     USet *exemplarSet = createFlattenSet(origSet, &errorCode);
@@ -824,11 +818,17 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
             && string[strIdx] != 0x200C && string[strIdx] != 0x200D) {
             if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
                 uset_close(exemplarSet);
+                if (badCharPtr) {
+                    *badCharPtr = string[strIdx];
+                }
                 return strIdx;
             }
         }
     }
     uset_close(exemplarSet);
+    if (badCharPtr) {
+        *badCharPtr = 0;
+    }
     return -1;
 }
 /* include non-invariant chars */
@@ -992,15 +992,16 @@ static void VerifyTranslation(void) {
             UChar langBuffer[128];
             int32_t langSize;
             int32_t strIdx;
+            UChar badChar;
             langSize = uloc_getDisplayLanguage(currLoc, currLoc, langBuffer, sizeof(langBuffer)/sizeof(langBuffer[0]), &errorCode);
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayLanguage returned %s\n", u_errorName(errorCode));
             }
             else {
-                strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
+                strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
                 if (strIdx >= 0) {
-                    log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters.\n",
-                        currLoc, strIdx);
+                    log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
+                        currLoc, strIdx, badChar);
                 }
             }
             langSize = uloc_getDisplayCountry(currLoc, currLoc, langBuffer, sizeof(langBuffer)/sizeof(langBuffer[0]), &errorCode);
@@ -1008,10 +1009,10 @@ static void VerifyTranslation(void) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
             else if (uprv_strstr(currLoc, "ti_") != currLoc) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
-              strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
+              strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
                 if (strIdx >= 0) {
-                    log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters.\n",
-                        currLoc, strIdx);
+                    log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
+                        currLoc, strIdx, badChar);
                 }
             }
             {
@@ -1038,10 +1039,10 @@ static void VerifyTranslation(void) {
                         log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
                         continue;
                     }
-                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE, &badChar);
                     if (strIdx >= 0) {
-                        log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
-                            currLoc, idx, strIdx);
+                        log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters: %04X.\n",
+                            currLoc, idx, strIdx, badChar);
                     }
                 }
                 ures_close(resArray);
@@ -1067,10 +1068,10 @@ static void VerifyTranslation(void) {
                         log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
                         continue;
                     }
-                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE, &badChar);
                     if (strIdx >= 0) {
-                        log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
-                            currLoc, idx, strIdx);
+                        log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters: %04X.\n",
+                            currLoc, idx, strIdx, badChar);
                     }
                 }
                 ures_close(resArray);
@@ -1114,7 +1115,7 @@ static void VerifyTranslation(void) {
                if(U_FAILURE(errorCode)){
                    log_err("ulocdata_getMeasurementSystem failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
                }
-               if(strstr(currLoc, "_US")!=NULL){
+               if(strstr(currLoc, "_US")!=NULL || strstr(currLoc, "_MM")!=NULL || strstr(currLoc, "_LR")!=NULL){
                    if(measurementSystem != UMS_US){
                         log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                    }
