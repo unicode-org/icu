@@ -81,7 +81,7 @@ public class LocaleDataTest extends TestFmwk{
             if(lang.equals("in")){
                 continue;
             }           
-            if(locale.toString().indexOf("_US") >= 0){
+            if(locale.toString().indexOf("_US") >= 0 || locale.toString().indexOf("_MM") >= 0 || locale.toString().indexOf("_LR") >= 0){
                 if(ms == LocaleData.MeasurementSystem.US){
                     logln("Got the expected measurement system for locale: " + locale);
                 }else{
