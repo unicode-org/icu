@@ -1789,6 +1789,9 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementary() {
+        if (skipIfBeforeICU(4, 6, 99)) {
+            return;
+        }
         int count = 0;
         while (SUPPLEMENTARY[count].text != null) {
             if (!assertEqual(SUPPLEMENTARY[count])) {
@@ -1799,6 +1802,9 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementaryCanonical() {
+        if (skipIfBeforeICU(4, 6, 99)) {
+            return;
+        }
         int count = 0;
         while (SUPPLEMENTARYCANONICAL[count].text != null) {
             if (!assertCanonicalEqual(SUPPLEMENTARYCANONICAL[count])) {
