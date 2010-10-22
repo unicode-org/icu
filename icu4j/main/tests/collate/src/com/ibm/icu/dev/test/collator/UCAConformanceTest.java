@@ -44,18 +44,12 @@ public class UCAConformanceTest extends TestFmwk {
     UTF16.StringComparator comparer;
 
     public void TestTableNonIgnorable() {
-        if(skipIfBeforeICU(4, 5, 2)) {
-            return;
-        }
         setCollNonIgnorable(UCA);
         openTestFile("NON_IGNORABLE");
         conformanceTest(UCA);
     }
 
     public void TestTableShifted() {
-        if(skipIfBeforeICU(4, 5, 2)) {
-            return;
-        }
         setCollShifted(UCA);
         openTestFile("SHIFTED");
         conformanceTest(UCA);
