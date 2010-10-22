@@ -1332,9 +1332,9 @@ public final class CollationElementIterator
     /**
      * <p>Special CE management for surrogates</p>
      * <p>Lead surrogate is encountered. CE to be retrieved by using the
-     * following code unit. If next character is a trail surrogate, both
-     * characters will be combined to retrieve the CE, otherwise completely
-     * ignorable (UCA specification) is returned.</p>
+     * following code unit. If the next code unit is a trail surrogate, both
+     * units will be combined to retrieve the CE,
+     * otherwise we treat it like an unassigned code point.</p>
      * @param collator collator to use
      * @param ce current CE
      * @param trail character
@@ -1345,7 +1345,7 @@ public final class CollationElementIterator
     {
         if (!UTF16.isTrailSurrogate(trail)) {
             updateInternalState(m_utilSpecialBackUp_);
-            return IGNORABLE;
+            return CE_NOT_FOUND_;
         }
         // TODO: CE contain the data from the previous CE + the mask.
         // It should at least be unmasked
@@ -1503,14 +1503,14 @@ public final class CollationElementIterator
     private int currentChar()
     {
         if (m_bufferOffset_ < 0) {
-            m_source_.previous();
-            return m_source_.next();
+            m_source_.previousCodePoint();
+            return m_source_.nextCodePoint();
         }
 
         // m_bufferOffset_ is never 0 in normal circumstances except after a
         // discontiguous contraction since it is always returned and moved
         // by 1 when we do nextChar()
-        return m_buffer_.charAt(m_bufferOffset_ - 1);
+        return UTF16.charAt(m_buffer_, m_bufferOffset_ - 1);
     }
 
     /**
@@ -1533,25 +1533,52 @@ public final class CollationElementIterator
         else {
             m_utilSkippedBuffer_.setLength(0);
         }
-        char ch = (char)currentChar();
-        m_utilSkippedBuffer_.append((char)currentChar());
+        int ch = currentChar();
+        m_utilSkippedBuffer_.appendCodePoint(ch);
+        int prevCC = 0;
+        int cc = getCombiningClass(ch);
         // accent after the first character
         if (m_utilSpecialDiscontiguousBackUp_ == null) {
             m_utilSpecialDiscontiguousBackUp_ = new Backup();
         }
         backupInternalState(m_utilSpecialDiscontiguousBackUp_);
-        char nextch = ch;
+        boolean prevWasLead = false;
         while (true) {
-            ch = nextch;
+            // We read code units for contraction table matching
+            // but have to get combining classes for code points
+            // to figure out where to stop with discontiguous contraction.
             int ch_int = nextChar();
-            nextch = (char)ch_int;
-            if (ch_int == UCharacterIterator.DONE
-                || getCombiningClass(nextch) == 0) {
+            char nextch = (char)ch_int;
+            if (UTF16.isSurrogate(nextch)) {
+                if (prevWasLead) {
+                    // trail surrogate of surrogate pair, keep previous and current cc
+                    prevWasLead = false;
+                } else {
+                    prevCC = cc;
+                    cc = 0;  // default cc for an unpaired surrogate
+                    prevWasLead = false;
+                    if (Character.isHighSurrogate(nextch)) {
+                        int trail = nextChar();
+                        if (Character.isLowSurrogate((char)trail)) {
+                            cc = getCombiningClass(Character.toCodePoint(nextch, (char)trail));
+                            prevWasLead = true;
+                        }
+                        if (trail >= 0) {
+                            previousChar();  // restore index after having peeked at the next code unit
+                        }
+                    }
+                }
+            } else {
+                prevCC = cc;
+                cc = getCombiningClass(ch_int);
+                prevWasLead = false;
+            }
+            if (ch_int < 0 || cc == 0) {
                 // if there are no more accents to move around
                 // we don't have to shift previousChar, since we are resetting
                 // the offset later
                 if (multicontraction) {
-                    if (ch_int != UCharacterIterator.DONE) {
+                    if (ch_int >= 0) {
                         previousChar(); // backtrack
                     }
                     setDiscontiguous(m_utilSkippedBuffer_);
@@ -1570,8 +1597,7 @@ public final class CollationElementIterator
             if ( offset >= collator.m_contractionIndex_.length)  {
                 break;
             }
-            if ( nextch != collator.m_contractionIndex_[offset]
-                 || getCombiningClass(nextch) == getCombiningClass(ch)) {
+            if (nextch != collator.m_contractionIndex_[offset] || cc == prevCC) {
                     // unmatched or blocked character
                 if ( (m_utilSkippedBuffer_.length()!= 1) ||
                      ((m_utilSkippedBuffer_.charAt(0)!= nextch) &&
@@ -2007,7 +2033,7 @@ public final class CollationElementIterator
         if (nextch != CharacterIterator.DONE) {
             previousChar(); // reverts back to the original position
         }
-        return IGNORABLE; // completely ignorable
+        return CE_NOT_FOUND_; // treat like unassigned
     }
 
     /**
@@ -2098,7 +2124,7 @@ public final class CollationElementIterator
                     return ce;
                 case RuleBasedCollator.CE_SURROGATE_TAG_:
                     if (isEnd()) {
-                        return IGNORABLE;
+                        return CE_NOT_FOUND_;
                     }
                     backupInternalState(m_utilSpecialBackUp_);
                     char trail = (char)nextChar();
@@ -2128,7 +2154,7 @@ public final class CollationElementIterator
                 case CE_IMPLICIT_TAG_: // everything that is not defined
                     return nextImplicit(codepoint);
                 case CE_TRAIL_SURROGATE_TAG_:
-                    return IGNORABLE; // DC00-DFFF broken surrogate
+                    return CE_NOT_FOUND_; // DC00-DFFF broken surrogate, treat like unassigned
                 case CE_LEAD_SURROGATE_TAG_:  // D800-DBFF
                     return nextSurrogate(ch);
                 case CE_HANGUL_SYLLABLE_TAG_: // AC00-D7AF
@@ -2626,7 +2652,7 @@ public final class CollationElementIterator
     {
         if (isBackwardsStart()) {
             // we are at the start of the string, wrong place to be at
-            return IGNORABLE;
+            return CE_NOT_FOUND_;
         }
         char prevch = (char)previousChar();
         // Handles Han and Supplementary characters here.
@@ -2637,7 +2663,7 @@ public final class CollationElementIterator
         if (prevch != CharacterIterator.DONE) {
             nextChar();
         }
-        return IGNORABLE; // completely ignorable
+        return CE_NOT_FOUND_; // treat like unassigned
     }
 
     /**
@@ -2655,10 +2681,8 @@ public final class CollationElementIterator
             switch (RuleBasedCollator.getTag(ce)) {
             case CE_NOT_FOUND_TAG_:  // this tag always returns
                 return ce;
-            case RuleBasedCollator.CE_SURROGATE_TAG_:
-                                // essentialy a disengaged lead surrogate. a broken
-                                // sequence was encountered and this is an error
-                return IGNORABLE;
+            case RuleBasedCollator.CE_SURROGATE_TAG_:  // unpaired lead surrogate
+                return CE_NOT_FOUND_;
             case CE_SPEC_PROC_TAG_:
                 ce = previousSpecialPrefix(collator, ce);
                 break;
@@ -2681,7 +2705,7 @@ public final class CollationElementIterator
             case CE_HANGUL_SYLLABLE_TAG_: // AC00-D7AF
                 return previousHangul(collator, ch);
             case CE_LEAD_SURROGATE_TAG_:  // D800-DBFF
-                return IGNORABLE; // broken surrogate sequence
+                return CE_NOT_FOUND_; // broken surrogate sequence, treat like unassigned
             case CE_TRAIL_SURROGATE_TAG_: // DC00-DFFF
                 return previousSurrogate(ch);
             case CE_CJK_IMPLICIT_TAG_:
@@ -2702,88 +2726,6 @@ public final class CollationElementIterator
         return ce;
     }
 
-    /**
-     * GET IMPLICIT PRIMARY WEIGHTS
-     * @param cp codepoint
-     * @param value is left justified primary key
-     */
-//    private static final int getImplicitPrimary(int cp)
-//    {
-//        cp = swapCJK(cp);
-//
-//        //if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
-//        // we now have a range of numbers from 0 to 21FFFF.
-//        // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-//        // we must leave a gap of 01 between all values of the last byte, so
-//        // the last byte has 126 values (3 byte case)
-//        // we shift so that HAN all has the same first primary, for
-//        // compression.
-//        // for the 4 byte case, we make the gap as large as we can fit.
-//        // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-//        // Four byte forms (most supplementaries) are EF xx xx xx (with a gap
-//        // of LAST2_MULTIPLIER == 14)
-//
-//        int last0 = cp - RuleBasedCollator.IMPLICIT_4BYTE_BOUNDARY_;
-//        if (last0 < 0) {
-//            int last1 = cp / RuleBasedCollator.LAST_COUNT_;
-//            last0 = cp % RuleBasedCollator.LAST_COUNT_;
-//
-//            int last2 = last1 / RuleBasedCollator.OTHER_COUNT_;
-//            last1 %= RuleBasedCollator.OTHER_COUNT_;
-//            return RuleBasedCollator.IMPLICIT_BASE_3BYTE_ + (last2 << 24)
-//                   + (last1 << 16)
-//                   + ((last0 * RuleBasedCollator.LAST_MULTIPLIER_) << 8);
-//        }
-//        else {
-//            int last1 = last0 / RuleBasedCollator.LAST_COUNT2_;
-//            last0 %= RuleBasedCollator.LAST_COUNT2_;
-//
-//            int last2 = last1 / RuleBasedCollator.OTHER_COUNT_;
-//            last1 %= RuleBasedCollator.OTHER_COUNT_;
-//
-//            int last3 = last2 / RuleBasedCollator.OTHER_COUNT_;
-//            last2 %= RuleBasedCollator.OTHER_COUNT_;
-//            return RuleBasedCollator.IMPLICIT_BASE_4BYTE_ + (last3 << 24)
-//                   + (last2 << 16) + (last1 << 8)
-//                   + (last0 * RuleBasedCollator.LAST2_MULTIPLIER_);
-//        }
-//    }
-
-//    /**
-//     * Swapping CJK characters for implicit ces
-//     * @param cp codepoint CJK
-//     * @return swapped result
-//     */
-//    private static final int swapCJK(int cp)
-//    {
-//        if (cp >= CJK_BASE_) {
-//            if (cp < CJK_LIMIT_) {
-//                return cp - CJK_BASE_;
-//            }
-//            if (cp < CJK_COMPAT_USED_BASE_) {
-//                return cp + NON_CJK_OFFSET_;
-//            }
-//            if (cp < CJK_COMPAT_USED_LIMIT_) {
-//                return cp - CJK_COMPAT_USED_BASE_ + (CJK_LIMIT_ - CJK_BASE_);
-//            }
-//            if (cp < CJK_B_BASE_) {
-//                return cp + NON_CJK_OFFSET_;
-//            }
-//            if (cp < CJK_B_LIMIT_) {
-//                return cp; // non-BMP-CJK
-//            }
-//            return cp + NON_CJK_OFFSET_; // non-CJK
-//        }
-//        if (cp < CJK_A_BASE_) {
-//            return cp + NON_CJK_OFFSET_;
-//        }
-//        if (cp < CJK_A_LIMIT_) {
-//            return cp - CJK_A_BASE_ + (CJK_LIMIT_ - CJK_BASE_)
-//                   + (CJK_COMPAT_USED_LIMIT_ - CJK_COMPAT_USED_BASE_);
-//        }
-//        return cp + NON_CJK_OFFSET_; // non-CJK
-//    }
-    
 //    /** 
 //     * Gets a character from the source string at a given offset.
 //     * Handles both normal and iterative cases.
