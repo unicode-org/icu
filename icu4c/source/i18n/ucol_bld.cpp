@@ -853,7 +853,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
             //uint32_t exp = currentSequenceLen | expOffset;
             UColToken exp;
             exp.source = currentSequenceLen | expOffset;
-            exp.rulesToParse = src->source;
+            exp.rulesToParseHdl = &(src->source);
 
             while(len > 0) {
                 currentSequenceLen = len;
