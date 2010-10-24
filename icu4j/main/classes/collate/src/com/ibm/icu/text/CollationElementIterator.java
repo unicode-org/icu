@@ -282,33 +282,36 @@ public final class CollationElementIterator
         if (ch <= 0xFF) {
             // For latin-1 characters we never need to fall back to the UCA
             // table because all of the UCA data is replicated in the
-            // latinOneMapping array
+            // latinOneMapping array.
+            // Except: Special CEs can result in CE_NOT_FOUND_,
+            // for example if the default entry for a prefix-special is "not found",
+            // and we do need to fall back to the UCA in such a case.
+            // TODO: It would be better if tailoring specials never resulted in "not found"
+            // unless the corresponding UCA result is also "not found".
+            // That would require a change in the ICU4J collator-from-rule builder.
             result = m_collator_.m_trie_.getLatin1LinearValue(ch);
-            if (RuleBasedCollator.isSpecial(result)) {
-                result = nextSpecial(m_collator_, result, ch);
-            }
-        }
-        else {
+        } else {
             result = m_collator_.m_trie_.getLeadValue(ch);
-            //System.out.println(Integer.toHexString(result));
-            if (RuleBasedCollator.isSpecial(result)) {
-                // surrogate leads are handled as special ces
-                result = nextSpecial(m_collator_, result, ch);
-            }
-            if (result == CE_NOT_FOUND_ && RuleBasedCollator.UCA_ != null) {
-                // couldn't find a good CE in the tailoring
-                // if we got here, the codepoint MUST be over 0xFF - so we look
-                // directly in the UCA
+        }
+        if (!RuleBasedCollator.isSpecial(result)) {
+            return result;
+        }
+        if (result != CE_NOT_FOUND_) {
+            result = nextSpecial(m_collator_, result, ch);
+        }
+        if (result == CE_NOT_FOUND_) {
+            // couldn't find a good CE in the tailoring
+            if (RuleBasedCollator.UCA_ != null) {
                 result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
                 if (RuleBasedCollator.isSpecial(result)) {
                     // UCA also gives us a special CE
                     result = nextSpecial(RuleBasedCollator.UCA_, result, ch);
                 }
             }
-        }
-        if(result == CE_NOT_FOUND_) { 
-            // maybe there is no UCA, unlikely in Java, but ported for consistency
-            result = nextImplicit(ch); 
+            if(result == CE_NOT_FOUND_) { 
+                // maybe there is no UCA, unlikely in Java, but ported for consistency
+                result = nextImplicit(ch); 
+            }
         }
         return result;
     }

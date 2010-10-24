@@ -324,20 +324,17 @@ public class CollationMiscTest extends TestFmwk {
     String prettify(CollationKey sourceKey) {
         int i;
         byte[] bytes= sourceKey.toByteArray();
-        String target = "[";
+        StringBuilder target = new StringBuilder("[");
 
         for (i = 0; i < bytes.length; i++) {
-            String numStr = Integer.toHexString(bytes[i]);
-            if (numStr.length()>2) {
-                target += numStr.substring(numStr.length()-2);
+            String numStr = Integer.toHexString(bytes[i] & 0xff);
+            if (numStr.length() < 2) {
+                target.append('0');
             }
-            else {
-                target += numStr;
-            }
-            target += " ";
+            target.append(numStr).append(' ');
         }
-        target += "]";
-        return target;
+        target.append(']');
+        return target.toString();
     }
 
     public void TestBeforePrefixFailure() {
@@ -2461,8 +2458,8 @@ public class CollationMiscTest extends TestFmwk {
                 if (j>0) {
                     CollationKey prevKey = en.getCollationKey(cases[j-1]);
                     if (key.compareTo(prevKey)<0) {
-                        errln("Error! EN test["+j+"]:"+"source:" + cases[j]+
-                        "is not greater than previous test.");
+                        errln("Error! EN test["+j+"]:source:" + cases[j]+
+                        " is not >= previous test string.");
                     }
                 }
                 /*
@@ -2474,7 +2471,7 @@ public class CollationMiscTest extends TestFmwk {
                 logln("String:"+cases[j]+"   Key:"+  prettify(key));
             }
         } catch (Exception e) {
-            warnln("Error creating Vietnese collator");
+            warnln("Error creating English collator");
             return;
         }
 
@@ -2489,14 +2486,14 @@ public class CollationMiscTest extends TestFmwk {
                 if (j>0) {
                     CollationKey prevKey = ja.getCollationKey(cases[j-1]);
                     if (key.compareTo(prevKey)<0) {
-                        errln("Error! JA test["+j+"]:"+"source:" + cases[j]+
-                        "is not greater than previous test.");
+                        errln("Error! JA test["+j+"]:source:" + cases[j]+
+                        " is not >= previous test string.");
                     }
                 }
                 logln("String:"+cases[j]+"   Key:"+  prettify(key));
             }
         } catch (Exception e) {
-            warnln("Error creating Vietnese collator");
+            warnln("Error creating Japanese collator");
             return;
         }
         for(int i = 0; i < rules.length; i++) {
@@ -2507,6 +2504,7 @@ public class CollationMiscTest extends TestFmwk {
                 coll = new RuleBasedCollator(rules[i]);
             } catch (Exception e) {
                 warnln("Unable to open collator with rules " + rules[i]);
+                continue;
             }
 
             for (int j=0; j<cases.length; j++) {
@@ -2515,14 +2513,14 @@ public class CollationMiscTest extends TestFmwk {
                     CollationKey prevKey = coll.getCollationKey(cases[j-1]);
                     if (i==1 && j==3) {
                         if (key.compareTo(prevKey)>0) {
-                            errln("Error! Rule:"+rules[i]+" test["+j+"]:"+"source:"+
-                            cases[j]+"is not greater than previous test.");
+                            errln("Error! Rule:"+rules[i]+" test["+j+"]:source:"+
+                            cases[j]+" is not <= previous test string.");
                         }
                     }
                     else {
                         if (key.compareTo(prevKey)<0) {
-                            errln("Error! Rule:"+rules[i]+" test["+j+"]:"+"source:"+
-                            cases[j]+"is not greater than previous test.");
+                            errln("Error! Rule:"+rules[i]+" test["+j+"]:source:"+
+                            cases[j]+" is not >= previous test string.");
                         }
                     }
                 }
