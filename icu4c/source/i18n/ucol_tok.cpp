@@ -41,12 +41,10 @@ uhash_hashTokens(const UHashTok k)
     //uint32_t key = (uint32_t)k.integer;
     UColToken *key = (UColToken *)k.pointer;
     if (key != 0) {
-        //int32_t len = (key & 0xFF000000)>>24;
         int32_t len = (key->source & 0xFF000000)>>24;
         int32_t inc = ((len - 32) / 32) + 1;
 
-        //const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
-        const UChar *p = (key->source & 0x00FFFFFF) + key->rulesToParse;
+        const UChar *p = (key->source & 0x00FFFFFF) + *(key->rulesToParseHdl);
         const UChar *limit = p + len;
 
         while (p<limit) {
@@ -64,8 +62,8 @@ uhash_compareTokens(const UHashTok key1, const UHashTok key2)
     //uint32_t p2 = (uint32_t) key2.integer;
     UColToken *p1 = (UColToken *)key1.pointer;
     UColToken *p2 = (UColToken *)key2.pointer;
-    const UChar *s1 = (p1->source & 0x00FFFFFF) + p1->rulesToParse;
-    const UChar *s2 = (p2->source & 0x00FFFFFF) + p2->rulesToParse;
+    const UChar *s1 = (p1->source & 0x00FFFFFF) + *(p1->rulesToParseHdl);
+    const UChar *s2 = (p2->source & 0x00FFFFFF) + *(p2->rulesToParseHdl);
     uint32_t s1L = ((p1->source & 0xFF000000) >> 24);
     uint32_t s2L = ((p2->source & 0xFF000000) >> 24);
     const UChar *end = s1+s1L-1;
@@ -1344,7 +1342,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, const UChar *expand,
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    sourceToken->rulesToParse = src->source;
+    sourceToken->rulesToParseHdl = &(src->source);
     sourceToken->source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
     sourceToken->expansion = src->parsedToken.extensionLen << 24 | src->parsedToken.extensionOffset;
 
@@ -1451,7 +1449,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
         src->parsedToken.charsLen++;
 
         key.source = (src->parsedToken.charsLen/**newCharsLen*/ << 24) | src->parsedToken.charsOffset/**charsOffset*/;
-        key.rulesToParse = src->source;
+        key.rulesToParseHdl = &(src->source);
 
         //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
         sourceToken = (UColToken *)uhash_get(src->tailored, &key);
@@ -1530,7 +1528,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
 
         // uint32_t key = (*newCharsLen << 24) | *charsOffset;
         key.source = (src->parsedToken.charsLen/**newCharsLen*/ << 24) | src->parsedToken.charsOffset/**charsOffset*/;
-        key.rulesToParse = src->source;
+        key.rulesToParseHdl = &(src->source);
 
         //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
         sourceToken = (UColToken *)uhash_get(src->tailored, &key);
@@ -1620,7 +1618,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             //key = newCharsLen << 24 | charsOffset;
             UColToken key;
             key.source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
-            key.rulesToParse = src->source;
+            key.rulesToParseHdl = &(src->source);
 
             /*  4 Lookup each source in the CharsToToken map, and find a sourceToken */
             sourceToken = (UColToken *)uhash_get(src->tailored, &key);
@@ -1640,7 +1638,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                         *status = U_MEMORY_ALLOCATION_ERROR;
                         return 0;
                     }
-                    sourceToken->rulesToParse = src->source;
+                    sourceToken->rulesToParseHdl = &(src->source);
                     sourceToken->source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
 
                     sourceToken->debugSource = *(src->source + src->parsedToken.charsOffset);
@@ -1820,7 +1818,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                         //key = searchCharsLen << 24 | charsOffset;
                         UColToken key;
                         key.source = searchCharsLen << 24 | src->parsedToken.charsOffset;
-                        key.rulesToParse = src->source;
+                        key.rulesToParseHdl = &(src->source);
                         sourceToken = (UColToken *)uhash_get(src->tailored, &key);
                     }
                     if(sourceToken != NULL) {
@@ -2067,7 +2065,6 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
 
     uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
 
-    // rulesToParse = src->source;
     src->lh = 0;
     src->listCapacity = 1024;
     src->lh = (UColTokListHeader *)uprv_malloc(src->listCapacity*sizeof(UColTokListHeader));

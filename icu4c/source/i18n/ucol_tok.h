@@ -82,7 +82,7 @@ struct UColToken {
   UColTokListHeader *listHeader;
   UColToken* previous;
   UColToken* next;
-  UChar *rulesToParse;
+  UChar **rulesToParseHdl;
   uint16_t flags;
 };
 
