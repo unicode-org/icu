@@ -53,17 +53,18 @@ public class CollationCreationMethodTest extends TestFmwk
         for(z = 0; z < 60; z++)
         {
             x = r.nextInt(locales.length);
+            Locale locale = locales[x];
 
             try
             {
                 //this is making the assumption that the only type of collator that will be made is RBC
-                localeCollator = (RuleBasedCollator)Collator.getInstance(locales[x]);
+                localeCollator = (RuleBasedCollator)Collator.getInstance(locale);
+                logln("Rules for " + locale + " are: " + localeCollator.getRules());
                 ruleCollator = new RuleBasedCollator(localeCollator.getRules());
-                logln("Rules are: " + localeCollator.getRules());
             } 
             catch (Exception e) 
             {
-                warnln("ERROR: in creation of collator of " + locales[x].getDisplayName() + " locale");
+                warnln("ERROR: in creation of collator of locale " + locale.getDisplayName() + ": " + e);
                 return;
             }
 
@@ -77,7 +78,7 @@ public class CollationCreationMethodTest extends TestFmwk
                 key1 = localeCollator.getCollationKey(randString1);
                 key2 = ruleCollator.getCollationKey(randString1);
                
-                report(locales[x].getDisplayName(), randString1, key1, key2);
+                report(locale.getDisplayName(), randString1, key1, key2);
             }
         }
     }
@@ -112,11 +113,12 @@ public class CollationCreationMethodTest extends TestFmwk
     {
         if (!k1.equals(k2)) 
         {
-            String msg = "";
-            msg += "With " + localeName + "Collator: ";
-            msg += string1; 
-            msg += " failed to produce identical keys on both collators";
-            errln(msg);
+            StringBuilder msg = new StringBuilder();
+            msg.append("With ").append(localeName).append(" collator\n and input string: ").append(string1).append('\n');
+            msg.append(" failed to produce identical keys on both collators\n");
+            msg.append("  localeCollator key: ").append(CollationMiscTest.prettify(k1)).append('\n');
+            msg.append("  ruleCollator   key: ").append(CollationMiscTest.prettify(k2)).append('\n');
+            errln(msg.toString());
         }
     }
 }

@@ -1697,32 +1697,14 @@ public final class RuleBasedCollator extends Collator
      * Implicit generator
      */
     static final ImplicitCEGenerator impCEGen_;
-//    /**
-//     * Implicit constants
-//     */
-//    static final int IMPLICIT_BASE_BYTE_;
-//    static final int IMPLICIT_LIMIT_BYTE_;
-//    static final int IMPLICIT_4BYTE_BOUNDARY_;
-//    static final int LAST_MULTIPLIER_;
-//    static final int LAST2_MULTIPLIER_;
-//    static final int IMPLICIT_BASE_3BYTE_;
-//    static final int IMPLICIT_BASE_4BYTE_;
-//    static final int BYTES_TO_AVOID_ = 3;
-//    static final int OTHER_COUNT_ = 256 - BYTES_TO_AVOID_;
-//    static final int LAST_COUNT_ = OTHER_COUNT_ / 2;
-//    /**
-//     * Room for intervening, without expanding to 5 bytes
-//     */
-//    static final int LAST_COUNT2_ = OTHER_COUNT_ / 21;
-//    static final int IMPLICIT_3BYTE_COUNT_ = 1;
-//    
+
     static final byte SORT_LEVEL_TERMINATOR_ = 1;
 
 //  These are values from UCA required for
 //  implicit generation and supressing sort key compression
 //  they should regularly be in the UCA, but if one
 //  is running without UCA, it could be a problem
-     static final int maxRegularPrimary  = 0xA0;
+     static final int maxRegularPrimary  = 0x7A;
      static final int minImplicitPrimary = 0xE0;
      static final int maxImplicitPrimary = 0xE4;
 
@@ -2108,9 +2090,10 @@ public final class RuleBasedCollator extends Collator
     private static final byte BYTE_SHIFT_PREFIX_ = (byte)0x03;
     /*private*/ static final byte BYTE_UNSHIFTED_MIN_ = BYTE_SHIFT_PREFIX_;
     //private static final byte BYTE_FIRST_UCA_ = BYTE_COMMON_;
-    static final byte CODAN_PLACEHOLDER = 0x27;
-    //private static final byte BYTE_LAST_LATIN_PRIMARY_ = (byte)0x4C;
-    private static final byte BYTE_FIRST_NON_LATIN_PRIMARY_ = (byte)0x4D;
+    // TODO: Make the following values dynamic since they change with almost every UCA version. 
+    static final byte CODAN_PLACEHOLDER = 0x12;
+    private static final byte BYTE_FIRST_NON_LATIN_PRIMARY_ = (byte)0x5B;
+
     private static final byte BYTE_UNSHIFTED_MAX_ = (byte)0xFF;
     private static final int TOTAL_2_ = COMMON_TOP_2_ - COMMON_BOTTOM_2_ - 1;
     private static final int FLAG_BIT_MASK_CASE_SWITCH_OFF_ = 0x80;
@@ -2341,6 +2324,14 @@ public final class RuleBasedCollator extends Collator
         return 0;
     }
 
+    // Is this primary weight compressible?
+    // Returns false for multi-lead-byte scripts (digits, Latin, Han, implicit).
+    // TODO: This should use per-lead-byte flags from FractionalUCA.txt.
+    static boolean
+    isCompressible(int primary1) {
+        return BYTE_FIRST_NON_LATIN_PRIMARY_ <= primary1 && primary1 <= maxRegularPrimary;
+    }
+
     /**
      * Gets the 2 bytes of primary order and adds it to the primary byte array
      * @param ce current ce
@@ -2417,33 +2408,27 @@ public final class RuleBasedCollator extends Collator
                             m_utilBytesCount1_ ++;
                             leadPrimary = 0;
                         }
-                        else if (p1 < BYTE_FIRST_NON_LATIN_PRIMARY_
-                              || (p1 > maxRegularPrimary
-                    //> (RuleBasedCollator.UCA_CONSTANTS_.LAST_NON_VARIABLE_[0]
-                    //                                              >>> 24)
-                                && p1 < minImplicitPrimary
-                    //< (RuleBasedCollator.UCA_CONSTANTS_.FIRST_IMPLICIT_[0]
-                    //                                              >>> 24)
-                    )) {
-                                // not compressible
-                                leadPrimary = 0;
-                                m_utilBytes1_ = append(m_utilBytes1_,
-                                                       m_utilBytesCount1_,
-                                                       (byte)p1);
-                                m_utilBytesCount1_ ++;
-                                m_utilBytes1_ = append(m_utilBytes1_,
-                                                       m_utilBytesCount1_,
-                                                       (byte)p2);
-                                m_utilBytesCount1_ ++;
-                        }
-                        else { // compress
+                        else if (isCompressible(p1)) {
+                            // compress
                             leadPrimary = p1;
                             m_utilBytes1_ = append(m_utilBytes1_,
                                                    m_utilBytesCount1_,
                                                    (byte)p1);
                             m_utilBytesCount1_ ++;
                             m_utilBytes1_ = append(m_utilBytes1_,
-                                                  m_utilBytesCount1_, (byte)p2);
+                                                   m_utilBytesCount1_,
+                                                   (byte)p2);
+                            m_utilBytesCount1_ ++;
+                        }
+                        else {
+                            leadPrimary = 0;
+                            m_utilBytes1_ = append(m_utilBytes1_,
+                                                   m_utilBytesCount1_,
+                                                   (byte)p1);
+                            m_utilBytesCount1_ ++;
+                            m_utilBytes1_ = append(m_utilBytes1_,
+                                                   m_utilBytesCount1_,
+                                                   (byte)p2);
                             m_utilBytesCount1_ ++;
                         }
                     }

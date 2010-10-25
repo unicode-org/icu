@@ -727,17 +727,7 @@ final class CollationParsedRuleBuilder {
          * @return 0 if equals, 1 if this is > target, -1 otherwise
          */
         public int compareTo(WeightRange target) {
-            if (this == target) {
-                return 0;
-            }
-            int tstart = target.m_start_;
-            if (m_start_ == tstart) {
-                return 0;
-            }
-            if (m_start_ > tstart) {
-                return 1;
-            }
-            return -1;
+            return Utility.compareUnsigned(m_start_, target.m_start_);
         }
 
         /**
@@ -1584,9 +1574,12 @@ final class CollationParsedRuleBuilder {
                 }
             }
         }
-        if (low == 0) {
-            low = 0x01000000;
+        if(0 <= low && low < 0x02000000) {  // unsigned comparison < 0x02000000
+            // We must not use CE weight byte 02, so we set it as the minimum lower bound.
+            // See http://site.icu-project.org/design/collation/bytes
+            low = 0x02000000;
         }
+
         if (strength == Collator.SECONDARY) { // similar as simple
             if (Utility.compareUnsigned(low,
                     RuleBasedCollator.COMMON_BOTTOM_2_ << 24) >= 0

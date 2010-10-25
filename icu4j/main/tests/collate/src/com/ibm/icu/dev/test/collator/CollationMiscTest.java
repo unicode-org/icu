@@ -213,6 +213,7 @@ public class CollationMiscTest extends TestFmwk {
         };
 
         for (int i = 0; i< rules.length; i++) {
+            logln(String.format("rules[%d] = \"%s\"", i, rules[i]));
             genericRulesStarter(rules[i], data[i]);
         }
     }
@@ -321,7 +322,7 @@ public class CollationMiscTest extends TestFmwk {
         return target;
     }
 
-    String prettify(CollationKey sourceKey) {
+    static String prettify(CollationKey sourceKey) {
         int i;
         byte[] bytes= sourceKey.toByteArray();
         StringBuilder target = new StringBuilder("[");
