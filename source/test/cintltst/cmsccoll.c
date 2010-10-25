@@ -948,6 +948,8 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
+	/* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+	   the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
     while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
       strength = src.parsedToken.strength;
       chOffset = src.parsedToken.charsOffset;
@@ -962,12 +964,12 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
 
-      u_strncpy(second,rulesCopy+chOffset, chLen);
+      u_strncpy(second,src.source+chOffset, chLen);
       second[chLen] = 0;
       secondLen = chLen;
 
       if(exLen > 0) {
-        u_strncat(first, rulesCopy+exOffset, exLen);
+        u_strncat(first, src.source+exOffset, exLen);
         first[firstLen+exLen] = 0;
         firstLen += exLen;
       }
@@ -993,7 +995,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
     if(Windiff == 0) {
       log_verbose("No immediate difference with Win32!\n");
     }
-    free(rulesCopy);
+    free(src.source);
   }
 }
 
