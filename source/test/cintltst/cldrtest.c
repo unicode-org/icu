@@ -985,7 +985,7 @@ static void VerifyTranslation(void) {
         else if (getTestOption(QUICK_OPTION) && exemplarLen > 2048) {
             log_verbose("skipping test for %s\n", currLoc);
         }
-        else if (uprv_strncmp(currLoc,"bem",3) == 0 || uprv_strncmp(currLoc,"my",2) == 0) { /* TODO: restore test for my* when cldrbug 3062 is fixed) */
+        else if (uprv_strncmp(currLoc,"bem",3) == 0) {
             log_verbose("skipping test for %s, some month and country names known to use aux exemplars\n", currLoc);
         }
         else {
