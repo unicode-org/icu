@@ -830,75 +830,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     private static final UnicodeSet IGNORE_SCRIPTS = new UnicodeSet(
     "[[:sc=Common:][:sc=inherited:][:script=Unknown:][:script=braille:]]").freeze();
-    //private static final UnicodeSet TO_TRY = new UnicodeSet("[:^nfcqc=no:]").removeAll(IGNORE_SCRIPTS).freeze();
-
-    //    /**
-    //     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
-    //     * collation.
-    //     * 
-    //     * @param ruleBasedCollator
-    //     *            TODO
-    //     * @param comparator
-    //     * @param lowerLimit
-    //     * @param testScript
-    //     * 
-    //     * @return
-    //     */
-    //
-    //    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
-    //        String[] results = new String[UScript.CODE_LIMIT];
-    //        for (String current : TO_TRY) {
-    //            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
-    //                // symbols.
-    //                continue;
-    //            }
-    //            int script = UScript.getScript(current.codePointAt(0));
-    //            if (results[script] == null) {
-    //                results[script] = current;
-    //            } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
-    //                results[script] = current;
-    //            }
-    //        }
-    //
-    //        try {
-    //            UnicodeSet extras = new UnicodeSet();
-    //            UnicodeSet expansions = new UnicodeSet();
-    //            ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
-    //            extras.addAll(expansions).removeAll(TO_TRY);
-    //            if (extras.size() != 0) {
-    //                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
-    //                for (String current : extras) {
-    //                    if (!TO_TRY.containsAll(current))
-    //                        continue;
-    //                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
-    //                        continue;
-    //                    }
-    //                    int script = UScript.getScript(current.codePointAt(0));
-    //                    if (results[script] == null) {
-    //                        results[script] = current;
-    //                    } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
-    //                        results[script] = current;
-    //                    }
-    //                }
-    //            }
-    //        } catch (Exception e) {
-    //        } // why have a checked exception???
-    //
-    //        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
-    //        for (int i = 0; i < results.length; ++i) {
-    //            if (results[i] != null) {
-    //                sorted.add(results[i]);
-    //            }
-    //        }
-    //        if (true) {
-    //            for (String s : sorted) {
-    //                System.out.println("\"" + s + "\",");
-    //            }
-    //        }
-    //
-    //        List<String> result = Collections.unmodifiableList(new ArrayList<String>(sorted));
-    //        return result;
-    //    }
 
     private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
     private int maxLabelCount = 99;
@@ -1199,4 +1130,13 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 "\u3041", "\u30A1", "\u3105", "\uA000", "\uA4F8", "\uD800\uDE80", "\uD800\uDEA0", "\uD802\uDD20", "\uD800\uDF00", "\uD800\uDF30", "\uD801\uDC28", "\uD801\uDC50", "\uD801\uDC80", "\uD800\uDC00", "\uD802\uDC00", "\uD802\uDE60", "\uD802\uDF00", "\uD802\uDC40", 
                 "\uD802\uDF40", "\uD802\uDF60", "\uD800\uDF80", "\uD800\uDFA0", "\uD808\uDC00", "\uD80C\uDC00", "\u4E00" 
         });
+    
+    /**
+     * Only for testing...
+     * @internal
+     * @deprecated only for internal testing
+     */
+    public static List<String> getFirstCharactersInScripts() {
+        return HACK_FIRST_CHARS_IN_SCRIPTS;
+    }
 }
