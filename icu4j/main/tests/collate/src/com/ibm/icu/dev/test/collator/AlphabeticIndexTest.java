@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -26,7 +27,9 @@ import com.ibm.icu.text.AlphabeticIndex;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
 import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.text.AlphabeticIndex.Record;
+import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
@@ -433,15 +436,15 @@ public class AlphabeticIndexTest extends TestFmwk {
     //        displayPairs(false);
     //    }
 
-//    private void displayPairs(boolean in) {
-//        for (String[] pair : localeAndIndexCharactersLists) {
-//            if (KEY_LOCALES.contains(pair[0]) == in) {
-//                logln("\t"
-//                        + "/* " + ULocale.getDisplayName(pair[0], "en") + "*/\t"
-//                        + "{\"" + pair[0] + "\", \"" + pair[1] + "\"},");
-//            }
-//        }
-//    }
+    //    private void displayPairs(boolean in) {
+    //        for (String[] pair : localeAndIndexCharactersLists) {
+    //            if (KEY_LOCALES.contains(pair[0]) == in) {
+    //                logln("\t"
+    //                        + "/* " + ULocale.getDisplayName(pair[0], "en") + "*/\t"
+    //                        + "{\"" + pair[0] + "\", \"" + pair[1] + "\"},");
+    //            }
+    //        }
+    //    }
 
     public void TestClientSupport() {
         for (String localeString : KEY_LOCALES) { // KEY_LOCALES, new String[] {"zh"}
@@ -517,6 +520,83 @@ public class AlphabeticIndexTest extends TestFmwk {
             }
         }
     }
+
+    public void TestFirstScriptCharacters() {
+        List<String> firstCharacters = AlphabeticIndex.getFirstCharactersInScripts();
+        List<String> expectedFirstCharacters = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
+        assertEquals("First Characters", expectedFirstCharacters, firstCharacters);
+    }
+
+    private static final UnicodeSet TO_TRY = new UnicodeSet("[[:^nfcqc=no:]-[:sc=Common:]-[:sc=Inherited:]-[:sc=Unknown:]]").freeze();
+
+    /**
+     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
+     * collation.
+     * 
+     * @param ruleBasedCollator
+     *            TODO
+     * @param comparator
+     * @param lowerLimit
+     * @param testScript
+     * 
+     * @return
+     */
+
+    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
+        String[] results = new String[UScript.CODE_LIMIT];
+        for (String current : TO_TRY) {
+            if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
+                // symbols.
+                continue;
+            }
+            int script = UScript.getScript(current.codePointAt(0));
+            if (results[script] == null) {
+                results[script] = current;
+            } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+                results[script] = current;
+            }
+        }
+
+        try {
+            UnicodeSet extras = new UnicodeSet();
+            UnicodeSet expansions = new UnicodeSet();
+            ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
+            extras.addAll(expansions).removeAll(TO_TRY);
+            if (extras.size() != 0) {
+                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
+                for (String current : extras) {
+                    if (!TO_TRY.containsAll(current))
+                        continue;
+                    if (!normalizer.isNormalized(current) || ruleBasedCollator.compare(current, "a") < 0) {
+                        continue;
+                    }
+                    int script = UScript.getScript(current.codePointAt(0));
+                    if (results[script] == null) {
+                        results[script] = current;
+                    } else if (ruleBasedCollator.compare(current, results[script]) < 0) {
+                        results[script] = current;
+                    }
+                }
+            }
+        } catch (Exception e) {
+        } // why have a checked exception???
+
+        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
+        for (int i = 0; i < results.length; ++i) {
+            if (results[i] != null) {
+                sorted.add(results[i]);
+            }
+        }
+        if (false) {
+            for (String s : sorted) {
+                System.out.println("\"" + s + "\",");
+            }
+        }
+
+        List<String> result = Collections.unmodifiableList(new ArrayList<String>(sorted));
+        return result;
+    }
+
 
     public void TestZZZ() {
         //            int x = 3;
@@ -628,4 +708,6 @@ public class AlphabeticIndexTest extends TestFmwk {
         "\u6771\u90ed", "\u5357\u9580", "\u547c\u5ef6", "\u6b78", "\u6d77", "\u7f8a\u820c", "\u5fae\u751f", "\u5cb3", "\u5e25", "\u7df1", "\u4ea2", "\u6cc1", "\u5f8c", "\u6709", "\u7434", "\u6881\u4e18", "\u5de6\u4e18", "\u6771\u9580", "\u897f\u9580",
         "\u5546", "\u725f", "\u4f58", "\u4f74", "\u4f2f", "\u8cde", "\u5357\u5bae", "\u58a8", "\u54c8", "\u8b59", "\u7b2a", "\u5e74", "\u611b", "\u967d", "\u4f5f" 
     };
+
+
 }
