@@ -16,10 +16,10 @@ mt{
             Sequence{
                 " [caseFirst upper ]"
                 "&[before 1]c<Ċ<<<ċ"
-                "&[before 1]g<Ġ<<<ġ"
+                "&[before 1]g<Ġ<<<ġ"
                 "&[before 1]h<GĦ<<<Għ<<<gĦ<<<għ"
                 "&[before 1]i<Ħ<<<ħ"
-                "&[before 1]z<Ż<<<ż"
+                "&[before 1]z<Ż<<<ż"
             }
             Version{"1.9"}
         }

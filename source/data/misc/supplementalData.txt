@@ -434,6 +434,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Beng",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -791,6 +793,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BD",
+                }
+            }
+            secondary{
+                territories{
                     "IN",
                 }
             }
@@ -829,11 +835,6 @@ supplementalData:table(nofallback){
             }
         }
         brx{
-            primary{
-                scripts{
-                    "Deva",
-                }
-            }
             secondary{
                 territories{
                     "IN",
@@ -1478,6 +1479,8 @@ supplementalData:table(nofallback){
                     "HK",
                     "IE",
                     "IM",
+                    "IN",
+                    "IO",
                     "JE",
                     "JM",
                     "KE",
@@ -1542,8 +1545,6 @@ supplementalData:table(nofallback){
                     "ES",
                     "ET",
                     "FR",
-                    "IN",
-                    "IO",
                     "IT",
                     "MY",
                     "NL",
@@ -2097,6 +2098,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Gujr",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -2810,6 +2813,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Knda",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -2948,6 +2953,8 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -3533,6 +3540,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Mlym",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -3617,6 +3626,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -4022,6 +4033,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Orya",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -4060,15 +4073,13 @@ supplementalData:table(nofallback){
                 scripts{
                     "Guru",
                 }
-                territories{
-                    "IN",
-                }
             }
             secondary{
                 scripts{
                     "Arab",
                 }
                 territories{
+                    "IN",
                     "PK",
                 }
             }
@@ -4359,6 +4370,7 @@ supplementalData:table(nofallback){
                     "KG",
                     "KZ",
                     "RU",
+                    "UA",
                 }
             }
             secondary{
@@ -4366,7 +4378,6 @@ supplementalData:table(nofallback){
                     "EE",
                     "LV",
                     "SJ",
-                    "UA",
                     "UZ",
                 }
             }
@@ -4389,15 +4400,13 @@ supplementalData:table(nofallback){
             }
         }
         sa{
-            primary{
-                territories{
-                    "IN",
-                }
-            }
             secondary{
                 scripts{
                     "Deva",
                     "Sinh",
+                }
+                territories{
+                    "IN",
                 }
             }
         }
@@ -4502,12 +4511,10 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Deva",
                 }
-                territories{
-                    "IN",
-                }
             }
             secondary{
                 territories{
+                    "IN",
                     "PK",
                 }
             }
@@ -4878,9 +4885,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Arab",
                 }
-                territories{
-                    "KM",
-                }
             }
             secondary{
                 scripts{
@@ -4926,13 +4930,13 @@ supplementalData:table(nofallback){
                     "Taml",
                 }
                 territories{
-                    "IN",
                     "LK",
                     "SG",
                 }
             }
             secondary{
                 territories{
+                    "IN",
                     "MY",
                 }
             }
@@ -4980,6 +4984,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Telu",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -5449,8 +5455,12 @@ supplementalData:table(nofallback){
                     "Arab",
                 }
                 territories{
-                    "IN",
                     "PK",
+                }
+            }
+            secondary{
+                territories{
+                    "IN",
                 }
             }
         }
@@ -5721,6 +5731,13 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Blis",
+                }
+            }
+        }
+        zdj{
+            primary{
+                territories{
+                    "KM",
                 }
             }
         }
