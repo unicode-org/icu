@@ -53,7 +53,9 @@ icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/config/mh-haiku -text
+icu4c/source/data/brkitr/fi.txt -text
 icu4c/source/data/brkitr/he.txt -text
+icu4c/source/data/brkitr/line_fi.txt -text
 icu4c/source/data/brkitr/line_he.txt -text
 icu4c/source/data/coll/my.txt -text
 icu4c/source/data/coll/my_MM.txt -text
@@ -98,6 +100,7 @@ icu4c/source/data/translit/ro_FONIPA_ja.txt -text
 icu4c/source/data/translit/ro_ja.txt -text
 icu4c/source/data/translit/sk_FONIPA_ja.txt -text
 icu4c/source/data/translit/sk_ja.txt -text
+icu4c/source/data/xml/brkitr/fi.xml -text
 icu4c/source/data/xml/brkitr/he.xml -text
 icu4c/source/data/xml/collation/en_US.xml -text
 icu4c/source/data/xml/collation/en_US_POSIX.xml -text

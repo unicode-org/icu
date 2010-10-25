@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -43,6 +43,7 @@ static void TestBreakIteratorRules(void);
 static void TestBreakIteratorRuleError(void);
 static void TestBreakIteratorStatusVec(void);
 static void TestBreakIteratorUText(void);
+static void TestBreakIteratorTailoring(void);
 
 void addBrkIterAPITest(TestNode** root);
 
@@ -56,6 +57,7 @@ void addBrkIterAPITest(TestNode** root)
     addTest(root, &TestBreakIteratorRules, "tstxtbd/cbiapts/TestBreakIteratorRules");
     addTest(root, &TestBreakIteratorRuleError, "tstxtbd/cbiapts/TestBreakIteratorRuleError");
     addTest(root, &TestBreakIteratorStatusVec, "tstxtbd/cbiapts/TestBreakIteratorStatusVec");
+    addTest(root, &TestBreakIteratorTailoring, "tstxtbd/cbiapts/TestBreakIteratorTailoring");
 }
 
 #define CLONETEST_ITERATOR_COUNT 2
@@ -705,6 +707,99 @@ static void TestBreakIteratorUText(void) {
     utext_close(ut);
 }
 
+/*
+ *  static void TestBreakIteratorTailoring(void);
+ *
+ *         Test break iterator tailorings from CLDR data.
+ */
 
+/* Hebrew line break tailoring, for cldrbug 3028 */
+static const UChar heTest[] = { 0x0020, 0x002D, 0x0031, 0x0032, 0x0020,
+                                0x0061, 0x002D, 0x006B, 0x0020,
+                                0x0061, 0x0300, 0x2010, 0x006B, 0x0020,
+                                0x05DE, 0x05D4, 0x002D, 0x0069, 0x0020,
+                                0x05D1, 0x05BC, 0x2010, 0x0047, 0x0020, 0 };
+static const int32_t heTestOffs_enFwd[] = {  1,  5,  7,  9, 12, 14, 17, 19, 22, 24 };
+static const int32_t heTestOffs_heFwd[] = {  1,  5,  7,  9, 12, 14,     19,     24 };
+static const int32_t heTestOffs_enRev[] = { 22, 19, 17, 14, 12,  9,  7,  5,  1,  0 };
+static const int32_t heTestOffs_heRev[] = {     19,     14, 12,  9,  7,  5,  1,  0 };
+
+/* Finnish line break tailoring, for cldrbug 3029 */
+static const UChar fiTest[] = { 0x0020, 0x002D, 0x0031, 0x0032, 0x0020,
+                                0x0061, 0x002D, 0x006B, 0x0020,
+                                0x0061, 0x0300, 0x2010, 0x006B, 0x0020,
+                                0x0061, 0x0020, 0x002D, 0x006B, 0x0020,
+                                0x0061, 0x0300, 0x0020, 0x2010, 0x006B, 0x0020, 0 };
+static const int32_t fiTestOffs_enFwd[] =  {  1,  5,  7,  9, 12, 14, 16, 17, 19, 22, 23, 25 };
+static const int32_t fiTestOffs_fiFwd[] =  {  1,  5,  7,  9, 12, 14, 16,     19, 22,     25 };
+static const int32_t fiTestOffs_enRev[] =  { 23, 22, 19, 17, 16, 14, 12,  9,  7,  5,  1,  0 };
+static const int32_t fiTestOffs_fiRev[] =  {     22, 19,     16, 14, 12,  9,  7,  5,  1,  0 };
+
+typedef struct {
+    const char * locale;
+    UBreakIteratorType type;
+    const UChar * test;
+    const int32_t * offsFwd;
+    const int32_t * offsRev;
+    int32_t numOffsets;
+} RBBITailoringTest;
+
+static const RBBITailoringTest tailoringTests[] = {
+    { "en", UBRK_LINE, heTest, heTestOffs_enFwd, heTestOffs_enRev, sizeof(heTestOffs_enFwd)/ sizeof(heTestOffs_enFwd[0]) },
+/*  { "he", UBRK_LINE, heTest, heTestOffs_heFwd, heTestOffs_heRev, sizeof(heTestOffs_heFwd)/ sizeof(heTestOffs_heFwd[0]) }, not working yet */
+    { "en", UBRK_LINE, fiTest, fiTestOffs_enFwd, fiTestOffs_enRev, sizeof(fiTestOffs_enFwd)/ sizeof(fiTestOffs_enFwd[0]) },
+/*  { "fi", UBRK_LINE, fiTest, fiTestOffs_fiFwd, fiTestOffs_fiRev, sizeof(fiTestOffs_fiFwd)/ sizeof(fiTestOffs_fiFwd[0]) }, not working yet */
+    { NULL, 0, NULL, NULL, NULL, 0 },
+};
+
+static void TestBreakIteratorTailoring(void) {
+    const RBBITailoringTest * testPtr;
+    for (testPtr = tailoringTests; testPtr->locale != NULL; ++testPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        UBreakIterator* ubrkiter = ubrk_open(testPtr->type, testPtr->locale, testPtr->test, -1, &status);
+        if ( U_SUCCESS(status) ) {
+            int32_t offset, offsindx;
+            UBool foundError;
+
+            foundError = FALSE;
+            for (offsindx = 0; (offset = ubrk_next(ubrkiter)) != UBRK_DONE; ++offsindx) {
+                if (!foundError && offsindx >= testPtr->numOffsets) {
+                    log_err("FAIL: locale %s, break type %d, ubrk_next expected UBRK_DONE, got %d\n",
+                            testPtr->locale, testPtr->type, offset);
+                    foundError = TRUE;
+                } else if (!foundError && offset != testPtr->offsFwd[offsindx]) {
+                    log_err("FAIL: locale %s, break type %d, ubrk_next expected %d, got %d\n",
+                            testPtr->locale, testPtr->type, testPtr->offsFwd[offsindx], offset);
+                    foundError = TRUE;
+                }
+            }
+            if (!foundError && offsindx < testPtr->numOffsets) {
+                log_err("FAIL: locale %s, break type %d, ubrk_next expected %d, got UBRK_DONE\n",
+                    	testPtr->locale, testPtr->type, testPtr->offsFwd[offsindx]);
+            }
+
+            foundError = FALSE;
+            for (offsindx = 0; (offset = ubrk_previous(ubrkiter)) != UBRK_DONE; ++offsindx) {
+                if (!foundError && offsindx >= testPtr->numOffsets) {
+                    log_err("FAIL: locale %s, break type %d, ubrk_previous expected UBRK_DONE, got %d\n",
+                            testPtr->locale, testPtr->type, offset);
+                    foundError = TRUE;
+                } else if (!foundError && offset != testPtr->offsRev[offsindx]) {
+                    log_err("FAIL: locale %s, break type %d, ubrk_previous expected %d, got %d\n",
+                            testPtr->locale, testPtr->type, testPtr->offsRev[offsindx], offset);
+                    foundError = TRUE;
+                }
+            }
+            if (!foundError && offsindx < testPtr->numOffsets) {
+                log_err("FAIL: locale %s, break type %d, ubrk_previous expected %d, got UBRK_DONE\n",
+                    	testPtr->locale, testPtr->type, testPtr->offsRev[offsindx]);
+            }
+
+            ubrk_close(ubrkiter);
+        } else {
+            log_err("FAIL: locale %s, break type %d, ubrk_open status %d\n", testPtr->locale, testPtr->type, status);
+        }
+    }
+}
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
