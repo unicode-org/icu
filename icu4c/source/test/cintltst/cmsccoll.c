@@ -3604,8 +3604,39 @@ static void TestPrefixCompose(void) {
 static void TestRuleOptions(void) {
   /* values here are hardcoded and are correct for the current UCA
    * when the UCA changes, one might be forced to change these
-   * values. (\\u02d0, \\U00010FFFC etc...)
+   * values.
    */
+
+  /*
+   * These strings contain the last character before [variable top]
+   * and the first and second characters (by primary weights) after it.
+   * See FractionalUCA.txt. For example:
+      [last variable [0C FE, 05, 05]] # U+10A7F OLD SOUTH ARABIAN NUMERIC INDICATOR
+      [variable top = 0C FE]
+      [first regular [0D 0A, 05, 05]] # U+0060 GRAVE ACCENT
+     and
+      00B4; [0D 0C, 05, 05]
+   *
+   * Note: Starting with UCA 6.0, the [variable top] collation element
+   * is not the weight of any character or string,
+   * which means that LAST_VARIABLE_CHAR_STRING sorts before [last variable].
+   */
+#define LAST_VARIABLE_CHAR_STRING "\\U00010A7F"
+#define FIRST_REGULAR_CHAR_STRING "\\u0060"
+#define SECOND_REGULAR_CHAR_STRING "\\u00B4"
+
+  /*
+   * This string has to match the character that has the [last regular] weight
+   * which changes with each UCA version.
+   * See the bottom of FractionalUCA.txt which says something like
+      [last regular [7A FE, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
+   *
+   * Note: Starting with UCA 6.0, the [last regular] collation element
+   * is not the weight of any character or string,
+   * which means that LAST_REGULAR_CHAR_STRING sorts before [last regular].
+   */
+#define LAST_REGULAR_CHAR_STRING "\\U0001342E"
+
   static const struct {
     const char *rules;
     const char *data[10];
@@ -3645,24 +3676,6 @@ static void TestRuleOptions(void) {
         {  "c", "b", "\\u0009", "a", "\\u000a" }, 5
     },
 
-    /*
-     * These strings contain the last character before [variable top]
-     * and the first and second characters (by primary weights) after it.
-     * See FractionalUCA.txt. For example:
-        [last variable [0C FE, 05, 05]] # U+10A7F OLD SOUTH ARABIAN NUMERIC INDICATOR
-        [variable top = 0C FE]
-        [first regular [0D 0A, 05, 05]] # U+0060 GRAVE ACCENT
-       and
-        00B4; [0D 0C, 05, 05]
-     *
-     * Note: Starting with UCA 6.0, the [variable top] collation element
-     * is not the weight of any character or string,
-     * which means that LAST_VARIABLE_CHAR_STRING sorts before [last variable].
-     */
-#define LAST_VARIABLE_CHAR_STRING "\\U00010A7F"
-#define FIRST_REGULAR_CHAR_STRING "\\u0060"
-#define SECOND_REGULAR_CHAR_STRING "\\u00B4"
-
     { "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
         { LAST_VARIABLE_CHAR_STRING, "c", "b", /* [last variable] */ "a", FIRST_REGULAR_CHAR_STRING }, 5
     },
@@ -3671,19 +3684,6 @@ static void TestRuleOptions(void) {
       "&[before 1][first regular]<b",
       { "b", FIRST_REGULAR_CHAR_STRING, "a", SECOND_REGULAR_CHAR_STRING }, 4
     },
-
-    /*
-     * The character in the second ordering test string
-     * has to match the character that has the [last regular] weight
-     * which changes with each UCA version.
-     * See the bottom of FractionalUCA.txt which says something like
-        [last regular [7A FE, 05, 05]] # U+1342E EGYPTIAN HIEROGLYPH AA032
-     *
-     * Note: Starting with UCA 6.0, the [last regular] collation element
-     * is not the weight of any character or string,
-     * which means that LAST_REGULAR_CHAR_STRING sorts before [last regular].
-     */
-#define LAST_REGULAR_CHAR_STRING "\\U0001342E"
 
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
@@ -3710,7 +3710,6 @@ static void TestRuleOptions(void) {
 
   };
   uint32_t i;
-
 
   for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
