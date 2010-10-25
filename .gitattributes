@@ -14,9 +14,11 @@ icu4c/source/data/brkitr/el.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en_US.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/en_US_POSIX.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/brkitr/fi.txt -text
 icu4c/source/data/brkitr/he.txt -text
 icu4c/source/data/brkitr/ja.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
+icu4c/source/data/brkitr/line_fi.txt -text
 icu4c/source/data/brkitr/line_he.txt -text
 icu4c/source/data/brkitr/root.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/sent.txt svneol=native#text/plain
@@ -1894,6 +1896,7 @@ icu4c/source/data/xml/brkitr/el.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
+icu4c/source/data/xml/brkitr/fi.xml -text
 icu4c/source/data/xml/brkitr/he.xml -text
 icu4c/source/data/xml/brkitr/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/root.xml svneol=native#text/xml
