@@ -235,9 +235,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         collatorOriginal = collator != null ? collator : (RuleBasedCollator) Collator.getInstance(locale);
         try {
             collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.clone());
-        } catch (CloneNotSupportedException e) {
+        } catch (Exception e) {
             // should never happen
-            throw new IllegalArgumentException("Collator cannot be cloned", e);
+            throw new IllegalStateException("Collator cannot be cloned", e);
         }
         collatorPrimaryOnly.setStrength(Collator.PRIMARY);
         addLabels(exemplarChars);
@@ -290,6 +290,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Set the overflow label
      * @param overflowLabel see class description
      * @return this, for chaining
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex<V> setOverflowLabel(String overflowLabel) {
         this.overflowLabel = overflowLabel;
@@ -312,6 +314,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Set the underflowLabel label
      * @param underflowLabel see class description
      * @return this, for chaining
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex<V> setUnderflowLabel(String underflowLabel) {
         this.underflowLabel = underflowLabel;
@@ -334,6 +338,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Set the inflowLabel label
      * @param inflowLabel see class description
      * @return this, for chaining
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex<V> setInflowLabel(String inflowLabel) {
         this.inflowLabel = inflowLabel;
@@ -543,9 +549,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (collatorExternal == null) {
             try {
                 collatorExternal = (RuleBasedCollator) (collatorOriginal.clone());
-            } catch (CloneNotSupportedException e) {
+            } catch (Exception e) {
                 // should never happen
-                throw new IllegalArgumentException("Collator cannot be cloned", e);
+                throw new IllegalStateException("Collator cannot be cloned", e);
             }
         }
         return collatorExternal;
@@ -694,23 +700,23 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 return o1.counter - o2.counter;
             }
         };
-        
+
         // If we have Pinyin, then we have a special hack to bucket items with ASCII.
         if (langType == LangType.SIMPLIFIED) {
             Map<String,Bucket<V>> rebucketMap = new HashMap<String, Bucket<V>>();
             for (Record<V> name : inputList) {
-                 String key = hackName(name.name, collatorOriginal);
-                 if (key == null) continue;
-                 Bucket<V> bucket = rebucketMap.get(key);
-                 if (bucket == null) {
-                     int index = rawGetBucketIndex(key);
-                     bucket = buckets.bucketList.get(index);
-                 }
-                 rebucketMap.put(key, bucket);
-                 name.rebucket = bucket;
+                String key = hackName(name.name, collatorOriginal);
+                if (key == null) continue;
+                Bucket<V> bucket = rebucketMap.get(key);
+                if (bucket == null) {
+                    int index = rawGetBucketIndex(key);
+                    bucket = buckets.bucketList.get(index);
+                }
+                rebucketMap.put(key, bucket);
+                name.rebucket = bucket;
             }
         }
-        
+
         // Set up a sorted list of the input
         TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
         sortedInput.addAll(inputList);
@@ -720,7 +726,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         // This makes the process order n*log(n), since we just sort the list and then do a linear process.
         // However, if the user adds item at a time and then gets the buckets, this isn't efficient, so
         // we need to improve it for that case.
-        
+
         Iterator<Bucket<V>> bucketIterator = buckets.iterator();
         Bucket<V> currentBucket = bucketIterator.next();
         Bucket<V> nextBucket = bucketIterator.next();
@@ -966,7 +972,11 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             return data;
         }
 
-        @Override
+        /**
+         * Standard toString()
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
         public String toString() {
             return name + "=" + data + (rebucket == null ? "" : "{" + rebucket.label + "}");
         }
@@ -1050,11 +1060,18 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         /**
          * Iterator over the records in the bucket
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public Iterator<Record<V>> iterator() {
             return records.iterator();
         }
 
+        /**
+         * Standard toString()
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public String toString() {
             return "{" +
@@ -1104,7 +1121,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             // overflow bucket
             String limitString = getOverflowComparisonString(last);
             bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final,
-            
+
         }
 
         public Iterator<Bucket<V>> iterator() {
@@ -1115,10 +1132,10 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * HACKS
      */
-    
+
     //private static String STROKE = "\u5283";
     private static String PINYIN_LOWER_BOUNDS = "\u0101bcd\u0113fghjklmn\u014Dpqrstwxyz";
-    
+
     /**
      * HACKS
      */
