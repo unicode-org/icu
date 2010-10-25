@@ -13,7 +13,15 @@ sk{
     Version{"2.0.49.77"}
     collations{
         standard{
-            Sequence{"&A<ä<<<Ä&C<č<<<Č&H<ch<<<cH<<<Ch<<<CH&O<ô<<<Ô&R<ř<<<Ř&S<š<<<Š&Z<ž<<<Ž"}
+            Sequence{
+                "&A<ä<<<Ä"
+                "&C<č<<<Č"
+                "&H<ch<<<cH<<<Ch<<<CH"
+                "&O<ô<<<Ô"
+                "&R<ř<<<Ř"
+                "&S<š<<<Š"
+                "&Z<ž<<<Ž"
+            }
             Version{"1.9"}
         }
     }

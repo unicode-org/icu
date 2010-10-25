@@ -7,6 +7,7 @@
 # File: Han_Spacedhan.txt
 # Generated from CLDR 
 #
+:: [[㆒-㆟㈠-㉇㊀-㊰㋀-㋋㍘-㍰㍻-㍿㏠-㏾ 🈐-🈒🈔-🈺🉀-🉈🉐🉑][:ideographic:][:sc=han:]] nfkc; 
 :: fullwidth-halfwidth;
 ｡ → '.';
 $terminalPunct = [\.\,\:\;\?\!．，：？！｡、；[:Pe:][:Pf:]];

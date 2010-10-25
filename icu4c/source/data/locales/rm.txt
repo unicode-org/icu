@@ -39,7 +39,7 @@ rm{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.51.22"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -241,12 +241,9 @@ rm{
                     y{"MM.yy - MM.yy"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yy - E,
-dd.MM.yy"}
-                    d{"E, dd.MM.yy - E,
-dd.MM.yy"}
-                    y{"E, dd.MM.yy - E,
-dd.MM.yy"}
+                    M{"E, dd.MM.yy - E, dd.MM.yy"}
+                    d{"E, dd.MM.yy - E, dd.MM.yy"}
+                    y{"E, dd.MM.yy - E, dd.MM.yy"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -255,8 +252,7 @@ dd.MM.yy"}
                 yMMMEd{
                     M{"E, d. MMM - E, d. MMM y"}
                     d{"E, d. - E, d. MMM y"}
-                    y{"E, d. MMM y - E, d. MMM
-y"}
+                    y{"E, d. MMM y - E, d. MMM y"}
                 }
                 yMMMM{
                     M{"MM – MM.yyyy"}
