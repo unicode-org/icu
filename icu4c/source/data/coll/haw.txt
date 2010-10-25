@@ -14,7 +14,7 @@ haw{
     collations{
         standard{
             Sequence{
-                "&a<e<i<o<u<h<k<l<m<n<p<w<ʻ"
+                "&a<*eiouhk-npwʻ"
                 "&a<<<A"
                 "&e<<<E"
                 "&i<<<I"

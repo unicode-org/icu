@@ -11,12 +11,12 @@
  */
 my{
     AuxExemplarCharacters{
-        "[\u1036 \u1037 း ျ ြ \u103D \u103E ာ ါ \u102D \u102E \u102F \u1030 ေ \u1032 "
-        "\u1039 \u103A]"
+        "[\u1022 \u1028 \u1037 \u1039 \u103A \u1050-\u1062 \u1065-\u1068 \u106E-"
+        "\u1086 \u108E \u109C-\u109D]"
     }
     ExemplarCharacters{
         "[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ ဣ ဤ ဥ ဦ"
-        " ဧ ဩ ဪ]"
+        " ဧ ဩ ဪ \u102B-\u1032 \u1036 \u1038 \u103B-\u103E]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ]"}
@@ -44,7 +44,7 @@ my{
             }
         }
     }
-    Version{"2.0.51.8"}
+    Version{"2.0.51.24"}
     calendar{
         gregorian{
             AmPmMarkers{

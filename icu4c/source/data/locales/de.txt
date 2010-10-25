@@ -39,7 +39,7 @@ de{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.51.21"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -59,7 +59,7 @@ de{
             }
             availableFormats{
                 Ed{"E d."}
-                H{"HH"}
+                H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -111,7 +111,7 @@ de{
             }
             availableFormats{
                 Ed{"E, d."}
-                H{"HH"}
+                H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -229,8 +229,8 @@ de{
             }
             intervalFormats{
                 H{
-                    H{"HH-HH"}
-                    a{"HH-HH"}
+                    H{"HH-HH 'Uhr'"}
+                    a{"HH-HH 'Uhr'"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
@@ -243,8 +243,8 @@ de{
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
-                    H{"HH-HH v"}
-                    a{"HH-HH v"}
+                    H{"HH-HH 'Uhr' v"}
+                    a{"HH-HH 'Uhr' v"}
                 }
                 M{
                     M{"M.-M."}
@@ -426,7 +426,7 @@ de{
             }
             availableFormats{
                 Ed{"E d."}
-                H{"HH"}
+                H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -473,7 +473,7 @@ de{
             }
             availableFormats{
                 Ed{"E d."}
-                H{"HH"}
+                H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -520,7 +520,7 @@ de{
             }
             availableFormats{
                 Ed{"E d."}
-                H{"HH"}
+                H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}

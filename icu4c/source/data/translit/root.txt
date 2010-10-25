@@ -541,6 +541,19 @@ root {
             }
         }
 
+        IPA-XSampa {
+            file {
+                resource:process(transliterator) {"IPA_XSampa.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        XSampa-IPA {
+            file {
+                resource:process(transliterator) {"IPA_XSampa.txt"}
+                direction {"REVERSE"}
+            }
+        }
+
         InterIndic-Bengali {
             internal {
                 resource:process(transliterator) {"InterIndic_Bengali.txt"}
@@ -1316,6 +1329,125 @@ root {
         Uzbek-Latin/BGN {
             file {
                 resource:process(transliterator) {"Uzbek_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        cs-ja {
+            file {
+                resource:process(transliterator) {"cs_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        cs-ko {
+            file {
+                resource:process(transliterator) {"cs_ko.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        cs_FONIPA-ja {
+            file {
+                resource:process(transliterator) {"cs_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        cs_FONIPA-ko {
+            file {
+                resource:process(transliterator) {"cs_FONIPA_ko.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        es-ja {
+            file {
+                resource:process(transliterator) {"es_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        es-zh {
+            file {
+                resource:process(transliterator) {"es_zh.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        es_419-ja {
+            file {
+                resource:process(transliterator) {"es_419_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        es_419-zh {
+            file {
+                resource:process(transliterator) {"es_419_zh.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        es_FONIPA-ja {
+            file {
+                resource:process(transliterator) {"es_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        es_FONIPA-zh {
+            file {
+                resource:process(transliterator) {"es_FONIPA_zh.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        it-ja {
+            file {
+                resource:process(transliterator) {"it_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        pl-ja {
+            file {
+                resource:process(transliterator) {"pl_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        pl_FONIPA-ja {
+            file {
+                resource:process(transliterator) {"pl_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ro-ja {
+            file {
+                resource:process(transliterator) {"ro_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ro_FONIPA-ja {
+            file {
+                resource:process(transliterator) {"ro_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        sk-ja {
+            file {
+                resource:process(transliterator) {"sk_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        sk_FONIPA-ja {
+            file {
+                resource:process(transliterator) {"sk_FONIPA_ja.txt"}
                 direction {"FORWARD"}
             }
         }
