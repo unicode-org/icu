@@ -2204,23 +2204,22 @@ final class CollationParsedRuleBuilder {
         // using binary search to determine if last expansion element is
         // already in the array
         int result = -1;
-        while (start < limit - 1) {
-            int mid = start + ((limit - start) >> 1);
-            long unsignedce = (maxexpansion.m_endExpansionCE_
-                    .get(mid)).intValue();
-            unsignedce &= 0xFFFFFFFFl;
-            if (unsigned <= unsignedce) {
-                limit = mid;
-            } else {
-                start = mid;
+        if (limit > 0) {
+            while (start < limit - 1) {
+                int mid = (start + limit) >> 1;
+                long unsignedce = (maxexpansion.m_endExpansionCE_
+                        .get(mid)).intValue();
+                unsignedce &= 0xFFFFFFFFl;
+                if (unsigned < unsignedce) {
+                    limit = mid;
+                } else {
+                    start = mid;
+                }
             }
-        }
-
-        if ((maxexpansion.m_endExpansionCE_.get(start)).intValue() == endexpansion) {
-            result = start;
-        } else if ((maxexpansion.m_endExpansionCE_.get(limit))
-                .intValue() == endexpansion) {
-            result = limit;
+    
+            if ((maxexpansion.m_endExpansionCE_.get(start)).intValue() == endexpansion) {
+                result = start;
+            }
         }
         if (result > -1) {
             // found the ce in expansion, we'll just modify the size if it
