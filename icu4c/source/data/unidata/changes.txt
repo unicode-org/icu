@@ -231,6 +231,22 @@ Unicode 6.0 update
 or
 - ~/svn.icu/trunk/bld$ make ICU4J_ROOT=~/svn.icu4j/trunk/src icu4j-data-install
 
+*** LayoutEngine script information
+
+(For details see the Unicode 5.2 change log below.)
+
+* Run ICU4J com.ibm.icu.dev.tool.layout.ScriptNameBuilder. This generates LEScripts.h, LELanguages.h,
+ScriptAndLanguageTags.h and ScriptAndLanguageTags.cpp in the working directory. (It also generates
+ScriptRunData.cpp, which is no longer needed.)
+
+The generated files have a current copyright date and "@draft" statement.
+
+* copy the above files into <icu>/source/layout, replacing the old files.
+* fix mixed line endings
+* review the diffs and fix incorrect @draft and missing aliases;
+  Unicode-derived script codes should be "born stable" like constants in uchar.h, uscript.h etc.
+* manually re-add the "Indic script xyz v.2" tags in ScriptAndLanguageTags.h
+
 ---------------------------------------------------------------------------- ***
 
 Unicode 5.2 update

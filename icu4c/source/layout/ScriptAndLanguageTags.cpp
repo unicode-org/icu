@@ -5,7 +5,7 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 02/25/2010 06:59:14 PM PST
+ * Generated on: 10/26/2010 02:53:33 PM PDT
  */
 
 #include "LETypes.h"
@@ -78,9 +78,9 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     tfngScriptTag, /* 'tfng' (TIFINAGH) */
     xpeoScriptTag, /* 'xpeo' (OLD_PERSIAN) */
     baliScriptTag, /* 'bali' (BALINESE) */
-    batkScriptTag, /* 'batk' (BATK) */
+    batkScriptTag, /* 'batk' (BATAK) */
     blisScriptTag, /* 'blis' (BLIS) */
-    brahScriptTag, /* 'brah' (BRAH) */
+    brahScriptTag, /* 'brah' (BRAHMI) */
     chamScriptTag, /* 'cham' (CHAM) */
     cirtScriptTag, /* 'cirt' (CIRT) */
     cyrsScriptTag, /* 'cyrs' (CYRS) */
@@ -99,7 +99,7 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     latgScriptTag, /* 'latg' (LATG) */
     lepcScriptTag, /* 'lepc' (LEPCHA) */
     linaScriptTag, /* 'lina' (LINA) */
-    mandScriptTag, /* 'mand' (MAND) */
+    mandScriptTag, /* 'mand' (MANDAIC) */
     mayaScriptTag, /* 'maya' (MAYA) */
     meroScriptTag, /* 'mero' (MERO) */
     nkooScriptTag, /* 'nko ' (NKO) */
@@ -148,7 +148,20 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     bamuScriptTag, /* 'bamu' (BAMUM) */
     lisuScriptTag, /* 'lisu' (LISU) */
     nkgbScriptTag, /* 'nkgb' (NKGB) */
-    sarbScriptTag  /* 'sarb' (OLD_SOUTH_ARABIAN) */
+    sarbScriptTag, /* 'sarb' (OLD_SOUTH_ARABIAN) */
+    bassScriptTag, /* 'bass' (BASS) */
+    duplScriptTag, /* 'dupl' (DUPL) */
+    elbaScriptTag, /* 'elba' (ELBA) */
+    granScriptTag, /* 'gran' (GRAN) */
+    kpelScriptTag, /* 'kpel' (KPEL) */
+    lomaScriptTag, /* 'loma' (LOMA) */
+    mendScriptTag, /* 'mend' (MEND) */
+    mercScriptTag, /* 'merc' (MERC) */
+    narbScriptTag, /* 'narb' (NARB) */
+    nbatScriptTag, /* 'nbat' (NBAT) */
+    palmScriptTag, /* 'palm' (PALM) */
+    sindScriptTag, /* 'sind' (SIND) */
+    waraScriptTag  /* 'wara' (WARA) */
 };
 
 const LETag OpenTypeLayoutEngine::languageTags[] = {
