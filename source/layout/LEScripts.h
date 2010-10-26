@@ -5,7 +5,7 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 02/25/2010 06:59:11 PM PST
+ * Generated on: 10/26/2010 02:53:33 PM PDT
  */
 
 #ifndef __LESCRIPTS_H
@@ -192,15 +192,32 @@ enum ScriptCodes {
     zmthScriptCode = 128,
     zsymScriptCode = 129,
 /**
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 
     bamuScriptCode = 130,
     lisuScriptCode = 131,
     nkgbScriptCode = 132,
     sarbScriptCode = 133,
+/**
+ * @stable ICU 4.6
+ */
 
-    scriptCodeCount = 134
+    bassScriptCode = 134,
+    duplScriptCode = 135,
+    elbaScriptCode = 136,
+    granScriptCode = 137,
+    kpelScriptCode = 138,
+    lomaScriptCode = 139,
+    mendScriptCode = 140,
+    mercScriptCode = 141,
+    narbScriptCode = 142,
+    nbatScriptCode = 143,
+    palmScriptCode = 144,
+    sindScriptCode = 145,
+    waraScriptCode = 146,
+
+    scriptCodeCount = 147
 };
 
 U_NAMESPACE_END
