@@ -496,6 +496,8 @@
                 <include name="en.txt" />
                 <include name="en_US.txt" />
                 <include name="en_US_POSIX.txt" />
+                <include name="fi.txt" />
+                <include name="he.txt" />
                 <include name="ja.txt" />
                 <include name="th.txt" />
             </fileset>
