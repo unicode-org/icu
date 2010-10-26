@@ -9,6 +9,6 @@
 fi{
     Version{"2.2.89.3"}
     boundaries{
-        sentence:process(dependency){"line_fi.brk"}
+        line:process(dependency){"line_fi.brk"}
     }
 }
