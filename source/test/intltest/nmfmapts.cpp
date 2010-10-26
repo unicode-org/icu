@@ -194,20 +194,6 @@ if (fr != NULL && def != NULL)
         logln(name);
     }
 
-    // check default value of lenient, and setting/testing
-    if ( def->isLenient() ) {
-         errln("ERROR: isLenient() not FALSE by default for NumberFormat");
-    } else {
-    	def->setLenient(TRUE);
-    	if ( !def->isLenient() ) {
-    	    errln("ERROR: isLenient() after setLenient(TRUE) failed");
-    	}
-    }
-    def->setLenient(fr->isLenient());
-    if(def->isLenient() != fr->isLenient()) {
-        errln("ERROR: setLenient() failed");
-    }
-
     fr->setParseIntegerOnly( def->isParseIntegerOnly() );
     if(fr->isParseIntegerOnly() != def->isParseIntegerOnly() ) {
         errln("ERROR: setParseIntegerOnly() failed");
