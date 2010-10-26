@@ -1173,11 +1173,18 @@ uprv_pathIsAbsolute(const char *path)
   return FALSE;
 }
 
+/* Temporary backup setting of ICU_DATA_DIR_PREFIX_ENV_VAR
+   until some client wrapper makefiles are updated */
+#if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
+# if !defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
+#  define ICU_DATA_DIR_PREFIX_ENV_VAR "IPHONE_SIMULATOR_ROOT"
+# endif
+#endif
+
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     const char *path = NULL;
-#if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
-    const char *simulator_root = NULL;
+#if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
     char datadir_path_buffer[PATH_MAX];
 #endif
 
@@ -1215,21 +1222,22 @@ u_getDataDirectory(void) {
      */
 #if defined(ICU_DATA_DIR) || defined(U_ICU_DATA_DEFAULT_DIR)
     if(path==NULL || *path==0) {
-#   ifdef ICU_DATA_DIR
+# if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
+        const char *prefix = getenv(ICU_DATA_DIR_PREFIX_ENV_VAR);
+# endif
+# ifdef ICU_DATA_DIR
         path=ICU_DATA_DIR;
-#   else
+# else
         path=U_ICU_DATA_DEFAULT_DIR;
-#   endif
-#if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
-        simulator_root=getenv("IPHONE_SIMULATOR_ROOT");
-        if (simulator_root != NULL) {
-            (void) strlcpy(datadir_path_buffer, simulator_root, PATH_MAX);
-            (void) strlcat(datadir_path_buffer, path, PATH_MAX);
+# endif
+# if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
+        if (prefix != NULL) {
+            snprintf(datadir_path_buffer, PATH_MAX, "%s%s", prefix, path);
             path=datadir_path_buffer;
         }
-#endif
+# endif
     }
-#   endif
+#endif
 
     if(path==NULL) {
         /* It looks really bad, set it to something. */
