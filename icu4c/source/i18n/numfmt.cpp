@@ -193,7 +193,6 @@ NumberFormat::NumberFormat()
     fParseIntegerOnly(FALSE)
 {
     fCurrency[0] = 0;
-    Format::setLenient(FALSE);
 }
 
 // -------------------------------------
