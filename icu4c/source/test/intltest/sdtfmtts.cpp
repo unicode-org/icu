@@ -175,25 +175,6 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
 
     logln("Testing getters and setters");
 
-    // check default value of lenient
-    if ( !def.isLenient() ) {
-        errln("ERROR: isLenient() not TRUE by default for SimpleDateFormat");
-    }
-    SimpleDateFormat *defMod = new SimpleDateFormat(def);
-    // check setting & comparison of lenient
-    if (defMod != NULL) {
-        if ( !(*defMod == def) ) {
-            errln("ERROR: operator == is FALSE, should be TRUE after copy");
-        }
-        defMod->setLenient(!def.isLenient());
-        if( defMod->isLenient() == def.isLenient()) {
-            errln("ERROR: isLenient() after setLenient(!isLenient()) failed");
-        } else if ( *defMod == def ) {
-            errln("ERROR: operator == is TRUE, should be FALSE if isLenient() differs");
-        }
-        delete defMod;
-    }
-
     const DateFormatSymbols *syms = pat.getDateFormatSymbols();
     if(!syms) {
       errln("Couldn't obtain DateFormatSymbols. Quitting test!");

@@ -927,7 +927,7 @@ public:
    * @see #setLenient
    * @stable ICU 2.0
    */
-  virtual UBool isLenient(void) const;
+  virtual inline UBool isLenient(void) const;
 
 #endif
 
@@ -994,6 +994,7 @@ private:
     Locale locale;
     Collator* collator;
     DecimalFormatSymbols* decimalFormatSymbols;
+    UBool lenient;
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;
 
@@ -1034,6 +1035,15 @@ RuleBasedNumberFormat::parse(const UnicodeString& text, Formattable& result, UEr
 {
     NumberFormat::parse(text, result, status);
 }
+
+#if !UCONFIG_NO_COLLATION
+
+inline UBool
+RuleBasedNumberFormat::isLenient(void) const {
+    return lenient;
+}
+
+#endif
 
 inline NFRuleSet*
 RuleBasedNumberFormat::getDefaultRuleSet() const {

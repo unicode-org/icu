@@ -218,16 +218,7 @@ if (fr != NULL && it != NULL && de != NULL)
         name = locales[i].getName();
         logln(name);
     }
-    
-    // check default value of lenient, and setting/testing
-    if ( !fr->isLenient() ) {
-        errln("ERROR: isLenient() not TRUE by default for DateFormat");
-    } else {
-        fr->setLenient(FALSE);
-        if ( fr->isLenient() ) {
-            errln("ERROR: isLenient() after setLenient(FALSE) failed");
-        }
-    }
+
     fr->setLenient(it->isLenient());
     if(fr->isLenient() != it->isLenient()) {
         errln("ERROR: setLenient() failed");
