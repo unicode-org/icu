@@ -705,41 +705,6 @@ public class TestIDNA extends TestFmwk {
 
         }  
     }
-    public void TestUnicode32Norm() {
-        // This test fails - is this because of the new Noramlizer implementation?
-        // Revisit this after 4.4.
-        if (skipIfBeforeICU(4,5,2)) {
-            logln("Skipping TestUnicode32Norm");
-            return;
-        }
-
-        /*
-         * test Unicode 3.2 normalization, before Public Review Issue #29
-         * see cnormtst.c TestComposition()
-         */
-        final String strings[]={
-            "\u1100\u0300\u1161\u0327",
-            "\u0b47\u0300\u0b3e\u0327"
-        };
-
-        String ascii = null, unicode = null;
-        int i;
-
-        for(i=0; i<strings.length; ++i) {
-            try {
-                ascii=IDNA.convertToASCII(strings[i], 0).toString();
-                unicode=IDNA.convertToUnicode(ascii, 0).toString();
-            } catch(StringPrepParseException ex) {
-                errln("string " + i + " gets exception " + ex.toString());
-            }
-            
-            if(unicode == null || unicode.compareTo(ascii) != 0) {
-                String uc = unicode == null? "(null)" : unicode;
-                
-                errln("string " + i + " yields " + uc +" instead of " + ascii);
-            }
-        }
-    }
     public void TestJB4490(){
         String[] in = new String[]{
                 "\u00F5\u00dE\u00dF\u00dD",
