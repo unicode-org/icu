@@ -264,39 +264,83 @@ public abstract class IDNA {
     // The following protected methods give IDNA subclasses access to the private IDNAInfo fields.
     // The IDNAInfo also provides intermediate state that is publicly invisible,
     // avoiding the allocation of another worker object.
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void resetInfo(Info info) {
         info.reset();
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static boolean hasCertainErrors(Info info, EnumSet<Error> errors) {
         return !info.errors.isEmpty() && !Collections.disjoint(info.errors, errors);
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static boolean hasCertainLabelErrors(Info info, EnumSet<Error> errors) {
         return !info.labelErrors.isEmpty() && !Collections.disjoint(info.labelErrors, errors);
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void addLabelError(Info info, Error error) {
         info.labelErrors.add(error);
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void promoteAndResetLabelErrors(Info info) {
         if(!info.labelErrors.isEmpty()) {
             info.errors.addAll(info.labelErrors);
             info.labelErrors.clear();
         }
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void addError(Info info, Error error) {
         info.errors.add(error);
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void setTransitionalDifferent(Info info) {
         info.isTransDiff=true;
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void setBiDi(Info info) {
         info.isBiDi=true;
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static boolean isBiDi(Info info) {
         return info.isBiDi;
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static void setNotOkBiDi(Info info) {
         info.isOkBiDi=false;
     }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected static boolean isOkBiDi(Info info) {
         return info.isOkBiDi;
     }
