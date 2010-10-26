@@ -17,7 +17,7 @@
     <special xmlns:icu="http://www.icu-project.org/">
         <icu:breakIteratorData>
             <icu:boundaries>
-                <icu:sentence icu:dependency="line_fi.brk"/>
+                <icu:line     icu:dependency="line_fi.brk"/>
             </icu:boundaries>
         </icu:breakIteratorData>
     </special>

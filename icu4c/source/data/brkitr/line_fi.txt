@@ -326,12 +326,12 @@ $QUcm $LB18NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc
 $LB20NonBreaks = [$LB18NonBreaks - $CB];
 
 # LB 20.09 added rule for Finnish tailoring
-$SP / ($HY | $HH) $AL;
-
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
+$LB20NonBreaks $CM* ($BAcm | $HHcm | $HYcm | $NScm) / $AL; 
 $LB20NonBreaks $CM* ($BAcm | $HHcm | $HYcm | $NScm); 
+($HY | $HH) $AL;
 
 $BBcm [^$CB];                                  #  $BB  x
 $BBcm $LB20NonBreaks $CM*;
