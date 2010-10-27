@@ -57,15 +57,6 @@
             <arg value = "--newdir"/>
             <arg value = "${newdir}"/>
             
-            <arg value = "--cppxslt"/>
-            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc.xslt"/>
-            
-            <arg value = "--cxslt"/>
-            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc.xslt"/>
-            
-            <arg value = "--reportxslt"/>
-            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/genReport.xslt"/>
-            
             <arg value = "--resultfile"/>
             <arg value = "${basedir}/APIChangeReport.html"/>
 
