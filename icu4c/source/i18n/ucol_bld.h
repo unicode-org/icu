@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -50,6 +50,8 @@ typedef struct {
 
 U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE, 
                                             uint32_t prevCE, uint32_t prevContCE);
+
+U_INTERNAL int32_t U_EXPORT2 ucol_findReorderingEntry(const char* name);
 
 /*#endif*/ /* #if !UCONFIG_NO_COLLATION_BUILDER */
 #endif /* #if !UCONFIG_NO_COLLATION */

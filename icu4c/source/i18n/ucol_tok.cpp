@@ -227,7 +227,8 @@ void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, U
     }
 }
 
-#define UTOK_OPTION_COUNT 20
+
+#define UTOK_OPTION_COUNT 22
 
 static UBool didInit = FALSE;
 /* we can be strict, or we can be lenient */
@@ -275,6 +276,8 @@ U_STRING_DECL(option_16,    "last",           4);
 U_STRING_DECL(option_17,    "optimize",       8);
 U_STRING_DECL(option_18,    "suppressContractions",         20);
 U_STRING_DECL(option_19,    "numericOrdering",              15);
+U_STRING_DECL(option_20,    "import",         6);
+U_STRING_DECL(option_21,    "scriptReorder",         13);
 
 
 /*
@@ -351,7 +354,9 @@ enum OptionNumber {
     OPTION_UNDEFINED,
     OPTION_SCRIPT_ORDER,
     OPTION_CHARSET_NAME,
-    OPTION_CHARSET
+    OPTION_CHARSET,
+    OPTION_IMPORT,
+    OPTION_SCRIPTREORDER
 } ;
 
 static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
@@ -374,7 +379,9 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
     /*16*/ {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
     /*17*/ {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
     /*18*/ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
-    /*19*/ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */
+    /*19*/ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT},  /*"charset"        */
+    /*20*/ {option_20,  6, NULL, 0, UCOL_ATTRIBUTE_COUNT},  /*"import"        */
+    /*21*/ {option_21,  13, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"scriptReorder"        */
 };
 
 static
@@ -442,6 +449,7 @@ void ucol_uprv_tok_initData() {
         U_STRING_INIT(option_17, "optimize",       8);
         U_STRING_INIT(option_18, "suppressContractions",         20);
         U_STRING_INIT(option_19, "numericOrdering",      15);
+        U_STRING_INIT(option_21, "scriptReorder ",        13);
         didInit = TRUE;
     }
 }
@@ -570,6 +578,85 @@ int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UCh
 }
 
 
+static
+void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status){
+    int32_t codeCount = 0;
+    int32_t codeIndex = 0;
+    char conversion[64];
+	int32_t tokenLength = 0;
+	const UChar* space;
+	
+    const UChar* current = src->current;
+    const UChar* end = u_memchr(src->current, 0x005d, src->end - src->current);
+
+    // eat leading whitespace
+   	while(current < end && u_isWhitespace(*current)) {
+   		current++;
+   	}
+   	
+    while(current < end) {    
+    	space = u_memchr(current, 0x0020, end - current);
+    	space = space == 0 ? end : space;
+    	tokenLength = space - current;
+    	if (tokenLength < 4) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return;
+        }
+        codeCount++;
+        current += tokenLength;
+        while(current < end && u_isWhitespace(*current)) { /* eat whitespace */
+            ++current;
+        }
+    }
+
+    if (codeCount == 0) {
+    	*status = U_INVALID_FORMAT_ERROR;
+   	}
+    
+    int32_t nonScriptReorderCodes = UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST;
+    codeCount += nonScriptReorderCodes;	// to account for the non-script codes
+    src->opts->scriptOrderLength = codeCount;
+    src->opts->scriptOrder = (int32_t*)uprv_malloc(codeCount * sizeof(int32_t));
+	current = src->current;
+	
+	for (codeIndex = 0; codeIndex < nonScriptReorderCodes; codeIndex++) {
+		src->opts->scriptOrder[codeIndex] = UCOL_REORDERCODE_FIRST + codeIndex;
+	}
+	
+	// eat leading whitespace
+   	while(current < end && u_isWhitespace(*current)) {
+   		current++;
+   	}
+
+    while(current < end) {    
+    	space = u_memchr(current, 0x0020, end - current);
+    	space = space == 0 ? end : space;
+    	tokenLength = space - current;
+    	if (tokenLength < 4) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return;
+        } else {
+            u_UCharsToChars(current, conversion, tokenLength);
+    		conversion[tokenLength] = '\0';
+        	src->opts->scriptOrder[codeIndex] = ucol_findReorderingEntry(conversion);
+    		if (src->opts->scriptOrder[codeIndex] != USCRIPT_INVALID_CODE) {
+    			// non-script reorder code used in rule so remove it from the leading slot
+    			src->opts->scriptOrder[src->opts->scriptOrder[codeIndex] - UCOL_REORDERCODE_FIRST] = UCOL_REORDERCODE_IGNORE;
+    		} else {
+    			src->opts->scriptOrder[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
+    		}
+    		if (src->opts->scriptOrder[codeIndex] == USCRIPT_INVALID_CODE) {
+    			*status = U_INVALID_FORMAT_ERROR;
+    		}
+        }
+        codeIndex++;
+        current += tokenLength;
+        while(current < end && u_isWhitespace(*current)) { /* eat whitespace */
+            ++current;
+        }
+    }	
+}
+
 // reads and conforms to various options in rules
 // end is the position of the first closing ']'
 // However, some of the options take an UnicodeSet definition
@@ -667,6 +754,9 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
             src->current++;
         }
         result = UCOL_TOK_SUCCESS;
+        break;
+    case OPTION_SCRIPTREORDER:
+        ucol_tok_parseScriptReorder(src, status);
         break;
     default:
         *status = U_UNSUPPORTED_ERROR;

@@ -25,6 +25,7 @@
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
+#include "unicode/ustring.h"
 #include "normalizer2impl.h"
 #include "ucol_bld.h"
 #include "ucol_elm.h"
@@ -1373,6 +1374,36 @@ ucol_initInverseUCA(UErrorCode *status)
         }
     }
     return _staticInvUCA;
+}
+
+/* This is the data that is used for non-script reordering codes.
+ */
+const char* ReorderingTokenNames[] = {
+	"SPACE",
+	"PUNCT",
+	"SYMBOL",
+	"CURRENCY",
+	"DIGIT",
+	NULL
+};
+
+void toUpper(const char* src, char* dst, uint32_t length) {
+   for (uint32_t i = 0; *src != '\0' && i < length - 1; ++src, ++dst, ++i) {
+       *dst = toupper(*src);
+   }
+   *dst = '\0';
+}
+
+U_INTERNAL int32_t U_EXPORT2 
+ucol_findReorderingEntry(const char* name) {
+	char buffer[32];
+	toUpper(name, buffer, 32);
+	for (uint32_t entry = 0; ReorderingTokenNames[entry] != NULL; entry++) {
+		if (strcmp(buffer, ReorderingTokenNames[entry]) == 0) {
+			return entry + UCOL_REORDERCODE_FIRST;
+		}
+	}
+	return USCRIPT_INVALID_CODE;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -587,6 +587,21 @@ void RuleBasedCollator::setStrength(ECollationStrength newStrength)
     ucol_setAttribute(ucollator, UCOL_STRENGTH, strength, &intStatus);
 }
 
+int32_t RuleBasedCollator::getScriptOrder(int32_t *dest,
+                                          const int32_t destCapacity,
+                                          UErrorCode& status) const
+{
+    return ucol_getScriptOrder(ucollator, dest, destCapacity, &status);
+}
+
+void RuleBasedCollator::setScriptOrder(const int32_t *scriptOrder,
+                                       const int32_t scriptOrderLength,
+                                       UErrorCode& status)
+{
+    ucol_setScriptOrder(ucollator, scriptOrder, scriptOrderLength);
+}
+
+
 /**
 * Create a hash code for this collation. Just hash the main rule table -- that
 * should be good enough for almost any use.
