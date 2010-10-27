@@ -1173,6 +1173,18 @@ TransliteratorEntry* TransliteratorRegistry::find(UnicodeString& source,
     TransliteratorSpec trg(target);
     TransliteratorEntry* entry;
 
+    // Seek exact match in hashtable.  Temporary fix for ICU 4.6.
+    // TODO: The general logic for finding a matching transliterator needs to be reviewed.
+    // ICU ticket #8089
+    UnicodeString ID;
+    TransliteratorIDParser::STVtoID(source, target, variant, ID);
+    entry = (TransliteratorEntry*) registry.get(ID);
+    if (entry != 0) {
+        // std::string ss;
+        // std::cout << ID.toUTF8String(ss) << std::endl;
+        return entry;
+    }
+
     if (variant.length() != 0) {
         
         // Seek exact match in hashtable
