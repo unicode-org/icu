@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- *   Copyright (c) 2002-2005, International Business Machines Corporation *
+ *   Copyright (c) 2002-2010, International Business Machines Corporation *
  *   and others.  All Rights Reserved.                                    *
  **************************************************************************
  *   Date        Name        Description                                  *
@@ -147,7 +147,7 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
      * @param dir the direction.
      * @param withParens INPUT-OUTPUT parameter.  On entry, if
      * withParens[0] is 0, then parens are disallowed.  If it is 1,
-     * then parens are requires.  If it is -1, then parens are
+     * then parens are required.  If it is -1, then parens are
      * optional, and the return result will be set to 0 or 1.
      * @param canonID OUTPUT parameter.  The pattern for the filter
      * added to the canonID, either at the end, if dir is FORWARD, or
