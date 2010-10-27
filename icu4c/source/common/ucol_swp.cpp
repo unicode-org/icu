@@ -153,7 +153,6 @@ ucol_swapBinary(const UDataSwapper *ds,
                 UErrorCode *pErrorCode) {
     const uint8_t *inBytes;
     uint8_t *outBytes;
-    fprintf(stderr, "@@@ ucol_swapBinary\n");
 
     const UCATableHeader *inHeader;
     UCATableHeader *outHeader;
