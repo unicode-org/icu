@@ -769,6 +769,8 @@ typedef struct {
       /*UColAttributeValue*/ int32_t strength;          /* attribute for strength */
       /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribute for special Hiragana */
       /*UColAttributeValue*/ int32_t numericCollation;  /* attribute for numeric collation */
+      /* reorder code */ int32_t* scriptOrder;
+      int32_t scriptOrderLength;
       uint32_t reserved[15];                 /* for future use */
 } UColOptionSet;
 
@@ -846,7 +848,9 @@ typedef struct {
       UVersionInfo UCAVersion;              /* version of the UCA, read from file */
       UVersionInfo UCDVersion;              /* UCD version, obtained by u_getUnicodeVersion */
       UVersionInfo formatVersion;           /* format version from the UDataInfo header */
-      uint8_t reserved[84];                 /* for future use */
+      uint32_t scriptToLeadByte;            /* offset to script to lead collation byte mapping data */
+      uint32_t leadByteToScript;            /* offset to lead collation byte to script mapping data */
+      uint8_t reserved[76];                 /* for future use */
 } UCATableHeader;
 
 #define U_UNKNOWN_STATE 0
@@ -957,7 +961,6 @@ struct UCollator {
     const uint32_t *expansion;
     const UChar    *contractionIndex;
     const uint32_t *contractionCEs;
-    /*const uint8_t  *scriptOrder;*/
 
     const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
                                           corresponds to expansionCESize */
@@ -1015,6 +1018,9 @@ struct UCollator {
     uint8_t tertiaryBottomCount;
 
     UVersionInfo dataVersion;               /* Data info of UCA table */
+    int32_t* scriptOrder;
+    int32_t scriptOrderLength;
+    uint8_t* scriptReorderTable;
 };
 
 U_CDECL_END
@@ -1066,6 +1072,8 @@ U_CAPI UChar32 U_EXPORT2
 uprv_uca_getCodePointFromRaw(UChar32 i);
 
 
+
+U_CAPI void ucol_buildScriptReorderTable(UCollator *coll);
 
 #ifdef XP_CPLUSPLUS
 /*
