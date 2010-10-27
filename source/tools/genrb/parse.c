@@ -1850,6 +1850,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
 
 
     bundle_setlocale(bundle, tokenValue->fChars, status);
+
     /* The following code is to make Empty bundle work no matter with :table specifer or not */
     token = getToken(NULL, NULL, &line, status);
     if(token==TOK_COLON) {

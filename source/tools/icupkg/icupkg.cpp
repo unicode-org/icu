@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2009, International Business Machines
+*   Copyright (C) 2005-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -322,9 +322,14 @@ main(int argc, char *argv[]) {
         outType=0; /* tells extractItem() to not swap */
     }
 
+fprintf(stderr, "inFilename = %s\n", inFilename);
+fprintf(stderr, "outFilename = %s\n", outFilename);
+fprintf(stderr, "outType = %c\n", outType);
     if(options[OPT_WRITEPKG].doesOccur) {
         isModified=TRUE;
     }
+fprintf(stderr, "isModified = %x\n", isModified);
+fprintf(stderr, "isPackage = %x\n", isPackage);
 
     if(!isPackage) {
         /*
@@ -343,6 +348,7 @@ main(int argc, char *argv[]) {
             return U_ILLEGAL_ARGUMENT_ERROR;
         }
         if(isModified) {
+fprintf(stderr, "@@@@ Calling Package::extractItem\n");
             pkg->extractItem(destPath, outFilename, 0, outType);
         }
 

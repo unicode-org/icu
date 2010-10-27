@@ -153,6 +153,7 @@ ucol_swapBinary(const UDataSwapper *ds,
                 UErrorCode *pErrorCode) {
     const uint8_t *inBytes;
     uint8_t *outBytes;
+    fprintf(stderr, "@@@ ucol_swapBinary\n");
 
     const UCATableHeader *inHeader;
     UCATableHeader *outHeader;
@@ -219,6 +220,8 @@ ucol_swapBinary(const UDataSwapper *ds,
 
         /* swap the necessary pieces in the order of their occurrence in the data */
 
+        udata_printError(ds, "@@@@@ Here inside the collator data swapper\n");
+
         /* read more of the UCATableHeader (the size field was read above) */
         header.options=                 ds->readUInt32(inHeader->options);
         header.UCAConsts=               ds->readUInt32(inHeader->UCAConsts);
@@ -232,11 +235,14 @@ ucol_swapBinary(const UDataSwapper *ds,
         header.expansionCESize=         ds->readUInt32(inHeader->expansionCESize);
         header.endExpansionCECount=     udata_readInt32(ds, inHeader->endExpansionCECount);
         header.contractionUCACombosSize=udata_readInt32(ds, inHeader->contractionUCACombosSize);
-
+        header.scriptToLeadByte=        ds->readUInt32(inHeader->scriptToLeadByte);
+        header.leadByteToScript=        ds->readUInt32(inHeader->leadByteToScript);
+        
         /* swap the 32-bit integers in the header */
         ds->swapArray32(ds, inHeader, (int32_t)((const char *)&inHeader->jamoSpecial-(const char *)inHeader),
                            outHeader, pErrorCode);
-
+        ds->swapArray32(ds, &(inHeader->scriptToLeadByte), sizeof(header.scriptToLeadByte) + sizeof(header.leadByteToScript),
+                           &(outHeader->scriptToLeadByte), pErrorCode);
         /* set the output platform properties */
         outHeader->isBigEndian=ds->outIsBigEndian;
         outHeader->charSetFamily=ds->outCharset;
@@ -302,6 +308,24 @@ ucol_swapBinary(const UDataSwapper *ds,
             count=header.contractionUCACombosSize*inHeader->contractionUCACombosWidth*U_SIZEOF_UCHAR;
             ds->swapArray16(ds, inBytes+header.contractionUCACombos, (int32_t)count,
                                outBytes+header.contractionUCACombos, pErrorCode);
+        }
+        
+        /* swap the script to lead bytes */
+        if(header.scriptToLeadByte!=0) {
+            int indexCount = ds->readUInt16(*(inBytes+header.scriptToLeadByte)); // each entry = uint16
+            int dataCount = ds->readUInt16(*(inBytes+header.scriptToLeadByte + 2)); // each entry = uint16
+            ds->swapArray16(ds, inBytes+header.scriptToLeadByte, 
+                                4 + (indexCount * 4) + (dataCount * 2),
+                                outBytes+header.scriptToLeadByte, pErrorCode);
+        }
+        
+        /* swap the lead byte to scripts */
+        if(header.leadByteToScript!=0) {
+            int indexCount = ds->readUInt16(*(inBytes+header.leadByteToScript)); // each entry = 2 * uint16
+            int dataCount = ds->readUInt16(*(inBytes+header.leadByteToScript + 2)); // each entry = uint16
+            ds->swapArray16(ds, inBytes+header.leadByteToScript, 
+                                4 + (indexCount * 2) + (dataCount * 2),
+                                outBytes+header.leadByteToScript, pErrorCode);
         }
     }
 
