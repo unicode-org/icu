@@ -11,6 +11,7 @@ package com.ibm.icu.dev.tools.docs;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
@@ -21,11 +22,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -84,7 +87,14 @@ public class StableAPI {
     private String rightVer;
     private File rightDir = null;
 //    private String rightStatus;
-    
+
+    private InputStream dumpCppXsltStream = null; 
+	private InputStream dumpCXsltStream = null;
+	private InputStream reportXslStream = null;
+	private static final String CXSLT = "dumpAllCFunc.xslt";
+	private static final String CPPXSLT = "dumpAllCppFunc.xslt"; 
+	private static final String RPTXSLT = "genReport.xslt";
+
     private File dumpCppXslt;
     private File dumpCXslt;
     private File reportXsl;
@@ -105,11 +115,11 @@ public class StableAPI {
         Set<JoinedFunction> full = new TreeSet<JoinedFunction>();
 
         System.err.println("Reading C++...");
-        Set<JoinedFunction> setCpp = this.getFullList(this.dumpCppXslt);
+        Set<JoinedFunction> setCpp = this.getFullList(dumpCppXsltStream, CPPXSLT);
         full.addAll(setCpp);
         System.out.println("read "+setCpp.size() +" C++.  Reading C:");
         
-        Set<JoinedFunction> setC = this.getFullList(this.dumpCXslt);
+        Set<JoinedFunction> setC = this.getFullList(dumpCXsltStream, CXSLT);
         full.addAll(setC);
 
         System.out.println("read "+setC.size() +" C. Setting node:");
@@ -153,10 +163,34 @@ public class StableAPI {
                printUsage();
             } 
         }
-                
+
+        dumpCppXsltStream = loadStream(CPPXSLT, "--cppxslt", dumpCppXslt);
+        dumpCXsltStream= loadStream(CXSLT, "--cxslt", dumpCXslt);
+        reportXslStream= loadStream(RPTXSLT, "--reportxslt", reportXsl);
+
         leftVer = trimICU(setVer(leftVer, "old", leftDir));
         rightVer = trimICU(setVer(rightVer, "new", rightDir));
     }
+
+
+    private InputStream loadStream(String name, String argName, File argFile) {
+    	InputStream stream = null;
+    	if(argFile != null) {
+    		try {
+	    		stream = new FileInputStream(argFile);
+	    	} catch (IOException ioe) {
+	    		throw new RuntimeException("Error: Could not load " + argName +" " + argFile.getPath() + " - " + ioe.toString(), ioe);
+	    	}
+    	} else {    	
+        	stream = StableAPI.class.getResourceAsStream(name);
+        	if(stream == null) {
+        		throw new InternalError("No resource found for " + StableAPI.class.getPackage().getName()+"/"+ name + " -   use " + argName);
+        	} else {
+        		System.out.println("Loaded resource " + name);
+        	}
+        }
+        return stream;
+	}
 
     private static Set<String> warnSet = new TreeSet<String>();
     
@@ -591,10 +625,39 @@ public class StableAPI {
     }
 
     TransformerFactory transFac = TransformerFactory.newInstance();
-
+    Transformer makeTransformer(InputStream is, String name) {
+    	if(is==null) {
+    		throw new InternalError("No inputstream set for " + name);
+    	}
+    	System.err.println("Transforming from: " + name);
+    	Transformer t;
+		try {
+//			// check the prolog
+//			if(is.markSupported())  try {
+//				is.mark(100);
+//				int b = is.read();
+//				is.reset();
+//				System.err.println("Read byte: == " + Integer.toHexString(b));
+//			} catch(Throwable th) {
+//				System.err.println(" ( couldn't read a byte: " + th.toString()+ " )");
+//			} else {
+//				System.err.println(" ( couldn't set mark)");
+//			}
+			StreamSource ss = new StreamSource(is);
+			ss.setSystemId(new File("."));
+			t = transFac.newTransformer(ss);
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+			throw new InternalError("Couldn't make transformer for " + name + " - " + e.getMessageAndLocation());			
+		}
+    	if(t == null) {
+    		throw new InternalError("Couldn't make transformer for " + name);
+    	}
+    	return t;
+    }
     private void reportSelectedFun(Node joinedNode) throws TransformerException, ParserConfigurationException, SAXException, IOException{
-        Transformer report = transFac.newTransformer(new javax.xml.transform.stream.StreamSource(reportXsl));
-//        report.setParameter("leftStatus", leftStatus);
+        Transformer report = makeTransformer(reportXslStream, RPTXSLT);
+        //report.setParameter("leftStatus", leftStatus);
         report.setParameter("leftVer", leftVer);
 //        report.setParameter("rightStatus", rightStatus);
         report.setParameter("ourYear", new Integer(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
@@ -611,11 +674,11 @@ public class StableAPI {
 //        dumpNode(res.getNode(),"");
     }
     
-    private Set<JoinedFunction> getFullList(File dumpXsltFile) throws TransformerException, ParserConfigurationException, XPathExpressionException, SAXException, IOException{
+    private Set<JoinedFunction> getFullList(InputStream dumpXsltStream, String dumpXsltFile) throws TransformerException, ParserConfigurationException, XPathExpressionException, SAXException, IOException{
         // prepare transformer
         XPath xpath = XPathFactory.newInstance().newXPath();
         String expression = "/list";
-        Transformer transformer = transFac.newTransformer(new javax.xml.transform.stream.StreamSource(dumpXsltFile));
+        Transformer transformer = makeTransformer(dumpXsltStream, dumpXsltFile);
 
         //        InputSource leftSource = new InputSource(leftDir + "index.xml");
         DOMSource leftIndex = new DOMSource(getDocument(new File(leftDir,INDEX_XML)));
@@ -631,7 +694,7 @@ public class StableAPI {
 //        	dumpNode(leftIndex.getNode());
         	System.out.flush();
         	System.err.flush();
-        	throw new InternalError("getFullList("+dumpXsltFile.getName()+") returned a null left "+expression);
+        	throw new InternalError("getFullList("+dumpXsltFile.toString()+") returned a null left "+expression);
         }
         
         xpath.reset(); // reuse
@@ -639,12 +702,12 @@ public class StableAPI {
         DOMSource rightIndex = new DOMSource(getDocument(new File(rightDir,INDEX_XML)));
         DOMResult rightResult = new DOMResult();
         transformer.setParameter(DOC_FOLDER, rightDir);
-        System.err.println("abdToLoad "+dumpXsltFile.getName());
+        System.err.println("abdToLoad "+dumpXsltFile.toString());
         transformer.transform(rightIndex, rightResult);
-        System.err.println("dnlToLoad "+dumpXsltFile.getName());
+        System.err.println("dnlToLoad "+dumpXsltFile.toString());
         Node rightList = (Node)xpath.evaluate(expression, rightResult.getNode(), XPathConstants.NODE);
         if(rightList==null) {
-        	throw new InternalError("getFullList("+dumpXsltFile.getName()+") returned a null right "+expression);
+        	throw new InternalError("getFullList("+dumpXsltFile.toString()+") returned a null right "+expression);
         }
 //        dumpNode(rightList,"");
         
