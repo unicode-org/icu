@@ -124,7 +124,7 @@ typedef struct {
   USet *removeSet;
   UBool buildCCTabFlag;  /* Tailoring rule requirs building combining class table. */
 
-  uint32_t previousCp;               /* Previous code point. */
+  UChar32 previousCp;               /* Previous code point. */
   /* For processing starred lists. */
   UBool isStarred;                   /* Are we processing a starred token? */
   UBool savedIsStarred;
@@ -133,8 +133,8 @@ typedef struct {
 
   /* For processing ranges. */
   UBool inRange;                     /* Are we in a range? */
-  uint32_t currentRangeCp;           /* Current code point in the range. */
-  uint32_t lastRangeCp;              /* The last code point in the range. */
+  UChar32 currentRangeCp;           /* Current code point in the range. */
+  UChar32 lastRangeCp;              /* The last code point in the range. */
 } UColTokenParser;
 
 typedef struct {
