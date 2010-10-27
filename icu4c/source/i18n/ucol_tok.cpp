@@ -92,6 +92,38 @@ uhash_compareTokens(const UHashTok key1, const UHashTok key2)
 }
 U_CDECL_END
 
+/*
+ * Debug messages used to pinpoint where a format error occurred.
+ * A better way is to include context-sensitive information in syntaxError() function.
+ *
+ * To turn this debugging on, either uncomment the following line, or define use -DDEBUG_FOR_FORMAT_ERROR
+ * in the compile line.
+ */
+/* #define DEBUG_FOR_FORMAT_ERROR 1 */
+
+#ifdef DEBUG_FOR_FORMAT_ERROR
+#define DBG_FORMAT_ERROR { printf("U_INVALID_FORMAT_ERROR at line %d", __LINE__);}
+#else
+#define DBG_FORMAT_ERROR
+#endif
+
+
+/*
+ * Controls debug messages so that the output can be compared before and after a
+ * big change.  Prints the information of every code point that comes out of the
+ * collation parser and its strength into a file.  When a big change in format
+ * happens, the files before and after the change should be identical.
+ *
+ * To turn this debugging on, either uncomment the following line, or define use -DDEBUG_FOR_CODE_POINTS
+ * in the compile line.
+ */
+/* #define DEBUG_FOR_CODE_POINTS 1 */
+
+#ifdef DEBUG_FOR_CODE_POINTS
+    FILE* dfcp_fp = NULL;
+#endif
+
+
 /*static inline void U_CALLCONV
 uhash_freeBlockWrapper(void *obj) {
     uhash_freeBlock(obj);
@@ -888,7 +920,7 @@ static const UChar*
 ucol_tok_processNextTokenInStarredList(UColTokenParser *src)
 {
   // Extract the characters corresponding to the next code point.
-  uint32_t cp;
+  UChar32 cp;
   src->parsedToken.charsOffset = src->currentStarredCharIndex;
   int32_t prev = src->currentStarredCharIndex;
   U16_NEXT(src->source, src->currentStarredCharIndex, (uint32_t)(src->end - src->source), cp);
@@ -982,6 +1014,7 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
             if (newStrength == UCOL_TOK_UNSET) {
                 *status = U_INVALID_FORMAT_ERROR;
                 syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                DBG_FORMAT_ERROR
                 return NULL;
                 // enabling rules to start with non-tokens a < b
                 // newStrength = UCOL_TOK_RESET;
@@ -1112,6 +1145,7 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
                                 } else {
                                     *status = U_INVALID_FORMAT_ERROR;
                                     syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                                    DBG_FORMAT_ERROR
                                 }
                             } else if(result & UCOL_TOK_VARIABLE_TOP) {
                                 if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
@@ -1125,6 +1159,7 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
                                 } else {
                                     *status = U_INVALID_FORMAT_ERROR;
                                     syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                                    DBG_FORMAT_ERROR
                                 }
                             } else if (result & UCOL_TOK_BEFORE){
                                 if(newStrength == UCOL_TOK_RESET) {
@@ -1132,12 +1167,13 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
                                 } else {
                                     *status = U_INVALID_FORMAT_ERROR;
                                     syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-
+                                    DBG_FORMAT_ERROR
                                 }
                             }
                         } else {
                             *status = U_INVALID_FORMAT_ERROR;
                             syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                            DBG_FORMAT_ERROR
                             return NULL;
                         }
                     }
@@ -1156,6 +1192,7 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
                     if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
                       *status = U_INVALID_FORMAT_ERROR;
                       syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                      DBG_FORMAT_ERROR
                       return NULL;
                       // enabling rules to start with a non-token character a < b
                       // newStrength = UCOL_TOK_RESET;
@@ -1244,6 +1281,7 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
                    if (!src->isStarred) {
                      *status = U_INVALID_FORMAT_ERROR;
                      syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                     DBG_FORMAT_ERROR
                      return NULL;
                    }
                    newStrength = src->parsedToken.strength;
@@ -1260,12 +1298,14 @@ ucol_tok_parseNextTokenInternal(UColTokenParser *src,
                     if (newStrength == UCOL_TOK_UNSET) {
                       *status = U_INVALID_FORMAT_ERROR;
                       syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                      DBG_FORMAT_ERROR
                       return NULL;
                     }
 
                     if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
                         *status = U_INVALID_FORMAT_ERROR;
                         syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                        DBG_FORMAT_ERROR
                         return NULL;
                     }
 
@@ -1310,6 +1350,7 @@ EndOfLoop:
     if (src->parsedToken.charsLen == 0 && top == FALSE) {
         syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
         *status = U_INVALID_FORMAT_ERROR;
+        DBG_FORMAT_ERROR
         return NULL;
     }
 
@@ -1366,6 +1407,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         *status = U_INVALID_FORMAT_ERROR;
         syntaxError(src->source,src->parsedToken.charsOffset-1,
                     src->parsedToken.charsOffset+src->parsedToken.charsLen, parseError);
+        DBG_FORMAT_ERROR
         return NULL;
     }
 
@@ -1378,6 +1420,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         *status = U_INVALID_FORMAT_ERROR;
         syntaxError(src->source,src->parsedToken.charsOffset-1,
                     src->parsedToken.charsOffset+src->parsedToken.charsLen,parseError);
+        DBG_FORMAT_ERROR
         return NULL;
     }
 
@@ -1446,6 +1489,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, const UChar *expand,
         // this is a syntax error
         *status = U_INVALID_FORMAT_ERROR;
         syntaxError(src->source,src->parsedToken.charsOffset-1,src->parsedToken.charsOffset+src->parsedToken.charsLen,parseError);
+        DBG_FORMAT_ERROR
         uprv_free(sourceToken);
         return 0;
     } else {
@@ -1681,6 +1725,13 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
     if(U_FAILURE(*status)) {
         return 0;
     }
+#ifdef DEBUG_FOR_CODE_POINTS
+    char filename[50];
+    time_t now = time(0);
+    strftime(filename, 50, "/tmp/debug_for_cp_%C%m%d.%H%M%S.txt", localtime(&now));
+    dfcp_fp = fopen(filename, "a");
+    fprintf(stderr, "Output is in the file %s.\n", filename);
+#endif
 
     while(src->current < src->end || src->isStarred) {
         src->parsedToken.prefixOffset = 0;
@@ -1705,6 +1756,11 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                 lastStrength = lastToken->strength;
             }
 
+#ifdef DEBUG_FOR_CODE_POINTS
+            UChar32 cp;
+            U16_GET(src->source, 0, src->parsedToken.charsOffset, (uint32_t)(src->extraEnd - src->source), cp);
+            fprintf(dfcp_fp, "Code point = %x, Strength = %x\n", cp, src->parsedToken.strength);
+#endif
             //key = newCharsLen << 24 | charsOffset;
             UColToken key;
             key.source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
@@ -1717,6 +1773,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                 if(lastToken == NULL) { /* this means that rules haven't started properly */
                     *status = U_INVALID_FORMAT_ERROR;
                     syntaxError(src->source,0,(int32_t)(src->end-src->source),parseError);
+                    DBG_FORMAT_ERROR
                     return 0;
                 }
                 /*  6 Otherwise (when relation != reset) */
@@ -1888,6 +1945,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                         if(beforeStrength != sourceToken->strength) {
                             *status = U_INVALID_FORMAT_ERROR;
                             syntaxError(src->source,0,(int32_t)(src->end-src->source),parseError);
+                            DBG_FORMAT_ERROR
                             return 0;
                         }
                     }
@@ -2037,6 +2095,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             }
         }
     }
+#ifdef DEBUG_FOR_CODE_POINTS
+    fclose(dfcp_fp);
+#endif
+
 
     if(src->resultLen > 0 && ListList[src->resultLen-1].first == NULL) {
         src->resultLen--;
