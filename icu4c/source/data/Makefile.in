@@ -537,8 +537,13 @@ $(BUILDDIR)/%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLBINDIR)/makeconv$(TOOLEXEEXT)
 # RES FILES
 
 ### curr res
+
+# Suffix rule for building the currency .res files.
+# We use the $(CURR_SRC) macro instead of $(<F) so that genrb sees all files at the same time.
+# This is a little more efficient, and needed for when we temporarily --writePoolBundle
+# when we refresh CLDR data.
 $(CURRBLDDIR)/%.res: $(CURRSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(CURRSRCDIR) -d $(CURRBLDDIR) $(<F)
+	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(CURRSRCDIR) -d $(CURRBLDDIR) $(CURR_SRC)
 
 # copy the curr/pool.res file from the source folder to the build output folder
 # and swap it to native endianness
@@ -561,8 +566,13 @@ $(CURR_INDEX_FILE): $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 ### lang res
+
+# Suffix rule for building the language .res files.
+# We use the $(LANG_SRC) macro instead of $(<F) so that genrb sees all files at the same time.
+# This is a little more efficient, and needed for when we temporarily --writePoolBundle
+# when we refresh CLDR data.
 $(LANGBLDDIR)/%.res: $(LANGSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LANGSRCDIR) -d $(LANGBLDDIR) $(<F)
+	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LANGSRCDIR) -d $(LANGBLDDIR) $(LANG_SRC)
 
 # copy the lang/pool.res file from the source folder to the build output folder
 # and swap it to native endianness
@@ -585,8 +595,13 @@ $(LANG_INDEX_FILE): $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 ### region res
+
+# Suffix rule for building the region .res files.
+# We use the $(REGION_SRC) macro instead of $(<F) so that genrb sees all files at the same time.
+# This is a little more efficient, and needed for when we temporarily --writePoolBundle
+# when we refresh CLDR data.
 $(REGIONBLDDIR)/%.res: $(REGIONSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(REGIONSRCDIR) -d $(REGIONBLDDIR) $(<F)
+	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(REGIONSRCDIR) -d $(REGIONBLDDIR) $(REGION_SRC)
 
 # copy the region/pool.res file from the source folder to the build output folder
 # and swap it to native endianness
@@ -609,8 +624,13 @@ $(REGION_INDEX_FILE): $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 ### zone res
+
+# Suffix rule for building the time zone .res files.
+# We use the $(ZONE_SRC) macro instead of $(<F) so that genrb sees all files at the same time.
+# This is a little more efficient, and needed for when we temporarily --writePoolBundle
+# when we refresh CLDR data.
 $(ZONEBLDDIR)/%.res: $(ZONESRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(ZONESRCDIR) -d $(ZONEBLDDIR) $(<F)
+	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(ZONESRCDIR) -d $(ZONEBLDDIR) $(ZONE_SRC)
 
 # copy the zone/pool.res file from the source folder to the build output folder
 # and swap it to native endianness
@@ -696,8 +716,12 @@ $(TRANSLITBLDDIR)/%.res: $(TRANSLITSRCDIR)/%.txt  $(TOOLBINDIR)/genrb$(TOOLEXEEX
 ### normal (locale) res
 all-RES:  $(RES_FILES)
 
+# Suffix rule for building the locale .res files.
+# We use the $(RES_SRC) macro instead of $(<F) so that genrb sees all files at the same time.
+# This is a little more efficient, and needed for when we temporarily --writePoolBundle
+# when we refresh CLDR data.
 $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(TOOLBINDIR)/genrb --usePoolBundle $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(RES_SRC)
 
 # copy the locales/pool.res file from the source folder to the build output folder
 # and swap it to native endianness
