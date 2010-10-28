@@ -327,4 +327,37 @@ public class CurrencyTest extends TestFmwk {
             assertEquals(loc.toString(), ALLSET, returnedSet);
         }
     }
+
+    public void TestIsAvailable() {
+        Date d1995 = new Date(788918400000L);   // 1995-01-01 00:00 GMT
+        Date d2000 = new Date(946684800000L);   // 2000-01-01 00:00 GMT
+        Date d2005 = new Date(1104537600000L);  // 2005-01-01 00:00 GMT
+
+        assertTrue("USD all time", Currency.isAvailable("USD", null, null));
+        assertTrue("USD before 1995", Currency.isAvailable("USD", null, d1995));
+        assertTrue("USD 1995-2005", Currency.isAvailable("USD", d1995, d2005));
+        assertTrue("USD after 2005", Currency.isAvailable("USD", d2005, null));
+        assertTrue("USD on 2005-01-01", Currency.isAvailable("USD", d2005, d2005));
+
+        assertTrue("usd all time", Currency.isAvailable("usd", null, null));
+
+        assertTrue("DEM all time", Currency.isAvailable("DEM", null, null));
+        assertTrue("DEM before 1995", Currency.isAvailable("DEM", null, d1995));
+        assertTrue("DEM 1995-2000", Currency.isAvailable("DEM", d1995, d2000));
+        assertTrue("DEM 1995-2005", Currency.isAvailable("DEM", d1995, d2005));
+        assertFalse("DEM after 2005", Currency.isAvailable("DEM", d2005, null));
+        assertTrue("DEM on 2000-01-01", Currency.isAvailable("DEM", d2000, d2000));
+        assertFalse("DEM on 2005-01-01", Currency.isAvailable("DEM", d2005, d2005));
+
+        assertFalse("XXX unknown code", Currency.isAvailable("XXX", null, null));
+        assertFalse("USDOLLAR invalid code", Currency.isAvailable("USDOLLAR", null, null));
+
+        // illegal argument combination
+        try {
+            Currency.isAvailable("USD", d2005, d1995);
+            errln("Expected IllegalArgumentException, because lower range is after upper range");
+        } catch (IllegalArgumentException e) {
+            logln("IllegalArgumentException, because lower range is after upper range");
+        }
+    }
 }
