@@ -838,6 +838,7 @@ int32_t Collator::getScriptOrder(int32_t *dest,
                                  UErrorCode& status) const
 {
     status = U_UNSUPPORTED_ERROR;
+	return 0;
 }
 
 void Collator::setScriptOrder(const int32_t *scriptOrder,

@@ -5822,7 +5822,6 @@ static void TestInvalidListsAndRanges(void)
  */
 static void TestBeforeRuleWithScriptReordering(void)
 {
-    int32_t i;
     UParseError error;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
@@ -5831,16 +5830,19 @@ static void TestBeforeRuleWithScriptReordering(void)
     uint32_t rulesLength = 0;
     UScriptCode scriptOrder[1] = {USCRIPT_GREEK};
 
-	log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
-
     UChar base[] = { 0x03b1 }; /* base */
     int32_t baseLen = sizeof(base)/sizeof(*base);
 
     UChar before[] = { 0x0e01 }; /* ko kai */
     int32_t beforeLen = sizeof(before)/sizeof(*before);
 
-	/*UChar *data[] = { before, base };
-	genericRulesStarter(srules, data, 2);*/
+	UCollationResult collResult;
+	uint8_t baseKey[256];
+    uint32_t baseKeyLength;
+    uint8_t beforeKey[256];
+    uint32_t beforeKeyLength;
+
+	log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
 	
 	/* build collator */
     rulesLength = u_unescape(srules, rules, LEN(rules));
@@ -5851,16 +5853,14 @@ static void TestBeforeRuleWithScriptReordering(void)
     }
 
 	/* check collation results - before rule applied but not script reordering */
-    UCollationResult collResult = ucol_strcoll(myCollation, base, baseLen, before, beforeLen);
+    collResult = ucol_strcoll(myCollation, base, baseLen, before, beforeLen);
 	if (collResult != UCOL_GREATER) {
 		log_err("Collation result not correct before script reordering = %d\n", collResult);
 	}
 
 	/* check the lead byte of the collation keys before script reordering */
-    uint8_t baseKey[256];
-    uint32_t baseKeyLength = ucol_getSortKey(myCollation, base, baseLen, baseKey, 256);
-    uint8_t beforeKey[256];
-    uint32_t beforeKeyLength = ucol_getSortKey(myCollation, before, beforeLen, beforeKey, 256);
+    baseKeyLength = ucol_getSortKey(myCollation, base, baseLen, baseKey, 256);
+    beforeKeyLength = ucol_getSortKey(myCollation, before, beforeLen, beforeKey, 256);
     if (baseKey[0] != beforeKey[0]) {
       log_err("Different lead byte for sort keys using before rule and before script reordering. base character lead byte = %02x, before character lead byte = %02x\n", baseKey[0], beforeKey[0]);
    }
