@@ -1085,5 +1085,5 @@ it{
             one{"valuta sconosciuta/non valida"}
         }
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.51.59"}
 }

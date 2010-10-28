@@ -42,7 +42,7 @@ nl{
             }
         }
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.51.59"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -460,9 +460,28 @@ nl{
                 abbreviated{
                     "Saʻna Hizjria",
                 }
+                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
             }
             monthNames{
+                default{"format"}
                 format{
+                    abbreviated{
+                        "Moeh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Joem. I",
+                        "Joem. II",
+                        "Raj.",
+                        "Sja.",
+                        "Ram.",
+                        "Sjaw.",
+                        "Doe al k.",
+                        "Doe al h.",
+                    }
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Moeharram",
                         "Safar",
@@ -477,6 +496,24 @@ nl{
                         "Doe al kaʻaba",
                         "Doe al hizja",
                     }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                 }
             }
         }

@@ -807,7 +807,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.51.59"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}
