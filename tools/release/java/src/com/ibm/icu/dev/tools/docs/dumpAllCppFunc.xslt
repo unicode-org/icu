@@ -38,16 +38,10 @@
 				<xsl:for-each select="$enum_node">
 
 					<!--  use a name, else '(anonymous)' -->
-					<xsl:variable name="enum_node_name">
-						<xsl:choose>					
-							<xsl:when test="contains(name/text(), '@')">
-								(anonymous)
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="name/text()" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
+					<xsl:variable name="enum_node_name"><xsl:choose>					
+							<xsl:when test="contains(name/text(), '@')">(anonymous)</xsl:when>
+							<xsl:otherwise><xsl:value-of select="name/text()" /></xsl:otherwise>
+						</xsl:choose></xsl:variable>
 
 					<xsl:variable name="enum_status" select="detaileddescription/para/xrefsect/xreftitle/text()"/>
 					<xsl:variable name="enum_version" select="detaileddescription/para/xrefsect/xrefdescription/para/text()"/>
@@ -59,9 +53,8 @@
 						<xsl:attribute name="version"><xsl:value-of
 							select="$enum_version" /></xsl:attribute>
 						<xsl:attribute name="prototype">enum 
-							<xsl:value-of select="$compoundname"/>::
-							<xsl:value-of
-							select="$enum_node_name" /></xsl:attribute>
+							<xsl:value-of select="$compoundname"/>::<xsl:value-of
+							select="$enum_node_name" /> {}</xsl:attribute>
 						<xsl:copy-of select="location/@file" />
 					</cppfunc>
 		
@@ -97,6 +90,7 @@
 							</xsl:attribute>
 							<xsl:attribute name="prototype">enum 
 							<xsl:value-of select="$compoundname"/>::<xsl:value-of
+								select="$enum_node_name" />::<xsl:value-of
 								select="name/text()" /></xsl:attribute>
 							<xsl:attribute name="file"><xsl:value-of select="$enum_node_file" /></xsl:attribute>
 						</cppfunc>
