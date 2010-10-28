@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -161,15 +161,11 @@ UnicodeString::extract(int32_t start,
         // Assume that the capacity is real and a limit pointer won't wrap around.
         capacity = (int32_t)dstSize;
     } else {
-        char *targetLimit = target + 0x7fffffff;
-        if(targetLimit < target) {
-            // Pin the capacity so that a limit pointer does not wrap around.
-            targetLimit = (char *)U_MAX_PTR(target);
-            capacity = (int32_t)(targetLimit - target);
-        } else {
-            // Pin the capacity to the maximum int32_t value.
-            capacity = 0x7fffffff;
-        }
+        // Pin the capacity so that a limit pointer does not wrap around.
+        char *targetLimit = (char *)U_MAX_PTR(target);
+        // U_MAX_PTR(target) returns a targetLimit that is at most 0x7fffffff
+        // greater than target and does not wrap around the top of the address space.
+        capacity = (int32_t)(targetLimit - target);
     }
 
     // create the converter
