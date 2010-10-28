@@ -39,7 +39,7 @@ pl{
             }
         }
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.51.52"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -567,75 +567,75 @@ pl{
     units{
         day{
             few{"{0} dni"}
+            many{"{0} dni"}
             one{"{0} dzień"}
-            other{"{0} dni"}
         }
         hour{
             few{"{0} godziny"}
+            many{"{0} godzin"}
             one{"{0} godzina"}
-            other{"{0} godzin"}
         }
         minute{
             few{"{0} minuty"}
+            many{"{0} minut"}
             one{"{0} minuta"}
-            other{"{0} minut"}
         }
         month{
             few{"{0} miesiące"}
+            many{"{0} miesięcy"}
             one{"{0} miesiąc"}
-            other{"{0} miesięcy"}
         }
         second{
             few{"{0} sekundy"}
+            many{"{0} sekund"}
             one{"{0} sekunda"}
-            other{"{0} sekund"}
         }
         week{
             few{"{0} tygodnie"}
+            many{"{0} tygodni"}
             one{"{0} tydzień"}
-            other{"{0} tygodni"}
         }
         year{
             few{"{0} lata"}
+            many{"{0} lat"}
             one{"{0} rok"}
-            other{"{0} lat"}
         }
     }
     unitsShort{
         day{
             few{"{0} dni"}
+            many{"{0} dni"}
             one{"{0} dzień"}
-            other{"{0} dni"}
         }
         hour{
             few{"{0} godz."}
+            many{"{0} godz."}
             one{"{0} godz."}
-            other{"{0} godz."}
         }
         minute{
             few{"{0} min."}
+            many{"{0} min."}
             one{"{0} min."}
-            other{"{0} min."}
         }
         month{
             few{"{0} mies."}
+            many{"{0} mies."}
             one{"{0} mies."}
-            other{"{0} mies."}
         }
         second{
             few{"{0} sek."}
+            many{"{0} sek."}
             one{"{0} sek."}
-            other{"{0} sek."}
         }
         week{
             few{"{0} tyg."}
+            many{"{0} tyg."}
             one{"{0} tydz."}
-            other{"{0} tyg."}
         }
         year{
             few{"{0} lata"}
+            many{"{0} lat"}
             one{"{0} rok"}
-            other{"{0} lat"}
         }
     }
 }

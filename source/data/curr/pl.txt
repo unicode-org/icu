@@ -1043,206 +1043,206 @@ pl{
     CurrencyPlurals{
         ADP{
             few{"pesety andorskie"}
-            other{"peset andorskich"}
+            many{"peset andorskich"}
         }
         AED{
             few{"dirhamy arabskie"}
-            other{"dirhamów arabskich"}
+            many{"dirhamów arabskich"}
         }
         AFA{
             few{"afgani (1927-2002)"}
-            other{"afgani (1927-2002)"}
+            many{"afgani (1927-2002)"}
         }
         AFN{
             few{"afgani"}
-            other{"afgani"}
+            many{"afgani"}
         }
         ALL{
             few{"leki albańskie"}
-            other{"leków albańskich"}
+            many{"leków albańskich"}
         }
         AMD{
             few{"dramy armeńskie"}
-            other{"dramów armeńskich"}
+            many{"dramów armeńskich"}
         }
         ANG{
             few{"guldeny Antyle Holenderskie"}
-            other{"guldenów (Antyle Holenderskie)"}
+            many{"guldenów (Antyle Holenderskie)"}
         }
         AOA{
             few{"kwanzy angolańskie"}
-            other{"kwanz angolańskich"}
+            many{"kwanz angolańskich"}
         }
         AOK{
             few{"kwanzy angolańskie (1977-1990)"}
-            other{"kwanz angolańskich (1977-1990)"}
+            many{"kwanz angolańskich (1977-1990)"}
         }
         AON{
             few{"nowe kwanzy angolańskie (1990-2000)"}
-            other{"nowych kwanz angolańskich (1990-2000)"}
+            many{"nowych kwanz angolańskich (1990-2000)"}
         }
         AOR{
             few{"kwanzy angolańskie Reajustado (1995-1999)"}
-            other{"kwanz angolańskich Reajustado (1995-1999)"}
+            many{"kwanz angolańskich Reajustado (1995-1999)"}
         }
         AUD{
             few{"dolary australijskie"}
+            many{"dolarów australijskich"}
             one{"dolar australijski"}
-            other{"dolarów australijskich"}
         }
         AZN{
             few{"manaty azerskie"}
+            many{"manatów azerskich"}
             one{"manat azerski"}
-            other{"manatów azerskich"}
         }
         BAM{
             few{"marki wymienne Bośni i Hercegowiny"}
+            many{"marek wymiennych Bośni i Hercegowiny"}
             one{"marka wymienna Bośni i Hercegowiny"}
-            other{"marek wymiennych Bośni i Hercegowiny"}
         }
         BYR{
             few{"ruble białoruskie"}
+            many{"rubli białoruskich"}
             one{"rubel białoruski"}
-            other{"rubli białoruskich"}
         }
         CAD{
             few{"dolary kanadyjskie"}
+            many{"dolarów kanadyjskich"}
             one{"dolar kanadyjski"}
-            other{"dolarów kanadyjskich"}
         }
         CHF{
             few{"franki szwajcarskie"}
+            many{"franków szwajcarskich"}
             one{"frank szwajcarski"}
-            other{"franków szwajcarskich"}
         }
         CSK{
             few{"korony czechosłowackie"}
+            many{"koron czechosłowackich"}
             one{"korona czechosłowacka"}
-            other{"koron czechosłowackich"}
         }
         CZK{
             few{"korony czeskie"}
+            many{"koron czeskich"}
             one{"korona czeska"}
-            other{"koron czeskich"}
         }
         DEM{
             few{"marki niemieckie"}
+            many{"marek niemieckich"}
             one{"marka niemiecka"}
-            other{"marek niemieckich"}
         }
         DKK{
             few{"korony duńskie"}
+            many{"koron duńskich"}
             one{"korona duńska"}
-            other{"koron duńskich"}
         }
         EEK{
             few{"korony estońskie"}
+            many{"koron estońskich"}
             one{"korona estońska"}
-            other{"koron estońskich"}
         }
         EUR{
             few{"euro"}
+            many{"euro"}
             one{"euro"}
-            other{"euro"}
         }
         FRF{
             few{"franki francuskie"}
+            many{"franków francuskich"}
             one{"frank francuski"}
-            other{"franków francuskich"}
         }
         HUF{
             few{"forinty węgierskie"}
+            many{"forintów węgierskich"}
             one{"forint węgierski"}
-            other{"forintów węgierskich"}
         }
         JPY{
             few{"jeny japońskie"}
+            many{"jenów japońskich"}
             one{"jen japoński"}
-            other{"jenów japońskich"}
         }
         MAF{
             few{"franki marokańskie"}
+            many{"franków marokańskich"}
             one{"frank marokański"}
-            other{"franków marokańskich"}
         }
         NOK{
             few{"korony norweskie"}
+            many{"koron norweskich"}
             one{"korona norweska"}
-            other{"koron norweskich"}
         }
         NZD{
             few{"dolary nowozelandzkie"}
+            many{"dolarów nowozelandzkich"}
             one{"dolar nowozelandzki"}
-            other{"dolarów nowozelandzkich"}
         }
         PLN{
             few{"złote polskie"}
+            many{"złotych polskich"}
             one{"złoty polski"}
-            other{"złotych polskich"}
         }
         RUB{
             few{"ruble rosyjskie"}
+            many{"rubli rosyjskich"}
             one{"rubel rosyjski"}
-            other{"rubli rosyjskich"}
         }
         SEK{
             few{"korony szwedzkie"}
+            many{"koron szwedzkich"}
             one{"korona szwedzka"}
-            other{"koron szwedzkich"}
         }
         SIT{
             few{"tolary słoweńskie"}
+            many{"tolarów słoweńskich"}
             one{"tolar słoweński"}
-            other{"tolarów słoweńskich"}
         }
         SKK{
             few{"korony słowackie"}
+            many{"koron słowackich"}
             one{"korona słowacka"}
-            other{"koron słowackich"}
         }
         SRD{
             few{"dolary surinamskie"}
+            many{"dolarów surinamskich"}
             one{"dolar surinamski"}
-            other{"dolarów surinamskich"}
         }
         SUR{
             few{"ruble radzieckie"}
+            many{"rubli radzieckich"}
             one{"rubel radziecki"}
-            other{"rubli radzieckich"}
         }
         TRL{
             few{"liry tureckie"}
+            many{"lir tureckich"}
             one{"lira turecka"}
-            other{"lir tureckich"}
         }
         TRY{
             few{"nowe liry tureckie"}
+            many{"nowych lir tureckich"}
             one{"nowa lira turecka"}
-            other{"nowych lir tureckich"}
         }
         UAH{
             few{"hrywny ukraińskie"}
+            many{"hrywien ukraińskich"}
             one{"hrywna ukraińska"}
-            other{"hrywien ukraińskich"}
         }
         UAK{
             few{"karbowańce ukraińskie"}
+            many{"karbowańców ukraińskich"}
             one{"karbowaniec ukraiński"}
-            other{"karbowańców ukraińskich"}
         }
         USD{
             few{"dolary amerykańskie"}
+            many{"dolarów amerykańskich"}
             one{"dolar amerykański"}
-            other{"dolarów amerykańskich"}
         }
         XXX{
             few{"XXX"}
+            many{"XXX"}
             one{"nieznana/nieprawidłowa waluta"}
-            other{"XXX"}
         }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.51.52"}
 }

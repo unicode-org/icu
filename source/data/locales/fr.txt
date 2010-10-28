@@ -42,7 +42,7 @@ fr{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.51.59"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -517,8 +517,31 @@ fr{
                 yyyyQ{"'T'Q y G"}
                 yyyyQQQ{"QQQ y G"}
             }
+            eras{
+                abbreviated{
+                    "AH",
+                }
+                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+            }
             monthNames{
                 format{
+                    abbreviated{
+                        "Mouh.",
+                        "Saf.",
+                        "Rabiʻ-oul-A.",
+                        "Rabiʻ-out-T.",
+                        "Djoum.-l-O.",
+                        "Djoum.-t-T.",
+                        "Radj.",
+                        "Cha.",
+                        "Ram.",
+                        "Chaou.",
+                        "Dou-l-Q.",
+                        "Dou-l-H.",
+                    }
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Mouharram",
                         "Safar",
@@ -533,6 +556,24 @@ fr{
                         "Dou-l-Qaʻda",
                         "Dou-l-Hidjja",
                     }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                 }
             }
         }

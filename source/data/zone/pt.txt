@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    Version{"2.0.50.94"}
+    Version{"2.0.51.59"}
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaína"}
