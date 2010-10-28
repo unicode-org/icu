@@ -2127,12 +2127,22 @@ static void hexForUnicodeString(const UnicodeString &ustr, char * cbuf, int32_t 
     int32_t ustri, ustrlen = ustr.length();
     cbuflen -= 3; // leave room for possible terminating ellipsis
     for (ustri = 0; ustri < ustrlen; ++ustri) {
-        int charsNeeded = snprintf(cbuf, (size_t)cbuflen, " %04X", ustr.charAt(ustri));
+        int charsNeeded =
+#ifdef U_WINDOWS
+            _snprintf(cbuf, (size_t)cbuflen, " %04X", ustr.charAt(ustri));
+#else
+            snprintf(cbuf, (size_t)cbuflen, " %04X", ustr.charAt(ustri));
+#endif
         if (charsNeeded >= cbuflen) {
             // couldn't fit this value, indicate truncation with ellipsis
             cbuflen += 3;
-            charsNeeded = snprintf(cbuf, (size_t)cbuflen, "...");
-            break;
+            charsNeeded =
+#ifdef U_WINDOWS
+                _snprintf(cbuf, (size_t)cbuflen, "...");
+#else
+                snprintf(cbuf, (size_t)cbuflen, "...");
+#endif
+           break;
         }
         cbuflen -= charsNeeded;
         cbuf += charsNeeded;
