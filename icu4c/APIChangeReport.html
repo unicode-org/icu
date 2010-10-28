@@ -3,12 +3,12 @@
 	--><html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ICU4C API Comparison: 4.4.2 with 4.6 (ICU 4.5.2) r28742M</title>
+<title>ICU4C API Comparison: 4.4.2 with 4.6 r28928M</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="_top"></a>
-<h1>ICU4C API Comparison: 4.4.2 with 4.6 (ICU 4.5.2) (r28742M)</h1>
+<h1>ICU4C API Comparison: 4.4.2 with 4.6 (r28928M)</h1>
 <ul>
 <li>
 <a href="#removed">Removed from 4.4.2</a>
@@ -120,6 +120,17 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">regex.h</td><td class="proto">enum 
+							RegexMatcher::
+							MatcherDestIsUTextFlag</td><td class="">Internal<br>.</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">enum 
+							RegexMatcher::MATCHER_DEST_IS_UTEXT</td><td class="">Internal<br>.</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">uidna.h</td><td class="proto">#define UIDNA_ALLOW_UNASSIGNED</td><td class="stabchange">Stable<br>2.6</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
@@ -170,88 +181,369 @@
 </tr>
 </THEAD>
 <tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::bamuScriptCode</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::appendReplacement(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(UText*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">RegexMatcher* RegexPattern::matcher(UText*, PatternIsUTextFlag, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::inputText() const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceAll(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceFirst(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">enum 
+							RegexPattern::
+							PatternIsUTextFlag</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
 <tr class="row1">
+<td class="file">regex.h</td><td class="proto">enum 
+							RegexPattern::PATTERN_IS_UTEXT</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.4</span>
+<br>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">int32_t RegexMatcher::split(UText*, UText*dest[], int32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">int32_t RegexPattern::split(UText*, UText*dest[], int32_t, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">static UBool RegexPattern::matches(UText*, UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_AVESTAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BAMUM</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_COMMON_INDIC_NUMBER_FORMS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_DEVANAGARI_EXTENDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_EGYPTIAN_HIEROGLYPHS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ENCLOSED_IDEOGRAPHIC_SUPPLEMENT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_HANGUL_JAMO_EXTENDED_A</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_HANGUL_JAMO_EXTENDED_B</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_IMPERIAL_ARAMAIC</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_INSCRIPTIONAL_PAHLAVI</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_INSCRIPTIONAL_PARTHIAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_JAVANESE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_KAITHI</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_LISU</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MEETEI_MAYEK</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MYANMAR_EXTENDED_A</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_OLD_SOUTH_ARABIAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_OLD_TURKIC</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_RUMI_NUMERAL_SYMBOLS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_SAMARITAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_TAI_THAM</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_TAI_VIET</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_VEDIC_EXTENSIONS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UCharNameChoice::U_CHAR_NAME_ALIAS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UJoiningGroup::U_JG_FARSI_YEH</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UJoiningGroup::U_JG_NYA</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CASE_IGNORABLE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_CASEFOLDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_CASEMAPPED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_LOWERCASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_TITLECASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_UPPERCASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
 </tr>
 <tr class="row1">
 <td class="file">uregex.h</td><td class="proto">URegularExpression* uregex_openUText(UText*, uint32_t, UParseError*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
@@ -301,6 +593,18 @@
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be 4.6)</b></span></td>
 </tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MANDAEAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
+<span class="verchange"><span>3.6</span>
+<br>
+<b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MEROITIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
+<span class="verchange"><span>3.6</span>
+<br>
+<b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -318,6 +622,78 @@
 <td class="file">dcfmtsym.h</td><td class="proto">void DecimalFormatSymbols::setSymbol(ENumberFormatSymbol, const UnicodeString&amp;, const UBool)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::bamuScriptCode</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::bassScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::duplScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::elbaScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::granScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::kpelScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::lomaScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::mendScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::mercScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::narbScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::nbatScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::palmScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::sindScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::waraScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint16 LESwaps::swapWord(le_uint16)</td><td class="">None<br>
@@ -354,6 +730,423 @@
 </td><td>Stable<br>
 <span class=""><span>2.8</span></span></td>
 </tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ALCHEMICAL_SYMBOLS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_AVESTAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BAMUM_SUPPLEMENT</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BAMUM</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BATAK</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BRAHMI</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_COMMON_INDIC_NUMBER_FORMS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_DEVANAGARI_EXTENDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_EGYPTIAN_HIEROGLYPHS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_EMOTICONS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ENCLOSED_IDEOGRAPHIC_SUPPLEMENT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ETHIOPIC_EXTENDED_A</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_HANGUL_JAMO_EXTENDED_A</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_HANGUL_JAMO_EXTENDED_B</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_IMPERIAL_ARAMAIC</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_INSCRIPTIONAL_PAHLAVI</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_INSCRIPTIONAL_PARTHIAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_JAVANESE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_KAITHI</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_KANA_SUPPLEMENT</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_LISU</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MANDAIC</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MEETEI_MAYEK</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MYANMAR_EXTENDED_A</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_OLD_SOUTH_ARABIAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_OLD_TURKIC</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_PLAYING_CARDS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_RUMI_NUMERAL_SYMBOLS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_SAMARITAN</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_TAI_THAM</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_TAI_VIET</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_TRANSPORT_AND_MAP_SYMBOLS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_VEDIC_EXTENSIONS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UCharNameChoice::U_CHAR_NAME_ALIAS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UJoiningGroup::U_JG_FARSI_YEH</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UJoiningGroup::U_JG_NYA</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UJoiningGroup::U_JG_TEH_MARBUTA_GOAL</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CASE_IGNORABLE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_CASEFOLDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_CASEMAPPED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_LOWERCASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_TITLECASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_CHANGES_WHEN_UPPERCASED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft&raquo;Stable<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ALLOW_UNASSIGNED</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_DEFAULT</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_USE_STD3_RULES</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_BASSA_VAH</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_DUPLOYAN_SHORTAND</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_ELBASAN</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_GRANTHA</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_KPELLE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_LOMA</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MANDAIC</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MENDE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MEROITIC_CURSIVE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MEROITIC_HIEROGLYPHS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_NABATAEAN</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_OLD_NORTH_ARABIAN</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_PALMYRENE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_SINDHI</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_WARANG_CITI</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -378,84 +1171,203 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">coll.h</td><td class="proto">int32_t Collator::getScriptOrder(int32_t*, const int32_t, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">coll.h</td><td class="proto">void Collator::setScriptOrder(const int32_t*, const int32_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kEightDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kFiveDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kFourDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kNineDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kOneDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kSevenDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kSixDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kThreeDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kTwoDigitSymbol</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">dcfmtsym.h</td><td class="proto">void DecimalFormatSymbols::setSymbol(ENumberFormatSymbol, const UnicodeString&amp;, const UBool)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
-<tr class="row0">
-<td class="file">format.h</td><td class="proto">UBool Format::isLenient()const</td><td class="">None<br>
-</td><td>Draft<br>
-<span class=""><span>4.6</span></span></td>
-</tr>
 <tr class="row1">
-<td class="file">format.h</td><td class="proto">void Format::setLenient(UBool)</td><td class="">None<br>
-</td><td>Draft<br>
-<span class=""><span>4.6</span></span></td>
-</tr>
-<tr class="row0">
 <td class="file">idna.h</td><td class="proto">IDNAInfo::IDNAInfo()</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">UBool IDNAInfo::hasErrors() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">UBool IDNAInfo::isTransitionalDifferent() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::labelToASCII(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::labelToUnicode(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::nameToASCII(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">UnicodeString&amp; IDNA::nameToUnicode(const UnicodeString&amp;, UnicodeString&amp;, IDNAInfo&amp;, UErrorCode&amp;) const =0</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">static IDNA* IDNA::createUTS46Instance(uint32_t, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">uint32_t IDNAInfo::getErrors() const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">void IDNA::labelToASCII_UTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">void IDNA::labelToUnicodeUTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">idna.h</td><td class="proto">void IDNA::nameToASCII_UTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">idna.h</td><td class="proto">void IDNA::nameToUnicodeUTF8(const StringPiece&amp;, ByteSink&amp;, IDNAInfo&amp;, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::bassScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::duplScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::elbaScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::granScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::kpelScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::lomaScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::mendScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::mercScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::narbScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::nbatScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::palmScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::sindScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">LEScripts.h</td><td class="proto">enum ScriptCodes::waraScriptCode</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
 </tr>
 <tr class="row1">
 <td class="file">LESwaps.h</td><td class="proto">static le_uint16 LESwaps::swapWord(le_uint16)</td><td class="">None<br>
@@ -539,11 +1451,8 @@
 </tr>
 <tr class="row1">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::group(int32_t, UText*, int64_t&amp;, UErrorCode&amp;) const</td><td class="">None<br>
-</td><td>
-<br>
-<span class=""><span></span>
-<br>
-<b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">regex.h</td><td class="proto">UText* RegexPattern::patternText(UErrorCode&amp;) const</td><td class="">None<br>
@@ -591,9 +1500,161 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">tblcoll.h</td><td class="proto">int32_t RuleBasedCollator::getScriptOrder(int32_t*, const int32_t, UErrorCode&amp;) const</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">tblcoll.h</td><td class="proto">void RuleBasedCollator::setScriptOrder(const int32_t*, const int32_t, UErrorCode&amp;)</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">ubidi.h</td><td class="proto">UBiDiDirection ubidi_getBaseDirection(const UChar*, int32_t)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ubidi.h</td><td class="proto">enum UBiDiDirection::UBIDI_NEUTRAL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ALCHEMICAL_SYMBOLS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BAMUM_SUPPLEMENT</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BATAK</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_BRAHMI</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_EMOTICONS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_ETHIOPIC_EXTENDED_A</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_KANA_SUPPLEMENT</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MANDAIC</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_PLAYING_CARDS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UBlockCode::UBLOCK_TRANSPORT_AND_MAP_SYMBOLS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UJoiningGroup::U_JG_TEH_MARBUTA_GOAL</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_OTHER_PROPERTY_LIMIT</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_OTHER_PROPERTY_START</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto">enum UProperty::UCHAR_SCRIPT_EXTENSIONS</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_CURRENCY</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_DIGIT</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_FIRST</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_IGNORE</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_LIMIT</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_PUNCTUATION</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_SPACE</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode::UCOL_REORDERCODE_SYMBOL</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucol.h</td><td class="proto">enum UColReorderCode</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span></span>
+<br>
+<b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ucol.h</td><td class="proto">int32_t ucol_getScriptOrder(const UCollator*, int32_t*, const int32_t, UErrorCode*)</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucol.h</td><td class="proto">void ucol_setScriptOrder(UCollator*, const int32_t*, const int32_t)</td><td class="">None<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">uidna.h</td><td class="proto">#define UIDNA_INFO_INITIALIZER</td><td class="">None<br>
@@ -604,6 +1665,126 @@
 <td class="file">uidna.h</td><td class="proto">UIDNA* uidna_openUTS46(uint32_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ALLOW_UNASSIGNED</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_CHECK_BIDI</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_CHECK_CONTEXTJ</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_DEFAULT</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_BIDI</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_CONTEXTJ</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_DISALLOWED</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_DOMAIN_NAME_TOO_LONG</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_EMPTY_LABEL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_HYPHEN_3_4</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_INVALID_ACE_LABEL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_LABEL_HAS_DOT</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_LABEL_TOO_LONG</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_LEADING_COMBINING_MARK</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_LEADING_HYPHEN</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_PUNYCODE</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_ERROR_TRAILING_HYPHEN</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_NONTRANSITIONAL_TO_ASCII</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_NONTRANSITIONAL_TO_UNICODE</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uidna.h</td><td class="proto">enum (anonymous)
+::UIDNA_USE_STD3_RULES</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.6</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">uidna.h</td><td class="proto">int32_t uidna_labelToASCII(const UIDNA*, const UChar*, int32_t, UChar*, int32_t, UIDNAInfo*, UErrorCode*)</td><td class="">None<br>
@@ -671,89 +1852,209 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_EIGHT_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_FIVE_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_FOUR_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_NINE_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_ONE_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_SEVEN_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_SIX_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_THREE_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatSymbol::UNUM_TWO_DIGIT_SYMBOL</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">uobject.h</td><td class="proto">#define UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">UBool uregex_find64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">UBool uregex_lookingAt64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">UBool uregex_matches64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">UText* uregex_appendTailUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">UText* uregex_groupUText(URegularExpression*, int32_t, UText*, int64_t*, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">UText* uregex_groupUTextDeep(URegularExpression*, int32_t, UText*, UErrorCode*)</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>4.4 technology preview</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">int64_t uregex_end64(URegularExpression*, int32_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">int64_t uregex_regionEnd64(const URegularExpression*, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">int64_t uregex_regionStart64(const URegularExpression*, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">int64_t uregex_start64(URegularExpression*, int32_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">void uregex_getFindProgressCallback(const URegularExpression*, URegexFindProgressCallback**, const void**, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">void uregex_reset64(URegularExpression*, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">void uregex_setFindProgressCallback(URegularExpression*, URegexFindProgressCallback*, const void*, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">void uregex_setRegion64(URegularExpression*, int64_t, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">void uregex_setRegionAndStart(URegularExpression*, int64_t, int64_t, int64_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto">UBool uscript_hasScript(UChar32, UScriptCode)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_BASSA_VAH</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_DUPLOYAN_SHORTAND</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_ELBASAN</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_GRANTHA</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_KPELLE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_LOMA</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MANDAIC</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MENDE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MEROITIC_CURSIVE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_MEROITIC_HIEROGLYPHS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>4.6</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_NABATAEAN</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_OLD_NORTH_ARABIAN</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_PALMYRENE</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_SINDHI</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto">enum UScriptCode::USCRIPT_WARANG_CITI</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.2</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">uscript.h</td><td class="proto">int32_t uscript_getScriptExtensions(UChar32, UScriptCode*, int32_t, UErrorCode*)</td><td class="">None<br>
@@ -836,711 +2137,1003 @@
        	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::
+							ECurrencySpacing</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kCurrencyMatch</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kCurrencySpacingCount</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kInsert</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">enum 
+							DecimalFormatSymbols::kSurroundingMatch</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
 <td class="file">dcfmtsym.h</td><td class="proto">void DecimalFormatSymbols::setPatternForCurrencySpacing(ECurrencySpacing, UBool, const UnicodeString&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">UnicodeString&amp; DecimalFormat::format(const StringPiece&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">decimfmt.h</td><td class="proto">UnicodeString&amp; DecimalFormat::format(double, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">UnicodeString&amp; DecimalFormat::format(int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">decimfmt.h</td><td class="proto">UnicodeString&amp; DecimalFormat::format(int64_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">dtptngen.h</td><td class="proto">UnicodeString DateTimePatternGenerator::getBestPattern(const UnicodeString&amp;, UDateTimePatternMatchOptions, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">dtptngen.h</td><td class="proto">UnicodeString DateTimePatternGenerator::replaceFieldTypes(const UnicodeString&amp;, const UnicodeString&amp;, UDateTimePatternMatchOptions, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">errorcode.h</td><td class="proto">const char* ErrorCode::errorName() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">errorcode.h</td><td class="proto">void ErrorCode::assertSuccess() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fmtable.h</td><td class="proto">Formattable::Formattable(const StringPiece&amp;, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">fmtable.h</td><td class="proto">StringPiece Formattable::getDecimalNumber(UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fmtable.h</td><td class="proto">void Formattable::setDecimalNumber(const StringPiece&amp;, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">format.h</td><td class="proto">UnicodeString&amp; Format::format(const Formattable&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fpositer.h</td><td class="proto">FieldPositionIterator::FieldPositionIterator()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">fpositer.h</td><td class="proto">FieldPositionIterator::FieldPositionIterator(const FieldPositionIterator&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fpositer.h</td><td class="proto">FieldPositionIterator::~FieldPositionIterator()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">fpositer.h</td><td class="proto">UBool FieldPositionIterator::next(FieldPosition&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fpositer.h</td><td class="proto">UBool FieldPositionIterator::operator!=(const FieldPositionIterator&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">fpositer.h</td><td class="proto">UBool FieldPositionIterator::operator==(const FieldPositionIterator&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">LocaleDisplayNames::~LocaleDisplayNames()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">UDialectHandling LocaleDisplayNames::getDialectHandling() const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::keyDisplayName(const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::keyValueDisplayName(const char*, const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::languageDisplayName(const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::localeDisplayName(const Locale&amp;, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::localeDisplayName(const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::regionDisplayName(const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::scriptDisplayName(UScriptCode, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::scriptDisplayName(const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">UnicodeString&amp; LocaleDisplayNames::variantDisplayName(const char*, UnicodeString&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">const Locale&amp; LocaleDisplayNames::getLocale() const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locdspnm.h</td><td class="proto">static LocaleDisplayNames* LocaleDisplayNames::createInstance(const Locale&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locdspnm.h</td><td class="proto">static LocaleDisplayNames* LocaleDisplayNames::createInstance(const Locale&amp;, UDialectHandling)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">static const Locale&amp; Locale::getRoot()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">FilteredNormalizer2::FilteredNormalizer2(const Normalizer2&amp;, const UnicodeSet&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UBool FilteredNormalizer2::hasBoundaryAfter(UChar32) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UBool FilteredNormalizer2::hasBoundaryBefore(UChar32) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UBool FilteredNormalizer2::isInert(UChar32) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UBool FilteredNormalizer2::isNormalized(const UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UBool Normalizer2::hasBoundaryAfter(UChar32) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UBool Normalizer2::hasBoundaryBefore(UChar32) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UBool Normalizer2::isInert(UChar32) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UBool Normalizer2::isNormalized(const UnicodeString&amp;, UErrorCode&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UNormalizationCheckResult FilteredNormalizer2::quickCheck(const UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UNormalizationCheckResult Normalizer2::quickCheck(const UnicodeString&amp;, UErrorCode&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString Normalizer2::normalize(const UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString&amp; FilteredNormalizer2::append(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString&amp; FilteredNormalizer2::normalize(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString&amp; FilteredNormalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString&amp; Normalizer2::append(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString&amp; Normalizer2::normalize(const UnicodeString&amp;, UnicodeString&amp;, UErrorCode&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">UnicodeString&amp; Normalizer2::normalizeSecondAndAppend(UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">int32_t FilteredNormalizer2::spanQuickCheckYes(const UnicodeString&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">normalizer2.h</td><td class="proto">int32_t Normalizer2::spanQuickCheckYes(const UnicodeString&amp;, UErrorCode&amp;) const =0</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">static const Normalizer2* Normalizer2::getInstance(const char*, const char*, UNormalization2Mode, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; NumberFormat::format(const Formattable&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; NumberFormat::format(const StringPiece&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; NumberFormat::format(double, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; NumberFormat::format(int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; NumberFormat::format(int64_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
+<tr class="row0">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::
+							EStyles</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
 <tr class="row1">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kCurrencyStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kIsoCurrencyStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kNumberStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kPercentStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kPluralCurrencyStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kScientificStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">numfmt.h</td><td class="proto">enum 
+							NumberFormat::kStyleCount</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
 <td class="file">numfmt.h</td><td class="proto">static NumberFormat* NumberFormat::createInstance(const Locale&amp;, EStyles, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">platform.h</td><td class="proto">#define UCLN_NO_AUTO_CLEANUP</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">platform.h</td><td class="proto">#define U_CHECK_DYLOAD</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">platform.h</td><td class="proto">#define U_ENABLE_DYLOAD</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">platform.h</td><td class="proto">#define U_HAVE_STD_STRING</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::appendReplacement(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">RegexMatcher&amp; RegexMatcher::reset(UText*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">RegexMatcher* RegexPattern::matcher(UText*, PatternIsUTextFlag, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">RegexMatcher::RegexMatcher(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::inputText() const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceAll(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">UText* RegexMatcher::replaceFirst(UText*, UText*, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">enum 
+							RegexPattern::
+							PatternIsUTextFlag</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
 <tr class="row0">
+<td class="file">regex.h</td><td class="proto">enum 
+							RegexPattern::PATTERN_IS_UTEXT</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.4</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">int32_t RegexMatcher::split(UText*, UText*dest[], int32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">int32_t RegexPattern::split(UText*, UText*dest[], int32_t, UErrorCode&amp;) const</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">regex.h</td><td class="proto">static RegexPattern* RegexPattern::compile(UText*, uint32_t, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">regex.h</td><td class="proto">static UBool RegexPattern::matches(UText*, UText*, UParseError&amp;, UErrorCode&amp;)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">Format* SelectFormat::clone()const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">SelectFormat&amp; SelectFormat::operator=(const SelectFormat&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">SelectFormat::SelectFormat(const SelectFormat&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">SelectFormat::SelectFormat(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">SelectFormat::~SelectFormat()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">UBool SelectFormat::operator!=(const Format&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">UBool SelectFormat::operator==(const Format&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">UClassID SelectFormat::getDynamicClassID() const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">UnicodeString&amp; SelectFormat::format(const Formattable&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">UnicodeString&amp; SelectFormat::format(const UnicodeString&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">UnicodeString&amp; SelectFormat::toPattern(UnicodeString&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">static UClassID SelectFormat::getStaticClassID()</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">selfmt.h</td><td class="proto">void SelectFormat::applyPattern(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">selfmt.h</td><td class="proto">void SelectFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">smpdtfmt.h</td><td class="proto">UnicodeString&amp; SimpleDateFormat::format(Calendar&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">smpdtfmt.h</td><td class="proto">UnicodeString&amp; SimpleDateFormat::format(UDate, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">smpdtfmt.h</td><td class="proto">UnicodeString&amp; SimpleDateFormat::format(const Formattable&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">std_string.h</td><td class="proto">#define U_HAVE_STD_STRING</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
+<tr class="row1">
+<td class="file">timezone.h</td><td class="proto">enum 
+							TimeZone::GENERIC_LOCATION</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
 <tr class="row0">
+<td class="file">timezone.h</td><td class="proto">enum 
+							TimeZone::LONG_GENERIC</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">timezone.h</td><td class="proto">enum 
+							TimeZone::LONG_GMT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">timezone.h</td><td class="proto">enum 
+							TimeZone::SHORT_COMMONLY_USED</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">timezone.h</td><td class="proto">enum 
+							TimeZone::SHORT_GENERIC</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">timezone.h</td><td class="proto">enum 
+							TimeZone::SHORT_GMT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
 <td class="file">tmutfmt.h</td><td class="proto">TimeUnitFormat::TimeUnitFormat(const Locale&amp;, EStyle, UErrorCode&amp;)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
+<tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">enum 
+							TimeUnitFormat::
+							EStyle</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
 <tr class="row1">
+<td class="file">tmutfmt.h</td><td class="proto">enum 
+							TimeUnitFormat::kAbbreviate</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
+<td class="file">tmutfmt.h</td><td class="proto">enum 
+							TimeUnitFormat::kFull</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row1">
+<td class="file">tmutfmt.h</td><td class="proto">enum 
+							TimeUnitFormat::kTotal</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
+<tr class="row0">
 <td class="file">ucal.h</td><td class="proto">UBool ucal_isWeekend(const UCalendar*, UDate, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ucal.h</td><td class="proto">UCalendarWeekdayType ucal_getDayOfWeekType(const UCalendar*, UCalendarDaysOfWeek, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
+<tr class="row0">
+<td class="file">ucal.h</td><td class="proto">enum UCalendarType::UCAL_DEFAULT</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
+</tr>
 <tr class="row1">
+<td class="file">ucal.h</td><td class="proto">enum UCalendarWeekdayType::UCAL_WEEKDAY</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">ucal.h</td><td class="proto">enum UCalendarWeekdayType::UCAL_WEEKEND_CEASE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">ucal.h</td><td class="proto">enum UCalendarWeekdayType::UCAL_WEEKEND_ONSET</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">ucal.h</td><td class="proto">enum UCalendarWeekdayType::UCAL_WEEKEND</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">ucal.h</td><td class="proto">enum UCalendarWeekdayType</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>
+</td>
+</tr>
+<tr class="row0">
 <td class="file">ucal.h</td><td class="proto">int32_t ucal_getWeekendTransition(const UCalendar*, UCalendarDaysOfWeek, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">udat.h</td><td class="proto">UCalendarDateFields udat_toCalendarDateField(UDateFormatField)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
+<tr class="row0">
+<td class="file">udatpg.h</td><td class="proto">enum UDateTimePatternMatchOptions::UDATPG_MATCH_ALL_FIELDS_LENGTH</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
 <tr class="row1">
+<td class="file">udatpg.h</td><td class="proto">enum UDateTimePatternMatchOptions::UDATPG_MATCH_HOUR_FIELD_LENGTH</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">udatpg.h</td><td class="proto">enum UDateTimePatternMatchOptions::UDATPG_MATCH_NO_OPTIONS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">udatpg.h</td><td class="proto">enum UDateTimePatternMatchOptions</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>
+</td>
+</tr>
+<tr class="row0">
 <td class="file">udatpg.h</td><td class="proto">int32_t udatpg_getBestPatternWithOptions(UDateTimePatternGenerator*, const UChar*, int32_t, UDateTimePatternMatchOptions, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">udatpg.h</td><td class="proto">int32_t udatpg_replaceFieldTypesWithOptions(UDateTimePatternGenerator*, const UChar*, int32_t, const UChar*, int32_t, UDateTimePatternMatchOptions, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uldnames.h</td><td class="proto">UDialectHandling uldn_getDialectHandling(const ULocaleDisplayNames*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uldnames.h</td><td class="proto">ULocaleDisplayNames* uldn_open(const char*, UDialectHandling, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uldnames.h</td><td class="proto">const char* uldn_getLocale(const ULocaleDisplayNames*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uldnames.h</td><td class="proto">enum UDialectHandling::ULDN_DIALECT_NAMES</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">uldnames.h</td><td class="proto">enum UDialectHandling::ULDN_STANDARD_NAMES</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uldnames.h</td><td class="proto">enum UDialectHandling</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>
+</td>
 </tr>
 <tr class="row0">
 <td class="file">uldnames.h</td><td class="proto">int32_t uldn_keyDisplayName(const ULocaleDisplayNames*, const char*, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
@@ -1704,39 +3297,82 @@
        	            	">Draft<br>4.4</td>
 </tr>
 <tr class="row1">
+<td class="file">unorm2.h</td><td class="proto">enum UNormalization2Mode::UNORM2_COMPOSE_CONTIGUOUS</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">unorm2.h</td><td class="proto">enum UNormalization2Mode::UNORM2_COMPOSE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">unorm2.h</td><td class="proto">enum UNormalization2Mode::UNORM2_DECOMPOSE</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">unorm2.h</td><td class="proto">enum UNormalization2Mode::UNORM2_FCD</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">unorm2.h</td><td class="proto">enum UNormalization2Mode</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>
+</td>
+</tr>
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">int32_t unorm2_append(const UNormalizer2*, UChar*, int32_t, int32_t, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unorm2.h</td><td class="proto">int32_t unorm2_normalize(const UNormalizer2*, const UChar*, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">int32_t unorm2_normalizeSecondAndAppend(const UNormalizer2*, UChar*, int32_t, int32_t, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unorm2.h</td><td class="proto">int32_t unorm2_spanQuickCheckYes(const UNormalizer2*, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">void unorm2_close(UNormalizer2*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto">enum UNumberFormatStyle::UNUM_NUMBERING_SYSTEM</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.2</td>
 </tr>
 <tr class="row0">
 <td class="file">unum.h</td><td class="proto">int32_t unum_formatDecimal(const UNumberFormat*, const char*, int32_t, UChar*, int32_t, UFieldPosition*, UErrorCode*)</td><td class="" colspan="
@@ -1773,200 +3409,235 @@
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">uregex.h</td><td class="proto">enum URegexpFlag::UREGEX_CANON_EQ</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>2.4</td>
+</tr>
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">int32_t uregex_splitUText(URegularExpression*, UText*destFields[], int32_t, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uregex.h</td><td class="proto">void uregex_appendReplacementUText(URegularExpression*, UText*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uregex.h</td><td class="proto">void uregex_setUText(URegularExpression*, UText*, UErrorCode*)</td><td class="">Internal<br>4.4 technology preview</td><td>Draft<br>
 <span class="verchange"><span>4.4</span></span></td>
 </tr>
+<tr class="row1">
+<td class="file">usearch.h</td><td class="proto">enum USearchAttribute::USEARCH_ELEMENT_COMPARISON</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
 <tr class="row0">
+<td class="file">usearch.h</td><td class="proto">enum USearchAttributeValue::USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
+<td class="file">usearch.h</td><td class="proto">enum USearchAttributeValue::USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row0">
+<td class="file">usearch.h</td><td class="proto">enum USearchAttributeValue::USEARCH_STANDARD_ELEMENT_COMPARISON</td><td class="" colspan="
+       	            		2
+       	            	" align="
+       	            		center
+       	            	">Draft<br>4.4</td>
+</tr>
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define SHAPE_TAIL_NEW_UNICODE</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define SHAPE_TAIL_TYPE_MASK</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_LAMALEF_AUTO</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_LAMALEF_BEGIN</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_LAMALEF_END</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_LAMALEF_MASK</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_LAMALEF_NEAR</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_LAMALEF_RESIZE</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_SEEN_MASK</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_SEEN_TWOCELL_NEAR</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_SPACES_RELATIVE_TO_TEXT_MASK</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_TASHKEEL_BEGIN</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_TASHKEEL_END</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_TASHKEEL_MASK</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_TASHKEEL_RESIZE</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_TEXT_DIRECTION_VISUAL_RTL</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_YEHHAMZA_MASK</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ushape.h</td><td class="proto">#define U_SHAPE_YEHHAMZA_TWOCELL_NEAR</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ustdio.h</td><td class="proto">UFILE* u_fadopt(FILE*, const char*, const char*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ustring.h</td><td class="proto">UChar* u_strFromJavaModifiedUTF8WithSub(UChar*, int32_t, int32_t*, const char*, int32_t, UChar32, int32_t*, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ustring.h</td><td class="proto">char* u_strToJavaModifiedUTF8(char*, int32_t, int32_t*, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.4</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">utf.h</td><td class="proto">#define U_IS_SURROGATE_TRAIL</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">utf16.h</td><td class="proto">#define U16_IS_SURROGATE_TRAIL</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">utypes.h</td><td class="proto">#define U_CHARSET_IS_UTF8</td><td class="" colspan="
        	            		2
        	            	" align="
        	            		center
        	            	">Draft<br>4.2</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uvernum.h</td><td class="proto">#define U_ICU_ENTRY_POINT_RENAME</td><td class="" colspan="
        	            		2
        	            	" align="
@@ -1979,7 +3650,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI (r28741:28742M) tool on Thu Sep 30 11:19:58 PDT 2010<br>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI (r28926:28927M) tool on Wed Oct 27 17:05:47 PDT 2010<br>Copyright (C) 2010, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
