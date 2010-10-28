@@ -42,6 +42,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.sun.xml.internal.fastinfoset.stax.events.XMLConstants;
+
 
 /**
  A utility to report the status change between two ICU releases
@@ -204,6 +206,8 @@ public class StableAPI {
         }
     } 
     
+    private static boolean didWarnSuperTrim = false;
+    
     private static String trimICU(String ver) {
         final String ICU_ = ICU_SPACE_PREFIX;
         final String ICU = "ICU";
@@ -220,7 +224,11 @@ public class StableAPI {
                 int n;
                 for(n=ver.length()-1;n>0 && ((ver.charAt(n)=='.') || Character.isDigit(ver.charAt(n))) ;n--)
                     ;
-                warn("super-trimming: '" + ver + "'");
+                warn("Trimming extraneous 'version' text: '" + ver + "'");
+                if(!didWarnSuperTrim) {
+                	didWarnSuperTrim = true;
+                	warn("Please ONLY use:  '@whatever ICU X.Y.Z'");
+                }
                 if(n>0) {
                     ver = ver.substring(n+1).trim();
                 }
@@ -361,7 +369,8 @@ public class StableAPI {
 
     static String getAttr(Node node, String attrName){
     	if(node.getAttributes()==null && node.getNodeType()==3) {
-    		return "(text node 3)";
+//    		return "(text node 3)";
+    		return "(Node: " + node.toString() + " )";
 //    		return node.getFirstChild().getAttributes().getNamedItem(attrName).getNodeValue();
     	}
     	
@@ -408,7 +417,11 @@ public class StableAPI {
             f.version = trimICU(getAttr(n, "version"));
             f.file = getAttr(n, "file");
             f.purifyPrototype();
-            f.file = Function.getBasename(f.file);
+            if(f.file == null) {
+            	f.file = "{null}";
+            } else {
+            	f.file = Function.getBasename(f.file);
+            }
             f.comparableName = f.comparableName();
             return f;
         }
