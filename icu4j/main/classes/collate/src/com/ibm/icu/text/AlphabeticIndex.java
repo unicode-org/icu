@@ -1060,19 +1060,25 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         }
     }
 
-    /**
+    /*
      * HACKS
      */
 
-    //private static String STROKE = "\u5283";
-    private static String PINYIN_LOWER_BOUNDS = "\u0101bcd\u0113fghjklmn\u014Dpqrstwxyz";
-
     /**
-     * HACKS
+     * Only gets called for simplified Chinese. Uses further hack to distinguish long from short pinyin table.
      */
-    private String hackName(CharSequence name, @SuppressWarnings("rawtypes") Comparator comparator) {
+    private String hackName(CharSequence name, @SuppressWarnings("rawtypes") RuleBasedCollator comparator) {
         if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
+        }
+        if (PINYIN_LOWER_BOUNDS == null) {
+            if (comparator.getTailoredSet().contains(probeCharInLong)) {
+                PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_LONG;
+                HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_LONG;
+            } else {
+                PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_SHORT;
+                HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_SHORT;
+            }
         }
         @SuppressWarnings("unchecked")
         int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
@@ -1082,33 +1088,72 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         return PINYIN_LOWER_BOUNDS.substring(index, index + 1);
     }
 
+    private static String PINYIN_LOWER_BOUNDS;
+
+    private static String[] HACK_PINYIN_LOOKUP;
+
+
     /**
      * HACKS
+     * Generated with org.unicode.draft.GenerateUnihanCollator.
      */
-    private static String[] HACK_PINYIN_LOOKUP = {
-        "", // A 
-        "\u516B", // B 
-        "\u5693", // C 
-        "\u5491", // D 
-        "\u59B8", // E 
-        "\u53D1", // F 
-        "\u7324", // G 
-        "\u598E", // H 
-        "\u4E0C", // J 
-        "\u5494", // K 
-        "\u5783", // L 
-        "\u5638", // M 
-        "\u62FF", // N 
-        "\u5662", // O 
-        "\u5991", // P 
-        "\u4E03", // Q 
-        "\u5465", // R 
-        "\u4EE8", // S 
-        "\u4ED6", // T 
-        "\u5C72", // W 
-        "\u5915", // X 
-        "\u4E2B", // Y 
-        "\u5E00", // Z 
+    
+    private int probeCharInLong = 0x28EAD;
+
+    private static String PINYIN_LOWER_BOUNDS_LONG = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
+
+    private static String[] HACK_PINYIN_LOOKUP_LONG = {
+        "", // A
+        "\u516B", // b : 八 [bā]
+        "\uD863\uDEAD", // c : 𨺭 [cā]
+        "\uD844\uDE51", // d : 𡉑 [dā]
+        "\u59B8", // e : 妸 [ē]
+        "\u53D1", // f : 发 [fā]
+        "\uD844\uDE45", // g : 𡉅 [gā]
+        "\u54C8", // h : 哈 [hā]
+        "\u4E0C", // j : 丌 [jī]
+        "\u5494", // k : 咔 [kā]
+        "\u3547", // l : 㕇 [lā]
+        "\u5452", // m : 呒 [ḿ]
+        "\u5514", // n : 唔 [ń]
+        "\u5594", // o : 喔 [ō]
+        "\uD84F\uDC7A", // p : 𣱺 [pā]
+        "\u4E03", // q : 七 [qī]
+        "\u513F", // r : 儿 [r]
+        "\u4EE8", // s : 仨 [sā]
+        "\u4ED6", // t : 他 [tā]
+        "\u7A75", // w : 穵 [wā]
+        "\u5915", // x : 夕 [xī]
+        "\u4E2B", // y : 丫 [yā]
+        "\u5E00", // z : 帀 [zā]
+    };
+
+    private static String PINYIN_LOWER_BOUNDS_SHORT = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
+
+    private static String[] HACK_PINYIN_LOOKUP_SHORT = {
+        "", // A
+        "\u516B", // b : 八 [bā]
+        "\u5693", // c : 嚓 [cā]
+        "\u5491", // d : 咑 [dā]
+        "\u59B8", // e : 妸 [ē]
+        "\u53D1", // f : 发 [fā]
+        "\u65EE", // g : 旮 [gā]
+        "\u54C8", // h : 哈 [hā]
+        "\u4E0C", // j : 丌 [jī]
+        "\u5494", // k : 咔 [kā]
+        "\u5783", // l : 垃 [lā]
+        "\u5452", // m : 呒 [ḿ]
+        "\u5514", // n : 唔 [ń]
+        "\u5594", // o : 喔 [ō]
+        "\u5991", // p : 妑 [pā]
+        "\u4E03", // q : 七 [qī]
+        "\u513F", // r : 儿 [r]
+        "\u4EE8", // s : 仨 [sā]
+        "\u4ED6", // t : 他 [tā]
+        "\u7A75", // w : 穵 [wā]
+        "\u5915", // x : 夕 [xī]
+        "\u4E2B", // y : 丫 [yā]
+        "\u5E00", // z : 帀 [zā]
     };
 
     /**
@@ -1130,7 +1175,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 "\u3041", "\u30A1", "\u3105", "\uA000", "\uA4F8", "\uD800\uDE80", "\uD800\uDEA0", "\uD802\uDD20", "\uD800\uDF00", "\uD800\uDF30", "\uD801\uDC28", "\uD801\uDC50", "\uD801\uDC80", "\uD800\uDC00", "\uD802\uDC00", "\uD802\uDE60", "\uD802\uDF00", "\uD802\uDC40", 
                 "\uD802\uDF40", "\uD802\uDF60", "\uD800\uDF80", "\uD800\uDFA0", "\uD808\uDC00", "\uD80C\uDC00", "\u4E00" 
         });
-    
+
     /**
      * Only for testing...
      * @internal
