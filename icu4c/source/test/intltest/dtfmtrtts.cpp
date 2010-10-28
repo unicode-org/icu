@@ -436,9 +436,8 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             }
 
             if(dmatch > maxDmatch || smatch > maxSmatch) { // Special case for Japanese and Islamic (could have large negative years)
-              // Timebomb for Buddhist - see ticket #7744
               const char *type = fmt->getCalendar()->getType();
-              if(!strcmp(type,"japanese") || (!strcmp(type,"buddhist") && !isICUVersionAtLeast(ICU_452))) {
+              if(!strcmp(type,"japanese") || (!strcmp(type,"buddhist"))) {
                 maxSmatch = 4;
                 maxDmatch = 4;
               }
