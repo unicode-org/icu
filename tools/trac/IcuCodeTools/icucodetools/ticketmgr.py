@@ -73,7 +73,7 @@ class TicketManager(Component):
         ourYoungest = self.youngest_rev(db)
         theirYoungest = repos.get_youngest_rev()
         #log.info("TKT: check_sync %d/%d" % (ourYoungest,theirYoungest))
-        if(ourYoungest < theirYoungest):
+        if(ourYoungest <= theirYoungest):
             self.resync(log, db, repos, ourYoungest, theirYoungest)
     
     def environment_needs_upgrade(self, db):
@@ -112,12 +112,16 @@ class TicketManager(Component):
 #        self.ticket_match = re.compile(self.ticket_pattern.get())
 #        self.ticket_match = re.compile('.*')
         for i in range(ourYoungest, theirYoungest+1):
-            #log.info('syncing: %d', i)
+            #log.warning('syncing: %d [%d/%d+1]', i, theirYoungest)
             cset = repos.get_changeset(i)
             self.revision_changed(log, cset, i, cursor)
         cursor = db.cursor();
         cursor.execute("update system set value='%s' where name='icu_tktmgr_youngest'" % (theirYoungest))
         db.commit()
+        #log.warn("self.known_youngest was %d [%d/%d]" % (self.known_youngest,ourYoungest,theirYoungest)) 
+        # update known youngest.
+        self.known_youngest = theirYoungest
+        #log.warn("self.known_youngest now %d [%d/%d]" % (self.known_youngest,ourYoungest,theirYoungest)) 
         return
 
     # IRepositoryObserver methods
