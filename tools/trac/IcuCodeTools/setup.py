@@ -19,7 +19,7 @@ setup(
     package_data={
         'icucodetools': [
             'htdocs/css/*.css',
-            'templates/*.cs',
+            'templates/*.html',
 ##            'htdocs/img/*.png',
 #            'htdocs/js/*.js',
         ]
