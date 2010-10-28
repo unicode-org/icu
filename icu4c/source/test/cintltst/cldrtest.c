@@ -938,6 +938,7 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
 }
 
 static void VerifyTranslation(void) {
+    static const UVersionInfo icu47 = { 4, 7, 0, 0 };
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
@@ -1008,7 +1009,7 @@ static void VerifyTranslation(void) {
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
-            else if (uprv_strstr(currLoc, "ti_") != currLoc) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
+            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(icu47)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
               strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
