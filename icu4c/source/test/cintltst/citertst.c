@@ -1796,6 +1796,8 @@ static void TestCEValidity()
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
+	        /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+	           the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
             while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
               strength = src.parsedToken.strength;
               chOffset = src.parsedToken.charsOffset;
@@ -1812,7 +1814,7 @@ static void TestCEValidity()
                 codepoints[chLen] = 0;
                 checkCEValidity(coll, codepoints, chLen);
             }
-            free(rulesCopy);
+            free(src.source);
         }
 
         ucol_close(coll);
@@ -1984,6 +1986,8 @@ static void TestSortKeyValidity(void)
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
+	        /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+	           the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
             while ((current = ucol_tok_parseNextToken(&src, startOfRules,&parseError, &status)) != NULL) {
                 strength = src.parsedToken.strength;
                 chOffset = src.parsedToken.charsOffset;
@@ -2004,7 +2008,7 @@ static void TestSortKeyValidity(void)
                 }
                 checkSortKeyValidity(coll, codepoints, chLen);
             }
-            free(rulesCopy);
+            free(src.source);
         }
 
         ucol_close(coll);
