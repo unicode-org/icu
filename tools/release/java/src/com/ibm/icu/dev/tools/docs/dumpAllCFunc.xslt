@@ -50,12 +50,9 @@
 			<xsl:variable name="enum_node_name">
 				<xsl:choose>					
 					<xsl:when test="contains(name/text(), '@')">
-						(anonymous)
-					</xsl:when>
+						(anonymous)</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="name/text()" />
-					</xsl:otherwise>
-				</xsl:choose>
+						<xsl:value-of select="name/text()" /></xsl:otherwise></xsl:choose>
 			</xsl:variable>
 		
 			<!--  enum object  -->
@@ -68,7 +65,7 @@
 					<xsl:attribute name="status"><xsl:value-of select="$enum_status" /></xsl:attribute>
 					<xsl:attribute name="version"><xsl:value-of select="$enum_status" /></xsl:attribute>
 					<xsl:attribute name="prototype">enum <xsl:value-of
-						select="$enum_node_name" /></xsl:attribute>
+						select="$enum_node_name" /> {}</xsl:attribute>
 					<xsl:copy-of select="location/@file" />
 				</cppfunc>
 			</xsl:if>

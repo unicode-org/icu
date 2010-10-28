@@ -131,7 +131,7 @@
                     -->
                 </xsl:attribute>
                 <td class='file'> <xsl:value-of select="@file" /> </td>
-                <td class='proto'> <xsl:value-of select="@prototype" /> </td>
+                <td class='proto'> <xsl:value-of disable-output-escaping="yes" select="@prototype" /> </td>
                 <td>
                     <xsl:attribute name="class">
                         <xsl:if test ="@leftStatus = 'Stable'">
@@ -206,7 +206,7 @@
                     -->
                 </xsl:attribute>
                 <td class='file'> <xsl:value-of select="@file" /> </td>
-                <td class='proto'> <xsl:value-of select="@prototype" /> </td>
+                <td class='proto'> <xsl:value-of disable-output-escaping="yes" select="@prototype" /> </td>
                 <td>
                     <xsl:attribute name="class">
                         <xsl:if test ="@leftStatus = 'Stable'">

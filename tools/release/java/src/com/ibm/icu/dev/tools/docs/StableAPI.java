@@ -608,7 +608,7 @@ public class StableAPI {
 
         Element toXml(Document doc){
             Element  ele = doc.createElement("func");
-            ele.setAttribute("prototype", prototype);
+            ele.setAttribute("prototype", formatCode(prototype));
 //            ele.setAttribute("leftRefId", leftRefId);
             
             ele.setAttribute("leftStatus", leftStatus);
@@ -627,6 +627,7 @@ public class StableAPI {
             ele.setAttribute("file", f);
             return ele;
         }
+        
 
 		public int compareTo(JoinedFunction o) {
 			return comparableName.compareTo(o.comparableName);
@@ -871,5 +872,64 @@ public class StableAPI {
         Document doc = getDocumentBuilder().parse(inputSource);
         return doc;
     }
+    static boolean tried = false;
+    static Formatter aFormatter = null;
+    
+    public interface Formatter {
+    	public String formatCode(String s);
+    }
+    
 
+    public static String format_keywords[] = {
+    	"enum","#define","static"
+    };
+    
+    /**
+     * Attempt to use a pretty formatter
+     * @param prototype2
+     * @return
+     */
+	public static String formatCode(String prototype2) {
+		if(!tried) {
+			String theFormatter = StableAPI.class.getPackage().getName()+".CodeFormatter";
+			try {
+				@SuppressWarnings("unchecked")
+				Class<Formatter> formatClass = (Class<Formatter>) Class.forName(theFormatter);
+				aFormatter = (Formatter) formatClass.newInstance();
+			} catch (Exception e) {
+				System.err.println("Note: Couldn't load " + theFormatter);
+				aFormatter = new Formatter() {
+
+					public String formatCode(String s) {
+						String str = HTMLSafe(s.trim());
+						for(String keyword : format_keywords) {
+							if(str.startsWith(keyword)) {
+								str = str.replaceFirst(keyword, "<tt>"+keyword+"</tt>");
+							}
+						}
+						return str;
+					}
+					
+				};
+			}
+			tried = true;
+		}
+		if(aFormatter != null) {
+			return aFormatter.formatCode(prototype2);
+		} else {
+			return HTMLSafe(prototype2);
+		}
+	}
+
+    public static String HTMLSafe(String s) {
+        if(s==null) return null;
+        
+        return 
+            s.replaceAll("&","&amp;")
+             .replaceAll("<","&lt;")
+             .replaceAll(">","&gt;")
+             .replaceAll("\"","&quot;");
+    }
+    
+	
 }

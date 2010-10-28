@@ -64,6 +64,7 @@
                 <pathelement location="${build.dir}"/>
                 <pathelement path="${java.class.path}/"/>
                 <pathelement location="${lib.dir}/xalan.jar"/>
+		<fileset dir="${lib.dir}"/>
                 <pathelement location="${lib.dir}/xercesImpl.jar"/>
                 <pathelement path="."/>
             </classpath>
