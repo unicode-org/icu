@@ -7,8 +7,10 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
+import java.lang.ref.SoftReference;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -206,23 +208,25 @@ public class Currency extends MeasureUnit implements Serializable {
         if (theISOCode == null) {
             throw new NullPointerException("The input currency code is null.");
         }
-        boolean is3alpha = true;
-        if (theISOCode.length() != 3) {
-            is3alpha = false;
-        } else {
-            for (int i = 0; i < 3; i++) {
-                char ch = theISOCode.charAt(i);
-                if (ch < 'A' || (ch > 'Z' && ch < 'a') || ch > 'z') {
-                    is3alpha = false;
-                    break;
-                }
-            }
-        }
-        if (!is3alpha) {
+        if (!isAlpha3Code(theISOCode)) {
             throw new IllegalArgumentException(
                     "The input currency code is not 3-letter alphabetic code.");
         }
         return new Currency(theISOCode.toUpperCase(Locale.US));
+    }
+
+    private static boolean isAlpha3Code(String code) {
+        if (code.length() != 3) {
+            return false;
+        } else {
+            for (int i = 0; i < 3; i++) {
+                char ch = code.charAt(i);
+                if (ch < 'A' || (ch > 'Z' && ch < 'a') || ch > 'z') {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -324,8 +328,7 @@ public class Currency extends MeasureUnit implements Serializable {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         if (!commonlyUsed) {
             // Behavior change from 4.3.3, no longer sort the currencies
-            List<String> result = info.currencies(null);
-            return result.toArray(new String[result.size()]);
+            return getAvailableCurrencyCodes().toArray(new String[0]);
         }
         
         // Don't resolve region if the requested locale is 'und', it will resolve to US
@@ -739,6 +742,66 @@ public class Currency extends MeasureUnit implements Serializable {
     private static final int[] POW10 = { 
         1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 
     };
+
+
+    private static SoftReference<List<String>> ALL_CODES;
+    /*
+     * Returns an unmodifiable String list including all known currency codes
+     */
+    private static synchronized List<String> getAvailableCurrencyCodes() {
+        List<String> all = (ALL_CODES == null) ? null : ALL_CODES.get();
+        if (all == null) {
+            CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+            all = Collections.unmodifiableList(info.currencies(null));
+            ALL_CODES = new SoftReference<List<String>>(all);
+        }
+        return all;
+    }
+
+    /**
+     * Queries if the given ISO 4217 3-letter code is available on the specified date range.
+     * <p>
+     * Note: For checking availability of a currency on a specific date, specify the date on both <code>from</code> and
+     * <code>to</code>. When both <code>from</code> and <code>to</code> are null, this method checks if the specified
+     * currency is available all time.
+     * 
+     * @param code
+     *            The ISO 4217 3-letter code.
+     * @param from
+     *            The lower bound of the date range, inclusive. When <code>from</code> is null, check the availability
+     *            of the currency any date before <code>to</code>
+     * @param to
+     *            The upper bound of the date range, inclusive. When <code>to</code> is null, check the availability of
+     *            the currency any date after <code>from</code>
+     * @return true if the given ISO 4217 3-letter code is supported on the specified date range.
+     * @throws IllegalArgumentException when <code>to</code> is before <code>from</code>.
+     * 
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static boolean isAvailable(String code, Date from, Date to) {
+        if (!isAlpha3Code(code)) {
+            return false;
+        }
+
+        if (from != null && to != null && from.after(to)) {
+            throw new IllegalArgumentException("To is before from");
+        }
+
+        code = code.toUpperCase(Locale.ENGLISH);
+        boolean isKnown = getAvailableCurrencyCodes().contains(code);
+        if (isKnown == false) {
+            return false;
+        } else if (from == null && to == null) {
+            return true;
+        }
+
+        // When asActiveOnly is true, check if the currency is currently
+        // active or not.
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        List<String> allActive = info.currencies(CurrencyFilter.onRange(from, to));
+        return allActive.contains(code);
+    }
 
     // -------- BEGIN ULocale boilerplate --------
 
