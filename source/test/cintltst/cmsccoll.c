@@ -566,6 +566,8 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
+	/* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+	   the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
     while ((current = ucol_tok_parseNextToken(&src, startOfRules,&parseError, status)) != NULL) {
       strength = src.parsedToken.strength;
       chOffset = src.parsedToken.charsOffset;
@@ -582,17 +584,17 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       if(top_) { /* if reset is on top, the sequence is broken. We should have an empty string */
         second[0] = 0;
       } else {
-        u_strncpy(second,rulesCopy+chOffset, chLen);
+        u_strncpy(second,src.source+chOffset, chLen);
         second[chLen] = 0;
 
         if(exLen > 0 && firstEx == 0) {
-          u_strncat(first, rulesCopy+exOffset, exLen);
+          u_strncat(first, src.source+exOffset, exLen);
           first[firstLen+exLen] = 0;
         }
 
         if(lastReset == TRUE && prefixLen != 0) {
           u_strncpy(first+prefixLen, first, firstLen);
-          u_strncpy(first, rulesCopy+prefixOffset, prefixLen);
+          u_strncpy(first, src.source+prefixOffset, prefixLen);
           first[firstLen+prefixLen] = 0;
           firstLen = firstLen+prefixLen;
         }
@@ -648,7 +650,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
         u_strcpy(first, second);
       }
     }
-    free(rulesCopy);
+    free(src.source);
   }
 }
 
@@ -1180,6 +1182,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
         src.extraCurrent = src.end;
         src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
+	    /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+	       the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
         while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
             strength = src.parsedToken.strength;
             chOffset = src.parsedToken.charsOffset;
@@ -1194,10 +1198,10 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
             varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
             top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
 
-            uprv_init_collIterate(coll, rulesCopy+chOffset, chLen, c, status);
+            uprv_init_collIterate(coll, src.source+chOffset, chLen, c, status);
 
             currCE = ucol_getNextCE(coll, c, status);
-            if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(rulesCopy+chOffset))) {
+            if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(src.source+chOffset))) {
                 log_verbose("Thai prevowel detected. Will pick next CE\n");
                 currCE = ucol_getNextCE(coll, c, status);
             }
@@ -1232,8 +1236,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
                         result = ucol_inv_getNextCE(&src, baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
                     }
                     if(result < 0) {
-                        if(ucol_isTailored(coll, *(rulesCopy+oldOffset), status)) {
-                            log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(rulesCopy+oldOffset));
+                        if(ucol_isTailored(coll, *(src.source+oldOffset), status)) {
+                            log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(src.source+oldOffset));
                             return;
                         } else {
                             log_err("%s: couldn't find the CE\n", colLoc);
@@ -1280,7 +1284,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
             lastCE = currCE & 0xFFFFFF3F;
             lastContCE = currContCE & 0xFFFFFFBF;
         }
-        free(rulesCopy);
+        free(src.source);
     }
     ucol_close(UCA);
     uprv_delete_collIterate(c);
@@ -2992,6 +2996,8 @@ static void TestVariableTopSetting(void) {
       src.extraCurrent = src.end;
       src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
+	  /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+	   the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
       while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
         strength = src.parsedToken.strength;
         chOffset = src.parsedToken.charsOffset;
@@ -3004,12 +3010,12 @@ static void TestVariableTopSetting(void) {
 
         startOfRules = FALSE;
         {
-          log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);
+          log_verbose("%04X %d ", *(src.source+chOffset), chLen);
         }
         if(strength == UCOL_PRIMARY) {
           status = U_ZERO_ERROR;
           varTopOriginal = ucol_getVariableTop(coll, &status);
-          varTop1 = ucol_setVariableTop(coll, rulesCopy+oldChOffset, oldChLen, &status);
+          varTop1 = ucol_setVariableTop(coll, src.source+oldChOffset, oldChLen, &status);
           if(U_FAILURE(status)) {
             char buffer[256];
             char *buf = buffer;
@@ -3019,12 +3025,12 @@ static void TestVariableTopSetting(void) {
             /* before we start screaming, let's see if there is a problem with the rules */
             UErrorCode collIterateStatus = U_ZERO_ERROR;
             collIterate *s = uprv_new_collIterate(&collIterateStatus);
-            uprv_init_collIterate(coll, rulesCopy+oldChOffset, oldChLen, s, &collIterateStatus);
+            uprv_init_collIterate(coll, src.source+oldChOffset, oldChLen, s, &collIterateStatus);
 
             CE = ucol_getNextCE(coll, s, &status);
 
             for(i = 0; i < oldChLen; i++) {
-              j = sprintf(buf, "%04X ", *(rulesCopy+oldChOffset+i));
+              j = sprintf(buf, "%04X ", *(src.source+oldChOffset+i));
               buf += j;
             }
             if(status == U_PRIMARY_TOO_LONG_ERROR) {
@@ -3048,25 +3054,25 @@ static void TestVariableTopSetting(void) {
 
           if((varTop1 & 0xFFFF0000) > 0 && oldExLen == 0) {
 
-            u_strncpy(first, rulesCopy+oldChOffset, oldChLen);
-            u_strncpy(first+oldChLen, rulesCopy+chOffset, chLen);
-            u_strncpy(first+oldChLen+chLen, rulesCopy+oldChOffset, oldChLen);
+            u_strncpy(first, src.source+oldChOffset, oldChLen);
+            u_strncpy(first+oldChLen, src.source+chOffset, chLen);
+            u_strncpy(first+oldChLen+chLen, src.source+oldChOffset, oldChLen);
             first[2*oldChLen+chLen] = 0;
 
             if(oldExLen == 0) {
-              u_strncpy(second, rulesCopy+chOffset, chLen);
+              u_strncpy(second, src.source+chOffset, chLen);
               second[chLen] = 0;
             } else { /* This is skipped momentarily, but should work once UCARules are fully UCA conformant */
-              u_strncpy(second, rulesCopy+oldExOffset, oldExLen);
-              u_strncpy(second+oldChLen, rulesCopy+chOffset, chLen);
-              u_strncpy(second+oldChLen+chLen, rulesCopy+oldExOffset, oldExLen);
+              u_strncpy(second, src.source+oldExOffset, oldExLen);
+              u_strncpy(second+oldChLen, src.source+chOffset, chLen);
+              u_strncpy(second+oldChLen+chLen, src.source+oldExOffset, oldExLen);
               second[2*oldExLen+chLen] = 0;
             }
             result = ucol_strcoll(coll, first, -1, second, -1);
             if(result == UCOL_EQUAL) {
               doTest(coll, first, second, UCOL_EQUAL);
             } else {
-              log_verbose("Suspicious strcoll result for %04X and %04X\n", *(rulesCopy+oldChOffset), *(rulesCopy+chOffset));
+              log_verbose("Suspicious strcoll result for %04X and %04X\n", *(src.source+oldChOffset), *(src.source+chOffset));
             }
           }
         }
@@ -3152,7 +3158,7 @@ static void TestVariableTopSetting(void) {
   if(status != U_INTERNAL_PROGRAM_ERROR) {
     log_err("Bad reaction to passed error!\n");
   }
-  free(rulesCopy);
+  free(src.source);
   ucol_close(coll);
   } else {
     log_data_err("Couldn't open UCA collator\n");
