@@ -92,13 +92,13 @@ class TicketManager(Component):
         else:
             self.log.info('Do not know how to upgrade icutraxctn_ticketmgr tables to %d',
                           self.icu_tktmgr())
+	cursor.close()
 
     def resync(self, log, db, repos, ourYoungest, theirYoungest):
         self.log.info('resync: ourYoungest=%d theirYoungest=%d' % (ourYoungest, theirYoungest))
         if (ourYoungest < 0):
             # start at rev 1
             ourYoungest = 1
-        cursor = db.cursor();
         
         #self.ticket_pattern = self.env.config.get('icucodetools', 'ticket_pattern', '^cldrbug (\d+):')
 
@@ -114,7 +114,8 @@ class TicketManager(Component):
         for i in range(ourYoungest, theirYoungest+1):
             #log.warning('syncing: %d [%d/%d+1]', i, theirYoungest)
             cset = repos.get_changeset(i)
-            self.revision_changed(log, cset, i, cursor)
+            self.revision_changed(log, cset, i, db.cursor())
+        db.commit()
         cursor = db.cursor();
         cursor.execute("update system set value='%s' where name='icu_tktmgr_youngest'" % (theirYoungest))
         db.commit()
@@ -139,12 +140,13 @@ class TicketManager(Component):
                                  (next_youngest, tickname, e))
                 return
             try:
-                cursor.execute("INSERT INTO rev2ticket "
+		#log.warning('r%s=#%s' % (str(next_youngest), tickname))
+                cursor.execute("INSERT OR IGNORE INTO rev2ticket "
                                " (rev,ticket) "
-                               "VALUES (%s,%s)",
+                               "VALUES (%s,%s) ",
                                (str(next_youngest), tickname))
             except Exception, e: # *another* 1.1. resync attempt won 
-                log.warning('rev2ticket %s already cached: %s' %
+                log.warning('rev2ticket %s could not cache: %s' %
                                  (next_youngest, e))
         else:
                 log.warning('Revision %s had unmatched message %s' %
@@ -164,4 +166,5 @@ class TicketManager(Component):
         for rev, in cursor:
             rev = int(rev)
             revs.append(rev)
+	cursor.close()
         return revs
