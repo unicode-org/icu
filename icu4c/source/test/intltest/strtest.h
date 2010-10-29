@@ -31,12 +31,17 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
 
 private:
-    void TestEndian(void);
-    void TestSizeofTypes(void);
-    void TestCharsetFamily(void);
+    void TestEndian();
+    void TestSizeofTypes();
+    void TestCharsetFamily();
+    void Test_U_STRING();
+    void Test_UNICODE_STRING();
+    void Test_UNICODE_STRING_SIMPLE();
+    void Test_UTF8_COUNT_TRAIL_BYTES();
     void TestStdNamespaceQualifier();
     void TestUsingStdNamespace();
     void TestStringPiece();
+    void TestStringPieceComparisons();
     void TestByteSink();
     void TestCheckedArrayByteSink();
     void TestStringByteSink();

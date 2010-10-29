@@ -91,143 +91,86 @@ void StringTest::TestCharsetFamily(void) {
 
 U_STRING_DECL(ustringVar, "aZ0 -", 5);
 
+void
+StringTest::Test_U_STRING() {
+    U_STRING_INIT(ustringVar, "aZ0 -", 5);
+    if( sizeof(ustringVar)/sizeof(*ustringVar)!=6 ||
+        ustringVar[0]!=0x61 ||
+        ustringVar[1]!=0x5a ||
+        ustringVar[2]!=0x30 ||
+        ustringVar[3]!=0x20 ||
+        ustringVar[4]!=0x2d ||
+        ustringVar[5]!=0
+    ) {
+        errln("Test_U_STRING: U_STRING_DECL with U_STRING_INIT does not work right! "
+              "See putil.h and utypes.h with platform.h.");
+    }
+}
+
+void
+StringTest::Test_UNICODE_STRING() {
+    UnicodeString ustringVar=UNICODE_STRING("aZ0 -", 5);
+    if( ustringVar.length()!=5 ||
+        ustringVar[0]!=0x61 ||
+        ustringVar[1]!=0x5a ||
+        ustringVar[2]!=0x30 ||
+        ustringVar[3]!=0x20 ||
+        ustringVar[4]!=0x2d
+    ) {
+        errln("Test_UNICODE_STRING: UNICODE_STRING does not work right! "
+              "See unistr.h and utypes.h with platform.h.");
+    }
+}
+
+void
+StringTest::Test_UNICODE_STRING_SIMPLE() {
+    UnicodeString ustringVar=UNICODE_STRING_SIMPLE("aZ0 -");
+    if( ustringVar.length()!=5 ||
+        ustringVar[0]!=0x61 ||
+        ustringVar[1]!=0x5a ||
+        ustringVar[2]!=0x30 ||
+        ustringVar[3]!=0x20 ||
+        ustringVar[4]!=0x2d
+    ) {
+        errln("Test_UNICODE_STRING_SIMPLE: UNICODE_STRING_SIMPLE does not work right! "
+              "See unistr.h and utypes.h with platform.h.");
+    }
+}
+
+void
+StringTest::Test_UTF8_COUNT_TRAIL_BYTES() {
+    if(UTF8_COUNT_TRAIL_BYTES(0x7F) != 0
+        || UTF8_COUNT_TRAIL_BYTES(0xC0) != 1
+        || UTF8_COUNT_TRAIL_BYTES(0xE0) != 2
+        || UTF8_COUNT_TRAIL_BYTES(0xF0) != 3)
+    {
+        errln("Test_UTF8_COUNT_TRAIL_BYTES: UTF8_COUNT_TRAIL_BYTES does not work right! "
+              "See utf8.h.");
+    }
+}
+
 void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if(exec) {
         logln("TestSuite Character and String Test: ");
     }
-    switch(index) {
-    case 0:
-        name="TestEndian";
-        if(exec) {
-            TestEndian();
-        }
-        break;
-    case 1:
-        name="TestSizeofTypes";
-        if(exec) {
-            TestSizeofTypes();
-        }
-        break;
-    case 2:
-        name="TestCharsetFamily";
-        if(exec) {
-            TestCharsetFamily();
-        }
-        break;
-    case 3:
-        name="Test_U_STRING";
-        if(exec) {
-            U_STRING_INIT(ustringVar, "aZ0 -", 5);
-            if( sizeof(ustringVar)/sizeof(*ustringVar)!=6 ||
-                ustringVar[0]!=0x61 ||
-                ustringVar[1]!=0x5a ||
-                ustringVar[2]!=0x30 ||
-                ustringVar[3]!=0x20 ||
-                ustringVar[4]!=0x2d ||
-                ustringVar[5]!=0
-            ) {
-                errln("Test_U_STRING: U_STRING_DECL with U_STRING_INIT does not work right! "
-                      "See putil.h and utypes.h with platform.h.");
-            }
-        }
-        break;
-    case 4:
-        name="Test_UNICODE_STRING";
-        if(exec) {
-            UnicodeString ustringVar=UNICODE_STRING("aZ0 -", 5);
-            if( ustringVar.length()!=5 ||
-                ustringVar[0]!=0x61 ||
-                ustringVar[1]!=0x5a ||
-                ustringVar[2]!=0x30 ||
-                ustringVar[3]!=0x20 ||
-                ustringVar[4]!=0x2d
-            ) {
-                errln("Test_UNICODE_STRING: UNICODE_STRING does not work right! "
-                      "See unistr.h and utypes.h with platform.h.");
-            }
-        }
-        break;
-    case 5:
-        name="Test_UNICODE_STRING_SIMPLE";
-        if(exec) {
-            UnicodeString ustringVar=UNICODE_STRING_SIMPLE("aZ0 -");
-            if( ustringVar.length()!=5 ||
-                ustringVar[0]!=0x61 ||
-                ustringVar[1]!=0x5a ||
-                ustringVar[2]!=0x30 ||
-                ustringVar[3]!=0x20 ||
-                ustringVar[4]!=0x2d
-            ) {
-                errln("Test_UNICODE_STRING_SIMPLE: UNICODE_STRING_SIMPLE does not work right! "
-                      "See unistr.h and utypes.h with platform.h.");
-            }
-        }
-        break;
-    case 6:
-        name="Test_UTF8_COUNT_TRAIL_BYTES";
-        if(exec) {
-            if(UTF8_COUNT_TRAIL_BYTES(0x7F) != 0
-                || UTF8_COUNT_TRAIL_BYTES(0xC0) != 1
-                || UTF8_COUNT_TRAIL_BYTES(0xE0) != 2
-                || UTF8_COUNT_TRAIL_BYTES(0xF0) != 3)
-            {
-                errln("Test_UTF8_COUNT_TRAIL_BYTES: UTF8_COUNT_TRAIL_BYTES does not work right! "
-                      "See utf8.h.");
-            }
-        }
-        break;
-    case 7:
-        name="TestSTLCompatibility";
-        if(exec) {
-            TestSTLCompatibility();
-        }
-        break;
-    case 8:
-        name="TestStdNamespaceQualifier";
-        if(exec) {
-            TestStdNamespaceQualifier();
-        }
-        break;
-    case 9:
-        name="TestUsingStdNamespace";
-        if(exec) {
-            TestUsingStdNamespace();
-        }
-        break;
-    case 10:
-        name="TestStringPiece";
-        if(exec) {
-            TestStringPiece();
-        }
-        break;
-    case 11:
-        name="TestByteSink";
-        if(exec) {
-            TestByteSink();
-        }
-        break;
-    case 12:
-        name="TestCheckedArrayByteSink";
-        if(exec) {
-            TestCheckedArrayByteSink();
-        }
-        break;
-    case 13:
-        name="TestStringByteSink";
-        if(exec) {
-            TestStringByteSink();
-        }
-        break;
-    case 14:
-        name="TestCharString";
-        if(exec) {
-            TestCharString();
-        }
-        break;
-    default:
-        name="";
-        break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestEndian);
+    TESTCASE_AUTO(TestSizeofTypes);
+    TESTCASE_AUTO(TestCharsetFamily);
+    TESTCASE_AUTO(Test_U_STRING);
+    TESTCASE_AUTO(Test_UNICODE_STRING);
+    TESTCASE_AUTO(Test_UNICODE_STRING_SIMPLE);
+    TESTCASE_AUTO(Test_UTF8_COUNT_TRAIL_BYTES);
+    TESTCASE_AUTO(TestSTLCompatibility);
+    TESTCASE_AUTO(TestStdNamespaceQualifier);
+    TESTCASE_AUTO(TestUsingStdNamespace);
+    TESTCASE_AUTO(TestStringPiece);
+    TESTCASE_AUTO(TestStringPieceComparisons);
+    TESTCASE_AUTO(TestByteSink);
+    TESTCASE_AUTO(TestCheckedArrayByteSink);
+    TESTCASE_AUTO(TestStringByteSink);
+    TESTCASE_AUTO(TestCharString);
+    TESTCASE_AUTO_END;
 }
 
 // Syntax check for the correct namespace qualifier for the standard string class.
@@ -394,6 +337,31 @@ StringTest::TestStringPiece() {
     sp.remove_suffix(5);
     if(!sp.empty() || sp.length()!=0 || sp.size()!=0) {
         errln("abcd.remove_suffix(5) failed");
+    }
+}
+
+void
+StringTest::TestStringPieceComparisons() {
+    StringPiece empty;
+    StringPiece null(NULL);
+    StringPiece abc("abc");
+    StringPiece abcd("abcdefg", 4);
+    StringPiece abx("abx");
+    if(empty!=null) {
+        errln("empty!=null");
+    }
+    if(empty==abc) {
+        errln("empty==abc");
+    }
+    if(abc==abcd) {
+        errln("abc==abcd");
+    }
+    abcd.remove_suffix(1);
+    if(abc!=abcd) {
+        errln("abc!=abcd.remove_suffix(1)");
+    }
+    if(abc==abx) {
+        errln("abc==abx");
     }
 }
 
