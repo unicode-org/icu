@@ -1,58 +1,60 @@
-# ***************************************************************************
-# *
-# *   Copyright (C) 2005, International Business Machines
-# *   Corporation and others.  All Rights Reserved.
-# *
-# ***************************************************************************
+#! /bin/bash
+#
+#  Copyright (C) 2010, International Business Machines Corporation and others.  All Rights Reserved.                  
+#
+# Commands for regenerating ICU4C locale data (.txt files) from CLDR.
+#
+# The process requires local copies of
+#    - CLDR (the source of the data, and some Java tools)
+#    - ICU4J  (used by the conversion tools)
+#    - ICU4C  (the destination for the new data)
+#
+# The versions of each of these must match.  Included with the release notes for ICU
+# is the version number and/or a CLDR svn tag name for the revision of CLDR
+# that was the source of the data for that release of ICU.
+#
+# Note: Some versions of the OpenJDK will not build the CLDR java utilities.
+#   If you see compilation errors complaining about type incompatibilities with
+#   functions on generic classes, try switching to the Sun JDK.
+#
+# Note: Enough things can fail in this process that it can be convenient to
+#   run the commands separately from an interactive shell.  They should all
+#   copy and paste without problems.
+#
+# Define the locations of icu4c, icu4j and cldr sources
+# These three defines should be changed to match the locations on your machine.
 
-Steps for building ICU data from CLDR:
+export ICU4C_DIR=$HOME/icu/icu/trunk
+export ICU4J_DIR=$HOME/icu/icu4j/trunk
+export CLDR_DIR=$HOME/cldr/trunk
 
-Users of CLDR:
-1. Download cldrtools.zip from the CLDR website (http://www.unicode.org/cldr/repository_access.html) and unzip in a directory 
-2. Download cldr.zip from the CLDR website (same as above) and unzip in cldr directory
-3. Check out ICU from ICU CVS repository  http://www.ibm.com/software/globalization/icu/repository.jsp
-4. Set the required environment variables
-        export JAVA_HOME=<path>/java
-        export ANT_OPTS="-DCLDR_DTD_CACHE=<path>/temp/cldrdtd"
-        export CLDR_DIR=<path>/cldr   
-        export CLDR_JAR=<path>/cldr.jar
-        export ICU4C_DIR=<path>/icu
-        export ICU4J_JAR=<path>/icu4j.jar 
-        export UTILITIES_JAR=<path>/utilities.jar
-5. Change directory to <path>/icu/source/data/
-6. Enter command
-   <path>/ant/bin/ant clean all
-   
-Developers of CLDR:
-1. Check out CLDR from the CVS repository http://www.unicode.org/cldr/repository_access.html and build the tools.
-2. Check out ICU from ICU CVS repository http://www.ibm.com/software/globalization/icu/repository.jsp and build it.
-3. Check out ICU4J from ICU CVS repository http://www.ibm.com/software/globalization/icu/repository.jsp and build it.
-4. Set the required environment variables
-        export JAVA_HOME=<path>/java
-        export ANT_OPTS="-DCLDR_DTD_CACHE=<path>/temp/cldrdtd"
-        export CLDR_DIR=<path>/cldr   
-        export CLDR_CLASSES=<path>/cldr/tools/java/classes
-        export ICU4C_DIR=<path>/icu
-        export ICU4J_CLASSES=<path>/icu4j/classes
-5. Change directory to <path>/icu/source/data/
-6. Enter command
-   <path>/ant/bin/ant clean all
+# Build ICU4J, including the cldr Utilities.
 
-Debugging in Eclipse:
-1. From Eclipse select Run > Run from toolbar
-2. Click New button
-3. Go to Main tab and enter 
-    Name: Ant_Launcher
-    Project: cldr
-    Main class: org.apache.tools.ant.launch.Launcher
-4. Go to Arguments tab and enter
-    Program Arguments: -buildfile c:\work\cldr\tools\java\build.xml  icu4c
-    VM Arguments: -classpath C:\work\apache-ant-1.6.1\lib\ant-launcher.jar 
-                  -Dant.home=C:\work\apache-ant-1.6.1 
-                  -DCLDR_DTD_CACHE=/work/temp/cldrdtd/
-5. Go to Environment tag and create new variables
-        CLDR_DIR=<path>/cldr   
-        CLDR_CLASSES=<path>/cldr/tools/java/classes
-        ICU4C_DIR=/work/icu
-        ICU4J_CLASSES=<path>/icu4j/classes
-6. Set a break point in CLDRBuild or the tool class that needs to be debugged.
+cd $ICU4J_DIR
+ant jar
+ant cldrUtil
+export ICU4J_JAR=$ICU4J_DIR/icu4j.jar
+export ICU4J_CLASSES=$ICU4J_DIR/out/cldr_util/bin
+
+# Build the Java utilities included with the CLDR project
+
+cd $CLDR_DIR/tools/java
+ant all
+export CLDR_CLASSES=$CLDR_DIR/tools/java/classes
+
+# Set up a temporary director for caching the CLDR xml dtd.
+#   This speeds up the data generation.
+
+mkdir /tmp/cldrdtd
+export ANT_OPTS="-DCLDR_DTD_CACHE=/tmp/cldrdtd"
+
+# Build the ICU4C .txt data files.
+# The new data will replace whatever was already present in the ICU4C sources
+# This process will take several minutes.
+
+cd $ICU4C_DIR/source/data
+ant clean
+ant all
+
+# After rebuilding .txt files, ICU4C should be rebuilt to regenerate
+# the new res files.  
