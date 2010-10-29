@@ -214,7 +214,7 @@ public:
     * @param status A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 4.6h
+    * @draft ICU 4.6
     */
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         UParseError          &pe,
@@ -274,7 +274,7 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 4.6h
+    * @draft ICU 4.6
     */
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         uint32_t             flags,
@@ -331,7 +331,7 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 4.6h
+    * @draft ICU 4.6
     */
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         uint32_t             flags,
@@ -368,7 +368,7 @@ public:
         
    /**
     * Flag to disambiguate RegexPattern::matcher signature
-    * @draft ICU 4.6h
+    * @draft ICU 4.6
     */
     enum PatternIsUTextFlag { PATTERN_IS_UTEXT };
 
@@ -389,7 +389,7 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return         A RegexMatcher object for this pattern and input.
     *
-    * @draft ICU 4.6h
+    * @draft ICU 4.6
     */
     virtual RegexMatcher *matcher(UText *input,
         PatternIsUTextFlag	flag, 
@@ -460,7 +460,7 @@ public:
     * @param status A reference to a UErrorCode to receive any errors.
     * @return True if the regular expression exactly matches the full input string.
     *
-    * @draft ICU 4.6h
+    * @draft ICU 4.6
     */
     static UBool U_EXPORT2 matches(UText *regex,
         UText           *input,
@@ -546,7 +546,7 @@ public:
      * @param status  A reference to a UErrorCode to receive any errors.
      * @return        The number of fields into which the input string was split.
      *
-     * @draft ICU 4.6h
+     * @draft ICU 4.6
      */
     virtual int32_t  split(UText *input,
         UText            *dest[],
@@ -677,7 +677,7 @@ public:
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
       *
-      *  @draft ICU 4.6h
+      *  @draft ICU 4.6
       */
     RegexMatcher(UText *regexp, uint32_t flags, UErrorCode &status);
     
@@ -724,7 +724,7 @@ public:
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
       *
-      *  @draft ICU 4.6h
+      *  @draft ICU 4.6
       */
     RegexMatcher(UText *regexp, UText *input,
         uint32_t flags, UErrorCode &status);
