@@ -1006,6 +1006,16 @@ UnicodeStringTest::TestReverse()
     if(test.char32At(0)!=0x1ed0 || test.char32At(1)!=0xc4 || test.char32At(2)!=0x1d15f || test.char32At(4)!=0x2f999) {
         errln("reverse() failed with supplementary characters");
     }
+
+    // Test case for ticket #8091:
+    // UnicodeString::reverse() failed to see a lead surrogate in the middle of
+    // an odd-length string that contains no other lead surrogates.
+    test=UNICODE_STRING_SIMPLE("ab\\U0001F4A9e").unescape();
+    UnicodeString expected=UNICODE_STRING_SIMPLE("e\\U0001F4A9ba").unescape();
+    test.reverse();
+    if(test!=expected) {
+        errln("reverse() failed with only lead surrogate in the middle");
+    }
 }
 
 void
