@@ -158,7 +158,7 @@ uregex_open( const  UChar          *pattern,
   *                       information is not wanted, pass NULL for this parameter.
   * @param status         Receives error detected by this function.
   *
-  * @draft ICU 4.4
+  * @draft ICU 4.6
   */
 U_DRAFT URegularExpression *  U_EXPORT2
 uregex_openUText(UText          *pattern,
@@ -280,7 +280,7 @@ uregex_pattern(const URegularExpression *regexp,
  * @return the pattern text.  The storage for the text is owned by the regular expression
  *                   object, and must not be altered or deleted.
  *
- * @draft ICU 4.4
+ * @draft ICU 4.6
  */
 U_DRAFT UText * U_EXPORT2 
 uregex_patternUText(const URegularExpression *regexp,
@@ -341,7 +341,7 @@ uregex_setText(URegularExpression *regexp,
   * @param text       The subject text string.
   * @param status     Receives errors detected by this function.
   *
-  * @draft ICU 4.4
+  * @draft ICU 4.6
   */
 U_DRAFT void U_EXPORT2 
 uregex_setUText(URegularExpression *regexp,
@@ -388,7 +388,7 @@ uregex_getText(URegularExpression *regexp,
   * @return            The subject text currently associated with this regular expression.
   *                    If a pre-allocated UText was provided, it will always be used and returned.
   *
-  * @draft ICU 4.4
+  * @draft ICU 4.6
   */
 U_DRAFT UText * U_EXPORT2 
 uregex_getUText(URegularExpression *regexp,
@@ -932,7 +932,7 @@ uregex_replaceAll(URegularExpression    *regexp,
   *    @return                 A UText containing the results of the find and replace.
   *                             If a pre-allocated UText was provided, it will always be used and returned.
   *
-  *    @draft ICU 4.4
+  *    @draft ICU 4.6
   */
 U_DRAFT UText * U_EXPORT2 
 uregex_replaceAllUText(URegularExpression *regexp,
@@ -991,7 +991,7 @@ uregex_replaceFirst(URegularExpression  *regexp,
   *    @return                 A UText containing the results of the find and replace.
   *                             If a pre-allocated UText was provided, it will always be used and returned.
   *
-  *    @draft ICU 4.4
+  *    @draft ICU 4.6
   */
 U_DRAFT UText * U_EXPORT2 
 uregex_replaceFirstUText(URegularExpression *regexp,
@@ -1075,7 +1075,7 @@ uregex_appendReplacement(URegularExpression    *regexp,
   *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
   *   @param   status      A reference to a UErrorCode to receive any errors. 
   *
-  *   @draft ICU 4.4
+  *   @draft ICU 4.6
   */
 U_DRAFT void U_EXPORT2 
 uregex_appendReplacementUText(URegularExpression    *regexp,
@@ -1225,7 +1225,7 @@ uregex_split(   URegularExpression      *regexp,
    * @param status  A reference to a UErrorCode to receive any errors.
    * @return        The number of fields into which the input string was split.
    *
-   * @draft ICU 4.4
+   * @draft ICU 4.6
    */
 U_DRAFT int32_t U_EXPORT2 
 uregex_splitUText(URegularExpression    *regexp,
