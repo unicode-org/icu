@@ -1010,23 +1010,18 @@ overwrite any corresponding resource files already in that directory.
 <h4><a name="resourcesICU4C">Building ICU4J Resources from ICU4C</a></h4>
 ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_root</I>/source/data for the procedures.
 <h5> Generating Data from CLDR </h5>
-<I> Note: This procedure assumes that all 3 sources are in sibling directories</I>
+<I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout CLDR.  $cldr_root in the following steps is the root directory where
-    the CLDR source files checked out.</li>
-    <li>Update <I>$cldr_root</I>/common to 'release-1-8-0' tag</li>
-    <li>Update <I>$cldr_root</I>/tools to 'release-1-8-0' tag</li>
-    <li>Checkout ICU4C with tag 'release-4-4'</li>
-    <li>Checkout ICU4J with tag 'release-4-4'</li>
-    <li>Build ICU4J</li>
-    <li>Build ICU4C</li>
-    <li>Change to <I>$cldr_root</I>/tools/java directory</li>
-    <li>Build CLDR using ant after pointing ICU4J_CLASSES env var to the newly build ICU4J</li>
+    <li>Checkout or download CLDR version 1.9</li>
+    <li>Checkout ICU4C with tag 'release-4-6'</li>
+    <li>Checkout ICU4J with tag 'release-4-6'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
-    <li>Follow the instructions in the cldr-icu-readme.txt</li>
-    <li>Build ICU4C data from CLDR</li>
+    <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
+    <li>Rebuild ICU4C with the newly generated data.</li>
+    <li>Run ICU4C tests to verify that the new data is good.</li>
     <li>Build ICU4J data from ICU4C data by following the procedures in <I>$icu4c_root</I>/source/data/icu4j-readme.txt</li>
     <li>cd to <I>$icu4j_root</I> dir</li>
+
     <li>Build and test icu4j</li>
 </ol>
 
