@@ -1388,15 +1388,19 @@ UnicodeString::doReverse(int32_t start,
   pinIndices(start, length);
 
   UChar *left = getArrayStart() + start;
-  UChar *right = left + length;
+  UChar *right = left + length - 1;  // -1 for inclusive boundary (length>=2)
   UChar swap;
   UBool hasSupplementary = FALSE;
 
-  while(left < --right) {
-    hasSupplementary |= (UBool)UTF_IS_LEAD(swap = *left);
-    hasSupplementary |= (UBool)UTF_IS_LEAD(*left++ = *right);
-    *right = swap;
-  }
+  // Before the loop we know left<right because length>=2.
+  do {
+    hasSupplementary |= (UBool)U16_IS_LEAD(swap = *left);
+    hasSupplementary |= (UBool)U16_IS_LEAD(*left++ = *right);
+    *right-- = swap;
+  } while(left < right);
+  // Make sure to test the middle code unit of an odd-length string.
+  // Redundant if the length is even.
+  hasSupplementary |= (UBool)U16_IS_LEAD(*left);
 
   /* if there are supplementary code points in the reversed range, then re-swap their surrogates */
   if(hasSupplementary) {
@@ -1405,7 +1409,7 @@ UnicodeString::doReverse(int32_t start,
     left = getArrayStart() + start;
     right = left + length - 1; // -1 so that we can look at *(left+1) if left<right
     while(left < right) {
-      if(UTF_IS_TRAIL(swap = *left) && UTF_IS_LEAD(swap2 = *(left + 1))) {
+      if(U16_IS_TRAIL(swap = *left) && U16_IS_LEAD(swap2 = *(left + 1))) {
         *left++ = swap2;
         *left++ = swap;
       } else {
