@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -62,7 +62,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
                         u_UCharsToChars(name,cName,len);
                         code = (UScriptCode) u_getPropertyValueEnum(UCHAR_SCRIPT, cName);
                         /* got the script code now fill in the buffer */
-                        if(numFilled<=capacity){ 
+                        if(numFilled<capacity){ 
                             *(fillIn)++=code;
                             numFilled++;
                         }else{
@@ -85,7 +85,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     }
     if(code!=(UScriptCode)UCHAR_INVALID_CODE){
         /* we found it */
-        if(numFilled<=capacity){ 
+        if(numFilled<capacity){ 
             *(fillIn)++=code;
             numFilled++;
         }else{
