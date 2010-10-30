@@ -1624,16 +1624,6 @@ public:
                                               UErrorCode                      &status);
 
 
-  /**
-    *  inline version of ReportFindProgress() to eliminate function calls where a check for
-    *  the callback suffices.
-    *
-    * @draft ICU 4.6
-    */
-#define REGEXFINDPROGRESS_INTERRUPT(pos, status)     \
-    (fFindProgressCallbackFn != NULL) && (ReportFindProgress(pos, status) == FALSE)
-
-
    /**
      *   setTrace   Debug function, enable/disable tracing of the matching engine.
      *              For internal ICU development use only.  DO NO USE!!!!

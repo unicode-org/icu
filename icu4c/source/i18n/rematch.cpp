@@ -32,6 +32,13 @@
 // #include <malloc.h>        // Needed for heapcheck testing
 
 
+// Find progress callback
+// ----------------------
+// Macro to inline test & call to ReportFindProgress().  Eliminates unnecessary function call.
+//
+#define REGEXFINDPROGRESS_INTERRUPT(pos, status)     \
+    (fFindProgressCallbackFn != NULL) && (ReportFindProgress(pos, status) == FALSE)
+
 
 // Smart Backtracking
 // ------------------
