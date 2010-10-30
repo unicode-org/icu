@@ -587,15 +587,15 @@ void RuleBasedCollator::setStrength(ECollationStrength newStrength)
     ucol_setAttribute(ucollator, UCOL_STRENGTH, strength, &intStatus);
 }
 
-int32_t RuleBasedCollator::getScriptOrder(int32_t *dest,
-                                          const int32_t destCapacity,
+uint32_t RuleBasedCollator::getScriptOrder(int32_t *dest,
+                                          const uint32_t destCapacity,
                                           UErrorCode& status) const
 {
     return ucol_getScriptOrder(ucollator, dest, destCapacity, &status);
 }
 
 void RuleBasedCollator::setScriptOrder(const int32_t *scriptOrder,
-                                       const int32_t scriptOrderLength,
+                                       const uint32_t scriptOrderLength,
                                        UErrorCode& status)
 {
     ucol_setScriptOrder(ucollator, scriptOrder, scriptOrderLength);

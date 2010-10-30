@@ -348,7 +348,6 @@ fprintf(stderr, "isPackage = %x\n", isPackage);
             return U_ILLEGAL_ARGUMENT_ERROR;
         }
         if(isModified) {
-fprintf(stderr, "@@@@ Calling Package::extractItem\n");
             pkg->extractItem(destPath, outFilename, 0, outType);
         }
 
