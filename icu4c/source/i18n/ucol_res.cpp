@@ -211,12 +211,11 @@ int ucol_getReorderCodesForLeadByte(UCollator *coll, int leadByte, int16_t* retu
     return reorderCodeCount;
 }
 
-void ucol_buildScriptReorderTable(UCollator *coll) {    
-    int32_t *next;
+void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
     uint16_t leadBytesSize = 256;
     uint16_t leadBytes[256];
-    uint16_t reorderCodesSize = 256;
-    int16_t reorderCodes[256];
+    uint32_t internalScriptOrderLength = coll->scriptOrderLength + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST);
+    int32_t* internalScriptOrder;
     
     // The lowest byte that hasn't been assigned a mapping
     int toBottom = 0x03;
@@ -227,16 +226,17 @@ void ucol_buildScriptReorderTable(UCollator *coll) {
     bool fromTheBottom = true;
     
     // lead bytes that have alread been assigned to the permutation table
-    bool leadByteUsed[256];
+    bool newLeadByteUsed[256];
     // permutation table slots that have already been filled
     bool permutationSlotFilled[256];
 
     // nothing to do
-    if (coll->scriptOrderLength == 0) {
+    if(U_FAILURE(*status) || coll == NULL || coll->scriptOrderLength == 0) {
         if (coll->scriptReorderTable != NULL) {
             uprv_free(coll->scriptReorderTable);
             coll->scriptReorderTable = NULL;
         }
+        coll->scriptOrderLength = 0;
         return;
     }
 
@@ -244,14 +244,27 @@ void ucol_buildScriptReorderTable(UCollator *coll) {
         coll->scriptReorderTable = (uint8_t*)uprv_malloc(256*sizeof(uint8_t));
     }
 
+    // prefill the reordering codes with the leading entries
+    internalScriptOrder = (int32_t*)uprv_malloc(internalScriptOrderLength * sizeof(int32_t));
+    for (uint32_t codeIndex = 0; codeIndex < (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST); codeIndex++) {
+        internalScriptOrder[codeIndex] = UCOL_REORDERCODE_FIRST + codeIndex;
+    }
+    for (uint32_t codeIndex = 0; codeIndex < coll->scriptOrderLength; codeIndex++) {
+        uint32_t scriptOrderCode = coll->scriptOrder[codeIndex];
+        internalScriptOrder[codeIndex + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST)] = scriptOrderCode;
+        if (scriptOrderCode >= UCOL_REORDERCODE_FIRST && scriptOrderCode < UCOL_REORDERCODE_LIMIT) {
+            internalScriptOrder[scriptOrderCode - UCOL_REORDERCODE_FIRST] = UCOL_REORDERCODE_IGNORE;
+        }
+    }
+
     for (int i = 0; i < 256; i++) {
         if (i < toBottom || i > toTop) {
             permutationSlotFilled[i] = true;
-            leadByteUsed[i] = true;
+            newLeadByteUsed[i] = true;
             coll->scriptReorderTable[i] = i;
         } else {
             permutationSlotFilled[i] = false;
-            leadByteUsed[i] = false;
+            newLeadByteUsed[i] = false;
             coll->scriptReorderTable[i] = 0;
         }
     }
@@ -262,62 +275,122 @@ void ucol_buildScriptReorderTable(UCollator *coll) {
      * possible location. At each step, we also need to make sure that any scripts
      * that need to not be moved are copied to their same location in the final table.
      */
-    next = coll->scriptOrder;
-    while (next < coll->scriptOrder + coll->scriptOrderLength) {
-        if (*next == UCOL_REORDERCODE_IGNORE) {
-            next++;
+    for (int scriptOrderIndex = 0; scriptOrderIndex < internalScriptOrderLength; scriptOrderIndex++) {
+        int32_t next = internalScriptOrder[scriptOrderIndex];
+        if (next == UCOL_REORDERCODE_IGNORE) {
             continue;
         }
-        if (*next == USCRIPT_UNKNOWN) {
+        if (next == USCRIPT_UNKNOWN) {
             if (fromTheBottom == false) {
-			    //TODO - error condition - bad script order
+                // double turnaround
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                if (coll->scriptReorderTable != NULL) {
+                    uprv_free(coll->scriptReorderTable);
+                    coll->scriptReorderTable = NULL;
+                }
+                coll->scriptOrderLength = 0;
+                if (internalScriptOrder != NULL) {
+                    uprv_free(internalScriptOrder);
+                }
+    fprintf(stdout, "\treturn - next == USCRIPT_UNKNOWN\n");
+                return;
             }
-			fromTheBottom = false;
-			next++;
+            fromTheBottom = false;
             continue;
         }
         
-        uint16_t leadByteCount = ucol_getLeadBytesForReorderCode(coll, *next, leadBytes, leadBytesSize);
+        uint16_t leadByteCount = ucol_getLeadBytesForReorderCode(coll, next, leadBytes, leadBytesSize);
         if (fromTheBottom) {
             for (int leadByteIndex = 0; leadByteIndex < leadByteCount; leadByteIndex++) {
                 // don't place a lead byte twice in the permutation table
-                if (leadByteUsed[leadBytes[leadByteIndex]]) {
-                    // TODO - or should this be an error condition?
-                    continue;
+                if (permutationSlotFilled[leadBytes[leadByteIndex]]) {
+                    // lead byte already used
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    if (coll->scriptReorderTable != NULL) {
+                        uprv_free(coll->scriptReorderTable);
+                        coll->scriptReorderTable = NULL;
+                    }
+                    coll->scriptOrderLength = 0;
+                    if (internalScriptOrder != NULL) {
+                        uprv_free(internalScriptOrder);
+                    }
+    fprintf(stdout, "\treturn - fromTheBottom reuse lead byte\n");
+                    return;
                 }
    
                 coll->scriptReorderTable[leadBytes[leadByteIndex]] = toBottom;
-                leadByteUsed[toBottom] = true;
+                newLeadByteUsed[toBottom] = true;
                 permutationSlotFilled[leadBytes[leadByteIndex]] = true;
                 toBottom++;
             }
         } else {
             for (int leadByteIndex = leadByteCount - 1; leadByteIndex >= 0; leadByteIndex--) {
                 // don't place a lead byte twice in the permutation table
-                if (leadByteUsed[leadBytes[leadByteIndex]]) {
-                    // TODO - or should this be an error condition?
-                    continue;
+                if (permutationSlotFilled[leadBytes[leadByteIndex]]) {
+                    // lead byte already used
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    if (coll->scriptReorderTable != NULL) {
+                        uprv_free(coll->scriptReorderTable);
+                        coll->scriptReorderTable = NULL;
+                    }
+                    coll->scriptOrderLength = 0;
+                    if (internalScriptOrder != NULL) {
+                        uprv_free(internalScriptOrder);
+                    }
+    fprintf(stdout, "\treturn - fromTheTop reuse lead byte\n");
+                    return;
                 }
 
                 coll->scriptReorderTable[leadBytes[leadByteIndex]] = toTop;
-                leadByteUsed[toTop] = true;
+                newLeadByteUsed[toTop] = true;
                 permutationSlotFilled[leadBytes[leadByteIndex]] = true;
                 toTop--;
             }
         }
-        next++;
     }
+    
+#ifdef REORDER_DEBUG
+    fprintf(stdout, "\n@@@@ Partial Script Reordering Table\n");
+    for (int i = 0; i < 256; i++) {
+        fprintf(stdout, "\t%02x = %02x\n", i, coll->scriptReorderTable[i]);
+    }
+    fprintf(stdout, "\n@@@@ Lead Byte Used Table\n");
+    for (int i = 0; i < 256; i++) {
+        fprintf(stdout, "\t%02x = %02x\n", i, newLeadByteUsed[i]);
+    }
+    fprintf(stdout, "\n@@@@ Permutation Slot Filled Table\n");
+    for (int i = 0; i < 256; i++) {
+        fprintf(stdout, "\t%02x = %02x\n", i, permutationSlotFilled[i]);
+    }
+#endif
 
     /* Copy everything that's left over */
     int reorderCode = 0;
     for (int i = 0; i < 256; i++) {
         if (!permutationSlotFilled[i]) {
-            while (reorderCode < 256 && leadByteUsed[reorderCode++]) {
-                ;
+            while (reorderCode < 256 && newLeadByteUsed[reorderCode]) {
+                reorderCode++;
             }
             coll->scriptReorderTable[i] = reorderCode;
+            permutationSlotFilled[i] = true;
+            newLeadByteUsed[reorderCode] = true;
         }
-    }        
+    } 
+    
+#ifdef REORDER_DEBUG
+    fprintf(stdout, "\n@@@@ Script Reordering Table\n");
+    for (int i = 0; i < 256; i++) {
+        fprintf(stdout, "\t%02x = %02x\n", i, coll->scriptReorderTable[i]);
+    } 
+#endif
+
+    if (internalScriptOrder != NULL) {
+        uprv_free(internalScriptOrder);
+    }
+
+    // force a regen of the latin one table since it is affected by the script reordering
+    coll->latinOneRegenTable = TRUE;
+    ucol_updateInternalState(coll, status);
 }
 
 // API in ucol_imp.h
@@ -623,9 +696,9 @@ ucol_openRules( const UChar        *rules,
         result->actualLocale = NULL;
         result->validLocale = NULL;
         result->requestedLocale = NULL;
+        ucol_buildScriptReorderTable(result, status);
         ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
         ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
-        ucol_buildScriptReorderTable(result);
     } else {
 cleanup:
         if(result != NULL) {

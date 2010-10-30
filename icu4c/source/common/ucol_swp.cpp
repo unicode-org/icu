@@ -219,8 +219,6 @@ ucol_swapBinary(const UDataSwapper *ds,
 
         /* swap the necessary pieces in the order of their occurrence in the data */
 
-        udata_printError(ds, "@@@@@ Here inside the collator data swapper\n");
-
         /* read more of the UCATableHeader (the size field was read above) */
         header.options=                 ds->readUInt32(inHeader->options);
         header.UCAConsts=               ds->readUInt32(inHeader->UCAConsts);
