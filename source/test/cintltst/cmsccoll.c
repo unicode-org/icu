@@ -950,8 +950,8 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
-	/* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
-	   the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
+    /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
+       the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
     while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
       strength = src.parsedToken.strength;
       chOffset = src.parsedToken.charsOffset;
@@ -5829,6 +5829,12 @@ static void TestBeforeRuleWithScriptReordering(void)
     UChar rules[500];
     uint32_t rulesLength = 0;
     UScriptCode scriptOrder[1] = {USCRIPT_GREEK};
+    UCollationResult collResult;
+
+    uint8_t baseKey[256];
+    uint32_t baseKeyLength;
+    uint8_t beforeKey[256];
+    uint32_t beforeKeyLength;
 
     UChar base[] = { 0x03b1 }; /* base */
     int32_t baseLen = sizeof(base)/sizeof(*base);
@@ -5836,15 +5842,13 @@ static void TestBeforeRuleWithScriptReordering(void)
     UChar before[] = { 0x0e01 }; /* ko kai */
     int32_t beforeLen = sizeof(before)/sizeof(*before);
 
-	UCollationResult collResult;
-	uint8_t baseKey[256];
-    uint32_t baseKeyLength;
-    uint8_t beforeKey[256];
-    uint32_t beforeKeyLength;
+    /*UChar *data[] = { before, base };
+    genericRulesStarter(srules, data, 2);*/
+    
+    log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
 
-	log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
-	
-	/* build collator */
+
+    /* build collator */
     rulesLength = u_unescape(srules, rules, LEN(rules));
     myCollation = ucol_openRules(rules, rulesLength, UCOL_ON, UCOL_TERTIARY, &error, &status);
     if(U_FAILURE(status)) {
@@ -5852,85 +5856,174 @@ static void TestBeforeRuleWithScriptReordering(void)
         return;
     }
 
-	/* check collation results - before rule applied but not script reordering */
+    /* check collation results - before rule applied but not script reordering */
     collResult = ucol_strcoll(myCollation, base, baseLen, before, beforeLen);
-	if (collResult != UCOL_GREATER) {
-		log_err("Collation result not correct before script reordering = %d\n", collResult);
-	}
+    if (collResult != UCOL_GREATER) {
+        log_err("Collation result not correct before script reordering = %d\n", collResult);
+    }
 
-	/* check the lead byte of the collation keys before script reordering */
+    /* check the lead byte of the collation keys before script reordering */
     baseKeyLength = ucol_getSortKey(myCollation, base, baseLen, baseKey, 256);
     beforeKeyLength = ucol_getSortKey(myCollation, before, beforeLen, beforeKey, 256);
     if (baseKey[0] != beforeKey[0]) {
       log_err("Different lead byte for sort keys using before rule and before script reordering. base character lead byte = %02x, before character lead byte = %02x\n", baseKey[0], beforeKey[0]);
    }
 
-	/* reirder the scripts */
+    /* reorder the scripts */
     ucol_setScriptOrder(myCollation, scriptOrder, 1);
 
-	/* check collation results - before rule applied and after script reordering */
+    /* check collation results - before rule applied and after script reordering */
     collResult = ucol_strcoll(myCollation, base, baseLen, before, beforeLen);
-	if (collResult != UCOL_GREATER) {
-		log_err("Collation result not correct after script reordering = %d\n", collResult);
-	}
-	
-	/* check the lead byte of the collation keys after script reordering */
+    if (collResult != UCOL_GREATER) {
+        log_err("Collation result not correct after script reordering = %d\n", collResult);
+    }
+    
+    /* check the lead byte of the collation keys after script reordering */
     ucol_getSortKey(myCollation, base, baseLen, baseKey, 256);
     ucol_getSortKey(myCollation, before, beforeLen, beforeKey, 256);
     if (baseKey[0] != beforeKey[0]) {
-		log_err("Different lead byte for sort keys using before fule and after script reordering. base character lead byte = %02x, before character lead byte = %02x\n", baseKey[0], beforeKey[0]);
+        log_err("Different lead byte for sort keys using before fule and after script reordering. base character lead byte = %02x, before character lead byte = %02x\n", baseKey[0], beforeKey[0]);
     }
 
     ucol_close(myCollation);
 }
 
+/*
+ * Utility function to test one collation reordering test case.
+ * @param testcases Array of test cases.
+ * @param n_testcases Size of the array testcases.
+ * @param str_rules Array of rules.  These rules should be specifying the same rule in different formats.
+ * @param n_rules Size of the array str_rules.
+ */
+static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32_t testCasesLen, const int32_t reorderTokens[], uint32_t reorderTokensLen)
+{
+    int testCaseNum;
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
+
+    for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
+        myCollation = ucol_open("", &status);
+        if (U_FAILURE(status)) {
+            log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+            return;
+        }
+        /*ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+        ucol_setStrength(myCollation, UCOL_TERTIARY);*/
+        ucol_setScriptOrder(myCollation, reorderTokens, reorderTokensLen);
+        for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
+            doTest(myCollation,
+                testCases[testCaseNum].source,
+                testCases[testCaseNum].target,
+                testCases[testCaseNum].result
+            );
+        }
+        ucol_close(myCollation);
+    }
+}
+
 static void TestGreekFirstReorder(void)
 {
-  const char* strRules[] = {
-    "[scriptReorder Grek]"
-  };
+    const char* strRules[] = {
+        "[scriptReorder Grek]"
+    };
 
-  const static OneTestCase privateUseCharacterStrings[] = {
-    { {0x0391}, {0x0391}, UCOL_EQUAL },
-    { {0x0041}, {0x0391}, UCOL_GREATER },
-    { {0x03B1, 0x0041}, {0x03B1, 0x0391}, UCOL_GREATER },
-    { {0x0060}, {0x0391}, UCOL_LESS },
-    { {0x0391}, {0xe2dc}, UCOL_LESS },
-    { {0x0391}, {0x0060}, UCOL_GREATER },
-  };
-  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    const int32_t apiRules[] = {
+        USCRIPT_GREEK
+    };
+    
+    const static OneTestCase privateUseCharacterStrings[] = {
+        { {0x0391}, {0x0391}, UCOL_EQUAL },
+        { {0x0041}, {0x0391}, UCOL_GREATER },
+        { {0x03B1, 0x0041}, {0x03B1, 0x0391}, UCOL_GREATER },
+        { {0x0060}, {0x0391}, UCOL_LESS },
+        { {0x0391}, {0xe2dc}, UCOL_LESS },
+        { {0x0391}, {0x0060}, UCOL_GREATER },
+    };
+
+    /* Test rules creation */
+    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+
+    /* Test collation reordering API */
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
 }
 
 static void TestGreekLastReorder(void)
 {
-  const char* strRules[] = {
-    "[scriptReorder Zzzz Grek]"
-  };
+    const char* strRules[] = {
+        "[scriptReorder Zzzz Grek]"
+    };
 
-  const static OneTestCase privateUseCharacterStrings[] = {
-    { {0x0391}, {0x0391}, UCOL_EQUAL },
-    { {0x0041}, {0x0391}, UCOL_LESS },
-    { {0x03B1, 0x0041}, {0x03B1, 0x0391}, UCOL_LESS },
-    { {0x0060}, {0x0391}, UCOL_LESS },
-    { {0x0391}, {0xe2dc}, UCOL_GREATER },
-  };
-  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    const int32_t apiRules[] = {
+        USCRIPT_UNKNOWN, USCRIPT_GREEK
+    };
+    
+    const static OneTestCase privateUseCharacterStrings[] = {
+        { {0x0391}, {0x0391}, UCOL_EQUAL },
+        { {0x0041}, {0x0391}, UCOL_LESS },
+        { {0x03B1, 0x0041}, {0x03B1, 0x0391}, UCOL_LESS },
+        { {0x0060}, {0x0391}, UCOL_LESS },
+        { {0x0391}, {0xe2dc}, UCOL_GREATER },
+    };
+    
+    /* Test rules creation */
+    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+
+    /* Test collation reordering API */
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
 }
 
 static void TestNonScriptReorder(void)
 {
-  const char* strRules[] = {
-    "[scriptReorder Grek Symbol DIGIT Latn Punct space Zzzz cURRENCy]"
-  };
+    const char* strRules[] = {
+        "[scriptReorder Grek Symbol DIGIT Latn Punct space Zzzz cURRENCy]"
+    };
 
-  const static OneTestCase privateUseCharacterStrings[] = {
-    { {0x0391}, {0x0041}, UCOL_LESS },
-    { {0x0041}, {0x0391}, UCOL_GREATER },
-    { {0x0060}, {0x0041}, UCOL_LESS },
-    { {0x0060}, {0x0391}, UCOL_GREATER },
-    { {0x0024}, {0x0041}, UCOL_GREATER },
-  };
-  doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+    const int32_t apiRules[] = {
+        USCRIPT_GREEK, UCOL_REORDERCODE_SYMBOL, UCOL_REORDERCODE_DIGIT, USCRIPT_LATIN, 
+        UCOL_REORDERCODE_PUNCTUATION, UCOL_REORDERCODE_SPACE, USCRIPT_UNKNOWN, 
+        UCOL_REORDERCODE_CURRENCY
+    };
+
+    const static OneTestCase privateUseCharacterStrings[] = {
+        { {0x0391}, {0x0041}, UCOL_LESS },
+        { {0x0041}, {0x0391}, UCOL_GREATER },
+        { {0x0060}, {0x0041}, UCOL_LESS },
+        { {0x0060}, {0x0391}, UCOL_GREATER },
+        { {0x0024}, {0x0041}, UCOL_GREATER },
+    };
+    
+    /* Test rules creation */
+    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+
+    /* Test collation reordering API */
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
+}
+
+static void TestHaniReorder(void)
+{
+    const char* strRules[] = {
+        "[scriptReorder Hani]"
+    };
+
+    const int32_t apiRules[] = {
+        USCRIPT_HAN
+    };
+
+    const static OneTestCase privateUseCharacterStrings[] = {
+        { {0x4e00}, {0x0041}, UCOL_LESS },
+        { {0x4e00}, {0x0060}, UCOL_GREATER },
+        { {0xD86D, 0xDF40}, {0x0041}, UCOL_LESS },
+        { {0xD86D, 0xDF40}, {0x0060}, UCOL_GREATER },
+        { {0x4e00}, {0xD86D, 0xDF40}, UCOL_LESS },
+        { {0xfa27}, {0x0041}, UCOL_LESS },
+        { {0xD869, 0xDF00}, {0x0041}, UCOL_LESS },
+    };
+    
+    /* Test rules creation */
+    doTestOneTestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), strRules, LEN(strRules));
+
+    /* Test collation reordering API */
+    doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
 }
 
 
@@ -6010,11 +6103,6 @@ void addMiscCollTest(TestNode** root)
     TEST(TestUCAPrecontext);
     TEST(TestOutOfBuffer5468);
     TEST(TestSameStrengthList);
-
-    TEST(TestGreekFirstReorder);
-    TEST(TestGreekLastReorder);
-    TEST(TestBeforeRuleWithScriptReordering);
-    TEST(TestNonScriptReorder);
     
     TEST(TestSameStrengthListQuoted);
     TEST(TestSameStrengthListSupplemental);
@@ -6027,6 +6115,12 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPrivateUseCharactersInList);
     TEST(TestPrivateUseCharactersInRange);
     TEST(TestInvalidListsAndRanges);    
+
+    TEST(TestGreekFirstReorder);
+    TEST(TestGreekLastReorder);
+    TEST(TestBeforeRuleWithScriptReordering);
+    TEST(TestNonScriptReorder);
+    TEST(TestHaniReorder);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

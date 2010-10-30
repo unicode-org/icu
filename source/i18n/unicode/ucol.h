@@ -138,14 +138,14 @@ typedef enum {
  *  @internal
  */
 typedef enum {
-	UCOL_REORDERCODE_FIRST			= 0x1000,
-	UCOL_REORDERCODE_SPACE			= 0x1000,
-	UCOL_REORDERCODE_PUNCTUATION	= 0x1001,
-	UCOL_REORDERCODE_SYMBOL			= 0x1002,
-	UCOL_REORDERCODE_CURRENCY		= 0x1003,
-	UCOL_REORDERCODE_DIGIT			= 0x1004,
-	UCOL_REORDERCODE_LIMIT			= 0x1005,
-	UCOL_REORDERCODE_IGNORE			= 0x7FFF
+    UCOL_REORDERCODE_FIRST          = 0x1000,
+    UCOL_REORDERCODE_SPACE          = 0x1000,
+    UCOL_REORDERCODE_PUNCTUATION    = 0x1001,
+    UCOL_REORDERCODE_SYMBOL         = 0x1002,
+    UCOL_REORDERCODE_CURRENCY       = 0x1003,
+    UCOL_REORDERCODE_DIGIT          = 0x1004,
+    UCOL_REORDERCODE_LIMIT          = 0x1005,
+    UCOL_REORDERCODE_IGNORE         = 0x7FFF
 } UColReorderCode;
 
 /**
@@ -547,10 +547,10 @@ ucol_setStrength(UCollator *coll,
  * @see ucol_setScriptOrder
  * @internal 
  */
-U_INTERNAL int32_t U_EXPORT2 
+U_INTERNAL uint32_t U_EXPORT2 
 ucol_getScriptOrder(const UCollator* coll,
                     int32_t* dest,
-                    const int32_t destCapacity,
+                    const uint32_t destCapacity,
                     UErrorCode *pErrorCode);
 
 /**
@@ -564,7 +564,7 @@ ucol_getScriptOrder(const UCollator* coll,
 U_INTERNAL void U_EXPORT2 
 ucol_setScriptOrder(UCollator* coll,
                     const int32_t* scriptOrder,
-                    const int32_t scriptOrderLength);
+                    const uint32_t scriptOrderLength);
 
 /**
  * Get the display name for a UCollator.

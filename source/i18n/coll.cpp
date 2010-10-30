@@ -833,16 +833,16 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
     return Locale::createFromName(loc);
 }
 
-int32_t Collator::getScriptOrder(int32_t *dest,
-                                 const int32_t destCapacity,
+uint32_t Collator::getScriptOrder(int32_t *dest,
+                                 const uint32_t destCapacity,
                                  UErrorCode& status) const
 {
     status = U_UNSUPPORTED_ERROR;
-	return 0;
+    return 0;
 }
 
 void Collator::setScriptOrder(const int32_t *scriptOrder,
-                              const int32_t scriptOrderLength,
+                              const uint32_t scriptOrderLength,
                               UErrorCode& status)
 {
     status = U_UNSUPPORTED_ERROR;

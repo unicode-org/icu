@@ -1376,15 +1376,16 @@ ucol_initInverseUCA(UErrorCode *status)
     return _staticInvUCA;
 }
 
-/* This is the data that is used for non-script reordering codes.
+/* This is the data that is used for non-script reordering codes. These _must_ be kept
+ * in order that they are to be applied as defaults and in synch with the UColReorderCode enum.
  */
 const char* ReorderingTokenNames[] = {
-	"SPACE",
-	"PUNCT",
-	"SYMBOL",
-	"CURRENCY",
-	"DIGIT",
-	NULL
+    "SPACE",
+    "PUNCT",
+    "SYMBOL",
+    "CURRENCY",
+    "DIGIT",
+    NULL
 };
 
 void toUpper(const char* src, char* dst, uint32_t length) {
@@ -1396,14 +1397,14 @@ void toUpper(const char* src, char* dst, uint32_t length) {
 
 U_INTERNAL int32_t U_EXPORT2 
 ucol_findReorderingEntry(const char* name) {
-	char buffer[32];
-	toUpper(name, buffer, 32);
-	for (uint32_t entry = 0; ReorderingTokenNames[entry] != NULL; entry++) {
-		if (strcmp(buffer, ReorderingTokenNames[entry]) == 0) {
-			return entry + UCOL_REORDERCODE_FIRST;
-		}
-	}
-	return USCRIPT_INVALID_CODE;
+    char buffer[32];
+    toUpper(name, buffer, 32);
+    for (uint32_t entry = 0; ReorderingTokenNames[entry] != NULL; entry++) {
+        if (strcmp(buffer, ReorderingTokenNames[entry]) == 0) {
+            return entry + UCOL_REORDERCODE_FIRST;
+        }
+    }
+    return USCRIPT_INVALID_CODE;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

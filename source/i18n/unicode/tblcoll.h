@@ -675,9 +675,9 @@ public:
      * @see ucol_setScriptOrder
      * @internal 
      */
-    virtual int32_t getScriptOrder(int32_t* dest,
-                                   const int32_t destCapacity,
-                                   UErrorCode& status) const;
+    virtual uint32_t getScriptOrder(int32_t* dest,
+                                    const uint32_t destCapacity,
+                                    UErrorCode& status) const;
 
     /**
      * Set the ordering of scripts for this collator.
@@ -687,7 +687,7 @@ public:
      * @internal 
      */
     virtual void setScriptOrder(const int32_t* scriptOrder,
-                                const int32_t scriptOrderLength,
+                                const uint32_t scriptOrderLength,
                                 UErrorCode& status);
 
 

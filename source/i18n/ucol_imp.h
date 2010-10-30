@@ -770,7 +770,7 @@ typedef struct {
       /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribute for special Hiragana */
       /*UColAttributeValue*/ int32_t numericCollation;  /* attribute for numeric collation */
       /* reorder code */ int32_t* scriptOrder;
-      int32_t scriptOrderLength;
+      uint32_t scriptOrderLength;
       uint32_t reserved[15];                 /* for future use */
 } UColOptionSet;
 
@@ -1019,7 +1019,7 @@ struct UCollator {
 
     UVersionInfo dataVersion;               /* Data info of UCA table */
     int32_t* scriptOrder;
-    int32_t scriptOrderLength;
+    uint32_t scriptOrderLength;
     uint8_t* scriptReorderTable;
 };
 
@@ -1073,7 +1073,7 @@ uprv_uca_getCodePointFromRaw(UChar32 i);
 
 
 
-U_CAPI void ucol_buildScriptReorderTable(UCollator *coll);
+U_CAPI void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status);
 
 #ifdef XP_CPLUSPLUS
 /*

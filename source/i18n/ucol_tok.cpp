@@ -615,22 +615,22 @@ void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status){
     int32_t codeCount = 0;
     int32_t codeIndex = 0;
     char conversion[64];
-	int32_t tokenLength = 0;
-	const UChar* space;
-	
+    int32_t tokenLength = 0;
+    const UChar* space;
+    
     const UChar* current = src->current;
     const UChar* end = u_memchr(src->current, 0x005d, src->end - src->current);
 
     // eat leading whitespace
-   	while(current < end && u_isWhitespace(*current)) {
-   		current++;
-   	}
-   	
+    while(current < end && u_isWhitespace(*current)) {
+        current++;
+    }
+
     while(current < end) {    
-    	space = u_memchr(current, 0x0020, end - current);
-    	space = space == 0 ? end : space;
-    	tokenLength = space - current;
-    	if (tokenLength < 4) {
+        space = u_memchr(current, 0x0020, end - current);
+        space = space == 0 ? end : space;
+        tokenLength = space - current;
+        if (tokenLength < 4) {
             *status = U_INVALID_FORMAT_ERROR;
             return;
         }
@@ -642,51 +642,42 @@ void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status){
     }
 
     if (codeCount == 0) {
-    	*status = U_INVALID_FORMAT_ERROR;
-   	}
+        *status = U_INVALID_FORMAT_ERROR;
+    }
     
-    int32_t nonScriptReorderCodes = UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST;
-    codeCount += nonScriptReorderCodes;	// to account for the non-script codes
     src->opts->scriptOrderLength = codeCount;
     src->opts->scriptOrder = (int32_t*)uprv_malloc(codeCount * sizeof(int32_t));
-	current = src->current;
-	
-	for (codeIndex = 0; codeIndex < nonScriptReorderCodes; codeIndex++) {
-		src->opts->scriptOrder[codeIndex] = UCOL_REORDERCODE_FIRST + codeIndex;
-	}
-	
-	// eat leading whitespace
-   	while(current < end && u_isWhitespace(*current)) {
-   		current++;
-   	}
+    current = src->current;
+    
+    // eat leading whitespace
+    while(current < end && u_isWhitespace(*current)) {
+        current++;
+    }
 
     while(current < end) {    
-    	space = u_memchr(current, 0x0020, end - current);
-    	space = space == 0 ? end : space;
-    	tokenLength = space - current;
-    	if (tokenLength < 4) {
-            *status = U_INVALID_FORMAT_ERROR;
+        space = u_memchr(current, 0x0020, end - current);
+        space = space == 0 ? end : space;
+        tokenLength = space - current;
+        if (tokenLength < 4) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         } else {
             u_UCharsToChars(current, conversion, tokenLength);
-    		conversion[tokenLength] = '\0';
-        	src->opts->scriptOrder[codeIndex] = ucol_findReorderingEntry(conversion);
-    		if (src->opts->scriptOrder[codeIndex] != USCRIPT_INVALID_CODE) {
-    			// non-script reorder code used in rule so remove it from the leading slot
-    			src->opts->scriptOrder[src->opts->scriptOrder[codeIndex] - UCOL_REORDERCODE_FIRST] = UCOL_REORDERCODE_IGNORE;
-    		} else {
-    			src->opts->scriptOrder[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
-    		}
-    		if (src->opts->scriptOrder[codeIndex] == USCRIPT_INVALID_CODE) {
-    			*status = U_INVALID_FORMAT_ERROR;
-    		}
+            conversion[tokenLength] = '\0';
+            src->opts->scriptOrder[codeIndex] = ucol_findReorderingEntry(conversion);
+            if (src->opts->scriptOrder[codeIndex] == USCRIPT_INVALID_CODE) {
+                src->opts->scriptOrder[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
+            }
+            if (src->opts->scriptOrder[codeIndex] == USCRIPT_INVALID_CODE) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+            }
         }
         codeIndex++;
         current += tokenLength;
         while(current < end && u_isWhitespace(*current)) { /* eat whitespace */
             ++current;
         }
-    }	
+    }
 }
 
 // reads and conforms to various options in rules
