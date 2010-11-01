@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
 
@@ -38,7 +41,7 @@ final class CollationRuleParser
     CollationRuleParser(String rules) throws ParseException
     {
         // Prepares m_copySet_ and m_removeSet_.
-        extractSetsFromRules(rules);
+        rules = preprocessRules(rules);
 
         // Save the rules as a long string.  The StringBuilder object is
         // used to store the result of token parsing as well.
@@ -557,7 +560,7 @@ final class CollationRuleParser
         INDIRECT_BOUNDARIES_[14].m_limitCE_
                  = RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_SPECIAL_MIN_ << 24;
 
-        RULES_OPTIONS_ = new TokenOption[19];
+        RULES_OPTIONS_ = new TokenOption[20];
         String option[] = {"non-ignorable", "shifted"};
         int value[] = {RuleBasedCollator.AttributeValue.NON_IGNORABLE_,
                        RuleBasedCollator.AttributeValue.SHIFTED_};
@@ -666,6 +669,9 @@ final class CollationRuleParser
                                   RuleBasedCollator.Attribute.LIMIT_,
                                   null, null);
         RULES_OPTIONS_[18] = new TokenOption("charset",
+                                  RuleBasedCollator.Attribute.LIMIT_,
+                                  null, null);
+        RULES_OPTIONS_[19] = new TokenOption("import",
                                   RuleBasedCollator.Attribute.LIMIT_,
                                   null, null);
     }
@@ -1220,7 +1226,7 @@ final class CollationRuleParser
             if (m_lastRangeCp_ > 0 && m_lastRangeCp_ == m_previousCp_) {
                 throw new ParseException("Chained range syntax", m_current_);
             }
-            
+
             // The current token is the first character of the second code point of the range.
             // Process just that, and then proceed with the star.
             m_lastRangeCp_ = m_source_.codePointAt(this.m_parsedToken_.m_charsOffset_);
@@ -1696,7 +1702,7 @@ final class CollationRuleParser
 
 
     /**
-     * 
+     *
      */
     private void initializeParsedToken() {
         m_parsedToken_.m_charsLen_ = 0;
@@ -2231,7 +2237,7 @@ final class CollationRuleParser
         return tailored;
     }
 
-    final private void extractSetsFromRules(String rules) throws ParseException {
+    final private String preprocessRules(String rules) throws ParseException {
       int optionNumber = -1;
       int setStart = 0;
       int i = 0;
@@ -2248,14 +2254,32 @@ final class CollationRuleParser
               }
           } else if(optionNumber == 14) {
             UnicodeSet newSet = readAndSetUnicodeSet(rules, setStart);
-              if(m_removeSet_ == null) {
-                m_removeSet_ = newSet;
-              } else {
-                m_removeSet_.addAll(newSet);
-              }
+            if(m_removeSet_ == null) {
+              m_removeSet_ = newSet;
+            } else {
+              m_removeSet_.addAll(newSet);
+            }
+          } else if(optionNumber == 19) {
+            int optionEndOffset = rules.indexOf(']', i) + 1;
+            ULocale locale = ULocale.forLanguageTag(rules.substring(setStart, optionEndOffset-1));
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_BASE_NAME + "/coll", locale.getBaseName());
+
+            String type = locale.getKeywordValue("collation");
+            if(type == null){
+              type = "standard";
+            }
+
+            String importRules = bundle.get("collations")
+                                 .get(type)
+                                 .get("Sequence")
+                                 .getString();
+
+            rules = rules.substring(0, i) + importRules + rules.substring(optionEndOffset);
           }
         }
         i++;
       }
+      return rules;
     }
 }
