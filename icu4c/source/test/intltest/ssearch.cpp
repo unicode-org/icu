@@ -934,16 +934,16 @@ void SSearchTest::offsetTest()
         "a\\u0430\\u0301\\u0316",
         "a\\u0430\\u0316\\u0301",
         "abc\\u0E41\\u0301\\u0316",
-		"abc\\u0E41\\u0316\\u0301",
-		"\\u0E41\\u0301\\u0316",
-		"\\u0E41\\u0316\\u0301",
-		"a\\u0301\\u0316",
-		"a\\u0316\\u0301",
-		"\\uAC52\\uAC53",
-		"\\u34CA\\u34CB",
-		"\\u11ED\\u11EE",
-		"\\u30C3\\u30D0",
-		"p\\u00E9ch\\u00E9",
+        "abc\\u0E41\\u0316\\u0301",
+        "\\u0E41\\u0301\\u0316",
+        "\\u0E41\\u0316\\u0301",
+        "a\\u0301\\u0316",
+        "a\\u0316\\u0301",
+        "\\uAC52\\uAC53",
+        "\\u34CA\\u34CB",
+        "\\u11ED\\u11EE",
+        "\\u30C3\\u30D0",
+        "p\\u00E9ch\\u00E9",
         "a\\u0301\\u0325",
         "a\\u0300\\u0325",
         "a\\u0325\\u0300",
@@ -2125,27 +2125,20 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
 static void hexForUnicodeString(const UnicodeString &ustr, char * cbuf, int32_t cbuflen)
 {
     int32_t ustri, ustrlen = ustr.length();
-    cbuflen -= 3; // leave room for possible terminating ellipsis
+
     for (ustri = 0; ustri < ustrlen; ++ustri) {
-        int charsNeeded =
-#ifdef U_WINDOWS
-            _snprintf(cbuf, (size_t)cbuflen, " %04X", ustr.charAt(ustri));
-#else
-            snprintf(cbuf, (size_t)cbuflen, " %04X", ustr.charAt(ustri));
-#endif
-        if (charsNeeded >= cbuflen) {
-            // couldn't fit this value, indicate truncation with ellipsis
-            cbuflen += 3;
-            charsNeeded =
-#ifdef U_WINDOWS
-                _snprintf(cbuf, (size_t)cbuflen, "...");
-#else
-                snprintf(cbuf, (size_t)cbuflen, "...");
-#endif
-           break;
+        if (cbuflen >= 9 /* format width for single code unit(5) + terminating ellipsis(3) + null(1) */) {
+            int len = sprintf(cbuf, " %04X", ustr.charAt(ustri));
+            cbuflen -= len;
+            cbuf += len;
+        } else {
+            if (cbuflen >= 4 /* terminating ellipsis(3) + null(1) */) {
+                sprintf(cbuf, "...");
+            } else if (cbuflen >= 1) {
+                cbuf = 0;
+            }
+            break;
         }
-        cbuflen -= charsNeeded;
-        cbuf += charsNeeded;
     }
 }
 
@@ -2339,7 +2332,7 @@ void SSearchTest::monkeyTest(char *params)
 
 void SSearchTest::bmMonkeyTest(char *params)
 {
-    static const UVersionInfo icu47 = { 4, 7, 0, 0 }; // for timebomb
+    static const UVersionInfo icu47 = { 4, 6, 0, 0 }; // for timebomb
     static const UChar skipChars[] = { 0x0E40, 0x0E41, 0x0E42, 0x0E43, 0x0E44, 0xAAB5, 0xAAB6, 0xAAB9, 0xAABB, 0xAABC, 0 }; // for timebomb
     // ook!
     UErrorCode status = U_ZERO_ERROR;
