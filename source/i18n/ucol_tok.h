@@ -165,7 +165,13 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src,
                                     UErrorCode *status);
 
 U_CFUNC
-void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, const UCollator *UCA, UErrorCode *status);
+void ucol_tok_initTokenList(UColTokenParser *src,
+                            const UChar *rules,
+                            const uint32_t rulesLength,
+                            const UCollator *UCA,
+                            GetCollationRulesFunction importFunc,
+                            void* context,
+                            UErrorCode *status);
 
 U_CFUNC void ucol_tok_closeTokenList(UColTokenParser *src);
 
@@ -188,6 +194,12 @@ U_CFUNC int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
 
+U_CFUNC const UChar* ucol_tok_getRulesFromBundle(
+    void* context,
+    const char* locale,
+    const char* type,
+    int32_t* pLength,
+    UErrorCode* status);
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 

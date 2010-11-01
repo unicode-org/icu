@@ -1071,8 +1071,24 @@ uprv_uca_getRawFromCodePoint(UChar32 i);
 U_CAPI UChar32 U_EXPORT2
 uprv_uca_getCodePointFromRaw(UChar32 i);
 
+typedef const UChar* GetCollationRulesFunction(void* context, const char* locale, const char* type, int32_t* pLength, UErrorCode* status);
 
+U_CAPI UCollator* U_EXPORT2
+ucol_openRulesForImport( const UChar        *rules,
+                         int32_t            rulesLength,
+                         UColAttributeValue normalizationMode,
+                         UCollationStrength strength,
+                         UParseError        *parseError,
+                         GetCollationRulesFunction  importFunc,
+                         void* context,
+                         UErrorCode         *status);
 
+U_CAPI const U_EXPORT2 UChar* ucol_tok_getRulesFromBundle(
+       void* context,
+       const char* locale,
+       const char* type,
+       int32_t* pLength,
+       UErrorCode* status);
 U_CAPI void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status);
 
 #ifdef XP_CPLUSPLUS
