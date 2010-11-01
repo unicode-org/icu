@@ -5849,6 +5849,8 @@ static void TestBeforeRuleWithScriptReordering(void)
 
 
     /* build collator */
+    log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
+
     rulesLength = u_unescape(srules, rules, LEN(rules));
     myCollation = ucol_openRules(rules, rulesLength, UCOL_ON, UCOL_TERTIARY, &error, &status);
     if(U_FAILURE(status)) {
@@ -6004,7 +6006,6 @@ static void TestHaniReorder(void)
     const char* strRules[] = {
         "[scriptReorder Hani]"
     };
-
     const int32_t apiRules[] = {
         USCRIPT_HAN
     };
@@ -6024,6 +6025,204 @@ static void TestHaniReorder(void)
 
     /* Test collation reordering API */
     doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
+}
+
+static int compare_uint8_t_arrays(const uint8_t* a, const uint8_t* b)
+{
+  for (; *a == *b; ++a, ++b) {
+    if (*a == 0) {
+      return 0;
+    }
+  }
+  return (*a < *b ? -1 : 1);
+}
+
+static void TestImport(void)
+{
+    UCollator* vicoll;
+    UCollator* escoll;
+    UCollator* viescoll;
+    UCollator* importviescoll;
+    UParseError error;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar* virules;
+    int32_t viruleslength;
+    UChar* esrules;
+    int32_t esruleslength;
+    UChar* viesrules;
+    int32_t viesruleslength;
+    char srules[500] = "[import vi][import es]";
+    UChar rules[500];
+    uint32_t length = 0;
+    int32_t itemCount;
+    int32_t i, k;
+    UChar32 start;
+    UChar32 end;
+    UChar str[500];
+    int32_t strLength;
+
+    uint8_t sk1[500];
+    uint8_t sk2[500];
+
+    UBool b;
+    USet* tailoredSet;
+    USet* importTailoredSet;
+
+
+    vicoll = ucol_open("vi", &status);
+    virules = (UChar*) ucol_getRules(vicoll, &viruleslength);
+    escoll = ucol_open("es", &status);
+    esrules = (UChar*) ucol_getRules(escoll, &esruleslength);
+    viesrules = (UChar*)uprv_malloc((viruleslength+esruleslength+1)*sizeof(UChar*));
+    viesrules[0] = 0;
+    u_strcat(viesrules, virules);
+    u_strcat(viesrules, esrules);
+    viesruleslength = viruleslength + esruleslength;
+    viescoll = ucol_openRules(viesrules, viesruleslength, UCOL_ON, UCOL_TERTIARY, &error, &status);
+
+    /* u_strFromUTF8(rules, 500, &length, srules, strlen(srules), &status); */
+    length = u_unescape(srules, rules, 500);
+    importviescoll = ucol_openRules(rules, length, UCOL_ON, UCOL_TERTIARY, &error, &status);
+    if(U_FAILURE(status)){
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
+    }
+
+    tailoredSet = ucol_getTailoredSet(viescoll, &status);
+    importTailoredSet = ucol_getTailoredSet(importviescoll, &status);
+
+    if(!uset_equals(tailoredSet, importTailoredSet)){
+        log_err("Tailored sets not equal");
+    }
+
+    uset_close(importTailoredSet);
+
+    itemCount = uset_getItemCount(tailoredSet);
+
+    for( i = 0; i < itemCount; i++){
+        strLength = uset_getItem(tailoredSet, i, &start, &end, str, 500, &status);
+        if(strLength < 2){
+            for (; start <= end; start++){
+                k = 0;
+                U16_APPEND(str, k, 500, start, b);
+                ucol_getSortKey(viescoll, str, 1, sk1, 500);
+                ucol_getSortKey(importviescoll, str, 1, sk2, 500);
+                if(compare_uint8_t_arrays(sk1, sk2) != 0){
+                    log_err("Sort key for %s not equal\n", str);
+                    break;
+                }
+            }
+        }else{
+            ucol_getSortKey(viescoll, str, strLength, sk1, 500);
+            ucol_getSortKey(importviescoll, str, strLength, sk2, 500);
+            if(compare_uint8_t_arrays(sk1, sk2) != 0){
+                log_err("ZZSort key for %s not equal\n", str);
+                break;
+            }
+
+        }
+    }
+
+    uset_close(tailoredSet);
+}
+
+static void TestImportWithType(void)
+{
+    UCollator* vicoll;
+    UCollator* decoll;
+    UCollator* videcoll;
+    UCollator* importvidecoll;
+    UParseError error;
+    UErrorCode status = U_ZERO_ERROR;
+    const UChar* virules;
+    int32_t viruleslength;
+    const UChar* derules;
+    int32_t deruleslength;
+    UChar* viderules;
+    int32_t videruleslength;
+    const char srules[500] = "[import vi][import de-u-co-phonebk]";
+    UChar rules[500];
+    uint32_t length = 0;
+    int32_t itemCount;
+    int32_t i, k;
+    UChar32 start;
+    UChar32 end;
+    UChar str[500];
+    int32_t strLength;
+
+    uint8_t sk1[500];
+    uint8_t sk2[500];
+
+    USet* tailoredSet;
+    USet* importTailoredSet;
+
+    vicoll = ucol_open("vi", &status);
+    if(U_FAILURE(status)){
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
+    }
+    virules = ucol_getRules(vicoll, &viruleslength);
+    /* decoll = ucol_open("de@collation=phonebook", &status); */
+    decoll = ucol_open("de-u-co-phonebk", &status);
+    if(U_FAILURE(status)){
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
+    }
+
+
+    derules = ucol_getRules(decoll, &deruleslength);
+    viderules = (UChar*)uprv_malloc((viruleslength+deruleslength+1)*sizeof(UChar*));
+    viderules[0] = 0;
+    u_strcat(viderules, virules);
+    u_strcat(viderules, derules);
+    videruleslength = viruleslength + deruleslength;
+    videcoll = ucol_openRules(viderules, videruleslength, UCOL_ON, UCOL_TERTIARY, &error, &status);
+
+    /* u_strFromUTF8(rules, 500, &length, srules, strlen(srules), &status); */
+    length = u_unescape(srules, rules, 500);
+    importvidecoll = ucol_openRules(rules, length, UCOL_ON, UCOL_TERTIARY, &error, &status);
+    if(U_FAILURE(status)){
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
+    }
+
+    tailoredSet = ucol_getTailoredSet(videcoll, &status);
+    importTailoredSet = ucol_getTailoredSet(importvidecoll, &status);
+
+    if(!uset_equals(tailoredSet, importTailoredSet)){
+        log_err("Tailored sets not equal");
+    }
+
+    uset_close(importTailoredSet);
+
+    itemCount = uset_getItemCount(tailoredSet);
+
+    for( i = 0; i < itemCount; i++){
+        strLength = uset_getItem(tailoredSet, i, &start, &end, str, 500, &status);
+        if(strLength < 2){
+            for (; start <= end; start++){
+                k = 0;
+                U16_APPEND_UNSAFE(str, k, start);
+                ucol_getSortKey(videcoll, str, 1, sk1, 500);
+                ucol_getSortKey(importvidecoll, str, 1, sk2, 500);
+                if(compare_uint8_t_arrays(sk1, sk2) != 0){
+                    log_err("Sort key for %s not equal\n", str);
+                    break;
+                }
+            }
+        }else{
+            ucol_getSortKey(videcoll, str, strLength, sk1, 500);
+            ucol_getSortKey(importvidecoll, str, strLength, sk2, 500);
+            if(compare_uint8_t_arrays(sk1, sk2) != 0){
+                log_err("Sort key for %s not equal\n", str);
+                break;
+            }
+
+        }
+    }
+
+    uset_close(tailoredSet);
+
 }
 
 
@@ -6103,7 +6302,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestUCAPrecontext);
     TEST(TestOutOfBuffer5468);
     TEST(TestSameStrengthList);
-    
+
     TEST(TestSameStrengthListQuoted);
     TEST(TestSameStrengthListSupplemental);
     TEST(TestSameStrengthListQwerty);
@@ -6114,7 +6313,9 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPrivateUseCharacters);
     TEST(TestPrivateUseCharactersInList);
     TEST(TestPrivateUseCharactersInRange);
-    TEST(TestInvalidListsAndRanges);    
+    TEST(TestInvalidListsAndRanges);
+    TEST(TestImport);
+    TEST(TestImportWithType);
 
     TEST(TestGreekFirstReorder);
     TEST(TestGreekLastReorder);

@@ -577,13 +577,16 @@ ucol_open(const char *loc,
     return result;
 }
 
-U_CAPI UCollator* U_EXPORT2
-ucol_openRules( const UChar        *rules,
-               int32_t            rulesLength,
-               UColAttributeValue normalizationMode,
-               UCollationStrength strength,
-               UParseError        *parseError,
-               UErrorCode         *status)
+
+UCollator*
+ucol_openRulesForImport( const UChar        *rules,
+                         int32_t            rulesLength,
+                         UColAttributeValue normalizationMode,
+                         UCollationStrength strength,
+                         UParseError        *parseError,
+                         GetCollationRulesFunction  importFunc,
+                         void* context,
+                         UErrorCode         *status)
 {
     UColTokenParser src;
     UColAttributeValue norm;
@@ -625,7 +628,7 @@ ucol_openRules( const UChar        *rules,
         return NULL;
     }
 
-    ucol_tok_initTokenList(&src, rules, rulesLength, UCA, status);
+    ucol_tok_initTokenList(&src, rules, rulesLength, UCA, importFunc, context, status);
     ucol_tok_assembleTokenList(&src,parseError, status);
 
     if(U_FAILURE(*status)) {
@@ -723,6 +726,24 @@ cleanup:
     return result;
 }
 
+U_CAPI UCollator* U_EXPORT2
+ucol_openRules( const UChar        *rules,
+               int32_t            rulesLength,
+               UColAttributeValue normalizationMode,
+               UCollationStrength strength,
+               UParseError        *parseError,
+               UErrorCode         *status)
+{
+    return ucol_openRulesForImport(rules,
+                                   rulesLength,
+                                   normalizationMode,
+                                   strength,
+                                   parseError,
+                                   ucol_tok_getRulesFromBundle,
+                                   NULL,
+                                   status);
+}
+
 U_CAPI int32_t U_EXPORT2
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
     UErrorCode status = U_ZERO_ERROR;
@@ -813,8 +834,8 @@ ucol_equals(const UCollator *source, const UCollator *target) {
     UParseError parseError;
     UColTokenParser sourceParser, targetParser;
     int32_t sourceListLen = 0, targetListLen = 0;
-    ucol_tok_initTokenList(&sourceParser, sourceRules, sourceRulesLen, source->UCA, &status);
-    ucol_tok_initTokenList(&targetParser, targetRules, targetRulesLen, target->UCA, &status);
+    ucol_tok_initTokenList(&sourceParser, sourceRules, sourceRulesLen, source->UCA, ucol_tok_getRulesFromBundle, NULL, &status);
+    ucol_tok_initTokenList(&targetParser, targetRules, targetRulesLen, target->UCA, ucol_tok_getRulesFromBundle, NULL, &status);
     sourceListLen = ucol_tok_assembleTokenList(&sourceParser, &parseError, &status);
     targetListLen = ucol_tok_assembleTokenList(&targetParser, &parseError, &status);
 
@@ -1202,7 +1223,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
 
     // The idea is to tokenize the rule set. For each non-reset token,
     // we add all the canonicaly equivalent FCD sequences
-    ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA, status);
+    ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA, ucol_tok_getRulesFromBundle, NULL, status);
     while (ucol_tok_parseNextToken(&src, startOfRules, &parseError, status) != NULL) {
         startOfRules = FALSE;
         if(src.parsedToken.strength != UCOL_TOK_RESET) {

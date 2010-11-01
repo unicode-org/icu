@@ -30,6 +30,14 @@
 #include "ucol_bld.h"
 #include "cmemory.h"
 #include "util.h"
+#include "uresimp.h"
+
+// Define this only for debugging.
+// #define DEBUG_FOR_COLL_RULES 1
+
+#ifdef DEBUG_FOR_COLL_RULES
+#include <iostream>
+#endif
 
 U_NAMESPACE_USE
 
@@ -117,7 +125,7 @@ U_CDECL_END
  * To turn this debugging on, either uncomment the following line, or define use -DDEBUG_FOR_CODE_POINTS
  * in the compile line.
  */
-/* #define DEBUG_FOR_CODE_POINTS 1 */
+// #define DEBUG_FOR_CODE_POINTS 1
 
 #ifdef DEBUG_FOR_CODE_POINTS
     FILE* dfcp_fp = NULL;
@@ -259,7 +267,6 @@ void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, U
     }
 }
 
-
 #define UTOK_OPTION_COUNT 22
 
 static UBool didInit = FALSE;
@@ -310,7 +317,6 @@ U_STRING_DECL(option_18,    "suppressContractions",         20);
 U_STRING_DECL(option_19,    "numericOrdering",              15);
 U_STRING_DECL(option_20,    "import",         6);
 U_STRING_DECL(option_21,    "scriptReorder",         13);
-
 
 /*
 [last variable] last variable value
@@ -481,6 +487,7 @@ void ucol_uprv_tok_initData() {
         U_STRING_INIT(option_17, "optimize",       8);
         U_STRING_INIT(option_18, "suppressContractions",         20);
         U_STRING_INIT(option_19, "numericOrdering",      15);
+        U_STRING_INIT(option_20, "import ",        6);
         U_STRING_INIT(option_21, "scriptReorder ",        13);
         didInit = TRUE;
     }
@@ -583,6 +590,13 @@ USet *ucol_uprv_tok_readAndSetUnicodeSet(const UChar *start, const UChar *end, U
     return uset_openPattern(start, current, status);
 }
 
+/**
+ * Reads an option and matches the option name with the predefined options. (Case-insensitive.)
+ * @param start Pointer to the start UChar.
+ * @param end Pointer to the last valid pointer beyond which the option will not extend.
+ * @param optionArg Address of the pointer at which the options start (after the option name)
+ * @return The index of the option, or -1 if the option is not valid.
+ */
 static
 int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UChar **optionArg) {
     int32_t i = 0;
@@ -594,7 +608,7 @@ int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UCh
     while(i < UTOK_OPTION_COUNT) {
         if(u_strncmpNoCase(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
             if(end - start > rulesOptions[i].optionLen) {
-                *optionArg = start+rulesOptions[i].optionLen; /* start of the options*/
+                *optionArg = start+rulesOptions[i].optionLen; /* End of option name; start of the options */
                 while(u_isWhitespace(**optionArg) || uprv_isRuleWhiteSpace(**optionArg)) { /* eat whitespace */
                     (*optionArg)++;
                 }
@@ -1717,11 +1731,16 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
         return 0;
     }
 #ifdef DEBUG_FOR_CODE_POINTS
-    char filename[50];
-    time_t now = time(0);
-    strftime(filename, 50, "/tmp/debug_for_cp_%C%m%d.%H%M%S.txt", localtime(&now));
+    char filename[35];
+    sprintf(filename, "/tmp/debug_for_cp_%09d.txt", getpid());
     dfcp_fp = fopen(filename, "a");
-    fprintf(stderr, "Output is in the file %s.\n", filename);
+    fprintf(stdout, "Output is in the file %s.\n", filename);
+#endif
+
+#ifdef DEBUG_FOR_COLL_RULES
+    std::string s3;
+    UnicodeString(src->source).toUTF8String(s3);
+    std::cout << "src->source = " << s3 << std::endl;
 #endif
 
     while(src->current < src->end || src->isStarred) {
@@ -2097,11 +2116,64 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
     return src->resultLen;
 }
 
-void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, const UCollator *UCA, UErrorCode *status) {
+const UChar* ucol_tok_getRulesFromBundle(
+    void* context,
+    const char* locale,
+    const char* type,
+    int32_t* pLength,
+    UErrorCode* status)
+{
+    const UChar* rules = NULL;
+    UResourceBundle* bundle;
+    UResourceBundle* collations;
+    UResourceBundle* collation;
+
+    *pLength = 0;
+
+    bundle = ures_open(U_ICUDATA_COLL, locale, status);
+    if(U_SUCCESS(*status)){
+        collations = ures_getByKey(bundle, "collations", NULL, status);
+        if(U_SUCCESS(*status)){
+            collation = ures_getByKey(collations, type, NULL, status);
+            if(U_SUCCESS(*status)){
+                rules = ures_getStringByKey(collation, "Sequence", pLength, status);
+                if(U_FAILURE(*status)){
+                    *pLength = 0;
+                    rules = NULL;
+                }
+                ures_close(collation);
+            }
+            ures_close(collations);
+        }
+    }
+
+    ures_close(bundle);
+
+    return rules;
+}
+
+static char* make_string(const char* sourceStart, int32_t length) {
+    char* s = (char*)uprv_malloc(length+1);
+    uprv_memcpy(s, sourceStart, length);
+    s[length] = 0;
+    return s;
+}
+
+void ucol_tok_initTokenList(
+    UColTokenParser *src,
+    const UChar *rules,
+    uint32_t rulesLength,
+    const UCollator *UCA,
+    GetCollationRulesFunction importFunc,
+    void* context, 
+    UErrorCode *status) {
     U_NAMESPACE_USE
 
     uint32_t nSize = 0;
     uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
+
+    bool needToDeallocRules = false;
+
     if(U_FAILURE(*status)) {
         return;
     }
@@ -2116,11 +2188,15 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
     const UChar *setStart = NULL;
     uint32_t i = 0;
     while(i < rulesLength) {
-        if(rules[i] == 0x005B) {
-            // while((openBrace = u_strchr(openBrace, 0x005B)) != NULL) { // find open braces
-            //optionNumber = ucol_uprv_tok_readOption(openBrace+1, rules+rulesLength, &setStart);
+        if(rules[i] == 0x005B) {    // '[': start of an option
+            /* Gets the following:
+               optionNumber: The index of the option.
+               setStart: The pointer at which the option arguments start.
+             */
             optionNumber = ucol_uprv_tok_readOption(rules+i+1, rules+rulesLength, &setStart);
+
             if(optionNumber == OPTION_OPTIMIZE) { /* copy - parts of UCA to tailoring */
+                // [optimize]
                 USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
                 if(U_SUCCESS(*status)) {
                     if(src->copySet == NULL) {
@@ -2144,6 +2220,106 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
                 } else {
                     return;
                 }
+            } else if(optionNumber == OPTION_IMPORT){
+                // [import <collation-name>]
+
+                // Find the address of the closing ].
+                UChar* import_end = u_strchr(rules+i, 0x005D);
+
+                // Find the offset of the ']' from the beginning.
+                uint32_t optionEndOffset = import_end - rules + 1;
+
+                // Find the length of the import argument, till the closing ].
+                uint32_t optionEndOffsetFromLoc = import_end - setStart;
+
+                int32_t optionLength;
+
+                // The following call is to get optionLength.
+                u_strToUTF8(NULL, 0, &optionLength, setStart, optionEndOffsetFromLoc, status);
+
+                char* option = (char*)uprv_malloc((optionLength+1)*sizeof(char));
+
+                *status = U_ZERO_ERROR;
+                // The following call convertes the utf16 string to UTF8 and stores in option.
+                u_strToUTF8(option, optionLength+1, &optionLength, setStart, optionEndOffsetFromLoc, status);
+
+                int32_t localeLength;
+                int32_t templ;
+                localeLength = uloc_forLanguageTag(option, NULL, 0, NULL, status);
+                *status = U_ZERO_ERROR;
+                char* locale = (char*)uprv_malloc(localeLength+1);
+                uloc_forLanguageTag(option, locale, localeLength+1, &templ, status);
+
+                int32_t typeLength;
+                char* type;
+
+                typeLength = uloc_getKeywordValue(locale, "collation", NULL, 0, status);
+                *status = U_ZERO_ERROR;
+                if (typeLength > 0){
+                    type = (char*)uprv_malloc(typeLength+1);
+                    uloc_getKeywordValue(locale, "collation", type, typeLength+1, status);
+
+                    // Truncate the locale at @ to be used later.
+                    char* at = strchr(locale, '@');
+                    if (at != NULL) {
+                      *at = 0;
+                    }
+                }else{
+                  type = make_string("standard", 8);
+                }
+
+                int32_t importRulesLength = 0;
+                const UChar* importRules = importFunc(context, locale, type, &importRulesLength, status);
+
+#ifdef DEBUG_FOR_COLL_RULES
+                std::string s;
+                UnicodeString(importRules).toUTF8String(s);
+                std::cout << "Import rules = " << s << std::endl;
+#endif
+                uprv_free(locale);
+                uprv_free(option);
+                uprv_free(type);
+
+                // Add the length of the imported rules to length of the original rules,
+                // and subtract the length of the import option.
+                uint32_t newRulesLength = rulesLength + importRulesLength - (optionEndOffset - i);
+
+                UChar* newRules = (UChar*)uprv_malloc(newRulesLength*sizeof(UChar));
+
+#ifdef DEBUG_FOR_COLL_RULES
+                std::string s1;
+                UnicodeString(rules).toUTF8String(s1);
+                std::cout << "Original rules = " << s1 << std::endl;
+#endif
+
+
+                // Copy the section of the original rules leading up to the import
+                uprv_memcpy(newRules, rules, i*sizeof(UChar));
+                // Copy the imported rules
+                uprv_memcpy(newRules+i, importRules, importRulesLength*sizeof(UChar));
+                // Copy the rest of the original rules (minus the import option itself)
+                uprv_memcpy(newRules+i+importRulesLength,
+                            rules+optionEndOffset,
+                            (rulesLength-optionEndOffset)*sizeof(UChar));
+
+#ifdef DEBUG_FOR_COLL_RULES
+                std::string s2;
+                UnicodeString(newRules).toUTF8String(s2);
+                std::cout << "Resulting rules = " << s2 << std::endl;
+#endif
+
+                if(needToDeallocRules){
+                    // if needToDeallocRules is set, then we allocated rules, so it's safe to cast and free
+                    uprv_free((void*)rules);
+                }
+                needToDeallocRules = true;
+                rules = newRules;
+                rulesLength = newRulesLength;
+
+                estimatedSize += importRulesLength*2;
+
+                // First character of the new rules needs to be processed
+                i--;
             }
         }
         //openBrace++;
@@ -2168,6 +2344,12 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
         }
         nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
     }
+    if(needToDeallocRules){
+        // if needToDeallocRules is set, then we allocated rules, so it's safe to cast and free
+        uprv_free((void*)rules);
+    }
+
+
     src->current = src->source;
     src->end = src->source+nSize;
     src->sourceCurrent = src->source;
