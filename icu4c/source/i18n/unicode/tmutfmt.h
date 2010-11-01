@@ -33,6 +33,15 @@ union UHashTok;
 
 U_NAMESPACE_BEGIN
 
+U_CDECL_BEGIN
+
+/**
+ * @internal ICU 4.2
+ */
+UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2) ;
+
+U_CDECL_END
+
 class Hashtable;
 
 
@@ -221,6 +230,7 @@ private:
     PluralRules*  fPluralRules;
     EStyle           fStyle;
 
+    friend UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
     void create(const Locale& locale, EStyle style, UErrorCode& status);
 
     // it might actually be simpler to make them Decimal Formats later.

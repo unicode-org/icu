@@ -844,7 +844,8 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
     int32_t rulesLen = 0;
     const UChar* rules = ucol_getRules(coll, &rulesLen);
     UColTokenParser src;
-    ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA, status);
+    ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA,
+                           ucol_tok_getRulesFromBundle, NULL, status);
 
     contContext c = { NULL, contractions, expansions, src.removeSet, addPrefixes, status };
 

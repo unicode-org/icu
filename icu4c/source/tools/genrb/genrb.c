@@ -22,7 +22,7 @@
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
 
 /* Protos */
-static void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status);
+void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status);
 static char *make_res_filename(const char *filename, const char *outputDir,
                                const char *packageName, UErrorCode *status);
 
@@ -440,7 +440,7 @@ main(int argc,
 }
 
 /* Process a file */
-static void
+void
 processFile(const char *filename, const char *cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status) {
     /*FileStream     *in           = NULL;*/
     struct SRBRoot *data         = NULL;
@@ -453,6 +453,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
     int32_t dirlen  = 0;
     int32_t filelen = 0;
+
 
     if (status==NULL || U_FAILURE(*status)) {
         return;
@@ -533,7 +534,6 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     uprv_strcat(openFileName, filename);
 
     ucbuf = ucbuf_open(openFileName, &cp,getShowWarning(),TRUE, status);
-
     if(*status == U_FILE_ACCESS_ERROR) {
 
         fprintf(stderr, "couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
