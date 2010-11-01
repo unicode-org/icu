@@ -292,7 +292,10 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                 if (internalScriptOrder != NULL) {
                     uprv_free(internalScriptOrder);
                 }
+
+#ifdef REORDER_DEBUG
     fprintf(stdout, "\treturn - next == USCRIPT_UNKNOWN\n");
+#endif
                 return;
             }
             fromTheBottom = false;
@@ -314,7 +317,9 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                     if (internalScriptOrder != NULL) {
                         uprv_free(internalScriptOrder);
                     }
+#ifdef REORDER_DEBUG
     fprintf(stdout, "\treturn - fromTheBottom reuse lead byte\n");
+#endif
                     return;
                 }
    
@@ -337,7 +342,9 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                     if (internalScriptOrder != NULL) {
                         uprv_free(internalScriptOrder);
                     }
+#ifdef REORDER_DEBUG
     fprintf(stdout, "\treturn - fromTheTop reuse lead byte\n");
+#endif
                     return;
                 }
 
