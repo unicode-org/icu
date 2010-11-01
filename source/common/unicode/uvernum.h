@@ -134,9 +134,12 @@
  *                       now break contractions
  * Backward compatible with the old rules. 
  * This value may change in the subsequent releases of ICU
+ * version 8 - ICU 4.6 - the addition of collation reordering. It should in general be
+ *                       compatible since the data is at the end of the file. However,
+ *                       if data parsers make assumptions about lengths this will cause problems.
  * @stable ICU 2.4
  */
-#define UCOL_BUILDER_VERSION 7
+#define UCOL_BUILDER_VERSION 8
 
 /** This is the version of the tailorings 
  *  This value may change in the subsequent releases of ICU
