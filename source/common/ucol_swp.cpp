@@ -309,19 +309,19 @@ ucol_swapBinary(const UDataSwapper *ds,
         
         /* swap the script to lead bytes */
         if(header.scriptToLeadByte!=0) {
-            int indexCount = ds->readUInt16(*(inBytes+header.scriptToLeadByte)); // each entry = uint16
-            int dataCount = ds->readUInt16(*(inBytes+header.scriptToLeadByte + 2)); // each entry = uint16
+            int indexCount = ds->readUInt16(*((uint16_t*)(inBytes+header.scriptToLeadByte))); // each entry = 2 * uint16
+            int dataCount = ds->readUInt16(*((uint16_t*)(inBytes+header.scriptToLeadByte + 2))); // each entry = uint16
             ds->swapArray16(ds, inBytes+header.scriptToLeadByte, 
-                                4 + (indexCount * 4) + (dataCount * 2),
+                                4 + (4 * indexCount) + (2 * dataCount),
                                 outBytes+header.scriptToLeadByte, pErrorCode);
         }
         
         /* swap the lead byte to scripts */
         if(header.leadByteToScript!=0) {
-            int indexCount = ds->readUInt16(*(inBytes+header.leadByteToScript)); // each entry = 2 * uint16
-            int dataCount = ds->readUInt16(*(inBytes+header.leadByteToScript + 2)); // each entry = uint16
+            int indexCount = ds->readUInt16(*((uint16_t*)(inBytes+header.leadByteToScript))); // each entry = uint16
+            int dataCount = ds->readUInt16(*((uint16_t*)(inBytes+header.leadByteToScript + 2))); // each entry = uint16
             ds->swapArray16(ds, inBytes+header.leadByteToScript, 
-                                4 + (indexCount * 2) + (dataCount * 2),
+                                4 + (2 * indexCount) + (2 * dataCount),
                                 outBytes+header.leadByteToScript, pErrorCode);
         }
     }
@@ -334,6 +334,7 @@ U_CAPI int32_t U_EXPORT2
 ucol_swap(const UDataSwapper *ds,
           const void *inData, int32_t length, void *outData,
           UErrorCode *pErrorCode) {
+          
     const UDataInfo *pInfo;
     int32_t headerSize, collationSize;
 
