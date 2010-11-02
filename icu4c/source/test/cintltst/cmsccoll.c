@@ -942,7 +942,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   /*printOutRules(rules);*/
 
   if(U_SUCCESS(*status) && ruleLen > 0) {
-    rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
     src.current = src.source = rulesCopy;
     src.end = rulesCopy+ruleLen;
@@ -997,7 +997,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
     if(Windiff == 0) {
       log_verbose("No immediate difference with Win32!\n");
     }
-    free(src.source);
+    uprv_free(src.source);
   }
 }
 
@@ -1340,7 +1340,7 @@ static void TestCollations(void) {
     }
     ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
 
-    for(i = 0; i<noOfLoc; i++) {
+    for(i = 429; i<=429; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
         if(uprv_strcmp("ja", locName) == 0) {
