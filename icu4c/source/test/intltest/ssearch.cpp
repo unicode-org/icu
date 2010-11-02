@@ -2332,7 +2332,7 @@ void SSearchTest::monkeyTest(char *params)
 
 void SSearchTest::bmMonkeyTest(char *params)
 {
-    static const UVersionInfo icu47 = { 4, 6, 0, 0 }; // for timebomb
+    static const UVersionInfo icu47 = { 4, 7, 0, 0 }; // for timebomb
     static const UChar skipChars[] = { 0x0E40, 0x0E41, 0x0E42, 0x0E43, 0x0E44, 0xAAB5, 0xAAB6, 0xAAB9, 0xAABB, 0xAABC, 0 }; // for timebomb
     // ook!
     UErrorCode status = U_ZERO_ERROR;
