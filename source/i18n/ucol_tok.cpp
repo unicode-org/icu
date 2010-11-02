@@ -316,7 +316,7 @@ U_STRING_DECL(option_17,    "optimize",       8);
 U_STRING_DECL(option_18,    "suppressContractions",         20);
 U_STRING_DECL(option_19,    "numericOrdering",              15);
 U_STRING_DECL(option_20,    "import",         6);
-U_STRING_DECL(option_21,    "scriptReorder",         13);
+U_STRING_DECL(option_21,    "reorder",         7);
 
 /*
 [last variable] last variable value
@@ -419,7 +419,7 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
     /*18*/ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
     /*19*/ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT},  /*"charset"        */
     /*20*/ {option_20,  6, NULL, 0, UCOL_ATTRIBUTE_COUNT},  /*"import"        */
-    /*21*/ {option_21,  13, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"scriptReorder"        */
+    /*21*/ {option_21,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"scriptReorder"        */
 };
 
 static
@@ -488,7 +488,7 @@ void ucol_uprv_tok_initData() {
         U_STRING_INIT(option_18, "suppressContractions",         20);
         U_STRING_INIT(option_19, "numericOrdering",      15);
         U_STRING_INIT(option_20, "import ",        6);
-        U_STRING_INIT(option_21, "scriptReorder ",        13);
+        U_STRING_INIT(option_21, "reorder",        7);
         didInit = TRUE;
     }
 }
@@ -625,7 +625,7 @@ int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UCh
 
 
 static
-void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status){
+void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status) {
     int32_t codeCount = 0;
     int32_t codeIndex = 0;
     char conversion[64];
