@@ -292,10 +292,6 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                 if (internalScriptOrder != NULL) {
                     uprv_free(internalScriptOrder);
                 }
-
-#ifdef REORDER_DEBUG
-    fprintf(stdout, "\treturn - next == USCRIPT_UNKNOWN\n");
-#endif
                 return;
             }
             fromTheBottom = false;
@@ -317,9 +313,6 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                     if (internalScriptOrder != NULL) {
                         uprv_free(internalScriptOrder);
                     }
-#ifdef REORDER_DEBUG
-    fprintf(stdout, "\treturn - fromTheBottom reuse lead byte\n");
-#endif
                     return;
                 }
    
@@ -342,9 +335,6 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                     if (internalScriptOrder != NULL) {
                         uprv_free(internalScriptOrder);
                     }
-#ifdef REORDER_DEBUG
-    fprintf(stdout, "\treturn - fromTheTop reuse lead byte\n");
-#endif
                     return;
                 }
 
@@ -443,7 +433,8 @@ ucol_open_internal(const char *loc,
     collations = NULL; // We just reused the collations object as collElem.
 
     UResourceBundle *binary = NULL;
-
+    UResourceBundle *reorderRes = NULL;
+    
     if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
         *status = U_USING_DEFAULT_WARNING;
         result = ucol_initCollator(UCA->image, result, UCA, status);
@@ -502,7 +493,18 @@ ucol_open_internal(const char *loc,
                     result->hasRealData = FALSE;
                 }
                 result->freeImageOnClose = FALSE;
+                
+                reorderRes = ures_getByKey(collElem, "%%ReorderCodes", NULL, &intStatus);
+                if (U_SUCCESS(intStatus)) {
+                    int32_t reorderCodesLen = 0;
+                    const int32_t* reorderCodes = ures_getIntVector(reorderRes, &reorderCodesLen, status);
+                    ucol_setScriptOrder(result, reorderCodes, reorderCodesLen, status);
+                    if (U_FAILURE(*status)) {
+                        goto clean;
+                    }
+                }
             }
+
         } else { // !U_SUCCESS(binaryStatus)
             if(U_SUCCESS(*status)) {
                 *status = intStatus; // propagate underlying error
@@ -546,12 +548,14 @@ ucol_open_internal(const char *loc,
     ures_close(b);
     ures_close(collElem);
     ures_close(binary);
+    ures_close(reorderRes);
     return result;
 
 clean:
     ures_close(b);
     ures_close(collElem);
     ures_close(binary);
+    ures_close(reorderRes);
     ucol_close(result);
     return NULL;
 }

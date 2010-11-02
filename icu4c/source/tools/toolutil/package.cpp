@@ -1079,7 +1079,6 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t idx, ch
     uint8_t itemCharset, outCharset;
     UBool itemIsBigEndian, outIsBigEndian;
 
-fprintf(stderr, "^^^^ Package::extractItem\n");
     if(idx<0 || itemCount<=idx) {
         return;
     }

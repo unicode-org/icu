@@ -133,8 +133,8 @@ ucol_looksLikeCollationBinary(const UDataSwapper *ds,
     header.magic=ds->readUInt32(inHeader->magic);
     if(!(
         header.magic==UCOL_HEADER_MAGIC &&
-        inHeader->formatVersion[0]==2 &&
-        inHeader->formatVersion[1]>=3
+        inHeader->formatVersion[0]==3 &&
+        inHeader->formatVersion[1]>=0
     )) {
         return FALSE;
     }
@@ -194,8 +194,8 @@ ucol_swapBinary(const UDataSwapper *ds,
     header.magic=ds->readUInt32(inHeader->magic);
     if(!(
         header.magic==UCOL_HEADER_MAGIC &&
-        inHeader->formatVersion[0]==2 &&
-        inHeader->formatVersion[1]>=3
+        inHeader->formatVersion[0]==3 &&
+        inHeader->formatVersion[1]>=0
     )) {
         udata_printError(ds, "ucol_swapBinary(): magic 0x%08x or format version %02x.%02x is not a collation binary\n",
                          header.magic,
@@ -350,8 +350,8 @@ ucol_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x43 &&
         pInfo->dataFormat[2]==0x6f &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==2 &&
-        pInfo->formatVersion[1]>=3
+        pInfo->formatVersion[0]==3 &&
+        pInfo->formatVersion[1]>=0
     )) {
         udata_printError(ds, "ucol_swap(): data format %02x.%02x.%02x.%02x (format version %02x.%02x) is not a collation file\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],

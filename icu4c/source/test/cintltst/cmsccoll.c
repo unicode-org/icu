@@ -5845,7 +5845,7 @@ static void TestBeforeRuleWithScriptReordering(void)
     /*UChar *data[] = { before, base };
     genericRulesStarter(srules, data, 2);*/
     
-    log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
+    log_verbose("Testing the &[before 1] rule with [reorder grek]\n");
 
 
     /* build collator */
@@ -5872,7 +5872,11 @@ static void TestBeforeRuleWithScriptReordering(void)
    }
 
     /* reorder the scripts */
-    ucol_setScriptOrder(myCollation, scriptOrder, 1);
+    ucol_setScriptOrder(myCollation, scriptOrder, 1, &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
+        return;
+    }
 
     /* check collation results - before rule applied and after script reordering */
     collResult = ucol_strcoll(myCollation, base, baseLen, before, beforeLen);
@@ -5911,7 +5915,12 @@ static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32
         }
         /*ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
         ucol_setStrength(myCollation, UCOL_TERTIARY);*/
-        ucol_setScriptOrder(myCollation, reorderTokens, reorderTokensLen);
+        ucol_setScriptOrder(myCollation, reorderTokens, reorderTokensLen, &status);
+        if(U_FAILURE(status)) {
+            log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
+            return;
+        }
+        
         for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
             doTest(myCollation,
                 testCases[testCaseNum].source,
@@ -5926,7 +5935,7 @@ static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32
 static void TestGreekFirstReorder(void)
 {
     const char* strRules[] = {
-        "[scriptReorder Grek]"
+        "[reorder Grek]"
     };
 
     const int32_t apiRules[] = {
@@ -5952,7 +5961,7 @@ static void TestGreekFirstReorder(void)
 static void TestGreekLastReorder(void)
 {
     const char* strRules[] = {
-        "[scriptReorder Zzzz Grek]"
+        "[reorder Zzzz Grek]"
     };
 
     const int32_t apiRules[] = {
@@ -5977,7 +5986,7 @@ static void TestGreekLastReorder(void)
 static void TestNonScriptReorder(void)
 {
     const char* strRules[] = {
-        "[scriptReorder Grek Symbol DIGIT Latn Punct space Zzzz cURRENCy]"
+        "[reorder Grek Symbol DIGIT Latn Punct space Zzzz cURRENCy]"
     };
 
     const int32_t apiRules[] = {
@@ -6004,7 +6013,7 @@ static void TestNonScriptReorder(void)
 static void TestHaniReorder(void)
 {
     const char* strRules[] = {
-        "[scriptReorder Hani]"
+        "[reorder Hani]"
     };
     const int32_t apiRules[] = {
         USCRIPT_HAN

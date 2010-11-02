@@ -550,7 +550,7 @@ ucol_setStrength(UCollator *coll,
 U_INTERNAL uint32_t U_EXPORT2 
 ucol_getScriptOrder(const UCollator* coll,
                     int32_t* dest,
-                    const uint32_t destCapacity,
+                    uint32_t destCapacity,
                     UErrorCode *pErrorCode);
 
 /**
@@ -558,13 +558,15 @@ ucol_getScriptOrder(const UCollator* coll,
  * @param coll The UCollator to set.
  * @param scriptOrder An array of script codes in the new order.
  * @param scriptOrderLength The length of scriptOrder.
+ * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
  * @see ucol_getStrength
  * @internal 
  */
 U_INTERNAL void U_EXPORT2 
 ucol_setScriptOrder(UCollator* coll,
                     const int32_t* scriptOrder,
-                    const uint32_t scriptOrderLength);
+                    uint32_t scriptOrderLength,
+                    UErrorCode *pErrorCode);
 
 /**
  * Get the display name for a UCollator.

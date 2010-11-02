@@ -7121,10 +7121,10 @@ ucol_getStrength(const UCollator *coll)
 U_INTERNAL uint32_t U_EXPORT2 
 ucol_getScriptOrder(const UCollator *coll,
                     int32_t *dest,
-                    const uint32_t destCapacity,
-                    UErrorCode *pErrorCode){
+                    uint32_t destCapacity,
+                    UErrorCode *pErrorCode) {
     if (pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return NULL;
+        return 0;
     }
     if (coll->scriptOrder == NULL) {
         return 0;
@@ -7141,8 +7141,8 @@ ucol_getScriptOrder(const UCollator *coll,
 U_INTERNAL void U_EXPORT2 
 ucol_setScriptOrder(UCollator *coll,
                     const int32_t *scriptOrder,
-                    const uint32_t scriptOrderLength) {
-    UErrorCode status = U_ZERO_ERROR;
+                    uint32_t scriptOrderLength,
+                    UErrorCode *pErrorCode ){
     if (coll->scriptOrder != NULL) {
         uprv_free(coll->scriptOrder);
     }
@@ -7151,8 +7151,7 @@ ucol_setScriptOrder(UCollator *coll,
         coll->scriptOrder[i] = scriptOrder[i];
     }
     coll->scriptOrderLength = scriptOrderLength;
-    ucol_buildScriptReorderTable(coll, &status);
-    // TODO: something with the status if error condition
+    ucol_buildScriptReorderTable(coll, pErrorCode);
 }
 
 
