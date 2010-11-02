@@ -19,13 +19,17 @@
   <xsl:param name="nul" />
 
   <xsl:param name="ourYear" />
+
+<xsl:output method="html" version="4.0"  doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
+doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+	omit-xml-declaration="yes"	encoding="utf-8" indent="yes"/>
   
 
   <xsl:template match="/">
+    <html>
 	<xsl:comment>
 	 Copyright (C)  <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved. 
 	</xsl:comment>
-    <html>
     <head>
     <title>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </title>
     <link rel="stylesheet" href="icu4c.css" type="text/css" />
@@ -33,62 +37,59 @@
     
     <body>
     
-    <a name="_top"></a>
+    <a name="#_top"></a>
     
     <h1>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </h1>
-    <ul>
-    	<li><a href="#removed">Removed from <xsl:value-of select="$leftVer"/></a></li>
-    	<li><a href="#deprecated">Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#changed">Changed in  <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#promoted">Promoted to stable in <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#added">Added in <xsl:value-of select="$rightVer" /></a></li>
-    	<li><a href="#other">Other existing drafts in <xsl:value-of select="$rightVer" /></a></li>
-    </ul>
-    <hr/>
-
-	<a name="removed">
+    
+    <div id="toc">
+	    <ul>
+	    	<li><a href="#removed">Removed from <xsl:value-of select="$leftVer"/></a></li>
+	    	<li><a href="#deprecated">Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></a></li>
+	    	<li><a href="#changed">Changed in  <xsl:value-of select="$rightVer" /></a></li>
+	    	<li><a href="#promoted">Promoted to stable in <xsl:value-of select="$rightVer" /></a></li>
+	    	<li><a href="#added">Added in <xsl:value-of select="$rightVer" /></a></li>
+	    	<li><a href="#other">Other existing drafts in <xsl:value-of select="$rightVer" /></a></li>
+	    </ul>
+	    <hr />
+	</div>
+	
+	<a name="removed"></a>
 	    <h2>Removed from <xsl:value-of select="$leftVer"/> </h2>
-    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@rightStatus=$nul]"/>
         </xsl:call-template>
     <P/><a href="#_top">(jump back to top)</a><hr/>
 
-	<a name="deprecated">
+	<a name="deprecated"></a>
     <h2>Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></h2>
-    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[(@rightStatus='Deprecated' and @leftStatus!='Deprecated') or (@rightStatus='Obsolete' and @leftStatus!='Obsolete')]"/>
         </xsl:call-template>
     <P/><a href="#_top">(jump back to top)</a><hr/>
 
-	<a name="changed">
+	<a name="changed"></a>
     <h2>Changed in  <xsl:value-of select="$rightVer" /> (old, new)</h2>
-    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[(@leftStatus != $nul) and (@rightStatus != $nul) and ( (@leftStatus != @rightStatus) or (@leftVersion != @rightVersion) ) and not ( (@leftStatus = 'Draft') and (@rightStatus = 'Stable') and (@rightVersion = $rightVer) )]"/>
         </xsl:call-template>
     <P/><a href="#_top">(jump back to top)</a><hr/>
 
-	<a name="promoted">
+	<a name="promoted"></a>
     <h2>Promoted to stable in <xsl:value-of select="$rightVer" /></h2>
-    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@leftStatus != 'Stable' and  @rightStatus = 'Stable']"/>
         </xsl:call-template>
     <P/><a href="#_top">(jump back to top)</a><hr/>
     
-    <a name="added">
+    <a name="added"></a>
     <h2>Added in <xsl:value-of select="$rightVer" /></h2>
-    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@leftStatus=$nul]"/>
         </xsl:call-template>
     <P/><a href="#_top">(jump back to top)</a><hr/>
     
-    <a name="other">
+    <a name="other"></a>
     <h2>Other existing drafts in <xsl:value-of select="$rightVer" /></h2>
-    </a>
     <div class='other'>
         <xsl:call-template name="infoTable"> <!--  note: note genTable -->
             <xsl:with-param name="nodes" select="/list/func[@rightStatus = 'Draft' and @rightVersion != $rightVer]"/>
@@ -139,12 +140,8 @@
                         </xsl:if>
                     </xsl:attribute>
                    	<xsl:if  test = "@leftStatus = 'Draft' and @rightStatus = 'Stable' and @leftVersion = @rightVersion">
-	                    <xsl:attribute name="colspan">
-       	            		2
-       	            	</xsl:attribute>
-	                    <xsl:attribute name="align">
-       	            		center
-       	            	</xsl:attribute>
+	                    <xsl:attribute name="colspan">2</xsl:attribute>
+	                    <xsl:attribute name="align">center</xsl:attribute>
                    	</xsl:if>
                 
                     <xsl:value-of select="@leftStatus" /><xsl:if  test = "@leftStatus = 'Draft' and @rightStatus = 'Stable' and @leftVersion = @rightVersion">»Stable</xsl:if>
@@ -175,7 +172,7 @@
                 </td>
            </xsl:if>
            	<xsl:if  test = "@rightStatus = 'Stable' and @rightVersion = $rightVer">
-                <td>
+                <td class='bornstable'>
                     <b title='A new API was introduced as stable in $rightVer.' class='bigwarn'>(Born Stable)</b>
                 </td>
            </xsl:if>
@@ -220,12 +217,8 @@
                     </xsl:attribute>
                     
                    	<xsl:if  test = "@leftStatus = @rightStatus and @leftVersion = @rightVersion">
-	                    <xsl:attribute name="colspan">
-       	            		2
-       	            	</xsl:attribute>
-	                    <xsl:attribute name="align">
-       	            		center
-       	            	</xsl:attribute>
+	                    <xsl:attribute name="colspan">2</xsl:attribute>
+	                    <xsl:attribute name="align">center</xsl:attribute>
                    	</xsl:if>
                
                     <xsl:value-of select="@leftStatus" />
