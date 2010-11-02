@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Specification-Title: International Components for Unicode for Java (core)
+Specification-Version: @SPECVERSION@
+Specification-Vendor: icu-project.org
+Implementation-Title: International Components for Unicode for Java (core)
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Bundle-ManifestVersion: 2
+Bundle-Name: ICU4J core
+Bundle-Description: International Components for Unicode for Java (core)
+Bundle-SymbolicName: com.ibm.icu.core
+Bundle-Version: @IMPLVERSION@
+Bundle-Vendor: IBM Corporation
+Bundle-Copyright: @COPYRIGHT@
+Bundle-RequiredExecutionEnvironment: @EXECENV@
+Main-Class: com.ibm.icu.util.VersionInfo
