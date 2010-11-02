@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -489,40 +489,6 @@ upvec_compactToUTrie2WithRowIndexes(UPropsVectors *pv, UErrorCode *pErrorCode) {
  * TODO(markus): Add upvec_16BitsToUTrie2() function that enumerates all rows, extracts
  * some 16-bit field and builds and returns a UTrie2.
  */
-
-U_CAPI void U_CALLCONV
-upvec_compactToUTrieHandler(void *context,
-                            UChar32 start, UChar32 end,
-                            int32_t rowIndex, uint32_t *row, int32_t columns,
-                            UErrorCode *pErrorCode) {
-    UPVecToUTrieContext *toUTrie=(UPVecToUTrieContext *)context;
-    if(start<UPVEC_FIRST_SPECIAL_CP) {
-        if(!utrie_setRange32(toUTrie->newTrie, start, end+1, (uint32_t)rowIndex, TRUE)) {
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    } else {
-        switch(start) {
-        case UPVEC_INITIAL_VALUE_CP:
-            toUTrie->initialValue=rowIndex;
-            break;
-        case UPVEC_START_REAL_VALUES_CP:
-            if(rowIndex>0xffff) {
-                /* too many rows for a 16-bit trie */
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            } else {
-                toUTrie->newTrie=utrie_open(NULL, NULL, toUTrie->capacity,
-                                            toUTrie->initialValue, toUTrie->initialValue,
-                                            toUTrie->latin1Linear);
-                if(toUTrie->newTrie==NULL) {
-                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                }
-            }
-            break;
-        default:
-            break;
-        }
-    }
-}
 
 U_CAPI void U_CALLCONV
 upvec_compactToUTrie2Handler(void *context,
