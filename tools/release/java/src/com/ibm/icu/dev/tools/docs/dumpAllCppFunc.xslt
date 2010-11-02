@@ -30,8 +30,45 @@
 						<xsl:copy-of select="@inline" />
 					</cppfunc>
 				</xsl:for-each>
+				
+				<!--  now const static publics -->
+				<xsl:variable name="sconst_node"
+					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='variable'][@static='yes']" />
+				<xsl:for-each select="$sconst_node">
+					<cppfunc>
+						<xsl:copy-of select="@id" />
+						<xsl:attribute name="status"><xsl:value-of
+							select="detaileddescription/para/xrefsect/xreftitle/text()" /></xsl:attribute>
+						<xsl:attribute name="version"><xsl:value-of
+							select="detaileddescription/para/xrefsect/xrefdescription/para/text()" /></xsl:attribute>
+						<xsl:attribute name="prototype">static <xsl:value-of
+							select="definition/text()" /></xsl:attribute>
+						<xsl:copy-of select="location/@file" />
+						<xsl:copy-of select="@static" />
+						<xsl:copy-of select="@inline" />
+					</cppfunc>
+				</xsl:for-each>
 
-
+		<!-- 
+				//No real non-static variables - and also, doxygen is confused about nested structs/unions
+				
+				<xsl:variable name="const_node"
+					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='variable'][@static='no']" />
+				<xsl:for-each select="$const_node">
+					<cppfunc>
+						<xsl:copy-of select="@id" />
+						<xsl:attribute name="status"><xsl:value-of
+							select="detaileddescription/para/xrefsect/xreftitle/text()" /></xsl:attribute>
+						<xsl:attribute name="version"><xsl:value-of
+							select="detaileddescription/para/xrefsect/xrefdescription/para/text()" /></xsl:attribute>
+						<xsl:attribute name="prototype">/* not static */ <xsl:value-of
+							select="definition/text()" /></xsl:attribute>
+						<xsl:copy-of select="location/@file" />
+						<xsl:copy-of select="@static" />
+						<xsl:copy-of select="@inline" />
+					</cppfunc>
+				</xsl:for-each>
+		-->
 				<!--  now enums -->
 				<xsl:variable name="enum_node"
 					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@kind='enum'][@prot='public']" />
