@@ -132,11 +132,11 @@
  * version 6 - ICU 2.8 - fixed bug in builder that allowed 0xFF in primary values
  * version 7 - ICU 3.4 - with the UCA 4.1 Thai tag is no longer processed, complete ignorables
  *                       now break contractions
- * Backward compatible with the old rules. 
- * This value may change in the subsequent releases of ICU
  * version 8 - ICU 4.6 - the addition of collation reordering. It should in general be
  *                       compatible since the data is at the end of the file. However,
  *                       if data parsers make assumptions about lengths this will cause problems.
+ * Backward compatible with the old rules. 
+ * This value may change in the subsequent releases of ICU
  * @stable ICU 2.4
  */
 #define UCOL_BUILDER_VERSION 8

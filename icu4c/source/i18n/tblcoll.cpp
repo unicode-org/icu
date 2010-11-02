@@ -598,7 +598,7 @@ void RuleBasedCollator::setScriptOrder(const int32_t *scriptOrder,
                                        const uint32_t scriptOrderLength,
                                        UErrorCode& status)
 {
-    ucol_setScriptOrder(ucollator, scriptOrder, scriptOrderLength);
+    ucol_setScriptOrder(ucollator, scriptOrder, scriptOrderLength, &status);
 }
 
 

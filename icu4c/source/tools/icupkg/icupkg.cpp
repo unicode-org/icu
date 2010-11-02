@@ -322,14 +322,9 @@ main(int argc, char *argv[]) {
         outType=0; /* tells extractItem() to not swap */
     }
 
-fprintf(stderr, "inFilename = %s\n", inFilename);
-fprintf(stderr, "outFilename = %s\n", outFilename);
-fprintf(stderr, "outType = %c\n", outType);
     if(options[OPT_WRITEPKG].doesOccur) {
         isModified=TRUE;
     }
-fprintf(stderr, "isModified = %x\n", isModified);
-fprintf(stderr, "isPackage = %x\n", isPackage);
 
     if(!isPackage) {
         /*

@@ -143,7 +143,10 @@
  *                               same formatVersion as in ucadata.icu's UDataInfo header
  *                               (formatVersion 2.3)
  *
- * uint8_t reserved[84];  - currently unused
+ * uint32_t offset to the reordering code to lead CE byte remapping table
+ * uint32_t offset to the lead CE byte to reordering code mapping table
+ *
+ * uint8_t reserved[76];  - currently unused
  *
  * -------------------------------------------------------------
  *
@@ -178,8 +181,8 @@
 #define UCA_DATA_FORMAT_2 ((uint8_t)0x6f)
 #define UCA_DATA_FORMAT_3 ((uint8_t)0x6c)
 
-#define UCA_FORMAT_VERSION_0 ((uint8_t)2)
-#define UCA_FORMAT_VERSION_1 ((uint8_t)3)
+#define UCA_FORMAT_VERSION_0 ((uint8_t)3)
+#define UCA_FORMAT_VERSION_1 ((uint8_t)0)
 #define UCA_FORMAT_VERSION_2 ((uint8_t)0)
 #define UCA_FORMAT_VERSION_3 ((uint8_t)0)
 

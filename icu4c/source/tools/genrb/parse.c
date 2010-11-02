@@ -899,6 +899,9 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 int32_t     len   = 0;
                 uint8_t   *data  = NULL;
                 UCollator *coll  = NULL;
+                int32_t reorderCodes[USCRIPT_CODE_LIMIT + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST)];
+                uint32_t reorderCodeCount;
+                int32_t reorderCodeIndex;
                 UParseError parseError;
 
                 genrbdata.inputDir = state->inputdir;
@@ -929,6 +932,16 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                         struct SResource *collationBin = bin_open(state->bundle, "%%CollationBin", len, data, NULL, NULL, status);
                         table_add(result, collationBin, line, status);
                         uprv_free(data);
+                        
+                        reorderCodeCount = ucol_getScriptOrder(
+                            coll, reorderCodes, USCRIPT_CODE_LIMIT + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST), &intStatus);
+                        if (U_SUCCESS(intStatus) && reorderCodeCount > 0) {
+                            struct SResource *reorderCodeRes = intvector_open(state->bundle, "%%ReorderCodes", NULL, status);
+                            for (reorderCodeIndex = 0; reorderCodeIndex < reorderCodeCount; reorderCodeIndex++) {
+                                intvector_add(reorderCodeRes, reorderCodes[reorderCodeIndex], status);
+                            }
+                            table_add(result, reorderCodeRes, line, status);
+                        }
                     }
                     else
                     {
