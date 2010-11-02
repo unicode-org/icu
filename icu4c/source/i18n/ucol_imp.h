@@ -1083,7 +1083,7 @@ ucol_openRulesForImport( const UChar        *rules,
                          void* context,
                          UErrorCode         *status);
 
-U_CAPI const U_EXPORT2 UChar* ucol_tok_getRulesFromBundle(
+U_CAPI const UChar* U_EXPORT2 ucol_tok_getRulesFromBundle(
        void* context,
        const char* locale,
        const char* type,
