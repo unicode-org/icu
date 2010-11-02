@@ -558,7 +558,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 
   rules = ucol_getRules(coll, &ruleLen);
   if(U_SUCCESS(*status) && ruleLen > 0) {
-    rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
     src.current = src.source = rulesCopy;
     src.end = rulesCopy+ruleLen;
@@ -650,7 +650,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
         u_strcpy(first, second);
       }
     }
-    free(src.source);
+    uprv_free(src.source);
   }
 }
 
@@ -1175,7 +1175,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
 
     if(U_SUCCESS(*status) && ruleLen > 0) {
-        rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+        rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
         uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
         src.current = src.source = rulesCopy;
         src.end = rulesCopy+ruleLen;
@@ -1284,7 +1284,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
             lastCE = currCE & 0xFFFFFF3F;
             lastContCE = currContCE & 0xFFFFFFBF;
         }
-        free(src.source);
+        uprv_free(src.source);
     }
     ucol_close(UCA);
     uprv_delete_collIterate(c);
@@ -1340,7 +1340,7 @@ static void TestCollations(void) {
     }
     ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
 
-    for(i = 429; i<=429; i++) {
+    for(i = 0; i<noOfLoc; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
         if(uprv_strcmp("ja", locName) == 0) {
@@ -2986,7 +2986,7 @@ static void TestVariableTopSetting(void) {
   { /* QUICK > 0*/
     log_verbose("Slide variable top over UCARules\n");
     rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
-    rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesCopy = (UChar *)uprv_malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
 
     if(U_SUCCESS(status) && rulesLen > 0) {
@@ -3158,7 +3158,7 @@ static void TestVariableTopSetting(void) {
   if(status != U_INTERNAL_PROGRAM_ERROR) {
     log_err("Bad reaction to passed error!\n");
   }
-  free(src.source);
+  uprv_free(src.source);
   ucol_close(coll);
   } else {
     log_data_err("Couldn't open UCA collator\n");
