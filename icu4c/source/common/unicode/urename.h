@@ -1335,7 +1335,6 @@
 #define upvec_compact U_ICU_ENTRY_POINT_RENAME(upvec_compact)
 #define upvec_compactToUTrie2Handler U_ICU_ENTRY_POINT_RENAME(upvec_compactToUTrie2Handler)
 #define upvec_compactToUTrie2WithRowIndexes U_ICU_ENTRY_POINT_RENAME(upvec_compactToUTrie2WithRowIndexes)
-#define upvec_compactToUTrieHandler U_ICU_ENTRY_POINT_RENAME(upvec_compactToUTrieHandler)
 #define upvec_getArray U_ICU_ENTRY_POINT_RENAME(upvec_getArray)
 #define upvec_getRow U_ICU_ENTRY_POINT_RENAME(upvec_getRow)
 #define upvec_getValue U_ICU_ENTRY_POINT_RENAME(upvec_getValue)

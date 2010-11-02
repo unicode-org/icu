@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -155,21 +155,6 @@ upvec_cloneArray(const UPropsVectors *pv,
  */
 U_CAPI UTrie2 * U_EXPORT2
 upvec_compactToUTrie2WithRowIndexes(UPropsVectors *pv, UErrorCode *pErrorCode);
-
-struct UPVecToUTrieContext {
-    UNewTrie *newTrie;
-    int32_t capacity;
-    int32_t initialValue;
-    UBool latin1Linear;
-};
-typedef struct UPVecToUTrieContext UPVecToUTrieContext;
-
-/* context=UPVecToUTrieContext, creates the trie and stores the rowIndex values */
-U_CAPI void U_CALLCONV
-upvec_compactToUTrieHandler(void *context,
-                            UChar32 start, UChar32 end,
-                            int32_t rowIndex, uint32_t *row, int32_t columns,
-                            UErrorCode *pErrorCode);
 
 struct UPVecToUTrie2Context {
     UTrie2 *trie;
