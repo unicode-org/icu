@@ -1,13 +1,13 @@
 /*
  * Default CSS style sheet for the ICU4C Open Source readme
- * Copyright (C) 2005-2009, International Business Machines
+ * Copyright (C) 2005-2010, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
 /* Global styles */
 
 body,p,li,ol,ul,th,td {
-	font-size: 10pt;
+	font-size: 1em;
 	font-family: "Arial", "Helvetica", sans-serif;
 }
 
@@ -329,8 +329,17 @@ table.rtable tr.rarely td {
 .bigwarn {
 	color: red;
 	background-color: white;
-	font-size: x-large;
+	font-size: large;
 	margin: 0.5 em;
+}
+
+
+td.bornstable {
+	
+}
+td.bornstable .bigwarn {
+	font-size: small;
+	white-space: nowrap;
 }
 
 table.genTable {
@@ -444,4 +453,20 @@ pre.samp,samp {
 	padding: 1em;
 	display: block;
 	background-color: #EEEEEE
+}
+
+td.proto {
+	font-size: smaller;
+}
+
+
+
+@media print {
+	div#toc {
+		display: none;
+	}
+	
+	table,tr,td,div {
+		page-break-inside: auto;
+	}
 }
