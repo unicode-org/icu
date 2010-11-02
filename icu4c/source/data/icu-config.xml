@@ -7,6 +7,7 @@
 */
 -->
 <config type="icu-config">
+    <!-- This is used by CLDRBuild.java and CLDRConverterTool.java in org/unicode/cldr/ant/ -->
     <locales>
         <include locales="af"/>
         <include locales="af_NA"/>
@@ -486,12 +487,26 @@
     </locales>    
     <paths>
         <include xpath="//ldml/.*"/>
+        <include xpath="//ldml/collations/.*" alt="short"/>
         <include xpath="//ldml/.*" draft="contributed"/>
         <include xpath="//ldml/.*/special/.*"/>
         <include xpath="//supplementalData/.*"/>
         <include xpath="//supplementalMetaData/.*"/>
         <!-- Exclude unusable data -->
-        <exclude xpath="//ldml/.*" alt=".*"/>
+        <!-- Need to allow alt=.* for ldml/collations, but exclude for others -->
+        <exclude xpath="//ldml/fallback/.*" alt=".*"/>
+        <exclude xpath="//ldml/localeDisplayNames/.*" alt=".*"/>
+        <exclude xpath="//ldml/layout/.*" alt=".*"/>
+        <exclude xpath="//ldml/characters/.*" alt=".*"/>
+        <exclude xpath="//ldml/delimiters/.*" alt=".*"/>
+        <exclude xpath="//ldml/measurement/.*" alt=".*"/>
+        <exclude xpath="//ldml/dates/.*" alt=".*"/>
+        <exclude xpath="//ldml/numbers/.*" alt=".*"/>
+        <exclude xpath="//ldml/units/.*" alt=".*"/>
+        <exclude xpath="//ldml/listPatterns/.*" alt=".*"/>
+        <exclude xpath="//ldml/posix/.*" alt=".*"/>
+        <exclude xpath="//ldml/segmentations/.*" alt=".*"/>
+        <exclude xpath="//ldml/rbnf/.*" alt=".*"/>
         <exclude xpath="//ldml/.*" draft="provisional"/>
         <exclude xpath="//ldml/.*" draft="unconfirmed"/>
         <exclude xpath="//ldml/dates/localizedPatternChars.*"/>
