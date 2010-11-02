@@ -90,7 +90,7 @@
     <h2>Other existing drafts in <xsl:value-of select="$rightVer" /></h2>
     </a>
     <div class='other'>
-        <xsl:call-template name="infoTable">
+        <xsl:call-template name="infoTable"> <!--  note: note genTable -->
             <xsl:with-param name="nodes" select="/list/func[@rightStatus = 'Draft' and @rightVersion != $rightVer]"/>
         </xsl:call-template>
     </div>
@@ -172,6 +172,11 @@
                         	<br/><b title='A new API was introduced that was not tagged.' class='bigwarn'>(untagged)</b>
                         </xsl:if>
                     </span>
+                </td>
+           </xsl:if>
+           	<xsl:if  test = "@rightStatus = 'Stable' and @rightVersion = $rightVer">
+                <td>
+                    <b title='A new API was introduced as stable in $rightVer.' class='bigwarn'>(Born Stable)</b>
                 </td>
            </xsl:if>
             </tr>

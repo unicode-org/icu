@@ -10,7 +10,7 @@ Requirements:
   - Doxygen (for generating docs)
   - Java JDK 1.5+
   - Apache Ant
-  
+  - Xalan/Xerces ( put the jars in the lib/ directory ) - the built in version to Java doesn't seem to work properly.
 
 To use the utility:
     1. setup ICU
