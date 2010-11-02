@@ -1788,7 +1788,7 @@ static void TestCEValidity()
         rules = ucol_getRules(coll, &ruleLen);
 
         if (ruleLen > 0) {
-            rulesCopy = (UChar *)malloc((ruleLen +
+            rulesCopy = (UChar *)uprv_malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
             src.current = src.source = rulesCopy;
@@ -1814,7 +1814,7 @@ static void TestCEValidity()
                 codepoints[chLen] = 0;
                 checkCEValidity(coll, codepoints, chLen);
             }
-            free(src.source);
+            uprv_free(src.source);
         }
 
         ucol_close(coll);
@@ -1978,7 +1978,7 @@ static void TestSortKeyValidity(void)
         rules = ucol_getRules(coll, &ruleLen);
 
         if (ruleLen > 0) {
-            rulesCopy = (UChar *)malloc((ruleLen +
+            rulesCopy = (UChar *)uprv_malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
             src.current = src.source = rulesCopy;
@@ -2008,7 +2008,7 @@ static void TestSortKeyValidity(void)
                 }
                 checkSortKeyValidity(coll, codepoints, chLen);
             }
-            free(src.source);
+            uprv_free(src.source);
         }
 
         ucol_close(coll);
