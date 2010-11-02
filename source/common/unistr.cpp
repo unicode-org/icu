@@ -1377,15 +1377,16 @@ UBool UnicodeString::hasMetaData() const {
 }
 
 UnicodeString&
-UnicodeString::doReverse(int32_t start,
-             int32_t length)
-{
-  if(this->length() <= 1 || !cloneArrayIfNeeded()) {
+UnicodeString::doReverse(int32_t start, int32_t length) {
+  if(length <= 1 || !cloneArrayIfNeeded()) {
     return *this;
   }
 
   // pin the indices to legal values
   pinIndices(start, length);
+  if(length <= 1) {  // pinIndices() might have shrunk the length
+    return *this;
+  }
 
   UChar *left = getArrayStart() + start;
   UChar *right = left + length - 1;  // -1 for inclusive boundary (length>=2)
