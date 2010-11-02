@@ -6133,6 +6133,13 @@ static void TestImport(void)
     }
 
     uset_close(tailoredSet);
+
+    uprv_free(viesrules);
+
+    ucol_close(vicoll);
+    ucol_close(escoll);
+    ucol_close(viescoll);
+    ucol_close(importviescoll);
 }
 
 static void TestImportWithType(void)
@@ -6231,6 +6238,13 @@ static void TestImportWithType(void)
     }
 
     uset_close(tailoredSet);
+
+    uprv_free(viderules);
+
+    ucol_close(videcoll);
+    ucol_close(importvidecoll);
+    ucol_close(vicoll);
+    ucol_close(decoll);
 
 }
 
