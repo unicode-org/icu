@@ -772,8 +772,8 @@ typedef struct {
       /*UColAttributeValue*/ int32_t strength;          /* attribute for strength */
       /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribute for special Hiragana */
       /*UColAttributeValue*/ int32_t numericCollation;  /* attribute for numeric collation */
-      /* reorder code */ int32_t* scriptOrder;
-      uint32_t scriptOrderLength;
+      /* reorder code */ int32_t* reorderCodes;
+      uint32_t reorderCodesLength;
       uint32_t reserved[15];                 /* for future use */
 } UColOptionSet;
 
@@ -1021,9 +1021,9 @@ struct UCollator {
     uint8_t tertiaryBottomCount;
 
     UVersionInfo dataVersion;               /* Data info of UCA table */
-    int32_t* scriptOrder;
-    uint32_t scriptOrderLength;
-    uint8_t* scriptReorderTable;
+    int32_t* reorderCodes;
+    uint32_t reorderCodesLength;
+    uint8_t* leadBytePermutationTable;
 };
 
 U_CDECL_END

@@ -673,11 +673,11 @@ ucol_close(UCollator *coll)
         if(coll->image != NULL && coll->freeImageOnClose) {
             uprv_free((UCATableHeader *)coll->image);
         }
-        if(coll->scriptReorderTable != NULL) {
-            uprv_free(coll->scriptReorderTable);
+        if(coll->leadBytePermutationTable != NULL) {
+            uprv_free(coll->leadBytePermutationTable);
         }
-        if(coll->scriptOrder != NULL){
-            uprv_free(coll->scriptOrder);
+        if(coll->reorderCodes != NULL) {
+            uprv_free(coll->reorderCodes);
         }
 
         /* Here, it would be advisable to close: */
@@ -771,8 +771,13 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->alternateHandling = (UColAttributeValue)opts->alternateHandling;
     result->hiraganaQ = (UColAttributeValue)opts->hiraganaQ;
     result->numericCollation = (UColAttributeValue)opts->numericCollation;
-    result->scriptOrder = opts->scriptOrder;
-    result->scriptOrderLength = opts->scriptOrderLength;
+    result->reorderCodesLength = opts->reorderCodesLength;
+    if (result->reorderCodesLength > 0) {
+        result->reorderCodes = (int32_t*) uprv_malloc(result->reorderCodesLength * sizeof(int32_t));
+        uprv_memcpy(result->reorderCodes, opts->reorderCodes, result->reorderCodesLength * sizeof(int32_t));
+    } else {
+        result->reorderCodes = NULL;
+    }
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -869,7 +874,9 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     result->rules = NULL;
     result->rulesLength = 0;
     result->freeRulesOnClose = FALSE;
-    result->scriptReorderTable = NULL;
+    result->reorderCodes = NULL;
+    result->reorderCodesLength = 0;
+    result->leadBytePermutationTable = NULL;
 
     /* get the version info from UCATableHeader and populate the Collator struct*/
     result->dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
@@ -4356,8 +4363,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
         primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
         primary1 = (uint8_t)(order >> 8);
 
-        if (coll->scriptReorderTable != NULL && notIsContinuation) {
-            primary1 = coll->scriptReorderTable[primary1];
+        if (coll->leadBytePermutationTable != NULL && notIsContinuation) {
+            primary1 = coll->leadBytePermutationTable[primary1];
         }
 
         if((shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
@@ -4789,8 +4796,8 @@ ucol_calcSortKey(const    UCollator    *coll,
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >> 8);
 
-            if(notIsContinuation && coll->scriptReorderTable != NULL) {
-                primary1 = coll->scriptReorderTable[primary1];
+            if(notIsContinuation && coll->leadBytePermutationTable != NULL) {
+                primary1 = coll->leadBytePermutationTable[primary1];
             }
 
             if((shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
@@ -5383,8 +5390,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >> 8);
 
-            if (coll->scriptReorderTable != NULL && notIsContinuation) {
-                primary1 = coll->scriptReorderTable[primary1];
+            if (coll->leadBytePermutationTable != NULL && notIsContinuation) {
+                primary1 = coll->leadBytePermutationTable[primary1];
             }
 
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
@@ -5975,8 +5982,8 @@ ucol_nextSortKeyPart(const UCollator *coll,
                 break;
             }
             if(!isContinuation(CE)){
-                if(coll->scriptReorderTable != NULL){
-                    CE = (coll->scriptReorderTable[CE>>24] << 24) | (CE & 0x00FFFFFF);
+                if(coll->leadBytePermutationTable != NULL){
+                    CE = (coll->leadBytePermutationTable[CE>>24] << 24) | (CE & 0x00FFFFFF);
                 }
             }
             if(!isShiftedCE(CE, LVT, &wasShifted)) {
@@ -6602,8 +6609,8 @@ ucol_addLatinOneEntry(UCollator *coll, UChar ch, uint32_t CE,
     primary1 = (uint8_t)(CE >> 8);
 
     if(primary1 != 0) {
-        if (coll->scriptReorderTable != NULL && !continuation) {
-            primary1 = coll->scriptReorderTable[primary1];
+        if (coll->leadBytePermutationTable != NULL && !continuation) {
+            primary1 = coll->leadBytePermutationTable[primary1];
         }
 
         coll->latinOneCEs[ch] |= (primary1 << *primShift);
@@ -7119,38 +7126,38 @@ ucol_getStrength(const UCollator *coll)
 }
 
 U_INTERNAL uint32_t U_EXPORT2 
-ucol_getScriptOrder(const UCollator *coll,
+ucol_getReorderCodes(const UCollator *coll,
                     int32_t *dest,
                     uint32_t destCapacity,
                     UErrorCode *pErrorCode) {
     if (pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if (coll->scriptOrder == NULL) {
+    if (coll->reorderCodes == NULL) {
         return 0;
     }
-    if (coll->scriptOrderLength > destCapacity) {
+    if (coll->reorderCodesLength > destCapacity) {
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
     }
-    for (uint32_t i = 0; (i < coll->scriptOrderLength) && (i < destCapacity); i++) {
-        dest[i] = coll->scriptOrder[i];
+    for (uint32_t i = 0; (i < coll->reorderCodesLength) && (i < destCapacity); i++) {
+        dest[i] = coll->reorderCodes[i];
     }
-    return coll->scriptOrderLength;
+    return coll->reorderCodesLength;
 }
 
 U_INTERNAL void U_EXPORT2 
-ucol_setScriptOrder(UCollator *coll,
-                    const int32_t *scriptOrder,
-                    uint32_t scriptOrderLength,
+ucol_setReorderCodes(UCollator *coll,
+                    const int32_t *reorderCodes,
+                    uint32_t reorderCodesLength,
                     UErrorCode *pErrorCode ){
-    if (coll->scriptOrder != NULL) {
-        uprv_free(coll->scriptOrder);
+    if (coll->reorderCodes != NULL) {
+        uprv_free(coll->reorderCodes);
     }
-    coll->scriptOrder = (int32_t*) uprv_malloc(scriptOrderLength*sizeof(int32_t));
-    for (uint32_t i = 0; i < scriptOrderLength; i++) {
-        coll->scriptOrder[i] = scriptOrder[i];
+    coll->reorderCodes = (int32_t*) uprv_malloc(reorderCodesLength * sizeof(int32_t));
+    for (uint32_t i = 0; i < reorderCodesLength; i++) {
+        coll->reorderCodes[i] = reorderCodes[i];
     }
-    coll->scriptOrderLength = scriptOrderLength;
+    coll->reorderCodesLength = reorderCodesLength;
     ucol_buildScriptReorderTable(coll, pErrorCode);
 }
 
@@ -7504,9 +7511,9 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
             } else {
                 // only need to check one for continuation
                 // if one is then the other must be or the preceding CE would be a prefix of the other
-                if (coll->scriptReorderTable != NULL && !isContinuation(sOrder)) {
-                    sOrder = (coll->scriptReorderTable[sOrder>>24] << 24) | (sOrder & 0x00FFFFFF);
-                    tOrder = (coll->scriptReorderTable[tOrder>>24] << 24) | (tOrder & 0x00FFFFFF);
+                if (coll->leadBytePermutationTable != NULL && !isContinuation(sOrder)) {
+                    sOrder = (coll->leadBytePermutationTable[sOrder>>24] << 24) | (sOrder & 0x00FFFFFF);
+                    tOrder = (coll->leadBytePermutationTable[tOrder>>24] << 24) | (tOrder & 0x00FFFFFF);
                 }
                 // if two primaries are different, we are done
                 result = (sOrder < tOrder) ?  UCOL_LESS: UCOL_GREATER;
@@ -7546,8 +7553,8 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
                         }
                     }
                 } else { /* regular */
-                    if(coll->scriptReorderTable != NULL){
-                        sOrder = (coll->scriptReorderTable[sOrder>>24] << 24) | (sOrder & 0x00FFFFFF);
+                    if(coll->leadBytePermutationTable != NULL){
+                        sOrder = (coll->leadBytePermutationTable[sOrder>>24] << 24) | (sOrder & 0x00FFFFFF);
                     }
                     if((sOrder & UCOL_PRIMARYMASK) > LVT) {
                         UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
@@ -7596,8 +7603,8 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
                         }
                     }
                 } else { /* regular */
-                    if(coll->scriptReorderTable != NULL){
-                        tOrder = (coll->scriptReorderTable[tOrder>>24] << 24) | (tOrder & 0x00FFFFFF);
+                    if(coll->leadBytePermutationTable != NULL){
+                        tOrder = (coll->leadBytePermutationTable[tOrder>>24] << 24) | (tOrder & 0x00FFFFFF);
                     }
                     if((tOrder & UCOL_PRIMARYMASK) > LVT) {
                         UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);

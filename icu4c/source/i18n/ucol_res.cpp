@@ -214,8 +214,8 @@ int ucol_getReorderCodesForLeadByte(UCollator *coll, int leadByte, int16_t* retu
 void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
     uint16_t leadBytesSize = 256;
     uint16_t leadBytes[256];
-    uint32_t internalScriptOrderLength = coll->scriptOrderLength + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST);
-    int32_t* internalScriptOrder;
+    uint32_t internalReorderCodesLength = coll->reorderCodesLength + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST);
+    int32_t* internalReorderCodes;
     
     // The lowest byte that hasn't been assigned a mapping
     int toBottom = 0x03;
@@ -231,29 +231,29 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
     bool permutationSlotFilled[256];
 
     // nothing to do
-    if(U_FAILURE(*status) || coll == NULL || coll->scriptOrderLength == 0) {
-        if (coll->scriptReorderTable != NULL) {
-            uprv_free(coll->scriptReorderTable);
-            coll->scriptReorderTable = NULL;
+    if(U_FAILURE(*status) || coll == NULL || coll->reorderCodesLength == 0) {
+        if (coll->leadBytePermutationTable != NULL) {
+            uprv_free(coll->leadBytePermutationTable);
+            coll->leadBytePermutationTable = NULL;
         }
-        coll->scriptOrderLength = 0;
+        coll->reorderCodesLength = 0;
         return;
     }
 
-    if (coll->scriptReorderTable == NULL) {
-        coll->scriptReorderTable = (uint8_t*)uprv_malloc(256*sizeof(uint8_t));
+    if (coll->leadBytePermutationTable == NULL) {
+        coll->leadBytePermutationTable = (uint8_t*)uprv_malloc(256*sizeof(uint8_t));
     }
 
     // prefill the reordering codes with the leading entries
-    internalScriptOrder = (int32_t*)uprv_malloc(internalScriptOrderLength * sizeof(int32_t));
+    internalReorderCodes = (int32_t*)uprv_malloc(internalReorderCodesLength * sizeof(int32_t));
     for (uint32_t codeIndex = 0; codeIndex < (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST); codeIndex++) {
-        internalScriptOrder[codeIndex] = UCOL_REORDERCODE_FIRST + codeIndex;
+        internalReorderCodes[codeIndex] = UCOL_REORDERCODE_FIRST + codeIndex;
     }
-    for (uint32_t codeIndex = 0; codeIndex < coll->scriptOrderLength; codeIndex++) {
-        uint32_t scriptOrderCode = coll->scriptOrder[codeIndex];
-        internalScriptOrder[codeIndex + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST)] = scriptOrderCode;
-        if (scriptOrderCode >= UCOL_REORDERCODE_FIRST && scriptOrderCode < UCOL_REORDERCODE_LIMIT) {
-            internalScriptOrder[scriptOrderCode - UCOL_REORDERCODE_FIRST] = UCOL_REORDERCODE_IGNORE;
+    for (uint32_t codeIndex = 0; codeIndex < coll->reorderCodesLength; codeIndex++) {
+        uint32_t reorderCodesCode = coll->reorderCodes[codeIndex];
+        internalReorderCodes[codeIndex + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST)] = reorderCodesCode;
+        if (reorderCodesCode >= UCOL_REORDERCODE_FIRST && reorderCodesCode < UCOL_REORDERCODE_LIMIT) {
+            internalReorderCodes[reorderCodesCode - UCOL_REORDERCODE_FIRST] = UCOL_REORDERCODE_IGNORE;
         }
     }
 
@@ -261,11 +261,11 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
         if (i < toBottom || i > toTop) {
             permutationSlotFilled[i] = true;
             newLeadByteUsed[i] = true;
-            coll->scriptReorderTable[i] = i;
+            coll->leadBytePermutationTable[i] = i;
         } else {
             permutationSlotFilled[i] = false;
             newLeadByteUsed[i] = false;
-            coll->scriptReorderTable[i] = 0;
+            coll->leadBytePermutationTable[i] = 0;
         }
     }
     
@@ -275,8 +275,8 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
      * possible location. At each step, we also need to make sure that any scripts
      * that need to not be moved are copied to their same location in the final table.
      */
-    for (int scriptOrderIndex = 0; scriptOrderIndex < internalScriptOrderLength; scriptOrderIndex++) {
-        int32_t next = internalScriptOrder[scriptOrderIndex];
+    for (int reorderCodesIndex = 0; reorderCodesIndex < internalReorderCodesLength; reorderCodesIndex++) {
+        int32_t next = internalReorderCodes[reorderCodesIndex];
         if (next == UCOL_REORDERCODE_IGNORE) {
             continue;
         }
@@ -284,13 +284,13 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
             if (fromTheBottom == false) {
                 // double turnaround
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
-                if (coll->scriptReorderTable != NULL) {
-                    uprv_free(coll->scriptReorderTable);
-                    coll->scriptReorderTable = NULL;
+                if (coll->leadBytePermutationTable != NULL) {
+                    uprv_free(coll->leadBytePermutationTable);
+                    coll->leadBytePermutationTable = NULL;
                 }
-                coll->scriptOrderLength = 0;
-                if (internalScriptOrder != NULL) {
-                    uprv_free(internalScriptOrder);
+                coll->reorderCodesLength = 0;
+                if (internalReorderCodes != NULL) {
+                    uprv_free(internalReorderCodes);
                 }
                 return;
             }
@@ -305,18 +305,18 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                 if (permutationSlotFilled[leadBytes[leadByteIndex]]) {
                     // lead byte already used
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
-                    if (coll->scriptReorderTable != NULL) {
-                        uprv_free(coll->scriptReorderTable);
-                        coll->scriptReorderTable = NULL;
+                    if (coll->leadBytePermutationTable != NULL) {
+                        uprv_free(coll->leadBytePermutationTable);
+                        coll->leadBytePermutationTable = NULL;
                     }
-                    coll->scriptOrderLength = 0;
-                    if (internalScriptOrder != NULL) {
-                        uprv_free(internalScriptOrder);
+                    coll->reorderCodesLength = 0;
+                    if (internalReorderCodes != NULL) {
+                        uprv_free(internalReorderCodes);
                     }
                     return;
                 }
    
-                coll->scriptReorderTable[leadBytes[leadByteIndex]] = toBottom;
+                coll->leadBytePermutationTable[leadBytes[leadByteIndex]] = toBottom;
                 newLeadByteUsed[toBottom] = true;
                 permutationSlotFilled[leadBytes[leadByteIndex]] = true;
                 toBottom++;
@@ -327,18 +327,18 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
                 if (permutationSlotFilled[leadBytes[leadByteIndex]]) {
                     // lead byte already used
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
-                    if (coll->scriptReorderTable != NULL) {
-                        uprv_free(coll->scriptReorderTable);
-                        coll->scriptReorderTable = NULL;
+                    if (coll->leadBytePermutationTable != NULL) {
+                        uprv_free(coll->leadBytePermutationTable);
+                        coll->leadBytePermutationTable = NULL;
                     }
-                    coll->scriptOrderLength = 0;
-                    if (internalScriptOrder != NULL) {
-                        uprv_free(internalScriptOrder);
+                    coll->reorderCodesLength = 0;
+                    if (internalReorderCodes != NULL) {
+                        uprv_free(internalReorderCodes);
                     }
                     return;
                 }
 
-                coll->scriptReorderTable[leadBytes[leadByteIndex]] = toTop;
+                coll->leadBytePermutationTable[leadBytes[leadByteIndex]] = toTop;
                 newLeadByteUsed[toTop] = true;
                 permutationSlotFilled[leadBytes[leadByteIndex]] = true;
                 toTop--;
@@ -349,7 +349,7 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
 #ifdef REORDER_DEBUG
     fprintf(stdout, "\n@@@@ Partial Script Reordering Table\n");
     for (int i = 0; i < 256; i++) {
-        fprintf(stdout, "\t%02x = %02x\n", i, coll->scriptReorderTable[i]);
+        fprintf(stdout, "\t%02x = %02x\n", i, coll->leadBytePermutationTable[i]);
     }
     fprintf(stdout, "\n@@@@ Lead Byte Used Table\n");
     for (int i = 0; i < 256; i++) {
@@ -368,7 +368,7 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
             while (reorderCode < 256 && newLeadByteUsed[reorderCode]) {
                 reorderCode++;
             }
-            coll->scriptReorderTable[i] = reorderCode;
+            coll->leadBytePermutationTable[i] = reorderCode;
             permutationSlotFilled[i] = true;
             newLeadByteUsed[reorderCode] = true;
         }
@@ -377,12 +377,12 @@ void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status) {
 #ifdef REORDER_DEBUG
     fprintf(stdout, "\n@@@@ Script Reordering Table\n");
     for (int i = 0; i < 256; i++) {
-        fprintf(stdout, "\t%02x = %02x\n", i, coll->scriptReorderTable[i]);
+        fprintf(stdout, "\t%02x = %02x\n", i, coll->leadBytePermutationTable[i]);
     } 
 #endif
 
-    if (internalScriptOrder != NULL) {
-        uprv_free(internalScriptOrder);
+    if (internalReorderCodes != NULL) {
+        uprv_free(internalReorderCodes);
     }
 
     // force a regen of the latin one table since it is affected by the script reordering
@@ -498,7 +498,7 @@ ucol_open_internal(const char *loc,
                 if (U_SUCCESS(intStatus)) {
                     int32_t reorderCodesLen = 0;
                     const int32_t* reorderCodes = ures_getIntVector(reorderRes, &reorderCodesLen, status);
-                    ucol_setScriptOrder(result, reorderCodes, reorderCodesLen, status);
+                    ucol_setReorderCodes(result, reorderCodes, reorderCodesLen, status);
                     if (U_FAILURE(*status)) {
                         goto clean;
                     }
@@ -816,11 +816,11 @@ ucol_equals(const UCollator *source, const UCollator *target) {
             return FALSE;
         }
     }
-    if(source->scriptOrderLength != target->scriptOrderLength){
+    if(source->reorderCodesLength != target->reorderCodesLength){
         return FALSE;
     }
-    for(int i = 0; i < source->scriptOrderLength; i++){
-        if(source->scriptOrder[i] != target->scriptOrder[i]){
+    for (int i = 0; i < source->reorderCodesLength; i++) {
+        if(source->reorderCodes[i] != target->reorderCodes[i]) {
             return FALSE;
         }
     }
