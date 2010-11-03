@@ -933,7 +933,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                         table_add(result, collationBin, line, status);
                         uprv_free(data);
                         
-                        reorderCodeCount = ucol_getScriptOrder(
+                        reorderCodeCount = ucol_getReorderCodes(
                             coll, reorderCodes, USCRIPT_CODE_LIMIT + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST), &intStatus);
                         if (U_SUCCESS(intStatus) && reorderCodeCount > 0) {
                             struct SResource *reorderCodeRes = intvector_open(state->bundle, "%%ReorderCodes", NULL, status);

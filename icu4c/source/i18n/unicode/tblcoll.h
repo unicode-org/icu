@@ -672,22 +672,22 @@ public:
      * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function will only return the length of the result without writing any of the result string (pre-flighting).
      * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
      * @return The length of the array of the script ordering.
-     * @see ucol_setScriptOrder
+     * @see ucol_getReorderCodes
      * @internal 
      */
-    virtual uint32_t getScriptOrder(int32_t* dest,
+    virtual uint32_t getReorderCodes(int32_t* dest,
                                     const uint32_t destCapacity,
                                     UErrorCode& status) const;
 
     /**
      * Set the ordering of scripts for this collator.
-     * @param scriptOrder An array of script codes in the new order.
-     * @param scriptOrderLength The length of scriptOrder.
-     * @see ucol_getStrength
+     * @param reorderCodes An array of script codes in the new order.
+     * @param reorderCodesLength The length of reorderCodes.
+     * @see ucol_setReorderCodes
      * @internal 
      */
-    virtual void setScriptOrder(const int32_t* scriptOrder,
-                                const uint32_t scriptOrderLength,
+    virtual void setReorderCodes(const int32_t* reorderCodes,
+                                const uint32_t reorderCodesLength,
                                 UErrorCode& status);
 
 

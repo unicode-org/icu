@@ -5828,7 +5828,7 @@ static void TestBeforeRuleWithScriptReordering(void)
     char srules[500] = "&[before 1]\\u03b1 < \\u0e01";
     UChar rules[500];
     uint32_t rulesLength = 0;
-    UScriptCode scriptOrder[1] = {USCRIPT_GREEK};
+    int32_t reorderCodes[1] = {USCRIPT_GREEK};
     UCollationResult collResult;
 
     uint8_t baseKey[256];
@@ -5872,7 +5872,7 @@ static void TestBeforeRuleWithScriptReordering(void)
    }
 
     /* reorder the scripts */
-    ucol_setScriptOrder(myCollation, scriptOrder, 1, &status);
+    ucol_setReorderCodes(myCollation, reorderCodes, 1, &status);
     if(U_FAILURE(status)) {
         log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
         return;
@@ -5915,7 +5915,7 @@ static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32
         }
         /*ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
         ucol_setStrength(myCollation, UCOL_TERTIARY);*/
-        ucol_setScriptOrder(myCollation, reorderTokens, reorderTokensLen, &status);
+        ucol_setReorderCodes(myCollation, reorderTokens, reorderTokensLen, &status);
         if(U_FAILURE(status)) {
             log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
             return;

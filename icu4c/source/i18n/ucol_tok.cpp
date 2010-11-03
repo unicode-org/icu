@@ -419,7 +419,7 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
     /*18*/ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
     /*19*/ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT},  /*"charset"        */
     /*20*/ {option_20,  6, NULL, 0, UCOL_ATTRIBUTE_COUNT},  /*"import"        */
-    /*21*/ {option_21,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"scriptReorder"        */
+    /*21*/ {option_21,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"reorder"        */
 };
 
 static
@@ -659,8 +659,8 @@ void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status) {
         *status = U_INVALID_FORMAT_ERROR;
     }
     
-    src->opts->scriptOrderLength = codeCount;
-    src->opts->scriptOrder = (int32_t*)uprv_malloc(codeCount * sizeof(int32_t));
+    src->opts->reorderCodesLength = codeCount;
+    src->opts->reorderCodes = (int32_t*)uprv_malloc(codeCount * sizeof(int32_t));
     current = src->current;
     
     // eat leading whitespace
@@ -678,11 +678,11 @@ void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status) {
         } else {
             u_UCharsToChars(current, conversion, tokenLength);
             conversion[tokenLength] = '\0';
-            src->opts->scriptOrder[codeIndex] = ucol_findReorderingEntry(conversion);
-            if (src->opts->scriptOrder[codeIndex] == USCRIPT_INVALID_CODE) {
-                src->opts->scriptOrder[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
+            src->opts->reorderCodes[codeIndex] = ucol_findReorderingEntry(conversion);
+            if (src->opts->reorderCodes[codeIndex] == USCRIPT_INVALID_CODE) {
+                src->opts->reorderCodes[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
             }
-            if (src->opts->scriptOrder[codeIndex] == USCRIPT_INVALID_CODE) {
+            if (src->opts->reorderCodes[codeIndex] == USCRIPT_INVALID_CODE) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
             }
         }
