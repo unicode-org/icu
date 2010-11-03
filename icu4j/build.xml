@@ -5,6 +5,7 @@
 *******************************************************************************
 -->
 <project name="icu4j" default="jar" basedir=".">
+    <property file="build-local.properties"/>
     <property file="build.properties"/>
 
     <property name="shared.dir" value="main/shared"/>
@@ -37,7 +38,6 @@
     <!-- directories -->
     <property name="release.dir" value="release"/>
     <property name="doc.dir" value="doc"/>
-    <property name="release.dir" value="release"/>
 
     <!-- Java version check -->
     <condition property="is.java6.plus">
@@ -1486,4 +1486,100 @@
                 todir="${module.tests.dir}/com/ibm/icu/dev/data"/>
     </target>
 
+    <target name="publishToMavenRepo" depends="releaseBinaries, releaseSrcJars, releaseDocs">
+        <!--
+            Publish libraries to Maven repositories, snapshot or release depending on current
+            version in pom.xml.
+
+            Prerequisites
+            
+            1) Apache Maven Ant tasks - http://maven.apache.org/ant-tasks
+            2) GnuPG
+            3) Put build-local.properties to specify followings
+            
+                maven-ant-tasks.jar = [location of maven ant tasks jar file]
+                gpg.user = ICU Project
+                gpg.passphrase = [passprase for ICU Project's PGP key]
+
+            4) Maven configuration file ~/.m2/settings.xml
+                <settings>
+                    <servers>
+                        <server>
+                            <id>icu4j-releases</id>
+                            <username>[your JIRA/Nexus ID]</username>
+                            <password>[your JIRA/Nexus password]</password>
+                        </server>
+                        <server>
+                            <id>icu4j-snapshots</id>
+                            <username>[your JIRA/Nexus ID]</username>
+                            <password>[your JIRA/Nexus password]</password>
+                        </server>
+                    </servers>
+                </settings>
+
+            Note: For now, charset.jar and localespi.jar are excluded.
+        -->
+        <fail message="Maven Ant Tasks are required to publish libraries. Set maven-ant-tasks.jar property. Maven Ant Tasks URL: http://maven.apache.org/ant-tasks/" unless="maven-ant-tasks.jar"/>
+        <condition property="no_maven-ant-tasks">
+            <available file="${maven-ant-tasks.jar}"/>
+        </condition>
+        <fail message="Maven Ant Tasks not found at ${maven-ant-tasks.jar}" unless="no_maven-ant-tasks"/>
+
+        <path id="maven-ant-tasks.classpath" path="${maven-ant-tasks.jar}"/>
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
+            classpathref="maven-ant-tasks.classpath"/>
+
+        <xmlproperty file="pom.xml" prefix="pom.xml"/>
+
+        <!-- copy release files -->
+        <property name="maven.release.dir" value="${release.dir}/maven"/>
+
+        <property name="maven.icu4j.jar.versioned.file" value="icu4j-${pom.xml.project.version}.jar"/>
+        <property name="maven.icu4j-src.jar.versioned.file" value="icu4j-${pom.xml.project.version}-src.jar"/>
+        <property name="maven.icu4jdocs.jar.file" value="icu4j-${pom.xml.project.version}-javadoc.jar"/>
+
+        <mkdir dir="${maven.release.dir}"/>
+
+        <copy file="${release.dir}/${icu4j.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4j.jar.versioned.file}"/>
+        <copy file="${release.dir}/${icu4j-src.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}"/>
+        <copy file="${release.dir}/${icu4jdocs.jar.file}" tofile="${maven.release.dir}/${maven.icu4jdocs.jar.file}"/>
+
+        <copy file="pom.xml" todir="${maven.release.dir}"/>
+
+        <!-- sign release files-->
+        <macrodef name="gpg">
+            <attribute name="file"/>
+            <sequential>
+                <delete file="@{file}.asc" failonerror="false"/>
+                <exec executable="gpg">
+                    <arg value="-u"/>
+                    <arg value="${gpg.user}"/>
+                    <arg value="-ab"/>
+                    <arg value="--passphrase"/>
+                    <arg value="${gpg.passphrase}"/>
+                    <arg value="-o"/>
+                    <arg value="@{file}.asc"/>
+                    <arg value="@{file}"/>
+                </exec>
+            </sequential>
+        </macrodef>
+
+        <gpg file="${maven.release.dir}/${maven.icu4j.jar.versioned.file}"/>
+        <gpg file="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}"/>
+        <gpg file="${maven.release.dir}/${maven.icu4jdocs.jar.file}"/>
+
+        <gpg file="${maven.release.dir}/pom.xml"/>
+
+        <!-- deploy files to the repository -->
+        <deploy xmlns="urn:maven-artifact-ant" file="${maven.release.dir}/${maven.icu4j.jar.versioned.file}">
+            <pom file="${maven.release.dir}/pom.xml"/>
+            <attach file="${maven.release.dir}/pom.xml.asc" type="pom.asc"/>
+
+            <attach file="${maven.release.dir}/${maven.icu4j.jar.versioned.file}.asc" type="jar.asc"/>
+            <attach file="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}" classifier="sources"/>
+            <attach file="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}.asc" classifier="sources" type="jar.asc"/>
+            <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}" classifier="javadoc"/>
+            <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
+        </deploy>
+    </target>
 </project>
