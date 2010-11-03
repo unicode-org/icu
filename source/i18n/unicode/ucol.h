@@ -544,11 +544,11 @@ ucol_setStrength(UCollator *coll,
  * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function will only return the length of the result without writing any of the result string (pre-flighting).
  * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
  * @return The length of the array of the script ordering.
- * @see ucol_setScriptOrder
+ * @see ucol_setReorderCodes
  * @internal 
  */
 U_INTERNAL uint32_t U_EXPORT2 
-ucol_getScriptOrder(const UCollator* coll,
+ucol_getReorderCodes(const UCollator* coll,
                     int32_t* dest,
                     uint32_t destCapacity,
                     UErrorCode *pErrorCode);
@@ -556,16 +556,16 @@ ucol_getScriptOrder(const UCollator* coll,
 /**
  * Set the ordering of scripts for this collator.
  * @param coll The UCollator to set.
- * @param scriptOrder An array of script codes in the new order.
- * @param scriptOrderLength The length of scriptOrder.
+ * @param reorderCodes An array of script codes in the new order.
+ * @param reorderCodesLength The length of reorderCodes.
  * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
- * @see ucol_getStrength
+ * @see ucol_getReorderCodes
  * @internal 
  */
 U_INTERNAL void U_EXPORT2 
-ucol_setScriptOrder(UCollator* coll,
-                    const int32_t* scriptOrder,
-                    uint32_t scriptOrderLength,
+ucol_setReorderCodes(UCollator* coll,
+                    const int32_t* reorderCodes,
+                    uint32_t reorderCodesLength,
                     UErrorCode *pErrorCode);
 
 /**
