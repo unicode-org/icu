@@ -127,11 +127,9 @@ import com.ibm.icu.util.ULocale;
  *     Characters from the Unicode Scripts "Common" and "Inherited" are ignored when considering
  *     the script of an identifier. Common characters include digits and symbols that
  *     are normally used with text from many different scripts.
- *     
- */
-
-/**
- * The main SpoofChecker class.
+ *
+ * @draft ICU 4.6
+ * @provisional This API might change or be removed in a future release.
  */
 public class SpoofChecker {
 
@@ -147,6 +145,7 @@ public class SpoofChecker {
      * single identifier.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int SINGLE_SCRIPT_CONFUSABLE = 1;
 
@@ -160,6 +159,7 @@ public class SpoofChecker {
      * and and at least one contains characters from more than one script.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MIXED_SCRIPT_CONFUSABLE = 2;
 
@@ -173,6 +173,7 @@ public class SpoofChecker {
      * scripts of the two identifiers are different, and the identifiers are visually confusable.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int WHOLE_SCRIPT_CONFUSABLE = 4;
 
@@ -184,6 +185,7 @@ public class SpoofChecker {
      * checked.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ANY_CASE = 8;
 
@@ -192,6 +194,7 @@ public class SpoofChecker {
      * scripts.) Applies to checks of a single identifier check only.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int SINGLE_SCRIPT = 16;
 
@@ -201,6 +204,7 @@ public class SpoofChecker {
      * test the input string as a whole for conformance to any particular syntax for identifiers.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int INVISIBLE = 32;
 
@@ -209,6 +213,7 @@ public class SpoofChecker {
      * Builder.setAllowedChars() and Builder.setAllowedLocales().
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int CHAR_LIMIT = 64;
 
@@ -216,6 +221,7 @@ public class SpoofChecker {
      * Enable all spoof checks.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ALL_CHECKS = 0x7f;
 
@@ -233,6 +239,7 @@ public class SpoofChecker {
      * checking options on the builder, then call the build() function to create a SpoofChecker instance.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static class Builder {
         int fMagic; // Internal sanity check.
@@ -248,6 +255,7 @@ public class SpoofChecker {
          * to the default checking behavior.
          * 
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder() {
             fMagic = MAGIC;
@@ -263,6 +271,7 @@ public class SpoofChecker {
          * @param src
          *            The existing checker.
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder(SpoofChecker src) {
             fMagic = src.fMagic;
@@ -278,6 +287,7 @@ public class SpoofChecker {
          * 
          * @return SpoofChecker
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public SpoofChecker build() {
             if (fSpoofData == null) { // read binary file
@@ -314,6 +324,7 @@ public class SpoofChecker {
          * @throws ParseException
          *             To report syntax errors in the input.
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder setData(Reader confusables, Reader confusablesWholeScript) throws ParseException,
                 java.io.IOException {
@@ -335,7 +346,7 @@ public class SpoofChecker {
          *            checks..
          * @return self
          * @draft ICU 4.6
-         * 
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder setChecks(int checks) {
             // Verify that the requested checks are all ones (bits) that
@@ -374,6 +385,7 @@ public class SpoofChecker {
          * 
          * @return self
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder setAllowedLocales(Set<ULocale> locales) {
             fAllowedCharsSet.clear();
@@ -433,6 +445,7 @@ public class SpoofChecker {
          *            this function. Note that this clears the allowedLocales set.
          * @return self
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder setAllowedChars(UnicodeSet chars) {
             fAllowedCharsSet = chars.cloneAsThawed();
@@ -1303,7 +1316,7 @@ public class SpoofChecker {
      * 
      * @return The set of checks that this spoof checker will perform.
      * @draft ICU 4.6
-     * 
+     * @provisional This API might change or be removed in a future release.
      */
     public int getChecks() {
         return fChecks;
@@ -1321,6 +1334,7 @@ public class SpoofChecker {
      * @return A set of locales corresponding to the acceptable scripts.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public Set<ULocale> getAllowedLocales() {
         return fAllowedLocales;
@@ -1335,6 +1349,7 @@ public class SpoofChecker {
      * 
      * @return A UnicodeSet containing the characters that are permitted by the CHAR_LIMIT test.
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public UnicodeSet getAllowedChars() {
         return fAllowedCharsSet;
@@ -1345,18 +1360,21 @@ public class SpoofChecker {
      * string where the failure was found.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public static class CheckResult {
         /**
          * Indicate which of the spoof check(s) has failed.
          * 
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public int checks;
         /**
          * The index of the first string position that failed a check.
          * 
          * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
          */
         public int position;
     }
@@ -1371,6 +1389,7 @@ public class SpoofChecker {
      *            Optional caller provided fill-in parameter. If not null, on return it will be filled.
      * @return True there any issue is found with the input string.
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean check(String text, CheckResult checkResult) {
         int length = text.length();
@@ -1521,6 +1540,7 @@ public class SpoofChecker {
      *            A String to be checked for possible security issues.
      * @return True there any issue is found with the input string.
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean check(String text) {
         return check(text, null);
@@ -1544,6 +1564,7 @@ public class SpoofChecker {
      * @return Non-zero if s1 and s1 are confusable. If not 0, the value will indicate the type(s) of confusability
      *         found, as defined by spoof check test constants.
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public int areConfusable(String s1, String s2) {
         //
@@ -1631,6 +1652,7 @@ public class SpoofChecker {
      * @return The output skeleton string.
      * 
      * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
      */
     public String getSkeleton(int type, String s) {
         // TODO: this function could be sped up a bit
