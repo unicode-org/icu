@@ -361,22 +361,42 @@ class CollationFunction : public UPerfFunction
 private:
 	int num;
     char locale[25];
+	UnicodeString *collation_strings;
+
+	/**
+	 * Unescape the strings
+	 */
+	void init() {
+        uint32_t listSize = sizeof(collation_strings_escaped)/sizeof(collation_strings_escaped[0]);
+		collation_strings = new UnicodeString[listSize];
+		for(uint32_t k=0;k<listSize;k++) {
+			collation_strings[k] = collation_strings_escaped[k].unescape();
+		}
+		UnicodeString shorty((UChar32)0x12345);
+	}
 public:
 	
 	CollationFunction()
 	{
 		num = -1;
+
+		init();
+	}
+
+	~CollationFunction() {
+		delete [] collation_strings;
 	}
 
 	CollationFunction(int a, const char* loc)
 	{
 		num = a;
         strcpy(locale, loc);
+		init();
 	}
 
 	virtual void call(UErrorCode* status2)
 	{
-        uint32_t listSize = sizeof(collation_strings)/sizeof(collation_strings[0]);
+        uint32_t listSize = sizeof(collation_strings_escaped)/sizeof(collation_strings_escaped[0]);
         UErrorCode status = U_ZERO_ERROR; 
         Collator *coll = Collator::createInstance(Locale(locale), status);
         

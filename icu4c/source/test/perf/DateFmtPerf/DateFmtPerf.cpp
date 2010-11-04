@@ -111,11 +111,15 @@ UPerfFunction* DateFormatPerfTest::Collation100000(){
 int main(int argc, const char* argv[]){
 
     // -x Filename.xml
-    if(strcmp(argv[1],"-x") == 0)
+    if((argc>1)&&(strcmp(argv[1],"-x") == 0))
     {
-        if(argc < 3) return 0; // not enough arguments
+        if(argc < 3) {
+			fprintf(stderr, "Usage: %s -x <outfile>.xml\n", argv[0]);
+			return 1;
+			// not enough arguments
+		}
 
-	    cout << "ICU version - " << U_ICU_VERSION << endl;
+		cout << "ICU version - " << U_ICU_VERSION << endl;
         UErrorCode status = U_ZERO_ERROR;
 
         // Declare functions
