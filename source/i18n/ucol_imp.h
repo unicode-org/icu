@@ -273,7 +273,9 @@ minimum number for special Jamo
 
 #ifdef XP_CPLUSPLUS
 
-typedef struct collIterate : public U_NAMESPACE_QUALIFIER UMemory {
+U_NAMESPACE_BEGIN
+
+typedef struct collIterate : public UMemory {
   const UChar *string; /* Original string */
   /* UChar *start;  Pointer to the start of the source string. Either points to string
                     or to writableBuffer */
@@ -308,6 +310,8 @@ typedef struct collIterate : public U_NAMESPACE_QUALIFIER UMemory {
   // are an improvement over duplicated code.
   void appendOffset(int32_t offset, UErrorCode &errorCode);
 } collIterate;
+
+U_NAMESPACE_END
 
 #else
 
