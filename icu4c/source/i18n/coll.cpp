@@ -833,19 +833,23 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
     return Locale::createFromName(loc);
 }
 
-uint32_t Collator::getReorderCodes(int32_t *dest,
-                                 const uint32_t destCapacity,
+int32_t Collator::getReorderCodes(int32_t *dest,
+                                 int32_t destCapacity,
                                  UErrorCode& status) const
 {
-    status = U_UNSUPPORTED_ERROR;
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
     return 0;
 }
 
 void Collator::setReorderCodes(const int32_t *reorderCodes,
-                              const uint32_t reorderCodesLength,
+                              int32_t reorderCodesLength,
                               UErrorCode& status)
 {
-    status = U_UNSUPPORTED_ERROR;
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
 }
 
 // UCollator private data members ----------------------------------------

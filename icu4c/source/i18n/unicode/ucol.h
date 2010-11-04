@@ -16,7 +16,6 @@
 #include "unicode/localpointer.h"
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
-#include "unicode/uscript.h"
 #include "unicode/uset.h"
 
 /**
@@ -138,14 +137,13 @@ typedef enum {
  *  @internal
  */
 typedef enum {
-    UCOL_REORDERCODE_FIRST          = 0x1000,
-    UCOL_REORDERCODE_SPACE          = 0x1000,
-    UCOL_REORDERCODE_PUNCTUATION    = 0x1001,
-    UCOL_REORDERCODE_SYMBOL         = 0x1002,
-    UCOL_REORDERCODE_CURRENCY       = 0x1003,
-    UCOL_REORDERCODE_DIGIT          = 0x1004,
-    UCOL_REORDERCODE_LIMIT          = 0x1005,
-    UCOL_REORDERCODE_IGNORE         = 0x7FFF
+    UCOL_REORDER_CODE_SPACE          = 0x1000,
+    UCOL_REORDER_CODE_FIRST          = UCOL_REORDER_CODE_SPACE,
+    UCOL_REORDER_CODE_PUNCTUATION    = 0x1001,
+    UCOL_REORDER_CODE_SYMBOL         = 0x1002,
+    UCOL_REORDER_CODE_CURRENCY       = 0x1003,
+    UCOL_REORDER_CODE_DIGIT          = 0x1004,
+    UCOL_REORDER_CODE_LIMIT          = 0x1005
 } UColReorderCode;
 
 /**
@@ -547,10 +545,10 @@ ucol_setStrength(UCollator *coll,
  * @see ucol_setReorderCodes
  * @internal 
  */
-U_INTERNAL uint32_t U_EXPORT2 
+U_INTERNAL int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator* coll,
                     int32_t* dest,
-                    uint32_t destCapacity,
+                    int32_t destCapacity,
                     UErrorCode *pErrorCode);
 
 /**
@@ -565,7 +563,7 @@ ucol_getReorderCodes(const UCollator* coll,
 U_INTERNAL void U_EXPORT2 
 ucol_setReorderCodes(UCollator* coll,
                     const int32_t* reorderCodes,
-                    uint32_t reorderCodesLength,
+                    int32_t reorderCodesLength,
                     UErrorCode *pErrorCode);
 
 /**

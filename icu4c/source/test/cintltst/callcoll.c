@@ -29,7 +29,6 @@
  * equlivalent to word 'one'. 
  */
 
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -284,14 +283,9 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     uiter_setString(&tIter, target, tLen);
     compareResultIter = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
     if(compareResultIter != result) {
-		log_err("different results in iterative comparison for UTF-16 encoded strings. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+        log_err("different results in iterative comparison for UTF-16 encoded strings. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
     }
-	
-    compareResultIter = ucol_strcoll(myCollation, source, sLen, target, tLen);
-    if(compareResultIter != result) {
-		log_err("different results in strcoll comparison for UTF-16 encoded strings. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
-    }
-	
+
     /* convert the strings to UTF-8 and do try comparing with char iterator */
     if(getTestOption(QUICK_OPTION) <= 0) { /*!QUICK*/
       char utf8Source[256], utf8Target[256];

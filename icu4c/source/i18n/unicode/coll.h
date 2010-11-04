@@ -606,8 +606,8 @@ public:
      * @see ucol_getReorderCodes
      * @internal 
      */
-    virtual uint32_t getReorderCodes(int32_t *dest,
-                                    const uint32_t destCapacity,
+    virtual int32_t getReorderCodes(int32_t *dest,
+                                    const int32_t destCapacity,
                                     UErrorCode& status) const;
 
     /**
@@ -618,7 +618,7 @@ public:
      * @internal 
      */
     virtual void setReorderCodes(const int32_t* reorderCodes,
-                                const uint32_t reorderCodesLength,
+                                const int32_t reorderCodesLength,
                                 UErrorCode& status) ;
 
     /**

@@ -692,7 +692,7 @@
 #define ucnvsel_serialize U_ICU_ENTRY_POINT_RENAME(ucnvsel_serialize)
 #define ucol_allocWeights U_ICU_ENTRY_POINT_RENAME(ucol_allocWeights)
 #define ucol_assembleTailoringTable U_ICU_ENTRY_POINT_RENAME(ucol_assembleTailoringTable)
-#define ucol_buildScriptReorderTable U_ICU_ENTRY_POINT_RENAME(ucol_buildScriptReorderTable)
+#define ucol_buildPermutationTable U_ICU_ENTRY_POINT_RENAME(ucol_buildPermutationTable)
 #define ucol_calcSortKey U_ICU_ENTRY_POINT_RENAME(ucol_calcSortKey)
 #define ucol_calcSortKeySimpleTertiary U_ICU_ENTRY_POINT_RENAME(ucol_calcSortKeySimpleTertiary)
 #define ucol_cloneBinary U_ICU_ENTRY_POINT_RENAME(ucol_cloneBinary)

@@ -587,15 +587,15 @@ void RuleBasedCollator::setStrength(ECollationStrength newStrength)
     ucol_setAttribute(ucollator, UCOL_STRENGTH, strength, &intStatus);
 }
 
-uint32_t RuleBasedCollator::getReorderCodes(int32_t *dest,
-                                          const uint32_t destCapacity,
+int32_t RuleBasedCollator::getReorderCodes(int32_t *dest,
+                                          const int32_t destCapacity,
                                           UErrorCode& status) const
 {
     return ucol_getReorderCodes(ucollator, dest, destCapacity, &status);
 }
 
 void RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes,
-                                       const uint32_t reorderCodesLength,
+                                       const int32_t reorderCodesLength,
                                        UErrorCode& status)
 {
     ucol_setReorderCodes(ucollator, reorderCodes, reorderCodesLength, &status);
