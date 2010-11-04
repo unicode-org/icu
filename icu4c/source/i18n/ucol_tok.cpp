@@ -22,6 +22,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/uscript.h"
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
@@ -659,8 +660,8 @@ void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status) {
         *status = U_INVALID_FORMAT_ERROR;
     }
     
-    src->opts->reorderCodesLength = codeCount;
-    src->opts->reorderCodes = (int32_t*)uprv_malloc(codeCount * sizeof(int32_t));
+    src->reorderCodesLength = codeCount;
+    src->reorderCodes = (int32_t*)uprv_malloc(codeCount * sizeof(int32_t));
     current = src->current;
     
     // eat leading whitespace
@@ -678,11 +679,11 @@ void ucol_tok_parseScriptReorder(UColTokenParser *src, UErrorCode *status) {
         } else {
             u_UCharsToChars(current, conversion, tokenLength);
             conversion[tokenLength] = '\0';
-            src->opts->reorderCodes[codeIndex] = ucol_findReorderingEntry(conversion);
-            if (src->opts->reorderCodes[codeIndex] == USCRIPT_INVALID_CODE) {
-                src->opts->reorderCodes[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
+            src->reorderCodes[codeIndex] = ucol_findReorderingEntry(conversion);
+            if (src->reorderCodes[codeIndex] == USCRIPT_INVALID_CODE) {
+                src->reorderCodes[codeIndex] = u_getPropertyValueEnum(UCHAR_SCRIPT, conversion);
             }
-            if (src->opts->reorderCodes[codeIndex] == USCRIPT_INVALID_CODE) {
+            if (src->reorderCodes[codeIndex] == USCRIPT_INVALID_CODE) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
             }
         }
@@ -2455,6 +2456,9 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
     }
     if(src->opts != NULL) {
         uprv_free(src->opts);
+    }
+    if (src->reorderCodes != NULL) {
+        uprv_free(src->reorderCodes);
     }
 }
 

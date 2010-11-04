@@ -31,6 +31,7 @@
 #include "rbt_pars.h"
 #include "genrb.h"
 #include "unicode/ustring.h"
+#include "unicode/uscript.h"
 #include "unicode/putil.h"
 #include <stdio.h>
 
@@ -899,7 +900,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 int32_t     len   = 0;
                 uint8_t   *data  = NULL;
                 UCollator *coll  = NULL;
-                int32_t reorderCodes[USCRIPT_CODE_LIMIT + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST)];
+                int32_t reorderCodes[USCRIPT_CODE_LIMIT + (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST)];
                 uint32_t reorderCodeCount;
                 int32_t reorderCodeIndex;
                 UParseError parseError;
@@ -934,7 +935,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                         uprv_free(data);
                         
                         reorderCodeCount = ucol_getReorderCodes(
-                            coll, reorderCodes, USCRIPT_CODE_LIMIT + (UCOL_REORDERCODE_LIMIT - UCOL_REORDERCODE_FIRST), &intStatus);
+                            coll, reorderCodes, USCRIPT_CODE_LIMIT + (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST), &intStatus);
                         if (U_SUCCESS(intStatus) && reorderCodeCount > 0) {
                             struct SResource *reorderCodeRes = intvector_open(state->bundle, "%%ReorderCodes", NULL, status);
                             for (reorderCodeIndex = 0; reorderCodeIndex < reorderCodeCount; reorderCodeIndex++) {
