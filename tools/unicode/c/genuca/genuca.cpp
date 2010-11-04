@@ -28,6 +28,7 @@
 #include "unicode/putil.h"
 #include "unicode/udata.h"
 #include "unicode/uclean.h"
+#include "unicode/uscript.h"
 #include "unicode/ustring.h"
 #include "ucol_bld.h"
 #include "ucol_imp.h"
@@ -1073,29 +1074,29 @@ void writeOutData(UCATableHeader *data,
     // output the script to lead bytes table here
     if (VERBOSE) {
         fprintf(stdout, "Writing Script to Lead Byte Data\n");
-        fprintf(stdout, "\tindex table size = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT);
-        fprintf(stdout, "\tdata block size = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
+        fprintf(stdout, "\tindex table size = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT);
+        fprintf(stdout, "\tdata block size = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
     }
     udata_write16(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT);
     udata_write16(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
-//    fprintf(stdout, "#### Script to Lead Byte Index Before Sort\n");
+//     fprintf(stdout, "#### Script to Lead Byte Index Before Sort\n");
 //     for (int reorderCodeIndex = 0; reorderCodeIndex < leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT; reorderCodeIndex++) {
 //         fprintf(stdout, "\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
 //     }
     qsort(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT, sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]), ReorderIndexComparer);
     udata_writeBlock(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT * sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]));
-//      fprintf(stdout, "#### Script to Lead Byte Index After Sort\n");
-//      for (int reorderCodeIndex = 0; reorderCodeIndex < leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT; reorderCodeIndex++) {
-//          fprintf(stdout, "\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
-//      }
+//     fprintf(stdout, "#### Script to Lead Byte Index After Sort\n");
+//     for (int reorderCodeIndex = 0; reorderCodeIndex < leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT; reorderCodeIndex++) {
+//         fprintf(stdout, "\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
+//     }
     
     // write out the script to lead bytes data block
     udata_writeBlock(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET * sizeof(*leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA));
     
     if (VERBOSE) {
         fprintf(stdout, "Writing Lead Byte To Script Data\n");
-        fprintf(stdout, "\tindex table size = %d\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH);
-        fprintf(stdout, "\tdata block size = %d\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_DATA_OFFSET);
+        fprintf(stdout, "\tindex table size = %x\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH);
+        fprintf(stdout, "\tdata block size = %x\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_DATA_OFFSET);
     }
     // output the header info
     udata_write16(pData, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH);
@@ -1104,9 +1105,9 @@ void writeOutData(UCATableHeader *data,
     // output the index table
     udata_writeBlock(pData, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX, 
         leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH * sizeof(leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX)[0]);
-//      for (int leadByte = 0; leadByte < leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH; leadByte++) {
-//          fprintf(stdout, "\t%02x = %04x\n", leadByte, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX[leadByte]);
-//      }
+//     for (int leadByte = 0; leadByte < leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH; leadByte++) {
+//         fprintf(stdout, "\t%02x = %04x\n", leadByte, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX[leadByte]);
+//     }
 
     // output the data
     udata_writeBlock(pData, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_DATA, 
