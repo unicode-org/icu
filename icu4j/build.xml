@@ -715,6 +715,7 @@
                 <param name="-name" value="ICU4J ${icu4j.impl.version}"/>
                 <param name="-output" value="${out.dir}/icu4j${api.report.version}.api2"/>
                 <param name="-internal"/>
+                <param name="-version"/>
                 <param name="-gzip"/>
             </doclet>
         </javadoc>
@@ -777,6 +778,18 @@
         </java>
     </target>
 
+    <target name="draftAPIs" depends="info, gatherapi" description="Run API collector tool and generate draft API report">
+        <java classname="com.ibm.icu.dev.tool.docs.CollectAPI"
+                classpath="${icu4j.build-tools.jar}"
+                failonerror="true">
+            <arg value="-f"/>
+            <arg value="Draft"/>
+            <arg value="-o"/>
+            <arg value="${out.dir}/draftAPIs.html"/>
+            <arg value="${out.dir}/icu4j${api.report.version}.api2.gz" />
+        </java>
+    </target>
+
     <target name="swatDeprecated" depends="build-tools" description="Convert @deprecated @draft tags to @provisional">
         <antcall target="_runSwatDeprecated">
             <param name="swat.deprecated.opt" value="-dep"/>
@@ -813,7 +826,6 @@
             <arg value="-verbose"/>
         </java>
     </target>
-
 
     <!-- Special packaging targets -->
     <target name="translitIMEJar" depends="info" description="Build transliterator IME 'icutransime.jar' jar file">

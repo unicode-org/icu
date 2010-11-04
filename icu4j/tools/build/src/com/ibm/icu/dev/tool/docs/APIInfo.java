@@ -206,10 +206,23 @@ class APIInfo {
             return;
         }
 
+        // status version
+        String version = "";
+        if (typ == STA) {
+            int idx = val.indexOf('@');
+            if (idx != -1) {
+                version = val.substring(idx + 1);
+                val = val.substring(0, idx);
+            }
+        }
+
         for (int i = 0; i < vals.length; ++i) {
             if (val.equalsIgnoreCase(vals[i])) {
                 info &= ~(masks[typ] << shifts[typ]);
                 info |= i << shifts[typ];
+                if (version.length() > 0) {
+                    setStatusVersion(version);
+                }
                 return;
             }
         }
@@ -407,6 +420,10 @@ class APIInfo {
      * Write the data in report format.
      */
     public void print(PrintWriter pw, boolean detail, boolean html) {
+        print(pw, detail, html, true);
+    }
+
+    public void print(PrintWriter pw, boolean detail, boolean html, boolean withStatus) {
         StringBuffer buf = new StringBuffer();
 
         // remove all occurrences of icu packages from the param string
@@ -428,7 +445,7 @@ class APIInfo {
         }
 
         // construct signature
-        for (int i = STA; i < CAT; ++i) { // include status
+        for (int i = (withStatus ? STA : VIS) ; i < CAT; ++i) { // include status
             String s = get(i, false);
             if (s != null && s.length() > 0) {
                 if (html && s.indexOf("internal") != -1) {
