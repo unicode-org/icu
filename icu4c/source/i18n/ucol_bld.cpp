@@ -1379,7 +1379,7 @@ ucol_initInverseUCA(UErrorCode *status)
 /* This is the data that is used for non-script reordering codes. These _must_ be kept
  * in order that they are to be applied as defaults and in synch with the UColReorderCode enum.
  */
-const char* ReorderingTokenNames[] = {
+static const char* ReorderingTokenNames[] = {
     "SPACE",
     "PUNCT",
     "SYMBOL",
@@ -1388,7 +1388,7 @@ const char* ReorderingTokenNames[] = {
     NULL
 };
 
-void toUpper(const char* src, char* dst, uint32_t length) {
+static void toUpper(const char* src, char* dst, uint32_t length) {
    for (uint32_t i = 0; *src != '\0' && i < length - 1; ++src, ++dst, ++i) {
        *dst = toupper(*src);
    }
