@@ -1385,7 +1385,6 @@ static void RamsRulesTest(void) {
     }
 
     for(i = 0; i<noOfLoc; i++) {
-        status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
         if(hasCollationElements(locName)) {
             if (uprv_strcmp("ja", locName)==0) {
@@ -1407,19 +1406,26 @@ static void RamsRulesTest(void) {
                 uprv_strcmp("zh_Hant", locName)==0
             ) {
                 log_verbose("Don't know how to test %s. "
-                            "TODO: Fix ticket #6040 and reenable RamsRulesTest for this locale.\n");
+                            "TODO: Fix ticket #6040 and reenable RamsRulesTest for this locale.\n", locName);
                 continue;
             }
             log_verbose("Testing locale %s\n", locName);
+            status = U_ZERO_ERROR;
             coll = ucol_open(locName, &status);
             if(U_SUCCESS(status)) {
+              if((status != U_USING_DEFAULT_WARNING) && (status != U_USING_FALLBACK_WARNING)) {
                 if(coll->image->jamoSpecial == TRUE) {
-                    log_err("%s has special JAMOs\n", locName);
+                  log_err("%s has special JAMOs\n", locName);
                 }
                 ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
                 testCollator(coll, &status);
                 testCEs(coll, &status);
-                ucol_close(coll);
+              } else {
+                log_verbose("Skipping %s: %s\n", locName, u_errorName(status));
+              }
+              ucol_close(coll);
+            } else {
+              log_err("Could not open %s: %s\n", locName, u_errorName(status));
             }
         }
     }
@@ -1427,11 +1433,14 @@ static void RamsRulesTest(void) {
     for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
         log_verbose("Testing rule: %s\n", rulesToTest[i]);
         ruleLen = u_unescape(rulesToTest[i], rule, 2048);
+        status = U_ZERO_ERROR;
         coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
         if(U_SUCCESS(status)) {
             testCollator(coll, &status);
             testCEs(coll, &status);
             ucol_close(coll);
+        } else {
+          log_err("Could not test rule: %s: '%s'\n", u_errorName(status), rulesToTest[i]);
         }
     }
 
