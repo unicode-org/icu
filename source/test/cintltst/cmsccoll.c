@@ -36,6 +36,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
+#include "unicode/uscript.h"
 #include "uparse.h"
 #include "putilimp.h"
 
@@ -5904,26 +5905,109 @@ static void TestBeforeRuleWithScriptReordering(void)
 }
 
 /*
+ * This test ensures that characters placed before a character in a different script have the same lead byte
+ * in their collation key before and after script reordering.
+ */
+static void TestNonLeadBytesDuringCollationReordering(void)
+{
+    UParseError error;
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
+    int32_t reorderCodes[1] = {USCRIPT_GREEK};
+    UCollationResult collResult;
+
+    uint8_t baseKey[256];
+    uint32_t baseKeyLength;
+    uint8_t reorderKey[256];
+    uint32_t reorderKeyLength;
+
+    UChar testString[] = { 0x03b1, 0x03b2, 0x03b3 };
+    
+    int i;
+
+
+    log_verbose("Testing non-lead bytes in a sort key with and without reordering\n");
+
+    /* build collator tertiary */
+    myCollation = ucol_open("", &status);
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+    baseKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), baseKey, 256);
+
+    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
+        return;
+    }
+    reorderKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), reorderKey, 256);
+    
+    if (baseKeyLength != reorderKeyLength) {
+        log_err("Key lengths not the same during reordering.\n", collResult);
+        return;
+    }
+    
+    for (i = 1; i < baseKeyLength; i++) {
+        if (baseKey[i] != reorderKey[i]) {
+            log_err("Collation key bytes not the same at position %d.\n", i);
+            return;
+        }
+    } 
+    ucol_close(myCollation);
+
+    /* build collator quaternary */
+    myCollation = ucol_open("", &status);
+    ucol_setStrength(myCollation, UCOL_QUATERNARY);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+    baseKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), baseKey, 256);
+
+    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
+        return;
+    }
+    reorderKeyLength = ucol_getSortKey(myCollation, testString, LEN(testString), reorderKey, 256);
+    
+    if (baseKeyLength != reorderKeyLength) {
+        log_err("Key lengths not the same during reordering.\n", collResult);
+        return;
+    }
+    
+    for (i = 1; i < baseKeyLength; i++) {
+        if (baseKey[i] != reorderKey[i]) {
+            log_err("Collation key bytes not the same at position %d.\n", i);
+            return;
+        }
+    }
+    ucol_close(myCollation);
+}
+
+/*
  * Utility function to test one collation reordering test case.
  * @param testcases Array of test cases.
  * @param n_testcases Size of the array testcases.
  * @param str_rules Array of rules.  These rules should be specifying the same rule in different formats.
  * @param n_rules Size of the array str_rules.
  */
-static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32_t testCasesLen, const int32_t reorderTokens[], uint32_t reorderTokensLen)
+static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32_t testCasesLen, const int32_t reorderTokens[], int32_t reorderTokensLen)
 {
     int testCaseNum;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
 
+    int i;
+    
     for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
         myCollation = ucol_open("", &status);
         if (U_FAILURE(status)) {
             log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
             return;
         }
-        /*ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
-        ucol_setStrength(myCollation, UCOL_TERTIARY);*/
         ucol_setReorderCodes(myCollation, reorderTokens, reorderTokensLen, &status);
         if(U_FAILURE(status)) {
             log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
@@ -5999,9 +6083,9 @@ static void TestNonScriptReorder(void)
     };
 
     const int32_t apiRules[] = {
-        USCRIPT_GREEK, UCOL_REORDERCODE_SYMBOL, UCOL_REORDERCODE_DIGIT, USCRIPT_LATIN, 
-        UCOL_REORDERCODE_PUNCTUATION, UCOL_REORDERCODE_SPACE, USCRIPT_UNKNOWN, 
-        UCOL_REORDERCODE_CURRENCY
+        USCRIPT_GREEK, UCOL_REORDER_CODE_SYMBOL, UCOL_REORDER_CODE_DIGIT, USCRIPT_LATIN, 
+        UCOL_REORDER_CODE_PUNCTUATION, UCOL_REORDER_CODE_SPACE, USCRIPT_UNKNOWN, 
+        UCOL_REORDER_CODE_CURRENCY
     };
 
     const static OneTestCase privateUseCharacterStrings[] = {
@@ -6349,9 +6433,10 @@ void addMiscCollTest(TestNode** root)
     TEST(TestImport);
     TEST(TestImportWithType);
 
+    TEST(TestBeforeRuleWithScriptReordering);
+    TEST(TestNonLeadBytesDuringCollationReordering);
     TEST(TestGreekFirstReorder);
     TEST(TestGreekLastReorder);
-    TEST(TestBeforeRuleWithScriptReordering);
     TEST(TestNonScriptReorder);
     TEST(TestHaniReorder);
 }

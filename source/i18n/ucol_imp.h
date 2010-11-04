@@ -776,8 +776,6 @@ typedef struct {
       /*UColAttributeValue*/ int32_t strength;          /* attribute for strength */
       /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribute for special Hiragana */
       /*UColAttributeValue*/ int32_t numericCollation;  /* attribute for numeric collation */
-      /* reorder code */ int32_t* reorderCodes;
-      uint32_t reorderCodesLength;
       uint32_t reserved[15];                 /* for future use */
 } UColOptionSet;
 
@@ -1026,7 +1024,7 @@ struct UCollator {
 
     UVersionInfo dataVersion;               /* Data info of UCA table */
     int32_t* reorderCodes;
-    uint32_t reorderCodesLength;
+    int32_t reorderCodesLength;
     uint8_t* leadBytePermutationTable;
 };
 
@@ -1096,7 +1094,9 @@ U_CAPI const UChar* U_EXPORT2 ucol_tok_getRulesFromBundle(
        const char* type,
        int32_t* pLength,
        UErrorCode* status);
-U_CAPI void ucol_buildScriptReorderTable(UCollator *coll, UErrorCode *status);
+       
+U_CAPI void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
+
 
 #ifdef XP_CPLUSPLUS
 /*

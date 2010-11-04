@@ -771,14 +771,6 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->alternateHandling = (UColAttributeValue)opts->alternateHandling;
     result->hiraganaQ = (UColAttributeValue)opts->hiraganaQ;
     result->numericCollation = (UColAttributeValue)opts->numericCollation;
-    result->reorderCodesLength = opts->reorderCodesLength;
-    if (result->reorderCodesLength > 0) {
-        result->reorderCodes = (int32_t*) uprv_malloc(result->reorderCodesLength * sizeof(int32_t));
-        uprv_memcpy(result->reorderCodes, opts->reorderCodes, result->reorderCodesLength * sizeof(int32_t));
-    } else {
-        result->reorderCodes = NULL;
-    }
-
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
     result->frenchCollationisDefault = TRUE;
@@ -4363,9 +4355,11 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
         primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
         primary1 = (uint8_t)(order >> 8);
 
+        /* no need to permute since the actual code values don't matter
         if (coll->leadBytePermutationTable != NULL && notIsContinuation) {
             primary1 = coll->leadBytePermutationTable[primary1];
         }
+        */
 
         if((shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
                       || (!notIsContinuation && wasShifted)))
@@ -4796,6 +4790,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >> 8);
 
+            uint8_t originalPrimary1 = primary1;
             if(notIsContinuation && coll->leadBytePermutationTable != NULL) {
                 primary1 = coll->leadBytePermutationTable[primary1];
             }
@@ -4845,7 +4840,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                                 /* one byter, not compressed */
                                 *primaries++ = primary1;
                                 leadPrimary = 0;
-                            } else if(isCompressible(coll, primary1)) {
+                            } else if(isCompressible(coll, originalPrimary1)) {
                                 /* compress */
                                 *primaries++ = leadPrimary = primary1;
                                 if(primaries <= primarySafeEnd) {
@@ -5390,6 +5385,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >> 8);
 
+            uint8_t originalPrimary1 = primary1;
             if (coll->leadBytePermutationTable != NULL && notIsContinuation) {
                 primary1 = coll->leadBytePermutationTable[primary1];
             }
@@ -5410,7 +5406,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                             /* one byter, not compressed */
                             *primaries++ = primary1;
                             leadPrimary = 0;
-                        } else if(isCompressible(coll, primary1)) {
+                        } else if(isCompressible(coll, originalPrimary1)) {
                             /* compress */
                             *primaries++ = leadPrimary = primary1;
                             *primaries++ = primary2;
@@ -7125,21 +7121,24 @@ ucol_getStrength(const UCollator *coll)
     return ucol_getAttribute(coll, UCOL_STRENGTH, &status);
 }
 
-U_INTERNAL uint32_t U_EXPORT2 
+U_INTERNAL int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator *coll,
                     int32_t *dest,
-                    uint32_t destCapacity,
+                    int32_t destCapacity,
                     UErrorCode *pErrorCode) {
-    if (pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
     if (coll->reorderCodes == NULL) {
+        if (destCapacity != 0) {
+            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        }
         return 0;
     }
     if (coll->reorderCodesLength > destCapacity) {
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
     }
-    for (uint32_t i = 0; (i < coll->reorderCodesLength) && (i < destCapacity); i++) {
+    for (int32_t i = 0; (i < coll->reorderCodesLength) && (i < destCapacity); i++) {
         dest[i] = coll->reorderCodes[i];
     }
     return coll->reorderCodesLength;
@@ -7148,17 +7147,28 @@ ucol_getReorderCodes(const UCollator *coll,
 U_INTERNAL void U_EXPORT2 
 ucol_setReorderCodes(UCollator *coll,
                     const int32_t *reorderCodes,
-                    uint32_t reorderCodesLength,
-                    UErrorCode *pErrorCode ){
-    if (coll->reorderCodes != NULL) {
-        uprv_free(coll->reorderCodes);
+                    int32_t reorderCodesLength,
+                    UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) {
+        return;
     }
+    if (reorderCodes == NULL) {
+        if (reorderCodesLength != 0) {
+            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return;
+    }
+    uprv_free(coll->reorderCodes);
     coll->reorderCodes = (int32_t*) uprv_malloc(reorderCodesLength * sizeof(int32_t));
-    for (uint32_t i = 0; i < reorderCodesLength; i++) {
+    if (coll->reorderCodes == NULL) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    for (int32_t i = 0; i < reorderCodesLength; i++) {
         coll->reorderCodes[i] = reorderCodes[i];
     }
     coll->reorderCodesLength = reorderCodesLength;
-    ucol_buildScriptReorderTable(coll, pErrorCode);
+    ucol_buildPermutationTable(coll, pErrorCode);
 }
 
 

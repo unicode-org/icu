@@ -135,6 +135,11 @@ typedef struct {
   UBool inRange;                     /* Are we in a range? */
   UChar32 currentRangeCp;           /* Current code point in the range. */
   UChar32 lastRangeCp;              /* The last code point in the range. */
+  
+  /* reorder codes for collation reordering */
+  int32_t* reorderCodes;
+  int32_t reorderCodesLength;
+
 } UColTokenParser;
 
 typedef struct {

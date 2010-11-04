@@ -25,6 +25,7 @@
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
+#include "unicode/uscript.h"
 #include "unicode/ustring.h"
 #include "normalizer2impl.h"
 #include "ucol_bld.h"
@@ -33,6 +34,7 @@
 #include "ucln_in.h"
 #include "umutex.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
@@ -1400,8 +1402,8 @@ ucol_findReorderingEntry(const char* name) {
     char buffer[32];
     toUpper(name, buffer, 32);
     for (uint32_t entry = 0; ReorderingTokenNames[entry] != NULL; entry++) {
-        if (strcmp(buffer, ReorderingTokenNames[entry]) == 0) {
-            return entry + UCOL_REORDERCODE_FIRST;
+        if (uprv_strcmp(buffer, ReorderingTokenNames[entry]) == 0) {
+            return entry + UCOL_REORDER_CODE_FIRST;
         }
     }
     return USCRIPT_INVALID_CODE;

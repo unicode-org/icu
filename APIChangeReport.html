@@ -812,12 +812,12 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">coll.h</td><td class="proto">uint32_t Collator::getReorderCodes(int32_t*, const uint32_t, UErrorCode&amp;) const</td><td class="">None<br>
+<td class="file">coll.h</td><td class="proto">int32_t Collator::getReorderCodes(int32_t*, const int32_t, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">coll.h</td><td class="proto">void Collator::setReorderCodes(const int32_t*, const uint32_t, UErrorCode&amp;)</td><td class="">None<br>
+<td class="file">coll.h</td><td class="proto">void Collator::setReorderCodes(const int32_t*, const int32_t, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
@@ -1136,12 +1136,12 @@
 <span class=""><span>4.6</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">tblcoll.h</td><td class="proto">uint32_t RuleBasedCollator::getReorderCodes(int32_t*, const uint32_t, UErrorCode&amp;) const</td><td class="">None<br>
+<td class="file">tblcoll.h</td><td class="proto">int32_t RuleBasedCollator::getReorderCodes(int32_t*, const int32_t, UErrorCode&amp;) const</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">tblcoll.h</td><td class="proto">void RuleBasedCollator::setReorderCodes(const int32_t*, const uint32_t, UErrorCode&amp;)</td><td class="">None<br>
+<td class="file">tblcoll.h</td><td class="proto">void RuleBasedCollator::setReorderCodes(const int32_t*, const int32_t, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
@@ -1248,52 +1248,52 @@
 <b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_CURRENCY</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_CURRENCY</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_DIGIT</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_DIGIT</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_FIRST</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_FIRST</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_IGNORE</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_IGNORE</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_LIMIT</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_LIMIT</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_PUNCTUATION</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_PUNCTUATION</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_SPACE</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_SPACE</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDERCODE_SYMBOL</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_SYMBOL</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">ucol.h</td><td class="proto">uint32_t ucol_getReorderCodes(const UCollator*, int32_t*, uint32_t, UErrorCode*)</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto">int32_t ucol_getReorderCodes(const UCollator*, int32_t*, int32_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">ucol.h</td><td class="proto">void ucol_setReorderCodes(UCollator*, const int32_t*, uint32_t, UErrorCode*)</td><td class="">None<br>
+<td class="file">ucol.h</td><td class="proto">void ucol_setReorderCodes(UCollator*, const int32_t*, int32_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
 </tr>
