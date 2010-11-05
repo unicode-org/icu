@@ -6018,10 +6018,11 @@ static void TestReorderingAPI(void)
     }
     
     retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, NULL, 0, &status);
-    if (status != U_MEMORY_ALLOCATION_ERROR) {
-        log_err_status(status, "ERROR: getting error codes should have returned U_MEMORY_ALLOCATION_ERROR : %s\n", myErrorName(status));
+    if (status != U_BUFFER_OVERFLOW_ERROR) {
+        log_err_status(status, "ERROR: getting error codes should have returned U_BUFFER_OVERFLOW_ERROR : %s\n", myErrorName(status));
         return;
     }
+    status = U_ZERO_ERROR;
     if (retrievedReorderCodesLength != LEN(reorderCodes)) {
         log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
         return;
@@ -6040,10 +6041,6 @@ static void TestReorderingAPI(void)
     }
 
     retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, NULL, 0, &status);
-    if (status != U_MEMORY_ALLOCATION_ERROR) {
-        log_err_status(status, "ERROR: getting error codes should have returned U_MEMORY_ALLOCATION_ERROR : %s\n", myErrorName(status));
-        return;
-    }
     if (retrievedReorderCodesLength != 0) {
         log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, 0);
         return;
