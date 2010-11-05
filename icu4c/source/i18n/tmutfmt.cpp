@@ -816,9 +816,9 @@ U_CDECL_BEGIN
  * @param val2  the other value in comparison
  * @return      TRUE if 2 values are the same, FALSE otherwise
  */
-UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
+static UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
 
-UBool
+static UBool
 U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2) {
     const MessageFormat** pattern1 = (const MessageFormat**)val1.pointer;
     const MessageFormat** pattern2 = (const MessageFormat**)val2.pointer;
