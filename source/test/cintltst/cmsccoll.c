@@ -5905,8 +5905,7 @@ static void TestBeforeRuleWithScriptReordering(void)
 }
 
 /*
- * This test ensures that characters placed before a character in a different script have the same lead byte
- * in their collation key before and after script reordering.
+ * Test that in a primary-compressed sort key all bytes except the first one are unchanged under script reordering.
  */
 static void TestNonLeadBytesDuringCollationReordering(void)
 {
