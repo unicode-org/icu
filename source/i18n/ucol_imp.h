@@ -1088,12 +1088,6 @@ ucol_openRulesForImport( const UChar        *rules,
                          void* context,
                          UErrorCode         *status);
 
-U_CAPI const UChar* U_EXPORT2 ucol_tok_getRulesFromBundle(
-       void* context,
-       const char* locale,
-       const char* type,
-       int32_t* pLength,
-       UErrorCode* status);
        
 U_CAPI void U_EXPORT2 ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
 
