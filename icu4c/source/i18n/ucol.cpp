@@ -7129,16 +7129,17 @@ ucol_getReorderCodes(const UCollator *coll,
     if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if (coll->reorderCodes == NULL) {
-        if (destCapacity != 0) {
-            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        }
+    
+    if (destCapacity < 0 || (destCapacity > 0 && dest == NULL)) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+    
     if (coll->reorderCodesLength > destCapacity) {
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        return coll->reorderCodesLength;
     }
-    for (int32_t i = 0; (i < coll->reorderCodesLength) && (i < destCapacity); i++) {
+    for (int32_t i = 0; i < coll->reorderCodesLength; i++) {
         dest[i] = coll->reorderCodes[i];
     }
     return coll->reorderCodesLength;
@@ -7152,13 +7153,19 @@ ucol_setReorderCodes(UCollator *coll,
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    if (reorderCodes == NULL) {
-        if (reorderCodesLength != 0) {
-            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        }
+
+    if (reorderCodesLength < 0 || (reorderCodesLength > 0 && reorderCodes == NULL)) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+    
     uprv_free(coll->reorderCodes);
+    coll->reorderCodesLength = 0;
+    if (reorderCodesLength == 0) {
+        uprv_free(coll->leadBytePermutationTable);
+        coll->leadBytePermutationTable = NULL;
+        return;
+    }
     coll->reorderCodes = (int32_t*) uprv_malloc(reorderCodesLength * sizeof(int32_t));
     if (coll->reorderCodes == NULL) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -7169,6 +7176,11 @@ ucol_setReorderCodes(UCollator *coll,
     }
     coll->reorderCodesLength = reorderCodesLength;
     ucol_buildPermutationTable(coll, pErrorCode);
+    if (U_FAILURE(*pErrorCode)) {
+        uprv_free(coll->reorderCodes);
+        coll->reorderCodes = NULL;
+        coll->reorderCodesLength = 0;
+    }    
 }
 
 

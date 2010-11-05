@@ -1095,7 +1095,7 @@ U_CAPI const UChar* U_EXPORT2 ucol_tok_getRulesFromBundle(
        int32_t* pLength,
        UErrorCode* status);
        
-U_CAPI void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
+U_CAPI void U_EXPORT2 ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
 
 
 #ifdef XP_CPLUSPLUS
