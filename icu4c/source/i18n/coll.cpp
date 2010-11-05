@@ -833,7 +833,7 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
     return Locale::createFromName(loc);
 }
 
-int32_t U_EXPORT2 Collator::getReorderCodes(int32_t *dest,
+int32_t Collator::getReorderCodes(int32_t *dest,
                                  int32_t destCapacity,
                                  UErrorCode& status) const
 {
@@ -843,7 +843,7 @@ int32_t U_EXPORT2 Collator::getReorderCodes(int32_t *dest,
     return 0;
 }
 
-void U_EXPORT2 Collator::setReorderCodes(const int32_t *reorderCodes,
+void Collator::setReorderCodes(const int32_t *reorderCodes,
                               int32_t reorderCodesLength,
                               UErrorCode& status)
 {
