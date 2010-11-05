@@ -7160,6 +7160,7 @@ ucol_setReorderCodes(UCollator *coll,
     }
     
     uprv_free(coll->reorderCodes);
+    coll->reorderCodes = NULL;
     coll->reorderCodesLength = 0;
     if (reorderCodesLength == 0) {
         uprv_free(coll->leadBytePermutationTable);
