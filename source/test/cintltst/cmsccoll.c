@@ -5987,6 +5987,78 @@ static void TestNonLeadBytesDuringCollationReordering(void)
 }
 
 /*
+ * Test reordering API.
+ */
+static void TestReorderingAPI(void)
+{
+    UParseError error;
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
+    int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
+    UCollationResult collResult;
+    int32_t retrievedReorderCodesLength;
+    UChar greekString[] = { 0x03b1 };
+    UChar punctuationString[] = { 0x203e };
+
+    log_verbose("Testing non-lead bytes in a sort key with and without reordering\n");
+
+    /* build collator tertiary */
+    myCollation = ucol_open("", &status);
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+
+    /* set the reorderding */
+    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
+        return;
+    }
+    
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, NULL, 0, &status);
+    if (status != U_MEMORY_ALLOCATION_ERROR) {
+        log_err_status(status, "ERROR: getting error codes should have returned U_MEMORY_ALLOCATION_ERROR : %s\n", myErrorName(status));
+        return;
+    }
+    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+        return;
+    }
+    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
+    if (collResult != UCOL_LESS) {
+        log_err_status(status, "ERROR: collation result should have been UCOL_LESS\n");
+        return;
+    }
+    
+    /* clear the reordering */
+    ucol_setReorderCodes(myCollation, NULL, 0, &status);    
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes to NULL: %s\n", myErrorName(status));
+        return;
+    }
+
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, NULL, 0, &status);
+    if (status != U_MEMORY_ALLOCATION_ERROR) {
+        log_err_status(status, "ERROR: getting error codes should have returned U_MEMORY_ALLOCATION_ERROR : %s\n", myErrorName(status));
+        return;
+    }
+    if (retrievedReorderCodesLength != 0) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, 0);
+        return;
+    }
+
+    collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), punctuationString, LEN(punctuationString));
+    if (collResult != UCOL_GREATER) {
+        log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
+        return;
+    }
+
+    ucol_close(myCollation);
+}
+
+/*
  * Utility function to test one collation reordering test case.
  * @param testcases Array of test cases.
  * @param n_testcases Size of the array testcases.
@@ -6434,6 +6506,7 @@ void addMiscCollTest(TestNode** root)
 
     TEST(TestBeforeRuleWithScriptReordering);
     TEST(TestNonLeadBytesDuringCollationReordering);
+    TEST(TestReorderingAPI);
     TEST(TestGreekFirstReorder);
     TEST(TestGreekLastReorder);
     TEST(TestNonScriptReorder);
