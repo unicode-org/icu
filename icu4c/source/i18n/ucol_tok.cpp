@@ -27,11 +27,13 @@
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
 
-#include "ucol_tok.h"
-#include "ucol_bld.h"
 #include "cmemory.h"
-#include "util.h"
+#include "cstring.h"
+#include "ucol_bld.h"
+#include "ucol_tok.h"
+#include "ulocimp.h"
 #include "uresimp.h"
+#include "util.h"
 
 // Define this only for debugging.
 // #define DEBUG_FOR_COLL_RULES 1
@@ -2118,7 +2120,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
 }
 
 const UChar* ucol_tok_getRulesFromBundle(
-    void* context,
+    void* /*context*/,
     const char* locale,
     const char* type,
     int32_t* pLength,
@@ -2151,13 +2153,6 @@ const UChar* ucol_tok_getRulesFromBundle(
     ures_close(bundle);
 
     return rules;
-}
-
-static char* make_string(const char* sourceStart, int32_t length) {
-    char* s = (char*)uprv_malloc(length+1);
-    uprv_memcpy(s, sourceStart, length);
-    s[length] = 0;
-    return s;
 }
 
 void ucol_tok_initTokenList(
@@ -2225,48 +2220,43 @@ void ucol_tok_initTokenList(
                 // [import <collation-name>]
 
                 // Find the address of the closing ].
-                UChar* import_end = u_strchr(rules+i, 0x005D);
+                UChar* import_end = u_strchr(setStart, 0x005D);
+                int32_t optionEndOffset = (int32_t)(import_end + 1 - rules);
+                // Ignore trailing whitespace.
+                while(uprv_isRuleWhiteSpace(*(import_end-1))) {
+                    --import_end;
+                }
 
-                // Find the offset of the ']' from the beginning.
-                uint32_t optionEndOffset = import_end - rules + 1;
-
-                // Find the length of the import argument, till the closing ].
-                uint32_t optionEndOffsetFromLoc = import_end - setStart;
-
-                int32_t optionLength;
-
-                // The following call is to get optionLength.
-                u_strToUTF8(NULL, 0, &optionLength, setStart, optionEndOffsetFromLoc, status);
-
-                char* option = (char*)uprv_malloc((optionLength+1)*sizeof(char));
+                int32_t optionLength = (int32_t)(import_end - setStart);
+                char option[50];
+                if(optionLength >= (int32_t)sizeof(option)) {
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+                u_UCharsToChars(setStart, option, optionLength);
+                option[optionLength] = 0;
 
                 *status = U_ZERO_ERROR;
-                // The following call convertes the utf16 string to UTF8 and stores in option.
-                u_strToUTF8(option, optionLength+1, &optionLength, setStart, optionEndOffsetFromLoc, status);
-
-                int32_t localeLength;
+                char locale[50];
                 int32_t templ;
-                localeLength = uloc_forLanguageTag(option, NULL, 0, NULL, status);
-                *status = U_ZERO_ERROR;
-                char* locale = (char*)uprv_malloc(localeLength+1);
-                uloc_forLanguageTag(option, locale, localeLength+1, &templ, status);
+                uloc_forLanguageTag(option, locale, (int32_t)sizeof(locale), &templ, status);
+                if(U_FAILURE(*status)) {
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
 
-                int32_t typeLength;
-                char* type;
+                char type[50];
+                if (uloc_getKeywordValue(locale, "collation", type, (int32_t)sizeof(type), status) <= 0 ||
+                    U_FAILURE(*status)
+                ) {
+                    *status = U_ZERO_ERROR;
+                    uprv_strcpy(type, "standard");
+                }
 
-                typeLength = uloc_getKeywordValue(locale, "collation", NULL, 0, status);
-                *status = U_ZERO_ERROR;
-                if (typeLength > 0){
-                    type = (char*)uprv_malloc(typeLength+1);
-                    uloc_getKeywordValue(locale, "collation", type, typeLength+1, status);
-
-                    // Truncate the locale at @ to be used later.
-                    char* at = strchr(locale, '@');
-                    if (at != NULL) {
-                      *at = 0;
-                    }
-                }else{
-                  type = make_string("standard", 8);
+                // TODO: Use public functions when available, see ticket #8134.
+                char *keywords = (char *)locale_getKeywordsStart(locale);
+                if(keywords != NULL) {
+                    *keywords = 0;
                 }
 
                 int32_t importRulesLength = 0;
@@ -2277,9 +2267,6 @@ void ucol_tok_initTokenList(
                 UnicodeString(importRules).toUTF8String(s);
                 std::cout << "Import rules = " << s << std::endl;
 #endif
-                uprv_free(locale);
-                uprv_free(option);
-                uprv_free(type);
 
                 // Add the length of the imported rules to length of the original rules,
                 // and subtract the length of the import option.

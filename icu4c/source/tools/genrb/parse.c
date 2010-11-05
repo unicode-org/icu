@@ -2048,15 +2048,6 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
 
     bundle_setlocale(state.bundle, tokenValue->fChars, status);
 
-    u_strToUTF8(NULL, 0, &encLength, tokenValue->fChars, u_strlen(tokenValue->fChars), status);
-    *status = U_ZERO_ERROR;
-    enc = (char*)uprv_malloc(encLength + 1);
-    u_strToUTF8(enc, encLength, &encLength, tokenValue->fChars, u_strlen(tokenValue->fChars), status);
-    enc[encLength] = 0;
-    *status = U_ZERO_ERROR;
-    /* printf("((((( %s )))))\n", enc); */
-    uprv_free(enc);
-
     /* The following code is to make Empty bundle work no matter with :table specifer or not */
     token = getToken(&state, NULL, NULL, &line, status);
     if(token==TOK_COLON) {
