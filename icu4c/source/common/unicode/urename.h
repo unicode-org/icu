@@ -142,6 +142,7 @@
 #define le_layoutChars U_ICU_ENTRY_POINT_RENAME(le_layoutChars)
 #define le_reset U_ICU_ENTRY_POINT_RENAME(le_reset)
 #define locale_getKeywords U_ICU_ENTRY_POINT_RENAME(locale_getKeywords)
+#define locale_getKeywordsStart U_ICU_ENTRY_POINT_RENAME(locale_getKeywordsStart)
 #define locale_get_default U_ICU_ENTRY_POINT_RENAME(locale_get_default)
 #define locale_set_default U_ICU_ENTRY_POINT_RENAME(locale_set_default)
 #define pl_addFontRun U_ICU_ENTRY_POINT_RENAME(pl_addFontRun)
