@@ -568,7 +568,7 @@ static int32_t getShortestSubtagLength(const char *localeID) {
 #define ULOC_KEYWORD_BUFFER_LEN 25
 #define ULOC_MAX_NO_KEYWORDS 25
 
-static const char * 
+U_CAPI const char * U_EXPORT2
 locale_getKeywordsStart(const char *localeID) {
     const char *result = NULL;
     if((result = uprv_strchr(localeID, '@')) != NULL) {
