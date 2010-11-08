@@ -1067,7 +1067,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * Only gets called for simplified Chinese. Uses further hack to distinguish long from short pinyin table.
      */
-    private String hackName(CharSequence name, @SuppressWarnings("rawtypes") RuleBasedCollator comparator) {
+    private String hackName(CharSequence name, RuleBasedCollator comparator) {
         if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
         }
@@ -1080,7 +1080,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_SHORT;
             }
         }
-        @SuppressWarnings("unchecked")
         int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
         if (index < 0) {
             index = -index - 2;
