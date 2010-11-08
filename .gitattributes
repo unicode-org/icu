@@ -2580,6 +2580,7 @@ icu4c/unicode-license.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/APIChangeReport.html svneol=native#text/html
 icu4j/build.properties -text
 icu4j/build.xml svneol=native#text/xml
+icu4j/demos/.settings/org.eclipse.core.resources.prefs -text
 icu4j/demos/manifest.stub -text
 icu4j/demos/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
 icu4j/demos/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
@@ -2603,16 +2604,19 @@ icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -tex
 icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text
+icu4j/main/classes/charset/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/charset/manifest.stub -text
 icu4j/main/classes/charset/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/main/classes/collate/.classpath -text
 icu4j/main/classes/collate/.project -text
+icu4j/main/classes/collate/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/collate/collate-build.launch -text
 icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
+icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/IterableComparator.java svneol=native#text/plain
@@ -2628,15 +2632,18 @@ icu4j/main/classes/core/src/com/ibm/icu/util/LocaleMatcher.java svneol=native#te
 icu4j/main/classes/core/src/com/ibm/icu/util/LocalePriorityList.java svneol=native#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
+icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/currdata/currdata-build.launch -text
 icu4j/main/classes/langdata/.externalToolBuilders/copy-data-langdata.launch -text
+icu4j/main/classes/langdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/langdata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/langdata/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/langdata/langdata-build.launch -text
 icu4j/main/classes/localespi/.classpath -text
 icu4j/main/classes/localespi/.project -text
+icu4j/main/classes/localespi/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/localespi/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/localespi/manifest.stub -text
 icu4j/main/classes/localespi/readme.html svneol=native#text/html
@@ -2651,14 +2658,17 @@ icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.LocaleNameProvi
 icu4j/main/classes/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/main/classes/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
 icu4j/main/classes/regiondata/.externalToolBuilders/copy-data-regiondata.launch -text
+icu4j/main/classes/regiondata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/regiondata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/regiondata/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/regiondata/regiondata-build.launch -text
 icu4j/main/classes/translit/.externalToolBuilders/copy-data-translit.launch -text
+icu4j/main/classes/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/translit/translit-build.launch -text
 icu4j/main/shared/.project -text
+icu4j/main/shared/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/shared/data/Transliterator_Han_Latin_Definition.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/shared/data/Transliterator_Han_Latin_EDICT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/shared/data/icudata.jar -text svneol=unset#application/java-archive
@@ -2667,10 +2677,12 @@ icu4j/main/shared/licenses/license.html svneol=native#text/html
 icu4j/main/shared/licenses/unicode-license.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/charset/.classpath -text
 icu4j/main/tests/charset/.project -text
+icu4j/main/tests/charset/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/charset/manifest.stub -text
 icu4j/main/tests/collate/.classpath -text
 icu4j/main/tests/collate/.project -text
+icu4j/main/tests/collate/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/collate/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/collate/collate-tests-build.launch -text
@@ -2681,6 +2693,7 @@ icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/Counter.java svneol=n
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/main/tests/core/.classpath -text
 icu4j/main/tests/core/.project -text
+icu4j/main/tests/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/core/manifest.stub -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt svneol=native#text/plain
@@ -2985,16 +2998,20 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleVal
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.32.tri2 -text
 icu4j/main/tests/framework/.classpath -text
 icu4j/main/tests/framework/.project -text
+icu4j/main/tests/framework/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/framework/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/framework/manifest.stub -text
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/package.html svneol=native#text/html
 icu4j/main/tests/localespi/.classpath -text
 icu4j/main/tests/localespi/.project -text
+icu4j/main/tests/localespi/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/localespi/manifest.stub -text
+icu4j/main/tests/packaging/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/packaging/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/packaging/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/packaging/packaging-tests-build.launch -text
 icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -text
+icu4j/main/tests/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/PrettyPrinterTest.java svneol=native#text/plain
@@ -3026,6 +3043,7 @@ icu4j/perf-tests/data/conversion/japanese.txt svneol=native#text/plain%3Bcharset
 icu4j/perf-tests/data/conversion/korean.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/conversion/s-chinese.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/readme.html svneol=native#text/html
+icu4j/tools/build/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/build/README.txt svneol=native#text/plain
 icu4j/tools/build/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/tools/build/icu4j30.api.gz -text svneol=unset#application/gzip
@@ -3044,6 +3062,7 @@ icu4j/tools/build/icu4j421.api.gz -text
 icu4j/tools/build/icu4j44.api.gz -text
 icu4j/tools/build/icu4j44.api2.gz -text
 icu4j/tools/build/manifest.stub -text
+icu4j/tools/misc/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/misc/manifest.stub -text
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/cldr/CheckSystemFonts.java svneol=native#text/plain
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
