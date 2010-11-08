@@ -225,6 +225,18 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public final static int CANONICAL_DECOMPOSITION = 17;
 
+    public final static class CollationReorderCodes {
+        private CollationReorderCodes() {}
+        
+        public final static int SPACE          = 0x1000;
+        public final static int FIRST          = SPACE;
+        public final static int PUNCTUATION    = 0x1001;
+        public final static int SYMBOL         = 0x1002;
+        public final static int CURRENCY       = 0x1003;
+        public final static int DIGIT          = 0x1004;
+        public final static int LIMIT          = 0x1005;
+        
+    }
     // public methods --------------------------------------------------------
 
     // public setters --------------------------------------------------------
@@ -313,6 +325,17 @@ public abstract class Collator implements Comparator<Object>, Cloneable
             Norm2AllModes.getFCDNormalizer2();
         }
     }
+
+    /** 
+     * Set the order for scripts to be ordered in.  
+     * @param order the reordering of scripts 
+     * @see #getScriptOrder 
+     * @stable  
+     */ 
+    public void setScriptOrder(int... order) 
+    { 
+        throw new UnsupportedOperationException(); 
+    } 
 
     // public getters --------------------------------------------------------
 
@@ -988,6 +1011,17 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * @stable ICU 2.8
      */
     public abstract VersionInfo getUCAVersion();
+    
+    /**  
+     * Method to retrieve the script reordering 
+     * @see #setScriptOrder 
+     * @return the ordering of the scripts if one has been set, null otherwise. 
+     * @stable  
+     */ 
+    public int[] getScriptOrder() 
+    { 
+        throw new UnsupportedOperationException(); 
+    }   
 
     // protected constructor -------------------------------------------------
 

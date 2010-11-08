@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UScript;
 
 /**
 * Class for parsing collation rules, produces a list of tokens that will be
@@ -89,6 +91,14 @@ final class CollationRuleParser
             m_decomposition_ = collator.getDecomposition();
             m_strength_ = collator.getStrength();
             m_isHiragana4_ = collator.m_isHiragana4_;
+
+            if(collator.m_scriptOrder_ != null){ 
+                m_scriptOrder_ = new int[collator.m_scriptOrder_.length]; 
+                for(int i = 0; i < m_scriptOrder_.length; i++){ 
+                    m_scriptOrder_[i] = collator.m_scriptOrder_[i]; 
+                } 
+            } 
+
         }
 
         // package private data members --------------------------------------
@@ -119,6 +129,11 @@ final class CollationRuleParser
          * attribute for special Hiragana
          */
         boolean m_isHiragana4_;
+        
+        /** 
+         * the ordering of the scripts 
+         */ 
+        int[] m_scriptOrder_;   
     }
 
     /**
@@ -291,6 +306,14 @@ final class CollationRuleParser
         collator.m_defaultCaseFirst_ = m_options_.m_caseFirst_;
         collator.m_defaultIsHiragana4_ = m_options_.m_isHiragana4_;
         collator.m_defaultVariableTopValue_ = m_options_.m_variableTopValue_;
+        if(m_options_.m_scriptOrder_ != null) { 
+            collator.m_defaultScriptOrder_ = new int[m_options_.m_scriptOrder_.length]; 
+            for (int i = 0; i < m_options_.m_scriptOrder_.length; i++) { 
+                collator.m_defaultScriptOrder_[i] = m_options_.m_scriptOrder_[i]; 
+            } 
+        } else { 
+            collator.m_defaultScriptOrder_ = null; 
+        }  
     }
 
     // private inner classes -------------------------------------------------
@@ -662,7 +685,7 @@ final class CollationRuleParser
         RULES_OPTIONS_[15] = new TokenOption("undefined",
                                   RuleBasedCollator.Attribute.LIMIT_,
                                   null, null);
-        RULES_OPTIONS_[16] = new TokenOption("scriptOrder",
+        RULES_OPTIONS_[16] = new TokenOption("reorder",
                                   RuleBasedCollator.Attribute.LIMIT_,
                                   null, null);
         RULES_OPTIONS_[17] = new TokenOption("charsetname",
@@ -2028,7 +2051,6 @@ final class CollationRuleParser
       return new UnicodeSet(source.substring(start, start+current)); //uset_openPattern(start, current);
     }
 
-
     /** in C, optionarg is passed by reference to function.
      *  We use a private int to simulate this.
      */
@@ -2061,6 +2083,7 @@ final class CollationRuleParser
         }
         return i;
     }
+    
     /**
      * Reads and set collation options
      * @return TOKEN_SUCCESS if option is set correct, 0 otherwise
@@ -2152,6 +2175,11 @@ final class CollationRuleParser
             m_optionEnd_ = m_current_-1;
             return TOKEN_SUCCESS_MASK_;
         }
+        else if(i == 16) { 
+            m_current_ = m_optionarg_; // skip opening brace and name 
+            parseScriptReorder(); 
+            return TOKEN_SUCCESS_MASK_; 
+        } 
         else {
             throwParseException(m_rules_, optionarg);
         }
@@ -2282,4 +2310,31 @@ final class CollationRuleParser
       }
       return rules;
     }
+    
+    private void parseScriptReorder() throws ParseException{ 
+        ArrayList<Integer> tempOrder = new ArrayList<Integer>(); 
+        int end = m_rules_.indexOf(']', m_current_); 
+        while(m_current_ < end){ 
+            // Ensure that the following token is 4 characters long 
+            if ((end != m_current_+4) && 
+                    (m_rules_.charAt(m_current_+4) != ' ')) { 
+                throw new ParseException(m_rules_, m_current_); 
+            } 
+            int[] script = UScript.getCode(m_rules_.substring(m_current_, m_current_+4)); 
+            if (script.length > 0) { 
+                tempOrder.add(script[0]); 
+            } else { 
+                throw new ParseException(m_rules_, m_current_); 
+            } 
+            m_current_+= 4; 
+            while (m_current_ < end && UCharacter.isWhitespace(m_rules_.charAt(m_current_))) 
+            {   // eat whitespace 
+                m_current_++; 
+            } 
+        } 
+        m_options_.m_scriptOrder_ = new int[tempOrder.size()]; 
+        for(int i = 0; i < tempOrder.size(); i++){ 
+            m_options_.m_scriptOrder_[i] = tempOrder.get(i); 
+        } 
+    } 
 }
