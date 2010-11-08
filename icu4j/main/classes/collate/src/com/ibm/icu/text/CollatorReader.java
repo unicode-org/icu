@@ -63,22 +63,13 @@ final class CollatorReader
     }
 
     static void initRBC(RuleBasedCollator rbc, ByteBuffer data) throws IOException {
-        // TODO - why? 4 extra bytes? padding in the swapper?
-        //final int MIN_BINARY_DATA_SIZE_ = (42 + 25) << 2;
-        final int MIN_BINARY_DATA_SIZE_ = 272;
+        final int MIN_BINARY_DATA_SIZE_ = (42 + 25) << 2;
         int dataLength = data.remaining();
         // TODO: Change the rest of this class to use the ByteBuffer directly, rather than
         // a DataInputStream, except for passing an InputStream to ICUBinary.readHeader().
         // Consider changing ICUBinary to also work with a ByteBuffer.
         CollatorReader reader = new CollatorReader(makeByteBufferInputStream(data), false);
         if (dataLength > MIN_BINARY_DATA_SIZE_) {
-//            for (int i = 0; i < dataLength; i++) {
-//                byte b = data.get(i);
-//                System.out.print("0x" + (((int) 0xff & b) < 0x0f ? "0" : "") + Integer.toHexString(0xff & b) + " ");
-//                if (i % 16 == 0) {
-//                    System.out.println();
-//                }
-//            }
             reader.readImp(rbc, null, null);
         } else {
             reader.readHeader(rbc);
