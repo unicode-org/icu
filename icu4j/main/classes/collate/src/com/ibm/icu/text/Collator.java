@@ -225,9 +225,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public final static int CANONICAL_DECOMPOSITION = 17;
 
-    public final static class CollationReorderCodes {
-        private CollationReorderCodes() {}
-        
+    public static interface ReorderCodes {
         public final static int SPACE          = 0x1000;
         public final static int FIRST          = SPACE;
         public final static int PUNCTUATION    = 0x1001;
