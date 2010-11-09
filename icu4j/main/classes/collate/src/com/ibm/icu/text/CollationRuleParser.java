@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.Collator.ReorderCodes;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -2311,29 +2313,51 @@ final class CollationRuleParser
       return rules;
     }
     
-    private void parseScriptReorder() throws ParseException{ 
+    /* This is the data that is used for non-script reordering codes. These _must_ be kept
+     * in order that they are to be applied as defaults and in synch with the Collator.ReorderCodes statics.
+     */
+    static final String ReorderingTokensArray[] = {
+        "SPACE",
+        "PUNCT",
+        "SYMBOL",
+        "CURRENCY",
+        "DIGIT",
+    };
+
+    int findReorderingEntry(String name) {
+        for (int tokenIndex = 0; tokenIndex < ReorderingTokensArray.length; tokenIndex++) {
+            if (name.equalsIgnoreCase(ReorderingTokensArray[tokenIndex])) {
+                return tokenIndex + ReorderCodes.FIRST;
+            }
+        }
+        return UScript.INVALID_CODE;
+    }
+    
+    private void parseScriptReorder() throws ParseException { 
         ArrayList<Integer> tempOrder = new ArrayList<Integer>(); 
-        int end = m_rules_.indexOf(']', m_current_); 
-        while(m_current_ < end){ 
-            // Ensure that the following token is 4 characters long 
-            if ((end != m_current_+4) && 
-                    (m_rules_.charAt(m_current_+4) != ' ')) { 
-                throw new ParseException(m_rules_, m_current_); 
-            } 
-            int[] script = UScript.getCode(m_rules_.substring(m_current_, m_current_+4)); 
-            if (script.length > 0) { 
-                tempOrder.add(script[0]); 
-            } else { 
-                throw new ParseException(m_rules_, m_current_); 
-            } 
-            m_current_+= 4; 
-            while (m_current_ < end && UCharacter.isWhitespace(m_rules_.charAt(m_current_))) 
-            {   // eat whitespace 
-                m_current_++; 
-            } 
-        } 
+        int end = m_rules_.indexOf(']', m_current_);
+        if (end == -1) {
+            return;
+        }
+        String tokenString = m_rules_.substring(m_current_, end);
+        String[] tokens = tokenString.split("\\s+", 0);
+        String token;
+        for (int tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
+            token = tokens[tokenIndex];
+            int reorderCode = findReorderingEntry(token);
+            if (reorderCode != UScript.INVALID_CODE) {
+                tempOrder.add(reorderCode);
+            } else {
+                int[] reorderCodes = UScript.getCode(token); 
+                if (reorderCodes.length > 0) {
+                    tempOrder.add(reorderCodes[0]);
+                } else {
+                    throw new ParseException(m_rules_, tokenIndex);
+                }
+            }
+        }
         m_options_.m_scriptOrder_ = new int[tempOrder.size()]; 
-        for(int i = 0; i < tempOrder.size(); i++){ 
+        for(int i = 0; i < tempOrder.size(); i++) { 
             m_options_.m_scriptOrder_[i] = tempOrder.get(i); 
         } 
     } 

@@ -23,22 +23,25 @@ import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
 import com.ibm.icu.util.VersionInfo;
 
 /**
- * <p>Internal reader class for ICU data file uca.icu containing 
- * Unicode Collation Algorithm data.</p> 
- * <p>This class simply reads uca.icu, authenticates that it is a valid
- * ICU data file and split its contents up into blocks of data for use in
- * <a href=Collator.html>com.ibm.icu.text.Collator</a>.
- * </p> 
- * <p>uca.icu which is in big-endian format is jared together with this 
- * package.</p>
+ * <p>
+ * Internal reader class for ICU data file uca.icu containing Unicode Collation Algorithm data.
+ * </p>
+ * <p>
+ * This class simply reads uca.icu, authenticates that it is a valid ICU data file and split its contents up into blocks
+ * of data for use in <a href=Collator.html>com.ibm.icu.text.Collator</a>.
+ * </p>
+ * <p>
+ * uca.icu which is in big-endian format is jared together with this package.
+ * </p>
+ * 
  * @author Syn Wee Quek
  * @since release 2.2, April 18 2002
  */
 
-final class CollatorReader
-{
-    static char[] read(RuleBasedCollator rbc, UCAConstants ucac, LeadByteConstants leadByteConstants) throws IOException {
-        InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/coll/ucadata.icu");
+final class CollatorReader {
+    static char[] read(RuleBasedCollator rbc, UCAConstants ucac, LeadByteConstants leadByteConstants)
+            throws IOException {
+        InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/coll/ucadata.icu");
         BufferedInputStream b = new BufferedInputStream(i, 90000);
         CollatorReader reader = new CollatorReader(b);
         char[] result = reader.readImp(rbc, ucac, leadByteConstants);
@@ -54,6 +57,7 @@ final class CollatorReader
                 }
                 return buf.get() & 0xff;
             }
+
             public int read(byte[] bytes, int off, int len) throws IOException {
                 len = Math.min(len, buf.remaining());
                 buf.get(bytes, off, len);
@@ -81,60 +85,62 @@ final class CollatorReader
 
     static InverseUCA getInverseUCA() throws IOException {
         InverseUCA result = null;
-        InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/coll/invuca.icu");
-        //        try    {
-        //            String invdat = "/com/ibm/icu/impl/data/invuca.icu";
-        //            InputStream i = CollationParsedRuleBuilder.class.getResourceAsStream(invdat);
+        InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/coll/invuca.icu");
+        // try {
+        // String invdat = "/com/ibm/icu/impl/data/invuca.icu";
+        // InputStream i = CollationParsedRuleBuilder.class.getResourceAsStream(invdat);
         BufferedInputStream b = new BufferedInputStream(i, 110000);
         result = CollatorReader.readInverseUCA(b);
         b.close();
         i.close();
         return result;
-        //        } catch (Exception e) {
-        //            throw new RuntimeException(e.getMessage());
-        //        }
+        // } catch (Exception e) {
+        // throw new RuntimeException(e.getMessage());
+        // }
     }
 
     // protected constructor ---------------------------------------------
 
     /**
-     * <p>Protected constructor.</p>
-     * @param inputStream ICU collator file input stream
-     * @exception IOException throw if data file fails authentication 
+     * <p>
+     * Protected constructor.
+     * </p>
+     * 
+     * @param inputStream
+     *            ICU collator file input stream
+     * @exception IOException
+     *                throw if data file fails authentication
      */
-    private CollatorReader(InputStream inputStream) throws IOException
-    {
+    private CollatorReader(InputStream inputStream) throws IOException {
         this(inputStream, true);
         /*
-        byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
-        // weiv: check that we have the correct Unicode version in 
-        // binary files
-        VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
-        if(UnicodeVersion[0] != UCDVersion.getMajor() 
-        || UnicodeVersion[1] != UCDVersion.getMinor()) {
-            throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
-        }
-        m_dataInputStream_ = new DataInputStream(inputStream);
+         * byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_); // weiv: check
+         * that we have the correct Unicode version in // binary files VersionInfo UCDVersion =
+         * UCharacter.getUnicodeVersion(); if(UnicodeVersion[0] != UCDVersion.getMajor() || UnicodeVersion[1] !=
+         * UCDVersion.getMinor()) { throw new IOException(WRONG_UNICODE_VERSION_ERROR_); } m_dataInputStream_ = new
+         * DataInputStream(inputStream);
          */
     }
 
     /**
-     * <p>Protected constructor.</p>
-     * @param inputStream ICU uprops.icu file input stream
-     * @param readICUHeader flag to indicate if the ICU header has to be read
-     * @exception IOException throw if data file fails authentication 
+     * <p>
+     * Protected constructor.
+     * </p>
+     * 
+     * @param inputStream
+     *            ICU uprops.icu file input stream
+     * @param readICUHeader
+     *            flag to indicate if the ICU header has to be read
+     * @exception IOException
+     *                throw if data file fails authentication
      */
-    private CollatorReader(InputStream inputStream, boolean readICUHeader) 
-    throws IOException
-    {
+    private CollatorReader(InputStream inputStream, boolean readICUHeader) throws IOException {
         if (readICUHeader) {
-            byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                    UCA_AUTHENTICATE_);
-            // weiv: check that we have the correct Unicode version in 
+            byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
+            // weiv: check that we have the correct Unicode version in
             // binary files
             VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
-            if(UnicodeVersion[0] != UCDVersion.getMajor() 
-                    || UnicodeVersion[1] != UCDVersion.getMinor()) {
+            if (UnicodeVersion[0] != UCDVersion.getMajor() || UnicodeVersion[1] != UCDVersion.getMinor()) {
                 throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
             }
         }
@@ -144,13 +150,14 @@ final class CollatorReader
     // protected methods -------------------------------------------------
 
     /**
-     * Read and break up the header stream of data passed in as arguments into 
-     * meaningful Collator data.
-     * @param rbc RuleBasedCollator to populate with header information
-     * @exception IOException thrown when there's a data error.
+     * Read and break up the header stream of data passed in as arguments into meaningful Collator data.
+     * 
+     * @param rbc
+     *            RuleBasedCollator to populate with header information
+     * @exception IOException
+     *                thrown when there's a data error.
      */
-    private void readHeader(RuleBasedCollator rbc) throws IOException
-    {
+    private void readHeader(RuleBasedCollator rbc) throws IOException {
         m_size_ = m_dataInputStream_.readInt();
         // all the offsets are in bytes
         // to get the address add to the header address and cast properly
@@ -163,7 +170,7 @@ final class CollatorReader
         readcount += 4;
         // this one is needed only for UCA, to copy the appropriate
         // contractions
-        int contractionUCACombos = m_dataInputStream_.readInt();
+        /*int contractionUCACombos =*/ m_dataInputStream_.readInt();
         readcount += 4;
         // reserved for future use
         m_dataInputStream_.skipBytes(4);
@@ -191,7 +198,7 @@ final class CollatorReader
         int expansionEndCEMaxSize = m_dataInputStream_.readInt();
         readcount += 4;
         // size of endExpansionCE int expansionEndCESize
-        /*int endExpansionCECount =*/ m_dataInputStream_.readInt();
+        /* int endExpansionCECount = */m_dataInputStream_.readInt();
         readcount += 4;
         // hash table of unsafe code points
         int unsafe = m_dataInputStream_.readInt();
@@ -216,7 +223,7 @@ final class CollatorReader
         readcount += 4;
         rbc.m_UCD_version_ = readVersion(m_dataInputStream_);
         readcount += 4;
-        VersionInfo formatVersion = readVersion(m_dataInputStream_);
+        /*VersionInfo formatVersion =*/ readVersion(m_dataInputStream_);
         readcount += 4;
         rbc.m_scriptToLeadBytes = m_dataInputStream_.readInt();
         readcount += 4;
@@ -230,9 +237,9 @@ final class CollatorReader
         m_dataInputStream_.skipBytes(44); // for future use
         readcount += 44;
         if (m_headerSize_ < readcount) {
-            ///CLOVER:OFF
+            // /CLOVER:OFF
             throw new IOException("Internal Error: Header size error");
-            ///CLOVER:ON
+            // /CLOVER:ON
         }
         m_dataInputStream_.skipBytes(m_headerSize_ - readcount);
 
@@ -244,18 +251,18 @@ final class CollatorReader
         m_expansionSize_ = rbc.m_contractionOffset_ - rbc.m_expansionOffset_;
         m_contractionIndexSize_ = contractionCE - rbc.m_contractionOffset_;
         m_contractionCESize_ = mapping - contractionCE;
-        //m_trieSize_ = expansionEndCE - mapping;
+        // m_trieSize_ = expansionEndCE - mapping;
         m_expansionEndCESize_ = expansionEndCEMaxSize - expansionEndCE;
         m_expansionEndCEMaxSizeSize_ = unsafe - expansionEndCEMaxSize;
         m_unsafeSize_ = contractionEnd - unsafe;
-        //m_UCAValuesSize_ = m_size_ - UCAConst; // UCA value, will be handled later
+        // m_UCAValuesSize_ = m_size_ - UCAConst; // UCA value, will be handled later
         m_UCAcontractionSize_ = contractionUCACombosSize * contractionUCACombosWidth * 2;
 
         // treat it as normal collator first
         // for normal collator there is no UCA contraction
         // contractions (UChar[contractionSize] + CE[contractionSize])
-        int old_contractionSize_ = m_size_ - contractionEnd;
-        //        m_contractionSize_ = contractionSize * 2 + contractionSize * 4;
+        //int old_contractionSize_ = m_size_ - contractionEnd;
+        // m_contractionSize_ = contractionSize * 2 + contractionSize * 4;
         m_contractionSize_ = contractionSize * 2 + contractionSize * 4;
 
         rbc.m_contractionOffset_ >>= 1; // casting to ints
@@ -263,126 +270,114 @@ final class CollatorReader
     }
 
     /**
-     * Read and break up the collation options passed in the stream of data and
-     * update the argument Collator with the results
+     * Read and break up the collation options passed in the stream of data and update the argument Collator with the
+     * results
      * 
      * @param rbc
      *            RuleBasedCollator to populate
      * @exception IOException
      *                thrown when there's a data error.
      */
-    private void readOptions(RuleBasedCollator rbc) throws IOException
-    {
+    private void readOptions(RuleBasedCollator rbc) throws IOException {
         int readcount = 0;
         rbc.m_defaultVariableTopValue_ = m_dataInputStream_.readInt();
         readcount += 4;
-        rbc.m_defaultIsFrenchCollation_ = (m_dataInputStream_.readInt()
-                == RuleBasedCollator.AttributeValue.ON_);
+        rbc.m_defaultIsFrenchCollation_ = (m_dataInputStream_.readInt() == RuleBasedCollator.AttributeValue.ON_);
         readcount += 4;
-        rbc.m_defaultIsAlternateHandlingShifted_ 
-        = (m_dataInputStream_.readInt() == 
-            RuleBasedCollator.AttributeValue.SHIFTED_);
+        rbc.m_defaultIsAlternateHandlingShifted_ = (m_dataInputStream_.readInt() == RuleBasedCollator.AttributeValue.SHIFTED_);
         readcount += 4;
         rbc.m_defaultCaseFirst_ = m_dataInputStream_.readInt();
         readcount += 4;
-        //        rbc.m_defaultIsCaseLevel_ = (m_dataInputStream_.readInt() 
-        //                == RuleBasedCollator.AttributeValue.ON_);
+        // rbc.m_defaultIsCaseLevel_ = (m_dataInputStream_.readInt()
+        // == RuleBasedCollator.AttributeValue.ON_);
         int defaultIsCaseLevel = m_dataInputStream_.readInt();
-        rbc.m_defaultIsCaseLevel_ = (defaultIsCaseLevel
-                == RuleBasedCollator.AttributeValue.ON_);
+        rbc.m_defaultIsCaseLevel_ = (defaultIsCaseLevel == RuleBasedCollator.AttributeValue.ON_);
         readcount += 4;
         int value = m_dataInputStream_.readInt();
         readcount += 4;
         if (value == RuleBasedCollator.AttributeValue.ON_) {
             value = Collator.CANONICAL_DECOMPOSITION;
-        }
-        else {
+        } else {
             value = Collator.NO_DECOMPOSITION;
         }
         rbc.m_defaultDecomposition_ = value;
         rbc.m_defaultStrength_ = m_dataInputStream_.readInt();
         readcount += 4;
-        rbc.m_defaultIsHiragana4_ = (m_dataInputStream_.readInt() 
-                == RuleBasedCollator.AttributeValue.ON_);
+        rbc.m_defaultIsHiragana4_ = (m_dataInputStream_.readInt() == RuleBasedCollator.AttributeValue.ON_);
         readcount += 4;
-        rbc.m_defaultIsNumericCollation_ = (m_dataInputStream_.readInt() 
-                == RuleBasedCollator.AttributeValue.ON_);
+        rbc.m_defaultIsNumericCollation_ = (m_dataInputStream_.readInt() == RuleBasedCollator.AttributeValue.ON_);
         readcount += 4;
         m_dataInputStream_.skip(60); // reserved for future use
         readcount += 60;
         m_dataInputStream_.skipBytes(m_optionSize_ - readcount);
         if (m_optionSize_ < readcount) {
-            ///CLOVER:OFF
+            // /CLOVER:OFF
             throw new IOException("Internal Error: Option size error");
-            ///CLOVER:ON
+            // /CLOVER:ON
         }
     }
 
     /**
-     * Read and break up the stream of data passed in as arguments into 
-     * meaningful Collator data.
-     * @param rbc RuleBasedCollator to populate
-     * @param UCAConst object to fill up with UCA constants if we are reading 
-     *                 the UCA collator, if not use a null
-     * @param leadByteConstants 
-     * @return UCAContractions array filled up with the UCA contractions if we
-     *                        are reading the UCA collator
-     * @exception IOException thrown when there's a data error.
+     * Read and break up the stream of data passed in as arguments into meaningful Collator data.
+     * 
+     * @param rbc
+     *            RuleBasedCollator to populate
+     * @param UCAConst
+     *            object to fill up with UCA constants if we are reading the UCA collator, if not use a null
+     * @param leadByteConstants
+     * @return UCAContractions array filled up with the UCA contractions if we are reading the UCA collator
+     * @exception IOException
+     *                thrown when there's a data error.
      */
-    private char[] readImp(RuleBasedCollator rbc, 
-            RuleBasedCollator.UCAConstants UCAConst,
-            RuleBasedCollator.LeadByteConstants leadByteConstants) 
-    throws IOException
-    {
-        char ucaContractions[] = null;	// return result
+    private char[] readImp(RuleBasedCollator rbc, RuleBasedCollator.UCAConstants UCAConst,
+            RuleBasedCollator.LeadByteConstants leadByteConstants) throws IOException {
+        char ucaContractions[] = null; // return result
 
         readHeader(rbc);
         // header size has been checked by readHeader
-        int readcount = m_headerSize_; 
+        int readcount = m_headerSize_;
         // option size has been checked by readOptions
         readOptions(rbc);
         readcount += m_optionSize_;
         m_expansionSize_ >>= 2;
         rbc.m_expansion_ = new int[m_expansionSize_];
-        for (int i = 0; i < m_expansionSize_; i ++) {
+        for (int i = 0; i < m_expansionSize_; i++) {
             rbc.m_expansion_[i] = m_dataInputStream_.readInt();
         }
         readcount += (m_expansionSize_ << 2);
-        if (m_contractionIndexSize_ > 0) { 
+        if (m_contractionIndexSize_ > 0) {
             m_contractionIndexSize_ >>= 1;
-        rbc.m_contractionIndex_ = new char[m_contractionIndexSize_];
-        for (int i = 0; i < m_contractionIndexSize_; i ++) {
-            rbc.m_contractionIndex_[i] = m_dataInputStream_.readChar();
+            rbc.m_contractionIndex_ = new char[m_contractionIndexSize_];
+            for (int i = 0; i < m_contractionIndexSize_; i++) {
+                rbc.m_contractionIndex_[i] = m_dataInputStream_.readChar();
+            }
+            readcount += (m_contractionIndexSize_ << 1);
+            m_contractionCESize_ >>= 2;
+            rbc.m_contractionCE_ = new int[m_contractionCESize_];
+            for (int i = 0; i < m_contractionCESize_; i++) {
+                rbc.m_contractionCE_[i] = m_dataInputStream_.readInt();
+            }
+            readcount += (m_contractionCESize_ << 2);
         }
-        readcount += (m_contractionIndexSize_ << 1);
-        m_contractionCESize_ >>= 2;
-        rbc.m_contractionCE_ = new int[m_contractionCESize_];
-        for (int i = 0; i < m_contractionCESize_; i ++) {
-            rbc.m_contractionCE_[i] = m_dataInputStream_.readInt();
-        }
-        readcount += (m_contractionCESize_ << 2);
-        }
-        rbc.m_trie_ = new IntTrie(m_dataInputStream_, 
-                RuleBasedCollator.DataManipulate.getInstance());
+        rbc.m_trie_ = new IntTrie(m_dataInputStream_, RuleBasedCollator.DataManipulate.getInstance());
         if (!rbc.m_trie_.isLatin1Linear()) {
-            throw new IOException("Data corrupted, " 
-                    + "Collator Tries expected to have linear "
+            throw new IOException("Data corrupted, " + "Collator Tries expected to have linear "
                     + "latin one data arrays");
         }
         readcount += rbc.m_trie_.getSerializedDataSize();
         m_expansionEndCESize_ >>= 2;
         rbc.m_expansionEndCE_ = new int[m_expansionEndCESize_];
-        for (int i = 0; i < m_expansionEndCESize_; i ++) {
+        for (int i = 0; i < m_expansionEndCESize_; i++) {
             rbc.m_expansionEndCE_[i] = m_dataInputStream_.readInt();
         }
         readcount += (m_expansionEndCESize_ << 2);
         rbc.m_expansionEndCEMaxSize_ = new byte[m_expansionEndCEMaxSizeSize_];
-        for (int i = 0; i < m_expansionEndCEMaxSizeSize_; i ++) {
+        for (int i = 0; i < m_expansionEndCEMaxSizeSize_; i++) {
             rbc.m_expansionEndCEMaxSize_[i] = m_dataInputStream_.readByte();
         }
         readcount += m_expansionEndCEMaxSizeSize_;
         rbc.m_unsafe_ = new byte[m_unsafeSize_];
-        for (int i = 0; i < m_unsafeSize_; i ++) {
+        for (int i = 0; i < m_unsafeSize_; i++) {
             rbc.m_unsafe_[i] = m_dataInputStream_.readByte();
         }
         readcount += m_unsafeSize_;
@@ -390,164 +385,148 @@ final class CollatorReader
             // we are reading the UCA
             // unfortunately the UCA offset in any collator data is not 0 and
             // only refers to the UCA data
-            //m_contractionSize_ -= m_UCAValuesSize_;       
-            m_contractionSize_ = m_UCAConstOffset_ - readcount;       
+            // m_contractionSize_ -= m_UCAValuesSize_;
+            m_contractionSize_ = m_UCAConstOffset_ - readcount;
         } else {
             m_contractionSize_ = m_size_ - readcount;
         }
         rbc.m_contractionEnd_ = new byte[m_contractionSize_];
-        for (int i = 0; i < m_contractionSize_; i ++) {
+        for (int i = 0; i < m_contractionSize_; i++) {
             rbc.m_contractionEnd_[i] = m_dataInputStream_.readByte();
         }
         readcount += m_contractionSize_;
         if (UCAConst != null) {
-            UCAConst.FIRST_TERTIARY_IGNORABLE_[0] 
-                                               = m_dataInputStream_.readInt();
+            UCAConst.FIRST_TERTIARY_IGNORABLE_[0] = m_dataInputStream_.readInt();
             int readUCAConstcount = 4;
-            UCAConst.FIRST_TERTIARY_IGNORABLE_[1] 
-                                               = m_dataInputStream_.readInt();
+            UCAConst.FIRST_TERTIARY_IGNORABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_TERTIARY_IGNORABLE_[0] 
-                                              = m_dataInputStream_.readInt();
+            UCAConst.LAST_TERTIARY_IGNORABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_TERTIARY_IGNORABLE_[1] 
-                                              = m_dataInputStream_.readInt();
+            UCAConst.LAST_TERTIARY_IGNORABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_PRIMARY_IGNORABLE_[0] 
-                                              = m_dataInputStream_.readInt();
+            UCAConst.FIRST_PRIMARY_IGNORABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_PRIMARY_IGNORABLE_[1] 
-                                              = m_dataInputStream_.readInt();
+            UCAConst.FIRST_PRIMARY_IGNORABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_SECONDARY_IGNORABLE_[0] 
-                                                = m_dataInputStream_.readInt();
+            UCAConst.FIRST_SECONDARY_IGNORABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_SECONDARY_IGNORABLE_[1] 
-                                                = m_dataInputStream_.readInt();
+            UCAConst.FIRST_SECONDARY_IGNORABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_SECONDARY_IGNORABLE_[0] 
-                                               = m_dataInputStream_.readInt();
+            UCAConst.LAST_SECONDARY_IGNORABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_SECONDARY_IGNORABLE_[1] 
-                                               = m_dataInputStream_.readInt();
+            UCAConst.LAST_SECONDARY_IGNORABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_PRIMARY_IGNORABLE_[0] 
-                                             = m_dataInputStream_.readInt();
+            UCAConst.LAST_PRIMARY_IGNORABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_PRIMARY_IGNORABLE_[1] 
-                                             = m_dataInputStream_.readInt();
+            UCAConst.LAST_PRIMARY_IGNORABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_VARIABLE_[0] = m_dataInputStream_.readInt();     
+            UCAConst.FIRST_VARIABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
             UCAConst.FIRST_VARIABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_VARIABLE_[0] = m_dataInputStream_.readInt(); 
+            UCAConst.LAST_VARIABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_VARIABLE_[1] = m_dataInputStream_.readInt();                     
+            UCAConst.LAST_VARIABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_NON_VARIABLE_[0] = m_dataInputStream_.readInt();  
+            UCAConst.FIRST_NON_VARIABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_NON_VARIABLE_[1] = m_dataInputStream_.readInt();  
+            UCAConst.FIRST_NON_VARIABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_NON_VARIABLE_[0] = m_dataInputStream_.readInt();  
+            UCAConst.LAST_NON_VARIABLE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_NON_VARIABLE_[1] = m_dataInputStream_.readInt();  
+            UCAConst.LAST_NON_VARIABLE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.RESET_TOP_VALUE_[0] = m_dataInputStream_.readInt();  
+            UCAConst.RESET_TOP_VALUE_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.RESET_TOP_VALUE_[1] = m_dataInputStream_.readInt();  
+            UCAConst.RESET_TOP_VALUE_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_IMPLICIT_[0] = m_dataInputStream_.readInt();  
+            UCAConst.FIRST_IMPLICIT_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_IMPLICIT_[1] = m_dataInputStream_.readInt();  
+            UCAConst.FIRST_IMPLICIT_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_IMPLICIT_[0] = m_dataInputStream_.readInt();  
+            UCAConst.LAST_IMPLICIT_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_IMPLICIT_[1] = m_dataInputStream_.readInt();  
+            UCAConst.LAST_IMPLICIT_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_TRAILING_[0] = m_dataInputStream_.readInt();  
+            UCAConst.FIRST_TRAILING_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.FIRST_TRAILING_[1] = m_dataInputStream_.readInt();  
+            UCAConst.FIRST_TRAILING_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_TRAILING_[0] = m_dataInputStream_.readInt();  
+            UCAConst.LAST_TRAILING_[0] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.LAST_TRAILING_[1] = m_dataInputStream_.readInt();   
-            readUCAConstcount += 4; 
-            UCAConst.PRIMARY_TOP_MIN_ = m_dataInputStream_.readInt();  
+            UCAConst.LAST_TRAILING_[1] = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.PRIMARY_IMPLICIT_MIN_ = m_dataInputStream_.readInt();   
+            UCAConst.PRIMARY_TOP_MIN_ = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.PRIMARY_IMPLICIT_MAX_ = m_dataInputStream_.readInt();   
+            UCAConst.PRIMARY_IMPLICIT_MIN_ = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.PRIMARY_TRAILING_MIN_ = m_dataInputStream_.readInt();   
+            UCAConst.PRIMARY_IMPLICIT_MAX_ = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.PRIMARY_TRAILING_MAX_ = m_dataInputStream_.readInt();   
+            UCAConst.PRIMARY_TRAILING_MIN_ = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.PRIMARY_SPECIAL_MIN_ = m_dataInputStream_.readInt();   
+            UCAConst.PRIMARY_TRAILING_MAX_ = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
-            UCAConst.PRIMARY_SPECIAL_MAX_ = m_dataInputStream_.readInt();   
+            UCAConst.PRIMARY_SPECIAL_MIN_ = m_dataInputStream_.readInt();
+            readUCAConstcount += 4;
+            UCAConst.PRIMARY_SPECIAL_MAX_ = m_dataInputStream_.readInt();
             readUCAConstcount += 4;
 
             readcount += readUCAConstcount;
 
-            //int resultsize = m_UCAcontractionSize_ / 2;
+            // int resultsize = m_UCAcontractionSize_ / 2;
             int resultsize = (rbc.m_scriptToLeadBytes - readcount) / 2;
             ucaContractions = new char[resultsize];
-            for (int i = 0; i < resultsize; i ++) {
+            for (int i = 0; i < resultsize; i++) {
                 ucaContractions[i] = m_dataInputStream_.readChar();
             }
             readcount += m_UCAcontractionSize_;
 
-            //            if (readcount != m_size_) {
-            //                ///CLOVER:OFF
-            //                throw new IOException("Internal Error: Data file size error");
-            //                ///CLOVER:ON
-            //            }
+            // if (readcount != m_size_) {
+            // ///CLOVER:OFF
+            // throw new IOException("Internal Error: Data file size error");
+            // ///CLOVER:ON
+            // }
         }
 
-        if (leadByteConstants != null)
-        {
+        if (leadByteConstants != null) {
             readcount += m_dataInputStream_.skip(rbc.m_scriptToLeadBytes - readcount);
             leadByteConstants.read(m_dataInputStream_);
             readcount += leadByteConstants.getSerializedDataSize();
         }
 
         if (readcount != m_size_) {
-            ///CLOVER:OFF
+            // /CLOVER:OFF
             throw new IOException("Internal Error: Data file size error");
-            ///CLOVER:ON
+            // /CLOVER:ON
         }
         return ucaContractions;
     }
 
     /**
      * Reads in the inverse uca data
-     * @param input input stream with the inverse uca data
+     * 
+     * @param input
+     *            input stream with the inverse uca data
      * @return an object containing the inverse uca data
-     * @exception IOException thrown when error occurs while reading the 
-     *            inverse uca
+     * @exception IOException
+     *                thrown when error occurs while reading the inverse uca
      */
-    private static CollationParsedRuleBuilder.InverseUCA readInverseUCA(
-            InputStream inputStream)
-    throws IOException
-    {
-        byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
+    private static CollationParsedRuleBuilder.InverseUCA readInverseUCA(InputStream inputStream) throws IOException {
+        byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_,
                 INVERSE_UCA_AUTHENTICATE_);
 
-        // weiv: check that we have the correct Unicode version in 
+        // weiv: check that we have the correct Unicode version in
         // binary files
         VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
-        if(UnicodeVersion[0] != UCDVersion.getMajor() 
-                || UnicodeVersion[1] != UCDVersion.getMinor()) {
+        if (UnicodeVersion[0] != UCDVersion.getMajor() || UnicodeVersion[1] != UCDVersion.getMinor()) {
             throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
         }
 
-        CollationParsedRuleBuilder.InverseUCA result = 
-            new CollationParsedRuleBuilder.InverseUCA();
-        DataInputStream input = new DataInputStream(inputStream);        
+        CollationParsedRuleBuilder.InverseUCA result = new CollationParsedRuleBuilder.InverseUCA();
+        DataInputStream input = new DataInputStream(inputStream);
         input.readInt(); // bytesize
         int tablesize = input.readInt(); // in int size
-        int contsize = input.readInt();  // in char size
+        int contsize = input.readInt(); // in char size
         input.readInt(); // table in bytes
         input.readInt(); // conts in bytes
         result.m_UCA_version_ = readVersion(input);
@@ -557,10 +536,10 @@ final class CollatorReader
         result.m_table_ = new int[size];
         result.m_continuations_ = new char[contsize];
 
-        for (int i = 0; i < size; i ++) {
+        for (int i = 0; i < size; i++) {
             result.m_table_[i] = input.readInt();
         }
-        for (int i = 0; i < contsize; i ++) {
+        for (int i = 0; i < contsize; i++) {
             result.m_continuations_[i] = input.readChar();
         }
         input.close();
@@ -568,27 +547,24 @@ final class CollatorReader
     }
 
     /**
-     * Reads four bytes from the input and returns a VersionInfo
-     * object. Use it to read different collator versions.
-     * @param input already instantiated DataInputStream, positioned 
-     *              at the start of four version bytes
+     * Reads four bytes from the input and returns a VersionInfo object. Use it to read different collator versions.
+     * 
+     * @param input
+     *            already instantiated DataInputStream, positioned at the start of four version bytes
      * @return a ready VersionInfo object
-     * @throws IOException thrown when error occurs while reading  
-     *            version bytes
+     * @throws IOException
+     *             thrown when error occurs while reading version bytes
      */
 
-    protected static VersionInfo readVersion(DataInputStream input) 
-    throws IOException {
+    protected static VersionInfo readVersion(DataInputStream input) throws IOException {
         byte[] version = new byte[4];
         version[0] = input.readByte();
         version[1] = input.readByte();
         version[2] = input.readByte();
         version[3] = input.readByte();
 
-        VersionInfo result = 
-            VersionInfo.getInstance(
-                    (int)version[0], (int)version[1], 
-                    (int)version[2], (int)version[3]);
+        VersionInfo result = VersionInfo.getInstance((int) version[0], (int) version[1], (int) version[2],
+                (int) version[3]);
 
         return result;
     }
@@ -600,123 +576,102 @@ final class CollatorReader
     /**
      * Authenticate uca data format version
      */
-    private static final ICUBinary.Authenticate UCA_AUTHENTICATE_ 
-    = new ICUBinary.Authenticate() {
-        public boolean isDataVersionAcceptable(byte version[])
-        {
-            return version[0] == DATA_FORMAT_VERSION_[0] 
-                                                      && version[1] >= DATA_FORMAT_VERSION_[1];
-                                                      // Too harsh 
-                                                      //&& version[1] == DATA_FORMAT_VERSION_[1]
-                                                      //&& version[2] == DATA_FORMAT_VERSION_[2] 
-                                                      //&& version[3] == DATA_FORMAT_VERSION_[3];
+    private static final ICUBinary.Authenticate UCA_AUTHENTICATE_ = new ICUBinary.Authenticate() {
+        public boolean isDataVersionAcceptable(byte version[]) {
+            return version[0] == DATA_FORMAT_VERSION_[0] && version[1] >= DATA_FORMAT_VERSION_[1];
+            // Too harsh
+            // && version[1] == DATA_FORMAT_VERSION_[1]
+            // && version[2] == DATA_FORMAT_VERSION_[2]
+            // && version[3] == DATA_FORMAT_VERSION_[3];
         }
     };
 
     /**
      * Authenticate uca data format version
      */
-    private static final ICUBinary.Authenticate INVERSE_UCA_AUTHENTICATE_ 
-    = new ICUBinary.Authenticate() {
-        public boolean isDataVersionAcceptable(byte version[])
-        {
-            return version[0] 
-                           == INVERSE_UCA_DATA_FORMAT_VERSION_[0] 
-                                                               && version[1] 
-                                                                          >= INVERSE_UCA_DATA_FORMAT_VERSION_[1];
+    private static final ICUBinary.Authenticate INVERSE_UCA_AUTHENTICATE_ = new ICUBinary.Authenticate() {
+        public boolean isDataVersionAcceptable(byte version[]) {
+            return version[0] == INVERSE_UCA_DATA_FORMAT_VERSION_[0]
+                    && version[1] >= INVERSE_UCA_DATA_FORMAT_VERSION_[1];
         }
     };
 
     /**
-     * Data input stream for uca.icu 
+     * Data input stream for uca.icu
      */
     private DataInputStream m_dataInputStream_;
 
     /**
-     * File format version and id that this class understands.
-     * No guarantees are made if a older version is used
+     * File format version and id that this class understands. No guarantees are made if a older version is used
      */
-    private static final byte DATA_FORMAT_VERSION_[] = 
-    {(byte)0x3, (byte)0x0, (byte)0x0, (byte)0x0};
-    private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x43,  
-        (byte)0x6f, (byte)0x6c};
+    private static final byte DATA_FORMAT_VERSION_[] = { (byte) 0x3, (byte) 0x0, (byte) 0x0, (byte) 0x0 };
+    private static final byte DATA_FORMAT_ID_[] = { (byte) 0x55, (byte) 0x43, (byte) 0x6f, (byte) 0x6c };
     /**
-     * Inverse UCA file format version and id that this class understands.
-     * No guarantees are made if a older version is used
+     * Inverse UCA file format version and id that this class understands. No guarantees are made if a older version is
+     * used
      */
-    private static final byte INVERSE_UCA_DATA_FORMAT_VERSION_[] = 
-    {(byte)0x2, (byte)0x1, (byte)0x0, (byte)0x0};
-    private static final byte INVERSE_UCA_DATA_FORMAT_ID_[] = {(byte)0x49, 
-        (byte)0x6e,  
-        (byte)0x76, 
-        (byte)0x43};
+    private static final byte INVERSE_UCA_DATA_FORMAT_VERSION_[] = { (byte) 0x2, (byte) 0x1, (byte) 0x0, (byte) 0x0 };
+    private static final byte INVERSE_UCA_DATA_FORMAT_ID_[] = { (byte) 0x49, (byte) 0x6e, (byte) 0x76, (byte) 0x43 };
 
     /**
      * Wrong unicode version error string
      */
-     private static final String WRONG_UNICODE_VERSION_ERROR_ =
-         "Unicode version in binary image is not compatible with the current Unicode version";
+    private static final String WRONG_UNICODE_VERSION_ERROR_ = "Unicode version in binary image is not compatible with the current Unicode version";
 
-     /**
-      * Size of expansion table in bytes
-      */
-     private int m_expansionSize_;
-     /**
-      * Size of contraction index table in bytes
-      */
-     private int m_contractionIndexSize_;
-     /**
-      * Size of contraction table in bytes
-      */
-     private int m_contractionCESize_;
-     /*
-      * Size of the Trie in bytes
-      */
-     //private int m_trieSize_;
-     /**
-      * Size of the table that contains information about collation elements
-      * that end with an expansion 
-      */
-     private int m_expansionEndCESize_;
-     /**
-      * Size of the table that contains information about the maximum size of 
-      * collation elements that end with a particular expansion CE corresponding
-      * to the ones in expansionEndCE
-      */
-     private int m_expansionEndCEMaxSizeSize_;
-     /**
-      * Size of the option table that contains information about the collation
-      * options
-      */
-     private int m_optionSize_;
-     /**
-      * Size of the whole data file minusing the ICU header
-      */
-     private int m_size_;
-     /**
-      * Size of the collation data header
-      */
-     private int m_headerSize_;
-     /**
-      * Size of the table that contains information about the "Unsafe" 
-      * codepoints
-      */
-     private int m_unsafeSize_;
-     /**
-      * Size in bytes of the table that contains information about codepoints that ends
-      * with a contraction
-      */
-     private int m_contractionSize_;
-     /**
-      * Size of the table that contains UCA contraction information in bytes
-      */
-     private int m_UCAcontractionSize_;
-     /**
-      * Offset of the UCA Const
-      */
-     private int m_UCAConstOffset_;
+    /**
+     * Size of expansion table in bytes
+     */
+    private int m_expansionSize_;
+    /**
+     * Size of contraction index table in bytes
+     */
+    private int m_contractionIndexSize_;
+    /**
+     * Size of contraction table in bytes
+     */
+    private int m_contractionCESize_;
+    /*
+     * Size of the Trie in bytes
+     */
+    // private int m_trieSize_;
+    /**
+     * Size of the table that contains information about collation elements that end with an expansion
+     */
+    private int m_expansionEndCESize_;
+    /**
+     * Size of the table that contains information about the maximum size of collation elements that end with a
+     * particular expansion CE corresponding to the ones in expansionEndCE
+     */
+    private int m_expansionEndCEMaxSizeSize_;
+    /**
+     * Size of the option table that contains information about the collation options
+     */
+    private int m_optionSize_;
+    /**
+     * Size of the whole data file minusing the ICU header
+     */
+    private int m_size_;
+    /**
+     * Size of the collation data header
+     */
+    private int m_headerSize_;
+    /**
+     * Size of the table that contains information about the "Unsafe" codepoints
+     */
+    private int m_unsafeSize_;
+    /**
+     * Size in bytes of the table that contains information about codepoints that ends with a contraction
+     */
+    private int m_contractionSize_;
+    /**
+     * Size of the table that contains UCA contraction information in bytes
+     */
+    private int m_UCAcontractionSize_;
+    /**
+     * Offset of the UCA Const
+     */
+    private int m_UCAConstOffset_;
 
-     // private methods ---------------------------------------------------
+    // private methods ---------------------------------------------------
 
 }
-

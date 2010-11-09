@@ -1566,18 +1566,19 @@ public final class RuleBasedCollator extends Collator {
             if (offset == 0) {
                 return EMPTY_INT_ARRAY;
             }
+            int[] reorderCodes;
             if ((offset & DATA_MASK_FOR_INDEX) == DATA_MASK_FOR_INDEX) {
-                int[] reorderCodes = new int[1];
+                reorderCodes = new int[1];
                 reorderCodes[0] = offset & ~DATA_MASK_FOR_INDEX;
-            }
+            } else {
 
-            int length = readShort(this.LEAD_BYTE_TO_SCRIPTS_DATA, offset);
-            offset++;
+                int length = readShort(this.LEAD_BYTE_TO_SCRIPTS_DATA, offset);
+                offset++;
 
-            int[] reorderCodes = new int[length];
-
-            for (int code = 0; code < length; code++, offset++) {
-                reorderCodes[code] = readShort(this.LEAD_BYTE_TO_SCRIPTS_DATA, offset);
+                reorderCodes = new int[length];
+                for (int code = 0; code < length; code++, offset++) {
+                    reorderCodes[code] = readShort(this.LEAD_BYTE_TO_SCRIPTS_DATA, offset);
+                }
             }
             return reorderCodes;
         }
@@ -1610,7 +1611,7 @@ public final class RuleBasedCollator extends Collator {
         }
 
         private static int readShort(byte[] data, int offset) {
-            return data[offset * 2] << 8 | data[offset * 2 + 1];
+            return (0xff & data[offset * 2]) << 8 | (data[offset * 2 + 1] & 0xff);
         }
     }
 
@@ -1841,10 +1842,8 @@ public final class RuleBasedCollator extends Collator {
                     ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
             iUCA_.m_rules_ = (String) rb.getObject("UCARules");
         } catch (MissingResourceException ex) {
-            int i =12;
             // throw ex;
         } catch (IOException e) {
-            int i =12;
             // e.printStackTrace();
             // throw new MissingResourceException(e.getMessage(),"","");
         }
@@ -2422,78 +2421,78 @@ public final class RuleBasedCollator extends Collator {
 
         int p2 = (ce >>>= 16) & LAST_BYTE_MASK_; // in ints for unsigned
         int p1 = ce >>> 8; // comparison
-                            if (doShift) {
-                                if (m_utilCount4_ > 0) {
-                                    while (m_utilCount4_ > bottomCount4) {
-                                        m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) (commonBottom4 + bottomCount4));
-                                        m_utilBytesCount4_++;
-                                        m_utilCount4_ -= bottomCount4;
-                                    }
-                                    m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) (commonBottom4 + (m_utilCount4_ - 1)));
-                                    m_utilBytesCount4_++;
-                                    m_utilCount4_ = 0;
-                                }
-                                // dealing with a variable and we're treating them as shifted
-                                // This is a shifted ignorable
-                                if (p1 != 0) {
-                                    // we need to check this since we could be in continuation
-                                    m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) p1);
-                                    m_utilBytesCount4_++;
-                                }
-                                if (p2 != 0) {
-                                    m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) p2);
-                                    m_utilBytesCount4_++;
-                                }
-                            } else {
-                                // Note: This code assumes that the table is well built
-                                // i.e. not having 0 bytes where they are not supposed to be.
-                                // Usually, we'll have non-zero primary1 & primary2, except
-                                // in cases of LatinOne and friends, when primary2 will be
-                                // regular and simple sortkey calc
-                                if (p1 != CollationElementIterator.IGNORABLE) {
-                                    if (notIsContinuation) {
-                                        if (leadPrimary == p1) {
-                                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
-                                            m_utilBytesCount1_++;
-                                        } else {
-                                            if (leadPrimary != 0) {
-                                                m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_,
-                                                        ((p1 > leadPrimary) ? BYTE_UNSHIFTED_MAX_ : BYTE_UNSHIFTED_MIN_));
-                                                m_utilBytesCount1_++;
-                                            }
-                                            if (p2 == CollationElementIterator.IGNORABLE) {
-                                                // one byter, not compressed
-                                                m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
-                                                m_utilBytesCount1_++;
-                                                leadPrimary = 0;
-                                            } else if (isCompressible(p1)) {
-                                                // compress
-                                                leadPrimary = p1;
-                                                m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
-                                                m_utilBytesCount1_++;
-                                                m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
-                                                m_utilBytesCount1_++;
-                                            } else {
-                                                leadPrimary = 0;
-                                                m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
-                                                m_utilBytesCount1_++;
-                                                m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
-                                                m_utilBytesCount1_++;
-                                            }
-                                        }
-                                    } else {
-                                        // continuation, add primary to the key, no compression
-                                        m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
-                                        m_utilBytesCount1_++;
-                                        if (p2 != CollationElementIterator.IGNORABLE) {
-                                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
-                                            // second part
-                                            m_utilBytesCount1_++;
-                                        }
-                                    }
-                                }
-                            }
-                            return leadPrimary;
+        if (doShift) {
+            if (m_utilCount4_ > 0) {
+                while (m_utilCount4_ > bottomCount4) {
+                    m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) (commonBottom4 + bottomCount4));
+                    m_utilBytesCount4_++;
+                    m_utilCount4_ -= bottomCount4;
+                }
+                m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) (commonBottom4 + (m_utilCount4_ - 1)));
+                m_utilBytesCount4_++;
+                m_utilCount4_ = 0;
+            }
+            // dealing with a variable and we're treating them as shifted
+            // This is a shifted ignorable
+            if (p1 != 0) {
+                // we need to check this since we could be in continuation
+                m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) p1);
+                m_utilBytesCount4_++;
+            }
+            if (p2 != 0) {
+                m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, (byte) p2);
+                m_utilBytesCount4_++;
+            }
+        } else {
+            // Note: This code assumes that the table is well built
+            // i.e. not having 0 bytes where they are not supposed to be.
+            // Usually, we'll have non-zero primary1 & primary2, except
+            // in cases of LatinOne and friends, when primary2 will be
+            // regular and simple sortkey calc
+            if (p1 != CollationElementIterator.IGNORABLE) {
+                if (notIsContinuation) {
+                    if (leadPrimary == p1) {
+                        m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
+                        m_utilBytesCount1_++;
+                    } else {
+                        if (leadPrimary != 0) {
+                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_,
+                                    ((p1 > leadPrimary) ? BYTE_UNSHIFTED_MAX_ : BYTE_UNSHIFTED_MIN_));
+                            m_utilBytesCount1_++;
+                        }
+                        if (p2 == CollationElementIterator.IGNORABLE) {
+                            // one byter, not compressed
+                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
+                            m_utilBytesCount1_++;
+                            leadPrimary = 0;
+                        } else if (isCompressible(p1)) {
+                            // compress
+                            leadPrimary = p1;
+                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
+                            m_utilBytesCount1_++;
+                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
+                            m_utilBytesCount1_++;
+                        } else {
+                            leadPrimary = 0;
+                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
+                            m_utilBytesCount1_++;
+                            m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
+                            m_utilBytesCount1_++;
+                        }
+                    }
+                } else {
+                    // continuation, add primary to the key, no compression
+                    m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
+                    m_utilBytesCount1_++;
+                    if (p2 != CollationElementIterator.IGNORABLE) {
+                        m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p2);
+                        // second part
+                        m_utilBytesCount1_++;
+                    }
+                }
+            }
+        }
+        return leadPrimary;
     }
 
     /**
@@ -2745,9 +2744,6 @@ public final class RuleBasedCollator extends Collator {
         m_srcUtilColEIter_.setText(m_srcUtilIter_);
         m_utilFrenchStart_ = -1;
         m_utilFrenchEnd_ = -1;
-
-        // scriptorder not implemented yet
-        // const uint8_t *scriptOrder = coll->scriptOrder;
 
         boolean doShift = false;
         boolean notIsContinuation = false;
@@ -3784,7 +3780,7 @@ public final class RuleBasedCollator extends Collator {
         return ch;
     }
 
-    private static final int UCOL_REORDER_CODE_IGNORE = CollationReorderCodes.LIMIT + 1;
+    private static final int UCOL_REORDER_CODE_IGNORE = ReorderCodes.LIMIT + 1;
     /**
      * Builds the lead byte permuatation table
      */
@@ -3812,13 +3808,13 @@ public final class RuleBasedCollator extends Collator {
 
         // prefill the reordering codes with the leading entries
         int[] internalReorderCodes = new int[m_scriptOrder_.length + 5]; // TODO - replace 5 with the reorder codes prefix size
-        for (int codeIndex = 0; codeIndex < CollationReorderCodes.LIMIT - CollationReorderCodes.FIRST; codeIndex++) {
-            internalReorderCodes[codeIndex] = CollationReorderCodes.FIRST + codeIndex;
+        for (int codeIndex = 0; codeIndex < ReorderCodes.LIMIT - ReorderCodes.FIRST; codeIndex++) {
+            internalReorderCodes[codeIndex] = ReorderCodes.FIRST + codeIndex;
         }
         for (int codeIndex = 0; codeIndex < m_scriptOrder_.length; codeIndex++) {
-            internalReorderCodes[codeIndex + (CollationReorderCodes.LIMIT - CollationReorderCodes.FIRST)] = m_scriptOrder_[codeIndex];
-            if (m_scriptOrder_[codeIndex] >= CollationReorderCodes.FIRST && m_scriptOrder_[codeIndex] < CollationReorderCodes.LIMIT) {
-                internalReorderCodes[m_scriptOrder_[codeIndex] - CollationReorderCodes.FIRST] = UCOL_REORDER_CODE_IGNORE;
+            internalReorderCodes[codeIndex + (ReorderCodes.LIMIT - ReorderCodes.FIRST)] = m_scriptOrder_[codeIndex];
+            if (m_scriptOrder_[codeIndex] >= ReorderCodes.FIRST && m_scriptOrder_[codeIndex] < ReorderCodes.LIMIT) {
+                internalReorderCodes[m_scriptOrder_[codeIndex] - ReorderCodes.FIRST] = UCOL_REORDER_CODE_IGNORE;
             }
         }
 
@@ -3898,6 +3894,8 @@ public final class RuleBasedCollator extends Collator {
         // for (int i = 0; i < 256; i++){
         // System.out.println(Integer.toString(i, 16) + " -> " + Integer.toString(m_scriptReorderTable_[i], 16));
         // }
+        latinOneRegenTable_ = true;
+        updateInternalState();
     }
 
     /**
@@ -4050,8 +4048,9 @@ public final class RuleBasedCollator extends Collator {
 
     private final void addLatinOneEntry(char ch, int CE, shiftValues sh) {
         int primary1 = 0, primary2 = 0, secondary = 0, tertiary = 0;
+        boolean continuation = isContinuation(CE);
         boolean reverseSecondary = false;
-        if (!isContinuation(CE)) {
+        if (!continuation) {
             tertiary = ((CE & m_mask3_));
             tertiary ^= m_caseSwitch_;
             reverseSecondary = true;
@@ -4066,6 +4065,9 @@ public final class RuleBasedCollator extends Collator {
         primary1 = (CE >>> 8);
 
         if (primary1 != 0) {
+            if (m_leadBytePermutationTable_ != null && !continuation) {
+                primary1 = m_leadBytePermutationTable_[primary1];
+            }
             latinOneCEs_[ch] |= (primary1 << sh.primShift);
             sh.primShift -= 8;
         }
@@ -4396,11 +4398,6 @@ public final class RuleBasedCollator extends Collator {
             }
             if (endOfSource) { // source is finished, but target is not, say the result.
                 return -1;
-            }
-
-            if (!isContinuation(sOrder) && m_leadBytePermutationTable_ != null) {
-                sOrder = (m_leadBytePermutationTable_[((sOrder >> 24) + 256) % 256] << 24) | (sOrder & 0x00FFFFFF);
-                tOrder = (m_leadBytePermutationTable_[((tOrder >> 24) + 256) % 256] << 24) | (tOrder & 0x00FFFFFF);
             }
 
             if (sOrder == tOrder) { // if we have same CEs, we continue the loop
