@@ -1071,13 +1071,15 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
             return null;
         }
-        if (PINYIN_LOWER_BOUNDS == null) {
-            if (comparator.getTailoredSet().contains(probeCharInLong)) {
-                PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_LONG;
-                HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_LONG;
-            } else {
-                PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_SHORT;
-                HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_SHORT;
+        synchronized (PINYIN_LOWER_BOUNDS_LONG) {
+            if (PINYIN_LOWER_BOUNDS == null) {
+                if (comparator.getTailoredSet().contains(probeCharInLong)) {
+                    PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_LONG;
+                    HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_LONG;
+                } else {
+                    PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_SHORT;
+                    HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_SHORT;
+                }
             }
         }
         int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
@@ -1096,7 +1098,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * HACKS
      * Generated with org.unicode.draft.GenerateUnihanCollator.
      */
-    
+
     private int probeCharInLong = 0x28EAD;
 
     private static String PINYIN_LOWER_BOUNDS_LONG = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
