@@ -1377,6 +1377,16 @@ public class SpoofChecker {
          * @provisional This API might change or be removed in a future release.
          */
         public int position;
+        
+        /**
+         *  Default constructor
+         *  @draft ICU 4.6
+         *  @provisional This API might change or be removed in a future release.
+         */
+        public CheckResult() {
+            checks = 0;
+            position = 0;
+        }
     }
 
     /**
