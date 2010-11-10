@@ -58,7 +58,7 @@ configure = svn:eol-style=native;svn:executable
 *.pl = svn:eol-style=native;svn:executable
 *.py = svn:eol-style=native;svn:executable
 *.txt = svn:mime-type=text/plain;svn:eol-style=native
-*.java = svn:eol-style=native
+*.java = svn:eol-style=native;svn:mime-type=text/plain;;charset=utf-8
 *.ucm = svn:eol-style=native
 *.html = svn:eol-style=native;svn:mime-type=text/html
 *.htm = svn:eol-style=native;svn:mime-type=text/html
@@ -81,6 +81,8 @@ Makefile = svn:eol-style=native
 *.rtf = mime-type=text/rtf
 *.pdf = mime-type=application/pdf
 # changed 2008-04-08: modified .txt, above, adding mime-type
+# changed 2010-11-09: modified .java, adding mime-type
+# Note: The escape syntax for semicolon (";;") is supported since subversion 1.6.1
 """
 
 
@@ -112,16 +114,22 @@ def parse_auto_props():
         file_type = file_type + "$"
 
         # example string_proplist at this point: " svn:eol-style=native;svn:executable"
-        string_proplist = string_proplist.split(";")
+        # split on ';' into a list of properties.  The negative lookahead and lookbehind
+        # in the split regexp are to prevent matching on ';;', which is an escaped ';'
+        # within a property value.
+        string_proplist = re.split("(?<!;);(?!;)", string_proplist)
         proplist = list()
         for prop in string_proplist:
             if prop.find("=") >= 0:
-                prop_name, prop_val = prop.split("=")
+                prop_name, prop_val = prop.split("=", 1)
             else:
                 # properties with no explicit value, e.g. svn:executable
                 prop_name, prop_val = prop, ""
             prop_name = prop_name.strip()
             prop_val = prop_val.strip()
+            # unescape any ";;" in a property value, e.g. the mime-type from
+            #    *.java = svn:eol-style=native;svn:mime-type=text/plain;;charset=utf-8
+            prop_val = prop_val.replace(";;", ";");
             proplist.append((prop_name, prop_val))
 
         file_types.append((file_type, proplist))
@@ -219,9 +227,9 @@ def main(argv):
                         # check for UTF-8 text files, should have svn:mime-type=text/something; charset=utf8
                         propval = check_utf8(f, propval, actual_propval)
                     if not (propval == actual_propval or (propval == "" and actual_propval == "*")):
-                        print "svn propset %s %s %s" % (propname, propval, f)
+                        print "svn propset %s '%s' %s" % (propname, propval, f)
                         if fix_problems:
-                            os.system("svn propset %s %s %s" % (propname, propval, f))
+                            os.system("svn propset %s '%s' %s" % (propname, propval, f))
                     if propname == "svn:eol-style" and propval == "native":
                         if os.system("grep -q -v \r " + f):
                             if fix_problems:
