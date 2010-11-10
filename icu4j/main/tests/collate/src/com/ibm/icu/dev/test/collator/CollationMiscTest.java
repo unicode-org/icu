@@ -3218,6 +3218,146 @@ public class CollationMiscTest extends TestFmwk {
 //                                 results[i]);
 //        }
 //    }
+
+    /*
+     * This test ensures that characters placed before a character in a different script have the same lead byte
+     * in their collation key before and after script reordering.
+     */
+    public void TestBeforeRuleWithScriptReordering() throws Exception
+    {
+        /* build collator */
+        String rules = "&[before 1]\u03b1 < \u0e01";
+        int[] reorderCodes = {UScript.GREEK};
+        int result;
+        
+        Collator myCollation = new RuleBasedCollator(rules);
+        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        myCollation.setStrength(Collator.TERTIARY);
+        
+        String base = "\u03b1"; /* base */
+        String before = "\u0e01"; /* ko kai */
+
+        /* check collation results - before rule applied but not script reordering */
+        result = myCollation.compare(base, before);
+        if (!(result > 0)) {
+            errln("Collation result not correct before script reordering.");
+        }
+
+        /* check the lead byte of the collation keys before script reordering */
+        CollationKey baseKey = myCollation.getCollationKey(base);
+        CollationKey beforeKey = myCollation.getCollationKey(before);
+        byte[] baseKeyBytes = baseKey.toByteArray();
+        byte[] beforeKeyBytes = beforeKey.toByteArray();
+        if (baseKeyBytes[0] != beforeKeyBytes[0]) {
+            errln("Different lead byte for sort keys using before rule and before script reordering. base character lead byte = " 
+                    + baseKeyBytes[0] + ", before character lead byte = " + beforeKeyBytes[0]);
+       }
+
+        /* reorder the scripts */
+        myCollation.setReorderCodes(reorderCodes);
+
+        /* check collation results - before rule applied and after script reordering */
+        result = myCollation.compare(base, before);
+        if (!(result > 0)) {
+            errln("Collation result not correct after script reordering.");
+        }
+        
+        /* check the lead byte of the collation keys after script reordering */
+        baseKey = myCollation.getCollationKey(base);
+        beforeKey = myCollation.getCollationKey(before);
+        baseKeyBytes = baseKey.toByteArray();
+        beforeKeyBytes = beforeKey.toByteArray();
+        if (baseKeyBytes[0] != beforeKeyBytes[0]) {
+            errln("Different lead byte for sort keys using before rule and before script reordering. base character lead byte = " 
+                    + baseKeyBytes[0] + ", before character lead byte = " + beforeKeyBytes[0]);
+       }
+    }
+
+    /*
+     * Test that in a primary-compressed sort key all bytes except the first one are unchanged under script reordering.
+     */
+    public void TestNonLeadBytesDuringCollationReordering() throws Exception
+    {
+        Collator myCollation;
+        byte[] baseKey;
+        byte[] reorderKey;
+        int[] reorderCodes = {UScript.GREEK};
+        String testString = "\u03b1\u03b2\u03b3";
+
+        /* build collator tertiary */
+        myCollation = new RuleBasedCollator("");
+        myCollation.setStrength(Collator.TERTIARY);
+        baseKey = myCollation.getCollationKey(testString).toByteArray();
+
+        myCollation.setReorderCodes(reorderCodes);
+        reorderKey = myCollation.getCollationKey(testString).toByteArray();
+        
+        if (baseKey.length != reorderKey.length) {
+            errln("Key lengths not the same during reordering.\n");
+        }
+        
+        for (int i = 1; i < baseKey.length; i++) {
+            if (baseKey[i] != reorderKey[i]) {
+                errln("Collation key bytes not the same at position " + i);
+            }
+        } 
+
+        /* build collator tertiary */
+        myCollation = new RuleBasedCollator("");
+        myCollation.setStrength(Collator.QUATERNARY);
+        baseKey = myCollation.getCollationKey(testString).toByteArray();
+
+        myCollation.setReorderCodes(reorderCodes);
+        reorderKey = myCollation.getCollationKey(testString).toByteArray();
+        
+        if (baseKey.length != reorderKey.length) {
+            errln("Key lengths not the same during reordering.\n");
+        }
+        
+        for (int i = 1; i < baseKey.length; i++) {
+            if (baseKey[i] != reorderKey[i]) {
+                errln("Collation key bytes not the same at position " + i);
+            }
+        } 
+    }
+
+    /*
+     * Test reordering API.
+     */
+    public void TestReorderingAPI() throws Exception
+    {
+        Collator myCollation;
+        int[] reorderCodes = {UScript.GREEK, UScript.HAN, ReorderCodes.PUNCTUATION};
+        int[] retrievedReorderCodes;
+        String greekString = "\u03b1";
+        String punctuationString = "\u203e";
+
+        /* build collator tertiary */
+        myCollation = new RuleBasedCollator("");
+        myCollation.setStrength(Collator.TERTIARY);
+
+        /* set the reorderding */
+        myCollation.setReorderCodes(reorderCodes);
+        
+        retrievedReorderCodes = myCollation.getReorderCodes();
+        if (!Arrays.equals(reorderCodes, retrievedReorderCodes)) {
+            errln("ERROR: retrieved reorder codes do not match set reorder codes.");
+        }
+        if (!(myCollation.compare(greekString, punctuationString) < 0)) {
+            errln("ERROR: collation result should have been less.");
+        }
+        
+        /* clear the reordering */
+        myCollation.setReorderCodes(null);    
+        retrievedReorderCodes = myCollation.getReorderCodes();
+        if (retrievedReorderCodes != null) {
+            errln("ERROR: retrieved reorder codes was not null.");
+        }
+
+        if (!(myCollation.compare(greekString, punctuationString) > 0)) {
+            errln("ERROR: collation result should have been greater.");
+        }
+    }
     
     public void TestSameLeadBytScriptReorder(){
         String[] testSourceCases = {
@@ -3284,11 +3424,11 @@ public class CollationMiscTest extends TestFmwk {
                 testSourceCases[0], testSourceCases[1], nonReorderedResults);
     
         Arrays.sort(equivalentScriptsResult);
-        int[] equivalentScripts = RuleBasedCollator.getScriptEquivalentsForReordering(UScript.GOTHIC);
+        int[] equivalentScripts = RuleBasedCollator.getReorderingCodesGroup(UScript.GOTHIC);
         Arrays.sort(equivalentScripts);
         assertTrue("Script Equivalents for Reordering", Arrays.equals(equivalentScripts, equivalentScriptsResult));
 
-        equivalentScripts = RuleBasedCollator.getScriptEquivalentsForReordering(UScript.SHAVIAN);
+        equivalentScripts = RuleBasedCollator.getReorderingCodesGroup(UScript.SHAVIAN);
         Arrays.sort(equivalentScripts);
         assertTrue("Script Equivalents for Reordering", Arrays.equals(equivalentScripts, equivalentScriptsResult));
     }
@@ -3343,7 +3483,6 @@ public class CollationMiscTest extends TestFmwk {
         }
     }
 
-    
     /*
      * Utility function to test one collation reordering test case.
      * @param testcases Array of test cases.
@@ -3354,7 +3493,7 @@ public class CollationMiscTest extends TestFmwk {
     private void doTestOneReorderingAPITestCase(OneTestCase testCases[], int reorderTokens[])
     {
         Collator myCollation = Collator.getInstance(ULocale.ENGLISH);
-        myCollation.setScriptOrder(reorderTokens);
+        myCollation.setReorderCodes(reorderTokens);
         
         for (OneTestCase testCase : testCases) {
             CollationTest.doTest(this, (RuleBasedCollator)myCollation,
@@ -3401,8 +3540,8 @@ public class CollationMiscTest extends TestFmwk {
         };
         
         OneTestCase[] privateUseCharacterStrings = {
-            new OneTestCase("\u0391", "\u0391", 0),
-            new OneTestCase("\u0041", "\u0391", -1),
+            //new OneTestCase("\u0391", "\u0391", 0),
+            //new OneTestCase("\u0041", "\u0391", -1),
             new OneTestCase("\u03B1\u0041", "\u03B1\u0391", -1),
             new OneTestCase("\u0060", "\u0391", -1),
             new OneTestCase("\u0391", "\ue2dc", 1),
