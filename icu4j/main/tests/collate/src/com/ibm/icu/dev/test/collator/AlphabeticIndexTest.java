@@ -19,6 +19,7 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CollectionUtilities;
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R4;
 import com.ibm.icu.lang.UProperty;
@@ -44,7 +45,8 @@ public class AlphabeticIndexTest extends TestFmwk {
      * 
      */
     private static final String ARROW = "\u2192";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = ICUDebug.enabled("alphabeticindex");
+    
     public static Set<String> KEY_LOCALES = new LinkedHashSet(Arrays.asList(
             "en", "es", "de", "fr", "ja", "it", "tr", "pt", "zh", "nl", 
             "pl", "ar", "ru", "zh_Hant", "ko", "th", "sv", "fi", "da", 
