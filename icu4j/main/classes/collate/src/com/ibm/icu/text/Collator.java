@@ -325,12 +325,15 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     }
 
     /** 
-     * Set the order for scripts to be ordered in.  
-     * @param order the reordering of scripts 
-     * @see #getScriptOrder 
-     * @stable  
+     * Set the reordering codes for this collator.
+     * The reordering codes are a combination of UScript and ReorderingCodes. These
+     * allow the order of these groups to be changed as a group.  
+     * @param order the reordering codes to apply to this collator, if null then clears the reordering
+     * @see #getReorderCodes
+     * @internal
+     * @deprecated This API is ICU internal only.
      */ 
-    public void setScriptOrder(int... order) 
+    public void setReorderCodes(int... order) 
     { 
         throw new UnsupportedOperationException(); 
     } 
@@ -1011,12 +1014,14 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public abstract VersionInfo getUCAVersion();
     
     /**  
-     * Method to retrieve the script reordering 
-     * @see #setScriptOrder 
-     * @return the ordering of the scripts if one has been set, null otherwise. 
-     * @stable  
+     * Retrieve the reordering codes for this collator.
+     * These reordering codes are a combination of UScript and ReorderCodes.
+     * @see #setReorderCodes
+     * @return the reordering codes for this collator if they have been set, null otherwise. 
+     * @internal
+     * @deprecated This API is ICU internal only.
      */ 
-    public int[] getScriptOrder() 
+    public int[] getReorderCodes() 
     { 
         throw new UnsupportedOperationException(); 
     }   

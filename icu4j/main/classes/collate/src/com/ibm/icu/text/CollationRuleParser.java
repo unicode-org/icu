@@ -94,10 +94,10 @@ final class CollationRuleParser
             m_strength_ = collator.getStrength();
             m_isHiragana4_ = collator.m_isHiragana4_;
 
-            if(collator.m_scriptOrder_ != null){ 
-                m_scriptOrder_ = new int[collator.m_scriptOrder_.length]; 
+            if(collator.m_reorderCodes_ != null){ 
+                m_scriptOrder_ = new int[collator.m_reorderCodes_.length]; 
                 for(int i = 0; i < m_scriptOrder_.length; i++){ 
-                    m_scriptOrder_[i] = collator.m_scriptOrder_[i]; 
+                    m_scriptOrder_[i] = collator.m_reorderCodes_[i]; 
                 } 
             } 
 

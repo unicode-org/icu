@@ -453,7 +453,7 @@ public final class RuleBasedCollator extends Collator {
      * @stable
      */
     public void setScriptOrderDefault() {
-        setScriptOrder(m_defaultScriptOrder_);
+        setReorderCodes(m_defaultScriptOrder_);
     }
 
     /**
@@ -634,23 +634,23 @@ public final class RuleBasedCollator extends Collator {
         updateInternalState();
     }
 
-    /**
-     * Set the order for scripts to be ordered in.
-     * 
-     * @param order
-     *            the reordering of scripts
-     * @see #getScriptOrder
-     * @see #setScriptOrderDefault
-     * @stable
-     */
-    public void setScriptOrder(int... order) {
+    /** 
+     * Set the reordering codes for this collator.
+     * The reordering codes are a combination of UScript and ReorderingCodes. These
+     * allow the order of these groups to be changed as a group.  
+     * @param order the reordering codes to apply to this collator, if null then clears the reordering
+     * @see #getReorderCodes
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */ 
+    public void setReorderCodes(int... order) {
         if (order != null) {
-            m_scriptOrder_ = new int[order.length];
+            m_reorderCodes_ = new int[order.length];
             for (int i = 0; i < order.length; i++) {
-                m_scriptOrder_[i] = order[i];
+                m_reorderCodes_[i] = order[i];
             }
         } else {
-            m_scriptOrder_ = null;
+            m_reorderCodes_ = null;
         }
         buildPermutationTable();
     }
@@ -1068,19 +1068,19 @@ public final class RuleBasedCollator extends Collator {
         return m_isNumericCollation_;
     }
 
-    /**
-     * Method to retrieve the script reordering.
-     * 
-     * @see #setScriptOrder
-     * @see #setScriptOrderDefault
-     * @return the ordering of the scripts if one has been set, null otherwise.
-     * @stable
-     */
-    public int[] getScriptOrder() {
-        if (m_scriptOrder_ != null) {
-            int[] ret = new int[m_scriptOrder_.length];
-            for (int i = 0; i < m_scriptOrder_.length; i++) {
-                ret[i] = m_scriptOrder_[i];
+    /**  
+     * Retrieve the reordering codes for this collator.
+     * These reordering codes are a combination of UScript and ReorderCodes.
+     * @see #setReorderCodes
+     * @return the reordering codes for this collator if they have been set, null otherwise. 
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */ 
+    public int[] getReorderCodes() {
+        if (m_reorderCodes_ != null) {
+            int[] ret = new int[m_reorderCodes_.length];
+            for (int i = 0; i < m_reorderCodes_.length; i++) {
+                ret[i] = m_reorderCodes_[i];
             }
             return ret;
         } else {
@@ -1089,30 +1089,31 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**
-     * Method to retrieve the scripts equivalent to the given script for reordering. Some scripts will share the same
-     * "lead byte" used for the collation codes and so must be reordered together.
+     * Retrieve the reorder codes that are grouped with the given reorder code. Some reorder codes will
+     * be grouped and must reorder together.
      * 
-     * @see #setScriptOrder
-     * @see #setScriptOrderDefault
+     * @see #setReorderCodes
+     * @see #getReorderCodes
      * @param reorderCode code for which equivalents to be retrieved
-     * @return the set of scripts equivalent to the given script including the script given.
-     * @stable
+     * @return the set of all reorder codes in the same group as the given reorder code.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public static int[] getScriptEquivalentsForReordering(int reorderCode) {
-        Set<Integer> equivalentScriptsSet = new HashSet<Integer>();
+    public static int[] getReorderingCodesGroup(int reorderCode) {
+        Set<Integer> equivalentCodesSet = new HashSet<Integer>();
         int[] leadBytes = RuleBasedCollator.LEADBYTE_CONSTANTS_.getLeadBytesForReorderCode(reorderCode);
         for (int leadByte : leadBytes) {
-            int[] scripts = RuleBasedCollator.LEADBYTE_CONSTANTS_.getReorderCodesForLeadByte(leadByte);
-            for (int script : scripts) {
-                equivalentScriptsSet.add(script);
+            int[] codes = RuleBasedCollator.LEADBYTE_CONSTANTS_.getReorderCodesForLeadByte(leadByte);
+            for (int code : codes) {
+                equivalentCodesSet.add(code);
             }
         }
-        int[] equivalentScripts = new int[equivalentScriptsSet.size()];
+        int[] equivalentCodes = new int[equivalentCodesSet.size()];
         int i = 0;
-        for (int script : equivalentScriptsSet) {
-            equivalentScripts[i++] = script;
+        for (int code : equivalentCodesSet) {
+            equivalentCodes[i++] = code;
         }
-        return equivalentScripts;
+        return equivalentCodes;
     }
 
     // public other methods -------------------------------------------------
@@ -1145,15 +1146,15 @@ public final class RuleBasedCollator extends Collator {
                 || other.m_isHiragana4_ != m_isHiragana4_) {
             return false;
         }
-        if (m_scriptOrder_ != null ^ other.m_scriptOrder_ != null) {
+        if (m_reorderCodes_ != null ^ other.m_reorderCodes_ != null) {
             return false;
         }
-        if (m_scriptOrder_ != null) {
-            if (m_scriptOrder_.length != other.m_scriptOrder_.length) {
+        if (m_reorderCodes_ != null) {
+            if (m_reorderCodes_.length != other.m_reorderCodes_.length) {
                 return false;
             }
-            for (int i = 0; i < m_scriptOrder_.length; i++) {
-                if (m_scriptOrder_[i] != other.m_scriptOrder_[i]) {
+            for (int i = 0; i < m_reorderCodes_.length; i++) {
+                if (m_reorderCodes_[i] != other.m_reorderCodes_[i]) {
                     return false;
                 }
             }
@@ -1708,7 +1709,7 @@ public final class RuleBasedCollator extends Collator {
     /**
      * Script order
      */
-    int[] m_scriptOrder_;
+    int[] m_reorderCodes_;
 
     // end Collator options --------------------------------------------------
 
@@ -1925,6 +1926,15 @@ public final class RuleBasedCollator extends Collator {
                         if (!m_UCA_version_.equals(UCA_.m_UCA_version_) || !m_UCD_version_.equals(UCA_.m_UCD_version_)) {
                             init(m_rules_);
                             return;
+                        }
+                        try {
+                        UResourceBundle reorderRes = elements.get("%%ReorderCodes");
+                        if (reorderRes != null) {
+                            int[] reorderCodes = reorderRes.getIntVector();
+                            setReorderCodes(reorderCodes);
+                        }
+                        } catch (MissingResourceException e) {
+                            // ignore
                         }
                         init();
                         return;
@@ -2421,6 +2431,13 @@ public final class RuleBasedCollator extends Collator {
 
         int p2 = (ce >>>= 16) & LAST_BYTE_MASK_; // in ints for unsigned
         int p1 = ce >>> 8; // comparison
+        int originalP1 = p1;
+        if (notIsContinuation) {
+            if (m_leadBytePermutationTable_ != null) {
+                p1 = 0xff & m_leadBytePermutationTable_[p1];
+            }
+        }
+
         if (doShift) {
             if (m_utilCount4_ > 0) {
                 while (m_utilCount4_ > bottomCount4) {
@@ -2465,7 +2482,7 @@ public final class RuleBasedCollator extends Collator {
                             m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
                             m_utilBytesCount1_++;
                             leadPrimary = 0;
-                        } else if (isCompressible(p1)) {
+                        } else if (isCompressible(originalP1)) {
                             // compress
                             leadPrimary = p1;
                             m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte) p1);
@@ -2762,12 +2779,7 @@ public final class RuleBasedCollator extends Collator {
             }
 
             notIsContinuation = !isContinuation(ce);
-
-            if (notIsContinuation) {
-                if (m_leadBytePermutationTable_ != null) {
-                    ce = (m_leadBytePermutationTable_[((ce >> 24) + 256) % 256] << 24) | (ce & 0x00FFFFFF);
-                }
-            }
+            
             boolean isPrimaryByteIgnorable = (ce & CE_PRIMARY_MASK_) == 0;
             // actually we can just check that the first byte is 0
             // generation stuffs the order left first
@@ -2784,6 +2796,7 @@ public final class RuleBasedCollator extends Collator {
                 continue;
             }
             leadPrimary = doPrimaryBytes(ce, notIsContinuation, doShift, leadPrimary, commonBottom4, bottomCount4);
+
             if (doShift) {
                 continue;
             }
@@ -3785,7 +3798,7 @@ public final class RuleBasedCollator extends Collator {
      * Builds the lead byte permuatation table
      */
     private void buildPermutationTable() {
-        if (m_scriptOrder_ == null) {
+        if (m_reorderCodes_ == null) {
             m_leadBytePermutationTable_ = null;
             return;
         }
@@ -3807,14 +3820,14 @@ public final class RuleBasedCollator extends Collator {
         }
 
         // prefill the reordering codes with the leading entries
-        int[] internalReorderCodes = new int[m_scriptOrder_.length + 5]; // TODO - replace 5 with the reorder codes prefix size
+        int[] internalReorderCodes = new int[m_reorderCodes_.length + 5]; // TODO - replace 5 with the reorder codes prefix size
         for (int codeIndex = 0; codeIndex < ReorderCodes.LIMIT - ReorderCodes.FIRST; codeIndex++) {
             internalReorderCodes[codeIndex] = ReorderCodes.FIRST + codeIndex;
         }
-        for (int codeIndex = 0; codeIndex < m_scriptOrder_.length; codeIndex++) {
-            internalReorderCodes[codeIndex + (ReorderCodes.LIMIT - ReorderCodes.FIRST)] = m_scriptOrder_[codeIndex];
-            if (m_scriptOrder_[codeIndex] >= ReorderCodes.FIRST && m_scriptOrder_[codeIndex] < ReorderCodes.LIMIT) {
-                internalReorderCodes[m_scriptOrder_[codeIndex] - ReorderCodes.FIRST] = UCOL_REORDER_CODE_IGNORE;
+        for (int codeIndex = 0; codeIndex < m_reorderCodes_.length; codeIndex++) {
+            internalReorderCodes[codeIndex + (ReorderCodes.LIMIT - ReorderCodes.FIRST)] = m_reorderCodes_[codeIndex];
+            if (m_reorderCodes_[codeIndex] >= ReorderCodes.FIRST && m_reorderCodes_[codeIndex] < ReorderCodes.LIMIT) {
+                internalReorderCodes[m_reorderCodes_[codeIndex] - ReorderCodes.FIRST] = UCOL_REORDER_CODE_IGNORE;
             }
         }
 
@@ -3988,12 +4001,12 @@ public final class RuleBasedCollator extends Collator {
         m_isNumericCollation_ = m_defaultIsNumericCollation_;
         latinOneFailed_ = false;
         if (m_defaultScriptOrder_ != null) {
-            m_scriptOrder_ = new int[m_defaultScriptOrder_.length];
+            m_reorderCodes_ = new int[m_defaultScriptOrder_.length];
             for (int i = 0; i < m_defaultScriptOrder_.length; i++) {
-                m_scriptOrder_[i] = m_defaultScriptOrder_[i];
+                m_reorderCodes_[i] = m_defaultScriptOrder_[i];
             }
         } else {
-            m_scriptOrder_ = null;
+            m_reorderCodes_ = null;
         }
         updateInternalState();
     }
