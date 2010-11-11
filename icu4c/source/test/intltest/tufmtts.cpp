@@ -271,7 +271,8 @@ void TimeUnitTest::testGreek() {
                     ++unitIndex ) {
 
                     TimeUnitAmount *tamt = new TimeUnitAmount(numbers[numberIndex], tunits[unitIndex], status);
-                    if (!assertSuccess("generating TimeUnitAmount Object failed", status)) {
+                    if (U_FAILURE(status)) {
+                        dataerrln("generating TimeUnitAmount Object failed.");
 #ifdef TUFMTTS_DEBUG
                         std::cout << "Failed to get TimeUnitAmount for " << tunits[unitIndex] << "\n";
 #endif
@@ -279,7 +280,8 @@ void TimeUnitTest::testGreek() {
                     }
 
                     TimeUnitFormat *tfmt = new TimeUnitFormat(l, styles[styleIndex], status);
-                    if (!assertSuccess("generating TimeUnitFormat Object failed", status)) {
+                    if (U_FAILURE(status)) {
+                        dataerrln("generating TimeUnitAmount Object failed.");
 #ifdef TUFMTTS_DEBUG
                        std::cout <<  "Failed to get TimeUnitFormat for " << locales[locIndex] << "\n";
 #endif
