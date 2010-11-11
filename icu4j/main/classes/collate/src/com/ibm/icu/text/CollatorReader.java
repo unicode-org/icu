@@ -261,8 +261,6 @@ final class CollatorReader {
         // treat it as normal collator first
         // for normal collator there is no UCA contraction
         // contractions (UChar[contractionSize] + CE[contractionSize])
-        //int old_contractionSize_ = m_size_ - contractionEnd;
-        // m_contractionSize_ = contractionSize * 2 + contractionSize * 4;
         m_contractionSize_ = contractionSize * 2 + contractionSize * 4;
 
         rbc.m_contractionOffset_ >>= 1; // casting to ints
@@ -473,19 +471,12 @@ final class CollatorReader {
 
             readcount += readUCAConstcount;
 
-            // int resultsize = m_UCAcontractionSize_ / 2;
             int resultsize = (rbc.m_scriptToLeadBytes - readcount) / 2;
             ucaContractions = new char[resultsize];
             for (int i = 0; i < resultsize; i++) {
                 ucaContractions[i] = m_dataInputStream_.readChar();
             }
             readcount += m_UCAcontractionSize_;
-
-            // if (readcount != m_size_) {
-            // ///CLOVER:OFF
-            // throw new IOException("Internal Error: Data file size error");
-            // ///CLOVER:ON
-            // }
         }
 
         if (leadByteConstants != null) {

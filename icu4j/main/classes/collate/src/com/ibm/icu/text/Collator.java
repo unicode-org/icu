@@ -225,16 +225,59 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public final static int CANONICAL_DECOMPOSITION = 17;
 
+    /**
+     * Reordering codes for non-script groups that can be reordered under collation.
+     * 
+     * @see #getReorderCodes
+     * @see #setReorderCodes
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public static interface ReorderCodes {
+        /**
+         * Characters with the space property.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public final static int SPACE          = 0x1000;
+        /**
+         * The first entry in the enumeration.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public final static int FIRST          = SPACE;
+        /**
+         * Characters with the punctuation property.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public final static int PUNCTUATION    = 0x1001;
+        /**
+         * Characters with the symbol property.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public final static int SYMBOL         = 0x1002;
+        /**
+         * Characters with the currency property.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public final static int CURRENCY       = 0x1003;
+        /**
+         * Characters with the digit property.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public final static int DIGIT          = 0x1004;
-        public final static int LIMIT          = 0x1005;
-        
+        /**
+         * The limit of the reorder codes..
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final static int LIMIT          = 0x1005;        
     }
+    
     // public methods --------------------------------------------------------
 
     // public setters --------------------------------------------------------

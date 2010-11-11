@@ -94,13 +94,17 @@ import com.ibm.icu.util.VersionInfo;
  * Creating Customized RuleBasedCollators: <blockquote>
  * 
  * <pre>
- * String simple = &quot;&amp; a &lt; b &lt; c &lt; d&quot;;
+ * String simple = "&amp; a &lt; b &lt; c &lt; d";
  * RuleBasedCollator simpleCollator = new RuleBasedCollator(simple);
- * 
- * String norwegian = &quot;&amp; a , A &lt; b , B &lt; c , C &lt; d , D &lt; e , E &quot; + &quot;&lt; f , F &lt; g , G &lt; h , H &lt; i , I &lt; j , &quot;
- *         + &quot;J &lt; k , K &lt; l , L &lt; m , M &lt; n , N &lt; &quot; + &quot;o , O &lt; p , P &lt; q , Q &amp;lt r , R &amp;lt s , S &lt; &quot;
- *         + &quot;t , T &lt; u , U &lt; v , V &lt; w , W &lt; x , X &quot; + &quot;&lt; y , Y &lt; z , Z &lt; \u00E5 = a\u030A &quot;
- *         + &quot;, \u00C5 = A\u030A ; aa , AA &lt; \u00E6 &quot; + &quot;, \u00C6 &lt; \u00F8 , \u00D8&quot;;
+ *
+ * String norwegian = "&amp; a , A &lt; b , B &lt; c , C &lt; d , D &lt; e , E "
+ *                    + "&lt; f , F &lt; g , G &lt; h , H &lt; i , I &lt; j , "
+ *                    + "J &lt; k , K &lt; l , L &lt; m , M &lt; n , N &lt; "
+ *                    + "o , O &lt; p , P &lt; q , Q &lt r , R &lt s , S &lt; "
+ *                    + "t , T &lt; u , U &lt; v , V &lt; w , W &lt; x , X "
+ *                    + "&lt; y , Y &lt; z , Z &lt; &#92;u00E5 = a&#92;u030A "
+ *                    + ", &#92;u00C5 = A&#92;u030A ; aa , AA &lt; &#92;u00E6 "
+ *                    + ", &#92;u00C6 &lt; &#92;u00F8 , &#92;u00D8";
  * RuleBasedCollator norwegianCollator = new RuleBasedCollator(norwegian);
  * </pre>
  * 
@@ -110,15 +114,18 @@ import com.ibm.icu.util.VersionInfo;
  * 
  * <pre>
  * // Create an en_US Collator object
- * RuleBasedCollator en_USCollator = (RuleBasedCollator) Collator.getInstance(new Locale(&quot;en&quot;, &quot;US&quot;, &quot;&quot;));
+ * RuleBasedCollator en_USCollator = (RuleBasedCollator)
+ *     Collator.getInstance(new Locale("en", "US", ""));
  * // Create a da_DK Collator object
- * RuleBasedCollator da_DKCollator = (RuleBasedCollator) Collator.getInstance(new Locale(&quot;da&quot;, &quot;DK&quot;, &quot;&quot;));
+ * RuleBasedCollator da_DKCollator = (RuleBasedCollator)
+ *     Collator.getInstance(new Locale("da", "DK", ""));
  * // Combine the two
  * // First, get the collation rules from en_USCollator
  * String en_USRules = en_USCollator.getRules();
  * // Second, get the collation rules from da_DKCollator
  * String da_DKRules = da_DKCollator.getRules();
- * RuleBasedCollator newCollator = new RuleBasedCollator(en_USRules + da_DKRules);
+ * RuleBasedCollator newCollator =
+ *                             new RuleBasedCollator(en_USRules + da_DKRules);
  * // newCollator has the combined rules
  * </pre>
  * 
@@ -129,10 +136,11 @@ import com.ibm.icu.util.VersionInfo;
  * 
  * <pre>
  * // Create a new Collator object with additional rules
- * String addRules = &quot;&amp; C &lt; ch, cH, Ch, CH&quot;;
- * RuleBasedCollator myCollator = new RuleBasedCollator(en_USCollator.getRules() + addRules);
+ * String addRules = "&amp; C &lt; ch, cH, Ch, CH";
+ * RuleBasedCollator myCollator =
+ *     new RuleBasedCollator(en_USCollator.getRules() + addRules);
  * // myCollator contains the new rules
- * </pre>
+  * </pre>
  * 
  * </blockquote>
  * 
@@ -140,12 +148,15 @@ import com.ibm.icu.util.VersionInfo;
  * 
  * <pre>
  * // old rule with main accents
- * String oldRules = &quot;= \u0301 ; \u0300 ; \u0302 ; \u0308 &quot; + &quot;; \u0327 ; \u0303 ; \u0304 ; \u0305 &quot;
- *         + &quot;; \u0306 ; \u0307 ; \u0309 ; \u030A &quot; + &quot;; \u030B ; \u030C ; \u030D ; \u030E &quot;
- *         + &quot;; \u030F ; \u0310 ; \u0311 ; \u0312 &quot; + &quot;&lt; a , A ; ae, AE ; \u00e6 , \u00c6 &quot;
- *         + &quot;&lt; b , B &lt; c, C &lt; e, E &amp; C &lt; d , D&quot;;
+ * String oldRules = "= &#92;u0301 ; &#92;u0300 ; &#92;u0302 ; &#92;u0308 "
+ *                 + "; &#92;u0327 ; &#92;u0303 ; &#92;u0304 ; &#92;u0305 "
+ *                 + "; &#92;u0306 ; &#92;u0307 ; &#92;u0309 ; &#92;u030A "
+ *                 + "; &#92;u030B ; &#92;u030C ; &#92;u030D ; &#92;u030E "
+ *                 + "; &#92;u030F ; &#92;u0310 ; &#92;u0311 ; &#92;u0312 "
+ *                 + "&lt; a , A ; ae, AE ; &#92;u00e6 , &#92;u00c6 "
+ *                 + "&lt; b , B &lt; c, C &lt; e, E &amp; C &lt; d , D";
  * // change the order of accent characters
- * String addOn = &quot;&amp; \u0300 ; \u0308 ; \u0302&quot;;
+ * String addOn = "&amp; &#92;u0300 ; &#92;u0308 ; &#92;u0302";
  * RuleBasedCollator myCollator = new RuleBasedCollator(oldRules + addOn);
  * </pre>
  * 
@@ -156,12 +167,15 @@ import com.ibm.icu.util.VersionInfo;
  * 
  * <pre>
  * // get en_US Collator rules
- * RuleBasedCollator en_USCollator = (RuleBasedCollator) Collator.getInstance(Locale.US);
+ * RuleBasedCollator en_USCollator
+ *                        = (RuleBasedCollator)Collator.getInstance(Locale.US);
  * // add a few Japanese characters to sort before English characters
  * // suppose the last character before the first base letter 'a' in
- * // the English collation rule is \u2212
- * String jaString = &quot;&amp; \u2212 &amp;lt \u3041, \u3042 &amp;lt \u3043, &quot; + &quot;\u3044&quot;;
- * RuleBasedCollator myJapaneseCollator = new RuleBasedCollator(en_USCollator.getRules() + jaString);
+ * // the English collation rule is &#92;u2212
+ * String jaString = "& &#92;u2212 &lt &#92;u3041, &#92;u3042 &lt &#92;u3043, "
+ *                   + "&#92;u3044";
+ * RuleBasedCollator myJapaneseCollator
+ *              = new RuleBasedCollator(en_USCollator.getRules() + jaString);
  * </pre>
  * 
  * </blockquote>
@@ -446,17 +460,6 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**
-     * Method to set the script order to its default value.
-     * 
-     * @see #getScriptOrder
-     * @see #setScriptOrder
-     * @stable
-     */
-    public void setScriptOrderDefault() {
-        setReorderCodes(m_defaultScriptOrder_);
-    }
-
-    /**
      * Sets the mode for the direction of SECONDARY weights to be used in French collation. The default value is false,
      * which treats SECONDARY weights in the order they appear. If set to true, the SECONDARY weights will be sorted
      * backwards. See the section on <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
@@ -644,11 +647,8 @@ public final class RuleBasedCollator extends Collator {
      * @deprecated This API is ICU internal only.
      */ 
     public void setReorderCodes(int... order) {
-        if (order != null) {
-            m_reorderCodes_ = new int[order.length];
-            for (int i = 0; i < order.length; i++) {
-                m_reorderCodes_[i] = order[i];
-            }
+        if (order != null && order.length > 0) {
+            m_reorderCodes_ = order.clone();
         } else {
             m_reorderCodes_ = null;
         }
@@ -1078,11 +1078,7 @@ public final class RuleBasedCollator extends Collator {
      */ 
     public int[] getReorderCodes() {
         if (m_reorderCodes_ != null) {
-            int[] ret = new int[m_reorderCodes_.length];
-            for (int i = 0; i < m_reorderCodes_.length; i++) {
-                ret[i] = m_reorderCodes_[i];
-            }
-            return ret;
+            return m_reorderCodes_.clone();
         } else {
             return null;
         }
@@ -1688,7 +1684,7 @@ public final class RuleBasedCollator extends Collator {
     int m_defaultStrength_;
     boolean m_defaultIsHiragana4_;
     boolean m_defaultIsNumericCollation_;
-    int[] m_defaultScriptOrder_;
+    int[] m_defaultReorderCodes_;
 
     /**
      * Value of the variable top
@@ -1932,6 +1928,7 @@ public final class RuleBasedCollator extends Collator {
                         if (reorderRes != null) {
                             int[] reorderCodes = reorderRes.getIntVector();
                             setReorderCodes(reorderCodes);
+                            m_defaultReorderCodes_ = reorderCodes.clone();
                         }
                         } catch (MissingResourceException e) {
                             // ignore
@@ -3820,7 +3817,7 @@ public final class RuleBasedCollator extends Collator {
         }
 
         // prefill the reordering codes with the leading entries
-        int[] internalReorderCodes = new int[m_reorderCodes_.length + 5]; // TODO - replace 5 with the reorder codes prefix size
+        int[] internalReorderCodes = new int[m_reorderCodes_.length + (ReorderCodes.LIMIT - ReorderCodes.FIRST)];
         for (int codeIndex = 0; codeIndex < ReorderCodes.LIMIT - ReorderCodes.FIRST; codeIndex++) {
             internalReorderCodes[codeIndex] = ReorderCodes.FIRST + codeIndex;
         }
@@ -3846,10 +3843,8 @@ public final class RuleBasedCollator extends Collator {
             if (next == UScript.UNKNOWN) {
                 if (fromTheBottom == false) {
                     // double turnaround
-                    //*status = U_ILLEGAL_ARGUMENT_ERROR;
-                    // TODO - exception
                     m_leadBytePermutationTable_ = null;
-                    return;
+                    throw new IllegalArgumentException("Illegal collation reorder codes - two \"from the end\" markers.");
                 }
                 fromTheBottom = false;
                 continue;
@@ -3861,10 +3856,8 @@ public final class RuleBasedCollator extends Collator {
                     // don't place a lead byte twice in the permutation table
                     if (permutationSlotFilled[leadByte]) {
                         // lead byte already used
-                        //*status = U_ILLEGAL_ARGUMENT_ERROR;
-                        // TODO - exception?
                         m_leadBytePermutationTable_ = null;
-                        return;
+                        throw new IllegalArgumentException("Illegal reorder codes specified - multiple codes with the same lead byte.");
                     }
                     m_leadBytePermutationTable_[leadByte] = (byte) toBottom;
                     newLeadByteUsed[toBottom] = true;
@@ -3877,10 +3870,8 @@ public final class RuleBasedCollator extends Collator {
                     // don't place a lead byte twice in the permutation table
                     if (permutationSlotFilled[leadByte]) {
                         // lead byte already used
-                        //*status = U_ILLEGAL_ARGUMENT_ERROR;
-                        // TODO - exception?
                         m_leadBytePermutationTable_ = null;
-                        return;
+                        throw new IllegalArgumentException("Illegal reorder codes specified - multiple codes with the same lead byte.");
                     }
 
                     m_leadBytePermutationTable_[leadByte] = (byte) toTop;
@@ -3895,7 +3886,10 @@ public final class RuleBasedCollator extends Collator {
         int reorderCode = 0;
         for (int i = 0; i < 256; i++) {
             if (!permutationSlotFilled[i]) {
-                while (reorderCode < 256 && newLeadByteUsed[reorderCode]) {
+                while (newLeadByteUsed[reorderCode]) {
+                    if (reorderCode > 255) {
+                        throw new IllegalArgumentException("Unable to fill collation reordering table slots - no available reordering code.");
+                    }
                     reorderCode++;
                 }
                 m_leadBytePermutationTable_[i] = (byte) reorderCode;
@@ -4000,11 +3994,8 @@ public final class RuleBasedCollator extends Collator {
         m_isHiragana4_ = m_defaultIsHiragana4_;
         m_isNumericCollation_ = m_defaultIsNumericCollation_;
         latinOneFailed_ = false;
-        if (m_defaultScriptOrder_ != null) {
-            m_reorderCodes_ = new int[m_defaultScriptOrder_.length];
-            for (int i = 0; i < m_defaultScriptOrder_.length; i++) {
-                m_reorderCodes_[i] = m_defaultScriptOrder_[i];
-            }
+        if (m_defaultReorderCodes_ != null) {
+            m_reorderCodes_ = m_defaultReorderCodes_.clone();
         } else {
             m_reorderCodes_ = null;
         }
@@ -4348,7 +4339,8 @@ public final class RuleBasedCollator extends Collator {
         int offset = latinOneTableLen_;
 
         // Do the primary level
-        primLoop: for (;;) {
+primLoop: 
+        for (;;) {
             while (sOrder == 0) { // this loop skips primary ignorables
                 // sOrder=getNextlatinOneCE(source);
                 if (sIndex == sLen) {

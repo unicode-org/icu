@@ -3357,6 +3357,31 @@ public class CollationMiscTest extends TestFmwk {
         if (!(myCollation.compare(greekString, punctuationString) > 0)) {
             errln("ERROR: collation result should have been greater.");
         }
+        
+        // do it again with an empty but non-null array
+        
+        /* set the reorderding */
+        myCollation.setReorderCodes(reorderCodes);
+        
+        retrievedReorderCodes = myCollation.getReorderCodes();
+        if (!Arrays.equals(reorderCodes, retrievedReorderCodes)) {
+            errln("ERROR: retrieved reorder codes do not match set reorder codes.");
+        }
+        if (!(myCollation.compare(greekString, punctuationString) < 0)) {
+            errln("ERROR: collation result should have been less.");
+        }
+        
+        /* clear the reordering */
+        myCollation.setReorderCodes(new int[]{});    
+        retrievedReorderCodes = myCollation.getReorderCodes();
+        if (retrievedReorderCodes != null) {
+            errln("ERROR: retrieved reorder codes was not null.");
+        }
+
+        if (!(myCollation.compare(greekString, punctuationString) > 0)) {
+            errln("ERROR: collation result should have been greater.");
+        }
+
     }
     
     public void TestSameLeadBytScriptReorder(){
