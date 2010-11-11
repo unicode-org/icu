@@ -155,8 +155,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@icu} A style specifier for <code>getDisplayName()</code> indicating
      * a short generic name, such as "PT."
      * @see #LONG_GENERIC
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final int SHORT_GENERIC = 2;
 
@@ -164,8 +163,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@icu} A style specifier for <code>getDisplayName()</code> indicating
      * a long generic name, such as "Pacific Time."
      * @see #SHORT_GENERIC
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final int LONG_GENERIC = 3;
 
@@ -173,8 +171,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@icu} A style specifier for <code>getDisplayName()</code> indicating
      * a short name derived from the timezone's offset, such as "-0800."
      * @see #LONG_GMT
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final int SHORT_GMT = 4;
 
@@ -182,8 +179,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@icu} A style specifier for <code>getDisplayName()</code> indicating
      * a long name derived from the timezone's offset, such as "GMT-08:00."
      * @see #SHORT_GMT
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final int LONG_GMT = 5;
 
@@ -191,8 +187,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@icu} A style specifier for <code>getDisplayName()</code> indicating
      * a short name derived from the timezone's short standard or daylight
      * timezone name ignoring commonlyUsed, such as "PDT."
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
 
     public static final int SHORT_COMMONLY_USED = 6;
@@ -201,8 +196,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@icu} A style specifier for <code>getDisplayName()</code> indicating
      * a long name derived from the timezone's fallback name, such as
      * "United States (Los Angeles)."
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final int GENERIC_LOCATION = 7;
 

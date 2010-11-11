@@ -1143,8 +1143,7 @@ public final class ULocale implements Serializable {
      * {@icu} Returns this locale's language localized for display in the default locale.
      * If a dialect name is present in the data, then it is returned.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getDisplayLanguageWithDialect() {
         return getDisplayLanguageInternal(this, getDefault(), true);
@@ -1155,8 +1154,7 @@ public final class ULocale implements Serializable {
      * If a dialect name is present in the data, then it is returned.
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getDisplayLanguageWithDialect(ULocale displayLocale) {
         return getDisplayLanguageInternal(this, displayLocale, true);
@@ -1169,8 +1167,7 @@ public final class ULocale implements Serializable {
      * @param localeID the id of the locale whose language will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayLanguageWithDialect(String localeID, String displayLocaleID) {
         return getDisplayLanguageInternal(new ULocale(localeID), new ULocale(displayLocaleID),
@@ -1184,8 +1181,7 @@ public final class ULocale implements Serializable {
      * @param localeID the id of the locale whose language will be displayed.
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayLanguageWithDialect(String localeID, ULocale displayLocale) {
         return getDisplayLanguageInternal(new ULocale(localeID), displayLocale, true);
@@ -1490,8 +1486,7 @@ public final class ULocale implements Serializable {
      * {@icu} Returns this locale name localized for display in the default locale.
      * If a dialect name is present in the locale data, then it is returned.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getDisplayNameWithDialect() {
         return getDisplayNameWithDialectInternal(this, getDefault());
@@ -1502,8 +1497,7 @@ public final class ULocale implements Serializable {
      * If a dialect name is present in the locale data, then it is returned.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getDisplayNameWithDialect(ULocale displayLocale) {
         return getDisplayNameWithDialectInternal(this, displayLocale);
@@ -1516,8 +1510,7 @@ public final class ULocale implements Serializable {
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocaleID the id of the locale in which to display the locale name.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayNameWithDialect(String localeID, String displayLocaleID) {
         return getDisplayNameWithDialectInternal(new ULocale(localeID),
@@ -1531,8 +1524,7 @@ public final class ULocale implements Serializable {
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayNameWithDialect(String localeID, ULocale displayLocale) {
         return getDisplayNameWithDialectInternal(new ULocale(localeID), displayLocale);

@@ -925,8 +925,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * {@icu} Field indicating whether or not the current month is a leap month.
      * Should have a value of 0 for non-leap months, and 1 for leap months.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final int IS_LEAP_MONTH = 22;
 

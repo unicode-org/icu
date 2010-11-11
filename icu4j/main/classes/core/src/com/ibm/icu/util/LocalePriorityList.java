@@ -62,8 +62,7 @@ import java.util.regex.Pattern;
  * fr;q=1.0
  * ja;q=1.0</pre>
  * @author markdavis@google.com
- * @draft ICU 4.4
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.4
  */
 public class LocalePriorityList implements Iterable<ULocale> {
     private static final double D0 = 0.0d;
@@ -79,8 +78,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * 
      * @param languageCode locale/language to be added
      * @return internal builder, for chaining
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static Builder add(ULocale languageCode) {
         return new Builder().add(languageCode);
@@ -92,8 +90,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * @param languageCode locale/language to be added
      * @param weight value from 0.0 to 1.0
      * @return internal builder, for chaining
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static Builder add(ULocale languageCode, final double weight) {
         return new Builder().add(languageCode, weight);
@@ -104,8 +101,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * 
      * @param languagePriorityList list to add all the members of
      * @return internal builder, for chaining
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static Builder add(LocalePriorityList languagePriorityList) {
         return new Builder().add(languagePriorityList);
@@ -117,8 +113,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * 
      * @param acceptLanguageString String in rfc2616 format (but leniently parsed)
      * @return internal builder, for chaining
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static Builder add(String acceptLanguageString) {
         return new Builder().add(acceptLanguageString);
@@ -130,8 +125,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * 
      * @param language to get weight of
      * @return weight
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public Double getWeight(ULocale language) {
         return languagesAndWeights.get(language);
@@ -139,8 +133,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     @Override
     public String toString() {
@@ -160,8 +153,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public Iterator<ULocale> iterator() {
         return languagesAndWeights.keySet().iterator();
@@ -169,8 +161,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     @Override
     public boolean equals(final Object o) {
@@ -184,8 +175,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     @Override
     public int hashCode() {
@@ -201,8 +191,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     /**
      * Class used for building LanguagePriorityLists
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static class Builder {
         /**
@@ -223,8 +212,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * {@link Builder#build(boolean) Builder.build(false)}.
          * 
          * @return A LocalePriorityList
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public LocalePriorityList build() {
             return build(false);
@@ -236,8 +224,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * @param preserveWeights when true, the weights originally came
          * from a language priority list specified by add() are preserved.
          * @return A LocalePriorityList
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public LocalePriorityList build(boolean preserveWeights) {
             // Walk through the input list, collecting the items with the same weights.
@@ -267,8 +254,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * 
          * @param languagePriorityList a LocalePriorityList
          * @return this, for chaining
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public Builder add(
                 final LocalePriorityList languagePriorityList) {
@@ -284,8 +270,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * 
          * @param languageCode to add with weight 1.0
          * @return this, for chaining
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public Builder add(final ULocale languageCode) {
             return add(languageCode, D1);
@@ -296,8 +281,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * 
          * @param languageCodes List of language codes.
          * @return this, for chaining.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public Builder add(ULocale... languageCodes) {
             for (final ULocale languageCode : languageCodes) {
@@ -313,8 +297,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * @param languageCode language/locale to add
          * @param weight value between 0.0 and 1.1
          * @return this, for chaining.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public Builder add(final ULocale languageCode,
                 double weight) {
@@ -335,8 +318,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
          * 
          * @param acceptLanguageList in rfc2616 format
          * @return this, for chaining.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public Builder add(final String acceptLanguageList) {
             final String[] items = languageSplitter.split(acceptLanguageList.trim());

@@ -81,7 +81,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
      *         Thai digits for the month and Devanagari digits for the year.
      * @param locale the locale
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
    public ChineseDateFormat(String pattern, String override, ULocale locale) {
        super(pattern, new ChineseDateFormatSymbols(locale), 
