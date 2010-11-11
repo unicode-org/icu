@@ -865,7 +865,7 @@ public class SpoofChecker {
                 // Capture Group 8: A syntactically invalid line. Anything that didn't
                 // match before.
                 // Example Line from the confusables.txt source file:
-                // "1D702 ;	006E 0329 ;	SL	# MATHEMATICAL ITALIC SMALL ETA ... "
+                // "1D702 ; 006E 0329 ; SL # MATHEMATICAL ITALIC SMALL ETA ... "
                 fParseLine = Pattern.compile("(?m)^[ \\t]*([0-9A-Fa-f]+)[ \\t]+;" + // Match
                         // the
                         // source
