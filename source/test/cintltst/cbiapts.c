@@ -807,7 +807,7 @@ static void TestBreakIteratorTailoring(void) {
 
             ubrk_close(ubrkiter);
         } else {
-            log_err("FAIL: locale %s, break type %d, ubrk_open status %d\n", testPtr->locale, testPtr->type, status);
+            log_err_status(status, "FAIL: locale %s, break type %d, ubrk_open status: %s\n", testPtr->locale, testPtr->type, u_errorName(status));
         }
     }
 }

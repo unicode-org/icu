@@ -1441,7 +1441,7 @@ static void RamsRulesTest(void) {
             testCEs(coll, &status);
             ucol_close(coll);
         } else {
-          log_err("Could not test rule: %s: '%s'\n", u_errorName(status), rulesToTest[i]);
+          log_err_status(status, "Could not test rule: %s: '%s'\n", u_errorName(status), rulesToTest[i]);
         }
     }
 
@@ -5909,7 +5909,6 @@ static void TestBeforeRuleWithScriptReordering(void)
  */
 static void TestNonLeadBytesDuringCollationReordering(void)
 {
-    UParseError error;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
     int32_t reorderCodes[1] = {USCRIPT_GREEK};
@@ -5991,7 +5990,6 @@ static void TestNonLeadBytesDuringCollationReordering(void)
  */
 static void TestReorderingAPI(void)
 {
-    UParseError error;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
     int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
@@ -6068,8 +6066,6 @@ static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
 
-    int i;
-    
     for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
         myCollation = ucol_open("", &status);
         if (U_FAILURE(status)) {
@@ -6240,6 +6236,11 @@ static void TestImport(void)
 
 
     vicoll = ucol_open("vi", &status);
+    if(U_FAILURE(status)){
+        log_err_status(status, "ERROR: Call ucol_open(\"vi\", ...): %s\n", myErrorName(status));
+        return;
+    }
+
     virules = (UChar*) ucol_getRules(vicoll, &viruleslength);
     escoll = ucol_open("es", &status);
     esrules = (UChar*) ucol_getRules(escoll, &esruleslength);
