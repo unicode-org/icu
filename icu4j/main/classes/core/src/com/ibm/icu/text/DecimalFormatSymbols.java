@@ -612,20 +612,20 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * {@icu} Indicates the currency match pattern used in {@link #getPatternForCurrencySpacing}.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
 
     /**
      * {@icu} Indicates the surrounding match pattern used in {@link
      * #getPatternForCurrencySpacing}.
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public static final int CURRENCY_SPC_SURROUNDING_MATCH = 1;
 
     /**
      * {@icu} Indicates the insertion value used in {@link #getPatternForCurrencySpacing}.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     public static final int CURRENCY_SPC_INSERT = 2;
 
@@ -649,7 +649,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * to get the <code>afterCurrency</code> values.
      * @return the value, or null.
      * @see #setPatternForCurrencySpacing(int, boolean, String)
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public String getPatternForCurrencySpacing(int itemType, boolean beforeCurrency)  {
         if (itemType < CURRENCY_SPC_CURRENCY_MATCH ||
@@ -677,7 +677,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * false if the pattern is for after it.
      * @param  pattern string to override current setting; can be null.
      * @see #getPatternForCurrencySpacing(int, boolean)
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     public void setPatternForCurrencySpacing(int itemType, boolean beforeCurrency, String pattern) {
         if (itemType < CURRENCY_SPC_CURRENCY_MATCH ||

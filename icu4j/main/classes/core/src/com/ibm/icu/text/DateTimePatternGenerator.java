@@ -384,8 +384,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *            the returned pattern to match those in the skeleton (when this would
      *            not happen otherwise). For default behavior, use MATCH_NO_OPTIONS.
      * @return Best pattern matching the input skeleton (and options).
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getBestPattern(String skeleton, int options) {
         return getBestPattern(skeleton, null, options);
@@ -625,8 +624,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *            the returned pattern to match those in the skeleton (when this would
      *            not happen otherwise). For default behavior, use MATCH_NO_OPTIONS.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String replaceFieldTypes(String pattern, String skeleton, int options) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -836,32 +834,41 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     // Option masks for getBestPattern, replaceFieldTypes (individual masks may be ORed together)
 
     /**
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * Default option mask used for {@link #getBestPattern(String, int)}
+     * and {@link #replaceFieldTypes(String, String, int)}.
+     * @stable ICU 4.4
+     * @see #getBestPattern(String, int)
+     * @see #replaceFieldTypes(String, String, int)
      */
     public static final int MATCH_NO_OPTIONS = 0;
 
     /**
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * Option mask for forcing the width of hour field.
+     * @stable ICU 4.4
+     * @see #getBestPattern(String, int)
+     * @see #replaceFieldTypes(String, String, int)
      */
     public static final int MATCH_HOUR_FIELD_LENGTH = 1 << HOUR;
 
     /**
-     * @internal ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * Option mask for forcing  the width of minute field.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int MATCH_MINUTE_FIELD_LENGTH = 1 << MINUTE;
 
     /**
-     * @internal ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * Option mask for forcing  the width of second field.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final int MATCH_SECOND_FIELD_LENGTH = 1 << SECOND;
 
     /**
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * Option mask for forcing the width of all date and time fields.
+     * @stable ICU 4.4
+     * @see #getBestPattern(String, int)
+     * @see #replaceFieldTypes(String, String, int)
      */
     public static final int MATCH_ALL_FIELDS_LENGTH = (1 << TYPE_LIMIT) - 1;
 
