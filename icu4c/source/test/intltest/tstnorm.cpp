@@ -1454,6 +1454,10 @@ void
 BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
     UErrorCode errorCode = U_ZERO_ERROR;
     const Normalizer2 *nfcNorm2=Normalizer2Factory::getNFCInstance(errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Normalizer2Factory::getNFCInstance() call failed - %s", u_errorName(status));
+        return;
+    }
     UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff]"), errorCode);
     UnicodeString newString1 = UNICODE_STRING_SIMPLE("[^\\u0100-\\u01ff]");
     UnicodeString newString2 = UNICODE_STRING_SIMPLE("[^\\u0200-\\u02ff]");
