@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.Collator.ReorderCodes;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.Collator.ReorderCodes;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
 * Class for parsing collation rules, produces a list of tokens that will be
@@ -309,12 +309,9 @@ final class CollationRuleParser
         collator.m_defaultIsHiragana4_ = m_options_.m_isHiragana4_;
         collator.m_defaultVariableTopValue_ = m_options_.m_variableTopValue_;
         if(m_options_.m_scriptOrder_ != null) { 
-            collator.m_defaultScriptOrder_ = new int[m_options_.m_scriptOrder_.length]; 
-            for (int i = 0; i < m_options_.m_scriptOrder_.length; i++) { 
-                collator.m_defaultScriptOrder_[i] = m_options_.m_scriptOrder_[i]; 
-            } 
+            collator.m_defaultReorderCodes_ = m_options_.m_scriptOrder_.clone(); 
         } else { 
-            collator.m_defaultScriptOrder_ = null; 
+            collator.m_defaultReorderCodes_ = null; 
         }  
     }
 
@@ -2345,16 +2342,13 @@ final class CollationRuleParser
         for (int tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
             token = tokens[tokenIndex];
             int reorderCode = findReorderingEntry(token);
-            if (reorderCode != UScript.INVALID_CODE) {
-                tempOrder.add(reorderCode);
-            } else {
-                int[] reorderCodes = UScript.getCode(token); 
-                if (reorderCodes.length > 0) {
-                    tempOrder.add(reorderCodes[0]);
-                } else {
+            if (reorderCode == UScript.INVALID_CODE) {
+                reorderCode = UCharacter.getPropertyValueEnum(UProperty.SCRIPT, token); 
+                if (reorderCode < 0) {
                     throw new ParseException(m_rules_, tokenIndex);
                 }
             }
+            tempOrder.add(reorderCode);
         }
         m_options_.m_scriptOrder_ = new int[tempOrder.size()]; 
         for(int i = 0; i < tempOrder.size(); i++) { 
