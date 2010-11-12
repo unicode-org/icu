@@ -534,6 +534,21 @@ static const TestCase testCases[]={
       "\\u06EF\\u200C\\u06EF", UIDNA_ERROR_CONTEXTJ },
     { "\\u0644\\u200C", "N",  // D ZWNJ
       "\\u0644\\u200C", UIDNA_ERROR_BIDI|UIDNA_ERROR_CONTEXTJ },
+    // Ticket #8137: UTS #46 toUnicode() fails with non-ASCII labels that turn
+    // into 15 characters (UChars).
+    // The bug was in u_strFromPunycode() which did not write the last character
+    // if it just so fit into the end of the destination buffer.
+    // The UTS #46 code gives a default-capacity UnicodeString as the destination buffer,
+    // and the internal UnicodeString capacity is currently 15 UChars on 64-bit machines
+    // but 13 on 32-bit machines.
+    // Label with 15 UChars, for 64-bit-machine testing:
+    { "aaaaaaaaaaaaa\\u00FCa.de", "B", "aaaaaaaaaaaaa\\u00FCa.de", 0 },
+    { "xn--aaaaaaaaaaaaaa-ssb.de", "B", "aaaaaaaaaaaaa\\u00FCa.de", 0 },
+    { "abschlu\\u00DFpr\\u00FCfung.de", "N", "abschlu\\u00DFpr\\u00FCfung.de", 0 },
+    { "xn--abschluprfung-hdb15b.de", "B", "abschlu\\u00DFpr\\u00FCfung.de", 0 },
+    // Label with 13 UChars, for 32-bit-machine testing:
+    { "xn--aaaaaaaaaaaa-nlb.de", "B", "aaaaaaaaaaa\\u00FCa.de", 0 },
+    { "xn--schluprfung-z6a39a.de", "B", "schlu\\u00DFpr\\u00FCfung.de", 0 },
     // { "", "B",
     //   "", 0 },
 };
