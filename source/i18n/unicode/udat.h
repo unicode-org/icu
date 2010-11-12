@@ -503,9 +503,9 @@ typedef enum UDateFormatField {
  * @param field the UDateFormatField.
  * @return the UCalendarDateField.  This will be UCAL_FIELD_COUNT in case
  * of error (e.g., the input field is UDAT_FIELD_COUNT).
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UCalendarDateFields U_EXPORT2
+U_STABLE UCalendarDateFields U_EXPORT2
 udat_toCalendarDateField(UDateFormatField field);
 
 

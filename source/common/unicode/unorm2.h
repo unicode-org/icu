@@ -37,7 +37,7 @@
  * For details about standard Unicode normalization forms
  * and about the algorithms which are also used with custom mapping tables
  * see http://www.unicode.org/unicode/reports/tr15/
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 typedef enum {
     /**
@@ -46,7 +46,7 @@ typedef enum {
      * Same as standard NFKC when using an "nfkc" instance.
      * For details about standard Unicode normalization forms
      * see http://www.unicode.org/unicode/reports/tr15/
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UNORM2_COMPOSE,
     /**
@@ -55,7 +55,7 @@ typedef enum {
      * Same as standard NFKD when using an "nfkc" instance.
      * For details about standard Unicode normalization forms
      * see http://www.unicode.org/unicode/reports/tr15/
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UNORM2_DECOMPOSE,
     /**
@@ -68,7 +68,7 @@ typedef enum {
      * Not a standard Unicode normalization form.
      * Not a unique form: Different FCD strings can be canonically equivalent.
      * For details see http://www.unicode.org/notes/tn5/#FCD
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UNORM2_FCD,
     /**
@@ -78,7 +78,7 @@ typedef enum {
      * The result will conform to FCD which is useful for processing.
      * Not a standard Unicode normalization form.
      * For details see http://www.unicode.org/notes/tn5/#FCC
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UNORM2_COMPOSE_CONTIGUOUS
 } UNormalization2Mode;
@@ -111,10 +111,10 @@ typedef enum UNormalizationCheckResult {
 
 /**
  * Opaque C service object type for the new normalization API.
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 struct UNormalizer2;
-typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer2. @draft ICU 4.4 */
+typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer2. @stable ICU 4.4 */
 
 #if !UCONFIG_NO_NORMALIZATION
 
@@ -137,9 +137,9 @@ typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return the requested UNormalizer2, if successful
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_STABLE const UNormalizer2 * U_EXPORT2
 unorm2_getInstance(const char *packageName,
                    const char *name,
                    UNormalization2Mode mode,
@@ -158,18 +158,18 @@ unorm2_getInstance(const char *packageName,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return the requested UNormalizer2, if successful
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UNormalizer2 * U_EXPORT2
+U_STABLE UNormalizer2 * U_EXPORT2
 unorm2_openFiltered(const UNormalizer2 *norm2, const USet *filterSet, UErrorCode *pErrorCode);
 
 /**
  * Closes a UNormalizer2 instance from unorm2_openFiltered().
  * Do not close instances from unorm2_getInstance()!
  * @param norm2 UNormalizer2 instance to be closed
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 unorm2_close(UNormalizer2 *norm2);
 
 #if U_SHOW_CPLUSPLUS_API
@@ -205,9 +205,9 @@ U_NAMESPACE_END
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return dest
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 unorm2_normalize(const UNormalizer2 *norm2,
                  const UChar *src, int32_t length,
                  UChar *dest, int32_t capacity,
@@ -228,9 +228,9 @@ unorm2_normalize(const UNormalizer2 *norm2,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return first
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
                                 UChar *first, int32_t firstLength, int32_t firstCapacity,
                                 const UChar *second, int32_t secondLength,
@@ -251,9 +251,9 @@ unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return first
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 unorm2_append(const UNormalizer2 *norm2,
               UChar *first, int32_t firstLength, int32_t firstCapacity,
               const UChar *second, int32_t secondLength,
@@ -294,9 +294,9 @@ unorm2_getDecomposition(const UNormalizer2 *norm2,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return TRUE if s is normalized
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 unorm2_isNormalized(const UNormalizer2 *norm2,
                     const UChar *s, int32_t length,
                     UErrorCode *pErrorCode);
@@ -316,9 +316,9 @@ unorm2_isNormalized(const UNormalizer2 *norm2,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return UNormalizationCheckResult
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UNormalizationCheckResult U_EXPORT2
+U_STABLE UNormalizationCheckResult U_EXPORT2
 unorm2_quickCheck(const UNormalizer2 *norm2,
                   const UChar *s, int32_t length,
                   UErrorCode *pErrorCode);
@@ -345,9 +345,9 @@ unorm2_quickCheck(const UNormalizer2 *norm2,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return "yes" span end index
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
                          const UChar *s, int32_t length,
                          UErrorCode *pErrorCode);
@@ -359,9 +359,9 @@ unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
  * @param norm2 UNormalizer2 instance
  * @param c character to test
  * @return TRUE if c has a normalization boundary before it
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 unorm2_hasBoundaryBefore(const UNormalizer2 *norm2, UChar32 c);
 
 /**
@@ -371,9 +371,9 @@ unorm2_hasBoundaryBefore(const UNormalizer2 *norm2, UChar32 c);
  * @param norm2 UNormalizer2 instance
  * @param c character to test
  * @return TRUE if c has a normalization boundary after it
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 unorm2_hasBoundaryAfter(const UNormalizer2 *norm2, UChar32 c);
 
 /**
@@ -382,9 +382,9 @@ unorm2_hasBoundaryAfter(const UNormalizer2 *norm2, UChar32 c);
  * @param norm2 UNormalizer2 instance
  * @param c character to test
  * @return TRUE if c is normalization-inert
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 unorm2_isInert(const UNormalizer2 *norm2, UChar32 c);
 
 #endif  /* !UCONFIG_NO_NORMALIZATION */

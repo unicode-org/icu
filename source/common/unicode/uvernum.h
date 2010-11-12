@@ -80,7 +80,7 @@
  *  This value will change in the subsequent releases of ICU.
  *  If a custom suffix (such as matching library suffixes) is desired, this can be modified.
  *  Note that if present, platform.h may contain an earlier definition of this macro.
- *  @draft ICU 4.2
+ *  @stable ICU 4.2
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
 #define U_ICU_ENTRY_POINT_RENAME(x)    x ## _46

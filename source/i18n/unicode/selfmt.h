@@ -178,7 +178,7 @@ class Hashtable;
   * <code>Kirti est all&#x00E9;e &#x00E0; Paris.</code>
   * \endhtmlonly
   *
-  * @draft ICU 4.4
+  * @stable ICU 4.4
   */
 
 class U_I18N_API SelectFormat : public Format {
@@ -190,19 +190,19 @@ public:
      *                 errors are returned to status if the pattern is invalid.
      * @param status   output param set to success/failure code on exit, which
      *                 must not indicate a failure before the function call.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     SelectFormat(const UnicodeString& pattern, UErrorCode& status);
 
     /**
      * copy constructor.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     SelectFormat(const SelectFormat& other);
 
     /**
      * Destructor.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual ~SelectFormat();
 
@@ -215,7 +215,7 @@ public:
      *                errors are returned to status if the pattern is invalid.
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     void applyPattern(const UnicodeString& pattern, UErrorCode& status);
 
@@ -233,7 +233,7 @@ public:
      * @param status  output param set to success/failure code on exit, which
      *                 must not indicate a failure before the function call.
      * @return         Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UnicodeString& format(const UnicodeString& keyword,
                             UnicodeString& appendTo,
@@ -244,7 +244,7 @@ public:
      * Assignment operator
      *
      * @param other    the SelectFormat object to copy from.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     SelectFormat& operator=(const SelectFormat& other);
 
@@ -253,7 +253,7 @@ public:
      *
      * @param other    the SelectFormat object to be compared with.
      * @return         true if other is semantically equal to this.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -262,14 +262,14 @@ public:
      *
      * @param other    the SelectFormat object to be compared with.
      * @return         true if other is semantically unequal to this.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UBool operator!=(const Format& other) const;
 
     /**
      * Clones this Format object polymorphically.  The caller owns the
      * result and should delete it when done.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual Format* clone(void) const;
 
@@ -286,7 +286,7 @@ public:
      *                  On output: the offsets of the alignment field.
      * @param status    output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UnicodeString& format(const Formattable& obj,
                          UnicodeString& appendTo,
@@ -299,7 +299,7 @@ public:
      * @param  appendTo  output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return the UnicodeString with inserted pattern.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UnicodeString& toPattern(UnicodeString& appendTo);
 
@@ -323,7 +323,7 @@ public:
      *     last character successfully parsed. If the
      *     source is not parsed successfully, this param
      *     will remain unchanged.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual void parseObject(const UnicodeString& source,
                             Formattable& result,
