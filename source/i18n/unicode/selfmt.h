@@ -331,13 +331,13 @@ public:
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UClassID getDynamicClassID() const;
 
