@@ -327,7 +327,7 @@ bs{
         nic{"niger-kordofanijski jezik"}
         niu{"niuean"}
         nl{"holandski"}
-        nl_be{"flamanski"}
+        nl_BE{"flamanski"}
         nn{"norveški njorsk"}
         no{"norveški"}
         nog{"nogai"}
@@ -498,8 +498,8 @@ bs{
         zbl{"blisimboli"}
         zen{"zenaga"}
         zh{"kineski"}
-        zh_hans{"kineski (pojednostavljen)"}
-        zh_hant{"kineski (tradicionalni)"}
+        zh_Hans{"kineski (pojednostavljen)"}
+        zh_Hant{"kineski (tradicionalni)"}
         znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
@@ -640,7 +640,7 @@ bs{
     }
     Types:alias{"sr_Latn"}
     Variants:alias{"sr_Latn"}
-    Version{"2.0.50.94"}
+    Version{"2.0.51.83"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}
