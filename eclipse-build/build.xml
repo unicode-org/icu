@@ -1,0 +1,208 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2010, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+-->
+
+<project name="icu4j-eclipse" default="build" basedir=".">
+  <property file="build.properties"/>
+
+  <property name="out.dir" value="out"/>
+  <property name="eclipse.projects.dir" value="${out.dir}/projects"/>
+
+  <property name="main.dir" value="../main"/>
+  <property name="shared.dir" value="${main.dir}/shared"/>
+  <property file="${shared.dir}/build/common.properties"/>
+  <property file="${shared.dir}/build/locations.properties"/>
+
+  <property environment="env"/>
+
+  <target name="clean" description="Delete all build outputs">
+    <delete dir="${out.dir}"/>
+  </target>
+
+  <target name="build"
+          depends="initEnv,icuProjectFiles"
+          description="Build icu4j plug-ins">
+
+    <!-- copy OSGi jar file to baseLocation -->
+    <mkdir dir="${eclipse.projects.dir}/baseLocation/features"/>
+    <mkdir dir="${eclipse.projects.dir}/baseLocation/plugins"/>
+    <copy toDir="${eclipse.projects.dir}/baseLocation/plugins" file="${eclipse.osgi.jar}"/>
+
+    <!-- copy PDE build script files and run the build -->
+    <pathconvert property="eclipse.projects.dir.full" dirsep="/">
+      <path location="${basedir}/${eclipse.projects.dir}"/>
+    </pathconvert>
+
+    <antcall target="runEclipsePDEBuild">
+      <param name="icu.plugin.id" value="com.ibm.icu"/>
+    </antcall>
+
+  </target>
+
+  <target name="initPluginVersion">
+    <tstamp>
+      <format property="build.date" pattern="yyyyMMdd"/>
+    </tstamp>
+    <property name="icu4j.eclipse.build.version.string" value="${icu4j.plugin.impl.version.string}.v${build.date}"/>
+  </target>
+
+  <target name="initEnv"
+          depends="initEclipseHome,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
+          description="Initialize eclipse PDE build environment">
+    <echo message="[PDE build configuration properties]"/>
+    <echo message="    Eclipse home:    ${eclipse.home}"/>
+    <echo message="    Launcher jar:    ${eclipse.launcher}"/>
+    <echo message="    OSGi bundle jar: ${eclipse.osgi.jar}"/>
+    <echo message="    Base OS:         ${eclipse.baseos}"/>
+    <echo message="    Base WS:         ${eclipse.basews}"/>
+    <echo message="    Base ARCH:       ${eclipse.basearch}"/>
+  </target>
+
+  <target name="initEclipseHome"
+          if="env.ECLIPSE_HOME"
+          unless="eclipse.home"
+          description="Initialize the property eclipse.home from the environment variable ECLIPSE_HOME">
+    <property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+  </target>
+
+  <target name="initEclipseLauncher"
+          if="eclipse.home"
+          description="Locate org.eclipse.equinox.launcher jar file for eclipse 3.3 and beyond">
+    <first id="equinox.launcher">
+      <fileset dir="${eclipse.home}/plugins">
+        <include name="org.eclipse.equinox.launcher_*.jar"/>
+      </fileset>
+    </first>
+    <pathconvert property="eclipse.launcher" dirsep="/" refid="equinox.launcher"/>
+  </target>
+
+  <target name="initEclipseOSGiJar"
+          if="eclipse.home"
+          description="Locate org.eclipse.osgi plugin jar file">
+    <first id="osgi.bundle">
+      <fileset dir="${eclipse.home}/plugins">
+        <include name="org.eclipse.osgi_*.jar"/>
+      </fileset>
+    </first>
+    <pathconvert property="eclipse.osgi.jar" dirsep="/" refid="osgi.bundle"/>
+  </target>
+
+  <target name="initEclipsePDE"
+          depends="locateEclipsePDE"
+          if="eclipse.pde.dir"
+          description="Set up PDE runtime arguments">
+    <property file="${eclipse.pde.dir}/templates/headless-build/build.properties" prefix="pde.template"/>
+    <property name="eclipse.baseos" value="${pde.template.baseos}"/>
+    <property name="eclipse.basews" value="${pde.template.basews}"/>
+    <property name="eclipse.basearch" value="${pde.template.basearch}"/>
+  </target>
+
+  <target name="locateEclipsePDE"
+          if="eclipse.home"
+          description="Locate org.eclipse.pde.build plug-in and set the property 'eclipse.pde.dir'">
+    <first id="eclipse.pde.plugin.dir">
+      <dirset dir="${eclipse.home}/plugins">
+        <include name="org.eclipse.pde.build_*"/>
+      </dirset>
+    </first>
+    <pathconvert property="eclipse.pde.dir" dirsep="/" refid="eclipse.pde.plugin.dir"/>
+  </target>
+
+  <target name="runEclipsePDEBuild">
+    <mkdir dir="${eclipse.projects.dir}/buildScripts/${icu.plugin.id}"/>
+      <copy toDir="${eclipse.projects.dir}/buildScripts/${icu.plugin.id}">
+        <fileset dir="pdebuild" includes="**/*"/>
+          <filterset>
+            <filter token="PLUGIN_ID" value="${icu.plugin.id}"/>
+            <filter token="BUILD_DIR" value="${eclipse.projects.dir.full}"/>
+            <filter token="BUILD_TYPE" value="ICU4J"/>
+            <filter token="BUILD_ID" value="${icu.plugin.id}"/>
+            <filter token="BASE_LOCATION" value="${eclipse.projects.dir.full}/baseLocation"/>
+            <filter token="BASE_OS" value="${eclipse.baseos}"/>
+            <filter token="BASE_WS" value="${eclipse.basews}"/>
+            <filter token="BASE_ARCH" value="${eclipse.basearch}"/>
+          </filterset>
+      </copy>
+
+      <java jar="${eclipse.launcher}" fork="true" failonerror="true">
+        <arg value="-application"/>
+        <arg value="org.eclipse.ant.core.antRunner"/>
+        <arg value="-buildfile"/>
+        <arg value="${eclipse.pde.dir}/scripts/build.xml"/>
+        <arg value="-Dbuilder=${eclipse.projects.dir.full}/buildScripts/${icu.plugin.id}"/>
+      </java>
+  </target>
+
+  <target name="icuProjectFiles"
+        depends="initPluginVersion"
+        description="Copy com.ibm.icu plug-in project files">
+
+    <delete failonerror="no">
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu" />
+      <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu" />
+    </delete>
+
+    <!-- icu source -->
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu/src">
+      <fileset dir="${icu4j.collate.dir}/src"/>
+      <fileset dir="${icu4j.core.dir}/src"/>
+      <fileset dir="${icu4j.currdata.dir}/src"/>
+      <fileset dir="${icu4j.langdata.dir}/src"/>
+      <fileset dir="${icu4j.regiondata.dir}/src"/>
+      <fileset dir="${icu4j.translit.dir}/src"/>
+    </copy>
+
+    <!-- overwriting the ICU runtime configuration file for forcing ICU4J plugin to use JDK time zone rules -->
+    <copy file="misc/ICUConfig.properties"
+      toDir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/com/ibm/icu"
+      overwrite="true"/>
+
+    <!-- icu data -->
+    <unjar src="${icu4j.data.jar}" dest="${eclipse.projects.dir}/plugins/com.ibm.icu/src">
+      <patternset>
+        <exclude name="**/*.cnv"/>
+        <exclude name="**/cnvalias.icu"/>
+      </patternset>
+    </unjar>
+
+    <!-- plugin project -->
+    <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu">
+      <fileset dir="plugins.template/com.ibm.icu"/>
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="IMPL_VERSION" value="${icu4j.impl.version}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
+      </filterset>
+    </copy>
+
+    <!-- license -->
+    <copy file="${shared.dir}/licenses/license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
+
+    <!-- ucd terms -->
+    <copy file="${shared.dir}/licenses/unicode-license.txt"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
+
+    <!-- about -->
+    <copy file="misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/about.html" />
+
+    <!-- FEATURE FILES -->
+    <copy todir="${eclipse.projects.dir}/features/com.ibm.icu">
+      <fileset dir="features.template/com.ibm.icu"/>
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
+      </filterset>
+    </copy>
+
+  </target>
+
+</project>
