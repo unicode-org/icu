@@ -1106,6 +1106,7 @@
             <src path="${icu4j.collate.dir}/src"/>
 
             <include name="com/ibm/icu/impl/data/*Break*.java"/>
+            <include name="com/ibm/icu/text/AlphabeticIndex.java"/>
             <include name="com/ibm/icu/text/*BreakIterator*.java"/>
             <include name="com/ibm/icu/text/*Collation*.java"/>
             <include name="com/ibm/icu/text/*Collator*.java"/>
@@ -1122,6 +1123,7 @@
                 <include name="**/*.icu"/>
                 <include name="**/coll/*.res"/>
                 <include name="**/*.brk"/>
+                <include name="**/*.nrm"/>
                 <include name="**/icudt${icu4j.data.version}b/res_index.res"/>
             </patternset>
         </unjar>
@@ -1283,6 +1285,7 @@
 
         <unjar src="${icu4j.data.jar}" dest="${module.bin.dir}">
             <patternset>
+                <include name="**/ubidi.icu"/>
                 <include name="**/ucase.icu"/>
                 <include name="**/unorm.icu"/>
                 <include name="**/uprops.icu"/>
