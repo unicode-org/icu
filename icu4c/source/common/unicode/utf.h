@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -221,7 +221,7 @@
  * is it a trail surrogate?
  * @param c 32-bit code point
  * @return TRUE or FALSE
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 #define U_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
 

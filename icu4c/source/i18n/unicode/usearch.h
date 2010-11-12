@@ -164,7 +164,7 @@ typedef enum {
     /** 
      * Option to control how collation elements are compared.
      * The default value will be USEARCH_STANDARD_ELEMENT_COMPARISON.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     USEARCH_ELEMENT_COMPARISON,
 
@@ -185,7 +185,7 @@ typedef enum {
      * Value (default) for USEARCH_ELEMENT_COMPARISON;
      * standard collation element comparison at the specified collator
      * strength.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     USEARCH_STANDARD_ELEMENT_COMPARISON,
     /** 
@@ -199,7 +199,7 @@ typedef enum {
      * the pattern will match a plain e or an e with any diacritic in the
      * searched text, but an e with diacritic in the pattern will only
      * match an e with the same diacritic in the searched text.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD,
     /** 
@@ -213,7 +213,7 @@ typedef enum {
      * in the pattern will match a plain e or an e with any diacritic in the
      * searched text, but an e with diacritic in the pattern will only
      * match an e with the same diacritic or a plain e in the searched text.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD,
 

@@ -180,7 +180,7 @@
 U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
 public:
-    /** Useful constant for the Root locale. @draft ICU 4.4 */
+    /** Useful constant for the Root locale. @stable ICU 4.4 */
     static const Locale &U_EXPORT2 getRoot(void);
     /** Useful constant for this language. @stable ICU 2.0 */
     static const Locale &U_EXPORT2 getEnglish(void);

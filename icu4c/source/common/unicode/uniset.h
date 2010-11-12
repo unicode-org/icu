@@ -870,7 +870,7 @@ public:
      * @param spanCondition specifies the containment condition
      * @return the exclusive end of the substring according to the spanCondition;
      *         the substring s.tempSubStringBetween(start, end) fulfills the spanCondition
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      * @see USetSpanCondition
      */
     inline int32_t span(const UnicodeString &s, int32_t start, USetSpanCondition spanCondition) const;
@@ -904,7 +904,7 @@ public:
      * @param spanCondition specifies the containment condition
      * @return the start of the substring according to the spanCondition;
      *         the substring s.tempSubStringBetween(start, limit) fulfills the spanCondition
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      * @see USetSpanCondition
      */
     inline int32_t spanBack(const UnicodeString &s, int32_t limit, USetSpanCondition spanCondition) const;

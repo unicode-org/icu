@@ -92,18 +92,18 @@ typedef enum UDateTimePatternField {
  * pattern to match those in the skeleton (when this would not happen
  * otherwise). These may be combined to force the length of multiple fields.
  * Used with udatpg_getBestPatternWithOptions, udatpg_replaceFieldTypesWithOptions.
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 typedef enum UDateTimePatternMatchOptions {
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UDATPG_MATCH_NO_OPTIONS = 0,
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UDATPG_MATCH_HOUR_FIELD_LENGTH = 1 << UDATPG_HOUR_FIELD,
     /** @internal ICU 4.4 */
     UDATPG_MATCH_MINUTE_FIELD_LENGTH = 1 << UDATPG_MINUTE_FIELD,
     /** @internal ICU 4.4 */
     UDATPG_MATCH_SECOND_FIELD_LENGTH = 1 << UDATPG_SECOND_FIELD,
-    /** @draft ICU 4.4 */
+    /** @stable ICU 4.4 */
     UDATPG_MATCH_ALL_FIELDS_LENGTH = (1 << UDATPG_FIELD_COUNT) - 1
 } UDateTimePatternMatchOptions;
 
@@ -238,9 +238,9 @@ udatpg_getBestPattern(UDateTimePatternGenerator *dtpg,
  *            a pointer to the UErrorCode which must not indicate a
  *            failure before the function call.
  * @return the length of bestPattern.
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 udatpg_getBestPatternWithOptions(UDateTimePatternGenerator *dtpg,
                                  const UChar *skeleton, int32_t length,
                                  UDateTimePatternMatchOptions options,
@@ -531,9 +531,9 @@ udatpg_replaceFieldTypes(UDateTimePatternGenerator *dtpg,
  * @param pErrorCode a pointer to the UErrorCode which must not indicate a
  *                  failure before the function call.
  * @return the length of dest.
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 udatpg_replaceFieldTypesWithOptions(UDateTimePatternGenerator *dtpg,
                                     const UChar *pattern, int32_t patternLength,
                                     const UChar *skeleton, int32_t skeletonLength,

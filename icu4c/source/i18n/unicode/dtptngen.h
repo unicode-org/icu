@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2009, International Business Machines Corporation and
+* Copyright (C) 2007-2010, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -270,7 +270,7 @@ public:
      *            which must not indicate a failure before the function call.
      * @return bestPattern
      *            The best pattern found from the given skeleton.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
      UnicodeString getBestPattern(const UnicodeString& skeleton,
                                   UDateTimePatternMatchOptions options,
@@ -317,7 +317,7 @@ public:
      *            Output param set to success/failure code on exit,
      *            which must not indicate a failure before the function call.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
      UnicodeString replaceFieldTypes(const UnicodeString& pattern, 
                                      const UnicodeString& skeleton, 
