@@ -752,6 +752,7 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "ID",
+                    "MY",
                 }
             }
         }
@@ -813,10 +814,22 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bqi{
+            secondary{
+                territories{
+                    "IR",
+                }
+            }
+        }
         br{
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "FR",
                 }
             }
         }
@@ -1692,6 +1705,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ffm{
+            secondary{
+                territories{
+                    "ML",
+                }
+            }
+        }
         fi{
             primary{
                 scripts{
@@ -2049,6 +2069,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "ID",
+                }
+            }
         }
         got{
             secondary{
@@ -2089,6 +2114,7 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "CH",
+                    "FR",
                     "LI",
                 }
             }
@@ -3917,6 +3943,9 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+                territories{
+                    "ZA",
+                }
             }
         }
         nso{
@@ -4233,6 +4262,11 @@ supplementalData:table(nofallback){
                     "TL",
                 }
             }
+            secondary{
+                territories{
+                    "FR",
+                }
+            }
         }
         qu{
             primary{
@@ -4311,6 +4345,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "CH",
                 }
@@ -4531,6 +4567,13 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "NO",
+                }
+            }
+        }
+        seh{
+            secondary{
+                territories{
+                    "MZ",
                 }
             }
         }
@@ -7227,11 +7270,12 @@ supplementalData:table(nofallback){
             "MA",
             "SD",
             "TN",
+            "EA",
+            "IC",
         }
         017{
             "AO",
             "CD",
-            "ZR",
             "CF",
             "CG",
             "CM",
@@ -7317,13 +7361,11 @@ supplementalData:table(nofallback){
             "KH",
             "LA",
             "MM",
-            "BU",
             "MY",
             "PH",
             "SG",
             "TH",
             "TL",
-            "TP",
             "VN",
         }
         039{
@@ -7338,13 +7380,11 @@ supplementalData:table(nofallback){
             "ME",
             "MK",
             "MT",
-            "CS",
             "RS",
             "PT",
             "SI",
             "SM",
             "VA",
-            "YU",
         }
         053{
             "AU",
@@ -7379,17 +7419,12 @@ supplementalData:table(nofallback){
             "WF",
             "WS",
         }
-        062{
-            "034",
-            "143",
-        }
         142{
             "030",
             "035",
             "143",
             "145",
             "034",
-            "062",
         }
         143{
             "TM",
@@ -7414,11 +7449,9 @@ supplementalData:table(nofallback){
             "PS",
             "QA",
             "SA",
-            "NT",
             "SY",
             "TR",
             "YE",
-            "YD",
         }
         150{
             "039",
@@ -7436,7 +7469,6 @@ supplementalData:table(nofallback){
             "PL",
             "RO",
             "RU",
-            "SU",
             "SK",
             "UA",
         }
@@ -7464,36 +7496,16 @@ supplementalData:table(nofallback){
             "BE",
             "CH",
             "DE",
-            "DD",
             "FR",
-            "FX",
             "LI",
             "LU",
             "MC",
             "NL",
         }
-        172{
-            "AM",
-            "AZ",
-            "BY",
-            "GE",
-            "KG",
-            "KZ",
-            "MD",
-            "RU",
-            "TJ",
-            "TM",
-            "UA",
-            "UZ",
-        }
         419{
             "005",
             "013",
             "029",
-        }
-        830{
-            "GG",
-            "JE",
         }
         EU{
             "AT",
@@ -7534,6 +7546,10 @@ supplementalData:table(nofallback){
             "IO",
             "TF",
             "UM",
+            "AC",
+            "CP",
+            "DG",
+            "TA",
         }
     }
 }
