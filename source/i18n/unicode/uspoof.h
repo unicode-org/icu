@@ -249,7 +249,7 @@ uspoof_open(UErrorCode *status);
  * @see uspoof_serialize
  * @stable ICU 4.2
  */
-U_CAPI USpoofChecker * U_EXPORT2
+U_STABLE USpoofChecker * U_EXPORT2
 uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLength,
                           UErrorCode *pErrorCode);
 
@@ -284,7 +284,7 @@ uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLeng
   * @return            A spoof checker that uses the rules from the input files.
   * @stable ICU 4.2
   */
-U_CAPI USpoofChecker * U_EXPORT2
+U_STABLE USpoofChecker * U_EXPORT2
 uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
                       const char *confusablesWholeScript, int32_t confusablesWholeScriptLen,
                       int32_t *errType, UParseError *pe, UErrorCode *status);
@@ -876,7 +876,7 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
  * @see utrie2_openFromSerialized()
  * @stable ICU 4.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uspoof_serialize(USpoofChecker *sc,
                  void *data, int32_t capacity,
                  UErrorCode *status);
