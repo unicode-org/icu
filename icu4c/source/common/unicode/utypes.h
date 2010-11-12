@@ -178,7 +178,7 @@
  *   configuration option (see unicode/uconfig.h)
  * - the UCONFIG_NO_CONVERSION build option in uconfig.h is more usable
  *
- * @draft ICU 4.2
+ * @stable ICU 4.2
  * @see UCONFIG_NO_CONVERSION
  */
 #ifndef U_CHARSET_IS_UTF8

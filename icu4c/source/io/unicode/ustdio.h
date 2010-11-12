@@ -275,9 +275,9 @@ u_finit(FILE        *f,
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or NULL if an error occurred. If an error occurs
  * the ownership of the FILE* stream remains with the caller.
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UFILE* U_EXPORT2
+U_STABLE UFILE* U_EXPORT2
 u_fadopt(FILE     *f,
     const char    *locale,
     const char    *codepage);

@@ -246,7 +246,7 @@ public:
      *                  are defined in UDateFormatField.  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -305,7 +305,7 @@ public:
      *                  are defined in UDateFormatField.  Can be NULL.
      * @param status    error status.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(Calendar& cal,
                                   UnicodeString& appendTo,
@@ -353,7 +353,7 @@ public:
      *                  are defined in UDateFormatField.  Can be NULL.
      * @param status    error status.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UnicodeString& format(UDate date,
                           UnicodeString& appendTo,

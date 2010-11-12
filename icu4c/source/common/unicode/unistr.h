@@ -1577,7 +1577,7 @@ public:
    * @param start offset of the first character visible in the substring
    * @param length length of the substring
    * @return a read-only alias UnicodeString object for the substring
-   * @draft ICU 4.4
+   * @stable ICU 4.4
    */
   UnicodeString tempSubString(int32_t start=0, int32_t length=INT32_MAX) const;
 
@@ -1589,7 +1589,7 @@ public:
    * @param start offset of the first character visible in the substring
    * @param limit offset immediately following the last character visible in the substring
    * @return a read-only alias UnicodeString object for the substring
-   * @draft ICU 4.4
+   * @stable ICU 4.4
    */
   inline UnicodeString tempSubStringBetween(int32_t start, int32_t limit=INT32_MAX) const;
 
@@ -2432,7 +2432,7 @@ public:
    * @param start the offset of the first character to retain
    * @param limit the offset immediately following the range to retain
    * @return a reference to this
-   * @draft ICU 4.4
+   * @stable ICU 4.4
    */
   inline UnicodeString &retainBetween(int32_t start, int32_t limit = INT32_MAX);
 

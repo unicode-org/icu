@@ -160,7 +160,7 @@ typedef enum UNumberFormatStyle {
     UNUM_DURATION,
     /** 
      * Numbering system rule-based format 
-     * @draft ICU 4.2
+     * @stable ICU 4.2
      */
     UNUM_NUMBERING_SYSTEM,
     /** 
@@ -396,9 +396,9 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 * @see unum_parseInt64
 * @see unum_parseDouble
 * @see UFieldPosition
-* @draft ICU 4.4 
+* @stable ICU 4.4 
 */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 unum_formatDecimal(    const    UNumberFormat*  fmt,
             const char *    number,
             int32_t         length,
@@ -533,9 +533,9 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @see unum_format
 * @see unum_formatInt64
 * @see unum_formatDouble
-* @draft ICU 4.4
+* @stable ICU 4.4
 */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 unum_parseDecimal(const   UNumberFormat*  fmt,
                  const   UChar*          text,
                          int32_t         textLength,

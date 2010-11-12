@@ -1630,11 +1630,11 @@ u_strFromUTF32WithSub(UChar *dest,
  *                      immediately. Check for U_FAILURE() on output or use with
  *                      function chaining. (See User Guide for details.)
  * @return The pointer to destination buffer.
- * @draft ICU 4.4
+ * @stable ICU 4.4
  * @see u_strToUTF8WithSub
  * @see u_strFromJavaModifiedUTF8WithSub
  */
-U_DRAFT char* U_EXPORT2 
+U_STABLE char* U_EXPORT2 
 u_strToJavaModifiedUTF8(
         char *dest,
         int32_t destCapacity,
@@ -1681,9 +1681,9 @@ u_strToJavaModifiedUTF8(
  * @see u_strFromUTF8WithSub
  * @see u_strFromUTF8Lenient
  * @see u_strToJavaModifiedUTF8
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
-U_DRAFT UChar* U_EXPORT2
+U_STABLE UChar* U_EXPORT2
 u_strFromJavaModifiedUTF8WithSub(
         UChar *dest,
         int32_t destCapacity,

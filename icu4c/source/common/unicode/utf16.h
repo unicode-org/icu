@@ -87,7 +87,7 @@
  * is it a trail surrogate?
  * @param c 16-bit code unit
  * @return TRUE or FALSE
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 #define U16_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
 

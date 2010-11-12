@@ -406,7 +406,7 @@ public:
      *                  are defined in UDateFormatField.
      * @param status    Input/output param set to success/failure code.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(  Calendar& cal,
                                     UnicodeString& appendTo,
@@ -455,7 +455,7 @@ public:
      *                  are defined in UDateFormatField.
      * @param status    Input/output param set to success/failure code.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(  const Formattable& obj,
                                     UnicodeString& appendTo,
@@ -486,7 +486,7 @@ public:
      *                      are defined in UDateFormatField.
      * @param status        Input/output param set to success/failure code.
      * @return              Reference to 'appendTo' parameter.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UnicodeString& format(UDate date,
                           UnicodeString& appendTo,
