@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -58,7 +58,7 @@ U_NAMESPACE_BEGIN
  * @see LocalPointer
  * @see LocalArray
  * @see U_DEFINE_LOCAL_OPEN_POINTER
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 template<typename T>
 class LocalPointerBase {
@@ -66,25 +66,25 @@ public:
     /**
      * Constructor takes ownership.
      * @param p simple pointer to an object that is adopted
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     explicit LocalPointerBase(T *p=NULL) : ptr(p) {}
     /**
      * Destructor deletes the object it owns.
      * Subclass must override: Base class does nothing.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     ~LocalPointerBase() { /* delete ptr; */ }
     /**
      * NULL check.
      * @return TRUE if ==NULL
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UBool isNull() const { return ptr==NULL; }
     /**
      * NULL check.
      * @return TRUE if !=NULL
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     UBool isValid() const { return ptr!=NULL; }
     /**
@@ -92,7 +92,7 @@ public:
      * with ==NULL need not be changed.
      * @param other simple pointer for comparison
      * @return true if this pointer value equals other
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     bool operator==(const T *other) const { return ptr==other; }
     /**
@@ -100,32 +100,32 @@ public:
      * with !=NULL need not be changed.
      * @param other simple pointer for comparison
      * @return true if this pointer value differs from other
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     bool operator!=(const T *other) const { return ptr!=other; }
     /**
      * Access without ownership change.
      * @return the pointer value
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     T *getAlias() const { return ptr; }
     /**
      * Access without ownership change.
      * @return the pointer value as a reference
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     T &operator*() const { return *ptr; }
     /**
      * Access without ownership change.
      * @return the pointer value
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     T *operator->() const { return ptr; }
     /**
      * Gives up ownership; the internal pointer becomes NULL.
      * @return the pointer value;
      *         caller becomes responsible for deleting the object
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     T *orphan() {
         T *p=ptr;
@@ -137,7 +137,7 @@ public:
      * and adopts (takes ownership of) the one passed in.
      * Subclass must override: Base class does not delete the object.
      * @param p simple pointer to an object that is adopted
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     void adoptInstead(T *p) {
         // delete ptr;
@@ -176,7 +176,7 @@ private:
  * \endcode
  *
  * @see LocalPointerBase
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 template<typename T>
 class LocalPointer : public LocalPointerBase<T> {
@@ -184,12 +184,12 @@ public:
     /**
      * Constructor takes ownership.
      * @param p simple pointer to an object that is adopted
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     explicit LocalPointer(T *p=NULL) : LocalPointerBase<T>(p) {}
     /**
      * Destructor deletes the object it owns.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     ~LocalPointer() {
         delete LocalPointerBase<T>::ptr;
@@ -198,7 +198,7 @@ public:
      * Deletes the object it owns,
      * and adopts (takes ownership of) the one passed in.
      * @param p simple pointer to an object that is adopted
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     void adoptInstead(T *p) {
         delete LocalPointerBase<T>::ptr;
@@ -222,7 +222,7 @@ public:
  * \endcode
  *
  * @see LocalPointerBase
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 template<typename T>
 class LocalArray : public LocalPointerBase<T> {
@@ -230,12 +230,12 @@ public:
     /**
      * Constructor takes ownership.
      * @param p simple pointer to an array of T objects that is adopted
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     explicit LocalArray(T *p=NULL) : LocalPointerBase<T>(p) {}
     /**
      * Destructor deletes the array it owns.
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     ~LocalArray() {
         delete[] LocalPointerBase<T>::ptr;
@@ -244,7 +244,7 @@ public:
      * Deletes the array it owns,
      * and adopts (takes ownership of) the one passed in.
      * @param p simple pointer to an array of T objects that is adopted
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     void adoptInstead(T *p) {
         delete[] LocalPointerBase<T>::ptr;
@@ -255,7 +255,7 @@ public:
      * No index bounds check.
      * @param i array index
      * @return reference to the array item
-     * @draft ICU 4.4
+     * @stable ICU 4.4
      */
     T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
 };
@@ -281,7 +281,7 @@ public:
  *
  * @see LocalPointerBase
  * @see LocalPointer
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
     class LocalPointerClassName : public LocalPointerBase<Type> { \
