@@ -35,7 +35,7 @@
 
 /**
  * Determine wheter to enable auto cleanup of libraries. 
- * @stable ICU 4.4
+ * @internal
  */
 #ifndef UCLN_NO_AUTO_CLEANUP
 #define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP@
@@ -87,7 +87,7 @@
  * For platforms that do not use platform.h and do not define this constant
  * in their platform-specific headers, std_string.h defaults
  * U_HAVE_STD_STRING to 1.
- * @stable ICU 4.2
+ * @internal
  */
 #ifndef U_HAVE_STD_STRING
 #define U_HAVE_STD_STRING @U_HAVE_STD_STRING@
@@ -186,7 +186,7 @@
 
 /**
  * Whether to enable Dynamic loading in ICU
- * @stable ICU 4.4
+ * @internal
  */
 #ifndef U_ENABLE_DYLOAD
 #define U_ENABLE_DYLOAD @U_ENABLE_DYLOAD@
@@ -194,7 +194,7 @@
 
 /**
  * Whether to test Dynamic loading as an OS capabilty
- * @stable ICU 4.4
+ * @internal
  */
 #ifndef U_CHECK_DYLOAD
 #define U_CHECK_DYLOAD @U_CHECK_DYLOAD@
