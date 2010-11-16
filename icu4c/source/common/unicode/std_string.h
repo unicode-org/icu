@@ -28,7 +28,7 @@
 /**
  * \def U_HAVE_STD_STRING
  * Define whether the standard C++ (STL) &lt;string&gt; header is available.
- * @stable ICU 4.2
+ * @internal
  */
 #ifndef U_HAVE_STD_STRING
 #define U_HAVE_STD_STRING 1
