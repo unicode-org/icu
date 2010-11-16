@@ -290,10 +290,10 @@ typedef struct collIterate : public UMemory {
   int32_t offsetRepeatCount;  /* Repeat stored offset if non-zero */
   int32_t offsetRepeatValue;  /* offset value to repeat */
 
-  U_NAMESPACE_QUALIFIER UnicodeString writableBuffer;
+  UnicodeString writableBuffer;
   const UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
   const UCollator *coll;
-  const U_NAMESPACE_QUALIFIER Normalizer2 *nfd;
+  const Normalizer2 *nfd;
   uint8_t   flags;
   uint8_t   origFlags;
   uint32_t *extendCEs; /* This is use if CEs is not big enough */
@@ -341,18 +341,18 @@ struct collIterateState {
 U_CAPI void U_EXPORT2
 uprv_init_collIterate(const UCollator *collator,
                       const UChar *sourceString, int32_t sourceLen,
-                      collIterate *s, UErrorCode *status);
+                      U_NAMESPACE_QUALIFIER collIterate *s, UErrorCode *status);
 
 /* Internal functions for C test code. */
-U_CAPI collIterate * U_EXPORT2
+U_CAPI U_NAMESPACE_QUALIFIER collIterate * U_EXPORT2
 uprv_new_collIterate(UErrorCode *status);
 
 U_CAPI void U_EXPORT2
-uprv_delete_collIterate(collIterate *s);
+uprv_delete_collIterate(U_NAMESPACE_QUALIFIER collIterate *s);
 
 /* @return s->pos == s->endp */
 U_CAPI UBool U_EXPORT2
-uprv_collIterateAtEnd(collIterate *s);
+uprv_collIterateAtEnd(U_NAMESPACE_QUALIFIER collIterate *s);
 
 #ifdef XP_CPLUSPLUS
 
@@ -368,7 +368,7 @@ struct UCollationElements : public U_NAMESPACE_QUALIFIER UMemory
   /**
   * Struct wrapper for source data
   */
-        collIterate        iteratordata_;
+        U_NAMESPACE_QUALIFIER collIterate iteratordata_;
   /**
   * Indicates if this data has been reset.
   */
@@ -515,15 +515,17 @@ uprv_init_pce(const struct UCollationElements *elems);
 }
 
 U_CFUNC
-uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status);
+uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE,
+                               U_NAMESPACE_QUALIFIER collIterate *source, UErrorCode *status);
 
 U_CFUNC
 uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
-                          collIterate *source, UErrorCode *status);
-U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
+                                   U_NAMESPACE_QUALIFIER collIterate *source, UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll,
+                                         U_NAMESPACE_QUALIFIER collIterate *collationSource, UErrorCode *status);
 U_CFUNC uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
-                                         collIterate *collationSource,
-                                         UErrorCode *status);
+                                          U_NAMESPACE_QUALIFIER collIterate *collationSource,
+                                          UErrorCode *status);
 /* function used by C++ getCollationKey to prevent restarting the calculation */
 U_CFUNC int32_t
 ucol_getSortKeyWithAllocation(const UCollator *coll,
@@ -557,7 +559,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
 U_CFUNC
 int32_t 
-ucol_getSortKeySize(const UCollator *coll, collIterate *s, 
+ucol_getSortKeySize(const UCollator *coll, U_NAMESPACE_QUALIFIER collIterate *s, 
                     int32_t currentSize, UColAttributeValue strength, 
                     int32_t len);
 /**
@@ -1124,7 +1126,7 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 #endif /* XP_CPLUSPLUS */
 
 /* The offsetBuffer in collIterate might need to be freed to avoid memory leaks. */
-void ucol_freeOffsetBuffer(collIterate *s); 
+void ucol_freeOffsetBuffer(U_NAMESPACE_QUALIFIER collIterate *s); 
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
