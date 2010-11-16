@@ -125,4 +125,21 @@ public class UPropertyAliasesTest extends TestFmwk {
                   + " should have a null property value name");
         }
     }
+
+    public void TestUnknownPropertyNames() {
+        try {
+            int p = UCharacter.getPropertyEnum("??");
+            errln("UCharacter.getPropertyEnum(??) returned " + p +
+                  " rather than throwing an exception");
+        } catch (IllegalArgumentException e) {
+            // ok
+        }
+        try {
+            int p = UCharacter.getPropertyValueEnum(UProperty.LINE_BREAK, "?!");
+            errln("UCharacter.getPropertyValueEnum(UProperty.LINE_BREAK, ?!) returned " + p +
+                  " rather than throwing an exception");
+        } catch (IllegalArgumentException e) {
+            // ok
+        }
+    }
 }
