@@ -36,6 +36,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+U_NAMESPACE_BEGIN
+
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
 
@@ -1064,7 +1066,8 @@ ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
     }
 }
 
-UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
+U_CFUNC UCATableHeader *
+ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
     U_NAMESPACE_USE
 
     uint32_t i = 0;
@@ -1408,5 +1411,7 @@ ucol_findReorderingEntry(const char* name) {
     }
     return USCRIPT_INVALID_CODE;
 }
+
+U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
