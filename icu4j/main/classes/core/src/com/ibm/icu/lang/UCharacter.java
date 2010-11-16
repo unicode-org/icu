@@ -4315,7 +4315,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see UProperty
      * @throws IllegalArgumentException if property is not a valid UProperty
-     *         selector
+     *         selector or valueAlias is not a value of this property
      * @stable ICU 2.4
      */
     public static int getPropertyValueEnum(int property, String valueAlias) {
