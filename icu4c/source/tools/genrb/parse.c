@@ -35,6 +35,8 @@
 #include "unicode/putil.h"
 #include <stdio.h>
 
+extern UBool gIncludeUnihanColl;
+
 /* Number of tokens to read ahead of the current stream position */
 #define MAX_LOOKAHEAD   3
 
@@ -1080,7 +1082,10 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                 if(token == TOK_OPEN_BRACE) {
                     token = getToken(state, &tokenValue, &comment, &line, status);
                     collationRes = table_open(state->bundle, subtag, NULL, status);
-                    table_add(result, addCollation(state, collationRes, startline, status), startline, status);
+                    collationRes = addCollation(state, collationRes, startline, status); /* need to parse the collation data regardless */
+                    if (gIncludeUnihanColl || uprv_strcmp(subtag, "unihan") != 0) {
+                        table_add(result, collationRes, startline, status);
+                    }
                 } else if(token == TOK_COLON) { /* right now, we'll just try to see if we have aliases */
                     /* we could have a table too */
                     token = peekToken(state, 1, &tokenValue, &line, &comment, status);

@@ -59,7 +59,8 @@ enum
     NO_COLLATION_RULES,
     FORMAT_VERSION,
     WRITE_POOL_BUNDLE,
-    USE_POOL_BUNDLE
+    USE_POOL_BUNDLE,
+    INCLUDE_UNIHAN_COLL
 };
 
 UOption options[]={
@@ -84,6 +85,7 @@ UOption options[]={
                       UOPTION_DEF("formatVersion", '\x01', UOPT_REQUIRES_ARG),/* 18 */
                       UOPTION_DEF("writePoolBundle", '\x01', UOPT_NO_ARG),/* 19 */
                       UOPTION_DEF("usePoolBundle", '\x01', UOPT_OPTIONAL_ARG),/* 20 */
+                      UOPTION_DEF("includeUnihanColl", '\x01', UOPT_NO_ARG),/* 21 */ /* temporary, don't display in usage info */
                   };
 
 static     UBool       write_java = FALSE;
@@ -92,6 +94,7 @@ static     const char* outputEnc ="";
 static     const char* gPackageName=NULL;
 static     const char* bundleName=NULL;
 static     struct SRBRoot *newPoolBundle = NULL;
+           UBool       gIncludeUnihanColl = FALSE;
 
 /* TODO: separate header file for ResFile? */
 typedef struct ResFile {
@@ -398,8 +401,12 @@ main(int argc,
         setUsePoolBundle(TRUE);
     }
 
+    if(options[INCLUDE_UNIHAN_COLL].doesOccur) {
+        gIncludeUnihanColl = TRUE;
+    }
+
     if((argc-1)!=1) {
-    	printf("genrb number of files: %d\n", argc - 1);
+        printf("genrb number of files: %d\n", argc - 1);
     }
     /* generate the binary files */
     for(i = 1; i < argc; ++i) {
