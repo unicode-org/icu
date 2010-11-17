@@ -1444,12 +1444,17 @@ public class TimeZoneRuleTest extends TestFmwk {
     }
     
     public void TestBasicTimeZoneCoverage() {
-        BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone("PST");
-        int []offsets = new int[2];
-        
-        btz.getOffsetFromLocal(Calendar.getInstance().getTimeInMillis(), BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
-        if (offsets[0] > offsets[1]) {
-            errln("Error calling getOffsetFromLocal().");
+        TimeZone tz = TimeZone.getTimeZone("PST");
+        if (tz instanceof BasicTimeZone) {
+            BasicTimeZone btz = (BasicTimeZone)tz;
+            int []offsets = new int[2];
+
+            btz.getOffsetFromLocal(Calendar.getInstance().getTimeInMillis(), BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
+            if (offsets[0] > offsets[1]) {
+                errln("Error calling getOffsetFromLocal().");
+            }
+        } else {
+            logln("Skipping TestBasicTimeZoneCoverage: ICU4J is configured to use JDK TimeZone");
         }
     }
 
