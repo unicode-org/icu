@@ -268,7 +268,7 @@ option.
 .PP
 The following is a list of valid
 .I callback
-names, alonmg with a description of their behavior. The list of
+names, along with a description of their behavior. The list of
 callbacks actually supported by
 .B uconv
 is displayed when it is called with
