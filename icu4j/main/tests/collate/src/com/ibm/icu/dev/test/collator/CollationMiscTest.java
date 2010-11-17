@@ -31,9 +31,9 @@ import com.ibm.icu.text.Collator.ReorderCodes;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
