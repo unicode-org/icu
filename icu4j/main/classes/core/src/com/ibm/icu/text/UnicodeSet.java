@@ -993,18 +993,21 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Does one string contain another, starting at a specific offset?
-     * @param text
-     * @param offset
-     * @param other
-     * @return
+     * @param text text to match
+     * @param offsetInText offset within that text
+     * @param substring substring to match at offset in text
+     * @return -1 if match fails, otherwise other.length()
      */
     // Note: This method was moved from CollectionUtilities
-    private static int matchesAt(CharSequence text, int offset, CharSequence other) {
-        int len = other.length();
+    private static int matchesAt(CharSequence text, int offsetInText, CharSequence substring) {
+        int len = substring.length();
+        int textLength = text.length();
+        if (textLength + offsetInText > len) {
+            return -1;
+        }
         int i = 0;
-        int j = offset;
-        for (; i < len; ++i, ++j) {
-            char pc = other.charAt(i);
+        for (int j = offsetInText; i < len; ++i, ++j) {
+            char pc = substring.charAt(i);
             char tc = text.charAt(j);
             if (pc != tc) return -1;
         }
