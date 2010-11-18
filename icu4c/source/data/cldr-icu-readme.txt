@@ -1,5 +1,3 @@
-#! /bin/bash
-#
 # Copyright (C) 2010, International Business Machines Corporation and others.
 # All Rights Reserved.                  
 #
