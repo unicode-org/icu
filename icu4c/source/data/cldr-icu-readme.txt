@@ -192,6 +192,7 @@ svn status
 # 8. Now rebuild ICU4C with the new data and run make check tests.
 # Again, keep a log so you can investigate the errors.
 
+cd $ICU4C_DIR/source
 make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 
 # 9. Investigate each test case failure. The first run processing new CLDR data
@@ -205,6 +206,7 @@ make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 
 # 10. Now run the make check tests in exhaustive mode:
 
+cd $ICU4C_DIR/source
 export INTLTEST_OPTS="-e"
 export CINTLTST_OPTS="-e"
 make check 2>&1 | tee /tmp/icu4c-newData-makeCheckEx.txt
