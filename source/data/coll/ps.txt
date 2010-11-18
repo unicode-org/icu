@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ps.xml
  */
 ps{
-    Version{"2.0.41.26"}
+    Version{"2.0.52.6"}
     collations{
         standard{
             Sequence{
@@ -30,7 +30,7 @@ ps{
                 "&و<<ؤ<<*ۇۉ"
                 "&ه<<<ۀ<<<هٔ<<*ەہھةۃ"
                 "&ی<<*ىےيېۍ<<یٔ<<<ىٔ<<<ئ"
-                "&'\u00A0'<<*'\u200C''\u200D'"
+                "&'\u00A0'<<'\u200C'<<'\u200D'"
             }
             Version{"1.9"}
         }
