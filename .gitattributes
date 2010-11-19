@@ -3188,7 +3188,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt svneol=
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusables.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/ucdterms.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/TestAllCore.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BidiTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
