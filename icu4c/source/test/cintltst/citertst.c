@@ -1695,7 +1695,7 @@ static void TestCEValidity()
     const char *loc;
     FileStream *file = NULL;
     char        line[2048];
-    UChar       codepoints[10];
+    UChar       codepoints[11];
     int         count = 0;
     int         maxCount = 0;
     UChar       contextCPs[3];
