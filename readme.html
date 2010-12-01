@@ -4,7 +4,7 @@
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
 
-    <title>ReadMe for ICU 4.6 DRAFT</title>
+    <title>ReadMe for ICU 4.6</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2010 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -17,9 +17,9 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.6 DRAFT ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.6 ReadMe</h1>
 
-    <p>Last updated: 2010-Nov-16<br />
+    <p>Last updated: 2010-Dec-01<br />
      Copyright &copy; 1997-2010 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -42,8 +42,6 @@
         <a href="#HowToBuild">How To Build And Install ICU</a> 
 
         <ul >
-          <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
-
           <li><a href="#RecBuild">Recommended Build Options</a></li>
 
           <li><a href="#HowToBuildWindows">Windows</a></li>
@@ -513,284 +511,6 @@
     <h2><a name="HowToBuild" href="#HowToBuild" id="HowToBuild">How To Build And
     Install ICU</a></h2>
 
-    <h3><a name="HowToBuildSupported" href="#HowToBuildSupported" id=
-    "HowToBuildSupported">Supported Platforms</a></h3>
-
-    <table class="rtable" summary=
-    "ICU can be built on many platforms.">
-      <caption>
-        Here is the status of building ICU on several different platforms.
-      </caption>
-
-        
-            <tr>
-                <td>AIX 6.1 (power, 64-bit)</td>
-                <td>VisualAge 9</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>HP/UX 11iv3 (ia64, 64-bit)</td>
-                <td>aCC A.06.15</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Red Hat Enterprise Linux 5 (x86, 32-bit)</td>
-                <td>gcc 4.1.2</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Red Hat Enterprise Linux 5 (x86, 64-bit)</td>
-                <td>gcc 4.1.2</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Solaris 10 (sparc, 64-bit)</td>
-                <td>Sun Studio 12</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Windows Vista SP1 (x86, 32-bit)</td>
-                <td>MS Visual Studio 9</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>AIX 5.2 (power, 64-bit)</td>
-                <td>VisualAge 6</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>AIX 5.3 (power, 64-bit)</td>
-                <td>VisualAge 8</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>AIX 6.1 (power, 64-bit)</td>
-                <td>gcc 4.2.4</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>HP/UX 11i (hppa, 64-bit)</td>
-                <td>aCC A.03.85</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>MacOSX 10.5 Leopard (x86, 32-bit)</td>
-                <td>gcc 4.0.1</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>MacOSX 10.5 Leopard (x86, 64-bit)</td>
-                <td>gcc 4.0.1</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Red Hat Enterprise Linux 4.2 (x86, 32-bit)</td>
-                <td>gcc 3.4.6</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Red Hat Enterprise Linux 4u7 (x86, 32-bit)</td>
-                <td>gcc 4.2.4</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-
-            <tr>
-                <td>Red Hat Enterprise Linux 5 (x86, 32-bit)</td>
-                <td>icc 11.0</td>
-                <td class="works">Frequently Tested<br/><b>[<a href="#LinuxICCValueSafeOptimization">See Change</a>]</b></td>
-            </tr>
-
-            <tr>
-                <td>Solaris 10 (sparc, 64-bit)</td>
-                <td>gcc 4.2.1</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>SuSE 10 (x86, 64-bit)</td>
-                <td>gcc 4.1.0</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Windows 2000 Professional (x86, 32-bit)</td>
-                <td>MS Visual Studio 2003 via Cygwin</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Windows 2000 Professional (x86, 32-bit)</td>
-                <td>gcc 3.4.4 via Cygwin</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Windows Server 2003 (x86, 64-bit)</td>
-                <td>MS Visual Studio 8 via Cygwin</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Windows Server 2008 (x86, 64-bit)</td>
-                <td>MS Visual Studio 9</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr>
-                <td>Windows XP Professional (x86, 32-bit)</td>
-                <td>MS Visual Studio 9</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-            
-            <tr>
-                <td>Windows Server 2008 (x86, 64-bit)</td>
-                <td>MS Visual Studio 9 via Cygwin</td>
-                <td class="works">Frequently Tested</td>
-
-            </tr>
-        
-            <tr class="broken">
-                <td>SuSe Linux 7.2 (x86, 32-bit)</td>
-                <td>icc 9.0</td>
-                <td class="broken">Broken <b><a href="http://bugs.icu-project.org/trac/ticket/6888">#6888</a></b></td>
-
-            </tr>
-        
-
-<!-- end IBM lab data -->
-
-      <tr class="rarely">
-        <td>z/OS 1.7</td>
-
-        <td>cxx 1.7</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>IBM i family (IBM i, i5/OS, OS/400)</td>
-
-        <td>iCC</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-
-      <tr class="rarely">
-        <td>MinGW</td>
-
-        <td>gcc</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>NetBSD, OpenBSD, FreeBSD</td>
-
-        <td>gcc</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>SUSE Linux Enterprise Server 9 (PowerPC)</td>
-
-        <td>IBM XL C/C++ 8.0</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>QNX</td>
-
-        <td>gcc</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>BeOS/Haiku</td>
-
-        <td>gcc</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>SGI/IRIX</td>
-
-        <td>MIPSpro CC</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>Tru64 (OSF)</td>
-
-        <td>Compaq's cxx compiler</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr class="rarely">
-        <td>MP-RAS</td>
-
-        <td>NCR MP-RAS C/C++ Compiler</td>
-
-        <td>Rarely tested</td>
-      </tr>
-    </table>
-
-    <p><br />
-    </p>
-
-    <h4>Key to testing frequency</h4>
-
-    <dl>
-      <dt><i>Frequently tested</i></dt>
-
-      <dd>ICU will work on these platforms with these compilers</dd>
-
-      <dt><i>Rarely tested</i></dt>
-
-      <dd>ICU has been ported to these platforms but may not have been tested
-      there recently</dd>
-    </dl>
-
     <h3><a name="RecBuild" href="#RecBuild" id=
     "RecBuild">Recommended Build Options</a></h3>
 
@@ -936,9 +656,9 @@
     <p>Building International Components for Unicode requires:</p>
 
     <ul>
-      <li>Microsoft Windows (<a href="#HowToBuildSupported">See currently tested versions)</a></li>
+      <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (<a href="#HowToBuildSupported">See currently tested versions)</a></li>
+      <li>Microsoft Visual C++</li>
 
       <li><a href="#HowToBuildCygwin">Cygwin</a> is required when other versions
       of Microsoft Visual C++ and other compilers are used to build ICU.</li>
@@ -1070,9 +790,9 @@
     requires:</p>
 
     <ul>
-      <li>Microsoft Windows (<a href="#HowToBuildSupported">See currently tested versions)</a></li>
+      <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (when gcc isn't used)  (<a href="#HowToBuildSupported">See currently tested versions)</a>.</li>
+      <li>Microsoft Visual C++ (when gcc isn't used).</li>
 
       <li>
         Cygwin with the following installed: 
@@ -1414,7 +1134,7 @@ Data set name type  : PDS</samp>
       <li>QSHELL interpreter installed (install base option 30, operating system)
       <!--li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li--></li>
 
-      <li>ILE C/C++ Compiler installed on the system
+      <li>ILE C/C++ Compiler installed on the system</li>
 
       <li>The latest GNU facilities (You can get the GNU facilities 
       from <a href=
@@ -1443,7 +1163,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>') REPLACE(*YES)   </samp>
 <pre>
 <samp>ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake') REPLACE(*YES)
 CHGJOB CCSID(37)</samp>
-</pre>
+</pre></li>
 
       <li>Run <tt>'QSH'</tt></li>
 
@@ -1455,7 +1175,7 @@ CHGJOB CCSID(37)</samp>
       <li>Change your current directory to icu/source.</li>
 
       <li>Run <tt>'./runConfigureICU IBMi'</tt>  (See <a href="#HowToConfigureICU">configuration
-      note</a> for details).</li></li>
+      note</a> for details).</li>
 
       <li>Run <tt>'gmake'</tt> to build ICU.</li>
 
@@ -1475,13 +1195,13 @@ CHGJOB CCSID(37)</samp>
 		<p>Three initially-empty directories will be used in this example:</p>
 		<table summary="Three directories used in this example" class="docTable">
 			<tr>
-				<th align=left>/icu</th><td>a copy of the ICU source</td>
+				<th align="left">/icu</th><td>a copy of the ICU source</td>
 			</tr>
 			<tr>
-				<th align=left>/buildA</th><td>an empty directory, it will contain ICU built for A<br>(MacOSX in this case)</td>
+				<th align="left">/buildA</th><td>an empty directory, it will contain ICU built for A<br>(MacOSX in this case)</td>
 			</tr>
 			<tr>
-				<th align=left>/buildB</th><td>an empty directory, it will contain ICU built for B<br>(HaikuOS in this case)</td>
+				<th align="left">/buildB</th><td>an empty directory, it will contain ICU built for B<br>(HaikuOS in this case)</td>
 			</tr>
 		</table>
 		
