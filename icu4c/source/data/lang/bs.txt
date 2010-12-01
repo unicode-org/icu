@@ -640,7 +640,7 @@ bs{
     }
     Types:alias{"sr_Latn"}
     Variants:alias{"sr_Latn"}
-    Version{"2.0.51.83"}
+    Version{"2.0.52.13"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

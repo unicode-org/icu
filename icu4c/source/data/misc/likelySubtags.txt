@@ -34,6 +34,7 @@ likelySubtags:table(nofallback){
     br{"br_Latn_FR"}
     brx{"brx_Deva_IN"}
     bs{"bs_Latn_BA"}
+    byn{"byn_Ethi_ER"}
     ca{"ca_Latn_ES"}
     cch{"cch_Latn_NG"}
     ce{"ce_Cyrl_RU"}
@@ -133,6 +134,7 @@ likelySubtags:table(nofallback){
     ksh{"ksh_Latn_DE"}
     ku{"ku_Arab_IQ"}
     ku_Latn{"ku_Latn_TR"}
+    ku_SY{"ku_Latn_SY"}
     ku_TR{"ku_Latn_TR"}
     kum{"kum_Cyrl_RU"}
     kw{"kw_Latn_GB"}
@@ -232,6 +234,7 @@ likelySubtags:table(nofallback){
     sv{"sv_Latn_SE"}
     sw{"sw_Latn_TZ"}
     swb{"swb_Arab_KM"}
+    syr{"syr_Syri_SY"}
     ta{"ta_Taml_IN"}
     te{"te_Telu_IN"}
     teo{"teo_Latn_UG"}
