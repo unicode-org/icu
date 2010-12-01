@@ -2723,5 +2723,5 @@ bs{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.51.83"}
+    Version{"2.0.52.13"}
 }
