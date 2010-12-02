@@ -272,10 +272,8 @@ public class SpoofCheckerTest extends TestFmwk {
         TEST_ASSERT_EQ(SpoofChecker.CHAR_LIMIT, result.checks);
 
         checkResults = sc.check(goodGreek, result);
-        if (false) {   // Ticket 8054.  Understand why this is different from ICU4C.
-            TEST_ASSERT(checkResults);
-            TEST_ASSERT_EQ(SpoofChecker.WHOLE_SCRIPT_CONFUSABLE, result.checks);
-        }
+        TEST_ASSERT(checkResults);
+        TEST_ASSERT_EQ(SpoofChecker.WHOLE_SCRIPT_CONFUSABLE, result.checks);
         teardown();
     }
 
