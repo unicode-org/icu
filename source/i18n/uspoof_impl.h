@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation
+* Copyright (C) 2008-2010, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *
@@ -21,6 +21,8 @@
 
 
 #if !UCONFIG_NO_NORMALIZATION
+
+#ifdef XP_CPLUSPLUS
 
 U_NAMESPACE_BEGIN
 
@@ -331,7 +333,7 @@ class SpoofData: public UMemory {
 //
 //---------------------------------------------------------------------------------------
 struct SpoofDataHeader {
-    int32_t       fMagic;                // (0x8345fdef)
+    int32_t       fMagic;                // (0x3845fdef)
     uint8_t       fFormatVersion[4];     // Data Format. Same as the value in struct UDataInfo
                                          //   if there is one associated with this data.
     int32_t       fLength;               // Total lenght in bytes of this spoof data,
@@ -395,6 +397,7 @@ struct SpoofDataHeader {
 
 
 U_NAMESPACE_END
+#endif /* XP_CPLUSPLUS */
 
 /**
   * Endianness swap function for binary spoof data.

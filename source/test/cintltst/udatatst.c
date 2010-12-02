@@ -55,6 +55,9 @@
 #include "propname.h"
 #include "rbbidata.h"
 
+/* swapping implementation in i18n */
+#include "uspoof_impl.h"
+
 U_CAPI int32_t U_EXPORT2
 unorm2_swap(const UDataSwapper *ds,
             const void *inData, int32_t length, void *outData,
@@ -1330,6 +1333,7 @@ static const struct {
 #endif
 #if !UCONFIG_NO_NORMALIZATION
     {"nfc",                      "nrm", unorm2_swap},
+    {"confusables",              "cfu", uspoof_swap},
 #endif
     {"unames",                   "icu", uchar_swapNames}
 };

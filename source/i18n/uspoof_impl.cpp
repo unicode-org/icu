@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -942,17 +942,19 @@ uspoof_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *ou
 
     // Script Sets.  The data is an array of int32_t
     sectionStart  = ds->readUInt32(spoofDH->fScriptSets);
-    sectionLength = ds->readUInt32(spoofDH->fScriptSetsLength) * 4;
+    sectionLength = ds->readUInt32(spoofDH->fScriptSetsLength) * sizeof(ScriptSet);
     ds->swapArray32(ds, inBytes+sectionStart, sectionLength, outBytes+sectionStart, status);
 
     // And, last, swap the header itself.
     //   int32_t   fMagic             // swap this
-    //   uint8_t   fFormatVersion[4]  // Do not swap this
-    //   int32_t   all the rest       // Swap the rest, all is 32 bit stuff.
+    //   uint8_t   fFormatVersion[4]  // Do not swap this, just copy
+    //   int32_t   fLength and all the rest       // Swap the rest, all is 32 bit stuff.
     //
     uint32_t magic = ds->readUInt32(spoofDH->fMagic);
     ds->writeUInt32((uint32_t *)&outputDH->fMagic, magic);
-    ds->swapArray32(ds, &spoofDH->fLength, sizeof(SpoofDataHeader)-8, &outputDH->fLength, status);
+    uprv_memcpy(outputDH->fFormatVersion, spoofDH->fFormatVersion, sizeof(spoofDH->fFormatVersion));
+    // swap starting at fLength
+    ds->swapArray32(ds, &spoofDH->fLength, sizeof(SpoofDataHeader)-8 /* minus magic and fFormatVersion[4] */, &outputDH->fLength, status);
 
     return totalSize;
 }
