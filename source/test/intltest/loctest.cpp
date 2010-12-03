@@ -13,6 +13,7 @@
 #include "unicode/coll.h"
 #include "cstring.h"
 #include <stdio.h>
+#include <string.h>
 #include "putilimp.h"
 #include "unicode/ustring.h"
 
@@ -867,8 +868,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 491)
-        errln("Expected getISOLanguages() to return 491 languages; it returned %d", testCount);
+    if (testCount != 516)
+        errln("Expected getISOLanguages() to return 516 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -915,8 +916,8 @@ LocaleTest::TestGetLangsAndCountries()
                 errln("Couldn't find " + spotCheck2[i] + " in country list.");
         }
     }
-        for (i = 0; i < testCount; i++) {
-      UnicodeString testee(test[i],"");
+    for (i = 0; i < testCount; i++) {
+        UnicodeString testee(test[i],"");
         UnicodeString uc(test[i],"");
         if (testee != uc.toUpper())
             errln(testee + " is not all upper case.");
@@ -924,6 +925,26 @@ LocaleTest::TestGetLangsAndCountries()
             errln(testee + " is not two characters long.");
         if (i > 0 && testee.compare(test[i - 1]) <= 0)
             errln(testee + " appears in an out-of-order position in the list.");
+    }
+
+    // This getAvailableLocales and getISO3Language
+    {
+        int32_t numOfLocales;
+        Locale  enLoc ("en");
+        const Locale *pLocales = Locale::getAvailableLocales(numOfLocales);
+
+        for (int i = 0; i < numOfLocales; i++) {
+            const Locale    &loc(pLocales[i]);
+            UnicodeString   name;
+            char        szName[200];
+
+            loc.getDisplayName (enLoc, name);
+            name.extract (0, 200, szName, sizeof(szName));
+
+            if (strlen(loc.getISO3Language()) == 0) {
+                errln("getISO3Language() returned an empty string for: " + name);
+            }
+        }
     }
 }
 
