@@ -1054,7 +1054,8 @@ Calendar::set(UCalendarDateFields field, int32_t value)
         computeFields(ec);
     }
     fFields[field]     = value;
-    fStamp[field]     = fNextStamp++;
+    /* Ensure that the fNextStamp value doesn't go pass max value for int32_t */
+    fStamp[field]     = fNextStamp == INT32_MAX ? fNextStamp : fNextStamp++;
     fIsSet[field]     = TRUE; // Remove later
     fIsTimeSet = fAreFieldsSet = fAreFieldsVirtuallySet = FALSE;
 }
