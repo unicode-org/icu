@@ -2049,7 +2049,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             computeFields();
         }
         fields[field] = value;
-        stamp[field] = nextStamp++;
+        /* Ensure that the fNextStamp value doesn't go pass max value for 32 bit integer */
+        stamp[field] = nextStamp == Integer.MAX_VALUE ? nextStamp : nextStamp++;
         isTimeSet = areFieldsSet = areFieldsVirtuallySet = false;
     }
 
