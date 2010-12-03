@@ -463,14 +463,14 @@ public:
     /**
      * returns the locale's three-letter language code, as specified
      * in ISO draft standard ISO-639-2.
-     * @return      An alias to the code, or NULL
+     * @return      An alias to the code, or an empty string
      * @stable ICU 2.0
      */
     const char * getISO3Language() const;
 
     /**
      * Fills in "name" with the locale's three-letter ISO-3166 country code.
-     * @return      An alias to the code, or NULL
+     * @return      An alias to the code, or an empty string
      * @stable ICU 2.0
      */
     const char * getISO3Country() const;

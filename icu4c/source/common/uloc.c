@@ -96,60 +96,60 @@ static const char * const LANGUAGES[] = {
     "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",
     "afh", "ain", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  
     "ang", "anp", "apa",
-    "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",
+    "ar",  "arc", "arn", "arp", "art", "arw", "as", "asa", "ast",
     "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",
     "bai", "bal", "ban", "bas", "bat", "be",  "bej",
-    "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",
+    "bem", "ber", "bez", "bg",  "bh",  "bho", "bi",  "bik", "bin",
     "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",
     "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",
-    "cch", "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",
+    "cch", "ce",  "ceb", "cel", "cgg", "ch",  "chb", "chg", "chk", "chm",
     "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",
     "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",
-    "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",
+    "cv",  "cy",  "da",  "dak", "dar", "dav", "day", "de",  "del", "den",
     "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",
-    "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
+    "dz",  "ebu", "ee",  "efi", "egy", "eka", "el",  "elx", "en",
     "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
     "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",
     "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  
     "ga",  "gaa", "gay", "gba", "gd",  "gem", "gez", "gil", 
     "gl",  "gmh", "gn",  "goh", "gon", "gor", "got", "grb", 
-    "grc", "gsw", "gu",  "gv", "gwi", 
+    "grc", "gsw", "gu",  "guz", "gv",  "gwi",
     "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
     "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",
     "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
     "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
-    "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
-    "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kfo", "kg",  "kha", "khi",
-    "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",
+    "iu",  "ja",  "jbo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
+    "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kde", "kea", "kfo", "kg",  "kha", "khi",
+    "kho", "khq", "ki",  "kj",  "kk",  "kl",  "kln", "km",  "kmb", "kn",
     "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks",
-    "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",
+    "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad", "lag",
     "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",
-    "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",
+    "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus", "luy",
     "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",
-    "mdf", "mdr", "men", "mfe", "mg",  "mga", "mh",  "mi",  "mic", "min",
+    "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mh",  "mi",  "mic", "min",
     "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",
     "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",
-    "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
+    "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap", "naq",
     "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
     "niu", "nl",  "nn",  "no",  "nog", "non", "nqo", "nr",  "nso", "nub",
     "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
     "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",
     "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
     "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
-    "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",
-    "ru",  "rup", "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",
-    "sas", "sat", "sc",  "scn", "sco", "sd",  "se",  "sel", "sem",
-    "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",
+    "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rof", "rom",
+    "ru",  "rup", "rw",  "rwk", "sa",  "sad", "sah", "sai", "sal", "sam", "saq",
+    "sas", "sat", "sc",  "scn", "sco", "sd",  "se",  "seh", "sel", "sem", "ses",
+    "sg",  "sga", "sgn", "shi", "shn", "si",  "sid", "sio", "sit",
     "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",
     "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",
     "srn", "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
-    "sv",  "sw",  "syc", "syr", "ta",  "tai", "te",  "tem", "ter",
+    "sv",  "sw",  "syc", "syr", "ta",  "tai", "te",  "tem", "teo", "ter",
     "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
     "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr", "trv",
     "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",
-    "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
-    "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
-    "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
+    "ty",  "tyv", "tzm", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
+    "uz",  "vai", "ve",  "vi",  "vo",  "vot", "vun", "wa",  "wak",
+    "wal", "war", "was", "wen", "wo",  "xal", "xh",  "xog", "yao", "yap",
     "yi",  "yo",  "ypk", "za",  "zap", "zbl", "zen", "zh",  "znd",
     "zu",  "zun", "zxx", "zza",
 NULL,
@@ -184,30 +184,30 @@ static const char * const LANGUAGES_3[] = {
     "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
 /*  "afh", "ain", "ak",  "akk", "ale", "alg", "alt", "am",  "an",  "ang", "anp", "apa",    */
     "afh", "ain", "aka", "akk", "ale", "alg", "alt", "amh", "arg", "ang", "anp", "apa",
-/*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
-    "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
+/*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "asa", "ast",    */
+    "ara", "arc", "arn", "arp", "art", "arw", "asm", "asa", "ast",
 /*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
     "ath", "aus", "ava", "awa", "aym", "aze", "bak", "bad",
 /*  "bai", "bal", "ban", "bas", "bat", "be",  "bej",    */
     "bai", "bal", "ban", "bas", "bat", "bel", "bej",
-/*  "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
-    "bem", "ber", "bul", "bih", "bho", "bis", "bik", "bin",
+/*  "bem", "ber", "bez", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
+    "bem", "ber", "bez", "bul", "bih", "bho", "bis", "bik", "bin",
 /*  "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
     "bla", "bam", "ben", "bnt", "bod", "bre", "bra", "bos",
 /*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
     "btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
-/*  "cch", "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
-    "cch", "che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
+/*  "cch", "ce",  "ceb", "cel", "cgg", "ch",  "chb", "chg", "chk", "chm",    */
+    "cch", "che", "ceb", "cel", "cgg", "cha", "chb", "chg", "chk", "chm",
 /*  "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
     "chn", "cho", "chp", "chr", "chy", "cmc", "cos", "cop",
 /*  "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
     "cpe", "cpf", "cpp", "cre", "crh", "crp", "ces", "csb", "chu", "cus",
-/*  "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",    */
-    "chv", "cym", "dan", "dak", "dar", "day", "deu", "del", "den",
+/*  "cv",  "cy",  "da",  "dak", "dar", "dav", "day", "de",  "del", "den",    */
+    "chv", "cym", "dan", "dak", "dar", "dav", "day", "deu", "del", "den",
 /*  "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",    */
     "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "div", "dyu",
-/*  "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",     */
-    "dzo", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
+/*  "dz",  "ebu", "ee",  "efi", "egy", "eka", "el",  "elx", "en",     */
+    "dzo", "ebu", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
 /*  "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
     "enm", "epo", "spa", "est", "eus", "ewo", "fas",
 /*  "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",    */
@@ -216,8 +216,8 @@ static const char * const LANGUAGES_3[] = {
     "fra", "frm", "fro", "frr", "frs", "fur", "fry", "gle", "gaa", "gay",
 /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
     "gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
-/*  "goh", "gon", "gor", "got", "grb", "grc", "gsw", "gu",  "gv",     */
-    "goh", "gon", "gor", "got", "grb", "grc", "gsw", "guj", "glv",
+/*  "goh", "gon", "gor", "got", "grb", "grc", "gsw", "gu",  "guz", "gv",     */
+    "goh", "gon", "gor", "got", "grb", "grc", "gsw", "guj", "guz", "glv",
 /*  "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
     "gwi", "hau", "hai", "haw", "heb", "hin", "hil", "him",
 /*  "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
@@ -226,30 +226,30 @@ static const char * const LANGUAGES_3[] = {
     "ina", "iba", "ind", "ile", "ibo", "iii", "ijo", "ipk",
 /*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
     "ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
-/*  "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
-    "iku", "jpn", "jbo", "jpr", "jrb", "jav", "kat", "kaa", "kab",
-/*  "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kfo", "kg",  "kha", "khi",*/
-    "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kfo", "kg",  "kha", "khi",
-/*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
-    "kho", "kik", "kua", "kaz", "kal", "khm", "kmb", "kan",
+/*  "iu",  "ja",  "jbo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
+    "iku", "jpn", "jbo", "jmc", "jpr", "jrb", "jav", "kat", "kaa", "kab",
+/*  "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kde", "kea", "kfo", "kg",  "kha", "khi",*/
+    "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kde", "kea", "kfo", "kg",  "kha", "khi",
+/*  "kho", "khq", "ki",  "kj",  "kk",  "kl",  "kln", "km",  "kmb", "kn",     */
+    "kho", "khq", "kik", "kua", "kaz", "kal", "kln", "khm", "kmb", "kan",
 /*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks",     */
     "kor", "kok", "kos", "kpe", "kau", "krc", "krl", "kro", "kru", "kas",
-/*  "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",    */
-    "kur", "kum", "kut", "kom", "cor", "kir", "lat", "lad",
+/*  "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad", "lag",    */
+    "kur", "kum", "kut", "kom", "cor", "kir", "lat", "lad", "lag",
 /*  "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",    */
     "lah", "lam", "ltz", "lez", "lug", "lim", "lin", "lao", "lol",
-/*  "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",    */
-    "loz", "lit", "lub", "lua", "lui", "lun", "luo", "lus",
+/*  "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus", "luy",   */
+    "loz", "lit", "lub", "lua", "lui", "lun", "luo", "lus", "luy",
 /*  "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",    */
     "lav", "mad", "mag", "mai", "mak", "man", "map", "mas",
-/*  "mdf", "mdr", "men", "mfe", "mg",  "mga", "mh",  "mi",  "mic", "min",    */
-    "mdf", "mdr", "men", "mfe", "mlg", "mga", "mah", "mri", "mic", "min",
+/*  "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mh",  "mi",  "mic", "min",    */
+    "mdf", "mdr", "men", "mer", "mfe", "mlg", "mga", "mah", "mri", "mic", "min",
 /*  "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",    */
     "mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
 /*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",    */
     "mol", "moh", "mos", "mar", "msa", "mlt", "mul", "mun",
-/*  "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
-    "mus", "mwl", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
+/*  "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap", "naq",   */
+    "mus", "mwl", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap", "naq",
 /*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
     "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
 /*  "niu", "nl",  "nn",  "no",  "nog", "non", "nqo", "nr",  "nso", "nub",    */
@@ -262,34 +262,34 @@ static const char * const LANGUAGES_3[] = {
     "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
 /*  "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",     */
     "pli", "pol", "pon", "pra", "pro", "pus", "por", "que",
-/*  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",    */
-    "raj", "rap", "rar", "roh", "run", "ron", "roa", "rom",
-/*  "ru",  "rup", "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
-    "rus", "rup", "kin", "san", "sad", "sah", "sai", "sal", "sam",
-/*  "sas", "sat", "sc",  "scn", "sco", "sd",  "se",  "sel", "sem",    */
-    "sas", "sat", "srd", "scn", "sco", "snd", "sme", "sel", "sem",
-/*  "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
-    "sag", "sga", "sgn", "shn", "sin", "sid", "sio", "sit",
+/*  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rof", "rom",    */
+    "raj", "rap", "rar", "roh", "run", "ron", "roa", "rof", "rom",
+/*  "ru",  "rup", "rw",  "rwk", "sa",  "sad", "sah", "sai", "sal", "sam", "saq",    */
+    "rus", "rup", "kin", "rwk", "san", "sad", "sah", "sai", "sal", "sam", "saq",
+/*  "sas", "sat", "sc",  "scn", "sco", "sd",  "se",  "seh", "sel", "sem", "ses",    */
+    "sas", "sat", "srd", "scn", "sco", "snd", "sme", "seh", "sel", "sem", "ses",
+/*  "sg",  "sga", "sgn", "shi", "shn", "si",  "sid", "sio", "sit",    */
+    "sag", "sga", "sgn", "shi", "shn", "sin", "sid", "sio", "sit",
 /*  "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",    */
     "slk", "slv", "sla", "smo", "sma", "smi", "smj", "smn",
 /*  "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",     */
     "sms", "sna", "snk", "som", "sog", "son", "sqi", "srp",
 /*  "srn", "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
     "srn", "srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
-/*  "sv",  "sw",  "syc", "syr", "ta",  "tai", "te",  "tem", "ter",    */
-    "swe", "swa", "syc", "syr", "tam", "tai", "tel", "tem", "ter",
+/*  "sv",  "sw",  "syc", "syr", "ta",  "tai", "te",  "tem", "teo", "ter",    */
+    "swe", "swa", "syc", "syr", "tam", "tai", "tel", "tem", "teo", "ter",
 /*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
     "tet", "tgk", "tha", "tir", "tig", "tiv", "tuk", "tkl",
 /*  "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr", "trv",    */
     "tgl", "tlh", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur", "trv",
 /*  "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",     */
     "tso", "tsi", "tat", "tum", "tup", "tut", "tvl", "twi",
-/*  "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
-    "tah", "tyv", "udm", "uig", "uga", "ukr", "umb", "und", "urd",
-/*  "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",    */
-    "uzb", "vai", "ven", "vie", "vol", "vot", "wln", "wak",
-/*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",    */
-    "wal", "war", "was", "wen", "wol", "xal", "xho", "yao", "yap",
+/*  "ty",  "tyv", "tzm", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
+    "tah", "tyv", "tzm", "udm", "uig", "uga", "ukr", "umb", "und", "urd",
+/*  "uz",  "vai", "ve",  "vi",  "vo",  "vot", "vun", "wa",  "wak",    */
+    "uzb", "vai", "ven", "vie", "vol", "vot", "vun", "wln", "wak",
+/*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "xog", "yao", "yap",    */
+    "wal", "war", "was", "wen", "wol", "xal", "xho", "xog", "yao", "yap",
 /*  "yi",  "yo",  "ypk", "za",  "zap", "zbl", "zen", "zh",  "znd",    */
     "yid", "yor", "ypk", "zha", "zap", "zbl", "zen", "zho", "znd",
 /*  "zu",  "zun", "zxx", "zza",                                         */
