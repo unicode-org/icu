@@ -123,11 +123,11 @@ $(LIBDIR)/%.a : %.so
 
 %.u : $(srcdir)/%.c
 	@echo "generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null'
+	@$(GEN_DEPS.c) $< > /dev/null
 
 %.u : $(srcdir)/%.cpp
 	@echo "generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null'
+	@$(GEN_DEPS.cc) $< > /dev/null
 
 ## Versioned libraries rules
 %$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
