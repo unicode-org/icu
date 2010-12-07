@@ -1516,7 +1516,34 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         setWeekData(locale);
         initInternal();
     }
-
+    
+    private void recalculateStamp() {
+        int index;
+        int currentValue;
+        int j, i;
+        
+        nextStamp = 1;
+        
+        for (j = 0; j < stamp.length; j++) {
+            currentValue = STAMP_MAX;
+            index = -1;
+            
+            for (i = 0; i < stamp.length; i++) {
+                if (stamp[i] > nextStamp && stamp[i] < currentValue) {
+                    currentValue = stamp[i];
+                    index = i;
+                }
+            }
+            
+            if (index >= 0) {
+                stamp[index] = ++nextStamp;
+            } else {
+                break;
+            }
+        }
+        nextStamp++;
+    }
+    
     private void initInternal()
     {
         // Allocate fields through the framework method.  Subclasses
@@ -1626,6 +1653,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         cal.setTimeInMillis(System.currentTimeMillis());
         return cal;
     }
+    /* Max value for stamp allowable */
+    private static int STAMP_MAX = Integer.MAX_VALUE;
 
     private static final String[] calTypes = {
         "gregorian",
@@ -2050,7 +2079,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
         fields[field] = value;
         /* Ensure that the fNextStamp value doesn't go pass max value for 32 bit integer */
-        stamp[field] = nextStamp == Integer.MAX_VALUE ? nextStamp : nextStamp++;
+        if (nextStamp == STAMP_MAX) {
+            recalculateStamp();
+        }
+        stamp[field] = nextStamp++;
         isTimeSet = areFieldsSet = areFieldsVirtuallySet = false;
     }
 
