@@ -138,6 +138,9 @@ U_CFUNC void ucal_dump(UCalendar* cal) {
 
 #endif
 
+/* Max value for stamp allowable */
+#define STAMP_MAX INT32_MAX
+
 static const char * const gCalTypes[] = {
     "gregorian",
     "japanese",
@@ -1055,7 +1058,10 @@ Calendar::set(UCalendarDateFields field, int32_t value)
     }
     fFields[field]     = value;
     /* Ensure that the fNextStamp value doesn't go pass max value for int32_t */
-    fStamp[field]     = fNextStamp == INT32_MAX ? fNextStamp : fNextStamp++;
+    if (fNextStamp == STAMP_MAX) {
+        recalculateStamp();
+    }
+    fStamp[field]     = fNextStamp++;
     fIsSet[field]     = TRUE; // Remove later
     fIsTimeSet = fAreFieldsSet = fAreFieldsVirtuallySet = FALSE;
 }
@@ -3358,6 +3364,33 @@ const char *
 Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
     U_LOCALE_BASED(locBased, *this);
     return locBased.getLocaleID(type, status);
+}
+
+void
+Calendar::recalculateStamp() {
+    int32_t index;
+    int32_t currentValue;
+    int32_t j, i;
+
+    fNextStamp = 1;
+
+    for (j = 0; j < UCAL_FIELD_COUNT; j++) {
+        currentValue = STAMP_MAX;
+        index = -1;
+        for (i = 0; i < UCAL_FIELD_COUNT; i++) {
+            if (fStamp[i] > fNextStamp && fStamp[i] < currentValue) {
+                currentValue = fStamp[i];
+                index = i;
+            }
+        }
+
+        if (index >= 0) {
+            fStamp[index] = ++fNextStamp;
+        } else {
+            break;
+        }
+    }
+    fNextStamp++;
 }
 
 // Deprecated function. This doesn't need to be inline.

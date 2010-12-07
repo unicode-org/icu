@@ -1937,6 +1937,12 @@ private:
     int32_t fNextStamp;// = MINIMUM_USER_STAMP;
 
     /**
+     * Recalculates the time stamp array (fStamp).
+     * Resets fNextStamp to lowest next stamp value.
+     */
+    void recalculateStamp();
+
+    /**
      * The current time set for the calendar.
      */
     UDate        fTime;
