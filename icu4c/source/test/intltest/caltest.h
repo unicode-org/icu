@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2010, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -219,6 +219,11 @@ public: // package
     void Test6703(void);
     void Test3785(void);
     void Test1624(void);
+
+    /**
+     * Test the time stamp array recalculation during heavy Calendar usage
+     */
+    void TestTimeStamp(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

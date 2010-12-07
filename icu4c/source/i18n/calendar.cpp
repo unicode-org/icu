@@ -138,8 +138,8 @@ U_CFUNC void ucal_dump(UCalendar* cal) {
 
 #endif
 
-/* Max value for stamp allowable */
-#define STAMP_MAX INT32_MAX
+/* Max value for stamp allowable before recalculation */
+#define STAMP_MAX 10000
 
 static const char * const gCalTypes[] = {
     "gregorian",
