@@ -1653,8 +1653,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         cal.setTimeInMillis(System.currentTimeMillis());
         return cal;
     }
-    /* Max value for stamp allowable */
-    private static int STAMP_MAX = Integer.MAX_VALUE;
+    /* Max value for stamp allowable before recalcution */
+    private static int STAMP_MAX = 10000;
 
     private static final String[] calTypes = {
         "gregorian",
