@@ -2160,6 +2160,28 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestTimeStamp() {
+        long start = 0, time;
+
+        // Create a new Gregorian Calendar.
+        Calendar cal = Calendar.getInstance(Locale.US);
+        
+        for (int i = 0; i < 20000; i++) {
+            cal.set(2009, Calendar.JULY, 3, 0, 49, 46);
+            
+            time = cal.getTime().getTime();
+            
+            if (i == 0) {
+                start = time;
+            } else {
+                if (start != time) {
+                    errln("start and time not equal");
+                    return;
+                }
+            }
+        }
+    }
 
 }
 
