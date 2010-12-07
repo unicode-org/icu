@@ -229,6 +229,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             Test1624();
           }
           break;
+        case 25:
+          name = "TestTimeStamp";
+          if(exec) {
+            logln("TestTimeStamp---"); logln("");
+            TestTimeStamp();
+          }
+          break;
         default: name = ""; break;
     }
 }
@@ -2156,6 +2163,41 @@ void CalendarTest::Test1624() {
         }
     }
     return;
+}
+
+void CalendarTest::TestTimeStamp() {
+    UErrorCode status = U_ZERO_ERROR;
+    UDate start, time;
+    Calendar *cal;
+
+    // Create a new Gregorian Calendar.
+    cal = Calendar::createInstance("en_US@calender=gregorian", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating Gregorian calendar.");
+        return;
+    }
+
+    for (int i = 0; i < 20000; i++) {
+        // Set the Gregorian Calendar to a specific date for testing.
+        cal->set(2009, UCAL_JULY, 3, 0, 49, 46);
+
+        time = cal->getTime(status);
+        if (U_FAILURE(status)) {
+            errln("Error calling getTime()");
+            break;
+        }
+
+        if (i == 0) {
+            start = time;
+        } else {
+            if (start != time) {
+                errln("start and time not equal.");
+                break;
+            }
+        }
+    }
+
+    delete cal;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
