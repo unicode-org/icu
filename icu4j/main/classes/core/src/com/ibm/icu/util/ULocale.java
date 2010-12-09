@@ -8,14 +8,18 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -241,7 +245,7 @@ public final class ULocale implements Serializable {
     // default empty locale
     private static final Locale EMPTY_LOCALE = new Locale("", "");
 
-    // specia keyword key for Unicode locale attributes
+    // special keyword key for Unicode locale attributes
     private static final String LOCALE_ATTRIBUTE_KEY = "attribute";
 
     /**
@@ -360,21 +364,6 @@ public final class ULocale implements Serializable {
         }
     }
 
-    /*
-     * This table is used for mapping between ICU and special Java
-     * locales.  When an ICU locale matches <minumum base> with
-     * <keyword>/<value>, the ICU locale is mapped to <Java> locale.
-     * For example, both ja_JP@calendar=japanese and ja@calendar=japanese
-     * are mapped to Java locale "ja_JP_JP".  ICU locale "nn" is mapped
-     * to Java locale "no_NO_NY".
-     */
-    private static final String[][] _javaLocaleMap = {
-    //  { <Java>,       <ICU base>, <keyword>,  <value>,    <minimum base>
-        { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
-        { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
-        { "th_TH_TH",   "th_TH",    "numbers",  "thai",     "th"},
-    };
-
     /**
      * Private constructor used by static initializers.
      */
@@ -405,22 +394,9 @@ public final class ULocale implements Serializable {
         ULocale result = CACHE.get(loc);
         if (result == null) {
             if (defaultULocale != null && loc == defaultULocale.locale) {
-            result = defaultULocale;
-        } else {
-                String locStr = loc.toString();
-                if (locStr.length() == 0) {
-                    result = ROOT;
-                } else {
-                    for (int i = 0; i < _javaLocaleMap.length; i++) {
-                        if (_javaLocaleMap[i][0].equals(locStr)) {
-                            LocaleIDParser p = new LocaleIDParser(_javaLocaleMap[i][1]);
-                            p.setKeywordValue(_javaLocaleMap[i][2], _javaLocaleMap[i][3]);
-                            locStr = p.getName();
-                            break;
-                        }
-                    }
-                    result = new ULocale(locStr, loc);
-                }
+                result = defaultULocale;
+            } else {
+                result = JDKLocaleMapper.INSTANCE.toULocale(loc);
             }
             CACHE.put(loc, result);
         }
@@ -527,24 +503,7 @@ public final class ULocale implements Serializable {
      */
     public Locale toLocale() {
         if (locale == null) {
-            LocaleIDParser p = new LocaleIDParser(localeID);
-            String base = p.getBaseName();
-            for (int i = 0; i < _javaLocaleMap.length; i++) {
-                if (base.equals(_javaLocaleMap[i][1]) || base.equals(_javaLocaleMap[i][4])) {
-                    if (_javaLocaleMap[i][2] != null) {
-                        String val = p.getKeywordValue(_javaLocaleMap[i][2]);
-                        if (val != null && val.equals(_javaLocaleMap[i][3])) {
-                            p = new LocaleIDParser(_javaLocaleMap[i][0]);
-                            break;
-                        }
-                    } else {
-                        p = new LocaleIDParser(_javaLocaleMap[i][0]);
-                        break;
-                    }
-                }
-            }
-            String[] names = p.getLanguageScriptCountryVariant();
-            locale = new Locale(names[0], names[2], names[3]);
+            locale = JDKLocaleMapper.INSTANCE.toLocale(this);
         }
         return locale;
     }
@@ -3544,5 +3503,284 @@ public final class ULocale implements Serializable {
             return bcpType;
         }
         return type;
+    }
+
+    /*
+     * JDK Locale Mapper
+     */
+    private static final class JDKLocaleMapper {
+        public static final JDKLocaleMapper INSTANCE = new JDKLocaleMapper();
+
+        private static boolean isJava7orNewer = false;
+
+        /*
+         * New methods in Java 7 Locale class
+         */
+        private static Method mGetScript;
+        private static Method mGetExtensionKeys;
+        private static Method mGetExtension;
+        private static Method mGetUnicodeLocaleKeys;
+        private static Method mGetUnicodeLocaleAttributes;
+        private static Method mGetUnicodeLocaleType;
+        private static Method mForLanguageTag;
+
+        /*
+         * This table is used for mapping between ICU and special Java
+         * 6 locales.  When an ICU locale matches <minumum base> with
+         * <keyword>/<value>, the ICU locale is mapped to <Java> locale.
+         * For example, both ja_JP@calendar=japanese and ja@calendar=japanese
+         * are mapped to Java locale "ja_JP_JP".  ICU locale "nn" is mapped
+         * to Java locale "no_NO_NY".
+         */
+        private static final String[][] JAVA6_MAPDATA = {
+        //  { <Java>,       <ICU base>, <keyword>,  <value>,    <minimum base>
+            { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
+            { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
+            { "th_TH_TH",   "th_TH",    "numbers",  "thai",     "th"},
+        };
+
+        static {
+            try {
+                mGetScript = Locale.class.getMethod("getScript", (Class[]) null);
+                mGetExtensionKeys = Locale.class.getMethod("getExtensionKeys", (Class[]) null);
+                mGetExtension = Locale.class.getMethod("getExtension", char.class);
+                mGetUnicodeLocaleKeys = Locale.class.getMethod("getUnicodeLocaleKeys", (Class[]) null);
+                mGetUnicodeLocaleAttributes = Locale.class.getMethod("getUnicodeLocaleAttributes", (Class[]) null);
+                mGetUnicodeLocaleType = Locale.class.getMethod("getUnicodeLocaleType", String.class);
+                mForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
+                isJava7orNewer = true;
+            } catch (NoSuchMethodException e) {
+                // Java 6 or older
+            }
+        }
+
+        private JDKLocaleMapper() {
+        }
+
+        public ULocale toULocale(Locale loc) {
+            return isJava7orNewer ? toULocale7(loc) : toULocale6(loc);
+        }
+
+        public Locale toLocale(ULocale uloc) {
+            return isJava7orNewer ? toLocale7(uloc) : toLocale6(uloc);
+        }
+
+        private ULocale toULocale7(Locale loc) {
+            String language = loc.getLanguage();
+            String script = "";
+            String country = loc.getCountry();
+            String variant = loc.getVariant();
+
+            Set<String> attributes = null;
+            Map<String, String> keywords = null;
+
+            try {
+                script = (String) mGetScript.invoke(loc, (Object[]) null);
+                @SuppressWarnings("unchecked")
+                Set<Character> extKeys = (Set<Character>) mGetExtensionKeys.invoke(loc, (Object[]) null);
+                if (!extKeys.isEmpty()) {
+                    for (Character extKey : extKeys) {
+                        if (extKey.charValue() == 'u') {
+                            // Found Unicode locale extension
+
+                            // attributes
+                            @SuppressWarnings("unchecked")
+                            Set<String> uAttributes = (Set<String>) mGetUnicodeLocaleAttributes.invoke(loc, (Object[]) null);
+                            if (!uAttributes.isEmpty()) {
+                                attributes = new TreeSet<String>();
+                                for (String attr : uAttributes) {
+                                    attributes.add(attr);
+                                }
+                            }
+
+                            // keywords
+                            @SuppressWarnings("unchecked")
+                            Set<String> uKeys = (Set<String>) mGetUnicodeLocaleKeys.invoke(loc, (Object[]) null);
+                            for (String kwKey : uKeys) {
+                                String kwVal = (String) mGetUnicodeLocaleType.invoke(loc, kwKey);
+                                if (kwVal != null) {
+                                    if (kwKey.equals("va")) {
+                                        // va-* is interpreted as a variant
+                                        variant = (variant.length() == 0) ? kwVal : kwVal + "_" + variant;
+                                    } else {
+                                        if (keywords == null) {
+                                            keywords = new TreeMap<String, String>();
+                                        }
+                                        keywords.put(kwKey, kwVal);
+                                    }
+                                }
+                            }
+                        } else {
+                            String extVal = (String) mGetExtension.invoke(loc, extKey);
+                            if (extVal != null) {
+                                if (keywords == null) {
+                                    keywords = new TreeMap<String, String>();
+                                }
+                                keywords.put(String.valueOf(extKey), extVal);
+                            }
+                        }
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+
+            // JDK locale no_NO_NY is not interpreted as Nynorsk by ICU,
+            // and it should be transformed to nn_NO.
+
+            // Note: JDK7+ unerstand both no_NO_NY and nn_NO. When convert
+            // ICU locale to JDK, we do not need to map nn_NO back to no_NO_NY.
+
+            if (language.equals("no") && country.equals("NO") && variant.equals("NY")) {
+                language = "nn";
+                variant = "";
+            }
+
+            // Constructing ID
+            StringBuilder buf = new StringBuilder(language);
+
+            if (script.length() > 0) {
+                buf.append('_');
+                buf.append(script);
+            }
+
+            if (country.length() > 0) {
+                buf.append('_');
+                buf.append(country);
+            }
+
+            if (variant.length() > 0) {
+                if (country.length() == 0) {
+                    buf.append('_');
+                }
+                buf.append('_');
+                buf.append(variant);
+            }
+
+            if (attributes != null) {
+                // transform Unicode attributes into a keyword
+                StringBuilder attrBuf = new StringBuilder();
+                for (String attr : attributes) {
+                    if (attrBuf.length() != 0) {
+                        attrBuf.append('-');
+                    }
+                    attrBuf.append(attr);
+                }
+                if (keywords == null) {
+                    keywords = new TreeMap<String, String>();
+                }
+                keywords.put(LOCALE_ATTRIBUTE_KEY, attrBuf.toString());
+            }
+
+            if (keywords != null) {
+                buf.append('@');
+                boolean addSep = false;
+                for (Entry<String, String> kwEntry : keywords.entrySet()) {
+                    String kwKey = kwEntry.getKey();
+                    String kwVal = kwEntry.getValue();
+
+                    if (kwKey.length() != 1) {
+                        // Unicode locale key
+                        kwKey = bcp47ToLDMLKey(kwKey);
+                        // use "true" as the value of typeless keywords
+                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "true" : kwVal));
+                    }
+
+                    if (addSep) {
+                        buf.append(';');
+                    } else {
+                        addSep = true;
+                    }
+                    buf.append(kwKey);
+                    buf.append('=');
+                    buf.append(kwVal);
+                }
+            }
+
+            return new ULocale(buf.toString());
+        }
+
+        private ULocale toULocale6(Locale loc) {
+            ULocale uloc = null;
+            String locStr = loc.toString();
+            if (locStr.length() == 0) {
+                uloc = ULocale.ROOT;
+            } else {
+                for (int i = 0; i < JAVA6_MAPDATA.length; i++) {
+                    if (JAVA6_MAPDATA[i][0].equals(locStr)) {
+                        LocaleIDParser p = new LocaleIDParser(JAVA6_MAPDATA[i][1]);
+                        p.setKeywordValue(JAVA6_MAPDATA[i][2], JAVA6_MAPDATA[i][3]);
+                        locStr = p.getName();
+                        break;
+                    }
+                }
+                uloc = new ULocale(locStr, loc);
+            }
+            return uloc;
+        }
+
+        private Locale toLocale7(ULocale uloc) {
+            Locale loc = null;
+            String ulocStr = uloc.getName();
+            if (uloc.getScript().length() > 0 || ulocStr.contains("@")) {
+                // With script or keywords available, the best way
+                // to get a mapped Locale is to go through a language tag.
+                // A Locale with script or keywords can only have variants
+                // that is 1 to 8 alphanum. If this ULocale has a variant
+                // subtag not satisfying the criteria, the variant subtag
+                // will be lost.
+                String tag = uloc.toLanguageTag();
+
+                // Workaround for variant casing problem:
+                //
+                // The variant field in ICU is case insensitive and normalized
+                // to upper case letters by getVariant(), while
+                // the variant field in JDK Locale is case sensitive.
+                // ULocale#toLanguageTag use lower case characters for
+                // BCP 47 variant and private use x-lvariant.
+                //
+                // Locale#forLanguageTag in JDK preserves character casing
+                // for variant. Because ICU always normalizes variant to
+                // upper case, we convert language tag to upper case here.
+                tag = AsciiUtil.toUpperString(tag);
+
+                try {
+                    loc = (Locale)mForLanguageTag.invoke(null, tag);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (loc == null) {
+                // Without script or keywords, use a Locale constructor,
+                // so we can preserve any ill-formed variants.
+                loc = new Locale(uloc.getLanguage(), uloc.getCountry(), uloc.getVariant());
+            }
+            return loc;
+        }
+
+        private Locale toLocale6(ULocale uloc) {
+            String locstr = uloc.getBaseName();
+            for (int i = 0; i < JAVA6_MAPDATA.length; i++) {
+                if (locstr.equals(JAVA6_MAPDATA[i][1]) || locstr.equals(JAVA6_MAPDATA[i][4])) {
+                    if (JAVA6_MAPDATA[i][2] != null) {
+                        String val = uloc.getKeywordValue(JAVA6_MAPDATA[i][2]);
+                        if (val != null && val.equals(JAVA6_MAPDATA[i][3])) {
+                            locstr = JAVA6_MAPDATA[i][0];
+                            break;
+                        }
+                    } else {
+                        locstr = JAVA6_MAPDATA[i][0];
+                        break;
+                    }
+                }
+            }
+            LocaleIDParser p = new LocaleIDParser(locstr);
+            String[] names = p.getLanguageScriptCountryVariant();
+            return new Locale(names[0], names[2], names[3]);
+        }
     }
 }
