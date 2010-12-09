@@ -9,6 +9,7 @@
 package com.ibm.icu.dev.test.util;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,7 +28,7 @@ import com.ibm.icu.util.Freezable;
  * @author medavis
 
  */
-public class Relation<K, V> implements Freezable {
+public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collection<V>>, but requires API changes
     private Map<K, Set<V>> data;
 
     Constructor<Set<V>> setCreator;
@@ -64,13 +65,22 @@ public class Relation<K, V> implements Freezable {
 
     public boolean containsValue(Object value) {
         for (Set<V> values : data.values()) {
-            if (values.contains(value))
+            if (values.contains(value)) {
                 return true;
+            }
         }
         return false;
     }
 
-    public Set<Entry<K, V>> entrySet() {
+    public final Set<Entry<K, V>> entrySet() {
+        return keyValueSet();
+    }
+    
+    public Set<Entry<K, Set<V>>> keyValuesSet() {
+        return data.entrySet();
+    }
+    
+    public Set<Entry<K, V>> keyValueSet() {
         Set<Entry<K, V>> result = new LinkedHashSet();
         for (K key : data.keySet()) {
             for (V value : data.get(key)) {
@@ -99,6 +109,10 @@ public class Relation<K, V> implements Freezable {
         return data.get(key);
     }
 
+    public Set<V> get(Object key) {
+        return data.get(key);
+    }
+
     public int hashCode() {
         return data.hashCode();
     }
@@ -120,13 +134,13 @@ public class Relation<K, V> implements Freezable {
         return value;
     }
 
-    public V putAll(K key, Collection<V> value) {
+    public V putAll(K key, Collection<? extends V> values) {
         Set<V> set = data.get(key);
         if (set == null) {
             data.put(key, set = newSet());
         }
-        set.addAll(value);
-        return value.size() == 0 ? null : value.iterator().next();
+        set.addAll(values);
+        return values.size() == 0 ? null : values.iterator().next();
     }
 
     public V putAll(Collection<K> keys, V value) {
@@ -177,7 +191,7 @@ public class Relation<K, V> implements Freezable {
         return data.size();
     }
 
-    public Collection<V> values() {
+    public Set<V> values() {
         Set<V> result = newSet();
         for (K key : data.keySet()) {
             result.addAll(data.get(key));
@@ -270,9 +284,13 @@ public class Relation<K, V> implements Freezable {
         return result;
     }
 
-    public boolean removeAll(K key, Iterable<V> all) {
+    public Set<V> removeAll(K... keys) {
+        return data.remove(Arrays.asList(keys));
+    }
+
+    public boolean removeAll(K key, Iterable<V> toBeRemoved) {
         boolean result = false;
-        for (V value : all) {
+        for (V value : toBeRemoved) {
             result |= remove(key, value);
         }
         return result;

@@ -470,7 +470,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         exemplars = exemplars.cloneAsThawed();
         // question: should we add auxiliary exemplars?
-        if (exemplars.containsSome(CORE_LATIN)) {
+        if (exemplars.containsSome(CORE_LATIN) || exemplars.size() == 0) {
             exemplars.addAll(CORE_LATIN);
         }
         if (exemplars.containsSome(HANGUL)) {
@@ -487,7 +487,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 }
             }
         }
-
+        
         UnicodeSet uppercased = new UnicodeSet();
         for (String item : exemplars) {
             uppercased.add(UCharacter.toUpperCase(locale, item));
