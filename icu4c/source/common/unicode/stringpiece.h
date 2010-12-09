@@ -203,7 +203,7 @@ class U_COMMON_API StringPiece : public UMemory {
  * @param x The first StringPiece to compare.
  * @param y The second StringPiece to compare.
  * @return TRUE if the string data is equal
- * @internal
+ * @draft ICU 4.8
  */
 U_EXPORT UBool U_EXPORT2 
 operator==(const StringPiece& x, const StringPiece& y);
@@ -213,7 +213,7 @@ operator==(const StringPiece& x, const StringPiece& y);
  * @param x The first StringPiece to compare.
  * @param y The second StringPiece to compare.
  * @return TRUE if the string data is not equal
- * @internal
+ * @draft ICU 4.8
  */
 inline UBool operator!=(const StringPiece& x, const StringPiece& y) {
   return !(x == y);
