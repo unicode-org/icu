@@ -28,9 +28,9 @@ import com.ibm.icu.text.AlphabeticIndex;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
 import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.text.AlphabeticIndex.Record;
+import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer2;
-import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
@@ -46,7 +46,7 @@ public class AlphabeticIndexTest extends TestFmwk {
      */
     private static final String ARROW = "\u2192";
     private static final boolean DEBUG = ICUDebug.enabled("alphabeticindex");
-    
+
     public static Set<String> KEY_LOCALES = new LinkedHashSet(Arrays.asList(
             "en", "es", "de", "fr", "ja", "it", "tr", "pt", "zh", "nl", 
             "pl", "ar", "ru", "zh_Hant", "ko", "th", "sv", "fi", "da", 
@@ -198,6 +198,24 @@ public class AlphabeticIndexTest extends TestFmwk {
 
         for (String[] pair : localeAndIndexCharactersLists) {
             checkBuckets(pair[0], SimpleTests, additionalLocale, "E", "edgar", "Effron", "Effron");
+        }
+    }
+
+    public void TestEmpty() {
+        // just verify that it doesn't blow up.
+        Set<ULocale> locales = new LinkedHashSet<ULocale>();
+        locales.add(ULocale.ROOT);
+        locales.addAll(Arrays.asList(ULocale.getAvailableLocales()));
+        for (ULocale locale : locales) {
+            try {
+                AlphabeticIndex<String> alphabeticIndex = new AlphabeticIndex(locale);
+                alphabeticIndex.addRecord("hi", "HI");
+                for (Bucket<String> bucket : alphabeticIndex) {
+                    LabelType labelType = bucket.getLabelType();
+                }
+            } catch (Exception e) {
+                errln("Exception when creating AlphabeticIndex for:\t" + locale.toLanguageTag());
+            }
         }
     }
 
