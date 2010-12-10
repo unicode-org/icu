@@ -70,10 +70,6 @@ public class CollationMiscTest extends TestFmwk {
 
     public void TestComposeDecompose()
     {
-        if(skipIfBeforeICU(4, 5, 2)) {
-            return;
-        }
-        
         Tester t[] = new Tester[0x30000];
         t[0] = new Tester();
         logln("Testing UCA extensively\n");
