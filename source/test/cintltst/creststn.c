@@ -250,7 +250,7 @@ static void checkStatus(int32_t line, UErrorCode expected, UErrorCode status) {
 }
 
 static void TestErrorCodes(void) {
-  static const UVersionInfo icu47 = { 4, 7, 0, 0 };
+  static const UVersionInfo icu47 = { 4, 7, 2, 0 };
   UErrorCode status = U_USING_DEFAULT_WARNING;
 
   UResourceBundle *r = NULL, *r2 = NULL;
