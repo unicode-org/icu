@@ -2845,6 +2845,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/locale/LocaleSyntaxException.java s
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/ParseStatus.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/StringTokenIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/locale/UnicodeLocaleExtension.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/lang/CharSequences.java -text svneol=unset#text/plain
 icu4j/main/classes/core/src/com/ibm/icu/lang/UCharacter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/lang/UCharacterCategory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/lang/UCharacterDirection.java svneol=native#text/plain%3Bcharset%3Dutf-8
