@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.UCaseProps;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -108,5 +109,25 @@ class LowercaseTransliterator extends Transliterator{
             }
         }
         offsets.start = offsets.limit;
+    }
+    
+    // NOTE: normally this would be static, but because the results vary by locale....
+    SourceTargetUtility sourceTargetUtility = null;
+    
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        synchronized (this) {
+            if (sourceTargetUtility == null) {
+                sourceTargetUtility = new SourceTargetUtility(new Transform<String,String>() {
+                    public String transform(String source) {
+                        return UCharacter.toLowerCase(locale, source);                    
+                    }
+                });
+            }
+        }
+        sourceTargetUtility.addSourceTargetSet(this, inputFilter, sourceSet, targetSet);
     }
 }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -548,8 +548,11 @@ class TransliterationRule {
      * Union the set of all characters that may be modified by this rule
      * into the given set.
      */
-    void addSourceSetTo(UnicodeSet toUnionTo) {
+    void addSourceSetTo(UnicodeSet toUnionTo, UnicodeSet filter) {
         int limit = anteContextLength + keyLength;
+        if (filter != null && !matches(filter)) {
+            return;
+        }
         for (int i=anteContextLength; i<limit; ) {
             int ch = UTF16.charAt(pattern, i);
             i += UTF16.getCharCount(ch);
@@ -563,10 +566,54 @@ class TransliterationRule {
     }
 
     /**
+     * Sees if the source of the rule can match the filter. There is a known issue with filters containing multiple characters.
+     * @param filter must not be null (check in caller)
+     * @param pattern2
+     * @param anteContextLength2
+     * @param limit
+     * @return
+     */
+    // Problem: the rule is [{ab}]c > x
+    // The filter is [a{bc}].
+    // If the input is abc, then the rule will work.
+    // However, following code applying the filter won't catch that case.
+    private boolean matches(UnicodeSet filter) {
+        int limit = anteContextLength + keyLength;
+        // We need to walk through the pattern.
+        // Iff some of the characters at ALL of the the positions are matched by the filter, then we add temp to toUnionTo
+        for (int i=anteContextLength; i<limit; ) {
+            int ch = UTF16.charAt(pattern, i);
+            i += UTF16.getCharCount(ch);
+            UnicodeMatcher matcher = data.lookupMatcher(ch);
+            if (matcher == null) {
+                if (!filter.contains(ch)) {
+                    return false;
+                }
+            } else {
+                try {
+                    if (!filter.containsSome((UnicodeSet) matcher)) {
+                        return false;
+                    }
+                } catch (ClassCastException e) {
+                    UnicodeSet temp = new UnicodeSet();
+                    matcher.addMatchSetTo(temp);
+                    if (!filter.containsSome(temp)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * Union the set of all characters that may be emitted by this rule
      * into the given set.
      */
-    void addTargetSetTo(UnicodeSet toUnionTo) {
+    void addTargetSetTo(UnicodeSet toUnionTo, UnicodeSet filter) {
+        if (filter != null && !matches(filter)) {
+            return;
+        }
         output.addReplacementSetTo(toUnionTo);
     }
 }

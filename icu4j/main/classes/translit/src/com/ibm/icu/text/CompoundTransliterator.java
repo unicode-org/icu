@@ -305,26 +305,20 @@ class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Return the set of all characters that may be modified by this
-     * Transliterator, ignoring the effect of our filter.
+     * @internal
      */
-    protected UnicodeSet handleGetSourceSet() {
-        UnicodeSet set = new UnicodeSet();
+    @Override
+    public void addSourceTargetSet(UnicodeSet filter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        UnicodeSet myFilter = new UnicodeSet(getFilterAsUnicodeSet(filter));
+        UnicodeSet tempTargetSet = new UnicodeSet();
         for (int i=0; i<trans.length; ++i) {
-            set.addAll(trans[i].getSourceSet());
-            // Take the example of Hiragana-Latin.  This is really
-            // Hiragana-Katakana; Katakana-Latin.  The source set of
-            // these two is roughly [:Hiragana:] and [:Katakana:].
-            // But the source set for the entire transliterator is
-            // actually [:Hiragana:] ONLY -- that is, the first
-            // non-empty source set.
-
-            // This is a heuristic, and not 100% reliable.
-            if (!set.isEmpty()) {
-                break;
-            }
+            // each time we produce targets, those can be used by subsequent items, despite the filter.
+            // so we get just those items, and add them to the filter each time.
+            tempTargetSet.clear();
+            trans[i].addSourceTargetSet(myFilter, sourceSet, tempTargetSet);
+            targetSet.addAll(tempTargetSet);
+            myFilter.addAll(tempTargetSet);
         }
-        return set;
     }
 
     /**

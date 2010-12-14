@@ -262,6 +262,7 @@ icu4j/main/classes/translit/.externalToolBuilders/copy-data-translit.launch -tex
 icu4j/main/classes/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/classes/translit/src/com/ibm/icu/text/SourceTargetUtility.java -text
 icu4j/main/classes/translit/translit-build.launch -text
 icu4j/main/shared/.project -text
 icu4j/main/shared/.settings/org.eclipse.core.resources.prefs -text

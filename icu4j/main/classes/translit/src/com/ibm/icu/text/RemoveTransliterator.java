@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -48,5 +48,16 @@ class RemoveTransliterator extends Transliterator {
         int len = index.limit - index.start;
         index.contextLimit -= len;
         index.limit -= len;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(boolean, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        // intersect myFilter with the input filter
+        UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
+        sourceSet.addAll(myFilter);
+        // do nothing with the target
     }
 }
