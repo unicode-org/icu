@@ -70,4 +70,25 @@ class UnicodeNameTransliterator extends Transliterator {
         offsets.limit = limit;
         offsets.start = cursor;
     }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
+        if (myFilter.size() > 0) {
+            sourceSet.addAll(myFilter);
+            targetSet.addAll('0', '9')
+            .addAll('A', 'Z')
+            .add('-')
+            .add(' ')
+            .addAll(OPEN_DELIM)
+            .add(CLOSE_DELIM)
+            .addAll('a', 'z') // for controls
+            .add('<').add('>') // for controls
+            .add('(').add(')') // for controls
+            ;
+        }
+    }
 }

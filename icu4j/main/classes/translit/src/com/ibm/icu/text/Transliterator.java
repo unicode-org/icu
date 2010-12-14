@@ -26,226 +26,200 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * <code>Transliterator</code> is an abstract class that
- * transliterates text from one format to another.  The most common
- * kind of transliterator is a script, or alphabet, transliterator.
- * For example, a Russian to Latin transliterator changes Russian text
- * written in Cyrillic characters to phonetically equivalent Latin
- * characters.  It does not <em>translate</em> Russian to English!
- * Transliteration, unlike translation, operates on characters, without
- * reference to the meanings of words and sentences.
- *
- * <p>Although script conversion is its most common use, a
- * transliterator can actually perform a more general class of tasks.
- * In fact, <code>Transliterator</code> defines a very general API
- * which specifies only that a segment of the input text is replaced
- * by new text.  The particulars of this conversion are determined
- * entirely by subclasses of <code>Transliterator</code>.
- *
- * <p><b>Transliterators are stateless</b>
- *
- * <p><code>Transliterator</code> objects are <em>stateless</em>; they
- * retain no information between calls to
- * <code>transliterate()</code>.  As a result, threads may share
- * transliterators without synchronizing them.  This might seem to
- * limit the complexity of the transliteration operation.  In
- * practice, subclasses perform complex transliterations by delaying
- * the replacement of text until it is known that no other
- * replacements are possible.  In other words, although the
- * <code>Transliterator</code> objects are stateless, the source text
- * itself embodies all the needed information, and delayed operation
- * allows arbitrary complexity.
- *
- * <p><b>Batch transliteration</b>
- *
- * <p>The simplest way to perform transliteration is all at once, on a
- * string of existing text.  This is referred to as <em>batch</em>
- * transliteration.  For example, given a string <code>input</code>
- * and a transliterator <code>t</code>, the call
- *
+ * <code>Transliterator</code> is an abstract class that transliterates text from one format to another. The most common
+ * kind of transliterator is a script, or alphabet, transliterator. For example, a Russian to Latin transliterator
+ * changes Russian text written in Cyrillic characters to phonetically equivalent Latin characters. It does not
+ * <em>translate</em> Russian to English! Transliteration, unlike translation, operates on characters, without reference
+ * to the meanings of words and sentences.
+ * 
+ * <p>
+ * Although script conversion is its most common use, a transliterator can actually perform a more general class of
+ * tasks. In fact, <code>Transliterator</code> defines a very general API which specifies only that a segment of the
+ * input text is replaced by new text. The particulars of this conversion are determined entirely by subclasses of
+ * <code>Transliterator</code>.
+ * 
+ * <p>
+ * <b>Transliterators are stateless</b>
+ * 
+ * <p>
+ * <code>Transliterator</code> objects are <em>stateless</em>; they retain no information between calls to
+ * <code>transliterate()</code>. As a result, threads may share transliterators without synchronizing them. This might
+ * seem to limit the complexity of the transliteration operation. In practice, subclasses perform complex
+ * transliterations by delaying the replacement of text until it is known that no other replacements are possible. In
+ * other words, although the <code>Transliterator</code> objects are stateless, the source text itself embodies all the
+ * needed information, and delayed operation allows arbitrary complexity.
+ * 
+ * <p>
+ * <b>Batch transliteration</b>
+ * 
+ * <p>
+ * The simplest way to perform transliteration is all at once, on a string of existing text. This is referred to as
+ * <em>batch</em> transliteration. For example, given a string <code>input</code> and a transliterator <code>t</code>,
+ * the call
+ * 
  * <blockquote><code>String result = t.transliterate(input);
  * </code></blockquote>
- *
- * will transliterate it and return the result.  Other methods allow
- * the client to specify a substring to be transliterated and to use
- * {@link Replaceable} objects instead of strings, in order to
- * preserve out-of-band information (such as text styles).
- *
- * <p><b>Keyboard transliteration</b>
- *
- * <p>Somewhat more involved is <em>keyboard</em>, or incremental
- * transliteration.  This is the transliteration of text that is
- * arriving from some source (typically the user's keyboard) one
- * character at a time, or in some other piecemeal fashion.
- *
- * <p>In keyboard transliteration, a <code>Replaceable</code> buffer
- * stores the text.  As text is inserted, as much as possible is
- * transliterated on the fly.  This means a GUI that displays the
- * contents of the buffer may show text being modified as each new
- * character arrives.
- *
- * <p>Consider the simple <code>RuleBasedTransliterator</code>:
- *
+ * 
+ * will transliterate it and return the result. Other methods allow the client to specify a substring to be
+ * transliterated and to use {@link Replaceable} objects instead of strings, in order to preserve out-of-band
+ * information (such as text styles).
+ * 
+ * <p>
+ * <b>Keyboard transliteration</b>
+ * 
+ * <p>
+ * Somewhat more involved is <em>keyboard</em>, or incremental transliteration. This is the transliteration of text that
+ * is arriving from some source (typically the user's keyboard) one character at a time, or in some other piecemeal
+ * fashion.
+ * 
+ * <p>
+ * In keyboard transliteration, a <code>Replaceable</code> buffer stores the text. As text is inserted, as much as
+ * possible is transliterated on the fly. This means a GUI that displays the contents of the buffer may show text being
+ * modified as each new character arrives.
+ * 
+ * <p>
+ * Consider the simple <code>RuleBasedTransliterator</code>:
+ * 
  * <blockquote><code>
  * th&gt;{theta}<br>
  * t&gt;{tau}
  * </code></blockquote>
- *
- * When the user types 't', nothing will happen, since the
- * transliterator is waiting to see if the next character is 'h'.  To
- * remedy this, we introduce the notion of a cursor, marked by a '|'
- * in the output string:
- *
+ * 
+ * When the user types 't', nothing will happen, since the transliterator is waiting to see if the next character is
+ * 'h'. To remedy this, we introduce the notion of a cursor, marked by a '|' in the output string:
+ * 
  * <blockquote><code>
  * t&gt;|{tau}<br>
  * {tau}h&gt;{theta}
  * </code></blockquote>
- *
- * Now when the user types 't', tau appears, and if the next character
- * is 'h', the tau changes to a theta.  This is accomplished by
- * maintaining a cursor position (independent of the insertion point,
- * and invisible in the GUI) across calls to
- * <code>transliterate()</code>.  Typically, the cursor will
- * be coincident with the insertion point, but in a case like the one
- * above, it will precede the insertion point.
- *
- * <p>Keyboard transliteration methods maintain a set of three indices
- * that are updated with each call to
- * <code>transliterate()</code>, including the cursor, start,
- * and limit.  These indices are changed by the method, and they are
- * passed in and out via a Position object. The <code>start</code> index
- * marks the beginning of the substring that the transliterator will
- * look at.  It is advanced as text becomes committed (but it is not
- * the committed index; that's the <code>cursor</code>).  The
- * <code>cursor</code> index, described above, marks the point at
- * which the transliterator last stopped, either because it reached
- * the end, or because it required more characters to disambiguate
- * between possible inputs.  The <code>cursor</code> can also be
- * explicitly set by rules in a <code>RuleBasedTransliterator</code>.
- * Any characters before the <code>cursor</code> index are frozen;
- * future keyboard transliteration calls within this input sequence
- * will not change them.  New text is inserted at the
- * <code>limit</code> index, which marks the end of the substring that
- * the transliterator looks at.
- *
- * <p>Because keyboard transliteration assumes that more characters
- * are to arrive, it is conservative in its operation.  It only
- * transliterates when it can do so unambiguously.  Otherwise it waits
- * for more characters to arrive.  When the client code knows that no
- * more characters are forthcoming, perhaps because the user has
- * performed some input termination operation, then it should call
- * <code>finishTransliteration()</code> to complete any
- * pending transliterations.
- *
- * <p><b>Inverses</b>
- *
- * <p>Pairs of transliterators may be inverses of one another.  For
- * example, if transliterator <b>A</b> transliterates characters by
- * incrementing their Unicode value (so "abc" -> "def"), and
- * transliterator <b>B</b> decrements character values, then <b>A</b>
- * is an inverse of <b>B</b> and vice versa.  If we compose <b>A</b>
- * with <b>B</b> in a compound transliterator, the result is the
- * indentity transliterator, that is, a transliterator that does not
- * change its input text.
- *
- * The <code>Transliterator</code> method <code>getInverse()</code>
- * returns a transliterator's inverse, if one exists, or
- * <code>null</code> otherwise.  However, the result of
- * <code>getInverse()</code> usually will <em>not</em> be a true
- * mathematical inverse.  This is because true inverse transliterators
- * are difficult to formulate.  For example, consider two
- * transliterators: <b>AB</b>, which transliterates the character 'A'
- * to 'B', and <b>BA</b>, which transliterates 'B' to 'A'.  It might
- * seem that these are exact inverses, since
- *
+ * 
+ * Now when the user types 't', tau appears, and if the next character is 'h', the tau changes to a theta. This is
+ * accomplished by maintaining a cursor position (independent of the insertion point, and invisible in the GUI) across
+ * calls to <code>transliterate()</code>. Typically, the cursor will be coincident with the insertion point, but in a
+ * case like the one above, it will precede the insertion point.
+ * 
+ * <p>
+ * Keyboard transliteration methods maintain a set of three indices that are updated with each call to
+ * <code>transliterate()</code>, including the cursor, start, and limit. These indices are changed by the method, and
+ * they are passed in and out via a Position object. The <code>start</code> index marks the beginning of the substring
+ * that the transliterator will look at. It is advanced as text becomes committed (but it is not the committed index;
+ * that's the <code>cursor</code>). The <code>cursor</code> index, described above, marks the point at which the
+ * transliterator last stopped, either because it reached the end, or because it required more characters to
+ * disambiguate between possible inputs. The <code>cursor</code> can also be explicitly set by rules in a
+ * <code>RuleBasedTransliterator</code>. Any characters before the <code>cursor</code> index are frozen; future keyboard
+ * transliteration calls within this input sequence will not change them. New text is inserted at the <code>limit</code>
+ * index, which marks the end of the substring that the transliterator looks at.
+ * 
+ * <p>
+ * Because keyboard transliteration assumes that more characters are to arrive, it is conservative in its operation. It
+ * only transliterates when it can do so unambiguously. Otherwise it waits for more characters to arrive. When the
+ * client code knows that no more characters are forthcoming, perhaps because the user has performed some input
+ * termination operation, then it should call <code>finishTransliteration()</code> to complete any pending
+ * transliterations.
+ * 
+ * <p>
+ * <b>Inverses</b>
+ * 
+ * <p>
+ * Pairs of transliterators may be inverses of one another. For example, if transliterator <b>A</b> transliterates
+ * characters by incrementing their Unicode value (so "abc" -> "def"), and transliterator <b>B</b> decrements character
+ * values, then <b>A</b> is an inverse of <b>B</b> and vice versa. If we compose <b>A</b> with <b>B</b> in a compound
+ * transliterator, the result is the indentity transliterator, that is, a transliterator that does not change its input
+ * text.
+ * 
+ * The <code>Transliterator</code> method <code>getInverse()</code> returns a transliterator's inverse, if one exists,
+ * or <code>null</code> otherwise. However, the result of <code>getInverse()</code> usually will <em>not</em> be a true
+ * mathematical inverse. This is because true inverse transliterators are difficult to formulate. For example, consider
+ * two transliterators: <b>AB</b>, which transliterates the character 'A' to 'B', and <b>BA</b>, which transliterates
+ * 'B' to 'A'. It might seem that these are exact inverses, since
+ * 
  * <blockquote>"A" x <b>AB</b> -> "B"<br>
  * "B" x <b>BA</b> -> "A"</blockquote>
- *
- * where 'x' represents transliteration.  However,
- *
+ * 
+ * where 'x' represents transliteration. However,
+ * 
  * <blockquote>"ABCD" x <b>AB</b> -> "BBCD"<br>
  * "BBCD" x <b>BA</b> -> "AACD"</blockquote>
- *
- * so <b>AB</b> composed with <b>BA</b> is not the
- * identity. Nonetheless, <b>BA</b> may be usefully considered to be
- * <b>AB</b>'s inverse, and it is on this basis that
- * <b>AB</b><code>.getInverse()</code> could legitimately return
+ * 
+ * so <b>AB</b> composed with <b>BA</b> is not the identity. Nonetheless, <b>BA</b> may be usefully considered to be
+ * <b>AB</b>'s inverse, and it is on this basis that <b>AB</b><code>.getInverse()</code> could legitimately return
  * <b>BA</b>.
- *
- * <p><b>IDs and display names</b>
- *
- * <p>A transliterator is designated by a short identifier string or
- * <em>ID</em>.  IDs follow the format <em>source-destination</em>,
- * where <em>source</em> describes the entity being replaced, and
- * <em>destination</em> describes the entity replacing
- * <em>source</em>.  The entities may be the names of scripts,
- * particular sequences of characters, or whatever else it is that the
- * transliterator converts to or from.  For example, a transliterator
- * from Russian to Latin might be named "Russian-Latin".  A
- * transliterator from keyboard escape sequences to Latin-1 characters
- * might be named "KeyboardEscape-Latin1".  By convention, system
- * entity names are in English, with the initial letters of words
- * capitalized; user entity names may follow any format so long as
- * they do not contain dashes.
- *
- * <p>In addition to programmatic IDs, transliterator objects have
- * display names for presentation in user interfaces, returned by
- * {@link #getDisplayName}.
- *
- * <p><b>Factory methods and registration</b>
- *
- * <p>In general, client code should use the factory method
- * <code>getInstance()</code> to obtain an instance of a
- * transliterator given its ID.  Valid IDs may be enumerated using
- * <code>getAvailableIDs()</code>.  Since transliterators are
- * stateless, multiple calls to <code>getInstance()</code> with the
- * same ID will return the same object.
- *
- * <p>In addition to the system transliterators registered at startup,
- * user transliterators may be registered by calling
- * <code>registerInstance()</code> at run time.  To register a
- * transliterator subclass without instantiating it (until it is
- * needed), users may call <code>registerClass()</code>.
- *
- * <p><b>Composed transliterators</b>
- *
- * <p>In addition to built-in system transliterators like
- * "Latin-Greek", there are also built-in <em>composed</em>
- * transliterators.  These are implemented by composing two or more
- * component transliterators.  For example, if we have scripts "A",
- * "B", "C", and "D", and we want to transliterate between all pairs
- * of them, then we need to write 12 transliterators: "A-B", "A-C",
- * "A-D", "B-A",..., "D-A", "D-B", "D-C".  If it is possible to
- * convert all scripts to an intermediate script "M", then instead of
- * writing 12 rule sets, we only need to write 8: "A~M", "B~M", "C~M",
- * "D~M", "M~A", "M~B", "M~C", "M~D".  (This might not seem like a big
- * win, but it's really 2<em>n</em> vs. <em>n</em><sup>2</sup> -
- * <em>n</em>, so as <em>n</em> gets larger the gain becomes
- * significant.  With 9 scripts, it's 18 vs. 72 rule sets, a big
- * difference.)  Note the use of "~" rather than "-" for the script
- * separator here; this indicates that the given transliterator is
- * intended to be composed with others, rather than be used as is.
- *
- * <p>Composed transliterators can be instantiated as usual.  For
- * example, the system transliterator "Devanagari-Gujarati" is a
- * composed transliterator built internally as
- * "Devanagari~InterIndic;InterIndic~Gujarati".  When this
- * transliterator is instantiated, it appears externally to be a
- * standard transliterator (e.g., getID() returns
+ * 
+ * <p>
+ * <b>Filtering</b>
+ * <p>Each transliterator has a filter, which restricts changes to those characters selected by the filter. The
+ * filter affects just the characters that are changed -- the characters outside of the filter are still part of the
+ * context for the filter. For example, in the following even though 'x' is filtered out, and doesn't convert to y, it does affect the conversion of 'a'.
+ * 
+ * <pre>
+ * String rules = &quot;x &gt; y; x{a} &gt; b; &quot;;
+ * Transliterator tempTrans = Transliterator.createFromRules(&quot;temp&quot;, rules, Transliterator.FORWARD);
+ * tempTrans.setFilter(new UnicodeSet(&quot;[a]&quot;));
+ * String tempResult = tempTrans.transform(&quot;xa&quot;);
+ * // results in &quot;xb&quot;
+ *</pre>
+ * <p>
+ * <b>IDs and display names</b>
+ * 
+ * <p>
+ * A transliterator is designated by a short identifier string or <em>ID</em>. IDs follow the format
+ * <em>source-destination</em>, where <em>source</em> describes the entity being replaced, and <em>destination</em>
+ * describes the entity replacing <em>source</em>. The entities may be the names of scripts, particular sequences of
+ * characters, or whatever else it is that the transliterator converts to or from. For example, a transliterator from
+ * Russian to Latin might be named "Russian-Latin". A transliterator from keyboard escape sequences to Latin-1
+ * characters might be named "KeyboardEscape-Latin1". By convention, system entity names are in English, with the
+ * initial letters of words capitalized; user entity names may follow any format so long as they do not contain dashes.
+ * 
+ * <p>
+ * In addition to programmatic IDs, transliterator objects have display names for presentation in user interfaces,
+ * returned by {@link #getDisplayName}.
+ * 
+ * <p>
+ * <b>Factory methods and registration</b>
+ * 
+ * <p>
+ * In general, client code should use the factory method <code>getInstance()</code> to obtain an instance of a
+ * transliterator given its ID. Valid IDs may be enumerated using <code>getAvailableIDs()</code>. Since transliterators
+ * are stateless, multiple calls to <code>getInstance()</code> with the same ID will return the same object.
+ * 
+ * <p>
+ * In addition to the system transliterators registered at startup, user transliterators may be registered by calling
+ * <code>registerInstance()</code> at run time. To register a transliterator subclass without instantiating it (until it
+ * is needed), users may call <code>registerClass()</code>.
+ * 
+ * <p>
+ * <b>Composed transliterators</b>
+ * 
+ * <p>
+ * In addition to built-in system transliterators like "Latin-Greek", there are also built-in <em>composed</em>
+ * transliterators. These are implemented by composing two or more component transliterators. For example, if we have
+ * scripts "A", "B", "C", and "D", and we want to transliterate between all pairs of them, then we need to write 12
+ * transliterators: "A-B", "A-C", "A-D", "B-A",..., "D-A", "D-B", "D-C". If it is possible to convert all scripts to an
+ * intermediate script "M", then instead of writing 12 rule sets, we only need to write 8: "A~M", "B~M", "C~M", "D~M",
+ * "M~A", "M~B", "M~C", "M~D". (This might not seem like a big win, but it's really 2<em>n</em> vs. <em>n</em>
+ * <sup>2</sup> - <em>n</em>, so as <em>n</em> gets larger the gain becomes significant. With 9 scripts, it's 18 vs. 72
+ * rule sets, a big difference.) Note the use of "~" rather than "-" for the script separator here; this indicates that
+ * the given transliterator is intended to be composed with others, rather than be used as is.
+ * 
+ * <p>
+ * Composed transliterators can be instantiated as usual. For example, the system transliterator "Devanagari-Gujarati"
+ * is a composed transliterator built internally as "Devanagari~InterIndic;InterIndic~Gujarati". When this
+ * transliterator is instantiated, it appears externally to be a standard transliterator (e.g., getID() returns
  * "Devanagari-Gujarati").
- *
- * <p><b>Subclassing</b>
- *
- * <p>Subclasses must implement the abstract method
- * <code>handleTransliterate()</code>.  <p>Subclasses should override
- * the <code>transliterate()</code> method taking a
- * <code>Replaceable</code> and the <code>transliterate()</code>
- * method taking a <code>String</code> and <code>StringBuffer</code>
- * if the performance of these methods can be improved over the
- * performance obtained by the default implementations in this class.
- *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
- *
+ * 
+ * <p>
+ * <b>Subclassing</b>
+ * 
+ * <p>
+ * Subclasses must implement the abstract method <code>handleTransliterate()</code>.
+ * <p>
+ * Subclasses should override the <code>transliterate()</code> method taking a <code>Replaceable</code> and the
+ * <code>transliterate()</code> method taking a <code>String</code> and <code>StringBuffer</code> if the performance of
+ * these methods can be improved over the performance obtained by the default implementations in this class.
+ * 
+ * <p>
+ * Copyright &copy; IBM Corporation 1999. All rights reserved.
+ * 
  * @author Alan Liu
  * @stable ICU 2.0
  */
@@ -1418,7 +1392,7 @@ public abstract class Transliterator implements StringTransform  {
             t = new NullTransliterator();
         }
         else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
-            t = new RuleBasedTransliterator(ID, parser.dataVector.get(0), null);
+            t = new RuleBasedTransliterator(ID, parser.dataVector.get(0), parser.compoundFilter);
         }
         else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
             // idBlock, no data -- this is an alias.  The ID has
@@ -1536,6 +1510,8 @@ public abstract class Transliterator implements StringTransform  {
         return result;
     }
 
+    static final UnicodeSet ALL_CODEPOINTS = new UnicodeSet(0,0x10FFFF).freeze();
+    
     /**
      * Returns the set of all characters that may be modified in the
      * input text by this Transliterator.  This incorporates this
@@ -1550,20 +1526,9 @@ public abstract class Transliterator implements StringTransform  {
      * @stable ICU 2.2
      */
     public final UnicodeSet getSourceSet() {
-        UnicodeSet set = handleGetSourceSet();
-        if (filter != null) {
-            UnicodeSet filterSet;
-            // Most, but not all filters will be UnicodeSets.  Optimize for
-            // the high-runner case.
-            try {
-                filterSet = (UnicodeSet) filter;
-            } catch (ClassCastException e) {
-                filterSet = new UnicodeSet();
-                filter.addMatchSetTo(filterSet);
-            }
-            set.retainAll(filterSet);
-        }
-        return set;
+        UnicodeSet result = new UnicodeSet();
+        addSourceTargetSet(getFilterAsUnicodeSet(ALL_CODEPOINTS), result, new UnicodeSet());
+        return result;
     }
 
     /**
@@ -1595,7 +1560,78 @@ public abstract class Transliterator implements StringTransform  {
      * @stable ICU 2.2
      */
     public UnicodeSet getTargetSet() {
-        return new UnicodeSet();
+        UnicodeSet result = new UnicodeSet();
+        addSourceTargetSet(getFilterAsUnicodeSet(ALL_CODEPOINTS), new UnicodeSet(), result);
+        return result;
+    }
+
+    /**
+     * Returns the set of all characters that may be generated as
+     * replacement text by this transliterator, filtered by BOTH the input filter, and the current getFilter().
+     * <p>SHOULD BE OVERRIDEN BY SUBCLASSES.
+     * It is probably an error for any transliterator to NOT override this, but we can't force them to
+     * for backwards compatibility.
+     * <p>Other methods vector through this.
+     * <p>When gathering the information on source and target, the compound transliterator makes things complicated.
+     * For example, suppose we have:
+     * <pre>
+     * Global FILTER = [ax]
+     * a > b;
+     * :: NULL;
+     * b > c;
+     * x > d;
+     * </pre>
+     * While the filter just allows a and x, b is an intermediate result, which could produce c. So the source and target sets
+     * cannot be gathered independently. What we have to do is filter the sources for the first transliterator according to
+     * the global filter, intersect that transliterator's filter. Based on that we get the target.
+     * The next transliterator gets as a global filter (global + last target). And so on.
+     * <p>There is another complication:
+     * <pre>
+     * Global FILTER = [ax]
+     * a > |b;
+     * b > c;
+     * </pre>
+     * Even though b would be filtered from the input, whenever we have a backup, it could be part of the input. So ideally we will
+     * change the global filter as we go.
+     * @param targetSet TODO
+     * @see #getTargetSet
+     * @internal
+     */
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
+        UnicodeSet temp = new UnicodeSet(handleGetSourceSet()).retainAll(myFilter);
+        // use old method, if we don't have anything better
+        sourceSet.addAll(temp);
+        // clumsy guess with target
+        for (String s : temp) {
+            String t = transliterate(s);
+            if (!s.equals(t)) {
+                targetSet.addAll(t);
+            }
+        }
+    }
+
+    /**
+     * Returns the intersectionof this instance's filter intersected with an external filter. 
+     * The externalFilter must be frozen (it is frozen if not).
+     * The result may be frozen, so don't attempt to modify.
+     * @internal
+     */
+   // TODO change to getMergedFilter
+    public UnicodeSet getFilterAsUnicodeSet(UnicodeSet externalFilter) {
+        if (filter == null) {
+            return externalFilter;
+        }
+        UnicodeSet filterSet = new UnicodeSet(externalFilter);
+        // Most, but not all filters will be UnicodeSets.  Optimize for
+        // the high-runner case.
+        UnicodeSet temp;
+        try {
+            temp = (UnicodeSet) filter;
+        } catch (ClassCastException e) {
+            filter.addMatchSetTo(temp = new UnicodeSet());
+        }
+        return filterSet.retainAll(temp).freeze();
     }
 
     /**

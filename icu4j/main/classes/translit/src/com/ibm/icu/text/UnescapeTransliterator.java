@@ -8,6 +8,7 @@
 **********************************************************************
 */
 package com.ibm.icu.text;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 
 /**
@@ -247,5 +248,39 @@ class UnescapeTransliterator extends Transliterator {
         pos.contextLimit += limit - pos.limit;
         pos.limit = limit;
         pos.start = start;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        // Each form consists of a prefix, suffix,
+        // * radix, minimum digit count, and maximum digit count.  These
+        // * values are stored as a five character header. ...
+        UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
+        UnicodeSet items = new UnicodeSet();
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; spec[i] != END;) {
+            // first 5 items are header
+            int end = i + spec[i] + spec[i+1] + 5;
+            int radix = spec[i+2];
+            for (int j = 0; j < radix; ++j) {
+                Utility.appendNumber(buffer, j, radix, 0);
+            }
+            // then add the characters
+            for (int j = i + 5; j < end; ++j) {
+                items.add(spec[j]);
+            }
+            // and go to next block
+            i = end;
+        }
+        items.addAll(buffer.toString());
+        items.retainAll(myFilter);
+
+        if (items.size() > 0) {
+            sourceSet.addAll(items);
+            targetSet.addAll(0,0x10FFFF); // assume we can produce any character
+        }
     }
 }

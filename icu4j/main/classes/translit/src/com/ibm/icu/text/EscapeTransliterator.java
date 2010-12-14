@@ -197,4 +197,23 @@ class EscapeTransliterator extends Transliterator {
         pos.limit = limit;
         pos.start = start;
     }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        sourceSet.addAll(getFilterAsUnicodeSet(inputFilter));
+        for (EscapeTransliterator it = this; it != null ; it = it.supplementalHandler) {
+            if (inputFilter.size() != 0) {
+                targetSet.addAll(it.prefix);
+                targetSet.addAll(it.suffix);
+                StringBuilder buffer = new StringBuilder();
+                for (int i = 0; i < it.radix; ++i) {
+                    Utility.appendNumber(buffer, i, it.radix, it.minDigits);
+                }
+                targetSet.addAll(buffer.toString()); // TODO drop once String is changed to CharSequence in UnicodeSet
+            }
+        }
+    }
 }

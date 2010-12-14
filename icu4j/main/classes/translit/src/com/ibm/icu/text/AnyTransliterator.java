@@ -404,5 +404,18 @@ class AnyTransliterator extends Transliterator {
         }
         return new AnyTransliterator(getID(), filter, target, targetScript, widthFix, cache);
     }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
+        // Assume that it can modify any character to any other character
+        sourceSet.addAll(myFilter);
+        if (myFilter.size() != 0) {
+            targetSet.addAll(0, 0x10FFFF);
+        }
+    }
 }
 

@@ -30,4 +30,12 @@ class NullTransliterator extends Transliterator {
                                        Position offsets, boolean incremental) {
         offsets.start = offsets.limit;
     }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(boolean, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        // do nothing
+    }
 }

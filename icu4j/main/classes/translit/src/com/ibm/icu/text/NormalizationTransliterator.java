@@ -1,14 +1,17 @@
 /*
-**********************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   06/08/01    aliu        Creation.
-**********************************************************************
-*/
+ **********************************************************************
+ *   Copyright (C) 2001-2010, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   06/08/01    aliu        Creation.
+ **********************************************************************
+ */
 
 package com.ibm.icu.text;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
 
@@ -76,7 +79,7 @@ final class NormalizationTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean isIncremental) {
+            Position offsets, boolean isIncremental) {
         // start and limit of the input range
         int start = offsets.start;
         int limit = offsets.limit;
@@ -128,5 +131,35 @@ final class NormalizationTransliterator extends Transliterator {
         offsets.start = start;
         offsets.contextLimit += limit - offsets.limit;
         offsets.limit = limit;
+    }
+
+    static final Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE = new HashMap<Normalizer2, SourceTargetUtility>();
+    
+    // TODO Get rid of this if Normalizer2 becomes a Transform
+    static class NormalizingTransform implements Transform<String,String> {
+        final Normalizer2 norm2;
+        public NormalizingTransform(Normalizer2 norm2) {
+            this.norm2 = norm2;
+        }
+        public String transform(String source) {
+            return norm2.normalize(source);
+        }   
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        SourceTargetUtility cache;
+        synchronized (SOURCE_CACHE) {
+            //String id = getID();
+            cache = SOURCE_CACHE.get(norm2);
+            if (cache == null) {
+                cache = new SourceTargetUtility(new NormalizingTransform(norm2), norm2);
+                SOURCE_CACHE.put(norm2, cache);
+            }
+        }
+        cache.addSourceTargetSet(this, inputFilter, sourceSet, targetSet);
     }
 }

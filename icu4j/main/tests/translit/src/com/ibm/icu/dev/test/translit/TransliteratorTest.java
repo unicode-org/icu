@@ -13,13 +13,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
+import com.ibm.icu.lang.CharSequences;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.StringTransform;
@@ -28,6 +33,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeFilter;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
 
@@ -480,6 +486,16 @@ public class TransliteratorTest extends TestFmwk {
      * Do some basic tests of filtering.
      */
     public void TestFiltering() {
+        
+        Transliterator tempTrans = Transliterator.createFromRules("temp", "x > y; x{a} > b; ", Transliterator.FORWARD);
+        tempTrans.setFilter(new UnicodeSet("[a]"));
+        String tempResult = tempTrans.transform("xa");
+        assertEquals("context should not be filtered ", "xb", tempResult);
+        
+        tempTrans = Transliterator.createFromRules("temp", "::[a]; x > y; x{a} > b; ", Transliterator.FORWARD);
+        tempResult = tempTrans.transform("xa");
+        assertEquals("context should not be filtered ", "xb", tempResult);
+        
         Transliterator hex = Transliterator.getInstance("Any-Hex");
         hex.setFilter(new UnicodeFilter() {
             public boolean contains(int c) {
@@ -2997,6 +3013,358 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
+    public void TestSourceTargetSet2() {
+        
+
+        Normalizer2 nfkd = Normalizer2.getInstance(null, "NFKC", Mode.DECOMPOSE);
+        Normalizer2 nfc = Normalizer2.getInstance(null, "NFC", Mode.COMPOSE);
+        Normalizer2 nfd = Normalizer2.getInstance(null, "NFC", Mode.DECOMPOSE);
+        //        UnicodeSet nfkdSource = new UnicodeSet();
+        //        UnicodeSet nfkdTarget = new UnicodeSet();
+        //        for (int i = 0; i <= 0x10FFFF; ++i) {
+        //            if (nfkd.isInert(i)) {
+        //                continue;
+        //            }
+        //            nfkdSource.add(i);
+        //            String t = nfkd.getDecomposition(i);
+        //            if (t != null) {
+        //                nfkdTarget.addAll(t);
+        //            } else {
+        //                nfkdTarget.add(i);
+        //            }
+        //        }
+        //        nfkdSource.freeze();
+        //        nfkdTarget.freeze();
+        //        logln("NFKD Source: " + nfkdSource.toPattern(false));
+        //        logln("NFKD Target: " + nfkdTarget.toPattern(false));
+
+        UnicodeMap<UnicodeSet> leadToTrail = new UnicodeMap();
+        UnicodeMap<UnicodeSet> leadToSources = new UnicodeMap();
+        UnicodeSet nonStarters = new UnicodeSet("[:^ccc=0:]").freeze();
+        CanonicalIterator can = new CanonicalIterator("");
+
+        UnicodeSet disorderedMarks = new UnicodeSet();
+
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            String s = nfd.getDecomposition(i);
+            if (s == null) {
+                continue;
+            }
+            
+            can.setSource(s);
+            for (String t = can.next(); t != null; t = can.next()) {
+                disorderedMarks.add(t);
+            }
+            
+            // if s has two code points, (or more), add the lead/trail information
+            int first = s.codePointAt(0);
+            int firstCount = Character.charCount(first);
+            if (s.length() == firstCount) continue;
+            String trailString = s.substring(firstCount);
+
+            // add all the trail characters
+            if (!nonStarters.containsSome(trailString)) {
+               continue; 
+            }
+            UnicodeSet trailSet = leadToTrail.get(first);
+            if (trailSet == null) {
+                leadToTrail.put(first, trailSet = new UnicodeSet());
+            }
+            trailSet.addAll(trailString); // add remaining trails
+
+            // add the sources
+            UnicodeSet sourcesSet = leadToSources.get(first);
+            if (sourcesSet == null) {
+                leadToSources.put(first, sourcesSet = new UnicodeSet());
+            }
+            sourcesSet.add(i);
+        }
+
+
+        for (Entry<String, UnicodeSet> x : leadToSources.entrySet()) {
+            String lead = x.getKey();
+            UnicodeSet sources = x.getValue();
+            UnicodeSet trailSet = leadToTrail.get(lead);
+            for (String source : sources) {
+                for (String trail : trailSet) {
+                    can.setSource(source + trail);
+                    for (String t = can.next(); t != null; t = can.next()) {
+                        if (t.endsWith(trail)) continue;
+                        disorderedMarks.add(t);
+                    }
+                }
+            }
+        }
+
+
+        for (String s : nonStarters) {
+            disorderedMarks.add("\u0345" + s);
+            disorderedMarks.add(s+"\u0323");
+            String xx = nfc.normalize("Ǭ" + s);
+            if (!xx.startsWith("Ǭ")) {
+                logln("??");
+            }
+        }
+
+//        for (int i = 0; i <= 0x10FFFF; ++i) {
+//            String s = nfkd.getDecomposition(i);
+//            if (s != null) {
+//                disorderedMarks.add(s);
+//                disorderedMarks.add(nfc.normalize(s));
+//                addDerivedStrings(nfc, disorderedMarks, s);
+//            }            
+//            s = nfd.getDecomposition(i);
+//            if (s != null) {
+//                disorderedMarks.add(s);
+//            }
+//            if (!nfc.isInert(i)) {
+//                if (i == 0x00C0) {
+//                    logln("À");
+//                }
+//                can.setSource(s+"\u0334");
+//                for (String t = can.next(); t != null; t = can.next()) {
+//                    addDerivedStrings(nfc, disorderedMarks, t);
+//                }
+//                can.setSource(s+"\u0345");
+//                for (String t = can.next(); t != null; t = can.next()) {
+//                    addDerivedStrings(nfc, disorderedMarks, t);
+//                }
+//                can.setSource(s+"\u0323");
+//                for (String t = can.next(); t != null; t = can.next()) {
+//                    addDerivedStrings(nfc, disorderedMarks, t);
+//                }
+//            }
+//        }
+        logln("Test cases: " + disorderedMarks.size());
+        disorderedMarks.addAll(0,0x10FFFF).freeze();
+        logln("isInert \u0104 " + nfc.isInert('\u0104'));
+
+        Object[][] rules = {
+                {":: [:sc=COMMON:] any-name;", null},
+
+                {":: [:Greek:] hex-any/C;", null},
+                {":: [:Greek:] any-hex/C;", null},
+
+                {":: [[:Mn:][:Me:]] remove;", null},
+                {":: [[:Mn:][:Me:]] null;", null},
+
+
+                {":: lower;", null},
+                {":: upper;", null},
+                {":: title;", null},
+                {":: CaseFold;", null},
+                
+                {":: NFD;", null},
+                {":: NFC;", null},
+                {":: NFKD;", null},
+                {":: NFKC;", null},
+                
+                {":: [[:Mn:][:Me:]] NFKD;", null},
+                {":: Latin-Greek;", null},
+                {":: [:Latin:] NFKD;", null},
+                {":: NFKD;", null},
+                {":: NFKD;\n" +
+                    ":: [[:Mn:][:Me:]] remove;\n" +
+                    ":: NFC;", null},
+        };
+        for (Object[] rulex : rules) {
+            String rule = (String) rulex[0];
+            Transliterator trans = Transliterator.createFromRules("temp", rule, Transliterator.FORWARD);
+            UnicodeSet actualSource = trans.getSourceSet();
+            UnicodeSet actualTarget = trans.getTargetSet();
+            UnicodeSet empiricalSource = new UnicodeSet();
+            UnicodeSet empiricalTarget = new UnicodeSet();
+            String ruleDisplay = rule.replace("\n", "\t\t");
+            UnicodeSet toTest = disorderedMarks;
+//            if (rulex[1] != null) {
+//                toTest = new UnicodeSet(disorderedMarks);
+//                toTest.addAll((UnicodeSet) rulex[1]);
+//            }
+
+            String test = nfd.normalize("Ą");
+            boolean DEBUG = true;
+            int count = 0; // for debugging
+            for (String s : toTest) {
+                if (s.equals(test)) {
+                    logln(test);
+                }
+                String t = trans.transform(s);
+                if (!s.equals(t)) {
+                    if (!isAtomic(s, t, trans)) {
+                        isAtomic(s, t, trans);
+                        continue;
+                    }
+
+                    // only keep the part that changed; so skip the front and end.
+                    //                    int start = findSharedStartLength(s,t);
+                    //                    int end = findSharedEndLength(s,t);
+                    //                    if (start != 0 || end != 0) {
+                    //                        s = s.substring(start, s.length() - end);
+                    //                        t = t.substring(start, t.length() - end);
+                    //                    }
+                    if (DEBUG) {
+                        if (!actualSource.containsAll(s)) {
+                            count++;
+                        }
+                        if (!actualTarget.containsAll(t)) {
+                            count++;
+                        }
+                    }
+                    addSourceTarget(s, empiricalSource, t, empiricalTarget);
+                }
+            }
+            assertEquals("getSource(" + ruleDisplay + ")", empiricalSource, actualSource, SetAssert.MISSING_OK);
+            assertEquals("getTarget(" + ruleDisplay + ")", empiricalTarget, actualTarget, SetAssert.MISSING_OK);
+        }
+    }
+
+    private boolean isAtomic(String s, String t, Transliterator trans) {
+        for (int i = 1; i < s.length(); ++i) {
+            if (!CharSequences.onCharacterBoundary(s, i)) {
+                continue;
+            }
+            String q = trans.transform(s.substring(0,i));
+            if (t.startsWith(q)) {
+                String r = trans.transform(s.substring(i));
+                if (t.length() == q.length() + r.length() && t.endsWith(r)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+        //        // make sure that every part is different
+        //        if (s.codePointCount(0, s.length()) > 1) {
+        //            int[] codePoints = It.codePoints(s);
+        //            for (int k = 0; k < codePoints.length; ++k) {
+        //                int pos = indexOf(t,codePoints[k]);
+        //                if (pos >= 0) {
+        //                    int x;
+        //                }
+        //            }
+        //            if (s.contains("À")) {
+        //                logln("À");
+        //            }
+        //        }
+    }
+
+    private void addSourceTarget(String s, UnicodeSet expectedSource, String t, UnicodeSet expectedTarget) {
+        expectedSource.addAll(s);
+        if (t.length() > 0) {
+            expectedTarget.addAll(t);
+        }
+    }
+
+    private void addDerivedStrings(Normalizer2 nfc, UnicodeSet disorderedMarks, String s) {
+        disorderedMarks.add(s);
+        for (int j = 1; j < s.length(); ++j) {
+            if (CharSequences.onCharacterBoundary(s, j)) {
+                String shorter = s.substring(0,j);
+                disorderedMarks.add(shorter);
+                disorderedMarks.add(nfc.normalize(shorter) + s.substring(j));
+            }
+        }
+    }
+
+    public void TestCharUtils() {
+        String[][] startTests = {
+                {"1", "a", "ab"},
+                {"0", "a", "xb"},
+                {"0", "\uD800", "\uD800\uDC01"},
+                {"1", "\uD800a", "\uD800b"},
+                {"0", "\uD800\uDC00", "\uD800\uDC01"},
+        };
+        for (String[] row : startTests) {
+            int actual = findSharedStartLength(row[1], row[2]);
+            assertEquals("findSharedStartLength(" + row[1] + "," + row[2] + ")", 
+                    Integer.parseInt(row[0]),
+                    actual);
+        }
+        String[][] endTests = {
+                {"0", "\uDC00", "\uD801\uDC00"},
+                {"1", "a", "ba"},
+                {"0", "a", "bx"},
+                {"1", "a\uDC00", "b\uDC00"},
+                {"0", "\uD800\uDC00", "\uD801\uDC00"},
+        };
+        for (String[] row : endTests) {
+            int actual = findSharedEndLength(row[1], row[2]);
+            assertEquals("findSharedEndLength(" + row[1] + "," + row[2] + ")", 
+                    Integer.parseInt(row[0]), 
+                    actual);
+        }
+    }
+
+    /**
+     * @param s
+     * @param t
+     * @return
+     */
+    // TODO make generally available
+    private static int findSharedStartLength(CharSequence s, CharSequence t) {
+        int min = Math.min(s.length(), t.length());
+        int i;
+        char sch, tch;
+        for (i = 0; i < min; ++i) {
+            sch = s.charAt(i);
+            tch = t.charAt(i);
+            if (sch != tch) {
+                break;
+            }
+        }
+        return CharSequences.onCharacterBoundary(s,i) && CharSequences.onCharacterBoundary(t,i) ? i : i - 1;
+    }
+
+    /**
+     * @param s
+     * @param t
+     * @return
+     */
+    // TODO make generally available
+    private static int findSharedEndLength(CharSequence s, CharSequence t) {
+        int slength = s.length();
+        int tlength = t.length();
+        int min = Math.min(slength, tlength);
+        int i;
+        char sch, tch;
+        // TODO can make the calculations slightly faster... Not sure if it is worth the complication, tho'
+        for (i = 0; i < min; ++i) {
+            sch = s.charAt(slength - i - 1);
+            tch = t.charAt(tlength - i - 1);
+            if (sch != tch) {
+                break;
+            }
+        }
+        return CharSequences.onCharacterBoundary(s,slength - i) && CharSequences.onCharacterBoundary(t,tlength - i) ? i : i - 1;
+    }
+
+    enum SetAssert {EQUALS, MISSING_OK, EXTRA_OK}
+
+    void assertEquals(String message, UnicodeSet empirical, UnicodeSet actual, SetAssert setAssert) {
+        boolean haveError = false;
+        if (!actual.containsAll(empirical)) {
+            UnicodeSet missing = new UnicodeSet(empirical).removeAll(actual);
+            errln(message + " \tgetXSet < empirical (" + missing.size() + "): " + toPattern(missing));
+            haveError = true;
+        }
+        if (!empirical.containsAll(actual)) {
+            UnicodeSet extra = new UnicodeSet(actual).removeAll(empirical);
+            logln("WARNING: " + message + " \tgetXSet > empirical (" + extra.size() + "): " + toPattern(extra));
+            haveError = true;
+        }
+        if (!haveError) {
+            logln("OK " + message + ' ' + toPattern(empirical));
+        }
+    }
+
+    private String toPattern(UnicodeSet missing) {
+        String result = missing.toPattern(false);
+        if (result.length() < 200) {
+            return result;
+        }
+        return result.substring(0, CharSequences.onCharacterBoundary(result, 200) ? 200 : 199) + "…";
+    }
+
+
     /**
      * Test handling of rule whitespace, for both RBT and UnicodeSet.
      */
@@ -3741,7 +4109,7 @@ the ::BEGIN/::END stuff)
             Transliterator.createFromRules("gif", "\\", Transliterator.FORWARD);
         } catch(Exception e){
             errln("TransliteratorParser.nextLine() was not suppose to return an " +
-                    "exception for a rule of '\\'");
+            "exception for a rule of '\\'");
         }
     }
 }

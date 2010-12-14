@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.UCaseProps;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * A transliterator that performs locale-sensitive toLower()
@@ -101,5 +102,24 @@ class CaseFoldTransliterator extends Transliterator{
             }
         }
         offsets.start = offsets.limit;
+    }
+    
+    static SourceTargetUtility sourceTargetUtility = null;
+    
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
+     */
+    @Override
+    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+        synchronized (UppercaseTransliterator.class) {
+            if (sourceTargetUtility == null) {
+                sourceTargetUtility = new SourceTargetUtility(new Transform<String,String>() {
+                    public String transform(String source) {
+                        return UCharacter.foldCase(source, true);
+                    }
+                });
+            }
+        }
+        sourceTargetUtility.addSourceTargetSet(this, inputFilter, sourceSet, targetSet);
     }
 }
