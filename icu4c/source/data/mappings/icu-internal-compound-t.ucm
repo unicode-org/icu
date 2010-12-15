@@ -19,6 +19,7 @@
 <icu:state>                   80-bf
 
 CHARMAP
+<U003F> \x3F |2
 <U0080> \xC2\x80 |0
 <U0081> \xC2\x81 |0
 <U0082> \xC2\x82 |0

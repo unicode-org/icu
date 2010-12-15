@@ -13,7 +13,7 @@
 <uconv_class>                 "SBCS"
 
 CHARMAP
-<U003F> \x3F |0
+<U003F> \x3F |2
 <U02BC> \xA2 |1
 <U02BD> \xA1 |1
 <U0384> \xB4 |0

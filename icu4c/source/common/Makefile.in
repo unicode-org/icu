@@ -82,7 +82,7 @@ udata.o ucmndata.o udatamem.o umapfile.o udataswp.o ucol_swp.o utrace.o \
 uhash.o uhash_us.o uenum.o ustrenum.o uvector.o ustack.o uvectr32.o uvectr64.o \
 ucnv.o ucnv_bld.o ucnv_cnv.o ucnv_io.o ucnv_cb.o ucnv_err.o ucnvlat1.o \
 ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o ucnvscsu.o ucnvbocu.o \
-ucnv_ext.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o ucnv_set.o \
+ucnv_ext.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o ucnv_set.o ucnv_ct.o \
 uresbund.o ures_cnv.o uresdata.o resbund.o resbund_cnv.o \
 ucat.o locmap.o uloc.o locid.o locutil.o locavailable.o locdispnames.o loclikely.o locresdata.o \
 bytestream.o stringpiece.o \

@@ -305,6 +305,7 @@
     <ClCompile Include="ucnv_bld.c" />
     <ClCompile Include="ucnv_cb.c" />
     <ClCompile Include="ucnv_cnv.c" />
+    <ClCompile Include="ucnv_ct.c" />
     <ClCompile Include="ucnv_err.c" />
     <ClCompile Include="ucnv_ext.c" />
     <ClCompile Include="ucnv_io.c" />

@@ -124,6 +124,7 @@ typedef enum {
     UCNV_UTF32,
     UCNV_CESU8,
     UCNV_IMAP_MAILBOX,
+    UCNV_COMPOUND_TEXT,
 
     /* Number of converter types for which we have conversion routines. */
     UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES
