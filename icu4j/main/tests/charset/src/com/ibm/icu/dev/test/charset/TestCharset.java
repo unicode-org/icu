@@ -5592,38 +5592,4 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
-    /* Test compound text converter */
-    public void TestCompoundText() {
-        CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("x11-compound-text");
-        CharsetEncoder encoder = cs.newEncoder();
-        CharsetDecoder decoder = cs.newDecoder();
-        
-        char []unicode = {
-                0x54A1, 0x00A5, 0x00E3, 0x0120, 0x0121, 0x011E, 0x0041, 0x0135, 0x02D9, 0x0E3F,
-                0x0100, 0x0157, 0x0384, 0x0660, 0x05D0, 0x0401
-        };
-        
-        byte []bytes = {
-                0x1b, 0x24, 0x29, 0x44, (byte)0xb5, (byte)0xac, 0x1b, 0x2d, 0x41, (byte)0xa5,
-                (byte)0xe3, 0x1b, 0x2d, 0x43, (byte)0xd5, (byte)0xf5, 0x1b, 0x2d, 0x4d, (byte)0xd0,
-                0x1b, 0x2d, 0x41, 0x41, 0x1b, 0x2d, 0x43, (byte)0xbc, 0x1b, 0x2d,
-                0x42, (byte)0xff, 0x1b, 0x2d, 0x54, (byte)0xdf, 0x1b, 0x2d, 0x44, (byte)0xc0,
-                (byte)0xb3, 0x1b, 0x2d, 0x46, (byte)0xb4, 0x1b, 0x2d, 0x47, (byte)0xb0, 0x1b,
-                0x2d, 0x48, (byte)0xe0, 0x1b, 0x2d, 0x4c,(byte) 0xa1
-                
-        };
-        
-        CharBuffer us;
-        ByteBuffer bs;
-
-        us = CharBuffer.allocate(0x20);
-        bs = ByteBuffer.wrap(bytes);
-        smBufDecode(decoder, "x11-compound-text", bs, us);
-        
-        us = CharBuffer.wrap(unicode);
-        bs = ByteBuffer.allocate(0x40);
-        smBufEncode(encoder, "x11-compound-text", us, bs);
-    }
 }
