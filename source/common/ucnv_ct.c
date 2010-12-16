@@ -286,14 +286,14 @@ _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorC
 
 static void
 _CompoundTextClose(UConverter *converter) {
-    UConverterSharedData** gbCharset = (UConverterSharedData**)(converter->extraInfo);
+    UConverterDataCompoundText* myConverterData = (UConverterDataCompoundText*)(converter->extraInfo);
     int32_t i;
 
     if (converter->extraInfo != NULL) {
         /*close the array of converter pointers and free the memory*/
         for (i = 0; i < NUM_OF_CONVERTERS; i++) {
-            if(gbCharset[i] != NULL) {
-                ucnv_unloadSharedDataIfReady(gbCharset[i]);
+            if (myConverterData->myConverterArray[i] != NULL) {
+                ucnv_unloadSharedDataIfReady(myConverterData->myConverterArray[i]);
             }
         }
 
@@ -323,8 +323,8 @@ UConverter_fromUnicode_CompoundText_OFFSETS(UConverterFromUnicodeArgs* args, UEr
     uint8_t tmpTargetBuffer[7];
     int32_t tmpTargetBufferLength = 0;
     COMPOUND_TEXT_CONVERTERS currentState, tmpState;
-    uint8_t buffer[4];
-    int32_t bufferLength = 0;
+    uint32_t pValue;
+    int32_t pValueLength = 0;
     int32_t i, n;
 
     UConverterDataCompoundText *myConverterData = (UConverterDataCompoundText *) cnv->extraInfo;
@@ -389,8 +389,8 @@ getTrail:
              if (tmpState == DO_SEARCH) {
                  /* Test all available converters */
                  for (i = 1; i < SEARCH_LENGTH; i++) {
-                     bufferLength = ucnv_MBCSFromUChar32(myConverterData->myConverterArray[i], sourceChar, (uint32_t*)buffer, useFallback);
-                     if (bufferLength > 0) {
+                     pValueLength = ucnv_MBCSFromUChar32(myConverterData->myConverterArray[i], sourceChar, &pValue, useFallback);
+                     if (pValueLength > 0) {
                          tmpState = (COMPOUND_TEXT_CONVERTERS)i;
                          if (currentState != tmpState) {
                              currentState = tmpState;
@@ -398,20 +398,19 @@ getTrail:
                                  tmpTargetBuffer[tmpTargetBufferLength++] = escSeqCompoundText[currentState][i];
                              }
                          }
-                         for (n = 0; n < bufferLength; n++) {
-                             tmpTargetBuffer[tmpTargetBufferLength++] = buffer[(bufferLength -1) - n];
+                         for (n = (pValueLength - 1); n >= 0; n--) {
+                             tmpTargetBuffer[tmpTargetBufferLength++] = (uint8_t)(pValue >> (n * 8));
                          }
-                         /* TODO: Reset? */
                          break;
                      }
                  }
              } else if (tmpState == COMPOUND_TEXT_SINGLE_0) {
                  tmpTargetBuffer[tmpTargetBufferLength++] = (uint8_t)sourceChar;
              } else {
-                 bufferLength = ucnv_MBCSFromUChar32(myConverterData->myConverterArray[currentState], sourceChar, (uint32_t*)buffer, useFallback);
-                 if (bufferLength > 0) {
-                     for (n = 0; n < bufferLength; n++) {
-                         tmpTargetBuffer[tmpTargetBufferLength++] = buffer[(bufferLength -1) - n];
+                 pValueLength = ucnv_MBCSFromUChar32(myConverterData->myConverterArray[currentState], sourceChar, &pValue, useFallback);
+                 if (pValueLength > 0) {
+                     for (n = (pValueLength - 1); n >= 0; n--) {
+                         tmpTargetBuffer[tmpTargetBufferLength++] = (uint8_t)(pValue >> (n * 8));
                      }
                  }
              }
