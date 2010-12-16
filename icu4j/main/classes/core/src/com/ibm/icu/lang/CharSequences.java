@@ -82,11 +82,17 @@ public class CharSequences {
      * @internal
      */
     public static int[] codePoints(CharSequence s) {
-        int[] result = new int[s.length()]; // common case
+        int[] result = new int[s.length()]; // in the vast majority of cases, the length is the same
         int j = 0;
-        int cp;
-        for (int i = 0; i < s.length(); i += Character.charCount(cp)) {
-            cp = Character.codePointAt(s, i);
+        for (int i = 0; i < s.length(); ++i) {
+            char cp = s.charAt(i);
+            if (cp >= 0xDC00 && cp <= 0xDFFF && i != 0 ) { // hand-code for speed
+                char last = (char) result[j-1];
+                if (last >= 0xD800 && last <= 0xDBFF) {
+                    result[j-1] = Character.toCodePoint(last, cp);
+                    continue;
+                }
+            }
             result[j++] = cp;
         }
         if (j == result.length) {
