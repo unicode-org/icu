@@ -213,8 +213,8 @@ static COMPOUND_TEXT_CONVERTERS findStateFromEscSeq(const char* source, const ch
     int32_t i, n, offset = toUBytesBufferLength;
 
     for (i = 0; i < NUM_OF_CONVERTERS; i++) {
+        matchFound = TRUE;
         for (n = 0; escSeqCompoundText[i][n] != 0; n++) {
-            matchFound = TRUE;
             if (n < toUBytesBufferLength) {
                 if (toUBytesBuffer[n] != escSeqCompoundText[i][n]) {
                     matchFound = FALSE;
