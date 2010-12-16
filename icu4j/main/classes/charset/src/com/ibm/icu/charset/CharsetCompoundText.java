@@ -21,8 +21,11 @@ import com.ibm.icu.text.UnicodeSet;
 
 class CharsetCompoundText extends CharsetICU {
     private static final byte[] fromUSubstitution = new byte[] { (byte) 0x3F };
-    private CharsetMBCS gbCharset[];
+    private CharsetMBCS myConverterArray[];
+    private byte state;
     
+    private final static byte INVALID = -2;
+    private final static byte DO_SEARCH = -1;
     private final static byte COMPOUND_TEXT_SINGLE_0 = 0;
     private final static byte COMPOUND_TEXT_SINGLE_1 = 1;
     private final static byte COMPOUND_TEXT_SINGLE_2 = 2;
@@ -51,7 +54,7 @@ class CharsetCompoundText extends CharsetICU {
     
     private final static byte SEARCH_LENGTH = 12;
     
-    private final static byte[][] escSeqCcompoundText = {
+    private final static byte[][] escSeqCompoundText = {
         /* Single */
         { 0x1B, 0x2D, 0x41 },
         { 0x1B, 0x2D, 0x4D },
@@ -196,7 +199,8 @@ class CharsetCompoundText extends CharsetICU {
     }
     
     private static int findNextEsc(ByteBuffer source) {
-        for (int i = source.position(); i < source.limit(); i++) {
+        int sourceLimit = source.limit();
+        for (int i = source.position(); i < sourceLimit; i++) {
             if (source.get(i) == 0x1B) {
                 return i;
             }
@@ -236,16 +240,25 @@ class CharsetCompoundText extends CharsetICU {
         return state;
     }
     
-    private static int findStateFromEscSeq(ByteBuffer source) {
-        int state = -1;
+    private static byte findStateFromEscSeq(ByteBuffer source, byte[] toUBytes, int toUBytesLength) {
+        byte state = INVALID;
         int sourceIndex = source.position();
         boolean matchFound = false;
-        int i, n;
+        byte i, n;
+        int offset = toUBytesLength;
+        int sourceLimit = source.limit();
         
-        for (i = 0; i < escSeqCcompoundText.length; i++) {
-            for (n = 0; n < escSeqCcompoundText[i].length; n++) {
-                matchFound = true;
-                if (source.get(sourceIndex + n) != escSeqCcompoundText[i][n]) {
+        for (i = 0; i < escSeqCompoundText.length; i++) {
+            matchFound = true;
+            for (n = 0; n < escSeqCompoundText[i].length; n++) {
+                if (n < toUBytesLength) {
+                    if (toUBytes[n] != escSeqCompoundText[i][n]) {
+                        matchFound = false;
+                        break;
+                    }
+                } else if ((sourceIndex + (n - offset)) >= sourceLimit) {
+                    return DO_SEARCH;
+                } else if (source.get(sourceIndex + (n - offset)) != escSeqCompoundText[i][n]) {
                     matchFound = false;
                     break;
                 }
@@ -257,7 +270,7 @@ class CharsetCompoundText extends CharsetICU {
         
         if (matchFound) {
             state = i;
-            source.position(sourceIndex + escSeqCcompoundText[i].length);
+            source.position(sourceIndex + (escSeqCompoundText[i].length - offset));
         }
         
         return state;
@@ -274,9 +287,9 @@ class CharsetCompoundText extends CharsetICU {
     }
     
     private void LoadConverters() {
-        gbCharset = new CharsetMBCS[NUM_OF_CONVERTERS];
+        myConverterArray = new CharsetMBCS[NUM_OF_CONVERTERS];
         
-        gbCharset[COMPOUND_TEXT_SINGLE_0] = null;
+        myConverterArray[COMPOUND_TEXT_SINGLE_0] = null;
         
         for (int i = 1; i < SEARCH_LENGTH; i++) {
             String name = "icu-internal-compound-";
@@ -288,17 +301,17 @@ class CharsetCompoundText extends CharsetICU {
                 name = name + "t";
             }
             
-            gbCharset[i] = (CharsetMBCS)CharsetICU.forNameICU(name);
+            myConverterArray[i] = (CharsetMBCS)CharsetICU.forNameICU(name);
         }
         
-        gbCharset[IBM_915] = (CharsetMBCS)CharsetICU.forNameICU("ibm-915_P100-1995");
-        gbCharset[IBM_916] = (CharsetMBCS)CharsetICU.forNameICU("ibm-916_P100-1995");
-        gbCharset[IBM_914] = (CharsetMBCS)CharsetICU.forNameICU("ibm-914_P100-1995");
-        gbCharset[IBM_874] = (CharsetMBCS)CharsetICU.forNameICU("ibm-874_P100-1995");
-        gbCharset[IBM_912] = (CharsetMBCS)CharsetICU.forNameICU("ibm-912_P100-1995");
-        gbCharset[IBM_913] = (CharsetMBCS)CharsetICU.forNameICU("ibm-913_P100-2000");
-        gbCharset[ISO_8859_14] = (CharsetMBCS)CharsetICU.forNameICU("iso-8859_14-1998");
-        gbCharset[IBM_923] = (CharsetMBCS)CharsetICU.forNameICU("ibm-923_P100-1998");
+        myConverterArray[IBM_915] = (CharsetMBCS)CharsetICU.forNameICU("ibm-915_P100-1995");
+        myConverterArray[IBM_916] = (CharsetMBCS)CharsetICU.forNameICU("ibm-916_P100-1995");
+        myConverterArray[IBM_914] = (CharsetMBCS)CharsetICU.forNameICU("ibm-914_P100-1995");
+        myConverterArray[IBM_874] = (CharsetMBCS)CharsetICU.forNameICU("ibm-874_P100-1995");
+        myConverterArray[IBM_912] = (CharsetMBCS)CharsetICU.forNameICU("ibm-912_P100-1995");
+        myConverterArray[IBM_913] = (CharsetMBCS)CharsetICU.forNameICU("ibm-913_P100-2000");
+        myConverterArray[ISO_8859_14] = (CharsetMBCS)CharsetICU.forNameICU("iso-8859_14-1998");
+        myConverterArray[IBM_923] = (CharsetMBCS)CharsetICU.forNameICU("ibm-923_P100-1998");
     }
     
     class CharsetEncoderCompoundText extends CharsetEncoderICU {
@@ -313,7 +326,7 @@ class CharsetCompoundText extends CharsetICU {
                 if (i == 0) {
                     gbEncoder[i] = null;
                 } else {
-                    gbEncoder[i] = (CharsetEncoderMBCS)gbCharset[i].newEncoder();
+                    gbEncoder[i] = (CharsetEncoderMBCS)myConverterArray[i].newEncoder();
                 }
             }
         }
@@ -334,7 +347,7 @@ class CharsetCompoundText extends CharsetICU {
             ByteBuffer tmpTargetBuffer = ByteBuffer.allocate(3);
             byte[] targetBytes = new byte[10];
             int targetLength = 0;
-            int currentState = this.fromUnicodeStatus;
+            byte currentState = state;
             byte tmpState = 0;
             int i = 0;
             boolean gotoGetTrail = false;
@@ -431,8 +444,8 @@ class CharsetCompoundText extends CharsetICU {
                         currentState = tmpState;
                         
                         /* Write escape sequence if necessary */
-                        for (i = 0; i < escSeqCcompoundText[currentState].length; i++) {
-                            targetBytes[i] = escSeqCcompoundText[currentState][i];
+                        for (i = 0; i < escSeqCompoundText[currentState].length; i++) {
+                            targetBytes[i] = escSeqCompoundText[currentState][i];
                         }
                         targetLength = i;
                     }
@@ -463,7 +476,7 @@ class CharsetCompoundText extends CharsetICU {
                 }
                 this.errorBufferLength = m;
             }
-            this.fromUnicodeStatus = currentState;
+            state = currentState;
             
             return err;
         }
@@ -480,7 +493,7 @@ class CharsetCompoundText extends CharsetICU {
                 if (i == 0) {
                     gbDecoder[i] = null;
                 } else {
-                    gbDecoder[i] = (CharsetDecoderMBCS)gbCharset[i].newDecoder();
+                    gbDecoder[i] = (CharsetDecoderMBCS)myConverterArray[i].newDecoder();
                 }
             }
         }
@@ -497,8 +510,8 @@ class CharsetCompoundText extends CharsetICU {
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             byte[] sourceChar = { 0x00 };
-            int currentState = this.toUnicodeStatus;
-            int tmpState = currentState;
+            byte currentState = state;
+            byte tmpState = currentState;
             CharsetDecoderMBCS decoder;
             int sourceLimit = source.limit();;
             
@@ -509,20 +522,32 @@ class CharsetCompoundText extends CharsetICU {
             
             while (source.hasRemaining()) {
                 if (target.hasRemaining()) {
-                    sourceChar[0] = source.get(source.position());
+                    if (this.toULength > 0) {
+                        sourceChar[0] = this.toUBytesArray[0];
+                    } else {
+                        sourceChar[0] = source.get(source.position());
+                    }
                     
                     if (sourceChar[0] == ESC_START) {
-                        tmpState = findStateFromEscSeq(source);
+                        tmpState = findStateFromEscSeq(source, this.toUBytesArray, this.toULength);
+                        if (tmpState == DO_SEARCH) {
+                            while (source.hasRemaining()) {
+                                this.toUBytesArray[this.toULength++] = source.get();
+                            }
+                            break;
+                        }
                         if (tmpState < 0) {
                             err = CoderResult.malformedForLength(1);
                             break;
                         }
+                        
+                        this.toULength = 0;
                     }
                     
                     if (tmpState != currentState) {
                         currentState = tmpState;
                     }
-
+                    
                     if (currentState == COMPOUND_TEXT_SINGLE_0) {
                         while (source.hasRemaining()) {
                             if (!target.hasRemaining()) {
@@ -536,12 +561,29 @@ class CharsetCompoundText extends CharsetICU {
                                 target.put((char)(UConverterConstants.UNSIGNED_BYTE_MASK&source.get()));
                             }
                         }
-                    } else {
+                    } else if (source.hasRemaining()) {
                         source.limit(findNextEsc(source));
-                        
+
                         decoder = gbDecoder[currentState];
                         
+                        decoder.toUBytesArray = this.toUBytesArray;
+                        decoder.toULength = this.toULength;
+
                         err = decoder.decodeLoop(source, target, offsets, true);
+                        
+                        this.toULength = decoder.toULength;
+                        decoder.toULength = 0;
+                        
+                        if (err.isError()) {
+                            if (err.isOverflow()) {
+                                this.charErrorBufferArray = decoder.charErrorBufferArray;
+                                this.charErrorBufferBegin = decoder.charErrorBufferBegin;
+                                this.charErrorBufferLength = decoder.charErrorBufferLength;
+                                
+                                decoder.charErrorBufferBegin = 0;
+                                decoder.charErrorBufferLength = 0;
+                            }
+                        }
                         
                         source.limit(sourceLimit);
                     }
@@ -554,6 +596,7 @@ class CharsetCompoundText extends CharsetICU {
                     break;
                 }
             }
+            state = currentState;
             return err;
         }
     }
@@ -568,7 +611,7 @@ class CharsetCompoundText extends CharsetICU {
     
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
         for (int i = 1; i < NUM_OF_CONVERTERS; i++) {
-            gbCharset[i].MBCSGetFilteredUnicodeSetForUnicode(gbCharset[i].sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_NONE);
+            myConverterArray[i].MBCSGetFilteredUnicodeSetForUnicode(myConverterArray[i].sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_NONE);
         }
         setFillIn.add(0x0000);
         setFillIn.add(0x0009);
