@@ -2039,8 +2039,6 @@ public class DecimalFormat extends NumberFormat {
                 0xFF0E, 0xFF0E,
                 0xFF61, 0xFF61).freeze();
 
-    private static final UnicodeSet EMPTY_SET = new UnicodeSet().freeze();
-
     // When parsing a number with big exponential value, it requires to transform the
     // value into a string representation to construct BigInteger instance.  We want to
     // set the maximum size because it can easily trigger OutOfMemoryException.
@@ -2148,9 +2146,9 @@ public class DecimalFormat extends NumberFormat {
                 "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
                 .equals("true");
 
-            UnicodeSet decimalEquiv = skipExtendedSeparatorParsing ? EMPTY_SET :
+            UnicodeSet decimalEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY :
                 getEquivalentDecimals(decimal, strictParse);
-            UnicodeSet groupEquiv = skipExtendedSeparatorParsing ? EMPTY_SET :
+            UnicodeSet groupEquiv = skipExtendedSeparatorParsing ? UnicodeSet.EMPTY :
                 (strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators);
 
             // We have to track digitCount ourselves, because digits.count will pin when
@@ -2477,7 +2475,7 @@ public class DecimalFormat extends NumberFormat {
      * parsing number.  This method may return an empty set.
      */
     private UnicodeSet getEquivalentDecimals(char decimal, boolean strictParse) {
-        UnicodeSet equivSet = EMPTY_SET;
+        UnicodeSet equivSet = UnicodeSet.EMPTY;
         if (strictParse) {
             if (strictDotEquivalents.contains(decimal)) {
                 equivSet = strictDotEquivalents;

@@ -271,6 +271,17 @@ import com.ibm.icu.util.VersionInfo;
  */
 public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Comparable<UnicodeSet>, Freezable<UnicodeSet> {
 
+    /**
+     * Constant for the empty set.
+     * @draft 4.8
+     */
+    public static final UnicodeSet EMPTY = new UnicodeSet().freeze();
+    /**
+     * Constant for the set of all code points. (Since UnicodeSets can include strings, does not include everything that a UnicodeSet can.)
+     * @draft 4.8
+     */
+    public static final UnicodeSet ALL_CODEPOINTS = new UnicodeSet(0, 0x10FFFF).freeze();
+
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
     // 110000 for codepoints
