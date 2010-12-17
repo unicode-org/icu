@@ -1556,6 +1556,16 @@ public abstract class Transliterator implements StringTransform  {
      * return result is approximate in any case and is intended for
      * use by tests, tools, or utilities requiring such
      * meta-information.
+     * <p>Warning. You might expect an empty filter to always produce an empty target.
+     * However, consider the following:
+     * <pre>
+     * [Pp]{}[ΣςσϷϸϺϻ] > \';
+     * </pre>
+     * With a filter of [], you still get some elements in the target set, because this rule will still match. It could
+     * be recast to the following if it were important.
+     * <pre>
+     * [Pp]{([ΣςσϷϸϺϻ])} > \' | $1;
+     * </pre>
      * @see #getTargetSet
      * @stable ICU 2.2
      */

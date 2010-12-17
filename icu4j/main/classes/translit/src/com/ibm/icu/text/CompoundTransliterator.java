@@ -321,18 +321,18 @@ class CompoundTransliterator extends Transliterator {
         }
     }
 
-    /**
-     * Returns the set of all characters that may be generated as
-     * replacement text by this transliterator.
-     */
-    public UnicodeSet getTargetSet() {
-        UnicodeSet set = new UnicodeSet();
-        for (int i=0; i<trans.length; ++i) {
-            // This is a heuristic, and not 100% reliable.
-            set.addAll(trans[i].getTargetSet());
-        }
-        return set;
-    }
+//    /**
+//     * Returns the set of all characters that may be generated as
+//     * replacement text by this transliterator.
+//     */
+//    public UnicodeSet getTargetSet() {
+//        UnicodeSet set = new UnicodeSet();
+//        for (int i=0; i<trans.length; ++i) {
+//            // This is a heuristic, and not 100% reliable.
+//            set.addAll(trans[i].getTargetSet());
+//        }
+//        return set;
+//    }
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
