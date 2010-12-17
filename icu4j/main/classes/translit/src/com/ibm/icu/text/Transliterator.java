@@ -1510,8 +1510,6 @@ public abstract class Transliterator implements StringTransform  {
         return result;
     }
 
-    static final UnicodeSet ALL_CODEPOINTS = new UnicodeSet(0,0x10FFFF).freeze();
-    
     /**
      * Returns the set of all characters that may be modified in the
      * input text by this Transliterator.  This incorporates this
@@ -1527,7 +1525,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     public final UnicodeSet getSourceSet() {
         UnicodeSet result = new UnicodeSet();
-        addSourceTargetSet(getFilterAsUnicodeSet(ALL_CODEPOINTS), result, new UnicodeSet());
+        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODEPOINTS), result, new UnicodeSet());
         return result;
     }
 
@@ -1571,7 +1569,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     public UnicodeSet getTargetSet() {
         UnicodeSet result = new UnicodeSet();
-        addSourceTargetSet(getFilterAsUnicodeSet(ALL_CODEPOINTS), new UnicodeSet(), result);
+        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODEPOINTS), new UnicodeSet(), result);
         return result;
     }
 

@@ -3234,7 +3234,7 @@ public class TransliteratorTest extends TestFmwk {
                 {"[] title"},
                 {"[] upper"},
         };
-        UnicodeSet expectedSource = new UnicodeSet().freeze();
+        UnicodeSet expectedSource = UnicodeSet.EMPTY;
         for (String[] testPair : tests) {
             String test = testPair[0];
             Transliterator t0;
