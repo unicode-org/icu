@@ -149,6 +149,8 @@ UTF-8 { IANA* MIME* JAVA* WINDOWS }
                                 windows-65001 { WINDOWS* }
                                 cp1208
                                 x-UTF_8J
+                                unicode-1-1-utf-8
+                                unicode-2-0-utf-8
 
 # The ICU 2.2 UTF-16/32 converters detect and write a BOM.
 UTF-16 { IANA* MIME* JAVA* }    ISO-10646-UCS-2 { IANA }
