@@ -3016,9 +3016,9 @@ public class TransliteratorTest extends TestFmwk {
     public void TestSourceTargetSet2() {
 
 
-        Normalizer2 nfkd = Normalizer2.getInstance(null, "NFKC", Mode.DECOMPOSE);
-        Normalizer2 nfc = Normalizer2.getInstance(null, "NFC", Mode.COMPOSE);
-        Normalizer2 nfd = Normalizer2.getInstance(null, "NFC", Mode.DECOMPOSE);
+        Normalizer2 nfkd = Normalizer2.getInstance(null, "nfkc", Mode.DECOMPOSE);
+        Normalizer2 nfc = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
+        Normalizer2 nfd = Normalizer2.getInstance(null, "nfc", Mode.DECOMPOSE);
         //        UnicodeSet nfkdSource = new UnicodeSet();
         //        UnicodeSet nfkdTarget = new UnicodeSet();
         //        for (int i = 0; i <= 0x10FFFF; ++i) {
