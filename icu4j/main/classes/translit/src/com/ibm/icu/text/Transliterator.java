@@ -415,7 +415,7 @@ public abstract class Transliterator implements StringTransform  {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    private UnicodeFilter filter;
+    private UnicodeSet filter;
 
     private int maximumContextLength = 0;
 
@@ -489,7 +489,7 @@ public abstract class Transliterator implements StringTransform  {
             throw new NullPointerException();
         }
         this.ID = ID;
-        this.filter = filter;
+        setFilter(filter);
     }
 
     /**
@@ -1284,7 +1284,18 @@ public abstract class Transliterator implements StringTransform  {
      * @stable ICU 2.0
      */
     public void setFilter(UnicodeFilter filter) {
-        this.filter = filter;
+        if (filter == null) {
+            this.filter = null;
+        } else {
+            try {
+                // fast high-runner case
+                this.filter = new UnicodeSet((UnicodeSet)filter).freeze();
+            } catch (Exception e) {
+                this.filter = new UnicodeSet();
+                filter.addMatchSetTo(this.filter);
+                this.filter.freeze();
+            }
+        }
     }
 
     /**
