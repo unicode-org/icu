@@ -20,7 +20,7 @@ class SourceTargetUtility {
     final UnicodeSet sourceCache;
     final Set<String> sourceStrings;
     static final UnicodeSet NON_STARTERS = new UnicodeSet("[:^ccc=0:]").freeze();
-    static Normalizer2 NFC = Normalizer2.getInstance(null, "NFC", Mode.COMPOSE);
+    static Normalizer2 NFC = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
     //static final UnicodeSet TRAILING_COMBINING = new UnicodeSet();
 
     public SourceTargetUtility(Transform<String, String> transform) {
@@ -32,7 +32,7 @@ class SourceTargetUtility {
         if (normalizer != null) {
 //            synchronized (SourceTargetUtility.class) {
 //                if (NFC == null) {
-//                    NFC = Normalizer2.getInstance(null, "NFC", Mode.COMPOSE);
+//                    NFC = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
 //                    for (int i = 0; i <= 0x10FFFF; ++i) {
 //                        String d = NFC.getDecomposition(i);
 //                        if (d == null) {
