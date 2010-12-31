@@ -511,7 +511,7 @@ UCharTrieBuilder::UCTLinearMatchNode::write(DictTrieBuilder &builder) {
     UCharTrieBuilder &b=(UCharTrieBuilder &)builder;
     next->write(builder);
     b.write(s, length);
-    offset=b.writeValueAndType(hasValue, value, UCharTrie::kMinLinearMatch+length-1);
+    offset=b.writeValueAndType(hasValue, value, minLinearMatch()+length-1);
 }
 
 void
@@ -575,7 +575,7 @@ void
 UCharTrieBuilder::UCTBranchHeadNode::write(DictTrieBuilder &builder) {
     UCharTrieBuilder &b=(UCharTrieBuilder &)builder;
     next->write(builder);
-    if(length<=UCharTrie::kMinLinearMatch) {
+    if(length<=minLinearMatch()) {
         offset=b.writeValueAndType(hasValue, value, length-1);
     } else {
         b.write(length-1);
