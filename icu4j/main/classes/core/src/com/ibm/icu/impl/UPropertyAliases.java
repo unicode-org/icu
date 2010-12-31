@@ -6,6 +6,7 @@
  * Author: Alan Liu
  * Created: November 5 2002
  * Since: ICU 2.4
+ * 2010nov19 Markus Scherer  Rewrite for formatVersion 2.
  **********************************************************************
  */
 
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
 /**
@@ -25,13 +25,12 @@ import com.ibm.icu.lang.UProperty;
  * imported from icu4c.  It contains property and property value
  * aliases from the UCD files PropertyAliases.txt and
  * PropertyValueAliases.txt.  The file is built by the icu4c tool
- * genpname.  It must be built on an ASCII big-endian platform to be
+ * genpname.  It must be an ASCII big-endian file to be
  * usable in icu4j.
  *
  * This class performs two functions.
  *
- * (1) It can import the flat binary data into a tree of usable
- * objects.
+ * (1) It can import the flat binary data into usable objects.
  *
  * (2) It provides an API to access the tree of objects.
  *
@@ -39,170 +38,186 @@ import com.ibm.icu.lang.UProperty;
  * of icu4c's pnames.icu file.
  *
  * Each time a UPropertyAliases is constructed, the pnames.icu file is
- * read, parsed, and a data tree assembled.  Clients should create one
+ * read, parsed, and data structures assembled.  Clients should create one
  * singleton instance and cache it.
  *
  * @author Alan Liu
  * @since ICU 2.4
  */
-public final class UPropertyAliases implements ICUBinary.Authenticate {
+public final class UPropertyAliases {
+    // Byte offsets from the start of the data, after the generic header.
+    private static final int IX_VALUE_MAPS_OFFSET=0;
+    private static final int IX_BYTE_TRIES_OFFSET=1;
+    private static final int IX_NAME_GROUPS_OFFSET=2;
+    private static final int IX_RESERVED3_OFFSET=3;
+    // private static final int IX_RESERVED4_OFFSET=4;
+    // private static final int IX_TOTAL_SIZE=5;
+
+    // Other values.
+    // private static final int IX_MAX_NAME_LENGTH=6;
+    // private static final int IX_RESERVED7=7;
+    // private static final int IX_COUNT=8;
 
     //----------------------------------------------------------------
     // Runtime data.  This is an unflattened representation of the
     // data in pnames.icu.
 
-    /**
-     * Map from property enum value to nameGroupPool[] index
-     */
-    private NonContiguousEnumToShort enumToName;
+    private int[] valueMaps;
+    private byte[] byteTries;
+    private String nameGroups;
 
-    /**
-     * Map from property alias to property enum value
-     */
-    private NameToEnum nameToEnum;
+    private static final class IsAcceptable implements ICUBinary.Authenticate {
+        // @Override when we switch to Java 6
+        public boolean isDataVersionAcceptable(byte version[]) {
+            return version[0]==2;
+        }
+    }
+    private static final IsAcceptable IS_ACCEPTABLE=new IsAcceptable();
+    private static final byte DATA_FORMAT[]={ 0x70, 0x6E, 0x61, 0x6D  };  // "pnam"
 
-    /**
-     * Map from property enum value to valueMapArray[] index
-     */
-    private NonContiguousEnumToShort enumToValue;
+    private void load(InputStream data) throws IOException {
+        BufferedInputStream bis=new BufferedInputStream(data);
+        //dataVersion=ICUBinary.readHeaderAndDataVersion(bis, DATA_FORMAT, IS_ACCEPTABLE);
+        ICUBinary.readHeader(bis, DATA_FORMAT, IS_ACCEPTABLE);
+        DataInputStream ds=new DataInputStream(bis);
+        int indexesLength=ds.readInt()/4;  // inIndexes[IX_VALUE_MAPS_OFFSET]/4
+        if(indexesLength<8) {  // formatVersion 2 initially has 8 indexes
+            throw new IOException("pnames.icu: not enough indexes");
+        }
+        int[] inIndexes=new int[indexesLength];
+        inIndexes[0]=indexesLength*4;
+        for(int i=1; i<indexesLength; ++i) {
+            inIndexes[i]=ds.readInt();
+        }
 
-    /**
-     * Each entry represents a binary or enumerated property
-     */
-    private ValueMap valueMapArray[];
+        // Read the valueMaps.
+        int offset=inIndexes[IX_VALUE_MAPS_OFFSET];
+        int nextOffset=inIndexes[IX_BYTE_TRIES_OFFSET];
+        int numInts=(nextOffset-offset)/4;
+        valueMaps=new int[numInts];
+        for(int i=0; i<numInts; ++i) {
+            valueMaps[i]=ds.readInt();
+        }
 
-    /**
-     * Pool of concatenated integer runs.  Each run contains one
-     * or more entries.  The last entry of the run is negative.
-     * A zero entry indicates "n/a" in the Property*Aliases.txt.
-     * Each entry is a stringPool[] index.
-     */
-    private short nameGroupPool[];
+        // Read the byteTries.
+        offset=nextOffset;
+        nextOffset=inIndexes[IX_NAME_GROUPS_OFFSET];
+        int numBytes=nextOffset-offset;
+        byteTries=new byte[numBytes];
+        ds.readFully(byteTries);
 
-    /**
-     * Pool of strings.
-     */
-    private String stringPool[];
+        // Read the nameGroups and turn them from ASCII bytes into a Java String.
+        offset=nextOffset;
+        nextOffset=inIndexes[IX_RESERVED3_OFFSET];
+        numBytes=nextOffset-offset;
+        StringBuilder sb=new StringBuilder(numBytes);
+        for(int i=0; i<numBytes; ++i) {
+            sb.append((char)ds.readByte());
+        }
+        nameGroups=sb.toString();
 
-    //----------------------------------------------------------------
-    // Constants
+        data.close();
+    }
 
-    /**
-     * Debug flag (not really constant)
-     */
-    private static boolean DEBUG = ICUDebug.enabled("pnames");
-
-    /**
-     * File format that this class understands.
-     * See icu4c/src/common/propname.h.
-     */
-    private static final byte DATA_FORMAT_ID[] = {'p', 'n', 'a', 'm'};
-
-    /**
-     * File version that this class understands.
-     * See icu4c/src/common/propname.h.
-     */
-    private static final byte DATA_FORMAT_VERSION = 1;
-
-    /**
-     * Name of the datafile
-     */
-    private static final String DATA_FILE_NAME = ICUResourceBundle.ICU_BUNDLE+"/pnames.icu";
-
-    /**
-     * Buffer size of datafile.  The whole file is < 16k.
-     */
-    private static final int DATA_BUFFER_SIZE = 8192;
-
-    //----------------------------------------------------------------
-    // Constructor
-
-    /**
-     * Constructs a UPropertyAliases object.  The binary file
-     * DATA_FILE_NAME is read from the jar/classpath and unflattened
-     * into member variables of this object.
-     */
     private UPropertyAliases() throws IOException {
+        load(ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/pnames.icu"));
+    }
 
-        // Open the .icu file from the jar/classpath
-        InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME);
-        BufferedInputStream b = new BufferedInputStream(is, DATA_BUFFER_SIZE);
-        // Read and discard Unicode version...
-       /* byte unicodeVersion[] = */ICUBinary.readHeader(b, DATA_FORMAT_ID, this);
-        DataInputStream d = new DataInputStream(b);
-
-        // Record the origin position of the file.  Keep enough around
-        // to seek back to the start of the header.
-        d.mark(256);
-
-        short enumToName_offset = d.readShort();
-        short nameToEnum_offset = d.readShort();
-        short enumToValue_offset = d.readShort();
-        short total_size = d.readShort();
-        short valueMap_offset = d.readShort();
-        short valueMap_count = d.readShort();
-        short nameGroupPool_offset = d.readShort();
-        short nameGroupPool_count = d.readShort();
-        short stringPool_offset = d.readShort();
-        short stringPool_count = d.readShort();
-
-        if (DEBUG) {
-            System.out.println(
-               "enumToName_offset=" + enumToName_offset + "\n" +
-               "nameToEnum_offset=" + nameToEnum_offset + "\n" +
-               "enumToValue_offset=" + enumToValue_offset + "\n" +
-               "total_size=" + total_size + "\n" +
-               "valueMap_offset=" + valueMap_offset + "\n" +
-               "valueMap_count=" + valueMap_count + "\n" +
-               "nameGroupPool_offset=" + nameGroupPool_offset + "\n" +
-               "nameGroupPool_count=" + nameGroupPool_count + "\n" +
-               "stringPool_offset=" + stringPool_offset + "\n" +
-               "stringPool_count=" + stringPool_count);
+    private int findProperty(int property) {
+        int i=1;  // valueMaps index, initially after numRanges
+        for(int numRanges=valueMaps[0]; numRanges>0; --numRanges) {
+            // Read and skip the start and limit of this range.
+            int start=valueMaps[i];
+            int limit=valueMaps[i+1];
+            i+=2;
+            if(property<start) {
+                break;
+            }
+            if(property<limit) {
+                return i+(property-start)*2;
+            }
+            i+=(limit-start)*2;  // Skip all entries for this range.
         }
+        return 0;
+    }
 
-        // Read it all (less than 32k).  Seeking around (using
-        // mark/reset/skipBytes) doesn't work directly on the file,
-        // but it works fine if we read everything into a byte[] array
-        // first.
-        byte raw[] = new byte[total_size];
-        d.reset();
-        d.readFully(raw);
-        d.close();
-
-        Builder builder = new Builder(raw);
-
-        stringPool = builder.readStringPool(stringPool_offset,
-                                            stringPool_count);
-
-        nameGroupPool = builder.readNameGroupPool(nameGroupPool_offset,
-                                                  nameGroupPool_count);
-
-        builder.setupValueMap_map(valueMap_offset, valueMap_count);
-
-        // Some of the following data structures have to be set up
-        // here, _not_ in Builder.  That's because they are instances
-        // of non-static inner classes, and they contain implicit
-        // references to this.
-
-        builder.seek(enumToName_offset);
-        enumToName = new NonContiguousEnumToShort(builder);
-        builder.nameGroupOffsetToIndex(enumToName.offsetArray);
-
-        builder.seek(nameToEnum_offset);
-        nameToEnum = new NameToEnum(builder);
-
-        builder.seek(enumToValue_offset);
-        enumToValue = new NonContiguousEnumToShort(builder);
-        builder.valueMapOffsetToIndex(enumToValue.offsetArray);
-
-        valueMapArray = new ValueMap[valueMap_count];
-        for (int i=0; i<valueMap_count; ++i) {
-            // Must seek to the start of each entry.
-            builder.seek(builder.valueMap_map[i]);
-            valueMapArray[i] = new ValueMap(builder);
+    private int findPropertyValueNameGroup(int valueMapIndex, int value) {
+        if(valueMapIndex==0) {
+            return 0;  // The property does not have named values.
         }
+        ++valueMapIndex;  // Skip the ByteTrie offset.
+        int numRanges=valueMaps[valueMapIndex++];
+        if(numRanges<0x10) {
+            // Ranges of values.
+            for(; numRanges>0; --numRanges) {
+                // Read and skip the start and limit of this range.
+                int start=valueMaps[valueMapIndex];
+                int limit=valueMaps[valueMapIndex+1];
+                valueMapIndex+=2;
+                if(value<start) {
+                    break;
+                }
+                if(value<limit) {
+                    return valueMaps[valueMapIndex+value-start];
+                }
+                valueMapIndex+=limit-start;  // Skip all entries for this range.
+            }
+        } else {
+            // List of values.
+            int valuesStart=valueMapIndex;
+            int nameGroupOffsetsStart=valueMapIndex+numRanges-0x10;
+            do {
+                int v=valueMaps[valueMapIndex];
+                if(value<v) {
+                    break;
+                }
+                if(value==v) {
+                    return valueMaps[nameGroupOffsetsStart+valueMapIndex-valuesStart];
+                }
+            } while(++valueMapIndex<nameGroupOffsetsStart);
+        }
+        return 0;
+    }
 
-        builder.close();
+    private String getName(int nameGroupsIndex, int nameIndex) {
+        int numNames=nameGroups.charAt(nameGroupsIndex++);
+        if(nameIndex<0 || numNames<=nameIndex) {
+            throw new IllegalIcuArgumentException("Invalid property (value) name choice");
+        }
+        // Skip nameIndex names.
+        for(; nameIndex>0; --nameIndex) {
+            while(0!=nameGroups.charAt(nameGroupsIndex++)) {}
+        }
+        // Find the end of this name.
+        int nameStart=nameGroupsIndex;
+        while(0!=nameGroups.charAt(nameGroupsIndex)) {
+            ++nameGroupsIndex;            
+        }
+        if(nameStart==nameGroupsIndex) {
+            return null;  // no name (Property[Value]Aliases.txt has "n/a")
+        }
+        return nameGroups.substring(nameStart, nameGroupsIndex);
+    }
+
+    private static int asciiToLowercase(int c) {
+        return 'A'<=c && c<='Z' ? c+0x20 : c;
+    }
+
+    private boolean containsName(ByteTrie trie, CharSequence name) {
+        ByteTrie.Result result=ByteTrie.Result.NO_VALUE;
+        for(int i=0; i<name.length(); ++i) {
+            int c=name.charAt(i);
+            // Ignore delimiters '-', '_', and ASCII White_Space.
+            if(c=='-' || c=='_' || c==' ' || (0x09<=c && c<=0x0d)) {
+                continue;
+            }
+            if(!result.hasNext()) {
+                return false;
+            }
+            c=asciiToLowercase(c);
+            result=trie.next(c);
+        }
+        return result.hasValue();
     }
 
     //----------------------------------------------------------------
@@ -215,193 +230,85 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
             INSTANCE = new UPropertyAliases();
         } catch(IOException e) {
             ///CLOVER:OFF
-            throw new MissingResourceException("Could not construct UPropertyAliases. Missing pnames.icu","","");
+            MissingResourceException mre = new MissingResourceException(
+                    "Could not construct UPropertyAliases. Missing pnames.icu", "", "");
+            mre.initCause(e);
+            throw mre;
             ///CLOVER:ON
         }
     }
 
     /**
-     * Return a property name given a property enum.  Multiple
-     * names may be available for each property; the nameChoice
-     * selects among them.
+     * Returns a property name given a property enum.
+     * Multiple names may be available for each property;
+     * the nameChoice selects among them.
      */
-    public String getPropertyName(int property,
-                                  int nameChoice) {
-        short nameGroupIndex = enumToName.getShort(property);
-        return chooseNameInGroup(nameGroupIndex, nameChoice);
+    public String getPropertyName(int property, int nameChoice) {
+        int valueMapIndex=findProperty(property);
+        if(valueMapIndex==0) {
+            throw new IllegalArgumentException(
+                    "Invalid property enum "+property+" (0x"+Integer.toHexString(property)+")");
+        }
+        return getName(valueMaps[valueMapIndex], nameChoice);
     }
 
     /**
-     * Return a property enum given one of its property names.
+     * Returns a value name given a property enum and a value enum.
+     * Multiple names may be available for each value;
+     * the nameChoice selects among them.
+     */
+    public String getPropertyValueName(int property, int value, int nameChoice) {
+        int valueMapIndex=findProperty(property);
+        if(valueMapIndex==0) {
+            throw new IllegalArgumentException(
+                    "Invalid property enum "+property+" (0x"+Integer.toHexString(property)+")");
+        }
+        int nameGroupOffset=findPropertyValueNameGroup(valueMaps[valueMapIndex+1], value);
+        if(nameGroupOffset==0) {
+            throw new IllegalArgumentException(
+                    "Property "+property+" (0x"+Integer.toHexString(property)+
+                    ") does not have named values");
+        }
+        return getName(nameGroupOffset, nameChoice);
+    }
+
+    private int getPropertyOrValueEnum(int byteTrieOffset, CharSequence alias) {
+        ByteTrie trie=new ByteTrie(byteTries, byteTrieOffset);
+        if(containsName(trie, alias)) {
+            return trie.getValue();
+        } else {
+            return UProperty.UNDEFINED;
+        }
+    }
+
+    /**
+     * Returns a property enum given one of its property names.
      * If the property name is not known, this method returns
      * UProperty.UNDEFINED.
      */
-    public int getPropertyEnum(String propertyAlias) {
-        return nameToEnum.getEnum(propertyAlias);
+    public int getPropertyEnum(CharSequence alias) {
+        return getPropertyOrValueEnum(0, alias);
     }
 
     /**
-     * Return a value name given a property enum and a value enum.
-     * Multiple names may be available for each value; the nameChoice
-     * selects among them.
+     * Returns a value enum given a property enum and one of its value names.
      */
-    public String getPropertyValueName(int property,
-                                       int value,
-                                       int nameChoice) {
-        ValueMap vm = getValueMap(property);
-        short nameGroupIndex = vm.enumToName.getShort(value);
-        return chooseNameInGroup(nameGroupIndex, nameChoice);
-    }
-
-    /**
-     * Return a value enum given one of its value names and the
-     * corresponding property alias.
-     */
-    public int getPropertyValueEnum(int property,
-                                    String valueAlias) {
-        ValueMap vm = getValueMap(property);
-        return vm.nameToEnum.getEnum(valueAlias);
-    }
-
-    //----------------------------------------------------------------
-    // Data structures
-
-    /**
-     * A map for the legal values of a binary or enumerated properties.
-     */
-    private class ValueMap {
-
-        /**
-         * Maps value enum to index into the nameGroupPool[]
-         */
-        EnumToShort enumToName; // polymorphic
-
-        /**
-         * Maps value name to value enum.
-         */
-        NameToEnum nameToEnum;
-
-        ValueMap(Builder b) throws IOException {
-            short enumToName_offset = b.readShort();
-            short ncEnumToName_offset = b.readShort();
-            short nameToEnum_offset = b.readShort();
-            if (enumToName_offset != 0) {
-                b.seek(enumToName_offset);
-                ContiguousEnumToShort x = new ContiguousEnumToShort(b);
-                b.nameGroupOffsetToIndex(x.offsetArray);
-                enumToName = x;
-            } else {
-                b.seek(ncEnumToName_offset);
-                NonContiguousEnumToShort x = new NonContiguousEnumToShort(b);
-                b.nameGroupOffsetToIndex(x.offsetArray);
-                enumToName = x;
-            }
-            b.seek(nameToEnum_offset);
-            nameToEnum = new NameToEnum(b);
+    public int getPropertyValueEnum(int property, CharSequence alias) {
+        int valueMapIndex=findProperty(property);
+        if(valueMapIndex==0) {
+            throw new IllegalArgumentException(
+                    "Invalid property enum "+property+" (0x"+Integer.toHexString(property)+")");
         }
+        valueMapIndex=valueMaps[valueMapIndex+1];
+        if(valueMapIndex==0) {
+            throw new IllegalArgumentException(
+                    "Property "+property+" (0x"+Integer.toHexString(property)+
+                    ") does not have named values");
+        }
+        // valueMapIndex is the start of the property's valueMap,
+        // where the first word is the ByteTrie offset.
+        return getPropertyOrValueEnum(valueMaps[valueMapIndex], alias);
     }
-
-    /**
-     * Abstract map from enum values to integers.
-     */
-    private interface EnumToShort {
-        short getShort(int enumProbe);
-    }
-
-    /**
-     * Generic map from enum values to offsets.  Enum values are
-     * contiguous.
-     */
-    private static class ContiguousEnumToShort implements EnumToShort {
-        int enumStart;
-        int enumLimit;
-        short offsetArray[];
-
-        public short getShort(int enumProbe) {
-            if (enumProbe < enumStart || enumProbe >= enumLimit) {
-                throw new IllegalIcuArgumentException("Invalid enum. enumStart = " +enumStart +
-                                                   " enumLimit = " + enumLimit +
-                                                   " enumProbe = " + enumProbe );
-            }
-            return offsetArray[enumProbe - enumStart];
-        }
-
-        ContiguousEnumToShort(ICUBinaryStream s) throws IOException  {
-            enumStart = s.readInt();
-            enumLimit = s.readInt();
-            int count = enumLimit - enumStart;
-            offsetArray = new short[count];
-            for (int i=0; i<count; ++i) {
-                offsetArray[i] = s.readShort();
-            }
-        }
-    }
-
-    /**
-     * Generic map from enum values to offsets.  Enum values need not
-     * be contiguous.
-     */
-    private static class NonContiguousEnumToShort implements EnumToShort {
-        int enumArray[];
-        short offsetArray[];
-
-        public short getShort(int enumProbe) {
-            for (int i=0; i<enumArray.length; ++i) {
-                if (enumArray[i] < enumProbe) continue;
-                if (enumArray[i] > enumProbe) break;
-                return offsetArray[i];
-            }
-            throw new IllegalIcuArgumentException("Invalid enum");
-        }
-
-        NonContiguousEnumToShort(ICUBinaryStream s) throws IOException  {
-            int i;
-            int count = s.readInt();
-            enumArray = new int[count];
-            offsetArray = new short[count];
-            for (i=0; i<count; ++i) {
-                enumArray[i] = s.readInt();
-            }
-            for (i=0; i<count; ++i) {
-                offsetArray[i] = s.readShort();
-            }
-        }
-    }
-
-    /**
-     * Map from names to enum values.
-     */
-    private class NameToEnum {
-        int enumArray[];
-        short nameArray[];
-
-        int getEnum(String nameProbe) {
-            for (int i=0; i<nameArray.length; ++i) {
-                int c = UPropertyAliases.compare(nameProbe,
-                                                 stringPool[nameArray[i]]);
-                if (c > 0) continue;
-                if (c < 0) break;
-                return enumArray[i];
-            }
-            return UProperty.UNDEFINED;
-        }
-
-        NameToEnum(Builder b) throws IOException {
-            int i;
-            int count = b.readInt();
-            enumArray = new int[count];
-            nameArray = new short[count];
-            for (i=0; i<count; ++i) {
-                enumArray[i] = b.readInt();
-            }
-            for (i=0; i<count; ++i) {
-                nameArray[i] = b.stringOffsetToIndex(b.readShort());
-            }
-        }
-    }
-
-    //----------------------------------------------------------------
-    // Runtime implementation
 
     /**
      * Compare two property names, returning <0, 0, or >0.  The
@@ -447,227 +354,13 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
                 cstrb = 0;
             }
 
-            rc = UCharacter.toLowerCase(cstra) - UCharacter.toLowerCase(cstrb);
+            rc = asciiToLowercase(cstra) - asciiToLowercase(cstrb);
             if (rc != 0) {
                 return rc;
             }
 
             ++istra;
             ++istrb;
-        }
-    }
-
-    /**
-     * Given an index to a run within the nameGroupPool[], and a
-     * nameChoice (0,1,...), select the nameChoice-th entry of the run.
-     */
-    private String chooseNameInGroup(short nameGroupIndex, int nameChoice) {
-        if (nameChoice < 0) {
-            throw new IllegalIcuArgumentException("Invalid name choice");
-        }
-        while (nameChoice-- > 0) {
-            if (nameGroupPool[nameGroupIndex++] < 0) {
-                throw new IllegalIcuArgumentException("Invalid name choice");
-            }
-        }
-        short a = nameGroupPool[nameGroupIndex];
-        return stringPool[(a < 0) ? -a : a];
-    }
-
-    /**
-     * Return the valueMap[] entry for a given property.
-     */
-    private ValueMap getValueMap(int property) {
-        int valueMapIndex = enumToValue.getShort(property);
-        return valueMapArray[valueMapIndex];
-    }
-
-    //----------------------------------------------------------------
-    // ICUBinary API
-
-    /**
-     * Return true if the given data version can be used.
-     */
-    public boolean isDataVersionAcceptable(byte version[])   {
-        return version[0] == DATA_FORMAT_VERSION;
-    }
-
-    //----------------------------------------------------------------
-    // Builder
-
-    /**
-     * A specialized ICUBinaryStream that can map between offsets and
-     * index values into various arrays (stringPool, nameGroupPool,
-     * and valueMap).  It also knows how to read various structures.
-     */
-    static class Builder extends ICUBinaryStream {
-
-        // map[i] = offset of object i.  We need maps for all of our
-        // arrays.  The arrays are indexed by offset in the raw binary
-        // file; we need to translate that to index.
-
-        private short stringPool_map[];
-
-        private short valueMap_map[];
-
-        private short nameGroup_map[];
-
-        public Builder(byte raw[]) {
-            super(raw);
-        }
-
-        /**
-         * The valueMap_map[] must be setup in advance.  This method
-         * does that.
-         */
-        public void setupValueMap_map(short offset, short count) {
-            valueMap_map = new short[count];
-            for (int i=0; i<count; ++i) {
-                // Start of each entry.  Each entry is 6 bytes long.
-                valueMap_map[i] = (short) (offset + i * 6);
-            }
-        }
-
-        /**
-         * Read stringPool[].  Build up translation table from offsets
-         * to string indices (stringPool_map[]).
-         */
-        public String[] readStringPool(short offset, short count)
-            throws IOException {
-            seek(offset);
-            // Allocate one more stringPool entry than needed.  Use this
-            // to store a "no string" entry in the pool, at index 0.  This
-            // maps to offset 0, so let stringPool_map[0] = 0.
-            String stringPool[] = new String[count + 1];
-            stringPool_map = new short[count + 1];
-            short pos = offset;
-            StringBuilder buf = new StringBuilder();
-            stringPool_map[0] = 0;
-            for (int i=1; i<=count; ++i) {
-                buf.setLength(0);
-                for (;;) {
-                    // This works because the name is invariant-ASCII
-                    char c = (char) readUnsignedByte();
-                    if (c == 0) break;
-                    buf.append(c);
-                }
-                stringPool_map[i] = pos;
-                stringPool[i] = buf.toString();
-                pos += stringPool[i].length() + 1;
-            }
-            if (DEBUG) {
-                System.out.println("read stringPool x " + count +
-                                   ": " + stringPool[1] + ", " +
-                                   stringPool[2] + ", " +
-                                   stringPool[3] + ",...");
-            }
-            return stringPool;
-        }
-
-        /**
-         * Read the nameGroupPool[], and build up the offset->index
-         * map (nameGroupPool_map[]).
-         */
-        public short[] readNameGroupPool(short offset, short count)
-            throws IOException {
-            // Read nameGroupPool[].  This contains offsets from start of
-            // header.  We translate these into indices into stringPool[]
-            // on the fly.  The offset 0, which indicates "no entry", we
-            // translate into index 0, which contains a null String
-            // pointer.
-            seek(offset);
-            short pos = offset;
-            short nameGroupPool[] = new short[count];
-            nameGroup_map = new short[count];
-            for (int i=0; i<count; ++i) {
-                nameGroup_map[i] = pos;
-                nameGroupPool[i] = stringOffsetToIndex(readShort());
-                pos += 2;
-            }
-            if (DEBUG) {
-                System.out.println("read nameGroupPool x " + count +
-                                   ": " + nameGroupPool[0] + ", " +
-                                   nameGroupPool[1] + ", " +
-                                   nameGroupPool[2] + ",...");
-            }
-            return nameGroupPool;
-        }
-
-        /**
-         * Convert an offset into the string pool into a stringPool[]
-         * index.
-         */
-        private short stringOffsetToIndex(short offset) {
-            int probe = offset;
-            if (probe < 0) probe = -probe;
-            for (int i=0; i<stringPool_map.length; ++i) {
-                if (stringPool_map[i] == probe) {
-                    return (short) ((offset < 0) ? -i : i);
-                }
-            }
-            throw new IllegalStateException("Can't map string pool offset " + 
-                                            offset + " to index");
-        }
-
-        /**
-         * Convert an array of offsets into the string pool into an
-         * array of stringPool[] indices.  MODIFIES THE ARRAY IN
-         * PLACE.
-         */
-/*        private void stringOffsetToIndex(short array[]) {
-            for (int i=0; i<array.length; ++i) {
-                array[i] = stringOffsetToIndex(array[i]);
-            }
-        }*/
-
-        /**
-         * Convert an offset into the value map into a valueMap[]
-         * index.
-         */
-        private short valueMapOffsetToIndex(short offset) {
-            for (short i=0; i<valueMap_map.length; ++i) {
-                if (valueMap_map[i] == offset) {
-                    return i;
-                }
-            }
-            throw new IllegalStateException("Can't map value map offset " + 
-                                            offset + " to index");
-        }
-
-        /**
-         * Convert an array of offsets into the value map array into
-         * an array of valueMap[] indices.  MODIFIES THE ARRAY IN
-         * PLACE.
-         */
-        private void valueMapOffsetToIndex(short array[]) {
-            for (int i=0; i<array.length; ++i) {
-                array[i] = valueMapOffsetToIndex(array[i]);
-            }
-        }
-
-        /**
-         * Convert an offset into the name group pool into a
-         * nameGroupPool[] index.
-         */
-        private short nameGroupOffsetToIndex(short offset) {
-            for (short i=0; i<nameGroup_map.length; ++i) {
-                if (nameGroup_map[i] == offset) {
-                    return i;
-                }
-            }
-            throw new RuntimeException("Can't map name group offset " + offset +
-                                       " to index");
-        }
-
-        /**
-         * Convert an array of offsets into the name group pool into an
-         * array of nameGroupPool[] indices.  MODIFIES THE ARRAY IN
-         * PLACE.
-         */
-        private void nameGroupOffsetToIndex(short array[]) {
-            for (int i=0; i<array.length; ++i) {
-                array[i] = nameGroupOffsetToIndex(array[i]);
-            }
         }
     }
 }
