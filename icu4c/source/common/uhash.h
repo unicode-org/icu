@@ -583,6 +583,9 @@ uhash_hashChars(const UHashTok key);
 U_CAPI int32_t U_EXPORT2 
 uhash_hashUCharsN(const UChar *key, int32_t length);
 
+U_CAPI int32_t U_EXPORT2 
+uhash_hashCharsN(const char *key, int32_t length);
+
 /**
  * Generate a case-insensitive hash code for a null-terminated char*
  * string.  If the string is not null-terminated do not use this

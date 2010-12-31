@@ -13,6 +13,20 @@
 
 ---------------------------------------------------------------------------- ***
 
+Unicode 6.1 update
+
+(TODO: Copy and adjust most of the 6.0 update instructions,
+ except retain this following section in this new form.
+ So far, this just documents the new procedure for building the property names data.)
+
+* run genpname
+  (builds both pnames.icu and propname_data.h)
+- ~/svn.icu/tools/trunk/bld/unicode$ c/genpname/genpname -v -d ~/svn.icu/trunk/src/source/data/in
+- ~/svn.icu/tools/trunk/bld/unicode$ c/genpname/genpname -v -d ~/svn.icu/trunk/src/source/common --csource
+- rebuild ICU & tools
+
+---------------------------------------------------------------------------- ***
+
 Unicode 6.0 update
 
 *** related ICU Trac tickets

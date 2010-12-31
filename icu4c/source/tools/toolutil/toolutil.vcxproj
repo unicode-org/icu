@@ -246,6 +246,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bytetriebuilder.cpp" />
+    <ClCompile Include="bytetrieiterator.cpp" />
+    <ClCompile Include="denseranges.cpp" />
+    <ClCompile Include="dicttriebuilder.cpp" />
     <ClCompile Include="filestrm.c" />
     <ClCompile Include="filetools.cpp" />
     <ClCompile Include="flagparser.c" />
@@ -272,6 +276,9 @@
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="ucbuf.c" />
+    <ClCompile Include="uchartrie.cpp" />
+    <ClCompile Include="uchartriebuilder.cpp" />
+    <ClCompile Include="uchartrieiterator.cpp" />
     <ClCompile Include="ucm.c" />
     <ClCompile Include="ucmstate.c" />
     <ClCompile Include="unewdata.c" />
@@ -289,6 +296,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bytetriebuilder.h" />
+    <ClInclude Include="bytetrieiterator.h" />
+    <ClInclude Include="denseranges.h" />
+    <ClInclude Include="dicttriebuilder.h" />
     <ClInclude Include="filestrm.h" />
     <ClInclude Include="filetools.h" />
     <ClInclude Include="flagparser.h" />
@@ -301,6 +312,9 @@
     <ClInclude Include="swapimpl.h" />
     <ClInclude Include="toolutil.h" />
     <ClInclude Include="ucbuf.h" />
+    <ClInclude Include="uchartrie.h" />
+    <ClInclude Include="uchartriebuilder.h" />
+    <ClInclude Include="uchartrieiterator.h" />
     <ClInclude Include="ucm.h" />
     <ClInclude Include="unewdata.h" />
     <ClInclude Include="uoptions.h" />

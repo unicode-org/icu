@@ -84,6 +84,26 @@ uprv_compareInvEbcdicAsAscii(const char *s1, const char *s2);
 #endif
 
 /**
+ * Converts an EBCDIC invariant character to lowercase ASCII.
+ * @internal
+ */
+U_INTERNAL char U_EXPORT2
+uprv_ebcdicToLowercaseAscii(char c);
+
+/**
+ * \def uprv_invCharToLowercaseAscii
+ * Converts an invariant character to lowercase ASCII.
+ * @internal
+ */
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define uprv_invCharToLowercaseAscii uprv_asciitolower
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define uprv_invCharToLowercaseAscii uprv_ebcdicToLowercaseAscii
+#else
+#   error Unknown charset family!
+#endif
+
+/**
  * Copy EBCDIC to ASCII
  * @internal
  * @see uprv_strncpy

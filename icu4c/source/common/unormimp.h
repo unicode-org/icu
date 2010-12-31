@@ -163,15 +163,6 @@ enum {
 };
 
 /**
- * Swap unorm.icu. See udataswp.h.
- * @internal
- */
-U_CAPI int32_t U_EXPORT2
-unorm_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode);
-
-/**
  * Description of the format of unorm.icu version 2.3.
  *
  * Main change from version 1 to version 2:
