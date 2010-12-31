@@ -1160,7 +1160,6 @@
 #define uplug_setPlugLevel U_ICU_ENTRY_POINT_RENAME(uplug_setPlugLevel)
 #define uplug_setPlugName U_ICU_ENTRY_POINT_RENAME(uplug_setPlugName)
 #define uplug_setPlugNoUnload U_ICU_ENTRY_POINT_RENAME(uplug_setPlugNoUnload)
-#define upname_swap U_ICU_ENTRY_POINT_RENAME(upname_swap)
 #define uprops_getSource U_ICU_ENTRY_POINT_RENAME(uprops_getSource)
 #define upropsvec_addPropertyStarts U_ICU_ENTRY_POINT_RENAME(upropsvec_addPropertyStarts)
 #define uprv_aestrncpy U_ICU_ENTRY_POINT_RENAME(uprv_aestrncpy)

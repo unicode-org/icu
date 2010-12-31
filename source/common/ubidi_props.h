@@ -34,11 +34,6 @@ typedef struct UBiDiProps UBiDiProps;
 U_CFUNC const UBiDiProps *
 ubidi_getSingleton(void);
 
-U_CAPI int32_t
-ubidi_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode);
-
 U_CFUNC void
 ubidi_addPropertyStarts(const UBiDiProps *bdp, const USetAdder *sa, UErrorCode *pErrorCode);
 

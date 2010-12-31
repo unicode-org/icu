@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -864,6 +864,11 @@ uhash_hashUChars(const UHashTok key) {
 U_CAPI int32_t U_EXPORT2
 uhash_hashUCharsN(const UChar *str, int32_t length) {
     STRING_HASH(UChar, str, length, *p);
+}
+
+U_CAPI int32_t U_EXPORT2
+uhash_hashCharsN(const char *str, int32_t length) {
+    STRING_HASH(char, str, length, *p);
 }
 
 U_CAPI int32_t U_EXPORT2

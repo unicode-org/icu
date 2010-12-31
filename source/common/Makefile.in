@@ -85,7 +85,7 @@ ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o ucnvscsu.o ucnvbocu.o \
 ucnv_ext.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o ucnv_set.o ucnv_ct.o \
 uresbund.o ures_cnv.o uresdata.o resbund.o resbund_cnv.o \
 ucat.o locmap.o uloc.o locid.o locutil.o locavailable.o locdispnames.o loclikely.o locresdata.o \
-bytestream.o stringpiece.o \
+bytestream.o stringpiece.o bytetrie.o \
 ustr_cnv.o unistr_cnv.o unistr.o unistr_case.o unistr_props.o \
 utf_impl.o ustring.o ustrcase.o ucasemap.o cstring.o ustrfmt.o ustrtrns.o ustr_wcs.o utext.o \
 normalizer2impl.o normalizer2.o filterednormalizer2.o normlzr.o unorm.o unormcmp.o unorm_it.o \

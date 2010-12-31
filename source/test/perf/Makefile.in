@@ -18,7 +18,7 @@ subdir = test/perf
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = collationperf charperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf DateFmtPerf
+SUBDIRS = collationperf charperf dicttrieperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf DateFmtPerf
 
 # Subdirs that support 'xperf'
 XSUBDIRS = DateFmtPerf

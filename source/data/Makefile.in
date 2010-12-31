@@ -226,8 +226,10 @@ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
 ## DAT files - Misc. data files.
 #  2005-may-05 Removed Unicode properties files (unorm.icu, uprops.icu, ucase.icu, ubidi.icu)
 #  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
+#  2010-dec Removed pnames.icu.
+# These are now hardcoded in ICU4C and only loaded in ICU4J.
 #
-DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu coll/ucadata.icu coll/invuca.icu nfc.nrm nfkc.nrm nfkc_cf.nrm uts46.nrm
+DAT_FILES_SHORT=unames.icu cnvalias.icu coll/ucadata.icu coll/invuca.icu nfc.nrm nfkc.nrm nfkc_cf.nrm uts46.nrm
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -411,7 +413,7 @@ COLL_FILES_LIST=$(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT)
 BRK_FILES_LIST=$(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) 
 LOCALE_FILES_LIST= $(RES_FILES_SHORT) $(LANG_FILES_SHORT) $(REGION_FILES_SHORT) $(ZONE_FILES_SHORT)
 MISC_FILES_LIST=$(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(CNV_FILES_SHORT_SPECIAL) $(CURR_FILES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT) $(CFU_FILES_SHORT)
-UNI_CORE_DATA=uprops.icu ucase.icu ubidi.icu
+UNI_CORE_DATA=pnames.icu uprops.icu ucase.icu ubidi.icu
 UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
 
 ifneq ($(INCLUDE_UNI_CORE_DATA),)
@@ -494,7 +496,7 @@ $(BUILDDIR)/coll/%.icu: $(SRCDATADIR)/in/coll/%.icu
 ####################################################    SPP
 # SPP FILES
 
-$(BUILDDIR)/%.spp: $(SPREPSRCDIR)/%.txt $(TOOLBINDIR)/gensprep$(TOOLEXEEXT) $(BUILDDIR)/unames.icu $(BUILDDIR)/pnames.icu
+$(BUILDDIR)/%.spp: $(SPREPSRCDIR)/%.txt $(TOOLBINDIR)/gensprep$(TOOLEXEEXT) $(BUILDDIR)/unames.icu
 	$(INVOKE) $(TOOLBINDIR)/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(SPREPSRCDIR) -b $(@F:%.spp=%) -m $(UNICODEDATADIR) -u 3.2.0 $(<F)
 
 ####################################################    BRK
@@ -753,11 +755,10 @@ clean-resindex:
 $(BUILDDIR)/$(INDEX_NAME).res: $(INDEX_FILE) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILE)
 
-# The core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu)
+# The core Unicode properties files (pnames.icu, uprops.icu, ucase.icu, ubidi.icu)
 # are hardcoded in the common DLL and therefore not included in the data package any more.
 # They are not built by default but need to be built for ICU4J data and for getting the .c source files
 # when updating the Unicode data.
-# Changed in Makefile.in revision 1.147. See Jitterbug 4497.
 uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
 	@echo Unicode .icu files built to $(BUILDDIR)
 
@@ -778,7 +779,7 @@ JAR=jar
 # - package them into the .jar file
 $(OUTDIR)/icu4j/icudata.jar: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
 	mkdir -p $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
-	echo ubidi.icu ucase.icu uprops.icu > $(OUTDIR)/icu4j/add.txt
+	echo pnames.icu ubidi.icu ucase.icu uprops.icu > $(OUTDIR)/icu4j/add.txt
 	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 
@@ -821,9 +822,9 @@ pkgdataMakefile:
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
-# used to depend on uprops.icu ucase.icu ubidi.icu
-# see Jitterbug 4497
-ALLFILES390=pnames.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+# used to depend on pnames.icu uprops.icu ucase.icu ubidi.icu
+# These are now hardcoded in ICU4C and only loaded in ICU4J.
+ALLFILES390=cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(OUTTMPDIR)/icudata390.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
