@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/stringpiece.h"
+#include "bytetrie.h"
 #include "charstr.h"
 #include "dicttriebuilder.h"
 
@@ -59,6 +60,13 @@ private:
     int32_t writeDelta(int32_t i);
 
     // Compacting builder.
+
+    // Indirect "friend" access.
+    // Nested classes cannot be friends of ByteTrie unless the whole header is included,
+    // at least with AIX xlC_r,
+    // so this Builder class, which is a friend, provides the necessary value.
+    static int32_t minLinearMatch() { return ByteTrie::kMinLinearMatch; }
+
     class BTFinalValueNode : public FinalValueNode {
     public:
         BTFinalValueNode(int32_t v) : FinalValueNode(v) {}

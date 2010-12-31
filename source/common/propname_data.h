@@ -4,12 +4,14 @@
  *
  * file name: propname_data.h
  *
- * machine-generated on: 2010-12-30
+ * machine-generated on: 2010-12-31
  */
 
 #ifndef INCLUDED_FROM_PROPNAME_CPP
 #   error This file must be #included from propname.cpp only.
 #endif
+
+U_NAMESPACE_BEGIN
 
 const int32_t PropNameData::indexes[8]={0x20,0xf94,0x3789,0x6789,0x6789,0x6789,0x2f,0};
 
@@ -1238,3 +1240,5 @@ const char PropNameData::nameGroups[12288]={
 2,'Z',0,'S','e','p','a','r','a','t','o','r',0,2,'s','c','x',0,'S','c','r','i','p','t','_','E','x','t','e','n','s','i',
 'o','n','s',0
 };
+
+U_NAMESPACE_END

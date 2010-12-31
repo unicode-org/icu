@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "dicttriebuilder.h"
+#include "uchartrie.h"
 
 U_NAMESPACE_BEGIN
 
@@ -59,6 +60,13 @@ private:
     int32_t writeDelta(int32_t i);
 
     // Compacting builder.
+
+    // Indirect "friend" access.
+    // Nested classes cannot be friends of UCharTrie unless the whole header is included,
+    // at least with AIX xlC_r,
+    // so this Builder class, which is a friend, provides the necessary value.
+    static int32_t minLinearMatch() { return UCharTrie::kMinLinearMatch; }
+
     class UCTFinalValueNode : public FinalValueNode {
     public:
         UCTFinalValueNode(int32_t v) : FinalValueNode(v) {}

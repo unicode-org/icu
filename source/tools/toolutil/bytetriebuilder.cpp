@@ -573,7 +573,7 @@ ByteTrieBuilder::BTLinearMatchNode::write(DictTrieBuilder &builder) {
     ByteTrieBuilder &b=(ByteTrieBuilder &)builder;
     next->write(builder);
     b.write(s, length);
-    offset=b.write(ByteTrie::kMinLinearMatch+length-1);
+    offset=b.write(minLinearMatch()+length-1);
 }
 
 void
@@ -638,7 +638,7 @@ ByteTrieBuilder::BTBranchHeadNode::write(DictTrieBuilder &builder) {
     ByteTrieBuilder &b=(ByteTrieBuilder &)builder;
     next->write(builder);
     offset=b.write((length-1));
-    if(length>ByteTrie::kMinLinearMatch) {
+    if(length>minLinearMatch()) {
         offset=b.write(0);
     }
 }
