@@ -456,6 +456,8 @@ static void writeCSourceFile(const char *destdir, const Builder& builder) {
           "#   error This file must be #included from propname.cpp only.\n"
           "#endif\n\n", f);
 
+    fputs("U_NAMESPACE_BEGIN\n\n", f);
+
     usrc_writeArray(f, "const int32_t PropNameData::indexes[%ld]={",
                     builder.indexes, 32, PropNameData::IX_COUNT,
                     "};\n\n");
@@ -468,7 +470,9 @@ static void writeCSourceFile(const char *destdir, const Builder& builder) {
     usrc_writeArrayOfMostlyInvChars(
         f, "const char PropNameData::nameGroups[%ld]={\n",
         builder.nameGroups.data(), builder.nameGroups.length(),
-        "\n};\n");
+        "\n};\n\n");
+
+    fputs("U_NAMESPACE_END\n", f);
 
     fclose(f);
 }
