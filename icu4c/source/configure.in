@@ -1354,6 +1354,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/letest/Makefile \
 		test/perf/Makefile \
 		test/perf/collationperf/Makefile \
+		test/perf/dicttrieperf/Makefile \
 		test/perf/ubrkperf/Makefile \
 		test/perf/charperf/Makefile \
 		test/perf/convperf/Makefile \

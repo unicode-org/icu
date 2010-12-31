@@ -216,3 +216,42 @@ usrc_writeUTrie2Struct(FILE *f,
         fputs(postfix, f);
     }
 }
+
+U_CAPI void U_EXPORT2
+usrc_writeArrayOfMostlyInvChars(FILE *f,
+                                const char *prefix,
+                                const char *p, int32_t length,
+                                const char *postfix) {
+    int32_t i, col;
+    int prev2, prev, c;
+
+    if(prefix!=NULL) {
+        fprintf(f, prefix, (long)length);
+    }
+    prev2=prev=-1;
+    for(i=col=0; i<length; ++i, ++col) {
+        c=(uint8_t)p[i];
+        if(i>0) {
+            /* Break long lines. Try to break at interesting places, to minimize revision diffs. */
+            if( 
+                /* Very long line. */
+                col>=32 ||
+                /* Long line, break after terminating NUL. */
+                (col>=24 && prev2>=0x20 && prev==0) ||
+                /* Medium-long line, break before non-NUL, non-character byte. */
+                (col>=16 && (prev==0 || prev>=0x20) && 0<c && c<0x20)
+            ) {
+                fputs(",\n", f);
+                col=0;
+            } else {
+                fputc(',', f);
+            }
+        }
+        fprintf(f, c<0x20 ? "%u" : "'%c'", c);
+        prev2=prev;
+        prev=c;
+    }
+    if(postfix!=NULL) {
+        fputs(postfix, f);
+    }
+}

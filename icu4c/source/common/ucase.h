@@ -34,11 +34,6 @@ typedef struct UCaseProps UCaseProps;
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getSingleton(void);
 
-U_CAPI int32_t U_EXPORT2
-ucase_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode);
-
 U_CFUNC void U_EXPORT2
 ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode);
 

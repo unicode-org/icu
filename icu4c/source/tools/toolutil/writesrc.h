@@ -24,21 +24,21 @@
 #include "utrie2.h"
 
 /**
- * Create a source text file and write a header comment with the ICU copyright.
+ * Creates a source text file and write a header comment with the ICU copyright.
  * Writes a C/Java-style comment.
  */
 U_CAPI FILE * U_EXPORT2
 usrc_create(const char *path, const char *filename);
 
 /**
- * Create a source text file and write a header comment with the ICU copyright.
+ * Creates a source text file and write a header comment with the ICU copyright.
  * Writes the comment with # lines, as used in scripts and text data.
  */
 U_CAPI FILE * U_EXPORT2
 usrc_createTextData(const char *path, const char *filename);
 
 /**
- * Write the contents of an array of 8/16/32-bit words.
+ * Writes the contents of an array of 8/16/32-bit words.
  * The prefix and postfix are optional (can be NULL) and are written first/last.
  * The prefix may contain a %ld or similar field for the array length.
  * The {} and declaration etc. need to be included in prefix/postfix or
@@ -72,5 +72,21 @@ usrc_writeUTrie2Struct(FILE *f,
                        const UTrie2 *pTrie,
                        const char *indexName, const char *dataName,
                        const char *postfix);
+
+/**
+ * Writes the contents of an array of mostly invariant characters.
+ * Characters 0..0x1f are printed as numbers,
+ * others as characters with single quotes: '%c'.
+ *
+ * The prefix and postfix are optional (can be NULL) and are written first/last.
+ * The prefix may contain a %ld or similar field for the array length.
+ * The {} and declaration etc. need to be included in prefix/postfix or
+ * printed before and after the array contents.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeArrayOfMostlyInvChars(FILE *f,
+                                const char *prefix,
+                                const char *p, int32_t length,
+                                const char *postfix);
 
 #endif

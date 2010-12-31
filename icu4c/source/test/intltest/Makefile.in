@@ -50,6 +50,7 @@ sdtfmtts.o svccoll.o tchcfmt.o	selfmts.o \
 tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\
 tsmthred.o tsnmfmt.o tsputil.o tstnrapi.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o strcase.o transtst.o strtest.o thcoll.o \
+bytetrietest.o uchartrietest.o \
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o \
 testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
