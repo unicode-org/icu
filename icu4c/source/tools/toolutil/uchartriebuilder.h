@@ -31,7 +31,7 @@ public:
     UCharTrieBuilder()
             : elements(NULL), elementsCapacity(0), elementsLength(0),
               uchars(NULL), ucharsCapacity(0), ucharsLength(0) {}
-    ~UCharTrieBuilder();
+    virtual ~UCharTrieBuilder();
 
     UCharTrieBuilder &add(const UnicodeString &s, int32_t value, UErrorCode &errorCode);
 
