@@ -37,7 +37,7 @@ public:
 
 protected:
     DictTrieBuilder();
-    ~DictTrieBuilder();
+    virtual ~DictTrieBuilder();
 
     class Node;
 

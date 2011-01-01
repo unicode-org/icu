@@ -32,7 +32,7 @@ public:
     ByteTrieBuilder()
             : elements(NULL), elementsCapacity(0), elementsLength(0),
               bytes(NULL), bytesCapacity(0), bytesLength(0) {}
-    ~ByteTrieBuilder();
+    virtual ~ByteTrieBuilder();
 
     ByteTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
 
