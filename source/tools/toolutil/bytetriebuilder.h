@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  bytetriebuilder.h
@@ -46,43 +46,21 @@ public:
     }
 
 private:
-    void writeNode(int32_t start, int32_t limit, int32_t byteIndex);
-    void writeBranchSubNode(int32_t start, int32_t limit, int32_t byteIndex, int32_t length);
+    virtual int32_t getElementStringLength(int32_t i) const;
+    virtual UChar getElementUnit(int32_t i, int32_t byteIndex) const;
+    virtual int32_t getElementValue(int32_t i) const;
 
-    Node *makeNode(int32_t start, int32_t limit, int32_t byteIndex, UErrorCode &errorCode);
-    Node *makeBranchSubNode(int32_t start, int32_t limit, int32_t byteIndex,
-                            int32_t length, UErrorCode &errorCode);
+    virtual int32_t getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const;
 
-    UBool ensureCapacity(int32_t length);
-    int32_t write(int32_t byte);
-    int32_t write(const char *b, int32_t length);
-    int32_t writeValueAndFinal(int32_t i, UBool final);
-    int32_t writeDelta(int32_t i);
+    virtual int32_t countElementUnits(int32_t start, int32_t limit, int32_t byteIndex) const;
+    virtual int32_t skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t count) const;
+    virtual int32_t indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar byte) const;
 
-    // Compacting builder.
+    virtual UBool matchNodesCanHaveValues() const { return FALSE; }
 
-    // Indirect "friend" access.
-    // Nested classes cannot be friends of ByteTrie unless the whole header is included,
-    // at least with AIX xlC_r,
-    // so this Builder class, which is a friend, provides the necessary value.
-    static int32_t minLinearMatch() { return ByteTrie::kMinLinearMatch; }
-
-    class BTFinalValueNode : public FinalValueNode {
-    public:
-        BTFinalValueNode(int32_t v) : FinalValueNode(v) {}
-        virtual void write(DictTrieBuilder &builder);
-    };
-
-    class BTValueNode : public ValueNode {
-    public:
-        BTValueNode(int32_t v, Node *nextNode)
-                : ValueNode(0x222222*37+hashCode(nextNode)), next(nextNode) { setValue(v); }
-        virtual UBool operator==(const Node &other) const;
-        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
-        virtual void write(DictTrieBuilder &builder);
-    private:
-        Node *next;
-    };
+    virtual int32_t getMaxBranchLinearSubNodeLength() const { return ByteTrie::kMaxBranchLinearSubNodeLength; }
+    virtual int32_t getMinLinearMatch() const { return ByteTrie::kMinLinearMatch; }
+    virtual int32_t getMaxLinearMatchLength() const { return ByteTrie::kMaxLinearMatchLength; }
 
     class BTLinearMatchNode : public LinearMatchNode {
     public:
@@ -93,26 +71,16 @@ private:
         const char *s;
     };
 
-    class BTListBranchNode : public ListBranchNode {
-    public:
-        BTListBranchNode() : ListBranchNode() {}
-        virtual void write(DictTrieBuilder &builder);
-    };
+    virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
+                                        Node *nextNode) const;
 
-    class BTSplitBranchNode : public SplitBranchNode {
-    public:
-        BTSplitBranchNode(char middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
-                : SplitBranchNode((uint8_t)middleUnit, lessThanNode, greaterOrEqualNode) {}
-        virtual void write(DictTrieBuilder &builder);
-    };
-
-    class BTBranchHeadNode : public BranchHeadNode {
-    public:
-        BTBranchHeadNode(int32_t len, Node *subNode) : BranchHeadNode(len, subNode) {}
-        virtual void write(DictTrieBuilder &builder);
-    };
-
-    virtual Node *createFinalValueNode(int32_t value) const { return new BTFinalValueNode(value); }
+    UBool ensureCapacity(int32_t length);
+    virtual int32_t write(int32_t byte);
+    int32_t write(const char *b, int32_t length);
+    virtual int32_t writeElementUnits(int32_t i, int32_t byteIndex, int32_t length);
+    virtual int32_t writeValueAndFinal(int32_t i, UBool final);
+    virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node);
+    virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
     CharString strings;
     ByteTrieElement *elements;
