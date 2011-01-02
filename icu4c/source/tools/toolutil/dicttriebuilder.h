@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  dicttriebuilder.h
@@ -28,7 +28,7 @@ enum UDictTrieBuildOption {
 
 U_NAMESPACE_BEGIN
 
-class U_TOOLUTIL_API DictTrieBuilder : public UMemory {
+class U_TOOLUTIL_API DictTrieBuilder : public UObject {
 public:
     /** @internal */
     static UBool hashNode(const void *node);
@@ -39,10 +39,45 @@ protected:
     DictTrieBuilder();
     virtual ~DictTrieBuilder();
 
-    class Node;
-
     void createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode);
     void deleteCompactBuilder();
+
+    void build(UDictTrieBuildOption buildOption, int32_t elementsLength, UErrorCode &errorCode);
+
+    int32_t writeNode(int32_t start, int32_t limit, int32_t byteIndex);
+    int32_t writeBranchSubNode(int32_t start, int32_t limit, int32_t byteIndex, int32_t length);
+
+    class Node;
+
+    Node *makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErrorCode &errorCode);
+    Node *makeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex,
+                            int32_t length, UErrorCode &errorCode);
+
+    virtual int32_t getElementStringLength(int32_t i) const = 0;
+    virtual UChar getElementUnit(int32_t i, int32_t unitIndex) const = 0;
+    virtual int32_t getElementValue(int32_t i) const = 0;
+
+    // Finds the first unit index after this one where
+    // the first and last element have different units again.
+    virtual int32_t getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const = 0;
+
+    // Number of different bytes at unitIndex.
+    virtual int32_t countElementUnits(int32_t start, int32_t limit, int32_t unitIndex) const = 0;
+    virtual int32_t skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t count) const = 0;
+    virtual int32_t indexOfElementWithNextUnit(int32_t i, int32_t unitIndex, UChar unit) const = 0;
+
+    virtual UBool matchNodesCanHaveValues() const = 0;
+
+    virtual int32_t getMaxBranchLinearSubNodeLength() const = 0;
+    virtual int32_t getMinLinearMatch() const = 0;
+    virtual int32_t getMaxLinearMatchLength() const = 0;
+
+    // max(ByteTrie::kMaxBranchLinearSubNodeLength, UCharTrie::kMaxBranchLinearSubNodeLength).
+    static const int32_t kMaxBranchLinearSubNodeLength=5;
+
+    // Maximum number of nested split-branch levels for a branch on all 2^16 possible UChar units.
+    // log2(2^16/kMaxBranchLinearSubNodeLength) rounded up.
+    static const int32_t kMaxSplitBranchLevels=14;
 
     /**
      * Makes sure that there is only one unique node registered that is
@@ -80,8 +115,6 @@ protected:
      * they need to check for failures only before explicitly dereferencing
      * a Node pointer, or before setting a new UErrorCode.
      */
-
-    virtual Node *createFinalValueNode(int32_t value) const = 0;
 
     // Hash set of nodes, maps from nodes to integer 1.
     UHashtable *nodes;
@@ -146,12 +179,17 @@ protected:
         virtual UClassID getDynamicClassID() const;
     };
 
+    // This class should not be overridden because
+    // registerFinalValue() compares a stack-allocated FinalValueNode
+    // (stack-allocated so that we don't unnecessarily create lots of duplicate nodes)
+    // with the input node, and the
+    // !Node::operator==(other) used inside FinalValueNode::operator==(other)
+    // will be false if the typeid's are different.
     class FinalValueNode : public Node {
     public:
         FinalValueNode(int32_t v) : Node(0x111111*37+v), value(v) {}
         virtual UBool operator==(const Node &other) const;
-        // Dummy default implementation, must be overridden for real writing.
-        virtual void write(DictTrieBuilder & /*builder*/) {}
+        virtual void write(DictTrieBuilder &builder);
     protected:
         int32_t value;
     };
@@ -168,6 +206,17 @@ protected:
     protected:
         UBool hasValue;
         int32_t value;
+    };
+
+    class IntermediateValueNode : public ValueNode {
+    public:
+        IntermediateValueNode(int32_t v, Node *nextNode)
+                : ValueNode(0x222222*37+hashCode(nextNode)), next(nextNode) { setValue(v); }
+        virtual UBool operator==(const Node &other) const;
+        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(DictTrieBuilder &builder);
+    protected:
+        Node *next;
     };
 
     class LinearMatchNode : public ValueNode {
@@ -194,6 +243,7 @@ protected:
         ListBranchNode() : BranchNode(0x444444), length(0) {}
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(DictTrieBuilder &builder);
         // Adds a unit with a final value.
         void add(int32_t c, int32_t value) {
             units[length]=(UChar)c;
@@ -211,11 +261,10 @@ protected:
             hash=(hash*37+c)*37+hashCode(node);
         }
     protected:
-        // TODO: 10 -> max(BT/UCT max list lengths)
-        Node *equal[10];  // NULL means "has final value".
+        Node *equal[kMaxBranchLinearSubNodeLength];  // NULL means "has final value".
         int32_t length;
-        int32_t values[10];
-        UChar units[10];
+        int32_t values[kMaxBranchLinearSubNodeLength];
+        UChar units[kMaxBranchLinearSubNodeLength];
     };
 
     class SplitBranchNode : public BranchNode {
@@ -226,6 +275,7 @@ protected:
                   unit(middleUnit), lessThan(lessThanNode), greaterOrEqual(greaterOrEqualNode) {}
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(DictTrieBuilder &builder);
     protected:
         UChar unit;
         Node *lessThan;
@@ -240,10 +290,24 @@ protected:
                   length(len), next(subNode) {}
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(DictTrieBuilder &builder);
     protected:
         int32_t length;
         Node *next;  // A branch sub-node.
     };
+
+    virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
+                                        Node *nextNode) const = 0;
+
+    virtual int32_t write(int32_t byte) = 0;
+    virtual int32_t writeElementUnits(int32_t i, int32_t byteIndex, int32_t length) = 0;
+    virtual int32_t writeValueAndFinal(int32_t i, UBool final) = 0;
+    virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node) = 0;
+    virtual int32_t writeDeltaTo(int32_t jumpTarget) = 0;
+
+private:
+    // No ICU "poor man's RTTI" for this class nor its subclasses.
+    virtual UClassID getDynamicClassID() const;
 };
 
 U_NAMESPACE_END
