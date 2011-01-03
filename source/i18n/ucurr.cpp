@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -1530,7 +1530,7 @@ static const struct CurrencyList {
     {"DZD", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"ECS", UCURR_COMMON|UCURR_DEPRECATED},
     {"ECV", UCURR_UNCOMMON|UCURR_DEPRECATED},
-    {"EEK", UCURR_COMMON|UCURR_NON_DEPRECATED},
+    {"EEK", UCURR_COMMON|UCURR_DEPRECATED},
     {"EGP", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"EQE", UCURR_COMMON|UCURR_DEPRECATED},
     {"ERN", UCURR_COMMON|UCURR_NON_DEPRECATED},
