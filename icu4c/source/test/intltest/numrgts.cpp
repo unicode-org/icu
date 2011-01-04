@@ -2732,7 +2732,7 @@ void NumberFormatRegressionTest::Test8199(void) {
     TEST_ASSERT(Formattable::kDouble == val.getType());
     TEST_ASSERT(100000000000000001LL == val.getInt64(status));
     TEST_CHECK_STATUS(status);
-    TEST_ASSERT(100000000000000000 == val.getDouble(status));
+    TEST_ASSERT(100000000000000000.0 == val.getDouble(status));
     TEST_CHECK_STATUS(status);
 
     numStr = "1E17";  // Parses with the internal decimal number having non-zero exponent

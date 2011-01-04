@@ -432,7 +432,7 @@ Formattable::getLong(UErrorCode& status) const
 //    Larger ints may be rounded to a near-by value as not all are representable.
 // TODO:  move this constant elsewhere, possibly configure it for different
 //        floating point formats, if any non-standard ones are still in use.
-static const int64_t U_DOUBLE_MAX_EXACT_INT = 9007199254740992;
+static const int64_t U_DOUBLE_MAX_EXACT_INT = 9007199254740992LL;
 
 int64_t
 Formattable::getInt64(UErrorCode& status) const
