@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and    *
+* Copyright (C) 1997-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -17,6 +17,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <math.h>
 #include "unicode/fmtable.h"
 #include "unicode/ustring.h"
 #include "unicode/measure.h"
@@ -427,6 +428,12 @@ Formattable::getLong(UErrorCode& status) const
 }
 
 // -------------------------------------
+// Maximum int that can be represented exactly in a double.  (53 bits)
+//    Larger ints may be rounded to a near-by value as not all are representable.
+// TODO:  move this constant elsewhere, possibly configure it for different
+//        floating point formats, if any non-standard ones are still in use.
+static const int64_t U_DOUBLE_MAX_EXACT_INT = 9007199254740992;
+
 int64_t
 Formattable::getInt64(UErrorCode& status) const
 {
@@ -439,21 +446,28 @@ Formattable::getInt64(UErrorCode& status) const
     case Formattable::kInt64: 
         return fValue.fInt64;
     case Formattable::kDouble:
-        if (fValue.fDouble >= U_INT64_MAX) {
+        if (fValue.fDouble > (double)U_INT64_MAX) {
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MAX;
-        } else if (fValue.fDouble <= U_INT64_MIN) {
+        } else if (fValue.fDouble < (double)U_INT64_MIN) {
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MIN;
+        } else if (fabs(fValue.fDouble) > U_DOUBLE_MAX_EXACT_INT && fDecimalNum != NULL) {
+            int64_t val = fDecimalNum->getInt64();
+            if (val != 0) {
+                return val;
+            } else {
+                status = U_INVALID_FORMAT_ERROR;
+                return fValue.fDouble > 0 ? U_INT64_MAX : U_INT64_MIN;
+            }
         } else {
             return (int64_t)fValue.fDouble;
-        }
+        } 
     case Formattable::kObject:
         if (fValue.fObject == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
-        // TODO Later replace this with instanceof call
         if (instanceOfMeasure(fValue.fObject)) {
             return ((const Measure*) fValue.fObject)->
                 getNumber().getInt64(status);
