@@ -1,5 +1,5 @@
 #
-#   Copyright (C) 2002-2010, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2011, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  char_th.txt 
@@ -15,7 +15,7 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [\p{Grapheme_Cluster_Break = Control}];
-$Extend      = [\p{Grapheme_Cluster_Break = Extend} + [\u0E33 \u0EB3]];
+$Extend      = [\p{Grapheme_Cluster_Break = Extend} [\u0E33 \u0EB3]];
 
 #
 # Korean Syllable Definitions
