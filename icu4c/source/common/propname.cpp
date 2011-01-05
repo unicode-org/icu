@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -165,7 +165,7 @@ int32_t PropNameData::findPropertyValueNameGroup(int32_t valueMapIndex, int32_t 
     if(valueMapIndex==0) {
         return 0;  // The property does not have named values.
     }
-    ++valueMapIndex;  // Skip the ByteTrie offset.
+    ++valueMapIndex;  // Skip the BytesTrie offset.
     int32_t numRanges=valueMaps[valueMapIndex++];
     if(numRanges<0x10) {
         // Ranges of values.
@@ -214,11 +214,11 @@ const char *PropNameData::getName(const char *nameGroup, int32_t nameIndex) {
     return nameGroup;
 }
 
-UBool PropNameData::containsName(ByteTrie &trie, const char *name) {
+UBool PropNameData::containsName(BytesTrie &trie, const char *name) {
     if(name==NULL) {
         return FALSE;
     }
-    UDictTrieResult result=UDICTTRIE_NO_VALUE;
+    UStringTrieResult result=USTRINGTRIE_NO_VALUE;
     char c;
     while((c=*name++)!=0) {
         c=uprv_invCharToLowercaseAscii(c);
@@ -226,12 +226,12 @@ UBool PropNameData::containsName(ByteTrie &trie, const char *name) {
         if(c==0x2d || c==0x5f || c==0x20 || (0x09<=c && c<=0x0d)) {
             continue;
         }
-        if(!UDICTTRIE_RESULT_HAS_NEXT(result)) {
+        if(!USTRINGTRIE_HAS_NEXT(result)) {
             return FALSE;
         }
         result=trie.next((uint8_t)c);
     }
-    return UDICTTRIE_RESULT_HAS_VALUE(result);
+    return USTRINGTRIE_HAS_VALUE(result);
 }
 
 const char *PropNameData::getPropertyName(int32_t property, int32_t nameChoice) {
@@ -254,8 +254,8 @@ const char *PropNameData::getPropertyValueName(int32_t property, int32_t value, 
     return getName(nameGroups+nameGroupOffset, nameChoice);
 }
 
-int32_t PropNameData::getPropertyOrValueEnum(int32_t byteTrieOffset, const char *alias) {
-    ByteTrie trie(byteTries+byteTrieOffset);
+int32_t PropNameData::getPropertyOrValueEnum(int32_t bytesTrieOffset, const char *alias) {
+    BytesTrie trie(bytesTries+bytesTrieOffset);
     if(containsName(trie, alias)) {
         return trie.getValue();
     } else {
@@ -277,7 +277,7 @@ int32_t PropNameData::getPropertyValueEnum(int32_t property, const char *alias) 
         return UCHAR_INVALID_CODE;  // The property does not have named values.
     }
     // valueMapIndex is the start of the property's valueMap,
-    // where the first word is the ByteTrie offset.
+    // where the first word is the BytesTrie offset.
     return getPropertyOrValueEnum(valueMaps[valueMapIndex], alias);
 }
 

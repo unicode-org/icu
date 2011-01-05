@@ -1,74 +1,70 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  bytetrieiterator.h
+*   file name:  ucharstrieiterator.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   created on: 2010nov03
+*   created on: 2010nov15
 *   created by: Markus W. Scherer
 */
 
-#ifndef __BYTETRIEITERATOR_H__
-#define __BYTETRIEITERATOR_H__
+#ifndef __UCHARSTRIEITERATOR_H__
+#define __UCHARSTRIEITERATOR_H__
 
 /**
  * \file
- * \brief C++ API: ByteTrie iterator for all of its (byte sequence, value) pairs.
+ * \brief C++ API: UCharsTrie iterator for all of its (string, value) pairs.
  */
 
-// Needed if and when we change the .dat package index to a ByteTrie,
-// so that icupkg can work with an input package.
-
 #include "unicode/utypes.h"
-#include "unicode/stringpiece.h"
-#include "bytetrie.h"
-#include "charstr.h"
+#include "unicode/unistr.h"
+#include "ucharstrie.h"
 #include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
 
 /**
- * Iterator for all of the (byte sequence, value) pairs in a ByteTrie.
+ * Iterator for all of the (string, value) pairs in a UCharsTrie.
  */
-class U_TOOLUTIL_API ByteTrieIterator : public UMemory {
+class U_TOOLUTIL_API UCharsTrieIterator : public UMemory {
 public:
     /**
-     * Iterates from the root of a byte-serialized ByteTrie.
-     * @param trieBytes The trie bytes.
-     * @param maxStringLength If 0, the iterator returns full strings/byte sequences.
+     * Iterates from the root of a UChar-serialized UCharsTrie.
+     * @param trieUChars The trie UChars.
+     * @param maxStringLength If 0, the iterator returns full strings.
      *                        Otherwise, the iterator returns strings with this maximum length.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      */
-    ByteTrieIterator(const void *trieBytes, int32_t maxStringLength, UErrorCode &errorCode);
+    UCharsTrieIterator(const UChar *trieUChars, int32_t maxStringLength, UErrorCode &errorCode);
 
     /**
-     * Iterates from the current state of the specified ByteTrie.
+     * Iterates from the current state of the specified UCharsTrie.
      * @param trie The trie whose state will be copied for iteration.
-     * @param maxStringLength If 0, the iterator returns full strings/byte sequences.
+     * @param maxStringLength If 0, the iterator returns full strings.
      *                        Otherwise, the iterator returns strings with this maximum length.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      */
-    ByteTrieIterator(const ByteTrie &trie, int32_t maxStringLength, UErrorCode &errorCode);
+    UCharsTrieIterator(const UCharsTrie &trie, int32_t maxStringLength, UErrorCode &errorCode);
 
     /**
      * Resets this iterator to its initial state.
      */
-    ByteTrieIterator &reset();
+    UCharsTrieIterator &reset();
 
     /**
-     * Finds the next (byte sequence, value) pair if there is one.
+     * Finds the next (string, value) pair if there is one.
      *
-     * If the byte sequence is truncated to the maximum length and does not
+     * If the string is truncated to the maximum length and does not
      * have a real value, then the value is set to -1.
      * In this case, this "not a real value" is indistinguishable from
      * a real value of -1.
@@ -82,9 +78,9 @@ public:
     UBool hasNext() const { return pos_!=NULL || !stack_.isEmpty(); }
 
     /**
-     * @return the NUL-terminated byte sequence for the last successful next()
+     * @return the NUL-terminated string for the last successful next()
      */
-    const StringPiece &getString() const { return sp_; }
+    const UnicodeString &getString() const { return str_; }
     /**
      * @return the value for the last successful next()
      */
@@ -94,20 +90,19 @@ private:
     UBool truncateAndStop() {
         pos_=NULL;
         value_=-1;  // no real value for str
-        sp_.set(str_.data(), str_.length());
         return TRUE;
     }
 
-    const uint8_t *branchNext(const uint8_t *pos, int32_t length, UErrorCode &errorCode);
+    const UChar *branchNext(const UChar *pos, int32_t length, UErrorCode &errorCode);
 
-    const uint8_t *bytes_;
-    const uint8_t *pos_;
-    const uint8_t *initialPos_;
+    const UChar *uchars_;
+    const UChar *pos_;
+    const UChar *initialPos_;
     int32_t remainingMatchLength_;
     int32_t initialRemainingMatchLength_;
+    UBool skipValue_;  // Skip intermediate value which was already delivered.
 
-    CharString str_;
-    StringPiece sp_;
+    UnicodeString str_;
     int32_t maxLength_;
     int32_t value_;
 
@@ -115,12 +110,12 @@ private:
     // outbound edge of a branch node.
     // The first integer is an offset from ByteTrie.bytes.
     // The second integer has the str.length() from before the node in bits 15..0,
-    // and the remaining branch length in bits 24..16. (Bits 31..25 are unused.)
-    // (We could store the remaining branch length minus 1 in bits 23..16 and not use bits 31..24,
+    // and the remaining branch length in bits 31..16.
+    // (We could store the remaining branch length minus 1 in bits 30..16 and not use the sign bit,
     // but the code looks more confusing that way.)
     UVector32 stack_;
 };
 
 U_NAMESPACE_END
 
-#endif  // __BYTETRIEITERATOR_H__
+#endif  // __UCHARSTRIEITERATOR_H__

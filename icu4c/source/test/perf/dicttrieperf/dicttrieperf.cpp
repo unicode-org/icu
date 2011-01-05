@@ -1,6 +1,6 @@
 /*  
  **********************************************************************
- *   Copyright (C) 2002-2010, International Business Machines
+ *   Copyright (C) 2010-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *  file name:  dicttrieperf.cpp
@@ -26,15 +26,15 @@
 #include <stdlib.h>
 #include "unicode/uperf.h"
 #include "unicode/utext.h"
-#include "bytetrie.h"
-#include "bytetriebuilder.h"
+#include "bytestrie.h"
+#include "bytestriebuilder.h"
 #include "charstr.h"
 #include "package.h"
 #include "toolutil.h"
 #include "triedict.h"
 #include "ucbuf.h"  // struct ULine
-#include "uchartrie.h"
-#include "uchartriebuilder.h"
+#include "ucharstrie.h"
+#include "ucharstriebuilder.h"
 #include "uoptions.h"
 #include "uvectr32.h"
 
@@ -259,18 +259,18 @@ public:
     }
 };
 
-static int32_t byteTrieLookup(const char *s, const char *nameTrieBytes) {
-    ByteTrie trie(nameTrieBytes);
-    if(UDICTTRIE_RESULT_HAS_VALUE(trie.next(s, -1))) {
+static int32_t bytesTrieLookup(const char *s, const char *nameTrieBytes) {
+    BytesTrie trie(nameTrieBytes);
+    if(USTRINGTRIE_HAS_VALUE(trie.next(s, -1))) {
         return trie.getValue();
     } else {
         return -1;
     }
 }
 
-class ByteTriePackageLookup : public PackageLookup {
+class BytesTriePackageLookup : public PackageLookup {
 public:
-    ByteTriePackageLookup(const DictionaryTriePerfTest &perf)
+    BytesTriePackageLookup(const DictionaryTriePerfTest &perf)
             : PackageLookup(perf) {
         IcuToolErrorCode errorCode("BinarySearchPackageLookup()");
         int32_t count=pkg.getItemCount();
@@ -292,20 +292,20 @@ public:
             // NUL-terminate the name for call() to find the next one.
             itemNames.append(0, errorCode);
         }
-        int32_t length=builder.build(UDICTTRIE_BUILD_SMALL, errorCode).length();
-        printf("size of ByteTrie:   %6ld\n", (long)length);
+        int32_t length=builder.build(USTRINGTRIE_BUILD_SMALL, errorCode).length();
+        printf("size of BytesTrie:   %6ld\n", (long)length);
         // count+1: +1 for the last-item limit offset which we should have always had
         printf("size of dataOffsets:%6ld\n", (long)((count+1)*4));
         printf("total index size:   %6ld\n", (long)(length+(count+1)*4));
     }
-    virtual ~ByteTriePackageLookup() {}
+    virtual ~BytesTriePackageLookup() {}
 
     virtual void call(UErrorCode *pErrorCode) {
         int32_t count=pkg.getItemCount();
-        const char *nameTrieBytes=builder.build(UDICTTRIE_BUILD_SMALL, *pErrorCode).data();
+        const char *nameTrieBytes=builder.build(USTRINGTRIE_BUILD_SMALL, *pErrorCode).data();
         const char *name=itemNames.data();
         for(int32_t i=0; i<count; ++i) {
-            if(byteTrieLookup(name, nameTrieBytes)<0) {
+            if(bytesTrieLookup(name, nameTrieBytes)<0) {
                 fprintf(stderr, "item not found: %s\n", name);
             }
             name=strchr(name, 0)+1;
@@ -313,7 +313,7 @@ public:
     }
 
 protected:
-    ByteTrieBuilder builder;
+    BytesTrieBuilder builder;
     CharString itemNames;
 };
 
@@ -337,9 +337,9 @@ class CompactTrieDictLookup : public DictLookup {
 public:
     CompactTrieDictLookup(const DictionaryTriePerfTest &perfTest)
             : DictLookup(perfTest), ctd(NULL) {
-        IcuToolErrorCode errorCode("UCharTrieDictLookup()");
+        IcuToolErrorCode errorCode("UCharsTrieDictLookup()");
         // U+0E1C is the median code unit, from
-        // the UCharTrie root node (split-branch node) for thaidict.txt.
+        // the UCharsTrie root node (split-branch node) for thaidict.txt.
         MutableTrieDictionary builder(0xe1c, errorCode);
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
@@ -386,13 +386,13 @@ protected:
 // Closely imitate CompactTrieDictionary::matches().
 // Note: CompactTrieDictionary::matches() is part of its trie implementation,
 // and while it loops over the text, it knows the current state.
-// By contrast, this implementation uses UCharTrie API functions that have to
+// By contrast, this implementation uses UCharsTrie API functions that have to
 // check the trie state each time and load/store state in the object.
 // (Whether it hasNext() and whether it is in the middle of a linear-match node.)
 static int32_t
-ucharTrieMatches(UCharTrie &trie,
-                 UText *text, int32_t textLimit,
-                 int32_t *lengths, int &count, int limit ) {
+ucharsTrieMatches(UCharsTrie &trie,
+                  UText *text, int32_t textLimit,
+                  int32_t *lengths, int &count, int limit ) {
     UChar32 c=utext_next32(text);
     // Notes:
     // a) CompactTrieDictionary::matches() does not check for U_SENTINEL.
@@ -402,19 +402,19 @@ ucharTrieMatches(UCharTrie &trie,
     }
     // Should be firstForCodePoint() but CompactTrieDictionary
     // handles only code units.
-    UDictTrieResult result=trie.first(c);
+    UStringTrieResult result=trie.first(c);
     int32_t numChars=1;
     count=0;
     for(;;) {
-        if(UDICTTRIE_RESULT_HAS_VALUE(result)) {
+        if(USTRINGTRIE_HAS_VALUE(result)) {
             if(count<limit) {
                 // lengths[count++]=(int32_t)utext_getNativeIndex(text);
                 lengths[count++]=numChars;  // CompactTrieDictionary just counts chars too.
             }
-            if(result==UDICTTRIE_HAS_FINAL_VALUE) {
+            if(result==USTRINGTRIE_FINAL_VALUE) {
                 break;
             }
-        } else if(result==UDICTTRIE_NO_MATCH) {
+        } else if(result==USTRINGTRIE_NO_MATCH) {
             break;
         }
         if(numChars>=textLimit) {
@@ -447,11 +447,11 @@ ucharTrieMatches(UCharTrie &trie,
     return numChars;
 }
 
-class UCharTrieDictLookup : public DictLookup {
+class UCharsTrieDictLookup : public DictLookup {
 public:
-    UCharTrieDictLookup(const DictionaryTriePerfTest &perfTest)
+    UCharsTrieDictLookup(const DictionaryTriePerfTest &perfTest)
             : DictLookup(perfTest) {
-        IcuToolErrorCode errorCode("UCharTrieDictLookup()");
+        IcuToolErrorCode errorCode("UCharsTrieDictLookup()");
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
         for(int32_t i=0; i<numLines; ++i) {
@@ -462,24 +462,24 @@ public:
             builder.add(UnicodeString(FALSE, lines[i].name, lines[i].len), 0, errorCode);
         }
         UnicodeString trieUChars;
-        int32_t length=builder.build(UDICTTRIE_BUILD_SMALL, trieUChars, errorCode).length();
-        printf("size of UCharTrie:          %6ld bytes\n", (long)length*2);
+        int32_t length=builder.build(USTRINGTRIE_BUILD_SMALL, trieUChars, errorCode).length();
+        printf("size of UCharsTrie:          %6ld bytes\n", (long)length*2);
     }
 
-    virtual ~UCharTrieDictLookup() {}
+    virtual ~UCharsTrieDictLookup() {}
 
 protected:
-    UCharTrieBuilder builder;
+    UCharsTrieBuilder builder;
 };
 
-class UCharTrieDictMatches : public UCharTrieDictLookup {
+class UCharsTrieDictMatches : public UCharsTrieDictLookup {
 public:
-    UCharTrieDictMatches(const DictionaryTriePerfTest &perfTest)
-            : UCharTrieDictLookup(perfTest) {}
+    UCharsTrieDictMatches(const DictionaryTriePerfTest &perfTest)
+            : UCharsTrieDictLookup(perfTest) {}
 
     virtual void call(UErrorCode *pErrorCode) {
         UnicodeString uchars;
-        UCharTrie trie(builder.build(UDICTTRIE_BUILD_SMALL, uchars, *pErrorCode).getBuffer());
+        UCharsTrie trie(builder.build(USTRINGTRIE_BUILD_SMALL, uchars, *pErrorCode).getBuffer());
         UText text=UTEXT_INITIALIZER;
         int32_t lengths[20];
         const ULine *lines=perf.getCachedLines();
@@ -491,8 +491,8 @@ public:
             }
             utext_openUChars(&text, lines[i].name, lines[i].len, pErrorCode);
             int32_t count=0;
-            ucharTrieMatches(trie, &text, lines[i].len,
-                             lengths, count, LENGTHOF(lengths));
+            ucharsTrieMatches(trie, &text, lines[i].len,
+                              lengths, count, LENGTHOF(lengths));
             if(count==0 || lengths[count-1]!=lines[i].len) {
                 fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
             }
@@ -500,14 +500,14 @@ public:
     }
 };
 
-class UCharTrieDictContains : public UCharTrieDictLookup {
+class UCharsTrieDictContains : public UCharsTrieDictLookup {
 public:
-    UCharTrieDictContains(const DictionaryTriePerfTest &perfTest)
-            : UCharTrieDictLookup(perfTest) {}
+    UCharsTrieDictContains(const DictionaryTriePerfTest &perfTest)
+            : UCharsTrieDictLookup(perfTest) {}
 
     virtual void call(UErrorCode *pErrorCode) {
         UnicodeString uchars;
-        UCharTrie trie(builder.build(UDICTTRIE_BUILD_SMALL, uchars, *pErrorCode).getBuffer());
+        UCharsTrie trie(builder.build(USTRINGTRIE_BUILD_SMALL, uchars, *pErrorCode).getBuffer());
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
         for(int32_t i=0; i<numLines; ++i) {
@@ -515,7 +515,7 @@ public:
             if(lines[i].name[0]<0x41) {
                 continue;
             }
-            if(!UDICTTRIE_RESULT_HAS_VALUE(trie.reset().next(lines[i].name, lines[i].len))) {
+            if(!USTRINGTRIE_HAS_VALUE(trie.reset().next(lines[i].name, lines[i].len))) {
                 fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
             }
         }
@@ -547,11 +547,11 @@ static UBool thaiWordToBytes(const UChar *s, int32_t length,
     return TRUE;
 }
 
-class ByteTrieDictLookup : public DictLookup {
+class BytesTrieDictLookup : public DictLookup {
 public:
-    ByteTrieDictLookup(const DictionaryTriePerfTest &perfTest)
+    BytesTrieDictLookup(const DictionaryTriePerfTest &perfTest)
             : DictLookup(perfTest), noDict(FALSE) {
-        IcuToolErrorCode errorCode("ByteTrieDictLookup()");
+        IcuToolErrorCode errorCode("BytesTrieDictLookup()");
         CharString str;
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
@@ -568,39 +568,39 @@ public:
             builder.add(str.toStringPiece(), 0, errorCode);
         }
         if(!noDict) {
-            int32_t length=builder.build(UDICTTRIE_BUILD_SMALL, errorCode).length();
-            printf("size of ByteTrie:           %6ld bytes\n", (long)length);
+            int32_t length=builder.build(USTRINGTRIE_BUILD_SMALL, errorCode).length();
+            printf("size of BytesTrie:           %6ld bytes\n", (long)length);
         }
     }
 
-    virtual ~ByteTrieDictLookup() {}
+    virtual ~BytesTrieDictLookup() {}
 
 protected:
-    ByteTrieBuilder builder;
+    BytesTrieBuilder builder;
     UBool noDict;
 };
 
 static int32_t
-byteTrieMatches(ByteTrie &trie,
-                UText *text, int32_t textLimit,
-                int32_t *lengths, int &count, int limit ) {
+bytesTrieMatches(BytesTrie &trie,
+                 UText *text, int32_t textLimit,
+                 int32_t *lengths, int &count, int limit ) {
     UChar32 c=utext_next32(text);
     if(c<0) {
         return 0;
     }
-    UDictTrieResult result=trie.first(thaiCharToByte(c));
+    UStringTrieResult result=trie.first(thaiCharToByte(c));
     int32_t numChars=1;
     count=0;
     for(;;) {
-        if(UDICTTRIE_RESULT_HAS_VALUE(result)) {
+        if(USTRINGTRIE_HAS_VALUE(result)) {
             if(count<limit) {
                 // lengths[count++]=(int32_t)utext_getNativeIndex(text);
                 lengths[count++]=numChars;  // CompactTrieDictionary just counts chars too.
             }
-            if(result==UDICTTRIE_HAS_FINAL_VALUE) {
+            if(result==USTRINGTRIE_FINAL_VALUE) {
                 break;
             }
-        } else if(result==UDICTTRIE_NO_MATCH) {
+        } else if(result==USTRINGTRIE_NO_MATCH) {
             break;
         }
         if(numChars>=textLimit) {
@@ -616,16 +616,16 @@ byteTrieMatches(ByteTrie &trie,
     return numChars;
 }
 
-class ByteTrieDictMatches : public ByteTrieDictLookup {
+class BytesTrieDictMatches : public BytesTrieDictLookup {
 public:
-    ByteTrieDictMatches(const DictionaryTriePerfTest &perfTest)
-            : ByteTrieDictLookup(perfTest) {}
+    BytesTrieDictMatches(const DictionaryTriePerfTest &perfTest)
+            : BytesTrieDictLookup(perfTest) {}
 
     virtual void call(UErrorCode *pErrorCode) {
         if(noDict) {
             return;
         }
-        ByteTrie trie(builder.build(UDICTTRIE_BUILD_SMALL, *pErrorCode).data());
+        BytesTrie trie(builder.build(USTRINGTRIE_BUILD_SMALL, *pErrorCode).data());
         UText text=UTEXT_INITIALIZER;
         int32_t lengths[20];
         const ULine *lines=perf.getCachedLines();
@@ -637,8 +637,8 @@ public:
             }
             utext_openUChars(&text, lines[i].name, lines[i].len, pErrorCode);
             int32_t count=0;
-            byteTrieMatches(trie, &text, lines[i].len,
-                            lengths, count, LENGTHOF(lengths));
+            bytesTrieMatches(trie, &text, lines[i].len,
+                             lengths, count, LENGTHOF(lengths));
             if(count==0 || lengths[count-1]!=lines[i].len) {
                 fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
             }
@@ -646,16 +646,16 @@ public:
     }
 };
 
-class ByteTrieDictContains : public ByteTrieDictLookup {
+class BytesTrieDictContains : public BytesTrieDictLookup {
 public:
-    ByteTrieDictContains(const DictionaryTriePerfTest &perfTest)
-            : ByteTrieDictLookup(perfTest) {}
+    BytesTrieDictContains(const DictionaryTriePerfTest &perfTest)
+            : BytesTrieDictLookup(perfTest) {}
 
     virtual void call(UErrorCode *pErrorCode) {
         if(noDict) {
             return;
         }
-        ByteTrie trie(builder.build(UDICTTRIE_BUILD_SMALL, *pErrorCode).data());
+        BytesTrie trie(builder.build(USTRINGTRIE_BUILD_SMALL, *pErrorCode).data());
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
         for(int32_t i=0; i<numLines; ++i) {
@@ -664,16 +664,16 @@ public:
             if(line[0]<0x41) {
                 continue;
             }
-            UDictTrieResult result=trie.first(thaiCharToByte(line[0]));
+            UStringTrieResult result=trie.first(thaiCharToByte(line[0]));
             int32_t lineLength=lines[i].len;
             for(int32_t j=1; j<lineLength; ++j) {
-                if(!UDICTTRIE_RESULT_HAS_NEXT(result)) {
+                if(!USTRINGTRIE_HAS_NEXT(result)) {
                     fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
                     break;
                 }
                 result=trie.next(thaiCharToByte(line[j]));
             }
-            if(!UDICTTRIE_RESULT_HAS_VALUE(result)) {
+            if(!USTRINGTRIE_HAS_VALUE(result)) {
                 fprintf(stderr, "word %ld (0-based) not found\n", (long)i);
             }
         }
@@ -691,27 +691,27 @@ UPerfFunction *DictionaryTriePerfTest::runIndexedTest(int32_t index, UBool exec,
             }
             break;
         case 1:
-            name="uchartriematches";
+            name="ucharstriematches";
             if(exec) {
-                return new UCharTrieDictMatches(*this);
+                return new UCharsTrieDictMatches(*this);
             }
             break;
         case 2:
-            name="uchartriecontains";
+            name="ucharstriecontains";
             if(exec) {
-                return new UCharTrieDictContains(*this);
+                return new UCharsTrieDictContains(*this);
             }
             break;
         case 3:
-            name="bytetriematches";
+            name="bytestriematches";
             if(exec) {
-                return new ByteTrieDictMatches(*this);
+                return new BytesTrieDictMatches(*this);
             }
             break;
         case 4:
-            name="bytetriecontains";
+            name="bytestriecontains";
             if(exec) {
-                return new ByteTrieDictContains(*this);
+                return new BytesTrieDictContains(*this);
             }
             break;
         default:
@@ -720,8 +720,8 @@ UPerfFunction *DictionaryTriePerfTest::runIndexedTest(int32_t index, UBool exec,
         }
     } else {
         if(index==0 && exec) {
-            puts("Running ByteTrie perf tests on the .dat package file from the --sourcedir.\n"
-                 "For UCharTrie perf tests on a dictionary text file, specify the -f or --file-name.\n");
+            puts("Running BytesTrie perf tests on the .dat package file from the --sourcedir.\n"
+                 "For UCharsTrie perf tests on a dictionary text file, specify the -f or --file-name.\n");
         }
         switch(index) {
         case 0:
@@ -737,9 +737,9 @@ UPerfFunction *DictionaryTriePerfTest::runIndexedTest(int32_t index, UBool exec,
             }
             break;
         case 2:
-            name="bytetrie";
+            name="bytestrie";
             if(exec) {
-                return new ByteTriePackageLookup(*this);
+                return new BytesTriePackageLookup(*this);
             }
             break;
         default:

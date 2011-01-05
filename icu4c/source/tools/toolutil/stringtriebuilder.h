@@ -3,32 +3,33 @@
 *   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  dicttriebuilder.h
+*   file name:  stringtriebuilder.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
 *   created on: 2010dec24
 *   created by: Markus W. Scherer
-*
-* Base class for dictionary-trie builder classes.
 */
 
-#ifndef __DICTTRIEBUILDER_H__
-#define __DICTTRIEBUILDER_H__
+#ifndef __STRINGTRIEBUILDER_H__
+#define __STRINGTRIEBUILDER_H__
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "uhash.h"
 
-enum UDictTrieBuildOption {
-    UDICTTRIE_BUILD_FAST,
-    UDICTTRIE_BUILD_SMALL
+enum UStringTrieBuildOption {
+    USTRINGTRIE_BUILD_FAST,
+    USTRINGTRIE_BUILD_SMALL
 };
 
 U_NAMESPACE_BEGIN
 
-class U_TOOLUTIL_API DictTrieBuilder : public UObject {
+/**
+ * Base class for string trie builder classes.
+ */
+class U_TOOLUTIL_API StringTrieBuilder : public UObject {
 public:
     /** @internal */
     static UBool hashNode(const void *node);
@@ -36,13 +37,13 @@ public:
     static UBool equalNodes(const void *left, const void *right);
 
 protected:
-    DictTrieBuilder();
-    virtual ~DictTrieBuilder();
+    StringTrieBuilder();
+    virtual ~StringTrieBuilder();
 
     void createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode);
     void deleteCompactBuilder();
 
-    void build(UDictTrieBuildOption buildOption, int32_t elementsLength, UErrorCode &errorCode);
+    void build(UStringTrieBuildOption buildOption, int32_t elementsLength, UErrorCode &errorCode);
 
     int32_t writeNode(int32_t start, int32_t limit, int32_t byteIndex);
     int32_t writeBranchSubNode(int32_t start, int32_t limit, int32_t byteIndex, int32_t length);
@@ -157,10 +158,10 @@ protected:
          */
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
         // write() must set the offset to a positive value.
-        virtual void write(DictTrieBuilder &builder) = 0;
+        virtual void write(StringTrieBuilder &builder) = 0;
         // See markRightEdgesFirst.
         inline void writeUnlessInsideRightEdge(int32_t firstRight, int32_t lastRight,
-                                               DictTrieBuilder &builder) {
+                                               StringTrieBuilder &builder) {
             // Note: Edge numbers are negative, lastRight<=firstRight.
             // If offset>0 then this node and its sub-nodes have been written already
             // and we need not write them again.
@@ -189,7 +190,7 @@ protected:
     public:
         FinalValueNode(int32_t v) : Node(0x111111*37+v), value(v) {}
         virtual UBool operator==(const Node &other) const;
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
     protected:
         int32_t value;
     };
@@ -214,7 +215,7 @@ protected:
                 : ValueNode(0x222222*37+hashCode(nextNode)), next(nextNode) { setValue(v); }
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
     protected:
         Node *next;
     };
@@ -243,7 +244,7 @@ protected:
         ListBranchNode() : BranchNode(0x444444), length(0) {}
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
         // Adds a unit with a final value.
         void add(int32_t c, int32_t value) {
             units[length]=(UChar)c;
@@ -275,7 +276,7 @@ protected:
                   unit(middleUnit), lessThan(lessThanNode), greaterOrEqual(greaterOrEqualNode) {}
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
     protected:
         UChar unit;
         Node *lessThan;
@@ -290,7 +291,7 @@ protected:
                   length(len), next(subNode) {}
         virtual UBool operator==(const Node &other) const;
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
     protected:
         int32_t length;
         Node *next;  // A branch sub-node.
@@ -312,4 +313,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // __DICTTRIEBUILDER_H__
+#endif  // __STRINGTRIEBUILDER_H__

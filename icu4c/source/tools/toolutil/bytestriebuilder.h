@@ -3,42 +3,43 @@
 *   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  bytetriebuilder.h
+*   file name:  bytestriebuilder.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
 *   created on: 2010sep25
 *   created by: Markus W. Scherer
-*
-* Builder class for ByteTrie dictionary trie.
 */
 
-#ifndef __BYTETRIEBUILDER_H__
-#define __BYTETRIEBUILDER_H__
+#ifndef __BYTESTRIEBUILDER_H__
+#define __BYTESTRIEBUILDER_H__
 
 #include "unicode/utypes.h"
 #include "unicode/stringpiece.h"
-#include "bytetrie.h"
+#include "bytestrie.h"
 #include "charstr.h"
-#include "dicttriebuilder.h"
+#include "stringtriebuilder.h"
 
 U_NAMESPACE_BEGIN
 
-class ByteTrieElement;
+class BytesTrieElement;
 
-class U_TOOLUTIL_API ByteTrieBuilder : public DictTrieBuilder {
+/**
+ * Builder class for BytesTrie.
+ */
+class U_TOOLUTIL_API BytesTrieBuilder : public StringTrieBuilder {
 public:
-    ByteTrieBuilder()
+    BytesTrieBuilder()
             : elements(NULL), elementsCapacity(0), elementsLength(0),
               bytes(NULL), bytesCapacity(0), bytesLength(0) {}
-    virtual ~ByteTrieBuilder();
+    virtual ~BytesTrieBuilder();
 
-    ByteTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
+    BytesTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
 
-    StringPiece build(UDictTrieBuildOption buildOption, UErrorCode &errorCode);
+    StringPiece build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
-    ByteTrieBuilder &clear() {
+    BytesTrieBuilder &clear() {
         strings.clear();
         elementsLength=0;
         bytesLength=0;
@@ -58,15 +59,15 @@ private:
 
     virtual UBool matchNodesCanHaveValues() const { return FALSE; }
 
-    virtual int32_t getMaxBranchLinearSubNodeLength() const { return ByteTrie::kMaxBranchLinearSubNodeLength; }
-    virtual int32_t getMinLinearMatch() const { return ByteTrie::kMinLinearMatch; }
-    virtual int32_t getMaxLinearMatchLength() const { return ByteTrie::kMaxLinearMatchLength; }
+    virtual int32_t getMaxBranchLinearSubNodeLength() const { return BytesTrie::kMaxBranchLinearSubNodeLength; }
+    virtual int32_t getMinLinearMatch() const { return BytesTrie::kMinLinearMatch; }
+    virtual int32_t getMaxLinearMatchLength() const { return BytesTrie::kMaxLinearMatchLength; }
 
     class BTLinearMatchNode : public LinearMatchNode {
     public:
         BTLinearMatchNode(const char *units, int32_t len, Node *nextNode);
         virtual UBool operator==(const Node &other) const;
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
     private:
         const char *s;
     };
@@ -83,7 +84,7 @@ private:
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
     CharString strings;
-    ByteTrieElement *elements;
+    BytesTrieElement *elements;
     int32_t elementsCapacity;
     int32_t elementsLength;
 
@@ -96,4 +97,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // __BYTETRIEBUILDER_H__
+#endif  // __BYTESTRIEBUILDER_H__

@@ -3,15 +3,13 @@
 *   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  uchartriebuilder.h
+*   file name:  ucharstriebuilder.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
 *   created on: 2010nov14
 *   created by: Markus W. Scherer
-*
-* Builder class for UCharTrie dictionary trie.
 */
 
 #include "unicode/utypes.h"
@@ -19,18 +17,18 @@
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "uarrsort.h"
-#include "uchartrie.h"
-#include "uchartriebuilder.h"
+#include "ucharstrie.h"
+#include "ucharstriebuilder.h"
 
 U_NAMESPACE_BEGIN
 
 /*
  * Note: This builder implementation stores (string, value) pairs with full copies
- * of the 16-bit-unit sequences, until the UCharTrie is built.
+ * of the 16-bit-unit sequences, until the UCharsTrie is built.
  * It might(!) take less memory if we collected the data in a temporary, dynamic trie.
  */
 
-class UCharTrieElement : public UMemory {
+class UCharsTrieElement : public UMemory {
 public:
     // Use compiler's default constructor, initializes nothing.
 
@@ -50,7 +48,7 @@ public:
 
     int32_t getValue() const { return value; }
 
-    int32_t compareStringTo(const UCharTrieElement &o, const UnicodeString &strings) const;
+    int32_t compareStringTo(const UCharsTrieElement &o, const UnicodeString &strings) const;
 
 private:
     // The first strings unit contains the string length.
@@ -60,8 +58,8 @@ private:
 };
 
 void
-UCharTrieElement::setTo(const UnicodeString &s, int32_t val,
-                        UnicodeString &strings, UErrorCode &errorCode) {
+UCharsTrieElement::setTo(const UnicodeString &s, int32_t val,
+                         UnicodeString &strings, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return;
     }
@@ -78,17 +76,17 @@ UCharTrieElement::setTo(const UnicodeString &s, int32_t val,
 }
 
 int32_t
-UCharTrieElement::compareStringTo(const UCharTrieElement &other, const UnicodeString &strings) const {
+UCharsTrieElement::compareStringTo(const UCharsTrieElement &other, const UnicodeString &strings) const {
     return getString(strings).compare(other.getString(strings));
 }
 
-UCharTrieBuilder::~UCharTrieBuilder() {
+UCharsTrieBuilder::~UCharsTrieBuilder() {
     delete[] elements;
     uprv_free(uchars);
 }
 
-UCharTrieBuilder &
-UCharTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorCode) {
+UCharsTrieBuilder &
+UCharsTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return *this;
     }
@@ -105,12 +103,12 @@ UCharTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorCo
         } else {
             newCapacity=4*elementsCapacity;
         }
-        UCharTrieElement *newElements=new UCharTrieElement[newCapacity];
+        UCharsTrieElement *newElements=new UCharsTrieElement[newCapacity];
         if(newElements==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
         if(elementsLength>0) {
-            uprv_memcpy(newElements, elements, elementsLength*sizeof(UCharTrieElement));
+            uprv_memcpy(newElements, elements, elementsLength*sizeof(UCharsTrieElement));
         }
         delete[] elements;
         elements=newElements;
@@ -128,15 +126,15 @@ U_CDECL_BEGIN
 static int32_t U_CALLCONV
 compareElementStrings(const void *context, const void *left, const void *right) {
     const UnicodeString *strings=reinterpret_cast<const UnicodeString *>(context);
-    const UCharTrieElement *leftElement=reinterpret_cast<const UCharTrieElement *>(left);
-    const UCharTrieElement *rightElement=reinterpret_cast<const UCharTrieElement *>(right);
+    const UCharsTrieElement *leftElement=reinterpret_cast<const UCharsTrieElement *>(left);
+    const UCharsTrieElement *rightElement=reinterpret_cast<const UCharsTrieElement *>(right);
     return leftElement->compareStringTo(*rightElement, *strings);
 }
 
 U_CDECL_END
 
 UnicodeString &
-UCharTrieBuilder::build(UDictTrieBuildOption buildOption, UnicodeString &result, UErrorCode &errorCode) {
+UCharsTrieBuilder::build(UStringTrieBuildOption buildOption, UnicodeString &result, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return result;
     }
@@ -153,7 +151,7 @@ UCharTrieBuilder::build(UDictTrieBuildOption buildOption, UnicodeString &result,
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return result;
     }
-    uprv_sortArray(elements, elementsLength, (int32_t)sizeof(UCharTrieElement),
+    uprv_sortArray(elements, elementsLength, (int32_t)sizeof(UCharsTrieElement),
                    compareElementStrings, &strings,
                    FALSE,  // need not be a stable sort
                    &errorCode);
@@ -179,7 +177,7 @@ UCharTrieBuilder::build(UDictTrieBuildOption buildOption, UnicodeString &result,
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return result;
     }
-    DictTrieBuilder::build(buildOption, elementsLength, errorCode);
+    StringTrieBuilder::build(buildOption, elementsLength, errorCode);
     if(uchars==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     } else {
@@ -189,24 +187,24 @@ UCharTrieBuilder::build(UDictTrieBuildOption buildOption, UnicodeString &result,
 }
 
 int32_t
-UCharTrieBuilder::getElementStringLength(int32_t i) const {
+UCharsTrieBuilder::getElementStringLength(int32_t i) const {
     return elements[i].getStringLength(strings);
 }
 
 UChar
-UCharTrieBuilder::getElementUnit(int32_t i, int32_t unitIndex) const {
+UCharsTrieBuilder::getElementUnit(int32_t i, int32_t unitIndex) const {
     return elements[i].charAt(unitIndex, strings);
 }
 
 int32_t
-UCharTrieBuilder::getElementValue(int32_t i) const {
+UCharsTrieBuilder::getElementValue(int32_t i) const {
     return elements[i].getValue();
 }
 
 int32_t
-UCharTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const {
-    const UCharTrieElement &firstElement=elements[first];
-    const UCharTrieElement &lastElement=elements[last];
+UCharsTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const {
+    const UCharsTrieElement &firstElement=elements[first];
+    const UCharsTrieElement &lastElement=elements[last];
     int32_t minStringLength=firstElement.getStringLength(strings);
     while(++unitIndex<minStringLength &&
             firstElement.charAt(unitIndex, strings)==
@@ -215,7 +213,7 @@ UCharTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t uni
 }
 
 int32_t
-UCharTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t unitIndex) const {
+UCharsTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t unitIndex) const {
     int32_t length=0;  // Number of different units at unitIndex.
     int32_t i=start;
     do {
@@ -229,7 +227,7 @@ UCharTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t unitIn
 }
 
 int32_t
-UCharTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t count) const {
+UCharsTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t count) const {
     do {
         UChar unit=elements[i++].charAt(unitIndex, strings);
         while(unit==elements[i].charAt(unitIndex, strings)) {
@@ -240,20 +238,20 @@ UCharTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t 
 }
 
 int32_t
-UCharTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t unitIndex, UChar unit) const {
+UCharsTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t unitIndex, UChar unit) const {
     while(unit==elements[i].charAt(unitIndex, strings)) {
         ++i;
     }
     return i;
 }
 
-UCharTrieBuilder::UCTLinearMatchNode::UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode)
+UCharsTrieBuilder::UCTLinearMatchNode::UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode)
         : LinearMatchNode(len, nextNode), s(units) {
     hash=hash*37+uhash_hashUCharsN(units, len);
 }
 
 UBool
-UCharTrieBuilder::UCTLinearMatchNode::operator==(const Node &other) const {
+UCharsTrieBuilder::UCTLinearMatchNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -265,16 +263,16 @@ UCharTrieBuilder::UCTLinearMatchNode::operator==(const Node &other) const {
 }
 
 void
-UCharTrieBuilder::UCTLinearMatchNode::write(DictTrieBuilder &builder) {
-    UCharTrieBuilder &b=(UCharTrieBuilder &)builder;
+UCharsTrieBuilder::UCTLinearMatchNode::write(StringTrieBuilder &builder) {
+    UCharsTrieBuilder &b=(UCharsTrieBuilder &)builder;
     next->write(builder);
     b.write(s, length);
     offset=b.writeValueAndType(hasValue, value, b.getMinLinearMatch()+length-1);
 }
 
-DictTrieBuilder::Node *
-UCharTrieBuilder::createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
-                                        Node *nextNode) const {
+StringTrieBuilder::Node *
+UCharsTrieBuilder::createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
+                                         Node *nextNode) const {
     return new UCTLinearMatchNode(
             elements[i].getString(strings).getBuffer()+unitIndex,
             length,
@@ -282,7 +280,7 @@ UCharTrieBuilder::createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t le
 }
 
 UBool
-UCharTrieBuilder::ensureCapacity(int32_t length) {
+UCharsTrieBuilder::ensureCapacity(int32_t length) {
     if(uchars==NULL) {
         return FALSE;  // previous memory allocation had failed
     }
@@ -308,7 +306,7 @@ UCharTrieBuilder::ensureCapacity(int32_t length) {
 }
 
 int32_t
-UCharTrieBuilder::write(int32_t unit) {
+UCharsTrieBuilder::write(int32_t unit) {
     int32_t newLength=ucharsLength+1;
     if(ensureCapacity(newLength)) {
         ucharsLength=newLength;
@@ -318,7 +316,7 @@ UCharTrieBuilder::write(int32_t unit) {
 }
 
 int32_t
-UCharTrieBuilder::write(const UChar *s, int32_t length) {
+UCharsTrieBuilder::write(const UChar *s, int32_t length) {
     int32_t newLength=ucharsLength+length;
     if(ensureCapacity(newLength)) {
         ucharsLength=newLength;
@@ -328,24 +326,24 @@ UCharTrieBuilder::write(const UChar *s, int32_t length) {
 }
 
 int32_t
-UCharTrieBuilder::writeElementUnits(int32_t i, int32_t unitIndex, int32_t length) {
+UCharsTrieBuilder::writeElementUnits(int32_t i, int32_t unitIndex, int32_t length) {
     return write(elements[i].getString(strings).getBuffer()+unitIndex, length);
 }
 
 int32_t
-UCharTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
+UCharsTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
     UChar intUnits[3];
     int32_t length;
-    if(i<0 || i>UCharTrie::kMaxTwoUnitValue) {
-        intUnits[0]=(UChar)(UCharTrie::kThreeUnitValueLead);
+    if(i<0 || i>UCharsTrie::kMaxTwoUnitValue) {
+        intUnits[0]=(UChar)(UCharsTrie::kThreeUnitValueLead);
         intUnits[1]=(UChar)(i>>16);
         intUnits[2]=(UChar)i;
         length=3;
-    } else if(i<=UCharTrie::kMaxOneUnitValue) {
+    } else if(i<=UCharsTrie::kMaxOneUnitValue) {
         intUnits[0]=(UChar)(i);
         length=1;
     } else {
-        intUnits[0]=(UChar)(UCharTrie::kMinTwoUnitValueLead+(i>>16));
+        intUnits[0]=(UChar)(UCharsTrie::kMinTwoUnitValueLead+(i>>16));
         intUnits[1]=(UChar)i;
         length=2;
     }
@@ -354,22 +352,22 @@ UCharTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
 }
 
 int32_t
-UCharTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node) {
+UCharsTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node) {
     if(!hasValue) {
         return write(node);
     }
     UChar intUnits[3];
     int32_t length;
-    if(value<0 || value>UCharTrie::kMaxTwoUnitNodeValue) {
-        intUnits[0]=(UChar)(UCharTrie::kThreeUnitNodeValueLead);
+    if(value<0 || value>UCharsTrie::kMaxTwoUnitNodeValue) {
+        intUnits[0]=(UChar)(UCharsTrie::kThreeUnitNodeValueLead);
         intUnits[1]=(UChar)(value>>16);
         intUnits[2]=(UChar)value;
         length=3;
-    } else if(value<=UCharTrie::kMaxOneUnitNodeValue) {
+    } else if(value<=UCharsTrie::kMaxOneUnitNodeValue) {
         intUnits[0]=(UChar)((value+1)<<6);
         length=1;
     } else {
-        intUnits[0]=(UChar)(UCharTrie::kMinTwoUnitNodeValueLead+((value>>10)&0x7fc0));
+        intUnits[0]=(UChar)(UCharsTrie::kMinTwoUnitNodeValueLead+((value>>10)&0x7fc0));
         intUnits[1]=(UChar)value;
         length=2;
     }
@@ -378,18 +376,18 @@ UCharTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node)
 }
 
 int32_t
-UCharTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
+UCharsTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
     int32_t i=ucharsLength-jumpTarget;
     UChar intUnits[3];
     int32_t length;
     U_ASSERT(i>=0);
-    if(i<=UCharTrie::kMaxOneUnitDelta) {
+    if(i<=UCharsTrie::kMaxOneUnitDelta) {
         length=0;
-    } else if(i<=UCharTrie::kMaxTwoUnitDelta) {
-        intUnits[0]=(UChar)(UCharTrie::kMinTwoUnitDeltaLead+(i>>16));
+    } else if(i<=UCharsTrie::kMaxTwoUnitDelta) {
+        intUnits[0]=(UChar)(UCharsTrie::kMinTwoUnitDeltaLead+(i>>16));
         length=1;
     } else {
-        intUnits[0]=(UChar)(UCharTrie::kThreeUnitDeltaLead);
+        intUnits[0]=(UChar)(UCharsTrie::kThreeUnitDeltaLead);
         intUnits[1]=(UChar)(i>>16);
         length=2;
     }

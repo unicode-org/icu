@@ -1,9 +1,9 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  uchartrie.h
+*   file name:  ucharstrie.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -15,7 +15,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "uassert.h"
-#include "uchartrie.h"
+#include "ucharstrie.h"
 
 U_NAMESPACE_BEGIN
 
@@ -48,20 +48,20 @@ Appendable::append(const UChar *s, int32_t length) {
 
 UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Appendable)
 
-UDictTrieResult
-UCharTrie::current() const {
+UStringTrieResult
+UCharsTrie::current() const {
     const UChar *pos=pos_;
     if(pos==NULL) {
-        return UDICTTRIE_NO_MATCH;
+        return USTRINGTRIE_NO_MATCH;
     } else {
         int32_t node;
         return (remainingMatchLength_<0 && (node=*pos)>=kMinValueLead) ?
-                valueResult(node) : UDICTTRIE_NO_VALUE;
+                valueResult(node) : USTRINGTRIE_NO_VALUE;
     }
 }
 
-UDictTrieResult
-UCharTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
+UStringTrieResult
+UCharsTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
     // Branch according to the current unit.
     if(length==0) {
         length=*pos++;
@@ -83,11 +83,11 @@ UCharTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
     // and divides length by 2.
     do {
         if(uchar==*pos++) {
-            UDictTrieResult result;
+            UStringTrieResult result;
             int32_t node=*pos;
             if(node&kValueIsFinal) {
                 // Leave the final value for getValue() to read.
-                result=UDICTTRIE_HAS_FINAL_VALUE;
+                result=USTRINGTRIE_FINAL_VALUE;
             } else {
                 // Use the non-final value as the jump delta.
                 ++pos;
@@ -104,7 +104,7 @@ UCharTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
                 // end readValue()
                 pos+=delta;
                 node=*pos;
-                result= node>=kMinValueLead ? valueResult(node) : UDICTTRIE_NO_VALUE;
+                result= node>=kMinValueLead ? valueResult(node) : USTRINGTRIE_NO_VALUE;
             }
             pos_=pos;
             return result;
@@ -115,15 +115,15 @@ UCharTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
     if(uchar==*pos++) {
         pos_=pos;
         int32_t node=*pos;
-        return node>=kMinValueLead ? valueResult(node) : UDICTTRIE_NO_VALUE;
+        return node>=kMinValueLead ? valueResult(node) : USTRINGTRIE_NO_VALUE;
     } else {
         stop();
-        return UDICTTRIE_NO_MATCH;
+        return USTRINGTRIE_NO_MATCH;
     }
 }
 
-UDictTrieResult
-UCharTrie::nextImpl(const UChar *pos, int32_t uchar) {
+UStringTrieResult
+UCharsTrie::nextImpl(const UChar *pos, int32_t uchar) {
     int32_t node=*pos++;
     for(;;) {
         if(node<kMinLinearMatch) {
@@ -135,7 +135,7 @@ UCharTrie::nextImpl(const UChar *pos, int32_t uchar) {
                 remainingMatchLength_=--length;
                 pos_=pos;
                 return (length<0 && (node=*pos)>=kMinValueLead) ?
-                        valueResult(node) : UDICTTRIE_NO_VALUE;
+                        valueResult(node) : USTRINGTRIE_NO_VALUE;
             } else {
                 // No match.
                 break;
@@ -150,14 +150,14 @@ UCharTrie::nextImpl(const UChar *pos, int32_t uchar) {
         }
     }
     stop();
-    return UDICTTRIE_NO_MATCH;
+    return USTRINGTRIE_NO_MATCH;
 }
 
-UDictTrieResult
-UCharTrie::next(int32_t uchar) {
+UStringTrieResult
+UCharsTrie::next(int32_t uchar) {
     const UChar *pos=pos_;
     if(pos==NULL) {
-        return UDICTTRIE_NO_MATCH;
+        return USTRINGTRIE_NO_MATCH;
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     if(length>=0) {
@@ -167,24 +167,24 @@ UCharTrie::next(int32_t uchar) {
             pos_=pos;
             int32_t node;
             return (length<0 && (node=*pos)>=kMinValueLead) ?
-                    valueResult(node) : UDICTTRIE_NO_VALUE;
+                    valueResult(node) : USTRINGTRIE_NO_VALUE;
         } else {
             stop();
-            return UDICTTRIE_NO_MATCH;
+            return USTRINGTRIE_NO_MATCH;
         }
     }
     return nextImpl(pos, uchar);
 }
 
-UDictTrieResult
-UCharTrie::next(const UChar *s, int32_t sLength) {
+UStringTrieResult
+UCharsTrie::next(const UChar *s, int32_t sLength) {
     if(sLength<0 ? *s==0 : sLength==0) {
         // Empty input.
         return current();
     }
     const UChar *pos=pos_;
     if(pos==NULL) {
-        return UDICTTRIE_NO_MATCH;
+        return USTRINGTRIE_NO_MATCH;
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     for(;;) {
@@ -198,7 +198,7 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
                     pos_=pos;
                     int32_t node;
                     return (length<0 && (node=*pos)>=kMinValueLead) ?
-                            valueResult(node) : UDICTTRIE_NO_VALUE;
+                            valueResult(node) : USTRINGTRIE_NO_VALUE;
                 }
                 if(length<0) {
                     remainingMatchLength_=length;
@@ -206,7 +206,7 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
                 }
                 if(uchar!=*pos) {
                     stop();
-                    return UDICTTRIE_NO_MATCH;
+                    return USTRINGTRIE_NO_MATCH;
                 }
                 ++pos;
                 --length;
@@ -218,7 +218,7 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
                     pos_=pos;
                     int32_t node;
                     return (length<0 && (node=*pos)>=kMinValueLead) ?
-                            valueResult(node) : UDICTTRIE_NO_VALUE;
+                            valueResult(node) : USTRINGTRIE_NO_VALUE;
                 }
                 uchar=*s++;
                 --sLength;
@@ -228,7 +228,7 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
                 }
                 if(uchar!=*pos) {
                     stop();
-                    return UDICTTRIE_NO_MATCH;
+                    return USTRINGTRIE_NO_MATCH;
                 }
                 ++pos;
                 --length;
@@ -237,9 +237,9 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
         int32_t node=*pos++;
         for(;;) {
             if(node<kMinLinearMatch) {
-                UDictTrieResult result=branchNext(pos, node, uchar);
-                if(result==UDICTTRIE_NO_MATCH) {
-                    return UDICTTRIE_NO_MATCH;
+                UStringTrieResult result=branchNext(pos, node, uchar);
+                if(result==USTRINGTRIE_NO_MATCH) {
+                    return USTRINGTRIE_NO_MATCH;
                 }
                 // Fetch the next input unit, if there is one.
                 if(sLength<0) {
@@ -253,10 +253,10 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
                     uchar=*s++;
                     --sLength;
                 }
-                if(result==UDICTTRIE_HAS_FINAL_VALUE) {
+                if(result==USTRINGTRIE_FINAL_VALUE) {
                     // No further matching units.
                     stop();
-                    return UDICTTRIE_NO_MATCH;
+                    return USTRINGTRIE_NO_MATCH;
                 }
                 pos=pos_;  // branchNext() advanced pos and wrote it to pos_ .
                 node=*pos++;
@@ -265,7 +265,7 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
                 length=node-kMinLinearMatch;  // Actual match length minus 1.
                 if(uchar!=*pos) {
                     stop();
-                    return UDICTTRIE_NO_MATCH;
+                    return USTRINGTRIE_NO_MATCH;
                 }
                 ++pos;
                 --length;
@@ -273,7 +273,7 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
             } else if(node&kValueIsFinal) {
                 // No further matching units.
                 stop();
-                return UDICTTRIE_NO_MATCH;
+                return USTRINGTRIE_NO_MATCH;
             } else {
                 // Skip intermediate value.
                 pos=skipNodeValue(pos, node);
@@ -284,8 +284,8 @@ UCharTrie::next(const UChar *s, int32_t sLength) {
 }
 
 const UChar *
-UCharTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
-                                    UBool haveUniqueValue, int32_t &uniqueValue) {
+UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
+                                      UBool haveUniqueValue, int32_t &uniqueValue) {
     while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison byte
         if(NULL==findUniqueValueFromBranch(jumpByDelta(pos), length>>1, haveUniqueValue, uniqueValue)) {
@@ -322,7 +322,7 @@ UCharTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
 }
 
 UBool
-UCharTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &uniqueValue) {
+UCharsTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &uniqueValue) {
     int32_t node=*pos++;
     for(;;) {
         if(node<kMinLinearMatch) {
@@ -365,7 +365,7 @@ UCharTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &uni
 }
 
 int32_t
-UCharTrie::getNextUChars(Appendable &out) const {
+UCharsTrie::getNextUChars(Appendable &out) const {
     const UChar *pos=pos_;
     if(pos==NULL) {
         return 0;
@@ -397,7 +397,7 @@ UCharTrie::getNextUChars(Appendable &out) const {
 }
 
 void
-UCharTrie::getNextBranchUChars(const UChar *pos, int32_t length, Appendable &out) {
+UCharsTrie::getNextBranchUChars(const UChar *pos, int32_t length, Appendable &out) {
     while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison unit
         getNextBranchUChars(jumpByDelta(pos), length>>1, out);
