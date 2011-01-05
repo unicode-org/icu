@@ -1,25 +1,25 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2010nov23
 *   created by: Markus W. Scherer
-*   ported from ICU4C bytetrie.h/.cpp
+*   ported from ICU4C bytestrie.h/.cpp
 */
 package com.ibm.icu.impl;
 
 import java.io.IOException;
 
 /**
- * Light-weight, non-const reader class for a ByteTrie.
+ * Light-weight, non-const reader class for a BytesTrie.
  * Traverses a byte-serialized data structure with minimal state,
  * for mapping byte sequences to non-negative integer values.
  *
  * @author Markus W. Scherer
  */
-public final class ByteTrie implements Cloneable {
-    public ByteTrie(byte[] trieBytes, int offset) {
+public final class BytesTrie implements Cloneable {
+    public BytesTrie(byte[] trieBytes, int offset) {
         bytes_=trieBytes;
         pos_=root_=offset;
         remainingMatchLength_=-1;
@@ -38,14 +38,14 @@ public final class ByteTrie implements Cloneable {
     /**
      * Resets this trie to its initial state.
      */
-    public ByteTrie reset() {
+    public BytesTrie reset() {
         pos_=root_;
         remainingMatchLength_=-1;
         return this;
     }
 
     /**
-     * ByteTrie state object, for saving a trie's current state
+     * BytesTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
      */
     public static final class State {
@@ -59,7 +59,7 @@ public final class ByteTrie implements Cloneable {
      * Saves the state of this trie.
      * @see #resetToState
      */
-    public ByteTrie saveState(State state) /*const*/ {
+    public BytesTrie saveState(State state) /*const*/ {
         state.bytes=bytes_;
         state.pos=pos_;
         state.remainingMatchLength=remainingMatchLength_;
@@ -73,7 +73,7 @@ public final class ByteTrie implements Cloneable {
      * @see #saveState
      * @see #reset
      */
-    public ByteTrie resetToState(State state) {
+    public BytesTrie resetToState(State state) {
         if(bytes_==state.bytes && bytes_!=null) {
             pos_=state.pos;
             remainingMatchLength_=state.remainingMatchLength;
@@ -84,7 +84,7 @@ public final class ByteTrie implements Cloneable {
     }
 
     /**
-     * Return values for ByteTrie.next(), UCharTrie.next() and similar methods.
+     * Return values for BytesTrie.next(), UCharsTrie.next() and similar methods.
      */
     public enum Result {
         /**
@@ -103,14 +103,14 @@ public final class ByteTrie implements Cloneable {
          * This value will be returned by getValue().
          * No further input byte/unit can continue a matching string.
          */
-        HAS_FINAL_VALUE,
+        FINAL_VALUE,
         /**
          * The input unit(s) continued a matching string
          * and there is a value for the string so far.
          * This value will be returned by getValue().
          * Another input byte/unit can continue a matching string.
          */
-        HAS_VALUE;
+        INTERMEDIATE_VALUE;
 
         /**
          * Same as (result!=NO_MATCH).
@@ -119,14 +119,14 @@ public final class ByteTrie implements Cloneable {
         public boolean matches() { return ordinal()!=0; }
 
         /**
-         * Equivalent to (result==HAS_VALUE || result==HAS_FINAL_VALUE).
+         * Equivalent to (result==INTERMEDIATE_VALUE || result==FINAL_VALUE).
          * @return true if there is a value for the input bytes/units so far.
          * @see #getValue
          */
         public boolean hasValue() { return ordinal()>=2; }
 
         /**
-         * Equivalent to (result==NO_VALUE || result==HAS_VALUE).
+         * Equivalent to (result==NO_VALUE || result==INTERMEDIATE_VALUE).
          * @return true if another input byte/unit can continue a matching string.
          */
         public boolean hasNext() { return (ordinal()&1)!=0; }
@@ -190,7 +190,8 @@ public final class ByteTrie implements Cloneable {
      * <pre>
      * Result result=current();
      * for(each c in s)
-     *   if((result=next(c))==Result.NO_MATCH) return Result.NO_MATCH;
+     *   if(!result.hasNext()) return Result.NO_MATCH;
+     *   result=next(c);
      * return result;
      * </pre>
      * @return The match/value Result.
@@ -199,7 +200,7 @@ public final class ByteTrie implements Cloneable {
 
     /**
      * Returns a matching byte sequence's value if called immediately after
-     * current()/first()/next() returned Result.HAS_VALUE or Result.HAS_FINAL_VALUE.
+     * current()/first()/next() returned Result.INTERMEDIATE_VALUE or Result.FINAL_VALUE.
      * getValue() can be called multiple times.
      *
      * Do not call getValue() after Result.NO_MATCH or Result.NO_VALUE!
@@ -341,7 +342,7 @@ public final class ByteTrie implements Cloneable {
         return pos;
     }
 
-    private static Result[] valueResults_={ Result.HAS_VALUE, Result.HAS_FINAL_VALUE };
+    private static Result[] valueResults_={ Result.INTERMEDIATE_VALUE, Result.FINAL_VALUE };
 
     // Handles a branch node for both next(byte) and next(string).
     private Result branchNext(int pos, int length, int inByte) {
@@ -371,7 +372,7 @@ public final class ByteTrie implements Cloneable {
                 assert(node>=kMinValueLead);
                 if((node&kValueIsFinal)!=0) {
                     // Leave the final value for getValue() to read.
-                    result=Result.HAS_FINAL_VALUE;
+                    result=Result.FINAL_VALUE;
                 } else {
                     // Use the non-final value as the jump delta.
                     ++pos;
@@ -546,7 +547,7 @@ public final class ByteTrie implements Cloneable {
         }
     }
 
-    // ByteTrie data structure
+    // BytesTrie data structure
     //
     // The trie consists of a series of byte-serialized nodes for incremental
     // string/byte sequence matching. The root node is at the beginning of the trie data.
@@ -625,7 +626,7 @@ public final class ByteTrie implements Cloneable {
     /*package*/ static final int kMaxTwoByteDelta=((kMinThreeByteDeltaLead-kMinTwoByteDeltaLead)<<8)-1;  // 0x2fff
     /*package*/ static final int kMaxThreeByteDelta=((kFourByteDeltaLead-kMinThreeByteDeltaLead)<<16)-1;  // 0xdffff
 
-    // Fixed value referencing the ByteTrie bytes.
+    // Fixed value referencing the BytesTrie bytes.
     private byte[] bytes_;
     private int root_;
 

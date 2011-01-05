@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2010, International Business Machines
+ * Copyright (c) 2002-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -63,7 +63,7 @@ public final class UPropertyAliases {
     // data in pnames.icu.
 
     private int[] valueMaps;
-    private byte[] byteTries;
+    private byte[] bytesTries;
     private String nameGroups;
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -99,12 +99,12 @@ public final class UPropertyAliases {
             valueMaps[i]=ds.readInt();
         }
 
-        // Read the byteTries.
+        // Read the bytesTries.
         offset=nextOffset;
         nextOffset=inIndexes[IX_NAME_GROUPS_OFFSET];
         int numBytes=nextOffset-offset;
-        byteTries=new byte[numBytes];
-        ds.readFully(byteTries);
+        bytesTries=new byte[numBytes];
+        ds.readFully(bytesTries);
 
         // Read the nameGroups and turn them from ASCII bytes into a Java String.
         offset=nextOffset;
@@ -145,7 +145,7 @@ public final class UPropertyAliases {
         if(valueMapIndex==0) {
             return 0;  // The property does not have named values.
         }
-        ++valueMapIndex;  // Skip the ByteTrie offset.
+        ++valueMapIndex;  // Skip the BytesTrie offset.
         int numRanges=valueMaps[valueMapIndex++];
         if(numRanges<0x10) {
             // Ranges of values.
@@ -203,8 +203,8 @@ public final class UPropertyAliases {
         return 'A'<=c && c<='Z' ? c+0x20 : c;
     }
 
-    private boolean containsName(ByteTrie trie, CharSequence name) {
-        ByteTrie.Result result=ByteTrie.Result.NO_VALUE;
+    private boolean containsName(BytesTrie trie, CharSequence name) {
+        BytesTrie.Result result=BytesTrie.Result.NO_VALUE;
         for(int i=0; i<name.length(); ++i) {
             int c=name.charAt(i);
             // Ignore delimiters '-', '_', and ASCII White_Space.
@@ -272,8 +272,8 @@ public final class UPropertyAliases {
         return getName(nameGroupOffset, nameChoice);
     }
 
-    private int getPropertyOrValueEnum(int byteTrieOffset, CharSequence alias) {
-        ByteTrie trie=new ByteTrie(byteTries, byteTrieOffset);
+    private int getPropertyOrValueEnum(int bytesTrieOffset, CharSequence alias) {
+        BytesTrie trie=new BytesTrie(bytesTries, bytesTrieOffset);
         if(containsName(trie, alias)) {
             return trie.getValue();
         } else {
@@ -306,7 +306,7 @@ public final class UPropertyAliases {
                     ") does not have named values");
         }
         // valueMapIndex is the start of the property's valueMap,
-        // where the first word is the ByteTrie offset.
+        // where the first word is the BytesTrie offset.
         return getPropertyOrValueEnum(valueMaps[valueMapIndex], alias);
     }
 
