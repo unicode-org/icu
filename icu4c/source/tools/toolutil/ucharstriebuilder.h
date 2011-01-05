@@ -3,41 +3,42 @@
 *   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  uchartriebuilder.h
+*   file name:  ucharstriebuilder.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
 *   created on: 2010nov14
 *   created by: Markus W. Scherer
-*
-* Builder class for UCharTrie dictionary trie.
 */
 
-#ifndef __UCHARTRIEBUILDER_H__
-#define __UCHARTRIEBUILDER_H__
+#ifndef __UCHARSTRIEBUILDER_H__
+#define __UCHARSTRIEBUILDER_H__
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
-#include "dicttriebuilder.h"
-#include "uchartrie.h"
+#include "stringtriebuilder.h"
+#include "ucharstrie.h"
 
 U_NAMESPACE_BEGIN
 
-class UCharTrieElement;
+class UCharsTrieElement;
 
-class U_TOOLUTIL_API UCharTrieBuilder : public DictTrieBuilder {
+/**
+ * Builder class for UCharsTrie.
+ */
+class U_TOOLUTIL_API UCharsTrieBuilder : public StringTrieBuilder {
 public:
-    UCharTrieBuilder()
+    UCharsTrieBuilder()
             : elements(NULL), elementsCapacity(0), elementsLength(0),
               uchars(NULL), ucharsCapacity(0), ucharsLength(0) {}
-    virtual ~UCharTrieBuilder();
+    virtual ~UCharsTrieBuilder();
 
-    UCharTrieBuilder &add(const UnicodeString &s, int32_t value, UErrorCode &errorCode);
+    UCharsTrieBuilder &add(const UnicodeString &s, int32_t value, UErrorCode &errorCode);
 
-    UnicodeString &build(UDictTrieBuildOption buildOption, UnicodeString &result, UErrorCode &errorCode);
+    UnicodeString &build(UStringTrieBuildOption buildOption, UnicodeString &result, UErrorCode &errorCode);
 
-    UCharTrieBuilder &clear() {
+    UCharsTrieBuilder &clear() {
         strings.remove();
         elementsLength=0;
         ucharsLength=0;
@@ -57,15 +58,15 @@ private:
 
     virtual UBool matchNodesCanHaveValues() const { return TRUE; }
 
-    virtual int32_t getMaxBranchLinearSubNodeLength() const { return UCharTrie::kMaxBranchLinearSubNodeLength; }
-    virtual int32_t getMinLinearMatch() const { return UCharTrie::kMinLinearMatch; }
-    virtual int32_t getMaxLinearMatchLength() const { return UCharTrie::kMaxLinearMatchLength; }
+    virtual int32_t getMaxBranchLinearSubNodeLength() const { return UCharsTrie::kMaxBranchLinearSubNodeLength; }
+    virtual int32_t getMinLinearMatch() const { return UCharsTrie::kMinLinearMatch; }
+    virtual int32_t getMaxLinearMatchLength() const { return UCharsTrie::kMaxLinearMatchLength; }
 
     class UCTLinearMatchNode : public LinearMatchNode {
     public:
         UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode);
         virtual UBool operator==(const Node &other) const;
-        virtual void write(DictTrieBuilder &builder);
+        virtual void write(StringTrieBuilder &builder);
     private:
         const UChar *s;
     };
@@ -82,7 +83,7 @@ private:
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
     UnicodeString strings;
-    UCharTrieElement *elements;
+    UCharsTrieElement *elements;
     int32_t elementsCapacity;
     int32_t elementsLength;
 
@@ -95,4 +96,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // __UCHARTRIEBUILDER_H__
+#endif  // __UCHARSTRIEBUILDER_H__

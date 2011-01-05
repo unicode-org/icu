@@ -223,8 +223,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bytetrietest.cpp" />
-    <ClCompile Include="uchartrietest.cpp" />
+    <ClCompile Include="bytestrietest.cpp" />
+    <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
     <ClCompile Include="rbbiapts.cpp" />
     <ClCompile Include="rbbitst.cpp" />

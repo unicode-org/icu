@@ -3,51 +3,49 @@
 *   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  dicttriebuilder.cpp
+*   file name:  stringtriebuilder.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
 *   created on: 2010dec24
 *   created by: Markus W. Scherer
-*
-* Base class for dictionary-trie builder classes.
 */
 
 #include <typeinfo>  // for 'typeid' to work
 #include "unicode/utypes.h"
-#include "dicttriebuilder.h"
+#include "stringtriebuilder.h"
 #include "uassert.h"
 #include "uhash.h"
 
 U_CDECL_BEGIN
 
 static int32_t U_CALLCONV
-hashDictTrieNode(const UHashTok key) {
-    return U_NAMESPACE_QUALIFIER DictTrieBuilder::hashNode(key.pointer);
+hashStringTrieNode(const UHashTok key) {
+    return U_NAMESPACE_QUALIFIER StringTrieBuilder::hashNode(key.pointer);
 }
 
 static UBool U_CALLCONV
-equalDictTrieNodes(const UHashTok key1, const UHashTok key2) {
-    return U_NAMESPACE_QUALIFIER DictTrieBuilder::equalNodes(key1.pointer, key2.pointer);
+equalStringTrieNodes(const UHashTok key1, const UHashTok key2) {
+    return U_NAMESPACE_QUALIFIER StringTrieBuilder::equalNodes(key1.pointer, key2.pointer);
 }
 
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-DictTrieBuilder::DictTrieBuilder() : nodes(NULL) {}
+StringTrieBuilder::StringTrieBuilder() : nodes(NULL) {}
 
-DictTrieBuilder::~DictTrieBuilder() {
+StringTrieBuilder::~StringTrieBuilder() {
     deleteCompactBuilder();
 }
 
 void
-DictTrieBuilder::createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode) {
+StringTrieBuilder::createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return;
     }
-    nodes=uhash_openSize(hashDictTrieNode, equalDictTrieNodes, NULL,
+    nodes=uhash_openSize(hashStringTrieNode, equalStringTrieNodes, NULL,
                          sizeGuess, &errorCode);
     if(U_SUCCESS(errorCode) && nodes==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -58,17 +56,17 @@ DictTrieBuilder::createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode) 
 }
 
 void
-DictTrieBuilder::deleteCompactBuilder() {
+StringTrieBuilder::deleteCompactBuilder() {
     uhash_close(nodes);
     nodes=NULL;
 }
 
 void
-DictTrieBuilder::build(UDictTrieBuildOption buildOption, int32_t elementsLength,
+StringTrieBuilder::build(UStringTrieBuildOption buildOption, int32_t elementsLength,
                        UErrorCode &errorCode) {
-    if(buildOption==UDICTTRIE_BUILD_FAST) {
+    if(buildOption==USTRINGTRIE_BUILD_FAST) {
         writeNode(0, elementsLength, 0);
-    } else /* UDICTTRIE_BUILD_SMALL */ {
+    } else /* USTRINGTRIE_BUILD_SMALL */ {
         createCompactBuilder(2*elementsLength, errorCode);
         Node *root=makeNode(0, elementsLength, 0, errorCode);
         if(U_SUCCESS(errorCode)) {
@@ -83,7 +81,7 @@ DictTrieBuilder::build(UDictTrieBuildOption buildOption, int32_t elementsLength,
 // and all strings of the [start..limit[ elements must be sorted and
 // have a common prefix of length unitIndex.
 int32_t
-DictTrieBuilder::writeNode(int32_t start, int32_t limit, int32_t unitIndex) {
+StringTrieBuilder::writeNode(int32_t start, int32_t limit, int32_t unitIndex) {
     UBool hasValue=FALSE;
     int32_t value=0;
     int32_t type;
@@ -131,7 +129,7 @@ DictTrieBuilder::writeNode(int32_t start, int32_t limit, int32_t unitIndex) {
 // start<limit && all strings longer than unitIndex &&
 // length different units at unitIndex
 int32_t
-DictTrieBuilder::writeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex, int32_t length) {
+StringTrieBuilder::writeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex, int32_t length) {
     UChar middleUnits[kMaxSplitBranchLevels];
     int32_t lessThan[kMaxSplitBranchLevels];
     int32_t ltLength=0;
@@ -203,8 +201,8 @@ DictTrieBuilder::writeBranchSubNode(int32_t start, int32_t limit, int32_t unitIn
 // Requires start<limit,
 // and all strings of the [start..limit[ elements must be sorted and
 // have a common prefix of length unitIndex.
-DictTrieBuilder::Node *
-DictTrieBuilder::makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErrorCode &errorCode) {
+StringTrieBuilder::Node *
+StringTrieBuilder::makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return NULL;
     }
@@ -255,8 +253,8 @@ DictTrieBuilder::makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErro
 
 // start<limit && all strings longer than unitIndex &&
 // length different units at unitIndex
-DictTrieBuilder::Node *
-DictTrieBuilder::makeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex,
+StringTrieBuilder::Node *
+StringTrieBuilder::makeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex,
                                    int32_t length, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return NULL;
@@ -314,8 +312,8 @@ DictTrieBuilder::makeBranchSubNode(int32_t start, int32_t limit, int32_t unitInd
     return node;
 }
 
-DictTrieBuilder::Node *
-DictTrieBuilder::registerNode(Node *newNode, UErrorCode &errorCode) {
+StringTrieBuilder::Node *
+StringTrieBuilder::registerNode(Node *newNode, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         delete newNode;
         return NULL;
@@ -343,8 +341,8 @@ DictTrieBuilder::registerNode(Node *newNode, UErrorCode &errorCode) {
     return newNode;
 }
 
-DictTrieBuilder::Node *
-DictTrieBuilder::registerFinalValue(int32_t value, UErrorCode &errorCode) {
+StringTrieBuilder::Node *
+StringTrieBuilder::registerFinalValue(int32_t value, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return NULL;
     }
@@ -373,34 +371,34 @@ DictTrieBuilder::registerFinalValue(int32_t value, UErrorCode &errorCode) {
 }
 
 UBool
-DictTrieBuilder::hashNode(const void *node) {
+StringTrieBuilder::hashNode(const void *node) {
     return ((const Node *)node)->hashCode();
 }
 
 UBool
-DictTrieBuilder::equalNodes(const void *left, const void *right) {
+StringTrieBuilder::equalNodes(const void *left, const void *right) {
     return *(const Node *)left==*(const Node *)right;
 }
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(DictTrieBuilder)
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(StringTrieBuilder)
 
 UBool
-DictTrieBuilder::Node::operator==(const Node &other) const {
+StringTrieBuilder::Node::operator==(const Node &other) const {
     return this==&other || (typeid(*this)==typeid(other) && hash==other.hash);
 }
 
 int32_t
-DictTrieBuilder::Node::markRightEdgesFirst(int32_t edgeNumber) {
+StringTrieBuilder::Node::markRightEdgesFirst(int32_t edgeNumber) {
     if(offset==0) {
         offset=edgeNumber;
     }
     return edgeNumber;
 }
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(DictTrieBuilder::Node)
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(StringTrieBuilder::Node)
 
 UBool
-DictTrieBuilder::FinalValueNode::operator==(const Node &other) const {
+StringTrieBuilder::FinalValueNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -412,12 +410,12 @@ DictTrieBuilder::FinalValueNode::operator==(const Node &other) const {
 }
 
 void
-DictTrieBuilder::FinalValueNode::write(DictTrieBuilder &builder) {
+StringTrieBuilder::FinalValueNode::write(StringTrieBuilder &builder) {
     offset=builder.writeValueAndFinal(value, TRUE);
 }
 
 UBool
-DictTrieBuilder::ValueNode::operator==(const Node &other) const {
+StringTrieBuilder::ValueNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -429,7 +427,7 @@ DictTrieBuilder::ValueNode::operator==(const Node &other) const {
 }
 
 UBool
-DictTrieBuilder::IntermediateValueNode::operator==(const Node &other) const {
+StringTrieBuilder::IntermediateValueNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -441,7 +439,7 @@ DictTrieBuilder::IntermediateValueNode::operator==(const Node &other) const {
 }
 
 int32_t
-DictTrieBuilder::IntermediateValueNode::markRightEdgesFirst(int32_t edgeNumber) {
+StringTrieBuilder::IntermediateValueNode::markRightEdgesFirst(int32_t edgeNumber) {
     if(offset==0) {
         offset=edgeNumber=next->markRightEdgesFirst(edgeNumber);
     }
@@ -449,13 +447,13 @@ DictTrieBuilder::IntermediateValueNode::markRightEdgesFirst(int32_t edgeNumber) 
 }
 
 void
-DictTrieBuilder::IntermediateValueNode::write(DictTrieBuilder &builder) {
+StringTrieBuilder::IntermediateValueNode::write(StringTrieBuilder &builder) {
     next->write(builder);
     offset=builder.writeValueAndFinal(value, FALSE);
 }
 
 UBool
-DictTrieBuilder::LinearMatchNode::operator==(const Node &other) const {
+StringTrieBuilder::LinearMatchNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -467,7 +465,7 @@ DictTrieBuilder::LinearMatchNode::operator==(const Node &other) const {
 }
 
 int32_t
-DictTrieBuilder::LinearMatchNode::markRightEdgesFirst(int32_t edgeNumber) {
+StringTrieBuilder::LinearMatchNode::markRightEdgesFirst(int32_t edgeNumber) {
     if(offset==0) {
         offset=edgeNumber=next->markRightEdgesFirst(edgeNumber);
     }
@@ -475,7 +473,7 @@ DictTrieBuilder::LinearMatchNode::markRightEdgesFirst(int32_t edgeNumber) {
 }
 
 UBool
-DictTrieBuilder::ListBranchNode::operator==(const Node &other) const {
+StringTrieBuilder::ListBranchNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -492,7 +490,7 @@ DictTrieBuilder::ListBranchNode::operator==(const Node &other) const {
 }
 
 int32_t
-DictTrieBuilder::ListBranchNode::markRightEdgesFirst(int32_t edgeNumber) {
+StringTrieBuilder::ListBranchNode::markRightEdgesFirst(int32_t edgeNumber) {
     if(offset==0) {
         firstEdgeNumber=edgeNumber;
         int32_t step=0;
@@ -511,7 +509,7 @@ DictTrieBuilder::ListBranchNode::markRightEdgesFirst(int32_t edgeNumber) {
 }
 
 void
-DictTrieBuilder::ListBranchNode::write(DictTrieBuilder &builder) {
+StringTrieBuilder::ListBranchNode::write(StringTrieBuilder &builder) {
     // Write the sub-nodes in reverse order: The jump lengths are deltas from
     // after their own positions, so if we wrote the minUnit sub-node first,
     // then its jump delta would be larger.
@@ -554,7 +552,7 @@ DictTrieBuilder::ListBranchNode::write(DictTrieBuilder &builder) {
 }
 
 UBool
-DictTrieBuilder::SplitBranchNode::operator==(const Node &other) const {
+StringTrieBuilder::SplitBranchNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -566,7 +564,7 @@ DictTrieBuilder::SplitBranchNode::operator==(const Node &other) const {
 }
 
 int32_t
-DictTrieBuilder::SplitBranchNode::markRightEdgesFirst(int32_t edgeNumber) {
+StringTrieBuilder::SplitBranchNode::markRightEdgesFirst(int32_t edgeNumber) {
     if(offset==0) {
         firstEdgeNumber=edgeNumber;
         edgeNumber=greaterOrEqual->markRightEdgesFirst(edgeNumber);
@@ -576,7 +574,7 @@ DictTrieBuilder::SplitBranchNode::markRightEdgesFirst(int32_t edgeNumber) {
 }
 
 void
-DictTrieBuilder::SplitBranchNode::write(DictTrieBuilder &builder) {
+StringTrieBuilder::SplitBranchNode::write(StringTrieBuilder &builder) {
     // Encode the less-than branch first.
     lessThan->writeUnlessInsideRightEdge(firstEdgeNumber, greaterOrEqual->getOffset(), builder);
     // Encode the greater-or-equal branch last because we do not jump for it at all.
@@ -588,7 +586,7 @@ DictTrieBuilder::SplitBranchNode::write(DictTrieBuilder &builder) {
 }
 
 UBool
-DictTrieBuilder::BranchHeadNode::operator==(const Node &other) const {
+StringTrieBuilder::BranchHeadNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -600,7 +598,7 @@ DictTrieBuilder::BranchHeadNode::operator==(const Node &other) const {
 }
 
 int32_t
-DictTrieBuilder::BranchHeadNode::markRightEdgesFirst(int32_t edgeNumber) {
+StringTrieBuilder::BranchHeadNode::markRightEdgesFirst(int32_t edgeNumber) {
     if(offset==0) {
         offset=edgeNumber=next->markRightEdgesFirst(edgeNumber);
     }
@@ -608,7 +606,7 @@ DictTrieBuilder::BranchHeadNode::markRightEdgesFirst(int32_t edgeNumber) {
 }
 
 void
-DictTrieBuilder::BranchHeadNode::write(DictTrieBuilder &builder) {
+StringTrieBuilder::BranchHeadNode::write(StringTrieBuilder &builder) {
     next->write(builder);
     if(length<=builder.getMinLinearMatch()) {
         offset=builder.writeValueAndType(hasValue, value, length-1);

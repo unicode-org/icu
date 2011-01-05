@@ -1,9 +1,9 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  bytetrie.h
+*   file name:  bytestrie.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -12,55 +12,54 @@
 *   created by: Markus W. Scherer
 */
 
-#ifndef __BYTETRIE_H__
-#define __BYTETRIE_H__
+#ifndef __BYTESTRIE_H__
+#define __BYTESTRIE_H__
 
 /**
  * \file
- * \brief C++ API: Dictionary trie for mapping arbitrary byte sequences
- *                 to integer values.
+ * \brief C++ API: Trie for mapping byte sequences to integer values.
  */
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "uassert.h"
-#include "udicttrie.h"
+#include "ustringtrie.h"
 
 U_NAMESPACE_BEGIN
 
 class ByteSink;
-class ByteTrieBuilder;
-class ByteTrieIterator;
+class BytesTrieBuilder;
+class BytesTrieIterator;
 
 /**
- * Light-weight, non-const reader class for a ByteTrie.
+ * Light-weight, non-const reader class for a BytesTrie.
  * Traverses a byte-serialized data structure with minimal state,
  * for mapping byte sequences to non-negative integer values.
  */
-class U_COMMON_API ByteTrie : public UMemory {
+class U_COMMON_API BytesTrie : public UMemory {
 public:
-    ByteTrie(const void *trieBytes)
+    BytesTrie(const void *trieBytes)
             : bytes_(reinterpret_cast<const uint8_t *>(trieBytes)),
               pos_(bytes_), remainingMatchLength_(-1) {}
 
     /**
      * Resets this trie to its initial state.
      */
-    ByteTrie &reset() {
+    BytesTrie &reset() {
         pos_=bytes_;
         remainingMatchLength_=-1;
         return *this;
     }
 
     /**
-     * ByteTrie state object, for saving a trie's current state
+     * BytesTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
      */
     class State : public UMemory {
     public:
         State() { bytes=NULL; }
     private:
-        friend class ByteTrie;
+        friend class BytesTrie;
 
         const uint8_t *bytes;
         const uint8_t *pos;
@@ -71,7 +70,7 @@ public:
      * Saves the state of this trie.
      * @see resetToState
      */
-    const ByteTrie &saveState(State &state) const {
+    const BytesTrie &saveState(State &state) const {
         state.bytes=bytes_;
         state.pos=pos_;
         state.remainingMatchLength=remainingMatchLength_;
@@ -85,7 +84,7 @@ public:
      * @see saveState
      * @see reset
      */
-    ByteTrie &resetToState(const State &state) {
+    BytesTrie &resetToState(const State &state) {
         if(bytes_==state.bytes && bytes_!=NULL) {
             pos_=state.pos;
             remainingMatchLength_=state.remainingMatchLength;
@@ -98,14 +97,14 @@ public:
      * and whether another input byte can continue a matching byte sequence.
      * @return The match/value Result.
      */
-    UDictTrieResult current() const;
+    UStringTrieResult current() const;
 
     /**
      * Traverses the trie from the initial state for this input byte.
      * Equivalent to reset().next(inByte).
      * @return The match/value Result.
      */
-    inline UDictTrieResult first(int32_t inByte) {
+    inline UStringTrieResult first(int32_t inByte) {
         remainingMatchLength_=-1;
         return nextImpl(bytes_, inByte);
     }
@@ -114,7 +113,7 @@ public:
      * Traverses the trie from the current state for this input byte.
      * @return The match/value Result.
      */
-    UDictTrieResult next(int32_t inByte);
+    UStringTrieResult next(int32_t inByte);
 
     /**
      * Traverses the trie from the current state for this byte sequence.
@@ -122,19 +121,20 @@ public:
      * \code
      * Result result=current();
      * for(each c in s)
-     *   if((result=next(c))==UDICTTRIE_NO_MATCH) return UDICTTRIE_NO_MATCH;
+     *   if(!USTRINGTRIE_HAS_NEXT(result)) return USTRINGTRIE_NO_MATCH;
+     *   result=next(c);
      * return result;
      * \endcode
      * @return The match/value Result.
      */
-    UDictTrieResult next(const char *s, int32_t length);
+    UStringTrieResult next(const char *s, int32_t length);
 
     /**
      * Returns a matching byte sequence's value if called immediately after
-     * current()/first()/next() returned UDICTTRIE_HAS_VALUE or UDICTTRIE_HAS_FINAL_VALUE.
+     * current()/first()/next() returned USTRINGTRIE_INTERMEDIATE_VALUE or USTRINGTRIE_FINAL_VALUE.
      * getValue() can be called multiple times.
      *
-     * Do not call getValue() after UDICTTRIE_NO_MATCH or UDICTTRIE_NO_VALUE!
+     * Do not call getValue() after USTRINGTRIE_NO_MATCH or USTRINGTRIE_NO_VALUE!
      */
     inline int32_t getValue() const {
         const uint8_t *pos=pos_;
@@ -159,7 +159,7 @@ public:
 
     /**
      * Finds each byte which continues the byte sequence from the current state.
-     * That is, each byte b for which it would be next(b)!=UDICTTRIE_NO_MATCH now.
+     * That is, each byte b for which it would be next(b)!=USTRINGTRIE_NO_MATCH now.
      * @param out Each next byte is appended to this object.
      *            (Only uses the out.Append(s, length) method.)
      * @return the number of bytes which continue the byte sequence from here
@@ -167,8 +167,8 @@ public:
     int32_t getNextBytes(ByteSink &out) const;
 
 private:
-    friend class ByteTrieBuilder;
-    friend class ByteTrieIterator;
+    friend class BytesTrieBuilder;
+    friend class BytesTrieIterator;
 
     inline void stop() {
         pos_=NULL;
@@ -212,15 +212,15 @@ private:
         return pos;
     }
 
-    static inline UDictTrieResult valueResult(int32_t node) {
-        return (UDictTrieResult)(UDICTTRIE_HAS_VALUE-(node&kValueIsFinal));
+    static inline UStringTrieResult valueResult(int32_t node) {
+        return (UStringTrieResult)(USTRINGTRIE_INTERMEDIATE_VALUE-(node&kValueIsFinal));
     }
 
     // Handles a branch node for both next(byte) and next(string).
-    UDictTrieResult branchNext(const uint8_t *pos, int32_t length, int32_t inByte);
+    UStringTrieResult branchNext(const uint8_t *pos, int32_t length, int32_t inByte);
 
     // Requires remainingLength_<0.
-    UDictTrieResult nextImpl(const uint8_t *pos, int32_t inByte);
+    UStringTrieResult nextImpl(const uint8_t *pos, int32_t inByte);
 
     // Helper functions for hasUniqueValue().
     // Recursively finds a unique value (or whether there is not a unique one)
@@ -236,7 +236,7 @@ private:
     static void getNextBranchBytes(const uint8_t *pos, int32_t length, ByteSink &out);
     static void append(ByteSink &out, int c);
 
-    // ByteTrie data structure
+    // BytesTrie data structure
     //
     // The trie consists of a series of byte-serialized nodes for incremental
     // string/byte sequence matching. The root node is at the beginning of the trie data.
@@ -315,7 +315,7 @@ private:
     static const int32_t kMaxTwoByteDelta=((kMinThreeByteDeltaLead-kMinTwoByteDeltaLead)<<8)-1;  // 0x2fff
     static const int32_t kMaxThreeByteDelta=((kFourByteDeltaLead-kMinThreeByteDeltaLead)<<16)-1;  // 0xdffff
 
-    // Fixed value referencing the ByteTrie bytes.
+    // Fixed value referencing the BytesTrie bytes.
     const uint8_t *bytes_;
 
     // Iterator variables.
@@ -328,4 +328,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // __BYTETRIE_H__
+#endif  // __BYTESTRIE_H__
