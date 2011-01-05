@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -12,7 +12,7 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
-#include "bytetriebuilder.h"
+#include "bytestriebuilder.h"
 #include "cmemory.h"
 #include "charstr.h"
 #include "cstring.h"
@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-// We test for ASCII delimiters and White_Space, and build ASCII string ByteTries.
+// We test for ASCII delimiters and White_Space, and build ASCII string BytesTries.
 #if U_CHARSET_FAMILY!=U_ASCII_FAMILY
 #   error This builder requires U_CHARSET_FAMILY==U_ASCII_FAMILY.
 #endif
@@ -203,9 +203,9 @@ public:
             }
         }
 
-        // Build the properties trie first, at ByteTrie offset 0,
+        // Build the properties trie first, at BytesTrie offset 0,
         // so that we need not store another offset for it.
-        buildAliasesByteTrie(PROPERTY, PROPERTY_COUNT, errorCode);
+        buildAliasesBytesTrie(PROPERTY, PROPERTY_COUNT, errorCode);
 
         // Build the name group for the first property, at nameGroups offset 0.
         // Name groups for *value* aliases must not start at offset 0
@@ -215,14 +215,14 @@ public:
 
         // Build the known-repeated binary properties once.
         int32_t binPropsValueMapOffset=valueMaps.size();
-        int32_t byteTrieOffset=buildAliasesByteTrie(VALUES_binprop, VALUES_binprop_COUNT, errorCode);
-        valueMaps.addElement(byteTrieOffset, errorCode);
+        int32_t bytesTrieOffset=buildAliasesBytesTrie(VALUES_binprop, VALUES_binprop_COUNT, errorCode);
+        valueMaps.addElement(bytesTrieOffset, errorCode);
         buildValueMap(VALUES_binprop, VALUES_binprop_COUNT, errorCode);
 
         // Build the known-repeated canonical combining class properties once.
         int32_t cccValueMapOffset=valueMaps.size();
-        byteTrieOffset=buildAliasesByteTrie(VALUES_ccc, VALUES_ccc_COUNT, errorCode);
-        valueMaps.addElement(byteTrieOffset, errorCode);
+        bytesTrieOffset=buildAliasesBytesTrie(VALUES_ccc, VALUES_ccc_COUNT, errorCode);
+        valueMaps.addElement(bytesTrieOffset, errorCode);
         buildValueMap(VALUES_ccc, VALUES_ccc_COUNT, errorCode);
 
         // Build the rest of the data.
@@ -242,8 +242,8 @@ public:
                     valueMapOffset=cccValueMapOffset;
                 } else {
                     valueMapOffset=valueMaps.size();
-                    byteTrieOffset=buildAliasesByteTrie(valueList, valueCount, errorCode);
-                    valueMaps.addElement(byteTrieOffset, errorCode);
+                    bytesTrieOffset=buildAliasesBytesTrie(valueList, valueCount, errorCode);
+                    valueMaps.addElement(bytesTrieOffset, errorCode);
                     buildValueMap(valueList, valueCount, errorCode);
                 }
                 setPropertyInt(PROPERTY[propIndex].enumValue, 1, valueMapOffset);
@@ -255,7 +255,7 @@ public:
         indexes[PropNameData::IX_VALUE_MAPS_OFFSET]=offset;
         offset+=valueMaps.size()*4;
         indexes[PropNameData::IX_BYTE_TRIES_OFFSET]=offset;
-        offset+=byteTries.length();
+        offset+=bytesTries.length();
         indexes[PropNameData::IX_NAME_GROUPS_OFFSET]=offset;
         offset+=nameGroups.length();
         for(i=PropNameData::IX_RESERVED3_OFFSET; i<=PropNameData::IX_TOTAL_SIZE; ++i) {
@@ -371,7 +371,7 @@ public:
         }
     }
 
-    void addAliasToByteTrie(const Alias &alias, UErrorCode &errorCode) {
+    void addAliasToBytesTrie(const Alias &alias, UErrorCode &errorCode) {
         int32_t names[MAX_NAMES_PER_GROUP];
         int32_t numNames=alias.getUniqueNames(names);
         for(int32_t i=0; i<numNames; ++i) {
@@ -380,33 +380,33 @@ public:
         }
     }
 
-    int32_t buildAliasesByteTrie(const Alias aliases[], int32_t length, UErrorCode &errorCode) {
+    int32_t buildAliasesBytesTrie(const Alias aliases[], int32_t length, UErrorCode &errorCode) {
         btb.clear();
         for(int32_t i=0; i<length; ++i) {
-            addAliasToByteTrie(aliases[i], errorCode);
+            addAliasToBytesTrie(aliases[i], errorCode);
         }
-        int32_t byteTrieOffset=byteTries.length();
-        byteTries.append(btb.build(UDICTTRIE_BUILD_SMALL, errorCode), errorCode);
-        return byteTrieOffset;
+        int32_t bytesTrieOffset=bytesTries.length();
+        bytesTries.append(btb.build(USTRINGTRIE_BUILD_SMALL, errorCode), errorCode);
+        return bytesTrieOffset;
     }
 
     // Overload for Property. Property is-an Alias, but when we iterate through
     // the array we need to increment by the right object size.
-    int32_t buildAliasesByteTrie(const Property aliases[], int32_t length,
-                                 UErrorCode &errorCode) {
+    int32_t buildAliasesBytesTrie(const Property aliases[], int32_t length,
+                                  UErrorCode &errorCode) {
         btb.clear();
         for(int32_t i=0; i<length; ++i) {
-            addAliasToByteTrie(aliases[i], errorCode);
+            addAliasToBytesTrie(aliases[i], errorCode);
         }
-        int32_t byteTrieOffset=byteTries.length();
-        byteTries.append(btb.build(UDICTTRIE_BUILD_SMALL, errorCode), errorCode);
-        return byteTrieOffset;
+        int32_t bytesTrieOffset=bytesTries.length();
+        bytesTries.append(btb.build(USTRINGTRIE_BUILD_SMALL, errorCode), errorCode);
+        return bytesTrieOffset;
     }
 
     int32_t indexes[PropNameData::IX_COUNT];
     UVector32 valueMaps;
-    ByteTrieBuilder btb;
-    CharString byteTries;
+    BytesTrieBuilder btb;
+    CharString bytesTries;
     CharString nameGroups;
     int32_t maxNameLength;
 };
@@ -434,7 +434,7 @@ static void writeDataFile(const char *destdir, const Builder& builder, UBool use
 
     udata_writeBlock(pdata, builder.indexes, PropNameData::IX_COUNT*4);
     udata_writeBlock(pdata, builder.valueMaps.getBuffer(), builder.valueMaps.size()*4);
-    udata_writeBlock(pdata, builder.byteTries.data(), builder.byteTries.length());
+    udata_writeBlock(pdata, builder.bytesTries.data(), builder.bytesTries.length());
     udata_writeBlock(pdata, builder.nameGroups.data(), builder.nameGroups.length());
 
     int32_t dataLength=(int32_t)udata_finish(pdata, errorCode);
@@ -464,8 +464,8 @@ static void writeCSourceFile(const char *destdir, const Builder& builder) {
     usrc_writeArray(f, "const int32_t PropNameData::valueMaps[%ld]={\n",
                     builder.valueMaps.getBuffer(), 32, builder.valueMaps.size(),
                     "\n};\n\n");
-    usrc_writeArray(f, "const uint8_t PropNameData::byteTries[%ld]={\n",
-                    builder.byteTries.data(), 8, builder.byteTries.length(),
+    usrc_writeArray(f, "const uint8_t PropNameData::bytesTries[%ld]={\n",
+                    builder.bytesTries.data(), 8, builder.bytesTries.length(),
                     "\n};\n\n");
     usrc_writeArrayOfMostlyInvChars(
         f, "const char PropNameData::nameGroups[%ld]={\n",
@@ -529,7 +529,7 @@ extern int main(int argc, char *argv[]) {
     builder.build();
     if(options[VERBOSE].doesOccur) {
         printf("length of all value maps:  %6ld\n", (long)builder.valueMaps.size());
-        printf("length of all ByteTries:   %6ld\n", (long)builder.byteTries.length());
+        printf("length of all BytesTries:  %6ld\n", (long)builder.bytesTries.length());
         printf("length of all name groups: %6ld\n", (long)builder.nameGroups.length());
         printf("length of pnames.icu data: %6ld\n", (long)builder.indexes[PropNameData::IX_TOTAL_SIZE]);
     }
