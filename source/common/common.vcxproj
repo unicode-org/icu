@@ -400,7 +400,7 @@
     <ClCompile Include="servslkf.cpp" />
     <ClCompile Include="usprep.cpp" />
     <ClCompile Include="bytestream.cpp" />
-    <ClCompile Include="bytetrie.cpp" />
+    <ClCompile Include="bytestrie.cpp" />
     <ClCompile Include="chariter.cpp" />
     <ClCompile Include="charstr.cpp" />
     <ClCompile Include="cstring.c" />
@@ -557,6 +557,7 @@
     <ClInclude Include="uhash.h" />
     <ClInclude Include="ulist.h" />
     <ClInclude Include="ustrenum.h" />
+    <ClInclude Include="ustringtrie.h" />
     <ClInclude Include="utrie.h" />
     <ClInclude Include="utrie2.h" />
     <ClInclude Include="utrie2_impl.h" />
@@ -1366,7 +1367,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="bytetrie.h" />
+    <ClInclude Include="bytestrie.h" />
     <CustomBuild Include="unicode\chariter.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>

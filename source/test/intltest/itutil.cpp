@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -29,9 +29,9 @@
 #include "aliastst.h"
 #include "usettest.h"
 
-extern IntlTest *createByteTrieTest();
+extern IntlTest *createBytesTrieTest();
 static IntlTest *createLocalPointerTest();
-extern IntlTest *createUCharTrieTest();
+extern IntlTest *createUCharsTrieTest();
 
 #define CASE(id, test) case id:                               \
                           name = #test;                       \
@@ -73,16 +73,16 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
         case 17:
             name = "ByteTrieTest";
             if (exec) {
-                logln("TestSuite ByteTrieTest---"); logln();
-                LocalPointer<IntlTest> test(createByteTrieTest());
+                logln("TestSuite BytesTrieTest---"); logln();
+                LocalPointer<IntlTest> test(createBytesTrieTest());
                 callTest(*test, par);
             }
             break;
         case 18:
             name = "UCharTrieTest";
             if (exec) {
-                logln("TestSuite UCharTrieTest---"); logln();
-                LocalPointer<IntlTest> test(createUCharTrieTest());
+                logln("TestSuite UCharsTrieTest---"); logln();
+                LocalPointer<IntlTest> test(createUCharsTrieTest());
                 callTest(*test, par);
             }
             break;

@@ -3,21 +3,19 @@
 *   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  bytetriebuilder.cpp
+*   file name:  bytestriebuilder.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
 *   created on: 2010sep25
 *   created by: Markus W. Scherer
-*
-* Builder class for ByteTrie dictionary trie.
 */
 
 #include "unicode/utypes.h"
 #include "unicode/stringpiece.h"
-#include "bytetrie.h"
-#include "bytetriebuilder.h"
+#include "bytestrie.h"
+#include "bytestriebuilder.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "uarrsort.h"
@@ -26,11 +24,11 @@ U_NAMESPACE_BEGIN
 
 /*
  * Note: This builder implementation stores (bytes, value) pairs with full copies
- * of the byte sequences, until the ByteTrie is built.
+ * of the byte sequences, until the BytesTrie is built.
  * It might(!) take less memory if we collected the data in a temporary, dynamic trie.
  */
 
-class ByteTrieElement : public UMemory {
+class BytesTrieElement : public UMemory {
 public:
     // Use compiler's default constructor, initializes nothing.
 
@@ -62,7 +60,7 @@ public:
 
     int32_t getValue() const { return value; }
 
-    int32_t compareStringTo(const ByteTrieElement &o, const CharString &strings) const;
+    int32_t compareStringTo(const BytesTrieElement &o, const CharString &strings) const;
 
 private:
     const char *data(const CharString &strings) const {
@@ -85,8 +83,8 @@ private:
 };
 
 void
-ByteTrieElement::setTo(const StringPiece &s, int32_t val,
-                       CharString &strings, UErrorCode &errorCode) {
+BytesTrieElement::setTo(const StringPiece &s, int32_t val,
+                        CharString &strings, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return;
     }
@@ -108,7 +106,7 @@ ByteTrieElement::setTo(const StringPiece &s, int32_t val,
 }
 
 int32_t
-ByteTrieElement::compareStringTo(const ByteTrieElement &other, const CharString &strings) const {
+BytesTrieElement::compareStringTo(const BytesTrieElement &other, const CharString &strings) const {
     // TODO: add StringPiece::compare(), see ticket #8187
     StringPiece thisString=getString(strings);
     StringPiece otherString=other.getString(strings);
@@ -123,13 +121,13 @@ ByteTrieElement::compareStringTo(const ByteTrieElement &other, const CharString 
     return diff!=0 ? diff : lengthDiff;
 }
 
-ByteTrieBuilder::~ByteTrieBuilder() {
+BytesTrieBuilder::~BytesTrieBuilder() {
     delete[] elements;
     uprv_free(bytes);
 }
 
-ByteTrieBuilder &
-ByteTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode) {
+BytesTrieBuilder &
+BytesTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return *this;
     }
@@ -146,12 +144,12 @@ ByteTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode)
         } else {
             newCapacity=4*elementsCapacity;
         }
-        ByteTrieElement *newElements=new ByteTrieElement[newCapacity];
+        BytesTrieElement *newElements=new BytesTrieElement[newCapacity];
         if(newElements==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
         if(elementsLength>0) {
-            uprv_memcpy(newElements, elements, elementsLength*sizeof(ByteTrieElement));
+            uprv_memcpy(newElements, elements, elementsLength*sizeof(BytesTrieElement));
         }
         delete[] elements;
         elements=newElements;
@@ -166,15 +164,15 @@ U_CDECL_BEGIN
 static int32_t U_CALLCONV
 compareElementStrings(const void *context, const void *left, const void *right) {
     const CharString *strings=reinterpret_cast<const CharString *>(context);
-    const ByteTrieElement *leftElement=reinterpret_cast<const ByteTrieElement *>(left);
-    const ByteTrieElement *rightElement=reinterpret_cast<const ByteTrieElement *>(right);
+    const BytesTrieElement *leftElement=reinterpret_cast<const BytesTrieElement *>(left);
+    const BytesTrieElement *rightElement=reinterpret_cast<const BytesTrieElement *>(right);
     return leftElement->compareStringTo(*rightElement, *strings);
 }
 
 U_CDECL_END
 
 StringPiece
-ByteTrieBuilder::build(UDictTrieBuildOption buildOption, UErrorCode &errorCode) {
+BytesTrieBuilder::build(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
     StringPiece result;
     if(U_FAILURE(errorCode)) {
         return result;
@@ -188,7 +186,7 @@ ByteTrieBuilder::build(UDictTrieBuildOption buildOption, UErrorCode &errorCode) 
         errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return result;
     }
-    uprv_sortArray(elements, elementsLength, (int32_t)sizeof(ByteTrieElement),
+    uprv_sortArray(elements, elementsLength, (int32_t)sizeof(BytesTrieElement),
                    compareElementStrings, &strings,
                    FALSE,  // need not be a stable sort
                    &errorCode);
@@ -214,7 +212,7 @@ ByteTrieBuilder::build(UDictTrieBuildOption buildOption, UErrorCode &errorCode) 
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return result;
     }
-    DictTrieBuilder::build(buildOption, elementsLength, errorCode);
+    StringTrieBuilder::build(buildOption, elementsLength, errorCode);
     if(bytes==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     } else {
@@ -224,24 +222,24 @@ ByteTrieBuilder::build(UDictTrieBuildOption buildOption, UErrorCode &errorCode) 
 }
 
 int32_t
-ByteTrieBuilder::getElementStringLength(int32_t i) const {
+BytesTrieBuilder::getElementStringLength(int32_t i) const {
     return elements[i].getStringLength(strings);
 }
 
 UChar
-ByteTrieBuilder::getElementUnit(int32_t i, int32_t byteIndex) const {
+BytesTrieBuilder::getElementUnit(int32_t i, int32_t byteIndex) const {
     return (uint8_t)elements[i].charAt(byteIndex, strings);
 }
 
 int32_t
-ByteTrieBuilder::getElementValue(int32_t i) const {
+BytesTrieBuilder::getElementValue(int32_t i) const {
     return elements[i].getValue();
 }
 
 int32_t
-ByteTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t byteIndex) const {
-    const ByteTrieElement &firstElement=elements[first];
-    const ByteTrieElement &lastElement=elements[last];
+BytesTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t byteIndex) const {
+    const BytesTrieElement &firstElement=elements[first];
+    const BytesTrieElement &lastElement=elements[last];
     int32_t minStringLength=firstElement.getStringLength(strings);
     while(++byteIndex<minStringLength &&
             firstElement.charAt(byteIndex, strings)==
@@ -250,7 +248,7 @@ ByteTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t byte
 }
 
 int32_t
-ByteTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteIndex) const {
+BytesTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteIndex) const {
     int32_t length=0;  // Number of different units at unitIndex.
     int32_t i=start;
     do {
@@ -264,7 +262,7 @@ ByteTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteInd
 }
 
 int32_t
-ByteTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t count) const {
+BytesTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t count) const {
         do {
             char byte=elements[i++].charAt(byteIndex, strings);
             while(byte==elements[i].charAt(byteIndex, strings)) {
@@ -275,7 +273,7 @@ ByteTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t c
 }
 
 int32_t
-ByteTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar byte) const {
+BytesTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar byte) const {
     char b=(char)byte;
     while(b==elements[i].charAt(byteIndex, strings)) {
         ++i;
@@ -283,13 +281,13 @@ ByteTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar 
     return i;
 }
 
-ByteTrieBuilder::BTLinearMatchNode::BTLinearMatchNode(const char *bytes, int32_t len, Node *nextNode)
+BytesTrieBuilder::BTLinearMatchNode::BTLinearMatchNode(const char *bytes, int32_t len, Node *nextNode)
         : LinearMatchNode(len, nextNode), s(bytes) {
     hash=hash*37+uhash_hashCharsN(bytes, len);
 }
 
 UBool
-ByteTrieBuilder::BTLinearMatchNode::operator==(const Node &other) const {
+BytesTrieBuilder::BTLinearMatchNode::operator==(const Node &other) const {
     if(this==&other) {
         return TRUE;
     }
@@ -301,16 +299,16 @@ ByteTrieBuilder::BTLinearMatchNode::operator==(const Node &other) const {
 }
 
 void
-ByteTrieBuilder::BTLinearMatchNode::write(DictTrieBuilder &builder) {
-    ByteTrieBuilder &b=(ByteTrieBuilder &)builder;
+BytesTrieBuilder::BTLinearMatchNode::write(StringTrieBuilder &builder) {
+    BytesTrieBuilder &b=(BytesTrieBuilder &)builder;
     next->write(builder);
     b.write(s, length);
     offset=b.write(b.getMinLinearMatch()+length-1);
 }
 
-DictTrieBuilder::Node *
-ByteTrieBuilder::createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
-                                       Node *nextNode) const {
+StringTrieBuilder::Node *
+BytesTrieBuilder::createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
+                                        Node *nextNode) const {
     return new BTLinearMatchNode(
             elements[i].getString(strings).data()+byteIndex,
             length,
@@ -318,7 +316,7 @@ ByteTrieBuilder::createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t len
 }
 
 UBool
-ByteTrieBuilder::ensureCapacity(int32_t length) {
+BytesTrieBuilder::ensureCapacity(int32_t length) {
     if(bytes==NULL) {
         return FALSE;  // previous memory allocation had failed
     }
@@ -344,7 +342,7 @@ ByteTrieBuilder::ensureCapacity(int32_t length) {
 }
 
 int32_t
-ByteTrieBuilder::write(int32_t byte) {
+BytesTrieBuilder::write(int32_t byte) {
     int32_t newLength=bytesLength+1;
     if(ensureCapacity(newLength)) {
         bytesLength=newLength;
@@ -354,7 +352,7 @@ ByteTrieBuilder::write(int32_t byte) {
 }
 
 int32_t
-ByteTrieBuilder::write(const char *b, int32_t length) {
+BytesTrieBuilder::write(const char *b, int32_t length) {
     int32_t newLength=bytesLength+length;
     if(ensureCapacity(newLength)) {
         bytesLength=newLength;
@@ -364,31 +362,31 @@ ByteTrieBuilder::write(const char *b, int32_t length) {
 }
 
 int32_t
-ByteTrieBuilder::writeElementUnits(int32_t i, int32_t byteIndex, int32_t length) {
+BytesTrieBuilder::writeElementUnits(int32_t i, int32_t byteIndex, int32_t length) {
     return write(elements[i].getString(strings).data()+byteIndex, length);
 }
 
 int32_t
-ByteTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
+BytesTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
     char intBytes[5];
     int32_t length=1;
     if(i<0 || i>0xffffff) {
-        intBytes[0]=(char)ByteTrie::kFiveByteValueLead;
+        intBytes[0]=(char)BytesTrie::kFiveByteValueLead;
         intBytes[1]=(char)(i>>24);
         intBytes[2]=(char)(i>>16);
         intBytes[3]=(char)(i>>8);
         intBytes[4]=(char)i;
         length=5;
-    } else if(i<=ByteTrie::kMaxOneByteValue) {
-        intBytes[0]=(char)(ByteTrie::kMinOneByteValueLead+i);
+    } else if(i<=BytesTrie::kMaxOneByteValue) {
+        intBytes[0]=(char)(BytesTrie::kMinOneByteValueLead+i);
     } else {
-        if(i<=ByteTrie::kMaxTwoByteValue) {
-            intBytes[0]=(char)(ByteTrie::kMinTwoByteValueLead+(i>>8));
+        if(i<=BytesTrie::kMaxTwoByteValue) {
+            intBytes[0]=(char)(BytesTrie::kMinTwoByteValueLead+(i>>8));
         } else {
-            if(i<=ByteTrie::kMaxThreeByteValue) {
-                intBytes[0]=(char)(ByteTrie::kMinThreeByteValueLead+(i>>16));
+            if(i<=BytesTrie::kMaxThreeByteValue) {
+                intBytes[0]=(char)(BytesTrie::kMinThreeByteValueLead+(i>>16));
             } else {
-                intBytes[0]=(char)ByteTrie::kFourByteValueLead;
+                intBytes[0]=(char)BytesTrie::kFourByteValueLead;
                 intBytes[1]=(char)(i>>16);
                 length=2;
             }
@@ -401,7 +399,7 @@ ByteTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
 }
 
 int32_t
-ByteTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node) {
+BytesTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node) {
     int32_t offset=write(node);
     if(hasValue) {
         offset=writeValueAndFinal(value, FALSE);
@@ -410,26 +408,26 @@ ByteTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node) 
 }
 
 int32_t
-ByteTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
+BytesTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
     int32_t i=bytesLength-jumpTarget;
     char intBytes[5];
     int32_t length;
     U_ASSERT(i>=0);
-    if(i<=ByteTrie::kMaxOneByteDelta) {
+    if(i<=BytesTrie::kMaxOneByteDelta) {
         length=0;
-    } else if(i<=ByteTrie::kMaxTwoByteDelta) {
-        intBytes[0]=(char)(ByteTrie::kMinTwoByteDeltaLead+(i>>8));
+    } else if(i<=BytesTrie::kMaxTwoByteDelta) {
+        intBytes[0]=(char)(BytesTrie::kMinTwoByteDeltaLead+(i>>8));
         length=1;
     } else {
-        if(i<=ByteTrie::kMaxThreeByteDelta) {
-            intBytes[0]=(char)(ByteTrie::kMinThreeByteDeltaLead+(i>>16));
+        if(i<=BytesTrie::kMaxThreeByteDelta) {
+            intBytes[0]=(char)(BytesTrie::kMinThreeByteDeltaLead+(i>>16));
             length=2;
         } else {
             if(i<=0xffffff) {
-                intBytes[0]=(char)ByteTrie::kFourByteDeltaLead;
+                intBytes[0]=(char)BytesTrie::kFourByteDeltaLead;
                 length=3;
             } else {
-                intBytes[0]=(char)ByteTrie::kFiveByteDeltaLead;
+                intBytes[0]=(char)BytesTrie::kFiveByteDeltaLead;
                 intBytes[1]=(char)(i>>24);
                 length=4;
             }

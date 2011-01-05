@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -14,7 +14,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
-#include "bytetrie.h"
+#include "bytestrie.h"
 #include "udataswp.h"
 #include "uprops.h"
 
@@ -106,13 +106,13 @@ private:
     static int32_t findProperty(int32_t property);
     static int32_t findPropertyValueNameGroup(int32_t valueMapIndex, int32_t value);
     static const char *getName(const char *nameGroup, int32_t nameIndex);
-    static UBool containsName(ByteTrie &trie, const char *name);
+    static UBool containsName(BytesTrie &trie, const char *name);
 
-    static int32_t getPropertyOrValueEnum(int32_t byteTrieOffset, const char *alias);
+    static int32_t getPropertyOrValueEnum(int32_t bytesTrieOffset, const char *alias);
 
     static const int32_t indexes[];
     static const int32_t valueMaps[];
-    static const uint8_t byteTries[];
+    static const uint8_t bytesTries[];
     static const char nameGroups[];
 };
 
@@ -164,7 +164,7 @@ private:
  *            If the valueMapIndex is 0, then the property does not have named values.
  *
  *      For each property's value map:
- *      int32_t byteTrieOffset; -- Offset into byteTries[] for name->value mapping.
+ *      int32_t bytesTrieOffset; -- Offset into bytesTries[] for name->value mapping.
  *      int32_t numRanges;
  *        If numRanges is in the range 1..15, then that many ranges of values follow.
  *        Per range:
@@ -181,12 +181,12 @@ private:
  *
  *      For both properties and property values, ranges are sorted by their start/limit values.
  *
- * uint8_t byteTries[];
+ * uint8_t bytesTries[];
  *
- *      This is a sequence of ByteTrie structures, byte-serialized tries for
+ *      This is a sequence of BytesTrie structures, byte-serialized tries for
  *      mapping from names/aliases to values.
  *      The first one maps from property names/aliases to UProperty enum constants.
- *      The following ones are indexed by property value map byteTrieOffsets
+ *      The following ones are indexed by property value map bytesTrieOffsets
  *      for mapping each property's names/aliases to their property values.
  *
  * char nameGroups[];

@@ -1,9 +1,9 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*   file name:  uchartrie.h
+*   file name:  ucharstrie.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -12,24 +12,24 @@
 *   created by: Markus W. Scherer
 */
 
-#ifndef __UCHARTRIE_H__
-#define __UCHARTRIE_H__
+#ifndef __UCHARSTRIE_H__
+#define __UCHARSTRIE_H__
 
 /**
  * \file
- * \brief C++ API: Dictionary trie for mapping Unicode strings (or 16-bit-unit sequences)
+ * \brief C++ API: Trie for mapping Unicode strings (or 16-bit-unit sequences)
  *                 to integer values.
  */
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "uassert.h"
-#include "udicttrie.h"
+#include "ustringtrie.h"
 
 U_NAMESPACE_BEGIN
 
-class UCharTrieBuilder;
-class UCharTrieIterator;
+class UCharsTrieBuilder;
+class UCharsTrieIterator;
 
 /**
  * Base class for objects to which Unicode characters and strings can be appended.
@@ -67,34 +67,34 @@ private:
 };
 
 /**
- * Light-weight, non-const reader class for a UCharTrie.
+ * Light-weight, non-const reader class for a UCharsTrie.
  * Traverses a UChar-serialized data structure with minimal state,
  * for mapping strings (16-bit-unit sequences) to non-negative integer values.
  */
-class U_TOOLUTIL_API UCharTrie : public UMemory {
+class U_TOOLUTIL_API UCharsTrie : public UMemory {
 public:
-    UCharTrie(const UChar *trieUChars)
+    UCharsTrie(const UChar *trieUChars)
             : uchars_(trieUChars),
               pos_(uchars_), remainingMatchLength_(-1) {}
 
     /**
      * Resets this trie to its initial state.
      */
-    UCharTrie &reset() {
+    UCharsTrie &reset() {
         pos_=uchars_;
         remainingMatchLength_=-1;
         return *this;
     }
 
     /**
-     * UCharTrie state object, for saving a trie's current state
+     * UCharsTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
      */
     class State : public UMemory {
     public:
         State() { uchars=NULL; }
     private:
-        friend class UCharTrie;
+        friend class UCharsTrie;
 
         const UChar *uchars;
         const UChar *pos;
@@ -105,7 +105,7 @@ public:
      * Saves the state of this trie.
      * @see resetToState
      */
-    const UCharTrie &saveState(State &state) const {
+    const UCharsTrie &saveState(State &state) const {
         state.uchars=uchars_;
         state.pos=pos_;
         state.remainingMatchLength=remainingMatchLength_;
@@ -119,7 +119,7 @@ public:
      * @see saveState
      * @see reset
      */
-    UCharTrie &resetToState(const State &state) {
+    UCharsTrie &resetToState(const State &state) {
         if(uchars_==state.uchars && uchars_!=NULL) {
             pos_=state.pos;
             remainingMatchLength_=state.remainingMatchLength;
@@ -132,14 +132,14 @@ public:
      * and whether another input UChar can continue a matching string.
      * @return The match/value Result.
      */
-    UDictTrieResult current() const;
+    UStringTrieResult current() const;
 
     /**
      * Traverses the trie from the initial state for this input UChar.
      * Equivalent to reset().next(uchar).
      * @return The match/value Result.
      */
-    inline UDictTrieResult first(int32_t uchar) {
+    inline UStringTrieResult first(int32_t uchar) {
         remainingMatchLength_=-1;
         return nextImpl(uchars_, uchar);
     }
@@ -150,31 +150,31 @@ public:
      * Equivalent to reset().nextForCodePoint(cp).
      * @return The match/value Result.
      */
-    inline UDictTrieResult firstForCodePoint(UChar32 cp) {
+    inline UStringTrieResult firstForCodePoint(UChar32 cp) {
         return cp<=0xffff ?
             first(cp) :
-            (first(U16_LEAD(cp))!=UDICTTRIE_NO_MATCH ?
+            (USTRINGTRIE_HAS_NEXT(first(U16_LEAD(cp))) ?
                 next(U16_TRAIL(cp)) :
-                UDICTTRIE_NO_MATCH);
+                USTRINGTRIE_NO_MATCH);
     }
 
     /**
      * Traverses the trie from the current state for this input UChar.
      * @return The match/value Result.
      */
-    UDictTrieResult next(int32_t uchar);
+    UStringTrieResult next(int32_t uchar);
 
     /**
      * Traverses the trie from the current state for the
      * one or two UTF-16 code units for this input code point.
      * @return The match/value Result.
      */
-    inline UDictTrieResult nextForCodePoint(UChar32 cp) {
+    inline UStringTrieResult nextForCodePoint(UChar32 cp) {
         return cp<=0xffff ?
             next(cp) :
-            (next(U16_LEAD(cp))!=UDICTTRIE_NO_MATCH ?
+            (USTRINGTRIE_HAS_NEXT(next(U16_LEAD(cp))) ?
                 next(U16_TRAIL(cp)) :
-                UDICTTRIE_NO_MATCH);
+                USTRINGTRIE_NO_MATCH);
     }
 
     /**
@@ -183,19 +183,20 @@ public:
      * \code
      * Result result=current();
      * for(each c in s)
-     *   if((result=next(c))==UDICTTRIE_NO_MATCH) return UDICTTRIE_NO_MATCH;
+     *   if(!USTRINGTRIE_HAS_NEXT(result)) return USTRINGTRIE_NO_MATCH;
+     *   result=next(c);
      * return result;
      * \endcode
      * @return The match/value Result.
      */
-    UDictTrieResult next(const UChar *s, int32_t length);
+    UStringTrieResult next(const UChar *s, int32_t length);
 
     /**
      * Returns a matching string's value if called immediately after
-     * current()/first()/next() returned UDICTTRIE_HAS_VALUE or UDICTTRIE_HAS_FINAL_VALUE.
+     * current()/first()/next() returned USTRINGTRIE_INTERMEDIATE_VALUE or USTRINGTRIE_FINAL_VALUE.
      * getValue() can be called multiple times.
      *
-     * Do not call getValue() after UDICTTRIE_NO_MATCH or UDICTTRIE_NO_VALUE!
+     * Do not call getValue() after USTRINGTRIE_NO_MATCH or USTRINGTRIE_NO_VALUE!
      */
     inline int32_t getValue() const {
         const UChar *pos=pos_;
@@ -221,7 +222,7 @@ public:
 
     /**
      * Finds each UChar which continues the string from the current state.
-     * That is, each UChar c for which it would be next(c)!=UDICTTRIE_NO_MATCH now.
+     * That is, each UChar c for which it would be next(c)!=USTRINGTRIE_NO_MATCH now.
      * @param out Each next UChar is appended to this object.
      *            (Only uses the out.append(c) method.)
      * @return the number of UChars which continue the string from here
@@ -229,8 +230,8 @@ public:
     int32_t getNextUChars(Appendable &out) const;
 
 private:
-    friend class UCharTrieBuilder;
-    friend class UCharTrieIterator;
+    friend class UCharsTrieBuilder;
+    friend class UCharsTrieIterator;
 
     inline void stop() {
         pos_=NULL;
@@ -313,15 +314,15 @@ private:
         return pos;
     }
 
-    static inline UDictTrieResult valueResult(int32_t node) {
-        return (UDictTrieResult)(UDICTTRIE_HAS_VALUE-(node>>15));
+    static inline UStringTrieResult valueResult(int32_t node) {
+        return (UStringTrieResult)(USTRINGTRIE_INTERMEDIATE_VALUE-(node>>15));
     }
 
     // Handles a branch node for both next(uchar) and next(string).
-    UDictTrieResult branchNext(const UChar *pos, int32_t length, int32_t uchar);
+    UStringTrieResult branchNext(const UChar *pos, int32_t length, int32_t uchar);
 
     // Requires remainingLength_<0.
-    UDictTrieResult nextImpl(const UChar *pos, int32_t uchar);
+    UStringTrieResult nextImpl(const UChar *pos, int32_t uchar);
 
     // Helper functions for hasUniqueValue().
     // Recursively finds a unique value (or whether there is not a unique one)
@@ -336,7 +337,7 @@ private:
     // getNextUChars() when pos is on a branch node.
     static void getNextBranchUChars(const UChar *pos, int32_t length, Appendable &out);
 
-    // UCharTrie data structure
+    // UCharsTrie data structure
     //
     // The trie consists of a series of UChar-serialized nodes for incremental
     // Unicode string/UChar sequence matching. (UChar=16-bit unsigned integer)
@@ -417,7 +418,7 @@ private:
 
     static const int32_t kMaxTwoUnitDelta=((kThreeUnitDeltaLead-kMinTwoUnitDeltaLead)<<16)-1;  // 0x03feffff
 
-    // Fixed value referencing the UCharTrie words.
+    // Fixed value referencing the UCharsTrie words.
     const UChar *uchars_;
 
     // Iterator variables.
@@ -430,4 +431,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // __UCHARTRIE_H__
+#endif  // __UCHARSTRIE_H__
