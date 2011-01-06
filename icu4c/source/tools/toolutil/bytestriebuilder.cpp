@@ -136,7 +136,6 @@ BytesTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode
         errorCode=U_NO_WRITE_PERMISSION;
         return *this;
     }
-    bytesCapacity+=s.length()+1;  // Crude bytes preallocation estimate.
     if(elementsLength==elementsCapacity) {
         int32_t newCapacity;
         if(elementsCapacity==0) {
@@ -204,13 +203,19 @@ BytesTrieBuilder::build(UStringTrieBuildOption buildOption, UErrorCode &errorCod
         prev=current;
     }
     // Create and byte-serialize the trie for the elements.
-    if(bytesCapacity<1024) {
-        bytesCapacity=1024;
+    int32_t capacity=strings.length();
+    if(capacity<1024) {
+        capacity=1024;
     }
-    bytes=reinterpret_cast<char *>(uprv_malloc(bytesCapacity));
-    if(bytes==NULL) {
-        errorCode=U_MEMORY_ALLOCATION_ERROR;
-        return result;
+    if(bytesCapacity<capacity) {
+        uprv_free(bytes);
+        bytes=reinterpret_cast<char *>(uprv_malloc(capacity));
+        if(bytes==NULL) {
+            errorCode=U_MEMORY_ALLOCATION_ERROR;
+            bytesCapacity=0;
+            return result;
+        }
+        bytesCapacity=capacity;
     }
     StringTrieBuilder::build(buildOption, elementsLength, errorCode);
     if(bytes==NULL) {
@@ -330,6 +335,7 @@ BytesTrieBuilder::ensureCapacity(int32_t length) {
             // unable to allocate memory
             uprv_free(bytes);
             bytes=NULL;
+            bytesCapacity=0;
             return FALSE;
         }
         uprv_memcpy(newBytes+(newCapacity-bytesLength),
