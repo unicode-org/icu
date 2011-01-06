@@ -95,7 +95,6 @@ UCharsTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorC
         errorCode=U_NO_WRITE_PERMISSION;
         return *this;
     }
-    ucharsCapacity+=s.length()+1;  // Crude uchars preallocation estimate.
     if(elementsLength==elementsCapacity) {
         int32_t newCapacity;
         if(elementsCapacity==0) {
@@ -169,13 +168,19 @@ UCharsTrieBuilder::build(UStringTrieBuildOption buildOption, UnicodeString &resu
         prev.fastCopyFrom(current);
     }
     // Create and UChar-serialize the trie for the elements.
-    if(ucharsCapacity<1024) {
-        ucharsCapacity=1024;
+    int32_t capacity=strings.length();
+    if(capacity<1024) {
+        capacity=1024;
     }
-    uchars=reinterpret_cast<UChar *>(uprv_malloc(ucharsCapacity*2));
-    if(uchars==NULL) {
-        errorCode=U_MEMORY_ALLOCATION_ERROR;
-        return result;
+    if(ucharsCapacity<capacity) {
+        uprv_free(uchars);
+        uchars=reinterpret_cast<UChar *>(uprv_malloc(capacity*2));
+        if(uchars==NULL) {
+            errorCode=U_MEMORY_ALLOCATION_ERROR;
+            ucharsCapacity=0;
+            return result;
+        }
+        ucharsCapacity=capacity;
     }
     StringTrieBuilder::build(buildOption, elementsLength, errorCode);
     if(uchars==NULL) {
@@ -294,6 +299,7 @@ UCharsTrieBuilder::ensureCapacity(int32_t length) {
             // unable to allocate memory
             uprv_free(uchars);
             uchars=NULL;
+            ucharsCapacity=0;
             return FALSE;
         }
         u_memcpy(newUChars+(newCapacity-ucharsLength),
