@@ -175,7 +175,7 @@ public:
     /**
      * Iterator for all of the (byte sequence, value) pairs in a BytesTrie.
      */
-    class Iterator : public UMemory {
+    class U_COMMON_API Iterator : public UMemory {
     public:
         /**
          * Iterates from the root of a byte-serialized BytesTrie.
