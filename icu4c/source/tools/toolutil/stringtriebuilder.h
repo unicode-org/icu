@@ -45,8 +45,8 @@ protected:
 
     void build(UStringTrieBuildOption buildOption, int32_t elementsLength, UErrorCode &errorCode);
 
-    int32_t writeNode(int32_t start, int32_t limit, int32_t byteIndex);
-    int32_t writeBranchSubNode(int32_t start, int32_t limit, int32_t byteIndex, int32_t length);
+    int32_t writeNode(int32_t start, int32_t limit, int32_t unitIndex);
+    int32_t writeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex, int32_t length);
 
     class Node;
 
@@ -62,7 +62,7 @@ protected:
     // the first and last element have different units again.
     virtual int32_t getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const = 0;
 
-    // Number of different bytes at unitIndex.
+    // Number of different units at unitIndex.
     virtual int32_t countElementUnits(int32_t start, int32_t limit, int32_t unitIndex) const = 0;
     virtual int32_t skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t count) const = 0;
     virtual int32_t indexOfElementWithNextUnit(int32_t i, int32_t unitIndex, UChar unit) const = 0;
@@ -73,7 +73,7 @@ protected:
     virtual int32_t getMinLinearMatch() const = 0;
     virtual int32_t getMaxLinearMatchLength() const = 0;
 
-    // max(ByteTrie::kMaxBranchLinearSubNodeLength, UCharTrie::kMaxBranchLinearSubNodeLength).
+    // max(BytesTrie::kMaxBranchLinearSubNodeLength, UCharsTrie::kMaxBranchLinearSubNodeLength).
     static const int32_t kMaxBranchLinearSubNodeLength=5;
 
     // Maximum number of nested split-branch levels for a branch on all 2^16 possible UChar units.
@@ -300,9 +300,9 @@ protected:
     virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
                                         Node *nextNode) const = 0;
 
-    virtual int32_t write(int32_t byte) = 0;
-    virtual int32_t writeElementUnits(int32_t i, int32_t byteIndex, int32_t length) = 0;
-    virtual int32_t writeValueAndFinal(int32_t i, UBool final) = 0;
+    virtual int32_t write(int32_t unit) = 0;
+    virtual int32_t writeElementUnits(int32_t i, int32_t unitIndex, int32_t length) = 0;
+    virtual int32_t writeValueAndFinal(int32_t i, UBool isFinal) = 0;
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node) = 0;
     virtual int32_t writeDeltaTo(int32_t jumpTarget) = 0;
 
