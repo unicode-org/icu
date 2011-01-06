@@ -401,6 +401,7 @@
     <ClCompile Include="usprep.cpp" />
     <ClCompile Include="bytestream.cpp" />
     <ClCompile Include="bytestrie.cpp" />
+    <ClCompile Include="bytestrieiterator.cpp" />
     <ClCompile Include="chariter.cpp" />
     <ClCompile Include="charstr.cpp" />
     <ClCompile Include="cstring.c" />

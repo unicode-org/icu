@@ -18,7 +18,6 @@
 #include "unicode/uniset.h"
 #include "ucharstrie.h"
 #include "ucharstriebuilder.h"
-#include "ucharstrieiterator.h"
 #include "intltest.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -69,7 +68,7 @@ public:
     void checkNextWithState(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
     void checkNextString(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
     void checkIterator(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
-    void checkIterator(UCharsTrieIterator &iter, const StringAndValue data[], int32_t dataLength);
+    void checkIterator(UCharsTrie::Iterator &iter, const StringAndValue data[], int32_t dataLength);
 };
 
 extern IntlTest *createUCharsTrieTest() {
@@ -560,8 +559,8 @@ void UCharsTrieTest::TestIteratorFromBranch() {
     trie.next(u_a);
     trie.next(u_n);
     IcuTestErrorCode errorCode(*this, "TestIteratorFromBranch()");
-    UCharsTrieIterator iter(trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("UCharsTrieIterator(trie) constructor")) {
+    UCharsTrie::Iterator iter(trie, 0, errorCode);
+    if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the suffixes
@@ -613,8 +612,8 @@ void UCharsTrieTest::TestIteratorFromLinearMatch() {
     trie.next(u_u);
     trie.next(u_a);
     IcuTestErrorCode errorCode(*this, "TestIteratorFromLinearMatch()");
-    UCharsTrieIterator iter(trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("UCharsTrieIterator(trie) constructor")) {
+    UCharsTrie::Iterator iter(trie, 0, errorCode);
+    if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the suffixes
@@ -636,8 +635,8 @@ void UCharsTrieTest::TestTruncatingIteratorFromRoot() {
         return;  // buildTrie() reported an error
     }
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromRoot()");
-    UCharsTrieIterator iter(trieUChars.getBuffer(), 4, errorCode);
-    if(errorCode.logIfFailureAndReset("UCharsTrieIterator(trie) constructor")) {
+    UCharsTrie::Iterator iter(trieUChars.getBuffer(), 4, errorCode);
+    if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the first 4 characters
@@ -693,8 +692,8 @@ void UCharsTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
     trie.next(u_b);
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchShort()");
     // Truncate within the linear-match node.
-    UCharsTrieIterator iter(trie, 2, errorCode);
-    if(errorCode.logIfFailureAndReset("UCharsTrieIterator(trie) constructor")) {
+    UCharsTrie::Iterator iter(trie, 2, errorCode);
+    if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
     static const StringAndValue expected[]={
@@ -724,8 +723,8 @@ void UCharsTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
     trie.next(u_c);
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchLong()");
     // Truncate after the linear-match node.
-    UCharsTrieIterator iter(trie, 3, errorCode);
-    if(errorCode.logIfFailureAndReset("UCharsTrieIterator(trie) constructor")) {
+    UCharsTrie::Iterator iter(trie, 3, errorCode);
+    if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
     static const StringAndValue expected[]={
@@ -989,14 +988,14 @@ void UCharsTrieTest::checkNextString(const UnicodeString &trieUChars,
 void UCharsTrieTest::checkIterator(const UnicodeString &trieUChars,
                                    const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
-    UCharsTrieIterator iter(trieUChars.getBuffer(), 0, errorCode);
-    if(errorCode.logIfFailureAndReset("UCharsTrieIterator(trieUChars) constructor")) {
+    UCharsTrie::Iterator iter(trieUChars.getBuffer(), 0, errorCode);
+    if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trieUChars) constructor")) {
         return;
     }
     checkIterator(iter, data, dataLength);
 }
 
-void UCharsTrieTest::checkIterator(UCharsTrieIterator &iter,
+void UCharsTrieTest::checkIterator(UCharsTrie::Iterator &iter,
                                    const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     for(int32_t i=0; i<dataLength; ++i) {
