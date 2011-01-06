@@ -147,13 +147,13 @@ StringTrieBuilder::writeBranchSubNode(int32_t start, int32_t limit, int32_t unit
     }
     // For each unit, find its elements array start and whether it has a final value.
     int32_t starts[kMaxBranchLinearSubNodeLength];
-    UBool final[kMaxBranchLinearSubNodeLength-1];
+    UBool isFinal[kMaxBranchLinearSubNodeLength-1];
     int32_t unitNumber=0;
     do {
         int32_t i=starts[unitNumber]=start;
         UChar unit=getElementUnit(i++, unitIndex);
         i=indexOfElementWithNextUnit(i, unitIndex, unit);
-        final[unitNumber]= start==i-1 && unitIndex+1==getElementStringLength(start);
+        isFinal[unitNumber]= start==i-1 && unitIndex+1==getElementStringLength(start);
         start=i;
     } while(++unitNumber<length-1);
     // unitNumber==length-1, and the maxUnit elements range is [start..limit[
@@ -166,7 +166,7 @@ StringTrieBuilder::writeBranchSubNode(int32_t start, int32_t limit, int32_t unit
     int32_t jumpTargets[kMaxBranchLinearSubNodeLength-1];
     do {
         --unitNumber;
-        if(!final[unitNumber]) {
+        if(!isFinal[unitNumber]) {
             jumpTargets[unitNumber]=writeNode(starts[unitNumber], starts[unitNumber+1], unitIndex+1);
         }
     } while(unitNumber>0);
@@ -179,14 +179,14 @@ StringTrieBuilder::writeBranchSubNode(int32_t start, int32_t limit, int32_t unit
     while(--unitNumber>=0) {
         start=starts[unitNumber];
         int32_t value;
-        if(final[unitNumber]) {
+        if(isFinal[unitNumber]) {
             // Write the final value for the one string ending with this unit.
             value=getElementValue(start);
         } else {
             // Write the delta to the start position of the sub-node.
             value=offset-jumpTargets[unitNumber];
         }
-        writeValueAndFinal(value, final[unitNumber]);
+        writeValueAndFinal(value, isFinal[unitNumber]);
         offset=write(getElementUnit(start, unitIndex));
     }
     // Write the split-branch nodes.

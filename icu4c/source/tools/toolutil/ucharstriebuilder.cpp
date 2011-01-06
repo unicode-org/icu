@@ -331,7 +331,10 @@ UCharsTrieBuilder::writeElementUnits(int32_t i, int32_t unitIndex, int32_t lengt
 }
 
 int32_t
-UCharsTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
+UCharsTrieBuilder::writeValueAndFinal(int32_t i, UBool isFinal) {
+    if(0<=i && i<=UCharsTrie::kMaxOneUnitValue) {
+        return write(i|(isFinal<<15));
+    }
     UChar intUnits[3];
     int32_t length;
     if(i<0 || i>UCharsTrie::kMaxTwoUnitValue) {
@@ -339,15 +342,15 @@ UCharsTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
         intUnits[1]=(UChar)(i>>16);
         intUnits[2]=(UChar)i;
         length=3;
-    } else if(i<=UCharsTrie::kMaxOneUnitValue) {
-        intUnits[0]=(UChar)(i);
-        length=1;
+    // } else if(i<=UCharsTrie::kMaxOneUnitValue) {
+    //     intUnits[0]=(UChar)(i);
+    //     length=1;
     } else {
         intUnits[0]=(UChar)(UCharsTrie::kMinTwoUnitValueLead+(i>>16));
         intUnits[1]=(UChar)i;
         length=2;
     }
-    intUnits[0]=(UChar)(intUnits[0]|(final<<15));
+    intUnits[0]=(UChar)(intUnits[0]|(isFinal<<15));
     return write(intUnits, length);
 }
 
@@ -378,12 +381,13 @@ UCharsTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node
 int32_t
 UCharsTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
     int32_t i=ucharsLength-jumpTarget;
-    UChar intUnits[3];
-    int32_t length;
     U_ASSERT(i>=0);
     if(i<=UCharsTrie::kMaxOneUnitDelta) {
-        length=0;
-    } else if(i<=UCharsTrie::kMaxTwoUnitDelta) {
+        return write(i);
+    }
+    UChar intUnits[3];
+    int32_t length;
+    if(i<=UCharsTrie::kMaxTwoUnitDelta) {
         intUnits[0]=(UChar)(UCharsTrie::kMinTwoUnitDeltaLead+(i>>16));
         length=1;
     } else {
