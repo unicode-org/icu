@@ -15,26 +15,50 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "ucharstrie.h"
-#include "ucharstrieiterator.h"
 #include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
 
-UCharsTrieIterator::UCharsTrieIterator(const UChar *trieUChars, int32_t maxStringLength,
-                                       UErrorCode &errorCode)
+UCharsTrie::Iterator::Iterator(const UChar *trieUChars, int32_t maxStringLength,
+                               UErrorCode &errorCode)
         : uchars_(trieUChars),
           pos_(uchars_), initialPos_(uchars_),
           remainingMatchLength_(-1), initialRemainingMatchLength_(-1),
           skipValue_(FALSE),
-          maxLength_(maxStringLength), value_(0), stack_(errorCode) {}
+          maxLength_(maxStringLength), value_(0), stack_(NULL) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    // stack_ is a pointer so that it's easy to turn ucharstrie.h into
+    // a public API header for which we would want it to depend only on
+    // other public headers.
+    // Unlike UCharsTrie itself, its Iterator performs memory allocations anyway
+    // via the UnicodeString and UVector32 implementations, so this additional
+    // cost is minimal.
+    stack_=new UVector32(errorCode);
+    if(stack_==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    }
+}
 
-UCharsTrieIterator::UCharsTrieIterator(const UCharsTrie &trie, int32_t maxStringLength,
-                                       UErrorCode &errorCode)
+UCharsTrie::Iterator::Iterator(const UCharsTrie &trie, int32_t maxStringLength,
+                               UErrorCode &errorCode)
         : uchars_(trie.uchars_), pos_(trie.pos_), initialPos_(trie.pos_),
           remainingMatchLength_(trie.remainingMatchLength_),
           initialRemainingMatchLength_(trie.remainingMatchLength_),
           skipValue_(FALSE),
-          maxLength_(maxStringLength), value_(0), stack_(errorCode) {
+          maxLength_(maxStringLength), value_(0), stack_(NULL) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    stack_=new UVector32(errorCode);
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    if(stack_==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     if(length>=0) {
         // Pending linear-match node, append remaining UChars to str.
@@ -48,7 +72,12 @@ UCharsTrieIterator::UCharsTrieIterator(const UCharsTrie &trie, int32_t maxString
     }
 }
 
-UCharsTrieIterator &UCharsTrieIterator::reset() {
+UCharsTrie::Iterator::~Iterator() {
+    delete stack_;
+}
+
+UCharsTrie::Iterator &
+UCharsTrie::Iterator::reset() {
     pos_=initialPos_;
     remainingMatchLength_=initialRemainingMatchLength_;
     skipValue_=FALSE;
@@ -59,26 +88,29 @@ UCharsTrieIterator &UCharsTrieIterator::reset() {
     str_.truncate(length);
     pos_+=length;
     remainingMatchLength_-=length;
-    stack_.setSize(0);
+    stack_->setSize(0);
     return *this;
 }
 
 UBool
-UCharsTrieIterator::next(UErrorCode &errorCode) {
+UCharsTrie::Iterator::hasNext() const { return pos_!=NULL || !stack_->isEmpty(); }
+
+UBool
+UCharsTrie::Iterator::next(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return FALSE;
     }
     const UChar *pos=pos_;
     if(pos==NULL) {
-        if(stack_.isEmpty()) {
+        if(stack_->isEmpty()) {
             return FALSE;
         }
         // Pop the state off the stack and continue with the next outbound edge of
         // the branch node.
-        int32_t stackSize=stack_.size();
-        int32_t length=stack_.elementAti(stackSize-1);
-        pos=uchars_+stack_.elementAti(stackSize-2);
-        stack_.setSize(stackSize-2);
+        int32_t stackSize=stack_->size();
+        int32_t length=stack_->elementAti(stackSize-1);
+        pos=uchars_+stack_->elementAti(stackSize-2);
+        stack_->setSize(stackSize-2);
         str_.truncate(length&0xffff);
         length=(int32_t)((uint32_t)length>>16);
         if(length>1) {
@@ -149,12 +181,12 @@ UCharsTrieIterator::next(UErrorCode &errorCode) {
 
 // Branch node, needs to take the first outbound edge and push state for the rest.
 const UChar *
-UCharsTrieIterator::branchNext(const UChar *pos, int32_t length, UErrorCode &errorCode) {
+UCharsTrie::Iterator::branchNext(const UChar *pos, int32_t length, UErrorCode &errorCode) {
     while(length>UCharsTrie::kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison unit
         // Push state for the greater-or-equal edge.
-        stack_.addElement((int32_t)(UCharsTrie::skipDelta(pos)-uchars_), errorCode);
-        stack_.addElement(((length-(length>>1))<<16)|str_.length(), errorCode);
+        stack_->addElement((int32_t)(UCharsTrie::skipDelta(pos)-uchars_), errorCode);
+        stack_->addElement(((length-(length>>1))<<16)|str_.length(), errorCode);
         // Follow the less-than edge.
         length>>=1;
         pos=UCharsTrie::jumpByDelta(pos);
@@ -166,8 +198,8 @@ UCharsTrieIterator::branchNext(const UChar *pos, int32_t length, UErrorCode &err
     UBool isFinal=(UBool)(node>>15);
     int32_t value=UCharsTrie::readValue(pos, node&=0x7fff);
     pos=UCharsTrie::skipValue(pos, node);
-    stack_.addElement((int32_t)(pos-uchars_), errorCode);
-    stack_.addElement(((length-1)<<16)|str_.length(), errorCode);
+    stack_->addElement((int32_t)(pos-uchars_), errorCode);
+    stack_->addElement(((length-1)<<16)|str_.length(), errorCode);
     str_.append(trieUnit);
     if(isFinal) {
         pos_=NULL;
