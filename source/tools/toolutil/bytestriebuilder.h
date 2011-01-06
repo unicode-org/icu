@@ -51,7 +51,7 @@ private:
     virtual UChar getElementUnit(int32_t i, int32_t byteIndex) const;
     virtual int32_t getElementValue(int32_t i) const;
 
-    virtual int32_t getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const;
+    virtual int32_t getLimitOfLinearMatch(int32_t first, int32_t last, int32_t byteIndex) const;
 
     virtual int32_t countElementUnits(int32_t start, int32_t limit, int32_t byteIndex) const;
     virtual int32_t skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t count) const;
@@ -72,14 +72,14 @@ private:
         const char *s;
     };
 
-    virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
+    virtual Node *createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
                                         Node *nextNode) const;
 
     UBool ensureCapacity(int32_t length);
     virtual int32_t write(int32_t byte);
     int32_t write(const char *b, int32_t length);
     virtual int32_t writeElementUnits(int32_t i, int32_t byteIndex, int32_t length);
-    virtual int32_t writeValueAndFinal(int32_t i, UBool final);
+    virtual int32_t writeValueAndFinal(int32_t i, UBool isFinal);
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node);
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 

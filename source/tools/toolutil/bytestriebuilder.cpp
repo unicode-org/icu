@@ -249,7 +249,7 @@ BytesTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t byt
 
 int32_t
 BytesTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteIndex) const {
-    int32_t length=0;  // Number of different units at unitIndex.
+    int32_t length=0;  // Number of different bytes at byteIndex.
     int32_t i=start;
     do {
         char byte=elements[i++].charAt(byteIndex, strings);
@@ -263,12 +263,12 @@ BytesTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteIn
 
 int32_t
 BytesTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t count) const {
-        do {
-            char byte=elements[i++].charAt(byteIndex, strings);
-            while(byte==elements[i].charAt(byteIndex, strings)) {
-                ++i;
-            }
-        } while(--count>0);
+    do {
+        char byte=elements[i++].charAt(byteIndex, strings);
+        while(byte==elements[i].charAt(byteIndex, strings)) {
+            ++i;
+        }
+    } while(--count>0);
     return i;
 }
 
@@ -367,7 +367,10 @@ BytesTrieBuilder::writeElementUnits(int32_t i, int32_t byteIndex, int32_t length
 }
 
 int32_t
-BytesTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
+BytesTrieBuilder::writeValueAndFinal(int32_t i, UBool isFinal) {
+    if(0<=i && i<=BytesTrie::kMaxOneByteValue) {
+        return write(((BytesTrie::kMinOneByteValueLead+i)<<1)|isFinal);
+    }
     char intBytes[5];
     int32_t length=1;
     if(i<0 || i>0xffffff) {
@@ -377,8 +380,8 @@ BytesTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
         intBytes[3]=(char)(i>>8);
         intBytes[4]=(char)i;
         length=5;
-    } else if(i<=BytesTrie::kMaxOneByteValue) {
-        intBytes[0]=(char)(BytesTrie::kMinOneByteValueLead+i);
+    // } else if(i<=BytesTrie::kMaxOneByteValue) {
+    //     intBytes[0]=(char)(BytesTrie::kMinOneByteValueLead+i);
     } else {
         if(i<=BytesTrie::kMaxTwoByteValue) {
             intBytes[0]=(char)(BytesTrie::kMinTwoByteValueLead+(i>>8));
@@ -394,7 +397,7 @@ BytesTrieBuilder::writeValueAndFinal(int32_t i, UBool final) {
         }
         intBytes[length++]=(char)i;
     }
-    intBytes[0]=(char)((intBytes[0]<<1)|final);
+    intBytes[0]=(char)((intBytes[0]<<1)|isFinal);
     return write(intBytes, length);
 }
 
@@ -410,12 +413,13 @@ BytesTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node)
 int32_t
 BytesTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
     int32_t i=bytesLength-jumpTarget;
-    char intBytes[5];
-    int32_t length;
     U_ASSERT(i>=0);
     if(i<=BytesTrie::kMaxOneByteDelta) {
-        length=0;
-    } else if(i<=BytesTrie::kMaxTwoByteDelta) {
+        return write(i);
+    }
+    char intBytes[5];
+    int32_t length;
+    if(i<=BytesTrie::kMaxTwoByteDelta) {
         intBytes[0]=(char)(BytesTrie::kMinTwoByteDeltaLead+(i>>8));
         length=1;
     } else {
