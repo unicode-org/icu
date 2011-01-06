@@ -10,6 +10,8 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 /**
  * Light-weight, non-const reader class for a BytesTrie.
@@ -18,7 +20,12 @@ import java.io.IOException;
  *
  * @author Markus W. Scherer
  */
-public final class BytesTrie implements Cloneable {
+public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
+    /**
+     * Constructs a BytesTrie reader instance.
+     * @param trieBytes Bytes array that contains the serialized trie.
+     * @param offset Root offset of the trie in the array.
+     */
     public BytesTrie(byte[] trieBytes, int offset) {
         bytes_=trieBytes;
         pos_=root_=offset;
@@ -267,6 +274,252 @@ public final class BytesTrie implements Cloneable {
             append(out, bytes_[pos]&0xff);
             return 1;
         }
+    }
+
+    /**
+     * Iterates from the current state of this trie.
+     * @return A new BytesTrie.Iterator.
+     */
+    public Iterator iterator() {
+        return new Iterator(bytes_, root_, remainingMatchLength_, 0);
+    }
+
+    /**
+     * Iterates from the current state of this trie.
+     * @param maxStringLength If 0, the iterator returns full strings/byte sequences.
+     *                        Otherwise, the iterator returns strings with this maximum length.
+     * @return A new BytesTrie.Iterator.
+     */
+    public Iterator iterator(int maxStringLength) {
+        return new Iterator(bytes_, root_, remainingMatchLength_, maxStringLength);
+    }
+
+    /**
+     * Iterates from the root of a byte-serialized BytesTrie.
+     * @param trieBytes Bytes array that contains the serialized trie.
+     * @param offset Root offset of the trie in the array.
+     * @param maxStringLength If 0, the iterator returns full strings/byte sequences.
+     *                        Otherwise, the iterator returns strings with this maximum length.
+     * @return A new BytesTrie.Iterator.
+     */
+    public static Iterator iterator(byte[] trieBytes, int offset, int maxStringLength) {
+        return new Iterator(trieBytes, offset, -1, 0);
+    }
+
+    /**
+     * Return value type for the Iterator.
+     */
+    public static final class Entry {
+        private Entry(int capacity) {
+            bytes=new byte[capacity];
+        }
+
+        public int stringLength() { return length; }
+        public byte charAt(int index) { return bytes[index]; }
+        public void copyStringTo(byte[] dest, int destOffset) {
+            System.arraycopy(bytes, 0, dest, destOffset, length);
+        }
+
+        public int value;
+
+        private void ensureCapacity(int len) {
+            if(bytes.length<len) {
+                byte[] newBytes=new byte[Math.min(2*bytes.length, 2*len)];
+                System.arraycopy(bytes, 0, newBytes, 0, length);
+            }
+        }
+        private void append(byte b) {
+            ensureCapacity(length+1);
+            bytes[length++]=b;
+        }
+        private void append(byte[] b, int off, int len) {
+            ensureCapacity(length+len);
+            System.arraycopy(b, off, bytes, length, len);
+            length+=len;
+        }
+        private void truncateString(int newLength) { length=newLength; }
+
+        private byte[] bytes;
+        private int length;
+    }
+
+    /**
+     * Iterator for all of the (byte sequence, value) pairs in a BytesTrie.
+     */
+    public static final class Iterator implements java.util.Iterator<Entry> {
+        private Iterator(byte[] trieBytes, int offset, int remainingMatchLength, int maxStringLength) {
+            bytes_=trieBytes;
+            pos_=initialPos_=offset;
+            remainingMatchLength_=initialRemainingMatchLength_=remainingMatchLength;
+            maxLength_=maxStringLength;
+            entry_=new Entry(maxLength_!=0 ? maxLength_ : 32);
+            int length=remainingMatchLength_;  // Actual remaining match length minus 1.
+            if(length>=0) {
+                // Pending linear-match node, append remaining bytes to str.
+                ++length;
+                if(maxLength_>0 && length>maxLength_) {
+                    length=maxLength_;  // This will leave remainingMatchLength>=0 as a signal.
+                }
+                entry_.append(bytes_, pos_, length);
+                pos_+=length;
+                remainingMatchLength_-=length;
+            }
+        }
+
+        /**
+         * Resets this iterator to its initial state.
+         */
+        public Iterator reset() {
+            pos_=initialPos_;
+            remainingMatchLength_=initialRemainingMatchLength_;
+            int length=remainingMatchLength_+1;  // Remaining match length.
+            if(maxLength_>0 && length>maxLength_) {
+                length=maxLength_;
+            }
+            entry_.truncateString(length);
+            pos_+=length;
+            remainingMatchLength_-=length;
+            stack_.clear();
+            return this;
+        }
+
+        /**
+         * @return true if there are more elements.
+         */
+        public boolean hasNext() /*const*/  { return pos_>=0 || !stack_.isEmpty(); }
+
+        /**
+         * Finds the next (byte sequence, value) pair if there is one.
+         *
+         * If the byte sequence is truncated to the maximum length and does not
+         * have a real value, then the value is set to -1.
+         * In this case, this "not a real value" is indistinguishable from
+         * a real value of -1.
+         * @return An Entry with the string and value of the next element.
+         * @throw NoSuchElementException - iteration has no more elements.
+         */
+        public Entry next() {
+            int pos=pos_;
+            if(pos<0) {
+                if(stack_.isEmpty()) {
+                    throw new NoSuchElementException();
+                }
+                // Pop the state off the stack and continue with the next outbound edge of
+                // the branch node.
+                long top=stack_.remove(stack_.size()-1);
+                int length=(int)top;
+                pos=(int)(top>>32);
+                entry_.truncateString(length&0xffff);
+                length>>>=16;
+                if(length>1) {
+                    pos=branchNext(pos, length);
+                    if(pos<0) {
+                        return entry_;  // Reached a final value.
+                    }
+                } else {
+                    entry_.append(bytes_[pos++]);
+                }
+            }
+            if(remainingMatchLength_>=0) {
+                // We only get here if we started in a pending linear-match node
+                // with more than maxLength remaining bytes.
+                return truncateAndStop();
+            }
+            for(;;) {
+                int node=bytes_[pos++]&0xff;
+                if(node>=kMinValueLead) {
+                    // Deliver value for the byte sequence so far.
+                    boolean isFinal=(node&kValueIsFinal)!=0;
+                    entry_.value=readValue(bytes_, pos, node>>1);
+                    if(isFinal || (maxLength_>0 && entry_.length==maxLength_)) {
+                        pos_=-1;
+                    } else {
+                        pos_=skipValue(pos, node);
+                    }
+                    return entry_;
+                }
+                if(maxLength_>0 && entry_.length==maxLength_) {
+                    return truncateAndStop();
+                }
+                if(node<kMinLinearMatch) {
+                    if(node==0) {
+                        node=bytes_[pos++]&0xff;
+                    }
+                    pos=branchNext(pos, node+1);
+                    if(pos<0) {
+                        return entry_;  // Reached a final value.
+                    }
+                } else {
+                    // Linear-match node, append length bytes to str_.
+                    int length=node-kMinLinearMatch+1;
+                    if(maxLength_>0 && entry_.length+length>maxLength_) {
+                        entry_.append(bytes_, pos, maxLength_-entry_.length);
+                        return truncateAndStop();
+                    }
+                    entry_.append(bytes_, pos, length);
+                    pos+=length;
+                }
+            }
+        }
+
+        /**
+         * Iterator.remove() is not supported.
+         * @throws UnsupportedOperationException (always)
+         */
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        private Entry truncateAndStop() {
+            pos_=-1;
+            entry_.value=-1;  // no real value for str
+            return entry_;
+        }
+
+        private int branchNext(int pos, int length) {
+            while(length>kMaxBranchLinearSubNodeLength) {
+                ++pos;  // ignore the comparison byte
+                // Push state for the greater-or-equal edge.
+                stack_.add(((long)skipDelta(bytes_, pos)<<32)|((length-(length>>1))<<16)|entry_.length);
+                // Follow the less-than edge.
+                length>>=1;
+                pos=jumpByDelta(bytes_, pos);
+            }
+            // List of key-value pairs where values are either final values or jump deltas.
+            // Read the first (key, value) pair.
+            byte trieByte=bytes_[pos++];
+            int node=bytes_[pos++]&0xff;
+            boolean isFinal=(node&kValueIsFinal)!=0;
+            int value=readValue(bytes_, pos, node>>1);
+            pos=skipValue(pos, node);
+            stack_.add(((long)pos<<32)|((length-1)<<16)|entry_.length);
+            entry_.append(trieByte);
+            if(isFinal) {
+                pos_=-1;
+                entry_.value=value;
+                return -1;
+            } else {
+                return pos+value;
+            }
+        }
+
+        private byte[] bytes_;
+        private int pos_;
+        private int initialPos_;
+        private int remainingMatchLength_;
+        private int initialRemainingMatchLength_;
+
+        private int maxLength_;
+        private Entry entry_;
+
+        // The stack stores longs for backtracking to another
+        // outbound edge of a branch node.
+        // Each long has the offset from bytes_ in bits 62..32,
+        // the entry_.stringLength() from before the node in bits 15..0,
+        // and the remaining branch length in bits 24..16. (Bits 31..25 are unused.)
+        // (We could store the remaining branch length minus 1 in bits 23..16 and not use bits 31..24,
+        // but the code looks more confusing that way.)
+        ArrayList<Long> stack_=new ArrayList<Long>();
     }
 
     private void stop() {
