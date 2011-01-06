@@ -237,7 +237,7 @@ public:
     /**
      * Iterator for all of the (string, value) pairs in a UCharsTrie.
      */
-    class Iterator : public UMemory {
+    class U_TOOLUTIL_API Iterator : public UMemory {
     public:
         /**
          * Iterates from the root of a UChar-serialized UCharsTrie.
