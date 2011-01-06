@@ -129,18 +129,18 @@ UCharsTrie::Iterator::next(UErrorCode &errorCode) {
     }
     for(;;) {
         int32_t node=*pos++;
-        if(node>=UCharsTrie::kMinValueLead) {
+        if(node>=kMinValueLead) {
             if(skipValue_) {
-                pos=UCharsTrie::skipNodeValue(pos, node);
-                node&=UCharsTrie::kNodeTypeMask;
+                pos=skipNodeValue(pos, node);
+                node&=kNodeTypeMask;
                 skipValue_=FALSE;
             } else {
                 // Deliver value for the string so far.
                 UBool isFinal=(UBool)(node>>15);
                 if(isFinal) {
-                    value_=UCharsTrie::readValue(pos, node&0x7fff);
+                    value_=readValue(pos, node&0x7fff);
                 } else {
-                    value_=UCharsTrie::readNodeValue(pos, node);
+                    value_=readNodeValue(pos, node);
                 }
                 if(isFinal || (maxLength_>0 && str_.length()==maxLength_)) {
                     pos_=NULL;
@@ -158,7 +158,7 @@ UCharsTrie::Iterator::next(UErrorCode &errorCode) {
         if(maxLength_>0 && str_.length()==maxLength_) {
             return truncateAndStop();
         }
-        if(node<UCharsTrie::kMinLinearMatch) {
+        if(node<kMinLinearMatch) {
             if(node==0) {
                 node=*pos++;
             }
@@ -168,7 +168,7 @@ UCharsTrie::Iterator::next(UErrorCode &errorCode) {
             }
         } else {
             // Linear-match node, append length units to str_.
-            int32_t length=node-UCharsTrie::kMinLinearMatch+1;
+            int32_t length=node-kMinLinearMatch+1;
             if(maxLength_>0 && str_.length()+length>maxLength_) {
                 str_.append(pos, maxLength_-str_.length());
                 return truncateAndStop();
@@ -182,22 +182,22 @@ UCharsTrie::Iterator::next(UErrorCode &errorCode) {
 // Branch node, needs to take the first outbound edge and push state for the rest.
 const UChar *
 UCharsTrie::Iterator::branchNext(const UChar *pos, int32_t length, UErrorCode &errorCode) {
-    while(length>UCharsTrie::kMaxBranchLinearSubNodeLength) {
+    while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison unit
         // Push state for the greater-or-equal edge.
-        stack_->addElement((int32_t)(UCharsTrie::skipDelta(pos)-uchars_), errorCode);
+        stack_->addElement((int32_t)(skipDelta(pos)-uchars_), errorCode);
         stack_->addElement(((length-(length>>1))<<16)|str_.length(), errorCode);
         // Follow the less-than edge.
         length>>=1;
-        pos=UCharsTrie::jumpByDelta(pos);
+        pos=jumpByDelta(pos);
     }
     // List of key-value pairs where values are either final values or jump deltas.
     // Read the first (key, value) pair.
     UChar trieUnit=*pos++;
     int32_t node=*pos++;
     UBool isFinal=(UBool)(node>>15);
-    int32_t value=UCharsTrie::readValue(pos, node&=0x7fff);
-    pos=UCharsTrie::skipValue(pos, node);
+    int32_t value=readValue(pos, node&=0x7fff);
+    pos=skipValue(pos, node);
     stack_->addElement((int32_t)(pos-uchars_), errorCode);
     stack_->addElement(((length-1)<<16)|str_.length(), errorCode);
     str_.append(trieUnit);
