@@ -586,30 +586,30 @@ public final class BytesTrie implements Cloneable {
 
     // For a branch sub-node with at most this many entries, we drop down
     // to a linear search.
-    private static final int kMaxBranchLinearSubNodeLength=5;
+    /*package*/ static final int kMaxBranchLinearSubNodeLength=5;
 
     // 10..1f: Linear-match node, match 1..16 bytes and continue reading the next node.
-    private static final int kMinLinearMatch=0x10;
-    private static final int kMaxLinearMatchLength=0x10;
+    /*package*/ static final int kMinLinearMatch=0x10;
+    /*package*/ static final int kMaxLinearMatchLength=0x10;
 
     // 20..ff: Variable-length value node.
     // If odd, the value is final. (Otherwise, intermediate value or jump delta.)
     // Then shift-right by 1 bit.
     // The remaining lead byte value indicates the number of following bytes (0..4)
     // and contains the value's top bits.
-    private static final int kMinValueLead=kMinLinearMatch+kMaxLinearMatchLength;  // 0x20
+    /*package*/ static final int kMinValueLead=kMinLinearMatch+kMaxLinearMatchLength;  // 0x20
     // It is a final value if bit 0 is set.
     private static final int kValueIsFinal=1;
 
     // Compact value: After testing bit 0, shift right by 1 and then use the following thresholds.
-    private static final int kMinOneByteValueLead=kMinValueLead/2;  // 0x10
-    private static final int kMaxOneByteValue=0x40;  // At least 6 bits in the first byte.
+    /*package*/ static final int kMinOneByteValueLead=kMinValueLead/2;  // 0x10
+    /*package*/ static final int kMaxOneByteValue=0x40;  // At least 6 bits in the first byte.
 
-    private static final int kMinTwoByteValueLead=kMinOneByteValueLead+kMaxOneByteValue+1;  // 0x51
-    private static final int kMaxTwoByteValue=0x1aff;
+    /*package*/ static final int kMinTwoByteValueLead=kMinOneByteValueLead+kMaxOneByteValue+1;  // 0x51
+    /*package*/ static final int kMaxTwoByteValue=0x1aff;
 
-    private static final int kMinThreeByteValueLead=kMinTwoByteValueLead+(kMaxTwoByteValue>>8)+1;  // 0x6c
-    private static final int kFourByteValueLead=0x7e;
+    /*package*/ static final int kMinThreeByteValueLead=kMinTwoByteValueLead+(kMaxTwoByteValue>>8)+1;  // 0x6c
+    /*package*/ static final int kFourByteValueLead=0x7e;
 
     // A little more than Unicode code points. (0x11ffff)
     /*package*/ static final int kMaxThreeByteValue=((kFourByteValueLead-kMinThreeByteValueLead)<<16)-1;
@@ -617,10 +617,10 @@ public final class BytesTrie implements Cloneable {
     /*package*/ static final int kFiveByteValueLead=0x7f;
 
     // Compact delta integers.
-    private static final int kMaxOneByteDelta=0xbf;
-    private static final int kMinTwoByteDeltaLead=kMaxOneByteDelta+1;  // 0xc0
-    private static final int kMinThreeByteDeltaLead=0xf0;
-    private static final int kFourByteDeltaLead=0xfe;
+    /*package*/ static final int kMaxOneByteDelta=0xbf;
+    /*package*/ static final int kMinTwoByteDeltaLead=kMaxOneByteDelta+1;  // 0xc0
+    /*package*/ static final int kMinThreeByteDeltaLead=0xf0;
+    /*package*/ static final int kFourByteDeltaLead=0xfe;
     /*package*/ static final int kFiveByteDeltaLead=0xff;
 
     /*package*/ static final int kMaxTwoByteDelta=((kMinThreeByteDeltaLead-kMinTwoByteDeltaLead)<<8)-1;  // 0x2fff
