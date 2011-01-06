@@ -15,25 +15,51 @@
 #include "unicode/utypes.h"
 #include "unicode/stringpiece.h"
 #include "bytestrie.h"
-#include "bytestrieiterator.h"
 #include "charstr.h"
 #include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
 
-BytesTrieIterator::BytesTrieIterator(const void *trieBytes, int32_t maxStringLength,
-                                     UErrorCode &errorCode)
+BytesTrie::Iterator::Iterator(const void *trieBytes, int32_t maxStringLength,
+                              UErrorCode &errorCode)
         : bytes_(reinterpret_cast<const uint8_t *>(trieBytes)),
           pos_(bytes_), initialPos_(bytes_),
           remainingMatchLength_(-1), initialRemainingMatchLength_(-1),
-          maxLength_(maxStringLength), value_(0), stack_(errorCode) {}
+          str_(NULL), maxLength_(maxStringLength), value_(0), stack_(NULL) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    // str_ and stack_ are pointers so that it's easy to turn bytestrie.h into
+    // a public API header for which we would want it to depend only on
+    // other public headers.
+    // Unlike BytesTrie itself, its Iterator performs memory allocations anyway
+    // via the CharString and UVector32 implementations, so this additional
+    // cost is minimal.
+    str_=new CharString();
+    stack_=new UVector32(errorCode);
+    if(U_SUCCESS(errorCode) && (str_==NULL || stack_==NULL)) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    }
+}
 
-BytesTrieIterator::BytesTrieIterator(const BytesTrie &trie, int32_t maxStringLength,
-                                     UErrorCode &errorCode)
+BytesTrie::Iterator::Iterator(const BytesTrie &trie, int32_t maxStringLength,
+                              UErrorCode &errorCode)
         : bytes_(trie.bytes_), pos_(trie.pos_), initialPos_(trie.pos_),
           remainingMatchLength_(trie.remainingMatchLength_),
           initialRemainingMatchLength_(trie.remainingMatchLength_),
-          maxLength_(maxStringLength), value_(0), stack_(errorCode) {
+          str_(NULL), maxLength_(maxStringLength), value_(0), stack_(NULL) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    str_=new CharString();
+    stack_=new UVector32(errorCode);
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    if(str_==NULL || stack_==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     if(length>=0) {
         // Pending linear-match node, append remaining bytes to str.
@@ -41,43 +67,52 @@ BytesTrieIterator::BytesTrieIterator(const BytesTrie &trie, int32_t maxStringLen
         if(maxLength_>0 && length>maxLength_) {
             length=maxLength_;  // This will leave remainingMatchLength>=0 as a signal.
         }
-        str_.append(reinterpret_cast<const char *>(pos_), length, errorCode);
+        str_->append(reinterpret_cast<const char *>(pos_), length, errorCode);
         pos_+=length;
         remainingMatchLength_-=length;
     }
 }
 
-BytesTrieIterator &BytesTrieIterator::reset() {
+BytesTrie::Iterator::~Iterator() {
+    delete str_;
+    delete stack_;
+}
+
+BytesTrie::Iterator &
+BytesTrie::Iterator::reset() {
     pos_=initialPos_;
     remainingMatchLength_=initialRemainingMatchLength_;
     int32_t length=remainingMatchLength_+1;  // Remaining match length.
     if(maxLength_>0 && length>maxLength_) {
         length=maxLength_;
     }
-    str_.truncate(length);
+    str_->truncate(length);
     pos_+=length;
     remainingMatchLength_-=length;
-    stack_.setSize(0);
+    stack_->setSize(0);
     return *this;
 }
 
 UBool
-BytesTrieIterator::next(UErrorCode &errorCode) {
+BytesTrie::Iterator::hasNext() const { return pos_!=NULL || !stack_->isEmpty(); }
+
+UBool
+BytesTrie::Iterator::next(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return FALSE;
     }
     const uint8_t *pos=pos_;
     if(pos==NULL) {
-        if(stack_.isEmpty()) {
+        if(stack_->isEmpty()) {
             return FALSE;
         }
         // Pop the state off the stack and continue with the next outbound edge of
         // the branch node.
-        int32_t stackSize=stack_.size();
-        int32_t length=stack_.elementAti(stackSize-1);
-        pos=bytes_+stack_.elementAti(stackSize-2);
-        stack_.setSize(stackSize-2);
-        str_.truncate(length&0xffff);
+        int32_t stackSize=stack_->size();
+        int32_t length=stack_->elementAti(stackSize-1);
+        pos=bytes_+stack_->elementAti(stackSize-2);
+        stack_->setSize(stackSize-2);
+        str_->truncate(length&0xffff);
         length=(int32_t)((uint32_t)length>>16);
         if(length>1) {
             pos=branchNext(pos, length, errorCode);
@@ -85,7 +120,7 @@ BytesTrieIterator::next(UErrorCode &errorCode) {
                 return TRUE;  // Reached a final value.
             }
         } else {
-            str_.append((char)*pos++, errorCode);
+            str_->append((char)*pos++, errorCode);
         }
     }
     if(remainingMatchLength_>=0) {
@@ -99,15 +134,15 @@ BytesTrieIterator::next(UErrorCode &errorCode) {
             // Deliver value for the byte sequence so far.
             UBool isFinal=(UBool)(node&BytesTrie::kValueIsFinal);
             value_=BytesTrie::readValue(pos, node>>1);
-            if(isFinal || (maxLength_>0 && str_.length()==maxLength_)) {
+            if(isFinal || (maxLength_>0 && str_->length()==maxLength_)) {
                 pos_=NULL;
             } else {
                 pos_=BytesTrie::skipValue(pos, node);
             }
-            sp_.set(str_.data(), str_.length());
+            sp_.set(str_->data(), str_->length());
             return TRUE;
         }
-        if(maxLength_>0 && str_.length()==maxLength_) {
+        if(maxLength_>0 && str_->length()==maxLength_) {
             return truncateAndStop();
         }
         if(node<BytesTrie::kMinLinearMatch) {
@@ -121,25 +156,33 @@ BytesTrieIterator::next(UErrorCode &errorCode) {
         } else {
             // Linear-match node, append length bytes to str_.
             int32_t length=node-BytesTrie::kMinLinearMatch+1;
-            if(maxLength_>0 && str_.length()+length>maxLength_) {
-                str_.append(reinterpret_cast<const char *>(pos),
-                            maxLength_-str_.length(), errorCode);
+            if(maxLength_>0 && str_->length()+length>maxLength_) {
+                str_->append(reinterpret_cast<const char *>(pos),
+                            maxLength_-str_->length(), errorCode);
                 return truncateAndStop();
             }
-            str_.append(reinterpret_cast<const char *>(pos), length, errorCode);
+            str_->append(reinterpret_cast<const char *>(pos), length, errorCode);
             pos+=length;
         }
     }
 }
 
+UBool
+BytesTrie::Iterator::truncateAndStop() {
+    pos_=NULL;
+    value_=-1;  // no real value for str
+    sp_.set(str_->data(), str_->length());
+    return TRUE;
+}
+
 // Branch node, needs to take the first outbound edge and push state for the rest.
 const uint8_t *
-BytesTrieIterator::branchNext(const uint8_t *pos, int32_t length, UErrorCode &errorCode) {
+BytesTrie::Iterator::branchNext(const uint8_t *pos, int32_t length, UErrorCode &errorCode) {
     while(length>BytesTrie::kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison byte
         // Push state for the greater-or-equal edge.
-        stack_.addElement((int32_t)(BytesTrie::skipDelta(pos)-bytes_), errorCode);
-        stack_.addElement(((length-(length>>1))<<16)|str_.length(), errorCode);
+        stack_->addElement((int32_t)(BytesTrie::skipDelta(pos)-bytes_), errorCode);
+        stack_->addElement(((length-(length>>1))<<16)|str_->length(), errorCode);
         // Follow the less-than edge.
         length>>=1;
         pos=BytesTrie::jumpByDelta(pos);
@@ -151,12 +194,12 @@ BytesTrieIterator::branchNext(const uint8_t *pos, int32_t length, UErrorCode &er
     UBool isFinal=(UBool)(node&BytesTrie::kValueIsFinal);
     int32_t value=BytesTrie::readValue(pos, node>>1);
     pos=BytesTrie::skipValue(pos, node);
-    stack_.addElement((int32_t)(pos-bytes_), errorCode);
-    stack_.addElement(((length-1)<<16)|str_.length(), errorCode);
-    str_.append((char)trieByte, errorCode);
+    stack_->addElement((int32_t)(pos-bytes_), errorCode);
+    stack_->addElement(((length-1)<<16)|str_->length(), errorCode);
+    str_->append((char)trieByte, errorCode);
     if(isFinal) {
         pos_=NULL;
-        sp_.set(str_.data(), str_.length());
+        sp_.set(str_->data(), str_->length());
         value_=value;
         return NULL;
     } else {

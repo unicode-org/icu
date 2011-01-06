@@ -247,7 +247,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bytestriebuilder.cpp" />
-    <ClCompile Include="bytestrieiterator.cpp" />
     <ClCompile Include="denseranges.cpp" />
     <ClCompile Include="filestrm.c" />
     <ClCompile Include="filetools.cpp" />
@@ -297,7 +296,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bytestriebuilder.h" />
-    <ClInclude Include="bytestrieiterator.h" />
     <ClInclude Include="denseranges.h" />
     <ClInclude Include="filestrm.h" />
     <ClInclude Include="filetools.h" />
@@ -314,7 +312,6 @@
     <ClInclude Include="ucbuf.h" />
     <ClInclude Include="ucharstrie.h" />
     <ClInclude Include="ucharstriebuilder.h" />
-    <ClInclude Include="ucharstrieiterator.h" />
     <ClInclude Include="ucm.h" />
     <ClInclude Include="unewdata.h" />
     <ClInclude Include="uoptions.h" />

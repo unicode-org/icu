@@ -18,7 +18,6 @@
 #include "unicode/stringpiece.h"
 #include "bytestrie.h"
 #include "bytestriebuilder.h"
-#include "bytestrieiterator.h"
 #include "intltest.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -63,7 +62,7 @@ public:
     void checkNextWithState(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
     void checkNextString(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
     void checkIterator(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
-    void checkIterator(BytesTrieIterator &iter, const StringAndValue data[], int32_t dataLength);
+    void checkIterator(BytesTrie::Iterator &iter, const StringAndValue data[], int32_t dataLength);
 };
 
 extern IntlTest *createBytesTrieTest() {
@@ -392,8 +391,8 @@ void BytesTrieTest::TestIteratorFromBranch() {
     trie.next('a');
     trie.next('n');
     IcuTestErrorCode errorCode(*this, "TestIteratorFromBranch()");
-    BytesTrieIterator iter(trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrieIterator(trie) constructor")) {
+    BytesTrie::Iterator iter(trie, 0, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the suffixes
@@ -445,8 +444,8 @@ void BytesTrieTest::TestIteratorFromLinearMatch() {
     trie.next('u');
     trie.next('a');
     IcuTestErrorCode errorCode(*this, "TestIteratorFromLinearMatch()");
-    BytesTrieIterator iter(trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrieIterator(trie) constructor")) {
+    BytesTrie::Iterator iter(trie, 0, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the suffixes
@@ -468,8 +467,8 @@ void BytesTrieTest::TestTruncatingIteratorFromRoot() {
         return;  // buildTrie() reported an error
     }
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromRoot()");
-    BytesTrieIterator iter(sp.data(), 4, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrieIterator(trie) constructor")) {
+    BytesTrie::Iterator iter(sp.data(), 4, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the first 4 characters
@@ -525,8 +524,8 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
     trie.next('b');
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchShort()");
     // Truncate within the linear-match node.
-    BytesTrieIterator iter(trie, 2, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrieIterator(trie) constructor")) {
+    BytesTrie::Iterator iter(trie, 2, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     static const StringAndValue expected[]={
@@ -556,8 +555,8 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
     trie.next('c');
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchLong()");
     // Truncate after the linear-match node.
-    BytesTrieIterator iter(trie, 3, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrieIterator(trie) constructor")) {
+    BytesTrie::Iterator iter(trie, 3, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     static const StringAndValue expected[]={
@@ -798,14 +797,14 @@ void BytesTrieTest::checkNextString(const StringPiece &trieBytes,
 void BytesTrieTest::checkIterator(const StringPiece &trieBytes,
                                   const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
-    BytesTrieIterator iter(trieBytes.data(), 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrieIterator(trieBytes) constructor")) {
+    BytesTrie::Iterator iter(trieBytes.data(), 0, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trieBytes) constructor")) {
         return;
     }
     checkIterator(iter, data, dataLength);
 }
 
-void BytesTrieTest::checkIterator(BytesTrieIterator &iter,
+void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
                                   const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     for(int32_t i=0; i<dataLength; ++i) {
