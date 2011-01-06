@@ -27,7 +27,6 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             // Cannot add elements after building.
             throw new IllegalStateException("Cannot add (string, value) pairs after build().");
         }
-        bytesCapacity+=length+1;  // Crude bytes preallocation estimate.
         elements.add(new Element(sequence, length, value, this));
         return this;
     }
@@ -57,10 +56,13 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             prevLength=currentLength;
         }
         // Create and byte-serialize the trie for the elements.
-        if(bytesCapacity<1024) {
-            bytesCapacity=1024;
+        int capacity=stringsLength;
+        if(capacity<1024) {
+            capacity=1024;
         }
-        bytes=new byte[bytesCapacity];
+        if(bytes==null || bytes.length<capacity) {
+            bytes=new byte[capacity];
+        }
         build(buildOption, elementsLength);
         return ByteBuffer.wrap(bytes, bytes.length-bytesLength, bytesLength).asReadOnlyBuffer();
     }
@@ -68,7 +70,6 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     public BytesTrieBuilder clear() {
         stringsLength=0;
         elements.clear();
-        bytesCapacity=0;
         bytesLength=0;
         return this;
     }
@@ -98,7 +99,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
                 length=strings[offset++]&0xff;
             } else {
                 offset=~offset;
-                length=((int)(strings[offset]&0xff)<<8)|(strings[offset+1]&0xff);
+                length=((strings[offset]&0xff)<<8)|(strings[offset+1]&0xff);
                 offset+=2;
             }
             return ((long)offset<<32)|length;
@@ -109,7 +110,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
                 return strings[offset]&0xff;
             } else {
                 offset=~offset;
-                return ((int)(strings[offset]&0xff)<<8)|(strings[offset+1]&0xff);
+                return ((strings[offset]&0xff)<<8)|(strings[offset+1]&0xff);
             }
         }
 
@@ -270,14 +271,13 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             System.arraycopy(bytes, bytes.length-bytesLength,
                              newBytes, newBytes.length-bytesLength, bytesLength);
             bytes=newBytes;
-            bytesCapacity=newCapacity;
         }
     }
     protected int write(int b) {
         int newLength=bytesLength+1;
         ensureCapacity(newLength);
         bytesLength=newLength;
-        bytes[bytesCapacity-bytesLength]=(byte)b;
+        bytes[bytes.length-bytesLength]=(byte)b;
         return bytesLength;
     }
     private int write(int offset, int length) {
@@ -297,11 +297,14 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     protected int writeElementUnits(int i, int byteIndex, int length) {
         return write(elements.get(i).getStringOffset(strings)+byteIndex, length);
     }
+
+    // For writeValueAndFinal() and writeDeltaTo().
+    private final byte[] intBytes=new byte[5];
+
     protected int writeValueAndFinal(int i, boolean isFinal) {
         if(0<=i && i<=BytesTrie.kMaxOneByteValue) {
             return write(((BytesTrie.kMinOneByteValueLead+i)<<1)|(isFinal?1:0));
         }
-        byte[] intBytes=new byte[5];
         int length=1;
         if(i<0 || i>0xffffff) {
             intBytes[0]=(byte)BytesTrie.kFiveByteValueLead;
@@ -343,7 +346,6 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         if(i<=BytesTrie.kMaxOneByteDelta) {
             return write(i);
         }
-        byte[] intBytes=new byte[5];
         int length;
         if(i<=BytesTrie.kMaxTwoByteDelta) {
             intBytes[0]=(byte)(BytesTrie.kMinTwoByteDeltaLead+(i>>8));
@@ -422,6 +424,5 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     // Byte serialization of the trie.
     // Grows from the back: bytesLength measures from the end of the buffer!
     private byte[] bytes;
-    private int bytesCapacity;
     private int bytesLength;
 }
