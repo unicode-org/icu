@@ -40,6 +40,10 @@ class UVector32;
  */
 class U_COMMON_API BytesTrie : public UMemory {
 public:
+    /**
+     * Constructs a BytesTrie reader instance.
+     * @param trieBytes The trie bytes.
+     */
     BytesTrie(const void *trieBytes)
             : bytes_(reinterpret_cast<const uint8_t *>(trieBytes)),
               pos_(bytes_), remainingMatchLength_(-1) {}
@@ -247,7 +251,7 @@ public:
 
         // The stack stores pairs of integers for backtracking to another
         // outbound edge of a branch node.
-        // The first integer is an offset from BytesTrie.bytes.
+        // The first integer is an offset from bytes_.
         // The second integer has the str_->length() from before the node in bits 15..0,
         // and the remaining branch length in bits 24..16. (Bits 31..25 are unused.)
         // (We could store the remaining branch length minus 1 in bits 23..16 and not use bits 31..24,
