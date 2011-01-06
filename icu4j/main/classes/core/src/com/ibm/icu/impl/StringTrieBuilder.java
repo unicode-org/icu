@@ -281,7 +281,7 @@ public abstract class StringTrieBuilder {
     protected abstract int getMinLinearMatch() /*const*/;
     protected abstract int getMaxLinearMatchLength() /*const*/;
 
-    // max(BytesTrie::kMaxBranchLinearSubNodeLength, UCharsTrie::kMaxBranchLinearSubNodeLength).
+    // max(BytesTrie::kMaxBranchLinearSubNodeLength, CharsTrie::kMaxBranchLinearSubNodeLength).
     protected static final int kMaxBranchLinearSubNodeLength=5;
 
     // Maximum number of nested split-branch levels for a branch on all 2^16 possible char units.
@@ -292,8 +292,6 @@ public abstract class StringTrieBuilder {
      * Makes sure that there is only one unique node registered that is
      * equivalent to newNode.
      * @param newNode Input node. The builder takes ownership.
-     * @param errorCode ICU in/out UErrorCode.
-                        Set to U_MEMORY_ALLOCATION_ERROR if it was success but newNode==null.
      * @return newNode if it is the first of its kind, or
      *         an equivalent node if newNode is a duplicate.
      */
@@ -314,8 +312,6 @@ public abstract class StringTrieBuilder {
      * with this value.
      * Avoids creating a node if the value is a duplicate.
      * @param value A final value.
-     * @param errorCode ICU in/out UErrorCode.
-                        Set to U_MEMORY_ALLOCATION_ERROR if it was success but newNode==null.
      * @return A FinalValueNode with the given value.
      */
     protected final Node registerFinalValue(int value) {
