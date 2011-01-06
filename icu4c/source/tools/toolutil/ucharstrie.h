@@ -74,6 +74,10 @@ private:
  */
 class U_TOOLUTIL_API UCharsTrie : public UMemory {
 public:
+    /**
+     * Constructs a UCharsTrie reader instance.
+     * @param trieBytes The trie UChars.
+     */
     UCharsTrie(const UChar *trieUChars)
             : uchars_(trieUChars),
               pos_(uchars_), remainingMatchLength_(-1) {}
@@ -313,7 +317,7 @@ public:
 
         // The stack stores pairs of integers for backtracking to another
         // outbound edge of a branch node.
-        // The first integer is an offset from ByteTrie.bytes.
+        // The first integer is an offset from uchars_.
         // The second integer has the str_.length() from before the node in bits 15..0,
         // and the remaining branch length in bits 31..16.
         // (We could store the remaining branch length minus 1 in bits 30..16 and not use the sign bit,

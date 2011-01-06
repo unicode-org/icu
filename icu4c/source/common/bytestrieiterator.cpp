@@ -130,14 +130,14 @@ BytesTrie::Iterator::next(UErrorCode &errorCode) {
     }
     for(;;) {
         int32_t node=*pos++;
-        if(node>=BytesTrie::kMinValueLead) {
+        if(node>=kMinValueLead) {
             // Deliver value for the byte sequence so far.
-            UBool isFinal=(UBool)(node&BytesTrie::kValueIsFinal);
-            value_=BytesTrie::readValue(pos, node>>1);
+            UBool isFinal=(UBool)(node&kValueIsFinal);
+            value_=readValue(pos, node>>1);
             if(isFinal || (maxLength_>0 && str_->length()==maxLength_)) {
                 pos_=NULL;
             } else {
-                pos_=BytesTrie::skipValue(pos, node);
+                pos_=skipValue(pos, node);
             }
             sp_.set(str_->data(), str_->length());
             return TRUE;
@@ -145,7 +145,7 @@ BytesTrie::Iterator::next(UErrorCode &errorCode) {
         if(maxLength_>0 && str_->length()==maxLength_) {
             return truncateAndStop();
         }
-        if(node<BytesTrie::kMinLinearMatch) {
+        if(node<kMinLinearMatch) {
             if(node==0) {
                 node=*pos++;
             }
@@ -155,7 +155,7 @@ BytesTrie::Iterator::next(UErrorCode &errorCode) {
             }
         } else {
             // Linear-match node, append length bytes to str_.
-            int32_t length=node-BytesTrie::kMinLinearMatch+1;
+            int32_t length=node-kMinLinearMatch+1;
             if(maxLength_>0 && str_->length()+length>maxLength_) {
                 str_->append(reinterpret_cast<const char *>(pos),
                             maxLength_-str_->length(), errorCode);
@@ -178,22 +178,22 @@ BytesTrie::Iterator::truncateAndStop() {
 // Branch node, needs to take the first outbound edge and push state for the rest.
 const uint8_t *
 BytesTrie::Iterator::branchNext(const uint8_t *pos, int32_t length, UErrorCode &errorCode) {
-    while(length>BytesTrie::kMaxBranchLinearSubNodeLength) {
+    while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison byte
         // Push state for the greater-or-equal edge.
-        stack_->addElement((int32_t)(BytesTrie::skipDelta(pos)-bytes_), errorCode);
+        stack_->addElement((int32_t)(skipDelta(pos)-bytes_), errorCode);
         stack_->addElement(((length-(length>>1))<<16)|str_->length(), errorCode);
         // Follow the less-than edge.
         length>>=1;
-        pos=BytesTrie::jumpByDelta(pos);
+        pos=jumpByDelta(pos);
     }
     // List of key-value pairs where values are either final values or jump deltas.
     // Read the first (key, value) pair.
     uint8_t trieByte=*pos++;
     int32_t node=*pos++;
-    UBool isFinal=(UBool)(node&BytesTrie::kValueIsFinal);
-    int32_t value=BytesTrie::readValue(pos, node>>1);
-    pos=BytesTrie::skipValue(pos, node);
+    UBool isFinal=(UBool)(node&kValueIsFinal);
+    int32_t value=readValue(pos, node>>1);
+    pos=skipValue(pos, node);
     stack_->addElement((int32_t)(pos-bytes_), errorCode);
     stack_->addElement(((length-1)<<16)|str_->length(), errorCode);
     str_->append((char)trieByte, errorCode);
