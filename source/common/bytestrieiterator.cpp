@@ -62,7 +62,7 @@ BytesTrie::Iterator::Iterator(const BytesTrie &trie, int32_t maxStringLength,
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     if(length>=0) {
-        // Pending linear-match node, append remaining bytes to str.
+        // Pending linear-match node, append remaining bytes to str_.
         ++length;
         if(maxLength_>0 && length>maxLength_) {
             length=maxLength_;  // This will leave remainingMatchLength>=0 as a signal.
@@ -170,8 +170,8 @@ BytesTrie::Iterator::next(UErrorCode &errorCode) {
 UBool
 BytesTrie::Iterator::truncateAndStop() {
     pos_=NULL;
-    value_=-1;  // no real value for str
     sp_.set(str_->data(), str_->length());
+    value_=-1;  // no real value for str
     return TRUE;
 }
 
