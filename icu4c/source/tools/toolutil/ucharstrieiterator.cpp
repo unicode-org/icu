@@ -61,7 +61,7 @@ UCharsTrie::Iterator::Iterator(const UCharsTrie &trie, int32_t maxStringLength,
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     if(length>=0) {
-        // Pending linear-match node, append remaining UChars to str.
+        // Pending linear-match node, append remaining UChars to str_.
         ++length;
         if(maxLength_>0 && length>maxLength_) {
             length=maxLength_;  // This will leave remainingMatchLength>=0 as a signal.
