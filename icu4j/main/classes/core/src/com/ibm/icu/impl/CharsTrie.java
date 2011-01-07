@@ -517,6 +517,8 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
 
         private Entry truncateAndStop() {
             pos_=-1;
+            // We reset entry_.chars every time we return entry_
+            // just because the caller might have modified the Entry.
             entry_.chars=str_;
             entry_.value=-1;  // no real value for str
             return entry_;

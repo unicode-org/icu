@@ -122,11 +122,15 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
          */
         INTERMEDIATE_VALUE;
 
+        // Note: The following methods assume the particular order
+        // of enum constants, treating the ordinal() values like bit sets.
+        // Do not reorder the enum constants!
+
         /**
          * Same as (result!=NO_MATCH).
          * @return true if the input bytes/units so far are part of a matching string/byte sequence.
          */
-        public boolean matches() { return ordinal()!=0; }
+        public boolean matches() { return this!=NO_MATCH; }
 
         /**
          * Equivalent to (result==INTERMEDIATE_VALUE || result==FINAL_VALUE).

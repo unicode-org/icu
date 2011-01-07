@@ -332,7 +332,7 @@ public abstract class StringTrieBuilder {
     protected HashMap<Node, Node> nodes;
     protected FinalValueNode lookupFinalValueNode;
 
-    protected abstract class Node {
+    protected static abstract class Node {
         public Node(int initialHash) {
             hash=initialHash;
             offset=0;
@@ -403,7 +403,7 @@ public abstract class StringTrieBuilder {
     // with the input node, and the
     // !Node::operator==(other) used inside FinalValueNode::operator==(other)
     // will be false if the typeid's are different.
-    protected final class FinalValueNode extends Node {
+    protected static final class FinalValueNode extends Node {
         public FinalValueNode(int v) {
             super(0x111111*37+v);
             value=v;
@@ -439,7 +439,7 @@ public abstract class StringTrieBuilder {
         }
     }
 
-    protected abstract class ValueNode extends Node {
+    protected static abstract class ValueNode extends Node {
         public ValueNode(int initialHash) {
             super(initialHash);
         }
@@ -464,7 +464,7 @@ public abstract class StringTrieBuilder {
         protected int value;
     }
 
-    protected final class IntermediateValueNode extends ValueNode {
+    protected static final class IntermediateValueNode extends ValueNode {
         public IntermediateValueNode(int v, Node nextNode) {
             super(0x222222*37+nextNode.hashCode());
             next=nextNode;
@@ -497,7 +497,7 @@ public abstract class StringTrieBuilder {
         protected Node next;
     }
 
-    protected abstract class LinearMatchNode extends ValueNode {
+    protected static abstract class LinearMatchNode extends ValueNode {
         public LinearMatchNode(int len, Node nextNode) {
             super((0x333333*37+len)*37+nextNode.hashCode());
             length=len;
@@ -526,7 +526,7 @@ public abstract class StringTrieBuilder {
         public Node next;
     }
 
-    protected abstract class BranchNode extends Node {
+    protected static abstract class BranchNode extends Node {
         public BranchNode(int initialHash) {
             super(initialHash);
         }
@@ -534,7 +534,7 @@ public abstract class StringTrieBuilder {
         protected int firstEdgeNumber;
     }
 
-    protected final class ListBranchNode extends BranchNode {
+    protected static final class ListBranchNode extends BranchNode {
         public ListBranchNode() {
             super(0x444444);
         }
@@ -637,7 +637,7 @@ public abstract class StringTrieBuilder {
         protected char[] units=new char[kMaxBranchLinearSubNodeLength];
     }
 
-    protected final class SplitBranchNode extends BranchNode {
+    protected static final class SplitBranchNode extends BranchNode {
         public SplitBranchNode(char middleUnit, Node lessThanNode, Node greaterOrEqualNode) {
             super(((0x555555*37+middleUnit)*37+
                     lessThanNode.hashCode())*37+greaterOrEqualNode.hashCode());
@@ -683,7 +683,7 @@ public abstract class StringTrieBuilder {
     }
 
     // Branch head node, for writing the actual node lead unit.
-    protected final class BranchHeadNode extends ValueNode {
+    protected static final class BranchHeadNode extends ValueNode {
         public BranchHeadNode(int len, Node subNode) {
             super((0x666666*37+len)*37+subNode.hashCode());
             length=len;
