@@ -7,6 +7,7 @@
 *   created by: Markus W. Scherer
 *   ported from ICU4C bytestriebuilder/.cpp
 */
+
 package com.ibm.icu.impl;
 
 import java.nio.ByteBuffer;
@@ -191,7 +192,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     }
 
     protected int countElementUnits(int start, int limit, int byteIndex) /*const*/ {
-        int length=0;  // Number of different units at unitIndex.
+        int length=0;  // Number of different bytes at byteIndex.
         int i=start;
         do {
             byte b=elements.get(i++).charAt(byteIndex, strings);
@@ -225,7 +226,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     protected int getMinLinearMatch() /*const*/ { return BytesTrie.kMinLinearMatch; }
     protected int getMaxLinearMatchLength() /*const*/ { return BytesTrie.kMaxLinearMatchLength; }
 
-    private final class BTLinearMatchNode extends LinearMatchNode {
+    private static final class BTLinearMatchNode extends LinearMatchNode {
         public BTLinearMatchNode(int offset, int len, Node nextNode, BytesTrieBuilder b) {
             super(len, nextNode);
             btBuilder=b;
