@@ -10,6 +10,7 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -58,9 +59,10 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     public static final class State {
         public State() {}
         private byte[] bytes;
+        private int root;
         private int pos;
         private int remainingMatchLength;
-    };
+    }
 
     /**
      * Saves the state of this trie.
@@ -68,6 +70,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      */
     public BytesTrie saveState(State state) /*const*/ {
         state.bytes=bytes_;
+        state.root=root_;
         state.pos=pos_;
         state.remainingMatchLength=remainingMatchLength_;
         return this;
@@ -81,7 +84,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * @see #reset
      */
     public BytesTrie resetToState(State state) {
-        if(bytes_==state.bytes && bytes_!=null) {
+        if(bytes_==state.bytes && bytes_!=null && root_==state.root) {
             pos_=state.pos;
             remainingMatchLength_=state.remainingMatchLength;
         } else {
@@ -203,7 +206,81 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * </pre>
      * @return The match/value Result.
      */
-    // public Result next(const char *s, int length);
+    public Result next(byte[] s, int sIndex, int sLimit) {
+        if(sIndex>=sLimit) {
+            // Empty input.
+            return current();
+        }
+        int pos=pos_;
+        if(pos<0) {
+            return Result.NO_MATCH;
+        }
+        int length=remainingMatchLength_;  // Actual remaining match length minus 1.
+        for(;;) {
+            // Fetch the next input byte, if there is one.
+            // Continue a linear-match node.
+            byte inByte;
+            for(;;) {
+                if(sIndex==sLimit) {
+                    remainingMatchLength_=length;
+                    pos_=pos;
+                    int node;
+                    return (length<0 && (node=(bytes_[pos]&0xff))>=kMinValueLead) ?
+                            valueResults_[node&kValueIsFinal] : Result.NO_VALUE;
+                }
+                inByte=s[sIndex++];
+                if(length<0) {
+                    remainingMatchLength_=length;
+                    break;
+                }
+                if(inByte!=bytes_[pos]) {
+                    stop();
+                    return Result.NO_MATCH;
+                }
+                ++pos;
+                --length;
+            }
+            for(;;) {
+                int node=bytes_[pos++]&0xff;
+                if(node<kMinLinearMatch) {
+                    Result result=branchNext(pos, node, inByte&0xff);
+                    if(result==Result.NO_MATCH) {
+                        return Result.NO_MATCH;
+                    }
+                    // Fetch the next input byte, if there is one.
+                    if(sIndex==sLimit) {
+                        return result;
+                    }
+                    if(result==Result.FINAL_VALUE) {
+                        // No further matching bytes.
+                        stop();
+                        return Result.NO_MATCH;
+                    }
+                    inByte=s[sIndex++];
+                    pos=pos_;  // branchNext() advanced pos and wrote it to pos_ .
+                } else if(node<kMinValueLead) {
+                    // Match length+1 bytes.
+                    length=node-kMinLinearMatch;  // Actual match length minus 1.
+                    if(inByte!=bytes_[pos]) {
+                        stop();
+                        return Result.NO_MATCH;
+                    }
+                    ++pos;
+                    --length;
+                    break;
+                } else if((node&kValueIsFinal)!=0) {
+                    // No further matching bytes.
+                    stop();
+                    return Result.NO_MATCH;
+                } else {
+                    // Skip intermediate value.
+                    pos=skipValue(pos, node);
+                    // The next node must not also be a value node.
+                    assert((bytes_[pos]&0xff)<kMinValueLead);
+                }
+            }
+        }
+    }
 
     /**
      * Returns a matching byte sequence's value if called immediately after
@@ -222,7 +299,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     /**
      * Determines whether all byte sequences reachable from the current state
      * map to the same value, and if so, returns that value.
-     * @return the unique value in bits 32..1 with bit 0 set,
+     * @return The unique value in bits 32..1 with bit 0 set,
      *         if all byte sequences reachable from the current state
      *         map to the same value; otherwise returns 0.
      */
@@ -242,7 +319,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * That is, each byte b for which it would be next(b)!=Result.NO_MATCH now.
      * @param out Each next byte is 0-extended to a char and appended to this object.
      *            (Only uses the out.append(c) method.)
-     * @return the number of bytes which continue the byte sequence from here
+     * @return The number of bytes which continue the byte sequence from here.
      */
     public int getNextBytes(Appendable out) /*const*/ {
         int pos=pos_;
@@ -281,7 +358,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * @return A new BytesTrie.Iterator.
      */
     public Iterator iterator() {
-        return new Iterator(bytes_, root_, remainingMatchLength_, 0);
+        return new Iterator(bytes_, pos_, remainingMatchLength_, 0);
     }
 
     /**
@@ -291,7 +368,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * @return A new BytesTrie.Iterator.
      */
     public Iterator iterator(int maxStringLength) {
-        return new Iterator(bytes_, root_, remainingMatchLength_, maxStringLength);
+        return new Iterator(bytes_, pos_, remainingMatchLength_, maxStringLength);
     }
 
     /**
@@ -315,9 +392,12 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
         }
 
         public int stringLength() { return length; }
-        public byte charAt(int index) { return bytes[index]; }
+        public byte byteAt(int index) { return bytes[index]; }
         public void copyStringTo(byte[] dest, int destOffset) {
             System.arraycopy(bytes, 0, dest, destOffset, length);
+        }
+        public ByteBuffer stringAsByteBuffer() {
+            return ByteBuffer.wrap(bytes, 0, length).asReadOnlyBuffer();
         }
 
         public int value;
@@ -355,7 +435,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
             entry_=new Entry(maxLength_!=0 ? maxLength_ : 32);
             int length=remainingMatchLength_;  // Actual remaining match length minus 1.
             if(length>=0) {
-                // Pending linear-match node, append remaining bytes to str.
+                // Pending linear-match node, append remaining bytes to entry_.
                 ++length;
                 if(maxLength_>0 && length>maxLength_) {
                     length=maxLength_;  // This will leave remainingMatchLength>=0 as a signal.
@@ -450,7 +530,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
                         return entry_;  // Reached a final value.
                     }
                 } else {
-                    // Linear-match node, append length bytes to str_.
+                    // Linear-match node, append length bytes to entry_.
                     int length=node-kMinLinearMatch+1;
                     if(maxLength_>0 && entry_.length+length>maxLength_) {
                         entry_.append(bytes_, pos, maxLength_-entry_.length);
@@ -519,7 +599,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
         // and the remaining branch length in bits 24..16. (Bits 31..25 are unused.)
         // (We could store the remaining branch length minus 1 in bits 23..16 and not use bits 31..24,
         // but the code looks more confusing that way.)
-        ArrayList<Long> stack_=new ArrayList<Long>();
+        private ArrayList<Long> stack_=new ArrayList<Long>();
     }
 
     private void stop() {
@@ -699,7 +779,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
         return Result.NO_MATCH;
     }
 
-    // Helper functions for hasUniqueValue().
+    // Helper functions for getUniqueValue().
     // Recursively finds a unique value (or whether there is not a unique one)
     // from a branch.
     // uniqueValue: On input, same as for getUniqueValue()/findUniqueValue().
