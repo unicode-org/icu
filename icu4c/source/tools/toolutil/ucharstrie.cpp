@@ -91,7 +91,7 @@ UCharsTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
             } else {
                 // Use the non-final value as the jump delta.
                 ++pos;
-                // int32_t delta=readValue(pos, node>>1);
+                // int32_t delta=readValue(pos, node);
                 int32_t delta;
                 if(node<kMinTwoUnitValueLead) {
                     delta=node;
@@ -287,7 +287,7 @@ const UChar *
 UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
                                       UBool haveUniqueValue, int32_t &uniqueValue) {
     while(length>kMaxBranchLinearSubNodeLength) {
-        ++pos;  // ignore the comparison byte
+        ++pos;  // ignore the comparison unit
         if(NULL==findUniqueValueFromBranch(jumpByDelta(pos), length>>1, haveUniqueValue, uniqueValue)) {
             return NULL;
         }

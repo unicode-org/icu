@@ -76,7 +76,7 @@ class U_TOOLUTIL_API UCharsTrie : public UMemory {
 public:
     /**
      * Constructs a UCharsTrie reader instance.
-     * @param trieBytes The trie UChars.
+     * @param trieUChars The trie UChars.
      */
     UCharsTrie(const UChar *trieUChars)
             : uchars_(trieUChars),
