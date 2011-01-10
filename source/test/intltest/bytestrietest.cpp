@@ -756,7 +756,7 @@ void BytesTrieTest::checkNextWithState(const StringPiece &trieBytes,
                   result!=trie.current()) {
             errln("trie.next(rest of %s) does not seem to contain %s after "
                   "saveState/next(0)/resetToState",
-                  data[i].s);
+                  data[i].s, data[i].s);
         } else if(!USTRINGTRIE_HAS_VALUE(
                       result=trie.resetToState(state).
                                   next(expectedString+partialLength,

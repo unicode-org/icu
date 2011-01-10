@@ -43,8 +43,8 @@ public:
     void TestLongBranch();
     void TestValuesForState();
     void TestCompact();
-    void TestNextForCodePoint();
     void TestFirstForCodePoint();
+    void TestNextForCodePoint();
 
     UBool buildLargeTrie(UCharsTrieBuilder &builder, UnicodeString &result, int32_t numUniqueFirst);
     void TestLargeTrie();
@@ -93,8 +93,8 @@ void UCharsTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name
     TESTCASE_AUTO(TestLongBranch);
     TESTCASE_AUTO(TestValuesForState);
     TESTCASE_AUTO(TestCompact);
-    TESTCASE_AUTO(TestNextForCodePoint);
     TESTCASE_AUTO(TestFirstForCodePoint);
+    TESTCASE_AUTO(TestNextForCodePoint);
     TESTCASE_AUTO(TestLargeTrie);
     TESTCASE_AUTO(TestHasUniqueValue);
     TESTCASE_AUTO(TestGetNextUChars);
@@ -263,9 +263,9 @@ void UCharsTrieTest::TestCompact() {
 void UCharsTrieTest::TestFirstForCodePoint() {
     static const StringAndValue data[]={
         { "a", 1 },
-        { "a\\uD800", 2 },
+        { "a\\ud800", 2 },
         { "a\\U00010000", 3 },
-        { "\\uD840", 4 },
+        { "\\ud840", 4 },
         { "\\U00020000\\udbff", 5 },
         { "\\U00020000\\U0010ffff", 6 },
         { "\\U00020000\\U0010ffffz", 7 },
@@ -384,7 +384,7 @@ void UCharsTrieTest::TestLargeTrie() {
         int32_t value=gen.getValue();
         if(!x.isEmpty()) {
             if(trie.first(x[0])==USTRINGTRIE_NO_MATCH) {
-                errln("next(first char U+%04X)=USTRINGTRIE_NO_MATCH for string %ld\n",
+                errln("first(first char U+%04X)=USTRINGTRIE_NO_MATCH for string %ld\n",
                       x[0], (long)gen.getIndex());
                 break;
             }
@@ -946,7 +946,7 @@ void UCharsTrieTest::checkNextWithState(const UnicodeString &trieUChars,
                   result!=trie.current()) {
             errln("trie.next(rest of %s) does not seem to contain %s after "
                   "saveState/next(0)/resetToState",
-                  data[i].s);
+                  data[i].s, data[i].s);
         } else if(!USTRINGTRIE_HAS_VALUE(
                       result=trie.resetToState(state).
                                   next(expectedString.getTerminatedBuffer()+partialLength,
