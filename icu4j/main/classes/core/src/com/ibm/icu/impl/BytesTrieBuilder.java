@@ -5,7 +5,7 @@
 *******************************************************************************
 *   created on: 2011jan05
 *   created by: Markus W. Scherer
-*   ported from ICU4C bytestriebuilder/.cpp
+*   ported from ICU4C bytestriebuilder.h/.cpp
 */
 
 package com.ibm.icu.impl;
