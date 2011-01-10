@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -298,6 +298,9 @@
 /** @{ Symbol import-export control                                              */
 /*===========================================================================*/
 
+#ifdef U_STATIC_IMPLEMENTATION
+#define U_EXPORT
+#else
 #if @U_USE_GCC_VISIBILITY_ATTRIBUTE@
 #define U_EXPORT __attribute__((visibility("default")))
 #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
@@ -307,6 +310,7 @@
 #define U_EXPORT __declspec(dllexport)*/
 #else
 #define U_EXPORT
+#endif
 #endif
 
 /* U_CALLCONV is releated to U_EXPORT2 */
