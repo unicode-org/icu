@@ -367,7 +367,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         return hash;
     }
 
-    private StringBuilder strings;
+    private StringBuilder strings=new StringBuilder();
     private ArrayList<Element> elements=new ArrayList<Element>();
 
     // char serialization of the trie.

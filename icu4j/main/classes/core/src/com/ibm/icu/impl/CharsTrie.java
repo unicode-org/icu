@@ -361,7 +361,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @return A new CharsTrie.Iterator.
      */
     public static Iterator iterator(CharSequence trieChars, int offset, int maxStringLength) {
-        return new Iterator(trieChars, offset, -1, 0);
+        return new Iterator(trieChars, offset, -1, maxStringLength);
     }
 
     /**
@@ -559,7 +559,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
         private int initialRemainingMatchLength_;
         private boolean skipValue_;  // Skip intermediate value which was already delivered.
 
-        private StringBuilder str_;
+        private StringBuilder str_=new StringBuilder();
         private int maxLength_;
         private Entry entry_=new Entry();
 

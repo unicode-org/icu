@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
 
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -923,8 +922,8 @@ public class TestFmwk extends AbstractTestLog {
         return result + foo;
     }
 
-    public static String hex(String s) {
-        StringBuffer result = new StringBuffer();
+    public static String hex(CharSequence s) {
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); ++i) {
             if (i != 0)
                 result.append(',');
@@ -933,21 +932,18 @@ public class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
 
-    public static String hex(StringBuffer s) {
-        return hex(s.toString());
-    }
-    public static String prettify(String s) {
-        StringBuffer result = new StringBuffer();
+    public static String prettify(CharSequence s) {
+        StringBuilder result = new StringBuilder();
         int ch;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(ch)) {
-            ch = UTF16.charAt(s, i);
+        for (int i = 0; i < s.length(); i += Character.charCount(ch)) {
+            ch = Character.codePointAt(s, i);
             if (ch > 0xfffff) {
                 result.append("\\U00");
                 result.append(hex(ch));
             } else if (ch > 0xffff) {
                 result.append("\\U000");
                 result.append(hex(ch));
-            } else if (ch > 0x7f) {
+            } else if (ch < 0x20 || 0x7e < ch) {
                 result.append("\\u");
                 result.append(hex(ch));
             } else {
@@ -956,9 +952,6 @@ public class TestFmwk extends AbstractTestLog {
 
         }
         return result.toString();
-    }
-    public static String prettify(StringBuffer s) {
-        return prettify(s.toString());
     }
 
     private static java.util.GregorianCalendar cal;
