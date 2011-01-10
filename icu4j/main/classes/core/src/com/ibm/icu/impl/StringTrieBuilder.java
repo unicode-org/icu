@@ -5,7 +5,7 @@
 *******************************************************************************
 *   created on: 2011jan05
 *   created by: Markus W. Scherer
-*   ported from ICU4C stringtriebuilder/.cpp
+*   ported from ICU4C stringtriebuilder.h/.cpp
 */
 package com.ibm.icu.impl;
 
@@ -26,6 +26,7 @@ public abstract class StringTrieBuilder {
 
     protected final void createCompactBuilder(int sizeGuess) {
         nodes=new HashMap<Node, Node>(sizeGuess);
+        lookupFinalValueNode=new FinalValueNode(0);
     }
     protected final void deleteCompactBuilder() {
         nodes=null;

@@ -384,7 +384,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * @return A new BytesTrie.Iterator.
      */
     public static Iterator iterator(byte[] trieBytes, int offset, int maxStringLength) {
-        return new Iterator(trieBytes, offset, -1, 0);
+        return new Iterator(trieBytes, offset, -1, maxStringLength);
     }
 
     /**
@@ -395,12 +395,12 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
             bytes=new byte[capacity];
         }
 
-        public int stringLength() { return length; }
+        public int bytesLength() { return length; }
         public byte byteAt(int index) { return bytes[index]; }
-        public void copyStringTo(byte[] dest, int destOffset) {
+        public void copyBytesTo(byte[] dest, int destOffset) {
             System.arraycopy(bytes, 0, dest, destOffset, length);
         }
-        public ByteBuffer stringAsByteBuffer() {
+        public ByteBuffer bytesAsByteBuffer() {
             return ByteBuffer.wrap(bytes, 0, length).asReadOnlyBuffer();
         }
 
@@ -410,6 +410,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
             if(bytes.length<len) {
                 byte[] newBytes=new byte[Math.min(2*bytes.length, 2*len)];
                 System.arraycopy(bytes, 0, newBytes, 0, length);
+                bytes=newBytes;
             }
         }
         private void append(byte b) {
