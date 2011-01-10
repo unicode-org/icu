@@ -3648,6 +3648,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java svneol
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/ArrayComparator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/BytesTrieTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/CalendarFieldsSet.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/CharsTrieTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/CompactArrayTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/CurrencyTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/DateTimeStyleSet.java svneol=native#text/plain%3Bcharset%3Dutf-8
