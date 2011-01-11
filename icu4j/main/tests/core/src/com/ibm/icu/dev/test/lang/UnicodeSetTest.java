@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1613,6 +1613,8 @@ public class UnicodeSetTest extends TestFmwk {
             }
         }
         // now compare all the combinations. If any of them is a code point, use it.
+        int maxErrorCount = 0;
+        compare:
         for (String last : target) {
             for (String curr : target) {
                 int lastCount = Character.codePointCount(last, 0, last.length());
@@ -1632,7 +1634,11 @@ public class UnicodeSetTest extends TestFmwk {
                     } else if (currCount == 1) {
                         comparison = UnicodeSet.compare(last, curr.codePointAt(0));
                     }
-                    errln("Failure in comparing " + last + " & " + curr);
+                    if (maxErrorCount++ > 10) {
+                        errln(maxErrorCount + " Failure in comparing " + last + " & " + curr + "\tOmitting others...");
+                        break compare;
+                    }
+                    errln(maxErrorCount + " Failure in comparing " + last + " & " + curr);
                 }
             }
         }
