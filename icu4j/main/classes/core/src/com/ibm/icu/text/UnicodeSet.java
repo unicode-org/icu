@@ -4272,7 +4272,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 4.4
      */
     public static int compare(int codePoint, String string) {
-        return CharSequences.compare(string, codePoint);
+        return -CharSequences.compare(string, codePoint);
     }
 
 
