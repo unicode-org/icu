@@ -300,8 +300,7 @@
 
 #ifdef U_STATIC_IMPLEMENTATION
 #define U_EXPORT
-#else
-#if @U_USE_GCC_VISIBILITY_ATTRIBUTE@
+#elif @U_USE_GCC_VISIBILITY_ATTRIBUTE@
 #define U_EXPORT __attribute__((visibility("default")))
 #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
@@ -310,7 +309,6 @@
 #define U_EXPORT __declspec(dllexport)*/
 #else
 #define U_EXPORT
-#endif
 #endif
 
 /* U_CALLCONV is releated to U_EXPORT2 */
