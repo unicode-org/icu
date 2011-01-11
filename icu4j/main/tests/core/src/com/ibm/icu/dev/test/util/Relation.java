@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2010, International Business Machines
+ * Copyright (c) 2002-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -34,6 +34,14 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
     Constructor<Set<V>> setCreator;
     Object[] setComparatorParam;
 
+    public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator) {
+        return new Relation(map, setCreator);
+    }
+
+    public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class setCreator, Comparator<V> setComparator) {
+        return new Relation(map, setCreator, setComparator);
+    }
+
     public Relation(Map<K, Set<V>> map, Class<Set<V>> setCreator) {
         this(map, setCreator, null);
     }
@@ -52,7 +60,6 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
         } catch (Exception e) {
             throw (RuntimeException) new IllegalArgumentException("Can't create new set").initCause(e);
         }
-
     }
 
     public void clear() {

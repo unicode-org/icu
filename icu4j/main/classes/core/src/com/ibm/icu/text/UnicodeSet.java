@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,6 +23,7 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.impl.UnicodeSetStringSpan;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.CharSequences;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
@@ -1263,11 +1264,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return this object, for chaining
      * @stable ICU 2.0
      */
-    public final UnicodeSet add(String s) {
+    public final UnicodeSet add(CharSequence s) {
         checkFrozen();
         int cp = getSingleCP(s);
         if (cp < 0) {
-            strings.add(s);
+            strings.add(s.toString());
             pat = null;
         } else {
             add_unchecked(cp, cp);
@@ -1280,7 +1281,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * otherwise returns -1.
      * @param string to test
      */
-    private static int getSingleCP(String s) {
+    private static int getSingleCP(CharSequence s) {
         if (s.length() < 1) {
             throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
         }
@@ -1302,7 +1303,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return this object, for chaining
      * @stable ICU 2.0
      */
-    public final UnicodeSet addAll(String s) {
+    public final UnicodeSet addAll(CharSequence s) {
         checkFrozen();
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
@@ -4254,52 +4255,26 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Utility to compare a string to a code point.
      * Same results as turning the code point into a string (with the [ugly] new StringBuilder().appendCodePoint(codepoint).toString())
      * and comparing, but much faster (no object creation). 
+     * Actually, there is one difference; a null compares as less.
      * Note that this (=String) order is UTF-16 order -- *not* code point order.
      * @stable ICU 4.4
      */
-    public static int compare(String string, int codePoint) {
-        if (codePoint < Character.MIN_CODE_POINT || codePoint > Character.MAX_CODE_POINT) {
-            throw new IllegalArgumentException();
-        }
-        int stringLength = string.length();
-        if (stringLength == 0) {
-            return -1;
-        }
-        char firstChar = string.charAt(0);
-        int offset = codePoint - Character.MIN_SUPPLEMENTARY_CODE_POINT;
 
-        if (offset < 0) { // BMP codePoint
-            int result = firstChar - codePoint;
-            if (result != 0) {
-                return result;
-            }
-            return stringLength - 1;
-        } 
-        // non BMP
-        char lead = (char)((offset >>> 10) + Character.MIN_HIGH_SURROGATE);
-        int result = firstChar - lead;
-        if (result != 0) {
-            return result;
-        }
-        if (stringLength > 1) {
-            char trail = (char)((offset & 0x3ff) + Character.MIN_LOW_SURROGATE);
-            result = string.charAt(1) - trail;
-            if (result != 0) {
-                return result;
-            }
-        }
-        return stringLength - 2;
+    public static int compare(String string, int codePoint) {
+        return CharSequences.compare(string, codePoint);
     }
 
     /**
      * Utility to compare a string to a code point.
      * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
      * Actually, there is one difference; a null compares as less.
+     * Note that this (=String) order is UTF-16 order -- *not* code point order.
      * @stable ICU 4.4
      */
-    public static int compare(int codepoint, String a) {
-        return -compare(a, codepoint);
+    public static int compare(int codePoint, String string) {
+        return CharSequences.compare(string, codePoint);
     }
+
 
     /**
      * Utility to compare two iterables. Warning: the ordering in iterables is important. For Collections that are ordered,
@@ -4382,13 +4357,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static int getSingleCodePoint(String s) {
-        int length = s.length();
-        if (length < 1 || length > 2) {
-            return Integer.MAX_VALUE;
-        }
-        int result = s.codePointAt(0);
-        return (result < 0x10000) == (length == 1) ? result : Integer.MAX_VALUE;
+    public static int getSingleCodePoint(CharSequence s) {
+        return CharSequences.getSingleCodePoint(s);
     }
 
     /**
