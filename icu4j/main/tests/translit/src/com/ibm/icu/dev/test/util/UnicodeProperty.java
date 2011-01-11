@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -238,7 +238,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return maxFirstValueAliasWidth;
         return maxValueWidth;
     }
-
+    
     public final UnicodeSet getSet(String propertyValue) {
         return getSet(propertyValue, null);
     }
