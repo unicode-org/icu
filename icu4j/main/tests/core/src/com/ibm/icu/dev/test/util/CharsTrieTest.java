@@ -672,7 +672,7 @@ public class CharsTrieTest extends TestFmwk {
     private void checkFirst(CharSequence trieChars, StringAndValue[] data, int dataLength) {
         CharsTrie trie=new CharsTrie(trieChars, 0);
         for(int i=0; i<dataLength; ++i) {
-            if(data[i].s.isEmpty()) {
+            if(data[i].s.length()==0) {
                 continue;  // skip empty string
             }
             String expectedString=data[i].s;
