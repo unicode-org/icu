@@ -543,7 +543,7 @@ public class BytesTrieTest extends TestFmwk {
     private void checkFirst(byte[] trieBytes, StringAndValue data[], int dataLength) {
         BytesTrie trie=new BytesTrie(trieBytes, 0);
         for(int i=0; i<dataLength; ++i) {
-            if(data[i].s.isEmpty()) {
+            if(data[i].s.length()==0) {
                 continue;  // skip empty string
             }
             int c=data[i].s.charAt(0);
