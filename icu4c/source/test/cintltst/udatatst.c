@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2010, International Business Machines Corporation and
+ * Copyright (c) 1998-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -121,7 +121,6 @@ static void TestUDataOpen(){
     UErrorCode status=U_ZERO_ERROR;
     const char* memMap[][2]={
         {"root", "res"},
-        {"pnames", "icu"},
         {"cnvalias", "icu"},
         {"unames",   "icu"},
         {"ibm-37_P100-1995",   "cnv"}
