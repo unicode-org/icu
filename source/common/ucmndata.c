@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -86,6 +86,125 @@ typedef struct  {
  *    entry point lookup implementations                                       *
  *                                                                             *
  *-----------------------------------------------------------------------------*/
+
+#ifndef MIN
+#define MIN(a,b) (((a)<(b)) ? (a) : (b))
+#endif
+
+/**
+ * Compare strings where we know the shared prefix length,
+ * and advance the prefix length as we find that the strings share even more characters.
+ */
+static int32_t
+strcmpAfterPrefix(const char *s1, const char *s2, int32_t *pPrefixLength) {
+    int32_t pl=*pPrefixLength;
+    int32_t cmp=0;
+    s1+=pl;
+    s2+=pl;
+    for(;;) {
+        int32_t c1=(uint8_t)*s1++;
+        int32_t c2=(uint8_t)*s2++;
+        cmp=c1-c2;
+        if(cmp!=0 || c1==0) {  /* different or done */
+            break;
+        }
+        ++pl;  /* increment shared same-prefix length */
+    }
+    *pPrefixLength=pl;
+    return cmp;
+}
+
+static int32_t
+offsetTOCPrefixBinarySearch(const char *s, const char *names,
+                            const UDataOffsetTOCEntry *toc, int32_t count) {
+    int32_t start=0;
+    int32_t limit=count;
+    /*
+     * Remember the shared prefix between s, start and limit,
+     * and don't compare that shared prefix again.
+     * The shared prefix should get longer as we narrow the [start, limit[ range.
+     */
+    int32_t startPrefixLength=0;
+    int32_t limitPrefixLength=0;
+    if(count==0) {
+        return -1;
+    }
+    /*
+     * Prime the prefix lengths so that we don't keep prefixLength at 0 until
+     * both the start and limit indexes have moved.
+     * At the same time, we find if s is one of the start and (limit-1) names,
+     * and if not, exclude them from the actual binary search.
+     */
+    if(0==strcmpAfterPrefix(s, names+toc[0].nameOffset, &startPrefixLength)) {
+        return 0;
+    }
+    ++start;
+    --limit;
+    if(0==strcmpAfterPrefix(s, names+toc[limit].nameOffset, &limitPrefixLength)) {
+        return limit;
+    }
+    while(start<limit) {
+        int32_t i=(start+limit)/2;
+        int32_t prefixLength=MIN(startPrefixLength, limitPrefixLength);
+        int32_t cmp=strcmpAfterPrefix(s, names+toc[i].nameOffset, &prefixLength);
+        if(cmp<0) {
+            limit=i;
+            limitPrefixLength=prefixLength;
+        } else if(cmp==0) {
+            return i;
+        } else {
+            start=i+1;
+            startPrefixLength=prefixLength;
+        }
+    }
+    return -1;
+}
+
+static int32_t
+pointerTOCPrefixBinarySearch(const char *s, const PointerTOCEntry *toc, int32_t count) {
+    int32_t start=0;
+    int32_t limit=count;
+    /*
+     * Remember the shared prefix between s, start and limit,
+     * and don't compare that shared prefix again.
+     * The shared prefix should get longer as we narrow the [start, limit[ range.
+     */
+    int32_t startPrefixLength=0;
+    int32_t limitPrefixLength=0;
+    if(count==0) {
+        return -1;
+    }
+    /*
+     * Prime the prefix lengths so that we don't keep prefixLength at 0 until
+     * both the start and limit indexes have moved.
+     * At the same time, we find if s is one of the start and (limit-1) names,
+     * and if not, exclude them from the actual binary search.
+     */
+    if(0==strcmpAfterPrefix(s, toc[0].entryName, &startPrefixLength)) {
+        return 0;
+    }
+    ++start;
+    --limit;
+    if(0==strcmpAfterPrefix(s, toc[limit].entryName, &limitPrefixLength)) {
+        return limit;
+    }
+    while(start<limit) {
+        int32_t i=(start+limit)/2;
+        int32_t prefixLength=MIN(startPrefixLength, limitPrefixLength);
+        int32_t cmp=strcmpAfterPrefix(s, toc[i].entryName, &prefixLength);
+        if(cmp<0) {
+            limit=i;
+            limitPrefixLength=prefixLength;
+        } else if(cmp==0) {
+            return i;
+        } else {
+            start=i+1;
+            startPrefixLength=prefixLength;
+        }
+    }
+    return -1;
+}
+
 static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
     int32_t          retVal=0;
     const UDataOffsetTOC *toc = (UDataOffsetTOC *)pData->toc;
@@ -95,7 +214,6 @@ static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
     return retVal;
 }
 
-
 static const DataHeader *
 offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
@@ -104,53 +222,34 @@ offsetTOCLookupFn(const UDataMemory *pData,
     const UDataOffsetTOC  *toc = (UDataOffsetTOC *)pData->toc;
     if(toc!=NULL) {
         const char *base=(const char *)toc;
-        uint32_t start, limit, number, lastNumber;
-        int32_t strResult;
-        const UDataOffsetTOCEntry *entry;
+        int32_t number, count=(int32_t)toc->count;
 
         /* perform a binary search for the data in the common data's table of contents */
 #if defined (UDATA_DEBUG_DUMP)
         /* list the contents of the TOC each time .. not recommended */
-        for(start=0;start<toc->count;start++) {
-          fprintf(stderr, "\tx%d: %s\n", start, &base[toc->entry[start].nameOffset]);
+        for(number=0; number<count; ++number) {
+            fprintf(stderr, "\tx%d: %s\n", number, &base[toc->entry[number].nameOffset]);
         }
 #endif
-
-        start=0;
-        limit=toc->count;         /* number of names in this table of contents */
-        lastNumber=limit;
-        entry=toc->entry;
-        for (;;) {
-            number = (start+limit)/2;
-            if (lastNumber == number) { /* Have we moved? */
-                break;  /* We haven't moved, and it wasn't found; */
-                        /* or the empty stub common data library was used during build. */
-            }
-            lastNumber = number;
-            strResult = uprv_strcmp(tocEntryName, base+entry[number].nameOffset);
-            if(strResult<0) {
-                limit=number;
-            } else if (strResult>0) {
-                start=number;
-            }
-            else {
-                /* found it */
+        number=offsetTOCPrefixBinarySearch(tocEntryName, base, toc->entry, count);
+        if(number>=0) {
+            /* found it */
+            const UDataOffsetTOCEntry *entry=toc->entry+number;
 #ifdef UDATA_DEBUG
-                fprintf(stderr, "%s: Found.\n", tocEntryName);
+            fprintf(stderr, "%s: Found.\n", tocEntryName);
 #endif
-                entry += number; /* Alias the entry to the current entry. */
-                if((number+1) < toc->count) {
-                    *pLength = (int32_t)(entry[1].dataOffset - entry->dataOffset);
-                } else {
-                    *pLength = -1;
-                }
-                return (const DataHeader *)(base+entry->dataOffset);
+            if((number+1) < count) {
+                *pLength = (int32_t)(entry[1].dataOffset - entry->dataOffset);
+            } else {
+                *pLength = -1;
             }
+            return (const DataHeader *)(base+entry->dataOffset);
+        } else {
+#ifdef UDATA_DEBUG
+            fprintf(stderr, "%s: Not found.\n", tocEntryName);
+#endif
+            return NULL;
         }
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "%s: Not found.\n", tocEntryName);
-#endif
-        return NULL;
     } else {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "returning header\n");
@@ -173,47 +272,28 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
                    UErrorCode *pErrorCode) {
     if(pData->toc!=NULL) {
         const PointerTOC *toc = (PointerTOC *)pData->toc;
-        uint32_t start, limit, number, lastNumber;
-        int32_t strResult;
+        int32_t number, count=(int32_t)toc->count;
 
 #if defined (UDATA_DEBUG_DUMP)
         /* list the contents of the TOC each time .. not recommended */
-        for(start=0;start<toc->count;start++) {
-            fprintf(stderr, "\tx%d: %s\n", start, toc->entry[start].entryName);
+        for(number=0; number<count; ++number) {
+            fprintf(stderr, "\tx%d: %s\n", number, toc->entry[number].entryName);
         }
 #endif
-
-        /* perform a binary search for the data in the common data's table of contents */
-        start=0;
-        limit=toc->count;
-        lastNumber=limit;
-
-        for (;;) {
-            number = (start+limit)/2;
-            if (lastNumber == number) { /* Have we moved? */
-                break;  /* We haven't moved, and it wasn't found, */
-                        /* or the empty stub common data library was used during build. */
-            }
-            lastNumber = number;
-            strResult = uprv_strcmp(name, toc->entry[number].entryName);
-            if(strResult<0) {
-                limit=number;
-            } else if (strResult>0) {
-                start=number;
-            }
-            else {
-                /* found it */
+        number=pointerTOCPrefixBinarySearch(name, toc->entry, count);
+        if(number>=0) {
+            /* found it */
 #ifdef UDATA_DEBUG
-                fprintf(stderr, "%s: Found.\n", toc->entry[number].entryName);
+            fprintf(stderr, "%s: Found.\n", toc->entry[number].entryName);
 #endif
-                *pLength=-1;
-                return UDataMemory_normalizeDataPointer(toc->entry[number].pHeader);
-            }
+            *pLength=-1;
+            return UDataMemory_normalizeDataPointer(toc->entry[number].pHeader);
+        } else {
+#ifdef UDATA_DEBUG
+            fprintf(stderr, "%s: Not found.\n", name);
+#endif
+            return NULL;
         }
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "%s: Not found.\n", name);
-#endif
-        return NULL;
     } else {
         return pData->pHeader;
     }

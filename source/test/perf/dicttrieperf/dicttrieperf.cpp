@@ -234,7 +234,7 @@ static int32_t prefixBinarySearch(const char *s, const char *names, const TOCEnt
         } else if(cmp==0) {
             return i;
         } else {
-            start=i;
+            start=i+1;
             startPrefixLength=prefixLength;
         }
     }
