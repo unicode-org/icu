@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -22,7 +22,7 @@
 * The following files need to be updated as well, which can be done
 *  by running the UNIX makefile target 'update-windows-makefiles' in icu/source.
 *
-* 
+*
 * source/common/common.vcproj - update 'Output file name' on the link tab so
 *                   that it contains the new major/minor combination
 * source/i18n/i18n.vcproj - same as for the common.vcproj
@@ -105,47 +105,34 @@
 #define U_ICU_DATA_VERSION "4.7.1"
 
 /*===========================================================================
- * ICU collation framework version information                               
- * Version info that can be obtained from a collator is affected by these    
+ * ICU collation framework version information
+ * Version info that can be obtained from a collator is affected by these
  * numbers in a secret and magic way. Please use collator version as whole
  *===========================================================================
  */
 
-/** Collation runtime version (sort key generator, strcoll). 
- * If the version is different, sortkeys for the same string could be different 
- * version 2 was in ICU 1.8.1. changed is: compression intervals, French secondary 
- * compression, generating quad level always when strength is quad or more 
- * version 4 - ICU 2.2 - tracking UCA changes, ignore completely ignorables 
- * in contractions, ignore primary ignorables after shifted 
- * version 5 - ICU 2.8 - changed implicit generation code
- * version 6 - ICU 3.4 - with the UCA 4.1, Thai tag is no longer generated or used
- * This value may change in the subsequent releases of ICU
+/**
+ * Collation runtime version (sort key generator, strcoll).
+ * If the version is different, sort keys for the same string could be different.
+ * This value may change in subsequent releases of ICU.
  * @stable ICU 2.4
  */
-#define UCOL_RUNTIME_VERSION 6
+#define UCOL_RUNTIME_VERSION 7
 
-/** Builder code version. When this is different, same tailoring might result
- * in assigning different collation elements to code points                  
- * version 2 was in ICU 1.8.1. added support for prefixes, tweaked canonical 
- * closure. However, the tailorings should probably get same CEs assigned    
- * version 5 - ICU 2.2 - fixed some bugs, renamed some indirect values.      
- * version 6 - ICU 2.8 - fixed bug in builder that allowed 0xFF in primary values
- * version 7 - ICU 3.4 - with the UCA 4.1 Thai tag is no longer processed, complete ignorables
- *                       now break contractions
- * version 8 - ICU 4.6 - the addition of collation reordering. It should in general be
- *                       compatible since the data is at the end of the file. However,
- *                       if data parsers make assumptions about lengths this will cause problems.
- * Backward compatible with the old rules. 
- * This value may change in the subsequent releases of ICU
+/**
+ * Collation builder code version.
+ * When this is different, the same tailoring might result
+ * in assigning different collation elements to code points.
+ * This value may change in subsequent releases of ICU.
  * @stable ICU 2.4
  */
 #define UCOL_BUILDER_VERSION 8
 
-/** This is the version of the tailorings 
- *  This value may change in the subsequent releases of ICU
- *  @stable ICU 2.4
+/**
+ * This is the version of collation tailorings.
+ * This value may change in subsequent releases of ICU.
+ * @stable ICU 2.4
  */
 #define UCOL_TAILORINGS_VERSION 1
-
 
 #endif
