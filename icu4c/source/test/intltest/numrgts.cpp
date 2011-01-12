@@ -2749,8 +2749,10 @@ void NumberFormatRegressionTest::Test8199(void) {
     TEST_ASSERT(Formattable::kInt64 == val.getType());
     TEST_ASSERT(9223372036854775807LL == val.getInt64());
     // In the following check, note that a substantial range of integers will
-    //    convert to the same double value.
-    TEST_ASSERT(9223372036854775810.0 == val.getDouble(status));
+    //    convert to the same double value.  There are also platform variations
+    //    in the rounding at compile time of double constants.
+    TEST_ASSERT(9223372036854775808.0 >= val.getDouble(status));
+    TEST_ASSERT(9223372036854774700.0 <= val.getDouble(status));
     TEST_CHECK_STATUS(status);
 
     numStr = "-9223372036854775808";  // smallest int64_t
