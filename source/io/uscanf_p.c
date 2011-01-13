@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -473,6 +473,8 @@ u_scanf_double_handler(UFILE        *input,
     return parsePos + skipped;
 }
 
+#define UPRINTF_SYMBOL_BUFFER_SIZE 8
+
 static int32_t
 u_scanf_scientific_handler(UFILE        *input,
                            u_scanf_spec_info *info,
@@ -487,6 +489,9 @@ u_scanf_scientific_handler(UFILE        *input,
     int32_t         parsePos    = 0;
     int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
+    UChar srcExpBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
+    int32_t srcLen, expLen;
+    UChar expBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
 
 
     /* skip all ws in the input */
@@ -508,6 +513,37 @@ u_scanf_scientific_handler(UFILE        *input,
     /* handle error */
     if(format == 0)
         return 0;
+
+    /* set the appropriate flags on the formatter */
+
+    srcLen = unum_getSymbol(format,
+        UNUM_EXPONENTIAL_SYMBOL,
+        srcExpBuf,
+        sizeof(srcExpBuf),
+        &status);
+
+    /* Upper/lower case the e */
+    if (info->fSpec == (UChar)0x65 /* e */) {
+        expLen = u_strToLower(expBuf, (int32_t)sizeof(expBuf),
+            srcExpBuf, srcLen,
+            input->str.fBundle.fLocale,
+            &status);
+    }
+    else {
+        expLen = u_strToUpper(expBuf, (int32_t)sizeof(expBuf),
+            srcExpBuf, srcLen,
+            input->str.fBundle.fLocale,
+            &status);
+    }
+
+    unum_setSymbol(format,
+        UNUM_EXPONENTIAL_SYMBOL,
+        expBuf,
+        expLen,
+        &status);
+
+
+
 
     /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
     skipped += u_scanf_skip_leading_positive_sign(input, format, &status);

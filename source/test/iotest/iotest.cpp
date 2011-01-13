@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -856,6 +856,7 @@ int main(int argc, char* argv[])
         /* This should delete any temporary files. */
         if (fileToRemove) {
             fclose(fileToRemove);
+            log_verbose("Deleting: %s\n", STANDARD_TEST_FILE);
             if (remove(STANDARD_TEST_FILE) != 0) {
                 /* Maybe someone didn't close the file correctly. */
                 fprintf(stderr, "FAIL: Could not delete %s\n", STANDARD_TEST_FILE);

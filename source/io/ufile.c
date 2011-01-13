@@ -201,6 +201,7 @@ U_CAPI void U_EXPORT2
 u_fflush(UFILE *file)
 {
     ufile_flush_translit(file);
+    ufile_flush_io(file);
     if (file->fFile) {
         fflush(file->fFile);
     }
