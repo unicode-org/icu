@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_ct.c
@@ -163,6 +163,20 @@ typedef struct{
     COMPOUND_TEXT_CONVERTERS state;
 } UConverterDataCompoundText;
 
+/*********** Compound Text Converter Protos ***********/
+static void
+_CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode);
+
+static void
+ _CompoundTextClose(UConverter *converter);
+
+static void
+_CompoundTextReset(UConverter *converter, UConverterResetChoice choice);
+
+static const char*
+_CompoundTextgetName(const UConverter* cnv);
+
+
 static int32_t findNextEsc(const char *source, const char *sourceLimit) {
     int32_t length = sourceLimit - source;
     int32_t i;
@@ -273,7 +287,8 @@ _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorC
         myConverterData->myConverterArray[ISO_8859_14] = ucnv_loadSharedData("iso-8859_14-1998", &stackPieces, &stackArgs, errorCode);
         myConverterData->myConverterArray[IBM_923] = ucnv_loadSharedData("ibm-923_P100-1998", &stackPieces, &stackArgs, errorCode);
 
-        if (U_FAILURE(*errorCode)) {
+        if (U_FAILURE(*errorCode) || pArgs->onlyTestIsLoadable) {
+            _CompoundTextClose(cnv);
             return;
         }
 
@@ -532,12 +547,6 @@ UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
 
                 mySource = subArgs.source;
                 myTarget = subArgs.target;
-
-                /* copy input/error/overflow buffers */
-                if(subArgs.converter->toULength > 0) {
-                    uprv_memcpy(args->converter->toUBytes, subArgs.converter->toUBytes, subArgs.converter->toULength);
-                }
-                args->converter->toULength = subArgs.converter->toULength;
 
                 if (U_FAILURE(*err)) {
                     if(*err == U_BUFFER_OVERFLOW_ERROR) {
