@@ -30,9 +30,9 @@ public class BytesTrieTest extends TestFmwk {
     // If there is a problem, the simpler ones are easier to step through.
 
     public void Test00Builder() {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
+        builder_.clear();
         try {
-            builder.build(StringTrieBuilder.Option.FAST);
+            builder_.build(StringTrieBuilder.Option.FAST);
             errln("BytesTrieBuilder().build() did not throw IndexOutOfBoundsException");
             return;
         } catch(IndexOutOfBoundsException e) {
@@ -40,8 +40,8 @@ public class BytesTrieTest extends TestFmwk {
         }
         try {
             byte[] equal=new byte[] { 0x3d };  // "="
-            builder.add(equal, 1, 0).add(equal, 1, 1).build(StringTrieBuilder.Option.FAST);
-            errln("BytesTrieBuilder.build() did not detect duplicates");
+            builder_.add(equal, 1, 0).add(equal, 1, 1);
+            errln("BytesTrieBuilder.add() did not detect duplicates");
             return;
         } catch(IllegalArgumentException e) {
             // good
@@ -206,7 +206,7 @@ public class BytesTrieTest extends TestFmwk {
         checkData(data);
     }
 
-    public byte[] buildMonthsTrie(BytesTrieBuilder builder, StringTrieBuilder.Option buildOption) {
+    public BytesTrie buildMonthsTrie(StringTrieBuilder.Option buildOption) {
         // All types of nodes leading to the same value,
         // for code coverage of recursive functions.
         // In particular, we need a lot of branches on some single level
@@ -243,13 +243,11 @@ public class BytesTrieTest extends TestFmwk {
             new StringAndValue("jun.", 6),
             new StringAndValue("june", 6)
         };
-        return buildTrie(data, data.length, builder, buildOption);
+        return buildTrie(data, data.length, buildOption);
     }
 
     public void Test40GetUniqueValue() {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildMonthsTrie(builder, StringTrieBuilder.Option.FAST);
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+        BytesTrie trie=buildMonthsTrie(StringTrieBuilder.Option.FAST);
         long uniqueValue;
         if((uniqueValue=trie.getUniqueValue())!=0) {
             errln("unique value at root");
@@ -282,9 +280,7 @@ public class BytesTrieTest extends TestFmwk {
     }
 
     public void Test41GetNextBytes() {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildMonthsTrie(builder, StringTrieBuilder.Option.SMALL);
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+        BytesTrie trie=buildMonthsTrie(StringTrieBuilder.Option.SMALL);
         StringBuilder buffer=new StringBuilder();
         int count=trie.getNextBytes(buffer);
         if(count!=2 || !"aj".contentEquals(buffer)) {
@@ -330,9 +326,7 @@ public class BytesTrieTest extends TestFmwk {
     }
 
     public void Test50IteratorFromBranch() {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildMonthsTrie(builder, StringTrieBuilder.Option.FAST);
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+        BytesTrie trie=buildMonthsTrie(StringTrieBuilder.Option.FAST);
         // Go to a branch node.
         trie.next('j');
         trie.next('a');
@@ -374,9 +368,7 @@ public class BytesTrieTest extends TestFmwk {
     }
 
     public void Test51IteratorFromLinearMatch() {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildMonthsTrie(builder, StringTrieBuilder.Option.SMALL);
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+        BytesTrie trie=buildMonthsTrie(StringTrieBuilder.Option.SMALL);
         // Go into a linear-match node.
         trie.next('j');
         trie.next('a');
@@ -397,9 +389,8 @@ public class BytesTrieTest extends TestFmwk {
     }
 
     public void Test52TruncatingIteratorFromRoot() {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildMonthsTrie(builder, StringTrieBuilder.Option.FAST);
-        BytesTrie.Iterator iter=BytesTrie.iterator(trieBytes, 0, 4);
+        BytesTrie trie=buildMonthsTrie(StringTrieBuilder.Option.FAST);
+        BytesTrie.Iterator iter=trie.iterator(4);
         // Expected data: Same as in buildMonthsTrie(), except only the first 4 characters
         // of each string, and no string duplicates from the truncation.
         final StringAndValue[] data={
@@ -442,9 +433,7 @@ public class BytesTrieTest extends TestFmwk {
             new StringAndValue("abcdepq", 200),
             new StringAndValue("abcdeyz", 3000)
         };
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildTrie(data, data.length, builder, StringTrieBuilder.Option.FAST);
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+        BytesTrie trie=buildTrie(data, data.length, StringTrieBuilder.Option.FAST);
         // Go into a linear-match node.
         trie.next('a');
         trie.next('b');
@@ -465,9 +454,7 @@ public class BytesTrieTest extends TestFmwk {
             new StringAndValue("abcdepq", 200),
             new StringAndValue("abcdeyz", 3000)
         };
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildTrie(data, data.length, builder, StringTrieBuilder.Option.FAST);
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+        BytesTrie trie=buildTrie(data, data.length, StringTrieBuilder.Option.FAST);
         // Go into a linear-match node.
         trie.next('a');
         trie.next('b');
@@ -485,6 +472,20 @@ public class BytesTrieTest extends TestFmwk {
         checkIterator(iter.reset(), expected);
     }
 
+    public void Test59IteratorFromBytes() {
+        final StringAndValue[] data={
+            new StringAndValue("mm", 3),
+            new StringAndValue("mmm", 33),
+            new StringAndValue("mmnop", 333)
+        };
+        builder_.clear();
+        for(StringAndValue item : data) {
+            builder_.add(item.bytes, item.bytes.length, item.value);
+        }
+        ByteBuffer trieBytes=builder_.buildByteBuffer(StringTrieBuilder.Option.FAST);
+        checkIterator(BytesTrie.iterator(trieBytes.array(), trieBytes.arrayOffset()+trieBytes.position(), 0), data);
+    }
+
     private void checkData(StringAndValue data[]) {
         checkData(data, data.length);
     }
@@ -497,17 +498,16 @@ public class BytesTrieTest extends TestFmwk {
     }
 
     private void checkData(StringAndValue data[], int dataLength, StringTrieBuilder.Option buildOption) {
-        BytesTrieBuilder builder=new BytesTrieBuilder();
-        byte[] trieBytes=buildTrie(data, dataLength, builder, buildOption);
-        checkFirst(trieBytes, data, dataLength);
-        checkNext(trieBytes, data, dataLength);
-        checkNextWithState(trieBytes, data, dataLength);
-        checkNextString(trieBytes, data, dataLength);
-        checkIterator(trieBytes, data, dataLength);
+        BytesTrie trie=buildTrie(data, dataLength, buildOption);
+        checkFirst(trie, data, dataLength);
+        checkNext(trie, data, dataLength);
+        checkNextWithState(trie, data, dataLength);
+        checkNextString(trie, data, dataLength);
+        checkIterator(trie, data, dataLength);
     }
 
-    private byte[] buildTrie(StringAndValue data[], int dataLength,
-                             BytesTrieBuilder builder, StringTrieBuilder.Option buildOption) {
+    private BytesTrie buildTrie(StringAndValue data[], int dataLength,
+                                StringTrieBuilder.Option buildOption) {
         // Add the items to the trie builder in an interesting (not trivial, not random) order.
         int index, step;
         if((dataLength&1)!=0) {
@@ -522,26 +522,31 @@ public class BytesTrieTest extends TestFmwk {
             index=dataLength-1;
             step=-1;
         }
-        builder.clear();
+        builder_.clear();
         for(int i=0; i<dataLength; ++i) {
-            builder.add(data[index].bytes, data[index].bytes.length, data[index].value);
+            builder_.add(data[index].bytes, data[index].bytes.length, data[index].value);
             index=(index+step)%dataLength;
         }
-        ByteBuffer result=builder.build(buildOption);
+        BytesTrie trie=builder_.build(buildOption);
         try {
-            builder.add(/* "zzz" */ new byte[] { 0x7a, 0x7a, 0x7a }, 0, 999);
+            builder_.add(/* "zzz" */ new byte[] { 0x7a, 0x7a, 0x7a }, 0, 999);
             errln("builder.build().add(zzz) did not throw IllegalStateException");
         } catch(IllegalStateException e) {
             // good
         }
-        logln("serialized trie size: "+result.remaining()+" bytes\n");
-        byte[] trieBytes=new byte[result.remaining()];
-        result.get(trieBytes);
-        return trieBytes;
+        ByteBuffer trieBytes=builder_.buildByteBuffer(buildOption);
+        logln("serialized trie size: "+trieBytes.remaining()+" bytes\n");
+        // Tries from either build() method should be identical but
+        // BytesTrie does not implement equals().
+        // We just return either one.
+        if((dataLength&1)!=0) {
+            return trie;
+        } else {
+            return new BytesTrie(trieBytes.array(), trieBytes.arrayOffset()+trieBytes.position());
+        }
     }
 
-    private void checkFirst(byte[] trieBytes, StringAndValue data[], int dataLength) {
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+    private void checkFirst(BytesTrie trie, StringAndValue data[], int dataLength) {
         for(int i=0; i<dataLength; ++i) {
             if(data[i].s.length()==0) {
                 continue;  // skip empty string
@@ -560,10 +565,10 @@ public class BytesTrieTest extends TestFmwk {
                                     c, data[i].s));
             }
         }
+        trie.reset();
     }
 
-    private void checkNext(byte[] trieBytes, StringAndValue data[], int dataLength) {
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+    private void checkNext(BytesTrie trie, StringAndValue data[], int dataLength) {
         BytesTrie.State state=new BytesTrie.State();
         for(int i=0; i<dataLength; ++i) {
             int stringLength=data[i].s.length();
@@ -634,8 +639,7 @@ public class BytesTrieTest extends TestFmwk {
         }
     }
 
-    private void checkNextWithState(byte[] trieBytes, StringAndValue data[], int dataLength) {
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+    private void checkNextWithState(BytesTrie trie, StringAndValue data[], int dataLength) {
         BytesTrie.State noState=new BytesTrie.State(), state=new BytesTrie.State();
         for(int i=0; i<dataLength; ++i) {
             if((i&1)==0) {
@@ -692,8 +696,7 @@ public class BytesTrieTest extends TestFmwk {
 
     // next(string) is also tested in other functions,
     // but here we try to go partway through the string, and then beyond it.
-    private void checkNextString(byte[] trieBytes, StringAndValue data[], int dataLength) {
-        BytesTrie trie=new BytesTrie(trieBytes, 0);
+    private void checkNextString(BytesTrie trie, StringAndValue data[], int dataLength) {
         for(int i=0; i<dataLength; ++i) {
             byte[] expectedString=data[i].bytes;
             int stringLength=data[i].s.length();
@@ -710,9 +713,8 @@ public class BytesTrieTest extends TestFmwk {
         }
     }
 
-    private void checkIterator(byte[] trieBytes, StringAndValue data[], int dataLength) {
-        BytesTrie.Iterator iter=BytesTrie.iterator(trieBytes, 0, 0);
-        checkIterator(iter, data, dataLength);
+    private void checkIterator(BytesTrie trie, StringAndValue data[], int dataLength) {
+        checkIterator(trie.iterator(), data, dataLength);
     }
 
     private void checkIterator(BytesTrie.Iterator iter, StringAndValue data[]) {
@@ -751,4 +753,6 @@ public class BytesTrieTest extends TestFmwk {
             // good
         }
     }
+
+    private BytesTrieBuilder builder_=new BytesTrieBuilder();
 }

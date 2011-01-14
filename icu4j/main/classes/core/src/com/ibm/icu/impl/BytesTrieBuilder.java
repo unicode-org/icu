@@ -12,8 +12,6 @@ package com.ibm.icu.impl;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Builder class for BytesTrie.
@@ -21,40 +19,86 @@ import java.util.Comparator;
  * @author Markus W. Scherer
  */
 public final class BytesTrieBuilder extends StringTrieBuilder {
+    /**
+     * Constructs an empty builder.
+     */
     public BytesTrieBuilder() {}
 
+    /**
+     * Adds a (byte sequence, value) pair.
+     * The byte sequence must be unique.
+     * Bytes 0..length-1 will be copied; the builder does not keep
+     * a reference to the input array.
+     * @param sequence The array that contains the byte sequence, starting at index 0.
+     * @param length The length of the byte sequence.
+     * @param value The value associated with this byte sequence.
+     * @return this
+     */
     public BytesTrieBuilder add(byte[] sequence, int length, int value) {
         if(bytesLength>0) {
             // Cannot add elements after building.
             throw new IllegalStateException("Cannot add (string, value) pairs after build().");
         }
-        elements.add(new Element(sequence, length, value, this));
+        // Binary search in the sorted elements array to find
+        // a) whether the byte sequence is a duplicate, and, if not,
+        // b) the insertion index.
+        int start=0, limit=elements.size();
+        while(start<limit) {
+            int i=(start+limit)/2;
+            int diff=elements.get(i).compareStringTo(sequence, length, strings);
+            if(diff<0) {  // elements[i]<sequence
+                start=i+1;
+            } else if(diff==0) {
+                throw new IllegalArgumentException("Duplicate string.");
+            } else {  // elements[i]>sequence
+                limit=i;
+            }
+        }
+        elements.add(start, new Element(sequence, length, value, this));
         return this;
     }
 
-    public ByteBuffer build(StringTrieBuilder.Option buildOption) {
+    /**
+     * Builds a BytesTrie for the add()ed data.
+     * Once built, no further data can be add()ed until clear() is called.
+     *
+     * <p>This builder must not be modified via clear()/add()/build()
+     * while the BytesTrie is used because the trie shares the builder's result array.
+     * Multiple calls to build() or buildByteBuffer() return tries or buffers with the same data.
+     * @param buildOption Build option, see StringTrieBuilder.Option.
+     * @return A new BytesTrie for the add()ed data.
+     */
+    public BytesTrie build(StringTrieBuilder.Option buildOption) {
+        buildImpl(buildOption);
+        return new BytesTrie(bytes, bytes.length-bytesLength);
+    }
+
+    /**
+     * Builds a BytesTrie for the add()ed data and byte-serializes it.
+     * Once built, no further data can be add()ed until clear() is called.
+     *
+     * <p>This builder must not be modified via clear()/add()/build()
+     * while the buffer is used because the buffer shares the builder's result array.
+     * Multiple calls to build() or buildByteBuffer() return tries or buffers with the same data.
+     *
+     * <p>The serialized BytesTrie is accessible via the buffer's
+     * array()/arrayOffset()+position() or remaining()/get(byte[]) etc.
+     * @param buildOption Build option, see StringTrieBuilder.Option.
+     * @return A ByteBuffer with the byte-serialized BytesTrie for the add()ed data.
+     *         The buffer is not read-only and array() can be called.
+     */
+    public ByteBuffer buildByteBuffer(StringTrieBuilder.Option buildOption) {
+        buildImpl(buildOption);
+        return ByteBuffer.wrap(bytes, bytes.length-bytesLength, bytesLength);
+    }
+
+    private void buildImpl(StringTrieBuilder.Option buildOption) {
         if(bytesLength>0) {
             // Already built.
-            return ByteBuffer.wrap(bytes, bytes.length-bytesLength, bytesLength).asReadOnlyBuffer();
+            return;
         }
         if(elements.isEmpty()) {
             throw new IndexOutOfBoundsException("No (string, value) pairs were added.");
-        }
-        Collections.sort(elements, compareElementStrings);
-        // Duplicate strings are not allowed.
-        long prev=elements.get(0).getStringOffsetAndLength(strings);
-        int prevOffset=(int)(prev>>32);
-        int prevLength=(int)prev;
-        int elementsLength=elements.size();
-        for(int i=1; i<elementsLength; ++i) {
-            long current=elements.get(i).getStringOffsetAndLength(strings);
-            int currentOffset=(int)(current>>32);
-            int currentLength=(int)current;
-            if(stringsAreEqual(prevOffset, prevLength, currentOffset, currentLength)) {
-                throw new IllegalArgumentException("There are duplicate strings.");
-            }
-            prevOffset=currentOffset;
-            prevLength=currentLength;
         }
         // Create and byte-serialize the trie for the elements.
         int capacity=stringsLength;
@@ -64,10 +108,17 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         if(bytes==null || bytes.length<capacity) {
             bytes=new byte[capacity];
         }
-        build(buildOption, elementsLength);
-        return ByteBuffer.wrap(bytes, bytes.length-bytesLength, bytesLength).asReadOnlyBuffer();
+        build(buildOption, elements.size());
     }
 
+    /**
+     * Removes all (byte sequence, value) pairs.
+     * New data can then be add()ed and a new trie can be built.
+     *
+     * <p>Do not use earlier build() results (tries, buffers) after this call
+     * since the shared result array will be reused.
+     * @return this
+     */
     public BytesTrieBuilder clear() {
         stringsLength=0;
         elements.clear();
@@ -119,20 +170,19 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
 
         public int getValue() /*const*/ { return value; }
 
-        public int compareStringTo(Element other, byte[] strings) /*const*/ {
+        public int compareStringTo(byte[] other, int otherLength, byte[] strings) /*const*/ {
             long thisString=getStringOffsetAndLength(strings);
-            long otherString=other.getStringOffsetAndLength(strings);
-            int lengthDiff=(int)thisString-(int)otherString;
+            int lengthDiff=(int)thisString-otherLength;
             int commonLength;
             if(lengthDiff<=0) {
                 commonLength=(int)thisString;
             } else {
-                commonLength=(int)otherString;
+                commonLength=otherLength;
             }
             int thisOffset=(int)(thisString>>32);
-            int otherOffset=(int)(otherString>>32);
+            int otherOffset=0;
             while(commonLength>0) {
-                int diff=(strings[thisOffset++]&0xff)-(strings[otherOffset++]&0xff);
+                int diff=(strings[thisOffset++]&0xff)-(other[otherOffset++]&0xff);
                 if(diff!=0) {
                     return diff;
                 }
@@ -159,17 +209,6 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         private int stringOffset;
         private int value;
     };
-
-    private static final class ElementStringsComparator implements Comparator<Element> {
-        public ElementStringsComparator(BytesTrieBuilder b) {
-            builder=b;
-        }
-        public int compare(Element e1, Element e2) {
-            return e1.compareStringTo(e2, builder.strings);
-        }
-        private BytesTrieBuilder builder;
-    }
-    private final ElementStringsComparator compareElementStrings=new ElementStringsComparator(this);
 
     protected int getElementStringLength(int i) /*const*/ {
         return elements.get(i).getStringLength(strings);
