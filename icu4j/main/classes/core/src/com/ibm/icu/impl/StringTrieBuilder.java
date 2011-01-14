@@ -17,8 +17,23 @@ import java.util.HashMap;
  * @author Markus W. Scherer
  */
 public abstract class StringTrieBuilder {
+    /**
+     * Build options for BytesTrieBuilder and CharsTrieBuilder.
+     */
     public enum Option {
+        /**
+         * Builds a trie quickly.
+         */
         FAST,
+        /**
+         * Builds a trie more slowly, attempting to generate
+         * a shorter but equivalent serialization.
+         * This build option also uses more memory.
+         *
+         * <p>This option can be effective when many integer values are the same
+         * and string/byte sequence suffixes can be shared.
+         * Runtime speed is not expected to improve.
+         */
         SMALL
     }
 

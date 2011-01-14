@@ -24,6 +24,15 @@ import java.util.NoSuchElementException;
 public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     /**
      * Constructs a BytesTrie reader instance.
+     *
+     * <p>The array must contain a copy of a byte sequence from the BytesTrieBuilder,
+     * with the offset indicating the first byte of that sequence.
+     * The BytesTrie object will not read more bytes than
+     * the BytesTrieBuilder generated in the corresponding build() call.
+     *
+     * <p>The array is not copied/cloned and must not be modified while
+     * the BytesTrie object is in use.
+     *
      * @param trieBytes Bytes array that contains the serialized trie.
      * @param offset Root offset of the trie in the array.
      */
@@ -99,6 +108,9 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     public enum Result {
         /**
          * The input unit(s) did not continue a matching string.
+         * Once current()/next() return NO_MATCH,
+         * all further calls to current()/next() will also return NO_MATCH,
+         * until the trie is reset to its original state or to a saved state.
          */
         NO_MATCH,
         /**
