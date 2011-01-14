@@ -1,4 +1,4 @@
-# Copyright (C) 2000-2009, International Business Machines Corporation and others.
+# Copyright (C) 2000-2011, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 # ICU codepage data for GB 18030
@@ -25,7 +25,7 @@
 <icu:state> 30-39
 
 # All-unassigned 4-byte sequences
-<icu:state> 30-39:4, 40-7e, 80-fe
+<icu:state> 30-39:4, 40-50, 51-53.p, 54-6b, 6c.p, 6d-75, 76.p, 77-7e, 80-90, 91.p, 92-fe
 <icu:state> 81-fe:5
 <icu:state> 30-39.u
 
@@ -41,6 +41,10 @@
 # generated using gbmake4 and gbtoucm tools. Please see charset/source/gb18030/gb18030.html
 # or http://source.icu-project.org/repos/icu/data/trunk/charset/source/gb18030/gb18030.html
 # for more information.
+
+# The 2005 version of gb18030 includes updates to previous mappings that use to map to PUA
+# but are now mapped to actual Unicode codepoints.
+# (CJKV 2nd edition)
 
 CHARMAP
 
@@ -28064,6 +28068,14 @@ CHARMAP
 <U9FA3> \xFD\x99 |0
 <U9FA4> \xFD\x9A |0
 <U9FA5> \xFD\x9B |0
+<U9FB4> \xFE\x59 |0
+<U9FB5> \xFE\x61 |0
+<U9FB6> \xFE\x66 |0
+<U9FB7> \xFE\x67 |0
+<U9FB8> \xFE\x6D |0
+<U9FB9> \xFE\x7E |0
+<U9FBA> \xFE\x90 |0
+<U9FBB> \xFE\xA0 |0
 <UE000> \xAA\xA1 |0
 <UE001> \xAA\xA2 |0
 <UE002> \xAA\xA3 |0
@@ -29997,16 +30009,16 @@ CHARMAP
 <UE78A> \xA6\xBE |0
 <UE78B> \xA6\xBF |0
 <UE78C> \xA6\xC0 |0
-<UE78D> \xA6\xD9 |0
-<UE78E> \xA6\xDA |0
-<UE78F> \xA6\xDB |0
-<UE790> \xA6\xDC |0
-<UE791> \xA6\xDD |0
-<UE792> \xA6\xDE |0
-<UE793> \xA6\xDF |0
-<UE794> \xA6\xEC |0
-<UE795> \xA6\xED |0
-<UE796> \xA6\xF3 |0
+<UE78D> \xA6\xD9 |1
+<UE78E> \xA6\xDA |1
+<UE78F> \xA6\xDB |1
+<UE790> \xA6\xDC |1
+<UE791> \xA6\xDD |1
+<UE792> \xA6\xDE |1
+<UE793> \xA6\xDF |1
+<UE794> \xA6\xEC |1
+<UE795> \xA6\xED |1
+<UE796> \xA6\xF3 |1
 <UE797> \xA6\xF6 |0
 <UE798> \xA6\xF7 |0
 <UE799> \xA6\xF8 |0
@@ -30134,15 +30146,15 @@ CHARMAP
 <UE813> \xD7\xFD |0
 <UE814> \xD7\xFE |0
 <UE815> \x83\x36\xC9\x34 |0
-<UE816> \xFE\x51 |0
-<UE817> \xFE\x52 |0
-<UE818> \xFE\x53 |0
+<UE816> \xFE\x51 |1
+<UE817> \xFE\x52 |1
+<UE818> \xFE\x53 |1
 <UE819> \x83\x36\xC9\x35 |0
 <UE81A> \x83\x36\xC9\x36 |0
 <UE81B> \x83\x36\xC9\x37 |0
 <UE81C> \x83\x36\xC9\x38 |0
 <UE81D> \x83\x36\xC9\x39 |0
-<UE81E> \xFE\x59 |0
+<UE81E> \xFE\x59 |1
 <UE81F> \x83\x36\xCA\x30 |0
 <UE820> \x83\x36\xCA\x31 |0
 <UE821> \x83\x36\xCA\x32 |0
@@ -30150,19 +30162,19 @@ CHARMAP
 <UE823> \x83\x36\xCA\x34 |0
 <UE824> \x83\x36\xCA\x35 |0
 <UE825> \x83\x36\xCA\x36 |0
-<UE826> \xFE\x61 |0
+<UE826> \xFE\x61 |1
 <UE827> \x83\x36\xCA\x37 |0
 <UE828> \x83\x36\xCA\x38 |0
 <UE829> \x83\x36\xCA\x39 |0
 <UE82A> \x83\x36\xCB\x30 |0
-<UE82B> \xFE\x66 |0
-<UE82C> \xFE\x67 |0
+<UE82B> \xFE\x66 |1
+<UE82C> \xFE\x67 |1
 <UE82D> \x83\x36\xCB\x31 |0
 <UE82E> \x83\x36\xCB\x32 |0
 <UE82F> \x83\x36\xCB\x33 |0
 <UE830> \x83\x36\xCB\x34 |0
-<UE831> \xFE\x6C |0
-<UE832> \xFE\x6D |0
+<UE831> \xFE\x6C |1
+<UE832> \xFE\x6D |1
 <UE833> \x83\x36\xCB\x35 |0
 <UE834> \x83\x36\xCB\x36 |0
 <UE835> \x83\x36\xCB\x37 |0
@@ -30171,7 +30183,7 @@ CHARMAP
 <UE838> \x83\x36\xCC\x30 |0
 <UE839> \x83\x36\xCC\x31 |0
 <UE83A> \x83\x36\xCC\x32 |0
-<UE83B> \xFE\x76 |0
+<UE83B> \xFE\x76 |1
 <UE83C> \x83\x36\xCC\x33 |0
 <UE83D> \x83\x36\xCC\x34 |0
 <UE83E> \x83\x36\xCC\x35 |0
@@ -30179,7 +30191,7 @@ CHARMAP
 <UE840> \x83\x36\xCC\x37 |0
 <UE841> \x83\x36\xCC\x38 |0
 <UE842> \x83\x36\xCC\x39 |0
-<UE843> \xFE\x7E |0
+<UE843> \xFE\x7E |1
 <UE844> \x83\x36\xCD\x30 |0
 <UE845> \x83\x36\xCD\x31 |0
 <UE846> \x83\x36\xCD\x32 |0
@@ -30196,8 +30208,8 @@ CHARMAP
 <UE851> \x83\x36\xCE\x33 |0
 <UE852> \x83\x36\xCE\x34 |0
 <UE853> \x83\x36\xCE\x35 |0
-<UE854> \xFE\x90 |0
-<UE855> \xFE\x91 |0
+<UE854> \xFE\x90 |1
+<UE855> \xFE\x91 |1
 <UE856> \x83\x36\xCE\x36 |0
 <UE857> \x83\x36\xCE\x37 |0
 <UE858> \x83\x36\xCE\x38 |0
@@ -30212,7 +30224,7 @@ CHARMAP
 <UE861> \x83\x36\xCF\x37 |0
 <UE862> \x83\x36\xCF\x38 |0
 <UE863> \x83\x36\xCF\x39 |0
-<UE864> \xFE\xA0 |0
+<UE864> \xFE\xA0 |1
 <UF92C> \xFD\x9C |0
 <UF92D> \x84\x30\x85\x35 |0
 <UF92E> \x84\x30\x85\x36 |0
@@ -30467,6 +30479,16 @@ CHARMAP
 <UFA27> \xFE\x4D |0
 <UFA28> \xFE\x4E |0
 <UFA29> \xFE\x4F |0
+<UFE10> \xA6\xD9 |0
+<UFE11> \xA6\xDB |0
+<UFE12> \xA6\xDA |0
+<UFE13> \xA6\xDC |0
+<UFE14> \xA6\xDD |0
+<UFE15> \xA6\xDE |0
+<UFE16> \xA6\xDF |0
+<UFE17> \xA6\xEC |0
+<UFE18> \xA6\xED |0
+<UFE19> \xA6\xF3 |0
 <UFE30> \xA9\x55 |0
 <UFE31> \xA6\xF2 |0
 <UFE32> \x84\x31\x85\x38 |0
@@ -30905,5 +30927,11 @@ CHARMAP
 <UFFE3> \xA3\xFE |0
 <UFFE4> \xA9\x57 |0
 <UFFE5> \xA3\xA4 |0
+<U20087> \xFE\x51 |0
+<U20089> \xFE\x52 |0
+<U200CC> \xFE\x53 |0
+<U215D7> \xFE\x6C |0
+<U2298F> \xFE\x76 |0
+<U241FE> \xFE\x91 |0
 
 END CHARMAP
