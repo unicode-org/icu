@@ -411,23 +411,23 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         return write(intBytes, length);
     }
 
-    private void stringsAppend(byte b) {
+    private void ensureStringsCapacity(int length) {
         if(strings==null) {
-            strings=new byte[1024];
-        } else if(stringsLength>=strings.length) {
-            byte[] newStrings=new byte[4*strings.length];
+            strings=new byte[Math.max(1024, 2*length)];
+        } else if(length>strings.length) {
+            byte[] newStrings=new byte[Math.max(4*strings.length, 2*length)];
             System.arraycopy(strings, 0, newStrings, 0, stringsLength);
+            strings=newStrings;
         }
+    }
+
+    private void stringsAppend(byte b) {
+        ensureStringsCapacity(stringsLength+1);
         strings[stringsLength++]=b;
     }
 
     private void stringsAppend(byte[] b, int length) {
-        if(strings==null) {
-            strings=new byte[Math.min(1024, 4*length)];
-        } else if((stringsLength+length)>strings.length) {
-            byte[] newStrings=new byte[Math.min(4*strings.length, 4*length)];
-            System.arraycopy(strings, 0, newStrings, 0, stringsLength);
-        }
+        ensureStringsCapacity(stringsLength+length);
         System.arraycopy(b, 0, strings, stringsLength, length);
         stringsLength+=length;
     }
