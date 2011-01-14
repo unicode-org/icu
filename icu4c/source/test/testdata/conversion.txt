@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2010, International Business Machines
+//   Copyright (C) 2003-2011, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -108,9 +108,9 @@ conversion:table(nofallback) {
         }
         {
           "gb18030",
-          :bin{ 618130fc318130fc8181303c3e813cfc817a },
-          "a\u05ed\\x810\u9f07\\x810<>\\x81<\u9f07z",
-          :intvector{ 0,1,5,5,5,5,6,7,9,9,9,9,10,11,12,13,13,13,13,14,15,17 },
+          :bin{ 618130fc318130fc8181303c3e813cfc817afe90 },
+          "a\u05ed\\x810\u9f07\\x810<>\\x81<\u9f07z\u9fba",
+          :intvector{ 0,1,5,5,5,5,6,7,9,9,9,9,10,11,12,13,13,13,13,14,15,17,18 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
         {
@@ -1769,6 +1769,13 @@ conversion:table(nofallback) {
           "\ud899\udc7f\ud977\ud888\udc99\ud888\u0041",
           :bin{ 0fd899dc7fd888dc99e041 },
           :intvector{},
+          :int{1}, :int{0}, "", "0", ""
+        }
+        {
+          "gb18030",
+          "\U00020087\ue790\ue78f",
+          :bin{ fe51a6dca6db },
+          :intvector{ 0,0,2,2,3,3 },
           :int{1}, :int{0}, "", "0", ""
         }
       }
