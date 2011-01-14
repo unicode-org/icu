@@ -55,7 +55,7 @@
         </antcall>
 
         <antcall target="@full-locale-names">
-            <param name="res.dir" value="${bin.dir}/com/ibm/icu/impl/data/icudt${icu4j.data.version}b/zone"/>
+            <param name="res.dir" value="${bin.dir}/${icu4j.data.path}/zone"/>
         </antcall>
     </target>
 </project>
