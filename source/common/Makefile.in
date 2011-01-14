@@ -86,7 +86,7 @@ normalizer2impl.o normalizer2.o filterednormalizer2.o normlzr.o unorm.o unormcmp
 chariter.o schriter.o uchriter.o uiter.o \
 uchar.o uprops.o ucase.o propname.o ubidi_props.o ubidi.o ubidiwrt.o ubidiln.o ushape.o \
 uscript.o usc_impl.o unames.o \
-utrie.o utrie2.o utrie2_builder.o bmpset.o unisetspan.o uset_props.o uniset_props.o uset.o uniset.o usetiter.o ruleiter.o caniter.o unifilt.o unifunct.o \
+utrie.o utrie2.o utrie2w.o utrie2_builder.o bmpset.o unisetspan.o uset_props.o uniset_props.o uset.o uniset.o usetiter.o ruleiter.o caniter.o unifilt.o unifunct.o \
 uarrsort.o brkiter.o ubrk.o brkeng.o dictbe.o triedict.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
 serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o \
@@ -102,6 +102,7 @@ STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 DEPS = $(OBJECTS:.o=.d)
 
 -include Makefile.local
+include icu4c0.mk
 
 -include $(SVC_HOOK_INC)
 

@@ -469,6 +469,7 @@ static const UChar iDotGrave[3] = { 0x69, 0x307, 0x300 };
 static const UChar iDotAcute[3] = { 0x69, 0x307, 0x301 };
 static const UChar iDotTilde[3] = { 0x69, 0x307, 0x303 };
 
+#if !UCONFIG_NO_USET
 
 U_CFUNC void U_EXPORT2
 ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
@@ -580,6 +581,7 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
         }
     }
 }
+#endif
 
 /*
  * compare s, which has a length, with t, which has a maximum length or is NUL-terminated
@@ -610,6 +612,7 @@ strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
     }
 }
 
+#if !UCONFIG_NO_USET
 U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa) {
     const UChar *unfold, *p;
@@ -667,6 +670,7 @@ ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length
 
     return FALSE; /* string not found */
 }
+#endif
 
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2

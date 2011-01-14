@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2010, International Business Machines
+#   Copyright (C) 1998-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -265,3 +265,17 @@ update-windows-makefiles: config.status
 	done;
 	$(RMV) $(WINDOWS_UPDATEFILES_SED)
 	@echo Please check over the changes carefully before checking them in.
+
+## icu4c0
+include icu4c0.mk
+
+samples/c0test/Makefile: $(top_srcdir)/samples/c0test/Makefile.in
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+icu4c0:	samples/c0test/Makefile
+	@echo Building ICU for pure C
+	@$(MKINSTALLDIRS) $(NEWLIBDIR)
+	@make -C stubdata
+	@make -C common icu4c0
+	@echo testing samples/c0test/c0test ...
+	@make -C samples/c0test check

@@ -125,6 +125,7 @@ source/layoutex/release
 source/layoutex/x64
 source/layoutex/x86
 source/lib
+source/lib_c
 source/samples/Makefile
 source/samples/all/all.ncb
 source/samples/all/all.suo
@@ -134,6 +135,11 @@ source/samples/break/break.exe
 source/samples/break/break.out
 source/samples/break/break.vcproj.*.*.user
 source/samples/break/release
+source/samples/c0test/*.d
+source/samples/c0test/*.pdb
+source/samples/c0test/Makefile
+source/samples/c0test/c0test
+source/samples/c0test/c0test.exe
 source/samples/cal/*.d
 source/samples/cal/*.pdb
 source/samples/cal/Debug

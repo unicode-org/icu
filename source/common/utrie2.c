@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -12,6 +12,8 @@
 *
 *   created on: 2008aug16 (starting from a copy of utrie.c)
 *   created by: Markus W. Scherer
+*
+*   moved back into C 2011 jan 13  by srl
 *
 *   This is a common implementation of a Unicode trie.
 *   It is a kind of compressed, serializable table of 16- or 32-bit values associated with
@@ -697,38 +699,3 @@ utrie2_enumForLeadSurrogate(const UTrie2 *trie, UChar32 lead,
     enumEitherTrie(trie, lead, lead+0x400, enumValue, enumRange, context);
 }
 
-/* C++ convenience wrappers ------------------------------------------------- */
-
-U_NAMESPACE_BEGIN
-
-uint16_t BackwardUTrie2StringIterator::previous16() {
-    codePointLimit=codePointStart;
-    if(start>=codePointStart) {
-        codePoint=U_SENTINEL;
-        return 0;
-    }
-    uint16_t result;
-    UTRIE2_U16_PREV16(trie, start, codePointStart, codePoint, result);
-    return result;
-}
-
-uint16_t ForwardUTrie2StringIterator::next16() {
-    codePointStart=codePointLimit;
-    if(codePointLimit==limit) {
-        codePoint=U_SENTINEL;
-        return 0;
-    }
-    uint16_t result;
-    UTRIE2_U16_NEXT16(trie, codePointLimit, limit, codePoint, result);
-    return result;
-}
-
-UTrie2 *UTrie2Singleton::getInstance(InstantiatorFn *instantiator, const void *context,
-                                     UErrorCode &errorCode) {
-    void *duplicate;
-    UTrie2 *instance=(UTrie2 *)singleton.getInstance(instantiator, context, duplicate, errorCode);
-    utrie2_close((UTrie2 *)duplicate);
-    return instance;
-}
-
-U_NAMESPACE_END
