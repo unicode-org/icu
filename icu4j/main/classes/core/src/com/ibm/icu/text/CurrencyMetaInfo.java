@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -403,6 +403,7 @@ public class CurrencyMetaInfo {
         }
     }
 
+///CLOVER:OFF
     /**
      * Returns the list of CurrencyInfos matching the provided filter.  Results
      * are ordered by country code,  then by highest to lowest priority (0 is highest).
@@ -443,6 +444,7 @@ public class CurrencyMetaInfo {
     public List<String> regions(CurrencyFilter filter) {
         return Collections.emptyList();
     }
+///CLOVER:ON
 
     /**
      * Returns the CurrencyDigits for the currency code.
