@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1536,7 +1536,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     public final UnicodeSet getSourceSet() {
         UnicodeSet result = new UnicodeSet();
-        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODEPOINTS), result, new UnicodeSet());
+        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODE_POINTS), result, new UnicodeSet());
         return result;
     }
 
@@ -1580,7 +1580,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     public UnicodeSet getTargetSet() {
         UnicodeSet result = new UnicodeSet();
-        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODEPOINTS), new UnicodeSet(), result);
+        addSourceTargetSet(getFilterAsUnicodeSet(UnicodeSet.ALL_CODE_POINTS), new UnicodeSet(), result);
         return result;
     }
 

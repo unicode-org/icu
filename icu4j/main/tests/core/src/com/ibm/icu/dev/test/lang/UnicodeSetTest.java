@@ -2389,4 +2389,9 @@ public class UnicodeSetTest extends TestFmwk {
         } catch (Exception e) {
         }
     }
+    
+    public void TestConstants() {
+        assertEquals("Empty", new UnicodeSet(), UnicodeSet.EMPTY);
+        assertEquals("All", new UnicodeSet(0,0x10FFFF), UnicodeSet.ALL_CODE_POINTS);
+    }
 }
