@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -259,7 +260,11 @@ public class CompatibilityTest extends TestFmwk
         } else if (protocol.equals("file")) {
             return getFileTargets(dataURL);
         } else {
-            errln("Don't know how to test " + dataURL.getPath());
+//#if defined(ECLIPSE)
+//##            logln("Don't know how to test " + dataURL);
+//#else
+            errln("Don't know how to test " + dataURL);
+//#endif
             return null;
         }
     }
