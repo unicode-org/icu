@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -594,7 +594,7 @@ public final class StringTokenizer implements Enumeration<Object>
     /**
      * A empty delimiter UnicodeSet, used when user specified null delimiters
      */
-    private static final UnicodeSet EMPTY_DELIMITER_ = new UnicodeSet();
+    private static final UnicodeSet EMPTY_DELIMITER_ = UnicodeSet.EMPTY;
     
     // private methods ------------------------------------------------------
     

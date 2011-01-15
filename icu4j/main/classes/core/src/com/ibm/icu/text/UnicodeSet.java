@@ -281,7 +281,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Constant for the set of all code points. (Since UnicodeSets can include strings, does not include everything that a UnicodeSet can.)
      * @draft 4.8
      */
-    public static final UnicodeSet ALL_CODEPOINTS = new UnicodeSet(0, 0x10FFFF).freeze();
+    public static final UnicodeSet ALL_CODE_POINTS = new UnicodeSet(0, 0x10FFFF).freeze();
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
@@ -4285,8 +4285,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 4.4
      */
     public static <T extends Comparable<T>> int compare(Iterable<T> collection1, Iterable<T> collection2) {
-        Iterator<T> first = collection1.iterator();
-        Iterator<T> other = collection2.iterator();
+        return compare(collection1.iterator(), collection2.iterator());
+    }
+    
+    /**
+     * Utility to compare two iterators. Warning: the ordering in iterables is important. For Collections that are ordered,
+     * like Lists, that is expected. However, Sets in Java violate Leibniz's law when it comes to iteration.
+     * That means that sets can't be compared directly with this method, unless they are TreeSets without
+     * (or with the same) comparator. Unfortunately, it is impossible to reliably detect in Java whether subclass of
+     * Collection satisfies the right criteria, so it is left to the user to avoid those circumstances.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static <T extends Comparable<T>> int compare(Iterator<T> first, Iterator<T> other) {
         while (true) {
             if (!first.hasNext()) {
                 return other.hasNext() ? -1 : 0;
@@ -4301,6 +4312,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             }
         }
     }
+
 
     /**
      * Utility to compare two collections, optionally by size, and then lexicographically.
