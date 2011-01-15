@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 2005-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -201,6 +202,14 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
             while (urlEnum.hasMoreElements()) {
                 URL url = urlEnum.nextElement();
                 URLHandler handler  = URLHandler.get(url);
+                if (handler == null) {
+//#if defined(ECLIPSE)
+//##                    logln("Unsupported URL: " + url);
+//#else
+                    errln("Unsupported URL: " + url);
+//#endif
+                    continue;
+                }
                 handler.guide(this, true, false);
             }
         } catch (IOException e) {

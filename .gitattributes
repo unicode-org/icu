@@ -209,7 +209,10 @@ icu4c/source/tools/toolutil/toolutil.vcxproj -text
 icu4j/build.properties -text
 icu4j/demos/.settings/org.eclipse.core.resources.prefs -text
 icu4j/demos/manifest.stub -text
+icu4j/eclipse-build/eclipse_mod_classes.txt -text
+icu4j/eclipse-build/eclipse_mod_test_classes.txt -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text

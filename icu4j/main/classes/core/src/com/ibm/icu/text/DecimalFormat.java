@@ -1,6 +1,7 @@
+//##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2957,11 +2958,17 @@ public class DecimalFormat extends NumberFormat {
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
+//#if defined(ECLIPSE)
+//##    public BigDecimal getRoundingIncrement() {
+//##        return roundingIncrementICU;
+//##    }
+//#else
     public java.math.BigDecimal getRoundingIncrement() {
         if (roundingIncrementICU == null)
             return null;
         return roundingIncrementICU.toBigDecimal();
     }
+//#endif
 
     /**
      * {@icu} Sets the rounding increment. This method also controls whether rounding is
