@@ -3677,6 +3677,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/SortedBag.java svneol=native
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/StringTokenizerTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TextTrieMapTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Timer.java -text svneol=unset#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.32.tri2 -text
@@ -3688,6 +3689,8 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesEmpty.16.
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesEmpty.32.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.16.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRangesSingleValue.32.tri2 -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TrieMap.java -text svneol=unset#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TrieMapTest.java -text svneol=unset#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/TrieTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/ULocaleTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/UnicodePropertySource.java svneol=native#text/plain%3Bcharset%3Dutf-8

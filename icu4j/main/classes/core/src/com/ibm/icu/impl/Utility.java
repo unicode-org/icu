@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1012,6 +1012,15 @@ public final class Utility {
         }
     }
 
+    public static String hex(byte[] o, int start, int end, String separator) {
+        StringBuilder result = new StringBuilder();
+        //int ch;
+        for (int i = start; i < end; ++i) {
+          if (i != 0) result.append(separator);
+          result.append(hex(o[i]));
+        }
+        return result.toString();
+      }
 
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
