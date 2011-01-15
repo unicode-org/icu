@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009, International Business Machines Corporation and         *
+* Copyright (C) 2009-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -28,8 +28,12 @@
 
     <target name="copy-data" description="Extract pre-built ICU language data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
-            <patternset includes="**/lang/*"/>
+            <patternset includes="${icu4j.data.path}/lang/**"/>
         </unjar>
+
+        <antcall target="@full-locale-names">
+            <param name="res.dir" value="${bin.dir}/${icu4j.data.path}/lang"/>
+        </antcall>
     </target>
 
 </project>

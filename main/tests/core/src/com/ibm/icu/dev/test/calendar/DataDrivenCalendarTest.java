@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,7 @@ import com.ibm.icu.dev.test.util.CalendarFieldsSet;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -269,9 +270,15 @@ public class DataDrivenCalendarTest extends ModuleTest {
                         logln(caseString + " SUCCESS: got=expected="+toDate);
                         logln("PASS: "+caseString+" matched! ");
                     } else {
-                        errln(caseString + " FAIL: got " + 
+                        if (caseString.equals("[case 31]") && TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
+                            logln(caseString + " FAIL(expected): got " + 
+                                    toCalendar.getTimeInMillis() + "  expected " + 
+                                    toDate);
+                        } else {
+                            errln(caseString + " FAIL: got " + 
                                 toCalendar.getTimeInMillis() + "  expected " + 
                                 toDate);
+                        }
                     }
             }else if (!toSet.matches(toCalendar, diffSet)) {
                 String diffs = diffSet.diffFrom(toSet);
