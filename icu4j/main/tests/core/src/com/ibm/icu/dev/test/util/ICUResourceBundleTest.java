@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -714,13 +714,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestFunctionalEquivalent(){
        String[] calCases = {
        //  avail    locale                              equiv
-           "t",     "en_US_POSIX",                      "en_US@calendar=gregorian",
-           "f",     "ja_JP_TOKYO",                      "ja_JP@calendar=gregorian",
+           "t",     "en_US_POSIX",                      "en@calendar=gregorian",
+           "f",     "ja_JP_TOKYO",                      "ja@calendar=gregorian",
            "f",     "ja_JP_TOKYO@calendar=japanese",    "ja@calendar=japanese",
            "t",     "sr@calendar=gregorian",            "sr@calendar=gregorian",
            "t",     "en",                               "en@calendar=gregorian",
            "t",     "th_TH",                            "th@calendar=buddhist",
-           "t",     "th_TH@calendar=gregorian",         "th_TH@calendar=gregorian",
+           "t",     "th_TH@calendar=gregorian",         "th@calendar=gregorian",
            "f",     "th_TH_Bangkok",                    "th@calendar=buddhist",
        };
 
