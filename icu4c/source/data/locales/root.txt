@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -285,10 +285,6 @@ root{
             AmPmMarkers{
                 "AM",
                 "PM",
-            }
-            DateTimeElements:intvector{
-                2,
-                4,
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -583,12 +579,6 @@ root{
                     }
                     wide:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
                 }
-            }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
             }
         }
         hebrew{

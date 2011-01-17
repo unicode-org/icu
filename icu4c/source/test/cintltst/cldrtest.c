@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -611,77 +611,9 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     }
     fromCalendar = ures_getByKey(fromLocaleBund, "calendar", NULL, &errorCode);
     fromGregorian = ures_getByKeyWithFallback(fromCalendar, "gregorian", NULL, &errorCode);
-    fromDateTimeElements = ures_getByKeyWithFallback(fromGregorian, "DateTimeElements", NULL, &errorCode);
 
     toCalendar = ures_getByKey(toLocaleBund, "calendar", NULL, &errorCode);
     toGregorian = ures_getByKeyWithFallback(toCalendar, "gregorian", NULL, &errorCode);
-    toDateTimeElements = ures_getByKeyWithFallback(toGregorian, "DateTimeElements", NULL, &errorCode);
-
-    if(U_FAILURE(errorCode)){
-        log_err("Did not get DateTimeElements from the bundle %s or %s\n", fromLocale, toLocale);
-        goto cleanup;
-    }
-
-    fromWeekendData = ures_getByKeyWithFallback(fromGregorian, "weekend", NULL, &errorCode);
-    if(U_FAILURE(errorCode)){
-        log_err("Did not get weekend data from the bundle %s to compare against %s\n", fromLocale, toLocale);
-        goto cleanup;
-    }
-    toWeekendData = ures_getByKeyWithFallback(toGregorian, "weekend", NULL, &errorCode);
-    if(U_FAILURE(errorCode)){
-        log_err("Did not get weekend data from the bundle %s to compare against %s\n", toLocale, fromLocale);
-        goto cleanup;
-    }
-
-    if (strcmp(fromLocale, "ar_IN") != 0)
-    {
-        int32_t fromSize;
-        int32_t toSize;
-        int32_t idx;
-        const int32_t *fromBundleArr = ures_getIntVector(fromDateTimeElements, &fromSize, &errorCode);
-        const int32_t *toBundleArr = ures_getIntVector(toDateTimeElements, &toSize, &errorCode);
-
-        if (fromSize > toSize) {
-            fromSize = toSize;
-            log_err("Arrays are different size with key \"DateTimeElements\" from \"%s\" to \"%s\"\n",
-                    fromLocale,
-                    toLocale);
-        }
-
-        for (idx = 0; idx < fromSize; idx++) {
-            if (fromBundleArr[idx] != toBundleArr[idx]) {
-                log_err("Difference with key \"DateTimeElements\" at index %d from \"%s\" to \"%s\"\n",
-                        idx,
-                        fromLocale,
-                        toLocale);
-            }
-        }
-    }
-
-    /* test for weekend data */
-    {
-        int32_t fromSize;
-        int32_t toSize;
-        int32_t idx;
-        const int32_t *fromBundleArr = ures_getIntVector(fromWeekendData, &fromSize, &errorCode);
-        const int32_t *toBundleArr = ures_getIntVector(toWeekendData, &toSize, &errorCode);
-
-        if (fromSize > toSize) {
-            fromSize = toSize;
-            log_err("Arrays are different size with key \"weekend\" data from \"%s\" to \"%s\"\n",
-                    fromLocale,
-                    toLocale);
-        }
-
-        for (idx = 0; idx < fromSize; idx++) {
-            if (fromBundleArr[idx] != toBundleArr[idx]) {
-                log_err("Difference with key \"weekend\" data at index %d from \"%s\" to \"%s\"\n",
-                        idx,
-                        fromLocale,
-                        toLocale);
-            }
-        }
-    }
 
     fromArray = ures_getByKey(fromLocaleBund, "CurrencyElements", NULL, &errorCode);
     toArray = ures_getByKey(toLocaleBund, "CurrencyElements", NULL, &errorCode);
@@ -724,11 +656,6 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     ures_close(toArray);
 
 cleanup:
-    ures_close(fromDateTimeElements);
-    ures_close(toDateTimeElements);
-    ures_close(fromWeekendData);
-    ures_close(toWeekendData);
-
     ures_close(fromCalendar);
     ures_close(toCalendar);
     ures_close(fromGregorian);
