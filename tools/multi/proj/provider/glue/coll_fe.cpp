@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -336,7 +336,7 @@ int32_t GLUE_SYM ( Collator ) :: getSortKey(const UChar*s, int32_t l, uint8_t*d,
 #endif   
     for(int j=0;j<avail;j++) {
          strs[i+j].append(OICU_ucol_getAvailable(j));
-         strs[i+j].append("@provider=icu");
+         strs[i+j].append("@sp=icu");
          strs[i+j].append( ICUGLUE_VER_STR[0] );  // X_y
          strs[i+j].append( ICUGLUE_VER_STR[2] );  // x_Y
 #if COLL_FE_DEBUG
@@ -381,7 +381,7 @@ Collator *VersionCollatorFactory::createCollator(const Locale &loc) {
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:CC %s\n", loc.getName());
 #endif
-    int32_t len = loc.getKeywordValue("provider", provider, 200, status);
+    int32_t len = loc.getKeywordValue("sp", provider, 200, status);
     if(U_FAILURE(status)||len==0) return NULL;
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:KWV> %s/%d\n", u_errorName(status), len);
