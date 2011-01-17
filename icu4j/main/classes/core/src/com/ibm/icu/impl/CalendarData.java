@@ -35,7 +35,7 @@ public class CalendarData {
             fFallbackType = null;
         } else {
             fMainType = type;
-            fFallbackType = null;
+            fFallbackType = "gregorian";
         }
     }
     
