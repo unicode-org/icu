@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ar_DZ.xml
@@ -13,10 +13,6 @@ ar_DZ{
     Version{"2.0.48.49"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                7,
-                4,
-            }
             DateTimePatterns{
                 "zzzz h:mm:ss a",
                 "z h:mm:ss a",
@@ -51,12 +47,6 @@ ar_DZ{
                 y{
                     y{"y‏-y"}
                 }
-            }
-            weekend:intvector{
-                5,
-                0,
-                6,
-                86400000,
             }
         }
     }

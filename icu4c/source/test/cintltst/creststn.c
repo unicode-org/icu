@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2603,8 +2603,8 @@ static void TestGetFunctionalEquivalent(void) {
 
     static const char *calCases[] = {
         /*   avail   locale                       equiv   */
-        "t",    "en_US_POSIX",                   "en_US@calendar=gregorian",
-        "f",    "ja_JP_TOKYO",                   "ja_JP@calendar=gregorian",
+        "t",    "en_US_POSIX",                   "en@calendar=gregorian",
+        "f",    "ja_JP_TOKYO",                   "ja@calendar=gregorian",
         "f",    "ja_JP_TOKYO@calendar=japanese", "ja@calendar=japanese",
         "t",    "sr@calendar=gregorian", "sr@calendar=gregorian",
         "t",    "en", "en@calendar=gregorian",
