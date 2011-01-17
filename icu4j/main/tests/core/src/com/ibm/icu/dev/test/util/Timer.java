@@ -34,17 +34,17 @@ public final class Timer {
   }
   
   public String toString() {
-    return nf.format(getDuration()) + "ns";
+    return nf.format(getDuration()) + "\tns";
   }
   public String toString(Timer other) {
     return toString(1L, other.getDuration());
   }
   public String toString(long iterations) {
-    return nf.format(getDuration()/iterations) + "ns";
+    return nf.format(getDuration()/iterations) + "\tns";
   }
   
   public String toString(long iterations, long other) {
-    return nf.format(getDuration()/iterations) + "ns" + " (" + pf.format((double)getDuration()/other - 1D) + ")";
+    return nf.format(getDuration()/iterations) + "\tns\t" + pf.format((double)getDuration()/other - 1D) + "";
   }
   
   private static DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(ULocale.ENGLISH);
