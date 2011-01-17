@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -55,7 +55,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             char locID[200];
             strcpy(locID, locale[l]);
             if((v!=expected)) { // -1 = no version
-                strcat(locID, "@provider=icu");
+                strcat(locID, "@sp=icu");
                 strcat(locID, provider_version[v]);
             }
             
@@ -63,13 +63,32 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             
             UErrorCode subStatus = U_ZERO_ERROR;
             uint8_t bytes[200];
+#define USE_CXX 0
 
+#if USE_CXX
             Collator *col = Collator::createInstance(Locale(locID),subStatus);
             if(U_FAILURE(subStatus)) {
                 printf("ERR: %s\n", u_errorName(subStatus));
                 continue;
             }
             int32_t len = col->getSortKey(stuff, -1, bytes, 200);
+#else
+#if 1
+            char xbuf2[200];
+            strcpy(xbuf2,"X/");
+            strcat(xbuf2,locID);
+            strcat(xbuf2,"/");
+            printf(" -> %s\n", xbuf2);
+            UCollator *col = ucol_openFromShortString(xbuf2, FALSE,NULL, &subStatus);
+#else
+            UCollator *col = ucol_open(locID, &subStatus);
+#endif
+            if(U_FAILURE(subStatus)) {
+                printf("ERR: %s\n", u_errorName(subStatus));
+                continue;
+            }
+            int32_t len = ucol_getSortKey(col, stuff, -1, bytes, 200);
+#endif
 
             for(int i=0;i<len;i++) {
 	      if(i<oldLen&&bytes[i]!=oldBytes[i]) {
@@ -81,8 +100,11 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
                 printf("%02X", (0xFF&bytes[i]));
             }
             printf("\n");
-
+#if USE_CXX
             delete col;
+#else
+            ucol_close(col);
+#endif
 
             oldLen = len;
             memcpy(oldBytes, bytes, len);
