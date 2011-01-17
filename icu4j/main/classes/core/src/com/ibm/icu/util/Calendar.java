@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -4282,7 +4282,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             //     ( i.e. "en_Latn_US" becomes "en_US" )
  
             ULocale useLocale;
-            ULocale min = ULocale.minimizeSubtags(locale);
+            CalendarData calData = new CalendarData(locale, getType());
+            ULocale min = ULocale.minimizeSubtags(calData.getULocale());
             if ( min.getCountry().length() > 0 ) {
                 useLocale = min;
             } else {
@@ -4301,19 +4302,26 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 useLocale = new ULocale(buf.toString());                
             }
  
-            CalendarData calData = new CalendarData(locale, getType());
-            CalendarData wkData = new CalendarData(useLocale, getType());
-            int[] dateTimeElements = wkData.get("DateTimeElements").getIntVector();
-            int[] weekend = wkData.get("weekend").getIntVector();
-            data = new WeekData(dateTimeElements[0],dateTimeElements[1],
-                                weekend[0],
-                                weekend[1],
-                                weekend[2],
-                                weekend[3],
+            UResourceBundle rb = UResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_BASE_NAME,
+                    "supplementalData",
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle weekDataInfo = rb.get("weekData");
+            UResourceBundle weekDataBundle = null;
+            try {
+                weekDataBundle = weekDataInfo.get(useLocale.getCountry());
+            } catch (MissingResourceException mre) {
+                // use "001" as fallback
+                weekDataBundle = weekDataInfo.get("001");
+            }
+
+            int[] wdi = weekDataBundle.getIntVector();
+            data = new WeekData(wdi[0],wdi[1],wdi[2],wdi[3],wdi[4],wdi[5],
                                 calData.getULocale());
             /* cache update */
             cachedLocaleData.put(locale, data);
         }
+        
         setFirstDayOfWeek(data.firstDayOfWeek);
         setMinimalDaysInFirstWeek(data.minimalDaysInFirstWeek);
         weekendOnset       = data.weekendOnset;
