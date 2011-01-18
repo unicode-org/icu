@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2010, International Business Machines Corporation and
+# Copyright (c) 1999-2011, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -164,7 +164,7 @@ case $platform in
         THE_COMP="Sun's CC"
         CC=`which cc`; export CC
         CXX=`which CC`; export CXX
-        LDFLAGS="-L -lCrun";export LDFLAGS
+        LDFLAGS="-lCrun";export LDFLAGS
         RELEASE_CFLAGS=-xO3
         RELEASE_CXXFLAGS=-O3
         ;;
