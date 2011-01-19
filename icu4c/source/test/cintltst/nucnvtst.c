@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -3569,8 +3569,19 @@ TestRoundTrippingAllUTF(void){
         TestFullRoundtrip("UTF-7,version=1");
         log_verbose("Running exhaustive round trip test for IMAP-mailbox-name\n");
         TestFullRoundtrip("IMAP-mailbox-name");
-        log_verbose("Running exhaustive round trip test for GB18030\n");
-        TestFullRoundtrip("GB18030");
+        /*
+         *
+         * With the update to GB18030 2005 (Ticket #8274), this test will fail because the 2005 version of
+         * GB18030 contains mappings to actual Unicode codepoints (which were previously mapped to PUA).
+         * The old mappings remain as fallbacks.
+         * This test may be reintroduced at a later time.
+         *
+         * 110118 - mow
+         */
+         /*
+         log_verbose("Running exhaustive round trip test for GB18030\n");
+         TestFullRoundtrip("GB18030");
+         */
     }
 }
 
