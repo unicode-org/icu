@@ -30,7 +30,7 @@ import com.ibm.icu.util.ULocale;
 public class TrieMapTest extends TestFmwk {
     static final boolean SHORT = false;
     static final int REPEAT = SHORT ? 1000000 : 10;
-    static final boolean HACK_TO_MAKE_TESTS_PASS = true;
+    static final boolean HACK_TO_MAKE_TESTS_PASS = false;
 
     Map<String, Integer> unicodeTestMap = new HashMap<String, Integer>();
 
