@@ -5,7 +5,6 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
-import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;

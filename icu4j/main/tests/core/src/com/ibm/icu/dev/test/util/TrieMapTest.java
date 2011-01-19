@@ -7,7 +7,9 @@
 package com.ibm.icu.dev.test.util;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import com.ibm.icu.impl.StringTrieBuilder.Option;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.Row.R3;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;
@@ -133,7 +136,6 @@ public class TrieMapTest extends TestFmwk {
         TrieMap<Integer> trieMap = TrieMap.BytesBuilder.with(style, testMap).build(Option.SMALL);
         TreeMap<String,Integer> expected = new TreeMap<String, Integer>(testMap);
 
-        int REPEAT = 1;
         Timer t = new Timer();
 
         System.gc();
@@ -322,33 +324,64 @@ public class TrieMapTest extends TestFmwk {
     private static DecimalFormat pf = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.ENGLISH);
 
     public void TestTimeGet() {
-        long comparisonTime = timeGet(unicodeTestMap, 0, null, 0);
-        timeGet(unicodeTestMap, comparisonTime, Style.BYTES, 1);
-        timeGet(unicodeTestMap, comparisonTime, Style.CHARS, 1);
+        HashSet<String> keySet = new HashSet<String>(unicodeTestMap.keySet());
+        ULocale[] locales = ULocale.getAvailableLocales();
+        int i = 0;
+        for (ULocale locale : locales) {
+            if (locale.getDisplayCountry().length() != 0) {
+                continue;
+            }
+            String localeName;
+            for (int scriptCodeInt = 0; scriptCodeInt < UScript.CODE_LIMIT; ++scriptCodeInt) {
+                String scriptCode = UScript.getShortName(scriptCodeInt);
+                localeName = ULocale.getDisplayScript("und-" + scriptCode, locale);
+                if (!localeName.equals(scriptCode)) {
+                    if (!keySet.contains(localeName)) {
+                        keySet.add(localeName);
+                        ++i;
+                    }
+                    if (SHORT) break;
+                }
+            }
+        }
+        logln("\tExtra Key Elements\t" + i);
+
+        ArrayList<String> keys = new ArrayList<String>(keySet);
+
+        long comparisonTime = timeGet(keys, unicodeTestMap, 0, null, 0);
+        timeGet(keys, unicodeTestMap, comparisonTime, null, 0);
+        timeGet(keys, unicodeTestMap, comparisonTime, Style.BYTES, 1);
+        timeGet(keys, unicodeTestMap, comparisonTime, Style.CHARS, 1);
     }
 
-    public long timeGet(Map<String, Integer> testmap, long comparisonTime, Style style, int ratioToMap) {
+    public long timeGet(ArrayList<String> keys, Map<String, Integer> testmap, long comparisonTime, Style style, int ratioToMap) {
         Timer t = new Timer();
 
-        TreeMap<String, Integer> map = new TreeMap<String, Integer>(testmap);
         TrieMap<Integer> trieMap = TrieMap.Builder.with(style, testmap).build(Option.SMALL);
-
-        System.gc();
-        t.start();
+        int repeat = REPEAT;
+        
         if (style == null) {
-            for (int tt = 0; tt < REPEAT; ++tt) {
-                for (String key : testmap.keySet()) {
+            Map<String, Integer> map = comparisonTime == 0 ? new TreeMap<String, Integer>(testmap) : new HashMap<String, Integer>(testmap);
+
+            System.gc();
+            t.start();
+            for (int tt = 0; tt < repeat; ++tt) {
+                for (String key : keys) {
                     Integer foundValue = map.get(key);
                 }
             }
             long mapTime = t.getDuration();
-            logln("\tget() time\tTREEMAP\tn/a\t" + t.toString(REPEAT*testmap.size()));
+            if (comparisonTime == 0) {
+                logln("\tget() time\tTREEMAP\tn/a\t" + t.toString(REPEAT*testmap.size()));
+            } else {
+                logln("\tget() time\tHASHMAP\tn/a\t" + t.toString(REPEAT*testmap.size(), comparisonTime));
+            }
             return mapTime;
         } else {
             System.gc();
             t.start();
-            for (int tt = 0; tt < REPEAT; ++tt) {
-                for (String key : testmap.keySet()) {
+            for (int tt = 0; tt < repeat; ++tt) {
+                for (String key : keys) {
                     Integer foundValue = trieMap.get(key);
                 }
             }
