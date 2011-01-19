@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2183,6 +2183,36 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    /*
+     * Test case for add/roll with non-lenient calendar reported by ticket#8057.
+     * Calendar#add may result internal fields out of valid range. ICU used to
+     * trigger field range validation also for internal field changes triggered
+     * by add/roll, then throws IllegalArgumentException. The field value range
+     * validation should be done only for fields set by user code explicitly
+     * in non-lenient mode.
+     */
+    public void TestT8057() {
+        // Set the calendar to the last day in a leap year
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setLenient(false);
+        cal.clear();
+        cal.set(2008, Calendar.DECEMBER, 31);
+
+        // Force calculating then fields once.
+        long t = cal.getTimeInMillis();
+
+        long expected = 1262246400000L; // 2009-12-31 00:00 PST
+
+        try {
+            cal.add(Calendar.YEAR, 1);
+            t = cal.getTimeInMillis();
+            if (t != expected) {
+                errln("FAIL: wrong date after add: expected=" + expected + " returned=" + t);
+            }
+        } catch (IllegalArgumentException e) {
+            errln("FAIL: add method should not throw IllegalArgumentException");
+        }
+    }
 }
 
 //eof

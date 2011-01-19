@@ -2329,6 +2329,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case DAY_OF_MONTH:
             {
                 Calendar cal = (Calendar) clone();
+                cal.setLenient(true);
                 cal.prepareGetActual(field, false);
                 result = handleGetMonthLength(cal.get(EXTENDED_YEAR), cal.get(MONTH));
             }
@@ -2337,6 +2338,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case DAY_OF_YEAR:
             {
                 Calendar cal = (Calendar) clone();
+                cal.setLenient(true);
                 cal.prepareGetActual(field, false);
                 result = handleGetYearLength(cal.get(EXTENDED_YEAR));
             }
@@ -4749,7 +4751,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     protected void validateFields() {
         for (int field = 0; field < fields.length; field++) {
-            if (isSet(field)) {
+            if (stamp[field] >= MINIMUM_USER_STAMP) {
                 validateField(field);
             }
         }
