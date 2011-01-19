@@ -19,6 +19,8 @@ import java.util.NoSuchElementException;
  * Traverses a byte-serialized data structure with minimal state,
  * for mapping byte sequences to non-negative integer values.
  *
+ * <p>This class is not intended for public subclassing.
+ *
  * @author Markus W. Scherer
  */
 public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
@@ -177,21 +179,31 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     /**
      * Traverses the trie from the initial state for this input byte.
      * Equivalent to reset().next(inByte).
+     * @param inByte Input byte value. Values -0x100..-1 are treated like 0..0xff.
+     *               Values below -0x100 and above 0xff will never match.
      * @return The match/value Result.
      */
     public Result first(int inByte) {
         remainingMatchLength_=-1;
+        if(inByte<0) {
+            inByte+=0x100;
+        }
         return nextImpl(root_, inByte);
     }
 
     /**
      * Traverses the trie from the current state for this input byte.
+     * @param inByte Input byte value. Values -0x100..-1 are treated like 0..0xff.
+     *               Values below -0x100 and above 0xff will never match.
      * @return The match/value Result.
      */
     public Result next(int inByte) {
         int pos=pos_;
         if(pos<0) {
             return Result.NO_MATCH;
+        }
+        if(inByte<0) {
+            inByte+=0x100;
         }
         int length=remainingMatchLength_;  // Actual remaining match length minus 1.
         if(length>=0) {
