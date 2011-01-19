@@ -2375,7 +2375,7 @@ Calendar::getActualMinimum(UCalendarDateFields field, UErrorCode& status) const
 */
 void Calendar::validateFields(UErrorCode &status) {
     for (int32_t field = 0; U_SUCCESS(status) && (field < UCAL_FIELD_COUNT); field++) {
-        if (isSet((UCalendarDateFields)field)) {
+        if (fStamp[field] >= kMinimumUserStamp) {
             validateField((UCalendarDateFields)field, status);
         }
     }
@@ -3050,6 +3050,7 @@ Calendar::getActualMaximum(UCalendarDateFields field, UErrorCode& status) const
             if(U_FAILURE(status)) return 0;
             Calendar *cal = clone();
             if(!cal) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
+            cal->setLenient(TRUE);
             cal->prepareGetActual(field,FALSE,status);
             result = handleGetMonthLength(cal->get(UCAL_EXTENDED_YEAR, status), cal->get(UCAL_MONTH, status));
             delete cal;
@@ -3061,6 +3062,7 @@ Calendar::getActualMaximum(UCalendarDateFields field, UErrorCode& status) const
             if(U_FAILURE(status)) return 0;
             Calendar *cal = clone();
             if(!cal) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
+			cal->setLenient(TRUE);
             cal->prepareGetActual(field,FALSE,status);
             result = handleGetYearLength(cal->get(UCAL_EXTENDED_YEAR, status));
             delete cal;
