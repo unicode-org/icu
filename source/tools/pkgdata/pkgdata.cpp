@@ -1177,7 +1177,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                      uprv_strlen(pkgDataFlags[LD_SONAME][0] == 0 ? "" : libFileNames[LIB_FILE_VERSION_MAJOR]) +
                      uprv_strlen(pkgDataFlags[RPATH_FLAGS]) + uprv_strlen(pkgDataFlags[BIR_FLAGS]) + BUFFER_PADDING_SIZE;
 #ifdef U_CYGWIN
-            length += uprv_strlen(targetDir) + uprv_stren(libFileNames[LIB_FILE_CYGWIN_VERSION]);
+            length += uprv_strlen(targetDir) + uprv_strlen(libFileNames[LIB_FILE_CYGWIN_VERSION]);
 #endif
             if ((cmd = (char *)uprv_malloc(sizeof(char) * length)) == NULL) {
                 fprintf(stderr, "Unable to allocate memory for command.\n");
