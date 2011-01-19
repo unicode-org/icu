@@ -551,10 +551,10 @@ public class BytesTrieTest extends TestFmwk {
             if(data[i].s.length()==0) {
                 continue;  // skip empty string
             }
-            int c=data[i].s.charAt(0);
+            int c=data[i].bytes[0];
             BytesTrie.Result firstResult=trie.first(c);
             int firstValue=firstResult.hasValue() ? trie.getValue() : -1;
-            int nextC=data[i].s.length()>1 ? data[i].s.charAt(1) : 0;
+            int nextC=data[i].s.length()>1 ? data[i].bytes[1] : 0;
             BytesTrie.Result nextResult=trie.next(nextC);
             if(firstResult!=trie.reset().next(c) ||
                firstResult!=trie.current() ||
@@ -601,7 +601,7 @@ public class BytesTrieTest extends TestFmwk {
                         break;
                     }
                 }
-                result=trie.next(data[i].s.charAt(j));
+                result=trie.next(data[i].bytes[j]);
                 if(!result.matches()) {
                     errln(String.format("trie.next()=BytesTrie.Result.NO_MATCH "+
                                         "before end of %s (at index %d)", data[i].s, j));

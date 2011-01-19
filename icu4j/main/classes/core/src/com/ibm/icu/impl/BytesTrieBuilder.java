@@ -16,6 +16,8 @@ import java.util.ArrayList;
 /**
  * Builder class for BytesTrie.
  *
+ * <p>This class is not intended for public subclassing.
+ *
  * @author Markus W. Scherer
  */
 public final class BytesTrieBuilder extends StringTrieBuilder {
@@ -62,9 +64,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      * Builds a BytesTrie for the add()ed data.
      * Once built, no further data can be add()ed until clear() is called.
      *
-     * <p>This builder must not be modified via clear()/add()/build()
-     * while the BytesTrie is used because the trie shares the builder's result array.
-     * Multiple calls to build() or buildByteBuffer() return tries or buffers with the same data.
+     * <p>Multiple calls to build() or buildByteBuffer() return tries or buffers
+     * which share the builder's bytes array, without rebuilding.
+     * <em>The bytes array must not be modified via the buildByteBuffer() result object.</em>
+     * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A new BytesTrie for the add()ed data.
      */
@@ -77,9 +80,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      * Builds a BytesTrie for the add()ed data and byte-serializes it.
      * Once built, no further data can be add()ed until clear() is called.
      *
-     * <p>This builder must not be modified via clear()/add()/build()
-     * while the buffer is used because the buffer shares the builder's result array.
-     * Multiple calls to build() or buildByteBuffer() return tries or buffers with the same data.
+     * <p>Multiple calls to build() or buildByteBuffer() return tries or buffers
+     * which share the builder's bytes array, without rebuilding.
+     * <em>Do not modify the bytes in the buffer!</em>
+     * After clear() has been called, a new array will be used.
      *
      * <p>The serialized BytesTrie is accessible via the buffer's
      * array()/arrayOffset()+position() or remaining()/get(byte[]) etc.
@@ -114,14 +118,12 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     /**
      * Removes all (byte sequence, value) pairs.
      * New data can then be add()ed and a new trie can be built.
-     *
-     * <p>Do not use earlier build() results (tries, buffers) after this call
-     * since the shared result array will be reused.
      * @return this
      */
     public BytesTrieBuilder clear() {
         stringsLength=0;
         elements.clear();
+        bytes=null;
         bytesLength=0;
         return this;
     }
