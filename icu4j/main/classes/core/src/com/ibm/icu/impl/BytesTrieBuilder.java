@@ -65,8 +65,8 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      * Once built, no further data can be add()ed until clear() is called.
      *
      * <p>Multiple calls to build() or buildByteBuffer() return tries or buffers
-     * which share the builder's bytes array, without rebuilding.
-     * <em>The bytes array must not be modified via the buildByteBuffer() result object.</em>
+     * which share the builder's byte array, without rebuilding.
+     * <em>The byte array must not be modified via the buildByteBuffer() result object.</em>
      * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A new BytesTrie for the add()ed data.
@@ -81,7 +81,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      * Once built, no further data can be add()ed until clear() is called.
      *
      * <p>Multiple calls to build() or buildByteBuffer() return tries or buffers
-     * which share the builder's bytes array, without rebuilding.
+     * which share the builder's byte array, without rebuilding.
      * <em>Do not modify the bytes in the buffer!</em>
      * After clear() has been called, a new array will be used.
      *
@@ -145,19 +145,6 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             builder.stringsAppend(sequence, length);
         }
 
-        // C++: StringPiece getString(strings)
-        public long getStringOffsetAndLength(byte[] strings) /*const*/ {
-            int offset=stringOffset;
-            int length;
-            if(offset>=0) {
-                length=strings[offset++]&0xff;
-            } else {
-                offset=~offset;
-                length=((strings[offset]&0xff)<<8)|(strings[offset+1]&0xff);
-                offset+=2;
-            }
-            return ((long)offset<<32)|length;
-        }
         public int getStringLength(byte[] strings) /*const*/ {
             int offset=stringOffset;
             if(offset>=0) {
@@ -173,15 +160,22 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         public int getValue() /*const*/ { return value; }
 
         public int compareStringTo(byte[] other, int otherLength, byte[] strings) /*const*/ {
-            long thisString=getStringOffsetAndLength(strings);
-            int lengthDiff=(int)thisString-otherLength;
+            int thisOffset=stringOffset;
+            int thisLength;
+            if(thisOffset>=0) {
+                thisLength=strings[thisOffset++]&0xff;
+            } else {
+                thisOffset=~thisOffset;
+                thisLength=((strings[thisOffset]&0xff)<<8)|(strings[thisOffset+1]&0xff);
+                thisOffset+=2;
+            }
+            int lengthDiff=thisLength-otherLength;
             int commonLength;
             if(lengthDiff<=0) {
-                commonLength=(int)thisString;
+                commonLength=thisLength;
             } else {
                 commonLength=otherLength;
             }
-            int thisOffset=(int)(thisString>>32);
             int otherOffset=0;
             while(commonLength>0) {
                 int diff=(strings[thisOffset++]&0xff)-(other[otherOffset++]&0xff);

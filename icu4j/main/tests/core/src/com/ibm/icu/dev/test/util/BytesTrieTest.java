@@ -483,7 +483,9 @@ public class BytesTrieTest extends TestFmwk {
             builder_.add(item.bytes, item.bytes.length, item.value);
         }
         ByteBuffer trieBytes=builder_.buildByteBuffer(StringTrieBuilder.Option.FAST);
-        checkIterator(BytesTrie.iterator(trieBytes.array(), trieBytes.arrayOffset()+trieBytes.position(), 0), data);
+        checkIterator(
+            BytesTrie.iterator(trieBytes.array(), trieBytes.arrayOffset()+trieBytes.position(), 0),
+            data);
     }
 
     private void checkData(StringAndValue data[]) {
