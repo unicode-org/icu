@@ -495,7 +495,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
         /**
          * @return true if there are more elements.
          */
-        public boolean hasNext() /*const*/  { return pos_>=0 || !stack_.isEmpty(); }
+        public boolean hasNext() /*const*/ { return pos_>=0 || !stack_.isEmpty(); }
 
         /**
          * Finds the next (byte sequence, value) pair if there is one.

@@ -15,6 +15,8 @@ import java.util.HashMap;
 /**
  * Base class for string trie builder classes.
  *
+ * <p>This class is not intended for public subclassing.
+ *
  * @author Markus W. Scherer
  */
 public abstract class StringTrieBuilder {
