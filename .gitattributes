@@ -51,7 +51,10 @@ README text !eol
 /build.properties -text
 demos/.settings/org.eclipse.core.resources.prefs -text
 demos/manifest.stub -text
+eclipse-build/eclipse_mod_classes.txt -text
+eclipse-build/eclipse_mod_test_classes.txt -text
 eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
+eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text
 eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 main/classes/charset/.classpath -text
 main/classes/charset/.project -text
