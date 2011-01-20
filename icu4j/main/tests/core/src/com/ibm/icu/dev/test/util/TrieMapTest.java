@@ -32,15 +32,20 @@ import com.ibm.icu.util.ULocale;
 
 public class TrieMapTest extends TestFmwk {
     static final boolean SHORT = false;
-    static final int REPEAT = SHORT ? 1000000 : 10;
     static final boolean HACK_TO_MAKE_TESTS_PASS = false;
+    static final int MASK = 0x3;
 
     Map<String, Integer> unicodeTestMap = new HashMap<String, Integer>();
+    boolean useSmallList = true;
+    int REPEAT = 10;
 
     @Override
     protected void init() throws Exception {
         super.init();
         if (unicodeTestMap.size() == 0) {
+            
+            useSmallList = getInclusion() < 5;
+
             int i = 0;
             UnicodeSet testSet = new UnicodeSet("[[:^C:]-[:sc=han:]]");
             for (String s : testSet) {
@@ -49,9 +54,9 @@ public class TrieMapTest extends TestFmwk {
                 if (!unicodeTestMap.containsKey(extendedName)) {
                     unicodeTestMap.put(extendedName, i++);
                 }
-                if (SHORT) break;
+                if (i > 500 && useSmallList) break;
             }
-            ULocale[] locales = SHORT ? new ULocale[] {new ULocale("zh"), new ULocale("el")} : ULocale.getAvailableLocales();
+            ULocale[] locales = useSmallList ? new ULocale[] {new ULocale("zh"), new ULocale("el")} : ULocale.getAvailableLocales();
             for (ULocale locale : locales) {
                 if (locale.getDisplayCountry().length() != 0) {
                     continue;
@@ -61,7 +66,7 @@ public class TrieMapTest extends TestFmwk {
                     localeName = ULocale.getDisplayName(languageCode, locale);
                     if (!localeName.equals(languageCode)) {
                         if (!unicodeTestMap.containsKey(localeName)) {
-                            unicodeTestMap.put(localeName, i++);
+                            unicodeTestMap.put(localeName, MASK & i++);
                         }
                         if (SHORT) break;
                     }
@@ -70,7 +75,7 @@ public class TrieMapTest extends TestFmwk {
                     localeName = ULocale.getDisplayCountry("und-" + countryCode, locale);
                     if (!localeName.equals(countryCode)) {
                         if (!unicodeTestMap.containsKey(localeName)) {
-                            unicodeTestMap.put(localeName, i++);
+                            unicodeTestMap.put(localeName, MASK & i++);
                         }
                         if (SHORT) break;
                     }
@@ -79,6 +84,11 @@ public class TrieMapTest extends TestFmwk {
             int charCount = 0; 
             for (String key : unicodeTestMap.keySet()) {
                 charCount += key.length();
+            }
+            if (useSmallList) {
+                logln("\tSmall version:\t to get more accurate figures and test for reasonable times, use -e 5 or more");
+            } else {
+                REPEAT *= (getInclusion() - 5);
             }
             logln("\tTest Data Elements:\t\t\t" + nf.format(unicodeTestMap.size()));
             logln("\tTotal chars:\t\t\t" + nf.format(charCount));
@@ -159,7 +169,7 @@ public class TrieMapTest extends TestFmwk {
             }
             long trieTime = t.getDuration();
             logln("\titeration time\t" + style + "\tn/a\t" + t.toString(REPEAT*testMap.size(), comparisonTime));
-            if (trieTime > ratioToMap * comparisonTime) {
+            if (!useSmallList && trieTime > ratioToMap * comparisonTime) {
                 errln(style + "\tTime iteration takes too long. Expected:\t< " + ratioToMap * comparisonTime + ", Actual:\t" + trieTime);
             }
             return trieTime;
@@ -277,7 +287,7 @@ public class TrieMapTest extends TestFmwk {
             }
             long trieTime = t.getDuration();
             logln("\tbuild time\t" + style + "\t" + option + "\t" + t.toString(REPEAT*testmap.size(), comparisonTime));
-            if (trieTime > ratioToMap * comparisonTime) {
+            if (!useSmallList && trieTime > ratioToMap * comparisonTime) {
                 errln(style + "\t" + option + "\tTrie build takes too long. Expected:\t< " + nf.format(ratioToMap * comparisonTime) + ", Actual:\t" + nf.format(trieTime));
             }
             return trieTime;
@@ -313,7 +323,7 @@ public class TrieMapTest extends TestFmwk {
             logln("\tkey byte size\t" + style + "\t" + option + "\t" + nf.format(trieKeyByteSize) + "\t\t" + pf.format(trieKeyByteSize/(double)comparisonSize - 1D) + "");
 
 
-            if (trieKeyByteSize > ratioToMap * comparisonSize) {
+            if (!useSmallList && trieKeyByteSize > ratioToMap * comparisonSize) {
                 errln(style + "\t" + option + "\ttrieKeyByteSize too large. Expected:\t< " + nf.format(ratioToMap * comparisonSize) + ", Actual:\t" + nf.format(trieKeyByteSize));
             }
             return trieKeyByteSize;
@@ -387,7 +397,7 @@ public class TrieMapTest extends TestFmwk {
             }
             long trieTime = t.getDuration();
             logln("\tget() time\t" + style + "\tn/a\t" + t.toString(REPEAT*testmap.size(), comparisonTime));
-            if (trieTime > ratioToMap * comparisonTime) {
+            if (!useSmallList && trieTime > ratioToMap * comparisonTime) {
                 errln(style + "\tTime iteration takes too long. Expected:\t< " + ratioToMap * comparisonTime + ", Actual:\t" + trieTime);
             }
             return trieTime;
