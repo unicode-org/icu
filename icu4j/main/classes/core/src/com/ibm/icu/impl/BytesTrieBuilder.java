@@ -230,6 +230,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         int length=0;  // Number of different bytes at byteIndex.
         int i=start;
         do {
+            starts_.add(i);
             byte b=elements.get(i++).charAt(byteIndex, strings);
             while(i<limit && b==elements.get(i).charAt(byteIndex, strings)) {
                 ++i;
@@ -237,22 +238,6 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             ++length;
         } while(i<limit);
         return length;
-    }
-    protected int skipElementsBySomeUnits(int i, int byteIndex, int count) /*const*/ {
-        do {
-            byte b=elements.get(i++).charAt(byteIndex, strings);
-            while(b==elements.get(i).charAt(byteIndex, strings)) {
-                ++i;
-            }
-        } while(--count>0);
-        return i;
-    }
-    protected int indexOfElementWithNextUnit(int i, int byteIndex, char unit) /*const*/ {
-        byte b=(byte)unit;
-        while(b==elements.get(i).charAt(byteIndex, strings)) {
-            ++i;
-        }
-        return i;
     }
 
     protected boolean matchNodesCanHaveValues() /*const*/ { return false; }

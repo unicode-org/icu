@@ -9,6 +9,7 @@
 */
 package com.ibm.icu.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -95,9 +96,11 @@ public abstract class StringTrieBuilder {
             type=getMinLinearMatch()+length-1;
         } else {
             // Branch node.
+            int startsOffset=starts_.size();
             int length=countElementUnits(start, limit, unitIndex);
             // length>=2 because minUnit!=maxUnit.
-            writeBranchSubNode(start, limit, unitIndex, length);
+            writeBranchSubNode(start, limit, unitIndex, length, startsOffset);
+            starts_.truncate(startsOffset);
             if(--length<getMinLinearMatch()) {
                 type=length;
             } else {
@@ -110,45 +113,44 @@ public abstract class StringTrieBuilder {
 
     // start<limit && all strings longer than unitIndex &&
     // length different units at unitIndex
-    protected int writeBranchSubNode(int start, int limit, int unitIndex, int length) {
-        char[] middleUnits=new char[kMaxSplitBranchLevels];
-        int[] lessThan=new int[kMaxSplitBranchLevels];
+    protected int writeBranchSubNode(int start, int limit, int unitIndex, int length,
+                                     int startsOffset) {
         int ltLength=0;
         while(length>getMaxBranchLinearSubNodeLength()) {
             // Branch on the middle unit.
             // First, find the middle unit.
-            int i=skipElementsBySomeUnits(start, unitIndex, length/2);
+            int i=starts_.get(startsOffset+length/2);
             // Encode the less-than branch first.
-            middleUnits[ltLength]=getElementUnit(i, unitIndex);  // middle unit
-            lessThan[ltLength]=writeBranchSubNode(start, i, unitIndex, length/2);
+            middleUnits_.append(getElementUnit(i, unitIndex));  // middle unit
+            jumpTargets_.add(writeBranchSubNode(start, i, unitIndex, length/2, startsOffset));
             ++ltLength;
             // Continue for the greater-or-equal branch.
             start=i;
+            startsOffset+=length/2;
             length=length-length/2;
         }
         // For each unit, find its elements array start and whether it has a final value.
-        int[] starts=new int[kMaxBranchLinearSubNodeLength];
-        boolean[] isFinal=new boolean[kMaxBranchLinearSubNodeLength-1];
+        int isFinal=0;
         int unitNumber=0;
         do {
-            int i=starts[unitNumber]=start;
-            char unit=getElementUnit(i++, unitIndex);
-            i=indexOfElementWithNextUnit(i, unitIndex, unit);
-            isFinal[unitNumber]= start==i-1 && unitIndex+1==getElementStringLength(start);
+            int i=starts_.get(startsOffset+unitNumber+1);
+            if(start==i-1 && unitIndex+1==getElementStringLength(start)) {
+                isFinal|=(1<<unitNumber);
+            }
             start=i;
         } while(++unitNumber<length-1);
         // unitNumber==length-1, and the maxUnit elements range is [start..limit[
-        starts[unitNumber]=start;
 
         // Write the sub-nodes in reverse order: The jump lengths are deltas from
         // after their own positions, so if we wrote the minUnit sub-node first,
         // then its jump delta would be larger.
         // Instead we write the minUnit sub-node last, for a shorter delta.
-        int[] jumpTargets=new int[kMaxBranchLinearSubNodeLength-1];
+        int jumpTargetsOffset=jumpTargets_.size();
         do {
             --unitNumber;
-            if(!isFinal[unitNumber]) {
-                jumpTargets[unitNumber]=writeNode(starts[unitNumber], starts[unitNumber+1], unitIndex+1);
+            if((isFinal&(1<<unitNumber))==0) {
+                jumpTargets_.add(writeNode(starts_.get(startsOffset+unitNumber),
+                                           starts_.get(startsOffset+unitNumber+1), unitIndex+1));
             }
         } while(unitNumber>0);
         // The maxUnit sub-node is written as the very last one because we do
@@ -157,25 +159,30 @@ public abstract class StringTrieBuilder {
         writeNode(start, limit, unitIndex+1);
         int offset=write(getElementUnit(start, unitIndex));
         // Write the rest of this node's unit-value pairs.
+        int jumpTargetsIndex=jumpTargetsOffset;
         while(--unitNumber>=0) {
-            start=starts[unitNumber];
-            int value;
-            if(isFinal[unitNumber]) {
+            start=starts_.get(startsOffset+unitNumber);
+            if((isFinal&(1<<unitNumber))!=0) {
                 // Write the final value for the one string ending with this unit.
-                value=getElementValue(start);
+                writeValueAndFinal(getElementValue(start), true);
             } else {
                 // Write the delta to the start position of the sub-node.
-                value=offset-jumpTargets[unitNumber];
+                writeValueAndFinal(offset-jumpTargets_.get(jumpTargetsIndex++), false);
             }
-            writeValueAndFinal(value, isFinal[unitNumber]);
             offset=write(getElementUnit(start, unitIndex));
         }
         // Write the split-branch nodes.
-        while(ltLength>0) {
-            --ltLength;
-            writeDeltaTo(lessThan[ltLength]);
-            offset=write(middleUnits[ltLength]);
+        int lessThanIndex=jumpTargetsOffset;
+        if(ltLength>0) {
+            int middleUnitsIndex=middleUnits_.length();
+            do {
+                --ltLength;
+                writeDeltaTo(jumpTargets_.get(--lessThanIndex));
+                offset=write(middleUnits_.charAt(--middleUnitsIndex));
+            } while(ltLength>0);
+            middleUnits_.setLength(middleUnitsIndex);
         }
+        jumpTargets_.truncate(lessThanIndex);
         return offset;
     }
 
@@ -213,9 +220,11 @@ public abstract class StringTrieBuilder {
             node=createLinearMatchNode(start, unitIndex, length, nextNode);
         } else {
             // Branch node.
+            int startsOffset=starts_.size();
             int length=countElementUnits(start, limit, unitIndex);
             // length>=2 because minUnit!=maxUnit.
-            Node subNode=makeBranchSubNode(start, limit, unitIndex, length);
+            Node subNode=makeBranchSubNode(start, limit, unitIndex, length, startsOffset);
+            starts_.truncate(startsOffset);
             node=new BranchHeadNode(length, subNode);
         }
         if(hasValue && node!=null) {
@@ -231,29 +240,27 @@ public abstract class StringTrieBuilder {
     // start<limit && all strings longer than unitIndex &&
     // length different units at unitIndex
     protected Node makeBranchSubNode(int start, int limit, int unitIndex,
-                            int length) {
-        char[] middleUnits=new char[kMaxSplitBranchLevels];
-        Node[] lessThan=new Node[kMaxSplitBranchLevels];
+                                     int length, int startsOffset) {
         int ltLength=0;
         while(length>getMaxBranchLinearSubNodeLength()) {
             // Branch on the middle unit.
             // First, find the middle unit.
-            int i=skipElementsBySomeUnits(start, unitIndex, length/2);
+            int i=starts_.get(startsOffset+length/2);
             // Create the less-than branch.
-            middleUnits[ltLength]=getElementUnit(i, unitIndex);  // middle unit
-            lessThan[ltLength]=makeBranchSubNode(start, i, unitIndex, length/2);
+            middleUnits_.append(getElementUnit(i, unitIndex));  // middle unit
+            lessThan_.add(makeBranchSubNode(start, i, unitIndex, length/2, startsOffset));
             ++ltLength;
             // Continue for the greater-or-equal branch.
             start=i;
+            startsOffset+=length/2;
             length=length-length/2;
         }
         ListBranchNode listNode=new ListBranchNode();
         // For each unit, find its elements array start and whether it has a final value.
         int unitNumber=0;
         do {
-            int i=start;
-            char unit=getElementUnit(i++, unitIndex);
-            i=indexOfElementWithNextUnit(i, unitIndex, unit);
+            char unit=getElementUnit(start, unitIndex);
+            int i=starts_.get(startsOffset+unitNumber+1);
             if(start==i-1 && unitIndex+1==getElementStringLength(start)) {
                 listNode.add(unit, getElementValue(start));
             } else {
@@ -270,10 +277,17 @@ public abstract class StringTrieBuilder {
         }
         Node node=registerNode(listNode);
         // Create the split-branch nodes.
-        while(ltLength>0) {
-            --ltLength;
-            node=registerNode(
-                new SplitBranchNode(middleUnits[ltLength], lessThan[ltLength], node));
+        if(ltLength>0) {
+            int lessThanIndex=lessThan_.size();
+            int middleUnitsIndex=middleUnits_.length();
+            do {
+                --ltLength;
+                node=registerNode(
+                    new SplitBranchNode(middleUnits_.charAt(--middleUnitsIndex),
+                                        lessThan_.get(--lessThanIndex), node));
+            } while(ltLength>0);
+            lessThan_.truncate(lessThanIndex);
+            middleUnits_.setLength(middleUnitsIndex);
         }
         return node;
     }
@@ -288,8 +302,6 @@ public abstract class StringTrieBuilder {
 
     // Number of different bytes at unitIndex.
     protected abstract int countElementUnits(int start, int limit, int unitIndex) /*const*/;
-    protected abstract int skipElementsBySomeUnits(int i, int unitIndex, int count) /*const*/;
-    protected abstract int indexOfElementWithNextUnit(int i, int unitIndex, char unit) /*const*/;
 
     protected abstract boolean matchNodesCanHaveValues() /*const*/;
 
@@ -746,4 +758,20 @@ public abstract class StringTrieBuilder {
     protected abstract int writeValueAndFinal(int i, boolean isFinal);
     protected abstract int writeValueAndType(boolean hasValue, int value, int node);
     protected abstract int writeDeltaTo(int jumpTarget);
+
+    // Temporary storage for recursive builder functions.
+    // In C++, each function stack-allocates segments of these.
+    // In Java, we reuse growable arrays to minimize allocations.
+    @SuppressWarnings("serial")
+    protected final class MyList<T> extends ArrayList<T> {
+        // ArrayList.removeRange() is protected, so we have to subclass it
+        // to truncate the list.
+        public void truncate(int newLength) {
+            removeRange(newLength, size());
+        }
+    }
+    protected MyList<Integer> starts_=new MyList<Integer>();
+    private MyList<Integer> jumpTargets_=new MyList<Integer>();
+    private MyList<Node> lessThan_=new MyList<Node>();
+    private StringBuilder middleUnits_=new StringBuilder();
 }

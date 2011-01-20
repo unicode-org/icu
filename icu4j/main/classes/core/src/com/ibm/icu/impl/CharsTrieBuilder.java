@@ -198,6 +198,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         int length=0;  // Number of different units at unitIndex.
         int i=start;
         do {
+            starts_.add(i);
             char unit=elements.get(i++).charAt(unitIndex, strings);
             while(i<limit && unit==elements.get(i).charAt(unitIndex, strings)) {
                 ++i;
@@ -205,21 +206,6 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
             ++length;
         } while(i<limit);
         return length;
-    }
-    protected int skipElementsBySomeUnits(int i, int unitIndex, int count) /*const*/ {
-        do {
-            char unit=elements.get(i++).charAt(unitIndex, strings);
-            while(unit==elements.get(i).charAt(unitIndex, strings)) {
-                ++i;
-            }
-        } while(--count>0);
-        return i;
-    }
-    protected int indexOfElementWithNextUnit(int i, int unitIndex, char unit) /*const*/ {
-        while(unit==elements.get(i).charAt(unitIndex, strings)) {
-            ++i;
-        }
-        return i;
     }
 
     protected boolean matchNodesCanHaveValues() /*const*/ { return true; }
