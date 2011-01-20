@@ -12,49 +12,95 @@ package com.ibm.icu.impl;
 
 import java.nio.CharBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Builder class for CharsTrie.
  *
+ * <p>This class is not intended for public subclassing.
+ *
  * @author Markus W. Scherer
  */
 public final class CharsTrieBuilder extends StringTrieBuilder {
+    /**
+     * Constructs an empty builder.
+     */
     public CharsTrieBuilder() {}
 
+    /**
+     * Adds a (string, value) pair.
+     * The string must be unique.
+     * The string contents will be copied; the builder does not keep
+     * a reference to the input CharSequence.
+     * @param s The input string.
+     * @param value The value associated with this char sequence.
+     * @return this
+     */
     public CharsTrieBuilder add(CharSequence s, int value) {
         if(charsLength>0) {
             // Cannot add elements after building.
             throw new IllegalStateException("Cannot add (string, value) pairs after build().");
         }
-        elements.add(new Element(s, value, strings));
+        // Binary search in the sorted elements array to find
+        // a) whether the string is a duplicate, and, if not,
+        // b) the insertion index.
+        int start=0, limit=elements.size();
+        while(start<limit) {
+            int i=(start+limit)/2;
+            int diff=elements.get(i).compareStringTo(s, strings);
+            if(diff<0) {  // elements[i]<sequence
+                start=i+1;
+            } else if(diff==0) {
+                throw new IllegalArgumentException("Duplicate string.");
+            } else {  // elements[i]>s
+                limit=i;
+            }
+        }
+        elements.add(start, new Element(s, value, strings));
         return this;
     }
 
-    public CharBuffer build(StringTrieBuilder.Option buildOption) {
+    /**
+     * Builds a CharsTrie for the add()ed data.
+     * Once built, no further data can be add()ed until clear() is called.
+     *
+     * <p>Multiple calls to build() or buildCharBuffer() return tries or buffers
+     * which share the builder's char array, without rebuilding.
+     * <em>The char array must not be modified via the buildCharBuffer() result object.</em>
+     * After clear() has been called, a new array will be used.
+     * @param buildOption Build option, see StringTrieBuilder.Option.
+     * @return A new CharsTrie for the add()ed data.
+     */
+    public CharsTrie build(StringTrieBuilder.Option buildOption) {
+        return new CharsTrie(buildCharBuffer(buildOption), 0);
+    }
+
+    /**
+     * Builds a CharsTrie for the add()ed data and byte-serializes it.
+     * Once built, no further data can be add()ed until clear() is called.
+     *
+     * <p>Multiple calls to build() or buildCharBuffer() return tries or buffers
+     * which share the builder's char array, without rebuilding.
+     * <em>Do not modify the chars in the buffer!</em>
+     * After clear() has been called, a new array will be used.
+     *
+     * <p>The serialized CharsTrie is accessible via the buffer's
+     * array()/arrayOffset()+position() or remaining()/get(char[]) etc.
+     * @param buildOption Build option, see StringTrieBuilder.Option.
+     * @return A CharBuffer with the char-serialized CharsTrie for the add()ed data.
+     *         The buffer is not read-only and array() can be called.
+     */
+    public CharBuffer buildCharBuffer(StringTrieBuilder.Option buildOption) {
+        buildImpl(buildOption);
+        return CharBuffer.wrap(chars, chars.length-charsLength, charsLength);
+    }
+
+    public void buildImpl(StringTrieBuilder.Option buildOption) {
         if(charsLength>0) {
             // Already built.
-            return CharBuffer.wrap(chars, chars.length-charsLength, charsLength).asReadOnlyBuffer();
+            return;
         }
         if(elements.isEmpty()) {
             throw new IndexOutOfBoundsException("No (string, value) pairs were added.");
-        }
-        Collections.sort(elements, compareElementStrings);
-        // Duplicate strings are not allowed.
-        long prev=elements.get(0).getStringOffsetAndLength(strings);
-        int prevOffset=(int)(prev>>32);
-        int prevLength=(int)prev;
-        int elementsLength=elements.size();
-        for(int i=1; i<elementsLength; ++i) {
-            long current=elements.get(i).getStringOffsetAndLength(strings);
-            int currentOffset=(int)(current>>32);
-            int currentLength=(int)current;
-            if(stringsAreEqual(prevOffset, prevLength, currentOffset, currentLength)) {
-                throw new IllegalArgumentException("There are duplicate strings.");
-            }
-            prevOffset=currentOffset;
-            prevLength=currentLength;
         }
         // Create and char-serialize the trie for the elements.
         int capacity=strings.length();
@@ -64,13 +110,18 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         if(chars==null || chars.length<capacity) {
             chars=new char[capacity];
         }
-        build(buildOption, elementsLength);
-        return CharBuffer.wrap(chars, chars.length-charsLength, charsLength).asReadOnlyBuffer();
+        build(buildOption, elements.size());
     }
 
+    /**
+     * Removes all (string, value) pairs.
+     * New data can then be add()ed and a new trie can be built.
+     * @return this
+     */
     public CharsTrieBuilder clear() {
         strings.setLength(0);
         elements.clear();
+        chars=null;
         charsLength=0;
         return this;
     }
@@ -88,11 +139,6 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
             strings.append(s);
         }
 
-        // C++: UnicodeString getString(strings)
-        public long getStringOffsetAndLength(CharSequence strings) /*const*/ {
-            int length=strings.charAt(stringOffset);
-            return ((long)(stringOffset+1)<<32)|length;
-        }
         public int getStringLength(CharSequence strings) /*const*/ {
             return strings.charAt(stringOffset);
         }
@@ -103,12 +149,11 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
 
         public int getValue() /*const*/ { return value; }
 
-        public int compareStringTo(Element other, CharSequence strings) /*const*/ {
+        public int compareStringTo(CharSequence other, CharSequence strings) /*const*/ {
             // TODO: Add CharSequence comparison function to UTF16 class.
             int thisOffset=stringOffset;
-            int otherOffset=other.stringOffset;
             int thisLength=strings.charAt(thisOffset++);
-            int otherLength=strings.charAt(otherOffset++);
+            int otherLength=other.length();
             int lengthDiff=thisLength-otherLength;
             int commonLength;
             if(lengthDiff<=0) {
@@ -116,8 +161,9 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
             } else {
                 commonLength=otherLength;
             }
+            int otherOffset=0;
             while(commonLength>0) {
-                int diff=(int)strings.charAt(thisOffset++)-(int)strings.charAt(otherOffset++);
+                int diff=(int)strings.charAt(thisOffset++)-(int)other.charAt(otherOffset++);
                 if(diff!=0) {
                     return diff;
                 }
@@ -133,17 +179,6 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         private int stringOffset;
         private int value;
     }
-
-    private static final class ElementStringsComparator implements Comparator<Element> {
-        public ElementStringsComparator(CharsTrieBuilder b) {
-            builder=b;
-        }
-        public int compare(Element e1, Element e2) {
-            return e1.compareStringTo(e2, builder.strings);
-        }
-        private CharsTrieBuilder builder;
-    }
-    private final ElementStringsComparator compareElementStrings=new ElementStringsComparator(this);
 
     protected int getElementStringLength(int i) /*const*/ {
         return elements.get(i).getStringLength(strings);

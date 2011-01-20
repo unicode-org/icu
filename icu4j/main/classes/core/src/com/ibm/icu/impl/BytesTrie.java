@@ -105,7 +105,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     }
 
     /**
-     * Return values for BytesTrie.next(), UCharsTrie.next() and similar methods.
+     * Return values for BytesTrie.next(), CharsTrie.next() and similar methods.
      */
     public enum Result {
         /**

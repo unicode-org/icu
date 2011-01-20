@@ -32,17 +32,17 @@ public class CharsTrieTest extends TestFmwk {
     // If there is a problem, the simpler ones are easier to step through.
 
     public void Test00Builder() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
+        builder_.clear();
         try {
-            builder.build(StringTrieBuilder.Option.FAST);
+            builder_.build(StringTrieBuilder.Option.FAST);
             errln("CharsTrieBuilder().build() did not throw IndexOutOfBoundsException");
             return;
         } catch(IndexOutOfBoundsException e) {
             // good
         }
         try {
-            builder.add("=", 0).add("=", 1).build(StringTrieBuilder.Option.FAST);
-            errln("CharsTrieBuilder.build() did not detect duplicates");
+            builder_.add("=", 0).add("=", 1);
+            errln("CharsTrieBuilder.add() did not detect duplicates");
             return;
         } catch(IllegalArgumentException e) {
             // good
@@ -226,9 +226,7 @@ public class CharsTrieTest extends TestFmwk {
             // "\u4dff\\U000103ff"
             new StringAndValue("\u4dff\ud800\udfff", 99999)
         };
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildTrie(data, data.length, builder, StringTrieBuilder.Option.FAST);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildTrie(data, data.length, StringTrieBuilder.Option.FAST);
         BytesTrie.Result result;
         if( (result=trie.nextForCodePoint(0x4dff))!=BytesTrie.Result.NO_VALUE || result!=trie.current() ||
             (result=trie.nextForCodePoint(0x10000))!=BytesTrie.Result.NO_VALUE || result!=trie.current() ||
@@ -293,24 +291,22 @@ public class CharsTrieTest extends TestFmwk {
         private int num;
     };
 
-    private CharBuffer buildLargeTrie(CharsTrieBuilder builder, int numUniqueFirst) {
+    private CharsTrie buildLargeTrie(int numUniqueFirst) {
         Generator gen=new Generator();
-        builder.clear();
+        builder_.clear();
         while(gen.countUniqueFirstChars()<numUniqueFirst) {
-            builder.add(gen.getString(), gen.getValue());
+            builder_.add(gen.getString(), gen.getValue());
             gen.next();
         }
         logln("buildLargeTrie("+numUniqueFirst+") added "+gen.getIndex()+" strings");
-        CharBuffer result=builder.build(StringTrieBuilder.Option.FAST);
-        logln("serialized trie size: "+result.length()+" chars\n");
-        return result;
+        CharBuffer trieChars=builder_.buildCharBuffer(StringTrieBuilder.Option.FAST);
+        logln("serialized trie size: "+trieChars.length()+" chars\n");
+        return new CharsTrie(trieChars, 0);
     }
 
     // Exercise a large branch node.
     public void Test37LargeTrie() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildLargeTrie(builder, 1111);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildLargeTrie(1111);
         Generator gen=new Generator();
         while(gen.countUniqueFirstChars()<1111) {
             CharSequence x=gen.getString();
@@ -337,7 +333,7 @@ public class CharsTrieTest extends TestFmwk {
         }
     }
 
-    private CharBuffer buildMonthsTrie(CharsTrieBuilder builder, StringTrieBuilder.Option buildOption) {
+    private CharsTrie buildMonthsTrie(StringTrieBuilder.Option buildOption) {
         // All types of nodes leading to the same value,
         // for code coverage of recursive functions.
         // In particular, we need a lot of branches on some single level
@@ -374,13 +370,11 @@ public class CharsTrieTest extends TestFmwk {
             new StringAndValue("jun.", 6),
             new StringAndValue("june", 6)
         };
-        return buildTrie(data, data.length, builder, buildOption);
+        return buildTrie(data, data.length, buildOption);
     }
 
     public void Test40GetUniqueValue() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildMonthsTrie(builder, StringTrieBuilder.Option.FAST);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildMonthsTrie(StringTrieBuilder.Option.FAST);
         long uniqueValue;
         if((uniqueValue=trie.getUniqueValue())!=0) {
             errln("unique value at root");
@@ -413,9 +407,7 @@ public class CharsTrieTest extends TestFmwk {
     }
 
     public void Test41GetNextChars() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildMonthsTrie(builder, StringTrieBuilder.Option.SMALL);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildMonthsTrie(StringTrieBuilder.Option.SMALL);
         StringBuilder buffer=new StringBuilder();
         int count=trie.getNextChars(buffer);
         if(count!=2 || !"aj".contentEquals(buffer)) {
@@ -461,9 +453,7 @@ public class CharsTrieTest extends TestFmwk {
     }
 
     public void Test50IteratorFromBranch() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildMonthsTrie(builder, StringTrieBuilder.Option.FAST);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildMonthsTrie(StringTrieBuilder.Option.FAST);
         // Go to a branch node.
         trie.next('j');
         trie.next('a');
@@ -505,9 +495,7 @@ public class CharsTrieTest extends TestFmwk {
     }
 
     public void Test51IteratorFromLinearMatch() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildMonthsTrie(builder, StringTrieBuilder.Option.SMALL);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildMonthsTrie(StringTrieBuilder.Option.SMALL);
         // Go into a linear-match node.
         trie.next('j');
         trie.next('a');
@@ -528,9 +516,8 @@ public class CharsTrieTest extends TestFmwk {
     }
 
     public void Test52TruncatingIteratorFromRoot() {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildMonthsTrie(builder, StringTrieBuilder.Option.FAST);
-        CharsTrie.Iterator iter=CharsTrie.iterator(trieChars, 0, 4);
+        CharsTrie trie=buildMonthsTrie(StringTrieBuilder.Option.FAST);
+        CharsTrie.Iterator iter=trie.iterator(4);
         // Expected data: Same as in buildMonthsTrie(), except only the first 4 characters
         // of each string, and no string duplicates from the truncation.
         final StringAndValue[] data={
@@ -573,9 +560,7 @@ public class CharsTrieTest extends TestFmwk {
             new StringAndValue("abcdepq", 200),
             new StringAndValue("abcdeyz", 3000)
         };
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildTrie(data, data.length, builder, StringTrieBuilder.Option.FAST);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildTrie(data, data.length, StringTrieBuilder.Option.FAST);
         // Go into a linear-match node.
         trie.next('a');
         trie.next('b');
@@ -596,9 +581,7 @@ public class CharsTrieTest extends TestFmwk {
             new StringAndValue("abcdepq", 200),
             new StringAndValue("abcdeyz", 3000)
         };
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildTrie(data, data.length, builder, StringTrieBuilder.Option.FAST);
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+        CharsTrie trie=buildTrie(data, data.length, StringTrieBuilder.Option.FAST);
         // Go into a linear-match node.
         trie.next('a');
         trie.next('b');
@@ -616,6 +599,20 @@ public class CharsTrieTest extends TestFmwk {
         checkIterator(iter.reset(), expected);
     }
 
+    public void Test59IteratorFromChars() {
+        final StringAndValue[] data={
+            new StringAndValue("mm", 3),
+            new StringAndValue("mmm", 33),
+            new StringAndValue("mmnop", 333)
+        };
+        builder_.clear();
+        for(StringAndValue item : data) {
+            builder_.add(item.s, item.value);
+        }
+        CharBuffer trieChars=builder_.buildCharBuffer(StringTrieBuilder.Option.FAST);
+        checkIterator(CharsTrie.iterator(trieChars, 0, 0), data);
+    }
+
     private void checkData(StringAndValue data[]) {
         checkData(data, data.length);
     }
@@ -628,17 +625,16 @@ public class CharsTrieTest extends TestFmwk {
     }
 
     private void checkData(StringAndValue[] data, int dataLength, StringTrieBuilder.Option buildOption) {
-        CharsTrieBuilder builder=new CharsTrieBuilder();
-        CharBuffer trieChars=buildTrie(data, dataLength, builder, buildOption);
-        checkFirst(trieChars, data, dataLength);
-        checkNext(trieChars, data, dataLength);
-        checkNextWithState(trieChars, data, dataLength);
-        checkNextString(trieChars, data, dataLength);
-        checkIterator(trieChars, data, dataLength);
+        CharsTrie trie=buildTrie(data, dataLength, buildOption);
+        checkFirst(trie, data, dataLength);
+        checkNext(trie, data, dataLength);
+        checkNextWithState(trie, data, dataLength);
+        checkNextString(trie, data, dataLength);
+        checkIterator(trie, data, dataLength);
     }
 
-    private CharBuffer buildTrie(StringAndValue data[], int dataLength,
-                                 CharsTrieBuilder builder, StringTrieBuilder.Option buildOption) {
+    private CharsTrie buildTrie(StringAndValue data[], int dataLength,
+                                StringTrieBuilder.Option buildOption) {
         // Add the items to the trie builder in an interesting (not trivial, not random) order.
         int index, step;
         if((dataLength&1)!=0) {
@@ -653,24 +649,34 @@ public class CharsTrieTest extends TestFmwk {
             index=dataLength-1;
             step=-1;
         }
-        builder.clear();
+        builder_.clear();
         for(int i=0; i<dataLength; ++i) {
-            builder.add(data[index].s, data[index].value);
+            builder_.add(data[index].s, data[index].value);
             index=(index+step)%dataLength;
         }
-        CharBuffer result=builder.build(buildOption);
+        CharsTrie trie=builder_.build(buildOption);
         try {
-            builder.add("zzz", 999);
+            builder_.add("zzz", 999);
             errln("builder.build().add(zzz) did not throw IllegalStateException");
         } catch(IllegalStateException e) {
             // good
         }
-        logln("serialized trie size: "+result.length()+" chars\n");
-        return result;
+        CharBuffer trieChars=builder_.buildCharBuffer(buildOption);
+        // The following verifies that we can call array() and arrayOffset().
+        logln("serialized trie size: "+trieChars.remaining()+" chars "+
+              " in array of capacity "+trieChars.array().length+
+              " at arrayOffset "+trieChars.arrayOffset());
+        // Tries from either build() method should be identical but
+        // CharsTrie does not implement equals().
+        // We just return either one.
+        if((dataLength&1)!=0) {
+            return trie;
+        } else {
+            return new CharsTrie(trieChars, 0);
+        }
     }
 
-    private void checkFirst(CharSequence trieChars, StringAndValue[] data, int dataLength) {
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+    private void checkFirst(CharsTrie trie, StringAndValue[] data, int dataLength) {
         for(int i=0; i<dataLength; ++i) {
             if(data[i].s.length()==0) {
                 continue;  // skip empty string
@@ -704,10 +710,10 @@ public class CharsTrieTest extends TestFmwk {
                                     c, data[i].s));
             }
         }
+        trie.reset();
     }
 
-    private void checkNext(CharSequence trieChars, StringAndValue[] data, int dataLength) {
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+    private void checkNext(CharsTrie trie, StringAndValue[] data, int dataLength) {
         CharsTrie.State state=new CharsTrie.State(); 
         for(int i=0; i<dataLength; ++i) {
             String expectedString=data[i].s;
@@ -782,8 +788,7 @@ public class CharsTrieTest extends TestFmwk {
         }
     }
 
-    private void checkNextWithState(CharSequence trieChars, StringAndValue[] data, int dataLength) {
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+    private void checkNextWithState(CharsTrie trie, StringAndValue[] data, int dataLength) {
         CharsTrie.State noState=new CharsTrie.State(), state=new CharsTrie.State();
         for(int i=0; i<dataLength; ++i) {
             if((i&1)==0) {
@@ -840,8 +845,7 @@ public class CharsTrieTest extends TestFmwk {
 
     // next(string) is also tested in other functions,
     // but here we try to go partway through the string, and then beyond it.
-    private void checkNextString(CharSequence trieChars, StringAndValue[] data, int dataLength) {
-        CharsTrie trie=new CharsTrie(trieChars, 0);
+    private void checkNextString(CharsTrie trie, StringAndValue[] data, int dataLength) {
         for(int i=0; i<dataLength; ++i) {
             String expectedString=data[i].s;
             int stringLength=expectedString.length();
@@ -858,9 +862,8 @@ public class CharsTrieTest extends TestFmwk {
         }
     }
 
-    private void checkIterator(CharSequence trieChars, StringAndValue[] data, int dataLength) {
-        CharsTrie.Iterator iter=CharsTrie.iterator(trieChars, 0, 0);
-        checkIterator(iter, data, dataLength);
+    private void checkIterator(CharsTrie trie, StringAndValue[] data, int dataLength) {
+        checkIterator(trie.iterator(), data, dataLength);
     }
 
     private void checkIterator(CharsTrie.Iterator iter, StringAndValue data[]) {
@@ -896,4 +899,6 @@ public class CharsTrieTest extends TestFmwk {
             // good
         }
     }
+
+    private CharsTrieBuilder builder_=new CharsTrieBuilder();
 }

@@ -22,11 +22,22 @@ import com.ibm.icu.text.UTF16;
  * Traverses a char-serialized data structure with minimal state,
  * for mapping strings (16-bit-unit sequences) to non-negative integer values.
  *
+ * <p>This class is not intended for public subclassing.
+ *
  * @author Markus W. Scherer
  */
 public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     /**
      * Constructs a CharsTrie reader instance.
+     *
+     * <p>The CharSequence must contain a copy of a char sequence from the CharsTrieBuilder,
+     * with the offset indicating the first char of that sequence.
+     * The CharsTrie object will not read more chars than
+     * the CharsTrieBuilder generated in the corresponding build() call.
+     *
+     * <p>The CharSequence is not copied/cloned and must not be modified while
+     * the CharsTrie object is in use.
+     *
      * @param trieChars CharSequence that contains the serialized trie.
      * @param offset Root offset of the trie in the CharSequence.
      */
@@ -115,6 +126,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     /**
      * Traverses the trie from the initial state for this input char.
      * Equivalent to reset().next(inUnit).
+     * @param inUnit Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
      */
     public Result first(int inUnit) {
@@ -126,6 +138,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Traverses the trie from the initial state for the
      * one or two UTF-16 code units for this input code point.
      * Equivalent to reset().nextForCodePoint(cp).
+     * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
      */
     public Result firstForCodePoint(int cp) {
@@ -138,6 +151,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
 
     /**
      * Traverses the trie from the current state for this input char.
+     * @param inUnit Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
      */
     public Result next(int inUnit) {
@@ -165,6 +179,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     /**
      * Traverses the trie from the current state for the
      * one or two UTF-16 code units for this input code point.
+     * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
      */
     public Result nextForCodePoint(int cp) {

@@ -5,9 +5,9 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -128,8 +128,8 @@ public class TrieMapTest extends TestFmwk {
 
     public void TestTimeIteration() {
         long comparisonTime = timeIteration(unicodeTestMap, 0, null, 0);
-        timeIteration(unicodeTestMap, comparisonTime, Style.BYTES, 2);
-        timeIteration(unicodeTestMap, comparisonTime, Style.CHARS, 1.5);
+        timeIteration(unicodeTestMap, comparisonTime, Style.BYTES, 5);
+        timeIteration(unicodeTestMap, comparisonTime, Style.CHARS, 3);
     }
 
     public long timeIteration(Map<String, Integer> testMap, long comparisonTime, Style style, double ratioToMap) {
@@ -251,10 +251,10 @@ public class TrieMapTest extends TestFmwk {
 
     public void TestTimeBuilding() {
         long comparisonTime = timeBuilding(unicodeTestMap, 0, null, Option.SMALL, 0);
-        timeBuilding(unicodeTestMap, comparisonTime, Style.BYTES, Option.SMALL, 10);
-        timeBuilding(unicodeTestMap, comparisonTime, Style.BYTES, Option.FAST, 9);
-        timeBuilding(unicodeTestMap, comparisonTime, Style.CHARS, Option.SMALL, 4);
-        timeBuilding(unicodeTestMap, comparisonTime, Style.CHARS, Option.FAST, 3);
+        timeBuilding(unicodeTestMap, comparisonTime, Style.BYTES, Option.SMALL, 20);
+        timeBuilding(unicodeTestMap, comparisonTime, Style.BYTES, Option.FAST, 20);
+        timeBuilding(unicodeTestMap, comparisonTime, Style.CHARS, Option.SMALL, 20);
+        timeBuilding(unicodeTestMap, comparisonTime, Style.CHARS, Option.FAST, 20);
     }
 
     public long timeBuilding(Map<String, Integer> testmap, long comparisonTime, Style style, Option option, double ratioToMap) {
@@ -350,8 +350,8 @@ public class TrieMapTest extends TestFmwk {
 
         long comparisonTime = timeGet(keys, unicodeTestMap, 0, null, 0);
         timeGet(keys, unicodeTestMap, comparisonTime, null, 0);
-        timeGet(keys, unicodeTestMap, comparisonTime, Style.BYTES, 1);
-        timeGet(keys, unicodeTestMap, comparisonTime, Style.CHARS, 1);
+        timeGet(keys, unicodeTestMap, comparisonTime, Style.BYTES, 3);
+        timeGet(keys, unicodeTestMap, comparisonTime, Style.CHARS, 3);
     }
 
     public long timeGet(ArrayList<String> keys, Map<String, Integer> testmap, long comparisonTime, Style style, int ratioToMap) {

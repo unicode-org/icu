@@ -5,7 +5,7 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
-import java.nio.CharBuffer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -478,18 +478,11 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
         }
 
         public TrieMap<V> build(Option option) {
-            // should be the following, parallel to BytesTrie
-            //int size = btBuilder.buildCharBuffer(option).remaining();
-            //CharsTrie bytesTrie = btBuilder.build(option);
-
-            //TODO fix this
-            CharBuffer buffer = builder.build(option);
-            // warning: toString() goes to limit-1, not to remaining()-1!
-            int size = 2*buffer.remaining();
-            CharsTrie bytesTrie = new CharsTrie(buffer, 0);
+            int size = 2*builder.buildCharBuffer(option).remaining();
+            CharsTrie charsTrie = builder.build(option);
             @SuppressWarnings("unchecked")
             V[] intToValueArray = intToValueTemp.toArray((V[])(new Object[intToValueTemp.size()]));
-            return new CharsTrieMap<V>(bytesTrie, intToValueArray, size);
+            return new CharsTrieMap<V>(charsTrie, intToValueArray, size);
         }
     }
     
