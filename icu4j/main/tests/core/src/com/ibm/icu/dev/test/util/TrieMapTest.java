@@ -43,8 +43,12 @@ public class TrieMapTest extends TestFmwk {
     protected void init() throws Exception {
         super.init();
         if (unicodeTestMap.size() == 0) {
-            
-            useSmallList = getInclusion() < 5;
+            if (getInclusion() < 5) {
+                logln("\tSmall version:\t to get more accurate figures and test for reasonable times, use -e5 or more");
+            } else {
+                REPEAT *= (getInclusion() - 4);
+                useSmallList = false;
+            }
 
             int i = 0;
             UnicodeSet testSet = new UnicodeSet("[[:^C:]-[:sc=han:]]");
@@ -85,11 +89,6 @@ public class TrieMapTest extends TestFmwk {
             for (String key : unicodeTestMap.keySet()) {
                 charCount += key.length();
             }
-            if (useSmallList) {
-                logln("\tSmall version:\t to get more accurate figures and test for reasonable times, use -e 5 or more");
-            } else {
-                REPEAT *= (getInclusion() - 5);
-            }
             logln("\tTest Data Elements:\t\t\t" + nf.format(unicodeTestMap.size()));
             logln("\tTotal chars:\t\t\t" + nf.format(charCount));
         }
@@ -121,7 +120,7 @@ public class TrieMapTest extends TestFmwk {
         if (testmap.size() == 0) {
             return;
         }
-        TrieMap<Integer> trieMap = TrieMap.Builder.with(style, testmap).build(Option.SMALL);
+        TrieMap<Integer> trieMap = TrieMap.Builder.with(style, testmap).build(Option.FAST);
         //logln(trieMap.toString());
         for (Entry<String, Integer> entry : testmap.entrySet()) {
             Integer value = entry.getValue();
@@ -185,7 +184,7 @@ public class TrieMapTest extends TestFmwk {
         if (testMap.size() == 0) {
             return;
         }
-        TrieMap<Integer> trieMap = TrieMap.BytesBuilder.with(style, testMap).build(Option.SMALL);
+        TrieMap<Integer> trieMap = TrieMap.BytesBuilder.with(style, testMap).build(Option.FAST);
         TreeMap<String,Integer> expected = new TreeMap<String, Integer>(testMap);
         Iterator<Entry<CharSequence, Integer>> trieIterator = trieMap.iterator();
         Iterator<Entry<String, Integer>> mapIterator = expected.entrySet().iterator();
@@ -222,7 +221,7 @@ public class TrieMapTest extends TestFmwk {
         TrieMap<String> trieMap = TrieMap.BytesBuilder.with(style, "abc", "first")
         .add("cdab", "fifth")
         .add("abcde", "second")
-        .add("abdfg", "third").build(Option.SMALL);
+        .add("abdfg", "third").build(Option.FAST);
 
         String string = "xabcdab abcde abdfg";
         @SuppressWarnings("unchecked")

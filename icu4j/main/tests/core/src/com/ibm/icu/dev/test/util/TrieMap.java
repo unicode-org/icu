@@ -462,7 +462,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
         }
 
         public TrieMap<V> build(Option option) {
-            int size = 2*builder.buildCharBuffer(option).remaining();
+            int size = 2*builder.buildCharSequence(option).length();
             CharsTrie charsTrie = builder.build(option);
             @SuppressWarnings("unchecked")
             V[] intToValueArray = intToValueTemp.toArray((V[])(new Object[intToValueTemp.size()]));
@@ -476,15 +476,15 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
      * self-synchronizing, and is not intended for general usage
      * <pre>
      * 0000..007F - 0xxx xxxx
-     * 0000..7E00 - 1yyy yyyy xxxx xxxx
-     * 4000..FFFF - 1111 1111 yyyy yyyy xxxx xxxx
+     * 0000..7EFF - 1yyy yyyy xxxx xxxx
+     * 7F00..FFFF - 1111 1111 yyyy yyyy xxxx xxxx
      * </pre>
      */
     static class ByteConverter {
         public static int getBytes(char source, byte[] bytes, int limit) {
             if (source < 0x80) {
                 bytes[limit++] = (byte)source;
-            } else if (source < 0x7E00) {
+            } else if (source < 0x7F00) {
                 bytes[limit++] = (byte)(0x80 | (source>>8));
                 bytes[limit++] = (byte)source;
             } else {
@@ -527,7 +527,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
                 int b2 = 0xFF & bytes[start++];
                 output[0] = (char)((b1 << 8) | b2);
             } else {
-                int b2 = 0xFF & bytes[start++];
+                int b2 = bytes[start++];
                 int b3 = 0xFF & bytes[start++];
                 output[0] = (char)((b2 << 8) | b3);
             }
@@ -546,7 +546,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
                     int b2 = 0xFF & entry.byteAt(i++);
                     stringBuilder.append((char)((b1 << 8) | b2));
                 } else {
-                    int b2 = 0xFF & entry.byteAt(i++);
+                    int b2 = entry.byteAt(i++);
                     int b3 = 0xFF & entry.byteAt(i++);
                     stringBuilder.append((char)((b2 << 8) | b3));
                 }

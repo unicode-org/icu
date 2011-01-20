@@ -10,7 +10,6 @@
 
 package com.ibm.icu.dev.test.util;
 
-import java.nio.CharBuffer;
 import java.util.NoSuchElementException;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -299,7 +298,7 @@ public class CharsTrieTest extends TestFmwk {
             gen.next();
         }
         logln("buildLargeTrie("+numUniqueFirst+") added "+gen.getIndex()+" strings");
-        CharBuffer trieChars=builder_.buildCharBuffer(StringTrieBuilder.Option.FAST);
+        CharSequence trieChars=builder_.buildCharSequence(StringTrieBuilder.Option.FAST);
         logln("serialized trie size: "+trieChars.length()+" chars\n");
         return new CharsTrie(trieChars, 0);
     }
@@ -609,7 +608,7 @@ public class CharsTrieTest extends TestFmwk {
         for(StringAndValue item : data) {
             builder_.add(item.s, item.value);
         }
-        CharBuffer trieChars=builder_.buildCharBuffer(StringTrieBuilder.Option.FAST);
+        CharSequence trieChars=builder_.buildCharSequence(StringTrieBuilder.Option.FAST);
         checkIterator(CharsTrie.iterator(trieChars, 0, 0), data);
     }
 
@@ -661,11 +660,8 @@ public class CharsTrieTest extends TestFmwk {
         } catch(IllegalStateException e) {
             // good
         }
-        CharBuffer trieChars=builder_.buildCharBuffer(buildOption);
-        // The following verifies that we can call array() and arrayOffset().
-        logln("serialized trie size: "+trieChars.remaining()+" chars "+
-              " in array of capacity "+trieChars.array().length+
-              " at arrayOffset "+trieChars.arrayOffset());
+        CharSequence trieChars=builder_.buildCharSequence(buildOption);
+        logln("serialized trie size: "+trieChars.length()+" chars");
         // Tries from either build() method should be identical but
         // CharsTrie does not implement equals().
         // We just return either one.

@@ -71,7 +71,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * @return A new CharsTrie for the add()ed data.
      */
     public CharsTrie build(StringTrieBuilder.Option buildOption) {
-        return new CharsTrie(buildCharBuffer(buildOption), 0);
+        return new CharsTrie(buildCharSequence(buildOption), 0);
     }
 
     /**
@@ -89,7 +89,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * @return A CharBuffer with the char-serialized CharsTrie for the add()ed data.
      *         The buffer is not read-only and array() can be called.
      */
-    public CharBuffer buildCharBuffer(StringTrieBuilder.Option buildOption) {
+    public CharSequence buildCharSequence(StringTrieBuilder.Option buildOption) {
         buildImpl(buildOption);
         return CharBuffer.wrap(chars, chars.length-charsLength, charsLength);
     }
