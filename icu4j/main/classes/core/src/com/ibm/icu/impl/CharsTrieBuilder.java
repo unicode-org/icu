@@ -63,9 +63,8 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * Builds a CharsTrie for the add()ed data.
      * Once built, no further data can be add()ed until clear() is called.
      *
-     * <p>Multiple calls to build() or buildCharBuffer() return tries or buffers
+     * <p>Multiple calls to build() or buildCharSequence() return tries or sequences
      * which share the builder's char array, without rebuilding.
-     * <em>The char array must not be modified via the buildCharBuffer() result object.</em>
      * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A new CharsTrie for the add()ed data.
@@ -75,19 +74,14 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
     }
 
     /**
-     * Builds a CharsTrie for the add()ed data and byte-serializes it.
+     * Builds a CharsTrie for the add()ed data and char-serializes it.
      * Once built, no further data can be add()ed until clear() is called.
      *
-     * <p>Multiple calls to build() or buildCharBuffer() return tries or buffers
+     * <p>Multiple calls to build() or buildCharSequence() return tries or sequences
      * which share the builder's char array, without rebuilding.
-     * <em>Do not modify the chars in the buffer!</em>
      * After clear() has been called, a new array will be used.
-     *
-     * <p>The serialized CharsTrie is accessible via the buffer's
-     * array()/arrayOffset()+position() or remaining()/get(char[]) etc.
      * @param buildOption Build option, see StringTrieBuilder.Option.
-     * @return A CharBuffer with the char-serialized CharsTrie for the add()ed data.
-     *         The buffer is not read-only and array() can be called.
+     * @return A CharSequence with the char-serialized CharsTrie for the add()ed data.
      */
     public CharSequence buildCharSequence(StringTrieBuilder.Option buildOption) {
         buildImpl(buildOption);
