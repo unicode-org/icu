@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and    *
+* Copyright (C) 2009-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -85,6 +85,25 @@
 
     <target name="@build-all">
         <antcall target="_all.${ant.project.name}"/>
+    </target>
+
+    <target name="@full-locale-names">
+        <echo message="Generating ${res.dir}/fullLocaleNames.lst"/>
+        <pathconvert pathsep="${line.separator}" property="full.locale.names">
+            <fileset dir="${res.dir}">
+                <include name="??.res"/>
+                <include name="??_*.res"/>
+                <include name="???.res"/>
+                <include name="???_*.res"/>
+                <include name="root.res"/>
+                <exclude name="res_index.res"/>
+            </fileset>
+            <chainedmapper>
+                <flattenmapper/>
+                <globmapper from="*.res" to="*"/>
+            </chainedmapper>
+        </pathconvert>
+        <echo message="${full.locale.names}" file="${res.dir}/fullLocaleNames.lst"/>
     </target>
 
     <!-- Dependencies -->
