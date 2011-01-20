@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2010, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1093,7 +1093,7 @@ public class MessageFormat extends UFormat {
      * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
-    public static String format(String pattern, Object[] arguments) {
+    public static String format(String pattern, Object... arguments) {
         MessageFormat temp = new MessageFormat(pattern);
         return temp.format(arguments);
     }
