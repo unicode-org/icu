@@ -31,7 +31,7 @@ import com.ibm.icu.impl.Utility;
 
 
 public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
-    
+
     public enum Style {BYTES, CHARS}
 
     private static final boolean DEBUG = true;
@@ -48,7 +48,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
     public int keyByteSize() {
         return size;
     }
-    
+
     public static abstract class Builder<V> {
         protected List<V> intToValueTemp = new ArrayList<V>();
         protected Map<V, Integer> valueToIntegerTemp = new HashMap<V, Integer>();
@@ -114,25 +114,25 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
                 result = limit == 1 ? bytesTrie.next(bytes[0]) : bytesTrie.next(bytes, 0, limit);
             }
             return result.hasValue() ? intToValue[bytesTrie.getValue()] : null;
-            
-//            int length = test.length();
-//            if (length == 0) {
-//                return null;
-//            }
-//            bytesTrie.reset();
-//            Result result = null;
-//            byte[] bytes = new byte[3];
-//            for (int i = 0; i < length; ++i) {
-//                char c = test.charAt(i);
-//                int limit = ByteConverter.getBytes(c, bytes, 0);
-//                for (int j = 0; j < limit; ++j) {
-//                    result = bytesTrie.next(bytes[j]&0xFF);
-//                    if (!result.matches()) {
-//                        return null;
-//                    }
-//                }
-//            }
-//            return result.hasValue() ? intToValue[bytesTrie.getValue()] : null;
+
+            //            int length = test.length();
+            //            if (length == 0) {
+            //                return null;
+            //            }
+            //            bytesTrie.reset();
+            //            Result result = null;
+            //            byte[] bytes = new byte[3];
+            //            for (int i = 0; i < length; ++i) {
+            //                char c = test.charAt(i);
+            //                int limit = ByteConverter.getBytes(c, bytes, 0);
+            //                for (int j = 0; j < limit; ++j) {
+            //                    result = bytesTrie.next(bytes[j]&0xFF);
+            //                    if (!result.matches()) {
+            //                        return null;
+            //                    }
+            //                }
+            //            }
+            //            return result.hasValue() ? intToValue[bytesTrie.getValue()] : null;
         }
 
         public  String toString() {
@@ -307,7 +307,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
             return new BytesTrieMap<V>(bytesTrie, intToValueArray, size);
         }
     }
-        
+
     private static class CharsTrieMap<V> extends TrieMap<V> {
         private final CharsTrie charsTrie;
 
@@ -315,26 +315,10 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
             super(intToValue, size);
             this.charsTrie = charsTrie;
         }
+
         public V get(CharSequence test) {
-            
-                Result result = charsTrie.reset().next(test, 0, test.length());
-                return result.hasValue() ? intToValue[charsTrie.getValue()] : null;
-            
-//            int length = test.length();
-//            if (length == 0) {
-//                return null;
-//            }
-//            charsTrie.reset();
-//            Result result = null;
-//            byte[] bytes = new byte[3];
-//            for (int i = 0; i < length; ++i) {
-//                char c = test.charAt(i);
-//                result = charsTrie.next(c);
-//                if (!result.matches()) {
-//                    return null;
-//                }
-//            }
-//            return result.hasValue() ? intToValue[charsTrie.getValue()] : null;
+            Result result = charsTrie.reset().next(test, 0, test.length());
+            return result.hasValue() ? intToValue[charsTrie.getValue()] : null;
         }
 
         public  String toString() {
@@ -415,13 +399,13 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
                 while (current < text.length()) {
                     char c = text.charAt(current++);
                     Result result = charsTrie.next(c);
-                        if (result.hasValue()) {
-                            value = intToValue[charsTrie.getValue()];
-                            return result.hasNext();
-                        } else if (!result.matches()) {
-                            value = null;
-                            return false;
-                        
+                    if (result.hasValue()) {
+                        value = intToValue[charsTrie.getValue()];
+                        return result.hasNext();
+                    } else if (!result.matches()) {
+                        value = null;
+                        return false;
+
                     }
                 }
                 value = null;
@@ -485,7 +469,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
             return new CharsTrieMap<V>(charsTrie, intToValueArray, size);
         }
     }
-    
+
 
     /**
      * Supports the following format for encoding chars (Unicode 16-bit code units). The format is slightly simpler and more compact than UTF8, but also maintains ordering. It is not, however
@@ -589,7 +573,7 @@ public abstract class TrieMap<V> implements Iterable<Entry<CharSequence,V>>{
         }
         return buffer.toString();
     }
-    
+
     public static String toString(CharsTrie bytesTrie2, String keyValueSeparator, String itemSeparator) {
         StringBuilder buffer = new StringBuilder();
         CharsTrie.Iterator iterator = bytesTrie2.iterator();
