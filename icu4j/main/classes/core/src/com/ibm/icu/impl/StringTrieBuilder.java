@@ -66,6 +66,15 @@ public abstract class StringTrieBuilder {
             }
             if(buildOption==Option.FAST) {
                 state=State.BUILDING_FAST;
+                // Building "fast" is somewhat faster (25..50% in some test)
+                // because it makes registerNode() return the input node
+                // rather than checking for duplicates.
+                // As a result, we sometimes write larger trie serializations.
+                //
+                // In either case we need to fix-up linear-match nodes (for their maximum length)
+                // and branch nodes (turning dynamic branch nodes into trees of
+                // runtime-equivalent nodes), but the HashMap/hashCode()/equals() are omitted for
+                // nodes other than final values.
             } else {
                 state=State.BUILDING_SMALL;
             }
@@ -77,17 +86,12 @@ public abstract class StringTrieBuilder {
         case BUILT:
             return;  // Nothing more to do.
         }
-        // Note: Building should be a little faster if we skipped registerNode() calls
-        // (or make it return the input node without checking whether it is unique).
-        // We would still need to fix-up linear-match nodes (for their maximum length)
-        // and branch nodes (turning dynamic branch nodes into trees of runtime-equivalent nodes),
-        // but the HashMap/hashCode()/equals() would be omitted.
-        //
-        // Drawbacks:
-        // a) Requires an API option, and users having to think about the choice.
-        // b) Requires additional testing. (And unit tests take more time.)
-        // c) Somewhat more code and complexity.
-        // d) Sometimes larger trie serializations when duplicates could be removed.
+        // Implementation note:
+        // We really build three versions of the trie.
+        // The first is a fully dynamic trie, built successively by addImpl().
+        // Then we call root.register() to turn it into a tree of nodes
+        // which is 1:1 equivalent to the runtime data structure.
+        // Finally, root.markRightEdgesFirst() and root.write() write that serialized form.
         root=root.register(this);
         root.markRightEdgesFirst(-1);
         root.write(this);
