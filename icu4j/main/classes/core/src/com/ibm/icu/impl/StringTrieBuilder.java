@@ -64,11 +64,16 @@ public abstract class StringTrieBuilder {
             if(root==null) {
                 throw new IndexOutOfBoundsException("No (string, value) pairs were added.");
             }
-            state=State.BUILDING;
+            if(buildOption==Option.FAST) {
+                state=State.BUILDING_FAST;
+            } else {
+                state=State.BUILDING_SMALL;
+            }
             break;
-        case BUILDING:
+        case BUILDING_FAST:
+        case BUILDING_SMALL:
             // Building must have failed.
-            throw new IndexOutOfBoundsException("Builder failed and must be clear()ed.");
+            throw new IllegalStateException("Builder failed and must be clear()ed.");
         case BUILT:
             return;  // Nothing more to do.
         }
@@ -98,20 +103,24 @@ public abstract class StringTrieBuilder {
 
     /**
      * Makes sure that there is only one unique node registered that is
-     * equivalent to newNode.
+     * equivalent to newNode, unless BUILDING_FAST.
      * @param newNode Input node. The builder takes ownership.
      * @return newNode if it is the first of its kind, or
      *         an equivalent node if newNode is a duplicate.
      */
     private final Node registerNode(Node newNode) {
-        Node old=nodes.get(newNode);
-        if(old!=null) {
-            return old;
+        if(state==State.BUILDING_FAST) {
+            return newNode;
+        }
+        // BUILDING_SMALL
+        Node oldNode=nodes.get(newNode);
+        if(oldNode!=null) {
+            return oldNode;
         }
         // If put() returns a non-null value from an equivalent, previously
         // registered node, then get() failed to find that and we will leak newNode.
-        Node oldValue=nodes.put(newNode, newNode);
-        assert(oldValue==null);
+        oldNode=nodes.put(newNode, newNode);
+        assert(oldNode==null);
         return newNode;
     }
 
@@ -123,13 +132,14 @@ public abstract class StringTrieBuilder {
      * @return A FinalValueNode with the given value.
      */
     private final ValueNode registerFinalValue(int value) {
+        // We always register final values because while ADDING
+        // we do not know yet whether we will build fast or small.
         lookupFinalValueNode.setFinalValue(value);
         Node oldNode=nodes.get(lookupFinalValueNode);
         if(oldNode!=null) {
             return (ValueNode)oldNode;
         }
-        ValueNode newNode=new ValueNode();
-        newNode.setFinalValue(value);
+        ValueNode newNode=new ValueNode(value);
         // If put() returns a non-null value from an equivalent, previously
         // registered node, then get() failed to find that and we will leak newNode.
         oldNode=nodes.put(newNode, newNode);
@@ -223,6 +233,10 @@ public abstract class StringTrieBuilder {
     // match nodes with intermediate values.
     private static class ValueNode extends Node {
         public ValueNode() {}
+        public ValueNode(int v) {
+            hasValue=true;
+            value=v;
+        }
         public final void setValue(int v) {
             assert(!hasValue);
             hasValue=true;
@@ -776,10 +790,10 @@ public abstract class StringTrieBuilder {
     protected abstract int writeValueAndType(boolean hasValue, int value, int node);
     protected abstract int writeDeltaTo(int jumpTarget);
 
-    protected enum State {
-        ADDING, BUILDING, BUILT
+    private enum State {
+        ADDING, BUILDING_FAST, BUILDING_SMALL, BUILT
     }
-    protected State state=State.ADDING;
+    private State state=State.ADDING;
 
     // Strings and sub-strings for linear-match nodes.
     protected StringBuilder strings=new StringBuilder();
