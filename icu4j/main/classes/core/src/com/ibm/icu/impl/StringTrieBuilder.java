@@ -42,281 +42,59 @@ public abstract class StringTrieBuilder {
 
     protected StringTrieBuilder() {}
 
-    protected final void createCompactBuilder(int sizeGuess) {
-        nodes=new HashMap<Node, Node>(sizeGuess);
-        lookupFinalValueNode=new FinalValueNode(0);
-    }
-    protected final void deleteCompactBuilder() {
-        nodes=null;
-        lookupFinalValueNode=null;
-    }
-
-    protected final void build(Option buildOption, int elementsLength) {
-        if(buildOption==Option.FAST) {
-            writeNode(0, elementsLength, 0);
-        } else /* Option.SMALL */ {
-            createCompactBuilder(2*elementsLength);
-            Node root=makeNode(0, elementsLength, 0);
-            root.markRightEdgesFirst(-1);
-            root.write(this);
-            deleteCompactBuilder();
+    protected void addImpl(CharSequence s, int value) {
+        if(state!=State.ADDING) {
+            // Cannot add elements after building.
+            throw new IllegalStateException("Cannot add (string, value) pairs after build().");
         }
-    }
-
-    // Requires start<limit,
-    // and all strings of the [start..limit[ elements must be sorted and
-    // have a common prefix of length unitIndex.
-    protected int writeNode(int start, int limit, int unitIndex) {
-        boolean hasValue=false;
-        int value=0;
-        int type;
-        if(unitIndex==getElementStringLength(start)) {
-            // An intermediate or final value.
-            value=getElementValue(start++);
-            if(start==limit) {
-                return writeValueAndFinal(value, true);  // final-value node
-            }
-            hasValue=true;
+        if(s.length()>0xffff) {
+            // Too long: Limited by iterator internals, and by builder recursion depth.
+            throw new IndexOutOfBoundsException("The maximum string length is 0xffff.");
         }
-        // Now all [start..limit[ strings are longer than unitIndex.
-        int minUnit=getElementUnit(start, unitIndex);
-        int maxUnit=getElementUnit(limit-1, unitIndex);
-        if(minUnit==maxUnit) {
-            // Linear-match node: All strings have the same character at unitIndex.
-            int lastUnitIndex=getLimitOfLinearMatch(start, limit-1, unitIndex);
-            writeNode(start, limit, lastUnitIndex);
-            // Break the linear-match sequence into chunks of at most kMaxLinearMatchLength.
-            int length=lastUnitIndex-unitIndex;
-            int maxLinearMatchLength=getMaxLinearMatchLength();
-            while(length>maxLinearMatchLength) {
-                lastUnitIndex-=maxLinearMatchLength;
-                length-=maxLinearMatchLength;
-                writeElementUnits(start, lastUnitIndex, maxLinearMatchLength);
-                write(getMinLinearMatch()+maxLinearMatchLength-1);
-            }
-            writeElementUnits(start, unitIndex, length);
-            type=getMinLinearMatch()+length-1;
+        if(root==null) {
+            root=createSuffixNode(s, 0, value);
         } else {
-            // Branch node.
-            int startsOffset=starts_.size();
-            int length=countElementUnits(start, limit, unitIndex);
-            // length>=2 because minUnit!=maxUnit.
-            writeBranchSubNode(start, limit, unitIndex, length, startsOffset);
-            starts_.truncate(startsOffset);
-            if(--length<getMinLinearMatch()) {
-                type=length;
-            } else {
-                write(length);
-                type=0;
-            }
+            root=root.add(this, s, 0, value);
         }
-        return writeValueAndType(hasValue, value, type);
     }
 
-    // start<limit && all strings longer than unitIndex &&
-    // length different units at unitIndex
-    protected int writeBranchSubNode(int start, int limit, int unitIndex, int length,
-                                     int startsOffset) {
-        int ltLength=0;
-        while(length>getMaxBranchLinearSubNodeLength()) {
-            // Branch on the middle unit.
-            // First, find the middle unit.
-            int i=starts_.get(startsOffset+length/2);
-            // Encode the less-than branch first.
-            middleUnits_.append(getElementUnit(i, unitIndex));  // middle unit
-            jumpTargets_.add(writeBranchSubNode(start, i, unitIndex, length/2, startsOffset));
-            ++ltLength;
-            // Continue for the greater-or-equal branch.
-            start=i;
-            startsOffset+=length/2;
-            length=length-length/2;
-        }
-        // For each unit, find its elements array start and whether it has a final value.
-        int isFinal=0;
-        int unitNumber=0;
-        do {
-            int i=starts_.get(startsOffset+unitNumber+1);
-            if(start==i-1 && unitIndex+1==getElementStringLength(start)) {
-                isFinal|=(1<<unitNumber);
+    protected final void buildImpl(Option buildOption) {
+        switch(state) {
+        case ADDING:
+            if(root==null) {
+                throw new IndexOutOfBoundsException("No (string, value) pairs were added.");
             }
-            start=i;
-        } while(++unitNumber<length-1);
-        // unitNumber==length-1, and the maxUnit elements range is [start..limit[
-
-        // Write the sub-nodes in reverse order: The jump lengths are deltas from
-        // after their own positions, so if we wrote the minUnit sub-node first,
-        // then its jump delta would be larger.
-        // Instead we write the minUnit sub-node last, for a shorter delta.
-        int jumpTargetsOffset=jumpTargets_.size();
-        do {
-            --unitNumber;
-            if((isFinal&(1<<unitNumber))==0) {
-                jumpTargets_.add(writeNode(starts_.get(startsOffset+unitNumber),
-                                           starts_.get(startsOffset+unitNumber+1), unitIndex+1));
-            }
-        } while(unitNumber>0);
-        // The maxUnit sub-node is written as the very last one because we do
-        // not jump for it at all.
-        unitNumber=length-1;
-        writeNode(start, limit, unitIndex+1);
-        int offset=write(getElementUnit(start, unitIndex));
-        // Write the rest of this node's unit-value pairs.
-        int jumpTargetsIndex=jumpTargetsOffset;
-        while(--unitNumber>=0) {
-            start=starts_.get(startsOffset+unitNumber);
-            if((isFinal&(1<<unitNumber))!=0) {
-                // Write the final value for the one string ending with this unit.
-                writeValueAndFinal(getElementValue(start), true);
-            } else {
-                // Write the delta to the start position of the sub-node.
-                writeValueAndFinal(offset-jumpTargets_.get(jumpTargetsIndex++), false);
-            }
-            offset=write(getElementUnit(start, unitIndex));
+            state=State.BUILDING;
+            break;
+        case BUILDING:
+            // Building must have failed.
+            throw new IndexOutOfBoundsException("Builder failed and must be clear()ed.");
+        case BUILT:
+            return;  // Nothing more to do.
         }
-        // Write the split-branch nodes.
-        int lessThanIndex=jumpTargetsOffset;
-        if(ltLength>0) {
-            int middleUnitsIndex=middleUnits_.length();
-            do {
-                --ltLength;
-                writeDeltaTo(jumpTargets_.get(--lessThanIndex));
-                offset=write(middleUnits_.charAt(--middleUnitsIndex));
-            } while(ltLength>0);
-            middleUnits_.setLength(middleUnitsIndex);
-        }
-        jumpTargets_.truncate(lessThanIndex);
-        return offset;
+        // Note: Building should be a little faster if we skipped registerNode() calls
+        // (or make it return the input node without checking whether it is unique).
+        // We would still need to fix-up linear-match nodes (for their maximum length)
+        // and branch nodes (turning dynamic branch nodes into trees of runtime-equivalent nodes),
+        // but the HashMap/hashCode()/equals() would be omitted.
+        //
+        // Drawbacks:
+        // a) Requires an API option, and users having to think about the choice.
+        // b) Requires additional testing. (And unit tests take more time.)
+        // c) Somewhat more code and complexity.
+        // d) Sometimes larger trie serializations when duplicates could be removed.
+        root=root.register(this);
+        root.markRightEdgesFirst(-1);
+        root.write(this);
+        state=State.BUILT;
     }
 
-    // Requires start<limit,
-    // and all strings of the [start..limit[ elements must be sorted and
-    // have a common prefix of length unitIndex.
-    protected Node makeNode(int start, int limit, int unitIndex) {
-        boolean hasValue=false;
-        int value=0;
-        if(unitIndex==getElementStringLength(start)) {
-            // An intermediate or final value.
-            value=getElementValue(start++);
-            if(start==limit) {
-                return registerFinalValue(value);
-            }
-            hasValue=true;
-        }
-        Node node;
-        // Now all [start..limit[ strings are longer than unitIndex.
-        int minUnit=getElementUnit(start, unitIndex);
-        int maxUnit=getElementUnit(limit-1, unitIndex);
-        if(minUnit==maxUnit) {
-            // Linear-match node: All strings have the same character at unitIndex.
-            int lastUnitIndex=getLimitOfLinearMatch(start, limit-1, unitIndex);
-            Node nextNode=makeNode(start, limit, lastUnitIndex);
-            // Break the linear-match sequence into chunks of at most kMaxLinearMatchLength.
-            int length=lastUnitIndex-unitIndex;
-            int maxLinearMatchLength=getMaxLinearMatchLength();
-            while(length>maxLinearMatchLength) {
-                lastUnitIndex-=maxLinearMatchLength;
-                length-=maxLinearMatchLength;
-                node=createLinearMatchNode(start, lastUnitIndex, maxLinearMatchLength, nextNode);
-                nextNode=registerNode(node);
-            }
-            node=createLinearMatchNode(start, unitIndex, length, nextNode);
-        } else {
-            // Branch node.
-            int startsOffset=starts_.size();
-            int length=countElementUnits(start, limit, unitIndex);
-            // length>=2 because minUnit!=maxUnit.
-            Node subNode=makeBranchSubNode(start, limit, unitIndex, length, startsOffset);
-            starts_.truncate(startsOffset);
-            node=new BranchHeadNode(length, subNode);
-        }
-        if(hasValue && node!=null) {
-            if(matchNodesCanHaveValues()) {
-                ((ValueNode )node).setValue(value);
-            } else {
-                node=new IntermediateValueNode(value, registerNode(node));
-            }
-        }
-        return registerNode(node);
+    protected void clearImpl() {
+        strings.setLength(0);
+        nodes.clear();
+        root=null;
+        state=State.ADDING;
     }
-
-    // start<limit && all strings longer than unitIndex &&
-    // length different units at unitIndex
-    protected Node makeBranchSubNode(int start, int limit, int unitIndex,
-                                     int length, int startsOffset) {
-        int ltLength=0;
-        while(length>getMaxBranchLinearSubNodeLength()) {
-            // Branch on the middle unit.
-            // First, find the middle unit.
-            int i=starts_.get(startsOffset+length/2);
-            // Create the less-than branch.
-            middleUnits_.append(getElementUnit(i, unitIndex));  // middle unit
-            lessThan_.add(makeBranchSubNode(start, i, unitIndex, length/2, startsOffset));
-            ++ltLength;
-            // Continue for the greater-or-equal branch.
-            start=i;
-            startsOffset+=length/2;
-            length=length-length/2;
-        }
-        ListBranchNode listNode=new ListBranchNode();
-        // For each unit, find its elements array start and whether it has a final value.
-        int unitNumber=0;
-        do {
-            char unit=getElementUnit(start, unitIndex);
-            int i=starts_.get(startsOffset+unitNumber+1);
-            if(start==i-1 && unitIndex+1==getElementStringLength(start)) {
-                listNode.add(unit, getElementValue(start));
-            } else {
-                listNode.add(unit, makeNode(start, i, unitIndex+1));
-            }
-            start=i;
-        } while(++unitNumber<length-1);
-        // unitNumber==length-1, and the maxUnit elements range is [start..limit[
-        char unit=getElementUnit(start, unitIndex);
-        if(start==limit-1 && unitIndex+1==getElementStringLength(start)) {
-            listNode.add(unit, getElementValue(start));
-        } else {
-            listNode.add(unit, makeNode(start, limit, unitIndex+1));
-        }
-        Node node=registerNode(listNode);
-        // Create the split-branch nodes.
-        if(ltLength>0) {
-            int lessThanIndex=lessThan_.size();
-            int middleUnitsIndex=middleUnits_.length();
-            do {
-                --ltLength;
-                node=registerNode(
-                    new SplitBranchNode(middleUnits_.charAt(--middleUnitsIndex),
-                                        lessThan_.get(--lessThanIndex), node));
-            } while(ltLength>0);
-            lessThan_.truncate(lessThanIndex);
-            middleUnits_.setLength(middleUnitsIndex);
-        }
-        return node;
-    }
-
-    protected abstract int getElementStringLength(int i) /*const*/;
-    protected abstract char getElementUnit(int i, int unitIndex) /*const*/;
-    protected abstract int getElementValue(int i) /*const*/;
-
-    // Finds the first unit index after this one where
-    // the first and last element have different units again.
-    protected abstract int getLimitOfLinearMatch(int first, int last, int unitIndex) /*const*/;
-
-    // Number of different bytes at unitIndex.
-    protected abstract int countElementUnits(int start, int limit, int unitIndex) /*const*/;
-
-    protected abstract boolean matchNodesCanHaveValues() /*const*/;
-
-    protected abstract int getMaxBranchLinearSubNodeLength() /*const*/;
-    protected abstract int getMinLinearMatch() /*const*/;
-    protected abstract int getMaxLinearMatchLength() /*const*/;
-
-    // max(BytesTrie::kMaxBranchLinearSubNodeLength, CharsTrie::kMaxBranchLinearSubNodeLength).
-    protected static final int kMaxBranchLinearSubNodeLength=5;
-
-    // Maximum number of nested split-branch levels for a branch on all 2^16 possible char units.
-    // log2(2^16/kMaxBranchLinearSubNodeLength) rounded up.
-    protected static final int kMaxSplitBranchLevels=14;
 
     /**
      * Makes sure that there is only one unique node registered that is
@@ -325,7 +103,7 @@ public abstract class StringTrieBuilder {
      * @return newNode if it is the first of its kind, or
      *         an equivalent node if newNode is a duplicate.
      */
-    protected final Node registerNode(Node newNode) {
+    private final Node registerNode(Node newNode) {
         Node old=nodes.get(newNode);
         if(old!=null) {
             return old;
@@ -344,36 +122,51 @@ public abstract class StringTrieBuilder {
      * @param value A final value.
      * @return A FinalValueNode with the given value.
      */
-    protected final Node registerFinalValue(int value) {
-        lookupFinalValueNode.setValue(value);
-        Node old=nodes.get(lookupFinalValueNode);
-        if(old!=null) {
-            return old;
+    private final ValueNode registerFinalValue(int value) {
+        lookupFinalValueNode.setFinalValue(value);
+        Node oldNode=nodes.get(lookupFinalValueNode);
+        if(oldNode!=null) {
+            return (ValueNode)oldNode;
         }
-        Node newNode=new FinalValueNode(value);
+        ValueNode newNode=new ValueNode();
+        newNode.setFinalValue(value);
         // If put() returns a non-null value from an equivalent, previously
         // registered node, then get() failed to find that and we will leak newNode.
-        Node oldValue=nodes.put(newNode, newNode);
-        assert(oldValue==null);
+        oldNode=nodes.put(newNode, newNode);
+        assert(oldNode==null);
         return newNode;
     }
 
-    // Hash set of nodes, maps from nodes to integer 1.
-    protected HashMap<Node, Node> nodes;
-    protected FinalValueNode lookupFinalValueNode;
-
-    protected static abstract class Node {
-        public Node(int initialHash) {
-            hash=initialHash;
+    private static abstract class Node {
+        public Node() {
             offset=0;
         }
+        // hashCode() and equals() for use with registerNode() and the nodes hash.
         @Override
-        public final int hashCode() /*const*/ { return hash; }
+        public abstract int hashCode() /*const*/;
         // Base class equals() compares the actual class types.
         @Override
         public boolean equals(Object other) {
-            return this==other || (this.getClass()==other.getClass() && hash==((Node)other).hash);
+            return this==other || this.getClass()==other.getClass();
         }
+        /**
+         * Recursive method for adding a new (string, value) pair.
+         * Matches the remaining part of s from start,
+         * and adds a new node where there is a mismatch.
+         * @return this or a replacement Node
+         */
+        public Node add(StringTrieBuilder builder, CharSequence s, int start, int sValue) {
+            return this;
+        }
+        /**
+         * Recursive method for registering unique nodes,
+         * after all (string, value) pairs have been added.
+         * Final-value nodes are pre-registered while add()ing (string, value) pairs.
+         * Other nodes created while add()ing registerNode() themselves later
+         * and might replace themselves with new types of nodes for write()ing.
+         * @return The registered version of this node which implements write().
+         */
+        public Node register(StringTrieBuilder builder) { return this; }
         /**
          * Traverses the Node graph and numbers branch edges, with rightmost edges first.
          * This is to avoid writing a duplicate node twice.
@@ -423,55 +216,29 @@ public abstract class StringTrieBuilder {
         }
         public final int getOffset() /*const*/ { return offset; }
 
-        protected int hash;
         protected int offset;
     }
 
-    // This class should not be overridden because
-    // registerFinalValue() compares a stack-allocated FinalValueNode
-    // (stack-allocated so that we don't unnecessarily create lots of duplicate nodes)
-    // with the input node, and the
-    // !Node::operator==(other) used inside FinalValueNode::operator==(other)
-    // will be false if the typeid's are different.
-    protected static final class FinalValueNode extends Node {
-        public FinalValueNode(int v) {
-            super(0x111111*37+v);
+    // Used directly for final values, and as as a superclass for
+    // match nodes with intermediate values.
+    private static class ValueNode extends Node {
+        public ValueNode() {}
+        public final void setValue(int v) {
+            assert(!hasValue);
+            hasValue=true;
+            value=v;
+        }
+        private void setFinalValue(int v) {
+            hasValue=true;
             value=v;
         }
         @Override
-        public boolean equals(Object other) {
-            if(this==other) {
-                return true;
+        public int hashCode() /*const*/ {
+            int hash=0x111111;
+            if(hasValue) {
+                hash=hash*37+value;
             }
-            if(!super.equals(other)) {
-                return false;
-            }
-            FinalValueNode o=(FinalValueNode)other;
-            return value==o.value;
-        }
-        @Override
-        public void write(StringTrieBuilder builder) {
-            offset=builder.writeValueAndFinal(value, true);
-        }
-
-        protected int value;
-
-        /**
-         * Must be called only by registerFinalValue() and only on the lookupFinalValueNode.
-         * This is a workaround: C++ just stack-allocates a FinalValueNode
-         * inside registerFinalValue().
-         * In Java, we keep a FinalValueNode instance and modify it.
-         * Otherwise, FinalValueNode instances are immutable.
-         */
-        private void setValue(int v) {
-            hash=0x111111*37+v;
-            value=v;
-        }
-    }
-
-    protected static abstract class ValueNode extends Node {
-        public ValueNode(int initialHash) {
-            super(initialHash);
+            return hash;
         }
         @Override
         public boolean equals(Object other) {
@@ -484,21 +251,33 @@ public abstract class StringTrieBuilder {
             ValueNode o=(ValueNode)other;
             return hasValue==o.hasValue && (!hasValue || value==o.value);
         }
-        public final void setValue(int v) {
-            hasValue=true;
-            value=v;
-            hash=hash*37+v;
+        @Override
+        public Node add(StringTrieBuilder builder, CharSequence s, int start, int sValue) {
+            if(start==s.length()) {
+                throw new IllegalArgumentException("Duplicate string.");
+            }
+            // Replace self with a node for the remaining string suffix and value.
+            ValueNode node=builder.createSuffixNode(s, start, sValue);
+            node.setValue(value);
+            return node;
+        }
+        @Override
+        public void write(StringTrieBuilder builder) {
+            offset=builder.writeValueAndFinal(value, true);
         }
 
         protected boolean hasValue;
         protected int value;
     }
 
-    protected static final class IntermediateValueNode extends ValueNode {
+    private static final class IntermediateValueNode extends ValueNode {
         public IntermediateValueNode(int v, Node nextNode) {
-            super(0x222222*37+nextNode.hashCode());
             next=nextNode;
             setValue(v);
+        }
+        @Override
+        public int hashCode() /*const*/ {
+            return (0x222222*37+value)*37+next.hashCode();
         }
         @Override
         public boolean equals(Object other) {
@@ -524,15 +303,18 @@ public abstract class StringTrieBuilder {
             offset=builder.writeValueAndFinal(value, false);
         }
 
-        protected Node next;
+        private Node next;
     }
 
-    protected static abstract class LinearMatchNode extends ValueNode {
-        public LinearMatchNode(int len, Node nextNode) {
-            super((0x333333*37+len)*37+nextNode.hashCode());
+    private static final class LinearMatchNode extends ValueNode {
+        public LinearMatchNode(CharSequence builderStrings, int sOffset, int len, Node nextNode) {
+            strings=builderStrings;
+            stringOffset=sOffset;
             length=len;
             next=nextNode;
         }
+        @Override
+        public int hashCode() /*const*/ { return hash; }
         @Override
         public boolean equals(Object other) {
             if(this==other) {
@@ -542,7 +324,108 @@ public abstract class StringTrieBuilder {
                 return false;
             }
             LinearMatchNode o=(LinearMatchNode)other;
-            return length==o.length && next==o.next;
+            if(length!=o.length || next!=o.next) {
+                return false;
+            }
+            for(int i=stringOffset, j=o.stringOffset, limit=stringOffset+length; i<limit; ++i, ++j) {
+                if(strings.charAt(i)!=strings.charAt(j)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        @Override
+        public Node add(StringTrieBuilder builder, CharSequence s, int start, int sValue) {
+            if(start==s.length()) {
+                if(hasValue) {
+                    throw new IllegalArgumentException("Duplicate string.");
+                } else {
+                    setValue(sValue);
+                    return this;
+                }
+            }
+            int limit=stringOffset+length;
+            for(int i=stringOffset; i<limit; ++i, ++start) {
+                if(start==s.length()) {
+                    // s is a prefix with a new value. Split self into two linear-match nodes.
+                    int prefixLength=i-stringOffset;
+                    LinearMatchNode suffixNode=new LinearMatchNode(strings, i, length-prefixLength, next);
+                    suffixNode.setValue(sValue);
+                    length=prefixLength;
+                    next=suffixNode;
+                    return this;
+                }
+                char thisChar=strings.charAt(i);
+                char newChar=s.charAt(start);
+                if(thisChar!=newChar) {
+                    // Mismatch, insert a branch node.
+                    DynamicBranchNode branchNode=new DynamicBranchNode();
+                    // Reuse this node for one of the remaining substrings, if any.
+                    Node result, thisSuffixNode;
+                    if(i==stringOffset) {
+                        // Mismatch on first character, turn this node into a suffix.
+                        if(hasValue) {
+                            // Move the value for prefix length "start" to the new node.
+                            branchNode.setValue(value);
+                            value=0;
+                            hasValue=false;
+                        }
+                        ++stringOffset;
+                        --length;
+                        thisSuffixNode= length>0 ? this : next;
+                        // C++: if(length==0) { delete this; }
+                        result=branchNode;
+                    } else if(i==limit-1) {
+                        // Mismatch on last character, keep this node for the prefix.
+                        --length;
+                        thisSuffixNode=next;
+                        next=branchNode;
+                        result=this;
+                    } else {
+                        // Mismatch on intermediate character, keep this node for the prefix.
+                        int prefixLength=i-stringOffset;
+                        ++i;  // Suffix start offset (after thisChar).
+                        thisSuffixNode=new LinearMatchNode(
+                                strings, i, length-(prefixLength+1), next);
+                        length=prefixLength;
+                        next=branchNode;
+                        result=this;
+                    }
+                    ValueNode newSuffixNode=builder.createSuffixNode(s, start+1, sValue);
+                    branchNode.add(thisChar, thisSuffixNode);
+                    branchNode.add(newChar, newSuffixNode);
+                    return result;
+                }
+            }
+            // s matches all of this node's characters.
+            next=next.add(builder, s, start, sValue);
+            return this;
+        }
+        @Override
+        public Node register(StringTrieBuilder builder) {
+            next=next.register(builder);
+            // Break the linear-match sequence into chunks of at most kMaxLinearMatchLength.
+            int maxLinearMatchLength=builder.getMaxLinearMatchLength();
+            while(length>maxLinearMatchLength) {
+                int nextOffset=stringOffset+length-maxLinearMatchLength;
+                length-=maxLinearMatchLength;
+                LinearMatchNode suffixNode=
+                    new LinearMatchNode(strings, nextOffset, maxLinearMatchLength, next);
+                suffixNode.setHashCode();
+                next=builder.registerNode(suffixNode);
+            }
+            Node result;
+            if(hasValue && !builder.matchNodesCanHaveValues()) {
+                int intermediateValue=value;
+                value=0;
+                hasValue=false;
+                setHashCode();
+                result=new IntermediateValueNode(intermediateValue, builder.registerNode(this));
+            } else {
+                setHashCode();
+                result=this;
+            }
+            return builder.registerNode(result);
         }
         @Override
         public int markRightEdgesFirst(int edgeNumber) {
@@ -551,22 +434,134 @@ public abstract class StringTrieBuilder {
             }
             return edgeNumber;
         }
-
-        protected int length;
-        public Node next;
-    }
-
-    protected static abstract class BranchNode extends Node {
-        public BranchNode(int initialHash) {
-            super(initialHash);
+        @Override
+        public void write(StringTrieBuilder builder) {
+            next.write(builder);
+            builder.write(stringOffset, length);
+            offset=builder.writeValueAndType(hasValue, value, builder.getMinLinearMatch()+length-1);
         }
 
+        // Must be called just before registerNode(this).
+        private void setHashCode() /*const*/ {
+            hash=(0x333333*37+length)*37+next.hashCode();
+            if(hasValue) {
+                hash=hash*37+value;
+            }
+            for(int i=stringOffset, limit=stringOffset+length; i<limit; ++i) {
+                hash=hash*37+strings.charAt(i);
+            }
+        }
+
+        private CharSequence strings;
+        private int stringOffset;
+        private int length;
+        private Node next;
+        private int hash;
+    }
+
+    private static final class DynamicBranchNode extends ValueNode {
+        public DynamicBranchNode() {}
+        // c must not be in chars yet.
+        public void add(char c, Node node) {
+            int i=find(c);
+            chars.insert(i, c);
+            equal.add(i, node);
+        }
+        @Override
+        public Node add(StringTrieBuilder builder, CharSequence s, int start, int sValue) {
+            if(start==s.length()) {
+                if(hasValue) {
+                    throw new IllegalArgumentException("Duplicate string.");
+                } else {
+                    setValue(sValue);
+                    return this;
+                }
+            }
+            char c=s.charAt(start++);
+            int i=find(c);
+            if(i<chars.length() && c==chars.charAt(i)) {
+                equal.set(i, equal.get(i).add(builder, s, start, sValue));
+            } else {
+                chars.insert(i, c);
+                equal.add(i, builder.createSuffixNode(s, start, sValue));
+            }
+            return this;
+        }
+        @Override
+        public Node register(StringTrieBuilder builder) {
+            Node subNode=register(builder, 0, chars.length());
+            BranchHeadNode head=new BranchHeadNode(chars.length(), subNode);
+            Node result=head;
+            if(hasValue) {
+                if(builder.matchNodesCanHaveValues()) {
+                    head.setValue(value);
+                } else {
+                    result=new IntermediateValueNode(value, builder.registerNode(head));
+                }
+            }
+            return builder.registerNode(result);
+        }
+        private Node register(StringTrieBuilder builder, int start, int limit) {
+            int length=limit-start;
+            if(length>builder.getMaxBranchLinearSubNodeLength()) {
+                // Branch on the middle unit.
+                int middle=start+length/2;
+                return builder.registerNode(
+                        new SplitBranchNode(
+                                chars.charAt(middle),
+                                register(builder, start, middle),
+                                register(builder, middle, limit)));
+            }
+            ListBranchNode listNode=new ListBranchNode(length);
+            do {
+                char c=chars.charAt(start);
+                Node node=equal.get(start);
+                if(node.getClass()==ValueNode.class) {
+                    // Final value.
+                    listNode.add(c, ((ValueNode)node).value);
+                } else {
+                    listNode.add(c, node.register(builder));
+                }
+            } while(++start<limit);
+            return builder.registerNode(listNode);
+        }
+
+        private int find(char c) {
+            int start=0;
+            int limit=chars.length();
+            while(start<limit) {
+                int i=(start+limit)/2;
+                char middleChar=chars.charAt(i);
+                if(c<middleChar) {
+                    limit=i;
+                } else if(c==middleChar) {
+                    return i;
+                } else {
+                    start=i+1;
+                }
+            }
+            return start;
+        }
+
+        private StringBuilder chars=new StringBuilder();
+        private ArrayList<Node> equal=new ArrayList<Node>();
+    }
+
+    private static abstract class BranchNode extends Node {
+        public BranchNode() {}
+        @Override
+        public int hashCode() /*const*/ { return hash; }
+
+        protected int hash;
         protected int firstEdgeNumber;
     }
 
-    protected static final class ListBranchNode extends BranchNode {
-        public ListBranchNode() {
-            super(0x444444);
+    private static final class ListBranchNode extends BranchNode {
+        public ListBranchNode(int capacity) {
+            hash=0x444444*37+capacity;
+            equal=new Node[capacity];
+            values=new int[capacity];
+            units=new char[capacity];
         }
         @Override
         public boolean equals(Object other) {
@@ -661,16 +656,20 @@ public abstract class StringTrieBuilder {
             hash=(hash*37+c)*37+node.hashCode();
         }
 
-        protected Node[] equal=new Node[kMaxBranchLinearSubNodeLength];  // null means "has final value".
-        protected int length;
-        protected int[] values=new int[kMaxBranchLinearSubNodeLength];
-        protected char[] units=new char[kMaxBranchLinearSubNodeLength];
+        // Note: We could try to reduce memory allocations
+        // by replacing these per-node arrays with per-builder ArrayLists and
+        // (for units) a StringBuilder (or even use its strings for the units too).
+        // It remains to be seen whether that would improve performance.
+        private Node[] equal;  // null means "has final value".
+        private int length;
+        private int[] values;
+        private char[] units;
     }
 
-    protected static final class SplitBranchNode extends BranchNode {
+    private static final class SplitBranchNode extends BranchNode {
         public SplitBranchNode(char middleUnit, Node lessThanNode, Node greaterOrEqualNode) {
-            super(((0x555555*37+middleUnit)*37+
-                    lessThanNode.hashCode())*37+greaterOrEqualNode.hashCode());
+            hash=((0x555555*37+middleUnit)*37+
+                    lessThanNode.hashCode())*37+greaterOrEqualNode.hashCode();
             unit=middleUnit;
             lessThan=lessThanNode;
             greaterOrEqual=greaterOrEqualNode;
@@ -707,17 +706,20 @@ public abstract class StringTrieBuilder {
             offset=builder.write(unit);
         }
 
-        protected char unit;
-        protected Node lessThan;
-        protected Node greaterOrEqual;
+        private char unit;
+        private Node lessThan;
+        private Node greaterOrEqual;
     }
 
     // Branch head node, for writing the actual node lead unit.
-    protected static final class BranchHeadNode extends ValueNode {
+    private static final class BranchHeadNode extends ValueNode {
         public BranchHeadNode(int len, Node subNode) {
-            super((0x666666*37+len)*37+subNode.hashCode());
             length=len;
             next=subNode;
+        }
+        @Override
+        public int hashCode() /*const*/ {
+            return (0x666666*37+length)*37+next.hashCode();
         }
         @Override
         public boolean equals(Object other) {
@@ -748,32 +750,42 @@ public abstract class StringTrieBuilder {
             }
         }
 
-        protected int length;
-        protected Node next;  // A branch sub-node.
+        private int length;
+        private Node next;  // A branch sub-node.
     }
 
-    protected abstract Node createLinearMatchNode(int i, int unitIndex, int length,
-                                        Node nextNode) /*const*/;
+    private ValueNode createSuffixNode(CharSequence s, int start, int sValue) {
+        ValueNode node=registerFinalValue(sValue);
+        if(start<s.length()) {
+            int offset=strings.length();
+            strings.append(s, start, s.length());
+            node=new LinearMatchNode(strings, offset, s.length()-start, node);
+        }
+        return node;
+    }
+
+    protected abstract boolean matchNodesCanHaveValues() /*const*/;
+
+    protected abstract int getMaxBranchLinearSubNodeLength() /*const*/;
+    protected abstract int getMinLinearMatch() /*const*/;
+    protected abstract int getMaxLinearMatchLength() /*const*/;
 
     protected abstract int write(int unit);
-    protected abstract int writeElementUnits(int i, int unitIndex, int length);
+    protected abstract int write(int offset, int length);
     protected abstract int writeValueAndFinal(int i, boolean isFinal);
     protected abstract int writeValueAndType(boolean hasValue, int value, int node);
     protected abstract int writeDeltaTo(int jumpTarget);
 
-    // Temporary storage for recursive builder functions.
-    // In C++, each function stack-allocates segments of these.
-    // In Java, we reuse growable arrays to minimize allocations.
-    @SuppressWarnings("serial")
-    protected final class MyList<T> extends ArrayList<T> {
-        // ArrayList.removeRange() is protected, so we have to subclass it
-        // to truncate the list.
-        public void truncate(int newLength) {
-            removeRange(newLength, size());
-        }
+    protected enum State {
+        ADDING, BUILDING, BUILT
     }
-    protected MyList<Integer> starts_=new MyList<Integer>();
-    private MyList<Integer> jumpTargets_=new MyList<Integer>();
-    private MyList<Node> lessThan_=new MyList<Node>();
-    private StringBuilder middleUnits_=new StringBuilder();
+    protected State state=State.ADDING;
+
+    // Strings and sub-strings for linear-match nodes.
+    protected StringBuilder strings=new StringBuilder();
+    private Node root;
+
+    // Hash set of nodes, maps from nodes to integer 1.
+    private HashMap<Node, Node> nodes=new HashMap<Node, Node>();
+    private ValueNode lookupFinalValueNode=new ValueNode();
 }
