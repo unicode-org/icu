@@ -181,6 +181,32 @@ public class CharSequences {
                         : a.equals(b);
     }
     
+    /**
+     * Utility for comparing the contents of CharSequences
+     * @internal
+     */
+    public static int compare(CharSequence a, CharSequence b) {
+        int alength = a.length();
+        int blength = b.length();
+        int min = alength <= blength ? alength : blength;
+        for (int i = 0; i < min; ++i) {
+            int diff = a.charAt(i) - b.charAt(i);
+            if (diff != 0) {
+                return diff;
+            }
+        }
+        return alength - blength;
+    }
+
+    /**
+     * Utility for comparing the contents of CharSequences
+     * @internal
+     */
+    public static boolean equalsChars(CharSequence a, CharSequence b) {
+        // do length test first for fast path
+        return a.length() == b.length() && compare(a,b) == 0;
+    }
+
     /** Are we on a character boundary?
      * @internal
      */
@@ -239,5 +265,4 @@ public class CharSequences {
         System.arraycopy(result, 0, shortResult, 0, j);
         return shortResult;
     }
-
 }
