@@ -1,19 +1,19 @@
 //---------------------------------------------------------
-// Copyright (C) 2003-2010, International Business Machines
+// Copyright (C) 2003-2011, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Mon Nov  1 16:33:32 2010
+// Build date: Mon Jan 24 11:00:00 2011
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2010o
-// ICU version: 4.6
+// Olson version: 2011a
+// ICU version: 4.7.1
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
 //---------------------------------------------------------
 
 zoneinfo64:table(nofallback) {
- TZVersion { "2010o" }
+ TZVersion { "2011a" }
  Zones:array { 
   /* ACT */ :int { 337 } //Z#0
   /* AET */ :int { 349 } //Z#1
@@ -2849,8 +2849,8 @@ zoneinfo64:table(nofallback) {
     typeMap:bin { "0102" }
   } //Z#544
   /* Pacific/Honolulu */ :table {
-    transPre32:intvector { -1, 2086059582 }
-    trans:intvector { -1157283000, -1155472200, -880198200, -765376200, -712150200 }
+    transPre32:intvector { -1, 1960865982 }
+    trans:intvector { -1157283000, -1155436200, -880198200, -765376200, -712150200 }
     typeOffsets:intvector { -37886, 0, -37800, 0, -37800, 3600, -36000, 0 }
     typeMap:bin { "010201020103" }
     links:intvector { 545, 600 }
