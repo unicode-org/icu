@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -164,8 +164,6 @@ void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
     uregex_setText(parseRegexp, input, inputLen, &status);
     while (uregex_findNext(parseRegexp, &status)) {
         lineNum++;
-        UChar  line[200];
-        uregex_group(parseRegexp, 0, line, 200, &status);
         if (uregex_start(parseRegexp, 1, &status) >= 0) {
             // this was a blank or comment line.
             continue;

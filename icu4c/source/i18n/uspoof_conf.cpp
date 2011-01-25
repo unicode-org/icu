@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2008-2010, International Business Machines
+*   Copyright (C) 2008-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -219,6 +219,7 @@ void ConfusabledataBuilder::build(const char * confusables, int32_t confusablesL
     fInput = static_cast<UChar *>(uprv_malloc((inputLen+1) * sizeof(UChar)));
     if (fInput == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     u_strFromUTF8(fInput, inputLen+1, NULL, confusables, confusablesLen, &status);
 
