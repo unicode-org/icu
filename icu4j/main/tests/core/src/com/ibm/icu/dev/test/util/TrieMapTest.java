@@ -25,7 +25,6 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
@@ -34,11 +33,15 @@ public class TrieMapTest extends TestFmwk {
     static final boolean HACK_TO_MAKE_TESTS_PASS = false;
     static final int MASK = 0x3;
 
-    Map<String, Integer> unicodeTestMap = new HashMap<String, Integer>();
-    boolean useSmallList = true;
-    int REPEAT = 10;
+    private Map<String, Integer> unicodeTestMap = new HashMap<String, Integer>();
+    private boolean useSmallList = true;
 
-    Timer t = new Timer();
+    private Timer t = new Timer();
+    private DecimalFormat nf = t.getNumberFormat();
+    private DecimalFormat pf = t.getPercentFormat();
+    {
+        pf.setMaximumFractionDigits(0);
+    }
 
     @Override
     protected void init() throws Exception {
@@ -166,7 +169,7 @@ public class TrieMapTest extends TestFmwk {
                 } 
             }, null, map);
             if (comparisonTime == 0) {
-                logln("\titeration time\tTREEMAP\tn/a\t" + t.toString(testMap.size()) + "\titerations=" + t.getIterations());
+                logln("\titeration time\tTREEMAP\tn/a\t" + t.toString(testMap.size()) + "\t\titerations=" + t.getIterations());
             } else {
                 logln("\titeration time\tHASHMAP\tn/a\t" + t.toString(testMap.size(), comparisonTime) + "\titerations=" + t.getIterations());
             }
@@ -297,7 +300,7 @@ public class TrieMapTest extends TestFmwk {
                         }
                     } 
                 }, null, testmap);
-                logln("\tbuild time\tTREEMAP\tn/a\t" + t.toString(testmap.size()) + "\titerations=" + t.getIterations());
+                logln("\tbuild time\tTREEMAP\tn/a\t" + t.toString(testmap.size()) + "\t\titerations=" + t.getIterations());
                 return mapTime;
             } else {
                 long mapTime = t.timeIterations(new MyLoop() {
@@ -363,9 +366,6 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
-    private static DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(ULocale.ENGLISH);
-    private static DecimalFormat pf = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.ENGLISH);
-
     public void TestTimeGet() {
         HashSet<String> keySet = new HashSet<String>(unicodeTestMap.keySet());
         ULocale[] locales = ULocale.getAvailableLocales();
@@ -414,7 +414,7 @@ public class TrieMapTest extends TestFmwk {
                 } 
             }, keys, map);
             if (comparisonTime == 0) {
-                logln("\tget() time\tTREEMAP\tn/a\t" + t.toString(keys.size()) + "\titerations=" + t.getIterations());
+                logln("\tget() time\tTREEMAP\tn/a\t" + t.toString(keys.size()) + "\t\titerations=" + t.getIterations());
             } else {
                 logln("\tget() time\tHASHMAP\tn/a\t" + t.toString(keys.size(), comparisonTime) + "\titerations=" + t.getIterations());
             }
