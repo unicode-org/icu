@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -116,7 +116,7 @@ class ConfusabledataBuilder : public UMemory {
 
     // From an index into fKeyVec & fValueVec
     //   get a UnicodeString with the corresponding mapping.
-    UnicodeString getMapping(int32_t key);
+    UnicodeString getMapping(int32_t index);
 
     // Populate the final binary output data array with the compiled data.
     void outputData(UErrorCode &status);
