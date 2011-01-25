@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2009, International Business Machines Corporation and
+ * Copyright (c) 2005-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -210,6 +210,10 @@ static void TestAPI(void) {
         UChar     uString[]  = {0x41, 0x42, 0x43, 0};
         UChar     buf[100];
         int32_t   i;
+        /* Test pinning of input bounds */
+        UChar     uString2[]  = {0x41, 0x42, 0x43, 0x44, 0x45,
+                                 0x46, 0x47, 0x48, 0x49, 0x4A, 0};
+        UChar *   uString2Ptr = uString2 + 5;
 
         status = U_ZERO_ERROR;
         uta = utext_openUChars(NULL, uString, -1, &status);
@@ -226,6 +230,20 @@ static void TestAPI(void) {
         TEST_SUCCESS(status);
         TEST_ASSERT(i == u_strlen(uString));
         i = u_strcmp(uString, buf);
+        TEST_ASSERT(i == 0);
+        utext_close(uta);
+
+        /* Test pinning of input bounds */
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, uString2Ptr, -1, &status);
+        TEST_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        memset(buf, 0, sizeof(buf));
+        i = utext_extract(uta, -3, 20, buf, 100, &status);
+        TEST_SUCCESS(status);
+        TEST_ASSERT(i == u_strlen(uString2Ptr));
+        i = u_strcmp(uString2Ptr, buf);
         TEST_ASSERT(i == 0);
         utext_close(uta);
     }
