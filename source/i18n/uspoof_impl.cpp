@@ -66,7 +66,6 @@ SpoofImpl::SpoofImpl(const SpoofImpl &src, UErrorCode &status)  :
     if (src.fSpoofData != NULL) {
         fSpoofData = src.fSpoofData->addReference();
     }
-    fCheckMask = src.fCheckMask;
     fAllowedCharsSet = static_cast<const UnicodeSet *>(src.fAllowedCharsSet->clone());
     if (fAllowedCharsSet == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -309,7 +308,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
         tmpSet->freeze();
         delete fAllowedCharsSet;
         fAllowedCharsSet = tmpSet;
-        fCheckMask &= ~USPOOF_CHAR_LIMIT;
+        fChecks &= ~USPOOF_CHAR_LIMIT;
         return;
     }
 
@@ -339,7 +338,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
     tmpSet->freeze();
     delete fAllowedCharsSet;
     fAllowedCharsSet = tmpSet;
-    fCheckMask |= USPOOF_CHAR_LIMIT;
+    fChecks |= USPOOF_CHAR_LIMIT;
 }
 
 

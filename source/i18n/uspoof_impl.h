@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation
+* Copyright (C) 2008-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *
@@ -97,11 +97,6 @@ public:
      */
     int32_t scriptScan(const UChar *text, int32_t length, int32_t &pos, UErrorCode &status) const;
 
-
-    // WholeScript and MixedScript check implementation.
-    //
-    ScriptSet *WholeScriptCheck(const UChar *text, int32_t length, UErrorCode &status) const;
-    
     static UClassID U_EXPORT2 getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 
@@ -114,8 +109,6 @@ public:
 
     SpoofData        *fSpoofData;
     
-    int32_t           fCheckMask;         // Spoof table selector.  f(Check Type)
-	
     const UnicodeSet *fAllowedCharsSet;   // The UnicodeSet of allowed characters.
                                           //   for this Spoof Checker.  Defaults to all chars. 
 
