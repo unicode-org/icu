@@ -180,7 +180,7 @@ public class TrieMapTest extends TestFmwk {
                     }
                 } 
             }, null, trieMap);
-            logln("\titeration time\t" + style + "\tn/a\t" + t.toString(testMap.size(), comparisonTime));
+            logln("\titeration time\t" + style + "\tn/a\t" + t.toString(testMap.size(), comparisonTime) + "\titerations=" + t.getIterations());
             if (!useSmallList && trieTime > ratioToMap * comparisonTime) {
                 errln(style + "\tTime iteration takes too long. Expected:\t< " + ratioToMap * comparisonTime + ", Actual:\t" + trieTime);
             }
