@@ -54,6 +54,14 @@ public final class Timer {
         return this;
     }
 
+    public DecimalFormat getNumberFormat() {
+        return nf;
+    }
+
+    public DecimalFormat getPercentFormat() {
+        return pf;
+    }
+
     public String toString() {
         return nf.format(getDuration()) + "\tns";
     }
@@ -68,9 +76,10 @@ public final class Timer {
         return nf.format(getDuration()/iterations) + "\tns\t" + pf.format((double)getDuration()/other - 1D) + "";
     }
 
-    private static DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(ULocale.ENGLISH);
-    private static DecimalFormat pf = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.ENGLISH);
-    static {
+    private DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(ULocale.ENGLISH);
+    private DecimalFormat pf = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.ENGLISH);
+    
+    {
         pf.setMaximumFractionDigits(1);
         pf.setPositivePrefix("+");
     }
