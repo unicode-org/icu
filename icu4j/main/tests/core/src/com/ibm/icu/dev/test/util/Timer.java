@@ -81,12 +81,18 @@ public final class Timer {
     }
 
     public long timeIterations(Loop loop, Object... params) {
+        // Timing on Java is very tricky, especially when you count in garbage collection. This is a simple strategy for now, we might improve later.
+        // The current strategy is to warm up once, then time it until we reach the timingPeriod (eg 5 seconds), increasing the iterations each time
+        // At first, we double the iterations.
+        // Once we get to within 1/4 of the timingPeriod, we change to adding 33%, plus 1. We also remember the shortest duration from this point on.
+        // We return the shortest of the durations.
         loop.init(params);
         System.gc();
         start();
         loop.time(1);
         stop();
-        iterations = 2;
+        iterations = 1;
+        long shortest = Long.MAX_VALUE;
         while (true) {
             System.gc();
             start();
@@ -94,9 +100,14 @@ public final class Timer {
             stop();
             if (duration >= timingPeriod) {
                 duration /= iterations;
-                return duration;
+                return Math.min(duration, shortest);
+            } else if (duration >= timingPeriod / 4) {
+                duration /= iterations;
+                shortest = Math.min(duration, shortest);
+                iterations = (iterations * 4) / 3 + 1;
+            } else {
+                iterations = iterations * 2;
             }
-            iterations <<= 1;
         }
     }
 }

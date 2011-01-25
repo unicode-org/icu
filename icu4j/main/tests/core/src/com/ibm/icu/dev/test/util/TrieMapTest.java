@@ -45,10 +45,12 @@ public class TrieMapTest extends TestFmwk {
         super.init();
         if (unicodeTestMap.size() == 0) {
             if (getInclusion() < 5) {
-                logln("\tSmall version:\t to get more accurate figures and test for reasonable times, use -e5 or more");
+                logln("\tShort version, timing for 1s:\t to get more accurate figures and test for reasonable times, use -e5 or more");
                 t.setTimingPeriod(1*Timer.SECONDS);
             } else {
-                t.setTimingPeriod((getInclusion() - 4)*Timer.SECONDS);
+                int seconds = getInclusion();
+                logln("\tExhaustive version, timing for " + seconds + "s");
+                t.setTimingPeriod(seconds*Timer.SECONDS);
                 useSmallList = false;
             }
 
