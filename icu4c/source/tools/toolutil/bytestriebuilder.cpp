@@ -121,6 +121,10 @@ BytesTrieElement::compareStringTo(const BytesTrieElement &other, const CharStrin
     return diff!=0 ? diff : lengthDiff;
 }
 
+BytesTrieBuilder::BytesTrieBuilder(UErrorCode & /*errorCode*/)
+        : elements(NULL), elementsCapacity(0), elementsLength(0),
+          bytes(NULL), bytesCapacity(0), bytesLength(0) {}
+
 BytesTrieBuilder::~BytesTrieBuilder() {
     delete[] elements;
     uprv_free(bytes);
@@ -170,39 +174,66 @@ compareElementStrings(const void *context, const void *left, const void *right) 
 
 U_CDECL_END
 
-StringPiece
+BytesTrie *
 BytesTrieBuilder::build(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
-    StringPiece result;
-    if(U_FAILURE(errorCode)) {
-        return result;
-    }
-    if(bytesLength>0) {
-        // Already built.
-        result.set(bytes+(bytesCapacity-bytesLength), bytesLength);
-        return result;
-    }
-    if(elementsLength==0) {
-        errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return result;
-    }
-    uprv_sortArray(elements, elementsLength, (int32_t)sizeof(BytesTrieElement),
-                   compareElementStrings, &strings,
-                   FALSE,  // need not be a stable sort
-                   &errorCode);
-    if(U_FAILURE(errorCode)) {
-        return result;
-    }
-    // Duplicate strings are not allowed.
-    StringPiece prev=elements[0].getString(strings);
-    for(int32_t i=1; i<elementsLength; ++i) {
-        StringPiece current=elements[i].getString(strings);
-        if(prev==current) {
-            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            return result;
+    buildBytes(buildOption, errorCode);
+    BytesTrie *newTrie=NULL;
+    if(U_SUCCESS(errorCode)) {
+        newTrie=new BytesTrie(bytes, bytes+(bytesCapacity-bytesLength));
+        if(newTrie==NULL) {
+            errorCode=U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            bytes=NULL;  // The new trie now owns the array.
+            bytesCapacity=0;
         }
-        prev=current;
+    }
+    return newTrie;
+}
+
+StringPiece
+BytesTrieBuilder::buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
+    buildBytes(buildOption, errorCode);
+    StringPiece result;
+    if(U_SUCCESS(errorCode)) {
+        result.set(bytes+(bytesCapacity-bytesLength), bytesLength);
+    }
+    return result;
+}
+
+void
+BytesTrieBuilder::buildBytes(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    if(bytes!=NULL && bytesLength>0) {
+        // Already built.
+        return;
+    }
+    if(bytesLength==0) {
+        if(elementsLength==0) {
+            errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
+        uprv_sortArray(elements, elementsLength, (int32_t)sizeof(BytesTrieElement),
+                      compareElementStrings, &strings,
+                      FALSE,  // need not be a stable sort
+                      &errorCode);
+        if(U_FAILURE(errorCode)) {
+            return;
+        }
+        // Duplicate strings are not allowed.
+        StringPiece prev=elements[0].getString(strings);
+        for(int32_t i=1; i<elementsLength; ++i) {
+            StringPiece current=elements[i].getString(strings);
+            if(prev==current) {
+                errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            prev=current;
+        }
     }
     // Create and byte-serialize the trie for the elements.
+    bytesLength=0;
     int32_t capacity=strings.length();
     if(capacity<1024) {
         capacity=1024;
@@ -213,17 +244,14 @@ BytesTrieBuilder::build(UStringTrieBuildOption buildOption, UErrorCode &errorCod
         if(bytes==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             bytesCapacity=0;
-            return result;
+            return;
         }
         bytesCapacity=capacity;
     }
     StringTrieBuilder::build(buildOption, elementsLength, errorCode);
     if(bytes==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        result.set(bytes+(bytesCapacity-bytesLength), bytesLength);
     }
-    return result;
 }
 
 int32_t

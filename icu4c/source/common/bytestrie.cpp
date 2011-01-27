@@ -15,10 +15,15 @@
 #include "unicode/utypes.h"
 #include "unicode/bytestream.h"
 #include "unicode/uobject.h"
+#include "cmemory.h"
 #include "uassert.h"
 #include "bytestrie.h"
 
 U_NAMESPACE_BEGIN
+
+BytesTrie::~BytesTrie() {
+    uprv_free(ownedArray_);
+}
 
 // lead byte already shifted right by 1.
 int32_t
@@ -177,6 +182,9 @@ BytesTrie::next(int32_t inByte) {
     const uint8_t *pos=pos_;
     if(pos==NULL) {
         return USTRINGTRIE_NO_MATCH;
+    }
+    if(inByte<0) {
+        inByte+=0x100;
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
     if(length>=0) {

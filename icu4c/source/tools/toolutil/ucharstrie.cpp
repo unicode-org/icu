@@ -14,6 +14,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "cmemory.h"
 #include "uassert.h"
 #include "ucharstrie.h"
 
@@ -47,6 +48,10 @@ Appendable::append(const UChar *s, int32_t length) {
 }
 
 UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Appendable)
+
+UCharsTrie::~UCharsTrie() {
+    uprv_free(ownedArray_);
+}
 
 UStringTrieResult
 UCharsTrie::current() const {
