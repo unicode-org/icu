@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_res.cpp
@@ -1111,6 +1111,7 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
 
     // are we filling from the bottom?
     bool fromTheBottom = true;
+    int32_t reorderCodesIndex = -1;
     
     // lead bytes that have alread been assigned to the permutation table
     bool newLeadByteUsed[256];
@@ -1177,7 +1178,8 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
      * possible location. At each step, we also need to make sure that any scripts
      * that need to not be moved are copied to their same location in the final table.
      */
-    for (int reorderCodesIndex = 0; reorderCodesIndex < internalReorderCodesLength; reorderCodesIndex++) {
+    for (int reorderCodesCount = 0; reorderCodesCount < internalReorderCodesLength; reorderCodesCount++) {
+        reorderCodesIndex += fromTheBottom ? 1 : -1;
         int32_t next = internalReorderCodes[reorderCodesIndex];
         if (next == UCOL_REORDER_CODE_IGNORE) {
             continue;
@@ -1197,6 +1199,7 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                 return;
             }
             fromTheBottom = false;
+            reorderCodesIndex = internalReorderCodesLength;
             continue;
         }
         
