@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -479,6 +479,23 @@ uregex_getUText(URegularExpression *regexp2,
         return dest;
     }
     return regexp->fMatcher->getInput(dest, *status);
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_refreshUText
+//
+//------------------------------------------------------------------------------
+U_CAPI void U_EXPORT2 
+uregex_refreshUText(URegularExpression *regexp2,
+                    UText              *text,
+                    UErrorCode         *status) {
+    RegularExpression *regexp = (RegularExpression*)regexp2;
+    if (validateRE(regexp, status, FALSE) == FALSE) {
+        return;
+    }
+    regexp->fMatcher->refreshInputText(text, *status);
 }
 
 
