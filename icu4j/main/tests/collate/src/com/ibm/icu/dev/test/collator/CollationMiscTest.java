@@ -1,7 +1,7 @@
 
  /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3063,157 +3063,6 @@ public class CollationMiscTest extends TestFmwk {
             warnln("ERROR: in creation of rule based collator");
         }
     }
-    
-    
-//    public void TestGreekFirstReorder(){
-//        String[] testSourceCases = {
-//            "\u0041",
-//            "\u03b1\u0041",
-//            "\u0061",
-//            "\u0041\u0061",
-//            "\u0391",
-//        };
-//
-//        String[] testTargetCases = {
-//            "\u03b1",
-//            "\u0041\u03b1",
-//            "\u0391",
-//            "\u0391\u03b1",
-//            "\u0391",
-//        };
-//
-//        int[] results = {
-//            1,
-//            -1,
-//            1,
-//            1,
-//            0
-//        };
-//
-//        Collator  myCollation;
-//        String rules = "[reorder Grek]";
-//        try {
-//            myCollation = new RuleBasedCollator(rules);
-//        } catch (Exception e) {
-//            warnln("ERROR: in creation of rule based collator");
-//            return;
-//        }
-//        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-//        myCollation.setStrength(Collator.TERTIARY);
-//        for (int i = 0; i < testSourceCases.length; i++)
-//        {
-//            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-//                                 testSourceCases[i], testTargetCases[i], 
-//                                 results[i]);
-//        }
-//
-//        try {
-//            myCollation = new RuleBasedCollator("");
-//        } catch (Exception e) {
-//            warnln("ERROR: in creation of rule based collator");
-//            return;
-//        }
-//        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-//        myCollation.setStrength(Collator.TERTIARY);
-//        myCollation.setScriptOrder(new int[]{UScript.GREEK});
-//        for (int i = 0; i < testSourceCases.length; i++)
-//        {
-//            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-//                                 testSourceCases[i], testTargetCases[i], 
-//                                 results[i]);
-//        }
-//
-//        try {
-//            myCollation = new RuleBasedCollator("");
-//        } catch (Exception e) {
-//            warnln("ERROR: in creation of rule based collator");
-//            return;
-//        }
-//        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-//        myCollation.setStrength(Collator.TERTIARY);
-//        myCollation.setScriptOrder(UScript.GREEK);
-//        for (int i = 0; i < testSourceCases.length; i++)
-//        {
-//            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-//                                 testSourceCases[i], testTargetCases[i], 
-//                                 results[i]);
-//        }
-//    }
-//
-//    public void TestUnknownReorder(){
-//        String[] testSourceCases = {
-//            "\u0041",
-//            "\u0041",
-//            "\u0031",
-//            "\u0391",
-//            "\u0031",
-//        };
-//
-//        String[] testTargetCases = {
-//            "\u03b1",
-//            "\u0031",
-//            "\u0391",
-//            "\u099d",
-//            "\u0032",
-//        };
-//
-//        int[] results = {
-//            -1,
-//            1,
-//            1,
-//            -1,
-//            -1
-//        };
-//
-//        Collator  myCollation;
-//        String rules = "[reorder Latn Zzzz Zyyy]";
-//        try {
-//            myCollation = new RuleBasedCollator(rules);
-//        } catch (Exception e) {
-//            warnln("ERROR: in creation of rule based collator");
-//            return;
-//        }
-//        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-//        myCollation.setStrength(Collator.TERTIARY);
-//        for (int i = 0; i < testSourceCases.length ; i++)
-//        {
-//            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-//                                 testSourceCases[i], testTargetCases[i], 
-//                                 results[i]);
-//        }
-//
-//        try {
-//            myCollation = new RuleBasedCollator("");
-//        } catch (Exception e) {
-//            warnln("ERROR: in creation of rule based collator");
-//            return;
-//        }
-//        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-//        myCollation.setStrength(Collator.TERTIARY);
-//        myCollation.setScriptOrder(new int[]{UScript.LATIN, UScript.UNKNOWN, UScript.COMMON});
-//        for (int i = 0; i < testSourceCases.length ; i++)
-//        {
-//            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-//                                 testSourceCases[i], testTargetCases[i], 
-//                                 results[i]);
-//        }
-//
-//        try {
-//            myCollation = new RuleBasedCollator("");
-//        } catch (Exception e) {
-//            warnln("ERROR: in creation of rule based collator");
-//            return;
-//        }
-//        myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-//        myCollation.setStrength(Collator.TERTIARY);
-//        myCollation.setScriptOrder(UScript.LATIN, UScript.UNKNOWN, UScript.COMMON);
-//        for (int i = 0; i < testSourceCases.length ; i++)
-//        {
-//            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-//                                 testSourceCases[i], testTargetCases[i], 
-//                                 results[i]);
-//        }
-//    }
 
     /*
      * This test ensures that characters placed before a character in a different script have the same lead byte
@@ -3626,5 +3475,28 @@ public class CollationMiscTest extends TestFmwk {
 
         /* Test collation reordering API */
         doTestOneReorderingAPITestCase(privateUseCharacterStrings, apiRules);
+    }
+    
+    public void TestMultipleReorder()
+    {
+        String[] strRules = {
+            "[reorder Grek Zzzz DIGIT Latn Hani]"
+        };
+
+        int[] apiRules = {
+            UScript.GREEK, UScript.UNKNOWN, ReorderCodes.DIGIT, UScript.LATIN, UScript.HAN
+        };
+        
+        OneTestCase[] collationTestCases = {
+            new OneTestCase("\u0391", "\u0041", -1),
+            new OneTestCase("\u0031", "\u0041", -1),
+            new OneTestCase("u0041", "\u4e00", -1),
+        };
+
+        /* Test rules creation */
+        doTestCollation(collationTestCases, strRules);
+
+        /* Test collation reordering API */
+        doTestOneReorderingAPITestCase(collationTestCases, apiRules);
     }
 }
