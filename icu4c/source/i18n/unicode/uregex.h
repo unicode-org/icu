@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uregex.h
@@ -394,6 +394,36 @@ U_DRAFT UText * U_EXPORT2
 uregex_getUText(URegularExpression *regexp,
                 UText              *dest,
                 UErrorCode         *status);
+
+/**
+  *  Set the subject text string upon which the regular expression is looking for matches
+  *  without changing any other aspect of the matching state.
+  *  The new and previous text strings must have the same content.
+  *
+  *  This function is intended for use in environments where ICU is operating on 
+  *  strings that may move around in memory.  It provides a mechanism for notifying
+  *  ICU that the string has been relocated, and providing a new UText to access the
+  *  string in its new position.
+  *
+  *  Note that the regular expression implementation never copies the underlying text
+  *  of a string being matched, but always operates directly on the original text 
+  *  provided by the user. Refreshing simply drops the references to the old text 
+  *  and replaces them with references to the new.
+  *
+  *  Caution:  this function is normally used only by very specialized
+  *            system-level code.   One example use case is with garbage collection 
+  *            that moves the text in memory. 
+  *
+  * @param regexp     The compiled regular expression.
+  * @param text       The new (moved) text string.
+  * @param status     Receives errors detected by this function.
+  *
+  * @draft ICU 4.8 
+  */
+U_INTERNAL void U_EXPORT2 
+uregex_refreshUText(URegularExpression *regexp,
+                    UText              *text,
+                    UErrorCode         *status);
 
 /**
   *   Attempts to match the input string against the pattern.
