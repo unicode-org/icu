@@ -15,6 +15,7 @@
 #include <string.h>
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "unicode/stringpiece.h"
 #include "bytestrie.h"
 #include "bytestriebuilder.h"
@@ -29,7 +30,7 @@ struct StringAndValue {
 
 class BytesTrieTest : public IntlTest {
 public:
-    BytesTrieTest() {}
+    BytesTrieTest();
     virtual ~BytesTrieTest();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
@@ -44,7 +45,7 @@ public:
     void TestValuesForState();
     void TestCompact();
 
-    StringPiece buildMonthsTrie(BytesTrieBuilder &builder, UStringTrieBuildOption buildOption);
+    BytesTrie *buildMonthsTrie(UStringTrieBuildOption buildOption);
     void TestHasUniqueValue();
     void TestGetNextBytes();
     void TestIteratorFromBranch();
@@ -52,24 +53,34 @@ public:
     void TestTruncatingIteratorFromRoot();
     void TestTruncatingIteratorFromLinearMatchShort();
     void TestTruncatingIteratorFromLinearMatchLong();
+    void TestIteratorFromBytes();
 
     void checkData(const StringAndValue data[], int32_t dataLength);
     void checkData(const StringAndValue data[], int32_t dataLength, UStringTrieBuildOption buildOption);
-    StringPiece buildTrie(const StringAndValue data[], int32_t dataLength,
-                          BytesTrieBuilder &builder, UStringTrieBuildOption buildOption);
-    void checkFirst(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
-    void checkNext(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
-    void checkNextWithState(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
-    void checkNextString(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
-    void checkIterator(const StringPiece &trieBytes, const StringAndValue data[], int32_t dataLength);
+    BytesTrie *buildTrie(const StringAndValue data[], int32_t dataLength,
+                         UStringTrieBuildOption buildOption);
+    void checkFirst(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNext(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNextWithState(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNextString(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkIterator(const BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkIterator(BytesTrie::Iterator &iter, const StringAndValue data[], int32_t dataLength);
+
+private:
+    BytesTrieBuilder *builder_;
 };
 
 extern IntlTest *createBytesTrieTest() {
     return new BytesTrieTest();
 }
 
+BytesTrieTest::BytesTrieTest() : builder_(NULL) {
+    IcuTestErrorCode errorCode(*this, "BytesTrieTest()");
+    builder_=new BytesTrieBuilder(errorCode);
+}
+
 BytesTrieTest::~BytesTrieTest() {
+    delete builder_;
 }
 
 void BytesTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
@@ -94,20 +105,22 @@ void BytesTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestTruncatingIteratorFromRoot);
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchShort);
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchLong);
+    TESTCASE_AUTO(TestIteratorFromBytes);
     TESTCASE_AUTO_END;
 }
 
 void BytesTrieTest::TestBuilder() {
     IcuTestErrorCode errorCode(*this, "TestBuilder()");
-    BytesTrieBuilder builder;
-    builder.build(USTRINGTRIE_BUILD_FAST, errorCode);
+    builder_->clear();
+    delete builder_->build(USTRINGTRIE_BUILD_FAST, errorCode);
     if(errorCode.reset()!=U_INDEX_OUTOFBOUNDS_ERROR) {
         errln("BytesTrieBuilder().build() did not set U_INDEX_OUTOFBOUNDS_ERROR");
         return;
     }
-    builder.add("=", 0, errorCode).add("=", 1, errorCode).build(USTRINGTRIE_BUILD_FAST, errorCode);
+    // TODO: remove .build(...) once add() checks for duplicates.
+    builder_->add("=", 0, errorCode).add("=", 1, errorCode).build(USTRINGTRIE_BUILD_FAST, errorCode);
     if(errorCode.reset()!=U_ILLEGAL_ARGUMENT_ERROR) {
-        errln("BytesTrieBuilder.build() did not detect duplicates");
+        errln("BytesTrieBuilder.add() did not detect duplicates");
         return;
     }
 }
@@ -250,7 +263,7 @@ void BytesTrieTest::TestCompact() {
     checkData(data, LENGTHOF(data));
 }
 
-StringPiece BytesTrieTest::buildMonthsTrie(BytesTrieBuilder &builder, UStringTrieBuildOption buildOption) {
+BytesTrie *BytesTrieTest::buildMonthsTrie(UStringTrieBuildOption buildOption) {
     // All types of nodes leading to the same value,
     // for code coverage of recursive functions.
     // In particular, we need a lot of branches on some single level
@@ -287,111 +300,105 @@ StringPiece BytesTrieTest::buildMonthsTrie(BytesTrieBuilder &builder, UStringTri
         { "jun.", 6 },
         { "june", 6 }
     };
-    return buildTrie(data, LENGTHOF(data), builder, buildOption);
+    return buildTrie(data, LENGTHOF(data), buildOption);
 }
 
 void BytesTrieTest::TestHasUniqueValue() {
-    BytesTrieBuilder builder;
-    StringPiece sp=buildMonthsTrie(builder, USTRINGTRIE_BUILD_FAST);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    BytesTrie trie(sp.data());
     int32_t uniqueValue;
-    if(trie.hasUniqueValue(uniqueValue)) {
+    if(trie->hasUniqueValue(uniqueValue)) {
         errln("unique value at root");
     }
-    trie.next('j');
-    trie.next('a');
-    trie.next('n');
+    trie->next('j');
+    trie->next('a');
+    trie->next('n');
     // hasUniqueValue() directly after next()
-    if(!trie.hasUniqueValue(uniqueValue) || uniqueValue!=1) {
+    if(!trie->hasUniqueValue(uniqueValue) || uniqueValue!=1) {
         errln("not unique value 1 after \"jan\"");
     }
-    trie.first('j');
-    trie.next('u');
-    if(trie.hasUniqueValue(uniqueValue)) {
+    trie->first('j');
+    trie->next('u');
+    if(trie->hasUniqueValue(uniqueValue)) {
         errln("unique value after \"ju\"");
     }
-    if(trie.next('n')!=USTRINGTRIE_INTERMEDIATE_VALUE || 6!=trie.getValue()) {
+    if(trie->next('n')!=USTRINGTRIE_INTERMEDIATE_VALUE || 6!=trie->getValue()) {
         errln("not normal value 6 after \"jun\"");
     }
     // hasUniqueValue() after getValue()
-    if(!trie.hasUniqueValue(uniqueValue) || uniqueValue!=6) {
+    if(!trie->hasUniqueValue(uniqueValue) || uniqueValue!=6) {
         errln("not unique value 6 after \"jun\"");
     }
     // hasUniqueValue() from within a linear-match node
-    trie.first('a');
-    trie.next('u');
-    if(!trie.hasUniqueValue(uniqueValue) || uniqueValue!=8) {
+    trie->first('a');
+    trie->next('u');
+    if(!trie->hasUniqueValue(uniqueValue) || uniqueValue!=8) {
         errln("not unique value 8 after \"au\"");
     }
 }
 
 void BytesTrieTest::TestGetNextBytes() {
-    BytesTrieBuilder builder;
-    StringPiece sp=buildMonthsTrie(builder, USTRINGTRIE_BUILD_SMALL);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_SMALL));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    BytesTrie trie(sp.data());
     char buffer[40];
     CheckedArrayByteSink sink(buffer, LENGTHOF(buffer));
-    int32_t count=trie.getNextBytes(sink);
+    int32_t count=trie->getNextBytes(sink);
     if(count!=2 || sink.NumberOfBytesAppended()!=2 || buffer[0]!='a' || buffer[1]!='j') {
         errln("months getNextBytes()!=[aj] at root");
     }
-    trie.next('j');
-    trie.next('a');
-    trie.next('n');
+    trie->next('j');
+    trie->next('a');
+    trie->next('n');
     // getNextBytes() directly after next()
-    count=trie.getNextBytes(sink.Reset());
+    count=trie->getNextBytes(sink.Reset());
     buffer[count]=0;
     if(count!=20 || sink.NumberOfBytesAppended()!=20 || 0!=strcmp(buffer, ".abcdefghijklmnopqru")) {
         errln("months getNextBytes()!=[.abcdefghijklmnopqru] after \"jan\"");
     }
     // getNextBytes() after getValue()
-    trie.getValue();  // next() had returned USTRINGTRIE_INTERMEDIATE_VALUE.
+    trie->getValue();  // next() had returned USTRINGTRIE_INTERMEDIATE_VALUE.
     memset(buffer, 0, sizeof(buffer));
-    count=trie.getNextBytes(sink.Reset());
+    count=trie->getNextBytes(sink.Reset());
     if(count!=20 || sink.NumberOfBytesAppended()!=20 || 0!=strcmp(buffer, ".abcdefghijklmnopqru")) {
         errln("months getNextBytes()!=[.abcdefghijklmnopqru] after \"jan\"+getValue()");
     }
     // getNextBytes() from a linear-match node
-    trie.next('u');
+    trie->next('u');
     memset(buffer, 0, sizeof(buffer));
-    count=trie.getNextBytes(sink.Reset());
+    count=trie->getNextBytes(sink.Reset());
     if(count!=1 || sink.NumberOfBytesAppended()!=1 || buffer[0]!='a') {
         errln("months getNextBytes()!=[a] after \"janu\"");
     }
-    trie.next('a');
+    trie->next('a');
     memset(buffer, 0, sizeof(buffer));
-    count=trie.getNextBytes(sink.Reset());
+    count=trie->getNextBytes(sink.Reset());
     if(count!=1 || sink.NumberOfBytesAppended()!=1 || buffer[0]!='r') {
         errln("months getNextBytes()!=[r] after \"janua\"");
     }
-    trie.next('r');
-    trie.next('y');
+    trie->next('r');
+    trie->next('y');
     // getNextBytes() after a final match
-    count=trie.getNextBytes(sink.Reset());
+    count=trie->getNextBytes(sink.Reset());
     if(count!=0 || sink.NumberOfBytesAppended()!=0) {
         errln("months getNextBytes()!=[] after \"january\"");
     }
 }
 
 void BytesTrieTest::TestIteratorFromBranch() {
-    BytesTrieBuilder builder;
-    StringPiece sp=buildMonthsTrie(builder, USTRINGTRIE_BUILD_FAST);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    BytesTrie trie(sp.data());
     // Go to a branch node.
-    trie.next('j');
-    trie.next('a');
-    trie.next('n');
+    trie->next('j');
+    trie->next('a');
+    trie->next('n');
     IcuTestErrorCode errorCode(*this, "TestIteratorFromBranch()");
-    BytesTrie::Iterator iter(trie, 0, errorCode);
+    BytesTrie::Iterator iter(*trie, 0, errorCode);
     if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -431,20 +438,18 @@ void BytesTrieTest::TestIteratorFromBranch() {
 }
 
 void BytesTrieTest::TestIteratorFromLinearMatch() {
-    BytesTrieBuilder builder;
-    StringPiece sp=buildMonthsTrie(builder, USTRINGTRIE_BUILD_SMALL);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_SMALL));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    BytesTrie trie(sp.data());
     // Go into a linear-match node.
-    trie.next('j');
-    trie.next('a');
-    trie.next('n');
-    trie.next('u');
-    trie.next('a');
+    trie->next('j');
+    trie->next('a');
+    trie->next('n');
+    trie->next('u');
+    trie->next('a');
     IcuTestErrorCode errorCode(*this, "TestIteratorFromLinearMatch()");
-    BytesTrie::Iterator iter(trie, 0, errorCode);
+    BytesTrie::Iterator iter(*trie, 0, errorCode);
     if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -461,13 +466,12 @@ void BytesTrieTest::TestIteratorFromLinearMatch() {
 }
 
 void BytesTrieTest::TestTruncatingIteratorFromRoot() {
-    BytesTrieBuilder builder;
-    StringPiece sp=buildMonthsTrie(builder, USTRINGTRIE_BUILD_FAST);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromRoot()");
-    BytesTrie::Iterator iter(sp.data(), 4, errorCode);
+    BytesTrie::Iterator iter(*trie, 4, errorCode);
     if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -513,18 +517,16 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
         { "abcdepq", 200 },
         { "abcdeyz", 3000 }
     };
-    BytesTrieBuilder builder;
-    StringPiece sp=buildTrie(data, LENGTHOF(data), builder, USTRINGTRIE_BUILD_FAST);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildTrie(data, LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    BytesTrie trie(sp.data());
     // Go into a linear-match node.
-    trie.next('a');
-    trie.next('b');
+    trie->next('a');
+    trie->next('b');
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchShort()");
     // Truncate within the linear-match node.
-    BytesTrie::Iterator iter(trie, 2, errorCode);
+    BytesTrie::Iterator iter(*trie, 2, errorCode);
     if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -543,19 +545,17 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
         { "abcdepq", 200 },
         { "abcdeyz", 3000 }
     };
-    BytesTrieBuilder builder;
-    StringPiece sp=buildTrie(data, LENGTHOF(data), builder, USTRINGTRIE_BUILD_FAST);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildTrie(data, LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    BytesTrie trie(sp.data());
     // Go into a linear-match node.
-    trie.next('a');
-    trie.next('b');
-    trie.next('c');
+    trie->next('a');
+    trie->next('b');
+    trie->next('c');
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchLong()");
     // Truncate after the linear-match node.
-    BytesTrie::Iterator iter(trie, 3, errorCode);
+    BytesTrie::Iterator iter(*trie, 3, errorCode);
     if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -570,6 +570,22 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
     checkIterator(iter.reset(), expected, LENGTHOF(expected));
 }
 
+void BytesTrieTest::TestIteratorFromBytes() {
+    static const StringAndValue data[]={
+        { "mm", 3 },
+        { "mmm", 33 },
+        { "mmnop", 333 }
+    };
+    builder_->clear();
+    IcuTestErrorCode errorCode(*this, "TestIteratorFromBytes()");
+    for(int32_t i=0; i<LENGTHOF(data); ++i) {
+        builder_->add(data[i].s, data[i].value, errorCode);
+    }
+    StringPiece trieBytes=builder_->buildStringPiece(USTRINGTRIE_BUILD_FAST, errorCode);
+    BytesTrie::Iterator iter(trieBytes.data(), 0, errorCode);
+    checkIterator(iter, data, LENGTHOF(data));
+}
+
 void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {
     logln("checkData(dataLength=%d, fast)", (int)dataLength);
     checkData(data, dataLength, USTRINGTRIE_BUILD_FAST);
@@ -578,20 +594,19 @@ void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {
 }
 
 void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength, UStringTrieBuildOption buildOption) {
-    BytesTrieBuilder builder;
-    StringPiece sp=buildTrie(data, dataLength, builder, buildOption);
-    if(sp.empty()) {
+    LocalPointer<BytesTrie> trie(buildTrie(data, dataLength, buildOption));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    checkFirst(sp, data, dataLength);
-    checkNext(sp, data, dataLength);
-    checkNextWithState(sp, data, dataLength);
-    checkNextString(sp, data, dataLength);
-    checkIterator(sp, data, dataLength);
+    checkFirst(*trie, data, dataLength);
+    checkNext(*trie, data, dataLength);
+    checkNextWithState(*trie, data, dataLength);
+    checkNextString(*trie, data, dataLength);
+    checkIterator(*trie, data, dataLength);
 }
 
-StringPiece BytesTrieTest::buildTrie(const StringAndValue data[], int32_t dataLength,
-                                     BytesTrieBuilder &builder, UStringTrieBuildOption buildOption) {
+BytesTrie *BytesTrieTest::buildTrie(const StringAndValue data[], int32_t dataLength,
+                                    UStringTrieBuildOption buildOption) {
     IcuTestErrorCode errorCode(*this, "buildTrie()");
     // Add the items to the trie builder in an interesting (not trivial, not random) order.
     int32_t index, step;
@@ -607,47 +622,61 @@ StringPiece BytesTrieTest::buildTrie(const StringAndValue data[], int32_t dataLe
         index=dataLength-1;
         step=-1;
     }
-    builder.clear();
+    builder_->clear();
     for(int32_t i=0; i<dataLength; ++i) {
-        builder.add(data[index].s, data[index].value, errorCode);
+        builder_->add(data[index].s, data[index].value, errorCode);
         index=(index+step)%dataLength;
     }
-    StringPiece sp(builder.build(buildOption, errorCode));
+    StringPiece sp=builder_->buildStringPiece(buildOption, errorCode);
+    LocalPointer<BytesTrie> trie(builder_->build(buildOption, errorCode));
     if(!errorCode.logIfFailureAndReset("add()/build()")) {
-        builder.add("zzz", 999, errorCode);
+        builder_->add("zzz", 999, errorCode);
         if(errorCode.reset()!=U_NO_WRITE_PERMISSION) {
             errln("builder.build().add(zzz) did not set U_NO_WRITE_PERMISSION");
         }
     }
     logln("serialized trie size: %ld bytes\n", (long)sp.length());
-    return sp;
+    StringPiece sp2=builder_->buildStringPiece(buildOption, errorCode);
+    if(sp.data()==sp2.data()) {
+        errln("builder.buildStringPiece() before & after build() returned same array");
+    }
+    if(errorCode.isFailure()) {
+        return NULL;
+    }
+    // Tries from either build() method should be identical but
+    // BytesTrie does not implement equals().
+    // We just return either one.
+    if((dataLength&1)!=0) {
+        return trie.orphan();
+    } else {
+        return new BytesTrie(sp2.data());
+    }
 }
 
-void BytesTrieTest::checkFirst(const StringPiece &trieBytes,
+void BytesTrieTest::checkFirst(BytesTrie &trie,
                                const StringAndValue data[], int32_t dataLength) {
-    BytesTrie trie(trieBytes.data());
     for(int32_t i=0; i<dataLength; ++i) {
-        int c=(uint8_t)*data[i].s;
+        int c=*data[i].s;
         if(c==0) {
             continue;  // skip empty string
         }
         UStringTrieResult firstResult=trie.first(c);
         int32_t firstValue=USTRINGTRIE_HAS_VALUE(firstResult) ? trie.getValue() : -1;
-        UStringTrieResult nextResult=trie.next((uint8_t)data[i].s[1]);
+        UStringTrieResult nextResult=trie.next(data[i].s[1]);
         if(firstResult!=trie.reset().next(c) ||
            firstResult!=trie.current() ||
            firstValue!=(USTRINGTRIE_HAS_VALUE(firstResult) ? trie.getValue() : -1) ||
-           nextResult!=trie.next((uint8_t)data[i].s[1])
+           nextResult!=trie.next(data[i].s[1])
         ) {
             errln("trie.first(%c)!=trie.reset().next(same) for %s",
                   c, data[i].s);
         }
     }
+    trie.reset();
 }
 
-void BytesTrieTest::checkNext(const StringPiece &trieBytes,
+void BytesTrieTest::checkNext(BytesTrie &trie,
                               const StringAndValue data[], int32_t dataLength) {
-    BytesTrie trie(trieBytes.data());
     BytesTrie::State state;
     for(int32_t i=0; i<dataLength; ++i) {
         int32_t stringLength= (i&1) ? -1 : strlen(data[i].s);
@@ -715,9 +744,8 @@ void BytesTrieTest::checkNext(const StringPiece &trieBytes,
     }
 }
 
-void BytesTrieTest::checkNextWithState(const StringPiece &trieBytes,
+void BytesTrieTest::checkNextWithState(BytesTrie &trie,
                                        const StringAndValue data[], int32_t dataLength) {
-    BytesTrie trie(trieBytes.data());
     BytesTrie::State noState, state;
     for(int32_t i=0; i<dataLength; ++i) {
         if((i&1)==0) {
@@ -776,9 +804,8 @@ void BytesTrieTest::checkNextWithState(const StringPiece &trieBytes,
 
 // next(string) is also tested in other functions,
 // but here we try to go partway through the string, and then beyond it.
-void BytesTrieTest::checkNextString(const StringPiece &trieBytes,
+void BytesTrieTest::checkNextString(BytesTrie &trie,
                                     const StringAndValue data[], int32_t dataLength) {
-    BytesTrie trie(trieBytes.data());
     for(int32_t i=0; i<dataLength; ++i) {
         const char *expectedString=data[i].s;
         int32_t stringLength=strlen(expectedString);
@@ -794,11 +821,11 @@ void BytesTrieTest::checkNextString(const StringPiece &trieBytes,
     }
 }
 
-void BytesTrieTest::checkIterator(const StringPiece &trieBytes,
+void BytesTrieTest::checkIterator(const BytesTrie &trie,
                                   const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
-    BytesTrie::Iterator iter(trieBytes.data(), 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trieBytes) constructor")) {
+    BytesTrie::Iterator iter(trie, 0, errorCode);
+    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     checkIterator(iter, data, dataLength);

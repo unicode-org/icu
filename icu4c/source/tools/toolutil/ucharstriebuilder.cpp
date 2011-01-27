@@ -80,6 +80,10 @@ UCharsTrieElement::compareStringTo(const UCharsTrieElement &other, const Unicode
     return getString(strings).compare(other.getString(strings));
 }
 
+UCharsTrieBuilder::UCharsTrieBuilder(UErrorCode & /*errorCode*/)
+        : elements(NULL), elementsCapacity(0), elementsLength(0),
+          uchars(NULL), ucharsCapacity(0), ucharsLength(0) {}
+
 UCharsTrieBuilder::~UCharsTrieBuilder() {
     delete[] elements;
     uprv_free(uchars);
@@ -132,42 +136,70 @@ compareElementStrings(const void *context, const void *left, const void *right) 
 
 U_CDECL_END
 
-UnicodeString &
-UCharsTrieBuilder::build(UStringTrieBuildOption buildOption, UnicodeString &result, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) {
-        return result;
-    }
-    if(ucharsLength>0) {
-        // Already built.
-        result.setTo(FALSE, uchars+(ucharsCapacity-ucharsLength), ucharsLength);
-        return result;
-    }
-    if(elementsLength==0) {
-        errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return result;
-    }
-    if(strings.isBogus()) {
-        errorCode=U_MEMORY_ALLOCATION_ERROR;
-        return result;
-    }
-    uprv_sortArray(elements, elementsLength, (int32_t)sizeof(UCharsTrieElement),
-                   compareElementStrings, &strings,
-                   FALSE,  // need not be a stable sort
-                   &errorCode);
-    if(U_FAILURE(errorCode)) {
-        return result;
-    }
-    // Duplicate strings are not allowed.
-    UnicodeString prev=elements[0].getString(strings);
-    for(int32_t i=1; i<elementsLength; ++i) {
-        UnicodeString current=elements[i].getString(strings);
-        if(prev==current) {
-            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            return result;
+UCharsTrie *
+UCharsTrieBuilder::build(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
+    buildUChars(buildOption, errorCode);
+    UCharsTrie *newTrie=NULL;
+    if(U_SUCCESS(errorCode)) {
+        newTrie=new UCharsTrie(uchars, uchars+(ucharsCapacity-ucharsLength));
+        if(newTrie==NULL) {
+            errorCode=U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            uchars=NULL;  // The new trie now owns the array.
+            ucharsCapacity=0;
         }
-        prev.fastCopyFrom(current);
+    }
+    return newTrie;
+}
+
+UnicodeString &
+UCharsTrieBuilder::buildUnicodeString(UStringTrieBuildOption buildOption, UnicodeString &result,
+                                      UErrorCode &errorCode) {
+    buildUChars(buildOption, errorCode);
+    if(U_SUCCESS(errorCode)) {
+        result.setTo(FALSE, uchars+(ucharsCapacity-ucharsLength), ucharsLength);
+    }
+    return result;
+}
+
+void
+UCharsTrieBuilder::buildUChars(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    if(uchars!=NULL && ucharsLength>0) {
+        // Already built.
+        return;
+    }
+    if(ucharsLength==0) {
+        if(elementsLength==0) {
+            errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
+        if(strings.isBogus()) {
+            errorCode=U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        uprv_sortArray(elements, elementsLength, (int32_t)sizeof(UCharsTrieElement),
+                      compareElementStrings, &strings,
+                      FALSE,  // need not be a stable sort
+                      &errorCode);
+        if(U_FAILURE(errorCode)) {
+            return;
+        }
+        // Duplicate strings are not allowed.
+        UnicodeString prev=elements[0].getString(strings);
+        for(int32_t i=1; i<elementsLength; ++i) {
+            UnicodeString current=elements[i].getString(strings);
+            if(prev==current) {
+                errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            prev.fastCopyFrom(current);
+        }
     }
     // Create and UChar-serialize the trie for the elements.
+    ucharsLength=0;
     int32_t capacity=strings.length();
     if(capacity<1024) {
         capacity=1024;
@@ -178,17 +210,14 @@ UCharsTrieBuilder::build(UStringTrieBuildOption buildOption, UnicodeString &resu
         if(uchars==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             ucharsCapacity=0;
-            return result;
+            return;
         }
         ucharsCapacity=capacity;
     }
     StringTrieBuilder::build(buildOption, elementsLength, errorCode);
     if(uchars==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        result.setTo(FALSE, uchars+(ucharsCapacity-ucharsLength), ucharsLength);
     }
-    return result;
 }
 
 int32_t

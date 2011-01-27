@@ -15,6 +15,7 @@
 #include <string.h>
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "unicode/uniset.h"
 #include "ucharstrie.h"
 #include "ucharstriebuilder.h"
@@ -29,7 +30,7 @@ struct StringAndValue {
 
 class UCharsTrieTest : public IntlTest {
 public:
-    UCharsTrieTest() {}
+    UCharsTrieTest();
     virtual ~UCharsTrieTest();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
@@ -46,11 +47,10 @@ public:
     void TestFirstForCodePoint();
     void TestNextForCodePoint();
 
-    UBool buildLargeTrie(UCharsTrieBuilder &builder, UnicodeString &result, int32_t numUniqueFirst);
+    UCharsTrie *buildLargeTrie(int32_t numUniqueFirst);
     void TestLargeTrie();
 
-    UBool buildMonthsTrie(UCharsTrieBuilder &builder, UStringTrieBuildOption buildOption,
-                          UnicodeString &result);
+    UCharsTrie *buildMonthsTrie(UStringTrieBuildOption buildOption);
     void TestHasUniqueValue();
     void TestGetNextUChars();
     void TestIteratorFromBranch();
@@ -58,24 +58,34 @@ public:
     void TestTruncatingIteratorFromRoot();
     void TestTruncatingIteratorFromLinearMatchShort();
     void TestTruncatingIteratorFromLinearMatchLong();
+    void TestIteratorFromUChars();
 
     void checkData(const StringAndValue data[], int32_t dataLength);
     void checkData(const StringAndValue data[], int32_t dataLength, UStringTrieBuildOption buildOption);
-    UBool buildTrie(const StringAndValue data[], int32_t dataLength,
-                    UCharsTrieBuilder &builder, UStringTrieBuildOption buildOption, UnicodeString &result);
-    void checkFirst(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
-    void checkNext(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
-    void checkNextWithState(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
-    void checkNextString(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
-    void checkIterator(const UnicodeString &trieUChars, const StringAndValue data[], int32_t dataLength);
+    UCharsTrie *buildTrie(const StringAndValue data[], int32_t dataLength,
+                          UStringTrieBuildOption buildOption);
+    void checkFirst(UCharsTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNext(UCharsTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNextWithState(UCharsTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNextString(UCharsTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkIterator(UCharsTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkIterator(UCharsTrie::Iterator &iter, const StringAndValue data[], int32_t dataLength);
+
+private:
+    UCharsTrieBuilder *builder_;
 };
 
 extern IntlTest *createUCharsTrieTest() {
     return new UCharsTrieTest();
 }
 
+UCharsTrieTest::UCharsTrieTest() : builder_(NULL) {
+    IcuTestErrorCode errorCode(*this, "UCharsTrieTest()");
+    builder_=new UCharsTrieBuilder(errorCode);
+}
+
 UCharsTrieTest::~UCharsTrieTest() {
+    delete builder_;
 }
 
 void UCharsTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
@@ -103,21 +113,21 @@ void UCharsTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name
     TESTCASE_AUTO(TestTruncatingIteratorFromRoot);
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchShort);
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchLong);
+    TESTCASE_AUTO(TestIteratorFromUChars);
     TESTCASE_AUTO_END;
 }
 
 void UCharsTrieTest::TestBuilder() {
     IcuTestErrorCode errorCode(*this, "TestBuilder()");
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    builder.build(USTRINGTRIE_BUILD_FAST, trieUChars, errorCode);
+    delete builder_->build(USTRINGTRIE_BUILD_FAST, errorCode);
     if(errorCode.reset()!=U_INDEX_OUTOFBOUNDS_ERROR) {
         errln("UCharsTrieBuilder().build() did not set U_INDEX_OUTOFBOUNDS_ERROR");
         return;
     }
-    builder.add("=", 0, errorCode).add("=", 1, errorCode).build(USTRINGTRIE_BUILD_FAST, trieUChars, errorCode);
+    // TODO: remove .build(...) once add() checks for duplicates.
+    builder_->add("=", 0, errorCode).add("=", 1, errorCode).build(USTRINGTRIE_BUILD_FAST, errorCode);
     if(errorCode.reset()!=U_ILLEGAL_ARGUMENT_ERROR) {
-        errln("UCharsTrieBuilder.build() did not detect duplicates");
+        errln("UCharsTrieBuilder.add() did not detect duplicates");
         return;
     }
 }
@@ -281,41 +291,39 @@ void UCharsTrieTest::TestNextForCodePoint() {
         { "\\u4dff\\U00010000\\u9999\\U00020002", 44444 },
         { "\\u4dff\\U000103ff", 99999 }
     };
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildTrie(data, LENGTHOF(data), builder, USTRINGTRIE_BUILD_FAST, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildTrie(data, LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     UStringTrieResult result;
-    if( (result=trie.nextForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x10000))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x9999))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x20000))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0xdfff))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x10ffff))!=USTRINGTRIE_FINAL_VALUE || result!=trie.current() ||
-        trie.getValue()!=2000000000
+    if( (result=trie->nextForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x10000))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x9999))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x20000))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0xdfff))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x10ffff))!=USTRINGTRIE_FINAL_VALUE || result!=trie->current() ||
+        trie->getValue()!=2000000000
     ) {
         errln("UCharsTrie.nextForCodePoint() fails for %s", data[0].s);
     }
-    if( (result=trie.firstForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x10000))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x9999))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x20002))!=USTRINGTRIE_FINAL_VALUE || result!=trie.current() ||
-        trie.getValue()!=44444
+    if( (result=trie->firstForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x10000))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x9999))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x20002))!=USTRINGTRIE_FINAL_VALUE || result!=trie->current() ||
+        trie->getValue()!=44444
     ) {
         errln("UCharsTrie.nextForCodePoint() fails for %s", data[1].s);
     }
-    if( (result=trie.reset().nextForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x10000))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x9999))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x20222))!=USTRINGTRIE_NO_MATCH || result!=trie.current()  // no match for trail surrogate
+    if( (result=trie->reset().nextForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x10000))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x9999))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x20222))!=USTRINGTRIE_NO_MATCH || result!=trie->current()  // no match for trail surrogate
     ) {
         errln("UCharsTrie.nextForCodePoint() fails for \\u4dff\\U00010000\\u9999\\U00020222");
     }
-    if( (result=trie.reset().nextForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie.current() ||
-        (result=trie.nextForCodePoint(0x103ff))!=USTRINGTRIE_FINAL_VALUE || result!=trie.current() ||
-        trie.getValue()!=99999
+    if( (result=trie->reset().nextForCodePoint(0x4dff))!=USTRINGTRIE_NO_VALUE || result!=trie->current() ||
+        (result=trie->nextForCodePoint(0x103ff))!=USTRINGTRIE_FINAL_VALUE || result!=trie->current() ||
+        trie->getValue()!=99999
     ) {
         errln("UCharsTrie.nextForCodePoint() fails for %s", data[2].s);
     }
@@ -355,43 +363,41 @@ private:
 
 }  // end namespace
 
-UBool UCharsTrieTest::buildLargeTrie(UCharsTrieBuilder &builder, UnicodeString &result,
-                                     int32_t numUniqueFirst) {
+UCharsTrie *UCharsTrieTest::buildLargeTrie(int32_t numUniqueFirst) {
     IcuTestErrorCode errorCode(*this, "buildLargeTrie()");
     Generator gen;
-    builder.clear();
+    builder_->clear();
     while(gen.countUniqueFirstChars()<numUniqueFirst) {
-        builder.add(gen.getString(), gen.getValue(), errorCode);
+        builder_->add(gen.getString(), gen.getValue(), errorCode);
         gen.next();
     }
     infoln("buildLargeTrie(%ld) added %ld strings", (long)numUniqueFirst, (long)gen.getIndex());
-    builder.build(USTRINGTRIE_BUILD_FAST, result, errorCode);
-    logln("serialized trie size: %ld UChars\n", (long)result.length());
-    return errorCode.isSuccess();
+    UnicodeString trieUChars;
+    builder_->buildUnicodeString(USTRINGTRIE_BUILD_FAST, trieUChars, errorCode);
+    logln("serialized trie size: %ld UChars\n", (long)trieUChars.length());
+    return new UCharsTrie(trieUChars.getBuffer());
 }
 
 // Exercise a large branch node.
 void UCharsTrieTest::TestLargeTrie() {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildLargeTrie(builder, trieUChars, 1111)) {
+    LocalPointer<UCharsTrie> trie(buildLargeTrie(1111));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     Generator gen;
     while(gen.countUniqueFirstChars()<1111) {
         UnicodeString x(gen.getString());
         int32_t value=gen.getValue();
         if(!x.isEmpty()) {
-            if(trie.first(x[0])==USTRINGTRIE_NO_MATCH) {
+            if(trie->first(x[0])==USTRINGTRIE_NO_MATCH) {
                 errln("first(first char U+%04X)=USTRINGTRIE_NO_MATCH for string %ld\n",
                       x[0], (long)gen.getIndex());
                 break;
             }
             x.remove(0, 1);
         }
-        UStringTrieResult result=trie.next(x.getBuffer(), x.length());
-        if(!USTRINGTRIE_HAS_VALUE(result) || result!=trie.current() || value!=trie.getValue()) {
+        UStringTrieResult result=trie->next(x.getBuffer(), x.length());
+        if(!USTRINGTRIE_HAS_VALUE(result) || result!=trie->current() || value!=trie->getValue()) {
             errln("next(%d chars U+%04X U+%04X)!=hasValue or "
                   "next()!=current() or getValue() wrong "
                   "for string %ld\n", (int)x.length(), x[0], x[1], (long)gen.getIndex());
@@ -412,8 +418,7 @@ enum {
     u_y=0x79
 };
 
-UBool UCharsTrieTest::buildMonthsTrie(UCharsTrieBuilder &builder, UStringTrieBuildOption buildOption,
-                                      UnicodeString &result) {
+UCharsTrie *UCharsTrieTest::buildMonthsTrie(UStringTrieBuildOption buildOption) {
     // All types of nodes leading to the same value,
     // for code coverage of recursive functions.
     // In particular, we need a lot of branches on some single level
@@ -450,43 +455,41 @@ UBool UCharsTrieTest::buildMonthsTrie(UCharsTrieBuilder &builder, UStringTrieBui
         { "jun.", 6 },
         { "june", 6 }
     };
-    return buildTrie(data, LENGTHOF(data), builder, buildOption, result);
+    return buildTrie(data, LENGTHOF(data), buildOption);
 }
 
 void UCharsTrieTest::TestHasUniqueValue() {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildMonthsTrie(builder, USTRINGTRIE_BUILD_FAST, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     int32_t uniqueValue;
-    if(trie.hasUniqueValue(uniqueValue)) {
+    if(trie->hasUniqueValue(uniqueValue)) {
         errln("unique value at root");
     }
-    trie.next(u_j);
-    trie.next(u_a);
-    trie.next(u_n);
+    trie->next(u_j);
+    trie->next(u_a);
+    trie->next(u_n);
     // hasUniqueValue() directly after next()
-    if(!trie.hasUniqueValue(uniqueValue) || uniqueValue!=1) {
+    if(!trie->hasUniqueValue(uniqueValue) || uniqueValue!=1) {
         errln("not unique value 1 after \"jan\"");
     }
-    trie.first(u_j);
-    trie.next(u_u);
-    if(trie.hasUniqueValue(uniqueValue)) {
+    trie->first(u_j);
+    trie->next(u_u);
+    if(trie->hasUniqueValue(uniqueValue)) {
         errln("unique value after \"ju\"");
     }
-    if(trie.next(u_n)!=USTRINGTRIE_INTERMEDIATE_VALUE || 6!=trie.getValue()) {
+    if(trie->next(u_n)!=USTRINGTRIE_INTERMEDIATE_VALUE || 6!=trie->getValue()) {
         errln("not normal value 6 after \"jun\"");
     }
     // hasUniqueValue() after getValue()
-    if(!trie.hasUniqueValue(uniqueValue) || uniqueValue!=6) {
+    if(!trie->hasUniqueValue(uniqueValue) || uniqueValue!=6) {
         errln("not unique value 6 after \"jun\"");
     }
     // hasUniqueValue() from within a linear-match node
-    trie.first(u_a);
-    trie.next(u_u);
-    if(!trie.hasUniqueValue(uniqueValue) || uniqueValue!=8) {
+    trie->first(u_a);
+    trie->next(u_u);
+    if(!trie->hasUniqueValue(uniqueValue) || uniqueValue!=8) {
         errln("not unique value 8 after \"au\"");
     }
 }
@@ -501,65 +504,61 @@ private:
 };
 
 void UCharsTrieTest::TestGetNextUChars() {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildMonthsTrie(builder, USTRINGTRIE_BUILD_SMALL, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_SMALL));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     UnicodeString buffer;
     UnicodeStringAppendable app(buffer);
-    int32_t count=trie.getNextUChars(app);
+    int32_t count=trie->getNextUChars(app);
     if(count!=2 || buffer.length()!=2 || buffer[0]!=u_a || buffer[1]!=u_j) {
         errln("months getNextUChars()!=[aj] at root");
     }
-    trie.next(u_j);
-    trie.next(u_a);
-    trie.next(u_n);
+    trie->next(u_j);
+    trie->next(u_a);
+    trie->next(u_n);
     // getNextUChars() directly after next()
-    count=trie.getNextUChars(app.reset());
+    count=trie->getNextUChars(app.reset());
     if(count!=20 || buffer!=UNICODE_STRING_SIMPLE(".abcdefghijklmnopqru")) {
         errln("months getNextUChars()!=[.abcdefghijklmnopqru] after \"jan\"");
     }
     // getNextUChars() after getValue()
-    trie.getValue();  // next() had returned USTRINGTRIE_INTERMEDIATE_VALUE.
-    count=trie.getNextUChars(app.reset());
+    trie->getValue();  // next() had returned USTRINGTRIE_INTERMEDIATE_VALUE.
+    count=trie->getNextUChars(app.reset());
     if(count!=20 || buffer!=UNICODE_STRING_SIMPLE(".abcdefghijklmnopqru")) {
         errln("months getNextUChars()!=[.abcdefghijklmnopqru] after \"jan\"+getValue()");
     }
     // getNextUChars() from a linear-match node
-    trie.next(u_u);
-    count=trie.getNextUChars(app.reset());
+    trie->next(u_u);
+    count=trie->getNextUChars(app.reset());
     if(count!=1 || buffer.length()!=1 || buffer[0]!=u_a) {
         errln("months getNextUChars()!=[a] after \"janu\"");
     }
-    trie.next(u_a);
-    count=trie.getNextUChars(app.reset());
+    trie->next(u_a);
+    count=trie->getNextUChars(app.reset());
     if(count!=1 || buffer.length()!=1 || buffer[0]!=u_r) {
         errln("months getNextUChars()!=[r] after \"janua\"");
     }
-    trie.next(u_r);
-    trie.next(u_y);
+    trie->next(u_r);
+    trie->next(u_y);
     // getNextUChars() after a final match
-    count=trie.getNextUChars(app.reset());
+    count=trie->getNextUChars(app.reset());
     if(count!=0 || buffer.length()!=0) {
         errln("months getNextUChars()!=[] after \"january\"");
     }
 }
 
 void UCharsTrieTest::TestIteratorFromBranch() {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildMonthsTrie(builder, USTRINGTRIE_BUILD_FAST, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     // Go to a branch node.
-    trie.next(u_j);
-    trie.next(u_a);
-    trie.next(u_n);
+    trie->next(u_j);
+    trie->next(u_a);
+    trie->next(u_n);
     IcuTestErrorCode errorCode(*this, "TestIteratorFromBranch()");
-    UCharsTrie::Iterator iter(trie, 0, errorCode);
+    UCharsTrie::Iterator iter(*trie, 0, errorCode);
     if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -599,20 +598,18 @@ void UCharsTrieTest::TestIteratorFromBranch() {
 }
 
 void UCharsTrieTest::TestIteratorFromLinearMatch() {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildMonthsTrie(builder, USTRINGTRIE_BUILD_SMALL, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_SMALL));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     // Go into a linear-match node.
-    trie.next(u_j);
-    trie.next(u_a);
-    trie.next(u_n);
-    trie.next(u_u);
-    trie.next(u_a);
+    trie->next(u_j);
+    trie->next(u_a);
+    trie->next(u_n);
+    trie->next(u_u);
+    trie->next(u_a);
     IcuTestErrorCode errorCode(*this, "TestIteratorFromLinearMatch()");
-    UCharsTrie::Iterator iter(trie, 0, errorCode);
+    UCharsTrie::Iterator iter(*trie, 0, errorCode);
     if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -629,13 +626,12 @@ void UCharsTrieTest::TestIteratorFromLinearMatch() {
 }
 
 void UCharsTrieTest::TestTruncatingIteratorFromRoot() {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildMonthsTrie(builder, USTRINGTRIE_BUILD_FAST, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildMonthsTrie(USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromRoot()");
-    UCharsTrie::Iterator iter(trieUChars.getBuffer(), 4, errorCode);
+    UCharsTrie::Iterator iter(*trie, 4, errorCode);
     if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -681,18 +677,16 @@ void UCharsTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
         { "abcdepq", 200 },
         { "abcdeyz", 3000 }
     };
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildTrie(data, LENGTHOF(data), builder, USTRINGTRIE_BUILD_FAST, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildTrie(data, LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     // Go into a linear-match node.
-    trie.next(u_a);
-    trie.next(u_b);
+    trie->next(u_a);
+    trie->next(u_b);
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchShort()");
     // Truncate within the linear-match node.
-    UCharsTrie::Iterator iter(trie, 2, errorCode);
+    UCharsTrie::Iterator iter(*trie, 2, errorCode);
     if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -711,19 +705,17 @@ void UCharsTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
         { "abcdepq", 200 },
         { "abcdeyz", 3000 }
     };
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildTrie(data, LENGTHOF(data), builder, USTRINGTRIE_BUILD_FAST, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildTrie(data, LENGTHOF(data), USTRINGTRIE_BUILD_FAST));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    UCharsTrie trie(trieUChars.getBuffer());
     // Go into a linear-match node.
-    trie.next(u_a);
-    trie.next(u_b);
-    trie.next(u_c);
+    trie->next(u_a);
+    trie->next(u_b);
+    trie->next(u_c);
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchLong()");
     // Truncate after the linear-match node.
-    UCharsTrie::Iterator iter(trie, 3, errorCode);
+    UCharsTrie::Iterator iter(*trie, 3, errorCode);
     if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trie) constructor")) {
         return;
     }
@@ -738,6 +730,23 @@ void UCharsTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
     checkIterator(iter.reset(), expected, LENGTHOF(expected));
 }
 
+void UCharsTrieTest::TestIteratorFromUChars() {
+    static const StringAndValue data[]={
+        { "mm", 3 },
+        { "mmm", 33 },
+        { "mmnop", 333 }
+    };
+    builder_->clear();
+    IcuTestErrorCode errorCode(*this, "TestIteratorFromUChars()");
+    for(int32_t i=0; i<LENGTHOF(data); ++i) {
+        builder_->add(data[i].s, data[i].value, errorCode);
+    }
+    UnicodeString trieUChars;
+    builder_->buildUnicodeString(USTRINGTRIE_BUILD_FAST, trieUChars, errorCode);
+    UCharsTrie::Iterator iter(trieUChars.getBuffer(), 0, errorCode);
+    checkIterator(iter, data, LENGTHOF(data));
+}
+
 void UCharsTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {
     logln("checkData(dataLength=%d, fast)", (int)dataLength);
     checkData(data, dataLength, USTRINGTRIE_BUILD_FAST);
@@ -746,20 +755,19 @@ void UCharsTrieTest::checkData(const StringAndValue data[], int32_t dataLength) 
 }
 
 void UCharsTrieTest::checkData(const StringAndValue data[], int32_t dataLength, UStringTrieBuildOption buildOption) {
-    UCharsTrieBuilder builder;
-    UnicodeString trieUChars;
-    if(!buildTrie(data, dataLength, builder, buildOption, trieUChars)) {
+    LocalPointer<UCharsTrie> trie(buildTrie(data, dataLength, buildOption));
+    if(trie.isNull()) {
         return;  // buildTrie() reported an error
     }
-    checkFirst(trieUChars, data, dataLength);
-    checkNext(trieUChars, data, dataLength);
-    checkNextWithState(trieUChars, data, dataLength);
-    checkNextString(trieUChars, data, dataLength);
-    checkIterator(trieUChars, data, dataLength);
+    checkFirst(*trie, data, dataLength);
+    checkNext(*trie, data, dataLength);
+    checkNextWithState(*trie, data, dataLength);
+    checkNextString(*trie, data, dataLength);
+    checkIterator(*trie, data, dataLength);
 }
 
-UBool UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataLength,
-                                UCharsTrieBuilder &builder, UStringTrieBuildOption buildOption, UnicodeString &result) {
+UCharsTrie *UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataLength,
+                                      UStringTrieBuildOption buildOption) {
     IcuTestErrorCode errorCode(*this, "buildTrie()");
     // Add the items to the trie builder in an interesting (not trivial, not random) order.
     int32_t index, step;
@@ -775,26 +783,42 @@ UBool UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataLength,
         index=dataLength-1;
         step=-1;
     }
-    builder.clear();
+    builder_->clear();
     for(int32_t i=0; i<dataLength; ++i) {
-        builder.add(UnicodeString(data[index].s, -1, US_INV).unescape(),
-                    data[index].value, errorCode);
+        builder_->add(UnicodeString(data[index].s, -1, US_INV).unescape(),
+                      data[index].value, errorCode);
         index=(index+step)%dataLength;
     }
-    builder.build(buildOption, result, errorCode);
+    UnicodeString trieUChars;
+    builder_->buildUnicodeString(buildOption, trieUChars, errorCode);
+    LocalPointer<UCharsTrie> trie(builder_->build(buildOption, errorCode));
     if(!errorCode.logIfFailureAndReset("add()/build()")) {
-        builder.add("zzz", 999, errorCode);
+        builder_->add("zzz", 999, errorCode);
         if(errorCode.reset()!=U_NO_WRITE_PERMISSION) {
             errln("builder.build().add(zzz) did not set U_NO_WRITE_PERMISSION");
         }
     }
-    logln("serialized trie size: %ld UChars\n", (long)result.length());
-    return errorCode.isSuccess();
+    logln("serialized trie size: %ld UChars\n", (long)trieUChars.length());
+    UnicodeString trieUChars2;
+    builder_->buildUnicodeString(buildOption, trieUChars2, errorCode);
+    if(trieUChars.getBuffer()==trieUChars2.getBuffer()) {
+        errln("builder.buildUnicodeString() before & after build() returned same array");
+    }
+    if(errorCode.isFailure()) {
+        return NULL;
+    }
+    // Tries from either build() method should be identical but
+    // UCharsTrie does not implement equals().
+    // We just return either one.
+    if((dataLength&1)!=0) {
+        return trie.orphan();
+    } else {
+        return new UCharsTrie(trieUChars2.getBuffer());
+    }
 }
 
-void UCharsTrieTest::checkFirst(const UnicodeString &trieUChars,
+void UCharsTrieTest::checkFirst(UCharsTrie &trie,
                                 const StringAndValue data[], int32_t dataLength) {
-    UCharsTrie trie(trieUChars.getBuffer());
     for(int32_t i=0; i<dataLength; ++i) {
         if(*data[i].s==0) {
             continue;  // skip empty string
@@ -828,11 +852,11 @@ void UCharsTrieTest::checkFirst(const UnicodeString &trieUChars,
                   c, data[i].s);
         }
     }
+    trie.reset();
 }
 
-void UCharsTrieTest::checkNext(const UnicodeString &trieUChars,
+void UCharsTrieTest::checkNext(UCharsTrie &trie,
                                const StringAndValue data[], int32_t dataLength) {
-    UCharsTrie trie(trieUChars.getBuffer());
     UCharsTrie::State state; 
     for(int32_t i=0; i<dataLength; ++i) {
         UnicodeString expectedString=UnicodeString(data[i].s, -1, US_INV).unescape();
@@ -905,9 +929,8 @@ void UCharsTrieTest::checkNext(const UnicodeString &trieUChars,
     }
 }
 
-void UCharsTrieTest::checkNextWithState(const UnicodeString &trieUChars,
+void UCharsTrieTest::checkNextWithState(UCharsTrie &trie,
                                         const StringAndValue data[], int32_t dataLength) {
-    UCharsTrie trie(trieUChars.getBuffer());
     UCharsTrie::State noState, state; 
     for(int32_t i=0; i<dataLength; ++i) {
         if((i&1)==0) {
@@ -966,9 +989,8 @@ void UCharsTrieTest::checkNextWithState(const UnicodeString &trieUChars,
 
 // next(string) is also tested in other functions,
 // but here we try to go partway through the string, and then beyond it.
-void UCharsTrieTest::checkNextString(const UnicodeString &trieUChars,
+void UCharsTrieTest::checkNextString(UCharsTrie &trie,
                                      const StringAndValue data[], int32_t dataLength) {
-    UCharsTrie trie(trieUChars.getBuffer());
     for(int32_t i=0; i<dataLength; ++i) {
         UnicodeString expectedString=UnicodeString(data[i].s, -1, US_INV).unescape();
         int32_t stringLength=expectedString.length();
@@ -985,10 +1007,10 @@ void UCharsTrieTest::checkNextString(const UnicodeString &trieUChars,
     }
 }
 
-void UCharsTrieTest::checkIterator(const UnicodeString &trieUChars,
+void UCharsTrieTest::checkIterator(UCharsTrie &trie,
                                    const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
-    UCharsTrie::Iterator iter(trieUChars.getBuffer(), 0, errorCode);
+    UCharsTrie::Iterator iter(trie, 0, errorCode);
     if(errorCode.logIfFailureAndReset("UCharsTrie::Iterator(trieUChars) constructor")) {
         return;
     }
