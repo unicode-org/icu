@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3835,7 +3835,9 @@ public final class RuleBasedCollator extends Collator {
          * be moved are copied to their same location in the final table.
          */
         boolean fromTheBottom = true;
-        for (int reorderCodesIndex = 0; reorderCodesIndex < internalReorderCodes.length; reorderCodesIndex++) {
+        int reorderCodesIndex = -1;
+        for (int reorderCodesCount = 0; reorderCodesCount < internalReorderCodes.length; reorderCodesCount++) {
+            reorderCodesIndex += fromTheBottom ? 1 : -1;
             int next = internalReorderCodes[reorderCodesIndex];
             if (next == UCOL_REORDER_CODE_IGNORE) {
                 continue;
@@ -3847,6 +3849,7 @@ public final class RuleBasedCollator extends Collator {
                     throw new IllegalArgumentException("Illegal collation reorder codes - two \"from the end\" markers.");
                 }
                 fromTheBottom = false;
+                reorderCodesIndex = internalReorderCodes.length;
                 continue;
             }
 
