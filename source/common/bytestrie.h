@@ -37,16 +37,46 @@ class UVector32;
  * Light-weight, non-const reader class for a BytesTrie.
  * Traverses a byte-serialized data structure with minimal state,
  * for mapping byte sequences to non-negative integer values.
+ *
+ * This class owns the serialized trie data only if it was constructed by
+ * the builder's build() method.
+ * The public constructor and the copy constructor only alias the data (only copy the pointer).
+ * There is no assignment operator.
+ *
+ * This class is not intended for public subclassing.
  */
 class U_COMMON_API BytesTrie : public UMemory {
 public:
     /**
      * Constructs a BytesTrie reader instance.
-     * @param trieBytes The trie bytes.
+     *
+     * The trieBytes must contain a copy of a byte sequence from the BytesTrieBuilder,
+     * starting with the first byte of that sequence.
+     * The BytesTrie object will not read more bytes than
+     * the BytesTrieBuilder generated in the corresponding build() call.
+     *
+     * The array is not copied/cloned and must not be modified while
+     * the BytesTrie object is in use.
+     *
+     * @param trieBytes The byte array that contains the serialized trie.
      */
     BytesTrie(const void *trieBytes)
-            : bytes_(reinterpret_cast<const uint8_t *>(trieBytes)),
+            : ownedArray_(NULL), bytes_(reinterpret_cast<const uint8_t *>(trieBytes)),
               pos_(bytes_), remainingMatchLength_(-1) {}
+
+    /**
+     * Destructor.
+     */
+    ~BytesTrie();
+
+    /**
+     * Copy constructor, copies the other trie reader object and its state,
+     * but not the byte array which will be shared. (Shallow copy.)
+     * @param Another BytesTrie object.
+     */
+    BytesTrie(const BytesTrie &other)
+            : ownedArray_(NULL), bytes_(other.bytes_),
+              pos_(other.pos_), remainingMatchLength_(other.remainingMatchLength_) {}
 
     /**
      * Resets this trie to its initial state.
@@ -108,15 +138,22 @@ public:
     /**
      * Traverses the trie from the initial state for this input byte.
      * Equivalent to reset().next(inByte).
+     * @param inByte Input byte value. Values -0x100..-1 are treated like 0..0xff.
+     *               Values below -0x100 and above 0xff will never match.
      * @return The match/value Result.
      */
     inline UStringTrieResult first(int32_t inByte) {
         remainingMatchLength_=-1;
+        if(inByte<0) {
+            inByte+=0x100;
+        }
         return nextImpl(bytes_, inByte);
     }
 
     /**
      * Traverses the trie from the current state for this input byte.
+     * @param inByte Input byte value. Values -0x100..-1 are treated like 0..0xff.
+     *               Values below -0x100 and above 0xff will never match.
      * @return The match/value Result.
      */
     UStringTrieResult next(int32_t inByte);
@@ -262,6 +299,20 @@ public:
 private:
     friend class BytesTrieBuilder;
 
+    /**
+     * Constructs a BytesTrie reader instance.
+     * Unlike the public constructor which just aliases an array,
+     * this constructor adopts the builder's array.
+     * This constructor is only called by the builder.
+     */
+    BytesTrie(void *adoptBytes, const void *trieBytes)
+            : ownedArray_(reinterpret_cast<uint8_t *>(adoptBytes)),
+              bytes_(reinterpret_cast<const uint8_t *>(trieBytes)),
+              pos_(bytes_), remainingMatchLength_(-1) {}
+
+    // No assignment operator.
+    BytesTrie &operator=(const BytesTrie &other);
+
     inline void stop() {
         pos_=NULL;
     }
@@ -406,6 +457,8 @@ private:
 
     static const int32_t kMaxTwoByteDelta=((kMinThreeByteDeltaLead-kMinTwoByteDeltaLead)<<8)-1;  // 0x2fff
     static const int32_t kMaxThreeByteDelta=((kFourByteDeltaLead-kMinThreeByteDeltaLead)<<16)-1;  // 0xdffff
+
+    uint8_t *ownedArray_;
 
     // Fixed value referencing the BytesTrie bytes.
     const uint8_t *bytes_;

@@ -71,16 +71,46 @@ private:
  * Light-weight, non-const reader class for a UCharsTrie.
  * Traverses a UChar-serialized data structure with minimal state,
  * for mapping strings (16-bit-unit sequences) to non-negative integer values.
+ *
+ * This class owns the serialized trie data only if it was constructed by
+ * the builder's build() method.
+ * The public constructor and the copy constructor only alias the data (only copy the pointer).
+ * There is no assignment operator.
+ *
+ * This class is not intended for public subclassing.
  */
 class U_TOOLUTIL_API UCharsTrie : public UMemory {
 public:
     /**
      * Constructs a UCharsTrie reader instance.
-     * @param trieUChars The trie UChars.
+     *
+     * The trieUChars must contain a copy of a UChar sequence from the UCharsTrieBuilder,
+     * starting with the first UChar of that sequence.
+     * The UCharsTrie object will not read more UChars than
+     * the UCharsTrieBuilder generated in the corresponding build() call.
+     *
+     * The array is not copied/cloned and must not be modified while
+     * the UCharsTrie object is in use.
+     *
+     * @param trieUChars The UChar array that contains the serialized trie.
      */
     UCharsTrie(const UChar *trieUChars)
-            : uchars_(trieUChars),
+            : ownedArray_(NULL), uchars_(trieUChars),
               pos_(uchars_), remainingMatchLength_(-1) {}
+
+    /**
+     * Destructor.
+     */
+    ~UCharsTrie();
+
+    /**
+     * Copy constructor, copies the other trie reader object and its state,
+     * but not the UChar array which will be shared. (Shallow copy.)
+     * @param Another UCharsTrie object.
+     */
+    UCharsTrie(const UCharsTrie &other)
+            : ownedArray_(NULL), uchars_(other.uchars_),
+              pos_(other.pos_), remainingMatchLength_(other.remainingMatchLength_) {}
 
     /**
      * Resets this trie to its initial state.
@@ -142,6 +172,7 @@ public:
     /**
      * Traverses the trie from the initial state for this input UChar.
      * Equivalent to reset().next(uchar).
+     * @param uchar Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
      */
     inline UStringTrieResult first(int32_t uchar) {
@@ -153,6 +184,7 @@ public:
      * Traverses the trie from the initial state for the
      * one or two UTF-16 code units for this input code point.
      * Equivalent to reset().nextForCodePoint(cp).
+     * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
      */
     inline UStringTrieResult firstForCodePoint(UChar32 cp) {
@@ -165,6 +197,7 @@ public:
 
     /**
      * Traverses the trie from the current state for this input UChar.
+     * @param uchar Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
      */
     UStringTrieResult next(int32_t uchar);
@@ -172,6 +205,7 @@ public:
     /**
      * Traverses the trie from the current state for the
      * one or two UTF-16 code units for this input code point.
+     * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
      */
     inline UStringTrieResult nextForCodePoint(UChar32 cp) {
@@ -327,6 +361,19 @@ public:
 
 private:
     friend class UCharsTrieBuilder;
+
+    /**
+     * Constructs a UCharsTrie reader instance.
+     * Unlike the public constructor which just aliases an array,
+     * this constructor adopts the builder's array.
+     * This constructor is only called by the builder.
+     */
+    UCharsTrie(UChar *adoptUChars, const UChar *trieUChars)
+            : ownedArray_(adoptUChars), uchars_(trieUChars),
+              pos_(uchars_), remainingMatchLength_(-1) {}
+
+    // No assignment operator.
+    UCharsTrie &operator=(const UCharsTrie &other);
 
     inline void stop() {
         pos_=NULL;
@@ -512,6 +559,8 @@ private:
     static const int32_t kThreeUnitDeltaLead=0xffff;
 
     static const int32_t kMaxTwoUnitDelta=((kThreeUnitDeltaLead-kMinTwoUnitDeltaLead)<<16)-1;  // 0x03feffff
+
+    UChar *ownedArray_;
 
     // Fixed value referencing the UCharsTrie words.
     const UChar *uchars_;

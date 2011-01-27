@@ -19,8 +19,23 @@
 #include "unicode/uobject.h"
 #include "uhash.h"
 
+/**
+ * Build options for BytesTrieBuilder and CharsTrieBuilder.
+ */
 enum UStringTrieBuildOption {
+    /**
+     * Builds a trie quickly.
+     */
     USTRINGTRIE_BUILD_FAST,
+    /**
+     * Builds a trie more slowly, attempting to generate
+     * a shorter but equivalent serialization.
+     * This build option also uses more memory.
+     *
+     * This option can be effective when many integer values are the same
+     * and string/byte sequence suffixes can be shared.
+     * Runtime speed is not expected to improve.
+     */
     USTRINGTRIE_BUILD_SMALL
 };
 
@@ -28,6 +43,8 @@ U_NAMESPACE_BEGIN
 
 /**
  * Base class for string trie builder classes.
+ *
+ * This class is not intended for public subclassing.
  */
 class U_TOOLUTIL_API StringTrieBuilder : public UObject {
 public:

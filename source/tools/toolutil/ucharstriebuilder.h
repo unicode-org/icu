@@ -26,18 +26,81 @@ class UCharsTrieElement;
 
 /**
  * Builder class for UCharsTrie.
+ *
+ * This class is not intended for public subclassing.
  */
 class U_TOOLUTIL_API UCharsTrieBuilder : public StringTrieBuilder {
 public:
-    UCharsTrieBuilder()
-            : elements(NULL), elementsCapacity(0), elementsLength(0),
-              uchars(NULL), ucharsCapacity(0), ucharsLength(0) {}
+    /**
+     * Constructs an empty builder.
+     * @param errorCode Standard ICU error code.
+     */
+    UCharsTrieBuilder(UErrorCode &errorCode);
+
+    /**
+     * Destructor.
+     */
     virtual ~UCharsTrieBuilder();
 
+    /**
+     * Adds a (string, value) pair.
+     * The string must be unique.
+     * The string contents will be copied; the builder does not keep
+     * a reference to the input UnicodeString or its buffer.
+     * @param s The input string.
+     * @param value The value associated with this string.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return *this
+     */
     UCharsTrieBuilder &add(const UnicodeString &s, int32_t value, UErrorCode &errorCode);
 
-    UnicodeString &build(UStringTrieBuildOption buildOption, UnicodeString &result, UErrorCode &errorCode);
+    /**
+     * Builds a UCharsTrie for the add()ed data.
+     * Once built, no further data can be add()ed until clear() is called.
+     *
+     * This method passes ownership of the builder's internal result array to the new trie object.
+     * Another call to any build() variant will re-serialize the trie.
+     * After clear() has been called, a new array will be used as well.
+     * @param buildOption Build option, see UStringTrieBuildOption.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return A new UCharsTrie for the add()ed data.
+     */
+    UCharsTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
+    /**
+     * Builds a UCharsTrie for the add()ed data and UChar-serializes it.
+     * Once built, no further data can be add()ed until clear() is called.
+     *
+     * Multiple calls to buildUnicodeString() set the UnicodeStrings to the
+     * builder's same UChar array, without rebuilding.
+     * If buildUnicodeString() is called after build(), the trie will be
+     * re-serialized into a new array.
+     * If build() is called after buildUnicodeString(), the trie object will become
+     * the owner of the previously returned array.
+     * After clear() has been called, a new array will be used as well.
+     * @param buildOption Build option, see UStringTrieBuildOption.
+     * @param result A UnicodeString which will be set to the UChar-serialized
+     *               UCharsTrie for the add()ed data.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return result
+     */
+    UnicodeString &buildUnicodeString(UStringTrieBuildOption buildOption, UnicodeString &result,
+                                      UErrorCode &errorCode);
+
+    /**
+     * Removes all (string, value) pairs.
+     * New data can then be add()ed and a new trie can be built.
+     * @return *this
+     */
     UCharsTrieBuilder &clear() {
         strings.remove();
         elementsLength=0;
@@ -46,6 +109,11 @@ public:
     }
 
 private:
+    UCharsTrieBuilder(const UCharsTrieBuilder &other);  // no copy constructor
+    UCharsTrieBuilder &operator=(const UCharsTrieBuilder &other);  // no assignment operator
+
+    void buildUChars(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
+
     virtual int32_t getElementStringLength(int32_t i) const;
     virtual UChar getElementUnit(int32_t i, int32_t unitIndex) const;
     virtual int32_t getElementValue(int32_t i) const;

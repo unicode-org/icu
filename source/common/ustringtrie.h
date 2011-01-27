@@ -31,6 +31,9 @@
 enum UStringTrieResult {
     /**
      * The input unit(s) did not continue a matching string.
+     * Once current()/next() return USTRINGTRIE_NO_MATCH,
+     * all further calls to current()/next() will also return USTRINGTRIE_NO_MATCH,
+     * until the trie is reset to its original state or to a saved state.
      */
     USTRINGTRIE_NO_MATCH,
     /**
