@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2010, International Business Machines Corporation and
+ * Copyright (c) 2001-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -6193,6 +6193,29 @@ static void TestHaniReorder(void)
     doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
 }
 
+static void TestMultipleReorder()
+{
+    const char* strRules[] = {
+        "[reorder Grek Zzzz DIGIT Latn Hani]"
+    };
+
+    const int32_t apiRules[] = {
+        USCRIPT_GREEK, USCRIPT_UNKNOWN, UCOL_REORDER_CODE_DIGIT, USCRIPT_LATIN, USCRIPT_HAN
+    };
+        
+    const static OneTestCase collationTestCases[] = {
+        { {0x0391}, {0x0041}, UCOL_LESS},
+        { {0x0031}, {0x0041}, UCOL_LESS},
+        { {0x0041}, {0x4e00}, UCOL_LESS},
+    };
+
+    /* Test rules creation */
+    doTestOneTestCase(collationTestCases, LEN(collationTestCases), strRules, LEN(strRules));
+
+    /* Test collation reordering API */
+    doTestOneReorderingAPITestCase(collationTestCases, LEN(collationTestCases), apiRules, LEN(apiRules));
+}
+
 static int compare_uint8_t_arrays(const uint8_t* a, const uint8_t* b)
 {
   for (; *a == *b; ++a, ++b) {
@@ -6509,6 +6532,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestGreekLastReorder);
     TEST(TestNonScriptReorder);
     TEST(TestHaniReorder);
+    TEST(TestMultipleReorder);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
