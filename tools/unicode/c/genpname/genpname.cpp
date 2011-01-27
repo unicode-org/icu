@@ -176,7 +176,7 @@ int32_t Alias::getUniqueNames(int32_t* stringIndices) const {
 
 class Builder {
 public:
-    Builder(UErrorCode &errorCode) : valueMaps(errorCode), maxNameLength(0) {}
+    Builder(UErrorCode &errorCode) : valueMaps(errorCode), btb(errorCode), maxNameLength(0) {}
 
     void build() {
         IcuToolErrorCode errorCode("genpname Builder::build()");
@@ -386,7 +386,7 @@ public:
             addAliasToBytesTrie(aliases[i], errorCode);
         }
         int32_t bytesTrieOffset=bytesTries.length();
-        bytesTries.append(btb.build(USTRINGTRIE_BUILD_SMALL, errorCode), errorCode);
+        bytesTries.append(btb.buildStringPiece(USTRINGTRIE_BUILD_SMALL, errorCode), errorCode);
         return bytesTrieOffset;
     }
 
@@ -399,7 +399,7 @@ public:
             addAliasToBytesTrie(aliases[i], errorCode);
         }
         int32_t bytesTrieOffset=bytesTries.length();
-        bytesTries.append(btb.build(USTRINGTRIE_BUILD_SMALL, errorCode), errorCode);
+        bytesTries.append(btb.buildStringPiece(USTRINGTRIE_BUILD_SMALL, errorCode), errorCode);
         return bytesTrieOffset;
     }
 
