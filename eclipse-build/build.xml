@@ -27,7 +27,7 @@
   </target>
 
   <target name="build"
-          depends="initEnv,icuProjectFiles,icuTestsProjectFiles"
+          depends="initEnv,icuProjectFiles,icuTestsProjectFiles,icuBaseProjectFiles,icuBaseTestsProjectFiles"
           description="Build icu4j plug-ins">
 
     <!-- copy OSGi jar file to baseLocation -->
@@ -42,6 +42,10 @@
 
     <antcall target="runEclipsePDEBuild">
       <param name="icu.plugin.id" value="com.ibm.icu"/>
+    </antcall>
+
+    <antcall target="runEclipsePDEBuild">
+      <param name="icu.plugin.id" value="com.ibm.icu.base"/>
     </antcall>
 
   </target>
@@ -262,7 +266,6 @@
 
     <delete failonerror="no">
       <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" />
-      <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu.tests" />
     </delete>
 
     <!-- icu test source -->
@@ -313,6 +316,75 @@
     <!-- about -->
     <copy file="misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/about.html" />
+
+  </target>
+
+  <target name="icuBaseProjectFiles"
+        depends="initPluginVersion"
+        description="Copy com.ibm.icu.base plug-in project files">
+
+    <delete failonerror="no">
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base" />
+      <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu.base" />
+    </delete>
+
+    <!-- plugin project -->
+    <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base">
+      <fileset dir="plugins.template/com.ibm.icu.base"/>
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="IMPL_VERSION" value="${icu4j.impl.version}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
+      </filterset>
+    </copy>
+
+    <!-- license -->
+    <copy file="${shared.dir}/licenses/license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
+
+    <!-- about -->
+    <copy file="misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html" />
+
+    <!-- FEATURE FILES -->
+    <copy todir="${eclipse.projects.dir}/features/com.ibm.icu.base">
+      <fileset dir="features.template/com.ibm.icu.base"/>
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
+      </filterset>
+    </copy>
+
+  </target>
+
+  <target name="icuBaseTestsProjectFiles"
+        depends="initPluginVersion"
+        description="Copy com.ibm.icu.base.tests plug-in project files">
+
+    <delete failonerror="no">
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests" />
+    </delete>
+
+    <!-- plugin project -->
+    <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests">
+      <fileset dir="plugins.template/com.ibm.icu.base.tests"/>
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="IMPL_VERSION" value="${icu4j.impl.version}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
+      </filterset>
+    </copy>
+
+    <!-- license -->
+    <copy file="${shared.dir}/licenses/license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests/about_files" />
+
+    <!-- about -->
+    <copy file="misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests/about.html" />
 
   </target>
 
