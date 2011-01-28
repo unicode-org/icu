@@ -2249,7 +2249,7 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
      */
     public String getType() {
         // JDK supports Gregorian, Japanese and Buddhist
-        String name = calendar.getClass().getSimpleName().toLowerCase(Locale.ROOT);
+        String name = calendar.getClass().getSimpleName().toLowerCase(Locale.US);
         if (name.contains("japanese")) {
             return "japanese";
         } else if (name.contains("buddhist")) {
