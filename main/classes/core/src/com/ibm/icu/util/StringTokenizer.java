@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -585,8 +585,8 @@ public final class StringTokenizer implements Enumeration<Object>
     /**
      * Default set of delimiters &#92;t&#92;n&#92;r&#92;f
      */
-    private static final UnicodeSet DEFAULT_DELIMITERS_ 
-                                        = new UnicodeSet("[ \t\n\r\f]", false);
+    private static final UnicodeSet DEFAULT_DELIMITERS_
+        = new UnicodeSet(0x09, 0x0a, 0x0c, 0x0d, 0x20, 0x20);   // UnicodeSet("[ \t\n\r\f]", false)
     /**
      * Array size increments
      */
