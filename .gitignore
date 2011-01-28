@@ -956,6 +956,9 @@ tools/release/java/src/com/ibm/icu/dev/tools/misc/*.class
 tools/trac/IcuCodeTools/0.11/*.egg-info
 tools/trac/IcuCodeTools/0.11/build
 tools/trac/IcuCodeTools/0.11/icucodetools/*.pyc
+tools/trac/IcuCodeTools/0.12/*.egg-info
+tools/trac/IcuCodeTools/0.12/build
+tools/trac/IcuCodeTools/0.12/icucodetools/*.pyc
 tools/unicode/c/genbidi/*.d
 tools/unicode/c/genbidi/*.o
 tools/unicode/c/genbidi/*.pdb
