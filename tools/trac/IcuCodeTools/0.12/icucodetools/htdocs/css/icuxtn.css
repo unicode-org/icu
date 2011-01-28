@@ -1,0 +1,30 @@
+/* Copyright (C) 2010 International Business Machines Corporation and Others. All Rights Reserved. */
+
+/* @override http://unicode.org/cldr/trac/chrome/icucodetools/css/icuxtn.css */
+
+
+table.icureview {
+	border-collapse: collapse;
+	border:  1px solid gray;
+}
+
+table.icureview th, table.icureview td {
+	text-align: left;
+	border:  1px solid gray;
+	padding:  2px;
+}
+
+table.icureview thead th {
+	font-weight: bold;
+}
+
+table.icureview td.changes {
+	text-align: right;
+}
+
+table.icureview td.overall  {
+	background-color: silver;
+	font-style: italic;
+	text-align: right;
+}
+
