@@ -143,11 +143,11 @@ class TicketManager(Component):
                                str(changeset.rev))
         self.revision_changed(self.log, changeset, changeset.rev, db.cursor())
 	db.commit()
-	self.log.error("changeset_added: %s\n" % changeset.rev)
+	#self.log.error("changeset_added: %s\n" % changeset.rev)
 
     def changeset_added(self, repos, changeset):
         message = changeset.message or '--'
-	self.log.error("changeset_added: %s\n" % changeset.rev)
+	#self.log.error("changeset_added: %s\n" % changeset.rev)
 
     # IRepositoryObserver function
     def revision_changed(self, log, cset, next_youngest, cursor):
