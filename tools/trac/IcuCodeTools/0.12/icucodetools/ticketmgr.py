@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2007-2010 IBM and Others. All Rights Reserved
+# Copyright (C) 2007-2011 IBM and Others. All Rights Reserved
 # Author: <srl@icu-project.org>
 #
 
 # 
 # Ticket management.
 # This component manages the revision to ticket map.
+#
+# 2011-jan-27	srl	adding IRepositoryChangeListener functionality (requires trac 0.12)
 
 
 
@@ -15,6 +17,7 @@ from trac.env import IEnvironmentSetupParticipant
 from trac.db import Table, Column, Index, DatabaseManager
 from trac.config import Option
 from trac.util.text import exception_to_unicode
+from trac.versioncontrol.api import IRepositoryChangeListener
 
 import re
 
@@ -26,8 +29,7 @@ tktmgr_schema = [
 ]
 
 class TicketManager(Component):
-    implements(IEnvironmentSetupParticipant)
-#    implements(IEnvironmentSetupParticipant, IRepositoryObserver)
+    implements(IEnvironmentSetupParticipant, IRepositoryChangeListener)
 
     ticket_pattern = Option('icucodetools', 'ticket_pattern', '^ticket:(\d+)', 
                             """A regex matching the commit messages. Group 1 must return a number.""")
@@ -125,7 +127,29 @@ class TicketManager(Component):
         #log.warn("self.known_youngest now %d [%d/%d]" % (self.known_youngest,ourYoungest,theirYoungest)) 
         return
 
-    # IRepositoryObserver methods
+    # IRepositoryChangeListener methods
+    # Must call with: trac-admin /home/icutrac changeset modified '(default)' 29330 29333  - ugly, http://www.mail-archive.com/trac-dev@googlegroups.com/msg04568.html
+    def changeset_modified(self, repos, changeset, old_changeset):
+        try:
+            self.ticket_match = re.compile(self.ticket_pattern)
+        except Exception, e:
+            found = self.env.config.get('icucodetools', 'ticket_pattern', 'NoneFound')
+            raise TracError('Could not compile icucodetools.ticket_pattern=/%s/ but /%s/: %s' % (self.ticket_pattern, found, exception_to_unicode(e, traceback=True)))
+        db = self.env.get_db_cnx()
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM rev2ticket "
+                               "  "
+                               "where rev= %s " %
+                               str(changeset.rev))
+        self.revision_changed(self.log, changeset, changeset.rev, db.cursor())
+	db.commit()
+	self.log.error("changeset_added: %s\n" % changeset.rev)
+
+    def changeset_added(self, repos, changeset):
+        message = changeset.message or '--'
+	self.log.error("changeset_added: %s\n" % changeset.rev)
+
+    # IRepositoryObserver function
     def revision_changed(self, log, cset, next_youngest, cursor):
         # sync the 'rev2ticket' table
         message = cset.message or '--'
@@ -136,7 +160,7 @@ class TicketManager(Component):
             try:
                 int(res.group(1)) # should be int
             except Exception, e:
-                log.warning('Revision [%s] had unparseable ticket number [%s]: [%s]' %
+                self.log.warning('Revision [%s] had unparseable ticket number [%s]: [%s]' %
                                  (next_youngest, tickname, e))
                 return
             try:
