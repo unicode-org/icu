@@ -3953,18 +3953,18 @@ tools/release/java/icu4c.css -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt -text
-tools/trac/IcuCodeTools/icucodetools/__init__.py -text
-tools/trac/IcuCodeTools/icucodetools/dcut.py -text
-tools/trac/IcuCodeTools/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css
-tools/trac/IcuCodeTools/icucodetools/review.py -text
-tools/trac/IcuCodeTools/icucodetools/templates/nothing.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/icucodetools/templates/review.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/icucodetools/ticketmgr.py -text
-tools/trac/IcuCodeTools/icucodetools/tktlist.py -text
-tools/trac/IcuCodeTools/license.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/readme.txt -text
-tools/trac/IcuCodeTools/setup.cfg -text
-tools/trac/IcuCodeTools/setup.py -text
+tools/trac/0.11/icucodetools/__init__.py -text
+tools/trac/0.11/icucodetools/dcut.py -text
+tools/trac/0.11/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css
+tools/trac/0.11/icucodetools/review.py -text
+tools/trac/0.11/icucodetools/templates/nothing.html -text svneol=unset#text/html
+tools/trac/0.11/icucodetools/templates/review.html -text svneol=unset#text/html
+tools/trac/0.11/icucodetools/ticketmgr.py -text
+tools/trac/0.11/icucodetools/tktlist.py -text
+tools/trac/0.11/license.html -text svneol=unset#text/html
+tools/trac/0.11/readme.txt -text
+tools/trac/0.11/setup.cfg -text
+tools/trac/0.11/setup.py -text
 tools/unicode/c/genpname/SyntheticPropertyAliases.txt svneol=native#text/plain
 tools/unicode/c/genpname/SyntheticPropertyValueAliases.txt svneol=native#text/plain
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
