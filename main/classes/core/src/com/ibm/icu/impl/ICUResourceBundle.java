@@ -25,11 +25,11 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.URLHandler.URLVisitor;
-import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
