@@ -148,7 +148,7 @@ case $platform in
         THE_COMP="Sun's CC"
         CC=`which cc`; export CC
         CXX=`which CC`; export CXX
-        RELEASE_CFLAGS="-xO4 -xlibmil"
+        RELEASE_CFLAGS="-xO1 -xlibmil"
         RELEASE_CXXFLAGS="-O4 -xlibmil"
         ;;
     Solaris/GCC)
