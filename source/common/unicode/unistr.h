@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -27,6 +27,7 @@
  */
 
 #include "unicode/utypes.h"
+#include "unicode/appendable.h"
 #include "unicode/rep.h"
 #include "unicode/std_string.h"
 #include "unicode/stringpiece.h"
@@ -184,7 +185,7 @@ class BreakIterator;        // unicode/brkiter.h
  * @see CharacterIterator
  * @stable ICU 2.0
  */
-class U_COMMON_API UnicodeString : public Replaceable
+class U_COMMON_API UnicodeString : public Replaceable, public Appendable
 {
 public:
 
@@ -2035,7 +2036,7 @@ public:
    * @param srcStart the offset into <TT>srcChars</TT> where new characters
    * will be obtained
    * @param srcLength the number of characters in <TT>srcChars</TT> in
-   * the append string
+   *                  the append string; can be -1 if <TT>srcChars</TT> is NUL-terminated
    * @return a reference to this
    * @stable ICU 2.0
    */
@@ -2047,7 +2048,8 @@ public:
    * Append the characters in <TT>srcChars</TT> to the UnicodeString object
    * at offset <TT>start</TT>. <TT>srcChars</TT> is not modified.
    * @param srcChars the source for the new characters
-   * @param srcLength the number of Unicode characters in <TT>srcChars</TT>
+   * @param srcLength the number of Unicode characters in <TT>srcChars</TT>;
+   *                  can be -1 if <TT>srcChars</TT> is NUL-terminated
    * @return a reference to this
    * @stable ICU 2.0
    */
@@ -2069,6 +2071,46 @@ public:
    * @stable ICU 2.0
    */
   inline UnicodeString& append(UChar32 srcChar);
+
+  /**
+   * Appends a 16-bit code unit.
+   * Equivalent to
+   * \code
+   *   return !append(c).isBogus();
+   * \endcode
+   * (Implements Appendable.)
+   * @param c code unit
+   * @return TRUE if the operation succeeded
+   * @draft ICU 4.8
+   */
+  virtual UBool appendCodeUnit(UChar c);
+
+  /**
+   * Appends a code point.
+   * Equivalent to
+   * \code
+   *   return !append(c).isBogus();
+   * \endcode
+   * (Implements Appendable.)
+   * @param c code point 0..0x10ffff
+   * @return TRUE if the operation succeeded
+   * @draft ICU 4.8
+   */
+  virtual UBool appendCodePoint(UChar32 c);
+
+  /**
+   * Appends a string.
+   * Equivalent to
+   * \code
+   *   return !append(s, length).isBogus();
+   * \endcode
+   * (Implements Appendable.)
+   * @param s string, must not be NULL if length!=0
+   * @param length string length, or -1 if NUL-terminated
+   * @return TRUE if the operation succeeded
+   * @draft ICU 4.8
+   */
+  virtual UBool appendString(const UChar *s, int32_t length);
 
 
   /* Insert operations */
@@ -2780,6 +2822,43 @@ public:
    * @stable ICU 2.2
    */
   inline const UChar *getTerminatedBuffer();
+
+  /**
+   * Tells the UnicodeString that the caller is going to append roughly
+   * appendCapacity UChars.
+   * (Implements Appendable.)
+   * @param appendCapacity estimated number of UChars that will be appended
+   * @return TRUE if the operation succeeded
+   * @draft ICU 4.8
+   */
+  virtual UBool reserveAppendCapacity(int32_t appendCapacity);
+
+  /**
+   * Returns a writable buffer for appending and writes the buffer's capacity to
+   * *resultCapacity. Guarantees *resultCapacity>=minCapacity.
+   * May return a pointer to the caller-owned scratch buffer which must have
+   * scratchCapacity>=minCapacity.
+   * The returned buffer is only valid until the next operation
+   * on this UnicodeString.
+   *
+   * (Implements Appendable.)
+   * For details see Appendable::getAppendBuffer().
+   *
+   * @param minCapacity required minimum capacity of the returned buffer;
+   *                    must be non-negative
+   * @param desiredCapacityHint desired capacity of the returned buffer;
+   *                            must be non-negative
+   * @param scratch default caller-owned buffer
+   * @param scratchCapacity capacity of the scratch buffer
+   * @param resultCapacity pointer to an integer which will be set to the
+   *                       capacity of the returned buffer
+   * @return a buffer with *resultCapacity>=minCapacity
+   * @draft ICU 4.8
+   */
+  virtual UChar *getAppendBuffer(int32_t minCapacity,
+                                 int32_t desiredCapacityHint,
+                                 UChar *scratch, int32_t scratchCapacity,
+                                 int32_t *resultCapacity);
 
   //========================================
   // Constructors

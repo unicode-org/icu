@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2010, International Business Machines Corporation and   *
+* Copyright (C) 1999-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -1260,14 +1260,24 @@ UnicodeString::doReplace(int32_t start,
   }
 
   // calculate the size of the string after the replace
-  int32_t newSize;
+  int32_t newLength;
 
   // optimize append() onto a large-enough, owned string
   if(start >= oldLength) {
-    newSize = oldLength + srcLength;
-    if(newSize <= getCapacity() && isBufferWritable()) {
-      us_arrayCopy(srcChars, srcStart, getArrayStart(), oldLength, srcLength);
-      setLength(newSize);
+    newLength = oldLength + srcLength;
+    if(newLength <= getCapacity() && isBufferWritable()) {
+      UChar *oldArray = getArrayStart();
+      // Do not copy characters when
+      //   UChar *buffer=str.getAppendBuffer(...);
+      // is followed by
+      //   str.append(buffer, length);
+      // or
+      //   str.appendString(buffer, length)
+      // or similar.
+      if(srcChars + srcStart != oldArray + start || start > oldLength) {
+        us_arrayCopy(srcChars, srcStart, oldArray, oldLength, srcLength);
+      }
+      setLength(newLength);
       return *this;
     } else {
       // pin the indices to legal values
@@ -1278,14 +1288,14 @@ UnicodeString::doReplace(int32_t start,
     // pin the indices to legal values
     pinIndices(start, length);
 
-    newSize = oldLength - length + srcLength;
+    newLength = oldLength - length + srcLength;
   }
 
   // the following may change fArray but will not copy the current contents;
   // therefore we need to keep the current fArray
   UChar oldStackBuffer[US_STACKBUF_SIZE];
   UChar *oldArray;
-  if((fFlags&kUsingStackBuffer) && (newSize > US_STACKBUF_SIZE)) {
+  if((fFlags&kUsingStackBuffer) && (newLength > US_STACKBUF_SIZE)) {
     // copy the stack buffer contents because it will be overwritten with
     // fUnion.fFields values
     u_memcpy(oldStackBuffer, fUnion.fStackBuffer, oldLength);
@@ -1296,7 +1306,7 @@ UnicodeString::doReplace(int32_t start,
 
   // clone our array and allocate a bigger array if needed
   int32_t *bufferToDelete = 0;
-  if(!cloneArrayIfNeeded(newSize, newSize + (newSize >> 2) + kGrowSize,
+  if(!cloneArrayIfNeeded(newLength, newLength + (newLength >> 2) + kGrowSize,
                          FALSE, &bufferToDelete)
   ) {
     return *this;
@@ -1321,7 +1331,7 @@ UnicodeString::doReplace(int32_t start,
   // now fill in the hole with the new string
   us_arrayCopy(srcChars, srcStart, newArray, start, srcLength);
 
-  setLength(newSize);
+  setLength(newLength);
 
   // delayed delete in case srcChars == fArray when we started, and
   // to keep oldArray alive for the above operations
@@ -1330,6 +1340,28 @@ UnicodeString::doReplace(int32_t start,
   }
 
   return *this;
+}
+
+// Implements Appendable.
+UBool
+UnicodeString::appendCodeUnit(UChar c) {
+  return doReplace(length(), 0, &c, 0, 1).isWritable();
+}
+
+// Implements Appendable.
+UBool
+UnicodeString::appendCodePoint(UChar32 c) {
+  UChar buffer[U16_MAX_LENGTH];
+  int32_t cLength = 0;
+  UBool isError = FALSE;
+  U16_APPEND(buffer, cLength, U16_MAX_LENGTH, c, isError);
+  return !isError && doReplace(length(), 0, buffer, 0, cLength).isWritable();
+}
+
+// Implements Appendable.
+UBool
+UnicodeString::appendString(const UChar *s, int32_t sLength) {
+  return doReplace(length(), 0, s, 0, sLength).isWritable();
 }
 
 /**
@@ -1513,6 +1545,25 @@ UnicodeString::releaseBuffer(int32_t newLength) {
   }
 }
 
+// Implements Appendable.
+UChar *
+UnicodeString::getAppendBuffer(int32_t minCapacity,
+                               int32_t desiredCapacityHint,
+                               UChar *scratch, int32_t scratchCapacity,
+                               int32_t *resultCapacity) {
+    if(minCapacity < 1 || scratchCapacity < minCapacity) {
+        *resultCapacity = 0;
+        return NULL;
+    }
+    int32_t oldLength = length();
+    if(cloneArrayIfNeeded(oldLength + minCapacity, oldLength + desiredCapacityHint)) {
+      *resultCapacity = getCapacity() - oldLength;
+      return getArrayStart() + oldLength;
+    }
+    *resultCapacity = scratchCapacity;
+    return scratch;
+}
+
 //========================================
 // Miscellaneous
 //========================================
@@ -1616,6 +1667,13 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   }
   return TRUE;
 }
+
+// Implements Appendable.
+UBool
+UnicodeString::reserveAppendCapacity(int32_t appendCapacity) {
+  return cloneArrayIfNeeded(length() + appendCapacity);
+}
+
 U_NAMESPACE_END
 
 #ifdef U_STATIC_IMPLEMENTATION

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -9,6 +9,12 @@
 
 #include "unicode/unistr.h"
 #include "intltest.h"
+
+U_NAMESPACE_BEGIN
+
+class Appendable;
+
+U_NAMESPACE_END
 
 /**
  * Perform API and functionality tests for class UnicodeString
@@ -70,13 +76,16 @@ public:
     void TestUnescape(void);
 
     void _testUnicodeStringHasMoreChar32Than(const UnicodeString &s, int32_t start, int32_t length, int32_t number);
-    void TestCountChar32(void);
+    void TestCountChar32();
     void TestBogus();
     void TestStringEnumeration();
-    void TestNameSpace(void);
-    void TestUTF32(void);
-    void TestUTF8(void);
-    void TestReadOnlyAlias(void);
+    void TestNameSpace();
+    void TestUTF32();
+    void TestUTF8();
+    void TestReadOnlyAlias();
+    void doTestAppendable(UnicodeString &dest, Appendable &app);
+    void TestAppendable();
+    void TestUnicodeStringImplementsAppendable();
 };
 
 class StringCaseTest: public IntlTest {
