@@ -2053,11 +2053,11 @@ UnicodeStringTest::doTestAppendable(UnicodeString &dest, Appendable &app) {
     }
 }
 
-class UnicodeStringAppendable : public AppendableAdapter {
+class SimpleAppendable : public Appendable {
 public:
-    UnicodeStringAppendable(UnicodeString &dest) : str(dest) {}
+    explicit SimpleAppendable(UnicodeString &dest) : str(dest) {}
     virtual UBool appendCodeUnit(UChar c) { str.append(c); return TRUE; }
-    UnicodeStringAppendable &reset() { str.remove(); return *this; }
+    SimpleAppendable &reset() { str.remove(); return *this; }
 private:
     UnicodeString &str;
 };
@@ -2065,12 +2065,13 @@ private:
 void
 UnicodeStringTest::TestAppendable() {
     UnicodeString dest;
-    UnicodeStringAppendable app(dest);
+    SimpleAppendable app(dest);
     doTestAppendable(dest, app);
 }
 
 void
 UnicodeStringTest::TestUnicodeStringImplementsAppendable() {
     UnicodeString dest;
-    doTestAppendable(dest, dest);
+    UnicodeStringAppendable app(dest);
+    doTestAppendable(dest, app);
 }

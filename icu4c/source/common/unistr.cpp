@@ -19,6 +19,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/appendable.h"
 #include "unicode/putil.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -1342,28 +1343,6 @@ UnicodeString::doReplace(int32_t start,
   return *this;
 }
 
-// Implements Appendable.
-UBool
-UnicodeString::appendCodeUnit(UChar c) {
-  return doReplace(length(), 0, &c, 0, 1).isWritable();
-}
-
-// Implements Appendable.
-UBool
-UnicodeString::appendCodePoint(UChar32 c) {
-  UChar buffer[U16_MAX_LENGTH];
-  int32_t cLength = 0;
-  UBool isError = FALSE;
-  U16_APPEND(buffer, cLength, U16_MAX_LENGTH, c, isError);
-  return !isError && doReplace(length(), 0, buffer, 0, cLength).isWritable();
-}
-
-// Implements Appendable.
-UBool
-UnicodeString::appendString(const UChar *s, int32_t sLength) {
-  return doReplace(length(), 0, s, 0, sLength).isWritable();
-}
-
 /**
  * Replaceable API
  */
@@ -1545,25 +1524,6 @@ UnicodeString::releaseBuffer(int32_t newLength) {
   }
 }
 
-// Implements Appendable.
-UChar *
-UnicodeString::getAppendBuffer(int32_t minCapacity,
-                               int32_t desiredCapacityHint,
-                               UChar *scratch, int32_t scratchCapacity,
-                               int32_t *resultCapacity) {
-    if(minCapacity < 1 || scratchCapacity < minCapacity) {
-        *resultCapacity = 0;
-        return NULL;
-    }
-    int32_t oldLength = length();
-    if(cloneArrayIfNeeded(oldLength + minCapacity, oldLength + desiredCapacityHint)) {
-      *resultCapacity = getCapacity() - oldLength;
-      return getArrayStart() + oldLength;
-    }
-    *resultCapacity = scratchCapacity;
-    return scratch;
-}
-
 //========================================
 // Miscellaneous
 //========================================
@@ -1668,10 +1628,48 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   return TRUE;
 }
 
-// Implements Appendable.
+// UnicodeStringAppendable ------------------------------------------------- ***
+
 UBool
-UnicodeString::reserveAppendCapacity(int32_t appendCapacity) {
-  return cloneArrayIfNeeded(length() + appendCapacity);
+UnicodeStringAppendable::appendCodeUnit(UChar c) {
+  return str.doReplace(str.length(), 0, &c, 0, 1).isWritable();
+}
+
+UBool
+UnicodeStringAppendable::appendCodePoint(UChar32 c) {
+  UChar buffer[U16_MAX_LENGTH];
+  int32_t cLength = 0;
+  UBool isError = FALSE;
+  U16_APPEND(buffer, cLength, U16_MAX_LENGTH, c, isError);
+  return !isError && str.doReplace(str.length(), 0, buffer, 0, cLength).isWritable();
+}
+
+UBool
+UnicodeStringAppendable::appendString(const UChar *s, int32_t length) {
+  return str.doReplace(str.length(), 0, s, 0, length).isWritable();
+}
+
+UBool
+UnicodeStringAppendable::reserveAppendCapacity(int32_t appendCapacity) {
+  return str.cloneArrayIfNeeded(str.length() + appendCapacity);
+}
+
+UChar *
+UnicodeStringAppendable::getAppendBuffer(int32_t minCapacity,
+                                         int32_t desiredCapacityHint,
+                                         UChar *scratch, int32_t scratchCapacity,
+                                         int32_t *resultCapacity) {
+  if(minCapacity < 1 || scratchCapacity < minCapacity) {
+    *resultCapacity = 0;
+    return NULL;
+  }
+  int32_t oldLength = str.length();
+  if(str.cloneArrayIfNeeded(oldLength + minCapacity, oldLength + desiredCapacityHint)) {
+    *resultCapacity = str.getCapacity() - oldLength;
+    return str.getArrayStart() + oldLength;
+  }
+  *resultCapacity = scratchCapacity;
+  return scratch;
 }
 
 U_NAMESPACE_END

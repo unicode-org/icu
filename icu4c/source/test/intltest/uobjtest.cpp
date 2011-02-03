@@ -312,8 +312,8 @@ public:
 };
 #endif
 
-// AppendableAdapter is abstract; we define a subclass to verify that there is no "poor man's RTTI".
-class DummyAppendable : public AppendableAdapter {
+// Appendable is abstract; we define a subclass to verify that there is no "poor man's RTTI".
+class DummyAppendable : public Appendable {
 public:
     virtual UBool appendCodeUnit(UChar /*c*/) { return TRUE; }
 };
