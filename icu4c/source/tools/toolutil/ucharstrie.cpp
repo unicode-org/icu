@@ -13,41 +13,13 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/appendable.h"
 #include "unicode/uobject.h"
 #include "cmemory.h"
 #include "uassert.h"
 #include "ucharstrie.h"
 
 U_NAMESPACE_BEGIN
-
-Appendable &
-Appendable::appendCodePoint(UChar32 c) {
-    if(c<=0xffff) {
-        return append((UChar)c);
-    } else {
-        return append(U16_LEAD(c)).append(U16_TRAIL(c));
-    }
-}
-
-Appendable &
-Appendable::append(const UChar *s, int32_t length) {
-    if(s!=NULL && length!=0) {
-        if(length<0) {
-            UChar c;
-            while((c=*s++)!=0) {
-                append(c);
-            }
-        } else {
-            const UChar *limit=s+length;
-            while(s<limit) {
-                append(*s++);
-            }
-        }
-    }
-    return *this;
-}
-
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Appendable)
 
 UCharsTrie::~UCharsTrie() {
     uprv_free(ownedArray_);
@@ -376,7 +348,7 @@ UCharsTrie::getNextUChars(Appendable &out) const {
         return 0;
     }
     if(remainingMatchLength_>=0) {
-        out.append(*pos);  // Next unit of a pending linear-match node.
+        out.appendCodeUnit(*pos);  // Next unit of a pending linear-match node.
         return 1;
     }
     int32_t node=*pos++;
@@ -392,11 +364,12 @@ UCharsTrie::getNextUChars(Appendable &out) const {
         if(node==0) {
             node=*pos++;
         }
-        getNextBranchUChars(pos, ++node, out);
+        out.reserveAppendCapacity(++node);
+        getNextBranchUChars(pos, node, out);
         return node;
     } else {
         // First unit of the linear-match node.
-        out.append(*pos);
+        out.appendCodeUnit(*pos);
         return 1;
     }
 }
@@ -410,10 +383,10 @@ UCharsTrie::getNextBranchUChars(const UChar *pos, int32_t length, Appendable &ou
         pos=skipDelta(pos);
     }
     do {
-        out.append(*pos++);
+        out.appendCodeUnit(*pos++);
         pos=skipValue(pos);
     } while(--length>1);
-    out.append(*pos);
+    out.appendCodeUnit(*pos);
 }
 
 U_NAMESPACE_END
