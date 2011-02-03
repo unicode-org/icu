@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2010, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -3764,6 +3764,8 @@ public class ULocaleTest extends TestFmwk {
             {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic"},
             {"en_US_POSIX", "en-US-u-va-posix"},
             {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
+            {"@x=elmer",    "x-elmer"},
+            {"_US@x=elmer", "und-US-x-elmer"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -3819,6 +3821,7 @@ public class ULocaleTest extends TestFmwk {
             {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   NOERROR},
             {"fr--FR",              "fr",                   Integer.valueOf(3)},
             {"fr-",                 "fr",                   Integer.valueOf(3)},
+            {"x-elmer",             "@x=elmer",             NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
