@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc. 
  ********************************************************************/
@@ -249,6 +249,7 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
 #include "reldtfmt.h"
 
 // External Things
+#include "unicode/appendable.h"
 #include "unicode/brkiter.h"
 #include "unicode/calendar.h"
 #include "unicode/caniter.h"
@@ -310,6 +311,12 @@ public:
     TestLocaleKeyFactory(int32_t coverage) : LocaleKeyFactory(coverage) {}
 };
 #endif
+
+// AppendableAdapter is abstract; we define a subclass to verify that there is no "poor man's RTTI".
+class DummyAppendable : public AppendableAdapter {
+public:
+    virtual UBool appendCodeUnit(UChar /*c*/) { return TRUE; }
+};
 
 void UObjectTest::testIDs()
 {
@@ -445,7 +452,8 @@ void UObjectTest::testIDs()
     TESTCLASSID_FACTORY(OlsonTimeZone, TimeZone::createTimeZone(UnicodeString("America/Los_Angeles")));
     TESTCLASSID_FACTORY_HIDDEN(KeywordEnumeration, TimeZone::createEnumeration());
 #endif
-    
+
+    TESTCLASSID_NONE_DEFAULT(DummyAppendable);
     TESTCLASSID_DEFAULT(UnicodeString);
     TESTCLASSID_CTOR(UnicodeSet, (0, 1));
     TESTCLASSID_ABSTRACT(UnicodeFilter);

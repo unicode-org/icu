@@ -29,43 +29,9 @@
 
 U_NAMESPACE_BEGIN
 
+class Appendable;
 class UCharsTrieBuilder;
 class UVector32;
-
-/**
- * Base class for objects to which Unicode characters and strings can be appended.
- * Combines elements of Java Appendable and ICU4C ByteSink.
- * TODO: Should live in separate files, could be public API.
- */
-class U_TOOLUTIL_API Appendable : public UObject {
-public:
-    /**
-     * Appends a 16-bit code unit.
-     * @param c code unit
-     * @return *this
-     */
-    virtual Appendable &append(UChar c) = 0;
-    /**
-     * Appends a code point; has a default implementation.
-     * @param c code point
-     * @return *this
-     */
-    virtual Appendable &appendCodePoint(UChar32 c);
-    /**
-     * Appends a string; has a default implementation.
-     * @param s string
-     * @param length string length, or -1 if NUL-terminated
-     * @return *this
-     */
-    virtual Appendable &append(const UChar *s, int32_t length);
-
-    // TODO: getAppendBuffer(), see ByteSink
-    // TODO: flush() (?) see ByteSink
-
-private:
-    // No ICU "poor man's RTTI" for this class nor its subclasses.
-    virtual UClassID getDynamicClassID() const;
-};
 
 /**
  * Light-weight, non-const reader class for a UCharsTrie.
@@ -263,7 +229,6 @@ public:
      * Finds each UChar which continues the string from the current state.
      * That is, each UChar c for which it would be next(c)!=USTRINGTRIE_NO_MATCH now.
      * @param out Each next UChar is appended to this object.
-     *            (Only uses the out.append(c) method.)
      * @return the number of UChars which continue the string from here
      */
     int32_t getNextUChars(Appendable &out) const;
