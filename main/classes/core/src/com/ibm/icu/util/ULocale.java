@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2010, International Business Machines Corporation and   *
+* Copyright (C) 2003-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -2775,7 +2775,9 @@ public final class ULocale implements Serializable {
 
         StringBuilder buf = new StringBuilder();
         String subtag = tag.getLanguage();
-        buf.append(LanguageTag.canonicalizeLanguage(subtag));
+        if (subtag.length() > 0) {
+            buf.append(LanguageTag.canonicalizeLanguage(subtag));
+        }
  
         subtag = tag.getScript();
         if (subtag.length() > 0) {
@@ -2803,7 +2805,10 @@ public final class ULocale implements Serializable {
 
         subtag = tag.getPrivateuse();
         if (subtag.length() > 0) {
-            buf.append(LanguageTag.SEP).append(LanguageTag.PRIVATEUSE).append(LanguageTag.SEP);
+            if (buf.length() > 0) {
+                buf.append(LanguageTag.SEP);
+            }
+            buf.append(LanguageTag.PRIVATEUSE).append(LanguageTag.SEP);
             buf.append(LanguageTag.canonicalizePrivateuse(subtag));
         }
 
