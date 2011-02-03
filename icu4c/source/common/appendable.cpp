@@ -17,10 +17,8 @@
 
 U_NAMESPACE_BEGIN
 
-Appendable::~Appendable() {}
-
 UBool
-AppendableAdapter::appendCodePoint(UChar32 c) {
+Appendable::appendCodePoint(UChar32 c) {
     if(c<=0xffff) {
         return appendCodeUnit((UChar)c);
     } else {
@@ -29,7 +27,7 @@ AppendableAdapter::appendCodePoint(UChar32 c) {
 }
 
 UBool
-AppendableAdapter::appendString(const UChar *s, int32_t length) {
+Appendable::appendString(const UChar *s, int32_t length) {
     if(length<0) {
         UChar c;
         while((c=*s++)!=0) {
@@ -49,15 +47,15 @@ AppendableAdapter::appendString(const UChar *s, int32_t length) {
 }
 
 UBool
-AppendableAdapter::reserveAppendCapacity(int32_t /*appendCapacity*/) {
+Appendable::reserveAppendCapacity(int32_t /*appendCapacity*/) {
     return TRUE;
 }
 
 UChar *
-AppendableAdapter::getAppendBuffer(int32_t minCapacity,
-                                   int32_t /*desiredCapacityHint*/,
-                                   UChar *scratch, int32_t scratchCapacity,
-                                   int32_t *resultCapacity) {
+Appendable::getAppendBuffer(int32_t minCapacity,
+                            int32_t /*desiredCapacityHint*/,
+                            UChar *scratch, int32_t scratchCapacity,
+                            int32_t *resultCapacity) {
     if(minCapacity<1 || scratchCapacity<minCapacity) {
         *resultCapacity=0;
         return NULL;
@@ -66,6 +64,8 @@ AppendableAdapter::getAppendBuffer(int32_t minCapacity,
     return scratch;
 }
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(AppendableAdapter)
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Appendable)
+
+// UnicodeStringAppendable is implemented in unistr.cpp.
 
 U_NAMESPACE_END
