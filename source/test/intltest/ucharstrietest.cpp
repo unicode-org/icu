@@ -15,6 +15,7 @@
 #include <string.h>
 
 #include "unicode/utypes.h"
+#include "unicode/appendable.h"
 #include "unicode/localpointer.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
@@ -501,7 +502,8 @@ void UCharsTrieTest::TestGetNextUChars() {
         return;  // buildTrie() reported an error
     }
     UnicodeString buffer;
-    int32_t count=trie->getNextUChars(buffer);
+    UnicodeStringAppendable app(buffer);
+    int32_t count=trie->getNextUChars(app);
     if(count!=2 || buffer.length()!=2 || buffer[0]!=u_a || buffer[1]!=u_j) {
         errln("months getNextUChars()!=[aj] at root");
     }
@@ -509,31 +511,36 @@ void UCharsTrieTest::TestGetNextUChars() {
     trie->next(u_a);
     trie->next(u_n);
     // getNextUChars() directly after next()
-    count=trie->getNextUChars(buffer.remove());
+    buffer.remove();
+    count=trie->getNextUChars(app);
     if(count!=20 || buffer!=UNICODE_STRING_SIMPLE(".abcdefghijklmnopqru")) {
         errln("months getNextUChars()!=[.abcdefghijklmnopqru] after \"jan\"");
     }
     // getNextUChars() after getValue()
     trie->getValue();  // next() had returned USTRINGTRIE_INTERMEDIATE_VALUE.
-    count=trie->getNextUChars(buffer.remove());
+    buffer.remove();
+    count=trie->getNextUChars(app);
     if(count!=20 || buffer!=UNICODE_STRING_SIMPLE(".abcdefghijklmnopqru")) {
         errln("months getNextUChars()!=[.abcdefghijklmnopqru] after \"jan\"+getValue()");
     }
     // getNextUChars() from a linear-match node
     trie->next(u_u);
-    count=trie->getNextUChars(buffer.remove());
+    buffer.remove();
+    count=trie->getNextUChars(app);
     if(count!=1 || buffer.length()!=1 || buffer[0]!=u_a) {
         errln("months getNextUChars()!=[a] after \"janu\"");
     }
     trie->next(u_a);
-    count=trie->getNextUChars(buffer.remove());
+    buffer.remove();
+    count=trie->getNextUChars(app);
     if(count!=1 || buffer.length()!=1 || buffer[0]!=u_r) {
         errln("months getNextUChars()!=[r] after \"janua\"");
     }
     trie->next(u_r);
     trie->next(u_y);
     // getNextUChars() after a final match
-    count=trie->getNextUChars(buffer.remove());
+    buffer.remove();
+    count=trie->getNextUChars(app);
     if(count!=0 || buffer.length()!=0) {
         errln("months getNextUChars()!=[] after \"january\"");
     }
