@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -14,6 +14,7 @@
 #include "cstring.h"
 #include "putilimp.h"
 #include "uinvchar.h"
+#include "ulocimp.h"
 
 /* struct holding a single variant */
 typedef struct VariantListEntry {
@@ -2194,6 +2195,7 @@ uloc_toLanguageTag(const char* localeID,
     int32_t reslen = 0;
     UErrorCode tmpStatus = U_ZERO_ERROR;
     UBool hadPosix = FALSE;
+    const char* pKeywordStart;
 
     /* Note: uloc_canonicalize returns "en_US_POSIX" for input locale ID "".  See #6835 */
     canonical[0] = 0;
@@ -2202,6 +2204,51 @@ uloc_toLanguageTag(const char* localeID,
         if (tmpStatus != U_ZERO_ERROR) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
+        }
+    }
+
+    /* For handling special case - private use only tag */
+    pKeywordStart = locale_getKeywordsStart(canonical);
+    if (pKeywordStart == canonical) {
+        UEnumeration *kwdEnum;
+        int kwdCnt = 0;
+        UBool done = FALSE;
+
+        kwdEnum = uloc_openKeywords((const char*)canonical, &tmpStatus);
+        if (kwdEnum != NULL) {
+            kwdCnt = uenum_count(kwdEnum, &tmpStatus);
+            if (kwdCnt == 1) {
+                const char *key;
+                int32_t len = 0;
+
+                key = uenum_next(kwdEnum, &len, &tmpStatus);
+                if (len == 1 && *key == PRIVATEUSE) {
+                    char buf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
+                    buf[0] = PRIVATEUSE;
+                    buf[1] = SEP;
+                    len = uloc_getKeywordValue(localeID, key, &buf[2], sizeof(buf) - 2, &tmpStatus);
+                    if (U_SUCCESS(tmpStatus)) {
+                        if (_isPrivateuseValueSubtags(&buf[2], len)) {
+                            /* return private use only tag */
+                            reslen = len + 2;
+                            uprv_memcpy(langtag, buf, uprv_min(reslen, langtagCapacity));
+                            u_terminateChars(langtag, langtagCapacity, reslen, status);
+                            done = TRUE;
+                        } else if (strict) {
+                            *status = U_ILLEGAL_ARGUMENT_ERROR;
+                            done = TRUE;
+                        }
+                        /* if not strict mode, then "und" will be returned */
+                    } else {
+                        *status = U_ILLEGAL_ARGUMENT_ERROR;
+                        done = TRUE;
+                    }
+                }
+            }
+            uenum_close(kwdEnum);
+            if (done) {
+                return reslen;
+            }
         }
     }
 
@@ -2321,7 +2368,7 @@ uloc_forLanguageTag(const char* langtag,
     n = ultag_getExtensionsSize(lt);
     subtag = ultag_getPrivateUse(lt);
     if (n > 0 || uprv_strlen(subtag) > 0) {
-        if (reslen == 0) {
+        if (reslen == 0 && n > 0) {
             /* need a language */
             if (reslen < localeIDCapacity) {
                 uprv_memcpy(localeID + reslen, LANG_UND, uprv_min(LANG_UND_LEN, localeIDCapacity - reslen));
