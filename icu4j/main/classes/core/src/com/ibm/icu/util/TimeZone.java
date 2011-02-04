@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2010, International Business Machines
+ * Copyright (C) 1996-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -507,6 +507,16 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
+     * <p><strong>Note:</strong>The default implementation of
+     * ICU TimeZone uses the tz database, which supports historic
+     * rule changes, for system time zones. With the implementation,
+     * there are time zones that used daylight savings time in the
+     * past, but no longer used currently. For example, Asia/Tokyo has
+     * never used daylight savings time since 1951. Most clients would
+     * expect that this method to return <code>false</code> for such case.
+     * The default implementation of this method returns <code>true</code>
+     * when the time zone uses daylight savings time in the current
+     * (Gregorian) calendar year.
      * @stable ICU 2.0
      */
     abstract public boolean useDaylightTime();
