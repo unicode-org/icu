@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -378,8 +378,13 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate {
             int num16BitUnits = (indexes[URES_INDEX_16BIT_TOP] -
                                  indexes[URES_INDEX_KEYS_TOP]) * 2;
             char[] c16BitUnits = new char[num16BitUnits];
-            for(int i = 0; i < num16BitUnits; ++i) {
-                c16BitUnits[i] = ds.readChar();
+            // Note: Calling readFully() to read data into byte[] and copy
+            // the data to char[] is faster than calling readChar() one by one
+            // for large data
+            byte[] c16BitUnitsBytes = new byte[num16BitUnits * 2];
+            ds.readFully(c16BitUnitsBytes);
+            for (int i = 0; i < num16BitUnits; i++) {
+                c16BitUnits[i] = (char)((c16BitUnitsBytes[i*2] << 8) | (c16BitUnitsBytes[i*2 + 1] & 0xFF));
             }
             s16BitUnits = new String(c16BitUnits);
             resourceBottom = indexes[URES_INDEX_16BIT_TOP] << 2;
