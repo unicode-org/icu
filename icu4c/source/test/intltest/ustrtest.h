@@ -86,6 +86,7 @@ public:
     void doTestAppendable(UnicodeString &dest, Appendable &app);
     void TestAppendable();
     void TestUnicodeStringImplementsAppendable();
+    void TestSizeofUnicodeString();
 };
 
 class StringCaseTest: public IntlTest {
