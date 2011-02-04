@@ -3370,10 +3370,9 @@ private:
 
   // constants
   enum {
-    // Set the stack buffer size so that sizeof(UnicodeString) is a multiple of sizeof(pointer):
-    // 32-bit pointers: 4+1+1+13*2 = 32 bytes
-    // 64-bit pointers: 8+1+1+15*2 = 40 bytes
-    US_STACKBUF_SIZE= sizeof(void *)==4 ? 13 : 15, // Size of stack buffer for small strings
+    // Set the stack buffer size so that sizeof(UnicodeString) is,
+    // naturally (without padding), a multiple of sizeof(pointer).
+    US_STACKBUF_SIZE= sizeof(void *)==4 ? 13 : 15, // Size of stack buffer for short strings
     kInvalidUChar=0xffff, // invalid UChar index
     kGrowSize=128, // grow size for this buffer
     kInvalidHashCode=0, // invalid hash code
@@ -3381,7 +3380,7 @@ private:
 
     // bit flag values for fFlags
     kIsBogus=1,         // this string is bogus, i.e., not valid or NULL
-    kUsingStackBuffer=2,// fArray==fStackBuffer
+    kUsingStackBuffer=2,// using fUnion.fStackBuffer instead of fUnion.fFields
     kRefCounted=4,      // there is a refCount field before the characters in fArray
     kBufferIsReadonly=8,// do not write to this buffer
     kOpenGetBuffer=16,  // getBuffer(minCapacity) was called (is "open"),
@@ -3406,25 +3405,48 @@ private:
    * Note that UnicodeString has virtual functions,
    * therefore there is an implicit vtable pointer
    * as the first real field.
-   * The fields should be aligned such that no padding is
-   * necessary, mostly by having larger types first.
+   * The fields should be aligned such that no padding is necessary.
    * On 32-bit machines, the size should be 32 bytes,
    * on 64-bit machines (8-byte pointers), it should be 40 bytes.
+   *
+   * We use a hack to achieve this.
+   *
+   * With at least some compilers, each of the following is forced to
+   * a multiple of sizeof(pointer) [the largest field base unit here is a data pointer],
+   * rounded up with additional padding if the fields do not already fit that requirement:
+   * - sizeof(class UnicodeString)
+   * - offsetof(UnicodeString, fUnion)
+   * - sizeof(fUnion)
+   * - sizeof(fFields)
+   *
+   * In order to avoid padding, we make sizeof(fStackBuffer)=16 (=8 UChars)
+   * which is at least as large as sizeof(fFields) on 32-bit and 64-bit machines.
+   * (Padding at the end of fFields is ok:
+   * As long as there is no padding after fStackBuffer, it is not wasted space.)
+   *
+   * We further assume that the compiler does not reorder the fields,
+   * so that fRestOfStackBuffer (which holds a few more UChars) immediately follows after fUnion,
+   * with at most some padding (but no other field) in between.
+   * (Padding there would be wasted space, but functionally harmless.)
+   *
+   * We use a few more sizeof(pointer)'s chunks of space with
+   * fRestOfStackBuffer, fShortLength and fFlags,
+   * to get up exactly to the intended sizeof(UnicodeString).
    */
   // (implicit) *vtable;
-  int8_t    fShortLength;   // 0..127: length  <0: real length is in fUnion.fFields.fLength
-  uint8_t   fFlags;         // bit flags: see constants above
   union StackBufferOrFields {
     // fStackBuffer is used iff (fFlags&kUsingStackBuffer)
     // else fFields is used
-    UChar     fStackBuffer [US_STACKBUF_SIZE]; // buffer for small strings
+    UChar fStackBuffer[8];  // buffer for short strings, together with fRestOfStackBuffer
     struct {
-      uint16_t  fPadding;   // align the following field at 8B (32b pointers) or 12B (64b)
-      int32_t   fLength;    // number of characters in fArray if >127; else undefined
-      UChar     *fArray;    // the Unicode data (aligned at 12B (32b pointers) or 16B (64b))
-      int32_t   fCapacity;  // sizeof fArray
+      UChar   *fArray;    // the Unicode data
+      int32_t fCapacity;  // capacity of fArray (in UChars)
+      int32_t fLength;    // number of characters in fArray if >127; else undefined
     } fFields;
   } fUnion;
+  UChar fRestOfStackBuffer[US_STACKBUF_SIZE-8];
+  int8_t fShortLength;  // 0..127: length  <0: real length is in fUnion.fFields.fLength
+  uint8_t fFlags;       // bit flags: see constants above
 };
 
 /**
