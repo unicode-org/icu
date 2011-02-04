@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 1997-2010, International Business Machines Corporation
+* Copyright (c) 1997-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 **************************************************************************
 *
@@ -554,6 +554,16 @@ public:
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
+     * <p><strong>Note:</strong>The default implementation of
+     * ICU TimeZone uses the tz database, which supports historic
+     * rule changes, for system time zones. With the implementation,
+     * there are time zones that used daylight savings time in the
+     * past, but no longer used currently. For example, Asia/Tokyo has
+     * never used daylight savings time since 1951. Most clients would
+     * expect that this method to return <code>FALSE</code> for such case.
+     * The default implementation of this method returns <code>TRUE</code>
+     * when the time zone uses daylight savings time in the current
+     * (Gregorian) calendar year.
      * @stable ICU 2.0
      */
     virtual UBool useDaylightTime(void) const = 0;
