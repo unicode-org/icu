@@ -65,6 +65,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 19: name = "TestReadOnlyAlias"; if (exec) TestReadOnlyAlias(); break;
         case 20: name = "TestAppendable"; if (exec) TestAppendable(); break;
         case 21: name = "TestUnicodeStringImplementsAppendable"; if (exec) TestUnicodeStringImplementsAppendable(); break;
+        case 22: name = "TestSizeofUnicodeString"; if (exec) TestSizeofUnicodeString(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -2074,4 +2075,25 @@ UnicodeStringTest::TestUnicodeStringImplementsAppendable() {
     UnicodeString dest;
     UnicodeStringAppendable app(dest);
     doTestAppendable(dest, app);
+}
+
+void
+UnicodeStringTest::TestSizeofUnicodeString() {
+    // See the comments in unistr.h near the declaration of UnicodeString's fields.
+    size_t sizeofUniStr=sizeof(UnicodeString);
+    size_t expected;
+    switch(sizeof(void *)) {
+    case 4:
+        expected=32;
+        break;
+    case 8:
+        expected=40;
+        break;
+    default:
+        logln("This platform has neither 32-bit nor 64-bit pointers.");
+        return;
+    }
+    if(expected!=sizeofUniStr) {
+        errln("sizeof(UnicodeString)=%d, expected %d", (int)sizeofUniStr, (int)expected);
+    }
 }
