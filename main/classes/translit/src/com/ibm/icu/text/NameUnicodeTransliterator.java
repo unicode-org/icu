@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
@@ -13,9 +13,6 @@ import com.ibm.icu.lang.UCharacter;
  * @author Alan Liu
  */
 class NameUnicodeTransliterator extends Transliterator {
-
-    char openDelimiter;
-    char closeDelimiter;
 
     static final String _ID = "Name-Any";
 

@@ -1,8 +1,8 @@
 /*
- *******************************************************************************
- * Copyright (C) 2009, Google, International Business Machines Corporation     *
- * and others. All Rights Reserved.                                            *
- *******************************************************************************
+ ********************************************************************************
+ * Copyright (C) 2009-2011, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                             *
+ ********************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -58,7 +58,7 @@ class CaseFoldTransliterator extends Transliterator{
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    protected void handleTransliterate(Replaceable text,
+    protected synchronized void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
         if(csp==null) {
             return;

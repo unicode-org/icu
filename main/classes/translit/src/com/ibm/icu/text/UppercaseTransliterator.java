@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -61,7 +61,7 @@ class UppercaseTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    protected void handleTransliterate(Replaceable text,
+    protected synchronized void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
     if(csp==null) {
         return;
