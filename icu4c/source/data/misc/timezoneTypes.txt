@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/bcp47/*.xml
@@ -289,6 +289,7 @@ timezoneTypes:table(nofallback){
             "America:Nipigon"{"cathu"}
             "America:Nome"{"usome"}
             "America:Noronha"{"brfen"}
+            "America:North_Dakota:Beulah"{"usxul"}
             "America:North_Dakota:Center"{"usndcnt"}
             "America:North_Dakota:New_Salem"{"usndnsl"}
             "America:Ojinaga"{"mxoji"}
