@@ -823,7 +823,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                                                                     ClassLoader root, boolean disableFallback){
         ULocale defaultLocale = ULocale.getDefault();
         String localeName = localeID;
-        if(localeName.indexOf('@')>0){
+        if(localeName.indexOf('@')>=0){
             localeName = ULocale.getBaseName(localeID);
         }
         String fullName = getFullName(baseName, localeName);
