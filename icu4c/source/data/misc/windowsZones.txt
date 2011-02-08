@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/windowsZones.xml
@@ -152,6 +152,9 @@ windowsZones:table(nofallback){
         Korea Standard Time{
             001{"Asia/Seoul"}
         }
+        Magadan Standard Time{
+            001{"Asia/Magadan"}
+        }
         Mauritius Standard Time{
             001{"Indian/Mauritius"}
         }
@@ -264,7 +267,7 @@ windowsZones:table(nofallback){
             001{"Pacific/Tongatapu"}
         }
         US Eastern Standard Time{
-            001{"Etc/GMT+5"}
+            001{"America/Indianapolis"}
         }
         US Mountain Standard Time{
             001{"America/Phoenix"}
