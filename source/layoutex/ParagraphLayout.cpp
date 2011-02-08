@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2008, International Business Machines
+ *   Copyright (C) 2002-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -868,7 +868,7 @@ le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
 
     return nullLanguageCode;
 }
-#elif
+#else
 
 // TODO - dummy implementation for right now...
 le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
