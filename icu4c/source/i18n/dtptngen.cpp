@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -1022,9 +1022,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
             if (fixFractionalSeconds && typeValue == UDATPG_SECOND_FIELD) {
                 UnicodeString newField=dtMatcher->skeleton.original[UDATPG_FRACTIONAL_SECOND_FIELD];
                 field = field + decimal + newField;
-            }
-            else {
-                if (dtMatcher->skeleton.type[typeValue]!=0) {
+            } else if (dtMatcher->skeleton.type[typeValue]!=0) {
                     // Here:
                     // - "reqField" is the field from the originally requested skeleton, with length
                     // "reqFieldLen".
@@ -1050,7 +1048,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     UnicodeString reqField = dtMatcher->skeleton.original[typeValue];
                     int32_t reqFieldLen = reqField.length();
                     if (reqField.charAt(0) == CAP_E && reqFieldLen < 3)
-                    	reqFieldLen = 3; // 1-3 for E are equivalent to 3 for c,e
+                        reqFieldLen = 3; // 1-3 for E are equivalent to 3 for c,e
                     int32_t adjFieldLen = reqFieldLen;
                     if ( (typeValue==UDATPG_HOUR_FIELD && (options & UDATPG_MATCH_HOUR_FIELD_LENGTH)==0) ||
                          (typeValue==UDATPG_MINUTE_FIELD && (options & UDATPG_MATCH_MINUTE_FIELD_LENGTH)==0) ||
@@ -1072,9 +1070,8 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     for (int32_t i=adjFieldLen; i>0; --i) {
                         field+=c;
                     }
-                }
-                newPattern+=field;
             }
+            newPattern+=field;
         }
     }
     return newPattern;
@@ -1082,7 +1079,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
 
 UnicodeString
 DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatternMatchOptions options) {
-    UnicodeString  resultPattern, tempPattern, formattedPattern;
+    UnicodeString  resultPattern, tempPattern;
     UErrorCode err=U_ZERO_ERROR;
     int32_t lastMissingFieldMask=0;
     if (missingFields!=0) {
@@ -1099,8 +1096,7 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatte
             }
             if (((distanceInfo->missingFieldMask & UDATPG_SECOND_AND_FRACTIONAL_MASK)==UDATPG_FRACTIONAL_MASK) &&
                 ((missingFields & UDATPG_SECOND_AND_FRACTIONAL_MASK) == UDATPG_SECOND_AND_FRACTIONAL_MASK)) {
-                resultPattern = adjustFieldTypes(resultPattern, specifiedSkeleton, FALSE, options);
-                //resultPattern = tempPattern;
+                resultPattern = adjustFieldTypes(resultPattern, specifiedSkeleton, TRUE, options);
                 distanceInfo->missingFieldMask &= ~UDATPG_FRACTIONAL_MASK;
                 continue;
             }
@@ -1117,11 +1113,11 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatte
                 appendName
             };
             UnicodeString emptyStr;
-            formattedPattern = MessageFormat::format(appendItemFormats[topField], formatPattern, 3, emptyStr, err);
+            resultPattern = MessageFormat::format(appendItemFormats[topField], formatPattern, 3, emptyStr, err);
             lastMissingFieldMask = distanceInfo->missingFieldMask;
         }
     }
-    return formattedPattern;
+    return resultPattern;
 }
 
 int32_t
