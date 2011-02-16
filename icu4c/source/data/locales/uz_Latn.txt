@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/uz_Latn.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/uz_Latn.xml
  */
 uz_Latn{
-    %%ParentIsRoot:int{1}
+    %%Parent{"root"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v x y z ʿ]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ʿ]"}
     LocaleScript{

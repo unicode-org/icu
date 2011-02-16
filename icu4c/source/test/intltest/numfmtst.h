@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -149,6 +149,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestCurrencyFractionDigits();
 
     void TestExponentParse();
+    void TestExplicitParents();
 
  private:
 
