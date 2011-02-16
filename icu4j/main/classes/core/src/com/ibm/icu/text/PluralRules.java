@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,9 +11,10 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.PluralRulesLoader;
@@ -78,7 +79,7 @@ public class PluralRules implements Serializable {
     private static final long serialVersionUID = 1;
 
     private final RuleList rules;
-    private final Set<String> keywords;
+    private final Map<String, Double> keywords;
     private int repeatLimit; // for equality test
 
     // Standard keywords.
@@ -150,6 +151,9 @@ public class PluralRules implements Serializable {
         public int updateRepeatLimit(int limit) {
             return limit;
         }
+        public double uniqueValue() {
+            return Double.NaN;
+        }
       };
 
     /*
@@ -172,6 +176,10 @@ public class PluralRules implements Serializable {
 
         public int updateRepeatLimit(int limit) {
             return limit;
+        }
+
+        public Double getKeywordValue() {
+            return Double.NaN;
         }
     };
 
@@ -226,6 +234,11 @@ public class PluralRules implements Serializable {
          * @param n the number to test, >= 0.
          */
         boolean isFulfilled(double n);
+        
+        /*
+         * Returns the unique value that satisfies the constraint, or NaN.
+         */
+        double uniqueValue();
 
         /*
          * Returns the larger of limit or the limit of this constraint.
@@ -248,6 +261,8 @@ public class PluralRules implements Serializable {
         boolean appliesTo(double n);
         /* Returns the larger of limit and this rule's limit. */
         int updateRepeatLimit(int limit);
+        /* Returns the unique value that satisfies this rule, or NaN if there is no such value */
+        Double getKeywordValue();
     }
 
     /*
@@ -258,7 +273,7 @@ public class PluralRules implements Serializable {
         String select(double n);
 
         /* Returns the set of defined keywords. */
-        Set<String> getKeywords();
+        Map<String, Double> getKeywords();
 
         /* Return the value at which this rulelist starts repeating. */
         int getRepeatLimit();
@@ -491,6 +506,10 @@ public class PluralRules implements Serializable {
                 " integersOnly: " + integersOnly +
                 " low: " + lowerBound + " high: " + upperBound + "]";
         }
+
+        public double uniqueValue() {
+            return mod == 0 && lowerBound == upperBound ? lowerBound : Double.NaN;
+        }
     }
 
     /* Convenience base class for and/or constraints. */
@@ -510,7 +529,7 @@ public class PluralRules implements Serializable {
         public int updateRepeatLimit(int limit) {
             return a.updateRepeatLimit(b.updateRepeatLimit(limit));
         }
-
+        
         public String toString() {
             return a.toString() + conjunction + b.toString();
         }
@@ -522,6 +541,16 @@ public class PluralRules implements Serializable {
 
         AndConstraint(Constraint a, Constraint b) {
             super(a, b, " && ");
+        }
+
+        public double uniqueValue() {
+            if (Double.isNaN(a.uniqueValue())) {
+                return b.uniqueValue();
+            }
+            if (Double.isNaN(b.uniqueValue())) {
+                return a.uniqueValue();
+            }
+            return a.uniqueValue() == b.uniqueValue() ? a.uniqueValue() : Double.NaN; // degenerate case
         }
 
         public boolean isFulfilled(double n) {
@@ -537,6 +566,10 @@ public class PluralRules implements Serializable {
             super(a, b, " || ");
         }
 
+        public double uniqueValue() {
+            return a.uniqueValue() == b.uniqueValue() ? (double)a.uniqueValue() : Double.NaN;
+        }
+
         public boolean isFulfilled(double n) {
             return a.isFulfilled(n) || b.isFulfilled(n);
         }
@@ -549,10 +582,12 @@ public class PluralRules implements Serializable {
     private static class ConstrainedRule implements Rule, Serializable {
         private static final long serialVersionUID = 1;
         private final String keyword;
+        private final double keywordValue;
         private final Constraint constraint;
 
         public ConstrainedRule(String keyword, Constraint constraint) {
             this.keyword = keyword;
+            this.keywordValue = constraint.uniqueValue();
             this.constraint = constraint;
         }
 
@@ -580,6 +615,10 @@ public class PluralRules implements Serializable {
 
         public String toString() { 
             return keyword + ": " + constraint;
+        }
+
+        public Double getKeywordValue() {
+            return keywordValue;
         }
     }
 
@@ -625,12 +664,12 @@ public class PluralRules implements Serializable {
             return r.getKeyword();
         }
 
-        public Set<String> getKeywords() {
-            Set<String> result = new HashSet<String>();
-            result.add(KEYWORD_OTHER);
+        public Map<String, Double> getKeywords() {
+            Map<String, Double> result = new HashMap<String, Double>();
+            result.put(KEYWORD_OTHER, Double.NaN);
             RuleChain rc = this;
             while (rc != null) {
-                result.add(rc.rule.getKeyword());
+                result.put(rc.rule.getKeyword(), rc.rule.getKeywordValue());
                 rc = rc.next;
             }
             return result;
@@ -702,7 +741,7 @@ public class PluralRules implements Serializable {
      */
      private PluralRules(RuleList rules) {
          this.rules = rules;
-         this.keywords = Collections.unmodifiableSet(rules.getKeywords());
+         this.keywords = Collections.unmodifiableMap(rules.getKeywords());
      }
 
     /**
@@ -725,9 +764,21 @@ public class PluralRules implements Serializable {
       * @stable ICU 3.8
       */
      public Set<String> getKeywords() {
-         return keywords;
+         return keywords.keySet();
      }
-
+     
+     /**
+      * Returns the unique value that this keyword matches, or NaN if the keyword matches
+      * multiple values or is not defined for this PluralRules.
+      * 
+      * @param keyword the keyword to check for a unique value
+      * @return The unique value for the keyword, or NaN.
+      * @draft ICU 4.8
+      */
+     public double getUniqueKeywordValue(String keyword) {
+         return keywords.containsKey(keyword) ? keywords.get(keyword) : Double.NaN;
+     }
+     
     /**
      * Returns a list of values for which select() would return that keyword, or null if the keyword is not defined.
      * 
@@ -736,7 +787,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
      public Collection<Double> getSamples(String keyword, int max) {
-         if (!keywords.contains(keyword)) {
+         if (!keywords.containsKey(keyword)) {
              return null;
          }
          LinkedHashSet<Double> results = new LinkedHashSet<Double>();
@@ -833,8 +884,15 @@ public class PluralRules implements Serializable {
       if (rhs == this) { 
         return true;
       }
-      if (!rhs.getKeywords().equals(keywords)) {
-        return false;
+      
+      if (!getKeywords().equals(rhs.getKeywords())) { // note, we're comparing keys only here
+          return false;
+      }
+      // can't compare maps for equality since values might include NaN and Nan != itself.
+      for (String k : getKeywords()) {
+          double val = getUniqueKeywordValue(k);
+          double rhsVal = rhs.getUniqueKeywordValue(k);
+          return Double.isNaN(val) ? Double.isNaN(rhsVal) : val == rhsVal;
       }
 
       int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
