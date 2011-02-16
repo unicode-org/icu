@@ -2714,4 +2714,30 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("Comparison should return false.");
         }
     }
+    public void TestExplicitParents() {
+        // We use these for testing because decimal and grouping separators will be inherited from es_419
+        // starting with CLDR 2.0
+        String[] DATA = {
+                "es", "CO", "", "1.250,75",
+                "es", "CR", "", "1.250,75",
+                "es", "ES", "", "1.250,75",
+                "es", "GQ", "", "1.250,75",
+                "es", "MX", "", "1,250.75",
+                "es", "US", "", "1,250.75",
+                "es", "VE", "", "1.250,75",
+
+        };
+
+        for (int i=0; i<DATA.length; i+=4) {
+            Locale locale = new Locale(DATA[i], DATA[i+1], DATA[i+2]);
+            NumberFormat fmt = NumberFormat.getInstance(locale);
+            String s = fmt.format(1250.75);
+            if (s.equals(DATA[i+3])) {
+                logln("Ok: 1250.75 x " + locale + " => " + s);
+            } else {
+                errln("FAIL: 1250.75 x " + locale + " => " + s +
+                      ", expected " + DATA[i+3]);
+            }
+        }
+    }
 }

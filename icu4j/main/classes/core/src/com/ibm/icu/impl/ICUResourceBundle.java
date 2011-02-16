@@ -881,12 +881,10 @@ public  class ICUResourceBundle extends UResourceBundle {
 
                 b = (ICUResourceBundle)addToCache(root, fullName, defaultLocale, b);
 
-                boolean ParentIsRoot = false;
-                if (b.getTableResource("%%ParentIsRoot") != RES_BOGUS) {
-                    ParentIsRoot = true;
-                }
-
-                if (i != -1 && !ParentIsRoot) {
+                if (b.getTableResource("%%Parent") != RES_BOGUS) {
+                    String parentLocaleName = b.getString("%%Parent");
+                    parent = instantiateBundle(baseName, parentLocaleName, root, disableFallback);
+                } else if (i != -1) {
                     parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
                 } else if (!localeName.equals(rootLocale)){
                     parent = instantiateBundle(baseName, rootLocale, root, true);
