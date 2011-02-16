@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    %%ParentIsRoot:int{1}
+    %%Parent{"root"}
     AuxExemplarCharacters{"[伏 侶 兌 兹 别 勳 卑 占 叶 堤 墎 奥 孜 峇 巽 彝 楔 渾 燦 狄 琳 瑚 甫 礁 芒 苗 茨 蚩 蜀 隴]"}
     ExemplarCharacters{
         "[一 丁 七 丈-不 且 世 丘 丙 丟 並 中 串 丸 丹 主 乃 久 么 之 乎 乏 乖 乘 乙 九 也 乾 亂 了 予 事 二 于 云 互 五 井"

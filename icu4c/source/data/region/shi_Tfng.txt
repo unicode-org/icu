@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/shi_Tfng.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/shi_Tfng.xml
  */
 shi_Tfng{
-    %%ParentIsRoot:int{1}
+    %%Parent{"root"}
     Countries{
         AD{"ⴰⵏⴷⵓⵔⴰ"}
         AE{"ⵍⵉⵎⴰⵔⴰⵜ"}
