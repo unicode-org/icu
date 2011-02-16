@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// * Copyright (C) 2004-2010 International Business Machines
+// * Copyright (C) 2004-2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -10,7 +10,7 @@
 // root can't be used to validate the structure.
 // This file was generated from en.txt, and all ".*" were replaced with "".
 structLocale:table(nofallback){
-    %%ParentIsRoot:int{0}
+    %%Parent{""}
     BreakDictionaryData:bin {00}
     Countries{
         001{""}
