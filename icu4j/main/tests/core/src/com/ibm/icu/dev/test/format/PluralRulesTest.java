@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -213,10 +213,11 @@ public class PluralRulesTest extends TestFmwk {
      * Tests the method public int hashCode()
      */
     public void TestHashCode() {
-        PluralRules pr = PluralRules.DEFAULT;
-        if (106069776 != pr.hashCode()) {
-            errln("PluralRules.hashCode() was suppose to return 106069776 " + "when PluralRules.DEFAULT.");
-        }
+// Bad test, breaks whenever PluralRules implementation changes.
+//        PluralRules pr = PluralRules.DEFAULT;
+//        if (106069776 != pr.hashCode()) {
+//            errln("PluralRules.hashCode() was suppose to return 106069776 " + "when PluralRules.DEFAULT.");
+//        }
     }
 
     /*
@@ -225,9 +226,36 @@ public class PluralRulesTest extends TestFmwk {
     public void TestEquals() {
         PluralRules pr = PluralRules.DEFAULT;
 
-        // Tests when if (rhs == null) is true
         if (pr.equals((PluralRules) null)) {
-            errln("PluralRules.equals(PluralRules) was suppose to return false " + "when passing null.");
+            errln("PluralRules.equals(PluralRules) was supposed to return false " + "when passing null.");
         }
+    }
+    
+    private void assertRuleValue(String rule, double value) {
+        assertRuleKeyValue("a:" + rule, "a", value);
+    }
+    
+    private void assertRuleKeyValue(String rule, String key, double value) {
+        PluralRules pr = PluralRules.createRules(rule);
+        assertEquals(rule, value, pr.getUniqueKeywordValue(key));
+    }
+    
+    /*
+     * Tests getUniqueKeywordValue()
+     */
+    public void TestGetUniqueKeywordValue() {
+        assertRuleValue("n is 1", 1);
+        assertRuleValue("n in 2..2", 2);
+        assertRuleValue("n within 2..2", 2);
+        assertRuleValue("n in 3..4", Double.NaN);
+        assertRuleValue("n within 3..4", Double.NaN);
+        assertRuleValue("n is 2 or n is 2", 2);
+        assertRuleValue("n is 2 and n is 2", 2);
+        assertRuleValue("n is 2 or n is 3", Double.NaN);
+        assertRuleValue("n is 2 and n is 3", Double.NaN);
+        assertRuleValue("n is 2 or n in 2..3", Double.NaN);
+        assertRuleValue("n is 2 and n in 2..3", 2);
+        assertRuleKeyValue("a: n is 1", "not_defined", Double.NaN); // key not defined
+        assertRuleKeyValue("a: n is 1", "other", Double.NaN); // key matches default rule
     }
 }
