@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -2159,7 +2159,7 @@ uprv_dl_open(const char *libName, UErrorCode *status) {
   
   if(U_FAILURE(*status)) return NULL;
   
-  lib = LoadLibrary(libName);
+  lib = LoadLibraryA(libName);
   
   if(lib==NULL) {
     *status = U_MISSING_RESOURCE_ERROR;
