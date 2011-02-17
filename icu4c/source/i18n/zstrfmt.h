@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and    *
+* Copyright (C) 2007-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -80,7 +80,7 @@ public:
  * ZSFStringPool   Pool of (UChar *) strings.  Provides for sharing of repeated
  *                 strings within ZoneStringFormats.
  */
-class ZSFStringPoolChunk;
+struct ZSFStringPoolChunk;
 class ZSFStringPool: public UMemory {
   public:
     ZSFStringPool(UErrorCode &status);
