@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1640,6 +1640,48 @@ public class TimeZoneTest extends TestFmwk
             // string representation should be also same
             if (!tz1.toString().equals(tz2.toString())) {
                 errln("Fail: Two time zone instances for " + id + " have different toString() values.");
+            }
+        }
+    }
+
+    /*
+     * Test case for getRegion
+     */
+    public void TestGetRegion() {
+        final String[][] TEST_DATA = {
+            {"America/Los_Angeles",             "US"},
+            {"America/Indianapolis",            "US"},  // CLDR canonical, Olson backward
+            {"America/Indiana/Indianapolis",    "US"},  // CLDR alias
+            {"Mexico/General",                  "MX"},  // Link America/Mexico_City, Olson backward
+            {"Etc/UTC",                         "001"},
+            {"EST5EDT",                         "001"},
+            {"PST",                             "US"},  // Link America/Los_Angeles
+            {"Europe/Helsinki",                 "FI"},
+            {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
+            {"Asia/Riyadh",                     "SA"},
+            {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
+            {"Etc/Unknown",                     null},  // CLDR canonical, but not a sysmte zone ID
+            {"bogus",                           null},  // bogus
+            {"GMT+08:00",                       null},  // a custom ID, not a system zone ID
+        };
+
+        for (String[] test : TEST_DATA) {
+            try {
+                String region = TimeZone.getRegion(test[0]);
+                if (!region.equals(test[1])) {
+                    if (test[1] == null) {
+                        errln("Fail: getRegion(\"" + test[0] + "\") returns "
+                                + region + " [expected: IllegalArgumentException]");
+                    } else {
+                        errln("Fail: getRegion(\"" + test[0] + "\") returns "
+                                + region + " [expected: " + test[1] + "]");
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                if (test[1] != null) {
+                    errln("Fail: getRegion(\"" + test[0]
+                                + "\") throws IllegalArgumentException [expected: " + test[1] + "]");
+                }
             }
         }
     }
