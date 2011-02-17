@@ -866,6 +866,36 @@ abstract public class TimeZone implements Serializable, Cloneable {
         return canonicalID;
     }
 
+    /** 
+     * {@icu} Returns the region code associated with the given 
+     * system time zone ID. The region code is either ISO 3166 
+     * 2-letter country code or UN M.49 3-digit area code. 
+     * When the time zone is not associated with a specific location, 
+     * for example - "Etc/UTC", "EST5EDT", then this method returns 
+     * "001" (UN M.49 area code for World). 
+     * @param id the system time zone ID. 
+     * @return the region code associated with the given 
+     * system time zone ID. 
+     * @throw IllegalArgumentException if <code>id</code> is not a known system ID. 
+     * @see #getAvailableIDs(String) 
+     * 
+     * @draft ICU 4.8 
+     * @provisional This API might change or be removed in a future release. 
+     */ 
+    public static String getRegion(String id) {
+        String region = null;
+        // "Etc/Unknown" is not a system time zone ID,
+        // but in the zone data.
+        if (!id.equals(ETC_UKNNOWN)) {
+            region = ZoneMeta.getRegion(id);
+        }
+        if (region == null) {
+            // unknown id
+            throw new IllegalArgumentException("Unknown system zone id: " + id);
+        }
+        return region;
+    }
+
     // =======================privates===============================
 
     /**
@@ -906,6 +936,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
             TZ_IMPL = TIMEZONE_JDK;
         }
     }
+
+    private static final String ETC_UKNNOWN = "Etc/Unknown";
 }
 
 //eof

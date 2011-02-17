@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2010 International Business Machines
+* Copyright (c) 2003-2011 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -304,10 +304,10 @@ public final class ZoneMeta {
     }
 
     /**
-     * Return the canonical country code for this tzid.  If we have none, or if the time zone
-     * is not associated with a country, return null.
+     * Return the region code for this tzid.
+     * If tzid is not a system zone ID, this method returns null.
      */
-    public static String getCanonicalCountry(String tzid) {
+    public static String getRegion(String tzid) {
         String region = REGION_CACHE.get(tzid);
         if (region == null) {
             int zoneIdx = getZoneIndex(tzid);
@@ -327,10 +327,19 @@ public final class ZoneMeta {
                 }
             }
         }
-        if (region.equals("001")) {
-            return null;
-        }
         return region;
+    }
+
+    /**
+     * Return the canonical country code for this tzid.  If we have none, or if the time zone
+     * is not associated with a country or unknown, return null.
+     */
+    public static String getCanonicalCountry(String tzid) {
+        String country = getRegion(tzid);
+        if (country != null && country.equals("001")) {
+            country = null;
+        }
+        return country;
     }
 
     /**
