@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and    *
+* Copyright (C) 2007-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -274,7 +274,7 @@ ZoneMeta::getCanonicalSystemID(const UnicodeString &tzid, UnicodeString &systemI
 UnicodeString& U_EXPORT2
 ZoneMeta::getCanonicalCountry(const UnicodeString &tzid, UnicodeString &canonicalCountry) {
     const UChar *region = TimeZone::getRegion(tzid);
-    if (u_strcmp(gWorld, region) != 0) {
+    if (region != NULL && u_strcmp(gWorld, region) != 0) {
         canonicalCountry.setTo(region, -1);
     } else {
         canonicalCountry.remove();
@@ -286,8 +286,8 @@ UnicodeString& U_EXPORT2
 ZoneMeta::getSingleCountry(const UnicodeString &tzid, UnicodeString &country) {
     // Get canonical country for the zone
     const UChar *region = TimeZone::getRegion(tzid);
-    if (u_strcmp(gWorld, region) == 0) {
-        // special case - "001"
+    if (region == NULL || u_strcmp(gWorld, region) == 0) {
+        // special case - unknown or "001"
         country.remove();
         return country;
     }
