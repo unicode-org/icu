@@ -1,6 +1,6 @@
 
 /********************************************************************
- * Copyright (c) 1997-2010, International Business Machines
+ * Copyright (c) 1997-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
  
@@ -89,8 +89,10 @@ public:
     void TestFebruary(void);
 
     void TestCanonicalID(void);
-    
+
     virtual void TestDisplayNamesMeta();
+
+    void TestGetRegion(void);
 
     static const UDate INTERVAL;
 

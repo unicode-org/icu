@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -61,6 +61,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(15, TestFebruary);
         CASE(16, TestCanonicalID);
         CASE(17, TestDisplayNamesMeta);
+        CASE(18, TestGetRegion);
        default: name = ""; break;
     }
 }
@@ -1976,4 +1977,80 @@ void TimeZoneTest::TestDisplayNamesMeta() {
     }
 }
 
+void TimeZoneTest::TestGetRegion()
+{
+    static const struct {
+        const char *id;
+        const char *region;
+    } data[] = {
+        {"America/Los_Angeles",             "US"},
+        {"America/Indianapolis",            "US"},  // CLDR canonical, Olson backward
+        {"America/Indiana/Indianapolis",    "US"},  // CLDR alias
+        {"Mexico/General",                  "MX"},  // Link America/Mexico_City, Olson backward
+        {"Etc/UTC",                         "001"},
+        {"EST5EDT",                         "001"},
+        {"PST",                             "US"},  // Link America/Los_Angeles
+        {"Europe/Helsinki",                 "FI"},
+        {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
+        {"Asia/Riyadh",                     "SA"},
+        {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
+        {"Etc/Unknown",                     0},  // CLDR canonical, but not a sysmte zone ID
+        {"bogus",                           0},  // bogus
+        {"GMT+08:00",                       0},  // a custom ID, not a system zone ID
+        {0, 0}
+    };
+
+    int32_t i;
+    char region[4];
+    UErrorCode sts;
+    for (i = 0; data[i].id; i++) {
+        sts = U_ZERO_ERROR;
+        TimeZone::getRegion(data[i].id, region, sizeof(region), sts);
+        if (U_SUCCESS(sts)) {
+            if (data[i].region == 0) {
+                errln((UnicodeString)"Fail: getRegion(\"" + data[i].id + "\") returns "
+                    + region + " [expected: U_ILLEGAL_ARGUMENT_ERROR]");
+            } else if (uprv_strcmp(region, data[i].region) != 0) {
+                errln((UnicodeString)"Fail: getRegion(\"" + data[i].id + "\") returns "
+                    + region + " [expected: " + data[i].region + "]");
+            }
+        } else if (sts == U_ILLEGAL_ARGUMENT_ERROR) {
+            if (data[i].region != 0) {
+                errln((UnicodeString)"Fail: getRegion(\"" + data[i].id
+                    + "\") returns error status U_ILLEGAL_ARGUMENT_ERROR [expected: "
+                    + data[i].region + "]");
+            }
+        } else {
+                errln((UnicodeString)"Fail: getRegion(\"" + data[i].id
+                    + "\") returns an unexpected error status");
+        }
+    }
+
+    // Extra test cases for short buffer
+    int32_t len;
+    char region2[2];
+    sts = U_ZERO_ERROR;
+
+    len = TimeZone::getRegion("America/New_York", region2, sizeof(region2), sts);
+    if (sts != U_STRING_NOT_TERMINATED_WARNING) {
+        errln("Expected U_STRING_NOT_TERMINATED_WARNING");
+    }
+    if (len != 2) { // length of "US"
+        errln("Incorrect result length");
+    }
+    if (uprv_strncmp(region2, "US", 2) != 0) {
+        errln("Incorrect result");
+    }
+
+    char region1[1];
+    sts = U_ZERO_ERROR;
+
+    len = TimeZone::getRegion("America/Chicago", region1, sizeof(region1), sts);
+    if (sts != U_BUFFER_OVERFLOW_ERROR) {
+        errln("Expected U_BUFFER_OVERFLOW_ERROR");
+    }
+    if (len != 2) { // length of "US"
+        errln("Incorrect result length");
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
