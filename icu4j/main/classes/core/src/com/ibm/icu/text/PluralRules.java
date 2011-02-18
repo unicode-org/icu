@@ -128,7 +128,7 @@ public class PluralRules implements Serializable {
     /**
      * Value returned by {@link #getUniqueKeywordValue} when there is no
      * unique value to return.
-     * @defat ICU 4.8
+     * draft ICU 4.8
      */
     public static final double NO_UNIQUE_VALUE = -0.00123456777;
     
@@ -162,7 +162,7 @@ public class PluralRules implements Serializable {
         public int updateRepeatLimit(int limit) {
             return limit;
         }
-      };
+    };
 
     /*
      * The default rule that always returns "other".
@@ -185,13 +185,7 @@ public class PluralRules implements Serializable {
         public int updateRepeatLimit(int limit) {
             return limit;
         }
-
-        public double getKeywordValue() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
     };
-
 
     /**
      * The default rules that accept any number and return 
@@ -243,7 +237,7 @@ public class PluralRules implements Serializable {
          * @param n the number to test, >= 0.
          */
         boolean isFulfilled(double n);
-        
+
         /*
          * Returns the larger of limit or the limit of this constraint.
          * If the constraint is a simple range test, this is the higher
@@ -565,7 +559,7 @@ public class PluralRules implements Serializable {
         public int updateRepeatLimit(int limit) {
             return a.updateRepeatLimit(b.updateRepeatLimit(limit));
         }
-        
+
         public String toString() {
             return a.toString() + conjunction + b.toString();
         }
@@ -690,6 +684,7 @@ public class PluralRules implements Serializable {
             }
             return result;
         }
+        
         public int getRepeatLimit() {
           int result = 0;
           RuleChain rc = this;
@@ -934,7 +929,7 @@ public class PluralRules implements Serializable {
           return false;
       }
       
-      if (!getKeywords().equals(rhs.getKeywords())) { // note, we're comparing keys only here
+      if (!rhs.getKeywords().equals(keywords)) {
           return false;
       }
 
