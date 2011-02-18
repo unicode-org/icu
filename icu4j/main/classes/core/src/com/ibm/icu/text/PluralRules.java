@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -79,8 +80,10 @@ public class PluralRules implements Serializable {
     private static final long serialVersionUID = 1;
 
     private final RuleList rules;
-    private final Map<String, Double> keywords;
+    private final Set<String> keywords;
     private int repeatLimit; // for equality test
+    private transient Map<String, Double> uniqueKeywordValues;
+    private transient int hashCode;
 
     // Standard keywords.
 
@@ -122,6 +125,13 @@ public class PluralRules implements Serializable {
      */
     public static final String KEYWORD_OTHER = "other";
 
+    /**
+     * Value returned by {@link #getUniqueKeywordValue} when there is no
+     * unique value to return.
+     * @defat ICU 4.8
+     */
+    public static final double NO_UNIQUE_VALUE = -0.00123456777;
+    
     /*
      * The set of all characters a valid keyword can start with.
      */
@@ -144,15 +154,13 @@ public class PluralRules implements Serializable {
         public boolean isFulfilled(double n) {
             return true;
         }
+
         public String toString() {
             return "n is any";
         }
 
         public int updateRepeatLimit(int limit) {
             return limit;
-        }
-        public double uniqueValue() {
-            return Double.NaN;
         }
       };
 
@@ -178,8 +186,9 @@ public class PluralRules implements Serializable {
             return limit;
         }
 
-        public Double getKeywordValue() {
-            return Double.NaN;
+        public double getKeywordValue() {
+            // TODO Auto-generated method stub
+            return 0;
         }
     };
 
@@ -236,11 +245,6 @@ public class PluralRules implements Serializable {
         boolean isFulfilled(double n);
         
         /*
-         * Returns the unique value that satisfies the constraint, or NaN.
-         */
-        double uniqueValue();
-
-        /*
          * Returns the larger of limit or the limit of this constraint.
          * If the constraint is a simple range test, this is the higher
          * end of the range; if it is a modulo test, this is the modulus.
@@ -257,12 +261,12 @@ public class PluralRules implements Serializable {
     private interface Rule extends Serializable {
         /* Returns the keyword that names this rule. */
         String getKeyword();
+
         /* Returns true if the rule applies to the number. */
         boolean appliesTo(double n);
+
         /* Returns the larger of limit and this rule's limit. */
         int updateRepeatLimit(int limit);
-        /* Returns the unique value that satisfies this rule, or NaN if there is no such value */
-        Double getKeywordValue();
     }
 
     /*
@@ -273,7 +277,7 @@ public class PluralRules implements Serializable {
         String select(double n);
 
         /* Returns the set of defined keywords. */
-        Map<String, Double> getKeywords();
+        Set<String> getKeywords();
 
         /* Return the value at which this rulelist starts repeating. */
         int getRepeatLimit();
@@ -502,13 +506,45 @@ public class PluralRules implements Serializable {
         }
 
         public String toString() {
-            return "[mod: " + mod + " inRange: " + inRange +
-                " integersOnly: " + integersOnly +
-                " low: " + lowerBound + " high: " + upperBound + "]";
-        }
-
-        public double uniqueValue() {
-            return mod == 0 && lowerBound == upperBound ? lowerBound : Double.NaN;
+            class ListBuilder {
+                StringBuilder sb = new StringBuilder("[");
+                ListBuilder add(String s) {
+                    return add(s, null);
+                }
+                ListBuilder add(String s, Object o) {
+                    if (sb.length() > 1) {
+                        sb.append(", ");
+                    }
+                    sb.append(s);
+                    if (o != null) {
+                        sb.append(": ").append(o.toString());
+                    }
+                    return this;
+                }
+                public String toString() {
+                    String s = sb.append(']').toString();
+                    sb = null;
+                    return s;
+                }
+            }
+            ListBuilder lb = new ListBuilder();
+            if (mod > 1) {
+                lb.add("mod", mod);
+            }
+            if (inRange) {
+                lb.add("in");
+            } else {
+                lb.add("except");
+            }
+            if (integersOnly) {
+                lb.add("ints");
+            }
+            if (lowerBound == upperBound) {
+                lb.add(String.valueOf(lowerBound));
+            } else {
+                lb.add(String.valueOf(lowerBound) + "-" + String.valueOf(upperBound));
+            }
+            return lb.toString();
         }
     }
 
@@ -543,16 +579,6 @@ public class PluralRules implements Serializable {
             super(a, b, " && ");
         }
 
-        public double uniqueValue() {
-            if (Double.isNaN(a.uniqueValue())) {
-                return b.uniqueValue();
-            }
-            if (Double.isNaN(b.uniqueValue())) {
-                return a.uniqueValue();
-            }
-            return a.uniqueValue() == b.uniqueValue() ? a.uniqueValue() : Double.NaN; // degenerate case
-        }
-
         public boolean isFulfilled(double n) {
             return a.isFulfilled(n) && b.isFulfilled(n);
         }
@@ -564,10 +590,6 @@ public class PluralRules implements Serializable {
 
         OrConstraint(Constraint a, Constraint b) {
             super(a, b, " || ");
-        }
-
-        public double uniqueValue() {
-            return a.uniqueValue() == b.uniqueValue() ? (double)a.uniqueValue() : Double.NaN;
         }
 
         public boolean isFulfilled(double n) {
@@ -582,12 +604,10 @@ public class PluralRules implements Serializable {
     private static class ConstrainedRule implements Rule, Serializable {
         private static final long serialVersionUID = 1;
         private final String keyword;
-        private final double keywordValue;
         private final Constraint constraint;
 
         public ConstrainedRule(String keyword, Constraint constraint) {
             this.keyword = keyword;
-            this.keywordValue = constraint.uniqueValue();
             this.constraint = constraint;
         }
 
@@ -615,10 +635,6 @@ public class PluralRules implements Serializable {
 
         public String toString() { 
             return keyword + ": " + constraint;
-        }
-
-        public Double getKeywordValue() {
-            return keywordValue;
         }
     }
 
@@ -664,17 +680,16 @@ public class PluralRules implements Serializable {
             return r.getKeyword();
         }
 
-        public Map<String, Double> getKeywords() {
-            Map<String, Double> result = new HashMap<String, Double>();
-            result.put(KEYWORD_OTHER, Double.NaN);
+        public Set<String> getKeywords() {
+            Set<String> result = new HashSet<String>();
+            result.add(KEYWORD_OTHER);
             RuleChain rc = this;
             while (rc != null) {
-                result.put(rc.rule.getKeyword(), rc.rule.getKeywordValue());
+                result.add(rc.rule.getKeyword());
                 rc = rc.next;
             }
             return result;
         }
-
         public int getRepeatLimit() {
           int result = 0;
           RuleChain rc = this;
@@ -741,7 +756,7 @@ public class PluralRules implements Serializable {
      */
      private PluralRules(RuleList rules) {
          this.rules = rules;
-         this.keywords = Collections.unmodifiableMap(rules.getKeywords());
+         this.keywords = Collections.unmodifiableSet(rules.getKeywords());
      }
 
     /**
@@ -764,19 +779,37 @@ public class PluralRules implements Serializable {
       * @stable ICU 3.8
       */
      public Set<String> getKeywords() {
-         return keywords.keySet();
+         return keywords;
      }
      
      /**
-      * Returns the unique value that this keyword matches, or NaN if the keyword matches
-      * multiple values or is not defined for this PluralRules.
+      * Returns the unique value that this keyword matches, or {@link #NO_UNIQUE_VALUE}
+      * if the keyword matches multiple values or is not defined for this PluralRules.
       * 
       * @param keyword the keyword to check for a unique value
-      * @return The unique value for the keyword, or NaN.
+      * @return The unique value for the keyword, or NO_UNIQUE_VALUE.
       * @draft ICU 4.8
       */
      public double getUniqueKeywordValue(String keyword) {
-         return keywords.containsKey(keyword) ? keywords.get(keyword) : Double.NaN;
+         if (uniqueKeywordValues == null) {
+             // compute unique values the slow but exact way, the logic to do this from the rules is more complex than 
+             // this simple process
+             final Double NONE = NO_UNIQUE_VALUE;
+             uniqueKeywordValues = new HashMap<String, Double>();
+             int limit = getRepeatLimit();
+             for (int i = 0; i < limit * 2; ++i) {
+                 for (int j = 0; j < 2; ++j) {
+                     double value = i + 0.5 * j;
+                     String key = select(value);
+                     if (uniqueKeywordValues.containsKey(key)) {
+                         uniqueKeywordValues.put(key, NONE);
+                     } else {
+                         uniqueKeywordValues.put(key, value);
+                     }
+                 }
+             }
+         }
+         return uniqueKeywordValues.containsKey(keyword) ? uniqueKeywordValues.get(keyword) : NO_UNIQUE_VALUE;
      }
      
     /**
@@ -787,7 +820,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
      public Collection<Double> getSamples(String keyword, int max) {
-         if (!keywords.containsKey(keyword)) {
+         if (!keywords.contains(keyword)) {
              return null;
          }
          LinkedHashSet<Double> results = new LinkedHashSet<Double>();
@@ -851,8 +884,9 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public String toString() {
-      return "keywords: " + keywords + " rules: " + rules.toString() + 
-          " limit: " + getRepeatLimit();
+      return "keywords: " + keywords + 
+          " limit: " + getRepeatLimit() + 
+          " rules: " + rules.toString();
     }
 
     /**
@@ -860,7 +894,18 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public int hashCode() {
-      return keywords.hashCode();
+        if (hashCode == 0) {
+            // cache it
+            int newHashCode = keywords.hashCode();
+            for (int i = 0; i < 12; ++i) {
+                newHashCode = newHashCode * 31 + select(i).hashCode();
+            }
+            if (newHashCode == 0) {
+                newHashCode = 1;
+            }
+            hashCode = newHashCode;
+        }
+        return hashCode;
     }
 
     /**
@@ -885,18 +930,16 @@ public class PluralRules implements Serializable {
         return true;
       }
       
+      if (hashCode() != rhs.hashCode()) {
+          return false;
+      }
+      
       if (!getKeywords().equals(rhs.getKeywords())) { // note, we're comparing keys only here
           return false;
       }
-      // can't compare maps for equality since values might include NaN and Nan != itself.
-      for (String k : getKeywords()) {
-          double val = getUniqueKeywordValue(k);
-          double rhsVal = rhs.getUniqueKeywordValue(k);
-          return Double.isNaN(val) ? Double.isNaN(rhsVal) : val == rhsVal;
-      }
 
       int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
-      for (int i = 0; i < limit; ++i) {
+      for (int i = 0; i < limit * 2; ++i) {
         if (!select(i).equals(rhs.select(i))) {
           return false;
         }
