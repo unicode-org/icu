@@ -106,33 +106,57 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     private static String[][] equalityTestData = {
+        { "a: n is 5",
+          "a: n in 2..6 and n not in 2..4 and n is not 6" },
         { "a: n in 2..3", 
-            "a: n is 2 or n is 3", 
-            "a:n is 3 and n in 2..5 or n is 2" },
+          "a: n is 2 or n is 3", 
+          "a: n is 3 and n in 2..5 or n is 2" },
         { "a: n is 12; b:n mod 10 in 2..3",
           "b: n mod 10 in 2..3 and n is not 12; a: n in 12..12",
-          "b: n is 13; a: n in 12..13; b: n mod 10 is 2 or n mod 10 is 3" },
+          "b: n is 13; a: n is 12; b: n mod 10 is 2 or n mod 10 is 3" },
+    };
+    
+    private static String[][] inequalityTestData = {
+        { "a: n mod 8 is 3",
+          "a: n mod 7 is 3"
+        },
+        { "a: n mod 3 is 2 and n is not 5",
+          "a: n mod 6 is 2 or n is 8 or n is 11"
+        }
     };
 
-    private void compareEquality(Object[] objects) {
+    private void compareEquality(String id, Object[] objects, boolean shouldBeEqual) {
         for (int i = 0; i < objects.length; ++i) {
             Object lhs = objects[i];
-            for (int j = i; j < objects.length; ++j) {
+            int start = shouldBeEqual ? i : i + 1;
+            for (int j = start; j < objects.length; ++j) {
                 Object rhs = objects[j];
-                assertEquals("obj " + i + " and " + j, lhs, rhs);
+                if (shouldBeEqual != lhs.equals(rhs)) {
+                    String msg = shouldBeEqual ? "should be equal" : "should not be equal";
+                    fail(id + " " + msg + " (" + i + ", " + j + "):\n    " + lhs + "\n    " + rhs);
+                }
+                // assertEquals("obj " + i + " and " + j, lhs, rhs);
             }
         }
     }
 
-    public void testEquality() {
-        for (int i = 0; i < equalityTestData.length; ++i) {
-            String[] patterns = equalityTestData[i];
+    private void compareEqualityTestSets(String[][] sets, boolean shouldBeEqual) {
+        for (int i = 0; i < sets.length; ++i) {
+            String[] patterns = sets[i];
             PluralRules[] rules = new PluralRules[patterns.length];
             for (int j = 0; j < patterns.length; ++j) {
                 rules[j] = PluralRules.createRules(patterns[j]);
             }
-            compareEquality(rules);
+            compareEquality("test " + i, rules, shouldBeEqual);
         }
+    }
+    
+    public void testEquality() {
+        compareEqualityTestSets(equalityTestData, true);
+    }
+    
+    public void testInequality() {
+        compareEqualityTestSets(inequalityTestData, false);
     }
 
     public void testBuiltInRules() {
@@ -247,15 +271,15 @@ public class PluralRulesTest extends TestFmwk {
         assertRuleValue("n is 1", 1);
         assertRuleValue("n in 2..2", 2);
         assertRuleValue("n within 2..2", 2);
-        assertRuleValue("n in 3..4", Double.NaN);
-        assertRuleValue("n within 3..4", Double.NaN);
+        assertRuleValue("n in 3..4", PluralRules.NO_UNIQUE_VALUE);
+        assertRuleValue("n within 3..4", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n is 2 or n is 2", 2);
         assertRuleValue("n is 2 and n is 2", 2);
-        assertRuleValue("n is 2 or n is 3", Double.NaN);
-        assertRuleValue("n is 2 and n is 3", Double.NaN);
-        assertRuleValue("n is 2 or n in 2..3", Double.NaN);
+        assertRuleValue("n is 2 or n is 3", PluralRules.NO_UNIQUE_VALUE);
+        assertRuleValue("n is 2 and n is 3", PluralRules.NO_UNIQUE_VALUE);
+        assertRuleValue("n is 2 or n in 2..3", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n is 2 and n in 2..3", 2);
-        assertRuleKeyValue("a: n is 1", "not_defined", Double.NaN); // key not defined
-        assertRuleKeyValue("a: n is 1", "other", Double.NaN); // key matches default rule
+        assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
+        assertRuleKeyValue("a: n is 1", "other", PluralRules.NO_UNIQUE_VALUE); // key matches default rule
     }
 }
