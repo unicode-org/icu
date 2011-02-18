@@ -640,6 +640,26 @@ public:
      */
     virtual int32_t getDSTSavings() const;
 
+    /** 
+     * Gets the region code associated with the given
+     * system time zone ID. The region code is either ISO 3166
+     * 2-letter country code or UN M.49 3-digit area code.
+     * When the time zone is not associated with a specific location,
+     * for example - "Etc/UTC", "EST5EDT", then this method returns
+     * "001" (UN M.49 area code for World).
+     * 
+     * @param id            The system time zone ID.
+     * @param region        Output buffer for receiving the region code.
+     * @param capacity      The size of the output buffer.
+     * @param status        Receives the status.  When the given time zone ID
+     *                      is not a known system time zone ID,
+     *                      U_ILLEGAL_ARGUMENT_ERROR is set.
+     * @return The length of the output region code.
+     * @draft ICU 4.8 
+     */ 
+    static int32_t U_EXPORT2 getRegion(const UnicodeString& id, 
+        char *region, int32_t capacity, UErrorCode& status); 
+
 protected:
 
     /**
@@ -680,6 +700,7 @@ protected:
      */
     static UResourceBundle* loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode&status);
 
+
 private:
     friend class ZoneMeta;
 
@@ -697,7 +718,8 @@ private:
     static const UChar* dereferOlsonLink(const UnicodeString& id);
 
     /**
-     * Returns the region code associated with the given zone.
+     * Returns the region code associated with the given zone,
+     * or NULL if the zone is not known.
      * @param id zone id string
      * @return the region associated with the given zone
      */
