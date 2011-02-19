@@ -201,6 +201,15 @@ abstract public class TimeZone implements Serializable, Cloneable {
     public static final int GENERIC_LOCATION = 7;
 
     /**
+     * {@icu} The time zone ID reserved for unknown time zone.
+     * @see #getTimeZone(String)
+     * 
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release. 
+     */
+    public static final String UNKNOWN_ZONE_ID = "Etc/Unknown";
+
+    /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
      */
     private static ICUCache<ULocale, TimeZoneFormat> cachedLocaleData =
@@ -538,8 +547,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * or a custom ID such as "GMT-8:00". Note that the support of abbreviations,
      * such as "PST", is for JDK 1.1.x compatibility only and full names should be used.
      *
-     * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
-     * cannot be understood.
+     * @return the specified <code>TimeZone</code>, or the GMT zone with ID "Etc/Unknown"
+     * if the given ID cannot be understood.
+     * @see #UNKNOWN_ZONE_ID
      * @stable ICU 2.0
      */
     public static synchronized TimeZone getTimeZone(String ID) {
@@ -582,9 +592,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
                 /* Log that timezone is using GMT if logging is on. */
                 if (TimeZoneLogger != null && TimeZoneLogger.isLoggingOn()) {
                     TimeZoneLogger.warning(
-                        "\"" +ID + "\" is a bogus id so timezone is falling back to GMT.");
+                        "\"" +ID + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
                 }
-                result = ZoneMeta.getGMT();
+                result = new SimpleTimeZone(0, UNKNOWN_ZONE_ID);
             }
         }
         return result;
@@ -879,14 +889,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @throw IllegalArgumentException if <code>id</code> is not a known system ID. 
      * @see #getAvailableIDs(String) 
      * 
-     * @draft ICU 4.8 
+     * @draft ICU 4.8
      * @provisional This API might change or be removed in a future release. 
      */ 
     public static String getRegion(String id) {
         String region = null;
         // "Etc/Unknown" is not a system time zone ID,
         // but in the zone data.
-        if (!id.equals(ETC_UKNNOWN)) {
+        if (!id.equals(UNKNOWN_ZONE_ID)) {
             region = ZoneMeta.getRegion(id);
         }
         if (region == null) {
@@ -936,8 +946,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
             TZ_IMPL = TIMEZONE_JDK;
         }
     }
-
-    private static final String ETC_UKNNOWN = "Etc/Unknown";
 }
 
 //eof

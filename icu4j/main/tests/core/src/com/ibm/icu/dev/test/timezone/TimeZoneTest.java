@@ -46,8 +46,6 @@ public class TimeZoneTest extends TestFmwk
     static final int REFERENCE_YEAR = 2009;
     static final String REFERENCE_DATA_VERSION = "2009d";
 
-
-
     public static void main(String[] args) throws Exception {
         new TimeZoneTest().run(args);
     }
@@ -282,28 +280,28 @@ public class TimeZoneTest extends TestFmwk
         String[] DATA = {
             // ID               offset(sec)     output ID
             "GMT",              "0",            "GMT",      // system ID
-            "GMT-YOUR.AD.HERE", "0",            "GMT",
+            "GMT-YOUR.AD.HERE", "0",            TimeZone.UNKNOWN_ZONE_ID,
             "GMT0",             "0",            "GMT0",     // system ID
             "GMT+0",            "0",            "GMT+0",    // system ID
             "GMT+1",            "3600",         "GMT+01:00",
             "GMT-0030",         "-1800",        "GMT-00:30",
-            "GMT+15:99",        "0",            "GMT",
-            "GMT+",             "0",            "GMT",
-            "GMT-",             "0",            "GMT",
-            "GMT+0:",           "0",            "GMT",
-            "GMT-:",            "0",            "GMT",
+            "GMT+15:99",        "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+",             "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-",             "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+0:",           "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-:",            "0",            TimeZone.UNKNOWN_ZONE_ID,
             "GMT+0010",         "600",          "GMT+00:10",
             "GMT-10",           "-36000",       "GMT-10:00",
-            "GMT+30",           "0",            "GMT",
+            "GMT+30",           "0",            TimeZone.UNKNOWN_ZONE_ID,
             "GMT-3:30",         "-12600",       "GMT-03:30",
             "GMT-230",          "-9000",        "GMT-02:30",
             "GMT+05:13:05",     "18785",        "GMT+05:13:05",
             "GMT-71023",        "-25823",       "GMT-07:10:23",
-            "GMT+01:23:45:67",  "0",            "GMT",
-            "GMT+01:234",       "0",            "GMT",
-            "GMT-2:31:123",     "0",            "GMT",
-            "GMT+3:75",         "0",            "GMT",
-            "GMT-01010101",     "0",            "GMT",
+            "GMT+01:23:45:67",  "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+01:234",       "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-2:31:123",     "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT+3:75",         "0",            TimeZone.UNKNOWN_ZONE_ID,
+            "GMT-01010101",     "0",            TimeZone.UNKNOWN_ZONE_ID,
         };
         for (int i = 0; i < DATA.length; i += 3) {
             String id = DATA[i];
@@ -750,7 +748,7 @@ public class TimeZoneTest extends TestFmwk
         tz = TimeZone.getTimeZone("NON_EXISTENT");
         if (tz == null)
             errln("FAIL: getTimeZone(NON_EXISTENT) = null");
-        else if (!tz.getID().equals("GMT"))
+        else if (!tz.getID().equals(TimeZone.UNKNOWN_ZONE_ID))
             errln("FAIL: getTimeZone(NON_EXISTENT) = " + tz.getID());
     }
 
