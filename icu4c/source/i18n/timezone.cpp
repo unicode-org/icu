@@ -411,13 +411,8 @@ TimeZone::createTimeZone(const UnicodeString& ID)
         result = createCustomTimeZone(ID);
     }
     if (result == 0) {
-        U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to GMT"));
-        const TimeZone* temptz = getGMT();
-        if (temptz == NULL) {
-            result = NULL;
-        } else {
-            result = temptz->clone();
-        }
+        U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
+        result = new SimpleTimeZone(0, UNKNOWN_ZONE_ID);
     }
     return result;
 }

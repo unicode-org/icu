@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -139,6 +139,12 @@
  *
  * @stable ICU 2.0
  */
+
+/**
+ * The time zone ID reserved for unknown time zone.
+ * @draft ICU 4.8
+ */
+#define UCAL_UNKNOWN_ZONE_ID "Etc/Unknown"
 
 /** A calendar.
  *  For usage in C programs.
