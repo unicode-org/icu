@@ -528,12 +528,6 @@ public final class ZoneMeta {
         return (TimeZone)z.clone();
     }
 
-    public static TimeZone getGMT(){
-        TimeZone z = new SimpleTimeZone(0, kGMT_ID);
-        z.setID(kGMT_ID);
-        return z;
-    }
-
     // Maximum value of valid custom time zone hour/min
     private static final int kMAX_CUSTOM_HOUR = 23;
     private static final int kMAX_CUSTOM_MIN = 59;
