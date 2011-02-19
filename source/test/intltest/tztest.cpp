@@ -502,7 +502,7 @@ TimeZoneTest::TestGetAvailableIDs913()
     UnicodeString temp;
     if (tz == 0)
         errln("FAIL: getTimeZone(NON_EXISTENT) = null");
-    else if (tz->getID(temp) != "GMT")
+    else if (tz->getID(temp) != UCAL_UNKNOWN_ZONE_ID)
         errln("FAIL: getTimeZone(NON_EXISTENT) = " + temp);
     delete tz;
 
@@ -963,7 +963,7 @@ void TimeZoneTest::TestCustomParse()
             formatOffset(ioffset, offset);
             formatTZID(ioffset, expectedID);
             logln(id + " -> " + itsID + " " + offset);
-            if (exp == kUnparseable && itsID != "GMT") {
+            if (exp == kUnparseable && itsID != UCAL_UNKNOWN_ZONE_ID) {
                 errln("Expected parse failure for " + id +
                       ", got offset of " + offset +
                       ", id " + itsID);
