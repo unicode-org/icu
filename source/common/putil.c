@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -643,6 +643,7 @@ extern U_IMPORT char *U_TZNAME[];
 #endif
 #if U_HAVE_DIRENT_H
 #define TZFILE_SKIP     "posixrules" /* tz file to skip when searching. */
+#define TZFILE_SKIP_2   "localtime" 
 #define SEARCH_TZFILE
 #include <dirent.h>  /* Needed to search through system timezone files */
 #endif
@@ -889,7 +890,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 closedir(subDirp);
                 uprv_strcat(newpath, "/");
                 result = searchForTZFile(newpath, tzInfo);
-            } else if (uprv_strcmp(TZFILE_SKIP, dirEntry->d_name) != 0) {
+            } else if (uprv_strcmp(TZFILE_SKIP, dirEntry->d_name) != 0 && uprv_strcmp(TZFILE_SKIP_2, dirEntry->d_name) != 0) {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
                     uprv_strcpy(SEARCH_TZFILE_RESULT, newpath + (sizeof(TZZONEINFO) - 1));
                     result = SEARCH_TZFILE_RESULT;
