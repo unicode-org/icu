@@ -389,6 +389,16 @@ int32_t SpoofImpl::scriptScan
         if (sc == USCRIPT_COMMON || sc == USCRIPT_INHERITED || sc == USCRIPT_UNKNOWN) {
             continue;
         }
+
+        // Temporary fix: fold Japanese Hiragana and Katakana into Han.
+        //   Names are allowed to mix these scripts.
+        //   A more general solution will follow later for characters that are
+        //   used with multiple scripts.
+
+        if (sc == USCRIPT_HIRAGANA || sc == USCRIPT_KATAKANA || sc == USCRIPT_HANGUL) {
+            sc = USCRIPT_HAN;
+        }
+
         if (sc != lastScript) {
            scriptCount++;
            lastScript = sc;
