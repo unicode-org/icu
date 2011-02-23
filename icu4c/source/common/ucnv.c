@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -2881,6 +2881,20 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status){
         return cnv->toULength;
     }
     return 0;
+}
+
+U_DRAFT UBool U_EXPORT2
+ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status){
+    if (U_FAILURE(*status)) {
+        return FALSE;
+    }
+
+    if (cnv == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
+
+    return (cnv->sharedData->staticData->minBytesPerChar == cnv->sharedData->staticData->maxBytesPerChar) ? TRUE : FALSE;
 }
 #endif
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -1991,6 +1991,19 @@ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status);
  */
 U_STABLE int32_t U_EXPORT2
 ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
+
+
+/**
+ * Returns whether or not the converter has a fixed ratio of bytes per
+ * 16-bit char/UChar (e.g. converters that are SBCS or DBCS).
+ * FALSE is returned with the UErrorCode if error occurs or cnv is NULL.
+ * @param cnv       The converter to be tested
+ * @param status    ICU error code in/out paramter
+ * @return TRUE if the converter is fixed-width
+ * @draft ICU 4.8
+ */
+U_DRAFT UBool U_EXPORT2
+ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status);
 
 #endif
 
