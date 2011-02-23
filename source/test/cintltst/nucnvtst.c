@@ -97,6 +97,8 @@ static void TestJitterbug2411(void);
 static void TestJB5275(void);
 static void TestJB5275_1(void);
 static void TestJitterbug6175(void);
+
+static void TestIsFixedWidth(void);
 #endif
 
 static void TestInBufSizes(void);
@@ -323,8 +325,9 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestJitterbug2346, "tsconv/nucnvtst/TestJitterbug2346");
    addTest(root, &TestJitterbug2411, "tsconv/nucnvtst/TestJitterbug2411");
    addTest(root, &TestJitterbug6175, "tsconv/nucnvtst/TestJitterbug6175");
-#endif
 
+   addTest(root, &TestIsFixedWidth, "tsconv/nucnvtst/TestIsFixedWidth");
+#endif
 }
 
 
@@ -5537,4 +5540,48 @@ static void TestJB5275(){
         exp++;
     }
     ucnv_close(conv);
+}
+
+static void
+TestIsFixedWidth() {
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *cnv = NULL;
+    int32_t i;
+
+    const char *fixedWidth[] = {
+            "US-ASCII",
+            "UTF32",
+            "ibm-5478_P100-1995",
+            "UTF16"
+    };
+    int32_t fixedWidthLength = 4;
+
+    const char *notFixedWidth[] = {
+            "GB18030",
+            "UTF8",
+            "windows-949-2000"
+    };
+    int32_t notFixedWidthLength = 3;
+
+    for (i = 0; i < fixedWidthLength; i++) {
+        cnv = ucnv_open(fixedWidth[i], &status);
+        if (cnv == NULL || U_FAILURE(status)) {
+            log_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+        }
+
+        if (!ucnv_isFixedWidth(cnv, &status)) {
+            log_err("%s is a fixedWidth converter but returned FALSE.\n", fixedWidth[i]);
+        }
+    }
+
+    for (i = 0; i < notFixedWidthLength; i++) {
+        cnv = ucnv_open(notFixedWidth[i], &status);
+        if (cnv == NULL || U_FAILURE(status)) {
+            log_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+        }
+
+        if (ucnv_isFixedWidth(cnv, &status)) {
+            log_err("%s is NOT a fixedWidth converter but returned TRUE.\n", fixedWidth[i]);
+        }
+    }
 }
