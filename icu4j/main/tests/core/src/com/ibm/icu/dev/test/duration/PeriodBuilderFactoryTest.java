@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
+* Copyright (C) 2007-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -86,5 +86,24 @@ public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConsta
         assertNotNull(null, pbf.getSingleUnitBuilder());
         assertNotNull(null, pbf.getOneOrTwoUnitBuilder());
         assertNotNull(null, pbf.getMultiUnitBuilder(2));
+    }
+    
+    public void testBuilderFactoryPeriodConstruction() {
+        // see ticket #8307
+        pbf = BasicPeriodFormatterService.getInstance().newPeriodBuilderFactory();
+        pbf.setAvailableUnitRange(SECOND, DAY);
+        PeriodBuilder pb = pbf.getOneOrTwoUnitBuilder();
+        long H1M35S30M100 = 100 + 1000 * (30 + 35 * 60 + 1 * 60 * 60);
+        Period p = pb.create(H1M35S30M100);
+        assertEquals("hours", 1.0f, p.getCount(HOUR));
+        assertEquals("minutes", 35.501f, p.getCount(MINUTE));
+        assertFalse("seconds", p.isSet(SECOND));
+        
+        pb = pbf.getMultiUnitBuilder(3);
+        p = pb.create(H1M35S30M100);
+        assertEquals("hours", 1.0f, p.getCount(HOUR));
+        assertEquals("minutes", 35f, p.getCount(MINUTE));
+        assertEquals("seconds", 30.1f, p.getCount(SECOND));
+        assertFalse("millis", p.isSet(MILLISECOND));
     }
 }
