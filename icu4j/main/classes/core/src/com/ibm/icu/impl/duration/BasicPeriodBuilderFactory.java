@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
+* Copyright (C) 2007-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -451,7 +451,7 @@ class OneOrTwoUnitBuilder extends PeriodBuilderImpl {
             duration -= unitDuration;
           } else {
             if (count >= 1) {
-              period.and((float)count, unit);
+              period = period.and((float)count, unit);
             }
             break;
           }
@@ -503,7 +503,7 @@ class MultiUnitBuilder extends PeriodBuilderImpl {
           if (period == null) {
             period = Period.at((float)count, unit).inPast(inPast);
           } else {
-            period.and((float)count, unit);
+            period = period.and((float)count, unit);
           }
         }
       }
