@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 2010, International Business Machines Corporation 
+* Copyright (C) 2011, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -153,12 +153,6 @@ void IntlTestSpoof::testSkeleton() {
                " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
                " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations.")
 
-        // FC5F ;	FE74 0651 ;   ML  #* ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM to
-        //                                ARABIC KASRATAN ISOLATED FORM, ARABIC SHADDA	
-        //    This character NFKD normalizes to \u0020 \u064d \u0651, so its confusable mapping 
-        //    is never used in creating a skeleton.
-        CHECK_SKELETON(SL, "\\uFC5F", " \\u064d\\u0651");
-
         CHECK_SKELETON(SL, "nochange", "nochange");
         CHECK_SKELETON(MA, "love", "love"); 
         CHECK_SKELETON(MA, "1ove", "love");   // Digit 1 to letter l
@@ -198,6 +192,11 @@ void IntlTestSpoof::testSkeleton() {
         CHECK_SKELETON(SA, "\\u0022", "\\u0027\\u0027");
         CHECK_SKELETON(ML, "\\u0022", "\\u0027\\u0027");
         CHECK_SKELETON(MA, "\\u0022", "\\u0027\\u0027");
+
+        // 017F ;  0066 ;
+        // This mapping exists in the SA and MA tables
+        CHECK_SKELETON(MA, "\\u017F", "f");
+        CHECK_SKELETON(SA, "\\u017F", "f");
 
     TEST_TEARDOWN;
 }
@@ -354,16 +353,16 @@ void IntlTestSpoof::testConfData() {
     TEST_ASSERT_SUCCESS(status);
     while (parseLine.find()) {
         UnicodeString from = parseHex(parseLine.group(1, status));
-        if (!Normalizer::isNormalized(from, UNORM_NFKD, status)) {
-            // The source character was not NFKD.
-            // Skip this case; the first step in obtaining a skeleton is to NFKD the input,
+        if (!Normalizer::isNormalized(from, UNORM_NFD, status)) {
+            // The source character was not NFD.
+            // Skip this case; the first step in obtaining a skeleton is to NFD the input,
             //  so the mapping in this line of confusables.txt will never be applied.
             continue;
         }
 
         UnicodeString rawExpected = parseHex(parseLine.group(2, status));
         UnicodeString expected;
-        Normalizer::decompose(rawExpected, TRUE, 0, expected, status);
+        Normalizer::decompose(rawExpected, FALSE /*NFD*/, 0, expected, status);
         TEST_ASSERT_SUCCESS(status);
 
         int32_t skeletonType = 0;

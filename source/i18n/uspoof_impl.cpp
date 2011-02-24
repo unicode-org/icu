@@ -222,7 +222,7 @@ int32_t SpoofImpl::confusableLookup(UChar32 inChar, int32_t tableMask, UChar *de
 //
 //  wholeScriptCheck()
 //
-//      Input text is already normalized to NFKD
+//      Input text is already normalized to NFD
 //      Return the set of scripts, each of which can represent something that is
 //             confusable with the input text.  The script of the input text
 //             is included; input consisting of characters from a single script will
@@ -769,11 +769,11 @@ int32_t ScriptSet::countMembers() {
 
 //-----------------------------------------------------------------------------
 //
-//  NFKDBuffer Implementation.
+//  NFDBuffer Implementation.
 //
 //-----------------------------------------------------------------------------
 
-NFKDBuffer::NFKDBuffer(const UChar *text, int32_t length, UErrorCode &status) {
+NFDBuffer::NFDBuffer(const UChar *text, int32_t length, UErrorCode &status) {
     fNormalizedText = NULL;
     fNormalizedTextLength = 0;
     fOriginalText = text;
@@ -782,32 +782,32 @@ NFKDBuffer::NFKDBuffer(const UChar *text, int32_t length, UErrorCode &status) {
     }
     fNormalizedText = fSmallBuf;
     fNormalizedTextLength = unorm_normalize(
-        text, length, UNORM_NFKD, 0, fNormalizedText, USPOOF_STACK_BUFFER_SIZE, &status);
+        text, length, UNORM_NFD, 0, fNormalizedText, USPOOF_STACK_BUFFER_SIZE, &status);
     if (status == U_BUFFER_OVERFLOW_ERROR) {
         status = U_ZERO_ERROR;
         fNormalizedText = (UChar *)uprv_malloc((fNormalizedTextLength+1)*sizeof(UChar));
         if (fNormalizedText == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
         } else {
-            fNormalizedTextLength = unorm_normalize(text, length, UNORM_NFKD, 0,
+            fNormalizedTextLength = unorm_normalize(text, length, UNORM_NFD, 0,
                                         fNormalizedText, fNormalizedTextLength+1, &status);
         }
     }
 }
 
 
-NFKDBuffer::~NFKDBuffer() {
+NFDBuffer::~NFDBuffer() {
     if (fNormalizedText != fSmallBuf) {
         uprv_free(fNormalizedText);
     }
     fNormalizedText = 0;
 }
 
-const UChar *NFKDBuffer::getBuffer() {
+const UChar *NFDBuffer::getBuffer() {
     return fNormalizedText;
 }
 
-int32_t NFKDBuffer::getLength() {
+int32_t NFDBuffer::getLength() {
     return fNormalizedTextLength;
 }
 
