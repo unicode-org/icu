@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -722,4 +722,23 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             
         }
     }*/
+    
+    /**
+     * Returns the maxBytesPerChar value for the Charset that created this decoder.
+     * @return maxBytesPerChar
+     * @draft ICU 4.8
+     */
+    public final float maxBytesPerChar() {
+        return ((CharsetICU)(this.charset())).maxBytesPerChar;
+    }
+    
+    /**
+     * Returns whether or not the converter has a fixed ratio of bytes per 
+     * 16-bit char/UChar (e.g. converters that are SBCS or DBCS).
+     * @return true if the converter is fixed-width
+     * @draft ICU 4.8
+     */
+    public final boolean isFixedWidth() {
+        return ((CharsetICU)this.charset()).isFixedWidth();
+    }
 }

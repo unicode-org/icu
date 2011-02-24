@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -5589,6 +5589,44 @@ public class TestCharset extends TestFmwk {
             if (result.isError()) {
                 /* We don't care about any failures. */
                 continue;
+            }
+        }
+    }
+    public void TestIsFixedWidth(){
+        String[] fixedWidth = {
+                "US-ASCII",
+                "UTF32",
+                "ibm-5478_P100-1995",
+                "UTF16"
+        };
+        
+        String[] notFixedWidth = {
+                "GB18030",
+                "UTF8",
+                "windows-949-2000"
+        };
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset charset;
+        CharsetEncoder encoder;
+        CharsetDecoder decoder;
+        
+        for (int i = 0; i < fixedWidth.length; i++) {
+            charset = provider.charsetForName(fixedWidth[i]);
+            encoder = charset.newEncoder();
+            decoder = charset.newDecoder();
+            
+            if (!((CharsetEncoderICU)encoder).isFixedWidth() || !((CharsetDecoderICU)decoder).isFixedWidth()) {
+                errln(fixedWidth[i] + " is a fixedWidth charset but returned false.");
+            }
+        }
+        
+        for (int i = 0; i < notFixedWidth.length; i++) {
+            charset = provider.charsetForName(notFixedWidth[i]);
+            encoder = charset.newEncoder();
+            decoder = charset.newDecoder();
+            
+            if (((CharsetEncoderICU)encoder).isFixedWidth() || ((CharsetDecoderICU)decoder).isFixedWidth()) {
+                errln(notFixedWidth[i] + " is NOT a fixedWidth charset but returned true.");
             }
         }
     }
