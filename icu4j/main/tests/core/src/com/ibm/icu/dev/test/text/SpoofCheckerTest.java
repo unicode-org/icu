@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -73,29 +73,20 @@ public class SpoofCheckerTest extends TestFmwk {
     String scMixed = new String(scMixedChars); /* "sc", with Cyrillic 'c' */
     /* (mixed script, confusable */
 
-    char[] scLatinChars = { (char) 0x73, (char) 0x63 };
-    String scLatin = new String(scLatinChars); /* "sc", plain ascii. */
-    char[] goodCyrlChars = { (char) 0x438, (char) 0x43B };
-    String goodCyrl = new String(goodCyrlChars); /*
-                                                  * Plain lower case Cyrillic letters, no latin confusables
-                                                  */
+    String scLatin = "sc";   /* "sc", plain ascii. */
+    String goodCyrl = "\u0438\u043B";    // "ил"  Plain lower case Cyrillic letters, no latin confusables 
+    String goodGreek = "\u03c0\u03c6";   // "πφ"  Plain lower case Greek letters
 
-    char[] goodGreekChars = { (char) 0x3c0, (char) 0x3c6 };
-    String goodGreek = new String(goodGreekChars); /* Plain lower case Greek letters */
+    // Various 1 l I look-alikes
+    String lll_Latin_a = "lI1";   // small letter l, cap I, digit 1, all ASCII
+    //  "ＩⅼƖ"  Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA 
+    String lll_Latin_b = "\uff29\u217c\u0196";
+    String lll_Cyrl = "\u0406\u04C0\u0031";  // "ІӀ1"
+    /* The skeleton transform for all of the 'lll' lookalikes is ascii lower case letter l. */
+    String lll_Skel = "lll";
 
-    char[] lll_Latin_aChars = { (char) 0x6c, (char) 0x49, (char) 0x31 };
-    String lll_Latin_a = new String(lll_Latin_aChars); /* lI1, all ASCII */
+    String han_Hiragana = "\u3086\u308A \u77F3\u7530";  // Hiragana, space, Han
 
-    /* Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA */
-    char[] lll_Latin_bChars = { (char) 0xff29, (char) 0x217c, (char) 0x196 };
-    String lll_Latin_b = new String(lll_Latin_bChars);
-
-    char[] lll_CyrlChars = { (char) 0x0406, (char) 0x04C0, (char) 0x31 };
-    String lll_Cyrl = new String(lll_CyrlChars);
-
-    /* The skeleton transform for all of thes 'lll' lookalikes is all ascii lower case letter l. */
-    char[] lll_SkelChars = { (char) 0x6c, (char) 0x6c, (char) 0x6c };
-    String lll_Skel = new String(lll_SkelChars);
 
     /*
      * Test basic constructor.
@@ -295,6 +286,13 @@ public class SpoofCheckerTest extends TestFmwk {
         TEST_ASSERT(true == checkResults);
         TEST_ASSERT_EQ(SpoofChecker.MIXED_SCRIPT_CONFUSABLE | SpoofChecker.SINGLE_SCRIPT, result.checks);
         TEST_ASSERT_EQ(2, result.position);
+        
+        result.position = 666;
+        checkResults = sc.check(han_Hiragana, result);
+        TEST_ASSERT(false == checkResults);
+        TEST_ASSERT_EQ(666, result.position);
+        TEST_ASSERT_EQ(0, result.checks);
+
         teardown();
     }
 
