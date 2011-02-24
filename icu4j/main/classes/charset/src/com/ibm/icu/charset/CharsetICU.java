@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -377,6 +377,10 @@ public abstract class CharsetICU extends Charset{
        
        static void getCompleteUnicodeSet(UnicodeSet setFillIn){
            setFillIn.add(0, 0x10ffff);
+       }
+       
+       boolean isFixedWidth() {
+           return (maxBytesPerChar == minBytesPerChar);
        }
 
 }
