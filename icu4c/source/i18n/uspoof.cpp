@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2009, International Business Machines Corporation
+* Copyright (C) 2008-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   file name:  uspoof.cpp
@@ -240,10 +240,10 @@ uspoof_check(const USpoofChecker *sc,
 
     if (This->fChecks & 
         (USPOOF_WHOLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_INVISIBLE)) {
-        // These are the checks that need to be done on NFKD input
-        NFKDBuffer   normalizedInput(text, length, *status);
-        const UChar  *nfkdText = normalizedInput.getBuffer();
-        int32_t      nfkdLength = normalizedInput.getLength();
+        // These are the checks that need to be done on NFD input
+        NFDBuffer   normalizedInput(text, length, *status);
+        const UChar  *nfdText = normalizedInput.getBuffer();
+        int32_t      nfdLength = normalizedInput.getLength();
 
         if (This->fChecks & USPOOF_INVISIBLE) {
            
@@ -256,7 +256,7 @@ uspoof_check(const USpoofChecker *sc,
             UnicodeSet  marksSeenSoFar;   // Set of combining marks in a single combining sequence.
             
             for (i=0; i<length ;) {
-                U16_NEXT(nfkdText, i, nfkdLength, c);
+                U16_NEXT(nfdText, i, nfdLength, c);
                 if (u_charType(c) != U_NON_SPACING_MARK) {
                     firstNonspacingMark = 0;
                     if (haveMultipleMarks) {
@@ -304,7 +304,7 @@ uspoof_check(const USpoofChecker *sc,
             }
             
             ScriptSet scripts;
-            This->wholeScriptCheck(nfkdText, nfkdLength, &scripts, *status);
+            This->wholeScriptCheck(nfdText, nfdLength, &scripts, *status);
             int32_t confusableScriptCount = scripts.countMembers();
             //printf("confusableScriptCount = %d\n", confusableScriptCount);
             
@@ -631,25 +631,25 @@ uspoof_getSkeleton(const USpoofChecker *sc,
         return 0;
     }
 
-    // NFKD transform of the user supplied input
+    // NFD transform of the user supplied input
     
-    UChar nfkdStackBuf[USPOOF_STACK_BUFFER_SIZE];
-    UChar *nfkdInput = nfkdStackBuf;
+    UChar nfdStackBuf[USPOOF_STACK_BUFFER_SIZE];
+    UChar *nfdInput = nfdStackBuf;
     int32_t normalizedLen = unorm_normalize(
-        s, length, UNORM_NFKD, 0, nfkdInput, USPOOF_STACK_BUFFER_SIZE, status);
+        s, length, UNORM_NFD, 0, nfdInput, USPOOF_STACK_BUFFER_SIZE, status);
     if (*status == U_BUFFER_OVERFLOW_ERROR) {
-        nfkdInput = (UChar *)uprv_malloc((normalizedLen+1)*sizeof(UChar));
-        if (nfkdInput == NULL) {
+        nfdInput = (UChar *)uprv_malloc((normalizedLen+1)*sizeof(UChar));
+        if (nfdInput == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
         *status = U_ZERO_ERROR;
-        normalizedLen = unorm_normalize(s, length, UNORM_NFKD, 0,
-                                        nfkdInput, normalizedLen+1, status);
+        normalizedLen = unorm_normalize(s, length, UNORM_NFD, 0,
+                                        nfdInput, normalizedLen+1, status);
     }
     if (U_FAILURE(*status)) {
-        if (nfkdInput != nfkdStackBuf) {
-            uprv_free(nfkdInput);
+        if (nfdInput != nfdStackBuf) {
+            uprv_free(nfdInput);
         }
         return 0;
     }
@@ -657,36 +657,36 @@ uspoof_getSkeleton(const USpoofChecker *sc,
     // buffer to hold the Unicode defined skeleton mappings for a single code point
     UChar buf[USPOOF_MAX_SKELETON_EXPANSION];
 
-    // Apply the skeleton mapping to the NFKD normalized input string
+    // Apply the skeleton mapping to the NFD normalized input string
     // Accumulate the skeleton, possibly unnormalized, in a UnicodeString.
     int32_t inputIndex = 0;
     UnicodeString skelStr;
     while (inputIndex < normalizedLen) {
         UChar32 c;
-        U16_NEXT(nfkdInput, inputIndex, normalizedLen, c);
+        U16_NEXT(nfdInput, inputIndex, normalizedLen, c);
         int32_t replaceLen = This->confusableLookup(c, tableMask, buf);
         skelStr.append(buf, replaceLen);
     }
 
-    if (nfkdInput != nfkdStackBuf) {
-        uprv_free(nfkdInput);
+    if (nfdInput != nfdStackBuf) {
+        uprv_free(nfdInput);
     }
     
     const UChar *result = skelStr.getBuffer();
     int32_t  resultLen  = skelStr.length();
     UChar   *normedResult = NULL;
 
-    // Check the skeleton for NFKD, normalize it if needed.
+    // Check the skeleton for NFD, normalize it if needed.
     // Unnormalized results should be very rare.
-    if (!unorm_isNormalized(result, resultLen, UNORM_NFKD, status)) {
-        normalizedLen = unorm_normalize(result, resultLen, UNORM_NFKD, 0, NULL, 0, status);
+    if (!unorm_isNormalized(result, resultLen, UNORM_NFD, status)) {
+        normalizedLen = unorm_normalize(result, resultLen, UNORM_NFD, 0, NULL, 0, status);
         normedResult = static_cast<UChar *>(uprv_malloc((normalizedLen+1)*sizeof(UChar)));
         if (normedResult == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
         *status = U_ZERO_ERROR;
-        unorm_normalize(result, resultLen, UNORM_NFKD, 0, normedResult, normalizedLen+1, status);
+        unorm_normalize(result, resultLen, UNORM_NFD, 0, normedResult, normalizedLen+1, status);
         result = normedResult;
         resultLen = normalizedLen;
     }
