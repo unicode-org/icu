@@ -405,6 +405,8 @@ utrie2_cloneAsThawed(const UTrie2 *other, UErrorCode *pErrorCode) {
     return context.trie;
 }
 
+
+#ifndef ICU4C0
 /* Almost the same as utrie2_cloneAsThawed() but copies a UTrie and freezes the clone. */
 U_CAPI UTrie2 * U_EXPORT2
 utrie2_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode) {
@@ -454,6 +456,7 @@ utrie2_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
     }
     return context.trie;
 }
+#endif
 
 static U_INLINE UBool
 isInNullBlock(UNewTrie2 *trie, UChar32 c, UBool forLSCP) {

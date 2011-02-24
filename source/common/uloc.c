@@ -2056,7 +2056,7 @@ uloc_getLocaleForLCID(uint32_t hostid, char *locale, int32_t localeCapacity,
 /* ### Default locale **************************************************/
 
 #if defined(ICU4C0)
-char _locid[999] = { 0 };
+char _locid[999] = "en_US_POSIX";
 
 #if 0
 void locale_set_default_internal(const char *id)
@@ -2187,10 +2187,11 @@ void locale_set_default_internal(const char *id)
 #endif
 
 const char  *locale_get_default() {
-  return _locid;
+  return "en_US_POSIX";
+  /*  return _locid; */
 }
 void locale_set_default(const char *id) {
-  strcpy(_locid, id);
+  /*  strcpy(_locid, id); */
 }
 #endif
 

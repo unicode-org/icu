@@ -31,6 +31,12 @@ OBJECTS = c0test.o
 
 DEPS = $(OBJECTS:.o=.d)
 
+
+-include Makefile.local
+
+
+
+
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local \
 distclean distclean-local dist dist-local check check-local
@@ -77,3 +83,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+
