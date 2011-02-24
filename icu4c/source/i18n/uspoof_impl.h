@@ -214,7 +214,7 @@ class ScriptSet: public UMemory {
 
 //-------------------------------------------------------------------------------
 //
-//  NFKDBuffer   A little class to handle the NFKD normalization that is
+//  NFDBuffer   A little class to handle the NFD normalization that is
 //               needed on incoming identifiers to be checked.
 //               Takes care of buffer handling and normalization
 //
@@ -223,10 +223,10 @@ class ScriptSet: public UMemory {
 //               TODO:  how to map position offsets back to user values?
 //
 //--------------------------------------------------------------------------------
-class NFKDBuffer: public UMemory {
+class NFDBuffer: public UMemory {
 public:
-    NFKDBuffer(const UChar *text, int32_t length, UErrorCode &status);
-    ~NFKDBuffer();
+    NFDBuffer(const UChar *text, int32_t length, UErrorCode &status);
+    ~NFDBuffer();
     const UChar *getBuffer();
     int32_t getLength();
 
