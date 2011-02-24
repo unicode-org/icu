@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2008,2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -101,6 +101,11 @@ static void TestCEValidity(void);
 * Bound checkings.
 */
 static void TestSortKeyValidity(void);
+/**
+* TestSearchCollatorElements tests iterator behavior (forwards and backwards) with
+* normalization on AND jamo tailoring, among other things.
+*/
+static void TestSearchCollatorElements(void);
 
 /*------------------------------------------------------------------------
  Internal utilities

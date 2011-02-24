@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -22,6 +22,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/ucol.h"
+#include "unicode/ucoleitr.h"
 #include "unicode/uloc.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
@@ -58,6 +59,7 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestCEBufferOverflow, "tscoll/citertst/TestCEBufferOverflow");
     addTest(root, &TestCEValidity, "tscoll/citertst/TestCEValidity");
     addTest(root, &TestSortKeyValidity, "tscoll/citertst/TestSortKeyValidity");
+    addTest(root, &TestSearchCollatorElements, "tscoll/citertst/TestSearchCollatorElements");
 }
 
 /* The locales we support */
@@ -2015,6 +2017,143 @@ static void TestSortKeyValidity(void)
         count ++;
     }
     T_FileStream_close(file);
+}
+
+/**
+* TestSearchCollatorElements tests iterator behavior (forwards and backwards) with
+* normalization on AND jamo tailoring, among other things.
+*/
+static const UChar tsceText[] = {   /* Nothing in here should be ignorable */
+    0x0020, 0xAC00,                 /* simple LV Hangul */
+    0x0020, 0xAC01,                 /* simple LVT Hangul */
+    0x0020, 0xAC0F,                 /* LVTT, last jamo expands for search */
+    0x0020, 0xAFFF,                 /* LLVVVTT, every jamo expands for search */
+    0x0020, 0x1100, 0x1161, 0x11A8, /* 0xAC01 as conjoining jamo */
+    0x0020, 0x3131, 0x314F, 0x3131, /* 0xAC01 as compatibility jamo */
+    0x0020, 0x1100, 0x1161, 0x11B6, /* 0xAC0F as conjoining jamo; last expands for search */
+    0x0020, 0x1101, 0x1170, 0x11B6, /* 0xAFFF as conjoining jamo; all expand for search */
+    0x0020, 0x00E6,                 /* small letter ae, expands */
+    0x0020, 0x1E4D,                 /* small letter o with tilde and acute, decomposes */
+    0x0020
+};
+enum { kLen_tsceText = sizeof(tsceText)/sizeof(tsceText[0]) };
+
+static const int32_t rootStandardOffsets[] = {
+    0,  1,2,
+    2,  3,4,4,
+    4,  5,6,6,
+    6,  7,8,8,
+    8,  9,10,11,
+    12, 13,14,15,
+    16, 17,18,19,
+    20, 21,22,23,
+    24, 25,26,26,26,
+    26, 27,28,28,
+    28,
+    29
+};
+enum { kLen_rootStandardOffsets = sizeof(rootStandardOffsets)/sizeof(rootStandardOffsets[0]) };
+
+static const int32_t rootSearchOffsets[] = {
+    0,  1,2,
+    2,  3,4,4,
+    4,  5,6,6,6,
+    6,  7,8,8,8,8,8,8,
+    8,  9,10,11,
+    12, 13,14,15,
+    16, 17,18,19,20,
+    20, 21,22,22,23,23,23,24,
+    24, 25,26,26,26,
+    26, 27,28,28,
+    28,
+    29
+};
+enum { kLen_rootSearchOffsets = sizeof(rootSearchOffsets)/sizeof(rootSearchOffsets[0]) };
+
+typedef struct {
+    const char *    locale;
+    const int32_t * offsets;
+    int32_t         offsetsLen;
+} TSCEItem;
+
+static const TSCEItem tsceItems[] = {
+    { "root",                  rootStandardOffsets, kLen_rootStandardOffsets },
+    { "root@collation=search", rootSearchOffsets,   kLen_rootSearchOffsets   },
+    { NULL,                    NULL,                0                        }
+};
+
+static void TestSearchCollatorElements(void)
+{
+    const TSCEItem * tsceItemPtr;
+    for (tsceItemPtr = tsceItems; tsceItemPtr->locale != NULL; tsceItemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCollator* ucol = ucol_open(tsceItemPtr->locale, &status);
+        if ( U_SUCCESS(status) ) {
+            UCollationElements * uce = ucol_openElements(ucol, tsceText, kLen_tsceText, &status);
+            if ( U_SUCCESS(status) ) {
+                int32_t offset, element;
+                const int32_t * nextOffsetPtr;
+                const int32_t * limitOffsetPtr;
+
+                nextOffsetPtr = tsceItemPtr->offsets;
+                limitOffsetPtr = tsceItemPtr->offsets + tsceItemPtr->offsetsLen;
+                do {
+                    offset = ucol_getOffset(uce);
+                    element = ucol_next(uce, &status);
+                    if ( element == 0 ) {
+                        log_err("error, locale %s, ucol_next returned element 0\n", tsceItemPtr->locale );
+                    }
+                    if ( nextOffsetPtr < limitOffsetPtr ) {
+                        if (offset != *nextOffsetPtr) {
+                            log_err("error, locale %s, expected ucol_next -> ucol_getOffset %d, got %d\n",
+                                                            tsceItemPtr->locale, *nextOffsetPtr, offset );
+                            nextOffsetPtr = limitOffsetPtr;
+                            break;
+                        }
+                        nextOffsetPtr++;
+                    } else {
+                        log_err("error, locale %s, ucol_next returned more elements than expected\n", tsceItemPtr->locale );
+                    }
+                } while ( U_SUCCESS(status) && element != UCOL_NULLORDER );
+                if ( nextOffsetPtr < limitOffsetPtr ) {
+                    log_err("error, locale %s, ucol_next returned fewer elements than expected\n", tsceItemPtr->locale );
+                }
+
+                ucol_setOffset(uce, kLen_tsceText, &status);
+                status = U_ZERO_ERROR;
+                nextOffsetPtr = tsceItemPtr->offsets + tsceItemPtr->offsetsLen;
+                limitOffsetPtr = tsceItemPtr->offsets;
+                do {
+                    offset = ucol_getOffset(uce);
+                    element = ucol_previous(uce, &status);
+                    if ( element == 0 ) {
+                        log_err("error, locale %s, ucol_previous returned element 0\n", tsceItemPtr->locale );
+                    }
+                    if ( nextOffsetPtr > limitOffsetPtr ) {
+                        nextOffsetPtr--;
+                        if (offset != *nextOffsetPtr) {
+                            log_err("error, locale %s, expected ucol_previous -> ucol_getOffset %d, got %d\n",
+                                                                tsceItemPtr->locale, *nextOffsetPtr, offset );
+                            nextOffsetPtr = limitOffsetPtr;
+                            break;
+                        }
+                   } else {
+                        log_err("error, locale %s, ucol_previous returned more elements than expected\n", tsceItemPtr->locale );
+                    }
+                } while ( U_SUCCESS(status) && element != UCOL_NULLORDER );
+                if ( nextOffsetPtr > limitOffsetPtr ) {
+                    log_err("error, locale %s, ucol_previous returned fewer elements than expected\n", tsceItemPtr->locale );
+                }
+
+                ucol_closeElements(uce);
+            } else {
+                log_err("error, locale %s, ucol_openElements failed: %s\n", tsceItemPtr->locale, u_errorName(status) );
+            }
+            ucol_close(ucol);
+        } else {
+            log_err("error, locale %s, ucol_open failed: %s\n", tsceItemPtr->locale, u_errorName(status) );
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

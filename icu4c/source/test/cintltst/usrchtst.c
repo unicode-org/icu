@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2010 International Business Machines 
+ * Copyright (c) 2001-2011 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -2553,6 +2553,172 @@ static void TestStrengthIdentical(void)
     ucol_close(coll);
 }
 
+/**
+* TestUsingSearchCollator
+*/
+
+#define ARRAY_LENGTH(array) (sizeof(array)/sizeof(array[0]))
+
+typedef struct {
+    const UChar *   pattern;
+    const int32_t * offsets;
+    int32_t         offsetsLen;
+} PatternAndOffsets;
+
+static const UChar scKoText[] = {
+       0x0020,
+/*01*/ 0xAC00, 0x0020,                         /* simple LV Hangul */
+/*03*/ 0xAC01, 0x0020,                         /* simple LVT Hangul */
+/*05*/ 0xAC0F, 0x0020,                         /* LVTT, last jamo expands for search */
+/*07*/ 0xAFFF, 0x0020,                         /* LLVVVTT, every jamo expands for search */
+/*09*/ 0x1100, 0x1161, 0x11A8, 0x0020,         /* 0xAC01 as conjoining jamo */
+/*13*/ 0x1100, 0x1161, 0x1100, 0x0020,         /* 0xAC01 as basic conjoining jamo (per search rules) */
+/*17*/ 0x3131, 0x314F, 0x3131, 0x0020,         /* 0xAC01 as compatibility jamo */
+/*21*/ 0x1100, 0x1161, 0x11B6, 0x0020,         /* 0xAC0F as conjoining jamo; last expands for search */
+/*25*/ 0x1100, 0x1161, 0x1105, 0x1112, 0x0020, /* 0xAC0F as basic conjoining jamo; last expands for search */
+/*30*/ 0x1101, 0x1170, 0x11B6, 0x0020,         /* 0xAFFF as conjoining jamo; all expand for search */
+/*34*/ 0x00E6, 0x0020,                         /* small letter ae, expands */
+/*36*/ 0x1E4D, 0x0020,                         /* small letter o with tilde and acute, decomposes */
+       0
+};
+
+static const UChar scKoPat0[] = { 0xAC01, 0 };
+static const UChar scKoPat1[] = { 0x1100, 0x1161, 0x11A8, 0 }; /* 0xAC01 as conjoining jamo */
+static const UChar scKoPat2[] = { 0xAC0F, 0 };
+static const UChar scKoPat3[] = { 0x1100, 0x1161, 0x1105, 0x1112, 0 }; /* 0xAC0F as basic conjoining jamo */
+static const UChar scKoPat4[] = { 0xAFFF, 0 };
+static const UChar scKoPat5[] = { 0x1101, 0x1170, 0x11B6, 0 }; /* 0xAFFF as conjoining jamo */
+
+static const int32_t scKoSrchOff01[] = { 3,  9, 13 };
+static const int32_t scKoSrchOff23[] = { 5, 21, 25 };
+static const int32_t scKoSrchOff45[] = { 7, 30     };
+
+static const PatternAndOffsets scKoSrchPatternsOffsets[] = {
+    { scKoPat0, scKoSrchOff01, ARRAY_LENGTH(scKoSrchOff01) },
+    { scKoPat1, scKoSrchOff01, ARRAY_LENGTH(scKoSrchOff01) },
+    { scKoPat2, scKoSrchOff23, ARRAY_LENGTH(scKoSrchOff23) },
+    { scKoPat3, scKoSrchOff23, ARRAY_LENGTH(scKoSrchOff23) },
+    { scKoPat4, scKoSrchOff45, ARRAY_LENGTH(scKoSrchOff45) },
+    { scKoPat5, scKoSrchOff45, ARRAY_LENGTH(scKoSrchOff45) },
+    { NULL,     NULL,          0                           }
+};
+
+static const int32_t scKoStndOff01[] = { 3,  9 };
+static const int32_t scKoStndOff2[]  = { 5, 21 };
+static const int32_t scKoStndOff3[]  = { 25    };
+static const int32_t scKoStndOff45[] = { 7, 30 };
+
+static const PatternAndOffsets scKoStndPatternsOffsets[] = {
+    { scKoPat0, scKoStndOff01, ARRAY_LENGTH(scKoStndOff01) },
+    { scKoPat1, scKoStndOff01, ARRAY_LENGTH(scKoStndOff01) },
+    { scKoPat2, scKoStndOff2,  ARRAY_LENGTH(scKoStndOff2)  },
+    { scKoPat3, scKoStndOff3,  ARRAY_LENGTH(scKoStndOff3)  },
+    { scKoPat4, scKoStndOff45, ARRAY_LENGTH(scKoStndOff45) },
+    { scKoPat5, scKoStndOff45, ARRAY_LENGTH(scKoStndOff45) },
+    { NULL,     NULL,          0                           }
+};
+
+typedef struct {
+    const char *  locale;
+    const UChar * text;
+    const PatternAndOffsets * patternsAndOffsets;
+} TUSCItem;
+
+static const TUSCItem tuscItems[] = {
+    { "root",                  scKoText, scKoStndPatternsOffsets },
+    { "root@collation=search", scKoText, scKoSrchPatternsOffsets },
+    { "ko@collation=search",   scKoText, scKoSrchPatternsOffsets },
+    { NULL,                    NULL,     NULL                    }
+};
+
+static const UChar dummyPat[] = { 0x0061, 0 };
+
+static void TestUsingSearchCollator(void)
+{
+    const TUSCItem * tuscItemPtr;
+    for (tuscItemPtr = tuscItems; tuscItemPtr->locale != NULL; tuscItemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCollator* ucol = ucol_open(tuscItemPtr->locale, &status);
+        if ( U_SUCCESS(status) ) {
+            UStringSearch* usrch = usearch_openFromCollator(dummyPat, -1, tuscItemPtr->text, -1, ucol, NULL, &status);
+            if ( U_SUCCESS(status) ) {
+                const PatternAndOffsets * patternsOffsetsPtr;
+                for ( patternsOffsetsPtr = tuscItemPtr->patternsAndOffsets; patternsOffsetsPtr->pattern != NULL; patternsOffsetsPtr++) {
+                    usearch_setPattern(usrch, patternsOffsetsPtr->pattern, -1, &status);
+                    if ( U_SUCCESS(status) ) {
+                        int32_t offset;
+                        const int32_t * nextOffsetPtr;
+                        const int32_t * limitOffsetPtr;
+
+                        usearch_reset(usrch);
+                        nextOffsetPtr = patternsOffsetsPtr->offsets;
+                        limitOffsetPtr = patternsOffsetsPtr->offsets + patternsOffsetsPtr->offsetsLen;
+                        while (TRUE) {
+                            offset = usearch_next(usrch, &status);
+                            if ( U_FAILURE(status) || offset == USEARCH_DONE ) {
+                                break;
+                            }
+                            if ( nextOffsetPtr < limitOffsetPtr ) {
+                                 if (offset != *nextOffsetPtr) {
+                                     log_err("error, locale %s, expected usearch_next %d, got %d\n", tuscItemPtr->locale, *nextOffsetPtr, offset);
+                                     nextOffsetPtr = limitOffsetPtr;
+                                     break;
+                                 }
+                                 nextOffsetPtr++;
+                            } else {
+                                log_err("error, locale %s, usearch_next returned more matches than expected\n", tuscItemPtr->locale );
+                            }
+                        }
+                        if ( U_FAILURE(status) ) {
+                            log_err("error, locale %s, usearch_next failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
+                        } else if ( nextOffsetPtr < limitOffsetPtr ) {
+                            log_err("error, locale %s, usearch_next returned fewer matches than expected\n", tuscItemPtr->locale );
+                        }
+
+                        status = U_ZERO_ERROR;
+                        usearch_reset(usrch);
+                        nextOffsetPtr = patternsOffsetsPtr->offsets + patternsOffsetsPtr->offsetsLen;
+                        limitOffsetPtr = patternsOffsetsPtr->offsets;
+                        while (TRUE) {
+                            offset = usearch_previous(usrch, &status);
+                            if ( U_FAILURE(status) || offset == USEARCH_DONE ) {
+                                break;
+                            }
+                            if ( nextOffsetPtr > limitOffsetPtr ) {
+                                nextOffsetPtr--;
+                                if (offset != *nextOffsetPtr) {
+                                     log_err("error, locale %s, expected usearch_previous %d, got %d\n", tuscItemPtr->locale, *nextOffsetPtr, offset);
+                                     nextOffsetPtr = limitOffsetPtr;
+                                      break;
+                                }
+                            } else {
+                                log_err("error, locale %s, usearch_previous returned more matches than expected\n", tuscItemPtr->locale );
+                            }
+                        }
+                        if ( U_FAILURE(status) ) {
+                            log_err("error, locale %s, usearch_previous failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
+                        } else if ( nextOffsetPtr > limitOffsetPtr ) {
+                            log_err("error, locale %s, usearch_previous returned fewer matches than expected\n", tuscItemPtr->locale );
+                        }
+
+                    } else {
+                        log_err("error, locale %s, usearch_setPattern failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
+                    }
+                }
+                usearch_close(usrch);
+            } else {
+                log_err("error, locale %s, usearch_openFromCollator failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
+            }
+            ucol_close(ucol);
+        } else {
+            log_err("error, locale %s, ucol_open failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
+        }
+    }
+}
+
+/**
+* addSearchTest
+*/
 
 void addSearchTest(TestNode** root)
 {
@@ -2608,6 +2774,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
 	addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");
     addTest(root, &TestStrengthIdentical, "tscoll/usrchtst/TestStrengthIdentical");
+    addTest(root, &TestUsingSearchCollator, "tscoll/usrchtst/TestUsingSearchCollator");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
