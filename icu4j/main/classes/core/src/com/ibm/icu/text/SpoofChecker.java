@@ -1898,6 +1898,14 @@ public class SpoofChecker {
             if (sc == UScript.COMMON || sc == UScript.INHERITED || sc == UScript.UNKNOWN) {
                 continue;
             }
+            
+            // Temporary fix: fold Japanese and Korean into Han.
+            //   Names are allowed to mix these scripts.
+            //   A more general solution will follow later for characters that are
+            //   used with multiple scripts.            
+            if (sc == UScript.KATAKANA || sc == UScript.HIRAGANA || sc == UScript.HANGUL) {
+                sc = UScript.HAN;
+            }
             if (sc != lastScript) {
                 scriptCount++;
                 lastScript = sc;
