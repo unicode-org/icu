@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -49,6 +49,7 @@
 #include "ucaconf.h"
 #include "svccoll.h"
 #include "cmemory.h"
+#include "alphaindextst.h"
 //#include "rndmcoll.h"
 
 // Set to 1 to test offsets in backAndForth()
@@ -97,6 +98,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
       //TESTCLASS(21, RandomCollatorTest); // See ticket 5747 about reenabling this test.
       TESTCLASS(21, SSearchTest);
+      TESTCLASS(22, AlphabeticIndexTest);
 
       default: name = ""; break;
     }

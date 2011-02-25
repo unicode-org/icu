@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2010, International Business Machines Corporation and   *
+* Copyright (C) 1999-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *   Date        Name        Description
@@ -546,6 +546,17 @@ void UVector::sort(USortComparator *compare, UErrorCode &ec) {
     if (U_SUCCESS(ec)) {
         uprv_sortArray(elements, count, sizeof(UHashTok),
                        sortComparator, &compare, FALSE, &ec);
+    }
+}
+
+
+/**
+ *  Sort with a user supplied comparator of type UComparator.
+ */
+void UVector::sortWithUComparator(UComparator *compare, const void *context, UErrorCode &ec) {
+    if (U_SUCCESS(ec)) {
+        uprv_sortArray(elements, count, sizeof(UHashTok),
+                       compare, context, FALSE, &ec);
     }
 }
 

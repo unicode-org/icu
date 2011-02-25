@@ -1234,6 +1234,43 @@ static void TestCoverage(void){
     ulocdata_close(uld);
 }
 
+static void TestIndexChars(void) {
+    /* Very basic test of ULOCDATA_ES_INDEX.
+     * No comprehensive test of data, just basic check that the code path is alive.
+     */
+    UErrorCode status = U_ZERO_ERROR;
+    ULocaleData  *uld;
+    USet *exemplarChars;
+    USet *indexChars;
+
+    uld = ulocdata_open("en", &status);
+    exemplarChars = uset_openEmpty();
+    indexChars = uset_openEmpty();
+    ulocdata_getExemplarSet(uld, exemplarChars, 0, ULOCDATA_ES_STANDARD, &status);
+    ulocdata_getExemplarSet(uld, indexChars, 0, ULOCDATA_ES_INDEX, &status);
+    if (U_FAILURE(status)) {
+        log_err("File %s, line %d, Failure opening exemplar chars: %s", __FILE__, __LINE__, u_errorName(status));
+        goto close_sets;
+    }
+    /* en data, standard exemplars are [a-z], lower case. */
+    /* en data, index characters are [A-Z], upper case. */
+    if ((uset_contains(exemplarChars, (UChar32)0x41) || uset_contains(indexChars, (UChar32)0x61))) {
+        log_err("File %s, line %d, Exemplar characters incorrect.", __FILE__, __LINE__ );
+        goto close_sets;
+    }
+    if (!(uset_contains(exemplarChars, (UChar32)0x61) && uset_contains(indexChars, (UChar32)0x41) )) {
+        log_err("File %s, line %d, Exemplar characters incorrect.", __FILE__, __LINE__ );
+        goto close_sets;
+    }
+
+  close_sets:
+    uset_close(exemplarChars);
+    uset_close(indexChars);
+    ulocdata_close(uld);
+}
+
+
+
 static void TestCurrencyList(void){
 #if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1284,4 +1321,6 @@ void addCLDRTest(TestNode** root)
     TESTCASE(TestExemplarSet);
     TESTCASE(TestLocaleDisplayPattern);
     TESTCASE(TestCoverage);
+    TESTCASE(TestIndexChars);
 }
+

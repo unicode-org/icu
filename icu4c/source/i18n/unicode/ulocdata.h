@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2010, International Business Machines                   *
+* Copyright (C) 2003-2011, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -41,7 +41,8 @@ typedef struct ULocaleData ULocaleData;
 typedef enum ULocaleDataExemplarSetType  {
      ULOCDATA_ES_STANDARD=0,      /* Basic set */
      ULOCDATA_ES_AUXILIARY=1,     /* Auxiliary set */
-     ULOCDATA_ES_COUNT=2
+     ULOCDATA_ES_INDEX=2,         /* Index Character set */
+     ULOCDATA_ES_COUNT=3
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.
@@ -142,9 +143,11 @@ ulocdata_getNoSubstitute(ULocaleData *uld);
  *                  always set, regardless of the value of 'options'.
  * @param extype    Specifies the type of exemplar set to be retrieved.
  * @param status    Pointer to an input-output error code value;
- *                  must not be NULL.
+ *                  must not be NULL.  Will be set to U_MISSING_RESOURCE_ERROR
+ *                  if the requested data is not available.
  * @return USet*    Either fillIn, or if fillIn is NULL, a pointer to
  *                  a newly-allocated USet that the user must close.
+ *                  In case of error, NULL is returned.
  * @stable ICU 3.4
  */
 U_STABLE USet* U_EXPORT2
