@@ -281,7 +281,7 @@ C0DATALIB=$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
 ifeq ($(ICU4C0),)
 
 lib/$(C0DATALIB):
-	$(MAKE) -C . all-local && $(MAKE) -C stubdata all && $(MAKE) -C common all && $(MAKE) -C i18n all && $(MAKE) -C tools all && $(MAKE) -C data all
+	$(MAKE) -C . all-local $(LIBDIR) $(BINDIR) && $(MAKE) -C stubdata all && $(MAKE) -C common all && $(MAKE) -C i18n all && $(MAKE) -C tools all && $(MAKE) -C data all
 	ls $@
 
 $(NEWLIBDIR)/$(C0DATALIB): lib/$(C0DATALIB)
