@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -14,6 +14,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "uarrsort.h"
 #include "uhash.h"
 
 U_NAMESPACE_BEGIN
@@ -258,6 +259,14 @@ public:
       *  UComparator function type defined in uarrsort.h)
       */
     void sort(USortComparator *compare, UErrorCode &ec);
+
+    /**
+     * Sort the contents of this vector using a caller-supplied function
+     * of type UComparator to do the comparison.  Provides more flexibility
+     * than uvector::sort() because an additional user-parameter can be passed to
+     * the comparison function.
+     */
+    void sortWithUComparator(UComparator *compare, const void *context, UErrorCode &ec);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
