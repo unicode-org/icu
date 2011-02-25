@@ -318,14 +318,20 @@ char *aescstrdup(const UChar* unichars,int32_t length){
     return newString;
 }
 
-static void assertEqual(const UChar* result, const char* expected, int32_t index)
+static UBool assertEqual(const UChar* result, const char* expected, int32_t index)
 {
-    UChar *expectedUni = CharsToUChars(expected);
-    if(u_strcmp(result, expectedUni)!=0){
-        log_err("ERROR in index = %d. EXPECTED: %s , GOT: %s\n", index, expected,
-            austrdup(result) );
-    }
-    free(expectedUni);
+  UBool rc = TRUE;
+  UChar *expectedUni = CharsToUChars(expected);
+  if(u_strcmp(result, expectedUni)!=0){
+    log_err("ERROR in index = %d. EXPECTED: %s , GOT: %s\n", index, expected,
+            aescstrdup(result,-1) );
+    rc = FALSE;
+  } /* else {
+    log_verbose("OK %d: got %s\n", index, austrdup(result,-1));
+  } */
+
+  free(expectedUni);
+  return rc;
 }
 
 void TestCanonDecompCompose() 
@@ -349,7 +355,9 @@ void TestCanonDecompCompose()
             if(U_FAILURE(status)){
               log_data_err("ERROR in unorm_normalize at %s:  %s - (Are you missing data?)\n", austrdup(source),u_errorName(status) );
             } else {
-              assertEqual(result, canonTests[x][2], x);
+              if(assertEqual(result, canonTests[x][2], x)) {
+                log_verbose("OK %d: %s -> %s\n", x, aescstrdup(source,-1), aescstrdup(result,-1));
+              }
             }
             free(result);
         } else {
@@ -432,7 +440,7 @@ int main()
   char *dl = NULL;
   UErrorCode status = U_ZERO_ERROR;
 
-#if 0
+#if 1
   dl = uloc_getDefault();
 
   printf("Default Name: %s\n", dl!=NULL?dl:"<NULL>");
@@ -480,7 +488,7 @@ int main()
 
   TestCanonDecompCompose();
 
-#if 0
+#if 1
   {
     UNormalizationCheckResult res;
     UChar cpnfc = 0x0306;

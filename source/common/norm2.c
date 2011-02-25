@@ -34,6 +34,24 @@
 #endif
 #ifdef UNORM_DEBUG
 #include <stdio.h>
+#include <ctype.h>
+static char  dbg_buf[256];
+const char *dbg_uchars(UChar *u) {
+  int32_t n;
+  int32_t i;
+  int32_t c=0;
+  dbg_buf[0]=0;
+  for(i=0;u[i]&&(i<20);i++) {
+    UChar ch = u[i];
+    c+=strlen(dbg_buf+c);
+    if(ch<0x7f && isprint((char)ch)) {
+      printf(dbg_buf+c,"'%c', ", (char)ch);
+    } else {
+      printf(dbg_buf+c,"U+%04X, ", ch);
+    }
+  }
+  return dbg_buf;
+}
 #endif
 
 #define UNORM_ENABLE_FCD 0  /* enables FCD and other modes. Not implemented. */
@@ -41,7 +59,10 @@
 #include "unicode/ustring.h"
 #include "norm2imp.h"
 
+#if 0
+
 #ifndef UNORM_DEBUG
+/* for unimp */
 #include <stdio.h>
 #endif
 
@@ -52,7 +73,9 @@ static UBool _unimp(UErrorCode *e, const char *f, int l) {
 }
 
 #define unimp(e)  _unimp(e,__FILE__,__LINE__)
-
+#else
+/* no definition of unimp */
+#endif
 
 #define fcdTrie() (_this->newFCDTrie)
 #define getFCD16(c)  UTRIE2_GET16(_this->newFCDTrie, c)
@@ -440,12 +463,12 @@ static void ReorderingBuffer_setReorderingLimit(ReorderingBuffer* buffer, UChar*
 static void ReorderingBuffer_construct(ReorderingBuffer *buffer, Normalizer2 *n, UChar *dest, int32_t capacity) {
   buffer->impl = n;
   buffer->str = dest;
-  buffer->remainingCapacity=0;
   buffer->lastCC=0;
-  buffer->limit = NULL;
+  buffer->limit = dest;
   buffer->reorderStart=NULL;
-  buffer->start=NULL;
-  buffer->capacity = 0;
+  buffer->start=dest;
+  buffer->capacity = capacity;
+  buffer->remainingCapacity=capacity;
 }
 
 static UBool ReorderingBuffer_resize(ReorderingBuffer *buffer, int32_t appendLength, UErrorCode *errorCode) {
@@ -460,7 +483,14 @@ static UBool ReorderingBuffer_resize(ReorderingBuffer *buffer, int32_t appendLen
     if(newCapacity<256) {
         newCapacity=256;
     }
-    buffer->start=uprv_realloc(buffer->start,newCapacity);
+    if(buffer->start!=buffer->str) {
+      /* it's not the string passedin -- resize it */
+      buffer->start=uprv_realloc(buffer->start,newCapacity);
+    } else {
+      /* ran out of room- make a new buffer */
+      buffer->start=uprv_malloc(newCapacity);
+      memcpy(buffer->start,buffer->str,length*sizeof(buffer->start[0]));
+    }
     if(buffer->start==NULL) {
         /* getBuffer() already did str.setToBogus() */
         *errorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -620,18 +650,26 @@ static UBool ReorderingBuffer_append(ReorderingBuffer *buffer, UChar32 c, uint8_
 
 
 static void ReorderingBuffer_close(ReorderingBuffer *buffer) {
-  if(buffer!=NULL && buffer->start!=NULL) {
+  if(buffer!=NULL
+     && buffer->start!=NULL 
+     && (buffer->start!=buffer->str)) {  /* don't close the buffer if it's "str" (user's original buffer) */
     uprv_free(buffer->start);
   }
 }
 
 static UBool ReorderingBuffer_init(ReorderingBuffer *buffer, int32_t destCapacity, UErrorCode *pErrorCode) {
-  return TRUE; /* ? */
+  return TRUE; /* not needed. see ReorderingBuffer_construct */
 }
 
 static int32_t ReorderingBuffer_extract(ReorderingBuffer *buffer, Normalizer2 *n, UChar *dest, int32_t capacity, UErrorCode *pErrorCode) {
-  /* u_strncpy(dest,src,tlen); */
   int32_t length = buffer->limit - buffer->start;
+  if(buffer->str!=buffer->start) { /* did we make a new buffer? then copy */
+    int32_t tlen = length;
+    if(tlen > capacity) {
+      tlen = capacity;
+    }
+    u_strncpy(dest,buffer->start,tlen);
+  }
   return u_terminateUChars(dest,capacity,length,pErrorCode);
 }
 
@@ -783,15 +821,9 @@ static int32_t U_CALLCONV Normalizer2_comp_normalize (struct Normalizer2 *_this,
 /* #endif */
     return 0;
   }
-  if(tlen == -1) {
-    tlen = u_strlen(src);
-  }
-  if(capacity<length) {
-    tlen = capacity;
-  }
   
   ReorderingBuffer_construct(&buffer, _this, dest, capacity);
-  if(ReorderingBuffer_init(&buffer, length, pErrorCode)) {
+  if(ReorderingBuffer_init(&buffer, capacity, pErrorCode)) {
     Normalizer2_comp_compose(_this, src, length>=0 ? src+length : NULL, _this->onlyContiguous, TRUE, &buffer, pErrorCode);
   }
   
@@ -839,7 +871,7 @@ Normalizer2_fcd_copyLowPrefixFromNulTerminated(Normalizer2 *_this, const UChar *
     /*  Copy this prefix. */
     if(--src!=prevSrc) {
         if(buffer!=NULL) {
-          unimp(errorCode); /* buffer->appendZeroCC(prevSrc, src, errorCode); */
+          ReorderingBuffer_appendZeroCCStr(buffer, prevSrc, src, errorCode);
         }
     }
     return src;
@@ -929,7 +961,7 @@ Normalizer2_fcd_makeFCD(Normalizer2 *_this, const UChar *src, const UChar *limit
         }
         /*  copy these code units all at once */
         if(src!=prevSrc) {
-          if(buffer!=NULL && unimp(errorCode) /* !buffer->appendZeroCC(prevSrc, src, errorCode) */) {
+          if(buffer!=NULL && unimp(errorCode) /* !buffer->appendZeroCC(prevSrc, src, errorCode) */) { /* FCD */
                 break;
             }
             if(src==limit) {
@@ -970,7 +1002,7 @@ Normalizer2_fcd_makeFCD(Normalizer2 *_this, const UChar *src, const UChar *limit
             if((fcd16&0xff)<=1) {
                 prevBoundary=src;
             }
-            if(buffer!=NULL && unimp(errorCode) /* !buffer->appendZeroCC(c, errorCode) */) {
+            if(buffer!=NULL && unimp(errorCode) /* !buffer->appendZeroCC(c, errorCode) */) { /* FCD */
                 break;
             }
             prevFCD16=fcd16;
@@ -978,7 +1010,7 @@ Normalizer2_fcd_makeFCD(Normalizer2 *_this, const UChar *src, const UChar *limit
         } else if(buffer==NULL) {
             return prevBoundary;  /*  quick check "no" */
         } else {
-          unimp(errorCode);
+          unimp(errorCode); /* FCD */
 #if 0
             /*
              * Back out the part of the source that we copied or appended
@@ -1098,14 +1130,14 @@ Normalizer2_decomp_decompose(Normalizer2 *_this, const UChar *src, const UChar *
         }
         /*  copy these code units all at once */
         if(src!=prevSrc) {
-          if(buffer!=NULL && unimp(errorCode)) {
-                /* if(!buffer->appendZeroCC(prevSrc, src, errorCode)) { */
-                /*     break; */
-                /* } */
-            } else {
-                prevCC=0;
-                prevBoundary=src;
-            }
+          if(buffer!=NULL) { 
+            if(ReorderingBuffer_appendZeroCCStr(buffer, prevSrc, src, errorCode)) { 
+              break; 
+            } 
+          } else {
+            prevCC=0;
+            prevBoundary=src;
+          }
         }
         if(src==limit) {
             break;
@@ -1113,10 +1145,10 @@ Normalizer2_decomp_decompose(Normalizer2 *_this, const UChar *src, const UChar *
 
         /*  Check one above-minimum, relevant code point. */
         src+=U16_LENGTH(c);
-        if(buffer!=NULL && unimp(errorCode)) {
-            /* if(!decompose(c, norm16, *buffer, errorCode)) { */
-            /*     break; */
-            /* } */
+        if(buffer!=NULL) {
+          if(!Normalizer2Impl_decomposeChar(_this, c, norm16, buffer, errorCode)) {
+            break;
+          }
         } else {
           if(isDecompYes(_this,norm16)) {
                 uint8_t cc=getCCFromYesOrMaybe(norm16);
@@ -1128,7 +1160,7 @@ Normalizer2_decomp_decompose(Normalizer2 *_this, const UChar *src, const UChar *
                     continue;
                 }
             }
-            return prevBoundary;  /*  "no" or cc out of order */
+          return prevBoundary;  /*  "no" or cc out of order*/
         }
     }
     return src;
@@ -1161,24 +1193,46 @@ static void Normalizer2Impl_composeAndAppend(Normalizer2 *_this, const UChar *sr
     if(!ReorderingBuffer_isEmpty(buffer)) {
       const UChar *firstStarterInSrc=Normalizer2Impl_findNextCompBoundary(_this,src, limit);
         if(src!=firstStarterInSrc) {
+          UChar *middleStart;
+          int32_t middleLength;
+
           const UChar *lastStarterInDest=Normalizer2Impl_findPreviousCompBoundary(_this, ReorderingBuffer_getStart(buffer),
                                                                     ReorderingBuffer_getLimit(buffer));
-#if 1
-          unimp(errorCode); 
-#else
-          /* TODO! */
-            UnicodeString middle(lastStarterInDest,
-                                 (int32_t)(buffer.getLimit()-lastStarterInDest));
-            buffer.removeSuffix((int32_t)(buffer.getLimit()-lastStarterInDest));
-            middle.append(src, (int32_t)(firstStarterInSrc-src));
-            const UChar *middleStart=middle.getBuffer();
-            compose(middleStart, middleStart+middle.length(), onlyContiguous,
-                    TRUE, buffer, errorCode);
-#endif
-            if(U_FAILURE(*errorCode)) {
-                return;
-            }
-            src=firstStarterInSrc;
+          
+          middleLength = (int32_t)(ReorderingBuffer_getLimit(buffer)-lastStarterInDest)+   /* middle = [lastStarterInDest..limit] */
+            (int32_t)(firstStarterInSrc-src);  /* middle append [src..firstStarterInSrc] */
+          middleStart = uprv_malloc(middleLength*sizeof(middleStart[0]));
+
+          if(middleStart==NULL) {
+            *errorCode=U_MEMORY_ALLOCATION_ERROR;
+            return;
+          }
+          
+          /* C++: UnicodeString middle(lastStarterInDest,(int32_t)(buffer.getLimit()-lastStarterInDest)); (copy chars) */
+          /* >>>: middle := [lastStarterInDest..limit] */
+          uprv_memcpy(middleStart,lastStarterInDest,
+                      sizeof(middleStart[0])*(ReorderingBuffer_getLimit(buffer)-lastStarterInDest)); /* copy */
+
+          ReorderingBuffer_removeSuffix(buffer, (int32_t)(ReorderingBuffer_getLimit(buffer)-lastStarterInDest));
+          
+          /* C++: middle.append(src, (int32_t)(firstStarterInSrc-src)); */
+          /* >>>: middle append [src..firstStarterInSrc] */
+          uprv_memcpy(middleStart+(ReorderingBuffer_getLimit(buffer)-lastStarterInDest),
+                      src,
+                      sizeof(middleStart[0]*(firstStarterInSrc-src))); /* append */
+
+          /* C++: const UChar *middleStart=middle.getBuffer(); */
+          /* >>>: middleStart:  beginning of 'middle' buffer  (already done)*/
+
+          /* C++: compose(middleStart, middleStart+middle.length(), onlyContiguous, TRUE, buffer, errorCode); */
+          Normalizer2_comp_compose(_this, middleStart, middleStart+middleLength, onlyContiguous, TRUE, buffer, errorCode);
+          
+          uprv_free(middleStart);
+
+          if(U_FAILURE(*errorCode)) {
+            return;
+          }
+          src=firstStarterInSrc;
         }
     }
     if(doCompose) {
