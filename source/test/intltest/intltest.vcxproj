@@ -230,6 +230,7 @@
     <ClCompile Include="rbbitst.cpp" />
     <ClCompile Include="itspoof.cpp" />
     <ClCompile Include="allcoll.cpp" />
+    <ClCompile Include="alphaindextst.cpp" />
     <ClCompile Include="apicoll.cpp" />
     <ClCompile Include="cntabcol.cpp" />
     <ClCompile Include="currcoll.cpp" />
@@ -393,6 +394,7 @@
     <ClInclude Include="rbbitst.h" />
     <ClInclude Include="itspoof.h" />
     <ClInclude Include="allcoll.h" />
+    <ClInclude Include="alphaindextst.h" />
     <ClInclude Include="apicoll.h" />
     <ClInclude Include="cntabcol.h" />
     <ClInclude Include="currcoll.h" />
