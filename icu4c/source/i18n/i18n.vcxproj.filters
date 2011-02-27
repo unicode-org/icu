@@ -468,6 +468,9 @@
     <ClCompile Include="uspoof_wsconf.cpp">
       <Filter>spoof</Filter>
     </ClCompile>
+    <ClCompile Include="alphaindex.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bocsu.h">
@@ -510,9 +513,6 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="currfmt.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
-    <ClInclude Include="unicode\currpinf.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="decContext.h">
@@ -950,6 +950,10 @@
     </CustomBuild>
     <CustomBuild Include="unicode\uspoof.h">
       <Filter>spoof</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\currpinf.h" />
+    <CustomBuild Include="unicode\alphaindex.h">
+      <Filter>collation</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
