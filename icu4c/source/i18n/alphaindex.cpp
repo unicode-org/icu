@@ -504,7 +504,7 @@ AlphabeticIndex &AlphabeticIndex::setUnderflowLabel(const UnicodeString &label, 
 }
 
 
-int32_t AlphabeticIndex::AlphabeticIndex::getMaxLabelCount() const {
+int32_t AlphabeticIndex::getMaxLabelCount() const {
     return maxLabelCount_;
 }
 

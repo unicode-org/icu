@@ -439,6 +439,11 @@
     <ClCompile Include="bidiconf.cpp">
       <Filter>bidi</Filter>
     </ClCompile>
+    <ClCompile Include="bytestrietest.cpp" />
+    <ClCompile Include="ucharstrietest.cpp" />
+    <ClCompile Include="alphaindextst.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -803,6 +808,9 @@
     </ClInclude>
     <ClInclude Include="csdetest.h">
       <Filter>charset detection</Filter>
+    </ClInclude>
+    <ClInclude Include="alphaindextst.h">
+      <Filter>collation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
