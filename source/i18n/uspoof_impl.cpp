@@ -209,7 +209,7 @@ int32_t SpoofImpl::confusableLookup(UChar32 inChar, int32_t tableMask, UChar *de
         U_ASSERT(ix < stringLengthsLimit);
     }
 
-    U_ASSERT(value + stringLen < fSpoofData->fRawData->fCFUStringTableLen);
+    U_ASSERT(value + stringLen <= fSpoofData->fRawData->fCFUStringTableLen);
     UChar *src = &fSpoofData->fCFUStrings[value];
     for (ix=0; ix<stringLen; ix++) {
         destBuf[ix] = src[ix];
