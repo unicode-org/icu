@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -387,7 +387,7 @@ public class ZoneStringFormat {
         if (isFullyLoaded) {
             return;
         }
-        String tzid = ZoneMeta.getCanonicalSystemID(id);
+        String tzid = ZoneMeta.getCanonicalCLDRID(id);
         if (tzid == null || tzidToStrings.containsKey(tzid)) {
             return;
         }
@@ -436,7 +436,7 @@ public class ZoneStringFormat {
 
         for (int i = 0; i < zoneIDs.length; i++) {
             // Skip aliases
-             String tzid = ZoneMeta.getCanonicalSystemID(zoneIDs[i]);
+             String tzid = ZoneMeta.getCanonicalCLDRID(zoneIDs[i]);
             if (tzid == null || !zoneIDs[i].equals(tzid)) {
                 continue;
             }
@@ -702,7 +702,7 @@ public class ZoneStringFormat {
         ZoneStrings zstrings = tzidToStrings.get(tzid);
         if (zstrings == null) {
             // ICU's own array does not have entries for aliases
-            String canonicalID = ZoneMeta.getCanonicalSystemID(tzid);
+            String canonicalID = ZoneMeta.getCanonicalCLDRID(tzid);
             if (canonicalID != null && !canonicalID.equals(tzid)) {
                 // Canonicalize tzid here.  The rest of operations
                 // require tzid to be canonicalized.
@@ -783,7 +783,7 @@ public class ZoneStringFormat {
         ZoneStrings zstrings = tzidToStrings.get(tzid);
         if (zstrings == null) {
             // ICU's own array does not have entries for aliases
-            String canonicalID = ZoneMeta.getCanonicalSystemID(tzid);
+            String canonicalID = ZoneMeta.getCanonicalCLDRID(tzid);
             if (canonicalID != null && !canonicalID.equals(tzid)) {
                 // Canonicalize tzid here.  The rest of operations
                 // require tzid to be canonicalized.

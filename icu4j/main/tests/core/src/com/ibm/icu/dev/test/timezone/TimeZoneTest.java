@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -25,6 +26,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -752,6 +754,112 @@ public class TimeZoneTest extends TestFmwk
             errln("FAIL: getTimeZone(NON_EXISTENT) = " + tz.getID());
     }
 
+    public void TestGetAvailableIDsNew() {
+        Set<String> any = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, null, null);
+        Set<String> canonical = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);
+        Set<String> canonicalLoc = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, null, null);
+
+        checkContainsAll(any, "ANY", canonical, "CANONICAL");
+        checkContainsAll(canonical, "CANONICAL", canonicalLoc, "CANONICALLOC");
+
+        Set<String> any_US = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, "US", null);
+        Set<String> canonical_US = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, "US", null);
+        Set<String> canonicalLoc_US = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL_LOCATION, "US", null);
+
+        checkContainsAll(any, "ANY", any_US, "ANY_US");
+        checkContainsAll(canonical, "CANONICAL", canonical_US, "CANONICAL_US");
+        checkContainsAll(canonicalLoc, "CANONICALLOC", canonicalLoc_US, "CANONICALLOC_US");
+
+        checkContainsAll(any_US, "ANY_US", canonical_US, "CANONICAL_US");
+        checkContainsAll(canonical_US, "CANONICAL_US", canonicalLoc_US, "CANONICALLOC_US");
+
+        final int HOUR = 60*60*1000;
+        Set<String> any_W5 = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, null, -5 * HOUR);
+        Set<String> any_CA_W5 = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, "CA", -5 * HOUR);
+
+        checkContainsAll(any, "ANY", any_W5, "ANY_W5");
+        checkContainsAll(any_W5, "ANY_W5", any_CA_W5, "ANY_CA_W5");
+
+        boolean[] isSystemID = new boolean[1];
+
+        // An ID in any set, but not in canonical set must not be a canonical ID
+        for (String id : any) {
+            if (canonical.contains(id)) {
+                continue;
+            }
+            String cid = TimeZone.getCanonicalID(id, isSystemID);
+            if (id.equals(cid)) {
+                errln("FAIL: canonical ID [" + id + "] is not in CANONICAL");
+            }
+            if (!isSystemID[0]) {
+                errln("FAIL: ANY contains non-system ID: " + id);
+            }
+        }
+
+        // canonical set must contains only canonical IDs
+        for (String id : canonical) {
+            String cid = TimeZone.getCanonicalID(id, isSystemID);
+            if (!id.equals(cid)) {
+                errln("FAIL: CANONICAL contains non-canonical ID: " + id);
+            }
+            if (!isSystemID[0]) {
+                errln("FAIL: CANONICAL contains non-system ID: " + id);
+            }
+        }
+
+        // canonicalLoc set must contains only canonical location IDs
+        for (String id : canonicalLoc) {
+            String cid = TimeZone.getCanonicalID(id, isSystemID);
+            if (!id.equals(cid)) {
+                errln("FAIL: CANONICAL contains non-canonical ID: " + id);
+            }
+            if (!isSystemID[0]) {
+                errln("FAIL: CANONICAL contains non-system ID: " + id);
+            }
+            String region = TimeZone.getRegion(id);
+            if (region.equals("001")) {
+                errln("FAIL: CANONICALLOC contains non location zone: " + id);
+            }
+        }
+
+        // any_US must contain only US zones
+        for (String id : any_US) {
+            String region = TimeZone.getRegion(id);
+            if (!region.equals("US")) {
+                errln("FAIL: ANY_US contains non-US zone ID: " + id);
+            }
+        }
+
+        // any_W5 must contain only GMT-05:00 zones
+        for (String id : any_W5) {
+            TimeZone tz = TimeZone.getTimeZone(id);
+            if (tz.getRawOffset() != -5 * HOUR) {
+                errln("FAIL: ANY_W5 contains a zone whose offset is not -5:00: " + id);
+            }
+        }
+
+        // No US zones with GMT+14:00
+        Set<String> any_US_E14 = TimeZone.getAvailableIDs(SystemTimeZoneType.ANY, "US", 14 * HOUR);
+        if (!any_US_E14.isEmpty()) {
+            errln("FAIL: ANY_US_E14 must be empty");
+        }
+    }
+
+    private void checkContainsAll(Set<String> set1, String name1, Set<String> set2, String name2) {
+        if (!set1.containsAll(set2)) {
+            StringBuilder buf = new StringBuilder();
+            for (String s : set2) {
+                if (!set1.contains(s)) {
+                    if (buf.length() != 0) {
+                        buf.append(",");
+                    }
+                    buf.append(s);
+                }
+            }
+            errln("FAIL: " + name1 + " does not contain all of " + name2 + " - missing: {" + buf + "}");
+        }
+    }
+
     /**
      * Bug 4107276
      */
@@ -1456,6 +1564,7 @@ public class TimeZoneTest extends TestFmwk
                 {"GMT-091015", "GMT-09:10:15", null},
                 {"GMT+1:90", null, null},
                 {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", "true"},
+                {"Etc/Unknown", "Etc/Unknown", null},
                 {"bogus", null, null},
                 {"", null, null},
                 {null, null, null},
