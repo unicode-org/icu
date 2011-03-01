@@ -39,6 +39,7 @@
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
+#include "unicode/ucal.h"
 
 U_NAMESPACE_BEGIN
 
@@ -145,6 +146,28 @@ public:
      * @stable ICU 2.0
      */
     static TimeZone* U_EXPORT2 createTimeZone(const UnicodeString& ID);
+
+
+    /**
+     * Returns an enumeration over system time zone IDs with the given
+     * filter conditions.
+     * @param zoneType      The system time zone type.
+     * @param region        The ISO 3166 two-letter country code or UN M.49
+     *                      three-digit area code. When NULL, no filtering
+     *                      done by region. 
+     * @param rawOffset     An offset from GMT in milliseconds, ignoring
+     *                      the effect of daylight savings time, if any.
+     *                      When NULL, no filtering done by zone offset. 
+     * @param ec            Output param to filled in with a success or
+     *                      an error.
+     * @return an enumeration object, owned by the caller.
+     * @draft ICU 4.8
+     */
+    static StringEnumeration* U_EXPORT2 createTimeZoneIDEnumeration(
+        USystemTimeZoneType zoneType,
+        const char* region,
+        const int32_t* rawOffset,
+        UErrorCode& ec);
 
     /**
      * Returns an enumeration over all recognized time zone IDs. (i.e.,
@@ -726,6 +749,15 @@ private:
     static const UChar* getRegion(const UnicodeString& id);
 
     /**
+     * Returns the region code associated with the given zone,
+     * or NULL if the zone is not known.
+     * @param id zone id string
+     * @param status Status parameter
+     * @return the region associated with the given zone
+     */
+    static const UChar* getRegion(const UnicodeString& id, UErrorCode& status);
+
+    /**
      * Parses the given custom time zone identifier
      * @param id id A string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
      * GMT[+-]hh.
@@ -779,9 +811,11 @@ private:
      * @return the TimeZone indicated by the 'name'.
      */
     static TimeZone*        createSystemTimeZone(const UnicodeString& name);
+    static TimeZone*        createSystemTimeZone(const UnicodeString& name, UErrorCode& ec);
 
     UnicodeString           fID;    // this time zone's ID
 
+    friend class TZEnumeration;
 };
 
 

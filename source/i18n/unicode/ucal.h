@@ -522,6 +522,53 @@ enum UCalendarAMPMs {
 typedef enum UCalendarAMPMs UCalendarAMPMs;
 
 /**
+ * System time zone type constants used by filtering zones
+ * in ucal_openTimeZoneIDEnumeration.
+ * @see ucal_openTimeZoneIDEnumeration
+ * @draft ICU 4.8
+ */
+enum USystemTimeZoneType {
+    /**
+     * Any system zones.
+     * @draft ICU 4.8
+     */
+    UCAL_ZONE_TYPE_ANY,
+    /**
+     * Canonical system zones.
+     * @draft ICU 4.8
+     */
+    UCAL_ZONE_TYPE_CANONICAL,
+    /**
+     * Canonical system zones associated with actual locations.
+     * @draft ICU 4.8
+     */
+    UCAL_ZONE_TYPE_CANONICAL_LOCATION
+};
+
+/** @draft ICU 4.8 */
+typedef enum USystemTimeZoneType USystemTimeZoneType;
+
+/** 
+ * Create an enumeration over system time zone IDs with the given
+ * filter conditions. 
+ * @param zoneType  The system time zone type.
+ * @param region    The ISO 3166 two-letter country code or UN M.49
+ *                  three-digit area code.  When NULL, no filtering
+ *                  done by region. 
+ * @param rawOffset An offset from GMT in milliseconds, ignoring the
+ *                  effect of daylight savings time, if any. When NULL,
+ *                  no filtering done by zone offset.
+ * @param ec        A pointer to an UErrorCode to receive any errors
+ * @return  an enumeration object that the caller must dispose of
+ *          using enum_close(), or NULL upon failure. In case of failure,
+ *          *ec will indicate the error.
+ * @draft ICU 4.8
+ */ 
+U_DRAFT UEnumeration* U_EXPORT2
+ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char* region,
+                                const int32_t* rawOffset, UErrorCode* ec);
+
+/**
  * Create an enumeration over all time zones.
  *
  * @param ec input/output error code
