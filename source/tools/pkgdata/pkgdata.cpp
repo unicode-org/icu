@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2010, International Business Machines
+ *   Copyright (C) 2000-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.c
@@ -1366,6 +1366,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         char dllFilePath[SMALL_BUFFER_MAX_SIZE] = "";
         char libFilePath[SMALL_BUFFER_MAX_SIZE] = "";
         char resFilePath[SMALL_BUFFER_MAX_SIZE] = "";
+        char tmpResFilePath[SMALL_BUFFER_MAX_SIZE] = "";
 
 #ifdef CYGWINMSVC
         uprv_strcpy(dllFilePath, o->targetDir);
@@ -1375,25 +1376,29 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         uprv_strcat(dllFilePath, PKGDATA_FILE_SEP_STRING);
         uprv_strcpy(libFilePath, dllFilePath);
 
-#ifdef CYGWINMSVC
+#ifdef CYGWINMSVC 
         uprv_strcat(libFilePath, o->libName);
         uprv_strcat(libFilePath, ".lib");
-        
+       
         uprv_strcat(dllFilePath, o->libName);
         uprv_strcat(dllFilePath, o->version);
 #else
+        if (strstr(o->libName, "icudt")) {
+            uprv_strcat(libFilePath, LIB_FILE);
+        } else {
+            uprv_strcat(libFilePath, o->libName);
+            uprv_strcat(libFilePath, ".lib");
+        }
         uprv_strcat(dllFilePath, o->entryName);
-        
-        uprv_strcat(libFilePath, LIB_FILE);
 #endif
         uprv_strcat(dllFilePath, DLL_EXT);
         
-        uprv_strcpy(resFilePath, o->tmpDir);
-        uprv_strcat(resFilePath, PKGDATA_FILE_SEP_STRING);
-        uprv_strcat(resFilePath, ICUDATA_RES_FILE);
+        uprv_strcpy(tmpResFilePath, o->tmpDir);
+        uprv_strcat(tmpResFilePath, PKGDATA_FILE_SEP_STRING);
+        uprv_strcat(tmpResFilePath, ICUDATA_RES_FILE);
 
-        if (!T_FileStream_file_exists(resFilePath)) {
-            uprv_memset(resFilePath, 0, sizeof(resFilePath));
+        if (!T_FileStream_file_exists(tmpResFilePath)) {
+            sprintf(resFilePath, "\"%s\"", tmpResFilePath);
         }
 
         /* Check if dll file and lib file exists and that it is not newer than genc file. */
@@ -1405,7 +1410,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
           return 0;
         }
 
-        sprintf(cmd, "%s\"%s\" %s\"%s\" \"%s\" \"%s\"",
+        sprintf(cmd, "%s\"%s\" %s\"%s\" \"%s\" %s",
                 LINK_CMD,
                 dllFilePath,
                 LINK_FLAGS,
