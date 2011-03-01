@@ -185,7 +185,7 @@ parseDate (const UChar *text, UErrorCode &status) {
 }
 
 UnicodeString& U_EXPORT2
-ZoneMeta::getCanonicalSystemID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status) {
+ZoneMeta::getCanonicalCLDRID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status) {
     int32_t len = tzid.length();
     if ( len >= ZID_KEY_MAX ) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -348,27 +348,11 @@ ZoneMeta::getSingleCountry(const UnicodeString &tzid, UnicodeString &country) {
         char buf[] = {0, 0, 0};
         u_UCharsToChars(region, buf, 2);
 
-        StringEnumeration *ids = TimeZone::createEnumeration(buf);
+        StringEnumeration *ids = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, buf, NULL, status);
         int32_t idsLen = ids->count(status);
         if (U_SUCCESS(status) && idsLen > 1) {
-            // multiple zones are available for the region
-            UnicodeString canonical, tmp;
-            const UnicodeString *id = ids->snext(status);
-            getCanonicalSystemID(*id, canonical, status);
-            if (U_SUCCESS(status)) {
-                // check if there are any other canonical zone in the group
-                while ((id = ids->snext(status))!=NULL) {
-                    getCanonicalSystemID(*id, tmp, status);
-                    if (U_FAILURE(status)) {
-                        break;
-                    }
-                    if (canonical != tmp) {
-                        // another canonical zone was found
-                        multiZones = TRUE;
-                        break;
-                    }
-                }
-            }
+            // multiple canonical zones are available for the region
+            multiZones = TRUE;
         }
         if (U_FAILURE(status)) {
             // no single country by default for any error cases
@@ -519,7 +503,7 @@ ZoneMeta::createMetazoneMappings(const UnicodeString &tzid) {
     UnicodeString canonicalID;
     UResourceBundle *rb = ures_openDirect(NULL, gMetaZones, &status);
     ures_getByKey(rb, gMetazoneInfo, rb, &status);
-    TimeZone::getCanonicalID(tzid, canonicalID, status);
+    getCanonicalCLDRID(tzid, canonicalID, status);
 
     if (U_SUCCESS(status)) {
         char tzKey[ZID_KEY_MAX];

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and    *
+* Copyright (C) 2007-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -27,10 +27,13 @@ class UVector;
 class U_I18N_API ZoneMeta {
 public:
     /**
-     * Return the canonical id for this system tzid, which might be the id itself.
-     * If the given system tzid is not know, U_ILLEGAL_ARGUMENT_ERROR is set in the status.
+     * Return the canonical id for this tzid defined by CLDR, which might be the id itself.
+     * If the given system tzid is not known, U_ILLEGAL_ARGUMENT_ERROR is set in the status.
+     *
+     * Note: this internal API supports all known system IDs and "Etc/Unknown" (which is
+     * NOT a system ID).
      */
-    static UnicodeString& U_EXPORT2 getCanonicalSystemID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status);
+    static UnicodeString& U_EXPORT2 getCanonicalCLDRID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status);
 
     /**
      * Return the canonical country code for this tzid.  If we have none, or if the time zone

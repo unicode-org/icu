@@ -62,7 +62,8 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(16, TestCanonicalID);
         CASE(17, TestDisplayNamesMeta);
         CASE(18, TestGetRegion);
-       default: name = ""; break;
+        CASE(19, TestGetAvailableIDsNew);
+        default: name = ""; break;
     }
 }
 
@@ -510,6 +511,234 @@ TimeZoneTest::TestGetAvailableIDs913()
     delete s;
 }
 
+void
+TimeZoneTest::TestGetAvailableIDsNew()
+{
+    UErrorCode ec = U_ZERO_ERROR;
+    StringEnumeration *any, *canonical, *canonicalLoc;
+    StringEnumeration *any_US, *canonical_US, *canonicalLoc_US;
+    StringEnumeration *any_W5, *any_CA_W5;
+    StringEnumeration *any_US_E14;
+    int32_t rawOffset;
+    const UnicodeString *id1, *id2;
+    UnicodeString canonicalID;
+    UBool isSystemID;
+    char region[4];
+    int32_t zoneCount;
+
+    any = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, NULL, NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for ANY");
+        goto cleanup;
+    }
+
+    canonical = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for CANONICAL");
+        goto cleanup;
+    }
+
+    canonicalLoc = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, NULL, NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for CANONICALLOC");
+        goto cleanup;
+    }
+
+    any_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, "US", NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for ANY_US");
+        goto cleanup;
+    }
+
+    canonical_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, "US", NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for CANONICAL_US");
+        goto cleanup;
+    }
+
+    canonicalLoc_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, "US", NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for CANONICALLOC_US");
+        goto cleanup;
+    }
+
+    rawOffset = (-5)*60*60*1000;
+    any_W5 = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, NULL, &rawOffset, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for ANY_W5");
+        goto cleanup;
+    }
+
+    any_CA_W5 = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, "CA", &rawOffset, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for ANY_CA_W5");
+        goto cleanup;
+    }
+
+    rawOffset = 14*60*60*1000;
+    any_US_E14 = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, "US", &rawOffset, ec);
+    if (U_FAILURE(ec)) {
+        errln("Failed to create enumration for ANY_US_E14");
+        goto cleanup;
+    }
+
+    checkContainsAll(any, "ANY", canonical, "CANONICAL");
+    checkContainsAll(canonical, "CANONICAL", canonicalLoc, "CANONICALLOC");
+
+    checkContainsAll(any, "ANY", any_US, "ANY_US");
+    checkContainsAll(canonical, "CANONICAL", canonical_US, "CANONICAL_US");
+    checkContainsAll(canonicalLoc, "CANONICALLOC", canonicalLoc_US, "CANONICALLOC_US");
+
+    checkContainsAll(any_US, "ANY_US", canonical_US, "CANONICAL_US");
+    checkContainsAll(canonical_US, "CANONICAL_US", canonicalLoc_US, "CANONICALLOC_US");
+
+    checkContainsAll(any, "ANY", any_W5, "ANY_W5");
+    checkContainsAll(any_W5, "ANY_W5", any_CA_W5, "ANY_CA_W5");
+
+    // And ID in any set, but not in canonical set must not be a canonical ID
+    any->reset(ec);
+    while (id1 = any->snext(ec)) {
+        UBool found = FALSE;
+        canonical->reset(ec);
+        while (id2 = canonical->snext(ec)) {
+            if (*id1 == *id2) {
+                found = TRUE;
+                break;
+            }
+        }
+        if (U_FAILURE(ec)) {
+            break;
+        }
+        if (!found) {
+            TimeZone::getCanonicalID(*id1, canonicalID, isSystemID, ec);
+            if (U_FAILURE(ec)) {
+                break;
+            }
+            if (*id1 == canonicalID) {
+                errln((UnicodeString)"FAIL: canonicalID [" + *id1 + "] is not in CANONICAL");
+            }
+            if (!isSystemID) {
+                errln((UnicodeString)"FAIL: ANY contains non-system ID: " + *id1);
+            }
+        }
+    }
+    if (U_FAILURE(ec)) {
+        errln("Error checking IDs in ANY, but not in CANONICAL");
+        ec = U_ZERO_ERROR;
+    }
+
+    // canonical set must contains only canonical IDs
+    canonical->reset(ec);
+    while (id1 = canonical->snext(ec)) {
+        TimeZone::getCanonicalID(*id1, canonicalID, isSystemID, ec);
+        if (U_FAILURE(ec)) {
+            break;
+        }
+        if (*id1 != canonicalID) {
+            errln((UnicodeString)"FAIL: CANONICAL contains non-canonical ID: " + *id1);
+        }
+        if (!isSystemID) {
+            errln((UnicodeString)"FAILE: CANONICAL contains non-system ID: " + *id1);
+        }
+    }
+    if (U_FAILURE(ec)) {
+        errln("Error checking IDs in CANONICAL");
+        ec = U_ZERO_ERROR;
+    }
+
+    // canonicalLoc set must contain only canonical location IDs
+    canonicalLoc->reset(ec);
+    while (id1 = canonicalLoc->snext(ec)) {
+        TimeZone::getRegion(*id1, region, sizeof(region), ec);
+        if (U_FAILURE(ec)) {
+            break;
+        }
+        if (uprv_strcmp(region, "001") == 0) {
+            errln((UnicodeString)"FAIL: CANONICALLOC contains non location zone: " + *id1);
+        }
+    }
+    if (U_FAILURE(ec)) {
+        errln("Error checking IDs in CANONICALLOC");
+        ec = U_ZERO_ERROR;
+    }
+
+    // any_US must contain only US zones
+    any_US->reset(ec);
+    while (id1 = any_US->snext(ec)) {
+        TimeZone::getRegion(*id1, region, sizeof(region), ec);
+        if (U_FAILURE(ec)) {
+            break;
+        }
+        if (uprv_strcmp(region, "US") != 0) {
+            errln((UnicodeString)"FAIL: ANY_US contains non-US zone ID: " + *id1);
+        }
+    }
+    if (U_FAILURE(ec)) {
+        errln("Error checking IDs in ANY_US");
+        ec = U_ZERO_ERROR;
+    }
+
+    // any_W5 must contain only GMT-05:00 zones
+    any_W5->reset(ec);
+    while (id1 = any_W5->snext(ec)) {
+        TimeZone *tz = TimeZone::createTimeZone(*id1);
+        if (tz->getRawOffset() != (-5)*60*60*1000) {
+            errln((UnicodeString)"FAIL: ANY_W5 contains a zone whose offset is not -05:00: " + *id1);
+        }
+    }
+    if (U_FAILURE(ec)) {
+        errln("Error checking IDs in ANY_W5");
+        ec = U_ZERO_ERROR;
+    }
+
+    // No US zone swith GMT+14:00
+    zoneCount = any_US_E14->count(ec);
+    if (U_FAILURE(ec)) {
+        errln("Error checking IDs in ANY_US_E14");
+        ec = U_ZERO_ERROR;
+    } else if (zoneCount != 0) {
+        errln("FAIL: ANY_US_E14 must be empty");
+    }
+
+cleanup:
+    delete any;
+    delete canonical;
+    delete canonicalLoc;
+    delete any_US;
+    delete canonical_US;
+    delete canonicalLoc_US;
+    delete any_W5;
+    delete any_CA_W5;
+}
+
+void
+TimeZoneTest::checkContainsAll(StringEnumeration *s1, const char *name1,
+        StringEnumeration *s2, const char *name2)
+{
+    UErrorCode ec = U_ZERO_ERROR;
+    const UnicodeString *id1, *id2;
+
+    s2->reset(ec);
+
+    while (id2 = s2->snext(ec)) {
+        UBool found = FALSE;
+        s1->reset(ec);
+        while (id1 = s1->snext(ec)) {
+            if (*id1 == *id2) {
+                found = TRUE;
+                break;
+            }
+        }
+        if (!found) {
+            errln((UnicodeString)"FAIL: " + name1 + "does not contain "
+                + *id2 + " in " + name2);
+        }
+    }
+
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"Error checkContainsAll for " + name1 + " - " + name2);
+    }
+}
 
 /**
  * NOTE: As of ICU 2.8, this test confirms that the "tz.alias"
@@ -1847,6 +2076,7 @@ void TimeZoneTest::TestCanonicalID() {
         {"GMT-091015", "GMT-09:10:15", FALSE},
         {"GMT+1:90", 0, FALSE},
         {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", TRUE},
+        {"Etc/Unknown", "Etc/Unknown", FALSE},
         {"bogus", 0, FALSE},
         {"", 0, FALSE},
         {0, 0, FALSE}

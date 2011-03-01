@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -43,6 +43,13 @@ _createTimeZone(const UChar* zoneID, int32_t len, UErrorCode* ec) {
         }
     }
     return zone;
+}
+
+U_CAPI UEnumeration* U_EXPORT2
+ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char* region,
+                                const int32_t* rawOffset, UErrorCode* ec) {
+    return uenum_openFromStringEnumeration(TimeZone::createTimeZoneIDEnumeration(
+        zoneType, region, rawOffset, *ec), ec);
 }
 
 U_CAPI UEnumeration* U_EXPORT2
