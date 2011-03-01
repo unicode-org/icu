@@ -4041,6 +4041,7 @@ public class ULocaleTest extends TestFmwk {
             {new Locale("", "US"),              "_US"},
             {new Locale("en", "", "POSIX"),     "en__POSIX"},
             {new Locale("no", "NO", "NY"),      "nn_NO"},
+            {new Locale("en", "BOGUS"),         "en__BOGUS"}, // ill-formed country is mapped to variant - see #8383 and #8384
         };
 
         for (int i = 0; i < DATA.length; i++) {
