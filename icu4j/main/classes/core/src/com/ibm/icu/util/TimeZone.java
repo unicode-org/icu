@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.impl.Grego;
 import com.ibm.icu.impl.ICUCache;
@@ -208,6 +209,36 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @provisional This API might change or be removed in a future release. 
      */
     public static final String UNKNOWN_ZONE_ID = "Etc/Unknown";
+
+    /**
+     * {@icu} System time zone type constants used by filtering zones in
+     * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
+     *
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release. 
+     */
+    public enum SystemTimeZoneType {
+        /**
+         * Any system zones.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release. 
+         */
+        ANY,
+
+        /**
+         * Canonical system zones.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release. 
+         */
+        CANONICAL,
+
+        /**
+         * Canonical system zones associated with actual locations.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release. 
+         */
+        CANONICAL_LOCATION,
+    }
 
     /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
@@ -623,6 +654,26 @@ abstract public class TimeZone implements Serializable, Cloneable {
         return TZ_IMPL;
     }
 
+    /** 
+     * {@icu} Returns a set of time zone ID strings with the given filter conditions. 
+     * <p><b>Note:</b>A <code>Set</code> returned by this method is
+     * immutable.
+     * @param zoneType      The system time zone type.
+     * @param region        The ISO 3166 two-letter country code or UN M.49 three-digit area code. 
+     *                      When null, no filtering done by region. 
+     * @param rawOffset     An offset from GMT in milliseconds, ignoring the effect of daylight savings 
+     *                      time, if any. When null, no filtering done by zone offset. 
+     * @return an immutable set of system time zone IDs.
+     * @see SystemTimeZoneType
+     * 
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release. 
+     */ 
+    public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
+            String region, Integer rawOffset) {
+        return ZoneMeta.getAvailableIDs(zoneType, region, rawOffset);
+    }
+
     /**
      * Return a new String array containing all system TimeZone IDs
      * with the given raw offset from GMT.  These IDs may be passed to
@@ -631,13 +682,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param rawOffset the offset in milliseconds from GMT
      * @return an array of IDs for system TimeZones with the given
      * raw offset.  If there are none, return a zero-length array.
+     * @see #getAvailableIDs(SystemTimeZoneType, String, Integer)
+     * 
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(int rawOffset) {
-        return ZoneMeta.getAvailableIDs(rawOffset);
-
+        Set<String> ids = getAvailableIDs(SystemTimeZoneType.ANY, null, Integer.valueOf(rawOffset));
+        return ids.toArray(new String[0]);
     }
-
 
     /**
      * Return a new String array containing all system TimeZone IDs
@@ -648,10 +700,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * to return zones not associated with any country
      * @return an array of IDs for system TimeZones in the given
      * country.  If there are none, return a zero-length array.
+     * @see #getAvailableIDs(SystemTimeZoneType, String, Integer)
+     * 
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(String country) {
-        return ZoneMeta.getAvailableIDs(country);
+        Set<String> ids = getAvailableIDs(SystemTimeZoneType.ANY, country, null);
+        return ids.toArray(new String[0]);
     }
 
     /**
@@ -660,10 +715,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * <code>get()</code> to construct the corresponding TimeZone
      * object.
      * @return an array of all system TimeZone IDs
+     * @see #getAvailableIDs(SystemTimeZoneType, String, Integer)
+     * 
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs() {
-        return ZoneMeta.getAvailableIDs();
+        Set<String> ids = getAvailableIDs(SystemTimeZoneType.ANY, null, null);
+        return ids.toArray(new String[0]);
     }
 
     /**
@@ -863,11 +921,17 @@ abstract public class TimeZone implements Serializable, Cloneable {
         String canonicalID = null;
         boolean systemTzid = false;
         if (id != null && id.length() != 0) {
-            canonicalID = ZoneMeta.getCanonicalSystemID(id);
-            if (canonicalID != null) {
-                systemTzid = true;
+            if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
+                // special case - Etc/Unknown is a canonical ID, but not system ID
+                canonicalID = TimeZone.UNKNOWN_ZONE_ID;
+                systemTzid = false;
             } else {
-                canonicalID = ZoneMeta.getCustomID(id);
+                canonicalID = ZoneMeta.getCanonicalCLDRID(id);
+                if (canonicalID != null) {
+                    systemTzid = true;
+                } else {
+                    canonicalID = ZoneMeta.getCustomID(id);
+                }
             }
         }
         if (isSystemID != null) {
@@ -886,7 +950,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param id the system time zone ID. 
      * @return the region code associated with the given 
      * system time zone ID. 
-     * @throw IllegalArgumentException if <code>id</code> is not a known system ID. 
+     * @throws IllegalArgumentException if <code>id</code> is not a known system ID. 
      * @see #getAvailableIDs(String) 
      * 
      * @draft ICU 4.8

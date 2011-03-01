@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2010, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2011, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.Set;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 
@@ -256,15 +258,10 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 String pattern = BASEPATTERN + " " + PATTERNS[patidx];
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, LOCALES[locidx]);
 
-                String[] ids = TimeZone.getAvailableIDs();
-                for (int zidx = 0; zidx < ids.length; zidx++) {
-                    String id = TimeZone.getCanonicalID(ids[zidx]);
-                    if (id == null || !id.equals(ids[zidx])) {
-                        // Skip aliases
-                        continue;
-                    }
-                    BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx], TimeZone.TIMEZONE_ICU);
-                    TimeZone tz = TimeZone.getTimeZone(ids[zidx]);
+                Set<String> ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);
+                for (String id : ids) {
+                    BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(id, TimeZone.TIMEZONE_ICU);
+                    TimeZone tz = TimeZone.getTimeZone(id);
                     sdf.setTimeZone(tz);
 
                     long t = START_TIME;
@@ -310,7 +307,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 if (restime != testTimes[testidx]) {
                                     StringBuffer msg = new StringBuffer();
                                     msg.append("Time round trip failed for ")
-                                        .append("tzid=").append(ids[zidx])
+                                        .append("tzid=").append(id)
                                         .append(", locale=").append(LOCALES[locidx])
                                         .append(", pattern=").append(PATTERNS[patidx])
                                         .append(", text=").append(text)
