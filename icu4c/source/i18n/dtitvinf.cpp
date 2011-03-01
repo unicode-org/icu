@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation and
+* Copyright (C) 2008-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -619,6 +619,10 @@ DateIntervalInfo::initHash(UErrorCode& status) {
     Hashtable* hTable;
     if ( (hTable = new Hashtable(FALSE, status)) == NULL ) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if ( U_FAILURE(status) ) {
+        delete hTable; 
         return NULL;
     }
     hTable->setValueComparator(dtitvinfHashTableValueComparator);

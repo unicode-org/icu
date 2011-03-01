@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, Google, International Business Machines Corporation
+ * Copyright (C) 2008-2011, Google, International Business Machines Corporation
  * and  others. All Rights Reserved.                                           
  *******************************************************************************
  */
@@ -835,6 +835,10 @@ TimeUnitFormat::initHash(UErrorCode& status) {
     Hashtable* hTable;
     if ( (hTable = new Hashtable(TRUE, status)) == NULL ) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if ( U_FAILURE(status) ) {
+        delete hTable; 
         return NULL;
     }
     hTable->setValueComparator(tmutfmtHashTableValueComparator);
