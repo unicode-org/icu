@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,6 +23,7 @@ import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.util.ULocale;
 
 public class CollationIteratorTest extends TestFmwk {
     
@@ -645,6 +646,135 @@ public class CollationIteratorTest extends TestFmwk {
         for (int count = 0; count < testdata.length; count ++) {
             iter.setText(testdata[count]);
             CollationTest.backAndForth(this, iter);
+        }
+    }
+
+    /**
+    * TestSearchCollatorElements tests iterator behavior (forwards and backwards) with
+    * normalization on AND jamo tailoring, among other things.
+    */
+    public void TestSearchCollatorElements()
+    {
+        String tsceText =
+            " \uAC00" +              // simple LV Hangul
+            " \uAC01" +              // simple LVT Hangul
+            " \uAC0F" +              // LVTT, last jamo expands for search
+            " \uAFFF" +              // LLVVVTT, every jamo expands for search
+            " \u1100\u1161\u11A8" +  // 0xAC01 as conjoining jamo
+            " \u3131\u314F\u3131" +  // 0xAC01 as compatibility jamo
+            " \u1100\u1161\u11B6" +  // 0xAC0F as conjoining jamo; last expands for search
+            " \u1101\u1170\u11B6" +  // 0xAFFF as conjoining jamo; all expand for search
+            " \u00E6" +              // small letter ae, expands
+            " \u1E4D" +              // small letter o with tilde and acute, decomposes
+            " ";
+        
+        int[] rootStandardOffsets = {
+            0,  1,2,
+            2,  3,4,4,
+            4,  5,6,6,
+            6,  7,8,8,
+            8,  9,10,11,
+            12, 13,14,15,
+            16, 17,18,19,
+            20, 21,22,23,
+            24, 25,26,26,26,
+            26, 27,28,28,
+            28,
+            29
+        };
+        
+        int[] rootSearchOffsets = {
+            0,  1,2,
+            2,  3,4,4,
+            4,  5,6,6,6,
+            6,  7,8,8,8,8,8,8,
+            8,  9,10,11,
+            12, 13,14,15,
+            16, 17,18,19,20,
+            20, 21,22,22,23,23,23,24,
+            24, 25,26,26,26,
+            26, 27,28,28,
+            28,
+            29
+        };
+
+        class TSCEItem {
+            private String localeString;
+            private int[] offsets;
+            TSCEItem(String locStr, int[] offs) {
+                localeString = locStr;
+                offsets = offs;
+            }
+            public String getLocaleString() { return localeString; }
+            public int[] getOffsets() { return offsets; }
+        }
+        final TSCEItem[] tsceItems = { 
+            new TSCEItem( "root",                  rootStandardOffsets ),
+            new TSCEItem( "root@collation=search", rootSearchOffsets   ),
+        };
+
+        for (TSCEItem tsceItem: tsceItems) {
+            String localeString = tsceItem.getLocaleString();
+            ULocale uloc = new ULocale(localeString);
+            RuleBasedCollator col = null;
+            try {
+                col = (RuleBasedCollator)Collator.getInstance(uloc);
+            } catch (Exception e) {
+                errln("Error: in locale " + localeString + ", err in Collator.getInstance");
+                continue;
+            }
+            CollationElementIterator uce = col.getCollationElementIterator(tsceText);
+            int[] offsets = tsceItem.getOffsets();
+            int ioff, noff = offsets.length;
+            int offset, element;
+
+            ioff = 0;
+            do {
+                offset = uce.getOffset();
+                element = uce.next();
+                if (element == 0) {
+                    errln("Error: in locale " + localeString + ", CEIterator next() returned element 0");
+                }
+                if ( ioff < noff ) {
+                    if ( offset != offsets[ioff] ) {
+                        errln("Error: in locale " + localeString + ", expected CEIterator next()->getOffset " + offsets[ioff] + ", got " + offset);
+                        //ioff = noff;
+                        //break;
+                    }
+                    ioff++;
+                } else {
+                    errln("Error: in locale " + localeString + ", CEIterator next() returned more elements than expected");
+                }
+            } while (element != CollationElementIterator.NULLORDER);
+            if ( ioff < noff ) {
+                errln("Error: in locale " + localeString + ", CEIterator next() returned fewer elements than expected");
+            }
+            
+            /*
+            // Skip the backwards test until ticket #8382 is fixed
+            uce.setOffset(tsceText.length());
+            ioff = noff;
+            do {
+                offset = uce.getOffset();
+                element = uce.previous();
+                if (element == 0) {
+                    errln("Error: in locale " + localeString + ", CEIterator previous() returned element 0");
+                }
+                if ( ioff > 0 ) {
+                    ioff--;
+                    if ( offset != offsets[ioff] ) {
+                        errln("Error: in locale " + localeString + ", expected CEIterator previous()->getOffset " + offsets[ioff] + ", got " + offset);
+                        //ioff = 0;
+                        //break;
+                    }
+                } else {
+                    errln("Error: in locale " + localeString + ", CEIterator previous() returned more elements than expected");
+                }
+            } while (element != CollationElementIterator.NULLORDER);
+            if ( ioff > 0 ) {
+                errln("Error: in locale " + localeString + ", CEIterator previous() returned fewer elements than expected");
+            }
+            */
         }
     }
 }

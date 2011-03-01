@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -264,55 +264,58 @@ public final class CollationElementIterator
             m_CEBufferOffset_ = 0;
         }
  
-        int ch_int = nextChar();
-        
-        if (ch_int == UCharacterIterator.DONE) {
-            return NULLORDER;
-        }
-        char ch = (char)ch_int;
-        if (m_collator_.m_isHiragana4_) {
-            /* Codepoints \u3099-\u309C are both Hiragana and Katakana. Set the flag
-             * based on whether the previous codepoint was Hiragana or Katakana.
-             */
-            m_isCodePointHiragana_ = (m_isCodePointHiragana_ && (ch >= 0x3099 && ch <= 0x309C)) || 
-                                     ((ch >= 0x3040 && ch <= 0x309e) && !(ch > 0x3094 && ch < 0x309d));
-        }
-
         int result = NULLORDER;
-        if (ch <= 0xFF) {
-            // For latin-1 characters we never need to fall back to the UCA
-            // table because all of the UCA data is replicated in the
-            // latinOneMapping array.
-            // Except: Special CEs can result in CE_NOT_FOUND_,
-            // for example if the default entry for a prefix-special is "not found",
-            // and we do need to fall back to the UCA in such a case.
-            // TODO: It would be better if tailoring specials never resulted in "not found"
-            // unless the corresponding UCA result is also "not found".
-            // That would require a change in the ICU4J collator-from-rule builder.
-            result = m_collator_.m_trie_.getLatin1LinearValue(ch);
-        } else {
-            result = m_collator_.m_trie_.getLeadValue(ch);
-        }
-        if (!RuleBasedCollator.isSpecial(result)) {
-            return result;
-        }
-        if (result != CE_NOT_FOUND_) {
-            result = nextSpecial(m_collator_, result, ch);
-        }
-        if (result == CE_NOT_FOUND_) {
-            // couldn't find a good CE in the tailoring
-            if (RuleBasedCollator.UCA_ != null) {
-                result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
-                if (RuleBasedCollator.isSpecial(result)) {
-                    // UCA also gives us a special CE
-                    result = nextSpecial(RuleBasedCollator.UCA_, result, ch);
+        char ch = 0;
+        do {
+            int ch_int = nextChar();
+            if (ch_int == UCharacterIterator.DONE) {
+                return NULLORDER;
+            }
+            ch = (char)ch_int;
+            if (m_collator_.m_isHiragana4_) {
+                /* Codepoints \u3099-\u309C are both Hiragana and Katakana. Set the flag
+                 * based on whether the previous codepoint was Hiragana or Katakana.
+                 */
+                m_isCodePointHiragana_ = (m_isCodePointHiragana_ && (ch >= 0x3099 && ch <= 0x309C)) || 
+                                         ((ch >= 0x3040 && ch <= 0x309e) && !(ch > 0x3094 && ch < 0x309d));
+            }
+
+            if (ch <= 0xFF) {
+                // For latin-1 characters we never need to fall back to the UCA
+                // table because all of the UCA data is replicated in the
+                // latinOneMapping array.
+                // Except: Special CEs can result in CE_NOT_FOUND_,
+                // for example if the default entry for a prefix-special is "not found",
+                // and we do need to fall back to the UCA in such a case.
+                // TODO: It would be better if tailoring specials never resulted in "not found"
+                // unless the corresponding UCA result is also "not found".
+                // That would require a change in the ICU4J collator-from-rule builder.
+                result = m_collator_.m_trie_.getLatin1LinearValue(ch);
+            } else {
+                result = m_collator_.m_trie_.getLeadValue(ch);
+            }
+            if (!RuleBasedCollator.isSpecial(result)) {
+                return result;
+            }
+            if (result != CE_NOT_FOUND_) {
+                result = nextSpecial(m_collator_, result, ch);
+            }
+            if (result == CE_NOT_FOUND_) {
+                // couldn't find a good CE in the tailoring
+                if (RuleBasedCollator.UCA_ != null) {
+                    result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
+                    if (RuleBasedCollator.isSpecial(result)) {
+                        // UCA also gives us a special CE
+                        result = nextSpecial(RuleBasedCollator.UCA_, result, ch);
+                    }
+                }
+                if(result == CE_NOT_FOUND_) { 
+                    // maybe there is no UCA, unlikely in Java, but ported for consistency
+                    result = nextImplicit(ch); 
                 }
             }
-            if(result == CE_NOT_FOUND_) { 
-                // maybe there is no UCA, unlikely in Java, but ported for consistency
-                result = nextImplicit(ch); 
-            }
-        }
+        } while (result == IGNORABLE && ch >= 0xAC00 && ch <= 0xD7AF);
+
         return result;
     }
 
@@ -347,7 +350,6 @@ public final class CollationElementIterator
             updateInternalState();
         }
         m_isForwards_ = false;
-        int result = NULLORDER;
         if (m_CEBufferSize_ > 0) {
             if (m_CEBufferOffset_ > 0) {
                 return m_CEBuffer_[-- m_CEBufferOffset_];
@@ -355,45 +357,50 @@ public final class CollationElementIterator
             m_CEBufferSize_ = 0;
             m_CEBufferOffset_ = 0;
         }
-        int ch_int = previousChar();
-        if (ch_int == UCharacterIterator.DONE) {
-            return NULLORDER;
-        }
-        char ch = (char)ch_int;
-        if (m_collator_.m_isHiragana4_) {
-            m_isCodePointHiragana_ = (ch >= 0x3040 && ch <= 0x309f);
-        }
-        if (m_collator_.isContractionEnd(ch) && !isBackwardsStart()) {
-            result = previousSpecial(m_collator_, CE_CONTRACTION_, ch);
-        }
-        else {
-            if (ch <= 0xFF) {
-                result = m_collator_.m_trie_.getLatin1LinearValue(ch);
+
+        int result = NULLORDER;
+        char ch = 0;
+        do {
+            int ch_int = previousChar();
+            if (ch_int == UCharacterIterator.DONE) {
+                return NULLORDER;
+            }
+            ch = (char)ch_int;
+            if (m_collator_.m_isHiragana4_) {
+                m_isCodePointHiragana_ = (ch >= 0x3040 && ch <= 0x309f);
+            }
+            if (m_collator_.isContractionEnd(ch) && !isBackwardsStart()) {
+                result = previousSpecial(m_collator_, CE_CONTRACTION_, ch);
             }
             else {
-                result = m_collator_.m_trie_.getLeadValue(ch);
-            }
-            if (RuleBasedCollator.isSpecial(result)) {
-                result = previousSpecial(m_collator_, result, ch);
-            }
-            if (result == CE_NOT_FOUND_) {
-                if (!isBackwardsStart()
-                    && m_collator_.isContractionEnd(ch)) {
-                    result = CE_CONTRACTION_;
+                if (ch <= 0xFF) {
+                    result = m_collator_.m_trie_.getLatin1LinearValue(ch);
                 }
                 else {
-                    if(RuleBasedCollator.UCA_ != null) {
-                        result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
-                    }
+                    result = m_collator_.m_trie_.getLeadValue(ch);
                 }
-
                 if (RuleBasedCollator.isSpecial(result)) {
-                    if(RuleBasedCollator.UCA_ != null) {                    
-                        result = previousSpecial(RuleBasedCollator.UCA_, result, ch);
+                    result = previousSpecial(m_collator_, result, ch);
+                }
+                if (result == CE_NOT_FOUND_) {
+                    if (!isBackwardsStart()
+                        && m_collator_.isContractionEnd(ch)) {
+                        result = CE_CONTRACTION_;
+                    }
+                    else {
+                        if(RuleBasedCollator.UCA_ != null) {
+                            result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
+                        }
+                    }
+
+                    if (RuleBasedCollator.isSpecial(result)) {
+                        if(RuleBasedCollator.UCA_ != null) {                    
+                            result = previousSpecial(RuleBasedCollator.UCA_, result, ch);
+                        }
                     }
                 }
             }
-        }
+        } while (result == IGNORABLE && ch >= 0xAC00 && ch <= 0xD7AF);
         if(result == CE_NOT_FOUND_) {
             result = previousImplicit(ch);
         }
@@ -2066,7 +2073,7 @@ public final class CollationElementIterator
         // return the first CE, but first put the rest into the expansion
         // buffer
         m_CEBufferSize_ = 0;
-        if (!collator.m_isJamoSpecial_) { // FAST PATH
+        if (!m_collator_.m_isJamoSpecial_) { // FAST PATH
             m_CEBuffer_[m_CEBufferSize_ ++] =
                 collator.m_trie_.getLeadValue(L);
             m_CEBuffer_[m_CEBufferSize_ ++] =
@@ -2090,6 +2097,7 @@ public final class CollationElementIterator
             if (T != HANGUL_TBASE_) {
                 m_buffer_.append(T);
             }
+            m_bufferOffset_ = 0;
             m_FCDLimit_ = m_source_.getIndex();
             m_FCDStart_ = m_FCDLimit_ - 1;
             // Indicate where to continue in main input string after
@@ -2602,7 +2610,7 @@ public final class CollationElementIterator
         T += HANGUL_TBASE_;
 
         m_CEBufferSize_ = 0;
-        if (!collator.m_isJamoSpecial_) {
+        if (!m_collator_.m_isJamoSpecial_) {
             m_CEBuffer_[m_CEBufferSize_ ++] =
                 collator.m_trie_.getLeadValue(L);
             m_CEBuffer_[m_CEBufferSize_ ++] =
@@ -2623,7 +2631,7 @@ public final class CollationElementIterator
             if (T != HANGUL_TBASE_) {
                 m_buffer_.append(T);
             }
-
+            m_bufferOffset_ = m_buffer_.length();
             m_FCDStart_ = m_source_.getIndex();
             m_FCDLimit_ = m_FCDStart_ + 1;
             return IGNORABLE;
