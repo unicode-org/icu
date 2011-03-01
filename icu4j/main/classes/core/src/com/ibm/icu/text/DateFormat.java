@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 1996-2010, International Business Machines
+ *   Copyright (C) 1996-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -202,7 +202,7 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * Alias for FRACTIONAL_SECOND_FIELD.
-     * @deprecated ICU 3.0 use FRACTIONAL_SECOND_FIELD.
+     * @stable ICU 3.0
      */
     public final static int MILLISECOND_FIELD = FRACTIONAL_SECOND_FIELD;
 
