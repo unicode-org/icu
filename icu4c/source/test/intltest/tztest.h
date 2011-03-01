@@ -37,6 +37,8 @@ public:
      */
     virtual void TestGetAvailableIDs913(void);
 
+    virtual void TestGetAvailableIDsNew(void);
+
     /**
      * Generic API testing for API coverage.
      */
@@ -105,6 +107,9 @@ private:
     // when year/rule are changed.
     static const int32_t REFERENCE_YEAR;
     static const char *REFERENCE_DATA_VERSION;
+
+    void checkContainsAll(StringEnumeration *s1, const char *name1,
+        StringEnumeration *s2, const char *name2);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

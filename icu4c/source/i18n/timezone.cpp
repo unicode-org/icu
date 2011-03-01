@@ -124,6 +124,14 @@ static U_NAMESPACE_QUALIFIER TimeZone*  _GMT = NULL; // cf. TimeZone::GMT
 static char TZDATA_VERSION[16];
 static UBool TZDataVersionInitialized = FALSE;
 
+static int32_t* MAP_SYSTEM_ZONES = NULL;
+static int32_t* MAP_CANONICAL_SYSTEM_ZONES = NULL;
+static int32_t* MAP_CANONICAL_SYSTEM_LOCATION_ZONES = NULL;
+
+int32_t LEN_SYSTEM_ZONES = 0;
+int32_t LEN_CANONICAL_SYSTEM_ZONES = 0;
+int32_t LEN_CANONICAL_SYSTEM_LOCATION_ZONES = 0;
+
 U_CDECL_BEGIN
 static UBool U_CALLCONV timeZone_cleanup(void)
 {
@@ -135,6 +143,18 @@ static UBool U_CALLCONV timeZone_cleanup(void)
 
     uprv_memset(TZDATA_VERSION, 0, sizeof(TZDATA_VERSION));
     TZDataVersionInitialized = FALSE;
+
+    LEN_SYSTEM_ZONES = 0;
+    uprv_free(MAP_SYSTEM_ZONES);
+    MAP_SYSTEM_ZONES = 0;
+
+    LEN_CANONICAL_SYSTEM_ZONES = 0;
+    uprv_free(MAP_CANONICAL_SYSTEM_ZONES);
+    MAP_CANONICAL_SYSTEM_ZONES = 0;
+
+    LEN_CANONICAL_SYSTEM_LOCATION_ZONES = 0;
+    uprv_free(MAP_CANONICAL_SYSTEM_LOCATION_ZONES);
+    MAP_CANONICAL_SYSTEM_LOCATION_ZONES = 0;
 
     if (LOCK) {
         umtx_destroy(&LOCK);
@@ -150,49 +170,6 @@ static UBool U_CALLCONV timeZone_cleanup(void)
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
-
-/**
- * The Olson data is stored the "zoneinfo" resource bundle.
- * Sub-resources are organized into three ranges of data: Zones, final
- * rules, and country tables.  There is also a meta-data resource
- * which has 3 integers: The number of zones, rules, and countries,
- * respectively.  The country count includes the non-country 'Default'.
- */
-static int32_t OLSON_ZONE_COUNT = 0;  // count of zones
-
-/**
- * Given a pointer to an open "zoneinfo" resource, load up the Olson
- * meta-data. Return TRUE if successful.
- */
-static UBool getOlsonMeta(const UResourceBundle* top) {
-    if (OLSON_ZONE_COUNT == 0) {
-        UErrorCode ec = U_ZERO_ERROR;
-        UResourceBundle res;
-        ures_initStackObject(&res);
-        ures_getByKey(top, kZONES, &res, &ec);
-        if(U_SUCCESS(ec)) {
-            OLSON_ZONE_COUNT = ures_getSize(&res);
-            U_DEBUG_TZ_MSG(("OZC%d\n",OLSON_ZONE_COUNT));
-        }
-        ures_close(&res);
-    }
-    return (OLSON_ZONE_COUNT > 0);
-}
-
-/**
- * Load up the Olson meta-data. Return TRUE if successful.
- */
-static UBool getOlsonMeta() {
-    if (OLSON_ZONE_COUNT == 0) {
-        UErrorCode ec = U_ZERO_ERROR;
-        UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
-        if (U_SUCCESS(ec)) {
-            getOlsonMeta(top);
-        }
-        ures_close(top);
-    }
-    return (OLSON_ZONE_COUNT > 0);
-}
 
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
 {
@@ -304,7 +281,7 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
     // Dereference if this is an alias.  Docs say result should be 1
     // but it is 0 in 2.8 (?).
     U_DEBUG_TZ_MSG(("Loading zone '%s' (%s, size %d) - %s\n", buf, ures_getKey((UResourceBundle*)&res), ures_getSize(&res), u_errorName(ec)));
-    if (ures_getType(&res) == URES_INT && getOlsonMeta(top)) {
+    if (ures_getType(&res) == URES_INT) {
         int32_t deref = ures_getInt(&res, &ec) + 0;
         U_DEBUG_TZ_MSG(("getInt: %s - type is %d\n", u_errorName(ec), ures_getType(&res)));
         UResourceBundle *ares = ures_getByKey(top, kZONES, NULL, &ec); // dereference Zones section
@@ -424,8 +401,16 @@ TimeZone::createTimeZone(const UnicodeString& ID)
  */
 TimeZone*
 TimeZone::createSystemTimeZone(const UnicodeString& id) {
-    TimeZone* z = 0;
     UErrorCode ec = U_ZERO_ERROR;
+    return createSystemTimeZone(id, ec);
+}
+
+TimeZone*
+TimeZone::createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
+    if (U_FAILURE(ec)) {
+        return NULL;
+    }
+    TimeZone* z = 0;
     UResourceBundle res;
     ures_initStackObject(&res);
     U_DEBUG_TZ_MSG(("pre-err=%s\n", u_errorName(ec)));
@@ -657,10 +642,17 @@ private:
     // Map into to zones.  Our results are zone[map[i]] for
     // i=0..len-1, where zone[i] is the i-th Olson zone.  If map==NULL
     // then our results are zone[i] for i=0..len-1.  Len will be zero
-    // iff the zone data could not be loaded.
+    // if the zone data could not be loaded.
     int32_t* map;
     int32_t  len;
     int32_t  pos;
+    int32_t* localMap;
+
+    TZEnumeration(int32_t* mapData, int32_t mapLen, UBool adoptMapData) : pos(0) {
+        map = mapData;
+        localMap = adoptMapData ? mapData : NULL;
+        len = mapLen;
+    }
 
     UBool getID(int32_t i) {
         UErrorCode ec = U_ZERO_ERROR;
@@ -679,118 +671,272 @@ private:
         return U_SUCCESS(ec);
     }
 
-public:
-    TZEnumeration() : map(NULL), len(0), pos(0) {
-        if (getOlsonMeta()) {
-            len = OLSON_ZONE_COUNT;
+    static int32_t* getMap(USystemTimeZoneType type, int32_t& len, UErrorCode& ec) {
+        len = 0;
+        if (U_FAILURE(ec)) {
+            return NULL;
         }
+        int32_t* m = NULL;
+        switch (type) {
+        case UCAL_ZONE_TYPE_ANY:
+            m = MAP_SYSTEM_ZONES;
+            len = LEN_SYSTEM_ZONES;
+            break;
+        case UCAL_ZONE_TYPE_CANONICAL:
+            m = MAP_CANONICAL_SYSTEM_ZONES;
+            len = LEN_CANONICAL_SYSTEM_ZONES;
+            break;
+        case UCAL_ZONE_TYPE_CANONICAL_LOCATION:
+            m = MAP_CANONICAL_SYSTEM_LOCATION_ZONES;
+            len = LEN_CANONICAL_SYSTEM_LOCATION_ZONES;
+            break;
+        }
+        UBool needsInit = FALSE;
+        UMTX_CHECK(&LOCK, (len == 0), needsInit);
+        if (needsInit) {
+            m = initMap(type, len, ec);
+        }
+        return m;
     }
 
-    TZEnumeration(int32_t rawOffset) : map(NULL), len(0), pos(0) {
-        if (!getOlsonMeta()) {
-            return;
+    static int32_t* initMap(USystemTimeZoneType type, int32_t& len, UErrorCode& ec) {
+        len = 0;
+        if (U_FAILURE(ec)) {
+            return NULL;
         }
 
-        // Allocate more space than we'll need.  The end of the array will
-        // be blank.
-        map = (int32_t*)uprv_malloc(OLSON_ZONE_COUNT * sizeof(int32_t));
-        if (map == 0) {
-            return;
-        }
+        int32_t *result = NULL;
 
-        uprv_memset(map, 0, sizeof(int32_t) * OLSON_ZONE_COUNT);
-
-        UnicodeString s;
-        for (int32_t i=0; i<OLSON_ZONE_COUNT; ++i) {
-            if (getID(i)) {
-                // This is VERY inefficient.
-                TimeZone* z = TimeZone::createTimeZone(unistr);
-                // Make sure we get back the ID we wanted (if the ID is
-                // invalid we get back GMT).
-                if (z != 0 && z->getID(s) == unistr &&
-                    z->getRawOffset() == rawOffset) {
-                    map[len++] = i;
-                }
-                delete z;
-            }
-        }
-    }
-
-    TZEnumeration(const char* country) : map(NULL), len(0), pos(0) {
-        if (!getOlsonMeta()) {
-            return;
-        }
-
-        UErrorCode ec = U_ZERO_ERROR;
         UResourceBundle *res = ures_openDirect(0, kZONEINFO, &ec);
-        ures_getByKey(res, kREGIONS, res, &ec);
-        if (U_SUCCESS(ec) && ures_getType(res) == URES_ARRAY) {
-            UChar uCountry[] = {0, 0, 0, 0};
-            if (country) {
-                u_charsToUChars(country, uCountry, 2);
+        res = ures_getByKey(res, kNAMES, res, &ec); // dereference Zones section
+        if (U_SUCCESS(ec)) {
+            int32_t size = ures_getSize(res);
+            int32_t *m = (int32_t *)uprv_malloc(size * sizeof(int32_t));
+            if (m == NULL) {
+                ec = U_MEMORY_ALLOCATION_ERROR;
             } else {
-                u_strcpy(uCountry, WORLD);
-            }
-
-            // count matches
-            int32_t count = 0;
-            int32_t i;
-            const UChar *region;
-            for (i = 0; i < ures_getSize(res); i++) {
-                region = ures_getStringByIndex(res, i, NULL, &ec);
-                if (U_FAILURE(ec)) {
-                    break;
-                }
-                if (u_strcmp(uCountry, region) == 0) {
-                    count++;
-                }
-            }
-
-            if (count > 0) {
-                map = (int32_t*)uprv_malloc(sizeof(int32_t) * count);
-                if (map != NULL) {
-                    int32_t idx = 0;
-                    for (i = 0; i < ures_getSize(res); i++) {
-                        region = ures_getStringByIndex(res, i, NULL, &ec);
+                int32_t numEntries = 0;
+                for (int32_t i = 0; i < size; i++) {
+                    const UChar *id = ures_getStringByIndex(res, i, NULL, &ec);
+                    if (U_FAILURE(ec)) {
+                        break;
+                    }
+                    if (u_strcmp(id, UNKNOWN_ZONE_ID) == 0) {
+                        // exclude Etc/Unknown
+                        continue;
+                    }
+                    if (type == UCAL_ZONE_TYPE_CANONICAL || type == UCAL_ZONE_TYPE_CANONICAL_LOCATION) {
+                        UnicodeString canonicalID;
+                        ZoneMeta::getCanonicalCLDRID(id, canonicalID, ec);
                         if (U_FAILURE(ec)) {
                             break;
                         }
-                        if (u_strcmp(uCountry, region) == 0) {
-                            map[idx++] = i;
+                        if (canonicalID.compare(id, -1) != 0) {
+                            // exclude aliases
+                            continue;
                         }
                     }
-                    if (U_SUCCESS(ec)) {
-                        len = count;
-                    } else {
-                        uprv_free(map);
-                        map = NULL;
+                    if (type == UCAL_ZONE_TYPE_CANONICAL_LOCATION) {
+                        const UChar *region = TimeZone::getRegion(id, ec);
+                        if (U_FAILURE(ec)) {
+                            break;
+                        }
+                        if (u_strcmp(region, WORLD) == 0) {
+                           // exclude non-location ("001")
+                            continue;
+                        }
                     }
-                } else {
-                    U_DEBUG_TZ_MSG(("Failed to load tz for region %s: %s\n", country, u_errorName(ec)));
+                    m[numEntries++] = i;
                 }
+                if (U_SUCCESS(ec)) {
+                    int32_t *tmp = m;
+                    m = (int32_t *)uprv_realloc(tmp, numEntries * sizeof(int32_t));
+                    if (m == NULL) {
+                        // realloc failed.. use the original one even it has unused
+                        // area at the end
+                        m = tmp;
+                    }
+
+                    umtx_lock(&LOCK);
+                    {
+                        switch(type) {
+                        case UCAL_ZONE_TYPE_ANY:
+                            if (MAP_SYSTEM_ZONES == NULL) {
+                                MAP_SYSTEM_ZONES = m;
+                                LEN_SYSTEM_ZONES = numEntries;
+                                m = NULL;
+                                ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+                            }
+                            result = MAP_SYSTEM_ZONES;
+                            len = LEN_SYSTEM_ZONES;
+                            break;
+                        case UCAL_ZONE_TYPE_CANONICAL:
+                            if (MAP_CANONICAL_SYSTEM_ZONES == NULL) {
+                                MAP_CANONICAL_SYSTEM_ZONES = m;
+                                LEN_CANONICAL_SYSTEM_ZONES = numEntries;
+                                m = NULL;
+                                ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+                            }
+                            result = MAP_CANONICAL_SYSTEM_ZONES;
+                            len = LEN_CANONICAL_SYSTEM_ZONES;
+                            break;
+                        case UCAL_ZONE_TYPE_CANONICAL_LOCATION:
+                            if (MAP_CANONICAL_SYSTEM_LOCATION_ZONES == NULL) {
+                                MAP_CANONICAL_SYSTEM_LOCATION_ZONES = m;
+                                LEN_CANONICAL_SYSTEM_LOCATION_ZONES = numEntries;
+                                m = NULL;
+                                ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+                            }
+                            result = MAP_CANONICAL_SYSTEM_LOCATION_ZONES;
+                            len = LEN_CANONICAL_SYSTEM_LOCATION_ZONES;
+                            break;
+                        }
+                    }
+                    umtx_unlock(&LOCK);
+                }
+                uprv_free(m);
             }
         }
+
         ures_close(res);
+        return result;
     }
 
-  TZEnumeration(const TZEnumeration &other) : StringEnumeration(), map(NULL), len(0), pos(0) {
-        if(other.len > 0) {
-            if(other.map != NULL) {
-                map = (int32_t *)uprv_malloc(other.len * sizeof(int32_t));
-                if(map != NULL) {
-                    len = other.len;
-                    uprv_memcpy(map, other.map, len * sizeof(int32_t));
-                    pos = other.pos;
-                }
-            } else {
-                len = other.len;
-                pos = other.pos;
+public:
+
+#define DEFAULT_FILTERED_MAP_SIZE 8
+#define MAP_INCREMENT_SIZE 8
+
+    static TZEnumeration* create(USystemTimeZoneType type, const char* region, const int32_t* rawOffset, UErrorCode& ec) {
+        if (U_FAILURE(ec)) {
+            return NULL;
+        }
+
+        int32_t baseLen;
+        int32_t *baseMap = getMap(type, baseLen, ec);
+
+        if (U_FAILURE(ec)) {
+            return NULL;
+        }
+
+        // If any additional conditions are available,
+        // create instance local map filtered by the conditions.
+
+        int32_t *filteredMap = NULL;
+        int32_t numEntries = 0;
+
+        if (region != NULL || rawOffset != NULL) {
+            int32_t filteredMapSize = DEFAULT_FILTERED_MAP_SIZE;
+            filteredMap = (int32_t *)uprv_malloc(filteredMapSize * sizeof(int32_t));
+            if (filteredMap == NULL) {
+                ec = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
             }
+
+            // Walk through the base map
+            UResourceBundle *res = ures_openDirect(0, kZONEINFO, &ec);
+            res = ures_getByKey(res, kNAMES, res, &ec); // dereference Zones section
+            for (int32_t i = 0; i < baseLen; i++) {
+                int32_t zidx = baseMap[i];
+                const UChar *id = ures_getStringByIndex(res, zidx, NULL, &ec);
+                if (U_FAILURE(ec)) {
+                    break;
+                }
+                if (region != NULL) {
+                    // Filter by region
+                    char tzregion[4]; // max 3 letters + null term
+                    TimeZone::getRegion(id, tzregion, sizeof(tzregion), ec);
+                    if (U_FAILURE(ec)) {
+                        break;
+                    }
+                    if (uprv_stricmp(tzregion, region) != 0) {
+                        // region does not match
+                        continue;
+                    }
+                }
+                if (rawOffset != NULL) {
+                    // Filter by raw offset
+                    // Note: This is VERY inefficient
+                    TimeZone *z = TimeZone::createSystemTimeZone(id, ec);
+                    if (U_FAILURE(ec)) {
+                        break;
+                    }
+                    int32_t tzoffset = z->getRawOffset();
+                    delete z;
+
+                    if (tzoffset != *rawOffset) {
+                        continue;
+                    }
+                }
+
+                if (filteredMapSize <= numEntries) {
+                    filteredMapSize += MAP_INCREMENT_SIZE;
+                    int32_t *tmp = (int32_t *)uprv_realloc(filteredMap, filteredMapSize * sizeof(int32_t));
+                    if (tmp == NULL) {
+                        ec = U_MEMORY_ALLOCATION_ERROR;
+                        break;
+                    } else {
+                        filteredMap = tmp;
+                    }
+                }
+
+                filteredMap[numEntries++] = zidx;
+            }
+
+            if (U_FAILURE(ec)) {
+                uprv_free(filteredMap);
+                filteredMap = NULL;
+            }
+
+            ures_close(res);
+        }
+
+        TZEnumeration *result = NULL;
+        if (U_SUCCESS(ec)) {
+            // Finally, create a new enumeration instance
+            if (filteredMap == NULL) {
+                result = new TZEnumeration(baseMap, baseLen, FALSE);
+            } else {
+                result = new TZEnumeration(filteredMap, numEntries, TRUE);
+                filteredMap = NULL;
+            }
+            if (result == NULL) {
+                ec = U_MEMORY_ALLOCATION_ERROR;
+            }
+        }
+
+        if (filteredMap != NULL) {
+            uprv_free(filteredMap);
+        }
+
+        return result;
+    }
+
+    TZEnumeration(const TZEnumeration &other) : StringEnumeration(), map(NULL), localMap(NULL), len(0), pos(0) {
+        if (other.localMap != NULL) {
+            localMap = (int32_t *)uprv_malloc(other.len * sizeof(int32_t));
+            if (localMap != NULL) {
+                len = other.len;
+                uprv_memcpy(localMap, other.localMap, len * sizeof(int32_t));
+                pos = other.pos;
+                map = localMap;
+            } else {
+                len = 0;
+                pos = 0;
+                map = NULL;
+            }
+        } else {
+            map = other.map;
+            localMap = NULL;
+            len = other.len;
+            pos = other.pos;
         }
     }
 
     virtual ~TZEnumeration() {
-        uprv_free(map);
+        if (localMap != NULL) {
+            uprv_free(localMap);
+        }
     }
 
     virtual StringEnumeration *clone() const {
@@ -802,8 +948,8 @@ public:
     }
 
     virtual const UnicodeString* snext(UErrorCode& status) {
-        if (U_SUCCESS(status) && pos < len) {
-            getID((map == 0) ? pos : map[pos]);
+        if (U_SUCCESS(status) && map != NULL && pos < len) {
+            getID(map[pos]);
             ++pos;
             return &unistr;
         }
@@ -822,18 +968,30 @@ public:
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TZEnumeration)
 
 StringEnumeration* U_EXPORT2
+TimeZone::createTimeZoneIDEnumeration(
+            USystemTimeZoneType zoneType,
+            const char* region,
+            const int32_t* rawOffset,
+            UErrorCode& ec) {
+    return TZEnumeration::create(zoneType, region, rawOffset, ec);
+}
+
+StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration() {
-    return new TZEnumeration();
+    UErrorCode ec = U_ZERO_ERROR;
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, NULL, ec);
 }
 
 StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration(int32_t rawOffset) {
-    return new TZEnumeration(rawOffset);
+    UErrorCode ec = U_ZERO_ERROR;
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, &rawOffset, ec);
 }
 
 StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration(const char* country) {
-    return new TZEnumeration(country);
+    UErrorCode ec = U_ZERO_ERROR;
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, country, NULL, ec);
 }
 
 // ---------------------------------------
@@ -876,7 +1034,7 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
         ures_getByKey(&res, kLINKS, &r, &ec);
         const int32_t* v = ures_getIntVector(&r, &size, &ec);
         if (U_SUCCESS(ec)) {
-            if (index >= 0 && index < size && getOlsonMeta()) {
+            if (index >= 0 && index < size) {
                 zone = v[index];
             }
         }
@@ -940,18 +1098,26 @@ TimeZone::dereferOlsonLink(const UnicodeString& id) {
 
 const UChar*
 TimeZone::getRegion(const UnicodeString& id) {
+    UErrorCode status = U_ZERO_ERROR;
+    return getRegion(id, status);
+}
+
+const UChar*
+TimeZone::getRegion(const UnicodeString& id, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     const UChar *result = NULL;
-    UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &ec);
+    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &status);
 
     // resolve zone index by name
-    UResourceBundle *res = ures_getByKey(rb, kNAMES, NULL, &ec);
-    int32_t idx = findInStringArray(res, id, ec);
+    UResourceBundle *res = ures_getByKey(rb, kNAMES, NULL, &status);
+    int32_t idx = findInStringArray(res, id, status);
 
     // get region mapping
-    ures_getByKey(rb, kREGIONS, res, &ec);
-    const UChar *tmp = ures_getStringByIndex(res, idx, NULL, &ec);
-    if (U_SUCCESS(ec)) {
+    ures_getByKey(rb, kREGIONS, res, &status);
+    const UChar *tmp = ures_getStringByIndex(res, idx, NULL, &status);
+    if (U_SUCCESS(status)) {
         result = tmp;
     }
 
@@ -960,6 +1126,7 @@ TimeZone::getRegion(const UnicodeString& id) {
 
     return result;
 }
+
 
 // ---------------------------------------
 int32_t
@@ -1399,13 +1566,19 @@ TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UB
     if (U_FAILURE(status)) {
         return canonicalID;
     }
-    ZoneMeta::getCanonicalSystemID(id, canonicalID, status);
-    if (U_SUCCESS(status)) {
-        isSystemID = TRUE;
+    if (id.compare(UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH) == 0) {
+        // special case - Etc/Unknown is a canonical ID, but not system ID
+        canonicalID.fastCopyFrom(id);
+        isSystemID = FALSE;
     } else {
-        // Not a system ID
-        status = U_ZERO_ERROR;
-        getCustomID(id, canonicalID, status);
+        ZoneMeta::getCanonicalCLDRID(id, canonicalID, status);
+        if (U_SUCCESS(status)) {
+            isSystemID = TRUE;
+        } else {
+            // Not a system ID
+            status = U_ZERO_ERROR;
+            getCustomID(id, canonicalID, status);
+        }
     }
     return canonicalID;
 }
