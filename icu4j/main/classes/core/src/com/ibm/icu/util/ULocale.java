@@ -3704,7 +3704,7 @@ public final class ULocale implements Serializable {
                 }
             }
 
-            return new ULocale(buf.toString());
+            return new ULocale(getName(buf.toString()), loc);
         }
 
         private ULocale toULocale6(Locale loc) {
@@ -3721,7 +3721,7 @@ public final class ULocale implements Serializable {
                         break;
                     }
                 }
-                uloc = new ULocale(locStr, loc);
+                uloc = new ULocale(getName(locStr), loc);
             }
             return uloc;
         }
