@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and    *
+* Copyright (C) 1997-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -16,18 +16,18 @@
     <!-- icu4j binaries -->
     <property name="icu4j.jar.file" value="icu4j.jar"/>
     <property name="icu4jtests.jar.file" value="icu4jtests.jar"/>
-    <property name="icu4j-charsets.jar.file" value="icu4j-charsets.jar"/>
+    <property name="icu4j-charset.jar.file" value="icu4j-charset.jar"/>
     <property name="icu4j-localespi.jar.file" value="icu4j-localespi.jar"/>
 
     <property name="icu4jdemos.jar.file" value="icu4jdemos.jar"/>
 
     <!-- icu4j release files -->
     <property name="icu4j.jar.versioned.file" value="icu4j-${release.file.ver}.jar"/>
-    <property name="icu4j-charsets.jar.versioned.file" value="icu4j-charsets-${release.file.ver}.jar"/>
+    <property name="icu4j-charset.jar.versioned.file" value="icu4j-charset-${release.file.ver}.jar"/>
     <property name="icu4j-localespi.jar.versioned.file" value="icu4j-localespi-${release.file.ver}.jar"/>
 
     <property name="icu4j-src.jar.versioned.file" value="icu4j-${release.file.ver}-src.jar"/>
-    <property name="icu4j-charsets-src.jar.versioned.file" value="icu4j-charsets-${release.file.ver}-src.jar"/>
+    <property name="icu4j-charset-src.jar.versioned.file" value="icu4j-charset-${release.file.ver}-src.jar"/>
     <property name="icu4j-localespi-src.jar.versioned.file" value="icu4j-localespi-${release.file.ver}-src.jar"/>
 
     <property name="icu4jsrc.zip.file" value="icu4j-${release.file.ver}.zip"/>
@@ -302,7 +302,7 @@
             <jvmarg line="${securecheck.jvmarg}"/>
             <classpath>
                 <pathelement path="${icu4j.jar.file}"/>
-                <pathelement path="${icu4j-charsets.jar.file}"/>
+                <pathelement path="${icu4j-charset.jar.file}"/>
                 <pathelement path="${icu4jtests.jar.file}"/>
             </classpath>
         </java>
@@ -310,7 +310,7 @@
 
     <!-- jar targets -->
     <target name="jar" depends="icu4jJar, charset, localespi" description="Build ICU4J runtime library jar files">
-        <copy file="${icu4j.charset.jar}" tofile="${icu4j-charsets.jar.file}"/>
+        <copy file="${icu4j.charset.jar}" tofile="${icu4j-charset.jar.file}"/>
         <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}" failonerror="false"/>
     </target>
 
@@ -364,7 +364,7 @@
     <target name="releaseBinaries" depends="icu4jJar, charset, localespi" description="Build ICU4J binary files for distribution">
         <mkdir dir="${release.dir}"/>
         <copy file="${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
-        <copy file="${icu4j.charset.jar}" tofile="${release.dir}/${icu4j-charsets.jar.versioned.file}"/>
+        <copy file="${icu4j.charset.jar}" tofile="${release.dir}/${icu4j-charset.jar.versioned.file}"/>
         <copy file="${icu4j.localespi.jar}" tofile="${release.dir}/${icu4j-localespi.jar.versioned.file}"/>
     </target>
 
@@ -389,7 +389,7 @@
         <ant dir="${icu4j.charset.dir}" target="src-jar" inheritAll="false"/>
         <ant dir="${icu4j.localespi.dir}" target="src-jar" inheritAll="false"/>
 
-        <copy file="${icu4j.charset.dir}/${out.dir}/lib/icu4j-charset-src.jar" tofile="${release.dir}/${icu4j-charsets-src.jar.versioned.file}"/>
+        <copy file="${icu4j.charset.dir}/${out.dir}/lib/icu4j-charset-src.jar" tofile="${release.dir}/${icu4j-charset-src.jar.versioned.file}"/>
         <copy file="${icu4j.localespi.dir}/${out.dir}/lib/icu4j-localespi-src.jar" tofile="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"/>
     </target>
 

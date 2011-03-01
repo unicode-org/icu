@@ -1,6 +1,6 @@
 //#
 //#*******************************************************************************
-//#* Copyright (C) 1997-2010, International Business Machines Corporation and    *
+//#* Copyright (C) 1997-2011, International Business Machines Corporation and    *
 //#* others. All Rights Reserved.                                                *
 //#*******************************************************************************
 //#* This is the ant build file for ICU4J.  See readme.html for more information.
@@ -40,7 +40,7 @@ grant
 grant codebase "file:${user.dir}/icu4j.jar"
 {
     permission java.io.FilePermission "${/}${user.dir}${/}icu4jtests.jar", "read";
-    permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charsets.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charset.jar", "read";
 
     permission java.util.PropertyPermission "com.ibm.icu.util.TimeZone.DefaultTimeZoneType", "read";
     permission java.util.PropertyPermission "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "read";
