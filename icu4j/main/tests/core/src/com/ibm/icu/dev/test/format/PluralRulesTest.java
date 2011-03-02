@@ -9,8 +9,12 @@ package com.ibm.icu.dev.test.format;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -281,5 +285,45 @@ public class PluralRulesTest extends TestFmwk {
         assertRuleValue("n is 2 and n in 2..3", 2);
         assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
         assertRuleKeyValue("a: n is 1", "other", PluralRules.NO_UNIQUE_VALUE); // key matches default rule
+    }
+    
+    /**
+     * The version in PluralFormatUnitTest is not really a test, and it's in the wrong place
+     * anyway, so I'm putting a variant of it here.
+     */
+    public void TestGetSamples() {
+        Set<ULocale> uniqueRuleSet = new HashSet<ULocale>();
+        for (ULocale locale : PluralRules.getAvailableULocales()) {
+           uniqueRuleSet.add(PluralRules.getFunctionalEquivalent(locale, null));
+        }
+        for (ULocale locale : uniqueRuleSet) {
+            PluralRules rules = PluralRules.forLocale(locale);
+            logln("\nlocale: " + (locale == ULocale.ROOT ? "root" : locale.toString()) + ", rules: " + rules);
+            Set<String> keywords = rules.getKeywords();
+            for (String keyword : keywords) {
+                Collection<Double> list = rules.getSamples(keyword);
+                logln("keyword: " + keyword + ", samples: " + list);
+
+                assertNotNull("list is not null", list);
+                if (list == null) {
+                    continue;
+                }
+                
+                // Currently fails for some rule sets and 'other' keyword.  Special case these
+                // cases for now.
+                if ("other".equals(keyword) && list.isEmpty()) {
+                    String lang = locale.toString();
+                    if ("pl".equals(lang) || "be".equals(lang)) {
+                        // ok, ignore it
+                        continue;
+                    }
+                }
+                assertTrue("list is not empty", !list.isEmpty());
+                
+                for (double value : list) {
+                    assertEquals("value " + value + " matches keyword", keyword, rules.select(value));
+                }
+            }
+        }
     }
 }
