@@ -122,7 +122,7 @@ offsetTOCPrefixBinarySearch(const char *s, const char *names,
     /*
      * Remember the shared prefix between s, start and limit,
      * and don't compare that shared prefix again.
-     * The shared prefix should get longer as we narrow the [start, limit[ range.
+     * The shared prefix should get longer as we narrow the [start, limit] range.
      */
     int32_t startPrefixLength=0;
     int32_t limitPrefixLength=0;
@@ -167,7 +167,7 @@ pointerTOCPrefixBinarySearch(const char *s, const PointerTOCEntry *toc, int32_t 
     /*
      * Remember the shared prefix between s, start and limit,
      * and don't compare that shared prefix again.
-     * The shared prefix should get longer as we narrow the [start, limit[ range.
+     * The shared prefix should get longer as we narrow the [start, limit] range.
      */
     int32_t startPrefixLength=0;
     int32_t limitPrefixLength=0;
