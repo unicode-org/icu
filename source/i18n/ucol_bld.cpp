@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -35,8 +35,6 @@
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
-
-U_NAMESPACE_BEGIN
 
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
@@ -616,6 +614,8 @@ uint32_t u_toSmallKana(const UChar *source, const uint32_t sourceLen, UChar *res
     return sourceLen;
 }
 
+U_NAMESPACE_BEGIN
+
 static
 uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t len, UErrorCode *status) {
     uint32_t i = 0;
@@ -1066,6 +1066,8 @@ ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
     }
 }
 
+U_NAMESPACE_END
+
 U_CFUNC UCATableHeader *
 ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
     U_NAMESPACE_USE
@@ -1411,7 +1413,5 @@ ucol_findReorderingEntry(const char* name) {
     }
     return USCRIPT_INVALID_CODE;
 }
-
-U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
