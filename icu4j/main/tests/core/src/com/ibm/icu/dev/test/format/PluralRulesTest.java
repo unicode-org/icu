@@ -302,25 +302,16 @@ public class PluralRulesTest extends TestFmwk {
                 logln("keyword: " + keyword + ", samples: " + list);
 
                 assertNotNull("list is not null", list);
-                if (list == null) {
-                    continue;
-                }
-                
-                // Currently fails for some rule sets and 'other' keyword.  Special case these
-                // cases for now.
-                if ("other".equals(keyword) && list.isEmpty()) {
-                    String lang = locale.toString();
-                    if ("pl".equals(lang) || "be".equals(lang)) {
-                        // ok, ignore it
-                        continue;
+                if (list != null) {
+                    assertTrue("list is not empty", !list.isEmpty());
+
+                    for (double value : list) {
+                        assertEquals("value " + value + " matches keyword", keyword, rules.select(value));
                     }
                 }
-                assertTrue("list is not empty", !list.isEmpty());
-                
-                for (double value : list) {
-                    assertEquals("value " + value + " matches keyword", keyword, rules.select(value));
-                }
             }
+            
+            assertNull("list is null", rules.getSamples("@#$%^&*"));
         }
     }
 }

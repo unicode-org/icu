@@ -837,17 +837,12 @@ public class PluralRules implements Serializable {
 
      private Map<String, List<Double>> generateSamples(int maxSamples) {
          Map<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
-         Set<String> hasFractions = new HashSet<String>();
          int keywordsRemaining = keywords.size();
 
-         // Some rule sets never generate 'other'.  I consider these ill-formed rule sets
-         // but we'll see what others think.  For now, let's be sure to never return null
-         // for the 'other' keyword.
-         sampleMap.put("other", new ArrayList<Double>());
-
-         int limit = Math.max(5, getRepeatLimit() * maxSamples);
+         int limit = Math.max(5, getRepeatLimit() * maxSamples) * 2;
          for (int i = 0; keywordsRemaining > 0 && i < limit; ++i) {
-             String keyword = select(i);
+             double val = i / 2.0;
+             String keyword = select(val);
              List<Double> list = sampleMap.get(keyword);
              if (list == null) {
                  list = new ArrayList<Double>(maxSamples);
@@ -855,22 +850,12 @@ public class PluralRules implements Serializable {
              } else if (list.size() == maxSamples) {
                  continue;
              }
-             list.add(Double.valueOf(i));
+             list.add(Double.valueOf(val));
 
              if (list.size() == maxSamples) {
                  --keywordsRemaining;
                  continue;
              }
-
-             if (hasFractions.contains(keyword)) {
-                 double fraction = i + ((i % 9) + 1) / 10.0;
-                 if (keyword.equals(select(fraction))) {
-                     list.add(Double.valueOf(fraction));
-                     if (list.size() == maxSamples) {
-                         --keywordsRemaining;
-                     }
-                 }
-            }
          }
 
          // Make lists immutable so we can return them directly
