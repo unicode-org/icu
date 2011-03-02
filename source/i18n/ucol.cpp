@@ -3998,8 +3998,8 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                         source->fcdPosition       = source->pos-1;
                     }
                     
-					// Append offsets for the additional chars
-					// (not the 0, and not the L whose offsets match the original Hangul)
+                    // Append offsets for the additional chars
+                    // (not the 0, and not the L whose offsets match the original Hangul)
                     int32_t jamoRemaining = tempbufferLength - 2;
                     jamoOffset++; // appended offsets should match end of original Hangul
                     while (jamoRemaining-- > 0) {
