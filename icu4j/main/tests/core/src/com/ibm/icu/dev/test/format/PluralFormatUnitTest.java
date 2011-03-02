@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -198,7 +198,7 @@ public class PluralFormatUnitTest extends TestFmwk {
             logln(localeName + "\ttoString\t" + rules.toString());
             Set<String> keywords = rules.getKeywords();
             for (String keyword : keywords) {
-                Collection<Double> list = rules.getSamples(keyword, 10);
+                Collection<Double> list = rules.getSamples(keyword);
                 if (list == null || list.size() == 0) {
                     errln("Empty list for " + localeName + " : " + keyword);
                 } else {

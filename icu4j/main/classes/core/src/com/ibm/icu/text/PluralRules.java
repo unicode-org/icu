@@ -9,11 +9,12 @@ package com.ibm.icu.text;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -84,6 +85,7 @@ public class PluralRules implements Serializable {
     private int repeatLimit; // for equality test
     private transient Map<String, Double> uniqueKeywordValues;
     private transient int hashCode;
+    private transient Map<String, List<Double>> samples;
 
     // Standard keywords.
 
@@ -808,39 +810,71 @@ public class PluralRules implements Serializable {
      }
      
     /**
-     * Returns a list of values for which select() would return that keyword, or null if the keyword is not defined.
+     * Returns a list of up to three values for which select() would return that keyword, 
+     * or null if the keyword is not defined. The returned collection is unmodifiable.
      * 
+     * @param keyword the keyword to test
      * @return a list of values matching the keyword.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 4.8
      */
-     public Collection<Double> getSamples(String keyword, int max) {
+     public Collection<Double> getSamples(String keyword) {
          if (!keywords.contains(keyword)) {
              return null;
          }
-         LinkedHashSet<Double> results = new LinkedHashSet<Double>();
-         boolean noFractions = true;
-         for (int i = 0; i < 256; ++i) {
-             String foundKeyword = select(i);
-             if (keyword.equals(foundKeyword)) {
-                 results.add((double) i);
-                 if (results.size() >= max) {
-                     break;
-                 }
-             }
-             if (noFractions) {
-                 double fraction = i + ((i % 9) + 1) / 10.0;
-                 foundKeyword = select(fraction);
-                 if (keyword.equals(foundKeyword)) {
-                     results.add(fraction);
-                     if (results.size() >= max) {
-                         break;
-                     }
-                     noFractions = false;
-                 }
-             }
+         // If this were allowed to vary on a per-call basis, we'd have to recheck and
+         // possibly rebuild the samples cache.  Doesn't seem worth it.
+         int MAX_SAMPLES = 3;
+         
+         if (samples == null) {
+             samples = generateSamples(MAX_SAMPLES);
          }
-         return results;
+         return samples.get(keyword);
+     }
+     
+     private Map<String, List<Double>> generateSamples(int maxSamples) {
+         Map<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
+         Set<String> hasFractions = new HashSet<String>();
+         int keywordsRemaining = keywords.size();
+         
+         // Some rule sets never generate 'other'.  I consider these ill-formed rule sets
+         // but we'll see what others think.  For now, let's be sure to never return null
+         // for the 'other' keyword.
+         sampleMap.put("other", new ArrayList<Double>());
+         
+         int limit = Math.max(5, getRepeatLimit() * maxSamples);
+         for (int i = 0; keywordsRemaining > 0 && i < limit; ++i) {
+             String keyword = select(i);
+             List<Double> list = sampleMap.get(keyword);
+             if (list == null) {
+                 list = new ArrayList<Double>(maxSamples);
+                 sampleMap.put(keyword, list);
+             } else if (list.size() == maxSamples) {
+                 continue;
+             }
+             list.add(Double.valueOf(i));
+             
+             if (list.size() == maxSamples) {
+                 --keywordsRemaining;
+                 continue;
+             }
+             
+             if (hasFractions.contains(keyword)) {
+                 double fraction = i + ((i % 9) + 1) / 10.0;
+                 if (keyword.equals(select(fraction))) {
+                     list.add(Double.valueOf(fraction));
+                     if (list.size() == maxSamples) {
+                         --keywordsRemaining;
+                     }
+                 }
+            }
+         }
+         
+         // Make lists immutable so we can return them directly
+         for (String key : sampleMap.keySet()) {
+             sampleMap.put(key, Collections.unmodifiableList(sampleMap.get(key)));
+         }
+         
+         return sampleMap;
      }
 
     /**
