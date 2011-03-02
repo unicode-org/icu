@@ -23,7 +23,7 @@ import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
 
-/** 
+/**
  * <p>Defines rules for mapping positive double values onto a small set of
  * keywords. Serializable so can be used in formatters, which are
  * serializable. Rules are constructed from a text description, consisting
@@ -89,14 +89,14 @@ public class PluralRules implements Serializable {
 
     // Standard keywords.
 
-    /** 
-     * Common name for the 'zero' plural form. 
-     * @stable ICU 3.8 
+    /**
+     * Common name for the 'zero' plural form.
+     * @stable ICU 3.8
      */
     public static final String KEYWORD_ZERO = "zero";
 
-    /** 
-     * Common name for the 'singular' plural form. 
+    /**
+     * Common name for the 'singular' plural form.
      * @stable ICU 3.8
      */
     public static final String KEYWORD_ONE = "one";
@@ -121,7 +121,7 @@ public class PluralRules implements Serializable {
 
     /**
      * Common name for the default plural form.  This name is returned
-     * for values to which no other form in the rule applies.  It 
+     * for values to which no other form in the rule applies.  It
      * can additionally be assigned rules of its own.
      * @stable ICU 3.8
      */
@@ -133,18 +133,18 @@ public class PluralRules implements Serializable {
      * draft ICU 4.8
      */
     public static final double NO_UNIQUE_VALUE = -0.00123456777;
-    
+
     /*
      * The set of all characters a valid keyword can start with.
      */
-    private static final UnicodeSet START_CHARS = 
+    private static final UnicodeSet START_CHARS =
         new UnicodeSet("[[:ID_Start:][_]]");
 
     /*
-     * The set of all characters a valid keyword can contain after 
+     * The set of all characters a valid keyword can contain after
      * the first character.
      */
-    private static final UnicodeSet CONT_CHARS = 
+    private static final UnicodeSet CONT_CHARS =
         new UnicodeSet("[:ID_Continue:]");
 
     /*
@@ -190,7 +190,7 @@ public class PluralRules implements Serializable {
     };
 
     /**
-     * The default rules that accept any number and return 
+     * The default rules that accept any number and return
      * {@link #KEYWORD_OTHER}.
      * @stable ICU 3.8
      */
@@ -204,7 +204,7 @@ public class PluralRules implements Serializable {
      *    The exception index is typically not set, it will be -1.
      * @stable ICU 3.8
      */
-    public static PluralRules parseDescription(String description) 
+    public static PluralRules parseDescription(String description)
         throws ParseException {
 
         description = description.trim();
@@ -302,7 +302,7 @@ public class PluralRules implements Serializable {
      * digit :         0|1|2|3|4|5|6|7|8|9
      * range :         value'..'value
      */
-    private static Constraint parseConstraint(String description) 
+    private static Constraint parseConstraint(String description)
         throws ParseException {
 
         description = description.trim().toLowerCase(Locale.ENGLISH);
@@ -375,14 +375,14 @@ public class PluralRules implements Serializable {
                         throw unexpected(tokens[x], condition);
                     }
 
-                    newConstraint = 
+                    newConstraint =
                         new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound);
                 }
 
                 if (andConstraint == null) {
                     andConstraint = newConstraint;
                 } else {
-                    andConstraint = new AndConstraint(andConstraint, 
+                    andConstraint = new AndConstraint(andConstraint,
                                                       newConstraint);
                 }
             }
@@ -403,10 +403,10 @@ public class PluralRules implements Serializable {
                                   "' in '" + context + "'", -1);
     }
 
-    /* 
+    /*
      * Returns the token at x if available, else throws a parse exception.
      */
-    private static String nextToken(String[] tokens, int x, String context) 
+    private static String nextToken(String[] tokens, int x, String context)
         throws ParseException {
         if (x < tokens.length) {
             return tokens[x];
@@ -434,7 +434,7 @@ public class PluralRules implements Serializable {
 
         description = description.substring(x+1).trim();
         if (description.length() == 0) {
-          throw new ParseException("missing constraint in '" + 
+          throw new ParseException("missing constraint in '" +
                                    description + "'", x+1);
         }
         Constraint constraint = parseConstraint(description);
@@ -447,7 +447,7 @@ public class PluralRules implements Serializable {
      * rules : rule
      *         rule ';' rules
      */
-    private static RuleChain parseRuleChain(String description) 
+    private static RuleChain parseRuleChain(String description)
         throws ParseException {
 
         RuleChain rc = null;
@@ -464,13 +464,13 @@ public class PluralRules implements Serializable {
     }
 
     /*
-     * An implementation of Constraint representing a modulus, 
+     * An implementation of Constraint representing a modulus,
      * a range of values, and include/exclude. Provides lots of
      * convenience factory methods.
      */
     private static class RangeConstraint implements Constraint, Serializable {
         private static final long serialVersionUID = 1;
-      
+
         private int mod;
         private boolean inRange;
         private boolean integersOnly;
@@ -545,7 +545,7 @@ public class PluralRules implements Serializable {
     }
 
     /* Convenience base class for and/or constraints. */
-    private static abstract class BinaryConstraint implements Constraint, 
+    private static abstract class BinaryConstraint implements Constraint,
                                                    Serializable {
         private static final long serialVersionUID = 1;
         protected final Constraint a;
@@ -566,7 +566,7 @@ public class PluralRules implements Serializable {
             return a.toString() + conjunction + b.toString();
         }
     }
-      
+
     /* A constraint representing the logical and of two constraints. */
     private static class AndConstraint extends BinaryConstraint {
         private static final long serialVersionUID = 7766999779862263523L;
@@ -629,7 +629,7 @@ public class PluralRules implements Serializable {
             return constraint.updateRepeatLimit(limit);
         }
 
-        public String toString() { 
+        public String toString() {
             return keyword + ": " + constraint;
         }
     }
@@ -686,7 +686,7 @@ public class PluralRules implements Serializable {
             }
             return result;
         }
-        
+
         public int getRepeatLimit() {
           int result = 0;
           RuleChain rc = this;
@@ -713,10 +713,10 @@ public class PluralRules implements Serializable {
     /**
      * Provides access to the predefined <code>PluralRules</code> for a given
      * locale.
-     * ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>. 
+     * ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
-     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html 
-     * 
+     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     *
      * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
      * @return The predefined <code>PluralRules</code> object for this locale.
@@ -732,7 +732,7 @@ public class PluralRules implements Serializable {
 
     /*
      * Checks whether a token is a valid keyword.
-     * 
+     *
      * @param token the token to be checked
      * @return true if the token is a valid keyword.
      */
@@ -759,7 +759,7 @@ public class PluralRules implements Serializable {
     /**
      * Given a number, returns the keyword of the first rule that applies to
      * the number.
-     * 
+     *
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
      * @stable ICU 4.0
@@ -771,48 +771,52 @@ public class PluralRules implements Serializable {
      /**
       * Returns a set of all rule keywords used in this <code>PluralRules</code>
       * object.  The rule "other" is always present by default.
-      * 
+      *
       * @return The set of keywords.
       * @stable ICU 3.8
       */
      public Set<String> getKeywords() {
          return keywords;
      }
-     
+
      /**
       * Returns the unique value that this keyword matches, or {@link #NO_UNIQUE_VALUE}
       * if the keyword matches multiple values or is not defined for this PluralRules.
-      * 
+      *
       * @param keyword the keyword to check for a unique value
       * @return The unique value for the keyword, or NO_UNIQUE_VALUE.
       * @draft ICU 4.8
       */
      public double getUniqueKeywordValue(String keyword) {
          if (uniqueKeywordValues == null) {
-             // compute unique values the slow but exact way, the logic to do this from the rules is more complex than 
+             // compute unique values the slow but exact way,
+             // the logic to do this from the rules is more complex than
              // this simple process
              final Double NONE = NO_UNIQUE_VALUE;
-             uniqueKeywordValues = new HashMap<String, Double>();
+             Map<String, Double> tempUniqueKeywordValues = new HashMap<String, Double>();
              int limit = getRepeatLimit();
              for (int i = 0; i < limit * 2; ++i) {
                  for (int j = 0; j < 2; ++j) {
-                     double value = i + 0.5 * j;
+                   double value = i + (j == 0 ? 0.0 : 0.5);
                      String key = select(value);
-                     if (uniqueKeywordValues.containsKey(key)) {
-                         uniqueKeywordValues.put(key, NONE);
+                     if (tempUniqueKeywordValues.containsKey(key)) {
+                         tempUniqueKeywordValues.put(key, NONE);
                      } else {
-                         uniqueKeywordValues.put(key, value);
+                         tempUniqueKeywordValues.put(key, value);
                      }
                  }
              }
+             uniqueKeywordValues = tempUniqueKeywordValues;
          }
-         return uniqueKeywordValues.containsKey(keyword) ? uniqueKeywordValues.get(keyword) : NO_UNIQUE_VALUE;
+
+         return uniqueKeywordValues.containsKey(keyword) ?
+             uniqueKeywordValues.get(keyword) : NO_UNIQUE_VALUE;
      }
-     
+
     /**
-     * Returns a list of up to three values for which select() would return that keyword, 
+     * Returns a list of up to three values for which select() would return that keyword,
      * or null if the keyword is not defined. The returned collection is unmodifiable.
-     * 
+     *
      * @param keyword the keyword to test
      * @return a list of values matching the keyword.
      * @draft ICU 4.8
@@ -824,23 +828,23 @@ public class PluralRules implements Serializable {
          // If this were allowed to vary on a per-call basis, we'd have to recheck and
          // possibly rebuild the samples cache.  Doesn't seem worth it.
          int MAX_SAMPLES = 3;
-         
+
          if (samples == null) {
              samples = generateSamples(MAX_SAMPLES);
          }
          return samples.get(keyword);
      }
-     
+
      private Map<String, List<Double>> generateSamples(int maxSamples) {
          Map<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
          Set<String> hasFractions = new HashSet<String>();
          int keywordsRemaining = keywords.size();
-         
+
          // Some rule sets never generate 'other'.  I consider these ill-formed rule sets
          // but we'll see what others think.  For now, let's be sure to never return null
          // for the 'other' keyword.
          sampleMap.put("other", new ArrayList<Double>());
-         
+
          int limit = Math.max(5, getRepeatLimit() * maxSamples);
          for (int i = 0; keywordsRemaining > 0 && i < limit; ++i) {
              String keyword = select(i);
@@ -852,12 +856,12 @@ public class PluralRules implements Serializable {
                  continue;
              }
              list.add(Double.valueOf(i));
-             
+
              if (list.size() == maxSamples) {
                  --keywordsRemaining;
                  continue;
              }
-             
+
              if (hasFractions.contains(keyword)) {
                  double fraction = i + ((i % 9) + 1) / 10.0;
                  if (keyword.equals(select(fraction))) {
@@ -868,12 +872,12 @@ public class PluralRules implements Serializable {
                  }
             }
          }
-         
+
          // Make lists immutable so we can return them directly
          for (String key : sampleMap.keySet()) {
              sampleMap.put(key, Collections.unmodifiableList(sampleMap.get(key)));
          }
-         
+
          return sampleMap;
      }
 
@@ -913,8 +917,8 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public String toString() {
-      return "keywords: " + keywords + 
-          " limit: " + getRepeatLimit() + 
+      return "keywords: " + keywords +
+          " limit: " + getRepeatLimit() +
           " rules: " + rules.toString();
     }
 
@@ -955,14 +959,14 @@ public class PluralRules implements Serializable {
       if (rhs == null) {
         return false;
       }
-      if (rhs == this) { 
+      if (rhs == this) {
         return true;
       }
-      
+
       if (hashCode() != rhs.hashCode()) {
           return false;
       }
-      
+
       if (!rhs.getKeywords().equals(keywords)) {
           return false;
       }
