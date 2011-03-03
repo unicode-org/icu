@@ -83,7 +83,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(44,TestDeprecates);
         CASE(45,TestT5555);
         CASE(46,TestT6745);
-		CASE(47,TestT8057);
+        CASE(47,TestT8057);
     default: name = ""; break;
     }
 }
@@ -217,6 +217,10 @@ CalendarRegressionTest::test4031502()
     // require the host zone to be set; it can be set in Java.
     UErrorCode status = U_ZERO_ERROR;
     StringEnumeration* ids = TimeZone::createEnumeration();
+    if (ids == NULL) {
+        dataerrln("Unable to create TimeZone Enumeration.");
+        return;
+    }
     UBool bad = FALSE;
     TimeZone* tz =TimeZone::createTimeZone("Asia/Riyadh87");
     failure(status, "new TimeZone");
@@ -281,6 +285,10 @@ void CalendarRegressionTest::test4040996()
 {
     int32_t count = 0;
     StringEnumeration* ids = TimeZone::createEnumeration(-8 * 60 * 60 * 1000);
+    if (ids == NULL) {
+        dataerrln("Unable to create TimeZone enumeration.");
+        return;
+    }
     UErrorCode status = U_ZERO_ERROR;    
     count = ids->count(status);
     SimpleTimeZone *pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *ids->snext(status));
@@ -2590,7 +2598,7 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
 
     StringEnumeration *tz = TimeZone::createEnumeration();
     if (tz == NULL) {
-        errln("FAIL: TimeZone::createEnumeration");
+        dataerrln("FAIL: TimeZone::createEnumeration");
         return;
     }
 
@@ -2793,7 +2801,7 @@ void CalendarRegressionTest::TestT8057(void) {
     t = cal->getTime(status);
     if (U_SUCCESS(status)) {
         if (t != expected) {
-            errln((UnicodeString)"FAIL: wrong date after add: expected=" + expected + " returned=" + t);
+            dataerrln((UnicodeString)"FAIL: wrong date after add: expected=" + expected + " returned=" + t);
         }
     } else {
         errln("FAIL: error while adding one year");

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009, International Business Machines Corporation and Others.
+ * Copyright (C) 2008-2011, International Business Machines Corporation and Others.
  * All rights reserved.
  */
 
@@ -34,9 +34,11 @@ ucd_open(UCollator *coll, UErrorCode *status)
 U_CAPI void U_EXPORT2
 ucd_close(UCD *ucd)
 {
-    CollData *data = STATIC_CAST(CollData *, ucd);
+    if (ucd != NULL) {
+        CollData *data = STATIC_CAST(CollData *, ucd);
 
-    CollData::close(data);
+        CollData::close(data);
+    }
 }
 
 U_CAPI UCollator * U_EXPORT2

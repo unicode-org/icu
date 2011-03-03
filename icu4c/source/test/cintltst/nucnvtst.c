@@ -5566,22 +5566,26 @@ TestIsFixedWidth() {
     for (i = 0; i < fixedWidthLength; i++) {
         cnv = ucnv_open(fixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
-            log_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+            log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+            continue;
         }
 
         if (!ucnv_isFixedWidth(cnv, &status)) {
             log_err("%s is a fixedWidth converter but returned FALSE.\n", fixedWidth[i]);
         }
+        ucnv_close(cnv);
     }
 
     for (i = 0; i < notFixedWidthLength; i++) {
         cnv = ucnv_open(notFixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
-            log_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+            log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+            continue;
         }
 
         if (ucnv_isFixedWidth(cnv, &status)) {
             log_err("%s is NOT a fixedWidth converter but returned TRUE.\n", fixedWidth[i]);
         }
+        ucnv_close(cnv);
     }
 }

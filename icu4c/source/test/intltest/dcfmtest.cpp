@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2010, International Business Machines Corporation and
+ * Copyright (c) 2002-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -234,7 +234,7 @@ void DecimalFormatTest::DataDrivenTests() {
     while (lineMat.find()) {
         lineNum++;
         if (U_FAILURE(status)) {
-            errln("File dcfmtest.txt, line %d: ICU Error \"%s\"", lineNum, u_errorName(status));
+            dataerrln("File dcfmtest.txt, line %d: ICU Error \"%s\"", lineNum, u_errorName(status));
         }
 
         status = U_ZERO_ERROR;
@@ -312,7 +312,7 @@ void DecimalFormatTest::execParseTest(int32_t lineNum,
     DecimalFormat format(pattern, symbols, status);
     Formattable   result;
     if (U_FAILURE(status)) {
-        errln("file dcfmtest.txt, line %d: %s error creating the formatter.",
+        dataerrln("file dcfmtest.txt, line %d: %s error creating the formatter.",
             lineNum, u_errorName(status));
         return;
     }
@@ -377,7 +377,7 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
     // printf("Pattern = %s\n", UnicodeStringPiece(pattern).data());
     DecimalFormat fmtr(pattern, symbols, status);
     if (U_FAILURE(status)) {
-        errln("file dcfmtest.txt, line %d: %s error creating the formatter.",
+        dataerrln("file dcfmtest.txt, line %d: %s error creating the formatter.",
             lineNum, u_errorName(status));
         return;
     }

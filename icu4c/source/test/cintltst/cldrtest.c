@@ -1249,7 +1249,7 @@ static void TestIndexChars(void) {
     ulocdata_getExemplarSet(uld, exemplarChars, 0, ULOCDATA_ES_STANDARD, &status);
     ulocdata_getExemplarSet(uld, indexChars, 0, ULOCDATA_ES_INDEX, &status);
     if (U_FAILURE(status)) {
-        log_err("File %s, line %d, Failure opening exemplar chars: %s", __FILE__, __LINE__, u_errorName(status));
+        log_data_err("File %s, line %d, Failure opening exemplar chars: %s", __FILE__, __LINE__, u_errorName(status));
         goto close_sets;
     }
     /* en data, standard exemplars are [a-z], lower case. */

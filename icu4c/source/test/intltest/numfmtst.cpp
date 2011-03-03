@@ -6250,7 +6250,7 @@ void NumberFormatTest::TestExplicitParents() {
         uloc_canonicalize(localeID, loc, 256, &status);
         NumberFormat *fmt= NumberFormat::createInstance(Locale(loc), status);
         if(U_FAILURE(status)){
-            errln("Could not create number formatter for locale %s",localeID);
+            dataerrln("Could not create number formatter for locale %s - %s",localeID, u_errorName(status));
             continue;
         }
         s.remove();

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2010, International Business Machines Corporation and
+ * Copyright (c) 1999-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -1793,7 +1793,7 @@ void RBBITest::TestExtended() {
 
 
         if (U_FAILURE(status)) {
-            errln("ICU Error %s while parsing test file at line %d.",
+            dataerrln("ICU Error %s while parsing test file at line %d.",
                 u_errorName(status), lineNum);
             status = U_ZERO_ERROR;
             goto end_test; // Stop the test

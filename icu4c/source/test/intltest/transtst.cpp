@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -3905,7 +3905,7 @@ void TransliteratorTest::TestAny(void) {
     Transliterator* anyLatin =
         Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
     if (U_FAILURE(status)) {
-        errln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
 
@@ -4011,7 +4011,7 @@ void TransliteratorTest::TestAllCodepoints(){
     for(uint32_t i = 0; i<=0x10ffff; i++){
         code =  uscript_getScript(i,&status);
         if(code == USCRIPT_INVALID_CODE){
-            errln("uscript_getScript for codepoint \\U%08X failed.\n", i);
+            dataerrln("uscript_getScript for codepoint \\U%08X failed.", i);
         }
         const char* myId = uscript_getName(code);
         if(!myId) {
@@ -4032,14 +4032,14 @@ void TransliteratorTest::TestAllCodepoints(){
         if(uprv_strcmp(newId,oldId)!=0){
             Transliterator* t = Transliterator::createInstance(newId,UTRANS_FORWARD,pe,status);
             if(t==NULL || U_FAILURE(status)){
-                errln((UnicodeString)"FAIL: Could not create " + id);
+                dataerrln((UnicodeString)"FAIL: Could not create " + id + " - " + u_errorName(status));
             }
             delete t;
         }
         if(uprv_strcmp(newAbbrId,oldAbbrId)!=0){
             Transliterator* t = Transliterator::createInstance(newAbbrId,UTRANS_FORWARD,pe,status);
             if(t==NULL || U_FAILURE(status)){
-                errln((UnicodeString)"FAIL: Could not create " + id);
+                dataerrln((UnicodeString)"FAIL: Could not create " + id + " - " + u_errorName(status));
             }
             delete t;
         }

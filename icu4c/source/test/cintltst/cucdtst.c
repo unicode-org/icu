@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2985,9 +2985,8 @@ TestConsistency() {
             while(start<=end) {
                 length=u_charName(start, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
                 if(U_FAILURE(errorCode)) {
-                    log_err("error getting the name of U+%04x - %s\n", start, u_errorName(errorCode));
+                    log_data_err("error getting the name of U+%04x - %s\n", start, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
-                    continue;
                 }
                 if( (strstr(buffer, "SMALL")==NULL || strstr(buffer, "CAPITAL")!=NULL) &&
                     strstr(buffer, "SMALL CAPITAL")==NULL

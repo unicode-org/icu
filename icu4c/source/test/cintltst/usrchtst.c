@@ -2711,7 +2711,7 @@ static void TestUsingSearchCollator(void)
             }
             ucol_close(ucol);
         } else {
-            log_err("error, locale %s, ucol_open failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
+            log_data_err("error, locale %s, ucol_open failed: %s\n", tuscItemPtr->locale, u_errorName(status) );
         }
     }
 }
