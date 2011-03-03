@@ -17,11 +17,15 @@ import java.nio.CharBuffer;
  *
  * <p>This class is not intended for public subclassing.
  *
+ * @draft ICU 4.8
+ * @provisional This API might change or be removed in a future release.
  * @author Markus W. Scherer
  */
 public final class CharsTrieBuilder extends StringTrieBuilder {
     /**
      * Constructs an empty builder.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsTrieBuilder() {}
 
@@ -33,6 +37,8 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * @param s The input string.
      * @param value The value associated with this char sequence.
      * @return this
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsTrieBuilder add(CharSequence s, int value) {
         addImpl(s, value);
@@ -48,6 +54,8 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A new CharsTrie for the add()ed data.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsTrie build(StringTrieBuilder.Option buildOption) {
         return new CharsTrie(buildCharSequence(buildOption), 0);
@@ -62,13 +70,15 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A CharSequence with the char-serialized CharsTrie for the add()ed data.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public CharSequence buildCharSequence(StringTrieBuilder.Option buildOption) {
         buildChars(buildOption);
         return CharBuffer.wrap(chars, chars.length-charsLength, charsLength);
     }
 
-    public void buildChars(StringTrieBuilder.Option buildOption) {
+    private void buildChars(StringTrieBuilder.Option buildOption) {
         // Create and char-serialize the trie for the elements.
         if(chars==null) {
             chars=new char[1024];
@@ -80,6 +90,8 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * Removes all (string, value) pairs.
      * New data can then be add()ed and a new trie can be built.
      * @return this
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsTrieBuilder clear() {
         clearImpl();
