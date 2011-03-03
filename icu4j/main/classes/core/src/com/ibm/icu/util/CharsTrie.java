@@ -8,13 +8,13 @@
 *   ported from ICU4C ucharstrie.h/.cpp
 */
 
-package com.ibm.icu.impl;
+package com.ibm.icu.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import com.ibm.icu.impl.BytesTrie.Result;
+import com.ibm.icu.util.BytesTrie.Result;
 import com.ibm.icu.text.UTF16;
 
 /**

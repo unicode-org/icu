@@ -7,7 +7,7 @@
 *   created by: Markus W. Scherer
 *   ported from ICU4C bytestrie.h/.cpp
 */
-package com.ibm.icu.impl;
+package com.ibm.icu.util;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

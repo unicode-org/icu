@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.util.BytesTrie;
 
 /**
  * Wrapper for the pnames.icu binary data file.  This data file is

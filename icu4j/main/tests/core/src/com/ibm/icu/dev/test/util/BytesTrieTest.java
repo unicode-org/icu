@@ -14,9 +14,9 @@ import java.nio.ByteBuffer;
 import java.util.NoSuchElementException;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.BytesTrie;
-import com.ibm.icu.impl.BytesTrieBuilder;
-import com.ibm.icu.impl.StringTrieBuilder;
+import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.BytesTrieBuilder;
+import com.ibm.icu.util.StringTrieBuilder;
 
 public class BytesTrieTest extends TestFmwk {
     public static void main(String[] args) throws Exception {

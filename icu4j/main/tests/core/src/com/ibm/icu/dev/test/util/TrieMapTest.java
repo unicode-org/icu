@@ -20,7 +20,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.TrieMap.Style;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R3;
-import com.ibm.icu.impl.StringTrieBuilder.Option;
+import com.ibm.icu.util.StringTrieBuilder.Option;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
