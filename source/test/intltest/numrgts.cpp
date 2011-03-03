@@ -2709,6 +2709,10 @@ void NumberFormatRegressionTest::TestJ691(void) {
 void NumberFormatRegressionTest::Test8199(void) {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getEnglish(), status);
+    if (nf == NULL) {
+        dataerrln("Fail: NumberFormat::createInstance(Locale::getEnglish(), status)");
+        return;
+    }
     TEST_CHECK_STATUS(status);
 
     // Note:  Retrieving parsed values from a Formattable as a reduced-precision type

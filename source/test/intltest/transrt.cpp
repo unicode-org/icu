@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -566,7 +566,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
                                        status));
     if ((Transliterator *)sourceToTarget == NULL) {
-        parent->errln("FAIL: createInstance(" + transliteratorID +
+        parent->dataerrln("FAIL: createInstance(" + transliteratorID +
                    ") returned NULL. Error: " + u_errorName(status)
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
