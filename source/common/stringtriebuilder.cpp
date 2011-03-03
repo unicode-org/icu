@@ -14,7 +14,7 @@
 
 #include <typeinfo>  // for 'typeid' to work
 #include "unicode/utypes.h"
-#include "stringtriebuilder.h"
+#include "unicode/stringtriebuilder.h"
 #include "uassert.h"
 #include "uhash.h"
 

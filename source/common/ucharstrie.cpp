@@ -14,10 +14,10 @@
 
 #include "unicode/utypes.h"
 #include "unicode/appendable.h"
+#include "unicode/ucharstrie.h"
 #include "unicode/uobject.h"
 #include "cmemory.h"
 #include "uassert.h"
-#include "ucharstrie.h"
 
 U_NAMESPACE_BEGIN
 

@@ -13,12 +13,14 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/bytestrie.h"
+#include "unicode/bytestriebuilder.h"
 #include "unicode/stringpiece.h"
-#include "bytestrie.h"
-#include "bytestriebuilder.h"
 #include "charstr.h"
 #include "cmemory.h"
+#include "uhash.h"
 #include "uarrsort.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -121,11 +123,20 @@ BytesTrieElement::compareStringTo(const BytesTrieElement &other, const CharStrin
     return diff!=0 ? diff : lengthDiff;
 }
 
-BytesTrieBuilder::BytesTrieBuilder(UErrorCode & /*errorCode*/)
-        : elements(NULL), elementsCapacity(0), elementsLength(0),
-          bytes(NULL), bytesCapacity(0), bytesLength(0) {}
+BytesTrieBuilder::BytesTrieBuilder(UErrorCode &errorCode)
+        : strings(NULL), elements(NULL), elementsCapacity(0), elementsLength(0),
+          bytes(NULL), bytesCapacity(0), bytesLength(0) {
+    if(U_FAILURE(errorCode)) {
+        return;
+    }
+    strings=new CharString();
+    if(strings==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    }
+}
 
 BytesTrieBuilder::~BytesTrieBuilder() {
+    delete strings;
     delete[] elements;
     uprv_free(bytes);
 }
@@ -158,7 +169,7 @@ BytesTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode
         elements=newElements;
         elementsCapacity=newCapacity;
     }
-    elements[elementsLength++].setTo(s, value, strings, errorCode);
+    elements[elementsLength++].setTo(s, value, *strings, errorCode);
     return *this;
 }
 
@@ -215,16 +226,16 @@ BytesTrieBuilder::buildBytes(UStringTrieBuildOption buildOption, UErrorCode &err
             return;
         }
         uprv_sortArray(elements, elementsLength, (int32_t)sizeof(BytesTrieElement),
-                      compareElementStrings, &strings,
+                      compareElementStrings, strings,
                       FALSE,  // need not be a stable sort
                       &errorCode);
         if(U_FAILURE(errorCode)) {
             return;
         }
         // Duplicate strings are not allowed.
-        StringPiece prev=elements[0].getString(strings);
+        StringPiece prev=elements[0].getString(*strings);
         for(int32_t i=1; i<elementsLength; ++i) {
-            StringPiece current=elements[i].getString(strings);
+            StringPiece current=elements[i].getString(*strings);
             if(prev==current) {
                 errorCode=U_ILLEGAL_ARGUMENT_ERROR;
                 return;
@@ -234,7 +245,7 @@ BytesTrieBuilder::buildBytes(UStringTrieBuildOption buildOption, UErrorCode &err
     }
     // Create and byte-serialize the trie for the elements.
     bytesLength=0;
-    int32_t capacity=strings.length();
+    int32_t capacity=strings->length();
     if(capacity<1024) {
         capacity=1024;
     }
@@ -254,14 +265,22 @@ BytesTrieBuilder::buildBytes(UStringTrieBuildOption buildOption, UErrorCode &err
     }
 }
 
+BytesTrieBuilder &
+BytesTrieBuilder::clear() {
+    strings->clear();
+    elementsLength=0;
+    bytesLength=0;
+    return *this;
+}
+
 int32_t
 BytesTrieBuilder::getElementStringLength(int32_t i) const {
-    return elements[i].getStringLength(strings);
+    return elements[i].getStringLength(*strings);
 }
 
 UChar
 BytesTrieBuilder::getElementUnit(int32_t i, int32_t byteIndex) const {
-    return (uint8_t)elements[i].charAt(byteIndex, strings);
+    return (uint8_t)elements[i].charAt(byteIndex, *strings);
 }
 
 int32_t
@@ -273,10 +292,10 @@ int32_t
 BytesTrieBuilder::getLimitOfLinearMatch(int32_t first, int32_t last, int32_t byteIndex) const {
     const BytesTrieElement &firstElement=elements[first];
     const BytesTrieElement &lastElement=elements[last];
-    int32_t minStringLength=firstElement.getStringLength(strings);
+    int32_t minStringLength=firstElement.getStringLength(*strings);
     while(++byteIndex<minStringLength &&
-            firstElement.charAt(byteIndex, strings)==
-            lastElement.charAt(byteIndex, strings)) {}
+            firstElement.charAt(byteIndex, *strings)==
+            lastElement.charAt(byteIndex, *strings)) {}
     return byteIndex;
 }
 
@@ -285,8 +304,8 @@ BytesTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteIn
     int32_t length=0;  // Number of different bytes at byteIndex.
     int32_t i=start;
     do {
-        char byte=elements[i++].charAt(byteIndex, strings);
-        while(i<limit && byte==elements[i].charAt(byteIndex, strings)) {
+        char byte=elements[i++].charAt(byteIndex, *strings);
+        while(i<limit && byte==elements[i].charAt(byteIndex, *strings)) {
             ++i;
         }
         ++length;
@@ -297,8 +316,8 @@ BytesTrieBuilder::countElementUnits(int32_t start, int32_t limit, int32_t byteIn
 int32_t
 BytesTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t count) const {
     do {
-        char byte=elements[i++].charAt(byteIndex, strings);
-        while(byte==elements[i].charAt(byteIndex, strings)) {
+        char byte=elements[i++].charAt(byteIndex, *strings);
+        while(byte==elements[i].charAt(byteIndex, *strings)) {
             ++i;
         }
     } while(--count>0);
@@ -308,7 +327,7 @@ BytesTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t 
 int32_t
 BytesTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar byte) const {
     char b=(char)byte;
-    while(b==elements[i].charAt(byteIndex, strings)) {
+    while(b==elements[i].charAt(byteIndex, *strings)) {
         ++i;
     }
     return i;
@@ -343,7 +362,7 @@ StringTrieBuilder::Node *
 BytesTrieBuilder::createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
                                         Node *nextNode) const {
     return new BTLinearMatchNode(
-            elements[i].getString(strings).data()+byteIndex,
+            elements[i].getString(*strings).data()+byteIndex,
             length,
             nextNode);
 }
@@ -397,7 +416,7 @@ BytesTrieBuilder::write(const char *b, int32_t length) {
 
 int32_t
 BytesTrieBuilder::writeElementUnits(int32_t i, int32_t byteIndex, int32_t length) {
-    return write(elements[i].getString(strings).data()+byteIndex, length);
+    return write(elements[i].getString(*strings).data()+byteIndex, length);
 }
 
 int32_t

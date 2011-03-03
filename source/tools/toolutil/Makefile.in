@@ -52,8 +52,6 @@ LDFLAGS += $(LDFLAGSICUTOOLUTIL)
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = filestrm.o package.o pkgitems.o swapimpl.o toolutil.o unewdata.o \
-stringtriebuilder.o bytestriebuilder.o \
-ucharstrie.o ucharstriebuilder.o ucharstrieiterator.o \
 denseranges.o \
 ucm.o ucmstate.o uoptions.o uparse.o \
 ucbuf.o xmlparser.o writesrc.o \

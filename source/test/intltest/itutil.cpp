@@ -71,7 +71,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
         case 17:
-            name = "ByteTrieTest";
+            name = "BytesTrieTest";
             if (exec) {
                 logln("TestSuite BytesTrieTest---"); logln();
                 LocalPointer<IntlTest> test(createBytesTrieTest());
@@ -79,7 +79,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
         case 18:
-            name = "UCharTrieTest";
+            name = "UCharsTrieTest";
             if (exec) {
                 logln("TestSuite UCharsTrieTest---"); logln();
                 LocalPointer<IntlTest> test(createUCharsTrieTest());

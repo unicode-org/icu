@@ -15,10 +15,10 @@
 #include <string.h>
 
 #include "unicode/utypes.h"
+#include "unicode/bytestrie.h"
+#include "unicode/bytestriebuilder.h"
 #include "unicode/localpointer.h"
 #include "unicode/stringpiece.h"
-#include "bytestrie.h"
-#include "bytestriebuilder.h"
 #include "intltest.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))

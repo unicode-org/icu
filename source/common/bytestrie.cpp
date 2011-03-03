@@ -14,10 +14,10 @@
 
 #include "unicode/utypes.h"
 #include "unicode/bytestream.h"
+#include "unicode/bytestrie.h"
 #include "unicode/uobject.h"
 #include "cmemory.h"
 #include "uassert.h"
-#include "bytestrie.h"
 
 U_NAMESPACE_BEGIN
 

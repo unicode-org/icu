@@ -16,30 +16,33 @@
 #define __BYTESTRIEBUILDER_H__
 
 #include "unicode/utypes.h"
+#include "unicode/bytestrie.h"
 #include "unicode/stringpiece.h"
-#include "bytestrie.h"
-#include "charstr.h"
-#include "stringtriebuilder.h"
+#include "unicode/stringtriebuilder.h"
 
 U_NAMESPACE_BEGIN
 
 class BytesTrieElement;
+class CharString;
 
 /**
  * Builder class for BytesTrie.
  *
  * This class is not intended for public subclassing.
+ * @draft ICU 4.8
  */
-class U_TOOLUTIL_API BytesTrieBuilder : public StringTrieBuilder {
+class U_COMMON_API BytesTrieBuilder : public StringTrieBuilder {
 public:
     /**
      * Constructs an empty builder.
      * @param errorCode Standard ICU error code.
+     * @draft ICU 4.8
      */
     BytesTrieBuilder(UErrorCode &errorCode);
 
     /**
      * Destructor.
+     * @draft ICU 4.8
      */
     virtual ~BytesTrieBuilder();
 
@@ -55,6 +58,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return *this
+     * @draft ICU 4.8
      */
     BytesTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
 
@@ -71,6 +75,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return A new BytesTrie for the add()ed data.
+     * @draft ICU 4.8
      */
     BytesTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
@@ -91,6 +96,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return A StringPiece which refers to the byte-serialized BytesTrie for the add()ed data.
+     * @draft ICU 4.8
      */
     StringPiece buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
@@ -98,13 +104,9 @@ public:
      * Removes all (byte sequence, value) pairs.
      * New data can then be add()ed and a new trie can be built.
      * @return *this
+     * @draft ICU 4.8
      */
-    BytesTrieBuilder &clear() {
-        strings.clear();
-        elementsLength=0;
-        bytesLength=0;
-        return *this;
-    }
+    BytesTrieBuilder &clear();
 
 private:
     BytesTrieBuilder(const BytesTrieBuilder &other);  // no copy constructor
@@ -148,7 +150,7 @@ private:
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node);
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
-    CharString strings;
+    CharString *strings;  // Pointer not object so we need not #include internal charstr.h.
     BytesTrieElement *elements;
     int32_t elementsCapacity;
     int32_t elementsLength;
