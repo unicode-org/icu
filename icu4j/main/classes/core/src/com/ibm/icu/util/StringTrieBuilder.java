@@ -7,7 +7,7 @@
 *   created by: Markus W. Scherer
 *   ported from ICU4C stringtriebuilder.h/.cpp
 */
-package com.ibm.icu.impl;
+package com.ibm.icu.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;

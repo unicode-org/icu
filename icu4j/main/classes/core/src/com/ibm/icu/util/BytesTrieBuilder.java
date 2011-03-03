@@ -8,7 +8,7 @@
 *   ported from ICU4C bytestriebuilder.h/.cpp
 */
 
-package com.ibm.icu.impl;
+package com.ibm.icu.util;
 
 import java.nio.ByteBuffer;
 
