@@ -415,6 +415,10 @@ TimeZoneTest::TestGetAvailableIDs913()
     UnicodeString *buf = new UnicodeString("TimeZone::createEnumeration() = { ");
     int32_t s_length;
     StringEnumeration* s = TimeZone::createEnumeration();
+    if (s == NULL) {
+        dataerrln("Unable to create TimeZone enumeration");
+        return;
+    }
     s_length = s->count(ec);
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
@@ -526,9 +530,11 @@ TimeZoneTest::TestGetAvailableIDsNew()
     char region[4];
     int32_t zoneCount;
 
+    any = canonical = canonicalLoc = any_US = canonical_US = canonicalLoc_US = any_W5 = any_CA_W5 = any_US_E14 = NULL;
+    
     any = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, NULL, NULL, ec);
     if (U_FAILURE(ec)) {
-        errln("Failed to create enumration for ANY");
+        dataerrln("Failed to create enumration for ANY");
         goto cleanup;
     }
 
@@ -1709,6 +1715,10 @@ void TimeZoneTest::TestCountries() {
     UErrorCode ec = U_ZERO_ERROR;
     int32_t n;
     StringEnumeration* s = TimeZone::createEnumeration("US");
+    if (s == NULL) {
+        dataerrln("Unable to create TimeZone enumeration for US");
+        return;
+    }
     n = s->count(ec);
     UBool la = FALSE, tokyo = FALSE;
     UnicodeString laZone("America/Los_Angeles", "");
@@ -2005,6 +2015,10 @@ void TimeZoneTest::TestCanonicalID() {
     UErrorCode ec = U_ZERO_ERROR;
     int32_t s_length, i, j, k;
     StringEnumeration* s = TimeZone::createEnumeration();
+    if (s == NULL) {
+        dataerrln("Unable to create TimeZone enumeration");
+        return;
+    }
     UnicodeString canonicalID, tmpCanonical;
     s_length = s->count(ec);
     for (i = 0; i < s_length;++i) {
@@ -2246,7 +2260,7 @@ void TimeZoneTest::TestGetRegion()
             }
         } else if (sts == U_ILLEGAL_ARGUMENT_ERROR) {
             if (data[i].region != 0) {
-                errln((UnicodeString)"Fail: getRegion(\"" + data[i].id
+                dataerrln((UnicodeString)"Fail: getRegion(\"" + data[i].id
                     + "\") returns error status U_ILLEGAL_ARGUMENT_ERROR [expected: "
                     + data[i].region + "]");
             }
@@ -2262,25 +2276,33 @@ void TimeZoneTest::TestGetRegion()
     sts = U_ZERO_ERROR;
 
     len = TimeZone::getRegion("America/New_York", region2, sizeof(region2), sts);
-    if (sts != U_STRING_NOT_TERMINATED_WARNING) {
-        errln("Expected U_STRING_NOT_TERMINATED_WARNING");
-    }
-    if (len != 2) { // length of "US"
-        errln("Incorrect result length");
-    }
-    if (uprv_strncmp(region2, "US", 2) != 0) {
-        errln("Incorrect result");
+    if (sts == U_ILLEGAL_ARGUMENT_ERROR) {
+        dataerrln("Error calling TimeZone::getRegion");
+    } else {
+        if (sts != U_STRING_NOT_TERMINATED_WARNING) {
+            errln("Expected U_STRING_NOT_TERMINATED_WARNING");
+        }
+        if (len != 2) { // length of "US"
+            errln("Incorrect result length");
+        }
+        if (uprv_strncmp(region2, "US", 2) != 0) {
+            errln("Incorrect result");
+        }
     }
 
     char region1[1];
     sts = U_ZERO_ERROR;
 
     len = TimeZone::getRegion("America/Chicago", region1, sizeof(region1), sts);
-    if (sts != U_BUFFER_OVERFLOW_ERROR) {
-        errln("Expected U_BUFFER_OVERFLOW_ERROR");
-    }
-    if (len != 2) { // length of "US"
-        errln("Incorrect result length");
+    if (sts == U_ILLEGAL_ARGUMENT_ERROR) {
+        dataerrln("Error calling TimeZone::getRegion");
+    } else {
+        if (sts != U_BUFFER_OVERFLOW_ERROR) {
+            errln("Expected U_BUFFER_OVERFLOW_ERROR");
+        }
+        if (len != 2) { // length of "US"
+            errln("Incorrect result length");
+        }
     }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -322,7 +322,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
     }
 
     LocalUDateTimePatternGeneratorPointer patgen(udatpg_open("root", errorCode));
-    if(errorCode.logIfFailureAndReset("udatpg_open()")) {
+    if(errorCode.logDataIfFailureAndReset("udatpg_open()")) {
         return;
     }
     if(patgen.isNull()) {

@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -766,27 +766,28 @@ log_err_status(UErrorCode status, const char* pattern, ...)
     va_list ap;
     va_start(ap, pattern);
     
-    first_line_err();
     if ((status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR)) {
         ++DATA_ERROR_COUNT; /* for informational message at the end */
         
         if (WARN_ON_MISSING_DATA == 0) {
+            first_line_err();
             /* Fatal error. */
             if (strchr(pattern, '\n') != NULL) {
                 ++ERROR_COUNT;
             } else {
-				++ONE_ERROR;
+                ++ONE_ERROR;
             }
             vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
         } else {
             vlog_info("[DATA] ", pattern, ap); 
         }
     } else {
+        first_line_err();
         /* Fatal error. */
         if(strchr(pattern, '\n') != NULL) {
             ++ERROR_COUNT;
         } else {
-			++ONE_ERROR;
+            ++ONE_ERROR;
         }
         vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
     }

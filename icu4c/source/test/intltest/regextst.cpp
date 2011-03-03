@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2010, International Business Machines Corporation and
+ * Copyright (c) 2002-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -3205,7 +3205,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
             goto cleanupAndReturn;
         } else {
             // Unexpected pattern compilation error.
-            errln("Line %d: error %s compiling pattern.", line, u_errorName(status));
+            dataerrln("Line %d: error %s compiling pattern.", line, u_errorName(status));
             goto cleanupAndReturn;
         }
     }
@@ -3441,7 +3441,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //   G option in test means that capture group data is not available in the
     //     expected results, so the check needs to be suppressed.
     if (isMatch == FALSE && groupStarts.size() != 0) {
-        errln("Error at line %d:  Match expected, but none found.", line);
+        dataerrln("Error at line %d:  Match expected, but none found.", line);
         failed = TRUE;
         goto cleanupAndReturn;
     } else if (UTF8Matcher != NULL && isUTF8Match == FALSE && groupStarts.size() != 0) {

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines
+ * Copyright (c) 1997-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -111,6 +111,13 @@ void DateFormatTest::TestWallyWedel()
      */
     int32_t ids_length;
     StringEnumeration* ids = TimeZone::createEnumeration();
+    if (ids == NULL) {
+        dataerrln("Unable to create TimeZone enumeration.");
+        if (sdf != NULL) {
+            delete sdf;
+        }
+        return;
+    }
     ids_length = ids->count(status);
     /*
      * How many ids do we have?
@@ -1042,7 +1049,7 @@ DateFormatTest::TestDateFormatZone146()
         if (testtimezone == "GMT")
             logln("Test timezone = " + testtimezone);
         else
-            errln("Test timezone should be GMT, not " + testtimezone);
+            dataerrln("Test timezone should be GMT, not " + testtimezone);
 
         UErrorCode status = U_ZERO_ERROR;
         // now try to use the default GMT time zone
@@ -3365,7 +3372,12 @@ void DateFormatTest::TestISOEra() {
     // create formatter 
     SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("GGG yyyy-MM-dd'T'HH:mm:ss'Z"), status); 
     failure(status, "new SimpleDateFormat", TRUE); 
-
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        if (fmt1 != NULL) {
+            delete fmt1;
+        }
+        return;
+    }
     for(int i=0; i < numData; i+=2) { 
         // create input string 
         UnicodeString in = data[i]; 
@@ -3417,7 +3429,7 @@ void DateFormatTest::TestFormalChineseDate() {
         UnicodeString parsedres,expres;
         usf->format(parsedate,parsedres,pos);
         usf->format(thedate,expres,pos);
-        errln((UnicodeString)"FAIL: parsed -> " + parsedres + " expected -> " + expres); 
+        dataerrln((UnicodeString)"FAIL: parsed -> " + parsedres + " expected -> " + expres); 
         delete usf;
     }
     delete sdf; 	 

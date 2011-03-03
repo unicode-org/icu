@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2009, International Business Machines
+ *   Copyright (C) 2005-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -161,7 +161,7 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
 
     if (bytes == NULL) {
 #if !UCONFIG_NO_LEGACY_CONVERSION
-        errln("Can't open a " + encoding + " converter for " + id);
+        dataerrln("Can't open a " + encoding + " converter for " + id);
 #endif
         return;
     }

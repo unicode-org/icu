@@ -154,7 +154,7 @@ static void TestCalendar()
             break;
         }
         if (U_FAILURE(status)) {
-            log_err("FAIL: %s failed with %s", api,
+            log_err_status(status, "FAIL: %s failed with %s\n", api,
                     u_errorName(status));
         } else {
             const char* id;
@@ -1607,6 +1607,9 @@ static void TestWeekend() {
     UDateFormat * fmt = udat_open(UDAT_NONE, UDAT_NONE, "en", NULL, 0, NULL, 0, &fmtStatus);
     if (U_SUCCESS(fmtStatus)) {
         udat_applyPattern(fmt, FALSE, logDateFormat, -1);
+    } else {
+        log_data_err("Unable to create UDateFormat - %s\n", u_errorName(fmtStatus));
+        return;
     }
 	for (count = sizeof(testDates)/sizeof(testDates[0]); count-- > 0; ++testDatesPtr) {
         UErrorCode status = U_ZERO_ERROR;

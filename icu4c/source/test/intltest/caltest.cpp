@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -1307,7 +1307,7 @@ CalendarTest::TestEpochStartFields()
         if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
         for (int32_t i = 0; i < UCAL_ZONE_OFFSET;++i) {
             if (c->get((UCalendarDateFields)i, status) != EPOCH_FIELDS[i])
-                errln(UnicodeString("Expected field ") + i + " to have value " + EPOCH_FIELDS[i] +
+                dataerrln(UnicodeString("Expected field ") + i + " to have value " + EPOCH_FIELDS[i] +
                       "; saw " + c->get((UCalendarDateFields)i, status) + " instead");
             if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         }
