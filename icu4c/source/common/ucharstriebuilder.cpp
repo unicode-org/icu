@@ -13,12 +13,14 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/ucharstrie.h"
+#include "unicode/ucharstriebuilder.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "uarrsort.h"
-#include "ucharstrie.h"
-#include "ucharstriebuilder.h"
+#include "uassert.h"
+#include "uhash.h"
 
 U_NAMESPACE_BEGIN
 

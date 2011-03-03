@@ -24,18 +24,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "unicode/bytestrie.h"
+#include "unicode/bytestriebuilder.h"
 #include "unicode/localpointer.h"
+#include "unicode/ucharstrie.h"
+#include "unicode/ucharstriebuilder.h"
 #include "unicode/uperf.h"
 #include "unicode/utext.h"
-#include "bytestrie.h"
-#include "bytestriebuilder.h"
 #include "charstr.h"
 #include "package.h"
 #include "toolutil.h"
 #include "triedict.h"
 #include "ucbuf.h"  // struct ULine
-#include "ucharstrie.h"
-#include "ucharstriebuilder.h"
 #include "uoptions.h"
 #include "uvectr32.h"
 

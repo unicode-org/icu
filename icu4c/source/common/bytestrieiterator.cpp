@@ -13,8 +13,8 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/bytestrie.h"
 #include "unicode/stringpiece.h"
-#include "bytestrie.h"
 #include "charstr.h"
 #include "uvectr32.h"
 
