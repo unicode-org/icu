@@ -246,7 +246,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bytestriebuilder.cpp" />
     <ClCompile Include="denseranges.cpp" />
     <ClCompile Include="filestrm.c" />
     <ClCompile Include="filetools.cpp" />
@@ -266,7 +265,6 @@
     </ClCompile>
     <ClCompile Include="pkg_icu.cpp" />
     <ClCompile Include="pkgitems.cpp" />
-    <ClCompile Include="stringtriebuilder.cpp" />
     <ClCompile Include="swapimpl.cpp" />
     <ClCompile Include="toolutil.cpp">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
@@ -275,9 +273,6 @@
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="ucbuf.c" />
-    <ClCompile Include="ucharstrie.cpp" />
-    <ClCompile Include="ucharstriebuilder.cpp" />
-    <ClCompile Include="ucharstrieiterator.cpp" />
     <ClCompile Include="ucm.c" />
     <ClCompile Include="ucmstate.c" />
     <ClCompile Include="unewdata.c" />
@@ -295,7 +290,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bytestriebuilder.h" />
     <ClInclude Include="denseranges.h" />
     <ClInclude Include="filestrm.h" />
     <ClInclude Include="filetools.h" />
@@ -306,12 +300,9 @@
     <ClInclude Include="pkg_icu.h" />
     <ClInclude Include="pkg_imp.h" />
     <ClInclude Include="platform_xopen_source_extended.h" />
-    <ClInclude Include="stringtriebuilder.h" />
     <ClInclude Include="swapimpl.h" />
     <ClInclude Include="toolutil.h" />
     <ClInclude Include="ucbuf.h" />
-    <ClInclude Include="ucharstrie.h" />
-    <ClInclude Include="ucharstriebuilder.h" />
     <ClInclude Include="ucm.h" />
     <ClInclude Include="unewdata.h" />
     <ClInclude Include="uoptions.h" />

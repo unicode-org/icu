@@ -17,10 +17,10 @@
 #include "unicode/utypes.h"
 #include "unicode/appendable.h"
 #include "unicode/localpointer.h"
+#include "unicode/ucharstrie.h"
+#include "unicode/ucharstriebuilder.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
-#include "ucharstrie.h"
-#include "ucharstriebuilder.h"
 #include "intltest.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))

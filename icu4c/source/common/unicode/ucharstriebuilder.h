@@ -16,9 +16,9 @@
 #define __UCHARSTRIEBUILDER_H__
 
 #include "unicode/utypes.h"
+#include "unicode/stringtriebuilder.h"
+#include "unicode/ucharstrie.h"
 #include "unicode/unistr.h"
-#include "stringtriebuilder.h"
-#include "ucharstrie.h"
 
 U_NAMESPACE_BEGIN
 
@@ -28,17 +28,20 @@ class UCharsTrieElement;
  * Builder class for UCharsTrie.
  *
  * This class is not intended for public subclassing.
+ * @draft ICU 4.8
  */
-class U_TOOLUTIL_API UCharsTrieBuilder : public StringTrieBuilder {
+class U_COMMON_API UCharsTrieBuilder : public StringTrieBuilder {
 public:
     /**
      * Constructs an empty builder.
      * @param errorCode Standard ICU error code.
+     * @draft ICU 4.8
      */
     UCharsTrieBuilder(UErrorCode &errorCode);
 
     /**
      * Destructor.
+     * @draft ICU 4.8
      */
     virtual ~UCharsTrieBuilder();
 
@@ -54,6 +57,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return *this
+     * @draft ICU 4.8
      */
     UCharsTrieBuilder &add(const UnicodeString &s, int32_t value, UErrorCode &errorCode);
 
@@ -70,6 +74,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return A new UCharsTrie for the add()ed data.
+     * @draft ICU 4.8
      */
     UCharsTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
@@ -92,6 +97,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return result
+     * @draft ICU 4.8
      */
     UnicodeString &buildUnicodeString(UStringTrieBuildOption buildOption, UnicodeString &result,
                                       UErrorCode &errorCode);
@@ -100,6 +106,7 @@ public:
      * Removes all (string, value) pairs.
      * New data can then be add()ed and a new trie can be built.
      * @return *this
+     * @draft ICU 4.8
      */
     UCharsTrieBuilder &clear() {
         strings.remove();

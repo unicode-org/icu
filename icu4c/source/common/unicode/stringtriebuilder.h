@@ -17,14 +17,19 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
-#include "uhash.h"
+
+// Forward declaration.
+struct UHashtable;
+typedef struct UHashtable UHashtable;
 
 /**
  * Build options for BytesTrieBuilder and CharsTrieBuilder.
+ * @draft ICU 4.8
  */
 enum UStringTrieBuildOption {
     /**
      * Builds a trie quickly.
+     * @draft ICU 4.8
      */
     USTRINGTRIE_BUILD_FAST,
     /**
@@ -35,6 +40,7 @@ enum UStringTrieBuildOption {
      * This option can be effective when many integer values are the same
      * and string/byte sequence suffixes can be shared.
      * Runtime speed is not expected to improve.
+     * @draft ICU 4.8
      */
     USTRINGTRIE_BUILD_SMALL
 };
@@ -45,8 +51,9 @@ U_NAMESPACE_BEGIN
  * Base class for string trie builder classes.
  *
  * This class is not intended for public subclassing.
+ * @draft ICU 4.8
  */
-class U_TOOLUTIL_API StringTrieBuilder : public UObject {
+class U_COMMON_API StringTrieBuilder : public UObject {
 public:
     /** @internal */
     static UBool hashNode(const void *node);

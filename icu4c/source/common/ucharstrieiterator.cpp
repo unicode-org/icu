@@ -13,8 +13,8 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/ucharstrie.h"
 #include "unicode/unistr.h"
-#include "ucharstrie.h"
 #include "uvectr32.h"
 
 U_NAMESPACE_BEGIN

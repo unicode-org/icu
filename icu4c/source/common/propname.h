@@ -13,8 +13,8 @@
 #define PROPNAME_H
 
 #include "unicode/utypes.h"
+#include "unicode/bytestrie.h"
 #include "unicode/uchar.h"
-#include "bytestrie.h"
 #include "udataswp.h"
 #include "uprops.h"
 
