@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -482,11 +482,11 @@ int32_t DigitList::getLong() /*const*/
 
 
 /**
- *  convert this number to an int64_t.   Round if there is a fractional part.
+ *  convert this number to an int64_t.   Truncate if there is a fractional part.
  *  Return zero if the number cannot be represented.
  */
 int64_t DigitList::getInt64() /*const*/ {
-    // Round if non-integer.   (Truncate or round?)
+    // Truncate if non-integer.
     // Return 0 if out of range.
     // Range of in64_t is -9223372036854775808 to 9223372036854775807  (19 digits)
     //
@@ -494,23 +494,27 @@ int64_t DigitList::getInt64() /*const*/ {
         // Overflow, absolute value too big.
         return 0;
     }
-    decNumber *workingNum = fDecNumber;
 
-    if (fDecNumber->exponent != 0) {
-        // Force to an integer, with zero exponent, rounding if necessary.
-        DigitList copy(*this);
-        DigitList zero;
-        uprv_decNumberQuantize(copy.fDecNumber, copy.fDecNumber, zero.fDecNumber, &fContext);
-        workingNum = copy.fDecNumber;
-    }
+    // The number of integer digits may differ from the number of digits stored
+    //   in the decimal number.
+    //     for 12.345  numIntDigits = 2, number->digits = 5
+    //     for 12E4    numIntDigits = 6, number->digits = 2
+    // The conversion ignores the fraction digits in the first case,
+    // and fakes up extra zero digits in the second.
+    // TODO:  It would be faster to store a table of powers of ten to multiply by
+    //        instead of looping over zero digits, multiplying each time.
 
+    int32_t numIntDigits = fDecNumber->digits + fDecNumber->exponent;
     uint64_t value = 0;
-    int32_t numDigits = workingNum->digits;
-    for (int i = numDigits-1; i>=0 ; --i) {
-        int v = workingNum->lsu[i];
+    for (int32_t i = 0; i < numIntDigits; i++) {
+        // Loop is iterating over digits starting with the most significant.
+        // Numbers are stored with the least significant digit at index zero.
+        int32_t digitIndex = fDecNumber->digits - i - 1;
+        int32_t v = (digitIndex >= 0) ? fDecNumber->lsu[digitIndex] : 0;
         value = value * (uint64_t)10 + (uint64_t)v;
     }
-    if (decNumberIsNegative(workingNum)) {
+
+    if (decNumberIsNegative(fDecNumber)) {
         value = ~value;
         value += 1;
     }
@@ -519,7 +523,7 @@ int64_t DigitList::getInt64() /*const*/ {
     // Check overflow.  It's convenient that the MSD is 9 only on overflow, the amount of
     //                  overflow can't wrap too far.  The test will also fail -0, but
     //                  that does no harm; the right answer is 0.
-    if (numDigits == 19) {
+    if (numIntDigits == 19) {
         if (( decNumberIsNegative(fDecNumber) && svalue>0) ||
             (!decNumberIsNegative(fDecNumber) && svalue<0)) {
             svalue = 0;
