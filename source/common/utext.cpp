@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2010, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -2846,7 +2846,7 @@ ucstrTextExtract(UText *ut,
         return 0;
     }
 
-    const UChar *s=(const UChar *)ut->context;
+    //const UChar *s=(const UChar *)ut->context;
     int32_t si, di;
 
     int32_t start32;
@@ -2856,8 +2856,8 @@ ucstrTextExtract(UText *ut,
     //   Pins 'start' to the length of the string, if it came in out-of-bounds.
     //   Snaps 'start' to the beginning of a code point.
     ucstrTextAccess(ut, start, TRUE);
-    U_ASSERT(start <= INT32_MAX);
-    start32 = (int32_t)start;
+    const UChar *s=ut->chunkContents;
+    start32 = ut->chunkOffset;
 
     int32_t strLength=(int32_t)ut->a;
     if (strLength >= 0) {
