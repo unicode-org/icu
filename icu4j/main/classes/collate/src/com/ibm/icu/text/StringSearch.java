@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -1058,6 +1058,7 @@ public final class StringSearch extends SearchIterator
      */ 
     private final void initialize()
     {
+        m_nfcImpl_.getFCDTrie();  // ensure the FCD data is initialized
         int expandlength  = initializePattern();   
         if (m_pattern_.m_CELength_ > 0) {
             char minlength = (char)(m_pattern_.m_CELength_ > expandlength 

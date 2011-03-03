@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -487,6 +487,14 @@ public final class Normalizer2Impl {
     // low-level properties ------------------------------------------------ ***
 
     public Trie2_16 getNormTrie() { return normTrie; }
+    /**
+     * Builds and returns the FCD trie based on the data used in this instance.
+     * This is required before any of {@link #getFCD16(int)} or
+     * {@link #getFCD16FromSingleLead(char)} are called,
+     * or else they crash.
+     * This method is called automatically by Normalizer2.getInstance(..., Mode.FCD).
+     * @return The FCD trie for this instance's data.
+     */
     public synchronized Trie2_16 getFCDTrie() {
         if(fcdTrie!=null) {
             return fcdTrie;
@@ -522,6 +530,13 @@ public final class Normalizer2Impl {
         return fcdTrie=newFCDTrie.toTrie2_16();
     }
 
+    /**
+     * Builds the canonical-iterator data for this instance.
+     * This is required before any of {@link #isCanonSegmentStarter(int)} or
+     * {@link #getCanonStartSet(int, UnicodeSet)} are called,
+     * or else they crash.
+     * @return this
+     */
     public synchronized Normalizer2Impl ensureCanonIterData() {
         if(canonIterData==null) {
             Trie2Writable newData=new Trie2Writable(0, 0);
@@ -629,10 +644,24 @@ public final class Normalizer2Impl {
         return norm16>=MIN_NORMAL_MAYBE_YES ? norm16&0xff : 0;
     }
 
+    /**
+     * Returns the FCD data for code point c.
+     * <b>{@link #getFCDTrie()} must have been called before this method,
+     * or else this method will crash.</b>
+     * @param c A Unicode code point.
+     * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
+     */
     public int getFCD16(int c) { return fcdTrie.get(c); }
+    /**
+     * Returns the FCD data for the single-or-lead code unit c.
+     * <b>{@link #getFCDTrie()} must have been called before this method,
+     * or else this method will crash.</b>
+     * @param c A Unicode code point.
+     * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
+     */
     public int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
 
-    void setFCD16FromNorm16(int start, int end, int norm16, Trie2Writable newFCDTrie) {
+    private void setFCD16FromNorm16(int start, int end, int norm16, Trie2Writable newFCDTrie) {
         // Only loops for 1:1 algorithmic mappings.
         for(;;) {
             if(norm16>=MIN_NORMAL_MAYBE_YES) {
@@ -712,9 +741,26 @@ public final class Normalizer2Impl {
         }
     }
 
+    /**
+     * Returns true if code point c starts a canonical-iterator string segment.
+     * <b>{@link #ensureCanonIterData()} must have been called before this method,
+     * or else this method will crash.</b>
+     * @param c A Unicode code point.
+     * @return true if c starts a canonical-iterator string segment.
+     */
     public boolean isCanonSegmentStarter(int c) {
         return canonIterData.get(c)>=0;
     }
+    /**
+     * Returns true if there are characters whose decomposition starts with c.
+     * If so, then the set is cleared and then filled with those characters.
+     * <b>{@link #ensureCanonIterData()} must have been called before this method,
+     * or else this method will crash.</b>
+     * @param c A Unicode code point.
+     * @param set A UnicodeSet to receive the characters whose decompositions
+     *        start with c, if there are any.
+     * @return true if there are characters whose decomposition starts with c.
+     */
     public boolean getCanonStartSet(int c, UnicodeSet set) {
         int canonValue=canonIterData.get(c)&~CANON_NOT_SEGMENT_STARTER;
         if(canonValue==0) {
