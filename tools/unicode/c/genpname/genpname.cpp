@@ -10,9 +10,9 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/bytestriebuilder.h"
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
-#include "bytestriebuilder.h"
 #include "cmemory.h"
 #include "charstr.h"
 #include "cstring.h"
