@@ -511,7 +511,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
          * In this case, this "not a real value" is indistinguishable from
          * a real value of -1.
          * @return An Entry with the string and value of the next element.
-         * @throw NoSuchElementException - iteration has no more elements.
+         * @throws NoSuchElementException - iteration has no more elements.
          * @draft ICU 4.8
          * @provisional This API might change or be removed in a future release.
          */

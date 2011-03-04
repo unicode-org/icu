@@ -786,6 +786,7 @@ public class PluralRules implements Serializable {
       * @param keyword the keyword to check for a unique value
       * @return The unique value for the keyword, or NO_UNIQUE_VALUE.
       * @draft ICU 4.8
+      * @provisional This API might change or be removed in a future release.
       */
      public double getUniqueKeywordValue(String keyword) {
          if (uniqueKeywordValues == null) {
@@ -820,6 +821,7 @@ public class PluralRules implements Serializable {
      * @param keyword the keyword to test
      * @return a list of values matching the keyword.
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
      public Collection<Double> getSamples(String keyword) {
          if (!keywords.contains(keyword)) {

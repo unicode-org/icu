@@ -727,6 +727,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * Returns the maxBytesPerChar value for the Charset that created this decoder.
      * @return maxBytesPerChar
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public final float maxBytesPerChar() {
         return ((CharsetICU)(this.charset())).maxBytesPerChar;
@@ -737,6 +738,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * 16-bit char/UChar (e.g. converters that are SBCS or DBCS).
      * @return true if the converter is fixed-width
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public final boolean isFixedWidth() {
         return ((CharsetICU)this.charset()).isFixedWidth();

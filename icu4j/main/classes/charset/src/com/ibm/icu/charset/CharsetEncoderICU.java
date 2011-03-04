@@ -922,6 +922,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * Returns the maxCharsPerByte value for the Charset that created this encoder.
      * @return maxCharsPerByte
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public final float maxCharsPerByte() {
         return ((CharsetICU)(this.charset())).maxCharsPerByte;
@@ -932,6 +933,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * 16-bit char/UChar (e.g. converters that are SBCS or DBCS).
      * @return true if the converter is fixed-width
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public final boolean isFixedWidth() {
         return ((CharsetICU)this.charset()).isFixedWidth();

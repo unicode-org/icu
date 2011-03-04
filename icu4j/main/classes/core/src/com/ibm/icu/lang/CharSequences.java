@@ -1,12 +1,11 @@
 /*
- *******************************************************************************
- * Copyright (C) 2010-2011, Google, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ ********************************************************************************
+ * Copyright (C) 2010-2011, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                                 *
+ ********************************************************************************
  */
 package com.ibm.icu.lang;
 
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * A number of utilities for dealing with CharSequences and related classes.
@@ -22,6 +21,7 @@ import com.ibm.icu.text.UnicodeSet;
  * </ul>
  * @author markdavis
  * @internal
+ * @deprecated This API is ICU internal only.
  */
 public class CharSequences {
     // TODO
@@ -29,20 +29,22 @@ public class CharSequences {
     // compareToIgnoreCase(a, b)
     // contentEquals(a, b)
     // contentEqualsIgnoreCase(a, b)
-    
+
     // contains(a, b) => indexOf >= 0
     // endsWith(a, b)
     // startsWith(a, b)
-    
+
     // lastIndexOf(a, b, fromIndex)
     // indexOf(a, ch, fromIndex)
     // lastIndexOf(a, ch, fromIndex);
 
     // s.trim() => UnicodeSet.trim(CharSequence s); return a subsequence starting with the first character not in the set to the last character not in the set.
     // add UnicodeSet.split(CharSequence s);
-    
+
     /**
      * Find the longest n such that a[aIndex,n] = b[bIndex,n], and n is on a character boundary.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int matchAfter(CharSequence a, CharSequence b, int aIndex, int bIndex) {
         int i = aIndex, j = bIndex;
@@ -65,6 +67,8 @@ public class CharSequences {
     
     /**
      * Count the code point length. Unpaired surrogates count as 1.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int codePointLength(CharSequence s) {
         return Character.codePointCount(s, 0, s.length());
@@ -85,10 +89,8 @@ public class CharSequences {
      * Utility function for comparing codepoint to string without generating new
      * string.
      * 
-     * @param codepoint
-     * @param other
-     * @return true if the codepoint equals the string
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final boolean equals(int codepoint, CharSequence other) {
         if (other == null) {
@@ -100,7 +102,11 @@ public class CharSequences {
         default: return false;
         }
     }
-    
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public static final boolean equals(CharSequence other, int codepoint) {
         return equals(codepoint, other);
     }
@@ -111,6 +117,9 @@ public class CharSequences {
      * and comparing, but much faster (no object creation). 
      * Actually, there is one difference; a null compares as less.
      * Note that this (=String) order is UTF-16 order -- *not* code point order.
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int compare(CharSequence string, int codePoint) {
         if (codePoint < Character.MIN_CODE_POINT || codePoint > Character.MAX_CODE_POINT) {
@@ -151,6 +160,9 @@ public class CharSequences {
      * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
      * Actually, there is one difference; a null compares as less.
      * Note that this (=String) order is UTF-16 order -- *not* code point order.
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int compare(int codepoint, CharSequence a) {
         return -compare(a, codepoint);
@@ -158,6 +170,7 @@ public class CharSequences {
 
     /**
      * Return the value of the first code point, if the string is exactly one code point. Otherwise return Integer.MAX_VALUE.
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -173,7 +186,9 @@ public class CharSequences {
     /**
      * Utility function for comparing objects that may be null
      * string.
+     * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final <T extends Object> boolean equals(T a, T b) {
         return a == null ? b == null
@@ -183,7 +198,9 @@ public class CharSequences {
     
     /**
      * Utility for comparing the contents of CharSequences
+     * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int compare(CharSequence a, CharSequence b) {
         int alength = a.length();
@@ -200,15 +217,20 @@ public class CharSequences {
 
     /**
      * Utility for comparing the contents of CharSequences
+     * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static boolean equalsChars(CharSequence a, CharSequence b) {
         // do length test first for fast path
         return a.length() == b.length() && compare(a,b) == 0;
     }
 
-    /** Are we on a character boundary?
+    /**
+     * Are we on a character boundary?
+     * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static boolean onCharacterBoundary(CharSequence s, int i) {
         return i <= 0 
@@ -216,13 +238,12 @@ public class CharSequences {
         || !Character.isHighSurrogate(s.charAt(i-1))
         || !Character.isLowSurrogate(s.charAt(i));
     }
-    
+
     /**
      * Find code point in string.
-     * @param s
-     * @param codePoint
-     * @return
+     * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int indexOf(CharSequence s, int codePoint) {
         int cp;
@@ -242,7 +263,9 @@ public class CharSequences {
      *     doSomethingWith(codePoint);
      *   }
      * </pre>
+     * 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static int[] codePoints(CharSequence s) {
         int[] result = new int[s.length()]; // in the vast majority of cases, the length is the same
@@ -264,5 +287,8 @@ public class CharSequences {
         int[] shortResult = new int[j];
         System.arraycopy(result, 0, shortResult, 0, j);
         return shortResult;
+    }
+
+    private CharSequences() {
     }
 }

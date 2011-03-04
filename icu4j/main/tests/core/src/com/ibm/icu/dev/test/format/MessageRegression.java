@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2005-2010, International Business Machines
+* Copyright (c) 2005-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -596,14 +596,12 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void Test4169959() {
         // This works
-        logln(MessageFormat.format( "This will {0}",
-                                    new String[]{"work"} ) );
-        
+        logln(MessageFormat.format("This will {0}", "work"));
+
         // This fails
-        logln(MessageFormat.format( "This will {0}",
-                                    new Object[]{ null } ) );
+        logln(MessageFormat.format("This will {0}", new Object[]{ null }));
     }
-    
+
     public void test4232154() {
         boolean gotException = false;
         try {
