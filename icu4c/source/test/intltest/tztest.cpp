@@ -691,6 +691,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
         if (tz->getRawOffset() != (-5)*60*60*1000) {
             errln((UnicodeString)"FAIL: ANY_W5 contains a zone whose offset is not -05:00: " + *id1);
         }
+        delete tz;
     }
     if (U_FAILURE(ec)) {
         errln("Error checking IDs in ANY_W5");
@@ -715,6 +716,7 @@ cleanup:
     delete canonicalLoc_US;
     delete any_W5;
     delete any_CA_W5;
+    delete any_US_E14;
 }
 
 void
