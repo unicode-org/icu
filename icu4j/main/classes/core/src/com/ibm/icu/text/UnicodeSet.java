@@ -275,11 +275,13 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Constant for the empty set.
      * @draft 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final UnicodeSet EMPTY = new UnicodeSet().freeze();
     /**
      * Constant for the set of all code points. (Since UnicodeSets can include strings, does not include everything that a UnicodeSet can.)
      * @draft 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final UnicodeSet ALL_CODE_POINTS = new UnicodeSet(0, 0x10FFFF).freeze();
 

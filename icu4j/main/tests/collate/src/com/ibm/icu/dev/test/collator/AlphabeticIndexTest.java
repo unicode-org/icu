@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -211,6 +211,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 AlphabeticIndex<String> alphabeticIndex = new AlphabeticIndex(locale);
                 alphabeticIndex.addRecord("hi", "HI");
                 for (Bucket<String> bucket : alphabeticIndex) {
+                    @SuppressWarnings("unused")
                     LabelType labelType = bucket.getLabelType();
                 }
             } catch (Exception e) {

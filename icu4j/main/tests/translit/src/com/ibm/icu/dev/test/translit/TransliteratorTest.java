@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3016,9 +3016,10 @@ public class TransliteratorTest extends TestFmwk {
     public void TestSourceTargetSet2() {
 
 
-        Normalizer2 nfkd = Normalizer2.getInstance(null, "nfkc", Mode.DECOMPOSE);
         Normalizer2 nfc = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
         Normalizer2 nfd = Normalizer2.getInstance(null, "nfc", Mode.DECOMPOSE);
+
+        //        Normalizer2 nfkd = Normalizer2.getInstance(null, "nfkd", Mode.DECOMPOSE);
         //        UnicodeSet nfkdSource = new UnicodeSet();
         //        UnicodeSet nfkdTarget = new UnicodeSet();
         //        for (int i = 0; i <= 0x10FFFF; ++i) {
@@ -3308,16 +3309,16 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    private void addDerivedStrings(Normalizer2 nfc, UnicodeSet disorderedMarks, String s) {
-        disorderedMarks.add(s);
-        for (int j = 1; j < s.length(); ++j) {
-            if (CharSequences.onCharacterBoundary(s, j)) {
-                String shorter = s.substring(0,j);
-                disorderedMarks.add(shorter);
-                disorderedMarks.add(nfc.normalize(shorter) + s.substring(j));
-            }
-        }
-    }
+//    private void addDerivedStrings(Normalizer2 nfc, UnicodeSet disorderedMarks, String s) {
+//        disorderedMarks.add(s);
+//        for (int j = 1; j < s.length(); ++j) {
+//            if (CharSequences.onCharacterBoundary(s, j)) {
+//                String shorter = s.substring(0,j);
+//                disorderedMarks.add(shorter);
+//                disorderedMarks.add(nfc.normalize(shorter) + s.substring(j));
+//            }
+//        }
+//    }
 
     public void TestCharUtils() {
         String[][] startTests = {

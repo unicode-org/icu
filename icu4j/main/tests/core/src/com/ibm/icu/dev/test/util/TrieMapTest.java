@@ -149,6 +149,7 @@ public class TrieMapTest extends TestFmwk {
         timeIteration(unicodeTestMap, comparisonTime, Style.CHARS, 3);
     }
 
+    @SuppressWarnings("unused")
     public long timeIteration(Map<String, Integer> testMap, long comparisonTime, Style style, double ratioToMap) {
         TrieMap<Integer> trieMap = TrieMap.BytesBuilder.with(style, Option.SMALL, testMap).build();
         TreeMap<String,Integer> expected = new TreeMap<String, Integer>(testMap);
@@ -285,10 +286,8 @@ public class TrieMapTest extends TestFmwk {
         timeBuilding(unicodeTestMap, comparisonTime, Style.CHARS, Option.FAST, 20);
     }
 
+    @SuppressWarnings("unused")
     public long timeBuilding(Map<String, Integer> testmap, long comparisonTime, Style style, Option option, double ratioToMap) {
-        TrieMap<Integer> trieMap = null;
-        TreeMap<String, Integer> map = null;
-
         System.gc();
         t.start();
         if (style == null) {
@@ -397,6 +396,7 @@ public class TrieMapTest extends TestFmwk {
         timeGet(keys, unicodeTestMap, comparisonTime, Style.CHARS, 3);
     }
 
+    @SuppressWarnings("unused")
     public long timeGet(ArrayList<String> keys, Map<String, Integer> testmap, long comparisonTime, Style style, int ratioToMap) {
 
         TrieMap<Integer> trieMap = TrieMap.Builder.with(style, Option.SMALL, testmap).build();

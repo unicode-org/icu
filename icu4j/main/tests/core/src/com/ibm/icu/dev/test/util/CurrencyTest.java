@@ -18,15 +18,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.Map;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.CurrencyData;
+import com.ibm.icu.text.CurrencyDisplayNames;
+import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.text.CurrencyMetaInfo;
-import com.ibm.icu.text.CurrencyDisplayNames;
-import com.ibm.icu.impl.CurrencyData;
 
 /**
  * @test

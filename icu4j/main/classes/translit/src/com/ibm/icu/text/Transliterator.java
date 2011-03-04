@@ -1646,7 +1646,7 @@ public abstract class Transliterator implements StringTransform  {
         // the high-runner case.
         UnicodeSet temp;
         try {
-            temp = (UnicodeSet) filter;
+            temp = filter;
         } catch (ClassCastException e) {
             filter.addMatchSetTo(temp = new UnicodeSet());
         }
