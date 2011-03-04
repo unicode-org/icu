@@ -3015,6 +3015,15 @@ const char* const basic_maximize_data[][2] = {
   }, {
     "zzz",
     ""
+  }, {
+     "de_u_co_phonebk",
+     "de_Latn_DE_U_CO_PHONEBK"
+  }, {
+     "de_Latn_u_co_phonebk",
+     "de_Latn_DE_U_CO_PHONEBK"
+  }, {
+     "de_Latn_DE_u_co_phonebk",
+     "de_Latn_DE_U_CO_PHONEBK"
   }
 };
 
@@ -3037,6 +3046,9 @@ const char* const basic_minimize_data[][2] = {
   }, {
     "und",
     ""
+  }, {
+    "en_Latn_US@calendar=gregorian",
+    "en@calendar=gregorian"
   }
 };
 
@@ -5113,6 +5125,10 @@ const char* const full_data[][3] = {
     "art_Moon_AQ",
     "",
     ""
+  }, {
+    "de@collation=phonebook",
+    "de_Latn_DE@collation=phonebook",
+    "de@collation=phonebook"
   }
 };
 
