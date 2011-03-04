@@ -275,6 +275,7 @@ public class CharSequences {
             if (cp >= 0xDC00 && cp <= 0xDFFF && i != 0 ) { // hand-code for speed
                 char last = (char) result[j-1];
                 if (last >= 0xD800 && last <= 0xDBFF) {
+                    // Note: j-1 is safe, because j can only be zero if i is zero. But i!=0 in this block.
                     result[j-1] = Character.toCodePoint(last, cp);
                     continue;
                 }
