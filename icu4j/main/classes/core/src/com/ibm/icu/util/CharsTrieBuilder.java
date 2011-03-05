@@ -100,10 +100,26 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected boolean matchNodesCanHaveValues() /*const*/ { return true; }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int getMaxBranchLinearSubNodeLength() /*const*/ { return CharsTrie.kMaxBranchLinearSubNodeLength; }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int getMinLinearMatch() /*const*/ { return CharsTrie.kMinLinearMatch; }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int getMaxLinearMatchLength() /*const*/ { return CharsTrie.kMaxLinearMatchLength; }
 
     private void ensureCapacity(int length) {
@@ -118,6 +134,10 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
             chars=newChars;
         }
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int write(int unit) {
         int newLength=charsLength+1;
         ensureCapacity(newLength);
@@ -125,6 +145,10 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         chars[chars.length-charsLength]=(char)unit;
         return charsLength;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int write(int offset, int length) {
         int newLength=charsLength+length;
         ensureCapacity(newLength);
@@ -147,6 +171,10 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
     // For writeValueAndFinal(), writeValueAndType() and writeDeltaTo().
     private final char[] intUnits=new char[3];
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int writeValueAndFinal(int i, boolean isFinal) {
         if(0<=i && i<=CharsTrie.kMaxOneUnitValue) {
             return write(i|(isFinal ? CharsTrie.kValueIsFinal : 0));
@@ -168,6 +196,10 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         intUnits[0]=(char)(intUnits[0]|(isFinal ? CharsTrie.kValueIsFinal : 0));
         return write(intUnits, length);
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int writeValueAndType(boolean hasValue, int value, int node) {
         if(!hasValue) {
             return write(node);
@@ -189,6 +221,10 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
         intUnits[0]|=(char)node;
         return write(intUnits, length);
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int writeDeltaTo(int jumpTarget) {
         int i=charsLength-jumpTarget;
         assert(i>=0);

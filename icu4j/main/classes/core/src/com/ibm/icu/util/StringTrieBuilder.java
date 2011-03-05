@@ -22,10 +22,14 @@ import java.util.HashMap;
 public abstract class StringTrieBuilder {
     /**
      * Build options for BytesTrieBuilder and CharsTrieBuilder.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public enum Option {
         /**
          * Builds a trie quickly.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release.
          */
         FAST,
         /**
@@ -36,12 +40,22 @@ public abstract class StringTrieBuilder {
          * <p>This option can be effective when many integer values are the same
          * and string/byte sequence suffixes can be shared.
          * Runtime speed is not expected to improve.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release.
          */
         SMALL
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected StringTrieBuilder() {}
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected void addImpl(CharSequence s, int value) {
         if(state!=State.ADDING) {
             // Cannot add elements after building.
@@ -58,6 +72,10 @@ public abstract class StringTrieBuilder {
         }
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected final void buildImpl(Option buildOption) {
         switch(state) {
         case ADDING:
@@ -98,6 +116,10 @@ public abstract class StringTrieBuilder {
         state=State.BUILT;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected void clearImpl() {
         strings.setLength(0);
         nodes.clear();
@@ -782,16 +804,52 @@ public abstract class StringTrieBuilder {
         return node;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract boolean matchNodesCanHaveValues() /*const*/;
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int getMaxBranchLinearSubNodeLength() /*const*/;
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int getMinLinearMatch() /*const*/;
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int getMaxLinearMatchLength() /*const*/;
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int write(int unit);
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int write(int offset, int length);
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int writeValueAndFinal(int i, boolean isFinal);
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int writeValueAndType(boolean hasValue, int value, int node);
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected abstract int writeDeltaTo(int jumpTarget);
 
     private enum State {
@@ -800,6 +858,10 @@ public abstract class StringTrieBuilder {
     private State state=State.ADDING;
 
     // Strings and sub-strings for linear-match nodes.
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected StringBuilder strings=new StringBuilder();
     private Node root;
 
