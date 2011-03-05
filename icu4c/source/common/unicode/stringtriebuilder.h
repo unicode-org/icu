@@ -61,47 +61,69 @@ public:
     static UBool equalNodes(const void *left, const void *right);
 
 protected:
+    /** @internal */
     StringTrieBuilder();
+    /** @internal */
     virtual ~StringTrieBuilder();
 
+    /** @internal */
     void createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode);
+    /** @internal */
     void deleteCompactBuilder();
 
+    /** @internal */
     void build(UStringTrieBuildOption buildOption, int32_t elementsLength, UErrorCode &errorCode);
 
+    /** @internal */
     int32_t writeNode(int32_t start, int32_t limit, int32_t unitIndex);
+    /** @internal */
     int32_t writeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex, int32_t length);
 
     class Node;
 
+    /** @internal */
     Node *makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErrorCode &errorCode);
+    /** @internal */
     Node *makeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex,
                             int32_t length, UErrorCode &errorCode);
 
+    /** @internal */
     virtual int32_t getElementStringLength(int32_t i) const = 0;
+    /** @internal */
     virtual UChar getElementUnit(int32_t i, int32_t unitIndex) const = 0;
+    /** @internal */
     virtual int32_t getElementValue(int32_t i) const = 0;
 
     // Finds the first unit index after this one where
     // the first and last element have different units again.
+    /** @internal */
     virtual int32_t getLimitOfLinearMatch(int32_t first, int32_t last, int32_t unitIndex) const = 0;
 
     // Number of different units at unitIndex.
+    /** @internal */
     virtual int32_t countElementUnits(int32_t start, int32_t limit, int32_t unitIndex) const = 0;
+    /** @internal */
     virtual int32_t skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t count) const = 0;
+    /** @internal */
     virtual int32_t indexOfElementWithNextUnit(int32_t i, int32_t unitIndex, UChar unit) const = 0;
 
+    /** @internal */
     virtual UBool matchNodesCanHaveValues() const = 0;
 
+    /** @internal */
     virtual int32_t getMaxBranchLinearSubNodeLength() const = 0;
+    /** @internal */
     virtual int32_t getMinLinearMatch() const = 0;
+    /** @internal */
     virtual int32_t getMaxLinearMatchLength() const = 0;
 
     // max(BytesTrie::kMaxBranchLinearSubNodeLength, UCharsTrie::kMaxBranchLinearSubNodeLength).
+    /** @internal */
     static const int32_t kMaxBranchLinearSubNodeLength=5;
 
     // Maximum number of nested split-branch levels for a branch on all 2^16 possible UChar units.
     // log2(2^16/kMaxBranchLinearSubNodeLength) rounded up.
+    /** @internal */
     static const int32_t kMaxSplitBranchLevels=14;
 
     /**
@@ -112,6 +134,7 @@ protected:
                         Set to U_MEMORY_ALLOCATION_ERROR if it was success but newNode==NULL.
      * @return newNode if it is the first of its kind, or
      *         an equivalent node if newNode is a duplicate.
+     * @internal
      */
     Node *registerNode(Node *newNode, UErrorCode &errorCode);
     /**
@@ -122,6 +145,7 @@ protected:
      * @param errorCode ICU in/out UErrorCode.
                         Set to U_MEMORY_ALLOCATION_ERROR if it was success but newNode==NULL.
      * @return A FinalValueNode with the given value.
+     * @internal
      */
     Node *registerFinalValue(int32_t value, UErrorCode &errorCode);
 
@@ -142,8 +166,10 @@ protected:
      */
 
     // Hash set of nodes, maps from nodes to integer 1.
+    /** @internal */
     UHashtable *nodes;
 
+    /** @internal */
     class Node : public UObject {
     public:
         Node(int32_t initialHash) : hash(initialHash), offset(0) {}
@@ -210,6 +236,7 @@ protected:
     // with the input node, and the
     // !Node::operator==(other) used inside FinalValueNode::operator==(other)
     // will be false if the typeid's are different.
+    /** @internal */
     class FinalValueNode : public Node {
     public:
         FinalValueNode(int32_t v) : Node(0x111111*37+v), value(v) {}
@@ -219,6 +246,7 @@ protected:
         int32_t value;
     };
 
+    /** @internal */
     class ValueNode : public Node {
     public:
         ValueNode(int32_t initialHash) : Node(initialHash), hasValue(FALSE), value(0) {}
@@ -233,6 +261,7 @@ protected:
         int32_t value;
     };
 
+    /** @internal */
     class IntermediateValueNode : public ValueNode {
     public:
         IntermediateValueNode(int32_t v, Node *nextNode)
@@ -244,6 +273,7 @@ protected:
         Node *next;
     };
 
+    /** @internal */
     class LinearMatchNode : public ValueNode {
     public:
         LinearMatchNode(int32_t len, Node *nextNode)
@@ -256,6 +286,7 @@ protected:
         Node *next;
     };
 
+    /** @internal */
     class BranchNode : public Node {
     public:
         BranchNode(int32_t initialHash) : Node(initialHash) {}
@@ -263,6 +294,7 @@ protected:
         int32_t firstEdgeNumber;
     };
 
+    /** @internal */
     class ListBranchNode : public BranchNode {
     public:
         ListBranchNode() : BranchNode(0x444444), length(0) {}
@@ -292,6 +324,7 @@ protected:
         UChar units[kMaxBranchLinearSubNodeLength];
     };
 
+    /** @internal */
     class SplitBranchNode : public BranchNode {
     public:
         SplitBranchNode(UChar middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
@@ -308,6 +341,7 @@ protected:
     };
 
     // Branch head node, for writing the actual node lead unit.
+    /** @internal */
     class BranchHeadNode : public ValueNode {
     public:
         BranchHeadNode(int32_t len, Node *subNode)
@@ -321,13 +355,19 @@ protected:
         Node *next;  // A branch sub-node.
     };
 
+    /** @internal */
     virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
                                         Node *nextNode) const = 0;
 
+    /** @internal */
     virtual int32_t write(int32_t unit) = 0;
+    /** @internal */
     virtual int32_t writeElementUnits(int32_t i, int32_t unitIndex, int32_t length) = 0;
+    /** @internal */
     virtual int32_t writeValueAndFinal(int32_t i, UBool isFinal) = 0;
+    /** @internal */
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node) = 0;
+    /** @internal */
     virtual int32_t writeDeltaTo(int32_t jumpTarget) = 0;
 
 private:
