@@ -122,10 +122,26 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected boolean matchNodesCanHaveValues() /*const*/ { return false; }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int getMaxBranchLinearSubNodeLength() /*const*/ { return BytesTrie.kMaxBranchLinearSubNodeLength; }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int getMinLinearMatch() /*const*/ { return BytesTrie.kMinLinearMatch; }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int getMaxLinearMatchLength() /*const*/ { return BytesTrie.kMaxLinearMatchLength; }
 
     private void ensureCapacity(int length) {
@@ -140,6 +156,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             bytes=newBytes;
         }
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int write(int b) {
         int newLength=bytesLength+1;
         ensureCapacity(newLength);
@@ -147,6 +167,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         bytes[bytes.length-bytesLength]=(byte)b;
         return bytesLength;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int write(int offset, int length) {
         int newLength=bytesLength+length;
         ensureCapacity(newLength);
@@ -169,6 +193,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     // For writeValueAndFinal() and writeDeltaTo().
     private final byte[] intBytes=new byte[5];
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int writeValueAndFinal(int i, boolean isFinal) {
         if(0<=i && i<=BytesTrie.kMaxOneByteValue) {
             return write(((BytesTrie.kMinOneByteValueLead+i)<<1)|(isFinal?1:0));
@@ -201,6 +229,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         intBytes[0]=(byte)((intBytes[0]<<1)|(isFinal?1:0));
         return write(intBytes, length);
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int writeValueAndType(boolean hasValue, int value, int node) {
         int offset=write(node);
         if(hasValue) {
@@ -208,6 +240,10 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         }
         return offset;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected int writeDeltaTo(int jumpTarget) {
         int i=bytesLength-jumpTarget;
         assert(i>=0);
