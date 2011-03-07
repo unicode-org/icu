@@ -277,6 +277,7 @@ timezoneTypes:table(nofallback){
             "America:Mendoza"{"armdz"}
             "America:Menominee"{"usmnm"}
             "America:Merida"{"mxmid"}
+            "America:Metlakatla"{"usmtm"}
             "America:Mexico_City"{"mxmex"}
             "America:Miquelon"{"pmmqc"}
             "America:Moncton"{"camon"}
@@ -314,6 +315,7 @@ timezoneTypes:table(nofallback){
             "America:Sao_Paulo"{"brsao"}
             "America:Scoresbysund"{"globy"}
             "America:Shiprock"{"usnavajo"}
+            "America:Sitka"{"ussit"}
             "America:St_Barthelemy"{"gpsbh"}
             "America:St_Johns"{"casjf"}
             "America:St_Kitts"{"knbas"}
