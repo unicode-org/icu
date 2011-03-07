@@ -1,11 +1,17 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2010-2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/metazoneInfo.xml
 // *
 // ***************************************************************************
+//
+// Note: This file was originally generated from CLDR metazoneInfo.xml.
+//       Because the version of supplementalData.xml is no longer maintained,
+//       we edit this file manually to make necessary changes for new time zone
+//       related changes.
+//
 metazoneInfo:table(nofallback){
     metazoneMappings{
         "Africa:Abidjan"{
@@ -453,7 +459,7 @@ metazoneInfo:table(nofallback){
             }
             mz1{
                 "Hawaii_Aleutian",
-                "1983-10-30 12:00",
+                "1983-11-30 10:00",
                 "9999-12-31 23:59",
             }
         }
@@ -464,8 +470,13 @@ metazoneInfo:table(nofallback){
                 "1983-10-30 11:00",
             }
             mz1{
-                "Alaska",
+                "Yukon",
                 "1983-10-30 11:00",
+                "1983-11-30 09:00",
+            }
+            mz2{
+                "Alaska",
+                "1983-11-30 09:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1253,11 +1264,26 @@ metazoneInfo:table(nofallback){
             mz0{
                 "America_Pacific",
                 "1970-01-01 00:00",
-                "1983-10-30 09:00",
+                "1980-04-27 10:00",
             }
             mz1{
-                "Alaska",
+                "Yukon",
+                "1980-04-27 10:00",
+                "1980-10-26 10:00",
+            }
+            mz2{
+                "America_Pacific",
+                "1980-10-26 10:00",
                 "1983-10-30 09:00",
+            }
+            mz3{
+                "Yukon",
+                "1983-10-30 09:00",
+                "1983-11-30 09:00",
+            }
+            mz4{
+                "Alaska",
+                "1983-11-30 09:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1441,6 +1467,13 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Metlakatla"{
+            mz0{
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:Mexico_City"{
             mz0{
                 "America_Central",
@@ -1523,8 +1556,13 @@ metazoneInfo:table(nofallback){
                 "1983-10-30 12:00",
             }
             mz1{
-                "Alaska",
+                "Yukon",
                 "1983-10-30 12:00",
+                "1983-11-30 09:00",
+            }
+            mz2{
+                "Alaska",
+                "1983-11-30 09:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1532,6 +1570,18 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Noronha",
                 "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:North_Dakota:Beulah"{
+            mz0{
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "2010-11-07 08:00",
+            }
+            mz1{
+                "America_Central",
+                "2010-11-07 08:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1793,6 +1843,23 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Sitka"{
+            mz0{
+                "America_Pacific",
+                "1970-01-01 00:00",
+                "1983-10-30 09:00",
+            }
+            mz1{
+                "Yukon",
+                "1983-10-30 09:00",
+                "1983-11-30 09:00",
+            }
+            mz2{
+                "Alaska",
+                "1983-11-30 09:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:St_Barthelemy"{
             mz0{
                 "Atlantic",
@@ -1914,11 +1981,11 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Yukon",
                 "1970-01-01 00:00",
-                "1983-10-30 10:00",
+                "1983-11-30 09:00",
             }
             mz1{
                 "Alaska",
-                "1983-10-30 10:00",
+                "1983-11-30 09:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1960,6 +2027,11 @@ metazoneInfo:table(nofallback){
                 "Australia_Eastern",
                 "1970-01-01 00:00",
                 "2010-04-03 16:00",
+            }
+            mz1{
+                "Macquarie",
+                "2010-04-03 16:00",
+                "9999-12-31 23:59",
             }
         }
         "Antarctica:Mawson"{

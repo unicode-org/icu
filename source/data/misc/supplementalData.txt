@@ -1,11 +1,17 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2010-2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
 // *
 // ***************************************************************************
+//
+// Note: This file was originally generated from CLDR supplementalData.xml.
+//       Because the version of supplementalData.xml is no longer maintained,
+//       we edit this file manually to make necessary changes for new time zone
+//       related changes.
+//
 supplementalData:table(nofallback){
     /**
      * Map from ISO 3166 country codes to ISO 4217 currency codes 
@@ -9371,6 +9377,7 @@ supplementalData:table(nofallback){
             "meta:Atlantic_GP"{"America/Guadeloupe"}
             "meta:Atlantic_KN"{"America/St_Kitts"}
             "meta:Atlantic_LC"{"America/St_Lucia"}
+            "meta:Atlantic_MF"{"America/Marigot"}
             "meta:Atlantic_MQ"{"America/Martinique"}
             "meta:Atlantic_MS"{"America/Montserrat"}
             "meta:Atlantic_PR"{"America/Puerto_Rico"}
@@ -9446,8 +9453,11 @@ supplementalData:table(nofallback){
             "meta:Europe_Central_SE"{"Europe/Stockholm"}
             "meta:Europe_Central_SI"{"Europe/Ljubljana"}
             "meta:Europe_Central_SK"{"Europe/Bratislava"}
+            "meta:Europe_Central_SM"{"Europe/San_Marino"}
             "meta:Europe_Central_TN"{"Africa/Tunis"}
+            "meta:Europe_Central_VA"{"Europe/Vatican"}
             "meta:Europe_Eastern_001"{"Europe/Bucharest"}
+            "meta:Europe_Eastern_AX"{"Europe/Mariehamn"}
             "meta:Europe_Eastern_BG"{"Europe/Sofia"}
             "meta:Europe_Eastern_CY"{"Asia/Nicosia"}
             "meta:Europe_Eastern_EG"{"Africa/Cairo"}
@@ -9652,6 +9662,7 @@ supplementalData:table(nofallback){
             "Jordan Standard Time"{"Asia/Amman"}
             "Kamchatka Standard Time"{"Asia/Kamchatka"}
             "Korea Standard Time"{"Asia/Seoul"}
+            "Magadan Standard Time"{"Asia/Magadan"}
             "Mauritius Standard Time"{"Indian/Mauritius"}
             "Mexico Standard Time"{"America/Mexico_City"}
             "Mexico Standard Time 2"{"America/Chihuahua"}
@@ -9689,7 +9700,7 @@ supplementalData:table(nofallback){
             "Tasmania Standard Time"{"Australia/Hobart"}
             "Tokyo Standard Time"{"Asia/Tokyo"}
             "Tonga Standard Time"{"Pacific/Tongatapu"}
-            "US Eastern Standard Time"{"Etc/GMT+5"}
+            "US Eastern Standard Time"{"America/Indianapolis"}
             "US Mountain Standard Time"{"America/Phoenix"}
             "UTC"{"Etc/GMT"}
             "UTC+12"{"Etc/GMT-12"}
@@ -11884,6 +11895,9 @@ supplementalData:table(nofallback){
         "America:Merida"{
             territory{"MX"}
         }
+        "America:Metlakatla"{
+            territory{"US"}
+        }
         "America:Mexico_City"{
             territory{"MX"}
             aliases{
@@ -11928,6 +11942,9 @@ supplementalData:table(nofallback){
             aliases{
                 "Brazil/DeNoronha",
             }
+        }
+        "America:North_Dakota:Beulah"{
+            territory{"US"}
         }
         "America:North_Dakota:Center"{
             territory{"US"}
@@ -12025,6 +12042,9 @@ supplementalData:table(nofallback){
             aliases{
                 "Navajo",
             }
+        }
+        "America:Sitka"{
+            territory{"US"}
         }
         "America:St_Barthelemy"{
             territory{"BL"}
