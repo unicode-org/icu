@@ -1961,7 +1961,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
             else {
                 const UnicodeString *tmp;
                 tmp = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
-                if (!text.compare(position, tmp->length(), *tmp))    // error code is set below if !sawDigit 
+                if (!text.caseCompare(position, tmp->length(), *tmp, U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit 
                 {
                     // Parse sign, if present
                     int32_t pos = position + tmp->length();
