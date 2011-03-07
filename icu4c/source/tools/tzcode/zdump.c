@@ -996,7 +996,7 @@ static void getzones(char * basedir, char * relpath, struct listentry ** last, i
 
 	if ((dp = opendir(path)) == NULL) {
 		/* file */
-		if (strstr(relpath, ".tab") == NULL) {
+		if (strstr(relpath, ".tab") == NULL && strcmp(relpath, "Etc/Unknown") != 0) {
 			char *		pzonename;
 			listentry *	pentry;
 
