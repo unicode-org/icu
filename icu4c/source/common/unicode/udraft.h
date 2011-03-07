@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -24,65 +24,55 @@
 #ifdef U_HIDE_DRAFT_API
 
 #    if U_DISABLE_RENAMING
-#        define ubidi_getBaseDirection ubidi_getBaseDirection_DRAFT_API_DO_NOT_USE
-#        define uidna_close uidna_close_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToASCII uidna_labelToASCII_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToASCII_UTF8 uidna_labelToASCII_UTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToUnicode uidna_labelToUnicode_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToUnicodeUTF8 uidna_labelToUnicodeUTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToASCII uidna_nameToASCII_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToASCII_UTF8 uidna_nameToASCII_UTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToUnicode uidna_nameToUnicode_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToUnicodeUTF8 uidna_nameToUnicodeUTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_openUTS46 uidna_openUTS46_DRAFT_API_DO_NOT_USE
-#        define uloc_forLanguageTag uloc_forLanguageTag_DRAFT_API_DO_NOT_USE
-#        define uloc_toLanguageTag uloc_toLanguageTag_DRAFT_API_DO_NOT_USE
-#        define unorm2_getDecomposition unorm2_getDecomposition_DRAFT_API_DO_NOT_USE
-#        define uregex_end64 uregex_end64_DRAFT_API_DO_NOT_USE
-#        define uregex_find64 uregex_find64_DRAFT_API_DO_NOT_USE
-#        define uregex_getFindProgressCallback uregex_getFindProgressCallback_DRAFT_API_DO_NOT_USE
-#        define uregex_lookingAt64 uregex_lookingAt64_DRAFT_API_DO_NOT_USE
-#        define uregex_matches64 uregex_matches64_DRAFT_API_DO_NOT_USE
-#        define uregex_patternUText uregex_patternUText_DRAFT_API_DO_NOT_USE
-#        define uregex_regionEnd64 uregex_regionEnd64_DRAFT_API_DO_NOT_USE
-#        define uregex_regionStart64 uregex_regionStart64_DRAFT_API_DO_NOT_USE
-#        define uregex_reset64 uregex_reset64_DRAFT_API_DO_NOT_USE
-#        define uregex_setFindProgressCallback uregex_setFindProgressCallback_DRAFT_API_DO_NOT_USE
-#        define uregex_setRegion64 uregex_setRegion64_DRAFT_API_DO_NOT_USE
-#        define uregex_setRegionAndStart uregex_setRegionAndStart_DRAFT_API_DO_NOT_USE
-#        define uregex_start64 uregex_start64_DRAFT_API_DO_NOT_USE
-#        define uscript_getScriptExtensions uscript_getScriptExtensions_DRAFT_API_DO_NOT_USE
-#        define uscript_hasScript uscript_hasScript_DRAFT_API_DO_NOT_USE
+#        define StringPiece&amp;y) StringPiece&amp;y)_DRAFT_API_DO_NOT_USE
+#        define ubidi_getBaseDirection(const UChar *text, int32_t length) ubidi_getBaseDirection(const UChar *text, int32_t length)_DRAFT_API_DO_NOT_USE
+#        define ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char *region, const int32_t *rawOffset, UErrorCode *ec) ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char *region, const int32_t *rawOffset, UErrorCode *ec)_DRAFT_API_DO_NOT_USE
+#        define ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status) ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uidna_close(UIDNA *idna) uidna_close(UIDNA *idna)_DRAFT_API_DO_NOT_USE
+#        define uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode) uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode)_DRAFT_API_DO_NOT_USE
+#        define uloc_forLanguageTag(const char *langtag, char *localeID, int32_t localeIDCapacity, int32_t *parsedLength, UErrorCode *err) uloc_forLanguageTag(const char *langtag, char *localeID, int32_t localeIDCapacity, int32_t *parsedLength, UErrorCode *err)_DRAFT_API_DO_NOT_USE
+#        define uloc_toLanguageTag(const char *localeID, char *langtag, int32_t langtagCapacity, UBool strict, UErrorCode *err) uloc_toLanguageTag(const char *localeID, char *langtag, int32_t langtagCapacity, UBool strict, UErrorCode *err)_DRAFT_API_DO_NOT_USE
+#        define unorm2_getDecomposition(const UNormalizer2 *norm2, UChar32 c, UChar *decomposition, int32_t capacity, UErrorCode *pErrorCode) unorm2_getDecomposition(const UNormalizer2 *norm2, UChar32 c, UChar *decomposition, int32_t capacity, UErrorCode *pErrorCode)_DRAFT_API_DO_NOT_USE
+#        define uregex_end64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status) uregex_end64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_find64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status) uregex_find64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_getFindProgressCallback(const URegularExpression *regexp, URegexFindProgressCallback **callback, const void **context, UErrorCode *status) uregex_getFindProgressCallback(const URegularExpression *regexp, URegexFindProgressCallback **callback, const void **context, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_lookingAt64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status) uregex_lookingAt64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_matches64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status) uregex_matches64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_patternUText(const URegularExpression *regexp, UErrorCode *status) uregex_patternUText(const URegularExpression *regexp, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_regionEnd64(const URegularExpression *regexp, UErrorCode *status) uregex_regionEnd64(const URegularExpression *regexp, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_regionStart64(const URegularExpression *regexp, UErrorCode *status) uregex_regionStart64(const URegularExpression *regexp, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_reset64(URegularExpression *regexp, int64_t index, UErrorCode *status) uregex_reset64(URegularExpression *regexp, int64_t index, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_setFindProgressCallback(URegularExpression *regexp, URegexFindProgressCallback *callback, const void *context, UErrorCode *status) uregex_setFindProgressCallback(URegularExpression *regexp, URegexFindProgressCallback *callback, const void *context, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_setRegion64(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, UErrorCode *status) uregex_setRegion64(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_setRegionAndStart(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode *status) uregex_setRegionAndStart(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_start64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status) uregex_start64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uscript_getScriptExtensions(UChar32 c, UScriptCode *scripts, int32_t capacity, UErrorCode *pErrorCode) uscript_getScriptExtensions(UChar32 c, UScriptCode *scripts, int32_t capacity, UErrorCode *pErrorCode)_DRAFT_API_DO_NOT_USE
+#        define uscript_hasScript(UChar32 c, UScriptCode sc) uscript_hasScript(UChar32 c, UScriptCode sc)_DRAFT_API_DO_NOT_USE
 #    else
-#        define ubidi_getBaseDirection_4_6 ubidi_getBaseDirection_DRAFT_API_DO_NOT_USE
-#        define uidna_close_4_6 uidna_close_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToASCII_4_6 uidna_labelToASCII_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToASCII_UTF8_4_6 uidna_labelToASCII_UTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToUnicodeUTF8_4_6 uidna_labelToUnicodeUTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_labelToUnicode_4_6 uidna_labelToUnicode_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToASCII_4_6 uidna_nameToASCII_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToASCII_UTF8_4_6 uidna_nameToASCII_UTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToUnicodeUTF8_4_6 uidna_nameToUnicodeUTF8_DRAFT_API_DO_NOT_USE
-#        define uidna_nameToUnicode_4_6 uidna_nameToUnicode_DRAFT_API_DO_NOT_USE
-#        define uidna_openUTS46_4_6 uidna_openUTS46_DRAFT_API_DO_NOT_USE
-#        define uloc_forLanguageTag_4_6 uloc_forLanguageTag_DRAFT_API_DO_NOT_USE
-#        define uloc_toLanguageTag_4_6 uloc_toLanguageTag_DRAFT_API_DO_NOT_USE
-#        define unorm2_getDecomposition_4_6 unorm2_getDecomposition_DRAFT_API_DO_NOT_USE
-#        define uregex_end64_4_6 uregex_end64_DRAFT_API_DO_NOT_USE
-#        define uregex_find64_4_6 uregex_find64_DRAFT_API_DO_NOT_USE
-#        define uregex_getFindProgressCallback_4_6 uregex_getFindProgressCallback_DRAFT_API_DO_NOT_USE
-#        define uregex_lookingAt64_4_6 uregex_lookingAt64_DRAFT_API_DO_NOT_USE
-#        define uregex_matches64_4_6 uregex_matches64_DRAFT_API_DO_NOT_USE
-#        define uregex_patternUText_4_6 uregex_patternUText_DRAFT_API_DO_NOT_USE
-#        define uregex_regionEnd64_4_6 uregex_regionEnd64_DRAFT_API_DO_NOT_USE
-#        define uregex_regionStart64_4_6 uregex_regionStart64_DRAFT_API_DO_NOT_USE
-#        define uregex_reset64_4_6 uregex_reset64_DRAFT_API_DO_NOT_USE
-#        define uregex_setFindProgressCallback_4_6 uregex_setFindProgressCallback_DRAFT_API_DO_NOT_USE
-#        define uregex_setRegion64_4_6 uregex_setRegion64_DRAFT_API_DO_NOT_USE
-#        define uregex_setRegionAndStart_4_6 uregex_setRegionAndStart_DRAFT_API_DO_NOT_USE
-#        define uregex_start64_4_6 uregex_start64_DRAFT_API_DO_NOT_USE
-#        define uscript_getScriptExtensions_4_6 uscript_getScriptExtensions_DRAFT_API_DO_NOT_USE
-#        define uscript_hasScript_4_6 uscript_hasScript_DRAFT_API_DO_NOT_USE
+#        define StringPiece&amp;y)_4_7 StringPiece&amp;y)_DRAFT_API_DO_NOT_USE
+#        define ubidi_getBaseDirection(const UChar *text, int32_t length)_4_7 ubidi_getBaseDirection(const UChar *text, int32_t length)_DRAFT_API_DO_NOT_USE
+#        define ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char *region, const int32_t *rawOffset, UErrorCode *ec)_4_7 ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char *region, const int32_t *rawOffset, UErrorCode *ec)_DRAFT_API_DO_NOT_USE
+#        define ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status)_4_7 ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uidna_close(UIDNA *idna)_4_7 uidna_close(UIDNA *idna)_DRAFT_API_DO_NOT_USE
+#        define uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode)_4_7 uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode)_DRAFT_API_DO_NOT_USE
+#        define uloc_forLanguageTag(const char *langtag, char *localeID, int32_t localeIDCapacity, int32_t *parsedLength, UErrorCode *err)_4_7 uloc_forLanguageTag(const char *langtag, char *localeID, int32_t localeIDCapacity, int32_t *parsedLength, UErrorCode *err)_DRAFT_API_DO_NOT_USE
+#        define uloc_toLanguageTag(const char *localeID, char *langtag, int32_t langtagCapacity, UBool strict, UErrorCode *err)_4_7 uloc_toLanguageTag(const char *localeID, char *langtag, int32_t langtagCapacity, UBool strict, UErrorCode *err)_DRAFT_API_DO_NOT_USE
+#        define unorm2_getDecomposition(const UNormalizer2 *norm2, UChar32 c, UChar *decomposition, int32_t capacity, UErrorCode *pErrorCode)_4_7 unorm2_getDecomposition(const UNormalizer2 *norm2, UChar32 c, UChar *decomposition, int32_t capacity, UErrorCode *pErrorCode)_DRAFT_API_DO_NOT_USE
+#        define uregex_end64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status)_4_7 uregex_end64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_find64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_4_7 uregex_find64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_getFindProgressCallback(const URegularExpression *regexp, URegexFindProgressCallback **callback, const void **context, UErrorCode *status)_4_7 uregex_getFindProgressCallback(const URegularExpression *regexp, URegexFindProgressCallback **callback, const void **context, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_lookingAt64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_4_7 uregex_lookingAt64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_matches64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_4_7 uregex_matches64(URegularExpression *regexp, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_patternUText(const URegularExpression *regexp, UErrorCode *status)_4_7 uregex_patternUText(const URegularExpression *regexp, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_regionEnd64(const URegularExpression *regexp, UErrorCode *status)_4_7 uregex_regionEnd64(const URegularExpression *regexp, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_regionStart64(const URegularExpression *regexp, UErrorCode *status)_4_7 uregex_regionStart64(const URegularExpression *regexp, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_reset64(URegularExpression *regexp, int64_t index, UErrorCode *status)_4_7 uregex_reset64(URegularExpression *regexp, int64_t index, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_setFindProgressCallback(URegularExpression *regexp, URegexFindProgressCallback *callback, const void *context, UErrorCode *status)_4_7 uregex_setFindProgressCallback(URegularExpression *regexp, URegexFindProgressCallback *callback, const void *context, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_setRegion64(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, UErrorCode *status)_4_7 uregex_setRegion64(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_setRegionAndStart(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode *status)_4_7 uregex_setRegionAndStart(URegularExpression *regexp, int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uregex_start64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status)_4_7 uregex_start64(URegularExpression *regexp, int32_t groupNum, UErrorCode *status)_DRAFT_API_DO_NOT_USE
+#        define uscript_getScriptExtensions(UChar32 c, UScriptCode *scripts, int32_t capacity, UErrorCode *pErrorCode)_4_7 uscript_getScriptExtensions(UChar32 c, UScriptCode *scripts, int32_t capacity, UErrorCode *pErrorCode)_DRAFT_API_DO_NOT_USE
+#        define uscript_hasScript(UChar32 c, UScriptCode sc)_4_7 uscript_hasScript(UChar32 c, UScriptCode sc)_DRAFT_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_DRAFT_API */
