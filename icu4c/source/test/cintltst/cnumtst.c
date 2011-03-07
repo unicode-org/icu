@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1306,6 +1306,15 @@ static void TestInt64Format() {
             } else if (!withinErr(valDouble, doubleBig, 1e-15)) {
                 log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
             }
+        }
+		
+		u_uastrcpy(result, "5.06e-27");
+        parsepos = 0;
+        valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+        if (U_FAILURE(status)) {
+            log_err("parseDouble() returned error: %s\n", myErrorName(status));
+        } else if (!withinErr(valDouble, 5.06e-27, 1e-15)) {
+            log_err("parseDouble() returned incorrect value, got: %g\n", valDouble);
         }
     }
     unum_close(fmt);
