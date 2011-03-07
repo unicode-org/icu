@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -24,25 +24,23 @@
 #ifdef U_HIDE_DEPRECATED_API
 
 #    if U_DISABLE_RENAMING
-#        define ucol_getContractions ucol_getContractions_DEPRECATED_API_DO_NOT_USE
-#        define ucol_getLocale ucol_getLocale_DEPRECATED_API_DO_NOT_USE
-#        define ures_countArrayItems ures_countArrayItems_DEPRECATED_API_DO_NOT_USE
-#        define ures_getLocale ures_getLocale_DEPRECATED_API_DO_NOT_USE
-#        define ures_getVersionNumber ures_getVersionNumber_DEPRECATED_API_DO_NOT_USE
-#        define utrans_getAvailableID utrans_getAvailableID_DEPRECATED_API_DO_NOT_USE
-#        define utrans_getID utrans_getID_DEPRECATED_API_DO_NOT_USE
-#        define utrans_open utrans_open_DEPRECATED_API_DO_NOT_USE
-#        define utrans_unregister utrans_unregister_DEPRECATED_API_DO_NOT_USE
+#        define ucol_getContractions(const UCollator *coll, USet *conts, UErrorCode *status) ucol_getContractions(const UCollator *coll, USet *conts, UErrorCode *status)_DEPRECATED_API_DO_NOT_USE
+#        define ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status) ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status)_DEPRECATED_API_DO_NOT_USE
+#        define ures_countArrayItems(const UResourceBundle *resourceBundle, const char *resourceKey, UErrorCode *err) ures_countArrayItems(const UResourceBundle *resourceBundle, const char *resourceKey, UErrorCode *err)_DEPRECATED_API_DO_NOT_USE
+#        define ures_getLocale(const UResourceBundle *resourceBundle, UErrorCode *status) ures_getLocale(const UResourceBundle *resourceBundle, UErrorCode *status)_DEPRECATED_API_DO_NOT_USE
+#        define ures_getVersionNumber(const UResourceBundle *resourceBundle) ures_getVersionNumber(const UResourceBundle *resourceBundle)_DEPRECATED_API_DO_NOT_USE
+#        define utrans_getAvailableID(int32_t index, char *buf, int32_t bufCapacity) utrans_getAvailableID(int32_t index, char *buf, int32_t bufCapacity)_DEPRECATED_API_DO_NOT_USE
+#        define utrans_getID(const UTransliterator *trans, char *buf, int32_t bufCapacity) utrans_getID(const UTransliterator *trans, char *buf, int32_t bufCapacity)_DEPRECATED_API_DO_NOT_USE
+#        define utrans_unregister(const char *id) utrans_unregister(const char *id)_DEPRECATED_API_DO_NOT_USE
 #    else
-#        define ucol_getContractions_4_6 ucol_getContractions_DEPRECATED_API_DO_NOT_USE
-#        define ucol_getLocale_4_6 ucol_getLocale_DEPRECATED_API_DO_NOT_USE
-#        define ures_countArrayItems_4_6 ures_countArrayItems_DEPRECATED_API_DO_NOT_USE
-#        define ures_getLocale_4_6 ures_getLocale_DEPRECATED_API_DO_NOT_USE
-#        define ures_getVersionNumber_4_6 ures_getVersionNumber_DEPRECATED_API_DO_NOT_USE
-#        define utrans_getAvailableID_4_6 utrans_getAvailableID_DEPRECATED_API_DO_NOT_USE
-#        define utrans_getID_4_6 utrans_getID_DEPRECATED_API_DO_NOT_USE
-#        define utrans_open_4_6 utrans_open_DEPRECATED_API_DO_NOT_USE
-#        define utrans_unregister_4_6 utrans_unregister_DEPRECATED_API_DO_NOT_USE
+#        define ucol_getContractions(const UCollator *coll, USet *conts, UErrorCode *status)_4_7 ucol_getContractions(const UCollator *coll, USet *conts, UErrorCode *status)_DEPRECATED_API_DO_NOT_USE
+#        define ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status)_4_7 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status)_DEPRECATED_API_DO_NOT_USE
+#        define ures_countArrayItems(const UResourceBundle *resourceBundle, const char *resourceKey, UErrorCode *err)_4_7 ures_countArrayItems(const UResourceBundle *resourceBundle, const char *resourceKey, UErrorCode *err)_DEPRECATED_API_DO_NOT_USE
+#        define ures_getLocale(const UResourceBundle *resourceBundle, UErrorCode *status)_4_7 ures_getLocale(const UResourceBundle *resourceBundle, UErrorCode *status)_DEPRECATED_API_DO_NOT_USE
+#        define ures_getVersionNumber(const UResourceBundle *resourceBundle)_4_7 ures_getVersionNumber(const UResourceBundle *resourceBundle)_DEPRECATED_API_DO_NOT_USE
+#        define utrans_getAvailableID(int32_t index, char *buf, int32_t bufCapacity)_4_7 utrans_getAvailableID(int32_t index, char *buf, int32_t bufCapacity)_DEPRECATED_API_DO_NOT_USE
+#        define utrans_getID(const UTransliterator *trans, char *buf, int32_t bufCapacity)_4_7 utrans_getID(const UTransliterator *trans, char *buf, int32_t bufCapacity)_DEPRECATED_API_DO_NOT_USE
+#        define utrans_unregister(const char *id)_4_7 utrans_unregister(const char *id)_DEPRECATED_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_DEPRECATED_API */

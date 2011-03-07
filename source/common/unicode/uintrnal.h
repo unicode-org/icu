@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -24,227 +24,219 @@
 #ifdef U_HIDE_INTERNAL_API
 
 #    if U_DISABLE_RENAMING
-#        define RegexPatternDump RegexPatternDump_INTERNAL_API_DO_NOT_USE
-#        define bms_close bms_close_INTERNAL_API_DO_NOT_USE
-#        define bms_empty bms_empty_INTERNAL_API_DO_NOT_USE
-#        define bms_getData bms_getData_INTERNAL_API_DO_NOT_USE
-#        define bms_open bms_open_INTERNAL_API_DO_NOT_USE
-#        define bms_search bms_search_INTERNAL_API_DO_NOT_USE
-#        define bms_setTargetString bms_setTargetString_INTERNAL_API_DO_NOT_USE
-#        define pl_addFontRun pl_addFontRun_INTERNAL_API_DO_NOT_USE
-#        define pl_addLocaleRun pl_addLocaleRun_INTERNAL_API_DO_NOT_USE
-#        define pl_addValueRun pl_addValueRun_INTERNAL_API_DO_NOT_USE
-#        define pl_close pl_close_INTERNAL_API_DO_NOT_USE
-#        define pl_closeFontRuns pl_closeFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_closeLine pl_closeLine_INTERNAL_API_DO_NOT_USE
-#        define pl_closeLocaleRuns pl_closeLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_closeValueRuns pl_closeValueRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_countLineRuns pl_countLineRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_getAscent pl_getAscent_INTERNAL_API_DO_NOT_USE
-#        define pl_getDescent pl_getDescent_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunCount pl_getFontRunCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunFont pl_getFontRunFont_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunLastLimit pl_getFontRunLastLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunLimit pl_getFontRunLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getLeading pl_getLeading_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineAscent pl_getLineAscent_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineDescent pl_getLineDescent_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineLeading pl_getLineLeading_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineVisualRun pl_getLineVisualRun_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineWidth pl_getLineWidth_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunCount pl_getLocaleRunCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunLastLimit pl_getLocaleRunLastLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunLimit pl_getLocaleRunLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunLocale pl_getLocaleRunLocale_INTERNAL_API_DO_NOT_USE
-#        define pl_getParagraphLevel pl_getParagraphLevel_INTERNAL_API_DO_NOT_USE
-#        define pl_getTextDirection pl_getTextDirection_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunCount pl_getValueRunCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunLastLimit pl_getValueRunLastLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunLimit pl_getValueRunLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunValue pl_getValueRunValue_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunAscent pl_getVisualRunAscent_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunDescent pl_getVisualRunDescent_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunDirection pl_getVisualRunDirection_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunFont pl_getVisualRunFont_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunGlyphCount pl_getVisualRunGlyphCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunGlyphToCharMap pl_getVisualRunGlyphToCharMap_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunGlyphs pl_getVisualRunGlyphs_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunLeading pl_getVisualRunLeading_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunPositions pl_getVisualRunPositions_INTERNAL_API_DO_NOT_USE
+#        define LE_ARRAY_SIZE(array) LE_ARRAY_SIZE(array)_INTERNAL_API_DO_NOT_USE
+#        define RegexPatternDump(pat) RegexPatternDump(pat)_INTERNAL_API_DO_NOT_USE
+#        define bms_close(BMS *bms) bms_close(BMS *bms)_INTERNAL_API_DO_NOT_USE
+#        define bms_empty(BMS *bms) bms_empty(BMS *bms)_INTERNAL_API_DO_NOT_USE
+#        define bms_getData(BMS *bms) bms_getData(BMS *bms)_INTERNAL_API_DO_NOT_USE
+#        define bms_open(UCD *ucd, const UChar *pattern, int32_t patternLength, const UChar *target, int32_t targetLength, UErrorCode *status) bms_open(UCD *ucd, const UChar *pattern, int32_t patternLength, const UChar *target, int32_t targetLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end) bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end)_INTERNAL_API_DO_NOT_USE
+#        define bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status) bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define pl_addFontRun(pl_fontRuns *fontRuns, const le_font *font, le_int32 limit) pl_addFontRun(pl_fontRuns *fontRuns, const le_font *font, le_int32 limit)_INTERNAL_API_DO_NOT_USE
+#        define pl_addLocaleRun(pl_localeRuns *localeRuns, const char *locale, le_int32 limit) pl_addLocaleRun(pl_localeRuns *localeRuns, const char *locale, le_int32 limit)_INTERNAL_API_DO_NOT_USE
+#        define pl_addValueRun(pl_valueRuns *valueRuns, le_int32 value, le_int32 limit) pl_addValueRun(pl_valueRuns *valueRuns, le_int32 value, le_int32 limit)_INTERNAL_API_DO_NOT_USE
+#        define pl_close(pl_paragraph *paragraph) pl_close(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeFontRuns(pl_fontRuns *fontRuns) pl_closeFontRuns(pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeLine(pl_line *line) pl_closeLine(pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeLocaleRuns(pl_localeRuns *localeRuns) pl_closeLocaleRuns(pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeValueRuns(pl_valueRuns *valueRuns) pl_closeValueRuns(pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_countLineRuns(const pl_line *line) pl_countLineRuns(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getAscent(const pl_paragraph *paragraph) pl_getAscent(const pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getDescent(const pl_paragraph *paragraph) pl_getDescent(const pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunCount(const pl_fontRuns *fontRuns) pl_getFontRunCount(const pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunFont(const pl_fontRuns *fontRuns, le_int32 run) pl_getFontRunFont(const pl_fontRuns *fontRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunLastLimit(const pl_fontRuns *fontRuns) pl_getFontRunLastLimit(const pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunLimit(const pl_fontRuns *fontRuns, le_int32 run) pl_getFontRunLimit(const pl_fontRuns *fontRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLeading(const pl_paragraph *paragraph) pl_getLeading(const pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineAscent(const pl_line *line) pl_getLineAscent(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineDescent(const pl_line *line) pl_getLineDescent(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineLeading(const pl_line *line) pl_getLineLeading(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineVisualRun(const pl_line *line, le_int32 runIndex) pl_getLineVisualRun(const pl_line *line, le_int32 runIndex)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineWidth(const pl_line *line) pl_getLineWidth(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunCount(const pl_localeRuns *localeRuns) pl_getLocaleRunCount(const pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunLastLimit(const pl_localeRuns *localeRuns) pl_getLocaleRunLastLimit(const pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunLimit(const pl_localeRuns *localeRuns, le_int32 run) pl_getLocaleRunLimit(const pl_localeRuns *localeRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunLocale(const pl_localeRuns *localeRuns, le_int32 run) pl_getLocaleRunLocale(const pl_localeRuns *localeRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getParagraphLevel(pl_paragraph *paragraph) pl_getParagraphLevel(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getTextDirection(pl_paragraph *paragraph) pl_getTextDirection(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunCount(const pl_valueRuns *valueRuns) pl_getValueRunCount(const pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunLastLimit(const pl_valueRuns *valueRuns) pl_getValueRunLastLimit(const pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunLimit(const pl_valueRuns *valueRuns, le_int32 run) pl_getValueRunLimit(const pl_valueRuns *valueRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunValue(const pl_valueRuns *valueRuns, le_int32 run) pl_getValueRunValue(const pl_valueRuns *valueRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunAscent(const pl_visualRun *run) pl_getVisualRunAscent(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunDescent(const pl_visualRun *run) pl_getVisualRunDescent(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunDirection(const pl_visualRun *run) pl_getVisualRunDirection(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunFont(const pl_visualRun *run) pl_getVisualRunFont(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunGlyphCount(const pl_visualRun *run) pl_getVisualRunGlyphCount(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunGlyphToCharMap(const pl_visualRun *run) pl_getVisualRunGlyphToCharMap(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunGlyphs(const pl_visualRun *run) pl_getVisualRunGlyphs(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunLeading(const pl_visualRun *run) pl_getVisualRunLeading(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunPositions(const pl_visualRun *run) pl_getVisualRunPositions(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
 #        define pl_line pl_line_INTERNAL_API_DO_NOT_USE
-#        define pl_nextLine pl_nextLine_INTERNAL_API_DO_NOT_USE
-#        define pl_openEmptyFontRuns pl_openEmptyFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openEmptyLocaleRuns pl_openEmptyLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openEmptyValueRuns pl_openEmptyValueRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openFontRuns pl_openFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openLocaleRuns pl_openLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openValueRuns pl_openValueRuns_INTERNAL_API_DO_NOT_USE
+#        define pl_nextLine(pl_paragraph *paragraph, float width) pl_nextLine(pl_paragraph *paragraph, float width)_INTERNAL_API_DO_NOT_USE
+#        define pl_openEmptyFontRuns(le_int32 initialCapacity) pl_openEmptyFontRuns(le_int32 initialCapacity)_INTERNAL_API_DO_NOT_USE
+#        define pl_openEmptyLocaleRuns(le_int32 initialCapacity) pl_openEmptyLocaleRuns(le_int32 initialCapacity)_INTERNAL_API_DO_NOT_USE
+#        define pl_openEmptyValueRuns(le_int32 initialCapacity) pl_openEmptyValueRuns(le_int32 initialCapacity)_INTERNAL_API_DO_NOT_USE
+#        define pl_openFontRuns(const le_font **fonts, const le_int32 *limits, le_int32 count) pl_openFontRuns(const le_font **fonts, const le_int32 *limits, le_int32 count)_INTERNAL_API_DO_NOT_USE
+#        define pl_openLocaleRuns(const char **locales, const le_int32 *limits, le_int32 count) pl_openLocaleRuns(const char **locales, const le_int32 *limits, le_int32 count)_INTERNAL_API_DO_NOT_USE
+#        define pl_openValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count) pl_openValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count)_INTERNAL_API_DO_NOT_USE
 #        define pl_paragraph pl_paragraph_INTERNAL_API_DO_NOT_USE
-#        define pl_reflow pl_reflow_INTERNAL_API_DO_NOT_USE
-#        define pl_resetFontRuns pl_resetFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_resetLocaleRuns pl_resetLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_resetValueRuns pl_resetValueRuns_INTERNAL_API_DO_NOT_USE
+#        define pl_reflow(pl_paragraph *paragraph) pl_reflow(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_resetFontRuns(pl_fontRuns *fontRuns) pl_resetFontRuns(pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_resetLocaleRuns(pl_localeRuns *localeRuns) pl_resetLocaleRuns(pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_resetValueRuns(pl_valueRuns *valueRuns) pl_resetValueRuns(pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
 #        define pl_visualRun pl_visualRun_INTERNAL_API_DO_NOT_USE
-#        define ucd_close ucd_close_INTERNAL_API_DO_NOT_USE
-#        define ucd_flushCache ucd_flushCache_INTERNAL_API_DO_NOT_USE
-#        define ucd_freeCache ucd_freeCache_INTERNAL_API_DO_NOT_USE
-#        define ucd_getCollator ucd_getCollator_INTERNAL_API_DO_NOT_USE
-#        define ucd_open ucd_open_INTERNAL_API_DO_NOT_USE
-#        define ucol_equals ucol_equals_INTERNAL_API_DO_NOT_USE
-#        define ucol_forceHanImplicit ucol_forceHanImplicit_INTERNAL_API_DO_NOT_USE
-#        define ucol_forgetUCA ucol_forgetUCA_INTERNAL_API_DO_NOT_USE
-#        define ucol_getAttributeOrDefault ucol_getAttributeOrDefault_INTERNAL_API_DO_NOT_USE
-#        define ucol_getReorderCodes ucol_getReorderCodes_INTERNAL_API_DO_NOT_USE
-#        define ucol_getUnsafeSet ucol_getUnsafeSet_INTERNAL_API_DO_NOT_USE
-#        define ucol_nextProcessed ucol_nextProcessed_INTERNAL_API_DO_NOT_USE
-#        define ucol_prepareShortStringOpen ucol_prepareShortStringOpen_INTERNAL_API_DO_NOT_USE
-#        define ucol_previousProcessed ucol_previousProcessed_INTERNAL_API_DO_NOT_USE
-#        define ucol_setReorderCodes ucol_setReorderCodes_INTERNAL_API_DO_NOT_USE
-#        define udat_applyPatternRelative udat_applyPatternRelative_INTERNAL_API_DO_NOT_USE
-#        define udat_toPatternRelativeDate udat_toPatternRelativeDate_INTERNAL_API_DO_NOT_USE
-#        define udat_toPatternRelativeTime udat_toPatternRelativeTime_INTERNAL_API_DO_NOT_USE
-#        define uplug_getConfiguration uplug_getConfiguration_INTERNAL_API_DO_NOT_USE
-#        define uplug_getContext uplug_getContext_INTERNAL_API_DO_NOT_USE
-#        define uplug_getCurrentLevel uplug_getCurrentLevel_INTERNAL_API_DO_NOT_USE
-#        define uplug_getLibrary uplug_getLibrary_INTERNAL_API_DO_NOT_USE
-#        define uplug_getLibraryName uplug_getLibraryName_INTERNAL_API_DO_NOT_USE
-#        define uplug_getPlugLevel uplug_getPlugLevel_INTERNAL_API_DO_NOT_USE
-#        define uplug_getPlugLoadStatus uplug_getPlugLoadStatus_INTERNAL_API_DO_NOT_USE
-#        define uplug_getPlugName uplug_getPlugName_INTERNAL_API_DO_NOT_USE
-#        define uplug_getSymbolName uplug_getSymbolName_INTERNAL_API_DO_NOT_USE
-#        define uplug_loadPlugFromEntrypoint uplug_loadPlugFromEntrypoint_INTERNAL_API_DO_NOT_USE
-#        define uplug_loadPlugFromLibrary uplug_loadPlugFromLibrary_INTERNAL_API_DO_NOT_USE
-#        define uplug_nextPlug uplug_nextPlug_INTERNAL_API_DO_NOT_USE
-#        define uplug_removePlug uplug_removePlug_INTERNAL_API_DO_NOT_USE
-#        define uplug_setContext uplug_setContext_INTERNAL_API_DO_NOT_USE
-#        define uplug_setPlugLevel uplug_setPlugLevel_INTERNAL_API_DO_NOT_USE
-#        define uplug_setPlugName uplug_setPlugName_INTERNAL_API_DO_NOT_USE
-#        define uplug_setPlugNoUnload uplug_setPlugNoUnload_INTERNAL_API_DO_NOT_USE
-#        define uprv_getDefaultCodepage uprv_getDefaultCodepage_INTERNAL_API_DO_NOT_USE
-#        define uprv_getDefaultLocaleID uprv_getDefaultLocaleID_INTERNAL_API_DO_NOT_USE
-#        define ures_openFillIn ures_openFillIn_INTERNAL_API_DO_NOT_USE
-#        define usearch_search usearch_search_INTERNAL_API_DO_NOT_USE
-#        define usearch_searchBackwards usearch_searchBackwards_INTERNAL_API_DO_NOT_USE
-#        define utext_caseCompare utext_caseCompare_INTERNAL_API_DO_NOT_USE
-#        define utext_caseCompareNativeLimit utext_caseCompareNativeLimit_INTERNAL_API_DO_NOT_USE
-#        define utext_compare utext_compare_INTERNAL_API_DO_NOT_USE
-#        define utext_compareNativeLimit utext_compareNativeLimit_INTERNAL_API_DO_NOT_USE
-#        define utf8_appendCharSafeBody utf8_appendCharSafeBody_INTERNAL_API_DO_NOT_USE
-#        define utf8_back1SafeBody utf8_back1SafeBody_INTERNAL_API_DO_NOT_USE
-#        define utf8_countTrailBytes utf8_countTrailBytes_INTERNAL_API_DO_NOT_USE
-#        define utf8_nextCharSafeBody utf8_nextCharSafeBody_INTERNAL_API_DO_NOT_USE
-#        define utf8_prevCharSafeBody utf8_prevCharSafeBody_INTERNAL_API_DO_NOT_USE
+#        define ucd_close(UCD *ucd) ucd_close(UCD *ucd)_INTERNAL_API_DO_NOT_USE
+#        define ucd_flushCache() ucd_flushCache()_INTERNAL_API_DO_NOT_USE
+#        define ucd_freeCache() ucd_freeCache()_INTERNAL_API_DO_NOT_USE
+#        define ucd_getCollator(UCD *ucd) ucd_getCollator(UCD *ucd)_INTERNAL_API_DO_NOT_USE
+#        define ucd_open(UCollator *coll, UErrorCode *status) ucd_open(UCollator *coll, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_equals(const UCollator *source, const UCollator *target) ucol_equals(const UCollator *source, const UCollator *target)_INTERNAL_API_DO_NOT_USE
+#        define ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status) ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_forgetUCA(void) ucol_forgetUCA(void)_INTERNAL_API_DO_NOT_USE
+#        define ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status) ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_getReorderCodes(const UCollator *coll, int32_t *dest, int32_t destCapacity, UErrorCode *pErrorCode) ucol_getReorderCodes(const UCollator *coll, int32_t *dest, int32_t destCapacity, UErrorCode *pErrorCode)_INTERNAL_API_DO_NOT_USE
+#        define ucol_getUnsafeSet(const UCollator *coll, USet *unsafe, UErrorCode *status) ucol_getUnsafeSet(const UCollator *coll, USet *unsafe, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_nextProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status) ucol_nextProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_previousProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status) ucol_previousProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_setReorderCodes(UCollator *coll, const int32_t *reorderCodes, int32_t reorderCodesLength, UErrorCode *pErrorCode) ucol_setReorderCodes(UCollator *coll, const int32_t *reorderCodes, int32_t reorderCodesLength, UErrorCode *pErrorCode)_INTERNAL_API_DO_NOT_USE
+#        define udat_applyPatternRelative(UDateFormat *format, const UChar *datePattern, int32_t datePatternLength, const UChar *timePattern, int32_t timePatternLength, UErrorCode *status) udat_applyPatternRelative(UDateFormat *format, const UChar *datePattern, int32_t datePatternLength, const UChar *timePattern, int32_t timePatternLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define udat_toPatternRelativeDate(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status) udat_toPatternRelativeDate(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define udat_toPatternRelativeTime(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status) udat_toPatternRelativeTime(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getConfiguration(UPlugData *plug) uplug_getConfiguration(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getContext(UPlugData *plug) uplug_getContext(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getCurrentLevel(void) uplug_getCurrentLevel(void)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getLibrary(UPlugData *plug) uplug_getLibrary(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getLibraryName(UPlugData *plug, UErrorCode *status) uplug_getLibraryName(UPlugData *plug, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getPlugLevel(UPlugData *plug) uplug_getPlugLevel(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getPlugLoadStatus(UPlugData *plug) uplug_getPlugLoadStatus(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getPlugName(UPlugData *plug) uplug_getPlugName(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getSymbolName(UPlugData *plug) uplug_getSymbolName(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_loadPlugFromEntrypoint(UPlugEntrypoint *entrypoint, const char *config, UErrorCode *status) uplug_loadPlugFromEntrypoint(UPlugEntrypoint *entrypoint, const char *config, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_loadPlugFromLibrary(const char *libName, const char *sym, const char *config, UErrorCode *status) uplug_loadPlugFromLibrary(const char *libName, const char *sym, const char *config, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_nextPlug(UPlugData *prior) uplug_nextPlug(UPlugData *prior)_INTERNAL_API_DO_NOT_USE
+#        define uplug_removePlug(UPlugData *plug, UErrorCode *status) uplug_removePlug(UPlugData *plug, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setContext(UPlugData *plug, void *context) uplug_setContext(UPlugData *plug, void *context)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setPlugLevel(UPlugData *plug, UPlugLevel level) uplug_setPlugLevel(UPlugData *plug, UPlugLevel level)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setPlugName(UPlugData *plug, const char *name) uplug_setPlugName(UPlugData *plug, const char *name)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setPlugNoUnload(UPlugData *plug, UBool dontUnload) uplug_setPlugNoUnload(UPlugData *plug, UBool dontUnload)_INTERNAL_API_DO_NOT_USE
+#        define uprv_getDefaultCodepage(void) uprv_getDefaultCodepage(void)_INTERNAL_API_DO_NOT_USE
+#        define uprv_getDefaultLocaleID(void) uprv_getDefaultLocaleID(void)_INTERNAL_API_DO_NOT_USE
+#        define ures_openFillIn(UResourceBundle *r, const char *packageName, const char *localeID, UErrorCode *status) ures_openFillIn(UResourceBundle *r, const char *packageName, const char *localeID, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define usearch_search(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status) usearch_search(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define usearch_searchBackwards(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status) usearch_searchBackwards(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError) utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError)_INTERNAL_API_DO_NOT_USE
+#        define utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i) utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i)_INTERNAL_API_DO_NOT_USE
+#        define utf8_countTrailBytes[256] utf8_countTrailBytes[256]_INTERNAL_API_DO_NOT_USE
+#        define utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict)_INTERNAL_API_DO_NOT_USE
+#        define utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict) utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict)_INTERNAL_API_DO_NOT_USE
 #    else
-#        define RegexPatternDump_4_6 RegexPatternDump_INTERNAL_API_DO_NOT_USE
-#        define bms_close_4_6 bms_close_INTERNAL_API_DO_NOT_USE
-#        define bms_empty_4_6 bms_empty_INTERNAL_API_DO_NOT_USE
-#        define bms_getData_4_6 bms_getData_INTERNAL_API_DO_NOT_USE
-#        define bms_open_4_6 bms_open_INTERNAL_API_DO_NOT_USE
-#        define bms_search_4_6 bms_search_INTERNAL_API_DO_NOT_USE
-#        define bms_setTargetString_4_6 bms_setTargetString_INTERNAL_API_DO_NOT_USE
-#        define pl_addFontRun_4_6 pl_addFontRun_INTERNAL_API_DO_NOT_USE
-#        define pl_addLocaleRun_4_6 pl_addLocaleRun_INTERNAL_API_DO_NOT_USE
-#        define pl_addValueRun_4_6 pl_addValueRun_INTERNAL_API_DO_NOT_USE
-#        define pl_close_4_6 pl_close_INTERNAL_API_DO_NOT_USE
-#        define pl_closeFontRuns_4_6 pl_closeFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_closeLine_4_6 pl_closeLine_INTERNAL_API_DO_NOT_USE
-#        define pl_closeLocaleRuns_4_6 pl_closeLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_closeValueRuns_4_6 pl_closeValueRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_countLineRuns_4_6 pl_countLineRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_getAscent_4_6 pl_getAscent_INTERNAL_API_DO_NOT_USE
-#        define pl_getDescent_4_6 pl_getDescent_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunCount_4_6 pl_getFontRunCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunFont_4_6 pl_getFontRunFont_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunLastLimit_4_6 pl_getFontRunLastLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getFontRunLimit_4_6 pl_getFontRunLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getLeading_4_6 pl_getLeading_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineAscent_4_6 pl_getLineAscent_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineDescent_4_6 pl_getLineDescent_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineLeading_4_6 pl_getLineLeading_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineVisualRun_4_6 pl_getLineVisualRun_INTERNAL_API_DO_NOT_USE
-#        define pl_getLineWidth_4_6 pl_getLineWidth_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunCount_4_6 pl_getLocaleRunCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunLastLimit_4_6 pl_getLocaleRunLastLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunLimit_4_6 pl_getLocaleRunLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getLocaleRunLocale_4_6 pl_getLocaleRunLocale_INTERNAL_API_DO_NOT_USE
-#        define pl_getParagraphLevel_4_6 pl_getParagraphLevel_INTERNAL_API_DO_NOT_USE
-#        define pl_getTextDirection_4_6 pl_getTextDirection_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunCount_4_6 pl_getValueRunCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunLastLimit_4_6 pl_getValueRunLastLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunLimit_4_6 pl_getValueRunLimit_INTERNAL_API_DO_NOT_USE
-#        define pl_getValueRunValue_4_6 pl_getValueRunValue_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunAscent_4_6 pl_getVisualRunAscent_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunDescent_4_6 pl_getVisualRunDescent_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunDirection_4_6 pl_getVisualRunDirection_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunFont_4_6 pl_getVisualRunFont_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunGlyphCount_4_6 pl_getVisualRunGlyphCount_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunGlyphToCharMap_4_6 pl_getVisualRunGlyphToCharMap_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunGlyphs_4_6 pl_getVisualRunGlyphs_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunLeading_4_6 pl_getVisualRunLeading_INTERNAL_API_DO_NOT_USE
-#        define pl_getVisualRunPositions_4_6 pl_getVisualRunPositions_INTERNAL_API_DO_NOT_USE
-#        define pl_line_4_6 pl_line_INTERNAL_API_DO_NOT_USE
-#        define pl_nextLine_4_6 pl_nextLine_INTERNAL_API_DO_NOT_USE
-#        define pl_openEmptyFontRuns_4_6 pl_openEmptyFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openEmptyLocaleRuns_4_6 pl_openEmptyLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openEmptyValueRuns_4_6 pl_openEmptyValueRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openFontRuns_4_6 pl_openFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openLocaleRuns_4_6 pl_openLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_openValueRuns_4_6 pl_openValueRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_paragraph_4_6 pl_paragraph_INTERNAL_API_DO_NOT_USE
-#        define pl_reflow_4_6 pl_reflow_INTERNAL_API_DO_NOT_USE
-#        define pl_resetFontRuns_4_6 pl_resetFontRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_resetLocaleRuns_4_6 pl_resetLocaleRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_resetValueRuns_4_6 pl_resetValueRuns_INTERNAL_API_DO_NOT_USE
-#        define pl_visualRun_4_6 pl_visualRun_INTERNAL_API_DO_NOT_USE
-#        define ucd_close_4_6 ucd_close_INTERNAL_API_DO_NOT_USE
-#        define ucd_flushCache_4_6 ucd_flushCache_INTERNAL_API_DO_NOT_USE
-#        define ucd_freeCache_4_6 ucd_freeCache_INTERNAL_API_DO_NOT_USE
-#        define ucd_getCollator_4_6 ucd_getCollator_INTERNAL_API_DO_NOT_USE
-#        define ucd_open_4_6 ucd_open_INTERNAL_API_DO_NOT_USE
-#        define ucol_equals_4_6 ucol_equals_INTERNAL_API_DO_NOT_USE
-#        define ucol_forceHanImplicit_4_6 ucol_forceHanImplicit_INTERNAL_API_DO_NOT_USE
-#        define ucol_forgetUCA_4_6 ucol_forgetUCA_INTERNAL_API_DO_NOT_USE
-#        define ucol_getAttributeOrDefault_4_6 ucol_getAttributeOrDefault_INTERNAL_API_DO_NOT_USE
-#        define ucol_getReorderCodes_4_6 ucol_getReorderCodes_INTERNAL_API_DO_NOT_USE
-#        define ucol_getUnsafeSet_4_6 ucol_getUnsafeSet_INTERNAL_API_DO_NOT_USE
-#        define ucol_nextProcessed_4_6 ucol_nextProcessed_INTERNAL_API_DO_NOT_USE
-#        define ucol_prepareShortStringOpen_4_6 ucol_prepareShortStringOpen_INTERNAL_API_DO_NOT_USE
-#        define ucol_previousProcessed_4_6 ucol_previousProcessed_INTERNAL_API_DO_NOT_USE
-#        define ucol_setReorderCodes_4_6 ucol_setReorderCodes_INTERNAL_API_DO_NOT_USE
-#        define udat_applyPatternRelative_4_6 udat_applyPatternRelative_INTERNAL_API_DO_NOT_USE
-#        define udat_toPatternRelativeDate_4_6 udat_toPatternRelativeDate_INTERNAL_API_DO_NOT_USE
-#        define udat_toPatternRelativeTime_4_6 udat_toPatternRelativeTime_INTERNAL_API_DO_NOT_USE
-#        define uplug_getConfiguration_4_6 uplug_getConfiguration_INTERNAL_API_DO_NOT_USE
-#        define uplug_getContext_4_6 uplug_getContext_INTERNAL_API_DO_NOT_USE
-#        define uplug_getCurrentLevel_4_6 uplug_getCurrentLevel_INTERNAL_API_DO_NOT_USE
-#        define uplug_getLibrary_4_6 uplug_getLibrary_INTERNAL_API_DO_NOT_USE
-#        define uplug_getLibraryName_4_6 uplug_getLibraryName_INTERNAL_API_DO_NOT_USE
-#        define uplug_getPlugLevel_4_6 uplug_getPlugLevel_INTERNAL_API_DO_NOT_USE
-#        define uplug_getPlugLoadStatus_4_6 uplug_getPlugLoadStatus_INTERNAL_API_DO_NOT_USE
-#        define uplug_getPlugName_4_6 uplug_getPlugName_INTERNAL_API_DO_NOT_USE
-#        define uplug_getSymbolName_4_6 uplug_getSymbolName_INTERNAL_API_DO_NOT_USE
-#        define uplug_loadPlugFromEntrypoint_4_6 uplug_loadPlugFromEntrypoint_INTERNAL_API_DO_NOT_USE
-#        define uplug_loadPlugFromLibrary_4_6 uplug_loadPlugFromLibrary_INTERNAL_API_DO_NOT_USE
-#        define uplug_nextPlug_4_6 uplug_nextPlug_INTERNAL_API_DO_NOT_USE
-#        define uplug_removePlug_4_6 uplug_removePlug_INTERNAL_API_DO_NOT_USE
-#        define uplug_setContext_4_6 uplug_setContext_INTERNAL_API_DO_NOT_USE
-#        define uplug_setPlugLevel_4_6 uplug_setPlugLevel_INTERNAL_API_DO_NOT_USE
-#        define uplug_setPlugName_4_6 uplug_setPlugName_INTERNAL_API_DO_NOT_USE
-#        define uplug_setPlugNoUnload_4_6 uplug_setPlugNoUnload_INTERNAL_API_DO_NOT_USE
-#        define uprv_getDefaultCodepage_4_6 uprv_getDefaultCodepage_INTERNAL_API_DO_NOT_USE
-#        define uprv_getDefaultLocaleID_4_6 uprv_getDefaultLocaleID_INTERNAL_API_DO_NOT_USE
-#        define ures_openFillIn_4_6 ures_openFillIn_INTERNAL_API_DO_NOT_USE
-#        define usearch_search_4_6 usearch_search_INTERNAL_API_DO_NOT_USE
-#        define usearch_searchBackwards_4_6 usearch_searchBackwards_INTERNAL_API_DO_NOT_USE
-#        define utext_caseCompareNativeLimit_4_6 utext_caseCompareNativeLimit_INTERNAL_API_DO_NOT_USE
-#        define utext_caseCompare_4_6 utext_caseCompare_INTERNAL_API_DO_NOT_USE
-#        define utext_compareNativeLimit_4_6 utext_compareNativeLimit_INTERNAL_API_DO_NOT_USE
-#        define utext_compare_4_6 utext_compare_INTERNAL_API_DO_NOT_USE
-#        define utf8_appendCharSafeBody_4_6 utf8_appendCharSafeBody_INTERNAL_API_DO_NOT_USE
-#        define utf8_back1SafeBody_4_6 utf8_back1SafeBody_INTERNAL_API_DO_NOT_USE
-#        define utf8_countTrailBytes_4_6 utf8_countTrailBytes_INTERNAL_API_DO_NOT_USE
-#        define utf8_nextCharSafeBody_4_6 utf8_nextCharSafeBody_INTERNAL_API_DO_NOT_USE
-#        define utf8_prevCharSafeBody_4_6 utf8_prevCharSafeBody_INTERNAL_API_DO_NOT_USE
+#        define LE_ARRAY_SIZE(array)_4_7 LE_ARRAY_SIZE(array)_INTERNAL_API_DO_NOT_USE
+#        define RegexPatternDump(pat)_4_7 RegexPatternDump(pat)_INTERNAL_API_DO_NOT_USE
+#        define bms_close(BMS *bms)_4_7 bms_close(BMS *bms)_INTERNAL_API_DO_NOT_USE
+#        define bms_empty(BMS *bms)_4_7 bms_empty(BMS *bms)_INTERNAL_API_DO_NOT_USE
+#        define bms_getData(BMS *bms)_4_7 bms_getData(BMS *bms)_INTERNAL_API_DO_NOT_USE
+#        define bms_open(UCD *ucd, const UChar *pattern, int32_t patternLength, const UChar *target, int32_t targetLength, UErrorCode *status)_4_7 bms_open(UCD *ucd, const UChar *pattern, int32_t patternLength, const UChar *target, int32_t targetLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end)_4_7 bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end)_INTERNAL_API_DO_NOT_USE
+#        define bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status)_4_7 bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define pl_addFontRun(pl_fontRuns *fontRuns, const le_font *font, le_int32 limit)_4_7 pl_addFontRun(pl_fontRuns *fontRuns, const le_font *font, le_int32 limit)_INTERNAL_API_DO_NOT_USE
+#        define pl_addLocaleRun(pl_localeRuns *localeRuns, const char *locale, le_int32 limit)_4_7 pl_addLocaleRun(pl_localeRuns *localeRuns, const char *locale, le_int32 limit)_INTERNAL_API_DO_NOT_USE
+#        define pl_addValueRun(pl_valueRuns *valueRuns, le_int32 value, le_int32 limit)_4_7 pl_addValueRun(pl_valueRuns *valueRuns, le_int32 value, le_int32 limit)_INTERNAL_API_DO_NOT_USE
+#        define pl_close(pl_paragraph *paragraph)_4_7 pl_close(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeFontRuns(pl_fontRuns *fontRuns)_4_7 pl_closeFontRuns(pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeLine(pl_line *line)_4_7 pl_closeLine(pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeLocaleRuns(pl_localeRuns *localeRuns)_4_7 pl_closeLocaleRuns(pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_closeValueRuns(pl_valueRuns *valueRuns)_4_7 pl_closeValueRuns(pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_countLineRuns(const pl_line *line)_4_7 pl_countLineRuns(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getAscent(const pl_paragraph *paragraph)_4_7 pl_getAscent(const pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getDescent(const pl_paragraph *paragraph)_4_7 pl_getDescent(const pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunCount(const pl_fontRuns *fontRuns)_4_7 pl_getFontRunCount(const pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunFont(const pl_fontRuns *fontRuns, le_int32 run)_4_7 pl_getFontRunFont(const pl_fontRuns *fontRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunLastLimit(const pl_fontRuns *fontRuns)_4_7 pl_getFontRunLastLimit(const pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getFontRunLimit(const pl_fontRuns *fontRuns, le_int32 run)_4_7 pl_getFontRunLimit(const pl_fontRuns *fontRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLeading(const pl_paragraph *paragraph)_4_7 pl_getLeading(const pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineAscent(const pl_line *line)_4_7 pl_getLineAscent(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineDescent(const pl_line *line)_4_7 pl_getLineDescent(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineLeading(const pl_line *line)_4_7 pl_getLineLeading(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineVisualRun(const pl_line *line, le_int32 runIndex)_4_7 pl_getLineVisualRun(const pl_line *line, le_int32 runIndex)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLineWidth(const pl_line *line)_4_7 pl_getLineWidth(const pl_line *line)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunCount(const pl_localeRuns *localeRuns)_4_7 pl_getLocaleRunCount(const pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunLastLimit(const pl_localeRuns *localeRuns)_4_7 pl_getLocaleRunLastLimit(const pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunLimit(const pl_localeRuns *localeRuns, le_int32 run)_4_7 pl_getLocaleRunLimit(const pl_localeRuns *localeRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getLocaleRunLocale(const pl_localeRuns *localeRuns, le_int32 run)_4_7 pl_getLocaleRunLocale(const pl_localeRuns *localeRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getParagraphLevel(pl_paragraph *paragraph)_4_7 pl_getParagraphLevel(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getTextDirection(pl_paragraph *paragraph)_4_7 pl_getTextDirection(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunCount(const pl_valueRuns *valueRuns)_4_7 pl_getValueRunCount(const pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunLastLimit(const pl_valueRuns *valueRuns)_4_7 pl_getValueRunLastLimit(const pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunLimit(const pl_valueRuns *valueRuns, le_int32 run)_4_7 pl_getValueRunLimit(const pl_valueRuns *valueRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getValueRunValue(const pl_valueRuns *valueRuns, le_int32 run)_4_7 pl_getValueRunValue(const pl_valueRuns *valueRuns, le_int32 run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunAscent(const pl_visualRun *run)_4_7 pl_getVisualRunAscent(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunDescent(const pl_visualRun *run)_4_7 pl_getVisualRunDescent(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunDirection(const pl_visualRun *run)_4_7 pl_getVisualRunDirection(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunFont(const pl_visualRun *run)_4_7 pl_getVisualRunFont(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunGlyphCount(const pl_visualRun *run)_4_7 pl_getVisualRunGlyphCount(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunGlyphToCharMap(const pl_visualRun *run)_4_7 pl_getVisualRunGlyphToCharMap(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunGlyphs(const pl_visualRun *run)_4_7 pl_getVisualRunGlyphs(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunLeading(const pl_visualRun *run)_4_7 pl_getVisualRunLeading(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_getVisualRunPositions(const pl_visualRun *run)_4_7 pl_getVisualRunPositions(const pl_visualRun *run)_INTERNAL_API_DO_NOT_USE
+#        define pl_line_4_7 pl_line_INTERNAL_API_DO_NOT_USE
+#        define pl_nextLine(pl_paragraph *paragraph, float width)_4_7 pl_nextLine(pl_paragraph *paragraph, float width)_INTERNAL_API_DO_NOT_USE
+#        define pl_openEmptyFontRuns(le_int32 initialCapacity)_4_7 pl_openEmptyFontRuns(le_int32 initialCapacity)_INTERNAL_API_DO_NOT_USE
+#        define pl_openEmptyLocaleRuns(le_int32 initialCapacity)_4_7 pl_openEmptyLocaleRuns(le_int32 initialCapacity)_INTERNAL_API_DO_NOT_USE
+#        define pl_openEmptyValueRuns(le_int32 initialCapacity)_4_7 pl_openEmptyValueRuns(le_int32 initialCapacity)_INTERNAL_API_DO_NOT_USE
+#        define pl_openFontRuns(const le_font **fonts, const le_int32 *limits, le_int32 count)_4_7 pl_openFontRuns(const le_font **fonts, const le_int32 *limits, le_int32 count)_INTERNAL_API_DO_NOT_USE
+#        define pl_openLocaleRuns(const char **locales, const le_int32 *limits, le_int32 count)_4_7 pl_openLocaleRuns(const char **locales, const le_int32 *limits, le_int32 count)_INTERNAL_API_DO_NOT_USE
+#        define pl_openValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count)_4_7 pl_openValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count)_INTERNAL_API_DO_NOT_USE
+#        define pl_paragraph_4_7 pl_paragraph_INTERNAL_API_DO_NOT_USE
+#        define pl_reflow(pl_paragraph *paragraph)_4_7 pl_reflow(pl_paragraph *paragraph)_INTERNAL_API_DO_NOT_USE
+#        define pl_resetFontRuns(pl_fontRuns *fontRuns)_4_7 pl_resetFontRuns(pl_fontRuns *fontRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_resetLocaleRuns(pl_localeRuns *localeRuns)_4_7 pl_resetLocaleRuns(pl_localeRuns *localeRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_resetValueRuns(pl_valueRuns *valueRuns)_4_7 pl_resetValueRuns(pl_valueRuns *valueRuns)_INTERNAL_API_DO_NOT_USE
+#        define pl_visualRun_4_7 pl_visualRun_INTERNAL_API_DO_NOT_USE
+#        define ucd_close(UCD *ucd)_4_7 ucd_close(UCD *ucd)_INTERNAL_API_DO_NOT_USE
+#        define ucd_flushCache()_4_7 ucd_flushCache()_INTERNAL_API_DO_NOT_USE
+#        define ucd_freeCache()_4_7 ucd_freeCache()_INTERNAL_API_DO_NOT_USE
+#        define ucd_getCollator(UCD *ucd)_4_7 ucd_getCollator(UCD *ucd)_INTERNAL_API_DO_NOT_USE
+#        define ucd_open(UCollator *coll, UErrorCode *status)_4_7 ucd_open(UCollator *coll, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_equals(const UCollator *source, const UCollator *target)_4_7 ucol_equals(const UCollator *source, const UCollator *target)_INTERNAL_API_DO_NOT_USE
+#        define ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status)_4_7 ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_forgetUCA(void)_4_7 ucol_forgetUCA(void)_INTERNAL_API_DO_NOT_USE
+#        define ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status)_4_7 ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_getReorderCodes(const UCollator *coll, int32_t *dest, int32_t destCapacity, UErrorCode *pErrorCode)_4_7 ucol_getReorderCodes(const UCollator *coll, int32_t *dest, int32_t destCapacity, UErrorCode *pErrorCode)_INTERNAL_API_DO_NOT_USE
+#        define ucol_getUnsafeSet(const UCollator *coll, USet *unsafe, UErrorCode *status)_4_7 ucol_getUnsafeSet(const UCollator *coll, USet *unsafe, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_nextProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status)_4_7 ucol_nextProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_previousProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status)_4_7 ucol_previousProcessed(UCollationElements *elems, int32_t *ixLow, int32_t *ixHigh, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define ucol_setReorderCodes(UCollator *coll, const int32_t *reorderCodes, int32_t reorderCodesLength, UErrorCode *pErrorCode)_4_7 ucol_setReorderCodes(UCollator *coll, const int32_t *reorderCodes, int32_t reorderCodesLength, UErrorCode *pErrorCode)_INTERNAL_API_DO_NOT_USE
+#        define udat_applyPatternRelative(UDateFormat *format, const UChar *datePattern, int32_t datePatternLength, const UChar *timePattern, int32_t timePatternLength, UErrorCode *status)_4_7 udat_applyPatternRelative(UDateFormat *format, const UChar *datePattern, int32_t datePatternLength, const UChar *timePattern, int32_t timePatternLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define udat_toPatternRelativeDate(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status)_4_7 udat_toPatternRelativeDate(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define udat_toPatternRelativeTime(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status)_4_7 udat_toPatternRelativeTime(const UDateFormat *fmt, UChar *result, int32_t resultLength, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getConfiguration(UPlugData *plug)_4_7 uplug_getConfiguration(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getContext(UPlugData *plug)_4_7 uplug_getContext(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getCurrentLevel(void)_4_7 uplug_getCurrentLevel(void)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getLibrary(UPlugData *plug)_4_7 uplug_getLibrary(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getLibraryName(UPlugData *plug, UErrorCode *status)_4_7 uplug_getLibraryName(UPlugData *plug, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getPlugLevel(UPlugData *plug)_4_7 uplug_getPlugLevel(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getPlugLoadStatus(UPlugData *plug)_4_7 uplug_getPlugLoadStatus(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getPlugName(UPlugData *plug)_4_7 uplug_getPlugName(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_getSymbolName(UPlugData *plug)_4_7 uplug_getSymbolName(UPlugData *plug)_INTERNAL_API_DO_NOT_USE
+#        define uplug_loadPlugFromEntrypoint(UPlugEntrypoint *entrypoint, const char *config, UErrorCode *status)_4_7 uplug_loadPlugFromEntrypoint(UPlugEntrypoint *entrypoint, const char *config, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_loadPlugFromLibrary(const char *libName, const char *sym, const char *config, UErrorCode *status)_4_7 uplug_loadPlugFromLibrary(const char *libName, const char *sym, const char *config, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_nextPlug(UPlugData *prior)_4_7 uplug_nextPlug(UPlugData *prior)_INTERNAL_API_DO_NOT_USE
+#        define uplug_removePlug(UPlugData *plug, UErrorCode *status)_4_7 uplug_removePlug(UPlugData *plug, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setContext(UPlugData *plug, void *context)_4_7 uplug_setContext(UPlugData *plug, void *context)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setPlugLevel(UPlugData *plug, UPlugLevel level)_4_7 uplug_setPlugLevel(UPlugData *plug, UPlugLevel level)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setPlugName(UPlugData *plug, const char *name)_4_7 uplug_setPlugName(UPlugData *plug, const char *name)_INTERNAL_API_DO_NOT_USE
+#        define uplug_setPlugNoUnload(UPlugData *plug, UBool dontUnload)_4_7 uplug_setPlugNoUnload(UPlugData *plug, UBool dontUnload)_INTERNAL_API_DO_NOT_USE
+#        define uprv_getDefaultCodepage(void)_4_7 uprv_getDefaultCodepage(void)_INTERNAL_API_DO_NOT_USE
+#        define uprv_getDefaultLocaleID(void)_4_7 uprv_getDefaultLocaleID(void)_INTERNAL_API_DO_NOT_USE
+#        define ures_openFillIn(UResourceBundle *r, const char *packageName, const char *localeID, UErrorCode *status)_4_7 ures_openFillIn(UResourceBundle *r, const char *packageName, const char *localeID, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define usearch_search(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status)_4_7 usearch_search(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define usearch_searchBackwards(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status)_4_7 usearch_searchBackwards(UStringSearch *strsrch, int32_t startIdx, int32_t *matchStart, int32_t *matchLimit, UErrorCode *status)_INTERNAL_API_DO_NOT_USE
+#        define utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError)_4_7 utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError)_INTERNAL_API_DO_NOT_USE
+#        define utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i)_4_7 utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i)_INTERNAL_API_DO_NOT_USE
+#        define utf8_countTrailBytes[256]_4_7 utf8_countTrailBytes[256]_INTERNAL_API_DO_NOT_USE
+#        define utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict)_4_7 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict)_INTERNAL_API_DO_NOT_USE
+#        define utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict)_4_7 utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict)_INTERNAL_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_INTERNAL_API */
