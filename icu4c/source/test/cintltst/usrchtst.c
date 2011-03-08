@@ -2717,7 +2717,7 @@ static void TestUsingSearchCollator(void)
 }
 
 
- void TestPCEBuffer_with(const UChar *search, uint32_t searchLen, const UChar *source, uint32_t sourceLen) {
+static void TestPCEBuffer_with(const UChar *search, uint32_t searchLen, const UChar *source, uint32_t sourceLen) {
    UErrorCode icuStatus = U_ZERO_ERROR;
    UCollator *coll;
    const char *locale;
@@ -2790,11 +2790,11 @@ static void TestUsingSearchCollator(void)
    ucol_close(coll);
 
 exit:
-   return 0;
+   return;
 }
 
 
-void TestPCEBuffer_100df() {
+static void TestPCEBuffer_100df() {
   UChar search[] =
     { 0x0020, 0x0020, 0x00df, 0x0020, 0x0041, 0x00df, 0x0020, 0x0061, 0x00df, 0x0020, 0x00c5, 0x00df, 0x0020, 0x212b, 0x00df, 0x0020, 0x0041, 0x030a, 0x00df, 0x0020, 0x00e5, 0x00df, 0x0020, 0x0061, 0x02da, 0x00df, 0x0020, 0x0061, 0x030a, 0x00df, 0x0020, 0xd8fa, 0xdeae, 0x00df, 0x0020, 0x2027, 0x00df }; /* 38 cp, 9 of them unpaired surrogates */
   UChar source[] = 
@@ -2805,7 +2805,7 @@ void TestPCEBuffer_100df() {
  }
 
 
-void TestPCEBuffer_2surr() {
+static void TestPCEBuffer_2surr() {
   UChar search[] =
     { 0x0020, 0x0020, 0xdfff, 0x0020, 0x0041, 0xdfff, 0x0020, 0x0061, 0xdfff, 0x0020, 0x00c5, 0xdfff, 0x0020, 0x212b, 0xdfff, 0x0020, 0x0041, 0x030a, 0xdfff, 0x0020, 0x00e5, 0xdfff, 0x0020, 0x0061, 0x02da, 0xdfff, 0x0020, 0x0061, 0x030a, 0xdfff, 0x0020, 0xd8fa, 0xdeae, 0xdfff, 0x0020, 0x2027, 0xdfff }; /* 38 cp, 9 of them unpaired surrogates */
   UChar source[] = 
