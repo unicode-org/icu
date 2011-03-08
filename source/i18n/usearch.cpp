@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2010 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2011 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  07/02/2001   synwee      Creation.
@@ -3478,7 +3478,7 @@ struct CEBuffer {
 CEBuffer::CEBuffer(UStringSearch *ss, UErrorCode *status) {
     buf = defBuf;
     strSearch = ss;
-    bufSize = ss->pattern.CELength+10;
+    bufSize = ss->pattern.PCELength+10;
     ceIter    = ss->textIter;
     firstIx = 0;
     limitIx = 0;
