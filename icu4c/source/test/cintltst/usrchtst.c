@@ -2716,6 +2716,105 @@ static void TestUsingSearchCollator(void)
     }
 }
 
+
+ void TestPCEBuffer_with(const UChar *search, uint32_t searchLen, const UChar *source, uint32_t sourceLen) {
+   UErrorCode icuStatus = U_ZERO_ERROR;
+   UCollator *coll;
+   const char *locale;
+   UBreakIterator *ubrk;
+   UStringSearch *usearch;
+   int32_t match = 0;
+
+
+   coll = ucol_openFromShortString( "LSK_AS_CX_EX_FX_HX_NX_S4",
+                                    FALSE,
+                                    NULL,
+                                    &icuStatus );
+   if ( U_FAILURE(icuStatus) )
+   {
+     log_err( "ucol_openFromShortString error %s\n" , u_errorName(icuStatus));
+      goto exit;
+   }
+
+   locale = ucol_getLocaleByType( coll,
+                                  ULOC_VALID_LOCALE,
+                                  &icuStatus );
+   if ( U_FAILURE(icuStatus) )
+   {
+     log_err( "ucol_getLocaleByType error %s\n", u_errorName(icuStatus) );
+      goto exit;
+   }
+
+   log_verbose("locale=%s\n", locale);
+
+   ubrk = ubrk_open( UBRK_CHARACTER,
+                     locale,
+                     source,
+                     sourceLen,
+                     &icuStatus );
+   if ( U_FAILURE(icuStatus) )
+   {
+     log_err( "ubrk_open error %s\n", u_errorName(icuStatus) );
+      goto exit;
+   }
+
+   usearch = usearch_openFromCollator( search,
+                                       searchLen,
+                                       source,
+                                       sourceLen,
+                                       coll,
+                                       ubrk,
+                                       &icuStatus );
+   if ( U_FAILURE(icuStatus) )
+   {
+     log_err( "usearch_openFromCollator error %s\n", u_errorName(icuStatus) );
+      goto exit;
+   }
+
+   match = usearch_first( usearch,
+                          &icuStatus );
+   if ( U_FAILURE(icuStatus) )
+   {
+     log_err( "usearch_first error %s\n", u_errorName(icuStatus) );
+     goto exit;
+   }
+
+   if(match==0) {
+     log_verbose("OK: match=%d\n", match);
+   } else {
+     log_err("Err: match expected 0 got %d\n", match);
+   }
+
+   usearch_close(usearch);
+   ubrk_close(ubrk);
+   ucol_close(coll);
+
+exit:
+   return 0;
+}
+
+
+void TestPCEBuffer_100df() {
+  UChar search[] =
+    { 0x0020, 0x0020, 0x00df, 0x0020, 0x0041, 0x00df, 0x0020, 0x0061, 0x00df, 0x0020, 0x00c5, 0x00df, 0x0020, 0x212b, 0x00df, 0x0020, 0x0041, 0x030a, 0x00df, 0x0020, 0x00e5, 0x00df, 0x0020, 0x0061, 0x02da, 0x00df, 0x0020, 0x0061, 0x030a, 0x00df, 0x0020, 0xd8fa, 0xdeae, 0x00df, 0x0020, 0x2027, 0x00df }; /* 38 cp, 9 of them unpaired surrogates */
+  UChar source[] = 
+    { 0x0020, 0x0020, 0x00df, 0x0020, 0x0041, 0x00df, 0x0020, 0x0061, 0x00df, 0x0020, 0x00c5, 0x00df, 0x0020, 0x212b, 0x00df, 0x0020, 0x0041, 0x030a, 0x00df, 0x0020, 0x00e5, 0x00df, 0x0020, 0x0061, 0x02da, 0x00df, 0x0020, 0x0061, 0x030a, 0x00df, 0x0020, 0xd8fa, 0xdeae, 0x00df, 0x0020, 0x2027, 0x00df };
+  uint32_t searchLen = sizeof(search)/sizeof(UChar);
+  uint32_t sourceLen = sizeof(source)/sizeof(UChar);
+  TestPCEBuffer_with(search,searchLen,source,sourceLen);
+ }
+
+
+void TestPCEBuffer_2surr() {
+  UChar search[] =
+    { 0x0020, 0x0020, 0xdfff, 0x0020, 0x0041, 0xdfff, 0x0020, 0x0061, 0xdfff, 0x0020, 0x00c5, 0xdfff, 0x0020, 0x212b, 0xdfff, 0x0020, 0x0041, 0x030a, 0xdfff, 0x0020, 0x00e5, 0xdfff, 0x0020, 0x0061, 0x02da, 0xdfff, 0x0020, 0x0061, 0x030a, 0xdfff, 0x0020, 0xd8fa, 0xdeae, 0xdfff, 0x0020, 0x2027, 0xdfff }; /* 38 cp, 9 of them unpaired surrogates */
+  UChar source[] = 
+    { 0x0020, 0x0020, 0xdfff, 0x0020, 0x0041, 0xdfff, 0x0020, 0x0061, 0xdfff, 0x0020, 0x00c5, 0xdfff, 0x0020, 0x212b, 0xdfff, 0x0020, 0x0041, 0x030a, 0xdfff, 0x0020, 0x00e5, 0xdfff, 0x0020, 0x0061, 0x02da, 0xdfff, 0x0020, 0x0061, 0x030a, 0xdfff, 0x0020, 0xd8fa, 0xdeae, 0xdfff, 0x0020, 0x2027, 0xdfff };
+  uint32_t searchLen = sizeof(search)/sizeof(UChar);
+  uint32_t sourceLen = sizeof(source)/sizeof(UChar);
+  TestPCEBuffer_with(search,searchLen,source,sourceLen);
+}
+
 /**
 * addSearchTest
 */
@@ -2775,6 +2874,8 @@ void addSearchTest(TestNode** root)
 	addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");
     addTest(root, &TestStrengthIdentical, "tscoll/usrchtst/TestStrengthIdentical");
     addTest(root, &TestUsingSearchCollator, "tscoll/usrchtst/TestUsingSearchCollator");
+    addTest(root, &TestPCEBuffer_100df, "tscoll/usrchtst/TestPCEBuffer/1_00df");
+    addTest(root, &TestPCEBuffer_2surr, "tscoll/usrchtst/TestPCEBuffer/2_dfff");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
