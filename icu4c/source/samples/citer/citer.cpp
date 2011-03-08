@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*     Copyright (C) 2002-2007, International Business Machines
+*     Copyright (C) 2002-2011, International Business Machines
 *     Corporation and others.    All Rights Reserved.
 *
 *******************************************************************************
@@ -19,7 +19,7 @@ static UFILE *out;
 
 void printUnicodeString(const UnicodeString &s)
 {
-    u_fprintf(out, "%S", s);
+    u_fprintf(out, "%S", &s);
 }
 
 void printUChar(UChar32 ch)
