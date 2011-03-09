@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2010, International Business Machines Corporation and
+ * Copyright (c) 1999-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -2202,8 +2202,8 @@ void RBBITest::TestUnicodeFiles() {
 void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 // TODO(andy): Match line break behavior to Unicode 6.0 and remove this time bomb.
-  UVersionInfo icu4601 = { 4, 6, 0, 1 };
-UBool isICUVersionPast46 = isICUVersionAtLeast(icu4601);
+  UVersionInfo icu4700 = { 4, 7, 0, 0 };
+UBool isICUVersionPast46 = isICUVersionAtLeast(icu4700);
 UBool isLineBreak = 0 == strcmp(fileName, "LineBreakTest.txt");
     UErrorCode  status = U_ZERO_ERROR;
 
