@@ -5607,25 +5607,19 @@ public class TestCharset extends TestFmwk {
         };
         CharsetProvider provider = new CharsetProviderICU();
         Charset charset;
-        CharsetEncoder encoder;
-        CharsetDecoder decoder;
         
         for (int i = 0; i < fixedWidth.length; i++) {
             charset = provider.charsetForName(fixedWidth[i]);
-            encoder = charset.newEncoder();
-            decoder = charset.newDecoder();
             
-            if (!((CharsetEncoderICU)encoder).isFixedWidth() || !((CharsetDecoderICU)decoder).isFixedWidth()) {
+            if (!((CharsetICU)charset).isFixedWidth()) {
                 errln(fixedWidth[i] + " is a fixedWidth charset but returned false.");
             }
         }
         
         for (int i = 0; i < notFixedWidth.length; i++) {
             charset = provider.charsetForName(notFixedWidth[i]);
-            encoder = charset.newEncoder();
-            decoder = charset.newDecoder();
             
-            if (((CharsetEncoderICU)encoder).isFixedWidth() || ((CharsetDecoderICU)decoder).isFixedWidth()) {
+            if (((CharsetICU)charset).isFixedWidth()) {
                 errln(notFixedWidth[i] + " is NOT a fixedWidth charset but returned true.");
             }
         }
