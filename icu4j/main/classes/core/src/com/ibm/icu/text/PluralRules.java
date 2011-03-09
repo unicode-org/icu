@@ -130,7 +130,8 @@ public class PluralRules implements Serializable {
     /**
      * Value returned by {@link #getUniqueKeywordValue} when there is no
      * unique value to return.
-     * draft ICU 4.8
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final double NO_UNIQUE_VALUE = -0.00123456777;
 
