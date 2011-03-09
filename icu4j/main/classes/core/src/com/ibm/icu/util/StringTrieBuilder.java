@@ -18,6 +18,8 @@ import java.util.HashMap;
  * <p>This class is not intended for public subclassing.
  *
  * @author Markus W. Scherer
+ * @draft ICU 4.8
+ * @provisional This API might change or be removed in a future release.
  */
 public abstract class StringTrieBuilder {
     /**
