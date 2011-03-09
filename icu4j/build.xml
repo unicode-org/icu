@@ -1108,7 +1108,6 @@
             <src path="${icu4j.collate.dir}/src"/>
 
             <include name="com/ibm/icu/impl/data/*Break*.java"/>
-            <include name="com/ibm/icu/text/AlphabeticIndex.java"/>
             <include name="com/ibm/icu/text/*BreakIterator*.java"/>
             <include name="com/ibm/icu/text/*Collation*.java"/>
             <include name="com/ibm/icu/text/*Collator*.java"/>
@@ -1147,6 +1146,7 @@
             <include name="com/ibm/icu/dev/test/TestAllCollate.java"/>
             <include name="com/ibm/icu/dev/test/collator/**/*.java"/>
             <include name="java,com/ibm/icu/dev/test/search/**/*.java"/>
+            <exclude name="com/ibm/icu/dev/test/collator/AlphabeticIndexTest.java"/>
             <exclude name="com/ibm/icu/dev/test/collator/RandomCollator.java"/>
             <exclude name="com/ibm/icu/dev/test/collator/IndexCharactersTest.java"/>
         </javac>
