@@ -11,6 +11,7 @@
 #include "unicode/decimfmt.h"
 #include "tsnmfmt.h"
 #include "putilimp.h"
+#include "cstring.h"
 #include <float.h>
 #include <stdlib.h>
 
@@ -94,11 +95,13 @@ IntlTestNumberFormat::testLocale(/* char* par, */const Locale& locale, const Uni
     fFormat = NumberFormat::createPercentInstance(locale, fStatus);
     testFormat(/* par */);
 	
-    name = "Scientific test";
-    logln((UnicodeString)name + " (" + localeName + ")");
-    fStatus = U_ZERO_ERROR;
-    fFormat = NumberFormat::createScientificInstance(locale, fStatus);
-    testFormat(/* par */);
+    if (uprv_strcmp(locale.getName(), "en_US_POSIX") != 0) {
+        name = "Scientific test";
+        logln((UnicodeString)name + " (" + localeName + ")");
+        fStatus = U_ZERO_ERROR;
+        fFormat = NumberFormat::createScientificInstance(locale, fStatus);
+        testFormat(/* par */);
+    }
 }
 
 double IntlTestNumberFormat::randDouble()
