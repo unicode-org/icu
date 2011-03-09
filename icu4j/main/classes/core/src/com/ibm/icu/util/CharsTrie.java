@@ -449,6 +449,9 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
          * @provisional This API might change or be removed in a future release.
          */
         public int value;
+
+        private Entry() {
+        }
     }
 
     /**

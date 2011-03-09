@@ -124,22 +124,30 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
 
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected boolean matchNodesCanHaveValues() /*const*/ { return false; }
 
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int getMaxBranchLinearSubNodeLength() /*const*/ { return BytesTrie.kMaxBranchLinearSubNodeLength; }
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int getMinLinearMatch() /*const*/ { return BytesTrie.kMinLinearMatch; }
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int getMaxLinearMatchLength() /*const*/ { return BytesTrie.kMaxLinearMatchLength; }
@@ -158,6 +166,8 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     }
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int write(int b) {
@@ -169,6 +179,8 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     }
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int write(int offset, int length) {
@@ -195,6 +207,8 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
 
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int writeValueAndFinal(int i, boolean isFinal) {
@@ -231,6 +245,8 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     }
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int writeValueAndType(boolean hasValue, int value, int node) {
@@ -242,6 +258,8 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     }
     /**
      * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     protected int writeDeltaTo(int jumpTarget) {
