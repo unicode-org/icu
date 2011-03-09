@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2006-2010, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2011, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -1830,6 +1830,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'L', MONTH, SHORT - DELTA, 3},
         {'L', MONTH, LONG - DELTA, 4},
         {'L', MONTH, NARROW - DELTA, 5},
+        {'l', MONTH, NUMERIC + DELTA, 1, 1},
 
         {'w', WEEK_OF_YEAR, NUMERIC, 1, 2},
         {'W', WEEK_OF_MONTH, NUMERIC + DELTA, 1},
