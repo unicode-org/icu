@@ -1994,8 +1994,8 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
 
 
 /**
- * Returns whether or not the converter has a fixed ratio of bytes per
- * 16-bit char/UChar (e.g. converters that are SBCS or DBCS).
+ * Returns whether or not the converter has a fixed number of bytes
+ * per character (e.g. converters that are SBCS or DBCS).
  * FALSE is returned with the UErrorCode if error occurs or cnv is NULL.
  * @param cnv       The converter to be tested
  * @param status    ICU error code in/out paramter
