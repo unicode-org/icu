@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1043,6 +1043,96 @@ ubidi_setReorderingOptions(UBiDi *pBiDi, uint32_t reorderingOptions);
  */
 U_STABLE uint32_t U_EXPORT2
 ubidi_getReorderingOptions(UBiDi *pBiDi);
+
+/**
+ * Set the context before a call to ubidi_setPara().<p>
+ *
+ * ubidi_setPara() computes the left-right directionality for a given piece
+ * of text which is supplied as one of its arguments. Sometimes this piece
+ * of text (the "main text") should be considered in context, because text
+ * appearing before ("prologue") and/or after ("epilogue") the main text
+ * may affect the result of this computation.<p>
+ *
+ * This function specifies the prologue and/or the epilogue for the next
+ * call to ubidi_setPara(). The characters specified as prologue and
+ * epilogue should not be modified by the calling program until the call
+ * to ubidi_setPara() has returned. If successive calls to ubidi_setPara()
+ * all need specification of a context, ubidi_setContext() must be called
+ * before each call to ubidi_setPara(). In other words, a context is not
+ * "remembered" after the following successful call to ubidi_setPara().<p>
+ *
+ * If a call to ubidi_setPara() specifies UBIDI_DEFAULT_LTR or
+ * UBIDI_DEFAULT_RTL as paraLevel and is preceded by a call to
+ * ubidi_setContext() which specifies a prologue, the paragraph level will
+ * be computed taking in consideration the text in the prologue.<p>
+ *
+ * When ubidi_setPara() is called without a previous call to
+ * ubidi_setContext, the main text is handled as if preceded and followed
+ * by strong directional characters at the current paragraph level.
+ * Calling ubidi_setContext() with specification of a prologue will change
+ * this behavior by handling the main text as if preceded by the last
+ * strong character appearing in the prologue, if any.
+ * Calling ubidi_setContext() with specification of an epilogue will change
+ * the behavior of ubidi_setPara() by handling the main text as if followed
+ * by the first strong character or digit appearing in the epilogue, if any.<p>
+ *
+ * Note 1: if <code>ubidi_setContext</code> is called repeatedly without
+ *         calling <code>ubidi_setPara</code>, the earlier calls have no effect,
+ *         only the last call will be remembered for the next call to
+ *         <code>ubidi_setPara</code>.<p>
+ *
+ * Note 2: calling <code>ubidi_setContext(pBiDi, NULL, 0, NULL, 0, &errorCode)</code>
+ *         cancels any previous setting of non-empty prologue or epilogue.
+ *         The next call to <code>ubidi_setPara()</code> will process no
+ *         prologue or epilogue.<p>
+ *
+ * Note 3: users must be aware that even after setting the context
+ *         before a call to ubidi_setPara() to perform e.g. a logical to visual
+ *         transformation, the resulting string may not be identical to what it
+ *         would have been if all the text, including prologue and epilogue, had
+ *         been processed together.<br>
+ * Example (upper case letters represent RTL characters):<br>
+ * &nbsp;&nbsp;prologue = "<code>abc DE</code>"<br>
+ * &nbsp;&nbsp;epilogue = none<br>
+ * &nbsp;&nbsp;main text = "<code>FGH xyz</code>"<br>
+ * &nbsp;&nbsp;paraLevel = UBIDI_LTR<br>
+ * &nbsp;&nbsp;display without prologue = "<code>HGF xyz</code>"
+ *             ("HGF" is adjacent to "xyz")<br>
+ * &nbsp;&nbsp;display with prologue = "<code>abc HGFED xyz</code>"
+ *             ("HGF" is not adjacent to "xyz")<br>
+ *
+ * @param pBiDi is a paragraph <code>UBiDi</code> object.
+ *
+ * @param prologue is a pointer to the text which precedes the text that
+ *        will be specified in a coming call to ubidi_setPara().
+ *        If there is no prologue to consider, then <code>proLength</code>
+ *        must be zero and this pointer can be NULL.
+ *
+ * @param proLength is the length of the prologue; if <code>proLength==-1</code>
+ *        then the prologue must be zero-terminated.
+ *        Otherwise proLength must be >= 0. If <code>proLength==0</code>, it means
+ *        that there is no prologue to consider.
+ *
+ * @param epilogue is a pointer to the text which follows the text that
+ *        will be specified in a coming call to ubidi_setPara().
+ *        If there is no epilogue to consider, then <code>epiLength</code>
+ *        must be zero and this pointer can be NULL.
+ *
+ * @param epiLength is the length of the epilogue; if <code>epiLength==-1</code>
+ *        then the epilogue must be zero-terminated.
+ *        Otherwise epiLength must be >= 0. If <code>epiLength==0</code>, it means
+ *        that there is no epilogue to consider.
+ *
+ * @param pErrorCode must be a valid pointer to an error code value.
+ *
+ * @see ubidi_setPara
+ * @draft ICU 4.8
+ */
+U_DRAFT void U_EXPORT2
+ubidi_setContext(UBiDi *pBiDi,
+                 const UChar *prologue, int32_t proLength,
+                 const UChar *epilogue, int32_t epiLength,
+                 UErrorCode *pErrorCode);
 
 /**
  * Perform the Unicode Bidi algorithm. It is defined in the
