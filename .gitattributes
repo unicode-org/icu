@@ -3266,7 +3266,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestBidi.java svneol=native#
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestCharFromDirProp.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestClassOverride.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestCompatibility.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestContext.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestFailureRecovery.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestInverse.java svneol=native#text/plain%3Bcharset%3Dutf-8
