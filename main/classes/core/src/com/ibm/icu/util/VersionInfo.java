@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -153,19 +153,25 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static final VersionInfo ICU_DATA_VERSION;
 
     /**
-     * ICU4J collator runtime version
+     * Collation runtime version (sort key generator, string comparisons).
+     * If the version is different, sort keys for the same string could be different.
+     * This value may change in subsequent releases of ICU.
      * @stable ICU 2.8
      */
     public static final VersionInfo UCOL_RUNTIME_VERSION;
 
     /**
-     * ICU4J collator builder version
+     * Collation builder code version.
+     * When this is different, the same tailoring might result
+     * in assigning different collation elements to code points.
+     * This value may change in subsequent releases of ICU.
      * @stable ICU 2.8
      */
     public static final VersionInfo UCOL_BUILDER_VERSION;
 
     /**
-     * ICU4J collator tailorings version
+     * This is the version of collation tailorings.
+     * This value may change in subsequent releases of ICU.
      * @stable ICU 2.8
      */
     public static final VersionInfo UCOL_TAILORINGS_VERSION;
@@ -486,8 +492,8 @@ public final class VersionInfo implements Comparable<VersionInfo>
         ICU_DATA_VERSION = getInstance(4, 6, 0, 0);
         UNICODE_VERSION = UNICODE_6_0;
 
-        UCOL_RUNTIME_VERSION = getInstance(6);
-        UCOL_BUILDER_VERSION = getInstance(7);
+        UCOL_RUNTIME_VERSION = getInstance(7);
+        UCOL_BUILDER_VERSION = getInstance(8);
         UCOL_TAILORINGS_VERSION = getInstance(1);
     }
 
