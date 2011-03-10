@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2010, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -113,7 +113,7 @@ static int32_t detectWindowsType()
         }
     }
 
-    return winType+1; // +1 to bring it inline with the enum
+    return winType+1; /* +1 to bring it inline with the enum */
 }
 
 static LONG openTZRegKey(HKEY *hkey, const char *winid)
