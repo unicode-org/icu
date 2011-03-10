@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2010, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -74,8 +74,6 @@ static void testMultipleParagraphs(void);
 
 static void testGetBaseDirection(void);
 
-static void testContext(void);
-
 /* new BIDI API */
 static void testReorderingMode(void);
 static void testReorderRunsOnly(void);
@@ -120,14 +118,13 @@ addComplexTest(TestNode** root) {
     addTest(root, testReorderRunsOnly, "complex/bidi/TestReorderRunsOnly");
     addTest(root, testStreaming, "complex/bidi/TestStreaming");
     addTest(root, testClassOverride, "complex/bidi/TestClassOverride");
-    addTest(root, testGetBaseDirection, "complex/bidi/testGetBaseDirection");
-    addTest(root, testContext, "complex/bidi/testContext");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
     addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
+    addTest(root, testGetBaseDirection, "complex/bidi/testGetBaseDirection");
 }
 
 static void
@@ -343,7 +340,6 @@ static int pseudoToU16(const int length, const char * input, UChar * output)
     }
     for (i = 0; i < length; i++)
         output[i] = pseudoToUChar[(uint8_t)input[i]];
-    output[length] = 0;
     return length;
 }
 
@@ -1214,8 +1210,8 @@ static void testGetBaseDirection(void) {
      for(i=0; i<LENGTHOF(testCases); ++i) {
         dir = ubidi_getBaseDirection(testCases[i].s, testCases[i].length );
         log_verbose("Testing case %d\tReceived dir %d\n", i, dir);
-        if (dir != expectedDir[i])
-            log_err("\nFailed getBaseDirection case %d Expected  %d \tReceived %d\n",
+        if (dir != expectedDir[i]) 
+            log_err("\nFailed getBaseDirection case %d Expected  %d \tReceived %d\n", 
             i, expectedDir[i], dir);
     }
 
@@ -4049,132 +4045,3 @@ checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
     return testOK;
 }
 
-static UBool
-assertIllegalArgument(const char* message, UErrorCode* rc) {
-    if (*rc != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("%s() failed with error %s.\n", message, myErrorName(*rc));
-        return FALSE;
-    }
-    return TRUE;
-}
-
-typedef struct {
-    char* prologue;
-    char* source;
-    char* epilogue;
-    char* expected;
-    UBiDiLevel paraLevel;
-} contextCase;
-
-static const contextCase contextData[] = {
-    /*00*/  {"", "", "", "", UBIDI_LTR},
-    /*01*/  {"", ".-=JKL-+*", "", ".-=LKJ-+*", UBIDI_LTR},
-    /*02*/  {" ", ".-=JKL-+*", " ", ".-=LKJ-+*", UBIDI_LTR},
-    /*03*/  {"a", ".-=JKL-+*", "b", ".-=LKJ-+*", UBIDI_LTR},
-    /*04*/  {"D", ".-=JKL-+*", "", "LKJ=-.-+*", UBIDI_LTR},
-    /*05*/  {"", ".-=JKL-+*", " D", ".-=*+-LKJ", UBIDI_LTR},
-    /*06*/  {"", ".-=JKL-+*", " 2", ".-=*+-LKJ", UBIDI_LTR},
-    /*07*/  {"", ".-=JKL-+*", " 7", ".-=*+-LKJ", UBIDI_LTR},
-    /*08*/  {" G 1", ".-=JKL-+*", " H", "*+-LKJ=-.", UBIDI_LTR},
-    /*09*/  {"7", ".-=JKL-+*", " H", ".-=*+-LKJ", UBIDI_LTR},
-    /*10*/  {"", ".-=abc-+*", "", "*+-abc=-.", UBIDI_RTL},
-    /*11*/  {" ", ".-=abc-+*", " ", "*+-abc=-.", UBIDI_RTL},
-    /*12*/  {"D", ".-=abc-+*", "G", "*+-abc=-.", UBIDI_RTL},
-    /*13*/  {"x", ".-=abc-+*", "", "*+-.-=abc", UBIDI_RTL},
-    /*14*/  {"", ".-=abc-+*", " y", "abc-+*=-.", UBIDI_RTL},
-    /*15*/  {"", ".-=abc-+*", " 2", "abc-+*=-.", UBIDI_RTL},
-    /*16*/  {" x 1", ".-=abc-+*", " 2", ".-=abc-+*", UBIDI_RTL},
-    /*17*/  {" x 7", ".-=abc-+*", " 8", "*+-.-=abc", UBIDI_RTL},
-    /*18*/  {"x|", ".-=abc-+*", " 8", "*+-abc=-.", UBIDI_RTL},
-    /*19*/  {"G|y", ".-=abc-+*", " 8", "*+-.-=abc", UBIDI_RTL},
-    /*20*/  {"", ".-=", "", ".-=", UBIDI_DEFAULT_LTR},
-    /*21*/  {"D", ".-=", "", "=-.", UBIDI_DEFAULT_LTR},
-    /*22*/  {"G", ".-=", "", "=-.", UBIDI_DEFAULT_LTR},
-    /*23*/  {"xG", ".-=", "", ".-=", UBIDI_DEFAULT_LTR},
-    /*24*/  {"x|G", ".-=", "", "=-.", UBIDI_DEFAULT_LTR},
-    /*25*/  {"x|G", ".-=|-+*", "", "=-.|-+*", UBIDI_DEFAULT_LTR},
-};
-#define CONTEXT_COUNT       LENGTHOF(contextData)
-
-static void
-testContext(void) {
-
-    UChar prologue[MAXLEN], epilogue[MAXLEN], src[MAXLEN], dest[MAXLEN];
-    char destChars[MAXLEN];
-    UBiDi *pBiDi = NULL;
-    UErrorCode rc;
-    int32_t proLength, epiLength, srcLen, destLen, tc;
-    contextCase cc;
-    UBool testOK = TRUE;
-
-    log_verbose("\nEntering TestContext \n\n");
-
-    /* test null BiDi object */
-    rc = U_ZERO_ERROR;
-    ubidi_setContext(pBiDi, NULL, 0, NULL, 0, &rc);
-    testOK &= assertIllegalArgument("Error when BiDi object is null", &rc);
-
-    pBiDi = getBiDiObject();
-    ubidi_orderParagraphsLTR(pBiDi, TRUE);
-
-    /* test proLength < -1 */
-    rc = U_ZERO_ERROR;
-    ubidi_setContext(pBiDi, NULL, -2, NULL, 0, &rc);
-    testOK &= assertIllegalArgument("Error when proLength < -1", &rc);
-    /* test epiLength < -1 */
-    rc = U_ZERO_ERROR;
-    ubidi_setContext(pBiDi, NULL, 0, NULL, -2, &rc);
-    testOK &= assertIllegalArgument("Error when epiLength < -1", &rc);
-    /* test prologue == NULL */
-    rc = U_ZERO_ERROR;
-    ubidi_setContext(pBiDi, NULL, 3, NULL, 0, &rc);
-    testOK &= assertIllegalArgument("Prologue is NULL", &rc);
-    /* test epilogue == NULL */
-    rc = U_ZERO_ERROR;
-    ubidi_setContext(pBiDi, NULL, 0, NULL, 4, &rc);
-    testOK &= assertIllegalArgument("Epilogue is NULL", &rc);
-
-    for (tc = 0; tc < CONTEXT_COUNT; tc++) {
-        cc = contextData[tc];
-        proLength = strlen(cc.prologue);
-        pseudoToU16(proLength, cc.prologue, prologue);
-        epiLength = strlen(cc.epilogue);
-        pseudoToU16(epiLength, cc.epilogue, epilogue);
-        /* in the call below, prologue and epilogue are swapped to show
-           that the next call will override this call */
-        rc = U_ZERO_ERROR;
-        ubidi_setContext(pBiDi, epilogue, epiLength, prologue, proLength, &rc);
-        testOK &= assertSuccessful("swapped ubidi_setContext", &rc);
-        ubidi_setContext(pBiDi, prologue, -1, epilogue, -1, &rc);
-        testOK &= assertSuccessful("regular ubidi_setContext", &rc);
-        srcLen = strlen(cc.source);
-        pseudoToU16(srcLen, cc.source, src);
-        ubidi_setPara(pBiDi, src, srcLen, cc.paraLevel, NULL, &rc);
-        testOK &= assertSuccessful("ubidi_setPara", &rc);
-        destLen = ubidi_writeReordered(pBiDi, dest, MAXLEN, UBIDI_DO_MIRRORING, &rc);
-        assertSuccessful("ubidi_writeReordered", &rc);
-        u16ToPseudo(destLen, dest, destChars);
-        if (uprv_strcmp(cc.expected, destChars)) {
-            char formatChars[MAXLEN];
-            log_err("\nActual and expected output mismatch on case %d.\n"
-                "%20s %s\n%20s %s\n%20s %s\n%20s %s\n%20s %s\n%20s %s\n%20s %d\n%20s %u\n%20s %d\n",
-                tc,
-                "Prologue:", cc.prologue,
-                "Input:", cc.source,
-                "Epilogue:", cc.epilogue,
-                "Expected output:", cc.expected,
-                "Actual output:", destChars,
-                "Levels:", formatLevels(pBiDi, formatChars),
-                "Reordering mode:", ubidi_getReorderingMode(pBiDi),
-                "Paragraph level:", ubidi_getParaLevel(pBiDi),
-                "Reordering option:", ubidi_getReorderingOptions(pBiDi));
-            testOK = FALSE;
-        }
-    }
-    if (testOK == TRUE) {
-        log_verbose("\nContext test OK\n");
-    }
-    ubidi_close(pBiDi);
-
-    log_verbose("\nExiting TestContext \n\n");
-}
