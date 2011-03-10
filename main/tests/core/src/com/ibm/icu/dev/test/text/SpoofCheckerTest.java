@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -369,6 +369,7 @@ public class SpoofCheckerTest extends TestFmwk {
 
         setup();
         // A long "identifier" that will overflow implementation stack buffers, forcing heap allocations.
+        //    (in the C implementation)
         checkSkeleton(
                 sc,
                 SL,
@@ -380,12 +381,6 @@ public class SpoofCheckerTest extends TestFmwk {
                         + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
                         + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
                         + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations.");
-
-        // FC5F ; FE74 0651 ; ML #* ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM to
-        // ARABIC KASRATAN ISOLATED FORM, ARABIC SHADDA
-        // This character NFKD normalizes to \u064d \u0651, so its confusable mapping
-        // is never used in creating a skeleton.
-        checkSkeleton(sc, SL, "\\uFC5F", " \\u064d\\u0651");
 
         checkSkeleton(sc, SL, "nochange", "nochange");
         checkSkeleton(sc, MA, "love", "love");
@@ -530,7 +525,7 @@ public class SpoofCheckerTest extends TestFmwk {
                     "\\ufeff?" + "(?:([0-9A-F\\s]+);([0-9A-F\\s]+);\\s*(SL|ML|SA|MA)\\s*(?:#.*?)?$)"
                             + "|\\ufeff?(\\s*(?:#.*)?)"). // Comment line
                     matcher("");
-            Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Normalizer2.Mode.DECOMPOSE);
+            Normalizer2 normalizer = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.DECOMPOSE);
             int lineNum = 0;
             String inputLine;
             while ((inputLine = confusablesRdr.readLine()) != null) {
@@ -547,8 +542,8 @@ public class SpoofCheckerTest extends TestFmwk {
                 String from = parseHex(parseLine.group(1));
 
                 if (!normalizer.isNormalized(from)) {
-                    // The source character was not NFKD.
-                    // Skip this case; the first step in obtaining a skeleton is to NFKD the input,
+                    // The source character was not NFD.
+                    // Skip this case; the first step in obtaining a skeleton is to NFD the input,
                     // so the mapping in this line of confusables.txt will never be applied.
                     continue;
                 }

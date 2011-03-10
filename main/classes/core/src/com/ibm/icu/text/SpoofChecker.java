@@ -1,6 +1,6 @@
 /*
  ***************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation
+ * Copyright (C) 2008-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***************************************************************************
  *
@@ -1443,8 +1443,8 @@ public class SpoofChecker {
         }
 
         if (0 != (this.fChecks & (WHOLE_SCRIPT_CONFUSABLE | MIXED_SCRIPT_CONFUSABLE | INVISIBLE))) {
-            // These are the checks that need to be done on NFKD input
-            String nfkdText = Normalizer.normalize(text, Normalizer.NFKD, 0);
+            // These are the checks that need to be done on NFD input
+            String nfdText = Normalizer.normalize(text, Normalizer.NFD, 0);
 
             if (0 != (this.fChecks & INVISIBLE)) {
 
@@ -1454,17 +1454,12 @@ public class SpoofChecker {
                 int c;
                 int firstNonspacingMark = 0;
                 boolean haveMultipleMarks = false;
-                UnicodeSet marksSeenSoFar = new UnicodeSet(); // Set of
-                // combining
-                // marks in a
-                // single
-                // combining
-                // sequence.
-
+                UnicodeSet marksSeenSoFar = new UnicodeSet(); // Set of combining marks in a
+                                                              // single combining sequence.
                 for (i = 0; i < length;) {
-                    // U16_NEXT(nfkdText, i, nfkdLength, c);
-                    c = Character.codePointAt(nfkdText, i);
-                    i = Character.offsetByCodePoints(nfkdText, i, 1);
+                    // U16_NEXT(nfdText, i, nfdLength, c);
+                    c = Character.codePointAt(nfdText, i);
+                    i = Character.offsetByCodePoints(nfdText, i, 1);
                     if (Character.getType(c) != UCharacterCategory.NON_SPACING_MARK) {
                         firstNonspacingMark = 0;
                         if (haveMultipleMarks) {
@@ -1519,7 +1514,7 @@ public class SpoofChecker {
                 }
 
                 ScriptSet scripts = new ScriptSet();
-                this.wholeScriptCheck(nfkdText, scripts);
+                this.wholeScriptCheck(nfdText, scripts);
                 int confusableScriptCount = scripts.countMembers();
                 // printf("confusableScriptCount = %d\n",
                 // confusableScriptCount);
@@ -1692,28 +1687,28 @@ public class SpoofChecker {
             return null;
         }
 
-        // NFKD transform of the user supplied input
-        String nfkdInput = Normalizer.normalize(s, Normalizer.NFKD, 0);
-        int normalizedLen = nfkdInput.length();
+        // NFD transform of the user supplied input
+        String nfdInput = Normalizer.normalize(s, Normalizer.NFD, 0);
+        int normalizedLen = nfdInput.length();
 
-        // Apply the skeleton mapping to the NFKD normalized input string
+        // Apply the skeleton mapping to the NFD normalized input string
         // Accumulate the skeleton, possibly unnormalized, in a String.
         int inputIndex = 0;
         StringBuilder skelStr = new StringBuilder();
         while (inputIndex < normalizedLen) {
             int c;
-            c = Character.codePointAt(nfkdInput, inputIndex);
-            inputIndex = Character.offsetByCodePoints(nfkdInput, inputIndex, 1);
+            c = Character.codePointAt(nfdInput, inputIndex);
+            inputIndex = Character.offsetByCodePoints(nfdInput, inputIndex, 1);
             this.confusableLookup(c, tableMask, skelStr);
         }
 
         String result = skelStr.toString();
         String normedResult;
 
-        // Check the skeleton for NFKD, normalize it if needed.
+        // Check the skeleton for NFD, normalize it if needed.
         // Unnormalized results should be very rare.
-        if (!Normalizer.isNormalized(result, Normalizer.NFKD, 0)) {
-            normedResult = Normalizer.normalize(result, Normalizer.NFKD, 0);
+        if (!Normalizer.isNormalized(result, Normalizer.NFD, 0)) {
+            normedResult = Normalizer.normalize(result, Normalizer.NFD, 0);
             result = normedResult;
         }
         return result;
@@ -1831,7 +1826,7 @@ public class SpoofChecker {
     // Implementation for Whole Script tests.
     // Return the test bit flag to be ORed into the eventual user return value
     // if a Spoof opportunity is detected.
-    // Input text is already normalized to NFKD
+    // Input text is already normalized to NFD
     // Return the set of scripts, each of which can represent something that is
     // confusable with the input text. The script of the input text
     // is included; input consisting of characters from a single script will
