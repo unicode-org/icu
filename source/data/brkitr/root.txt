@@ -1,12 +1,17 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/xml/brkitr/root.xml
 // *
 // ***************************************************************************
 root{
+    MeasurementSystem:int{0}
+    PaperSize:intvector{
+        297,
+        210,
+    }
     Version{"1.1"}
     boundaries{
         grapheme:process(dependency){"char.brk"}
@@ -14,6 +19,20 @@ root{
         sentence:process(dependency){"sent.brk"}
         title:process(dependency){"title.brk"}
         word:process(dependency){"word.brk"}
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
+            }
+        }
     }
     dictionaries{
         Thai:process(dependency){"thaidict.ctd"}

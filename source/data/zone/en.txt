@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.51.59"}
+    Version{"2.0.53.53"}
     zoneStrings{
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
@@ -460,6 +460,9 @@ en{
         "meta:Macau"{
             ld{"Macau Summer Time"}
             ls{"Macau Time"}
+        }
+        "meta:Macquarie"{
+            ls{"Macquarie Island Time"}
         }
         "meta:Magadan"{
             ld{"Magadan Summer Time"}

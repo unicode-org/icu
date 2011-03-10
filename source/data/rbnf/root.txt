@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/root.xml
@@ -10,6 +10,11 @@
  *  ICU <specials> source: <path>/xml/rbnf/root.xml
  */
 root{
+    MeasurementSystem:int{0}
+    PaperSize:intvector{
+        297,
+        210,
+    }
     RBNFRules{
         DurationRules{
             "%duration:",
@@ -509,4 +514,18 @@ root{
         }
     }
     Version{"2.0.41.26"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
+            }
+        }
+    }
 }

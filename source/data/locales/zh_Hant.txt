@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -68,7 +68,7 @@ zh_Hant{
         " 顏 願 類 顧 顯 風 飄 飛 食 飯 飲 飽 飾 餅 養 餐 餘 館 首 香 馬 駐 駕 駛 騎 騙 騷 驅 驗 驚 骨 體 高 髮 鬆 鬥 鬧 鬱"
         " 鬼 魁 魂 魅 魔 魚 魯 鮮 鳥 鳳 鳴 鴻 鵝 鷹 鹿 麗 麥 麵 麻 麼 黃 黎 黑 默 點 黨 鼓 鼠 鼻 齊 齋 齒 齡 龍 龜]"
     }
-    ExemplarCharactersIndex{"[一 丁 三 丑 丙 丞 串 並 亟 乘 乾 傢 亂 僧 億 儒 優 叢 嚥 勸 儷 儼 囌 囑 廳]"}
+    ExemplarCharactersIndex{"[一 丁 丈 不 且 丞 串 並 亭 乘 乾 傀 亂 僎 僵 儐 償 叢 儳 嚴 儷 儻 囌 囑 廳]"}
     LocaleScript{
         "Hani",
         "Bopo",
@@ -80,7 +80,7 @@ zh_Hant{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.54.34"}
     calendar{
         buddhist{
             DateTimePatterns{

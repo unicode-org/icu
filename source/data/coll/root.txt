@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/root.xml
@@ -10,8 +10,27 @@
  *  ICU <specials> source: <path>/xml/collation/root.xml
  */
 root{
+    MeasurementSystem:int{0}
+    PaperSize:intvector{
+        297,
+        210,
+    }
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
     Version{"2.0.51.25"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
+            }
+        }
+    }
     collations{
         default{"standard"}
         ducet{
@@ -40,7 +59,7 @@ root{
                 "&Ꞧ<<<₨/s"
                 "&ﷶ<<<﷼/یال"
             }
-            Version{"1.9"}
+            Version{"1.9.1"}
         }
         search{
             Sequence{
@@ -91,11 +110,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"1.9"}
+            Version{"1.9.1"}
         }
         standard{
             Sequence{""}
-            Version{"1.9"}
+            Version{"1.9.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

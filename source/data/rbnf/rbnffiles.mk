@@ -1,6 +1,6 @@
-# *   Copyright (C) 1998-2010, International Business Machines
+# *   Copyright (C) 1998-2011, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-RBNF_CLDR_VERSION = 1.9
+RBNF_CLDR_VERSION = 1.9.1
 # A list of txt's to build
 # Note:
 #
