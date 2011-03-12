@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/kk.xml
@@ -19,7 +19,7 @@ kk{
                 "&Ұ<ү<<<Ү"
                 "&[before 1]ь<і<<<І"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
     }
 }

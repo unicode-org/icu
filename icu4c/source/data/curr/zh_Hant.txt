@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    %%Parent{"root"}
     Currencies{
         ADP{
             "ADP" /** ===  */,
@@ -433,7 +432,7 @@ zh_Hant{
             "以色列新謝克爾",
         }
         INR{
-            "Rs",
+            "₹",
             "印度盧比",
         }
         IQD{
@@ -1057,5 +1056,5 @@ zh_Hant{
             "辛巴威元 (2009)",
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.54.33"}
 }

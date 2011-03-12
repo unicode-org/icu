@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lt.xml
@@ -51,9 +51,9 @@ lt{
                 "HH:mm:ss",
                 "HH:mm",
                 "y G, MMMM d, EEEE",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yyyy",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG yyyy-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

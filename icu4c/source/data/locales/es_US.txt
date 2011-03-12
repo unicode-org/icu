@@ -7,20 +7,13 @@
 // *
 // ***************************************************************************
 es_US{
+    %%Parent{"es_419"}
     MeasurementSystem:int{1}
-    NumberElements{
-        latn{
-            symbols{
-                decimal{"."}
-                group{","}
-            }
-        }
-    }
     PaperSize:intvector{
         279,
         216,
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.54.44"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,8 +32,16 @@ es_US{
                 "{1} {0}",
             }
             availableFormats{
+                MEd{"E, MM/dd"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
                 MMd{"MM/d"}
                 Md{"M/d"}
+                yM{"M/yy"}
+                yMEd{"EEE, M/d/yy"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMd{"MMM d, y"}
+                yMd{"M/d/yy"}
             }
         }
     }

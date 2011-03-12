@@ -2956,7 +2956,7 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         // test locale without currency information
         {"root", "-1.23", "USD", "-US$\\u00A01.23", "-USD\\u00A01.23", "-1.23 USD"},
         // test choice format
-        {"es_AR", "1", "INR", "Rs\\u00A01,00", "INR\\u00A01,00", "1,00 rupia india"},
+        {"es_AR", "1", "INR", "\\u20B9\\u00A01,00", "INR\\u00A01,00", "1,00 rupia india"},
     };
 
     for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
@@ -4457,7 +4457,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Pts1.00",
         "\\u20aa1.00",
         "\\u20ac1.00",
-        "Rs1.00",
+        "\\u20b91.00",
         "\\u20a61.00",
         "\\u20ae1.00",
         "IT\\u20a41.00",

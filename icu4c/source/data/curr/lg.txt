@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lg.xml
@@ -96,7 +96,7 @@ lg{
             "Faranga ey'eGini",
         }
         INR{
-            "Rs",
+            "₹",
             "Rupiya ey'eBuyindi",
         }
         JPY{
@@ -232,5 +232,5 @@ lg{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.53.5"}
 }

@@ -11,7 +11,7 @@ en_CA{
         279,
         216,
     }
-    Version{"2.0.48.53"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,6 +39,8 @@ en_CA{
                 Md{"M-d"}
                 yMEd{"EEE, y-M-d"}
                 yMMMEd{"EEE, d MMM, y"}
+                yMMMd{"d MMM, y"}
+                yMd{"y-M-d"}
                 yyMMM{"MMM-yy"}
             }
             intervalFormats{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fa.xml
@@ -248,7 +248,7 @@ fa{
             "پوند ایرلند",
         }
         INR{
-            "Rs",
+            "₹",
             "روپیهٔ هند",
         }
         IQD{
@@ -603,5 +603,5 @@ fa{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.45"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/ko.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ko.xml
  */
 ko{
-    Version{"2.0.51.33"}
+    Version{"2.0.54.47"}
     collations{
         search{
             Sequence{
@@ -199,7 +199,7 @@ ko{
                 "&ᅩᅣ=ᆦ"
                 "&ᅩᅣᅵ=ᆧ"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
         standard{
             Sequence{
@@ -734,7 +734,7 @@ ko{
                 "&희<<*僖凞喜噫囍姬嬉希憙憘戱晞曦熙熹熺犧禧稀羲咥唏嘻悕戲暿欷燹爔豨餼"
                 "&힐<<*詰犵纈襭頡黠"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
         unihan{
             Sequence{
@@ -1707,7 +1707,7 @@ ko{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
     }
 }

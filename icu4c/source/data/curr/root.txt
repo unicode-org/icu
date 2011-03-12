@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -288,7 +288,7 @@ root{
             "ILS",
         }
         INR{
-            "Rs",
+            "₹",
             "INR",
         }
         ISK{
@@ -663,7 +663,7 @@ root{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.52.9"}
+    Version{"2.0.54.16"}
     currencySpacing{
         afterCurrency{
             currencyMatch{"[:letter:]"}

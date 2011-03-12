@@ -35,7 +35,7 @@ az_Cyrl{
             }
         }
     }
-    Version{"2.0.47.53"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -52,6 +52,14 @@ az_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMM{"LLL"}
+                MMMEd{"EEE, d, MMM"}
+                MMMd{"d MMM"}
+                yMMM{"MMM, y"}
+                yMMMEd{"EEE, d, MMM, y"}
+                yMMMd{"d MMM, y"}
             }
             dayNames{
                 format{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/plurals.xml
@@ -30,6 +30,7 @@ plurals:table(nofallback){
         da{"set2"}
         de{"set2"}
         dz{""}
+        ee{"set2"}
         el{"set2"}
         en{"set2"}
         eo{"set2"}
@@ -56,9 +57,9 @@ plurals:table(nofallback){
         hu{""}
         id{""}
         ig{""}
+        ii{""}
         is{"set2"}
         it{"set2"}
-        iw{"set2"}
         ja{""}
         jv{""}
         ka{""}
@@ -68,10 +69,12 @@ plurals:table(nofallback){
         km{""}
         kn{""}
         ko{""}
+        ksh{"set19"}
         ku{"set2"}
         lag{"set16"}
         lb{"set2"}
         ln{"set3"}
+        lo{""}
         lt{"set8"}
         lv{"set5"}
         mg{"set3"}
@@ -97,10 +100,10 @@ plurals:table(nofallback){
         pl{"set11"}
         ps{"set2"}
         pt{"set2"}
-        pt_PT{"set2"}
         rm{"set2"}
         ro{"set7"}
         ru{"set9"}
+        sah{""}
         se{"set6"}
         ses{""}
         sg{""}
@@ -130,6 +133,7 @@ plurals:table(nofallback){
         ur{"set2"}
         vi{""}
         wa{"set3"}
+        wae{"set2"}
         wo{""}
         yo{""}
         zh{""}
@@ -188,6 +192,10 @@ plurals:table(nofallback){
             many{"n is 6"}
             one{"n is 1"}
             two{"n is 2"}
+            zero{"n is 0"}
+        }
+        set19{
+            one{"n is 1"}
             zero{"n is 0"}
         }
         set2{

@@ -14,7 +14,7 @@ en_NZ{
             }
         }
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -33,8 +33,14 @@ en_NZ{
                 "{1} {0}",
             }
             availableFormats{
+                MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
                 Md{"d/M"}
+                yMEd{"E, dd/MM/yyyy"}
+                yMMMEd{"EEE, d MMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/MM/yy"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMMM{"MMMM y"}
             }
