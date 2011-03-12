@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/de.xml
@@ -456,7 +456,7 @@ de{
             "Schekel",
         }
         INR{
-            "Rs",
+            "₹",
             "Indische Rupie",
         }
         IQD{
@@ -1922,5 +1922,5 @@ de{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.51.59"}
+    Version{"2.0.53.54"}
 }

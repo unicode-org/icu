@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/pa_Arab.xml
  */
 pa_Arab{
-    %%Parent{"root"}
     Currencies{
         EUR{
             "€",

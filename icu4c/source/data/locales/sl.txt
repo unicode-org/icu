@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sl.xml
@@ -42,7 +42,7 @@ sl{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.45"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -65,19 +65,19 @@ sl{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"E., d."}
+                Ed{"E, d."}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                MEd{"E., d. MM."}
-                MMMEd{"E., d. MMM"}
+                MEd{"E, d. MM."}
+                MMMEd{"E, d. MMM"}
                 MMMd{"d. MMM"}
                 Md{"d. M."}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yMEd{"E., d. M. y"}
+                yMEd{"E, d. M. y"}
                 yMMM{"MMM y"}
-                yMMMEd{"E., d. MMM y"}
+                yMMMEd{"E, d. MMM y"}
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"MMMM y"}
@@ -85,13 +85,13 @@ sl{
             dayNames{
                 format{
                     abbreviated{
-                        "ned",
-                        "pon",
-                        "tor",
-                        "sre",
-                        "čet",
-                        "pet",
-                        "sob",
+                        "ned.",
+                        "pon.",
+                        "tor.",
+                        "sre.",
+                        "čet.",
+                        "pet.",
+                        "sob.",
                     }
                     wide{
                         "nedelja",
@@ -104,6 +104,15 @@ sl{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "tor",
+                        "sre",
+                        "čet",
+                        "pet",
+                        "sob",
+                    }
                     narrow{
                         "n",
                         "p",
@@ -174,22 +183,19 @@ sl{
                     M{"M.–M."}
                 }
                 MEd{
-                    M{"E., d. M. – E., d. M."}
-                    d{"E., d. – E., d. M."}
+                    M{"E, d. M. – E, d. M."}
+                    d{"E, d. – E, d. M."}
                 }
                 MMM{
                     M{"MMM–MMM"}
                 }
                 MMMEd{
-                    M{"E., d. MMM. – E., d. MMM."}
-                    d{"E., d. – E., d. MMM."}
-                }
-                MMMM{
-                    M{"LLLL–LLLL"}
+                    M{"E, d. MMM – E, d. MMM"}
+                    d{"E, d. – E, d. MMM"}
                 }
                 MMMd{
-                    M{"d. MMM. – d. MMM."}
-                    d{"d.–d. MMM."}
+                    M{"d. MMM – d. MMM"}
+                    d{"d.–d. MMM"}
                 }
                 Md{
                     M{"d. M. – d. M."}
@@ -221,31 +227,27 @@ sl{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M.–M. yy"}
+                    y{"M. yy – M. yy"}
                 }
                 yMEd{
-                    M{"E., d. M. – E., d. M. yy"}
-                    d{"E., d. – E., d. M. yy"}
-                    y{"E., d. M. yy – E., d. M. yy"}
+                    M{"E, d. M. – E, d. M. yy"}
+                    d{"E, d. – E, d. M. yy"}
+                    y{"E, d. M. yy – E, d. M. yy"}
                 }
                 yMMM{
-                    M{"MMM. – MMM. y"}
-                    y{"MMM. y – MMM. y"}
+                    M{"MMM – MMM y"}
+                    y{"MMM y – MMM y"}
                 }
                 yMMMEd{
-                    M{"E., d. MMM. – E., d. MMM. y"}
-                    d{"E., d. MMM. – E., d. MMM. y"}
-                    y{"E., d. MMM. y – E., d. MMM. y"}
-                }
-                yMMMM{
-                    M{"MM–MM yyyy"}
-                    y{"MM/yyyy – MM/yyyy"}
+                    M{"E, d. MMM – E, d. MMM y"}
+                    d{"E, d. MMM – E, d. MMM y"}
+                    y{"E, d. MMM y – E, d. MMM y"}
                 }
                 yMMMd{
-                    M{"d. MMM. – d. MMM. y"}
-                    d{"d.–d. MMM. y"}
-                    y{"d. MMM. y – d. MMM. y"}
+                    M{"d. MMM – d. MMM y"}
+                    d{"d.–d. MMM y"}
+                    y{"d. MMM y – d. MMM y"}
                 }
                 yMd{
                     M{"d. M. – d. M. yy"}

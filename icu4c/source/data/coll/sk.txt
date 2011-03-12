@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/sk.xml
@@ -10,8 +10,73 @@
  *  ICU <specials> source: <path>/xml/collation/sk.xml
  */
 sk{
-    Version{"2.0.49.77"}
+    Version{"2.0.52.94"}
     collations{
+        search{
+            Sequence{
+                " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
+                "&ا<<آ<<أ<<إ"
+                "&و<<ؤ"
+                "&ي<<ئ<<ى"
+                "&ه<<ة"
+                "&[last primary ignorable ]<<׳<<״<<ـ<<ٌ<<ٍ<<َ<<ُ<<ِ<<ّ<<ْ<<ฺ"
+                "&ᄀ=ᆨ"
+                "&ᄀᄀ=ᄁ=ᆩ"
+                "&ᄀᄉ=ᆪ"
+                "&ᄂ=ᆫ"
+                "&ᄂᄌ=ᆬ"
+                "&ᄂᄒ=ᆭ"
+                "&ᄃ=ᆮ"
+                "&ᄃᄃ=ᄄ"
+                "&ᄅ=ᆯ"
+                "&ᄅᄀ=ᆰ"
+                "&ᄅᄆ=ᆱ"
+                "&ᄅᄇ=ᆲ"
+                "&ᄅᄉ=ᆳ"
+                "&ᄅᄐ=ᆴ"
+                "&ᄅᄑ=ᆵ"
+                "&ᄅᄒ=ᆶ"
+                "&ᄆ=ᆷ"
+                "&ᄇ=ᆸ"
+                "&ᄇᄇ=ᄈ"
+                "&ᄇᄉ=ᆹ"
+                "&ᄉ=ᆺ"
+                "&ᄉᄉ=ᄊ=ᆻ"
+                "&ᄋ=ᆼ"
+                "&ᄌ=ᆽ"
+                "&ᄌᄌ=ᄍ"
+                "&ᄎ=ᆾ"
+                "&ᄏ=ᆿ"
+                "&ᄐ=ᇀ"
+                "&ᄑ=ᇁ"
+                "&ᄒ=ᇂ"
+                "&ᅡᅵ=ᅢ"
+                "&ᅣᅵ=ᅤ"
+                "&ᅥᅵ=ᅦ"
+                "&ᅧᅵ=ᅨ"
+                "&ᅩᅡ=ᅪ"
+                "&ᅩᅡᅵ=ᅫ"
+                "&ᅩᅵ=ᅬ"
+                "&ᅮᅴ=ᅯ"
+                "&ᅮᅴᅵ=ᅰ"
+                "&ᅮᅵ=ᅱ"
+                "&A<á<<<Á<ä<<<Ä"
+                "&C<č<<<Č"
+                "&D<ď<<<Ď"
+                "&E<é<<<É<ě<<<Ě"
+                "&I<í<<<Í"
+                "&L<ĺ<<<Ĺ<ľ<<<Ľ"
+                "&N<ň<<<Ň"
+                "&O<ó<<<Ó<ô<<<Ô"
+                "&R<ŕ<<<Ŕ<ř<<<Ř"
+                "&S<š<<<Š"
+                "&T<ť<<<Ť"
+                "&U<ú<<<Ú<ů<<<Ů"
+                "&Y<ý<<<Ý"
+                "&Z<ž<<<Ž"
+            }
+            Version{"1.9.9"}
+        }
         standard{
             Sequence{
                 "&A<ä<<<Ä"
@@ -22,7 +87,7 @@ sk{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/likelySubtags.xml
@@ -111,7 +111,6 @@ likelySubtags:table(nofallback){
     kcg{"kcg_Latn_NG"}
     kde{"kde_Latn_TZ"}
     kea{"kea_Latn_CV"}
-    kfo{"kfo_Latn_CI"}
     kg{"kg_Latn_CD"}
     kha{"kha_Latn_IN"}
     khq{"khq_Latn_ML"}
@@ -245,7 +244,7 @@ likelySubtags:table(nofallback){
     tig{"tig_Ethi_ER"}
     tk{"tk_Latn_TM"}
     tkl{"tkl_Latn_TK"}
-    tl{"tl_Latn_PH"}
+    tl{"fil_Latn_PH"}
     tn{"tn_Latn_ZA"}
     to{"to_Latn_TO"}
     tpi{"tpi_Latn_PG"}
@@ -503,6 +502,7 @@ likelySubtags:table(nofallback){
     ve{"ve_Latn_ZA"}
     vi{"vi_Latn_VN"}
     vun{"vun_Latn_TZ"}
+    wae{"wae_Latn_CH"}
     wal{"wal_Ethi_ET"}
     war{"war_Latn_PH"}
     wo{"wo_Latn_SN"}

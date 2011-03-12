@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/shi_Tfng.xml
  */
 shi_Tfng{
-    %%Parent{"root"}
     Currencies{
         AED{
             "AED",
@@ -97,7 +96,7 @@ shi_Tfng{
             "ⴼⵔⴰⵏⴽ ⵏ ⵖⵉⵏⵢⴰ",
         }
         INR{
-            "Rs",
+            "₹",
             "ⴰⵔⵓⴱⵉ ⵏ ⵍⵀⵉⵏⴷ",
         }
         JPY{

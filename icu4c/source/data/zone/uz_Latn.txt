@@ -10,6 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/uz_Latn.xml
  */
 uz_Latn{
-    %%Parent{"root"}
     Version{"2.0.47.68"}
 }

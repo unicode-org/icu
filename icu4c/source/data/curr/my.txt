@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/my.xml
@@ -152,7 +152,7 @@ my{
             "အစ္စရေး ပေါင်",
         }
         INR{
-            "Rs",
+            "₹",
             "အိန္ဒြိယ ရူပီး",
         }
         JMD{

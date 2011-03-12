@@ -18,7 +18,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"2.0.45.82"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -43,6 +43,7 @@ fr_CA{
                 Md{"M-d"}
                 yM{"yyyy-MM"}
                 yMEd{"EEE yyyy-MM-dd"}
+                yMd{"yyyy-MM-dd"}
                 yyMM{"yy-MM"}
             }
             intervalFormats{
@@ -64,8 +65,8 @@ fr_CA{
                     M{"E MM-dd – E MM-dd"}
                     d{"E MM-dd – E MM-dd"}
                 }
-                MMMM{
-                    M{"LLLL-LLLL"}
+                MMM{
+                    M{"MMM–MMM"}
                 }
                 Md{
                     M{"MM-dd – MM-dd"}

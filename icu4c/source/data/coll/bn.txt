@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/bn.xml
@@ -19,7 +19,7 @@ bn{
                 "<ঠ<ড<ড়=ড়<ঢ<ঢ়=ঢ়<ণ<ৎ<ত<থ<দ<ধ<ন<প<ফ<ব<ভ<ম<য<য়=য়<র<ৰ<ল<ৱ<শ<ষ<স<হ<ঽ<া<"
                 "ি<ী<ু<ূ<ৃ<ৄ<ৢ<ৣ<ে<ৈ<ো=ো<ৌ=ৌ<্<ৗ"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
         traditional{
             Sequence{
@@ -638,7 +638,7 @@ bn{
                 "&যৌ<<<য়ৌ"
                 "&য্<<<য়্"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
     }
 }

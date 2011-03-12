@@ -10,6 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/az_Cyrl.xml
  */
 az_Cyrl{
-    %%Parent{"root"}
-    Version{"2.0.47.53"}
+    Version{"2.0.53.54"}
 }

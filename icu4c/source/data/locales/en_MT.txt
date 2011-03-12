@@ -14,7 +14,7 @@ en_MT{
             }
         }
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,6 +31,15 @@ en_MT{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMEd{"E, d MMM"}
+                MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                yMEd{"E, dd/MM/yyyy"}
+                yMMMEd{"EEE, dd MMM y"}
+                yMMMd{"dd MMM y"}
+                yMd{"dd/MM/yyyy"}
             }
         }
     }

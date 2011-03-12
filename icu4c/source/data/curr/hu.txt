@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hu.xml
@@ -456,7 +456,7 @@ hu{
             "Izraeli új sékel",
         }
         INR{
-            "Rs",
+            "₹",
             "indiai rúpia",
         }
         IQD{
@@ -965,7 +965,7 @@ hu{
         }
         VND{
             "₫",
-            "Vietnámi dong",
+            "Vietnami dong",
         }
         VUV{
             "VT",
@@ -1309,5 +1309,5 @@ hu{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.54"}
 }

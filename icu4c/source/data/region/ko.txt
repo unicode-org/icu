@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -294,5 +294,5 @@ ko{
         ZW{"짐바브웨"}
         ZZ{"알수없거나 유효하지 않은 지역"}
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.53.54"}
 }

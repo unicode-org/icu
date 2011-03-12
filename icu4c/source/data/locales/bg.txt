@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bg.xml
@@ -35,7 +35,7 @@ bg{
             }
         }
     }
-    Version{"2.0.49.23"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -69,6 +69,8 @@ bg{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
+                yMMMd{"dd MMM y"}
+                yMd{"dd.MM.yy"}
                 yyMM{"MM.yy"}
                 yyQ{"Q yy"}
                 yyyy{"y"}

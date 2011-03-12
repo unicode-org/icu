@@ -192,7 +192,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"1.9"}
+    cldrVersion{"1.9.9"}
     languageData{
         aa{
             primary{
@@ -1739,6 +1739,10 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{
                     "Tglg",
+                }
+                territories{
+                    "PH",
+                    "US",
                 }
             }
         }
@@ -5158,19 +5162,6 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        tl{
-            primary{
-                scripts{
-                    "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "PH",
-                    "US",
-                }
-            }
-        }
         tli{
             primary{
                 scripts{
@@ -7458,7 +7449,6 @@ supplementalData:table(nofallback){
             "151",
             "154",
             "155",
-            "EU",
         }
         151{
             "BG",
