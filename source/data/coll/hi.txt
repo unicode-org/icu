@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/hi.xml
@@ -17,11 +17,11 @@ hi{
                 "&[last regular ]<*ँ-ःअ-न<ऩ<*प-र<ऱ<*लळ<ऴ<*व-ह<़<*ऽ-ौ<्<*ॐ<॑<॒<॓<॔<क़<ख़"
                 "<ग़<ज़<ड़<ढ़<फ़<य़<*ॠ-॰"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
         standard{
             Sequence{" [normalization on ]&ॐ<ं<<ँ<ः"}
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
     }
 }

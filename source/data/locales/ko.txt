@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -61,7 +61,7 @@ ko{
             }
         }
     }
-    Version{"2.0.49.58"}
+    Version{"2.0.53.54"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -82,6 +82,7 @@ ko{
             availableFormats{
                 EEEd{"d일 EEE"}
                 Ed{"d일 (E)"}
+                Gy{"G y년"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -105,6 +106,7 @@ ko{
                 yMMM{"G y년 MMM"}
                 yMMMEd{"G y년 MMM d일 EEE"}
                 yMMMd{"G y년 MMM d일"}
+                yMd{"G y. M. d."}
                 yQ{"G y년 Q분기"}
                 yQQQ{"G y년 QQQ"}
                 yyMM{"G YY. M."}
@@ -164,6 +166,7 @@ ko{
                 yMMM{"y년 MMM"}
                 yMMMEd{"y년 MMM d일 EEE"}
                 yMMMd{"y년 MMM d일"}
+                yMd{"yyyy. M. d."}
                 yQ{"y년 Q분기"}
                 yQQQ{"y년 QQQ"}
                 yyMM{"YY. M."}
@@ -412,6 +415,7 @@ ko{
             availableFormats{
                 EEEd{"d일 EEE"}
                 Ed{"d일 (E)"}
+                Gy{"G yy년"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -429,6 +433,7 @@ ko{
                 hms{"a h:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
+                y{"G yy년"}
                 yyMM{"G YY. M."}
                 yyMMM{"G yy년 MMM"}
                 yyQ{"G yy년 Q분기"}
@@ -729,6 +734,7 @@ ko{
                 yyyyMMM{"G y년 MMM"}
                 yyyyMMMEd{"G y년 MMM d일 EEE"}
                 yyyyMMMd{"G yy년 MMM d일"}
+                yyyyMd{"G y. M. d."}
                 yyyyQ{"G y년 Q분기"}
                 yyyyQQQ{"G y년 QQQ"}
             }

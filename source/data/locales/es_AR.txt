@@ -7,7 +7,16 @@
 // *
 // ***************************************************************************
 es_AR{
-    Version{"2.0.46.25"}
+    %%Parent{"es_419"}
+    NumberElements{
+        latn{
+            symbols{
+                decimal{","}
+                group{"."}
+            }
+        }
+    }
+    Version{"2.0.54.44"}
     calendar{
         gregorian{
             AmPmMarkers{

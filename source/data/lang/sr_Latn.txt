@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
-    %%Parent{"root"}
     Keys{
         calendar{"Kalendar"}
         collation{"Sortiranje"}
@@ -707,7 +706,7 @@ sr_Latn{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.45"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

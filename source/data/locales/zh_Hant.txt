@@ -68,7 +68,7 @@ zh_Hant{
         " 顏 願 類 顧 顯 風 飄 飛 食 飯 飲 飽 飾 餅 養 餐 餘 館 首 香 馬 駐 駕 駛 騎 騙 騷 驅 驗 驚 骨 體 高 髮 鬆 鬥 鬧 鬱"
         " 鬼 魁 魂 魅 魔 魚 魯 鮮 鳥 鳳 鳴 鴻 鵝 鷹 鹿 麗 麥 麵 麻 麼 黃 黎 黑 默 點 黨 鼓 鼠 鼻 齊 齋 齒 齡 龍 龜]"
     }
-    ExemplarCharactersIndex{"[一 丁 三 丑 丙 丞 串 並 亟 乘 乾 傢 亂 僧 億 儒 優 叢 嚥 勸 儷 儼 囌 囑 廳]"}
+    ExemplarCharactersIndex{"[一 丁 丈 不 且 丞 串 並 亭 乘 乾 傀 亂 僎 僵 儐 償 叢 儳 嚴 儷 儻 囌 囑 廳]"}
     LocaleScript{
         "Hani",
         "Bopo",
@@ -80,7 +80,7 @@ zh_Hant{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.54.33"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -100,15 +100,16 @@ zh_Hant{
             }
             availableFormats{
                 Ed{"d日(E)"}
+                Gy{"Gy年"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
                 MEd{"M/d（E）"}
                 MMM{"LLL"}
-                MMMEd{"MMMd日E"}
-                MMMMdd{"MMMMdd日"}
-                MMMd{"MMMd日"}
+                MMMEd{"M月d日E"}
+                MMMMdd{"M月dd日"}
+                MMMd{"M月d日"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
@@ -121,12 +122,12 @@ zh_Hant{
                 yMEd{"Gy/M/d（EEE）"}
                 yMMM{"Gy年M月"}
                 yMMMEd{"Gy年M月d日EEE"}
-                yMMMd{"Gy年MMMd日"}
+                yMMMd{"Gy年M月d日"}
                 yMd{"Gy/M/d"}
                 yQ{"Gy年QQQ"}
                 yQQQ{"Gy年QQQ"}
                 yyMM{"Gyy/MM"}
-                yyMMM{"Gyy年MMM"}
+                yyMMM{"Gyy年M月"}
                 yyQ{"Gyy年第Q季度"}
             }
         }
@@ -175,9 +176,9 @@ zh_Hant{
                 M{"M月"}
                 MEd{"M/d（E）"}
                 MMM{"LLL"}
-                MMMEd{"MMMd日E"}
-                MMMMdd{"MMMMdd日"}
-                MMMd{"MMMd日"}
+                MMMEd{"M月d日E"}
+                MMMMdd{"M月dd日"}
+                MMMd{"M月d日"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
@@ -190,11 +191,12 @@ zh_Hant{
                 yMEd{"yyyy/M/d（EEE）"}
                 yMMM{"y年M月"}
                 yMMMEd{"y年M月d日EEE"}
-                yMMMd{"y年MMMd日"}
+                yMMMd{"y年M月d日"}
+                yMd{"yyyy/M/d"}
                 yQ{"y年QQQ"}
                 yQQQ{"y年QQQ"}
                 yyMM{"yy-MM"}
-                yyMMM{"yy年MMM"}
+                yyMMM{"yy年M月"}
                 yyQ{"yy年第Q季度"}
                 yyyy{"y年"}
                 yyyyM{"y年M月"}
@@ -291,7 +293,7 @@ zh_Hant{
                     d{"M/dE至M/dE"}
                 }
                 MMM{
-                    M{"LLLL至LLLL"}
+                    M{"LLL至LLL"}
                 }
                 MMMEd{
                     M{"M月d日E至M月d日E"}
@@ -469,9 +471,9 @@ zh_Hant{
                 M{"M月"}
                 MEd{"M/d（E）"}
                 MMM{"LLL"}
-                MMMEd{"MMMd日E"}
-                MMMMdd{"MMMMdd日"}
-                MMMd{"MMMd日"}
+                MMMEd{"M月d日E"}
+                MMMMdd{"M月dd日"}
+                MMMd{"M月d日"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
@@ -505,6 +507,7 @@ zh_Hant{
             }
             availableFormats{
                 Ed{"d日（E）"}
+                Gy{"Gy年"}
                 H{"H時"}
                 M{"M月"}
                 MEd{"M/d（E）"}
@@ -515,6 +518,7 @@ zh_Hant{
                 h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
                 yyyyMEd{"Gy/M/d（E）"}
@@ -783,6 +787,7 @@ zh_Hant{
             }
             availableFormats{
                 Ed{"d日(E)"}
+                Gy{"Gy年"}
                 H{"H時"}
                 M{"M月"}
                 MEd{"M/d（E）"}
@@ -794,6 +799,7 @@ zh_Hant{
                 h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
                 yyyyMEd{"Gy/M/d（E）"}

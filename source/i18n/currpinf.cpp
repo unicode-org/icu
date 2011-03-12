@@ -241,9 +241,9 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
 
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle *rb = ures_open(NULL, loc.getName(), &ec);
-    rb = ures_getByKey(rb, gNumberElementsTag, rb, &ec);
-    rb = ures_getByKey(rb, gLatnTag, rb, &ec);
-    rb = ures_getByKey(rb, gPatternsTag, rb, &ec);
+    rb = ures_getByKeyWithFallback(rb, gNumberElementsTag, rb, &ec);
+    rb = ures_getByKeyWithFallback(rb, gLatnTag, rb, &ec);
+    rb = ures_getByKeyWithFallback(rb, gPatternsTag, rb, &ec);
     int32_t ptnLen;
     const UChar* numberStylePattern = ures_getStringByKeyWithFallback(rb, gDecimalFormatTag, &ptnLen, &ec);
     int32_t numberStylePatternLen = ptnLen;

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 en_SG{
-    Version{"2.0.45.82"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -29,6 +29,7 @@ en_SG{
                 MEd{"E, d/M"}
                 Md{"d/M"}
                 yMEd{"EEE, d/M/yyyy"}
+                yMd{"d/M/yyyy"}
             }
             intervalFormats{
                 MEd{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
-    Version{"2.0.52.9"}
+    Version{"2.0.54.16"}
     zoneStrings{
         ""{
             ec{""}
@@ -18,6 +18,12 @@ root{
             ls{""}
             sd{""}
             ss{""}
+        }
+        "Africa:Asmera"{
+            ec{"Asmara"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
         }
         "America:Indiana:Knox"{
             ec{"Knox, Indiana"}
@@ -43,20 +49,59 @@ root{
         "America:Kentucky:Monticello"{
             ec{"Monticello, Kentucky"}
         }
+        "America:North_Dakota:Beulah"{
+            ec{"Beulah, North Dakota"}
+        }
         "America:North_Dakota:Center"{
             ec{"Center, North Dakota"}
         }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, North Dakota"}
         }
+        "America:St_Barthelemy"{
+            ec{"St. Barthelemy"}
+        }
         "America:St_Johns"{
             ec{"St. John's"}
+        }
+        "America:St_Kitts"{
+            ec{"St. Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"St. Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"St. Vincent"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
         }
+        "Asia:Calcutta"{
+            ec{"Kolkata"}
+        }
+        "Asia:Katmandu"{
+            ec{"Kathmandu"}
+        }
+        "Asia:Saigon"{
+            ec{"Ho Chi Minh"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Faroe"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"St. Helena"}
+        }
         "Etc:Unknown"{
             ec{"Unknown"}
+        }
+        "Pacific:Ponape"{
+            ec{"Pohnpei"}
+        }
+        "Pacific:Truk"{
+            ec{"Chuuk"}
         }
         "meta:Acre"{
             sd{"ACST (Acre)"}
@@ -466,6 +511,9 @@ root{
             sd{"MOST"}
             ss{"MOT"}
         }
+        "meta:Macquarie"{
+            ss{"MIST"}
+        }
         "meta:Magadan"{
             sd{"MAGST"}
             ss{"MAGT"}
@@ -658,7 +706,7 @@ root{
             ss{"TOT"}
         }
         "meta:Truk"{
-            ss{"TRUT"}
+            ss{"CHUT"}
         }
         "meta:Turkey"{
             sd{"TRST"}
@@ -728,6 +776,7 @@ root{
             ss{"YST"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

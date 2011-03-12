@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    %%Parent{"root"}
     Keys{
         calendar{"日曆"}
         collation{"校對"}
@@ -671,7 +670,7 @@ zh_Hant{
         SAAHO{"SAAHO"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.54.33"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

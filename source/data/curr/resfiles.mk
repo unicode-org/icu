@@ -1,4 +1,4 @@
-# *   Copyright (C) 1998-2010, International Business Machines
+# *   Copyright (C) 1998-2011, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 CURR_CLDR_VERSION = 1.9
 # A list of txt's to build

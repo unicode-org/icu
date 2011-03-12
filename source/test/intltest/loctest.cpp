@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -39,7 +39,7 @@ static const char* const rawData[33][8] = {
         // display langage (English)
         {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx",   "Chinese" },
         // display script (English)
-        {   "",     "",     "",     "",     "",   "",     "",   "Simplified Han" },
+        {   "",     "",     "",     "",     "",   "",     "",   "Simplified" },
         // display country (English)
         {   "United States",    "France",   "Spain",  "Greece",   "Norway",   "",     "YY",   "China" },
         // display variant (English)
@@ -47,7 +47,7 @@ static const char* const rawData[33][8] = {
         // display name (English)
         // Updated no_NO_NY English display name for new pattern-based algorithm
         // (part of Euro support).
-        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, NY)", "Italian", "xx (YY)", "Chinese (Simplified Han, China)" },
+        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, NY)", "Italian", "xx (YY)", "Chinese (Simplified, China)" },
 
         // display langage (French)
         {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx", "chinois" },

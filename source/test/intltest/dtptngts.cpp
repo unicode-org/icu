@@ -91,10 +91,10 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("11:58:59.123 PM"),                     // 14: jmmssSSS -> "h:mm:ss.SSS a"
 
         // en_US@calendar=japanese                            // 1 en_US@calendar=japanese
-        UnicodeString("1/11 Heisei"),                         //  0: yM
+        UnicodeString("1/11 H"),                              //  0: yM
         UnicodeString("Jan 11 Heisei"),                       //  1: yMMM
-        UnicodeString("H 11-01-13"),                          //  2: yMd
-        UnicodeString("H 11 Jan 13"),                         //  3: yMMMd
+        UnicodeString("1/13/11 H"),                           //  2: yMd
+        UnicodeString("Jan 13, 11 Heisei"),                   //  3: yMMMd
         UnicodeString("1/13"),                                //  4: Md
         UnicodeString("Jan 13"),                              //  5: MMMd
         UnicodeString("Q1 11 Heisei"),                        //  6: yQQQ

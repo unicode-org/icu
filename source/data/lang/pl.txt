@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -707,7 +707,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.51.52"}
+    Version{"2.0.53.54"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

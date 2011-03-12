@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
-    %%Parent{"root"}
     Currencies{
         ADP{
             "ADP" /** ===  */,
@@ -457,7 +456,7 @@ sr_Latn{
             "Izraelski šekel",
         }
         INR{
-            "Rs",
+            "₹",
             "Indijski rupi",
         }
         IQD{
@@ -2724,5 +2723,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.45"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ja.xml
@@ -87,7 +87,7 @@ ja{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.54"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -108,12 +108,13 @@ ja{
             availableFormats{
                 Ed{"d日(EEE)"}
                 GGGGyMd{"GGGGy年M月d日"}
+                Gy{"Gy年"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
                 MEd{"M/d(E)"}
-                MMM{"LLL"}
+                MMM{"M月"}
                 MMMEd{"M月d日(E)"}
                 MMMd{"M月d日"}
                 MMdd{"MM/dd"}
@@ -162,7 +163,7 @@ ja{
                 Hms{"H:mm:ss"}
                 M{"M月"}
                 MEd{"M/d(E)"}
-                MMM{"LLL"}
+                MMM{"M月"}
                 MMMEd{"M月d日(E)"}
                 MMMd{"M月d日"}
                 MMdd{"MM/dd"}
@@ -305,7 +306,7 @@ ja{
                     d{"M月d日(E)～d日(E)"}
                 }
                 MMMM{
-                    M{"LLLL～LLLL"}
+                    M{"M月～M月"}
                 }
                 MMMd{
                     M{"M月d日～M月d日"}
@@ -442,6 +443,7 @@ ja{
             }
             availableFormats{
                 Ed{"d日(EEE)"}
+                Gy{"Gy年"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -462,7 +464,8 @@ ja{
                 yyyyMMMEd{"Gy年M月d日(EEE)"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gyy/M/d"}
-                yyyyQ{"Gyy/Q"}
+                yyyyQ{"Gy/Q"}
+                yyyyQQQ{"Gy/QQQ"}
             }
             eras{
                 abbreviated{
@@ -723,12 +726,13 @@ ja{
             }
             availableFormats{
                 Ed{"d日(EEE)"}
+                Gy{"Gy年"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
                 MEd{"M/d(E)"}
-                MMM{"LLL"}
+                MMM{"M月"}
                 MMMEd{"M月d日(EEE)"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
@@ -744,7 +748,8 @@ ja{
                 yyyyMMMEd{"Gy年M月d日(EEE)"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gyy/M/d"}
-                yyyyQ{"Gyy/Q"}
+                yyyyQ{"Gy/Q"}
+                yyyyQQQ{"Gy/QQQ"}
             }
             eras{
                 abbreviated{

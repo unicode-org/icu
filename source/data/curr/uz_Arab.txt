@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/uz_Arab.xml
  */
 uz_Arab{
-    %%Parent{"root"}
     Currencies{
         AFN{
             "Af",

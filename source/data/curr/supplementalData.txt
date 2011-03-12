@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -1262,15 +1262,26 @@ supplementalData:table(nofallback){
         }
         EE{
             {
+                id{"EUR"}
+                from:intvector{ /** 2011-01-01  */
+                    301,
+                    1054903904,
+                }
+            }
+            {
                 id{"EEK"}
                 from:intvector{ /** 1992-06-21  */
                     162,
                     167658048,
                 }
+                to:intvector{ /** 2010-12-31  */
+                    294,
+                    -2118632320,
+                }
             }
             {
                 id{"SUR"}
-                from:intvector{ /** 1961-1-1  */
+                from:intvector{ /** 1961-01-01  */
                     -67,
                     -528898464,
                 }

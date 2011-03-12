@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -39,7 +39,7 @@ fi{
             }
         }
     }
-    Version{"2.0.51.9"}
+    Version{"2.0.53.54"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -79,6 +79,8 @@ fi{
                 yMMM{"LLLL y G"}
                 yMMMEd{"EEE d. MMM y G"}
                 yMMMMccccd{"cccc, d. MMMM y G"}
+                yMMMd{"d. MMM y G"}
+                yMd{"d.M.y G"}
                 yQ{"Q/y G"}
                 yQQQ{"QQQ y G"}
                 yyMM{"M.y G"}
@@ -131,6 +133,8 @@ fi{
                 yMMM{"LLL y"}
                 yMMMEd{"EEE d. MMM y"}
                 yMMMMccccd{"cccc, d. MMMM y"}
+                yMMMd{"d. MMM y"}
+                yMd{"d.M.yyyy"}
                 yQ{"Q/yyyy"}
                 yQQQ{"QQQ y"}
                 yyMM{"M/yy"}
@@ -543,6 +547,8 @@ fi{
                 yyyyMMMEd{"EEE d. MMM y G"}
                 yyyyMMMM{"LLLL y G"}
                 yyyyMMMMccccd{"cccc, d. MMMM y G"}
+                yyyyMMMd{"d. MMM y G"}
+                yyyyMd{"d.M.y G"}
                 yyyyQ{"Q/y G"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
@@ -594,10 +600,12 @@ fi{
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
+                y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}
                 yyyyMEd{"E d.M.y G"}
                 yyyyMMM{"LLLL yy G"}
+                yyyyMMMEd{"EEE d. MMM yy G"}
                 yyyyMMMd{"d. MMM yy G"}
                 yyyyMd{"d.M.y G"}
             }
@@ -630,11 +638,13 @@ fi{
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
+                y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}
                 yyyyMEd{"E d.M.y G"}
                 yyyyMMM{"LLLL y G"}
                 yyyyMMMEd{"EEE d. MMM y G"}
+                yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d.M.y G"}
             }
         }

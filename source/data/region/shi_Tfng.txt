@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/shi_Tfng.xml
  */
 shi_Tfng{
-    %%Parent{"root"}
     Countries{
         AD{"ⴰⵏⴷⵓⵔⴰ"}
         AE{"ⵍⵉⵎⴰⵔⴰⵜ"}

@@ -52,6 +52,7 @@
 #include "unicode/curramt.h"
 #include "unicode/currpinf.h"
 #include "unicode/plurrule.h"
+#include "uresimp.h"
 #include "ucurrimp.h"
 #include "charstr.h"
 #include "cmemory.h"
@@ -391,11 +392,11 @@ DecimalFormat::construct(UErrorCode&             status,
         int32_t len = 0;
         UResourceBundle *resource = ures_open(NULL, Locale::getDefault().getName(), &status);
 
-        resource = ures_getByKey(resource, fgNumberElements, resource, &status);
+        resource = ures_getByKeyWithFallback(resource, fgNumberElements, resource, &status);
         // TODO : Get the pattern based on the active numbering system for the locale. Right now assumes "latn".
-        resource = ures_getByKey(resource, fgLatn, resource, &status);
-        resource = ures_getByKey(resource, fgPatterns, resource, &status);
-        const UChar *resStr = ures_getStringByKey(resource, fgDecimalFormat, &len, &status);
+        resource = ures_getByKeyWithFallback(resource, fgLatn, resource, &status);
+        resource = ures_getByKeyWithFallback(resource, fgPatterns, resource, &status);
+        const UChar *resStr = ures_getStringByKeyWithFallback(resource, fgDecimalFormat, &len, &status);
         str.setTo(TRUE, resStr, len);
         pattern = &str;
         ures_close(resource);
@@ -489,12 +490,12 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
     UErrorCode error = U_ZERO_ERROR;   
     
     UResourceBundle *resource = ures_open(NULL, fSymbols->getLocale().getName(), &error);
-    resource = ures_getByKey(resource, fgNumberElements, resource, &error);
+    resource = ures_getByKeyWithFallback(resource, fgNumberElements, resource, &error);
     // TODO : Get the pattern based on the active numbering system for the locale. Right now assumes "latn".
-    resource = ures_getByKey(resource, fgLatn, resource, &error);
-    resource = ures_getByKey(resource, fgPatterns, resource, &error);
+    resource = ures_getByKeyWithFallback(resource, fgLatn, resource, &error);
+    resource = ures_getByKeyWithFallback(resource, fgPatterns, resource, &error);
     int32_t patLen = 0;
-    const UChar *patResStr = ures_getStringByKey(resource, fgCurrencyFormat,  &patLen, &error);
+    const UChar *patResStr = ures_getStringByKeyWithFallback(resource, fgCurrencyFormat,  &patLen, &error);
     ures_close(resource);
 
     if (U_SUCCESS(error)) {

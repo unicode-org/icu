@@ -14,7 +14,7 @@ en_ZW{
             }
         }
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.53.54"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,6 +31,16 @@ en_ZW{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E d/M"}
+                MMMEd{"E dd MMM"}
+                MMMd{"dd MMM"}
+                Md{"d/M"}
+                yMEd{"E, d/M/y"}
+                yMMMEd{"EEE, dd MMM, y"}
+                yMMMd{"dd MMM, y"}
+                yMd{"d/M/y"}
             }
         }
     }

@@ -1,6 +1,6 @@
 /*********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2010, International Business Machines Corporation and
+ * Copyright (c) 2010-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************/
 
@@ -101,7 +101,7 @@ void LocaleDisplayNamesTest::TestWithKeywordsAndEverything() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
-  const char *target = "English (Traditional Han, United States, VALLEY, "
+  const char *target = "English (Traditional, United States, VALLEY, "
     "Calendar=Gregorian Calendar, Collation=Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   delete ldn;
@@ -148,7 +148,7 @@ void LocaleDisplayNamesTest::TestUldnWithKeywordsAndEverything() {
   const int32_t kMaxResultSize = 150;  // long enough
   UChar result[150];
   const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
-  const char *target = "English (Traditional Han, United States, VALLEY, "
+  const char *target = "English (Traditional, United States, VALLEY, "
     "Calendar=Gregorian Calendar, Collation=Phonebook Sort Order)";
   ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_STANDARD_NAMES, &status);
   int32_t len = uldn_localeDisplayName(ldn, locname, result, kMaxResultSize, &status);

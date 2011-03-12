@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/uz_Latn.xml
  */
 uz_Latn{
-    %%Parent{"root"}
     Currencies{
         BRL{
             "R$",
@@ -29,7 +28,7 @@ uz_Latn{
             "Ingliz funt sterlingi",
         }
         INR{
-            "Rs",
+            "₹",
             "Hind rupiyasi",
         }
         JPY{

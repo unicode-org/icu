@@ -8107,7 +8107,39 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        day-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        day-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         hour{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        hour-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        hour-past{
             zero{""}
             one{""}
             two{""}
@@ -8123,7 +8155,39 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        minute-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        minute-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         month{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        month-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        month-past{
             zero{""}
             one{""}
             two{""}
@@ -8139,6 +8203,22 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        second-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        second-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         week{
             zero{""}
             one{""}
@@ -8147,7 +8227,39 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        week-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        week-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         year{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        year-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        year-past{
             zero{""}
             one{""}
             two{""}
@@ -8165,7 +8277,39 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        day-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        day-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         hour{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        hour-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        hour-past{
             zero{""}
             one{""}
             two{""}
@@ -8181,7 +8325,39 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        minute-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        minute-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         month{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        month-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        month-past{
             zero{""}
             one{""}
             two{""}
@@ -8197,7 +8373,39 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        second-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        second-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         week{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        week-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        week-past{
             zero{""}
             one{""}
             two{""}
@@ -8213,6 +8421,22 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        year-future{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        year-past{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
     }
     zoneStrings{
         hoursFormat{""}
@@ -8221,6 +8445,7 @@ structLocale:table(nofallback){
         gmtZeroFormat{""}
         regionFormat{""}
         fallbackFormat{""}
+        fallbackRegionFormat{""}
         abbreviationFallback{""}
         preferenceOrdering:array{""}
         singleCountries:array{""}

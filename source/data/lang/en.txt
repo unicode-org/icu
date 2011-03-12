@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -15,6 +15,7 @@ en{
         collation{"Collation"}
         currency{"Currency"}
         numbers{"Numbers"}
+        x{"Private-Use"}
     }
     Languages{
         aa{"Afar"}
@@ -424,7 +425,7 @@ en{
         rwk{"Rwa"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
-        sah{"Yakut"}
+        sah{"Sakha"}
         sai{"South American Indian Language"}
         sal{"Salishan Language"}
         sam{"Samaritan Aramaic"}
@@ -533,6 +534,7 @@ en{
         vot{"Votic"}
         vun{"Vunjo"}
         wa{"Walloon"}
+        wae{"Walser"}
         wak{"Wakashan Language"}
         wal{"Walamo"}
         war{"Waray"}
@@ -606,8 +608,8 @@ en{
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
-        Hans{"Simplified Han"}
-        Hant{"Traditional Han"}
+        Hans{"Simplified"}
+        Hant{"Traditional"}
         Hebr{"Hebrew"}
         Hira{"Hiragana"}
         Hmng{"Pahawh Hmong"}
@@ -721,13 +723,17 @@ en{
         }
         collation{
             big5han{"Traditional Chinese Sort Order - Big5"}
+            dictionary{"Dictionary Sort Order"}
             direct{"Direct Sort Order"}
+            ducet{"Default Unicode Sort Order"}
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
-            pinyin{"Simplified Chinese Pinyin Sort Order"}
+            pinyin{"Pinyin Sort Order"}
+            reformed{"Reformed Sort Order"}
             search{"General-Purpose Search"}
-            stroke{"Traditional Chinese Stroke Sort Order"}
+            stroke{"Stroke Sort Order"}
             traditional{"Traditional Sort Order"}
+            unihan{"Radical-Stroke Sort Order"}
         }
         numbers{
             arab{"Arabic-Indic Digits"}
@@ -743,6 +749,7 @@ en{
             greklow{"Greek Lowercase Numerals"}
             gujr{"Gujarati Digits"}
             guru{"Gurmukhi Digits"}
+            hanidec{"Chinese Decimal Numerals"}
             hans{"Simplified Chinese Numerals"}
             hansfin{"Simplified Chinese Financial Numerals"}
             hant{"Traditional Chinese Numerals"}
@@ -807,7 +814,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.51.59"}
+    Version{"2.0.54.39"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

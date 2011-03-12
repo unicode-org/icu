@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/root.xml
@@ -40,7 +40,7 @@ root{
                 "&Ꞧ<<<₨/s"
                 "&ﷶ<<<﷼/یال"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
         search{
             Sequence{
@@ -91,11 +91,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
         standard{
             Sequence{""}
-            Version{"1.9"}
+            Version{"1.9.9"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

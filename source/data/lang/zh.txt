@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -677,7 +677,7 @@ zh{
         SAAHO{"萨霍"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.53.54"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

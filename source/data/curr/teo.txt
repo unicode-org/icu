@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/teo.xml
@@ -96,7 +96,7 @@ teo{
             "Ango'otol lok' Gine",
         }
         INR{
-            "Rs",
+            "₹",
             "Ango'otol lok' India",
         }
         JPY{

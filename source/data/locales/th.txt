@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/th.xml
@@ -46,7 +46,7 @@ th{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.54"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -63,6 +63,36 @@ th{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            availableFormats{
+                EEEd{"EEE d"}
+                H{"H"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                M{"L"}
+                MEd{"E, d/M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                d{"d"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"y G"}
+                yM{"M/yyyy"}
+                yMEd{"EEE d/M/yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE d MMM y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/yyyy"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ y"}
+                yyQ{"Q yy"}
+                yyyyM{"M/yyyy"}
+                yyyyMMMM{"MMMM y"}
             }
             eras{
                 abbreviated{
@@ -104,9 +134,6 @@ th{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d – E d MMM"}
-                }
-                MMMM{
-                    M{"LLLL-LLLL"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -218,6 +245,8 @@ th{
                 yMMM{"MMM y"}
                 yMMMEd{"EEE d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/yyyy"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
@@ -347,9 +376,6 @@ th{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d – E d MMM"}
-                }
-                MMMM{
-                    M{"LLLL-LLLL"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -554,9 +580,16 @@ th{
                 "{1} {0}",
             }
             availableFormats{
-                yyyy{"GGG yy"}
+                EEEd{"EEE d"}
+                MEd{"E, d/M"}
+                MMMEd{"E d MMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                yyyy{"G yy"}
                 yyyyM{"M/GGGGG yy"}
-                yyyyMMM{"MMM GGGGG yy"}
+                yyyyMMM{"MMM G yy"}
+                yyyyMMMEd{"EEE d MMM G y"}
+                yyyyMMMd{"d MMM G y"}
                 yyyyQ{"Q GGGGG yy"}
             }
             eras{
@@ -1055,9 +1088,16 @@ th{
                 "{1}, {0}",
             }
             availableFormats{
-                yyyy{"GGG yy"}
+                EEEd{"EEE d"}
+                MEd{"E, d/M"}
+                MMMEd{"E d MMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                yyyy{"G yy"}
                 yyyyM{"M/GGGGG yy"}
-                yyyyMMM{"MMM GGGGG yy"}
+                yyyyMMM{"MMM G yy"}
+                yyyyMMMEd{"EEE d MMM G y"}
+                yyyyMMMd{"d MMM G y"}
                 yyyyQ{"Q GGGGG yy"}
             }
         }

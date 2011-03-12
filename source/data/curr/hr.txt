@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hr.xml
@@ -460,7 +460,7 @@ hr{
             "novi izraelski šekel",
         }
         INR{
-            "Rs",
+            "₹",
             "indijska rupija",
         }
         IQD{
@@ -2745,5 +2745,5 @@ hr{
             other{"zimbabveanskih dolara (2009)"}
         }
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.53.54"}
 }

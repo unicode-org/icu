@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
+// * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/da.xml
@@ -82,7 +82,7 @@ da{
         bua{"buriatisk"}
         bug{"buginesisk"}
         byn{"blin"}
-        ca{"katalansk"}
+        ca{"catalansk"}
         cad{"caddo"}
         cai{"mellemamerikansk indiansk sprog"}
         car{"caribisk"}
@@ -703,7 +703,7 @@ da{
         REVISED{"revideret retskrivning"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.53.54"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

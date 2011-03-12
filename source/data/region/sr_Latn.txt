@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
-    %%Parent{"root"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -296,5 +295,5 @@ sr_Latn{
         ZW{"Zimbabve"}
         ZZ{"Nepoznat ili nevažeći region"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.53.45"}
 }
