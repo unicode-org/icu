@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -164,7 +164,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMM", "Oct\\u2013Nov", 
             
-            "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMMM", "October-November", 
+            "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMMM", "October\\u2013November", 
             
             "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hm", "10/10/2007 10:10 AM \\u2013 11/10/2007 10:10 AM", 
             
@@ -441,9 +441,9 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "d", "10\\u65e5\\u81f320\\u65e5", 
             
-            "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "y", "2007", 
+            "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "y", "2007\\u5E74", // (fixed expected result per ticket:6626:)
             
-            "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "M", "11", 
+            "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "M", "11\\u6708", 
             
             "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "MMM", "\\u5341\\u4E00\\u6708", // (fixed expected result per ticket 6872<-6626 and others)
             
@@ -663,7 +663,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
             "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "d", "10/10 - 10/11", 
         
-            "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "y", "2550", 
+            "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "y", "2550 \u0E1E.\u0E28.", 
         
         
             "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "MMM", "\\u0E15.\\u0E04.-\\u0E1E.\\u0E22.", 
@@ -711,7 +711,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/interval_data
         String[] DATA = {
-            "yyyy MM dd HH:mm:ss",    
+            "yyyy MM dd HH:mm:ss",
             "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "Oct 10, 2007 --- Oct 10, 2008", 
             
             "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "2007 Oct 10 - Nov 2007", 
@@ -747,17 +747,17 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10. Jan 2007", 
             
-            "es", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "10 de oct de 2007 --- 10 de oct de 2008", 
+            "es", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "10 oct 2007 --- 10 oct 2008", 
             
             "es", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "2007 oct 10 - nov 2007", 
             
-            "es", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "10 de nov de 2007 --- 20 de nov de 2007", 
+            "es", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "10 nov 2007 --- 20 nov 2007", 
             
-            "es", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "10 de ene de 2007", 
+            "es", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "10 ene 2007", 
             
-            "es", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "10 de ene de 2007", 
+            "es", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "10 ene 2007", 
             
-            "es", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10 de ene de 2007", 
+            "es", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10 ene 2007", 
         };
         expectUserDII(DATA, DATA.length);
     }

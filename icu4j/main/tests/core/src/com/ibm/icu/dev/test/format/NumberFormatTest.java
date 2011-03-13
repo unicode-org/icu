@@ -495,7 +495,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"root@numbers=latn", "-1.23", "USD", "-US$\u00a01.23", "-USD\u00a01.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers
             {"root@numbers=arab", "-1.23", "USD", "-US$\u00a0\u0661.\u0662\u0663", "-USD\u00a0\u0661.\u0662\u0663", "-\u0661.\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
             // test choice format
-            {"es_AR", "1", "INR", "Rs\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
+            {"es_AR", "1", "INR", "\u20B9\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
             {"ar_EG", "1", "USD", "US$\u00A0\u0661\u066B\u0660\u0660", "USD\u00a0\u0661\u066b\u0660\u0660", "\u0661\u066b\u0660\u0660 \u062f\u0648\u0644\u0627\u0631 \u0623\u0645\u0631\u064a\u0643\u064a"},
         };
         
@@ -1147,11 +1147,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat df = new DecimalFormat("'*&'' '\u00A4' ''&*' #,##0.00", US);
         df.setCurrency(Currency.getInstance("INR"));
-        expect2(df, 1.0, "*&' Rs '&* 1.00");
-        expect2(df, -2.0, "-*&' Rs '&* 2.00");
+        expect2(df, 1.0, "*&' \u20B9 '&* 1.00");
+        expect2(df, -2.0, "-*&' \u20B9 '&* 2.00");
         df.applyPattern("#,##0.00 '*&'' '\u00A4' ''&*'");
-        expect2(df, 2.0, "2.00 *&' Rs '&*");
-        expect2(df, -1.0, "-1.00 *&' Rs '&*");
+        expect2(df, 2.0, "2.00 *&' \u20B9 '&*");
+        expect2(df, -1.0, "-1.00 *&' \u20B9 '&*");
 
 //#if defined(ECLIPSE)
 //##        BigDecimal r;

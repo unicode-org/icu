@@ -285,10 +285,10 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Ed", "13 Wed"},
         new String[] {"jmmssSSS", "11:58:59.123 PM"},
         new ULocale("en_US@calendar=japanese"), // (new locale for testing ticket 6872<-5702)
-        new String[] {"yM", "1/11 Heisei"},
+        new String[] {"yM", "1/11 H"},
         new String[] {"yMMM", "Jan 11 Heisei"},
-        new String[] {"yMd", "H 11-01-13"},
-        new String[] {"yMMMd", "H 11 Jan 13"},
+        new String[] {"yMd", "1/13/11 H"},
+        new String[] {"yMMMd", "Jan 13, 11 Heisei"},
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "Jan 13"},
         new String[] {"yQQQ", "Q1 11 Heisei"},
@@ -335,7 +335,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new ULocale("ja"), // (new locale for testing ticket 6872<-6626)
         new String[] {"yM", "1999/1"},
         new String[] {"yMMM", "1999\u5E741\u6708"},
-        new String[] {"yMd", "1999\u5E741\u670813\u65E5"}, // *** expected result should be "1999/1/13" with current data, changed test temporarily to match current result, needs investigation
+        new String[] {"yMd", "1999/1/13"},
         new String[] {"yMMMd", "1999\u5E741\u670813\u65E5"},
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
