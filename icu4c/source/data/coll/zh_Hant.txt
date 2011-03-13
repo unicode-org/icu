@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/collation/zh_Hant.xml
  */
 zh_Hant{
-    %%Parent{"root"}
     Version{"2.0.41.26"}
     collations{
         default{"stroke"}
