@@ -1226,7 +1226,7 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("calendar", "Calendar");
         h[0].put("currency", "Currency");
         h[0].put("phonebook", "Phonebook Order");
-        h[0].put("pinyin", "Simplified Chinese Pinyin Sort Order");
+        h[0].put("pinyin", "Pinyin Sort Order");
         h[0].put("traditional", "Traditional Sort Order");
         h[0].put("stroke", "Stroke Order");
         h[0].put("direct", "Direct Sort Order");

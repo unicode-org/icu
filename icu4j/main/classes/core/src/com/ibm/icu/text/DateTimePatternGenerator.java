@@ -223,7 +223,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 result.setAvailableFormat(formatKey);
                 // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
                 // but not a previous availableFormats entry:
-                result.addPatternWithSkeleton(formatValue, formatKey, false, returnInfo);
+                result.addPatternWithSkeleton(formatValue, formatKey, true, returnInfo);
             } 
         }catch(Exception e) {
         }
@@ -244,7 +244,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                         result.setAvailableFormat(formatKey);
                         // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
                         // but not a previous availableFormats entry:
-                        result.addPatternWithSkeleton(formatValue, formatKey, false, returnInfo);
+                        result.addPatternWithSkeleton(formatValue, formatKey, true, returnInfo);
                         //System.out.println(" availableFormat:"+formatValue);
                     }
                 } 
