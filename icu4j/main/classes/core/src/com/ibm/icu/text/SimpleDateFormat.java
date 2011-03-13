@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2135,12 +2135,13 @@ public class SimpleDateFormat extends DateFormat {
 
         switch (patternCharIndex)
             {
-            case 0: // 'G' - ERA              
+            case 0: // 'G' - ERA
                 int ps = 0;
-                if (count == 4) {
+                if (count == 5) {
+                    ps = matchString(text, start, Calendar.ERA, formatData.narrowEras, cal);
+                } else if (count == 4) {
                     ps = matchString(text, start, Calendar.ERA, formatData.eraNames, cal);
-                }
-                else {
+                } else {
                     ps = matchString(text, start, Calendar.ERA, formatData.eras, cal);
                 }
 
