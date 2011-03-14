@@ -4,9 +4,9 @@
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
 
-    <title>ReadMe for ICU 4.6</title>
+    <title>ReadMe for ICU 4.7.1 (4.8M1)</title>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2010 IBM Corporation and others. All Rights Reserved." />
+    "Copyright (c) 1997-2011 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
@@ -17,10 +17,10 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.6 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.7.1 (4.8M1) ReadMe</h1>
 
-    <p>Last updated: 2010-Dec-01<br />
-     Copyright &copy; 1997-2010 International Business Machines Corporation and
+    <p>Last updated: 2011-Mar-14<br />
+     Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr />
@@ -213,25 +213,6 @@
     For more news about
     this release, see the <a href="http://site.icu-project.org/download">ICU
     download page</a>.</p>
-
-    <ul>
-      <li><strong>Compiler RTTI</strong><br />
-        ICU 4.6 requires compiler RTTI to be turned on.
-        It is used with many of ICU's polymorphic classes
-        (classes with virtual functions; they are subclasses of UObject).<br />
-        Existing "poor man's RTTI" functions continue to be available, but
-        the ICU code does not use them any more and users are encouraged
-        to use real C++ RTTI as well where necessary.
-        (<code>dynamic_cast&lt;pointer&gt;</code> for casting and testing whether
-        an object is an instance of a class <em>or subclass</em>,
-        and <code>typeid(object or type)</code> for testing for type equality.)<br />
-        New ICU class hierarchies (new immediate subclasses of UObject) will not
-        add "poor man's RTTI" functions.<br />
-        On AIX with the Visual Age compiler, RTTI must be turned on explicitly
-        via the the <code>-qrtti</code> option.
-        When using ICU's own makefiles, this is done automatically via the
-        <code><a href="source/config/mh-aix-va">mh-aix-va</a></code> file.</li>
-    </ul>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -1665,7 +1646,7 @@ gnumake</pre>
     </ul>
     <hr />
 
-    <p>Copyright &copy; 1997-2010 International Business Machines Corporation and
+    <p>Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.<br />
      IBM Globalization Center of Competency - San Jos&eacute;<br />
      4400 North First Street<br />
