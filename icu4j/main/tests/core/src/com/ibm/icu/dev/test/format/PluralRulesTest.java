@@ -354,7 +354,7 @@ public class PluralRulesTest extends TestFmwk {
                      valueList = valueList.trim();
                  }
                  Collection<Double> values;
-                 if (valueList == null || valueList.isEmpty()) {
+                 if (valueList == null || valueList.length() == 0) {
                      values = Collections.<Double>emptyList();
                  } else if ("null".equals(valueList)) {
                      values = null;
