@@ -83,7 +83,6 @@ public class PluralRules implements Serializable {
     private final RuleList rules;
     private final Set<String> keywords;
     private int repeatLimit; // for equality test
-    private transient Map<String, Double> uniqueKeywordValues;
     private transient int hashCode;
     private transient Map<String, List<Double>> _keySamplesMap;
     private transient Map<String, Boolean> _keyLimitedMap;
@@ -793,25 +792,25 @@ public class PluralRules implements Serializable {
      * @param token the token to be checked
      * @return true if the token is a valid keyword.
      */
-     private static boolean isValidKeyword(String token) {
-         if (token.length() > 0 && START_CHARS.contains(token.charAt(0))) {
-             for (int i = 1; i < token.length(); ++i) {
-                 if (!CONT_CHARS.contains(token.charAt(i))) {
-                     return false;
-                 }
-             }
-             return true;
-         }
-         return false;
-     }
+    private static boolean isValidKeyword(String token) {
+        if (token.length() > 0 && START_CHARS.contains(token.charAt(0))) {
+            for (int i = 1; i < token.length(); ++i) {
+                if (!CONT_CHARS.contains(token.charAt(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
     /*
      * Creates a new <code>PluralRules</code> object.  Immutable.
      */
-     private PluralRules(RuleList rules) {
-         this.rules = rules;
-         this.keywords = Collections.unmodifiableSet(rules.getKeywords());
-     }
+    private PluralRules(RuleList rules) {
+        this.rules = rules;
+        this.keywords = Collections.unmodifiableSet(rules.getKeywords());
+    }
 
     /**
      * Given a number, returns the keyword of the first rule that applies to
@@ -821,55 +820,37 @@ public class PluralRules implements Serializable {
      * @return The keyword of the selected rule.
      * @stable ICU 4.0
      */
-     public String select(double number) {
-         return rules.select(number);
-     }
+    public String select(double number) {
+        return rules.select(number);
+    }
 
-     /**
-      * Returns a set of all rule keywords used in this <code>PluralRules</code>
-      * object.  The rule "other" is always present by default.
-      *
-      * @return The set of keywords.
-      * @stable ICU 3.8
-      */
-     public Set<String> getKeywords() {
-         return keywords;
-     }
+    /**
+     * Returns a set of all rule keywords used in this <code>PluralRules</code>
+     * object.  The rule "other" is always present by default.
+     *
+     * @return The set of keywords.
+     * @stable ICU 3.8
+     */
+    public Set<String> getKeywords() {
+        return keywords;
+    }
 
-     /**
-      * Returns the unique value that this keyword matches, or {@link #NO_UNIQUE_VALUE}
-      * if the keyword matches multiple values or is not defined for this PluralRules.
-      *
-      * @param keyword the keyword to check for a unique value
-      * @return The unique value for the keyword, or NO_UNIQUE_VALUE.
-      * @draft ICU 4.8
-      * @provisional This API might change or be removed in a future release.
-      */
-     public double getUniqueKeywordValue(String keyword) {
-         if (uniqueKeywordValues == null) {
-             // compute unique values the slow but exact way,
-             // the logic to do this from the rules is more complex than
-             // this simple process
-             final Double NONE = NO_UNIQUE_VALUE;
-             Map<String, Double> tempUniqueKeywordValues = new HashMap<String, Double>();
-             int limit = getRepeatLimit();
-             for (int i = 0; i < limit * 2; ++i) {
-                 for (int j = 0; j < 2; ++j) {
-                   double value = i + (j == 0 ? 0.0 : 0.5);
-                     String key = select(value);
-                     if (tempUniqueKeywordValues.containsKey(key)) {
-                         tempUniqueKeywordValues.put(key, NONE);
-                     } else {
-                         tempUniqueKeywordValues.put(key, value);
-                     }
-                 }
-             }
-             uniqueKeywordValues = tempUniqueKeywordValues;
-         }
-
-         return uniqueKeywordValues.containsKey(keyword) ?
-             uniqueKeywordValues.get(keyword) : NO_UNIQUE_VALUE;
-     }
+    /**
+     * Returns the unique value that this keyword matches, or {@link #NO_UNIQUE_VALUE}
+     * if the keyword matches multiple values or is not defined for this PluralRules.
+     *
+     * @param keyword the keyword to check for a unique value
+     * @return The unique value for the keyword, or NO_UNIQUE_VALUE.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public double getUniqueKeywordValue(String keyword) {
+        Collection<Double> values = getAllKeywordValues(keyword);
+        if (values != null && values.size() == 1) {
+            return values.iterator().next();
+        }
+        return NO_UNIQUE_VALUE;
+    }
 
     /**
      * Returns all the values that trigger this keyword, or null if the number of such
@@ -879,6 +860,7 @@ public class PluralRules implements Serializable {
      * @return the values that trigger this keyword, or null.  The returned collection
      * is immutable. It will be empty if the keyword is not defined.
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Collection<Double> getAllKeywordValues(String keyword) {
         if (!keywords.contains(keyword)) {
