@@ -85,7 +85,8 @@ public class PluralRules implements Serializable {
     private int repeatLimit; // for equality test
     private transient Map<String, Double> uniqueKeywordValues;
     private transient int hashCode;
-    private transient Map<String, List<Double>> samples;
+    private transient Map<String, List<Double>> _keySamplesMap;
+    private transient Map<String, Boolean> _keyLimitedMap;
 
     // Standard keywords.
 
@@ -158,6 +159,10 @@ public class PluralRules implements Serializable {
             return true;
         }
 
+        public boolean isLimited() {
+            return false;
+        }
+
         public String toString() {
             return "n is any";
         }
@@ -179,6 +184,10 @@ public class PluralRules implements Serializable {
 
         public boolean appliesTo(double n) {
             return true;
+        }
+
+        public boolean isLimited() {
+            return false;
         }
 
         public String toString() {
@@ -242,6 +251,12 @@ public class PluralRules implements Serializable {
         boolean isFulfilled(double n);
 
         /*
+         * Returns false if an unlimited number of values fulfills the
+         * constraint.
+         */
+        boolean isLimited();
+
+        /*
          * Returns the larger of limit or the limit of this constraint.
          * If the constraint is a simple range test, this is the higher
          * end of the range; if it is a modulo test, this is the modulus.
@@ -253,7 +268,7 @@ public class PluralRules implements Serializable {
     }
 
     /*
-     * A pluralization rule.  .
+     * A pluralization rule.
      */
     private interface Rule extends Serializable {
         /* Returns the keyword that names this rule. */
@@ -261,6 +276,9 @@ public class PluralRules implements Serializable {
 
         /* Returns true if the rule applies to the number. */
         boolean appliesTo(double n);
+
+        /* Returns false if an unlimited number of values generate this rule. */
+        boolean isLimited();
 
         /* Returns the larger of limit and this rule's limit. */
         int updateRepeatLimit(int limit);
@@ -278,6 +296,9 @@ public class PluralRules implements Serializable {
 
         /* Return the value at which this rulelist starts repeating. */
         int getRepeatLimit();
+
+        /* Return true if the values for this keyword are limited. */
+        boolean isLimited(String keyword);
     }
 
     /*
@@ -478,6 +499,15 @@ public class PluralRules implements Serializable {
         private long lowerBound;
         private long upperBound;
 
+        RangeConstraint(int mod, boolean inRange, boolean integersOnly,
+                        long lowerBound, long upperBound) {
+            this.mod = mod;
+            this.inRange = inRange;
+            this.integersOnly = integersOnly;
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
         public boolean isFulfilled(double n) {
             if (integersOnly && (n - (long)n) != 0.0) {
                 return !inRange;
@@ -488,13 +518,8 @@ public class PluralRules implements Serializable {
             return inRange == (n >= lowerBound && n <= upperBound);
         }
 
-        RangeConstraint(int mod, boolean inRange, boolean integersOnly,
-                        long lowerBound, long upperBound) {
-            this.mod = mod;
-            this.inRange = inRange;
-            this.integersOnly = integersOnly;
-            this.lowerBound = lowerBound;
-            this.upperBound = upperBound;
+        public boolean isLimited() {
+            return integersOnly && inRange && mod == 0;
         }
 
         public int updateRepeatLimit(int limit) {
@@ -579,6 +604,12 @@ public class PluralRules implements Serializable {
         public boolean isFulfilled(double n) {
             return a.isFulfilled(n) && b.isFulfilled(n);
         }
+
+        public boolean isLimited() {
+            // we ignore the case where both a and b are unlimited but no values
+            // satisfy both-- we still consider this 'unlimited'
+            return a.isLimited() || b.isLimited();
+        }
     }
 
     /* A constraint representing the logical or of two constraints. */
@@ -591,6 +622,10 @@ public class PluralRules implements Serializable {
 
         public boolean isFulfilled(double n) {
             return a.isFulfilled(n) || b.isFulfilled(n);
+        }
+
+        public boolean isLimited() {
+            return a.isLimited() && b.isLimited();
         }
     }
 
@@ -628,6 +663,10 @@ public class PluralRules implements Serializable {
 
         public int updateRepeatLimit(int limit) {
             return constraint.updateRepeatLimit(limit);
+        }
+
+        public boolean isLimited() {
+            return constraint.isLimited();
         }
 
         public String toString() {
@@ -683,6 +722,23 @@ public class PluralRules implements Serializable {
             RuleChain rc = this;
             while (rc != null) {
                 result.add(rc.rule.getKeyword());
+                rc = rc.next;
+            }
+            return result;
+        }
+
+        public boolean isLimited(String keyword) {
+            // if all rules with this keyword are limited, it's limited,
+            // and if there's no rule with this keyword, it's unlimited
+            RuleChain rc = this;
+            boolean result = false;
+            while (rc != null) {
+                if (keyword.equals(rc.rule.getKeyword())) {
+                    if (!rc.rule.isLimited()) {
+                        return false;
+                    }
+                    result = true;
+                }
                 rc = rc.next;
             }
             return result;
@@ -816,58 +872,116 @@ public class PluralRules implements Serializable {
      }
 
     /**
-     * Returns a list of up to three values for which select() would return that keyword,
+     * Returns all the values that trigger this keyword, or null if the number of such
+     * values is unlimited.
+     *
+     * @param keyword the keyword
+     * @return the values that trigger this keyword, or null.  The returned collection
+     * is immutable. It will be empty if the keyword is not defined.
+     * @draft ICU 4.8
+     */
+    public Collection<Double> getAllKeywordValues(String keyword) {
+        if (!keywords.contains(keyword)) {
+            return Collections.<Double>emptyList();
+        }
+        Collection<Double> result = getKeySamplesMap().get(keyword);
+
+        // We depend on MAX_SAMPLES here.  It's possible for a conjunction
+        // of unlimited rules that 'looks' unlimited to return a limited
+        // number of values.  There's no bounds to this limited number, in
+        // general, because you can construct arbitrarily complex rules.  Since
+        // we always generate 3 samples if a rule is really unlimited, that's
+        // where we put the cutoff.
+        if (result.size() > 2 && !getKeyLimitedMap().get(keyword)) {
+            return null;
+        }
+        return result;
+    }
+
+    /**
+     * Returns a list of values for which select() would return that keyword,
      * or null if the keyword is not defined. The returned collection is unmodifiable.
+     * The returned list is not complete, and there might be additional values that
+     * would return the keyword.
      *
      * @param keyword the keyword to test
      * @return a list of values matching the keyword.
      * @draft ICU 4.8
      * @provisional This API might change or be removed in a future release.
      */
-     public Collection<Double> getSamples(String keyword) {
-         if (!keywords.contains(keyword)) {
-             return null;
-         }
-         // If this were allowed to vary on a per-call basis, we'd have to recheck and
-         // possibly rebuild the samples cache.  Doesn't seem worth it.
-         int MAX_SAMPLES = 3;
+    public Collection<Double> getSamples(String keyword) {
+        if (!keywords.contains(keyword)) {
+            return null;
+        }
+        return getKeySamplesMap().get(keyword);
+    }
 
-         if (samples == null) {
-             samples = generateSamples(MAX_SAMPLES);
-         }
-         return samples.get(keyword);
-     }
+    private Map<String, Boolean> getKeyLimitedMap() {
+        initKeyMaps();
+        return _keyLimitedMap;
+    }
 
-     private Map<String, List<Double>> generateSamples(int maxSamples) {
-         Map<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
-         int keywordsRemaining = keywords.size();
+    private Map<String, List<Double>> getKeySamplesMap() {
+        initKeyMaps();
+        return _keySamplesMap;
+    }
 
-         int limit = Math.max(5, getRepeatLimit() * maxSamples) * 2;
-         for (int i = 0; keywordsRemaining > 0 && i < limit; ++i) {
-             double val = i / 2.0;
-             String keyword = select(val);
-             List<Double> list = sampleMap.get(keyword);
-             if (list == null) {
-                 list = new ArrayList<Double>(maxSamples);
-                 sampleMap.put(keyword, list);
-             } else if (list.size() == maxSamples) {
-                 continue;
-             }
-             list.add(Double.valueOf(val));
+    private synchronized void initKeyMaps() {
+        // ensure both _keySamplesMap and _keyLimitedMap are initialized.
+        if (_keySamplesMap == null) {
+            // If this were allowed to vary on a per-call basis, we'd have to recheck and
+            // possibly rebuild the samples cache.  Doesn't seem worth it.
+            // This 'max samples' value only applies to keywords that are unlimited, for
+            // other keywords all the matching values are returned.  This might be a lot.
+            final int MAX_SAMPLES = 3;
 
-             if (list.size() == maxSamples) {
-                 --keywordsRemaining;
-                 continue;
-             }
-         }
+            Map<String, Boolean> temp = new HashMap<String, Boolean>();
+            for (String k : keywords) {
+                temp.put(k, rules.isLimited(k));
+            }
+            _keyLimitedMap = temp;
 
-         // Make lists immutable so we can return them directly
-         for (String key : sampleMap.keySet()) {
-             sampleMap.put(key, Collections.unmodifiableList(sampleMap.get(key)));
-         }
+            Map<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
+            int keywordsRemaining = keywords.size();
 
-         return sampleMap;
-     }
+            int limit = Math.max(5, getRepeatLimit() * MAX_SAMPLES) * 2;
+            for (int i = 0; keywordsRemaining > 0 && i < limit; ++i) {
+                double val = i / 2.0;
+                String keyword = select(val);
+                boolean keyIsLimited = _keyLimitedMap.get(keyword);
+
+                List<Double> list = sampleMap.get(keyword);
+                if (list == null) {
+                    list = new ArrayList<Double>(MAX_SAMPLES);
+                    sampleMap.put(keyword, list);
+                } else if (!keyIsLimited && list.size() == MAX_SAMPLES) {
+                    continue;
+                }
+                list.add(Double.valueOf(val));
+
+                if (!keyIsLimited && list.size() == MAX_SAMPLES) {
+                    --keywordsRemaining;
+                    continue;
+                }
+            }
+            if (keywordsRemaining > 0) {
+                for (String k : keywords) {
+                    if (!sampleMap.containsKey(k)) {
+                        sampleMap.put(k, Collections.<Double>emptyList());
+                        if (--keywordsRemaining == 0) {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Make lists immutable so we can return them directly
+            for (String key : sampleMap.keySet()) {
+                sampleMap.put(key, Collections.unmodifiableList(sampleMap.get(key)));
+            }
+            _keySamplesMap = sampleMap;
+        }
+    }
 
     /**
      * Returns the set of locales for which PluralRules are known.
