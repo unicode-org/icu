@@ -81,7 +81,7 @@ class UVector;
  * class AlphabeticIndex supports the creation of a UI index appropriate for a given language, such as:
  *
  * <pre>
- *  <b>… A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å …</b>
+ *  <b>... A B C D E F G H I J K L M N O P Q R S T U V W X Y Z \u00C6 \u00D8 \u00C5 ...</b>
  *
  *  <b>A</b>
  *     Addison
@@ -145,7 +145,7 @@ class UVector;
  * if its bucket is empty. Small buckets could also be combined based on size, such as:
  *
  * <pre>
- * <b>… A-F G-N O-Z …</b>
+ * <b>... A-F G-N O-Z ...</b>
  * </pre>
  *
  * <p>
