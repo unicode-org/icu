@@ -6054,7 +6054,7 @@ static void TestReorderingAPI(void)
 }
 
 /*
- * Utility function to test one collation reordering test case.
+ * Utility function to test one collation reordering test case set.
  * @param testcases Array of test cases.
  * @param n_testcases Size of the array testcases.
  * @param str_rules Array of rules.  These rules should be specifying the same rule in different formats.
@@ -6066,27 +6066,25 @@ static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
 
-    for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
-        myCollation = ucol_open("", &status);
-        if (U_FAILURE(status)) {
-            log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
-            return;
-        }
-        ucol_setReorderCodes(myCollation, reorderTokens, reorderTokensLen, &status);
-        if(U_FAILURE(status)) {
-            log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
-            return;
-        }
-        
-        for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
-            doTest(myCollation,
-                testCases[testCaseNum].source,
-                testCases[testCaseNum].target,
-                testCases[testCaseNum].result
-            );
-        }
-        ucol_close(myCollation);
+    myCollation = ucol_open("", &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
     }
+    ucol_setReorderCodes(myCollation, reorderTokens, reorderTokensLen, &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: while setting script order: %s\n", myErrorName(status));
+        return;
+    }
+        
+    for (testCaseNum = 0; testCaseNum < testCasesLen; ++testCaseNum) {
+        doTest(myCollation,
+            testCases[testCaseNum].source,
+            testCases[testCaseNum].target,
+            testCases[testCaseNum].result
+        );
+    }
+    ucol_close(myCollation);
 }
 
 static void TestGreekFirstReorder(void)
