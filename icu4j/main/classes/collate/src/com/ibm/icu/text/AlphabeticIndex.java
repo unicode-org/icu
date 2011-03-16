@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, Google Inc, International Business Machines Corporation
+ * Copyright (C) 2008-2011, Google Inc, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1105,56 +1105,56 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     private static String[] HACK_PINYIN_LOOKUP_LONG = {
         "", // A
-        "\u516B", // b : 八 [bā]
-        "\uD863\uDEAD", // c : 𨺭 [cā]
-        "\uD844\uDE51", // d : 𡉑 [dā]
-        "\u59B8", // e : 妸 [ē]
-        "\u53D1", // f : 发 [fā]
-        "\uD844\uDE45", // g : 𡉅 [gā]
-        "\u54C8", // h : 哈 [hā]
-        "\u4E0C", // j : 丌 [jī]
-        "\u5494", // k : 咔 [kā]
-        "\u3547", // l : 㕇 [lā]
-        "\u5452", // m : 呒 [ḿ]
-        "\u5514", // n : 唔 [ń]
-        "\u5594", // o : 喔 [ō]
-        "\uD84F\uDC7A", // p : 𣱺 [pā]
-        "\u4E03", // q : 七 [qī]
-        "\u513F", // r : 儿 [r]
-        "\u4EE8", // s : 仨 [sā]
-        "\u4ED6", // t : 他 [tā]
-        "\u7A75", // w : 穵 [wā]
-        "\u5915", // x : 夕 [xī]
-        "\u4E2B", // y : 丫 [yā]
-        "\u5E00", // z : 帀 [zā]
+        "\u516B", // b : \u516B [b\u0101]
+        "\uD863\uDEAD", // c : \U00028EAD [c\u0101]
+        "\uD844\uDE51", // d : \U00021251 [d\u0101]
+        "\u59B8", // e : \u59B8 [\u0113]
+        "\u53D1", // f : \u53D1 [f\u0101]
+        "\uD844\uDE45", // g : \U00021245 [g\u0101]
+        "\u54C8", // h : \u54C8 [h\u0101]
+        "\u4E0C", // j : \u4E0C [j\u012B]
+        "\u5494", // k : \u5494 [k\u0101]
+        "\u3547", // l : \u3547 [l\u0101]
+        "\u5452", // m : \u5452 [\u1E3F]
+        "\u5514", // n : \u5514 [\u0144]
+        "\u5594", // o : \u5594 [\u014D]
+        "\uD84F\uDC7A", // p : \U00023C7A [p\u0101]
+        "\u4E03", // q : \u4E03 [q\u012B]
+        "\u513F", // r : \u513F [r]
+        "\u4EE8", // s : \u4EE8 [s\u0101]
+        "\u4ED6", // t : \u4ED6 [t\u0101]
+        "\u7A75", // w : \u7A75 [w\u0101]
+        "\u5915", // x : \u5915 [x\u012B]
+        "\u4E2B", // y : \u4E2B [y\u0101]
+        "\u5E00", // z : \u5E00 [z\u0101]
     };
 
     private static String PINYIN_LOWER_BOUNDS_SHORT = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
 
     private static String[] HACK_PINYIN_LOOKUP_SHORT = {
         "", // A
-        "\u516B", // b : 八 [bā]
-        "\u5693", // c : 嚓 [cā]
-        "\u5491", // d : 咑 [dā]
-        "\u59B8", // e : 妸 [ē]
-        "\u53D1", // f : 发 [fā]
-        "\u65EE", // g : 旮 [gā]
-        "\u54C8", // h : 哈 [hā]
-        "\u4E0C", // j : 丌 [jī]
-        "\u5494", // k : 咔 [kā]
-        "\u5783", // l : 垃 [lā]
-        "\u5452", // m : 呒 [ḿ]
-        "\u5514", // n : 唔 [ń]
-        "\u5594", // o : 喔 [ō]
-        "\u5991", // p : 妑 [pā]
-        "\u4E03", // q : 七 [qī]
-        "\u513F", // r : 儿 [r]
-        "\u4EE8", // s : 仨 [sā]
-        "\u4ED6", // t : 他 [tā]
-        "\u7A75", // w : 穵 [wā]
-        "\u5915", // x : 夕 [xī]
-        "\u4E2B", // y : 丫 [yā]
-        "\u5E00", // z : 帀 [zā]
+        "\u516B", // b : \u516B [b\u0101]
+        "\u5693", // c : \u5693 [c\u0101]
+        "\u5491", // d : \u5491 [d\u0101]
+        "\u59B8", // e : \u59B8 [\u0113]
+        "\u53D1", // f : \u53D1 [f\u0101]
+        "\u65EE", // g : \u65EE [g\u0101]
+        "\u54C8", // h : \u54C8 [h\u0101]
+        "\u4E0C", // j : \u4E0C [j\u012B]
+        "\u5494", // k : \u5494 [k\u0101]
+        "\u3547", // l : \u3547 [l\u0101]
+        "\u5452", // m : \u5452 [\u1E3F]
+        "\u5514", // n : \u5514 [\u0144]
+        "\u5594", // o : \u5594 [\u014D]
+        "\u5991", // p : \u5991 [p\u0101]
+        "\u4E03", // q : \u4E03 [q\u012B]
+        "\u513F", // r : \u513F [r]
+        "\u4EE8", // s : \u4EE8 [s\u0101]
+        "\u4ED6", // t : \u4ED6 [t\u0101]
+        "\u7A75", // w : \u7A75 [w\u0101]
+        "\u5915", // x : \u5915 [x\u012B]
+        "\u4E2B", // y : \u4E2B [y\u0101]
+        "\u5E00", // z : \u5E00 [z\u0101]
     };
 
     /**
