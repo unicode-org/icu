@@ -3101,8 +3101,8 @@ public class TransliteratorTest extends TestFmwk {
         for (String s : nonStarters) {
             disorderedMarks.add("\u0345" + s);
             disorderedMarks.add(s+"\u0323");
-            String xx = nfc.normalize("Ǭ" + s);
-            if (!xx.startsWith("Ǭ")) {
+            String xx = nfc.normalize("\u01EC" + s);
+            if (!xx.startsWith("\u01EC")) {
                 logln("??");
             }
         }
@@ -3120,7 +3120,7 @@ public class TransliteratorTest extends TestFmwk {
         //            }
         //            if (!nfc.isInert(i)) {
         //                if (i == 0x00C0) {
-        //                    logln("À");
+        //                    logln("\u00C0");
         //                }
         //                can.setSource(s+"\u0334");
         //                for (String t = can.next(); t != null; t = can.next()) {
@@ -3182,7 +3182,7 @@ public class TransliteratorTest extends TestFmwk {
             //                toTest.addAll((UnicodeSet) rulex[1]);
             //            }
 
-            String test = nfd.normalize("Ą");
+            String test = nfd.normalize("\u0104");
             boolean DEBUG = true;
             int count = 0; // for debugging
             for (String s : toTest) {
@@ -3296,8 +3296,8 @@ public class TransliteratorTest extends TestFmwk {
         //                    int x;
         //                }
         //            }
-        //            if (s.contains("À")) {
-        //                logln("À");
+        //            if (s.contains("\u00C0")) {
+        //                logln("\u00C0");
         //            }
         //        }
     }
@@ -3416,7 +3416,7 @@ public class TransliteratorTest extends TestFmwk {
         if (result.length() < 200) {
             return result;
         }
-        return result.substring(0, CharSequences.onCharacterBoundary(result, 200) ? 200 : 199) + "…";
+        return result.substring(0, CharSequences.onCharacterBoundary(result, 200) ? 200 : 199) + "\u2026";
     }
 
 

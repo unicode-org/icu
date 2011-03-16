@@ -74,14 +74,14 @@ public class SpoofCheckerTest extends TestFmwk {
     /* (mixed script, confusable */
 
     String scLatin = "sc";   /* "sc", plain ascii. */
-    String goodCyrl = "\u0438\u043B";    // "ил"  Plain lower case Cyrillic letters, no latin confusables 
-    String goodGreek = "\u03c0\u03c6";   // "πφ"  Plain lower case Greek letters
+    String goodCyrl = "\u0438\u043B";    // "Cyrillic small letter i and el"  Plain lower case Cyrillic letters, no latin confusables 
+    String goodGreek = "\u03c0\u03c6";   // "Greek small letter pi and phi"  Plain lower case Greek letters
 
     // Various 1 l I look-alikes
     String lll_Latin_a = "lI1";   // small letter l, cap I, digit 1, all ASCII
-    //  "ＩⅼƖ"  Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA 
+    //  "\uFF29\u217C\u0196"  Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA 
     String lll_Latin_b = "\uff29\u217c\u0196";
-    String lll_Cyrl = "\u0406\u04C0\u0031";  // "ІӀ1"
+    String lll_Cyrl = "\u0406\u04C0\u0031";  // "\u0406\u04C01"
     /* The skeleton transform for all of the 'lll' lookalikes is ascii lower case letter l. */
     String lll_Skel = "lll";
 
