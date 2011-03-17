@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -27,23 +27,15 @@
 #include "ustrfmt.h"
 #include "locutil.h"
 
-/*
-// TODO(claireho): remove stdio
-#include "stdio.h"
-*/
-
 #if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN
 
+// shared by all instances when lazy-initializing samples
+static UMTX pluralMutex;
 
 #define ARRAY_SIZE(array) (int32_t)(sizeof array  / sizeof array[0])
 
-static const UChar PLURAL_KEYWORD_ZERO[] = {LOW_Z,LOW_E,LOW_R,LOW_O, 0};
-static const UChar PLURAL_KEYWORD_ONE[]={LOW_O,LOW_N,LOW_E,0};
-static const UChar PLURAL_KEYWORD_TWO[]={LOW_T,LOW_W,LOW_O,0};
-static const UChar PLURAL_KEYWORD_FEW[]={LOW_F,LOW_E,LOW_W,0};
-static const UChar PLURAL_KEYWORD_MANY[]={LOW_M,LOW_A,LOW_N,LOW_Y,0};
 static const UChar PLURAL_KEYWORD_OTHER[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,0};
 static const UChar PLURAL_DEFAULT_RULE[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,0};
 static const UChar PK_IN[]={LOW_I,LOW_N,0};
@@ -58,9 +50,15 @@ static const UChar PK_WITHIN[]={LOW_W,LOW_I,LOW_T,LOW_H,LOW_I,LOW_N,0};
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
+const double PluralRules::NO_UNIQUE_VALUE = -0.00123456777;
+
 PluralRules::PluralRules(UErrorCode& status)
 :   UObject(),
-    mRules(NULL)
+    mRules(NULL),
+    mParser(NULL),
+    mSamples(NULL),
+    mSampleInfo(NULL),
+    mSampleInfoCount(0)
 {
     if (U_FAILURE(status)) {
         return;
@@ -74,7 +72,10 @@ PluralRules::PluralRules(UErrorCode& status)
 PluralRules::PluralRules(const PluralRules& other)
 : UObject(other),
     mRules(NULL),
-    mParser(new RuleParser())
+  mParser(NULL),
+  mSamples(NULL),
+  mSampleInfo(NULL),
+  mSampleInfoCount(0)
 {
     *this=other;
 }
@@ -82,6 +83,8 @@ PluralRules::PluralRules(const PluralRules& other)
 PluralRules::~PluralRules() {
     delete mRules;
     delete mParser;
+    delete mSamples;
+    delete mSampleInfo;
 }
 
 PluralRules*
@@ -101,6 +104,13 @@ PluralRules::operator=(const PluralRules& other) {
         }
         delete mParser;
         mParser = new RuleParser();
+
+        delete mSamples;
+        mSamples = NULL;
+
+        delete mSampleInfo;
+        mSampleInfo = NULL;
+        mSampleInfoCount = 0;
     }
 
     return *this;
@@ -142,6 +152,7 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
     }
     PluralRules *newObj = new PluralRules(status);
     if (newObj==NULL || U_FAILURE(status)) {
+        delete newObj;
         return NULL;
     }
     UnicodeString locRule = newObj->getRuleFromResource(locale, status);
@@ -158,7 +169,7 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         newObj->parseDescription(defRule, rChain, status);
         newObj->addRules(rChain);
     }
-    
+
     return newObj;
 }
 
@@ -186,9 +197,74 @@ StringEnumeration*
 PluralRules::getKeywords(UErrorCode& status) const {
     if (U_FAILURE(status))  return NULL;
     StringEnumeration* nameEnumerator = new PluralKeywordEnumeration(mRules, status);
-    if (U_FAILURE(status))  return NULL;
+    if (U_FAILURE(status)) {
+      delete nameEnumerator;
+      return NULL;
+    }
 
     return nameEnumerator;
+}
+
+double
+PluralRules::getUniqueKeywordValue(const UnicodeString& keyword) {
+  double val;
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t count = getSamplesInternal(keyword, &val, 1, FALSE, status);
+  return count == 1 ? val : NO_UNIQUE_VALUE;
+}
+
+int32_t
+PluralRules::getAllKeywordValues(const UnicodeString &keyword, double *dest,
+                                 int32_t destCapacity, UErrorCode& error) {
+    return getSamplesInternal(keyword, dest, destCapacity, FALSE, error);
+}
+
+int32_t
+PluralRules::getSamples(const UnicodeString &keyword, double *dest,
+                        int32_t destCapacity, UErrorCode& status) {
+    return getSamplesInternal(keyword, dest, destCapacity, TRUE, status);
+}
+
+int32_t
+PluralRules::getSamplesInternal(const UnicodeString &keyword, double *dest,
+                                int32_t destCapacity, UBool includeUnlimited,
+                                UErrorCode& status) {
+    initSamples(status);
+
+    if (U_SUCCESS(status)) {
+        if (destCapacity < 0 || (dest == NULL && destCapacity > 0)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+    if (U_FAILURE(status)) {
+        return -1;
+    }
+
+    int32_t index = getKeywordIndex(keyword, status);
+    if (index == -1) {
+        return 0;
+    }
+
+    const int32_t LIMIT_MASK = 0x1 << 31;
+
+    if (!includeUnlimited) {
+        if ((mSampleInfo[index] & LIMIT_MASK) == 0) {
+            return -1;
+        }
+    }
+
+    int32_t start = index == 0 ? 0 : mSampleInfo[index - 1] & ~LIMIT_MASK;
+    int32_t limit = mSampleInfo[index] & ~LIMIT_MASK;
+    int32_t len = limit - start;
+    if (dest != NULL) {
+        if (len < destCapacity) {
+            destCapacity = len;
+        }
+        for (int32_t i = 0; i < destCapacity; ++i, ++start) {
+            dest[i] = mSamples[start];
+        }
+    }
+    return len;
 }
 
 
@@ -416,6 +492,186 @@ PluralRules::getRepeatLimit() const {
     }
 }
 
+int32_t
+PluralRules::getKeywordIndex(const UnicodeString& keyword,
+                             UErrorCode& status) const {
+    if (U_SUCCESS(status)) {
+        int32_t n = 0;
+        RuleChain* rc = mRules;
+        while (rc != NULL) {
+            if (rc->ruleHeader != NULL) {
+                if (rc->keyword == keyword) {
+                    return n;
+                }
+                ++n;
+            }
+            rc = rc->next;
+        }
+        if (keyword == PLURAL_KEYWORD_OTHER) {
+            return n;
+        }
+    }
+    return -1;
+}
+
+void
+PluralRules::initSamples(UErrorCode& status) {
+    Mutex lock(&pluralMutex);
+
+    if (mSamples || U_FAILURE(status)) {
+        return;
+    }
+
+    typedef struct SampleRecord {
+        int32_t ruleIndex;
+        double  value;
+    } SampleRecord;
+
+    // Note, the original design let you have multiple rules with the same keyword.  But
+    // we don't use that in our data and existing functions in this implementation don't
+    // fully support it (for example, the returned keywords is a list and not a set).
+    //
+    // So I don't support this here either.  If you ask for samples, or for all values,
+    // you will get information about the first rule with that keyword, not all rules with
+    // that keyword.
+
+    int32_t maxIndex = 0;
+    int32_t otherIndex = -1; // the value -1 will indicate we added 'other' at end
+    RuleChain* rc = mRules;
+    while (rc != NULL) {
+        if (rc->ruleHeader != NULL) {
+            if (otherIndex == -1 && rc->keyword == PLURAL_KEYWORD_OTHER) {
+                otherIndex = maxIndex;
+            }
+            ++maxIndex;
+        }
+        rc = rc->next;
+    }
+    if (otherIndex == -1) {
+        ++maxIndex;
+    }
+
+    int32_t* newSampleInfo = new int32_t[maxIndex];
+    if (newSampleInfo == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+
+    const int32_t LIMIT_MASK = 0x1 << 31;
+
+    rc = mRules;
+    int32_t n = 0;
+    while (rc != NULL) {
+        if (rc->ruleHeader != NULL) {
+            newSampleInfo[n++] = rc->ruleHeader->isLimited() ? LIMIT_MASK : 0;
+        }
+        rc = rc->next;
+    }
+    if (otherIndex == -1) {
+        newSampleInfo[maxIndex - 1] = 0; // unlimited
+    }
+
+    int32_t maxCount = MAX_SAMPLES * maxIndex; // this is a guess, we'll grow if need be
+    int32_t sampleCount = 0;
+    SampleRecord* newSamples = new SampleRecord[maxCount];
+    if (newSamples == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        int32_t limit = getRepeatLimit() * MAX_SAMPLES * 2;
+        if (limit < 10) {
+            limit = 10;
+        }
+
+        for (int i = 0, keywordsRemaining = maxIndex;
+             keywordsRemaining > 0 && i < limit;
+             ++i) {
+            double val = i / 2.0;
+
+            n = 0;
+            rc = mRules;
+            int32_t found = -1;
+            while (rc != NULL) {
+                if (rc->ruleHeader != NULL) {
+                    if (rc->ruleHeader->isFulfilled(val)) {
+                        found = n;
+                        break;
+                    }
+                    ++n;
+                }
+                rc = rc->next;
+            }
+            if (found == -1) {
+                // 'other'.  If there is an 'other' rule, the rule set is bad since nothing
+                // should leak through, but we don't bother to report that here.
+                found = otherIndex == -1 ? maxIndex - 1 : otherIndex;
+            }
+            UBool keyIsUnlimited = (newSampleInfo[found] & LIMIT_MASK) == 0;
+            if (keyIsUnlimited && newSampleInfo[found] == MAX_SAMPLES) { // limit flag not set
+                continue;
+            }
+            newSampleInfo[found] += 1; // won't impact limit flag
+
+            if (sampleCount == maxCount) {
+                // reallocate
+                SampleRecord *temp = new SampleRecord[maxCount * 2];
+                if (temp == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
+                for (int i = 0; i < maxCount; ++i) {
+                    temp[i] = newSamples[i];
+                }
+                delete [] newSamples;
+                newSamples = temp;
+                maxCount *= 2;
+            }
+            newSamples[sampleCount].ruleIndex = found;
+            newSamples[sampleCount].value = val;
+            ++sampleCount;
+
+            if (keyIsUnlimited && newSampleInfo[found] == MAX_SAMPLES) {
+                --keywordsRemaining;
+            }
+        }
+
+        // sort the values by index, leaving order otherwise unchanged
+        // this is just a selection sort for simplicity
+        double *values = new double[sampleCount];
+        if (values == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        } else if( U_SUCCESS(status)) {
+            for (int i = 0, j = 0; i < maxIndex; ++i) {
+                for (int k = 0; k < sampleCount; ++k) {
+                    if (newSamples[k].ruleIndex == i) {
+                        values[j++] = newSamples[k].value;
+                    }
+                }
+            }
+
+            // convert array of mask/lengths to array of mask/limits
+            int32_t limit = 0;
+            for (int i = 0; i < maxIndex; ++i) {
+                int32_t info = newSampleInfo[i];
+                int32_t len = info & ~LIMIT_MASK;
+                limit += len;
+                // if a rule is 'unlimited' but has fewer than MAX_SAMPLES samples,
+                // it's not really unlimited, so mark it as limited
+                int32_t mask = len < MAX_SAMPLES ? LIMIT_MASK : info & LIMIT_MASK;
+                newSampleInfo[i] = limit | mask;
+            }
+
+            // ok, we've got good data
+            mSamples = values;
+            mSampleInfo = newSampleInfo;
+            mSampleInfoCount = maxIndex;
+
+            // these are now aliased, so don't delete them
+            newSampleInfo = NULL;
+        }
+    }
+
+    delete [] newSamples;
+    delete [] newSampleInfo;
+}
 
 void
 PluralRules::addRules(RuleChain& rules) {
@@ -427,7 +683,7 @@ PluralRules::addRules(RuleChain& rules) {
 UnicodeString
 PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
     UnicodeString emptyStr;
-    
+
     if (U_FAILURE(errCode)) {
         return emptyStr;
     }
@@ -440,7 +696,7 @@ PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
     if(U_FAILURE(errCode)) {
         ures_close(rb);
         return emptyStr;
-    }   
+    }
     int32_t resLen=0;
     const char *curLocaleName=locale.getName();
     const UChar* s = ures_getStringByKey(locRes, curLocaleName, &resLen, &errCode);
@@ -452,8 +708,8 @@ PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
         const char *curLocaleName=locale.getName();
         int32_t localeNameLen=0;
         uprv_strcpy(parentLocaleName, curLocaleName);
-        
-        while ((localeNameLen=uloc_getParent(parentLocaleName, parentLocaleName, 
+
+        while ((localeNameLen=uloc_getParent(parentLocaleName, parentLocaleName,
                                        ULOC_FULLNAME_CAPACITY, &status)) > 0) {
             resLen=0;
             s = ures_getStringByKey(locRes, parentLocaleName, &resLen, &status);
@@ -469,12 +725,12 @@ PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
         ures_close(rb);
         return emptyStr;
     }
-    
+
     char setKey[256];
     UChar result[256];
     u_UCharsToChars(s, setKey, resLen + 1);
     // printf("\n PluralRule: %s\n", setKey);
-    
+
 
     UResourceBundle *ruleRes=ures_getByKey(rb, "rules", NULL, &errCode);
     if(U_FAILURE(errCode)) {
@@ -515,7 +771,6 @@ PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
     ures_close(locRes);
     ures_close(rb);
     return UnicodeString(result);
-    
 }
 
 AndConstraint::AndConstraint() {
@@ -555,7 +810,12 @@ UBool
 AndConstraint::isFulfilled(double number) {
     UBool result=TRUE;
     double value=number;
-    
+
+    // arrrrrrgh
+    if ((rangeHigh == -1 || integerOnly) && number != uprv_floor(number)) {
+      return notIn;
+    }
+
     if ( op == MOD ) {
         value = (int32_t)value % opNum;
     }
@@ -598,9 +858,14 @@ AndConstraint::isFulfilled(double number) {
     }
 }
 
+UBool 
+AndConstraint::isLimited() {
+    return (rangeHigh == -1 || integerOnly) && !notIn && op != MOD;
+}
+
 int32_t
 AndConstraint::updateRepeatLimit(int32_t maxLimit) {
-    
+
     if ( op == MOD ) {
         return uprv_max(opNum, maxLimit);
     }
@@ -669,7 +934,7 @@ UBool
 OrConstraint::isFulfilled(double number) {
     OrConstraint* orRule=this;
     UBool result=FALSE;
-    
+
     while (orRule!=NULL && !result) {
         result=TRUE;
         AndConstraint* andRule = orRule->childNode;
@@ -679,10 +944,28 @@ OrConstraint::isFulfilled(double number) {
         }
         orRule = orRule->next;
     }
-    
+
     return result;
 }
 
+UBool
+OrConstraint::isLimited() {
+    OrConstraint *orc = this;
+    for (OrConstraint *orc = this; orc != NULL; orc = orc->next) {
+        UBool result = FALSE;
+        AndConstraint *andc = orc->childNode;
+        for (AndConstraint *andc = orc->childNode; andc != NULL; andc = andc->next) {
+            if (andc->isLimited()) {
+                result = TRUE;
+                break;
+            }
+        }
+        if (result == FALSE) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
 
 RuleChain::RuleChain() {
     ruleHeader=NULL;
@@ -719,7 +1002,7 @@ RuleChain::~RuleChain() {
 
 UnicodeString
 RuleChain::select(double number) const {
-   
+
    if ( ruleHeader != NULL ) {
        if (ruleHeader->isFulfilled(number)) {
            return keyword;
@@ -737,7 +1020,7 @@ RuleChain::select(double number) const {
 void
 RuleChain::dumpRules(UnicodeString& result) {
     UChar digitString[16];
-    
+
     if ( ruleHeader != NULL ) {
         result +=  keyword;
         OrConstraint* orRule=ruleHeader;
@@ -902,7 +1185,7 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
         }
         break;
     case tVariableN :
-        if (curType != tIs && curType != tMod && curType != tIn && 
+        if (curType != tIs && curType != tMod && curType != tIn &&
             curType != tNot && curType != tWithin) {
             status = U_UNEXPECTED_TOKEN;
         }
@@ -1168,7 +1451,7 @@ fKeywordNames(status)
         }
         node=node->next;
     }
-    
+
     if (addKeywordOther) {
         fKeywordNames.addElement(new UnicodeString(PLURAL_KEYWORD_OTHER), status);
         if (U_FAILURE(status)) {

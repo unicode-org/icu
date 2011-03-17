@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation and
+* Copyright (C) 2008-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -32,6 +32,7 @@ U_NAMESPACE_BEGIN
 class Hashtable;
 class RuleChain;
 class RuleParser;
+class PluralKeywordEnumeration;
 
 /**
  * Defines rules for mapping positive long values onto a small set of
@@ -103,7 +104,7 @@ class RuleParser;
  * <strong>Note:</strong><br>
  *  <p>
  *   ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
- *   For these predefined rules, see CLDR page at 
+ *   For these predefined rules, see CLDR page at
  *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  * </p>
  */
@@ -182,7 +183,7 @@ public:
      * @stable ICU 4.0
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UErrorCode& status);
-    
+
     /**
      * Given a number, returns the keyword of the first rule that applies to
      * the number.  This function can be used with isKeyword* functions to
@@ -193,7 +194,7 @@ public:
      * @stable ICU 4.0
      */
     UnicodeString select(int32_t number) const;
-    
+
     /**
      * Given a number, returns the keyword of the first rule that applies to
      * the number.  This function can be used with isKeyword* functions to
@@ -216,6 +217,63 @@ public:
      * @stable ICU 4.0
      */
     StringEnumeration* getKeywords(UErrorCode& status) const;
+
+    /**
+     * Value returned by getUniqueKeywordValue when there is no
+     * unique value to return.
+     * draft ICU 4.8
+     */
+    static const double NO_UNIQUE_VALUE;
+
+    /**
+     * Returns a unique value for this keyword if it exists, else the constant
+     * NO_UNIQUE_VALUE.
+     *
+     * @param keyword The keyword.
+     * @return        The unique value that generates the keyword, or
+     *                NO_UNIQUE_VALUE if the keyword is undefined or there is no
+     *                unique value that generates this keyword.
+     * @draft ICU 4.8
+     */
+    double getUniqueKeywordValue(const UnicodeString& keyword);
+
+    /**
+     * Returns all the values for which select() would return the keyword.  If
+     * the keyword is unknown, returns no values, but this is not an error.  If
+     * the number of values is unlimited, returns no values and -1 as the
+     * count.
+     *
+     * The number of returned values is typically small.
+     *
+     * @param keyword      The keyword.
+     * @param dest         Array into which to put the returned values.  May
+     *                     be null if destCapacity is 0.
+     * @param destCapacity The capacity of the array, must be at least 0.
+     * @param status       The error code.
+     * @return             The count of values available, or -1.  This count
+     *                     can be larger than destCapacity, but no more than
+     *                     destCapacity values will be written.
+     */
+    int32_t getAllKeywordValues(const UnicodeString &keyword, double *dest,
+                      int32_t destCapacity, UErrorCode& status);
+
+    /**
+     * Returns sample values for which select() would return the keyword.  If
+     * the keyword is unknown, returns no values, but this is not an error.
+     *
+     * The number of returned values is typically small.
+     *
+     * @param keyword      The keyword.
+     * @param dest         Array into which to put the returned values.  May
+     *                     be null if destCapacity is 0.
+     * @param destCapacity The capacity of the array, must be at least 0.
+     * @param status       The error code.
+     * @return             The count of values available, or -1 if error.
+     *                     This can be larger than destCapacity, but no
+     *                     more than destCapacity values will be written.
+     */
+    int32_t getSamples(const UnicodeString &keyword, double *dest,
+                       int32_t destCapacity, UErrorCode& status);
 
     /**
      * Returns TRUE if the given keyword is defined in this
@@ -276,10 +334,11 @@ public:
 
 
 private:
-    Hashtable       *fLocaleStringsHash;
-    UnicodeString   mLocaleName;
-    RuleChain       *mRules;
-    RuleParser      *mParser;
+    RuleChain  *mRules;
+    RuleParser *mParser;
+    double     *mSamples;
+    int32_t    *mSampleInfo;
+    int32_t    mSampleInfoCount;
 
     PluralRules();   // default constructor not implemented
     int32_t getRepeatLimit() const;
@@ -288,6 +347,15 @@ private:
     void addRules(RuleChain& rules);
     int32_t getNumberValue(const UnicodeString& token) const;
     UnicodeString getRuleFromResource(const Locale& locale, UErrorCode& status);
+
+    static const int32_t MAX_SAMPLES = 3;
+
+    int32_t getSamplesInternal(const UnicodeString &keyword, double *dest,
+                               int32_t destCapacity, UBool includeUnlimited,
+                               UErrorCode& status);
+    int32_t getKeywordIndex(const UnicodeString& keyword,
+                            UErrorCode& status) const;
+    void initSamples(UErrorCode& status);
 
 };
 
