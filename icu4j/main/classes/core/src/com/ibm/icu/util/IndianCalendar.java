@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -434,6 +434,12 @@ public class IndianCalendar extends Calendar {
 
        //month is 0 based; converting it to 1-based 
        int imonth;
+       
+       // If the month is out of range, adjust it into range, and adjust the extended year accordingly
+       if (month < 0 || month > 11) {
+           year += month / 12;
+           month %= 12;
+       }
        
        if(month == 12) {
            imonth = 1;
