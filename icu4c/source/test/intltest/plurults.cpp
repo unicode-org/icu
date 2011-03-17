@@ -486,12 +486,18 @@ PluralRulesTest::testGetAllKeywordValues() {
             const char* ep = rp;
             while (*ep && *ep != ':') ++ep;
 
+            status = U_ZERO_ERROR;
             UnicodeString keyword(rp, ep - rp, US_INV);
-            double samples[4]; // no test above has more samples than 4
+            double samples[4]; // no test above should have more samples than 4
             int32_t count = p->getAllKeywordValues(keyword, &samples[0], 4, status);
             if (U_FAILURE(status)) {
-                logln("error getting samples for %s", rp);
+                errln("error getting samples for %s", rp);
                 break;
+            }
+
+            if (count > 4) {
+              errln("count > 4 for keyword %s", rp);
+              count = 4;
             }
 
             if (*ep) {
@@ -515,7 +521,7 @@ PluralRulesTest::testGetAllKeywordValues() {
             // implementation changes to return samples in an arbitrary order, this test
             // must change.  There's no actual restriction on the order of the samples.
 
-            for (int j = 0; ok && j < count; ++j ) { // samples guarantee count < 4
+            for (int j = 0; ok && j < count; ++j ) { // we've verified count < 4
                 double val = samples[j];
                 if (*ep == 0 || *ep == ';') {
                     errln("got unexpected value[%d]: %g", j, val);
