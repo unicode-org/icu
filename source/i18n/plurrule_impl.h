@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -17,7 +17,7 @@
  * \file
  * \brief C++ API: Defines rules for mapping positive long values onto a small set of keywords.
  */
- 
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"
@@ -134,13 +134,13 @@ class RuleParser : public UMemory {
 public:
     RuleParser();
     virtual ~RuleParser();
-    void getNextToken(const UnicodeString& ruleData, int32_t *ruleIndex, UnicodeString& token, 
+    void getNextToken(const UnicodeString& ruleData, int32_t *ruleIndex, UnicodeString& token,
                             tokenType& type, UErrorCode &status);
     void checkSyntax(tokenType prevType, tokenType curType, UErrorCode &status);
 private:
     UnicodeSet      *idStartFilter;
     UnicodeSet      *idContinueFilter;
-    
+
     void getKeyType(const UnicodeString& token, tokenType& type, UErrorCode &status);
     UBool inRange(UChar ch, tokenType& type);
     UBool isValidKeyword(const UnicodeString& token);
@@ -159,12 +159,13 @@ public:
     UBool   notIn;
     UBool   integerOnly;
     AndConstraint *next;
-    
+
     AndConstraint();
     AndConstraint(const AndConstraint& other);
     virtual ~AndConstraint();
     AndConstraint* add();
     UBool isFulfilled(double number);
+    UBool isLimited();
     int32_t updateRepeatLimit(int32_t maxLimit);
 };
 
@@ -173,11 +174,12 @@ public:
     AndConstraint *childNode;
     OrConstraint *next;
     OrConstraint();
-    
+
     OrConstraint(const OrConstraint& other);
     virtual ~OrConstraint();
     AndConstraint* add();
     UBool isFulfilled(double number);
+    UBool isLimited();
 };
 
 class RuleChain : public UMemory  {
@@ -187,11 +189,12 @@ public:
     RuleChain();
     RuleChain(const RuleChain& other);
     RuleChain *next;
-    
+
     virtual ~RuleChain();
     UnicodeString select(double number) const;
     void dumpRules(UnicodeString& result);
-    int32_t getRepeatLimit();  
+    int32_t getRepeatLimit();
+    UBool isLimited();
     UErrorCode getKeywords(int32_t maxArraySize, UnicodeString *keywords, int32_t& arraySize) const;
     UBool isKeyword(const UnicodeString& keyword) const;
     void setRepeatLimit();

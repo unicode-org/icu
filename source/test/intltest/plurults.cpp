@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 
@@ -13,10 +13,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdlib.h> // for strtod
 #include "plurults.h"
 #include "unicode/plurrule.h"
-
-
 
 void setupResult(const int32_t testSource[], char result[], int32_t* max);
 UBool checkEqual(PluralRules *test, char *result, int32_t max);
@@ -31,6 +30,10 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     if (exec) logln("TestSuite PluralRulesAPI");
     switch (index) {
         TESTCASE(0, testAPI);
+        TESTCASE(1, testGetUniqueKeywordValue);
+        TESTCASE(2, testGetSamples);
+        TESTCASE(3, testWithin);
+        TESTCASE(4, testGetAllKeywordValues);
         default: name = ""; break;
     }
 }
@@ -84,11 +87,11 @@ void PluralRulesTest::testAPI(/*char *par*/)
 
     // ======= Test constructors
     logln("Testing PluralRules constructors");
-    
-        
+
+
     logln("\n start default locale test case ..\n");
-        
-    PluralRules defRule(status); 
+
+    PluralRules defRule(status);
     PluralRules* test=new PluralRules(status);
     PluralRules* newEnPlural= test->forLocale(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
@@ -96,7 +99,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
         delete test;
         return;
     }
-    
+
     // ======= Test clone, assignment operator && == operator.
     PluralRules *dupRule = defRule.clone();
     if (dupRule!=NULL) {
@@ -114,9 +117,9 @@ void PluralRulesTest::testAPI(/*char *par*/)
 
     delete newEnPlural;
 
-    // ======= Test empty plural rules   
+    // ======= Test empty plural rules
     logln("Testing Simple PluralRules");
-      
+
     PluralRules* empRule = test->createRules(UNICODE_STRING_SIMPLE("a:n"), status);
     UnicodeString key;
     for (int32_t i=0; i<10; ++i) {
@@ -128,13 +131,13 @@ void PluralRulesTest::testAPI(/*char *par*/)
     if (empRule!=NULL) {
         delete empRule;
     }
-    
-    // ======= Test simple plural rules   
+
+    // ======= Test simple plural rules
     logln("Testing Simple PluralRules");
-        
+
     char result[100];
     int32_t max;
-        
+
     for (int32_t i=0; i<PLURAL_TEST_NUM-1; ++i) {
        PluralRules *newRules = test->createRules(pluralTestData[i], status);
        setupResult(pluralTestResult[i], result, &max);
@@ -147,15 +150,15 @@ void PluralRulesTest::testAPI(/*char *par*/)
            delete newRules;
        }
     }
-       
 
-    // ======= Test complex plural rules   
+
+    // ======= Test complex plural rules
     logln("Testing Complex PluralRules");
-    // TODO: the complex test data is hard coded. It's better to implement 
+    // TODO: the complex test data is hard coded. It's better to implement
     // a parser to parse the test data.
     UnicodeString complexRule = UNICODE_STRING_SIMPLE("a: n in 2..5; b: n in 5..8; c: n mod 2 is 1");
-    UnicodeString complexRule2 = UNICODE_STRING_SIMPLE("a: n within 2..5; b: n within 5..8; c: n mod 2 is 1"); 
-    char cRuleResult[] = 
+    UnicodeString complexRule2 = UNICODE_STRING_SIMPLE("a: n within 2..5; b: n within 5..8; c: n mod 2 is 1");
+    char cRuleResult[] =
     {
        0x6F, // 'o'
        0x63, // 'c'
@@ -190,7 +193,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
         delete newRules;
         newRules=NULL;
     }
-    
+
     // ======= Test decimal fractions plural rules
     UnicodeString decimalRule= UNICODE_STRING_SIMPLE("a: n not in 0..100;");
     UnicodeString KEYWORD_A = UNICODE_STRING_SIMPLE("a");
@@ -202,7 +205,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
         return;
     }
     double fData[10] = {-100, -1, -0.0, 0, 0.1, 1, 1.999, 2.0, 100, 100.001 };
-    UBool isKeywordA[10] = { 
+    UBool isKeywordA[10] = {
            TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE };
     for (int32_t i=0; i<10; i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
@@ -213,12 +216,12 @@ void PluralRulesTest::testAPI(/*char *par*/)
         delete newRules;
         newRules=NULL;
     }
-    
-    
-    
+
+
+
     // ======= Test Equality
     logln("Testing Equality of PluralRules");
-    
+
 
     if ( !testEquality(test) ) {
          errln("ERROR:  complex plural rules failed! - exitting");
@@ -226,10 +229,10 @@ void PluralRulesTest::testAPI(/*char *par*/)
          return;
      }
 
-  
+
     // ======= Test getStaticClassID()
     logln("Testing getStaticClassID()");
-    
+
     if(test->getDynamicClassID() != PluralRules::getStaticClassID()) {
         errln("ERROR: getDynamicClassID() didn't return the expected value");
     }
@@ -259,13 +262,13 @@ void PluralRulesTest::testAPI(/*char *par*/)
 void setupResult(const int32_t testSource[], char result[], int32_t* max) {
     int32_t i=0;
     int32_t curIndex=0;
-    
+
     do {
         while (curIndex < testSource[i]) {
             result[curIndex++]=0x6F; //'o' other
         }
         result[curIndex++]=0x61; // 'a'
-        
+
     } while(testSource[++i]>0);
     *max=curIndex;
 }
@@ -288,7 +291,7 @@ UBool checkEqual(PluralRules *test, char *result, int32_t max) {
 UBool testEquality(PluralRules *test) {
     UnicodeString testEquRules[MAX_EQ_ROW][MAX_EQ_COL] = {
         {   UNICODE_STRING_SIMPLE("a: n in 2..3"),
-            UNICODE_STRING_SIMPLE("a: n is 2 or n is 3"), 
+            UNICODE_STRING_SIMPLE("a: n is 2 or n is 3"),
             UNICODE_STRING_SIMPLE( "a:n is 3 and n in 2..5 or n is 2"),
             "",
         },
@@ -303,7 +306,7 @@ UBool testEquality(PluralRules *test) {
     UBool ret=TRUE;
     for (int32_t i=0; i<MAX_EQ_ROW; ++i) {
         PluralRules* rules[MAX_EQ_COL];
-        
+
         for (int32_t j=0; j<MAX_EQ_COL; ++j) {
             rules[j]=NULL;
         }
@@ -322,7 +325,7 @@ UBool testEquality(PluralRules *test) {
                     break;
                 }
             }
-            
+
         }
         for (int32_t j=0; j<MAX_EQ_COL; ++j) {
             if (rules[j]!=NULL) {
@@ -330,8 +333,224 @@ UBool testEquality(PluralRules *test) {
             }
         }
     }
-    
+
     return ret;
 }
-#endif /* #if !UCONFIG_NO_FORMATTING */
 
+void
+PluralRulesTest::assertRuleValue(const UnicodeString& rule, double expected) {
+  assertRuleKeyValue("a:" + rule, "a", expected);
+}
+
+void
+PluralRulesTest::assertRuleKeyValue(const UnicodeString& rule,
+                                    const UnicodeString& key, double expected) {
+  UErrorCode status = U_ZERO_ERROR;
+  PluralRules *pr = PluralRules::createRules(rule, status);
+  double result = pr->getUniqueKeywordValue(key);
+  delete pr;
+  if (expected != result) {
+    errln("expected %g but got %g", expected, result);
+  }
+}
+
+void PluralRulesTest::testGetUniqueKeywordValue() {
+  assertRuleValue("n is 1", 1);
+  assertRuleValue("n in 2..2", 2);
+  assertRuleValue("n within 2..2", 2);
+  assertRuleValue("n in 3..4", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n within 3..4", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 or n is 2", 2);
+  assertRuleValue("n is 2 and n is 2", 2);
+  assertRuleValue("n is 2 or n is 3", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 and n is 3", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 or n in 2..3", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 and n in 2..3", 2);
+  assertRuleKeyValue("a: n is 1", "not_defined", PluralRules::NO_UNIQUE_VALUE); // key not defined
+  assertRuleKeyValue("a: n is 1", "other", PluralRules::NO_UNIQUE_VALUE); // key matches default rule
+}
+
+void PluralRulesTest::testGetSamples() {
+  // no get functional equivalent API in ICU4C, so just
+  // test every locale...
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t numLocales;
+  const Locale* locales = Locale::getAvailableLocales(numLocales);
+
+  double values[4];
+  for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
+    PluralRules *rules = PluralRules::forLocale(locales[i], status);
+    if (U_FAILURE(status)) {
+      break;
+    }
+    StringEnumeration *keywords = rules->getKeywords(status);
+    if (U_FAILURE(status)) {
+      delete rules;
+      break;
+    }
+    const UnicodeString* keyword;
+    while (NULL != (keyword = keywords->snext(status))) {
+      int32_t count = rules->getSamples(*keyword, values, 4, status);
+      if (U_FAILURE(status)) {
+        errln("get samples failed");
+        continue;
+      }
+      if (count == 0) {
+        errln("no samples for keyword");
+      }
+      if (count > 4) { // count is number available, not number we wrote...
+        count = 4;
+      }
+      for (int32_t j = 0; j < count; ++j) {
+        if (values[j] == PluralRules::NO_UNIQUE_VALUE) {
+          errln("got 'no unique value' among values");
+        } else {
+          UnicodeString resultKeyword = rules->select(values[j]);
+          if (*keyword != resultKeyword) {
+            errln("keywords don't match");
+          }
+        }
+      }
+    }
+    delete keywords;
+    delete rules;
+  }
+}
+
+void PluralRulesTest::testWithin() {
+  // goes to show you what lack of testing will do.
+  // of course, this has been broken for two years and no one has noticed...
+  UErrorCode status = U_ZERO_ERROR;
+  PluralRules *rules = PluralRules::createRules("a: n mod 10 in 5..8", status);
+  if (!rules) {
+    errln("couldn't instantiate rules");
+    return;
+  }
+
+  UnicodeString keyword = rules->select(26);
+  if (keyword != "a") {
+    errln("expected 'a' for 26 but didn't get it.");
+  }
+
+  keyword = rules->select(26.5);
+  if (keyword != "other") {
+    errln("expected 'other' for 26.5 but didn't get it.");
+  }
+
+  delete rules;
+}
+
+void
+PluralRulesTest::testGetAllKeywordValues() {
+    const char* data[] = {
+        "a: n in 2..5", "a: 2,3,4,5; other: null; b:",
+        "a: n not in 2..5", "a: null; other: null",
+        "a: n within 2..5", "a: null; other: null",
+        "a: n not within 2..5", "a: null; other: null",
+        "a: n in 2..5 or n within 6..8", "a: null", // ignore 'other' here on out, always null
+        "a: n in 2..5 and n within 6..8", "a:",
+        "a: n in 2..5 and n within 5..8", "a: 5",
+        "a: n within 2..5 and n within 6..8", "a:", // our sampling catches these
+        "a: n within 2..5 and n within 5..8", "a: 5", // ''
+        "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5", "a: 2,4",
+        "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5 "
+          "or n within 5..6 and n within 6..7", "a: null", // but not this...
+        "a: n mod 3 is 0", "a: null",
+        "a: n mod 3 is 0 and n within 1..2", "a:",
+        "a: n mod 3 is 0 and n within 0..5", "a: 0,3",
+        "a: n mod 3 is 0 and n within 0..6", "a: null", // similarly with mod, we don't catch...
+        "a: n mod 3 is 0 and n in 3..12", "a: 3,6,9,12",
+        NULL
+    };
+
+    for (int i = 0; data[i] != NULL; i += 2) {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString ruleDescription(data[i], -1, US_INV);
+        const char* result = data[i+1];
+
+        logln("[%d] %s", i >> 1, data[i]);
+
+        PluralRules *p = PluralRules::createRules(ruleDescription, status);
+        if (U_FAILURE(status)) {
+            logln("could not create rules from '%s'\n", data[i]);
+            continue;
+        }
+
+        const char* rp = result;
+        while (*rp) {
+            while (*rp == ' ') ++rp;
+            if (!rp) {
+                break;
+            }
+
+            const char* ep = rp;
+            while (*ep && *ep != ':') ++ep;
+
+            UnicodeString keyword(rp, ep - rp, US_INV);
+            double samples[4]; // no test above has more samples than 4
+            int32_t count = p->getAllKeywordValues(keyword, &samples[0], 4, status);
+            if (U_FAILURE(status)) {
+                logln("error getting samples for %s", rp);
+                break;
+            }
+
+            if (*ep) {
+                ++ep; // skip colon
+                while (*ep && *ep == ' ') ++ep; // and spaces
+            }
+
+            UBool ok = TRUE;
+            if (count == -1) {
+                if (*ep != 'n') {
+                    errln("expected values for keyword %s but got -1 (%s)", rp, ep);
+                    ok = FALSE;
+                }
+            } else if (*ep == 'n') {
+                errln("expected count of -1, got %d, for keyword %s (%s)", count, rp, ep);
+                ok = FALSE;
+            }
+
+            // We'll cheat a bit here.  The samples happend to be in order and so are our
+            // expected values, so we'll just test in order until a failure.  If the
+            // implementation changes to return samples in an arbitrary order, this test
+            // must change.  There's no actual restriction on the order of the samples.
+
+            for (int j = 0; ok && j < count; ++j ) { // samples guarantee count < 4
+                double val = samples[j];
+                if (*ep == 0 || *ep == ';') {
+                    errln("got unexpected value[%d]: %g", j, val);
+                    ok = FALSE;
+                    break;
+                }
+                char* xp;
+                double expectedVal = strtod(ep, &xp);
+                if (xp == ep) {
+                    // internal error
+                    errln("yikes!");
+                    ok = FALSE;
+                    break;
+                }
+                ep = xp;
+                if (expectedVal != val) {
+                    errln("expected %g but got %g", expectedVal, val);
+                    ok = FALSE;
+                    break;
+                }
+                if (*ep == ',') ++ep;
+            }
+
+            if (ok && count != -1) {
+                if (!(*ep == 0 || *ep == ';')) {
+                    errln("didn't get expected value: %s", ep);
+                    ok = FALSE;
+                }
+            }
+
+            while (*ep && *ep != ';') ++ep;
+            if (*ep == ';') ++ep;
+            rp = ep;
+        }
+    }
+}
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
