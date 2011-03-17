@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.IndianCalendar;
@@ -239,5 +240,37 @@ public class IndianTest extends CalendarTest
         IndianCalendar indian = new IndianCalendar();
         doLimitsTest(indian, null, cal.getTime());
         doTheoreticalLimitsTest(indian, true);
+    }
+    
+    /**
+     * Problem reported by Bruno Haible <bruno.haible@de.ibm.com>
+     *  -- see ticket 8419 -- http://bugs.icu-project.org/trac/ticket/8419
+     * Problem with months out of range 0-11
+     */
+    public void TestYearEdge() {
+        // Display dates in ISO 8601 format.
+        DateFormat fmt = new SimpleDateFormat("YYYY-MM-dd", ULocale.US);
+
+        // Instantiate an Indian calendar.
+        ULocale locale = ULocale.US.setKeywordValue("calendar", "indian");
+        Calendar cal = Calendar.getInstance(locale);
+
+        // Try add() repeatedly.
+        cal.setTimeInMillis(1295568000000L);
+        if (!fmt.format(cal.getTime()).equals("2011-01-20")){
+            errln("Incorrect calendar value for year edge test");
+        }
+        cal.add(Calendar.MONTH, 1);
+        if (!fmt.format(cal.getTime()).equals("2011-02-19")){
+            errln("Incorrect calendar value for year edge test");
+        }
+        cal.add(Calendar.MONTH, 1);
+        if (!fmt.format(cal.getTime()).equals("2011-03-21")){
+            errln("Incorrect calendar value for year edge test");
+        }
+        cal.add(Calendar.MONTH, 1);
+        if (!fmt.format(cal.getTime()).equals("2011-04-20")){
+            errln("Incorrect calendar value for year edge test");
+        }
     }
 }
