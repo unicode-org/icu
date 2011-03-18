@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1025,6 +1025,8 @@ struct UCollator {
     uint8_t tertiaryBottomCount;
 
     UVersionInfo dataVersion;               /* Data info of UCA table */
+    int32_t* defaultReorderCodes;
+    int32_t defaultReorderCodesLength;
     int32_t* reorderCodes;
     int32_t reorderCodesLength;
     uint8_t* leadBytePermutationTable;
@@ -1091,8 +1093,14 @@ ucol_openRulesForImport( const UChar        *rules,
                          UErrorCode         *status);
 
        
-U_CAPI void U_EXPORT2 ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
+U_CAPI void U_EXPORT2 
+ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
 
+U_CAPI int U_EXPORT2 
+ucol_getLeadBytesForReorderCode(const UCollator *uca, int reorderCode, uint16_t* returnLeadBytes, int returnCapacity);
+
+U_CAPI int U_EXPORT2 
+ucol_getReorderCodesForLeadByte(const UCollator *uca, int leadByte, int16_t* returnReorderCodes, int returnCapacity);
 
 #ifdef XP_CPLUSPLUS
 /*

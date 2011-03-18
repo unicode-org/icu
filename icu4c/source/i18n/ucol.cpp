@@ -676,6 +676,9 @@ ucol_close(UCollator *coll)
         if(coll->leadBytePermutationTable != NULL) {
             uprv_free(coll->leadBytePermutationTable);
         }
+        if(coll->defaultReorderCodes != NULL) {
+            uprv_free(coll->defaultReorderCodes);
+        }
         if(coll->reorderCodes != NULL) {
             uprv_free(coll->reorderCodes);
         }
@@ -866,6 +869,8 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     result->rules = NULL;
     result->rulesLength = 0;
     result->freeRulesOnClose = FALSE;
+    result->defaultReorderCodes = NULL;
+    result->defaultReorderCodesLength = 0;
     result->reorderCodes = NULL;
     result->reorderCodesLength = 0;
     result->leadBytePermutationTable = NULL;
@@ -7140,7 +7145,7 @@ ucol_getStrength(const UCollator *coll)
     return ucol_getAttribute(coll, UCOL_STRENGTH, &status);
 }
 
-U_INTERNAL int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator *coll,
                     int32_t *dest,
                     int32_t destCapacity,
@@ -7154,6 +7159,9 @@ ucol_getReorderCodes(const UCollator *coll,
         return 0;
     }
     
+    printf("coll->reorderCodesLength = %d\n", coll->reorderCodesLength);
+    printf("coll->defaultReorderCodesLength = %d\n", coll->defaultReorderCodesLength);
+    
     if (coll->reorderCodesLength > destCapacity) {
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
         return coll->reorderCodesLength;
@@ -7164,9 +7172,9 @@ ucol_getReorderCodes(const UCollator *coll,
     return coll->reorderCodesLength;
 }
 
-U_INTERNAL void U_EXPORT2 
-ucol_setReorderCodes(UCollator *coll,
-                    const int32_t *reorderCodes,
+U_CAPI void U_EXPORT2 
+ucol_setReorderCodes(UCollator* coll,
+                    const int32_t* reorderCodes,
                     int32_t reorderCodesLength,
                     UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
@@ -7201,6 +7209,63 @@ ucol_setReorderCodes(UCollator *coll,
         coll->reorderCodes = NULL;
         coll->reorderCodesLength = 0;
     }    
+}
+
+U_CAPI int32_t U_EXPORT2 
+ucol_getEquivalentReorderCodes(int32_t reorderCode,
+                    int32_t* dest,
+                    int32_t destCapacity,
+                    UErrorCode *pErrorCode) {
+    bool equivalentCodesSet[USCRIPT_CODE_LIMIT];
+    uint16_t leadBytes[256];
+    int leadBytesCount;
+    int leadByteIndex;
+    int16_t reorderCodesForLeadByte[USCRIPT_CODE_LIMIT];
+    int reorderCodesForLeadByteCount;
+    int reorderCodeIndex;
+    
+    int32_t equivalentCodesCount = 0;
+    int setIndex;
+    
+    if (U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if (destCapacity < 0 || (destCapacity > 0 && dest == NULL)) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    const UCollator* uca = ucol_initUCA(pErrorCode);
+    leadBytesCount = ucol_getLeadBytesForReorderCode(uca, reorderCode, leadBytes, 256);
+    for (leadByteIndex = 0; leadByteIndex < leadBytesCount; leadByteIndex++) {
+        reorderCodesForLeadByteCount = ucol_getReorderCodesForLeadByte(
+            uca, leadBytes[leadByteIndex], reorderCodesForLeadByte, USCRIPT_CODE_LIMIT);
+        for (reorderCodeIndex = 0; reorderCodeIndex < reorderCodesForLeadByteCount; reorderCodeIndex++) {
+            equivalentCodesSet[reorderCodesForLeadByte[reorderCodeIndex]] = true;
+        }
+    }
+    
+    for (setIndex = 0; setIndex < USCRIPT_CODE_LIMIT; setIndex++) {
+        if (equivalentCodesSet[setIndex] == true) {
+            equivalentCodesCount++;
+        }
+    }
+    
+    if (destCapacity == 0) {
+        return equivalentCodesCount;
+    }
+    
+    equivalentCodesCount = 0;
+    for (setIndex = 0; setIndex < USCRIPT_CODE_LIMIT; setIndex++) {
+        if (equivalentCodesSet[setIndex] == true) {
+            dest[equivalentCodesCount++] = setIndex;
+            if (equivalentCodesCount >= destCapacity) {
+                break;
+            }
+        }        
+    }
+    return equivalentCodesCount;
 }
 
 
