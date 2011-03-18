@@ -280,6 +280,7 @@ int32_t PropNameData::getPropertyValueEnum(int32_t property, const char *alias) 
     // where the first word is the BytesTrie offset.
     return getPropertyOrValueEnum(valueMaps[valueMapIndex], alias);
 }
+U_NAMESPACE_END
 
 //----------------------------------------------------------------------
 // Public API implementation
@@ -307,5 +308,3 @@ u_getPropertyValueEnum(UProperty property,
                        const char* alias) {
     return PropNameData::getPropertyValueEnum(property, alias);
 }
-
-U_NAMESPACE_END
