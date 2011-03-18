@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2010, International Business Machines Corporation and others.
+* Copyright (c) 1996-2011, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -17,6 +17,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
 #include "unicode/uset.h"
+#include "unicode/uscript.h"
 
 /**
  * \file
@@ -132,18 +133,68 @@ typedef enum {
 
 } UColAttributeValue;
 
-/** Enum containing the codes for reordering segments of the collation table that are not script
- *  codes. These reordering codes are to be used in conjunction with the script codes.
- *  @internal
+/** 
+ * Enum containing the codes for reordering segments of the collation table that are not script
+ * codes. These reordering codes are to be used in conjunction with the script codes.
+ * @see ucol_getReorderCodes
+ * @see ucol_setReorderCodes
+ * @see ucol_getEquivalentReorderCodes
+ * @draft ICU 4.8
  */
-typedef enum {
-    UCOL_REORDER_CODE_SPACE          = 0x1000,
-    UCOL_REORDER_CODE_FIRST          = UCOL_REORDER_CODE_SPACE,
-    UCOL_REORDER_CODE_PUNCTUATION    = 0x1001,
-    UCOL_REORDER_CODE_SYMBOL         = 0x1002,
-    UCOL_REORDER_CODE_CURRENCY       = 0x1003,
-    UCOL_REORDER_CODE_DIGIT          = 0x1004,
-    UCOL_REORDER_CODE_LIMIT          = 0x1005
+ typedef enum {
+   /**
+    * A special reordering code that is used to specify the default
+    * reordering codes for a locale.
+    * @draft ICU 4.8
+    */   
+    UCOL_REORDER_CODE_DEFAULT       = -1,
+   /**
+    * A special reordering code that is used to specify no reordering codes.
+    * @draft ICU 4.8
+    */   
+    UCOL_REORDER_CODE_NONE          = USCRIPT_UNKNOWN,
+   /**
+    * A special reordering code that is used to specify all other codes used for
+    * reordering except for the codes lised as UColReorderCode values and those
+    * listed explicitly in a reordering.
+    * @draft ICU 4.8
+    */   
+    UCOL_REORDER_CODE_OTHERS        = USCRIPT_UNKNOWN,
+   /**
+    * Characters with the space property.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_SPACE         = 0x1000,
+   /**
+    * The first entry in the enumeration of reordering groups.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_FIRST         = UCOL_REORDER_CODE_SPACE,
+   /**
+    * Characters with the punctuation property.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_PUNCTUATION   = 0x1001,
+   /**
+    * Characters with the symbol property.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_SYMBOL        = 0x1002,
+   /**
+    * Characters with the currency property.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_CURRENCY      = 0x1003,
+   /**
+    * Characters with the digit property.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_DIGIT         = 0x1004,
+   /**
+    * The limit of the reorder codes.
+    * @draft ICU 4.8
+    */    
+    UCOL_REORDER_CODE_LIMIT         = 0x1005
 } UColReorderCode;
 
 /**
@@ -536,34 +587,64 @@ ucol_setStrength(UCollator *coll,
                  UCollationStrength strength);
 
 /**
- * Get the current reordering of scripts (if one has been set).
+ * Retrieves the reordering codes for this collator.
+ * These reordering codes are a combination of UScript codes and UColReorderCode entries.
  * @param coll The UCollator to query.
  * @param dest The array to fill with the script ordering.
- * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function will only return the length of the result without writing any of the result string (pre-flighting).
- * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
- * @return The length of the array of the script ordering.
+ * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function 
+ * will only return the length of the result without writing any of the result string (pre-flighting).
+ * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a 
+ * failure before the function call.
+ * @return The number of reordering codes written to the dest array.
  * @see ucol_setReorderCodes
- * @internal 
+ * @see ucol_getEquivalentReorderCodes
+ * @draft ICU 4.8
  */
-U_INTERNAL int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator* coll,
                     int32_t* dest,
                     int32_t destCapacity,
                     UErrorCode *pErrorCode);
 
 /**
- * Set the ordering of scripts for this collator.
+ * Sets the reordering codes for this collator.
+ * Reordering codes allow the collation ordering for groups of characters to be changed.
+ * The reordering codes are a combination of UScript codes and UColReorderCode entries.
+ * These allow the ordering of characters belonging to these groups to be changed as a group.   
  * @param coll The UCollator to set.
- * @param reorderCodes An array of script codes in the new order.
+ * @param reorderCodes An array of script codes in the new order. This can be NULL if the 
+ * length is also set to 0. An empty array will clear any reordering codes on the collator.
  * @param reorderCodesLength The length of reorderCodes.
- * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
+ * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a
+ * failure before the function call.
  * @see ucol_getReorderCodes
- * @internal 
+ * @see ucol_getEquivalentReorderCodes
+ * @draft ICU 4.8 
  */
-U_INTERNAL void U_EXPORT2 
+U_CFUNC void U_EXPORT2 
 ucol_setReorderCodes(UCollator* coll,
                     const int32_t* reorderCodes,
                     int32_t reorderCodesLength,
+                    UErrorCode *pErrorCode);
+
+/**
+ * Retrieves the reorder codes that are grouped with the given reorder code. Some reorder
+ * codes will be grouped and must reorder together.
+ * @param reorderCode The reorder code to determine equivalence for.
+ * @param dest The array to fill with the script ordering.
+ * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function
+ * will only return the length of the result without writing any of the result string (pre-flighting).
+ * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate 
+ * a failure before the function call.
+ * @return The number of reordering codes written to the dest array.
+ * @see ucol_setReorderCodes
+ * @see ucol_getReorderCodes
+ * @draft ICU 4.8
+ */
+U_CAPI int32_t U_EXPORT2 
+ucol_getEquivalentReorderCodes(int32_t reorderCode,
+                    int32_t* dest,
+                    int32_t destCapacity,
                     UErrorCode *pErrorCode);
 
 /**

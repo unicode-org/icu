@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1996-2010, International Business Machines                 *
+*   Copyright (C) 1996-2011, International Business Machines                 *
 *   Corporation and others.  All Rights Reserved.                            *
 ******************************************************************************
 */
@@ -598,28 +598,55 @@ public:
     virtual void setStrength(ECollationStrength newStrength) = 0;
 
     /**
-     * Get the current reordering of scripts (if one has been set).
+     * Retrieves the reordering codes for this collator.
      * @param dest The array to fill with the script ordering.
-     * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function will only return the length of the result without writing any of the result string (pre-flighting).
-     * @param pErrorCode Must be a valid pointer to an error code value, which must not indicate a failure before the function call.
-     * @return The length of the array of the script ordering.
-     * @see ucol_getReorderCodes
-     * @internal 
+     * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the function
+     *  will only return the length of the result without writing any of the result string (pre-flighting).
+     * @param status A reference to an error code value, which must not indicate
+     * a failure before the function call.
+     * @return The length oof the script ordering array.
+     * @see ucol_setReorderCodes
+     * @see Collator#getEquivalentReorderCodes
+     * @see Collator#setReorderCodes
+     * @draft ICU 4.8 
      */
-    virtual int32_t getReorderCodes(int32_t *dest,
+     virtual int32_t U_EXPORT2 getReorderCodes(int32_t *dest,
                                     int32_t destCapacity,
                                     UErrorCode& status) const;
 
     /**
-     * Set the ordering of scripts for this collator.
-     * @param reorderCodes An array of reorder codes in the new order.
+     * Sets the ordering of scripts for this collator.
+     * @param reorderCodes An array of script codes in the new order. This can be NULL if the 
+     * length is also set to 0. An empty array will clear any reordering codes on the collator.
      * @param reorderCodesLength The length of reorderCodes.
-     * @see ucol_setReorderCodes
-     * @internal 
+     * @see Collator#getReorderCodes
+     * @see Collator#getEquivalentReorderCodes
+     * @draft ICU 4.8 
      */
-    virtual void setReorderCodes(const int32_t* reorderCodes,
+     virtual void U_EXPORT2 setReorderCodes(const int32_t* reorderCodes,
                                 int32_t reorderCodesLength,
                                 UErrorCode& status) ;
+
+    /**
+     * Retrieves the reorder codes that are grouped with the given reorder code. Some reorder
+     * codes will be grouped and must reorder together.
+     * @param reorderCode The reorder code to determine equivalence for. 
+     * @param dest The array to fill with the script equivalene reordering codes.
+     * @param destCapacity The length of dest. If it is 0, then dest may be NULL and the 
+     * function will only return the length of the result without writing any of the result 
+     * string (pre-flighting).
+     * @param status A reference to an error code value, which must not indicate 
+     * a failure before the function call.
+     * @return The length of the of the reordering code equivalence array.
+     * @see ucol_setReorderCodes
+     * @see Collator#getReorderCodes
+     * @see Collator#setReorderCodes
+     * @draft ICU 4.8 
+     */
+    static int32_t U_EXPORT2 getEquivalentReorderCodes(int32_t reorderCode,
+                                int32_t* dest,
+                                int32_t destCapacity,
+                                UErrorCode& status);
 
     /**
      * Get name of the object for the desired Locale, in the desired langauge
