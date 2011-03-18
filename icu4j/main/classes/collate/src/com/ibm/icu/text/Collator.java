@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.util.Set;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
@@ -230,50 +231,59 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * 
      * @see #getReorderCodes
      * @see #setReorderCodes
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
      */
     public static interface ReorderCodes {
         /**
+         * A special reordering code that is used to specify the default reordering codes for a locale.
+         * @draft ICU 4.8
+         */
+        public final static int DEFAULT          = 1;
+        /**
+         * A speical reordering code that is used to specify no reordering codes.
+         * @draft ICU 4.8
+         */
+        public final static int NONE          = UScript.UNKNOWN;
+        /**
+         * A special reordering code that is used to specify all other codes used for reordering except 
+         * for the codes listed as ReorderingCodes and those listed explicitly in a reordering.
+         * @draft ICU 4.8
+         */
+        public final static int OTHERS          = UScript.UNKNOWN;
+        /**
          * Characters with the space property.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int SPACE          = 0x1000;
         /**
          * The first entry in the enumeration.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int FIRST          = SPACE;
         /**
          * Characters with the punctuation property.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int PUNCTUATION    = 0x1001;
         /**
          * Characters with the symbol property.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int SYMBOL         = 0x1002;
         /**
          * Characters with the currency property.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int CURRENCY       = 0x1003;
         /**
          * Characters with the digit property.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int DIGIT          = 0x1004;
         /**
          * The limit of the reorder codes..
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 4.8
          */
         public final static int LIMIT          = 0x1005;        
     }
@@ -368,13 +378,15 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     }
 
     /** 
-     * Set the reordering codes for this collator.
-     * The reordering codes are a combination of UScript and ReorderingCodes. These
-     * allow the order of these groups to be changed as a group.  
-     * @param order the reordering codes to apply to this collator, if null then clears the reordering
+     * Sets the reordering codes for this collator.
+     * Reordering codes allow the collation ordering for groups of characters to be changed.
+     * The reordering codes are a combination of UScript  codes and ReorderCodes.
+     * These allow the ordering of characters belonging to these groups to be changed as a group.  
+     * @param order the reordering codes to apply to this collator; if this is null or an empty array
+     * then this clears any existing reordering
      * @see #getReorderCodes
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
      */ 
     public void setReorderCodes(int... order) 
     { 
@@ -1057,14 +1069,30 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     public abstract VersionInfo getUCAVersion();
     
     /**  
-     * Retrieve the reordering codes for this collator.
-     * These reordering codes are a combination of UScript and ReorderCodes.
+     * Retrieves the reordering codes for this collator.
+     * These reordering codes are a combination of UScript codes and ReorderCodes.
+     * @return a copy of the reordering codes for this collator; 
+     * if none are set then returns an empty array
      * @see #setReorderCodes
-     * @return the reordering codes for this collator if they have been set, null otherwise. 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
      */ 
     public int[] getReorderCodes() 
+    { 
+        throw new UnsupportedOperationException(); 
+    }   
+
+    /**
+     * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
+     * codes are grouped and must reorder together.
+     * 
+     * @param reorderCode code for which equivalents to be retrieved
+     * @return the set of all reorder codes in the same group as the given reorder code.
+     * @see #setReorderCodes
+     * @see #getReorderCodes
+     * @draft ICU 4.8
+     */
+    public static int[] getEquivalentReorderCodes(int reorderCode)
     { 
         throw new UnsupportedOperationException(); 
     }   

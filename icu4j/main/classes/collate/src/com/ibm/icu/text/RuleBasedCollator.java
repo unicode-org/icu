@@ -638,13 +638,15 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /** 
-     * Set the reordering codes for this collator.
-     * The reordering codes are a combination of UScript and ReorderingCodes. These
-     * allow the order of these groups to be changed as a group.  
-     * @param order the reordering codes to apply to this collator, if null then clears the reordering
+     * Sets the reordering codes for this collator.
+     * Reordering codes allow the collation ordering for groups of characters to be changed.
+     * The reordering codes are a combination of UScript  codes and ReorderCodes.
+     * These allow the ordering of characters belonging to these groups to be changed as a group.  
+     * @param order the reordering codes to apply to this collator; if this is null or an empty array
+     * then this clears any existing reordering
      * @see #getReorderCodes
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
      */ 
     public void setReorderCodes(int... order) {
         if (order != null && order.length > 0) {
@@ -1069,33 +1071,33 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**  
-     * Retrieve the reordering codes for this collator.
-     * These reordering codes are a combination of UScript and ReorderCodes.
+     * Retrieves the reordering codes for this collator.
+     * These reordering codes are a combination of UScript codes and ReorderCodes.
+     * @return a copy of the reordering codes for this collator; 
+     * if none are set then returns an empty array
      * @see #setReorderCodes
-     * @return the reordering codes for this collator if they have been set, null otherwise. 
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
      */ 
     public int[] getReorderCodes() {
         if (m_reorderCodes_ != null) {
             return m_reorderCodes_.clone();
         } else {
-            return null;
+            return LeadByteConstants.EMPTY_INT_ARRAY;
         }
     }
 
     /**
-     * Retrieve the reorder codes that are grouped with the given reorder code. Some reorder codes will
-     * be grouped and must reorder together.
+     * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
+     * codes are grouped and must reorder together.
      * 
-     * @see #setReorderCodes
-     * @see #getReorderCodes
      * @param reorderCode code for which equivalents to be retrieved
      * @return the set of all reorder codes in the same group as the given reorder code.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @see #setReorderCodes
+     * @see #getReorderCodes
+     * @draft ICU 4.8
      */
-    public static int[] getReorderingCodesGroup(int reorderCode) {
+    public static int[] getEquivalentReorderCodes(int reorderCode) {
         Set<Integer> equivalentCodesSet = new HashSet<Integer>();
         int[] leadBytes = RuleBasedCollator.LEADBYTE_CONSTANTS_.getLeadBytesForReorderCode(reorderCode);
         for (int leadByte : leadBytes) {
@@ -1568,7 +1570,6 @@ public final class RuleBasedCollator extends Collator {
                 reorderCodes = new int[1];
                 reorderCodes[0] = offset & ~DATA_MASK_FOR_INDEX;
             } else {
-
                 int length = readShort(this.LEAD_BYTE_TO_SCRIPTS_DATA, offset);
                 offset++;
 
@@ -1595,7 +1596,6 @@ public final class RuleBasedCollator extends Collator {
                 leadBytes = new int[1];
                 leadBytes[0] = offset & ~DATA_MASK_FOR_INDEX;
             } else {
-
                 int length = readShort(this.SCRIPT_TO_LEAD_BYTES_DATA, offset);
                 offset++;
 
@@ -1684,6 +1684,9 @@ public final class RuleBasedCollator extends Collator {
     int m_defaultStrength_;
     boolean m_defaultIsHiragana4_;
     boolean m_defaultIsNumericCollation_;
+    /**
+     * Default script order - the one created at initial rule parse time
+     */
     int[] m_defaultReorderCodes_;
 
     /**
@@ -3795,11 +3798,19 @@ public final class RuleBasedCollator extends Collator {
      * Builds the lead byte permuatation table
      */
     private void buildPermutationTable() {
-        if (m_reorderCodes_ == null) {
+        if (m_reorderCodes_ == null || m_reorderCodes_.length == 0 || (m_reorderCodes_.length == 1 && m_reorderCodes_[0] == ReorderCodes.NONE)) {
             m_leadBytePermutationTable_ = null;
             return;
         }
-
+        
+        if (m_reorderCodes_[0] == ReorderCodes.DEFAULT) {
+            // swap the reorder codes for those at build of the rules
+            if (m_defaultReorderCodes_ == null || m_defaultReorderCodes_.length == 0) {
+                m_leadBytePermutationTable_ = null;                
+            }
+            m_reorderCodes_ = m_defaultReorderCodes_.clone();
+        }
+        
         // TODO - these need to be read in from the UCA data file
         // The lowest byte that hasn't been assigned a mapping
         int toBottom = 0x03;
