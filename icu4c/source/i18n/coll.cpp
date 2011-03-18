@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -833,7 +833,8 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
     return Locale::createFromName(loc);
 }
 
-int32_t Collator::getReorderCodes(int32_t *dest,
+int32_t U_EXPORT2 
+Collator::getReorderCodes(int32_t *dest,
                                  int32_t destCapacity,
                                  UErrorCode& status) const
 {
@@ -843,13 +844,26 @@ int32_t Collator::getReorderCodes(int32_t *dest,
     return 0;
 }
 
-void Collator::setReorderCodes(const int32_t *reorderCodes,
+void U_EXPORT2 
+Collator::setReorderCodes(const int32_t *reorderCodes,
                               int32_t reorderCodesLength,
                               UErrorCode& status)
 {
     if (U_SUCCESS(status)) {
         status = U_UNSUPPORTED_ERROR;
     }
+}
+
+int32_t U_EXPORT2
+Collator::getEquivalentReorderCodes(int32_t reorderCode,
+                                    int32_t *dest,
+                                    int32_t destCapacity,
+                                    UErrorCode& status)
+{
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return 0;
 }
 
 // UCollator private data members ----------------------------------------

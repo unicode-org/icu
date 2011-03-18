@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -601,6 +601,13 @@ void RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes,
     ucol_setReorderCodes(ucollator, reorderCodes, reorderCodesLength, &status);
 }
 
+int32_t RuleBasedCollator::getEquivalentReorderCodes(int32_t reorderCode,
+                                int32_t* dest,
+                                int32_t destCapacity,
+                                UErrorCode& status)
+{
+    return ucol_getEquivalentReorderCodes(reorderCode, dest, destCapacity, &status);
+}
 
 /**
 * Create a hash code for this collation. Just hash the main rule table -- that
