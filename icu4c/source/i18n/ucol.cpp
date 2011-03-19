@@ -7158,10 +7158,12 @@ ucol_getReorderCodes(const UCollator *coll,
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    
+
+#ifdef UCOL_DEBUG
     printf("coll->reorderCodesLength = %d\n", coll->reorderCodesLength);
     printf("coll->defaultReorderCodesLength = %d\n", coll->defaultReorderCodesLength);
-    
+#endif
+
     if (coll->reorderCodesLength > destCapacity) {
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
         return coll->reorderCodesLength;
