@@ -621,7 +621,7 @@ ucol_getReorderCodes(const UCollator* coll,
  * @see ucol_getEquivalentReorderCodes
  * @draft ICU 4.8 
  */
-U_CFUNC void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 ucol_setReorderCodes(UCollator* coll,
                     const int32_t* reorderCodes,
                     int32_t reorderCodesLength,
