@@ -1,8 +1,5 @@
-
 /*
- *
- * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
- *
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  */
 
 #include "LETypes.h"
@@ -37,6 +34,9 @@ U_NAMESPACE_BEGIN
 
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
 static const char copyright[] = U_COPYRIGHT_STRING;
+
+const le_int32 LayoutEngine::kTypoFlagKern = 0x1;
+const le_int32 LayoutEngine::kTypoFlagLiga = 0x2;
 
 const LEUnicode32 DefaultCharMapper::controlChars[] = {
     0x0009, 0x000A, 0x000D,
@@ -552,6 +552,11 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 
         case arabScriptCode:
             result = new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
+            break;
+
+        case hebrScriptCode:
+            // Disable hebrew ligatures since they have only archaic uses, see ticket #8318
+            result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags & ~kTypoFlagLiga, gsubTable, success);
             break;
 
         case hangScriptCode:
