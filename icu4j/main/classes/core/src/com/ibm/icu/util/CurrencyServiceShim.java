@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -42,10 +42,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         if (service.isDefault()) {
             return Currency.createCurrency(loc);
         }
-        ULocale[] actualLoc = new ULocale[1];
-    Currency curr = (Currency)service.get(loc, actualLoc);
-        ULocale uloc = actualLoc[0];
-        curr.setLocale(uloc, uloc); // services make no distinction between actual & valid
+        Currency curr = (Currency)service.get(loc);
         return curr;
     }
 
