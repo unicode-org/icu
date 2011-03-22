@@ -200,9 +200,6 @@ public class CurrencyTest extends TestFmwk {
                 "$",
                 usd.getSymbol());
         }
-        assertEquals("USD.getLocale()",
-                ULocale.ROOT,
-                usd.getLocale(null));
     }
     
     // Provide better code coverage for the CurrencyDisplayNames class
