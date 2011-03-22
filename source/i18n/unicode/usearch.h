@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2010 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2011 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  06/28/2001   synwee      Creation.
@@ -586,8 +586,8 @@ U_STABLE int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch,
                                            UErrorCode    *status);
 
 /**
-* Returns the first index greater than <tt>position</tt> at which the string 
-* text 
+* Returns the first index equal or greater than <tt>position</tt> at which
+* the string text
 * matches the search pattern. The iterator is adjusted so that its current 
 * index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
@@ -633,6 +633,12 @@ U_STABLE int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch,
 * matches the search pattern. The iterator is adjusted so that its current 
 * index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
+*
+* When <tt>USEARCH_OVERLAP</tt> option is off, the last index of the
+* result match is always less than <tt>position</tt>.
+* When <tt>USERARCH_OVERLAP</tt> is on, the result match may span across
+* <tt>position</tt>.
+*
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
 * the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>
 * <p>
