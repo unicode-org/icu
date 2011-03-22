@@ -288,11 +288,13 @@ U_NAMESPACE_END
 U_CAPI const char* U_EXPORT2
 u_getPropertyName(UProperty property,
                   UPropertyNameChoice nameChoice) {
+    U_NAMESPACE_USE
     return PropNameData::getPropertyName(property, nameChoice);
 }
 
 U_CAPI UProperty U_EXPORT2
 u_getPropertyEnum(const char* alias) {
+    U_NAMESPACE_USE
     return (UProperty)PropNameData::getPropertyEnum(alias);
 }
 
@@ -300,11 +302,13 @@ U_CAPI const char* U_EXPORT2
 u_getPropertyValueName(UProperty property,
                        int32_t value,
                        UPropertyNameChoice nameChoice) {
+    U_NAMESPACE_USE
     return PropNameData::getPropertyValueName(property, value, nameChoice);
 }
 
 U_CAPI int32_t U_EXPORT2
 u_getPropertyValueEnum(UProperty property,
                        const char* alias) {
+    U_NAMESPACE_USE
     return PropNameData::getPropertyValueEnum(property, alias);
 }
