@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Modification History:
@@ -849,7 +849,7 @@ unum_getSymbol(const UNumberFormat *fmt,
     if(status==NULL || U_FAILURE(*status)) {
         return 0;
     }
-    if(fmt==NULL || (uint16_t)symbol>=UNUM_FORMAT_SYMBOL_COUNT) {
+    if(fmt==NULL || symbol< 0 || symbol>=UNUM_FORMAT_SYMBOL_COUNT) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -876,7 +876,7 @@ unum_setSymbol(UNumberFormat *fmt,
     if(status==NULL || U_FAILURE(*status)) {
         return;
     }
-    if(fmt==NULL || (uint16_t)symbol>=UNUM_FORMAT_SYMBOL_COUNT || value==NULL || length<-1) {
+    if(fmt==NULL || symbol< 0 || symbol>=UNUM_FORMAT_SYMBOL_COUNT || value==NULL || length<-1) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }

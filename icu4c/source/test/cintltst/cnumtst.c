@@ -922,6 +922,36 @@ free(result);
         unum_close(fmt);
     }
 
+    status = U_ZERO_ERROR;
+    /* Test invalid symbol argument */
+    {
+        int32_t badsymbolLarge = UNUM_FORMAT_SYMBOL_COUNT + 1;
+        int32_t badsymbolSmall = -1;
+        UChar value[10];
+        int32_t valueLength = 10;
+        UNumberFormat *fmt = unum_open(UNUM_DEFAULT, NULL, 0, NULL, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("File %s, Line %d, status = %s\n", __FILE__, __LINE__, u_errorName(status));
+        } else {
+            unum_getSymbol(fmt, (UNumberFormatSymbol)badsymbolLarge, NULL, 0, &status);
+            if (U_SUCCESS(status)) log_err("unum_getSymbol()'s status should be ILLEGAL_ARGUMENT with invalid symbol (> UNUM_FORMAT_SYMBOL_COUNT) argument\n");
+
+            status = U_ZERO_ERROR;
+            unum_getSymbol(fmt, (UNumberFormatSymbol)badsymbolSmall, NULL, 0, &status);
+            if (U_SUCCESS(status)) log_err("unum_getSymbol()'s status should be ILLEGAL_ARGUMENT with invalid symbol (less than 0) argument\n");
+
+            status = U_ZERO_ERROR;
+            unum_setSymbol(fmt, (UNumberFormatSymbol)badsymbolLarge, value, valueLength, &status);
+            if (U_SUCCESS(status)) log_err("unum_setSymbol()'s status should be ILLEGAL_ARGUMENT with invalid symbol (> UNUM_FORMAT_SYMBOL_COUNT) argument\n");
+
+            status = U_ZERO_ERROR;
+            unum_setSymbol(fmt, (UNumberFormatSymbol)badsymbolSmall, value, valueLength, &status);
+            if (U_SUCCESS(status)) log_err("unum_setSymbol()'s status should be ILLEGAL_ARGUMENT with invalid symbol (less than 0) argument\n");
+
+            unum_close(fmt);
+        }
+    }
+
 
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/
     unum_close(def);
