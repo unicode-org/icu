@@ -1,6 +1,6 @@
 /*
 *****************************************************************************
-* Copyright (C) 2001-2010, International Business Machines orporation  
+* Copyright (C) 2001-2011, International Business Machines orporation  
 * and others. All Rights Reserved.
 ****************************************************************************/
 
@@ -254,11 +254,12 @@ Collator::ECollationStrength StringSearchTest::getECollationStrength(
 UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
                                                     const SearchData *search)
 {
-    int           count       = 0;
-    UErrorCode    status      = U_ZERO_ERROR;
-    int32_t   matchindex  = search->offset[count];
-    UnicodeString matchtext;
-    
+    int32_t         count       = 0;
+    UErrorCode      status      = U_ZERO_ERROR;
+    int32_t         matchindex  = search->offset[count];
+    UnicodeString   matchtext;
+    int32_t         matchlength;
+
     strsrch->setAttribute(USEARCH_ELEMENT_COMPARISON, search->elemCompare, status);
     if (U_FAILURE(status)) {
         errln("Error setting USEARCH_ELEMENT_COMPARISON attribute %s", u_errorName(status));
@@ -269,17 +270,18 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
         strsrch->getMatchedLength() != 0) {
         errln("Error with the initialization of match start and length");
     }
-    // start of following matches 
+
+    // start of next matches
     while (U_SUCCESS(status) && matchindex >= 0) {
-        int32_t matchlength = search->size[count];
+        matchlength = search->size[count];
         strsrch->next(status);
         if (matchindex != strsrch->getMatchedStart() || 
             matchlength != strsrch->getMatchedLength()) {
             char *str = toCharString(strsrch->getText());
             errln("Text: %s", str);
             str = toCharString(strsrch->getPattern());
-            infoln("Pattern: %s", str);
-            infoln("Error following match found at idx,len %d,%d; expected %d,%d", 
+            errln("Pattern: %s", str);
+            errln("Error next match found at %d (len:%d); expected %d (len:%d)", 
                     strsrch->getMatchedStart(), strsrch->getMatchedLength(),
                     matchindex, matchlength);
             return FALSE;
@@ -293,7 +295,7 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
                                               matchindex + matchlength,
                                               matchtext, 0, 
                                               matchtext.length())) {
-            errln("Error getting following matched text");
+            errln("Error getting next matched text");
         }
 
         matchindex = search->offset[count];
@@ -305,15 +307,16 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
             errln("Text: %s", str);
             str = toCharString(strsrch->getPattern());
             errln("Pattern: %s", str);
-            errln("Error following match found at %d %d", 
+            errln("Error next match found at %d (len:%d); expected <NO MATCH>", 
                     strsrch->getMatchedStart(), strsrch->getMatchedLength());
             return FALSE;
     }
-    // start of preceding matches 
+
+    // start of previous matches
     count = count == 0 ? 0 : count - 1;
     matchindex = search->offset[count];
     while (U_SUCCESS(status) && matchindex >= 0) {
-        int32_t matchlength = search->size[count];
+        matchlength = search->size[count];
         strsrch->previous(status);
         if (matchindex != strsrch->getMatchedStart() || 
             matchlength != strsrch->getMatchedLength()) {
@@ -321,8 +324,9 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
             errln("Text: %s", str);
             str = toCharString(strsrch->getPattern());
             errln("Pattern: %s", str);
-            errln("Error following match found at %d %d", 
-                    strsrch->getMatchedStart(), strsrch->getMatchedLength());
+            errln("Error previous match found at %d (len:%d); expected %d (len:%d)",
+                    strsrch->getMatchedStart(), strsrch->getMatchedLength(),
+                    matchindex, matchlength);
             return FALSE;
         }
         
@@ -333,7 +337,7 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
                                               matchindex + matchlength,
                                               matchtext, 0, 
                                               matchtext.length())) {
-            errln("Error getting following matched text");
+            errln("Error getting previous matched text");
         }
 
         matchindex = count > 0 ? search->offset[count - 1] : -1;
@@ -343,13 +347,112 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
     if (strsrch->getMatchedStart() != USEARCH_DONE ||
         strsrch->getMatchedLength() != 0) {
         char *str = toCharString(strsrch->getText());
-            errln("Text: %s", str);
-            str = toCharString(strsrch->getPattern());
-            errln("Pattern: %s", str);
-            errln("Error following match found at %d %d", 
-                    strsrch->getMatchedStart(), strsrch->getMatchedLength());
-            return FALSE;
+        errln("Text: %s", str);
+        str = toCharString(strsrch->getPattern());
+        errln("Pattern: %s", str);
+        errln("Error previous match found at %d (len:%d); expected <NO MATCH>", 
+                strsrch->getMatchedStart(), strsrch->getMatchedLength());
+        return FALSE;
     }
+
+    int32_t nextStart;
+    UBool isOverlap = (strsrch->getAttribute(USEARCH_OVERLAP) == USEARCH_ON);
+
+    // start of following matches
+    count = 0;
+    matchindex = search->offset[count];
+    nextStart = 0;
+
+    while (TRUE) {
+        strsrch->following(nextStart, status);
+
+        if (matchindex < 0) {
+            if (strsrch->getMatchedStart() != USEARCH_DONE ||
+                    strsrch->getMatchedLength() != 0) {
+                char *str = toCharString(strsrch->getText());
+                errln("Text: %s", str);
+                str = toCharString(strsrch->getPattern());
+                errln("Pattern: %s", str);
+                errln("Error following match starting at %d (overlap:%d) found at %d (len:%d); expected <NO MATCH>",
+                        nextStart, isOverlap,
+                        strsrch->getMatchedStart(), strsrch->getMatchedLength());
+                return FALSE;
+            }
+            // no more matches
+            break;
+        }
+
+        matchlength = search->size[count];
+        if (strsrch->getMatchedStart() != matchindex
+                || strsrch->getMatchedLength() != matchlength
+                || U_FAILURE(status)) {
+            char *str = toCharString(strsrch->getText());
+            errln("Text: %s\n", str);
+            str = toCharString(strsrch->getPattern());
+            errln("Pattern: %s\n", str);
+            errln("Error following match starting at %d (overlap: %d) found at %d (len:%d); expected %d (len:%d)\n",
+                        nextStart, isOverlap,
+                        strsrch->getMatchedStart(), strsrch->getMatchedLength(),
+                        matchindex, matchlength);
+            return FALSE;
+        }
+
+        if (isOverlap || strsrch->getMatchedLength() == 0) {
+            nextStart = strsrch->getMatchedStart() + 1;
+        } else {
+            nextStart = strsrch->getMatchedStart() + strsrch->getMatchedLength();
+        }
+
+        count++;
+        matchindex = search->offset[count];
+    }
+
+    // start preceding matches
+    count = -1; // last non-negative offset index, could be -1 if no match
+    while (search->offset[count + 1] >= 0) {
+        count++;
+    }
+    nextStart = strsrch->getText().length();
+
+    while (TRUE) {
+        strsrch->preceding(nextStart, status);
+
+        if (count < 0) {
+            if (strsrch->getMatchedStart() != USEARCH_DONE || strsrch->getMatchedLength() != 0) {
+                char *str = toCharString(strsrch->getText());
+                errln("Text: %s\n", str);
+                str = toCharString(strsrch->getPattern());
+                errln("Pattern: %s\n", str);
+                errln("Error preceding match starting at %d (overlap: %d) found at %d (len:%d); expected <NO MATCH>\n",
+                            nextStart, isOverlap,
+                            strsrch->getMatchedStart(), 
+                            strsrch->getMatchedLength());
+                return FALSE;
+            }
+            // no more matches
+            break;
+        }
+
+        matchindex = search->offset[count];
+        matchlength = search->size[count];
+        if (strsrch->getMatchedStart() != matchindex
+                || strsrch->getMatchedLength() != matchlength
+                || U_FAILURE(status)) {
+            char *str = toCharString(strsrch->getText());
+            errln("Text: %s\n", str);
+            str = toCharString(strsrch->getPattern());
+            errln("Pattern: %s\n", str);
+            errln("Error preceding match starting at %d (overlap: %d) found at %d (len:%d); expected %d (len:%d)\n",
+                        nextStart, isOverlap,
+                        strsrch->getMatchedStart(), strsrch->getMatchedLength(),
+                        matchindex, matchlength);
+            return FALSE;
+        }
+
+        nextStart = matchindex;
+        count--;
+    }
+
     strsrch->setAttribute(USEARCH_ELEMENT_COMPARISON, USEARCH_STANDARD_ELEMENT_COMPARISON, status);
     return TRUE;
 }
