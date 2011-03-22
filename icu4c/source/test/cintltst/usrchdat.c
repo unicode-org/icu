@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2008,2010 International Business Machines 
+ * Copyright (c) 2001-2011 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
@@ -65,6 +65,7 @@ static const SearchData BASIC[] = {
 #endif
 
     {"\\u00c9", "e", NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON,  NULL, {0, -1}, {1}},
+    {"x a\\u0301", "a\\u0301", NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {2, -1}, {2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {-1}, {0}}
 };
 
@@ -746,11 +747,11 @@ static const SearchData CONTRACTIONCANONICAL[] = {
 };
 
 static const SearchData DIACRITICMATCH[] = {
-		{"\\u03BA\\u03B1\\u03B9\\u0300\\u0020\\u03BA\\u03B1\\u1F76", "\\u03BA\\u03B1\\u03B9", NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {0, 5,-1}, {4, 3}},
-		{"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {1, -1}, {2}},
-		{"\\u0020\\u00C2\\u0303\\u0020\\u0041\\u0061\\u1EAA\\u0041\\u0302\\u0303\\u00C2\\u0303\\u1EAB\\u0061\\u0302\\u0303\\u00E2\\u0303\\uD806\\uDC01\\u0300\\u0020",
-		 "\\u00C2\\u0303", "LDE_AN_CX_EX_FX_HX_NX_S1", UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {1, 4, 5, 6, 7, 10, 12, 13, 16,-1}, {2, 1, 1, 1, 3, 2, 1, 3, 2}},
-		{NULL, NULL, NULL, UCOL_TERTIARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {-1}, {0}}
+    {"\\u03BA\\u03B1\\u03B9\\u0300\\u0020\\u03BA\\u03B1\\u1F76", "\\u03BA\\u03B1\\u03B9", NULL, UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {0, 5,-1}, {4, 3}},
+    {"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {1, -1}, {2}},
+    {"\\u0020\\u00C2\\u0303\\u0020\\u0041\\u0061\\u1EAA\\u0041\\u0302\\u0303\\u00C2\\u0303\\u1EAB\\u0061\\u0302\\u0303\\u00E2\\u0303\\uD806\\uDC01\\u0300\\u0020",
+     "\\u00C2\\u0303", "LDE_AN_CX_EX_FX_HX_NX_S1", UCOL_PRIMARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {1, 4, 5, 6, 7, 10, 12, 13, 16,-1}, {2, 1, 1, 1, 3, 2, 1, 3, 2}},
+    {NULL, NULL, NULL, UCOL_TERTIARY, USEARCH_STANDARD_ELEMENT_COMPARISON, NULL, {-1}, {0}}
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
