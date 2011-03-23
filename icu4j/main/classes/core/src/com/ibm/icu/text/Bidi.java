@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -77,7 +77,7 @@ import com.ibm.icu.lang.UCharacterDirection;
  * <li>{@link #LTR}
  * <li>{@link #RTL}
  * <li>{@link #MIXED}
- * <li>{@link #NEUTRAL} 
+ * <li>{@link #NEUTRAL}
  * </ul>
  *
  * <h3>Basic concept: levels</h3>
@@ -525,46 +525,46 @@ public class Bidi {
 
     /**
      * Left-to-right text.
-     * <ul> 
-     * <li>As return value for <code>getDirection()</code>, it means 
-     *     that the source string contains no right-to-left characters, or 
-     *     that the source string is empty and the paragraph level is even. 
-     * <li>As return value for <code>getBaseDirection()</code>, it 
-     *     means that the first strong character of the source string has 
-     *     a left-to-right direction. 
-     * </ul> 
+     * <ul>
+     * <li>As return value for <code>getDirection()</code>, it means
+     *     that the source string contains no right-to-left characters, or
+     *     that the source string is empty and the paragraph level is even.
+     * <li>As return value for <code>getBaseDirection()</code>, it
+     *     means that the first strong character of the source string has
+     *     a left-to-right direction.
+     * </ul>
      * @stable ICU 3.8
      */
     public static final byte LTR = 0;
 
     /**
      * Right-to-left text.
-     * <ul> 
-     * <li>As return value for <code>getDirection()</code>, it means 
-     *     that the source string contains no left-to-right characters, or 
-     *     that the source string is empty and the paragraph level is odd. 
-     * <li>As return value for <code>getBaseDirection()</code>, it 
-     *     means that the first strong character of the source string has 
-     *     a right-to-left direction. 
-     * </ul> 
+     * <ul>
+     * <li>As return value for <code>getDirection()</code>, it means
+     *     that the source string contains no left-to-right characters, or
+     *     that the source string is empty and the paragraph level is odd.
+     * <li>As return value for <code>getBaseDirection()</code>, it
+     *     means that the first strong character of the source string has
+     *     a right-to-left direction.
+     * </ul>
      * @stable ICU 3.8
      */
     public static final byte RTL = 1;
 
     /**
      * Mixed-directional text.
-     * <p>As return value for <code>getDirection()</code>, it means 
-     *    that the source string contains both left-to-right and 
-     *    right-to-left characters. 
+     * <p>As return value for <code>getDirection()</code>, it means
+     *    that the source string contains both left-to-right and
+     *    right-to-left characters.
      * @stable ICU 3.8
      */
     public static final byte MIXED = 2;
 
     /**
      * No strongly directional text.
-     * <p>As return value for <code>getBaseDirection()</code>, it means 
-     *    that the source string is missing or empty, or contains neither 
-     *    left-to-right nor right-to-left characters. 
+     * <p>As return value for <code>getBaseDirection()</code>, it means
+     *    that the source string is missing or empty, or contains neither
+     *    left-to-right nor right-to-left characters.
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -865,6 +865,8 @@ public class Bidi {
 
     private static final char CR = '\r';
     private static final char LF = '\n';
+    private static final char[] charArray0 = new char[0];
+
 
     static final int LRM_BEFORE = 1;
     static final int LRM_AFTER = 2;
@@ -926,6 +928,10 @@ public class Bidi {
     /* original paraLevel when contextual */
     /* must be one of DEFAULT_xxx or 0 if not contextual */
     byte                defaultParaLevel;
+
+    /* context data */
+    char[]              prologue = charArray0;
+    char[]              epilogue = charArray0;
 
     /* the following is set in setPara, used in processPropertySeq */
 
@@ -1589,6 +1595,29 @@ public class Bidi {
 
 /* perform (P2)..(P3) ------------------------------------------------------- */
 
+    private byte firstL_R_AL() {
+        /* return first strong char after the last B in prologue if any */
+        int i;
+        int uchar;
+        int proLength = prologue.length;
+        byte dirProp, result = ON;
+        for (i = 0; i < proLength; ) {
+            uchar = UTF16.charAt(prologue, 0, proLength, i);
+            i += UTF16.getCharCount(uchar);
+            dirProp = (byte)getCustomizedClass(uchar);
+            if (result == ON) {
+                if (dirProp == L || dirProp == R || dirProp == AL) {
+                    result = dirProp;
+                }
+            } else {
+                if (dirProp == B) {
+                    result = ON;
+                }
+            }
+        }
+        return result;
+    }
+
     private void getDirProps()
     {
         int i = 0, i0, i1;
@@ -1622,9 +1651,16 @@ public class Bidi {
             lastStrongLTR = 0;
         }
         if (isDefaultLevel) {
+            byte lastStrong;
             paraDirDefault = ((paraLevel & 1) != 0) ? CONTEXT_RTL : 0;
-            paraDir = paraDirDefault;
-            lastStrongDir = paraDirDefault;
+            if(prologue.length > 0 &&
+               (lastStrong = firstL_R_AL()) != ON) {
+                paraDir = (lastStrong == L) ? 0 : CONTEXT_RTL;
+                state = FOUND_STRONG_CHAR;
+            } else {
+                paraDir = paraDirDefault;
+                state = LOOKING_FOR_STRONG;
+            }
             state = LOOKING_FOR_STRONG;
         } else {
             state = NOT_CONTEXTUAL;
@@ -2039,7 +2075,7 @@ public class Bidi {
     private static final short groupProp[] =          /* dirProp regrouped */
     {
         /*  L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  */
-        0,  1,  2,  7,  8,  3,  9,  6,  5,  4,  4,  10, 10, 12, 10, 10, 10, 11, 10
+            0,  1,  2,  7,  8,  3,  9,  6,  5,  4,  4,  10, 10, 12, 10, 10, 10, 11, 10
     };
     private static final short _L  = 0;
     private static final short _R  = 1;
@@ -2574,6 +2610,61 @@ public class Bidi {
         }
     }
 
+    private byte lastL_R_AL() {
+        /* return last strong char at the end of the prologue */
+        int i;
+        int uchar;
+        char c;
+        byte dirProp;
+        for (i = prologue.length; i > 0; ) {
+            uchar = c = prologue[--i];
+            if (UTF16.isTrailSurrogate(c)) {
+                char __c2;
+                if (i > 0 && UTF16.isLeadSurrogate(__c2 = prologue[i - 1])) {
+                    --i;
+                    uchar = UCharacter.getCodePoint(__c2, c);
+                }
+            }
+            dirProp = (byte)getCustomizedClass(uchar);
+            if (dirProp == L) {
+                return _L;
+            }
+            if(dirProp==R || dirProp==AL) {
+                return _R;
+            }
+            if(dirProp==B) {
+                return _ON;
+            }
+        }
+        return _ON;
+    }
+
+    private byte firstL_R_AL_EN_AN() {
+        /* return first strong char or digit in epilogue */
+        int i;
+        int uchar;
+        int epiLength = epilogue.length;
+        byte dirProp;
+        for (i = 0; i < epiLength; ) {
+            uchar = UTF16.charAt(epilogue, 0, epiLength, i);
+            i += UTF16.getCharCount(uchar);
+            dirProp = (byte)getCustomizedClass(uchar);
+            if (dirProp == L) {
+                return _L;
+            }
+            if (dirProp == R || dirProp == AL) {
+                return _R;
+            }
+            if (dirProp == EN) {
+                return _EN;
+            }
+            if (dirProp == AN) {
+                return _AN;
+            }
+        }
+        return _ON;
+    }
+
     private void resolveImplicitLevels(int start, int limit, short sor, short eor)
     {
         LevState levState = new LevState();
@@ -2602,6 +2693,12 @@ public class Bidi {
         levState.runLevel = levels[start];
         levState.impTab = impTabPair.imptab[levState.runLevel & 1];
         levState.impAct = impTabPair.impact[levState.runLevel & 1];
+        if (start == 0 && prologue.length > 0) {
+            byte lastStrong = lastL_R_AL();
+            if (lastStrong != _ON) {
+                sor = lastStrong;
+            }
+        }
         processPropertySeq(levState, sor, start, start);
         /* initialize for property state table */
         if (NoContextRTL(dirProps[start]) == NSM) {
@@ -2678,6 +2775,12 @@ public class Bidi {
             }
         }
         /* flush possible pending sequence, e.g. ON */
+        if (limit == length && epilogue.length > 0) {
+            byte firstStrong = firstL_R_AL_EN_AN();
+            if (firstStrong != _ON) {
+                eor = firstStrong;
+            }
+        }
         processPropertySeq(levState, eor, limit, limit);
     }
 
@@ -2885,6 +2988,172 @@ public class Bidi {
         }
 //    cleanup3:
         this.reorderingMode = REORDER_RUNS_ONLY;
+    }
+
+    private void setParaSuccess() {
+        prologue = charArray0;          /* forget the last context */
+        epilogue = charArray0;
+        paraBidi = this;                /* mark successful setPara */
+    }
+
+    /**
+     * Set the context before a call to setPara().<p>
+     *
+     * setPara() computes the left-right directionality for a given piece
+     * of text which is supplied as one of its arguments. Sometimes this piece
+     * of text (the "main text") should be considered in context, because text
+     * appearing before ("prologue") and/or after ("epilogue") the main text
+     * may affect the result of this computation.<p>
+     *
+     * This function specifies the prologue and/or the epilogue for the next
+     * call to setPara(). The characters specified as prologue and
+     * epilogue should not be modified by the calling program until the call
+     * to setPara() has returned. If successive calls to setPara()
+     * all need specification of a context, setContext() must be called
+     * before each call to setPara(). In other words, a context is not
+     * "remembered" after the following successful call to setPara().<p>
+     *
+     * If a call to setPara() specifies DEFAULT_LTR or
+     * DEFAULT_RTL as paraLevel and is preceded by a call to
+     * setContext() which specifies a prologue, the paragraph level will
+     * be computed taking in consideration the text in the prologue.<p>
+     *
+     * When setPara() is called without a previous call to
+     * setContext, the main text is handled as if preceded and followed
+     * by strong directional characters at the current paragraph level.
+     * Calling setContext() with specification of a prologue will change
+     * this behavior by handling the main text as if preceded by the last
+     * strong character appearing in the prologue, if any.
+     * Calling setContext() with specification of an epilogue will change
+     * the behavior of setPara() by handling the main text as if followed
+     * by the first strong character or digit appearing in the epilogue, if any.<p>
+     *
+     * Note 1: if <code>setContext</code> is called repeatedly without
+     *         calling <code>setPara</code>, the earlier calls have no effect,
+     *         only the last call will be remembered for the next call to
+     *         <code>setPara</code>.<p>
+     *
+     * Note 2: calling <code>setContext(null, null)</code>
+     *         cancels any previous setting of non-empty prologue or epilogue.
+     *         The next call to <code>setPara()</code> will process no
+     *         prologue or epilogue.<p>
+     *
+     * Note 3: users must be aware that even after setting the context
+     *         before a call to setPara() to perform e.g. a logical to visual
+     *         transformation, the resulting string may not be identical to what it
+     *         would have been if all the text, including prologue and epilogue, had
+     *         been processed together.<br>
+     * Example (upper case letters represent RTL characters):<br>
+     * &nbsp;&nbsp;prologue = "<code>abc DE</code>"<br>
+     * &nbsp;&nbsp;epilogue = none<br>
+     * &nbsp;&nbsp;main text = "<code>FGH xyz</code>"<br>
+     * &nbsp;&nbsp;paraLevel = LTR<br>
+     * &nbsp;&nbsp;display without prologue = "<code>HGF xyz</code>"
+     *             ("HGF" is adjacent to "xyz")<br>
+     * &nbsp;&nbsp;display with prologue = "<code>abc HGFED xyz</code>"
+     *             ("HGF" is not adjacent to "xyz")<br>
+     *
+     * @param prologue is the text which precedes the text that
+     *        will be specified in a coming call to setPara().
+     *        If there is no prologue to consider,
+     *        this parameter can be <code>null</code>.
+     *
+     * @param epilogue is the text which follows the text that
+     *        will be specified in a coming call to setPara().
+     *        If there is no epilogue to consider,
+     *        this parameter can be <code>null</code>.
+     *
+     * @see #setPara
+     * @draft ICU 4.8
+     */
+    public void setContext(String prologue, String epilogue)
+    {
+        if (prologue == null) {
+            this.prologue = charArray0;
+        } else {
+            this.prologue = prologue.toCharArray();
+        }
+        if (epilogue == null) {
+            this.epilogue = charArray0;
+        } else {
+            this.epilogue = epilogue.toCharArray();
+        }
+    }
+
+    /**
+     * Set the context before a call to setPara().<p>
+     *
+     * setPara() computes the left-right directionality for a given piece
+     * of text which is supplied as one of its arguments. Sometimes this piece
+     * of text (the "main text") should be considered in context, because text
+     * appearing before ("prologue") and/or after ("epilogue") the main text
+     * may affect the result of this computation.<p>
+     *
+     * This function specifies the prologue and/or the epilogue for the next
+     * call to setPara(). The characters specified as prologue and
+     * epilogue should not be modified by the calling program until the call
+     * to setPara() has returned. If successive calls to setPara()
+     * all need specification of a context, setContext() must be called
+     * before each call to setPara(). In other words, a context is not
+     * "remembered" after the following successful call to setPara().<p>
+     *
+     * If a call to setPara() specifies DEFAULT_LTR or
+     * DEFAULT_RTL as paraLevel and is preceded by a call to
+     * setContext() which specifies a prologue, the paragraph level will
+     * be computed taking in consideration the text in the prologue.<p>
+     *
+     * When setPara() is called without a previous call to
+     * setContext, the main text is handled as if preceded and followed
+     * by strong directional characters at the current paragraph level.
+     * Calling setContext() with specification of a prologue will change
+     * this behavior by handling the main text as if preceded by the last
+     * strong character appearing in the prologue, if any.
+     * Calling setContext() with specification of an epilogue will change
+     * the behavior of setPara() by handling the main text as if followed
+     * by the first strong character or digit appearing in the epilogue, if any.<p>
+     *
+     * Note 1: if <code>setContext</code> is called repeatedly without
+     *         calling <code>setPara</code>, the earlier calls have no effect,
+     *         only the last call will be remembered for the next call to
+     *         <code>setPara</code>.<p>
+     *
+     * Note 2: calling <code>setContext(null, null)</code>
+     *         cancels any previous setting of non-empty prologue or epilogue.
+     *         The next call to <code>setPara()</code> will process no
+     *         prologue or epilogue.<p>
+     *
+     * Note 3: users must be aware that even after setting the context
+     *         before a call to setPara() to perform e.g. a logical to visual
+     *         transformation, the resulting string may not be identical to what it
+     *         would have been if all the text, including prologue and epilogue, had
+     *         been processed together.<br>
+     * Example (upper case letters represent RTL characters):<br>
+     * &nbsp;&nbsp;prologue = "<code>abc DE</code>"<br>
+     * &nbsp;&nbsp;epilogue = none<br>
+     * &nbsp;&nbsp;main text = "<code>FGH xyz</code>"<br>
+     * &nbsp;&nbsp;paraLevel = LTR<br>
+     * &nbsp;&nbsp;display without prologue = "<code>HGF xyz</code>"
+     *             ("HGF" is adjacent to "xyz")<br>
+     * &nbsp;&nbsp;display with prologue = "<code>abc HGFED xyz</code>"
+     *             ("HGF" is not adjacent to "xyz")<br>
+     *
+     * @param prologue is the text which precedes the text that
+     *        will be specified in a coming call to setPara().
+     *        If there is no prologue to consider,
+     *        this parameter can be <code>null</code>.
+     *
+     * @param epilogue is the text which follows the text that
+     *        will be specified in a coming call to setPara().
+     *        If there is no epilogue to consider,
+     *        this parameter can be <code>null</code>.
+     *
+     * @see #setPara
+     * @draft ICU 4.8
+     */
+    public void setContext(char[] prologue, char[] epilogue)
+    {
+        this.prologue = prologue;
+        this.epilogue = epilogue;
     }
 
     /**
@@ -3110,7 +3379,7 @@ public class Bidi {
 
             runCount = 0;
             paraCount = 0;
-            paraBidi = this;         /* mark successful setPara */
+            setParaSuccess();
             return;
         }
 
@@ -3322,7 +3591,7 @@ public class Bidi {
         } else {
             resultLength += insertPoints.size;
         }
-        paraBidi = this;             /* mark successful setPara */
+        setParaSuccess();
     }
 
     /**
@@ -4871,9 +5140,9 @@ public class Bidi {
     /**
      * Get the base direction of the text provided according to the Unicode
      * Bidirectional Algorithm. The base direction is derived from the first
-     * character in the string with bidirectional character type L, R, or AL. 
-     * If the first such character has type L, LTR is returned. If the first 
-     * such character has type R or AL, RTL is returned. If the string does 
+     * character in the string with bidirectional character type L, R, or AL.
+     * If the first such character has type L, LTR is returned. If the first
+     * such character has type R or AL, RTL is returned. If the string does
      * not contain any character of these types, then NEUTRAL is returned.
      * This is a lightweight function for use when only the base direction is
      * needed and no further bidi processing of the text is needed.
