@@ -167,32 +167,39 @@ public class Currency extends MeasureUnit implements Serializable {
     }
 
     private static final String EUR_STR = "EUR";
+    private static final ICUCache<ULocale, String> currencyCodeCache = new SimpleCache<ULocale, String>();
     
     /**
      * Instantiate a currency from resource data.
      */
     /* package */ static Currency createCurrency(ULocale loc) {
+        
         String variant = loc.getVariant();
         if ("EURO".equals(variant)) {
             return new Currency(EUR_STR);
         }
         
-        String country = loc.getCountry();
+        String code = currencyCodeCache.get(loc);
+        if (code == null) {
+            String country = loc.getCountry();
         
-        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        List<String> list = info.currencies(CurrencyFilter.onRegion(country));
-        if (list.size() > 0) {
-            String code = list.get(0);
-            boolean isPreEuro = "PREEURO".equals(variant);
-            if (isPreEuro && EUR_STR.equals(code)) {
-                if (list.size() < 2) {
-                    return null;
+            CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+            List<String> list = info.currencies(CurrencyFilter.onRegion(country));
+            if (list.size() > 0) {
+                code = list.get(0);
+                boolean isPreEuro = "PREEURO".equals(variant);
+                if (isPreEuro && EUR_STR.equals(code)) {
+                    if (list.size() < 2) {
+                        return null;
+                    }
+                    code = list.get(1);
                 }
-                code = list.get(1);
+            } else {
+                return null;
             }
-            return new Currency(code);
+            currencyCodeCache.put(loc, code);
         }
-        return null;
+        return new Currency(code);
     }
 
     /**
