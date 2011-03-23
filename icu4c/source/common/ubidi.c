@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -332,7 +332,7 @@ int32_t length){
     int32_t i;
     UChar32 uchar;
     UCharDirection dir;
-    
+
     if( text==NULL || length<-1 ){
         return UBIDI_NEUTRAL;
     }
@@ -354,6 +354,31 @@ int32_t length){
 }
 
 /* perform (P2)..(P3) ------------------------------------------------------- */
+
+static DirProp
+firstL_R_AL(UBiDi *pBiDi) {
+    /* return first strong char after the last B in prologue if any */
+    const UChar *text=pBiDi->prologue;
+    int32_t length=pBiDi->proLength;
+    int32_t i;
+    UChar32 uchar;
+    DirProp dirProp, result=ON;
+    for(i=0; i<length; ) {
+        /* i is incremented by U16_NEXT */
+        U16_NEXT(text, i, length, uchar);
+        dirProp=(DirProp)ubidi_getCustomizedClass(pBiDi, uchar);
+        if(result==ON) {
+            if(dirProp==L || dirProp==R || dirProp==AL) {
+                result=dirProp;
+            }
+        } else {
+            if(dirProp==B) {
+                result=ON;
+            }
+        }
+    }
+    return result;
+}
 
 /*
  * Get the directional properties for the text,
@@ -397,10 +422,17 @@ getDirProps(UBiDi *pBiDi) {
         lastStrongLTR=0;
     }
     if(isDefaultLevel) {
+        DirProp lastStrong;
         paraDirDefault=pBiDi->paraLevel&1 ? CONTEXT_RTL : 0;
-        paraDir=paraDirDefault;
-        lastStrongDir=paraDirDefault;
-        state=LOOKING_FOR_STRONG;
+        if(pBiDi->proLength>0 &&
+           (lastStrong=firstL_R_AL(pBiDi))!=ON) {
+            paraDir=(lastStrong==L) ? 0 : CONTEXT_RTL;
+            state=FOUND_STRONG_CHAR;
+        } else {
+            paraDir=paraDirDefault;
+            state=LOOKING_FOR_STRONG;
+        }
+        lastStrongDir=paraDir;
     } else {
         state=NOT_CONTEXTUAL;
         paraDir=0;
@@ -1405,6 +1437,59 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
     }
 }
 
+static DirProp
+lastL_R_AL(UBiDi *pBiDi) {
+    /* return last strong char at the end of the prologue */
+    const UChar *text=pBiDi->prologue;
+    int32_t length=pBiDi->proLength;
+    int32_t i;
+    UChar32 uchar;
+    DirProp dirProp;
+    for(i=length; i>0; ) {
+        /* i is decremented by U16_PREV */
+        U16_PREV(text, 0, i, uchar);
+        dirProp=(DirProp)ubidi_getCustomizedClass(pBiDi, uchar);
+        if(dirProp==L) {
+            return DirProp_L;
+        }
+        if(dirProp==R || dirProp==AL) {
+            return DirProp_R;
+        }
+        if(dirProp==B) {
+            return DirProp_ON;
+        }
+    }
+    return DirProp_ON;
+}
+
+static DirProp
+firstL_R_AL_EN_AN(UBiDi *pBiDi) {
+    /* return first strong char or digit in epilogue */
+    const UChar *text=pBiDi->epilogue;
+    int32_t length=pBiDi->epiLength;
+    int32_t i;
+    UChar32 uchar;
+    DirProp dirProp;
+    for(i=0; i<length; ) {
+        /* i is incremented by U16_NEXT */
+        U16_NEXT(text, i, length, uchar);
+        dirProp=(DirProp)ubidi_getCustomizedClass(pBiDi, uchar);
+        if(dirProp==L) {
+            return DirProp_L;
+        }
+        if(dirProp==R || dirProp==AL) {
+            return DirProp_R;
+        }
+        if(dirProp==EN) {
+            return DirProp_EN;
+        }
+        if(dirProp==AN) {
+            return DirProp_AN;
+        }
+    }
+    return DirProp_ON;
+}
+
 static void
 resolveImplicitLevels(UBiDi *pBiDi,
                       int32_t start, int32_t limit,
@@ -1439,6 +1524,12 @@ resolveImplicitLevels(UBiDi *pBiDi,
     levState.runLevel=pBiDi->levels[start];
     levState.pImpTab=(const ImpTab*)((pBiDi->pImpTabPair)->pImpTab)[levState.runLevel&1];
     levState.pImpAct=(const ImpAct*)((pBiDi->pImpTabPair)->pImpAct)[levState.runLevel&1];
+    if(start==0 && pBiDi->proLength>0) {
+        DirProp lastStrong=lastL_R_AL(pBiDi);
+        if(lastStrong!=DirProp_ON) {
+            sor=lastStrong;
+        }
+    }
     processPropertySeq(pBiDi, &levState, sor, start, start);
     /* initialize for property state table */
     if(NO_CONTEXT_RTL(dirProps[start])==NSM) {
@@ -1516,6 +1607,12 @@ resolveImplicitLevels(UBiDi *pBiDi,
         }
     }
     /* flush possible pending sequence, e.g. ON */
+    if(limit==pBiDi->length && pBiDi->epiLength>0) {
+        DirProp firstStrong=firstL_R_AL_EN_AN(pBiDi);
+        if(firstStrong!=DirProp_ON) {
+            eor=firstStrong;
+        }
+    }
     processPropertySeq(pBiDi, &levState, eor, limit, limit);
 }
 
@@ -1564,6 +1661,40 @@ adjustWSLevels(UBiDi *pBiDi) {
             }
         }
     }
+}
+
+U_DRAFT void U_EXPORT2
+ubidi_setContext(UBiDi *pBiDi,
+                 const UChar *prologue, int32_t proLength,
+                 const UChar *epilogue, int32_t epiLength,
+                 UErrorCode *pErrorCode) {
+    /* check the argument values */
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
+    if(pBiDi==NULL || proLength<-1 || epiLength<-1 ||
+       (prologue==NULL && proLength!=0) || (epilogue==NULL && epiLength!=0)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if(proLength==-1) {
+        pBiDi->proLength=u_strlen(prologue);
+    } else {
+        pBiDi->proLength=proLength;
+    }
+    if(epiLength==-1) {
+        pBiDi->epiLength=u_strlen(epilogue);
+    } else {
+        pBiDi->epiLength=epiLength;
+    }
+    pBiDi->prologue=prologue;
+    pBiDi->epilogue=epilogue;
+}
+
+static void
+setParaSuccess(UBiDi *pBiDi) {
+    pBiDi->proLength=0;                 /* forget the last context */
+    pBiDi->epiLength=0;
+    pBiDi->pParaBiDi=pBiDi;             /* mark successful setPara */
 }
 
 #define BIDI_MIN(x, y)   ((x)<(y) ? (x) : (y))
@@ -1823,7 +1954,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
 
         pBiDi->runCount=0;
         pBiDi->paraCount=0;
-        pBiDi->pParaBiDi=pBiDi;         /* mark successful setPara */
+        setParaSuccess(pBiDi);          /* mark successful setPara */
         return;
     }
 
@@ -2056,7 +2187,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     } else {
         pBiDi->resultLength += pBiDi->insertPoints.size;
     }
-    pBiDi->pParaBiDi=pBiDi;             /* mark successful setPara */
+    setParaSuccess(pBiDi);              /* mark successful setPara */
 }
 
 U_CAPI void U_EXPORT2

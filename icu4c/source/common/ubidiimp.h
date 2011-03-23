@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -256,6 +256,12 @@ struct UBiDi {
     /* original paraLevel when contextual */
     /* must be one of UBIDI_DEFAULT_xxx or 0 if not contextual */
     UBiDiLevel defaultParaLevel;
+
+    /* context data */
+    const UChar *prologue;
+    int32_t proLength;
+    const UChar *epilogue;
+    int32_t epiLength;
 
     /* the following is set in ubidi_setPara, used in processPropertySeq */
     const struct ImpTabPair * pImpTabPair;  /* pointer to levels state table pair */
