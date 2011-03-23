@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -909,22 +909,17 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             currencySymbol = isChoiceFormat[0]
                 ? new ChoiceFormat(currname).format(2.0)
                 : currname;
-        } else {
-            intlCurrencySymbol = "XXX";
-            currencySymbol = "\u00A4"; // 'OX' currency symbol
-        }
-
-
-        // Get currency pattern/separator overrides if they exist.
-        Currency curr = Currency.getInstance(locale);
-        if (curr != null){
-            CurrencyFormatInfo fmtInfo = info.getFormatInfo(curr.getCurrencyCode());
+            CurrencyFormatInfo fmtInfo = info.getFormatInfo(intlCurrencySymbol);
             if (fmtInfo != null) {
                 currencyPattern = fmtInfo.currencyPattern;
                 monetarySeparator = fmtInfo.monetarySeparator;
                 monetaryGroupingSeparator = fmtInfo.monetaryGroupingSeparator;
             }
+        } else {
+            intlCurrencySymbol = "XXX";
+            currencySymbol = "\u00A4"; // 'OX' currency symbol
         }
+
 
         // Get currency spacing data.
         currencySpcBeforeSym = new String[3];
