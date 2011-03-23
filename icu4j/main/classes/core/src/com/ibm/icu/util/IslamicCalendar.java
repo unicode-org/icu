@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -414,11 +414,15 @@ public class IslamicCalendar extends Calendar {
      * @param month  The hijri month, 0-based
      */
     private long monthStart(int year, int month) {
+        // Normalize year/month in case month is outside the normal bounds, which may occur
+        // in the case of an add operation
+        int realYear = year + month / 12;
+        int realMonth = month % 12;
         if (civil) {
-            return (long)Math.ceil(29.5*month)
-                    + (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
+            return (long)Math.ceil(29.5*realMonth)
+                    + (realYear-1)*354 + (long)Math.floor((3+11*realYear)/30.0);
         } else {
-            return trueMonthStart(12*(year-1) + month);
+            return trueMonthStart(12*(realYear-1) + realMonth);
         }
     }
     
