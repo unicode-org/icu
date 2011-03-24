@@ -6193,8 +6193,6 @@ static int compareUScriptCodes(const void * a, const void * b)
   return ( *(int32_t*)a - *(int32_t*)b );
 }
 
-UVersionInfo ICU_4711 = { 4,7,1,1 };
-
 static void TestEquivalentReorderingScripts() {
     UErrorCode status = U_ZERO_ERROR;
     int32_t equivalentScripts[50];
@@ -6225,20 +6223,21 @@ static void TestEquivalentReorderingScripts() {
         USCRIPT_EGYPTIAN_HIEROGLYPHS
     };
 
-    if(!isICUVersionAtLeast(ICU_4711)) {
-      log_info("WARNING: Please fix this broken test. Fails on all platforms with    ERROR: retrieved equivalent script length wrong: expected = 22, was = 50.  Please watch the Build Status page at http://bugs.icu-project.org/trac/build next time!");
-      return;
-    }
-    
     qsort(equivalentScriptsResult, LEN(equivalentScriptsResult), sizeof(int32_t), compareUScriptCodes);
-      
+    
     /* UScript.GOTHIC */
     equivalentScriptsLength = ucol_getEquivalentReorderCodes(USCRIPT_GOTHIC, equivalentScripts, LEN(equivalentScripts), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
     }
-    /*qsort(equivalentScripts, equivalentScriptsLength, sizeof(int32_t), compareUScriptCodes);*/
+    /*
+    fprintf(stdout, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    fprintf(stdout, "equivalentScriptsLength = %d\n", equivalentScriptsLength);
+    for (loopIndex = 0; loopIndex < equivalentScriptsLength; loopIndex++) {
+        fprintf(stdout, "%d = %x\n", loopIndex, equivalentScripts[loopIndex]);
+    }
+    */
     if (equivalentScriptsLength != LEN(equivalentScriptsResult)) {
         log_err_status(status, "ERROR: retrieved equivalent script length wrong: expected = %d, was = %d\n", LEN(equivalentScriptsResult), equivalentScriptsLength);
         return;
@@ -6256,7 +6255,6 @@ static void TestEquivalentReorderingScripts() {
         log_err_status(status, "ERROR: retrieving equivalent reorder codes: %s\n", myErrorName(status));
         return;
     }
-    /*qsort(equivalentScripts, equivalentScriptsLength, sizeof(int32_t), compareUScriptCodes);*/
     if (equivalentScriptsLength != LEN(equivalentScriptsResult)) {
         log_err_status(status, "ERROR: retrieved equivalent script length wrong: expected = %d, was = %d\n", LEN(equivalentScriptsResult), equivalentScriptsLength);
         return;

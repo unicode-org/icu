@@ -7238,7 +7238,12 @@ ucol_getEquivalentReorderCodes(int32_t reorderCode,
         return 0;
     }
 
+    uprv_memset(equivalentCodesSet, 0, USCRIPT_CODE_LIMIT * sizeof(bool));
+
     const UCollator* uca = ucol_initUCA(pErrorCode);
+    if (U_FAILURE(*pErrorCode)) {
+	return 0;
+    }
     leadBytesCount = ucol_getLeadBytesForReorderCode(uca, reorderCode, leadBytes, 256);
     for (leadByteIndex = 0; leadByteIndex < leadBytesCount; leadByteIndex++) {
         reorderCodesForLeadByteCount = ucol_getReorderCodesForLeadByte(
