@@ -18,6 +18,7 @@ import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
@@ -123,7 +124,7 @@ import com.ibm.icu.util.VersionInfo;
 * @author Syn Wee Quek
 * @stable ICU 2.8
 */
-public abstract class Collator implements Comparator<Object>, Cloneable
+public abstract class Collator implements Comparator<Object>, Freezable<Collator>
 {
     // public data members ---------------------------------------------------
 
@@ -314,6 +315,10 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public void setStrength(int newStrength)
     {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if ((newStrength != PRIMARY) &&
             (newStrength != SECONDARY) &&
             (newStrength != TERTIARY) &&
@@ -366,6 +371,9 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      */
     public void setDecomposition(int decomposition)
     {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
         if ((decomposition != NO_DECOMPOSITION) &&
             (decomposition != CANONICAL_DECOMPOSITION)) {
             throw new IllegalArgumentException("Wrong decomposition mode.");
@@ -686,6 +694,7 @@ public abstract class Collator implements Comparator<Object>, Cloneable
      * The resource bundle base name for this service.
      * *since ICU 3.0
      */
+    
     private static final String BASE = ICUResourceBundle.ICU_COLLATION_BASE_NAME;
 
     /**
@@ -1097,6 +1106,25 @@ public abstract class Collator implements Comparator<Object>, Cloneable
         throw new UnsupportedOperationException(); 
     }   
 
+
+    // Freezable interface implementation -------------------------------------------------
+    
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.Freezable#isFrozen()
+     */
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.Freezable#freeze()
+     */
+    public Collator freeze() {
+        frozen = true;
+        return this;
+    }
+
+    
     // protected constructor -------------------------------------------------
 
     /**
@@ -1110,6 +1138,11 @@ public abstract class Collator implements Comparator<Object>, Cloneable
     // package private methods -----------------------------------------------
 
     // private data members --------------------------------------------------
+
+    /**
+     * Frozen state of the collator.
+     */
+    protected boolean frozen;
 
     /**
      * Collation strength

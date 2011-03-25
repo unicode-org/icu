@@ -270,6 +270,30 @@ public final class RuleBasedCollator extends Collator {
         return new CollationElementIterator(source, this);
     }
 
+    // Freezable interface implementation -------------------------------------------------
+    
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.Freezable#freeze()
+     */
+    public Collator freeze() {
+        super.freeze();
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.Freezable#cloneAsThawed()
+     */
+    public RuleBasedCollator cloneAsThawed() {
+        RuleBasedCollator clone = null;
+        try {
+            clone = (RuleBasedCollator) clone();
+        } catch (CloneNotSupportedException e) {
+            // Clone is implemented
+        }
+        clone.frozen = false;
+        return clone;
+    }
+
     // public setters --------------------------------------------------------
 
     /**
@@ -284,6 +308,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setHiraganaQuaternary(boolean flag) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_isHiragana4_ = flag;
         updateInternalState();
     }
@@ -297,6 +325,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setHiraganaQuaternaryDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_isHiragana4_ = m_defaultIsHiragana4_;
         updateInternalState();
     }
@@ -316,6 +348,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setUpperCaseFirst(boolean upperfirst) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (upperfirst) {
             if (m_caseFirst_ != AttributeValue.UPPER_FIRST_) {
                 latinOneRegenTable_ = true;
@@ -345,6 +381,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setLowerCaseFirst(boolean lowerfirst) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (lowerfirst) {
             if (m_caseFirst_ != AttributeValue.LOWER_FIRST_) {
                 latinOneRegenTable_ = true;
@@ -370,6 +410,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public final void setCaseFirstDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (m_caseFirst_ != m_defaultCaseFirst_) {
             latinOneRegenTable_ = true;
         }
@@ -386,6 +430,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setAlternateHandlingDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_isAlternateHandlingShifted_ = m_defaultIsAlternateHandlingShifted_;
         updateInternalState();
     }
@@ -399,6 +447,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setCaseLevelDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_isCaseLevel_ = m_defaultIsCaseLevel_;
         updateInternalState();
     }
@@ -412,6 +464,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setDecompositionDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         setDecomposition(m_defaultDecomposition_);
         updateInternalState();
     }
@@ -425,6 +481,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setFrenchCollationDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (m_isFrenchCollation_ != m_defaultIsFrenchCollation_) {
             latinOneRegenTable_ = true;
         }
@@ -455,6 +515,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setNumericCollationDefault() {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         setNumericCollation(m_defaultIsNumericCollation_);
         updateInternalState();
     }
@@ -472,6 +536,10 @@ public final class RuleBasedCollator extends Collator {
      * @see #setFrenchCollationDefault
      */
     public void setFrenchCollation(boolean flag) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (m_isFrenchCollation_ != flag) {
             latinOneRegenTable_ = true;
         }
@@ -495,6 +563,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setAlternateHandlingShifted(boolean shifted) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_isAlternateHandlingShifted_ = shifted;
         updateInternalState();
     }
@@ -520,6 +592,10 @@ public final class RuleBasedCollator extends Collator {
      * @see #isCaseLevel
      */
     public void setCaseLevel(boolean flag) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_isCaseLevel_ = flag;
         updateInternalState();
     }
@@ -576,6 +652,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.6
      */
     public int setVariableTop(String varTop) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (varTop == null || varTop.length() == 0) {
             throw new IllegalArgumentException("Variable top argument string can not be null or zero in length.");
         }
@@ -618,6 +698,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.6
      */
     public void setVariableTop(int varTop) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         m_variableTopValue_ = (varTop & CE_PRIMARY_MASK_) >> 16;
     }
 
@@ -632,6 +716,10 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public void setNumericCollation(boolean flag) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         // sort substrings of digits as numbers
         m_isNumericCollation_ = flag;
         updateInternalState();
@@ -649,6 +737,10 @@ public final class RuleBasedCollator extends Collator {
      * @draft ICU 4.8
      */ 
     public void setReorderCodes(int... order) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify frozen object");
+        }
+
         if (order != null && order.length > 0) {
             m_reorderCodes_ = order.clone();
         } else {
@@ -3316,7 +3408,6 @@ public final class RuleBasedCollator extends Collator {
      * @return result next modified ce
      */
     private final int getPrimaryShiftedCompareCE(CollationElementIterator coleiter, int lowestpvalue, boolean isSrc)
-
     {
         boolean shifted = false;
         int result = CollationElementIterator.IGNORABLE;

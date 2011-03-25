@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2011, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -737,10 +737,17 @@ public class CollationAPITest extends TestFmwk {
             
             public void setVariableTop(int ce)
             {
+                if (isFrozen()) {
+                    throw new UnsupportedOperationException("Attempt to modify frozen object");
+                }
             }
             
             public int setVariableTop(String str) 
             {
+                if (isFrozen()) {
+                    throw new UnsupportedOperationException("Attempt to modify frozen object");
+                }
+
                 return 0;
             }
             
@@ -755,6 +762,30 @@ public class CollationAPITest extends TestFmwk {
             public VersionInfo getUCAVersion()
             {
                 return VersionInfo.getInstance(0);
+            }
+            
+            // Freezable interface implementation -------------------------------------------------
+            
+            /* (non-Javadoc)
+             * @see com.ibm.icu.util.Freezable#freeze()
+             */
+            public Collator freeze() {
+                super.freeze();
+                return this;
+            }
+
+            /* (non-Javadoc)
+             * @see com.ibm.icu.util.Freezable#cloneAsThawed()
+             */
+            public TestCollator cloneAsThawed() {
+                TestCollator clone = null;
+                try {
+                    clone = (TestCollator) clone();
+                } catch (CloneNotSupportedException e) {
+                    // Clone is implemented
+                }
+                clone.frozen = false;
+                return clone;
             }
         }
  
