@@ -3543,5 +3543,53 @@ public class CollationMiscTest extends TestFmwk {
 
         /* Test collation reordering API */
         doTestOneReorderingAPITestCase(collationTestCases, apiRules);
-    }    
+    }
+    
+    public void TestFrozeness()
+    {
+        Collator myCollation = Collator.getInstance(ULocale.CANADA);
+        boolean exceptionCaught = false;
+        
+        myCollation.freeze();
+        assertTrue("Collator not frozen.", myCollation.isFrozen());
+
+        try {
+            myCollation.setStrength(Collator.SECONDARY);
+        } catch (UnsupportedOperationException e) {
+            // expected
+            exceptionCaught = true;
+        }
+        assertTrue("Frozen collator allowed change.", exceptionCaught);
+        exceptionCaught = false;
+        
+        try {
+            myCollation.setReorderCodes(ReorderCodes.DEFAULT);
+        } catch (UnsupportedOperationException e) {
+            // expected
+            exceptionCaught = true;
+        }
+        assertTrue("Frozen collator allowed change.", exceptionCaught);
+        exceptionCaught = false;
+        
+        try {
+            myCollation.setVariableTop(12);
+        } catch (UnsupportedOperationException e) {
+            // expected
+            exceptionCaught = true;
+        }
+        assertTrue("Frozen collator allowed change.", exceptionCaught);
+        exceptionCaught = false;
+        
+        Collator myClone = null;
+        try {
+            myClone = (Collator) myCollation.clone();
+        } catch (CloneNotSupportedException e) {
+            // should not happen - clone is implemented in Collator
+            errln("ERROR: unable to clone collator.");
+        }
+        assertTrue("Clone not frozen as expected.", myClone.isFrozen());
+        
+        myClone = myClone.cloneAsThawed();
+        assertFalse("Clone not thawed as expected.", myClone.isFrozen());        
+    }
 }
