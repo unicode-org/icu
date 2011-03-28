@@ -621,12 +621,15 @@ ibm-33722_P12A_P12A-2004_U2 { UTR22* }
                         ibm-33722   # Leave untagged because this isn't the default
                         ibm-5050    # Leave untagged because this isn't the default, and yes this alias is correct
                         EUC-JP { IANA MIME* WINDOWS }
-                        Extended_UNIX_Code_Packed_Format_for_Japanese { IANA* WINDOWS }
+                        Extended_UNIX_Code_Packed_Format_for_Japanese { IANA* WINDOWS* }
                         csEUCPkdFmtJapanese { IANA WINDOWS }
                         X-EUC-JP { WINDOWS }   # Japan EUC. x-euc-jp is a MIME name
-                        windows-51932 { WINDOWS* }
                         ibm-33722_VPUA
                         IBM-eucJP
+windows-51932-2006 { UTR22* }
+                        windows-51932 { WINDOWS* }
+                        CP51932 { IANA* }
+                        csCP51932
 ibm-33722_P120-1999 { UTR22* }  # Japan EUC with \ <-> Yen mapping
                         ibm-33722 { IBM* JAVA }
                         ibm-5050 { IBM }    # Yes this is correct
