@@ -1651,7 +1651,8 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     char        line[16384];
     char       *linePtr, *lineNext;
     const uint32_t   lineMax = 16300;
-    char        tmp[1024];
+    char       *tmp;
+    int32_t     tmpLength = 0;
     char       *s;
     int32_t     ln=0; /* line number */
 
@@ -1736,10 +1737,16 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
                     fprintf(stderr, "pkgdata: Error: absolute path encountered. Old style paths are not supported. Use relative paths such as 'fur.res' or 'translit%cfur.res'.\n\tBad path: '%s'\n", U_FILE_SEP_CHAR, s);
                     exit(U_ILLEGAL_ARGUMENT_ERROR);
                 }
+                tmpLength = uprv_strlen(o->srcDir) + 
+                            uprv_strlen(s) + 5; /* 5 is to add a little extra space for, among other things, PKGDATA_FILE_SEP_STRING */
+                if((tmp = (char *)uprv_malloc(tmpLength)) == NULL) {
+                    fprintf(stderr, "pkgdata: Error: Unable to allocate tmp buffer size: %d\n", tmpLength);
+                    exit(U_MEMORY_ALLOCATION_ERROR);
+                }
                 uprv_strcpy(tmp, o->srcDir);
-                uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1] == U_FILE_SEP_CHAR ? "" :PKGDATA_FILE_SEP_STRING);
+                uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1] == U_FILE_SEP_CHAR ? "" : PKGDATA_FILE_SEP_STRING);
                 uprv_strcat(tmp, s);
-                o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
+                o->filePaths = pkg_appendToList(o->filePaths, &tail2, tmp);
                 linePtr = lineNext;
             } /* for each entry on line */
         } /* for each line */
