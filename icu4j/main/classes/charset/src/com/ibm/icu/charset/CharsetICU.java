@@ -371,8 +371,13 @@ public abstract class CharsetICU extends Charset{
        }
        
        /**
-        * Returns whether or not the converter has a fixed number of bytes
-        * per character (e.g. converters that are SBCS or DBCS).
+        * Returns whether or not the charset of the converter has a fixed number of bytes
+        * per charset character.
+        * An example of this are converters that are of the type UCNV_SBCS or UCNV_DBCS.
+        * Another example is UTF-32 which is always 4 bytes per character.  A UTF-32 code point
+        * may represent more than one UTF-8 or UTF-16 code units but always have size of 4 bytes.
+        * Note: This method is not intended to be used to determine whether the charset has a
+        * fixed ratio of bytes to Unicode codes units for any particular Unicode encoding form.
         * @return true if the converter is fixed-width
         * @draft ICU 4.8
         * @provisional This API might change or be removed in a future release.
