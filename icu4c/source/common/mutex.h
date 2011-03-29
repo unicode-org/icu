@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -113,7 +113,7 @@ struct SimpleSingleton {
 #define STATIC_SIMPLE_SINGLETON(name) static SimpleSingleton name={ NULL }
 
 /**
- * Handy wrapper for an SimpleSingleton.
+ * Handy wrapper for a SimpleSingleton.
  * Intended for temporary use on the stack, to make the SimpleSingleton easier to deal with.
  * Takes care of the duplicate deletion and type casting.
  */
@@ -145,7 +145,6 @@ private:
 struct TriStateSingleton {
     void *fInstance;
     UErrorCode fErrorCode;
-    int8_t fHaveInstance;
 
     /**
      * Returns the singleton instance, or NULL if it could not be created.
@@ -167,10 +166,10 @@ struct TriStateSingleton {
     void reset();
 };
 
-#define STATIC_TRI_STATE_SINGLETON(name) static TriStateSingleton name={ NULL, U_ZERO_ERROR, 0 }
+#define STATIC_TRI_STATE_SINGLETON(name) static TriStateSingleton name={ NULL, U_ZERO_ERROR }
 
 /**
- * Handy wrapper for an TriStateSingleton.
+ * Handy wrapper for a TriStateSingleton.
  * Intended for temporary use on the stack, to make the TriStateSingleton easier to deal with.
  * Takes care of the duplicate deletion and type casting.
  */
