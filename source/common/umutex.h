@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -19,8 +19,26 @@
 #define UMUTEX_H
 
 #include "unicode/utypes.h"
-#include "unicode/uclean.h"  
+#include "unicode/uclean.h"
 
+#if defined(U_WINDOWS)
+# include <intrin.h>
+#endif
+
+#if defined(U_DARWIN)
+# include <libkern/OSAtomic.h>
+#endif
+
+/*
+ * If we do not compile with dynamic_annotations.h then define
+ * empty annotation macros.
+ *  See http://code.google.com/p/data-race-test/wiki/DynamicAnnotations
+ */
+#ifndef ANNOTATE_HAPPENS_BEFORE
+# define ANNOTATE_HAPPENS_BEFORE(obj)
+# define ANNOTATE_HAPPENS_AFTER(obj)
+# define ANNOTATE_UNPROTECTED_READ(x) (x)
+#endif
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
@@ -33,47 +51,60 @@
  *   Default: use threads.
  *   Even with thread support compiled out, applications may override the
  *   (empty) mutex implementation with the u_setMutexFunctions() functions.
- */ 
+ */
 #ifndef ICU_USE_THREADS
 # define ICU_USE_THREADS 1
 #endif
 
-/**
- * By default assume that we are on a machine with a weak memory model,
- * and the double check lock won't work reliably.
- */
-#if !defined(UMTX_STRONG_MEMORY_MODEL)
-#define UMTX_STRONG_MEMORY_MODEL 0
+#ifndef UMTX_FULL_BARRIER
+# if !ICU_USE_THREADS
+#  define UMTX_FULL_BARRIER
+# elif U_HAVE_GCC_ATOMICS
+#  define UMTX_FULL_BARRIER __sync_synchronize();
+# elif defined(U_WINDOWS)
+#  define UMTX_FULL_BARRIER _ReadWriteBarrier();
+# elif defined(U_DARWIN)
+#  define UMTX_FULL_BARRIER OSMemoryBarrier();
+# else
+#  define UMTX_FULL_BARRIER \
+    { \
+        umtx_lock(NULL); \
+        umtx_unlock(NULL); \
+    }
+# endif
+#endif
+
+#ifndef UMTX_ACQUIRE_BARRIER
+# define UMTX_ACQUIRE_BARRIER UMTX_FULL_BARRIER
+#endif
+
+#ifndef UMTX_RELEASE_BARRIER
+# define UMTX_RELEASE_BARRIER UMTX_FULL_BARRIER
 #endif
 
 /**
  * \def UMTX_CHECK
- * Encapsulates a safe check of an expression 
+ * Encapsulates a safe check of an expression
  * for use with double-checked lazy inititialization.
- * On CPUs with weak memory models, this must use memory fence instructions
- * or mutexes.
+ * Either memory barriers or mutexes are required, to prevent both the hardware
+ * and the compiler from reordering operations across the check.
  * The expression must involve only a  _single_ variable, typically
  *    a possibly null pointer or a boolean that indicates whether some service
  *    is initialized or not.
  * The setting of the variable involved in the test must be the last step of
  *    the initialization process.
  *
- * 
  * @internal
  */
-#if UMTX_STRONG_MEMORY_MODEL
-
 #define UMTX_CHECK(pMutex, expression, result) \
-    (result)=(expression)
-
-#else
-
-#define UMTX_CHECK(pMutex, expression, result) \
-    umtx_lock(pMutex); \
-    (result)=(expression); \
-    umtx_unlock(pMutex)
-
-#endif
+    { \
+        (result)=(expression); \
+        UMTX_ACQUIRE_BARRIER; \
+    }
+/*
+ * TODO: Replace all uses of UMTX_CHECK and surrounding code
+ * with SimpleSingleton or TriStateSingleton, and remove UMTX_CHECK.
+ */
 
 /*
  * Code within ICU that accesses shared static or global data should
@@ -93,7 +124,7 @@
  * an alternative C++ mutex API is defined in the file common/mutex.h
  */
 
-/* Lock a mutex. 
+/* Lock a mutex.
  * @param mutex The given mutex to be locked.  Pass NULL to specify
  *              the global ICU mutex.  Recursive locks are an error
  *              and may cause a deadlock on some platforms.
@@ -128,8 +159,6 @@ U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
  */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 
-
-
 /*
  * Atomic Increment and Decrement of an int32_t value.
  *
@@ -142,9 +171,5 @@ U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 U_CAPI int32_t U_EXPORT2 umtx_atomic_inc(int32_t *);
 U_CAPI int32_t U_EXPORT2 umtx_atomic_dec(int32_t *);
 
-
 #endif /*_CMUTEX*/
 /*eof*/
-
-
-

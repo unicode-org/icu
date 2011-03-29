@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1997-2010, International Business Machines
+ *   Copyright (C) 1997-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -188,15 +188,6 @@ typedef unsigned int uint32_t;
 /** 0 or 1 to enable or disable auto cleanup of libraries. If undefined, default is: disabled. */
 #ifndef UCLN_NO_AUTO_CLEANUP
 #define UCLN_NO_AUTO_CLEANUP 1
-#endif
-
-/* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check mutex lock. */
-/**
-Microsoft can define _M_IX86, _M_AMD64 (before Visual Studio 8) or _M_X64 (starting in Visual Studio 8). 
-Intel can define _M_IX86 or _M_X64
-*/
-#if defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
-#define UMTX_STRONG_MEMORY_MODEL 1
 #endif
 
 /** Enable or disable debugging options **/
