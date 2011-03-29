@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -26,24 +26,20 @@
 
 U_NAMESPACE_BEGIN
 
+static UMTX llock;
 ICULocaleService::ICULocaleService()
   : fallbackLocale(Locale::getDefault())
-  , llock(0)
 {
-  umtx_init(&llock);
 }
 
 ICULocaleService::ICULocaleService(const UnicodeString& dname)
   : ICUService(dname)
   , fallbackLocale(Locale::getDefault())
-  , llock(0)
 {
-  umtx_init(&llock);
 }
 
 ICULocaleService::~ICULocaleService()
 {
-  umtx_destroy(&llock);
 }
 
 UObject*
@@ -267,7 +263,7 @@ ICULocaleService::validateFallbackLocale() const
     const Locale&     loc    = Locale::getDefault();
     ICULocaleService* ncThis = (ICULocaleService*)this;
     {
-        Mutex mutex(&ncThis->llock);
+        Mutex mutex(&llock);
         if (loc != fallbackLocale) {
             ncThis->fallbackLocale = loc;
             LocaleUtility::initNameFromLocale(loc, ncThis->fallbackLocaleName);

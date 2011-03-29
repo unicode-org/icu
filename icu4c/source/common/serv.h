@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation.       *
+ * Copyright (C) 2001-2011, International Business Machines Corporation.       *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -526,11 +526,6 @@ class U_COMMON_API ICUService : public ICUNotifier {
     const UnicodeString name;
 
  private:
-
-    /**
-     * single lock used by this service.
-     */
-    UMTX lock;
 
     /**
      * Timestamp so iterators can be fail-fast.
