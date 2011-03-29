@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *
@@ -41,7 +41,7 @@ U_NAMESPACE_USE
 
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
-typedef struct collIterate collIterator;
+typedef struct U_NAMESPACE_QUALIFIER collIterate collIterator;
 
 struct RCEI
 {
