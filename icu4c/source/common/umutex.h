@@ -26,7 +26,16 @@
 #endif
 
 #if defined(U_DARWIN)
-# include <libkern/OSAtomic.h>
+#if defined(__STRICT_ANSI__)
+#define UPRV_REMAP_INLINE
+#define inline
+#endif
+#include <libkern/OSAtomic.h>
+#define USE_MAC_OS_ATOMIC_INCREMENT 1
+#if defined(UPRV_REMAP_INLINE)
+#undef inline
+#undef UPRV_REMAP_INLINE
+#endif
 #endif
 
 /*
