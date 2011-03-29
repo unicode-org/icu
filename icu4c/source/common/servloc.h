@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -425,7 +425,6 @@ class U_COMMON_API ICULocaleService : public ICUService
  private:
   Locale fallbackLocale;
   UnicodeString fallbackLocaleName;
-  UMTX llock;
 
  public:
   /**

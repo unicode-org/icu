@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2010, International Business Machines Corporation.
+* Copyright (C) 2001-2011, International Business Machines Corporation.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -327,28 +327,26 @@ U_CDECL_END
 ******************************************************************
 */
 
+static UMTX lock;
+
 ICUService::ICUService()
 : name()
-, lock(0)
 , timestamp(0)
 , factories(NULL)
 , serviceCache(NULL)
 , idCache(NULL)
 , dnCache(NULL)
 {
-    umtx_init(&lock);
 }
 
 ICUService::ICUService(const UnicodeString& newName) 
 : name(newName)
-, lock(0)
 , timestamp(0)
 , factories(NULL)
 , serviceCache(NULL)
 , idCache(NULL)
 , dnCache(NULL)
 {
-    umtx_init(&lock);
 }
 
 ICUService::~ICUService()
@@ -359,7 +357,6 @@ ICUService::~ICUService()
         delete factories;
         factories = NULL;
     }
-    umtx_destroy(&lock);
 }
 
 UObject* 
@@ -446,7 +443,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
         // if factory is not null, we're calling from within the mutex,
         // and since some unix machines don't have reentrant mutexes we
         // need to make sure not to try to lock it again.
-        XMutex mutex(&ncthis->lock, factory != NULL);
+        XMutex mutex(&lock, factory != NULL);
 
         if (serviceCache == NULL) {
             ncthis->serviceCache = new Hashtable(status);
@@ -612,9 +609,8 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
         return result;
     }
 
-    ICUService * ncthis = (ICUService*)this; // cast away semantic const
     {
-        Mutex mutex(&ncthis->lock);
+        Mutex mutex(&lock);
         const Hashtable* map = getVisibleIDMap(status);
         if (map != NULL) {
             ICUServiceKey* fallbackKey = createKey(matchID, status);
@@ -690,9 +686,8 @@ UnicodeString&
 ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result, const Locale& locale) const 
 {
     {
-        ICUService* ncthis = (ICUService*)this; // cast away semantic const
         UErrorCode status = U_ZERO_ERROR;
-        Mutex mutex(&ncthis->lock);
+        Mutex mutex(&lock);
         const Hashtable* map = getVisibleIDMap(status);
         if (map != NULL) {
             ICUServiceFactory* f = (ICUServiceFactory*)map->get(id);
@@ -744,7 +739,7 @@ ICUService::getDisplayNames(UVector& result,
     result.setDeleter(userv_deleteStringPair);
     if (U_SUCCESS(status)) {
         ICUService* ncthis = (ICUService*)this; // cast away semantic const
-        Mutex mutex(&ncthis->lock);
+        Mutex mutex(&lock);
 
         if (dnCache != NULL && dnCache->locale != locale) {
             delete dnCache;
