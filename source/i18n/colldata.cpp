@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2009, International Business Machines                 *
+ *   Copyright (C) 1996-2011, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -463,9 +463,9 @@ private:
     static char *getKey(UCollator *collator, char *keyBuffer, int32_t *charBufferLength);
     static void deleteKey(char *key);
 
-    UMTX lock;
     UHashtable *cache;
 };
+static UMTX lock;
 
 U_CFUNC void deleteChars(void * /*obj*/)
 {
@@ -484,7 +484,7 @@ U_CFUNC void deleteCollDataCacheEntry(void *obj)
 }
 
 CollDataCache::CollDataCache(UErrorCode &status)
-    : lock(0), cache(NULL)
+    : cache(NULL)
 {
     if (U_FAILURE(status)) {
         return;
@@ -506,8 +506,6 @@ CollDataCache::~CollDataCache()
     uhash_close(cache);
     cache = NULL;
     umtx_unlock(&lock);
-
-    umtx_destroy(&lock);
 }
 
 CollData *CollDataCache::get(UCollator *collator, UErrorCode &status)
