@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -65,6 +65,7 @@ protected:
     const FeatureListTable  *featureListTable;
 
     FeatureMask            *lookupSelectArray;
+    le_uint32              lookupSelectCount;
 
     le_uint16               *lookupOrderArray;
     le_uint32               lookupOrderCount;
