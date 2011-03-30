@@ -83,8 +83,8 @@ PluralRules::PluralRules(const PluralRules& other)
 PluralRules::~PluralRules() {
     delete mRules;
     delete mParser;
-    delete mSamples;
-    delete mSampleInfo;
+    delete [] mSamples;
+    delete [] mSampleInfo;
 }
 
 PluralRules*
@@ -105,10 +105,10 @@ PluralRules::operator=(const PluralRules& other) {
         delete mParser;
         mParser = new RuleParser();
 
-        delete mSamples;
+        delete [] mSamples;
         mSamples = NULL;
 
-        delete mSampleInfo;
+        delete [] mSampleInfo;
         mSampleInfo = NULL;
         mSampleInfoCount = 0;
     }
