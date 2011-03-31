@@ -1,4 +1,4 @@
-// Copyright (C) 2010, International Business Machines
+// Copyright (C) 2011, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2001 and onwards Google Inc.
@@ -138,14 +138,14 @@ class U_COMMON_API StringPiece : public UMemory {
    * Reset the stringpiece to refer to new data.
    * @param data pointer the new string data.  Need not be nul terminated.
    * @param len the length of the new data
-   * @internal
+   * @draft ICU 4.8
    */
   void set(const char* data, int32_t len) { ptr_ = data; length_ = len; }
 
   /**
    * Reset the stringpiece to refer to new data.
    * @param str a pointer to a NUL-terminated string. 
-   * @internal
+   * @draft ICU 4.8
    */
   void set(const char* str);
 
