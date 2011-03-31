@@ -120,6 +120,7 @@ static void TestRegexCAPI(void);
 static void TestBug4315(void);
 static void TestUTextAPI(void);
 static void TestRefreshInput(void);
+static void TestBug8421(void);
 
 void addURegexTest(TestNode** root);
 
@@ -129,6 +130,7 @@ void addURegexTest(TestNode** root)
     addTest(root, &TestBug4315,   "regex/TestBug4315");
     addTest(root, &TestUTextAPI,  "regex/TestUTextAPI");
     addTest(root, &TestRefreshInput, "regex/TestRefreshInput");
+    addTest(root, &TestBug8421,   "regex/TestBug8421");
 }
 
 /*
@@ -2199,4 +2201,29 @@ static void TestRefreshInput(void) {
 }
 
 
+static void TestBug8421(void) {
+    /* Bug 8421:  setTimeLimit on a regular expresssion before setting text to be matched
+     *             was failing. 
+     */
+    URegularExpression *re;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t  limit = -1;
+
+    re = uregex_openC("abc", 0, 0, &status);
+    TEST_ASSERT_SUCCESS(status);
+
+    limit = uregex_getTimeLimit(re, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(limit == 0);
+
+    uregex_setTimeLimit(re, 100, &status);
+    TEST_ASSERT_SUCCESS(status);
+    limit = uregex_getTimeLimit(re, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(limit == 100);
+
+    uregex_close(re);
+}
+
+    
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */
