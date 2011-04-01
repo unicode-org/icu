@@ -556,6 +556,7 @@ PluralRulesTest::testGetAllKeywordValues() {
             if (*ep == ';') ++ep;
             rp = ep;
         }
+        delete p;
     }
 }
 
