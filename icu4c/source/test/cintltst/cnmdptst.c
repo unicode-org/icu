@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -868,25 +868,25 @@ static void TestCurrencyKeywords(void)
 }
 
 static void TestGetKeywordValuesForLocale(void) {
-#define PREFERRED_SIZE 13
-#define MAX_NUMBER_OF_KEYWORDS 3
+#define PREFERRED_SIZE 12
+#define MAX_NUMBER_OF_KEYWORDS 4
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS] = {
-            { "root",               "USD", NULL },
-            { "und",                "USD", NULL },
-            { "und_ZZ",             "USD", NULL },
-            { "en_US",              "USD", NULL },
-            { "en_029",             "USD", NULL },
-            { "en_TH",              "THB", NULL },
-            { "de",                 "EUR", NULL },
-            { "de_DE",              "EUR", NULL },
-            { "ar",                 "EGP", NULL },
-            { "ar_PS",              "JOD", "ILS" },
-            { "en@currency=CAD",    "USD", NULL },
-            { "fr@currency=zzz",    "EUR", NULL },
-            { "de_DE@currency=DEM", "EUR", NULL },
+            { "root",               "USD", "USN", "USS" },
+            { "und",                "USD", "USN", "USS" },
+ /*           { "und_ZZ",             "USD", NULL, NULL },  -- temporaary remove as this locale now has 15 entries */
+            { "en_US",              "USD", "USN", "USS" },
+            { "en_029",             "USD", "USN", "USS" },
+            { "en_TH",              "THB", NULL, NULL },
+            { "de",                 "EUR", NULL, NULL },
+            { "de_DE",              "EUR", NULL, NULL },
+            { "ar",                 "EGP", NULL, NULL },
+            { "ar_PS",              "JOD", "ILS", NULL },
+            { "en@currency=CAD",    "USD", "USN", "USS" },
+            { "fr@currency=zzz",    "EUR", NULL, NULL },
+            { "de_DE@currency=DEM", "EUR", NULL, NULL },
     };
     const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = {
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1
+            3, 3, 3, 3, 1, 1, 1, 1, 2, 3, 1, 1
     };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, j, size;
