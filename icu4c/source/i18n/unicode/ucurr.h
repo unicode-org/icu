@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -242,6 +242,45 @@ typedef enum UCurrCurrencyType {
  */
 U_STABLE UEnumeration * U_EXPORT2
 ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
+
+typedef struct IsoCodeEntry {
+    const UChar *isoCode; /* const because it's a reference to a resource bundle string. */
+    UDate from;
+    UDate to;
+} IsoCodeEntry;
+
+/** 
+  * Queries if the given ISO 4217 3-letter code is available on the specified date range. 
+  * 
+  * Note: For checking availability of a currency on a specific date, specify the date on both 'from' and 'to' 
+  * 
+  * When 'from' is U_DATE_MIN and 'to' is U_DATE_MAX, this method checks if the specified currency is available any time. 
+  * If 'from' and 'to' are same UDate value, this method checks if the specified currency is available on that date.
+  * 
+  * @param code 
+  *            The ISO 4217 3-letter code. 
+  * 
+  * @param from 
+  *            The lower bound of the date range, inclusive. When 'from' is U_DATE_MIN, check the availability 
+  *            of the currency any date before 'to' 
+  * 
+  * @param to 
+  *            The upper bound of the date range, inclusive. When 'to' is U_DATE_MAX, check the availability of 
+  *            the currency any date after 'from' 
+  * 
+  * @param errorCode 
+  *            ICU error code 
+   * 
+  * @return TRUE if the given ISO 4217 3-letter code is supported on the specified date range. 
+  * 
+  * @draft ICU 4.8 
+  */ 
+U_DRAFT UBool U_EXPORT2
+ucurr_isAvailable(const UChar* isoCode, 
+             UDate from, 
+             UDate to, 
+             UErrorCode* eErrorCode);
+
 
 /** 
  * Finds the number of valid currency codes for the
