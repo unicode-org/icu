@@ -2714,6 +2714,17 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("Comparison should return false.");
         }
     }
+
+    public void TestExponentParse() {
+        ParsePosition parsePos = new ParsePosition(0);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat fmt = new DecimalFormat("#####", symbols);
+        Number result = fmt.parse("5.06e-27", parsePos);
+        if ( result.doubleValue() != 5.06E-27 || parsePos.getIndex() != 8) {
+            errln("ERROR: ERROR: parse failed - expected 5.06E-27, 8; got " + result.doubleValue() + ", " + parsePos.getIndex());
+        }
+    }
+
     public void TestExplicitParents() {
         // We use these for testing because decimal and grouping separators will be inherited from es_419
         // starting with CLDR 2.0

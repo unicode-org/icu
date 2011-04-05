@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,6 +46,12 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
         logln("Percent test " + localeName);
         fNumberFormat = NumberFormat.getPercentInstance(locale);
         _testFormat();
+
+        if (locale.toString().compareTo("en_US_POSIX") != 0 ) {
+           logln("Scientific test " + localeName);
+           fNumberFormat = NumberFormat.getScientificInstance(locale);
+           _testFormat();
+        }
     }
     
     /**
@@ -103,14 +109,16 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
         tryIt(Double.NaN);
         tryIt(Double.POSITIVE_INFINITY);
         tryIt(Double.NEGATIVE_INFINITY);
-    
+
         tryIt(251887531);
         tryIt(5e-20 / 9);
         tryIt(5e20 / 9);
         tryIt(1.234e-50);
         tryIt(9.99999999999996);
         tryIt(9.999999999999996);
-    
+
+        tryIt(5.06e-27);
+
         tryIt(Integer.MIN_VALUE);
         tryIt(Integer.MAX_VALUE);
         tryIt((double)Integer.MIN_VALUE);
