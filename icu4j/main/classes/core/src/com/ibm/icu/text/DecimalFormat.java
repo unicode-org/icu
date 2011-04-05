@@ -2309,7 +2309,7 @@ public class DecimalFormat extends NumberFormat {
                     // them.
                     backup = position;
                     sawGrouping = true;
-                } else if (!sawExponent && text.regionMatches(position, exponentSep, 0, exponentSep.length())) {
+                } else if (!sawExponent && text.regionMatches(true, position, exponentSep, 0, exponentSep.length())) {
                     // Parse sign, if present
                     boolean negExp = false;
                     int pos = position + exponentSep.length();
