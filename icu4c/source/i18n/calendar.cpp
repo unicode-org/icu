@@ -1934,6 +1934,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
             } else if (ms > targetMs) {
                 break;
             } else {
+                min = max;
                 max <<= 1;
                 if (max < 0) {
                     // Field difference too large to fit into int32_t
@@ -1971,6 +1972,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
             } else if (ms < targetMs) {
                 break;
             } else {
+                min = max;
                 max <<= 1;
                 if (max == 0) {
                     // Field difference too large to fit into int32_t
