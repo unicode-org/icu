@@ -48,6 +48,10 @@ public class PluralRulesTest extends TestFmwk {
         "a: n mod 2 is 1 or n mod 5 is 1 and n is not 6", "a:1,3,5,7,9,11,13,15,16",
         "a: n in 2..5; b: n in 5..8; c: n mod 2 is 1", "a:2,3,4,5;b:6,7,8;c:1,9,11",
         "a: n within 2..5; b: n within 5..8; c: n mod 2 is 1", "a:2,3,4,5;b:6,7,8;c:1,9,11",
+        "a: n in 2,4..6; b: n within 7..9,11..12,20", "a:2,4,5,6;b:7,8,9,11,12,20",
+        "a: n in 2..8,12 and n not in 4..6", "a:2,3,7,8,12",
+        "a: n mod 10 in 2,3,5..7 and n is not 12", "a:2,3,5,6,7,13,15,16,17",
+        "a: n in 2..6,3..7", "a:2,3,4,5,6,7",
     };
 
     private String[] getTargetStrings(String targets) {
@@ -64,7 +68,7 @@ public class PluralRulesTest extends TestFmwk {
                     list.add(null);
                 }
                 if (list.get(val) != null) {
-                    fail("key: " + list.get(val) + " already set for: " + val);
+                    fail("test data error, key: " + list.get(val) + " already set for: " + val);
                 }
                 list.set(val, key);
             }
@@ -283,6 +287,8 @@ public class PluralRulesTest extends TestFmwk {
         assertRuleValue("n is 2 and n in 2..3", 2);
         assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
         assertRuleKeyValue("a: n is 1", "other", PluralRules.NO_UNIQUE_VALUE); // key matches default rule
+        assertRuleValue("n in 2,3", PluralRules.NO_UNIQUE_VALUE);
+        assertRuleValue("n in 2,3..6 and n not in 2..3,5..6", 4);
     }
 
     /**
@@ -340,6 +346,7 @@ public class PluralRulesTest extends TestFmwk {
              "a: n mod 3 is 0 and n within 0..5", "a: 0,3",
              "a: n mod 3 is 0 and n within 0..6", "a: null", // similarly with mod, we don't catch...
              "a: n mod 3 is 0 and n in 3..12", "a: 3,6,9,12",
+             "a: n in 2,4..6 and n is not 5", "a: 2,4,6",
          };
          for (int i = 0; i < data.length; i += 2) {
              String ruleDescription = data[i];
