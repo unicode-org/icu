@@ -1321,22 +1321,22 @@ static void TestAvailableIsoCodes(void){
     UChar* isoCode = (UChar*)malloc(sizeof(UChar) * (uprv_strlen(usdCode) + 1));
 
     /* testing available codes with no time ranges */
-    u_charsToUChars(eurCode, isoCode, uprv_strlen(usdCode));
+    u_charsToUChars(eurCode, isoCode, uprv_strlen(usdCode) + 1);
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == FALSE) {
        log_err("FAIL: ISO code (%s) is not found.\n", eurCode);
     }
 
-    u_charsToUChars(usdCode, isoCode, uprv_strlen(zzzCode));
+    u_charsToUChars(usdCode, isoCode, uprv_strlen(zzzCode) + 1);
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == FALSE) {
        log_err("FAIL: ISO code (%s) is not found.\n", usdCode);
     }
 
-    u_charsToUChars(zzzCode, isoCode, uprv_strlen(zzzCode));
+    u_charsToUChars(zzzCode, isoCode, uprv_strlen(zzzCode) + 1);
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == TRUE) {
        log_err("FAIL: ISO code (%s) is reported as available, but it doesn't exist.\n", zzzCode);
     }
 
-    u_charsToUChars(lastCode, isoCode, uprv_strlen(zzzCode));
+    u_charsToUChars(lastCode, isoCode, uprv_strlen(zzzCode) + 1);
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == FALSE) {
        log_err("FAIL: ISO code (%s) is not found.\n", lastCode);
     }
