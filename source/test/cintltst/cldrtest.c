@@ -1308,37 +1308,35 @@ static void TestCurrencyList(void){
 
 static void TestAvailableIsoCodes(void){
     UErrorCode errorCode = U_ZERO_ERROR;
-    UDate date = 1295568000000.0;
-    char* eurCode = "EUR";
-    char* usdCode = "USD";
-    char* lastCode = "RHD";
-    char* zzzCode = "ZZZ";
+    const char* eurCode = "EUR";
+    const char* usdCode = "USD";
+    const char* lastCode = "RHD";
+    const char* zzzCode = "ZZZ";
     UDate date1950 = (UDate)-630720000000.0;/* year 1950 */
     UDate date1970 = (UDate)0.0;            /* year 1970 */
     UDate date1975 = (UDate)173448000000.0; /* year 1975 */
     UDate date1978 = (UDate)260172000000.0; /* year 1978 */
     UDate date1981 = (UDate)346896000000.0; /* year 1981 */
     UDate date1992 = (UDate)693792000000.0; /* year 1992 */
-    UChar* isoCode = (UChar*)malloc(sizeof(usdCode) + 1);
-    UDate test = U_MILLIS_PER_SECOND;
+    UChar* isoCode = (UChar*)malloc(sizeof(UChar) * (uprv_strlen(usdCode) + 1));
 
     /* testing available codes with no time ranges */
-    u_charsToUChars(eurCode, isoCode, sizeof(usdCode));
+    u_charsToUChars(eurCode, isoCode, uprv_strlen(usdCode));
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == FALSE) {
        log_err("FAIL: ISO code (%s) is not found.\n", eurCode);
     }
 
-    u_charsToUChars(usdCode, isoCode, sizeof(zzzCode));
+    u_charsToUChars(usdCode, isoCode, uprv_strlen(zzzCode));
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == FALSE) {
        log_err("FAIL: ISO code (%s) is not found.\n", usdCode);
     }
 
-    u_charsToUChars(zzzCode, isoCode, sizeof(zzzCode));
+    u_charsToUChars(zzzCode, isoCode, uprv_strlen(zzzCode));
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == TRUE) {
        log_err("FAIL: ISO code (%s) is reported as available, but it doesn't exist.\n", zzzCode);
     }
 
-    u_charsToUChars(lastCode, isoCode, sizeof(zzzCode));
+    u_charsToUChars(lastCode, isoCode, uprv_strlen(zzzCode));
     if (ucurr_isAvailable(isoCode, U_DATE_MIN, U_DATE_MAX, &errorCode) == FALSE) {
        log_err("FAIL: ISO code (%s) is not found.\n", lastCode);
     }
