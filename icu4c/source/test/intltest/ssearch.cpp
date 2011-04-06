@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2010, International Business Machines
+ *   Copyright (C) 2005-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -1663,7 +1663,7 @@ const char *cPattern = "maketh houndes ete hem";
          //j = (j + i)%5;
     }
 
-    printf("%ld, %d\n", pm-longishText, j);
+    //printf("%ld, %d\n", pm-longishText, j);
 #ifdef TEST_BOYER_MOORE
     CollData::close(data);
 #endif
