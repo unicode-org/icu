@@ -10,6 +10,7 @@ package com.ibm.icu.text;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,16 +66,19 @@ import com.ibm.icu.util.ULocale;
  * and_condition = relation ('and' relation)*
  * relation      = is_relation | in_relation | within_relation | 'n' <EOL>
  * is_relation   = expr 'is' ('not')? value
- * in_relation   = expr ('not')? 'in' range
- * within_relation = expr ('not')? 'within' range
+ * in_relation   = expr ('not')? 'in' range_list
+ * within_relation = expr ('not')? 'within' range_list
  * expr          = 'n' ('mod' value)?
+ * range_list    = range | value (',' range_list)*
  * value         = digit+
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
  * </pre></p>
  * <p>
  * The difference between 'in' and 'within' is that 'in' only includes
- * integers in the specified range, while 'within' includes all values.</p>
+ * integers in the specified range, while 'within' includes all values.
+ * Using 'within' with a range_list consisting entirely of values
+ * is the same as using 'in' (it's not an error).</p>
  * @stable ICU 3.8
  */
 public class PluralRules implements Serializable {
@@ -342,8 +346,9 @@ public class PluralRules implements Serializable {
                 int mod = 0;
                 boolean inRange = true;
                 boolean integersOnly = true;
-                long lowBound = -1;
-                long highBound = -1;
+                long lowBound = Long.MAX_VALUE;
+                long highBound = Long.MIN_VALUE;
+                long[] vals = null;
 
                 boolean isRange = false;
 
@@ -381,12 +386,30 @@ public class PluralRules implements Serializable {
                     }
 
                     if (isRange) {
-                        String[] pair = Utility.splitString(t, "..");
-                        if (pair.length == 2) {
-                            lowBound = Long.parseLong(pair[0]);
-                            highBound = Long.parseLong(pair[1]);
-                        } else {
-                            throw unexpected(t, condition);
+                        String[] range_list = Utility.splitString(t, ",");
+                        vals = new long[range_list.length * 2];
+                        for (int k1 = 0, k2 = 0; k1 < range_list.length; ++k1, k2 += 2) {
+                            String range = range_list[k1];
+                            String[] pair = Utility.splitString(range, "..");
+                            long low, high;
+                            if (pair.length == 2) {
+                                low = Long.parseLong(pair[0]);
+                                high = Long.parseLong(pair[1]);
+                                if (low > high) {
+                                    throw unexpected(range, condition);
+                                }
+                            } else if (pair.length == 1) {
+                                low = high = Long.parseLong(pair[0]);
+                            } else {
+                                throw unexpected(range, condition);
+                            }
+                            vals[k2] = low;
+                            vals[k2+1] = high;
+                            lowBound = Math.min(lowBound, low);
+                            highBound = Math.max(highBound, high);
+                        }
+                        if (vals.length == 2) {
+                            vals = null;
                         }
                     } else {
                         lowBound = highBound = Long.parseLong(t);
@@ -397,7 +420,7 @@ public class PluralRules implements Serializable {
                     }
 
                     newConstraint =
-                        new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound);
+                        new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound, vals);
                 }
 
                 if (andConstraint == null) {
@@ -497,14 +520,16 @@ public class PluralRules implements Serializable {
         private boolean integersOnly;
         private long lowerBound;
         private long upperBound;
+        private long[] range_list;
 
         RangeConstraint(int mod, boolean inRange, boolean integersOnly,
-                        long lowerBound, long upperBound) {
+                        long lowerBound, long upperBound, long[] range_list) {
             this.mod = mod;
             this.inRange = inRange;
             this.integersOnly = integersOnly;
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
+            this.range_list = range_list;
         }
 
         public boolean isFulfilled(double n) {
@@ -514,7 +539,14 @@ public class PluralRules implements Serializable {
             if (mod != 0) {
                 n = n % mod;    // java % handles double numerator the way we want
             }
-            return inRange == (n >= lowerBound && n <= upperBound);
+            boolean test = n >= lowerBound && n <= upperBound;
+            if (test && range_list != null) {
+                test = false;
+                for (int i = 0; !test && i < range_list.length; i += 2) {
+                    test = n >= range_list[i] && n <= range_list[i+1];
+                }
+            }
+            return inRange == test;
         }
 
         public boolean isLimited() {
@@ -564,6 +596,9 @@ public class PluralRules implements Serializable {
                 lb.add(String.valueOf(lowerBound));
             } else {
                 lb.add(String.valueOf(lowerBound) + "-" + String.valueOf(upperBound));
+            }
+            if (range_list != null) {
+                lb.add(Arrays.toString(range_list));
             }
             return lb.toString();
         }
