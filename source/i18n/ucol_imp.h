@@ -205,7 +205,17 @@
 #define UCOL_PRIMARY_MAX_BUFFER 8*UCOL_MAX_BUFFER
 #define UCOL_SECONDARY_MAX_BUFFER UCOL_MAX_BUFFER
 #define UCOL_TERTIARY_MAX_BUFFER UCOL_MAX_BUFFER
+/*
 #define UCOL_CASE_MAX_BUFFER UCOL_MAX_BUFFER/4
+
+UCOL_CASE_MAX_BUFFER as previously defined above was too small. A single collation element can
+generate two caseShift values, and UCOL_CASE_SHIFT_START (=7) caseShift values are compressed into
+one byte. UCOL_MAX_BUFFER should effectively be multipled by 2/UCOL_CASE_SHIFT_START (2/7), not 1/4.
+Perhaps UCOL_CASE_SHIFT_START used to be 8; then this would have been correct. We should dynamically
+define UCOL_CASE_MAX_BUFFER in terms of both UCOL_MAX_BUFFER and UCOL_CASE_SHIFT_START. Since
+UCOL_CASE_SHIFT_START is defined lower down, we move the real definition of UCOL_CASE_MAX_BUFFER
+after it, further down.
+*/
 #define UCOL_QUAD_MAX_BUFFER 2*UCOL_MAX_BUFFER
 
 #define UCOL_NORMALIZATION_GROWTH 2
@@ -409,6 +419,15 @@ uprv_init_pce(const struct UCollationElements *elems);
 
 #define UCOL_CASE_BYTE_START 0x80
 #define UCOL_CASE_SHIFT_START 7
+
+/*
+The definition of UCOL_CASE_MAX_BUFFER is moved down here so it can use UCOL_CASE_SHIFT_START.
+
+A single collation element can generate two caseShift values, and UCOL_CASE_SHIFT_START caseShift
+values are compressed into one byte. The UCOL_CASE_MAX_BUFFER should effectively be UCOL_MAX_BUFFER
+multipled by 2/UCOL_CASE_SHIFT_START, with suitable rounding up.
+*/
+#define UCOL_CASE_MAX_BUFFER (((2*UCOL_MAX_BUFFER) + UCOL_CASE_SHIFT_START - 1)/UCOL_CASE_SHIFT_START)
 
 #define UCOL_IGNORABLE 0
 
