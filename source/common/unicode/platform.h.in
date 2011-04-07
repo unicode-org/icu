@@ -41,6 +41,10 @@
 #define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP@
 #endif
 
+#if @U_USING_CYGWIN_MSVC@
+#define CYGWINMSVC
+#endif
+
 /* Need platform.h when using CYGWINMSVC to get definitions above. Ignore everything else. */
 #ifndef CYGWINMSVC
 

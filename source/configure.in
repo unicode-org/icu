@@ -1,5 +1,5 @@
 # -*-autoconf-*-
-AC_COPYRIGHT([ Copyright (c) 1999-2010, International Business Machines Corporation and others. All Rights Reserved. ])
+AC_COPYRIGHT([ Copyright (c) 1999-2011, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
 
@@ -1289,6 +1289,12 @@ platform_make_fragment_name="$icu_cv_host_frag"
 platform_make_fragment='$(top_srcdir)/config/'"$platform_make_fragment_name"
 AC_SUBST(platform_make_fragment_name)
 AC_SUBST(platform_make_fragment)
+
+U_USING_CYGWIN_MSVC=0
+if test "${icu_cv_host_frag}" = "mh-cygwin-msvc"; then
+U_USING_CYGWIN_MSVC=1
+fi
+AC_SUBST(U_USING_CYGWIN_MSVC)
 
 if test "${FORCE_LIBS}" != ""; then
    echo " *** Overriding automatically chosen [LIBS=$LIBS], using instead [FORCE_LIBS=${FORCE_LIBS}]"  1>&6
