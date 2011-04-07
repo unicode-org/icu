@@ -107,7 +107,9 @@ static UMTX gIsoCodesLock = NULL;
 static UBool U_CALLCONV 
 isoCodes_cleanup(void)
 {
-    umtx_destroy(&gIsoCodesLock);
+    if (gIsoCodesLock != NULL) {
+        umtx_destroy(&gIsoCodesLock);
+    }
 
     if (gIsoCodes != NULL) {
         uhash_close(gIsoCodes);
@@ -344,9 +346,11 @@ static UBool U_CALLCONV currency_cleanup(void) {
     CReg::cleanup();
 #endif
     /*
-     * There might be some cached currency data.
+     * There might be some cached currency data or isoCodes data.
      */
     currency_cache_cleanup();
+    isoCodes_cleanup();
+
     return TRUE;
 }
 U_CDECL_END
@@ -1930,6 +1934,8 @@ ucurr_isAvailable(const UChar* isoCode, UDate from, UDate to, UErrorCode* eError
             return FALSE;
         }
         uhash_setValueDeleter(gIsoCodes, deleteIsoCodeEntry);
+
+        ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
 
         ucurr_createCurrencyList(&status);
         if (U_FAILURE(status)) {
