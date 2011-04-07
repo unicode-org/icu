@@ -793,6 +793,9 @@
     <CustomBuild Include="unicode\icudataver.h">
       <Filter>configuration</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\platform.win">
+      <Filter>configuration</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\putil.h">
       <Filter>configuration</Filter>
     </CustomBuild>

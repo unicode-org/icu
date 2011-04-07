@@ -1711,6 +1711,23 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="unicode\platform.win">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)"  unicode\%(FileName).h
+copy "%(FullPath)"  ..\..\include\unicode\%(FileName).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">unicode\%(Filename).h;..\..\include\unicode\%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)"  unicode\%(FileName).h
+copy "%(FullPath)"  ..\..\include\unicode\%(FileName).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">unicode\%(Filename).h;..\..\include\unicode\%(Filename).h;%(Outputs)</Outputs>
+            <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)"  unicode\%(FileName).h
+copy "%(FullPath)"  ..\..\include\unicode\%(FileName).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">unicode\%(Filename).h;..\..\include\unicode\%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)"  unicode\%(FileName).h
+copy "%(FullPath)"  ..\..\include\unicode\%(FileName).h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">unicode\%(Filename).h;..\..\include\unicode\%(Filename).h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

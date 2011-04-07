@@ -1,5 +1,5 @@
 ## Cygwin with Microsoft Visual C++ compiler specific setup
-## Copyright (c) 2001-2010, International Business Machines Corporation and
+## Copyright (c) 2001-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # We install sbin tools into the same bin directory because
@@ -49,7 +49,6 @@ CFLAGS+=/GF /nologo
 CXXFLAGS+=/GF /nologo /EHsc /Zc:wchar_t
 CPPFLAGS+=-D_CRT_SECURE_NO_DEPRECATE
 DEFS+=-DWIN32
-DEFS+=-DCYGWINMSVC
 LDFLAGS+=/nologo
 
 # Commands to compile
