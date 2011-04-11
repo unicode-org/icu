@@ -762,31 +762,7 @@ public class CollationAPITest extends TestFmwk {
             public VersionInfo getUCAVersion()
             {
                 return VersionInfo.getInstance(0);
-            }
-            
-            // Freezable interface implementation -------------------------------------------------
-            
-            /* (non-Javadoc)
-             * @see com.ibm.icu.util.Freezable#freeze()
-             */
-            public Collator freeze() {
-                super.freeze();
-                return this;
-            }
-
-            /* (non-Javadoc)
-             * @see com.ibm.icu.util.Freezable#cloneAsThawed()
-             */
-            public TestCollator cloneAsThawed() {
-                TestCollator clone = null;
-                try {
-                    clone = (TestCollator) clone();
-                } catch (CloneNotSupportedException e) {
-                    // Clone is implemented
-                }
-                clone.frozen = false;
-                return clone;
-            }
+            }            
         }
  
         Collator col1 = new TestCollator();

@@ -3173,6 +3173,7 @@ public class CollationMiscTest extends TestFmwk {
     {
         Collator myCollation;
         int[] reorderCodes = {UScript.GREEK, UScript.HAN, ReorderCodes.PUNCTUATION};
+        int[] duplicateReorderCodes = {UScript.CUNEIFORM, UScript.GREEK, ReorderCodes.CURRENCY, UScript.EGYPTIAN_HIEROGLYPHS};
         int[] retrievedReorderCodes;
         String greekString = "\u03b1";
         String punctuationString = "\u203e";
@@ -3225,6 +3226,18 @@ public class CollationMiscTest extends TestFmwk {
 
         if (!(myCollation.compare(greekString, punctuationString) > 0)) {
             errln("ERROR: collation result should have been greater.");
+        }
+        
+        boolean gotException = false;
+        /* set duplicates in the reorder codes */
+        try {
+            myCollation.setReorderCodes(duplicateReorderCodes);
+        } catch (IllegalArgumentException e) {
+            // expect exception on illegal arguments
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("ERROR: exception was not thrown for illegal reorder codes argument.");            
         }
     }
     

@@ -374,6 +374,20 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
+        internalSetDecomposition(decomposition);
+    }
+
+    /**
+     * Internal set decompostion call to workaround frozen state because of self-modification
+     * in the RuleBasedCollator. This method <b>must</b> only be called by code that has
+     * passed the frozen check already <b>and</b> has the lock if the Collator is frozen.
+     * Better still this method should go away and RuleBasedCollator.getSortKeyBytes()
+     * should be fixed to not self-modify.
+     * @param decomposition
+     * @internal
+     */
+    protected void internalSetDecomposition(int decomposition)
+    {
         if ((decomposition != NO_DECOMPOSITION) &&
             (decomposition != CANONICAL_DECOMPOSITION)) {
             throw new IllegalArgumentException("Wrong decomposition mode.");
@@ -1109,21 +1123,30 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
 
     // Freezable interface implementation -------------------------------------------------
     
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.Freezable#isFrozen()
+    /**
+     * Determines whether the object has been frozen or not.
+     * @draft ICU 4.8
      */
     public boolean isFrozen() {
-        return frozen;
+        return false;
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.Freezable#freeze()
+    /**
+     * Freezes the collaotr.
+     * @return the collator itself.
+     * @draft ICU 4.8
      */
     public Collator freeze() {
-        frozen = true;
-        return this;
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
     }
 
+    /**
+     * Provides for the clone operation. Any clone is initially unfrozen.
+     * @draft ICU 4.8
+     */
+    public Collator cloneAsThawed() {
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
+    }
     
     // protected constructor -------------------------------------------------
 
@@ -1138,11 +1161,6 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     // package private methods -----------------------------------------------
 
     // private data members --------------------------------------------------
-
-    /**
-     * Frozen state of the collator.
-     */
-    protected boolean frozen;
 
     /**
      * Collation strength
