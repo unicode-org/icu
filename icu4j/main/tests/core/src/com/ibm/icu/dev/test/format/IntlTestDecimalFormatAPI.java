@@ -390,9 +390,9 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         numstr = "005";        
         try {
             Number n = df.parse(numstr);
-            errln("ERROR: Expected round trip failure not encountered: numstr -> " + n);
+            logln("INFO: Successful parse for " + numstr + " with strict parse enabled. Number is " + n);
         } catch (ParseException pe) {
-            logln("INFO: Expected ParseExpection for " + numstr + " with strick parse enabled");
+            errln("ERROR: Parse Exception encountered in strict mode: numstr -> " + numstr);
         }  
         
     }

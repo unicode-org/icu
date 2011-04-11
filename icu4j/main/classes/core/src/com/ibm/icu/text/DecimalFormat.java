@@ -2136,12 +2136,6 @@ public class DecimalFormat extends NumberFormat {
             int lastGroup = -1; // where did we last see a grouping separator?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
 
-            // Strict parsing leading zeroes. If a leading zero would be forced by the
-            // pattern, then don't fail strict parsing.
-            boolean strictLeadingZero = false;
-            int leadingZeroPos = 0;
-            int leadingZeroCount = 0;
-
             // equivalent grouping and decimal support
             boolean skipExtendedSeparatorParsing = ICUConfig.get(
                 "com.ibm.icu.text.DecimalFormat.SkipExtendedSeparatorParsing", "false")
@@ -2202,14 +2196,6 @@ public class DecimalFormat extends NumberFormat {
                     // Handle leading zeros
                     if (digits.count == 0) {
                         if (!sawDecimal) {
-                            if (strictParse) {
-                                // Allow leading zeros in exponents
-                                // Count leading zeros for checking later
-                                if (!strictLeadingZero)
-                                    leadingZeroPos = position + 1;
-                                strictLeadingZero = true;
-                                ++leadingZeroCount;
-                            }
                             // Ignore leading zeros in integer part of number.
                             continue;
                         }
@@ -2385,13 +2371,6 @@ public class DecimalFormat extends NumberFormat {
                 digits.decimalAt = digitCount; // Not digits.count!
 
             // check for strict parse errors
-            if (strictParse && strictLeadingZero) {
-                if ((leadingZeroCount + digits.decimalAt) > this.getMinimumIntegerDigits()) {
-                    parsePosition.setIndex(oldStart);
-                    parsePosition.setErrorIndex(leadingZeroPos);
-                    return false;
-                }
-            }
             if (strictParse && !sawDecimal) {
                 if (lastGroup != -1 && position - lastGroup != groupingSize + 1) {
                     strictFail = true;

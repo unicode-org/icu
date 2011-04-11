@@ -1965,12 +1965,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "12345, ",     // comma not followed by digit is not a group separator, but end of number
             "1,234, ",     // if group separator is present, group sizes must be appropriate
             "1,234,567",   // ...secondary too
-            "0E",          // an exponnent not followed by zero or digits is not an exponent
+            "0E",          // an exponent not followed by zero or digits is not an exponent
+            "00",          // leading zero before zero - used to be error - see ticket #7913
+            "012",         // leading zero before digit - used to be error - see ticket #7913
+            "0,456",       // leading zero before group separator - used to be error - see ticket #7913
         };
         String[] fail = {
-            "00",        // leading zero before zero
-            "012",       // leading zero before digit
-            "0,456",     // leading zero before group separator
             "1,2",       // wrong number of digits after group separator
             ",0",        // leading group separator before zero
             ",1",        // leading group separator before digit
@@ -1992,9 +1992,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "0E2",      // single zero before exponent is ok
             "1234E2",   // any number of digits before exponent is ok
             "1,234E",   // an exponent string not followed by zero or digits is not an exponent
+            "00E2",     // leading zeroes now allowed in strict mode - see ticket #
         };
         String[] scientificFail = {
-            "00E2",     // double zeros fail
             "1,234E2",  // group separators with exponent fail
         };
 
