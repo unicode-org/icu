@@ -759,7 +759,10 @@ public class Currency extends MeasureUnit implements Serializable {
         List<String> all = (ALL_CODES == null) ? null : ALL_CODES.get();
         if (all == null) {
             CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-            all = Collections.unmodifiableList(info.currencies(null));
+            // Filter out non-tender currencies which have "from" date set to 9999-12-31
+            // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
+            CurrencyFilter filter = CurrencyFilter.onRange(null, new Date(253373299200000L));
+            all = Collections.unmodifiableList(info.currencies(filter));
             ALL_CODES = new SoftReference<List<String>>(all);
         }
         return all;
