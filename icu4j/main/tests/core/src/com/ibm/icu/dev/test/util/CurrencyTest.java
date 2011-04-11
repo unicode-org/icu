@@ -491,12 +491,8 @@ public class CurrencyTest extends TestFmwk {
         assertTrue("DEM on 2000-01-01", Currency.isAvailable("DEM", d2000, d2000));
         assertFalse("DEM on 2005-01-01", Currency.isAvailable("DEM", d2005, d2005));
 
-        // Time bomb for this testcase - Caused by data change in ticket #8093.
-        // Should explode when we move to 4.8
-        VersionInfo checkVersion = VersionInfo.getInstance(4,8);
-        if ( VersionInfo.ICU_VERSION.compareTo(checkVersion) >= 0 ) {
-            assertFalse("XXX unknown code", Currency.isAvailable("XXX", null, null));
-        }
+        assertFalse("XXX unknown code", Currency.isAvailable("XXX", null, null));
+
         assertFalse("USDOLLAR invalid code", Currency.isAvailable("USDOLLAR", null, null));
 
         // illegal argument combination
