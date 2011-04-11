@@ -3209,6 +3209,7 @@ icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationDummyTest.ja
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationEnglishTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationFinnishTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationFrenchTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationFrozenMonkeyTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationGermanTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationIteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationKanaTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
