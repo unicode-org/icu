@@ -244,6 +244,7 @@ icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/util/Region.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
@@ -552,6 +553,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.4/com.ibm.icu.util.VTimeZone.dat -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.32.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.16.tri2 -text
