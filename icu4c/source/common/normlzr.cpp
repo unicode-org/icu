@@ -1,7 +1,7 @@
 /*
  *************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2010, International Business Machines Corporation and
+ * Copyright (c) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *************************************************************************
  */
@@ -203,7 +203,7 @@ Normalizer::isNormalized(const UnicodeString& source,
 }
 
 UnicodeString & U_EXPORT2
-Normalizer::concatenate(UnicodeString &left, UnicodeString &right,
+Normalizer::concatenate(const UnicodeString &left, const UnicodeString &right,
                         UnicodeString &result,
                         UNormalizationMode mode, int32_t options,
                         UErrorCode &errorCode) {
