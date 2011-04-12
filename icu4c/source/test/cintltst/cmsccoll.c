@@ -5992,6 +5992,7 @@ static void TestReorderingAPI(void)
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
     int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
+    int32_t duplicateReorderCodes[] = {USCRIPT_CUNEIFORM, USCRIPT_GREEK, UCOL_REORDER_CODE_CURRENCY, USCRIPT_EGYPTIAN_HIEROGLYPHS};
     UCollationResult collResult;
     int32_t retrievedReorderCodesLength;
     int32_t retrievedReorderCodes[10];
@@ -6069,6 +6070,13 @@ static void TestReorderingAPI(void)
         return;
     }
 
+    /* test for error condition on duplicate reorder codes */
+    ucol_setReorderCodes(myCollation, duplicateReorderCodes, LEN(duplicateReorderCodes), &status);
+    if (!U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting duplicate reorder codes did not generate a failure");
+        return;
+    }
+    
     ucol_close(myCollation);
 }
 
@@ -6102,7 +6110,6 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
 
     /* get the reordering */
     retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
-    printf("retrievedReorderCodesLength = %d\n", retrievedReorderCodesLength);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
         return;
@@ -6265,15 +6272,71 @@ static void TestEquivalentReorderingScripts() {
         }
     }
 }
-    
 
+static void TestReorderingAcrossCloning() 
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
+    int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
+    UCollator *clonedCollation;
+    int32_t bufferSize;
+    int32_t* buffer;
+    int32_t retrievedReorderCodesLength;
+    int32_t retrievedReorderCodes[10];
+    int loopIndex;
+
+    log_verbose("Testing non-lead bytes in a sort key with and without reordering\n");
+
+    /* build collator tertiary */
+    myCollation = ucol_open("", &status);
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+
+    /* set the reorderding */
+    ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
+        return;
+    }
+    
+    /* clone the collator */
+    clonedCollation = ucol_safeClone(myCollation, NULL, &bufferSize, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: cloning collator: %s\n", myErrorName(status));
+        return;
+    }
+    
+    /* get the reordering */
+    retrievedReorderCodesLength = ucol_getReorderCodes(clonedCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
+        return;
+    }
+    if (retrievedReorderCodesLength != LEN(reorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(reorderCodes));
+        return;
+    }
+    for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
+        if (retrievedReorderCodes[loopIndex] != reorderCodes[loopIndex]) {
+            log_err_status(status, "ERROR: retrieved reorder code doesn't match set reorder code at index %d\n", loopIndex);
+            return;
+        }
+    }
+    
+    /*uprv_free(buffer);*/
+    ucol_close(myCollation);
+    ucol_close(clonedCollation);
+}
 
 /*
  * Utility function to test one collation reordering test case set.
  * @param testcases Array of test cases.
  * @param n_testcases Size of the array testcases.
- * @param str_rules Array of rules.  These rules should be specifying the same rule in different formats.
- * @param n_rules Size of the array str_rules.
+ * @param reorderTokens Array of reordering codes.
+ * @param reorderTokensLen Size of the array reorderTokens.
  */
 static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32_t testCasesLen, const int32_t reorderTokens[], int32_t reorderTokensLen)
 {
@@ -6643,9 +6706,7 @@ static void TestImportWithType(void)
     ucol_close(importvidecoll);
     ucol_close(vicoll);
     ucol_close(decoll);
-
 }
-
 
 /* 'IV INTERNATIONAL SCIENTIFIC - PRACTICAL CONFERENCE "GEOPOLITICS, GEOECONOMICS AND INTERNATIONAL RELATIONS PROBLEMS" 22-23 June 2010, St. Petersburg, Russia' */
 static const UChar longUpperStr1[]= { /* 155 chars */
@@ -6841,6 +6902,8 @@ void addMiscCollTest(TestNode** root)
     TEST(TestNonScriptReorder);
     TEST(TestHaniReorder);
     TEST(TestMultipleReorder);
+    TEST(TestReorderingAcrossCloning);
+
     TEST(TestCaseLevelBufferOverflow);
 }
 

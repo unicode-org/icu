@@ -249,6 +249,7 @@ Collator* RuleBasedCollator::clone() const
     return new RuleBasedCollator(*this);
 }
 
+
 CollationElementIterator* RuleBasedCollator::createCollationElementIterator
                                            (const UnicodeString& source) const
 {
@@ -598,6 +599,7 @@ void RuleBasedCollator::setReorderCodes(const int32_t *reorderCodes,
                                        int32_t reorderCodesLength,
                                        UErrorCode& status)
 {
+    checkOwned();
     ucol_setReorderCodes(ucollator, reorderCodes, reorderCodesLength, &status);
 }
 
@@ -711,8 +713,9 @@ void
 RuleBasedCollator::setUCollator(const char *locale,
                                 UErrorCode &status)
 {
-    if (U_FAILURE(status))
+    if (U_FAILURE(status)) {
         return;
+    }
     if (ucollator && dataIsOwned)
         ucol_close(ucollator);
     ucollator = ucol_open_internal(locale, &status);
