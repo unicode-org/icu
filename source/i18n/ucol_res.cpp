@@ -274,7 +274,14 @@ ucol_open_internal(const char *loc,
                 if (U_SUCCESS(intStatus)) {
                     int32_t reorderCodesLen = 0;
                     const int32_t* reorderCodes = ures_getIntVector(reorderRes, &reorderCodesLen, status);
-                    ucol_setReorderCodes(result, reorderCodes, reorderCodesLen, status);
+                    if (reorderCodesLen > 0) {
+                        ucol_setReorderCodes(result, reorderCodes, reorderCodesLen, status);
+                        // copy the reorder codes into the default reorder codes
+                        result->defaultReorderCodesLength = result->reorderCodesLength;
+                        result->defaultReorderCodes =  (int32_t*) uprv_malloc(result->defaultReorderCodesLength * sizeof(int32_t));
+                        uprv_memcpy(result->defaultReorderCodes, result->reorderCodes, result->defaultReorderCodesLength * sizeof(int32_t));
+                        result->freeDefaultReorderCodesOnClose = TRUE;
+                    }
                     if (U_FAILURE(*status)) {
                         goto clean;
                     }
@@ -1032,22 +1039,27 @@ void ucol_setReorderCodesFromParser(UCollator *coll, UColTokenParser *parser, UE
         return;
     }
     
-    coll->reorderCodesLength = 0;
-    if (coll->reorderCodes != NULL) {
-        uprv_free(coll->reorderCodes);
-    }
-    
     if (parser->reorderCodesLength == 0 || parser->reorderCodes == NULL) {
         return;
     }
     
+    coll->reorderCodesLength = 0;
+    if (coll->reorderCodes != NULL && coll->freeReorderCodesOnClose == TRUE) {
+        uprv_free(coll->reorderCodes);
+    }
+    
+    if (coll->defaultReorderCodes != NULL && coll->freeDefaultReorderCodesOnClose == TRUE) {
+        uprv_free(coll->defaultReorderCodes);
+    }
     coll->defaultReorderCodesLength = parser->reorderCodesLength;
     coll->defaultReorderCodes =  (int32_t*) uprv_malloc(coll->defaultReorderCodesLength * sizeof(int32_t));
     uprv_memcpy(coll->defaultReorderCodes, parser->reorderCodes, coll->defaultReorderCodesLength * sizeof(int32_t));
+    coll->freeDefaultReorderCodesOnClose = TRUE;
     
     coll->reorderCodesLength = parser->reorderCodesLength;
     coll->reorderCodes = (int32_t*) uprv_malloc(coll->reorderCodesLength * sizeof(int32_t));
     uprv_memcpy(coll->reorderCodes, parser->reorderCodes, coll->reorderCodesLength * sizeof(int32_t));
+    coll->freeReorderCodesOnClose = TRUE;
 }
 
 /*
@@ -1063,7 +1075,8 @@ void ucol_setReorderCodesFromParser(UCollator *coll, UColTokenParser *parser, UE
  *      - the data is an usigned short count followed by count number 
  *        of lead bytes stored in an unsigned short
  */
-int ucol_getLeadBytesForReorderCode(const UCollator *uca, int reorderCode, uint16_t* returnLeadBytes, int returnCapacity) {
+U_CFUNC int U_EXPORT2
+ucol_getLeadBytesForReorderCode(const UCollator *uca, int reorderCode, uint16_t* returnLeadBytes, int returnCapacity) {
     uint16_t reorderCodeIndexLength = *((uint16_t*) ((uint8_t *)uca->image + uca->image->scriptToLeadByte));
     uint16_t* reorderCodeIndex = (uint16_t*) ((uint8_t *)uca->image + uca->image->scriptToLeadByte + 2 *sizeof(uint16_t));
     
@@ -1100,7 +1113,8 @@ int ucol_getLeadBytesForReorderCode(const UCollator *uca, int reorderCode, uint1
  *  data[data size] - array of unsigned short (2 bytes each entry)
  *      - the data is an usigned short count followed by count number of reorder codes
  */
-int ucol_getReorderCodesForLeadByte(const UCollator *uca, int leadByte, int16_t* returnReorderCodes, int returnCapacity) {
+U_CFUNC int U_EXPORT2
+ucol_getReorderCodesForLeadByte(const UCollator *uca, int leadByte, int16_t* returnReorderCodes, int returnCapacity) {
     uint16_t* leadByteTable = ((uint16_t*) ((uint8_t *)uca->image + uca->image->leadByteToScript));
     uint16_t leadByteIndexLength = *leadByteTable;
     if (leadByte >= leadByteIndexLength) {
@@ -1126,7 +1140,8 @@ int ucol_getReorderCodesForLeadByte(const UCollator *uca, int leadByte, int16_t*
 // used to mark ignorable reorder code slots
 static const int32_t UCOL_REORDER_CODE_IGNORE = UCOL_REORDER_CODE_LIMIT + 1;
 
-void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
+U_CFUNC void U_EXPORT2
+ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
     uint16_t leadBytesSize = 256;
     uint16_t leadBytes[256];
     int32_t internalReorderCodesLength = coll->reorderCodesLength + (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST);
@@ -1155,7 +1170,9 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
     if (coll->reorderCodes == NULL || coll->reorderCodesLength == 0 
             || (coll->reorderCodesLength == 1 && coll->reorderCodes[0] == UCOL_REORDER_CODE_NONE)) {
         if (coll->leadBytePermutationTable != NULL) {
-            uprv_free(coll->leadBytePermutationTable);
+            if (coll->freeLeadBytePermutationTableOnClose) {
+                uprv_free(coll->leadBytePermutationTable);
+            }
             coll->leadBytePermutationTable = NULL;
             coll->reorderCodesLength = 0;
         }
@@ -1164,13 +1181,23 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
 
     // set reordering to the default reordering
     if (coll->reorderCodes[0] == UCOL_REORDER_CODE_DEFAULT) {
-        uprv_free(coll->reorderCodes);
+        if (coll->freeReorderCodesOnClose == TRUE) {
+            uprv_free(coll->reorderCodes);
+        }
         coll->reorderCodes = NULL;
-        uprv_free(coll->leadBytePermutationTable);
+        
+        if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
+            uprv_free(coll->leadBytePermutationTable);
+        }
         coll->leadBytePermutationTable = NULL;
 
+        if (coll->defaultReorderCodesLength == 0) {
+            return;
+        }
+        
         coll->reorderCodes = (int32_t*)uprv_malloc(coll->defaultReorderCodesLength * sizeof(int32_t));
-        if (internalReorderCodes == NULL) {
+        coll->freeReorderCodesOnClose = TRUE;
+        if (coll->reorderCodes == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1180,6 +1207,7 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
 
     if (coll->leadBytePermutationTable == NULL) {
         coll->leadBytePermutationTable = (uint8_t*)uprv_malloc(256*sizeof(uint8_t));
+        coll->freeLeadBytePermutationTableOnClose = TRUE;
         if (coll->leadBytePermutationTable == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1190,10 +1218,10 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
     internalReorderCodes = (int32_t*)uprv_malloc(internalReorderCodesLength * sizeof(int32_t));
     if (internalReorderCodes == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        if (coll->leadBytePermutationTable != NULL) {
+        if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
             uprv_free(coll->leadBytePermutationTable);
-            coll->leadBytePermutationTable = NULL;
         }
+        coll->leadBytePermutationTable = NULL;
         return;
     }
     
@@ -1236,10 +1264,10 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
             if (fromTheBottom == false) {
                 // double turnaround
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
-                if (coll->leadBytePermutationTable != NULL) {
+                if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
                     uprv_free(coll->leadBytePermutationTable);
-                    coll->leadBytePermutationTable = NULL;
                 }
+                coll->leadBytePermutationTable = NULL;
                 coll->reorderCodesLength = 0;
                 if (internalReorderCodes != NULL) {
                     uprv_free(internalReorderCodes);
@@ -1258,10 +1286,10 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                 if (permutationSlotFilled[leadBytes[leadByteIndex]]) {
                     // lead byte already used
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
-                    if (coll->leadBytePermutationTable != NULL) {
+                    if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
                         uprv_free(coll->leadBytePermutationTable);
-                        coll->leadBytePermutationTable = NULL;
                     }
+                    coll->leadBytePermutationTable = NULL;
                     coll->reorderCodesLength = 0;
                     if (internalReorderCodes != NULL) {
                         uprv_free(internalReorderCodes);
@@ -1280,10 +1308,10 @@ void ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                 if (permutationSlotFilled[leadBytes[leadByteIndex]]) {
                     // lead byte already used
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
-                    if (coll->leadBytePermutationTable != NULL) {
+                    if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
                         uprv_free(coll->leadBytePermutationTable);
-                        coll->leadBytePermutationTable = NULL;
                     }
+                    coll->leadBytePermutationTable = NULL;
                     coll->reorderCodesLength = 0;
                     if (internalReorderCodes != NULL) {
                         uprv_free(internalReorderCodes);
