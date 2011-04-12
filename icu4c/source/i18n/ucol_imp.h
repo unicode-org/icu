@@ -1029,6 +1029,9 @@ struct UCollator {
     UBool freeOptionsOnClose;
     UBool freeRulesOnClose;
     UBool freeImageOnClose;
+    UBool freeDefaultReorderCodesOnClose;
+    UBool freeReorderCodesOnClose;
+    UBool freeLeadBytePermutationTableOnClose;
 
     UBool latinOneUse;
     UBool latinOneRegenTable;
@@ -1112,13 +1115,13 @@ ucol_openRulesForImport( const UChar        *rules,
                          UErrorCode         *status);
 
        
-U_CAPI void U_EXPORT2 
+U_CFUNC void U_EXPORT2 
 ucol_buildPermutationTable(UCollator *coll, UErrorCode *status);
 
-U_CAPI int U_EXPORT2 
+U_CFUNC int U_EXPORT2 
 ucol_getLeadBytesForReorderCode(const UCollator *uca, int reorderCode, uint16_t* returnLeadBytes, int returnCapacity);
 
-U_CAPI int U_EXPORT2 
+U_CFUNC int U_EXPORT2 
 ucol_getReorderCodesForLeadByte(const UCollator *uca, int leadByte, int16_t* returnReorderCodes, int returnCapacity);
 
 #ifdef XP_CPLUSPLUS
