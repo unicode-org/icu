@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2010, International Business Machines Corporation and
+ * Copyright (c) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  */
@@ -368,7 +368,7 @@ public:
    * @stable ICU 2.1
    */
   static UnicodeString &
-  U_EXPORT2 concatenate(UnicodeString &left, UnicodeString &right,
+  U_EXPORT2 concatenate(const UnicodeString &left, const UnicodeString &right,
               UnicodeString &result,
               UNormalizationMode mode, int32_t options,
               UErrorCode &errorCode);
