@@ -4294,8 +4294,7 @@ UnicodeString::setTo(const UnicodeString& srcText,
 inline UnicodeString&
 UnicodeString::setTo(const UnicodeString& srcText)
 {
-  unBogus();
-  return doReplace(0, length(), srcText, 0, srcText.length());
+  return copyFrom(srcText);
 }
 
 inline UnicodeString&
