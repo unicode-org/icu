@@ -140,7 +140,7 @@ class U_COMMON_API StringPiece : public UMemory {
    * @param len the length of the new data
    * @draft ICU 4.8
    */
-  void set(const char* data, int32_t len) { ptr_ = data; length_ = len; }
+  void set(const char* xdata, int32_t len) { ptr_ = xdata; length_ = len; }
 
   /**
    * Reset the stringpiece to refer to new data.
