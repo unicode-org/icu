@@ -310,12 +310,6 @@ public:
      * string text matches the search pattern. The iterator is adjusted so 
      * that its current index (as returned by <tt>getOffset</tt>) is the 
      * match position if one was found.
-     *
-     * When <tt>USEARCH_OVERLAP</tt> option is off, the last index of the
-     * result match is always less than <tt>position</tt>.
-     * When <tt>USERARCH_OVERLAP</tt> is on, the result match may span across
-     * <tt>position</tt>.
-     *
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and the
      * iterator will be adjusted to the index <tt>USEARCH_DONE</tt>.
      * @param  position where search if to start from. If position is less
@@ -352,6 +346,12 @@ public:
      * position if one was found. If a match is not found, 
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
+     * <p>
+     * When <tt>USEARCH_OVERLAP</tt> option is off, the last index of the
+     * result match is always less than <tt>position</tt>.
+     * When <tt>USERARCH_OVERLAP</tt> is on, the result match may span across
+     * <tt>position</tt>.
+     *
      * @param  position where search is to start from. If position is less
      *             than or greater than the text range for searching, 
      *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned

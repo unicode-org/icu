@@ -633,18 +633,17 @@ U_STABLE int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch,
 * matches the search pattern. The iterator is adjusted so that its current 
 * index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
-*
-* When <tt>USEARCH_OVERLAP</tt> option is off, the last index of the
-* result match is always less than <tt>position</tt>.
-* When <tt>USERARCH_OVERLAP</tt> is on, the result match may span across
-* <tt>position</tt>.
-*
 * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
 * the iterator will be adjusted to the index <tt>USEARCH_DONE</tt>
 * <p>
 * Search positions that may render incorrect results are highlighted in the
 * header comments. If position is less than or greater than the text range 
-* for searching, an U_INDEX_OUTOFBOUNDS_ERROR will be returned
+* for searching, an U_INDEX_OUTOFBOUNDS_ERROR will be returned.
+* <p>
+* When <tt>USEARCH_OVERLAP</tt> option is off, the last index of the
+* result match is always less than <tt>position</tt>.
+* When <tt>USERARCH_OVERLAP</tt> is on, the result match may span across
+* <tt>position</tt>.
 * @param strsrch search iterator data struct
 * @param position index position the search is to begin at
 * @param status for errors if it occurs
