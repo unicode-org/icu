@@ -2151,8 +2151,9 @@ public class DecimalFormat extends NumberFormat {
             int digitCount = 0;
 
             int backup = -1;
-            for (; position < text.length(); ++position) {
-                char ch = text.charAt(position);
+            int ch;
+            for (; position < text.length(); position += UTF16.getCharCount(ch)) {
+                ch = UTF16.charAt(text,position);
 
 
                 // We recognize all digit ranges, not only the Latin digit range
@@ -2183,8 +2184,8 @@ public class DecimalFormat extends NumberFormat {
                         // group. If there was a group separator before that, the group
                         // must == the secondary group length, else it can be <= the the
                         // secondary group length.
-                        if ((lastGroup != -1 && backup - lastGroup - 1 != gs2)
-                                || (lastGroup == -1 && position - oldStart - 1 > gs2)) {
+                        if ((lastGroup != -1 && countCodePoints(text,lastGroup,backup) - 1 != gs2)
+                                || (lastGroup == -1 && countCodePoints(text,oldStart,position) - 1 > gs2)) {
                             strictFail = true;
                             break;
                         }
@@ -2212,8 +2213,8 @@ public class DecimalFormat extends NumberFormat {
                 {
                     if (strictParse) {
                         if (backup != -1) {
-                            if ((lastGroup != -1 && backup - lastGroup - 1 != gs2)
-                                    || (lastGroup == -1 && position - oldStart - 1 > gs2)) {
+                            if ((lastGroup != -1 && countCodePoints(text,lastGroup,backup) - 1 != gs2)
+                                    || (lastGroup == -1 && countCodePoints(text,oldStart,position) - 1 > gs2)) {
                                 strictFail = true;
                                 break;
                             }
@@ -2230,7 +2231,7 @@ public class DecimalFormat extends NumberFormat {
                 } else if (ch == decimal) {
                     if (strictParse) {
                         if (backup != -1 ||
-                            (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
+                            (lastGroup != -1 && countCodePoints(text,lastGroup,position) != groupingSize + 1)) {
                             strictFail = true;
                             break;
                         }
@@ -2261,7 +2262,7 @@ public class DecimalFormat extends NumberFormat {
                 } else if (!sawDecimal && decimalEquiv.contains(ch)) {
                     if (strictParse) {
                         if (backup != -1 ||
-                            (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
+                            (lastGroup != -1 && countCodePoints(text,lastGroup,position) != groupingSize + 1)) {
                             strictFail = true;
                             break;
                         }
@@ -2273,7 +2274,7 @@ public class DecimalFormat extends NumberFormat {
 
                     // Once we see a decimal separator character, we only accept that
                     // decimal separator character from then on.
-                    decimal = ch;
+                    decimal = (char) ch;
                     sawDecimal = true;
                 } else if (isGroupingUsed() && !sawGrouping && groupEquiv.contains(ch)) {
                     if (sawDecimal) {
@@ -2288,7 +2289,7 @@ public class DecimalFormat extends NumberFormat {
                     }
                     // Once we see a grouping character, we only accept that grouping
                     // character from then on.
-                    grouping = ch;
+                    grouping = (char) ch;
 
                     // Ignore grouping characters, if we are using them, but require that
                     // they be followed by a digit. Otherwise we backup and reprocess
@@ -2300,7 +2301,7 @@ public class DecimalFormat extends NumberFormat {
                     boolean negExp = false;
                     int pos = position + exponentSep.length();
                     if (pos < text.length()) {
-                        ch = text.charAt(pos);
+                        ch = UTF16.charAt(text,pos);
                         if (ch == symbols.getPlusSign()) {
                             ++pos;
                         } else if (ch == symbols.getMinusSign()) {
@@ -2312,16 +2313,16 @@ public class DecimalFormat extends NumberFormat {
                     DigitList exponentDigits = new DigitList();
                     exponentDigits.count = 0;
                     while (pos < text.length()) {
-                        digit = text.charAt(pos) - digitSymbols[0];
+                        digit = UTF16.charAt(text,pos) - digitSymbols[0];
                         if (digit < 0 || digit > 9) {
                             // Can't parse "[1E0]" when pattern is "0.###E0;[0.###E0]"
                             // Should update reassign the value of 'ch' in the code: digit
                             // = Character.digit(ch, 10); [Richard/GCL]
-                            digit = UCharacter.digit(text.charAt(pos), 10);
+                            digit = UCharacter.digit(UTF16.charAt(text,pos), 10);
                         }
                         if (digit >= 0 && digit <= 9) {
                             exponentDigits.append((char) (digit + '0'));
-                            ++pos;
+                            pos += UTF16.getCharCount(UTF16.charAt(text,pos));
                         } else {
                             break;
                         }
@@ -2372,7 +2373,7 @@ public class DecimalFormat extends NumberFormat {
 
             // check for strict parse errors
             if (strictParse && !sawDecimal) {
-                if (lastGroup != -1 && position - lastGroup != groupingSize + 1) {
+                if (lastGroup != -1 && countCodePoints(text,lastGroup,position) != groupingSize + 1) {
                     strictFail = true;
                 }
             }
@@ -2450,6 +2451,16 @@ public class DecimalFormat extends NumberFormat {
         return true;
     }
 
+    // Utility method used to count the number of codepoints 
+    private int countCodePoints(String str,int start, int end) {
+        int count = 0;
+        int index = start;
+        while ( index < end ) {
+            count++;
+            index += UTF16.getCharCount(UTF16.charAt(str, index));
+        }
+        return count;
+    }
     /**
      * Returns a set of characters equivalent to the given desimal separator used for
      * parsing number.  This method may return an empty set.

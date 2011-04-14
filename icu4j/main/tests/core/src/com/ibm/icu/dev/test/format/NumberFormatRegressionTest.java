@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -284,7 +284,35 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+    public void TestSurrogatesParsing() { // Test parsing of numbers that use digits from the supplemental planes.
+        final String[] data = {
+                "1\ud801\udca2,3\ud801\udca45.67", // 
+                "\ud801\udca1\ud801\udca2,\ud801\udca3\ud801\udca4\ud801\udca5.\ud801\udca6\ud801\udca7\ud801\udca8", // 
+                "\ud835\udfd2.\ud835\udfd7E-\ud835\udfd1",
+                "\ud835\udfd3.8E-0\ud835\udfd0"
+                };
+        final double[] expected = {
+                12345.67,
+                12345.678,
+                0.0049,
+                0.058
+        };
+
+        NumberFormat nfmt = NumberFormat.getInstance();
+
+        for (int i = 0; i < data.length; i++) {
+            try {
+                Number n = nfmt.parse(data[i]);
+                if (expected[i] != n.doubleValue()) {
+                    errln("Failed: Parsed result for " + data[i] + ": " 
+                            + n.doubleValue() + " / expected: " + expected[i]);
+                }
+            } catch (ParseException pe) {
+                errln("Failed: ParseException is thrown for " + data[i]);
+            }
+        }
+    }
+
     void checkNBSPPatternRtNum(String testcase, NumberFormat nf, double myNumber) {
         String myString = nf.format(myNumber);
         
