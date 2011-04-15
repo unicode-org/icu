@@ -1534,7 +1534,11 @@ TestQuickCheckPerCP() {
         }
 #endif
         /* skip some code points */
-        c=(20*c)/19+1;
+        if(QUICK) {
+          c=(20*c)/19+1;
+        } else {
+          c++;
+        }
     }
 }
 

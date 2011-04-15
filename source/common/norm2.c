@@ -419,7 +419,7 @@ static UBool isMostDecompYesAndZeroCC(Normalizer2* _this, uint16_t norm16)  {
         return norm16<_this->minYesNo || norm16==MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
     }
 
-static UBool isDecompYes(Normalizer2* _this,uint16_t norm16)  { return norm16<_this->minYesNo || _this->minMaybeYes<=norm16; }
+static UBool isDecompYes(Normalizer2* _this,uint16_t norm16)  { return (norm16<_this->minYesNo) || (_this->minMaybeYes<=norm16); }
 
 static UNormalizationCheckResult U_CALLCONV Normalizer2_noop_quickCheck(struct Normalizer2* n, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
   return UNORM_YES; 
@@ -2087,15 +2087,27 @@ static UNormalizationCheckResult U_CALLCONV Normalizer2_decomp_quickCheck(struct
 #endif
 
 static UNormalizationCheckResult U_CALLCONV Normalizer2_comp_getQuickCheck(struct Normalizer2* _this, UChar32 c)  {
-  return isDecompYes(_this, getNorm16(c)) ? UNORM_YES : UNORM_NO;
+/* #if defined(UNORM_DEBUG) */
+/*   fprintf(stderr, "c_gQC[U+%04X] -> %04X, isYes %d [minYesNo $%04X, minMaybeYes $%04X]\n", c, getNorm16(c), isDecompYes(_this, getNorm16(c)), _this->minYesNo, _this->minMaybeYes); */
+/* #endif */
+  /*return isDecompYes(_this, getNorm16(c)) ? UNORM_YES : UNORM_NO; */
+  uint16_t norm16 = getNorm16(c);
+  if(norm16<_this->minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
+    return UNORM_YES;
+  } else if(_this->minMaybeYes<=norm16) {
+    return UNORM_MAYBE;
+  } else {
+    return UNORM_NO;
+  }
+
 }
 
 static UNormalizationCheckResult U_CALLCONV Normalizer2_comp_quickCheck(struct Normalizer2* n, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
   UNormalizationCheckResult qcResult=UNORM_YES;
   Normalizer2_comp_composeQuickCheck(n, s, s+length, n->onlyContiguous, &qcResult);
-#if defined(UNORM_DEBUG)
-  fprintf(stderr, "CQC[%04X#%d] -> %d, status %s  (n=%p)\n", s[0], length, qcResult, u_errorName(*pErrorCode), n);
-#endif
+/* #if defined(UNORM_DEBUG) */
+/*   fprintf(stderr, "CQC[%04X#%d] -> %d, status %s  (n=%p)\n", s[0], length, qcResult, u_errorName(*pErrorCode), n); */
+/* #endif */
   return qcResult;
 }
 
@@ -2333,9 +2345,9 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
   }
   if(U_SUCCESS(errorCode)) {
     UNormalizationCheckResult res =  Normalizer2_comp_getQuickCheck(norm2,c);
-#if defined(UNORM_DEBUG)
-    fprintf(stderr, "u_gQC[U+%04X #%d, %d] -> %d\n", c, 1, mode, res);
-#endif
+/* #if defined(UNORM_DEBUG) */
+/*     fprintf(stderr, "u_gQC[U+%04X #%d, %d] -> %d\n", c, 1, mode, res); */
+/* #endif */
     /*return ((const Normalizer2WithImpl *)norm2)->getQuickCheck(c); */
     return res;
   } else {
@@ -2361,9 +2373,9 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_NFKC_QUICK_CHECK:
           {
             UNormalizationCheckResult res = unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK+UNORM_NFD));
-#ifdef UNORM_DEBUG
-            fprintf(stderr, "getIntPropVal(U+%04X,%d) -> %d\n", c,which, res);
-#endif
+/* #ifdef UNORM_DEBUG */
+/*             fprintf(stderr, "getIntPropVal(U+%04X,%d) -> %d\n", c,which, res); */
+/* #endif */
             return (int32_t)res;
           }
         default:
