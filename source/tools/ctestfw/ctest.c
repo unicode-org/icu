@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2009, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -311,11 +311,11 @@ showTests ( const TestNode *root )
     /* make up one for them */
     const TestNode *aList[MAXTESTS];
 
-    if (root == NULL)
-        log_err("TEST CAN'T BE FOUND!");
-
-    iterateTestsWithLevel ( root, 0, aList, SHOWTESTS );
-
+    if (root == NULL) {
+      log_err("Error: no test root!\n");
+    } else {
+      iterateTestsWithLevel ( root, 0, aList, SHOWTESTS );
+    }
 }
 
 void T_CTEST_EXPORT2
@@ -326,8 +326,10 @@ runTests ( const TestNode *root )
     /* make up one for them */
 
 
-    if (root == NULL)
-        log_err("TEST CAN'T BE FOUND!\n");
+    if (root == NULL) {
+        log_err("Error: no test root!\n");
+        return;
+    }
 
     ERRONEOUS_FUNCTION_COUNT = ERROR_COUNT = 0;
     iterateTestsWithLevel ( root, 0, aList, RUNTESTS );
@@ -375,7 +377,7 @@ getTest(const TestNode* root, const char* name)
     int nameLen; /* length of current 'name' */
 
     if (root == NULL) {
-        log_err("TEST CAN'T BE FOUND!\n");
+        log_err("Error: no test root!\n");
         return NULL;
     }
     /* remove leading slash */

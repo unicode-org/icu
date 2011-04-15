@@ -158,7 +158,7 @@ static UNormalizer2 *getSingleton(UNormalizationMode mode, const char *str, UErr
   UMTX_CHECK(NULL,singletons,theSingletons);
   if(theSingletons == NULL) {
     Normalizer2 **list = (Normalizer2**)uprv_malloc(sizeof(Normalizer2*)*UNORM_MODE_COUNT);
-    uprv_memset(list, sizeof(Normalizer2*)*UNORM_MODE_COUNT,0);
+    uprv_memset(list, 0, sizeof(Normalizer2*)*UNORM_MODE_COUNT);
     umtx_lock(NULL);
     if(singletons == NULL) {
       singletons=list;
@@ -1501,6 +1501,12 @@ static void Normalizer2Impl_recompose(Normalizer2 *_this, ReorderingBuffer *buff
     for(;;) {
         UTRIE2_U16_NEXT16(_this->normTrie, p, limit, c, norm16);
         cc=getCCFromYesOrMaybe(norm16);
+#if 0 /* defined(UNORM_DEBUG) */
+        {
+          int norm162 = getNorm16(c);
+          fprintf(stderr,"norm162 is 0x%08X, norm16 is 0x%08X on U+%04X: cc=0x%02X\n", norm162, norm16, c,(int)cc);
+        }
+#endif
         if( /*  this character combines backward and */
             isMaybe(norm16) &&
             /*  we have seen a starter that combines forward and */
@@ -2051,11 +2057,21 @@ static UBool Normalizer2_decomp_isNormalized(struct Normalizer2* n, const UChar 
 }
 #endif
 
-#if 0
-static UBool Normalizer2_comp_isNormalized(struct Normalizer2* n, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
-  return((s+length)==Normalizer2_comp_spanQuickCheckYes(n,s,s+length,pErrorCode));
+static UBool Normalizer2_comp_isNormalized(struct Normalizer2* _this, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
+  /*  return((s+length)==Normalizer2_comp_spanQuickCheckYes(n,s,s+length,pErrorCode)); */
+  ReorderingBuffer buffer;
+  UBool rc = FALSE;
+  ReorderingBuffer_construct(&buffer, _this, NULL, 0);
+  if(ReorderingBuffer_init(&buffer, 5,pErrorCode)){
+    rc =  Normalizer2_comp_compose(_this,s,s+length,_this->onlyContiguous, FALSE, &buffer, pErrorCode);
+  }
+  ReorderingBuffer_close(&buffer);
+  return rc;
 }
-#endif
+
+static UBool Normalizer2_noop_isNormalized(struct Normalizer2* n, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
+  return FALSE;
+}
 
 
 #if UNORM_ENABLE_FCD
@@ -2069,9 +2085,17 @@ static UNormalizationCheckResult U_CALLCONV Normalizer2_decomp_quickCheck(struct
   return Normalizer2_decomp_isNormalized(n, s, length, pErrorCode)?UNORM_YES:UNORM_NO;
 }
 #endif
+
+static UNormalizationCheckResult U_CALLCONV Normalizer2_comp_getQuickCheck(struct Normalizer2* _this, UChar32 c)  {
+  return isDecompYes(_this, getNorm16(c)) ? UNORM_YES : UNORM_NO;
+}
+
 static UNormalizationCheckResult U_CALLCONV Normalizer2_comp_quickCheck(struct Normalizer2* n, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
   UNormalizationCheckResult qcResult=UNORM_YES;
   Normalizer2_comp_composeQuickCheck(n, s, s+length, n->onlyContiguous, &qcResult);
+#if defined(UNORM_DEBUG)
+  fprintf(stderr, "CQC[%04X#%d] -> %d, status %s  (n=%p)\n", s[0], length, qcResult, u_errorName(*pErrorCode), n);
+#endif
   return qcResult;
 }
 
@@ -2092,12 +2116,13 @@ unorm2_get2Instance(const char *packageName,
     *errorCode = U_MEMORY_ALLOCATION_ERROR;
     goto cleanup;
   }
-  uprv_memset(_this,sizeof(Normalizer2),0); /* zero out */
+  uprv_memset(_this,0,sizeof(Normalizer2)); /* zero out */
 
   if(name == NULL) {
     /* no-op */
     _this->quickCheck = Normalizer2_noop_quickCheck;
     _this->normalize  = Normalizer2_noop_normalize;
+    _this->isNormalized  = Normalizer2_noop_isNormalized;
   } else {
     Normalizer2_load(_this, packageName, name, errorCode); 
     
@@ -2127,7 +2152,9 @@ unorm2_get2Instance(const char *packageName,
     case UNORM_NFC:
       {
         _this->quickCheck = Normalizer2_comp_quickCheck;
+        _this->getQuickCheck = Normalizer2_comp_getQuickCheck;
         _this->normalize = Normalizer2_comp_normalize;      
+        _this->isNormalized  = Normalizer2_comp_isNormalized;
 #if defined(UNORM_DEBUG)
         fprintf(stderr, "setting NFC for mode=%s\n", MODENAME(mode));
 #endif
@@ -2137,6 +2164,10 @@ unorm2_get2Instance(const char *packageName,
       {
         _this->quickCheck = Normalizer2_noop_quickCheck;
         _this->normalize = Normalizer2_noop_normalize;
+        _this->isNormalized  = Normalizer2_noop_isNormalized;
+#if defined(UNORM_DEBUG)
+        fprintf(stderr, "setting NOOP for mode=%s\n", MODENAME(mode));
+#endif
       }
       break;
     }
@@ -2248,6 +2279,29 @@ unorm_quickCheck(const UChar *src,
 }
 
 /** Public API for normalizing. */
+
+U_DRAFT UBool U_EXPORT2
+unorm2_isNormalized(const UNormalizer2 *norm2,
+                    const UChar *s, int32_t length,
+                    UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(s==NULL || length<-1) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return ((const Normalizer2 *)norm2)->isNormalized(norm2, s, length, pErrorCode);
+}
+
+U_CAPI UBool U_EXPORT2
+unorm_isNormalized(const UChar *src, int32_t srcLength,
+                   UNormalizationMode mode,
+                   UErrorCode *pErrorCode) {
+  const UNormalizer2 *n2= Normalizer2Factory_getInstance(mode, pErrorCode); 
+    return unorm2_isNormalized((const UNormalizer2 *)n2, src, srcLength, pErrorCode);
+}
+
 U_CAPI int32_t U_EXPORT2
 unorm_normalize(const UChar *src, int32_t srcLength,
                 UNormalizationMode mode, int32_t options,
@@ -2265,6 +2319,90 @@ unorm_normalize(const UChar *src, int32_t srcLength,
 }
 
 
+/* for tests */
 
+#if defined (ICU4C0)
+
+U_CFUNC UNormalizationCheckResult U_EXPORT2
+unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
+  Normalizer2 *norm2;
+  UErrorCode errorCode=U_ZERO_ERROR;
+  norm2 = Normalizer2Factory_getInstance(mode, &errorCode); 
+  if(mode<=UNORM_NONE || UNORM_FCD<=mode) {
+    return UNORM_YES;
+  }
+  if(U_SUCCESS(errorCode)) {
+    UNormalizationCheckResult res =  Normalizer2_comp_getQuickCheck(norm2,c);
+#if defined(UNORM_DEBUG)
+    fprintf(stderr, "u_gQC[U+%04X #%d, %d] -> %d\n", c, 1, mode, res);
+#endif
+    /*return ((const Normalizer2WithImpl *)norm2)->getQuickCheck(c); */
+    return res;
+  } else {
+    return UNORM_MAYBE;
+  }
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyValue(UChar32 c, UProperty which) {
+    /* UErrorCode errorCode; */
+
+    /* if(which<UCHAR_BINARY_START) { */
+    /*     return 0; /\* undefined *\/ */
+    /* } else if(which<UCHAR_BINARY_LIMIT) { */
+    /*   return 0; /\* (int32_t)u_hasBinaryProperty(c, which); *\/ */
+    /* } else if(which<UCHAR_INT_START) { */
+    /*     return 0; /\* undefined *\/ */
+    /* } else if(which<UCHAR_INT_LIMIT) { */
+        switch(which) {
+        case UCHAR_NFD_QUICK_CHECK:
+        case UCHAR_NFKD_QUICK_CHECK:
+        case UCHAR_NFC_QUICK_CHECK:
+        case UCHAR_NFKC_QUICK_CHECK:
+          {
+            UNormalizationCheckResult res = unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK+UNORM_NFD));
+#ifdef UNORM_DEBUG
+            fprintf(stderr, "getIntPropVal(U+%04X,%d) -> %d\n", c,which, res);
+#endif
+            return (int32_t)res;
+          }
+        default:
+            return 0; /* undefined */
+        }
+    /* } else { */
+    /*     return 0; /\* undefined *\/ */
+    /* } */
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyMinValue(UProperty which) {
+    return 0; /* all binary/enum/int properties have a minimum value of 0 */
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyMaxValue(UProperty which) {
+    if(which<UCHAR_BINARY_START) {
+        return -1; /* undefined */
+    } else if(which<UCHAR_BINARY_LIMIT) {
+        return 1; /* maximum TRUE for all binary properties */
+    } else if(which<UCHAR_INT_START) {
+        return -1; /* undefined */
+    } else if(which<UCHAR_INT_LIMIT) {
+        switch(which) {
+        case UCHAR_NFD_QUICK_CHECK:
+        case UCHAR_NFKD_QUICK_CHECK:
+            return (int32_t)UNORM_YES; /* these are never "maybe", only "no" or "yes" */
+        case UCHAR_NFC_QUICK_CHECK:
+        case UCHAR_NFKC_QUICK_CHECK:
+            return (int32_t)UNORM_MAYBE;
+        default:
+            return -1; /* undefined */
+        }
+    } else {
+        return -1; /* undefined */
+    }
+}
+
+#endif
 
 #endif

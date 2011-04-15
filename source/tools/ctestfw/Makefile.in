@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2010, International Business Machines
+#   Copyright (C) 1999-2011≈, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -58,6 +58,7 @@ STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 DEPS = $(OBJECTS:.o=.d)
 
 -include Makefile.local
+include icu4c0.mk
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\

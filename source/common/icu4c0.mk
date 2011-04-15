@@ -24,7 +24,7 @@ COMMON_TRIE_OBJ=utrie2.o uchar.o ucase.o utrie2_builder.o
 COMMON_UTIL_OBJ=putil.o uhash.o ustr_cnv.o ustring.o umutex.o cmemory.o utf_impl.o uinvchar.o ustrfmt.o uenum.o cstring.o ucln_cmn.o uinit.o umath.o icuplug.o uarrsort.o utrace.o utypes.o
 COMMON_UCNV_OBJ=ucnv.o ucnv2022.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_ext.o ucnv_io.o ucnv_lmb.o ucnv_set.o ucnv_u16.o ucnv_u32.o ucnv_u7.o ucnv_u8.o ucnvbocu.o ucnvdisp.o ucnvhz.o ucnvisci.o ucnvlat1.o ucnvmbcs.o ucnvscsu.o
 COMMON_LOC_OBJ=uloc_tag.o locmap.o uloc.o
-COMMON_RES_OBJ=uresbund.o uresdata.o 
+COMMON_RES_OBJ=uresbund.o uresdata.o
 COMMON_STR_OBJ=ustrtrns.o
 COMMON_NRM_OBJ=norm2.o
 COMMON_OBJ=$(COMMON_UCNV_OBJ) $(COMMON_UTIL_OBJ) $(COMMON_DATA_OBJ) $(COMMON_TRIE_OBJ) $(COMMON_LOC_OBJ) $(COMMON_RES_OBJ) $(COMMON_STR_OBJ) $(COMMON_NRM_OBJ)
@@ -41,8 +41,10 @@ ifeq ($(ICU4C0_VERSION),)
 else
 	$(MKINSTALLDIRS) $(NEWLIBDIR)
 	@echo Making ICU for C for $(ICU4C0_VERSION) in $(NEWLIBDIR)
+ifeq ($(ICU4C0_NOCLEAN),)
 	$(MAKE) clean
 	$(MAKE) clean ICU4C0=1
+endif
 	$(MAKE) all ICU4C0=1
 	@echo 
 	@echo ICU for C for $(ICU4C0_VERSION)

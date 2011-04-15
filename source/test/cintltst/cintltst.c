@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -196,6 +196,11 @@ int main(int argc, const char* const argv[])
          *   Subsequently will be used to find / iterate the tests to run */
         root = NULL;
         addAllTests(&root);
+
+        if(root==NULL) {
+          fprintf(stderr,"cintltst: no test root, exitting.\n");
+          return 1;
+        }
 
         /*  Tests acutally run HERE.   TODO:  separate command line option parsing & setting from test execution!! */
         nerrors = runTestRequest(root, argc, argv);

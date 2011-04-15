@@ -297,3 +297,5 @@ icu4c0:	samples/c0test/Makefile $(NEWLIBDIR)/$(C0DATALIB)
 	@make -C common icu4c0
 	@echo testing samples/c0test/c0test ...
 	@make -C samples/c0test check
+	@echo === Making tests ===
+	@make -C tools/ctestfw icu4c0

@@ -908,7 +908,9 @@ uprv_tzname(int n)
 {
     const char *tzid = NULL;
 #ifdef U_WINDOWS
+#ifndef ICU4C0
     tzid = uprv_detectWindowsTimeZone();
+#endif
 
     if (tzid != NULL) {
         return tzid;

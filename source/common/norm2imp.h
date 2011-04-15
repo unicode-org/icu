@@ -27,6 +27,11 @@ typedef struct Normalizer2  {
                                   const UChar *src, int32_t length,
                                   UChar *dest, int32_t capacity,
                                   UErrorCode *pErrorCode);
+  int32_t (U_EXPORT2 *isNormalized) (struct Normalizer2 *n,
+                                  const UChar *src, int32_t length,
+                                  UErrorCode *pErrorCode);
+  UNormalizationCheckResult (U_EXPORT2 *getQuickCheck) (struct Normalizer2 *n,
+                                                        const UChar32 c);
 
   /* from normalizer2impl.h */
   UDataMemory *memory;
@@ -144,7 +149,9 @@ typedef struct {
         HANGUL_LIMIT=HANGUL_BASE+HANGUL_COUNT
     };
 
-#define isHangul(c) (HANGUL_BASE<=c && c<HANGUL_LIMIT)
+
+#define isHangulChar(c) (HANGUL_BASE<=c && c<HANGUL_LIMIT)
+#define isHangul(c) (c==_this->minYesNo)
 
 #define isHangulWithoutJamoTBase(c) (c<HANGUL_COUNT && c%JAMO_T_COUNT==0)
 #define isHangulWithoutJamoT(c) isHangulWithoutJamoTBase(c-HANGUL_BASE)

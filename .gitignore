@@ -1,3 +1,5 @@
+/README_SRL
+/backup.sh
 /bin
 /bin64
 /include
@@ -138,6 +140,7 @@ source/samples/break/release
 source/samples/c0test/*.d
 source/samples/c0test/*.pdb
 source/samples/c0test/Makefile
+source/samples/c0test/Makefile.local
 source/samples/c0test/c0test
 source/samples/c0test/c0test.exe
 source/samples/cal/*.d
@@ -302,8 +305,10 @@ source/test/Makefile
 source/test/cintltst/*.d
 source/test/cintltst/*.o
 source/test/cintltst/*.plg
+source/test/cintltst/.gdbinit
 source/test/cintltst/Debug
 source/test/cintltst/Makefile
+source/test/cintltst/Makefile.local
 source/test/cintltst/Release
 source/test/cintltst/cintltst
 source/test/cintltst/cintltst.exe
@@ -463,6 +468,7 @@ source/tools/ctestfw/Makefile
 source/tools/ctestfw/Release
 source/tools/ctestfw/ctestfw.vcproj.*.*.user
 source/tools/ctestfw/debug
+source/tools/ctestfw/icu4c0.local
 source/tools/ctestfw/libicutest*
 source/tools/ctestfw/libsicutest*
 source/tools/ctestfw/release

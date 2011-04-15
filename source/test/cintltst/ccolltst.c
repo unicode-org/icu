@@ -16,7 +16,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION || defined(ICU4C0)
 
 #include "cintltst.h"
 #include "ccolltst.h"
@@ -28,9 +28,12 @@ void addCollTest(TestNode** root);
 
 void addCollTest(TestNode** root)
 {
+#ifndef ICU4C0
     addCollAPITest(root);
     addCurrencyCollTest(root);
+#endif
     addNormTest(root);
+#ifndef ICU4C0
     addGermanCollTest(root);
     addSpanishCollTest(root);
     addFrenchCollTest(root);
@@ -47,9 +50,12 @@ void addCollTest(TestNode** root)
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO
     addSearchTest(root);
 #endif
+#endif
 }
 
 
+
+#ifndef ICU4C0
 
 /*Internal functions used*/
 static char* dumpSk(uint8_t *sourceKey, char *sk) {
@@ -125,5 +131,7 @@ void reportCResult( const UChar source[], const UChar target[],
         log_verbose("SortKey2: %s\n", dumpSk(targetKey, sk));
     }
 }
+
+#endif
 
 #endif /* #if !UCONFIG_NO_COLLATION */

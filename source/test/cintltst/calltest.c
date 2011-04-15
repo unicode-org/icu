@@ -42,7 +42,10 @@ void addUSpoofTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
+#ifndef ICU4C0
     addCnvSelTest(root);
+#endif
+#ifndef ICU4C0
     addUDataTest(root);
     addHeapMutexTest(root);
     addUTF16Test(root);
@@ -69,9 +72,11 @@ void addAllTests(TestNode** root)
 #if !UCONFIG_NO_FORMATTING
     addFormatTest(root);
 #endif
-#if !UCONFIG_NO_COLLATION
+#endif
+#if !UCONFIG_NO_COLLATION || defined(ICU4C0)
     addCollTest(root);
 #endif
+#ifndef ICU4C0
 #if !UCONFIG_NO_TRANSLITERATION
     addUTransTest(root);
 #endif
@@ -79,5 +84,6 @@ void addAllTests(TestNode** root)
     addUSpoofTest(root);
 #endif
     addPUtilTest(root);
+#endif
 }
 
