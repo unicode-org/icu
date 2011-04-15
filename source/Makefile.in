@@ -295,7 +295,11 @@ icu4c0:	samples/c0test/Makefile $(NEWLIBDIR)/$(C0DATALIB)
 	@$(MKINSTALLDIRS) $(NEWLIBDIR)
 	@make -C stubdata
 	@make -C common icu4c0
+	@echo === Building tests ===
+	@make -C tools/ctestfw icu4c0
+	@make -C test/cintltst icu4c0 
+	@echo === Running tests ===
 	@echo testing samples/c0test/c0test ...
 	@make -C samples/c0test check
-	@echo === Making tests ===
-	@make -C tools/ctestfw icu4c0
+	@make -C test/cintltst ICU4C0=1 check
+
