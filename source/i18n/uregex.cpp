@@ -1841,7 +1841,11 @@ int32_t RegexCImpl::split(RegularExpression     *regexp,
                 // Set up to extract the capture group contents into the dest buffer.
                 destFields[i] = &destBuf[destIdx];
                 tStatus = U_ZERO_ERROR;
-                int32_t t = uregex_group((URegularExpression*)regexp, groupNum, destFields[i], REMAINING_CAPACITY(destIdx, destCapacity), &tStatus);
+                int32_t t = uregex_group((URegularExpression*)regexp, 
+                                         groupNum, 
+                                         destFields[i], 
+                                         REMAINING_CAPACITY(destIdx, destCapacity), 
+                                         &tStatus);
                 destIdx += t + 1;    // Record the space used in the output string buffer.
                                      //  +1 for the NUL that terminates the string.
                 if (tStatus == U_BUFFER_OVERFLOW_ERROR) {
@@ -1852,7 +1856,18 @@ int32_t RegexCImpl::split(RegularExpression     *regexp,
             }
 
             if (nextOutputStringStart == inputLen) {
-                // The delimiter was at the end of the string.  We're done.
+                // The delimiter was at the end of the string. 
+                // Output an empty string, and then we are done.
+                if (destIdx < destCapacity) {
+                    destBuf[destIdx] = 0;
+                }
+                if (i < destFieldsCapacity-1) {
+                   ++i;
+                }
+                if (destIdx < destCapacity) {
+                    destFields[i] = destBuf + destIdx;
+                }
+                ++destIdx;
                 break;
             }
 

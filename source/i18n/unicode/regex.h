@@ -397,7 +397,7 @@ public:
 
 private:
     /**
-     * Cause a compilation error if an application accidently attempts to
+     * Cause a compilation error if an application accidentally attempts to
      *   create a matcher with a (UChar *) string as input rather than
      *   a UnicodeString.  Avoids a dangling reference to a temporary string.
      * <p>
@@ -430,7 +430,7 @@ public:
 
    /**
     * Test whether a string matches a regular expression.  This convenience function
-    * both compiles the reguluar expression and applies it in a single operation.
+    * both compiles the regular expression and applies it in a single operation.
     * Note that if the same pattern needs to be applied repeatedly, this method will be
     * less efficient than creating and reusing a RegexMatcher object.
     *
@@ -450,7 +450,7 @@ public:
 
    /**
     * Test whether a string matches a regular expression.  This convenience function
-    * both compiles the reguluar expression and applies it in a single operation.
+    * both compiles the regular expression and applies it in a single operation.
     * Note that if the same pattern needs to be applied repeatedly, this method will be
     * less efficient than creating and reusing a RegexMatcher object.
     *
@@ -493,13 +493,26 @@ public:
 
 
     /**
-     * Split a string into fields.  Somewhat like split() from Perl.
-     * The pattern matches identify delimiters that separate the input
-     *  into fields.  The input data between the matches becomes the
-     *  fields themselves.
-     * <p>
-     *  For the best performance on split() operations,
-     *  <code>RegexMatcher::split</code> is perferable to this function
+     * Split a string into fields.  Somewhat like split() from Perl or Java.
+     * Pattern matches identify delimiters that separate the input
+     * into fields.  The input data between the delimiters becomes the
+     * fields themselves.
+     *
+     * If the delimiter pattern includes capture groups, the captured text will
+     * also appear in the destination array of output strings, interspersed
+     * with the fields.  This is similar to Perl, but differs from Java, 
+     * which ignores the presence of capture groups in the pattern.
+     * 
+     * Trailing empty fields will always be returned, assuming sufficient
+     * destination capacity.  This differs from the default behavior for Java
+     * and Perl where trailing empty fields are not returned.
+     *
+     * The number of strings produced by the split operation is returned.
+     * This count includes the strings from capture groups in the delimiter pattern.
+     * This behavior differs from Java, which ignores capture groups.
+     *
+     * For the best performance on split() operations,
+     * <code>RegexMatcher::split</code> is preferable to this function
      *
      * @param input   The string to be split into fields.  The field delimiters
      *                match the pattern (in the "this" object)
@@ -524,13 +537,26 @@ public:
 
 
     /**
-     * Split a string into fields.  Somewhat like split() from Perl.
-     * The pattern matches identify delimiters that separate the input
-     *  into fields.  The input data between the matches becomes the
-     *  fields themselves.
-     * <p>
+     * Split a string into fields.  Somewhat like split() from Perl or Java.
+     * Pattern matches identify delimiters that separate the input
+     * into fields.  The input data between the delimiters becomes the
+     * fields themselves.
+     *
+     * If the delimiter pattern includes capture groups, the captured text will
+     * also appear in the destination array of output strings, interspersed
+     * with the fields.  This is similar to Perl, but differs from Java, 
+     * which ignores the presence of capture groups in the pattern.
+     * 
+     * Trailing empty fields will always be returned, assuming sufficient
+     * destination capacity.  This differs from the default behavior for Java
+     * and Perl where trailing empty fields are not returned.
+     *
+     * The number of strings produced by the split operation is returned.
+     * This count includes the strings from capture groups in the delimiter pattern.
+     * This behavior differs from Java, which ignores capture groups.
+     *
      *  For the best performance on split() operations,
-     *  <code>RegexMatcher::split</code> is perferable to this function
+     *  <code>RegexMatcher::split</code> is preferable to this function
      *
      * @param input   The string to be split into fields.  The field delimiters
      *                match the pattern (in the "this" object)
@@ -544,7 +570,7 @@ public:
      *                of fields, the trailing part of the input string, including any
      *                field delimiters, is placed in the last destination string.
      * @param status  A reference to a UErrorCode to receive any errors.
-     * @return        The number of fields into which the input string was split.
+     * @return        The number of destination strings used.  
      *
      * @draft ICU 4.6
      */
@@ -637,7 +663,7 @@ private:
 
 
 /**
- *  class RegexMatcher bundles together a reular expression pattern and
+ *  class RegexMatcher bundles together a regular expression pattern and
  *  input text to which the expression can be applied.  It includes methods
  *  for testing for matches, and for find and replace operations.
  *
@@ -731,7 +757,7 @@ public:
 
 private:
     /**
-     * Cause a compilation error if an application accidently attempts to
+     * Cause a compilation error if an application accidentally attempts to
      *   create a matcher with a (UChar *) string as input rather than
      *   a UnicodeString.    Avoids a dangling reference to a temporary string.
      * <p>
@@ -956,7 +982,7 @@ public:
     *    @return the index of the last character matched, plus one.
     *                        The index value returned is a native index, corresponding to
     *                        code units for the underlying encoding type, for example,
-    *                        a byte index for UTF8.
+    *                        a byte index for UTF-8.
     *   @stable ICU 2.4
     */
     virtual int32_t end(UErrorCode &status) const;
@@ -976,7 +1002,7 @@ public:
     *                        attempted or the last match failed and
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number
     *    @return  the index of the first character following the text
-    *              captured by the specifed group during the previous match operation.
+    *              captured by the specified group during the previous match operation.
     *              Return -1 if the capture group exists in the pattern but was not part of the match.
     *              The index value returned is a native index, corresponding to
     *              code units for the underlying encoding type, for example,
@@ -1084,7 +1110,7 @@ public:
 
 private:
     /**
-     * Cause a compilation error if an application accidently attempts to
+     * Cause a compilation error if an application accidentally attempts to
      *   reset a matcher with a (UChar *) string as input rather than
      *   a UnicodeString.    Avoids a dangling reference to a temporary string.
      * <p>
@@ -1225,7 +1251,7 @@ public:
      
     /**
       * Return true if this matcher is using anchoring bounds.
-      * By default, matchers use anchoring region boounds.
+      * By default, matchers use anchoring region bounds.
       *
       * @return TRUE if this matcher is using anchoring bounds.
       * @stable ICU 4.0
@@ -1553,7 +1579,7 @@ public:
     virtual int32_t getTimeLimit() const;
 
   /**
-    *  Set the amount of heap storage avaliable for use by the match backtracking stack.
+    *  Set the amount of heap storage available for use by the match backtracking stack.
     *  The matcher is also reset, discarding any results from previous matches.
     *  <p>
     *  ICU uses a backtracking regular expression engine, with the backtrack stack
@@ -1606,7 +1632,7 @@ public:
   /**
     *  Get the callback function for this URegularExpression.
     *
-    *    @param   callback    Out paramater, receives a pointer to the user-supplied 
+    *    @param   callback    Out parameter, receives a pointer to the user-supplied 
     *                         callback function.
     *    @param   context     Out parameter, receives the user context pointer that
     *                         was set when uregex_setMatchCallback() was called.
@@ -1639,7 +1665,7 @@ public:
   /**
     *  Get the find progress callback function for this URegularExpression.
     *
-    *    @param   callback    Out paramater, receives a pointer to the user-supplied 
+    *    @param   callback    Out parameter, receives a pointer to the user-supplied 
     *                         callback function.
     *    @param   context     Out parameter, receives the user context pointer that
     *                         was set when uregex_setFindProgressCallback() was called.
