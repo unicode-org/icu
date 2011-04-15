@@ -33,7 +33,7 @@
 
 struct URegularExpression;
 /**
-  * Structure representing a compiled regular rexpression, plus the results
+  * Structure representing a compiled regular expression, plus the results
   *    of a match operation.
   * @stable ICU 3.0
   */
@@ -99,7 +99,7 @@ typedef enum URegexpFlag{
 
      /**  Error on Unrecognized backslash escapes.
        *     If set, fail with an error on patterns that contain
-       *     backslash-escaped ASCII letters without a known specail
+       *     backslash-escaped ASCII letters without a known special
        *     meaning.  If this flag is not set, these
        *     escaped letters represent themselves.
        *     @stable ICU 4.0
@@ -117,13 +117,13 @@ typedef enum URegexpFlag{
   *
   * @param pattern        The Regular Expression pattern to be compiled. 
   * @param patternLength  The length of the pattern, or -1 if the pattern is
-  *                       NUL termintated.
+  *                       NUL terminated.
   * @param flags          Flags that alter the default matching behavior for
   *                       the regular expression, UREGEX_CASE_INSENSITIVE, for
   *                       example.  For default behavior, set this parameter to zero.
   *                       See <code>enum URegexpFlag</code>.  All desired flags
   *                       are bitwise-ORed together.
-  * @param pe             Receives the position (line and column nubers) of any syntax
+  * @param pe             Receives the position (line and column numbers) of any syntax
   *                       error within the source regular expression string.  If this
   *                       information is not wanted, pass NULL for this parameter.
   * @param status         Receives error detected by this function.
@@ -153,7 +153,7 @@ uregex_open( const  UChar          *pattern,
   *                       example.  For default behavior, set this parameter to zero.
   *                       See <code>enum URegexpFlag</code>.  All desired flags
   *                       are bitwise-ORed together.
-  * @param pe             Receives the position (line and column nubers) of any syntax
+  * @param pe             Receives the position (line and column numbers) of any syntax
   *                       error within the source regular expression string.  If this
   *                       information is not wanted, pass NULL for this parameter.
   * @param status         Receives error detected by this function.
@@ -174,13 +174,13 @@ uregex_openUText(UText          *pattern,
   *   is supplied as an 8 bit char * string in the default code page.
   *
   * @param pattern        The Regular Expression pattern to be compiled, 
-  *                       NUL termintated.  
+  *                       NUL terminated.  
   * @param flags          Flags that alter the default matching behavior for
   *                       the regular expression, UREGEX_CASE_INSENSITIVE, for
   *                       example.  For default behavior, set this parameter to zero.
   *                       See <code>enum URegexpFlag</code>.  All desired flags
   *                       are bitwise-ORed together.
-  * @param pe             Receives the position (line and column nubers) of any syntax
+  * @param pe             Receives the position (line and column numbers) of any syntax
   *                       error within the source regular expression string.  If this
   *                       information is not wanted, pass NULL for this parameter.
   * @param status         Receives errors detected by this function.
@@ -234,7 +234,7 @@ U_NAMESPACE_END
  * form of the expression, and requires less memory.
  * <p>
  * Note that the current input string and the position of any matched text
- *  within it are not cloned; only the pattern itself and and the
+ *  within it are not cloned; only the pattern itself and the
  *  match mode flags are copied.
  * <p>
  * Cloning can be particularly useful to threaded applications that perform
@@ -927,7 +927,7 @@ uregex_requireEnd(const  URegularExpression   *regexp,
   *    @param   replacementLength  The length of the replacement string, or
   *                                -1 if it is NUL terminated.
   *    @param   destBuf            A (UChar *) buffer that will receive the result.
-  *    @param   destCapacity       The capacity of the desitnation buffer.
+  *    @param   destCapacity       The capacity of the destination buffer.
   *    @param   status             A reference to a UErrorCode to receive any errors.
   *    @return                     The length of the string resulting from the find
   *                                and replace operation.  In the event that the
@@ -986,7 +986,7 @@ uregex_replaceAllUText(URegularExpression *regexp,
   *    @param   replacementLength  The length of the replacement string, or
   *                                -1 if it is NUL terminated.
   *    @param   destBuf            A (UChar *) buffer that will receive the result.
-  *    @param   destCapacity       The capacity of the desitnation buffer.
+  *    @param   destCapacity       The capacity of the destination buffer.
   *    @param   status             a reference to a UErrorCode to receive any errors.
   *    @return                     The length of the string resulting from the find
   *                                and replace operation.  In the event that the
@@ -1172,26 +1172,23 @@ uregex_appendTailUText(URegularExpression    *regexp,
    *  The pattern matches identify delimiters that separate the input
    *  into fields.  The input data between the matches becomes the
    *  fields themselves.
-   * <p>
+   *
    *  Each of the fields is copied from the input string to the destination
    *  buffer, and NUL terminated.  The position of each field within
    *  the destination buffer is returned in the destFields array.
    *
-   *  Note:  another choice for the design of this function would be to not
-   *         copy the resulting fields at all, but to return indexes and
-   *         lengths within the source text.  
-   *           Advantages would be
-   *             o  Faster.  No Copying.
-   *             o  Nothing extra needed when field data may contain embedded NUL chars.
-   *             o  Less memory needed if working on large data.
-   *           Disadvantages
-   *             o  Less consistent with C++ split, which copies into an
-   *                array of UnicodeStrings.
-   *             o  No NUL termination, extracted fields would be less convenient
-   *                to use in most cases.
-   *             o  Possible problems in the future, when support Unicode Normalization
-   *                could cause the fields to not correspond exactly to
-   *                a range of the source text.
+   *  If the delimiter pattern includes capture groups, the captured text will
+   *  also appear in the destination array of output strings, interspersed
+   *  with the fields.  This is similar to Perl, but differs from Java, 
+   *  which ignores the presence of capture groups in the pattern.
+   * 
+   *  Trailing empty fields will always be returned, assuming sufficient
+   *  destination capacity.  This differs from the default behavior for Java
+   *  and Perl where trailing empty fields are not returned.
+   *
+   *  The number of strings produced by the split operation is returned.
+   *  This count includes the strings from capture groups in the delimiter pattern.
+   *  This behavior differs from Java, which ignores capture groups.
    * 
    *    @param   regexp      The compiled regular expression.
    *    @param   destBuf     A (UChar *) buffer to receive the fields that
@@ -1307,7 +1304,7 @@ uregex_getTimeLimit(const URegularExpression      *regexp,
                           UErrorCode              *status);
 
 /**
- * Set the amount of heap storage avaliable for use by the match backtracking stack.
+ * Set the amount of heap storage available for use by the match backtracking stack.
  * <p>
  * ICU uses a backtracking regular expression engine, with the backtrack stack
  * maintained on the heap.  This function sets the limit to the amount of memory
@@ -1392,7 +1389,7 @@ uregex_setMatchCallback(URegularExpression      *regexp,
  *  Get the callback function for this URegularExpression.
  *
  * @param   regexp      The compiled regular expression.
- * @param   callback    Out paramater, receives a pointer to the user-supplied 
+ * @param   callback    Out parameter, receives a pointer to the user-supplied 
  *                      callback function.
  * @param   context     Out parameter, receives the user context pointer that
  *                      was set when uregex_setMatchCallback() was called.
@@ -1464,7 +1461,7 @@ uregex_setFindProgressCallback(URegularExpression              *regexp,
  *  Get the find progress callback function for this URegularExpression.
  *
  * @param   regexp      The compiled regular expression.
- * @param   callback    Out paramater, receives a pointer to the user-supplied 
+ * @param   callback    Out parameter, receives a pointer to the user-supplied 
  *                      callback function.
  * @param   context     Out parameter, receives the user context pointer that
  *                      was set when uregex_setFindProgressCallback() was called.

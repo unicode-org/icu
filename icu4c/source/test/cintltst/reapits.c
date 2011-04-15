@@ -1225,15 +1225,16 @@ static void TestRegexCAPI(void) {
 
             /* The TEST_ASSERT_SUCCESS call above should change too... */
             if(U_SUCCESS(status)) {
-                TEST_ASSERT(numFields == 4);
+                TEST_ASSERT(numFields == 5);
                 TEST_ASSERT_STRING("first ",  fields[0], TRUE);
                 TEST_ASSERT_STRING("tag-a",   fields[1], TRUE);
                 TEST_ASSERT_STRING(" second", fields[2], TRUE);
                 TEST_ASSERT_STRING("tag-b",   fields[3], TRUE);
-                TEST_ASSERT(fields[4] == NULL);
+                TEST_ASSERT_STRING("",        fields[4], TRUE);
+                TEST_ASSERT(fields[5] == NULL);
                 TEST_ASSERT(fields[8] == NULL);
                 TEST_ASSERT(!memcmp(&fields[9],&minus1,sizeof(UChar*)));
-                spaceNeeded = strlen("first .tag-a. second.tag-b.");  /* "." at NUL positions */
+                spaceNeeded = strlen("first .tag-a. second.tag-b..");  /* "." at NUL positions */
                 TEST_ASSERT(spaceNeeded == requiredCapacity);
             }
         }
@@ -2134,13 +2135,15 @@ static void TestUTextAPI(void) {
                 const char str_taga[] = { 0x74, 0x61, 0x67, 0x2d, 0x61, 0x00 }; /* tag-a */
                 const char str_second[] = { 0x20, 0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x00 }; /*  second */
                 const char str_tagb[] = { 0x74, 0x61, 0x67, 0x2d, 0x62, 0x00 }; /* tag-b */
+                const char str_empty[] = { 0x00 };
 
-                TEST_ASSERT(numFields == 4);
+                TEST_ASSERT(numFields == 5);
                 TEST_ASSERT_UTEXT(str_first,  fields[0]);
                 TEST_ASSERT_UTEXT(str_taga,   fields[1]);
                 TEST_ASSERT_UTEXT(str_second, fields[2]);
                 TEST_ASSERT_UTEXT(str_tagb,   fields[3]);
-                TEST_ASSERT(fields[4] == NULL);
+                TEST_ASSERT_UTEXT(str_empty,  fields[4]);
+                TEST_ASSERT(fields[5] == NULL);
                 TEST_ASSERT(fields[8] == NULL);
                 TEST_ASSERT(fields[9] == &patternText);
             }

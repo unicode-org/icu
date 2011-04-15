@@ -2170,27 +2170,33 @@ int32_t  RegexMatcher::split(UText *input,
             // If the delimiter pattern has capturing parentheses, the captured
             //  text goes out into the next n destination strings.
             int32_t groupNum;
-            UBool lastGroupWasNullUText = FALSE;
             for (groupNum=1; groupNum<=numCaptureGroups; groupNum++) {
-                if (i==destCapacity-1) {
+                if (i >= destCapacity-2) {
+                    // Never fill the last available output string with capture group text.
+                    // It will filled with the last field, the remainder of the
+                    //  unsplit input text.
                     break;
                 }
                 i++;
-                lastGroupWasNullUText = (dest[i] == NULL ? TRUE : FALSE);
                 dest[i] = group(groupNum, dest[i], status);
             }
 
             if (nextOutputStringStart == fActiveLimit) {
-                // The delimiter was at the end of the string.  We're done.
-                break;
-            } else if (i == destCapacity-1) {
-                // We're out of capture groups, and the rest of the string is more important
-                if (lastGroupWasNullUText) {
-                    utext_close(dest[i]);
-                    dest[i] = NULL;
+                // The delimiter was at the end of the string.  We're done, but first
+                // we output one last empty string, for the empty field following
+                //   the delimiter at the end of input.
+                if (i+1 < destCapacity) {
+                    ++i;
+                    if (dest[i] == NULL) {
+                        dest[i] = utext_openUChars(NULL, NULL, 0, &status);
+                    } else {
+                        static UChar emptyString[] = {(UChar)0};
+                        utext_replace(dest[i], 0, utext_nativeLength(dest[i]), emptyString, 0, &status);
+                    }
                 }
-            }
-
+                break;
+            
+            } 
         }
         else
         {
