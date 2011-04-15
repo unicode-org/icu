@@ -19,10 +19,12 @@ source/common/*.o
 source/common/*.plg
 source/common/Debug
 source/common/Makefile
+source/common/Makefile.local
 source/common/Release
 source/common/common.res
 source/common/common.vcproj.*.*.user
 source/common/debug
+source/common/icu4c0.local
 source/common/icucfg.h
 source/common/libicu*.*
 source/common/release
