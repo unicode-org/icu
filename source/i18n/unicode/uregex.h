@@ -452,6 +452,23 @@ uregex_matches(URegularExpression *regexp,
 
 /**
   *   64bit version of uregex_matches.
+  *   Attempts to match the input string against the pattern.
+  *   To succeed, the match must extend to the end of the string,
+  *   or cover the complete match region.
+  *
+  *   If startIndex >= zero the match operation starts at the specified
+  *   index and must extend to the end of the input string.  Any region
+  *   that has been specified is reset.
+  *
+  *   If startIndex == -1 the match must cover the input region, or the entire
+  *   input string if no region has been set.  This directly corresponds to
+  *   Matcher.matches() in Java
+  *
+  *    @param  regexp      The compiled regular expression.
+  *    @param  startIndex  The input string (native) index at which to begin matching, or -1
+  *                        to match the input Region.
+  *    @param  status      Receives errors detected by this function.
+  *    @return             TRUE if there is a match
   *   @draft ICU 4.6
   */
 U_DRAFT UBool U_EXPORT2 
@@ -489,7 +506,27 @@ uregex_lookingAt(URegularExpression *regexp,
 
 /**
   *   64bit version of uregex_lookingAt.
-  *   @draft ICU 4.6
+  *   Attempts to match the input string, starting from the specified index, against the pattern.
+  *   The match may be of any length, and is not required to extend to the end
+  *   of the input string.  Contrast with uregex_matches().
+  *
+  *   <p>If startIndex is >= 0 any input region that was set for this
+  *   URegularExpression is reset before the operation begins.
+  *
+  *   <p>If the specified starting index == -1 the match begins at the start of the input 
+  *   region, or at the start of the full string if no region has been specified.
+  *   This corresponds directly with Matcher.lookingAt() in Java.
+  *
+  *   <p>If the match succeeds then more information can be obtained via the
+  *    <code>uregexp_start()</code>, <code>uregexp_end()</code>,
+  *    and <code>uregexp_group()</code> functions.</p>
+  *
+  *    @param   regexp      The compiled regular expression.
+  *    @param   startIndex  The input string (native) index at which to begin matching, or
+  *                         -1 to match the Input Region
+  *    @param   status      A reference to a UErrorCode to receive any errors.
+  *    @return  TRUE if there is a match.
+  *    @draft ICU 4.6
   */
 U_DRAFT UBool U_EXPORT2 
 uregex_lookingAt64(URegularExpression *regexp,
@@ -522,6 +559,22 @@ uregex_find(URegularExpression *regexp,
 
 /**
   *   64bit version of uregex_find.
+  *   Find the first matching substring of the input string that matches the pattern.
+  *   If startIndex is >= zero the search for a match begins at the specified index,
+  *          and any match region is reset.  This corresponds directly with
+  *          Matcher.find(startIndex) in Java.
+  *
+  *   If startIndex == -1 the search begins at the start of the input region,
+  *           or at the start of the full string if no region has been specified.
+  *
+  *   If a match is found, <code>uregex_start(), uregex_end()</code>, and
+  *   <code>uregex_group()</code> will provide more information regarding the match.
+  *
+  *   @param   regexp      The compiled regular expression.
+  *   @param   startIndex  The position (native) in the input string to begin the search, or
+  *                        -1 to search within the Input Region.
+  *   @param   status      A reference to a UErrorCode to receive any errors.
+  *   @return              TRUE if a match is found.
   *   @draft ICU 4.6
   */
 U_DRAFT UBool U_EXPORT2 
@@ -655,6 +708,17 @@ uregex_start(URegularExpression *regexp,
 
 /**
   *   64bit version of uregex_start.
+  *   Returns the index in the input string of the start of the text matched by the
+  *   specified capture group during the previous match operation.  Return -1 if
+  *   the capture group was not part of the last match.
+  *   Group #0 refers to the complete range of matched text.
+  *   Group #1 refers to the text matched by the first set of capturing parentheses.
+  *
+  *    @param   regexp      The compiled regular expression.
+  *    @param   groupNum    The capture group number
+  *    @param   status      A reference to a UErrorCode to receive any errors.
+  *    @return              the starting (native) position in the input of the text matched 
+  *                         by the specified group.
   *   @draft ICU 4.6
   */
 U_DRAFT int64_t U_EXPORT2 
@@ -682,6 +746,16 @@ uregex_end(URegularExpression   *regexp,
 
 /**
   *   64bit version of uregex_end.
+  *   Returns the index in the input string of the position following the end
+  *   of the text matched by the specified capture group.
+  *   Return -1 if the capture group was not part of the last match.
+  *   Group #0 refers to the complete range of matched text.
+  *   Group #1 refers to the text matched by the first set of capturing parentheses.
+  *
+  *    @param   regexp      The compiled regular expression.
+  *    @param   groupNum    The capture group number
+  *    @param   status      A reference to a UErrorCode to receive any errors.
+  *    @return              the (native) index of the position following the last matched character.
   *   @draft ICU 4.6
   */
 U_DRAFT int64_t U_EXPORT2 
@@ -708,15 +782,26 @@ uregex_reset(URegularExpression    *regexp,
              UErrorCode            *status);
              
 /**
-  *   64bit version of uregex_reset.
-  *   @draft ICU 4.6
+  *  64bit version of uregex_reset.
+  *  Reset any saved state from the previous match.  Has the effect of
+  *  causing uregex_findNext to begin at the specified index, and causing
+  *  uregex_start(), uregex_end() and uregex_group() to return an error 
+  *  indicating that there is no match information available.  Clears any
+  *  match region that may have been set.
+  *
+  *    @param   regexp      The compiled regular expression.
+  *    @param   index       The position (native) in the text at which a
+  *                         uregex_findNext() should begin searching.
+  *    @param   status      A reference to a UErrorCode to receive any errors.
+  *    @draft ICU 4.6
   */
 U_DRAFT void U_EXPORT2 
 uregex_reset64(URegularExpression  *regexp,
                int64_t               index,
                UErrorCode            *status);
 
-/** Sets the limits of the matching region for this URegularExpression.
+/**
+  * Sets the limits of the matching region for this URegularExpression.
   * The region is the part of the input string that will be considered when matching.
   * Invoking this method resets any saved state from the previous match, 
   * then sets the region to start at the index specified by the start parameter
@@ -742,8 +827,25 @@ uregex_setRegion(URegularExpression   *regexp,
                  UErrorCode           *status);
 
 /**
-  *   64bit version of uregex_setRegion.
-  *   @draft ICU 4.6
+  * 64bit version of uregex_setRegion.
+  * Sets the limits of the matching region for this URegularExpression.
+  * The region is the part of the input string that will be considered when matching.
+  * Invoking this method resets any saved state from the previous match, 
+  * then sets the region to start at the index specified by the start parameter
+  * and end at the index specified by the end parameter.
+  *
+  * Depending on the transparency and anchoring being used (see useTransparentBounds
+  * and useAnchoringBounds), certain constructs such as anchors may behave differently
+  * at or around the boundaries of the region
+  *
+  * The function will fail if start is greater than limit, or if either index
+  *  is less than zero or greater than the length of the string being matched.
+  *
+  * @param regexp The compiled regular expression.
+  * @param regionStart  The (native) index to begin searches at.
+  * @param regionLimit  The (native) index to end searches at (exclusive).
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @draft ICU 4.6
   */
 U_DRAFT void U_EXPORT2 
 uregex_setRegion64(URegularExpression *regexp,
@@ -752,9 +854,18 @@ uregex_setRegion64(URegularExpression *regexp,
                  UErrorCode           *status);
 
 /**
-  *   Variation on uregex_setRegion to set the region without resetting the start index
-  *     without resetting the position for subsequent matches.
-  *   @draft ICU 4.6
+  *  Set the matching region and the starting index for subsequent matches
+  *  in a single operation.
+  *  This is useful because the usual function for setting the starting
+  *  index, urgex_reset(), also resets any region limits.
+  *
+  * @param regexp The compiled regular expression.
+  * @param regionStart  The (native) index to begin searches at.
+  * @param regionLimit  The (native) index to end searches at (exclusive).
+  * @param startIndex   The index in the input text at which the next 
+  *                     match operation should begin.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @draft ICU 4.6
   */
 U_DRAFT void U_EXPORT2 
 uregex_setRegionAndStart(URegularExpression *regexp,
@@ -777,8 +888,14 @@ uregex_regionStart(const  URegularExpression   *regexp,
                           UErrorCode           *status);
 
 /**
-  *   64bit version of uregex_regionStart.
-  *   @draft ICU 4.6
+  * 64bit version of uregex_regionStart.
+  * Reports the start index of the matching region. Any matches found are limited to
+  * to the region bounded by regionStart (inclusive) and regionEnd (exclusive).
+  *
+  * @param regexp The compiled regular expression.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @return The starting (native) index of this matcher's region.
+  * @draft ICU 4.6
   */
 U_DRAFT int64_t U_EXPORT2 
 uregex_regionStart64(const  URegularExpression   *regexp,
@@ -799,8 +916,15 @@ uregex_regionEnd(const  URegularExpression   *regexp,
                         UErrorCode           *status);
 
 /**
-  *   64bit version of uregex_regionEnd.
-  *   @draft ICU 4.6
+  * 64bit version of uregex_regionEnd.
+  * Reports the end index (exclusive) of the matching region for this URegularExpression.
+  * Any matches found are limited to to the region bounded by regionStart (inclusive)
+  * and regionEnd (exclusive).
+  *
+  * @param regexp The compiled regular expression.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @return The ending point (native) of this matcher's region.
+  * @draft ICU 4.6
   */
 U_DRAFT int64_t U_EXPORT2 
 uregex_regionEnd64(const  URegularExpression   *regexp,
