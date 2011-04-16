@@ -901,8 +901,8 @@ public:
    /**
     *   Returns a shallow clone of the entire live input string with the UText current native index
     *   set to the beginning of the requested group.
-    *   Note that copying the entire input string may cause significant performance and memory issues.
-    *   @param   dest        The UText into which the input should be copied, or NULL to create a new UText
+    *
+    *   @param   dest        The UText into which the input should be cloned, or NULL to create a new UText
     *   @param   group_len   A reference to receive the length of the desired capture group
     *   @param   status      A reference to a UErrorCode to receive any errors.
     *                        Possible errors are  U_REGEX_INVALID_STATE if no match
@@ -915,7 +915,19 @@ public:
     virtual UText *group(UText *dest, int64_t &group_len, UErrorCode &status) const; 
 
    /**
-    * @draft ICU 4.6
+    *   Returns a shallow clone of the entire live input string with the UText current native index
+    *   set to the beginning of the requested group.
+    *
+    *   @param   group_Num   The capture group number.
+    *   @param   dest        The UText into which the input should be cloned, or NULL to create a new UText.
+    *   @param   group_len   A reference to receive the length of the desired capture group
+    *   @param   status      A reference to a UErrorCode to receive any errors.
+    *                        Possible errors are  U_REGEX_INVALID_STATE if no match
+    *                        has been attempted or the last match failed and
+    *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number.
+    *   @return dest if non-NULL, a shallow copy of the input text otherwise
+    *
+    *   @draft ICU 4.6
     */
     virtual UText *group(int32_t groupNum, UText *dest, int64_t &group_len, UErrorCode &status) const;
 
@@ -947,6 +959,10 @@ public:
     virtual int32_t start(UErrorCode &status) const;
 
    /**
+    *   Returns the index in the input string of the start of the text matched
+    *   during the previous match operation.
+    *    @param   status      a reference to a UErrorCode to receive any errors.
+    *    @return              The (native) position in the input string of the start of the last match.
     *   @draft ICU 4.6
     */
     virtual int64_t start64(UErrorCode &status) const;
@@ -968,7 +984,17 @@ public:
     virtual int32_t start(int32_t group, UErrorCode &status) const;
 
    /**
-    *   @draft ICU 4.6
+    *   Returns the index in the input string of the start of the text matched by the
+    *    specified capture group during the previous match operation.  Return -1 if
+    *    the capture group exists in the pattern, but was not part of the last match.
+    *
+    *    @param  group       the capture group number.
+    *    @param  status      A reference to a UErrorCode to receive any errors.  Possible
+    *                        errors are  U_REGEX_INVALID_STATE if no match has been
+    *                        attempted or the last match failed, and
+    *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number.
+    *    @return the (native) start position of substring matched by the specified group.
+    *    @draft ICU 4.6
     */
     virtual int64_t start64(int32_t group, UErrorCode &status) const;
 
@@ -976,6 +1002,7 @@ public:
    /**
     *    Returns the index in the input string of the first character following the
     *    text matched during the previous match operation.
+    *
     *   @param   status      A reference to a UErrorCode to receive any errors.  Possible
     *                        errors are  U_REGEX_INVALID_STATE if no match has been
     *                        attempted or the last match failed.
@@ -988,6 +1015,16 @@ public:
     virtual int32_t end(UErrorCode &status) const;
 
    /**
+    *    Returns the index in the input string of the first character following the
+    *    text matched during the previous match operation.
+    *
+    *   @param   status      A reference to a UErrorCode to receive any errors.  Possible
+    *                        errors are  U_REGEX_INVALID_STATE if no match has been
+    *                        attempted or the last match failed.
+    *    @return the index of the last character matched, plus one.
+    *                        The index value returned is a native index, corresponding to
+    *                        code units for the underlying encoding type, for example,
+    *                        a byte index for UTF-8.
     *   @draft ICU 4.6
     */
     virtual int64_t end64(UErrorCode &status) const;
@@ -996,6 +1033,7 @@ public:
    /**
     *    Returns the index in the input string of the character following the
     *    text matched by the specified capture group during the previous match operation.
+    *
     *    @param group  the capture group number
     *    @param   status      A reference to a UErrorCode to receive any errors.  Possible
     *                        errors are  U_REGEX_INVALID_STATE if no match has been
@@ -1012,6 +1050,20 @@ public:
     virtual int32_t end(int32_t group, UErrorCode &status) const;
 
    /**
+    *    Returns the index in the input string of the character following the
+    *    text matched by the specified capture group during the previous match operation.
+    *
+    *    @param group  the capture group number
+    *    @param   status      A reference to a UErrorCode to receive any errors.  Possible
+    *                        errors are  U_REGEX_INVALID_STATE if no match has been
+    *                        attempted or the last match failed and
+    *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number
+    *    @return  the index of the first character following the text
+    *              captured by the specified group during the previous match operation.
+    *              Return -1 if the capture group exists in the pattern but was not part of the match.
+    *              The index value returned is a native index, corresponding to
+    *              code units for the underlying encoding type, for example,
+    *              a byte index for UTF8.
     *   @draft ICU 4.6
     */
     virtual int64_t end64(int32_t group, UErrorCode &status) const;
@@ -1198,8 +1250,13 @@ public:
      virtual int32_t regionStart() const;
 
    /**
-    *   @draft ICU 4.6
-    */
+     * Reports the start index of this matcher's region. The searches this matcher
+     * conducts are limited to finding matches within regionStart (inclusive) and
+     * regionEnd (exclusive).
+     *
+     * @return The starting (native) index of this matcher's region.
+     * @draft ICU 4.6
+     */
      virtual int64_t regionStart64() const;
 
 
@@ -1214,8 +1271,13 @@ public:
       virtual int32_t regionEnd() const;
 
    /**
-    *   @draft ICU 4.6
-    */
+     * Reports the end (limit) index (exclusive) of this matcher's region. The searches
+     * this matcher conducts are limited to finding matches within regionStart
+     * (inclusive) and regionEnd (exclusive).
+     *
+     * @return The ending point (native) of this matcher's region.
+     * @draft ICU 4.6
+     */
       virtual int64_t regionEnd64() const;
 
     /**
