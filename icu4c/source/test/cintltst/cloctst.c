@@ -584,7 +584,7 @@ static int32_t UCharsToEscapedAscii(const UChar* utext, int32_t len, char* resul
         0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
         0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66
     };
-    int32_t i, j, v;
+    int32_t i, j;
     int32_t resultLen = 0;
     const int32_t limit = len<0 ? buflen : len; /* buflen is long enough to hit the buffer limit */
     const int32_t escapeLimit1 = buflen-2;
@@ -717,7 +717,7 @@ static void TestDisplayNames()
     /* test that we properly preflight and return data when there's a non-default pattern,
        see ticket #8262. */
     {
-        int32_t i, j, v;
+        int32_t i;
         static const char *locale="az_Cyrl";
         static const char *displayLocale="ja";
         static const char *expectedChars =
@@ -1982,7 +1982,7 @@ static void TestCanonicalization(void)
         { "ja_JP", "ja_JP", "ja_JP" },
 
         /* test case for "i-default" */
-        { "i-default", NULL, NULL }
+        { "i-default", "en@x=i-default", "en@x=i-default" }
     };
     
     static const char* label[] = { "getName", "canonicalize" };
@@ -5566,6 +5566,9 @@ const char* const locale_to_langtag[][3] = {
     {"sr_Latn_SR",  "sr-Latn-SR",   "sr-Latn-SR"},
     {"en__POSIX",   "en-u-va-posix", "en-u-va-posix"},
     {"en_POSIX",    "en-u-va-posix", "en-u-va-posix"},
+    {"en_US_POSIX_VAR", "en-US-posix-x-lvariant-var", NULL},  /* variant POSIX_VAR is processed as regular variant */
+    {"en_US_VAR_POSIX", "en-US-x-lvariant-var-posix", NULL},  /* variant VAR_POSIX is processed as regular variant */
+    {"en_US_POSIX@va=posix2",   "en-US-u-va-posix2",  "en-US-u-va-posix2"},           /* if keyword va=xxx already exists, variant POSIX is simply dropped */
     {"en_US_POSIX@ca=japanese",  "en-US-u-ca-japanese-va-posix", "en-US-u-ca-japanese-va-posix"},
     {"und_555",     "und-555",      "und-555"},
     {"123",         "und",          NULL},
@@ -5573,16 +5576,15 @@ const char* const locale_to_langtag[][3] = {
     {"_Latn",       "und-Latn",     "und-Latn"},
     {"_DE",         "und-DE",       "und-DE"},
     {"und_FR",      "und-FR",       "und-FR"},
-    {"th_TH_TH",    "th-TH",        NULL},
+    {"th_TH_TH",    "th-TH-x-lvariant-th", NULL},
     {"bogus",       "bogus",        "bogus"},
     {"foooobarrr",  "und",          NULL},
     {"az_AZ_CYRL",  "az-Cyrl-AZ",   "az-Cyrl-AZ"},
-    {"aa_BB_CYRL",  "aa-BB",        NULL},
+    {"aa_BB_CYRL",  "aa-BB-x-lvariant-cyrl", NULL},
     {"en_US_1234",  "en-US-1234",   "en-US-1234"},
     {"en_US_VARIANTA_VARIANTB", "en-US-varianta-variantb",  "en-US-varianta-variantb"},
-    {"en_US_VARIANTB_VARIANTA", "en-US-varianta-variantb",  "en-US-varianta-variantb"},
-    {"ja__9876_5432",   "ja-5432-9876", "ja-5432-9876"},
-    {"zh_Hant__VAR",    "zh-Hant",  NULL},
+    {"ja__9876_5432",   "ja-9876-5432", "ja-9876-5432"},
+    {"zh_Hant__VAR",    "zh-Hant-x-lvariant-var", NULL},
     {"es__BADVARIANT_GOODVAR",  "es-goodvar",   NULL},
     {"en@calendar=gregorian",   "en-u-ca-gregory",  "en-u-ca-gregory"},
     {"de@collation=phonebook;calendar=gregorian",   "de-u-ca-gregory-co-phonebk",   "de-u-ca-gregory-co-phonebk"},
@@ -5670,22 +5672,26 @@ static const struct {
     {"123",                 "",                     0},
     {"en_us",               "",                     0},
     {"en-latn-x",           "en_Latn",              7},
-    {"art-lojban",          "jbo",                  10},
-    {"zh-hakka",            "hak",                  8},
+    {"art-lojban",          "jbo",                  3},
+    {"zh-hakka",            "hak",                  3},
     {"zh-cmn-CH",           "cmn_CH",               9},
     {"xxx-yy",              "xxx_YY",               6},
     {"fr-234",              "fr_234",               6},
-    {"i-default",           "",                     9},
+    {"i-default",           "en@x=i-default",      14},
     {"i-test",              "",                     0},
     {"ja-jp-jp",            "ja_JP",                5},
     {"bogus",               "bogus",                5},
     {"boguslang",           "",                     0},
     {"EN-lATN-us",          "en_Latn_US",           10},
-    {"und-variant-1234",    "__1234_VARIANT",       16},
+    {"und-variant-1234",    "__VARIANT_1234",       16},
     {"und-varzero-var1-vartwo", "__VARZERO",        11},
     {"en-u-ca-gregory",     "en@calendar=gregorian",    15},
     {"en-U-cu-USD",         "en@currency=usd",      11},
     {"en-US-u-va-posix",    "en_US_POSIX",          16},
+    {"en-us-u-ca-gregory-va-posix", "en_US_POSIX@calendar=gregorian", 27},
+    {"en-us-posix-u-va-posix",   "en_US_POSIX@va=posix",  22},
+    {"en-us-u-va-posix2",        "en_US@va=posix2",       17},
+    {"en-us-vari1-u-va-posix",   "en_US_VARI1@va=posix",  22},
     {"ar-x-1-2-3",          "ar@x=1-2-3",           10},
     {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", 19},
     {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   30},
