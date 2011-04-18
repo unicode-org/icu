@@ -35,6 +35,11 @@
 #  RUNNING
 #   Any additional arguments following the file will be passed to the application.
 #
+#  TODO
+#   * should support pkg-config, which is preferred over icu-config, although icu-config makes this usage
+#     easier
+#
+#   * need to test the $PATH and $ICU_CONFIG usage models
 
 SCRIPTVER='$Revision$'
 
@@ -81,7 +86,7 @@ fi
 
 if [ "x${ICU_OVERRIDE}" != "x" ];
 then
-        if [ -x "${ICU_OVERRIDE}" ];
+        if [ -f "${ICU_OVERRIDE}" -a -x "${ICU_OVERRIDE}" ];
         then
                 ICU_CONFIG="${ICU_OVERRIDE}"
         elif [ -x "${ICU_OVERRIDE}/icu-config" ];
