@@ -119,15 +119,18 @@ then
     exit 1
 fi
 
+CPPOPTS="--cppflags"
+LINKOPTS="--ldflags --ldflags-icuio"
+
 
 case "${FILE}" in
      *.cpp)
-        COMP=`${ICU_CONFIG} --cxx --cxxflags --cppflags --ldflags`
+        COMP=`${ICU_CONFIG} --cxx --cxxflags ${CPPOPTS} ${LINKOPTS}`
         OUT=`basename ${FILE} .cpp`
      ;;
 
      *.c)
-        COMP=`${ICU_CONFIG} --cc --cflags --cppflags --ldflags`
+        COMP=`${ICU_CONFIG} --cc --cflags ${CPPOPTS} ${LINKOPTS}`
         OUT=`basename ${FILE} .c`
      ;;
 
