@@ -36,14 +36,14 @@
 #   Any additional arguments following the file will be passed to the application.
 #
 
-SCRIPTVER="$Revision$"
+SCRIPTVER='$Revision$'
 
 
 ICU_OVERRIDE=""
 
 usage()
 {
-    echo "Version ${SCRIPTVER}"
+    echo "Script Version ${SCRIPTVER}"
     echo "Usage: $0 [ -i /path/to/icu | -i /path/to/icu-config ]  file.c{pp} [ program args ...]"
 }
 
