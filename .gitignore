@@ -1,3 +1,4 @@
+/++psvn.state
 /README_SRL
 /backup.sh
 /bin
@@ -130,6 +131,7 @@ source/layoutex/x64
 source/layoutex/x86
 source/lib
 source/lib_c
+source/rcilocal
 source/samples/Makefile
 source/samples/all/all.ncb
 source/samples/all/all.suo

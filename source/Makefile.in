@@ -276,7 +276,11 @@ CLEANFILES+=$(NEWLIBDIR)
 samples/c0test/Makefile: $(top_srcdir)/samples/c0test/Makefile.in
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+ifneq ($(PKGDATA_MODE),static)
 C0DATALIB=$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
+else
+C0DATALIB=$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX).$(A)
+endif
 
 ifeq ($(ICU4C0),)
 
