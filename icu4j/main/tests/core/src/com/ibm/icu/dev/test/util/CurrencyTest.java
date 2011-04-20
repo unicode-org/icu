@@ -26,7 +26,6 @@ import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.VersionInfo;
 
 /**
  * @test
