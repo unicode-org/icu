@@ -501,5 +501,8 @@ int main()
 
   printf("Pure C test OK: %s\n", u_errorName(status));
   fflush(stdout);
+  u_cleanup();
+  printf("u_cleanup() OK: %s\n", u_errorName(status));
+  fflush(stdout);
   return status;
 }

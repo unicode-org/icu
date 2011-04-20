@@ -143,6 +143,7 @@ source/samples/break/break.vcproj.*.*.user
 source/samples/break/release
 source/samples/c0test/*.d
 source/samples/c0test/*.pdb
+source/samples/c0test/.gdbinit
 source/samples/c0test/Makefile
 source/samples/c0test/Makefile.local
 source/samples/c0test/c0test

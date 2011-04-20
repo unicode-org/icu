@@ -151,6 +151,22 @@ static const UChar *Normalizer2Impl_findNextCompBoundary(Normalizer2 *_this, con
 
 static Normalizer2 **singletons = NULL;
 
+
+static UBool U_CALLCONV Normalizer2Impl_cleanup(void)
+{
+  if(singletons!=NULL) {
+    int i;
+    for(i=0;i<UNORM_MODE_COUNT;i++) {
+      if(singletons[i]!=NULL) {
+        unorm2_close(singletons[i]);
+        singletons[i]=NULL;
+      }
+    }
+    uprv_free(singletons);
+    singletons=NULL;
+  }
+}
+
 static UNormalizer2 *getSingleton(UNormalizationMode mode, const char *str, UErrorCode *errorCode) {
   Normalizer2 *ret = NULL;
   Normalizer2 *newOne = NULL;
@@ -167,6 +183,8 @@ static UNormalizer2 *getSingleton(UNormalizationMode mode, const char *str, UErr
     umtx_unlock(NULL);
     if(list!=NULL) {
       uprv_free(list); /* someone beat us to it. */
+    } else {
+      ucln_common_registerCleanup(UCLN_COMMON_NORMALIZER2, Normalizer2Impl_cleanup);
     }
     if(singletons==NULL) {
       *errorCode = U_MEMORY_ALLOCATION_ERROR;
