@@ -92,11 +92,13 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	-$(MAKE) -C c0test clean
 
 check-local:
 
 distclean-local: clean-local
 	$(RMV) Makefile
+	-$(MAKE) -C c0test distclean
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
