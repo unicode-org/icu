@@ -365,36 +365,6 @@ public:
     virtual RegexMatcher *matcher(const UnicodeString &input,
         UErrorCode          &status) const;
         
-        
-   /**
-    * Flag to disambiguate RegexPattern::matcher signature
-    * @draft ICU 4.6
-    */
-    enum PatternIsUTextFlag { PATTERN_IS_UTEXT };
-
-   /**
-    * Creates a RegexMatcher that will match the given input against this pattern.  The
-    * RegexMatcher can then be used to perform match, find or replace operations
-    * on the input.  Note that a RegexPattern object must not be deleted while
-    * RegexMatchers created from it still exist and might possibly be used again.
-    * <p>
-    * The matcher will make a shallow clone of the supplied input text, and all regexp
-    * pattern matching operations happen on this clone.  While read-only operations on
-    * the supplied text are permitted, it is critical that the underlying string not be
-    * altered or deleted before use by the regular expression operations is complete.
-    *
-    * @param input    The input text to which the regular expression will be applied.
-    * @param flag     Must be RegexPattern::PATTERN_IS_UTEXT; used to disambiguate
-    *                 method signature.
-    * @param status   A reference to a UErrorCode to receive any errors.
-    * @return         A RegexMatcher object for this pattern and input.
-    *
-    * @draft ICU 4.6
-    */
-    virtual RegexMatcher *matcher(UText *input,
-        PatternIsUTextFlag	flag, 
-        UErrorCode          &status) const;
-
 private:
     /**
      * Cause a compilation error if an application accidentally attempts to
