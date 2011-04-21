@@ -111,6 +111,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 18: name = "Bug 8479";
             if (exec) Bug8479();
             break;
+        case 19: name = "Bug 7029";
+            if (exec) Bug7029();
+            break;
 
         default: name = "";
             break; //needed to end loop
@@ -5069,5 +5072,18 @@ void RegexTest::Bug8479() {
 }
      
 
+// Bug 7029
+void RegexTest::Bug7029() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    RegexMatcher* const pMatcher = new RegexMatcher(".", 0, status);
+    UnicodeString text = "abc.def";
+    UnicodeString splits[10];
+    REGEX_CHECK_STATUS;
+    int32_t numFields = pMatcher->split(text, splits, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(numFields == 8);
+    delete pMatcher;
+}
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 
