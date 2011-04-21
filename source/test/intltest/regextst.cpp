@@ -359,7 +359,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     unEscapedInput.extract(textChars, inputUTF8Length+1, UTF8Converter.getAlias(), status);
     utext_openUTF8(&inputText, textChars, inputUTF8Length, &status);
     
-    REMatcher = REPattern->matcher(&inputText, RegexPattern::PATTERN_IS_UTEXT, status);
+    REMatcher = &REPattern->matcher(status)->reset(&inputText);
     if (U_FAILURE(status)) {
         errln("RegexTest failure in REPattern::matcher() at line %d (UTF8).  Status = %s\n",
             line, u_errorName(status));
@@ -1755,7 +1755,7 @@ void RegexTest::API_Match_UTF8() {
         //
         // Matcher creation and reset.
         //
-        RegexMatcher *m1 = pat2->matcher(&input1, RegexPattern::PATTERN_IS_UTEXT, status);
+        RegexMatcher *m1 = &pat2->matcher(status)->reset(&input1);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(m1->lookingAt(status) == TRUE);
         const char str_abcdefthisisatest[] = { 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x20, 0x74, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0x00 }; /* abcdef this is a test */
@@ -1886,7 +1886,7 @@ void RegexTest::API_Match_UTF8() {
         const char str_0123456789[] = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x00 }; /* 0123456789 */
         utext_openUTF8(&input, str_0123456789, -1, &status);
 
-        RegexMatcher *matcher = pat->matcher(&input, RegexPattern::PATTERN_IS_UTEXT, status);
+        RegexMatcher *matcher = &pat->matcher(status)->reset(&input);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher->lookingAt(status) == TRUE);
         static const int32_t matchStarts[] = {0,  2, 4, 8};
@@ -2006,7 +2006,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUTF8(&input, str_abcabcabc, -1, &status);
         //                      012345678901234567
 
-        RegexMatcher *matcher = pat->matcher(&input, RegexPattern::PATTERN_IS_UTEXT, status);
+        RegexMatcher *matcher = &pat->matcher(status)->reset(&input);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher->find());
         REGEX_ASSERT(matcher->start(status) == 1);
@@ -2068,7 +2068,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUTF8(&input, str_abcabcabc, -1, &status);
         //                      012345678901234567
 
-        RegexMatcher *matcher = pat->matcher(&input, RegexPattern::PATTERN_IS_UTEXT, status);
+        RegexMatcher *matcher = &pat->matcher(status)->reset(&input);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher->find());
         REGEX_ASSERT(matcher->start(status) == 0);
@@ -2304,7 +2304,7 @@ void RegexTest::API_Replace_UTF8() {
     utext_openUTF8(&dataText, data, -1, &status);
     REGEX_CHECK_STATUS;
     REGEX_VERBOSE_TEXT(&dataText);
-    RegexMatcher *matcher = pat->matcher(&dataText, RegexPattern::PATTERN_IS_UTEXT, status);
+    RegexMatcher *matcher = &pat->matcher(status)->reset(&dataText);
 
     //
     //  Plain vanilla matches.
@@ -2458,7 +2458,7 @@ void RegexTest::API_Replace_UTF8() {
 
     const char str_abcdefg[] = { 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x00 }; /* abcdefg */
     utext_openUTF8(&dataText, str_abcdefg, -1, &status);
-    RegexMatcher *matcher2 = pat2->matcher(&dataText, RegexPattern::PATTERN_IS_UTEXT, status);
+    RegexMatcher *matcher2 = &pat2->matcher(status)->reset(&dataText);
     REGEX_CHECK_STATUS;
     
     const char str_11[] = { 0x24, 0x31, 0x24, 0x31, 0x00 }; /* $1$1 */
@@ -3382,7 +3382,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         utext_openUTF8(&inputText, inputChars, inputUTF8Length, &status);
 
         if (status == U_ZERO_ERROR) {
-            UTF8Matcher = UTF8Pattern->matcher(&inputText, RegexPattern::PATTERN_IS_UTEXT, status);
+            UTF8Matcher = &UTF8Pattern->matcher(status)->reset(&inputText);
             REGEX_CHECK_STATUS_L(line);
         }
         
@@ -4406,7 +4406,7 @@ void RegexTest::PerlTestsUTF8() {
         //
         // Run the test, check for expected match/don't match result.
         //
-        RegexMatcher *testMat = testPat->matcher(&inputText, RegexPattern::PATTERN_IS_UTEXT, status);
+        RegexMatcher *testMat = &testPat->matcher(status)->reset(&inputText);
         UBool found = testMat->find();
         UBool expected = FALSE;
         if (fields[2].indexOf(UChar_y) >=0) {
