@@ -2620,20 +2620,9 @@ U_CDECL_END
 
 U_CAPI UText * U_EXPORT2
 utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
-    // TODO:  use openConstUnicodeString, then add in the differences.
-    //
-    ut = utext_setup(ut, 0, status);
+    ut = utext_openConstUnicodeString(ut, s, status);
     if (U_SUCCESS(*status)) {
-        ut->pFuncs              = &unistrFuncs;
-        ut->context             = s;
-        ut->providerProperties  = I32_FLAG(UTEXT_PROVIDER_STABLE_CHUNKS)|
-                                  I32_FLAG(UTEXT_PROVIDER_WRITABLE);
-
-        ut->chunkContents       = s->getBuffer();
-        ut->chunkLength         = s->length();
-        ut->chunkNativeStart    = 0;
-        ut->chunkNativeLimit    = ut->chunkLength;
-        ut->nativeIndexingLimit = ut->chunkLength;
+        ut->providerProperties |= I32_FLAG(UTEXT_PROVIDER_WRITABLE);
     }
     return ut;
 }
@@ -2642,6 +2631,13 @@ utext_openUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
 
 U_CAPI UText * U_EXPORT2
 utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *status) {
+    if (U_SUCCESS(*status) && s->isBogus()) {
+        // The UnicodeString is bogus, but we still need to detach the UText
+        //   from whatever it was hooked to before, if anything.
+        utext_openUChars(ut, NULL, 0, status);
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return ut;
+    }
     ut = utext_setup(ut, 0, status);
     //    note:  use the standard (writable) function table for UnicodeString.
     //           The flag settings disable writing, so having the functions in
