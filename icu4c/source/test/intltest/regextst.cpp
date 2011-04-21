@@ -108,6 +108,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 17: name = "Bug 7740";
             if (exec) Bug7740();
             break;
+        case 18: name = "Bug 8479";
+            if (exec) Bug8479();
+            break;
 
         default: name = "";
             break; //needed to end loop
@@ -5046,7 +5049,24 @@ void RegexTest::Bug7740() {
     delete m;
 }
 
+// Bug 8479:  was crashing whith a Bogus UnicodeString as input.
 
+void RegexTest::Bug8479() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    RegexMatcher* const pMatcher = new RegexMatcher("\\Aboo\\z", UREGEX_DOTALL|UREGEX_CASE_INSENSITIVE, status);
+    REGEX_CHECK_STATUS;
+    if (U_SUCCESS(status))
+    {
+        UnicodeString str;
+        str.setToBogus();
+        pMatcher->reset(str);
+        status = U_ZERO_ERROR;
+        pMatcher->matches(status);
+        REGEX_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+        delete pMatcher;
+    }
+}
      
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
