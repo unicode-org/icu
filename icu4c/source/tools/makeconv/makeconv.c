@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2010, International Business Machines
+ *   Copyright (C) 1998-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -433,7 +433,7 @@ readHeader(ConvData *data,
            FileStream* convFile,
            const char* converterName,
            UErrorCode *pErrorCode) {
-    char line[200];
+    char line[1024];
     char *s, *key, *value;
     const UConverterStaticData *prototype;
     UConverterStaticData *staticData;
@@ -560,7 +560,7 @@ readHeader(ConvData *data,
 static UBool
 readFile(ConvData *data, const char* converterName,
          UErrorCode *pErrorCode) {
-    char line[200];
+    char line[1024];
     char *end;
     FileStream *convFile;
 
