@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -1108,10 +1108,11 @@ class CharsetMBCS extends CharsetICU {
      * 
      * Note that single surrogates are not mapped by GB 18030 as of the re-released mapping tables from 2000-nov-30.
      */
-    private static final long gb18030Ranges[][] = new long[/* 13 */][/* 4 */] {
+    private static final long gb18030Ranges[][] = new long[/* 14 */][/* 4 */] {
             { 0x10000L, 0x10FFFFL, LINEAR(0x90308130L), LINEAR(0xE3329A35L) },
             { 0x9FA6L, 0xD7FFL, LINEAR(0x82358F33L), LINEAR(0x8336C738L) },
-            { 0x0452L, 0x200FL, LINEAR(0x8130D330L), LINEAR(0x8136A531L) },
+            { 0x0452L, 0x1E3EL, LINEAR(0x8130D330L), LINEAR(0x8135F436L) },
+            { 0x1E40L, 0x200FL, LINEAR(0x8135F438L), LINEAR(0x8136A531L) },
             { 0xE865L, 0xF92BL, LINEAR(0x8336D030L), LINEAR(0x84308534L) },
             { 0x2643L, 0x2E80L, LINEAR(0x8137A839L), LINEAR(0x8138FD38L) },
             { 0xFA2AL, 0xFE2FL, LINEAR(0x84309C38L), LINEAR(0x84318537L) },
