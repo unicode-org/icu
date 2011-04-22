@@ -2914,6 +2914,78 @@ static void TestPCEBuffer_2surr() {
   TestPCEBuffer_with(search,searchLen,source,sourceLen);
 }
 
+static void TestMatchFollowedByIgnorables(void) {
+    /* test case for ticket#8482 */
+    UChar search[] = { 0x00c9 };
+    UChar source[] = { 0x00c9, 0x0000, 0x0041 };
+    int32_t searchLen;
+    int32_t sourceLen;
+    UErrorCode icuStatus = U_ZERO_ERROR;
+    UCollator *coll;
+    const char *locale;
+    UBreakIterator *ubrk;
+    UStringSearch *usearch;
+    int32_t match = 0;
+    int32_t matchLength = 0;
+    const int32_t expectedMatchLength = 1;
+
+    searchLen = sizeof(search)/sizeof(UChar);
+    sourceLen = sizeof(source)/sizeof(UChar);
+
+    coll = ucol_openFromShortString("LHR_AN_CX_EX_FX_HX_NX_S3",
+                                    FALSE,
+                                    NULL,
+                                    &icuStatus);
+    if (U_FAILURE(icuStatus)) {
+        log_err("ucol_openFromShortString error\n");
+    }
+
+    locale = ucol_getLocaleByType(coll,
+                                    ULOC_VALID_LOCALE,
+                                    &icuStatus);
+    if (U_FAILURE(icuStatus)) {
+        log_err("ucol_getLocaleByType error\n");
+    }
+
+    ubrk = ubrk_open(UBRK_CHARACTER,
+                        locale,
+                        source,
+                        sourceLen,
+                        &icuStatus);
+    if (U_FAILURE(icuStatus)) {
+        log_err("ubrk_open error\n");
+    }
+
+    usearch = usearch_openFromCollator(search,
+                                        searchLen,
+                                        source,
+                                        sourceLen,
+                                        coll,
+                                        ubrk,
+                                        &icuStatus);
+    if (U_FAILURE(icuStatus)) {
+        log_err("usearch_openFromCollator error\n");
+    }
+
+    match = usearch_first(usearch,
+                            &icuStatus);
+    if (U_FAILURE(icuStatus)) {
+        log_err("usearch_first error\n");
+    }
+
+    log_verbose("match=%d\n", match);
+
+    matchLength = usearch_getMatchedLength(usearch);
+
+    if (U_FAILURE(icuStatus)) {
+        log_err("usearch_getMatchedLength error\n");
+    }
+
+    if (matchLength != expectedMatchLength) {
+        log_err("Error: matchLength=%d, expected=%d\n", matchLength, expectedMatchLength);
+    }
+}
+
 /**
 * addSearchTest
 */
@@ -2975,6 +3047,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestUsingSearchCollator, "tscoll/usrchtst/TestUsingSearchCollator");
     addTest(root, &TestPCEBuffer_100df, "tscoll/usrchtst/TestPCEBuffer/1_00df");
     addTest(root, &TestPCEBuffer_2surr, "tscoll/usrchtst/TestPCEBuffer/2_dfff");
+    addTest(root, &TestMatchFollowedByIgnorables, "tscoll/usrchtst/TestMatchFollowedByIgnorables");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
