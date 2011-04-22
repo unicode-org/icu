@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2010, International Business Machines                 *
+ *   Copyright (C) 1996-2011, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -775,10 +775,20 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
 
             mLimit = maxLimit;
             if (minLimit < maxLimit) {
-                int32_t nbb = target->nextBreakBoundary(minLimit);
+                // When the last CE's low index is same with its high index, the CE is likely
+                // a part of expansion. In this case, the index is located just after the
+                // character corresponding to the CEs compared above. If the index is right
+                // at the break boundary, move the position to the next boundary will result
+                // incorrect match length when there are ignorable characters exist between
+                // the position and the next character produces CE(s). See ticket#8482.
+                if (minLimit == lastCEI.highOffset && target->isBreakBoundary(minLimit)) {
+                    mLimit = minLimit;
+                } else {
+                    int32_t nbb = target->nextBreakBoundary(minLimit);
 
-                if (nbb >= lastCEI.highOffset) {
-                    mLimit = nbb;
+                    if (nbb >= lastCEI.highOffset) {
+                        mLimit = nbb;
+                    }
                 }
             }
 

@@ -2010,10 +2010,20 @@ static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t 
             // that's after the last CE in the match, use that index
             // as the end of the match.
             if (minLimit < maxLimit) {
-                int32_t nba = ubrk_following(charBreakIterator, minLimit);
+                // When the last CE's low index is same with its high index, the CE is likely
+                // a part of expansion. In this case, the index is located just after the
+                // character corresponding to the CEs compared above. If the index is right
+                // at the break boundary, move the position to the next boundary will result
+                // incorrect match length when there are ignorable characters exist between
+                // the position and the next character produces CE(s). See ticket#8482.
+                if (minLimit == targetOrders.getHighOffset(i + patternSize - 1) && ubrk_isBoundary(charBreakIterator, minLimit)) {
+                    mend = minLimit;
+                } else {
+                    int32_t nba = ubrk_following(charBreakIterator, minLimit);
 
-                if (nba >= targetOrders.getHighOffset(i + patternSize - 1)) {
-                    mend = nba;
+                    if (nba >= targetOrders.getHighOffset(i + patternSize - 1)) {
+                        mend = nba;
+                    }
                 }
             }
 

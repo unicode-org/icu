@@ -3659,7 +3659,7 @@ static UBool isBreakBoundary(UStringSearch *strsrch, int32_t index) {
     U_ASSERT(index<=textLen);
 
     if (index>=textLen || index<=0) {
-        return FALSE;
+        return TRUE;
     }
 
     // If the character at the current index is not a GRAPHEME_EXTEND
@@ -3668,7 +3668,7 @@ static UBool isBreakBoundary(UStringSearch *strsrch, int32_t index) {
     U16_GET(text, 0, index, textLen, c);
     int32_t gcProperty = u_getIntPropertyValue(c, UCHAR_GRAPHEME_CLUSTER_BREAK);
     if (gcProperty != U_GCB_EXTEND && gcProperty != U_GCB_SPACING_MARK) {
-        return FALSE;
+        return TRUE;
     }
 
     // We are at a combining mark.  If the preceding character is anything
@@ -3676,7 +3676,7 @@ static UBool isBreakBoundary(UStringSearch *strsrch, int32_t index) {
     U16_PREV(text, 0, index, c);
     gcProperty = u_getIntPropertyValue(c, UCHAR_GRAPHEME_CLUSTER_BREAK);
     UBool combining =  !(gcProperty==U_GCB_CONTROL || gcProperty==U_GCB_LF || gcProperty==U_GCB_CR);
-    return combining;
+    return !combining;
 #elif !UCONFIG_NO_BREAK_ITERATION
     UBreakIterator *breakiterator = strsrch->search->breakIter;
 
@@ -3684,10 +3684,10 @@ static UBool isBreakBoundary(UStringSearch *strsrch, int32_t index) {
         breakiterator = strsrch->search->internalBreakIter;
     }
 
-    return (breakiterator != NULL && ! ubrk_isBoundary(breakiterator, index));
+    return (breakiterator != NULL && ubrk_isBoundary(breakiterator, index));
 #else
     // **** or use the original code? ****
-    return FALSE;
+    return TRUE;
 #endif
 }
 
@@ -3906,14 +3906,14 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //    1. The match extended to the last CE from the target text, which is OK, or
         //    2. The last CE that was part of the match is in an expansion that extends
         //       to the first CE after the match. In this case, we reject the match.
+        const CEI *nextCEI = 0;
         if (strsrch->search->elementComparisonType == 0) {
-            const CEI *nextCEI  = ceb.get(targetIx + targetIxOffset);
+            nextCEI  = ceb.get(targetIx + targetIxOffset);
             maxLimit = nextCEI->lowIndex;
             if (nextCEI->lowIndex == nextCEI->highIndex && nextCEI->ce != UCOL_PROCESSED_NULLORDER) {
                 found = FALSE;
             }
         } else {
-            const CEI *nextCEI;
             for ( ; ; ++targetIxOffset ) {
                 nextCEI = ceb.get(targetIx + targetIxOffset);
                 maxLimit = nextCEI->lowIndex;
@@ -3949,7 +3949,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //    to something else.
         //   This type of match should be rejected for not completely consuming a
         //   combining sequence.
-        if (isBreakBoundary(strsrch, mStart)) {
+        if (!isBreakBoundary(strsrch, mStart)) {
             found = FALSE;
         }
 
@@ -3967,10 +3967,19 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //    This advances the index over any combining charcters.
         mLimit = maxLimit;
         if (minLimit < maxLimit) {
-            int32_t nba = nextBoundaryAfter(strsrch, minLimit);
-
-            if (nba >= lastCEI->highIndex) {
-                mLimit = nba;
+            // When the last CE's low index is same with its high index, the CE is likely
+            // a part of expansion. In this case, the index is located just after the
+            // character corresponding to the CEs compared above. If the index is right
+            // at the break boundary, move the position to the next boundary will result
+            // incorrect match length when there are ignorable characters exist between
+            // the position and the next character produces CE(s). See ticket#8482.
+            if (minLimit == lastCEI->highIndex && isBreakBoundary(strsrch, minLimit)) {
+                mLimit = minLimit;
+            } else {
+                int32_t nba = nextBoundaryAfter(strsrch, minLimit);
+                if (nba >= lastCEI->highIndex) {
+                    mLimit = nba;
+                }
             }
         }
 
@@ -3986,7 +3995,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
             found = FALSE;
         }
 
-        if (isBreakBoundary(strsrch, mLimit)) {
+        if (!isBreakBoundary(strsrch, mLimit)) {
             found = FALSE;
         }
 
@@ -4165,7 +4174,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
         //    to something else.
         //   This type of match should be rejected for not completely consuming a
         //   combining sequence.
-        if (isBreakBoundary(strsrch, mStart)) {
+        if (!isBreakBoundary(strsrch, mStart)) {
             found = FALSE;
         }
 
@@ -4213,7 +4222,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
             }
 
             // Make sure the end of the match is on a break boundary
-            if (isBreakBoundary(strsrch, mLimit)) {
+            if (!isBreakBoundary(strsrch, mLimit)) {
                 found = FALSE;
             }
 
