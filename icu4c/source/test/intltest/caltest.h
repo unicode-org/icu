@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -224,6 +224,10 @@ public: // package
      * Test the time stamp array recalculation during heavy Calendar usage
      */
     void TestTimeStamp(void);
+    /**
+     * Test the ISO8601 calendar type
+     */
+    void TestISO8601(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
