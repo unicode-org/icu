@@ -1670,6 +1670,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         "coptic",
         "ethiopic",
         "ethiopic-amete-alem",
+        "iso8601",
     };
 
     // must be in the order of calTypes above
@@ -1686,6 +1687,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private static final int CALTYPE_COPTIC = 10;
     private static final int CALTYPE_ETHIOPIC = 11;
     private static final int CALTYPE_ETHIOPIC_AMETE_ALEM = 12;
+    private static final int CALTYPE_ISO8601 = 13;
     private static final int CALTYPE_UNKNOWN = -1;
 
     private static int getCalendarTypeForLocale(ULocale l) {
@@ -1828,6 +1830,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case CALTYPE_ETHIOPIC_AMETE_ALEM:
             cal = new EthiopicCalendar(zone, locale);
             ((EthiopicCalendar)cal).setAmeteAlemEra(true);
+            break;
+        case CALTYPE_ISO8601:
+            // Only differs week numbering rule from Gregorian
+            cal = new GregorianCalendar(zone, locale);
+            cal.setFirstDayOfWeek(MONDAY);
+            cal.setMinimalDaysInFirstWeek(4);
             break;
         default:
             // we must not get here, because unknown type is mapped to
@@ -5554,7 +5562,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @stable ICU 3.8
      */
     public String getType() {
-        return "gregorian";
+        return "unknown";
     }
 
     // -------- BEGIN ULocale boilerplate --------
