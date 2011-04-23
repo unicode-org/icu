@@ -7,10 +7,12 @@
 package com.ibm.icu.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,7 +22,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 /**
  * <code>Region</code> is the class representing a Unicode Region Code, also known as a 
  * Unicode Region Subtag, which is defined based upon the BCP 47 standard. We often think of
- * "regions" as "countries" when defining the characteristics of a locale.  There are different
+ * "regions" as "countries" when defining the characteristics of a locale.  Region codes There are different
  * types of region codes that are important to distinguish.
  * 
  *  Macroregion - A code for a "macro geographical (continental) region, geographical sub-region, or 
@@ -28,22 +30,28 @@ import com.ibm.icu.impl.ICUResourceBundle;
  *  UN M.49 (http://unstats.un.org/unsd/methods/m49/m49regin.htm). 
  *  These are typically 3-digit codes, but contain some 2-letter codes, such as the LDML code QO 
  *  added for Outlying Oceania.  Not all UNM.49 codes are defined in LDML, but most of them are.
+ *  Macroregions are represented in ICU by one of three region types: WORLD ( region code 001 ),
+ *  CONTINENTS ( regions contained directly by WORLD ), and SUBCONTINENTS ( things contained directly
+ *  by a continent ).
  *
- *  Territory - A Region that is not a Macroregion. These are typically codes for countries, but also
+ *  TERRITORY - A Region that is not a Macroregion. These are typically codes for countries, but also
  *  include areas that are not separate countries, such as the code "AQ" for Antarctica or the code 
  *  "HK" for Hong Kong (SAR China). Overseas dependencies of countries may or may not have separate 
  *  codes. The codes are typically 2-letter codes aligned with the ISO 3166 standard, but BCP47 allows
  *  for the use of 3-digit codes in the future.
  *
- *  Unknown - The code ZZ is defined by Unicode LDML for use to indicate that the Region is unknown,
+ *  UNKNOWN - The code ZZ is defined by Unicode LDML for use to indicate that the Region is unknown,
  *  or that the value supplied as a region was invalid.
  *
- *  Deprecated - Region codes that have been defined in the past but are no longer in modern usage,
+ *  DEPRECATED - Region codes that have been defined in the past but are no longer in modern usage,
  *  usually due to a country splitting into multiple territories or changing its name.
  *  
- *  Political - A widely understood grouping of territories that has a well defined membership such
- *  that a region code has been assigned for it.  Region code "EU" (European Union) is one such
- *  political region code.
+ *  GROUPING - A widely understood grouping of territories that has a well defined membership such
+ *  that a region code has been assigned for it.  Some of these are UNM.49 codes that do't fall into 
+ *  the world/continent/sub-continent hierarchy, while others are just well known groupings that have
+ *  their own region code. Region "EU" (European Union) is one such region code that is a grouping.
+ *  Groupings will never be returned by the getContainingRegion() API, since a different type of region
+ *  ( WORLD, CONTINENT, or SUBCONTINENT ) will always be the containing region instead.
  *  
  * @author       John Emmons
  * @draft ICU 4.8
@@ -54,7 +62,7 @@ public class Region implements Comparable<Region> {
 
     /**
      * RegionType is an enumeration defining the different types of regions.  Current possible
-     * values are MACROREGION, TERRITORY, POLITICAL, DEPRECATED, and UNKNOWN.
+     * values are WORLD, CONTINENT, SUBCONTINENT, TERRITORY, GROUPING, DEPRECATED, and UNKNOWN.
      * 
      * @draft ICU 4.8
      * @provisional This API might change or be removed in a future release. 
@@ -76,17 +84,30 @@ public class Region implements Comparable<Region> {
         TERRITORY,
 
         /**
-         * Type representing a macroregion.
+         * Type representing the whole world.
          * @draft ICU 4.8
          * @provisional This API might change or be removed in a future release. 
          */
-        MACROREGION,
+        WORLD,
         /**
-         * Type representing a political grouping of territories, such as the EU.
+         * Type representing a continent.
          * @draft ICU 4.8
          * @provisional This API might change or be removed in a future release. 
          */
-        POLITICAL,
+        CONTINENT,
+        /**
+         * Type representing a sub-continent.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release. 
+         */
+        SUBCONTINENT,
+        /**
+         * Type representing a grouping of territories that is not to be used in
+         * the normal WORLD/CONTINENT/SUBCONTINENT/TERRITORY containment tree.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release. 
+         */
+        GROUPING,
         /**
          * Type representing a region whose code has been deprecated, usually
          * due to a country splitting into multiple territories or changing its name.
@@ -114,7 +135,7 @@ public class Region implements Comparable<Region> {
     public static final int UNDEFINED_NUMERIC_CODE = -1;
     
     private static final String UNKNOWN_REGION_ID = "ZZ";
-    private static final String EUROPEAN_UNION = "EU";
+    private static final String WORLD_ID = "001";
    
     /*
      * Private default constructor.  Use factory methods only.
@@ -150,6 +171,9 @@ public class Region implements Comparable<Region> {
         UResourceBundle regionCodes = null;
         UResourceBundle territoryAlias = null;
         UResourceBundle codeMappings = null;
+        UResourceBundle worldContainment = null;
+        UResourceBundle territoryContainment = null;
+        UResourceBundle groupingContainment = null;
         UResourceBundle rb = UResourceBundle.getBundleInstance(
                                     ICUResourceBundle.ICU_BASE_NAME,
                                     "metadata",
@@ -162,6 +186,18 @@ public class Region implements Comparable<Region> {
                     "supplementalData",
                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         codeMappings = rb2.get("codeMappings");
+
+        // Right now only fetch as much territory containment as we need in order to determine
+        // types.  Only fetch the rest if we have to.
+        //
+        territoryContainment = rb2.get("territoryContainment");
+        worldContainment = territoryContainment.get("001");
+        groupingContainment = territoryContainment.get("grouping");
+        
+        String[] continentsArr = worldContainment.getStringArray();
+        List<String> continents = Arrays.asList(continentsArr);
+        String[] groupingArr = groupingContainment.getStringArray();
+        List<String> groupings = Arrays.asList(groupingArr);
 
         
         // First put alias mappings for iso3 and numeric code mappings
@@ -185,7 +221,8 @@ public class Region implements Comparable<Region> {
                 territoryAliasMap.put(key, value);
             }
         }
-            
+
+        
         regions = new Region[regionCodes.getSize()];
         for ( int i = 0 ; i < regions.length ; i++ ) {
             regions[i] = new Region();
@@ -207,12 +244,16 @@ public class Region implements Comparable<Region> {
 
             if ( territoryAliasMap.containsKey(id)){
                 regions[i].type = RegionType.DEPRECATED;
-            } else if ( id.equals(EUROPEAN_UNION) ) {
-                regions[i].type = RegionType.POLITICAL;
+            } else if ( id.equals(WORLD_ID) ) {
+                regions[i].type = RegionType.WORLD;
             } else if ( id.equals(UNKNOWN_REGION_ID) ) {
                 regions[i].type = RegionType.UNKNOWN;
+            } else if ( continents.contains(id) ) {
+                regions[i].type = RegionType.CONTINENT;
+            } else if ( groupings.contains(id) ) {
+                regions[i].type = RegionType.GROUPING;
             } else if ( id.matches("[0-9]{3}|QO") ) {
-                regions[i].type = RegionType.MACROREGION;
+                regions[i].type = RegionType.SUBCONTINENT;
             } else {
                 regions[i].type = RegionType.TERRITORY;
             }                
@@ -266,18 +307,9 @@ public class Region implements Comparable<Region> {
                 Integer childRegionIndex = regionIndexMap.get(child);
                 if ( parentRegionIndex != null && childRegionIndex != null ) {                    
                     subRegionData[parentRegionIndex.intValue()].set(childRegionIndex.intValue()); // Set the containment bit for this pair
-                    // Region 419 "Latin America & the Caribbean" is a somewhat problematic special
-                    // case, as it is the only place in UNM.49 where a particular macroregion's children
-                    // are also contained in a different macroregion.  
-                    // Everything in 419 is also contained in North America (003) or South America (005)
-                    // so for selection purposes it is more straight forward to let the parents of 
-                    // 013 ( Central America ) and 029 ( Caribbean ) be 003 ( North America )
-                    // instead of 419.  If more special cases like come up in the future, we will
-                    // probably need to find a way to deal with this using data.  But for right now,
-                    // this is the only known case, so we just suppress the assignment of 419
-                    // as the parent.
-                    if ( regions[parentRegionIndex].isOfType(RegionType.MACROREGION) && 
-                         !regions[parentRegionIndex].toString().equals("419")) {
+                    // Regions of type GROUPING can't be set as the parent, since another region
+                    // such as a SUBCONTINENT, CONTINENT, or WORLD must always be the parent.
+                    if ( !regions[parentRegionIndex].isOfType(RegionType.GROUPING)) {
                         containingRegionData[childRegionIndex] = parentRegionIndex; 
                     }
                 }
@@ -456,7 +488,7 @@ public class Region implements Comparable<Region> {
             Region r = it.next();
             if ( r.isOfType(RegionType.TERRITORY) ) {
                 result.add(r);
-            } else if ( r.isOfType(RegionType.MACROREGION) ) {
+            } else if ( r.isOfType(RegionType.CONTINENT) || r.isOfType(RegionType.SUBCONTINENT)) {
                 result.addAll(r.getContainedTerritories()); // Recursion!!!
             }
         }
