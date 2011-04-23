@@ -8775,7 +8775,9 @@ supplementalData:table(nofallback){
             "ZA",
         }
         019{
-            "003",
+            "021",
+            "013",
+            "029",
             "005",
         }
         021{
@@ -9028,6 +9030,11 @@ supplementalData:table(nofallback){
             "CP",
             "DG",
             "TA",
+        }
+        grouping{
+            "003",
+            "419",
+            "EU",
         }
     }
     weekData{
