@@ -943,8 +943,8 @@ public class IBMCalendarTest extends CalendarTest {
                 if (!df.equals(handleGetDateFormat("",ULocale.getDefault()))){
                     errln ("Calendar.handleGetDateFormat(String, Locale) should delegate to ( ,ULocale)");
                 }
-                if (!getType().equals("gregorian")){
-                    errln ("Calendar.getType() should be 'gregorian'");
+                if (!getType().equals("unknown")){
+                    errln ("Calendar.getType() should be 'unknown'");
                 }
             }
         }
@@ -1015,8 +1015,8 @@ public class IBMCalendarTest extends CalendarTest {
                 "en_US",
                 "th_TH",    // Default calendar for th_TH is buddhist
                 "th",       // th's default region is TH and buddhist is used as default for TH
-// FIXME: ICU Service canonicalize en_TH to en, so TH is ignored in Calendar instantiation.  See #6816.
-//                "en_TH",    // Default calendar for any locales with region TH is buddhist
+                "en_TH",    // Default calendar for any locales with region TH is buddhist
+                "th_TH@calendar=iso8601",   // iso8601 calendar type
         };
 
         String[] types = {
@@ -1032,14 +1032,56 @@ public class IBMCalendarTest extends CalendarTest {
                 "gregorian",
                 "buddhist",
                 "buddhist",
-// FIXME: ICU Service canonicalize en_TH to en, so TH is ignored in Calendar instantiation.  See #6816.
-//                "buddhist",
+                "buddhist",
+                "gregorian",    // iso8601 is a gregiran sub type
         };
 
         for (int i = 0; i < locs.length; i++) {
             Calendar cal = Calendar.getInstance(new ULocale(locs[i]));
             if (!cal.getType().equals(types[i])) {
                 errln(locs[i] + " Calendar type " + cal.getType() + " instead of " + types[i]);
+            }
+        }
+    }
+
+    public void TestISO8601() {
+        final ULocale[] TEST_LOCALES = {
+            new ULocale("en_US@calendar=iso8601"),
+            new ULocale("en_US@calendar=Iso8601"),
+            new ULocale("th_TH@calendar=iso8601"),
+            new ULocale("ar_EG@calendar=iso8601")
+        };
+
+        final int[][] TEST_DATA = {
+            // {<year>, <week# of Jan 1>, <week# year of Jan 1>}
+            {2008, 1, 2008},
+            {2009, 1, 2009},
+            {2010, 53, 2009},
+            {2011, 52, 2010},
+            {2012, 52, 2011},
+            {2013, 1, 2013},
+            {2014, 1, 2014},
+        };
+
+        for (ULocale locale : TEST_LOCALES) {
+            Calendar cal = Calendar.getInstance(locale);
+            // No matter what locale is used, if calendar type is "iso8601",
+            // calendar type must be Gregorian
+            if (!cal.getType().equals("gregorian")) {
+                errln("Error: Gregorian calendar is not used for locale: " + locale);
+            }
+
+            for (int[] data : TEST_DATA) {
+                cal.set(data[0], Calendar.JANUARY, 1);
+                int weekNum = cal.get(Calendar.WEEK_OF_YEAR);
+                int weekYear = cal.get(Calendar.YEAR_WOY);
+
+                if (weekNum != data[1] || weekYear != data[2]) {
+                    errln("Error: Incorrect week of year on January 1st, " + data[0]
+                            + " for locale " + locale
+                            + ": Returned [weekNum=" + weekNum + ", weekYear=" + weekYear
+                            + "], Expected [weekNum=" + data[1] + ", weekYear=" + data[2] + "]");
+                }
             }
         }
     }
