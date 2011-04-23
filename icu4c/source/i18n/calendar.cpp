@@ -155,6 +155,7 @@ static const char * const gCalTypes[] = {
     "coptic",
     "ethiopic",
     "ethiopic-amete-alem",
+    "iso8601",
     NULL
 };
 
@@ -173,7 +174,8 @@ typedef enum ECalType {
     CALTYPE_INDIAN,
     CALTYPE_COPTIC,
     CALTYPE_ETHIOPIC,
-    CALTYPE_ETHIOPIC_AMETE_ALEM
+    CALTYPE_ETHIOPIC_AMETE_ALEM,
+    CALTYPE_ISO8601,
 } ECalType;
 
 U_NAMESPACE_BEGIN
@@ -326,6 +328,11 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             break;
         case CALTYPE_ETHIOPIC_AMETE_ALEM:
             cal = new EthiopicCalendar(loc, status, EthiopicCalendar::AMETE_ALEM_ERA);
+            break;
+        case CALTYPE_ISO8601:
+            cal = new GregorianCalendar(loc, status);
+            cal->setFirstDayOfWeek(UCAL_MONDAY);
+            cal->setMinimalDaysInFirstWeek(4);
             break;
         default:
             status = U_UNSUPPORTED_ERROR;
@@ -870,6 +877,14 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
         fprintf(stderr, "%p: setting week count data to locale %s, actual locale %s\n", c, (const char*)aLocale.getName(), (const char *)actualLoc.getName());
 #endif
         c->setWeekData(aLocale, c->getType(), success);  // set the correct locale (this was an indirected calendar)
+
+        char keyword[ULOC_FULLNAME_CAPACITY];
+        UErrorCode tmpStatus = U_ZERO_ERROR;
+        l.getKeywordValue("calendar", keyword, ULOC_FULLNAME_CAPACITY, tmpStatus);
+        if (U_SUCCESS(tmpStatus) && uprv_strcmp(keyword, "iso8601") == 0) {
+            c->setFirstDayOfWeek(UCAL_MONDAY);
+            c->setMinimalDaysInFirstWeek(4);
+        }
     }
     else
 #endif /* UCONFIG_NO_SERVICE */
