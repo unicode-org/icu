@@ -17,6 +17,7 @@
 #include "dbgutil.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
+#include "cstring.h"
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
 
@@ -2234,7 +2235,7 @@ void CalendarTest::TestISO8601() {
             errln("Error: Failed to create a calendar for locale: %s", TEST_LOCALES[i]);
             continue;
         }
-        if (strcmp(cal->getType(), "gregorian") != 0) {
+        if (uprv_strcmp(cal->getType(), "gregorian") != 0) {
             errln("Error: Gregorian calendar is not used for locale: %s", TEST_LOCALES[i]);
             continue;
         }
