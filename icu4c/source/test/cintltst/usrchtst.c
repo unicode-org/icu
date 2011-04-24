@@ -2984,6 +2984,10 @@ static void TestMatchFollowedByIgnorables(void) {
     if (matchLength != expectedMatchLength) {
         log_err("Error: matchLength=%d, expected=%d\n", matchLength, expectedMatchLength);
     }
+
+    usearch_close(usearch);
+    ubrk_close(ubrk);
+    ucol_close(coll);
 }
 
 /**
