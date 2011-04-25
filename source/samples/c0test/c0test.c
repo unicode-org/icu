@@ -440,6 +440,14 @@ int main()
   char *dl = NULL;
   UErrorCode status = U_ZERO_ERROR;
 
+
+  u_init(&status);
+
+  if(U_FAILURE(status)) {
+    fprintf(stderr, "Error: u_init returned %s - check that data was built properly.\n\n\n\n", u_errorName(status));
+    return 1;
+  }
+
 #if 1
   dl = uloc_getDefault();
 

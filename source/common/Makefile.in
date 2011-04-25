@@ -24,7 +24,7 @@ LOCALSVC_CPP=localsvc.cpp
 SVC_HOOK_INC=$(top_builddir)/common/svchook.mk
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB) $(SVC_HOOK_INC)
+CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB) $(SVC_HOOK_INC) norm2.o norm2.d
 
 ## Target information
 
