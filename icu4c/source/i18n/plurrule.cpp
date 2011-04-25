@@ -13,7 +13,6 @@
 */
 
 
-#include "unicode/uniset.h"
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
 #include "unicode/plurrule.h"
@@ -21,6 +20,7 @@
 #include "cstring.h"
 #include "hash.h"
 #include "mutex.h"
+#include "patternprops.h"
 #include "plurrule_impl.h"
 #include "putilimp.h"
 #include "ucln_in.h"
@@ -1159,16 +1159,9 @@ RuleChain::isKeyword(const UnicodeString& keywordParam) const {
 
 
 RuleParser::RuleParser() {
-    UErrorCode err=U_ZERO_ERROR;
-    const UnicodeString idStart=UNICODE_STRING_SIMPLE("[[a-z]]");
-    const UnicodeString idContinue=UNICODE_STRING_SIMPLE("[[a-z][A-Z][_][0-9]]");
-    idStartFilter = new UnicodeSet(idStart, err);
-    idContinueFilter = new UnicodeSet(idContinue, err);
 }
 
 RuleParser::~RuleParser() {
-    delete idStartFilter;
-    delete idContinueFilter;
 }
 
 void
@@ -1413,21 +1406,7 @@ RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCod
 
 UBool
 RuleParser::isValidKeyword(const UnicodeString& token) {
-    if ( token.length()==0 ) {
-        return FALSE;
-    }
-    if ( idStartFilter->contains(token.charAt(0) )==TRUE ) {
-        int32_t i;
-        for (i=1; i< token.length(); i++) {
-            if (idContinueFilter->contains(token.charAt(i))== FALSE) {
-                return FALSE;
-            }
-        }
-        return TRUE;
-    }
-    else {
-        return FALSE;
-    }
+    return PatternProps::isIdentifier(token.getBuffer(), token.length());
 }
 
 PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode& status) :

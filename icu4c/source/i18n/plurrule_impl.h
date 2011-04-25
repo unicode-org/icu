@@ -13,10 +13,7 @@
 #ifndef PLURRULE_IMPLE
 #define PLURRULE_IMPLE
 
-/**
- * \file
- * \brief C++ API: Defines rules for mapping positive long values onto a small set of keywords.
- */
+// Internal definitions for the PluralRules implementation.
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -89,8 +86,6 @@ U_NAMESPACE_BEGIN
 #define PLURAL_RANGE_HIGH  0x7fffffff;
 
 
-class UnicodeSet;
-
 typedef enum PluralKey {
   pZero,
   pOne,
@@ -138,9 +133,6 @@ public:
                             tokenType& type, UErrorCode &status);
     void checkSyntax(tokenType prevType, tokenType curType, UErrorCode &status);
 private:
-    UnicodeSet      *idStartFilter;
-    UnicodeSet      *idContinueFilter;
-
     void getKeyType(const UnicodeString& token, tokenType& type, UErrorCode &status);
     UBool inRange(UChar ch, tokenType& type);
     UBool isValidKeyword(const UnicodeString& token);

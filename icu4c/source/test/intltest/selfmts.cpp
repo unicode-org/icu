@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc. 
  ********************************************************************/
@@ -12,7 +12,8 @@
 #include "selfmts.h"
 #include "cmemory.h"
 #include "unicode/selfmt.h"
-#include "stdio.h"
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #define SIMPLE_PATTERN_STRING                                                    "feminine {feminineVerbValue} other{otherVerbValue}"
 
@@ -81,29 +82,14 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     };
 
     UnicodeString checkSyntaxData[SELECT_SYNTAX_DATA] = {
-        UNICODE_STRING_SIMPLE("odd{foo} odd{bar} other{foobar}"),
-        UNICODE_STRING_SIMPLE("odd{foo} other{bar} other{foobar}"),
         UNICODE_STRING_SIMPLE("odd{foo}"),
-        UNICODE_STRING_SIMPLE("1odd{foo} other{bar}"),
+        UNICODE_STRING_SIMPLE("*odd{foo} other{bar}"),
         UNICODE_STRING_SIMPLE("odd{foo},other{bar}"),
         UNICODE_STRING_SIMPLE("od d{foo} other{bar}"),
         UNICODE_STRING_SIMPLE("odd{foo}{foobar}other{foo}"),
         UNICODE_STRING_SIMPLE("odd{foo1}other{foo2}}"),  
         UNICODE_STRING_SIMPLE("odd{foo1}other{{foo2}"),  
         UNICODE_STRING_SIMPLE("odd{fo{o1}other{foo2}}")
-    };
-
-    UErrorCode expErrorCodes[SELECT_SYNTAX_DATA]={
-        U_DUPLICATE_KEYWORD, 
-        U_DUPLICATE_KEYWORD,  
-        U_DEFAULT_KEYWORD_MISSING,
-        U_PATTERN_SYNTAX_ERROR,
-        U_PATTERN_SYNTAX_ERROR,
-        U_PATTERN_SYNTAX_ERROR,
-        U_PATTERN_SYNTAX_ERROR,
-        U_PATTERN_SYNTAX_ERROR,  
-        U_PATTERN_SYNTAX_ERROR,  
-        U_DEFAULT_KEYWORD_MISSING
     };
 
     UErrorCode status = U_ZERO_ERROR;
@@ -113,7 +99,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         dataerrln("ERROR: SelectFormat Unit Test constructor failed in unit tests.- exitting");
         return;
     }
-    
+
     // ======= Test SelectFormat pattern syntax.
     logln("SelectFormat Unit Test : Testing SelectFormat pattern syntax.");
     for (int32_t i=0; i<SELECT_SYNTAX_DATA; ++i) {
@@ -121,10 +107,22 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
         VERBOSE_INT(i);
         VERBOSE_USTRING(checkSyntaxData[i]);
         selFmt->applyPattern(checkSyntaxData[i], status);
-        if( status!= expErrorCodes[i] ){
-            errln("\nERROR: Unexpected result - SelectFormat Unit Test failed to detect syntax error with pattern: "+checkSyntaxData[i]+" and expected status="+ u_errorName(expErrorCodes[i]) + " and resulted status="+u_errorName(status));
+        if (U_SUCCESS(status)){
+            errln("\nERROR: Unexpected result - SelectFormat Unit Test failed to detect syntax error with pattern: "+checkSyntaxData[i]);
         }
     }
+
+    // ICU 4.8 does not check for duplicate keywords any more.
+    status = U_ZERO_ERROR;
+    selFmt->applyPattern("odd{foo} odd{bar} other{foobar}", status);
+    FieldPosition format_ignore(FieldPosition::DONT_CARE);
+    UnicodeString format_result;
+    selFmt->format(UnicodeString("odd"), format_result, format_ignore, status);
+    assertEquals("should use first occurrence of the 'odd' keyword", "foo", format_result);
+    format_result.remove();
+    selFmt->applyPattern("odd{foo} other{bar} other{foobar}", status);
+    selFmt->format(UnicodeString("other"), format_result, format_ignore, status);
+    assertEquals("should use first occurrence of the 'other' keyword", "bar", format_result);
 
     delete selFmt;
     selFmt = NULL;
@@ -166,27 +164,31 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     }
 
     //Test with an invalid keyword
+    // one which contains Pattern_Syntax or Pattern_White_Space.
     logln("SelectFormat Unit test: Testing  format() with keyword method and with invalid keywords...");
     status = U_ZERO_ERROR;
     result.remove();
     UnicodeString keywords[] = {
-        "9Keyword-_",       //Starts with a digit
-        "-Keyword-_",       //Starts with a hyphen
-        "_Keyword-_",       //Starts with a underscore
-        "\\u00E9Keyword-_", //Starts with non-ASCII character
-        "Key*word-_",       //Contains a sepial character not allowed
-        "*Keyword-_"        //Starts with a sepial character not allowed
+        "9Keyword-_",
+        "-Keyword-_",
+        "_Keyword-_",
+        "\\u00E9Keyword-_",
+        "Key word-_",
+        " Keyword-_",
+        "Key*word-_",
+        "*Keyword-_"
     };
 
     delete selFmt;
     selFmt = NULL;
 
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
-    for (int32_t i = 0; i< 6; i++ ){
+    for (int32_t i = 0; i < LENGTHOF(keywords); i++ ){
         status = U_ZERO_ERROR;
         selFmt->format( keywords[i], result , ignore , status);
         if (!U_FAILURE(status)) {
-            errln("ERROR: SelectFormat Unit test failed in format() with keyWord and with an invalid keyword as : "+ keywords[i]);
+            errln("ERROR: SelectFormat Unit test failed in format() with keyWord and with an invalid keyword as : "+
+                  keywords[i]+" ("+u_errorName(status)+")");
         }
     }
 

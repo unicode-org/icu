@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -25,36 +25,33 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void 
+void
 MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    // if (exec) logln((UnicodeString)"TestSuite MessageFormatRegressionTest");
-    switch (index) {
-        CASE(0,Test4074764)
-        CASE(1,Test4058973)
-        CASE(2,Test4031438)
-        CASE(3,Test4052223)
-        CASE(4,Test4104976)
-        CASE(5,Test4106659)
-        CASE(6,Test4106660)
-        CASE(7,Test4111739)
-        CASE(8,Test4114743)
-        CASE(9,Test4116444)
-        CASE(10,Test4114739)
-        CASE(11,Test4113018)
-        CASE(12,Test4106661)
-        CASE(13,Test4094906)
-        CASE(14,Test4118592)
-        CASE(15,Test4118594)
-        CASE(16,Test4105380)
-        CASE(17,Test4120552)
-        CASE(18,Test4142938)
-        CASE(19,TestChoicePatternQuote)
-        CASE(20,Test4112104)
-        CASE(21,TestAPI)
-
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(Test4074764)
+    //TESTCASE_AUTO(Test4058973)  -- disabled/obsolete in ICU 4.8
+    TESTCASE_AUTO(Test4031438)
+    TESTCASE_AUTO(Test4052223)
+    TESTCASE_AUTO(Test4104976)
+    TESTCASE_AUTO(Test4106659)
+    TESTCASE_AUTO(Test4106660)
+    TESTCASE_AUTO(Test4111739)
+    TESTCASE_AUTO(Test4114743)
+    TESTCASE_AUTO(Test4116444)
+    TESTCASE_AUTO(Test4114739)
+    TESTCASE_AUTO(Test4113018)
+    TESTCASE_AUTO(Test4106661)
+    TESTCASE_AUTO(Test4094906)
+    TESTCASE_AUTO(Test4118592)
+    TESTCASE_AUTO(Test4118594)
+    TESTCASE_AUTO(Test4105380)
+    TESTCASE_AUTO(Test4120552)
+    TESTCASE_AUTO(Test4142938)
+    TESTCASE_AUTO(TestChoicePatternQuote)
+    TESTCASE_AUTO(Test4112104)
+    TESTCASE_AUTO(TestAPI)
+    TESTCASE_AUTO_END;
 }
 
 UBool 
@@ -149,8 +146,13 @@ void MessageFormatRegressionTest::Test4074764() {
 
 /* @bug 4058973
  * MessageFormat.toPattern has weird rounding behavior.
+ *
+ * ICU 4.8: This test is commented out because toPattern() has been changed to return
+ * the original pattern string, rather than reconstituting a new (equivalent) one.
+ * This trivially eliminates issues with rounding or any other pattern string differences.
  */
-void MessageFormatRegressionTest::Test4058973() 
+/*
+void MessageFormatRegressionTest::Test4058973()
 {
     UErrorCode status = U_ZERO_ERROR;
     MessageFormat *fmt = new MessageFormat("{0,choice,0#no files|1#one file|1< {0,number,integer} files}", status);
@@ -166,7 +168,7 @@ void MessageFormatRegressionTest::Test4058973()
     }
 
     delete fmt;
-}
+}*/
 /* @bug 4031438
  * More robust message formats.
  */
@@ -258,7 +260,7 @@ void MessageFormatRegressionTest::Test4031438()
         failure(status, "messageFormatter->applyPattern", possibleDataError);
         tempBuffer.remove();
         tempBuffer = messageFormatter->format(params, 1, tempBuffer, pos, status);
-        if (tempBuffer != "Double ' Quotes 7 test and quoted {1} test plus other {2} stuff.")
+        if (tempBuffer != "Double ' Quotes 7 test and quoted {1} test plus 'other {2} stuff'.")
             dataerrln("quote format test (w/ params) failed. - %s", u_errorName(status));
         logln("Formatted with params : " + tempBuffer);
         
@@ -911,12 +913,21 @@ void MessageFormatRegressionTest::Test4142938()
  */
 void MessageFormatRegressionTest::TestChoicePatternQuote() 
 {
+    // ICU 4.8 ChoiceFormat (like PluralFormat & SelectFormat)
+    // returns the chosen string unmodified, so that it is usable in a MessageFormat.
+    // We modified the test strings accordingly.
+    // Note: Without further formatting/trimming/etc., it is not possible
+    // to get a single apostrophe as the last character of a non-final choice sub-message
+    // because the single apostrophe before the pipe '|' would start quoted text.
+    // Normally, ChoiceFormat is used inside a MessageFormat, where a double apostrophe
+    // can be used in that case and will be formatted as a single one.
+    // (Better: Use a "real" apostrophe, U+2019.)
     UnicodeString DATA [] = {
         // Pattern                  0 value           1 value
         // {sfb} hacked - changed \u2264 to = (copied from Character Map)
-        (UnicodeString)"0#can''t|1#can",           (UnicodeString)"can't",          (UnicodeString)"can",
-        (UnicodeString)"0#'pound(#)=''#'''|1#xyz", (UnicodeString)"pound(#)='#'",   (UnicodeString)"xyz",
-        (UnicodeString)"0#'1<2 | 1=1'|1#''",  (UnicodeString)"1<2 | 1=1", (UnicodeString)"'",
+        "0#can't|1#can",            "can't",          "can",
+        "0#pound(#)='#''|1#xyz",    "pound(#)='#''",  "xyz",
+        "0#1<2 '| 1=1'|1#'",        "1<2 '| 1=1'",    "'",
     };
     for (int i=0; i<9; i+=3) {
         //try {
@@ -929,7 +940,7 @@ void MessageFormatRegressionTest::TestChoicePatternQuote()
                 out = cf->format((double)j, out, pos);
                 if (out != DATA[i+1+j])
                     errln("Fail: Pattern \"" + DATA[i] + "\" x "+j+" -> " +
-                          out + "; want \"" + DATA[i+1+j] + '"');
+                          out + "; want \"" + DATA[i+1+j] + "\"");
             }
             UnicodeString pat;
             pat = cf->toPattern(pat);
@@ -937,9 +948,9 @@ void MessageFormatRegressionTest::TestChoicePatternQuote()
             ChoiceFormat *cf2 = new ChoiceFormat(pat, status);
             pat2 = cf2->toPattern(pat2);
             if (pat != pat2)
-                errln("Fail: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + '"');
+                errln("Fail: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + "\"");
             else
-                logln("Ok: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + '"');
+                logln("Ok: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + "\"");
         /*}
         catch (IllegalArgumentException e) {
             errln("Fail: Pattern \"" + DATA[i] + "\" -> " + e);
@@ -980,12 +991,12 @@ void MessageFormatRegressionTest::TestAPI() {
     
     // Test adoptFormat
     MessageFormat *fmt = new MessageFormat("",status);
-    format->adoptFormat("",fmt,status);
+    format->adoptFormat("some_name",fmt,status);  // Must at least pass a valid identifier.
     failure(status, "adoptFormat");
 
     // Test getFormat
     format->setFormat((int32_t)0,*fmt);
-    format->getFormat("",status);
+    format->getFormat("some_other_name",status);  // Must at least pass a valid identifier.
     failure(status, "getFormat");
     delete format;
 }
