@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
@@ -61,7 +62,7 @@ import com.ibm.icu.util.ULocale;
  * Syntax:<pre>
  * rules         = rule (';' rule)*
  * rule          = keyword ':' condition
- * keyword       = <identifier>
+ * keyword       = &lt;identifier&gt;
  * condition     = and_condition ('or' and_condition)*
  * and_condition = relation ('and' relation)*
  * relation      = is_relation | in_relation | within_relation | 'n' <EOL>
@@ -74,6 +75,9 @@ import com.ibm.icu.util.ULocale;
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
  * </pre></p>
+ * <p>
+ * An "identifier" is a sequence of characters that do not have the
+ * Unicode Pattern_Syntax or Pattern_White_Space properties.
  * <p>
  * The difference between 'in' and 'within' is that 'in' only includes
  * integers in the specified range, while 'within' includes all values.
@@ -138,19 +142,6 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static final double NO_UNIQUE_VALUE = -0.00123456777;
-
-    /*
-     * The set of all characters a valid keyword can start with.
-     */
-    private static final UnicodeSet START_CHARS =
-        new UnicodeSet("[[:ID_Start:][_]]");
-
-    /*
-     * The set of all characters a valid keyword can contain after
-     * the first character.
-     */
-    private static final UnicodeSet CONT_CHARS =
-        new UnicodeSet("[:ID_Continue:]");
 
     /*
      * The default constraint that is always satisfied.
@@ -827,17 +818,9 @@ public class PluralRules implements Serializable {
      * @param token the token to be checked
      * @return true if the token is a valid keyword.
      */
-    private static boolean isValidKeyword(String token) {
-        if (token.length() > 0 && START_CHARS.contains(token.charAt(0))) {
-            for (int i = 1; i < token.length(); ++i) {
-                if (!CONT_CHARS.contains(token.charAt(i))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
+     private static boolean isValidKeyword(String token) {
+         return PatternProps.isIdentifier(token);
+     }
 
     /*
      * Creates a new <code>PluralRules</code> object.  Immutable.

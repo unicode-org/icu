@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2010, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -28,6 +28,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.UFormat;
@@ -158,7 +159,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
            "'{1,number,#,##}' {1,number,#,##}",
         };
 
-        String testResultPatterns[] = {
+        // ICU 4.8 returns the original pattern (testCases)
+        // rather than toPattern() reconstituting a new, equivalent pattern string (testResultPatterns).
+        /*String testResultPatterns[] = {
             "Quotes '', '{', a {0} '{'0}",
             "Quotes '', '{', a {0,number} '{'0}",
             "'{'1,number,#,##} {1,number,'#'#,##}",
@@ -168,12 +171,12 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             "'{'1,date,full}, {1,date,full},",
             "'{'3,date,full}, {3,date,full},",
             "'{'1,number,#,##} {1,number,#,##}"
-        };
+        };*/
 
         String testResultStrings[] = {
-            "Quotes ', {, a 1 {0}",
-            "Quotes ', {, a 1 {0}",
-            "{1,number,#,##} #34,56",
+            "Quotes ', {, 'a' 1 {0}",
+            "Quotes ', {, 'a' 1 {0}",
+            "{1,number,'#',##} #34,56",
             "There are 3,456 files on Disk at 1/12/70 5:46 AM.",
             "On Disk, there are 3,456 files, with $1.00.",
             "{1,number,percent}, 345,600%,",
@@ -193,7 +196,14 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 errln("MessageFormat for " + testCases[i] + " creation failed.");
                 continue;
             }
-            assertEquals("\"" + testCases[i] + "\".toPattern()", testResultPatterns[i], form.toPattern());
+            // ICU 4.8 returns the original pattern (testCases)
+            // rather than toPattern() reconstituting a new, equivalent pattern string (testResultPatterns).
+            // assertEquals("\"" + testCases[i] + "\".toPattern()", testResultPatterns[i], form.toPattern());
+            assertEquals("\"" + testCases[i] + "\".toPattern()", testCases[i], form.toPattern());
+            // Note: An alternative test would be to build MessagePattern objects for
+            // both the input and output patterns and compare them, taking SKIP_SYNTAX etc.
+            // into account.
+            // (Too much trouble...)
 
             //it_out << "Pat out: " << form.toPattern(buffer));
             StringBuffer result = new StringBuffer();
@@ -644,7 +654,14 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern());
-        assertEquals("msg.toPattern()", formatStr, msg.toPattern());
+        // ICU 4.8 does not support toPattern() when there are custom formats (from setFormat() etc.).
+        // assertEquals("msg.toPattern()", formatStr, msg.toPattern());
+        try {
+            msg.toPattern();
+            errln("msg.setFormat().toPattern() does not throw an IllegalStateException");
+        } catch(IllegalStateException e) {
+            // ok
+        }
 
         for (i = 0; i < formatsAct.length; i++) {
             a = formatsAct[i];
@@ -685,7 +702,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         msg.setFormats( formatsToAdopt ); // function to test
 
         assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern());
-        assertEquals("msg.toPattern()", formatStr, msg.toPattern());
+        // ICU 4.8 does not support toPattern() when there are custom formats (from setFormat() etc.).
+        // assertEquals("msg.toPattern()", formatStr, msg.toPattern());
 
         formatsAct = msg.getFormats();
         if (formatsAct==null || (formatsAct.length <=0) || (formatsAct.length != formatsCmp.length)) {
@@ -735,7 +753,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern());
-        assertEquals("msg.toPattern()", formatStr, msg.toPattern());
+        // ICU 4.8 does not support toPattern() when there are custom formats (from setFormat() etc.).
+        // assertEquals("msg.toPattern()", formatStr, msg.toPattern());
 
         formatsAct = msg.getFormats();
         if (formatsAct==null || (formatsAct.length <=0) || (formatsAct.length != formatsCmp.length)) {
@@ -1124,22 +1143,14 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     public void testNamedArguments() {
-        // Ensure that mixed argument types are not allowed.
-        // Either all arguments have to be numeric or valid identifiers.
-        try {
-            new MessageFormat("Number of files in folder {0}: {numfiles}");
-            errln("Creating a MessageFormat with mixed argument types " + 
-                    "(named and numeric) should throw an " + 
-                    "IllegalArgumentException but did not!");
-        } catch (IllegalArgumentException e) {}
-        
-        try {
-            new MessageFormat("Number of files in folder {folder}: {1}");
-            errln("Creating a MessageFormat with mixed argument types " + 
-                    "(named and numeric) should throw an " + 
-                    "IllegalArgumentException but did not!");
-        } catch (IllegalArgumentException e) {}
-        
+        // ICU 4.8 allows mixing named and numbered arguments.
+        assertTrue(
+                "has some named arguments",
+                new MessageFormat("Number of files in folder {0}: {numfiles}").usesNamedArguments());
+        assertTrue(
+                "has some named arguments",
+                new MessageFormat("Number of files in folder {folder}: {1}").usesNamedArguments());
+
         // Test named arguments.
         MessageFormat mf = new MessageFormat("Number of files in folder {folder}: {numfiles}");
         if (!mf.usesNamedArguments()) {
@@ -1151,19 +1162,21 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
         
         // Test argument names with invalid start characters.
+        // Modified: ICU 4.8 allows all characters except for Pattern_White_Space and Pattern_Syntax.
         try {
-            new MessageFormat("Wavelength:  {_\u028EValue\uFF14}");
+            new MessageFormat("Wavelength:  {^\u028EValue\uFF14}");
             errln("Creating a MessageFormat with invalid argument names " + 
             "should throw an IllegalArgumentException but did not!");
         } catch (IllegalArgumentException e) {}
         
         try {
-            new MessageFormat("Wavelength:  {\uFF14\u028EValue}");
+            new MessageFormat("Wavelength:  {\uFE45\u028EValue}");
             errln("Creating a MessageFormat with invalid argument names " + 
             "should throw an IllegalArgumentException but did not!");
         } catch (IllegalArgumentException e) {}
         
         // Test argument names with invalid continue characters.
+        // Modified: ICU 4.8 allows all characters except for Pattern_White_Space and Pattern_Syntax.
         try {
             new MessageFormat("Wavelength:  {Value@\uFF14}");
             errln("Creating a MessageFormat with invalid argument names " + 
@@ -1240,7 +1253,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     public void testNestedFormatsInPluralFormat() {
         try {
             MessageFormat msgFmt = new MessageFormat(
-                    "{0, plural, one {{0, number,C''''est #,##0.0# fichier}} " +
+                    "{0, plural, one {{0, number,C''est #,##0.0# fichier}} " +
                     "other {Ce sont # fichiers}} dans la liste.",
                     new ULocale("fr"));
             Object objArray[] = {new Long(0)};
@@ -1301,6 +1314,19 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             if (!result.equals("There are 4,0 zavoda in the directory.")) {
                 errln("PluralFormat produced wrong message string.");
             }
+        }
+    }
+
+    public void testApostropheInPluralAndSelect() {
+        MessageFormat fmt = new MessageFormat(
+                "abc_{0,plural,other{#'#'#'{'#''}}_def_{1,select,other{sel'}'ect''}}_xyz",
+                Locale.ENGLISH);
+        String expected = "abc_3#3{3'_def_sel}ect'_xyz";
+        String result = fmt.format(new Object[] { 3, "x" });
+        if (!result.equals(expected)) {
+            errln("MessageFormat with apostrophes in plural/select arguments failed:\n" +
+                  "Expected "+expected+"\n" +
+                  "Got      "+result);
         }
     }
 
@@ -1680,5 +1706,130 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             errln("MessageFormat.getFormatByArgumentName(String) was suppose "
                     + "to return an null if argumentName was not found.");
         }
+    }
+
+    public String getPatternAndSkipSyntax(MessagePattern pattern) {
+        StringBuilder sb = new StringBuilder(pattern.getPatternString());
+        int count = pattern.countParts();
+        for (int i = count; i > 0;) {
+            MessagePattern.Part part = pattern.getPart(--i);
+            if (part.getType() == MessagePattern.Part.Type.SKIP_SYNTAX) {
+                sb.delete(part.getIndex(), part.getLimit());
+            }
+        }
+        return sb.toString();
+    }
+
+    public void TestApostropheMode() {
+        MessagePattern ado_mp = new MessagePattern(MessagePattern.ApostropheMode.DOUBLE_OPTIONAL);
+        MessagePattern adr_mp = new MessagePattern(MessagePattern.ApostropheMode.DOUBLE_REQUIRED);
+        assertEquals("wrong value",
+                MessagePattern.ApostropheMode.DOUBLE_OPTIONAL,
+                ado_mp.getApostropheMode());
+        assertEquals("wrong value",
+                MessagePattern.ApostropheMode.DOUBLE_REQUIRED,
+                adr_mp.getApostropheMode());
+        assertNotEquals("MessagePatterns with different ApostropheMode (no pattern)", ado_mp, adr_mp);
+        assertNotEquals("MessagePatterns with different ApostropheMode (a)",
+                ado_mp.parse("a"), adr_mp.parse("a"));
+
+        String[] tuples = new String[] {
+            // Desired output
+            // DOUBLE_OPTIONAL pattern
+            // DOUBLE_REQUIRED pattern (null=same as DOUBLE_OPTIONAL)
+            "I see {many}", "I see '{many}'", null,
+            "I said {'Wow!'}", "I said '{''Wow!''}'", null,
+            "I dont know", "I dont know", "I don't know",
+            "I don't know", "I don't know", "I don''t know",
+            "I don't know", "I don''t know", "I don''t know",
+        };
+        for (int i = 0; i < tuples.length; i += 3) {
+            String desired = tuples[i];
+            String ado_pattern = tuples[i + 1];
+            assertEquals("DOUBLE_OPTIONAL failure", desired,
+                    getPatternAndSkipSyntax(ado_mp.parse(ado_pattern)));
+            String adr_pattern = tuples[i + 2];
+            if (adr_pattern == null) {
+                adr_pattern = ado_pattern;
+            }
+            assertEquals("DOUBLE_REQUIRED failure", desired,
+                    getPatternAndSkipSyntax(adr_mp.parse(adr_pattern)));
+        }
+    }
+
+    // Compare behavior of JDK and ICU's DOUBLE_REQUIRED compatibility mode.
+    public void TestCompatibleApostrophe() {
+        // Message with choice argument which does not contain another argument.
+        // The JDK performs only one apostrophe-quoting pass on this pattern.
+        String pattern = "ab{0,choice,0#1'2''3'''4''''.}yz";
+        java.text.MessageFormat jdkMsg =
+            new java.text.MessageFormat(pattern, Locale.ENGLISH);
+
+        MessageFormat compMsg = new MessageFormat("", Locale.ENGLISH);
+        compMsg.applyPattern(pattern, MessagePattern.ApostropheMode.DOUBLE_REQUIRED);
+        assertEquals("wrong value",
+                MessagePattern.ApostropheMode.DOUBLE_REQUIRED,
+                compMsg.getApostropheMode());
+
+        MessageFormat icuMsg = new MessageFormat("", Locale.ENGLISH);
+        icuMsg.applyPattern(pattern, MessagePattern.ApostropheMode.DOUBLE_OPTIONAL);
+        assertEquals("wrong value",
+                MessagePattern.ApostropheMode.DOUBLE_OPTIONAL,
+                icuMsg.getApostropheMode());
+
+        Object[] zero0 = new Object[] { 0 };
+        assertEquals("unexpected JDK MessageFormat apostrophe behavior",
+                "ab12'3'4''.yz",
+                jdkMsg.format(zero0));
+        assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
+                "ab12'3'4''.yz",
+                compMsg.format(zero0));
+        assertEquals("unexpected ICU MessageFormat double-apostrophe-optional behavior",
+                "ab1'2'3''4''.yz",
+                icuMsg.format(zero0));
+
+        // Message with choice argument which contains a nested simple argument.
+        // The JDK performs two apostrophe-quoting passes.
+        pattern = "ab{0,choice,0#1'2''3'''4''''.{0,number,'#x'}}yz";
+        jdkMsg.applyPattern(pattern);
+        compMsg.applyPattern(pattern);
+        icuMsg.applyPattern(pattern);
+        assertEquals("unexpected JDK MessageFormat apostrophe behavior",
+                "ab1234'.0xyz",
+                jdkMsg.format(zero0));
+        assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
+                "ab1234'.0xyz",
+                compMsg.format(zero0));
+        assertEquals("unexpected ICU MessageFormat double-apostrophe-optional behavior",
+                "ab1'2'3''4''.#x0yz",
+                icuMsg.format(zero0));
+
+        // Message with choice argument which contains a nested choice argument.
+        // The JDK fails to parse this pattern.
+        // jdkMsg.applyPattern("cd{0,choice,0#ef{0,choice,0#1'2''3'''4''''.}uv}wx");
+        // For lack of comparison, we do not test ICU with this pattern.
+
+        // The JDK ChoiceFormat itself always performs one apostrophe-quoting pass.
+        ChoiceFormat choice = new ChoiceFormat("0#1'2''3'''4''''.");
+        assertEquals("unexpected JDK ChoiceFormat apostrophe behavior",
+                "12'3'4''.",
+                choice.format(0));
+        choice.applyPattern("0#1'2''3'''4''''.{0,number,'#x'}");
+        assertEquals("unexpected JDK ChoiceFormat apostrophe behavior",
+                "12'3'4''.{0,number,#x}",
+                choice.format(0));
+    }
+
+    public void TestTrimArgumentName() {
+        // ICU 4.8 allows and ignores white space around argument names and numbers.
+        MessageFormat m = new MessageFormat("a { 0 , number , '#,#'#.0 } z", Locale.ENGLISH);
+        assertEquals("trim-numbered-arg format() failed", "a  #,#2.0  z", m.format(new Object[] { 2 }));
+
+        m.applyPattern("x { _oOo_ , number , integer } y");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("_oOo_", new Integer(3));
+        StringBuffer result = new StringBuffer();
+        assertEquals("trim-named-arg format() failed", "x 3 y",
+                     m.format(map, result, new FieldPosition(0)).toString());
     }
 }

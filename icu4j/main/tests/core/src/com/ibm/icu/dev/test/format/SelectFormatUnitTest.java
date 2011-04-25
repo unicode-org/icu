@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2010, International Business Machines
+ * Copyright (c) 2004-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc.                                            
  *******************************************************************************
@@ -27,29 +27,14 @@ public class SelectFormatUnitTest extends TestFmwk {
      */
     public void TestPatternSyntax() {
         String checkSyntaxData[] = {
-            "odd{foo} odd{bar} other{foobar}",
-            "odd{foo} other{bar} other{foobar}",
             "odd{foo}",
-            "1odd{foo} other{bar}",
+            "*odd{foo} other{bar}",
             "odd{foo},other{bar}",
             "od d{foo} other{bar}",
             "odd{foo}{foobar}other{foo}",
             "odd{foo1}other{foo2}}",  
             "odd{foo1}other{{foo2}",  
             "odd{fo{o1}other{foo2}}"
-        };
-
-        String expectedErrorMsgs[] = {
-            "Duplicate keyword error.",
-            "Duplicate keyword error.",
-            "Pattern syntax error. Value for case \"other\" was not defined. ",
-            "Pattern syntax error.",
-            "Pattern syntax error.",
-            "Pattern syntax error.",
-            "Pattern syntax error.",
-            "Pattern syntax error.",
-            "Pattern syntax error.",
-            "Pattern syntax error. Value for case \"other\" was not defined. ",
         };
 
         //Test SelectFormat pattern syntax
@@ -60,26 +45,34 @@ public class SelectFormatUnitTest extends TestFmwk {
                 errln("\nERROR: Unexpected result - SelectFormat Unit Test failed "
                       + "to detect syntax error with pattern: "+checkSyntaxData[i]);
             } catch (IllegalArgumentException e){
-                assertEquals("Error:TestPatternSyntax failed with unexpected"
-                             + " error message for pattern: " + checkSyntaxData[i] ,
-                             expectedErrorMsgs[i], e.getMessage() );
+                // ok
                 continue;
             }
         }
+
+        // ICU 4.8 does not check for duplicate keywords any more.
+        selFmt.applyPattern("odd{foo} odd{bar} other{foobar}");
+        assertEquals("should use first occurrence of the 'odd' keyword", "foo", selFmt.format("odd"));
+        selFmt.applyPattern("odd{foo} other{bar} other{foobar}");
+        assertEquals("should use first occurrence of the 'other' keyword", "bar", selFmt.format("other"));
     }
 
     /**
      * Unit tests for invalid keywords 
      */
     public void TestInvalidKeyword() {
-        //Test formatting with invalid keyword
+        // Test formatting with invalid keyword:
+        // one which contains Pattern_Syntax or Pattern_White_Space.
         String keywords[] = {
-            "9Keyword-_",       //Starts with a digit
-            "-Keyword-_",       //Starts with a hyphen
-            "_Keyword-_",       //Starts with an underscore
-            "\\u00E9Keyword-_", //Starts with non-ASCII character
-            "Key*word-_",        //Contains a sepial character not allowed
-            "*Keyword-_"       //Starts with a sepial character not allowed
+            "9Keyword-_",
+            "-Keyword-_",
+            "_Keyword-_",
+            "\\u00E9Keyword-_",
+            "Key word",
+            " Keyword",
+            "Keyword ",
+            "Key*word-_",
+            "*Keyword-_"
         };
 
         String expected = "Invalid formatting argument.";

@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import com.ibm.icu.impl.BMPSet;
 import com.ibm.icu.impl.Norm2AllModes;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.RuleCharacterIterator;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.UBiDiProps;
@@ -115,7 +116,7 @@ import com.ibm.icu.util.VersionInfo;
  * </blockquote>
  *
  * Any character may be preceded by a backslash in order to remove any special
- * meaning.  White space characters, as defined by UCharacterProperty.isRuleWhiteSpace(), are
+ * meaning.  White space characters, as defined by the Unicode Pattern_White_Space property, are
  * ignored, unless they are escaped.
  *
  * <p>Property patterns specify a set of characters having a certain
@@ -424,8 +425,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Constructs a set from the given pattern.  See the class description
      * for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @param ignoreWhitespace if true, ignore characters for which
-     * UCharacterProperty.isRuleWhiteSpace() returns true
+     * @param ignoreWhitespace if true, ignore Unicode Pattern_White_Space characters
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
      * @stable ICU 2.0
@@ -548,8 +548,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * optionally ignoring whitespace.
      * See the class description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @param ignoreWhitespace if true then characters for which
-     * UCharacterProperty.isRuleWhiteSpace() returns true are ignored
+     * @param ignoreWhitespace if true then Unicode Pattern_White_Space characters are ignored
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      * @stable ICU 2.0
@@ -628,7 +627,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             break;
         default:
             // Escape whitespace
-            if (UCharacterProperty.isRuleWhiteSpace(c)) {
+            if (PatternProps.isWhiteSpace(c)) {
                 buf.append('\\');
             }
             break;
@@ -3189,30 +3188,27 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
 
     /**
-     * Remove leading and trailing rule white space and compress
-     * internal rule white space to a single space character.
-     *
-     * @see UCharacterProperty#isRuleWhiteSpace
+     * Remove leading and trailing Pattern_White_Space and compress
+     * internal Pattern_White_Space to a single space character.
      */
     private static String mungeCharName(String source) {
-        StringBuffer buf = new StringBuffer();
-        for (int i=0; i<source.length(); ) {
-            int ch = UTF16.charAt(source, i);
-            i += UTF16.getCharCount(ch);
-            if (UCharacterProperty.isRuleWhiteSpace(ch)) {
-                if (buf.length() == 0 ||
-                        buf.charAt(buf.length() - 1) == ' ') {
+        source = PatternProps.trimWhiteSpace(source);
+        StringBuilder buf = null;
+        for (int i=0; i<source.length(); ++i) {
+            char ch = source.charAt(i);
+            if (PatternProps.isWhiteSpace(ch)) {
+                if (buf == null) {
+                    buf = new StringBuilder().append(source, 0, i);
+                } else if (buf.charAt(buf.length() - 1) == ' ') {
                     continue;
                 }
                 ch = ' '; // convert to ' '
             }
-            UTF16.append(buf, ch);
+            if (buf != null) {
+                buf.append(ch);
+            }
         }
-        if (buf.length() != 0 &&
-                buf.charAt(buf.length() - 1) == ' ') {
-            buf.setLength(buf.length() - 1);
-        }
-        return buf.toString();
+        return buf == null ? source : buf.toString();
     }
 
     //----------------------------------------------------------------
@@ -3603,8 +3599,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Bitmask for constructor and applyPattern() indicating that
-     * white space should be ignored.  If set, ignore characters for
-     * which UCharacterProperty.isRuleWhiteSpace() returns true,
+     * white space should be ignored.  If set, ignore Unicode Pattern_White_Space characters,
      * unless they are quoted or escaped.  This may be ORed together
      * with other selectors.
      * @stable ICU 3.8

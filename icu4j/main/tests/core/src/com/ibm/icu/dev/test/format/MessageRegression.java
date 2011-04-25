@@ -44,6 +44,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.ULocale;
 
 public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -101,15 +103,19 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     /* @bug 4058973
      * MessageFormat.toPattern has weird rounding behavior.
+     *
+     * ICU 4.8: This test is commented out because toPattern() has been changed to return
+     * the original pattern string, rather than reconstituting a new (equivalent) one.
+     * This trivially eliminates issues with rounding or any other pattern string differences.
      */
-    public void Test4058973() {
+    /*public void Test4058973() {
 
         MessageFormat fmt = new MessageFormat("{0,choice,0#no files|1#one file|1< {0,number,integer} files}");
         String pat = fmt.toPattern();
         if (!pat.equals("{0,choice,0.0#no files|1.0#one file|1.0< {0,number,integer} files}")) {
             errln("MessageFormat.toPattern failed");
         }
-    }
+    }*/
     /* @bug 4031438
      * More robust message formats.
      */
@@ -143,11 +149,11 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             logln("Apply with pattern : " + pattern2);
             messageFormatter.applyPattern(pattern2);
             tempBuffer = messageFormatter.format(paramArray);
-            if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {1} test plus other {2} stuff."))
+            if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {1} test plus 'other {2} stuff'."))
                 errln("quote format test (w/ params) failed.");
             logln("Formatted with params : " + tempBuffer);
             tempBuffer = messageFormatter.format(null);
-            if (!tempBuffer.equals("Double ' Quotes {0} test and quoted {1} test plus other {2} stuff."))
+            if (!tempBuffer.equals("Double ' Quotes {0} test and quoted {1} test plus 'other {2} stuff'."))
                 errln("quote format test (w/ null) failed.");
             logln("Formatted with null : " + tempBuffer);
             logln("toPattern : " + messageFormatter.toPattern());
@@ -285,12 +291,12 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     {
         String originalPattern = "initial pattern";
         MessageFormat mf = new MessageFormat(originalPattern);
+        String illegalPattern = "ab { '}' de";
         try {
-            String illegalPattern = "ab { '}' de";
             mf.applyPattern(illegalPattern);
             errln("illegal pattern: \"" + illegalPattern + "\"");
         } catch (IllegalArgumentException foo) {
-            if (!originalPattern.equals(mf.toPattern()))
+            if (illegalPattern.equals(mf.toPattern()))
                 errln("pattern after: \"" + mf.toPattern() + "\"");
         }
     }
@@ -368,7 +374,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             mf.applyPattern(illegalPattern);
             errln("Should have thrown IllegalArgumentException for pattern : " + illegalPattern);
         } catch (IllegalArgumentException e) {
-            if (!originalPattern.equals(mf.toPattern()))
+            if (illegalPattern.equals(mf.toPattern()))
                 errln("pattern after: \"" + mf.toPattern() + "\"");
         }
     }
@@ -596,7 +602,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void Test4169959() {
         // This works
-        logln(MessageFormat.format("This will {0}", "work"));
+        logln(MessageFormat.format("This will {0}", new Object[]{"work"}));
 
         // This fails
         logln(MessageFormat.format("This will {0}", new Object[]{ null }));
@@ -670,11 +676,11 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             paramsMap.clear();
             paramsMap.put("ARG_ZERO", new Integer(7));
             tempBuffer = messageFormatter.format(paramsMap);
-            if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {ARG_ONE} test plus other {ARG_TWO} stuff."))
+            if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {ARG_ONE} test plus 'other {ARG_TWO} stuff'."))
                 errln("quote format test (w/ params) failed.");
             logln("Formatted with params : " + tempBuffer);
             tempBuffer = messageFormatter.format(null);
-            if (!tempBuffer.equals("Double ' Quotes {ARG_ZERO} test and quoted {ARG_ONE} test plus other {ARG_TWO} stuff."))
+            if (!tempBuffer.equals("Double ' Quotes {ARG_ZERO} test and quoted {ARG_ONE} test plus 'other {ARG_TWO} stuff'."))
                 errln("quote format test (w/ null) failed.");
             logln("Formatted with null : " + tempBuffer);
             logln("toPattern : " + messageFormatter.toPattern());
@@ -833,5 +839,42 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
   }
-}
 
+    private MessageFormat serializeAndDeserialize(MessageFormat original) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream ostream = new ObjectOutputStream(baos);
+            ostream.writeObject(original);
+            ostream.flush();
+            byte bytes[] = baos.toByteArray();
+    
+            ObjectInputStream istream = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            MessageFormat reconstituted = (MessageFormat)istream.readObject();
+            return reconstituted;
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void TestSerialization() {
+        MessageFormat format1 = null;
+        MessageFormat format2 = null;
+
+        format1 = new MessageFormat("", ULocale.GERMAN);
+        format2 = serializeAndDeserialize(format1);
+        assertEquals("MessageFormats (empty pattern) before and after serialization are not equal", format1, format2);
+
+        format1.applyPattern("ab{1}cd{0,number}ef{3,date}gh");
+        format1.setFormat(2, null);
+        format1.setFormatByArgumentIndex(1, NumberFormat.getInstance(ULocale.ENGLISH));
+        format2 = serializeAndDeserialize(format1);
+        assertEquals("MessageFormats (with custom formats) before and after serialization are not equal", format1, format2);
+        assertEquals(
+                "MessageFormat (with custom formats) does not "+
+                "format correctly after serialization",
+                "ab3.3cd4,4ef***gh",
+                format2.format(new Object[] { 4.4, 3.3, "+++", "***" }));
+    }
+}
