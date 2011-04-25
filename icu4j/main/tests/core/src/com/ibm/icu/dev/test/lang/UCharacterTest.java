@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
@@ -245,6 +246,46 @@ public final class UCharacterTest extends TestFmwk
                     (int)c, j, i, z));
             }
         }
+    }
+
+    /**
+     * Test various implementations of Pattern_Syntax & Pattern_White_Space.
+     */
+    public void TestPatternProperties() {
+        UnicodeSet syn_pp = new UnicodeSet();
+        UnicodeSet syn_prop = new UnicodeSet("[:Pattern_Syntax:]");
+        UnicodeSet syn_list = new UnicodeSet(
+            "[!-/\\:-@\\[-\\^`\\{-~"+
+            "\u00A1-\u00A7\u00A9\u00AB\u00AC\u00AE\u00B0\u00B1\u00B6\u00BB\u00BF\u00D7\u00F7"+
+            "\u2010-\u2027\u2030-\u203E\u2041-\u2053\u2055-\u205E\u2190-\u245F\u2500-\u2775"+
+            "\u2794-\u2BFF\u2E00-\u2E7F\u3001-\u3003\u3008-\u3020\u3030\uFD3E\uFD3F\uFE45\uFE46]");
+        UnicodeSet ws_pp = new UnicodeSet();
+        UnicodeSet ws_prop = new UnicodeSet("[:Pattern_White_Space:]");
+        UnicodeSet ws_list = new UnicodeSet("[\\u0009-\\u000D\\ \\u0085\\u200E\\u200F\\u2028\\u2029]");
+        UnicodeSet syn_ws_pp = new UnicodeSet();
+        UnicodeSet syn_ws_prop = new UnicodeSet(syn_prop).addAll(ws_prop);
+        for(int c=0; c<=0xffff; ++c) {
+            if(PatternProps.isSyntax(c)) {
+                syn_pp.add(c);
+            }
+            if(PatternProps.isWhiteSpace(c)) {
+                ws_pp.add(c);
+            }
+            if(PatternProps.isSyntaxOrWhiteSpace(c)) {
+                syn_ws_pp.add(c);
+            }
+        }
+        compareUSets(syn_pp, syn_prop,
+                     "PatternProps.isSyntax()", "[:Pattern_Syntax:]", true);
+        compareUSets(syn_pp, syn_list,
+                     "PatternProps.isSyntax()", "[Pattern_Syntax ranges]", true);
+        compareUSets(ws_pp, ws_prop,
+                     "PatternProps.isWhiteSpace()", "[:Pattern_White_Space:]", true);
+        compareUSets(ws_pp, ws_list,
+                     "PatternProps.isWhiteSpace()", "[Pattern_White_Space ranges]", true);
+        compareUSets(syn_ws_pp, syn_ws_prop,
+                     "PatternProps.isSyntaxOrWhiteSpace()",
+                     "[[:Pattern_Syntax:][:Pattern_White_Space:]]", true);
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  * Copyright (C) 2009 , Yahoo! Inc.                                            *
  *******************************************************************************
@@ -12,8 +12,8 @@ import java.io.ObjectInputStream;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.ibm.icu.impl.PatternProps;
 
 /**
  * <p><code>SelectFormat</code> supports the creation of  internationalized
@@ -24,6 +24,10 @@ import java.util.Map;
  * is selected; otherwise, the default phrase is used.</p>
  *
  * <h4>Using <code>SelectFormat</code> for Gender Agreement</h4>
+ *
+ * <p>Note: Typically, select formatting is done via <code>MessageFormat</code>
+ * with a <code>select</code> argument type,
+ * rather than using a stand-alone <code>SelectFormat</code>.</p>
  *
  * <p>The main use case for the select format is gender based  inflection.
  * When names or nouns are inserted into sentences, their gender can  affect pronouns,
@@ -58,6 +62,9 @@ import java.util.Map;
  * but similar in grammatical use.
  * Some African languages have around 20 noun classes.</p>
  *
+ * <p><b>Note:</b>For the gender of a <i>person</i> in a given sentence,
+ * we usually need to distinguish only between female, male and other/unknown.</p>
+ *
  * <p>To enable localizers to create sentence patterns that take their
  * language's gender dependencies into consideration, software has to  provide
  * information about the gender associated with a noun or name to
@@ -66,8 +73,8 @@ import java.util.Map;
  *
  * <ul>
  * <li>For people, natural gender information should be maintained  for each person.
- * The keywords "male", "female", "mixed" (for groups of people)
- * and "unknown" are used.
+ * Keywords like "male", "female", "mixed" (for groups of people)
+ * and "unknown" could be used.
  *
  * <li>For nouns, grammatical gender information should be maintained  for
  * each noun and per language, e.g., in resource bundles.
@@ -85,6 +92,11 @@ import java.util.Map;
  *
  * <pre>{0} went to {2}.</pre>
  *
+ * <p><b>Note:</b> The entire sentence should be included (and partially repeated)
+ * inside each phrase. Otherwise translators would have to be trained on how to
+ * move bits of the sentence in and out of the select argument of a message.
+ * (The examples below do not follow this recommendation!)</p>
+ * 
  * <p>The sentence pattern for French, where the gender of the person affects
  * the form of the participle, uses a select format based on argument 1:</p>
  *
@@ -104,39 +116,24 @@ import java.util.Map;
  *
  * <h4>Patterns and Their Interpretation</h4>
  *
- * <p>The <code>SelectFormat</code> pattern text defines the phrase  output
+ * <p>The <code>SelectFormat</code> pattern string defines the phrase  output
  * for each user-defined keyword.
- * The pattern is a sequence of <code><i>keyword</i>{<i>phrase</i>}</code>
- * clauses, separated by white space characters.
- * Each clause assigns the phrase <code><i>phrase</i></code>
- * to the user-defined <code><i>keyword</i></code>.</p>
+ * The pattern is a sequence of (keyword, message) pairs.
+ * A keyword is a "pattern identifier": [^[[:Pattern_Syntax:][:Pattern_White_Space:]]]+</p>
  *
- * <p>Keywords must match the pattern [a-zA-Z][a-zA-Z0-9_-]*; keywords
- * that don't match this pattern result in the error code
- * <code>U_ILLEGAL_CHARACTER</code>.
- * You always have to define a phrase for the default keyword
+ * <p>Each message is a MessageFormat pattern string enclosed in {curly braces}.</p>
+ *
+ * <p>You always have to define a phrase for the default keyword
  * <code>other</code>; this phrase is returned when the keyword  
  * provided to
  * the <code>format</code> method matches no other keyword.
  * If a pattern does not provide a phrase for <code>other</code>, the  method
  * it's provided to returns the error  <code>U_DEFAULT_KEYWORD_MISSING</code>.
- * If a pattern provides more than one phrase for the same keyword, the
- * error <code>U_DUPLICATE_KEYWORD</code> is returned.
  * <br/>
- * Spaces between <code><i>keyword</i></code> and
- * <code>{<i>phrase</i>}</code>  will be ignored; spaces within
- * <code>{<i>phrase</i>}</code> will be preserved.</p>
+ * Pattern_White_Space between keywords and messages is ignored.
+ * Pattern_White_Space within a message is preserved and output.</p>
  *
- * <p>The phrase for a particular select case may contain other message
- * format patterns. <code>SelectFormat</code> preserves these so that  you
- * can use the strings produced by <code>SelectFormat</code> with other
- * formatters. If you are using <code>SelectFormat</code> inside a
- * <code>MessageFormat</code> pattern, <code>MessageFormat</code> will
- * automatically evaluate the resulting format pattern.
- * Thus, curly braces (<code>{</code>, <code>}</code>) are <i>only</i> allowed
- * in phrases to define a nested format pattern.</p>
- *
- * <pre>Example:
+ * <p><pre>Example:
  * MessageFormat msgFmt = new MessageFormat("{0} est " +
  *     "{1, select, female {all&#u00E9;e} other {all&#u00E9;}} &#u00E0; Paris.",
  *     new ULocale("fr"));
@@ -160,106 +157,27 @@ public class SelectFormat extends Format{
      */
     private String pattern = null;
 
-    /*
-     * The format messages for each select case. It is a mapping:
-     *  <code>String</code>(select case keyword) --&gt; <code>String</code>
-     *  (message for this select case).
-     */
-    transient private Map<String, String> parsedValues = null;
-
     /**
-     * Common name for the default select form.  This name is returned
-     * for values to which no other form in the rule applies.  It 
-     * can additionally be assigned rules of its own.
-     * @stable ICU 4.4
+     * The MessagePattern which contains the parsed structure of the pattern string.
      */
-    private static final String KEYWORD_OTHER = "other";
-
-    /*
-     * The types of character classifications 
-     */
-    private enum CharacterClass {
-        T_START_KEYWORD, T_CONTINUE_KEYWORD, T_LEFT_BRACE,
-        T_RIGHT_BRACE, T_SPACE, T_OTHER
-    };
-
-    /*
-     * The different states needed in state machine
-     * in applyPattern method. 
-     */
-    private enum State {
-       START_STATE, KEYWORD_STATE,
-       PAST_KEYWORD_STATE, PHRASE_STATE      
-    };
-
+    transient private MessagePattern msgPattern;
+    
     /**
      * Creates a new <code>SelectFormat</code> for a given pattern string.
      * @param  pattern the pattern for this <code>SelectFormat</code>.
      * @stable ICU 4.4
      */
     public SelectFormat(String pattern) {
-        init();
         applyPattern(pattern);
     }
 
     /*
-     * Initializes the <code>SelectFormat</code> object.
-     * Postcondition:<br/>
-     *   <code>parsedValues</code>: is <code>null</code><br/>
-     *   <code>pattern</code>:      is <code>null</code><br/>
+     * Resets the <code>SelectFormat</code> object.
      */
-    private void init() {
-        parsedValues = null;
+    private void reset() {
         pattern = null;
-    }
-
-    /**
-     * Classifies the characters 
-     */
-    private boolean checkValidKeyword(String argKeyword) {
-        int len = argKeyword.length();
-        if (len < 1) {
-            return false;
-        };
-        if (classifyCharacter(argKeyword.charAt(0)) != CharacterClass.T_START_KEYWORD) {
-            return false;
-        };
-        for (int i = 1; i < len; i++) {
-            CharacterClass type = classifyCharacter(argKeyword.charAt(i));
-            if (type != CharacterClass.T_START_KEYWORD && 
-                type != CharacterClass.T_CONTINUE_KEYWORD) {
-                return false;
-            };
-        };
-        return true;
-    }
-
-    /**
-     * Classifies the characters.
-     */
-    private CharacterClass classifyCharacter(char ch) {
-        if ((ch >= 'A') && (ch <= 'Z')) {
-            return CharacterClass.T_START_KEYWORD;
-        }
-        if ((ch >= 'a') && (ch <= 'z')) {
-            return CharacterClass.T_START_KEYWORD;
-        }
-        if ((ch >= '0') && (ch <= '9')) {
-            return CharacterClass.T_CONTINUE_KEYWORD;
-        }
-        switch (ch) {
-            case '{':
-                return CharacterClass.T_LEFT_BRACE;
-            case '}':
-                return CharacterClass.T_RIGHT_BRACE;
-            case ' ':
-            case '\t':
-                return CharacterClass.T_SPACE;
-            case '-':
-            case '_':
-                return CharacterClass.T_CONTINUE_KEYWORD;
-            default :
-                return CharacterClass.T_OTHER;
+        if(msgPattern != null) {
+            msgPattern.clear();
         }
     }
 
@@ -272,129 +190,16 @@ public class SelectFormat extends Format{
      * @stable ICU 4.4
      */
     public void applyPattern(String pattern) {
-        parsedValues = null;
         this.pattern = pattern;
-
-        //Initialization
-        StringBuilder keyword = new StringBuilder();
-        StringBuilder phrase = new StringBuilder();
-        int braceCount = 0;
-
-        parsedValues = new HashMap<String, String>();
-
-        //Process the state machine
-        State state = State.START_STATE;
-        for (int i = 0; i < pattern.length(); i++ ){
-            //Get the character and check its type
-            char ch = pattern.charAt(i);
-            CharacterClass type = classifyCharacter(ch);
-
-            //Process the state machine
-            switch (state) {
-                //At the start of pattern
-                case START_STATE:
-                    switch (type) {
-                        case T_SPACE:
-                            break ;
-                        case T_START_KEYWORD:
-                            state = State.KEYWORD_STATE;
-                            keyword.append(ch);
-                            break ;
-                        //If anything else is encountered, it's a syntax error
-                        default :
-                            parsingFailure("Pattern syntax error.");
-                }//end of switch(type)
-                break ;
-
-                //Handle the keyword state
-                case KEYWORD_STATE:
-                    switch (type) {
-                        case T_SPACE:
-                            state = State.PAST_KEYWORD_STATE;
-                            break ;
-                        case T_START_KEYWORD:
-                        case T_CONTINUE_KEYWORD:
-                            keyword.append(ch);
-                            break ;
-                        case T_LEFT_BRACE:
-                            state = State.PHRASE_STATE;
-                        break ;
-                        //If anything else is encountered, it's a syntax error
-                        default :
-                            parsingFailure("Pattern syntax error.");
-                    }//end of switch(type)
-                    break ;
-
-                //Handle the pastkeyword state
-                case PAST_KEYWORD_STATE:
-                    switch (type) {
-                        case T_SPACE:
-                            break ;
-                        case T_LEFT_BRACE:
-                            state = State.PHRASE_STATE;
-                            break ;
-                        //If anything else is encountered, it's a syntax error
-                        default :
-                            parsingFailure("Pattern syntax error.");
-                    }//end of switch(type)
-                        break ;
-
-               //Handle the phrase state
-               case PHRASE_STATE:
-                    switch (type) {
-                        case T_LEFT_BRACE:
-                            braceCount++;
-                            phrase.append(ch);
-                            break ;
-                        case T_RIGHT_BRACE:
-                            //Matching keyword, phrase pair found
-                            if (braceCount == 0){
-                                //Check validity of keyword
-                                if (parsedValues.get(keyword.toString()) != null) {
-                                    parsingFailure("Duplicate keyword error.");
-                                }
-                                if (keyword.length() == 0) {
-                                    parsingFailure("Pattern syntax error.");
-                                }
-
-                                //Store the keyword, phrase pair in hashTable
-                                parsedValues.put( keyword.toString(), phrase.toString());
-
-                               //Reinitialize
-                                keyword.setLength(0);
-                                phrase.setLength(0);
-                                state = State.START_STATE;
-                            }
-
-                            if (braceCount > 0){
-                                braceCount-- ;
-                                phrase.append(ch);
-                            }
-                            break ;
-                        default :
-                            phrase.append(ch);
-                    }//end of switch(type)
-                    break ;
-
-                //Handle the  default case of switch(state)
-                default :
-                    parsingFailure("Pattern syntax error.");
-
-            }//end of switch(state)
+        if (msgPattern == null) {
+            msgPattern = new MessagePattern();
         }
-
-        //Check if the state machine is back to START_STATE
-        if ( state != State.START_STATE){
-            parsingFailure("Pattern syntax error.");
+        try {
+            msgPattern.parseSelectStyle(pattern);
+        } catch(RuntimeException e) {
+            reset();
+            throw e;
         }
-
-        //Check if "other" keyword is present 
-        if ( !checkSufficientDefinition() ) {
-            parsingFailure("Pattern syntax error. " 
-                    + "Value for case \"" + KEYWORD_OTHER
-                    + "\" was not defined. ");
-        }
-        return ;
     }
 
     /**
@@ -408,40 +213,102 @@ public class SelectFormat extends Format{
     }
 
     /**
+     * Finds the SelectFormat sub-message for the given keyword, or the "other" sub-message.
+     * @param pattern A MessagePattern.
+     * @param partIndex the index of the first SelectFormat argument style part.
+     * @param keyword a keyword to be matched to one of the SelectFormat argument's keywords.
+     * @return the sub-message start part index.
+     */
+    /*package*/ static int findSubMessage(MessagePattern pattern, int partIndex, String keyword) {
+        int count=pattern.countParts();
+        int msgStart=0;
+        // Iterate over (ARG_SELECTOR, message) pairs until ARG_LIMIT or end of select-only pattern.
+        do {
+            MessagePattern.Part part=pattern.getPart(partIndex++);
+            MessagePattern.Part.Type type=part.getType();
+            if(type==MessagePattern.Part.Type.ARG_LIMIT) {
+                break;
+            }
+            assert type==MessagePattern.Part.Type.ARG_SELECTOR;
+            // part is an ARG_SELECTOR followed by a message
+            if(pattern.partSubstringMatches(part, keyword)) {
+                // keyword matches
+                return partIndex;
+            } else if(msgStart==0 && pattern.partSubstringMatches(part, "other")) {
+                msgStart=partIndex;
+            }
+            partIndex=pattern.getLimitPartIndex(partIndex);
+        } while(++partIndex<count);
+        return msgStart;
+    }
+
+    /**
      * Selects the phrase for the given keyword.
      *
-     * @param keyword a keyword for which the select message should be formatted.
+     * @param keyword a phrase selection keyword.
      * @return the string containing the formatted select message.
-     * @throws IllegalArgumentException when the given keyword is not available in the select format pattern
+     * @throws IllegalArgumentException when the given keyword is not a "pattern identifier"
      * @stable ICU 4.4
      */
     public final String format(String keyword) {
         //Check for the validity of the keyword
-        if( !checkValidKeyword(keyword) ){
+        if (!PatternProps.isIdentifier(keyword)) {
             throw new IllegalArgumentException("Invalid formatting argument.");
         }
-
         // If no pattern was applied, throw an exception
-        if (parsedValues == null) {
+        if (msgPattern == null || msgPattern.countParts() == 0) {
             throw new IllegalStateException("Invalid format error.");
         }
 
-        // Get appropriate format pattern.
-        String selectedPattern = parsedValues.get(keyword);
-        if (selectedPattern == null) { // Fallback to others.
-            selectedPattern = parsedValues.get(KEYWORD_OTHER);
+        // Get the appropriate sub-message.
+        int msgStart = findSubMessage(msgPattern, 0, keyword);
+        if (!msgPattern.jdkAposMode()) {
+            int msgLimit = msgPattern.getLimitPartIndex(msgStart);
+            return msgPattern.getPatternString().substring(msgPattern.getPart(msgStart).getLimit(),
+                                                           msgPattern.getPatternIndex(msgLimit));
         }
-        return selectedPattern;
+        // JDK compatibility mode: Remove SKIP_SYNTAX.
+        StringBuilder result = null;
+        int prevIndex = msgPattern.getPart(msgStart).getLimit();
+        for (int i = msgStart;;) {
+            MessagePattern.Part part = msgPattern.getPart(++i);
+            MessagePattern.Part.Type type = part.getType();
+            int index = part.getIndex();
+            if (type == MessagePattern.Part.Type.MSG_LIMIT) {
+                if (result == null) {
+                    return pattern.substring(prevIndex, index);
+                } else {
+                    return result.append(pattern, prevIndex, index).toString();
+                }
+            } else if (type == MessagePattern.Part.Type.SKIP_SYNTAX) {
+                if (result == null) {
+                    result = new StringBuilder();
+                }
+                result.append(pattern, prevIndex, index);
+                prevIndex = part.getLimit();
+            } else if (type == MessagePattern.Part.Type.ARG_START) {
+                if (result == null) {
+                    result = new StringBuilder();
+                }
+                result.append(pattern, prevIndex, index);
+                prevIndex = index;
+                i = msgPattern.getLimitPartIndex(i);
+                index = msgPattern.getPart(i).getLimit();
+                MessagePattern.appendReducedApostrophes(pattern, prevIndex, index, result);
+                prevIndex = index;
+            }
+        }
     }
 
     /**
      * Selects the phrase for the given keyword.
      * and appends the formatted message to the given <code>StringBuffer</code>.
-     * @param keyword a keyword for which the select message should be formatted.
-     * @param toAppendTo the formatted message will be appended to this
+     * @param keyword a phrase selection keyword.
+     * @param toAppendTo the selected phrase will be appended to this
      *        <code>StringBuffer</code>.
      * @param pos will be ignored by this method.
-     * @throws IllegalArgumentException when the given keyword is not available in the select format pattern
+     * @throws IllegalArgumentException when the given keyword is not a String
+     *         or not a "pattern identifier"
      * @return the string buffer passed in as toAppendTo, with formatted text
      *         appended.
      * @stable ICU 4.4
@@ -470,45 +337,27 @@ public class SelectFormat extends Format{
         throw new UnsupportedOperationException();
     }
 
-    /*
-     * Checks if the applied pattern provided enough information,
-     * i.e., if the attribute <code>parsedValues</code> stores enough
-     * information for select formatting.
-     * Will be called at the end of pattern parsing.
-     */
-    private boolean checkSufficientDefinition() {
-        // Check that at least the default rule is defined.
-        return parsedValues.get(KEYWORD_OTHER) != null; 
-    }
-
-    /*
-     * Helper method that resets the <code>SelectFormat</code> object and throws
-     * an <code>IllegalArgumentException</code> with a given error text.
-     * @param errorText the error text of the exception message.
-     * @throws IllegalArgumentException will always be thrown by this method.
-     */
-    private void parsingFailure(String errorText) {
-        // Set SelectFormat to a valid state.
-        init();
-        throw new IllegalArgumentException(errorText);
-    }
-
     /**
      * {@inheritDoc}
      * @stable ICU 4.4
      */
+    @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof SelectFormat)) {
+        if(this == obj) {
+            return true;
+        }
+        if(obj == null || getClass() != obj.getClass()) {
             return false;
         }
         SelectFormat sf = (SelectFormat) obj;
-        return pattern == null ? sf.pattern == null : pattern.equals(sf.pattern);
+        return msgPattern == null ? sf.msgPattern == null : msgPattern.equals(sf.msgPattern);
     }
 
     /**
      * {@inheritDoc}
      * @stable ICU 4.4
      */
+    @Override
     public int hashCode() {
         if (pattern != null) {
             return pattern.hashCode();
@@ -517,16 +366,12 @@ public class SelectFormat extends Format{
     }
 
     /**
-     * Returns a string representation of the object
-     * @return a text representation of the format object.
-     * The result string includes the class name and
-     * the pattern string returned by <code>toPattern()</code>.
+     * {@inheritDoc}
      * @stable ICU 4.4
      */
+    @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("pattern='" + pattern + "'");
-        return buf.toString();
+        return "pattern='" + pattern + "'";
     }
 
     private void readObject(ObjectInputStream in)

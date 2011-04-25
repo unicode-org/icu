@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -737,18 +737,11 @@ public final class UCharacterProperty
      * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
      * @param c codepoint to check
      * @return true if c is a ICU white space
+     * @deprecated use PatternProps.isWhiteSpace(c)
      */
     public static boolean isRuleWhiteSpace(int c)
     {
-        /* "white space" in the sense of ICU rule parsers
-           This is a FIXED LIST that is NOT DEPENDENT ON UNICODE PROPERTIES.
-           See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
-           U+0009..U+000D, U+0020, U+0085, U+200E..U+200F, and U+2028..U+2029
-           Equivalent to test for Pattern_White_Space Unicode property.
-        */
-        return (c >= 0x0009 && c <= 0x2029 &&
-                (c <= 0x000D || c == 0x0020 || c == 0x0085 ||
-                 c == 0x200E || c == 0x200F || c >= 0x2028));
+        return PatternProps.isWhiteSpace(c);
     }
 
     /**

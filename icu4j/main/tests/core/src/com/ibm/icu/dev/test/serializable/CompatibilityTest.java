@@ -130,6 +130,16 @@ public class CompatibilityTest extends TestFmwk
         {"ICU_3.8.1",   "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
         {"ICU_4.0",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
         {"ICU_4.2.1",   "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        // ICU 4.8 MessageFormat is not serialization-compatible with previous versions.
+        {"ICU_3.6",     "com.ibm.icu.text.MessageFormat.dat"},
+        {"ICU_3.8.1",   "com.ibm.icu.text.MessageFormat.dat"},
+        {"ICU_4.0",     "com.ibm.icu.text.MessageFormat.dat"},
+        {"ICU_4.2.1",   "com.ibm.icu.text.MessageFormat.dat"},
+        {"ICU_4.4",     "com.ibm.icu.text.MessageFormat.dat"},
+        // RelativeDateFormat apparently uses and serializes a MessageFormat.
+        {"ICU_4.0",     "com.ibm.icu.impl.RelativeDateFormat.dat"},
+        {"ICU_4.2.1",   "com.ibm.icu.impl.RelativeDateFormat.dat"},
+        {"ICU_4.4",     "com.ibm.icu.impl.RelativeDateFormat.dat"},
     };
 
     private Target getFileTargets(URL fileURL)
