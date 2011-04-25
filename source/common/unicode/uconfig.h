@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -174,6 +174,17 @@
  */
 #ifndef UCONFIG_NO_IDNA
 #   define UCONFIG_NO_IDNA 0
+#endif
+
+/**
+ * \def UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE
+ * Determines the default UMessagePatternApostropheMode.
+ * See the documentation for that enum.
+ *
+ * @draft ICU 4.8
+ */
+#ifndef UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE
+#   define UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE UMSGPAT_APOS_DOUBLE_OPTIONAL
 #endif
 
 /* i18n library switches ---------------------------------------------------- */

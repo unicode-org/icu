@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -10,6 +10,7 @@
 #include "unicode/putil.h"
 #include "cstring.h"
 #include "hash.h"
+#include "patternprops.h"
 #include "normalizer2impl.h"
 #include "uparse.h"
 #include "ucdtest.h"
@@ -50,13 +51,15 @@ UnicodeTest::~UnicodeTest()
 
 void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    if (exec) logln("TestSuite UnicodeTest: ");
-    switch (index) {
-        case 0: name = "TestAdditionalProperties"; if(exec) TestAdditionalProperties(); break;
-        case 1: name = "TestBinaryValues"; if(exec) TestBinaryValues(); break;
-        case 2: name = "TestConsistency"; if(exec) TestConsistency(); break;
-        default: name = ""; break; //needed to end loop
+    if(exec) {
+        logln("TestSuite UnicodeTest: ");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestAdditionalProperties);
+    TESTCASE_AUTO(TestBinaryValues);
+    TESTCASE_AUTO(TestConsistency);
+    TESTCASE_AUTO(TestPatternProperties);
+    TESTCASE_AUTO_END;
 }
 
 //====================================================
@@ -339,7 +342,7 @@ void UnicodeTest::TestConsistency() {
     IcuTestErrorCode errorCode(*this, "TestConsistency");
     const Normalizer2 *nfd=Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
     const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
-    if(errorCode.isFailure()) {
+    if(!nfcImpl->ensureCanonIterData(errorCode) || errorCode.isFailure()) {
         dataerrln("Normalizer2::getInstance(NFD) or Normalizer2Factory::getNFCImpl() failed - %s\n",
                   errorCode.errorName());
         errorCode.reset();
@@ -368,4 +371,58 @@ void UnicodeTest::TestConsistency() {
         errln("NFC.getCanonStartSet() returned FALSE");
     }
 #endif
+}
+
+/**
+ * Test various implementations of Pattern_Syntax & Pattern_White_Space.
+ */
+void UnicodeTest::TestPatternProperties() {
+    IcuTestErrorCode errorCode(*this, "TestPatternProperties()");
+    UnicodeSet syn_pp;
+    UnicodeSet syn_prop(UNICODE_STRING_SIMPLE("[:Pattern_Syntax:]"), errorCode);
+    UnicodeSet syn_list(UNICODE_STRING_SIMPLE(
+        "[!-/\\:-@\\[-\\^`\\{-~"
+        "\\u00A1-\\u00A7\\u00A9\\u00AB\\u00AC\\u00AE\\u00B0\\u00B1\\u00B6\\u00BB\\u00BF\\u00D7\\u00F7"
+        "\\u2010-\\u2027\\u2030-\\u203E\\u2041-\\u2053\\u2055-\\u205E\\u2190-\\u245F\\u2500-\\u2775"
+        "\\u2794-\\u2BFF\\u2E00-\\u2E7F\\u3001-\\u3003\\u3008-\\u3020\\u3030\\uFD3E\\uFD3F\\uFE45\\uFE46]"), errorCode);
+    UnicodeSet ws_pp;
+    UnicodeSet ws_prop(UNICODE_STRING_SIMPLE("[:Pattern_White_Space:]"), errorCode);
+    UnicodeSet ws_list(UNICODE_STRING_SIMPLE("[\\u0009-\\u000D\\ \\u0085\\u200E\\u200F\\u2028\\u2029]"), errorCode);
+    UnicodeSet syn_ws_pp;
+    UnicodeSet syn_ws_prop(syn_prop);
+    syn_ws_prop.addAll(ws_prop);
+    for(UChar32 c=0; c<=0xffff; ++c) {
+        if(PatternProps::isSyntax(c)) {
+            syn_pp.add(c);
+        }
+        if(PatternProps::isWhiteSpace(c)) {
+            ws_pp.add(c);
+        }
+        if(PatternProps::isSyntaxOrWhiteSpace(c)) {
+            syn_ws_pp.add(c);
+        }
+    }
+    compareUSets(syn_pp, syn_prop,
+                 "PatternProps.isSyntax()", "[:Pattern_Syntax:]", TRUE);
+    compareUSets(syn_pp, syn_list,
+                 "PatternProps.isSyntax()", "[Pattern_Syntax ranges]", TRUE);
+    compareUSets(ws_pp, ws_prop,
+                 "PatternProps.isWhiteSpace()", "[:Pattern_White_Space:]", TRUE);
+    compareUSets(ws_pp, ws_list,
+                 "PatternProps.isWhiteSpace()", "[Pattern_White_Space ranges]", TRUE);
+    compareUSets(syn_ws_pp, syn_ws_prop,
+                 "PatternProps.isSyntaxOrWhiteSpace()",
+                 "[[:Pattern_Syntax:][:Pattern_White_Space:]]", TRUE);
+}
+
+// So far only minimal port of Java & cucdtst.c compareUSets().
+UBool
+UnicodeTest::compareUSets(const UnicodeSet &a, const UnicodeSet &b,
+                          const char *a_name, const char *b_name,
+                          UBool diffIsError) {
+    UBool same= a==b;
+    if(!same && diffIsError) {
+        errln("Sets are different: %s vs. %s\n", a_name, b_name);
+    }
+    return same;
 }

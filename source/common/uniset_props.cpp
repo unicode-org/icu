@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -399,20 +399,6 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
 // Public API
 //----------------------------------------------------------------
 
-/**
- * Modifies this set to represent the set specified by the given
- * pattern, optionally ignoring white space.  See the class
- * description for the syntax of the pattern language.
- * @param pattern a string specifying what characters are in the set
- * @param ignoreSpaces if <code>true</code>, all spaces in the
- * pattern are ignored.  Spaces are those characters for which
- * <code>uprv_isRuleWhiteSpace()</code> is <code>true</code>.
- * Characters preceded by '\\' are escaped, losing any special
- * meaning they otherwise have.  Spaces may be included by
- * escaping them.
- * @exception <code>IllegalArgumentException</code> if the pattern
- * contains a syntax error.
- */
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status) {
     return applyPattern(pattern, USET_IGNORE_SPACE, NULL, status);

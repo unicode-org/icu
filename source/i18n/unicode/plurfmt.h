@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -25,6 +25,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/messagepattern.h"
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
 
@@ -37,7 +38,7 @@ class Hashtable;
  * <code>PluralFormat</code> supports the creation of internationalized
  * messages with plural inflection. It is based on <i>plural
  * selection</i>, i.e. the caller specifies messages for each
- * plural case that can appear in the users language and the
+ * plural case that can appear in the user's language and the
  * <code>PluralFormat</code> selects the appropriate message based on
  * the number.
  * </p>
@@ -51,7 +52,7 @@ class Hashtable;
  * each message and selects the message whose interval contains a
  * given number. This can only handle a finite number of
  * intervals. But in some languages, like Polish, one plural case
- * applies to infinitely many intervals (e.g., paucal applies to
+ * applies to infinitely many intervals (e.g., the plural case applies to
  * numbers ending with 2, 3, or 4 except those ending with 12, 13, or
  * 14). Thus <code>ChoiceFormat</code> is not adequate.
  * </p><p>
@@ -62,17 +63,20 @@ class Hashtable;
  *     conditions for a plural case than just a single interval. These plural
  *     rules define both what plural cases exist in a language, and to
  *     which numbers these cases apply.
- * <li>It provides predefined plural rules for many locales. Thus, the programmer
- *     need not worry about the plural cases of a language. On the flip side,
- *     the localizer does not have to specify the plural cases; he can simply
+ * <li>It provides predefined plural rules for many languages. Thus, the programmer
+ *     need not worry about the plural cases of a language and
+ *     does not have to define the plural cases; they can simply
  *     use the predefined keywords. The whole plural formatting of messages can
  *     be done using localized patterns from resource bundles. For predefined plural
- *     rules, see CLDR <i>Language Plural Rules</i> page at 
+ *     rules, see the CLDR <i>Language Plural Rules</i> page at
  *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  * </ul>
  * </p>
  * <h4>Usage of <code>PluralFormat</code></h4>
- * <p>
+ * <p>Note: Typically, plural formatting is done via <code>MessageFormat</code>
+ * with a <code>plural</code> argument type,
+ * rather than using a stand-alone <code>PluralFormat</code>.
+ * </p><p>
  * This discussion assumes that you use <code>PluralFormat</code> with
  * a predefined set of plural rules. You can create one using one of
  * the constructors that takes a <code>locale</code> object. To
@@ -85,82 +89,46 @@ class Hashtable;
  * <h5>Patterns and Their Interpretation</h5>
  * <p>
  * The pattern text defines the message output for each plural case of the
- * used locale. The pattern is a sequence of
- * <code><i>caseKeyword</i>{<i>message</i>}</code> clauses, separated by white
- * space characters. Each clause assigns the message <code><i>message</i></code>
- * to the plural case identified by <code><i>caseKeyword</i></code>.
- * </p><p>
- * There are 6 predefined casekeyword in ICU - 'zero', 'one', 'two', 'few', 'many' and
- * 'other'. You always have to define a message text for the default plural case
- * "<code>other</code>" which is contained in every rule set. If the plural
- * rules of the <code>PluralFormat</code> object do not contain a plural case
- * identified by <code><i>caseKeyword</i></code>, U_DEFAULT_KEYWORD_MISSING
- * will be set to status.
- * If you do not specify a message text for a particular plural case, the
- * message text of the plural case "<code>other</code>" gets assigned to this
- * plural case. If you specify more than one message for the same plural case,
- * U_DUPLICATE_KEYWORD will be set to status.
- * <br>
- * Spaces between <code><i>caseKeyword</i></code> and
- * <code><i>message</i></code>  will be ignored; spaces within
- * <code><i>message</i></code> will be preserved.
- * </p><p>
- * The message text for a particular plural case may contain other message
- * format patterns. <code>PluralFormat</code> preserves these so that you
- * can use the strings produced by <code>PluralFormat</code> with other
- * formatters. If you are using <code>PluralFormat</code> inside a
- * <code>MessageFormat</code> pattern, <code>MessageFormat</code> will
- * automatically evaluate the resulting format pattern.<br>
- * Thus, curly braces (<code>{</code>, <code>}</code>) are <i>only</i> allowed
- * in message texts to define a nested format pattern.<br>
- * The pound sign (<code>#</code>) will be interpreted as the number placeholder
- * in the message text, if it is not contained in curly braces (to preserve
- * <code>NumberFormat</code> patterns). <code>PluralFormat</code> will
- * replace each of those pound signs by the number passed to the
- * <code>format()</code> method. It will be formatted using a
- * <code>NumberFormat</code> for the <code>PluralFormat</code>'s locale. If you
- * need special number formatting, you have to explicitly specify a
- * <code>NumberFormat</code> for the <code>PluralFormat</code> to use.
- * </p>
- * Example
+ * specified locale. Syntax:
  * <pre>
- * \code
- * UErrorCode status = U_ZERO_ERROR;
- * MessageFormat* msgFmt = new MessageFormat(UnicodeString("{0, plural,
- *   one{{0, number, C''est #,##0.0#  fichier}} other {Ce sont # fichiers}} dans la liste."),
- *   Locale("fr"), status);
- * if (U_FAILURE(status)) {
- *     return;
- * }
- * Formattable args1[] = {(int32_t)0};
- * Formattable args2[] = {(int32_t)3};
- * FieldPosition ignore(FieldPosition::DONT_CARE);
- * UnicodeString result;
- * msgFmt->format(args1, 1, result, ignore, status);
- * cout << result << endl;
- * result.remove();
- * msgFmt->format(args2, 1, result, ignore, status);
- * cout << result << endl;
- * \endcode
+ * pluralStyle = [offsetValue] (selector '{' message '}')+
+ * offsetValue = "offset:" number
+ * selector = explicitValue | keyword
+ * explicitValue = '=' number  // adjacent, no white space in between
+ * keyword = [^[[:Pattern_Syntax:][:Pattern_White_Space:]]]+
+ * message: see {@link MessageFormat}
  * </pre>
- * Produces the output:<br>
- * <code>C'est 0,0 fichier dans la liste.</code><br>
- * <code>Ce sont 3 fichiers dans la liste.</code>
- * <p>
- * <strong>Note:</strong><br>
- *   Currently <code>PluralFormat</code>
- *   does not make use of quotes like <code>MessageFormat</code>.
- *   If you use plural format strings with <code>MessageFormat</code> and want
- *   to use a quote sign <code>'</code>, you have to write <code>''</code>.
- *   <code>MessageFormat</code> unquotes this pattern and  passes the unquoted
- *   pattern to <code>PluralFormat</code>. It's a bit trickier if you use
- *   nested formats that do quoting. In the example above, we wanted to insert
- *   <code>'</code> in the number format pattern. Since
- *   <code>NumberFormat</code> supports quotes, we had to insert
- *   <code>''</code>. But since <code>MessageFormat</code> unquotes the
- *   pattern before it gets passed to <code>PluralFormat</code>, we have to
- *   double these quotes, i.e. write <code>''''</code>.
+ * Pattern_White_Space between syntax elements is ignored, except
+ * between the {curly braces} and their sub-message,
+ * and between the '=' and the number of an explicitValue.
+ *
+ * </p><p>
+ * There are 6 predefined casekeyword in CLDR/ICU - 'zero', 'one', 'two', 'few', 'many' and
+ * 'other'. You always have to define a message text for the default plural case
+ * <code>other</code> which is contained in every rule set.
+ * If you do not specify a message text for a particular plural case, the
+ * message text of the plural case <code>other</code> gets assigned to this
+ * plural case.
+ * </p><p>
+ * When formatting, the input number is first matched against the explicitValue clauses.
+ * If there is no exact-number match, then a keyword is selected by calling
+ * the <code>PluralRules</code> with the input number <em>minus the offset</em>.
+ * (The offset defaults to 0 if it is omitted from the pattern string.)
+ * If there is no clause with that keyword, then the "other" clauses is returned.
+ * </p><p>
+ * An unquoted pound sign (<code>#</code>) in the selected sub-message
+ * itself (i.e., outside of arguments nested in the sub-message)
+ * is replaced by the input number minus the offset.
+ * The number-minus-offset value is formatted using a
+ * <code>NumberFormat</code> for the <code>PluralFormat</code>'s locale. If you
+ * need special number formatting, you have to use a <code>MessageFormat</code>
+ * and explicitly specify a <code>NumberFormat</code> argument.
+ * <strong>Note:</strong> That argument is formatting without subtracting the offset!
+ * If you need a custom format and have a non-zero offset, then you need to pass the
+ * number-minus-offset value as a separate parameter.
  * </p>
+ * For a usage example, see the {@link MessageFormat} class documentation.
+ *
  * <h4>Defining Custom Plural Rules</h4>
  * <p>If you need to use <code>PluralFormat</code> with custom rules, you can
  * create a <code>PluralRules</code> object and pass it to
@@ -511,34 +479,63 @@ public:
      */
      virtual UClassID getDynamicClassID() const;
 
-private:
-    typedef enum fmtToken {
-        none,
-        tLetter,
-        tNumber,
-        tSpace,
-        tNumberSign,
-        tLeftBrace,
-        tRightBrace
-    }fmtToken;
+  private:
+
+    class  PluralSelector {
+      public:
+        /**
+         * Given a number, returns the appropriate PluralFormat keyword.
+         *
+         * @param number The number to be plural-formatted.
+         * @param ec Error code.
+         * @return The selected PluralFormat keyword.
+         */
+        virtual UnicodeString select(double number, UErrorCode& ec) const = 0;
+    };
+
+    class PluralSelectorAdapter : public PluralSelector {
+      public:
+        PluralSelectorAdapter() : pluralRules(NULL) {
+        }
+
+        virtual ~PluralSelectorAdapter();
+
+        virtual UnicodeString select(double number, UErrorCode& /*ec*/) const;
+
+        void reset();
+
+        PluralRules* pluralRules;
+    };
 
     Locale  locale;
-    PluralRules* pluralRules;
-    UnicodeString pattern;
-    Hashtable  *fParsedValuesHash;
+    MessagePattern msgPattern;
     NumberFormat*  numberFormat;
-    NumberFormat*  replacedNumberFormat;
+    double offset;
+    PluralSelectorAdapter pluralRulesWrapper;
 
     PluralFormat();   // default constructor not implemented
-    void init(const PluralRules* rules, const Locale& curlocale, UErrorCode& status);
-    UBool inRange(UChar ch, fmtToken& type);
-    UBool checkSufficientDefinition();
-    void parsingFailure();
-    UnicodeString insertFormattedNumber(double number,
-                                        UnicodeString& message,
-                                        UnicodeString& appendTo,
-                                        FieldPosition& pos) const;
-    void copyHashtable(Hashtable *other, UErrorCode& status);
+    void init(const PluralRules* rules, UErrorCode& status);
+    /**
+     * Copies dynamically allocated values (pointer fields).
+     * Others are copied using their copy constructors and assignment operators.
+     */
+    void copyObjects(const PluralFormat& other);
+
+    /**
+     * Finds the PluralFormat sub-message for the given number, or the "other" sub-message.
+     * @param pattern A MessagePattern.
+     * @param partIndex the index of the first PluralFormat argument style part.
+     * @param selector the PluralSelector for mapping the number (minus offset) to a keyword.
+     * @param number a number to be matched to one of the PluralFormat argument's explicit values,
+     *        or mapped via the PluralSelector.
+     * @param ec ICU error code.
+     * @return the sub-message start part index.
+     */
+    static int32_t findSubMessage(
+         const MessagePattern& pattern, int32_t partIndex,
+         const PluralSelector& selector, double number, UErrorCode& ec);
+
+    friend class MessageFormat;
 };
 
 U_NAMESPACE_END

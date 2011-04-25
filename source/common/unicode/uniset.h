@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 1999-2010, International Business Machines Corporation
+* Copyright (C) 1999-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   Date        Name        Description
@@ -575,8 +575,8 @@ public:
 
     /**
      * Modifies this set to represent the set specified by the given
-     * pattern, optionally ignoring white space.  See the class
-     * description for the syntax of the pattern language.
+     * pattern, ignoring Unicode Pattern_White_Space characters.
+     * See the class description for the syntax of the pattern language.
      * A frozen set will not be modified.
      * @param pattern a string specifying what characters are in the set
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
@@ -590,8 +590,8 @@ public:
 
     /**
      * Modifies this set to represent the set specified by the given
-     * pattern, optionally ignoring white space.  See the class
-     * description for the syntax of the pattern language.
+     * pattern, optionally ignoring Unicode Pattern_White_Space characters.
+     * See the class description for the syntax of the pattern language.
      * A frozen set will not be modified.
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
@@ -1540,8 +1540,8 @@ private:
      * \\p{foo} \\P{foo}  - white space not allowed within "\\p" or "\\P"
      * \\N{name}         - white space not allowed within "\\N"
      *
-     * Other than the above restrictions, white space is ignored.  Case
-     * is ignored except in "\\p" and "\\P" and "\\N".  In 'name' leading
+     * Other than the above restrictions, Unicode Pattern_White_Space characters are ignored.
+     * Case is ignored except in "\\p" and "\\P" and "\\N".  In 'name' leading
      * and trailing space is deleted, and internal runs of whitespace
      * are collapsed to a single space.
      *

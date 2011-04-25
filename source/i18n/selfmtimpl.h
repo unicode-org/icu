@@ -1,10 +1,10 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc. 
  ********************************************************************
- * File SELECTFMT_IMPL.H
+ * File selectfmtimpl.h
  *
  *   Date        Name        Description
  *   11/11/09    kirtig      Finished first cut of implementation.
@@ -14,11 +14,6 @@
 #ifndef SELFMTIMPL
 #define SELFMTIMPL
 
-/**
- * \file
- * \brief C++ API: Defines rules for mapping positive long values onto a small set of keywords.
- */
- 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"

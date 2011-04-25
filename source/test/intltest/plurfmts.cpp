@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2007-2010, International Business Machines Corporation and
+ * Copyright (c) 2007-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -35,6 +35,8 @@ void PluralFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         TESTCASE(0, pluralFormatBasicTest);
         TESTCASE(1, pluralFormatUnitTest);
         TESTCASE(2, pluralFormatLocaleTest);
+        TESTCASE(3, pluralFormatExtendedTest);
+        TESTCASE(4, pluralFormatExtendedParseTest);
         default: name = "";
             break;
     }
@@ -159,26 +161,28 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
         UNICODE_STRING_SIMPLE("odd {# is odd.} other{# is even.}"),
         UNICODE_STRING_SIMPLE("other{# is odd or even.}"),
         UNICODE_STRING_SIMPLE("odd{The number {0, number, #.#0} is odd.}other{The number {0, number, #.#0} is even.}"),
-        UNICODE_STRING_SIMPLE("odd{The number {#} is odd.}other{The number {#} is even.}"),
+        UNICODE_STRING_SIMPLE("odd{The number {1, number, #} is odd.}other{The number {2, number, #} is even.}"),
     };
     UnicodeString patternOddTestResult[PLURAL_PATTERN_DATA] = {
         UNICODE_STRING_SIMPLE(" is odd."),
         UNICODE_STRING_SIMPLE(" is odd or even."),
         UNICODE_STRING_SIMPLE("The number {0, number, #.#0} is odd."),
-        UNICODE_STRING_SIMPLE("The number {#} is odd."),
+        UNICODE_STRING_SIMPLE("The number {1, number, #} is odd."),
     };
     UnicodeString patternEvenTestResult[PLURAL_PATTERN_DATA] = {
         UNICODE_STRING_SIMPLE(" is even."),
         UNICODE_STRING_SIMPLE(" is odd or even."),
         UNICODE_STRING_SIMPLE("The number {0, number, #.#0} is even."),
-        UNICODE_STRING_SIMPLE("The number {#} is even."),
+        UNICODE_STRING_SIMPLE("The number {2, number, #} is even."),
     };
     UnicodeString checkSyntaxtData[PLURAL_SYNTAX_DATA] = {
-        UNICODE_STRING_SIMPLE("odd{foo} odd{bar} other{foobar}"),
-        UNICODE_STRING_SIMPLE("odd{foo} other{bar} other{foobar}"),
+        // ICU 4.8 does not check for duplicate keywords any more.
+        //UNICODE_STRING_SIMPLE("odd{foo} odd{bar} other{foobar}"),
+        //UNICODE_STRING_SIMPLE("odd{foo} other{bar} other{foobar}"),
         UNICODE_STRING_SIMPLE("odd{foo}"),
-        UNICODE_STRING_SIMPLE("otto{foo} other{bar}"),
-        UNICODE_STRING_SIMPLE("1odd{foo} other{bar}"),
+        // ICU 4.8 does not check for unknown keywords any more.
+        //UNICODE_STRING_SIMPLE("otto{foo} other{bar}"),
+        UNICODE_STRING_SIMPLE("*odd{foo} other{bar}"),
         UNICODE_STRING_SIMPLE("odd{foo},other{bar}"),
         UNICODE_STRING_SIMPLE("od d{foo} other{bar}"),
         UNICODE_STRING_SIMPLE("odd{foo}{foobar}other{foo}"),
@@ -264,7 +268,7 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     }
     numberFormatTest(&pluralFmt, numFmt, 5, 5, NULL, NULL, FALSE, &message);
     pluralFmt.applyPattern(UNICODE_STRING_SIMPLE("odd__{odd} other{even}"), status);
-    if (U_SUCCESS(status)) {
+    if (pluralFmt.format(1, status) != UNICODE_STRING_SIMPLE("even")) {
         errln("SetLocale should reset rules but did not.");
     }
     status = U_ZERO_ERROR;
@@ -489,6 +493,73 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
         plResult = plFmt.format(1.9, status);  // retrun ONE
         plResult = plFmt.format(2.0, status);  // retrun OTHER
     }
+}
+
+void
+PluralFormatTest::pluralFormatExtendedTest(void) {
+  const char *targets[] = {
+    "There are no widgets.",
+    "There is one widget.",
+    "There is a bling widget and one other widget.",
+    "There is a bling widget and 2 other widgets.",
+    "There is a bling widget and 3 other widgets.",
+    "Widgets, five (5-1=4) there be.",
+    "There is a bling widget and 5 other widgets.",
+    "There is a bling widget and 6 other widgets.",
+  };
+
+  const char* fmt =
+      "offset:1.0 "
+      "=0 {There are no widgets.} "
+      "=1.0 {There is one widget.} "
+      "=5 {Widgets, five (5-1=#) there be.} "
+      "one {There is a bling widget and one other widget.} "
+      "other {There is a bling widget and # other widgets.}";
+
+  UErrorCode status = U_ZERO_ERROR;
+  UnicodeString fmtString(fmt, -1, US_INV);
+  PluralFormat pf(fmtString, status);
+  if (U_FAILURE(status)) {
+    errln("Failed to apply pattern - %s\n", u_errorName(status));
+    return;
+  }
+  for (int i = 0; i < 7; ++i) {
+    UnicodeString result = pf.format(i, status);
+    if (U_FAILURE(status)) {
+      errln("Failed to format - %s\n", u_errorName(status));
+    }
+    UnicodeString expected(targets[i], -1, US_INV);
+    if (expected != result) {
+      UnicodeString message("Expected '", -1, US_INV);
+      message.append(expected);
+      message.append(UnicodeString("' but got '", -1, US_INV));
+      message.append(result);
+      message.append("'", -1, US_INV);
+      errln(message);
+      return;
+    }
+  }
+}
+
+void
+PluralFormatTest::pluralFormatExtendedParseTest(void) {
+  const char *failures[] = {
+    "offset:1..0 =0 {Foo}",
+    "offset:1.0 {Foo}",
+    "=0= {Foo}",
+    "=0 {Foo} =0.0 {Bar}",
+    " = {Foo}",
+  };
+  int len = sizeof(failures)/sizeof(failures[0]);
+
+  for (int i = 0; i < len; ++i) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString fmt(failures[i], -1, US_INV);
+    PluralFormat pf(fmt, status);
+    if (U_SUCCESS(status)) {
+      errln("expected failure when parsing '" + fmt + "'");
+    }
+  }
 }
 
 void
