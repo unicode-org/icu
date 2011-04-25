@@ -84,15 +84,18 @@ class PluralKeywordEnumeration;
  * \endcode
  * </pre></p>
  * <p>
- *  The difference between 'in' and 'within' is that 'in' only includes
- *  integers in the specified range, while 'within' includes all values.</p>
- *  <p>
- *  Keywords
- *  could be defined by users or from ICU locale data. There are 6
- *  predefined values in ICU - 'zero', 'one', 'two', 'few', 'many' and
- *  'other'. Callers need to check the value of keyword returned by
- *  {@link #select} method.
- *  </p>
+ * An "identifier" is a sequence of characters that do not have the
+ * Unicode Pattern_Syntax or Pattern_White_Space properties.
+ * <p>
+ * The difference between 'in' and 'within' is that 'in' only includes
+ * integers in the specified range, while 'within' includes all values.</p>
+ * <p>
+ * Keywords
+ * could be defined by users or from ICU locale data. There are 6
+ * predefined values in ICU - 'zero', 'one', 'two', 'few', 'many' and
+ * 'other'. Callers need to check the value of keyword returned by
+ * {@link #select} method.
+ * </p>
  *
  * Examples:<pre>
  * UnicodeString keyword = pl->select(number);

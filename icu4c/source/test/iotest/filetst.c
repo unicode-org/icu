@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2004-2010, International Business Machines
+ *   Copyright (C) 2004-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   file name:  filetst.c
@@ -910,8 +910,8 @@ static void TestCodepage(void) {
 }
 
 static void TestCodepageFlush(void) {
-#if UCONFIG_NO_LEGACY_CONVERSION
-  log_verbose("Skipping, legacy conversion is disabled.");
+#if UCONFIG_NO_LEGACY_CONVERSION || UCONFIG_NO_FORMATTING
+  log_verbose("Skipping, legacy conversion or formatting is disabled.");
 #else
   UChar utf16String[] = { 0x39, 0x39, 0x39, 0x20, 0x65E0, 0x6CD6, 0x5728, 0x0000 };
   uint8_t inBuf[200];

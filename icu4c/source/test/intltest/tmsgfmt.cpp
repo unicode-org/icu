@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
@@ -25,43 +25,46 @@
 #include "unicode/msgfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/choicfmt.h"
+#include "unicode/messagepattern.h"
 #include "unicode/selfmt.h"
 #include "unicode/gregocal.h"
 #include <stdio.h>
 
-#define E_WITH_ACUTE ((char)0x00E9)
-static const char E_ACCENTED[]={E_WITH_ACUTE,0};
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 void
 TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
                                   const char* &name, char* /*par*/) {
-    switch (index) {
-        TESTCASE(0,testBug1);
-        TESTCASE(1,testBug2);
-        TESTCASE(2,sample);
-        TESTCASE(3,PatternTest);
-        TESTCASE(4,testStaticFormat);
-        TESTCASE(5,testSimpleFormat);
-        TESTCASE(6,testMsgFormatChoice);
-        TESTCASE(7,testCopyConstructor);
-        TESTCASE(8,testAssignment);
-        TESTCASE(9,testClone);
-        TESTCASE(10,testEquals);
-        TESTCASE(11,testNotEquals);
-        TESTCASE(12,testSetLocale);
-        TESTCASE(13,testFormat);
-        TESTCASE(14,testParse);
-        TESTCASE(15,testAdopt);
-        TESTCASE(16,testCopyConstructor2);
-        TESTCASE(17,TestUnlimitedArgsAndSubformats);
-        TESTCASE(18,TestRBNF);
-        TESTCASE(19,TestTurkishCasing);
-        TESTCASE(20,testAutoQuoteApostrophe);
-        TESTCASE(21,testMsgFormatPlural);
-        TESTCASE(22,testCoverage);
-        TESTCASE(23,testMsgFormatSelect);
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testBug1);
+    TESTCASE_AUTO(testBug2);
+    TESTCASE_AUTO(sample);
+    TESTCASE_AUTO(PatternTest);
+    TESTCASE_AUTO(testStaticFormat);
+    TESTCASE_AUTO(testSimpleFormat);
+    TESTCASE_AUTO(testMsgFormatChoice);
+    TESTCASE_AUTO(testCopyConstructor);
+    TESTCASE_AUTO(testAssignment);
+    TESTCASE_AUTO(testClone);
+    TESTCASE_AUTO(testEquals);
+    TESTCASE_AUTO(testNotEquals);
+    TESTCASE_AUTO(testSetLocale);
+    TESTCASE_AUTO(testFormat);
+    TESTCASE_AUTO(testParse);
+    TESTCASE_AUTO(testAdopt);
+    TESTCASE_AUTO(testCopyConstructor2);
+    TESTCASE_AUTO(TestUnlimitedArgsAndSubformats);
+    TESTCASE_AUTO(TestRBNF);
+    TESTCASE_AUTO(TestTurkishCasing);
+    TESTCASE_AUTO(testAutoQuoteApostrophe);
+    TESTCASE_AUTO(testMsgFormatPlural);
+    TESTCASE_AUTO(testMsgFormatSelect);
+    TESTCASE_AUTO(testApostropheInPluralAndSelect);
+    TESTCASE_AUTO(TestApostropheMode);
+    TESTCASE_AUTO(TestCompatibleApostrophe);
+    TESTCASE_AUTO(testCoverage);
+    TESTCASE_AUTO(TestTrimArgumentName);
+    TESTCASE_AUTO_END;
 }
 
 void TestMessageFormat::testBug3()
@@ -261,7 +264,9 @@ void TestMessageFormat::PatternTest()
        "'{1,number,#,##}' {1,number,#,##}",
     };
 
-    UnicodeString testResultPatterns[] = {
+    // ICU 4.8 returns the original pattern (testCases),
+    // rather than toPattern() reconstituting a new, equivalent pattern string (testResultPatterns).
+    /*UnicodeString testResultPatterns[] = {
         "Quotes '', '{', a {0} '{'0}",
         "Quotes '', '{', a {0,number} '{'0}",
         "'{'1,number,#,##} {1,number,'#'#,##}",
@@ -271,12 +276,12 @@ void TestMessageFormat::PatternTest()
         "'{'1,date,full}, {1,date,full},",
         "'{'3,date,full}, {3,date,full},",
         "'{'1,number,#,##} {1,number,#,##}"
-    };
+    };*/
 
     UnicodeString testResultStrings[] = {
-        "Quotes ', {, a 1 {0}",
-        "Quotes ', {, a 1 {0}",
-        "{1,number,#,##} #34,56",
+        "Quotes ', {, 'a' 1 {0}",
+        "Quotes ', {, 'a' 1 {0}",
+        "{1,number,'#',##} #34,56",
         "There are 3,456 files on Disk at 1/12/70 5:46 AM.",
         "On Disk, there are 3,456 files, with $1.00.",
         "{1,number,percent}, 345,600%,",
@@ -298,11 +303,17 @@ void TestMessageFormat::PatternTest()
             logln(((UnicodeString)"MessageFormat for ") + testCases[i] + " creation failed.\n");
             continue;
         }
-        if (form->toPattern(buffer) != testResultPatterns[i]) {
+        // ICU 4.8 returns the original pattern (testCases),
+        // rather than toPattern() reconstituting a new, equivalent pattern string (testResultPatterns).
+        if (form->toPattern(buffer) != testCases[i]) {
+            // Note: An alternative test would be to build MessagePattern objects for
+            // both the input and output patterns and compare them, taking SKIP_SYNTAX etc.
+            // into account.
+            // (Too much trouble...)
             errln(UnicodeString("TestMessageFormat::PatternTest failed test #2, i = ") + i);
             //form->toPattern(buffer);
             errln(((UnicodeString)" Orig: ") + testCases[i]);
-            errln(((UnicodeString)" Exp:  ") + testResultPatterns[i]);
+            errln(((UnicodeString)" Exp:  ") + testCases[i]);
             errln(((UnicodeString)" Got:  ") + buffer);
         }
 
@@ -322,7 +333,7 @@ void TestMessageFormat::PatternTest()
             logln(UnicodeString("    Result: ") + result );
             logln(UnicodeString("  Expected: ") + testResultStrings[i] );
         }
-        
+
 
         //it_out << "Result:  " << result);
 #if 0
@@ -534,7 +545,7 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
     UnicodeString t2("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
     UnicodeString t3("There {0, plural, one{is # zavod}few{are {0, number,###.0} zavoda} other{are # zavodov}} in the directory.");
     UnicodeString t4("There {argument, plural, one{is # zavod}few{are {argument, number,###.0} zavoda} other{are #zavodov}} in the directory.");
-    UnicodeString t5("{0, plural, one {{0, number,C''''est #,##0.0# fichier}} other {Ce sont # fichiers}} dans la liste.");
+    UnicodeString t5("{0, plural, one {{0, number,C''est #,##0.0# fichier}} other {Ce sont # fichiers}} dans la liste.");
     MessageFormat* mfNum = new MessageFormat(t1, Locale("fr"), err);
     if (U_FAILURE(err)) {
         dataerrln("TestMessageFormat::testMsgFormatPlural #1 - argumentIndex - %s", u_errorName(err));
@@ -611,15 +622,32 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
         errln("TestMessageFormat::test nested PluralFormat with argumentName");
     }
     if ( argNameResult!= UnicodeString("C'est 0,0 fichier dans la liste.")) {
-        errln(UnicodeString("TestMessageFormat::test nested named PluralFormat."));
+        errln(UnicodeString("TestMessageFormat::test nested named PluralFormat: ") + argNameResult);
         logln(UnicodeString("The unexpected nested named PluralFormat."));
     }
     delete msgFmt;
 }
 
+void TestMessageFormat::testApostropheInPluralAndSelect() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    MessageFormat msgFmt(UNICODE_STRING_SIMPLE(
+        "abc_{0,plural,other{#'#'#'{'#''}}_def_{1,select,other{sel'}'ect''}}_xyz"),
+        Locale::getEnglish(),
+        errorCode);
+    if (U_FAILURE(errorCode)) {
+        errln("MessageFormat constructor failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+    UnicodeString expected = UNICODE_STRING_SIMPLE("abc_3#3{3'_def_sel}ect'_xyz");
+    Formattable args[] = { 3, UNICODE_STRING_SIMPLE("x") };
+    internalFormat(
+        &msgFmt, args, 2, expected,
+        "MessageFormat with apostrophes in plural/select arguments failed:\n");
+}
+
 void TestMessageFormat::internalFormat(MessageFormat* msgFmt , 
         Formattable* args , int32_t numOfArgs , 
-        UnicodeString expected ,char* errMsg)
+        UnicodeString expected, const char* errMsg)
 {
         UnicodeString result;
         FieldPosition ignore(FieldPosition::DONT_CARE);
@@ -1236,7 +1264,12 @@ void TestMessageFormat::testAdopt()
     }
 
     assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern(patCmp.remove()));
-    assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
+    // ICU 4.8 does not support toPattern() when there are custom formats (from setFormat() etc.).
+    // assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
+    msg.toPattern(patCmp.remove());
+    if (!patCmp.isBogus()) {
+      errln("msg.setFormat().toPattern() succeeds.");
+    }
 
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
@@ -1279,7 +1312,8 @@ void TestMessageFormat::testAdopt()
     delete[] formatsToAdopt;
 
     assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern(patCmp.remove()));
-    assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
+    // ICU 4.8 does not support toPattern() when there are custom formats (from setFormat() etc.).
+    // assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
 
     formatsAct = msg.getFormats(countAct);
     if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
@@ -1330,7 +1364,8 @@ void TestMessageFormat::testAdopt()
     delete[] formatsToAdopt; // array itself not needed in this case;
 
     assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern(patCmp.remove()));
-    assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
+    // ICU 4.8 does not support toPattern() when there are custom formats (from setFormat() etc.).
+    // assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
 
     formatsAct = msg.getFormats(countAct);
     if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
@@ -1519,6 +1554,116 @@ void TestMessageFormat::TestRBNF(void) {
     delete numFmt;
 }
 
+UnicodeString TestMessageFormat::GetPatternAndSkipSyntax(const MessagePattern& pattern) {
+    UnicodeString us(pattern.getPatternString());
+    int count = pattern.countParts();
+    for (int i = count; i > 0;) {
+        const MessagePattern::Part& part = pattern.getPart(--i);
+        if (part.getType() == UMSGPAT_PART_TYPE_SKIP_SYNTAX) {
+            us.remove(part.getIndex(), part.getLimit() - part.getIndex());
+        }
+    }
+    return us;
+}
+
+void TestMessageFormat::TestApostropheMode() {
+    UErrorCode status = U_ZERO_ERROR;
+    MessagePattern *ado_mp = new MessagePattern(UMSGPAT_APOS_DOUBLE_OPTIONAL, status);
+    MessagePattern *adr_mp = new MessagePattern(UMSGPAT_APOS_DOUBLE_REQUIRED, status);
+    if (ado_mp->getApostropheMode() != UMSGPAT_APOS_DOUBLE_OPTIONAL) {
+      errln("wrong value from ado_mp->getApostropheMode().");
+    }
+    if (adr_mp->getApostropheMode() != UMSGPAT_APOS_DOUBLE_REQUIRED) {
+      errln("wrong value from adr_mp->getApostropheMode().");
+    }
+
+
+    UnicodeString tuples[] = {
+        // Desired output
+        // DOUBLE_OPTIONAL pattern
+        // DOUBLE_REQUIRED pattern (empty=same as DOUBLE_OPTIONAL)
+        "I see {many}", "I see '{many}'", "",
+        "I said {'Wow!'}", "I said '{''Wow!''}'", "",
+        "I dont know", "I dont know", "I don't know",
+        "I don't know", "I don't know", "I don''t know",
+        "I don't know", "I don''t know", "I don''t know"
+    };
+    int32_t tuples_count = LENGTHOF(tuples);
+
+    for (int i = 0; i < tuples_count; i += 3) {
+      UnicodeString& desired = tuples[i];
+      UnicodeString& ado_pattern = tuples[i + 1];
+      UErrorCode status = U_ZERO_ERROR;
+      assertEquals("DOUBLE_OPTIONAL failure",
+                   desired,
+                   GetPatternAndSkipSyntax(ado_mp->parse(ado_pattern, NULL, status)));
+      UnicodeString& adr_pattern = tuples[i + 2].isEmpty() ? ado_pattern : tuples[i + 2];
+      assertEquals("DOUBLE_REQUIRED failure", desired,
+          GetPatternAndSkipSyntax(adr_mp->parse(adr_pattern, NULL, status)));
+    }
+    delete adr_mp;
+    delete ado_mp;
+}
+
+
+// Compare behavior of DOUBLE_OPTIONAL (new default) and DOUBLE_REQUIRED JDK-compatibility mode.
+void TestMessageFormat::TestCompatibleApostrophe() {
+    // Message with choice argument which does not contain another argument.
+    // The JDK performs only one apostrophe-quoting pass on this pattern.
+    UnicodeString pattern = "ab{0,choice,0#1'2''3'''4''''.}yz";
+
+    UErrorCode ec = U_ZERO_ERROR;
+    MessageFormat compMsg("", Locale::getUS(), ec);
+    compMsg.applyPattern(pattern, UMSGPAT_APOS_DOUBLE_REQUIRED, NULL, ec);
+    if (compMsg.getApostropheMode() != UMSGPAT_APOS_DOUBLE_REQUIRED) {
+        errln("wrong value from  compMsg.getApostropheMode().");
+    }
+
+    MessageFormat icuMsg("", Locale::getUS(), ec);
+    icuMsg.applyPattern(pattern, UMSGPAT_APOS_DOUBLE_OPTIONAL, NULL, ec);
+    if (icuMsg.getApostropheMode() != UMSGPAT_APOS_DOUBLE_OPTIONAL) {
+        errln("wrong value from  icuMsg.getApostropheMode().");
+    }
+
+    Formattable zero0[] = { 0 };
+    FieldPosition fieldpos(0);
+    UnicodeString buffer1, buffer2;
+    assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
+            "ab12'3'4''.yz",
+            compMsg.format(zero0, 1, buffer1, fieldpos, ec));
+    assertEquals("unexpected ICU MessageFormat double-apostrophe-optional behavior",
+            "ab1'2'3''4''.yz",
+            icuMsg.format(zero0, 1, buffer2, fieldpos, ec));
+
+    // Message with choice argument which contains a nested simple argument.
+    // The DOUBLE_REQUIRED version performs two apostrophe-quoting passes.
+    buffer1.remove();
+    buffer2.remove();
+    pattern = "ab{0,choice,0#1'2''3'''4''''.{0,number,'#x'}}yz";
+    compMsg.applyPattern(pattern, ec);
+    icuMsg.applyPattern(pattern, ec);
+    assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
+            "ab1234'.0xyz",
+            compMsg.format(zero0, 1, buffer1, fieldpos, ec));
+    assertEquals("unexpected ICU MessageFormat double-apostrophe-optional behavior",
+            "ab1'2'3''4''.#x0yz",
+            icuMsg.format(zero0, 1, buffer2, fieldpos, ec));
+
+    // This part is copied over from Java tests but cannot be properly tested here
+    // because we do not have a live reference implementation with JDK behavior.
+    // The JDK ChoiceFormat itself always performs one apostrophe-quoting pass.
+    /*
+    ChoiceFormat choice = new ChoiceFormat("0#1'2''3'''4''''.");
+    assertEquals("unexpected JDK ChoiceFormat apostrophe behavior",
+            "12'3'4''.",
+            choice.format(0));
+    choice.applyPattern("0#1'2''3'''4''''.{0,number,'#x'}");
+    assertEquals("unexpected JDK ChoiceFormat apostrophe behavior",
+            "12'3'4''.{0,number,#x}",
+            choice.format(0));
+    */
+}
+
 void TestMessageFormat::testAutoQuoteApostrophe(void) {
     const char* patterns[] = { // pattern, expected pattern
         "'", "''",
@@ -1595,7 +1740,10 @@ void TestMessageFormat::testCoverage(void) {
         }
     }
 
-    msgfmt->adoptFormat("adopt", &cf, status);
+    // adoptFormat() takes ownership of the input Format object.
+    // We need to clone the stack-allocated cf so that we do not attempt to delete cf.
+    Format *cfClone = cf.clone();
+    msgfmt->adoptFormat("adopt", cfClone, status);
 
     delete en;
     delete msgfmt;
@@ -1609,18 +1757,38 @@ void TestMessageFormat::testCoverage(void) {
         errln("FAIL: Unable to detect usage of named arguments.");
     }
 
+    // Starting with ICU 4.8, we support setFormat(name, ...) and getFormatNames()
+    // on a MessageFormat without named arguments.
     msgfmt->setFormat("formatName", cf, status);
-    if (!U_FAILURE(status)) {
-        errln("FAIL: Should fail to setFormat instead of passing.");
+    if (U_FAILURE(status)) {
+        errln("FAIL: Should work to setFormat(name, ...) regardless of pattern.");
     }
     status = U_ZERO_ERROR;
     en = msgfmt->getFormatNames(status);
-    if (!U_FAILURE(status)) {
-        errln("FAIL: Should fail to get format names enumeration instead of passing.");
+    if (U_FAILURE(status)) {
+        errln("FAIL: Should work to get format names enumeration regardless of pattern.");
     }
 
     delete en;
     delete msgfmt;
+}
+
+void TestMessageFormat::TestTrimArgumentName() {
+    // ICU 4.8 allows and ignores white space around argument names and numbers.
+    IcuTestErrorCode errorCode(*this, "TestTrimArgumentName");
+    MessageFormat m("a { 0 , number , '#,#'#.0 } z", Locale::getEnglish(), errorCode);
+    Formattable args[1] = { 2 };
+    FieldPosition ignore(0);
+    UnicodeString result;
+    assertEquals("trim-numbered-arg format() failed", "a  #,#2.0  z",
+                 m.format(args, 1, result, ignore, errorCode));
+
+    m.applyPattern("x { _oOo_ , number , integer } y", errorCode);
+    UnicodeString argName = UNICODE_STRING_SIMPLE("_oOo_");
+    args[0].setLong(3);
+    result.remove();
+    assertEquals("trim-named-arg format() failed", "x 3 y",
+                  m.format(&argName, args, 1, result, errorCode));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

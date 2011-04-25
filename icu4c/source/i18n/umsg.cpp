@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,6 +31,27 @@
 #include "cpputils.h"
 #include "uassert.h"
 #include "ustr_imp.h"
+
+U_NAMESPACE_BEGIN
+/**
+ * This class isolates our access to private internal methods of
+ * MessageFormat.  It is never instantiated; it exists only for C++
+ * access management.
+ */
+class MessageFormatAdapter {
+public:
+    static const Formattable::Type* getArgTypeList(const MessageFormat& m,
+                                                   int32_t& count);
+    static UBool hasArgTypeConflicts(const MessageFormat& m) {
+        return m.hasArgTypeConflicts;
+    }
+};
+const Formattable::Type*
+MessageFormatAdapter::getArgTypeList(const MessageFormat& m,
+                                     int32_t& count) {
+    return m.getArgTypeList(count);
+}
+U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
@@ -217,25 +238,23 @@ umsg_open(  const UChar     *pattern,
     }
 
     UParseError tErr;
-   
     if(parseError==NULL)
     {
         parseError = &tErr;
     }
-        
-    UMessageFormat* retVal = 0;
 
     int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
-    
-    UnicodeString patString((patternLength == -1 ? TRUE:FALSE), pattern,len);
+    UnicodeString patString(patternLength == -1, pattern, len);
 
-    retVal = (UMessageFormat*) new MessageFormat(patString,Locale(locale),*parseError,*status);
-    
-    if(retVal == 0) {
+    MessageFormat* retVal = new MessageFormat(patString,Locale(locale),*parseError,*status);
+    if(retVal == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return 0;
+        return NULL;
     }
-    return retVal;
+    if (U_SUCCESS(*status) && MessageFormatAdapter::hasArgTypeConflicts(*retVal)) {
+        *status = U_ARGUMENT_TYPE_MISMATCH;
+    }
+    return (UMessageFormat*)retVal;
 }
 
 U_CAPI void U_EXPORT2
@@ -366,24 +385,6 @@ umsg_format(    const UMessageFormat *fmt,
     return actLen;
 }
 
-U_NAMESPACE_BEGIN
-/**
- * This class isolates our access to private internal methods of
- * MessageFormat.  It is never instantiated; it exists only for C++
- * access management.
- */
-class MessageFormatAdapter {
-public:
-    static const Formattable::Type* getArgTypeList(const MessageFormat& m,
-                                                   int32_t& count);
-};
-const Formattable::Type*
-MessageFormatAdapter::getArgTypeList(const MessageFormat& m,
-                                     int32_t& count) {
-    return m.getArgTypeList(count);
-}
-U_NAMESPACE_END
-
 U_CAPI int32_t U_EXPORT2
 umsg_vformat(   const UMessageFormat *fmt,
                 UChar          *result,
@@ -456,11 +457,13 @@ umsg_vformat(   const UMessageFormat *fmt,
             break;
 
         case Formattable::kObject:
+        default:
             // This will never happen because MessageFormat doesn't
             // support kObject.  When MessageFormat is changed to
             // understand MeasureFormats, modify this code to do the
             // right thing. [alan]
             U_ASSERT(FALSE);
+            *status=U_ILLEGAL_ARGUMENT_ERROR;
             break;
         }
     }

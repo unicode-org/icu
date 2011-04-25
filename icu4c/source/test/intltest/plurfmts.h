@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -29,6 +29,8 @@ private:
     void pluralFormatBasicTest(/* char* par */);
     void pluralFormatUnitTest(/* char* par */);
     void pluralFormatLocaleTest(/* char* par */);
+    void pluralFormatExtendedTest();
+    void pluralFormatExtendedParseTest();
     void numberFormatTest(PluralFormat* plFmt, 
                           NumberFormat *numFmt, 
                           int32_t start, 
