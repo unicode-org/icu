@@ -325,8 +325,7 @@ ILCID_POSIX_SUBTABLE(ga) { /* Gaelic (Ireland) */
 
 ILCID_POSIX_SUBTABLE(gd) { /* Gaelic (Scotland) */
     {0x91,   "gd"},
-    {0x0491, "gd_GB"},
-    {0x043c, "gd_GB"}
+    {0x0491, "gd_GB"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0456, gl, gl_ES)
