@@ -105,7 +105,7 @@ public class TokenIterator {
      * -1
      */
     private int nextToken(int position) {
-        position = Utility.skipWhitespace(line, position);
+        position = PatternProps.skipWhiteSpace(line, position);
         if (position == line.length()) {
             return -1;
         }

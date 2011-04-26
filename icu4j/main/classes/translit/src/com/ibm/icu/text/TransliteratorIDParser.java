@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2010, International Business Machines Corporation
+*   Copyright (c) 2002-2011, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CaseInsensitiveString;
 
@@ -276,7 +277,7 @@ class TransliteratorIDParser {
             }
         }
         
-        Utility.skipWhitespace(id, pos);
+        pos[0] = PatternProps.skipWhiteSpace(id, pos[0]);
 
         if (UnicodeSet.resemblesPattern(id, pos[0])) {
             ParsePosition ppos = new ParsePosition(pos[0]);
@@ -409,7 +410,7 @@ class TransliteratorIDParser {
         }
 
         // Trailing unparsed text is a syntax error
-        Utility.skipWhitespace(id, pos[0]);
+        pos[0] = PatternProps.skipWhiteSpace(id, pos[0]);
         if (pos[0] != id.length()) {
             return false;
         }
@@ -601,7 +602,7 @@ class TransliteratorIDParser {
         // pass: a filter, a delimiter character (either '-' or '/'),
         // or a spec (source, target, or variant).
         for (;;) {
-            Utility.skipWhitespace(id, pos);
+            pos[0] = PatternProps.skipWhiteSpace(id, pos[0]);
             if (pos[0] == id.length()) {
                 break;
             }

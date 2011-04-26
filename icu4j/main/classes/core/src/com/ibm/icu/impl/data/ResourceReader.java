@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.PatternProps;
 
 /**
  * A reader for text resource data in the current package or the package
@@ -166,7 +166,7 @@ public class ResourceReader {
                 return line;
             }
             // Skip over white space
-            int pos = Utility.skipWhitespace(line, 0);
+            int pos = PatternProps.skipWhiteSpace(line, 0);
             // Ignore blank lines and comment lines
             if (pos == line.length() || line.charAt(pos) == '#') {
                 continue;
