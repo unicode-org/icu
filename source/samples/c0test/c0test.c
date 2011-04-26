@@ -43,6 +43,28 @@ static const char* res2str(UNormalizationCheckResult res) {
   }
 }
 
+void **chainDel = NULL;
+
+/**
+ * Use this to allocate stuff (such as test strings) to be cleaned up at the end
+ */
+void *c_malloc(size_t s) {
+  void **next = malloc(s+sizeof(void*));
+  next[0]=chainDel;
+  chainDel = next;
+  return (void*)(next+1);
+}
+
+void c_cleanup() {
+  while(chainDel) {
+    void **chainNext = *chainDel;
+    free(chainDel);
+    chainDel = chainNext;
+  }
+}
+
+
+
 
 static void TestQuickCheckResultNO() 
 {
@@ -280,7 +302,7 @@ char *austrdup(const UChar* unichars)
 
     length    = u_strlen ( unichars );
     /*newString = (char*)malloc  ( sizeof( char ) * 4 * ( length + 1 ) );*/ /* this leaks for now */
-    newString = (char*)malloc  ( sizeof( char ) * 4 * ( length + 1 ) ); /* this shouldn't */
+    newString = (char*)c_malloc  ( sizeof( char ) * 4 * ( length + 1 ) ); /* this shouldn't */
 
     if ( newString == NULL )
         return NULL;
@@ -308,7 +330,7 @@ char *aescstrdup(const UChar* unichars,int32_t length){
     if(length==-1){
         length = u_strlen( unichars);
     }
-    newString = (char*)malloc ( sizeof(char) * 8 * (length +1));
+    newString = (char*)c_malloc ( sizeof(char) * 8 * (length +1));
     target = newString;
     targetLimit = newString+sizeof(char) * 8 * (length +1);
     ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, &cb, &p, &errorCode);
@@ -439,7 +461,7 @@ int main()
 {
   char *dl = NULL;
   UErrorCode status = U_ZERO_ERROR;
-
+  int fail=0;
 
   u_init(&status);
 
@@ -469,7 +491,8 @@ int main()
     const UNormalizer2 *norm2;
     int length;
     UChar buffer16[300];
-    UChar source[50];
+    UChar source[50] = { 0x000A, 0x0000 };
+    int rc;
     
     /*
      * Test for an example that unorm_getCanonStartSet() delivers
@@ -484,10 +507,35 @@ int main()
     norm2=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("unorm2_getInstance(NFC) failed - %s\n", u_errorName(errorCode));
-        return -1;
+        fail++;
+    }
+    memset(buffer16,0,300*sizeof(buffer16[0]));
+    length=unorm2_normalize(norm2, source, 1, buffer16, LENGTHOF(buffer16), &errorCode);
+
+    printf("test1, returned length %d\n", length);
+    if(length!=1) {
+      printf("Error, length should be 1\n");
+      fail++;
+    }
+    rc=memcmp(buffer16,source,1);
+    if(rc) {
+      printf("Error: comparison failed!\n");
+      fail++;
     }
 
-    length=unorm2_normalize(norm2, source, 1, buffer16, LENGTHOF(buffer16), &errorCode);
+    memset(buffer16,0,300*sizeof(buffer16[0]));
+    length=unorm2_normalize(norm2, source, -1, buffer16, LENGTHOF(buffer16), &errorCode);
+    printf("test2, returned length %d\n", length);
+    if(length!=1) {
+      printf("Error, length should be 1\n");
+      fail++;
+    }
+
+    rc=memcmp(buffer16,source,1);
+    if(rc) {
+      printf("Error: comparison failed!\n");
+      fail++;
+    }
 
     unorm2_close(norm2);
   }
@@ -509,8 +557,9 @@ int main()
 
   printf("Pure C test OK: %s\n", u_errorName(status));
   fflush(stdout);
+  c_cleanup();
   u_cleanup();
   printf("u_cleanup() OK: %s\n", u_errorName(status));
   fflush(stdout);
-  return status;
+  return status || fail;
 }

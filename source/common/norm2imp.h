@@ -27,7 +27,7 @@ typedef struct Normalizer2  {
                                   const UChar *src, int32_t length,
                                   UChar *dest, int32_t capacity,
                                   UErrorCode *pErrorCode);
-  int32_t (U_EXPORT2 *isNormalized) (struct Normalizer2 *n,
+  UBool (U_EXPORT2 *isNormalized) (struct Normalizer2 *n,
                                   const UChar *src, int32_t length,
                                   UErrorCode *pErrorCode);
   UNormalizationCheckResult (U_EXPORT2 *getQuickCheck) (struct Normalizer2 *n,
@@ -159,6 +159,13 @@ typedef struct {
 #define isJamoV(c)  ((uint32_t)(c-JAMO_V_BASE)<JAMO_V_COUNT)
 #define isJamoVT(norm16)  ( (norm16)==JAMO_VT )
 
+
+/**
+ * Get the NF*_QC property for a code point, for u_getIntPropertyValue().
+ * @internal
+ */
+U_CFUNC UNormalizationCheckResult U_EXPORT2
+unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
 
 
 #endif

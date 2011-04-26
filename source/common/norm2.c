@@ -109,10 +109,13 @@ unorm2_get2Instance(const char *packageName,
                    UNormalizationMode mode,
                     UErrorCode *errorCode);
 
+
+#if 0
 static const UChar *
 Normalizer2_decomp_decompose(Normalizer2 *_this, const UChar *src, const UChar *limit,
                            ReorderingBuffer *buffer,
                              UErrorCode *errorCode);
+#endif
 
 static const UChar *Normalizer2Impl_findPreviousCompBoundary(Normalizer2 *_this, const UChar *start, const UChar *p);
 
@@ -158,13 +161,14 @@ static UBool U_CALLCONV Normalizer2Impl_cleanup(void)
     int i;
     for(i=0;i<UNORM_MODE_COUNT;i++) {
       if(singletons[i]!=NULL) {
-        unorm2_close(singletons[i]);
+        unorm2_close((UNormalizer2*)singletons[i]);
         singletons[i]=NULL;
       }
     }
     uprv_free(singletons);
     singletons=NULL;
   }
+  return TRUE;
 }
 
 static UNormalizer2 *getSingleton(UNormalizationMode mode, const char *str, UErrorCode *errorCode) {
@@ -433,9 +437,11 @@ static  void U_CALLCONV Normalizer2_close(struct Normalizer2* _this) {
 static uint8_t getCCFromYesOrMaybe(uint16_t norm16) {
   return norm16>=MIN_NORMAL_MAYBE_YES ? (uint8_t)norm16 : 0;
 }
+#if 0
 static UBool isMostDecompYesAndZeroCC(Normalizer2* _this, uint16_t norm16)  {
         return norm16<_this->minYesNo || norm16==MIN_NORMAL_MAYBE_YES || norm16==JAMO_VT;
     }
+#endif
 
 static UBool isDecompYes(Normalizer2* _this,uint16_t norm16)  { return (norm16<_this->minYesNo) || (_this->minMaybeYes<=norm16); }
 
@@ -466,9 +472,11 @@ static UChar *ReorderingBuffer_getLimit(ReorderingBuffer* buffer) {
 static UChar *ReorderingBuffer_getStart(ReorderingBuffer* buffer) {
   return buffer->start;
 }
+#if 0
 static UBool ReorderingBuffer_isEmpty(ReorderingBuffer* buffer) {
   return buffer->start==buffer->limit;
 }
+#endif
 static void ReorderingBuffer_setLastChar(ReorderingBuffer* buffer, UChar c) {
   *(buffer->limit-1)=c;
 }
@@ -1095,6 +1103,7 @@ static UBool Normalizer2Impl_decomposeChar(Normalizer2 *_this, UChar32 c, uint16
     }
 }
 
+#if 0
 
 /*  Dual functionality: */
 /*  buffer!=NULL: normalize */
@@ -1183,6 +1192,7 @@ Normalizer2_decomp_decompose(Normalizer2 *_this, const UChar *src, const UChar *
     }
     return src;
 }
+#endif
 
 
 
@@ -1202,7 +1212,7 @@ static uint8_t Normalizer2_getTrailCCFromCompYesAndZeroCC(Normalizer2 *_this, co
     }
 }
 
-
+#if 0
 static void Normalizer2Impl_composeAndAppend(Normalizer2 *_this, const UChar *src, const UChar *limit,
                                        UBool doCompose,
                                        UBool onlyContiguous,
@@ -1259,6 +1269,7 @@ static void Normalizer2Impl_composeAndAppend(Normalizer2 *_this, const UChar *sr
       ReorderingBuffer_appendZeroCCStr(buffer, src, limit, errorCode);
     }
 }
+#endif
 
 /**
  * Does c have a composition boundary before it?
@@ -1279,7 +1290,7 @@ static UBool Normalizer2Impl_hasCompBoundaryBefore(Normalizer2 *_this, UChar32 c
         } else {
             /*  c decomposes, get everything from the variable-length extra data */
             int32_t i=0;
-            UChar32 c;
+            UChar32 c2;
             const uint16_t *mapping=getMapping(norm16);
             {
               uint16_t firstUnit=*mapping++;
@@ -1289,13 +1300,14 @@ static UBool Normalizer2Impl_hasCompBoundaryBefore(Normalizer2 *_this, UChar32 c
               if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD) && (*mapping++&0xff00)) {
                 return FALSE;  /*  non-zero leadCC */
               }
-              U16_NEXT_UNSAFE(mapping, i, c);
-              return isCompYesAndZeroCC(getNorm16(c));
+              U16_NEXT_UNSAFE(mapping, i, c2);
+              return isCompYesAndZeroCC(getNorm16(c2));
             }
         }
     }
 }
 
+#if 0
 static UBool Normalizer2Impl_hasCompBoundaryAfter(Normalizer2 *_this, UChar32 c, UBool onlyContiguous, UBool testInert)  {
     for(;;) {
         uint16_t norm16=getNorm16(c);
@@ -1328,6 +1340,7 @@ static UBool Normalizer2Impl_hasCompBoundaryAfter(Normalizer2 *_this, UChar32 c,
         }
     }
 }
+#endif
 
 typedef struct {
     const UTrie2 *trie;
@@ -1383,6 +1396,7 @@ static uint16_t ForwardUTrie2StringIterator_next16(ForwardUTrie2StringIterator *
     return result;
 }
 
+#if 0
 static const UChar *Normalizer2Impl_findPreviousCompBoundary(Normalizer2 *_this, const UChar *start, const UChar *p) {
   BackwardsUTrie2StringIterator iter;
   uint16_t norm16;
@@ -1394,6 +1408,7 @@ static const UChar *Normalizer2Impl_findPreviousCompBoundary(Normalizer2 *_this,
     /*  but that's probably not worth the extra cost. */
     return iter.codePointStart;
 }
+#endif
 
 static const UChar *Normalizer2Impl_findNextCompBoundary(Normalizer2 *_this, const UChar *p, const UChar *limit)  {
     uint16_t norm16;
@@ -1719,7 +1734,7 @@ Normalizer2_comp_compose(Normalizer2 *_this, const UChar *src, const UChar *limi
   
     if(limit==NULL) {
         UErrorCode errorCode2=U_ZERO_ERROR;
-        src=Normalizer2_fcd_copyLowPrefixFromNulTerminated(_this, src, minNoMaybeCP, NULL, &errorCode2);
+        src=Normalizer2_fcd_copyLowPrefixFromNulTerminated(_this, src, minNoMaybeCP, doCompose? buffer : NULL, &errorCode2);
         limit=u_strchr(src, 0);
     }
 
@@ -2062,9 +2077,11 @@ static UChar* Normalizer2_decomp_spanQuickCheckYes(struct Normalizer2* n, const 
   return Normalizer2_decomp_decompose(n, s, limit, NULL, pErrorCode);
 }
 #endif
+#if 0
 static const UChar* Normalizer2_comp_spanQuickCheckYes(struct Normalizer2* n, const UChar *s, const UChar* limit, UErrorCode *pErrorCode) {
   return Normalizer2_comp_composeQuickCheck(n, s, limit, n->onlyContiguous, NULL);
 }
+#endif
 
 #if UNORM_ENABLE_FCD
 static UBool Normalizer2_fcd_isNormalized(struct Normalizer2* n, const UChar *s, int32_t length, UErrorCode *pErrorCode) {
@@ -2321,7 +2338,7 @@ unorm2_isNormalized(const UNormalizer2 *norm2,
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    return ((const Normalizer2 *)norm2)->isNormalized(norm2, s, length, pErrorCode);
+    return ((const Normalizer2 *)norm2)->isNormalized((Normalizer2*)norm2, s, length, pErrorCode);
 }
 
 U_CAPI UBool U_EXPORT2
@@ -2357,7 +2374,7 @@ U_CFUNC UNormalizationCheckResult U_EXPORT2
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
   Normalizer2 *norm2;
   UErrorCode errorCode=U_ZERO_ERROR;
-  norm2 = Normalizer2Factory_getInstance(mode, &errorCode); 
+  norm2 = (Normalizer2*)Normalizer2Factory_getInstance(mode, &errorCode); 
   if(mode<=UNORM_NONE || UNORM_FCD<=mode) {
     return UNORM_YES;
   }
