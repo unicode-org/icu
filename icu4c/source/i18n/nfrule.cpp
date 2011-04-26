@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrule.cpp
@@ -24,8 +24,7 @@
 #include "nfrs.h"
 #include "nfrlist.h"
 #include "nfsubs.h"
-
-#include "util.h"
+#include "patternprops.h"
 
 U_NAMESPACE_BEGIN
 
@@ -235,7 +234,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
         descriptor.setTo(description, 0, p);
 
         ++p;
-        while (p < description.length() && uprv_isRuleWhiteSpace(description.charAt(p))) {
+        while (p < description.length() && PatternProps::isWhiteSpace(description.charAt(p))) {
             ++p;
         }
         description.removeBetween(0, p);
@@ -278,7 +277,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
                 else if (c == gSlash || c == gGreaterThan) {
                     break;
                 }
-                else if (uprv_isRuleWhiteSpace(c) || c == gComma || c == gDot) {
+                else if (PatternProps::isWhiteSpace(c) || c == gComma || c == gDot) {
                 }
                 else {
                     // throw new IllegalArgumentException("Illegal character in rule descriptor");
@@ -307,7 +306,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
                     else if (c == gGreaterThan) {
                         break;
                     }
-                    else if (uprv_isRuleWhiteSpace(c) || c == gComma || c == gDot) {
+                    else if (PatternProps::isWhiteSpace(c) || c == gComma || c == gDot) {
                     }
                     else {
                         // throw new IllegalArgumentException("Illegal character is rule descriptor");

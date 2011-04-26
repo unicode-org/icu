@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -41,7 +41,7 @@ class TextFile {
     /**
      * Read a line, ignoring blank lines and lines that start with
      * '#'.  Trim leading white space.
-     * @param trim if TRUE then remove leading rule white space
+     * @param trim if TRUE then remove leading Pattern_White_Space
      * @return TRUE if a line was read, or FALSE if the EOF
      * was reached or an error occurred
      */

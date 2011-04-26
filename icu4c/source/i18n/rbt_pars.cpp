@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2008, International Business Machines
+ *   Copyright (C) 1999-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -33,6 +33,7 @@
 #include "tridpars.h"
 #include "uvector.h"
 #include "hash.h"
+#include "patternprops.h"
 #include "util.h"
 #include "cmemory.h"
 #include "uprops.h"
@@ -406,7 +407,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
         // Since all syntax characters are in the BMP, fetching
         // 16-bit code units suffices here.
         UChar c = rule.charAt(pos++);
-        if (uprv_isRuleWhiteSpace(c)) {
+        if (PatternProps::isWhiteSpace(c)) {
             // Ignore whitespace.  Note that this is not Unicode
             // spaces, but Java spaces -- a subset, representing
             // whitespace likely to be seen in code.
@@ -929,7 +930,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
 
     while (pos < limit && U_SUCCESS(status)) {
         UChar c = rule.charAt(pos++);
-        if (uprv_isRuleWhiteSpace(c)) {
+        if (PatternProps::isWhiteSpace(c)) {
             // Ignore leading whitespace.
             continue;
         }
@@ -958,7 +959,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                 rule.compare(pos, ID_TOKEN_LEN, ID_TOKEN) == 0) {
             pos += ID_TOKEN_LEN;
             c = rule.charAt(pos);
-            while (uprv_isRuleWhiteSpace(c) && pos < limit) {
+            while (PatternProps::isWhiteSpace(c) && pos < limit) {
                 ++pos;
                 c = rule.charAt(pos);
             }
@@ -1690,7 +1691,7 @@ utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorC
                         *status = U_PARSE_ERROR;
                         return 0;
                     }
-                    if (!uprv_isRuleWhiteSpace(c2) && !u_iscntrl(c2) && !u_ispunct(c2)) {
+                    if (!PatternProps::isWhiteSpace(c2) && !u_iscntrl(c2) && !u_ispunct(c2)) {
                         /* It was escaped for a reason. Write what it was suppose to be. */
                         source+=5;
                         c = c2;

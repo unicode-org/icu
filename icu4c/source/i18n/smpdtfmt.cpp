@@ -46,7 +46,7 @@
 #include "unicode/rbtz.h"
 #include "unicode/vtzone.h"
 #include "olsontz.h"
-#include "util.h"
+#include "patternprops.h"
 #include "fphdlimp.h"
 #include "gregoimp.h"
 #include "hebrwcal.h"
@@ -1912,11 +1912,11 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                         UChar ch = fPattern.charAt(i+1);
 
                         // check for whitespace
-                        if (uprv_isRuleWhiteSpace(ch)) {
+                        if (PatternProps::isWhiteSpace(ch)) {
                             i++;
                             // Advance over run in pattern
                             while ((i+1)<fPattern.length() &&
-                                   uprv_isRuleWhiteSpace(fPattern.charAt(i+1))) {
+                                   PatternProps::isWhiteSpace(fPattern.charAt(i+1))) {
                                 ++i;
                             }
                         }
@@ -1954,17 +1954,17 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             // A run of white space in the pattern matches a run
             // of white space in the input text.
-            if (uprv_isRuleWhiteSpace(ch)) {
+            if (PatternProps::isWhiteSpace(ch)) {
                 // Advance over run in pattern
                 while ((i+1)<fPattern.length() &&
-                       uprv_isRuleWhiteSpace(fPattern.charAt(i+1))) {
+                       PatternProps::isWhiteSpace(fPattern.charAt(i+1))) {
                     ++i;
                 }
 
                 // Advance over run in input text
                 int32_t s = pos;
                 while (pos<text.length() &&
-                       ( u_isUWhiteSpace(text.charAt(pos)) || uprv_isRuleWhiteSpace(text.charAt(pos)))) {
+                       ( u_isUWhiteSpace(text.charAt(pos)) || PatternProps::isWhiteSpace(text.charAt(pos)))) {
                     ++pos;
                 }
 
@@ -2398,7 +2398,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             return -start;
         }
         UChar32 c = text.char32At(start);
-        if (!u_isUWhiteSpace(c) || !uprv_isRuleWhiteSpace(c)) {
+        if (!u_isUWhiteSpace(c) || !PatternProps::isWhiteSpace(c)) {
             break;
         }
         start += UTF_CHAR_LENGTH(c);
@@ -3206,12 +3206,12 @@ SimpleDateFormat::compareSimpleAffix(const UnicodeString& affix,
     for (int32_t i=0; i<affix.length(); ) {
         UChar32 c = affix.char32At(i);
         int32_t len = U16_LENGTH(c);
-        if (uprv_isRuleWhiteSpace(c)) {
+        if (PatternProps::isWhiteSpace(c)) {
             // We may have a pattern like: \u200F \u0020
             //        and input text like: \u200F \u0020
-            // Note that U+200F and U+0020 are RuleWhiteSpace but only
+            // Note that U+200F and U+0020 are Pattern_White_Space but only
             // U+0020 is UWhiteSpace.  So we have to first do a direct
-            // match of the run of RULE whitespace in the pattern,
+            // match of the run of Pattern_White_Space in the pattern,
             // then match any extra characters.
             UBool literalMatch = FALSE;
             while (pos < input.length() &&
@@ -3224,13 +3224,13 @@ SimpleDateFormat::compareSimpleAffix(const UnicodeString& affix,
                 }
                 c = affix.char32At(i);
                 len = U16_LENGTH(c);
-                if (!uprv_isRuleWhiteSpace(c)) {
+                if (!PatternProps::isWhiteSpace(c)) {
                     break;
                 }
             }
 
             // Advance over run in pattern
-            i = skipRuleWhiteSpace(affix, i);
+            i = skipPatternWhiteSpace(affix, i);
 
             // Advance over run in input text
             // Must see at least one white space char in input,
@@ -3261,15 +3261,9 @@ SimpleDateFormat::compareSimpleAffix(const UnicodeString& affix,
 //----------------------------------------------------------------------
 
 int32_t
-SimpleDateFormat::skipRuleWhiteSpace(const UnicodeString& text, int32_t pos) const {
-    while (pos < text.length()) {
-        UChar32 c = text.char32At(pos);
-        if (!uprv_isRuleWhiteSpace(c)) {
-            break;
-        }
-        pos += U16_LENGTH(c);
-    }
-    return pos;
+SimpleDateFormat::skipPatternWhiteSpace(const UnicodeString& text, int32_t pos) const {
+    const UChar* s = text.getBuffer();
+    return (int32_t)(PatternProps::skipWhiteSpace(s + pos, text.length() - pos) - s);
 }
 
 //----------------------------------------------------------------------

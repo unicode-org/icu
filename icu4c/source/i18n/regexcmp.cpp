@@ -1,7 +1,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2010 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2011 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -21,7 +21,7 @@
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h"
 #include "unicode/regex.h"
-#include "util.h"
+#include "patternprops.h"
 #include "putilimp.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -3743,7 +3743,7 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
                     }
                 }
                 // TODO:  check what Java & Perl do with non-ASCII white spaces.  Ticket 6061.
-                if (uprv_isRuleWhiteSpace(c.fChar) == FALSE) {
+                if (PatternProps::isWhiteSpace(c.fChar) == FALSE) {
                     break;
                 }
                 c.fChar = nextCharLL();

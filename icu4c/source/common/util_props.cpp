@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2006, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -8,8 +8,9 @@
 **********************************************************************
 */
 
-#include "util.h"
 #include "unicode/uchar.h"
+#include "patternprops.h"
+#include "util.h"
 
 U_NAMESPACE_BEGIN
 
@@ -95,7 +96,7 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& rule, int32_t pos, int32_
                 return -1;
             }
             c = rule.charAt(pos++);
-            if (!uprv_isRuleWhiteSpace(c)) {
+            if (!PatternProps::isWhiteSpace(c)) {
                 return -1;
             }
             // FALL THROUGH to skipWhitespace
@@ -133,15 +134,13 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& rule, int32_t pos, int32_
  * @param pos INPUT-OUPUT parameter.  On INPUT, pos is the
  * first character to examine.  It must be less than str.length(),
  * and it must not point to a whitespace character.  That is, must
- * have pos < str.length() and
- * !uprv_isRuleWhiteSpace(str.char32At(pos)).  On
+ * have pos < str.length().  On
  * OUTPUT, the position after the last parsed character.
  * @return the Unicode identifier, or an empty string if there is
  * no valid identifier at pos.
  */
 UnicodeString ICU_Utility::parseUnicodeIdentifier(const UnicodeString& str, int32_t& pos) {
     // assert(pos < str.length());
-    // assert(!uprv_isRuleWhiteSpace(str.char32At(pos)));
     UnicodeString buf;
     int p = pos;
     while (p < str.length()) {

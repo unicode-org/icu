@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.cpp
@@ -20,12 +20,11 @@
 #include "unicode/uchar.h"
 #include "nfrule.h"
 #include "nfrlist.h"
+#include "patternprops.h"
 
 #ifdef RBNF_DEBUG
 #include "cmemory.h"
 #endif
-
-#include "util.h"
 
 U_NAMESPACE_BEGIN
 
@@ -149,7 +148,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
             status = U_PARSE_ERROR;
         } else {
             name.setTo(description, 0, pos);
-            while (pos < description.length() && uprv_isRuleWhiteSpace(description.charAt(++pos))) {
+            while (pos < description.length() && PatternProps::isWhiteSpace(description.charAt(++pos))) {
             }
             description.remove(0, pos);
         }
