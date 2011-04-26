@@ -26,8 +26,8 @@ import java.util.MissingResourceException;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.impl.ZoneStringFormat.ZoneStringInfo;
 import com.ibm.icu.lang.UCharacter;
@@ -1717,7 +1717,7 @@ public class SimpleDateFormat extends DateFormat {
                                 while (idx < plen) {
 
                                     char pch = patl.charAt(idx);
-                                    if (UCharacterProperty.isRuleWhiteSpace(pch))
+                                    if (PatternProps.isWhiteSpace(pch))
                                         idx++;
                                     else
                                         break;
@@ -1751,16 +1751,16 @@ public class SimpleDateFormat extends DateFormat {
                 while (idx < plen && pos < tlen) {
                     char pch = patl.charAt(idx);
                     char ich = text.charAt(pos);
-                    if (UCharacterProperty.isRuleWhiteSpace(pch)
-                        && UCharacterProperty.isRuleWhiteSpace(ich)) {
+                    if (PatternProps.isWhiteSpace(pch)
+                        && PatternProps.isWhiteSpace(ich)) {
                         // White space characters found in both patten and input.
                         // Skip contiguous white spaces.
                         while ((idx + 1) < plen &&
-                                UCharacterProperty.isRuleWhiteSpace(patl.charAt(idx + 1))) {
+                                PatternProps.isWhiteSpace(patl.charAt(idx + 1))) {
                              ++idx;
                         }
                         while ((pos + 1) < tlen &&
-                                UCharacterProperty.isRuleWhiteSpace(text.charAt(pos + 1))) {
+                                PatternProps.isWhiteSpace(text.charAt(pos + 1))) {
                              ++pos;
                         }
                     } else if (pch != ich) {
@@ -2102,7 +2102,7 @@ public class SimpleDateFormat extends DateFormat {
                 return -start;
             }
             int c = UTF16.charAt(text, start);
-            if (!UCharacter.isUWhiteSpace(c) || !UCharacterProperty.isRuleWhiteSpace(c)) {
+            if (!UCharacter.isUWhiteSpace(c) || !PatternProps.isWhiteSpace(c)) {
                 break;
             }
             start += UTF16.getCharCount(c);

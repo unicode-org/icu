@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2010, International Business Machines
+* Copyright (c) 2003-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -83,9 +83,8 @@ public class RuleCharacterIterator {
 
     /**
      * Bitmask option to enable skipping of whitespace.  If (options &
-     * SKIP_WHITESPACE) != 0, then whitespace characters will be silently
-     * skipped, as if they were not present in the input.  Whitespace
-     * characters are defined by UCharacterProperty.isRuleWhiteSpace().
+     * SKIP_WHITESPACE) != 0, then Unicode Pattern_White_Space characters will be silently
+     * skipped, as if they were not present in the input.
      */
     public static final int SKIP_WHITESPACE = 4;
 
@@ -156,7 +155,7 @@ public class RuleCharacterIterator {
             }
 
             if ((options & SKIP_WHITESPACE) != 0 &&
-                UCharacterProperty.isRuleWhiteSpace(c)) {
+                PatternProps.isWhiteSpace(c)) {
                 continue;
             }
 
@@ -249,7 +248,7 @@ public class RuleCharacterIterator {
         if ((options & SKIP_WHITESPACE) != 0) {
             for (;;) {
                 int a = _current();
-                if (!UCharacterProperty.isRuleWhiteSpace(a)) break;
+                if (!PatternProps.isWhiteSpace(a)) break;
                 _advance(UTF16.getCharCount(a));
             }
         }

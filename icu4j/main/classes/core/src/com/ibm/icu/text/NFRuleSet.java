@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,7 +10,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 
 /**
@@ -97,8 +97,8 @@ final class NFRuleSet {
                 throw new IllegalArgumentException("Rule set name doesn't end in colon");
             } else {
                 name = description.substring(0, pos);
-                while (pos < description.length() && UCharacterProperty.isRuleWhiteSpace(description.
-                                charAt(++pos))) {
+                while (pos < description.length() && PatternProps.isWhiteSpace(description.
+                charAt(++pos))) {
                 }
                 description = description.substring(pos);
                 descriptions[index] = description;

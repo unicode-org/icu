@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.UCharacterName;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 
@@ -89,7 +89,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 
                 // Convert \s+ => SPACE.  This assumes there are no
                 // runs of >1 space characters in names.
-                if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                if (PatternProps.isWhiteSpace(c)) {
                     // Ignore leading whitespace
                     if (name.length() > 0 &&
                         name.charAt(name.length()-1) != SPACE) {

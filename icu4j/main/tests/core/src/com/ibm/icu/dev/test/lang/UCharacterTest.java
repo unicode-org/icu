@@ -17,7 +17,6 @@ import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.UCharacterName;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
@@ -181,23 +180,23 @@ public final class UCharacterTest extends TestFmwk
                   " and \\u" + hex(nonwhitespaces[i]));
         }
 
-        int rulewhitespace[] = {0x9, 0xd, 0x20, 0x85,
+        int patternWhiteSpace[] = {0x9, 0xd, 0x20, 0x85,
                                 0x200e, 0x200f, 0x2028, 0x2029};
-        int nonrulewhitespace[] = {0x8, 0xe, 0x21, 0x86, 0xa0, 0xa1,
+        int nonPatternWhiteSpace[] = {0x8, 0xe, 0x21, 0x86, 0xa0, 0xa1,
                                    0x1680, 0x1681, 0x180e, 0x180f,
                                    0x1FFF, 0x2000, 0x200a, 0x200b,
                                    0x2010, 0x202f, 0x2030, 0x205f,
                                    0x2060, 0x3000, 0x3001};
-        for (int i = 0; i < rulewhitespace.length; i ++) {
-            if (!UCharacterProperty.isRuleWhiteSpace(rulewhitespace[i])) {
-                errln("\\u" + Utility.hex(rulewhitespace[i], 4)
-                      + " expected to be a rule white space");
+        for (int i = 0; i < patternWhiteSpace.length; i ++) {
+            if (!PatternProps.isWhiteSpace(patternWhiteSpace[i])) {
+                errln("\\u" + Utility.hex(patternWhiteSpace[i], 4)
+                      + " expected to be a Pattern_White_Space");
             }
         }
-        for (int i = 0; i < nonrulewhitespace.length; i ++) {
-            if (UCharacterProperty.isRuleWhiteSpace(nonrulewhitespace[i])) {
-                errln("\\u" + Utility.hex(nonrulewhitespace[i], 4)
-                      + " expected to be a non rule white space");
+        for (int i = 0; i < nonPatternWhiteSpace.length; i ++) {
+            if (PatternProps.isWhiteSpace(nonPatternWhiteSpace[i])) {
+                errln("\\u" + Utility.hex(nonPatternWhiteSpace[i], 4)
+                      + " expected to be a non-Pattern_White_Space");
             }
         }
 

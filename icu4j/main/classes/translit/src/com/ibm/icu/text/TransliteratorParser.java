@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.RuleBasedTransliterator.Data;
@@ -455,7 +455,7 @@ class TransliteratorParser {
                 // Since all syntax characters are in the BMP, fetching
                 // 16-bit code units suffices here.
                 char c = rule.charAt(pos++);
-                if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                if (PatternProps.isWhiteSpace(c)) {
                     continue;
                 }
                 // HALF_ENDERS is all chars that end a rule half: "<>=;"
@@ -930,7 +930,7 @@ class TransliteratorParser {
             int limit = rule.length();
             while (pos < limit) {
                 char c = rule.charAt(pos++);
-                if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                if (PatternProps.isWhiteSpace(c)) {
                     continue;
                 }
                 // Skip lines starting with the comment character
@@ -962,7 +962,7 @@ class TransliteratorParser {
                             rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
                         pos += ID_TOKEN_LEN;
                         c = rule.charAt(pos);
-                        while (UCharacterProperty.isRuleWhiteSpace(c) && pos < limit) {
+                        while (PatternProps.isWhiteSpace(c) && pos < limit) {
                             ++pos;
                             c = rule.charAt(pos);
                         }

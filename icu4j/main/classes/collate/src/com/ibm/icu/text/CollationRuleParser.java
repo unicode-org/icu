@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
@@ -1408,7 +1408,7 @@ final class CollationRuleParser
                 }
             }
             else {
-                if (!UCharacterProperty.isRuleWhiteSpace(ch)) {
+                if (!PatternProps.isWhiteSpace(ch)) {
                     // Sets the strength for this entry
                     switch (ch) {
                     case 0x003D : // '='
@@ -1653,7 +1653,7 @@ final class CollationRuleParser
                             m_current_ ++;
                             ch = m_source_.charAt(m_current_);
                             // skip whitespace between '|' and the character
-                        } while (UCharacterProperty.isRuleWhiteSpace(ch));
+                        } while (PatternProps.isWhiteSpace(ch));
                         break;
                    case 0x002D : // '-', indicates a range.
                        if (newstrength != TOKEN_UNSET_) {
@@ -2068,7 +2068,7 @@ final class CollationRuleParser
                 if (optionend - start > optionlength) {
                     m_optionarg_ = start + optionlength;
                     // start of the options, skip space
-                    while (m_optionarg_ < optionend && (UCharacter.isWhitespace(rules.charAt(m_optionarg_)) || UCharacterProperty.isRuleWhiteSpace(rules.charAt(m_optionarg_))))
+                    while (m_optionarg_ < optionend && PatternProps.isWhiteSpace(rules.charAt(m_optionarg_)))
                     {   // eat whitespace
                         m_optionarg_ ++;
                     }

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2008, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -12,14 +12,14 @@ package com.ibm.icu.impl.data;
 
 import java.io.IOException;
 
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 
 /**
  * An iterator class that returns successive string tokens from some
- * source.  String tokens are, in general, separated by rule white
- * space in the source test.  Furthermore, they may be delimited by
+ * source.  String tokens are, in general, separated by Pattern_White_Space
+ * in the source test.  Furthermore, they may be delimited by
  * either single or double quotes (opening and closing quotes must
  * match).  Escapes are processed using standard ICU unescaping.
  */
@@ -94,7 +94,7 @@ public class TokenIterator {
     
     /**
      * Read the next token from 'this.line' and append it to
-     * 'this.buf'.  Tokens are separated by rule white space.  Tokens
+     * 'this.buf'.  Tokens are separated by Pattern_White_Space.  Tokens
      * may also be delimited by double or single quotes.  The closing
      * quote must match the opening quote.  If a '#' is encountered,
      * the rest of the line is ignored, unless it is backslash-escaped
@@ -140,7 +140,7 @@ public class TokenIterator {
                 UTF16.append(buf, c32);
                 position = posref[0];
             } else if ((quote != 0 && c == quote) ||
-                       (quote == 0 && UCharacterProperty.isRuleWhiteSpace(c))) {
+                       (quote == 0 && PatternProps.isWhiteSpace(c))) {
                 return ++position;
             } else if (quote == 0 && c == '#') {
                 return position; // do NOT increment

@@ -1327,13 +1327,13 @@ public class UnicodeSetTest extends TestFmwk {
 
     public void TestEscapePattern() {
         // The following pattern must contain at least one range "c-d"
-        // for which isRuleWhiteSpace(c) or isRuleWhiteSpace(d) is true.
+        // where c or d is a Pattern_White_Space.
         String pattern =
             "[\\uFEFF \\u200E-\\u20FF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
         String exp =
             "[\\u200E-\\u20FF\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
         // We test this with two passes; in the second pass we
-        // pre-unescape the pattern.  Since U+200E is rule whitespace,
+        // pre-unescape the pattern.  Since U+200E is Pattern_White_Space,
         // this fails -- which is what we expect.
         for (int pass=1; pass<=2; ++pass) {
             String pat = pattern;

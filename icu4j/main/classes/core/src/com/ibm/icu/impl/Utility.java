@@ -1105,7 +1105,7 @@ public final class Utility {
     public static int skipWhitespace(String str, int pos) {
         while (pos < str.length()) {
             int c = Character.codePointAt(str, pos);
-            if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+            if (!PatternProps.isWhiteSpace(c)) {
                 break;
             }
             pos += UTF16.getCharCount(c);
@@ -1122,14 +1122,14 @@ public final class Utility {
     }
 
     /**
-     * Remove all rule white space from a string.
+     * Remove all Pattern_White_Space from a string.
      */
-    public static String deleteRuleWhiteSpace(String str) {
+    public static String deletePatternWhiteSpace(String str) {
         StringBuilder buf = new StringBuilder();
         for (int i=0; i<str.length(); ) {
             int ch = Character.codePointAt(str, i);
             i += UTF16.getCharCount(ch);
-            if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+            if (PatternProps.isWhiteSpace(ch)) {
                 continue;
             }
             buf.appendCodePoint(ch);
@@ -1195,7 +1195,7 @@ public final class Utility {
                     return -1;
                 }
                 c = rule.charAt(pos++);
-                if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+                if (!PatternProps.isWhiteSpace(c)) {
                     return -1;
                 }
                 // FALL THROUGH to skipWhitespace
@@ -1230,7 +1230,7 @@ public final class Utility {
      * pattern.  Characters are matched literally and case-sensitively
      * except for the following special characters:
      *
-     * ~  zero or more uprv_isRuleWhiteSpace chars
+     * ~  zero or more Pattern_White_Space chars
      *
      * If end of pattern is reached with all matches along the way,
      * pos is advanced to the first unparsed index and returned.
@@ -1259,7 +1259,7 @@ public final class Utility {
 
             // parse \s*
             if (cpat == '~') {
-                if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                if (PatternProps.isWhiteSpace(c)) {
                     index += UTF16.getCharCount(c);
                     continue;
                 } else {
@@ -1346,15 +1346,13 @@ public final class Utility {
      * @param pos INPUT-OUPUT parameter.  On INPUT, pos[0] is the
      * first character to examine.  It must be less than str.length(),
      * and it must not point to a whitespace character.  That is, must
-     * have pos[0] < str.length() and
-     * !UCharacterProperty.isRuleWhiteSpace(UTF16.charAt(str, pos[0])).  On
+     * have pos[0] < str.length().  On
      * OUTPUT, the position after the last parsed character.
      * @return the Unicode identifier, or null if there is no valid
      * identifier at pos[0].
      */
     public static String parseUnicodeIdentifier(String str, int[] pos) {
         // assert(pos[0] < str.length());
-        // assert(!UCharacterProperty.isRuleWhiteSpace(UTF16.charAt(str, pos[0])));
         StringBuilder buf = new StringBuilder();
         int p = pos[0];
         while (p < str.length()) {
@@ -1657,7 +1655,7 @@ public final class Utility {
                         !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
                                 (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
                                 (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-                                UCharacterProperty.isRuleWhiteSpace(c)) {
+                                PatternProps.isWhiteSpace(c)) {
             quoteBuf.appendCodePoint(c);
             // Double ' within a quote
             if (c == APOSTROPHE) {
