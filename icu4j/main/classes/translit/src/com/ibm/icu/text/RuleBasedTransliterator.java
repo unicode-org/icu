@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,8 +15,8 @@ import java.util.Map;
  * translations. Rule sets are stored in resource bundles indexed by
  * name. Rules within a rule set are separated by semicolons (';').
  * To include a literal semicolon, prefix it with a backslash ('\').
- * Whitespace, as defined by <code>UCharacterProperty.isRuleWhiteSpace()</code>,
- * is ignored. If the first non-blank character on a line is '#',
+ * Unicode Pattern_White_Space is ignored.
+ * If the first non-blank character on a line is '#',
  * the entire line is ignored as a comment. </p>
  *
  * <p>Each set of rules consists of two groups, one forward, and one

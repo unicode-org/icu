@@ -3325,7 +3325,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     if (p == UProperty.CANONICAL_COMBINING_CLASS ||
                             p == UProperty.LEAD_CANONICAL_COMBINING_CLASS ||
                             p == UProperty.TRAIL_CANONICAL_COMBINING_CLASS) {
-                        v = Integer.parseInt(Utility.deleteRuleWhiteSpace(valueAlias));
+                        v = Integer.parseInt(Utility.deletePatternWhiteSpace(valueAlias));
                         // If the resultant set is empty then the numeric value
                         // was invalid.
                         //mustNotBeEmpty = true;
@@ -3341,7 +3341,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 switch (p) {
                 case UProperty.NUMERIC_VALUE:
                 {
-                    double value = Double.parseDouble(Utility.deleteRuleWhiteSpace(valueAlias));
+                    double value = Double.parseDouble(Utility.deletePatternWhiteSpace(valueAlias));
                     applyFilter(new NumericValueFilter(value), UCharacterProperty.SRC_CHAR);
                     return this;
                 }

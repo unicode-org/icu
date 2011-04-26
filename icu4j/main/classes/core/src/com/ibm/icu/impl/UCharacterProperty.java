@@ -730,21 +730,6 @@ public final class UCharacterProperty
     */
 
     /**
-     * Checks if the argument c is to be treated as a white space in ICU
-     * rules. Usually ICU rule white spaces are ignored unless quoted.
-     * Equivalent to test for Pattern_White_Space Unicode property.
-     * Stable set of characters, won't change.
-     * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
-     * @param c codepoint to check
-     * @return true if c is a ICU white space
-     * @deprecated use PatternProps.isWhiteSpace(c)
-     */
-    public static boolean isRuleWhiteSpace(int c)
-    {
-        return PatternProps.isWhiteSpace(c);
-    }
-
-    /**
      * Get the the maximum values for some enum/int properties.
      * @return maximum values for the integer properties.
      */

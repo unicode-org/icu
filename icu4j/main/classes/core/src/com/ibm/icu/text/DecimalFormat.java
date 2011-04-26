@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUConfig;
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
@@ -2539,9 +2539,9 @@ public class DecimalFormat extends NumberFormat {
         for (int i = 0; i < affix.length();) {
             int c = UTF16.charAt(affix, i);
             int len = UTF16.getCharCount(c);
-            if (UCharacterProperty.isRuleWhiteSpace(c)) {
+            if (PatternProps.isWhiteSpace(c)) {
                 // We may have a pattern like: \u200F and input text like: \u200F Note
-                // that U+200F and U+0020 are RuleWhiteSpace but only U+0020 is
+                // that U+200F and U+0020 are Pattern_White_Space but only U+0020 is
                 // UWhiteSpace. So we have to first do a direct match of the run of RULE
                 // whitespace in the pattern, then match any extra characters.
                 boolean literalMatch = false;
@@ -2554,13 +2554,13 @@ public class DecimalFormat extends NumberFormat {
                     }
                     c = UTF16.charAt(affix, i);
                     len = UTF16.getCharCount(c);
-                    if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+                    if (!PatternProps.isWhiteSpace(c)) {
                         break;
                     }
                 }
 
                 // Advance over run in affix
-                i = skipRuleWhiteSpace(affix, i);
+                i = skipPatternWhiteSpace(affix, i);
 
                 // Advance over run in input text. Must see at least one white space char
                 // in input, unless we've already matched some characters literally.
@@ -2586,12 +2586,12 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Skips over a run of zero or more isRuleWhiteSpace() characters at pos in text.
+     * Skips over a run of zero or more Pattern_White_Space characters at pos in text.
      */
-    private static int skipRuleWhiteSpace(String text, int pos) {
+    private static int skipPatternWhiteSpace(String text, int pos) {
         while (pos < text.length()) {
             int c = UTF16.charAt(text, pos);
-            if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+            if (!PatternProps.isWhiteSpace(c)) {
                 break;
             }
             pos += UTF16.getCharCount(c);
@@ -2707,8 +2707,8 @@ public class DecimalFormat extends NumberFormat {
                 break;
             }
             pos = match(text, pos, c);
-            if (UCharacterProperty.isRuleWhiteSpace(c)) {
-                i = skipRuleWhiteSpace(affixPat, i);
+            if (PatternProps.isWhiteSpace(c)) {
+                i = skipPatternWhiteSpace(affixPat, i);
             }
         }
 
@@ -2717,18 +2717,18 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Matches a single character at text[pos] and return the index of the next character
-     * upon success. Return -1 on failure. If isRuleWhiteSpace(ch) then match a run of
+     * upon success. Return -1 on failure. If ch is a Pattern_White_Space then match a run of
      * white space in text.
      */
     static final int match(String text, int pos, int ch) {
         if (pos >= text.length()) {
             return -1;
         }
-        if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+        if (PatternProps.isWhiteSpace(ch)) {
             // Advance over run of white space in input text
             // Must see at least one white space char in input
             int s = pos;
-            pos = skipRuleWhiteSpace(text, pos);
+            pos = skipPatternWhiteSpace(text, pos);
             if (pos == s) {
                 return -1;
             }
@@ -2747,8 +2747,8 @@ public class DecimalFormat extends NumberFormat {
             int ch = UTF16.charAt(str, i);
             i += UTF16.getCharCount(ch);
             pos = match(text, pos, ch);
-            if (UCharacterProperty.isRuleWhiteSpace(ch)) {
-                i = skipRuleWhiteSpace(str, i);
+            if (PatternProps.isWhiteSpace(ch)) {
+                i = skipPatternWhiteSpace(str, i);
             }
         }
         return pos;

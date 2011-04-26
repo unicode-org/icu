@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,7 +19,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
@@ -1448,7 +1448,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 }
                 int lpStart = lp + specialName.length();
                 while (lpStart < lpEnd &&
-                       UCharacterProperty.isRuleWhiteSpace(description.charAt(lpStart))) {
+                       PatternProps.isWhiteSpace(description.charAt(lpStart))) {
                     ++lpStart;
                 }
 
@@ -1648,7 +1648,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         while (start != -1 && start < description.length()) {
             // seek to the first non-whitespace character...
             while (start < description.length()
-                   && UCharacterProperty.isRuleWhiteSpace(description.charAt(start))) {
+                   && PatternProps.isWhiteSpace(description.charAt(start))) {
                 ++start;
             }
 

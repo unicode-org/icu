@@ -3421,9 +3421,9 @@ public class TransliteratorTest extends TestFmwk {
 
 
     /**
-     * Test handling of rule whitespace, for both RBT and UnicodeSet.
+     * Test handling of Pattern_White_Space, for both RBT and UnicodeSet.
      */
-    public void TestRuleWhitespace() {
+    public void TestPatternWhitespace() {
         // Rules
         String r = "a > \u200E b;";
 

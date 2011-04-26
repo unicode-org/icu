@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -157,7 +157,7 @@ public class ResourceReader {
     /**
      * Read a line, ignoring blank lines and lines that start with
      * '#'.
-     * @param trim if true then trim leading rule white space.
+     * @param trim if true then trim leading Pattern_White_Space.
      */
     public String readLineSkippingComments(boolean trim) throws IOException {
         for (;;) {
@@ -180,7 +180,7 @@ public class ResourceReader {
 
     /**
      * Read a line, ignoring blank lines and lines that start with
-     * '#'. Do not trim leading rule white space.
+     * '#'. Do not trim leading Pattern_White_Space.
      */
     public String readLineSkippingComments() throws IOException {
         return readLineSkippingComments(false);

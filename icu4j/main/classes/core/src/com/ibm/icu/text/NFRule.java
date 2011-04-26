@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,7 +8,7 @@ package com.ibm.icu.text;
 
 import java.text.ParsePosition;
 
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.PatternProps;
 
 /**
  * A class representing a single rule in a RuleBasedNumberFormat.  A rule
@@ -242,7 +242,7 @@ final class NFRule {
             // description
             descriptor = description.substring(0, p);
             ++p;
-            while (p < description.length() && UCharacterProperty.isRuleWhiteSpace(description.charAt(p)))
+            while (p < description.length() && PatternProps.isWhiteSpace(description.charAt(p)))
                 ++p;
             description = description.substring(p);
 
@@ -281,7 +281,7 @@ final class NFRule {
                     else if (c == '/' || c == '>') {
                         break;
                     }
-                    else if (UCharacterProperty.isRuleWhiteSpace(c) || c == ',' || c == '.') {
+                    else if (PatternProps.isWhiteSpace(c) || c == ',' || c == '.') {
                     }
                     else {
                         throw new IllegalArgumentException("Illegal character in rule descriptor");
@@ -309,7 +309,7 @@ final class NFRule {
                         else if (c == '>') {
                             break;
                         }
-                        else if (UCharacterProperty.isRuleWhiteSpace(c) || c == ',' || c == '.') {
+                        else if (PatternProps.isWhiteSpace(c) || c == ',' || c == '.') {
                         }
                         else {
                             throw new IllegalArgumentException("Illegal character is rule descriptor");
