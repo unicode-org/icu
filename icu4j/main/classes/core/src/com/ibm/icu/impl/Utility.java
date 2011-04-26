@@ -1098,46 +1098,6 @@ public final class Utility {
     }
 
     /**
-     * Skip over a sequence of zero or more white space characters
-     * at pos.  Return the index of the first non-white-space character
-     * at or after pos, or str.length(), if there is none.
-     */
-    public static int skipWhitespace(String str, int pos) {
-        while (pos < str.length()) {
-            int c = Character.codePointAt(str, pos);
-            if (!PatternProps.isWhiteSpace(c)) {
-                break;
-            }
-            pos += UTF16.getCharCount(c);
-        }
-        return pos;
-    }
-
-    /**
-     * Skip over a sequence of zero or more white space characters
-     * at pos[0], advancing it.
-     */
-    public static void skipWhitespace(String str, int[] pos) {
-        pos[0] = skipWhitespace(str, pos[0]);
-    }
-
-    /**
-     * Remove all Pattern_White_Space from a string.
-     */
-    public static String deletePatternWhiteSpace(String str) {
-        StringBuilder buf = new StringBuilder();
-        for (int i=0; i<str.length(); ) {
-            int ch = Character.codePointAt(str, i);
-            i += UTF16.getCharCount(ch);
-            if (PatternProps.isWhiteSpace(ch)) {
-                continue;
-            }
-            buf.appendCodePoint(ch);
-        }
-        return buf.toString();
-    }
-
-    /**
      * Parse a single non-whitespace character 'ch', optionally
      * preceded by whitespace.
      * @param id the string to be parsed
@@ -1151,7 +1111,7 @@ public final class Utility {
      */
     public static boolean parseChar(String id, int[] pos, char ch) {
         int start = pos[0];
-        skipWhitespace(id, pos);
+        pos[0] = PatternProps.skipWhiteSpace(id, pos[0]);
         if (pos[0] == id.length() ||
                 id.charAt(pos[0]) != ch) {
             pos[0] = start;
@@ -1200,7 +1160,7 @@ public final class Utility {
                 }
                 // FALL THROUGH to skipWhitespace
             case '~':
-                pos = skipWhitespace(rule, pos);
+                pos = PatternProps.skipWhiteSpace(rule, pos);
                 break;
             case '#':
                 p[0] = pos;
@@ -1806,7 +1766,7 @@ public final class Utility {
      * Parse a list of hex numbers and return a string
      * @param string String of hex numbers.
      * @param minLength Minimal length.
-     * @param separator Seperator.
+     * @param separator Separator.
      * @return A string from hex numbers.
      */
     public static String fromHex(String string, int minLength, String separator) {
@@ -1817,7 +1777,7 @@ public final class Utility {
      * Parse a list of hex numbers and return a string
      * @param string String of hex numbers.
      * @param minLength Minimal length.
-     * @param separator Seperator.
+     * @param separator Separator.
      * @return A string from hex numbers.
      */
     public static String fromHex(String string, int minLength, Pattern separator) {
