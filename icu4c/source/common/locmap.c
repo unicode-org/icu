@@ -317,7 +317,6 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0467, fuv, fuv_NG)
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0462, fy, fy_NL)
 
-/* This LCID is really two different locales.*/
 ILCID_POSIX_SUBTABLE(ga) { /* Gaelic (Ireland) */
     {0x3c,   "ga"},
     {0x083c, "ga_IE"},
@@ -694,7 +693,6 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
 
 /* non-existent ISO-639-2 codes */
 /*
-0x467   Fulfulde - Nigeria
 0x486   K'iche - Guatemala
 0x430   Sutu
 */
