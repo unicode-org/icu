@@ -689,12 +689,6 @@ ILCID_POSIX_SUBTABLE(zh) {
 ILCID_POSIX_ELEMENT_ARRAY(0x0435, zu, zu_ZA)
 
 /* This must be static and grouped by LCID. */
-
-/* non-existent ISO-639-2 codes */
-/*
-0x486   K'iche - Guatemala
-0x430   Sutu
-*/
 static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(af),    /*  af  Afrikaans                 0x36 */
     ILCID_POSIX_MAP(am),    /*  am  Amharic                   0x5e */
