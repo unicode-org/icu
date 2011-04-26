@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2007, International Business Machines
+* Copyright (c) 2003-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -82,9 +82,8 @@ public:
 
     /**
      * Bitmask option to enable skipping of whitespace.  If (options &
-     * SKIP_WHITESPACE) != 0, then whitespace characters will be silently
-     * skipped, as if they were not present in the input.  Whitespace
-     * characters are defined by UCharacterProperty.isRuleWhiteSpace().
+     * SKIP_WHITESPACE) != 0, then Pattern_White_Space characters will be silently
+     * skipped, as if they were not present in the input.
      */
     enum { SKIP_WHITESPACE = 4 };
 

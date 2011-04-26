@@ -56,7 +56,7 @@
 #include "ucurrimp.h"
 #include "charstr.h"
 #include "cmemory.h"
-#include "util.h"
+#include "patternprops.h"
 #include "digitlst.h"
 #include "cstring.h"
 #include "umutex.h"
@@ -2173,12 +2173,12 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
     for (int32_t i=0; i<affix.length(); ) {
         UChar32 c = affix.char32At(i);
         int32_t len = U16_LENGTH(c);
-        if (uprv_isRuleWhiteSpace(c)) {
+        if (PatternProps::isWhiteSpace(c)) {
             // We may have a pattern like: \u200F \u0020
             //        and input text like: \u200F \u0020
-            // Note that U+200F and U+0020 are RuleWhiteSpace but only
+            // Note that U+200F and U+0020 are Pattern_White_Space but only
             // U+0020 is UWhiteSpace.  So we have to first do a direct
-            // match of the run of RULE whitespace in the pattern,
+            // match of the run of Pattern_White_Space in the pattern,
             // then match any extra characters.
             UBool literalMatch = FALSE;
             while (pos < input.length() &&
@@ -2191,13 +2191,13 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                 }
                 c = affix.char32At(i);
                 len = U16_LENGTH(c);
-                if (!uprv_isRuleWhiteSpace(c)) {
+                if (!PatternProps::isWhiteSpace(c)) {
                     break;
                 }
             }
 
             // Advance over run in pattern
-            i = skipRuleWhiteSpace(affix, i);
+            i = skipPatternWhiteSpace(affix, i);
 
             // Advance over run in input text
             // Must see at least one white space char in input,
@@ -2226,18 +2226,12 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
 }
 
 /**
- * Skip over a run of zero or more isRuleWhiteSpace() characters at
+ * Skip over a run of zero or more Pattern_White_Space characters at
  * pos in text.
  */
-int32_t DecimalFormat::skipRuleWhiteSpace(const UnicodeString& text, int32_t pos) {
-    while (pos < text.length()) {
-        UChar32 c = text.char32At(pos);
-        if (!uprv_isRuleWhiteSpace(c)) {
-            break;
-        }
-        pos += U16_LENGTH(c);
-    }
-    return pos;
+int32_t DecimalFormat::skipPatternWhiteSpace(const UnicodeString& text, int32_t pos) {
+    const UChar* s = text.getBuffer();
+    return (int32_t)(PatternProps::skipWhiteSpace(s + pos, text.length() - pos) - s);
 }
 
 /**
@@ -2354,8 +2348,8 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
         }
 
         pos = match(text, pos, c);
-        if (uprv_isRuleWhiteSpace(c)) {
-            i = skipRuleWhiteSpace(affixPat, i);
+        if (PatternProps::isWhiteSpace(c)) {
+            i = skipPatternWhiteSpace(affixPat, i);
         }
     }
     return pos - start;
@@ -2364,14 +2358,14 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
 /**
  * Match a single character at text[pos] and return the index of the
  * next character upon success.  Return -1 on failure.  If
- * isRuleWhiteSpace(ch) then match a run of white space in text.
+ * ch is a Pattern_White_Space then match a run of white space in text.
  */
 int32_t DecimalFormat::match(const UnicodeString& text, int32_t pos, UChar32 ch) {
-    if (uprv_isRuleWhiteSpace(ch)) {
+    if (PatternProps::isWhiteSpace(ch)) {
         // Advance over run of white space in input text
         // Must see at least one white space char in input
         int32_t s = pos;
-        pos = skipRuleWhiteSpace(text, pos);
+        pos = skipPatternWhiteSpace(text, pos);
         if (pos == s) {
             return -1;
         }
@@ -2390,8 +2384,8 @@ int32_t DecimalFormat::match(const UnicodeString& text, int32_t pos, const Unico
     for (int32_t i=0; i<str.length() && pos >= 0; ) {
         UChar32 ch = str.char32At(i);
         i += U16_LENGTH(ch);
-        if (uprv_isRuleWhiteSpace(ch)) {
-            i = skipRuleWhiteSpace(str, i);
+        if (PatternProps::isWhiteSpace(ch)) {
+            i = skipPatternWhiteSpace(str, i);
         }
         pos = match(text, pos, ch);
     }

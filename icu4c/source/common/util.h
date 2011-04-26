@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (c) 2001-2007, International Business Machines
+ *   Copyright (c) 2001-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -90,8 +90,8 @@ class U_COMMON_API ICU_Utility /* not : public UObject because all methods are s
                                   UBool advance = FALSE);
 
     /**
-     * Skip over whitespace in a Replaceable.  Whitespace is defined by
-     * uprv_isRuleWhiteSpace().  Skipping may be done in the forward or
+     * Skip over Pattern_White_Space in a Replaceable.
+     * Skipping may be done in the forward or
      * reverse direction.  In either case, the leftmost index will be
      * inclusive, and the rightmost index will be exclusive.  That is,
      * given a range defined as [start, limit), the call
@@ -151,7 +151,7 @@ class U_COMMON_API ICU_Utility /* not : public UObject because all methods are s
      * pattern.  Characters are matched literally and case-sensitively
      * except for the following special characters:
      *
-     * ~  zero or more uprv_isRuleWhiteSpace chars
+     * ~  zero or more Pattern_White_Space chars
      *
      * If end of pattern is reached with all matches along the way,
      * pos is advanced to the first unparsed index and returned.
@@ -237,25 +237,14 @@ private:
 U_NAMESPACE_END
 
 /**
- * Get the set of "white space" characters in the sense of ICU rule
- * parsers.  Caller must close/delete result.
- * Equivalent to the set of characters with the Pattern_White_Space Unicode property.
+ * Returns a new set with the Pattern_White_Space characters.
+ * The caller must close/delete the result.
  * Stable set of characters, won't change.
  * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
  * @internal
  */
 U_CAPI U_NAMESPACE_QUALIFIER UnicodeSet* U_EXPORT2
-uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
-
-/**
- * Is this character a "white space" in the sense of ICU rule parsers?
- * Equivalent to test for Pattern_White_Space Unicode property.
- * Stable set of characters, won't change.
- * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
- * @internal
- */
-U_CAPI UBool U_EXPORT2
-uprv_isRuleWhiteSpace(UChar32 c);
+uprv_openPatternWhiteSpaceSet(UErrorCode* ec);
 
 #endif
 //eof
