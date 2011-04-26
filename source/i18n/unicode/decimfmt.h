@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -1980,7 +1980,7 @@ private:
                                       const UnicodeString& input,
                                       int32_t pos);
 
-    static int32_t skipRuleWhiteSpace(const UnicodeString& text, int32_t pos);
+    static int32_t skipPatternWhiteSpace(const UnicodeString& text, int32_t pos);
 
     static int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos);
 

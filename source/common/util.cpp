@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2008, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -8,9 +8,10 @@
 **********************************************************************
 */
 
-#include "util.h"
 #include "unicode/unimatch.h"
 #include "unicode/uniset.h"
+#include "patternprops.h"
+#include "util.h"
 
 // Define UChar constants using hex for EBCDIC compatibility
 
@@ -132,13 +133,8 @@ int32_t ICU_Utility::quotedIndexOf(const UnicodeString& text,
 int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t& pos,
                                     UBool advance) {
     int32_t p = pos;
-    while (p < str.length()) {
-        UChar32 c = str.char32At(p);
-        if (!uprv_isRuleWhiteSpace(c)) {
-            break;
-        }
-        p += UTF_CHAR_LENGTH(c);
-    }
+    const UChar* s = str.getBuffer();
+    p = (int32_t)(PatternProps::skipWhiteSpace(s + p, str.length() - p) - s);
     if (advance) {
         pos = p;
     }
@@ -146,8 +142,8 @@ int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t& pos,
 }
 
 /**
- * Skip over whitespace in a Replaceable.  Whitespace is defined by
- * uprv_isRuleWhiteSpace().  Skipping may be done in the forward or
+ * Skip over Pattern_White_Space in a Replaceable.
+ * Skipping may be done in the forward or
  * reverse direction.  In either case, the leftmost index will be
  * inclusive, and the rightmost index will be exclusive.  That is,
  * given a range defined as [start, limit), the call
@@ -173,7 +169,7 @@ int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t& pos,
 //?    }
 //?    
 //?    while (pos != stop &&
-//?           uprv_isRuleWhiteSpace(c = text.char32At(pos))) {
+//?           PatternProps::isWhiteSpace(c = text.char32At(pos))) {
 //?        if (isForward) {
 //?            pos += UTF_CHAR_LENGTH(c);
 //?        } else {
@@ -217,7 +213,7 @@ UBool ICU_Utility::parseChar(const UnicodeString& id, int32_t& pos, UChar ch) {
  * pattern.  Characters are matched literally and case-sensitively
  * except for the following special characters:
  *
- * ~  zero or more uprv_isRuleWhiteSpace chars
+ * ~  zero or more Pattern_White_Space chars
  *
  * If end of pattern is reached with all matches along the way,
  * pos is advanced to the first unparsed index and returned.
@@ -246,7 +242,7 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& pat,
 
         // parse \s*
         if (cpat == 126 /*~*/) {
-            if (uprv_isRuleWhiteSpace(c)) {
+            if (PatternProps::isWhiteSpace(c)) {
                 index += UTF_CHAR_LENGTH(c);
                 continue;
             } else {
@@ -371,7 +367,7 @@ void ICU_Utility::appendToRule(UnicodeString& rule,
               !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
                 (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
                 (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-             uprv_isRuleWhiteSpace(c)) {
+             PatternProps::isWhiteSpace(c)) {
         quoteBuf.append(c);
         // Double ' within a quote
         if (c == APOSTROPHE) {
@@ -412,26 +408,13 @@ void ICU_Utility::appendToRule(UnicodeString& rule,
 
 U_NAMESPACE_END
 
-U_CAPI UBool U_EXPORT2
-uprv_isRuleWhiteSpace(UChar32 c) {
-    /* "white space" in the sense of ICU rule parsers
-       This is a FIXED LIST that is NOT DEPENDENT ON UNICODE PROPERTIES.
-       See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
-       U+0009..U+000D, U+0020, U+0085, U+200E..U+200F, and U+2028..U+2029
-       Equivalent to test for Pattern_White_Space Unicode property.
-    */
-    return (c >= 0x0009 && c <= 0x2029 &&
-            (c <= 0x000D || c == 0x0020 || c == 0x0085 ||
-             c == 0x200E || c == 0x200F || c >= 0x2028));
-}
-
 U_CAPI U_NAMESPACE_QUALIFIER UnicodeSet* U_EXPORT2
-uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
+uprv_openPatternWhiteSpaceSet(UErrorCode* ec) {
     if(U_FAILURE(*ec)) {
         return NULL;
     }
     // create a set with the Pattern_White_Space characters,
-    // without a pattern for fewer code dependencies
+    // without a pattern string for fewer code dependencies
     U_NAMESPACE_QUALIFIER UnicodeSet *set=new U_NAMESPACE_QUALIFIER UnicodeSet(9, 0xd);
     // Check for new failure.
     if (set == NULL) {

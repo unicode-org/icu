@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -10,6 +10,7 @@
 */
 #include "tokiter.h"
 #include "textfile.h"
+#include "patternprops.h"
 #include "util.h"
 #include "uprops.h"
 
@@ -52,7 +53,7 @@ int32_t TokenIterator::getLineNumber() const {
 
 /**
  * Read the next token from 'this->line' and append it to 'token'.
- * Tokens are separated by rule white space.  Tokens may also be
+ * Tokens are separated by Pattern_White_Space.  Tokens may also be
  * delimited by double or single quotes.  The closing quote must match
  * the opening quote.  If a '#' is encountered, the rest of the line
  * is ignored, unless it is backslash-escaped or within quotes.
@@ -89,7 +90,7 @@ UBool TokenIterator::nextToken(UnicodeString& token, UErrorCode& ec) {
             }
             token.append(c32);
         } else if ((quote != 0 && c == quote) ||
-                   (quote == 0 && uprv_isRuleWhiteSpace(c))) {
+                   (quote == 0 && PatternProps::isWhiteSpace(c))) {
             ++pos;
             return TRUE;
         } else if (quote == 0 && c == '#') {

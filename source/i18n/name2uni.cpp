@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -15,8 +15,9 @@
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
-#include "name2uni.h"
 #include "cmemory.h"
+#include "name2uni.h"
+#include "patternprops.h"
 #include "uprops.h"
 #include "uinvchar.h"
 #include "util.h"
@@ -162,7 +163,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
             // Convert \s+ => SPACE.  This assumes there are no
             // runs of >1 space characters in names.
-            if (uprv_isRuleWhiteSpace(c)) {
+            if (PatternProps::isWhiteSpace(c)) {
                 // Ignore leading whitespace
                 if (name.length() > 0 &&
                     name.charAt(name.length()-1) != SPACE) {

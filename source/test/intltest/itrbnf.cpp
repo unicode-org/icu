@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1738,7 +1738,7 @@ IntlTestRBNF::TestLocalizations(void)
                 "<<%main,>,<en, Main,>>", // comma before close angle ok
                 "<<%main>,<en, ',<>\" '>>", // quotes everything until next quote
                 "<<%main>,<'en', \"it's ok\">>", // double quotes work too
-                "  \n <\n  <\n  %main\n  >\n  , \t <\t   en\t  ,  \tfoo \t\t > \n\n >  \n ", // rule whitespace ok
+                "  \n <\n  <\n  %main\n  >\n  , \t <\t   en\t  ,  \tfoo \t\t > \n\n >  \n ", // Pattern_White_Space ok
            }; 
             int32_t goodLocsLen = sizeof(goodLocs)/sizeof(goodLocs[0]);
 

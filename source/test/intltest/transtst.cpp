@@ -182,7 +182,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(71,TestAnyX);
         TESTCASE(72,TestSourceTargetSet);
         TESTCASE(73,TestGurmukhiDevanagari);
-        TESTCASE(74,TestRuleWhitespace);
+        TESTCASE(74,TestPatternWhiteSpace);
         TESTCASE(75,TestAllCodepoints);
         TESTCASE(76,TestBoilerplate);
         TESTCASE(77,TestAlternateSyntax);
@@ -3964,9 +3964,9 @@ void TransliteratorTest::TestSourceTargetSet() {
 }
 
 /**
- * Test handling of rule whitespace, for both RBT and UnicodeSet.
+ * Test handling of Pattern_White_Space, for both RBT and UnicodeSet.
  */
-void TransliteratorTest::TestRuleWhitespace() {
+void TransliteratorTest::TestPatternWhiteSpace() {
     // Rules
     const char* r = "a > \\u200E b;";
     

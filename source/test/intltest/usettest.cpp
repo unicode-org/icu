@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1999-2010 International Business Machines Corporation and
+*   Copyright (C) 1999-2011 International Business Machines Corporation and
 *   others. All Rights Reserved.
 ********************************************************************************
 *   Date        Name        Description
@@ -1388,7 +1388,7 @@ void UnicodeSetTest::TestEscapePattern() {
     const char exp[] =
         "[\\u200A-\\u200E\\uFEFF\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
     // We test this with two passes; in the second pass we
-    // pre-unescape the pattern.  Since U+200E is rule whitespace,
+    // pre-unescape the pattern.  Since U+200E is Pattern_White_Space,
     // this fails -- which is what we expect.
     for (int32_t pass=1; pass<=2; ++pass) {
         UErrorCode ec = U_ZERO_ERROR;
