@@ -50,8 +50,6 @@ static const UChar PK_WITHIN[]={LOW_W,LOW_I,LOW_T,LOW_H,LOW_I,LOW_N,0};
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
-const double PluralRules::NO_UNIQUE_VALUE = -0.00123456777;
-
 PluralRules::PluralRules(UErrorCode& status)
 :   UObject(),
     mRules(NULL),
@@ -210,7 +208,7 @@ PluralRules::getUniqueKeywordValue(const UnicodeString& keyword) {
   double val;
   UErrorCode status = U_ZERO_ERROR;
   int32_t count = getSamplesInternal(keyword, &val, 1, FALSE, status);
-  return count == 1 ? val : NO_UNIQUE_VALUE;
+  return count == 1 ? val : UPLRULES_NO_UNIQUE_VALUE;
 }
 
 int32_t

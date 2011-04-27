@@ -358,16 +358,16 @@ void PluralRulesTest::testGetUniqueKeywordValue() {
   assertRuleValue("n is 1", 1);
   assertRuleValue("n in 2..2", 2);
   assertRuleValue("n within 2..2", 2);
-  assertRuleValue("n in 3..4", PluralRules::NO_UNIQUE_VALUE);
-  assertRuleValue("n within 3..4", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n in 3..4", UPLRULES_NO_UNIQUE_VALUE);
+  assertRuleValue("n within 3..4", UPLRULES_NO_UNIQUE_VALUE);
   assertRuleValue("n is 2 or n is 2", 2);
   assertRuleValue("n is 2 and n is 2", 2);
-  assertRuleValue("n is 2 or n is 3", PluralRules::NO_UNIQUE_VALUE);
-  assertRuleValue("n is 2 and n is 3", PluralRules::NO_UNIQUE_VALUE);
-  assertRuleValue("n is 2 or n in 2..3", PluralRules::NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 or n is 3", UPLRULES_NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 and n is 3", UPLRULES_NO_UNIQUE_VALUE);
+  assertRuleValue("n is 2 or n in 2..3", UPLRULES_NO_UNIQUE_VALUE);
   assertRuleValue("n is 2 and n in 2..3", 2);
-  assertRuleKeyValue("a: n is 1", "not_defined", PluralRules::NO_UNIQUE_VALUE); // key not defined
-  assertRuleKeyValue("a: n is 1", "other", PluralRules::NO_UNIQUE_VALUE); // key matches default rule
+  assertRuleKeyValue("a: n is 1", "not_defined", UPLRULES_NO_UNIQUE_VALUE); // key not defined
+  assertRuleKeyValue("a: n is 1", "other", UPLRULES_NO_UNIQUE_VALUE); // key matches default rule
 }
 
 void PluralRulesTest::testGetSamples() {
@@ -402,7 +402,7 @@ void PluralRulesTest::testGetSamples() {
         count = 4;
       }
       for (int32_t j = 0; j < count; ++j) {
-        if (values[j] == PluralRules::NO_UNIQUE_VALUE) {
+        if (values[j] == UPLRULES_NO_UNIQUE_VALUE) {
           errln("got 'no unique value' among values");
         } else {
           UnicodeString resultKeyword = rules->select(values[j]);
