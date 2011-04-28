@@ -392,7 +392,8 @@ void PluralRulesTest::testGetSamples() {
     while (NULL != (keyword = keywords->snext(status))) {
       int32_t count = rules->getSamples(*keyword, values, 4, status);
       if (U_FAILURE(status)) {
-        errln("get samples failed");
+        errln(UNICODE_STRING_SIMPLE("get samples failed for locale ") + locales[i].getName() +
+              UNICODE_STRING_SIMPLE(", keyword ") + *keyword);
         continue;
       }
       if (count == 0) {
