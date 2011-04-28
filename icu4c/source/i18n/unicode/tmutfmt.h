@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, Google, International Business Machines Corporation and *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2011, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -39,10 +39,14 @@ union UHashTok;
  * @draft ICU 4.8
  */
 enum UTimeUnitFormatStyle {
+    /** @draft ICU 4.8 */
     UTMUTFMT_FULL_STYLE,
+    /** @draft ICU 4.8 */
     UTMUTFMT_ABBREVIATED_STYLE,
+    /** @draft ICU 4.8 */
     UTMUTFMT_FORMAT_STYLE_COUNT
 };
+typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle;
 
 U_NAMESPACE_BEGIN
 
@@ -97,7 +101,7 @@ public:
 
     /**
      * Create TimeUnitFormat given locale and style.
-     * @draft ICU 4.2
+     * @draft ICU 4.8
      */
     TimeUnitFormat(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status);
 
@@ -219,7 +223,7 @@ private:
     Locale        fLocale;
     Hashtable*    fTimeUnitToCountToPatterns[TimeUnit::UTIMEUNIT_FIELD_COUNT];
     PluralRules*  fPluralRules;
-    UTimeUnitFormatStyle           fStyle;
+    UTimeUnitFormatStyle fStyle;
 
     void create(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status);
 
