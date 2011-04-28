@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008-2010, International Business Machines Corporation and
+ * Copyright (c) 2008-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -41,15 +41,15 @@ void TimeUnitTest::testBasic() {
         UErrorCode status = U_ZERO_ERROR;
         Locale loc(locales[locIndex]);
         TimeUnitFormat** formats = new TimeUnitFormat*[2];
-        formats[TimeUnitFormat::kFull] = new TimeUnitFormat(loc, status);
+        formats[UTMUTFMT_FULL_STYLE] = new TimeUnitFormat(loc, status);
         if (!assertSuccess("TimeUnitFormat(full)", status, TRUE)) return;
-        formats[TimeUnitFormat::kAbbreviate] = new TimeUnitFormat(loc, TimeUnitFormat::kAbbreviate, status);
+        formats[UTMUTFMT_ABBREVIATED_STYLE] = new TimeUnitFormat(loc, UTMUTFMT_ABBREVIATED_STYLE, status);
         if (!assertSuccess("TimeUnitFormat(short)", status)) return;
 #ifdef TUFMTTS_DEBUG
         std::cout << "locale: " << locales[locIndex] << "\n";
 #endif
-        for (int style = TimeUnitFormat::kFull; 
-             style <= TimeUnitFormat::kAbbreviate;
+        for (int style = UTMUTFMT_FULL_STYLE; 
+             style <= UTMUTFMT_ABBREVIATED_STYLE;
              ++style) {
           for (TimeUnit::UTimeUnitFields j = TimeUnit::UTIMEUNIT_YEAR; 
              j < TimeUnit::UTIMEUNIT_FIELD_COUNT; 
@@ -90,8 +90,8 @@ void TimeUnitTest::testBasic() {
             }
           }
         }
-        delete formats[TimeUnitFormat::kFull];
-        delete formats[TimeUnitFormat::kAbbreviate];
+        delete formats[UTMUTFMT_FULL_STYLE];
+        delete formats[UTMUTFMT_ABBREVIATED_STYLE];
         delete[] formats;
     }
 }
@@ -186,11 +186,11 @@ void TimeUnitTest::testAPI() {
 
     delete tmf_en;
 
-    TimeUnitFormat* en_long = new TimeUnitFormat(Locale("en"), TimeUnitFormat::kFull, status);
+    TimeUnitFormat* en_long = new TimeUnitFormat(Locale("en"), UTMUTFMT_FULL_STYLE, status);
     if (!assertSuccess("TimeUnitFormat(en...)", status)) return;
     delete en_long;
 
-    TimeUnitFormat* en_short = new TimeUnitFormat(Locale("en"), TimeUnitFormat::kAbbreviate, status);
+    TimeUnitFormat* en_short = new TimeUnitFormat(Locale("en"), UTMUTFMT_ABBREVIATED_STYLE, status);
     if (!assertSuccess("TimeUnitFormat(en...)", status)) return;
     delete en_short;
 
@@ -213,7 +213,7 @@ void TimeUnitTest::testGreek() {
 
     const char* locales[] = {"el-GR", "el"};
     TimeUnit::UTimeUnitFields tunits[] = {TimeUnit::UTIMEUNIT_SECOND, TimeUnit::UTIMEUNIT_MINUTE, TimeUnit::UTIMEUNIT_HOUR, TimeUnit::UTIMEUNIT_DAY, TimeUnit::UTIMEUNIT_MONTH, TimeUnit::UTIMEUNIT_YEAR};
-    TimeUnitFormat::EStyle styles[] = {TimeUnitFormat::kFull, TimeUnitFormat::kAbbreviate};
+    UTimeUnitFormatStyle styles[] = {UTMUTFMT_FULL_STYLE, UTMUTFMT_ABBREVIATED_STYLE};
     const int numbers[] = {1, 7};
 
     const UChar oneSecond[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03bf, 0};
