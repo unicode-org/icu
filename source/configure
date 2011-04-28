@@ -556,6 +556,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
+ac_unique_file="ICU"
 ac_unique_file="common/unicode/utypes.h"
 # Factoring default headers for most tests.
 ac_includes_default="\
@@ -2541,6 +2542,14 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+#TODO: IcuBug:8502
+#AC_INIT([ICU],
+#        m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "./common/unicode/uvernum.h]"),
+#        [http://icu-project.org/bugs],
+#        [International Components for Unicode],
+#        [http://icu-project.org])
+
+
 
 ac_config_headers="$ac_config_headers common/icucfg.h"
 
@@ -2577,18 +2586,17 @@ getuversion() {
 }
 VERSION=`geticuversion $srcdir/common/unicode/uvernum.h`
 if test x"$VERSION" = x; then
-    VERSION=`geticuversion $srcdir/common/unicode/*.h`
-    if test x"$VERSION" = x; then
-        as_fn_error $? "Cannot determine ICU version number from uvernum.h header file" "$LINENO" 5
-    fi
+   as_fn_error $? "Cannot determine ICU version number from uvernum.h header file" "$LINENO" 5
 fi
+
+#TODO: IcuBug:8502
+#if test "$VERSION" != "$PACKAGE_VERSION"; then
+#   AC_MSG_ERROR([configure was generated for $PACKAGE_VERSION but uvernum.h has $VERSION - please rerun autoconf])
+#fi
 
 UNICODE_VERSION=`getuversion $srcdir/common/unicode/uchar.h`
 if test x"$UNICODE_VERSION" = x; then
-    UNICODE_VERSION=`getuversion $srcdir/common/unicode/*.h`
-    if test x"$UNICODE_VERSION" = x; then
-        as_fn_error $? "Cannot determine Unicode version number from uchar.h header file" "$LINENO" 5
-    fi
+    as_fn_error $? "Cannot determine Unicode version number from uchar.h header file" "$LINENO" 5
 fi
 # Compute a reasonable library version from the release version. This is
 # very bad, but that's wanted... We want to make sure that the LIB_VERSION
@@ -4304,10 +4312,15 @@ $as_echo "$ac_use_strict_options" >&6; }
     then
         if test "$GCC" = yes
         then
-            CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long"
             case "${host}" in
             *-*-solaris*)
+                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long"
                 CFLAGS="$CFLAGS -D__STDC__=0";;
+            *-*-hpux*)
+                echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
+                CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
+            *)
+                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
             esac
         else
             case "${host}" in
