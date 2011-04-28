@@ -256,6 +256,7 @@ public:
      * @return             The count of values available, or -1.  This count
      *                     can be larger than destCapacity, but no more than
      *                     destCapacity values will be written.
+     * @draft ICU 4.8
      */
     int32_t getAllKeywordValues(const UnicodeString &keyword, double *dest,
                       int32_t destCapacity, UErrorCode& status);
@@ -274,6 +275,7 @@ public:
      * @return             The count of values available, or -1 if error.
      *                     This can be larger than destCapacity, but no
      *                     more than destCapacity values will be written.
+     * @draft ICU 4.8
      */
     int32_t getSamples(const UnicodeString &keyword, double *dest,
                        int32_t destCapacity, UErrorCode& status);
