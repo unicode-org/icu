@@ -6,9 +6,16 @@ AC_COPYRIGHT([ Copyright (c) 1999-2011, International Business Machines Corporat
 # Check for autoconf version
 AC_PREREQ(2.67)
 
-
 # Process this file with autoconf to produce a configure script
-AC_INIT
+AC_INIT([ICU])
+
+#TODO: IcuBug:8502
+#AC_INIT([ICU],
+#        m4_esyscmd_s([sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "./common/unicode/uvernum.h]"),
+#        [http://icu-project.org/bugs],
+#        [International Components for Unicode],
+#        [http://icu-project.org])
+
 AC_CONFIG_SRCDIR([common/unicode/utypes.h])
 
 AC_CONFIG_HEADERS(common/icucfg.h)
@@ -44,18 +51,17 @@ getuversion() {
 }
 VERSION=`geticuversion $srcdir/common/unicode/uvernum.h`
 if test x"$VERSION" = x; then
-    VERSION=`geticuversion $srcdir/common/unicode/*.h`
-    if test x"$VERSION" = x; then
-        AC_MSG_ERROR([Cannot determine ICU version number from uvernum.h header file])
-    fi
+   as_fn_error $? "Cannot determine ICU version number from uvernum.h header file" "$LINENO" 5
 fi
+
+#TODO: IcuBug:8502
+#if test "$VERSION" != "$PACKAGE_VERSION"; then
+#   AC_MSG_ERROR([configure was generated for $PACKAGE_VERSION but uvernum.h has $VERSION - please rerun autoconf])
+#fi
 
 UNICODE_VERSION=`getuversion $srcdir/common/unicode/uchar.h`
 if test x"$UNICODE_VERSION" = x; then
-    UNICODE_VERSION=`getuversion $srcdir/common/unicode/*.h`
-    if test x"$UNICODE_VERSION" = x; then
-        AC_MSG_ERROR([Cannot determine Unicode version number from uchar.h header file])
-    fi
+    AC_MSG_ERROR([Cannot determine Unicode version number from uchar.h header file])
 fi
 # Compute a reasonable library version from the release version. This is
 # very bad, but that's wanted... We want to make sure that the LIB_VERSION
