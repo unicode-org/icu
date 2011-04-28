@@ -451,7 +451,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * Sets the ApostropheMode and the pattern used by this message format.
+     * {@icu} Sets the ApostropheMode and the pattern used by this message format.
      * Parses the pattern and caches Format objects for simple argument types.
      * Patterns and their interpretation are specified in the
      * <a href="#patterns">class description</a>.
@@ -476,6 +476,7 @@ public class MessageFormat extends UFormat {
     }
 
     /**
+     * {@icu}
      * @return this instance's ApostropheMode.
      * @draft ICU 4.8
      * @provisional This API might change or be removed in a future release.
@@ -789,8 +790,6 @@ public class MessageFormat extends UFormat {
         }
         return list.toArray(new Format[list.size()]);
     }
-    // TODO: provide method public Map getFormatsByArgumentName().
-    // Where Map is: String argumentName --> Format format.
 
     /**
      * Returns the Format objects used for the format elements in the
@@ -824,11 +823,11 @@ public class MessageFormat extends UFormat {
     /**
      * {@icu} Returns the top-level argument names. For more details, see
      * {@link #setFormatByArgumentName(String, Format)}.
-     * @return List of names
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @return a Set of argument names
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
-    public Set<String> getFormatArgumentNames() {
+    public Set<String> getArgumentNames() {
         Set<String> result = new HashSet<String>();
         for (int partIndex = 0; (partIndex = nextTopLevelArgStart(partIndex)) >= 0;) {
             result.add(getArgName(partIndex + 1));
@@ -837,11 +836,12 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * {@icu} Returns the formats according to their argument names. For more details, see
-     * {@link #setFormatByArgumentName(String, Format)}.
-     * @return format associated with the name, or null if there isn't one.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * {@icu} Returns the first top-level format associated with the given argument name.
+     * For more details, see {@link #setFormatByArgumentName(String, Format)}.
+     * @param argumentName The name of the desired argument.
+     * @return the Format associated with the name, or null if there isn't one.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Format getFormatByArgumentName(String argumentName) {
         if (cachedFormatters == null) {
