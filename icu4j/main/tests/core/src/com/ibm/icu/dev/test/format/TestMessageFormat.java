@@ -1550,7 +1550,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         map.put("date", new Date(0,0,0));
         String result = ms.format(map);
         assertEquals("setFormatByArgumentName", "1234.000 year:99 month:12 day:31", result);
-        Set formatNames = ms.getFormatArgumentNames();
+        Set formatNames = ms.getArgumentNames();
         assertEquals("Format Names match", formatNames, map.keySet());
         assertEquals("Decimal", decimalFormat, ms.getFormatByArgumentName("number"));
         assertEquals("Date", dateFormat, ms.getFormatByArgumentName("date"));
