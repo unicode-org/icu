@@ -77,18 +77,18 @@ static const UChar PLURAL_COUNT_TWO[] = {LOW_T, LOW_W, LOW_O, 0};
 TimeUnitFormat::TimeUnitFormat(UErrorCode& status)
 :   fNumberFormat(NULL),
     fPluralRules(NULL) {
-    create(Locale::getDefault(), kFull, status);
+    create(Locale::getDefault(), UTMUTFMT_FULL_STYLE, status);
 }
 
 
 TimeUnitFormat::TimeUnitFormat(const Locale& locale, UErrorCode& status)
 :   fNumberFormat(NULL),
     fPluralRules(NULL) {
-    create(locale, kFull, status);
+    create(locale, UTMUTFMT_FULL_STYLE, status);
 }
 
 
-TimeUnitFormat::TimeUnitFormat(const Locale& locale, EStyle style, UErrorCode& status)
+TimeUnitFormat::TimeUnitFormat(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status)
 :   fNumberFormat(NULL),
     fPluralRules(NULL) {
     create(locale, style, status);
@@ -99,7 +99,7 @@ TimeUnitFormat::TimeUnitFormat(const TimeUnitFormat& other)
 :   MeasureFormat(other),
     fNumberFormat(NULL),
     fPluralRules(NULL),
-    fStyle(kFull)
+    fStyle(UTMUTFMT_FULL_STYLE)
 {
     for (TimeUnit::UTimeUnitFields i = TimeUnit::UTIMEUNIT_YEAR;
          i < TimeUnit::UTIMEUNIT_FIELD_COUNT;
@@ -266,7 +266,8 @@ TimeUnitFormat::parseObject(const UnicodeString& source,
             const UHashTok valueTok = elem->value;
             // the value is a pair of MessageFormat*
             MessageFormat** patterns = (MessageFormat**)valueTok.pointer;
-            for (EStyle style = kFull; style < kTotal; style = (EStyle)(style + 1)) {
+            for (UTimeUnitFormatStyle style = UTMUTFMT_FULL_STYLE; style < UTMUTFMT_FORMAT_STYLE_COUNT;
+                 style = (UTimeUnitFormatStyle)(style + 1)) {
                 MessageFormat* pattern = patterns[style];
                 pos.setErrorIndex(-1);
                 pos.setIndex(oldPos);
@@ -354,11 +355,11 @@ TimeUnitFormat::parseObject(const UnicodeString& source,
 
 
 void
-TimeUnitFormat::create(const Locale& locale, EStyle style, UErrorCode& status) {
+TimeUnitFormat::create(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (style < kFull || style > kAbbreviate) {
+    if (style < UTMUTFMT_FULL_STYLE || style > UTMUTFMT_ABBREVIATED_STYLE) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -383,10 +384,10 @@ TimeUnitFormat::create(const Locale& locale, EStyle style, UErrorCode& status) {
 void 
 TimeUnitFormat::setup(UErrorCode& err) {
     initDataMembers(err);
-    readFromCurrentLocale(kFull, gUnitsTag, err);
-    checkConsistency(kFull, gUnitsTag, err);
-    readFromCurrentLocale(kAbbreviate, gShortUnitsTag, err);
-    checkConsistency(kAbbreviate, gShortUnitsTag, err);
+    readFromCurrentLocale(UTMUTFMT_FULL_STYLE, gUnitsTag, err);
+    checkConsistency(UTMUTFMT_FULL_STYLE, gUnitsTag, err);
+    readFromCurrentLocale(UTMUTFMT_ABBREVIATED_STYLE, gShortUnitsTag, err);
+    checkConsistency(UTMUTFMT_ABBREVIATED_STYLE, gShortUnitsTag, err);
 }
 
 
@@ -412,7 +413,7 @@ TimeUnitFormat::initDataMembers(UErrorCode& err){
 
 
 void
-TimeUnitFormat::readFromCurrentLocale(EStyle style, const char* key, UErrorCode& err) {
+TimeUnitFormat::readFromCurrentLocale(UTimeUnitFormatStyle style, const char* key, UErrorCode& err) {
     if (U_FAILURE(err)) {
         return;
     }
@@ -496,9 +497,9 @@ TimeUnitFormat::readFromCurrentLocale(EStyle style, const char* key, UErrorCode&
                   }
                   MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCount);
                   if (formatters == NULL) {
-                    formatters = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
-                    formatters[kFull] = NULL;
-                    formatters[kAbbreviate] = NULL;
+                    formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
+                    formatters[UTMUTFMT_FULL_STYLE] = NULL;
+                    formatters[UTMUTFMT_ABBREVIATED_STYLE] = NULL;
                     countToPatterns->put(pluralCount, formatters, err);
                     if (U_FAILURE(err)) {
                         uprv_free(formatters);
@@ -532,7 +533,7 @@ TimeUnitFormat::readFromCurrentLocale(EStyle style, const char* key, UErrorCode&
 
 
 void 
-TimeUnitFormat::checkConsistency(EStyle style, const char* key, UErrorCode& err) {
+TimeUnitFormat::checkConsistency(UTimeUnitFormatStyle style, const char* key, UErrorCode& err) {
     if (U_FAILURE(err)) {
         return;
     }
@@ -598,7 +599,7 @@ TimeUnitFormat::checkConsistency(EStyle style, const char* key, UErrorCode& err)
 // using patterns of plural count "other", 
 // then, "other" is the searchPluralCount.
 void 
-TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key, const char* localeName,
+TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key, const char* localeName,
                                 TimeUnit::UTimeUnitFields srcTimeUnitField,
                                 const char* srcPluralCount,
                                 const char* searchPluralCount, 
@@ -631,9 +632,9 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key, const char* l
                 }
                 MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
                 if (formatters == NULL) {
-                    formatters = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
-                    formatters[kFull] = NULL;
-                    formatters[kAbbreviate] = NULL;
+                    formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
+                    formatters[UTMUTFMT_FULL_STYLE] = NULL;
+                    formatters[UTMUTFMT_ABBREVIATED_STYLE] = NULL;
                     countToPatterns->put(srcPluralCount, formatters, err);
                     if (U_FAILURE(err)) {
                         uprv_free(formatters);
@@ -706,9 +707,9 @@ TimeUnitFormat::searchInLocaleChain(EStyle style, const char* key, const char* l
             }
             MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
             if (formatters == NULL) {
-                formatters = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
-                formatters[kFull] = NULL;
-                formatters[kAbbreviate] = NULL;
+                formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
+                formatters[UTMUTFMT_FULL_STYLE] = NULL;
+                formatters[UTMUTFMT_ABBREVIATED_STYLE] = NULL;
                 countToPatterns->put(srcPluralCount, formatters, err);
                 if (U_FAILURE(err)) {
                     uprv_free(formatters);
@@ -754,8 +755,8 @@ TimeUnitFormat::setNumberFormat(const NumberFormat& format, UErrorCode& status){
         while ((elem = fTimeUnitToCountToPatterns[i]->nextElement(pos)) != NULL){
             const UHashTok keyTok = elem->value;
             MessageFormat** pattern = (MessageFormat**)keyTok.pointer;
-            pattern[kFull]->setFormat(0, format);
-            pattern[kAbbreviate]->setFormat(0, format);
+            pattern[UTMUTFMT_FULL_STYLE]->setFormat(0, format);
+            pattern[UTMUTFMT_ABBREVIATED_STYLE]->setFormat(0, format);
         }
     }
 }
@@ -769,8 +770,8 @@ TimeUnitFormat::deleteHash(Hashtable* htable) {
         while ( (element = htable->nextElement(pos)) != NULL ) {
             const UHashTok valueTok = element->value;
             const MessageFormat** value = (const MessageFormat**)valueTok.pointer;
-            delete value[kFull];
-            delete value[kAbbreviate];
+            delete value[UTMUTFMT_FULL_STYLE];
+            delete value[UTMUTFMT_ABBREVIATED_STYLE];
             //delete[] value;
             uprv_free(value);
         }
@@ -792,7 +793,7 @@ TimeUnitFormat::copyHash(const Hashtable* source, Hashtable* target, UErrorCode&
             const UnicodeString* key = (UnicodeString*)keyTok.pointer;
             const UHashTok valueTok = element->value;
             const MessageFormat** value = (const MessageFormat**)valueTok.pointer;
-            MessageFormat** newVal = (MessageFormat**)uprv_malloc(kTotal*sizeof(MessageFormat*));
+            MessageFormat** newVal = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
             newVal[0] = (MessageFormat*)value[0]->clone();
             newVal[1] = (MessageFormat*)value[1]->clone();
             target->put(UnicodeString(*key), newVal, status);
