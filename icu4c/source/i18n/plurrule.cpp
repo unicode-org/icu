@@ -14,8 +14,9 @@
 
 
 #include "unicode/utypes.h"
-#include "unicode/ures.h"
+#include "unicode/localpointer.h"
 #include "unicode/plurrule.h"
+#include "unicode/ures.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "hash.h"
@@ -24,6 +25,7 @@
 #include "plurrule_impl.h"
 #include "putilimp.h"
 #include "ucln_in.h"
+#include "uhash.h"
 #include "ustrfmt.h"
 #include "locutil.h"
 
@@ -81,8 +83,8 @@ PluralRules::PluralRules(const PluralRules& other)
 PluralRules::~PluralRules() {
     delete mRules;
     delete mParser;
-    delete [] mSamples;
-    delete [] mSampleInfo;
+    uprv_free(mSamples);
+    uprv_free(mSampleInfo);
 }
 
 PluralRules*
@@ -103,10 +105,10 @@ PluralRules::operator=(const PluralRules& other) {
         delete mParser;
         mParser = new RuleParser();
 
-        delete [] mSamples;
+        uprv_free(mSamples);
         mSamples = NULL;
 
-        delete [] mSampleInfo;
+        uprv_free(mSampleInfo);
         mSampleInfo = NULL;
         mSampleInfoCount = 0;
     }
@@ -228,13 +230,11 @@ PluralRules::getSamplesInternal(const UnicodeString &keyword, double *dest,
                                 int32_t destCapacity, UBool includeUnlimited,
                                 UErrorCode& status) {
     initSamples(status);
-
-    if (U_SUCCESS(status)) {
-        if (destCapacity < 0 || (dest == NULL && destCapacity > 0)) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-    }
     if (U_FAILURE(status)) {
+        return -1;
+    }
+    if (destCapacity < 0 || (dest == NULL && destCapacity > 0)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
@@ -254,13 +254,16 @@ PluralRules::getSamplesInternal(const UnicodeString &keyword, double *dest,
     int32_t start = index == 0 ? 0 : mSampleInfo[index - 1] & ~LIMIT_MASK;
     int32_t limit = mSampleInfo[index] & ~LIMIT_MASK;
     int32_t len = limit - start;
-    if (dest != NULL) {
-        if (len < destCapacity) {
-            destCapacity = len;
-        }
-        for (int32_t i = 0; i < destCapacity; ++i, ++start) {
-            dest[i] = mSamples[start];
-        }
+    if (len <= destCapacity) {
+        destCapacity = len;
+    } else if (includeUnlimited) {
+        len = destCapacity;  // no overflow, and don't report more than we copy
+    } else {
+        status = U_BUFFER_OVERFLOW_ERROR;
+        return len;
+    }
+    for (int32_t i = 0; i < destCapacity; ++i, ++start) {
+        dest[i] = mSamples[start];
     }
     return len;
 }
@@ -289,53 +292,35 @@ PluralRules::getKeywordOther() const {
 UBool
 PluralRules::operator==(const PluralRules& other) const  {
     int32_t limit;
-    UBool sameList = TRUE;
     const UnicodeString *ptrKeyword;
     UErrorCode status= U_ZERO_ERROR;
 
     if ( this == &other ) {
         return TRUE;
     }
-    StringEnumeration* myKeywordList = getKeywords(status);
-    if (U_FAILURE(status)) {
-        return FALSE;
-    }
-    StringEnumeration* otherKeywordList =other.getKeywords(status);
+    LocalPointer<StringEnumeration> myKeywordList(getKeywords(status));
+    LocalPointer<StringEnumeration> otherKeywordList(other.getKeywords(status));
     if (U_FAILURE(status)) {
         return FALSE;
     }
 
-    if (myKeywordList->count(status)!=otherKeywordList->count(status) ||
-        U_FAILURE(status)) {
-        sameList = FALSE;
+    if (myKeywordList->count(status)!=otherKeywordList->count(status)) {
+        return FALSE;
     }
-    else {
-        myKeywordList->reset(status);
-        if (U_FAILURE(status)) {
+    myKeywordList->reset(status);
+    while ((ptrKeyword=myKeywordList->snext(status))!=NULL) {
+        if (!other.isKeyword(*ptrKeyword)) {
             return FALSE;
         }
-        while (sameList && (ptrKeyword=myKeywordList->snext(status))!=NULL) {
-            if (U_FAILURE(status) || !other.isKeyword(*ptrKeyword)) {
-                sameList = FALSE;
-            }
-        }
-        otherKeywordList->reset(status);
-        if (U_FAILURE(status)) {
+    }
+    otherKeywordList->reset(status);
+    while ((ptrKeyword=otherKeywordList->snext(status))!=NULL) {
+        if (!this->isKeyword(*ptrKeyword)) {
             return FALSE;
         }
-        while (sameList && (ptrKeyword=otherKeywordList->snext(status))!=NULL) {
-            if (U_FAILURE(status)) {
-                return FALSE;
-            }
-            if (!this->isKeyword(*ptrKeyword))  {
-                sameList = FALSE;
-            }
-        }
-        delete myKeywordList;
-        delete otherKeywordList;
-        if (!sameList) {
-            return FALSE;
-        }
+    }
+    if (U_FAILURE(status)) {
+        return FALSE;
     }
 
     if ((limit=this->getRepeatLimit()) != other.getRepeatLimit()) {
@@ -512,18 +497,21 @@ PluralRules::getKeywordIndex(const UnicodeString& keyword,
     return -1;
 }
 
+typedef struct SampleRecord {
+    int32_t ruleIndex;
+    double  value;
+} SampleRecord;
+
 void
 PluralRules::initSamples(UErrorCode& status) {
-    Mutex lock(&pluralMutex);
-
-    if (mSamples || U_FAILURE(status)) {
+    if (U_FAILURE(status)) {
         return;
     }
+    Mutex lock(&pluralMutex);
 
-    typedef struct SampleRecord {
-        int32_t ruleIndex;
-        double  value;
-    } SampleRecord;
+    if (mSamples) {
+        return;
+    }
 
     // Note, the original design let you have multiple rules with the same keyword.  But
     // we don't use that in our data and existing functions in this implementation don't
@@ -549,9 +537,10 @@ PluralRules::initSamples(UErrorCode& status) {
         ++maxIndex;
     }
 
-    int32_t* newSampleInfo = new int32_t[maxIndex];
-    if (newSampleInfo == NULL) {
+    LocalMemory<int32_t> newSampleInfo;
+    if (NULL == newSampleInfo.allocateInsteadAndCopy(maxIndex)) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
 
     const int32_t LIMIT_MASK = 0x1 << 31;
@@ -568,107 +557,89 @@ PluralRules::initSamples(UErrorCode& status) {
         newSampleInfo[maxIndex - 1] = 0; // unlimited
     }
 
-    int32_t maxCount = MAX_SAMPLES * maxIndex; // this is a guess, we'll grow if need be
+    MaybeStackArray<SampleRecord, 10> newSamples;
     int32_t sampleCount = 0;
-    SampleRecord* newSamples = new SampleRecord[maxCount];
-    if (newSamples == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        int32_t limit = getRepeatLimit() * MAX_SAMPLES * 2;
-        if (limit < 10) {
-            limit = 10;
-        }
 
-        for (int i = 0, keywordsRemaining = maxIndex;
-             keywordsRemaining > 0 && i < limit;
-             ++i) {
-            double val = i / 2.0;
+    int32_t limit = getRepeatLimit() * MAX_SAMPLES * 2;
+    if (limit < 10) {
+        limit = 10;
+    }
 
-            n = 0;
-            rc = mRules;
-            int32_t found = -1;
-            while (rc != NULL) {
-                if (rc->ruleHeader != NULL) {
-                    if (rc->ruleHeader->isFulfilled(val)) {
-                        found = n;
-                        break;
-                    }
-                    ++n;
-                }
-                rc = rc->next;
-            }
-            if (found == -1) {
-                // 'other'.  If there is an 'other' rule, the rule set is bad since nothing
-                // should leak through, but we don't bother to report that here.
-                found = otherIndex == -1 ? maxIndex - 1 : otherIndex;
-            }
-            UBool keyIsUnlimited = (newSampleInfo[found] & LIMIT_MASK) == 0;
-            if (keyIsUnlimited && newSampleInfo[found] == MAX_SAMPLES) { // limit flag not set
-                continue;
-            }
-            newSampleInfo[found] += 1; // won't impact limit flag
+    for (int i = 0, keywordsRemaining = maxIndex;
+          keywordsRemaining > 0 && i < limit;
+          ++i) {
+        double val = i / 2.0;
 
-            if (sampleCount == maxCount) {
-                // reallocate
-                SampleRecord *temp = new SampleRecord[maxCount * 2];
-                if (temp == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
+        n = 0;
+        rc = mRules;
+        int32_t found = -1;
+        while (rc != NULL) {
+            if (rc->ruleHeader != NULL) {
+                if (rc->ruleHeader->isFulfilled(val)) {
+                    found = n;
                     break;
                 }
-                for (int i = 0; i < maxCount; ++i) {
-                    temp[i] = newSamples[i];
-                }
-                delete [] newSamples;
-                newSamples = temp;
-                maxCount *= 2;
+                ++n;
             }
-            newSamples[sampleCount].ruleIndex = found;
-            newSamples[sampleCount].value = val;
-            ++sampleCount;
+            rc = rc->next;
+        }
+        if (found == -1) {
+            // 'other'.  If there is an 'other' rule, the rule set is bad since nothing
+            // should leak through, but we don't bother to report that here.
+            found = otherIndex == -1 ? maxIndex - 1 : otherIndex;
+        }
+        if (newSampleInfo[found] == MAX_SAMPLES) { // limit flag not set
+            continue;
+        }
+        newSampleInfo[found] += 1; // won't impact limit flag
 
-            if (keyIsUnlimited && newSampleInfo[found] == MAX_SAMPLES) {
-                --keywordsRemaining;
+        if (sampleCount == newSamples.getCapacity()) {
+            int32_t newCapacity = sampleCount < 20 ? 128 : sampleCount * 2;
+            if (NULL == newSamples.resize(newCapacity, sampleCount)) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
             }
         }
+        newSamples[sampleCount].ruleIndex = found;
+        newSamples[sampleCount].value = val;
+        ++sampleCount;
 
-        // sort the values by index, leaving order otherwise unchanged
-        // this is just a selection sort for simplicity
-        double *values = new double[sampleCount];
-        if (values == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        } else if( U_SUCCESS(status)) {
-            for (int i = 0, j = 0; i < maxIndex; ++i) {
-                for (int k = 0; k < sampleCount; ++k) {
-                    if (newSamples[k].ruleIndex == i) {
-                        values[j++] = newSamples[k].value;
-                    }
-                }
-            }
-
-            // convert array of mask/lengths to array of mask/limits
-            int32_t limit = 0;
-            for (int i = 0; i < maxIndex; ++i) {
-                int32_t info = newSampleInfo[i];
-                int32_t len = info & ~LIMIT_MASK;
-                limit += len;
-                // if a rule is 'unlimited' but has fewer than MAX_SAMPLES samples,
-                // it's not really unlimited, so mark it as limited
-                int32_t mask = len < MAX_SAMPLES ? LIMIT_MASK : info & LIMIT_MASK;
-                newSampleInfo[i] = limit | mask;
-            }
-
-            // ok, we've got good data
-            mSamples = values;
-            mSampleInfo = newSampleInfo;
-            mSampleInfoCount = maxIndex;
-
-            // these are now aliased, so don't delete them
-            newSampleInfo = NULL;
+        if (newSampleInfo[found] == MAX_SAMPLES) { // limit flag not set
+            --keywordsRemaining;
         }
     }
 
-    delete [] newSamples;
-    delete [] newSampleInfo;
+    // sort the values by index, leaving order otherwise unchanged
+    // this is just a selection sort for simplicity
+    LocalMemory<double> values;
+    if (NULL == values.allocateInsteadAndCopy(sampleCount)) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    for (int i = 0, j = 0; i < maxIndex; ++i) {
+        for (int k = 0; k < sampleCount; ++k) {
+            if (newSamples[k].ruleIndex == i) {
+                values[j++] = newSamples[k].value;
+            }
+        }
+    }
+
+    // convert array of mask/lengths to array of mask/limits
+    limit = 0;
+    for (int i = 0; i < maxIndex; ++i) {
+        int32_t info = newSampleInfo[i];
+        int32_t len = info & ~LIMIT_MASK;
+        limit += len;
+        // if a rule is 'unlimited' but has fewer than MAX_SAMPLES samples,
+        // it's not really unlimited, so mark it as limited
+        int32_t mask = len < MAX_SAMPLES ? LIMIT_MASK : info & LIMIT_MASK;
+        newSampleInfo[i] = limit | mask;
+    }
+
+    // ok, we've got good data
+    mSamples = values.orphan();
+    mSampleInfo = newSampleInfo.orphan();
+    mSampleInfoCount = maxIndex;
 }
 
 void
@@ -948,10 +919,8 @@ OrConstraint::isFulfilled(double number) {
 
 UBool
 OrConstraint::isLimited() {
-    OrConstraint *orc = this;
     for (OrConstraint *orc = this; orc != NULL; orc = orc->next) {
         UBool result = FALSE;
-        AndConstraint *andc = orc->childNode;
         for (AndConstraint *andc = orc->childNode; andc != NULL; andc = andc->next) {
             if (andc->isLimited()) {
                 result = TRUE;
@@ -1407,33 +1376,27 @@ RuleParser::isValidKeyword(const UnicodeString& token) {
     return PatternProps::isIdentifier(token.getBuffer(), token.length());
 }
 
-PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode& status) :
-fKeywordNames(status)
-{
-    RuleChain *node=header;
-    UBool  addKeywordOther=true;
-
+PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode& status)
+        : pos(0), fKeywordNames(status) {
     if (U_FAILURE(status)) {
         return;
     }
-    pos=0;
-    fKeywordNames.removeAllElements();
+    fKeywordNames.setDeleter(uhash_deleteUObject);
+    UBool  addKeywordOther=TRUE;
+    RuleChain *node=header;
     while(node!=NULL) {
         fKeywordNames.addElement(new UnicodeString(node->keyword), status);
         if (U_FAILURE(status)) {
             return;
         }
         if (node->keyword == PLURAL_KEYWORD_OTHER) {
-            addKeywordOther= false;
+            addKeywordOther= FALSE;
         }
         node=node->next;
     }
 
     if (addKeywordOther) {
         fKeywordNames.addElement(new UnicodeString(PLURAL_KEYWORD_OTHER), status);
-        if (U_FAILURE(status)) {
-            return;
-        }
     }
 }
 
@@ -1456,12 +1419,6 @@ PluralKeywordEnumeration::count(UErrorCode& /*status*/) const {
 }
 
 PluralKeywordEnumeration::~PluralKeywordEnumeration() {
-    UnicodeString *s;
-    for (int32_t i=0; i<fKeywordNames.size(); ++i) {
-        if ((s=(UnicodeString *)fKeywordNames.elementAt(i))!=NULL) {
-            delete s;
-        }
-    }
 }
 
 U_NAMESPACE_END
