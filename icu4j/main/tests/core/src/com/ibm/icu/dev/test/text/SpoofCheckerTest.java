@@ -183,7 +183,7 @@ public class SpoofCheckerTest extends TestFmwk {
          * The checks that were disabled just above are the same ones that the "scMixed" test fails. So with those tests
          * gone checking that Identifier should now succeed
          */
-        checkResults = sc.check(scMixed);
+        checkResults = sc.failsChecks(scMixed);
         TEST_ASSERT(false == checkResults);
         teardown();
     }
@@ -217,20 +217,20 @@ public class SpoofCheckerTest extends TestFmwk {
         sc = builder.setChecks(SpoofChecker.CHAR_LIMIT).build();
 
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
-        checkResults = sc.check(goodLatin);
+        checkResults = sc.failsChecks(goodLatin);
         TEST_ASSERT(false == checkResults);
 
-        checkResults = sc.check(goodGreek, result);
+        checkResults = sc.failsChecks(goodGreek, result);
         TEST_ASSERT_EQ(SpoofChecker.CHAR_LIMIT, result.checks);
 
-        checkResults = sc.check(goodCyrl);
+        checkResults = sc.failsChecks(goodCyrl);
         TEST_ASSERT(false == checkResults);
 
         /* Reset with an empty locale list, which should allow all characters to pass */
         allowedLocales = new LinkedHashSet<ULocale>();
         sc = builder.setAllowedLocales(allowedLocales).build();
 
-        checkResults = sc.check(goodGreek);
+        checkResults = sc.failsChecks(goodGreek);
         TEST_ASSERT(false == checkResults);
         teardown();
     }
@@ -258,11 +258,11 @@ public class SpoofCheckerTest extends TestFmwk {
 
         /* Latin Identifier should now fail; other non-latin test cases should still be OK */
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
-        checkResults = sc.check(goodLatin, result);
+        checkResults = sc.failsChecks(goodLatin, result);
         TEST_ASSERT(checkResults);
         TEST_ASSERT_EQ(SpoofChecker.CHAR_LIMIT, result.checks);
 
-        checkResults = sc.check(goodGreek, result);
+        checkResults = sc.failsChecks(goodGreek, result);
         TEST_ASSERT(checkResults);
         TEST_ASSERT_EQ(SpoofChecker.WHOLE_SCRIPT_CONFUSABLE, result.checks);
         teardown();
@@ -274,21 +274,21 @@ public class SpoofCheckerTest extends TestFmwk {
         boolean checkResults;
 
         result.position = 666;
-        checkResults = sc.check(goodLatin, result);
+        checkResults = sc.failsChecks(goodLatin, result);
         TEST_ASSERT(false == checkResults);
         TEST_ASSERT_EQ(666, result.position);
 
-        checkResults = sc.check(goodCyrl, result);
+        checkResults = sc.failsChecks(goodCyrl, result);
         TEST_ASSERT(false == checkResults);
 
         result.position = 666;
-        checkResults = sc.check(scMixed, result);
+        checkResults = sc.failsChecks(scMixed, result);
         TEST_ASSERT(true == checkResults);
         TEST_ASSERT_EQ(SpoofChecker.MIXED_SCRIPT_CONFUSABLE | SpoofChecker.SINGLE_SCRIPT, result.checks);
         TEST_ASSERT_EQ(2, result.position);
         
         result.position = 666;
-        checkResults = sc.check(han_Hiragana, result);
+        checkResults = sc.failsChecks(han_Hiragana, result);
         TEST_ASSERT(false == checkResults);
         TEST_ASSERT_EQ(666, result.position);
         TEST_ASSERT_EQ(0, result.checks);
@@ -336,7 +336,7 @@ public class SpoofCheckerTest extends TestFmwk {
                            // If this test starts failing, consult confusablesWholeScript.txt
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         result.position = 666;
-        boolean checkResults = sc.check(s, result);
+        boolean checkResults = sc.failsChecks(s, result);
         TEST_ASSERT(false == checkResults);
         TEST_ASSERT_EQ(666, result.position); // not changed
         teardown();
@@ -453,12 +453,12 @@ public class SpoofCheckerTest extends TestFmwk {
         String s = Utility.unescape("abcd\\u0301ef");
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         result.position = -42;
-        TEST_ASSERT(false == sc.check(s, result));
+        TEST_ASSERT(false == sc.failsChecks(s, result));
         TEST_ASSERT_EQ(0, result.checks);
         TEST_ASSERT(result.position == -42); // unchanged
 
         String s2 = Utility.unescape("abcd\\u0301\\u0302\\u0301ef");
-        TEST_ASSERT(true == sc.check(s2, result));
+        TEST_ASSERT(true == sc.failsChecks(s2, result));
         TEST_ASSERT_EQ(SpoofChecker.INVISIBLE, result.checks);
         TEST_ASSERT_EQ(7, result.position);
 
@@ -466,7 +466,7 @@ public class SpoofCheckerTest extends TestFmwk {
         // and one separate.
         result.position = -42;
         String s3 = Utility.unescape("abcd\\u00e1\\u0301xyz");
-        TEST_ASSERT(true == sc.check(s3, result));
+        TEST_ASSERT(true == sc.failsChecks(s3, result));
         TEST_ASSERT_EQ(SpoofChecker.INVISIBLE, result.checks);
         TEST_ASSERT_EQ(7, result.position);
         teardown();
