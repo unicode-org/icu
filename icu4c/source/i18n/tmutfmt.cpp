@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  * Copyright (C) 2008-2011, Google, International Business Machines Corporation
- * and  others. All Rights Reserved.                                           
+ * and others. All Rights Reserved.
  *******************************************************************************
  */
 
