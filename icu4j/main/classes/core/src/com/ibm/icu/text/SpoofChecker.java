@@ -1367,15 +1367,18 @@ public class SpoofChecker {
     }
 
     /**
-     * Represent the results of a Spoof Check operation. Encapsulates which check(s) have failed and the index in the
-     * string where the failure was found.
+     * A struct-like class to hold the results of a Spoof Check operation. 
+     * Tells which check(s) have failed 
+     * and the position within the string where the failure was found.
      * 
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
     public static class CheckResult {
         /**
-         * Indicate which of the spoof check(s) has failed.
+         * Indicate which of the spoof check(s) has failed.  The value is a bitwise OR
+         * of the constants for the tests in question, SINGLE_SCRIPT_CONFUSABLE,
+         * MIXED_SCRIPT_CONFUSABLE, WHOLE_SCRIPT_CONFUSABLE, and so on.
          * 
          * @draft ICU 4.6
          * @provisional This API might change or be removed in a future release.
@@ -1407,12 +1410,13 @@ public class SpoofChecker {
      * @param text
      *            A String to be checked for possible security issues.
      * @param checkResult
-     *            Optional caller provided fill-in parameter. If not null, on return it will be filled.
+     *            Output parameter, indicates which specific tests failed.
+     *            May be null if the information is not wanted.
      * @return True there any issue is found with the input string.
-     * @draft ICU 4.6
+     * @draft ICU 4.8
      * @provisional This API might change or be removed in a future release.
      */
-    public boolean check(String text, CheckResult checkResult) {
+    public boolean failsChecks(String text, CheckResult checkResult) {
         int length = text.length();
 
         int result = 0;
@@ -1555,11 +1559,11 @@ public class SpoofChecker {
      * @param text
      *            A String to be checked for possible security issues.
      * @return True there any issue is found with the input string.
-     * @draft ICU 4.6
+     * @draft ICU 4.8
      * @provisional This API might change or be removed in a future release.
      */
-    public boolean check(String text) {
-        return check(text, null);
+    public boolean failsChecks(String text) {
+        return failsChecks(text, null);
     }
 
     /**
