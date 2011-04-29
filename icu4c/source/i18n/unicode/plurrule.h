@@ -42,12 +42,16 @@ class RuleParser;
 class PluralKeywordEnumeration;
 
 /**
- * Defines rules for mapping positive long values onto a small set of
+ * Defines rules for mapping non-negative numeric values onto a small set of
  * keywords. Rules are constructed from a text description, consisting
  * of a series of keywords and conditions.  The {@link #select} method
  * examines each condition in order and returns the keyword for the
  * first condition that matches the number.  If none match,
  * default rule(other) is returned.
+ *
+ * For more information, details, and tips for writing rules, see the
+ * LDML spec, C.11 Language Plural Rules:
+ * http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules
  *
  * Examples:<pre>
  *   "one: n is 1; few: n in 2..4"</pre>
