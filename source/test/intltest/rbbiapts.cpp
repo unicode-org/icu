@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1999-2010, International Business Machines
+ * Copyright (c) 1999-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *   Date        Name        Description
@@ -19,6 +19,7 @@
 #include "rbbidata.h"
 #include "cstring.h"
 #include "ubrkimpl.h"
+#include "unicode/locid.h"
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 #include "cmemory.h"
@@ -31,8 +32,8 @@
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) {\
 errln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-errln("Test Failure at file %s, line %d", __FILE__, __LINE__);}}
+#define TEST_ASSERT(expr) {if ((expr) == FALSE) { \
+    errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
 
 void RBBIAPITest::TestCloneEquals()
 {
@@ -1090,6 +1091,32 @@ void RBBIAPITest::TestCreateFromRBBIData() {
             errln("create RuleBasedBreakIterator from RBBIData (non-adopted): ICU Error \"%s\"\n", u_errorName(status) );
         }
     }
+
+    // getBinaryRules() and RuleBasedBreakIterator(uint8_t binaryRules, ...)
+    //
+    status = U_ZERO_ERROR;
+    RuleBasedBreakIterator *rb = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
+    TEST_ASSERT_SUCCESS(status);
+    uint32_t length;
+    const uint8_t *rules = rb->getBinaryRules(length);
+    RuleBasedBreakIterator *rb2 = new RuleBasedBreakIterator(rules, length, status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(*rb == *rb2);
+    UnicodeString words = "one two three ";
+    rb2->setText(words);
+    int wordCounter = 0;
+    while (rb2->next() != UBRK_DONE) {
+        wordCounter++;
+    }
+    TEST_ASSERT(wordCounter == 6);
+
+    status = U_ZERO_ERROR;
+    RuleBasedBreakIterator *rb3 = new RuleBasedBreakIterator(rules, length-1, status);
+    TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+
+    delete rb;
+    delete rb2;
+    delete rb3;
 }
 
 //---------------------------------------------
