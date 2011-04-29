@@ -17,6 +17,8 @@
 #include "plurults.h"
 #include "unicode/plurrule.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
+
 void setupResult(const int32_t testSource[], char result[], int32_t* max);
 UBool checkEqual(PluralRules *test, char *result, int32_t max);
 UBool testEquality(PluralRules *test);
@@ -392,15 +394,20 @@ void PluralRulesTest::testGetSamples() {
     while (NULL != (keyword = keywords->snext(status))) {
       int32_t count = rules->getSamples(*keyword, values, 4, status);
       if (U_FAILURE(status)) {
-        errln(UNICODE_STRING_SIMPLE("get samples failed for locale ") + locales[i].getName() +
+        errln(UNICODE_STRING_SIMPLE("getSamples() failed for locale ") +
+              locales[i].getName() +
               UNICODE_STRING_SIMPLE(", keyword ") + *keyword);
         continue;
       }
       if (count == 0) {
         errln("no samples for keyword");
       }
-      if (count > 4) { // count is number available, not number we wrote...
-        count = 4;
+      if (count > LENGTHOF(values)) {
+        errln(UNICODE_STRING_SIMPLE("getSamples()=") + count +
+              UNICODE_STRING_SIMPLE(", too many values, for locale ") +
+              locales[i].getName() +
+              UNICODE_STRING_SIMPLE(", keyword ") + *keyword);
+        count = LENGTHOF(values);
       }
       for (int32_t j = 0; j < count; ++j) {
         if (values[j] == UPLRULES_NO_UNIQUE_VALUE) {
