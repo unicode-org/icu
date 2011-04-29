@@ -1992,8 +1992,7 @@ public:
 
   /**
    * Append operator. Append the characters in <TT>srcText</TT> to the
-   * UnicodeString object at offset <TT>start</TT>. <TT>srcText</TT> is
-   * not modified.
+   * UnicodeString object. <TT>srcText</TT> is not modified.
    * @param srcText the source for the new characters
    * @return a reference to this
    * @stable ICU 2.0
@@ -2019,8 +2018,8 @@ public:
             int32_t srcLength);
 
   /**
-   * Append the characters in <TT>srcText</TT> to the UnicodeString object at
-   * offset <TT>start</TT>. <TT>srcText</TT> is not modified.
+   * Append the characters in <TT>srcText</TT> to the UnicodeString object.
+   * <TT>srcText</TT> is not modified.
    * @param srcText the source for the new characters
    * @return a reference to this
    * @stable ICU 2.0
