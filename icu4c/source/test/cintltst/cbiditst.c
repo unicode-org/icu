@@ -76,6 +76,8 @@ static void testGetBaseDirection(void);
 
 static void testContext(void);
 
+static void doTailTest(void);
+
 /* new BIDI API */
 static void testReorderingMode(void);
 static void testReorderRunsOnly(void);
@@ -128,6 +130,7 @@ addComplexTest(TestNode** root) {
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
     addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
+    addTest(root, doTailTest, "complex/arabic-shaping/tailtest");
 }
 
 static void
@@ -2760,6 +2763,51 @@ doLOGICALArabicDeShapingTest(void) {
         log_err("failure in u_shapeArabic(unshape_grow_shrink)\n");
     }
 
+}
+
+static void
+doTailTest(void) {
+  static const UChar src[] = { 0x0020, 0x0633, 0 };
+  static const UChar dst_old[] = { 0xFEB1, 0x200B,0 };
+  static const UChar dst_new[] = { 0xFEB1, 0xFE73,0 };
+  UChar dst[3] = { 0x0000, 0x0000,0 };
+  int32_t length;
+  UErrorCode status;
+  
+  log_verbose("SRC: U+%04X U+%04X\n", src[0],src[1]);
+
+  log_verbose("Trying old tail\n");
+  status = U_ZERO_ERROR;
+  length = u_shapeArabic(src, -1, dst, LENGTHOF(dst),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR, &status);
+  if(U_FAILURE(status)) {
+    log_err("Fail: status %s\n", u_errorName(status)); 
+  } else if(length!=2) {
+    log_err("Fail: len %d expected 3\n", length);
+  } else if(u_strncmp(dst,dst_old,LENGTHOF(dst))) {
+    log_err("Fail: got U+%04X U+%04X expected U+%04X U+%04X\n",
+            dst[0],dst[1],dst_old[0],dst_old[1]);
+  } else {
+    log_verbose("OK:  U+%04X U+%04X len %d err %s\n",
+            dst[0],dst[1],length,u_errorName(status));
+  }
+
+
+  log_verbose("Trying new tail\n");
+  status = U_ZERO_ERROR;
+  length = u_shapeArabic(src, -1, dst, LENGTHOF(dst),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR|U_SHAPE_TAIL_NEW_UNICODE, &status);
+  if(U_FAILURE(status)) {
+    log_err("Fail: status %s\n", u_errorName(status)); 
+  } else if(length!=2) {
+    log_err("Fail: len %d expected 3\n", length);
+  } else if(u_strncmp(dst,dst_new,LENGTHOF(dst))) {
+    log_err("Fail: got U+%04X U+%04X expected U+%04X U+%04X\n",
+            dst[0],dst[1],dst_new[0],dst_new[1]);
+  } else {
+    log_verbose("OK:  U+%04X U+%04X len %d err %s\n",
+            dst[0],dst[1],length,u_errorName(status));
+  }
 }
 
 static void
