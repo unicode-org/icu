@@ -156,7 +156,7 @@ public:
 
     /**
      * Creates a PluralRules from a description if it is parsable, otherwise
-     * returns null.
+     * returns NULL.
      *
      * @param description rule description
      * @param status      Output param set to success/failure code on exit, which
@@ -250,7 +250,7 @@ public:
      *
      * @param keyword      The keyword.
      * @param dest         Array into which to put the returned values.  May
-     *                     be null if destCapacity is 0.
+     *                     be NULL if destCapacity is 0.
      * @param destCapacity The capacity of the array, must be at least 0.
      * @param status       The error code.
      * @return             The count of values available, or -1.  This count
@@ -258,8 +258,9 @@ public:
      *                     destCapacity values will be written.
      * @draft ICU 4.8
      */
-    int32_t getAllKeywordValues(const UnicodeString &keyword, double *dest,
-                      int32_t destCapacity, UErrorCode& status);
+    int32_t getAllKeywordValues(const UnicodeString &keyword,
+                                double *dest, int32_t destCapacity,
+                                UErrorCode& status);
 
     /**
      * Returns sample values for which select() would return the keyword.  If
@@ -269,16 +270,19 @@ public:
      *
      * @param keyword      The keyword.
      * @param dest         Array into which to put the returned values.  May
-     *                     be null if destCapacity is 0.
+     *                     be NULL if destCapacity is 0.
      * @param destCapacity The capacity of the array, must be at least 0.
      * @param status       The error code.
-     * @return             The count of values available, or -1 if error.
-     *                     This can be larger than destCapacity, but no
-     *                     more than destCapacity values will be written.
+     * @return             The count of values written.
+     *                     If more than destCapacity samples are available, then
+     *                     only destCapacity are written, and destCapacity is returned as the count,
+     *                     rather than setting a U_BUFFER_OVERFLOW_ERROR.
+     *                     (The actual number of keyword values could be unlimited.)
      * @draft ICU 4.8
      */
-    int32_t getSamples(const UnicodeString &keyword, double *dest,
-                       int32_t destCapacity, UErrorCode& status);
+    int32_t getSamples(const UnicodeString &keyword,
+                       double *dest, int32_t destCapacity,
+                       UErrorCode& status);
 
     /**
      * Returns TRUE if the given keyword is defined in this
