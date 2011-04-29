@@ -732,14 +732,14 @@ public:
      * @param pattern           a non-localized pattern string
      * @param symbolsToAdopt    the set of symbols to be used.  The caller should not
      *                          delete this object after making this call.
-     * @param style             style of decimal format, kNumberStyle etc.
+     * @param style             style of decimal format
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
      * @internal ICU 4.2
      */
     DecimalFormat(  const UnicodeString& pattern,
                     DecimalFormatSymbols* symbolsToAdopt,
-                    NumberFormat::EStyles style,
+                    UNumberFormatStyle style,
                     UErrorCode& status);
 
     /**
