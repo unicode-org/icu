@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and others.
+* Copyright (C) 1997-2011, International Business Machines Corporation and others.
 * All Rights Reserved.
 * Modification History:
 *
@@ -134,19 +134,34 @@ typedef void* UNumberFormat;
  */
 typedef enum UNumberFormatStyle {
     /**
-     * Decimal format defined by pattern 
+     * Decimal format defined by a pattern string.
      * @stable ICU 3.0
      */
     UNUM_PATTERN_DECIMAL=0,
-    /** Decimal format */
+    /**
+     * Decimal format ("normal" style).
+     * @stable ICU 2.0
+     */
     UNUM_DECIMAL=1,
-    /** Currency format */
+    /**
+     * Currency format with a currency symbol, e.g., "$1.00".
+     * @stable ICU 2.0
+     */
     UNUM_CURRENCY,
-    /** Percent format */
+    /**
+     * Percent format
+     * @stable ICU 2.0
+     */
     UNUM_PERCENT,
-    /** Scientific format */
+    /**
+     * Scientific format
+     * @stable ICU 2.1
+     */
     UNUM_SCIENTIFIC,
-    /** Spellout rule-based format */
+    /**
+     * Spellout rule-based format
+     * @stable ICU 2.0
+     */
     UNUM_SPELLOUT,
     /** 
      * Ordinal rule-based format 
@@ -159,18 +174,40 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_DURATION,
     /** 
-     * Numbering system rule-based format 
+     * Numbering system rule-based format
      * @stable ICU 4.2
      */
     UNUM_NUMBERING_SYSTEM,
     /** 
-     * Rule-based format defined by pattern 
+     * Rule-based format defined by a pattern string.
      * @stable ICU 3.0
      */
     UNUM_PATTERN_RULEBASED,
-    /** Default format */
+    /**
+     * Currency format with an ISO currency code, e.g., "USD1.00".
+     * @draft ICU 4.8
+     */
+    UNUM_CURRENCY_ISO,
+    /**
+     * Currency format with a pluralized currency name,
+     * e.g., "1.00 US dollar" and "3.00 US dollars".
+     * @draft ICU 4.8
+     */
+    UNUM_CURRENCY_PLURAL,
+    /**
+     * One more than the highest number format style constant.
+     * @draft ICU 4.8
+     */
+    UNUM_FORMAT_STYLE_COUNT,
+    /**
+     * Default format
+     * @stable ICU 2.0
+     */
     UNUM_DEFAULT = UNUM_DECIMAL,
-    /** (Alias for UNUM_PATTERN_DECIMAL) */
+    /**
+     * Alias for UNUM_PATTERN_DECIMAL
+     * @stable ICU 3.0
+     */
     UNUM_IGNORE = UNUM_PATTERN_DECIMAL
 } UNumberFormatStyle;
 

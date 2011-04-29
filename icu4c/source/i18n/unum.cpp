@@ -38,78 +38,45 @@ unum_open(  UNumberFormatStyle    style,
             int32_t            patternLength,
             const    char*     locale,
             UParseError*       parseErr,
-            UErrorCode*        status)
-{
-
-    if(U_FAILURE(*status))
-    {
-        return 0;
+            UErrorCode*        status) {
+    if(U_FAILURE(*status)) {
+        return NULL;
     }
 
-    UNumberFormat *retVal = 0;
+    NumberFormat *retVal = NULL;
 
     switch(style) {
     case UNUM_DECIMAL:
-        if(locale == 0)
-            retVal = (UNumberFormat*)NumberFormat::createInstance(*status);
-        else
-            retVal = (UNumberFormat*)NumberFormat::createInstance(Locale(locale),
-            *status);
-        break;
-
     case UNUM_CURRENCY:
-        if(locale == 0)
-            retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(*status);
-        else
-            retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(Locale(locale),
-            *status);
-        break;
-
     case UNUM_PERCENT:
-        if(locale == 0)
-            retVal = (UNumberFormat*)NumberFormat::createPercentInstance(*status);
-        else
-            retVal = (UNumberFormat*)NumberFormat::createPercentInstance(Locale(locale),
-            *status);
-        break;
-
     case UNUM_SCIENTIFIC:
-        if(locale == 0)
-            retVal = (UNumberFormat*)NumberFormat::createScientificInstance(*status);
-        else
-            retVal = (UNumberFormat*)NumberFormat::createScientificInstance(Locale(locale),
-            *status);
+        retVal = NumberFormat::createInstance(Locale(locale), style, *status);
         break;
 
     case UNUM_PATTERN_DECIMAL: {
         UParseError tErr;
         /* UnicodeString can handle the case when patternLength = -1. */
         const UnicodeString pat(pattern, patternLength);
-        DecimalFormatSymbols *syms = 0;
 
         if(parseErr==NULL){
             parseErr = &tErr;
         }
 
-        if(locale == 0)
-            syms = new DecimalFormatSymbols(*status);
-        else
-            syms = new DecimalFormatSymbols(Locale(locale), *status);
-
-        if(syms == 0) {
+        DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale(locale), *status);
+        if(syms == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
+            return NULL;
         }
         if (U_FAILURE(*status)) {
             delete syms;
-            return 0;
+            return NULL;
         }
 
-        retVal = (UNumberFormat*)new DecimalFormat(pat, syms, *parseErr, *status);
-        if(retVal == 0) {
+        retVal = new DecimalFormat(pat, syms, *parseErr, *status);
+        if(retVal == NULL) {
             delete syms;
         }
-                               } break;
+    } break;
 
 #if U_HAVE_RBNF
     case UNUM_PATTERN_RULEBASED: {
@@ -121,36 +88,36 @@ unum_open(  UNumberFormatStyle    style,
             parseErr = &tErr;
         }
         
-        retVal = (UNumberFormat*)new RuleBasedNumberFormat(pat, Locale(locale), *parseErr, *status);
+        retVal = new RuleBasedNumberFormat(pat, Locale(locale), *parseErr, *status);
     } break;
 
     case UNUM_SPELLOUT:
-        retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
+        retVal = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
         break;
 
     case UNUM_ORDINAL:
-        retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_ORDINAL, Locale(locale), *status);
+        retVal = new RuleBasedNumberFormat(URBNF_ORDINAL, Locale(locale), *status);
         break;
 
     case UNUM_DURATION:
-        retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_DURATION, Locale(locale), *status);
+        retVal = new RuleBasedNumberFormat(URBNF_DURATION, Locale(locale), *status);
         break;
 
     case UNUM_NUMBERING_SYSTEM:
-        retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_NUMBERING_SYSTEM, Locale(locale), *status);
+        retVal = new RuleBasedNumberFormat(URBNF_NUMBERING_SYSTEM, Locale(locale), *status);
         break;
 #endif
 
     default:
         *status = U_UNSUPPORTED_ERROR;
-        return 0;
+        return NULL;
     }
 
-    if(retVal == 0 && U_SUCCESS(*status)) {
+    if(retVal == NULL && U_SUCCESS(*status)) {
         *status = U_MEMORY_ALLOCATION_ERROR;
     }
 
-    return retVal;
+    return reinterpret_cast<UNumberFormat *>(retVal);
 }
 
 U_CAPI void U_EXPORT2
