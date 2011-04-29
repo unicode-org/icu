@@ -26,13 +26,18 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
 
 /**
- * <p>Defines rules for mapping positive double values onto a small set of
+ * <p>Defines rules for mapping non-negative numeric values onto a small set of
  * keywords. Serializable so can be used in formatters, which are
  * serializable. Rules are constructed from a text description, consisting
  * of a series of keywords and conditions.  The {@link #select} method
  * examines each condition in order and returns the keyword for the
  * first condition that matches the number.  If none match,
  * {@link #KEYWORD_OTHER} is returned.</p>
+ *
+ * <p>For more information, details, and tips for writing rules, see the
+ * <a href="http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules">LDML spec,
+ * C.11 Language Plural Rules</a></p>
+ *
  * <p>
  * Examples:<pre>
  *   "one: n is 1; few: n in 2..4"</pre></p>
