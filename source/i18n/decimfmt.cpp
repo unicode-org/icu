@@ -303,7 +303,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern,
                              DecimalFormatSymbols* symbolsToAdopt,
-                             NumberFormat::EStyles style,
+                             UNumberFormatStyle style,
                              UErrorCode& status) {
     init();
     fStyle = style;
@@ -338,7 +338,7 @@ DecimalFormat::init() {
     fPad = 0;
     fFormatWidth = 0;
     fPadPosition = kPadBeforePrefix;
-    fStyle = NumberFormat::kNumberStyle;
+    fStyle = UNUM_DECIMAL;
     fCurrencySignCount = 0;
     fAffixPatternsForCurrency = NULL;
     fAffixesForCurrency = NULL;
@@ -418,7 +418,7 @@ DecimalFormat::construct(UErrorCode&             status,
     const UnicodeString* patternUsed;
     UnicodeString currencyPluralPatternForOther;
     // apply pattern
-    if (fStyle == NumberFormat::kPluralCurrencyStyle) {
+    if (fStyle == UNUM_CURRENCY_PLURAL) {
         fCurrencyPluralInfo = new CurrencyPluralInfo(fSymbols->getLocale(), status);
         if (U_FAILURE(status)) {
             return;
@@ -1686,7 +1686,7 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
     ParsePosition tmpPos(origPos);
     DigitList tmpDigitList;
     UBool found;
-    if (fStyle == NumberFormat::kPluralCurrencyStyle) {
+    if (fStyle == UNUM_CURRENCY_PLURAL) {
         found = subparse(text,
                          fNegPrefixPattern, fNegSuffixPattern,
                          fPosPrefixPattern, fPosSuffixPattern,
@@ -3208,7 +3208,7 @@ int32_t DecimalFormat::appendAffix(UnicodeString& buf, double number,
     if (fCurrencySignCount == fgCurrencySignCountInPluralFormat) {
         UnicodeString pluralCount = fCurrencyPluralInfo->getPluralRules()->select(number);
         AffixesForCurrency* oneSet;
-        if (fStyle == NumberFormat::kPluralCurrencyStyle) {
+        if (fStyle == UNUM_CURRENCY_PLURAL) {
             oneSet = (AffixesForCurrency*)fPluralAffixesForCurrency->get(pluralCount);
         } else {
             oneSet = (AffixesForCurrency*)fAffixesForCurrency->get(pluralCount);
@@ -3393,7 +3393,7 @@ DecimalFormat::appendAffixPattern(UnicodeString& appendTo,
 UnicodeString&
 DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 {
-    if (fStyle == NumberFormat::kPluralCurrencyStyle) {
+    if (fStyle == UNUM_CURRENCY_PLURAL) {
         // the prefix or suffix pattern might not be defined yet,
         // so they can not be synthesized,
         // instead, get them directly.
