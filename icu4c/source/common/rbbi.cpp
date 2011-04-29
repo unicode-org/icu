@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2010 International Business Machines Corporation
+*   Copyright (C) 1999-2011 International Business Machines Corporation
 *   and others. All rights reserved.
 ***************************************************************************
 */
@@ -85,6 +85,32 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const RBBIDataHeader* data, enum 
         return;
     }
 }
+
+
+//
+//  Construct from precompiled binary rules (tables).  This constructor is public API,
+//  taking the rules as a (const uint8_t *) to match the type produced by getBinaryRules().
+//
+RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
+                       uint32_t       ruleLength,
+                       UErrorCode     &status) {
+    init();
+    if (U_FAILURE(status)) {
+        return;
+    }
+    const RBBIDataHeader *data = (const RBBIDataHeader *)compiledRules;
+    if (data->fLength != ruleLength) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    fData = new RBBIDataWrapper(data, RBBIDataWrapper::kDontAdopt, status); 
+    if (U_FAILURE(status)) {return;}
+    if(fData == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+}    
+
 
 //-------------------------------------------------------------------------------
 //
