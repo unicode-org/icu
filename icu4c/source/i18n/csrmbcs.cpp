@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -220,9 +220,9 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const uint16_t commonChars
         // Frequency of occurence statistics exist.
         //
 
-        double maxVal = log10((double)doubleByteCharCount / 4); /*(float)?*/
+        double maxVal = log((double)doubleByteCharCount / 4); /*(float)?*/
         double scaleFactor = 90.0 / maxVal;
-        confidence = (int32_t)(log10((double)commonCharCount+1) * scaleFactor + 10.0);
+        confidence = (int32_t)(log((double)commonCharCount+1) * scaleFactor + 10.0);
 
         confidence = min(confidence, 100);
     }
