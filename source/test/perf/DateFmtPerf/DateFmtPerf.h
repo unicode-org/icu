@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010,International Business Machines
+* Copyright (c) 2002-2011,International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -28,8 +28,9 @@
 #include "collationdata.h"
 
 #include <stdlib.h>
+#include <string.h>
+
 #include <fstream>
-#include <string>
 
 #include <iostream>
 using namespace std;
