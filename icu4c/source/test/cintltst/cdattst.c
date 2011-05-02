@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1191,14 +1191,15 @@ static void TestRelativeCrash(void) {
             }            
         }
         {
+        	UChar erabuf[32];
             UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_getSymbols";
             log_verbose("Trying %s on a relative date..\n", what);
-            udat_getSymbols(icudf, UDAT_ERAS,0,NULL,0, &subStatus);  /* bogus values */
-            if(subStatus == expectStatus) {
-                log_verbose("Success: did not crash on %s, but got %s.\n", what, u_errorName(subStatus));
+            udat_getSymbols(icudf, UDAT_ERAS,0,erabuf,sizeof(erabuf)/sizeof(erabuf[0]), &subStatus);
+            if(subStatus == U_ZERO_ERROR) {
+                log_verbose("Success: %s returned %s.\n", what, u_errorName(subStatus));
             } else {
-                log_err("FAIL: didn't crash on %s, but got success %s instead of %s. \n", what, u_errorName(subStatus), u_errorName(expectStatus));
+                log_err("FAIL: didn't crash on %s, but got %s instead of U_ZERO_ERROR.\n", what, u_errorName(subStatus));
             }            
         }
         {
