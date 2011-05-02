@@ -1458,7 +1458,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         final List<Object> items = fp.set(id).getItems();
         TreeSet<String> result = new TreeSet<String>();
         for (Object obj : items) {
-            result.add(obj.toString());
+            final String item = obj.toString();
+            if (item.startsWith("G") || item.startsWith("a")) {
+                continue;
+            }
+            result.add(item);
         }
         return result;
     }
