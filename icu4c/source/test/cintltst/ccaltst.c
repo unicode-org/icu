@@ -31,6 +31,7 @@
 #include "ulist.h"
 
 void TestGregorianChange(void);
+void TestFieldDifference(void);
 
 void addCalTest(TestNode** root);
 
@@ -47,6 +48,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestGregorianChange, "tsformat/ccaltst/TestGregorianChange");
     addTest(root, &TestGetKeywordValuesForLocale, "tsformat/ccaltst/TestGetKeywordValuesForLocale");
     addTest(root, &TestWeekend, "tsformat/ccaltst/TestWeekend");
+    addTest(root, &TestFieldDifference, "tsformat/ccaltst/TestFieldDifference");
 }
 
 /* "GMT" */
@@ -1679,6 +1681,63 @@ static void TestWeekend() {
             ucal_close(cal);
         } else {
             log_data_err("FAIL: ucal_open for locale %s failed: %s - (Are you missing data?)\n", testDaysPtr->locale, u_errorName(status) );
+        }
+    }
+}
+
+/**
+ * TestFieldDifference
+ */
+
+typedef struct {
+    const UChar * timezone;
+    const char *  locale;
+    UDate         start;
+    UDate         target;
+    int32_t       yDiff;
+    int32_t       MDiff;
+    int32_t       dDiff;
+    int32_t       HDiff;
+    int32_t       mDiff;
+} TFDItem;
+
+static const UChar tzUSPacific[] = { 0x55,0x53,0x2F,0x50,0x61,0x63,0x69,0x66,0x69,0x63,0 }; /* "US/Pacific" */
+
+static const TFDItem tfdItems[] = {
+    /* timezone    locale   start            target             yDf MDf dDf HDf mDf
+    { tzUSPacific, "en_US", 1267459800000.0, 1277772600000.0,    0,  3, 27,  9, 40 }, /* 2010-Mar-01 08:10 -> 2010-Jun-28 17:50 */
+    { tzUSPacific, "en_US", 1267459800000.0, 1299089280000.0,    1,  0,  1,  1, 58 }, /* 2010-Mar-01 08:10 -> 2011-Mar-02 10:08 */
+    { NULL,        NULL,    0.0,             0.0,                0,  0,  0,  0,  0 }  /* terminator */
+};
+
+void TestFieldDifference() {
+    const TFDItem * tfdItemPtr;
+    for (tfdItemPtr = tfdItems; tfdItemPtr->timezone != NULL; tfdItemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCalendar* ucal = ucal_open(tfdItemPtr->timezone, -1, tfdItemPtr->locale, UCAL_DEFAULT, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: for locale \"%s\", ucal_open had status %s\n", tfdItemPtr->locale, u_errorName(status) );
+        } else {
+            int32_t yDf, MDf, dDf, HDf, mDf; 
+            ucal_setMillis(ucal, tfdItemPtr->start, &status);
+            yDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_YEAR, &status);
+            MDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MONTH, &status);
+            dDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_DATE, &status);
+            HDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_HOUR, &status);
+            mDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MINUTE, &status);
+            if (U_FAILURE(status)) {
+                log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, ucal_setMillis or ucal_getFieldDifference had status %s\n",
+                        tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target, u_errorName(status) );
+            } else if ( yDf !=  tfdItemPtr->yDiff ||
+                        MDf !=  tfdItemPtr->MDiff ||
+                        dDf !=  tfdItemPtr->dDiff ||
+                        HDf !=  tfdItemPtr->HDiff ||
+                        mDf !=  tfdItemPtr->mDiff ) {
+                log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected y-M-d-H-m diffs %d-%d-%d-%d-%d, got %d-%d-%d-%d-%d\n",
+                        tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target,
+                        tfdItemPtr->yDiff, tfdItemPtr->MDiff, tfdItemPtr->dDiff, tfdItemPtr->HDiff, tfdItemPtr->mDiff, yDf, MDf, dDf, HDf, mDf);
+            }
+            ucal_close(ucal);
         }
     }
 }

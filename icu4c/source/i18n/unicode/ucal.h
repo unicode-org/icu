@@ -1332,6 +1332,36 @@ ucal_getWeekendTransition(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, U
 U_STABLE UBool U_EXPORT2
 ucal_isWeekend(const UCalendar *cal, UDate date, UErrorCode *status);
 
+/**
+ * Return the difference between the target time and the time this calendar object is currently set to.
+ * If the target time is after the current calendar setting, the the returned value will be positive.
+ * The field parameter specifies the units of the return value. For example, if field is UCAL_MONTH
+ * and ucal_getFieldDifference returns 3, then the target time is 3 to less than 4 months after the
+ * current calendar setting.
+ *
+ * As a side effect of this call, this calendar is advanced toward target by the given amount. That is,
+ * calling this function has the side effect of calling ucal_add on this calendar with the specified
+ * field and an amount equal to the return value from this function.
+ *
+ * A typical way of using this function is to call it first with the largest field of interest, then
+ * with progressively smaller fields.
+ * 
+ * @param cal The UCalendar to compare and update.
+ * @param target The target date to compare to the current calendar setting.
+ * @param field The field to compare; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The date difference for the specified field.
+ * @draft ICU 4.8
+ */
+U_DRAFT int32_t U_EXPORT2 
+ucal_getFieldDifference(UCalendar* cal,
+                        UDate target,
+                        UCalendarDateFields field,
+                        UErrorCode* status);
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
