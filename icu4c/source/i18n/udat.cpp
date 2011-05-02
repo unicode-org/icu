@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -385,11 +385,16 @@ udat_getSymbols(const   UDateFormat     *fmt,
                 int32_t                 resultLength,
                 UErrorCode              *status)
 {
-    verifyIsSimpleDateFormat(fmt, status);
-    if(U_FAILURE(*status)) return -1;
-
-    const DateFormatSymbols *syms = 
-        ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
+    const DateFormatSymbols *syms;
+    const SimpleDateFormat* sdtfmt;
+    const RelativeDateFormat* rdtfmt;
+    if ((sdtfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    	syms = sdtfmt->getDateFormatSymbols();
+    } else if ((rdtfmt = dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    	syms = rdtfmt->getDateFormatSymbols();
+    } else {
+        return -1;
+    }
     int32_t count;
     const UnicodeString *res = NULL;
 
@@ -495,15 +500,16 @@ U_CAPI int32_t U_EXPORT2
 udat_countSymbols(    const    UDateFormat                *fmt,
             UDateFormatSymbolType    type)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    
-    verifyIsSimpleDateFormat(fmt, &status);
-    if(U_FAILURE(status)) {
+    const DateFormatSymbols *syms;
+    const SimpleDateFormat* sdtfmt;
+    const RelativeDateFormat* rdtfmt;
+    if ((sdtfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    	syms = sdtfmt->getDateFormatSymbols();
+    } else if ((rdtfmt = dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    	syms = rdtfmt->getDateFormatSymbols();
+    } else {
         return 0;
     }
-
-    const DateFormatSymbols *syms = 
-        ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
     int32_t count = 0;
 
     switch(type) {

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -339,6 +339,16 @@ RelativeDateFormat::applyPatterns(const UnicodeString& datePattern, const Unicod
     }
 }
 
+const DateFormatSymbols*
+RelativeDateFormat::getDateFormatSymbols() const
+{
+    SimpleDateFormat* sdtfmt = NULL;
+    if (fDateFormat && (sdtfmt = dynamic_cast<SimpleDateFormat*>(fDateFormat)) != NULL) {
+        return sdtfmt->getDateFormatSymbols();
+    }
+    return NULL;
+}
+
 void RelativeDateFormat::loadDates(UErrorCode &status) {
     CalendarData calData(fLocale, "gregorian", status);
     
@@ -353,25 +363,25 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
             if (patternsSize >= (DateFormat::kDateTimeOffset + DateFormat::kShort + 1)) {
                 // Get proper date time format
                 switch (fDateStyle) { 
- 	            case kFullRelative: 
- 	            case kFull: 
- 	                glueIndex = kDateTimeOffset + kFull; 
- 	                break; 
- 	            case kLongRelative: 
- 	            case kLong: 
- 	                glueIndex = kDateTimeOffset + kLong; 
- 	                break; 
- 	            case kMediumRelative: 
- 	            case kMedium: 
- 	                glueIndex = kDateTimeOffset + kMedium; 
- 	                break;         
- 	            case kShortRelative: 
- 	            case kShort: 
- 	                glueIndex = kDateTimeOffset + kShort; 
- 	                break; 
- 	            default: 
- 	                break; 
- 	            } 
+                case kFullRelative: 
+                case kFull: 
+                    glueIndex = kDateTimeOffset + kFull; 
+                    break; 
+                case kLongRelative: 
+                case kLong: 
+                    glueIndex = kDateTimeOffset + kLong; 
+                    break; 
+                case kMediumRelative: 
+                case kMedium: 
+                    glueIndex = kDateTimeOffset + kMedium; 
+                    break;         
+                case kShortRelative: 
+                case kShort: 
+                    glueIndex = kDateTimeOffset + kShort; 
+                    break; 
+                default: 
+                    break; 
+                } 
             }
 
             const UChar *resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &tempStatus);
