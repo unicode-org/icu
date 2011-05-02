@@ -1444,6 +1444,7 @@ public class TestFmwk extends AbstractTestLog {
 
         private void msg(String message, int level, boolean incCount,
                 boolean newln) {
+            int oldLevel = level;
             if (level == WARN && (!warnings && !nodata)){
                 level = ERR;
             }
@@ -1462,7 +1463,7 @@ public class TestFmwk extends AbstractTestLog {
                 if (!suppressIndent) {
                     indent(indentLevel + 1);
                     final String[] MSGNAMES = {"", "Warning: ", "Error: "};
-                    log.print(MSGNAMES[level]);
+                    log.print(MSGNAMES[oldLevel]);
                 }
 
                 log.print(message);
