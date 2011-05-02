@@ -213,9 +213,9 @@ void DecimalFormatTest::DataDrivenTests() {
     RegexMatcher    formatLineMat(UnicodeString(
             "(?i)\\s*format\\s+"
             "(\\S+)\\s+"                 // Capture group 1: pattern
-            "(ceiling|floor|down|up|halfeven|halfdown|halfup|default)\\s+"  // Capture group 2: Rounding Mode
+            "(ceiling|floor|down|up|halfeven|halfdown|halfup|default|unnecessary)\\s+"  // Capture group 2: Rounding Mode
             "\"([^\"]*)\"\\s+"           // Capture group 3: input
-            "\"([^\"]*)\""           // Capture group 4: expected output
+            "\"([^\"]*)\""               // Capture group 4: expected output
             "\\s*(?:#.*)?"),             // Trailing comment
          0, status);
 
@@ -397,6 +397,8 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
         fmtr.setRoundingMode(DecimalFormat::kRoundHalfUp);
     } else if (round=="default") {
         // don't set any value.
+    } else if (round=="unnecessary") {
+        fmtr.setRoundingMode(DecimalFormat::kRoundUnnecessary);
     } else {
         fmtr.setRoundingMode(DecimalFormat::kRoundFloor);
         errln("file dcfmtest.txt, line %d: Bad rounding mode \"%s\"",
@@ -412,9 +414,15 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
     //NumberFormat &nfmtr = fmtr;
     fmtr.format(fmtbl, result, NULL, status);
 
+    if ((status == U_FORMAT_INEXACT_ERROR) && (result == "") && (expected == "Inexact")) {
+        // Test succeeded.
+        status = U_ZERO_ERROR;
+        return;
+    }
     if (U_FAILURE(status)) {
         errln("file dcfmtest.txt, line %d: format() returned %s.",
             lineNum, u_errorName(status));
+        status = U_ZERO_ERROR;
         return;
     }
     

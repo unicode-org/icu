@@ -1,6 +1,6 @@
 ﻿
 # Note: Please make sure that this utf-8 file contains a BOM.
-#   Copyright (c) 2010, International Business Machines Corporation and
+#   Copyright (c) 2011, International Business Machines Corporation and
 #   others. All Rights Reserved.
 #
 
@@ -127,3 +127,12 @@ format .0E0     default   "1234"    ".1E4"
 format .0#E0     default  "1234"    ".12E4"
 format 0.##E0   default   "1234"    "1.23E3"
 
+# RoundUnnecessary.  Fail if result would be inexact.
+format 0.00    unnecessary    "-32.045"    "Inexact"
+format 0.00    unnecessary    "-32.040"    "-32.04"
+format 0.##E0  unnecessary    "1230"        "1.23E3"
+format 0.##E0  unnecessary    "1231"        "Inexact"
+format @@@     unnecessary    "1230"        "1230"
+format @@@     unnecessary    "1231"        "Inexact"
+format @@@@@@@@@@@@@@@@@@@@@@@@@ unnecessary "1234567890123456789012345"  "1234567890123456789012345" 
+format @@@@@@@@@@@@@@@@@@@@@@@@@ unnecessary "12345678901234567890123456" "Inexact" 
