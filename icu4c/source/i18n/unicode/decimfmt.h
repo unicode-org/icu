@@ -655,9 +655,13 @@ public:
                              towards the nearest even integer if equidistant */
         kRoundHalfDown, /**< Round towards the nearest integer, or
                              towards zero if equidistant */
-        kRoundHalfUp    /**< Round towards the nearest integer, or
+        kRoundHalfUp,   /**< Round towards the nearest integer, or
                              away from zero if equidistant */
-        // We don't support ROUND_UNNECESSARY
+        /**
+          *  Return U_FORMAT_INEXACT_ERROR if number does not format exactly. 
+          *  @draft ICU 4.8 
+          */
+        kRoundUnnecessary 
     };
 
     /**
