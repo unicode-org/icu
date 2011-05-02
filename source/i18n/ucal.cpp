@@ -580,6 +580,17 @@ ucal_isWeekend(const UCalendar *cal, UDate date, UErrorCode *status)
     return ((Calendar*)cal)->isWeekend(date, *status);
 }
 
+U_CAPI int32_t  U_EXPORT2
+ucal_getFieldDifference(UCalendar* cal, UDate target,
+                        UCalendarDateFields field,
+                        UErrorCode* status )
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return ((Calendar*)cal)->fieldDifference(target, field, *status);
+}
+
 
 static const UEnumeration defaultKeywordValues = {
     NULL,
