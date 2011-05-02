@@ -1098,12 +1098,19 @@ DecimalFormat::_format(const DigitList &number,
     UBool isNegative = !adjustedNum.isPositive();
 
     // Apply rounding after multiplier
+    
+    adjustedNum.fContext.status &= ~DEC_Inexact;
     if (fRoundingIncrement != NULL) {
         adjustedNum.div(*fRoundingIncrement, status);
         adjustedNum.toIntegralValue();
         adjustedNum.mult(*fRoundingIncrement, status);
         adjustedNum.trim();
     }
+    if (fRoundingMode == kRoundUnnecessary && (adjustedNum.fContext.status & DEC_Inexact)) {
+        status = U_FORMAT_INEXACT_ERROR;
+        return appendTo;
+    }
+        
 
     // Special case for INFINITE,
     if (adjustedNum.isInfinite()) {
@@ -1129,6 +1136,10 @@ DecimalFormat::_format(const DigitList &number,
         // Fixed point format.  Round to a set number of fraction digits.
         int32_t numFractionDigits = precision();
         adjustedNum.roundFixedPoint(numFractionDigits);
+    }
+    if (fRoundingMode == kRoundUnnecessary && (adjustedNum.fContext.status & DEC_Inexact)) {
+        status = U_FORMAT_INEXACT_ERROR;
+        return appendTo;
     }
  
     return subformat(appendTo, handler, adjustedNum, FALSE);

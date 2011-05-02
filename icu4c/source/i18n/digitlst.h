@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -372,9 +372,10 @@ private:
      * DecimalFormat::ERoundingMode    fRoundingMode;
      */
 
-private:
+public:
+    decContext    fContext;   // public access to status flags.  
 
-    decContext    fContext;
+private:
     decNumber     *fDecNumber;
     MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS>  fStorage;
 
