@@ -1,18 +1,20 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
 #ifndef _STRINGPERF_H
 #define _STRINGPERF_H
 
-#include <string>
-
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
 #include "unicode/uperf.h"
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef std::wstring stlstring;	
 
