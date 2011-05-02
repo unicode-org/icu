@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2010 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2011 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -473,7 +473,7 @@ void doBinarySearch()
     // Accurate timings do not depend on this being perfect.  The correction is just to try to
     //   get total running times of about the right order, so the that user doesn't need to
     //   manually adjust the loop count for every different file size.
-    double dLoopCount = double(opt_loopCount) * 3000. / (log10(gNumFileLines) * double(gNumFileLines));
+    double dLoopCount = double(opt_loopCount) * 3000. / (log10((double)gNumFileLines) * double(gNumFileLines));
     if (opt_usekeys) dLoopCount *= 5;
     int adj_loopCount = int(dLoopCount);
     if (adj_loopCount < 1) adj_loopCount = 1;
@@ -699,7 +699,7 @@ void doQSort() {
     Line **sortBuf = new Line *[gNumFileLines];
 
     // Adjust loop count to compensate for file size.   QSort should be n log(n)
-    double dLoopCount = double(opt_loopCount) * 3000. / (log10(gNumFileLines) * double(gNumFileLines));
+    double dLoopCount = double(opt_loopCount) * 3000. / (log10((double)gNumFileLines) * double(gNumFileLines));
     if (opt_usekeys) dLoopCount *= 5;
     int adj_loopCount = int(dLoopCount);
     if (adj_loopCount < 1) adj_loopCount = 1;
