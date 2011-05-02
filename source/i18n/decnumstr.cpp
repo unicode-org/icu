@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -70,7 +70,7 @@ void DecimalNumberString::setLength(int32_t length, UErrorCode &status) {
         return;
     }
     if (length > fLength) {
-        uprv_memset(&fText[fLength], length - fLength, 0);
+        uprv_memset(&fText[fLength], 0, length - fLength);
     }
     fLength = length;
     fText[fLength] = 0;
