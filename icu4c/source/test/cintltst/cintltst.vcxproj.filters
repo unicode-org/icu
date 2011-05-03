@@ -195,6 +195,9 @@
     <ClCompile Include="cnumtst.c">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="cpluralrulestest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="currtest.c">
       <Filter>formatting</Filter>
     </ClCompile>

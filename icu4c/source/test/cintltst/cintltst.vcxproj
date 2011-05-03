@@ -284,6 +284,7 @@
     <ClCompile Include="cmsgtst.c" />
     <ClCompile Include="cnmdptst.c" />
     <ClCompile Include="cnumtst.c" />
+    <ClCompile Include="cpluralrulestest.c" />
     <ClCompile Include="currtest.c" />
     <ClCompile Include="udatpg_test.c" />
     <ClCompile Include="utmstest.c" />
