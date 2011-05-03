@@ -14,14 +14,16 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.Grego;
-import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.ICULogger;
 import com.ibm.icu.impl.JavaTimeZone;
-import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.TimeZoneAdapter;
-import com.ibm.icu.impl.TimeZoneFormat;
 import com.ibm.icu.impl.ZoneMeta;
+import com.ibm.icu.text.TimeZoneFormat;
+import com.ibm.icu.text.TimeZoneFormat.Style;
+import com.ibm.icu.text.TimeZoneFormat.TimeType;
+import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.NameType;
 
 /**
  * {@icuenhanced java.util.TimeZone}.{@icu _usage_}
@@ -206,7 +208,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @see #getTimeZone(String)
      * 
      * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release. 
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String UNKNOWN_ZONE_ID = "Etc/Unknown";
 
@@ -215,36 +217,30 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
      *
      * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release. 
+     * @provisional This API might change or be removed in a future release.
      */
     public enum SystemTimeZoneType {
         /**
          * Any system zones.
          * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release. 
+         * @provisional This API might change or be removed in a future release.
          */
         ANY,
 
         /**
          * Canonical system zones.
          * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release. 
+         * @provisional This API might change or be removed in a future release.
          */
         CANONICAL,
 
         /**
          * Canonical system zones associated with actual locations.
          * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release. 
+         * @provisional This API might change or be removed in a future release.
          */
         CANONICAL_LOCATION,
     }
-
-    /**
-     * Cache to hold the SimpleDateFormat objects for a Locale.
-     */
-    private static ICUCache<ULocale, TimeZoneFormat> cachedLocaleData =
-        new SimpleCache<ULocale, TimeZoneFormat>();
 
     /**
      * Gets the time zone offset, for current date, modified in case of
@@ -385,7 +381,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName() {
-        return _getDisplayName(false, false, LONG_GENERIC, ULocale.getDefault());
+        return _getDisplayName(LONG_GENERIC, false, ULocale.getDefault());
     }
 
     /**
@@ -400,7 +396,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName(Locale locale) {
-        return _getDisplayName(false, false, LONG_GENERIC, ULocale.forLocale(locale));
+        return _getDisplayName(LONG_GENERIC, false, ULocale.forLocale(locale));
     }
 
     /**
@@ -415,15 +411,15 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 3.2
      */
     public final String getDisplayName(ULocale locale) {
-        return _getDisplayName(false, false, LONG_GENERIC, locale);
+        return _getDisplayName(LONG_GENERIC, false, locale);
     }
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
      * in the default locale.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param daylight if true, return the daylight savings name.
      * @param style the output style of the display name.  Valid styles are
      * <code>SHORT</code>, <code>LONG</code>, <code>SHORT_GENERIC</code>,
@@ -440,8 +436,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Returns a name of this time zone suitable for presentation to the user
      * in the specified locale.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param daylight if true, return the daylight savings name.
      * @param style the output style of the display name.  Valid styles are
      * <code>SHORT</code>, <code>LONG</code>, <code>SHORT_GENERIC</code>,
@@ -461,8 +457,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Returns a name of this time zone suitable for presentation to the user
      * in the specified locale.
      * If the display name is not available for the locale,
-     * then this method returns a string in the format
-     * <code>GMT[+-]hh:mm</code>.
+     * then this method returns a string in the localized GMT offset format
+     * such as <code>GMT[+-]HH:mm</code>.
      * @param daylight if true, return the daylight savings name.
      * @param style the output style of the display name.  Valid styles are
      * <code>SHORT</code>, <code>LONG</code>, <code>SHORT_GENERIC</code>,
@@ -479,7 +475,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
             throw new IllegalArgumentException("Illegal style: " + style);
         }
         
-        return _getDisplayName(daylight, true, style, locale);
+        return _getDisplayName(style, daylight, locale);
     }
 
     /**
@@ -487,37 +483,81 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * SHORT, LONG, SHORT_GENERIC, LONG_GENERIC, SHORT_GMT, LONG_GMT,
      * SHORT_COMMONLY_USED and GENERIC_LOCATION.
      */
-    private String _getDisplayName(boolean daylight, boolean daylightRequested, int style, ULocale locale) {
+    private String _getDisplayName(int style, boolean daylight, ULocale locale) {
         if (locale == null) {
             throw new NullPointerException("locale is null");
         }
 
-         // We keep a cache, indexed by locale.  
-        TimeZoneFormat tzf = null;
-        tzf = cachedLocaleData.get(locale);
-        if (tzf == null) {
-            tzf = TimeZoneFormat.createInstance(locale);
-            cachedLocaleData.put(locale, tzf);
-        }
+        String result = null;
 
-        String result;
-        if ( daylightRequested ) {
-            result = tzf.format(this, style, daylight);
-            if ( result == null) {
-                result = tzf.format( this, LONG_GMT, daylight);
+        if (style == GENERIC_LOCATION || style == LONG_GENERIC || style == SHORT_GENERIC) {
+            // Generic format
+            TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(locale);
+            long date = System.currentTimeMillis();
+            Output<TimeType> timeType = new Output<TimeType>(TimeType.UNKNOWN);
+
+            switch (style) {
+            case GENERIC_LOCATION:
+                result = tzfmt.format(Style.GENERIC_LOCATION, this, date, timeType);
+                break;
+            case LONG_GENERIC:
+                result = tzfmt.format(Style.GENERIC_LONG, this, date, timeType);
+                break;
+            case SHORT_GENERIC:
+                result = tzfmt.format(Style.GENERIC_SHORT, this, date, timeType);
+                break;
+            }
+
+            // Generic format many use Localized GMT as the final fallback.
+            // When Localized GMT format is used, the result might not be
+            // appropriate for the requested daylight value.
+            if (daylight && timeType.value == TimeType.STANDARD ||
+                    !daylight && timeType.value == TimeType.DAYLIGHT) {
+                int offset = daylight ? getRawOffset() + getDSTSavings() : getRawOffset();
+                result = tzfmt.formatOffsetLocalizedGMT(offset);
+            }
+
+        } else if (style == LONG_GMT || style == SHORT_GMT) {
+            // Offset format
+            TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(locale);
+            int offset = daylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
+            switch (style) {
+            case LONG_GMT:
+                result = tzfmt.formatOffsetLocalizedGMT(offset);
+                break;
+            case SHORT_GMT:
+                result = tzfmt.formatOffsetRFC822(offset);
+                break;
             }
         } else {
-            long now = System.currentTimeMillis();
-            result = tzf.format(this, now, style);
-            if ( result == null) {
-                result = tzf.format( this, now, LONG_GMT);
+            // Specific format
+            assert(style == LONG || style == SHORT || style == SHORT_COMMONLY_USED);
+
+            // Gets the name directly from TimeZoneNames
+            long date = System.currentTimeMillis();
+            TimeZoneNames tznames = TimeZoneNames.getInstance(locale);
+            NameType nameType = null;
+            switch (style) {
+            case LONG:
+                nameType = daylight ? NameType.LONG_DAYLIGHT : NameType.LONG_STANDARD;
+                break;
+            case SHORT:
+                nameType = daylight ? NameType.SHORT_DAYLIGHT : NameType.SHORT_STANDARD;
+                break;
+            case SHORT_COMMONLY_USED:
+                nameType = daylight ? NameType.SHORT_DAYLIGHT_COMMONLY_USED : NameType.SHORT_STANDARD_COMMONLY_USED;
+                break;
             }
-            
+            result = tznames.getDisplayName(ZoneMeta.getCanonicalCLDRID(this), nameType, date);
+            if (result == null) {
+                // Fallback to localized GMT
+                TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(locale);
+                int offset = daylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
+                result = tzfmt.formatOffsetLocalizedGMT(offset);
+            }
         }
-            
-        if ( result == null )
-            result = tzf.format(this, LONG_GMT, daylight);
-        
+        assert(result != null);
+
         return result;
     }
 
@@ -604,7 +644,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
             result = new JavaTimeZone(ID);
         } else {
             /* We first try to lookup the zone ID in our system list.  If this
-             * fails, we try to parse it as a custom string GMT[+-]hh:mm.  If
+             * fails, we try to parse it as a custom string GMT[+-]HH:mm.  If
              * all else fails, we return GMT, which is probably not what the
              * user wants, but at least is a functioning TimeZone object.
              *
@@ -667,7 +707,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @see SystemTimeZoneType
      * 
      * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release. 
+     * @provisional This API might change or be removed in a future release.
      */ 
     public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
             String region, Integer rawOffset) {
@@ -954,7 +994,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @see #getAvailableIDs(String) 
      * 
      * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release. 
+     * @provisional This API might change or be removed in a future release.
      */ 
     public static String getRegion(String id) {
         String region = null;

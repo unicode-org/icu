@@ -378,8 +378,8 @@ public class TimeZoneTest extends TestFmwk
             // V and VVVV
             Boolean.FALSE, new Integer(TimeZone.SHORT_COMMONLY_USED), "PST",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_COMMONLY_USED), "PDT",
-            Boolean.FALSE, new Integer(TimeZone.GENERIC_LOCATION),  "United States (Los Angeles)",
-            Boolean.TRUE,  new Integer(TimeZone.GENERIC_LOCATION),  "United States (Los Angeles)",
+            Boolean.FALSE, new Integer(TimeZone.GENERIC_LOCATION),  "United States Time (Los Angeles)",
+            Boolean.TRUE,  new Integer(TimeZone.GENERIC_LOCATION),  "United States Time (Los Angeles)",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
@@ -476,14 +476,24 @@ public class TimeZoneTest extends TestFmwk
             ULocale locale = new ULocale(locales[j]);
             for (int i = 0; i < timezones.length; ++i) {
                 TimeZone tz = TimeZone.getTimeZone(timezones[i]);
-                String displayName0 = tz.getDisplayName(locale); // doesn't work???
+                String displayName0 = tz.getDisplayName(locale);
                 SimpleDateFormat dt = new SimpleDateFormat("vvvv", locale);
                 dt.setTimeZone(tz);
                 String displayName1 = dt.format(now);  // date value _does_ matter if we fallback to GMT
                 logln(locale.getDisplayName() + ", " + tz.getID() + ": " + displayName0);
                 if (!displayName1.equals(displayName0)) {
-                    errln(locale.getDisplayName() + ", " + tz.getID() + 
-                          ": expected " + displayName1 + " but got: " + displayName0);
+                    // This could happen when the date used is in DST,
+                    // because TimeZone.getDisplayName(ULocale) may use
+                    // localized GMT format for the time zone's standard
+                    // time.
+                    if (tz.inDaylightTime(now)) {
+                        // Try getDisplayName with daylight argument
+                        displayName0 = tz.getDisplayName(true, TimeZone.LONG_GENERIC, locale);
+                    }
+                    if (!displayName1.equals(displayName0)) {
+                        errln(locale.getDisplayName() + ", " + tz.getID() + 
+                                ": expected " + displayName1 + " but got: " + displayName0);
+                    }
                 }
             }
         }

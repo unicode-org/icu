@@ -14,6 +14,7 @@ import java.util.Set;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.TimeZoneFormat;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.SimpleTimeZone;
@@ -29,6 +30,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     private static final String[] PATTERNS = {"z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV"};
+    boolean REALLY_VERBOSE_LOG = false;
 
     /*
      * Test case for checking if a TimeZone is properly set in the result calendar
@@ -82,7 +84,12 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // Run the roundtrip test
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
+            logln("Locale: " + LOCALES[locidx].toString());
+
+            String localGMTString = TimeZoneFormat.getInstance(LOCALES[locidx]).formatOffsetLocalizedGMT(0);
+
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
+                logln("    pattern: " + PATTERNS[patidx]);
                 SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
 
                 for (int tzidx = 0; tzidx < tzids.length; tzidx++) {
@@ -115,13 +122,13 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         if (PATTERNS[patidx].equals("VVVV")) {
                             // Location: time zone rule must be preserved except
                             // zones not actually associated with a specific location.
-                            // Time zones in this category do not have "/" in its ID.
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
+                            boolean hasNoLocation = TimeZone.getRegion(tzids[tzidx]).equals("001");
                             if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
                                 // Canonical ID did not match - check the rules
                                 boolean bFailure = false;
                                 if ((tz instanceof BasicTimeZone) && (outtz instanceof BasicTimeZone)) {
-                                    bFailure = !(canonicalID.indexOf('/') == -1)
+                                    bFailure = !hasNoLocation
                                                 && !((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high);
                                 }
                                 if (bFailure) {
@@ -129,7 +136,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                             + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
                                             + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
                                             + ", outtz=" + outtz.getID());
-                                } else {
+                                } else if (REALLY_VERBOSE_LOG) {
                                     logln("Canonical round trip failed (as expected); tz=" + tzids[tzidx]
                                             + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
                                             + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
@@ -145,7 +152,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 }
                             }
 
-                            if (numDigits >= 3) {
+                            if (tzstr.equals(localGMTString) || numDigits >= 3) {
                                 // Localized GMT or RFC: total offset (raw + dst) must be preserved.
                                 int inOffset = inOffsets[0] + inOffsets[1];
                                 int outOffset = outOffsets[0] + outOffsets[1];
@@ -162,10 +169,12 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                             && tzids[tzidx].startsWith("SystemV/")) {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones
-                                        logln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                        if (REALLY_VERBOSE_LOG) {
+                                            logln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                                + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                                + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                                + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                        }
 
                                     } else {
                                         errln("Raw offset round trip failed; tz=" + tzids[tzidx]
@@ -217,7 +226,6 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
         ULocale[] LOCALES = null;
-        boolean REALLY_VERBOSE = false;
 
         // timer for performance analysis
         long[] times = new long[PATTERNS.length];
@@ -317,7 +325,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                         .append(", diff=").append(restime - testTimes[testidx]);
                                     if (expectedRoundTrip[testidx]) {
                                         errln("FAIL: " + msg.toString());
-                                    } else if (REALLY_VERBOSE) {
+                                    } else if (REALLY_VERBOSE_LOG) {
                                         logln(msg.toString());
                                     }
                                 }

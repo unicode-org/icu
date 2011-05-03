@@ -13,20 +13,15 @@ package com.ibm.icu.impl;
 import java.lang.ref.SoftReference;
 import java.text.ParsePosition;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -179,12 +174,16 @@ public final class ZoneMeta {
             return baseSet;
         }
 
+        if (region != null) {
+            region = region.toUpperCase(Locale.US);
+        }
+
         // Filter by region/rawOffset
         Set<String> result = new TreeSet<String>();
         for (String id : baseSet) {
             if (region != null) {
                 String r = getRegion(id);
-                if (!region.equalsIgnoreCase(r)) {
+                if (!region.equals(r)) {
                     continue;
                 }
             }
@@ -336,10 +335,16 @@ public final class ZoneMeta {
         return zoneIdx;
     }
 
-
     private static ICUCache<String, String> CANONICAL_ID_CACHE = new SimpleCache<String, String>();
     private static ICUCache<String, String> REGION_CACHE = new SimpleCache<String, String>();
     private static ICUCache<String, Boolean> SINGLE_COUNTRY_CACHE = new SimpleCache<String, Boolean>();
+
+    public static String getCanonicalCLDRID(TimeZone tz) {
+        if (tz instanceof OlsonTimeZone) {
+            return ((OlsonTimeZone)tz).getCanonicalID();
+        }
+        return getCanonicalCLDRID(tz.getID());
+    }
 
     /**
      * Return the canonical id for this tzid defined by CLDR, which might be
@@ -448,101 +453,6 @@ public final class ZoneMeta {
         }
         return country;
     }
-
-    /**
-     * Returns a time zone location(region) format string defined by UTR#35.
-     * e.g. "Italy Time", "United States (Los Angeles) Time"
-     */
-    public static String getLocationFormat(String tzid, String city, ULocale locale) {
-        String country_code = getCanonicalCountry(tzid);
-        if (country_code == null) {
-            // no location is associated
-            return null;
-        }
-
-        String country = null;
-        try {
-            ICUResourceBundle rb = 
-                (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_REGION_BASE_NAME, locale);
-//
-// TODO: There is a design bug in UResourceBundle and getLoadingStatus() does not work well.
-//
-//                if (rb.getLoadingStatus() != ICUResourceBundle.FROM_ROOT && rb.getLoadingStatus() != ICUResourceBundle.FROM_DEFAULT) {
-//                    country = ULocale.getDisplayCountry("xx_" + country_code, locale);
-//                }
-// START WORKAROUND
-            ULocale rbloc = rb.getULocale();
-            if (!rbloc.equals(ULocale.ROOT) && rbloc.getLanguage().equals(locale.getLanguage())) {
-                country = ULocale.getDisplayCountry("xx_" + country_code, locale);
-            }
-// END WORKAROUND
-        } catch (MissingResourceException e) {
-            // fall through
-        }
-        if (country == null || country.length() == 0) {
-            country = country_code;
-        }
-
-        // This is not behavior specified in tr35, but behavior added by Mark.  
-        // TR35 says to display the country _only_ if there is a localization.
-        if (getSingleCountry(tzid) != null) { // single country
-            String regPat = getTZLocalizationInfo(locale, REGION_FORMAT);
-            if (regPat == null) {
-                regPat = DEF_REGION_FORMAT;
-            }
-            MessageFormat mf = new MessageFormat(regPat);
-            return mf.format(new Object[] { country });
-        }
-
-        if (city == null) {
-            city = tzid.substring(tzid.lastIndexOf('/')+1).replace('_',' ');
-        }
-
-        String flbPat = getTZLocalizationInfo(locale, FALLBACK_FORMAT);
-        if (flbPat == null) {
-            flbPat = DEF_FALLBACK_FORMAT;
-        }
-        MessageFormat mf = new MessageFormat(flbPat);
-
-        return mf.format(new Object[] { city, country });
-    }
-
-    private static final String DEF_REGION_FORMAT = "{0}";
-    private static final String DEF_FALLBACK_FORMAT = "{1} ({0})";
-
-    public static final String
-        HOUR = "hourFormat",
-        GMT = "gmtFormat",
-        REGION_FORMAT = "regionFormat",
-        FALLBACK_FORMAT = "fallbackFormat",
-        ZONE_STRINGS = "zoneStrings",
-        FORWARD_SLASH = "/";
-     
-    /**
-     * Get the index'd tz datum for this locale.  Index must be one of the 
-     * values PREFIX, HOUR, GMT, REGION_FORMAT, FALLBACK_FORMAT
-     */
-    public static String getTZLocalizationInfo(ULocale locale, String format) {
-        String result = null;
-        try {
-            ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_ZONE_BASE_NAME, locale);
-            result = bundle.getStringWithFallback(ZONE_STRINGS+FORWARD_SLASH+format);
-        } catch (MissingResourceException e) {
-            result = null;
-        }
-        return result;
-    }
-
-//    private static Set getValidIDs() {
-//        // Construct list of time zones that are valid, according
-//        // to the current underlying core JDK.  We have to do this
-//        // at runtime since we don't know what we're running on.
-//        Set valid = new TreeSet();
-//        valid.addAll(Arrays.asList(java.util.TimeZone.getAvailableIDs()));
-//        return valid;
-//    }
-
 
     /**
      * Given an ID and the top-level resource of the zoneinfo resource,
@@ -827,182 +737,4 @@ public final class ZoneMeta {
         }
         return zid.toString();
     }
-
-    /**
-     * Returns a CLDR metazone ID for the given Olson tzid and time.
-     */
-    public static String getMetazoneID(String olsonID, long date) {
-        String mzid = null;
-        List<OlsonToMetaMappingEntry> mappings = getOlsonToMatazones(olsonID);
-        if (mappings != null) {
-            for (int i = 0; i < mappings.size(); i++) {
-                OlsonToMetaMappingEntry mzm = mappings.get(i);
-                if (date >= mzm.from && date < mzm.to) {
-                    mzid = mzm.mzid;
-                    break;
-                }
-            }
-        }
-        return mzid;
-    }
-
-    private static ICUCache<String, List<OlsonToMetaMappingEntry>> OLSON_TO_META_CACHE =
-        new SimpleCache<String, List<OlsonToMetaMappingEntry>>();
-
-    static class OlsonToMetaMappingEntry {
-        String mzid;
-        long from;
-        long to;
-    }
-
-    static List<OlsonToMetaMappingEntry> getOlsonToMatazones(String tzid) {
-        List<OlsonToMetaMappingEntry> mzMappings = OLSON_TO_META_CACHE.get(tzid);
-        if (mzMappings == null) {
-            try {
-                UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metaZones");
-                UResourceBundle metazoneInfoBundle = bundle.get("metazoneInfo");
-
-                String canonicalID = getCanonicalCLDRID(tzid);
-                if (canonicalID == null) {
-                    return null;
-                }
-                String tzkey = canonicalID.replace('/', ':');
-                UResourceBundle zoneBundle = metazoneInfoBundle.get(tzkey);
-
-                mzMappings = new LinkedList<OlsonToMetaMappingEntry>();
-
-                for (int idx = 0; idx < zoneBundle.getSize(); idx++) {
-                    UResourceBundle mz = zoneBundle.get(idx);
-                    String mzid = mz.getString(0);
-                    String from = "1970-01-01 00:00";
-                    String to = "9999-12-31 23:59";
-                    if (mz.getSize() == 3) {
-                        from = mz.getString(1);
-                        to = mz.getString(2);
-                    }
-                    OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
-                    mzmap.mzid = mzid.intern();
-                    try {
-                        mzmap.from = parseDate(from);
-                        mzmap.to = parseDate(to);
-                    } catch (IllegalArgumentException baddate) {
-                        // skip this
-                        continue;
-                    }
-                    // Add this mapping to the list
-                    mzMappings.add(mzmap);
-                }
-
-            } catch (MissingResourceException mre) {
-                // fall through
-            }
-            if (mzMappings != null) {
-                OLSON_TO_META_CACHE.put(tzid, mzMappings);
-            }
-        }
-        return mzMappings;
-    }
-
-    /*
-     * Convert a date string used by metazone mappings to long.
-     * The format used by CLDR metazone mapping is "yyyy-MM-dd HH:mm".
-     * We do not want to use SimpleDateFormat to parse the metazone
-     * mapping range strings in createOlsonToMeta, because it might be
-     * called from SimpleDateFormat initialization code.
-     */
-     static long parseDate (String text) throws IllegalArgumentException {
-        int year = 0, month = 0, day = 0, hour = 0, min = 0;
-        int idx;
-        int n;
-
-        // "yyyy" (0 - 3)
-        for (idx = 0; idx <= 3; idx++) {
-            n = text.charAt(idx) - '0';
-            if (n >= 0 && n < 10) {
-                year = 10*year + n;
-            } else {
-                throw new IllegalArgumentException("Bad year");
-            }
-        }
-        // "MM" (5 - 6)
-        for (idx = 5; idx <= 6; idx++) {
-            n = text.charAt(idx) - '0';
-            if (n >= 0 && n < 10) {
-                month = 10*month + n;
-            } else {
-                throw new IllegalArgumentException("Bad month");
-            }
-        }
-        // "dd" (8 - 9)
-        for (idx = 8; idx <= 9; idx++) {
-            n = text.charAt(idx) - '0';
-            if (n >= 0 && n < 10) {
-                day = 10*day + n;
-            } else {
-                throw new IllegalArgumentException("Bad day");
-            }
-        }
-        // "HH" (11 - 12)
-        for (idx = 11; idx <= 12; idx++) {
-            n = text.charAt(idx) - '0';
-            if (n >= 0 && n < 10) {
-                hour = 10*hour + n;
-            } else {
-                throw new IllegalArgumentException("Bad hour");
-            }
-        }
-        // "mm" (14 - 15)
-        for (idx = 14; idx <= 15; idx++) {
-            n = text.charAt(idx) - '0';
-            if (n >= 0 && n < 10) {
-                min = 10*min + n;
-            } else {
-                throw new IllegalArgumentException("Bad minute");
-            }
-        }
-
-        long date = Grego.fieldsToDay(year, month - 1, day) * Grego.MILLIS_PER_DAY
-                    + hour * Grego.MILLIS_PER_HOUR + min * Grego.MILLIS_PER_MINUTE;
-        return date;
-     }
-
-     private static ICUCache<String, Map<String, String>> META_TO_OLSON_CACHE =
-         new SimpleCache<String, Map<String, String>>();
-
-     /**
-      * Returns an Olson ID for the ginve metazone and region
-      */
-     public static String getZoneIdByMetazone(String metazoneID, String region) {
-         String tzid = null;
-
-         // look up in the cache first
-         Map<String, String> zoneMap = META_TO_OLSON_CACHE.get(metazoneID);
-         if (zoneMap == null) {
-             try {
-                 // Create zone mappings for the metazone
-                 UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metaZones");
-                 UResourceBundle mapTimezones = bundle.get("mapTimezones");
-                 UResourceBundle territoryMap = mapTimezones.get(metazoneID);
-                 zoneMap = new HashMap<String, String>();
-                 Set<String> territories = territoryMap.keySet();
-                 for (String territory : territories) {
-                     String zone = territoryMap.getString(territory);
-                     zoneMap.put(territory, zone);
-                 }
-                 // cache this
-                 META_TO_OLSON_CACHE.put(metazoneID, zoneMap);
-             } catch (MissingResourceException e) {
-                 // ignore
-             }
-         }
-
-         if (zoneMap != null) {
-             tzid = zoneMap.get(region);
-             if (tzid == null) {
-                 tzid = zoneMap.get(kWorld); // use the mapping for world as fallback
-             }
-         }
-
-         return tzid;
-     }
 }

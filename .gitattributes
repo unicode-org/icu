@@ -244,6 +244,12 @@ icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneGenericNames.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneNamesFactoryImpl.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneNamesImpl.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneFormat.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneNames.java -text
+icu4j/main/classes/core/src/com/ibm/icu/util/Output.java -text
 icu4j/main/classes/core/src/com/ibm/icu/util/Region.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text

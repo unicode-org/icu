@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007-2010, International Business Machines
+*   Copyright (C) 2007-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Arrays;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
@@ -77,9 +78,11 @@ public final class DateNumberFormat extends NumberFormat {
             elems[10] = minusString.charAt(0);
             CACHE.put(loc, elems);
         }
-        
+
         digits = new char[10];
         System.arraycopy(elems, 0, digits, 0, 10);
+        zeroDigit = digits[0];
+
         minusSign = elems[10];
     }
 
@@ -105,24 +108,22 @@ public final class DateNumberFormat extends NumberFormat {
     }
 
     public char getZeroDigit() {
-        if ( digits != null ) {
-            return digits[0];
-        } else {
-            return zeroDigit;
-        }
+        return zeroDigit;
     }
 
     public void setZeroDigit(char zero) {
-        if ( digits == null ) {
+        zeroDigit = zero;
+        if (digits == null) {
             digits = new char[10];
         }
         digits[0] = zero;
-        if (Character.digit(zero,10) == 0) {
-            for ( int i = 1 ; i < 10 ; i++ ) {
-                digits[i] = (char)(zero+i);
-            }
+        for ( int i = 1 ; i < 10 ; i++ ) {
+            digits[i] = (char)(zero+i);
         }
- 
+    }
+
+    public char[] getDigits() {
+        return digits;
     }
 
     public StringBuffer format(double number, StringBuffer toAppendTo,
@@ -136,6 +137,7 @@ public final class DateNumberFormat extends NumberFormat {
         if (numberL < 0) {
             // negative
             toAppendTo.append(minusSign);
+            numberL = -numberL;
         }
 
         // Note: NumberFormat used by DateFormat only uses int numbers.
@@ -235,33 +237,18 @@ public final class DateNumberFormat extends NumberFormat {
             return false;
         }
         DateNumberFormat other = (DateNumberFormat)obj;
-
-        for (int i = 0 ; i < 10 ; i++) {
-            char check1, check2;
-            if ( digits != null ) {
-                check1 = digits[i];
-            } else {
-                check1 = (char)(zeroDigit+i);
-            }
-            if ( other.digits != null ) {
-                check2 = other.digits[i];
-            } else {
-                check2 = (char)(other.zeroDigit+i);
-            }
-            
-            if (check1 != check2) {
-                return false;
-            }
-        }
-
         return (this.maxIntDigits == other.maxIntDigits
                 && this.minIntDigits == other.minIntDigits
                 && this.minusSign == other.minusSign
-                && this.positiveOnly == other.positiveOnly);
+                && this.positiveOnly == other.positiveOnly
+                && Arrays.equals(this.digits, other.digits));
     }
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
+        if (digits == null) {
+            setZeroDigit(zeroDigit);
+        }
         // re-allocate the work buffer
         decimalBuf = new char[20];
     }

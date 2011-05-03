@@ -19,11 +19,10 @@ import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.impl.TimeZoneFormat;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.ZoneMeta;
-import com.ibm.icu.impl.ZoneStringFormat;
+import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -410,23 +409,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     String standaloneQuarters[] = null;
 
     /**
-     * Pattern string used for localized time zone GMT format.  For example, "GMT{0}"
-     * @serial
-     */
-    String gmtFormat = null;
-
-    /**
-     * Pattern strings used for formatting zone offset in a localized time zone GMT string.
-     * This is 2x2 String array holding followings
-     * [0][0] Negative H + m + s
-     * [0][1] Negative H + m
-     * [1][0] Positive H + m + s
-     * [1][1] Positive H + m
-     * @serial
-     */
-    String gmtHourFormats[][] = null;
-
-    /**
      * Localized names of time zones in this locale.  This is a
      * two-dimensional array of strings of size <em>n</em> by <em>m</em>,
      * where <em>m</em> is at least 5 and up to 7.  Each of the <em>n</em> rows is an
@@ -460,14 +442,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     private String zoneStrings[][] = null;
-
-     /**
-      * Since ICU 3.8.1, we use ZoneStringFormat to access localized
-      * zone names.  This field remains null unless setZoneStrings is
-      * called.
-      */
-    private transient ZoneStringFormat zsformat = null;
-    private transient TimeZoneFormat tzformat = null;
 
      /**
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
@@ -864,28 +838,74 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Returns timezone strings.
-     * @return the timezone strings.
+     * Returns time zone strings.
+     * <p>
+     * The array returned by this API is a two dimensional String array and
+     * each row contains at least following strings:
+     * <ul>
+     * <li>ZoneStrings[n][0] - System time zone ID
+     * <li>ZoneStrings[n][1] - Long standard time display name
+     * <li>ZoneStrings[n][2] - Short standard time display name
+     * <li>ZoneStrings[n][3] - Long daylight saving time display name
+     * <li>ZoneStrings[n][4] - Short daylight saving time display name
+     * </ul>
+     * When a localized display name is not available, the corresponding
+     * array element will be <code>null</code>.
+     * <p>
+     * <b>Note</b>: ICU implements time zone display name formatting algorithm
+     * specified by <a href="http://www.unicode.org/reports/tr35/">UTS#35 Unicode
+     * Locale Data Markup Language(LDML)</a>. The algorithm supports historic
+     * display name changes and various different type of names not available in
+     * JDK. For accessing the full set of time zone string data used by ICU implementation,
+     * you should use {@link TimeZoneNames} APIs instead.
+     * 
+     * @return the time zone strings.
      * @stable ICU 2.0
      */
     public String[][] getZoneStrings() {
         if (zoneStrings != null) {
             return duplicate(zoneStrings);
         }
-        return ZoneStringFormat.getInstance(requestedLocale).getZoneStrings();
+
+        String[] tzIDs = TimeZone.getAvailableIDs();
+        TimeZoneNames tznames = TimeZoneNames.getInstance(validLocale);
+        long now = System.currentTimeMillis();
+        String[][] array = new String[tzIDs.length][5];
+        for (int i = 0; i < tzIDs.length; i++) {
+            String canonicalID = TimeZone.getCanonicalID(tzIDs[i]);
+            if (canonicalID == null) {
+                canonicalID = tzIDs[i];
+            }
+
+            array[i][0] = tzIDs[i];
+            array[i][1] = tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, now);
+            array[i][2] = tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, now);
+            array[i][3] = tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, now);
+            array[i][4] = tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, now);
+        }
+
+        zoneStrings = array;
+        return zoneStrings;
     }
 
     /**
-     * Sets timezone strings.
-     * @param newZoneStrings the new timezone strings.
+     * Sets time zone strings.
+     * <p>
+     * <b>Note</b>: {@link SimpleDateFormat} no longer uses the
+     * zone strings stored in a <code>DateFormatSymbols</code>.
+     * Therefore, the time zone strings set by this method have
+     * no effects in an instance of <code>SimpleDateFormat</code>
+     * for formatting time zones. If you want to customize time
+     * zone display names formatted by <code>SimpleDateFormat</code>,
+     * you should customize {@link TimeZoneFormat} and set the
+     * instance by {@link SimpleDateFormat#setTimeZoneFormat(TimeZoneFormat)}
+     * instead.
+     * 
+     * @param newZoneStrings the new time zone strings.
      * @stable ICU 2.0
      */
     public void setZoneStrings(String[][] newZoneStrings) {
         zoneStrings = duplicate(newZoneStrings);
-        if ( tzformat == null ) {
-            tzformat = TimeZoneFormat.createInstance(requestedLocale);
-        }
-        tzformat.zsf = new ZoneStringFormat(zoneStrings);
     }
 
     /**
@@ -961,8 +981,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 && Utility.arrayEquals(standaloneShortWeekdays, that.standaloneShortWeekdays)
                 && Utility.arrayEquals(standaloneNarrowWeekdays, that.standaloneNarrowWeekdays)
                 && Utility.arrayEquals(ampms, that.ampms)
-                && gmtFormat.equals(that.gmtFormat)
-                && arrayOfArrayEquals(gmtHourFormats, that.gmtHourFormats)
                 && arrayOfArrayEquals(zoneStrings, that.zoneStrings)
                 // getDiplayName maps deprecated country and language codes to the current ones
                 // too bad there is no way to get the current codes!
@@ -1032,9 +1050,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.quarters = dfs.quarters;
         this.standaloneShortQuarters = dfs.standaloneShortQuarters;
         this.standaloneQuarters = dfs.standaloneQuarters;
-
-        this.gmtFormat = dfs.gmtFormat;
-        this.gmtHourFormats = dfs.gmtHourFormats;
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
@@ -1123,9 +1138,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
         standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
 
-        // Initialize localized GMT format patterns
-        initializeGMTFormat(desiredLocale);
-
         requestedLocale = desiredLocale;
 
         ICUResourceBundle rb =
@@ -1142,60 +1154,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // TODO: obtain correct actual/valid locale later
         ULocale uloc = rb.getULocale();
         setLocale(uloc, uloc);
-    }
-
-    static final String DEFAULT_GMT_PATTERN = "GMT{0}";
-    static final String[][] DEFAULT_GMT_HOUR_PATTERNS = {
-        {"-HH:mm:ss", "-HH:mm"},
-        {"+HH:mm:ss", "+HH:mm"}
-    };
-
-    /**
-     * Initializes localized GMT format patterns
-     */
-    private void initializeGMTFormat(ULocale desiredLocale) {
-        // TimeZone format localization is not included in CalendarData
-        gmtFormat = ZoneMeta.getTZLocalizationInfo(desiredLocale, ZoneMeta.GMT);
-        if (gmtFormat == null) {
-            gmtFormat = DEFAULT_GMT_PATTERN;
-        }
-
-        try {
-            String offsetHM = ZoneMeta.getTZLocalizationInfo(desiredLocale, ZoneMeta.HOUR);
-            gmtHourFormats = new String[2][2];
-            int sepIdx = offsetHM.indexOf(';');
-            if (sepIdx != -1) {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] = offsetHM.substring(0, sepIdx);
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] = offsetHM.substring(sepIdx + 1);
-            } else {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] = "+HH:mm";
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] = "-HH:mm";
-            }
-            // CLDR 1.5 does not have GMT offset pattern including second field.
-            // For now, append "ss" to the end.
-            if (gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM].indexOf(':') != -1) {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] =
-                    gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ":ss";
-            } else if (gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM].indexOf('.') != -1) {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] =
-                    gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ".ss";
-            } else {
-                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] =
-                    gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + "ss";
-            }
-            if (gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM].indexOf(':') != -1) {
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] =
-                    gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ":ss";
-            } else if (gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM].indexOf('.') != -1) {
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] =
-                    gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ".ss";
-            } else {
-                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] =
-                    gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + "ss";
-            }
-        } catch (MissingResourceException e) {
-            gmtHourFormats = DEFAULT_GMT_HOUR_PATTERNS;
-        }
     }
 
     private static final boolean arrayOfArrayEquals(Object[][] aa1, Object[][]aa2) {
@@ -1218,57 +1176,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return equal;
     }
 
-    /**
-     * Package local method (for now) to get localized GMT format pattern.
-     */
-    String getGmtFormat() {
-        return gmtFormat;
-    }
-
-    static final int OFFSET_HMS = 0;
-    static final int OFFSET_HM = 1;
-    static final int OFFSET_NEGATIVE = 0;
-    static final int OFFSET_POSITIVE = 1;
-
-    /*
-     * Package local method (for now) to get hour format pattern used by localized
-     * GMT string.
-     */
-    String getGmtHourFormat(int sign, int width) {
-        return gmtHourFormats[sign][width];
-    }
-
-    /*
-     * Package local method to access ZoneStringFormat used by this
-     * DateFormatSymbols instance.
-     */
-    ZoneStringFormat getZoneStringFormat() {
-        if (zsformat != null) {
-            return zsformat;
-        }
-        if (zoneStrings != null) {
-            zsformat = new ZoneStringFormat(zoneStrings);
-            return zsformat;
-        }
-        // We do not want to hold the reference to an instance of
-        // ZoneStringFormat.  An instance of ZoneStringFormat for
-        // a locale is shared and cached in ZoneStringFormat class
-        // itself.
-        return ZoneStringFormat.getInstance(requestedLocale);
-    }
-    TimeZoneFormat getTimeZoneFormat() {
-        if (tzformat != null) {
-            return tzformat;
-        }
-        
-        tzformat = TimeZoneFormat.createInstance(requestedLocale);
-        
-        if (zoneStrings != null) {
-            tzformat.zsf = new ZoneStringFormat(zoneStrings);
-        }
-        
-        return tzformat;
-    }
     /*
      * save the input locale
      */
@@ -1638,8 +1545,5 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        if (gmtFormat == null) {
-            initializeGMTFormat(requestedLocale);
-        }
     }
 }
