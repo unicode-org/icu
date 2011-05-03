@@ -25,6 +25,7 @@
 #include "unicode/dtintrv.h"
 #include "unicode/dtitvinf.h"
 #include "unicode/dtitvfmt.h"
+#include "unicode/timezone.h"
 
 
 
@@ -262,6 +263,56 @@ void DateIntervalFormatTest::testAPI() {
 
     delete dtitvfmt;
 
+    //====== test setting time zone
+    logln("Testing DateIntervalFormat set & format with different time zones, get time zone");
+    status = U_ZERO_ERROR;
+    dtitvfmt = DateIntervalFormat::createInstance("MMMdHHmm", Locale::getEnglish(), status);
+    if ( U_SUCCESS(status) ) {
+        UDate date1 = 1299090600000.0; // 2011-Mar-02 1030 in US/Pacific, 2011-Mar-03 0330 in Asia/Tokyo
+        UDate date2 = 1299115800000.0; // 2011-Mar-02 1730 in US/Pacific, 2011-Mar-03 1030 in Asia/Tokyo
+        
+        DateInterval * dtitv12 = new DateInterval(date1, date2);
+        TimeZone * tzCalif = TimeZone::createTimeZone("US/Pacific");
+        TimeZone * tzTokyo = TimeZone::createTimeZone("Asia/Tokyo");
+        UnicodeString fmtCalif = UnicodeString("Mar 2 10:30 – Mar 2 17:30");
+        UnicodeString fmtTokyo = UnicodeString("Mar 3 03:30 – Mar 3 10:30");
+
+        dtitvfmt->adoptTimeZone(tzCalif);
+        res.remove();
+        pos = 0;
+        status = U_ZERO_ERROR;
+        dtitvfmt->format(dtitv12, res, pos, status);
+        if ( U_SUCCESS(status) ) {
+            if ( res.compare(fmtCalif) != 0 ) {
+                errln("ERROR: DateIntervalFormat::format for tzCalif, expect " + fmtCalif + ", get " + res);
+            }
+        } else {
+            errln("ERROR: DateIntervalFormat::format for tzCalif, status %s", u_errorName(status));
+        }
+
+        dtitvfmt->setTimeZone(*tzTokyo);
+        res.remove();
+        pos = 0;
+        status = U_ZERO_ERROR;
+        dtitvfmt->format(dtitv12, res, pos, status);
+        if ( U_SUCCESS(status) ) {
+            if ( res.compare(fmtTokyo) != 0 ) {
+                errln("ERROR: DateIntervalFormat::format for fmtTokyo, expect " + fmtTokyo + ", get " + res);
+            }
+        } else {
+            errln("ERROR: DateIntervalFormat::format for tzTokyo, status %s", u_errorName(status));
+        }
+        
+        if ( dtitvfmt->getTimeZone() != *tzTokyo ) {
+            errln("ERROR: DateIntervalFormat::getTimeZone returns mismatch.");
+        }
+
+        delete tzTokyo; // tzCalif was owned by dtitvfmt which should have deleted it
+        delete dtitv12;
+        delete dtitvfmt;
+    } else {
+        errln("ERROR: DateIntervalFormat::createInstance(\"MdHH\", Locale::getEnglish(), ...), status %s", u_errorName(status));
+    }
     //====== test format  in testFormat()
     
     //====== test DateInterval class (better coverage)
