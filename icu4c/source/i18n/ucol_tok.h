@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -199,7 +199,7 @@ U_CFUNC int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
 
-U_CFUNC const UChar* ucol_tok_getRulesFromBundle(
+const UChar* U_CALLCONV ucol_tok_getRulesFromBundle(
     void* context,
     const char* locale,
     const char* type,

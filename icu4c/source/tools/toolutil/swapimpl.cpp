@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2010, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -70,7 +70,7 @@
 
 /* Unicode property (value) aliases data swapping --------------------------- */
 
-static int32_t
+static int32_t U_CALLCONV
 upname_swap(const UDataSwapper *ds,
             const void *inData, int32_t length, void *outData,
             UErrorCode *pErrorCode) {
@@ -155,7 +155,7 @@ upname_swap(const UDataSwapper *ds,
 
 /* Unicode properties data swapping ----------------------------------------- */
 
-static int32_t
+static int32_t U_CALLCONV
 uprops_swap(const UDataSwapper *ds,
             const void *inData, int32_t length, void *outData,
             UErrorCode *pErrorCode) {
@@ -303,7 +303,7 @@ uprops_swap(const UDataSwapper *ds,
 
 /* Unicode case mapping data swapping --------------------------------------- */
 
-static int32_t
+static int32_t U_CALLCONV
 ucase_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode) {
@@ -405,7 +405,7 @@ ucase_swap(const UDataSwapper *ds,
 
 /* Unicode bidi/shaping data swapping --------------------------------------- */
 
-static int32_t
+static int32_t U_CALLCONV
 ubidi_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode) {
@@ -513,7 +513,7 @@ ubidi_swap(const UDataSwapper *ds,
 
 #if !UCONFIG_NO_NORMALIZATION
 
-static int32_t
+static int32_t U_CALLCONV
 unorm_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode) {
@@ -637,7 +637,7 @@ unorm_swap(const UDataSwapper *ds,
 #endif
 
 /* Swap 'Test' data from gentest */
-static int32_t
+static int32_t U_CALLCONV
 test_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode) {

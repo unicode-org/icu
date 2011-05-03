@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -71,6 +71,7 @@ udata_getHeaderSize(const DataHeader *udh);
 U_CFUNC uint16_t
 udata_getInfoSize(const UDataInfo *info);
 
+U_CDECL_BEGIN
 /*
  *  "Virtual" functions for data lookup.
  *  To call one, given a UDataMemory *p, the code looks like this:
@@ -79,13 +80,15 @@ udata_getInfoSize(const UDataInfo *info);
  */
 
 typedef const DataHeader *
-(* LookupFn)(const UDataMemory *pData,
-             const char *tocEntryName,
-             int32_t *pLength,
-             UErrorCode *pErrorCode);
+(U_CALLCONV * LookupFn)(const UDataMemory *pData,
+                        const char *tocEntryName,
+                        int32_t *pLength,
+                        UErrorCode *pErrorCode);
 
 typedef uint32_t
-(* NumEntriesFn)(const UDataMemory *pData);
+(U_CALLCONV * NumEntriesFn)(const UDataMemory *pData);
+
+U_CDECL_END
 
 typedef struct {
     LookupFn      Lookup;
