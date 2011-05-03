@@ -247,7 +247,7 @@
     <ClCompile Include="alphaindex.cpp" />
     <ClCompile Include="bms.cpp" />
     <ClCompile Include="bmsearch.cpp" />
-    <ClCompile Include="bocsu.c" />
+    <ClCompile Include="bocsu.cpp" />
     <ClCompile Include="coleitr.cpp" />
     <ClCompile Include="coll.cpp" />
     <ClCompile Include="colldata.cpp" />
