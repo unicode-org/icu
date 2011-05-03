@@ -85,8 +85,10 @@ isAcceptableUCA(void * /*context*/,
         pInfo->dataFormat[1]==UCA_DATA_FORMAT_1 &&
         pInfo->dataFormat[2]==UCA_DATA_FORMAT_2 &&
         pInfo->dataFormat[3]==UCA_DATA_FORMAT_3 &&
-        pInfo->formatVersion[0]==UCA_FORMAT_VERSION_0 &&
-        pInfo->formatVersion[1]>=UCA_FORMAT_VERSION_1// &&
+        pInfo->formatVersion[0]==UCA_FORMAT_VERSION_0
+#if UCA_FORMAT_VERSION_1!=0
+        && pInfo->formatVersion[1]>=UCA_FORMAT_VERSION_1
+#endif
         //pInfo->formatVersion[1]==UCA_FORMAT_VERSION_1 &&
         //pInfo->formatVersion[2]==UCA_FORMAT_VERSION_2 && // Too harsh
         //pInfo->formatVersion[3]==UCA_FORMAT_VERSION_3 && // Too harsh
