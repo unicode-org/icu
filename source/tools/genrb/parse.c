@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -2025,8 +2025,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     enum ETokenType    token;
     ParseState state;
     uint32_t i;
-    int encLength;
-    char* enc;
+
     for (i = 0; i < MAX_LOOKAHEAD + 1; i++)
     {
         ustr_init(&state.lookahead[i].value);
