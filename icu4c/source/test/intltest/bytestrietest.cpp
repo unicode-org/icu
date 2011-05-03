@@ -730,7 +730,11 @@ void BytesTrieTest::checkNext(BytesTrie &trie,
         // Compare the final current() with whether next() can actually continue.
         trie.saveState(state);
         UBool nextContinues=FALSE;
+#if (U_CHARSET_FAMILY==U_ASCII_FAMILY)
         for(int32_t c=0x20; c<0x7f; ++c) {
+#else
+        for(int32_t c=0x00; c<0xff; ++c) {
+#endif
             if(trie.resetToState(state).next(c)) {
                 nextContinues=TRUE;
                 break;
