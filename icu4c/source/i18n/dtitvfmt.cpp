@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation and
+* Copyright (C) 2008-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -415,6 +415,50 @@ DateIntervalFormat::getDateFormat() const {
     return fDateFormat;
 }
 
+
+void
+DateIntervalFormat::adoptTimeZone(TimeZone* zone)
+{
+    if (fDateFormat != NULL) {
+        fDateFormat->adoptTimeZone(zone);
+    }
+    // The fDateFormat has the master calendar for the DateIntervalFormat and has
+    // ownership of any adopted TimeZone; fFromCalendar and fToCalendar are internal
+    // work clones of that calendar (and should not also be given ownership of the
+    // adopted TimeZone).
+    if (fFromCalendar) {
+    	fFromCalendar->setTimeZone(*zone);
+    }
+    if (fToCalendar) {
+    	fToCalendar->setTimeZone(*zone);
+    }
+}
+
+void
+DateIntervalFormat::setTimeZone(const TimeZone& zone)
+{
+    if (fDateFormat != NULL) {
+        fDateFormat->setTimeZone(zone);
+    }
+    // The fDateFormat has the master calendar for the DateIntervalFormat;
+    // fFromCalendar and fToCalendar are internal work clones of that calendar.
+    if (fFromCalendar) {
+    	fFromCalendar->setTimeZone(zone);
+    }
+    if (fToCalendar) {
+    	fToCalendar->setTimeZone(zone);
+    }
+}
+
+const TimeZone&
+DateIntervalFormat::getTimeZone() const
+{
+    if (fDateFormat != NULL) {
+        return fDateFormat->getTimeZone();
+    }
+    // If fDateFormat is NULL (unexpected), create default timezone.
+    return *(TimeZone::createDefault());
+}
 
 DateIntervalFormat::DateIntervalFormat(const Locale& locale,
                                        DateIntervalInfo* dtItvInfo,
