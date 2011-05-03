@@ -2855,24 +2855,28 @@ public final class UCharacterTest extends TestFmwk
         int[] valid = {
                 UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
                 UCharacter.MAX_VALUE, UCharacter.MAX_VALUE-1};
-        
+
         for(int i=0; i<invalid.length; i++){
             try{
-                UCharacter.hasBinaryProperty(invalid[i], 1);
-                errln("UCharacter.hasBinaryProperty(ch, property) was suppose to " +
-                        "give an exception for an invalid input. Value passed: " +
+                if (UCharacter.hasBinaryProperty(invalid[i], 1)) {
+                    errln("UCharacter.hasBinaryProperty(ch, property) should return " +
+                            "false for out-of-range code points but " +
+                            "returns true for " + invalid[i]);
+                }
+            } catch(Exception e) {
+                errln("UCharacter.hasBinaryProperty(ch, property) should not " +
+                        "throw an exception for any input. Value passed: " +
                         invalid[i]);
-                
-            } catch(Exception e){}
+            }
         }
-        
+
         for(int i=0; i<valid.length; i++){
             try{
                 UCharacter.hasBinaryProperty(valid[i], 1);
-            } catch(Exception e){
-                errln("UCharacter.hasBinaryProperty(ch, property) was not suppose to " +
-                        "give an exception for an valid input. Value passed: " +
-                        invalid[i]);
+            } catch(Exception e) {
+                errln("UCharacter.hasBinaryProperty(ch, property) should not " +
+                        "throw an exception for any input. Value passed: " +
+                        valid[i]);
             }
         }
     }

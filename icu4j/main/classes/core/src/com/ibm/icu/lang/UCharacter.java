@@ -5221,9 +5221,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean hasBinaryProperty(int ch, int property)
     {
-    if (ch < MIN_VALUE || ch > MAX_VALUE) {
-        throw new IllegalArgumentException("Codepoint out of bounds");
-        }
         return UCharacterProperty.INSTANCE.hasBinaryProperty(ch, property);
     }
 
