@@ -75,7 +75,7 @@ import com.ibm.icu.util.ULocale;
  * in_relation   = expr ('not')? 'in' range_list
  * within_relation = expr ('not')? 'within' range_list
  * expr          = 'n' ('mod' value)?
- * range_list    = range | value (',' range_list)*
+ * range_list    = (range | value) (',' range_list)*
  * value         = digit+
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
@@ -966,9 +966,9 @@ public class PluralRules implements Serializable {
 
                 if (!keyIsLimited && list.size() == MAX_SAMPLES) {
                     --keywordsRemaining;
-                    continue;
                 }
             }
+
             if (keywordsRemaining > 0) {
                 for (String k : keywords) {
                     if (!sampleMap.containsKey(k)) {
