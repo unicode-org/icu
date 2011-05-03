@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -37,8 +37,6 @@ U_NAMESPACE_BEGIN
 /* forward declaration */
 class SimpleDateFormat;
 class Hashtable;
-class ZoneStringFormat;
-class SafeZoneStringFormatPtr;
 
 /**
  * DateFormatSymbols is a public class for encapsulating localizable date-time
@@ -409,6 +407,10 @@ public:
 
     /**
      * Sets timezone strings. These strings are stored in a 2-dimensional array.
+     * <p><b>Note:<b> SimpleDateFormat no longer use the zone strings stored in
+     * a DateFormatSymbols. Therefore, the time zone strings set by this mthod
+     * have no effects in an instance of SimpleDateFormat for formatting time
+     * zones.
      * @param strings       The timezone strings as a 2-d array to be copied. (not adopted; caller retains ownership)
      * @param rowCount      The number of rows (count of first index).
      * @param columnCount   The number of columns (count of second index).
@@ -631,10 +633,12 @@ private:
     int32_t         fZoneStringsRowCount;
     int32_t         fZoneStringsColCount;
 
-    const ZoneStringFormat  *fZoneStringFormat;
-    ZoneStringFormat        *fZSFLocal;         // Local ZoneStringFormat instance
-    SafeZoneStringFormatPtr *fZSFCachePtr;      // Cached ZoneStringFormat
     Locale                  fZSFLocale;         // Locale used for getting ZoneStringFormat
+
+    /**
+     * String used for localized GMT. For example, "GMT"
+     */
+    UnicodeString fGmtZero;
 
     /**
      * Pattern string used for localized time zone GMT format.  For example, "GMT{0}"
@@ -724,17 +728,6 @@ private:
      * @param other the object to be copied.
      */
     void copyData(const DateFormatSymbols& other);
-
-
-    /**
-     * Returns a ZoneStringFormat, used only by SimpleDateFormat for now.
-     */
-    const ZoneStringFormat* getZoneStringFormat(void) const;
-
-    /**
-     * Create a ZoneStringFormat by locale if not yet availble
-     */
-    void initZoneStringFormat(void);
 
     /**
      * Create zone strings array by locale if not yet available

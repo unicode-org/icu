@@ -272,7 +272,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("Thu, Oct 14, 1999 6:58:59 AM"),
         UnicodeString("6:58 AM"),
         UnicodeString("6:58 AM"),
-        UnicodeString("6:58 AM GMT+00:00"),
+        UnicodeString("6:58 AM GMT"),
         UnicodeString(""),
     };
     

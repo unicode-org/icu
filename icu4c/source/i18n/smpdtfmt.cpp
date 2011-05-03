@@ -52,9 +52,9 @@
 #include "hebrwcal.h"
 #include "cstring.h"
 #include "uassert.h"
-#include "zstrfmt.h"
 #include "cmemory.h"
 #include "umutex.h"
+#include "tzfmt.h"
 #include <float.h>
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
@@ -177,6 +177,9 @@ SimpleDateFormat::~SimpleDateFormat()
     if (fNumberFormatters) {
         uprv_free(fNumberFormatters);
     }
+    if (fTimeZoneFormat) {
+        delete fTimeZoneFormat;
+    }
 
     while (fOverrideList) {
         NSOverride *cur = fOverrideList;
@@ -191,6 +194,7 @@ SimpleDateFormat::~SimpleDateFormat()
 SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
   :   fLocale(Locale::getDefault()),
       fSymbols(NULL),
+      fTimeZoneFormat(NULL),
       fGMTFormatters(NULL),
       fNumberFormatters(NULL),
       fOverrideList(NULL)
@@ -206,6 +210,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
     fSymbols(NULL),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -225,6 +230,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
     fSymbols(NULL),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -246,6 +252,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(locale),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -267,6 +274,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(locale),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -290,6 +298,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
+    fTimeZoneFormat(NULL),
     fSymbols(symbolsToAdopt),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
@@ -312,6 +321,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
     fSymbols(new DateFormatSymbols(symbols)),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -334,6 +344,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
                                    UErrorCode& status)
 :   fLocale(locale),
     fSymbols(NULL),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -355,6 +366,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(gDefaultPattern),
     fLocale(locale),
+    fTimeZoneFormat(NULL),
     fSymbols(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
@@ -389,6 +401,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
     fSymbols(NULL),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -416,6 +429,11 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     fHaveDefaultCentury          = other.fHaveDefaultCentury;
 
     fPattern = other.fPattern;
+
+    // TimeZoneFormat in ICU4C only deneds on a locale for now
+    if (fLocale != other.fLocale) {
+        delete fTimeZoneFormat;
+    }
 
     return *this;
 }
@@ -930,21 +948,26 @@ SimpleDateFormat::appendGMT(NumberFormat *currentNumberFormat,UnicodeString &app
     if (U_FAILURE(status)) {
         return;
     }
-    if (isDefaultGMTFormat()) {
-        formatGMTDefault(currentNumberFormat,appendTo, offset);
+    if (offset == 0) {
+        // use GMT zero format
+        appendTo += fSymbols->fGmtZero;
     } else {
-        ((SimpleDateFormat*)this)->initGMTFormatters(status);
-        if (U_SUCCESS(status)) {
-            int32_t type;
-            if (offset < 0) {
-                offset = -offset;
-                type = (offset % U_MILLIS_PER_MINUTE) == 0 ? kGMTNegativeHM : kGMTNegativeHMS;
-            } else {
-                type = (offset % U_MILLIS_PER_MINUTE) == 0 ? kGMTPositiveHM : kGMTPositiveHMS;
+        if (isDefaultGMTFormat()) {
+            formatGMTDefault(currentNumberFormat,appendTo, offset);
+        } else {
+            ((SimpleDateFormat*)this)->initGMTFormatters(status);
+            if (U_SUCCESS(status)) {
+                int32_t type;
+                if (offset < 0) {
+                    offset = -offset;
+                    type = (offset % U_MILLIS_PER_MINUTE) == 0 ? kGMTNegativeHM : kGMTNegativeHMS;
+                } else {
+                    type = (offset % U_MILLIS_PER_MINUTE) == 0 ? kGMTPositiveHM : kGMTPositiveHMS;
+                }
+                Formattable param(offset, Formattable::kIsDate);
+                FieldPosition fpos(0);
+                fGMTFormatters[type]->format(&param, 1, appendTo, fpos, status);
             }
-            Formattable param(offset, Formattable::kIsDate);
-            FieldPosition fpos(0);
-            fGMTFormatters[type]->format(&param, 1, appendTo, fpos, status);
         }
     }
 }
@@ -1648,34 +1671,32 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_TIMEZONE_SPECIAL_FIELD:
         {
             UnicodeString zoneString;
-            const ZoneStringFormat *zsf = fSymbols->getZoneStringFormat();
-            if (zsf) {
+            const TimeZone& tz = cal.getTimeZone();
+            UDate date = cal.getTime(status);
+            if (U_SUCCESS(status)) {
                 if (patternCharIndex == UDAT_TIMEZONE_FIELD) {
                     if (count < 4) {
                         // "z", "zz", "zzz"
-                        zsf->getSpecificShortString(cal, TRUE /*commonly used only*/,
-                            zoneString, status);
+                        tzFormat()->format(UTZFMT_STYLE_SPECIFIC_SHORT_COMMONLY_USED, tz, date, zoneString);
                     } else {
                         // "zzzz"
-                        zsf->getSpecificLongString(cal, zoneString, status);
+                        tzFormat()->format(UTZFMT_STYLE_SPECIFIC_LONG, tz, date, zoneString);
                     }
                 } else if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD) {
                     if (count == 1) {
                         // "v"
-                        zsf->getGenericShortString(cal, TRUE /*commonly used only*/,
-                            zoneString, status);
+                        tzFormat()->format(UTZFMT_STYLE_GENERIC_SHORT, tz, date, zoneString);
                     } else if (count == 4) {
                         // "vvvv"
-                        zsf->getGenericLongString(cal, zoneString, status);
+                        tzFormat()->format(UTZFMT_STYLE_GENERIC_LONG, tz, date, zoneString);
                     }
                 } else { // patternCharIndex == UDAT_TIMEZONE_SPECIAL_FIELD
                     if (count == 1) {
                         // "V"
-                        zsf->getSpecificShortString(cal, FALSE /*ignore commonly used*/,
-                            zoneString, status);
+                        tzFormat()->format(UTZFMT_STYLE_SPECIFIC_SHORT, tz, date, zoneString);
                     } else if (count == 4) {
                         // "VVVV"
-                        zsf->getGenericLocationString(cal, zoneString, status);
+                        tzFormat()->format(UTZFMT_STYLE_LOCATION, tz, date, zoneString);
                     }
                 }
             }
@@ -2812,70 +2833,76 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             }
 
             // Step 3
-            // At this point, check for named time zones by looking through
-            // the locale data from the DateFormatZoneData strings.
-            // Want to be able to parse both short and long forms.
-            // optimize for calendar's current time zone
-            const ZoneStringFormat *zsf = fSymbols->getZoneStringFormat();
-            if (zsf) {
-                UErrorCode status = U_ZERO_ERROR;
-                const ZoneStringInfo *zsinfo = NULL;
-                int32_t matchLen;
-
-                switch (patternCharIndex) {
-                    case UDAT_TIMEZONE_FIELD: // 'z'
-                        if (count < 4) {
-                            zsinfo = zsf->findSpecificShort(text, start, matchLen, status);
-                        } else {
-                            zsinfo = zsf->findSpecificLong(text, start, matchLen, status);
-                        }
-                        break;
-                    case UDAT_TIMEZONE_GENERIC_FIELD: // 'v'
-                        if (count == 1) {
-                            zsinfo = zsf->findGenericShort(text, start, matchLen, status);
-                        } else if (count == 4) {
-                            zsinfo = zsf->findGenericLong(text, start, matchLen, status);
-                        }
-                        break;
-                    case UDAT_TIMEZONE_SPECIAL_FIELD: // 'V'
-                        if (count == 1) {
-                            zsinfo = zsf->findSpecificShort(text, start, matchLen, status);
-                        } else if (count == 4) {
-                            zsinfo = zsf->findGenericLocation(text, start, matchLen, status);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if (U_SUCCESS(status) && zsinfo != NULL) {
-                    if (zsinfo->isStandard()) {
-                        ((SimpleDateFormat*)this)->tztype = TZTYPE_STD;
-                    } else if (zsinfo->isDaylight()) {
-                        ((SimpleDateFormat*)this)->tztype = TZTYPE_DST;
-                    }
-                    UnicodeString tzid;
-                    zsinfo->getID(tzid);
-
-                    UnicodeString current;
-                    cal.getTimeZone().getID(current);
-                    if (tzid != current) {
-                        TimeZone *tz = TimeZone::createTimeZone(tzid);
-                        cal.adoptTimeZone(tz);
-                    }
-                    return start + matchLen;
-                }
-            }
-            // Step 4
-            // Final attempt - is this standalone GMT/UT/UTC?
+            // Is this standalone Localized GMT zero or GMT/UT/UTC?
             int32_t gmtLen = 0;
-            if (text.compare(start, kGmtLen, gGmt) == 0) {
+            if (text.compare(start, fSymbols->fGmtZero.length(), fSymbols->fGmtZero) == 0) {
+                gmtLen = fSymbols->fGmtZero.length();
+            } else if (text.compare(start, kGmtLen, gGmt) == 0) {
                 gmtLen = kGmtLen;
             } else if (text.compare(start, kUtcLen, gUtc) == 0) {
                 gmtLen = kUtcLen;
             } else if (text.compare(start, kUtLen, gUt) == 0) {
                 gmtLen = kUtLen;
             }
+            // If we parse the string to the end, we can exit here.
+            // If any characters follow, we still need to proceed to the
+            // next step. Otherwise, all time zone names starting with GMT/UT/UTC
+            // (for example, "UTT") will fail.
+            if (gmtLen > 0 && ((text.length() - start) == gmtLen)) {
+                TimeZone *tz = TimeZone::createTimeZone(UnicodeString("Etc/GMT"));
+                cal.adoptTimeZone(tz);
+                return start + gmtLen;
+            }
+
+            // Step 4
+            // At this point, check for named time zones by looking through
+            // the locale data.
+            if (patternCharIndex != UDAT_TIMEZONE_RFC_FIELD) {
+                UTimeZoneTimeType parsedTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
+                ParsePosition tmpPos(start);
+                UnicodeString parsedID;
+
+                switch (patternCharIndex) {
+                case UDAT_TIMEZONE_FIELD:
+                    if (count < 4) {
+                        tzFormat()->parse(UTZFMT_STYLE_SPECIFIC_SHORT_COMMONLY_USED, text, tmpPos, parsedID, &parsedTimeType);
+                    } else {
+                        tzFormat()->parse(UTZFMT_STYLE_SPECIFIC_LONG, text, tmpPos, parsedID, &parsedTimeType);
+                    }
+                    break;
+                case UDAT_TIMEZONE_GENERIC_FIELD:
+                    if (count < 4) {
+                        tzFormat()->parse(UTZFMT_STYLE_GENERIC_SHORT, text, tmpPos, parsedID, &parsedTimeType);
+                    } else {
+                        tzFormat()->parse(UTZFMT_STYLE_GENERIC_LONG, text, tmpPos, parsedID, &parsedTimeType);
+                    }
+                    break;
+                case UDAT_TIMEZONE_SPECIAL_FIELD:
+                    if (count < 4) {
+                        tzFormat()->parse(UTZFMT_STYLE_SPECIFIC_SHORT, text, tmpPos, parsedID, &parsedTimeType);
+                    } else {
+                        tzFormat()->parse(UTZFMT_STYLE_LOCATION, text, tmpPos, parsedID, &parsedTimeType);
+                    }
+                    break;
+                }
+                if (tmpPos.getErrorIndex() < 0) {
+                    if (parsedTimeType == UTZFMT_TIME_TYPE_STANDARD) {
+                        ((SimpleDateFormat*)this)->tztype = TZTYPE_STD;
+                    } else if (parsedTimeType == UTZFMT_TIME_TYPE_DAYLIGHT) {
+                        ((SimpleDateFormat*)this)->tztype = TZTYPE_DST;
+                    }
+
+                    UnicodeString current;
+                    cal.getTimeZone().getID(current);
+                    if (parsedID != current) {
+                        TimeZone *tz = TimeZone::createTimeZone(parsedID);
+                        cal.adoptTimeZone(tz);
+                    }
+                    return tmpPos.getIndex();
+                }
+            }
+            // Step 5
+            // If we saw standalone GMT zero pattern, then use GMT.
             if (gmtLen > 0) {
                 TimeZone *tz = TimeZone::createTimeZone(UnicodeString("Etc/GMT"));
                 cal.adoptTimeZone(tz);
@@ -3280,6 +3307,26 @@ SimpleDateFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) const 
     return pos;
 }
 
+//----------------------------------------------------------------------
+
+// Lazy TimeZoneFormat instantiation, semantically const.
+TimeZoneFormat *
+SimpleDateFormat::tzFormat() const {
+    if (fTimeZoneFormat == NULL) {
+        umtx_lock(&LOCK);
+        {
+            if (fTimeZoneFormat == NULL) {
+                UErrorCode status = U_ZERO_ERROR;
+                TimeZoneFormat *tzfmt = TimeZoneFormat::createInstance(fLocale, status);
+                U_ASSERT(U_SUCCESS(status));
+
+                const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
+            }
+        }
+        umtx_unlock(&LOCK);
+    }
+    return fTimeZoneFormat;
+}
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

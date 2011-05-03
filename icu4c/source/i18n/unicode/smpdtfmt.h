@@ -41,6 +41,7 @@ class DateFormatSymbols;
 class DateFormat;
 class MessageFormat;
 class FieldPositionHandler;
+class TimeZoneFormat;
 
 /**
  *
@@ -1039,6 +1040,11 @@ private:
     static const UDateFormatField fgPatternIndexToDateFormatField[];
 
     /**
+     * Lazy TimeZoneFormat instantiation, semantically const
+     */
+    TimeZoneFormat *tzFormat() const;
+
+    /**
      * Used to map Calendar field to field level.
      * The larger the level, the smaller the field unit.
      * For example, UCAL_ERA level is 0, UCAL_YEAR level is 10,
@@ -1073,6 +1079,11 @@ private:
      * month and day names, AM and PM strings, time zone names, etc.)
      */
     DateFormatSymbols*  fSymbols;   // Owned
+
+    /**
+     * The time zone formatter
+     */
+    TimeZoneFormat* fTimeZoneFormat;
 
     /**
      * If dates have ambiguous years, we map them into the century starting
