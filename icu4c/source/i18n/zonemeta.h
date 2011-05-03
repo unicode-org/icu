@@ -23,6 +23,7 @@ typedef struct OlsonToMetaMappingEntry {
 } OlsonToMetaMappingEntry;
 
 class UVector;
+class TimeZone;
 
 class U_I18N_API ZoneMeta {
 public:
@@ -34,6 +35,18 @@ public:
      * NOT a system ID).
      */
     static UnicodeString& U_EXPORT2 getCanonicalCLDRID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status);
+
+    /**
+     * Return the canonical id for this tzid defined by CLDR, which might be the id itself.
+     * This overload method returns a persistent const UChar*, which is guranteed to persist
+     * (a pointer to a resource).
+     */
+    static const UChar* U_EXPORT2 getCanonicalCLDRID(const UnicodeString &tzid, UErrorCode& status);
+
+    /*
+     * Conveninent method returning CLDR canonical ID for the given time zone
+     */
+    static const UChar* U_EXPORT2 getCanonicalCLDRID(const TimeZone& tz);
 
     /**
      * Return the canonical country code for this tzid.  If we have none, or if the time zone
@@ -60,9 +73,24 @@ public:
 
     static const UVector* U_EXPORT2 getMetazoneMappings(const UnicodeString &tzid);
 
+    static const UVector* U_EXPORT2 getAvailableMetazoneIDs();
+
+    /**
+     * Returns the pointer to the persistent time zone ID string, or NULL if the given tzid is not in the
+     * tz database. This method is useful when you maintain persistent zone IDs without duplication.
+     */
+    static const UChar* U_EXPORT2 findTimeZoneID(const UnicodeString& tzid);
+
+    /**
+     * Returns the pointer to the persistent meta zone ID string, or NULL if the given mzid is not available.
+     * This method is useful when you maintain persistent meta zone IDs without duplication.
+     */
+    static const UChar* U_EXPORT2 findMetaZoneID(const UnicodeString& mzid);
+
 private:
     ZoneMeta(); // Prevent construction.
     static UVector* createMetazoneMappings(const UnicodeString &tzid);
+    static void initAvailableMetaZoneIDs();
 };
 
 U_NAMESPACE_END
