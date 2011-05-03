@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -672,6 +672,9 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.PluralRules", new FormatTests.PluralRulesHandler());
         map.put("com.ibm.icu.text.TimeUnitFormat", new FormatTests.TimeUnitFormatHandler());
         map.put("com.ibm.icu.text.SelectFormat", new FormatTests.SelectFormatHandler());
+        map.put("com.ibm.icu.impl.TimeZoneNamesImpl", new FormatTests.TimeZoneNamesHandler());
+        map.put("com.ibm.icu.text.TimeZoneFormat", new FormatTests.TimeZoneFormatHandler());
+        map.put("com.ibm.icu.impl.TimeZoneGenericNames", new FormatTests.TimeZoneGenericNamesHandler());
 
         map.put("com.ibm.icu.util.Calendar", new CalendarTests.CalendarHandler());
         map.put("com.ibm.icu.util.BuddhistCalendar", new CalendarTests.BuddhistCalendarHandler());
