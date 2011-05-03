@@ -3086,12 +3086,8 @@ for (;;) {
             dataerrln((UnicodeString)"can not create instance, locale:" + localeString + ", style: " + k + " - " + u_errorName(status));
             continue;
         }
-        // TODO: need to be UChar*
         UChar currencyCode[4];
-        currencyCode[0] = currencyISOCode[0];
-        currencyCode[1] = currencyISOCode[1];
-        currencyCode[2] = currencyISOCode[2];
-        currencyCode[3] = currencyISOCode[3];
+        u_charsToUChars(currencyISOCode, currencyCode, 4);
         numFmt->setCurrency(currencyCode, status);
         if (U_FAILURE(status)) {
             delete numFmt;
