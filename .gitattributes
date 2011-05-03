@@ -75,6 +75,8 @@ icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
+icu4c/source/i18n/udateintervalformat.cpp -text
+icu4c/source/i18n/unicode/udateintervalformat.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
@@ -132,6 +134,7 @@ icu4c/source/samples/ustring/ustring.vcxproj -text
 icu4c/source/samples/ustring/ustring.vcxproj.filters -text
 icu4c/source/stubdata/stubdata.vcxproj -text
 icu4c/source/stubdata/stubdata.vcxproj.filters -text
+icu4c/source/test/cintltst/cdateintervalformattest.c -text
 icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
 icu4c/source/test/intltest/intltest.vcxproj -text

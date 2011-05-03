@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation
- * and others. All Rights Reserved.
+ * Copyright (c) 1997-2007,2011, International Business Machines
+ * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
 *
@@ -25,6 +25,7 @@
 void addCalTest(TestNode**);
 void addDateForTest(TestNode**);
 void addDateTimePatternGeneratorTest(TestNode** root);
+void addDateIntervalFormatTest(TestNode** root);
 void addNumForTest(TestNode**);
 void addMsgForTest(TestNode**);
 void addDateForRgrTest(TestNode**);
@@ -40,6 +41,7 @@ void addFormatTest(TestNode** root)
     addCalTest(root);
     addDateForTest(root);
     addDateTimePatternGeneratorTest(root);
+    addDateIntervalFormatTest(root);
     addNumForTest(root);
     addNumFrDepTest(root);
     addMsgForTest(root);
