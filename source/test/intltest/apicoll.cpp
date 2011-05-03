@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -45,6 +45,8 @@
 #include "sfwdchit.h"
 #include "cmemory.h"
 #include <stdlib.h>
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 void
 CollationAPITest::doAssert(UBool condition, const char *message)
@@ -1245,6 +1247,55 @@ void CollationAPITest::TestSortKey()
     delete col;
 }
 
+void CollationAPITest::TestSortKeyOverflow() {
+    IcuTestErrorCode errorCode(*this, "TestSortKeyOverflow()");
+    LocalPointer<Collator> col(Collator::createInstance(Locale::getEnglish(), errorCode));
+    if (errorCode.logDataIfFailureAndReset("Collator::createInstance(English) failed")) {
+        return;
+    }
+    col->setAttribute(UCOL_STRENGTH, UCOL_PRIMARY, errorCode);
+    UChar i_and_phi[] = { 0x438, 0x3c6 };  // Cyrillic small i & Greek small phi.
+    // The sort key should be 6 bytes:
+    // 2 bytes for the Cyrillic i, 1 byte for the primary-compression terminator,
+    // 2 bytes for the Greek phi, and 1 byte for the NUL terminator.
+    uint8_t sortKey[12];
+    int32_t length = col->getSortKey(i_and_phi, 2, sortKey, LENGTHOF(sortKey));
+    uint8_t sortKey2[12];
+    for (int32_t capacity = 0; capacity < length; ++capacity) {
+        uprv_memset(sortKey2, 2, LENGTHOF(sortKey2));
+        int32_t length2 = col->getSortKey(i_and_phi, 2, sortKey2, capacity);
+        if (length2 != length || 0 != uprv_memcmp(sortKey, sortKey2, capacity)) {
+            errln("getSortKey(i_and_phi, capacity=%d) failed to write proper prefix", capacity);
+        } else if (sortKey2[capacity] != 2 || sortKey2[capacity + 1] != 2) {
+            errln("getSortKey(i_and_phi, capacity=%d) wrote beyond capacity", capacity);
+        }
+    }
+
+    // Now try to break getCollationKey().
+    // Internally, it always starts with a large stack buffer.
+    // Since we cannot control the initial capacity, we throw an increasing number
+    // of characters at it, with the problematic part at the end.
+    const int32_t longCapacity = 2000;
+    // Each 'a' in the prefix should result in one primary sort key byte.
+    // For i_and_phi we expect 6 bytes, then the NUL terminator.
+    const int32_t maxPrefixLength = longCapacity - 6 - 1;
+    LocalArray<uint8_t> longSortKey(new uint8_t[longCapacity]);
+    UnicodeString s(FALSE, i_and_phi, 2);
+    for (int32_t prefixLength = 0; prefixLength < maxPrefixLength; ++prefixLength) {
+        length = col->getSortKey(s, longSortKey.getAlias(), longCapacity);
+        CollationKey collKey;
+        col->getCollationKey(s, collKey, errorCode);
+        int32_t collKeyLength;
+        const uint8_t *collSortKey = collKey.getByteArray(collKeyLength);
+        if (collKeyLength != length || 0 != uprv_memcmp(longSortKey.getAlias(), collSortKey, length)) {
+            errln("getCollationKey(prefix[%d]+i_and_phi) failed to write proper sort key", prefixLength);
+        }
+
+        // Insert an 'a' to match ++prefixLength.
+        s.insert(prefixLength, (UChar)0x61);
+    }
+}
+
 void CollationAPITest::TestMaxExpansion()
 {
     UErrorCode          status = U_ZERO_ERROR;
@@ -2261,33 +2312,33 @@ void CollationAPITest::TestClone() {
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
-    switch (index) {
-        case 0: name = "TestProperty";  if (exec)   TestProperty(/* par */); break;
-        case 1: name = "TestOperators"; if (exec)   TestOperators(/* par */); break;
-        case 2: name = "TestDuplicate"; if (exec)   TestDuplicate(/* par */); break;
-        case 3: name = "TestCompare";   if (exec)   TestCompare(/* par */); break;
-        case 4: name = "TestHashCode";  if (exec)   TestHashCode(/* par */); break;
-        case 5: name = "TestCollationKey";  if (exec)   TestCollationKey(/* par */); break;
-        case 6: name = "TestElemIter";  if (exec)   TestElemIter(/* par */); break;
-        case 7: name = "TestGetAll";    if (exec)   TestGetAll(/* par */); break;
-        case 8: name = "TestRuleBasedColl"; if (exec)   TestRuleBasedColl(/* par */); break;
-        case 9: name = "TestDecomposition"; if (exec)   TestDecomposition(/* par */); break;
-        case 10: name = "TestSafeClone"; if (exec)   TestSafeClone(/* par */); break;
-        case 11: name = "TestSortKey";   if (exec)   TestSortKey(); break;
-        case 12: name = "TestMaxExpansion";   if (exec)   TestMaxExpansion(); break;
-        case 13: name = "TestDisplayName";   if (exec)   TestDisplayName(); break;
-        case 14: name = "TestAttribute";   if (exec)   TestAttribute(); break;
-        case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
-        case 16: name = "TestRules"; if (exec) TestRules(); break;
-        case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
-        case 18: name = "TestBounds"; if (exec) TestBounds(); break;
-        case 19: name = "TestGetTailoredSet"; if (exec) TestGetTailoredSet(); break;
-        case 20: name = "TestUClassID"; if (exec) TestUClassID(); break;
-        case 21: name = "TestSubclass"; if (exec) TestSubclass(); break;
-        case 22: name = "TestNULLCharTailoring"; if (exec) TestNULLCharTailoring(); break;
-        case 23: name = "TestClone"; if (exec) TestClone(); break;
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestProperty);
+    TESTCASE_AUTO(TestOperators);
+    TESTCASE_AUTO(TestDuplicate);
+    TESTCASE_AUTO(TestCompare);
+    TESTCASE_AUTO(TestHashCode);
+    TESTCASE_AUTO(TestCollationKey);
+    TESTCASE_AUTO(TestElemIter);
+    TESTCASE_AUTO(TestGetAll);
+    TESTCASE_AUTO(TestRuleBasedColl);
+    TESTCASE_AUTO(TestDecomposition);
+    TESTCASE_AUTO(TestSafeClone);
+    TESTCASE_AUTO(TestSortKey);
+    TESTCASE_AUTO(TestSortKeyOverflow);
+    TESTCASE_AUTO(TestMaxExpansion);
+    TESTCASE_AUTO(TestDisplayName);
+    TESTCASE_AUTO(TestAttribute);
+    TESTCASE_AUTO(TestVariableTopSetting);
+    TESTCASE_AUTO(TestRules);
+    TESTCASE_AUTO(TestGetLocale);
+    TESTCASE_AUTO(TestBounds);
+    TESTCASE_AUTO(TestGetTailoredSet);
+    TESTCASE_AUTO(TestUClassID);
+    TESTCASE_AUTO(TestSubclass);
+    TESTCASE_AUTO(TestNULLCharTailoring);
+    TESTCASE_AUTO(TestClone);
+    TESTCASE_AUTO_END;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

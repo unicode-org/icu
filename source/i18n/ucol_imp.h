@@ -545,42 +545,55 @@ U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll,
 U_CFUNC uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
                                           U_NAMESPACE_QUALIFIER collIterate *collationSource,
                                           UErrorCode *status);
+/* get some memory */
+void *ucol_getABuffer(const UCollator *coll, uint32_t size);
+
+#ifdef XP_CPLUSPLUS
+
+class SortKeyByteSink;
+
 /* function used by C++ getCollationKey to prevent restarting the calculation */
 U_CFUNC int32_t
 ucol_getSortKeyWithAllocation(const UCollator *coll,
                               const UChar *source, int32_t sourceLength,
-                              uint8_t **pResult,
+                              uint8_t *&result, int32_t &resultCapacity,
                               UErrorCode *pErrorCode);
 
-/* get some memory */
-void *ucol_getABuffer(const UCollator *coll, uint32_t size);
+typedef void U_CALLCONV
+SortKeyGenerator(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        SortKeyByteSink &result,
+        UErrorCode *status);
 
 /* worker function for generating sortkeys */
 U_CFUNC
-int32_t U_CALLCONV
+void U_CALLCONV
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        uint8_t        **result,
-        uint32_t        resultLength,
-        UBool allocatePrimary,
+        SortKeyByteSink &result,
         UErrorCode *status);
 
 U_CFUNC
-int32_t U_CALLCONV
+void U_CALLCONV
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        uint8_t        **result,
-        uint32_t        resultLength,
-        UBool allocatePrimary,
+        SortKeyByteSink &result,
         UErrorCode *status);
 
-U_CFUNC
-int32_t 
-ucol_getSortKeySize(const UCollator *coll, U_NAMESPACE_QUALIFIER collIterate *s, 
-                    int32_t currentSize, UColAttributeValue strength, 
-                    int32_t len);
+#else
+
+typedef void U_CALLCONV
+SortKeyGenerator(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        void *result,
+        UErrorCode *status);
+
+#endif
+
 /**
  * Makes a copy of the Collator's rule data. The format is
  * that of .col files.
@@ -957,15 +970,6 @@ typedef struct {
   UVersionInfo UCAVersion;              /* version of the UCA, read from file */
   uint8_t padding[8];
 } InverseUCATableHeader;
-
-typedef int32_t U_CALLCONV
-SortKeyGenerator(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        **result,
-        uint32_t        resultLength,
-        UBool allocatePrimary,
-        UErrorCode *status);
 
 typedef void U_CALLCONV
 ResourceCleaner(UCollator *coll);

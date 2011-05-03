@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and others.
+ * Copyright (C) 1996-2011, International Business Machines Corporation and others.
  * All Rights Reserved.
  *****************************************************************************
  *
@@ -243,10 +243,15 @@ private:
     * Returns an array of the collation key values as 16-bit integers.
     * The caller owns the storage and must delete it.
     * @param values Output param of the collation key values.
+    * @param capacity Size of the values array.
     * @param count output parameter of the number of collation key values
     * @return a pointer to an array of 16-bit collation key values.
     */
-    void adopt(uint8_t *values, int32_t count);
+    void adopt(uint8_t *values, int32_t capacity, int32_t count);
+    /**
+     * Set a new length for a new sort key in the existing fBytes.
+     */
+    void setLength(int32_t newLength);
 
     /*
     * Creates a collation key with a string.

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -96,14 +96,18 @@ CollationKey::~CollationKey()
         uprv_free(fBytes);
 }
 
-void CollationKey::adopt(uint8_t *values, int32_t count) {
+void CollationKey::adopt(uint8_t *values, int32_t capacity, int32_t count) {
     if(fBytes != NULL) {
         uprv_free(fBytes);
     }
-    fBogus = FALSE;
     fBytes = values;
-    fCount = count;
-    fCapacity = count;
+    fCapacity = capacity;
+    setLength(count);
+}
+
+void CollationKey::setLength(int32_t newLength) {
+    fBogus = FALSE;
+    fCount = newLength;
     fHashCode = kInvalidHashCode;
 }
 
