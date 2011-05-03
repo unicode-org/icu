@@ -1,4 +1,4 @@
-# SentenceBreakTest-6.0.0.txt
+﻿# SentenceBreakTest-6.0.0.txt
 # Date: 2010-08-19, 01:19:53 GMT [MD]
 #
 # Unicode Character Database
