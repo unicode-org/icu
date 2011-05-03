@@ -182,7 +182,7 @@
 #define UCA_DATA_FORMAT_3 ((uint8_t)0x6c)
 
 #define UCA_FORMAT_VERSION_0 ((uint8_t)3)
-#define UCA_FORMAT_VERSION_1 ((uint8_t)0)
+#define UCA_FORMAT_VERSION_1 0
 #define UCA_FORMAT_VERSION_2 ((uint8_t)0)
 #define UCA_FORMAT_VERSION_3 ((uint8_t)0)
 
