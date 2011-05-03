@@ -5598,7 +5598,7 @@ const char* const locale_to_langtag[][3] = {
     {"@x=elmer",    "x-elmer",      "x-elmer"},
     {"en@x=elmer",  "en-x-elmer",   "en-x-elmer"},
     {"@x=elmer;a=exta", "und-a-exta-x-elmer",   "und-a-exta-x-elmer"},
-
+    {"en_US@attribute=attr1-attr2;calendar=gregorian", "en-US-u-attr1-attr2-ca-gregory", "en-US-u-attr1-attr2-ca-gregory"},
     {NULL,          NULL,           NULL}
 };
 
@@ -5700,6 +5700,7 @@ static const struct {
     {"und-a-abc-def",       "und@a=abc-def",        13},
     {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   30},
     {"x-elmer",             "@x=elmer",             7},
+    {"en-US-u-attr1-attr2-ca-gregory", "en_US@attribute=attr1-attr2;calendar=gregorian", 30},
     {NULL,          NULL,           0}
 };
 
