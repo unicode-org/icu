@@ -291,6 +291,9 @@
     <ClCompile Include="unum.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="upluralrules.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="utmscale.c">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -946,6 +949,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\unum.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\upluralrules.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\utmscale.h">
