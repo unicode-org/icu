@@ -365,8 +365,8 @@ public final class UCharacterProperty
                 if(c>=0) {
                     /* single code point */
                     UCaseProps csp=UCaseProps.INSTANCE;
-                    UCaseProps.dummyStringBuffer.setLength(0);
-                    return csp.toFullFolding(c, UCaseProps.dummyStringBuffer,
+                    UCaseProps.dummyStringBuilder.setLength(0);
+                    return csp.toFullFolding(c, UCaseProps.dummyStringBuilder,
                                              UCharacter.FOLD_CASE_DEFAULT)>=0;
                 } else {
                     String folded=UCharacter.foldCase(nfd, true);

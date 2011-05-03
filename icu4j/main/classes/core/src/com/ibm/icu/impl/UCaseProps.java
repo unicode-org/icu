@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -825,7 +825,7 @@ public final class UCaseProps {
      * @internal
      */
     public final int toFullLower(int c, ContextIterator iter,
-                                 StringBuffer out,
+                                 StringBuilder out,
                                  ULocale locale, int[] locCache) {
         int result, props;
 
@@ -971,7 +971,7 @@ public final class UCaseProps {
 
     /* internal */
     private final int toUpperOrTitle(int c, ContextIterator iter,
-                                     StringBuffer out,
+                                     StringBuilder out,
                                      ULocale locale, int[] locCache,
                                      boolean upperNotTitle) {
         int result;
@@ -1066,13 +1066,13 @@ public final class UCaseProps {
     }
 
     public final int toFullUpper(int c, ContextIterator iter,
-                                 StringBuffer out,
+                                 StringBuilder out,
                                  ULocale locale, int[] locCache) {
         return toUpperOrTitle(c, iter, out, locale, locCache, true);
     }
 
     public final int toFullTitle(int c, ContextIterator iter,
-                                 StringBuffer out,
+                                 StringBuilder out,
                                  ULocale locale, int[] locCache) {
         return toUpperOrTitle(c, iter, out, locale, locCache, false);
     }
@@ -1185,7 +1185,7 @@ public final class UCaseProps {
      * together in a way that they still fold to common result strings.
      */
 
-    public final int toFullFolding(int c, StringBuffer out, int options) {
+    public final int toFullFolding(int c, StringBuilder out, int options) {
         int result;
         int props;
 
@@ -1261,15 +1261,15 @@ public final class UCaseProps {
 
     private static final int[] rootLocCache = { LOC_ROOT };
     /*
-     * We need a StringBuffer for multi-code point output from the
+     * We need a StringBuilder for multi-code point output from the
      * full case mapping functions. However, we do not actually use that output,
      * we just check whether the input character was mapped to anything else.
-     * We use a shared StringBuffer to avoid allocating a new one in each call.
+     * We use a shared StringBuilder to avoid allocating a new one in each call.
      * We remove its contents each time so that it does not grow large over time.
      *
      * @internal
      */
-    public static final StringBuffer dummyStringBuffer = new StringBuffer();
+    public static final StringBuilder dummyStringBuilder = new StringBuilder();
 
     public final boolean hasBinaryProperty(int c, int which) {
         switch(which) {
@@ -1298,21 +1298,21 @@ public final class UCaseProps {
          * start sets for normalization and case mappings.
          */
         case UProperty.CHANGES_WHEN_LOWERCASED:
-            dummyStringBuffer.setLength(0);
-            return toFullLower(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
+            dummyStringBuilder.setLength(0);
+            return toFullLower(c, null, dummyStringBuilder, ULocale.ROOT, rootLocCache)>=0;
         case UProperty.CHANGES_WHEN_UPPERCASED:
-            dummyStringBuffer.setLength(0);
-            return toFullUpper(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
+            dummyStringBuilder.setLength(0);
+            return toFullUpper(c, null, dummyStringBuilder, ULocale.ROOT, rootLocCache)>=0;
         case UProperty.CHANGES_WHEN_TITLECASED:
-            dummyStringBuffer.setLength(0);
-            return toFullTitle(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
+            dummyStringBuilder.setLength(0);
+            return toFullTitle(c, null, dummyStringBuilder, ULocale.ROOT, rootLocCache)>=0;
         /* case UProperty.CHANGES_WHEN_CASEFOLDED: -- in UCharacterProperty.java */
         case UProperty.CHANGES_WHEN_CASEMAPPED:
-            dummyStringBuffer.setLength(0);
+            dummyStringBuilder.setLength(0);
             return
-                toFullLower(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0 ||
-                toFullUpper(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0 ||
-                toFullTitle(c, null, dummyStringBuffer, ULocale.ROOT, rootLocCache)>=0;
+                toFullLower(c, null, dummyStringBuilder, ULocale.ROOT, rootLocCache)>=0 ||
+                toFullUpper(c, null, dummyStringBuilder, ULocale.ROOT, rootLocCache)>=0 ||
+                toFullTitle(c, null, dummyStringBuilder, ULocale.ROOT, rootLocCache)>=0;
         default:
             return false;
         }

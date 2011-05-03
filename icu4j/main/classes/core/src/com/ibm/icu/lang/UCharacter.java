@@ -4562,7 +4562,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(ULocale locale, String str) {
         StringContextIterator iter = new StringContextIterator(str);
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         int[] locCache = new int[1];
         int c;
 
@@ -4583,11 +4583,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 continue;
             /* } else { append single-code point mapping */
             }
-            if(c<=0xffff) {
-                result.append((char)c);
-            } else {
-                UTF16.append(result, c);
-            }
+            result.appendCodePoint(c);
         }
         return result.toString();
     }
@@ -4615,7 +4611,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(ULocale locale, String str) {
         StringContextIterator iter = new StringContextIterator(str);
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         int[] locCache = new int[1];
         int c;
 
@@ -4636,11 +4632,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 continue;
             /* } else { append single-code point mapping */
             }
-            if(c<=0xffff) {
-                result.append((char)c);
-            } else {
-                UTF16.append(result, c);
-            }
+            result.appendCodePoint(c);
         }
         return result.toString();
     }
@@ -4720,7 +4712,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                      BreakIterator titleIter,
                                      int options) {
         StringContextIterator iter = new StringContextIterator(str);
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         int[] locCache = new int[1];
         int c, nc, srcLength = str.length();
 
@@ -4795,20 +4787,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                         if(c<0) {
                             /* (not) original code point */
                             c=~c;
-                            if(c<=0xffff) {
-                                result.append((char)c);
-                            } else {
-                                UTF16.append(result, c);
-                            }
+                            result.appendCodePoint(c);
                         } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
                             /* mapping already appended to result */
                         } else {
                             /* append single-code point mapping */
-                            if(c<=0xffff) {
-                                result.append((char)c);
-                            } else {
-                                UTF16.append(result, c);
-                            }
+                            result.appendCodePoint(c);
                         }
 
                         if((options&TITLECASE_NO_LOWERCASE)!=0) {
@@ -4953,7 +4937,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.6
      */
     public static final String foldCase(String str, int options) {
-        StringBuffer result = new StringBuffer(str.length());
+        StringBuilder result = new StringBuilder(str.length());
         int c, i, length;
 
         length = str.length();
@@ -4971,11 +4955,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 continue;
             /* } else { append single-code point mapping */
             }
-            if(c<=0xffff) {
-                result.append((char)c);
-            } else {
-                UTF16.append(result, c);
-            }
+            result.appendCodePoint(c);
         }
         return result.toString();
     }
