@@ -1738,6 +1738,7 @@ void RegexTest::API_Match_UTF8() {
     {
         UText               re = UTEXT_INITIALIZER;
         regextst_openUTF8FromInvariant(&re, "abc", -1, &status);
+        REGEX_VERBOSE_TEXT(&re);
         RegexPattern        *pat2;
         pat2 = RegexPattern::compile(&re, flags, pe, status);
         REGEX_CHECK_STATUS;
@@ -2476,8 +2477,9 @@ void RegexTest::API_Replace_UTF8() {
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8(str_bcbcdefg, result);
-    
-    regextst_openUTF8FromInvariant(&replText, "The value of \\$1 is $1.", -1, &status);
+   
+    const char str_v[23] = { 0x54, 0x68, 0x65, 0x20, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x20, 0x6f, 0x66, 0x20, 0x5c, 0x24, 0x31, 0x20, 0x69, 0x73, 0x20, 0x24, 0x31, 0x2e }; /* The value of \$1 is $1. */ 
+    utext_openUTF8(&replText, str_v, -1, &status);
     result = matcher2->replaceFirst(&replText, NULL, status);
     REGEX_CHECK_STATUS;
     const char str_Thevalueof1isbcdefg[] = { 0x54, 0x68, 0x65, 0x20, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x20, 0x6f, 0x66, 0x20, 0x24, 0x31, 0x20, 0x69, 0x73, 0x20, 0x62, 0x63, 0x2e, 0x64, 0x65, 0x66, 0x67, 0x00 }; /* The value of $1 is bc.defg */
