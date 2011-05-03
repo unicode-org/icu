@@ -21,7 +21,7 @@ static void TestDateIntervalFormat(void);
 
 void addDateIntervalFormatTest(TestNode** root);
 
-#define TESTCASE(x) addTest(root, &x, "tsformat/cdattst/" #x)
+#define TESTCASE(x) addTest(root, &x, "tsformat/cdateintervalformattest/" #x)
 
 void addDateIntervalFormatTest(TestNode** root)
 {
