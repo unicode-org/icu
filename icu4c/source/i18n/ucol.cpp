@@ -4509,8 +4509,12 @@ ucol_getSortKeyWithAllocation(const UCollator *coll,
     SortKeyByteSink sink(reinterpret_cast<char *>(result), resultCapacity);
     coll->sortKeyGen(coll, source, sourceLength, sink, pErrorCode);
     int32_t resultLen = sink.NumberOfBytesAppended();
-    if (result != sink.GetUnsignedBuffer()) {
-        result = sink.OrphanUnsignedBuffer(resultCapacity);
+    if (U_SUCCESS(*pErrorCode)) {
+        if (!sink.IsOk()) {
+            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+        } else if (result != sink.GetUnsignedBuffer()) {
+            result = sink.OrphanUnsignedBuffer(resultCapacity);
+        }
     }
     return resultLen;
 }
@@ -4972,10 +4976,6 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     /* To avoid memory leak, free the offset buffer if necessary. */
     ucol_freeOffsetBuffer(&s);
-
-    if (U_SUCCESS(*status) && !result.IsOk()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    }
 }
 
 
