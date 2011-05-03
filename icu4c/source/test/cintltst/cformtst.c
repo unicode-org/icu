@@ -24,8 +24,8 @@
 
 void addCalTest(TestNode**);
 void addDateForTest(TestNode**);
-void addDateTimePatternGeneratorTest(TestNode** root);
-void addDateIntervalFormatTest(TestNode** root);
+void addDateTimePatternGeneratorTest(TestNode**);
+void addDateIntervalFormatTest(TestNode**);
 void addNumForTest(TestNode**);
 void addMsgForTest(TestNode**);
 void addDateForRgrTest(TestNode**);
@@ -33,6 +33,7 @@ void addNumFrDepTest(TestNode**);
 void addDtFrDepTest(TestNode**);
 void addUtmsTest(TestNode**);
 void addCurrencyTest(TestNode**);
+void addPluralRulesTest(TestNode**);
 
 void addFormatTest(TestNode** root);
 
@@ -49,6 +50,7 @@ void addFormatTest(TestNode** root)
     addDtFrDepTest(root);
     addUtmsTest(root);
     addCurrencyTest(root);
+    addPluralRulesTest(root);
 }
 /*Internal functions used*/
 
