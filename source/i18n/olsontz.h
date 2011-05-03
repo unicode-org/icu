@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2010, International Business Machines
+* Copyright (c) 2003-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -117,10 +117,13 @@ class U_I18N_API OlsonTimeZone: public BasicTimeZone {
      * @param top the top-level zoneinfo resource bundle.  This is used
      * to lookup the rule that `res' may refer to, if there is one.
      * @param res the resource bundle of the zone to be constructed
+     * @param tzid the time zone ID
      * @param ec input-output error code
      */
     OlsonTimeZone(const UResourceBundle* top,
-                  const UResourceBundle* res, UErrorCode& ec);
+                  const UResourceBundle* res,
+                  const UnicodeString& tzid,
+                  UErrorCode& ec);
 
     /**
      * Copy constructor
@@ -271,6 +274,12 @@ class U_I18N_API OlsonTimeZone: public BasicTimeZone {
     virtual void getTimeZoneRules(const InitialTimeZoneRule*& initial,
         const TimeZoneRule* trsrules[], int32_t& trscount, UErrorCode& status) /*const*/;
 
+    /**
+     * Internal API returning the canonical ID of this zone.
+     * This ID won't be affected by setID().
+     */
+    const UChar *getCanonicalID() const;
+
 private:
     /**
      * Default constructor.  Creates a time zone with an empty ID and
@@ -366,6 +375,11 @@ private:
      */
     int32_t finalStartYear;
 
+    /*
+     * Canonical (CLDR) ID of this zone
+     */
+    const UChar *canonicalID;
+
     /* BasicTimeZone support */
     void clearTransitionRules(void);
     void deleteTransitionRules(void);
@@ -418,6 +432,12 @@ inline int32_t
 OlsonTimeZone::initialDstOffset() const {
     return typeOffsets[1];
 }
+
+inline const UChar*
+OlsonTimeZone::getCanonicalID() const {
+    return canonicalID;
+}
+
 
 U_NAMESPACE_END
 

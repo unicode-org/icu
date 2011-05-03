@@ -255,6 +255,10 @@
     <ClCompile Include="sortkey.cpp" />
     <ClCompile Include="stsearch.cpp" />
     <ClCompile Include="tblcoll.cpp" />
+    <ClCompile Include="tzfmt.cpp" />
+    <ClCompile Include="tzgnames.cpp" />
+    <ClCompile Include="tznames.cpp" />
+    <ClCompile Include="tznames_impl.cpp" />
     <ClCompile Include="ucol.cpp" />
     <ClCompile Include="ucol_bld.cpp" />
     <ClCompile Include="ucol_cnt.cpp" />
@@ -356,7 +360,6 @@
     </ClCompile>
     <ClCompile Include="zonemeta.cpp" />
     <ClCompile Include="zrule.cpp" />
-    <ClCompile Include="zstrfmt.cpp" />
     <ClCompile Include="ztrans.cpp" />
     <ClCompile Include="ucln_in.c">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
@@ -570,6 +573,10 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="tzfmt.h" />
+    <ClInclude Include="tzgnames.h" />
+    <ClInclude Include="tznames.h" />
+    <ClInclude Include="tznames_impl.h" />
     <ClInclude Include="ucol_bld.h" />
     <ClInclude Include="ucol_cnt.h" />
     <ClInclude Include="ucol_elm.h" />
@@ -668,7 +675,7 @@
     </CustomBuild>
     <ClInclude Include="currfmt.h" />
     <CustomBuild Include="unicode\currpinf.h">
- <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
@@ -1328,7 +1335,6 @@
     <ClInclude Include="wintzimpl.h" />
     <ClInclude Include="zonemeta.h" />
     <ClInclude Include="zrule.h" />
-    <ClInclude Include="zstrfmt.h" />
     <ClInclude Include="ztrans.h" />
     <ClInclude Include="ucln_in.h" />
     <CustomBuild Include="unicode\regex.h">

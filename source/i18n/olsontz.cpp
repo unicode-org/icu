@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2010, International Business Machines
+* Copyright (c) 2003-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -24,6 +24,7 @@
 #include "uvector.h"
 #include <float.h> // DBL_MAX
 #include "uresimp.h" // struct UResourceBundle
+#include "zonemeta.h"
 
 #ifdef U_DEBUG_TZ
 # include <stdio.h>
@@ -93,6 +94,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OlsonTimeZone)
  * constructor fails so the resultant object is well-behaved.
  */
 void OlsonTimeZone::constructEmpty() {
+    canonicalID = NULL;
+
     transitionCountPre32 = transitionCount32 = transitionCountPost32 = 0;
     transitionTimesPre32 = transitionTimes32 = transitionTimesPost32 = NULL;
 
@@ -113,8 +116,9 @@ void OlsonTimeZone::constructEmpty() {
  */
 OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                              const UResourceBundle* res,
+                             const UnicodeString& tzid,
                              UErrorCode& ec) :
-  finalZone(NULL), transitionRulesInitialized(FALSE)
+  BasicTimeZone(tzid), finalZone(NULL), transitionRulesInitialized(FALSE)
 {
     clearTransitionRules();
     U_DEBUG_TZ_MSG(("OlsonTimeZone(%s)\n", ures_getKey((UResourceBundle*)res)));
@@ -245,6 +249,9 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
             ec = U_ZERO_ERROR;
         }
         ures_close(&r);
+
+        // initialize canonical ID
+        canonicalID = ZoneMeta::getCanonicalCLDRID(tzid, ec);
     }
 
     if (U_FAILURE(ec)) {
@@ -264,6 +271,8 @@ OlsonTimeZone::OlsonTimeZone(const OlsonTimeZone& other) :
  * Assignment operator
  */
 OlsonTimeZone& OlsonTimeZone::operator=(const OlsonTimeZone& other) {
+    canonicalID = other.canonicalID;
+
     transitionTimesPre32 = other.transitionTimesPre32;
     transitionTimes32 = other.transitionTimes32;
     transitionTimesPost32 = other.transitionTimesPost32;

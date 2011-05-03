@@ -417,10 +417,8 @@ TimeZone::createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
     UResourceBundle *top = openOlsonResource(id, res, ec);
     U_DEBUG_TZ_MSG(("post-err=%s\n", u_errorName(ec)));
     if (U_SUCCESS(ec)) {
-        z = new OlsonTimeZone(top, &res, ec);
-        if (z) {
-          z->setID(id);
-        } else {
+        z = new OlsonTimeZone(top, &res, id, ec);
+        if (z == NULL) {
           U_DEBUG_TZ_MSG(("cstz: olson time zone failed to initialize - err %s\n", u_errorName(ec)));
         }
     }
@@ -1062,7 +1060,26 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
 
 // ---------------------------------------
 
-// These two methods are used by ZoneMeta class only.
+// These methods are used by ZoneMeta class only.
+
+const UChar*
+TimeZone::findID(const UnicodeString& id) {
+    const UChar *result = NULL;
+    UErrorCode ec = U_ZERO_ERROR;
+    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &ec);
+
+    // resolve zone index by name
+    UResourceBundle *names = ures_getByKey(rb, kNAMES, NULL, &ec);
+    int32_t idx = findInStringArray(names, id, ec);
+    result = ures_getStringByIndex(names, idx, NULL, &ec);
+    if (U_FAILURE(ec)) {
+        result = NULL;
+    }
+    ures_close(names);
+    ures_close(rb);
+    return result;
+}
+
 
 const UChar*
 TimeZone::dereferOlsonLink(const UnicodeString& id) {

@@ -731,6 +731,16 @@ private:
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 
     /**
+     * Finds the given ID in the Olson tzdata. If the given ID is found in the tzdata,
+     * returns the pointer to the ID resource. This method is exposed through ZoneMeta class
+     * for ICU internal implementation and useful for building hashtable using a time zone
+     * ID as a key.
+     * @param id zone id string
+     * @return the pointer of the ID resource, or NULL.
+     */
+    static const UChar* findID(const UnicodeString& id);
+
+    /**
      * Resolve a link in Olson tzdata.  When the given id is known and it's not a link,
      * the id itself is returned.  When the given id is known and it is a link, then
      * dereferenced zone id is returned.  When the given id is unknown, then it returns

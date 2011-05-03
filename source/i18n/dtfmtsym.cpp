@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2009, International Business Machines Corporation and    *
+* Copyright (C) 1997-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -35,8 +35,8 @@
 #include "gregoimp.h"
 #include "hash.h"
 #include "uresimp.h"
-#include "zstrfmt.h"
 #include "ureslocs.h"
+#include "tznames.h"
 
 // *****************************************************************************
 // class DateFormatSymbols
@@ -120,18 +120,19 @@ static const UChar gLastResortEras[2][3] =
     {0x0041, 0x0044, 0x0000}  /* "AD" */
 };
 
+// Not used now
+//// These are the zone strings of last resort.
+//static const UChar gLastResortZoneStrings[5][4] =
+//{
+//    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+//    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+//    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+//    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+//    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+//};
 
-// These are the zone strings of last resort.
-static const UChar gLastResortZoneStrings[7][4] =
-{
-    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
-    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
-    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
-    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
-    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
-    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
-    {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
-};
+static const UChar gLastResortGmtZero[] =
+    {0x0047, 0x004D, 0x0054, 0x0000}; /* GMT */
 
 static const UChar gLastResortGmtFormat[] =
     {0x0047, 0x004D, 0x0054, 0x007B, 0x0030, 0x007D, 0x0000}; /* GMT{0} */
@@ -189,6 +190,7 @@ static const char gAmPmMarkersTag[]="AmPmMarkers";
 static const char gQuartersTag[]="quarters";
 
 static const char gZoneStringsTag[]="zoneStrings";
+static const char gGmtZeroFormatTag[] = "gmtZeroFormat";
 static const char gGmtFormatTag[]="gmtFormat";
 static const char gHourFormatTag[]="hourFormat";
 
@@ -329,6 +331,7 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     assignArray(fShortQuarters, fShortQuartersCount, other.fShortQuarters, other.fShortQuartersCount);
     assignArray(fStandaloneQuarters, fStandaloneQuartersCount, other.fStandaloneQuarters, other.fStandaloneQuartersCount);
     assignArray(fStandaloneShortQuarters, fStandaloneShortQuartersCount, other.fStandaloneShortQuarters, other.fStandaloneShortQuartersCount);
+    fGmtZero = other.fGmtZero;
     fGmtFormat = other.fGmtFormat;
     assignArray(fGmtHourFormats, fGmtHourFormatsCount, other.fGmtHourFormats, other.fGmtHourFormatsCount);
  
@@ -344,10 +347,7 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     }
     fZSFLocale = other.fZSFLocale;
     // Other zone strings data is created on demand
-    fZoneStringFormat = NULL;
     fLocaleZoneStrings = NULL;
-    fZSFCachePtr = NULL;
-    fZSFLocal = NULL;
 
     // fastCopyFrom() - see assignArray comments
     fLocalPatternChars.fastCopyFrom(other.fLocalPatternChars);
@@ -410,21 +410,11 @@ void DateFormatSymbols::disposeZoneStrings()
         }
         uprv_free(fLocaleZoneStrings);
     }
-    if (fZSFLocal) {
-        delete fZSFLocal;
-    }
-    if (fZSFCachePtr) {
-        delete fZSFCachePtr;
-    }
 
     fZoneStrings = NULL;
     fLocaleZoneStrings = NULL;
     fZoneStringsRowCount = 0;
     fZoneStringsColCount = 0;
-
-    fZoneStringFormat = NULL;
-    fZSFLocal = NULL;
-    fZSFCachePtr = NULL;
 }
 
 UBool
@@ -469,6 +459,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fStandaloneQuartersCount == other.fStandaloneQuartersCount &&
         fStandaloneShortQuartersCount == other.fStandaloneShortQuartersCount &&
         fGmtHourFormatsCount == other.fGmtHourFormatsCount &&
+        fGmtZero == other.fGmtZero &&
         fGmtFormat == other.fGmtFormat)
     {
         // Now compare the arrays themselves
@@ -1033,41 +1024,6 @@ DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count
     fAmPmsCount = count;
 }
 
-//------------------------------------------------------
-const ZoneStringFormat*
-DateFormatSymbols::getZoneStringFormat(void) const {
-    umtx_lock(&LOCK);
-    if (fZoneStringFormat == NULL) {
-        ((DateFormatSymbols*)this)->initZoneStringFormat();
-    }
-    umtx_unlock(&LOCK);
-    return fZoneStringFormat;
-}
-
-void
-DateFormatSymbols::initZoneStringFormat(void) {
-    if (fZoneStringFormat == NULL) {
-        UErrorCode status = U_ZERO_ERROR;
-        if (fZoneStrings) {
-            // Create an istance of ZoneStringFormat by the custom zone strings array
-            fZSFLocal = new ZoneStringFormat(fZoneStrings, fZoneStringsRowCount,
-                fZoneStringsColCount, status);
-            if (U_FAILURE(status)) {
-                delete fZSFLocal;
-            } else {
-                fZoneStringFormat = (const ZoneStringFormat*)fZSFLocal;
-            }
-        } else {
-            fZSFCachePtr = ZoneStringFormat::getZoneStringFormat(fZSFLocale, status);
-            if (U_FAILURE(status)) {
-                delete fZSFCachePtr;
-            } else {
-                fZoneStringFormat = fZSFCachePtr->get();
-            }
-        }
-    }
-}
-
 const UnicodeString**
 DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
 {
@@ -1089,18 +1045,89 @@ DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
     return result;
 }
 
+// For now, we include all zones
+#define ZONE_SET UCAL_ZONE_TYPE_ANY
+
+// This code must be called within a synchronized block
 void
 DateFormatSymbols::initZoneStringsArray(void) {
-    if (fZoneStrings == NULL && fLocaleZoneStrings == NULL) {
-        if (fZoneStringFormat == NULL) {
-            initZoneStringFormat();
+    if (fZoneStrings != NULL || fLocaleZoneStrings != NULL) {
+        return;
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+
+    StringEnumeration *tzids = NULL;
+    UnicodeString ** zarray = NULL;
+    TimeZoneNames *tzNames = NULL;
+    int32_t rows = 0;
+
+    do { // dummy do-while
+
+        tzids = TimeZone::createTimeZoneIDEnumeration(ZONE_SET, NULL, NULL, status);
+        rows = tzids->count(status);
+        if (U_FAILURE(status)) {
+            break;
         }
-        if (fZoneStringFormat) {
-            UErrorCode status = U_ZERO_ERROR;
-            fLocaleZoneStrings = fZoneStringFormat->createZoneStringsArray(uprv_getUTCtime() /* use current time */,
-                fZoneStringsRowCount, fZoneStringsColCount, status);
+
+        // Allocate array
+        int32_t size = rows * sizeof(UnicodeString*);
+        zarray = (UnicodeString**)uprv_malloc(size);
+        if (zarray == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            break;
+        }
+        uprv_memset(zarray, 0, size);
+
+        tzNames = TimeZoneNames::createInstance(fZSFLocale, status);
+
+        const UnicodeString *tzid;
+        int32_t i = 0;
+        UDate now = Calendar::getNow();
+        UnicodeString tzDispName;
+
+        while ((tzid = tzids->snext(status))) {
+            if (U_FAILURE(status)) {
+                break;
+            }
+
+            zarray[i] = new UnicodeString[5];
+            if (zarray[i] == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
+
+            zarray[i][0].setTo(*tzid);
+            zarray[i][1].setTo(tzNames->getDisplayName(*tzid, UTZNM_LONG_STANDARD, now, tzDispName));
+            zarray[i][2].setTo(tzNames->getDisplayName(*tzid, UTZNM_SHORT_STANDARD, now, tzDispName));
+            zarray[i][3].setTo(tzNames->getDisplayName(*tzid, UTZNM_LONG_DAYLIGHT, now, tzDispName));
+            zarray[i][4].setTo(tzNames->getDisplayName(*tzid, UTZNM_SHORT_DAYLIGHT, now, tzDispName));
+            i++;
+        }
+
+    } while (FALSE);
+
+    if (U_FAILURE(status)) {
+        if (zarray) {
+            for (int32_t i = 0; i < rows; i++) {
+                if (zarray[i]) {
+                    delete[] zarray[i];
+                }
+            }
+            uprv_free(zarray);
         }
     }
+
+    if (tzNames) {
+        delete tzNames;
+    }
+    if (tzids) {
+        delete tzids;
+    }
+
+    fLocaleZoneStrings = zarray;
+    fZoneStringsRowCount = rows;
+    fZoneStringsColCount = 5;
 }
 
 void
@@ -1236,10 +1263,6 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fZoneStrings = NULL;
     fLocaleZoneStrings = NULL;
 
-    fZoneStringFormat = NULL;
-    fZSFLocal = NULL;
-    fZSFCachePtr = NULL;
-
     // We need to preserve the requested locale for
     // lazy ZoneStringFormat instantiation.  ZoneStringFormat
     // is region sensitive, thus, bundle locale bundle's locale
@@ -1318,6 +1341,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             initField(&fStandaloneQuarters, fStandaloneQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fGmtHourFormats, fGmtHourFormatsCount, (const UChar *)gLastResortGmtHourFormats, kGmtHourNum, kGmtHourLen, status);
+            fGmtZero.setTo(TRUE, gLastResortGmtZero, -1);
             fGmtFormat.setTo(TRUE, gLastResortGmtFormat, -1);
             fLocalPatternChars.setTo(TRUE, gPatternChars, PATTERN_CHARS_LEN);
         }
@@ -1381,6 +1405,12 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     if(status == U_MISSING_RESOURCE_ERROR) {
         status = U_ZERO_ERROR;
         initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, calData.getByKey2(gQuartersTag, gNamesAbbrTag, status), status);
+    }
+
+    // GMT zero
+    resStr = ures_getStringByKeyWithFallback(zoneStringsArray, gGmtZeroFormatTag, &len, &status);
+    if (len > 0) {
+        fGmtZero.setTo(TRUE, resStr, len);
     }
 
     // GMT format patterns

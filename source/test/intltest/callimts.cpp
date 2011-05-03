@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -105,7 +105,7 @@ CalendarLimitTest::TestCalendarExtremeLimit()
        return;
     }
     fmt->adoptCalendar(cal);
-    ((SimpleDateFormat*) fmt)->applyPattern("HH:mm:ss.SSS zzz, EEEE, MMMM d, yyyy G");
+    ((SimpleDateFormat*) fmt)->applyPattern("HH:mm:ss.SSS Z, EEEE, MMMM d, yyyy G");
 
 
     // This test used to test the algorithmic limits of the dates that

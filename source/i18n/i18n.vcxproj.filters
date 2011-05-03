@@ -312,9 +312,6 @@
     <ClCompile Include="zrule.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="zstrfmt.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
     <ClCompile Include="ztrans.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -471,6 +468,18 @@
     <ClCompile Include="alphaindex.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="tzfmt.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="tzgnames.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="tznames.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="tznames_impl.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bocsu.h">
@@ -608,9 +617,6 @@
     <ClInclude Include="zrule.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="zstrfmt.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="ztrans.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -742,6 +748,18 @@
     </ClInclude>
     <ClInclude Include="uspoof_wsconf.h">
       <Filter>spoof</Filter>
+    </ClInclude>
+    <ClInclude Include="tzfmt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="tzgnames.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="tznames.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="tznames_impl.h">
+      <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
