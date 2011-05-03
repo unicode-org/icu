@@ -276,6 +276,7 @@
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="ccaltst.c" />
+    <ClCompile Include="cdateintervalformattest.c" />
     <ClCompile Include="cdattst.c" />
     <ClCompile Include="cdtdptst.c" />
     <ClCompile Include="cdtrgtst.c" />
