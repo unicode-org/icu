@@ -1,5 +1,5 @@
 /********************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation and
+* Copyright (C) 2008-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -257,7 +257,7 @@ public:
      * "EEE, d MMM, yyyy - EEE, d MMM, yyyy" for year differs,
      * "EEE, d MMM - EEE, d MMM, yyyy" for month differs,
      * "EEE, d - EEE, d MMM, yyyy" for day differs,
-     * @param skeleton  the skeleton on which interval format based.
+     * @param skeleton  the skeleton on which the interval format is based.
      * @param locale    the given locale
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter which the caller owns.
@@ -488,6 +488,28 @@ public:
      * @stable ICU 4.0
      */
     const DateFormat* getDateFormat(void) const;
+
+    /**
+     * Returns a reference to the TimeZone used by this DateIntervalFormat's calendar.
+     * @return the time zone associated with the calendar of DateIntervalFormat.
+     * @draft ICU 4.8
+     */
+    virtual const TimeZone& getTimeZone(void) const;
+
+    /**
+     * Sets the time zone for the calendar used by this DateIntervalFormat object. The
+     * caller no longer owns the TimeZone object and should not delete it after this call.
+     * @param zoneToAdopt the TimeZone to be adopted.
+     * @draft ICU 4.8
+     */
+    virtual void adoptTimeZone(TimeZone* zoneToAdopt);
+
+    /**
+     * Sets the time zone for the calendar used by this DateIntervalFormat object.
+     * @param zone the new time zone.
+     * @draft ICU 4.8
+     */
+    virtual void setTimeZone(const TimeZone& zone);
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
