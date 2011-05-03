@@ -250,6 +250,7 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
 
 // External Things
 #include "unicode/appendable.h"
+#include "unicode/alphaindex.h"
 #include "unicode/brkiter.h"
 #include "unicode/calendar.h"
 #include "unicode/caniter.h"
@@ -291,6 +292,7 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
 #include "unicode/timezone.h"
 #include "unicode/translit.h"
 #include "unicode/uchriter.h"
+#include "unicode/uloc.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifunct.h"
 #include "unicode/uniset.h"
@@ -478,6 +480,7 @@ void UObjectTest::testIDs()
 //    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
 //#endif
 #endif
+    TESTCLASSID_NONE_CTOR(AlphabeticIndex, (Locale::getEnglish(), status));
 
 #if UOBJTEST_DUMP_IDS
     int i;
