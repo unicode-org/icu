@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -40,7 +40,7 @@ class LowercaseTransliterator extends Transliterator{
 
     private UCaseProps csp;
     private ReplaceableContextIterator iter;
-    private StringBuffer result;
+    private StringBuilder result;
     private int[] locCache;
 
     /**
@@ -52,7 +52,7 @@ class LowercaseTransliterator extends Transliterator{
         locale = loc;
         csp=UCaseProps.INSTANCE;
         iter=new ReplaceableContextIterator();
-        result = new StringBuffer();
+        result = new StringBuilder();
         locCache = new int[1];
         locCache[0]=0;
     }

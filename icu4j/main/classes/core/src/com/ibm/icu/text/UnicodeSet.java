@@ -3661,7 +3661,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     //  add the result of a full case mapping to the set
     //  use str as a temporary string to avoid constructing one
-    private static final void addCaseMapping(UnicodeSet set, int result, StringBuffer full) {
+    private static final void addCaseMapping(UnicodeSet set, int result, StringBuilder full) {
         if(result >= 0) {
             if(result > UCaseProps.MAX_STRING_LENGTH) {
                 // add a single-code point case mapping
@@ -3716,7 +3716,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
             int n = getRangeCount();
             int result;
-            StringBuffer full = new StringBuffer();
+            StringBuilder full = new StringBuilder();
             int locCache[] = new int[1];
 
             for (int i=0; i<n; ++i) {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, Google, International Business Machines Corporation
+ * Copyright (C) 2009-2011, Google, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -37,7 +37,7 @@ class CaseFoldTransliterator extends Transliterator{
 
     private UCaseProps csp;
     private ReplaceableContextIterator iter;
-    private StringBuffer result;
+    private StringBuilder result;
 
     /**
      * Constructs a transliterator.
@@ -47,7 +47,7 @@ class CaseFoldTransliterator extends Transliterator{
         super(_ID, null);
         csp=UCaseProps.INSTANCE;
         iter=new ReplaceableContextIterator();
-        result = new StringBuffer();
+        result = new StringBuilder();
     }
 
     /**

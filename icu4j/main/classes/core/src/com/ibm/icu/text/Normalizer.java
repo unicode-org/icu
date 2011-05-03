@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1374,7 +1374,7 @@ public final class Normalizer implements Cloneable {
         Normalizer2 nfkc=NFKCModeImpl.INSTANCE.normalizer2;
         UCaseProps csp=UCaseProps.INSTANCE;
         // first: b = NFKC(Fold(a))
-        StringBuffer folded=new StringBuffer();
+        StringBuilder folded=new StringBuilder();
         int folded1Length=csp.toFullFolding(c, folded, 0);
         if(folded1Length<0) {
             Normalizer2Impl nfkcImpl=((Norm2AllModes.Normalizer2WithImpl)nfkc).impl;
@@ -2025,7 +2025,7 @@ public final class Normalizer implements Cloneable {
         String decomp1, decomp2;
 
         /* case folding buffers, only use current-level start/limit */
-        StringBuffer fold1, fold2;
+        StringBuilder fold1, fold2;
 
         /* track which is the current level per string */
         int level1, level2;
@@ -2049,8 +2049,8 @@ public final class Normalizer implements Cloneable {
         }
         if((options&COMPARE_IGNORE_CASE)!=0) {
             csp=UCaseProps.INSTANCE;
-            fold1=new StringBuffer();
-            fold2=new StringBuffer();
+            fold1=new StringBuilder();
+            fold2=new StringBuilder();
         } else {
             csp=null;
             fold1=fold2=null;
