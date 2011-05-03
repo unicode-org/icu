@@ -276,6 +276,9 @@
     <ClCompile Include="udat.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="udateintervalformat.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="udatpg.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -925,6 +928,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\udat.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\udateintervalformat.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\udatpg.h">
