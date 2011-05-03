@@ -1455,7 +1455,7 @@ Test_WCHART_LongString(){
       for(j=0;j>=0&&j<reqLen;j++) {
         if(wDest[j]!=uSrc[j]) {
           log_verbose("Diff %04X vs %04X @ %d\n", wDest[j],uSrc[j],j);
-          j=-1;
+          break;
         }
       }
     }
