@@ -274,8 +274,8 @@ void DateIntervalFormatTest::testAPI() {
         DateInterval * dtitv12 = new DateInterval(date1, date2);
         TimeZone * tzCalif = TimeZone::createTimeZone("US/Pacific");
         TimeZone * tzTokyo = TimeZone::createTimeZone("Asia/Tokyo");
-        UnicodeString fmtCalif = UnicodeString("Mar 2 10:30 – Mar 2 17:30");
-        UnicodeString fmtTokyo = UnicodeString("Mar 3 03:30 – Mar 3 10:30");
+        UnicodeString fmtCalif = UnicodeString("Mar 2 10:30 \u2013 Mar 2 17:30");
+        UnicodeString fmtTokyo = UnicodeString("Mar 3 03:30 \u2013 Mar 3 10:30");
 
         dtitvfmt->adoptTimeZone(tzCalif);
         res.remove();
