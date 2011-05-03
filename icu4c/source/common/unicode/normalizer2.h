@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -175,8 +175,11 @@ public:
            UErrorCode &errorCode) const = 0;
 
     /**
-     * Gets the decomposition mapping of c. Equivalent to normalize(UnicodeString(c))
-     * on a UNORM2_DECOMPOSE Normalizer2 instance, but much faster.
+     * Gets the decomposition mapping of c.
+     * Roughly equivalent to normalizing the String form of c
+     * on a UNORM2_DECOMPOSE Normalizer2 instance, but much faster, and except that this function
+     * returns FALSE and does not write a string
+     * if c does not have a decomposition mapping in this instance's data.
      * This function is independent of the mode of the Normalizer2.
      * @param c code point
      * @param decomposition String object which will be set to c's
