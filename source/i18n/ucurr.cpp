@@ -32,6 +32,12 @@
 #include "stdio.h"
 #endif
 
+typedef struct IsoCodeEntry {
+    const UChar *isoCode; /* const because it's a reference to a resource bundle string. */
+    UDate from;
+    UDate to;
+} IsoCodeEntry;
+
 //------------------------------------------------------------
 // Constants
 

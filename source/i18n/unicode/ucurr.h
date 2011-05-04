@@ -243,12 +243,6 @@ typedef enum UCurrCurrencyType {
 U_STABLE UEnumeration * U_EXPORT2
 ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
 
-typedef struct IsoCodeEntry {
-    const UChar *isoCode; /* const because it's a reference to a resource bundle string. */
-    UDate from;
-    UDate to;
-} IsoCodeEntry;
-
 /** 
   * Queries if the given ISO 4217 3-letter code is available on the specified date range. 
   * 
@@ -257,7 +251,7 @@ typedef struct IsoCodeEntry {
   * When 'from' is U_DATE_MIN and 'to' is U_DATE_MAX, this method checks if the specified currency is available any time. 
   * If 'from' and 'to' are same UDate value, this method checks if the specified currency is available on that date.
   * 
-  * @param code 
+  * @param isoCode 
   *            The ISO 4217 3-letter code. 
   * 
   * @param from 
@@ -279,7 +273,7 @@ U_DRAFT UBool U_EXPORT2
 ucurr_isAvailable(const UChar* isoCode, 
              UDate from, 
              UDate to, 
-             UErrorCode* eErrorCode);
+             UErrorCode* errorCode);
 
 
 /** 
