@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2010, International Business Machines Corporation and
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -503,6 +503,9 @@ $(BUILDDIR)/%.spp: $(SPREPSRCDIR)/%.txt $(TOOLBINDIR)/gensprep$(TOOLEXEEXT) $(BU
 # BRK FILES
 
 #thaidict.brk: $(SRCDATADIR)/thaidict.brk
+#	$(RMV) $@ && ln -s $(BUILDDIR) $@
+
+#khmerdict.brk: $(SRCDATADIR)/khmerdict.brk
 #	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
 $(BRKBLDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(TOOLBINDIR)/genbrk$(TOOLEXEEXT) $(DAT_FILES)

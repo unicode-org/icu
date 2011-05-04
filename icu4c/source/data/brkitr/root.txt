@@ -17,5 +17,6 @@ root{
     }
     dictionaries{
         Thai:process(dependency){"thaidict.ctd"}
+        Khmr:process(dependency){"khmerdict.ctd"}
     }
 }
