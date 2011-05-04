@@ -888,7 +888,7 @@ public:
     *   Returns a shallow clone of the entire live input string with the UText current native index
     *   set to the beginning of the requested group.
     *
-    *   @param   group_Num   The capture group number.
+    *   @param   groupNum   The capture group number.
     *   @param   dest        The UText into which the input should be cloned, or NULL to create a new UText.
     *   @param   group_len   A reference to receive the length of the desired capture group
     *   @param   status      A reference to a UErrorCode to receive any errors.
@@ -1171,6 +1171,7 @@ public:
     *   UText parameter or by returning a shallow clone of the live input. Note that copying
     *   the entire input may cause significant performance and memory issues.
     *   @param dest The UText into which the input should be copied, or NULL to create a new UText
+    *   @param status error code
     *   @return dest if non-NULL, a shallow copy of the input text otherwise
     *
     *   @draft ICU 4.6
@@ -1201,6 +1202,8 @@ public:
    /** 
      * Identical to region(start, limit, status) but also allows a start position without
      *  resetting the region state.
+     * @param regionStart The region start
+     * @param regionLimit the limit of the region
      * @param startIndex  The (native) index within the region bounds at which to begin searches.
      * @param status A reference to a UErrorCode to receive any errors.
      *                If startIndex is not within the specified region bounds, 
@@ -1515,6 +1518,7 @@ public:
     *
     *  @param dest A mutable UText to which the results of the find-and-replace are appended.
     *               Must not be NULL.
+    *  @param status error cod
     *  @return  the destination string.
     *
     *  @draft ICU 4.6

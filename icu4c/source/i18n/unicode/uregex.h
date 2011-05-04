@@ -1280,6 +1280,9 @@ uregex_appendTail(URegularExpression    *regexp,
   *                        obtain the input string and with the position
   *                        of the last match within it.
   *   @param   dest        A mutable UText that will receive the result. Must not be NULL.
+  *
+  *   @param status        Error code
+  *
   *   @return              The destination UText.
   *
   *   @draft ICU 4.6
