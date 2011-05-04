@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -570,8 +570,10 @@ Normalizer2Impl::getDecomposition(UChar32 c, UChar buffer[4], int32_t &length) c
 
 void Normalizer2Impl::decomposeAndAppend(const UChar *src, const UChar *limit,
                                          UBool doDecompose,
+                                         UnicodeString &safeMiddle,
                                          ReorderingBuffer &buffer,
                                          UErrorCode &errorCode) const {
+    buffer.copyReorderableSuffixTo(safeMiddle);
     if(doDecompose) {
         decompose(src, limit, &buffer, errorCode);
         return;
@@ -584,6 +586,9 @@ void Normalizer2Impl::decomposeAndAppend(const UChar *src, const UChar *limit,
         prevCC=cc;
         cc=getCC(iter.next16());
     };
+    if(limit==NULL) {  // appendZeroCC() needs limit!=NULL
+        limit=u_strchr(iter.codePointStart, 0);
+    }
     buffer.append(src, (int32_t)(iter.codePointStart-src), firstCC, prevCC, errorCode) &&
         buffer.appendZeroCC(iter.codePointStart, limit, errorCode);
 }
@@ -1271,16 +1276,20 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
 void Normalizer2Impl::composeAndAppend(const UChar *src, const UChar *limit,
                                        UBool doCompose,
                                        UBool onlyContiguous,
+                                       UnicodeString &safeMiddle,
                                        ReorderingBuffer &buffer,
                                        UErrorCode &errorCode) const {
     if(!buffer.isEmpty()) {
         const UChar *firstStarterInSrc=findNextCompBoundary(src, limit);
-        if(src!=firstStarterInSrc) {
+        if(src==firstStarterInSrc) {
+            buffer.copyReorderableSuffixTo(safeMiddle);
+        } else {
             const UChar *lastStarterInDest=findPreviousCompBoundary(buffer.getStart(),
                                                                     buffer.getLimit());
-            UnicodeString middle(lastStarterInDest,
-                                 (int32_t)(buffer.getLimit()-lastStarterInDest));
-            buffer.removeSuffix((int32_t)(buffer.getLimit()-lastStarterInDest));
+            int32_t destSuffixLength=(int32_t)(buffer.getLimit()-lastStarterInDest);
+            UnicodeString middle(lastStarterInDest, destSuffixLength);
+            buffer.removeSuffix(destSuffixLength);
+            safeMiddle=middle;
             middle.append(src, (int32_t)(firstStarterInSrc-src));
             const UChar *middleStart=middle.getBuffer();
             compose(middleStart, middleStart+middle.length(), onlyContiguous,
@@ -1294,6 +1303,9 @@ void Normalizer2Impl::composeAndAppend(const UChar *src, const UChar *limit,
     if(doCompose) {
         compose(src, limit, onlyContiguous, TRUE, buffer, errorCode);
     } else {
+        if(limit==NULL) {  // appendZeroCC() needs limit!=NULL
+            limit=u_strchr(src, 0);
+        }
         buffer.appendZeroCC(src, limit, errorCode);
     }
 }
@@ -1650,16 +1662,20 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
 
 void Normalizer2Impl::makeFCDAndAppend(const UChar *src, const UChar *limit,
                                        UBool doMakeFCD,
+                                       UnicodeString &safeMiddle,
                                        ReorderingBuffer &buffer,
                                        UErrorCode &errorCode) const {
     if(!buffer.isEmpty()) {
         const UChar *firstBoundaryInSrc=findNextFCDBoundary(src, limit);
-        if(src!=firstBoundaryInSrc) {
+        if(src==firstBoundaryInSrc) {
+            buffer.copyReorderableSuffixTo(safeMiddle);
+        } else {
             const UChar *lastBoundaryInDest=findPreviousFCDBoundary(buffer.getStart(),
                                                                     buffer.getLimit());
-            UnicodeString middle(lastBoundaryInDest,
-                                 (int32_t)(buffer.getLimit()-lastBoundaryInDest));
-            buffer.removeSuffix((int32_t)(buffer.getLimit()-lastBoundaryInDest));
+            int32_t destSuffixLength=(int32_t)(buffer.getLimit()-lastBoundaryInDest);
+            UnicodeString middle(lastBoundaryInDest, destSuffixLength);
+            buffer.removeSuffix(destSuffixLength);
+            safeMiddle=middle;
             middle.append(src, (int32_t)(firstBoundaryInSrc-src));
             const UChar *middleStart=middle.getBuffer();
             makeFCD(middleStart, middleStart+middle.length(), &buffer, errorCode);
@@ -1672,6 +1688,9 @@ void Normalizer2Impl::makeFCDAndAppend(const UChar *src, const UChar *limit,
     if(doMakeFCD) {
         makeFCD(src, limit, &buffer, errorCode);
     } else {
+        if(limit==NULL) {  // appendZeroCC() needs limit!=NULL
+            limit=u_strchr(src, 0);
+        }
         buffer.appendZeroCC(src, limit, errorCode);
     }
 }
