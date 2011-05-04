@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2010, International Business Machines Corporation
+* Copyright (C) 2003-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -141,6 +141,10 @@ UBool IslamicCalendar::isCivil() {
 // Note: Current IslamicCalendar implementation does not work
 // well with negative years.
 
+// TODO: In some cases the current ICU Islamic calendar implementation shows
+// a month as having 31 days. Since date parsing now uses range checks based
+// on the table below, we need to change the range for last day of month to
+// include 31 as a workaround until the implementation is fixed.
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest    Least  Maximum
     //           Minimum  Maximum
@@ -149,7 +153,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {        0,        0,       11,       11}, // MONTH
     {        1,        1,       50,       51}, // WEEK_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
-    {        1,        1,       29,       30}, // DAY_OF_MONTH
+    {        1,        1,       29,       31}, // DAY_OF_MONTH - 31 to workaround for cal implementation bug, should be 30
     {        1,        1,      354,      355}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
     {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH

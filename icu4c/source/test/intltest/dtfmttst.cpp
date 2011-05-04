@@ -81,9 +81,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(41,Test6880);
         TESTCASE(42,TestISOEra);
         TESTCASE(43,TestFormalChineseDate);
+        TESTCASE(44,TestNumberAsStringParsing);
         /*
-        TESTCASE(43,TestRelativeError);
-        TESTCASE(44,TestRelativeOther);
+        TESTCASE(45,TestRelativeError);
+        TESTCASE(46,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -681,8 +682,9 @@ DateFormatTest::TestLetterDPattern212()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString dateString("1995-040.05:01:29");
+    UnicodeString ddateString("1995-02-09.05:01:29");
     UnicodeString bigD("yyyy-DDD.hh:mm:ss");
-    UnicodeString littleD("yyyy-ddd.hh:mm:ss");
+    UnicodeString littleD("yyyy-MM-dd.hh:mm:ss");
     UDate expLittleD = date(95, 0, 1, 5, 1, 29);
     UDate expBigD = expLittleD + 39 * 24 * 3600000.0;
     expLittleD = expBigD; // Expect the same, with default lenient parsing
@@ -696,14 +698,14 @@ DateFormatTest::TestLetterDPattern212()
     ParsePosition pos(0);
     UDate myDate = formatter->parse(dateString, pos);
     logln((UnicodeString)"Using " + bigD + " -> " + myDate);
-    if (myDate != expBigD) errln((UnicodeString)"FAIL: Expected " + dateToString(expBigD));
+    if (myDate != expBigD) errln((UnicodeString)"FAIL: bigD - Expected " + dateToString(expBigD));
     delete formatter;
     formatter = new SimpleDateFormat(littleD, status);
     ASSERT_OK(status);
     pos = ParsePosition(0);
-    myDate = formatter->parse(dateString, pos);
+    myDate = formatter->parse(ddateString, pos);
     logln((UnicodeString)"Using " + littleD + " -> " + dateToString(myDate));
-    if (myDate != expLittleD) errln((UnicodeString)"FAIL: Expected " + dateToString(expLittleD));
+    if (myDate != expLittleD) errln((UnicodeString)"FAIL: littleD - Expected " + dateToString(expLittleD));
     delete formatter;
     if (U_FAILURE(status)) errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
 }
@@ -859,6 +861,8 @@ static const char* const parseFormats[] = {
     "h:mm a MMMM d, yyyy"
 };
 
+#if 0
+// strict inputStrings
 static const char* const inputStrings[] = {
     "bogus string", 0, 0, 0, 0, 0, 0, 0, 0, 0,
     "April 1, 1997", "April 1, 1997", 0, 0, 0, 0, 0, "April 1", 0, 0,
@@ -872,7 +876,23 @@ static const char* const inputStrings[] = {
     "1", 0, 0, 0, 0, 0, 0, 0, "0001", 0,
     "3:00 pm Jan 1, 1997", 0, 0, 0, 0, 0, 0, 0, "0003", "3:00 PM January 1, 1997",
 };
-
+#else
+// lenient inputStrings
+static const char* const inputStrings[] = {
+    "bogus string", 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    "April 1, 1997", "April 1, 1997", "April 1 1997", "4/1/97", 0, 0, 0, "April 1", 0, 0,
+    "Jan 1, 1970", "January 1, 1970", "January 1 1970", "1/1/70", 0, 0, 0, "January 1", 0, 0,
+    "Jan 1 2037", "January 1, 2037", "January 1 2037", "1/1/37", 0, 0, 0, "January 1", 0, 0,
+    "1/1/70", "January 1, 1970", "January 1 1970", "1/1/70", "1 January, 1970", "1 January 1970", "1 January", "January 1", "0001", 0,
+    "5 May 1997", 0, 0, 0, "5 May, 1997", "5 May 1997", "5 May", 0, "0005", 0,
+    "16 May", 0, 0, 0, 0, 0, "16 May", 0, "2016", 0,
+    "April 30", 0, 0, 0, 0, 0, 0, "April 30", 0, 0,
+    "1998", 0, 0, 0, 0, 0, 0, 0, "1998", 0,
+    "1", 0, 0, 0, 0, 0, 0, 0, "0001", 0,
+    "3:00 pm Jan 1, 1997", 0, 0, 0, 0, 0, 0, 0, "0003", "3:00 PM January 1, 1997",
+};
+#endif
+ 
 // -------------------------------------
 
 /**
@@ -935,9 +955,9 @@ DateFormatTest::TestBadInput135a()
           ((DateFormat*)dateParse)->format(date, result);
           logln((UnicodeString)"Parsed \"" + s + "\" using \"" + dateParse->toPattern(thePat) + "\" to: " + result);
           if (expected == 0)
-            errln((UnicodeString)"FAIL: Expected parse failure");
+            errln((UnicodeString)"FAIL: Expected parse failure, got " + result);
           else if (!(result == expected))
-            errln(UnicodeString("FAIL: Expected ") + expected);
+            errln(UnicodeString("FAIL: Expected ") + expected + UnicodeString(", got ") + result);
         }
       }
       else if (expected != 0) {
@@ -1233,12 +1253,38 @@ void DateFormatTest::TestSpaceParsing() {
         "yyyy MM dd HH:mm:ss",
 
         // pattern, input, expected parse or NULL if expect parse failure
-        "MMMM d yy", " 04 05 06",  NULL, // MMMM wants Apr/April
-        NULL,        "04 05 06",   NULL,
-        "MM d yy",   " 04 05 06",  "2006 04 05 00:00:00",
+        "MMMM d yy", " 04 05 06",  "2006 04 05 00:00:00",
         NULL,        "04 05 06",   "2006 04 05 00:00:00",
+		
+        "MM d yy",   " 04 05 06",    "2006 04 05 00:00:00",
+        NULL,        "04 05 06",     "2006 04 05 00:00:00",
+        NULL,        "04/05/06",     "2006 04 05 00:00:00",
+        NULL,        "04-05-06",     "2006 04 05 00:00:00",
+        NULL,        "04.05.06",     "2006 04 05 00:00:00",
+        NULL,        "04 / 05 / 06", "2006 04 05 00:00:00",
+        NULL,        "Apr / 05/ 06", "2006 04 05 00:00:00",
+        NULL,        "Apr-05-06",    "2006 04 05 00:00:00",
+        NULL,        "Apr 05, 2006", "2006 04 05 00:00:00",
+		
         "MMMM d yy", " Apr 05 06", "2006 04 05 00:00:00",
         NULL,        "Apr 05 06",  "2006 04 05 00:00:00",
+		NULL,        "Apr05 06",   "2006 04 05 00:00:00",
+		
+		"hh:mm:ss a", "12:34:56 PM", "1970 01 01 12:34:56",
+		NULL,         "12:34:56PM",  "1970 01 01 12:34:56",
+        NULL,         "12.34.56PM",  "1970 01 01 12:34:56",
+        NULL,         "12-34-56 PM", "1970 01 01 12:34:56",
+		NULL,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
+        
+        "MM d yy 'at' hh:mm:ss a", "04/05/06 12:34:56 PM", "2006 04 05 12:34:56",
+        
+        "MMMM dd yyyy hh:mm a", "September 27, 1964 21:56 PM", "1964 09 28 09:56:00",
+        NULL,                   "November 4, 2008 0:13 AM",    "2008 11 04 00:13:00",
+        
+        "HH'h'mm'min'ss's'", "12h34min56s", "1970 01 01 12:34:56",
+        NULL,                "12h34mi56s",  "1970 01 01 12:34:56",
+        NULL,                "12h34m56s",   "1970 01 01 12:34:56",
+        NULL,                "12:34:56",    "1970 01 01 12:34:56"
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
 
@@ -2032,8 +2078,8 @@ void DateFormatTest::TestZTimeZoneParsing(void) {
         pp.setIndex(0);
         UDate d = univ.parse(tests[i].input, pp);
         if(pp.getIndex() != tests[i].input.length()){
-            errln("setZoneString() did not succeed. Consumed: %i instead of %i",
-                  pp.getIndex(), tests[i].input.length());
+            errln("Test %i: setZoneString() did not succeed. Consumed: %i instead of %i",
+                  i, pp.getIndex(), tests[i].input.length()); 
             return;
         }
         result.remove();
@@ -3409,6 +3455,32 @@ void DateFormatTest::Test6880() {
     }
 
     delete fmt;
+}
+
+void DateFormatTest::TestNumberAsStringParsing()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString dateString("2009 7 2 08:14:16");
+    UnicodeString datePattern("y MMMM d HH:mm:ss");
+    SimpleDateFormat *formatter = new SimpleDateFormat(datePattern, Locale(""), status);
+    UDate date1 = 0;
+    
+    formatter->setLenient(FALSE);
+    date1 = formatter->parse(dateString, status);
+    
+    if (U_FAILURE(status)) {
+        errln("FAIL: Could not parse \"2009 7 2 08:14:16\" with pattern \"y MMMM d HH:mm:ss\"");
+    } else {
+        UnicodeString formatted;
+        
+        formatter->format(date1, formatted);
+        
+        if (formatted != dateString) {
+            errln("FAIL: parsed string did not match input.");
+        }
+    }
+        
+    delete formatter;
 }
 
 void DateFormatTest::TestISOEra() { 

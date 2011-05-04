@@ -46,6 +46,7 @@ class DigitList;
 class ChoiceFormat;
 class CurrencyPluralInfo;
 class Hashtable;
+class UnicodeSet;
 class FieldPositionHandler;
 
 /**
@@ -350,7 +351,8 @@ class FieldPositionHandler;
  * DecimalFormatSymbols object.  During formatting, the
  * DecimalFormatSymbols-based digits are output.
  *
- * <p>During parsing, grouping separators are ignored.
+ * <p>During parsing, grouping separators are ignored if in lenient mode;
+ * otherwise, if present, they must be in appropriate positions.
  *
  * <p>For currency parsing, the formatter is able to parse every currency
  * style formats no matter which style the formatter is constructed with.
@@ -1982,7 +1984,8 @@ private:
 
     static int32_t compareSimpleAffix(const UnicodeString& affix,
                                       const UnicodeString& input,
-                                      int32_t pos);
+                                      int32_t pos,
+                                      UBool lenient);
 
     static int32_t skipPatternWhiteSpace(const UnicodeString& text, int32_t pos);
 
@@ -1997,6 +2000,9 @@ private:
     static int32_t match(const UnicodeString& text, int32_t pos, UChar32 ch);
 
     static int32_t match(const UnicodeString& text, int32_t pos, const UnicodeString& str);
+
+    static UBool matchSymbol(const UnicodeString &text, int32_t position, int32_t length, const UnicodeString &symbol,
+                             UnicodeSet *sset, UChar32 schar);
 
     /**
      * Get a decimal format symbol.
