@@ -1281,9 +1281,7 @@ void Normalizer2Impl::composeAndAppend(const UChar *src, const UChar *limit,
                                        UErrorCode &errorCode) const {
     if(!buffer.isEmpty()) {
         const UChar *firstStarterInSrc=findNextCompBoundary(src, limit);
-        if(src==firstStarterInSrc) {
-            buffer.copyReorderableSuffixTo(safeMiddle);
-        } else {
+        if(src!=firstStarterInSrc) {
             const UChar *lastStarterInDest=findPreviousCompBoundary(buffer.getStart(),
                                                                     buffer.getLimit());
             int32_t destSuffixLength=(int32_t)(buffer.getLimit()-lastStarterInDest);
@@ -1667,9 +1665,7 @@ void Normalizer2Impl::makeFCDAndAppend(const UChar *src, const UChar *limit,
                                        UErrorCode &errorCode) const {
     if(!buffer.isEmpty()) {
         const UChar *firstBoundaryInSrc=findNextFCDBoundary(src, limit);
-        if(src==firstBoundaryInSrc) {
-            buffer.copyReorderableSuffixTo(safeMiddle);
-        } else {
+        if(src!=firstBoundaryInSrc) {
             const UChar *lastBoundaryInDest=findPreviousFCDBoundary(buffer.getStart(),
                                                                     buffer.getLimit());
             int32_t destSuffixLength=(int32_t)(buffer.getLimit()-lastBoundaryInDest);
