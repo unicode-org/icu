@@ -910,7 +910,23 @@ private:
      */
     int32_t matchQuarterString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
                                const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
-
+    
+    /**
+     * Private function used by subParse to match literal pattern text.
+     *
+     * @param pattern the pattern string
+     * @param patternOffset the starting offset into the pattern text. On
+     *        outupt will be set the offset of the first non-literal character in the pattern
+     * @param text the text being parsed
+     * @param textOffset the starting offset into the text. On output
+     *                   will be set to the offset of the character after the match
+     * @param lenient <code>TRUE</code> if the parse is lenient, <code>FALSE</code> otherwise.
+     *
+     * @return <code>TRUE</code> if the literal text could be matched, <code>FALSE</code> otherwise.
+     */
+    static UBool matchLiterals(const UnicodeString &pattern, int32_t &patternOffset,
+                               const UnicodeString &text, int32_t &textOffset, UBool lenient);
+    
     /**
      * Private member function that converts the parsed date strings into
      * timeFields. Returns -start (for ParsePosition) if failed.

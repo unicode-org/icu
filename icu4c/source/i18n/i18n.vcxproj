@@ -284,6 +284,7 @@
     <ClCompile Include="datefmt.cpp" />
     <ClCompile Include="dcfmtsym.cpp" />
     <ClCompile Include="decContext.c" />
+    <ClCompile Include="decfmtst.cpp" />
     <ClCompile Include="decimfmt.cpp" />
     <ClCompile Include="decNumber.c" />
     <ClCompile Include="digitlst.cpp" />
@@ -323,6 +324,7 @@
     <ClCompile Include="selfmt.cpp" />
     <ClCompile Include="simpletz.cpp" />
     <ClCompile Include="smpdtfmt.cpp" />
+    <ClCompile Include="smpdtfst.cpp" />
     <ClCompile Include="taiwncal.cpp" />
     <ClCompile Include="timezone.cpp" />
     <ClCompile Include="tmunit.cpp" />
@@ -733,6 +735,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="decContext.h" />
+    <ClInclude Include="decfmtst.h" />
     <CustomBuild Include="unicode\decimfmt.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
@@ -1104,6 +1107,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="smpdtfst.h" />
     <ClInclude Include="taiwncal.h" />
     <CustomBuild Include="unicode\timezone.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode

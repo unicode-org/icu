@@ -114,6 +114,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(48,TestCurrencyFractionDigits);
         CASE(49,TestExponentParse); 
         CASE(50,TestExplicitParents); 
+        CASE(51,TestLenientParse);
         default: name = ""; break;
     }
 }
@@ -845,6 +846,234 @@ NumberFormatTest::TestParse(void)
     //catch(Exception e) {
     //    errln((UnicodeString)"Exception caught: " + e);
     //}
+}
+
+// -------------------------------------
+
+static const char *lenientAffixTestCases[] = {
+		"(1)",
+		"( 1)",
+		"(1 )",
+		"( 1 )"
+};
+
+static const char *lenientMinusTestCases[] = {
+    "-5",
+    "\\u22125",
+    "\\u20105"
+};
+
+static const char *lenientCurrencyTestCases[] = {
+		"$1,000",
+		"$ 1,000",
+		"$1000",
+		"$ 1000",
+		"$1 000.00",
+		"$ 1 000.00",
+		"$ 1\\u00A0000.00",
+		"1000.00"
+};
+
+static const char *lenientNegativeCurrencyTestCases[] = {
+		"($1,000)",
+		"($ 1,000)",
+		"($1000)",
+		"($ 1000)",
+		"($1 000.00)",
+		"($ 1 000.00)",
+		"( $ 1,000.00 )",
+		"($ 1\\u00A0000.00)",
+		"(1000.00)"
+};
+
+static const char *lenientPercentTestCases[] = {
+		"25%",
+		" 25%",
+		" 25 %",
+		"25 %",
+		"25\\u00A0%",
+		"25"
+};
+
+static const char *lenientNegativePercentTestCases[] = {
+		"-25%",
+		" -25%",
+		" - 25%",
+		"- 25 %",
+		" - 25 %",
+		"-25 %",
+		"-25\\u00A0%",
+		"-25",
+		"- 25"
+};
+
+static const char *strictFailureTestCases[] = {
+		" 1000",
+		"10,00",
+		"1,000,.0"
+};
+
+#define ARRAY_SIZE(array) ((int32_t) (sizeof (array) / sizeof(array[0])))
+
+/**
+ * Test lenient parsing.
+ */
+void
+NumberFormatTest::TestLenientParse(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat *format = new DecimalFormat("(#,##0)", status);
+    Formattable n;
+
+    format->setLenient(TRUE);
+    for (int32_t t = 0; t < ARRAY_SIZE (lenientAffixTestCases); t += 1) {
+    	UnicodeString testCase = ctou(lenientAffixTestCases[t]);
+
+        format->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+
+        if (U_FAILURE(status) || n.getType() != Formattable::kLong ||
+        	n.getLong() != 1) {
+        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientAffixTestCases[t] + (UnicodeString) "\"");
+        	status = U_ZERO_ERROR;
+        }
+   }
+
+    delete format;
+
+    Locale en_US("en_US");
+    Locale sv_SE("sv_SE");
+    
+    NumberFormat *mFormat = NumberFormat::createInstance(sv_SE, UNUM_DECIMAL, status);
+    
+    mFormat->setLenient(TRUE);
+    for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
+        UnicodeString testCase = ctou(lenientMinusTestCases[t]);
+        
+        mFormat->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+        
+        if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
+            errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
+            status = U_ZERO_ERROR;
+        }
+    }
+    
+    delete mFormat;
+    
+    mFormat = NumberFormat::createInstance(en_US, UNUM_DECIMAL, status);
+    
+    mFormat->setLenient(TRUE);
+    for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
+        UnicodeString testCase = ctou(lenientMinusTestCases[t]);
+        
+        mFormat->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+        
+        if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
+            errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
+            status = U_ZERO_ERROR;
+        }
+    }
+    
+    delete mFormat;
+    
+    NumberFormat *cFormat = NumberFormat::createInstance(en_US, UNUM_CURRENCY, status);
+
+    cFormat->setLenient(TRUE);
+    for (int32_t t = 0; t < ARRAY_SIZE (lenientCurrencyTestCases); t += 1) {
+    	UnicodeString testCase = ctou(lenientCurrencyTestCases[t]);
+
+        cFormat->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+
+        if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
+        	n.getLong() != 1000) {
+        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientCurrencyTestCases[t] + (UnicodeString) "\"");
+        	status = U_ZERO_ERROR;
+        }
+   }
+
+    for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativeCurrencyTestCases); t += 1) {
+    	UnicodeString testCase = ctou(lenientNegativeCurrencyTestCases[t]);
+
+        cFormat->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+
+        if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
+        	n.getLong() != -1000) {
+        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativeCurrencyTestCases[t] + (UnicodeString) "\"");
+        	status = U_ZERO_ERROR;
+        }
+   }
+
+    delete cFormat;
+
+    NumberFormat *pFormat = NumberFormat::createPercentInstance(en_US, status);
+
+    pFormat->setLenient(TRUE);
+    for (int32_t t = 0; t < ARRAY_SIZE (lenientPercentTestCases); t += 1) {
+    	UnicodeString testCase = ctou(lenientPercentTestCases[t]);
+
+    	pFormat->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getDouble());
+
+        if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
+        	n.getDouble() != 0.25) {
+        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientPercentTestCases[t] + (UnicodeString) "\"");
+        	status = U_ZERO_ERROR;
+        }
+   }
+
+    for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativePercentTestCases); t += 1) {
+    	UnicodeString testCase = ctou(lenientNegativePercentTestCases[t]);
+
+    	pFormat->parse(testCase, n, status);
+        logln((UnicodeString)"parse(" + testCase + ") = " + n.getDouble());
+
+        if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
+        	n.getDouble() != -0.25) {
+        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativePercentTestCases[t] + (UnicodeString) "\"");
+        	status = U_ZERO_ERROR;
+        }
+   }
+
+   delete pFormat;
+
+   // Test cases that should fail with a strict parse and pass with a
+   // lenient parse.
+   NumberFormat *nFormat = NumberFormat::createInstance(en_US, status);
+
+   // first, make sure that they fail with a strict parse
+   for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
+	   UnicodeString testCase = ctou(strictFailureTestCases[t]);
+
+	   nFormat->parse(testCase, n, status);
+	   logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+
+	   if (! U_FAILURE(status)) {
+		   errln((UnicodeString)"Strict Parse succeeded for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
+	   }
+
+	   status = U_ZERO_ERROR;
+   }
+
+   // then, make sure that they pass with a lenient parse
+   nFormat->setLenient(TRUE);
+   for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
+	   UnicodeString testCase = ctou(strictFailureTestCases[t]);
+
+	   nFormat->parse(testCase, n, status);
+	   logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+
+	   if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
+	        	n.getLong() != 1000) {
+		   errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
+		   status = U_ZERO_ERROR;
+	   }
+   }
+
+   delete nFormat;
 }
 
 // -------------------------------------
@@ -2630,40 +2859,60 @@ void NumberFormatTest::TestNonpositiveMultiplier() {
     //expect2(df, java.math.BigDecimal.valueOf(Long.MIN_VALUE), java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
 }
 
+typedef struct {
+    const char * stringToParse;
+    int          parsedPos;
+    int          errorIndex;
+    UBool        lenient;
+} TestSpaceParsingItem;
 
 void
 NumberFormatTest::TestSpaceParsing() {
     // the data are:
     // the string to be parsed, parsed position, parsed error index
-    const char* DATA[][3] = {
-        {"$124", "4", "-1"},
-        {"$124 $124", "4", "-1"},
-        {"$124 ", "4", "-1"},
-        //{"$ 124 ", "5", "-1"}, // TODO: need to handle space correctly
-        //{"$\\u00A0124 ", "5", "-1"}, // TODO: need to handle space correctly
-        {"$ 124 ", "0", "0"},
-        {"$\\u00A0124 ", "0", "0"},
-        {" $ 124 ", "0", "0"}, // TODO: need to handle space correctly
-        {"124$", "0", "3"}, // TODO: need to handle space correctly
-        // {"124 $", "5", "-1"},  TODO: OK or not, need currency spacing rule
-        {"124 $", "0", "3"},
+    const TestSpaceParsingItem DATA[] = {
+        // TOTO: Update the following TODOs, some may be handled now
+        {"$124",           4, -1, FALSE},
+        {"$124 $124",      4, -1, FALSE},
+        {"$124 ",          4, -1, FALSE},
+        //{"$ 124 ",       5, -1, FALSE}, // TODO: need to handle space correctly
+        //{"$\\u00A0124 ", 5, -1, FALSE}, // TODO: need to handle space correctly
+        {"$ 124 ",         0,  1, FALSE}, // errorIndex used to be 0, now 1 (better)
+        {"$\\u00A0124 ",   0,  1, FALSE}, // errorIndex used to be 0, now 1 (better)
+        {" $ 124 ",        0,  0, FALSE}, // TODO: need to handle space correctly
+        {"124$",           0,  3, FALSE}, // TODO: need to handle space correctly
+        // {"124 $",       5, -1, FALSE}, // TODO: OK or not, need currency spacing rule
+        {"124 $",          0,  3, FALSE},
+        {"$124",           4, -1, TRUE},
+        {"$124 $124",      4, -1, TRUE},
+        {"$124 ",          4, -1, TRUE},
+        {"$ 124 ",         5, -1, TRUE},
+        {"$\\u00A0124 ",   5, -1, TRUE},
+        {" $ 124 ",        6, -1, TRUE},
+        //{"124$",         4, -1, TRUE}, // TODO: need to handle trailing currency correctly
+        {"124$",           3, -1, TRUE},
+        //{"124 $",        5, -1, TRUE}, // TODO: OK or not, need currency spacing rule
+        {"124 $",          4, -1, TRUE},
     };
     UErrorCode status = U_ZERO_ERROR;
-    NumberFormat* foo = NumberFormat::createCurrencyInstance(status);
+    Locale locale("en_US");
+    NumberFormat* foo = NumberFormat::createCurrencyInstance(locale, status);
+
     if (U_FAILURE(status)) {
         delete foo;
         return;
     }
     for (uint32_t i = 0; i < sizeof(DATA)/sizeof(DATA[0]); ++i) {
         ParsePosition parsePosition(0);
-        UnicodeString stringToBeParsed = ctou(DATA[i][0]);
-        int parsedPosition = atoi(DATA[i][1]);
-        int errorIndex = atoi(DATA[i][2]);
+        UnicodeString stringToBeParsed = ctou(DATA[i].stringToParse);
+        int parsedPosition = DATA[i].parsedPos;
+        int errorIndex = DATA[i].errorIndex;
+        foo->setLenient(DATA[i].lenient);
         Formattable result;
         foo->parse(stringToBeParsed, result, parsePosition);
         if (parsePosition.getIndex() != parsedPosition ||
             parsePosition.getErrorIndex() != errorIndex) {
-            errln("FAILED parse " + stringToBeParsed + "; wrong position, expected: (" + parsedPosition + ", " + errorIndex + "); got (" + parsePosition.getIndex() + ", " + parsePosition.getErrorIndex() + ")");
+            errln("FAILED parse " + stringToBeParsed + "; lenient: " + DATA[i].lenient + "; wrong position, expected: (" + parsedPosition + ", " + errorIndex + "); got (" + parsePosition.getIndex() + ", " + parsePosition.getErrorIndex() + ")");
         }
         if (parsePosition.getErrorIndex() == -1 &&
             result.getType() == Formattable::kLong &&
@@ -6198,7 +6447,7 @@ void NumberFormatTest::TestExponentParse() {
     // create format instance 
     status = U_ZERO_ERROR; 
     DecimalFormat fmt("#####", symbols, status); 
- 	if(U_FAILURE(status)) { 
+    if(U_FAILURE(status)) { 
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (pattern, symbols*)"); 
     } 
     
