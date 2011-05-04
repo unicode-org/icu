@@ -1704,7 +1704,7 @@ typedef struct {
 static const UChar tzUSPacific[] = { 0x55,0x53,0x2F,0x50,0x61,0x63,0x69,0x66,0x69,0x63,0 }; /* "US/Pacific" */
 
 static const TFDItem tfdItems[] = {
-    /* timezone    locale   start            target             yDf MDf dDf HDf mDf
+    /* timezone    locale   start            target             yDf MDf dDf HDf mDf  */
     { tzUSPacific, "en_US", 1267459800000.0, 1277772600000.0,    0,  3, 27,  9, 40 }, /* 2010-Mar-01 08:10 -> 2010-Jun-28 17:50 */
     { tzUSPacific, "en_US", 1267459800000.0, 1299089280000.0,    1,  0,  1,  1, 58 }, /* 2010-Mar-01 08:10 -> 2011-Mar-02 10:08 */
     { NULL,        NULL,    0.0,             0.0,                0,  0,  0,  0,  0 }  /* terminator */

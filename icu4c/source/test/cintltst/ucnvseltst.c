@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2010, International Business Machines
+ * Copyright (c) 1997-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -506,7 +506,6 @@ static void TestSelector()
 
 /* Improve code coverage of UPropsVectors */
 static void TestUPropsVector() {
-    uint32_t value;
     UErrorCode errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     UPropsVectors *pv = upvec_open(100, &errorCode);
     if (pv != NULL) {
