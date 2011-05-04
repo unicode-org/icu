@@ -1255,16 +1255,6 @@ TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID) {
     return znames;
 }
 
-static void convertTzToCLDRFomat(const UnicodeString& tzID, char* result) {
-    int32_t len = tzID.length();
-    for (int32_t i = 0; i < len; i++) {
-        char c = (char)tzID.charAt(i);
-        if (c == '/') c = ':';  // Reaplce '/' with ':'
-        result[i] = c;
-    }
-    result[len] = '\0';
-}
-
 /*
  * This method updates the cache and must be called with a lock
  */
@@ -1287,7 +1277,13 @@ TimeZoneNamesImpl::loadTimeZoneNames(const UnicodeString& tzID) {
         char key[ZID_KEY_MAX + 1];
         UErrorCode status = U_ZERO_ERROR;
         // Replace "/" with ":".
-        convertTzToCLDRFomat(tzID, key);
+        UnicodeString uKey(tzID);
+        for (int32_t i = 0; i < uKey.length(); i++) {
+            if (uKey.charAt(i) == (UChar)0x2F) {
+                uKey.setCharAt(i, (UChar)0x3A);
+            }
+        }
+        uKey.extract(0, uKey.length(), key, sizeof(key), US_INV);
         tznames = TZNames::createInstance(fZoneStrings, key);
 
         if (tznames == NULL) {
