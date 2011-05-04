@@ -86,9 +86,10 @@ class PluralKeywordEnumeration;
  * and_condition = relation ('and' relation)*
  * relation      = is_relation | in_relation | within_relation | 'n' <EOL>
  * is_relation   = expr 'is' ('not')? value
- * in_relation   = expr ('not')? 'in' range
+ * in_relation   = expr ('not')? 'in' range_list
  * within_relation = expr ('not')? 'within' range
  * expr          = 'n' ('mod' value)?
+ * range_list    = (range | value) (',' range_list)*
  * value         = digit+
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
