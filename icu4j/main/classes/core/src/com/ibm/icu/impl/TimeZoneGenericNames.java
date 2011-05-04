@@ -754,14 +754,16 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         TimeType timeType = TimeType.UNKNOWN;
         switch (matchInfo.nameType()) {
         case LONG_STANDARD:
+            nameType = GenericNameType.LONG;
             timeType = TimeType.STANDARD;
-            //$FALL-THROUGH$
+            break;
         case LONG_GENERIC:
             nameType = GenericNameType.LONG;
             break;
         case SHORT_STANDARD_COMMONLY_USED:
+            nameType = GenericNameType.SHORT;
             timeType = TimeType.STANDARD;
-            //$FALL-THROUGH$
+            break;
         case SHORT_GENERIC:
             nameType = GenericNameType.SHORT;
             break;
