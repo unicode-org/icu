@@ -600,6 +600,25 @@ public:
     virtual void setParseIntegerOnly(UBool value);
 
     /**
+     * Sets whether lenient parsing should be enabled (it is off by default).
+     *
+     * @param enable <code>TRUE</code> if lenient parsing should be used,
+     *               <code>FALSE</code> otherwise.
+     * @draft ICU 4.8
+     */
+    virtual void setLenient(UBool enable);
+
+    /**
+     * Returns whether lenient parsing is enabled (it is off by default).
+     *
+     * @return <code>TRUE</code> if lenient parsing is enabled,
+     *         <code>FALSE</code> otherwise.
+     * @see #setLenient
+     * @draft ICU 4.8
+     */
+    virtual UBool isLenient(void) const;
+
+    /**
      * Returns the default number format for the current default
      * locale.  The default format is one of the styles provided by
      * the other factory methods: getNumberInstance,
@@ -920,6 +939,7 @@ private:
     int32_t     fMaxFractionDigits;
     int32_t     fMinFractionDigits;
     UBool      fParseIntegerOnly;
+    UBool      fLenient; // TRUE => lenient parse is enabled
 
     // ISO currency code
     UChar      fCurrency[4];
@@ -1019,6 +1039,12 @@ inline UBool
 NumberFormat::isParseIntegerOnly() const
 {
     return fParseIntegerOnly;
+}
+
+inline UBool
+NumberFormat::isLenient() const
+{
+	return fLenient;
 }
 
 inline UnicodeString&

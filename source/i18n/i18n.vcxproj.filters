@@ -129,6 +129,9 @@
     <ClCompile Include="decContext.c">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="decfmtst.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="decimfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -244,6 +247,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="smpdtfmt.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="smpdtfst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="taiwncal.cpp">
@@ -533,6 +539,9 @@
     <ClInclude Include="decContext.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="decfmtst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="decNumber.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -594,6 +603,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="reldtfmt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="smpdtfst.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="taiwncal.h">

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -65,6 +65,10 @@ static void TestRBNFFormat(void);
  **/
 static void TestCurrencyRegression(void);
 
+/**
+ * Test strict parsing of "0"
+ **/
+static void TestParseZero(void);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
