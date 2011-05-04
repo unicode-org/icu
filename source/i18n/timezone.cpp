@@ -642,9 +642,9 @@ private:
     // then our results are zone[i] for i=0..len-1.  Len will be zero
     // if the zone data could not be loaded.
     int32_t* map;
+    int32_t* localMap;
     int32_t  len;
     int32_t  pos;
-    int32_t* localMap;
 
     TZEnumeration(int32_t* mapData, int32_t mapLen, UBool adoptMapData) : pos(0) {
         map = mapData;

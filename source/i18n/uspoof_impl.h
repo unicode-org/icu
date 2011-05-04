@@ -301,7 +301,7 @@ class SpoofData: public UMemory {
                                                     //  to be deleted when refcount goes to zero.
     UDataMemory                 *fUDM;              // If not NULL, our data came from a
                                                     //   UDataMemory, which we must close when
-                                                    //   we're done.
+                                                    //   we are done.
 
     uint32_t                    fMemLimit;          // Limit of available raw data space
     int32_t                     fRefCount;

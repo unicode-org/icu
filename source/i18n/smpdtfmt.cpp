@@ -342,8 +342,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
-    fTimeZoneFormat(NULL),
     fSymbols(symbolsToAdopt),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -410,8 +410,8 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(gDefaultPattern),
     fLocale(locale),
-    fTimeZoneFormat(NULL),
     fSymbols(NULL),
+    fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL)
@@ -3092,6 +3092,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                     } else {
                         tzFormat()->parse(UTZFMT_STYLE_LOCATION, text, tmpPos, parsedID, &parsedTimeType);
                     }
+                    break;
+                default:
                     break;
                 }
                 if (tmpPos.getErrorIndex() < 0) {

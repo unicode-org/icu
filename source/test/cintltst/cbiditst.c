@@ -4107,10 +4107,10 @@ assertIllegalArgument(const char* message, UErrorCode* rc) {
 }
 
 typedef struct {
-    char* prologue;
-    char* source;
-    char* epilogue;
-    char* expected;
+    const char* prologue;
+    const char* source;
+    const char* epilogue;
+    const char* expected;
     UBiDiLevel paraLevel;
 } contextCase;
 

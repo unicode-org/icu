@@ -6280,7 +6280,6 @@ static void TestReorderingAcrossCloning()
     int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
     UCollator *clonedCollation;
     int32_t bufferSize;
-    int32_t* buffer;
     int32_t retrievedReorderCodesLength;
     int32_t retrievedReorderCodes[10];
     int loopIndex;

@@ -1641,7 +1641,7 @@ const char *cPattern = "maketh houndes ete hem";
     TEST_ASSERT_M(refMatchPos == icuMatchPos, "strstr and icu give different match positions.");
 
     int32_t i;
-    int32_t j=0;
+    // int32_t j=0;
 
     // Try loopcounts around 100000 to some millions, depending on the operation,
     //   to get runtimes of at least several seconds.
