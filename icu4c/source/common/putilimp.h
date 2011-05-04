@@ -253,7 +253,7 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
  * - return the largest possible pointer greater than base
  * - return a valid pointer according to the machine architecture (AS/400, 64-bit, etc.)
  * - avoid wrapping around at high addresses
- * - make sure that the returned pointer is not farther from base than 0x7fffffff
+ * - make sure that the returned pointer is not farther from base than 0x7fffffff bytes
  *
  * @param base The beginning of a buffer to find the maximum offset from
  * @internal
@@ -264,23 +264,27 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
 #    define U_MAX_PTR(base) ((void *)0x7fffffff)
 #  elif defined(OS400)
 #    define U_MAX_PTR(base) uprv_maximumPtr((void *)base)
-#  elif defined(__GNUC__) && __GNUC__ >= 4
-/*
- * Due to a compiler optimization bug, gcc 4 causes test failures when doing
- * this math arithmetic on pointers on some platforms. It seems like the
- * pointers are considered signed instead of unsigned. The uintptr_t type
- * isn't available on all platforms (i.e MSVC 6) and pointers aren't always
- * a scalar value (i.e. i5/OS see uprv_maximumPtr function).
- */
+#  elif 0
+    /*
+     * For platforms where pointers are scalar values (which is normal, but unlike i5/OS)
+     * but that do not define uintptr_t.
+     *
+     * However, this does not work on modern compilers:
+     * The C++ standard does not define pointer overflow, and allows compilers to
+     * assume that p+u>p for any pointer p and any integer u>0.
+     * Thus, modern compilers optimize away the ">" comparison.
+     * (See ICU tickets #7187 and #8096.)
+     */
+#    define U_MAX_PTR(base) \
+    ((void *)(((char *)(base)+0x7fffffffu) > (char *)(base) \
+        ? ((char *)(base)+0x7fffffffu) \
+        : (char *)-1))
+#  else
+    /* Default version. C++ standard compliant for scalar pointers. */
 #    define U_MAX_PTR(base) \
     ((void *)(((uintptr_t)(base)+0x7fffffffu) > (uintptr_t)(base) \
         ? ((uintptr_t)(base)+0x7fffffffu) \
         : (uintptr_t)-1))
-#  else
-#    define U_MAX_PTR(base) \
-    ((char *)(((char *)(base)+0x7fffffffu) > (char *)(base) \
-        ? ((char *)(base)+0x7fffffffu) \
-        : (char *)-1))
 #  endif
 #endif
 
