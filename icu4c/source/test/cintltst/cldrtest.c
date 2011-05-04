@@ -599,7 +599,6 @@ compareArrays(const char *keyName,
 static void
 compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    UResourceBundle *fromDateTimeElements, *toDateTimeElements, *fromWeekendData = NULL, *toWeekendData = NULL;
     UResourceBundle *fromArray, *toArray;
     UResourceBundle *fromLocaleBund = ures_open(NULL, fromLocale, &errorCode);
     UResourceBundle *toLocaleBund = ures_open(NULL, toLocale, &errorCode);
@@ -654,8 +653,6 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     }
     ures_close(fromArray);
     ures_close(toArray);
-
-cleanup:
     ures_close(fromCalendar);
     ures_close(toCalendar);
     ures_close(fromGregorian);

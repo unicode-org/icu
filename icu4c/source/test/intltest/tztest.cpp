@@ -603,10 +603,10 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // And ID in any set, but not in canonical set must not be a canonical ID
     any->reset(ec);
-    while (id1 = any->snext(ec)) {
+    while ((id1 = any->snext(ec)) != NULL) {
         UBool found = FALSE;
         canonical->reset(ec);
-        while (id2 = canonical->snext(ec)) {
+        while ((id2 = canonical->snext(ec)) != NULL) {
             if (*id1 == *id2) {
                 found = TRUE;
                 break;
@@ -635,7 +635,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // canonical set must contains only canonical IDs
     canonical->reset(ec);
-    while (id1 = canonical->snext(ec)) {
+    while ((id1 = canonical->snext(ec)) != NULL) {
         TimeZone::getCanonicalID(*id1, canonicalID, isSystemID, ec);
         if (U_FAILURE(ec)) {
             break;
@@ -654,7 +654,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // canonicalLoc set must contain only canonical location IDs
     canonicalLoc->reset(ec);
-    while (id1 = canonicalLoc->snext(ec)) {
+    while ((id1 = canonicalLoc->snext(ec)) != NULL) {
         TimeZone::getRegion(*id1, region, sizeof(region), ec);
         if (U_FAILURE(ec)) {
             break;
@@ -670,7 +670,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // any_US must contain only US zones
     any_US->reset(ec);
-    while (id1 = any_US->snext(ec)) {
+    while ((id1 = any_US->snext(ec)) != NULL) {
         TimeZone::getRegion(*id1, region, sizeof(region), ec);
         if (U_FAILURE(ec)) {
             break;
@@ -686,7 +686,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // any_W5 must contain only GMT-05:00 zones
     any_W5->reset(ec);
-    while (id1 = any_W5->snext(ec)) {
+    while ((id1 = any_W5->snext(ec)) != NULL) {
         TimeZone *tz = TimeZone::createTimeZone(*id1);
         if (tz->getRawOffset() != (-5)*60*60*1000) {
             errln((UnicodeString)"FAIL: ANY_W5 contains a zone whose offset is not -05:00: " + *id1);
@@ -728,10 +728,10 @@ TimeZoneTest::checkContainsAll(StringEnumeration *s1, const char *name1,
 
     s2->reset(ec);
 
-    while (id2 = s2->snext(ec)) {
+    while ((id2 = s2->snext(ec)) != NULL) {
         UBool found = FALSE;
         s1->reset(ec);
-        while (id1 = s1->snext(ec)) {
+        while ((id1 = s1->snext(ec)) != NULL) {
             if (*id1 == *id2) {
                 found = TRUE;
                 break;
