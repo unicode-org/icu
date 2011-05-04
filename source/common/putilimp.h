@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -287,6 +287,8 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
 #if U_ENABLE_DYLOAD
 /*  Dynamic Library Functions */
 
+typedef void (UVoidFunction)(void);
+
 /**
  * Load a library
  * @internal (ICU 4.4)
@@ -300,10 +302,17 @@ U_INTERNAL void * U_EXPORT2 uprv_dl_open(const char *libName, UErrorCode *status
 U_INTERNAL void U_EXPORT2 uprv_dl_close( void *lib, UErrorCode *status);
 
 /**
- * Extract a symbol from a library
- * @internal (ICU 4.4)
+ * Extract a symbol from a library (function)
+ * @internal (ICU 4.8)
  */
-U_INTERNAL void * U_EXPORT2 uprv_dl_sym( void *lib, const char *symbolName, UErrorCode *status);
+U_INTERNAL UVoidFunction* U_EXPORT2 uprv_dlsym_func( void *lib, const char *symbolName, UErrorCode *status);
+
+/**
+ * Extract a symbol from a library (function)
+ * Not implemented, no clients.
+ * @internal
+ */
+/* U_INTERNAL void * U_EXPORT2 uprv_dlsym_data( void *lib, const char *symbolName, UErrorCode *status); */
 
 #endif
 
