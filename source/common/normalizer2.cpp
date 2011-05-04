@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -154,15 +154,24 @@ public:
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return first;
         }
-        ReorderingBuffer buffer(impl, first);
-        if(buffer.init(first.length()+second.length(), errorCode)) {
-            normalizeAndAppend(secondArray, secondArray+second.length(), doNormalize,
-                               buffer, errorCode);
+        int32_t firstLength=first.length();
+        UnicodeString safeMiddle;
+        {
+            ReorderingBuffer buffer(impl, first);
+            if(buffer.init(firstLength+second.length(), errorCode)) {
+                normalizeAndAppend(secondArray, secondArray+second.length(), doNormalize,
+                                   safeMiddle, buffer, errorCode);
+            }
+        }  // The ReorderingBuffer destructor finalizes the first string.
+        if(U_FAILURE(errorCode)) {
+            // Restore the modified suffix of the first string.
+            first.replace(firstLength-safeMiddle.length(), 0x7fffffff, safeMiddle);
         }
         return first;
     }
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+                       UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const = 0;
     virtual UBool
     getDecomposition(UChar32 c, UnicodeString &decomposition) const {
@@ -233,8 +242,9 @@ private:
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+                       UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const {
-        impl.decomposeAndAppend(src, limit, doNormalize, buffer, errorCode);
+        impl.decomposeAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
     }
     virtual const UChar *
     spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const {
@@ -263,8 +273,9 @@ private:
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+                       UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const {
-        impl.composeAndAppend(src, limit, doNormalize, onlyContiguous, buffer, errorCode);
+        impl.composeAndAppend(src, limit, doNormalize, onlyContiguous, safeMiddle, buffer, errorCode);
     }
 
     virtual UBool
@@ -332,8 +343,9 @@ private:
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
+                       UnicodeString &safeMiddle,
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const {
-        impl.makeFCDAndAppend(src, limit, doNormalize, buffer, errorCode);
+        impl.makeFCDAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
     }
     virtual const UChar *
     spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &errorCode) const {
@@ -693,16 +705,29 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
         return 0;
     }
     UnicodeString firstString(first, firstLength, firstCapacity);
+    firstLength=firstString.length();  // In case it was -1.
     // secondLength==0: Nothing to do, and n2wi->normalizeAndAppend(NULL, NULL, buffer, ...) would crash.
     if(secondLength!=0) {
         const Normalizer2 *n2=(const Normalizer2 *)norm2;
         const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
         if(n2wi!=NULL) {
             // Avoid duplicate argument checking and support NUL-terminated src.
-            ReorderingBuffer buffer(n2wi->impl, firstString);
-            if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
-                n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : NULL,
-                                        doNormalize, buffer, *pErrorCode);
+            UnicodeString safeMiddle;
+            {
+                ReorderingBuffer buffer(n2wi->impl, firstString);
+                if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
+                    n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : NULL,
+                                             doNormalize, safeMiddle, buffer, *pErrorCode);
+                }
+            }  // The ReorderingBuffer destructor finalizes firstString.
+            if(U_FAILURE(*pErrorCode) || firstString.length()>firstCapacity) {
+                // Restore the modified suffix of the first string.
+                // This does not restore first[] array contents between firstLength and firstCapacity.
+                // (That might be uninitialized memory, as far as we know.)
+                safeMiddle.extract(0, 0x7fffffff, first+firstLength-safeMiddle.length());
+                if(firstLength<firstCapacity) {
+                    first[firstLength]=0;  // NUL-terminate in case it was originally.
+                }
             }
         } else {
             UnicodeString secondString(secondLength<0, second, secondLength);
