@@ -80,7 +80,7 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
 	$(POST_BUILD_STEP)
 
-PLUGIN=$(LIBPREFIX)plugin.$(SO)    
+PLUGIN=$(LIBPREFIX)plugin.$(SO)
 SO_TARGET=$(PLUGIN)
 
 PLUGINDIR=$(shell pwd)

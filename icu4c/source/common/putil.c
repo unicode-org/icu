@@ -2110,11 +2110,16 @@ uprv_dl_close(void *lib, UErrorCode *status) {
   dlclose(lib);
 }
 
-U_INTERNAL void* U_EXPORT2
-uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
-  void *ret = NULL;
+U_INTERNAL UVoidFunction* U_EXPORT2
+uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
+  UVoidFunction* ret = NULL;
   if(U_FAILURE(*status)) return ret;
-  ret = dlsym(lib, sym);
+  /*
+   * ISO forbids the following cast, but it's needed for dlsym.
+   *  See: http://pubs.opengroup.org/onlinepubs/009695399/functions/dlsym.html
+   *  See: http://www.trilithium.com/johan/2004/12/problem-with-dlsym/ 
+   */
+  *(void **)&ret = dlsym(lib, sym);
   if(ret == NULL) {
     *status = U_MISSING_RESOURCE_ERROR;
   }
@@ -2140,11 +2145,12 @@ uprv_dl_close(void *lib, UErrorCode *status) {
 }
 
 
-U_INTERNAL void* U_EXPORT2
-uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
-  if(U_FAILURE(*status)) return NULL;
-  *status = U_UNSUPPORTED_ERROR;
-  return NULL;
+U_INTERNAL UVoidFunction* U_EXPORT2
+uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
+  if(U_SUCCESS(*status)) {
+    *status = U_UNSUPPORTED_ERROR;
+  }
+  return (UVoidFunction*)NULL;
 }
 
 
@@ -2179,14 +2185,14 @@ uprv_dl_close(void *lib, UErrorCode *status) {
 }
 
 
-U_INTERNAL void* U_EXPORT2
-uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
+U_INTERNAL UVoidFunction* U_EXPORT2
+uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   HMODULE handle = (HMODULE)lib;
-  void * addr = NULL;
+  UVoidFunction* addr = NULL;
   
   if(U_FAILURE(*status) || lib==NULL) return NULL;
   
-  addr = GetProcAddress(handle, sym);
+  addr = (UVoidFunction*)GetProcAddress(handle, sym);
   
   if(addr==NULL) {
     DWORD lastError = GetLastError();
@@ -2220,11 +2226,12 @@ uprv_dl_close(void *lib, UErrorCode *status) {
 }
 
 
-U_INTERNAL void* U_EXPORT2
-uprv_dl_sym(void *lib, const char* sym, UErrorCode *status) {
-    if(U_FAILURE(*status)) return NULL;
+U_INTERNAL UVoidFunction* U_EXPORT2
+uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
+  if(U_SUCCESS(*status)) {
     *status = U_UNSUPPORTED_ERROR;
-    return NULL;
+  }
+  return (UVoidFunction*)NULL;
 }
 
 

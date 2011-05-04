@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -578,12 +578,8 @@ uplug_initPlugFromLibrary(const char *libName, const char *sym, const char *conf
   lib = uplug_openLibrary(libName, status);
   if(lib!=NULL && U_SUCCESS(*status)) {
     UPlugEntrypoint *entrypoint = NULL;
-    /*
-     * ISO forbids the following cast.
-     *  See: http://www.trilithium.com/johan/2004/12/problem-with-dlsym/ 
-     */
-    entrypoint = (UPlugEntrypoint*)uprv_dl_sym(lib, sym, status);
-      
+    entrypoint = (UPlugEntrypoint*)uprv_dlsym_func(lib, sym, status);
+
     if(entrypoint!=NULL&&U_SUCCESS(*status)) {
       plug = uplug_initPlugFromEntrypointAndLibrary(entrypoint, config, lib, sym, status);
       if(plug!=NULL&&U_SUCCESS(*status)) {
