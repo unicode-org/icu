@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others. *
- * All Rights Reserved.                                                        *
+ * Copyright (C) 2006,2011, International Business Machines Corporation        *
+ * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
 
@@ -187,6 +187,64 @@ class ThaiBreakEngine : public DictionaryBreakEngine {
 };
 
 
+/******************************************************************* 
+ * KhmerBreakEngine 
+ */ 
+ 
+/** 
+ * <p>KhmerBreakEngine is a kind of DictionaryBreakEngine that uses a 
+ * TrieWordDictionary and heuristics to determine Khmer-specific breaks.</p> 
+ * 
+ * <p>After it is constructed a KhmerBreakEngine may be shared between 
+ * threads without synchronization.</p> 
+ */ 
+class KhmerBreakEngine : public DictionaryBreakEngine { 
+ private: 
+    /** 
+     * The set of characters handled by this engine 
+     * @internal 
+     */ 
+ 
+  UnicodeSet                fKhmerWordSet; 
+  UnicodeSet                fEndWordSet; 
+  UnicodeSet                fBeginWordSet; 
+  UnicodeSet                fSuffixSet; 
+  UnicodeSet                fMarkSet; 
+  const TrieWordDictionary  *fDictionary; 
+ 
+ public: 
+ 
+  /** 
+   * <p>Default constructor.</p> 
+   * 
+   * @param adoptDictionary A TrieWordDictionary to adopt. Deleted when the 
+   * engine is deleted. 
+   */ 
+  KhmerBreakEngine(const TrieWordDictionary *adoptDictionary, UErrorCode &status); 
+ 
+  /** 
+   * <p>Virtual destructor.</p> 
+   */ 
+  virtual ~KhmerBreakEngine(); 
+ 
+ protected: 
+ /** 
+  * <p>Divide up a range of known dictionary characters.</p> 
+  * 
+  * @param text A UText representing the text 
+  * @param rangeStart The start of the range of dictionary characters 
+  * @param rangeEnd The end of the range of dictionary characters 
+  * @param foundBreaks Output of C array of int32_t break positions, or 0 
+  * @return The number of breaks found 
+  */ 
+  virtual int32_t divideUpDictionaryRange( UText *text, 
+                                           int32_t rangeStart, 
+                                           int32_t rangeEnd, 
+                                           UStack &foundBreaks ) const; 
+ 
+}; 
+ 
+ 
 U_NAMESPACE_END
 
     /* DICTBE_H */
