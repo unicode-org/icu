@@ -1427,7 +1427,7 @@ public class MessageFormat extends UFormat {
             other.cachedFormatters = new HashMap<Integer, Format>();
             Iterator<Map.Entry<Integer, Format>> it = cachedFormatters.entrySet().iterator();
             while (it.hasNext()){
-                Map.Entry<Integer, Format> entry = (Map.Entry<Integer, Format>)it.next();
+                Map.Entry<Integer, Format> entry = it.next();
                 other.cachedFormatters.put(entry.getKey(), entry.getValue());
             }
         } else {
