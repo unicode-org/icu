@@ -1708,10 +1708,17 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     AttributeListEntry *attrFirst = NULL;
     AttributeListEntry *attr;
     const char *key, *type;
-    char kwdBuf[capacity/*ULOC_KEYWORDS_CAPACITY*/];
+    char *kwdBuf = NULL;
+    int32_t kwdBufLength = capacity;
     UBool posixVariant = FALSE;
 
     if (U_FAILURE(*status)) {
+        return 0;
+    }
+
+    kwdBuf = (char *)uprv_malloc(kwdBufLength);
+    if (kwdBuf == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
 
@@ -1727,7 +1734,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         key = ultag_getExtensionKey(langtag, i);
         type = ultag_getExtensionValue(langtag, i);
         if (*key == LDMLEXT) {
-            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, sizeof(kwdBuf), &posixVariant, status);
+            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, kwdBufLength, &posixVariant, status);
             if (U_FAILURE(*status)) {
                 break;
             }
@@ -1856,6 +1863,8 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         uprv_free(kwd);
         kwd = tmpKwd;
     }
+
+    uprv_free(kwdBuf);
 
     if (U_FAILURE(*status)) {
         return 0;
