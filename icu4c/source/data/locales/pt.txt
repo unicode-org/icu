@@ -42,7 +42,7 @@ pt{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.31"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -52,7 +52,7 @@ pt{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/yyyy",
                 "{1} {0}",
                 "{1} {0}",
@@ -90,6 +90,206 @@ pt{
                 yyQ{"Q yy G"}
                 yyyyMM{"MM/y G"}
                 yyyyMMM{"MMM 'de' y G"}
+            }
+        }
+        chinese{
+            monthNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+        }
+        coptic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                }
+            }
+        }
+        ethiopic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
             }
         }
         gregorian{
@@ -209,18 +409,33 @@ pt{
                 }
                 month{
                     dn{"Mês"}
+                    relative{
+                        "-1"{"Mês passado"}
+                        "0"{"Este mês"}
+                        "1"{"Próximo mês"}
+                    }
                 }
                 second{
                     dn{"Segundo"}
                 }
                 week{
                     dn{"Semana"}
+                    relative{
+                        "-1"{"Semana passada"}
+                        "0"{"Esta semana"}
+                        "1"{"Próxima semana"}
+                    }
                 }
                 weekday{
                     dn{"Dia da semana"}
                 }
                 year{
                     dn{"Ano"}
+                    relative{
+                        "-1"{"Ano passado"}
+                        "0"{"Este ano"}
+                        "1"{"Próximo ano"}
+                    }
                 }
                 zone{
                     dn{"Fuso"}
@@ -242,8 +457,8 @@ pt{
                     m{"HH'h'mm - HH'h'mm v"}
                 }
                 Hv{
-                    H{"HH'h'mm - HH'h'mm v"}
-                    a{"HH'h'mm - HH'h'mm v"}
+                    H{"HH - HH v"}
+                    a{"HH - HH v"}
                 }
                 M{
                     M{"M-M"}
@@ -286,8 +501,8 @@ pt{
                     m{"h'h'mm - h'h'mm a v"}
                 }
                 hv{
-                    a{"h'h'mm a - h'h'mm a v"}
-                    h{"h'h'mm - h'h'mm a v"}
+                    a{"h a - h a v"}
+                    h{"h - h a v"}
                 }
                 y{
                     y{"y - y"}
@@ -381,11 +596,161 @@ pt{
                         "T3",
                         "T4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1º trimestre",
                         "2º trimestre",
                         "3º trimestre",
                         "4º trimestre",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "1º trimestre",
+                        "2º trimestre",
+                        "3º trimestre",
+                        "4º trimestre",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+            }
+        }
+        indian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
                     }
                 }
             }
@@ -398,7 +763,7 @@ pt{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/yyyy",
                 "{1} {0}",
                 "{1} {0}",
@@ -408,9 +773,11 @@ pt{
             }
             availableFormats{
                 EEEd{"EEE, d"}
+                H{"HH"}
                 HHmm{"HH'h'mm"}
                 HHmmss{"HH'h'mm'min'ss's'"}
                 Hm{"HH'h'mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"EEE, dd/MM"}
                 MMM{"LLL"}
@@ -419,7 +786,17 @@ pt{
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm'min'ss's'"}
+                y{"y"}
+                yM{"MM/yyyy"}
+                yMEd{"EEE, dd/MM/yyyy"}
+                yMMM{"MMM 'de' y"}
+                yMMMEd{"EEE, d 'de' MMM 'de' y"}
+                yQ{"yyyy Q"}
+                yQQQ{"y QQQ"}
                 yyMM{"MM/yy G"}
                 yyMMM{"MMM 'de' yy G"}
                 yyMMMEEEd{"EEE, d 'de' MMM 'de' yy G"}
@@ -440,8 +817,6 @@ pt{
                 abbreviated{
                     "AH",
                 }
-                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
-                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
             }
             monthNames{
                 default{"format"}
@@ -461,7 +836,20 @@ pt{
                         "Dhuʻl-H.",
                     }
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "Muharram",
                         "Safar",
@@ -478,7 +866,20 @@ pt{
                     }
                 }
                 stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
                     narrow{
                         "1",
                         "2",
@@ -493,7 +894,20 @@ pt{
                         "11",
                         "12",
                     }
-                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
                 }
             }
         }
@@ -546,6 +960,70 @@ pt{
                 yyyyQQQ{"G y QQQ"}
             }
         }
+        persian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+            }
+        }
         roc{
             DateTimePatterns{
                 "HH'h'mm'min'ss's' zzzz",
@@ -554,7 +1032,7 @@ pt{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/yyyy",
                 "{1} {0}",
                 "{1} {0}",
@@ -615,6 +1093,7 @@ pt{
         }
     }
     measurementSystemNames{
+        UK{"Reino Unido"}
         US{"americano"}
         metric{"métrico"}
     }
@@ -623,29 +1102,107 @@ pt{
             one{"{0} dia"}
             other{"{0} dias"}
         }
+        day-future{
+            0{"Em 0 dias"}
+            1{"In 1 day"}
+            one{"Em {0} dia"}
+        }
+        day-past{
+            0{"0 dias atrás"}
+            1{"1 day ago"}
+            one{"-{0} d"}
+        }
         hour{
             one{"{0} hora"}
             other{"{0} horas"}
+        }
+        hour-future{
+            0{"Em 0 horas"}
+            1{"In 1 hour"}
+            one{"+{0} h"}
+        }
+        hour-past{
+            0{"0 horas atrás"}
+            1{"1 hour ago"}
+            one{"-{0} h"}
         }
         minute{
             one{"{0} minuto"}
             other{"{0} minutos"}
         }
+        minute-future{
+            0{"Em 0 minutos"}
+            1{"In 1 minute"}
+            one{"+{0} min"}
+            other{"Em {0} min"}
+        }
+        minute-past{
+            0{"0 minutos atrás"}
+            1{"1 minute ago"}
+            one{"-{0} min"}
+            other{"{0} minutos atrás"}
+        }
         month{
             one{"{0} mês"}
             other{"{0} meses"}
+        }
+        month-future{
+            0{"Em 0 meses"}
+            1{"In 1 month"}
+            one{"+{0} m"}
+        }
+        month-past{
+            0{"0 meses atrás"}
+            1{"1 month ago"}
+            one{"-{0} m"}
+            other{"-{0} meses"}
         }
         second{
             one{"{0} segundo"}
             other{"{0} segundos"}
         }
+        second-future{
+            0{"Em 0 segundos"}
+            1{"In 1 second"}
+            one{"+{0} s"}
+            other{"Em {0} s"}
+        }
+        second-past{
+            0{"0 segundos atrás"}
+            1{"1 second ago"}
+            one{"-{0} s"}
+        }
         week{
             one{"{0} semana"}
             other{"{0} semanas"}
         }
+        week-future{
+            0{"Em 0 semanas"}
+            1{"In 1 week"}
+            one{"+{0} sem"}
+            other{"+{0} sem"}
+        }
+        week-past{
+            0{"0 semanas atrás"}
+            1{"1 week ago"}
+            one{"-{0} sem"}
+            other{"-{0} sem"}
+        }
         year{
             one{"{0} ano"}
             other{"{0} anos"}
+        }
+        year-future{
+            0{"Em 0 anos"}
+            1{"In 1 year"}
+            one{"+{0} ano"}
+            other{"+{0} anos"}
+        }
+        year-past{
+            0{"0 anos atrás"}
+            1{"1 year ago"}
+            one{"-{0} ano"}
+            other{"-{0} anos"}
         }
     }
     unitsShort{
@@ -662,7 +1219,10 @@ pt{
             other{"{0} min"}
         }
         month{
+            0{"0 meses"}
+            1{"1 mth"}
             one{"{0} m."}
+            other{"{0} mths"}
         }
         second{
             one{"{0} seg"}

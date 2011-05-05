@@ -12,8 +12,7 @@
 he{
     AuxExemplarCharacters{
         "[\u05BD\u05C4\u200E\u200F \u05B0 \u05B1 \u05B2 \u05B3 \u05B4 \u05B5 \u05B6 "
-        "\u05B7 \u05B8 \u05B9 \u05BB \u05C2 \u05C1 \u05BC \u05BF ־ ׳ ״ a b c d e f g "
-        "h i j k l m n o p q r s t u v w x y z]"
+        "\u05B7 \u05B8 \u05B9 \u05BB \u05C2 \u05C1 \u05BC \u05BF ־ ׳ ״]"
     }
     ExemplarCharacters{"[א ב ג ד ה ו ז ח ט י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק ר ש ת]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
@@ -43,7 +42,7 @@ he{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,6 +112,15 @@ he{
                         "יום ו׳",
                         "שבת",
                     }
+                    narrow{
+                        "א",
+                        "ב",
+                        "ג",
+                        "ד",
+                        "ה",
+                        "ו",
+                        "ש",
+                    }
                     wide{
                         "יום ראשון",
                         "יום שני",
@@ -172,24 +180,42 @@ he{
                 }
                 month{
                     dn{"חודש"}
+                    relative{
+                        "-1"{"חודש שעבר"}
+                        "0"{"החודש"}
+                        "1"{"חודש הבא"}
+                    }
                 }
                 second{
                     dn{"שנייה"}
                 }
                 week{
                     dn{"שבוע"}
+                    relative{
+                        "-1"{"שבוע שעבר"}
+                        "0"{"השבוע"}
+                        "1"{"שבוע הבא"}
+                    }
                 }
                 weekday{
                     dn{"יום בשבוע"}
                 }
                 year{
                     dn{"שנה"}
+                    relative{
+                        "-1"{"שנה שעברה"}
+                        "0"{"השנה"}
+                        "1"{"שנה הבאה"}
+                    }
                 }
                 zone{
                     dn{"אזור"}
                 }
             }
             intervalFormats{
+                H{
+                    a{"H-‏H"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -278,7 +304,7 @@ he{
                     abbreviated{
                         "ינו",
                         "פבר",
-                        "מרס",
+                        "מרץ",
                         "אפר",
                         "מאי",
                         "יונ",
@@ -289,10 +315,24 @@ he{
                         "נוב",
                         "דצמ",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "ינואר",
                         "פברואר",
-                        "מרס",
+                        "מרץ",
                         "אפריל",
                         "מאי",
                         "יוני",
@@ -308,7 +348,7 @@ he{
                     abbreviated{
                         "ינו׳",
                         "פבר׳",
-                        "מרס",
+                        "מרץ",
                         "אפר׳",
                         "מאי",
                         "יונ׳",
@@ -323,6 +363,12 @@ he{
             }
             quarters{
                 format{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "רבעון 1",
                         "רבעון 2",
@@ -370,6 +416,22 @@ he{
             }
             monthNames{
                 format{
+                    narrow{
+                        "תש",
+                        "חש",
+                        "כס",
+                        "טב",
+                        "שב",
+                        "אא",
+                        "אד",
+                        "ני",
+                        "אי",
+                        "סי",
+                        "תמ",
+                        "אב",
+                        "אל",
+                        "א2",
+                    }
                     wide{
                         "תשרי",
                         "חשון",
@@ -387,9 +449,53 @@ he{
                         "אדר ב׳",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "תש",
+                        "חש",
+                        "כס",
+                        "טב",
+                        "שב",
+                        "אא",
+                        "אד",
+                        "ני",
+                        "אי",
+                        "סי",
+                        "תמ",
+                        "אב",
+                        "אל",
+                        "א2",
+                    }
+                }
             }
         }
         islamic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d בMMMM y",
+                "d בMMMM y",
+                "d בMMM yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                MEd{"E, d/M"}
+                Md{"d/M"}
+                h{"h a"}
+                yM{"M/yyyy"}
+                yMEd{"EEE, d.M.yyyy"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ y"}
+            }
             eras{
                 abbreviated{
                     "שנת היג׳רה",
@@ -667,7 +773,14 @@ he{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
+    listPattern{
+        standard{
+            2{"{0} ו-{1}"}
+            end{"{0} ו-{1}"}
+        }
+    }
     measurementSystemNames{
+        UK{"אימפריאלי"}
         US{"ארה״ב"}
         metric{"מטרי"}
     }
@@ -676,29 +789,99 @@ he{
             one{"{0} יום"}
             other{"{0} ימים"}
         }
+        day-future{
+            0{"עוד 0 ימים"}
+            1{"עוד יום"}
+            other{"בעוד {0} ימים"}
+        }
+        day-past{
+            0{"לפני 0 ימים"}
+            1{"לפני יום"}
+            other{"לפני {0} ימים"}
+        }
         hour{
             one{"{0} שעה"}
             other{"{0} שעות"}
+        }
+        hour-future{
+            0{"עוד 0 שעות"}
+            1{"עוד שעה"}
+            other{"בעוד {0} שעות"}
+        }
+        hour-past{
+            0{"לפני 0 שעות"}
+            1{"לפני שעה"}
+            other{"לפני {0} שעות"}
         }
         minute{
             one{"{0} דקה"}
             other{"{0} דקות"}
         }
+        minute-future{
+            0{"עוד 0 דקות"}
+            1{"עוד דקה"}
+            other{"בעוד {0} דקות"}
+        }
+        minute-past{
+            0{"לפני 0 דקות"}
+            1{"לפני דקה"}
+            other{"לפני {0} דקות"}
+        }
         month{
             one{"{0} חודש"}
             other{"{0} חודשים"}
+        }
+        month-future{
+            0{"עוד 0 חודשים"}
+            1{"עוד חודש"}
+            other{"בעוד {0} חודשים"}
+        }
+        month-past{
+            0{"לפני 0 חודשים"}
+            1{"לפני חודש"}
+            other{"לפני {0} חודשים"}
         }
         second{
             one{"{0} שניה"}
             other{"{0} שניות"}
         }
+        second-future{
+            0{"עוד 0 שניות"}
+            1{"עוד שנייה"}
+            other{"בעוד {0} שניות"}
+        }
+        second-past{
+            0{"לפני 0 שניות"}
+            1{"לפני שנייה"}
+            other{"לפני {0} שניות"}
+        }
         week{
             one{"{0} שבוע"}
             other{"{0} שבועות"}
         }
+        week-future{
+            0{"עוד 0 שבועות"}
+            1{"עוד שבוע"}
+            other{"בעוד {0} שבועות"}
+        }
+        week-past{
+            0{"לפני 0 שבועות"}
+            1{"לפני שבוע"}
+            other{"לפני {0} שבועות"}
+        }
         year{
             one{"{0} שנה"}
             other{"{0} שנים"}
+        }
+        year-future{
+            0{"עוד 0 שנים"}
+            1{"עוד שנה"}
+            other{"בעוד {0} שנים"}
+        }
+        year-past{
+            0{"לפני 0 שנים"}
+            1{"לפני שנה"}
+            other{"לפני {0} שנים"}
         }
     }
     unitsShort{

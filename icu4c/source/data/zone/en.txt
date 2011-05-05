@@ -10,8 +10,20 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.54.39"}
+    Version{"2.0.58.6"}
     zoneStrings{
+        "Africa:Sao_Tome"{
+            ec{"São Tomé"}
+        }
+        "America:Asuncion"{
+            ec{"Asunción"}
+        }
+        "America:Curacao"{
+            ec{"Curaçao"}
+        }
+        "America:St_Barthelemy"{
+            ec{"Saint Barthélemy"}
+        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
         }
@@ -28,6 +40,9 @@ en{
         "Europe:London"{
             ld{"British Summer Time"}
             sd{"BST"}
+        }
+        "Indian:Reunion"{
+            ec{"Réunion"}
         }
         "meta:Acre"{
             ld{"Acre Summer Time"}
@@ -264,7 +279,7 @@ en{
             ls{"Davis Time"}
         }
         "meta:DumontDUrville"{
-            ls{"Dumont-d'Urville Time"}
+            ls{"Dumont-d’Urville Time"}
         }
         "meta:Dushanbe"{
             ld{"Dushanbe Summer Time"}
@@ -678,8 +693,8 @@ en{
             ls{"Tuvalu Time"}
         }
         "meta:Uralsk"{
-            ld{"Ural'sk Summer Time"}
-            ls{"Ural'sk Time"}
+            ld{"Uralʹsk Summer Time"}
+            ls{"Uralʹsk Time"}
         }
         "meta:Uruguay"{
             ld{"Uruguay Summer Time"}

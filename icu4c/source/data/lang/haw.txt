@@ -28,7 +28,7 @@ haw{
         fr_CH{"Kuikilani"}
         ga{"ʻAiliki"}
         gsw{"Kuikilani Kelemānia"}
-        haw{"ʻōlelo Hawaiʻi"}
+        haw{"ʻŌlelo Hawaiʻi"}
         he{"Hebera"}
         it{"ʻĪkālia"}
         ja{"Kepanī"}
@@ -49,5 +49,5 @@ haw{
         zh_Hans{"Pākē Hoʻomaʻalahi ʻia"}
         zh_Hant{"Pākē Kuʻuna"}
     }
-    Version{"2.0.47.68"}
+    Version{"2.0.57.98"}
 }

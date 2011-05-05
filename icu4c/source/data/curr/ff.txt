@@ -16,7 +16,7 @@ ff{
             "Dirham Emiraati Araab Dentuɗi",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwansaa Anngolaa",
         }
         AUD{
@@ -24,11 +24,11 @@ ff{
             "Dolaar Ostaraalii",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinaar Bahrayn",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Mbuuɗu Burunndi",
         }
         BWP{
@@ -52,15 +52,15 @@ ff{
             "Yuam Siin",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Eskudoo Kap Weer",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faraa Jibutii",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinaar Alaseri",
         }
         EGP{
@@ -68,11 +68,11 @@ ff{
             "Liibar Ejipt",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nafka Eriteree",
         }
         ETB{
-            "Br",
+            "ETB",
             "Biir Ecoppi",
         }
         EUR{
@@ -84,7 +84,7 @@ ff{
             "Liibar Sterling",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi Ganaa",
         }
         GMD{
@@ -92,7 +92,7 @@ ff{
             "Dalasi Gammbi",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faraa Gine",
         }
         INR{
@@ -104,15 +104,15 @@ ff{
             "Yen Sapoo",
         }
         KES{
-            "Ksh",
+            "KES",
             "Siling Keñaa",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faraa Komoor",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dolaar Liberiyaa",
         }
         LSL{
@@ -120,7 +120,7 @@ ff{
             "Loti Lesotoo",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinaar Libi",
         }
         MAD{
@@ -132,11 +132,11 @@ ff{
             "Ariyari Madagaskaar",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ugiyya Muritani",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupii Moriis",
         }
         MWK{
@@ -144,15 +144,15 @@ ff{
             "Kuwacca Malaawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikal Mosammbik",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dolaar Namibii",
         }
         NGN{
-            "₦",
+            "NGN",
             "Nayraa Nijeriyaa",
         }
         RWF{
@@ -160,11 +160,11 @@ ff{
             "Faraa Ruwanndaa",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyaal Arabi Sawdit",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupii Seysel",
         }
         SDG{
@@ -172,19 +172,19 @@ ff{
             "Liibar Sudaan",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Liibar Sent Helen",
         }
         SLL{
-            "Le",
+            "SLL",
             "Lewoon Seraa Liyon",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Siling Soomali",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra Sawo Tome e Prensipe",
         }
         SZL{
@@ -192,15 +192,15 @@ ff{
             "Lilangeni Swaasilannda",
         }
         TND{
-            "DT",
+            "TND",
             "Dinaar Tunisii",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Siling Tansanii",
         }
         UGX{
-            "USh",
+            "UGX",
             "Siling Uganndaa",
         }
         USD{
@@ -216,17 +216,17 @@ ff{
             "Mbuuɗu Seefaa BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Rannda Afrik Bŋ Worgo",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kuwacca Sammbi",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dolaar Simbaabuwe",
         }
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.99"}
 }

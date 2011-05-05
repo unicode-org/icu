@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gsw.xml
  */
 gsw{
-    Version{"2.0.50.94"}
+    Version{"2.0.57.98"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}

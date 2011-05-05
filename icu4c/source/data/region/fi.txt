@@ -195,7 +195,7 @@ fi{
         MH{"Marshallinsaaret"}
         MK{"Makedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Burma]"}
         MN{"Mongolia"}
         MO{"Macao – Kiinan e.h.a."}
         MP{"Pohjois-Mariaanit"}
@@ -301,5 +301,5 @@ fi{
         ZW{"Zimbabwe"}
         ZZ{"tuntematon tai virheellinen alue"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
 }

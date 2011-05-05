@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
-    Version{"2.0.54.16"}
+    Version{"2.0.57.98"}
     zoneStrings{
         ""{
             ec{""}
@@ -62,7 +62,7 @@ root{
             ec{"St. Barthelemy"}
         }
         "America:St_Johns"{
-            ec{"St. John's"}
+            ec{"St. John’s"}
         }
         "America:St_Kitts"{
             ec{"St. Kitts"}
@@ -77,7 +77,7 @@ root{
             ec{"St. Vincent"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont d'Urville"}
+            ec{"Dumont d’Urville"}
         }
         "Asia:Calcutta"{
             ec{"Kolkata"}

@@ -11,6 +11,37 @@
  */
 ms{
     Countries{
+        001{"Dunia"}
+        002{"Afrika"}
+        003{"Amerika Utara"}
+        005{"Amerika Selatan"}
+        009{"Oceania"}
+        011{"Afrika Barat"}
+        013{"Amerika Tengah"}
+        014{"Afrika Timur"}
+        015{"Afrika Utara"}
+        017{"Afrika Tengah"}
+        018{"Selatan Afrika"}
+        019{"Amerika"}
+        021{"Utara Amerika"}
+        029{"Caribbean"}
+        030{"Asia Timur"}
+        034{"Asia Selatan"}
+        035{"Asia Tenggara"}
+        039{"Eropah Selatan"}
+        053{"Australia dan New Zealand"}
+        054{"Melanesia"}
+        057{"Wilayah Mikronesia"}
+        061{"Polinesia"}
+        142{"Asia"}
+        143{"Asia Tengah"}
+        145{"Asia Barat"}
+        150{"Eropah"}
+        151{"Eropah Timur"}
+        154{"Eropah Utara"}
+        155{"Eropah Barat"}
+        419{"Amerika Latin"}
+        AC{"Pulau Ascension"}
         AD{"Andorra"}
         AE{"Emiriah Arab Bersatu"}
         AF{"Afghanistan"}
@@ -26,6 +57,7 @@ ms{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
+        AX{"Kepulauan Åland"}
         AZ{"Azerbaijan"}
         BA{"Bosnia dan Herzegovina"}
         BB{"Barbados"}
@@ -36,6 +68,7 @@ ms{
         BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"Saint Barthélemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
@@ -47,17 +80,18 @@ ms{
         BY{"Belarus"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Cocos (Keeling) Islands"}
-        CD{"Democratic Republic of the Congo"}
+        CC{"Cocos [Keeling] Islands"}
+        CD{"Congo - Kinshasa"}
         CF{"Republik Afrika Tengah"}
         CG{"Congo"}
         CH{"Switzerland"}
-        CI{"Pantai Gading"}
+        CI{"Côte d’Ivoire"}
         CK{"Cook Islands"}
         CL{"Cile"}
         CM{"Kamerun"}
-        CN{"Cina"}
+        CN{"China"}
         CO{"Colombia"}
+        CP{"Pulau Clipperton"}
         CR{"Kosta Rika"}
         CS{"Serbia dan Montenegro"}
         CU{"Cuba"}
@@ -66,11 +100,13 @@ ms{
         CY{"Kibris"}
         CZ{"Republik Czech"}
         DE{"Jerman"}
+        DG{"Diego Garcia"}
         DJ{"Jibouti"}
         DK{"Denmark"}
         DM{"Dominica"}
         DO{"Republik Dominican"}
         DZ{"Aljazair"}
+        EA{"Ceuta dan Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Mesir"}
@@ -78,6 +114,7 @@ ms{
         ER{"Eritrea"}
         ES{"Sepanyol"}
         ET{"Ethiopia"}
+        EU{"Kesatuan Eropah"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falkland Islands"}
@@ -89,6 +126,7 @@ ms{
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"French Guiana"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Greenland"}
@@ -108,15 +146,18 @@ ms{
         HR{"Croatia"}
         HT{"Haiti"}
         HU{"Hungari"}
+        IC{"Kepulauan Canary"}
         ID{"Indonesia"}
         IE{"Ireland"}
         IL{"Israel"}
-        IN{"Hindia"}
+        IM{"Isle of Man"}
+        IN{"India"}
         IO{"British Indian Ocean Territory"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
         IT{"Itali"}
+        JE{"Jersey"}
         JM{"Jamaika"}
         JO{"Jordan"}
         JP{"Jepun"}
@@ -145,13 +186,15 @@ ms{
         MA{"Maghribi"}
         MC{"Monaco"}
         MD{"Moldova"}
+        ME{"Montenegro"}
+        MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Kepulauan Marshall"}
         MK{"Macedonia"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"Macao S.A.R., China"}
+        MO{"Macau SAR China"}
         MP{"Northern Mariana Islands"}
         MQ{"Martinique"}
         MR{"Mauritania"}
@@ -191,9 +234,11 @@ ms{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Oceania Terpencil"}
         RE{"Réunion"}
         RO{"Romania"}
-        RU{"Russia"}
+        RS{"Serbia"}
+        RU{"Rusia"}
         RW{"Rwanda"}
         SA{"Arab Saudi"}
         SB{"Kepulauan Solomon"}
@@ -214,6 +259,7 @@ ms{
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks and Caicos Islands"}
         TD{"Cad"}
         TF{"French Southern Territories"}
@@ -250,6 +296,7 @@ ms{
         ZA{"Afrika Selatan"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
+        ZZ{"Wilayah Tidak Diketahui"}
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.58.36"}
 }

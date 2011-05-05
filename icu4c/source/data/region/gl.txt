@@ -43,6 +43,7 @@ gl{
         155{"Europa Occidental"}
         172{"Comunidade de Estados Independentes"}
         419{"América Latina e o Caribe"}
+        AC{"Illa de Ascensión"}
         AD{"Andorra"}
         AE{"Emiratos Árabes Unidos"}
         AF{"Afganistán"}
@@ -92,6 +93,7 @@ gl{
         CM{"Camerún"}
         CN{"China"}
         CO{"Colombia"}
+        CP{"Illa Clipperton"}
         CR{"Costa Rica"}
         CS{"Serbia e Montenegro"}
         CU{"Cuba"}
@@ -100,11 +102,13 @@ gl{
         CY{"Chipre"}
         CZ{"República Checa"}
         DE{"Alemaña"}
+        DG{"Diego García"}
         DJ{"Xibuti"}
         DK{"Dinamarca"}
         DM{"Dominica"}
         DO{"República Dominicana"}
         DZ{"Arxelia"}
+        EA{"Ceuta e Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Exipto"}
@@ -144,6 +148,7 @@ gl{
         HR{"Croacia"}
         HT{"Haití"}
         HU{"Hungría"}
+        IC{"Illas Canarias"}
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israel"}
@@ -239,6 +244,7 @@ gl{
         RW{"Ruanda"}
         SA{"Arabia Saudita"}
         SB{"Illas Salomón"}
+        SC{"Seixeles"}
         SD{"Sudán"}
         SE{"Suecia"}
         SG{"Singapur"}
@@ -255,7 +261,9 @@ gl{
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Suacilandia"}
+        TA{"Tristán da Cunha"}
         TC{"Illas Turks e Caicos"}
+        TD{"Chad"}
         TF{"Territorios Franceses do Sul"}
         TG{"Togo"}
         TH{"Tailandia"}
@@ -290,7 +298,7 @@ gl{
         ZA{"Sudáfrica"}
         ZM{"Zambia"}
         ZW{"Cimbabue"}
-        ZZ{"rexión descoñecida ou non válida"}
+        ZZ{"rexión descoñecida"}
     }
-    Version{"2.0.53.4"}
+    Version{"2.0.57.98"}
 }

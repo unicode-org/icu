@@ -39,7 +39,7 @@ fil{
             }
         }
     }
-    Version{"2.0.48.64"}
+    Version{"2.0.58.6"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -65,6 +65,7 @@ fil{
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
                 Md{"M-d"}
+                d{"d"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"yyyy-M"}
@@ -72,6 +73,9 @@ fil{
                 yMMM{"y MMM"}
                 yMMMEd{"EEE, y MMM d"}
                 yMMMM{"y MMMM"}
+                yMMMd{"MMM d, y"}
+                yMd{"M/d/y"}
+                yQ{"Q y"}
                 yQQQ{"y QQQ"}
                 yyMM{"yy-MM"}
                 yyMMM{"MMM yy"}
@@ -118,13 +122,23 @@ fil{
                     }
                 }
             }
+            eras{
+                abbreviated{
+                    "BC",
+                    "AD",
+                }
+            }
             fields{
                 day{
                     dn{"Araw"}
                     relative{
                         "-1"{"Yesterday"}
+                        "-2"{"Araw bago ang kahapon"}
+                        "-3"{"Nakalipas na tatlong araw"}
                         "0"{"Today"}
                         "1"{"Tomorrow"}
+                        "2"{"Araw pagkatapos ng kahapon"}
+                        "3"{"Tatlong araw mula ngayon"}
                     }
                 }
                 dayperiod{
@@ -141,21 +155,89 @@ fil{
                 }
                 month{
                     dn{"Buwan"}
+                    relative{
+                        "-1"{"Nakaraang buwan"}
+                        "0"{"Ngayon buwang ito"}
+                        "1"{"Susunod na buwan"}
+                    }
                 }
                 second{
                     dn{"Segundo"}
                 }
                 week{
                     dn{"Linggo"}
+                    relative{
+                        "-1"{"Nakaraang Linggo"}
+                        "0"{"Sa linggong ito"}
+                        "1"{"Susunod na linggo"}
+                    }
                 }
                 weekday{
                     dn{"Araw ng Linggo"}
                 }
                 year{
                     dn{"Taon"}
+                    relative{
+                        "-1"{"Nakaraang taon"}
+                        "0"{"Sa taong ito"}
+                        "1"{"Susunod na taon"}
+                    }
                 }
                 zone{
                     dn{"Zone"}
+                }
+            }
+            intervalFormats{
+                MEd{
+                    M{"E, M/d – E, M/d"}
+                    d{"E, M/d – E, M/d"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, M/d/yy – E, M/d/yy"}
+                    d{"E, M/d/yy – E, M/d/yy"}
+                    y{"E, M/d/yy – E, M/d/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, y"}
+                    d{"E, MMM d – E, MMM d, y"}
+                    y{"E, MMM d, y – E, MMM d, y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, y"}
+                    d{"MMM d–d, y"}
+                    y{"MMM d, y – MMM d, y"}
+                }
+                yMd{
+                    M{"M/d/yy – M/d/yy"}
+                    d{"M/d/yy – M/d/yy"}
+                    y{"M/d/yy – M/d/yy"}
                 }
             }
             monthNames{
@@ -206,6 +288,42 @@ fil{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "ika-1 sangkapat",
+                        "ika-2 sangkapat",
+                        "ika-3 quarter",
+                        "ika-4 na quarter",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "ika-1 sangkapat",
+                        "ika-2 quarter",
+                        "ika-3 sangkapat",
+                        "ika-4 na quarter",
+                    }
+                }
+            }
         }
     }
     delimiters{
@@ -229,29 +347,99 @@ fil{
             one{"{0} araw"}
             other{"{0} araw"}
         }
+        day-future{
+            0{"Sa 0 na araw"}
+            1{"Sa 1 araw"}
+            other{"Sa {0} (na) araw"}
+        }
+        day-past{
+            0{"Nakalipas na 0 araw"}
+            1{"Nakalipas na 1 araw"}
+            other{"Nakalipas na {0} (na) araw"}
+        }
         hour{
             one{"{0} oras"}
             other{"{0} oras"}
+        }
+        hour-future{
+            0{"Sa 0 oras"}
+            1{"Sa 1 oras"}
+            other{"Sa {0} (na) oras"}
+        }
+        hour-past{
+            0{"Nakalipas na 0 oras"}
+            1{"Nakalipas na 1 oras"}
+            other{"Nakalipas na {0} (na) oras"}
         }
         minute{
             one{"{0} minuto"}
             other{"{0} minuto"}
         }
+        minute-future{
+            0{"Sa 0 minuto"}
+            1{"Sa 1 minuto"}
+            other{"Sa {0} (na) minuto"}
+        }
+        minute-past{
+            0{"Nakalipas na 0 na minuto"}
+            1{"Nakalipas na 1 minuto"}
+            other{"Nakalipas na {0} (na) minuto"}
+        }
         month{
             one{"{0} buwan"}
             other{"{0} buwan"}
+        }
+        month-future{
+            0{"Sa 0 na buwan"}
+            1{"Sa 1 buwan"}
+            other{"Sa {0} (na) buwan"}
+        }
+        month-past{
+            0{"Nakalipas na 0 buwan"}
+            1{"Nakalipas na 1 buwan"}
+            other{"Nakalipas na {0} (na) buwan"}
         }
         second{
             one{"{0} segundo"}
             other{"{0} segundo"}
         }
+        second-future{
+            0{"Sa 0 segundo"}
+            1{"Sa 1 segundo"}
+            other{"Sa {0} (na) segundo"}
+        }
+        second-past{
+            0{"Nakalipas na 0 segundo"}
+            1{"Nakalipas na 1 segundo"}
+            other{"Nakalipas na {0} (na) segundo"}
+        }
         week{
             one{"{0} linggo"}
             other{"{0} linggo"}
         }
+        week-future{
+            0{"Sa 0 linggo"}
+            1{"Sa 1 linggo"}
+            other{"Sa {0} (na) linggo"}
+        }
+        week-past{
+            0{"Nakalipas na 0 na linggo"}
+            1{"Nakalipas na 1 linggo"}
+            other{"Nakalipas na {0} (na) linggo"}
+        }
         year{
             one{"{0} taon"}
             other{"{0} taon"}
+        }
+        year-future{
+            0{"Sa 0 na taon"}
+            1{"Sa 1 taon"}
+            other{"Sa {0} (na) taon"}
+        }
+        year-past{
+            0{"Nakalipas na 0 taon"}
+            1{"Nakalipas na 1 taon"}
+            other{"Nakalipas na {0} (na) taon"}
         }
     }
     unitsShort{

@@ -16,7 +16,7 @@ kln{
             "Rabisiekab Kibagegeitab arabuk",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Rabisiekab Angolan",
         }
         AUD{
@@ -24,11 +24,11 @@ kln{
             "Dolaitab Australian",
         }
         BHD{
-            "BD",
+            "BHD",
             "Rabisiekab Bahrain",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Rabisiekab Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ kln{
             "Rabisiekab China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Rabisiekab Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Rabisiekab Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Rabisiekab Algerian",
         }
         EGP{
@@ -68,11 +68,11 @@ kln{
             "Pauditab Misri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Rabisiekab Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Rabisiekab Ethiopia",
         }
         EUR{
@@ -84,7 +84,7 @@ kln{
             "pounditab Uingereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "Rabisiekab Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ kln{
             "Rabisiekab Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Rabisiekab Guinea",
         }
         INR{
@@ -108,11 +108,11 @@ kln{
             "Silingitab ya Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Rabisiekab Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dolaitab Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ kln{
             "Rabisiekab Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Rabisiekab Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ kln{
             "Rabisiekab Malagasy",
         }
         MRO{
-            "UM",
+            "MRO",
             "Rabisiekab Mauritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rabisiekab Mauritius",
         }
         MWK{
@@ -144,15 +144,15 @@ kln{
             "Rabisiekaby Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Rabisiekab Msumbiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dolaitab Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Rabisiekab Nigeria",
         }
         RWF{
@@ -160,11 +160,11 @@ kln{
             "Rabisiekab Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Rabisiekab Saudia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rabisiekab Shelisheli",
         }
         SDG{
@@ -172,19 +172,19 @@ kln{
             "Pouditab Sudan",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Pouditab helena ne tilil",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leonit",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "siligitab Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "Rabisiekab Sao Tome ak Principe",
         }
         SZL{
@@ -192,15 +192,15 @@ kln{
             "Lilangenit",
         }
         TND{
-            "DT",
+            "TND",
             "RabisiekabTunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "silingitab Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Silingitab Uganda",
         }
         USD{
@@ -216,17 +216,17 @@ kln{
             "Rabisiekab CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randitab Afrika nebo murot tai",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwachaitab Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dolaitab ya Zimbabwe",
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

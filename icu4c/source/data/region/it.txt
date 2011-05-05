@@ -192,6 +192,7 @@ it{
         MC{"Monaco"}
         MD{"Moldavia"}
         ME{"Montenegro"}
+        MF{"Saint Martin"}
         MG{"Madagascar"}
         MH{"Isole Marshall"}
         MK{"Repubblica di Macedonia"}
@@ -303,7 +304,7 @@ it{
         ZA{"Sudafrica"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
-        ZZ{"regione non valida o sconosciuta"}
+        ZZ{"Regione non valida o sconosciuta"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
 }

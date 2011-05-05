@@ -27,7 +27,7 @@ kab{
             }
         }
     }
-    Version{"2.0.47.70"}
+    Version{"2.0.57.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -60,7 +60,6 @@ kab{
                 MMd{"d/MM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
-                Med{"EEE d/M"}
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}

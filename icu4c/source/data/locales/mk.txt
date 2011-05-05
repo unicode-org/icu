@@ -11,9 +11,9 @@
  */
 mk{
     AuxExemplarCharacters{"[ѐ ѝ]"}
-    ExemplarCharacters{"[а б в г ѓ д е ж з ѕ и ј к ќ л љ м н њ о п р с т у ф х ц ч џ ш]"}
+    ExemplarCharacters{"[а б в г д ѓ е ж з ѕ и ј к л љ м н њ о п р с т ќ у ф х ц ч џ ш]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
-    ExemplarCharactersIndex{"[А Б В Г Ѓ Д Е Ж З Ѕ И Ј К Ќ Л Љ М Н Њ О П Р С Т У Ф Х Ц Ч Џ Ш]"}
+    ExemplarCharactersIndex{"[А Б В Г Д Ѓ Е Ж З Ѕ И Ј К Л Љ М Н Њ О П Р С Т Ќ У Ф Х Ц Ч Џ Ш]"}
     LocaleScript{
         "Cyrl",
     }
@@ -28,7 +28,7 @@ mk{
             }
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.98"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -338,6 +338,14 @@ mk{
         day{
             one{"{0} ден"}
             other{"{0} денови"}
+        }
+        day-future{
+            one{"за {0} ден"}
+            other{"за {0} денови"}
+        }
+        day-past{
+            one{"пред {0} ден"}
+            other{"пред {0} денови"}
         }
         hour{
             one{"{0} час"}

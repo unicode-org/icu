@@ -16,7 +16,7 @@ mer{
             "Dirham ya Falme cia Kiarabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwanza ya Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ mer{
             "Dola ya Austrĩlia",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinari ya Baharini",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Faranga ya Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ mer{
             "Yuan Renminbi ya China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Eskudo ya Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faranga ya Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinari ya Anjĩria",
         }
         EGP{
@@ -68,11 +68,11 @@ mer{
             "Paũndi ya Misri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakfa ya Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Bĩrũ ya Ithiopia",
         }
         EUR{
@@ -84,7 +84,7 @@ mer{
             "Paũndi ya Ngeretha",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi ya Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ mer{
             "Dalasi ya Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faranga ya Gine",
         }
         INR{
@@ -108,11 +108,11 @@ mer{
             "Shilingi ya Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faranga ya Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dola ya Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ mer{
             "Loti ya Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinari ya Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ mer{
             "Ariarĩ ya Bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ugwiya ya Mauritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupia ya Maurĩtiasi",
         }
         MWK{
@@ -144,15 +144,15 @@ mer{
             "Kwacha ya Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikali ya Mozambĩkĩ",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dola ya Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira ya Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ mer{
             "Faranga ya Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyal ya Saudi Arĩbia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupia ya Shelisheli",
         }
         SDG{
@@ -172,19 +172,19 @@ mer{
             "Paũndi ya Sudani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Paũndi ya Santahelena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Shilingi ya Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra ya Sao Tome na Principe",
         }
         SZL{
@@ -192,15 +192,15 @@ mer{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dinari ya Tunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Shilingi ya Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Shilingi ya Uganda",
         }
         USD{
@@ -216,17 +216,17 @@ mer{
             "Faranga CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randi ya Afrika ya Sauthi",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwacha ya Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

@@ -10,6 +10,9 @@ es_CO{
     %%Parent{"es_419"}
     NumberElements{
         latn{
+            patterns{
+                currencyFormat{"¤#,##0.00"}
+            }
             symbols{
                 decimal{","}
                 group{"."}
@@ -20,7 +23,7 @@ es_CO{
         279,
         216,
     }
-    Version{"2.0.54.44"}
+    Version{"2.0.58.21"}
     calendar{
         gregorian{
             DateTimePatterns{

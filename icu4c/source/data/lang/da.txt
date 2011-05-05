@@ -14,6 +14,8 @@ da{
         calendar{"Kalender"}
         collation{"Sortering"}
         currency{"Valuta"}
+        numbers{"Tal"}
+        x{"Privatbrug"}
     }
     Languages{
         aa{"afar"}
@@ -204,7 +206,7 @@ da{
         him{"himachali"}
         hit{"hittitisk"}
         hmn{"hmong"}
-        ho{"Hiri Motu"}
+        ho{"hirimotu"}
         hr{"kroatisk"}
         hsb{"øvresorbisk"}
         ht{"haitisk"}
@@ -477,7 +479,7 @@ da{
         tn{"tswana"}
         to{"tongansk"}
         tog{"nyasa tongansk"}
-        tpi{"Tok Pisin"}
+        tpi{"tok pisin"}
         tr{"tyrkisk"}
         ts{"tsonga"}
         tsi{"tsimshisk"}
@@ -494,7 +496,7 @@ da{
         uga{"ugaristisk"}
         uk{"ukrainsk"}
         umb{"umbundu"}
-        und{"ukendt eller ugyldigt sprog"}
+        und{"ukendt sprog"}
         ur{"urdu"}
         uz{"usbekisk"}
         vai{"vai"}
@@ -529,6 +531,9 @@ da{
         zun{"zuni"}
         zxx{"intet sprogligt indhold"}
         zza{"zaza"}
+    }
+    LanguagesShort{
+        az{"azeri"}
     }
     Scripts{
         Arab{"arabisk"}
@@ -570,8 +575,8 @@ da{
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunoo"}
-        Hans{"forenklet han"}
-        Hant{"traditionelt han"}
+        Hans{"forenklet"}
+        Hant{"traditionelt"}
         Hebr{"hebraisk"}
         Hira{"hiragana"}
         Hmng{"pahawh hmong"}
@@ -658,14 +663,15 @@ da{
         Zinh{"arvet"}
         Zmth{"zmth"}
         Zsym{"zsym"}
-        Zxxx{"ikke-skriftsprog"}
+        Zxxx{"uden skriftsprog"}
         Zyyy{"fælles"}
-        Zzzz{"ukendt eller ugyldig skriftsprog"}
+        Zzzz{"ukendt skriftsprog"}
     }
     Types{
         calendar{
             buddhist{"buddhistisk kalender"}
             chinese{"kinesisk kalender"}
+            coptic{"Koptisk kalender"}
             ethiopic{"etiopisk kalender"}
             ethiopic-amete-alem{"etiopisk amete-alem-kalender"}
             gregorian{"gregoriansk kalender"}
@@ -679,12 +685,54 @@ da{
         }
         collation{
             big5han{"sorteringsrækkefølge uforkortet kinesisk - Big5"}
+            dictionary{"Sorteringsrækkefølge for ordbog"}
             direct{"direkte sorteringsrækkefølge"}
+            ducet{"Unicode-standardsortering"}
             gb2312han{"sorteringsrækkefølge forkortet kinesisk - GB2312"}
             phonebook{"sorteringsrækkefølge i telefonbøger"}
             pinyin{"pinyin-baseret sorteringsrækkefølge"}
+            reformed{"Ny sorteringsrækkefølge"}
+            search{"Generel søgning"}
             stroke{"stregbaseret sorteringsrækkefølge"}
             traditional{"traditionel sorteringsrækkefølge"}
+            unihan{"sortering efter streger i rodtegn"}
+        }
+        numbers{
+            arab{"Hindu-arabiske tal"}
+            arabext{"Udvidede hindu-arabiske tal"}
+            armn{"Armenske tal"}
+            armnlow{"Armenske tal i små bogstaver"}
+            beng{"Bengalske tal"}
+            deva{"Devanagariske tal"}
+            ethi{"Etiopiske tal"}
+            fullwide{"Tal i fuld bredde"}
+            geor{"Georgiske tal"}
+            grek{"Græske tal"}
+            greklow{"Græske tal i små bogstaver"}
+            gujr{"Gujaratiske tal"}
+            guru{"Gurmukhi tal"}
+            hanidec{"Kinesiske decimaltal"}
+            hans{"Forenklede kinesiske tal"}
+            hansfin{"Forenklede kinesiske financielle tal"}
+            hant{"Traditionelle kinesiske tal"}
+            hantfin{"Traditionelle kinesiske finansielle tal"}
+            hebr{"Hebræiske tal"}
+            jpan{"Japanske tal"}
+            jpanfin{"Japanske financielle tal"}
+            khmr{"Khmerske tal"}
+            knda{"Kannada tal"}
+            laoo{"Laotiske tal"}
+            latn{"arabertal"}
+            mlym{"Malayalamske tal"}
+            mong{"Mongolske tal"}
+            mymr{"Myanmar tal"}
+            orya{"Oriya tal"}
+            roman{"Romertal"}
+            romanlow{"Romertal i små bogstaver"}
+            taml{"Tamilske tal"}
+            telu{"Telugu tal"}
+            thai{"Thailandske tal"}
+            tibt{"Tibetanske tal"}
         }
     }
     Variants{
@@ -703,7 +751,7 @@ da{
         REVISED{"revideret retskrivning"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

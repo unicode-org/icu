@@ -14,6 +14,8 @@ et{
         calendar{"kalender"}
         collation{"sortimine"}
         currency{"vääring"}
+        numbers{"Numbrid"}
+        x{"Erakasutus"}
     }
     Languages{
         aa{"afari"}
@@ -139,6 +141,7 @@ et{
         el{"kreeka"}
         elx{"eelami"}
         en{"inglise"}
+        en_GB{"inglise (Briti)"}
         en_US{"inglise (USA)"}
         enm{"keskinglise"}
         eo{"esperanto"}
@@ -420,8 +423,8 @@ et{
         sm{"samoa"}
         sma{"lõunasaami"}
         smi{"muu saami"}
-        smj{"Lule saami"}
-        smn{"Inari saami"}
+        smj{"lule saami"}
+        smn{"inari saami"}
         sms{"koltasaami"}
         sn{"šona"}
         snk{"soninke"}
@@ -513,6 +516,9 @@ et{
         zu{"suulu"}
         zun{"sunji"}
         zxx{"mittekeeleline"}
+    }
+    LanguagesShort{
+        az{"aseri"}
     }
     Scripts{
         Arab{"araabia"}
@@ -626,22 +632,68 @@ et{
         calendar{
             buddhist{"budistlik kalender"}
             chinese{"Hiina kalender"}
+            coptic{"Kopti kalender"}
+            ethiopic{"Etioopia kalender"}
+            ethiopic-amete-alem{"Etioopia amete alemi kalender"}
             gregorian{"Gregoriuse kalender"}
             hebrew{"juudi kalender"}
             indian{"India rahvuslik"}
             islamic{"islamikalender"}
             islamic-civil{"islami ilmalik kalender"}
             japanese{"Jaapani kalender"}
+            persian{"Pärsia kalender"}
             roc{"Hiina Vabariigi kalender"}
         }
         collation{
             big5han{"hiina traditsiooniline - big5"}
+            dictionary{"Sõnastiku sortimisjärjestus"}
             direct{"lisareegliteta"}
+            ducet{"Unicode'i sortimise vaikejärjestus"}
             gb2312han{"hiina lihtsustatud - GB2312"}
             phonebook{"telefoniraamat"}
             pinyin{"hiina lihtsustatud - pinyin järjekorras"}
+            reformed{"Reformitud sortimisjärjestus"}
+            search{"Üldeesmärgiline otsing"}
             stroke{"elementide kirjutamise järjekorras"}
             traditional{"traditsiooniline"}
+            unihan{"Radikaal-kriipsude sortimisjärjestus"}
+        }
+        numbers{
+            arab{"Araabia-indic numbrid"}
+            arabext{"Laiendatud araabia-indic numbrid"}
+            armn{"Armeenia numbrid"}
+            armnlow{"Armeenia numbrid väikeste tähtedega"}
+            beng{"Bengali numbrid"}
+            deva{"Devanagari numbrid"}
+            ethi{"Etioopia numbrid"}
+            fullwide{"Täislaiusega numbrid"}
+            geor{"Gruusia numbrid"}
+            grek{"Kreeka numbrid"}
+            greklow{"kreeka numbrid väikeste tähtedega"}
+            gujr{"Gudžarati numbrid"}
+            guru{"Gurmukhi numbrid"}
+            hanidec{"Hiina kümnendnumbrid"}
+            hans{"Lihtsustatud hiina keele numbrid"}
+            hansfin{"Lihtsustatud hiina keele finantsnumbrid"}
+            hant{"Traditsioonilise hiina keele numbrid"}
+            hantfin{"Traditsioonilise hiina keele finantsnumbrid"}
+            hebr{"Heebrea numbrid"}
+            jpan{"Jaapani numbrid"}
+            jpanfin{"Jaapani rahandusnumeraalid"}
+            khmr{"Khmeri numbrid"}
+            knda{"Kannada numbrid"}
+            laoo{"Lao numbrid"}
+            latn{"Ladina numbrid"}
+            mlym{"Malayalami numbrid"}
+            mong{"Mongoolia numbrid"}
+            mymr{"Myanmari numbrid"}
+            orya{"Oria numbrid"}
+            roman{"Rooma numbrid"}
+            romanlow{"Rooma numbrid väikeste tähtedega"}
+            taml{"Tamili numbrid"}
+            telu{"Telugu numbrid"}
+            thai{"Tai numbrid"}
+            tibt{"Tiibeti numbrid"}
         }
     }
     Variants{
@@ -679,10 +731,13 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.58.6"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}
         territory{"Regioon: {0}"}
+    }
+    localeDisplayPattern{
+        separator{","}
     }
 }

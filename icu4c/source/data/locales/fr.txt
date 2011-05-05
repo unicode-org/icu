@@ -15,8 +15,9 @@ fr{
         "[a à â æ b c ç d e é è ê ë f g h i î ï j k l m n o ô œ p q r s t u ù û ü v w"
         " x y ÿ z]"
     }
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z ұ]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
+    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ’ « » ( ) \[ \] @ * / \& # † ‡ §]"}
     LocaleScript{
         "Latn",
     }
@@ -42,7 +43,7 @@ fr{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.22"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -61,6 +62,7 @@ fr{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Ed{"E d"}
                 Gy{"y G"}
                 Hm{"HH:mm"}
@@ -160,6 +162,7 @@ fr{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -174,6 +177,8 @@ fr{
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/yyyy"}
@@ -214,6 +219,15 @@ fr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "dim.",
+                        "lun.",
+                        "mar.",
+                        "mer.",
+                        "jeu.",
+                        "ven.",
+                        "sam.",
+                    }
                     narrow{
                         "D",
                         "L",
@@ -241,11 +255,9 @@ fr{
                     relative{
                         "-1"{"hier"}
                         "-2"{"avant-hier"}
-                        "-3"{"avant-avant-hier"}
                         "0"{"aujourd’hui"}
                         "1"{"demain"}
                         "2"{"après-demain"}
-                        "3"{"après-après-demain"}
                     }
                 }
                 dayperiod{
@@ -262,18 +274,33 @@ fr{
                 }
                 month{
                     dn{"mois"}
+                    relative{
+                        "-1"{"le mois dernier"}
+                        "0"{"ce mois-ci"}
+                        "1"{"le mois prochain"}
+                    }
                 }
                 second{
                     dn{"seconde"}
                 }
                 week{
                     dn{"semaine"}
+                    relative{
+                        "-1"{"la semaine dernière"}
+                        "0"{"cette semaine"}
+                        "1"{"la semaine prochaine"}
+                    }
                 }
                 weekday{
                     dn{"jour de la semaine"}
                 }
                 year{
                     dn{"année"}
+                    relative{
+                        "-1"{"l’année dernière"}
+                        "0"{"cette année"}
+                        "1"{"l’année prochaine"}
+                    }
                 }
                 zone{
                     dn{"fuseau horaire"}
@@ -410,6 +437,20 @@ fr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "janv.",
+                        "févr.",
+                        "mars",
+                        "avr.",
+                        "mai",
+                        "juin",
+                        "juil.",
+                        "août",
+                        "sept.",
+                        "oct.",
+                        "nov.",
+                        "déc.",
+                    }
                     narrow{
                         "J",
                         "F",
@@ -524,8 +565,6 @@ fr{
                 abbreviated{
                     "AH",
                 }
-                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
-                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
             }
             monthNames{
                 format{
@@ -544,7 +583,6 @@ fr{
                         "Dou-l-H.",
                     }
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Mouharram",
                         "Safar",
@@ -561,7 +599,6 @@ fr{
                     }
                 }
                 stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
                     narrow{
                         "1",
                         "2",
@@ -576,7 +613,6 @@ fr{
                         "11",
                         "12",
                     }
-                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                 }
             }
         }
@@ -597,6 +633,7 @@ fr{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Ed{"E d"}
                 Gy{"y G"}
                 Hm{"HH:mm"}
@@ -649,6 +686,7 @@ fr{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Ed{"E d"}
                 Gy{"y G"}
                 Hm{"HH:mm"}
@@ -683,6 +721,12 @@ fr{
                 yyyyQ{"'T'Q y G"}
                 yyyyQQQ{"QQQ y G"}
             }
+            eras{
+                abbreviated{
+                    "avant RdC",
+                    "RdC",
+                }
+            }
         }
     }
     delimiters{
@@ -698,6 +742,7 @@ fr{
         }
     }
     measurementSystemNames{
+        UK{"impérial"}
         US{"américain"}
         metric{"métrique"}
     }
@@ -706,29 +751,113 @@ fr{
             one{"{0} jour"}
             other{"{0} jours"}
         }
+        day-future{
+            0{"Dans 0 jour"}
+            1{"Dans 1 jour"}
+            one{"dans {0} jour"}
+            other{"dans {0} jours"}
+        }
+        day-past{
+            0{"Il y a 0 jour"}
+            1{"Il y a 1 jour"}
+            one{"il y a {0} jour"}
+            other{"il y a {0} jours"}
+        }
         hour{
             one{"{0} heure"}
             other{"{0} heures"}
+        }
+        hour-future{
+            0{"Dans 0 heure"}
+            1{"Dans 1 heure"}
+            one{"dans {0} heure"}
+            other{"dans {0} heures"}
+        }
+        hour-past{
+            0{"Il y a 0 heure"}
+            1{"Il y a 1 heure"}
+            one{"il y a {0} heure"}
+            other{"il y a {0} heures"}
         }
         minute{
             one{"{0} minute"}
             other{"{0} minutes"}
         }
+        minute-future{
+            0{"Dans 0 minute"}
+            1{"Dans 1 minute"}
+            one{"dans {0} minute"}
+            other{"dans {0} minutes"}
+        }
+        minute-past{
+            0{"Il y a 0 minute"}
+            1{"Il y a 1 minute"}
+            one{"il y a {0} minute"}
+            other{"il y a {0} minutes"}
+        }
         month{
             one{"{0} mois"}
             other{"{0} mois"}
+        }
+        month-future{
+            0{"Dans 0 mois"}
+            1{"Dans 1 mois"}
+            one{"dans {0} mois"}
+            other{"dans {0} mois"}
+        }
+        month-past{
+            0{"Il y a 0 mois"}
+            1{"Il y a 1 mois"}
+            one{"il y a {0} mois"}
+            other{"il y a {0} mois"}
         }
         second{
             one{"{0} seconde"}
             other{"{0} secondes"}
         }
+        second-future{
+            0{"Dans 0 seconde"}
+            1{"Dans 1 seconde"}
+            one{"dans {0} seconde"}
+            other{"dans {0} secondes"}
+        }
+        second-past{
+            0{"Il y a 0 seconde"}
+            1{"Il y a 1 seconde"}
+            one{"il y a {0} seconde"}
+            other{"il y a {0} secondes"}
+        }
         week{
             one{"{0} semaine"}
             other{"{0} semaines"}
         }
+        week-future{
+            0{"Dans 0 semaine"}
+            1{"Dans 1 semaine"}
+            one{"dans {0} semaine"}
+            other{"dans {0} semaines"}
+        }
+        week-past{
+            0{"Il y a 0 semaine"}
+            1{"Il y a 1 semaine"}
+            one{"il y a {0} semaine"}
+            other{"il y a {0} semaines"}
+        }
         year{
             one{"{0} année"}
             other{"{0} années"}
+        }
+        year-future{
+            0{"Dans 0 an"}
+            1{"Dans 1 an"}
+            one{"dans {0} an"}
+            other{"dans {0} ans"}
+        }
+        year-past{
+            0{"Il y a 0 an"}
+            1{"Il y a 1 an"}
+            one{"il y a {0} an"}
+            other{"il y a {0} ans"}
         }
     }
     unitsShort{

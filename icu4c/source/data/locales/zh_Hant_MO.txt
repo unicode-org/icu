@@ -7,12 +7,18 @@
 // *
 // ***************************************************************************
 zh_Hant_MO{
-    Version{"2.0.45.82"}
+    Version{"2.0.57.37"}
     calendar{
+        buddhist{
+            availableFormats{
+                MEd{"M-d（E）"}
+                Md{"M-d"}
+            }
+        }
         gregorian{
             DateTimePatterns{
-                "zzzzah時mm分ss秒",
-                "zah時mm分ss秒",
+                "ah:mm:ss [zzzz]",
+                "ah:mm:ss [z]",
                 "ahh:mm:ss",
                 "ah:mm",
                 "y年MM月dd日EEEE",
@@ -20,10 +26,55 @@ zh_Hant_MO{
                 "y年M月d日",
                 "yy年M月d日",
                 "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E, M-d"}
+                MMdd{"dd-MM"}
+                Md{"M-d"}
+            }
+            fields{
+                zone{
+                    dn{"時區"}
+                }
+            }
+            intervalFormats{
+                hmv{
+                    a{"ah:mm至ah:mm [v]"}
+                    h{"ah:mm至h:mm [v]"}
+                    m{"ah:mm至h:mm [v]"}
+                }
+                hv{
+                    a{"ah時至ah時 [v]"}
+                    h{"ah時至h時 [v]"}
+                }
+            }
+            monthNames{
+                stand-alone{
+                    abbreviated{
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
+                    }
+                }
+            }
+        }
+        roc{
+            availableFormats{
+                MEd{"d-M（E）"}
+                Md{"d-M"}
             }
         }
     }

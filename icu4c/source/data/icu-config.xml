@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2010, International Business Machines Corporation and    *
+* Copyright (C) 2005-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -12,6 +12,8 @@
         <include locales="af"/>
         <include locales="af_NA"/>
         <include locales="af_ZA"/>
+        <include locales="agq"/>
+        <include locales="agq_CM"/>
         <include locales="ak"/>
         <include locales="ak_GH"/>
         <include locales="am"/>
@@ -44,6 +46,8 @@
         <include locales="az_Cyrl"/> 
         <include locales="az_Cyrl_AZ"/>
         <include locales="az_AZ" /> 
+        <include locales="bas"/>
+        <include locales="bas_CM"/>
         <include locales="be"/>
         <include locales="be_BY"/>
         <include locales="bem"/>
@@ -60,6 +64,10 @@
         <include locales="bo"/>
         <include locales="bo_CN"/>
         <include locales="bo_IN"/>
+        <include locales="br"/>
+        <include locales="br_FR"/>
+        <include locales="brx"/>
+        <include locales="brx_IN"/>
         <include locales="bs"/>
         <include locales="bs_BA"/>
         <include locales="ca"/>
@@ -83,6 +91,12 @@
         <include locales="de_DE"/> 
         <include locales="de_LI"/>
         <include locales="de_LU"/> 
+        <include locales="dje"/>
+        <include locales="dje_NE"/>
+        <include locales="dua"/>
+        <include locales="dua_CM"/>
+        <include locales="dyo"/>
+        <include locales="dyo_SN"/>
         <include locales="ebu"/>
         <include locales="ebu_KE"/>
         <include locales="ee"/>
@@ -94,12 +108,15 @@
         <include locales="en"/>
         <include locales="en_AS"/> 
         <include locales="en_AU"/> 
+        <include locales="en_BB"/> 
         <include locales="en_BE"/> 
+        <include locales="en_BM"/> 
         <include locales="en_BW"/>
         <include locales="en_BZ"/> 
         <include locales="en_CA"/> 
         <include locales="en_GB"/> 
         <include locales="en_GU"/> 
+        <include locales="en_GY"/> 
         <include locales="en_HK"/> 
         <include locales="en_IE"/> 
         <include locales="en_IN"/> 
@@ -149,6 +166,8 @@
         <include locales="et_EE"/> 
         <include locales="eu"/>
         <include locales="eu_ES"/>
+        <include locales="ewo"/>
+        <include locales="ewo_CM"/>
         <include locales="fa"/>
         <include locales="fa_AF"/>
         <include locales="fa_IR"/>
@@ -176,6 +195,7 @@
         <include locales="fr_DJ"/> 
         <include locales="fr_FR"/> 
         <include locales="fr_GA"/> 
+        <include locales="fr_GF"/> 
         <include locales="fr_GN"/>
         <include locales="fr_GP"/>
         <include locales="fr_GQ"/> 
@@ -192,6 +212,7 @@
         <include locales="fr_SN"/> 
         <include locales="fr_TD"/> 
         <include locales="fr_TG"/> 
+        <include locales="fr_YT"/> 
         <include locales="ga"/>
         <include locales="ga_IE"/>
         <include locales="gl"/>
@@ -273,14 +294,23 @@
         <include locales="ko_KR"/> 
         <include locales="kok"/>
         <include locales="kok_IN"/>
+        <include locales="ksb"/>
+        <include locales="ksb_TZ"/>
+        <include locales="ksf"/>
+        <include locales="ksf_CM"/>
         <include locales="kw"/>
         <include locales="kw_GB"/>
         <include locales="lag"/>
         <include locales="lag_TZ"/>
         <include locales="lg"/>
         <include locales="lg_UG"/>
+        <include locales="ln"/>
+        <include locales="ln_CD"/>
+        <include locales="ln_CG"/>
         <include locales="lt"/>         
         <include locales="lt_LT"/>
+        <include locales="lu"/>
+        <include locales="lu_CD"/>
         <include locales="luo"/>
         <include locales="luo_KE"/>
         <include locales="luy"/>
@@ -296,6 +326,8 @@
         <include locales="mfe_MU"/>
         <include locales="mg"/>
         <include locales="mg_MG"/>
+        <include locales="mgh"/>
+        <include locales="mgh_MZ"/>
         <include locales="mk"/>         
         <include locales="mk_MK"/>
         <include locales="ml"/>
@@ -308,6 +340,8 @@
         <include locales="ms_MY"/>
         <include locales="mt"/> 
         <include locales="mt_MT"/>
+        <include locales="mua"/> 
+        <include locales="mua_CM"/> 
         <include locales="my"/> 
         <include locales="my_MM"/> 
         <include locales="naq"/>
@@ -320,12 +354,17 @@
         <include locales="ne_NP"/>
         <include locales="ne_IN"/>
         <include locales="nl"/>        
+        <include locales="nl_AW"/> 
         <include locales="nl_BE"/> 
         <include locales="nl_NL"/> 
+        <include locales="nmg"/>
+        <include locales="nmg_CM"/>
         <include locales="nn"/>
         <include locales="nn_NO"/>
         <include locales="no"/> 
         <include locales="no_NO"/> 
+        <include locales="nus"/>
+        <include locales="nus_SD"/>
         <include locales="nyn"/>
         <include locales="nyn_UG"/>
         <include locales="om"/>
@@ -345,12 +384,16 @@
         <include locales="ps"/>
         <include locales="ps_AF"/>
         <include locales="pt"/> 
+        <include locales="pt_AO"/>
         <include locales="pt_BR"/>
         <include locales="pt_GW"/>
         <include locales="pt_MZ"/>
         <include locales="pt_PT"/>
+        <include locales="pt_ST"/>
         <include locales="rm"/>         
         <include locales="rm_CH"/>
+        <include locales="rn"/>         
+        <include locales="rn_BI"/>
         <include locales="ro"/>         
         <include locales="ro_MD"/>
         <include locales="ro_RO"/>
@@ -367,6 +410,8 @@
         <include locales="rwk_TZ"/>
         <include locales="saq"/>
         <include locales="saq_KE"/>
+        <include locales="sbp"/>
+        <include locales="sbp_TZ"/>
         <include locales="seh"/>
         <include locales="seh_MZ"/>
         <include locales="ses"/>
@@ -422,6 +467,8 @@
         <include locales="sw"/>
         <include locales="sw_KE"/>
         <include locales="sw_TZ"/>
+        <include locales="swc"/>
+        <include locales="swc_CD"/>
         <include locales="ta"/> 
         <include locales="ta_LK"/>
         <include locales="ta_IN"/>
@@ -441,6 +488,8 @@
         <include locales="to_TO"/>
         <include locales="tr"/>        
         <include locales="tr_TR"/>
+        <include locales="twq"/>        
+        <include locales="twq_NE"/>
         <include locales="tzm"/>
         <include locales="tzm_Latn"/>
         <include locales="tzm_Latn_MA"/>
@@ -455,16 +504,24 @@
         <include locales="uz_Arab_AF"/>
         <include locales="uz_AF"/>
         <include locales="uz_Cyrl"/>
-        <include locales="uz_Latn" draft=".*"/>
+        <include locales="uz_Latn"/>
         <include locales="uz_Cyrl_UZ"/>
-        <include locales="uz_Latn_UZ" draft=".*"/>
+        <include locales="uz_Latn_UZ"/>
         <include locales="uz_UZ"/>
+        <include locales="vai"/> 
+        <include locales="vai_Vaii"/>
+        <include locales="vai_Vaii_LR"/>
+        <include locales="vai_LR"/>
+        <include locales="vai_Latn"/>
+        <include locales="vai_Latn_LR"/>
         <include locales="vi"/> 
         <include locales="vi_VN"/>
         <include locales="vun"/>
         <include locales="vun_TZ"/>
         <include locales="xog"/>
         <include locales="xog_UG"/>
+        <include locales="yav"/>
+        <include locales="yav_CM"/>
         <include locales="yo"/>
         <include locales="yo_NG"/>
         <include locales="zh"/> 

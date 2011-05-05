@@ -16,7 +16,7 @@ kde{
             "Dirham ya Falme za Chiarabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwanza ya Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ kde{
             "Dola ya Australia",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinari ya Bahareni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Faranga ya Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ kde{
             "Yuan Renminbi ya China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Eskudo ya Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faranga ya Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinari ya Aljeria",
         }
         EGP{
@@ -68,11 +68,11 @@ kde{
             "Pauni ya Misri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakfa ya Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Bir ya Uhabeshi",
         }
         EUR{
@@ -84,7 +84,7 @@ kde{
             "Pauni ya Uingereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi ya Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ kde{
             "Dalasi ya Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faranga ya Gine",
         }
         INR{
@@ -104,15 +104,15 @@ kde{
             "Sarafu ya Chijapani",
         }
         KES{
-            "Ksh",
+            "KES",
             "Shilingi ya Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faranga ya Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dola ya Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ kde{
             "Loti ya Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinari ya Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ kde{
             "Faranga ya Bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ugwiya ya Moritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupia ya Morisi",
         }
         MWK{
@@ -144,15 +144,15 @@ kde{
             "Kwacha ya Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikali ya Msumbiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dola ya Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira ya Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ kde{
             "Faranga ya Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyal ya Saudia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupia ya Shelisheli",
         }
         SDG{
@@ -172,23 +172,23 @@ kde{
             "Dinari ya Sudani",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Pauni ya Sudani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Pauni ya Santahelena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Shilingi ya Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra ya Sao Tome na Principe",
         }
         SZL{
@@ -196,7 +196,7 @@ kde{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dinari ya Tunisia",
         }
         TZS{
@@ -204,7 +204,7 @@ kde{
             "Shilingi ya Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Shilingi ya Uganda",
         }
         USD{
@@ -220,17 +220,17 @@ kde{
             "Faranga CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randi ya Afrika Kusini",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwacha ya Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.57.99"}
 }

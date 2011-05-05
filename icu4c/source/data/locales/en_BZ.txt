@@ -18,7 +18,7 @@ en_BZ{
         279,
         216,
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.56.95"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,7 +39,6 @@ en_BZ{
             availableFormats{
                 MMMEd{"EEE dd MMM"}
                 MMMd{"dd MMM"}
-                yMMM{"MMM y"}
                 yMMMEd{"EEE dd MMM y"}
                 yMMMd{"dd MMM y"}
             }

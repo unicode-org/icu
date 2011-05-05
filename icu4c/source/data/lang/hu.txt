@@ -14,6 +14,8 @@ hu{
         calendar{"Naptár"}
         collation{"Rendezés"}
         currency{"Pénznem"}
+        numbers{"Számok"}
+        x{"Privát használatra"}
     }
     Languages{
         aa{"afar"}
@@ -26,6 +28,7 @@ hu{
         af{"afrikaans"}
         afa{"afroázsiai nyelv"}
         afh{"afrihili"}
+        agq{"agq"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkád"}
@@ -44,6 +47,7 @@ hu{
         art{"mesterséges nyelv"}
         arw{"aravak"}
         as{"asszámi"}
+        asa{"asu"}
         ast{"asztúr"}
         ath{"atapaszkan nyelvek"}
         aus{"ausztrál nyelvek"}
@@ -62,6 +66,7 @@ hu{
         bej{"bedzsa"}
         bem{"bemba"}
         ber{"berber"}
+        bez{"bena"}
         bg{"bolgár"}
         bh{"bihari"}
         bho{"bodzspuri"}
@@ -75,6 +80,7 @@ hu{
         bo{"tibeti"}
         br{"breton"}
         bra{"braj"}
+        brx{"bodo"}
         bs{"bosnyák"}
         btk{"batak"}
         bua{"burját"}
@@ -125,14 +131,17 @@ hu{
         den{"szlevi"}
         dgr{"dogrib"}
         din{"dinka"}
+        dje{"dje"}
         doi{"dogri"}
         dra{"egyéb dravida"}
         dsb{"alsó szorb"}
         dua{"duala"}
         dum{"közép holland"}
         dv{"divehi"}
+        dyo{"dyo"}
         dyu{"diula"}
         dz{"butáni"}
+        ebu{"embu"}
         ee{"eve"}
         efi{"efik"}
         egy{"óegyiptomi"}
@@ -242,6 +251,7 @@ hu{
         kaw{"kawi"}
         kbd{"kabardi"}
         kcg{"tyap"}
+        kea{"kabuverdianu"}
         kfo{"koro"}
         kg{"kongo"}
         kha{"kaszi"}
@@ -264,6 +274,7 @@ hu{
         kro{"kru"}
         kru{"kuruh"}
         ks{"kásmíri"}
+        ksf{"ksf"}
         ku{"kurd"}
         kum{"kumük"}
         kut{"kutenai"}
@@ -289,6 +300,7 @@ hu{
         lun{"lunda"}
         luo{"luo"}
         lus{"lushai"}
+        luy{"lujia"}
         lv{"lett"}
         mad{"madurai"}
         mag{"magahi"}
@@ -302,6 +314,7 @@ hu{
         men{"mende"}
         mg{"málgas"}
         mga{"közép ír"}
+        mgh{"mgh"}
         mh{"marshalli"}
         mi{"maori"}
         mic{"mikmak"}
@@ -320,6 +333,7 @@ hu{
         mr{"marathi"}
         ms{"maláj"}
         mt{"máltai"}
+        mua{"mua"}
         mul{"többszörös nyelvek"}
         mun{"munda nyelvek"}
         mus{"krík"}
@@ -343,6 +357,7 @@ hu{
         niu{"niui"}
         nl{"holland"}
         nl_BE{"flamand"}
+        nmg{"nmg"}
         nn{"norvég nynorsk"}
         no{"norvég"}
         nog{"nogaj"}
@@ -351,6 +366,7 @@ hu{
         nr{"déli ndebele"}
         nso{"északi szotó"}
         nub{"núbiai nyelv"}
+        nus{"nus"}
         nv{"navahó"}
         nwc{"klasszikus newari"}
         ny{"nyanja"}
@@ -393,11 +409,13 @@ hu{
         rn{"kirundi"}
         ro{"román"}
         roa{"román nyelv"}
+        rof{"rombo"}
         rom{"roma"}
         root{"ősi"}
         ru{"orosz"}
         rup{"aromán"}
         rw{"kiruanda"}
+        rwk{"rwo"}
         sa{"szanszkrit"}
         sad{"szandave"}
         sah{"jakut"}
@@ -406,6 +424,7 @@ hu{
         sam{"szamaritánus arámi"}
         sas{"sasak"}
         sat{"szantáli"}
+        sbp{"sbp"}
         sc{"szardíniai"}
         scn{"szicíliai"}
         sco{"skót"}
@@ -482,6 +501,7 @@ hu{
         tut{"altáji nyelv"}
         tvl{"tuvalu"}
         tw{"twi"}
+        twq{"twq"}
         ty{"tahiti"}
         tyv{"tuvai"}
         udm{"udmurt"}
@@ -498,6 +518,7 @@ hu{
         vo{"volapük"}
         vot{"votják"}
         wa{"vallon"}
+        wae{"walser"}
         wak{"vakas nyelv"}
         wal{"valamo"}
         war{"varaó"}
@@ -508,6 +529,7 @@ hu{
         xh{"hosza"}
         yao{"jaó"}
         yap{"japi"}
+        yav{"yav"}
         yi{"jiddis"}
         yo{"joruba"}
         ypk{"jupik nyelv"}
@@ -524,6 +546,9 @@ hu{
         zun{"zuni"}
         zxx{"nincs nyelvészeti tartalom"}
         zza{"zaza"}
+    }
+    LanguagesShort{
+        az{"azeri"}
     }
     Scripts{
         Arab{"Arab"}
@@ -661,55 +686,129 @@ hu{
         calendar{
             buddhist{"buddhista naptár"}
             chinese{"kínai naptár"}
+            coptic{"Kopt naptár"}
+            ethiopic{"Etióp naptár"}
+            ethiopic-amete-alem{"Etióp amete alem naptár"}
             gregorian{"Gergely-naptár"}
             hebrew{"héber naptár"}
             indian{"Indiai nemzeti naptár"}
             islamic{"iszlám naptár"}
             islamic-civil{"iszlám civil naptár"}
             japanese{"japán naptár"}
+            persian{"Perzsa naptár"}
             roc{"Kínai köztársasági naptár"}
         }
         collation{
             big5han{"Hagyományos kínai sorrend - Big5"}
+            dictionary{"Szótári rendezési sorrend"}
             direct{"Közvetlen sorrend"}
+            ducet{"Alapértelmezett Unicode rendezési sorrend"}
             gb2312han{"Egyszerűsített kínai sorrend - GB2312"}
             phonebook{"Telefonkönyv sorrend"}
             pinyin{"Pinyin sorrend"}
+            reformed{"Átalakított rendezési elv"}
+            search{"Általános célú keresés"}
             stroke{"Vonássorrend"}
             traditional{"Hagyományos"}
+            unihan{"szótővonás rendezési sorrend"}
+        }
+        numbers{
+            arab{"Arab-indiai számjegyek"}
+            arabext{"Kibővített arab-indiai számjegyek"}
+            armn{"Örmény számok"}
+            armnlow{"Örmény kisbetűs számok"}
+            beng{"Bengáli számjegyek"}
+            deva{"Dévanágari számjegyek"}
+            ethi{"Etióp számok"}
+            fullwide{"Teljes szélességű számjegyek"}
+            geor{"Grúz számok"}
+            grek{"Görög számok"}
+            greklow{"Görög kisbetűs számok"}
+            gujr{"Gudzsaráti számjegyek"}
+            guru{"Gurmuki számjegyek"}
+            hanidec{"Kínai tizedes számok"}
+            hans{"Egyszerűsített kínai számok"}
+            hansfin{"Egyszerűsített kínai pénzügyi számok"}
+            hant{"Hagyományos kínai számok"}
+            hantfin{"Hagyományos kínai pénzügyi számok"}
+            hebr{"Héber számok"}
+            jpan{"Japán számok"}
+            jpanfin{"Japán pénzügyi számok"}
+            khmr{"Khmer számjegyek"}
+            knda{"Kannada számjegyek"}
+            laoo{"Lao számjegyek"}
+            latn{"Nyugati számjegyek"}
+            mlym{"Malajálam számjegyek"}
+            mong{"Mongol számjegyek"}
+            mymr{"Mianmari számjegyek"}
+            orya{"Orija számjegyek"}
+            roman{"Római számok"}
+            romanlow{"Római kisbetűs számok"}
+            taml{"Tamil számok"}
+            telu{"Telugu számjegyek"}
+            thai{"Thai számjegyek"}
+            tibt{"Tibeti számjegyek"}
         }
     }
     Variants{
         1606NICT{"Késői közép francia 1606-ig"}
+        1694ACAD{"Korai modern francia"}
         1901{"Hagyományos német helyesírás"}
+        1959ACAD{"Akadémiai"}
         1994{"Szabványosított reziján helyesírás"}
         1996{"1996-os német helyesírás"}
+        ALALC97{"ALA-LC romanizáció, 1997-es kiadás"}
+        ALUKU{"Aluku dialektus"}
         AREVELA{"Keleti örmény"}
         AREVMDA{"Nyugati örmény"}
         BAKU1926{"Egyesített türkic latin ábécé"}
+        BAUDDHA{"Bauddha"}
+        BISCAYAN{"Biszkajan"}
         BISKE{"San Giorgo/Bila tájszólás"}
         BOONT{"Boontling"}
         FONIPA{"IPA fonetika"}
         FONUPA{"UPA fonetika"}
+        FONXSAMP{"Fonxsamp"}
+        HEPBURN{"Hepburn romanizáció"}
+        HOGNORSK{"Hongorszk"}
+        ITIHASA{"Itihasa"}
+        JAUER{"Jauer"}
+        JYUTPING{"Jyutping"}
+        KKCOR{"Meghatározatlan helyesírás"}
+        LAUKIKA{"Laukika"}
         LIPAW{"Reziján lipovaz tájszólás"}
+        LUNA1918{"Luna1918"}
         MONOTON{"Monoton"}
+        NDYUKA{"Ndyuka dialektus"}
         NEDIS{"Natisone dialektus"}
         NJIVA{"Gniva/Njiva tájszólás"}
         OSOJS{"Oseacco/Osojane tájszólás"}
+        PAMAKA{"Pamaka dialektus"}
+        PETR1708{"Petr1708"}
         PINYIN{"pinjin átírás"}
         POLYTON{"Politonikus"}
         POSIX{"Számítógép"}
+        PUTER{"Puter"}
         REVISED{"Átdolgozott helyesírás"}
         ROZAJ{"Reziján"}
+        RUMGR{"Rumgr"}
         SAAHO{"Saho"}
         SCOTLAND{"Skót szabványos angol"}
         SCOUSE{"Scouse"}
         SOLBA{"Stolvizza/Solbica tájszólás"}
+        SURMIRAN{"Surmiran"}
+        SURSILV{"Sursilv"}
+        SUTSILV{"Sutsilv"}
         TARASK{"Taraskijevica helyesírás"}
+        UCCOR{"Egyesített helyesírás"}
+        UCRCOR{"Egyesített átdolgozott helyesírás"}
+        ULSTER{"Ulster"}
+        VAIDIKA{"Vaidika"}
         VALENCIA{"Valencia"}
+        VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.31"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

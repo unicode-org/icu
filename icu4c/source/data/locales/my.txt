@@ -10,10 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/my.xml
  */
 my{
-    AuxExemplarCharacters{"[\u1022 \u1028 \u1050-\u1059]"}
+    AuxExemplarCharacters{"[ၐ ၑ ဨ ဢ ၒ ၓ ၔ ၕ ၖ ၗ \u1058 \u1059]"}
     ExemplarCharacters{
         "[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ ဣ ဤ ဥ ဦ"
-        " ဧ ဩ ဪ ဿ \u102B-\u1032 \u1036-\u103E]"
+        " ဧ ဩ ဪ ာ ါ \u102D \u102E \u102F \u1030 ေ \u1032 \u1036 ဿ ျ ြ \u103D \u103E "
+        "\u1039 \u103A \u1037 း]"
     }
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ]"}
@@ -41,7 +42,7 @@ my{
             }
         }
     }
-    Version{"2.0.51.46"}
+    Version{"2.0.58.6"}
     calendar{
         gregorian{
             AmPmMarkers{

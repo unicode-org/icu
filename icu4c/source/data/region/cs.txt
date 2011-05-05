@@ -41,9 +41,11 @@ cs{
         151{"Východní Evropa"}
         154{"Severní Evropa"}
         155{"Západní Evropa"}
+        172{"Společenství nezávislých států"}
         200{"Československo"}
         419{"Latinská Amerika a Karibské moře"}
         830{"Normanské ostrovy"}
+        AC{"Ostrov Ascension"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afghánistán"}
@@ -70,6 +72,7 @@ cs{
         BH{"Bahrajn"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"Svatý Bartoloměj"}
         BM{"Bermudy"}
         BN{"Brunej Darussalam"}
         BO{"Bolívie"}
@@ -82,9 +85,9 @@ cs{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kokosové ostrovy"}
-        CD{"Demokratická republika Kongo"}
+        CD{"Kongo - Kinshasa"}
         CF{"Středoafrická republika"}
-        CG{"Kongo"}
+        CG{"Kongo - Brazzaville"}
         CH{"Švýcarsko"}
         CI{"Pobřeží slonoviny"}
         CK{"Cookovy ostrovy"}
@@ -92,6 +95,7 @@ cs{
         CM{"Kamerun"}
         CN{"Čína"}
         CO{"Kolumbie"}
+        CP{"Clippertonův ostrov"}
         CR{"Kostarika"}
         CS{"Srbsko a Černá Hora"}
         CU{"Kuba"}
@@ -100,11 +104,13 @@ cs{
         CY{"Kypr"}
         CZ{"Česká republika"}
         DE{"Německo"}
+        DG{"Diego Garcia"}
         DJ{"Džibuti"}
         DK{"Dánsko"}
         DM{"Dominika"}
         DO{"Dominikánská republika"}
         DZ{"Alžírsko"}
+        EA{"Ceuta a Melilla"}
         EC{"Ekvádor"}
         EE{"Estonsko"}
         EG{"Egypt"}
@@ -144,6 +150,7 @@ cs{
         HR{"Chorvatsko"}
         HT{"Haiti"}
         HU{"Maďarsko"}
+        IC{"Kanárské ostrovy"}
         ID{"Indonésie"}
         IE{"Irsko"}
         IL{"Izrael"}
@@ -182,12 +189,12 @@ cs{
         LY{"Libye"}
         MA{"Maroko"}
         MC{"Monako"}
-        MD{"Moldavsko, republika"}
+        MD{"Moldavsko"}
         ME{"Černá Hora"}
         MF{"Svatý Martin"}
         MG{"Madagaskar"}
         MH{"Marshallovy ostrovy"}
-        MK{"Macedonia"}
+        MK{"Makedonie"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolsko"}
@@ -256,6 +263,7 @@ cs{
         SV{"El Salvador"}
         SY{"Sýrie"}
         SZ{"Svazijsko"}
+        TA{"Tristan da Cunha"}
         TC{"Ostrovy Caicos a Turks"}
         TD{"Čad"}
         TF{"Francouzská jižní teritoria"}
@@ -294,5 +302,5 @@ cs{
         ZW{"Zimbabwe"}
         ZZ{"Neznámá nebo neplatná oblast"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.14"}
 }

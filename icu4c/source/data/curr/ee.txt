@@ -13,23 +13,83 @@ ee{
     Currencies{
         AED{
             "AED",
-            "United Arab Emiratestɔwofɛgadudu",
+            "united arab emiratesga dirham",
+        }
+        AFN{
+            "AFN",
+            "afghanistanga afghani",
+        }
+        ALL{
+            "ALL",
+            "albaniaga lek",
+        }
+        AMD{
+            "AMD",
+            "armeniaga dram",
+        }
+        ANG{
+            "ANG",
+            "nedalands Antilleaga guilder",
         }
         AOA{
-            "Kz",
-            "Angolatɔwoƒɛgadudu",
+            "AOA",
+            "angolaga kwanza",
+        }
+        ARS{
+            "ARS",
+            "argentinaga peso",
         }
         AUD{
             "AU$",
-            "Australiatɔwoƒɛgadudu",
+            "australiaga dollar",
+        }
+        AWG{
+            "AWG",
+            "arubaga lorin",
+        }
+        AZN{
+            "AZN",
+            "azerbaidzanga manat",
+        }
+        BAM{
+            "BAM",
+            "bosnia-herzegovinaga convertible mark",
+        }
+        BBD{
+            "BBD",
+            "barbadiaga dollar",
+        }
+        BDT{
+            "BDT",
+            "bangladeshga taka",
+        }
+        BGN{
+            "BGN",
+            "bulgariaga lev",
         }
         BHD{
-            "BD",
-            "Bahraintɔwoƒɛgadudu",
+            "BHD",
+            "bahrainga dinar",
         }
         BIF{
-            "FBu",
-            "Burunditɔwoƒɛgadudu",
+            "BIF",
+            "burundiga franc",
+        }
+        BMD{
+            "BMD",
+            "bermudaga dollar",
+        }
+        BND{
+            "BND",
+            "bruneiga dollar",
+        }
+        BOB{
+            "BOB",
+            "boliviaga boliviano",
+        }
+        BRL{
+            "BR$",
+            "brazilga real",
         }
         BWP{
             "BWP",
@@ -52,15 +112,15 @@ ee{
             "Tsynatɔwoƒɛgadudu",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Eskudo Kaboverdianotɔwoƒɛgadudu",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Dzibutitɔwoƒɛgadudu",
         }
         DZD{
-            "DA",
+            "DZD",
             "Algeriatɔwoƒɛgadudu",
         }
         EGP{
@@ -68,11 +128,11 @@ ee{
             "Egypt-tɔwoƒɛgadudu",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Eritreiatɔwofɛgadudu",
         }
         ETB{
-            "Br",
+            "ETB",
             "Ethiopiatɔwoƒɛgadudu",
         }
         EUR{
@@ -84,7 +144,7 @@ ee{
             "Britishtɔwoƒɛgadudu",
         }
         GHC{
-            "₵",
+            "GHC",
             "Siɖi",
         }
         GMD{
@@ -92,8 +152,16 @@ ee{
             "Gambiatɔwofɛgadudu",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Guineatɔwoƒɛgadudu",
+        }
+        HKD{
+            "HK$",
+            "hong kongga dollar",
+        }
+        IDR{
+            "IDR",
+            "indinesiaga rupiah",
         }
         INR{
             "₹",
@@ -104,15 +172,19 @@ ee{
             "Gyapantɔwoƒɛgadudu",
         }
         KES{
-            "Ksh",
+            "KES",
             "Kenyatɔwoƒɛgadudu",
         }
         KMF{
-            "CF",
+            "KMF",
             "Komoratɔwoƒɛgadudu",
         }
+        KRW{
+            "₩",
+            "anyiehe koreaga won",
+        }
         LRD{
-            "L$",
+            "LRD",
             "Liberiatɔwoƒɛgadudu",
         }
         LSL{
@@ -120,7 +192,7 @@ ee{
             "Lesothotɔwoƒɛgadudu",
         }
         LYD{
-            "LD",
+            "LYD",
             "Libyatɔwoƒɛgadudu",
         }
         MAD{
@@ -132,75 +204,107 @@ ee{
             "Malagasytɔwoƒɛgadudu",
         }
         MRO{
-            "UM",
+            "MRO",
             "Mauritaniatɔwoƒɛgadudu",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Mauritiustɔwoƒɛgadudu",
         }
         MWK{
             "MWK",
             "Malawitɔwofɛgadudu",
         }
+        MXN{
+            "MX$",
+            "meksikoga peso",
+        }
         MZM{
-            "Mt",
+            "MZM",
             "Mozambiktɔwoƒɛgadudu",
         }
         NAD{
-            "N$",
+            "NAD",
             "Namibiatɔwoƒɛgadudu",
         }
         NGN{
-            "₦",
+            "NGN",
             "Nigeriatɔwoƒɛgadudu",
+        }
+        NOK{
+            "NOK",
+            "norwayga krone",
+        }
+        PLN{
+            "PLN",
+            "polanɖga zloty",
+        }
+        RUB{
+            "RUB",
+            "russiaga ruble",
         }
         RWF{
             "RWF",
             "Rwandatɔwoƒɛgadudu",
         }
         SAR{
-            "SR",
+            "SAR",
             "Saudi Riyaltɔwoƒɛgadudu",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Seyshelstɔwoƒɛgadudu",
         }
         SDG{
             "SDG",
             "Sudantɔwoƒɛgadudu",
         }
+        SEK{
+            "SEK",
+            "swedenga krona",
+        }
         SHP{
-            "SH£",
+            "SHP",
             "St Helenatɔwoƒɛgadudu",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leonegadudu",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Somalitɔwoƒɛgadudu",
         }
         STD{
-            "Db",
+            "STD",
             "Sao Tome kplɛ Prinsipitɔwoƒɛgadudu",
         }
         SZL{
             "SZL",
             "Lilangenitɔwoƒɛgadudu",
         }
+        THB{
+            "฿",
+            "thaiga baht",
+        }
         TND{
-            "DT",
+            "TND",
             "Tunisiatɔwoƒɛgadudu",
         }
+        TRY{
+            "TRY",
+            "turkeyga lira",
+        }
+        TWD{
+            "NT$",
+            "taiwanga yeye dollar",
+        }
         TZS{
-            "TSh",
+            "TZS",
             "Tanzaniatɔwofɛgadudu",
         }
         UGX{
-            "USh",
+            "UGX",
             "Ugandatɔwofɛgadudu",
         }
         USD{
@@ -211,18 +315,25 @@ ee{
             "CFA",
             "Sefa",
         }
+        XXX{
+            "XXX",
+            "gaɖuɖu manya (xxx)",
+        }
         ZAR{
-            "R",
+            "ZAR",
             "South Afrikatɔwoƒɛgadudu",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Zambiatɔwoƒɛgadudu",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabwetɔwoƒɛgadudu",
         }
     }
-    Version{"2.0.53.54"}
+    CurrencyUnitPatterns{
+        other{"{1} {0}"}
+    }
+    Version{"2.0.58.0"}
 }

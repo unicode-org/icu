@@ -39,7 +39,7 @@ is{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.57.98"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -62,6 +62,7 @@ is{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L."}
@@ -73,6 +74,9 @@ is{
                 MMMd{"d. MMM"}
                 Md{"d.M"}
                 d{"d"}
+                h{"H"}
+                hm{"H:mm"}
+                hms{"H:mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M. yyyy"}
@@ -80,6 +84,8 @@ is{
                 yMMM{"MMM y"}
                 yMMMEd{"EEE d. MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMd{"d MMM, y"}
+                yMd{"d/M/y"}
                 yQ{"Q. yyyy"}
                 yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
@@ -96,6 +102,15 @@ is{
                         "fim",
                         "fös",
                         "lau",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "Þ",
+                        "M",
+                        "F",
+                        "F",
+                        "L",
                     }
                     wide{
                         "sunnudagur",
@@ -156,18 +171,33 @@ is{
                 }
                 month{
                     dn{"mánuður"}
+                    relative{
+                        "-1"{"Í síðasta mánuði"}
+                        "0"{"Í þessum mánuði"}
+                        "1"{"Í næsta mánuði"}
+                    }
                 }
                 second{
                     dn{"sekúnda"}
                 }
                 week{
                     dn{"vika"}
+                    relative{
+                        "-1"{"Í síðustu viku"}
+                        "0"{"Í þessari viku"}
+                        "1"{"Í næstu viku"}
+                    }
                 }
                 weekday{
                     dn{"vikudagur"}
                 }
                 year{
                     dn{"ár"}
+                    relative{
+                        "-1"{"Á síðasta ári"}
+                        "0"{"Á þessu ári"}
+                        "1"{"Á næsta ári"}
+                    }
                 }
                 zone{
                     dn{"svæði"}
@@ -207,16 +237,26 @@ is{
                     M{"d.M - d.M"}
                     d{"d.M - d.M"}
                 }
+                d{
+                    d{"d–d"}
+                }
                 fallback{"{0} - {1}"}
+                h{
+                    a{"H – H"}
+                    h{"H–H"}
+                }
                 hm{
+                    a{"H:mm – H:mm"}
                     h{"h:mm-h:mm a"}
                     m{"h:mm-h:mm a"}
                 }
                 hmv{
+                    a{"H:mm – H:mm v"}
                     h{"h:mm-h:mm a v"}
                     m{"h:mm-h:mm a v"}
                 }
                 hv{
+                    a{"H – H v"}
                     h{"h-h a v"}
                 }
                 y{
@@ -239,6 +279,10 @@ is{
                     M{"E, d. MMM - E, d. MMM y"}
                     d{"E, d. - E, d. MMM y"}
                     y{"E, d. MMM y - E, d. MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
                     M{"d. MMM - d. MMM y"}
@@ -266,6 +310,20 @@ is{
                         "okt",
                         "nóv",
                         "des",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "Á",
+                        "L",
+                        "O",
+                        "N",
+                        "D",
                     }
                     wide{
                         "janúar",
@@ -307,6 +365,12 @@ is{
                         "F3",
                         "F4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1st fjórðungur",
                         "2nd fjórðungur",
@@ -344,6 +408,7 @@ is{
         }
     }
     measurementSystemNames{
+        UK{"Bretland"}
         US{"bandarískt"}
         metric{"metrakerfi"}
     }
@@ -352,28 +417,135 @@ is{
             one{"{0} dagur"}
             other{"{0} dagar"}
         }
+        day-future{
+            0{"Eftir 0 daga"}
+            1{"Eftir einn dag"}
+            other{"Eftir {0} daga"}
+        }
+        day-past{
+            0{"Fyrir 0 dögum síðan"}
+            1{"Fyrir einum degi síðan"}
+            other{"Fyrir {0} dögum síðan"}
+        }
         hour{
             one{"{0} klukkustund"}
             other{"{0} klukkustundir"}
+        }
+        hour-future{
+            0{"Eftir 0 klukkustundir"}
+            1{"Eftir eina klukkustund"}
+            other{"Eftir {0} klukkustundir"}
+        }
+        hour-past{
+            0{"Fyrir 0 klukkustundum síðan"}
+            1{"Fyrir einni klukkustund síðan"}
+            other{"Fyrir {0} klukkustundum síðan"}
         }
         minute{
             one{"{0} mínúta"}
             other{"{0} mínútur"}
         }
+        minute-future{
+            0{"Eftir 0 mínútur"}
+            1{"Eftir eina mínútu"}
+            other{"Eftir {0} mínútur"}
+        }
+        minute-past{
+            0{"Fyrir 0 mínútum síðan"}
+            1{"Fyrir einni mínútu síðan"}
+            other{"Fyrir {0} mínútum síðan"}
+        }
         month{
             one{"{0} mánuður"}
             other{"{0} mánuðir"}
+        }
+        month-future{
+            0{"Eftir 0 mánuði"}
+            1{"Eftir einn mánuð"}
+            other{"Eftir {0} mánuði"}
+        }
+        month-past{
+            0{"Fyrir 0 mánuðum síðan"}
+            1{"Fyrir einum mánuði síðan"}
+            other{"Fyrir {0} mánuðum síðan"}
         }
         second{
             one{"{0} sekúnda"}
             other{"{0} sekúndur"}
         }
+        second-future{
+            0{"Eftir 0 sekúndur"}
+            1{"Eftir eina sekúndu"}
+            other{"Eftir {0} sekúndur"}
+        }
+        second-past{
+            0{"Fyrir 0 sekúndum síðan"}
+            1{"Fyrir einni sekúndu síðan"}
+            other{"Fyrir {0} sekúndum síðan"}
+        }
         week{
             one{"{0} vika"}
             other{"{0} vikur"}
         }
+        week-future{
+            0{"Eftir 0 vikur"}
+            1{"Eftir eina viku"}
+            other{"Eftir {0} vikur"}
+        }
+        week-past{
+            0{"Fyrir 0 vikum síðan"}
+            1{"Fyrir einni viku síðan"}
+            other{"Fyrir {0} vikum síðan"}
+        }
         year{
             one{"{0} ár"}
+            other{"{0} ár"}
+        }
+        year-future{
+            0{"Eftir 0 ár"}
+            1{"Eftir eitt ár"}
+            other{"Eftir {0} ár"}
+        }
+        year-past{
+            0{"Fyrir 0 árum síðan"}
+            1{"Fyrir einu ári síðan"}
+            other{"Fyrir {0} árum síðan"}
+        }
+    }
+    unitsShort{
+        day{
+            0{"0 dagar"}
+            1{"Einn dagur"}
+            other{"{0} dagar"}
+        }
+        hour{
+            0{"0 klst."}
+            1{"1 klst."}
+            other{"{0} klst."}
+        }
+        minute{
+            0{"0 mín."}
+            1{"1 mín."}
+            other{"{0} mín."}
+        }
+        month{
+            0{"0 mán."}
+            1{"1 mán."}
+            other{"{0} mán."}
+        }
+        second{
+            0{"0 sek."}
+            1{"1 sek."}
+            other{"{0} sek."}
+        }
+        week{
+            0{"0 vikur"}
+            1{"1 vika"}
+            other{"{0} vikur"}
+        }
+        year{
+            0{"0 ár"}
+            1{"1 ár"}
             other{"{0} ár"}
         }
     }

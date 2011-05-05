@@ -16,7 +16,7 @@ teo{
             "Ango'otol lok' Falme za Kiarabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Ango'otol lok' Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ teo{
             "Ango'otol lok' Australia",
         }
         BHD{
-            "BD",
+            "BHD",
             "Ango'otol lok' Bahareni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Ango'otol lok' Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ teo{
             "Ango'otol lok' China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Ango'otol lok' Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Ango'otol lok' Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Ango'otol lok' Aljeria",
         }
         EGP{
@@ -68,11 +68,11 @@ teo{
             "Epaunt lok' Misri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Ango'otol lok' Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Ango'otol lok' Uhabeshi",
         }
         EUR{
@@ -84,7 +84,7 @@ teo{
             "Epaunt lok' Uingereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi ya Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ teo{
             "Dalasi ya Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Ango'otol lok' Gine",
         }
         INR{
@@ -104,15 +104,15 @@ teo{
             "Ango'otol lok' Kijapani",
         }
         KES{
-            "Ksh",
+            "KES",
             "Ango'otol lok' Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Ango'otol lok' Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "edola lok' Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ teo{
             "Ango'otol lok' Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Ango'otol lok' Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ teo{
             "Ango'otol lok' Bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ango'otol lok' Moritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Ango'otol lok' Morisi",
         }
         MWK{
@@ -144,15 +144,15 @@ teo{
             "Ango'otol lok' Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Ango'otol lok' Msumbiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "Ango'otol lok' Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Ango'otol lok' Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ teo{
             "Ango'otol lok' Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Ango'otol lok' Saudia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Ango'otol lok' Shelisheli",
         }
         SDG{
@@ -172,19 +172,19 @@ teo{
             "Epaunt Lok' Sudan",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Ango'otol lok' Santahelena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Ango'otol lok' Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "Ango'otol lok' Sao Tome na Principe",
         }
         SZL{
@@ -192,11 +192,11 @@ teo{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Ango'otol lok' Tunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Ango'otol lok' Tanzania",
         }
         UGX{
@@ -216,17 +216,17 @@ teo{
             "Ango'otol lok' CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Ango'otol lok' Afrika Kusini",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Ango'otol lok' Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Edola lok'Zimbabwe",
         }
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.99"}
 }

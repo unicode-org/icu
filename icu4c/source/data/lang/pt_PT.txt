@@ -11,6 +11,7 @@ pt_PT{
         calendar{"calendário"}
         collation{"ordenação"}
         currency{"moeda"}
+        x{"Utilização Privada"}
     }
     Languages{
         af{"afrikaans"}
@@ -26,10 +27,12 @@ pt_PT{
         cpp{"crioulo ou pidgin do português"}
         cs{"checo"}
         cus{"idioma cuchita"}
+        de_CH{"Alto Alemão Suíço"}
         dra{"idioma dravítico"}
         dyu{"diula"}
         egy{"egípcio clássico"}
-        en{"Inglês"}
+        en_GB{"Inglês Britânico"}
+        en_US{"Inglês (EUA)"}
         enm{"inglês medieval"}
         et{"estónio"}
         fiu{"idioma ugro-finês"}
@@ -38,6 +41,7 @@ pt_PT{
         gmh{"alemão medieval alto"}
         grc{"grego clássico"}
         gsw{"alemão da Suíça"}
+        hi{"Hindi"}
         hsb{"sorbiano superior"}
         hy{"arménio"}
         iba{"Iban"}
@@ -51,6 +55,7 @@ pt_PT{
         nah{"Nauatle"}
         nds{"baixo alemão"}
         nic{"nigeriano - cordofano"}
+        nl_BE{"Flamengo"}
         non{"norse, old"}
         oc{"provençal"}
         os{"ossético"}
@@ -59,18 +64,26 @@ pt_PT{
         pra{"idioma prácito"}
         pro{"provençal, arcaico (até 1500)"}
         pt_PT{"português europeu"}
+        rm{"Romanche"}
         rom{"romanês"}
         sai{"idioma indígeno sul-americano"}
         sal{"salishan languages"}
         sgn{"linguages de sinais"}
         ssa{"idioma nilo-sariano"}
         swb{"língua comoriana"}
+        ta{"Tâmil"}
         tai{"idioma tailândes"}
+        tet{"Tétum"}
         tg{"tajique"}
         to{"tonga"}
         tog{"toganês"}
         tyv{"tuviniano"}
         wen{"idioma sórbio"}
+        zh_Hans{"Chinês Simplificado"}
+        zh_Hant{"Chinês Tradicional"}
+    }
+    LanguagesShort{
+        az{"Azerbaijano"}
     }
     Scripts{
         Armn{"arménio"}
@@ -78,6 +91,7 @@ pt_PT{
         Egyd{"egípcio demótico"}
         Egyh{"egípcio hierático"}
         Inds{"indus"}
+        Laoo{"Lao"}
         Lina{"linear A"}
         Linb{"linear B"}
         Sylo{"siloti nagri"}
@@ -89,9 +103,60 @@ pt_PT{
         Zzzz{"inválido ou desconhecido"}
     }
     Types{
+        calendar{
+            coptic{"Calendário Copta"}
+            ethiopic{"Calendário Etíope"}
+            ethiopic-amete-alem{"Calendário Etíope Amete Alem"}
+            islamic-civil{"Calendário Islâmico/Civil"}
+            persian{"Calendário Persa"}
+        }
         collation{
+            dictionary{"Ordenação do Dicionário"}
             direct{"Ordem Directa"}
+            ducet{"Ordenação Unicode Predefinida"}
             phonebook{"Ordem da Lista Telefónica"}
+            pinyin{"Ordem do Chinês Simplificado Pinyin"}
+            reformed{"Reforma da Ordenação"}
+            search{"Pesquisa por Objectivo/Geral"}
+            stroke{"Ordem por traços"}
+            traditional{"Ordem tradicional"}
+            unihan{"Ordem por radical e traços"}
+        }
+        numbers{
+            arab{"Algarismos Árabe/Índico"}
+            arabext{"Algarismos Árabe/Índico Expandidos"}
+            armn{"Algarismos Arménios"}
+            armnlow{"Numeração Arménia Minúscula"}
+            beng{"Algarismos Bengalis"}
+            deva{"Algarismos Devanágaris"}
+            ethi{"Numeração Etíope"}
+            fullwide{"Algarismos de Largura Completa"}
+            geor{"Numeração Georgiana"}
+            grek{"Numeração Grega"}
+            greklow{"Numeração Grega Minúscula"}
+            gujr{"Algarismos de Guzerate"}
+            hanidec{"Numeração Decimal Chinesa"}
+            hans{"Numeração Chinês Simplificado"}
+            hansfin{"Numeração Financeira Chinês Simplificado"}
+            hant{"Numeração Chinês Tradicional"}
+            hantfin{"Numeração Financeira Chinês Tradicional"}
+            hebr{"Numeração Hebraica"}
+            jpan{"Numeração Japonesa"}
+            jpanfin{"Numeração Financeira Japonesa"}
+            khmr{"Algarismo Khmer"}
+            knda{"Algarismos de Canarim"}
+            laoo{"Algarismos de Laos"}
+            latn{"Algarismos Ocidentais"}
+            mlym{"Algarismos Malaiala"}
+            mong{"Algarismos Mongóis"}
+            mymr{"Algarismos de Mianmar"}
+            orya{"Algarismos Oriá"}
+            roman{"Numeração Romana"}
+            romanlow{"Numeração Romana Minúscula"}
+            taml{"Numeração Tâmil"}
+            telu{"Algarismos de Telugu"}
+            thai{"Algarismos Tailandeses"}
+            tibt{"Algarismos Tibetanos"}
         }
     }
     Variants{
@@ -109,5 +174,5 @@ pt_PT{
         SOLBA{"dialecto stolvizza/solbica"}
         WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.50.84"}
+    Version{"2.0.58.14"}
 }

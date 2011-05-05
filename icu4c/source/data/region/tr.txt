@@ -42,7 +42,7 @@ tr{
         154{"Kuzey Avrupa"}
         155{"Batı Avrupa"}
         172{"Bağımsız Devletler Topluluğu"}
-        419{"Latin Amerika ve Karayipler"}
+        419{"Latin Amerika"}
         830{"Kanal Adaları"}
         AC{"Ascension Adası"}
         AD{"Andorra"}
@@ -241,7 +241,7 @@ tr{
         RE{"Reunion"}
         RO{"Romanya"}
         RS{"Sırbistan"}
-        RU{"Rusya Federasyonu"}
+        RU{"Rusya"}
         RW{"Ruanda"}
         SA{"Suudi Arabistan"}
         SB{"Solomon Adaları"}
@@ -299,7 +299,7 @@ tr{
         ZA{"Güney Afrika"}
         ZM{"Zambiya"}
         ZW{"Zimbabve"}
-        ZZ{"Bilinmeyen veya Geçersiz Bölge"}
+        ZZ{"Bilinmeyen Bölge"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.57.98"}
 }

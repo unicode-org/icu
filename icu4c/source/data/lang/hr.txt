@@ -14,6 +14,8 @@ hr{
         calendar{"kalendar"}
         collation{"poredavanje"}
         currency{"valuta"}
+        numbers{"brojevi"}
+        x{"Privatna upotreba"}
     }
     Languages{
         aa{"afarski"}
@@ -196,7 +198,7 @@ hr{
         hai{"haidi"}
         haw{"havajski"}
         he{"hebrejski"}
-        hi{"hindu"}
+        hi{"hindski"}
         hil{"hiligaynon"}
         him{"himachali"}
         hit{"hetitski"}
@@ -253,7 +255,7 @@ hr{
         kl{"kalaallisut"}
         km{"kmerski"}
         kmb{"kimbundu"}
-        kn{"kannada"}
+        kn{"kannadski"}
         ko{"korejski"}
         kok{"konkani"}
         kos{"naurski"}
@@ -309,7 +311,7 @@ hr{
         mis{"ostali jezici"}
         mk{"makedonski"}
         mkh{"mkh"}
-        ml{"malayalam"}
+        ml{"malajalamski"}
         mn{"mongolski"}
         mnc{"mandžurski"}
         mni{"manipurski"}
@@ -360,7 +362,7 @@ hr{
         nzi{"nzima"}
         oc{"okcitanski"}
         oj{"ojibwa"}
-        om{"oromo"}
+        om{"oromski"}
         or{"orijski"}
         os{"osetski"}
         osa{"osage"}
@@ -490,7 +492,7 @@ hr{
         uk{"ukrajinski"}
         umb{"umbundu"}
         und{"nepoznati ili nevažeći jezik"}
-        ur{"urdu"}
+        ur{"urdski"}
         uz{"uzbečki"}
         vai{"vai"}
         ve{"venda"}
@@ -524,6 +526,9 @@ hr{
         zun{"zuni"}
         zxx{"bez jezičnog sadržaja"}
         zza{"zazaki"}
+    }
+    LanguagesShort{
+        az{"Azerski"}
     }
     Scripts{
         Arab{"arapsko pismo"}
@@ -661,22 +666,68 @@ hr{
         calendar{
             buddhist{"budistički kalendar"}
             chinese{"kineski kalendar"}
+            coptic{"Koptski kalendar"}
+            ethiopic{"Etiopski kalendar"}
+            ethiopic-amete-alem{"Etiopski kalendar \"Amete Alem\""}
             gregorian{"gregorijanski kalendar"}
             hebrew{"hebrejski kalendar"}
             indian{"indijski nacionalni kalendar"}
             islamic{"islamski kalendar"}
             islamic-civil{"islamski civilni kalendar"}
             japanese{"japanski kalendar"}
+            persian{"Perzijski kalendar"}
             roc{"kalendar Republike Kine"}
         }
         collation{
-            big5han{"tradicionalno kinesko poredavanje - Big5"}
-            direct{"izravno poredavanje"}
-            gb2312han{"pojednostavljeno kinesko poredavanje - GB2312"}
-            phonebook{"poredavanje po abecedi"}
-            pinyin{"Pinyin poredavanje"}
-            stroke{"Stroke order poredavanje"}
-            traditional{"tradicionalno predavanje"}
+            big5han{"razvrstavanje prema tradicionalnom kineskom - Big5"}
+            dictionary{"rječničko razvrstavanje"}
+            direct{"izravno razvrstavanje"}
+            ducet{"zadano Unicode razvrstavanje"}
+            gb2312han{"razvrstavanje prema pojednostavljenom kineskom - GB2312"}
+            phonebook{"razvrstavanje po abecedi"}
+            pinyin{"Pinyin razvrstavanje"}
+            reformed{"reformirano razvrstavanje"}
+            search{"općenito pretraživanje"}
+            stroke{"razvrstavanje po redoslijedu poteza za kineski"}
+            traditional{"tradicionalno razvrstavanje"}
+            unihan{"razvrstavanje prema korijenu i potezu"}
+        }
+        numbers{
+            arab{"Arapsko-indijske znamenke"}
+            arabext{"Proširene arapsko-indijske znamenke"}
+            armn{"Armenski brojevi"}
+            armnlow{"Mali armenski brojevi"}
+            beng{"Znamenke bengalskog pisma"}
+            deva{"Znamenke pisma devanagari"}
+            ethi{"Etiopski brojevi"}
+            fullwide{"Široke znamenke"}
+            geor{"Gruzijski brojevi"}
+            grek{"Grčki brojevi"}
+            greklow{"Mali grčki brojevi"}
+            gujr{"Gudžaratske znamenke"}
+            guru{"Znamenke pisma gurmukhi"}
+            hanidec{"Kineski decimalni brojevi"}
+            hans{"Pojednostavljeni kineski brojevi"}
+            hansfin{"Pojednostavljeni kineski financijski brojevi"}
+            hant{"Tradicionalni kineski brojevi"}
+            hantfin{"Tradicionalni kineski financijski brojevi"}
+            hebr{"Hebrejski brojevi"}
+            jpan{"Japanski brojevi"}
+            jpanfin{"Japanski financijski brojevi"}
+            khmr{"Khmerske znamenke"}
+            knda{"Znamenke pisma kannada"}
+            laoo{"Laoske znamenke"}
+            latn{"arapski brojevi"}
+            mlym{"Malajalamske znamenke"}
+            mong{"Mongolske znamenke"}
+            mymr{"Mijanmarske znamenke"}
+            orya{"Orijske znamenke"}
+            roman{"Rimski brojevi"}
+            romanlow{"Mali rimski brojevi"}
+            taml{"Tamilski brojevi"}
+            telu{"Znamenke teluškog pisma"}
+            thai{"Tajske znamenke"}
+            tibt{"Tibetske znamenke"}
         }
     }
     Variants{
@@ -710,7 +761,12 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
+    codePatterns{
+        language{"Jezik: {0}"}
+        script{"Pismo: {0}"}
+        territory{"Regija: {0}"}
+    }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

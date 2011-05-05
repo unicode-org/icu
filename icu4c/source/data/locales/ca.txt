@@ -39,7 +39,7 @@ ca{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.12"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -84,7 +84,7 @@ ca{
                 yMEd{"E d/M/yyyy"}
                 yMMM{"LLL y"}
                 yMMMEd{"EEE d MMM y"}
-                yMMMM{"LLLL 'del' y"}
+                yMMMM{"LLLL 'de' y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
                 yQ{"Q yyyy"}
@@ -102,6 +102,15 @@ ca{
                         "dj.",
                         "dv.",
                         "ds.",
+                    }
+                    narrow{
+                        "G",
+                        "l",
+                        "T",
+                        "C",
+                        "J",
+                        "V",
+                        "S",
                     }
                     wide{
                         "diumenge",
@@ -131,6 +140,15 @@ ca{
                         "j",
                         "v",
                         "s",
+                    }
+                    wide{
+                        "Diumenge",
+                        "Dilluns",
+                        "Dimarts",
+                        "Dimecres",
+                        "Dijous",
+                        "Divendres",
+                        "Dissabte",
                     }
                 }
             }
@@ -167,18 +185,33 @@ ca{
                 }
                 month{
                     dn{"mes"}
+                    relative{
+                        "-1"{"Últim mes"}
+                        "0"{"Aquest mes"}
+                        "1"{"Mes següent"}
+                    }
                 }
                 second{
                     dn{"segon"}
                 }
                 week{
                     dn{"setmana"}
+                    relative{
+                        "-1"{"Última setmana"}
+                        "0"{"Aquesta setmana"}
+                        "1"{"Setmana següent"}
+                    }
                 }
                 weekday{
                     dn{"dia de la setmana"}
                 }
                 year{
                     dn{"any"}
+                    relative{
+                        "-1"{"Última any"}
+                        "0"{"Aquest any"}
+                        "1"{"Any següent"}
+                    }
                 }
                 zone{
                     dn{"zona"}
@@ -299,6 +332,20 @@ ca{
                         "de nov.",
                         "de des.",
                     }
+                    narrow{
+                        "G",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "G",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "de gener",
                         "de febrer",
@@ -367,6 +414,26 @@ ca{
                         "3T",
                         "4T",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1r trimestre",
+                        "2n trimestre",
+                        "3r trimestre",
+                        "4t trimestre",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1T",
+                        "2T",
+                        "3T",
+                        "4T",
+                    }
                     wide{
                         "1r trimestre",
                         "2n trimestre",
@@ -390,6 +457,7 @@ ca{
         }
     }
     measurementSystemNames{
+        UK{"anglosaxó"}
         US{"imperial"}
         metric{"mètric"}
     }
@@ -398,29 +466,113 @@ ca{
             one{"{0} dia"}
             other{"{0} dies"}
         }
+        day-future{
+            0{"D'aquí a 0 dies"}
+            1{"D'aquí a 1 dia"}
+            one{"D'aquí a {0} dia"}
+            other{"D'aquí a {0} dies"}
+        }
+        day-past{
+            0{"Fa 0 dies"}
+            1{"Fa 1 dia"}
+            one{"Fa {0} dia"}
+            other{"Fa {0} dies"}
+        }
         hour{
             one{"{0} hora"}
             other{"{0} hores"}
+        }
+        hour-future{
+            0{"D'aquí a 0 hores"}
+            1{"D'aquí a 1 hora"}
+            one{"D'aquí a {0} hora"}
+            other{"D'aquí a {0} hores"}
+        }
+        hour-past{
+            0{"Fa 0 hores"}
+            1{"Fa 1 hora"}
+            one{"Fa {0} hora"}
+            other{"Fa {0} hores"}
         }
         minute{
             one{"{0} minut"}
             other{"{0} minuts"}
         }
+        minute-future{
+            0{"D'aquí a 0 minuts"}
+            1{"D'aquí a 1 minut"}
+            one{"D'aquí a {0} minut"}
+            other{"D'aquí a {0} minuts"}
+        }
+        minute-past{
+            0{"Fa 0 minuts"}
+            1{"Fa 1 minut"}
+            one{"Fa {0} minut"}
+            other{"Fa {0} minuts"}
+        }
         month{
             one{"{0} mes"}
             other{"{0} mesos"}
+        }
+        month-future{
+            0{"D'aquí a 0 mesos"}
+            1{"D'aquí a 1 mes"}
+            one{"D'aquí a {0} mes"}
+            other{"D'aquí a {0} mesos"}
+        }
+        month-past{
+            0{"Fa 0 mesos"}
+            1{"Fa 1 mes"}
+            one{"Fa {0} mes"}
+            other{"Fa {0} mesos"}
         }
         second{
             one{"{0} segon"}
             other{"{0} segons"}
         }
+        second-future{
+            0{"D'aquí a 0 segons"}
+            1{"D'aquí a 1 segon"}
+            one{"D'aquí a {0} segon"}
+            other{"D'aquí a {0} segons"}
+        }
+        second-past{
+            0{"Fa 0 segons"}
+            1{"Fa 1 segon"}
+            one{"Fa {0} segon"}
+            other{"Fa {0} segons"}
+        }
         week{
             one{"{0} setmana"}
             other{"{0} setmanes"}
         }
+        week-future{
+            0{"D'aquí a 0 setmanes"}
+            1{"D'aquí a 1 setmana"}
+            one{"D'aquí a {0} setmana"}
+            other{"D'aquí a {0} setmanes"}
+        }
+        week-past{
+            0{"Fa 0 setmanes"}
+            1{"Fa 1 setmana"}
+            one{"Fa {0} setmana"}
+            other{"Fa {0} setmanes"}
+        }
         year{
             one{"{0} any"}
             other{"{0} anys"}
+        }
+        year-future{
+            0{"D'aquí a 0 anys"}
+            1{"D'aquí a 1 any"}
+            one{"D'aquí a {0} any"}
+            other{"D'aquí a {0} anys"}
+        }
+        year-past{
+            0{"Fa 0 anys"}
+            1{"Fa 1 any"}
+            one{"Fa {0} any"}
+            other{"Fa {0} anys"}
         }
     }
     unitsShort{

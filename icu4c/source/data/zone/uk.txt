@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/uk.xml
  */
 uk{
-    Version{"2.0.53.45"}
+    Version{"2.0.58.6"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -90,6 +90,9 @@ uk{
         "Africa:Kampala"{
             ec{"Кампала"}
         }
+        "Africa:Khartoum"{
+            ec{"Хартум"}
+        }
         "Africa:Kigali"{
             ec{"Кігалі"}
         }
@@ -168,6 +171,9 @@ uk{
         "America:Anchorage"{
             ec{"Анкоридж"}
         }
+        "America:Anguilla"{
+            ec{"Ангілья"}
+        }
         "America:Antigua"{
             ec{"Антигуа"}
         }
@@ -197,6 +203,9 @@ uk{
         }
         "America:Aruba"{
             ec{"Аруба"}
+        }
+        "America:Asuncion"{
+            ec{"Асунсьйон"}
         }
         "America:Bahia"{
             ec{"Байя"}
@@ -312,11 +321,17 @@ uk{
         "America:Grenada"{
             ec{"Гренада"}
         }
+        "America:Guadeloupe"{
+            ec{"Гваделупа"}
+        }
         "America:Guatemala"{
             ec{"Гватемала"}
         }
         "America:Guayaquil"{
             ec{"Гуаякіль"}
+        }
+        "America:Guyana"{
+            ec{"Гайана"}
         }
         "America:Halifax"{
             ec{"Галіфакс"}
@@ -390,6 +405,9 @@ uk{
         "America:Manaus"{
             ec{"Манаус"}
         }
+        "America:Marigot"{
+            ec{"Марігот"}
+        }
         "America:Martinique"{
             ec{"Мартініка"}
         }
@@ -440,6 +458,9 @@ uk{
         }
         "America:Noronha"{
             ec{"Норонья"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"Б’юла, Північна Дакота"}
         }
         "America:North_Dakota:Center"{
             ec{"Центр"}
@@ -507,6 +528,9 @@ uk{
         "America:Shiprock"{
             ec{"Шипрок"}
         }
+        "America:St_Barthelemy"{
+            ec{"Сен-Бартельмі"}
+        }
         "America:St_Johns"{
             ec{"Сент-Джонс"}
         }
@@ -524,6 +548,9 @@ uk{
         }
         "America:Swift_Current"{
             ec{"Свіфт-Каррент"}
+        }
+        "America:Tegucigalpa"{
+            ec{"Тегусігальпа"}
         }
         "America:Thule"{
             ec{"Туле"}
@@ -630,6 +657,9 @@ uk{
         "Asia:Brunei"{
             ec{"Бруней"}
         }
+        "Asia:Calcutta"{
+            ec{"Колката"}
+        }
         "Asia:Choibalsan"{
             ec{"Чойбалсан"}
         }
@@ -674,6 +704,9 @@ uk{
         }
         "Asia:Jayapura"{
             ec{"Джайпур"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Єрусалим"}
         }
         "Asia:Kabul"{
             ec{"Кабул"}
@@ -750,6 +783,9 @@ uk{
         "Asia:Riyadh"{
             ec{"Ер-Ріяд"}
         }
+        "Asia:Saigon"{
+            ec{"Хошимін"}
+        }
         "Asia:Sakhalin"{
             ec{"Сахалін"}
         }
@@ -813,6 +849,9 @@ uk{
         "Atlantic:Canary"{
             ec{"Канари"}
         }
+        "Atlantic:Cape_Verde"{
+            ec{"Кабо-Верде"}
+        }
         "Atlantic:Faeroe"{
             ec{"Фарерські острови"}
         }
@@ -824,6 +863,9 @@ uk{
         }
         "Atlantic:South_Georgia"{
             ec{"Південна Джорджія"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Острів Святої Єлени"}
         }
         "Atlantic:Stanley"{
             ec{"Стенлі"}
@@ -876,8 +918,14 @@ uk{
         "Europe:Athens"{
             ec{"Афіни"}
         }
+        "Europe:Belgrade"{
+            ec{"Белград"}
+        }
         "Europe:Berlin"{
             ec{"Берлін"}
+        }
+        "Europe:Bratislava"{
+            ec{"Братислава"}
         }
         "Europe:Brussels"{
             ec{"Брюссель"}
@@ -900,11 +948,20 @@ uk{
         "Europe:Gibraltar"{
             ec{"Гібралтар"}
         }
+        "Europe:Guernsey"{
+            ec{"Острів Гернсі"}
+        }
         "Europe:Helsinki"{
             ec{"Гельсінкі"}
         }
+        "Europe:Isle_of_Man"{
+            ec{"Острів Мен"}
+        }
         "Europe:Istanbul"{
             ec{"Стамбул"}
+        }
+        "Europe:Jersey"{
+            ec{"Джерсі"}
         }
         "Europe:Kaliningrad"{
             ec{"Калінінград"}
@@ -914,6 +971,9 @@ uk{
         }
         "Europe:Lisbon"{
             ec{"Лісабон"}
+        }
+        "Europe:Ljubljana"{
+            ec{"Любляна"}
         }
         "Europe:London"{
             ec{"Лондон"}
@@ -926,6 +986,9 @@ uk{
         }
         "Europe:Malta"{
             ec{"Мальта"}
+        }
+        "Europe:Mariehamn"{
+            ec{"Маріегамн"}
         }
         "Europe:Minsk"{
             ec{"Мінськ"}
@@ -942,6 +1005,12 @@ uk{
         "Europe:Paris"{
             ec{"Париж"}
         }
+        "Europe:Podgorica"{
+            ec{"Подгориця"}
+        }
+        "Europe:Prague"{
+            ec{"Прага"}
+        }
         "Europe:Riga"{
             ec{"Рига"}
         }
@@ -951,8 +1020,17 @@ uk{
         "Europe:Samara"{
             ec{"Самара"}
         }
+        "Europe:San_Marino"{
+            ec{"Сан-Марино"}
+        }
+        "Europe:Sarajevo"{
+            ec{"Сараєво"}
+        }
         "Europe:Simferopol"{
             ec{"Сімферополь"}
+        }
+        "Europe:Skopje"{
+            ec{"Скоп’є"}
         }
         "Europe:Sofia"{
             ec{"Софія"}
@@ -972,6 +1050,9 @@ uk{
         "Europe:Vaduz"{
             ec{"Вадуц"}
         }
+        "Europe:Vatican"{
+            ec{"Ватикан"}
+        }
         "Europe:Vienna"{
             ec{"Відень"}
         }
@@ -983,6 +1064,9 @@ uk{
         }
         "Europe:Warsaw"{
             ec{"Варшава"}
+        }
+        "Europe:Zagreb"{
+            ec{"Загреб"}
         }
         "Europe:Zaporozhye"{
             ec{"Запоріжжя"}
@@ -1001,6 +1085,9 @@ uk{
         }
         "Indian:Cocos"{
             ec{"Кокосові острови"}
+        }
+        "Indian:Comoro"{
+            ec{"Коморо"}
         }
         "Indian:Kerguelen"{
             ec{"Острів Кергелен"}
@@ -1055,6 +1142,9 @@ uk{
         }
         "Pacific:Guadalcanal"{
             ec{"Гвадалканал"}
+        }
+        "Pacific:Guam"{
+            ec{"Гуам"}
         }
         "Pacific:Honolulu"{
             ec{"Гонолулу"}
@@ -1132,6 +1222,7 @@ uk{
             ec{"Уолліс"}
         }
         "meta:Africa_Central"{
+            cu:int{0}
             ls{"за центральноафриканським часом"}
         }
         "meta:Africa_Eastern"{
@@ -1144,6 +1235,14 @@ uk{
         "meta:Africa_Western"{
             ld{"за західноафриканським літнім часом"}
             ls{"за західноафриканським часом"}
+        }
+        "meta:Alaska"{
+            ld{"Час: Аляска, літній"}
+            lg{"Час: Аляска"}
+            ls{"Час: Аляска, стандартний"}
+        }
+        "meta:Amazon"{
+            lg{"Час: Амазонка"}
         }
         "meta:America_Central"{
             cu:int{1}
@@ -1169,14 +1268,68 @@ uk{
             lg{"за північноамериканським тихоокеанським часом"}
             ls{"за північноамериканським тихоокеанським стандартним часом"}
         }
+        "meta:Anadyr"{
+            ld{"Час: Анадир, літній"}
+            lg{"Час: Анадир"}
+            ls{"Час: Анадир"}
+        }
+        "meta:Arabian"{
+            ld{"за арабським літнім часом"}
+            lg{"за арабським часом"}
+            ls{"за арабським стандартним часом"}
+        }
+        "meta:Argentina"{
+            ld{"Час: Аргентина, літній"}
+            lg{"Час: Аргентина"}
+            ls{"Час: Аргентина"}
+        }
+        "meta:Argentina_Western"{
+            ld{"Час: Аргентина, західний літній"}
+            lg{"Час: Аргентина, західний"}
+            ls{"Час: Аргентина, західний"}
+        }
         "meta:Armenia"{
             ld{"за вірменським літнім часом"}
             ls{"за вірменським часом"}
         }
         "meta:Atlantic"{
+            cu:int{0}
             ld{"за атлантичним літнім часом"}
             lg{"за атлантичним часом"}
             ls{"за атлантичним стандартним часом"}
+        }
+        "meta:Australia_Central"{
+            ld{"Час: Австралія, центральний літній"}
+            lg{"Час: Австралія, центральний"}
+            ls{"Час: Австралія, центральний стандартний"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Час: Австралія, центрально-західний літній"}
+            lg{"Час: Австралія, центрально-західний"}
+            ls{"Час: Австралія, центрально-західний стандартний"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Час: Австралія, східний літній"}
+            lg{"Час: Австралія, східний"}
+            ls{"Час: Австралія, східний стандартний"}
+        }
+        "meta:Australia_Western"{
+            ld{"Час: Австралія, західний літній"}
+            lg{"Час: Австралія, західний"}
+            ls{"Час: Австралія, західний стандартний"}
+        }
+        "meta:Brasilia"{
+            ld{"Час: Бразилія, літній"}
+            lg{"Час: Бразилія"}
+            ls{"Час: Бразилія"}
+        }
+        "meta:China"{
+            ls{"за китайським стандартним часом"}
+        }
+        "meta:Choibalsan"{
+            ld{"Час: Чойбалсан, літній"}
+            lg{"Час: Чойбалсан"}
+            ls{"Час: Чойбалсан"}
         }
         "meta:Europe_Central"{
             ld{"за центральноєвропейським літнім часом"}
@@ -1187,12 +1340,33 @@ uk{
             ls{"за східноєвропейським часом"}
         }
         "meta:Europe_Western"{
+            cu:int{0}
             ld{"за західноєвропейським літнім часом"}
             ls{"за західноєвропейським часом"}
         }
         "meta:GMT"{
             cu:int{1}
             ls{"за Грінвічем"}
+        }
+        "meta:Hawaii_Aleutian"{
+            lg{"Час: Гаваї/Алеутські о-ви"}
+        }
+        "meta:Hovd"{
+            ld{"Час: Говд, літній"}
+            lg{"Час: Говд"}
+            ls{"Час: Говд"}
+        }
+        "meta:India"{
+            ls{"за індійським стандартним часом"}
+        }
+        "meta:Indonesia_Central"{
+            lg{"Час: Індонезія, центральний"}
+        }
+        "meta:Indonesia_Eastern"{
+            lg{"Час: Індонезія, східний"}
+        }
+        "meta:Indonesia_Western"{
+            lg{"Час: Індонезія, західний"}
         }
         "meta:Iran"{
             ld{"за іранським літнім часом"}
@@ -1201,33 +1375,66 @@ uk{
         "meta:Irkutsk"{
             cu:int{1}
             ld{"за іркутським літнім часом"}
+            lg{"Час: Іркутськ"}
             ls{"за іркутським часом"}
         }
         "meta:Israel"{
+            ld{"за ізраїльським літнім часом"}
             lg{"за ізраїльським часом"}
+            ls{"за ізраїльським стандартним часом"}
         }
         "meta:Japan"{
             ld{"за японським літнім часом"}
             lg{"за японським часом"}
+            ls{"за японським стандартним часом"}
         }
         "meta:Kamchatka"{
             cu:int{1}
             ld{"за камчатським літнім часом"}
+            lg{"Час: Камчатка"}
             ls{"за камчатським часом"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ld{"Час: Казахстан, східний літній"}
+            lg{"Час: Казахстан, східний"}
+            ls{"Час: Казахстан, східний стандартний"}
+        }
+        "meta:Kazakhstan_Western"{
+            ld{"Час: Казахстан, західний літній"}
+            lg{"Час: Казахстан, західний"}
+            ls{"Час: Казахстан, західний стандартний"}
+        }
+        "meta:Korea"{
+            ls{"за корейським стандартним часом"}
         }
         "meta:Krasnoyarsk"{
             cu:int{1}
             ld{"за красноярським літнім часом"}
+            lg{"Час: Красноярськ"}
             ls{"за красноярським часом"}
         }
         "meta:Kuybyshev"{
             ld{"за куйбишевським літнім часом"}
             ls{"за куйбишевським часом"}
         }
+        "meta:Lord_Howe"{
+            ld{"Час: Лорд-Гоув, літній"}
+            lg{"Час: Логд-Гоув"}
+            ls{"Час: Лорд-Гоув, стандартний"}
+        }
+        "meta:Macquarie"{
+            lg{"Час: Макквері"}
+        }
         "meta:Magadan"{
             cu:int{1}
             ld{"за магаданським літнім часом"}
+            lg{"Час: Магадан"}
             ls{"за магаданським часом"}
+        }
+        "meta:Mongolia"{
+            ld{"Час: Улан-Батор, літній"}
+            lg{"Час: Монголія"}
+            ls{"Час: Улан-Батор"}
         }
         "meta:Moscow"{
             cu:int{1}
@@ -1235,17 +1442,35 @@ uk{
             lg{"за московським часом"}
             ls{"за московським стандартним часом"}
         }
+        "meta:Newfoundland"{
+            ld{"Час: Ньюфаундленд, літній"}
+            lg{"Час: Ньюфаундленд"}
+            ls{"Час: Ньюфаундленд, стандартний"}
+        }
+        "meta:Noronha"{
+            ld{"Час: Фернандо-де-Норонья, літній"}
+            lg{"Час: Норонья"}
+            ls{"Час: Фернандо-де-Норонья"}
+        }
         "meta:Novosibirsk"{
             ld{"за новосибірським літнім часом"}
+            lg{"Час: Новосибірськ"}
             ls{"за новосибірським часом"}
         }
         "meta:Omsk"{
             cu:int{1}
             ld{"за омським літнім часом"}
+            lg{"Час: Омськ"}
             ls{"за омським часом"}
+        }
+        "meta:Sakhalin"{
+            ld{"Час: Сахалін"}
+            lg{"Час: Сахалін"}
+            ls{"Час: Сахалін"}
         }
         "meta:Samara"{
             ld{"за самарським літнім часом"}
+            lg{"Час: Самара"}
             ls{"за самарським часом"}
         }
         "meta:Turkey"{
@@ -1255,23 +1480,30 @@ uk{
         "meta:Vladivostok"{
             cu:int{1}
             ld{"за владивостоцьким літнім часом"}
+            lg{"Час: Владивосток"}
             ls{"за владивостоцьким часом"}
         }
         "meta:Volgograd"{
             ld{"за волгоградським літнім часом"}
+            lg{"Час: Волгоград"}
             ls{"за волгоградським часом"}
         }
         "meta:Yakutsk"{
             cu:int{1}
             ld{"за якутським літнім часом"}
+            lg{"Час: Якутськ"}
             ls{"за якутським часом"}
         }
         "meta:Yekaterinburg"{
             cu:int{1}
             ld{"за єкатеринбурзьким літнім часом"}
+            lg{"Час: Єкатеринбург"}
             ls{"за єкатеринбурзьким часом"}
         }
+        fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"Час: {1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"Час: {0}"}
     }
 }

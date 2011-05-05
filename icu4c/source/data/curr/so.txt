@@ -12,11 +12,11 @@
 so{
     Currencies{
         DJF{
-            "Fdj",
+            "DJF",
             "Faran Jabbuuti",
         }
         ETB{
-            "Br",
+            "ETB",
             "Birta Itoobbiya",
         }
         EUR{
@@ -24,15 +24,15 @@ so{
             "Yuuroo",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyaalka Sacuudiga",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Shilin soomaali",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Shilin Tansaani",
         }
         USD{
@@ -40,5 +40,5 @@ so{
             "Doollar maraykan",
         }
     }
-    Version{"2.0.47.68"}
+    Version{"2.0.57.98"}
 }

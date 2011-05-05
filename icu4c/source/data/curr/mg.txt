@@ -16,7 +16,7 @@ mg{
             "Dirham",
         }
         AOA{
-            "Kz",
+            "AOA",
             "kwanza angoley",
         }
         AUD{
@@ -24,11 +24,11 @@ mg{
             "Dolara aostralianina",
         }
         BHD{
-            "BD",
+            "BHD",
             "dinar bahreïni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Farantsa Borondi",
         }
         BWP{
@@ -52,15 +52,15 @@ mg{
             "Yoan sinoa Renminbi",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Escudo",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Farantsa Djibotianina",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinara alzerianina",
         }
         EGP{
@@ -68,11 +68,11 @@ mg{
             "vola venty ejipsiana",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakfà Eritreanina",
         }
         ETB{
-            "Br",
+            "ETB",
             "Bir etiopianina",
         }
         EUR{
@@ -84,7 +84,7 @@ mg{
             "livre sterling",
         }
         GHC{
-            "₵",
+            "GHC",
             "cédi",
         }
         GMD{
@@ -92,7 +92,7 @@ mg{
             "Dalasi gambianina",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Farantsa Gineanina",
         }
         INR{
@@ -104,15 +104,15 @@ mg{
             "Yen Japoney",
         }
         KES{
-            "Ksh",
+            "KES",
             "Shilling kenianina",
         }
         KMF{
-            "CF",
+            "KMF",
             "Farantsa Komorianina",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dôlara Liberianina",
         }
         LSL{
@@ -120,7 +120,7 @@ mg{
             "Loti",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinara Libyanina",
         }
         MAD{
@@ -132,11 +132,11 @@ mg{
             "Ariary",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ouguiya moritanianina",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Ropia maorisianina",
         }
         MWK{
@@ -144,15 +144,15 @@ mg{
             "kwacha malawite",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikaly",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dolara namibianina",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira nigerianina",
         }
         RWF{
@@ -160,11 +160,11 @@ mg{
             "Farantsa Roande",
         }
         SAR{
-            "SR",
+            "SAR",
             "Rial saodianina",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Ropia Seysheloà",
         }
         SDG{
@@ -172,23 +172,23 @@ mg{
             "Dinara Sodaney",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "livre soudanaise (1956–2007)",
         }
         SHP{
-            "SH£",
+            "SHP",
             "livre de Sainte-Hélène",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leone",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Shilling somalianina",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra",
         }
         SZL{
@@ -196,15 +196,15 @@ mg{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dinar tonizianina",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Shilling tanzanianina",
         }
         UGX{
-            "USh",
+            "UGX",
             "Shilling ogandianina",
         }
         USD{
@@ -220,17 +220,17 @@ mg{
             "Farantsa CFA (BCEAO)",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Rand afrikanina tatsimo",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwacha zambianina",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dôlara Zimbaboeanina",
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.58.12"}
 }

@@ -14,6 +14,8 @@ it{
         calendar{"calendario"}
         collation{"collazione"}
         currency{"valuta"}
+        numbers{"Numeri"}
+        x{"Uso privato"}
     }
     Languages{
         aa{"afar"}
@@ -446,7 +448,7 @@ it{
         sux{"sumero"}
         sv{"svedese"}
         sw{"swahili"}
-        swb{"Comoriano"}
+        swb{"comoriano"}
         syr{"siriaco"}
         ta{"tamil"}
         tai{"lingua tailandese"}
@@ -507,7 +509,7 @@ it{
         yi{"yiddish"}
         yo{"yoruba"}
         ypk{"lingue yupik"}
-        yue{"Cantonese"}
+        yue{"cantonese"}
         za{"zhuang"}
         zap{"zapotec"}
         zen{"zenaga"}
@@ -517,8 +519,11 @@ it{
         znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
-        zxx{"Nessun contenuto linguistico"}
+        zxx{"nessun contenuto linguistico"}
         zza{"zaza"}
+    }
+    LanguagesShort{
+        az{"azero"}
     }
     Scripts{
         Arab{"arabo"}
@@ -573,6 +578,7 @@ it{
         Khar{"kharoshthi"}
         Khmr{"khmer"}
         Knda{"kannada"}
+        Kore{"coreano"}
         Lana{"lanna"}
         Laoo{"lao"}
         Latf{"variante fraktur del latino"}
@@ -589,7 +595,7 @@ it{
         Mero{"meroitico"}
         Mlym{"malayalam"}
         Mong{"mongolo"}
-        Moon{"Moon"}
+        Moon{"moon"}
         Mtei{"meetei mayek"}
         Mymr{"myanmar"}
         Nkoo{"n'ko"}
@@ -634,6 +640,7 @@ it{
         Xsux{"sumero-accadiano cuneiforme"}
         Yiii{"yi"}
         Zinh{"ereditato"}
+        Zsym{"simboli"}
         Zxxx{"non scritto"}
         Zyyy{"comune"}
         Zzzz{"ignoto o non valido"}
@@ -642,21 +649,68 @@ it{
         calendar{
             buddhist{"calendario buddista"}
             chinese{"calendario cinese"}
+            coptic{"Calendario copto"}
+            ethiopic{"Calendario etiope"}
+            ethiopic-amete-alem{"Calendario etiope Amete Alem"}
             gregorian{"calendario gregoriano"}
             hebrew{"calendario ebraico"}
             indian{"calendario nazionale indiano"}
             islamic{"calendario islamico"}
             islamic-civil{"calendario civile islamico"}
             japanese{"calendario giapponese"}
+            persian{"Calendario persiano"}
+            roc{"Calendario Minguo"}
         }
         collation{
             big5han{"cinese tradizionale"}
+            dictionary{"Ordinamento dizionario"}
             direct{"ordine diretto"}
+            ducet{"Ordinamento Unicode predefinito"}
             gb2312han{"cinese semplificato"}
             phonebook{"ordine elenco telefonico"}
             pinyin{"ordine pinyin"}
+            reformed{"Ordinamento riformato"}
+            search{"Ricerca generica"}
             stroke{"ordine segni"}
             traditional{"ordine tradizionale"}
+            unihan{"Ordinamento in base ai radicali"}
+        }
+        numbers{
+            arab{"Numeri indo-arabi"}
+            arabext{"Numeri indo-arabi estesi"}
+            armn{"Numeri armeni"}
+            armnlow{"Numeri minuscoli armeni"}
+            beng{"Numeri bengalesi"}
+            deva{"Numeri devanagari"}
+            ethi{"Numeri etiopi"}
+            fullwide{"Numeri a larghezza intera"}
+            geor{"Numeri gregoriani"}
+            grek{"Numeri greci"}
+            greklow{"Numeri minuscoli greci"}
+            gujr{"Numeri gujarati"}
+            guru{"Numeri Gurmukhi"}
+            hanidec{"Numeri decimali cinesi"}
+            hans{"Numeri in cinese semplificato"}
+            hansfin{"Numeri finanziari in cinese semplificato"}
+            hant{"Numeri in cinese tradizionale"}
+            hantfin{"Numeri finanziari in cinese tradizionale"}
+            hebr{"Numeri ebraici"}
+            jpan{"Numeri giapponesi"}
+            jpanfin{"Numeri finanziari giapponesi"}
+            khmr{"Numeri khmer"}
+            knda{"Numeri kannada"}
+            laoo{"Numeri lao"}
+            latn{"Numeri occidentali"}
+            mlym{"Numeri malayalam"}
+            mong{"Numeri mongoli"}
+            mymr{"Numeri birmani"}
+            orya{"Numeri oriya"}
+            roman{"Numeri romani"}
+            romanlow{"Numeri minuscoli romani"}
+            taml{"Numeri tamil"}
+            telu{"Numeri telugu"}
+            thai{"Numeri thailandesi"}
+            tibt{"Numeri tibetani"}
         }
     }
     Variants{
@@ -675,7 +729,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

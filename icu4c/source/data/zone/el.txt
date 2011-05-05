@@ -10,31 +10,160 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.53.54"}
+    Version{"2.0.58.14"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Ακτή Ελεφαντοστού"}
         }
+        "Africa:Accra"{
+            ec{"Άκρα"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"Αντίς Αμπέμπα"}
+        }
+        "Africa:Algiers"{
+            ec{"Αλγέρι"}
+        }
+        "Africa:Asmera"{
+            ec{"Ασμάρα"}
+        }
         "Africa:Bamako"{
             ec{"Μπαμάκο"}
+        }
+        "Africa:Bangui"{
+            ec{"Μπανγκί"}
+        }
+        "Africa:Banjul"{
+            ec{"Μπάνζουλ"}
+        }
+        "Africa:Bissau"{
+            ec{"Μπισάου"}
+        }
+        "Africa:Blantyre"{
+            ec{"Μπλαντάιρ"}
         }
         "Africa:Brazzaville"{
             ec{"Μπράζαβιλ"}
         }
+        "Africa:Bujumbura"{
+            ec{"Μπουζουμπούρα"}
+        }
+        "Africa:Cairo"{
+            ec{"Κάιρο"}
+        }
+        "Africa:Casablanca"{
+            ec{"Καζαμπλάνκα"}
+        }
         "Africa:Ceuta"{
             ec{"Κέουτα"}
+        }
+        "Africa:Conakry"{
+            ec{"Κόνακρι"}
+        }
+        "Africa:Dakar"{
+            ec{"Ντακάρ"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"Νταρ Ες Σαλάμ"}
         }
         "Africa:Djibouti"{
             ec{"Τζιμπουτί"}
         }
+        "Africa:Douala"{
+            ec{"Ντουάλα"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"Ελ Αγιούν"}
+        }
+        "Africa:Freetown"{
+            ec{"Φρίταουν"}
+        }
+        "Africa:Gaborone"{
+            ec{"Γκαμπορόνε"}
+        }
+        "Africa:Harare"{
+            ec{"Χαράρε"}
+        }
+        "Africa:Johannesburg"{
+            ec{"Γιοχάνεσμπουργκ"}
+        }
+        "Africa:Kampala"{
+            ec{"Καμπάλα"}
+        }
+        "Africa:Khartoum"{
+            ec{"Χαρτούμ"}
+        }
+        "Africa:Kigali"{
+            ec{"Κιγκάλι"}
+        }
         "Africa:Kinshasa"{
             ec{"Κινσάσα"}
+        }
+        "Africa:Lagos"{
+            ec{"Λάγκος"}
+        }
+        "Africa:Libreville"{
+            ec{"Λιμπρεβίλ"}
+        }
+        "Africa:Lome"{
+            ec{"Λομέ"}
+        }
+        "Africa:Luanda"{
+            ec{"Λουάντα"}
         }
         "Africa:Lubumbashi"{
             ec{"Λουμπουμπάσι"}
         }
+        "Africa:Lusaka"{
+            ec{"Λουζάκα"}
+        }
+        "Africa:Malabo"{
+            ec{"Μαλάμπο"}
+        }
+        "Africa:Maputo"{
+            ec{"Μαπούτο"}
+        }
+        "Africa:Maseru"{
+            ec{"Μασέρου"}
+        }
+        "Africa:Mbabane"{
+            ec{"Μπαμπάνε"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Μογκαντίσου"}
+        }
+        "Africa:Monrovia"{
+            ec{"Μονρόβια"}
+        }
+        "Africa:Nairobi"{
+            ec{"Ναϊρόμπι"}
+        }
+        "Africa:Ndjamena"{
+            ec{"Ντζαμένα"}
+        }
+        "Africa:Niamey"{
+            ec{"Νιαμέι"}
+        }
+        "Africa:Nouakchott"{
+            ec{"Νουακσότ"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"Ουαγκαντούγκου"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Πόρτο-Νόβο"}
+        }
         "Africa:Sao_Tome"{
             ec{"Σάο Τόμε"}
+        }
+        "Africa:Tripoli"{
+            ec{"Τρίπολη"}
+        }
+        "Africa:Tunis"{
+            ec{"Τύνιδα"}
+        }
+        "Africa:Windhoek"{
+            ec{"Βίντχουκ"}
         }
         "America:Adak"{
             ec{"Άντακ"}
@@ -44,6 +173,9 @@ el{
         }
         "America:Anguilla"{
             ec{"Ανγκουίλλα"}
+        }
+        "America:Antigua"{
+            ec{"Αντίγκουα"}
         }
         "America:Araguaina"{
             ec{"Αραγκουάινα"}
@@ -240,6 +372,9 @@ el{
         "America:Iqaluit"{
             ec{"Ικαλούτ"}
         }
+        "America:Jamaica"{
+            ec{"Τζαμάικα"}
+        }
         "America:Jujuy"{
             ec{"Χουχούι"}
         }
@@ -248,6 +383,12 @@ el{
         }
         "America:Kentucky:Monticello"{
             ec{"Μοντιτσέλο, Κεντάκι"}
+        }
+        "America:La_Paz"{
+            ec{"Λα Παζ"}
+        }
+        "America:Lima"{
+            ec{"Λίμα"}
         }
         "America:Los_Angeles"{
             ec{"Λος Άντζελες"}
@@ -258,8 +399,17 @@ el{
         "America:Maceio"{
             ec{"Μασέιο"}
         }
+        "America:Managua"{
+            ec{"Μανάγκουα"}
+        }
         "America:Manaus"{
             ec{"Μανάος"}
+        }
+        "America:Marigot"{
+            ec{"Μάριγκοτ"}
+        }
+        "America:Martinique"{
+            ec{"Μαρτινίκα"}
         }
         "America:Mazatlan"{
             ec{"Μαζατλάν"}
@@ -276,14 +426,26 @@ el{
         "America:Mexico_City"{
             ec{"Πόλη του Μεξικού"}
         }
+        "America:Miquelon"{
+            ec{"Μικελόν"}
+        }
         "America:Moncton"{
             ec{"Μονκτόν"}
         }
         "America:Monterrey"{
             ec{"Μοντερέι"}
         }
+        "America:Montevideo"{
+            ec{"Μοντεβιδέο"}
+        }
         "America:Montreal"{
             ec{"Μόντρεαλ"}
+        }
+        "America:Montserrat"{
+            ec{"Μονσεράτ"}
+        }
+        "America:Nassau"{
+            ec{"Νασάου"}
         }
         "America:New_York"{
             ec{"Νέα Υόρκη"}
@@ -297,20 +459,38 @@ el{
         "America:Noronha"{
             ec{"Νορόνχα"}
         }
+        "America:North_Dakota:Beulah"{
+            ec{"Μπέουλαχ, Βόρεια Ντακότα"}
+        }
         "America:North_Dakota:Center"{
             ec{"Κέντρο, Βόρεια Ντακότα"}
         }
         "America:North_Dakota:New_Salem"{
             ec{"Νιου Σάλεμ, Βόρεια Ντακότα"}
         }
+        "America:Panama"{
+            ec{"Παναμάς"}
+        }
         "America:Pangnirtung"{
             ec{"Πανγκνίρτουνγκ"}
+        }
+        "America:Paramaribo"{
+            ec{"Παραμαρίμπο"}
         }
         "America:Phoenix"{
             ec{"Φοίνιξ"}
         }
+        "America:Port-au-Prince"{
+            ec{"Πορτ-ο-Πρενς"}
+        }
+        "America:Port_of_Spain"{
+            ec{"Πορτ οφ Σπέιν"}
+        }
         "America:Porto_Velho"{
             ec{"Πόρτο Βέλο"}
+        }
+        "America:Puerto_Rico"{
+            ec{"Πουέρτο Ρίκο"}
         }
         "America:Rainy_River"{
             ec{"Ρέινι Ρίβερ"}
@@ -336,6 +516,9 @@ el{
         "America:Santiago"{
             ec{"Σαντιάγκο"}
         }
+        "America:Santo_Domingo"{
+            ec{"Άγιος Δομίνικος"}
+        }
         "America:Sao_Paulo"{
             ec{"Σάο Πάολο"}
         }
@@ -345,11 +528,29 @@ el{
         "America:Shiprock"{
             ec{"Σίπροκ"}
         }
+        "America:St_Barthelemy"{
+            ec{"Άγιος Βαρθολομαίος"}
+        }
         "America:St_Johns"{
             ec{"Σεντ Τζονς"}
         }
+        "America:St_Kitts"{
+            ec{"Άγιος Χριστόφορος (Σαιντ Κιτς)"}
+        }
+        "America:St_Lucia"{
+            ec{"Αγία Λουκία"}
+        }
+        "America:St_Thomas"{
+            ec{"Άγιος Θωμάς"}
+        }
+        "America:St_Vincent"{
+            ec{"Άγιος Βικέντιος"}
+        }
         "America:Swift_Current"{
             ec{"Σουίφτ Κάρρεντ"}
+        }
+        "America:Tegucigalpa"{
+            ec{"Τεγκουσιγκάλπα"}
         }
         "America:Thule"{
             ec{"Τούλε"}
@@ -362,6 +563,9 @@ el{
         }
         "America:Toronto"{
             ec{"Τορόντο"}
+        }
+        "America:Tortola"{
+            ec{"Τορτόλα"}
         }
         "America:Vancouver"{
             ec{"Βανκούβερ"}
@@ -408,8 +612,17 @@ el{
         "Antarctica:Vostok"{
             ec{"Βόστοκ"}
         }
+        "Arctic:Longyearbyen"{
+            ec{"Λόνγκιεαρμπιεν"}
+        }
+        "Asia:Aden"{
+            ec{"Άντεν"}
+        }
         "Asia:Almaty"{
             ec{"Αλμάτυ"}
+        }
+        "Asia:Amman"{
+            ec{"Αμμάν"}
         }
         "Asia:Anadyr"{
             ec{"Αναντίρ"}
@@ -420,14 +633,65 @@ el{
         "Asia:Aqtobe"{
             ec{"Ακτόμπε"}
         }
+        "Asia:Ashgabat"{
+            ec{"Ασχαμπάτ"}
+        }
+        "Asia:Baghdad"{
+            ec{"Βαγδάτη"}
+        }
+        "Asia:Bahrain"{
+            ec{"Μπαχρέιν"}
+        }
+        "Asia:Baku"{
+            ec{"Μπακού"}
+        }
+        "Asia:Bangkok"{
+            ec{"Μπανγκόκ"}
+        }
+        "Asia:Beirut"{
+            ec{"Βυρητός"}
+        }
+        "Asia:Bishkek"{
+            ec{"Μπισκέκ"}
+        }
+        "Asia:Brunei"{
+            ec{"Μπρουνέι"}
+        }
+        "Asia:Calcutta"{
+            ec{"Καλκούτα"}
+        }
         "Asia:Choibalsan"{
             ec{"Χόιμπαλσαν"}
         }
         "Asia:Chongqing"{
             ec{"Τσονγκίνγκ"}
         }
+        "Asia:Colombo"{
+            ec{"Κολόμπο"}
+        }
+        "Asia:Damascus"{
+            ec{"Δαμασκός"}
+        }
+        "Asia:Dhaka"{
+            ec{"Ντάκα"}
+        }
+        "Asia:Dili"{
+            ec{"Ντίλι"}
+        }
+        "Asia:Dubai"{
+            ec{"Ντουμπάι"}
+        }
+        "Asia:Dushanbe"{
+            ec{"Ντουσάμπε"}
+        }
+        "Asia:Gaza"{
+            ec{"Γάζα"}
+        }
         "Asia:Harbin"{
             ec{"Χαρμπίν"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Χονγκ Κονγκ"}
         }
         "Asia:Hovd"{
             ec{"Χοβντ"}
@@ -441,11 +705,23 @@ el{
         "Asia:Jayapura"{
             ec{"Χαγιαπούρα"}
         }
+        "Asia:Jerusalem"{
+            ec{"Ιερουσαλήμ"}
+        }
+        "Asia:Kabul"{
+            ec{"Καμπούλ"}
+        }
         "Asia:Kamchatka"{
             ec{"Καμτσάτκα"}
         }
+        "Asia:Karachi"{
+            ec{"Καράτσι"}
+        }
         "Asia:Kashgar"{
             ec{"Κάσγκαρ"}
+        }
+        "Asia:Katmandu"{
+            ec{"Κατμαντού"}
         }
         "Asia:Krasnoyarsk"{
             ec{"Κρασνογιάρσκ"}
@@ -456,11 +732,26 @@ el{
         "Asia:Kuching"{
             ec{"Κουτσίνγκ"}
         }
+        "Asia:Kuwait"{
+            ec{"Κουβέιτ"}
+        }
+        "Asia:Macau"{
+            ec{"Μακάο"}
+        }
         "Asia:Magadan"{
             ec{"Μαγκαντάν"}
         }
         "Asia:Makassar"{
             ec{"Μακασάρ"}
+        }
+        "Asia:Manila"{
+            ec{"Μανίλα"}
+        }
+        "Asia:Muscat"{
+            ec{"Μασκάτ"}
+        }
+        "Asia:Nicosia"{
+            ec{"Λευκωσία"}
         }
         "Asia:Novosibirsk"{
             ec{"Νοβοσιμπίρσκ"}
@@ -471,17 +762,38 @@ el{
         "Asia:Oral"{
             ec{"Όραλ"}
         }
+        "Asia:Phnom_Penh"{
+            ec{"Πνομ Πενχ"}
+        }
         "Asia:Pontianak"{
             ec{"Πόντιανακ"}
         }
+        "Asia:Pyongyang"{
+            ec{"Πιονγκ Γιανγκ"}
+        }
+        "Asia:Qatar"{
+            ec{"Κατάρ"}
+        }
         "Asia:Qyzylorda"{
             ec{"Κτζιλ-Ορντά"}
+        }
+        "Asia:Rangoon"{
+            ec{"Ρανγκούν"}
+        }
+        "Asia:Riyadh"{
+            ec{"Ριάντ"}
+        }
+        "Asia:Saigon"{
+            ec{"Πόλη Χο Τσι Μινχ"}
         }
         "Asia:Sakhalin"{
             ec{"Σακαλίνσκ"}
         }
         "Asia:Samarkand"{
             ec{"Σαμαρκάνδη"}
+        }
+        "Asia:Seoul"{
+            ec{"Σεούλ"}
         }
         "Asia:Shanghai"{
             ec{"Σανγκάη"}
@@ -536,6 +848,9 @@ el{
         }
         "Atlantic:Canary"{
             ec{"Κανάρια"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Πράσινο Ακρωτήριο"}
         }
         "Atlantic:Faeroe"{
             ec{"Φερόες"}
@@ -603,8 +918,14 @@ el{
         "Europe:Athens"{
             ec{"Αθήνα"}
         }
+        "Europe:Belgrade"{
+            ec{"Βελιγράδι"}
+        }
         "Europe:Berlin"{
             ec{"Βερολίνο"}
+        }
+        "Europe:Bratislava"{
+            ec{"Μπρατισλάβα"}
         }
         "Europe:Brussels"{
             ec{"Βρυξέλλες"}
@@ -627,11 +948,20 @@ el{
         "Europe:Gibraltar"{
             ec{"Γιβραλτάρ"}
         }
+        "Europe:Guernsey"{
+            ec{"Γκέρνσεϊ"}
+        }
         "Europe:Helsinki"{
             ec{"Ελσίνκι"}
         }
+        "Europe:Isle_of_Man"{
+            ec{"Νήσος του Μαν"}
+        }
         "Europe:Istanbul"{
             ec{"Κωνσταντινούπολη"}
+        }
+        "Europe:Jersey"{
+            ec{"Τζέρσεϊ"}
         }
         "Europe:Kaliningrad"{
             ec{"Καλλίπολη"}
@@ -641,6 +971,9 @@ el{
         }
         "Europe:Lisbon"{
             ec{"Λισσαβώνα"}
+        }
+        "Europe:Ljubljana"{
+            ec{"Λιουμπλιάνα"}
         }
         "Europe:London"{
             ec{"Λονδίνο"}
@@ -653,6 +986,9 @@ el{
         }
         "Europe:Malta"{
             ec{"Μάλτα"}
+        }
+        "Europe:Mariehamn"{
+            ec{"Μαριέχαμν"}
         }
         "Europe:Minsk"{
             ec{"Μινσκ"}
@@ -669,6 +1005,12 @@ el{
         "Europe:Paris"{
             ec{"Παρίσι"}
         }
+        "Europe:Podgorica"{
+            ec{"Ποντγκόριτσα"}
+        }
+        "Europe:Prague"{
+            ec{"Πράγα"}
+        }
         "Europe:Riga"{
             ec{"Ρίγα"}
         }
@@ -678,8 +1020,17 @@ el{
         "Europe:Samara"{
             ec{"Σαμάρα"}
         }
+        "Europe:San_Marino"{
+            ec{"Άγιος Μαρίνος"}
+        }
+        "Europe:Sarajevo"{
+            ec{"Σαράγεβο"}
+        }
         "Europe:Simferopol"{
             ec{"Συμφερούπολη"}
+        }
+        "Europe:Skopje"{
+            ec{"Σκόπια"}
         }
         "Europe:Sofia"{
             ec{"Σόφια"}
@@ -699,6 +1050,9 @@ el{
         "Europe:Vaduz"{
             ec{"Βαντούζ"}
         }
+        "Europe:Vatican"{
+            ec{"Βατικανό"}
+        }
         "Europe:Vienna"{
             ec{"Βιέννη"}
         }
@@ -711,6 +1065,9 @@ el{
         "Europe:Warsaw"{
             ec{"Βαρσοβία"}
         }
+        "Europe:Zagreb"{
+            ec{"Ζάγκρεμπ"}
+        }
         "Europe:Zaporozhye"{
             ec{"Ζαπορόζιε"}
         }
@@ -722,6 +1079,9 @@ el{
         }
         "Indian:Chagos"{
             ec{"Τσάγκος"}
+        }
+        "Indian:Christmas"{
+            ec{"Χριστούγεννα"}
         }
         "Indian:Cocos"{
             ec{"Κόκος"}
@@ -866,18 +1226,55 @@ el{
             ss{"ACT (Ακρ)"}
         }
         "meta:Africa_Central"{
-            ls{"ώρα Κεντρικής Αφρικής"}
+            cu:int{0}
+            ls{"Ώρα Κεντρικής Αφρικής"}
         }
         "meta:Africa_Eastern"{
-            ls{"ώρα Ανατολικής Αφρικής"}
+            cu:int{0}
+            ls{"Ώρα Ανατολικής Αφρικής"}
         }
         "meta:Africa_Southern"{
-            lg{"ώρα Νότιας Αφρικής"}
-            ls{"τυπική ώρα Νότιας Αφρικής"}
+            cu:int{0}
+            lg{"Ώρα Νότιας Αφρικής"}
+            ls{"Τυπική ώρα Νότιας Αφρικής"}
         }
         "meta:Africa_Western"{
-            ld{"καλοκαιρινή ώρα Δυτικής Αφρικής"}
-            ls{"ώρα Δυτικής Αφρικής"}
+            cu:int{0}
+            ld{"Θερινή ώρα Δυτικής Αφρικής"}
+            ls{"Ώρα Δυτικής Αφρικής"}
+        }
+        "meta:Alaska"{
+            ld{"Θερινή ώρα Αλάσκας"}
+            lg{"Ώρα Αλάσκας"}
+            ls{"Χειμερινή ώρα Αλάσκας"}
+        }
+        "meta:Amazon"{
+            lg{"Ώρα Αμαζονίου"}
+        }
+        "meta:America_Central"{
+            ld{"Κεντρική θερινή ώρα"}
+            lg{"Κεντρική ώρα"}
+            ls{"Κεντρική χειμερινή ώρα"}
+        }
+        "meta:America_Eastern"{
+            ld{"Ανατολική θερινή ώρα"}
+            lg{"Ανατολική ώρα"}
+            ls{"Ανατολική χειμερινή ώρα"}
+        }
+        "meta:America_Mountain"{
+            ld{"Ορεινή θερινή ώρα"}
+            lg{"Ορεινή ώρα"}
+            ls{"Ορεινή χειμερινή ώρα"}
+        }
+        "meta:America_Pacific"{
+            ld{"Θερινή ώρα Ειρηνικού"}
+            lg{"Ώρα Ειρηνικού"}
+            ls{"Χειμερινή ώρα Ειρηνικού"}
+        }
+        "meta:Anadyr"{
+            ld{"Θερινή ώρα Αναντίρ"}
+            lg{"Ώρα Αναντίρ"}
+            ls{"Ώρα Αναντίρ"}
         }
         "meta:Aqtau"{
             sd{"AQTST (Ακτάου)"}
@@ -887,21 +1284,217 @@ el{
             sd{"AQTST (Ακτοβε)"}
             ss{"AQTT (Ακτοβε)"}
         }
+        "meta:Arabian"{
+            sd{"ADT (Αραβική)"}
+            sg{"AT (Αραβική)"}
+            ss{"AST (Αραβική)"}
+        }
+        "meta:Argentina"{
+            ld{"Θερινή ώρα Αργεντινής"}
+            lg{"Ώρα Αργεντινής"}
+            ls{"Ώρα Αργεντινής"}
+        }
+        "meta:Argentina_Western"{
+            ld{"Δυτική θερινή ώρα Αργεντινής"}
+            lg{"Δυτική ώρα Αργεντινής"}
+            ls{"Ώρα δυτικής Αργεντινής"}
+        }
+        "meta:Atlantic"{
+            cu:int{0}
+            ld{"Θερινή ώρα Ατλαντικού"}
+            lg{"Ώρα Ατλαντικού"}
+            ls{"Χειμερινή ώρα Ατλαντικού"}
+        }
+        "meta:Australia_Central"{
+            cu:int{0}
+            ld{"Θερινή ώρα Κεντρικής Αυστραλίας"}
+            lg{"Ώρα Κεντρικής Αυστραλίας"}
+            ls{"Χειμερινή ώρα Κεντρικής Αυστραλίας"}
+        }
+        "meta:Australia_CentralWestern"{
+            cu:int{0}
+            ld{"Θερινή ώρα Κεντροδυτικής Αυστραλίας"}
+            lg{"Ώρα Κεντροδυτικής Αυστραλίας"}
+            ls{"Χειμερινή ώρα Κεντροδυτικής Αυστραλίας"}
+        }
+        "meta:Australia_Eastern"{
+            cu:int{0}
+            ld{"Θερινή ώρα Ανατολικής Αυστραλίας"}
+            lg{"Ώρα Ανατολικής Αυστραλίας"}
+            ls{"Χειμερινή ώρα Ανατολικής Αυστραλίας"}
+        }
+        "meta:Australia_Western"{
+            cu:int{0}
+            ld{"Θερινή ώρα Δυτικής Αυστραλίας"}
+            lg{"Ώρα Δυτικής Αυστραλίας"}
+            ls{"Χειμερινή ώρα Δυτικής Αυστραλίας"}
+        }
         "meta:Bering"{
             sd{"BDT (Μπερίνγκ)"}
             sg{"BT (Μπερίνγκ)"}
             ss{"BST (Μπερίνγκ)"}
+        }
+        "meta:Brasilia"{
+            ld{"Θερινή ώρα Μπραζίλια"}
+            lg{"Ώρα Μπραζίλια"}
+            ls{"Ώρα Μπραζίλια"}
+        }
+        "meta:China"{
+            sd{"CDT (Κίνα)"}
+            sg{"CT (Κίνα)"}
+            ss{"CST (Κίνα)"}
+        }
+        "meta:Choibalsan"{
+            ld{"Θερινή ώρα Τσοϊμπαλσάν"}
+            lg{"Ώρα Τσοϊμπαλσάν"}
+            ls{"Ώρα Τσοϊμπαλσάν"}
         }
         "meta:Cuba"{
             sd{"CDT (Κούβα)"}
             sg{"CT (Κούβα)"}
             ss{"CST (Κούβα)"}
         }
+        "meta:Europe_Central"{
+            cu:int{1}
+            ld{"Θερινή ώρα Κεντρικής Ευρώπης"}
+            ls{"Ώρα Κεντρικής Ευρώπης"}
+        }
+        "meta:Europe_Eastern"{
+            cu:int{0}
+            ld{"Θερινή ώρα Ανατολικής Ευρώπης"}
+            ls{"Ώρα Ανατολικής Ευρώπης"}
+        }
+        "meta:Europe_Western"{
+            cu:int{0}
+            ld{"Θερινή ώρα Δυτικής Ευρώπης"}
+            ls{"Ώρα Δυτικής Ευρώπης"}
+            sd{"Θερινή ώρα Δυτ. Ευρ."}
+            ss{"Ώρα Δυτ. Ευρ."}
+        }
+        "meta:Hawaii_Aleutian"{
+            lg{"Ώρα Χαβάης-Αλεούτιων νήσων"}
+        }
+        "meta:Hovd"{
+            ld{"Θερινή ώρα Χοβντ"}
+            lg{"Ώρα Χοβντ"}
+            ls{"Ώρα Χοβντ"}
+        }
+        "meta:Indonesia_Central"{
+            lg{"Κεντρική ώρα Ινδονησίας"}
+        }
+        "meta:Indonesia_Eastern"{
+            lg{"Ανατολική ώρα Ινδονησίας"}
+        }
+        "meta:Indonesia_Western"{
+            lg{"Δυτική ώρα Ινδονησίας"}
+        }
+        "meta:Irkutsk"{
+            ld{"Θερινή ώρα Ιρκούτσκ"}
+            lg{"Ώρα Ιρκούτσκ"}
+            ls{"Ώρα Ιρκούτσκ"}
+        }
+        "meta:Israel"{
+            ss{"IST (Ισραήλ)"}
+        }
+        "meta:Kamchatka"{
+            ld{"Θερινή ώρα Πετροπαβλόβσκ-Καμτσάτσκι"}
+            lg{"Ώρα Καμτσάτκα"}
+            ls{"Ώρα Πετροπαβλόβσκ-Καμτσάτσκι"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ld{"Ανατολική θερινή ώρα Καζακστάν"}
+            lg{"Ώρα Ανατολικού Καζακστάν"}
+            ls{"Χειμερινή ώρα Ανατολικού Καζακστάν"}
+        }
+        "meta:Kazakhstan_Western"{
+            ld{"Δυτική θερινή ώρα Καζακστάν"}
+            lg{"Ώρα δυτικού Καζακστάν"}
+            ls{"Χειμερινή ώρα δυτικού Καζακστάν"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"Θερινή ώρα Κρασνόγιαρσκ"}
+            lg{"Ώρα Κρασνόγιαρσκ"}
+            ls{"Ώρα Κρασνόγιαρσκ"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Θερινή ώρα Λορντ Χάου"}
+            lg{"Ώρα Λορντ Χάου"}
+            ls{"Χειμερινή ώρα Λορντ Χάου"}
+        }
+        "meta:Macquarie"{
+            lg{"Ώρα Μακουάρι"}
+        }
+        "meta:Magadan"{
+            ld{"Θερινή ώρα Μαγκαντάν"}
+            lg{"Ώρα Μάγκανταν"}
+            ls{"Ώρα Μάγκανταν"}
+        }
+        "meta:Mongolia"{
+            ld{"Θερινή ώρα Ουλάν Μπατόρ"}
+            lg{"Ώρα Μογγολίας"}
+            ls{"Ώρα Ουλάν Μπατόρ"}
+        }
+        "meta:Moscow"{
+            ld{"Θερινή ώρα Μόσχας"}
+            lg{"Ώρα Μόσχας"}
+            ls{"Χειμερινή ώρα Μόσχας"}
+        }
+        "meta:Newfoundland"{
+            ld{"Θερινή ώρα Νέας Γης"}
+            lg{"Ώρα Νέας Γης"}
+            ls{"Χειμερινή ώρα Νέας Γης"}
+        }
+        "meta:Noronha"{
+            ld{"Θερινή ώρα Φερνάρντο ντε Νορόνια"}
+            lg{"Ώρα Νορόνια"}
+            ls{"Ώρα Φερνάρντο ντε Νορόνια"}
+        }
+        "meta:Novosibirsk"{
+            ld{"Θερινή ώρα Νοβοσιμπίρσκ"}
+            lg{"Ώρα Νοβοσιμπίρσκ"}
+            ls{"Ώρα Νοβοσιμπίρσκ"}
+        }
+        "meta:Omsk"{
+            ld{"Θερινή ώρα Ομσκ"}
+            lg{"Ώρα Ομσκ"}
+            ls{"Ώρα Ομσκ"}
+        }
+        "meta:Sakhalin"{
+            ld{"Θερινή ώρα Σαχαλίνης"}
+            lg{"Ώρα Σαχαλίνης"}
+            ls{"Ώρα Σαχαλίνης"}
+        }
+        "meta:Samara"{
+            ld{"Θερινή ώρα Σαμάρας"}
+            lg{"Ώρα Σάμαρας"}
+            ls{"Ώρα Σάμαρας"}
+        }
         "meta:Samarkand"{
             sd{"SAMST (Σάμαρκαντ)"}
             ss{"SAMT (Σάμαρκαντ)"}
         }
+        "meta:Vladivostok"{
+            ld{"Θερινή ώρα Βλαδιβοστόκ"}
+            lg{"Ώρα Βλαδιβοστόκ"}
+            ls{"Ώρα Βλαδιβοστόκ"}
+        }
+        "meta:Volgograd"{
+            ld{"Θερινή ώρα Βόλγκογκραντ"}
+            lg{"Ώρα Βόλγκογκραντ"}
+            ls{"Ώρα Βόλγκογκραντ"}
+        }
+        "meta:Yakutsk"{
+            ld{"Θερινή ώρα Γιακούτσκ"}
+            lg{"Ώρα Γιακούτσκ"}
+            ls{"Ώρα Γιακούτσκ"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Θερινή ώρα Γεκατερίνμπουργκ"}
+            lg{"Ώρα Γεκατερίνμπουργκ"}
+            ls{"Ώρα Γεκατερίνμπουργκ"}
+        }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}"}
     }
 }

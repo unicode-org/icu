@@ -16,7 +16,7 @@ lag{
             "Diriháamu ya Ʉtemi wa Kɨaráabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwáanza ya Angóola",
         }
         AUD{
@@ -24,11 +24,11 @@ lag{
             "Dóola ya Ausitereelía",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dináari ya Baharéeni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Faráanga ya Burúundi",
         }
         BWP{
@@ -52,15 +52,15 @@ lag{
             "Yúani Renimínibi ya Chíina",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Esikúudo ya Kepuvéede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faráanga ya Jibóuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dináairi ya Alijéria",
         }
         EGP{
@@ -68,11 +68,11 @@ lag{
             "Páundi ya Mísiri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nákɨfa ya Eriterea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Bíiri ya Ʉhabéeshi",
         }
         EUR{
@@ -84,7 +84,7 @@ lag{
             "Páundi ya Ʉɨngɨréesa",
         }
         GHC{
-            "₵",
+            "GHC",
             "Séedi ya Gáana",
         }
         GMD{
@@ -92,7 +92,7 @@ lag{
             "Daláasi ya Gámbia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faráanga ya Gíine",
         }
         INR{
@@ -104,15 +104,15 @@ lag{
             "Yéeni ya Japáani",
         }
         KES{
-            "Ksh",
+            "KES",
             "Shilíingi ya Kéenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faráanga ya Komóoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dóola ya Libéria",
         }
         LSL{
@@ -120,7 +120,7 @@ lag{
             "Lóoti ya Lesóoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dináari ya Líbia",
         }
         MAD{
@@ -132,11 +132,11 @@ lag{
             "Mpía ya bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ungwíiya ya Moritánia",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupía ya Moríisi",
         }
         MWK{
@@ -144,15 +144,15 @@ lag{
             "Kwáacha ya Maláawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikáali ya Musumbíiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dóola ya Namíbia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naíira ya Niijéria",
         }
         RWF{
@@ -160,11 +160,11 @@ lag{
             "Faráanga ya Rwáanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyáali ya Saudía",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupía ya Shelishéeli",
         }
         SDG{
@@ -172,19 +172,19 @@ lag{
             "Páundi ya Sudáani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Páundi ya Mʉtakatíifu Heléena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leóoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Shilíingi ya Somália",
         }
         STD{
-            "Db",
+            "STD",
             "Dóbura ya SaoTóome na Pirínsipe",
         }
         SZL{
@@ -192,7 +192,7 @@ lag{
             "Lilengéeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dináari ya Tunísia",
         }
         TZS{
@@ -200,7 +200,7 @@ lag{
             "Shilíingi ya Taansanía",
         }
         UGX{
-            "USh",
+            "UGX",
             "Shilíingi ya Ugáanda",
         }
         USD{
@@ -216,17 +216,17 @@ lag{
             "Faráanga ya CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Ráandi ya Afɨrɨka ya Saame",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwácha ya Sámbia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dóola ya Simbáabwe",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.57.99"}
 }

@@ -10,8 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/sq.xml
  */
 sq{
-    Version{"2.0.47.69"}
+    Version{"2.0.57.98"}
     zoneStrings{
+        "Etc:Unknown"{
+            ec{"I panjohur"}
+        }
         "meta:Europe_Central"{
             ls{"Ora qendrore evropiane"}
         }
