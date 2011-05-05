@@ -974,6 +974,7 @@ private:
      * @param limit the limit offset for matching, either last+1 in
      * the forward direction, or last-1 in the reverse direction,
      * where last is the index of the last character to match.
+     * @param s
      * @return If part of s matches up to the limit, return |limit -
      * start|.  If all of s matches before reaching the limit, return
      * s.length().  If there is a mismatch between s and text, return
@@ -1562,6 +1563,7 @@ private:
      * On return, the position after the last character parsed, that is,
      * the locations marked '%'.  If the parse fails, ppos is returned
      * unchanged.
+     * @param ec status
      * @return a reference to this.
      */
     UnicodeSet& applyPropertyPattern(const UnicodeString& pattern,
