@@ -9,6 +9,7 @@
 pt_PT{
     Countries{
         009{"Oceânia"}
+        015{"Norte de África"}
         035{"Sudeste Asiático"}
         154{"Europa do Norte"}
         AC{"Ascensão"}
@@ -16,6 +17,7 @@ pt_PT{
         AI{"Anguila"}
         AM{"Arménia"}
         AQ{"Antárctica"}
+        AX{"Ilhas Åland"}
         AZ{"Azerbeijão"}
         BD{"Bangladeche"}
         BF{"Burkina-Faso"}
@@ -25,13 +27,16 @@ pt_PT{
         BY{"Bielorrússia"}
         CC{"Ilhas Cocos"}
         CG{"Congo-Brazzaville"}
+        CM{"Camarões"}
         CX{"Ilha do Natal"}
         CZ{"República Checa"}
+        DJ{"Jibuti"}
         EE{"Estónia"}
         EG{"Egipto"}
         EH{"Sara Ocidental"}
         FK{"Ilhas Falkland"}
         FM{"Estados Federados da Micronésia"}
+        FO{"Ilhas Faroé"}
         GL{"Gronelândia"}
         GW{"Guiné-Bissau"}
         HK{"Região Administrativa Especial de Hong Kong"}
@@ -39,9 +44,11 @@ pt_PT{
         KE{"Quénia"}
         KG{"Quirguizistão"}
         KN{"Saint Kitts e Nevis"}
+        KW{"Koweit"}
         KY{"Ilhas Caimão"}
         KZ{"Cazaquistão"}
         LA{"Laos, República Popular Democrática do"}
+        LK{"Sri Lanca"}
         LV{"Letónia"}
         MC{"Mónaco"}
         MD{"Moldávia, República da"}
@@ -50,6 +57,7 @@ pt_PT{
         MM{"Mianmar"}
         MO{"Região Administrativa Especial de Macau"}
         MP{"Ilhas Mariana do Norte"}
+        MS{"Monserrate"}
         MU{"Maurícias"}
         MW{"Malavi"}
         NC{"Nova Caledónia"}
@@ -67,10 +75,11 @@ pt_PT{
         TJ{"Tajiquistão"}
         TM{"Turquemenistão"}
         TT{"Trindade e Tobago"}
+        UZ{"Usbequistão"}
         VI{"Ilhas Virgin E.U.A."}
         VN{"Vietname"}
         YE{"Iémen"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.50.84"}
+    Version{"2.0.58.14"}
 }

@@ -11,6 +11,7 @@
  */
 ur_IN{
     NumberElements{
+        default{"arabext"}
         latn{
             patterns{
                 currencyFormat{"¤ #,##,##0.00"}
@@ -19,5 +20,5 @@ ur_IN{
             }
         }
     }
-    Version{"2.0.41.23"}
+    Version{"2.0.56.63"}
 }

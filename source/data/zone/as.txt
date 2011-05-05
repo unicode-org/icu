@@ -10,14 +10,14 @@
  *  ICU <specials> source: <path>/xml/main/as.xml
  */
 as{
-    Version{"2.0.47.67"}
+    Version{"2.0.58.6"}
     zoneStrings{
         "Asia:Calcutta"{
             ec{"এলাহাৱাদ"}
         }
         "meta:India"{
             cu:int{1}
-            ls{"ভাৰতীয় সময়"}
+            ls{"ভাৰতীয় সময়"}
             ss{"ভা. স."}
         }
     }

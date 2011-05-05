@@ -42,7 +42,7 @@ sv{
         154{"Nordeuropa"}
         155{"Västeuropa"}
         172{"Oberoende staters samvälde"}
-        419{"Latinamerika och Karibien"}
+        419{"Latinamerika"}
         830{"Kanalöarna"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -138,7 +138,7 @@ sv{
         GP{"Guadeloupe"}
         GQ{"Ekvatorialguinea"}
         GR{"Grekland"}
-        GS{"Sydgeorgien och Södra Sandwichöarna"}
+        GS{"Sydgeorgien och Sydsandwichöarna"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
@@ -301,5 +301,5 @@ sv{
         ZW{"Zimbabwe"}
         ZZ{"okänd eller ogiltig regionkod"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.14"}
 }

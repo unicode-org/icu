@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.53.54"}
+    Version{"2.0.58.12"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -66,6 +66,9 @@ de{
         "America:Havana"{
             ec{"Havanna"}
         }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
         "America:Jamaica"{
             ec{"Jamaika"}
         }
@@ -114,6 +117,9 @@ de{
         "Asia:Hong_Kong"{
             ec{"Hongkong"}
         }
+        "Asia:Jayapura"{
+            ec{"Port Numbay"}
+        }
         "Asia:Kamchatka"{
             ec{"Kamtschatka"}
         }
@@ -161,6 +167,9 @@ de{
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
         }
         "Asia:Vladivostok"{
             ec{"Wladiwostok"}
@@ -225,6 +234,9 @@ de{
         "Europe:Moscow"{
             ec{"Moskau"}
         }
+        "Europe:Prague"{
+            ec{"Prag"}
+        }
         "Europe:Rome"{
             ec{"Rom"}
         }
@@ -234,11 +246,17 @@ de{
         "Europe:Uzhgorod"{
             ec{"Uschgorod"}
         }
+        "Europe:Vatican"{
+            ec{"Vatikan"}
+        }
         "Europe:Vienna"{
             ec{"Wien"}
         }
         "Europe:Vilnius"{
             ec{"Wilna"}
+        }
+        "Europe:Volgograd"{
+            ec{"Wolgograd"}
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
@@ -282,11 +300,11 @@ de{
         }
         "meta:Africa_Southern"{
             lg{"Südafrikanische Zeit"}
-            ls{"Südafrikanische Standardzeit"}
+            ls{"Südafrikanische Winterzeit"}
         }
         "meta:Africa_Western"{
             ld{"Westafrikanische Sommerzeit"}
-            ls{"Westafrikanische Zeit"}
+            ls{"Westafrikanische Winterzeit"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinsk-Sommerzeit"}
@@ -294,19 +312,136 @@ de{
         }
         "meta:Alaska"{
             cu:int{1}
-            lg{"Alaska-Zeit"}
-            ls{"Alaska-Standardzeit"}
+            ld{"Alaska Sommerzeit"}
+            lg{"Alaska Zeit"}
+            ls{"Alaska Winterzeit"}
         }
         "meta:Alaska_Hawaii"{
             lg{"Alaska-Hawaii-Zeit"}
-            ls{"Alaska-Hawaii-Standardzeit"}
+            ls{"Alaska-Hawaii-Winterzeit"}
         }
         "meta:Almaty"{
             ld{"Almaty-Sommerzeit"}
             ls{"Almaty-Zeit"}
         }
         "meta:Amazon"{
-            ld{"Amazonas-Sommerzeit"}
+            ld{"Amazonas Sommerzeit"}
+            lg{"Amazonas Zeit"}
+            ls{"Amazonas Winterzeit"}
+        }
+        "meta:America_Central"{
+            ld{"Nordamerikanische Inland-Sommerzeit"}
+            lg{"Nordamerikanische Inlandzeit"}
+            ls{"Nordamerikanische Inland-Winterzeit"}
+        }
+        "meta:America_Eastern"{
+            ld{"Nordamerikanische Ostküsten-Sommerzeit"}
+            lg{"Nordamerikanische Ostküstenzeit"}
+            ls{"Nordamerikanische Ostküsten-Winterzeit"}
+        }
+        "meta:America_Mountain"{
+            ld{"Rocky Mountain Sommerzeit"}
+            lg{"Rocky Mountain Zeit"}
+            ls{"Rocky Mountain Winterzeit"}
+        }
+        "meta:America_Pacific"{
+            ld{"Nordamerikanische Westküsten-Sommerzeit"}
+            lg{"Nordamerikanische Westküstenzeit"}
+            ls{"Nordamerikanische Westküsten-Winterzeit"}
+        }
+        "meta:Anadyr"{
+            ld{"Anadyr Sommerzeit"}
+            lg{"Anadyr Zeit"}
+            ls{"Anadyr Winterzeit"}
+        }
+        "meta:Arabian"{
+            ld{"Arabische Sommerzeit"}
+            lg{"Arabische Zeit"}
+            ls{"Arabische Winterzeit"}
+        }
+        "meta:Argentina"{
+            ld{"Argentinische Sommerzeit"}
+            lg{"Argentinische Zeit"}
+            ls{"Argentinische Winterzeit"}
+        }
+        "meta:Argentina_Western"{
+            ld{"West-Argentinische Sommerzeit"}
+            lg{"West-Argentinische Zeit"}
+            ls{"West-Argentinische Winterzeit"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantik-Sommerzeit"}
+            lg{"Atlantik-Zeit"}
+            ls{"Atlantik-Winterzeit"}
+        }
+        "meta:Australia_Central"{
+            ld{"Zentralaustralische Sommerzeit"}
+            lg{"Zentralaustralische Zeit"}
+            ls{"Zentralaustralische Winterzeit"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Zentral-/Westaustralische Sommerzeit"}
+            lg{"Zentral-/Westaustralische Zeit"}
+            ls{"Zentral-/Westaustralische Winterzeit"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Ostaustralische Sommerzeit"}
+            lg{"Ostaustralische Zeit"}
+            ls{"Ostaustralische Winterzeit"}
+        }
+        "meta:Australia_Western"{
+            ld{"Westaustralische Sommerzeit"}
+            lg{"Westaustralische Zeit"}
+            ls{"Westaustralische Winterzeit"}
+        }
+        "meta:Azores"{
+            ld{"Azoren-Sommerzeit"}
+            ls{"Azoren-Zeit"}
+        }
+        "meta:Brasilia"{
+            ld{"Brasilianische Sommerzeit"}
+            lg{"Brasilianische Zeit"}
+            ls{"Brasilianische Winterzeit"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Kap-Verde-Sommerzeit"}
+            ls{"Kap-Verde-Zeit"}
+        }
+        "meta:Chamorro"{
+            lg{"Chamorro-Zeit"}
+            ls{"Chamorro-Winterzeit"}
+        }
+        "meta:Chatham"{
+            ld{"Chatham-Sommerzeit"}
+            ls{"Chatham-Winterzeit"}
+        }
+        "meta:China"{
+            ls{"Chinesische Winterzeit"}
+        }
+        "meta:Choibalsan"{
+            ld{"Choibalsan Sommerzeit"}
+            lg{"Choibalsan Zeit"}
+            ls{"Choibalsan Winterzeit"}
+        }
+        "meta:Christmas"{
+            ls{"Weihnachtsinsel-Zeit"}
+        }
+        "meta:Cocos"{
+            ls{"Kokosinseln-Zeit"}
+        }
+        "meta:Cook"{
+            ld{"Cookinseln-Sommerzeit"}
+            ls{"Cookinseln-Zeit"}
+        }
+        "meta:Davis"{
+            ls{"Davis-Zeit"}
+        }
+        "meta:DumontDUrville"{
+            ls{"Dumont-d'Urville-Zeit"}
+        }
+        "meta:Easter"{
+            ld{"Osterinsel-Sommerzeit"}
+            ls{"Osterinsel-Zeit"}
         }
         "meta:Europe_Central"{
             cu:int{1}
@@ -316,23 +451,236 @@ de{
             ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"Osteuropäische Sommerzeit"}
             ls{"Osteuropäische Zeit"}
             sd{"OESZ"}
             ss{"OEZ"}
         }
         "meta:Europe_Western"{
+            cu:int{1}
             ld{"Westeuropäische Sommerzeit"}
             ls{"Westeuropäische Zeit"}
             sd{"WESZ"}
             ss{"WEZ"}
         }
+        "meta:Falkland"{
+            ld{"Falklandinseln-Sommerzeit"}
+            ls{"Falklandinseln-Zeit"}
+        }
+        "meta:Fiji"{
+            ld{"Fidschi-Sommerzeit"}
+            ls{"Fidschi-Zeit"}
+        }
+        "meta:French_Southern"{
+            ls{"Französische Süd- und Antarktisgebiete-Zeit"}
+        }
+        "meta:GMT"{
+            ls{"Mittlere Greenwich-Zeit"}
+        }
+        "meta:Galapagos"{
+            ls{"Galapagos-Zeit"}
+        }
+        "meta:Gambier"{
+            ls{"Gambier-Zeit"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"Gilbert-Inseln-Zeit"}
+        }
+        "meta:Guam"{
+            ls{"Guam-Winterzeit"}
+        }
+        "meta:Hawaii_Aleutian"{
+            lg{"Hawaii-Aleuten-Zeit"}
+            ls{"Hawaii-Aleuten-Winterzeit"}
+        }
+        "meta:Hong_Kong"{
+            ld{"Hong-Kong-Sommerzeit"}
+            ls{"Hong-Kong-Zeit"}
+        }
+        "meta:Hovd"{
+            ld{"Hovd-Sommerzeit"}
+            lg{"Hovd-Zeit"}
+            ls{"Hovd-Winterzeit"}
+        }
+        "meta:India"{
+            ls{"Indische Zeit"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"Indischer Ozean-Zeit"}
+        }
+        "meta:Indochina"{
+            ls{"Indochinesische Winterzeit"}
+        }
+        "meta:Indonesia_Central"{
+            lg{"Zentralindonesische Zeit"}
+            ls{"Zentralindonesische Winterzeit"}
+        }
+        "meta:Indonesia_Eastern"{
+            lg{"Ostindonesische Zeit"}
+            ls{"Ostindonesische Winterzeit"}
+        }
+        "meta:Indonesia_Western"{
+            lg{"Westindonesische Zeit"}
+            ls{"Westindonesische Winterzeit"}
+        }
+        "meta:Irkutsk"{
+            ld{"Irkutsk-Sommerzeit"}
+            lg{"Irkutsk-Zeit"}
+            ls{"Irkutsk-Winterzeit"}
+        }
+        "meta:Israel"{
+            ld{"Israelische Sommerzeit"}
+            ls{"Israelische Winterzeit"}
+        }
+        "meta:Japan"{
+            ls{"Japanische Winterzeit"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamtschatka-Sommerzeit"}
+            lg{"Kamtschatka-Zeit"}
+            ls{"Kamtschatka-Winterzeit"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            lg{"Ostkasachstanische Zeit"}
+            ls{"Ostkasachstanische Winterzeit"}
+        }
+        "meta:Kazakhstan_Western"{
+            lg{"Westkasachstanische Zeit"}
+            ls{"Westkasachstanische Winterzeit"}
+        }
+        "meta:Korea"{
+            ls{"Koreanische Winterzeit"}
+        }
+        "meta:Kosrae"{
+            ls{"Kosrae-Zeit"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"Krasnoyarsk-Sommerzeit"}
+            lg{"Krasnoyarsk-Zeit"}
+            ls{"Krasnoyarsk-Winterzeit"}
+        }
+        "meta:Kuybyshev"{
+            ld{"Kuibyschew-Sommerzeit"}
+            ls{"Kuibyschew-Zeit"}
+        }
+        "meta:Line_Islands"{
+            ls{"Zentralpolynesische Sporaden-Zeit"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Lord-Howe-Sommerzeit"}
+            lg{"Lord-Howe-Zeit"}
+            ls{"Lord-Howe-Winterzeit"}
+        }
+        "meta:Macquarie"{
+            ls{"Macquarie-Zeit"}
+        }
+        "meta:Magadan"{
+            ld{"Magadan-Sommerzeit"}
+            lg{"Magadan-Zeit"}
+            ls{"Magadan-Winterzeit"}
+        }
+        "meta:Maldives"{
+            ls{"Malediven-Zeit"}
+        }
+        "meta:Mauritius"{
+            ld{"Mauritius-Sommerzeit"}
+            ls{"Mauritius-Zeit"}
+        }
+        "meta:Mawson"{
+            ls{"Mawson-Zeit"}
+        }
+        "meta:Mongolia"{
+            ld{"Mongolische Sommerzeit"}
+            lg{"Mongolische Zeit"}
+            ls{"Mongolische Winterzeit"}
+        }
         "meta:Moscow"{
             ld{"Moskauer Sommerzeit"}
-            ls{"Moskauer Zeit"}
+            lg{"Moskauer Zeit"}
+            ls{"Moskauer Winterzeit"}
+        }
+        "meta:New_Zealand"{
+            ld{"Neuseeland-Sommerzeit"}
+            lg{"Neuseeland-Zeit"}
+            ls{"Neuseeland-Winterzeit"}
+        }
+        "meta:Newfoundland"{
+            ld{"Neufundland-Sommerzeit"}
+            lg{"Neufundland-Zeit"}
+            ls{"Neufundland-Winterzeit"}
+        }
+        "meta:Noronha"{
+            ld{"Fernando de Noronha Sommerzeit"}
+            lg{"Fernando de Noronha Zeit"}
+            ls{"Fernando de Noronha Winterzeit"}
+        }
+        "meta:Novosibirsk"{
+            ld{"Novosibirsk-Sommerzeit"}
+            lg{"Novosibirsk-Zeit"}
+            ls{"Novosibirsk-Winterzeit"}
+        }
+        "meta:Omsk"{
+            ld{"Omsk-Sommerzeit"}
+            lg{"Omsk-Zeit"}
+            ls{"Omsk-Winterzeit"}
+        }
+        "meta:Reunion"{
+            ls{"Reunion-Zeit"}
+        }
+        "meta:Rothera"{
+            ls{"Rothera-Zeit"}
+        }
+        "meta:Sakhalin"{
+            ld{"Sakhalin-Sommerzeit"}
+            lg{"Sakhalin-Zeit"}
+            ls{"Sakhalin-Winterzeit"}
+        }
+        "meta:Samara"{
+            ld{"Samara-Sommerzeit"}
+            lg{"Samara-Zeit"}
+            ls{"Samara-Winterzeit"}
+        }
+        "meta:Seychelles"{
+            ls{"Seychellen-Zeit"}
+        }
+        "meta:South_Georgia"{
+            ls{"Südgeorgische Zeit"}
+        }
+        "meta:Syowa"{
+            ls{"Syowa-Zeit"}
+        }
+        "meta:Turkey"{
+            ld{"Türkische Sommerzeit"}
+            ls{"Türkische Zeit"}
+        }
+        "meta:Vladivostok"{
+            ld{"Wladiwostok-Sommerzeit"}
+            lg{"Wladiwostok-Zeit"}
+            ls{"Wladiwostok-Winterzeit"}
+        }
+        "meta:Volgograd"{
+            ld{"Wolgograd-Sommerzeit"}
+            lg{"Wolgograd-Zeit"}
+            ls{"Wolgograd-Winterzeit"}
+        }
+        "meta:Vostok"{
+            ls{"Vostok-Zeit"}
+        }
+        "meta:Yakutsk"{
+            ld{"Yakutsk-Sommerzeit"}
+            lg{"Yakutsk-Zeit"}
+            ls{"Yakutsk-Winterzeit"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Jekaterinburg-Sommerzeit"}
+            lg{"Jekaterinburg-Zeit"}
+            ls{"Jekaterinburg-Winterzeit"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1} Zeit ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Zeit"}
     }
 }

@@ -14,6 +14,7 @@ nn{
         calendar{"kalender"}
         collation{"kollasjon"}
         currency{"valuta"}
+        numbers{"tal"}
     }
     Languages{
         aa{"afar"}
@@ -26,6 +27,7 @@ nn{
         af{"afrikaans"}
         afa{"afroasiatisk språk"}
         afh{"afrihili"}
+        agq{"aghem"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkadisk"}
@@ -77,6 +79,7 @@ nn{
         bo{"tibetansk"}
         br{"bretonsk"}
         bra{"braj"}
+        brx{"bodo"}
         bs{"bosnisk"}
         btk{"batak"}
         bua{"burjatisk"}
@@ -127,12 +130,14 @@ nn{
         den{"slavej"}
         dgr{"dogrib"}
         din{"dinka"}
+        dje{"zarma"}
         doi{"dogri"}
         dra{"dravidisk språk"}
         dsb{"lågsorbisk"}
         dua{"duala"}
         dum{"mellumnederlandsk"}
         dv{"divehi"}
+        dyo{"jola-fonyi"}
         dyu{"dyula"}
         dz{"dzongkha"}
         ebu{"kiembu"}
@@ -225,7 +230,7 @@ nn{
         ine{"indo-europeisk språk"}
         inh{"ingusjisk"}
         io{"ido"}
-        ira{"iransk"}
+        ira{"iransk språk"}
         iro{"irokansk språk"}
         is{"islandsk"}
         it{"italiensk"}
@@ -268,6 +273,7 @@ nn{
         kro{"kru"}
         kru{"kurukh"}
         ks{"kasjmiri"}
+        ksf{"bafia"}
         ku{"kurdisk"}
         kum{"kumyk"}
         kut{"kutenai"}
@@ -299,7 +305,7 @@ nn{
         mai{"maithili"}
         mak{"makasar"}
         man{"mandingo"}
-        map{"austronesisk"}
+        map{"austronesisk språk"}
         mas{"masai"}
         mdf{"moksha"}
         mdr{"mandar"}
@@ -324,6 +330,7 @@ nn{
         mr{"marathi"}
         ms{"malayisk"}
         mt{"maltesisk"}
+        mua{"mundang"}
         mul{"fleire språk"}
         mun{"mundaspråk"}
         mus{"creek"}
@@ -347,6 +354,7 @@ nn{
         niu{"niueansk"}
         nl{"nederlandsk"}
         nl_BE{"flamsk"}
+        nmg{"kwasio"}
         nn{"nynorsk"}
         no{"norsk"}
         nog{"nogai"}
@@ -355,6 +363,7 @@ nn{
         nr{"sør-ndebele"}
         nso{"nordsotho"}
         nub{"nubisk språk"}
+        nus{"nuer"}
         nv{"navajo"}
         nwc{"klassisk newarisk"}
         ny{"nyanja"}
@@ -388,6 +397,7 @@ nn{
         ps{"pashto"}
         pt{"portugisisk"}
         pt_BR{"brasiliansk portugisisk"}
+        pt_PT{"europeisk portugisisk"}
         qu{"quechua"}
         raj{"rajasthani"}
         rap{"rapanui"}
@@ -396,11 +406,13 @@ nn{
         rn{"rundi"}
         ro{"rumensk"}
         roa{"romansk språk"}
+        rof{"rombo"}
         rom{"romani"}
         root{"rot"}
         ru{"russisk"}
         rup{"aromansk"}
         rw{"kinjarwanda"}
+        rwk{"rwa"}
         sa{"sanskrit"}
         sad{"sandawe"}
         sah{"jakutsk"}
@@ -409,6 +421,7 @@ nn{
         sam{"samaritansk arameisk"}
         sas{"sasak"}
         sat{"santali"}
+        sbp{"sangu"}
         sc{"sardinsk"}
         scn{"siciliansk"}
         sco{"skotsk"}
@@ -485,6 +498,7 @@ nn{
         tut{"altaisk språk"}
         tvl{"tuvalu"}
         tw{"twi"}
+        twq{"tasawaq"}
         ty{"tahitisk"}
         tyv{"tuvinisk"}
         udm{"udmurt"}
@@ -492,7 +506,7 @@ nn{
         uga{"ugaritisk"}
         uk{"ukrainsk"}
         umb{"umbundu"}
-        und{"ikkje bestemt"}
+        und{"ukjent språk"}
         ur{"urdu"}
         uz{"usbekisk"}
         vai{"vai"}
@@ -511,6 +525,7 @@ nn{
         xh{"xhosa"}
         yao{"yao"}
         yap{"yapesisk"}
+        yav{"yangben"}
         yi{"jiddisk"}
         yo{"joruba"}
         ypk{"jupisk språk"}
@@ -658,7 +673,7 @@ nn{
         Zsym{"symbol"}
         Zxxx{"kode for språk utan skrift"}
         Zyyy{"felles"}
-        Zzzz{"ukjend eller ugyldig skrift"}
+        Zzzz{"ukjend skrift"}
     }
     Types{
         calendar{
@@ -678,9 +693,11 @@ nn{
         collation{
             big5han{"tradisjonell kinesisk sortering"}
             direct{"direkte sortering"}
+            ducet{"grunnleggjande Unicode-sorteringsrekkjefølgje"}
             gb2312han{"forenkla kinesisk sortering"}
             phonebook{"telefonkatalogsortering"}
             pinyin{"pinyin-sortering"}
+            search{"søksorteringsrekkjefølgje etter CLDR"}
             stroke{"streksortering"}
             traditional{"tradisjonell sortering"}
         }
@@ -714,7 +731,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.58.6"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

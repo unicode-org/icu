@@ -57,5 +57,5 @@ naq{
         zh{"Chineesǁî gowab, Mandarinni"}
         zu{"Zulub"}
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.99"}
 }

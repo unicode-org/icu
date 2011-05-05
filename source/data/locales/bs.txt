@@ -11,7 +11,7 @@
  */
 bs{
     AuxExemplarCharacters{"[q w x y]"}
-    ExemplarCharacters{"[a b c ć č d đ {dž} e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
+    ExemplarCharacters{"[a b c č ć d {dž} đ e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
     LocaleScript{
         "Latn",
     }
@@ -23,7 +23,7 @@ bs{
             }
         }
     }
-    Version{"2.0.52.13"}
+    Version{"2.0.58.7"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -87,7 +87,6 @@ bs{
                     }
                 }
             }
-            fields:alias{"sr_Latn"}
             monthNames{
                 format{
                     abbreviated{
@@ -200,8 +199,4 @@ bs{
             }
         }
     }
-    listPattern:alias{"sr_Latn"}
-    measurementSystemNames:alias{"sr_Latn"}
-    units:alias{"sr_Latn"}
-    unitsShort:alias{"sr_Latn"}
 }

@@ -168,6 +168,11 @@ numberingSystems:table(nofallback){
             desc{"%tamil"}
             radix:int{10}
         }
+        tamldec{
+            algorithmic:int{0}
+            desc{"௦௧௨௩௪௫௬௭௮௯"}
+            radix:int{10}
+        }
         telu{
             algorithmic:int{0}
             desc{"౦౧౨౩౪౫౬౭౮౯"}

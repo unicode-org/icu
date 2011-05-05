@@ -83,7 +83,7 @@ static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display name (English) */
     {   "English (United States)", "French (France)", "Catalan (Spain)", 
         "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified, China)", 
-        "German (Germany, Collation=Phonebook Sort Order)", "Spanish (Collation=Traditional Sort Order)", "Japanese (Japan, Calendar=Japanese Calendar)" },
+        "German (Germany, Sort Order=Phonebook Sort Order)", "Spanish (Sort Order=Traditional Sort Order)", "Japanese (Japan, Calendar=Japanese Calendar)" },
 
     /* display language (French) */
     {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois", "allemand", "espagnol", "japonais"     },
@@ -101,14 +101,14 @@ static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display language (Catalan) */
     {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E8s", "alemany", "espanyol", "japon\\u00E8s"    },
     /* display script code (Catalan) */
-    {   "",     "",     "",     "",     "",     "xin\\u00e8s simplificat", "", "", ""         },
+    {   "",     "",     "",     "",     "",     "simplificat", "", "", ""         },
     /* display country (Catalan) */
     {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega",  "Xina", "Alemanya", "", "Jap\\u00F3"    },
     /* display variant (Catalan) */
     {   "", "", "",                    "", "NY",    "", "", "", ""    },
     /* display name (Catalan) */
     {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", 
-    "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E8s (xin\\u00e8s simplificat, Xina)", 
+    "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E8s (simplificat, Xina)", 
     "alemany (Alemanya, ordre alfab\\u00e8tic=ordre de la guia telef\\u00F2nica)", "espanyol (ordre alfab\\u00e8tic=ordre tradicional)", "japon\\u00E8s (Jap\\u00F3, calendari=calendari japon\\u00e8s)" },
 
     /* display language (Greek) */
@@ -691,7 +691,7 @@ static void TestDisplayNames()
             "fr_FR", 
             "ca_ES",
             "el_GR" };
-        static const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Collation=Traditional Sort Order)", /* note sorted order of keywords */
+        static const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Sort Order=Traditional Sort Order)", /* note sorted order of keywords */
             "espagnol (Calendrier=Calendrier japonais, Ordonnancement=Ordre traditionnel)",
             "espanyol (calendari=calendari japon\\u00e8s, ordre alfab\\u00e8tic=ordre tradicional)",
             "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u03B7\\u03BC\\u03B5\\u03C1\\u03BF\\u03BB\\u03CC\\u03B3\\u03B9\\u03BF=\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03CC \\u03B7\\u03BC\\u03B5\\u03C1\\u03BF\\u03BB\\u03CC\\u03B3\\u03B9\\u03BF, \\u03C4\\u03B1\\u03BA\\u03C4\\u03BF\\u03C0\\u03BF\\u03AF\\u03B7\\u03C3\\u03B7=\\u03A0\\u03B1\\u03C1\\u03B1\\u03B4\\u03BF\\u03C3\\u03B9\\u03B1\\u03BA\\u03AE \\u03C3\\u03B5\\u03B9\\u03C1\\u03AC \\u03C4\\u03B1\\u03BE\\u03B9\\u03BD\\u03CC\\u03BC\\u03B7\\u03C3\\u03B7\\u03C2)" };

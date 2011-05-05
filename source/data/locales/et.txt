@@ -12,6 +12,7 @@
 et{
     AuxExemplarCharacters{"[á à â å ā æ ç é è ê ë ē í ì î ï ī ñ ó ò ŏ ô ø ō œ ú ù û ū]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s š z ž t u v w õ ä ö ü x y]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s š z ž t u v w õ ä ö ü x y]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S Š Z Ž T U V Õ Ä Ö Ü X Y]"}
     LocaleScript{
         "Latn",
@@ -38,7 +39,7 @@ et{
             }
         }
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.58.6"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -70,9 +71,17 @@ et{
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 MMdd{"dd.MM"}
+                Md{"d.M"}
                 hms{"h:mm.ss a"}
                 mmss{"mm.ss"}
+                yM{"M.y"}
+                yMEd{"EEE, d.M.y"}
+                yMMM{"MMM y"}
                 yMMMEd{"EEE, d. MMM y"}
+                yMMMd{"d.MMM.y"}
+                yMd{"d.M.y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
                 yyQ{"Q. yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM y"}
@@ -147,18 +156,33 @@ et{
                 }
                 month{
                     dn{"kuu"}
+                    relative{
+                        "-1"{"Eelmine kuu"}
+                        "0"{"See kuu"}
+                        "1"{"Järgmine kuu"}
+                    }
                 }
                 second{
                     dn{"sekund"}
                 }
                 week{
                     dn{"nädal"}
+                    relative{
+                        "-1"{"Eelmine nädal"}
+                        "0"{"See nädal"}
+                        "1"{"Järgmine nädal"}
+                    }
                 }
                 weekday{
                     dn{"nädalapäev"}
                 }
                 year{
                     dn{"aasta"}
+                    relative{
+                        "-1"{"Eelmine aasta"}
+                        "0"{"Sel aastal"}
+                        "1"{"Järgmine aasta"}
+                    }
                 }
                 zone{
                     dn{"vöönd"}
@@ -226,10 +250,14 @@ et{
                     d{"E, d. MMM–E, d. MMM y"}
                     y{"E, d. MMM y–E, d. MMM y"}
                 }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
                 yMMMd{
                     M{"d. MMM–d. MMM y"}
                     d{"d.–d. MMM y"}
-                    y{"E, d. MMM y–E, d. MMM y"}
+                    y{"d. MMM y–d. MMM y"}
                 }
                 yMd{
                     M{"dd.MM.yy–dd.MM.yy"}
@@ -293,6 +321,12 @@ et{
                         "K3",
                         "K4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1. kvartal",
                         "2. kvartal",
@@ -316,6 +350,7 @@ et{
         }
     }
     measurementSystemNames{
+        UK{"inglise mõõdustik"}
         US{"inglise mõõdustik"}
         metric{"meetermõõdustik"}
     }
@@ -324,29 +359,150 @@ et{
             one{"{0} ööpäev"}
             other{"{0} ööpäeva"}
         }
+        day-future{
+            0{"0 päeva pärast"}
+            1{"1 päeva pärast"}
+            one{"+{0} päeva pärast"}
+            other{"{0} päeva pärast"}
+        }
+        day-past{
+            0{"0 päeva tagasi"}
+            1{"1 päev tagasi"}
+            one{"-{0} päeva eest"}
+            other{"-{0} päeva eest"}
+        }
         hour{
             one{"{0} tund"}
             other{"{0} tundi"}
+        }
+        hour-future{
+            0{"0 tunni pärast"}
+            1{"1 tunni pärast"}
+            one{"+{0} tunni pärast"}
+            other{"{0} tunni pärast"}
+        }
+        hour-past{
+            0{"0 tunni eest"}
+            1{"1 tunni eest"}
+            one{"-{0} tunni eest"}
+            other{"{0} tunni eest"}
         }
         minute{
             one{"{0} minut"}
             other{"{0} minutit"}
         }
+        minute-future{
+            0{"0 minuti pärast"}
+            1{"1 minuti pärast"}
+            one{"+{0} minuti pärast"}
+            other{"{0} minuti pärast"}
+        }
+        minute-past{
+            0{"0 minutit tagasi"}
+            1{"1 minut tagasi"}
+            one{"-{0} minuti eest"}
+            other{"{0} minuti eest"}
+        }
         month{
             one{"{0} kuu"}
             other{"{0} kuud"}
+        }
+        month-future{
+            0{"0 kuu pärast"}
+            1{"1 kuu pärast"}
+            one{"+{0} kuu pärast"}
+            other{"{0} kuu pärast"}
+        }
+        month-past{
+            0{"0 kuud tagasi"}
+            1{"1 kuu tagasi"}
+            one{"-{0} kuu eest"}
+            other{"{0} kuu eest"}
         }
         second{
             one{"{0} sekund"}
             other{"{0} sekundit"}
         }
+        second-future{
+            0{"0 sekundi pärast"}
+            1{"1 sekundi pärast"}
+            one{"+{0} sekundi pärast"}
+            other{"{0} sekundi pärast"}
+        }
+        second-past{
+            0{"0 sekundi eest"}
+            1{"1 sekundi eest"}
+            one{"-{0} sekundi eest"}
+            other{"{0} sekundi eest"}
+        }
         week{
             one{"{0} nädal"}
             other{"{0} nädalat"}
         }
+        week-future{
+            0{"0 nädala pärast"}
+            1{"1 nädala pärast"}
+            one{"+{0} nädala pärast"}
+            other{"{0} nädala pärast"}
+        }
+        week-past{
+            0{"0 nädalat tagasi"}
+            1{"1 nädal tagasi"}
+            one{"-{0} nädala eest"}
+            other{"{0} nädala eest"}
+        }
         year{
             one{"{0} aasta"}
             other{"{0} aastat"}
+        }
+        year-future{
+            0{"0 aasta pärast"}
+            1{"1 aasta pärast"}
+            one{"+{0} aasta pärast"}
+            other{"{0} aasta pärast"}
+        }
+        year-past{
+            0{"0 aastat tagasi"}
+            1{"1 aasta tagasi"}
+            one{"-{0} aasta eest"}
+            other{"{0} aasta eest"}
+        }
+    }
+    unitsShort{
+        day{
+            0{"0 päeva"}
+            1{"1 päev"}
+            other{"{0} päeva"}
+        }
+        hour{
+            0{"0 tundi"}
+            1{"1 tund"}
+            other{"{0} tundi"}
+        }
+        minute{
+            0{"0 min"}
+            1{"1 min"}
+            other{"{0} min"}
+        }
+        month{
+            0{"0 kuud"}
+            1{"1 kuu"}
+            other{"{0} kuud"}
+        }
+        second{
+            0{"0 s"}
+            1{"1 s"}
+            other{"{0} s"}
+        }
+        week{
+            0{"0 nädalat"}
+            1{"1 nädal"}
+            other{"{0} nädalat"}
+        }
+        year{
+            0{"0 a"}
+            1{"1 a"}
+            other{"{0} a"}
         }
     }
 }

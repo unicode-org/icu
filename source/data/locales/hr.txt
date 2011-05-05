@@ -11,10 +11,10 @@
  */
 hr{
     AuxExemplarCharacters{"[q w x y]"}
-    ExemplarCharacters{"[a b c č ć d đ {dž} e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
+    ExemplarCharacters{"[a b c č ć d {dž} đ e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{
-        "[A B C Č Ć D Đ {DŽ} E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z "
+        "[A B C Č Ć D {DŽ} Đ E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z "
         "Ž]"
     }
     LocaleScript{
@@ -31,7 +31,7 @@ hr{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -69,7 +69,7 @@ hr{
         }
         gregorian{
             AmPmMarkers{
-                "AM",
+                "prije podne",
                 "PM",
             }
             DateTimePatterns{
@@ -92,6 +92,7 @@ hr{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                M{"L."}
                 MEd{"E, d. M."}
                 MMM{"LLL"}
                 MMMEd{"E, d. MMM"}
@@ -133,6 +134,15 @@ hr{
                         "pet",
                         "sub",
                     }
+                    narrow{
+                        "N",
+                        "P",
+                        "U",
+                        "S",
+                        "Č",
+                        "P",
+                        "S",
+                    }
                     wide{
                         "nedjelja",
                         "ponedjeljak",
@@ -144,6 +154,15 @@ hr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
                     narrow{
                         "n",
                         "p",
@@ -153,12 +172,25 @@ hr{
                         "p",
                         "s",
                     }
+                    wide{
+                        "nedjelja",
+                        "ponedjeljak",
+                        "utorak",
+                        "srijeda",
+                        "četvrtak",
+                        "petak",
+                        "subota",
+                    }
                 }
             }
             eras{
                 abbreviated{
                     "p. n. e.",
                     "A. D.",
+                }
+                narrow{
+                    "pr.n.e.",
+                    "AD",
                 }
                 wide{
                     "Prije Krista",
@@ -192,18 +224,33 @@ hr{
                 }
                 month{
                     dn{"mjesec"}
+                    relative{
+                        "-1"{"Prošli mjesec"}
+                        "0"{"Ovaj mjesec"}
+                        "1"{"Sljedeći mjesec"}
+                    }
                 }
                 second{
                     dn{"sekunda"}
                 }
                 week{
                     dn{"tjedan"}
+                    relative{
+                        "-1"{"Prošli tjedan"}
+                        "0"{"Ovaj tjedan"}
+                        "1"{"Sljedeći tjedan"}
+                    }
                 }
                 weekday{
                     dn{"dan u tjednu"}
                 }
                 year{
                     dn{"godina"}
+                    relative{
+                        "-1"{"Prošla godina"}
+                        "0"{"Ova godina"}
+                        "1"{"Sljedeća godina"}
+                    }
                 }
                 zone{
                     dn{"zona"}
@@ -311,18 +358,32 @@ hr{
             monthNames{
                 format{
                     abbreviated{
-                        "sij.",
-                        "vel.j",
-                        "ožu.",
-                        "tra.",
-                        "svi.",
-                        "lip.",
-                        "srp.",
-                        "kol.",
-                        "ruj.",
-                        "lis.",
-                        "stu.",
-                        "pro.",
+                        "sij",
+                        "velj",
+                        "ožu",
+                        "tra",
+                        "svi",
+                        "lip",
+                        "srp",
+                        "kol",
+                        "ruj",
+                        "lis",
+                        "stu",
+                        "pro",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                        "5.",
+                        "6.",
+                        "7.",
+                        "8.",
+                        "9.",
+                        "10.",
+                        "11.",
+                        "12.",
                     }
                     wide{
                         "siječnja",
@@ -340,6 +401,20 @@ hr{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "sij",
+                        "velj",
+                        "ožu",
+                        "tra",
+                        "svi",
+                        "lip",
+                        "srp",
+                        "kol",
+                        "ruj",
+                        "lis",
+                        "stu",
+                        "pro",
+                    }
                     narrow{
                         "1.",
                         "2.",
@@ -377,6 +452,32 @@ hr{
                         "2kv",
                         "3kv",
                         "4kv",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1kv",
+                        "2kv",
+                        "3kv",
+                        "4kv",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
                     }
                     wide{
                         "1. kvartal",
@@ -475,6 +576,7 @@ hr{
         }
     }
     measurementSystemNames{
+        UK{"imperijalni sustav"}
         US{"američki sustav"}
         metric{"metrički"}
     }
@@ -485,11 +587,43 @@ hr{
             one{"{0} dan"}
             other{"{0} dan"}
         }
+        day-future{
+            0{"Za 0 dana"}
+            1{"Za 1 dan"}
+            few{"za {0} dana"}
+            many{"za {0} dana"}
+            one{"za {0} dan"}
+            other{"za {0} dana"}
+        }
+        day-past{
+            0{"Prije 0 dana"}
+            1{"Prije 1 dana"}
+            few{"prije {0} dana"}
+            many{"prije {0} dana"}
+            one{"prije {0} dan"}
+            other{"Prije ovoliko dana: {0}"}
+        }
         hour{
             few{"{0} sata"}
             many{"{0} sati"}
             one{"{0} sat"}
             other{"{0} sat"}
+        }
+        hour-future{
+            0{"Za 0 sati"}
+            1{"Za 1 sat"}
+            few{"za {0} sata"}
+            many{"za {0} sati"}
+            one{"za {0} sat"}
+            other{"Za {0} sati"}
+        }
+        hour-past{
+            0{"Prije 0 sati"}
+            1{"Prije 1 h"}
+            few{"prije {0} sata"}
+            many{"prije {0} sati"}
+            one{"prije {0} sat"}
+            other{"Prije {0} sati"}
         }
         minute{
             few{"{0} minute"}
@@ -497,11 +631,43 @@ hr{
             one{"{0} minuta"}
             other{"{0} minuta"}
         }
+        minute-future{
+            0{"Za 0 minuta"}
+            1{"Za 1 min"}
+            few{"za {0} minute"}
+            many{"za {0} minuta"}
+            one{"za {0} minutu"}
+            other{"Za {0} minuta"}
+        }
+        minute-past{
+            0{"Prije 0 minuta"}
+            1{"Prije 1 minutu"}
+            few{"prije {0} minute"}
+            many{"prije {0} minuta"}
+            one{"prije {0} minutu"}
+            other{"Prije {0} minuta"}
+        }
         month{
             few{"{0} mjeseca"}
             many{"{0} mjeseci"}
             one{"{0} mjesec"}
             other{"{0} mjesec"}
+        }
+        month-future{
+            0{"Za 0 mjeseci"}
+            1{"Za 1 mjesec"}
+            few{"za {0} mjeseca"}
+            many{"za {0} mjeseci"}
+            one{"za {0} mjesec"}
+            other{"Za sljedeći broj mjeseci: {0}"}
+        }
+        month-past{
+            0{"Prije 0 mjeseci"}
+            1{"Prije 1 mjeseca"}
+            few{"prije {0} mjeseca"}
+            many{"prije {0} mjeseci"}
+            one{"prije {0} mjesec"}
+            other{"Prije ovoliko mjeseci: {0}"}
         }
         second{
             few{"{0} sekunde"}
@@ -509,17 +675,65 @@ hr{
             one{"{0} sekunda"}
             other{"{0} sekunda"}
         }
+        second-future{
+            0{"Za 0 sekundi"}
+            1{"Za 1 sekundu"}
+            few{"za {0} sekunde"}
+            many{"za {0} sekundi"}
+            one{"za {0} sekundu"}
+            other{"Za {0} sekundi"}
+        }
+        second-past{
+            0{"Prije 0 sekundi"}
+            1{"Prije 1 sekundu"}
+            few{"prije {0} sekunde"}
+            many{"prije {0} sekundi"}
+            one{"prije {0} sekundu"}
+            other{"Prije {0} sekundi"}
+        }
         week{
             few{"{0} tjedna"}
             many{"{0} tjedana"}
             one{"{0} tjedan"}
             other{"{0} tjedan"}
         }
+        week-future{
+            0{"Za 0 tjedana"}
+            1{"Za 1 tjedan"}
+            few{"za {0} tjedna"}
+            many{"za {0} tjedana"}
+            one{"za {0} tjedan"}
+            other{"Za sljedeći broj tjedana: {0}"}
+        }
+        week-past{
+            0{"Prije 0 tjedana"}
+            1{"Prije 1 tjedna"}
+            few{"prije {0} tjedna"}
+            many{"prije {0} tjedana"}
+            one{"prije {0} tjedan"}
+            other{"Prije ovoliko tjedana: {0}"}
+        }
         year{
             few{"{0} godine"}
             many{"{0} godina"}
             one{"{0} godina"}
             other{"{0} godina"}
+        }
+        year-future{
+            0{"Za 0 g."}
+            1{"Za 1 godinu"}
+            few{"za {0} godine"}
+            many{"za {0} godina"}
+            one{"za {0} godinu"}
+            other{"Za {0} godina"}
+        }
+        year-past{
+            0{"Prije 0 godina"}
+            1{"Prije 1 godine"}
+            few{"prije {0} godine"}
+            many{"prije {0} godina"}
+            one{"prije {0} godinu"}
+            other{"Prije ovoliko godina: {0}"}
         }
     }
     unitsShort{

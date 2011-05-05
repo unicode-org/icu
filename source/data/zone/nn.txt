@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nn.xml
  */
 nn{
-    Version{"2.0.50.94"}
+    Version{"2.0.58.6"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}
@@ -68,11 +68,6 @@ nn{
             ld{"vestafrikansk sommartid"}
             ls{"vestafrikansk tid"}
         }
-        "meta:America_Central"{
-            ld{"Central Daylight Time"}
-            lg{"Central Time"}
-            ls{"Central Standard Time"}
-        }
         "meta:Armenia"{
             sd{"AMST (Armenia)"}
             ss{"AMT (Armenia)"}
@@ -115,7 +110,7 @@ nn{
             ls{"vesteuropeisk tid"}
         }
         "meta:GMT"{
-            ls{"Greenwich middeltid"}
+            ls{"greenwich middeltid"}
         }
         "meta:Israel"{
             ss{"IST (Israel)"}

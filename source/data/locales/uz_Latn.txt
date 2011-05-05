@@ -11,37 +11,18 @@
  */
 uz_Latn{
     %%Parent{"root"}
-    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v x y z ʿ]"}
-    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ʿ]"}
+    AuxExemplarCharacters{"[c w]"}
+    ExemplarCharacters{
+        "[a {aʼ} b d e {eʼ} f g h i {iʼ} j k l m n o p q r s t u {uʼ} v x y z {oʼ} {g"
+        "ʼ} {sh} {ch}]"
+    }
+    ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P Q R S T U V X Y Z {Oʼ} {Gʼ} {SH} {CH}]"}
     LocaleScript{
         "Latn",
     }
-    NumberElements{
-        latn{
-            symbols{
-                decimal{","}
-                group{" "}
-            }
-        }
-    }
-    Version{"2.0.47.68"}
+    Version{"2.0.58.32"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, y MMMM dd",
-                "y MMMM d",
-                "y MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             dayNames{
                 format{
                     abbreviated{
@@ -50,7 +31,7 @@ uz_Latn{
                         "Sesh",
                         "Chor",
                         "Pay",
-                        "Jum",
+                        "Cum",
                         "Shan",
                     }
                     wide{
@@ -59,7 +40,7 @@ uz_Latn{
                         "seshanba",
                         "chorshanba",
                         "payshanba",
-                        "juma",
+                        "cuma",
                         "shanba",
                     }
                 }
@@ -70,7 +51,7 @@ uz_Latn{
                         "S",
                         "C",
                         "P",
-                        "J",
+                        "C",
                         "S",
                     }
                 }
@@ -91,6 +72,20 @@ uz_Latn{
                         "Noya",
                         "Dek",
                     }
+                    wide{
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "Iyun",
+                        "Iyul",
+                        "Avgust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
+                    }
                 }
                 stand-alone{
                     narrow{
@@ -106,26 +101,6 @@ uz_Latn{
                         "O",
                         "N",
                         "D",
-                    }
-                }
-            }
-        }
-        islamic{
-            monthNames{
-                format{
-                    wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabiul-avval",
-                        "Rabiul-oxir",
-                        "Jumodiul-ulo",
-                        "Jumodiul-uxro",
-                        "Rajab",
-                        "Shaʿbon",
-                        "Ramazon",
-                        "Shavvol",
-                        "Zil-qaʿda",
-                        "Zil-hijja",
                     }
                 }
             }

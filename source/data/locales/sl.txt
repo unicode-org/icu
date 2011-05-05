@@ -42,7 +42,7 @@ sl{
             }
         }
     }
-    Version{"2.0.53.45"}
+    Version{"2.0.57.98"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -68,16 +68,26 @@ sl{
                 Ed{"E, d."}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                M{"L"}
                 MEd{"E, d. MM."}
+                MMM{"LLL"}
                 MMMEd{"E, d. MMM"}
                 MMMd{"d. MMM"}
                 Md{"d. M."}
+                d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
+                yM{"M/y"}
                 yMEd{"E, d. M. y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d. MMM y"}
+                yMMMd{"MMM d, y"}
+                yMd{"d. M. y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"MMMM y"}
@@ -161,18 +171,33 @@ sl{
                 }
                 month{
                     dn{"Mesec"}
+                    relative{
+                        "-1"{"Prejšnji mesec"}
+                        "0"{"Ta mesec"}
+                        "1"{"Naslednji mesec"}
+                    }
                 }
                 second{
                     dn{"Sekunda"}
                 }
                 week{
                     dn{"Teden"}
+                    relative{
+                        "-1"{"Prejšnji teden"}
+                        "0"{"Ta teden"}
+                        "1"{"Naslednji teden"}
+                    }
                 }
                 weekday{
                     dn{"Dan v tednu"}
                 }
                 year{
                     dn{"Leto"}
+                    relative{
+                        "-1"{"Lani"}
+                        "0"{"Letos"}
+                        "1"{"Naslednje leto"}
+                    }
                 }
                 zone{
                     dn{"Območje"}
@@ -243,6 +268,10 @@ sl{
                     M{"E, d. MMM – E, d. MMM y"}
                     d{"E, d. MMM – E, d. MMM y"}
                     y{"E, d. MMM y – E, d. MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
                     M{"d. MMM – d. MMM y"}
@@ -325,6 +354,12 @@ sl{
                         "Q3",
                         "Q4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1. četrtletje",
                         "2. četrtletje",
@@ -348,6 +383,7 @@ sl{
         }
     }
     measurementSystemNames{
+        UK{"Angleški"}
         US{"imperialni"}
         metric{"metrični"}
     }
@@ -358,11 +394,43 @@ sl{
             other{"{0} dni"}
             two{"{0} dni"}
         }
+        day-future{
+            0{"Čez 0 dni"}
+            1{"Čez 1 dan"}
+            few{"Čez {0} dni"}
+            one{"Čez {0} dan"}
+            other{"Čez {0} dni"}
+            two{"Čez {0} dni"}
+        }
+        day-past{
+            0{"Pred 0 dnevi"}
+            1{"Pred 1 dnevom"}
+            few{"Pred {0} dnevi"}
+            one{"Pred {0} dnevom"}
+            other{"Pred {0} dnevi"}
+            two{"Pred {0} dnevoma"}
+        }
         hour{
             few{"{0} ure"}
             one{"{0} ura"}
             other{"{0} ur"}
             two{"{0} uri"}
+        }
+        hour-future{
+            0{"Čez 0 h"}
+            1{"Čez 1 h"}
+            few{"Čez {0} h"}
+            one{"Čez {0} h"}
+            other{"Čez {0} h"}
+            two{"Čez {0} h"}
+        }
+        hour-past{
+            0{"Pred 0 h"}
+            1{"Pred 1 h"}
+            few{"Pred {0} h"}
+            one{"Pred {0} h"}
+            other{"Pred {0} h"}
+            two{"Pred {0} h"}
         }
         minute{
             few{"{0} minute"}
@@ -370,11 +438,43 @@ sl{
             other{"{0} minut"}
             two{"{0} minuti"}
         }
+        minute-future{
+            0{"Čez 0 min."}
+            1{"Čez 1 min."}
+            few{"Čez {0} min."}
+            one{"Čez {0} min."}
+            other{"Čez {0} min."}
+            two{"Čez {0} min."}
+        }
+        minute-past{
+            0{"Pred 0 min."}
+            1{"Pred 1 min."}
+            few{"Pred {0} min."}
+            one{"Pred {0} min."}
+            other{"Pred {0} min."}
+            two{"Pred {0} min."}
+        }
         month{
             few{"{0} meseci"}
             one{"{0} mesec"}
             other{"{0} mesecev"}
             two{"{0} meseca"}
+        }
+        month-future{
+            0{"Čez 0 mesecev"}
+            1{"Čez 1 mesec"}
+            few{"Čez {0} mesece"}
+            one{"Čez {0} mesec"}
+            other{"Čez {0} mesecev"}
+            two{"Čez {0} meseca"}
+        }
+        month-past{
+            0{"Pred 0 meseci"}
+            1{"Pred 1 mesecem"}
+            few{"Pred {0} meseci"}
+            one{"Pred {0} mesecem"}
+            other{"Pred {0} meseci"}
+            two{"Pred {0} meseci"}
         }
         second{
             few{"{0} sekunde"}
@@ -382,17 +482,65 @@ sl{
             other{"{0} sekund"}
             two{"{0} sekundi"}
         }
+        second-future{
+            0{"Čez 0 sekund"}
+            1{"Čez 1 sekundo"}
+            few{"Čez {0} sekunde"}
+            one{"Čez {0} sekundo"}
+            other{"Čez {0} sekundi"}
+            two{"Čez {0} sekundi"}
+        }
+        second-past{
+            0{"Pred 0 sekundami"}
+            1{"Pred 1 sekundo"}
+            few{"Pred {0} sekundami"}
+            one{"Pred {0} sekundo"}
+            other{"Pred {0} sekundami"}
+            two{"Pred {0} sekundama"}
+        }
         week{
             few{"{0} tedni"}
             one{"{0} teden"}
             other{"{0} tednov"}
             two{"{0} tedna"}
         }
+        week-future{
+            0{"Čez 0 tednov"}
+            1{"Čez 1 teden"}
+            few{"Čez {0} tedne"}
+            one{"Čez {0} teden"}
+            other{"Čez {0} tednov"}
+            two{"Čez {0} tedna"}
+        }
+        week-past{
+            0{"Pred 0 tedni"}
+            1{"Pred 1 tednom"}
+            few{"Pred {0} tedni"}
+            one{"Pred {0} tednom"}
+            other{"Pred {0} tedni"}
+            two{"Pred {0} tednoma"}
+        }
         year{
             few{"{0} leta"}
             one{"{0} leto"}
             other{"{0} let"}
             two{"{0} leti"}
+        }
+        year-future{
+            0{"Čez 0 let"}
+            1{"Čez 1 leto"}
+            few{"Čez {0} leta"}
+            one{"Čez {0} leto"}
+            other{"Čez {0} let"}
+            two{"Čez {0} leti"}
+        }
+        year-past{
+            0{"Pred 0 leti"}
+            1{"Pred 1 letom"}
+            few{"Pred {0} leti"}
+            one{"Pred {0} letom"}
+            other{"Pred {0} leti"}
+            two{"Pred {0} leti"}
         }
     }
     unitsShort{

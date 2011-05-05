@@ -12,11 +12,11 @@
 sr_Latn{
     %%Parent{"root"}
     AuxExemplarCharacters{"[q w x y]"}
-    ExemplarCharacters{"[a b c č ć d đ {dž} e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
+    ExemplarCharacters{"[a b c č ć d {dž} đ e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.53.45"}
+    Version{"2.0.57.98"}
     calendar{
         gregorian{
             AmPmMarkers{

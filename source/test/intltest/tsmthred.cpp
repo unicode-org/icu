@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2010, International Business Machines Corporation and
+ * Copyright (c) 1999-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -709,7 +709,7 @@ public:
                 countryToCheck=                     Locale("","BF");
                 currencyToCheck=                    2.32;
                 expected=                           CharsToUnicodeString(
-                                                    "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing 2,32\\u00A0DM.");
+                                                    "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing 2,32\\u00A0DEM.");
                 break;
             case 2:
                 statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;

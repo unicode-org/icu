@@ -14,6 +14,8 @@ es{
         calendar{"calendario"}
         collation{"intercalación"}
         currency{"moneda"}
+        numbers{"números"}
+        x{"Uso privado"}
     }
     Languages{
         aa{"afar"}
@@ -170,7 +172,7 @@ es{
         frr{"frisón septentrional"}
         frs{"frisón oriental"}
         fur{"friulano"}
-        fy{"frisón"}
+        fy{"frisón occidental"}
         ga{"irlandés"}
         gaa{"ga"}
         gay{"gayo"}
@@ -400,7 +402,7 @@ es{
         rw{"kinyarwanda"}
         sa{"sánscrito"}
         sad{"sandawe"}
-        sah{"yakut"}
+        sah{"sakha"}
         sai{"lengua india sudamericana"}
         sal{"lenguas salish"}
         sam{"arameo samaritano"}
@@ -442,7 +444,7 @@ es{
         srr{"serer"}
         ss{"siswati"}
         ssa{"lengua nilo-sahariana"}
-        st{"sesotho"}
+        st{"sesotho meridional"}
         su{"sundanés"}
         suk{"sukuma"}
         sus{"susu"}
@@ -489,7 +491,7 @@ es{
         uga{"ugarítico"}
         uk{"ucraniano"}
         umb{"umbundu"}
-        und{"indeterminada"}
+        und{"lengua desconocida"}
         ur{"urdu"}
         uz{"uzbeko"}
         vai{"vai"}
@@ -644,35 +646,81 @@ es{
         Zsym{"símbolos"}
         Zxxx{"no escrito"}
         Zyyy{"común"}
-        Zzzz{"escritura desconocida o no válida"}
+        Zzzz{"alfabeto desconocido"}
     }
     Types{
         calendar{
             buddhist{"calendario budista"}
             chinese{"calendario chino"}
+            coptic{"calendario copto"}
+            ethiopic{"calendario etíope"}
+            ethiopic-amete-alem{"calendario amete alem etíope"}
             gregorian{"calendario gregoriano"}
             hebrew{"calendario hebreo"}
             indian{"calendario nacional hindú"}
             islamic{"calendario islámico"}
             islamic-civil{"calendario civil islámico"}
             japanese{"calendario japonés"}
-            roc{"calendario de la República Popular de China"}
+            persian{"calendario persa"}
+            roc{"calendario de la República de China"}
         }
         collation{
             big5han{"orden del chino tradicional - Big5"}
+            dictionary{"orden de diccionario"}
             direct{"orden directo"}
+            ducet{"orden Unicode predeterminado"}
             gb2312han{"orden del chino simplificado - GB2312"}
             phonebook{"orden de listín telefónico"}
             pinyin{"orden pinyin"}
+            reformed{"orden reformado"}
+            search{"búsqueda de uso general"}
             stroke{"orden de los trazos"}
             traditional{"orden tradicional"}
+            unihan{"orden por radical-trazos"}
+        }
+        numbers{
+            arab{"dígitos indoarábigos"}
+            arabext{"dígitos indoarábigos extendidos"}
+            armn{"números en armenio"}
+            armnlow{"números en minúscula en armenio"}
+            beng{"dígitos en bengalí"}
+            deva{"dígitos en devanagari"}
+            ethi{"números en etíope"}
+            fullwide{"dígitos de ancho completo"}
+            geor{"números en georgiano"}
+            grek{"números en griego"}
+            greklow{"números en griego en minúscula"}
+            gujr{"dígitos en gujarati"}
+            guru{"dígitos en gurmuji"}
+            hanidec{"números decimales en chino"}
+            hans{"números en chino simplificado"}
+            hansfin{"números financieros en chino simplificado"}
+            hant{"números en chino tradicional"}
+            hantfin{"números financieros en chino tradicional"}
+            hebr{"números en hebreo"}
+            jpan{"números en japonés"}
+            jpanfin{"números financieros en japonés"}
+            khmr{"dígitos en jemer"}
+            knda{"dígitos en kannada"}
+            laoo{"dígitos en lao"}
+            latn{"dígitos occidentales"}
+            mlym{"dígitos en malayalam"}
+            mong{"dígitos en mongol"}
+            mymr{"dígitos en birmano"}
+            orya{"dígitos en oriya"}
+            roman{"números romanos"}
+            romanlow{"números romanos en minúscula"}
+            taml{"números en tamil tradicional"}
+            telu{"dígitos en telugu"}
+            thai{"dígitos en tailandés"}
+            tibt{"dígitos en tibetano"}
         }
     }
     Variants{
         1901{"Ortografía alemana tradicional"}
         1996{"Ortografía alemana de 1996"}
         AREVELA{"Armenio oriental"}
-        FONIPA{"alfabeto fonético internacional IPA"}
+        FONIPA{"Alfabeto fonético internacional IPA"}
         MONOTON{"Monotónico"}
         PINYIN{"Romanización pinyin"}
         POLYTON{"Politónico"}
@@ -681,7 +729,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

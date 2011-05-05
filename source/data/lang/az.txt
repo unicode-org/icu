@@ -655,7 +655,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.57.98"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Yazı: {0}"}

@@ -51,9 +51,9 @@ ru{
             "80: \u0432\u043E\u0441\u0435\u043C\u044C\u0434\u0435\u0441\u044F\u0442[ >>];",
             "90: \u0434\u0435\u0432\u044F\u043D\u043E\u0441\u0442\u043E[ >>];",
             "100: \u0441\u0442\u043E[ >>];",
-            "200: <%spellout-cardinal-masculine<\u0441\u0442\u0438[ >>];",
-            "300: <%spellout-cardinal-masculine<\u0441\u0442\u0430[ >>];",
-            "500: <%spellout-cardinal-masculine<\u0441\u043E\u0442[ >>];",
+            "200: <%spellout-cardinal-feminine<\u0441\u0442\u0438[ >>];",
+            "300: <%spellout-cardinal-feminine<\u0441\u0442\u0430[ >>];",
+            "500: <%spellout-cardinal-feminine<\u0441\u043E\u0442[ >>];",
             "1000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447\u0430[ >>];",
             "2000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447\u0438[ >>];",
             "5000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447[ >>];",
@@ -86,9 +86,9 @@ ru{
             "80: \u0432\u043E\u0441\u0435\u043C\u044C\u0434\u0435\u0441\u044F\u0442[ >>];",
             "90: \u0434\u0435\u0432\u044F\u043D\u043E\u0441\u0442\u043E[ >>];",
             "100: \u0441\u0442\u043E[ >>];",
-            "200: <%spellout-cardinal-masculine<\u0441\u0442\u0438[ >>];",
-            "300: <%spellout-cardinal-masculine<\u0441\u0442\u0430[ >>];",
-            "500: <%spellout-cardinal-masculine<\u0441\u043E\u0442[ >>];",
+            "200: <%spellout-cardinal-feminine<\u0441\u0442\u0438[ >>];",
+            "300: <%spellout-cardinal-feminine<\u0441\u0442\u0430[ >>];",
+            "500: <%spellout-cardinal-feminine<\u0441\u043E\u0442[ >>];",
             "1000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447\u0430[ >>];",
             "2000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447\u0438[ >>];",
             "5000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447[ >>];",
@@ -121,9 +121,9 @@ ru{
             "80: \u0432\u043E\u0441\u0435\u043C\u044C\u0434\u0435\u0441\u044F\u0442[ >>];",
             "90: \u0434\u0435\u0432\u044F\u043D\u043E\u0441\u0442\u043E[ >>];",
             "100: \u0441\u0442\u043E[ >>];",
-            "200: <%spellout-cardinal-masculine<\u0441\u0442\u0438[ >>];",
-            "300: <%spellout-cardinal-masculine<\u0441\u0442\u0430[ >>];",
-            "500: <%spellout-cardinal-masculine<\u0441\u043E\u0442[ >>];",
+            "200: <%spellout-cardinal-feminine<\u0441\u0442\u0438[ >>];",
+            "300: <%spellout-cardinal-feminine<\u0441\u0442\u0430[ >>];",
+            "500: <%spellout-cardinal-feminine<\u0441\u043E\u0442[ >>];",
             "1000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447\u0430[ >>];",
             "2000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447\u0438[ >>];",
             "5000: <%spellout-cardinal-feminine< \u0442\u044B\u0441\u044F\u0447[ >>];",
@@ -142,5 +142,5 @@ ru{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.0.41.26"}
+    Version{"2.0.57.74"}
 }

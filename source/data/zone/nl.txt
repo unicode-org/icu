@@ -10,13 +10,16 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
         }
         "Africa:Asmera"{
             ec{"Asmara"}
+        }
+        "Africa:Cairo"{
+            ec{"Caïro"}
         }
         "Africa:Khartoum"{
             ec{"Khartoem"}
@@ -54,6 +57,9 @@ nl{
         "America:El_Salvador"{
             ec{"Salvador"}
         }
+        "America:Grand_Turk"{
+            ec{"Grand Turk"}
+        }
         "America:Maceio"{
             ec{"Maceió"}
         }
@@ -74,6 +80,9 @@ nl{
         }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
+        }
+        "America:St_Barthelemy"{
+            ec{"Saint Barthélemy"}
         }
         "America:St_Johns"{
             ec{"St. Johns"}
@@ -101,6 +110,9 @@ nl{
         }
         "Asia:Ashgabat"{
             ec{"Asjchabad"}
+        }
+        "Asia:Baghdad"{
+            ec{"Bagdad"}
         }
         "Asia:Bahrain"{
             ec{"Bahrein"}
@@ -143,6 +155,9 @@ nl{
         }
         "Asia:Riyadh"{
             ec{"Riyad"}
+        }
+        "Asia:Saigon"{
+            ec{"Ho Chi Minhstad"}
         }
         "Asia:Sakhalin"{
             ec{"Sachalin"}
@@ -195,6 +210,9 @@ nl{
         "Europe:Athens"{
             ec{"Athene"}
         }
+        "Europe:Belgrade"{
+            ec{"Belgrado"}
+        }
         "Europe:Berlin"{
             ec{"Berlijn"}
         }
@@ -228,14 +246,23 @@ nl{
         "Europe:Paris"{
             ec{"Parijs"}
         }
+        "Europe:Prague"{
+            ec{"Praag"}
+        }
         "Europe:Tirane"{
             ec{"Tirana"}
         }
         "Europe:Uzhgorod"{
             ec{"Oezjhorod"}
         }
+        "Europe:Vatican"{
+            ec{"Vaticaanstad"}
+        }
         "Europe:Vienna"{
             ec{"Wenen"}
+        }
+        "Europe:Volgograd"{
+            ec{"Wolgograd"}
         }
         "Europe:Warsaw"{
             ec{"Warschau"}
@@ -333,6 +360,7 @@ nl{
         "meta:Amazon"{
             cu:int{1}
             ld{"Amazone-zomertijd"}
+            lg{"Amazone-tijd"}
             ls{"Amazone-tijd"}
         }
         "meta:America_Central"{
@@ -362,6 +390,7 @@ nl{
         "meta:Anadyr"{
             cu:int{1}
             ld{"Anadyr-zomertijd"}
+            lg{"Anadyr-tijd"}
             ls{"Anadyr-tijd"}
         }
         "meta:Aqtau"{
@@ -387,10 +416,13 @@ nl{
         "meta:Argentina"{
             cu:int{1}
             ld{"Argentijnse zomertijd"}
+            lg{"Argentijnse tijd"}
             ls{"Argentijnse tijd"}
         }
         "meta:Argentina_Western"{
             cu:int{1}
+            ld{"West-Argentijnse zomertijd"}
+            lg{"West-Argentijnse tijd"}
             ls{"West-Argentijnse tijd"}
         }
         "meta:Armenia"{
@@ -475,6 +507,7 @@ nl{
         "meta:Brasilia"{
             cu:int{1}
             ld{"Braziliaanse zomertijd"}
+            lg{"Brasilia-tijd"}
             ls{"Braziliaanse tijd"}
         }
         "meta:Brunei"{
@@ -517,6 +550,7 @@ nl{
         "meta:Choibalsan"{
             cu:int{1}
             ld{"Choibalsan-zomertijd"}
+            lg{"Tsjojbalsan-tijd"}
             ls{"Choibalsan-tijd"}
         }
         "meta:Christmas"{
@@ -629,8 +663,8 @@ nl{
         }
         "meta:Georgia"{
             cu:int{1}
-            ld{"Georgia-zomertijd"}
-            ls{"Georgia-tijd"}
+            ld{"Georgische zomertijd"}
+            ls{"Georgische tijd"}
         }
         "meta:Gilbert_Islands"{
             cu:int{1}
@@ -669,6 +703,7 @@ nl{
         }
         "meta:Hawaii_Aleutian"{
             cu:int{1}
+            lg{"Hawaii Aleutian-tijd"}
             ls{"Hawaii-Aleoetische standaardtijd"}
         }
         "meta:Hong_Kong"{
@@ -679,6 +714,7 @@ nl{
         "meta:Hovd"{
             cu:int{1}
             ld{"Hovd-zomertijd"}
+            lg{"Hovd-tijd"}
             ls{"Hovd-tijd"}
         }
         "meta:India"{
@@ -695,14 +731,17 @@ nl{
         }
         "meta:Indonesia_Central"{
             cu:int{1}
+            lg{"Centraal-Indonesische tijd"}
             ls{"Centraal-Indonesische tijd"}
         }
         "meta:Indonesia_Eastern"{
             cu:int{1}
+            lg{"Oost-Indonesische tijd"}
             ls{"Oost-Indonesische tijd"}
         }
         "meta:Indonesia_Western"{
             cu:int{1}
+            lg{"West-Indonesische tijd"}
             ls{"West-Indonesische tijd"}
         }
         "meta:Iran"{
@@ -713,6 +752,7 @@ nl{
         "meta:Irkutsk"{
             cu:int{1}
             ld{"Irkoetsk-zomertijd"}
+            lg{"Irkoetsk-tijd"}
             ls{"Irkoetsk-tijd"}
         }
         "meta:Israel"{
@@ -731,6 +771,7 @@ nl{
         "meta:Kamchatka"{
             cu:int{1}
             ld{"Petropavlovsk-Kamtsjatski-zomertijd"}
+            lg{"Kamtsjatka-tijd"}
             ls{"Petropavlovsk-Kamtsjatski-tijd"}
         }
         "meta:Karachi"{
@@ -743,11 +784,13 @@ nl{
         }
         "meta:Kazakhstan_Eastern"{
             cu:int{1}
+            ld{"Oost-Kazachstaanse zomertijd"}
             lg{"Oost-Kazachse tijd"}
             ls{"Oost-Kazachse standaardtijd"}
         }
         "meta:Kazakhstan_Western"{
             cu:int{1}
+            ld{"West-Kazachstaanse zomertijd"}
             lg{"West-Kazachse tijd"}
             ls{"West-Kazachse standaardtijd"}
         }
@@ -768,6 +811,7 @@ nl{
         "meta:Krasnoyarsk"{
             cu:int{1}
             ld{"Krasnojarsk-zomertijd"}
+            lg{"Krasnojarsk-tijd"}
             ls{"Krasnojarsk-tijd"}
         }
         "meta:Kuybyshev"{
@@ -806,9 +850,13 @@ nl{
             ld{"Macause zomertijd"}
             ls{"Macause tijd"}
         }
+        "meta:Macquarie"{
+            lg{"Macquarie-tijd"}
+        }
         "meta:Magadan"{
             cu:int{1}
             ld{"Magadan-zomertijd"}
+            lg{"Magadan-tijd"}
             ls{"Magadan-tijd"}
         }
         "meta:Malaya"{
@@ -842,6 +890,7 @@ nl{
         "meta:Mongolia"{
             cu:int{1}
             ld{"Ulaanbaatar-zomertijd"}
+            lg{"Mongoolse tijd"}
             ls{"Ulaanbaatar-tijd"}
         }
         "meta:Moscow"{
@@ -890,6 +939,7 @@ nl{
         "meta:Noronha"{
             cu:int{1}
             ld{"Fernando de Noronha-zomertijd"}
+            lg{"Noronha-tijd"}
             ls{"Fernando de Noronha-tijd"}
         }
         "meta:North_Mariana"{
@@ -899,11 +949,13 @@ nl{
         "meta:Novosibirsk"{
             cu:int{1}
             ld{"Novosibirsk-zomertijd"}
+            lg{"Novosibirsk-tijd"}
             ls{"Novosibirsk-tijd"}
         }
         "meta:Omsk"{
             cu:int{1}
             ld{"Omsk-zomertijd"}
+            lg{"Omsk-tijd"}
             ls{"Omsk-tijd"}
         }
         "meta:Oral"{
@@ -971,11 +1023,13 @@ nl{
         "meta:Sakhalin"{
             cu:int{1}
             ld{"Sachalin-zomertijd"}
+            lg{"Sakhalin-tijd"}
             ls{"Sachalin-tijd"}
         }
         "meta:Samara"{
             cu:int{1}
             ld{"Samara-zomertijd"}
+            lg{"Samara-tijd"}
             ls{"Samara-tijd"}
         }
         "meta:Samarkand"{
@@ -1098,11 +1152,13 @@ nl{
         "meta:Vladivostok"{
             cu:int{1}
             ld{"Vladivostok-zomertijd"}
+            lg{"Vladivostok-tijd"}
             ls{"Vladivostok-tijd"}
         }
         "meta:Volgograd"{
             cu:int{1}
             ld{"Wolgograd-zomertijd"}
+            lg{"Wolgograd-tijd"}
             ls{"Wolgograd-tijd"}
         }
         "meta:Vostok"{
@@ -1120,11 +1176,13 @@ nl{
         "meta:Yakutsk"{
             cu:int{1}
             ld{"Jakoetsk-zomertijd"}
+            lg{"Jakoetsk-tijd"}
             ls{"Jakoetsk-tijd"}
         }
         "meta:Yekaterinburg"{
             cu:int{1}
             ld{"Jekaterinenburg-zomertijd"}
+            lg{"Jekaterinenburg-tijd"}
             ls{"Jekaterinenburg-tijd"}
         }
         "meta:Yerevan"{
@@ -1139,6 +1197,7 @@ nl{
             ls{"Yukon-standaardtijd"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1}-tijd ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}-tijd"}

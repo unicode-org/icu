@@ -22,11 +22,11 @@ ca{
                 "&[last primary ignorable ]<<׳<<״<<ـ<<ٌ<<ٍ<<َ<<ُ<<ِ<<ّ<<ْ<<ฺ"
                 "&L<ŀ=l·<<<Ŀ=L·"
             }
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
         standard{
             Sequence{" [backwards 2]&L<<ŀ=l·<<<Ŀ=L·"}
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
     }
 }

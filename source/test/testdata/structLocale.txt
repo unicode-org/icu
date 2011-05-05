@@ -3884,6 +3884,7 @@ structLocale:table(nofallback){
         af{""}
         afa{""}
         afh{""}
+        agq{""}
         ain{""}
         ak{""}
         akk{""}
@@ -3935,6 +3936,7 @@ structLocale:table(nofallback){
         bo{""}
         br{""}
         bra{""}
+        brx{""}
         bs{""}
         btk{""}
         bua{""}
@@ -3987,12 +3989,14 @@ structLocale:table(nofallback){
         den{""}
         dgr{""}
         din{""}
+        dje{""}
         doi{""}
         dra{""}
         dsb{""}
         dua{""}
         dum{""}
         dv{""}
+        dyo{""}
         dyu{""}
         dz{""}
         ebu{""}
@@ -4133,6 +4137,8 @@ structLocale:table(nofallback){
         kro{""}
         kru{""}
         ks{""}
+        ksb{""}
+        ksf{""}
         ku{""}
         kum{""}
         kut{""}
@@ -4175,6 +4181,7 @@ structLocale:table(nofallback){
         mfe{""}
         mg{""}
         mga{""}
+        mgh{""}
         mh{""}
         mi{""}
         mic{""}
@@ -4193,6 +4200,7 @@ structLocale:table(nofallback){
         mr{""}
         ms{""}
         mt{""}
+        mua{""}
         mul{""}
         mun{""}
         mus{""}
@@ -4217,6 +4225,7 @@ structLocale:table(nofallback){
         niu{""}
         nl{""}
         nl_BE{""}
+        nmg{""}
         nn{""}
         no{""}
         nog{""}
@@ -4225,6 +4234,7 @@ structLocale:table(nofallback){
         nso{""}
         nqo{""}
         nub{""}
+        nus{""}
         nv{""}
         nwc{""}
         ny{""}
@@ -4283,6 +4293,7 @@ structLocale:table(nofallback){
         saq{""}
         sas{""}
         sat{""}
+        sbp{""}
         sc{""}
         scn{""}
         sco{""}
@@ -4329,6 +4340,7 @@ structLocale:table(nofallback){
         sux{""}
         sv{""}
         sw{""}
+        swc{""}
         syc{""}
         syr{""}
         ta{""}
@@ -4363,6 +4375,7 @@ structLocale:table(nofallback){
         tut{""}
         tvl{""}
         tw{""}
+        twq{""}
         ty{""}
         tyv{""}
         tzm{""}
@@ -4392,6 +4405,7 @@ structLocale:table(nofallback){
         xog{""}
         yao{""}
         yap{""}
+        yav{""}
         yi{""}
         yo{""}
         ypk{""}
@@ -5518,6 +5532,70 @@ structLocale:table(nofallback){
                         "",
                         "",
                     }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
                     wide{
                         "",
                         "",
@@ -5676,6 +5754,70 @@ structLocale:table(nofallback){
             monthNames{
                 format{
                     abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
                         "",
                         "",
                         "",
@@ -6377,6 +6519,7 @@ structLocale:table(nofallback){
                     }
                 }
                 stand-alone{
+                    default{""}
                     wide{
                         "",
                         "",
@@ -6409,7 +6552,6 @@ structLocale:table(nofallback){
                         "",
                         "",
                     }
-                    default{""}
                     narrow{
                         "",
                         "",
@@ -8106,6 +8248,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         day-future{
             zero{""}
@@ -8114,6 +8258,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         day-past{
             zero{""}
@@ -8122,6 +8268,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         hour{
             zero{""}
@@ -8130,6 +8278,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         hour-future{
             zero{""}
@@ -8138,6 +8288,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         hour-past{
             zero{""}
@@ -8146,6 +8298,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         minute{
             zero{""}
@@ -8154,6 +8308,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         minute-future{
             zero{""}
@@ -8162,6 +8318,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         minute-past{
             zero{""}
@@ -8170,6 +8328,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         month{
             zero{""}
@@ -8178,6 +8338,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         month-future{
             zero{""}
@@ -8186,6 +8348,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         month-past{
             zero{""}
@@ -8194,6 +8358,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         second{
             zero{""}
@@ -8202,6 +8368,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         second-future{
             zero{""}
@@ -8210,6 +8378,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         second-past{
             zero{""}
@@ -8218,6 +8388,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         week{
             zero{""}
@@ -8226,6 +8398,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         week-future{
             zero{""}
@@ -8234,6 +8408,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         week-past{
             zero{""}
@@ -8242,6 +8418,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         year{
             zero{""}
@@ -8250,6 +8428,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         year-future{
             zero{""}
@@ -8258,6 +8438,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         year-past{
             zero{""}
@@ -8266,6 +8448,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
     }
     unitsShort{
@@ -8276,6 +8460,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         day-future{
             zero{""}
@@ -8284,6 +8470,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         day-past{
             zero{""}
@@ -8292,6 +8480,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         hour{
             zero{""}
@@ -8300,6 +8490,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         hour-future{
             zero{""}
@@ -8308,6 +8500,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         hour-past{
             zero{""}
@@ -8316,6 +8510,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         minute{
             zero{""}
@@ -8324,6 +8520,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         minute-future{
             zero{""}
@@ -8332,6 +8530,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         minute-past{
             zero{""}
@@ -8340,6 +8540,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         month{
             zero{""}
@@ -8348,6 +8550,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         month-future{
             zero{""}
@@ -8356,6 +8560,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         month-past{
             zero{""}
@@ -8364,6 +8570,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         second{
             zero{""}
@@ -8372,6 +8580,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         second-future{
             zero{""}
@@ -8380,6 +8590,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         second-past{
             zero{""}
@@ -8388,6 +8600,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         week{
             zero{""}
@@ -8396,6 +8610,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         week-future{
             zero{""}
@@ -8404,6 +8620,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         week-past{
             zero{""}
@@ -8412,6 +8630,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         year{
             zero{""}
@@ -8420,6 +8640,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         year-future{
             zero{""}
@@ -8428,6 +8650,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
         year-past{
             zero{""}
@@ -8436,6 +8660,8 @@ structLocale:table(nofallback){
             few{""}
             many{""}
             other{""}
+            0{""}
+            1{""}
         }
     }
     zoneStrings{

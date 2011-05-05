@@ -138,7 +138,7 @@ metaZones:table(nofallback){
             AN{"America/Curacao"}
             AW{"America/Aruba"}
             BB{"America/Barbados"}
-            BM{"America/Bermuda"}
+            BM{"Atlantic/Bermuda"}
             DM{"America/Dominica"}
             GD{"America/Grenada"}
             GL{"America/Thule"}

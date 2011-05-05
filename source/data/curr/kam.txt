@@ -16,7 +16,7 @@ kam{
             "Dirham ya Falme za Kiarabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwanza ya Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ kam{
             "Ndola ya Australia",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinari ya Bahareni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Faranga ya Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ kam{
             "Yuan Renminbi ya China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Eskudo ya Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faranga ya Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinari ya Aljeria",
         }
         EGP{
@@ -68,11 +68,11 @@ kam{
             "Vaundi ya Misili",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakfa ya Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Bir ya Uhabeshi",
         }
         EUR{
@@ -84,7 +84,7 @@ kam{
             "Pauni ya Uingereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi ya Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ kam{
             "Ndalasi ya Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faranga ya Gine",
         }
         INR{
@@ -108,11 +108,11 @@ kam{
             "Silingi ya Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faranga ya Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dola ya Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ kam{
             "Loti ya Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinari ya Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ kam{
             "Ariary ya Bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ugwiya ya Moritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupia ya Morisi",
         }
         MWK{
@@ -144,15 +144,15 @@ kam{
             "Kwacha ya Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikali ya Msumbiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "Ndola ya Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira ya Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ kam{
             "Faranga ya Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyal ya Saudia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupia ya Shelisheli",
         }
         SDG{
@@ -172,19 +172,19 @@ kam{
             "Vaũndi ya Sudani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Vaũndi ya Santahelena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Silingi ya Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra ya Sao Tome na Principe",
         }
         SZL{
@@ -192,15 +192,15 @@ kam{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Ndinari ya Tunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Silingi ya Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Silingi ya Uganda",
         }
         USD{
@@ -216,17 +216,17 @@ kam{
             "Faranga CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randi ya Afrika Kusini",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwacha ya Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Ndola ya Zimbabwe",
         }
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.98"}
 }

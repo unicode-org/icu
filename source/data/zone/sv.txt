@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sv.xml
  */
 sv{
-    Version{"2.0.53.54"}
+    Version{"2.0.58.14"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -105,8 +105,17 @@ sv{
         "America:Scoresbysund"{
             ec{"Ittoqqortoormiit"}
         }
+        "America:St_Barthelemy"{
+            ec{"S:t Barthélemy"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
+        }
+        "America:St_Kitts"{
+            ec{"S:t Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"S:t Lucia"}
         }
         "America:St_Thomas"{
             ec{"Saint Thomas"}
@@ -152,6 +161,9 @@ sv{
         }
         "Asia:Dushanbe"{
             ec{"Dusjanbe"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Hongkong"}
         }
         "Asia:Kamchatka"{
             ec{"Kamtjatka"}
@@ -213,6 +225,9 @@ sv{
         "Atlantic:South_Georgia"{
             ec{"Grytviken"}
         }
+        "Atlantic:St_Helena"{
+            ec{"S:t Helena"}
+        }
         "Etc:Unknown"{
             ec{"Okänd"}
         }
@@ -221,6 +236,9 @@ sv{
         }
         "Europe:Belgrade"{
             ec{"Belgrad"}
+        }
+        "Europe:Berlin"{
+            ec{"Berlin"}
         }
         "Europe:Brussels"{
             ec{"Bryssel"}
@@ -246,8 +264,17 @@ sv{
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
         }
+        "Europe:Mariehamn"{
+            ec{"Mariehamn"}
+        }
         "Europe:Moscow"{
             ec{"Moskva"}
+        }
+        "Europe:Oslo"{
+            ec{"Oslo"}
+        }
+        "Europe:Paris"{
+            ec{"Paris"}
         }
         "Europe:Podgorica"{
             ec{"Podgorika"}
@@ -257,6 +284,9 @@ sv{
         }
         "Europe:Rome"{
             ec{"Rom"}
+        }
+        "Europe:Stockholm"{
+            ec{"Stockholm"}
         }
         "Europe:Tallinn"{
             ec{"Tallin"}
@@ -269,6 +299,9 @@ sv{
         }
         "Europe:Vaduz"{
             ec{"Vadus"}
+        }
+        "Europe:Vatican"{
+            ec{"Vatikanen"}
         }
         "Europe:Vienna"{
             ec{"Wien"}
@@ -285,6 +318,12 @@ sv{
         "Indian:Christmas"{
             ec{"Julön"}
         }
+        "Indian:Cocos"{
+            ec{"Kokosöarna"}
+        }
+        "Indian:Comoro"{
+            ec{"Komorerna"}
+        }
         "Indian:Maldives"{
             ec{"Maldiverna"}
         }
@@ -297,6 +336,9 @@ sv{
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }
+        "Pacific:Pago_Pago"{
+            ec{"Pago Pago"}
+        }
         "meta:Acre"{
             ld{"västbrasiliansk sommartid"}
             lg{"västbrasiliansk tid"}
@@ -308,11 +350,13 @@ sv{
             ls{"afghansk normaltid"}
         }
         "meta:Africa_Central"{
+            cu:int{0}
             ld{"centralafrikansk sommartid"}
             lg{"centralafrikansk tid"}
             ls{"centralafrikansk tid"}
         }
         "meta:Africa_Eastern"{
+            cu:int{0}
             ld{"östafrikansk sommartid"}
             lg{"östafrikansk tid"}
             ls{"östafrikansk normaltid"}
@@ -323,11 +367,13 @@ sv{
             ls{"västsaharisk normaltid"}
         }
         "meta:Africa_Southern"{
+            cu:int{0}
             ld{"sydafrikansk sommartid"}
             lg{"sydafrikansk tid"}
             ls{"sydafrikansk normaltid"}
         }
         "meta:Africa_Western"{
+            cu:int{0}
             ld{"västafrikansk sommartid"}
             lg{"västafrikansk tid"}
             ls{"västafrikansk normaltid"}
@@ -440,6 +486,11 @@ sv{
             ld{"centralaustralisk sommartid"}
             lg{"centralaustralisk tid"}
             ls{"centralaustralisk normaltid"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"västcentralaustralisk sommartid"}
+            lg{"västcentralaustralisk tid"}
+            ls{"västcentralaustralisk normaltid"}
         }
         "meta:Australia_Eastern"{
             ld{"östaustralisk sommartid"}
@@ -634,6 +685,7 @@ sv{
         "meta:Ecuador"{
             ld{"ecuadoriansk sommartid"}
             lg{"ecuadoriansk tid"}
+            ls{"ecuadoriansk normaltid"}
         }
         "meta:Europe_Central"{
             cu:int{1}
@@ -668,6 +720,11 @@ sv{
             ls{"Fijinormaltid"}
             sg{"FJT"}
         }
+        "meta:French_Guiana"{
+            ld{"Franska Guyanasommartid"}
+            lg{"Franska Guyanatid"}
+            ls{"Franska Guyananormaltid"}
+        }
         "meta:French_Southern"{
             ld{"Franska Sydterritoriernas sommartid"}
             lg{"Franska Sydterritoriernas tid"}
@@ -682,6 +739,7 @@ sv{
         }
         "meta:GMT"{
             cu:int{1}
+            ld{"Greenwichtid har per definition ingen sommartid"}
             lg{"Greenwichtid"}
             ls{"Greenwichtid"}
             sg{"GMT"}
@@ -735,6 +793,11 @@ sv{
             ld{"Persiska vikensommartid"}
             lg{"Persiska vikentid"}
             ls{"Persiska vikennormaltid"}
+        }
+        "meta:Guyana"{
+            ld{"Guyanasommartid"}
+            lg{"Guyanatid"}
+            ls{"Guyananormaltid"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Honolulusommartid"}
@@ -915,6 +978,9 @@ sv{
             ls{"Macaunormaltid"}
             sg{"MOT"}
         }
+        "meta:Macquarie"{
+            lg{"Macquarie"}
+        }
         "meta:Magadan"{
             ld{"Magadansommartid"}
             lg{"Magadantid"}
@@ -1021,6 +1087,11 @@ sv{
             ls{"Norfolköns normaltid"}
             sg{"NFT"}
         }
+        "meta:Noronha"{
+            ld{"Fernando de Noronhasommartid"}
+            lg{"Fernando de Noronhatid"}
+            ls{"Fernando de Noronhanormaltid"}
+        }
         "meta:North_Mariana"{
             ld{"Nordmarianernas sommartid"}
             lg{"Nordmarianernas tid"}
@@ -1062,6 +1133,16 @@ sv{
             ls{"Papua Nya Guineas normaltid"}
             sg{"PGT"}
         }
+        "meta:Paraguay"{
+            ld{"paraguayansk sommartid"}
+            lg{"paraguayansk tid"}
+            ls{"paraguayansk normaltid"}
+        }
+        "meta:Peru"{
+            ld{"peruansk sommartid"}
+            lg{"peruansk tid"}
+            ls{"peruansk normalid"}
+        }
         "meta:Philippines"{
             ld{"filippinsk sommartid"}
             lg{"filippinsk tid"}
@@ -1073,6 +1154,11 @@ sv{
             lg{"Enderburytid"}
             ls{"Enderburynormaltid"}
             sg{"PHOT"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Pierre och Miquelonsommartid"}
+            lg{"Pierre och Miquelontid"}
+            ls{"Pierre och Miquelonnormalid"}
         }
         "meta:Pitcairn"{
             ld{"Pitcairnsommartid"}
@@ -1156,9 +1242,12 @@ sv{
             lg{"sydgeorgisk tid"}
             ls{"sydgeorgisk normaltid"}
             sg{"GT (Sydgeorgien)"}
+            ss{"GT (Sydgeorgien)"}
         }
         "meta:Suriname"{
+            ld{"Surinamsommartid"}
             lg{"Surinamtid"}
+            ls{"Surinamnormaltid"}
         }
         "meta:Sverdlovsk"{
             ld{"Sverdlovsksommartid"}
@@ -1246,6 +1335,11 @@ sv{
             ls{"Oralnormaltid"}
             sg{"URAT"}
         }
+        "meta:Uruguay"{
+            ld{"uruguayansk sommartid"}
+            lg{"uruguayansk tid"}
+            ls{"uruguayansk normaltid"}
+        }
         "meta:Urumqi"{
             ld{"Urumqisommartid"}
             lg{"Urumqitid"}
@@ -1263,6 +1357,11 @@ sv{
             lg{"Vanuatutid"}
             ls{"Vanuatunormaltid"}
             sg{"VUT"}
+        }
+        "meta:Venezuela"{
+            ld{"venezuelansk sommartid"}
+            lg{"venezuelansk tid"}
+            ls{"venezuelansk normaltid"}
         }
         "meta:Vladivostok"{
             ld{"Vladivostoksommartid"}
@@ -1313,10 +1412,14 @@ sv{
             sg{"YERT"}
         }
         "meta:Yukon"{
+            ld{"Yukonsommartid"}
             lg{"Yukontid"}
+            ls{"Yukonnormaltid"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}"}
     }
 }

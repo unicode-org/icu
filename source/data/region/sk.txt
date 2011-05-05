@@ -13,7 +13,7 @@ sk{
     Countries{
         001{"Svet"}
         002{"Afrika"}
-        003{"Severná Amerika (003)"}
+        003{"Severná Amerika [003]"}
         005{"Južná Amerika"}
         009{"Oceánia"}
         011{"Západná Afrika"}
@@ -31,7 +31,7 @@ sk{
         039{"Južná Európa"}
         053{"Austrália a Nový Zéland"}
         054{"Melanézia"}
-        057{"Mikronésia"}
+        057{"Mikronézia – oblasť"}
         061{"Polynézia"}
         062{"Stredná a južná Ázia"}
         142{"Ázia"}
@@ -43,8 +43,9 @@ sk{
         155{"Západná Európa"}
         172{"Spoločenstvo nezávislých štátov"}
         200{"Československo"}
-        419{"Latinská Amerika a Karibik"}
-        830{"Kanál La Manche"}
+        419{"Latinská Amerika"}
+        830{"Normanské ostrovy"}
+        AC{"Ostrov Ascensión"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afganistan"}
@@ -94,6 +95,7 @@ sk{
         CM{"Kamerun"}
         CN{"Čína"}
         CO{"Kolumbia"}
+        CP{"Ostrov Clipperton"}
         CR{"Kostarika"}
         CS{"Srbsko a Čierna Hora"}
         CU{"Kuba"}
@@ -102,11 +104,13 @@ sk{
         CY{"Cyprus"}
         CZ{"Česká republika"}
         DE{"Nemecko"}
+        DG{"Diego Garcia"}
         DJ{"Džibuti"}
         DK{"Dánsko"}
         DM{"Dominika"}
         DO{"Dominikánska republika"}
         DZ{"Alžírsko"}
+        EA{"Ceuta a Melilla"}
         EC{"Ekvádor"}
         EE{"Estónsko"}
         EG{"Egypt"}
@@ -140,12 +144,13 @@ sk{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guayana"}
-        HK{"Hong Kong S.A.R. Číny"}
+        HK{"Hongkong S.A.R. Číny"}
         HM{"Heardove ostrovy a McDonaldove ostrovy"}
         HN{"Honduras"}
         HR{"Chorvátsko"}
         HT{"Haiti"}
         HU{"Maďarsko"}
+        IC{"Kanárske ostrovy"}
         ID{"Indonézia"}
         IE{"Írsko"}
         IL{"Izrael"}
@@ -258,6 +263,7 @@ sk{
         SV{"Salvador"}
         SY{"Sýrska arabská republika"}
         SZ{"Svazijsko"}
+        TA{"Tristan da Cunha"}
         TC{"Turks a Caicos"}
         TD{"Čad"}
         TF{"Francúzske južné územia"}
@@ -296,5 +302,5 @@ sk{
         ZW{"Zimbabwe"}
         ZZ{"Neznámy alebo neplatný región"}
     }
-    Version{"2.0.50.88"}
+    Version{"2.0.57.98"}
 }

@@ -16,7 +16,7 @@ sn{
             "Diramu re United Arab Emirates",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwanza ye Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ sn{
             "Dora re Australia",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dhinari re Bhahareni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Furenki re Bhurundi",
         }
         BWP{
@@ -52,27 +52,27 @@ sn{
             "Yuan Renminbi ye China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Dhora re Escudo",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Furenki re Jibhuti",
         }
         DZD{
-            "DA",
-            "Dhinari  re Aljeria",
+            "DZD",
+            "Dhinari re Aljeria",
         }
         EGP{
             "EGP",
             "Paundi re Ijipita",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakfa re Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Dhora re Etiopia",
         }
         EUR{
@@ -84,7 +84,7 @@ sn{
             "Paundi ye Bhiriteni",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi ye Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ sn{
             "Dalasi ye Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Furenki re Gine",
         }
         INR{
@@ -104,15 +104,15 @@ sn{
             "Yeni ye Japani",
         }
         KES{
-            "Ksh",
+            "KES",
             "Shiringi ye Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Furenki re Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dora re Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ sn{
             "Loti ye Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinari re Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ sn{
             "Furenki re Malagasi",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ugwiya ye Moritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupi ye Morishasi",
         }
         MWK{
@@ -144,15 +144,15 @@ sn{
             "Kwacha ye Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metika ye Mozambiki",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dora re Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira ye Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ sn{
             "Furenki re Ruwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyali re Saudi",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupi re Seyisheri",
         }
         SDG{
@@ -172,23 +172,23 @@ sn{
             "Dinari re Sudani",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Paundi re Sudani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Paundi re Senti Helena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Shiringi re Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra re Sao Tome ne Principe",
         }
         SZL{
@@ -196,15 +196,15 @@ sn{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dinari re Tunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Shiringi re Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Shiringi re Uganda",
         }
         USD{
@@ -220,17 +220,17 @@ sn{
             "Furenki CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randi",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwacha ye Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dora re Zimbabwe",
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

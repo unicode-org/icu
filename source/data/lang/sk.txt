@@ -14,6 +14,8 @@ sk{
         calendar{"Kalendár"}
         collation{"Triedenie"}
         currency{"Mena"}
+        numbers{"Číslice"}
+        x{"Súkromné použitie"}
     }
     Languages{
         aa{"afarčina"}
@@ -100,6 +102,8 @@ sk{
         dak{"dakotčina"}
         dar{"darginčina"}
         de{"nemčina"}
+        de_AT{"rakúska nemčina"}
+        de_CH{"švajčiarska spisovná nemčina"}
         del{"delawarčina"}
         den{"slovančina"}
         dgr{"dogribčina"}
@@ -118,10 +122,13 @@ sk{
         elx{"elamčina"}
         en{"angličtina"}
         en_AU{"austrálska angličtina"}
+        en_CA{"kanadská angličtina"}
         en_GB{"britská angličtina"}
         en_US{"americká angličtina"}
         eo{"esperanto"}
         es{"španielčina"}
+        es_419{"latinskoamerická španielčina"}
+        es_ES{"iberská španielčina"}
         et{"estónčina"}
         eu{"baskičtina"}
         ewo{"ewondo"}
@@ -136,6 +143,8 @@ sk{
         fo{"faerčina"}
         fon{"fončina"}
         fr{"francúzština"}
+        fr_CA{"kanadská francúzština"}
+        fr_CH{"švajčiarska francúzština"}
         frs{"východná frízština"}
         fur{"friulčina"}
         fy{"západná frízština"}
@@ -212,11 +221,14 @@ sk{
         na{"nauru"}
         nai{"jazyk severoamerických indiánov"}
         nb{"bokmål"}
+        nd{"severné ndbele"}
         ne{"nepálčina"}
         ng{"ndonga"}
         nl{"holandčina"}
+        nl_BE{"flámčina"}
         nn{"nórsky nynorsk"}
         no{"nórčina"}
+        nso{"severná sothčina"}
         nv{"navajo"}
         ny{"čewa"}
         oc{"okcitánčina"}
@@ -231,6 +243,7 @@ sk{
         ps{"paštúnčina"}
         pt{"portugalčina"}
         pt_BR{"brazílska portugalčina"}
+        pt_PT{"iberská portugalčina"}
         qu{"kečuánčina"}
         rm{"rétorománčina"}
         rn{"rundčina"}
@@ -242,6 +255,7 @@ sk{
         sc{"sardínčina"}
         scn{"sicílčina"}
         sd{"sindhčina"}
+        se{"severná saamčina"}
         sg{"sango"}
         sgn{"znaková reč"}
         sh{"srbochorvátčina"}
@@ -263,6 +277,7 @@ sk{
         syr{"sýrčina"}
         ta{"tamilčina"}
         te{"telugčina"}
+        tet{"tetum"}
         tg{"tadžičtina"}
         th{"thajčina"}
         ti{"tigrejčina"}
@@ -271,6 +286,7 @@ sk{
         tlh{"klingónčina"}
         tn{"tswančina"}
         to{"tonžtina"}
+        tpi{"tok pisin"}
         tr{"turečtina"}
         ts{"tsonga"}
         tt{"tatárčina"}
@@ -302,53 +318,126 @@ sk{
         Armn{"Arménsky"}
         Bali{"balijský"}
         Beng{"bengálsky"}
+        Bopo{"Bopomofo"}
         Brai{"Braillovo písmo"}
         Cyrl{"Cyrilika"}
+        Deva{"Dévanágarí"}
         Egyp{"egyptské hieroglyfy"}
         Ethi{"etiópsky"}
+        Geor{"Gruzínčina"}
         Glag{"hlaholika"}
         Goth{"gotický"}
         Grek{"Grécky"}
+        Gujr{"Gudžarátčina"}
+        Guru{"Gurmukhi"}
+        Hang{"Hangul"}
+        Hani{"Han"}
+        Hans{"Zjednodušené čínske"}
+        Hant{"Tradičné čínske"}
         Hebr{"hebrejský"}
+        Hira{"Hiragana"}
         Jpan{"japonský"}
+        Kana{"Katakana"}
         Khmr{"kmérsky"}
+        Knda{"Kannadčina"}
         Kore{"kórejský"}
+        Laoo{"Lao"}
         Latn{"latinka"}
         Lina{"lineárna A"}
         Linb{"lineárna B"}
         Maya{"mayské hieroglyfy"}
+        Mlym{"Malajámčina"}
         Mong{"mongolský"}
+        Mymr{"Mjanmarsko"}
+        Orya{"Oríjčina"}
         Osma{"osmanský"}
         Runr{"Runové písmo"}
+        Sinh{"Sinhálske písmo"}
+        Taml{"Tamilčina"}
+        Telu{"Telugčina"}
+        Thaa{"Tána"}
+        Thai{"Thajčina"}
         Tibt{"tibetský"}
+        Zsym{"Symboly"}
+        Zxxx{"Nepísané"}
         Zyyy{"Obecný"}
+        Zzzz{"Neznáme písmo"}
     }
     Types{
         calendar{
             buddhist{"Buddhistický kalendár"}
             chinese{"Čínsky kalendár"}
+            coptic{"Koptický kalendár"}
+            ethiopic{"Etiópsky kalendár"}
+            ethiopic-amete-alem{"Etiópsky kalendár Amete Alem"}
             gregorian{"Gregoriánsky kalendár"}
             hebrew{"Židovský kalendár"}
             indian{"Indický národný kalendár"}
             islamic{"Islamský kalendár"}
             islamic-civil{"Islamský občiansky kalendár"}
             japanese{"Japonský kalendár"}
+            persian{"Perzský kalendár"}
             roc{"Kalendár Čínskej republiky"}
         }
         collation{
             big5han{"Tradičný čínsky Big5"}
+            dictionary{"Usporiadanie slovníka"}
             direct{"Priame triedenie"}
+            ducet{"Predvolené usporiadanie unicode"}
             gb2312han{"Zjednodušený čínsky GB2312"}
             phonebook{"Lexikografické triedenie"}
             pinyin{"Triedenie pinyin"}
+            reformed{"Reformované usporiadanie"}
+            search{"Všeobecné vyhľadávanie"}
             stroke{"Tiedenie podľa ťahov"}
             traditional{"Tradičné"}
+            unihan{"Usporiadanie podľa znakov radikál"}
+        }
+        numbers{
+            arab{"Arabsko-indické číslice"}
+            arabext{"Rozšírené arabsko-indické číslice"}
+            armn{"Arménske číslice"}
+            armnlow{"Arménske číslice (malé písmená)"}
+            beng{"Bengálske číslice"}
+            deva{"Číslice písma Dévanágarí"}
+            ethi{"Etiópske číslice"}
+            fullwide{"Číslice s celou šírkou"}
+            geor{"Gruzínske číslice"}
+            grek{"Grécke číslice"}
+            greklow{"Grécke číslice (malé písmená)"}
+            gujr{"Gudžarátske číslice"}
+            guru{"Číslice Gurmukhi"}
+            hanidec{"Čínske desatinné číslice"}
+            hans{"Číslice zjednodušenej čínštiny"}
+            hansfin{"Finančné číslice zjednodušenej čínštiny"}
+            hant{"Číslice tradičnej čínštiny"}
+            hantfin{"Finančné číslice tradičnej čínštiny"}
+            hebr{"Hebrejské číslice"}
+            jpan{"Japonské číslice"}
+            jpanfin{"Japonské finančné číslice"}
+            khmr{"Khmérske číslice"}
+            knda{"Kannadské číslice"}
+            laoo{"Číslice písma lao"}
+            latn{"Arabské číslice"}
+            mlym{"Malajámske číslice"}
+            mong{"Mongolské číslice"}
+            mymr{"Mjanmarské číslice"}
+            orya{"Oríjske číslice"}
+            roman{"Rímske číslice"}
+            romanlow{"Rímske číslice (malé písmená)"}
+            taml{"Tamilské číslice"}
+            telu{"Telugské číslice"}
+            thai{"Thajské číslice"}
+            tibt{"Tibetské číslice"}
         }
     }
-    Version{"2.0.50.88"}
+    Version{"2.0.57.98"}
     codePatterns{
         language{"Jazyk: {0}"}
-        script{"Skript: {0}"}
+        script{"Písmo: {0}"}
         territory{"Región: {0}"}
+    }
+    localeDisplayPattern{
+        separator{","}
     }
 }

@@ -16,7 +16,7 @@ saq{
             "Njilingi eel Falme za Kiarabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Njilingi eel Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ saq{
             "Njilingi eel Australia",
         }
         BHD{
-            "BD",
+            "BHD",
             "Njilingi eel Bahareni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Njilingi eel Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ saq{
             "Njilingi eel China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Njilingi eel Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Njilingi eel Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Njilingi eel Aljeria",
         }
         EGP{
@@ -68,11 +68,11 @@ saq{
             "Njilingi eel Misri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Njilingi eel Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "Njilingi eel Uhabeshi",
         }
         EUR{
@@ -84,7 +84,7 @@ saq{
             "Njilingi eel Uingereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "Njilingi eel Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ saq{
             "Njilingi eel Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Njilingi eel Gine",
         }
         INR{
@@ -108,11 +108,11 @@ saq{
             "Njilingi eel Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Njilingi eel Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dola eel Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ saq{
             "Njilingi eel Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Njilingi eel Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ saq{
             "Njilingi eel Bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "Njilingi eel Moritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Njilingi eel Morisi",
         }
         MWK{
@@ -144,15 +144,15 @@ saq{
             "Njilingi eel Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Njilingi eel Msumbiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "Njilingi eel Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Njilingi eel Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ saq{
             "Njilingi eel Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Njilingi eel Saudia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Njilingi eel Shelisheli",
         }
         SDG{
@@ -172,40 +172,40 @@ saq{
             "Paunt eel Sudani",
         }
         SHP{
-            "SH£",
-            "Paunt eel  Santahelena",
+            "SHP",
+            "Paunt eel Santahelena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Njilingi eel Somalia",
         }
         STD{
-            "Db",
-            "Njilingi eel  Sao Tome na Principe",
+            "STD",
+            "Njilingi eel Sao Tome na Principe",
         }
         SZL{
             "SZL",
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Njilingi eel Tunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Njilingi eel Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Njilingi eel Uganda",
         }
         USD{
             "US$",
-            "Dola eel  Marekani",
+            "Dola eel Marekani",
         }
         XAF{
             "FCFA",
@@ -216,17 +216,17 @@ saq{
             "Njilingi eel CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Njilingi eel Afrika Kusini",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Njilingi eel Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dola eel Zimbabwe",
         }
     }
-    Version{"2.0.46.70"}
+    Version{"2.0.57.99"}
 }

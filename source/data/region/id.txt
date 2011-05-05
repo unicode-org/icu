@@ -11,6 +11,36 @@
  */
 id{
     Countries{
+        001{"Dunia"}
+        002{"Afrika"}
+        003{"Amerika Utara"}
+        005{"Amerika Selatan"}
+        009{"Oseania"}
+        011{"Afrika Barat"}
+        013{"Amerika Tengah"}
+        014{"Afrika Timur"}
+        015{"Afrika Utara"}
+        017{"Afrika Tengah"}
+        018{"Afrika bagian selatan"}
+        019{"Amerika"}
+        021{"Amerika bagian utara"}
+        029{"Kepulauan Karibia"}
+        030{"Asia Timur"}
+        034{"Asia Selatan"}
+        035{"Asia Tenggara"}
+        039{"Eropa Selatan"}
+        053{"Australia dan Selandia Baru"}
+        054{"Melanesia"}
+        057{"Wilayah Mikronesia"}
+        061{"Polinesia"}
+        142{"Asia"}
+        143{"Asia Tengah"}
+        145{"Asia Barat"}
+        150{"Eropa"}
+        151{"Eropa Timur"}
+        154{"Eropa Utara"}
+        155{"Eropa Barat"}
+        419{"Amerika Latin"}
         AC{"Pulau Ascension"}
         AD{"Andora"}
         AE{"Uni Emirat Arab"}
@@ -19,7 +49,7 @@ id{
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
-        AN{"Antilles Belanda"}
+        AN{"Antilla Belanda"}
         AO{"Angola"}
         AQ{"Antarktika"}
         AR{"Argentina"}
@@ -27,6 +57,7 @@ id{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
+        AX{"Kepulauan Aland"}
         AZ{"Azerbaijan"}
         BA{"Bosnia dan Herzegovina"}
         BB{"Barbados"}
@@ -37,10 +68,11 @@ id{
         BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"Saint Barthelemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BR{"Brazil"}
+        BR{"Brasil"}
         BS{"Bahama"}
         BT{"Bhutan"}
         BV{"Pulau Bouvet"}
@@ -49,7 +81,7 @@ id{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kepulauan Cocos"}
-        CD{"Republik Demokratik Kongo"}
+        CD{"Kongo - Kinshasa"}
         CF{"Republik Afrika Tengah"}
         CG{"Kongo - Republik"}
         CH{"Swiss"}
@@ -61,6 +93,7 @@ id{
         CO{"Kolombia"}
         CP{"Pulau Clipperton"}
         CR{"Kosta Rika"}
+        CS{"Serbia dan Montenegro"}
         CU{"Kuba"}
         CV{"Tanjung Verde"}
         CX{"Pulau Christmas"}
@@ -81,6 +114,7 @@ id{
         ER{"Eritrea"}
         ES{"Spanyol"}
         ET{"Ethiopia"}
+        EU{"Uni Eropa"}
         FI{"Finlandia"}
         FJ{"Fiji"}
         FK{"Kepulauan Malvinas"}
@@ -92,6 +126,7 @@ id{
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Guyana Perancis"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Grinlandia"}
@@ -115,12 +150,14 @@ id{
         ID{"Indonesia"}
         IE{"Irlandia"}
         IL{"Israel"}
+        IM{"Isle of Man"}
         IN{"India"}
         IO{"Wilayah Inggris di Samudra Hindia"}
-        IQ{"Iraq"}
+        IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandia"}
-        IT{"Itali"}
+        IT{"Italia"}
+        JE{"Jersey"}
         JM{"Jamaika"}
         JO{"Yordania"}
         JP{"Jepang"}
@@ -143,12 +180,14 @@ id{
         LR{"Liberia"}
         LS{"Lesotho"}
         LT{"Lituania"}
-        LU{"Luxembourg"}
+        LU{"Luksemburg"}
         LV{"Latvia"}
         LY{"Libia"}
         MA{"Maroko"}
-        MC{"Monaco"}
+        MC{"Monako"}
         MD{"Moldova"}
+        ME{"Montenegro"}
+        MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Kepulauan Marshall"}
         MK{"Makedonia"}
@@ -156,7 +195,7 @@ id{
         MM{"Myanmar"}
         MN{"Mongolia"}
         MO{"Makau SAR China"}
-        MP{"Kepualuan Mariana Utara"}
+        MP{"Kepulauan Mariana Utara"}
         MQ{"Martinique"}
         MR{"Mauritania"}
         MS{"Montserrat"}
@@ -164,16 +203,16 @@ id{
         MU{"Mauritius"}
         MV{"Maladewa"}
         MW{"Malawi"}
-        MX{"Mexico"}
+        MX{"Meksiko"}
         MY{"Malaysia"}
-        MZ{"Mozambique"}
+        MZ{"Mozambik"}
         NA{"Namibia"}
         NC{"Kaledonia Baru"}
         NE{"Niger"}
         NF{"Kepulauan Norfolk"}
         NG{"Nigeria"}
         NI{"Nikaragua"}
-        NL{"Netherlands"}
+        NL{"Belanda"}
         NO{"Norwegia"}
         NP{"Nepal"}
         NR{"Nauru"}
@@ -182,21 +221,23 @@ id{
         OM{"Oman"}
         PA{"Panama"}
         PE{"Peru"}
-        PF{"Polynesia Perancis"}
+        PF{"Polinesia Prancis"}
         PG{"Nugini Papua Nugini"}
         PH{"Filipina"}
         PK{"Pakistan"}
         PL{"Polandia"}
         PM{"Saint Pierre dan Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Kepulauan Pitcairn"}
         PR{"Puerto Riko"}
         PS{"Otoritas Palestina"}
         PT{"Portugis"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
+        QO{"Oseania Luar"}
         RE{"Réunion"}
         RO{"Rumania"}
+        RS{"Serbia"}
         RU{"Rusia"}
         RW{"Rwanda"}
         SA{"Arab Saudi"}
@@ -219,16 +260,18 @@ id{
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
+        TC{"Kepulauan Turks dan Caicos"}
         TD{"Chad"}
+        TF{"Teritori Kutub Selatan Prancis"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tajikistan"}
         TK{"Tokelau"}
         TL{"Timor Leste"}
-        TM{"Turkmenistan"}
+        TM{"Turkimenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
-        TR{"Turkey"}
+        TR{"Turki"}
         TT{"Trinidad dan Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
@@ -253,6 +296,7 @@ id{
         ZA{"Afrika Selatan"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
+        ZZ{"Wilayah Tidak Dikenal"}
     }
-    Version{"2.0.50.96"}
+    Version{"2.0.58.39"}
 }

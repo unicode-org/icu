@@ -11,6 +11,36 @@
  */
 kea{
     Countries{
+        001{"Mundu"}
+        002{"Afrika"}
+        003{"Merka di Norti"}
+        005{"Merka di Sul"}
+        009{"Oseania"}
+        011{"Afrika Osidental"}
+        013{"Merka Sentral"}
+        014{"Afrika Oriental"}
+        015{"Norti di Afrika"}
+        017{"Afrika Sentral"}
+        018{"Sul di Afrika"}
+        019{"Merkas"}
+        021{"Norti di Merka"}
+        029{"Karaibas"}
+        030{"Azia Oriental"}
+        034{"Sul di Azia"}
+        035{"Sudesti Aziatiku"}
+        039{"Europa di Sul"}
+        053{"Australia y Nova Zelandia"}
+        054{"Melanezia"}
+        057{"Rejiãu di Mikronezia"}
+        061{"Polinezia"}
+        142{"Azia"}
+        143{"Azia Sentral"}
+        145{"Azia Osidental"}
+        150{"Europa"}
+        151{"Europa Oriental"}
+        154{"Europa di Norti"}
+        155{"Europa Osidental"}
+        419{"Merka Latinu"}
         AD{"Andora"}
         AE{"Emiradus Arabi Unidu"}
         AF{"Afeganistãu"}
@@ -95,6 +125,7 @@ kea{
         GU{"Guam"}
         GW{"Gine-Bisau"}
         GY{"Giana"}
+        HK{"Ong Kong"}
         HN{"Onduras"}
         HR{"Kroasia"}
         HT{"Aiti"}
@@ -237,6 +268,7 @@ kea{
         ZA{"Afrika di Sul"}
         ZM{"Zambia"}
         ZW{"Zimbabui"}
+        ZZ{"rejiãu diskonxedu"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

@@ -18,17 +18,17 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.50.84"}
+    Version{"2.0.58.14"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "HH'h'mm'min'ss's' zzzz",
-                "HH'h'mm'min'ss's' z",
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1} {0}",
                 "{1} {0}",
@@ -44,17 +44,17 @@ pt_PT{
         }
         gregorian{
             AmPmMarkers{
-                "Antes do meio-dia",
-                "Depois do meio-dia",
+                "a.m.",
+                "p.m.",
             }
             DateTimePatterns{
-                "HH'h'mm'min'ss's' zzzz",
-                "HH'h'mm'min'ss's' z",
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "d 'de' MMM 'de' yyyy",
+                "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -66,12 +66,17 @@ pt_PT{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
+                MMMEd{"E, d/MM"}
+                MMMd{"d/MM"}
                 ms{"mm:ss"}
+                yMMM{"MM/y"}
+                yMMMEd{"EEE, d/MM/y"}
+                yMMMd{"d/MM/y"}
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
+                yyMMM{"MM/yy"}
+                yyMMMEEEd{"EEE, d/MM/yy"}
+                yyMMMd{"d/MM/yy"}
                 yyQ{"QQQ 'de' yy"}
             }
             dayNames{
@@ -87,9 +92,36 @@ pt_PT{
                     }
                 }
             }
+            fields{
+                month{
+                    relative{
+                        "-1"{"Último mês"}
+                    }
+                }
+                week{
+                    relative{
+                        "-1"{"Última semana"}
+                    }
+                }
+                year{
+                    relative{
+                        "-1"{"Último ano"}
+                    }
+                }
+            }
             intervalFormats{
+                H{
+                    a{"H-H"}
+                }
                 Hm{
-                    H{"HH'h' - HH'h'"}
+                    H{"HH:mm–HH:mm"}
+                    a{"H:mm–H:mm"}
+                    m{"H:mm–H:mm"}
+                }
+                Hmv{
+                    H{"H:mm–H:mm v"}
+                    a{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 MMM{
                     M{"MMM-MMM"}
@@ -99,13 +131,19 @@ pt_PT{
                     h{"h-h a"}
                 }
                 hm{
-                    h{"h'h' - h'h' a"}
+                    h{"h:mm - h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 y{
                     y{"y-y"}
                 }
                 yMMMM{
-                    M{"MM-MM 'de' yyyy"}
+                    y{"MMMM 'de' y – MMMM 'de' y"}
                 }
             }
             monthNames{
@@ -153,13 +191,13 @@ pt_PT{
         }
         islamic{
             DateTimePatterns{
-                "HH'h'mm'min'ss's' zzzz",
-                "HH'h'mm'min'ss's' z",
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1} {0}",
                 "{1} {0}",
@@ -175,13 +213,13 @@ pt_PT{
         }
         japanese{
             DateTimePatterns{
-                "HH'h'mm'min'ss's' zzzz",
-                "HH'h'mm'min'ss's' z",
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1} {0}",
                 "{1} {0}",
@@ -197,13 +235,13 @@ pt_PT{
         }
         roc{
             DateTimePatterns{
-                "HH'h'mm'min'ss's' zzzz",
-                "HH'h'mm'min'ss's' z",
+                "H:mm:ss zzzz",
+                "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d 'de' MMM 'de' y G",
+                "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1} {0}",
                 "{1} {0}",
@@ -219,6 +257,100 @@ pt_PT{
         }
     }
     measurementSystemNames{
+        US{"Estados Unidos"}
         metric{"Métrico"}
+    }
+    units{
+        day-future{
+            0{"Dentro de 0 dias"}
+            1{"Dentro de 1 dia"}
+            one{"Dentro de {0} dia"}
+            other{"Dentro de {0} dias"}
+        }
+        day-past{
+            0{"Há 0 dias"}
+            1{"Há 1 dia"}
+            one{"Há {0} dia"}
+            other{"Há {0} dias"}
+        }
+        hour-future{
+            0{"Dentro de 0 horas"}
+            1{"Dentro de 1 hora"}
+            one{"Dentro de {0} hora"}
+            other{"Dentro de {0} horas"}
+        }
+        hour-past{
+            0{"Há 0 horas"}
+            1{"Há 1 hora"}
+            one{"Há {0} hora"}
+            other{"Há {0} horas"}
+        }
+        minute-future{
+            0{"Dentro de 0 minutos"}
+            1{"Dentro de 1 minuto"}
+            one{"Dentro de {0} minuto"}
+            other{"Dentro de {0} minutos"}
+        }
+        minute-past{
+            0{"Há 0 minutos"}
+            1{"Há 1 minuto"}
+            one{"Há {0} minuto"}
+            other{"Há {0} minutos"}
+        }
+        month-future{
+            0{"Dentro de 0 meses"}
+            1{"Dentro de 1 mês"}
+            one{"Dentro de {0} mês"}
+            other{"Dentro de {0} meses"}
+        }
+        month-past{
+            0{"Há 0 meses"}
+            1{"Há 1 mês"}
+            one{"Há {0} mês"}
+            other{"Há {0} meses"}
+        }
+        second-future{
+            0{"Dentro de 0 segundos"}
+            1{"Dentro de 1 segundo"}
+            one{"Dentro de {0} segundo"}
+            other{"Dentro de {0} segundos"}
+        }
+        second-past{
+            0{"Há 0 segundos"}
+            1{"Há 1 segundo"}
+            one{"Há {0} segundo"}
+            other{"Há {0} segundos"}
+        }
+        week-future{
+            0{"Dentro de 0 semanas"}
+            1{"Dentro de 1 semana"}
+            one{"Dentro de {0} semana"}
+            other{"Dentro de {0} semanas"}
+        }
+        week-past{
+            0{"Há 0 semanas"}
+            1{"Há 1 semana"}
+            one{"Há {0} semana"}
+            other{"Há {0} semanas"}
+        }
+        year-future{
+            0{"Dentro de 0 anos"}
+            1{"Dentro de 1 ano"}
+            one{"Dentro de {0} ano"}
+            other{"Dentro de {0} anos"}
+        }
+        year-past{
+            0{"Há 0 anos"}
+            1{"Há 1 ano"}
+            one{"Há {0} ano"}
+            other{"Há {0} anos"}
+        }
+    }
+    unitsShort{
+        month{
+            1{"1 mês"}
+            one{"{0} mês"}
+            other{"{0} meses"}
+        }
     }
 }

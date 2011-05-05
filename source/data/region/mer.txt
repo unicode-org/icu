@@ -186,7 +186,7 @@ mer{
         RU{"Rashia"}
         RW{"Rwanda"}
         SA{"Saudi"}
-        SB{"Airandi Cia  Solomon"}
+        SB{"Airandi Cia Solomon"}
         SC{"Shelisheli"}
         SD{"Sudani"}
         SE{"Swideni"}
@@ -227,7 +227,7 @@ mer{
         VC{"Santavisenti na Grenadini"}
         VE{"Venezuela"}
         VG{"Aĩrandi cia Virgin cia Ngeretha"}
-        VI{"Aĩrandi cia  Virgin cia Amerika"}
+        VI{"Aĩrandi cia Virgin cia Amerika"}
         VN{"Vietinamu"}
         VU{"Vanuatu"}
         WF{"Walis na Futuna"}
@@ -238,5 +238,5 @@ mer{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

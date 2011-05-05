@@ -21,12 +21,12 @@ uz_Latn{
         ja{"yaponcha"}
         pt{"portugalcha"}
         ru{"ruscha"}
-        uz{"o'zbekcha"}
+        uz{"oʼzbekcha"}
         zh{"xitoycha"}
     }
     Scripts{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"2.0.47.68"}
+    Version{"2.0.58.32"}
 }

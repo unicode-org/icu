@@ -42,7 +42,7 @@ ta{
                 "&[before 1]ஹ<ஹ்"
                 "&[before 1]க்ஷ<க்ஷ்"
             }
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
     }
 }

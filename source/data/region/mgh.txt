@@ -1,0 +1,155 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/mgh.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/mgh.xml
+ */
+mgh{
+    Countries{
+        AD{"Uandora"}
+        AF{"Ufugustani"}
+        AL{"Ualbania"}
+        AS{"Usamoa ya Marekani"}
+        AZ{"Uazabajani"}
+        BI{"Urundi"}
+        BJ{"Ubelin"}
+        CA{"Ukanada"}
+        CG{"Ukongo"}
+        CI{"Ukodiva"}
+        CL{"Uchile"}
+        CN{"Uchina"}
+        CO{"Ukolombia"}
+        CS{"Usiera Leoni"}
+        CU{"Ukuba"}
+        CY{"Ukuprosi"}
+        CZ{"Ucheki"}
+        DJ{"Ujibuti"}
+        DK{"Udenimaka"}
+        DM{"Udominika"}
+        DZ{"Alujeria"}
+        EG{"Umisiri"}
+        ER{"Uriterea"}
+        ES{"Usudani"}
+        ET{"Uhabeshi"}
+        FI{"Ufini"}
+        FJ{"Ufiji"}
+        FR{"Ufaransa"}
+        GA{"Ugaboni"}
+        GB{"Umarekani"}
+        GD{"Ugrenada"}
+        GE{"Ujojia"}
+        GF{"Ufaransa yo Gwaya"}
+        GH{"Ugana"}
+        GI{"Ujibralta"}
+        GL{"Ugrinlandi"}
+        GM{"Ugambia"}
+        GN{"Ugine"}
+        GP{"Ugwadelupe"}
+        GT{"Ugwatemala"}
+        GU{"Ugwam"}
+        GW{"Uginebisau"}
+        GY{"Uguyana"}
+        HN{"Uhondurasi"}
+        HR{"Ukorasia"}
+        HT{"Uhaiti"}
+        HU{"Uhungaria"}
+        ID{"Undonesia"}
+        IE{"Uayalandi"}
+        IL{"Uisraeli"}
+        IN{"Uhindini"}
+        IQ{"Wiraki"}
+        IT{"Italia"}
+        JM{"Ujamaika"}
+        JO{"Uyordani"}
+        JP{"Ujapani"}
+        KE{"Ukenya"}
+        KH{"Ukambodia"}
+        KM{"Ukomoro"}
+        KN{"Usantapieri na Mikeloni"}
+        KP{"Ukorea Kaskazini"}
+        KR{"Ukorea Kusini"}
+        KZ{"Ukazakistani"}
+        LB{"Ulebanoni"}
+        LC{"Usantavisenti na Grenadini"}
+        LI{"Ushenteni"}
+        LK{"Usurinamu"}
+        LR{"Uliberia"}
+        LS{"Ulesoto"}
+        LT{"Utwania"}
+        LU{"Usembaji"}
+        LV{"Ulativia"}
+        LY{"Ulibya"}
+        MG{"Ubukini"}
+        MK{"Umasedonia"}
+        MP{"Uomani"}
+        MW{"Umalawi"}
+        NE{"Unijeri"}
+        NF{"Unorwe"}
+        NG{"Unijeria"}
+        NO{"Upakistani"}
+        PA{"Paragwai"}
+        PE{"Upitkairni"}
+        PF{"Ufaransa yo Potina"}
+        PG{"Uperuu"}
+        PH{"Upolandi"}
+        PL{"Upwetoriko"}
+        PM{"Usamoa"}
+        PR{"Uriyunioni"}
+        PS{"Upapua"}
+        PT{"Ukatari"}
+        PW{"Upanama"}
+        PY{"Ufilipino"}
+        QA{"Uromania"}
+        RO{"Urwanda"}
+        RU{"Usantahelena"}
+        RW{"Usantakitzi na Nevis"}
+        SA{"Umantegro"}
+        SB{"Afrika du Sulu"}
+        SC{"Usingapoo"}
+        SD{"Uswazi"}
+        SE{"Usiria"}
+        SG{"Uslovenia"}
+        SH{"Usantalusia"}
+        SI{"Usomalia"}
+        SL{"Uslovakia"}
+        SM{"Usaudi"}
+        SN{"Ushelisheli"}
+        SO{"Uhispania"}
+        SR{"Uswidi"}
+        ST{"Usenegali"}
+        SV{"Usalavado"}
+        SY{"Ujikistani"}
+        SZ{"Uswisi"}
+        TC{"Uvirigina"}
+        TD{"Uchadi"}
+        TG{"Utonga"}
+        TH{"Utokelau"}
+        TJ{"Utailandi"}
+        TK{"Utrinidad na Tobago"}
+        TL{"Utimo Mashariki"}
+        TM{"Utuvalu"}
+        TN{"Uturukimenistani"}
+        TO{"Utunisia"}
+        TR{"Utuki"}
+        TW{"Utanzania"}
+        TZ{"Utogo"}
+        UG{"Uarabuni"}
+        US{"Uvanuatu"}
+        UZ{"Uvatikani"}
+        VA{"Uvietinamu"}
+        VC{"Usamarino"}
+        VE{"Uwalis na Futuna"}
+        VN{"Uyemeni"}
+        VU{"Uvenezuela"}
+        WF{"Uzambia"}
+        WS{"Usao Tome na Principe"}
+        YE{"Uzimbabwe"}
+        ZA{"Usirilanka"}
+    }
+    Version{"2.0.57.99"}
+}

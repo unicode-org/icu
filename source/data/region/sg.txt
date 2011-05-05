@@ -120,7 +120,7 @@ sg{
         KP{"Korëe tî Banga"}
         KR{"Korëe tî Mbongo"}
         KW{"Köwêti"}
-        KY{"Âzûâ Ngundë,  Kaimäni"}
+        KY{"Âzûâ Ngundë, Kaimäni"}
         KZ{"Kazakisitäan"}
         LA{"Lùaôsi"}
         LB{"Libùaan"}
@@ -238,5 +238,5 @@ sg{
         ZM{"Zambïi"}
         ZW{"Zimbäbwe"}
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.99"}
 }

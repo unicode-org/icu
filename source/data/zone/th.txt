@@ -10,8 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/th.xml
  */
 th{
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"อาบีจาน"}
+        }
         "Africa:Accra"{
             ec{"อักกรา"}
         }
@@ -36,6 +39,9 @@ th{
         "Africa:Bissau"{
             ec{"บิสเซา"}
         }
+        "Africa:Blantyre"{
+            ec{"แบลนไทร์"}
+        }
         "Africa:Brazzaville"{
             ec{"บราซซาวิล"}
         }
@@ -57,8 +63,14 @@ th{
         "Africa:Dakar"{
             ec{"ดาการ์"}
         }
+        "Africa:Dar_es_Salaam"{
+            ec{"ดาร์เอสซาลาม"}
+        }
         "Africa:Djibouti"{
             ec{"จิบูตี"}
+        }
+        "Africa:Douala"{
+            ec{"ดูอาลา"}
         }
         "Africa:El_Aaiun"{
             ec{"เอลไอย์อุง"}
@@ -126,6 +138,9 @@ th{
         "Africa:Nairobi"{
             ec{"ไนโรเบีย"}
         }
+        "Africa:Ndjamena"{
+            ec{"เอ็นจาเมนา"}
+        }
         "Africa:Niamey"{
             ec{"นีอาเมย์"}
         }
@@ -170,6 +185,9 @@ th{
         }
         "America:Argentina:Rio_Gallegos"{
             ec{"ริโอกาลเลกอส"}
+        }
+        "America:Argentina:Salta"{
+            ec{"ซัลตา"}
         }
         "America:Argentina:San_Juan"{
             ec{"ซานฮวน"}
@@ -255,6 +273,9 @@ th{
         "America:Cuiaba"{
             ec{"กุยาบา"}
         }
+        "America:Curacao"{
+            ec{"คูราเซา"}
+        }
         "America:Danmarkshavn"{
             ec{"ดานมาร์กสฮาวน์"}
         }
@@ -293,6 +314,9 @@ th{
         }
         "America:Goose_Bay"{
             ec{"กูสเบย์"}
+        }
+        "America:Grand_Turk"{
+            ec{"แกรนด์เติร์ก"}
         }
         "America:Grenada"{
             ec{"เกรนาดา"}
@@ -375,8 +399,14 @@ th{
         "America:Maceio"{
             ec{"มาเซโอ"}
         }
+        "America:Managua"{
+            ec{"มานากัว"}
+        }
         "America:Manaus"{
             ec{"มาเนาส์"}
+        }
+        "America:Marigot"{
+            ec{"มาริโกต์"}
         }
         "America:Martinique"{
             ec{"มาร์ตินีก"}
@@ -429,6 +459,9 @@ th{
         "America:Noronha"{
             ec{"โนรอนฮา"}
         }
+        "America:North_Dakota:Beulah"{
+            ec{"โบลาห์, นอร์ทดาโคตา"}
+        }
         "America:North_Dakota:Center"{
             ec{"เซนเตอร์, นอร์ทดาโคตา"}
         }
@@ -446,6 +479,9 @@ th{
         }
         "America:Phoenix"{
             ec{"ฟีนิกซ์"}
+        }
+        "America:Port-au-Prince"{
+            ec{"ปอร์โตแปรงซ์"}
         }
         "America:Port_of_Spain"{
             ec{"พอร์ทออฟสเปน"}
@@ -492,8 +528,14 @@ th{
         "America:Shiprock"{
             ec{"ชิปร็อก"}
         }
+        "America:St_Barthelemy"{
+            ec{"เซนต์บาร์เธเลมี"}
+        }
         "America:St_Johns"{
             ec{"เซนต์จอนส์"}
+        }
+        "America:St_Kitts"{
+            ec{"เซนต์คิตส์"}
         }
         "America:St_Lucia"{
             ec{"เซนต์ลูเซีย"}
@@ -507,6 +549,9 @@ th{
         "America:Swift_Current"{
             ec{"สวิฟต์เคอร์เรนต์"}
         }
+        "America:Tegucigalpa"{
+            ec{"เตกูซิกัลปา"}
+        }
         "America:Thule"{
             ec{"ทูเล"}
         }
@@ -518,6 +563,9 @@ th{
         }
         "America:Toronto"{
             ec{"โทรอนโต"}
+        }
+        "America:Tortola"{
+            ec{"ตอร์โตลา"}
         }
         "America:Vancouver"{
             ec{"แวนคูเวอร์"}
@@ -608,6 +656,9 @@ th{
         }
         "Asia:Brunei"{
             ec{"บรูไนดารุสซาลาม"}
+        }
+        "Asia:Calcutta"{
+            ec{"โกลกาตา"}
         }
         "Asia:Choibalsan"{
             ec{"ชอยบาลซาน"}
@@ -801,6 +852,9 @@ th{
         "Atlantic:Cape_Verde"{
             ec{"เคปเวิร์ด"}
         }
+        "Atlantic:Faeroe"{
+            ec{"แฟโร"}
+        }
         "Atlantic:Madeira"{
             ec{"มาเดรา"}
         }
@@ -864,8 +918,14 @@ th{
         "Europe:Athens"{
             ec{"เอเธนส์"}
         }
+        "Europe:Belgrade"{
+            ec{"เบลเกรด"}
+        }
         "Europe:Berlin"{
             ec{"เบอร์ลิน"}
+        }
+        "Europe:Bratislava"{
+            ec{"บราติสลาวา"}
         }
         "Europe:Brussels"{
             ec{"บรัสเซลส์"}
@@ -876,6 +936,9 @@ th{
         "Europe:Budapest"{
             ec{"บูดาเปส"}
         }
+        "Europe:Chisinau"{
+            ec{"คีชีเนา"}
+        }
         "Europe:Copenhagen"{
             ec{"โคเปนเฮเกน"}
         }
@@ -885,11 +948,20 @@ th{
         "Europe:Gibraltar"{
             ec{"ยิบรอลตาร์"}
         }
+        "Europe:Guernsey"{
+            ec{"เกิร์นซีย์"}
+        }
         "Europe:Helsinki"{
             ec{"เฮลซิงกิ"}
         }
+        "Europe:Isle_of_Man"{
+            ec{"เกาะแมน"}
+        }
         "Europe:Istanbul"{
             ec{"อิสตันบูล"}
+        }
+        "Europe:Jersey"{
+            ec{"เจอร์ซีย์"}
         }
         "Europe:Kaliningrad"{
             ec{"คาลินิงกราด"}
@@ -899,6 +971,9 @@ th{
         }
         "Europe:Lisbon"{
             ec{"ลิสบอน"}
+        }
+        "Europe:Ljubljana"{
+            ec{"ลูบลิยานา"}
         }
         "Europe:London"{
             ec{"ลอนดอน"}
@@ -912,6 +987,12 @@ th{
         "Europe:Malta"{
             ec{"มอลตา"}
         }
+        "Europe:Mariehamn"{
+            ec{"มารีฮามน์"}
+        }
+        "Europe:Minsk"{
+            ec{"มินสก์"}
+        }
         "Europe:Monaco"{
             ec{"โมนาโก"}
         }
@@ -924,20 +1005,41 @@ th{
         "Europe:Paris"{
             ec{"ปารีส"}
         }
+        "Europe:Podgorica"{
+            ec{"พอดกอรีตซา"}
+        }
+        "Europe:Prague"{
+            ec{"ปราก"}
+        }
+        "Europe:Riga"{
+            ec{"ริกา"}
+        }
         "Europe:Rome"{
             ec{"โรม"}
         }
         "Europe:Samara"{
             ec{"ซามารา"}
         }
+        "Europe:San_Marino"{
+            ec{"ซานมารีโน"}
+        }
+        "Europe:Sarajevo"{
+            ec{"ซาราเยโว"}
+        }
         "Europe:Simferopol"{
             ec{"ซิมเฟอโรโปล"}
+        }
+        "Europe:Skopje"{
+            ec{"สโกเปีย"}
         }
         "Europe:Sofia"{
             ec{"โซเฟีย"}
         }
         "Europe:Stockholm"{
             ec{"สตอกโฮล์ม"}
+        }
+        "Europe:Tallinn"{
+            ec{"ทาลลินน์"}
         }
         "Europe:Tirane"{
             ec{"ติรานา"}
@@ -947,6 +1049,9 @@ th{
         }
         "Europe:Vaduz"{
             ec{"วาดุซ"}
+        }
+        "Europe:Vatican"{
+            ec{"วาติกัน"}
         }
         "Europe:Vienna"{
             ec{"เวียนนา"}
@@ -960,6 +1065,9 @@ th{
         "Europe:Warsaw"{
             ec{"วอร์ซอ"}
         }
+        "Europe:Zagreb"{
+            ec{"ซาเกร็บ"}
+        }
         "Europe:Zaporozhye"{
             ec{"ซาโปโรซี"}
         }
@@ -969,6 +1077,9 @@ th{
         "Indian:Antananarivo"{
             ec{"อันตานานาริโว"}
         }
+        "Indian:Chagos"{
+            ec{"ชากัส"}
+        }
         "Indian:Christmas"{
             ec{"คริสต์มาส"}
         }
@@ -977,6 +1088,12 @@ th{
         }
         "Indian:Comoro"{
             ec{"โคโมโร"}
+        }
+        "Indian:Kerguelen"{
+            ec{"แกร์เกอลอง"}
+        }
+        "Indian:Mahe"{
+            ec{"มาเอ"}
         }
         "Indian:Maldives"{
             ec{"มัลดีฟส์"}
@@ -1001,6 +1118,9 @@ th{
         }
         "Pacific:Easter"{
             ec{"อีสเตอร์"}
+        }
+        "Pacific:Efate"{
+            ec{"เอฟาเต"}
         }
         "Pacific:Enderbury"{
             ec{"เอนเดอร์เบอร์รี"}
@@ -1056,6 +1176,9 @@ th{
         "Pacific:Niue"{
             ec{"นีอูเอ"}
         }
+        "Pacific:Norfolk"{
+            ec{"นอร์ฟอล์ก"}
+        }
         "Pacific:Noumea"{
             ec{"นูเมอา"}
         }
@@ -1073,6 +1196,9 @@ th{
         }
         "Pacific:Port_Moresby"{
             ec{"พอร์ตมอร์สบี"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"ราโรตองกา"}
         }
         "Pacific:Saipan"{
             ec{"ไซปัน"}
@@ -1095,11 +1221,224 @@ th{
         "Pacific:Wallis"{
             ec{"วาลลิส"}
         }
+        "meta:Alaska"{
+            ld{"เวลาออมแสงของอะแลสกา"}
+            lg{"เวลาอะแลสกา"}
+            ls{"เวลามาตรฐานอะแลสกา"}
+        }
+        "meta:Amazon"{
+            lg{"เวลาอะเมซอน"}
+        }
+        "meta:America_Central"{
+            ld{"เวลาออมแสงทางตอนกลาง"}
+            lg{"เวลาตอนกลาง"}
+            ls{"เวลามาตรฐานตอนกลาง"}
+        }
+        "meta:America_Eastern"{
+            ld{"เวลาออมแสงทางตะวันออก"}
+            lg{"เวลาตะวันออก"}
+            ls{"เวลามาตรฐานตะวันออก"}
+        }
+        "meta:America_Mountain"{
+            ld{"เวลาออมแสงแถบภูเขา"}
+            lg{"เวลาแถบภูเขา"}
+            ls{"เวลามาตรฐานแถบภูเขา"}
+        }
+        "meta:America_Pacific"{
+            ld{"เวลาออมแสงของแปซิฟิก"}
+            lg{"เวลาแปซิฟิก"}
+            ls{"เวลามาตรฐานแปซิฟิก"}
+        }
+        "meta:Anadyr"{
+            ld{"เวลาฤดูร้อนอะนาดีร์"}
+            lg{"เวลาอะนาดีร์"}
+            ls{"เวลาอะนาดีร์"}
+        }
+        "meta:Argentina"{
+            ld{"เวลาฤดูร้อนอาร์เจนตินา"}
+            lg{"เวลาอาร์เจนตินา"}
+            ls{"เวลาอาร์เจนตินา"}
+        }
+        "meta:Argentina_Western"{
+            ld{"เวลาฤดูร้อนทางตะวันตกของอาร์เจนตินา"}
+            lg{"เวลาตะวันตกของอาร์เจนตินา"}
+            ls{"เวลาอาร์เจนตินาตะวันตก"}
+        }
+        "meta:Atlantic"{
+            ld{"เวลาออมแสงของแอตแลนติก"}
+            lg{"เวลาแอตแลนติก"}
+            ls{"เวลามาตรฐานแอตแลนติก"}
+        }
+        "meta:Australia_Central"{
+            ld{"เวลาออมแสงทางตอนกลางของออสเตรเลีย"}
+            lg{"เวลาออสเตรเลียกลาง"}
+            ls{"เวลามาตรฐานออสเตรเลียกลาง"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"เวลาออมแสงทางตะวันตกตอนกลางของออสเตรเลีย"}
+            lg{"เวลาออสเตรเลียตะวันตกกลาง"}
+            ls{"เวลามาตรฐานออสเตรเลียตะวันตกกลาง"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"เวลาออมแสงทางตะวันออกของออสเตรเลีย"}
+            lg{"เวลาออสเตรเลียตะวันออก"}
+            ls{"เวลามาตรฐานออสเตรเลียตะวันออก"}
+        }
+        "meta:Australia_Western"{
+            ld{"เวลาออมแสงทางตะวันตกของออสเตรเลีย"}
+            lg{"เวลาออสเตรเลียตะวันตก"}
+            ls{"เวลามาตรฐานออสเตรเลียตะวันตก"}
+        }
+        "meta:Brasilia"{
+            ld{"เวลาฤดูร้อนบราซิเลีย"}
+            lg{"เวลาบราซีเลีย"}
+            ls{"เวลาบราซิเลีย"}
+        }
+        "meta:Choibalsan"{
+            ld{"เวลาฤดูร้อนชอยปาลชาน"}
+            lg{"เวลาชอยปาลชาน"}
+            ls{"เวลาชอยปาลชาน"}
+        }
+        "meta:Europe_Central"{
+            ld{"เวลาฤดูร้อนยุโรปกลาง"}
+            ls{"เวลายุโรปกลาง"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"เวลาฤดูร้อนยุโรปตะวันออก"}
+            ls{"เวลายุโรปตะวันออก"}
+        }
+        "meta:Europe_Western"{
+            ld{"เวลาฤดูร้อนยุโรปตะวันตก"}
+            ls{"เวลายุโรปตะวันตก"}
+        }
+        "meta:Hawaii_Aleutian"{
+            lg{"เวลาฮาวาย-อาลิวเชียน"}
+        }
+        "meta:Hovd"{
+            ld{"เวลาฤดูร้อนฮอฟด์"}
+            lg{"เวลาฮอฟด์"}
+            ls{"เวลาฮอฟด์"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"เวลามหาสมุทรอินเดีย"}
+        }
+        "meta:Indonesia_Central"{
+            lg{"เวลาตอนกลางของอินโดนีเชีย"}
+        }
+        "meta:Indonesia_Eastern"{
+            lg{"เวลาตะวันออกของอินโดนีเชีย"}
+        }
+        "meta:Indonesia_Western"{
+            lg{"เวลาตะวันตกของอินโดนีเชีย"}
+        }
+        "meta:Irkutsk"{
+            ld{"เวลาฤดูร้อนอีร์คุตสค์"}
+            lg{"เวลาอีรคุตสค์"}
+            ls{"เวลาอีรคุตสค์"}
+        }
+        "meta:Kamchatka"{
+            ld{"เวลาฤดูร้อนเปโตรปัฟลอฟสค์-คัมชัตสกี"}
+            lg{"เวลาคัมชัตคา"}
+            ls{"เวลาเปโตรปัฟลอฟสค์-คัมชัตสกี"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ld{"เวลาฤดูร้อนทางตะวันออกของคาซัคสถาน"}
+            lg{"เวลาคาซัคสถานตะวันออก"}
+            ls{"เวลามาตรฐานคาซัคสถานตะวันออก"}
+        }
+        "meta:Kazakhstan_Western"{
+            ld{"เวลาฤดูร้อนทางตะวันตกของคาซัคสถาน"}
+            lg{"เวลาคาซัคสถานตะวันตก"}
+            ls{"เวลามาตรฐานคาซัคสถานตะวันตก"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"เวลาฤดูร้อนครัสโนยาสค์"}
+            lg{"เวลาครัสโนยาสค์"}
+            ls{"เวลาครัสโนยาสค์"}
+        }
+        "meta:Lord_Howe"{
+            ld{"เวลาออมแสงของลอร์ดโฮว์"}
+            lg{"เวลาลอร์ดโฮว"}
+            ls{"เวลามาตรฐานลอร์ดโฮว์"}
+        }
+        "meta:Macquarie"{
+            lg{"เวลาแมกควอรี"}
+        }
+        "meta:Magadan"{
+            ld{"เวลาฤดูร้อนมากาดาน"}
+            lg{"เวลามากาดาน"}
+            ls{"เวลามากาดาน"}
+        }
+        "meta:Mongolia"{
+            ld{"เวลาฤดูร้อนอูลานบาตอร์"}
+            lg{"เวลามองโกเลีย"}
+            ls{"เวลาอูลานบาตอร์"}
+        }
+        "meta:Moscow"{
+            ld{"เวลาฤดูร้อนมอสโก"}
+            lg{"เวลามอสโก"}
+            ls{"เวลามาตรฐานมอสโก"}
+        }
+        "meta:New_Zealand"{
+            ld{"เวลาออมแสงนิวซีแลนด์"}
+        }
+        "meta:Newfoundland"{
+            ld{"เวลาออมแสงนิวฟันด์แลนด์"}
+            lg{"เวลานิวฟันด์แลนด์"}
+            ls{"เวลามาตรฐานนิวฟันด์แลนด์"}
+        }
+        "meta:Noronha"{
+            ld{"เวลาฤดูร้อนเฟร์นันโดเดโนรอนฮา"}
+            lg{"เวลาโนรอนฮา"}
+            ls{"เวลาเฟร์นันโดเดโนรอนฮา"}
+        }
+        "meta:Novosibirsk"{
+            ld{"เวลาฤดูร้อนโนโวซีบีสค์"}
+            lg{"เวลาโนโวซีบีสค์"}
+            ls{"เวลาโนโวซีบีสค์"}
+        }
+        "meta:Omsk"{
+            ld{"เวลาฤดูร้อนออมสค์"}
+            lg{"เวลาออมสก์"}
+            ls{"เวลาออมสก์"}
+        }
+        "meta:Sakhalin"{
+            ld{"เวลาฤดูร้อนซาคาลิน"}
+            lg{"เวลาซาคาลิน"}
+            ls{"เวลาซาคาลิน"}
+        }
+        "meta:Samara"{
+            ld{"เวลาฤดูร้อนซามารา"}
+            lg{"เวลาซามารา"}
+            ls{"เวลาซามารา"}
+        }
         "meta:Samarkand"{
             ss{"SAMT (ซามาร์คันด์)"}
         }
+        "meta:Vladivostok"{
+            ld{"เวลาฤดูร้อนวลาดีวอสตอค"}
+            lg{"เวลาวลาดีวอสตอค"}
+            ls{"เวลาวลาดีวอสตอค"}
+        }
+        "meta:Volgograd"{
+            ld{"เวลาฤดูร้อนวอลโกกราด"}
+            lg{"เวลาวอลโกกราด"}
+            ls{"เวลาวอลโกกราด"}
+        }
+        "meta:Yakutsk"{
+            ld{"เวลาฤดูร้อนยาคุตสค์"}
+            lg{"เวลายาคุตสค์"}
+            ls{"เวลายาคุตสค์"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"เวลาฤดูร้อนเยคาเตรินบูร์ก"}
+            lg{"เวลาเยกาเตรินบุร์ก"}
+            ls{"เวลาเยคาเตรินบูร์ก"}
+        }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"เวลา {1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"เวลา {0}"}
     }
 }

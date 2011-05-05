@@ -16,7 +16,7 @@ sg{
             "dirâm tî âEmirâti tî Arâbo Ôko",
         }
         AOA{
-            "Kz",
+            "AOA",
             "kwânza tî Angoläa",
         }
         AUD{
@@ -24,11 +24,11 @@ sg{
             "dolära tî Ostralïi",
         }
         BHD{
-            "BD",
+            "BHD",
             "dolùara tî Bahrâina",
         }
         BIF{
-            "FBu",
+            "BIF",
             "farânga tî Burundïi",
         }
         BWP{
@@ -52,15 +52,15 @@ sg{
             "yuan renminbi tî Shîni",
         }
         CVE{
-            "CV$",
+            "CVE",
             "eskûêdo tî Kâpo-Vêre",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "farânga tî Dibutïi",
         }
         DZD{
-            "DA",
+            "DZD",
             "dinäri tî Alzerïi",
         }
         EGP{
@@ -68,11 +68,11 @@ sg{
             "pôndo tî Kâmitâ",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "nakafa tî Eritrëe",
         }
         ETB{
-            "Br",
+            "ETB",
             "bir tî Etiopïi",
         }
         EUR{
@@ -84,15 +84,15 @@ sg{
             "pôndo tî Anglëe",
         }
         GHC{
-            "₵",
-            "sêdi tî  Ganäa",
+            "GHC",
+            "sêdi tî Ganäa",
         }
         GMD{
             "GMD",
             "dalasi tî gambïi",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "sili tî Ginëe",
         }
         INR{
@@ -104,15 +104,15 @@ sg{
             "yêni tî Zapön",
         }
         KES{
-            "Ksh",
+            "KES",
             "shilîngi tî Kenyäa",
         }
         KMF{
-            "CF",
+            "KMF",
             "farânga tî Kömôro",
         }
         LRD{
-            "L$",
+            "LRD",
             "dolära tî Liberïa",
         }
         LSL{
@@ -120,7 +120,7 @@ sg{
             "loti tî Lesôtho",
         }
         LYD{
-            "LD",
+            "LYD",
             "dinäar tî Libïi",
         }
         MAD{
@@ -132,11 +132,11 @@ sg{
             "ariâri tî Madagasikära",
         }
         MRO{
-            "UM",
+            "MRO",
             "ugîya tî Moritanïi",
         }
         MUR{
-            "MURs",
+            "MUR",
             "rupïi tî Mörîsi",
         }
         MWK{
@@ -144,15 +144,15 @@ sg{
             "kwâtia tî Malawïi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "metikala tî Mozambîka",
         }
         NAD{
-            "N$",
+            "NAD",
             "dolära tî Namibïi",
         }
         NGN{
-            "₦",
+            "NGN",
             "nâîra tî Nizerïa",
         }
         RWF{
@@ -160,11 +160,11 @@ sg{
             "farânga tî Ruandäa",
         }
         SAR{
-            "SR",
+            "SAR",
             "riâli tî Saûdi Arabïi",
         }
         SCR{
-            "SRe",
+            "SCR",
             "rupïi tî Sëyshêle",
         }
         SDG{
@@ -172,19 +172,19 @@ sg{
             "pôndo tî Sudäan",
         }
         SHP{
-            "SH£",
+            "SHP",
             "pôndo tî Zûâ Sênt-Helêna",
         }
         SLL{
-            "Le",
+            "SLL",
             "leône tî Sierâ-Leône",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "shilîngi tî Somalïi",
         }
         STD{
-            "Db",
+            "STD",
             "dôbra tî Sâô Tomë na Prinsîpe",
         }
         SZL{
@@ -192,15 +192,15 @@ sg{
             "lilangùeni tî Swazïlânde",
         }
         TND{
-            "DT",
+            "TND",
             "dinära tî Tunizïi",
         }
         TZS{
-            "TSh",
+            "TZS",
             "shilîngi tî Tanzanïi",
         }
         UGX{
-            "USh",
+            "UGX",
             "shilîngi tî Ugandäa",
         }
         USD{
@@ -216,17 +216,17 @@ sg{
             "farânga CFA (BCEAO)",
         }
         ZAR{
-            "R",
+            "ZAR",
             "rânde tî Mbongo-Afrîka",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "kwâtia tî Zambïi",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "dolära tî Zimbäbwe",
         }
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.99"}
 }

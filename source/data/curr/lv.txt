@@ -16,7 +16,7 @@ lv{
             "Apvienoto Arābu Emirātu dirhēms",
         }
         AFN{
-            "Af",
+            "AFN",
             "Afganistānas afgāns",
         }
         ALL{
@@ -28,19 +28,19 @@ lv{
             "Armēnijas drams",
         }
         ANG{
-            "NAf.",
+            "ANG",
             "Nīderlandes Antiļu guldenis",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Angolas kvanza",
         }
         ARS{
-            "AR$",
+            "ARS",
             "Argentīnas peso",
         }
         ATS{
-            "ATS" /** ===  */,
+            "ATS",
             "Austrijas šiliņš",
         }
         AUD{
@@ -48,7 +48,7 @@ lv{
             "Austrālijas dolārs",
         }
         AWG{
-            "Afl.",
+            "AWG",
             "Arubas guldenis",
         }
         AZM{
@@ -56,23 +56,23 @@ lv{
             "Azerbaidžānas manats (1993-2006)",
         }
         AZN{
-            "man.",
+            "AZN",
             "Azerbaidžānas manats",
         }
         BAM{
-            "KM",
+            "BAM",
             "Bosnijas un Hercogovinas marka",
         }
         BBD{
-            "Bds$",
+            "BBD",
             "Barbadosas dolārs",
         }
         BDT{
-            "Tk",
+            "BDT",
             "Bangladešas taka",
         }
         BEF{
-            "BF",
+            "BEF",
             "Beļģijas franks",
         }
         BGN{
@@ -80,35 +80,35 @@ lv{
             "Bulgārijas leva",
         }
         BHD{
-            "BD",
+            "BHD",
             "Bahreinas dinārs",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Burundi franks",
         }
         BMD{
-            "BD$",
+            "BMD",
             "Bermudu dolārs",
         }
         BND{
-            "BN$",
+            "BND",
             "Brunejas dolārs",
         }
         BOB{
-            "Bs",
+            "BOB",
             "Bolīvijas boliviano",
         }
         BRL{
-            "R$",
+            "BR$",
             "Brazīlijas reāls",
         }
         BSD{
-            "BS$",
+            "BSD",
             "Bahamu dolārs",
         }
         BTN{
-            "Nu.",
+            "BTN",
             "Butānas ngultrums",
         }
         BWP{
@@ -120,7 +120,7 @@ lv{
             "Baltkrievijas rubelis",
         }
         BZD{
-            "BZ$",
+            "BZD",
             "Belizas dolārs",
         }
         CAD{
@@ -136,7 +136,7 @@ lv{
             "Šveices franks",
         }
         CLP{
-            "CL$",
+            "CLP",
             "Čīles peso",
         }
         CNY{
@@ -144,59 +144,59 @@ lv{
             "Ķīnas juaņa renminbi",
         }
         COP{
-            "CO$",
+            "COP",
             "Kolumbijas peso",
         }
         COU{
-            "COU" /** ===  */,
+            "COU",
             "Kolumbijas reāls",
         }
         CRC{
-            "₡",
+            "CRC",
             "Kostarikas kolons",
         }
         CUC{
-            "CUC$",
+            "CUC",
             "Kubas konvertējamais peso",
         }
         CUP{
-            "CU$",
+            "CUP",
             "Kubas peso",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Kaboverdes eskudo",
         }
         CYP{
-            "CY£",
+            "CYP",
             "Kipras mārciņa",
         }
         CZK{
-            "Kč",
+            "CZK",
             "Čehijas krona",
         }
         DEM{
-            "DM",
+            "DEM",
             "Vācijas marka",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Džibutijas franks",
         }
         DKK{
-            "Dkr",
+            "DKK",
             "Dānijas krona",
         }
         DOP{
-            "RD$",
+            "DOP",
             "Dominikānas peso",
         }
         DZD{
-            "DA",
+            "DZD",
             "Alžīrijas dinārs",
         }
         EEK{
-            "Ekr",
+            "EEK",
             "Igaunijas krona",
         }
         EGP{
@@ -204,15 +204,15 @@ lv{
             "Ēģiptes mārciņa",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Eritrejas nakfa",
         }
         ESP{
-            "Pts",
+            "ESP",
             "Spānijas peseta",
         }
         ETB{
-            "Br",
+            "ETB",
             "Etiopijas birs",
         }
         EUR{
@@ -220,19 +220,19 @@ lv{
             "eiro",
         }
         FIM{
-            "mk",
+            "FIM",
             "Somijas marka",
         }
         FJD{
-            "FJ$",
+            "FJD",
             "Fidži dolārs",
         }
         FKP{
-            "FK£",
+            "FKP",
             "Folklenda salu mārciņa",
         }
         FRF{
-            "₣",
+            "FRF",
             "Francijas franks",
         }
         GBP{
@@ -244,11 +244,11 @@ lv{
             "Gruzijas lari",
         }
         GHS{
-            "GH₵",
+            "GHS",
             "Ganas sedi",
         }
         GIP{
-            "GI£",
+            "GIP",
             "Gibraltāra mārciņa",
         }
         GMD{
@@ -256,11 +256,11 @@ lv{
             "Gambijas dalasi",
         }
         GNF{
-            "FG",
+            "GNF",
             "Gvinejas franks",
         }
         GRD{
-            "₯",
+            "GRD",
             "Grieķijas drahma",
         }
         GTQ{
@@ -268,7 +268,7 @@ lv{
             "Gvatemalas ketsals",
         }
         GYD{
-            "GY$",
+            "GYD",
             "Gajānas dolārs",
         }
         HKD{
@@ -280,7 +280,7 @@ lv{
             "Hondurasas lempīra",
         }
         HRK{
-            "kn",
+            "HRK",
             "Horvātijas kuna",
         }
         HTG{
@@ -288,15 +288,15 @@ lv{
             "Haiti gurds",
         }
         HUF{
-            "Ft",
+            "HUF",
             "Ungārijas forints",
         }
         IDR{
-            "Rp",
+            "IDR",
             "Indonēzijas rūpija",
         }
         IEP{
-            "IR£",
+            "IEP",
             "Īrijas mārciņa",
         }
         ILS{
@@ -316,19 +316,19 @@ lv{
             "Irānas riāls",
         }
         ISK{
-            "Ikr",
+            "ISK",
             "Īslandes krona",
         }
         ITL{
-            "IT₤",
+            "ITL",
             "Itālijas lira",
         }
         JMD{
-            "J$",
+            "JMD",
             "Jamaikas dolārs",
         }
         JOD{
-            "JD",
+            "JOD",
             "Jordānas dinārs",
         }
         JPY{
@@ -336,7 +336,7 @@ lv{
             "Japānas jena",
         }
         KES{
-            "Ksh",
+            "KES",
             "Kenijas šiliņš",
         }
         KGS{
@@ -348,7 +348,7 @@ lv{
             "Kambodžas riels",
         }
         KMF{
-            "CF",
+            "KMF",
             "Komoru franks",
         }
         KPW{
@@ -360,11 +360,11 @@ lv{
             "Dienvidkorejas vona",
         }
         KWD{
-            "KD",
+            "KWD",
             "Kuveitas dinārs",
         }
         KYD{
-            "KY$",
+            "KYD",
             "Kaimanu salu dolārs",
         }
         KZT{
@@ -372,19 +372,19 @@ lv{
             "Kazahstānas tenge",
         }
         LAK{
-            "₭",
+            "LAK",
             "Laosas kips",
         }
         LBP{
-            "LB£",
+            "LBP",
             "Libānas mārciņa",
         }
         LKR{
-            "SLRs",
+            "LKR",
             "Šrilankas rūpija",
         }
         LRD{
-            "L$",
+            "LRD",
             "Libērijas dolārs",
         }
         LSL{
@@ -392,11 +392,11 @@ lv{
             "Lesoto loti",
         }
         LTL{
-            "Lt",
+            "LTL",
             "Lietuvas lits",
         }
         LUF{
-            "LUF" /** ===  */,
+            "LUF",
             "Luksemburgas franks",
         }
         LVL{
@@ -404,11 +404,11 @@ lv{
             "Latvijas lats",
         }
         LVR{
-            "LVR" /** ===  */,
+            "LVR",
             "Latvijas rublis",
         }
         LYD{
-            "LD",
+            "LYD",
             "Lībijas dinārs",
         }
         MAD{
@@ -428,7 +428,7 @@ lv{
             "Maķedonijas denārs",
         }
         MLF{
-            "MLF" /** ===  */,
+            "MLF",
             "CFA (Āfrikas) franks",
         }
         MMK{
@@ -436,27 +436,27 @@ lv{
             "Mjanmas kjats",
         }
         MNT{
-            "₮",
+            "MNT",
             "Mongolijas tugriks",
         }
         MOP{
-            "MOP$",
+            "MOP",
             "Makao pataka",
         }
         MRO{
-            "UM",
+            "MRO",
             "Mauritānijas ugija",
         }
         MTL{
-            "Lm",
+            "MTL",
             "Maltas lira",
         }
         MTP{
-            "MT£",
+            "MTP",
             "Maltas mārciņa",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Maurīcijas rūpija",
         }
         MVR{
@@ -472,43 +472,43 @@ lv{
             "Meksikas peso",
         }
         MYR{
-            "RM",
+            "MYR",
             "Malaizijas ringits",
         }
         MZE{
-            "MZE" /** ===  */,
+            "MZE",
             "Mozambikas eskudo",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Mozambikas vecais metikals",
         }
         MZN{
-            "MTn",
+            "MZN",
             "Mozambikas metikals",
         }
         NAD{
-            "N$",
+            "NAD",
             "Namībijas dolārs",
         }
         NGN{
-            "₦",
+            "NGN",
             "Nigērijas naira",
         }
         NIO{
-            "C$",
+            "NIO",
             "Kordovas oro",
         }
         NLG{
-            "fl",
+            "NLG",
             "Nīderlandes guldenis",
         }
         NOK{
-            "Nkr",
+            "NOK",
             "Norvēģijas krona",
         }
         NPR{
-            "NPRs",
+            "NPR",
             "Nepālas rūpija",
         }
         NZD{
@@ -520,11 +520,11 @@ lv{
             "Omānas riāls",
         }
         PAB{
-            "B/.",
+            "PAB",
             "Panamas balboa",
         }
         PEN{
-            "S/.",
+            "PEN",
             "Peru jaunais sols",
         }
         PGK{
@@ -532,27 +532,27 @@ lv{
             "Papua-Jaungvinejas kina",
         }
         PHP{
-            "₱",
+            "PHP",
             "Filipīnu peso",
         }
         PKR{
-            "PKRs",
+            "PKR",
             "Pakistānas rūpija",
         }
         PLN{
-            "zł",
+            "PLN",
             "Polijas zlots",
         }
         PTE{
-            "Esc",
+            "PTE",
             "Portugāles eskudo",
         }
         PYG{
-            "₲",
+            "PYG",
             "Paragvajas guarani",
         }
         QAR{
-            "QR",
+            "QAR",
             "Kataras riāls",
         }
         ROL{
@@ -564,7 +564,7 @@ lv{
             "Rumānijas leja",
         }
         RSD{
-            "din.",
+            "RSD",
             "Serbijas dinārs",
         }
         RUB{
@@ -576,15 +576,15 @@ lv{
             "Ruandas franks",
         }
         SAR{
-            "SR",
+            "SAR",
             "Saūda riāls",
         }
         SBD{
-            "SI$",
+            "SBD",
             "Zālamana Salu dolārs",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Seišelu salu rūpija",
         }
         SDG{
@@ -592,51 +592,51 @@ lv{
             "Sudānas mārciņa",
         }
         SEK{
-            "Skr",
+            "SEK",
             "Zviedrijas krona",
         }
         SGD{
-            "S$",
+            "SGD",
             "Singapūras dolārs",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Sv.Helēnas salas mārciņa",
         }
         SIT{
-            "SIT" /** ===  */,
+            "SIT",
             "Slovēnijas tolars",
         }
         SKK{
-            "Sk",
+            "SKK",
             "Slovakijas krona",
         }
         SLL{
-            "Le",
+            "SLL",
             "Sjerraleones leone",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Somālijas šiliņš",
         }
         SRD{
-            "SR$",
+            "SRD",
             "Surinamas dolārs",
         }
         SRG{
-            "Sf",
+            "SRG",
             "Surinamas guldenis",
         }
         STD{
-            "Db",
+            "STD",
             "Santome un Prinsipi dobra",
         }
         SVC{
-            "SV₡",
+            "SVC",
             "Salvadoras kolons",
         }
         SYP{
-            "SY£",
+            "SYP",
             "Sīrijas mārciņa",
         }
         SZL{
@@ -660,11 +660,11 @@ lv{
             "Turkmenistānas jaunais manats",
         }
         TND{
-            "DT",
+            "TND",
             "Tunisijas dinārs",
         }
         TOP{
-            "T$",
+            "TOP",
             "Tongas paanga",
         }
         TRL{
@@ -672,11 +672,11 @@ lv{
             "Turcijas lira",
         }
         TRY{
-            "TL",
+            "TRY",
             "Turcijas jaunā lira",
         }
         TTD{
-            "TT$",
+            "TTD",
             "Trinidādas un Tobāgo dolārs",
         }
         TWD{
@@ -684,23 +684,23 @@ lv{
             "Taivānas jaunais dolārs",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Tanzānijas šiliņš",
         }
         UAH{
-            "₴",
+            "UAH",
             "Ukrainas grivna",
         }
         UGX{
-            "USh",
+            "UGX",
             "Ugandas šiliņš",
         }
         USD{
-            "US$",
+            "$",
             "ASV dolārs",
         }
         UYU{
-            "$U",
+            "UYU",
             "Urugvajas peso",
         }
         UZS{
@@ -708,11 +708,11 @@ lv{
             "Uzbekistānas sums",
         }
         VEB{
-            "VEB" /** ===  */,
+            "VEB",
             "Venecuēlas bolivārs",
         }
         VEF{
-            "Bs.F.",
+            "VEF",
             "Venecuēlas stiprais bolivārs",
         }
         VND{
@@ -720,11 +720,11 @@ lv{
             "Vjetnamas dongi",
         }
         VUV{
-            "VT",
+            "VUV",
             "Vanuatu vatu",
         }
         WST{
-            "WS$",
+            "WST",
             "Samoa tala",
         }
         XAF{
@@ -764,7 +764,7 @@ lv{
             "Speciālās aizņēmuma tiesības",
         }
         XEU{
-            "XEU" /** ===  */,
+            "XEU",
             "Eiropas norēķinu vienība",
         }
         XFO{
@@ -797,22 +797,22 @@ lv{
         }
         XXX{
             "XXX",
-            "nezināma vai nederīga valūta",
+            "Nezināma valūta",
         }
         YER{
-            "YR",
+            "YER",
             "Jemenas riāls",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Dienvidāfrikas rands",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Zambijas kvača",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabves dolārs",
         }
         ZWL{
@@ -897,10 +897,40 @@ lv{
             other{"Bahreinas dināri"}
             zero{"Bahreinas dināri"}
         }
+        BRL{
+            one{"Brazīlijas reāls"}
+            other{"Brazīlijas reāli"}
+            zero{"Brazīlijas reāli"}
+        }
+        CNY{
+            one{"Ķīnas juaņa renminbi"}
+            other{"Ķīnas juaņa renminbi"}
+            zero{"Ķīnas juaņa renminbi"}
+        }
         CUC{
             one{"Kubas konvertējamais peso"}
             other{"Kubas konvertējamie peso"}
             zero{"Kubas konvertējamie peso"}
+        }
+        EUR{
+            one{"eiro"}
+            other{"eiro"}
+            zero{"eiro"}
+        }
+        GBP{
+            one{"Lielbritānijas sterliņu mārciņa"}
+            other{"Lielbritānijas sterliņu mārciņas"}
+            zero{"Lielbritānijas sterliņu mārciņas"}
+        }
+        INR{
+            one{"Indijas rūpija"}
+            other{"Indijas rūpijas"}
+            zero{"Indijas rūpijas"}
+        }
+        JPY{
+            one{"Japānas jena"}
+            other{"Japānas jenas"}
+            zero{"Japānas jenas"}
         }
         KHR{
             one{"Kambodžas riels"}
@@ -920,6 +950,11 @@ lv{
         KZT{
             zero{"Kazahstānas tenge"}
         }
+        LVL{
+            one{"Latvijas lats"}
+            other{"Latvijas lati"}
+            zero{"Latvijas lati"}
+        }
         MZM{
             one{"Mozambikas vecais metikals"}
             other{"Mozambikas vecie metikali"}
@@ -935,6 +970,11 @@ lv{
             other{"Rumānijas vecās levas"}
             zero{"Rumānijas vecās levas"}
         }
+        RUB{
+            one{"Krievijas rublis"}
+            other{"Krievijas rubļi"}
+            zero{"Krievijas rubļi"}
+        }
         SYP{
             one{"Sīrijas mārciņa"}
             other{"Sīrijas mārciņas"}
@@ -944,6 +984,11 @@ lv{
             one{"Turkmenistānas jaunais manats"}
             other{"Turkmenistānas jaunie manati"}
             zero{"Turkmenistānas jaunie manati"}
+        }
+        USD{
+            one{"ASV dolārs"}
+            other{"ASV dolāri"}
+            zero{"ASV dolāri"}
         }
         XAF{
             one{"Centrālāfrikas CFA franks"}
@@ -980,6 +1025,11 @@ lv{
             other{"testa valūtas kods"}
             zero{"testa valūtas kods"}
         }
+        XXX{
+            one{"nezināmas/nederīgas valūtas vienība"}
+            other{"nezināmas valūtas vienības"}
+            zero{"nezināmas valūtas vienības"}
+        }
         ZWL{
             one{"Zimbabves dollārs (2009)"}
             other{"Zimbabves dollāri (2009)"}
@@ -991,5 +1041,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.53.45"}
+    Version{"2.0.58.6"}
 }

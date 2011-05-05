@@ -16,7 +16,7 @@ ha{
             "Kuɗin Haɗaɗɗiyar Daular Larabawa",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kuɗin Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ ha{
             "Dalar Ostareliya",
         }
         BHD{
-            "BD",
+            "BHD",
             "Kuɗin Baharan",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Kuɗin Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ ha{
             "Kuɗin Caina/Sin",
         }
         CVE{
-            "CV$",
-            "Kuɗin  Tsibiran Kap Barde",
+            "CVE",
+            "Kuɗin Tsibiran Kap Barde",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Kuɗin Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Kuɗin Aljeriya",
         }
         EGP{
@@ -68,11 +68,11 @@ ha{
             "Fam kin Masar",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Kuɗin Eritireya",
         }
         ETB{
-            "Br",
+            "ETB",
             "Kuɗin Habasha",
         }
         EUR{
@@ -84,7 +84,7 @@ ha{
             "Fam kin Ingila",
         }
         GHC{
-            "₵",
+            "GHC",
             "Cedi",
         }
         GMD{
@@ -92,7 +92,7 @@ ha{
             "Kuɗin Gambiya",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Kuɗin Gini",
         }
         INR{
@@ -104,15 +104,15 @@ ha{
             "Kuɗin Japan",
         }
         KES{
-            "Ksh",
+            "KES",
             "Sulen Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Kuɗin Kwamoras",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dalar Laberiya",
         }
         LSL{
@@ -120,7 +120,7 @@ ha{
             "Kuɗin Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Kuɗin Libiya",
         }
         MAD{
@@ -132,11 +132,11 @@ ha{
             "Kuɗin Madagaskar",
         }
         MRO{
-            "UM",
+            "MRO",
             "Kuɗin Moritaniya",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Kuɗin Moritus",
         }
         MWK{
@@ -144,11 +144,11 @@ ha{
             "Kuɗin Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Kuɗin Mozambik",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dalar Namibiya",
         }
         NGN{
@@ -160,11 +160,11 @@ ha{
             "Kuɗin Ruwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyal",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Kuɗin Saishal",
         }
         SDG{
@@ -172,19 +172,19 @@ ha{
             "Fam kin Sudan",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Fam kin San Helena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Kuɗin Salewo",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Sulen Somaliya",
         }
         STD{
-            "Db",
+            "STD",
             "Kuɗin Sawo Tome da Paransip",
         }
         SZL{
@@ -192,15 +192,15 @@ ha{
             "Kuɗin Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Kuɗin Tunisiya",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Sulen Tanzaniya",
         }
         UGX{
-            "USh",
+            "UGX",
             "Sule Yuganda",
         }
         USD{
@@ -216,17 +216,17 @@ ha{
             "Kuɗin Sefa na Afirka Ta Yamma",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Kuɗin Afirka Ta Kudu",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kuɗin Zambiya",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dalar zimbabuwe",
         }
     }
-    Version{"2.0.47.68"}
+    Version{"2.0.58.6"}
 }

@@ -14,6 +14,7 @@ it{
     ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ó ò p q r s t u ù v w x y z]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
+    ExemplarCharactersPunctuation{"[\- — , ; \: ! ? . … “ ” ( ) \[ \] \{ \} @ /]"}
     LocaleScript{
         "Latn",
     }
@@ -28,10 +29,15 @@ it{
             symbols{
                 decimal{","}
                 group{"."}
+                infinity{"∞"}
+                minusSign{"-"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -81,6 +87,11 @@ it{
                 yyQQQQ{"QQQQ y G"}
                 yyyyMMMM{"MMMM y G"}
             }
+            eras{
+                abbreviated{
+                    "EB",
+                }
+            }
         }
         gregorian{
             AmPmMarkers{
@@ -103,6 +114,7 @@ it{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -212,18 +224,33 @@ it{
                 }
                 month{
                     dn{"mese"}
+                    relative{
+                        "-1"{"Mese scorso"}
+                        "0"{"Questo mese"}
+                        "1"{"Mese prossimo"}
+                    }
                 }
                 second{
                     dn{"secondo"}
                 }
                 week{
                     dn{"settimana"}
+                    relative{
+                        "-1"{"Settimana scorsa"}
+                        "0"{"Questa settimana"}
+                        "1"{"Settimana prossima"}
+                    }
                 }
                 weekday{
                     dn{"giorno della settimana"}
                 }
                 year{
                     dn{"anno"}
+                    relative{
+                        "-1"{"Anno scorso"}
+                        "0"{"Questo anno"}
+                        "1"{"Anno prossimo"}
+                    }
                 }
                 zone{
                     dn{"zona"}
@@ -344,6 +371,20 @@ it{
                         "nov",
                         "dic",
                     }
+                    narrow{
+                        "G",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "G",
+                        "L",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "gennaio",
                         "febbraio",
@@ -360,6 +401,20 @@ it{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "gen",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "mag",
+                        "giu",
+                        "lug",
+                        "ago",
+                        "set",
+                        "ott",
+                        "nov",
+                        "dic",
+                    }
                     narrow{
                         "G",
                         "F",
@@ -398,11 +453,31 @@ it{
                         "T3",
                         "T4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1o trimestre",
                         "2o trimestre",
                         "3o trimestre",
                         "4o trimestre",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "1º trimestre",
+                        "2º trimestre",
+                        "3º trimestre",
+                        "4º trimestre",
                     }
                 }
             }
@@ -458,8 +533,6 @@ it{
                 abbreviated{
                     "AH",
                 }
-                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
-                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
             }
             monthNames{
                 default{"format"}
@@ -479,7 +552,6 @@ it{
                         "Dhuʻl-H.",
                     }
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Muharram",
                         "Safar",
@@ -496,7 +568,6 @@ it{
                     }
                 }
                 stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
                     narrow{
                         "1",
                         "2",
@@ -511,7 +582,6 @@ it{
                         "11",
                         "12",
                     }
-                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                 }
             }
         }
@@ -629,6 +699,7 @@ it{
         }
     }
     measurementSystemNames{
+        UK{"britannico"}
         US{"USA"}
         metric{"metrico"}
     }
@@ -637,29 +708,113 @@ it{
             one{"{0} giorno"}
             other{"{0} giorni"}
         }
+        day-future{
+            0{"Tra 0 giorni"}
+            1{"In 1 day"}
+            one{"tra {0} giorno"}
+            other{"tra {0} giorni"}
+        }
+        day-past{
+            0{"0 giorni fa"}
+            1{"1 day ago"}
+            one{"{0} giorno fa"}
+            other{"{0} giorni fa"}
+        }
         hour{
             one{"{0} ora"}
             other{"{0} ore"}
+        }
+        hour-future{
+            0{"Tra 0 ore"}
+            1{"In 1 hour"}
+            one{"tra {0} ora"}
+            other{"tra {0} ore"}
+        }
+        hour-past{
+            0{"0 ore fa"}
+            1{"1 hour ago"}
+            one{"{0} ora fa"}
+            other{"{0} ore fa"}
         }
         minute{
             one{"{0} minuto"}
             other{"{0} minuti"}
         }
+        minute-future{
+            0{"Tra 0 minuti"}
+            1{"In 1 minute"}
+            one{"tra {0} minuto"}
+            other{"tra {0} minuti"}
+        }
+        minute-past{
+            0{"0 minuti fa"}
+            1{"1 minute ago"}
+            one{"{0} minuto fa"}
+            other{"{0} minuti fa"}
+        }
         month{
             one{"{0} mese"}
             other{"{0} mesi"}
+        }
+        month-future{
+            0{"Tra 0 mesi"}
+            1{"In 1 month"}
+            one{"tra {0} mese"}
+            other{"tra {0} mesi"}
+        }
+        month-past{
+            0{"0 mesi fa"}
+            1{"1 month ago"}
+            one{"{0} mese fa"}
+            other{"{0} mesi fa"}
         }
         second{
             one{"{0} secondo"}
             other{"{0} secondi"}
         }
+        second-future{
+            0{"In 0 secondi"}
+            1{"In 1 second"}
+            one{"tra {0} secondo"}
+            other{"tra {0} secondi"}
+        }
+        second-past{
+            0{"0 secondi fa"}
+            1{"1 second ago"}
+            one{"{0} secondo fa"}
+            other{"{0} secondi fa"}
+        }
         week{
             one{"{0} settimana"}
             other{"{0} settimane"}
         }
+        week-future{
+            0{"Tra 0 settimane"}
+            1{"In 1 week"}
+            one{"tra {0} settimana"}
+            other{"tra {0} settimane"}
+        }
+        week-past{
+            0{"0 settimane fa"}
+            1{"1 week ago"}
+            one{"{0} settimana fa"}
+            other{"{0} settimane fa"}
+        }
         year{
             one{"{0} anno"}
             other{"{0} anni"}
+        }
+        year-future{
+            0{"Tra 0 anni"}
+            1{"In 1 year"}
+            one{"tra {0} anno"}
+            other{"tra {0} anni"}
+        }
+        year-past{
+            0{"0 anni fa"}
+            1{"1 year ago"}
+            one{"{0} anno fa"}
+            other{"{0} anni fa"}
         }
     }
     unitsShort{

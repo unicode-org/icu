@@ -61,7 +61,7 @@ ko{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -120,6 +120,23 @@ ko{
                 }
             }
         }
+        chinese{
+            DateTimePatterns{
+                "a h시 m분 s초 zzzz",
+                "a h시 m분 s초 z",
+                "a h:mm:ss",
+                "a h:mm",
+                "y'x'G-Ml-d EEEE",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "오전",
@@ -169,7 +186,7 @@ ko{
                 yMd{"yyyy. M. d."}
                 yQ{"y년 Q분기"}
                 yQQQ{"y년 QQQ"}
-                yyMM{"YY. M."}
+                yyMM{"yy. M."}
                 yyMMM{"yy년 MMM"}
                 yyQ{"yy년 Q분기"}
                 yyyyMM{"yyyy. MM"}
@@ -244,24 +261,57 @@ ko{
                 }
                 month{
                     dn{"월"}
+                    relative{
+                        "-1"{"지난달"}
+                        "0"{"이번 달"}
+                        "1"{"다음 달"}
+                    }
                 }
                 second{
                     dn{"초"}
                 }
                 week{
                     dn{"주"}
+                    relative{
+                        "-1"{"지난주"}
+                        "0"{"이번 주"}
+                        "1"{"다음 주"}
+                    }
                 }
                 weekday{
                     dn{"요일"}
                 }
                 year{
                     dn{"년"}
+                    relative{
+                        "-1"{"지난해"}
+                        "0"{"올해"}
+                        "1"{"내년"}
+                    }
                 }
                 zone{
                     dn{"시간대"}
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH ~ HH시"}
+                    a{"HH시 ~ HH시"}
+                }
+                Hm{
+                    H{"HH:mm ~ HH:mm"}
+                    a{"HH:mm ~ HH:mm"}
+                    m{"HH:mm ~ HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm ~ HH:mm v"}
+                    a{"HH:mm ~ HH:mm v"}
+                    m{"HH:mm ~ HH:mm v"}
+                }
+                Hv{
+                    H{"HH ~ HH시 v"}
+                    a{"HH시 ~ HH시 v"}
+                }
                 M{
                     M{"M월 ~ M월"}
                 }
@@ -386,6 +436,12 @@ ko{
                         "2분기",
                         "3분기",
                         "4분기",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                     wide{
                         "제 1/4분기",
@@ -752,31 +808,108 @@ ko{
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
+    listPattern{
+        standard{
+            2{"{0} 및 {1}"}
+            end{"{0} 및 {1}"}
+        }
+    }
     measurementSystemNames{
-        US{"US"}
+        UK{"영국"}
+        US{"미국"}
         metric{"미터법"}
     }
     units{
         day{
             other{"{0}일"}
         }
+        day-future{
+            0{"0일 후"}
+            1{"1일 후"}
+            other{"{0}일 후"}
+        }
+        day-past{
+            0{"0일 전"}
+            1{"1일 전"}
+            other{"{0}일 전"}
+        }
         hour{
             other{"{0}시간"}
+        }
+        hour-future{
+            0{"0시간 후"}
+            1{"1시간 후"}
+            other{"{0}시간 후"}
+        }
+        hour-past{
+            0{"0시간 전"}
+            1{"1시간 전"}
+            other{"{0}시간 전"}
         }
         minute{
             other{"{0}분"}
         }
+        minute-future{
+            0{"0분 후"}
+            1{"1분 후"}
+            other{"{0}분 후"}
+        }
+        minute-past{
+            0{"0분 전"}
+            1{"1분 전"}
+            other{"{0}분 전"}
+        }
         month{
             other{"{0}개월"}
+        }
+        month-future{
+            0{"0개월 후"}
+            1{"1개월 후"}
+            other{"{0}개월 후"}
+        }
+        month-past{
+            0{"0개월 전"}
+            1{"1개월 전"}
+            other{"{0}개월 전"}
         }
         second{
             other{"{0}초"}
         }
+        second-future{
+            0{"0초 후"}
+            1{"1초 후"}
+            other{"{0}초 후"}
+        }
+        second-past{
+            0{"0초 전"}
+            1{"1초 전"}
+            other{"{0}초 전"}
+        }
         week{
             other{"{0}주"}
         }
+        week-future{
+            0{"0주 후"}
+            1{"1주 후"}
+            other{"{0}주 후"}
+        }
+        week-past{
+            0{"0주 전"}
+            1{"1주 전"}
+            other{"{0}주 전"}
+        }
         year{
             other{"{0}년"}
+        }
+        year-future{
+            0{"0년 후"}
+            1{"1년 후"}
+            other{"{0}년 후"}
+        }
+        year-past{
+            0{"0년 전"}
+            1{"1년 전"}
+            other{"{0}년 전"}
         }
     }
     unitsShort{

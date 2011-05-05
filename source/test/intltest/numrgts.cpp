@@ -1032,11 +1032,11 @@ void NumberFormatRegressionTest::Test4071014 (void)
     UnicodeString tempString;
     /* user error :
     String expectedDefault = "-5.789,987";
-    String expectedCurrency = "5.789,98 DM";
+    String expectedCurrency = "5.789,98 DEM";
     String expectedPercent = "-578.998%";
     */
     UnicodeString expectedDefault("-5.789,988");
-    UnicodeString expectedCurrency("5.789,99\\u00A0DM");
+    UnicodeString expectedCurrency("5.789,99\\u00A0DEM");
     UnicodeString expectedPercent("-578.999\\u00A0%");
 
     expectedCurrency = expectedCurrency.unescape();
@@ -1104,7 +1104,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     String expectedPercent = "-578.998%";
     */
     UnicodeString expectedDefault("-5.789,988");
-    UnicodeString expectedCurrency("-IT\\u20A4\\u00A05.790", -1, US_INV);
+    UnicodeString expectedCurrency("-ITL\\u00A05.790", -1, US_INV);
     UnicodeString expectedPercent("-578.999%");
     expectedCurrency = expectedCurrency.unescape();
 

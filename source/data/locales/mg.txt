@@ -23,7 +23,7 @@ mg{
             }
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.58.12"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -43,6 +43,7 @@ mg{
             }
             availableFormats{
                 M{"M"}
+                MEd{"EEE d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"EEE d MMMM"}
@@ -52,7 +53,6 @@ mg{
                 MMd{"d/MM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
-                Med{"EEE d/M"}
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}

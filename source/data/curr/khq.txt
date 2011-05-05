@@ -16,7 +16,7 @@ khq{
             "Laaraw Immaara Margantey Dirham",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Angoola Kwanza",
         }
         AUD{
@@ -24,11 +24,11 @@ khq{
             "Ostraali Dollar",
         }
         BHD{
-            "BD",
+            "BHD",
             "Bahareen Dinar",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Burundi Fraŋ",
         }
         BWP{
@@ -52,15 +52,15 @@ khq{
             "Sinwa Yuan Renminbi",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Kapuver Escudo",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Jibuuti Fraŋ",
         }
         DZD{
-            "DA",
+            "DZD",
             "Alžeeri Dinar",
         }
         EGP{
@@ -68,11 +68,11 @@ khq{
             "Misra Pund",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Eritree Nafka",
         }
         ETB{
-            "Br",
+            "ETB",
             "Ecioopi Birr",
         }
         EUR{
@@ -84,7 +84,7 @@ khq{
             "Britin Pund",
         }
         GHC{
-            "₵",
+            "GHC",
             "Gaana Šiidi",
         }
         GMD{
@@ -92,7 +92,7 @@ khq{
             "Gambi Dalasi",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Ginee Fraŋ",
         }
         INR{
@@ -104,15 +104,15 @@ khq{
             "Jaapoŋ Yen",
         }
         KES{
-            "Ksh",
+            "KES",
             "Keeniya Šiiliŋ",
         }
         KMF{
-            "CF",
+            "KMF",
             "Komoor Fraŋ",
         }
         LRD{
-            "L$",
+            "LRD",
             "Liberia Dollar",
         }
         LSL{
@@ -120,7 +120,7 @@ khq{
             "Leezoto Loti",
         }
         LYD{
-            "LD",
+            "LYD",
             "Liibi Dinar",
         }
         MAD{
@@ -132,11 +132,11 @@ khq{
             "Malgaaši Fraŋ",
         }
         MRO{
-            "UM",
+            "MRO",
             "Mooritaani Ugiya",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Mooris Rupii",
         }
         MWK{
@@ -144,15 +144,15 @@ khq{
             "Malaawi Kwaca",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Mozambik Metikal",
         }
         NAD{
-            "N$",
+            "NAD",
             "Naamibi Dollar",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naajiriya Neera",
         }
         RWF{
@@ -160,11 +160,11 @@ khq{
             "Rwanda Fraŋ",
         }
         SAR{
-            "SR",
+            "SAR",
             "Saudiya Riyal",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Seešel Rupii",
         }
         SDG{
@@ -172,23 +172,23 @@ khq{
             "Suudaŋ Dinar",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Suudaŋ Pund",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Seŋ Helena Fraŋ",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leeon",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Somaali Šiiliŋ",
         }
         STD{
-            "Db",
+            "STD",
             "Sao Tome nda Prinsipe Dobra",
         }
         SZL{
@@ -196,15 +196,15 @@ khq{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Tunizi Dinar",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Tanzaani Šiiliŋ",
         }
         UGX{
-            "USh",
+            "UGX",
             "Uganda Šiiliŋ",
         }
         USD{
@@ -220,17 +220,17 @@ khq{
             "CFA Fraŋ (BCEAO)",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Hawasa Afriki Rand",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Zambi Kwaca",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabwe Dollar",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.57.99"}
 }
