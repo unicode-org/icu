@@ -12,6 +12,7 @@
 #include "unicode/udateintervalformat.h"
 #include "unicode/dtitvfmt.h"
 #include "unicode/dtintrv.h"
+#include "unicode/localpointer.h"
 #include "unicode/timezone.h"
 #include "unicode/locid.h"
 #include "unicode/unistr.h"
@@ -21,31 +22,36 @@ U_NAMESPACE_USE
 
 U_CAPI UDateIntervalFormat* U_EXPORT2
 udtitvfmt_open(const char*  locale,
-              const UChar* skeleton,
-              int32_t      skeletonLength,
-              const UChar* tzID,
-              int32_t      tzIDLength,
-              UErrorCode*  status)
+               const UChar* skeleton,
+               int32_t      skeletonLength,
+               const UChar* tzID,
+               int32_t      tzIDLength,
+               UErrorCode*  status)
 {
     if (U_FAILURE(*status)) {
-        return 0;
+        return NULL;
+    }
+    if ((skeleton == NULL ? skeletonLength != 0 : skeletonLength < -1) ||
+        (tzID == NULL ? tzIDLength != 0 : tzIDLength < -1)
+    ) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
     UnicodeString skel((UBool)(skeletonLength == -1), skeleton, skeletonLength);
-    DateIntervalFormat* formatter = DateIntervalFormat::createInstance(skel, Locale(locale), *status);
-    if (formatter == 0) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return 0;
+    LocalPointer<DateIntervalFormat> formatter(
+            DateIntervalFormat::createInstance(skel, Locale(locale), *status));
+    if (U_FAILURE(*status)) {
+        return NULL;
     }
     if(tzID != 0) {
         TimeZone *zone = TimeZone::createTimeZone(UnicodeString((UBool)(tzIDLength == -1), tzID, tzIDLength));
-        if(zone == 0) {
+        if(zone == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            delete formatter;
-            return 0;
+            return NULL;
         }
         formatter->adoptTimeZone(zone);
     }
-    return (UDateIntervalFormat*)formatter;
+    return (UDateIntervalFormat*)formatter.orphan();
 }
 
 
@@ -58,18 +64,22 @@ udtitvfmt_close(UDateIntervalFormat *formatter)
 
 U_CAPI int32_t U_EXPORT2
 udtitvfmt_format(const UDateIntervalFormat* formatter,
-                UDate           fromDate,
-                UDate           toDate,
-                UChar*          result,
-                int32_t         resultCapacity,
-                UFieldPosition* position,
-                UErrorCode*     status)
+                 UDate           fromDate,
+                 UDate           toDate,
+                 UChar*          result,
+                 int32_t         resultCapacity,
+                 UFieldPosition* position,
+                 UErrorCode*     status)
 {
     if (U_FAILURE(*status)) {
         return -1;
     }
+    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     UnicodeString res;
-    if (!(result==NULL && resultCapacity==0)) {
+    if (result != NULL) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
