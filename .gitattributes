@@ -17,7 +17,7 @@ icu4c/source/data/brkitr/en_US_POSIX.txt svneol=native#text/plain%3Bcharset%3Dut
 icu4c/source/data/brkitr/fi.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/he.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/ja.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/brkitr/khmerdict.txt -text
+icu4c/source/data/brkitr/khmerdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/line.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_fi.txt svneol=native#text/plain
 icu4c/source/data/brkitr/line_he.txt svneol=native#text/plain
