@@ -86,6 +86,9 @@ enum UMessagePatternApostropheMode {
      */
     UMSGPAT_APOS_DOUBLE_REQUIRED
 };
+/**
+ * @draft ICU 4.8
+ */
 typedef enum UMessagePatternApostropheMode UMessagePatternApostropheMode;
 
 /**
@@ -198,6 +201,9 @@ enum UMessagePatternPartType {
      */
     UMSGPAT_PART_TYPE_ARG_DOUBLE
 };
+/**
+ * @draft ICU 4.8
+ */
 typedef enum UMessagePatternPartType UMessagePatternPartType;
 
 /**
@@ -242,8 +248,14 @@ enum UMessagePatternArgType {
      */
     UMSGPAT_ARG_TYPE_SELECT
 };
+/**
+ * @draft ICU 4.8
+ */
 typedef enum UMessagePatternArgType UMessagePatternArgType;
 
+/**
+ * @draft ICU 4.8
+ */
 enum {
     /**
      * Return value from MessagePattern.validateArgumentName() for when
@@ -325,6 +337,7 @@ class MessagePatternPartsList;
  *       is the value of an explicit-number selector like "=2",
  *       otherwise the selector is a non-numeric identifier.
  *   <li>The REPLACE_NUMBER Part can occur only in an immediate sub-message of the pluralStyle.
+ * </ul>
  * <p>
  * This class is not intended for public subclassing.
  *
@@ -486,7 +499,6 @@ public:
      * countParts() will return 0.
      * @param mode The new UMessagePatternApostropheMode.
      * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
      */
     void clearPatternAndSetApostropheMode(UMessagePatternApostropheMode mode) {
         clear();
@@ -842,6 +854,8 @@ private:
      * @param start start index into the message string
      * @param limit limit index into the message string, must be start<limit
      * @param allowInfinity TRUE if U+221E is allowed (for ChoiceFormat)
+     * @param parseError
+     * @param errorCode
      */
     void parseDouble(int32_t start, int32_t limit, UBool allowInfinity,
                      UParseError *parseError, UErrorCode &errorCode);

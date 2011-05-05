@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2008, International Business Machines
+* Copyright (C) 1999-2011, International Business Machines
 * Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -652,7 +652,7 @@ private:
      *
      * <p>If this transliterator has a filter, break up the input text into runs
      * of unfiltered characters.  Pass each run to
-     * <subclass>.handleTransliterate().
+     * subclass.handleTransliterate().
      *
      * <p>In incremental mode, if rollback is TRUE, perform a special
      * incremental procedure in which several passes are made over the input

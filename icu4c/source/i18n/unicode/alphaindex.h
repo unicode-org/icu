@@ -81,7 +81,7 @@ class UVector;
  * class AlphabeticIndex supports the creation of a UI index appropriate for a given language, such as:
  *
  * <pre>
- *  <b>... A B C D E F G H I J K L M N O P Q R S T U V W X Y Z \u00C6 \u00D8 \u00C5 ...</b>
+ *  <b>... A B C D E F G H I J K L M N O P Q R S T U V W X Y Z \\u00C6 \\u00D8 \\u00C5 ...</b>
  *
  *  <b>A</b>
  *     Addison
@@ -154,9 +154,9 @@ class UVector;
  * <li>Additional collation parameters can be passed in as part of the locale name.
  *     For example, German plus numeric
  *     sorting would be "de@kn-true".
+ * </ul>
  *
- * @draft ICU 4.8
- * @provisional This API might change or be removed in a future release.
+ * @draft ICU 4.8 This API might change or be removed in a future release.
  */
 
 
@@ -209,6 +209,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
 
      /**
       * Destructor
+      * @draft ICU 4.8
       */
      virtual ~AlphabeticIndex();
 
@@ -312,6 +313,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * A more sophisticated mechanism may be available in the future.
      *
      * @param maxLabelCount the maximum number of labels.
+     * @param status error code
      * @return This, for chaining
      * @draft ICU 4.8
      */
@@ -326,6 +328,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * would be the <i>Greek-alpha</i>.
      *
      * @param lowerLimit   The character below the overflow (or inflow) bucket
+     * @param status error code
      * @return string that defines top of the overflow buck for lowerLimit, or an empty string if there is none
      * @internal
      */
@@ -391,7 +394,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *   A Record will not be added to the index by this function.
      *   Bucket numbers are zero-based, in Bucket iteration order.
      *
-     * @param name  The name whose bucket position in the index is to be determined.
+     * @param itemName  The name whose bucket position in the index is to be determined.
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return The bucket number for this name.
      * @draft ICU 4.8
@@ -594,17 +597,17 @@ private:
      UVector  *inputRecords_;
 
      /**
-      *   A Bucket holds an index label and references to everything belonging to that label.
-      *   For implementation use only.  Declared public because pure C implementation code needs access.
-      *   @internal
+      * A Bucket holds an index label and references to everything belonging to that label.
+      * For implementation use only.  Declared public because pure C implementation code needs access.
+      * @internal
       */
      struct Bucket: public UMemory {
          UnicodeString     label_;
          UnicodeString     lowerBoundary_;
          UAlphabeticIndexLabelType labelType_;
-         UVector           *records_;  // Records are owned by inputRecords_ vector.
+         UVector           *records_; // Records are owned by inputRecords_ vector.
 
-         Bucket(const UnicodeString &label,         // Parameter strings are copied.
+         Bucket(const UnicodeString &label,   // Parameter strings are copied.
                 const UnicodeString &lowerBoundary,
                 UAlphabeticIndexLabelType type, UErrorCode &status);
          ~Bucket();

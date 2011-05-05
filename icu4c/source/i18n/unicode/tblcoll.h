@@ -688,6 +688,7 @@ public:
      * @param reorderCodes An array of script codes in the new order. This can be NULL if the 
      * length is also set to 0. An empty array will clear any reordering codes on the collator.
      * @param reorderCodesLength The length of reorderCodes.
+     * @param status error code
      * @see Collator#getReorderCodes
      * @see Collator#getEquivalentReorderCodes
      * @draft ICU 4.8 
@@ -854,7 +855,6 @@ private:
     * Hence the responsibility of cleaning up the ucollator is not done by
     * this RuleBasedCollator. The isDataOwned flag is set to FALSE.
     * @param collator new ucollator data
-    * @param rules corresponding collation rules
     */
     void setUCollator(UCollator *collator);
 

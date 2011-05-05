@@ -68,6 +68,12 @@
 /**
  * \def U_HIDE_DRAFT_API
  * Define this to 1 to request that draft API be "hidden"
+ * @internal
+ */
+/**
+ * \def U_HIDE_INTERNAL_API
+ * Define this to 1 to request that internal API be "hidden"
+ * @internal
  */
 #if !U_DEFAULT_SHOW_DRAFT && !defined(U_SHOW_DRAFT_API)
 #define U_HIDE_DRAFT_API 1
@@ -316,10 +322,16 @@ typedef double UDate;
 /** The number of milliseconds per day @stable ICU 2.0 */
 #define U_MILLIS_PER_DAY       (86400000)
 
-/** Maximum and minimum UDate value 
+/** 
+ * Maximum UDate value 
  * @draft ICU 4.8 
  */ 
 #define U_DATE_MAX DBL_MAX
+
+/**
+ * Minimum UDate value 
+ * @draft ICU 4.8 
+ */ 
 #define U_DATE_MIN -U_DATE_MAX
 
 

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -695,6 +695,7 @@ private:
      * Was deprecated - used in implementation - moved internal
      *
      * @param cLocaleID The new locale name.
+     * @param canonicalize whether to call uloc_canonicalize on cLocaleID
      */
     Locale& init(const char* cLocaleID, UBool canonicalize);
 

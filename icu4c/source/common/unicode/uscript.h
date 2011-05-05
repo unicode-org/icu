@@ -468,6 +468,6 @@ uscript_hasScript(UChar32 c, UScriptCode sc);
 U_DRAFT int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
                             UScriptCode *scripts, int32_t capacity,
-                            UErrorCode *pErrorCode);
+                            UErrorCode *errorCode);
 
 #endif

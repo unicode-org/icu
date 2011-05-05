@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2009, International Business Machines Corporation and others.
+* Copyright (C) 1997-2011, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -471,14 +471,6 @@ public:
      * @internal
      */
     virtual const char * getType() const;
-
-protected:
-
-    /**
-     * (Overrides Calendar) Converts GMT as milliseconds to time field values.
-     * @param status Fill-in parameter which receives the status of this operation.
-     * @stable ICU 2.0
-     */
 
  private:
     GregorianCalendar(); // default constructor not implemented

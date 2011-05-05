@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 1997-2009, International Business Machines                     *
+ * Copyright (C) 1997-2011, International Business Machines                     *
  * Corporation and others. All Rights Reserved.                                 *
  ********************************************************************************
  *
@@ -807,7 +807,7 @@ private:
      * @param endTime         the time DST ends
      * @param endTimeMode     Whether the end time is local wall time, local
      *                        standard time, or UTC time. Default is local wall time.
-     * @param savingsDST      The number of milliseconds added to standard time
+     * @param dstSavings      The number of milliseconds added to standard time
      *                        to get DST time. Default is one hour.
      * @param status          An UErrorCode to receive the status.
      */
