@@ -481,6 +481,9 @@ public:
 
   private:
 
+     /**
+      * @internal 
+      */
     class  PluralSelector {
       public:
         /**
@@ -493,6 +496,9 @@ public:
         virtual UnicodeString select(double number, UErrorCode& ec) const = 0;
     };
 
+    /**
+     * @internal
+     */
     class PluralSelectorAdapter : public PluralSelector {
       public:
         PluralSelectorAdapter() : pluralRules(NULL) {

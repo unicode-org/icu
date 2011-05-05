@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2010, International Business Machines
+ *   Copyright (C) 1997-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -680,7 +680,7 @@ private:
      * @param inLocale the given locale.
      * @return a date/time formatter, or 0 on failure.
      */
-    static DateFormat* U_EXPORT2 create(EStyle timeStyle, EStyle dateStyle, const Locale&);
+    static DateFormat* U_EXPORT2 create(EStyle timeStyle, EStyle dateStyle, const Locale& inLocale);
 
 public:
     /**

@@ -407,7 +407,7 @@ public:
 
     /**
      * Sets timezone strings. These strings are stored in a 2-dimensional array.
-     * <p><b>Note:<b> SimpleDateFormat no longer use the zone strings stored in
+     * <p><b>Note:</b> SimpleDateFormat no longer use the zone strings stored in
      * a DateFormatSymbols. Therefore, the time zone strings set by this mthod
      * have no effects in an instance of SimpleDateFormat for formatting time
      * zones.
@@ -682,7 +682,7 @@ private:
      *                             failure code upon return.
      * @param useLastResortData    determine if use last resort data
      */
-    void initializeData(const Locale&, const char *type, UErrorCode& status, UBool useLastResortData = FALSE);
+    void initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData = FALSE);
 
     /**
      * Copy or alias an array in another object, as appropriate.

@@ -621,6 +621,7 @@ public:
      * @param reorderCodesLength The length of reorderCodes.
      * @see Collator#getReorderCodes
      * @see Collator#getEquivalentReorderCodes
+     * @param status error code
      * @draft ICU 4.8 
      */
      virtual void U_EXPORT2 setReorderCodes(const int32_t* reorderCodes,

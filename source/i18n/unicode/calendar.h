@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -2084,7 +2084,7 @@ private:
      * Validate a single field of this calendar.  Subclasses should
      * override this method to validate any calendar-specific fields.
      * Generic fields can be handled by
-     * <code>Calendar.validateField()</code>.
+     * <code>Calendar::validateField()</code>.
      * @see #validateField(int, int, int, int&)
      * @internal
      */

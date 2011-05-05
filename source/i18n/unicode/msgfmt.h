@@ -133,7 +133,7 @@ class NumberFormat;
  *   <li>Quotable syntax characters are the {curly braces} in all messageText parts,
  *       plus the '#' sign in a messageText immediately inside a pluralStyle,
  *       and the '|' symbol in a messageText immediately inside a choiceStyle.
- *   <li>See also {@link MessagePattern.ApostropheMode}
+ *   <li>See also {@link #UMessagePatternApostropheMode}
  *   <li>In argStyleText, every single ASCII apostrophe begins and ends quoted literal text,
  *       and unquoted {curly braces} must occur in matched pairs.
  * </ul>
@@ -557,7 +557,7 @@ public:
     /**
      * Gets subformat pointer for given format name.
      * This function supports both named and numbered
-     * arguments-- if numbered, the formatName is the
+     * arguments. If numbered, the formatName is the
      * corresponding UnicodeStrings (e.g. "0", "1", "2"...).
      * The returned Format object should not be deleted by the caller,
      * nor should the ponter of other object .  The pointer and its
@@ -1051,8 +1051,11 @@ private:
      */
     void resetPattern();
 
-    // A DummyFormatter that we use solely to store a NULL value. UHash does
-    // not support storing NULL values.
+    /**
+     * A DummyFormatter that we use solely to store a NULL value. UHash does
+     * not support storing NULL values.
+     * @internal
+     */
     class U_I18N_API DummyFormat : public Format {
     public:
         virtual UBool operator==(const Format&) const;

@@ -365,6 +365,7 @@ typedef int32_t UChar32;
 /**
  * \def U_INLINE
  * This is used to request inlining of a function, on platforms and languages which support it.
+ * @internal
  */
  
 #ifndef U_INLINE

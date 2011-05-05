@@ -607,7 +607,7 @@ private:
      * Caller should not delete them.
      *
      * @param locale    the locale of this date interval formatter.
-     * @param dtitvinf  the DateIntervalInfo object to be adopted.
+     * @param dtItvInfo the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of the date formatter
      * @param status    output param set to success/failure code on exit
      * @internal ICU 4.0
@@ -854,7 +854,7 @@ private:
      *
      * @param inputSkeleton            the input skeleton
      * @param bestMatchSkeleton        the best match skeleton
-     * @param bestMatchIntervalpattern the best match interval pattern
+     * @param bestMatchIntervalPattern the best match interval pattern
      * @param differenceInfo           the difference between 2 skeletons
      *                                 1 means only field width differs
      *                                 2 means v/z exchange
@@ -941,7 +941,7 @@ private:
      */
     void setPatternInfo(UCalendarDateFields field,
                         const UnicodeString* firstPart,
-                        const UnicodeString* secondpart,
+                        const UnicodeString* secondPart,
                         UBool laterDateFirst);
 
 

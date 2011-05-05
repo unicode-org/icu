@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2010, International Business Machines Corporation and        *
+* Copyright (C) 2010-2011, International Business Machines Corporation and        *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -63,7 +63,7 @@ public:
     // getters for state
     /**
      * Returns the locale used to determine the display names. This is
-     * not necessarily the same locale passed to {@link #getInstance}.
+     * not necessarily the same locale passed to {@link #createInstance}.
      * @return the display locale
      * @stable ICU 4.4
      */

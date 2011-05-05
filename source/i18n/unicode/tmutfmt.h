@@ -46,7 +46,7 @@ enum UTimeUnitFormatStyle {
     /** @draft ICU 4.8 */
     UTMUTFMT_FORMAT_STYLE_COUNT
 };
-typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle;
+typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle; /**< @draft ICU 4.8 */
 
 U_NAMESPACE_BEGIN
 
