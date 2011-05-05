@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ur.xml
  */
 ur{
-    Version{"2.0.58.7"}
+    Version{"2.0.58.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابدجان"}
@@ -1415,7 +1415,7 @@ ur{
             ls{"یکاٹیرِنبرگ ٹائم"}
         }
         fallbackRegionFormat{"{1} وقت ({0})"}
-        hourFormat{"+گھنٹہ:منٹ؛-گھنٹہ:منٹ"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} وقت"}
     }
 }

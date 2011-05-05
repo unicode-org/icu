@@ -18,6 +18,7 @@ ga{
         FR{"An Fhrainc"}
         HK{"R.R.S. na Síne Hong Cong"}
         ID{"An Indinéis"}
+        IE{"Éire"}
         IL{"Iosrael"}
         MD{"An Mholdóiv"}
         ML{"Mailí"}
@@ -27,5 +28,5 @@ ga{
         SM{"San Mairíne"}
         SO{"An tSomáil"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.58.44"}
 }

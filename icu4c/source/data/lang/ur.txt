@@ -292,7 +292,7 @@ ur{
             tibt{"تبتی اعداد"}
         }
     }
-    Version{"2.0.58.7"}
+    Version{"2.0.58.44"}
     localeDisplayPattern{
         separator{"،"}
     }
