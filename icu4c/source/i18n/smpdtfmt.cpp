@@ -754,7 +754,7 @@ SimpleDateFormat::initialize(const Locale& locale,
         fNumberFormat->setParseIntegerOnly(TRUE);
         fNumberFormat->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
 
-        fNumberFormat->setLenient(TRUE); // Java uses a custom DateNumberFormat to format/parse
+        //fNumberFormat->setLenient(TRUE); // Java uses a custom DateNumberFormat to format/parse
 
         initNumberFormatters(locale,status);
 
