@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010 IBM and Others. All Rights Reserved
+# Copyright (C) 2009-2011 IBM and Others. All Rights Reserved
 
 #
 #
@@ -27,6 +27,14 @@ ifeq ($(NEW_ICU),)
 NOTSET:="$(NOTSET) NEW_ICU"
 endif
 
+ifeq ($(NEW_ICU_BUILD),)
+NEW_ICU_BUILD:=$(NEW_ICU)/source
+endif
+
+ifeq ($(OLD_ICU_BUILD),)
+OLD_ICU_BUILD:=$(OLD_ICU)/source
+endif
+
 all: $(TARGET) $(LOCAL_TARGET)
 
 
@@ -40,34 +48,34 @@ endif
 
 .PHONY: check-vars classes clean-docs
 
-.PRECIOUS: $(TARGET) $(OLD_ICU)/$(DOXYFILE) $(NEW_ICU)/$(DOXYFILE)
+.PRECIOUS: $(TARGET) $(OLD_ICU_BUILD)/$(DOXYFILE) $(NEW_ICU_BUILD)/$(DOXYFILE)
 
 #######
-DOXYFILE=source/Doxyfile
-XML=source/doc/xml
+DOXYFILE=Doxyfile
+XML=doc/xml
 UVERSIONH=$(XML)/uversion_8h.xml
 
 clean-docs: | check-vars
-	-rm -rf "$(OLD_ICU)/$(XML)" "$(NEW_ICU)/$(XML)"
+	-rm -rf "$(OLD_ICU_BUILD)/$(XML)" "$(NEW_ICU_BUILD)/$(XML)"
 
-$(TARGET): check-vars $(OLD_ICU)/$(XML) $(NEW_ICU)/$(XML) 
+$(TARGET): check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML) 
 	echo "Remember to run the non-ascii file detector if you get errors."
-	$(ANT) -Dolddir="$(OLD_ICU)/$(XML)" -Dnewdir="$(NEW_ICU)/$(XML)" $(ANT_TARGET)
+	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)
 
-# check-vars $(OLD_ICU)/$(XML) $(NEW_ICU)/$(XML) 
+# check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML) 
 APIChangeReport.xml:
 	echo "Remember to run the non-ascii file detector if you get errors."
-	$(ANT) -Dolddir="$(OLD_ICU)/$(XML)" -Dnewdir="$(NEW_ICU)/$(XML)" $(ANT_TARGET)_xml
+	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)_xml
 
-%/source/doc/xml:	%/source/Doxyfile
-	# don't care what GENERATE_XML is set to previously - set it to yes.
+%/doc/xml:	%/Doxyfile
+# don't care what GENERATE_XML is set to previously - set it to yes.
 	@echo running doxyugen .. 
-	( cd "$*/source/" && ( (cat ./Doxyfile | grep -v '^GENERATE_') ;  echo 'GENERATE_XML=YES')  | $(DOXYGEN) -  )
+	( cd "$*/" && ( (cat ./Doxyfile | grep -v '^GENERATE_') ;  echo 'GENERATE_XML=YES')  | $(DOXYGEN) -  )
 	@echo doxygen done in $*
 
-%/source/Doxyfile:	%/source/Makefile %/source/Doxyfile.in
+%/Doxyfile:	%/Makefile
 	@echo generating $@
-	@$(MAKE) -C  "$*/source" Doxyfile || ( echo "could not make Doxyfile in $*  - was doxygen available?" ; false )
+	@$(MAKE) -C  "$*/" Doxyfile || ( echo "could not make Doxyfile in $*  - was doxygen available?" ; false )
 
-%/source/Makefile: %/source/Makefile.in
-	@echo "$@ does not seem to exist - was configure run?" ; false
+#%/source/Makefile: %/source/Makefile.in
+#	@echo "$@ does not seem to exist - was configure run?" ; false

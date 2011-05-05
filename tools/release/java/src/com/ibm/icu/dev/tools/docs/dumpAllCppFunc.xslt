@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2009-2010, International Business Machines Corporation and others. All Rights Reserved. -->
+<!-- Copyright (C) 2009-2011, International Business Machines Corporation and others. All Rights Reserved. -->
 <!-- List all cpp public functions generated from the 'index.xml' -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -13,9 +13,9 @@
 				<xsl:variable name="file"
 					select="concat($docFolder, '/', . , '.xml')" />
 				<xsl:variable name="funcs_node"
-					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='function']" />
+					select="document($file)/doxygen/compounddef[@prot='public']/sectiondef/memberdef[@prot='public'][@kind='function']" />
 				<xsl:variable name="compoundname"
-					select="document($file)/doxygen/compounddef/compoundname/text()" />
+					select="document($file)/doxygen/compounddef[@prot='public']/compoundname/text()" />
 				<xsl:for-each select="$funcs_node">
 					<cppfunc>
 						<xsl:copy-of select="@id" />
@@ -33,7 +33,7 @@
 				
 				<!--  now const static publics -->
 				<xsl:variable name="sconst_node"
-					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='variable'][@static='yes']" />
+					select="document($file)/doxygen/compounddef[@prot='public']/sectiondef/memberdef[@prot='public'][@kind='variable'][@static='yes']" />
 				<xsl:for-each select="$sconst_node">
 					<cppfunc>
 						<xsl:copy-of select="@id" />
@@ -53,7 +53,7 @@
 				//No real non-static variables - and also, doxygen is confused about nested structs/unions
 				
 				<xsl:variable name="const_node"
-					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='variable'][@static='no']" />
+					select="document($file)/doxygen/compounddef[@prot='public']/sectiondef/memberdef[@prot='public'][@kind='variable'][@static='no']" />
 				<xsl:for-each select="$const_node">
 					<cppfunc>
 						<xsl:copy-of select="@id" />
@@ -71,7 +71,7 @@
 		-->
 				<!--  now enums -->
 				<xsl:variable name="enum_node"
-					select="document($file)/doxygen/compounddef/sectiondef/memberdef[@kind='enum'][@prot='public']" />
+					select="document($file)/doxygen/compounddef[@prot='public']/sectiondef/memberdef[@kind='enum'][@prot='public']" />
 				<xsl:for-each select="$enum_node">
 
 					<!--  use a name, else '(anonymous)' -->
