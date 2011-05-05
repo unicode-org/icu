@@ -21,29 +21,30 @@ U_CAPI UPluralRules* U_EXPORT2
 uplrules_open(const char *locale,
               UErrorCode *status)
 {
-    if (status == NULL || U_FAILURE(*status)) {
-        return 0;
-    }
-	return (UPluralRules*)PluralRules::forLocale(Locale(locale), *status);
+    return (UPluralRules*)PluralRules::forLocale(Locale(locale), *status);
 }
 
 U_CAPI void U_EXPORT2
 uplrules_close(UPluralRules *uplrules)
 {
-  delete (PluralRules*)uplrules;
+    delete (PluralRules*)uplrules;
 }
 
 U_CAPI int32_t U_EXPORT2
 uplrules_select(const UPluralRules *uplrules,
-               double number,
-               UChar *keyword, int32_t capacity,
-               UErrorCode *status)
+                double number,
+                UChar *keyword, int32_t capacity,
+                UErrorCode *status)
 {
-    if (status == NULL || U_FAILURE(*status)) {
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    if (keyword == NULL ? capacity != 0 : capacity < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString result = ((PluralRules*)uplrules)->select(number);
-	return result.extract(keyword, capacity, *status);
+    return result.extract(keyword, capacity, *status);
 }
 
 
