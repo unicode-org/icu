@@ -778,7 +778,7 @@ private:
      * @return Returns TRUE when the given custom id is valid.
      */
     static UBool parseCustomID(const UnicodeString& id, int32_t& sign, int32_t& hour,
-        int32_t& min, int32_t& sec);
+        int32_t& minute, int32_t& second);
 
     /**
      * Parse a custom time zone identifier and return the normalized
@@ -798,7 +798,7 @@ private:
      * @param hour offset hours
      * @param min offset minutes
      * @param sec offset seconds
-     * @param netative sign of the offset, TRUE for negative offset.
+     * @param negative sign of the offset, TRUE for negative offset.
      * @param id Receves the format result (normalized custom ID)
      * @return The reference to id
      */

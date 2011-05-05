@@ -30,7 +30,7 @@
 /**
  * Value returned by PluralRules::getUniqueKeywordValue() when there is no
  * unique value to return.
- * draft ICU 4.8
+ * @draft ICU 4.8
  */
 #define UPLRULES_NO_UNIQUE_VALUE ((double)-0.00123456777)
 

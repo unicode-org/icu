@@ -252,12 +252,13 @@ typedef enum UNumberFormatPadPosition {
  * Constants for specifying currency spacing
  * @draft ICU 4.8
  */
-typedef enum UCurrencySpacing {
+enum UCurrencySpacing {
     UNUM_CURRENCY_MATCH,
     UNUM_CURRENCY_SURROUNDING_MATCH,
     UNUM_CURRENCY_INSERT,
     UNUM_CURRENCY_SPACING_COUNT
-} UCurrencySpacing;
+};
+typedef enum UCurrencySpacing UCurrencySpacing; /**< @draft ICU 4.8 */
 
 /**
  * Create and return a new UNumberFormat for formatting and parsing

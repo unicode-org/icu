@@ -169,6 +169,7 @@ class MessageFormat;
   * delete msgFmt;
   *
   * \endhtmlonly
+  * </pre>
   * </p>
   *
   * Produces the output:<br>

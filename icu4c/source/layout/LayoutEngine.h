@@ -63,9 +63,9 @@ class LEGlyphStorage;
  */
 class U_LAYOUT_API LayoutEngine : public UObject {
 public:
-    /** Flag to request kerning. */
+    /** @internal Flag to request kerning. */
     static const le_int32 kTypoFlagKern;
-    /** Flag to request ligatures. */
+    /** @internal Flag to request ligatures. */
     static const le_int32 kTypoFlagLiga;
 
 protected:

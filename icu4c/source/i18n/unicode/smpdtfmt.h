@@ -811,6 +811,7 @@ private:
      *                  "yyyy" in the pattern would result in a call to this function
      *                  with ch equal to 'y' and count equal to 4)
      * @param handler   Records information about field positions.
+     * @param cal       Calendar to use
      * @param status    Receives a status code, which will be U_ZERO_ERROR if the operation
      *                  succeeds.
      */
@@ -827,6 +828,7 @@ private:
      * having a number of digits between "minDigits" and
      * "maxDigits".  Uses the DateFormat's NumberFormat.
      *
+     * @param currentNumberFormat 
      * @param appendTo  Output parameter to receive result.
      *                  Formatted number is appended to existing contents.
      * @param value     Value to format.
@@ -877,7 +879,7 @@ private:
      * Called by construct() and the various constructors to set up the SimpleDateFormat's
      * Calendar and NumberFormat objects.
      * @param locale    The locale for which we want a Calendar and a NumberFormat.
-     * @param statuc    Filled in with an error code if creating either subobject fails.
+     * @param status    Filled in with an error code if creating either subobject fails.
      */
     void initialize(const Locale& locale, UErrorCode& status);
 
@@ -935,10 +937,12 @@ private:
      * @param ch the pattern character for the date field text to be parsed.
      * @param count the count of a pattern character.
      * @param obeyCount if true then the count is strictly obeyed.
+     * @param allowNegative
      * @param ambiguousYear If true then the two-digit year == the default start year.
      * @param saveHebrewMonth Used to hang onto month until year is known.
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
+     * @param patLoc
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */

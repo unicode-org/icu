@@ -136,7 +136,7 @@ class U_COMMON_API StringPiece : public UMemory {
 
   /**
    * Reset the stringpiece to refer to new data.
-   * @param data pointer the new string data.  Need not be nul terminated.
+   * @param xdata pointer the new string data.  Need not be nul terminated.
    * @param len the length of the new data
    * @draft ICU 4.8
    */
