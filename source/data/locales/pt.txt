@@ -42,7 +42,7 @@ pt{
             }
         }
     }
-    Version{"2.0.58.31"}
+    Version{"2.0.58.45"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1219,8 +1219,6 @@ pt{
             other{"{0} min"}
         }
         month{
-            0{"0 meses"}
-            1{"1 mth"}
             one{"{0} m."}
             other{"{0} mths"}
         }

@@ -88,6 +88,7 @@ mgh{
         MK{"Umasedonia"}
         MP{"Uomani"}
         MW{"Umalawi"}
+        MZ{"Mozambique"}
         NE{"Unijeri"}
         NF{"Unorwe"}
         NG{"Unijeria"}
@@ -151,5 +152,5 @@ mgh{
         YE{"Uzimbabwe"}
         ZA{"Usirilanka"}
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.58.44"}
 }
