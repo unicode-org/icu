@@ -411,7 +411,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String[] DATA = {
             "fr", "CA", "", "1,50\u00a0$",
             "de", "DE", "", "1,50\u00a0\u20AC",
-            "de", "DE", "PREEURO", "1,50\u00a0DM",
+            "de", "DE", "PREEURO", "1,50\u00a0DEM",
             "fr", "FR", "", "1,50\u00a0\u20AC",
             "fr", "FR", "PREEURO", "1,50\u00a0F",
         };
@@ -487,15 +487,15 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             //{"zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY"},
             {"zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00 \u4EBA\u6C11\u5E01"},
             {"zh_CN", "1234.56", "CNY", "\uFFE51,234.56", "CNY1,234.56", "1,234.56 \u4EBA\u6C11\u5E01"}, 
-            {"ru_RU", "1", "RUB", "1,00\u00A0\u0440\u0443\u0431.", "1,00\u00A0RUB", "1,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
-            {"ru_RU", "2", "RUB", "2,00\u00A0\u0440\u0443\u0431.", "2,00\u00A0RUB", "2,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"},
-            {"ru_RU", "5", "RUB", "5,00\u00A0\u0440\u0443\u0431.", "5,00\u00A0RUB", "5,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"},
+            {"ru_RU", "1", "RUB", "1,00\u00A0\u0440\u0443\u0431.", "1,00\u00A0RUB", "1,00 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
+            {"ru_RU", "2", "RUB", "2,00\u00A0\u0440\u0443\u0431.", "2,00\u00A0RUB", "2,00 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"},
+            {"ru_RU", "5", "RUB", "5,00\u00A0\u0440\u0443\u0431.", "5,00\u00A0RUB", "5,00 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"},
             // test locale without currency information
             {"root", "-1.23", "USD", "-US$\u00a01.23", "-USD\u00a01.23", "-1.23 USD"},
             {"root@numbers=latn", "-1.23", "USD", "-US$\u00a01.23", "-USD\u00a01.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers
-            {"root@numbers=arab", "-1.23", "USD", "-US$\u00a0\u0661.\u0662\u0663", "-USD\u00a0\u0661.\u0662\u0663", "-\u0661.\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
+            {"root@numbers=arab", "-1.23", "USD", "-US$\u00a0\u0661\u066B\u0662\u0663", "-USD\u00a0\u0661\u066B\u0662\u0663", "-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
             // test choice format
-            {"es_AR", "1", "INR", "\u20B9\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
+            {"es_AR", "1", "INR", "\u20B91,00", "INR1,00", "1,00 rupia india"},
             {"ar_EG", "1", "USD", "US$\u00A0\u0661\u066B\u0660\u0660", "USD\u00a0\u0661\u066b\u0660\u0660", "\u0661\u066b\u0660\u0660 \u062f\u0648\u0644\u0627\u0631 \u0623\u0645\u0631\u064a\u0643\u064a"},
         };
         
@@ -1276,7 +1276,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
         expect2(fmt1,1234.567,"\u0e51,\u0e52\u0e53\u0e54.\u0e55\u0e56\u0e57");
         expect3(fmt2,5678.0,"\u05d4\u05f3\u05ea\u05e8\u05e2\u05f4\u05d7");
-        expect2(fmt3,1234.567,"\u06f1,\u06f2\u06f3\u06f4.\u06f5\u06f6\u06f7");
+        expect2(fmt3,1234.567,"\u06f1\u066c\u06f2\u06f3\u06f4\u066b\u06f5\u06f6\u06f7");
         expect2(fmt4,1234.567,"\u0967,\u0968\u0969\u096a.\u096b\u096c\u096d");
         expect2(fmt5,1234.567,"\u0661\u066c\u0662\u0663\u0664\u066b\u0665\u0666\u0667");
         expect2(fmt6,1234.567,"1.234,567");
