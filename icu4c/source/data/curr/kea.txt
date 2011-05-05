@@ -16,7 +16,7 @@ kea{
             "Diren di Emiradus Arabi Unidu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kuanza",
         }
         AUD{
@@ -24,12 +24,16 @@ kea{
             "Dola australianu",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinar di Barain",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Franku borundes",
+        }
+        BRL{
+            "BR$",
+            "Rial brazileru",
         }
         BWP{
             "BWP",
@@ -52,15 +56,19 @@ kea{
             "Iuan xines",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Skudu Kabuverdianu",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Franku di Djibuti",
         }
+        DKK{
+            "DKK",
+            "Kuroa dinamarkeza",
+        }
         DZD{
-            "DA",
+            "DZD",
             "Dinar arjelinu",
         }
         EGP{
@@ -68,11 +76,11 @@ kea{
             "Libra ejipsiu",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nafka di Eritreia",
         }
         ETB{
-            "Br",
+            "ETB",
             "Bir etiopi",
         }
         EUR{
@@ -84,7 +92,7 @@ kea{
             "Libra sterlina britaniku",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi di Gana",
         }
         GMD{
@@ -92,8 +100,16 @@ kea{
             "Dalasi",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Sili",
+        }
+        HKD{
+            "HK$",
+            "Dola di Ong Kong",
+        }
+        IDR{
+            "IDR",
+            "Rupia indoneziu",
         }
         INR{
             "₹",
@@ -104,15 +120,19 @@ kea{
             "Ieni japones",
         }
         KES{
-            "Ksh",
+            "KES",
             "Xelin kenianu",
         }
         KMF{
-            "CF",
+            "KMF",
             "Franku di Komoris",
         }
+        KRW{
+            "₩",
+            "Won sul-koreanu",
+        }
         LRD{
-            "L$",
+            "LRD",
             "Dola liberianu",
         }
         LSL{
@@ -120,7 +140,7 @@ kea{
             "Loti di Lezotu",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinar libiu",
         }
         MAD{
@@ -132,39 +152,55 @@ kea{
             "Ariari di Madagaskar",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ougia",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupia di Maurisias",
         }
         MWK{
             "MWK",
             "Kuaxa di Malaui",
         }
+        MXN{
+            "MX$",
+            "Pezu mexikanu",
+        }
         MZM{
-            "Mt",
+            "MZM",
             "Metikal",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dola namibianu",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira",
+        }
+        NOK{
+            "NOK",
+            "Kuroa norueges",
+        }
+        PLN{
+            "PLN",
+            "Zloty polaku",
+        }
+        RUB{
+            "RUB",
+            "Rublu rusu",
         }
         RWF{
             "RWF",
             "Franku ruandes",
         }
         SAR{
-            "SR",
+            "SAR",
             "Rial saudita",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupia di Seixelis",
         }
         SDG{
@@ -172,39 +208,55 @@ kea{
             "Libra sudanes",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Libra sudanes antigu",
         }
+        SEK{
+            "SEK",
+            "Kuroa sueku",
+        }
         SHP{
-            "SH£",
+            "SHP",
             "Libra di Santa Ilena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leone di Sera Leoa",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Xelin somalianu",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra di Sãu Tume i Prinsipi",
         }
         SZL{
             "SZL",
             "Lilanjeni",
         }
+        THB{
+            "฿",
+            "Baht tailandes",
+        }
         TND{
-            "DT",
+            "TND",
             "Dinar tunizianu",
         }
+        TRY{
+            "TRY",
+            "Lira turku",
+        }
+        TWD{
+            "NT$",
+            "Dola Novu di Taiwan",
+        }
         TZS{
-            "TSh",
+            "TZS",
             "Xelin di Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Xelin ugandensi",
         }
         USD{
@@ -219,18 +271,22 @@ kea{
             "CFA",
             "Franku CFA BCEAO",
         }
+        XXX{
+            "XXX",
+            "mueda diskonxedu",
+        }
         ZAR{
-            "R",
+            "ZAR",
             "Rand sulafrikanu",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kuaxa zambianu",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dola di Zimbabue",
         }
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

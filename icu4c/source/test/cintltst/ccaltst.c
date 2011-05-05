@@ -697,7 +697,7 @@ static void TestFieldGetSet()
         ucal_get(cal, UCAL_DATE, &status)!=12 || ucal_get(cal, UCAL_HOUR, &status)!=5)
         log_data_err("error in ucal_get() -> %s (Are you missing data?)\n", u_errorName(status));    
     else if(ucal_get(cal, UCAL_DAY_OF_WEEK_IN_MONTH, &status)!=2 || ucal_get(cal, UCAL_DAY_OF_WEEK, &status)!=6
-        || ucal_get(cal, UCAL_WEEK_OF_MONTH, &status)!=2 || ucal_get(cal, UCAL_WEEK_OF_YEAR, &status)!= 10)
+        || ucal_get(cal, UCAL_WEEK_OF_MONTH, &status)!=2 || ucal_get(cal, UCAL_WEEK_OF_YEAR, &status)!= 11)
         log_err("FAIL: error in ucal_get()\n");
     else
         log_verbose("PASS: ucal_get() works fine\n");

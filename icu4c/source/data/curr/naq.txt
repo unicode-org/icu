@@ -16,7 +16,7 @@ naq{
             "United Arab Emirates Dirham",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Angolan Kwanzab",
         }
         AUD{
@@ -24,11 +24,11 @@ naq{
             "Australian Dollari",
         }
         BHD{
-            "BD",
+            "BHD",
             "Bahrain Dinar",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Burundi Franc",
         }
         BWP{
@@ -52,15 +52,15 @@ naq{
             "Chinese Yuan Renminbi",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Escudo Caboverdiano",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Djibouti Franc",
         }
         DZD{
-            "DA",
+            "DZD",
             "Algerian Dinar",
         }
         EGP{
@@ -68,11 +68,11 @@ naq{
             "Egytian Ponds",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Eritreian Nakfa",
         }
         ETB{
-            "Br",
+            "ETB",
             "Ethiopian Birr",
         }
         EUR{
@@ -84,7 +84,7 @@ naq{
             "British Ponds",
         }
         GHC{
-            "₵",
+            "GHC",
             "Ghana Cedi",
         }
         GMD{
@@ -92,7 +92,7 @@ naq{
             "Gambia Dalasi",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Guinea Franc",
         }
         INR{
@@ -104,15 +104,15 @@ naq{
             "Japanese Yenni",
         }
         KES{
-            "Ksh",
+            "KES",
             "Kenyan Shilling",
         }
         KMF{
-            "CF",
+            "KMF",
             "Comorian Franc",
         }
         LRD{
-            "L$",
+            "LRD",
             "Liberian Dollar",
         }
         LSL{
@@ -120,7 +120,7 @@ naq{
             "Lesotho Loti",
         }
         LYD{
-            "LD",
+            "LYD",
             "Libyan Dinar",
         }
         MAD{
@@ -132,11 +132,11 @@ naq{
             "Malagasy Franc",
         }
         MRO{
-            "UM",
+            "MRO",
             "Mauritania Ouguiya",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Mauritius Rupeeb",
         }
         MWK{
@@ -144,15 +144,15 @@ naq{
             "Malawian Kwachab",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Mozambique Metical",
         }
         NAD{
-            "N$",
+            "$",
             "Namibia Dollari",
         }
         NGN{
-            "₦",
+            "NGN",
             "Nigerian Naira",
         }
         RWF{
@@ -160,11 +160,11 @@ naq{
             "Rwanda Franci",
         }
         SAR{
-            "SR",
+            "SAR",
             "Saudi Riyal",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Seychelles Rupee",
         }
         SDG{
@@ -172,23 +172,23 @@ naq{
             "Sudanese Dinar",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Sudanese Ponds",
         }
         SHP{
-            "SH£",
+            "SHP",
             "St Helena Ponds",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leone",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Somali Shillings",
         }
         STD{
-            "Db",
+            "STD",
             "Sao Tome and Principe Dobra",
         }
         SZL{
@@ -196,15 +196,15 @@ naq{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Tunisian Dinar",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Tanzanian Shillings",
         }
         UGX{
-            "USh",
+            "UGX",
             "Ugandan Shillings",
         }
         USD{
@@ -220,17 +220,17 @@ naq{
             "CFA Franc BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "South African Randi",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Zambian Kwachab",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabwe Dollari",
         }
     }
-    Version{"2.0.46.85"}
+    Version{"2.0.57.99"}
 }

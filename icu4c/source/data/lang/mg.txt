@@ -57,5 +57,5 @@ mg{
         zh{"Sinoa, Mandarin"}
         zu{"Zolò"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.58.12"}
 }

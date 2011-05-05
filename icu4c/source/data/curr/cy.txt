@@ -12,7 +12,7 @@
 cy{
     Currencies{
         BRL{
-            "R$",
+            "BR$",
             "Real Brasil",
         }
         CNY{
@@ -44,5 +44,5 @@ cy{
             "Doler yr UDA",
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.57.98"}
 }

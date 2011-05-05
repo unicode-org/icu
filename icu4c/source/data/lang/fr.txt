@@ -14,6 +14,8 @@ fr{
         calendar{"Calendrier"}
         collation{"Ordonnancement"}
         currency{"Devise"}
+        numbers{"Nombres"}
+        x{"Usage privé"}
     }
     Languages{
         aa{"afar"}
@@ -661,22 +663,68 @@ fr{
         calendar{
             buddhist{"Calendrier bouddhiste"}
             chinese{"Calendrier chinois"}
+            coptic{"Calendrier copte"}
+            ethiopic{"Calendrier éthiopien"}
+            ethiopic-amete-alem{"Calendrier éthiopien Amete Alem"}
             gregorian{"Calendrier grégorien"}
             hebrew{"Calendrier hébraïque"}
             indian{"Calendrier indien"}
             islamic{"Calendrier musulman"}
             islamic-civil{"Calendrier civil musulman"}
             japanese{"Calendrier japonais"}
+            persian{"Calendrier persan"}
             roc{"Calendrier républicain chinois"}
         }
         collation{
             big5han{"Ordre chinois traditionnel - Big5"}
+            dictionary{"Ordre du dictionnaire"}
             direct{"Ordre direct"}
+            ducet{"table d'ordonnancement par défaut d'Unicode"}
             gb2312han{"Ordre chinois simplifié - GB2312"}
             phonebook{"Ordre de l’annuaire"}
             pinyin{"Ordre pinyin"}
+            reformed{"Ordre réformé"}
+            search{"Recherche générique"}
             stroke{"Ordre des traits"}
             traditional{"Ordre traditionnel"}
+            unihan{"Ordre par radical et nombre de traits"}
+        }
+        numbers{
+            arab{"chiffres arabes"}
+            arabext{"chiffres arabes étendus"}
+            armn{"chiffres arméniens"}
+            armnlow{"chiffres arméniens minuscules"}
+            beng{"chiffres bengalis"}
+            deva{"chiffres devanagaris"}
+            ethi{"chiffres éthiopiens"}
+            fullwide{"Chiffres pleine chasse"}
+            geor{"chiffres géorgiens"}
+            grek{"chiffres grecs"}
+            greklow{"chiffres grecs minuscules"}
+            gujr{"chiffres gujaratis"}
+            guru{"chiffres gurmukhis"}
+            hanidec{"nombres décimaux chinois"}
+            hans{"Chiffres en chinois simplifié"}
+            hansfin{"Chiffres financiers en chinois simplifié"}
+            hant{"Chiffres en chinois traditionnel"}
+            hantfin{"Chiffres financiers en chinois traditionnel"}
+            hebr{"chiffres hébreux"}
+            jpan{"Chiffres japonais"}
+            jpanfin{"Chiffres japonais financiers"}
+            khmr{"chiffres khmers"}
+            knda{"Chiffres en kannada"}
+            laoo{"chiffres laotiens"}
+            latn{"chiffres occidentaux"}
+            mlym{"chiffres malayalams"}
+            mong{"chiffres mongols"}
+            mymr{"chiffres birmans"}
+            orya{"chiffres oriyas"}
+            roman{"chiffres romains"}
+            romanlow{"chiffres romains minuscules"}
+            taml{"chiffres tamouls"}
+            telu{"chiffres télougous"}
+            thai{"chiffres thaïs"}
+            tibt{"chiffres tibétains"}
         }
     }
     Variants{
@@ -710,7 +758,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.22"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

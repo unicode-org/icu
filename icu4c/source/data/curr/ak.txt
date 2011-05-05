@@ -16,7 +16,7 @@ ak{
             "Ɛmirete Arab Nkabɔmu Deram",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Angola Kwanza",
         }
         AUD{
@@ -24,11 +24,11 @@ ak{
             "Ɔstrelia Dɔla",
         }
         BHD{
-            "BD",
+            "BHD",
             "Baren Dina",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Burundi Frank",
         }
         BWP{
@@ -52,15 +52,15 @@ ak{
             "Yuan",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Ɛskudo",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Gyebuti Frank",
         }
         DZD{
-            "DA",
+            "DZD",
             "Ɔlgyeria Dina",
         }
         EGP{
@@ -68,11 +68,11 @@ ak{
             "Egypt Pɔn",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Ɛretereya Nakfa",
         }
         ETB{
-            "Br",
+            "ETB",
             "Itiopia Bir",
         }
         EUR{
@@ -84,7 +84,7 @@ ak{
             "Breten Pɔn",
         }
         GHC{
-            "₵",
+            "GHC",
             "Ghana Sidi",
         }
         GMD{
@@ -92,7 +92,7 @@ ak{
             "Gambia Dalasi",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Gini Frank",
         }
         INR{
@@ -104,15 +104,15 @@ ak{
             "Gyapan Yɛn",
         }
         KES{
-            "Ksh",
+            "KES",
             "Kenya Hyelen",
         }
         KMF{
-            "CF",
+            "KMF",
             "Komoro Frank",
         }
         LRD{
-            "L$",
+            "LRD",
             "Laeberia Dɔla",
         }
         LSL{
@@ -120,7 +120,7 @@ ak{
             "Lesoto Loti",
         }
         LYD{
-            "LD",
+            "LYD",
             "Libya Dina",
         }
         MAD{
@@ -132,11 +132,11 @@ ak{
             "Madagasi Frank",
         }
         MRO{
-            "UM",
+            "MRO",
             "Mɔretenia Ouguiya",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Mɔrehyeɔs Rupi",
         }
         MWK{
@@ -144,15 +144,15 @@ ak{
             "Malawi Kwacha",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Mozambik Metical",
         }
         NAD{
-            "N$",
+            "NAD",
             "Namibia Dɔla",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naegyeria Naira",
         }
         RWF{
@@ -160,11 +160,11 @@ ak{
             "Rewanda Frank",
         }
         SAR{
-            "SR",
+            "SAR",
             "Saudi Riyal",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Seyhyɛls Rupi",
         }
         SDG{
@@ -172,23 +172,23 @@ ak{
             "Sudan Dina",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Sudan Pɔn",
         }
         SHP{
-            "SH£",
+            "SHP",
             "St Helena Pɔn",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leone",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Somailia Hyelen",
         }
         STD{
-            "Db",
+            "STD",
             "Sao Tome ne Principe Dobra",
         }
         SZL{
@@ -196,15 +196,15 @@ ak{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Tunisia Dina",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Tanzania Hyelen",
         }
         UGX{
-            "USh",
+            "UGX",
             "Uganda Hyelen",
         }
         USD{
@@ -216,17 +216,17 @@ ak{
             "Sefa",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Afrika Anaafo Rand",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Zambia Kwacha",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabwe Dɔla",
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
 }

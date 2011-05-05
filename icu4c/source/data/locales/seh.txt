@@ -29,7 +29,7 @@ seh{
             }
         }
     }
-    Version{"2.0.47.38"}
+    Version{"2.0.57.99"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -52,7 +52,7 @@ seh{
                 HHmmss{"HH:mm:ss"}
                 Hm{"H:mm"}
                 M{"L"}
-                MEd{"dd/MM"}
+                MEd{"EEE, dd/MM"}
                 MMM{"LLL"}
                 MMMEd{"EEE, d MMM"}
                 MMMMEd{"EEE, d MMMM"}

@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/bs.xml
  */
 bs{
-    Keys:alias{"sr_Latn"}
     Languages{
         aa{"afarski"}
         ab{"abkazijski"}
@@ -638,9 +637,7 @@ bs{
         Zyyy{"zajedničko pismo"}
         Zzzz{"nepoznato ili nevažeće pismo"}
     }
-    Types:alias{"sr_Latn"}
-    Variants:alias{"sr_Latn"}
-    Version{"2.0.52.13"}
+    Version{"2.0.58.7"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

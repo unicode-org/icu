@@ -116,7 +116,7 @@ kln{
         KH{"Emetab Cambodia"}
         KI{"Emetab Kiribati"}
         KM{"Emetab Comoros"}
-        KN{"Emetab Saint Kitts  ak  Nevis"}
+        KN{"Emetab Saint Kitts ak Nevis"}
         KP{"Emetab Korea nebo murot katam"}
         KR{"Emetab korea nebo murot tai"}
         KW{"Emetab Kuwait"}
@@ -173,7 +173,7 @@ kln{
         PH{"Emetab Philippines"}
         PK{"Emetab Pakistan"}
         PL{"Emetab Poland"}
-        PM{"Emetab Peter Ne titil  ak Miquelon"}
+        PM{"Emetab Peter Ne titil ak Miquelon"}
         PN{"Emetab Pitcairn"}
         PR{"Emetab Puerto Rico"}
         PS{"Emetab Palestine"}
@@ -203,7 +203,7 @@ kln{
         SV{"Emetab El Salvador"}
         SY{"Emetab Syria"}
         SZ{"Emetab Swaziland"}
-        TC{"Ikwembeiyotab Turks ak  Caicos"}
+        TC{"Ikwembeiyotab Turks ak Caicos"}
         TD{"Emetab Chad"}
         TG{"Emetab Togo"}
         TH{"Emetab Thailand"}
@@ -238,5 +238,5 @@ kln{
         ZM{"Emetab Zambia"}
         ZW{"Emetab Zimbabwe"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

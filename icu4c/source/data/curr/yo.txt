@@ -16,19 +16,19 @@ yo{
             "Diami ti Awon Orílẹ́ède Arabu",
         }
         AOA{
-            "Kz",
-            "Wansa ti Orílẹ́ède  Àngólà",
+            "AOA",
+            "Wansa ti Orílẹ́ède Àngólà",
         }
         AUD{
             "AU$",
             "Dọla ti Orílẹ́ède Ástràlìá",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dina ti Orílẹ́ède Báránì",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Faransi ti Orílẹ́ède Bùùrúndì",
         }
         BWP{
@@ -52,15 +52,15 @@ yo{
             "Reminibi ti Orílẹ́ède ṣáínà",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Kabofediano ti Orílẹ́ède Esuodo",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faransi ti Orílẹ́ède Dibouti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dina ti Orílẹ́ède Àlùgèríánì",
         }
         EGP{
@@ -68,11 +68,11 @@ yo{
             "pọọn ti Orílẹ́ède Egipiti",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakifa ti Orílẹ́ède Eriteriani",
         }
         ETB{
-            "Br",
+            "ETB",
             "Biri ti Orílẹ́ède Eutopia",
         }
         EUR{
@@ -81,10 +81,10 @@ yo{
         }
         GBP{
             "£",
-            "Pọọn ti Orílẹ́ède  Bírítísì",
+            "Pọọn ti Orílẹ́ède Bírítísì",
         }
         GHC{
-            "₵",
+            "GHC",
             "ṣidi ti Orílẹ́ède Gana",
         }
         GMD{
@@ -92,7 +92,7 @@ yo{
             "Dalasi ti Orílẹ́ède Gamibia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faransi ti Orílẹ́ède Gini",
         }
         INR{
@@ -104,15 +104,15 @@ yo{
             "Yeni ti Orílẹ́ède Japani",
         }
         KES{
-            "Ksh",
+            "KES",
             "ṣiili ti Orílẹ́ède Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faransi ti Orílẹ́ède ṣomoriani",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dọla ti Orílẹ́ède Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ yo{
             "Loti ti Orílẹ́ède Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dina ti Orílẹ́ède Libiya",
         }
         MAD{
@@ -132,11 +132,11 @@ yo{
             "Faransi ti Orílẹ́ède Malagasi",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ouguiya ti Orílẹ́ède Maritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupi ti Orílẹ́ède Maritiusi",
         }
         MWK{
@@ -144,11 +144,11 @@ yo{
             "Kaṣa ti Orílẹ́ède Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metika ti Orílẹ́ède Mosamibiki",
         }
         NAD{
-            "N$",
+            "NAD",
             "Dọla ti Orílẹ́ède Namibia",
         }
         NGN{
@@ -160,11 +160,11 @@ yo{
             "Faransi ti Orílẹ́ède Ruwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riya ti Orílẹ́ède Saudi",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupi ti Orílẹ́ède Sayiselesi",
         }
         SDG{
@@ -172,23 +172,23 @@ yo{
             "Dina ti Orílẹ́ède Sudani",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Pọọun ti Orílẹ́ède Sudani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Pọọun ti Orílẹ́ède ̣Elena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Lioni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Sile ti Orílẹ́ède Somali",
         }
         STD{
-            "Db",
+            "STD",
             "Dobira ti Orílẹ́ède Sao tome Ati Pirisipe",
         }
         SZL{
@@ -196,15 +196,15 @@ yo{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dina ti Orílẹ́ède Tunisia",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Sile ti Orílẹ́ède Tansania",
         }
         UGX{
-            "USh",
+            "UGX",
             "Siile ti Orílẹ́ède Uganda",
         }
         USD{
@@ -220,17 +220,17 @@ yo{
             "Faransi ti Orílẹ́ède BIKEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randi ti Orílẹ́ède Ariwa Afirika",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kawaṣa ti Orílẹ́ède Saabia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dọla ti Orílẹ́ède Siibabuwe",
         }
     }
-    Version{"2.0.49.29"}
+    Version{"2.0.57.98"}
 }

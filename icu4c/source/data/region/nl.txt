@@ -60,7 +60,7 @@ nl{
         AT{"Oostenrijk"}
         AU{"Australië"}
         AW{"Aruba"}
-        AX{"Alandeilanden"}
+        AX{"Ålandeilanden"}
         AZ{"Azerbeidzjan"}
         BA{"Bosnië en Herzegovina"}
         BB{"Barbados"}
@@ -86,7 +86,7 @@ nl{
         CC{"Cocoseilanden"}
         CD{"Congo-Kinshasa"}
         CF{"Centraal-Afrikaanse Republiek"}
-        CG{"Congo"}
+        CG{"Congo-Brazzaville"}
         CH{"Zwitserland"}
         CI{"Ivoorkust"}
         CK{"Cookeilanden"}
@@ -230,14 +230,14 @@ nl{
         PK{"Pakistan"}
         PL{"Polen"}
         PM{"Saint Pierre en Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairneilanden"}
         PR{"Puerto Rico"}
-        PS{"Palestijns Gebied"}
+        PS{"Palestijnse gebieden"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
-        QO{"Oceanië (overige)"}
+        QO{"Overig Oceanië"}
         RE{"Réunion"}
         RO{"Roemenië"}
         RS{"Servië"}
@@ -281,7 +281,7 @@ nl{
         TZ{"Tanzania"}
         UA{"Oekraïne"}
         UG{"Oeganda"}
-        UM{"Amerikaanse kleinere afgelegen eilanden"}
+        UM{"Kleine afgelegen eilanden van de Verenigde Staten"}
         US{"Verenigde Staten"}
         UY{"Uruguay"}
         UZ{"Oezbekistan"}
@@ -301,5 +301,5 @@ nl{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend of onjuist gebied"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
 }

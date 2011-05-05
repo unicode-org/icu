@@ -18,9 +18,9 @@ bo{
         "\u0FA1 {\u0FA1\u0FB7} ན \u0FA3 པ \u0FA4 ཕ \u0FA5 བ {བ\u0FB7} \u0FA6 {\u0FA6"
         "\u0FB7} མ \u0FA8 ཙ \u0FA9 ཚ \u0FAA ཛ {ཛ\u0FB7} \u0FAB {\u0FAB\u0FB7} ཝ "
         "\u0FAD \u0FBA ཞ \u0FAE ཟ \u0FAF འ \u0FB0 ཡ \u0FB1 \u0FBB ར ཪ \u0FB2 \u0FBC ལ"
-        " \u0FB3 ཤ \u0FB4 ཥ \u0FB5 ས \u0FB6 ཧ \u0FB7 ཨ \u0FB8 \u0F71 \u0F72 {\u0F71"
-        "\u0F72} \u0F80 {\u0F71\u0F80} \u0F74 {\u0F71\u0F74} {\u0FB2\u0F80} \u0F77 {"
-        "\u0FB3\u0F80} \u0F79-\u0F7D \u0F84]"
+        " \u0FB3 ཤ \u0FB4 ཥ \u0FB5 ས \u0FB6 ཧ \u0FB7 ཨ \u0FB8 \u0F72 {\u0F71\u0F72} "
+        "\u0F80 {\u0F71\u0F80} \u0F74 {\u0F71\u0F74} {\u0FB2\u0F80} \u0F77 {\u0FB3"
+        "\u0F80} \u0F79-\u0F7D \u0F84]"
     }
     ExemplarCharactersIndex{"[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ]"}
     LocaleScript{
@@ -43,7 +43,7 @@ bo{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -8,7 +8,7 @@
 // ***************************************************************************
 sv_FI{
     AuxExemplarCharacters{"[ã ç ë í ñ ó š ÿ ü ž]"}
-    Version{"2.0.45.99"}
+    Version{"2.0.57.98"}
     calendar{
         gregorian{
             fields{

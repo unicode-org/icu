@@ -416,7 +416,7 @@ static void TestCurrency(void)
     UChar res[100];
     UErrorCode status = U_ZERO_ERROR;
     const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
-    const char* result[]={"1,50\\u00a0$", "1,50\\u00a0DM", "1,50\\u00a0F"};
+    const char* result[]={"1,50\\u00a0$", "1,50\\u00a0DEM", "1,50\\u00a0F"};
     log_verbose("\nTesting the number format with different currency patterns\n");
     for(i=0; i < 3; i++)
     {
@@ -470,10 +470,10 @@ static void TestCurrencyPreEuro(void)
     };
 
     const char* result[]={
-        "2\\u00A0\\u20A7", "2\\u00A0F",            "IR\\u00A31.50",                      "1,50\\u00A0mk",   "2\\u00A0F",         "IT\\u20A4\\u00A02",
-        "1$50\\u00A0Esc.", "\\u00F6S\\u00A01,50",  "1,50\\u00A0\\u0394\\u03C1\\u03C7", "\\u20A7\\u00A02", "1,50\\u00A0FB",     "IR\\u00a31.50",
-        "1,50\\u00A0BF",   "1,50\\u00A0DM",        "1,50\\u00A0BF",                    "2\\u00A0\\u20A7", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
-        "fl\\u00A01,50"
+        "2\\u00A0\\u20A7", "2\\u00A0F",            "IEP1.50",                      "1,50\\u00A0FIM",   "2\\u00A0F",         "ITL\\u00A02",
+        "1$50\\u00A0Esc.", "\\u00F6S\\u00A01,50",  "1,50\\u00A0\\u0394\\u03C1\\u03C7", "\\u20A7\\u00A02", "1,50\\u00A0FB",     "IEP\\u00A01.50",
+        "1,50\\u00A0BEF",   "1,50\\u00A0DEM",        "1,50\\u00A0BEF",                    "2\\u00A0\\u20A7", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
+        "NLG\\u00A01,50"
     };
 
     log_verbose("\nTesting the number format with different currency patterns\n");

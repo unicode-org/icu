@@ -17,7 +17,7 @@ en{
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; : ! ? . … ‘ ' ’ ′ ″ “ \" ” ( ) [ ] / @ \& # § † ‡ *]"}
+    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / \& # † ‡ ′ ″ §]"}
     LocaleScript{
         "Latn",
     }
@@ -43,7 +43,7 @@ en{
             }
         }
     }
-    Version{"2.0.54.39"}
+    Version{"2.0.58.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -431,8 +431,6 @@ en{
                 abbreviated{
                     "AH",
                 }
-                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
-                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
             }
             monthNames{
                 default{"format"}
@@ -452,7 +450,6 @@ en{
                         "Dhuʻl-H.",
                     }
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Muharram",
                         "Safar",
@@ -469,7 +466,6 @@ en{
                     }
                 }
                 stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
                     narrow{
                         "1",
                         "2",
@@ -484,7 +480,6 @@ en{
                         "11",
                         "12",
                     }
-                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                 }
             }
         }

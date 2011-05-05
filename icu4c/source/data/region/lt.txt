@@ -299,7 +299,7 @@ lt{
         ZA{"Pietų Afrika"}
         ZM{"Zambija"}
         ZW{"Zimbabvė"}
-        ZZ{"Nežinoma ar neteisinga sritis"}
+        ZZ{"nežinoma sritis"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.58.6"}
 }

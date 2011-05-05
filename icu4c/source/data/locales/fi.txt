@@ -39,7 +39,7 @@ fi{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -102,7 +102,7 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "cccc d. MMMM y",
+                "cccc, d. MMMM y",
                 "d. MMMM y",
                 "d.M.yyyy",
                 "d.M.yyyy",
@@ -113,6 +113,7 @@ fi{
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d."}
                 Ed{"ccc d."}
                 H{"H"}
                 Hm{"H.mm"}
@@ -156,6 +157,15 @@ fi{
                         "pe",
                         "la",
                     }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "K",
+                        "T",
+                        "P",
+                        "L",
+                    }
                     wide{
                         "sunnuntaina",
                         "maanantaina",
@@ -167,6 +177,15 @@ fi{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "su",
+                        "ma",
+                        "ti",
+                        "ke",
+                        "to",
+                        "pe",
+                        "la",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -192,6 +211,10 @@ fi{
                     "eKr.",
                     "jKr.",
                 }
+                narrow{
+                    "eK",
+                    "jK",
+                }
                 wide{
                     "ennen Kristuksen syntymää",
                     "jälkeen Kristuksen syntymän",
@@ -203,13 +226,15 @@ fi{
                     relative{
                         "-1"{"eilen"}
                         "-2"{"toissapäivänä"}
+                        "-3"{"kolme päivää sitten"}
                         "0"{"tänään"}
                         "1"{"huomenna"}
                         "2"{"ylihuomenna"}
+                        "3"{"kolmen päivän päästä"}
                     }
                 }
                 dayperiod{
-                    dn{"ap./ip."}
+                    dn{"vuorokaudenaika"}
                 }
                 era{
                     dn{"aikakausi"}
@@ -222,18 +247,33 @@ fi{
                 }
                 month{
                     dn{"kuukausi"}
+                    relative{
+                        "-1"{"viime kuussa"}
+                        "0"{"tässä kuussa"}
+                        "1"{"ensi kuussa"}
+                    }
                 }
                 second{
                     dn{"sekunti"}
                 }
                 week{
                     dn{"viikko"}
+                    relative{
+                        "-1"{"viime viikolla"}
+                        "0"{"tällä viikolla"}
+                        "1"{"ensi viikolla"}
+                    }
                 }
                 weekday{
                     dn{"viikonpäivä"}
                 }
                 year{
                     dn{"vuosi"}
+                    relative{
+                        "-1"{"viime vuonna"}
+                        "0"{"tänä vuonna"}
+                        "1"{"ensi vuonna"}
+                    }
                 }
                 zone{
                     dn{"aikavyöhyke"}
@@ -357,6 +397,20 @@ fi{
                         "marraskuuta",
                         "joulukuuta",
                     }
+                    narrow{
+                        "T",
+                        "H",
+                        "M",
+                        "H",
+                        "T",
+                        "K",
+                        "H",
+                        "E",
+                        "S",
+                        "L",
+                        "M",
+                        "J",
+                    }
                     wide{
                         "tammikuuta",
                         "helmikuuta",
@@ -419,6 +473,26 @@ fi{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "1. nelj.",
+                        "2. nelj.",
+                        "3. nelj.",
+                        "4. nelj.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1. neljännes",
+                        "2. neljännes",
+                        "3. neljännes",
+                        "4. neljännes",
+                    }
+                }
+                stand-alone{
                     abbreviated{
                         "1. nelj.",
                         "2. nelj.",
@@ -662,6 +736,7 @@ fi{
         }
     }
     measurementSystemNames{
+        UK{"brittiläinen"}
         US{"amerikkalainen"}
         metric{"metrinen"}
     }
@@ -670,29 +745,113 @@ fi{
             one{"{0} päivä"}
             other{"{0} päivää"}
         }
+        day-future{
+            0{"alle päivän päästä"}
+            1{"päivän päästä"}
+            one{"{0} päivän päästä"}
+            other{"{0} päivän päästä"}
+        }
+        day-past{
+            0{"alle päivä sitten"}
+            1{"päivä sitten"}
+            one{"{0} päivä sitten"}
+            other{"{0} päivää sitten"}
+        }
         hour{
             one{"{0} tunti"}
             other{"{0} tuntia"}
+        }
+        hour-future{
+            0{"alle tunnin päästä"}
+            1{"tunnin päästä"}
+            one{"{0} tunnin päästä"}
+            other{"{0} tunnin päästä"}
+        }
+        hour-past{
+            0{"alle tunti sitten"}
+            1{"tunti sitten"}
+            one{"{0} tunti sitten"}
+            other{"{0} tuntia sitten"}
         }
         minute{
             one{"{0} minuutti"}
             other{"{0} minuuttia"}
         }
+        minute-future{
+            0{"alle minuutin päästä"}
+            1{"minuutin päästä"}
+            one{"{0} minuutin päästä"}
+            other{"{0} minuutin päästä"}
+        }
+        minute-past{
+            0{"alle minuutti sitten"}
+            1{"minuutti sitten"}
+            one{"{0} minuutti sitten"}
+            other{"{0} minuuttia sitten"}
+        }
         month{
             one{"{0} kuukausi"}
             other{"{0} kuukautta"}
+        }
+        month-future{
+            0{"alle kuukauden päästä"}
+            1{"kuukauden päästä"}
+            one{"{0} kuukauden päästä"}
+            other{"{0} kuukauden päästä"}
+        }
+        month-past{
+            0{"alle kuukausi sitten"}
+            1{"kuukausi sitten"}
+            one{"{0} kuukausi sitten"}
+            other{"{0} kuukautta sitten"}
         }
         second{
             one{"{0} sekunti"}
             other{"{0} sekuntia"}
         }
+        second-future{
+            0{"alle sekunnin päästä"}
+            1{"sekunnin päästä"}
+            one{"{0} sekunnin päästä"}
+            other{"{0} sekunnin päästä"}
+        }
+        second-past{
+            0{"alle sekunti sitten"}
+            1{"sekunti sitten"}
+            one{"{0} sekunti sitten"}
+            other{"{0} sekuntia sitten"}
+        }
         week{
             one{"{0} viikko"}
             other{"{0} viikkoa"}
         }
+        week-future{
+            0{"alle viikon päästä"}
+            1{"viikon päästä"}
+            one{"{0} viikon päästä"}
+            other{"{0} viikon päästä"}
+        }
+        week-past{
+            0{"alle viikko sitten"}
+            1{"viikko sitten"}
+            one{"{0} viikko sitten"}
+            other{"{0} viikkoa sitten"}
+        }
         year{
             one{"{0} vuosi"}
             other{"{0} vuotta"}
+        }
+        year-future{
+            0{"alle vuoden päästä"}
+            1{"vuoden päästä"}
+            one{"{0} vuoden päästä"}
+            other{"{0} vuoden päästä"}
+        }
+        year-past{
+            0{"alle vuosi sitten"}
+            1{"vuosi sitten"}
+            one{"{0} vuosi sitten"}
+            other{"{0} vuotta sitten"}
         }
     }
     unitsShort{
@@ -717,8 +876,8 @@ fi{
             other{"{0} s"}
         }
         week{
-            one{"{0} vko"}
-            other{"{0} vko"}
+            one{"{0} vk"}
+            other{"{0} vk"}
         }
         year{
             one{"{0} v"}

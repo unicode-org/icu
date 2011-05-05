@@ -14,7 +14,7 @@ de{
     collations{
         phonebook{
             Sequence{"&a<<ä/e&A<<Ä/E&o<<ö/e&O<<Ö/E&u<<ü/e&U<<Ü/E"}
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
         search{
             Sequence{
@@ -71,11 +71,11 @@ de{
                 "&u<<ü/e"
                 "&U<<Ü/E"
             }
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
         standard{
             Sequence{""}
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
     }
 }

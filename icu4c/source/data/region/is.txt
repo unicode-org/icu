@@ -24,6 +24,7 @@ is{
         018{"Suðurhluti Afríku"}
         019{"Ameríka"}
         021{"Ameríka norðan Mexikó"}
+        029{"Karabíska hafið"}
         030{"Austur-Asía"}
         034{"suðurhluti Asíu"}
         035{"Suðaustur-Asía"}
@@ -35,12 +36,15 @@ is{
         062{"Syðri-Mið-Asía"}
         142{"Asía"}
         143{"Mið-Asía"}
+        145{"Vestur-Asía"}
         150{"Evrópa"}
         151{"Austur-Evrópa"}
         154{"Norður-Evrópa"}
+        155{"Vestur-Evrópa"}
         172{"Samveldi sjálfstæðra ríkja"}
         419{"Latín-Ameríka og Karíbahaf"}
         830{"Ermasundseyjar"}
+        AC{"Ascension-eyja"}
         AD{"Andorra"}
         AE{"Sameinuðu arabísku furstadæmin"}
         AF{"Afganistan"}
@@ -67,6 +71,7 @@ is{
         BH{"Barein"}
         BI{"Búrúndí"}
         BJ{"Benín"}
+        BL{"Saint Barthélemy"}
         BM{"Bermúdaeyjar"}
         BN{"Brúnei"}
         BO{"Bólivía"}
@@ -89,6 +94,7 @@ is{
         CM{"Kamerún"}
         CN{"Kína"}
         CO{"Kólumbía"}
+        CP{"Clipperton-eyja"}
         CR{"Kostaríka"}
         CS{"Serbía og Svartfjallaland"}
         CU{"Kúba"}
@@ -97,11 +103,13 @@ is{
         CY{"Kýpur"}
         CZ{"Tékkland"}
         DE{"Þýskaland"}
+        DG{"Diego Garcia"}
         DJ{"Djíbútí"}
         DK{"Danmörk"}
         DM{"Dóminíka"}
         DO{"Dóminíska lýðveldið"}
         DZ{"Alsír"}
+        EA{"Ceuta og Melilla"}
         EC{"Ekvador"}
         EE{"Eistland"}
         EG{"Egyptaland"}
@@ -141,6 +149,7 @@ is{
         HR{"Króatía"}
         HT{"Haítí"}
         HU{"Ungverjaland"}
+        IC{"Kanaríeyjar"}
         ID{"Indónesía"}
         IE{"Írland"}
         IL{"Ísrael"}
@@ -181,6 +190,7 @@ is{
         MC{"Mónakó"}
         MD{"Moldóva"}
         ME{"Svartfjallaland"}
+        MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Marshalleyjar"}
         MK{"Makedónía"}
@@ -252,6 +262,7 @@ is{
         SV{"El Salvador"}
         SY{"Sýrland"}
         SZ{"Svasíland"}
+        TA{"Tristan da Cunha"}
         TC{"Turks- og Caicoseyjar"}
         TD{"Tsjad"}
         TF{"Frönsku suðlægu landsvæðin"}
@@ -277,8 +288,8 @@ is{
         VA{"Páfagarður"}
         VC{"Sankti Vinsent og Grenadíneyjar"}
         VE{"Venesúela"}
-        VG{"Jómfrúaeyjar (bresku)"}
-        VI{"Jómfrúaeyjar (bandarísku)"}
+        VG{"Bresku Jómfrúaeyjar"}
+        VI{"Bandarísku Jómfrúaeyjar"}
         VN{"Víetnam"}
         VU{"Vanúatú"}
         WF{"Wallis- og Fútúnaeyjar"}
@@ -287,7 +298,8 @@ is{
         YT{"Mayotte"}
         ZA{"Suður-Afríka"}
         ZM{"Sambía"}
+        ZW{"Simbabve"}
         ZZ{"Óþekkt eða ógilt svæði"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.57.98"}
 }

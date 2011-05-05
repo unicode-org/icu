@@ -14,6 +14,8 @@ pl{
         calendar{"kalendarz"}
         collation{"sortowanie"}
         currency{"waluta"}
+        numbers{"Cyfry"}
+        x{"Do prywatnego użytku"}
     }
     Languages{
         aa{"afar"}
@@ -65,7 +67,7 @@ pl{
         bg{"bułgarski"}
         bh{"biharski"}
         bho{"bhodźpuri"}
-        bi{"Bislama"}
+        bi{"bislama"}
         bik{"bikol"}
         bin{"bini"}
         bla{"siksika"}
@@ -188,7 +190,7 @@ pl{
         gsw{"niemiecki (Szwajcaria)"}
         gu{"gudźaracki"}
         gv{"manx"}
-        gwi{"Gwichʼin"}
+        gwi{"gwichʼin"}
         ha{"hausa"}
         hai{"haida"}
         haw{"hawajski"}
@@ -380,6 +382,7 @@ pl{
         pro{"staroprowansalski"}
         ps{"paszto"}
         pt{"portugalski"}
+        pt_PT{"portugalski (Półwysep Iberyjski)"}
         qu{"keczua"}
         raj{"radźasthani"}
         rap{"rapanui"}
@@ -520,6 +523,9 @@ pl{
         zxx{"brak treści o charakterze lingwistycznym"}
         zza{"zazaki"}
     }
+    LanguagesShort{
+        az{"azerski"}
+    }
     Scripts{
         Arab{"arabskie"}
         Armi{"armi"}
@@ -535,10 +541,10 @@ pl{
         Bugi{"bugińskie"}
         Buhd{"buhid"}
         Cakm{"chakma"}
-        Cans{"Zunifikowane symbole kanadyjskich autochtonów"}
+        Cans{"zunifikowane symbole kanadyjskich autochtonów"}
         Cari{"karyjskie"}
         Cham{"czamskie"}
-        Cher{"Irokeski"}
+        Cher{"irokeski"}
         Cirt{"cirth"}
         Copt{"koptyjskie"}
         Cprt{"cypryjskie"}
@@ -560,8 +566,8 @@ pl{
         Hang{"hangyl"}
         Hani{"han"}
         Hano{"hanunoo"}
-        Hans{"Uproszczony Han"}
-        Hant{"Tradycyjny Han"}
+        Hans{"uproszczony han"}
+        Hant{"tradycyjny han"}
         Hebr{"hebrajskie"}
         Hira{"hiragana"}
         Hmng{"pahawh hmong"}
@@ -599,7 +605,7 @@ pl{
         Mtei{"meitei mayek"}
         Mymr{"birmańskie"}
         Nkoo{"n'ko"}
-        Ogam{"Ogham"}
+        Ogam{"ogham"}
         Olck{"ol chiki"}
         Orkh{"orchońskie"}
         Orya{"oriya"}
@@ -623,10 +629,10 @@ pl{
         Sinh{"syngaleskie"}
         Sund{"sundajskie"}
         Sylo{"syloti nagri"}
-        Syrc{"Syryjski"}
+        Syrc{"syryjski"}
         Syre{"syriacki estrangelo"}
-        Syrj{"Syryjski (odmiana zachodnia)"}
-        Syrn{"Syryjski (odmiana wschodnia)"}
+        Syrj{"syryjski (odmiana zachodnia)"}
+        Syrn{"syryjski (odmiana wschodnia)"}
         Tagb{"tagbanwa"}
         Tale{"tai le"}
         Talu{"nowy tai lue"}
@@ -634,7 +640,7 @@ pl{
         Tavt{"tai viet"}
         Telu{"telugu"}
         Teng{"tengwar"}
-        Tfng{"Tifinagh (berberski)"}
+        Tfng{"tifinagh (berberski)"}
         Tglg{"tagalog"}
         Thaa{"thaana"}
         Thai{"tajskie"}
@@ -656,22 +662,68 @@ pl{
         calendar{
             buddhist{"kalendarz buddyjski"}
             chinese{"kalendarz chiński"}
+            coptic{"Kalendarz koptyjski"}
+            ethiopic{"Kalendarz etiopski"}
+            ethiopic-amete-alem{"Kalendarz etiopski Amete Alem"}
             gregorian{"kalendarz gregoriański"}
             hebrew{"kalendarz hebrajski"}
             indian{"narodowy kalendarz hinduski"}
             islamic{"kalendarz islamski (metoda wzrokowa)"}
             islamic-civil{"kalendarz islamski (metoda obliczeniowa)"}
             japanese{"kalendarz japoński"}
+            persian{"Kalendarz perski"}
             roc{"kalendarz Republiki Chińskiej"}
         }
         collation{
             big5han{"chiński tradycyjny porządek sortowania - Big5"}
+            dictionary{"sortowanie słownikowe"}
             direct{"bezpośredni porządek sortowania"}
+            ducet{"Domyślna kolejność sortowania Unicode"}
             gb2312han{"chiński uproszczony porządek sortowania - GB2312"}
             phonebook{"porządek sortowania książki telefonicznej"}
             pinyin{"porządek sortowania pinyin"}
+            reformed{"sortowanie zreformowane"}
+            search{"uniwersalny porządek sortowania"}
             stroke{"porządek akcentów"}
             traditional{"tradycyjny porządek sortowania"}
+            unihan{"sortowanie wg kluczy i ich liczby kresek"}
+        }
+        numbers{
+            arab{"Cyfry arabsko-indyjskie"}
+            arabext{"Rozszerzone cyfry arabsko-indyjskie"}
+            armn{"Cyfry ormiańskie"}
+            armnlow{"Cyfry ormiańskie (małe litery)"}
+            beng{"Cyfry bengalskie"}
+            deva{"Cyfry dewanagari"}
+            ethi{"Cyfry etiopskie"}
+            fullwide{"Cyfry o pełnej szerokości"}
+            geor{"Cyfry gruzińskie"}
+            grek{"Cyfry greckie"}
+            greklow{"Cyfry greckie (małe litery)"}
+            gujr{"Cyfry gudżarati"}
+            guru{"Cyfry Gurmukhi"}
+            hanidec{"Chińskie cyfry dziesiętne"}
+            hans{"Uproszczone cyfry chińskie"}
+            hansfin{"Uproszczone chińskie cyfry księgowe"}
+            hant{"Tradycyjne cyfry chińskie"}
+            hantfin{"Tradycyjne chińskie cyfry księgowe"}
+            hebr{"Cyfry hebrajskie"}
+            jpan{"Cyfry japońskie"}
+            jpanfin{"Japońskie cyfry księgowe"}
+            khmr{"Cyfry khmerskie"}
+            knda{"Cyfry kannada"}
+            laoo{"Cyfry laotańskie"}
+            latn{"cyfry arabskie"}
+            mlym{"Cyfry malajalam"}
+            mong{"Cyfry mongolskie"}
+            mymr{"Cyfry birmańskie"}
+            orya{"Cyfry orija"}
+            roman{"Cyfry rzymskie"}
+            romanlow{"Cyfry rzymskie (małe litery)"}
+            taml{"Cyfry tamilskie"}
+            telu{"Cyfry telugu"}
+            thai{"Cyfry tajskie"}
+            tibt{"Cyfry tybetańskie"}
         }
     }
     Variants{
@@ -707,7 +759,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.31"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

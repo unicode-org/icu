@@ -16,7 +16,7 @@ rof{
             "heleri sa Falme za Kiarabu",
         }
         AOA{
-            "Kz",
+            "AOA",
             "heleri sa Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ rof{
             "heleri sa Australia",
         }
         BHD{
-            "BD",
+            "BHD",
             "heleri sa Bahareni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "heleri sa Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ rof{
             "heleri sa China",
         }
         CVE{
-            "CV$",
+            "CVE",
             "heleri sa Kepuvede",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "heleri sa Jibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "heleri sa Aljeria",
         }
         EGP{
@@ -68,11 +68,11 @@ rof{
             "heleri sa Misri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "heleri sa Eritrea",
         }
         ETB{
-            "Br",
+            "ETB",
             "heleri sa Uhabeshi",
         }
         EUR{
@@ -84,7 +84,7 @@ rof{
             "heleri sa Uingereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "heleri sa Ghana",
         }
         GMD{
@@ -92,7 +92,7 @@ rof{
             "heleri sa Gambia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "heleri sa Gine",
         }
         INR{
@@ -104,15 +104,15 @@ rof{
             "heleri sa Japani",
         }
         KES{
-            "Ksh",
+            "KES",
             "heleri sa Kenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "heleri sa Komoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "heleri sa Liberia",
         }
         LSL{
@@ -120,7 +120,7 @@ rof{
             "heleri sa Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "heleri sa Libya",
         }
         MAD{
@@ -132,11 +132,11 @@ rof{
             "heleri sa Bukini",
         }
         MRO{
-            "UM",
+            "MRO",
             "heleri sa Moritania",
         }
         MUR{
-            "MURs",
+            "MUR",
             "heleri sa Morisi",
         }
         MWK{
@@ -144,15 +144,15 @@ rof{
             "heleri sa Malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "heleri sa Msumbiji",
         }
         NAD{
-            "N$",
+            "NAD",
             "heleri sa Namibia",
         }
         NGN{
-            "₦",
+            "NGN",
             "heleri sa Nijeria",
         }
         RWF{
@@ -160,11 +160,11 @@ rof{
             "heleri sa Rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "heleri sa Saudia",
         }
         SCR{
-            "SRe",
+            "SCR",
             "heleri sa Shelisheli",
         }
         SDG{
@@ -172,19 +172,19 @@ rof{
             "heleri sa Sudani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "heleri sa Santahelena",
         }
         SLL{
-            "Le",
+            "SLL",
             "leoni",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "heleri sa Somalia",
         }
         STD{
-            "Db",
+            "STD",
             "heleri sa Sao Tome na Principe",
         }
         SZL{
@@ -192,7 +192,7 @@ rof{
             "lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "heleri sa Tunisia",
         }
         TZS{
@@ -200,7 +200,7 @@ rof{
             "heleri sa Tanzania",
         }
         UGX{
-            "USh",
+            "UGX",
             "heleri sa Uganda",
         }
         USD{
@@ -216,17 +216,17 @@ rof{
             "heleri sa CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "heleri sa Afrika Kusini",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "heleri sa Zambia",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "heleri sa Zimbabwe",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.57.99"}
 }

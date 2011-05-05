@@ -39,7 +39,7 @@ nb{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.7"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -51,11 +51,11 @@ nb{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d.M yyyy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
             }
             availableFormats{
                 EEEd{"EEE d."}
@@ -103,11 +103,11 @@ nb{
                 "d. MMMM y",
                 "d. MMM y",
                 "dd.MM.yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
             }
             availableFormats{
                 EEEd{"EEE d."}
@@ -118,7 +118,7 @@ nb{
                 MMM{"LLL"}
                 MMMEd{"E d. MMM"}
                 MMMd{"d. MMM"}
-                MMdd{"dd.MM"}
+                MMdd{"d.M."}
                 Md{"d.M."}
                 d{"d."}
                 hm{"h:mm a"}
@@ -150,6 +150,15 @@ nb{
                         "fre.",
                         "lør.",
                     }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
+                    }
                     wide{
                         "søndag",
                         "mandag",
@@ -161,6 +170,15 @@ nb{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "sø.",
+                        "ma.",
+                        "ti.",
+                        "on.",
+                        "to.",
+                        "fr.",
+                        "lø.",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -169,6 +187,15 @@ nb{
                         "T",
                         "F",
                         "L",
+                    }
+                    wide{
+                        "søndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "lørdag",
                     }
                 }
             }
@@ -188,11 +215,9 @@ nb{
                     relative{
                         "-1"{"i går"}
                         "-2"{"i forgårs"}
-                        "-3"{"for tre dager siden"}
                         "0"{"i dag"}
                         "1"{"i morgen"}
                         "2"{"i overmorgen"}
-                        "3"{"om tre dager"}
                     }
                 }
                 dayperiod{
@@ -209,18 +234,33 @@ nb{
                 }
                 month{
                     dn{"måned"}
+                    relative{
+                        "-1"{"Sist måned"}
+                        "0"{"Denne måneden"}
+                        "1"{"Neste måned"}
+                    }
                 }
                 second{
                     dn{"sekund"}
                 }
                 week{
                     dn{"uke"}
+                    relative{
+                        "-1"{"Sist uke"}
+                        "0"{"Denne uken"}
+                        "1"{"Neste uke"}
+                    }
                 }
                 weekday{
                     dn{"ukedag"}
                 }
                 year{
                     dn{"år"}
+                    relative{
+                        "-1"{"I fjor"}
+                        "0"{"Dette året"}
+                        "1"{"Neste år"}
+                    }
                 }
                 zone{
                     dn{"sone"}
@@ -333,6 +373,20 @@ nb{
                         "nov.",
                         "des.",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "januar",
                         "februar",
@@ -349,6 +403,20 @@ nb{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "mai",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "des",
+                    }
                     narrow{
                         "J",
                         "F",
@@ -363,10 +431,44 @@ nb{
                         "N",
                         "D",
                     }
+                    wide{
+                        "januar",
+                        "februar",
+                        "mars",
+                        "april",
+                        "mai",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "desember",
+                    }
                 }
             }
             quarters{
                 format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
+                stand-alone{
                     abbreviated{
                         "K1",
                         "K2",
@@ -392,11 +494,11 @@ nb{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d.M y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
             }
             availableFormats{
                 EEEd{"EEE d."}
@@ -488,11 +590,11 @@ nb{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d.M y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
             }
             availableFormats{
                 EEEd{"EEE d."}
@@ -541,6 +643,7 @@ nb{
         }
     }
     measurementSystemNames{
+        UK{"engelsk"}
         US{"amerikansk"}
         metric{"metrisk"}
     }
@@ -549,29 +652,107 @@ nb{
             one{"{0} dag"}
             other{"{0} dager"}
         }
+        day-future{
+            0{"Om 0 dager"}
+            1{"Om 1 dag"}
+            one{"om {0} dag"}
+            other{"om {0} dager"}
+        }
+        day-past{
+            0{"0 dager siden"}
+            1{"1 dag siden"}
+            one{"for {0} dag siden"}
+            other{"{0} dager siden"}
+        }
         hour{
             one{"{0} time"}
             other{"{0} timer"}
+        }
+        hour-future{
+            0{"Om 0 timer"}
+            1{"Om 1 time"}
+            one{"om {0} time"}
+            other{"Om {0} timer"}
+        }
+        hour-past{
+            0{"0 timer siden"}
+            1{"1 time siden"}
+            other{"{0} timer siden"}
         }
         minute{
             one{"{0} minutt"}
             other{"{0} minutter"}
         }
+        minute-future{
+            0{"Om 0 minutter"}
+            1{"Om 1 minutt"}
+            one{"om {0} minutt"}
+            other{"om {0} minutter"}
+        }
+        minute-past{
+            0{"0 minutter siden"}
+            1{"1 minutt siden"}
+            other{"{0} minutter siden"}
+        }
         month{
             one{"{0} måned"}
             other{"{0} måneder"}
+        }
+        month-future{
+            0{"Om 0 måneder"}
+            1{"Om 1 måned"}
+            one{"om {0} måned"}
+            other{"om {0} måneder"}
+        }
+        month-past{
+            0{"0 måneder siden"}
+            1{"1 måned siden"}
+            other{"{0} måneder siden"}
         }
         second{
             one{"{0} sekund"}
             other{"{0} sekunder"}
         }
+        second-future{
+            0{"Om 0 sekunder"}
+            1{"om 1 sekund"}
+            one{"om {0} sekund"}
+            other{"om {0} sekunder"}
+        }
+        second-past{
+            0{"0 sekunder siden"}
+            1{"1 sekund siden"}
+            other{"{0} sekunder siden"}
+        }
         week{
             one{"{0} uke"}
             other{"{0} uker"}
         }
+        week-future{
+            0{"Om 0 uker"}
+            1{"Om 1 uke"}
+            one{"om {0} uke"}
+            other{"om {0} uker"}
+        }
+        week-past{
+            0{"0 uker siden"}
+            1{"1 uke siden"}
+            other{"{0} uker siden"}
+        }
         year{
             one{"{0} år"}
             other{"{0} år"}
+        }
+        year-future{
+            0{"Om 0 år"}
+            1{"Om 1 år"}
+            one{"om {0} år"}
+            other{"om {0} år"}
+        }
+        year-past{
+            0{"0 år siden"}
+            1{"1 år siden"}
+            other{"{0} år siden"}
         }
     }
     unitsShort{

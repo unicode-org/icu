@@ -34,7 +34,9 @@ eo{
         cy{"kimra"}
         da{"dana"}
         de{"germana"}
+        dv{"mahla"}
         dz{"dzonko"}
+        efi{"ibibioefika"}
         el{"greka"}
         en{"angla"}
         eo{"esperanto"}
@@ -54,9 +56,11 @@ eo{
         gn{"gvarania"}
         gu{"guĝarata"}
         ha{"haŭsa"}
+        haw{"havaja"}
         he{"hebrea"}
         hi{"hinda"}
         hr{"kroata"}
+        ht{"haitia kreola"}
         hu{"hungara"}
         hy{"armena"}
         ia{"interlingvao"}
@@ -78,6 +82,7 @@ eo{
         ku{"kurda"}
         ky{"kirgiza"}
         la{"latino"}
+        lb{"luksemburga"}
         ln{"lingala"}
         lo{"laŭa"}
         lt{"litova"}
@@ -92,6 +97,7 @@ eo{
         mt{"malta"}
         my{"birma"}
         na{"naura"}
+        nb{"dannorvega"}
         ne{"nepala"}
         nl{"nederlanda"}
         nn{"novnorvega"}
@@ -101,7 +107,7 @@ eo{
         or{"orijo"}
         pa{"panĝaba"}
         pl{"pola"}
-        ps{"paŝtua"}
+        ps{"paŝtoa"}
         pt{"portugala"}
         pt_BR{"brazilportugala"}
         pt_PT{"portugalportugala"}
@@ -144,6 +150,7 @@ eo{
         tw{"akana"}
         ug{"ujgura"}
         uk{"ukraina"}
+        und{"nekonata aŭ nevalida lingvo"}
         ur{"urduo"}
         uz{"uzbeka"}
         vi{"vjetnama"}
@@ -154,7 +161,10 @@ eo{
         yo{"joruba"}
         za{"ĝuanga"}
         zh{"ĉina"}
+        zh_Hans{"ĉina simpligita"}
+        zh_Hant{"ĉina tradicia"}
         zu{"zulua"}
+        zxx{"nelingvaĵo"}
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.58.6"}
 }

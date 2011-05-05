@@ -302,5 +302,5 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
-    Version{"2.0.54.39"}
+    Version{"2.0.58.6"}
 }

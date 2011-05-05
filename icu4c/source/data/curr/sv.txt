@@ -12,7 +12,7 @@
 sv{
     Currencies{
         ADP{
-            "ADP" /** ===  */,
+            "ADP",
             "andorransk peseta",
         }
         AED{
@@ -20,7 +20,7 @@ sv{
             "Förenade Arabemiratens dirham",
         }
         AFA{
-            "AFA" /** ===  */,
+            "AFA",
             "afghani (1927-2002)",
         }
         AFN{
@@ -40,7 +40,7 @@ sv{
             "armenisk dram",
         }
         ANG{
-            "NAf.",
+            "ANG",
             "Nederländska Antillernas gulden",
         }
         AOA{
@@ -48,15 +48,15 @@ sv{
             "angolansk kwanza",
         }
         AOK{
-            "AOK" /** ===  */,
+            "AOK",
             "angolansk kwanza (1977-1990)",
         }
         AON{
-            "AON" /** ===  */,
+            "AON",
             "angolansk ny kwanza (1990-2000)",
         }
         AOR{
-            "AOR" /** ===  */,
+            "AOR",
             "angolansk kwanza reajustado (1995-1999)",
         }
         ARA{
@@ -64,15 +64,15 @@ sv{
             "argentinsk austral",
         }
         ARL{
-            "ARL" /** ===  */,
+            "ARL",
             "ARL",
         }
         ARM{
-            "ARM" /** ===  */,
+            "ARM",
             "ARM",
         }
         ARP{
-            "ARP" /** ===  */,
+            "ARP",
             "argentinsk peso (1983-1985)",
         }
         ARS{
@@ -80,7 +80,7 @@ sv{
             "argentinsk peso",
         }
         ATS{
-            "ATS" /** ===  */,
+            "ATS",
             "österrikisk schilling",
         }
         AUD{
@@ -107,6 +107,10 @@ sv{
             "BAM",
             "bosnisk-hercegovinsk mark (konvertibel)",
         }
+        BAN{
+            "BAN",
+            "bosnisk-hercegovinsk dinar (1994-1998)",
+        }
         BBD{
             "Bds$",
             "Barbados-dollar",
@@ -116,7 +120,7 @@ sv{
             "bangladeshisk taka",
         }
         BEC{
-            "BEC" /** ===  */,
+            "BEC",
             "belgisk franc (konvertibel)",
         }
         BEF{
@@ -124,20 +128,24 @@ sv{
             "belgisk franc",
         }
         BEL{
-            "BEL" /** ===  */,
+            "BEL",
             "belgisk franc (finansiell)",
         }
         BGL{
-            "BGL" /** ===  */,
-            "bulgarisk lev (1962–1999)",
+            "BGL",
+            "bulgarisk hård lev (1962–1999)",
         }
         BGM{
-            "BGM" /** ===  */,
+            "BGM",
             "bulgarisk lev (1952–1962)",
         }
         BGN{
             "BGN",
-            "bulgarisk ny lev",
+            "bulgarisk lev",
+        }
+        BGO{
+            "BGO",
+            "bulgarisk lev (1881–1952)",
         }
         BHD{
             "BHD",
@@ -157,14 +165,18 @@ sv{
         }
         BOB{
             "BOB",
-            "boliviano",
+            "boliviansk boliviano",
+        }
+        BOL{
+            "BOL",
+            "boliviansk boliviano (1864-1963)",
         }
         BOP{
             "BOP",
             "boliviansk peso",
         }
         BOV{
-            "BOV" /** ===  */,
+            "BOV",
             "boliviansk mvdol",
         }
         BRB{
@@ -192,7 +204,7 @@ sv{
             "brasiliansk cruzeiro",
         }
         BRZ{
-            "BRZ" /** ===  */,
+            "BRZ",
             "BRZ",
         }
         BSD{
@@ -204,7 +216,7 @@ sv{
             "bhutanesisk ngultrum",
         }
         BUK{
-            "BUK" /** ===  */,
+            "BUK",
             "burmesisk kyat",
         }
         BWP{
@@ -212,7 +224,7 @@ sv{
             "botswansk pula",
         }
         BYB{
-            "BYB" /** ===  */,
+            "BYB",
             "vitrysk ny rubel (1994-1999)",
         }
         BYR{
@@ -232,7 +244,7 @@ sv{
             "kongolesisk franc",
         }
         CHE{
-            "CHE" /** ===  */,
+            "CHE",
             "euro (konvertibelt konto, WIR Bank, Schweiz)",
         }
         CHF{
@@ -240,15 +252,15 @@ sv{
             "schweizisk franc",
         }
         CHW{
-            "CHW" /** ===  */,
+            "CHW",
             "franc (konvertibelt konto, WIR Bank, Schweiz)",
         }
         CLE{
-            "CLE" /** ===  */,
+            "CLE",
             "CLE",
         }
         CLF{
-            "CLF" /** ===  */,
+            "CLF",
             "chilensk unidad de fomento",
         }
         CLP{
@@ -268,7 +280,7 @@ sv{
             "colombiansk peso",
         }
         COU{
-            "COU" /** ===  */,
+            "COU",
             "colombiansk unidad de valor real",
         }
         CRC{
@@ -276,16 +288,16 @@ sv{
             "costarikansk colón",
         }
         CSD{
-            "CSD" /** ===  */,
-            "jugoslavisk dinar",
+            "CSD",
+            "serbisk dinar (2002-2006)",
         }
         CSK{
-            "CSK" /** ===  */,
-            "tjeckisk hård koruna",
+            "CSK",
+            "tjeckoslovakisk krona (-1993)",
         }
         CUC{
             "CUC",
-            "CUC",
+            "kubansk peso (konvertibel)",
         }
         CUP{
             "CUP",
@@ -304,11 +316,11 @@ sv{
             "tjeckisk koruna",
         }
         DDM{
-            "DDM" /** ===  */,
+            "DDM",
             "östtysk mark",
         }
         DEM{
-            "DM",
+            "DEM",
             "tysk mark",
         }
         DJF{
@@ -328,15 +340,15 @@ sv{
             "algerisk dinar",
         }
         ECS{
-            "ECS" /** ===  */,
+            "ECS",
             "ecuadoriansk sucre",
         }
         ECV{
-            "ECV" /** ===  */,
+            "ECV",
             "ecuadoriansk unidad de valor constante",
         }
         EEK{
-            "Ekr",
+            "EEK",
             "estnisk krona",
         }
         EGP{
@@ -348,11 +360,11 @@ sv{
             "eritreansk nakfa",
         }
         ESA{
-            "ESA" /** ===  */,
+            "ESA",
             "spansk peseta (konto)",
         }
         ESB{
-            "ESB" /** ===  */,
+            "ESB",
             "spansk peseta (konvertibelt konto)",
         }
         ESP{
@@ -388,7 +400,7 @@ sv{
             "brittiskt pund sterling",
         }
         GEK{
-            "GEK" /** ===  */,
+            "GEK",
             "georgisk kupon larit",
         }
         GEL{
@@ -416,11 +428,11 @@ sv{
             "guineansk franc",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "guineansk syli",
         }
         GQE{
-            "GQE" /** ===  */,
+            "GQE",
             "ekvatorialguineansk ekwele",
         }
         GRD{
@@ -432,11 +444,11 @@ sv{
             "guatemalansk quetzal",
         }
         GWE{
-            "GWE" /** ===  */,
+            "GWE",
             "Portugisiska Guinea-escudo",
         }
         GWP{
-            "GWP" /** ===  */,
+            "GWP",
             "Guinea-Bissau-peso",
         }
         GYD{
@@ -452,7 +464,7 @@ sv{
             "honduransk lempira",
         }
         HRD{
-            "HRD" /** ===  */,
+            "HRD",
             "kroatisk dinar",
         }
         HRK{
@@ -543,6 +555,14 @@ sv{
             "KPW",
             "nordkoreansk won",
         }
+        KRH{
+            "KRH",
+            "sydkoreansk hwan (1953-1962)",
+        }
+        KRO{
+            "KRO",
+            "sydkoreansk won (1945-1953)",
+        }
         KRW{
             "KRW",
             "sydkoreansk won",
@@ -584,19 +604,19 @@ sv{
             "litauisk litas",
         }
         LTT{
-            "LTT" /** ===  */,
+            "LTT",
             "litauisk talonas",
         }
         LUC{
-            "LUC" /** ===  */,
+            "LUC",
             "luxemburgsk franc (konvertibel)",
         }
         LUF{
-            "LUF" /** ===  */,
+            "LUF",
             "luxemburgsk franc",
         }
         LUL{
-            "LUL" /** ===  */,
+            "LUL",
             "luxemburgsk franc (finansiell)",
         }
         LVL{
@@ -604,7 +624,7 @@ sv{
             "lettisk lats",
         }
         LVR{
-            "LVR" /** ===  */,
+            "LVR",
             "lettisk rubel",
         }
         LYD{
@@ -616,8 +636,16 @@ sv{
             "marockansk dirham",
         }
         MAF{
-            "MAF" /** ===  */,
+            "MAF",
             "marockansk franc",
+        }
+        MCF{
+            "MCF",
+            "monegaskisk franc (-2001)",
+        }
+        MDC{
+            "MDC",
+            "moldavisk cupon (1992-1993)",
         }
         MDL{
             "MDL",
@@ -628,15 +656,19 @@ sv{
             "madagaskisk ariary",
         }
         MGF{
-            "MGF" /** ===  */,
+            "MGF",
             "madagaskisk franc",
         }
         MKD{
             "MKD",
             "makedonisk denar",
         }
+        MKN{
+            "MKN",
+            "makedonisk denar (1992-1993)",
+        }
         MLF{
-            "MLF" /** ===  */,
+            "MLF",
             "malisk franc",
         }
         MMK{
@@ -684,7 +716,7 @@ sv{
             "mexikansk silverpeso (1861-1992)",
         }
         MXV{
-            "MXV" /** ===  */,
+            "MXV",
             "mexikansk unidad de inversion",
         }
         MYR{
@@ -692,7 +724,7 @@ sv{
             "malaysisk ringgit",
         }
         MZE{
-            "MZE" /** ===  */,
+            "MZE",
             "moçambikisk escudo",
         }
         MZM{
@@ -712,7 +744,7 @@ sv{
             "nigeriansk naira",
         }
         NIC{
-            "NIC" /** ===  */,
+            "NIC",
             "nicaraguansk córdoba",
         }
         NIO{
@@ -752,7 +784,7 @@ sv{
             "peruansk sol nuevo",
         }
         PES{
-            "PES" /** ===  */,
+            "PES",
             "peruansk sol",
         }
         PGK{
@@ -772,7 +804,7 @@ sv{
             "polsk zloty",
         }
         PLZ{
-            "PLZ" /** ===  */,
+            "PLZ",
             "polsk zloty (1950-1995)",
         }
         PTE{
@@ -801,14 +833,14 @@ sv{
         }
         RSD{
             "RSD",
-            "Serbisk dinar",
+            "serbisk dinar",
         }
         RUB{
             "RUB",
             "rysk rubel",
         }
         RUR{
-            "RUR" /** ===  */,
+            "RUR",
             "rysk rubel (1991-1998)",
         }
         RWF{
@@ -829,15 +861,15 @@ sv{
         }
         SDD{
             "SDD",
-            "sudanesisk dinar",
+            "sudansk dinar (1992-2007)",
         }
         SDG{
             "SDG",
-            "sudanesiskt pund",
+            "sudanskt pund",
         }
         SDP{
-            "SDP" /** ===  */,
-            "gammalt sudanesiskt pund",
+            "SDP",
+            "sudanskt pund (1916-1992)",
         }
         SEK{
             "kr",
@@ -852,7 +884,7 @@ sv{
             "S:t Helena-pund",
         }
         SIT{
-            "SIT" /** ===  */,
+            "SIT",
             "slovensk tolar",
         }
         SKK{
@@ -880,7 +912,7 @@ sv{
             "São Tomé och Príncipe-dobra",
         }
         SUR{
-            "SUR" /** ===  */,
+            "SUR",
             "sovjetisk rubel",
         }
         SVC{
@@ -900,7 +932,7 @@ sv{
             "thailändsk baht",
         }
         TJR{
-            "TJR" /** ===  */,
+            "TJR",
             "tadzjikisk rubel",
         }
         TJS{
@@ -909,7 +941,11 @@ sv{
         }
         TMM{
             "TMM",
-            "turkmensk manat",
+            "turkmenistansk manat (1993-2009)",
+        }
+        TMT{
+            "TMT",
+            "turkmenistansk manat",
         }
         TND{
             "TND",
@@ -920,7 +956,7 @@ sv{
             "tongansk paʻanga",
         }
         TPE{
-            "TPE" /** ===  */,
+            "TPE",
             "timoriansk escudo",
         }
         TRL{
@@ -933,7 +969,7 @@ sv{
         }
         TTD{
             "TTD",
-            "Trinidad ochTobago-dollar",
+            "Trinidad och Tobago-dollar",
         }
         TWD{
             "TWD",
@@ -948,11 +984,11 @@ sv{
             "ukrainsk hryvnia",
         }
         UAK{
-            "UAK" /** ===  */,
+            "UAK",
             "ukrainsk karbovanetz",
         }
         UGS{
-            "UGS" /** ===  */,
+            "UGS",
             "ugandisk shilling (1966-1987)",
         }
         UGX{
@@ -964,19 +1000,19 @@ sv{
             "US-dollar",
         }
         USN{
-            "USN" /** ===  */,
+            "USN",
             "US-dollar (nästa dag)",
         }
         USS{
-            "USS" /** ===  */,
+            "USS",
             "US-dollar (samma dag)",
         }
         UYI{
-            "UYI" /** ===  */,
+            "UYI",
             "uruguayansk peso en unidades indexadas",
         }
         UYP{
-            "UYP" /** ===  */,
+            "UYP",
             "uruguayansk peso (1975-1993)",
         }
         UYU{
@@ -999,6 +1035,10 @@ sv{
             "VND",
             "vietnamesisk dong",
         }
+        VNN{
+            "VNN",
+            "vietnamesisk dong (1978-1985)",
+        }
         VUV{
             "VUV",
             "vanuatisk vatu",
@@ -1009,7 +1049,7 @@ sv{
         }
         XAF{
             "XAF",
-            "CFA Franc BEAC",
+            "centralafrikansk franc",
         }
         XAG{
             "XAG",
@@ -1044,7 +1084,7 @@ sv{
             "IMF särskild dragningsrätt",
         }
         XEU{
-            "XEU" /** ===  */,
+            "XEU",
             "europeisk valutaenhet",
         }
         XFO{
@@ -1057,7 +1097,7 @@ sv{
         }
         XOF{
             "CFA",
-            "CFA Franc BCEAO",
+            "västafrikansk franc",
         }
         XPD{
             "XPD",
@@ -1072,7 +1112,7 @@ sv{
             "platina",
         }
         XRE{
-            "XRE" /** ===  */,
+            "XRE",
             "RINET-fond",
         }
         XTS{
@@ -1084,7 +1124,7 @@ sv{
             "okänd eller ogiltig valuta",
         }
         YDD{
-            "YDD" /** ===  */,
+            "YDD",
             "jemenitisk dinar",
         }
         YER{
@@ -1092,19 +1132,23 @@ sv{
             "jemenitisk rial",
         }
         YUD{
-            "YUD" /** ===  */,
+            "YUD",
             "jugoslavisk hård dinar",
         }
         YUM{
-            "YUM" /** ===  */,
+            "YUM",
             "jugoslavisk ny dinar",
         }
         YUN{
-            "YUN" /** ===  */,
+            "YUN",
             "jugoslavisk dinar (konvertibel)",
         }
+        YUR{
+            "YUR",
+            "jugoslavisk dinar (1992-1993)",
+        }
         ZAL{
-            "ZAL" /** ===  */,
+            "ZAL",
             "sydafrikansk rand (finansiell)",
         }
         ZAR{
@@ -1124,12 +1168,16 @@ sv{
             "zairisk zaire",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Zimbabwe-dollar",
         }
         ZWL{
             "ZWL",
             "Zimbabwe-dollar (2009)",
+        }
+        ZWR{
+            "ZWR",
+            "Zimbabwe-dollar (2008)",
         }
     }
     CurrencyPlurals{
@@ -1185,6 +1233,14 @@ sv{
             one{"argentinsk austral"}
             other{"argentinska australer"}
         }
+        ARL{
+            one{"argentisk peso (1970–1983)"}
+            other{"argentiska pesos (1970–1983)"}
+        }
+        ARM{
+            one{"argentisk peso (1881-1969)"}
+            other{"argentiska pesos (1881-1969)"}
+        }
         ARP{
             one{"argentinsk peso (1983-1985)"}
             other{"argentinska pesos (1983-1985)"}
@@ -1221,6 +1277,10 @@ sv{
             one{"bosnisk-hercegovinsk mark (konvertibel)"}
             other{"bosnisk-hercegovinska mark (konvertibla)"}
         }
+        BAN{
+            one{"bosnisk-hercegovinsk dinar (1994-1998)"}
+            other{"bosnisk-hercegovinska dinarer (1994-1998)"}
+        }
         BBD{
             one{"Barbados-dollar"}
             other{"Barbados-dollar"}
@@ -1243,14 +1303,19 @@ sv{
         }
         BGL{
             one{"bulgarisk hård lev (1962–1999)"}
-            other{"bulgariska lev (1962–1999)"}
+            other{"bulgariska hård lev (1962–1999)"}
         }
         BGM{
+            one{"bulgarisk lev (1952–1962)"}
             other{"bulgariska lev (1952–1962)"}
         }
         BGN{
             one{"bulgarisk lev"}
-            other{"bulgariska nya lev"}
+            other{"bulgariska lev"}
+        }
+        BGO{
+            one{"bulgarisk lev (1881–1952)"}
+            other{"bulgarisk lev (1881–1952)"}
         }
         BHD{
             one{"Bahrain-dinar"}
@@ -1270,7 +1335,11 @@ sv{
         }
         BOB{
             one{"boliviansk boliviano"}
-            other{"boliviano"}
+            other{"bolivianska bolivianos"}
+        }
+        BOL{
+            one{"boliviansk boliviano (1864-1963)"}
+            other{"bolivianska bolivianos (1864-1963)"}
         }
         BOP{
             one{"boliviansk peso"}
@@ -1303,6 +1372,10 @@ sv{
         BRR{
             one{"brasiliansk cruzeiro"}
             other{"brasilianska cruzeiros"}
+        }
+        BRZ{
+            one{"brasiliansk cruzeiro (1942-1967)"}
+            other{"brasilianska cruzeiros (1942-1967)"}
         }
         BSD{
             one{"Bahamas-dollar"}
@@ -1352,6 +1425,10 @@ sv{
             one{"franc (WIR Bank)"}
             other{"franc (konvertibelt konto, WIR Bank, Schweiz)"}
         }
+        CLE{
+            one{"chilensk escudo (1960-1975)"}
+            other{"chilenska escudos (1960-1975)"}
+        }
         CLF{
             one{"chilensk unidad de fomento"}
             other{"chilenska unidad de fomento"}
@@ -1381,12 +1458,16 @@ sv{
             other{"costarikanska colón"}
         }
         CSD{
-            one{"gammal serbisk dinar"}
-            other{"gamla serbiska dinarer"}
+            one{"serbisk dinar (2002-2006)"}
+            other{"serbiska dinarer (2002-2006)"}
         }
         CSK{
             one{"tjeckoslovakisk hård koruna"}
             other{"tjeckiska hårda koruna"}
+        }
+        CUC{
+            one{"kubansk peso (konvertibel)"}
+            other{"kubanska pesos (konvertibla)"}
         }
         CUP{
             one{"kubansk peso"}
@@ -1644,6 +1725,14 @@ sv{
             one{"nordkoreansk won"}
             other{"nordkoreanska won"}
         }
+        KRH{
+            one{"sydkoreansk hwan (1953-1962)"}
+            other{"sydkoreanska hwan (1953-1962)"}
+        }
+        KRO{
+            one{"sydkoreansk won (1945-1953)"}
+            other{"sydkoreanska won (1945-1953)"}
+        }
         KRW{
             one{"sydkoreansk won"}
             other{"sydkoreanska won"}
@@ -1720,6 +1809,14 @@ sv{
             one{"marockansk franc"}
             other{"marockanska franc"}
         }
+        MCF{
+            one{"monegaskisk franc (-2001)"}
+            other{"monegaskiska franc (-2001)"}
+        }
+        MDC{
+            one{"moldavisk cupon (1992-1993)"}
+            other{"moldaviska cupon (1992-1993)"}
+        }
         MDL{
             one{"moldavisk leu"}
             other{"moldaviska leu"}
@@ -1735,6 +1832,10 @@ sv{
         MKD{
             one{"makedonisk denar"}
             other{"makedoniska denarer"}
+        }
+        MKN{
+            one{"makedonisk denar (1992-1993)"}
+            other{"makedoniska denarer (1992-1993)"}
         }
         MLF{
             one{"malisk franc"}
@@ -1909,6 +2010,7 @@ sv{
             other{"ryska rubel"}
         }
         RUR{
+            one{"rysk rubel (1991-1998)"}
             other{"ryska rubel (1991-1998)"}
         }
         RWF{
@@ -1920,6 +2022,7 @@ sv{
             other{"saudiska riyal"}
         }
         SBD{
+            one{"Salomon-dollar"}
             other{"Salomon-dollar"}
         }
         SCR{
@@ -1927,66 +2030,103 @@ sv{
             other{"seychelliska rupier"}
         }
         SDD{
-            other{"sudanska gamla dinarer"}
+            one{"sudansk dinar (1992-2007)"}
+            other{"sudanska dinarer (1992-2007)"}
         }
         SDG{
+            one{"sudanskt pund"}
             other{"sudanska pund"}
         }
         SDP{
-            other{"sudanska gamla pund"}
+            one{"sudanskt pund (1916-1992)"}
+            other{"sudanska pund (1916-1992)"}
         }
         SEK{
+            one{"svensk krona"}
             other{"svenska kronor"}
         }
         SGD{
+            one{"Singapore-dollar"}
             other{"Singapore-dollar"}
         }
         SHP{
+            one{"S:t Helena-pund"}
             other{"S:t Helena-pund"}
         }
         SIT{
+            one{"slovensk tolar"}
             other{"slovenska tolar"}
         }
         SKK{
+            one{"slovakisk krona"}
             other{"slovakiska korunor"}
         }
+        SLL{
+            one{"sierraleonsk leone"}
+            other{"sierraleonska leoner"}
+        }
         SOS{
+            one{"somalisk shilling"}
             other{"somaliska shilling"}
         }
         SRD{
+            one{"Surinam-dollar"}
             other{"Surinam-dollar"}
         }
         SRG{
+            one{"Surinam-gulden"}
             other{"Surinam-gulden"}
         }
+        STD{
+            one{"São Tomé och Príncipe-dobra"}
+            other{"São Tomé och Príncipe-dobror"}
+        }
         SUR{
+            one{"sovjetisk rubel"}
             other{"sovjetiska rubler"}
         }
         SVC{
+            one{"salvadoransk colón"}
             other{"salvadoranska colón"}
         }
         SYP{
+            one{"syriskt pund"}
             other{"syriska pund"}
         }
+        SZL{
+            one{"swaziländsk lilangeni"}
+            other{"swaziländska lilangeni"}
+        }
         THB{
+            one{"thailändsk baht"}
             other{"thailändska baht"}
         }
         TJR{
+            one{"tadzjikisk rubel"}
             other{"tadzjikiska rubler"}
         }
         TJS{
+            one{"tadzjikisk somoni"}
             other{"tadzjikiska somoni"}
         }
         TMM{
-            other{"turkmenska manat"}
+            one{"turkmenistansk manat (1993-2009)"}
+            other{"turkmenistanska manat (1993-2009)"}
+        }
+        TMT{
+            one{"turkmenistansk manat"}
+            other{"turkmenistanska manat"}
         }
         TND{
+            one{"tunisisk dinar"}
             other{"tunisiska dinarer"}
         }
         TOP{
+            one{"tongansk paʻanga"}
             other{"tonganska paʻanga"}
         }
         TPE{
+            one{"östtimoresisk escudo"}
             other{"timorianska escudos"}
         }
         TRL{
@@ -2002,15 +2142,27 @@ sv{
             other{"Trinidad och Tobago-dollar"}
         }
         TWD{
+            one{"Taiwan-dollar"}
             other{"taiwanesiska nya dollar"}
         }
         TZS{
+            one{"tanzanisk shilling"}
             other{"tanzaniska shilling"}
         }
         UAH{
+            one{"ukrainsk hryvnia"}
             other{"ukrainska hryvnia"}
         }
+        UAK{
+            one{"ukrainsk karbovanetz (1992–1996)"}
+            other{"ukrainska karbovanetz (1992–1996)"}
+        }
+        UGS{
+            one{"ugandisk shilling (1966-1987)"}
+            other{"ugandiska shilling (1966-1987)"}
+        }
         UGX{
+            one{"ugandisk shilling"}
             other{"ugandiska shilling"}
         }
         USD{
@@ -2048,6 +2200,10 @@ sv{
         VND{
             one{"vietnamesisk dong"}
             other{"vietnamesiska dong"}
+        }
+        VNN{
+            one{"vietnamesisk dong (1978-1985)"}
+            other{"vietnamesiska dong (1978-1985)"}
         }
         VUV{
             one{"vanuatisk vatu"}
@@ -2153,6 +2309,10 @@ sv{
             one{"jugoslavisk dinar (konvertibel)"}
             other{"jugoslaviska dinarer (konvertibla)"}
         }
+        YUR{
+            one{"jugoslavisk dinar (1992-1993)"}
+            other{"jugoslaviska dinarer (1992-1993)"}
+        }
         ZAL{
             one{"sydafrikansk rand (finansiell)"}
             other{"sydafrikanska rand (finansiella)"}
@@ -2181,10 +2341,14 @@ sv{
             one{"Zimbabwe-dollar (2009)"}
             other{"Zimbabwe-dollar (2009)"}
         }
+        ZWR{
+            one{"Zimbabwe-dollar (2008)"}
+            other{"Zimbabwe-dollar (2008)"}
+        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.14"}
 }

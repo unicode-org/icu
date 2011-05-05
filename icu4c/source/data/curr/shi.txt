@@ -16,7 +16,7 @@ shi{
             "adrim n limarat",
         }
         AOA{
-            "Kz",
+            "AOA",
             "kwanza n angula",
         }
         AUD{
@@ -24,11 +24,11 @@ shi{
             "adular n ustralya",
         }
         BHD{
-            "BD",
+            "BHD",
             "adinar n bḥrayn",
         }
         BIF{
-            "FBu",
+            "BIF",
             "frank n burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ shi{
             "ayan n ccinwa",
         }
         CVE{
-            "CV$",
+            "CVE",
             "iskudu n kabbirdi",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "frank n djibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "adinar n dzayr",
         }
         EGP{
@@ -68,11 +68,11 @@ shi{
             "ajnih n miṣṛ",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "nafka n iritirya",
         }
         ETB{
-            "Br",
+            "ETB",
             "bir n ityubya",
         }
         EUR{
@@ -84,7 +84,7 @@ shi{
             "ajnih astrlini n nngliz",
         }
         GHC{
-            "₵",
+            "GHC",
             "sidi n ɣana",
         }
         GMD{
@@ -92,7 +92,7 @@ shi{
             "dalasi n gambya",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "frank n ɣinya",
         }
         INR{
@@ -104,15 +104,15 @@ shi{
             "ayan n lyaban",
         }
         KES{
-            "Ksh",
+            "KES",
             "acilin n kinya",
         }
         KMF{
-            "CF",
+            "KMF",
             "frank n qumuṛ",
         }
         LRD{
-            "L$",
+            "LRD",
             "adular n libirya",
         }
         LSL{
@@ -120,7 +120,7 @@ shi{
             "luti n liṣuṭu",
         }
         LYD{
-            "LD",
+            "LYD",
             "adinar n libya",
         }
         MAD{
@@ -132,11 +132,11 @@ shi{
             "frank n madaɣacqar",
         }
         MRO{
-            "UM",
+            "MRO",
             "uqiyya n muṛiṭanya",
         }
         MUR{
-            "MURs",
+            "MUR",
             "arubi n muris",
         }
         MWK{
@@ -144,15 +144,15 @@ shi{
             "kwaca n malawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "amitikl n muznbiq",
         }
         NAD{
-            "N$",
+            "NAD",
             "adular n namibya",
         }
         NGN{
-            "₦",
+            "NGN",
             "nayra n nijirya",
         }
         RWF{
@@ -160,11 +160,11 @@ shi{
             "afrank n rwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "aryal n ssaɛudiya",
         }
         SCR{
-            "SRe",
+            "SCR",
             "arubi n ssicil",
         }
         SDG{
@@ -172,23 +172,23 @@ shi{
             "adinar n ssudan",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "ajnih n ssudan",
         }
         SHP{
-            "SH£",
+            "SHP",
             "ajnih n santilin",
         }
         SLL{
-            "Le",
+            "SLL",
             "liyun",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "acilin n ṣṣumal",
         }
         STD{
-            "Db",
+            "STD",
             "adubra n sanṭumi",
         }
         SZL{
@@ -196,15 +196,15 @@ shi{
             "lilanjini",
         }
         TND{
-            "DT",
+            "TND",
             "adinar n tuns",
         }
         TZS{
-            "TSh",
+            "TZS",
             "acilin n ṭanẓanya",
         }
         UGX{
-            "USh",
+            "UGX",
             "acilin n uɣanda",
         }
         USD{
@@ -220,17 +220,17 @@ shi{
             "frank ṣifa bisaw",
         }
         ZAR{
-            "R",
+            "ZAR",
             "arand n afriqya n iffus",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "akwaca n zambya",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "adular n zimbabwi",
         }
     }
-    Version{"2.0.45.90"}
+    Version{"2.0.57.99"}
 }

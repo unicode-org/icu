@@ -14,6 +14,7 @@ sv{
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o p q r s t u v w x y z å ä ö]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Å Ä Ö]"}
+    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / \& # † ‡ ′ ″ §]"}
     LocaleScript{
         "Latn",
     }
@@ -39,7 +40,7 @@ sv{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.14"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -92,6 +93,142 @@ sv{
                 yyyyMM{"G yyyy-MM"}
                 yyyyMMM{"MMM y G"}
                 yyyyQQQQ{"QQQQ y G"}
+            }
+        }
+        coptic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "tout",
+                        "bâbâ",
+                        "hâtour",
+                        "kiahk",
+                        "toubah",
+                        "amshîr",
+                        "barmahât",
+                        "barmoudah",
+                        "bashans",
+                        "ba’ounah",
+                        "abîb",
+                        "misra",
+                        "al-nasi",
+                    }
+                    wide{
+                        "tout",
+                        "bâbâ",
+                        "hâtour",
+                        "kiahk",
+                        "toubah",
+                        "amshîr",
+                        "barmahât",
+                        "barmoudah",
+                        "bashans",
+                        "ba’ounah",
+                        "abîb",
+                        "misra",
+                        "al-nasi",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "tout",
+                        "bâbâ",
+                        "hâtour",
+                        "kiahk",
+                        "toubah",
+                        "amshîr",
+                        "barmahât",
+                        "barmoudah",
+                        "bashans",
+                        "ba’ounah",
+                        "abîb",
+                        "misra",
+                        "al-nasi",
+                    }
+                    wide{
+                        "tout",
+                        "bâbâ",
+                        "hâtour",
+                        "kiahk",
+                        "toubah",
+                        "amshîr",
+                        "barmahât",
+                        "barmoudah",
+                        "bashans",
+                        "ba’ounah",
+                        "abîb",
+                        "misra",
+                        "al-nasi",
+                    }
+                }
+            }
+        }
+        ethiopic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "mäskäräm",
+                        "teqemt",
+                        "hedar",
+                        "tahesas",
+                        "ter",
+                        "yäkatit",
+                        "mägabit",
+                        "miyazya",
+                        "guenbot",
+                        "säné",
+                        "hamlé",
+                        "nähasé",
+                        "pagumén",
+                    }
+                    wide{
+                        "mäskäräm",
+                        "teqemt",
+                        "hedar",
+                        "tahesas",
+                        "ter",
+                        "yäkatit",
+                        "mägabit",
+                        "miyazya",
+                        "guenbot",
+                        "säné",
+                        "hamlé",
+                        "nähasé",
+                        "pagumén",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "mäskäräm",
+                        "teqemt",
+                        "hedar",
+                        "tahesas",
+                        "ter",
+                        "yäkatit",
+                        "mägabit",
+                        "miyazya",
+                        "guenbot",
+                        "säné",
+                        "hamlé",
+                        "nähasé",
+                        "pagumén",
+                    }
+                    wide{
+                        "mäskäräm",
+                        "teqemt",
+                        "hedar",
+                        "tahesas",
+                        "ter",
+                        "yäkatit",
+                        "mägabit",
+                        "miyazya",
+                        "guenbot",
+                        "säné",
+                        "hamlé",
+                        "nähasé",
+                        "pagumén",
+                    }
+                }
             }
         }
         gregorian{
@@ -160,6 +297,15 @@ sv{
                         "fre",
                         "lör",
                     }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
+                    }
                     wide{
                         "söndag",
                         "måndag",
@@ -171,6 +317,15 @@ sv{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "sön",
+                        "mån",
+                        "tis",
+                        "ons",
+                        "tor",
+                        "fre",
+                        "lör",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -180,10 +335,23 @@ sv{
                         "F",
                         "L",
                     }
+                    wide{
+                        "söndag",
+                        "måndag",
+                        "tisdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "lördag",
+                    }
                 }
             }
             eras{
                 abbreviated{
+                    "f.Kr.",
+                    "e.Kr.",
+                }
+                narrow{
                     "f.Kr.",
                     "e.Kr.",
                 }
@@ -196,13 +364,11 @@ sv{
                 day{
                     dn{"dag"}
                     relative{
-                        "-1"{"igår"}
+                        "-1"{"i går"}
                         "-2"{"i förrgår"}
-                        "-3"{"för tre dagar sedan"}
-                        "0"{"idag"}
-                        "1"{"imorgon"}
+                        "0"{"i dag"}
+                        "1"{"i morgon"}
                         "2"{"i övermorgon"}
-                        "3"{"om tre dagar"}
                     }
                 }
                 dayperiod{
@@ -219,18 +385,33 @@ sv{
                 }
                 month{
                     dn{"månad"}
+                    relative{
+                        "-1"{"förra månaden"}
+                        "0"{"denna månad"}
+                        "1"{"nästa månad"}
+                    }
                 }
                 second{
                     dn{"sekund"}
                 }
                 week{
                     dn{"vecka"}
+                    relative{
+                        "-1"{"förra veckan"}
+                        "0"{"denna vecka"}
+                        "1"{"nästa vecka"}
+                    }
                 }
                 weekday{
                     dn{"veckodag"}
                 }
                 year{
                     dn{"år"}
+                    relative{
+                        "-1"{"i fjol"}
+                        "0"{"i år"}
+                        "1"{"nästa år"}
+                    }
                 }
                 zone{
                     dn{"tidszon"}
@@ -336,6 +517,20 @@ sv{
                         "nov",
                         "dec",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "januari",
                         "februari",
@@ -352,6 +547,20 @@ sv{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
                     narrow{
                         "J",
                         "F",
@@ -365,6 +574,20 @@ sv{
                         "O",
                         "N",
                         "D",
+                    }
+                    wide{
+                        "januari",
+                        "februari",
+                        "mars",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "augusti",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
                     }
                 }
             }
@@ -384,11 +607,23 @@ sv{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
                     narrow{
                         "1",
                         "2",
                         "3",
                         "4",
+                    }
+                    wide{
+                        "1:a kvartalet",
+                        "2:a kvartalet",
+                        "3:e kvartalet",
+                        "4:e kvartalet",
                     }
                 }
             }
@@ -418,6 +653,50 @@ sv{
         indian{
             monthNames{
                 format{
+                    abbreviated{
+                        "chaitra",
+                        "vaishākh",
+                        "jyaishtha",
+                        "āshādha",
+                        "shrāvana",
+                        "bhādrapad",
+                        "āshwin",
+                        "kārtik",
+                        "mārgashīrsha",
+                        "paush",
+                        "māgh",
+                        "phālgun",
+                    }
+                    wide{
+                        "chaitra",
+                        "vaishākh",
+                        "jyaishtha",
+                        "āshādha",
+                        "shrāvana",
+                        "bhādrapad",
+                        "āshwin",
+                        "kārtik",
+                        "mārgashīrsha",
+                        "paush",
+                        "māgh",
+                        "phālgun",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "chaitra",
+                        "vaishākh",
+                        "jyaishtha",
+                        "āshādha",
+                        "shrāvana",
+                        "bhādrapad",
+                        "āshwin",
+                        "kārtik",
+                        "mārgashīrsha",
+                        "paush",
+                        "māgh",
+                        "phālgun",
+                    }
                     wide{
                         "chaitra",
                         "vaishākh",
@@ -485,6 +764,40 @@ sv{
                 yyyyQQQ{"G y QQQ"}
                 yyyyQQQQ{"QQQQ y G"}
             }
+            monthNames{
+                format{
+                    wide{
+                        "muharram",
+                        "safar",
+                        "rabi’ al-awwal",
+                        "rabi’ al-akhir",
+                        "jumada-l-ula",
+                        "jumada-l-akhira",
+                        "rajab",
+                        "sha’ban",
+                        "ramadan",
+                        "shawwal",
+                        "dhu-l-ga’da",
+                        "dhu-l-hijja",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "muharram",
+                        "safar",
+                        "rabi’ al-awwal",
+                        "rabi’ al-akhir",
+                        "jumada-l-ula",
+                        "jumada-l-akhira",
+                        "rajab",
+                        "sha’ban",
+                        "ramadan",
+                        "shawwal",
+                        "dhu-l-ga’da",
+                        "dhu-l-hijja",
+                    }
+                }
+            }
         }
         japanese{
             DateTimePatterns{
@@ -537,6 +850,70 @@ sv{
                 yyyyQ{"G y Q"}
                 yyyyQQQ{"G y QQQ"}
                 yyyyQQQQ{"QQQQ y G"}
+            }
+        }
+        persian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "farvardin",
+                        "ordibehesht",
+                        "khordād",
+                        "tir",
+                        "mordād",
+                        "shahrivar",
+                        "mehr",
+                        "ābān",
+                        "āzar",
+                        "dey",
+                        "bahman",
+                        "esfand",
+                    }
+                    wide{
+                        "farvardin",
+                        "ordibehesht",
+                        "khordād",
+                        "tir",
+                        "mordād",
+                        "shahrivar",
+                        "mehr",
+                        "ābān",
+                        "āzar",
+                        "dey",
+                        "bahman",
+                        "esfand",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "farvardin",
+                        "ordibehesht",
+                        "khordād",
+                        "tir",
+                        "mordād",
+                        "shahrivar",
+                        "mehr",
+                        "ābān",
+                        "āzar",
+                        "dey",
+                        "bahman",
+                        "esfand",
+                    }
+                    wide{
+                        "farvardin",
+                        "ordibehesht",
+                        "khordād",
+                        "tir",
+                        "mordād",
+                        "shahrivar",
+                        "mehr",
+                        "ābān",
+                        "āzar",
+                        "dey",
+                        "bahman",
+                        "esfand",
+                    }
+                }
             }
         }
         roc{
@@ -612,63 +989,148 @@ sv{
         }
     }
     measurementSystemNames{
-        US{"engelska enheter"}
+        UK{"engelska enheter"}
+        US{"USA-enheter"}
         metric{"SI-enheter"}
     }
     units{
         day{
-            one{"{0} dag"}
-            other{"{0} dagar"}
+            one{"{0} dygn"}
+            other{"{0} dygn"}
+        }
+        day-future{
+            0{"om 0 dagar"}
+            1{"om 1 dag"}
+            one{"om {0} dygn"}
+            other{"om {0} dygn"}
+        }
+        day-past{
+            0{"för 0 dagar sedan"}
+            1{"för 1 dag sedan"}
+            one{"för {0} dygn sedan"}
+            other{"för {0} dygn sedan"}
         }
         hour{
             one{"{0} timme"}
             other{"{0} timmar"}
         }
+        hour-future{
+            0{"om 0 timmar"}
+            1{"om 1 timme"}
+            one{"om {0} timme"}
+            other{"om {0} timmar"}
+        }
+        hour-past{
+            0{"för 0 timmar sedan"}
+            1{"för 1 timme sedan"}
+            one{"för {0} timme sedan"}
+            other{"för {0} timmar sedan"}
+        }
         minute{
             one{"{0} minut"}
             other{"{0} minuter"}
+        }
+        minute-future{
+            0{"om 0 minuter"}
+            1{"om 1 minut"}
+            one{"om {0} minut"}
+            other{"om {0} minuter"}
+        }
+        minute-past{
+            0{"för 0 minuter sedan"}
+            1{"för 1 minut sedan"}
+            one{"för {0} minut sedan"}
+            other{"för {0} minuter sedan"}
         }
         month{
             one{"{0} månad"}
             other{"{0} månader"}
         }
+        month-future{
+            0{"om 0 månader"}
+            1{"om 1 månad"}
+            one{"om {0} månad"}
+            other{"om {0} månader"}
+        }
+        month-past{
+            0{"för 0 månader sedan"}
+            1{"för 1 månad sedan"}
+            one{"för {0} månad sedan"}
+            other{"för {0} månader sedan"}
+        }
         second{
             one{"{0} sekund"}
             other{"{0} sekunder"}
+        }
+        second-future{
+            0{"om 0 sekunder"}
+            1{"om 1 sekund"}
+            one{"om {0} sekund"}
+            other{"om {0} sekunder"}
+        }
+        second-past{
+            0{"för 0 sekunder sedan"}
+            1{"för 1 sekund sedan"}
+            one{"för {0} sekund sedan"}
+            other{"för {0} sekunder sedan"}
         }
         week{
             one{"{0} vecka"}
             other{"{0} veckor"}
         }
+        week-future{
+            0{"om 0 veckor"}
+            1{"om 1 vecka"}
+            one{"om {0} vecka"}
+            other{"om {0} veckor"}
+        }
+        week-past{
+            0{"för 0 veckor sedan"}
+            1{"för 1 vecka sedan"}
+            one{"för {0} vecka sedan"}
+            other{"för {0} veckor sedan"}
+        }
         year{
             one{"{0} år"}
             other{"{0} år"}
         }
+        year-future{
+            0{"om 0 år"}
+            1{"om 1 år"}
+            one{"om {0} år"}
+            other{"om {0} år"}
+        }
+        year-past{
+            0{"för 0 år sedan"}
+            1{"för 1 år sedan"}
+            one{"för {0} år sedan"}
+            other{"för {0} år sedan"}
+        }
     }
     unitsShort{
         day{
-            one{"{0} dag"}
-            other{"{0} dagar"}
+            one{"{0} d"}
+            other{"{0} d"}
         }
         hour{
-            one{"{0} tim."}
-            other{"{0} tim."}
+            one{"{0} tim"}
+            other{"{0} tim"}
         }
         minute{
-            one{"{0} min."}
-            other{"{0} min."}
+            one{"{0} min"}
+            other{"{0} min"}
         }
         month{
-            one{"{0} mån."}
-            other{"{0} mån."}
+            one{"{0} mån"}
+            other{"{0} mån"}
         }
         second{
-            one{"{0} sek."}
-            other{"{0} sek."}
+            one{"{0} s"}
+            other{"{0} s"}
         }
         week{
-            one{"{0} v."}
-            other{"{0} v."}
+            one{"{0} v"}
+            other{"{0} v"}
         }
         year{
             one{"{0} år"}

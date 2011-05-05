@@ -15,22 +15,9 @@ ar_SY{
             }
         }
     }
-    Version{"2.0.50.20"}
+    Version{"2.0.56.95"}
     calendar{
         gregorian{
-            dayNames{
-                format{
-                    abbreviated{
-                        "الأحد",
-                        "الاثنين",
-                        "الثلاثاء",
-                        "الأربعاء",
-                        "الخميس",
-                        "الجمعة",
-                        "السبت",
-                    }
-                }
-            }
             monthNames{
                 format{
                     wide{

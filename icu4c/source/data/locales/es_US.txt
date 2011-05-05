@@ -9,11 +9,18 @@
 es_US{
     %%Parent{"es_419"}
     MeasurementSystem:int{1}
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤#,##0.00"}
+            }
+        }
+    }
     PaperSize:intvector{
         279,
         216,
     }
-    Version{"2.0.54.44"}
+    Version{"2.0.56.63"}
     calendar{
         gregorian{
             DateTimePatterns{

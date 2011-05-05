@@ -13,5 +13,5 @@ uz{
     Languages{
         uz{"Ўзбек"}
     }
-    Version{"2.0.47.67"}
+    Version{"2.0.57.98"}
 }

@@ -57,5 +57,5 @@ nyn{
         zh{"Oruchaina"}
         zu{"Oruzuru"}
     }
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
 }

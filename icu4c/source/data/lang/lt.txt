@@ -14,6 +14,8 @@ lt{
         calendar{"kalendorius"}
         collation{"lyginimas"}
         currency{"valiuta"}
+        numbers{"Skaičiai"}
+        x{"Naudoti privačiai"}
     }
     Languages{
         aa{"afarų"}
@@ -140,6 +142,7 @@ lt{
         el{"graikų"}
         elx{"elamitų"}
         en{"anglų"}
+        en_AU{"anglų kalba (Australija)"}
         en_CA{"Kanados anglų"}
         en_GB{"anglų (britų)"}
         en_US{"anglų (amerikiečių)"}
@@ -488,7 +491,7 @@ lt{
         uga{"ugaritic"}
         uk{"ukrainiečių"}
         umb{"umbundu"}
-        und{"nenustatyta kalba"}
+        und{"nežinoma kalba"}
         ur{"urdų"}
         uz{"uzbekų"}
         vai{"vai"}
@@ -516,13 +519,14 @@ lt{
         zbl{"„Bliss“ simbolių kalba"}
         zen{"zenaga"}
         zh{"kinų"}
-        zh_Hans{"kinų supaprastinta"}
-        zh_Hant{"kinų tradicinė"}
         znd{"zande"}
         zu{"zulų"}
         zun{"zuni"}
         zxx{"Nėra kalbinio turinio"}
         zza{"zaza"}
+    }
+    LanguagesShort{
+        az{"Azeri k."}
     }
     Scripts{
         Arab{"arabų"}
@@ -564,8 +568,8 @@ lt{
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanuno"}
-        Hans{"supaprastinta han"}
-        Hant{"tradicinė han"}
+        Hans{"supaprastinta"}
+        Hant{"tradicinė"}
         Hebr{"hebrajų"}
         Hira{"hiragana"}
         Hmng{"pahav hmong"}
@@ -654,28 +658,74 @@ lt{
         Zsym{"simbolių"}
         Zxxx{"neparašyta"}
         Zyyy{"bendras"}
-        Zzzz{"nežinomi arba neteisingi rašmenys"}
+        Zzzz{"nežinomi rašmenys"}
     }
     Types{
         calendar{
             buddhist{"Budistų kalendorius"}
             chinese{"Kinų kalendorius"}
+            coptic{"Koptų kalendorius"}
+            ethiopic{"Etiopijos kalendorius"}
+            ethiopic-amete-alem{"Etiopijos „Amete Alem“ kalendorius"}
             gregorian{"Grigaliaus kalendorius"}
             hebrew{"Hebrajų kalendorius"}
             indian{"Nacionalinis indų kalendorius"}
             islamic{"Islamo kalendorius"}
             islamic-civil{"Pilietinis islamo kalendorius"}
             japanese{"Japonų kalendorius"}
+            persian{"Persų kalendorius"}
             roc{"Kinijos Respublikos kalendorius"}
         }
         collation{
             big5han{"Įprasta kiniška rūšiavimo tvarka - Big5"}
+            dictionary{"Žodyno rūšiavimo tvarka"}
             direct{"Tiesioginė rūšiavimo tvarka"}
+            ducet{"Numatytojo unikodo rūšiavimo tvarka"}
             gb2312han{"Supaprastinta kiniška rūšiavimo tvarka - GB2312"}
             phonebook{"Telefonų knygos rūšiavimo tvarka"}
             pinyin{"Supaprastinta kiniškų hieroglifų vertimo sistemos rūšiavimo tvarka"}
+            reformed{"Reformuota rūšiavimo tvarka"}
+            search{"Bendro tikslo paieška"}
             stroke{"Įprasta kiniško požymio rūšiavimo tvarka"}
             traditional{"Įprasta rūšiavimo tvarka"}
+            unihan{"Šaknies ženklų ir brūkšnių rūšiavimo tvarka"}
+        }
+        numbers{
+            arab{"Arabiški–indiški skaitmenys"}
+            arabext{"Išplėstiniai arabiški–indiški skaitmenys"}
+            armn{"Armėnų k. skaitmenys"}
+            armnlow{"Armėnų k. skaitmenys mažosiomis raidėmis"}
+            beng{"Bengalų k. skaitmenys"}
+            deva{"Devanagari k. skaitmenys"}
+            ethi{"Amharų k. skaitmenys"}
+            fullwide{"Viso pločio skaitmenys"}
+            geor{"Gruzinų k. skaitmenys"}
+            grek{"Graikų k. skaitmenys"}
+            greklow{"Graikiški skaitmenys mažosiomis raidėmis"}
+            gujr{"Gudžaratų k. skaitmenys"}
+            guru{"Gurmuki k. skaitmenys"}
+            hanidec{"Kinų k. dešimtainiai skaitmenys"}
+            hans{"Supaprastintos kinų k. skaitmenys"}
+            hansfin{"Supaprastintos kinų k. finans. skaitmenys"}
+            hant{"Tradicinės kinų k. skaitmenys"}
+            hantfin{"Tradicinės kinų k. finans. skaitmenys"}
+            hebr{"Hebrajų k. skaitmenys"}
+            jpan{"Japonų k. skaitmenys"}
+            jpanfin{"Japonų k. finans. skaitmenys"}
+            khmr{"Khmerų k. skaitmenys"}
+            knda{"Kanadų k. skaitmenys"}
+            laoo{"Laosiečių k. skaitmenys"}
+            latn{"Lotyniški skaitmenys"}
+            mlym{"Malajalių k. skaitmenys"}
+            mong{"Mongolų k. skaitmenys"}
+            mymr{"Mianmariečių k. skaitmenys"}
+            orya{"Oriya skaitmenys"}
+            roman{"Romėniškieji skaitmenys"}
+            romanlow{"Romėniškieji skaitmenys mažosiomis raidėmis"}
+            taml{"Tamilų k. skaitmenys"}
+            telu{"Telugų k. skaitmenys"}
+            thai{"Tajų k. skaitmenys"}
+            tibt{"Tibetiečių k. skaitmenys"}
         }
     }
     Variants{
@@ -713,10 +763,13 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.50.94"}
+    Version{"2.0.58.6"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}
         territory{"Sritis: {0}"}
+    }
+    localeDisplayPattern{
+        separator{","}
     }
 }

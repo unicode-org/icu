@@ -39,7 +39,7 @@ ro{
             }
         }
     }
-    Version{"2.0.53.45"}
+    Version{"2.0.58.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -57,12 +57,148 @@ ro{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            availableFormats{
+                MMMEd{"E d MMM"}
+                MMMd{"d MMM"}
+            }
             eras{
                 abbreviated{
                     "e.b.",
                 }
                 wide{
                     "era budistă",
+                }
+            }
+        }
+        chinese{
+            monthNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+        }
+        coptic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
                 }
             }
         }
@@ -89,6 +225,7 @@ ro{
             availableFormats{
                 EEEd{"EEE d"}
                 Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, d MMM"}
                 MMM{"LLL"}
@@ -100,6 +237,8 @@ ro{
                 MMdd{"dd.MM"}
                 Md{"d.M"}
                 d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M.yyyy"}
@@ -107,6 +246,8 @@ ro{
                 yMMM{"MMM y"}
                 yMMMEd{"EEE, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d.M.y"}
                 yQ{"'trimestrul' Q y"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM.yy"}
@@ -126,6 +267,15 @@ ro{
                         "Vi",
                         "Sâ",
                     }
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
+                    }
                     wide{
                         "duminică",
                         "luni",
@@ -137,6 +287,15 @@ ro{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Du",
+                        "Lu",
+                        "Ma",
+                        "Mi",
+                        "Jo",
+                        "Vi",
+                        "Sâ",
+                    }
                     narrow{
                         "D",
                         "L",
@@ -145,6 +304,15 @@ ro{
                         "J",
                         "V",
                         "S",
+                    }
+                    wide{
+                        "duminică",
+                        "luni",
+                        "marți",
+                        "miercuri",
+                        "joi",
+                        "vineri",
+                        "sâmbătă",
                     }
                 }
             }
@@ -185,18 +353,33 @@ ro{
                 }
                 month{
                     dn{"lună"}
+                    relative{
+                        "-1"{"Luna trecută"}
+                        "0"{"Luna aceasta"}
+                        "1"{"Luna viitoare"}
+                    }
                 }
                 second{
                     dn{"secundă"}
                 }
                 week{
                     dn{"săptămână"}
+                    relative{
+                        "-1"{"Săptămâna trecută"}
+                        "0"{"Săptămâna aceasta"}
+                        "1"{"Săptămâna viitoare"}
+                    }
                 }
                 weekday{
                     dn{"zi a săptămânii"}
                 }
                 year{
                     dn{"an"}
+                    relative{
+                        "-1"{"Anul trecut"}
+                        "0"{"Anul acesta"}
+                        "1"{"Anul viitor"}
+                    }
                 }
                 zone{
                     dn{"zonă"}
@@ -317,6 +500,20 @@ ro{
                         "nov.",
                         "dec.",
                     }
+                    narrow{
+                        "I",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "I",
+                        "I",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "ianuarie",
                         "februarie",
@@ -333,6 +530,20 @@ ro{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "ian.",
+                        "feb.",
+                        "mar.",
+                        "apr.",
+                        "mai",
+                        "iun.",
+                        "iul.",
+                        "aug.",
+                        "sept.",
+                        "oct.",
+                        "nov.",
+                        "dec.",
+                    }
                     narrow{
                         "I",
                         "F",
@@ -347,6 +558,20 @@ ro{
                         "N",
                         "D",
                     }
+                    wide{
+                        "ianuarie",
+                        "februarie",
+                        "martie",
+                        "aprilie",
+                        "mai",
+                        "iunie",
+                        "iulie",
+                        "august",
+                        "septembrie",
+                        "octombrie",
+                        "noiembrie",
+                        "decembrie",
+                    }
                 }
             }
             quarters{
@@ -357,6 +582,12 @@ ro{
                         "trim. III",
                         "trim. IV",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "T4",
+                    }
                     wide{
                         "trimestrul I",
                         "trimestrul al II-lea",
@@ -365,13 +596,102 @@ ro{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
                     narrow{
                         "T1",
                         "T2",
                         "T3",
                         "T4",
                     }
+                    wide{
+                        "trimestrul I",
+                        "trimestrul al II-lea",
+                        "trimestrul al III-lea",
+                        "trimestrul al IV-lea",
+                    }
                 }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tișrei",
+                        "Heșvan",
+                        "Kislev",
+                        "Tevet",
+                        "Șevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tammuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    wide{
+                        "Tișrei",
+                        "Heșvan",
+                        "Kislev",
+                        "Tevet",
+                        "Șevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Tișrei",
+                        "Heșvan",
+                        "Kislev",
+                        "Tevet",
+                        "Șevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tammuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                    wide{
+                        "Tișrei",
+                        "Heșvan",
+                        "Kislev",
+                        "Tevet",
+                        "Șevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tammuz",
+                        "Av",
+                        "Elul",
+                        "Adar II",
+                    }
+                }
+            }
+        }
+        islamic{
+            availableFormats{
+                yMEd{"EEE, dd.MM.yyyy"}
             }
         }
     }
@@ -381,7 +701,14 @@ ro{
         quotationEnd{"”"}
         quotationStart{"„"}
     }
+    listPattern{
+        standard{
+            2{"{0} şi {1}"}
+            end{"{0} şi {1}"}
+        }
+    }
     measurementSystemNames{
+        UK{"britanic"}
         US{"american"}
         metric{"metric"}
     }
@@ -391,35 +718,126 @@ ro{
             one{"{0} zi"}
             other{"{0} de zile"}
         }
+        day-future{
+            0{"În 0 zile"}
+            1{"Într-o zi"}
+            few{"În {0} zile"}
+            other{"În {0} de zile"}
+        }
+        day-past{
+            0{"Acum 0 zile"}
+            1{"Acum o zi"}
+            few{"Acum {0} zile"}
+            one{"În urmă cu {0} zi"}
+            other{"Acum {0} de zile"}
+        }
         hour{
             few{"{0} ore"}
             one{"{0} oră"}
             other{"{0} de ore"}
+        }
+        hour-future{
+            0{"În 0 ore"}
+            1{"Într-o oră"}
+            few{"În {0} ore"}
+            other{"În {0} de ore"}
+        }
+        hour-past{
+            0{"Acum 0 ore"}
+            1{"Acum o oră"}
+            few{"Acum {0} ore"}
+            one{"În urmă cu {0} oră"}
+            other{"Acum {0} de ore"}
         }
         minute{
             few{"{0} minute"}
             one{"{0} minut"}
             other{"{0} de minute"}
         }
+        minute-future{
+            0{"În 0 minute"}
+            1{"Într-un minut"}
+            few{"În {0} minute"}
+            other{"În {0} de minute"}
+        }
+        minute-past{
+            0{"Acum 0 minute"}
+            1{"Acum un minut"}
+            few{"Acum {0} minute"}
+            one{"În urmă cu {0} minut"}
+            other{"Acum {0} de minute"}
+        }
         month{
             few{"{0} luni"}
             one{"{0} lună"}
             other{"{0} de luni"}
+        }
+        month-future{
+            0{"În 0 luni"}
+            1{"Într-o lună"}
+            few{"În {0} luni"}
+            other{"În {0} de luni"}
+        }
+        month-past{
+            0{"Acum 0 luni"}
+            1{"Acum o lună"}
+            few{"Acum {0} luni"}
+            one{"În urmă cu {0} lună"}
+            other{"Acum {0} de luni"}
         }
         second{
             few{"{0} secunde"}
             one{"{0} secundă"}
             other{"{0} de secunde"}
         }
+        second-future{
+            0{"În 0 secunde"}
+            1{"Într-o secundă"}
+            few{"În {0} secunde"}
+            other{"În {0} de secunde"}
+        }
+        second-past{
+            0{"Acum 0 secunde"}
+            1{"Acum o secundă"}
+            few{"Acum {0} secunde"}
+            one{"În urmă cu {0} secundă"}
+            other{"Acum {0} de secunde"}
+        }
         week{
             few{"{0} săptămâni"}
             one{"{0} săptămână"}
             other{"{0} de săptămâni"}
         }
+        week-future{
+            0{"În 0 săptămâni"}
+            1{"Într-o săptămână"}
+            few{"În {0} săptămâni"}
+            other{"În {0} de săptămâni"}
+        }
+        week-past{
+            0{"Acum 0 săptămâni"}
+            1{"Acum o săptămână"}
+            few{"Acum {0} săptămâni"}
+            one{"În urmă cu {0} săptămână"}
+            other{"Acum {0} de săptămâni"}
+        }
         year{
             few{"{0} ani"}
             one{"{0} an"}
             other{"{0} de ani"}
+        }
+        year-future{
+            0{"În 0 ani"}
+            1{"Într-un an"}
+            few{"În {0} ani"}
+            other{"În {0} de ani"}
+        }
+        year-past{
+            0{"Acum 0 ani"}
+            1{"Acum un an"}
+            few{"Acum {0} ani"}
+            one{"În urmă cu {0} an"}
+            other{"Acum {0} de ani"}
         }
     }
     unitsShort{

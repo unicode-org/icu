@@ -11,7 +11,7 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.0.51.25"}
+    Version{"2.0.57.70"}
     collations{
         default{"standard"}
         ducet{
@@ -40,7 +40,7 @@ root{
                 "&Ꞧ<<<₨/s"
                 "&ﷶ<<<﷼/یال"
             }
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
         search{
             Sequence{
@@ -91,11 +91,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
         standard{
             Sequence{""}
-            Version{"1.9.9"}
+            Version{"2.0"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

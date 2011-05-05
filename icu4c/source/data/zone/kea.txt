@@ -10,5 +10,76 @@
  *  ICU <specials> source: <path>/xml/main/kea.xml
  */
 kea{
-    Version{"2.0.47.63"}
+    Version{"2.0.57.99"}
+    zoneStrings{
+        "Etc:Unknown"{
+            ec{"Sidadi Diskonxedu"}
+        }
+        "meta:Africa_Central"{
+            ls{"Ora di Afrika Sentral"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Ora di Afrika Oriental"}
+        }
+        "meta:Africa_Southern"{
+            lg{"Ora di Sul di Afrika"}
+            ls{"Ora Padrãu di Sul di Afrika"}
+        }
+        "meta:Africa_Western"{
+            ld{"Ora di Verão di Afrika Osidental"}
+            ls{"Ora di Afrika Osidental"}
+        }
+        "meta:Arabian"{
+            sd{"ADT (Arabia)"}
+            sg{"AT (Arabia)"}
+            ss{"AST (Arabia)"}
+        }
+        "meta:Atlantic"{
+            ld{"Ora di Verãu di Atlantiku"}
+            lg{"Ora di Atlantiku"}
+            ls{"Ora Padrãu di Atlantiku"}
+        }
+        "meta:Australia_Central"{
+            ld{"Ora di Verãu di Australia Sentral"}
+            lg{"Ora di Australia Sentral"}
+            ls{"Ora Padrãu di Australia Sentral"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Ora di Verãu di Australia Sentru-Osidental"}
+            lg{"Ora di Autralia Sentru-Osidental"}
+            ls{"Ora Padrãu di Australia Sentru-Osidental"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Ora di Verãu di Australia Oriental"}
+            lg{"Ora di Australia Oriental"}
+            ls{"Ora Padrãu di Australia Oriental"}
+        }
+        "meta:Australia_Western"{
+            ld{"Ora di Verãu di Australia Osidental"}
+            lg{"Ora di Australia Osidental"}
+            ls{"Ora Padrãu di Australia Osidental"}
+        }
+        "meta:China"{
+            sd{"CDT (Xina)"}
+            sg{"CT (Xina)"}
+            ss{"CST (Xina)"}
+        }
+        "meta:Europe_Central"{
+            ld{"Ora di Verãu di Europa Sentral"}
+            ls{"Ora di Europa Sentral"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Ora di Verãu di Europa Oriental"}
+            ls{"Ora di Europa Oriental"}
+        }
+        "meta:Europe_Western"{
+            ld{"Ora di Verãu di Europa Osidental"}
+            ls{"Ora di Europa Osidental"}
+        }
+        "meta:Israel"{
+            ss{"IST (Israel)"}
+        }
+        fallbackRegionFormat{"Ora di {1} ({0})"}
+        regionFormat{"Hora di {0}"}
+    }
 }

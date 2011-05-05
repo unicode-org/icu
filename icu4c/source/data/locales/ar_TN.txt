@@ -16,7 +16,7 @@ ar_TN{
             }
         }
     }
-    Version{"2.0.48.49"}
+    Version{"2.0.57.98"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,19 +39,6 @@ ar_TN{
                 Md{"M/d"}
                 yM{"yyyy/M"}
                 yyyyMM{"yyyy/MM"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "الأحد",
-                        "الاثنين",
-                        "الثلاثاء",
-                        "الأربعاء",
-                        "الخميس",
-                        "الجمعة",
-                        "السبت",
-                    }
-                }
             }
             intervalFormats{
                 M{

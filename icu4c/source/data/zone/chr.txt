@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/chr.xml
  */
 chr{
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
     zoneStrings{
         "meta:Alaska"{
             sd{"ᎠᎳᎢᎢ"}
@@ -27,7 +27,7 @@ chr{
         "meta:America_Eastern"{
             ld{"ᎧᎸᎬᎢᏗᏢ ᎢᎦ ᎢᏳᏩᎪᏗ"}
             lg{"ᎧᎸᎬᎢᏗᏢ ᎢᏳᏩᎪᏗ"}
-            ls{"ᎧᎸᎬᎢᏗᏢ  ᏰᎵᏊ ᏗᏙᎳᎩ ᎢᏳᏩᎪᏗ"}
+            ls{"ᎧᎸᎬᎢᏗᏢ ᏰᎵᏊ ᏗᏙᎳᎩ ᎢᏳᏩᎪᏗ"}
             sd{"ᎧᎢᎢ"}
             sg{"ᎧᎢ"}
             ss{"ᎧᏰᎢ"}
@@ -41,8 +41,8 @@ chr{
             ss{"ᎣᏰᎢ"}
         }
         "meta:America_Pacific"{
-            ld{"ᏭᏕᎵᎬ  ᎢᎦ ᎢᏳᏩᎪᏗ"}
-            lg{"ᏭᏕᎵᎬ  ᎢᏳᏩᎪᏗ"}
+            ld{"ᏭᏕᎵᎬ ᎢᎦ ᎢᏳᏩᎪᏗ"}
+            lg{"ᏭᏕᎵᎬ ᎢᏳᏩᎪᏗ"}
             ls{"ᏭᏕᎵᎬ ᏰᎵᏊ ᏗᏙᎳᎩ ᎢᏳᏩᎪᏗ"}
             sd{"ᏭᎢᎢ"}
             sg{"ᏭᎢ"}

@@ -42,7 +42,7 @@ de{
         154{"Nordeuropa"}
         155{"Westeuropa"}
         172{"Gemeinschaft Unabhängiger Staaten"}
-        419{"Lateinamerika und Karibik"}
+        419{"Lateinamerika"}
         830{"Kanalinseln"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -299,7 +299,7 @@ de{
         ZA{"Südafrika"}
         ZM{"Sambia"}
         ZW{"Simbabwe"}
-        ZZ{"Unbekannte oder ungültige Region"}
+        ZZ{"Unbekannte Region"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.12"}
 }

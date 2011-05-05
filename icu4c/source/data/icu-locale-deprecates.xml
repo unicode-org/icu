@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and    *
+* Copyright (C) 2009-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -44,6 +44,7 @@
     <aliasLocale locale="tzm_MA" />
     <aliasLocale locale="uz_AF" />
     <aliasLocale locale="uz_UZ" />
+    <aliasLocale locale="vai_LR" />
     <aliasLocale locale="zh_CN" />
     <aliasLocale locale="zh_HK" />
     <aliasLocale locale="zh_MO" />

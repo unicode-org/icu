@@ -762,6 +762,19 @@ root {
             }
         }
 
+        Latin-Bopomofo {
+            file {
+                resource:process(transliterator) {"Latin_Bopomofo.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        Bopomofo-Latin {
+            file {
+                resource:process(transliterator) {"Latin_Bopomofo.txt"}
+                direction {"REVERSE"}
+            }
+        }
+
         Latin-ConjoiningJamo {
             internal {
                 resource:process(transliterator) {"Latin_ConjoiningJamo.txt"}

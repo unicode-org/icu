@@ -192,7 +192,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"1.9.9"}
+    cldrVersion{"2.0"}
     codeMappings{
         {
             "AA",
@@ -9040,6 +9040,14 @@ supplementalData:table(nofallback){
     weekData{
         001:intvector{
             2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AD:intvector{
+            2,
             4,
             7,
             0,
@@ -9048,7 +9056,7 @@ supplementalData:table(nofallback){
         }
         AE:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
@@ -9056,15 +9064,55 @@ supplementalData:table(nofallback){
         }
         AF:intvector{
             7,
-            4,
+            1,
             5,
             0,
             6,
             86400000,
         }
+        AG:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AI:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AL:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AM:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AN:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
         AR:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9072,6 +9120,30 @@ supplementalData:table(nofallback){
         }
         AS:intvector{
             1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AT:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AU:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        AX:intvector{
+            2,
             4,
             7,
             0,
@@ -9079,7 +9151,39 @@ supplementalData:table(nofallback){
             86400000,
         }
         AZ:intvector{
+            2,
             1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BA:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BD:intvector{
+            6,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BE:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BG:intvector{
+            2,
             4,
             7,
             0,
@@ -9088,15 +9192,71 @@ supplementalData:table(nofallback){
         }
         BH:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
             86400000,
         }
+        BM:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BN:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BR:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BS:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BT:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         BW:intvector{
             1,
-            4,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BY:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        BZ:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9104,7 +9264,31 @@ supplementalData:table(nofallback){
         }
         CA:intvector{
             1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CH:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CL:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CM:intvector{
+            2,
+            1,
             7,
             0,
             1,
@@ -9112,6 +9296,46 @@ supplementalData:table(nofallback){
         }
         CN:intvector{
             1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CO:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CR:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CY:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        CZ:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        DE:intvector{
+            2,
             4,
             7,
             0,
@@ -9120,7 +9344,31 @@ supplementalData:table(nofallback){
         }
         DJ:intvector{
             7,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        DK:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        DM:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        DO:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9128,22 +9376,38 @@ supplementalData:table(nofallback){
         }
         DZ:intvector{
             7,
-            4,
+            1,
             5,
             0,
             6,
             86400000,
         }
+        EC:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        EE:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
         EG:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
             86400000,
         }
-        ER:intvector{
-            7,
+        ES:intvector{
+            2,
             4,
             7,
             0,
@@ -9151,7 +9415,23 @@ supplementalData:table(nofallback){
             86400000,
         }
         ET:intvector{
+            1,
+            1,
             7,
+            0,
+            1,
+            86400000,
+        }
+        FI:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        FJ:intvector{
+            2,
             4,
             7,
             0,
@@ -9159,7 +9439,23 @@ supplementalData:table(nofallback){
             86400000,
         }
         FO:intvector{
+            2,
+            4,
+            7,
+            0,
             1,
+            86400000,
+        }
+        FR:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        GB:intvector{
+            2,
             4,
             7,
             0,
@@ -9167,16 +9463,40 @@ supplementalData:table(nofallback){
             86400000,
         }
         GE:intvector{
+            2,
             1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        GF:intvector{
+            2,
             4,
             7,
             0,
             1,
             86400000,
         }
-        GL:intvector{
-            1,
+        GP:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        GR:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        GT:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9184,7 +9504,7 @@ supplementalData:table(nofallback){
         }
         GU:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9192,6 +9512,46 @@ supplementalData:table(nofallback){
         }
         HK:intvector{
             1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        HN:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        HR:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        HU:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        ID:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        IE:intvector{
+            2,
             4,
             7,
             0,
@@ -9200,7 +9560,7 @@ supplementalData:table(nofallback){
         }
         IL:intvector{
             1,
-            4,
+            1,
             6,
             0,
             7,
@@ -9208,7 +9568,7 @@ supplementalData:table(nofallback){
         }
         IN:intvector{
             1,
-            4,
+            1,
             1,
             0,
             1,
@@ -9216,7 +9576,7 @@ supplementalData:table(nofallback){
         }
         IQ:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
@@ -9224,15 +9584,31 @@ supplementalData:table(nofallback){
         }
         IR:intvector{
             7,
-            4,
+            1,
             5,
             0,
             6,
             86400000,
         }
+        IS:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        IT:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
         JM:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9240,7 +9616,7 @@ supplementalData:table(nofallback){
         }
         JO:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
@@ -9248,23 +9624,31 @@ supplementalData:table(nofallback){
         }
         JP:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
             86400000,
         }
         KE:intvector{
-            7,
-            4,
+            1,
+            1,
             7,
             0,
             1,
             86400000,
         }
         KG:intvector{
+            2,
             1,
-            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        KH:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9272,7 +9656,7 @@ supplementalData:table(nofallback){
         }
         KR:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9280,15 +9664,71 @@ supplementalData:table(nofallback){
         }
         KW:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
             86400000,
         }
+        KZ:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         LA:intvector{
             1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        LB:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        LI:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        LK:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        LT:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        LU:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        LV:intvector{
+            2,
+            1,
             7,
             0,
             1,
@@ -9296,7 +9736,7 @@ supplementalData:table(nofallback){
         }
         LY:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
@@ -9304,23 +9744,63 @@ supplementalData:table(nofallback){
         }
         MA:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
             86400000,
         }
+        MC:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        MD:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        ME:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         MH:intvector{
             1,
-            4,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        MK:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        MM:intvector{
+            1,
+            1,
             7,
             0,
             1,
             86400000,
         }
         MN:intvector{
+            2,
             1,
-            4,
             7,
             0,
             1,
@@ -9328,14 +9808,14 @@ supplementalData:table(nofallback){
         }
         MO:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
             86400000,
         }
-        MP:intvector{
-            1,
+        MQ:intvector{
+            2,
             4,
             7,
             0,
@@ -9344,7 +9824,7 @@ supplementalData:table(nofallback){
         }
         MT:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9352,7 +9832,63 @@ supplementalData:table(nofallback){
         }
         MV:intvector{
             6,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        MX:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        MY:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        MZ:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        NI:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        NL:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        NO:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        NP:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9360,7 +9896,7 @@ supplementalData:table(nofallback){
         }
         NZ:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9368,15 +9904,31 @@ supplementalData:table(nofallback){
         }
         OM:intvector{
             7,
-            4,
+            1,
             5,
             0,
             6,
             86400000,
         }
+        PA:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        PE:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         PH:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9384,7 +9936,39 @@ supplementalData:table(nofallback){
         }
         PK:intvector{
             1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        PL:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        PR:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        PT:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        PY:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9392,15 +9976,47 @@ supplementalData:table(nofallback){
         }
         QA:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
             86400000,
         }
+        RE:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        RO:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        RS:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        RU:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         SA:intvector{
             7,
-            4,
+            1,
             5,
             0,
             6,
@@ -9408,23 +10024,55 @@ supplementalData:table(nofallback){
         }
         SD:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
             86400000,
         }
-        SG:intvector{
-            1,
+        SE:intvector{
+            2,
             4,
             7,
             0,
             1,
             86400000,
         }
-        SO:intvector{
+        SG:intvector{
+            1,
+            1,
             7,
+            0,
+            1,
+            86400000,
+        }
+        SI:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        SK:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        SM:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        SV:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9432,7 +10080,7 @@ supplementalData:table(nofallback){
         }
         SY:intvector{
             7,
-            4,
+            1,
             6,
             0,
             7,
@@ -9440,23 +10088,47 @@ supplementalData:table(nofallback){
         }
         TH:intvector{
             1,
-            4,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        TJ:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        TM:intvector{
+            2,
+            1,
             7,
             0,
             1,
             86400000,
         }
         TN:intvector{
-            7,
-            4,
+            1,
+            1,
             6,
             0,
             7,
             86400000,
         }
+        TR:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         TT:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9464,7 +10136,15 @@ supplementalData:table(nofallback){
         }
         TW:intvector{
             1,
-            4,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        UA:intvector{
+            2,
+            1,
             7,
             0,
             1,
@@ -9472,7 +10152,7 @@ supplementalData:table(nofallback){
         }
         UM:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,
@@ -9480,15 +10160,39 @@ supplementalData:table(nofallback){
         }
         US:intvector{
             1,
-            4,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        UY:intvector{
+            2,
+            1,
             7,
             0,
             1,
             86400000,
         }
         UZ:intvector{
+            2,
             1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        VA:intvector{
+            2,
             4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        VE:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9496,7 +10200,23 @@ supplementalData:table(nofallback){
         }
         VI:intvector{
             1,
-            4,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        VN:intvector{
+            2,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        WS:intvector{
+            1,
+            1,
             7,
             0,
             1,
@@ -9504,15 +10224,23 @@ supplementalData:table(nofallback){
         }
         YE:intvector{
             7,
-            4,
+            1,
             5,
             0,
             6,
             86400000,
         }
+        ZA:intvector{
+            1,
+            1,
+            7,
+            0,
+            1,
+            86400000,
+        }
         ZW:intvector{
             1,
-            4,
+            1,
             7,
             0,
             1,

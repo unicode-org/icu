@@ -9,7 +9,7 @@
 de_BE{
     Currencies{
         FRF{
-            "₣",
+            "FRF",
             "Franken",
         }
     }

@@ -14,6 +14,8 @@ sl{
         calendar{"koledar"}
         collation{"razvrščanje"}
         currency{"valuta"}
+        numbers{"Številke"}
+        x{"Private-Use"}
     }
     Languages{
         aa{"afarščina"}
@@ -118,6 +120,7 @@ sl{
         dar{"darginščina"}
         day{"dajaščina"}
         de{"nemščina"}
+        de_AT{"avstrijska nemščina"}
         de_CH{"visoka nemščina (Švica)"}
         del{"delavarščina"}
         den{"slavejščina"}
@@ -138,6 +141,8 @@ sl{
         el{"grščina"}
         elx{"elamščina"}
         en{"angleščina"}
+        en_AU{"avstralska angleščina"}
+        en_CA{"kanadska angleščina"}
         en_GB{"angleščina (VB)"}
         en_US{"angleščina (ZDA)"}
         enm{"srednja angleščina"}
@@ -159,6 +164,8 @@ sl{
         fo{"ferščina"}
         fon{"fonščina"}
         fr{"francoščina"}
+        fr_CA{"kanadska francoščina"}
+        fr_CH{"švicarska francoščina"}
         frm{"srednja francoščina"}
         fro{"stara francoščina"}
         frr{"severna frizijščina"}
@@ -519,6 +526,9 @@ sl{
         zxx{"brez jezikoslovne vsebine"}
         zza{"zazajščina"}
     }
+    LanguagesShort{
+        az{"azerščina"}
+    }
     Scripts{
         Arab{"arabski"}
         Armi{"imperialno-aramejski"}
@@ -655,22 +665,68 @@ sl{
         calendar{
             buddhist{"budistični koledar"}
             chinese{"kitajski koledar"}
+            coptic{"Koptski koledar"}
+            ethiopic{"Etiopski koledar"}
+            ethiopic-amete-alem{"Etiopsko ametsko alemski koledar"}
             gregorian{"gregorijanski koledar"}
             hebrew{"hebrejski koledar"}
             indian{"indijanski koledar"}
             islamic{"islamski koledar"}
             islamic-civil{"islamski civilni koledar"}
             japanese{"japonski koledar"}
+            persian{"Perzijski koledar"}
             roc{"kitajski državni koledar"}
         }
         collation{
             big5han{"razvrščanje po sistemu tradicionalne kitajščine - Big5"}
+            dictionary{"Vrstni red razvrščanja v slovarju"}
             direct{"neposredno razvrščanje"}
+            ducet{"Privzeto razvrščanje Unicode"}
             gb2312han{"razvrščanje po sistemu poenostavljene kitajščine - GB2312"}
             phonebook{"razvrščanje po abecedi"}
             pinyin{"razvrščanje po sistemu pinjin"}
+            reformed{"Reformirano razvrščanje"}
+            search{"Splošno iskanje"}
             stroke{"razvrščanje po zaporedju pisanja pismenk"}
             traditional{"razvrščanje po tradicionalnem sistemu"}
+            unihan{"Razvrščanje koren-poteza"}
+        }
+        numbers{
+            arab{"Arabskoindijske števke"}
+            arabext{"Razširjene arabskoindijske števke"}
+            armn{"Armenske številke"}
+            armnlow{"Armenske majhne številke"}
+            beng{"Bengalske števke"}
+            deva{"Devangarske števke"}
+            ethi{"Etiopijske številke"}
+            fullwide{"Števke polne širine"}
+            geor{"Gruzijske številke"}
+            grek{"Grške številke"}
+            greklow{"Grške male številke"}
+            gujr{"Gudžaratske števke"}
+            guru{"Gurmuške števke"}
+            hanidec{"Kitajske decimalne številke"}
+            hans{"Poenostavljene kitajske številke"}
+            hansfin{"Poenostavljene kitajske finančne številke"}
+            hant{"Tradicionalne kitajske številke"}
+            hantfin{"Tradicionalne kitajske finančne številke"}
+            hebr{"Hebrejske številke"}
+            jpan{"Japonske številke"}
+            jpanfin{"Japonske finančne številke"}
+            khmr{"Kmerske števke"}
+            knda{"Kanaredske števke"}
+            laoo{"Laoške števke"}
+            latn{"Zahodne števke"}
+            mlym{"Malajalamske števke"}
+            mong{"Mongolske števke"}
+            mymr{"Mjanmarske števke"}
+            orya{"Orijske števke"}
+            roman{"Rimske številke"}
+            romanlow{"Rimske male številke"}
+            taml{"Tamilske številke"}
+            telu{"Teluške števke"}
+            thai{"Tajske števke"}
+            tibt{"Tibetanske števke"}
         }
     }
     Variants{
@@ -703,7 +759,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.0.53.45"}
+    Version{"2.0.57.98"}
     codePatterns{
         language{"Jezik: {0}"}
         territory{"Regija: {0}"}

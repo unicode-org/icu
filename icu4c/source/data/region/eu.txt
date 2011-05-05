@@ -11,11 +11,35 @@
  */
 eu{
     Countries{
+        001{"Mundua"}
         002{"Afrika"}
+        003{"Ipar Amerika"}
+        005{"Hego Amerika"}
+        009{"Ozeania"}
+        011{"Afrika mendebaldea"}
+        013{"Erdialdeko Amerika"}
+        014{"Afrika ekialdea"}
+        015{"Afrika iparraldea"}
+        017{"Erdialdeko Afrika"}
+        018{"Afrika hegoaldea"}
         019{"Amerika"}
+        021{"Amerika iparraldea"}
         029{"Karibea"}
+        030{"Asia ekialdea"}
+        034{"Asia hegoaldea"}
+        035{"Asia hego-ekialdea"}
+        039{"Europa hegoaldea"}
         053{"Australia eta Zeelanda Berria"}
+        054{"Melanesiera"}
+        057{"Mikronesia eskualdea"}
+        061{"Polinesia"}
+        142{"Asia"}
+        143{"Asia erdialdea"}
+        145{"Asia mendebaldea"}
         150{"Europa"}
+        151{"Europa ekialdea"}
+        154{"Europa iparraldea"}
+        155{"Europa mendebaldea"}
         419{"Latinoamerika"}
         AC{"Ascension Uhartea"}
         AD{"Andorra"}
@@ -32,15 +56,21 @@ eu{
         AS{"Amerikar Samoa"}
         AT{"Austria"}
         AU{"Australia"}
+        AW{"Aruba"}
         AX{"Aland Uharteak"}
         AZ{"Azerbaijan"}
         BA{"Bosnia-Herzegovina"}
+        BB{"Barbados"}
         BD{"Bangladesh"}
         BE{"Belgika"}
         BF{"Burkina Faso"}
         BG{"Bulgaria"}
+        BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"San Bartolome"}
+        BM{"Bermuda"}
+        BN{"Brunei"}
         BO{"Bolibia"}
         BR{"Brasil"}
         BS{"Bahamak"}
@@ -48,6 +78,7 @@ eu{
         BV{"Bouvet Uhartea"}
         BW{"Botswana"}
         BY{"Bielorrusia"}
+        BZ{"Belize"}
         CA{"Kanada"}
         CC{"Cocos uharteak"}
         CD{"Kongoko Errepublika Demokratikoa"}
@@ -61,6 +92,7 @@ eu{
         CN{"Txina"}
         CO{"Kolonbia"}
         CP{"CP"}
+        CR{"Costa Rica"}
         CS{"Serbia eta Montenegro"}
         CU{"Kuba"}
         CV{"Cabo Verde"}
@@ -82,13 +114,16 @@ eu{
         ER{"Eritrea"}
         ES{"Espainia"}
         ET{"Etiopia"}
+        EU{"Europar Batasuna"}
         FI{"Finlandia"}
+        FJ{"Fiji"}
         FK{"Malvinak"}
         FM{"Mikronesia"}
         FO{"Faroe Uharteak"}
         FR{"Frantzia"}
         GA{"Gabon"}
         GB{"Erresuma Batua"}
+        GD{"Grenada"}
         GE{"Georgia"}
         GF{"Guyana Frantsesa"}
         GG{"Guernsey"}
@@ -101,7 +136,10 @@ eu{
         GQ{"Ekuatore Ginea"}
         GR{"Grezia"}
         GS{"Hegoaldeko Georgia eta Hegoaldeko Sandwich uharteak"}
+        GT{"Guatemala"}
+        GU{"Guam"}
         GW{"Ginea-Bissau"}
+        GY{"Guyana"}
         HK{"HK"}
         HM{"Heard eta McDonald Uharteak"}
         HN{"Honduras"}
@@ -131,6 +169,7 @@ eu{
         KN{"Saint Kitts eta Nevis"}
         KP{"Ipar Korea"}
         KR{"Hego Korea"}
+        KW{"Kuwait"}
         KY{"Kaiman Uharteak"}
         KZ{"Kazakhstan"}
         LA{"Laos"}
@@ -148,6 +187,7 @@ eu{
         MC{"Monako"}
         MD{"Moldavia"}
         ME{"Montenegro"}
+        MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Marshall uharteak"}
         MK{"Mazedonia"}
@@ -158,6 +198,8 @@ eu{
         MP{"Iparraldeko Mariana uharteak"}
         MQ{"Martinika"}
         MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
         MU{"Maurizio"}
         MV{"Maldivak"}
         MW{"Malawi"}
@@ -173,8 +215,11 @@ eu{
         NL{"Herbehereak"}
         NO{"Norvegia"}
         NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
         NZ{"Zeelanda Berria"}
         OM{"Oman"}
+        PA{"Panama"}
         PE{"Peru"}
         PF{"Polinesia Frantsesa"}
         PG{"Papua Ginea Berria"}
@@ -182,10 +227,15 @@ eu{
         PK{"Pakistan"}
         PL{"Polonia"}
         PM{"Saint-Pierre eta Mikelune"}
+        PN{"Pitcairn uharteak"}
+        PR{"Puerto Rico"}
         PS{"Palestina"}
         PT{"Portugal"}
+        PW{"Palau"}
         PY{"Paraguai"}
         QA{"Katar"}
+        QO{"Mugaz kanpoko Ozeania"}
+        RE{"Reunion"}
         RO{"Errumania"}
         RS{"Serbia"}
         RU{"Errusia"}
@@ -205,7 +255,7 @@ eu{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
-        ST{"Sao Tomé eta Principe"}
+        ST{"Sao Tome eta Principe"}
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Swazilandia"}
@@ -242,10 +292,11 @@ eu{
         WF{"Wallis eta Futuna"}
         WS{"Samoa"}
         YE{"Yemen"}
+        YT{"Mayotte"}
         ZA{"Hegoafrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
         ZZ{"ZZ"}
     }
-    Version{"2.0.50.95"}
+    Version{"2.0.58.33"}
 }

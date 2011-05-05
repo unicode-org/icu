@@ -14,6 +14,8 @@ lv{
         calendar{"kalendārs"}
         collation{"salīdzināšana"}
         currency{"valūta"}
+        numbers{"Cipari"}
+        x{"Personīgai lietošanai"}
     }
     Languages{
         aa{"afāru"}
@@ -141,11 +143,12 @@ lv{
         en{"angļu"}
         en_AU{"Austrālijas angļu"}
         en_CA{"Kanādas angļu"}
-        en_US{"angļu (ASV)"}
+        en_GB{"Lielbritānijas angļu"}
+        en_US{"ASV angļu"}
         enm{"vidusangļu"}
         eo{"esperanto"}
         es{"spāņu"}
-        es_419{"spāņu (Latīņamerika)"}
+        es_419{"Latīņamerikas spāņu"}
         es_ES{"ibēriešu spāņu"}
         et{"igauņu"}
         eu{"basku"}
@@ -399,7 +402,7 @@ lv{
         sah{"jakutu"}
         sai{"Dienvidamerikas indiāņu"}
         sal{"sališu valodas"}
-        sam{"Samārijas aramiešu"}
+        sam{"samārijas aramiešu"}
         sas{"sasaku"}
         sat{"santalu"}
         sc{"sardīniešu"}
@@ -424,8 +427,8 @@ lv{
         sm{"samoāņu"}
         sma{"dienvidsāmu"}
         smi{"sāmu valodas"}
-        smj{"Luleo sāmu"}
-        smn{"Inari sāmu"}
+        smj{"luleo sāmu"}
+        smn{"inari sāmu"}
         sms{"skoltsāmu"}
         sn{"šonu"}
         snk{"soninku"}
@@ -437,7 +440,7 @@ lv{
         srn{"sranantogo"}
         srr{"serēru"}
         ss{"svatu"}
-        ssa{"Nīlas-Sahāras valodas"}
+        ssa{"nīlas-sahāras valodas"}
         st{"dienvidsotu"}
         su{"sundaniešu"}
         suk{"sukumu"}
@@ -467,7 +470,7 @@ lv{
         tmh{"tuaregu"}
         tn{"cvanu"}
         to{"tongu"}
-        tog{"Njasas tongu"}
+        tog{"njasas tongu"}
         tpi{"tokpisins"}
         tr{"turku"}
         ts{"congu"}
@@ -599,22 +602,68 @@ lv{
         calendar{
             buddhist{"budistu kalendārs"}
             chinese{"ķīniešu kalendārs"}
+            coptic{"Koptu kalendārs"}
+            ethiopic{"Etiopiešu kalendārs"}
+            ethiopic-amete-alem{"Etiopiešu kalendārs"}
             gregorian{"Gregora kalendārs"}
             hebrew{"ebreju kalendārs"}
             indian{"Indijas nacionālais kalendārs"}
             islamic{"islāma kalendārs"}
             islamic-civil{"islāma pilsoņu kalendārs"}
             japanese{"japāņu kalendārs"}
+            persian{"Persiešu kalendārs"}
             roc{"Ķīnas Republikas kalendārs"}
         }
         collation{
             big5han{"tradicionālās ķīniešu valodas kārtošanas secība - Big5"}
+            dictionary{"Vārdnīcas kārtošanas secība"}
             direct{"tiešā kārtošanas secība"}
+            ducet{"Noklusējuma unikoda kārtošanas secība"}
             gb2312han{"vienkāršotās ķīniešu valodas kārtošanas secība - GB2312"}
             phonebook{"tālruņu grāmatas kārtošanas secība"}
             pinyin{"piņjiņa kārtošanas secība"}
+            reformed{"Reformētā kārtošanas secība"}
+            search{"Vispārīga meklēšana"}
             stroke{"Stroke kārtošanas secība"}
             traditional{"tradicionālā kārtošanas secība"}
+            unihan{"Radikālā kārtošanas secība pēc vilkumu skaita"}
+        }
+        numbers{
+            arab{"Arābu-indiešu cipari"}
+            arabext{"Izvērstie arābu-indiešu cipari"}
+            armn{"Armēņu cipari"}
+            armnlow{"Mazie armēņu cipari"}
+            beng{"Bengāļu cipari"}
+            deva{"Devanāgarī cipari"}
+            ethi{"Etiopiešu cipari"}
+            fullwide{"Pilna platuma cipari"}
+            geor{"Gruzīnu cipari"}
+            grek{"Grieķu cipari"}
+            greklow{"Mazie grieķu cipari"}
+            gujr{"Gudžaratu cipari"}
+            guru{"Gurmuki cipari"}
+            hanidec{"Ķīniešu decimāldaļskaitļi"}
+            hans{"Vienkāršotie ķīniešu cipari"}
+            hansfin{"Vienkāršotie ķīniešu cipari finanšu dokumentiem"}
+            hant{"Tradicionālie ķīniešu cipari"}
+            hantfin{"Tradicionālie ķīniešu cipari finanšu dokumentiem"}
+            hebr{"Ivrita cipari"}
+            jpan{"Japāņu cipari"}
+            jpanfin{"Japāņu cipari finanšu dokumentiem"}
+            khmr{"Khmeru cipari"}
+            knda{"Kannadu cipari"}
+            laoo{"Laosiešu cipari"}
+            latn{"Arābu cipari"}
+            mlym{"Malajalu cipari"}
+            mong{"Mongoļu cipari"}
+            mymr{"Birmiešu cipari"}
+            orya{"Oriju cipari"}
+            roman{"Romiešu cipari"}
+            romanlow{"Mazie romiešu cipari"}
+            taml{"Tamilu cipari"}
+            telu{"Telugu cipari"}
+            thai{"Tajiešu cipari"}
+            tibt{"Tibetiešu cipari"}
         }
     }
     Variants{
@@ -638,7 +687,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.53.45"}
+    Version{"2.0.58.6"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

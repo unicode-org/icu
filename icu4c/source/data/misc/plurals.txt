@@ -24,11 +24,13 @@ plurals:table(nofallback){
         brx{"set2"}
         bs{"set9"}
         ca{"set2"}
+        cgg{"set2"}
         chr{"set2"}
         cs{"set10"}
         cy{"set15"}
         da{"set2"}
         de{"set2"}
+        dv{"set2"}
         dz{""}
         ee{"set2"}
         el{"set2"}
@@ -50,7 +52,9 @@ plurals:table(nofallback){
         gsw{"set2"}
         gu{"set2"}
         guw{"set3"}
+        gv{"set21"}
         ha{"set2"}
+        haw{"set2"}
         he{"set2"}
         hi{"set3"}
         hr{"set9"}
@@ -60,23 +64,29 @@ plurals:table(nofallback){
         ii{""}
         is{"set2"}
         it{"set2"}
+        iu{"set6"}
         ja{""}
         jv{""}
         ka{""}
         kab{"set4"}
         kde{""}
         kea{""}
+        kk{"set2"}
+        kl{"set2"}
         km{""}
         kn{""}
         ko{""}
         ksh{"set19"}
         ku{"set2"}
+        kw{"set6"}
         lag{"set16"}
         lb{"set2"}
+        lg{"set2"}
         ln{"set3"}
         lo{""}
         lt{"set8"}
         lv{"set5"}
+        mas{"set2"}
         mg{"set3"}
         mk{"set14"}
         ml{"set2"}
@@ -93,6 +103,7 @@ plurals:table(nofallback){
         nn{"set2"}
         no{"set2"}
         nso{"set3"}
+        nyn{"set2"}
         om{"set2"}
         or{"set2"}
         pa{"set2"}
@@ -104,6 +115,7 @@ plurals:table(nofallback){
         ro{"set7"}
         ru{"set9"}
         sah{""}
+        saq{"set2"}
         se{"set6"}
         ses{""}
         sg{""}
@@ -119,8 +131,10 @@ plurals:table(nofallback){
         so{"set2"}
         sq{"set2"}
         sr{"set9"}
+        ssy{"set2"}
         sv{"set2"}
         sw{"set2"}
+        syr{"set2"}
         ta{"set2"}
         te{"set2"}
         th{""}
@@ -129,12 +143,14 @@ plurals:table(nofallback){
         tl{"set3"}
         to{""}
         tr{""}
+        tzm{"set20"}
         uk{"set9"}
         ur{"set2"}
         vi{""}
         wa{"set3"}
         wae{"set2"}
         wo{""}
+        xog{"set2"}
         yo{""}
         zh{""}
         zu{"set2"}
@@ -200,6 +216,12 @@ plurals:table(nofallback){
         }
         set2{
             one{"n is 1"}
+        }
+        set20{
+            one{"n in 0..1 or n in 11..99"}
+        }
+        set21{
+            one{"n mod 10 in 1..2 or n mod 20 is 0"}
         }
         set3{
             one{"n in 0..1"}

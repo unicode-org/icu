@@ -16,7 +16,7 @@ seh{
             "Dirém dos Emirados Árabes Unidos",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Cuanza angolano",
         }
         AUD{
@@ -24,11 +24,11 @@ seh{
             "Dólar australiano",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinar bareinita",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Franco do Burundi",
         }
         BWP{
@@ -52,15 +52,15 @@ seh{
             "Yuan Renminbi chinês",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Escudo cabo-verdiano",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Franco do Djibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinar argelino",
         }
         EGP{
@@ -68,11 +68,11 @@ seh{
             "Libra egípcia",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakfa da Eritréia",
         }
         ETB{
-            "Br",
+            "ETB",
             "Birr etíope",
         }
         EUR{
@@ -84,7 +84,7 @@ seh{
             "Libra esterlina britânica",
         }
         GHC{
-            "₵",
+            "GHC",
             "Cedi de Gana (1979-2007)",
         }
         GMD{
@@ -92,7 +92,7 @@ seh{
             "Dalasi de Gâmbia",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Syli da Guiné",
         }
         INR{
@@ -104,15 +104,15 @@ seh{
             "Iene japonês",
         }
         KES{
-            "Ksh",
+            "KES",
             "Xelim queniano",
         }
         KMF{
-            "CF",
+            "KMF",
             "Franco de Comores",
         }
         LRD{
-            "L$",
+            "LRD",
             "Dólar liberiano",
         }
         LSL{
@@ -120,7 +120,7 @@ seh{
             "Loti do Lesoto",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinar líbio",
         }
         MAD{
@@ -132,11 +132,11 @@ seh{
             "Franco de Madagascar",
         }
         MRO{
-            "UM",
+            "MRO",
             "Ouguiya da Mauritânia",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupia de Maurício",
         }
         MWK{
@@ -144,15 +144,19 @@ seh{
             "Cuacha do Maláui",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metical antigo de Moçambique",
         }
+        MZN{
+            "MTn",
+            "Metical de Moçambique",
+        }
         NAD{
-            "N$",
+            "NAD",
             "Dólar da Namíbia",
         }
         NGN{
-            "₦",
+            "NGN",
             "Naira nigeriana",
         }
         RWF{
@@ -160,11 +164,11 @@ seh{
             "Franco ruandês",
         }
         SAR{
-            "SR",
+            "SAR",
             "Rial saudita",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupia das Seychelles",
         }
         SDG{
@@ -172,23 +176,23 @@ seh{
             "Dinar sudanês",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Libra sudanesa antiga",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Libra de Santa Helena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Leone de Serra Leoa",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Xelim somali",
         }
         STD{
-            "Db",
+            "STD",
             "Dobra de São Tomé e Príncipe",
         }
         SZL{
@@ -196,15 +200,15 @@ seh{
             "Lilangeni da Suazilândia",
         }
         TND{
-            "DT",
+            "TND",
             "Dinar tunisiano",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Xelim da Tanzânia",
         }
         UGX{
-            "USh",
+            "UGX",
             "Xelim ugandense (1966-1987)",
         }
         USD{
@@ -220,17 +224,17 @@ seh{
             "Franco CFA BCEAO",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Rand sul-africano",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Cuacha zambiano",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Dólar do Zimbábue",
         }
     }
-    Version{"2.0.47.38"}
+    Version{"2.0.57.99"}
 }

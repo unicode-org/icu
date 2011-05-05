@@ -42,7 +42,7 @@ es{
         154{"Europa septentrional"}
         155{"Europa occidental"}
         172{"Comunidad de Estados Independientes"}
-        419{"Latinoamérica y el Caribe"}
+        419{"Latinoamérica"}
         AC{"Isla de la Ascensión"}
         AD{"Andorra"}
         AE{"Emiratos Árabes Unidos"}
@@ -232,7 +232,7 @@ es{
         PK{"Pakistán"}
         PL{"Polonia"}
         PM{"San Pedro y Miquelón"}
-        PN{"Pitcairn"}
+        PN{"Islas Pitcairn"}
         PR{"Puerto Rico"}
         PS{"Territorios Palestinos"}
         PT{"Portugal"}
@@ -301,7 +301,7 @@ es{
         ZA{"Sudáfrica"}
         ZM{"Zambia"}
         ZW{"Zimbabue"}
-        ZZ{"Región desconocida o no válida"}
+        ZZ{"Región desconocida"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.58.6"}
 }

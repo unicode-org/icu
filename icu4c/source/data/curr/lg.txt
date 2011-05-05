@@ -16,7 +16,7 @@ lg{
             "Diraamu eya Emireeti",
         }
         AOA{
-            "Kz",
+            "AOA",
             "Kwanza ey'Angola",
         }
         AUD{
@@ -24,11 +24,11 @@ lg{
             "Doola ey'Awusiturelya",
         }
         BHD{
-            "BD",
+            "BHD",
             "Dinaali ey'eBaareeni",
         }
         BIF{
-            "FBu",
+            "BIF",
             "Faranga ey'eburundi",
         }
         BWP{
@@ -52,15 +52,15 @@ lg{
             "Yuwani Reniminibi ey'eCayina",
         }
         CVE{
-            "CV$",
+            "CVE",
             "Esikudo ey'Keepu Veredi",
         }
         DJF{
-            "Fdj",
+            "DJF",
             "Faranga ey'eJjibuti",
         }
         DZD{
-            "DA",
+            "DZD",
             "Dinaali ey'Aligerya",
         }
         EGP{
@@ -68,11 +68,11 @@ lg{
             "Pawundi ey'eMisiri",
         }
         ERN{
-            "Nfk",
+            "ERN",
             "Nakifa ey'Eritureya",
         }
         ETB{
-            "Br",
+            "ETB",
             "Biiru ey'Esyopya",
         }
         EUR{
@@ -84,7 +84,7 @@ lg{
             "Pawundi ey'eBungereza",
         }
         GHC{
-            "₵",
+            "GHC",
             "Sedi ey'eGana",
         }
         GMD{
@@ -92,7 +92,7 @@ lg{
             "Dalasi ey'eGambya",
         }
         GNS{
-            "GNS" /** ===  */,
+            "GNS",
             "Faranga ey'eGini",
         }
         INR{
@@ -104,15 +104,15 @@ lg{
             "Yeni ey'eJapani",
         }
         KES{
-            "Ksh",
+            "KES",
             "Silingi ey'eKenya",
         }
         KMF{
-            "CF",
+            "KMF",
             "Faranga ey'eKomoro",
         }
         LRD{
-            "L$",
+            "LRD",
             "Doola ey'eLiberya",
         }
         LSL{
@@ -120,7 +120,7 @@ lg{
             "Loti ey'eLesoso",
         }
         LYD{
-            "LD",
+            "LYD",
             "Dinaali ey'eLibya",
         }
         MAD{
@@ -132,11 +132,11 @@ lg{
             "Faranga ey'eMalagase",
         }
         MRO{
-            "UM",
+            "MRO",
             "Wugwiya ey'eMawritenya",
         }
         MUR{
-            "MURs",
+            "MUR",
             "Rupiya ey'eMawurisyasi",
         }
         MWK{
@@ -144,15 +144,15 @@ lg{
             "Kwaca ey'eMalawi",
         }
         MZM{
-            "Mt",
+            "MZM",
             "Metikaali ey'eMozambiiki",
         }
         NAD{
-            "N$",
+            "NAD",
             "Doola ey'eNamibiya",
         }
         NGN{
-            "₦",
+            "NGN",
             "Nayira ey'eNayijerya",
         }
         RWF{
@@ -160,11 +160,11 @@ lg{
             "Faranga ey'eRwanda",
         }
         SAR{
-            "SR",
+            "SAR",
             "Riyaali ey'eBuwarabu",
         }
         SCR{
-            "SRe",
+            "SCR",
             "Rupiya ey'eSesere",
         }
         SDG{
@@ -172,23 +172,23 @@ lg{
             "Dinaali ey'eSudaani",
         }
         SDP{
-            "SDP" /** ===  */,
+            "SDP",
             "Pawundi ey'eSudaani",
         }
         SHP{
-            "SH£",
+            "SHP",
             "Pawundi ey'eSenti Herena",
         }
         SLL{
-            "Le",
+            "SLL",
             "Lewone",
         }
         SOS{
-            "Ssh",
+            "SOS",
             "Silingi ey'eSomaliya",
         }
         STD{
-            "Db",
+            "STD",
             "Dobura ey'eSantome ne Purincipe",
         }
         SZL{
@@ -196,11 +196,11 @@ lg{
             "Lilangeni",
         }
         TND{
-            "DT",
+            "TND",
             "Dinaali ey'eTunizya",
         }
         TZS{
-            "TSh",
+            "TZS",
             "Silingi ey'eTanzaniya",
         }
         UGX{
@@ -220,17 +220,17 @@ lg{
             "Faranga ey'omu Afirika ey'ebugwanjuba",
         }
         ZAR{
-            "R",
+            "ZAR",
             "Randi ey'eSawusafirika",
         }
         ZMK{
-            "ZK",
+            "ZMK",
             "Kwaca ey'eZambya",
         }
         ZWD{
-            "Z$",
+            "ZWD",
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.53.5"}
+    Version{"2.0.57.99"}
 }

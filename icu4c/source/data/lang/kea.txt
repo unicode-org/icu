@@ -11,19 +11,39 @@
  */
 kea{
     Languages{
+        ab{"abkaziu"}
+        af{"afrikaner"}
         ak{"akan"}
         am{"amariku"}
         ar{"arabi"}
+        as{"asames"}
+        ay{"aimara"}
+        az{"azerbaijanu"}
         be{"bielorusu"}
         bg{"bulgaru"}
         bn{"bengali"}
+        bo{"tibetanu"}
+        bs{"bosniu"}
+        ca{"katalãu"}
         cs{"txeku"}
+        cy{"gales"}
+        da{"dinamarkes"}
         de{"alemãu"}
+        de_AT{"alimãu austriaku"}
+        de_CH{"altu alimãu suisu"}
         el{"gregu"}
         en{"ingles"}
+        en_AU{"ingles australianu"}
+        en_CA{"ingles kanadianu"}
+        en_GB{"ingles britanuku"}
+        en_US{"ingles merkanu"}
         es{"spanhol"}
+        es_419{"spanhol latinu-merkanu"}
+        es_ES{"spanhol europeu"}
         fa{"persa"}
         fr{"franses"}
+        fr_CA{"franses kanadianu"}
+        fr_CH{"franses suisu"}
         ha{"auza"}
         hi{"indi"}
         hu{"ungaru"}
@@ -39,9 +59,12 @@ kea{
         my{"birmanes"}
         ne{"nepales"}
         nl{"olandes"}
+        nl_BE{"flamengu"}
         pa{"pandjabi"}
         pl{"pulaku"}
         pt{"purtuges"}
+        pt_BR{"purtuges brazileru"}
+        pt_PT{"purtuges europeu"}
         ro{"rumenu"}
         ru{"rusu"}
         rw{"kiniaruanda"}
@@ -51,11 +74,36 @@ kea{
         th{"tailandes"}
         tr{"turku"}
         uk{"ukranianu"}
+        und{"lingua diskonxedu"}
         ur{"urdu"}
         vi{"vietnamita"}
         yo{"ioruba"}
         zh{"xines"}
+        zh_Hans{"xines simplifikadu"}
+        zh_Hant{"xines tradisional"}
         zu{"zulu"}
     }
-    Version{"2.0.47.63"}
+    Scripts{
+        Arab{"arabiku"}
+        Cyrl{"siriliku"}
+        Hans{"han simplifikadu"}
+        Hant{"han tradisional"}
+        Latn{"latinu"}
+        Zxxx{"nãu skritu"}
+        Zzzz{"skrita diskonxedu"}
+    }
+    Types{
+        calendar{
+            gregorian{"Kalendariu Gregorianu"}
+        }
+        numbers{
+            latn{"Numerus Arabikus"}
+        }
+    }
+    Version{"2.0.57.99"}
+    codePatterns{
+        language{"Lingua: {0}"}
+        script{"Skrita: {0}"}
+        territory{"Rejiãu: {0}"}
+    }
 }

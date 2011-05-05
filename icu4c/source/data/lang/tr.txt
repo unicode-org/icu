@@ -14,6 +14,8 @@ tr{
         calendar{"Takvim"}
         collation{"Sıralama"}
         currency{"Para Birimi"}
+        numbers{"Sayılar"}
+        x{"Özel Kullanım"}
     }
     Languages{
         aa{"Afar"}
@@ -142,14 +144,14 @@ tr{
         en{"İngilizce"}
         en_AU{"Avustralya İngilizcesi"}
         en_CA{"Kanada İngilizcesi"}
-        en_GB{"İngilizce (İngiltere)"}
-        en_US{"İngilizce (ABD)"}
+        en_GB{"İngiliz İngilizcesi"}
+        en_US{"Amerikan İngilizcesi"}
         enm{"Ortaçağ İngilizcesi"}
         eo{"Esperanto"}
         es{"İspanyolca"}
         es_419{"Latin Amerika İspanyolcası"}
         es_ES{"İber İspanyolcası"}
-        et{"Estonya Dili"}
+        et{"Estonca"}
         eu{"Baskça"}
         ewo{"Ewondo"}
         fa{"Farsça"}
@@ -319,7 +321,7 @@ tr{
         mos{"Mossi"}
         mr{"Marathi"}
         ms{"Malay"}
-        mt{"Malta Dili"}
+        mt{"Maltaca"}
         mul{"Birden Fazla Dil"}
         mun{"Munda Dilleri"}
         mus{"Creek"}
@@ -384,6 +386,7 @@ tr{
         ps{"Peştuca"}
         pt{"Portekizce"}
         pt_BR{"Brezilya Portekizcesi"}
+        pt_PT{"İber Portekizcesi"}
         qu{"Quechua"}
         raj{"Rajasthani"}
         rap{"Rapanui"}
@@ -488,7 +491,7 @@ tr{
         uga{"Ugarit Dili"}
         uk{"Ukraynaca"}
         umb{"Umbundu"}
-        und{"Bilinmeyen veya Geçersiz Dil"}
+        und{"Bilinmeyen Dil"}
         ur{"Urduca"}
         uz{"Özbekçe"}
         vai{"Vai"}
@@ -516,13 +519,16 @@ tr{
         zbl{"Blis Sembolleri"}
         zen{"Zenaga"}
         zh{"Çince"}
-        zh_Hans{"Çince (basitleştirilmiş)"}
-        zh_Hant{"Çince (geleneksel)"}
+        zh_Hans{"Basitleştirilmiş Çince"}
+        zh_Hant{"Geleneksel Çince"}
         znd{"Zande"}
         zu{"Zulu"}
         zun{"Zuni"}
         zxx{"Dilbilim içeriği yok"}
         zza{"Zazaca"}
+    }
+    LanguagesShort{
+        az{"Azeri"}
     }
     Scripts{
         Arab{"Arap"}
@@ -564,8 +570,8 @@ tr{
         Hang{"Hangıl"}
         Hani{"Han"}
         Hano{"Hanunoo"}
-        Hans{"Basitleştirilmiş Han"}
-        Hant{"Geleneksel Han"}
+        Hans{"Basitleştirilmiş"}
+        Hant{"Geleneksel"}
         Hebr{"İbrani"}
         Hira{"Hiragana"}
         Hmng{"Pahavh Hmong"}
@@ -654,28 +660,74 @@ tr{
         Zsym{"Sembol"}
         Zxxx{"Yazılı Olmayan"}
         Zyyy{"Ortak"}
-        Zzzz{"Bilinmeyen veya Geçersiz Betik"}
+        Zzzz{"Bilinmeyen Betik"}
     }
     Types{
         calendar{
             buddhist{"Budist Takvimi"}
             chinese{"Çin Takvimi"}
+            coptic{"Kıpti Takvim"}
+            ethiopic{"Etiyopik Takvim"}
+            ethiopic-amete-alem{"Etiyopik Amete Alem Takvimi"}
             gregorian{"Miladi Takvim"}
             hebrew{"Yahudi Takvimi"}
             indian{"Ulusal Hint Takvimi"}
             islamic{"Hicri Takvim"}
             islamic-civil{"Arap Takvimi"}
             japanese{"Japon Takvimi"}
+            persian{"Farsça Takvim"}
             roc{"Çin Cumhuriyeti Takvimi"}
         }
         collation{
             big5han{"Geleneksel Çince Sıralaması - Big5"}
+            dictionary{"Sözlük Sıralama Düzeni"}
             direct{"Düz Sıralama"}
+            ducet{"Saptanmış Unicode Sıralaması"}
             gb2312han{"Basitleştirilmiş Çince Sıralaması - GB2312"}
             phonebook{"Telefon Defteri Sıralaması"}
             pinyin{"Basitleştirilmiş Çince Pinyin Sıralaması"}
+            reformed{"Yeni Sıralama Düzeni"}
+            search{"Genel Amaçlı Arama"}
             stroke{"Geleneksel Çince Vuruş Sıralaması"}
             traditional{"Geleneksel Sıralama"}
+            unihan{"Radical-Stroke Sıralama Düzeni"}
+        }
+        numbers{
+            arab{"Hint-Arap Rakamları"}
+            arabext{"Genişletilmiş Hint-Arap Rakamları"}
+            armn{"Ermenice Rakamlar"}
+            armnlow{"Ermenice Rakamlar (Küçük Harf)"}
+            beng{"Bengalce Rakamlar"}
+            deva{"Devanagari Rakamları"}
+            ethi{"Etiyopik Rakamlar"}
+            fullwide{"Tam Genişlikte Rakamlar"}
+            geor{"Gürcüce Rakamlar"}
+            grek{"Yunanca Rakamlar"}
+            greklow{"Yunanca Rakamlar (Küçük Harf)"}
+            gujr{"Gucerat Rakamları"}
+            guru{"Gurmukhi Rakamları"}
+            hanidec{"Çince Ondalık Rakamlar"}
+            hans{"Basitleştirilmiş Çince Rakamlar"}
+            hansfin{"Basitleştirilmiş Çince Finansal Rakamlar"}
+            hant{"Geleneksel Çince Rakamlar"}
+            hantfin{"Geleneksel Çince Finansal Rakamlar"}
+            hebr{"İbranice Rakamlar"}
+            jpan{"Japonca Rakamlar"}
+            jpanfin{"Japonca Finansal Rakamlar"}
+            khmr{"Khmer Rakamları"}
+            knda{"Kannada Rakamları"}
+            laoo{"Lao Rakamları"}
+            latn{"Batı Rakamları"}
+            mlym{"Malayalam Rakamları"}
+            mong{"Moğolca Rakamlar"}
+            mymr{"Myanmar Rakamları"}
+            orya{"Oriya Rakamları"}
+            roman{"Roma Rakamları"}
+            romanlow{"Roma Rakamları (Küçük Harf)"}
+            taml{"Tamil Rakamları"}
+            telu{"Telugu Rakamları"}
+            thai{"Tay Dili Rakamları"}
+            tibt{"Tibet Rakamları"}
         }
     }
     Variants{
@@ -713,10 +765,10 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.57.98"}
     codePatterns{
         language{"Dil: {0}"}
-        script{"Betik: {0}"}
+        script{"Alfabe: {0}"}
         territory{"Bölge: {0}"}
     }
     localeDisplayPattern{
