@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and    *
+* Copyright (C) 2009-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is an XSLT build file for ICU tools. 
@@ -59,7 +59,8 @@
 			<xsl:variable name="enum_status" select="detaileddescription/para/xrefsect/xreftitle/text()"/>
 			<xsl:variable name="enum_version" select="detaileddescription/para/xrefsect/xrefdescription/para/text()"/>
 			
-			<xsl:if test="not(contains(name/text(), '@'))"> <!--  no anonymous file level enums -->
+			 <!--  no anonymous file level enums --><!--
+			<xsl:if test="not(contains(name/text(), '@'))">
 				<cppfunc> 
 					<xsl:copy-of select="@id" />
 					<xsl:attribute name="status"><xsl:value-of select="$enum_status" /></xsl:attribute>
@@ -70,7 +71,7 @@
 				</cppfunc>
 			</xsl:if>
 			
-			<xsl:variable name="enum_node_file" select="location/@file" />
+			--><xsl:variable name="enum_node_file" select="location/@file" />
 			
 
 			<xsl:variable name="enum_member" select="enumvalue[@prot='public']"/>
