@@ -1222,7 +1222,7 @@ public class ULocaleTest extends TestFmwk {
         h[1] = new HashMap<String, String>();
 
         //display in English
-        h[0].put("collation", "Collation");
+        h[0].put("collation", "Sort Order");
         h[0].put("calendar", "Calendar");
         h[0].put("currency", "Currency");
         h[0].put("phonebook", "Phonebook Order");
@@ -1242,7 +1242,7 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("collation", "\u5BF9\u7167");
         h[1].put("calendar", "\u65E5\u5386");
         h[1].put("currency", "\u8D27\u5E01");
-        h[1].put("direct", "\u987A\u5E8F");
+        h[1].put("direct", "\u76F4\u63A5\u6392\u5E8F\u987A\u5E8F");
         h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u987A\u5E8F");
         h[1].put("pinyin", "\u62FC\u97F3\u987a\u5e8f");
         h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");

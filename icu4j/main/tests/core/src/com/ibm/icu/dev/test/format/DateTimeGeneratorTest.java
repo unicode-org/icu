@@ -79,7 +79,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         // modify it to change the zone.
         String newPattern = gen.replaceFieldTypes(pattern, "vvvv");
         format.applyPattern(newPattern);
-        assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 08:58:59 (Frankreich)", format.format(sampleDate));
+        assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 08:58:59 Frankreich Zeit", format.format(sampleDate));
         
         // add test of basic cases
 
@@ -314,7 +314,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "Januar 1999"}, // (new item for testing 6872<-5702)
         new String[] {"MMMEd", "Mi., 13. Jan"},
-        new String[] {"Ed", "Mi., 13."},
+        new String[] {"Ed", "Mi. 13."},
         new String[] {"jmmssSSS", "23:58:59,123"},
         new ULocale("fi"),
         new String[] {"yM", "1.1999"}, // (fixed expected result per ticket 6872<-6626)
@@ -398,19 +398,19 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jmmssSSS", "\u4E0B\u534811:58:59.123"},
         new ULocale("ru"),
         new String[] {"yM", "1.1999"},
-        new String[] {"yMMM", "\u044F\u043D\u0432. 1999"},
+        new String[] {"yMMM", "\u042F\u043D\u0432. 1999"},
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13 \u044F\u043D\u0432. 1999\u00A0\u0433."},
         new String[] {"Md", "13.1"},
         new String[] {"MMMd", "13 \u044F\u043D\u0432."},
-        new String[] {"yQQQ", "1999 1-\u0439 \u043A\u0432."},
-        new String[] {"hhmm", "11:58 PM"},
+        new String[] {"yQQQ", "1-\u0439 \u043A\u0432. 1999 \u0433."},
+        new String[] {"hhmm", "11:58 \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u043B\u0443\u0434\u043D\u044F"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "\u042F\u043D\u0432\u0430\u0440\u044C 1999"},
         new String[] {"MMMEd", "\u0421\u0440, 13 \u044F\u043D\u0432."},
-        new String[] {"Ed", "\u0441\u0440, 13"},
+        new String[] {"Ed", "\u0421\u0440, 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},
     };
     

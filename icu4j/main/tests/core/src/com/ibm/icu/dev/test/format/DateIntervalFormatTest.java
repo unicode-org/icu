@@ -416,7 +416,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "EEEEdMMMM", "10\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f311\\u670810\\u65e5\\u661f\\u671f\\u516d", 
             
-            "zh", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "2007\\u5e7410\\u670810\\u65e5 \\u4e0a\\u534810:10 \\u7f8e\\u56fd (\\u6d1b\\u6749\\u77f6)\\u20132007\\u5e7411\\u670810\\u65e5 \\u4e0a\\u534810:10 \\u7f8e\\u56fd (\\u6d1b\\u6749\\u77f6)", 
+            "zh", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "2007\\u5e7410\\u670810\\u65e5 \\u4e0a\\u534810:10 \\u7f8e\\u56fd\\u65F6\\u95F4\\uFF08\\u6d1b\\u6749\\u77f6\\uff09\\u20132007\\u5e7411\\u670810\\u65e5 \\u4e0a\\u534810:10 \\u7f8e\\u56fd\\u65F6\\u95F4\\uFF08\\u6d1b\\u6749\\u77f6\\uff09", 
             
             "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "EEEEdMMMMy", "2007\\u5e7411\\u670810\\u65e5\\u661f\\u671f\\u516d\\u81f320\\u65e5\\u661f\\u671f\\u4e8c", 
             
@@ -457,13 +457,13 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hm", "\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10", 
             
-            "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hmv", "\\u7f8e\\u56fd (\\u6d1b\\u6749\\u77f6)\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10", 
+            "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hmv", "\\u7f8e\\u56fd\\u65F6\\u95F4\\uFF08\\u6d1b\\u6749\\u77f6\\uff09\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10", 
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hmz", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4-0800\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10", 
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "h", "\\u4e0a\\u534810\\u81f3\\u4e0b\\u53482\\u65f6", 
             
-            "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hv", "\\u7f8e\\u56fd (\\u6d1b\\u6749\\u77f6)\\u4e0a\\u534810\\u81f3\\u4e0b\\u53482\\u65f6", 
+            "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hv", "\\u7f8e\\u56fd\\u65F6\\u95F4\\uFF08\\u6d1b\\u6749\\u77f6\\uff09\\u4e0a\\u534810\\u81f3\\u4e0b\\u53482\\u65f6", 
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hz", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4-0800\\u4e0a\\u534810\\u81f3\\u4e0b\\u53482\\u65f6", 
             
@@ -471,7 +471,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hm", "\\u4e0a\\u534810:00\\u81f310:20", 
             
-            "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmv", "\\u7f8e\\u56fd (\\u6d1b\\u6749\\u77f6)\\u4e0a\\u534810:00\\u81f310:20", 
+            "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmv", "\\u7f8e\\u56fd\\u65F6\\u95F4\\uFF08\\u6d1b\\u6749\\u77f6\\uff09\\u4e0a\\u534810:00\\u81f310:20", 
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "h", "\\u4e0a\\u534810\\u65f6", 
             
@@ -540,9 +540,9 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMM", "Okt-Nov", 
             
-            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "10.10.2007 10:10 vorm. Vereinigte Staaten (Los Angeles) - 10.11.2007 10:10 vorm. Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "10.10.2007 10:10 vorm. Vereinigte Staaten Zeit (Los Angeles) - 10.11.2007 10:10 vorm. Vereinigte Staaten Zeit (Los Angeles)", 
             
-            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "jmv", "10.10.2007 10:10 Vereinigte Staaten (Los Angeles) - 10.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "jmv", "10.10.2007 10:10 Vereinigte Staaten Zeit (Los Angeles) - 10.11.2007 10:10 Vereinigte Staaten Zeit (Los Angeles)", 
 
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hms", "10.10.2007 10:10:10 vorm. - 10.11.2007 10:10:10 vorm.", 
             
@@ -572,9 +572,9 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "M", "11", 
             
-            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "hmv", "10.11.2007 10:10 vorm. Vereinigte Staaten (Los Angeles) - 20.11.2007 10:10 vorm. Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "hmv", "10.11.2007 10:10 vorm. Vereinigte Staaten Zeit (Los Angeles) - 20.11.2007 10:10 vorm. Vereinigte Staaten Zeit (Los Angeles)", 
             
-            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "jmv", "10.11.2007 10:10 Vereinigte Staaten (Los Angeles) - 20.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "jmv", "10.11.2007 10:10 Vereinigte Staaten Zeit (Los Angeles) - 20.11.2007 10:10 Vereinigte Staaten Zeit (Los Angeles)", 
 
             "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "EEEEdMMMy", "Mittwoch, 10. Jan 2007", 
             
@@ -594,13 +594,13 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hm", "10:00-10:20 vorm.", 
             
-            "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmv", "10:00-10:20 vorm. Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmv", "10:00-10:20 vorm. Vereinigte Staaten Zeit (Los Angeles)", 
             
             "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmz", "10:00-10:20 vorm. GMT-08:00", 
             
             "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "h", "10 vorm.", 
             
-            "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hv", "10 vorm. Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hv", "10 vorm. Vereinigte Staaten Zeit (Los Angeles)", 
             
             "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hz", "10 vorm. GMT-08:00", 
             
@@ -610,9 +610,9 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jm", "10:10", 
 
-            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmv", "10:10 vorm. Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmv", "10:10 vorm. Vereinigte Staaten Zeit (Los Angeles)", 
             
-            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jmv", "10:10 Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jmv", "10:10 Vereinigte Staaten Zeit (Los Angeles)", 
 
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmz", "10:10 vorm. GMT-08:00", 
             
@@ -620,7 +620,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "h", "10 vorm.", 
             
-            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hv", "10 vorm. Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hv", "10 vorm. Vereinigte Staaten Zeit (Los Angeles)", 
             
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hz", "10 vorm. GMT-08:00", 
         
@@ -663,7 +663,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
             "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "d", "10/10 - 10/11", 
         
-            "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "y", "2550 \u0E1E.\u0E28.", 
+            "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "y", "\u0E1E.\u0E28. 2550", 
         
         
             "th", "2550 10 10 10:10:10", "2550 11 10 10:10:10", "MMM", "\\u0E15.\\u0E04.-\\u0E1E.\\u0E22.", 
