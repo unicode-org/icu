@@ -1132,7 +1132,8 @@ void MessageFormat::formatComplexSubMessage(int32_t msgStart,
         }
     }
     if (sb.indexOf(LEFT_CURLY_BRACE) >= 0) {
-        MessageFormat subMsgFormat(UnicodeString(), fLocale, success);
+        UnicodeString emptyPattern;  // gcc 3.3.3 fails with "UnicodeString()" as the first parameter.
+        MessageFormat subMsgFormat(emptyPattern, fLocale, success);
         subMsgFormat.applyPattern(sb, UMSGPAT_APOS_DOUBLE_REQUIRED, NULL, success);
         subMsgFormat.format(0, 0, arguments, argumentNames, cnt, appendTo, NULL, success);
     } else {
