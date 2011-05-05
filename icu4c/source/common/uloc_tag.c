@@ -1708,7 +1708,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     AttributeListEntry *attrFirst = NULL;
     AttributeListEntry *attr;
     const char *key, *type;
-    char kwdBuf[ULOC_KEYWORDS_CAPACITY];
+    char kwdBuf[capacity/*ULOC_KEYWORDS_CAPACITY*/];
     UBool posixVariant = FALSE;
 
     if (U_FAILURE(*status)) {
