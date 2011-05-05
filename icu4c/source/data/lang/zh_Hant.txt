@@ -727,7 +727,7 @@ zh_Hant{
         SAAHO{"SAAHO"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.58.0"}
+    Version{"2.0.58.44"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

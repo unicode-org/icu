@@ -797,7 +797,7 @@ pt{
         VALLADER{"VALLADER"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.0.58.31"}
+    Version{"2.0.58.45"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Roteiro: {0}"}

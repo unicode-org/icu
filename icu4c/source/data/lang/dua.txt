@@ -13,5 +13,5 @@ dua{
     Languages{
         dua{"duálá"}
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.58.44"}
 }
