@@ -1790,7 +1790,7 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementary() {
-        if (skipIfBeforeICU(4, 7, 1)) {
+        if (skipIfBeforeICU(4,9,0)) { // ticket#8080
             return;
         }
         int count = 0;
@@ -1803,7 +1803,7 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementaryCanonical() {
-        if (skipIfBeforeICU(4, 7, 1)) {
+        if (skipIfBeforeICU(4,9,0)) { // ticket#8080
             return;
         }
         int count = 0;
