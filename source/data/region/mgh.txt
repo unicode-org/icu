@@ -20,6 +20,7 @@ mgh{
         BJ{"Ubelin"}
         CA{"Ukanada"}
         CG{"Ukongo"}
+        CH{"Uswisi"}
         CI{"Ukodiva"}
         CL{"Uchile"}
         CN{"Uchina"}
@@ -34,13 +35,12 @@ mgh{
         DZ{"Alujeria"}
         EG{"Umisiri"}
         ER{"Uriterea"}
-        ES{"Usudani"}
+        ES{"Uhispania"}
         ET{"Uhabeshi"}
         FI{"Ufini"}
         FJ{"Ufiji"}
         FR{"Ufaransa"}
         GA{"Ugaboni"}
-        GB{"Umarekani"}
         GD{"Ugrenada"}
         GE{"Ujojia"}
         GF{"Ufaransa yo Gwaya"}
@@ -70,87 +70,85 @@ mgh{
         KE{"Ukenya"}
         KH{"Ukambodia"}
         KM{"Ukomoro"}
-        KN{"Usantapieri na Mikeloni"}
+        KN{"Usantakitzi na Nevis"}
         KP{"Ukorea Kaskazini"}
         KR{"Ukorea Kusini"}
         KZ{"Ukazakistani"}
         LB{"Ulebanoni"}
-        LC{"Usantavisenti na Grenadini"}
+        LC{"Usantalusia"}
         LI{"Ushenteni"}
-        LK{"Usurinamu"}
+        LK{"Usirilanka"}
         LR{"Uliberia"}
         LS{"Ulesoto"}
         LT{"Utwania"}
         LU{"Usembaji"}
         LV{"Ulativia"}
         LY{"Ulibya"}
+        ME{"Umantegro"}
         MG{"Ubukini"}
         MK{"Umasedonia"}
-        MP{"Uomani"}
         MW{"Umalawi"}
-        MZ{"Mozambique"}
+        MZ{"Umozambiki"}
         NE{"Unijeri"}
-        NF{"Unorwe"}
         NG{"Unijeria"}
-        NO{"Upakistani"}
-        PA{"Paragwai"}
-        PE{"Upitkairni"}
+        NO{"Unorwe"}
+        OM{"Uomani"}
+        PA{"Upanama"}
+        PE{"Uperuu"}
         PF{"Ufaransa yo Potina"}
-        PG{"Uperuu"}
-        PH{"Upolandi"}
-        PL{"Upwetoriko"}
-        PM{"Usamoa"}
-        PR{"Uriyunioni"}
-        PS{"Upapua"}
-        PT{"Ukatari"}
-        PW{"Upanama"}
-        PY{"Ufilipino"}
-        QA{"Uromania"}
-        RO{"Urwanda"}
-        RU{"Usantahelena"}
-        RW{"Usantakitzi na Nevis"}
-        SA{"Umantegro"}
-        SB{"Afrika du Sulu"}
-        SC{"Usingapoo"}
-        SD{"Uswazi"}
-        SE{"Usiria"}
-        SG{"Uslovenia"}
-        SH{"Usantalusia"}
-        SI{"Usomalia"}
-        SL{"Uslovakia"}
-        SM{"Usaudi"}
-        SN{"Ushelisheli"}
-        SO{"Uhispania"}
-        SR{"Uswidi"}
-        ST{"Usenegali"}
+        PG{"Upapua"}
+        PH{"Ufilipino"}
+        PK{"Upakistani"}
+        PL{"Upolandi"}
+        PM{"Usantapieri na Mikeloni"}
+        PN{"Upitkairni"}
+        PR{"Upwetoriko"}
+        PY{"Paragwai"}
+        QA{"Ukatari"}
+        RE{"Uriyunioni"}
+        RO{"Uromania"}
+        RW{"Urwanda"}
+        SA{"Usaudi"}
+        SC{"Ushelisheli"}
+        SD{"Usudani"}
+        SE{"Uswidi"}
+        SG{"Usingapoo"}
+        SH{"Usantahelena"}
+        SI{"Uslovenia"}
+        SK{"Uslovakia"}
+        SM{"Usamarino"}
+        SN{"Usenegali"}
+        SO{"Usomalia"}
+        SR{"Usurinamu"}
+        ST{"Usao Tome na Principe"}
         SV{"Usalavado"}
-        SY{"Ujikistani"}
-        SZ{"Uswisi"}
-        TC{"Uvirigina"}
+        SY{"Usiria"}
+        SZ{"Uswazi"}
         TD{"Uchadi"}
-        TG{"Utonga"}
-        TH{"Utokelau"}
-        TJ{"Utailandi"}
-        TK{"Utrinidad na Tobago"}
+        TG{"Utogo"}
+        TH{"Utailandi"}
+        TJ{"Ujikistani"}
+        TK{"Utokelau"}
         TL{"Utimo Mashariki"}
-        TM{"Utuvalu"}
-        TN{"Uturukimenistani"}
-        TO{"Utunisia"}
+        TM{"Uturukimenistani"}
+        TN{"Utunisia"}
+        TO{"Utonga"}
         TR{"Utuki"}
-        TW{"Utanzania"}
-        TZ{"Utogo"}
-        UG{"Uarabuni"}
-        US{"Uvanuatu"}
-        UZ{"Uvatikani"}
-        VA{"Uvietinamu"}
-        VC{"Usamarino"}
-        VE{"Uwalis na Futuna"}
-        VN{"Uyemeni"}
-        VU{"Uvenezuela"}
-        WF{"Uzambia"}
-        WS{"Usao Tome na Principe"}
-        YE{"Uzimbabwe"}
-        ZA{"Usirilanka"}
+        TT{"Utrinidad na Tobago"}
+        TV{"Utuvalu"}
+        TZ{"Utanzania"}
+        US{"Umarekani"}
+        VA{"Uvatikani"}
+        VC{"Usantavisenti na Grenadini"}
+        VE{"Uvenezuela"}
+        VN{"Uvietinamu"}
+        VU{"Uvanuatu"}
+        WF{"Uwalis na Futuna"}
+        WS{"Usamoa"}
+        YE{"Uyemeni"}
+        ZA{"Afrika du Sulu"}
+        ZM{"Uzambia"}
+        ZW{"Uzimbabwe"}
     }
-    Version{"2.0.58.44"}
+    Version{"2.0.58.49"}
 }
