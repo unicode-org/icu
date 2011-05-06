@@ -13,11 +13,11 @@ package com.ibm.icu.dev.test.util;
 import java.util.NoSuchElementException;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder;
-import com.ibm.icu.text.UnicodeSet;
 
 public class CharsTrieTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
