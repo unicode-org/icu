@@ -25,6 +25,8 @@
 #include "cmemory.h"
 #include "nucnvtst.h"
 
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const int32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
 #if !UCONFIG_NO_COLLATION
@@ -5551,19 +5553,17 @@ TestIsFixedWidth() {
     const char *fixedWidth[] = {
             "US-ASCII",
             "UTF32",
-            "ibm-5478_P100-1995",
-            "UTF16"
+            "ibm-5478_P100-1995"
     };
-    int32_t fixedWidthLength = 4;
 
     const char *notFixedWidth[] = {
             "GB18030",
             "UTF8",
-            "windows-949-2000"
+            "windows-949-2000",
+            "UTF16"
     };
-    int32_t notFixedWidthLength = 3;
 
-    for (i = 0; i < fixedWidthLength; i++) {
+    for (i = 0; i < LENGTHOF(fixedWidth); i++) {
         cnv = ucnv_open(fixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
             log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
@@ -5576,7 +5576,7 @@ TestIsFixedWidth() {
         ucnv_close(cnv);
     }
 
-    for (i = 0; i < notFixedWidthLength; i++) {
+    for (i = 0; i < LENGTHOF(notFixedWidth); i++) {
         cnv = ucnv_open(notFixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
             log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
