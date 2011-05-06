@@ -2894,7 +2894,17 @@ ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status){
         return FALSE;
     }
 
-    return (cnv->sharedData->staticData->minBytesPerChar == cnv->sharedData->staticData->maxBytesPerChar) ? TRUE : FALSE;
+    switch (ucnv_getType(cnv)) {
+        case UCNV_SBCS:
+        case UCNV_DBCS:
+        case UCNV_UTF32_BigEndian:
+        case UCNV_UTF32_LittleEndian:
+        case UCNV_UTF32:
+        case UCNV_US_ASCII:
+            return TRUE;
+        default:
+            return FALSE;
+    }
 }
 #endif
 
