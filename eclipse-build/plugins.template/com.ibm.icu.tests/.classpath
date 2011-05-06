@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-test-framework"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/icu4j-charset-tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-collate-tests"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-core-tests"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-localespi-tests"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-packaging-tests"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/icu4j-translit-tests"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
