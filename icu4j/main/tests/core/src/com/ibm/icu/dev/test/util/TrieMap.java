@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.BytesTrie.Result;
 import com.ibm.icu.util.BytesTrieBuilder;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder.Option;
-import com.ibm.icu.impl.Utility;
 
 // would be nice to have a BytesTrieBuilder.add(aByte);
 // question: can bytetrie store <"",x>?

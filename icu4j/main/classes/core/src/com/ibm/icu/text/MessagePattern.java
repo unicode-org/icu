@@ -11,11 +11,12 @@ package com.ibm.icu.text;
 
 import java.util.ArrayList;
 
-// Minimize ICU dependencies, only use a very small part of the ICU core.
-// In particular, do not depend on *Format classes.
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.util.Freezable;
+
+//Note: Minimize ICU dependencies, only use a very small part of the ICU core.
+//In particular, do not depend on *Format classes.
 
 /**
  * Parses and represents ICU MessageFormat patterns.

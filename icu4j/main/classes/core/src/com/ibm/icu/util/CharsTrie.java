@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import com.ibm.icu.util.BytesTrie.Result;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.BytesTrie.Result;
 
 /**
  * Light-weight, non-const reader class for a CharsTrie.
