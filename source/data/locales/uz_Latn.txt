@@ -1,0 +1,109 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/uz_Latn.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/uz_Latn.xml
+ */
+uz_Latn{
+    %%Parent{"root"}
+    AuxExemplarCharacters{"[c w]"}
+    ExemplarCharacters{
+        "[a {aʼ} b d e {eʼ} f g h i {iʼ} j k l m n o p q r s t u {uʼ} v x y z {oʼ} {g"
+        "ʼ} {sh} {ch}]"
+    }
+    ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P Q R S T U V X Y Z {Oʼ} {Gʼ} {SH} {CH}]"}
+    LocaleScript{
+        "Latn",
+    }
+    Version{"2.0.58.32"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Yaksh",
+                        "Dush",
+                        "Sesh",
+                        "Chor",
+                        "Pay",
+                        "Cum",
+                        "Shan",
+                    }
+                    wide{
+                        "yakshanba",
+                        "dushanba",
+                        "seshanba",
+                        "chorshanba",
+                        "payshanba",
+                        "cuma",
+                        "shanba",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Y",
+                        "D",
+                        "S",
+                        "C",
+                        "P",
+                        "C",
+                        "S",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Yanv",
+                        "Fev",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Iyun",
+                        "Iyul",
+                        "Avg",
+                        "Sen",
+                        "Okt",
+                        "Noya",
+                        "Dek",
+                    }
+                    wide{
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "Iyun",
+                        "Iyul",
+                        "Avgust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Y",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "I",
+                        "I",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+        }
+    }
+}

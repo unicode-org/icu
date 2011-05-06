@@ -1,0 +1,339 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ee.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ee.xml
+ */
+ee{
+    Currencies{
+        AED{
+            "AED",
+            "united arab emiratesga dirham",
+        }
+        AFN{
+            "AFN",
+            "afghanistanga afghani",
+        }
+        ALL{
+            "ALL",
+            "albaniaga lek",
+        }
+        AMD{
+            "AMD",
+            "armeniaga dram",
+        }
+        ANG{
+            "ANG",
+            "nedalands Antilleaga guilder",
+        }
+        AOA{
+            "AOA",
+            "angolaga kwanza",
+        }
+        ARS{
+            "ARS",
+            "argentinaga peso",
+        }
+        AUD{
+            "AU$",
+            "australiaga dollar",
+        }
+        AWG{
+            "AWG",
+            "arubaga lorin",
+        }
+        AZN{
+            "AZN",
+            "azerbaidzanga manat",
+        }
+        BAM{
+            "BAM",
+            "bosnia-herzegovinaga convertible mark",
+        }
+        BBD{
+            "BBD",
+            "barbadiaga dollar",
+        }
+        BDT{
+            "BDT",
+            "bangladeshga taka",
+        }
+        BGN{
+            "BGN",
+            "bulgariaga lev",
+        }
+        BHD{
+            "BHD",
+            "bahrainga dinar",
+        }
+        BIF{
+            "BIF",
+            "burundiga franc",
+        }
+        BMD{
+            "BMD",
+            "bermudaga dollar",
+        }
+        BND{
+            "BND",
+            "bruneiga dollar",
+        }
+        BOB{
+            "BOB",
+            "boliviaga boliviano",
+        }
+        BRL{
+            "BR$",
+            "brazilga real",
+        }
+        BWP{
+            "BWP",
+            "Botswanatɔwoƒɛgadudu",
+        }
+        CAD{
+            "CA$",
+            "Kanadatɔwofɛgadudu",
+        }
+        CDF{
+            "CDF",
+            "Kongotɔwoƒɛgadudu",
+        }
+        CHF{
+            "CHF",
+            "Swistɔwoƒɛgadudu",
+        }
+        CNY{
+            "CN¥",
+            "Tsynatɔwoƒɛgadudu",
+        }
+        CVE{
+            "CVE",
+            "Eskudo Kaboverdianotɔwoƒɛgadudu",
+        }
+        DJF{
+            "DJF",
+            "Dzibutitɔwoƒɛgadudu",
+        }
+        DZD{
+            "DZD",
+            "Algeriatɔwoƒɛgadudu",
+        }
+        EGP{
+            "EGP",
+            "Egypt-tɔwoƒɛgadudu",
+        }
+        ERN{
+            "ERN",
+            "Eritreiatɔwofɛgadudu",
+        }
+        ETB{
+            "ETB",
+            "Ethiopiatɔwoƒɛgadudu",
+        }
+        EUR{
+            "€",
+            "Yurogadudu",
+        }
+        GBP{
+            "£",
+            "Britishtɔwoƒɛgadudu",
+        }
+        GHC{
+            "GHC",
+            "Siɖi",
+        }
+        GMD{
+            "GMD",
+            "Gambiatɔwofɛgadudu",
+        }
+        GNS{
+            "GNS",
+            "Guineatɔwoƒɛgadudu",
+        }
+        HKD{
+            "HK$",
+            "hong kongga dollar",
+        }
+        IDR{
+            "IDR",
+            "indinesiaga rupiah",
+        }
+        INR{
+            "₹",
+            "Indiatɔwɔfɛgadudu",
+        }
+        JPY{
+            "JP¥",
+            "Gyapantɔwoƒɛgadudu",
+        }
+        KES{
+            "KES",
+            "Kenyatɔwoƒɛgadudu",
+        }
+        KMF{
+            "KMF",
+            "Komoratɔwoƒɛgadudu",
+        }
+        KRW{
+            "₩",
+            "anyiehe koreaga won",
+        }
+        LRD{
+            "LRD",
+            "Liberiatɔwoƒɛgadudu",
+        }
+        LSL{
+            "LSL",
+            "Lesothotɔwoƒɛgadudu",
+        }
+        LYD{
+            "LYD",
+            "Libyatɔwoƒɛgadudu",
+        }
+        MAD{
+            "MAD",
+            "Morokotɔwoƒɛgadudu",
+        }
+        MGA{
+            "MGA",
+            "Malagasytɔwoƒɛgadudu",
+        }
+        MRO{
+            "MRO",
+            "Mauritaniatɔwoƒɛgadudu",
+        }
+        MUR{
+            "MUR",
+            "Mauritiustɔwoƒɛgadudu",
+        }
+        MWK{
+            "MWK",
+            "Malawitɔwofɛgadudu",
+        }
+        MXN{
+            "MX$",
+            "meksikoga peso",
+        }
+        MZM{
+            "MZM",
+            "Mozambiktɔwoƒɛgadudu",
+        }
+        NAD{
+            "NAD",
+            "Namibiatɔwoƒɛgadudu",
+        }
+        NGN{
+            "NGN",
+            "Nigeriatɔwoƒɛgadudu",
+        }
+        NOK{
+            "NOK",
+            "norwayga krone",
+        }
+        PLN{
+            "PLN",
+            "polanɖga zloty",
+        }
+        RUB{
+            "RUB",
+            "russiaga ruble",
+        }
+        RWF{
+            "RWF",
+            "Rwandatɔwoƒɛgadudu",
+        }
+        SAR{
+            "SAR",
+            "Saudi Riyaltɔwoƒɛgadudu",
+        }
+        SCR{
+            "SCR",
+            "Seyshelstɔwoƒɛgadudu",
+        }
+        SDG{
+            "SDG",
+            "Sudantɔwoƒɛgadudu",
+        }
+        SEK{
+            "SEK",
+            "swedenga krona",
+        }
+        SHP{
+            "SHP",
+            "St Helenatɔwoƒɛgadudu",
+        }
+        SLL{
+            "SLL",
+            "Leonegadudu",
+        }
+        SOS{
+            "SOS",
+            "Somalitɔwoƒɛgadudu",
+        }
+        STD{
+            "STD",
+            "Sao Tome kplɛ Prinsipitɔwoƒɛgadudu",
+        }
+        SZL{
+            "SZL",
+            "Lilangenitɔwoƒɛgadudu",
+        }
+        THB{
+            "฿",
+            "thaiga baht",
+        }
+        TND{
+            "TND",
+            "Tunisiatɔwoƒɛgadudu",
+        }
+        TRY{
+            "TRY",
+            "turkeyga lira",
+        }
+        TWD{
+            "NT$",
+            "taiwanga yeye dollar",
+        }
+        TZS{
+            "TZS",
+            "Tanzaniatɔwofɛgadudu",
+        }
+        UGX{
+            "UGX",
+            "Ugandatɔwofɛgadudu",
+        }
+        USD{
+            "US$",
+            "United Statestɔwofɛgadudu",
+        }
+        XOF{
+            "CFA",
+            "Sefa",
+        }
+        XXX{
+            "XXX",
+            "gaɖuɖu manya (xxx)",
+        }
+        ZAR{
+            "ZAR",
+            "South Afrikatɔwoƒɛgadudu",
+        }
+        ZMK{
+            "ZMK",
+            "Zambiatɔwoƒɛgadudu",
+        }
+        ZWD{
+            "ZWD",
+            "Zimbabwetɔwoƒɛgadudu",
+        }
+    }
+    CurrencyUnitPatterns{
+        other{"{1} {0}"}
+    }
+    Version{"2.0.58.0"}
+}
