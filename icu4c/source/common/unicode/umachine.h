@@ -50,7 +50,7 @@
  * building stubdata which is built before the platform.h file is
  * generated.
  */
-#if !defined(STUBDATA_BUILD) && !defined(__MINGW32__)
+#ifndef STUBDATA_BUILD
 #   include "unicode/platform.h"
 #endif
 #   include "unicode/pwin32.h"
