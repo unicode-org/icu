@@ -673,7 +673,7 @@ public:
      *  will only return the length of the result without writing any of the result string (pre-flighting).
      * @param status A reference to an error code value, which must not indicate
      * a failure before the function call.
-     * @return The length oof the script ordering array.
+     * @return The length of the script ordering array.
      * @see ucol_setReorderCodes
      * @see Collator#getEquivalentReorderCodes
      * @see Collator#setReorderCodes
