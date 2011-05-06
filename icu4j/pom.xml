@@ -78,6 +78,14 @@
       </roles>
     </developer>
     <developer>
+      <id>pedberg</id>
+      <name>Peter Edberg</name>
+      <organization>Apple</organization>
+      <roles>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
       <id>yoshito</id>
       <name>Yoshito Umaoka</name>
       <organization>IBM Corporation</organization>
