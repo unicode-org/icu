@@ -16,6 +16,7 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 
+import com.ibm.icu.charset.UConverterSharedData.UConverterType;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -383,7 +384,17 @@ public abstract class CharsetICU extends Charset{
         * @provisional This API might change or be removed in a future release.
         */
        public boolean isFixedWidth() {
-           return (maxBytesPerChar == minBytesPerChar);
+           if (this instanceof CharsetASCII || this instanceof CharsetUTF32) {
+               return true;
+           }
+           
+           if (this instanceof CharsetMBCS) {
+               if (((CharsetMBCS)this).sharedData.staticData.maxBytesPerChar == ((CharsetMBCS)this).sharedData.staticData.minBytesPerChar) {
+                   return true;
+               }
+           }
+           
+           return false;
        }
       
        static void getNonSurrogateUnicodeSet(UnicodeSet setFillIn){
