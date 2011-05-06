@@ -5596,14 +5596,14 @@ public class TestCharset extends TestFmwk {
         String[] fixedWidth = {
                 "US-ASCII",
                 "UTF32",
-                "ibm-5478_P100-1995",
-                "UTF16"
+                "ibm-5478_P100-1995"
         };
         
         String[] notFixedWidth = {
                 "GB18030",
                 "UTF8",
-                "windows-949-2000"
+                "windows-949-2000",
+                "UTF16"
         };
         CharsetProvider provider = new CharsetProviderICU();
         Charset charset;
