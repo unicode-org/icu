@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2010, International Business Machines Corporation
+#* Copyright (C) 1999-2011, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -9,8 +9,8 @@
 #	12/10/1999	weiv	Created
 
 ##############################################################################
-# Keep the following in sync with the version - see common/unicode/uversion.h
-U_ICUDATA_NAME=icudt47
+# Keep the following in sync with the version - see common/unicode/uvernum.h
+U_ICUDATA_NAME=icudt48
 ##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=6.0
