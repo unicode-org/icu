@@ -24,7 +24,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * Unicode Region Subtag, which is defined based upon the BCP 47 standard. We often think of
  * "regions" as "countries" when defining the characteristics of a locale.  Region codes There are different
  * types of region codes that are important to distinguish.
- * 
+ * <p>
  *  Macroregion - A code for a "macro geographical (continental) region, geographical sub-region, or 
  *  selected economic and other grouping" as defined in 
  *  UN M.49 (http://unstats.un.org/unsd/methods/m49/m49regin.htm). 
@@ -33,19 +33,19 @@ import com.ibm.icu.impl.ICUResourceBundle;
  *  Macroregions are represented in ICU by one of three region types: WORLD ( region code 001 ),
  *  CONTINENTS ( regions contained directly by WORLD ), and SUBCONTINENTS ( things contained directly
  *  by a continent ).
- *
+ *  <p>
  *  TERRITORY - A Region that is not a Macroregion. These are typically codes for countries, but also
  *  include areas that are not separate countries, such as the code "AQ" for Antarctica or the code 
  *  "HK" for Hong Kong (SAR China). Overseas dependencies of countries may or may not have separate 
  *  codes. The codes are typically 2-letter codes aligned with the ISO 3166 standard, but BCP47 allows
  *  for the use of 3-digit codes in the future.
- *
+ *  <p>
  *  UNKNOWN - The code ZZ is defined by Unicode LDML for use to indicate that the Region is unknown,
  *  or that the value supplied as a region was invalid.
- *
+ *  <p>
  *  DEPRECATED - Region codes that have been defined in the past but are no longer in modern usage,
  *  usually due to a country splitting into multiple territories or changing its name.
- *  
+ *  <p>
  *  GROUPING - A widely understood grouping of territories that has a well defined membership such
  *  that a region code has been assigned for it.  Some of these are UNM.49 codes that do't fall into 
  *  the world/continent/sub-continent hierarchy, while others are just well known groupings that have
