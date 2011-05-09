@@ -987,6 +987,7 @@ static void TestParseZero(void)
     } else {
         log_verbose("Double: %f\n", dbl);
     }
+    unum_close(unum);
 }
 
 typedef struct {
