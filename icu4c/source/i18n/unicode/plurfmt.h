@@ -499,7 +499,7 @@ public:
     /**
      * @internal
      */
-    class PluralSelectorAdapter : public PluralSelector {
+    class U_I18N_API PluralSelectorAdapter : public PluralSelector {
       public:
         PluralSelectorAdapter() : pluralRules(NULL) {
         }
