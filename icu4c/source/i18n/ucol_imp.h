@@ -550,7 +550,11 @@ void *ucol_getABuffer(const UCollator *coll, uint32_t size);
 
 #ifdef XP_CPLUSPLUS
 
+U_NAMESPACE_BEGIN
+
 class SortKeyByteSink;
+
+U_NAMESPACE_END
 
 /* function used by C++ getCollationKey to prevent restarting the calculation */
 U_CFUNC int32_t
