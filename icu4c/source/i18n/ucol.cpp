@@ -4265,6 +4265,8 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
     return destLength;
 }
 
+U_NAMESPACE_BEGIN
+
 class SortKeyByteSink : public ByteSink {
 public:
     static const uint32_t FILL_ORIGINAL_BUFFER = 1;
@@ -4462,6 +4464,8 @@ SortKeyByteSink::OrphanUnsignedBuffer(int32_t &orphanedCapacity) {
     orphanedCapacity = appended_;
     return newBuffer;
 }
+
+U_NAMESPACE_END
 
 /* sortkey API */
 U_CAPI int32_t U_EXPORT2

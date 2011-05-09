@@ -498,6 +498,7 @@ icu4c/source/test/perf/convperf/debug
 icu4c/source/test/perf/convperf/release
 icu4c/source/test/perf/convperf/x64
 icu4c/source/test/perf/convperf/x86
+icu4c/source/test/perf/dicttrieperf/Makefile
 icu4c/source/test/perf/ipch
 icu4c/source/test/perf/normperf/*.d
 icu4c/source/test/perf/normperf/*.o
