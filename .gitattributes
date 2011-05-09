@@ -3071,9 +3071,9 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/StringPrepDataReader.java svneol=na
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TextTrieMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneGenericNames.java -text
-icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneNamesFactoryImpl.java -text
-icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneNamesImpl.java -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneGenericNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneNamesFactoryImpl.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneNamesImpl.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Trie.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Trie2.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Trie2Writable.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3262,8 +3262,8 @@ icu4j/main/classes/core/src/com/ibm/icu/text/StringTransform.java svneol=native#
 icu4j/main/classes/core/src/com/ibm/icu/text/SymbolTable.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ThaiBreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/TimeUnitFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneFormat.java -text
-icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneNames.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Transform.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/UCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/UFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3316,11 +3316,11 @@ icu4j/main/classes/core/src/com/ibm/icu/util/LocaleMatcher.java svneol=native#te
 icu4j/main/classes/core/src/com/ibm/icu/util/LocalePriorityList.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/Measure.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/MeasureUnit.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/util/Output.java -text
+icu4j/main/classes/core/src/com/ibm/icu/util/Output.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/OverlayBundle.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/RangeDateRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/RangeValueIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/util/Region.java -text svneol=unset#text/plain
+icu4j/main/classes/core/src/com/ibm/icu/util/Region.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/RuleBasedTimeZone.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/STZInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/SimpleDateRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3528,7 +3528,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestBidi.java svneol=native#
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestCharFromDirProp.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestClassOverride.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestCompatibility.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestContext.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestContext.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestFailureRecovery.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestInverse.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3996,7 +3996,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleBuilderTest.java svneo
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleDataTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocaleMatcherTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/LocalePriorityListTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java -text svneol=unset#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/RegionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Relation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/SortedBag.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/StringTokenizerTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
