@@ -16,7 +16,6 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 
-import com.ibm.icu.charset.UConverterSharedData.UConverterType;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
