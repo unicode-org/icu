@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-# Copyright (C) 2009-2010, International Business Machines Corporation, Google and Others.
+# Copyright (C) 2009-2011, International Business Machines Corporation, Google and Others.
 # All rights reserved.
 
 #
@@ -182,8 +182,8 @@ def check_utf8(file_name, base_mime_type, actual_mime_type):
     if ord(bytes[0]) != 0xef:
       print "UTF-8 file with no BOM: " + file_name
 
-    # Append charset=utf-8.  Need to escape the ';' because it is ultimately going to a shell.
-    return base_mime_type + '\\;charset=utf-8'
+    # Append charset=utf-8.
+    return base_mime_type + ';charset=utf-8'
 
 
 def main(argv):
