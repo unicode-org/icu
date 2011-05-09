@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #*
 #*******************************************************************************
-#*   Copyright (C) 2001-2010, International Business Machines
+#*   Copyright (C) 2001-2011, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -139,7 +139,9 @@ for(;@ARGV; shift(@ARGV)) {
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
         $itemCount++;
         if($mode =~ /POSIX/) {
+            &verbose("  $_");
             ($_, $address, $type) = split(/\|/);
+            chop $qtype;
         } elsif ($mode =~ /Mach-O/) {
             if(/^(?:[0-9a-fA-F]){8} ([A-Z]) (?:_)?(.*)$/) {
                 ($_, $type) = ($2, $1);
@@ -156,10 +158,17 @@ for(;@ARGV; shift(@ARGV)) {
                 &verbose( "C++ method: $_\n");
             } elsif (/^[^\(]*::/) { # C++ methods, stuff class name in associative array
 	        ##  DON'T match    ...  (   foo::bar ...   want :: to be to the left of paren
-                ## icu_2_0::CharString::~CharString(void) -> CharString
+                ## icu::CharString::~CharString(void) -> CharString
                 @CppName = split(/::/); ## remove scope stuff
+                
                 if(@CppName>1) {
                     ## MessageFormat virtual table -> MessageFormat
+                    if(! ($CppName[0] =~ /icu/ )) {
+                        # *** WARNING Bad namespace (not 'icu') on ShoeSize::ShoeSize()
+                        warn "*** WARNING Bad namespace (not 'icu') on $_\n";
+                        next;
+                    }
+                    &verbose ( "(Chopping scope $CppName[0] )");
                     @CppName = split(/ /, $CppName[1]); ## remove debug stuff
                 }
                 ## ures_getUnicodeStringByIndex(UResourceBundle -> ures_getUnicodeStringByIndex
@@ -187,7 +196,7 @@ for(;@ARGV; shift(@ARGV)) {
                 print STDERR "$ARGV[0]: Skipped strange mangled function $_\n";
             } elsif ( /^vtable for /) {
                 print STDERR "$ARGV[0]: Skipped vtable $_\n";
-            } elsif ( /^typeinfo for /) {
+            } elsif ( /^typeinfo/) {
                 print STDERR "$ARGV[0]: Skipped typeinfo $_\n";
             } elsif ( /operator\+/ ) {
                 print STDERR "$ARGV[0]: Skipped ignored function $_\n";

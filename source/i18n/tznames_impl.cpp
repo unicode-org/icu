@@ -1417,27 +1417,6 @@ TimeZoneNamesImpl::find(const UnicodeString& text, int32_t start, uint32_t types
     return matchInfo;
 }
 
-UnicodeString& getTZCanonicalID(const TimeZone& tz, UnicodeString& canonicalID) {
-    if (dynamic_cast<const OlsonTimeZone *>(&tz) != NULL) {
-        // short cut for OlsonTimeZone
-        const OlsonTimeZone *otz = (const OlsonTimeZone*)&tz;
-        const UChar* uID = otz->getCanonicalID();
-        if (uID != NULL) {
-            canonicalID.setTo(TRUE, uID, -1);
-        } else {
-            canonicalID.setToBogus();
-        }
-    } else {
-        UErrorCode status = U_ZERO_ERROR;
-        UnicodeString tzID;
-        ZoneMeta::getCanonicalCLDRID(tz.getID(tzID), canonicalID, status);
-        if (U_FAILURE(status)) {
-            canonicalID.setToBogus();
-        }
-    }
-    return canonicalID;
-}
-
 
 U_NAMESPACE_END
 
