@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -743,6 +743,16 @@ static const int32_t fiTestOffs_fiFwd[] =  {  1,  5,  7,  9, 12, 14, 16,     19,
 static const int32_t fiTestOffs_enRev[] =  { 23, 22, 19, 17, 16, 14, 12,  9,  7,  5,  1,  0 };
 static const int32_t fiTestOffs_fiRev[] =  {     22, 19,     16, 14, 12,  9,  7,  5,  1,  0 };
 
+/* Khmer dictionary-based work break, for ICU ticket #8329 */
+static const UChar kmTest[] = { /* 00 */ 0x179F, 0x17BC, 0x1798, 0x1785, 0x17C6, 0x178E, 0x17B6, 0x1799, 0x1796, 0x17C1,
+                                /* 10 */ 0x179B, 0x1794, 0x1793, 0x17D2, 0x178F, 0x17B7, 0x1785, 0x178A, 0x17BE, 0x1798,
+                                /* 20 */ 0x17D2, 0x1794, 0x17B8, 0x17A2, 0x1792, 0x17B7, 0x179F, 0x17D2, 0x178B, 0x17B6,
+                                /* 30 */ 0x1793, 0x17A2, 0x179A, 0x1796, 0x17D2, 0x179A, 0x17C7, 0x1782, 0x17BB, 0x178E,
+                                /* 40 */ 0x178A, 0x179B, 0x17CB, 0x1796, 0x17D2, 0x179A, 0x17C7, 0x17A2, 0x1784, 0x17D2,
+                                /* 50 */ 0x1782, 0 };
+static const int32_t kmTestOffs_kmFwd[] =  {  3, /*8,*/ 11, 17, 23, 31, 33,  40,  43, 51 }; /* TODO: Investigate failure to break at offset 8 */
+static const int32_t kmTestOffs_kmRev[] =  { 43,  40,   33, 31, 23, 17, 11, /*8,*/ 3,  0 };
+
 typedef struct {
     const char * locale;
     UBreakIteratorType type;
@@ -759,6 +769,7 @@ static const RBBITailoringTest tailoringTests[] = {
     { "he", UBRK_LINE,      heTest, heTestOffs_heFwd, heTestOffs_heRev, sizeof(heTestOffs_heFwd)/sizeof(heTestOffs_heFwd[0]) },
     { "en", UBRK_LINE,      fiTest, fiTestOffs_enFwd, fiTestOffs_enRev, sizeof(fiTestOffs_enFwd)/sizeof(fiTestOffs_enFwd[0]) },
     { "fi", UBRK_LINE,      fiTest, fiTestOffs_fiFwd, fiTestOffs_fiRev, sizeof(fiTestOffs_fiFwd)/sizeof(fiTestOffs_fiFwd[0]) },
+    { "km", UBRK_WORD,      kmTest, kmTestOffs_kmFwd, kmTestOffs_kmRev, sizeof(kmTestOffs_kmFwd)/sizeof(kmTestOffs_kmFwd[0]) },
     { NULL, 0, NULL, NULL, NULL, 0 },
 };
 
