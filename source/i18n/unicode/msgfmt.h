@@ -880,7 +880,7 @@ private:
       * For example, if the number matches an explicit-value selector like "=1"
       * we do not need any PluralRules.
       */
-    class PluralSelectorProvider : public PluralFormat::PluralSelector {
+    class U_I18N_API PluralSelectorProvider : public PluralFormat::PluralSelector {
     public:
         PluralSelectorProvider(const Locale* loc);
         virtual ~PluralSelectorProvider();
