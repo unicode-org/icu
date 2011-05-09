@@ -98,8 +98,12 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
     if (U_FAILURE(status)) {
         return;
     }
+    if (compiledRules == NULL || ruleLength < sizeof(RBBIDataHeader)) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     const RBBIDataHeader *data = (const RBBIDataHeader *)compiledRules;
-    if (data->fLength != ruleLength) {
+    if (data->fLength > ruleLength) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
