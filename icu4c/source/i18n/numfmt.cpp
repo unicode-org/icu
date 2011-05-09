@@ -251,6 +251,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
         fMinFractionDigits = rhs.fMinFractionDigits;
         fParseIntegerOnly = rhs.fParseIntegerOnly;
         u_strncpy(fCurrency, rhs.fCurrency, 4);
+        fLenient = rhs.fLenient;
     }
     return *this;
 }
@@ -293,6 +294,10 @@ NumberFormat::operator==(const Format& that) const
         if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
         debug("fCurrency !=");
     }
+    if (!(fLenient == other->fLenient)) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        debug("fLenient != ");
+    }
     if (!first) { printf(" ]"); }
 #endif
 
@@ -304,7 +309,8 @@ NumberFormat::operator==(const Format& that) const
               fMinFractionDigits == other->fMinFractionDigits &&
               fGroupingUsed == other->fGroupingUsed &&
               fParseIntegerOnly == other->fParseIntegerOnly &&
-              u_strcmp(fCurrency, other->fCurrency) == 0)));
+              u_strcmp(fCurrency, other->fCurrency) == 0 &&
+              fLenient == other->fLenient)));
 }
 
 // -------------------------------------

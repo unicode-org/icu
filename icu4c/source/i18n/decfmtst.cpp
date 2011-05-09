@@ -38,15 +38,15 @@ U_NAMESPACE_BEGIN
 //------------------------------------------------------------------------------
 
 static const UChar gDotEquivalentsPattern[] = {
-		// [       .    \u2024  \u3002  \uFE12  \uFE52  \uFF0E  \uFF61     ]
-		0x005B, 0x002E, 0x2024, 0x3002, 0xFE12, 0xFE52, 0xFF0E, 0xFF61, 0x005D, 0x0000};
+        // [       .    \u2024  \u3002  \uFE12  \uFE52  \uFF0E  \uFF61     ]
+        0x005B, 0x002E, 0x2024, 0x3002, 0xFE12, 0xFE52, 0xFF0E, 0xFF61, 0x005D, 0x0000};
 
 static const UChar gCommaEquivalentsPattern[] = {
-		// [       ,    \u060C  \u066B  \u3001  \uFE10  \uFE11  \uFE50  \uFE51  \uFF0C  \uFF64    ]
+        // [       ,    \u060C  \u066B  \u3001  \uFE10  \uFE11  \uFE50  \uFE51  \uFF0C  \uFF64    ]
         0x005B, 0x002C, 0x060C, 0x066B, 0x3001, 0xFE10, 0xFE11, 0xFE50, 0xFE51, 0xFF0C, 0xFF64, 0x005D, 0x0000};
 
 static const UChar gOtherGroupingSeparatorsPattern[] = {
-		// [       \     SPACE     '      NBSP  \u066C  \u2000     -    \u200A  \u2018  \u2019  \u202F  \u205F  \u3000  \uFF07     ]
+        // [       \     SPACE     '      NBSP  \u066C  \u2000     -    \u200A  \u2018  \u2019  \u202F  \u205F  \u3000  \uFF07     ]
         0x005B, 0x005C, 0x0020, 0x0027, 0x00A0, 0x066C, 0x2000, 0x002D, 0x200A, 0x2018, 0x2019, 0x202F, 0x205F, 0x3000, 0xFF07, 0x005D, 0x0000};
 
 static const UChar gDashEquivalentsPattern[] = {
@@ -54,20 +54,20 @@ static const UChar gDashEquivalentsPattern[] = {
         0x005B, 0x005C, 0x002D, 0x2010, 0x2012, 0x2013, 0x2212, 0x005D, 0x0000};
 
 static const UChar gStrictDotEquivalentsPattern[] = {
-		// [      .     \u2024  \uFE52  \uFF0E  \uFF61    ]
+        // [      .     \u2024  \uFE52  \uFF0E  \uFF61    ]
         0x005B, 0x002E, 0x2024, 0xFE52, 0xFF0E, 0xFF61, 0x005D, 0x0000};
 
 static const UChar gStrictCommaEquivalentsPattern[] = {
-		// [       ,    \u066B  \uFE10  \uFE50  \uFF0C     ]
+        // [       ,    \u066B  \uFE10  \uFE50  \uFF0C     ]
         0x005B, 0x002C, 0x066B, 0xFE10, 0xFE50, 0xFF0C, 0x005D, 0x0000};
 
 static const UChar gStrictOtherGroupingSeparatorsPattern[] = {
-		// [       \     SPACE     '      NBSP  \u066C  \u2000     -    \u200A  \u2018  \u2019  \u202F  \u205F  \u3000  \uFF07     ]
+        // [       \     SPACE     '      NBSP  \u066C  \u2000     -    \u200A  \u2018  \u2019  \u202F  \u205F  \u3000  \uFF07     ]
         0x005B, 0x005C, 0x0020, 0x0027, 0x00A0, 0x066C, 0x2000, 0x002D, 0x200A, 0x2018, 0x2019, 0x202F, 0x205F, 0x3000, 0xFF07, 0x005D, 0x0000};
 
 static const UChar gStrictDashEquivalentsPattern[] = {
-    // [       \      -      MINUS     ]
-    0x005B, 0x005C, 0x002D, 0x2212, 0x005D, 0x0000};
+        // [       \      -      MINUS     ]
+        0x005B, 0x005C, 0x002D, 0x2212, 0x005D, 0x0000};
 
 
 DecimalFormatStaticSets *DecimalFormatStaticSets::gStaticSets = NULL;
@@ -105,8 +105,8 @@ DecimalFormatStaticSets::DecimalFormatStaticSets(UErrorCode *status)
 
     // Check for null pointers
     if (fDotEquivalents == NULL || fCommaEquivalents == NULL || fOtherGroupingSeparators == NULL || fDashEquivalents == NULL ||
-    		fStrictDotEquivalents == NULL || fStrictCommaEquivalents == NULL || fStrictOtherGroupingSeparators == NULL || fStrictDashEquivalents == NULL ||
-    		fDefaultGroupingSeparators == NULL || fStrictOtherGroupingSeparators == NULL) {
+        fStrictDotEquivalents == NULL || fStrictCommaEquivalents == NULL || fStrictOtherGroupingSeparators == NULL || fStrictDashEquivalents == NULL ||
+        fDefaultGroupingSeparators == NULL || fStrictOtherGroupingSeparators == NULL) {
         goto ExitConstrDeleteAll;
     }
 
@@ -134,6 +134,7 @@ ExitConstrDeleteAll: // Remove fPropSets and fRuleSets and return error
     delete fStrictOtherGroupingSeparators; fStrictOtherGroupingSeparators = NULL;
     delete fStrictDashEquivalents; fStrictDashEquivalents = NULL;
     delete fDefaultGroupingSeparators; fDefaultGroupingSeparators = NULL;
+    delete fStrictDefaultGroupingSeparators; fStrictDefaultGroupingSeparators = NULL;
     delete fStrictOtherGroupingSeparators; fStrictOtherGroupingSeparators = NULL;
 
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -150,6 +151,7 @@ DecimalFormatStaticSets::~DecimalFormatStaticSets() {
     delete fStrictOtherGroupingSeparators; fStrictOtherGroupingSeparators = NULL;
     delete fStrictDashEquivalents; fStrictDashEquivalents = NULL;
     delete fDefaultGroupingSeparators; fDefaultGroupingSeparators = NULL;
+    delete fStrictDefaultGroupingSeparators; fStrictDefaultGroupingSeparators = NULL;
     delete fStrictOtherGroupingSeparators; fStrictOtherGroupingSeparators = NULL;
 }
 
@@ -179,15 +181,15 @@ U_CDECL_END
 
 void DecimalFormatStaticSets::initSets(UErrorCode *status)
 {
-	DecimalFormatStaticSets *p;
+    DecimalFormatStaticSets *p;
 
     UMTX_CHECK(NULL, gStaticSets, p);
     if (p == NULL) {
         p = new DecimalFormatStaticSets(status);
 
         if (p == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
 
         if (U_FAILURE(*status)) {
@@ -212,14 +214,14 @@ void DecimalFormatStaticSets::initSets(UErrorCode *status)
 
 UnicodeSet *DecimalFormatStaticSets::getSimilarDecimals(UChar32 decimal, UBool strictParse, UnicodeSet *fallback)
 {
-	UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
-	initSets(&status);
+    initSets(&status);
 
-	if (U_FAILURE(status)) {
-		fallback->set(decimal, decimal);
-		return fallback;
-	}
+    if (U_FAILURE(status)) {
+        fallback->set(decimal, decimal);
+        return fallback;
+    }
 
     if (gStaticSets->fDotEquivalents->contains(decimal)) {
         return strictParse ? gStaticSets->fStrictDotEquivalents : gStaticSets->fDotEquivalents;
