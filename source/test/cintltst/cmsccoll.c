@@ -5993,6 +5993,7 @@ static void TestReorderingAPI(void)
     UCollator  *myCollation;
     int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
     int32_t duplicateReorderCodes[] = {USCRIPT_CUNEIFORM, USCRIPT_GREEK, UCOL_REORDER_CODE_CURRENCY, USCRIPT_EGYPTIAN_HIEROGLYPHS};
+    int32_t reorderCodesStartingWithDefault[] = {UCOL_REORDER_CODE_DEFAULT, USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
     UCollationResult collResult;
     int32_t retrievedReorderCodesLength;
     int32_t retrievedReorderCodes[10];
@@ -6073,7 +6074,15 @@ static void TestReorderingAPI(void)
     /* test for error condition on duplicate reorder codes */
     ucol_setReorderCodes(myCollation, duplicateReorderCodes, LEN(duplicateReorderCodes), &status);
     if (!U_FAILURE(status)) {
-        log_err_status(status, "ERROR: setting duplicate reorder codes did not generate a failure");
+        log_err_status(status, "ERROR: setting duplicate reorder codes did not generate a failure\n");
+        return;
+    }
+    
+    status = U_ZERO_ERROR;
+    /* test for reorder codes after a reset code */
+    ucol_setReorderCodes(myCollation, reorderCodesStartingWithDefault, LEN(reorderCodesStartingWithDefault), &status);
+    if (!U_FAILURE(status)) {
+        log_err_status(status, "ERROR: reorderd code sequence starting with default and having following codes didn't cause an error\n");
         return;
     }
     

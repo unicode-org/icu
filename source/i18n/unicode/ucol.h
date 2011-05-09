@@ -605,12 +605,29 @@ ucol_getReorderCodes(const UCollator* coll,
                     int32_t* dest,
                     int32_t destCapacity,
                     UErrorCode *pErrorCode);
-
-/**
+/** 
  * Sets the reordering codes for this collator.
- * Reordering codes allow the collation ordering for groups of characters to be changed.
- * The reordering codes are a combination of UScript codes and UColReorderCode entries.
- * These allow the ordering of characters belonging to these groups to be changed as a group.   
+ * Collation reordering allows scripts and some other defined blocks of characters 
+ * to be moved relative to each other as a block. This reordering is done on top of 
+ * the DUCET/CLDR standard collation order. Reordering can specify groups to be placed 
+ * at the start and/or the end of the collation order. These groups are specified using
+ * UScript codes and UColReorderCode entries.
+ * <p>By default, reordering codes specified for the start of the order are placed in the 
+ * order given after a group of “special” non-script blocks. These special groups of characters 
+ * are space, punctuation, symbol, currency, and digit. These special groups are represented with
+ * UColReorderCode entries. Script groups can be intermingled with 
+ * these special non-script blocks if those special blocks are explicitly specified in the reordering.
+ * <p>The special code OTHERS stands for any script that is not explicitly 
+ * mentioned in the list of reordering codes given. Anything that is after OTHERS
+ * will go at the very end of the reordering in the order given.
+ * <p>The special reorder code DEFAULT will reset the reordering for this collator
+ * to the default for this collator. The default reordering may be the DUCET/CLDR order or may be a reordering that
+ * was specified when this collator was created from resource data or from rules. The 
+ * DEFAULT code <b>must</b> be the sole code supplied when it used. If not
+ * that will result in an U_ILLEGAL_ARGUMENT_ERROR being set.
+ * <p>The special reorder code NONE will remove any reordering for this collator.
+ * The result of setting no reordering will be to have the DUCET/CLDR reordering used. The 
+ * NONE code <b>must</b> be the sole code supplied when it used.
  * @param coll The UCollator to set.
  * @param reorderCodes An array of script codes in the new order. This can be NULL if the 
  * length is also set to 0. An empty array will clear any reordering codes on the collator.
@@ -619,9 +636,9 @@ ucol_getReorderCodes(const UCollator* coll,
  * failure before the function call.
  * @see ucol_getReorderCodes
  * @see ucol_getEquivalentReorderCodes
- * @draft ICU 4.8 
- */
-U_CAPI void U_EXPORT2 
+ * @draft ICU 4.8
+ */ 
+U_DRAFT void U_EXPORT2 
 ucol_setReorderCodes(UCollator* coll,
                     const int32_t* reorderCodes,
                     int32_t reorderCodesLength,
@@ -641,7 +658,7 @@ ucol_setReorderCodes(UCollator* coll,
  * @see ucol_getReorderCodes
  * @draft ICU 4.8
  */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 ucol_getEquivalentReorderCodes(int32_t reorderCode,
                     int32_t* dest,
                     int32_t destCapacity,
