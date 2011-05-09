@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -155,6 +155,19 @@ public class IslamicTest extends CalendarTest {
         doTheoreticalLimitsTest(islamic2, true);
     }
 
+    public void Test7427() {
+        // Test the add month in a leap year problem as reported in ticket #7427
+        IslamicCalendar cal = new IslamicCalendar();
+        cal.clear();
+        cal.set(IslamicCalendar.YEAR,1431);
+        cal.set(IslamicCalendar.MONTH, IslamicCalendar.DHU_AL_HIJJAH);
+        cal.add(IslamicCalendar.MONTH,1);
+        if ( cal.get(IslamicCalendar.MONTH) != IslamicCalendar.MUHARRAM  ||
+           ( cal.get(IslamicCalendar.YEAR) != 1432 )) {
+               errln("Error incrementing month at the end of a leap year.  Expected Month:0 Year:1432 - Got Month:" + 
+                       cal.get(IslamicCalendar.MONTH) + " Year:" + cal.get(IslamicCalendar.YEAR));
+           }
+    }
     public void TestCoverage() {
     {
         // new IslamicCalendar(TimeZone)
