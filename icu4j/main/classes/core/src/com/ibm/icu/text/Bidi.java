@@ -865,8 +865,6 @@ public class Bidi {
 
     private static final char CR = '\r';
     private static final char LF = '\n';
-    private static final char[] charArray0 = new char[0];
-
 
     static final int LRM_BEFORE = 1;
     static final int LRM_AFTER = 2;
@@ -930,8 +928,8 @@ public class Bidi {
     byte                defaultParaLevel;
 
     /* context data */
-    char[]              prologue = charArray0;
-    char[]              epilogue = charArray0;
+    String              prologue;
+    String              epilogue;
 
     /* the following is set in setPara, used in processPropertySeq */
 
@@ -1595,16 +1593,16 @@ public class Bidi {
 
 /* perform (P2)..(P3) ------------------------------------------------------- */
 
+    /**
+     * Returns the directionality of the first strong character after the last B in prologue, if any.
+     * Requires prologue!=null.
+     */
     private byte firstL_R_AL() {
-        /* return first strong char after the last B in prologue if any */
-        int i;
-        int uchar;
-        int proLength = prologue.length;
-        byte dirProp, result = ON;
-        for (i = 0; i < proLength; ) {
-            uchar = UTF16.charAt(prologue, 0, proLength, i);
-            i += UTF16.getCharCount(uchar);
-            dirProp = (byte)getCustomizedClass(uchar);
+        byte result = ON;
+        for (int i = 0; i < prologue.length(); ) {
+            int uchar = prologue.codePointAt(i);
+            i += Character.charCount(uchar);
+            byte dirProp = (byte)getCustomizedClass(uchar);
             if (result == ON) {
                 if (dirProp == L || dirProp == R || dirProp == AL) {
                     result = dirProp;
@@ -1653,7 +1651,7 @@ public class Bidi {
         if (isDefaultLevel) {
             byte lastStrong;
             paraDirDefault = ((paraLevel & 1) != 0) ? CONTEXT_RTL : 0;
-            if(prologue.length > 0 &&
+            if(prologue != null &&
                (lastStrong = firstL_R_AL()) != ON) {
                 paraDir = (lastStrong == L) ? 0 : CONTEXT_RTL;
                 state = FOUND_STRONG_CHAR;
@@ -2610,22 +2608,15 @@ public class Bidi {
         }
     }
 
+    /**
+     * Returns the directionality of the last strong character at the end of the prologue, if any.
+     * Requires prologue!=null.
+     */
     private byte lastL_R_AL() {
-        /* return last strong char at the end of the prologue */
-        int i;
-        int uchar;
-        char c;
-        byte dirProp;
-        for (i = prologue.length; i > 0; ) {
-            uchar = c = prologue[--i];
-            if (UTF16.isTrailSurrogate(c)) {
-                char __c2;
-                if (i > 0 && UTF16.isLeadSurrogate(__c2 = prologue[i - 1])) {
-                    --i;
-                    uchar = UCharacter.getCodePoint(__c2, c);
-                }
-            }
-            dirProp = (byte)getCustomizedClass(uchar);
+        for (int i = prologue.length(); i > 0; ) {
+            int uchar = prologue.codePointBefore(i);
+            i -= Character.charCount(uchar);
+            byte dirProp = (byte)getCustomizedClass(uchar);
             if (dirProp == L) {
                 return _L;
             }
@@ -2639,16 +2630,15 @@ public class Bidi {
         return _ON;
     }
 
+    /**
+     * Returns the directionality of the first strong character, or digit, in the epilogue, if any.
+     * Requires epilogue!=null.
+     */
     private byte firstL_R_AL_EN_AN() {
-        /* return first strong char or digit in epilogue */
-        int i;
-        int uchar;
-        int epiLength = epilogue.length;
-        byte dirProp;
-        for (i = 0; i < epiLength; ) {
-            uchar = UTF16.charAt(epilogue, 0, epiLength, i);
-            i += UTF16.getCharCount(uchar);
-            dirProp = (byte)getCustomizedClass(uchar);
+        for (int i = 0; i < epilogue.length(); ) {
+            int uchar = epilogue.codePointAt(i);
+            i += Character.charCount(uchar);
+            byte dirProp = (byte)getCustomizedClass(uchar);
             if (dirProp == L) {
                 return _L;
             }
@@ -2693,7 +2683,7 @@ public class Bidi {
         levState.runLevel = levels[start];
         levState.impTab = impTabPair.imptab[levState.runLevel & 1];
         levState.impAct = impTabPair.impact[levState.runLevel & 1];
-        if (start == 0 && prologue.length > 0) {
+        if (start == 0 && prologue != null) {
             byte lastStrong = lastL_R_AL();
             if (lastStrong != _ON) {
                 sor = lastStrong;
@@ -2775,7 +2765,7 @@ public class Bidi {
             }
         }
         /* flush possible pending sequence, e.g. ON */
-        if (limit == length && epilogue.length > 0) {
+        if (limit == length && epilogue != null) {
             byte firstStrong = firstL_R_AL_EN_AN();
             if (firstStrong != _ON) {
                 eor = firstStrong;
@@ -2991,8 +2981,8 @@ public class Bidi {
     }
 
     private void setParaSuccess() {
-        prologue = charArray0;          /* forget the last context */
-        epilogue = charArray0;
+        prologue = null;                /* forget the last context */
+        epilogue = null;
         paraBidi = this;                /* mark successful setPara */
     }
 
@@ -3006,9 +2996,7 @@ public class Bidi {
      * may affect the result of this computation.<p>
      *
      * This function specifies the prologue and/or the epilogue for the next
-     * call to setPara(). The characters specified as prologue and
-     * epilogue should not be modified by the calling program until the call
-     * to setPara() has returned. If successive calls to setPara()
+     * call to setPara(). If successive calls to setPara()
      * all need specification of a context, setContext() must be called
      * before each call to setPara(). In other words, a context is not
      * "remembered" after the following successful call to setPara().<p>
@@ -3065,95 +3053,11 @@ public class Bidi {
      *
      * @see #setPara
      * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
-    public void setContext(String prologue, String epilogue)
-    {
-        if (prologue == null) {
-            this.prologue = charArray0;
-        } else {
-            this.prologue = prologue.toCharArray();
-        }
-        if (epilogue == null) {
-            this.epilogue = charArray0;
-        } else {
-            this.epilogue = epilogue.toCharArray();
-        }
-    }
-
-    /**
-     * Set the context before a call to setPara().<p>
-     *
-     * setPara() computes the left-right directionality for a given piece
-     * of text which is supplied as one of its arguments. Sometimes this piece
-     * of text (the "main text") should be considered in context, because text
-     * appearing before ("prologue") and/or after ("epilogue") the main text
-     * may affect the result of this computation.<p>
-     *
-     * This function specifies the prologue and/or the epilogue for the next
-     * call to setPara(). The characters specified as prologue and
-     * epilogue should not be modified by the calling program until the call
-     * to setPara() has returned. If successive calls to setPara()
-     * all need specification of a context, setContext() must be called
-     * before each call to setPara(). In other words, a context is not
-     * "remembered" after the following successful call to setPara().<p>
-     *
-     * If a call to setPara() specifies DEFAULT_LTR or
-     * DEFAULT_RTL as paraLevel and is preceded by a call to
-     * setContext() which specifies a prologue, the paragraph level will
-     * be computed taking in consideration the text in the prologue.<p>
-     *
-     * When setPara() is called without a previous call to
-     * setContext, the main text is handled as if preceded and followed
-     * by strong directional characters at the current paragraph level.
-     * Calling setContext() with specification of a prologue will change
-     * this behavior by handling the main text as if preceded by the last
-     * strong character appearing in the prologue, if any.
-     * Calling setContext() with specification of an epilogue will change
-     * the behavior of setPara() by handling the main text as if followed
-     * by the first strong character or digit appearing in the epilogue, if any.<p>
-     *
-     * Note 1: if <code>setContext</code> is called repeatedly without
-     *         calling <code>setPara</code>, the earlier calls have no effect,
-     *         only the last call will be remembered for the next call to
-     *         <code>setPara</code>.<p>
-     *
-     * Note 2: calling <code>setContext(null, null)</code>
-     *         cancels any previous setting of non-empty prologue or epilogue.
-     *         The next call to <code>setPara()</code> will process no
-     *         prologue or epilogue.<p>
-     *
-     * Note 3: users must be aware that even after setting the context
-     *         before a call to setPara() to perform e.g. a logical to visual
-     *         transformation, the resulting string may not be identical to what it
-     *         would have been if all the text, including prologue and epilogue, had
-     *         been processed together.<br>
-     * Example (upper case letters represent RTL characters):<br>
-     * &nbsp;&nbsp;prologue = "<code>abc DE</code>"<br>
-     * &nbsp;&nbsp;epilogue = none<br>
-     * &nbsp;&nbsp;main text = "<code>FGH xyz</code>"<br>
-     * &nbsp;&nbsp;paraLevel = LTR<br>
-     * &nbsp;&nbsp;display without prologue = "<code>HGF xyz</code>"
-     *             ("HGF" is adjacent to "xyz")<br>
-     * &nbsp;&nbsp;display with prologue = "<code>abc HGFED xyz</code>"
-     *             ("HGF" is not adjacent to "xyz")<br>
-     *
-     * @param prologue is the text which precedes the text that
-     *        will be specified in a coming call to setPara().
-     *        If there is no prologue to consider,
-     *        this parameter can be <code>null</code>.
-     *
-     * @param epilogue is the text which follows the text that
-     *        will be specified in a coming call to setPara().
-     *        If there is no epilogue to consider,
-     *        this parameter can be <code>null</code>.
-     *
-     * @see #setPara
-     * @draft ICU 4.8
-     */
-    public void setContext(char[] prologue, char[] epilogue)
-    {
-        this.prologue = prologue;
-        this.epilogue = epilogue;
+    public void setContext(String prologue, String epilogue) {
+        this.prologue = prologue != null && prologue.length() > 0 ? prologue : null;
+        this.epilogue = epilogue != null && epilogue.length() > 0 ? epilogue : null;
     }
 
     /**
