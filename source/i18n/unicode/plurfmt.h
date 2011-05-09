@@ -484,7 +484,7 @@ public:
      /**
       * @internal 
       */
-    class  PluralSelector {
+    class  PluralSelector : public UMemory {
       public:
         /**
          * Given a number, returns the appropriate PluralFormat keyword.
