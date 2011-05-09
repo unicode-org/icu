@@ -1055,11 +1055,19 @@ void ucol_setReorderCodesFromParser(UCollator *coll, UColTokenParser *parser, UE
     }
     coll->defaultReorderCodesLength = parser->reorderCodesLength;
     coll->defaultReorderCodes =  (int32_t*) uprv_malloc(coll->defaultReorderCodesLength * sizeof(int32_t));
+    if (coll->defaultReorderCodes == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     uprv_memcpy(coll->defaultReorderCodes, parser->reorderCodes, coll->defaultReorderCodesLength * sizeof(int32_t));
     coll->freeDefaultReorderCodesOnClose = TRUE;
     
     coll->reorderCodesLength = parser->reorderCodesLength;
     coll->reorderCodes = (int32_t*) uprv_malloc(coll->reorderCodesLength * sizeof(int32_t));
+    if (coll->reorderCodes == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     uprv_memcpy(coll->reorderCodes, parser->reorderCodes, coll->reorderCodesLength * sizeof(int32_t));
     coll->freeReorderCodesOnClose = TRUE;
 }
@@ -1183,6 +1191,10 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
 
     // set reordering to the default reordering
     if (coll->reorderCodes[0] == UCOL_REORDER_CODE_DEFAULT) {
+        if (coll->reorderCodesLength != 1) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
         if (coll->freeReorderCodesOnClose == TRUE) {
             uprv_free(coll->reorderCodes);
         }
