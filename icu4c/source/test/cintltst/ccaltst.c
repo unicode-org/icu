@@ -1733,7 +1733,7 @@ void TestFieldDifference() {
                         dDf !=  tfdItemPtr->dDiff ||
                         HDf !=  tfdItemPtr->HDiff ||
                         mDf !=  tfdItemPtr->mDiff ) {
-                log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected y-M-d-H-m diffs %d-%d-%d-%d-%d, got %d-%d-%d-%d-%d\n",
+                log_data_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected y-M-d-H-m diffs %d-%d-%d-%d-%d, got %d-%d-%d-%d-%d\n",
                         tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target,
                         tfdItemPtr->yDiff, tfdItemPtr->MDiff, tfdItemPtr->dDiff, tfdItemPtr->HDiff, tfdItemPtr->mDiff, yDf, MDf, dDf, HDf, mDf);
             }

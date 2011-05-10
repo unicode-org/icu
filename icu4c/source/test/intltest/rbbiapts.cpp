@@ -1096,27 +1096,30 @@ void RBBIAPITest::TestCreateFromRBBIData() {
     //
     status = U_ZERO_ERROR;
     RuleBasedBreakIterator *rb = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
-    TEST_ASSERT_SUCCESS(status);
-    uint32_t length;
-    const uint8_t *rules = rb->getBinaryRules(length);
-    RuleBasedBreakIterator *rb2 = new RuleBasedBreakIterator(rules, length, status);
-    TEST_ASSERT_SUCCESS(status);
-    TEST_ASSERT(*rb == *rb2);
-    UnicodeString words = "one two three ";
-    rb2->setText(words);
-    int wordCounter = 0;
-    while (rb2->next() != UBRK_DONE) {
-        wordCounter++;
+    if (rb == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create BreakIterator::createWordInstance (Locale::getEnglish) - %s", u_errorName(status));
+    } else {
+        uint32_t length;
+        const uint8_t *rules = rb->getBinaryRules(length);
+        RuleBasedBreakIterator *rb2 = new RuleBasedBreakIterator(rules, length, status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(*rb == *rb2);
+        UnicodeString words = "one two three ";
+        rb2->setText(words);
+        int wordCounter = 0;
+        while (rb2->next() != UBRK_DONE) {
+            wordCounter++;
+        }
+        TEST_ASSERT(wordCounter == 6);
+
+        status = U_ZERO_ERROR;
+        RuleBasedBreakIterator *rb3 = new RuleBasedBreakIterator(rules, length-1, status);
+        TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+
+        delete rb;
+        delete rb2;
+        delete rb3;
     }
-    TEST_ASSERT(wordCounter == 6);
-
-    status = U_ZERO_ERROR;
-    RuleBasedBreakIterator *rb3 = new RuleBasedBreakIterator(rules, length-1, status);
-    TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
-
-    delete rb;
-    delete rb2;
-    delete rb3;
 }
 
 //---------------------------------------------

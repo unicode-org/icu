@@ -983,7 +983,7 @@ static void TestParseZero(void)
 
     dbl = unum_parseDouble( unum, input, -1 /*u_strlen(input)*/, 0 /* 0 = start */, &errorCode );
     if (U_FAILURE(errorCode)) {
-        log_err("Result: %s\n", u_errorName(errorCode));
+        log_data_err("Result - %s\n", u_errorName(errorCode));
     } else {
         log_verbose("Double: %f\n", dbl);
     }
@@ -1062,7 +1062,7 @@ static void TestSignificantDigits()
     u_uastrcpy(temp, "###0.0#");
     fmt=unum_open(UNUM_IGNORE, temp, -1, NULL, NULL,&status);
     if (U_FAILURE(status)) {
-        log_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
+        log_data_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
         return;
     }
     unum_setAttribute(fmt, UNUM_SIGNIFICANT_DIGITS_USED, TRUE);
@@ -1262,7 +1262,7 @@ static void TestInt64Format() {
     u_uastrcpy(temp1, "#.#E0");
     fmt = unum_open(UNUM_IGNORE, temp1, u_strlen(temp1), NULL, NULL, &status);
     if(U_FAILURE(status)) {
-        log_err("error in unum_openPattern(): %s\n", myErrorName(status));
+        log_data_err("error in unum_openPattern() - %s\n", myErrorName(status));
     } else {
         unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 20);
         unum_formatInt64(fmt, U_INT64_MAX, result, 512, NULL, &status);

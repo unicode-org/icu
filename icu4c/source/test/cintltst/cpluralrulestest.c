@@ -75,7 +75,7 @@ static void TestPluralRules()
                 u_unescape(testItemPtr->keywordExpected, keywordExpected, kKeywordBufLen);
                 if ( u_strcmp(keyword, keywordExpected) != 0 ) {
                     char bcharBuf[kKeywordBufLen];
-                    log_err("ERROR: uplrules_select for locale %s, number %.1f: expect %s, get %s\n",
+                    log_data_err("ERROR: uplrules_select for locale %s, number %.1f: expect %s, get %s\n",
                              testItemPtr->locale, testItemPtr->number, testItemPtr->keywordExpected, u_austrcpy(bcharBuf,keyword) );
                 }
             } else {
