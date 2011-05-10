@@ -3174,6 +3174,7 @@ public class CollationMiscTest extends TestFmwk {
         Collator myCollation;
         int[] reorderCodes = {UScript.GREEK, UScript.HAN, ReorderCodes.PUNCTUATION};
         int[] duplicateReorderCodes = {UScript.CUNEIFORM, UScript.GREEK, ReorderCodes.CURRENCY, UScript.EGYPTIAN_HIEROGLYPHS};
+        int[] reorderCodesStartingWithDefault = {ReorderCodes.DEFAULT, UScript.GREEK, UScript.HAN, ReorderCodes.PUNCTUATION};
         int[] retrievedReorderCodes;
         String greekString = "\u03b1";
         String punctuationString = "\u203e";
@@ -3238,6 +3239,17 @@ public class CollationMiscTest extends TestFmwk {
         }
         if (!gotException) {
             errln("ERROR: exception was not thrown for illegal reorder codes argument.");            
+        }
+        
+        /* set duplicate reorder codes */
+        gotException = false;
+        try {
+            myCollation.setReorderCodes(reorderCodesStartingWithDefault);
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("ERROR: reorder codes following a 'default' code should have thrown an exception but did not.");            
         }
     }
     
