@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2010, International Business Machines Corporation and    *
+* Copyright (C) 2002-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -135,6 +135,10 @@ public abstract class ICUTaglet implements Taglet {
         }
 
         public String toString(Tag tag) {
+            if (tag.text().toLowerCase(Locale.US).indexOf("technology preview") >= 0) {
+                return STATUS + "<dd><em>Technology Preview</em>. <font color='red'>" +
+                    "This API is still in the early stages of development. Use at your own risk.</font></dd>";
+            }
             return STATUS + "<dd><em>Internal</em>. <font color='red'>" +
                 "This API is <em>ICU internal only</em>.</font></dd>";
         }
