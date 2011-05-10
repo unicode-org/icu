@@ -761,12 +761,29 @@ public final class RuleBasedCollator extends Collator {
 
     /** 
      * Sets the reordering codes for this collator.
-     * Reordering codes allow the collation ordering for groups of characters to be changed.
-     * The reordering codes are a combination of UScript  codes and ReorderCodes.
-     * These allow the ordering of characters belonging to these groups to be changed as a group.  
+     * Collation reordering allows scripts and some other defined blocks of characters 
+     * to be moved relative to each other as a block. This reordering is done on top of 
+     * the DUCET/CLDR standard collation order. Reordering can specify groups to be placed 
+     * at the start and/or the end of the collation order.
+     * <p>By default, reordering codes specified for the start of the order are placed in the 
+     * order given after a group of “special” non-script blocks. These special groups of characters 
+     * are space, punctuation, symbol, currency, and digit. These special groups are represented with
+     * {@link Collator.ReorderCodes}. Script groups can be intermingled with 
+     * these special non-script blocks if those special blocks are explicitly specified in the reordering.
+     * <p>The special code {@link Collator.ReorderCodes#OTHERS OTHERS} stands for any script that is not explicitly 
+     * mentioned in the list of reordering codes given. Anything that is after {@link Collator.ReorderCodes#OTHERS OTHERS}
+     * will go at the very end of the reordering in the order given.
+     * <p>The special reorder code {@link Collator.ReorderCodes#DEFAULT DEFAULT} will reset the reordering for this collator
+     * to the default for this collator. The default reordering may be the DUCET/CLDR order or may be a reordering that
+     * was specified when this collator was created from resource data or from rules. The 
+     * {@link Collator.ReorderCodes#DEFAULT DEFAULT} code <b>must</b> be the sole code supplied when it used. If not
+     * that will result in an {@link IllegalArgumentException} being thrown.
+     * <p>The special reorder code {@link Collator.ReorderCodes#NONE NONE} will remove any reordering for this collator.
+     * The result of setting no reordering will be to have the DUCET/CLDR reordering used. The 
+     * {@link Collator.ReorderCodes#NONE NONE} code <b>must</b> be the sole code supplied when it used.
      * @param order the reordering codes to apply to this collator; if this is null or an empty array
      * then this clears any existing reordering
-     * @throws IllegalArgumentException if the reordering codes are malformed in any (e.g. duplicates, multiple reset codes, overlapping equivalent scripts)
+     * @throws IllegalArgumentException if the reordering codes are malformed in any way (e.g. duplicates, multiple reset codes, overlapping equivalent scripts)
      * @see #getReorderCodes
      * @see #getEquivalentReorderCodes
      * @draft ICU 4.8
@@ -3980,6 +3997,9 @@ public final class RuleBasedCollator extends Collator {
         }
 
         if (m_reorderCodes_[0] == ReorderCodes.DEFAULT) {
+            if (m_reorderCodes_.length != 1) {
+                throw new IllegalArgumentException("Illegal collation reorder codes - default reorder code must be the only code in the list.");                
+            }
             // swap the reorder codes for those at build of the rules
             if (m_defaultReorderCodes_ == null || m_defaultReorderCodes_.length == 0) {
                 m_leadBytePermutationTable_ = null;                
