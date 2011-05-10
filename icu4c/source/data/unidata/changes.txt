@@ -1,4 +1,4 @@
-* Copyright (C) 2004-2010, International Business Machines
+* Copyright (C) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *
 *   file name:  changes.txt
@@ -21,9 +21,66 @@ Unicode 6.1 update
 
 * run genpname
   (builds both pnames.icu and propname_data.h)
-- ~/svn.icu/tools/trunk/bld/unicode$ c/genpname/genpname -v -d ~/svn.icu/trunk/src/source/data/in
-- ~/svn.icu/tools/trunk/bld/unicode$ c/genpname/genpname -v -d ~/svn.icu/trunk/src/source/common --csource
+- ~/svn.icu/tools/trunk/bld/unicode/c$ genpname/genpname -v -d ~/svn.icu/trunk/src/source/data/in
+- ~/svn.icu/tools/trunk/bld/unicode/c$ genpname/genpname -v -d ~/svn.icu/trunk/src/source/common --csource
 - rebuild ICU & tools
+
+---------------------------------------------------------------------------- ***
+
+ICU 4.8 (no Unicode update, just new script codes)
+
+* 9 new script codes from ISO 15924 http://www.unicode.org/iso15924/codechanges.html
+  (added 2010-12-21)
+    Afak    439     Afaka
+    Jurc    510     Jurchen
+    Mroo    199     Mro, Mru
+    Nshu    499     Nüshu
+    Shrd    319     Sharada, Śāradā
+    Sora    398     Sora Sompeng
+    Takr    321     Takri, Ṭākrī, Ṭāṅkrī
+    Tang    520     Tangut
+    Wole    480     Woleai
+  -> uscript.h
+  -> com.ibm.icu.lang.UScript
+    find     USCRIPT_([^ ]+) *= ([0-9]+),(.+)
+    replace  public static final int \1 = \2;\3
+  -> genpname/SyntheticPropertyValueAliases.txt
+  -> add to expectedLong and expectedShort names in cintltst/cucdapi.c/TestUScriptCodeAPI()
+      and in com.ibm.icu.dev.test.lang.TestUScript.java
+
+* run genpname/preparse.pl (on Linux)
+  + cd ~/svn.icu/tools/trunk/src/unicode/c/genpname
+  + make sure that data.h is writable
+  + perl preparse.pl ~/svn.icu/trunk/src > out.txt
+  + preparse.pl shows no errors, out.txt Info and Warning lines look ok
+
+* rebuild Unicode tools (at least genpname) using make
+- You might first need to "make install" ICU so that the tools build can pick
+  up the new definitions from the installed header files.
+
+* run genpname
+  (builds both pnames.icu and propname_data.h)
+- ~/svn.icu/tools/trunk/bld/unicode/c$ genpname/genpname -v -d ~/svn.icu/trunk/src/source/data/in
+- ~/svn.icu/tools/trunk/bld/unicode/c$ genpname/genpname -v -d ~/svn.icu/trunk/src/source/common --csource
+- rebuild ICU & tools
+
+* run genprops
+- ~/svn.icu/tools/trunk/bld/unicode/c$ genprops/genprops -d ~/svn.icu/trunk/src/source/data/in -s ~/svn.icu/trunk/src/source/data/unidata -i ~/svn.icu/trunk/dbg/data/out/build/icudt48l -u 6.0
+- ~/svn.icu/tools/trunk/bld/unicode/c$ genprops/genprops -d ~/svn.icu/trunk/src/source/common --csource -s ~/svn.icu/trunk/src/source/data/unidata -i ~/svn.icu/trunk/dbg/data/out/build/icudt48l -u 6.0
+- rebuild ICU & tools
+
+* update Java data files
+- refresh just the UCD-related files, just to be safe
+- see (ICU4C)/source/data/icu4j-readme.txt
+- mkdir /tmp/icu4j
+- ~/svn.icu/trunk/dbg$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
+- copy the big-endian Unicode data files to another location,
+  separate from the other data files
+    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt48b
+    ~/svn.icu/trunk/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt48b/pnames.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt48b
+    ~/svn.icu/trunk/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt48b/uprops.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt48b
+- refresh ICU4J
+    ~/svn.icu/trunk/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt48b
 
 ---------------------------------------------------------------------------- ***
 

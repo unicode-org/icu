@@ -363,10 +363,29 @@ typedef enum UScriptCode {
       /** @stable ICU 4.6 */
       USCRIPT_WARANG_CITI                   = 146,/* Wara */
 
+      /** @stable ICU 4.8 */
+      USCRIPT_AFAKA                         = 147,/* Afak */
+      /** @stable ICU 4.8 */
+      USCRIPT_JURCHEN                       = 148,/* Jurc */
+      /** @stable ICU 4.8 */
+      USCRIPT_MRO                           = 149,/* Mroo */
+      /** @stable ICU 4.8 */
+      USCRIPT_NUSHU                         = 150,/* Nshu */
+      /** @stable ICU 4.8 */
+      USCRIPT_SHARADA                       = 151,/* Shrd */
+      /** @stable ICU 4.8 */
+      USCRIPT_SORA_SOMPENG                  = 152,/* Sora */
+      /** @stable ICU 4.8 */
+      USCRIPT_TAKRI                         = 153,/* Takr */
+      /** @stable ICU 4.8 */
+      USCRIPT_TANGUT                        = 154,/* Tang */
+      /** @stable ICU 4.8 */
+      USCRIPT_WOLEAI                        = 155,/* Wole */
+
       /* Private use codes from Qaaa - Qabx are not supported */
 
       /** @stable ICU 2.2 */
-      USCRIPT_CODE_LIMIT    = 147
+      USCRIPT_CODE_LIMIT    = 156
 } UScriptCode;
 
 /**
