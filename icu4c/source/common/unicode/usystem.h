@@ -24,21 +24,21 @@
 #ifdef U_HIDE_SYSTEM_API
 
 #    if U_DISABLE_RENAMING
-#        define u_cleanup(void) u_cleanup(void)_SYSTEM_API_DO_NOT_USE
-#        define u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *inc, UMtxAtomicFn *dec, UErrorCode *status) u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *inc, UMtxAtomicFn *dec, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
-#        define u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, UErrorCode *status) u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
-#        define u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtxFn *lock, UMtxFn *unlock, UErrorCode *status) u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtxFn *lock, UMtxFn *unlock, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
-#        define ucnv_setDefaultName(const char *name) ucnv_setDefaultName(const char *name)_SYSTEM_API_DO_NOT_USE
-#        define uloc_getDefault(void) uloc_getDefault(void)_SYSTEM_API_DO_NOT_USE
-#        define uloc_setDefault(const char *localeID, UErrorCode *status) uloc_setDefault(const char *localeID, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
+#        define u_cleanup u_cleanup_SYSTEM_API_DO_NOT_USE
+#        define u_setAtomicIncDecFunctions u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMemoryFunctions u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMutexFunctions u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
+#        define ucnv_setDefaultName ucnv_setDefaultName_SYSTEM_API_DO_NOT_USE
+#        define uloc_getDefault uloc_getDefault_SYSTEM_API_DO_NOT_USE
+#        define uloc_setDefault uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    else
-#        define u_cleanup(void)_4_7 u_cleanup(void)_SYSTEM_API_DO_NOT_USE
-#        define u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *inc, UMtxAtomicFn *dec, UErrorCode *status)_4_7 u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *inc, UMtxAtomicFn *dec, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
-#        define u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, UErrorCode *status)_4_7 u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
-#        define u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtxFn *lock, UMtxFn *unlock, UErrorCode *status)_4_7 u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtxFn *lock, UMtxFn *unlock, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
-#        define ucnv_setDefaultName(const char *name)_4_7 ucnv_setDefaultName(const char *name)_SYSTEM_API_DO_NOT_USE
-#        define uloc_getDefault(void)_4_7 uloc_getDefault(void)_SYSTEM_API_DO_NOT_USE
-#        define uloc_setDefault(const char *localeID, UErrorCode *status)_4_7 uloc_setDefault(const char *localeID, UErrorCode *status)_SYSTEM_API_DO_NOT_USE
+#        define u_cleanup_48 u_cleanup_SYSTEM_API_DO_NOT_USE
+#        define u_setAtomicIncDecFunctions_48 u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMemoryFunctions_48 u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMutexFunctions_48 u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
+#        define ucnv_setDefaultName_48 ucnv_setDefaultName_SYSTEM_API_DO_NOT_USE
+#        define uloc_getDefault_48 uloc_getDefault_SYSTEM_API_DO_NOT_USE
+#        define uloc_setDefault_48 uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_SYSTEM_API */

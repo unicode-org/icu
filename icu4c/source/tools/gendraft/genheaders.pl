@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #*
 #*******************************************************************************
-#*   Copyright (C) 2006-2010, International Business Machines
+#*   Copyright (C) 2006-2011, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -73,7 +73,7 @@ sub main(){
   $internalFile   = "$srcDir/internal.html";
   
   $versionAppend = $version;
-  $versionAppend=~ s/^([0-9]+)\.([0-9]+).*/\1_\2/;
+  $versionAppend=~ s/^([0-9]+)\.([0-9]+).*/\1\2/;  # _48
   $excludeFH = IO::File->new($exclude,"r")
             or die  "could not open the file $exclude for reading: $! \n";
   my %exclude;
@@ -177,7 +177,7 @@ sub parseWriteFile{
             #<dt>Global <a class="el" href="utrans_8h.html#a21">utrans_unregister</a>  </dt>
             #<dt>Global <a class="el" href="classUnicodeString.html#w1w0">UnicodeString::kInvariant</a>  </dt>
             # the below regular expression works for both the above formats.
-            $line=~ m/\<dt\>.*\<a class=\".*\" href=\".*\">(.*)\<\/dt\>/;
+            $line=~ m/\<dt\>.*\<a class=\".*\" href=\".*\">(.*)\<\/a\>.*\<\/dt\>/;
             my $value = $1;
             $value =~ s/\<\/a\>\s*//g;
             $value =~ s/^\s+//;

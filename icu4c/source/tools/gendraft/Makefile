@@ -1,5 +1,5 @@
 #*******************************************************************************
-#*   Copyright (C) 2008-2010, International Business Machines
+#*   Copyright (C) 2008-2011, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 
@@ -16,6 +16,7 @@ LOCALHEADERS= udeprctd.h udraft.h uintrnal.h usystem.h
 COMMONHDR= $(top_srcdir)/common/unicode
 DOCDIR= $(top_builddir)/doc/html
 EXCLUDE=$(srcdir)/exclude.txt
+-include Makefile.local
 
 all:
 	@echo Usage:  'make install-headers'  to update headers.
@@ -31,7 +32,7 @@ $(DOCDIR):
 local-headers: $(LOCALHEADERS)
 
 install-headers: $(DOCDIR)
-	perl ./genheaders.pl --srcdir=$(DOCDIR) --destdir=$(COMMONHDR) --version=$(VERSION) --exclusion-list=$(EXCLUDE)
+	perl ./genheaders.pl --srcdir=$(DOCDIR) --destdir=$(COMMONHDR) --version=$(VERSION) --exclusion-list=$(EXCLUDE) $(GENHEADERS_OPTS)
 	( cd $(COMMONHDR) ; ls -l $(LOCALHEADERS) )
 
 %.h:	$(COMMONHDR)/%.h
