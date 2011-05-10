@@ -567,7 +567,7 @@ typedef void U_CALLCONV
 SortKeyGenerator(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        SortKeyByteSink &result,
+        U_NAMESPACE_QUALIFIER SortKeyByteSink &result,
         UErrorCode *status);
 
 /* worker function for generating sortkeys */
@@ -576,7 +576,7 @@ void U_CALLCONV
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        SortKeyByteSink &result,
+        U_NAMESPACE_QUALIFIER SortKeyByteSink &result,
         UErrorCode *status);
 
 U_CFUNC
@@ -584,7 +584,7 @@ void U_CALLCONV
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        SortKeyByteSink &result,
+        U_NAMESPACE_QUALIFIER SortKeyByteSink &result,
         UErrorCode *status);
 
 #else
