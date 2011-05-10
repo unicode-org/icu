@@ -1072,7 +1072,7 @@ public final class RuleBasedCollator extends Collator {
         }
     }
 
-    public RawCollationKey getRawCollationKey(String source, RawCollationKey key, CollationBuffer buffer) {
+    private RawCollationKey getRawCollationKey(String source, RawCollationKey key, CollationBuffer buffer) {
         int strength = getStrength();
         buffer.m_utilCompare0_ = m_isCaseLevel_;
         // m_utilCompare1_ = true;
