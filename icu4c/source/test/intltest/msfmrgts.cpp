@@ -497,7 +497,7 @@ void MessageFormatRegressionTest::Test4116444()
                 for (int j = 0; j < count; j++) {
                     //if (array[j] != null)
                     UnicodeString dummy;
-                    err("\"" + array[j].getString(dummy) + "\"");
+                    dataerrln("\"" + array[j].getString(dummy) + "\"");
                     //else
                      //   log("null");
                     if (j < count- 1) 

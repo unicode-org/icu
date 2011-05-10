@@ -925,155 +925,176 @@ NumberFormatTest::TestLenientParse(void)
     DecimalFormat *format = new DecimalFormat("(#,##0)", status);
     Formattable n;
 
-    format->setLenient(TRUE);
-    for (int32_t t = 0; t < ARRAY_SIZE (lenientAffixTestCases); t += 1) {
-    	UnicodeString testCase = ctou(lenientAffixTestCases[t]);
+    if (format == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create DecimalFormat (#,##0) - %s", u_errorName(status));
+    } else {
+        format->setLenient(TRUE);
+        for (int32_t t = 0; t < ARRAY_SIZE (lenientAffixTestCases); t += 1) {
+        	UnicodeString testCase = ctou(lenientAffixTestCases[t]);
 
-        format->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+            format->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
-        if (U_FAILURE(status) || n.getType() != Formattable::kLong ||
-        	n.getLong() != 1) {
-        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientAffixTestCases[t] + (UnicodeString) "\"");
-        	status = U_ZERO_ERROR;
-        }
-   }
-
-    delete format;
+            if (U_FAILURE(status) || n.getType() != Formattable::kLong ||
+            	n.getLong() != 1) {
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientAffixTestCases[t] + (UnicodeString) "\"");
+            	status = U_ZERO_ERROR;
+            }
+       }
+       delete format;
+    }
 
     Locale en_US("en_US");
     Locale sv_SE("sv_SE");
     
     NumberFormat *mFormat = NumberFormat::createInstance(sv_SE, UNUM_DECIMAL, status);
     
-    mFormat->setLenient(TRUE);
-    for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
-        UnicodeString testCase = ctou(lenientMinusTestCases[t]);
-        
-        mFormat->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
-        
-        if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
-            errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
-            status = U_ZERO_ERROR;
+    if (mFormat == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create NumberFormat (sv_SE, UNUM_DECIMAL) - %s", u_errorName(status));
+    } else {
+        mFormat->setLenient(TRUE);
+        for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
+            UnicodeString testCase = ctou(lenientMinusTestCases[t]);
+            
+            mFormat->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+            
+            if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
+                errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
+                status = U_ZERO_ERROR;
+            }
         }
+        delete mFormat;
     }
-    
-    delete mFormat;
     
     mFormat = NumberFormat::createInstance(en_US, UNUM_DECIMAL, status);
     
-    mFormat->setLenient(TRUE);
-    for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
-        UnicodeString testCase = ctou(lenientMinusTestCases[t]);
-        
-        mFormat->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
-        
-        if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
-            errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
-            status = U_ZERO_ERROR;
+    if (mFormat == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create NumberFormat (en_US, UNUM_DECIMAL) - %s", u_errorName(status));
+    } else {
+        mFormat->setLenient(TRUE);
+        for (int32_t t = 0; t < ARRAY_SIZE(lenientMinusTestCases); t += 1) {
+            UnicodeString testCase = ctou(lenientMinusTestCases[t]);
+            
+            mFormat->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+            
+            if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
+                errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
+                status = U_ZERO_ERROR;
+            }
         }
+        delete mFormat;
     }
-    
-    delete mFormat;
     
     NumberFormat *cFormat = NumberFormat::createInstance(en_US, UNUM_CURRENCY, status);
 
-    cFormat->setLenient(TRUE);
-    for (int32_t t = 0; t < ARRAY_SIZE (lenientCurrencyTestCases); t += 1) {
-    	UnicodeString testCase = ctou(lenientCurrencyTestCases[t]);
+    if (cFormat == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create NumberFormat (en_US, UNUM_CURRENCY) - %s", u_errorName(status));
+    } else {
+        cFormat->setLenient(TRUE);
+        for (int32_t t = 0; t < ARRAY_SIZE (lenientCurrencyTestCases); t += 1) {
+        	UnicodeString testCase = ctou(lenientCurrencyTestCases[t]);
 
-        cFormat->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+            cFormat->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
-        if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
-        	n.getLong() != 1000) {
-        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientCurrencyTestCases[t] + (UnicodeString) "\"");
-        	status = U_ZERO_ERROR;
+            if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
+            	n.getLong() != 1000) {
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientCurrencyTestCases[t] + (UnicodeString) "\"");
+            	status = U_ZERO_ERROR;
+            }
         }
-   }
 
-    for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativeCurrencyTestCases); t += 1) {
-    	UnicodeString testCase = ctou(lenientNegativeCurrencyTestCases[t]);
+        for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativeCurrencyTestCases); t += 1) {
+        	UnicodeString testCase = ctou(lenientNegativeCurrencyTestCases[t]);
 
-        cFormat->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+            cFormat->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
-        if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
-        	n.getLong() != -1000) {
-        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativeCurrencyTestCases[t] + (UnicodeString) "\"");
-        	status = U_ZERO_ERROR;
+            if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
+            	n.getLong() != -1000) {
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativeCurrencyTestCases[t] + (UnicodeString) "\"");
+            	status = U_ZERO_ERROR;
+            }
         }
-   }
 
-    delete cFormat;
+        delete cFormat;
+    }
 
     NumberFormat *pFormat = NumberFormat::createPercentInstance(en_US, status);
 
-    pFormat->setLenient(TRUE);
-    for (int32_t t = 0; t < ARRAY_SIZE (lenientPercentTestCases); t += 1) {
-    	UnicodeString testCase = ctou(lenientPercentTestCases[t]);
+    if (pFormat == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create NumberFormat::createPercentInstance (en_US) - %s", u_errorName(status));
+    } else {
+        pFormat->setLenient(TRUE);
+        for (int32_t t = 0; t < ARRAY_SIZE (lenientPercentTestCases); t += 1) {
+        	UnicodeString testCase = ctou(lenientPercentTestCases[t]);
 
-    	pFormat->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getDouble());
+        	pFormat->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getDouble());
 
-        if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
-        	n.getDouble() != 0.25) {
-        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientPercentTestCases[t] + (UnicodeString) "\"");
-        	status = U_ZERO_ERROR;
+            if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
+            	n.getDouble() != 0.25) {
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientPercentTestCases[t] + (UnicodeString) "\"");
+            	status = U_ZERO_ERROR;
+            }
         }
-   }
 
-    for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativePercentTestCases); t += 1) {
-    	UnicodeString testCase = ctou(lenientNegativePercentTestCases[t]);
+        for (int32_t t = 0; t < ARRAY_SIZE (lenientNegativePercentTestCases); t += 1) {
+        	UnicodeString testCase = ctou(lenientNegativePercentTestCases[t]);
 
-    	pFormat->parse(testCase, n, status);
-        logln((UnicodeString)"parse(" + testCase + ") = " + n.getDouble());
+        	pFormat->parse(testCase, n, status);
+            logln((UnicodeString)"parse(" + testCase + ") = " + n.getDouble());
 
-        if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
-        	n.getDouble() != -0.25) {
-        	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativePercentTestCases[t] + (UnicodeString) "\"");
-        	status = U_ZERO_ERROR;
+            if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
+            	n.getDouble() != -0.25) {
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativePercentTestCases[t] + (UnicodeString) "\"");
+            	status = U_ZERO_ERROR;
+            }
         }
-   }
 
-   delete pFormat;
+        delete pFormat;
+    }
 
    // Test cases that should fail with a strict parse and pass with a
    // lenient parse.
    NumberFormat *nFormat = NumberFormat::createInstance(en_US, status);
+    
+   if (nFormat == NULL || U_FAILURE(status)) {
+       dataerrln("Unable to create NumberFormat (en_US) - %s", u_errorName(status));
+   } else { 
+       // first, make sure that they fail with a strict parse
+       for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
+	       UnicodeString testCase = ctou(strictFailureTestCases[t]);
 
-   // first, make sure that they fail with a strict parse
-   for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
-	   UnicodeString testCase = ctou(strictFailureTestCases[t]);
+	       nFormat->parse(testCase, n, status);
+	       logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
-	   nFormat->parse(testCase, n, status);
-	   logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+	       if (! U_FAILURE(status)) {
+		       errln((UnicodeString)"Strict Parse succeeded for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
+	       }
 
-	   if (! U_FAILURE(status)) {
-		   errln((UnicodeString)"Strict Parse succeeded for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
-	   }
+	       status = U_ZERO_ERROR;
+       }
 
-	   status = U_ZERO_ERROR;
+       // then, make sure that they pass with a lenient parse
+       nFormat->setLenient(TRUE);
+       for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
+	       UnicodeString testCase = ctou(strictFailureTestCases[t]);
+
+	       nFormat->parse(testCase, n, status);
+	       logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
+
+	       if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
+	            	n.getLong() != 1000) {
+		       errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
+		       status = U_ZERO_ERROR;
+	       }
+       }
+
+       delete nFormat;
    }
-
-   // then, make sure that they pass with a lenient parse
-   nFormat->setLenient(TRUE);
-   for (int32_t t = 0; t < ARRAY_SIZE(strictFailureTestCases); t += 1) {
-	   UnicodeString testCase = ctou(strictFailureTestCases[t]);
-
-	   nFormat->parse(testCase, n, status);
-	   logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
-
-	   if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
-	        	n.getLong() != 1000) {
-		   errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
-		   status = U_ZERO_ERROR;
-	   }
-   }
-
-   delete nFormat;
 }
 
 // -------------------------------------

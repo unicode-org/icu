@@ -176,7 +176,7 @@ void TestMessageFormat::testBug2()
     logln("The input pattern : " + pattern);
     MessageFormat *fmt = new MessageFormat(pattern, status);
     if (U_FAILURE(status)) {
-        errln("MessageFormat pattern creation failed.");
+        dataerrln("MessageFormat pattern creation failed. - %s", u_errorName(status));
         return;
     }
     logln("The output pattern is : " + fmt->toPattern(result));
@@ -562,7 +562,7 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
     UnicodeString argNameResult;
     mfAlpha->format(argName, &testArgs1, 1, argNameResult, err);
     if (U_FAILURE(err)) {
-        errln("TestMessageFormat::testMsgFormatPlural #1 - argumentName");
+        dataerrln("TestMessageFormat::testMsgFormatPlural #1 - argumentName - %s", u_errorName(err));
         logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #1 with error code ")+(int32_t)err);
         delete mfNum;
         return;
@@ -1195,6 +1195,10 @@ void TestMessageFormat::testAdopt()
     err = U_ZERO_ERROR;
     MessageFormat msg( formatStr, err);
     MessageFormat msgCmp( formatStr, err);
+    if (U_FAILURE(err)) {
+        dataerrln("Unable to instantiate MessageFormat - %s", u_errorName(err));
+        return;
+    }
     int32_t count, countCmp;
     const Format** formats = msg.getFormats(count);
     const Format** formatsCmp = msgCmp.getFormats(countCmp);
@@ -1642,12 +1646,16 @@ void TestMessageFormat::TestCompatibleApostrophe() {
     pattern = "ab{0,choice,0#1'2''3'''4''''.{0,number,'#x'}}yz";
     compMsg.applyPattern(pattern, ec);
     icuMsg.applyPattern(pattern, ec);
-    assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
-            "ab1234'.0xyz",
-            compMsg.format(zero0, 1, buffer1, fieldpos, ec));
-    assertEquals("unexpected ICU MessageFormat double-apostrophe-optional behavior",
-            "ab1'2'3''4''.#x0yz",
-            icuMsg.format(zero0, 1, buffer2, fieldpos, ec));
+    if (U_FAILURE(ec)) {
+        dataerrln("Unable to applyPattern - %s", u_errorName(ec));
+    } else {
+        assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
+                "ab1234'.0xyz",
+                compMsg.format(zero0, 1, buffer1, fieldpos, ec));
+        assertEquals("unexpected ICU MessageFormat double-apostrophe-optional behavior",
+                "ab1'2'3''4''.#x0yz",
+                icuMsg.format(zero0, 1, buffer2, fieldpos, ec));
+    }
 
     // This part is copied over from Java tests but cannot be properly tested here
     // because we do not have a live reference implementation with JDK behavior.
@@ -1777,6 +1785,9 @@ void TestMessageFormat::TestTrimArgumentName() {
     // ICU 4.8 allows and ignores white space around argument names and numbers.
     IcuTestErrorCode errorCode(*this, "TestTrimArgumentName");
     MessageFormat m("a { 0 , number , '#,#'#.0 } z", Locale::getEnglish(), errorCode);
+    if (errorCode.logDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
+        return;
+    }
     Formattable args[1] = { 2 };
     FieldPosition ignore(0);
     UnicodeString result;

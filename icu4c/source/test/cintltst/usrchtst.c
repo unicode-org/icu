@@ -2831,7 +2831,7 @@ static void TestPCEBuffer_with(const UChar *search, uint32_t searchLen, const UC
                                     &icuStatus );
    if ( U_FAILURE(icuStatus) )
    {
-     log_err( "ucol_openFromShortString error %s\n" , u_errorName(icuStatus));
+     log_data_err( "ucol_openFromShortString error %s\n" , u_errorName(icuStatus));
       goto exit;
    }
 
@@ -2937,14 +2937,14 @@ static void TestMatchFollowedByIgnorables(void) {
                                     NULL,
                                     &icuStatus);
     if (U_FAILURE(icuStatus)) {
-        log_err("ucol_openFromShortString error\n");
+        log_data_err("ucol_openFromShortString error - %s\n", u_errorName(icuStatus));
     }
 
     locale = ucol_getLocaleByType(coll,
                                     ULOC_VALID_LOCALE,
                                     &icuStatus);
     if (U_FAILURE(icuStatus)) {
-        log_err("ucol_getLocaleByType error\n");
+        log_data_err("ucol_getLocaleByType error - %s\n", u_errorName(icuStatus));
     }
 
     ubrk = ubrk_open(UBRK_CHARACTER,
@@ -2953,7 +2953,7 @@ static void TestMatchFollowedByIgnorables(void) {
                         sourceLen,
                         &icuStatus);
     if (U_FAILURE(icuStatus)) {
-        log_err("ubrk_open error\n");
+        log_data_err("ubrk_open error - %s\n", u_errorName(icuStatus));
     }
 
     usearch = usearch_openFromCollator(search,
@@ -2964,25 +2964,22 @@ static void TestMatchFollowedByIgnorables(void) {
                                         ubrk,
                                         &icuStatus);
     if (U_FAILURE(icuStatus)) {
-        log_err("usearch_openFromCollator error\n");
+        log_data_err("usearch_openFromCollator error - %s\n", u_errorName(icuStatus));
     }
 
     match = usearch_first(usearch,
                             &icuStatus);
     if (U_FAILURE(icuStatus)) {
-        log_err("usearch_first error\n");
-    }
+        log_data_err("usearch_first error - %s\n", u_errorName(icuStatus));
+    } else {
 
-    log_verbose("match=%d\n", match);
+        log_verbose("match=%d\n", match);
 
-    matchLength = usearch_getMatchedLength(usearch);
+        matchLength = usearch_getMatchedLength(usearch);
 
-    if (U_FAILURE(icuStatus)) {
-        log_err("usearch_getMatchedLength error\n");
-    }
-
-    if (matchLength != expectedMatchLength) {
-        log_err("Error: matchLength=%d, expected=%d\n", matchLength, expectedMatchLength);
+        if (matchLength != expectedMatchLength) {
+            log_err("Error: matchLength=%d, expected=%d\n", matchLength, expectedMatchLength);
+        }
     }
 
     usearch_close(usearch);

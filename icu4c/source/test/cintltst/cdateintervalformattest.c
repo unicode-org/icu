@@ -107,7 +107,7 @@ static void TestDateIntervalFormat()
             }
             udtitvfmt_close(udtitvfmt);
         } else {
-            log_err("FAIL: udtitvfmt_open for locale %s, skeleton %s, tzid %s: %s\n",
+            log_data_err("FAIL: udtitvfmt_open for locale %s, skeleton %s, tzid %s - %s\n",
                     testItemPtr->locale, testItemPtr->skeleton, tzidForLog, myErrorName(status) );
         }
     }

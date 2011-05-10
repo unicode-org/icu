@@ -740,7 +740,7 @@ static void TestDisplayNames()
             int32_t expectedLen=u_strlen(expected);
 
             if(len!=expectedLen) {
-                log_err("uloc_getDisplayName(%s, %s...) returned string of length %d, expected length %d",
+                log_data_err("uloc_getDisplayName(%s, %s...) returned string of length %d, expected length %d",
                         locale, displayLocale, len, expectedLen);
             } else if(preflightLen!=expectedLen) {
                 log_err("uloc_getDisplayName(%s, %s...) returned preflight length %d, expected length %d",

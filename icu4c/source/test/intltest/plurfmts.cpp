@@ -520,13 +520,13 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
   UnicodeString fmtString(fmt, -1, US_INV);
   PluralFormat pf(fmtString, status);
   if (U_FAILURE(status)) {
-    errln("Failed to apply pattern - %s\n", u_errorName(status));
+    dataerrln("Failed to apply pattern - %s", u_errorName(status));
     return;
   }
   for (int i = 0; i < 7; ++i) {
     UnicodeString result = pf.format(i, status);
     if (U_FAILURE(status)) {
-      errln("Failed to format - %s\n", u_errorName(status));
+      errln("Failed to format - %s", u_errorName(status));
     }
     UnicodeString expected(targets[i], -1, US_INV);
     if (expected != result) {
