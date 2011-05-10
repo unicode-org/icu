@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 2006-2010, International Business Machines
+# Copyright (c) 2006-2011, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ########################################################################
 #   file name:      SyntheticPropertyValueAliases.txt
@@ -77,3 +77,13 @@ sc ; Nbat ; Nbat
 sc ; Palm ; Palm
 sc ; Sind ; Sind
 sc ; Wara ; Wara
+
+sc ; Afak ; Afak
+sc ; Jurc ; Jurc
+sc ; Mroo ; Mroo
+sc ; Nshu ; Nshu
+sc ; Shrd ; Shrd
+sc ; Sora ; Sora
+sc ; Takr ; Takr
+sc ; Tang ; Tang
+sc ; Wole ; Wole
