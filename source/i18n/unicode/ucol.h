@@ -600,7 +600,7 @@ ucol_setStrength(UCollator *coll,
  * @see ucol_getEquivalentReorderCodes
  * @draft ICU 4.8
  */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator* coll,
                     int32_t* dest,
                     int32_t destCapacity,
