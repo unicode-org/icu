@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -453,6 +453,8 @@ public class TestUScript extends TestFmwk {
             /* new in ICU 4.6 */
             "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
             "Narb", "Nbat", "Palm", "Sind", "Wara",
+            /* new in ICU 4.8 */
+            "Afak", "Jurc", "Mroo", "Nshu", "Shrd", "Sora", "Takr", "Tang", "Wole",
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -471,6 +473,8 @@ public class TestUScript extends TestFmwk {
             /* new in ICU 4.6 */
             "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
             "Narb", "Nbat", "Palm", "Sind", "Wara",
+            /* new in ICU 4.8 */
+            "Afak", "Jurc", "Mroo", "Nshu", "Shrd", "Sora", "Takr", "Tang", "Wole",
         };
         if(expectedLong.length!=(UScript.CODE_LIMIT-UScript.BALINESE)) {
             errln("need to add new script codes in lang.TestUScript.java!");

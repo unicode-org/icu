@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2010 International Business Machines Corporation and     *
+* Copyright (C) 2001-2011 International Business Machines Corporation and     *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -818,12 +818,58 @@ public final class UScript {
     public static final int WARANG_CITI                   = 146;/* Wara */
 
     /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int AFAKA = 147;/* Afak */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int JURCHEN = 148;/* Jurc */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int MRO = 149;/* Mroo */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int NUSHU = 150;/* Nshu */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int SHARADA = 151;/* Shrd */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int SORA_SOMPENG = 152;/* Sora */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int TAKRI = 153;/* Takr */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int TANGUT = 154;/* Tang */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 4.8
+     */
+    public static final int WOLEAI = 155;/* Wole */
+
+    /**
      * One higher than the last ISO 15924 script code integer.
      * This value will increase as ISO 15924 adds script codes
      * for which integer constants are added above.
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 147;
+    public static final int CODE_LIMIT   = 156;
 
     private static final String kLocaleScript = "LocaleScript";
     
