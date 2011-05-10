@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 1999-2010, International Business Machines
+ * Copyright (C) 1999-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *
  * file name: uchar_props_data.c
  *
- * machine-generated on: 2010-09-19
+ * machine-generated on: 2011-05-10
  */
 
 static const UVersionInfo dataVersion={6,0,0,0};
@@ -2818,5 +2818,5 @@ static const uint16_t scriptExtensions[40]={
 0x8025,0x11,0x14,0x8016,4,0xa,0x10,0x801f,0x2a,0x2b,0x2c,0x802d,5,0x11,0x12,0x14,
 0x8016,5,0x11,0x12,0x14,0x16,0x8029,0};
 
-static const int32_t indexes[UPROPS_INDEX_COUNT]={0x21ae,0x21ae,0x21ae,0x21ae,0x4d66,3,0x5f6c,0x5f80,0x5f80,0x5f80,0xad192,0x2473171,0,0,0,0};
+static const int32_t indexes[UPROPS_INDEX_COUNT]={0x21ae,0x21ae,0x21ae,0x21ae,0x4d66,3,0x5f6c,0x5f80,0x5f80,0x5f80,0xad19b,0x2473171,0,0,0,0};
 
