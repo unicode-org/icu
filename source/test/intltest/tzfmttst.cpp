@@ -276,7 +276,15 @@ public:
 
         StringEnumeration *tzids = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
         if (U_FAILURE(status)) {
-            log.errln("TimeZone::createTimeZoneIDEnumeration failed");
+            if (status == U_MISSING_RESOURCE_ERROR) {
+                /* This error is generally caused by data not being present. However, an infinite loop will occur
+                 * because the thread thinks that the test data is never done so we should treat the data as done.
+                 */
+                log.dataerrln("TimeZone::createTimeZoneIDEnumeration failed - %s", u_errorName(status));
+                data.numDone = data.nLocales;
+            } else {
+                log.errln("TimeZone::createTimeZoneIDEnumeration failed: %s", u_errorName(status));
+            }
             return;
         }
 

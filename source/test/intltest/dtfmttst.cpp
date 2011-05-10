@@ -3468,6 +3468,11 @@ void DateFormatTest::TestNumberAsStringParsing()
     SimpleDateFormat *formatter = new SimpleDateFormat(datePattern, Locale(""), status);
     UDate date1 = 0;
     
+    if (formatter == NULL || U_FAILURE(status)) {
+        dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+        return;
+    }
+    
     formatter->setLenient(FALSE);
     date1 = formatter->parse(dateString, status);
     
