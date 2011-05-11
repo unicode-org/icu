@@ -69,7 +69,7 @@ public class Currency extends MeasureUnit implements Serializable {
     public static final int SYMBOL_NAME = 0;
 
     /**
-     * Selector for ucurr_getName indicating the long name for a
+     * Selector for getName() indicating the long name for a
      * currency, such as "US Dollar" for USD.
      * @stable ICU 2.6
      */
