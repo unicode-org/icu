@@ -971,8 +971,8 @@ free(result);
 static void TestParseZero(void)
 {
     UErrorCode errorCode = U_ZERO_ERROR;
-    UChar input[] = {'0', 0};   /*  Input text is decimal '0' */
-    UChar pat[] = {'#', ';', '#', 0};
+    UChar input[] = {0x30, 0};   /*  Input text is decimal '0' */
+    UChar pat[] = {0x0023,0x003b,0x0023,0}; /*  {'#', ';', '#', 0}; */
     double  dbl;
 
 #if 0
