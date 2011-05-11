@@ -117,6 +117,14 @@ public class Region implements Comparable<Region> {
         DEPRECATED,
     }
 
+    /**
+     * A constant used for unknown numeric region code.
+     * @see #getNumericCode()
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int UNDEFINED_NUMERIC_CODE = -1;
+
     private String id;
     private int code;
     private RegionType type;
@@ -132,7 +140,6 @@ public class Region implements Comparable<Region> {
     private static BitSet[] subRegionData = null;
     private static Integer[] containingRegionData = null;
     private static ArrayList<Set<Region>> availableRegions = null;
-    public static final int UNDEFINED_NUMERIC_CODE = -1;
     
     private static final String UNKNOWN_REGION_ID = "ZZ";
     private static final String WORLD_ID = "001";
@@ -545,8 +552,10 @@ public class Region implements Comparable<Region> {
         return this.type.equals(type);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
+    /**
+     * {@inheritDoc}
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Region other) {
         return id.compareTo(other.id);
