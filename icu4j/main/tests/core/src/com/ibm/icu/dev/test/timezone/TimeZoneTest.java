@@ -364,7 +364,7 @@ public class TimeZoneTest extends TestFmwk
             Boolean.FALSE, new Integer(TimeZone.SHORT), "PST",
             Boolean.TRUE,  new Integer(TimeZone.SHORT), "PDT",
             Boolean.FALSE, new Integer(TimeZone.LONG),  "Pacific Standard Time",
-            Boolean.TRUE,  new Integer(TimeZone.LONG),  "Pacific Daylight Time",                
+            Boolean.TRUE,  new Integer(TimeZone.LONG),  "Pacific Daylight Time",
             // v and vvvv
             Boolean.FALSE, new Integer(TimeZone.SHORT_GENERIC), "PT",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_GENERIC), "PT",
@@ -374,7 +374,7 @@ public class TimeZoneTest extends TestFmwk
             Boolean.FALSE, new Integer(TimeZone.SHORT_GMT), "-0800",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_GMT), "-0700",
             Boolean.FALSE, new Integer(TimeZone.LONG_GMT),  "GMT-08:00",
-            Boolean.TRUE,  new Integer(TimeZone.LONG_GMT),  "GMT-07:00",              
+            Boolean.TRUE,  new Integer(TimeZone.LONG_GMT),  "GMT-07:00",
             // V and VVVV
             Boolean.FALSE, new Integer(TimeZone.SHORT_COMMONLY_USED), "PST",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_COMMONLY_USED), "PDT",
@@ -430,7 +430,7 @@ public class TimeZoneTest extends TestFmwk
         }
         // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone 
         //     - we now (3.4.1) have localizations for this zone, so change test string
-        else if(!name.equals("Stati Uniti (Los Angeles)") &&
+        else if(!name.equals("\u0126in ta\u2019 Stati Uniti (Los Angeles)") &&
             !name.equals("GMT-08:00") &&
             !name.equals("GMT-8:00") &&
             !name.equals("GMT-0800") &&

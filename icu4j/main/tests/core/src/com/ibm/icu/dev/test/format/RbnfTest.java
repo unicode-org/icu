@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -331,23 +331,23 @@ public class RbnfTest extends TestFmwk {
             = new RuleBasedNumberFormat(Locale.US,
                                         RuleBasedNumberFormat.ORDINAL);
         String[][] testData = {
-            { "1", "1\u02e2\u1d57" },
-            { "2", "2\u207f\u1d48" },
-            { "3", "3\u02b3\u1d48" },
-            { "4", "4\u1d57\u02b0" },
-            { "7", "7\u1d57\u02b0" },
-            { "10", "10\u1d57\u02b0" },
-            { "11", "11\u1d57\u02b0" },
-            { "13", "13\u1d57\u02b0" },
-            { "20", "20\u1d57\u02b0" },
-            { "21", "21\u02e2\u1d57" },
-            { "22", "22\u207f\u1d48" },
-            { "23", "23\u02b3\u1d48" },
-            { "24", "24\u1d57\u02b0" },
-            { "33", "33\u02b3\u1d48" },
-            { "102", "102\u207f\u1d48" },
-            { "312", "312\u1d57\u02b0" },
-            { "12,345", "12,345\u1d57\u02b0" }
+            { "1", "1st" },
+            { "2", "2nd" },
+            { "3", "3rd" },
+            { "4", "4th" },
+            { "7", "7th" },
+            { "10", "10th" },
+            { "11", "11th" },
+            { "13", "13th" },
+            { "20", "20th" },
+            { "21", "21st" },
+            { "22", "22nd" },
+            { "23", "23rd" },
+            { "24", "24th" },
+            { "33", "33rd" },
+            { "102", "102nd" },
+            { "312", "312th" },
+            { "12,345", "12,345th" }
         };
 
         doTest(formatter, testData, false);

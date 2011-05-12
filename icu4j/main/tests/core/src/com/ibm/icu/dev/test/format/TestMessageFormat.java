@@ -1588,8 +1588,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         Object[] args = { args0, args1, args2 };
 
         String[] expectedStrings = {
-                "The 2\u207f\u1d48 folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
-                "The 2\u207f\u1d48 folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+                "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+                "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
                 "The folder contains 34 files." };
 
         AttributedString[] expectedAttributedStrings = { new AttributedString(expectedStrings[0]),
