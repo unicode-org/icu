@@ -770,7 +770,7 @@ zh{
         VALLADER{"VALLADER"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.58.31"}
+    Version{"2.0.58.79"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

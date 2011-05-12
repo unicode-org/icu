@@ -295,5 +295,5 @@ sr_Latn{
         ZW{"Zimbabve"}
         ZZ{"Nepoznat ili nevažeći region"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.58.59"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ee.xml
  */
 ee{
-    Version{"2.0.58.0"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidzan nutomegaƒoƒome"}
@@ -1227,5 +1227,6 @@ ee{
             ls{"Atlantic gaƒoƒoɖoanyime"}
         }
         fallbackRegionFormat{"{1} gaƒoƒo ({0})"}
+        regionFormat{"{0} gaƒoƒo"}
     }
 }

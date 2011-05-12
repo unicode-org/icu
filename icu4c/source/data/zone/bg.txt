@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -1475,9 +1475,10 @@ bg{
             ls{"Екатеринбург"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1} време ({0})"}
         gmtFormat{"Гриинуич{0}"}
         gmtZeroFormat{"Гриинуич"}
         hourFormat{"+HHmm;-HHmm"}
-        regionFormat{"{0}"}
+        regionFormat{"{0} време"}
     }
 }

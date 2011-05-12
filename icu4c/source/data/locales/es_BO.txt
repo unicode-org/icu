@@ -10,14 +10,11 @@ es_BO{
     %%Parent{"es_419"}
     NumberElements{
         latn{
-            patterns{
-                currencyFormat{"¤#,##0.00"}
-            }
             symbols{
                 decimal{","}
                 group{"."}
             }
         }
     }
-    Version{"2.0.57.19"}
+    Version{"2.0.58.84"}
 }

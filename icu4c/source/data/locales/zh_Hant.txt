@@ -84,7 +84,7 @@ zh_Hant{
             }
         }
     }
-    Version{"2.0.58.44"}
+    Version{"2.0.58.80"}
     calendar{
         buddhist{
             DateTimePatterns{

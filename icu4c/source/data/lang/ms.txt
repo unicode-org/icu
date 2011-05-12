@@ -286,7 +286,7 @@ ms{
             tibt{"Digit Tibet"}
         }
     }
-    Version{"2.0.58.36"}
+    Version{"2.0.58.79"}
     localeDisplayPattern{
         separator{","}
     }

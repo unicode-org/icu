@@ -3,15 +3,10 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/de_BE.xml
+// * Source File:<path>/common/rbnf/pt_AO.xml
 // *
 // ***************************************************************************
-de_BE{
-    Currencies{
-        FRF{
-            "FRF",
-            "Franken",
-        }
-    }
-    Version{"2.0.47.67"}
+pt_AO{
+    %%Parent{"pt_PT"}
+    Version{"2.0.58.58"}
 }

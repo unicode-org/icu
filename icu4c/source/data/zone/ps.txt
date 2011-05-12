@@ -10,11 +10,12 @@
  *  ICU <specials> source: <path>/xml/main/ps.xml
  */
 ps{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}
         }
+        fallbackRegionFormat{"د {1} ({0}) په وخت"}
         regionFormat{"د {0} په وخت"}
     }
 }

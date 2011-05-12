@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.58.39"}
+    Version{"2.0.58.60"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Anchorage"}
@@ -291,7 +291,7 @@ id{
         "meta:Baku"{
             ld{"Waktu Musim Panas Kota Baku"}
             ls{"Waktu Kota Baku"}
-            sd{"WMPKB"}
+            sd{"WMPKB (Baku)"}
             ss{"WKKB"}
         }
         "meta:Bangladesh"{

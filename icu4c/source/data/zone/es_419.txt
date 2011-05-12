@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 es_419{
-    Version{"2.0.57.98"}
+    Version{"2.0.58.84"}
     zoneStrings{
         "meta:Anadyr"{
             ld{"Hora de Verano de Anadyr"}
@@ -43,6 +43,5 @@ es_419{
         "meta:Sakhalin"{
             ld{"Hora de Verano de Sajalín"}
         }
-        fallbackRegionFormat{"{1} Hora ({0})"}
     }
 }

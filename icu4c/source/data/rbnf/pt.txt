@@ -13,18 +13,18 @@ pt{
     RBNFRules{
         OrdinalRules{
             "%%dord-mascabbrev:",
-            "0: \u1D52;",
-            "1: \u1D49\u02B3;",
-            "2: \u1D52;",
-            "3: \u1D49\u02B3;",
-            "4: \u1D52;",
+            "0: \u00BA;",
+            "1: er;",
+            "2: \u00BA;",
+            "3: er;",
+            "4: \u00BA;",
             "20: >>;",
             "100: >>;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
             "0: =#,##0==%%dord-mascabbrev=;",
             "%%dord-femabbrev:",
-            "0: \u1D43;",
+            "0: \u00AA;",
             "%digits-ordinal-feminine:",
             "-x: \u2212>>;",
             "0: =#,##0==%%dord-femabbrev=;",
@@ -168,7 +168,7 @@ pt{
             "2000000000000: <%spellout-cardinal-masculine< trilion\u00E9sima[ >>];",
             "1000000000000000: un quadrilion\u00E9simo[ >>];",
             "2000000000000000: <%spellout-cardinal-masculine< quadrilion\u00E9simo[ >>];",
-            "1000000000000000000: =#,##0=\u1D52;",
+            "1000000000000000000: =#,##0=\u00BA;",
             "%spellout-ordinal-feminine:",
             "-x: menos >>;",
             "x.x: =#,##0.#=;",
@@ -210,8 +210,8 @@ pt{
             "2000000000000: <%spellout-cardinal-masculine< trilion\u00E9sima[ >>];",
             "1000000000000000: un quadrilion\u00E9sima[ >>];",
             "2000000000000000: <%spellout-cardinal-masculine< quadrilion\u00E9sima[ >>];",
-            "1000000000000000000: =#,##0=\u1D43;",
+            "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.0.41.26"}
+    Version{"2.0.58.57"}
 }

@@ -8,7 +8,7 @@
 // ***************************************************************************
 zh_Hans_MO{
     ExemplarCharactersPunctuation{"[＿ ﹏ \- — ， 、 ； ： ！ ？ … 。 · ‘ ’ “ ” （ ） ［ ］ 〈 〉 《 》 ﹁ ﹂ ﹃ ﹄ 【 】 〔 〕 / ～]"}
-    Version{"2.0.58.31"}
+    Version{"2.0.58.84"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -73,9 +73,6 @@ zh_Hans_MO{
                 }
             }
             intervalFormats{
-                M{
-                    M{"M–M月"}
-                }
                 MMMEd{
                     d{"M月d日E至M月d日E"}
                 }

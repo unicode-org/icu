@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/rm.xml
  */
 rm{
-    Version{"2.0.57.98"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -441,6 +441,5 @@ rm{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

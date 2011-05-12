@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/af.xml
  */
 af{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "America:Mexico_City"{
             ec{"Meksiko"}
@@ -224,7 +224,7 @@ af{
             ls{"Yekaterinburg-tyd"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} Tyd ({0})"}
+        fallbackRegionFormat{"{1}-tyd ({0})"}
         gmtFormat{"MGT{0}"}
         gmtZeroFormat{"MGT"}
         regionFormat{"{0}-tyd"}

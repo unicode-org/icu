@@ -28,7 +28,7 @@ id{
             }
         }
     }
-    Version{"2.0.58.39"}
+    Version{"2.0.58.60"}
     calendar{
         buddhist{
             DateTimePatterns{

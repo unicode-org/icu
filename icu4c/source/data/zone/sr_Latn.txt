@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
-    Version{"2.0.57.98"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -1622,5 +1622,7 @@ sr_Latn{
             lg{"Jukon vreme"}
             ls{"Jukon standardno vreme"}
         }
+        fallbackRegionFormat{"{1} vreme ({0})"}
+        regionFormat{"{0} vreme"}
     }
 }

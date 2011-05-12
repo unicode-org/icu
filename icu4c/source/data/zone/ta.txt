@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ta.xml
  */
 ta{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"அபிட்ஜான்"}
@@ -1878,7 +1878,7 @@ ta{
             ls{"யுகோன் தர நேரம்"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} TIME ({0})"}
+        fallbackRegionFormat{"{1} ({0}) நேரம்"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} நேரம்"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.58.14"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Jibuti"}
@@ -1015,5 +1015,6 @@ pt_PT{
             sg{"Hora da Arménia"}
         }
         fallbackRegionFormat{"Hora de {1} ({0})"}
+        regionFormat{"Hora de {0}"}
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hant_HK{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比贊"}
@@ -162,6 +162,5 @@ zh_Hant_HK{
         "meta:Sakhalin"{
             lg{"薩哈林時間"}
         }
-        fallbackRegionFormat{"{1} 時間（{0}）"}
     }
 }
