@@ -34,7 +34,7 @@ BRK_RES_ALIAS_SOURCE = $(BRK_RES_SYNTHETIC_ALIAS)
 
 
 # List of compact trie dictionary files (ctd).
-BRK_CTD_SOURCE =  thaidict.txt  khmerdict.txt 
+BRK_CTD_SOURCE = thaidict.txt khmerdict.txt
 
 
 # List of break iterator files (brk).
