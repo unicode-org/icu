@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ga.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ga.xml
+ */
+ga{
+    Countries{
+        054{"An Mheilinéis"}
+        BG{"An Bhulgáir"}
+        BI{"An Bhurúin"}
+        BY{"An Bhealarúis"}
+        FR{"An Fhrainc"}
+        HK{"R.R.S. na Síne Hong Cong"}
+        ID{"An Indinéis"}
+        IE{"Éire"}
+        IL{"Iosrael"}
+        MD{"An Mholdóiv"}
+        ML{"Mailí"}
+        MN{"An Mhongóil"}
+        NU{"Nívé"}
+        SD{"An tSúdáin"}
+        SM{"San Mairíne"}
+        SO{"An tSomáil"}
+    }
+    Version{"2.0.58.44"}
+}
