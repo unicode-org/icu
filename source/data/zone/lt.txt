@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -1470,9 +1470,9 @@ lt{
             ld{"Jerevano vasaros laikas"}
             ls{"Jerevano laikas"}
         }
-        fallbackFormat{"{0} ({1})"}
+        fallbackRegionFormat{"{1} laikas ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;−HH:mm"}
-        regionFormat{"Laikas ({0})"}
+        regionFormat{"{0} laikas"}
     }
 }

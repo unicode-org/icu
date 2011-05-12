@@ -13,16 +13,16 @@ fr{
     RBNFRules{
         OrdinalRules{
             "%%dord-mascabbrev:",
-            "0: \u1D49;",
-            "1: \u1D49\u02B3;",
-            "2: \u1D49;",
+            "0: e;",
+            "1: er;",
+            "2: e;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
             "0: =#,##0==%%dord-mascabbrev=;",
             "%%dord-femabbrev:",
-            "0: \u1D49;",
-            "1: \u02B3\u1D49;",
-            "2: \u1D49;",
+            "0: e;",
+            "1: re;",
+            "2: e;",
             "%digits-ordinal-feminine:",
             "-x: \u2212>>;",
             "0: =#,##0==%%dord-femabbrev=;",
@@ -135,5 +135,5 @@ fr{
             "2: =%spellout-cardinal-masculine=i\u00E8me;",
         }
     }
-    Version{"2.0.41.26"}
+    Version{"2.0.58.57"}
 }

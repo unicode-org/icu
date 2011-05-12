@@ -238,5 +238,5 @@ mas{
         ZM{"Sambia"}
         ZW{"Simbabwe"}
     }
-    Version{"2.0.58.32"}
+    Version{"2.0.58.82"}
 }

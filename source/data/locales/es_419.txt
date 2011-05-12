@@ -18,7 +18,7 @@ es_419{
             }
         }
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.58.84"}
     calendar{
         gregorian{
             fields{
@@ -66,17 +66,11 @@ es_419{
             one{"En {0} día"}
             other{"En {0} días"}
         }
-        day-past{
-            one{"Hace {0} día"}
-        }
         hour-future{
             0{"En 0 horas"}
             1{"En 1 hora"}
             one{"En {0} hora"}
             other{"En {0} horas"}
-        }
-        hour-past{
-            one{"Hace {0} hora"}
         }
         minute-future{
             0{"En 0 minutos"}
@@ -84,17 +78,11 @@ es_419{
             one{"En {0} minuto"}
             other{"En {0} minutos"}
         }
-        minute-past{
-            one{"Hace {0} minuto"}
-        }
         month-future{
             0{"En 0 meses"}
             1{"En 1 mes"}
             one{"En {0} mes"}
             other{"En {0} meses"}
-        }
-        month-past{
-            one{"Hace {0} mes"}
         }
         second-future{
             0{"En 0 segundos"}
@@ -102,26 +90,17 @@ es_419{
             one{"En {0} segundo"}
             other{"En {0} segundos"}
         }
-        second-past{
-            one{"Hace {0} segundo"}
-        }
         week-future{
             0{"En 0 semanas"}
             1{"En 1 semana"}
             one{"En {0} semana"}
             other{"En {0} semanas"}
         }
-        week-past{
-            one{"Hace {0} semana"}
-        }
         year-future{
             0{"En 0 años"}
             1{"En 1 año"}
             one{"En {0} año"}
             other{"En {0} años"}
-        }
-        year-past{
-            one{"Hace {0} año"}
         }
     }
 }

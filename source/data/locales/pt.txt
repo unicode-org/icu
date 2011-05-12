@@ -42,7 +42,7 @@ pt{
             }
         }
     }
-    Version{"2.0.58.45"}
+    Version{"2.0.58.79"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1103,106 +1103,112 @@ pt{
             other{"{0} dias"}
         }
         day-future{
-            0{"Em 0 dias"}
-            1{"In 1 day"}
-            one{"Em {0} dia"}
+            0{"Dentro de 0 dias"}
+            1{"Dentro de 1 dia"}
+            one{"Dentro de {0} dia"}
+            other{"Dentro de {0} dias"}
         }
         day-past{
-            0{"0 dias atrás"}
-            1{"1 day ago"}
-            one{"-{0} d"}
+            0{"Há 0 dias"}
+            1{"Há 1 dia"}
+            one{"Há {0} dia"}
+            other{"Há {0} dias"}
         }
         hour{
             one{"{0} hora"}
             other{"{0} horas"}
         }
         hour-future{
-            0{"Em 0 horas"}
-            1{"In 1 hour"}
-            one{"+{0} h"}
+            0{"Dentro de 0 horas"}
+            1{"Dentro de 1 hora"}
+            one{"Dentro de {0} hora"}
+            other{"Dentro de {0} horas"}
         }
         hour-past{
-            0{"0 horas atrás"}
-            1{"1 hour ago"}
-            one{"-{0} h"}
+            0{"Há 0 horas"}
+            1{"Há 1 hora"}
+            one{"Há {0} hora"}
+            other{"Há {0} horas"}
         }
         minute{
             one{"{0} minuto"}
             other{"{0} minutos"}
         }
         minute-future{
-            0{"Em 0 minutos"}
-            1{"In 1 minute"}
-            one{"+{0} min"}
-            other{"Em {0} min"}
+            0{"Dentro de 0 minutos"}
+            1{"Dentro de 1 minuto"}
+            one{"Dentro de {0} minuto"}
+            other{"Dentro de {0} minutos"}
         }
         minute-past{
-            0{"0 minutos atrás"}
-            1{"1 minute ago"}
-            one{"-{0} min"}
-            other{"{0} minutos atrás"}
+            0{"Há 0 minutos"}
+            1{"Há 1 minuto"}
+            one{"Há {0} minuto"}
+            other{"Há {0} minutos"}
         }
         month{
             one{"{0} mês"}
             other{"{0} meses"}
         }
         month-future{
-            0{"Em 0 meses"}
-            1{"In 1 month"}
-            one{"+{0} m"}
+            0{"Dentro de 0 meses"}
+            1{"Dentro de 1 mês"}
+            one{"Dentro de {0} mês"}
+            other{"Dentro de {0} meses"}
         }
         month-past{
-            0{"0 meses atrás"}
-            1{"1 month ago"}
-            one{"-{0} m"}
-            other{"-{0} meses"}
+            0{"Há 0 meses"}
+            1{"Há 1 mês"}
+            one{"Há {0} mês"}
+            other{"Há {0} meses"}
         }
         second{
             one{"{0} segundo"}
             other{"{0} segundos"}
         }
         second-future{
-            0{"Em 0 segundos"}
-            1{"In 1 second"}
-            one{"+{0} s"}
-            other{"Em {0} s"}
+            0{"Dentro de 0 segundos"}
+            1{"Dentro de 1 segundo"}
+            one{"Dentro de {0} segundo"}
+            other{"Dentro de {0} segundos"}
         }
         second-past{
-            0{"0 segundos atrás"}
-            1{"1 second ago"}
-            one{"-{0} s"}
+            0{"Há 0 segundos"}
+            1{"Há 1 segundo"}
+            one{"Há {0} segundo"}
+            other{"Há {0} segundos"}
         }
         week{
             one{"{0} semana"}
             other{"{0} semanas"}
         }
         week-future{
-            0{"Em 0 semanas"}
-            1{"In 1 week"}
-            one{"+{0} sem"}
-            other{"+{0} sem"}
+            0{"Dentro de 0 semanas"}
+            1{"Dentro de 1 semana"}
+            one{"Dentro de {0} semana"}
+            other{"Dentro de {0} semanas"}
         }
         week-past{
-            0{"0 semanas atrás"}
-            1{"1 week ago"}
-            one{"-{0} sem"}
-            other{"-{0} sem"}
+            0{"Há 0 semanas"}
+            1{"Há 1 semana"}
+            one{"Há {0} semana"}
+            other{"Há {0} semanas"}
         }
         year{
             one{"{0} ano"}
             other{"{0} anos"}
         }
         year-future{
-            0{"Em 0 anos"}
-            1{"In 1 year"}
-            one{"+{0} ano"}
-            other{"+{0} anos"}
+            0{"Dentro de 0 anos"}
+            1{"Dentro de 1 ano"}
+            one{"Dentro de {0} ano"}
+            other{"Dentro de {0} anos"}
         }
         year-past{
-            0{"0 anos atrás"}
-            1{"1 year ago"}
-            one{"-{0} ano"}
-            other{"-{0} anos"}
+            0{"Há 0 anos"}
+            1{"Há 1 ano"}
+            one{"Há {0} ano"}
+            other{"Há {0} anos"}
         }
     }
     unitsShort{
@@ -1219,8 +1225,8 @@ pt{
             other{"{0} min"}
         }
         month{
-            one{"{0} m."}
-            other{"{0} mths"}
+            one{"{0} mês"}
+            other{"{0} meses"}
         }
         second{
             one{"{0} seg"}

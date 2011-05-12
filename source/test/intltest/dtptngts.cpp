@@ -213,16 +213,16 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1.1999"),                                          // 00: yM    -> M.y
         CharsToUnicodeString("\\u042F\\u043D\\u0432. 1999"),              // 01: yMMM  -> LLL y
         UnicodeString("13.1.1999"),                                       // 02: yMd   -> d.M.y
-        CharsToUnicodeString("13 \\u044F\\u043D\\u0432. 1999\\u00A0\\u0433."), // 03: yMMMd -> d MMM y
+        CharsToUnicodeString("13 \\u044F\\u043D\\u0432 1999\\u00A0\\u0433."), // 03: yMMMd -> d MMM y
         UnicodeString("13.1"),                                            // 04: Md    -> d.M
-        CharsToUnicodeString("13 \\u044F\\u043D\\u0432."),                // 05: MMMd  -> d MMM
+        CharsToUnicodeString("13 \\u044F\\u043D\\u0432"),                // 05: MMMd  -> d MMM
         CharsToUnicodeString("1999 1-\\u0439 \\u043A\\u0432."),           // 06: yQQQ  -> y QQQ
         CharsToUnicodeString("11:58 \\u043F\\u043E\\u0441\\u043B\\u0435 \\u043F\\u043E\\u043B\\u0443\\u0434\\u043D\\u044F"),                                        // 07: hhmm  -> hh:mm a
         UnicodeString("23:58"),                                           // 08: HHmm  -> HH:mm
         UnicodeString("23:58"),                                           // 09: jjmm  -> HH:mm
         UnicodeString("58:59"),                                           // 10: mmss  -> mm:ss
         CharsToUnicodeString("\\u042F\\u043D\\u0432\\u0430\\u0440\\u044C 1999"), // 11: yyyyMMMM -> LLLL y
-        CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432."), // 12: MMMEd -> ccc, d MMM
+        CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432"), // 12: MMMEd -> ccc, d MMM
         CharsToUnicodeString("\\u0421\\u0440, 13"),                       // 13: Ed    -> EEE, d
         UnicodeString("23:58:59,123"),                                    // 14: jmmssSSS -> "H:mm:ss,SSS"
 

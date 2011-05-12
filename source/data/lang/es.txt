@@ -729,7 +729,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

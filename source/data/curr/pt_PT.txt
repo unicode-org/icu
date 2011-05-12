@@ -167,5 +167,5 @@ pt_PT{
             other{"Dólares dos Estados Unidos"}
         }
     }
-    Version{"2.0.58.14"}
+    Version{"2.0.58.79"}
 }

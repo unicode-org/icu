@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/fi.xml
  */
 fi{
-    Version{"2.0.51.25"}
+    Version{"2.0.58.71"}
     collations{
         default{"phonebook"}
         phonebook{
@@ -28,11 +28,11 @@ fi{
         search{
             Sequence{
                 " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
-                "&ا<<آ<<أ<<إ"
-                "&و<<ؤ"
-                "&ي<<ئ<<ى"
-                "&ه<<ة"
-                "&[last primary ignorable ]<<׳<<״<<ـ<<ٌ<<ٍ<<َ<<ُ<<ِ<<ّ<<ْ<<ฺ"
+                "&ا<<<ﺎ<<<ﺍ<<آ<<<ﺂ<<<ﺁ<<أ<<<ﺄ<<<ﺃ<<إ<<<ﺈ<<<ﺇ"
+                "&و<<<ۥ<<<ﻮ<<<ﻭ<<ؤ<<<ﺆ<<<ﺅ"
+                "&ي<<<ۦ<<<ﻳ<<<ﻴ<<<ﻲ<<<ﻱ<<ئ<<<ﺋ<<<ﺌ<<<ﺊ<<<ﺉ<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ"
+                "&ه<<<ﻫ<<<ﻬ<<<ﻪ<<<ﻩ<<ة<<<ﺔ<<<ﺓ"
+                "&[last primary ignorable ]<<׳<<״<<ـ<<ฺ"
                 "&ᄀ=ᆨ"
                 "&ᄀᄀ=ᄁ=ᆩ"
                 "&ᄀᄉ=ᆪ"

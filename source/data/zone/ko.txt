@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1747,7 +1747,7 @@ ko{
             ls{"예카테린부르크 표준시"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} 표준시({0})"}
+        fallbackRegionFormat{"{1} 시간 ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} 시간"}

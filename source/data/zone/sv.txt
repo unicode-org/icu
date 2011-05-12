@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sv.xml
  */
 sv{
-    Version{"2.0.58.14"}
+    Version{"2.0.58.88"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -988,9 +988,9 @@ sv{
             sg{"MAGT"}
         }
         "meta:Malaya"{
-            ld{"malaysisk sommartid"}
-            lg{"malaysisk tid"}
-            ls{"malaysisk normaltid"}
+            ld{"malayisk sommartid"}
+            lg{"malayisk tid"}
+            ls{"malayisk normaltid"}
             sg{"MALT"}
         }
         "meta:Malaysia"{
@@ -1417,9 +1417,10 @@ sv{
             ls{"Yukonnormaltid"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1}tid ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
+        regionFormat{"{0}tid"}
     }
 }

@@ -734,7 +734,7 @@ ta{
         PINYIN{"பின்யின் ரோமானைசெஷன்"}
         WADEGILE{"வேட்-கைல்ஸ் ரோமனைஷேசன்"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.58.59"}
     codePatterns{
         language{"மொழி: {0}"}
         script{"எழுத்து: {0}"}

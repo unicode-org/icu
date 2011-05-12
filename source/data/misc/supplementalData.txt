@@ -6738,6 +6738,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        trv{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "TW",
+                }
+            }
+        }
         ts{
             primary{
                 scripts{
@@ -7011,6 +7023,14 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Vaii",
+                }
+            }
+            secondary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "LR",
                 }
             }
         }

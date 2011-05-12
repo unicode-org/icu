@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}
@@ -493,7 +493,7 @@ et{
             lg{"Jakaterinburgi aeg"}
             ls{"Jakaterinburgi aeg"}
         }
-        fallbackFormat{"{0} ({1})"}
+        fallbackRegionFormat{"{1} aeg ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} aeg"}

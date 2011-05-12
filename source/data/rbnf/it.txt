@@ -13,12 +13,12 @@ it{
     RBNFRules{
         OrdinalRules{
             "%%dord-mascabbrev:",
-            "0: \u1D52;",
+            "0: \u00BA;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
             "0: =#,##0==%%dord-mascabbrev=;",
             "%%dord-femabbrev:",
-            "0: \u1D43;",
+            "0: \u00AA;",
             "%digits-ordinal-feminine:",
             "-x: \u2212>>;",
             "0: =#,##0==%%dord-femabbrev=;",
@@ -217,5 +217,5 @@ it{
             "2: =%%msco-with-o=;",
         }
     }
-    Version{"2.0.41.26"}
+    Version{"2.0.58.57"}
 }

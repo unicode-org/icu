@@ -124,7 +124,6 @@ zh_Hant{
         dar{"達爾格瓦文"}
         day{"迪雅克文"}
         de{"德文"}
-        de_CH{"瑞士高地德語"}
         del{"德拉瓦文"}
         den{"斯拉夫"}
         dgr{"多格里布文"}
@@ -145,7 +144,6 @@ zh_Hant{
         el{"希臘文"}
         elx{"埃蘭文"}
         en{"英文"}
-        en_CA{"加拿大英語"}
         enm{"中古英文"}
         eo{"世界語"}
         es{"西班牙文"}
@@ -163,7 +161,6 @@ zh_Hant{
         fo{"法羅文"}
         fon{"豐文"}
         fr{"法文"}
-        fr_CA{"加拿大法語"}
         frm{"中古法文"}
         fro{"古法文"}
         frr{"北弗里西亞文"}
@@ -382,7 +379,6 @@ zh_Hant{
         pro{"古普羅旺斯文"}
         ps{"普什圖文"}
         pt{"葡萄牙文"}
-        pt_BR{"巴西葡萄牙文"}
         qu{"蓋丘亞文"}
         raj{"拉賈斯坦諸文"}
         rap{"復活島文"}
@@ -727,7 +723,7 @@ zh_Hant{
         SAAHO{"SAAHO"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.58.44"}
+    Version{"2.0.58.80"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

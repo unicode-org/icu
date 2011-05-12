@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    Version{"2.0.57.98"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Džibutsko"}
@@ -399,8 +399,9 @@ sk{
             lg{"Jekaterinburgský čas"}
             ls{"Jekaterinburgský čas"}
         }
+        fallbackRegionFormat{"{0} čas"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
-        regionFormat{"{0}"}
+        regionFormat{"{0} čas"}
     }
 }

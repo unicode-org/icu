@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/uk.xml
  */
 uk{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.60"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -1464,9 +1464,9 @@ uk{
             ls{"за омським часом"}
         }
         "meta:Sakhalin"{
-            ld{"Час: Сахалін"}
+            ld{"за сахалін літнім часом"}
             lg{"Час: Сахалін"}
-            ls{"Час: Сахалін"}
+            ls{"за сахалін часом"}
         }
         "meta:Samara"{
             ld{"за самарським літнім часом"}
