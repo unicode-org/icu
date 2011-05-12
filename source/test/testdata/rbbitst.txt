@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2009 International Business Machines
+﻿# Copyright (c) 2001-2011 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -574,4 +574,13 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 สร้าง<200>บ้าน<200>ต้อง<200>ขน<200>มา<200>ด้วย<200>เกวียน<200>เป็น<200>ระยะ<200>ทาง<200>หลาย<200>\
 ไมล์<200></data>
 
+
+# Japanese line break tailoring test
+
+<locale ja>
+<line>
+<data>•\u3041•\u3043•\u3045•\u31f1•</data>
+<locale en>
+<line>
+<data>•\u3041\u3043\u3045\u31f1•</data>
 
