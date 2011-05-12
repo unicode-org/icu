@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    Version{"2.0.58.30"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"آبیجان"}
@@ -1623,7 +1623,7 @@ fa{
         "meta:Omsk"{
             ld{"وقت تابستانی اومسک"}
             lg{"وقت اومسک"}
-            ls{"وقت تابستانی اومسک"}
+            ls{"وقت اومسک"}
         }
         "meta:Pakistan"{
             ld{"وقت تابستانی پاکستان"}
@@ -1747,7 +1747,7 @@ fa{
         "meta:Yekaterinburg"{
             ld{"وقت تابستانی یکاترینبورگ"}
             lg{"وقت یکاترینبورگ"}
-            ls{"وقت تابستانی یکاترینبورگ"}
+            ls{"وقت یکاترینبورگ"}
         }
         "meta:Yerevan"{
             ld{"وقت تابستانی ایروان"}

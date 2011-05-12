@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zu.xml
  */
 zu{
-    Version{"2.0.58.6"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "meta:Alaska"{
             ld{"esase-Alaska Daylight Time"}
@@ -68,7 +68,7 @@ zu{
         "meta:Australia_CentralWestern"{
             ld{"esase-Austrilian Central Western Daylight Time"}
             lg{"esase-Austrilian Central Western Time"}
-            ls{"esase-Austrilian Central Western Daylight Time"}
+            ls{"esase-Austrilian Central Western Standard Time"}
         }
         "meta:Australia_Eastern"{
             ld{"esase-Australian Eastern Daylight Time"}

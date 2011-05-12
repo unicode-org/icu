@@ -223,7 +223,7 @@ my{
         REVISED{"ပြန်လည်စီစစ်ထားသော ရေးထုံး"}
         SCOTLAND{"စကော့ စံ အင်္ဂလိပ်"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.58.59"}
     codePatterns{
         language{"ဘာသာစကား - {0}"}
         script{"စာ - {0}"}

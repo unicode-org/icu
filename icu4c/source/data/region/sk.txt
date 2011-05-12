@@ -302,5 +302,5 @@ sk{
         ZW{"Zimbabwe"}
         ZZ{"Neznámy alebo neplatný región"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.58.59"}
 }

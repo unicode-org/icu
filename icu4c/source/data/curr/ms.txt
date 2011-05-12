@@ -640,5 +640,5 @@ ms{
             "Kwacha Zambia",
         }
     }
-    Version{"2.0.58.36"}
+    Version{"2.0.58.79"}
 }

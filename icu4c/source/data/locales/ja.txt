@@ -88,7 +88,7 @@ ja{
             }
         }
     }
-    Version{"2.0.58.43"}
+    Version{"2.0.58.55"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -121,9 +121,9 @@ ja{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
+                h{"aK時"}
+                hm{"aK:mm"}
+                hms{"aK:mm:ss"}
                 ms{"mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
@@ -307,9 +307,9 @@ ja{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
+                h{"aK時"}
+                hm{"aK:mm"}
+                hms{"aK:mm:ss"}
                 ms{"mm:ss"}
                 y{"y年"}
                 yM{"y/M"}
@@ -474,22 +474,22 @@ ja{
                 }
                 fallback{"{0}～{1}"}
                 h{
-                    a{"ah時～ah時"}
-                    h{"ah時～h時"}
+                    a{"aK時～aK時"}
+                    h{"aK時～K時"}
                 }
                 hm{
-                    a{"ah時mm分～ah時mm分"}
-                    h{"ah時mm分～h時mm分"}
-                    m{"ah時mm分～h時mm分"}
+                    a{"aK時mm分～aK時mm分"}
+                    h{"aK時mm分～K時mm分"}
+                    m{"aK時mm分～K時mm分"}
                 }
                 hmv{
-                    a{"ah時mm分～ah時mm分（v）"}
-                    h{"ah時mm分～h時mm分v"}
-                    m{"ah時mm分～h時mm分v"}
+                    a{"aK時mm分～aK時mm分（v）"}
+                    h{"aK時mm分～K時mm分v"}
+                    m{"aK時mm分～K時mm分v"}
                 }
                 hv{
-                    a{"ah時～ah時（v）"}
-                    h{"ah時～h時v"}
+                    a{"aK時～aK時（v）"}
+                    h{"aK時～K時v"}
                 }
                 y{
                     y{"y年～y年"}
@@ -857,9 +857,9 @@ ja{
                 MMMd{"M月d日"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
+                h{"aK時"}
+                hm{"aK:mm"}
+                hms{"aK:mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyMEd{"Gyy/M/d(E)"}
@@ -1205,9 +1205,9 @@ ja{
                 MMMd{"M月d日"}
                 Md{"M/d"}
                 d{"d日"}
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
+                h{"aK時"}
+                hm{"aK:mm"}
+                hms{"aK:mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyMEd{"Gyy/M/d(E)"}

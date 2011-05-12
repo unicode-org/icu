@@ -24,5 +24,5 @@ uz_Latn{
         US{"Qoʼshma Shtatlar"}
         UZ{"Oʼzbekiston"}
     }
-    Version{"2.0.58.32"}
+    Version{"2.0.58.82"}
 }

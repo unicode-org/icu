@@ -299,6 +299,7 @@
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-w" value="${env.CLDR_DIR}/common/rbnf" />
                 </args>
+                &icu-config;
             </run>
         </cldr-build>
     </target>

@@ -398,7 +398,6 @@ cs{
         zap{"zapotéčtina"}
         zh{"čínština"}
         zh_Hans{"čínština (zjednodušená)"}
-        zh_Hant{"čínština (tradiční)"}
         zu{"zulu"}
         zun{"zunijština"}
         zxx{"žádný jazykový obsah"}
@@ -576,7 +575,7 @@ cs{
     Variants{
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.58.14"}
+    Version{"2.0.58.83"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

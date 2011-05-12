@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/be.xml
  */
 be{
-    Version{"2.0.57.98"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Анкорыдж"}
@@ -90,6 +90,7 @@ be{
             ls{"Грынвічскі час"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"Час: {1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Час: {0}"}

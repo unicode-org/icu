@@ -40,7 +40,7 @@ de{
             }
         }
     }
-    Version{"2.0.58.12"}
+    Version{"2.0.58.79"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kea.xml
  */
 kea{
-    Version{"2.0.57.99"}
+    Version{"2.0.58.59"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"Sidadi Diskonxedu"}
@@ -80,6 +80,6 @@ kea{
             ss{"IST (Israel)"}
         }
         fallbackRegionFormat{"Ora di {1} ({0})"}
-        regionFormat{"Hora di {0}"}
+        regionFormat{"Ora di {0}"}
     }
 }

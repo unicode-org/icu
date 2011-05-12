@@ -15,7 +15,7 @@ fa_AF{
             }
         }
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.58.86"}
     calendar{
         gregorian{
             monthNames{
@@ -71,9 +71,6 @@ fa_AF{
             eras{
                 abbreviated{
                     "ه‍. ش.",
-                }
-                wide{
-                    "هجری شمسی",
                 }
             }
             monthNames{

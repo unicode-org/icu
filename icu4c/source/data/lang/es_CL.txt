@@ -7,13 +7,10 @@
 // *
 // ***************************************************************************
 es_CL{
-    Scripts{
-        Bali{"balinés"}
-    }
     Types{
         collation{
             phonebook{"orden de directorio telefónico"}
         }
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.58.84"}
 }

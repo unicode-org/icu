@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ru.xml
  */
 ru{
-    Version{"2.0.58.31"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -1728,8 +1728,9 @@ ru{
             ls{"Время по Екатеринбургу"}
         }
         fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1} время ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
+        regionFormat{"{0} время"}
     }
 }

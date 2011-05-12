@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
-    Version{"2.0.57.98"}
+    Version{"2.0.58.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -590,9 +590,9 @@ sl{
             ls{"Jekaterinburški čas"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} Ura ({0})"}
+        fallbackRegionFormat{"{1} čas ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"Čas na območju: {0}"}
+        regionFormat{"{0} čas"}
     }
 }
