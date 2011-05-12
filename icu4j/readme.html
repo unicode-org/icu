@@ -13,15 +13,15 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.8M1 (4.7.1)</h3>
+<h3>Read Me for ICU4J 4.8 RC1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-March 15, 2011<br>
+May 11, 2011<br>
 </p>
 
-<p><b>Note:</b> This is a development milestone release of ICU4J 4.8.
+<p><b>Note:</b> This is a release candidate version of ICU4J 4.8.
 The contents of this document may not reflect the recent changes done
-for ICU 4.8 development. This milestone is inteneded for those wishing
+for ICU 4.8 development. This version is inteneded for those wishing
 to get an early look at ICU 4.8 new features and API changes. It is not
 recommended for production use. 
 </p>
@@ -130,15 +130,21 @@ found in ICU4J.</p>
 <h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 <h4>New features and changes</h4>
 <p>
-See the <a href="http://sites.google.com/site/icusite/download/471">ICU 4.8M1 download page</a> about
+See the <a href="http://sites.google.com/site/icusite/download/48">ICU 4.8 Relese Candidate download page</a> about
 new features in this release.  The list of API changes since the previous ICU4J release
 is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-4-7-1/APIChangeReport.html">here</a>.
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-8-rc1/APIChangeReport.html">here</a>.
 </p>
 <h5>MessageFormat Changes</h5>
 <p>MessageFormat and related classes (choice/plural/select) have been reimplemented,
 with several improvements and some incompatible changes.
 See the <a href="http://site.icu-project.org/download/48">ICU 4.8 download</a> page for details.</p>
+<h5>Unknown system time zone - Etc/Unknown</h5>
+The behavior of the time zone factory method TimeZone.getTimeZone(String) has changed in this release.
+When an unknown time zone ID is specified in the method, previous versions return a TimeZone instance
+with ID "GMT" (offset 0 and no daylight saving time). In ICU 4.8, the method uses "Etc/Unknown" as the
+time zone ID (but still offset 0 and no daylight saving time) for the case. Existing software checking
+the returned time zone ID to validate the input ID may need to be updated to support the new behavior.
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -166,7 +172,7 @@ package.
 </p>
 <h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
 <p>
-ICU4J 4.8M1 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
+ICU4J 4.8 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
 JRE version 5.0 or later.
 The table below shows the operating systems and JRE/VM versions currently
 used by the ICU development team to test ICU4J.
@@ -508,8 +514,8 @@ ICU4J source archive is extracted.
   <td>main/shared</td>
   <td>Files shared by ICU4J sub-components under the <code>main</code> directory including:
   <ul>
-    <li>ICU4J runtime data archive (icudata.jar).<li>
-    <li>ICU4J unit test data archive (testdata.jar).<li>
+    <li>ICU4J runtime data archive (icudata.jar).</li>
+    <li>ICU4J unit test data archive (testdata.jar).</li>
     <li>Shared Ant build script and configuration files.</li>
     <li>License files.</li>
   </ul>
@@ -630,14 +636,17 @@ other targets.  For example:</p>
 <pre>C:\icu4j>ant
 Buildfile: build.xml
 
+Buildfile: C:\icu4j\build.xml
+
 info:
      [echo] ----- Build Environment Information -------------------
      [echo] Java Home:    C:\jdk1.6.0
      [echo] Java Version: 1.6.0
      [echo] Ant Home:     C:\ant
-     [echo] Ant Version:  Apache Ant version 1.7.1 compiled on June 27 2008
-     [echo] OS:           Windows XP
-     [echo] OS Version:   5.1 build 2600 Service Pack 3
+     [echo] Ant Version:  Apache Ant(TM) version 1.8.2 compiled on December 20 2
+010
+     [echo] OS:           Windows 7
+     [echo] OS Version:   6.1 build 7601 Service Pack 1
      [echo] OS Arch:      x86
      [echo] Host:         ICUDEV
      [echo] -------------------------------------------------------
@@ -656,7 +665,7 @@ core:
      [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\core\out\bin
-    [javac] Compiling 318 source files to C:\icu4j\main\classes\core\out\bin
+    [javac] Compiling 331 source files to C:\icu4j\main\classes\core\out\bin
     [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
@@ -721,7 +730,7 @@ jar:
      [copy] Copying 1 file to C:\icu4j
 
 BUILD SUCCESSFUL
-Total time: 1 minute 14 seconds</pre>
+Total time: 53 seconds</pre>
 </blockquote>
 <I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
 <p>The following are some targets that you can provide to <b>ant</b>.
@@ -831,54 +840,54 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt47b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt48b</tt>,
   as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
   Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
   class, and the use of these names in searching for resources is documented 
   in <code>com.ibm.icu.util.UResourceBundle</code>.</li>
 
-  <li>The <b>collation data</b> is under the directory <tt>icudt47b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt48b/coll</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>currency display name data</b> is under the directory <tt>icudt47b/curr</tt>,
+  <li>The <b>currency display name data</b> is under the directory <tt>icudt48b/curr</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>language display name data</b> is under the directory <tt>icudt47b/lang</tt>,
+  <li>The <b>language display name data</b> is under the directory <tt>icudt48b/lang</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>region display name data</b> is under the directory <tt>icudt47b/region</tt>,
+  <li>The <b>region display name data</b> is under the directory <tt>icudt48b/region</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based transliterator data</b> is under the directory
-  <tt>icudt47b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt48b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based number format data</b> is under the directory
-  <tt>icudt47b/rbnf</tt>, as a set of <tt>".res"</tt> files.
+  <tt>icudt48b/rbnf</tt>, as a set of <tt>".res"</tt> files.
 
   <li>The <b>break iterator data</b> is directly under the
-  directory <tt>icudt47b</tt>, as a set of <tt>".brk"</tt> files, named according to the
+  directory <tt>icudt48b</tt>, as a set of <tt>".brk"</tt> files, named according to the
   type of break and the locale where there are locale-specific versions.</li>
 
-  <li>The <b>holiday data</b> is under the directory <tt>icudt47b</tt>,
+  <li>The <b>holiday data</b> is under the directory <tt>icudt48b</tt>,
   as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
   followed by the locale ID.</li>
 
   <li>The <b>character property data</b> and default <b>unicode collation algorithm
-  (UCA) data</b> is found under the directory <tt>icudt47b</tt>, as a set of
+  (UCA) data</b> is found under the directory <tt>icudt48b</tt>, as a set of
   <tt>".icu"</tt> files. </li>
 
-  <li>The <b>normalization data</b> is found under the directory <tt>icudt47b</tt>,
+  <li>The <b>normalization data</b> is found under the directory <tt>icudt48b</tt>,
   as a set of <tt>".nrm"</tt> files. </li>
 
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt47b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt48b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
 
   <li>The <b>time zone rule data</b> is under the directory 
-  <tt>icudt47b</tt>, as <tt>zoneinfo64.res</tt>.</li>
+  <tt>icudt48b</tt>, as <tt>zoneinfo64.res</tt>.</li>
 
   <li>The <b>time zone display name data</b> is under the directory
-  <tt>icudt47b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt48b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
 </ul>
 <p>
 Some of the data files alias or otherwise reference data from other
@@ -973,9 +982,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version icu471milestone</li>
-    <li>Checkout ICU4C with tag 'milestone-4-7-1'</li>
-    <li>Checkout ICU4J with tag 'milestone-4-7-1'</li>
+    <li>Checkout or download CLDR version 'release-2-0-d02'</li>
+    <li>Checkout ICU4C with tag 'release-4-8-rc1'</li>
+    <li>Checkout ICU4J with tag 'release-4-8-rc1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -987,7 +996,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.8M1 includes time zone data version 2011d, which is the latest one as of
+<p>ICU4J 4.8RC1 includes time zone data version 2011g, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
