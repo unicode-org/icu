@@ -763,7 +763,7 @@ typedef enum UErrorCode {
     U_UNDEFINED_KEYWORD,              /**< Undefined Plural keyword */
     U_DEFAULT_KEYWORD_MISSING,        /**< Missing DEFAULT rule in plural rules */
     U_DECIMAL_NUMBER_SYNTAX_ERROR,    /**< Decimal number syntax error */
-    U_FORMAT_INEXACT_ERROR,           /**< Cannot format a number exactly and rounding mode is ROUND_UNNECESSARY */
+    U_FORMAT_INEXACT_ERROR,           /**< Cannot format a number exactly and rounding mode is ROUND_UNNECESSARY @draft ICU 4.8 */
     U_FMT_PARSE_ERROR_LIMIT,          /**< The limit for format library errors */
 
     /*
