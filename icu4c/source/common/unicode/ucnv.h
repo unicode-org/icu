@@ -88,47 +88,82 @@ U_CDECL_BEGIN
  * @stable ICU 2.0
  */
 typedef enum {
+    /** @stable ICU 2.0 */
     UCNV_UNSUPPORTED_CONVERTER = -1,
+    /** @stable ICU 2.0 */
     UCNV_SBCS = 0,
+    /** @stable ICU 2.0 */
     UCNV_DBCS = 1,
+    /** @stable ICU 2.0 */
     UCNV_MBCS = 2,
+    /** @stable ICU 2.0 */
     UCNV_LATIN_1 = 3,
+    /** @stable ICU 2.0 */
     UCNV_UTF8 = 4,
+    /** @stable ICU 2.0 */
     UCNV_UTF16_BigEndian = 5,
+    /** @stable ICU 2.0 */
     UCNV_UTF16_LittleEndian = 6,
+    /** @stable ICU 2.0 */
     UCNV_UTF32_BigEndian = 7,
+    /** @stable ICU 2.0 */
     UCNV_UTF32_LittleEndian = 8,
+    /** @stable ICU 2.0 */
     UCNV_EBCDIC_STATEFUL = 9,
+    /** @stable ICU 2.0 */
     UCNV_ISO_2022 = 10,
 
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_1 = 11,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_2, 
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_3,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_4,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_5,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_6,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_8,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_11,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_16,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_17,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_18,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_19,
+    /** @stable ICU 2.0 */
     UCNV_LMBCS_LAST = UCNV_LMBCS_19,
+    /** @stable ICU 2.0 */
     UCNV_HZ,
+    /** @stable ICU 2.0 */
     UCNV_SCSU,
+    /** @stable ICU 2.0 */
     UCNV_ISCII,
+    /** @stable ICU 2.0 */
     UCNV_US_ASCII,
+    /** @stable ICU 2.0 */
     UCNV_UTF7,
+    /** @stable ICU 2.2 */
     UCNV_BOCU1,
+    /** @stable ICU 2.2 */
     UCNV_UTF16,
+    /** @stable ICU 2.2 */
     UCNV_UTF32,
+    /** @stable ICU 2.2 */
     UCNV_CESU8,
+    /** @stable ICU 2.4 */
     UCNV_IMAP_MAILBOX,
+    /** @draft ICU 4.8 */
     UCNV_COMPOUND_TEXT,
 
     /* Number of converter types for which we have conversion routines. */
     UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES
-
 } UConverterType;
 
 /**
