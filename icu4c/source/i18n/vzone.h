@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2009-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -298,9 +298,9 @@ vzone_useDaylightTime(VZone* zone);
  * @param status Output param filled in with success/error code.
  * @return true if the given date is in daylight savings time,
  * false, otherwise.
- * @deprecated ICU 2.4. Use Calendar::inDaylightTime() instead.
+ * @internal ICU 2.4. Use Calendar::inDaylightTime() instead.
  */
-U_DRAFT UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 vzone_inDaylightTime(VZone* zone, UDate date, UErrorCode& status);
 
 /**
