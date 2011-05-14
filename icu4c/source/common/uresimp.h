@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -262,10 +262,12 @@ ures_getVersionNumberInternal(const UResourceBundle *resourceBundle);
  * For subresources, the locale where this resource comes from will be returned.
  * If fallback has occured, getLocale will reflect this.
  *
+ * This internal version avoids deprecated-warnings in ICU code.
+ *
  * @param resourceBundle resource bundle in question
  * @param status just for catching illegal arguments
  * @return  A Locale name
- * @deprecated ICU 2.8 Use ures_getLocaleByType instead.
+ * @internal
  */
 U_INTERNAL const char* U_EXPORT2 
 ures_getLocaleInternal(const UResourceBundle* resourceBundle, 
