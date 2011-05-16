@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2006, International Business Machines
+ *   Copyright (C) 2003-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -50,18 +50,14 @@ public :
 
 
     inline UBool isProhibited(UChar32 ch);
-    
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.6
      */
     inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.6
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
@@ -82,7 +78,6 @@ public :
      * @param status        ICU error code in/out parameter.
      *                      Must fulfill U_SUCCESS before the function call.
      * @return The number of UChars in the destination buffer
-     *
      */
     int32_t map(const UChar* src, int32_t srcLength, 
                         UChar* dest, int32_t destCapacity, 
@@ -115,14 +110,12 @@ public :
      * Ascertain if the given code point is a label separator as specified by IDNA
      *
      * @return TRUE is the code point is a label separator
-     *
-     *
      */
     UBool isLabelSeparator(UChar32 ch, UErrorCode& status);
 
-    
     inline UBool isLDHChar(UChar32 ch);
-private:        
+
+private:
     /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".

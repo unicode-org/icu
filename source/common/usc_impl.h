@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -51,8 +51,6 @@
  *     uscript_closeRun(scriptRun);
  *  }
  * </pre>
- *
- * @draft ICU 2.2
  */
 struct UScriptRun;
 
@@ -76,8 +74,6 @@ typedef struct UScriptRun UScriptRun;
  *
  * @return the address of <code>UScriptRun</code> object which will iterate over the text,
  *         or <code>NULL</code> if the operation failed.
- *
- * @draft ICU 2.2
  */
 U_CAPI UScriptRun * U_EXPORT2
 uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode);
@@ -87,8 +83,6 @@ uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode);
  * On return, scriptRun no longer points to a valid <code>UScriptRun</code> object.
  *
  * @param scriptRun is the <code>UScriptRun</code> object which will be freed.
- *
- * @draft ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uscript_closeRun(UScriptRun *scriptRun);
@@ -98,8 +92,6 @@ uscript_closeRun(UScriptRun *scriptRun);
  * the beginning.
  *
  * @param scriptRun is the address of the <code>UScriptRun</code> object to be reset.
- *
- * @draft ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uscript_resetRun(UScriptRun *scriptRun);
@@ -118,8 +110,6 @@ uscript_resetRun(UScriptRun *scriptRun);
  * @param pErrorCode is a pointer to a valid <code>UErrorCode</code> value. If this value
  *        indicates a failure on entry, the function will immediately return.
  *        On exit the value will indicate the success of the operation.
- *
- * @draft ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uscript_setRunText(UScriptRun *scriptRun, const UChar *src, int32_t length, UErrorCode *pErrorCode);
@@ -140,8 +130,6 @@ uscript_setRunText(UScriptRun *scriptRun, const UChar *src, int32_t length, UErr
  *        script of the current run. This pointer can be <code>NULL</code> if the value is not needed.
  *
  * @return true if there was another script run.
- *
- * @draft ICU 2.2
  */
 U_CAPI UBool U_EXPORT2
 uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, UScriptCode *pRunScript);

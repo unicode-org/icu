@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ustr_imp.h
@@ -30,7 +30,6 @@
 /**
  * Option bit for unorm_compare:
  * Perform case-insensitive comparison.
- * @draft ICU 2.2
  */
 #define U_COMPARE_IGNORE_CASE       0x10000
 #endif
@@ -38,7 +37,6 @@
 /**
  * Internal option for unorm_cmpEquivFold() for strncmp style.
  * If set, checks for both string length and terminating NUL.
- * @internal
  */
 #define _STRNCMP_STYLE 0x1000
 
@@ -47,7 +45,6 @@
  * Works in strcmp style (both lengths -1),
  * strncmp style (lengths equal and >=0, flag TRUE),
  * and memcmp/UnicodeString style (at least one length >=0).
- * @internal
  */
 U_CFUNC int32_t U_EXPORT2
 uprv_strCompare(const UChar *s1, int32_t length1,
@@ -58,7 +55,6 @@ uprv_strCompare(const UChar *s1, int32_t length1,
  * Internal API, used by u_strcasecmp() etc.
  * Compare strings case-insensitively,
  * in code point order or code unit order.
- * @internal
  */
 U_CFUNC int32_t
 u_strcmpFold(const UChar *s1, int32_t length1,
@@ -71,7 +67,6 @@ u_strcmpFold(const UChar *s1, int32_t length1,
  * This must be used before internal functions are called that do
  * not perform this check.
  * Generate a debug assertion failure if data is not loaded.
- * @internal
  */
 U_CFUNC UBool
 uprv_haveProperties(UErrorCode *pErrorCode);
@@ -81,7 +76,6 @@ uprv_haveProperties(UErrorCode *pErrorCode);
   * Intended primarily for use from u_init().
   * Has no effect if property data is already loaded.
   * NOT thread safe.
-  * @internal
   */
 /*U_CFUNC int8_t
 uprv_loadPropsData(UErrorCode *errorCode);*/
@@ -91,9 +85,6 @@ uprv_loadPropsData(UErrorCode *errorCode);*/
  * ustring.h/ustrcase.c and UnicodeString case mapping functions.
  */
 
-/**
- * @internal
- */
 struct UCaseMap {
     const UCaseProps *csp;
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -108,9 +99,6 @@ struct UCaseMap {
 typedef struct UCaseMap UCaseMap;
 #endif
 
-/**
- * @internal
- */
 enum {
     TO_LOWER,
     TO_UPPER,
@@ -118,9 +106,6 @@ enum {
     FOLD_CASE
 };
 
-/**
- * @internal
- */
 U_CFUNC int32_t
 ustr_toLower(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
@@ -128,9 +113,6 @@ ustr_toLower(const UCaseProps *csp,
              const char *locale,
              UErrorCode *pErrorCode);
 
-/**
- * @internal
- */
 U_CFUNC int32_t
 ustr_toUpper(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
@@ -140,9 +122,6 @@ ustr_toUpper(const UCaseProps *csp,
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-/**
- * @internal
- */
 U_CFUNC int32_t
 ustr_toTitle(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
@@ -155,7 +134,6 @@ ustr_toTitle(const UCaseProps *csp,
 
 /**
  * Internal case folding function.
- * @internal
  */
 U_CFUNC int32_t
 ustr_foldCase(const UCaseProps *csp,
@@ -175,7 +153,6 @@ ustr_foldCase(const UCaseProps *csp,
  * @param length Number of UChars that were (to be) written to dest.
  * @param pErrorCode ICU error code.
  * @return length
- * @internal
  */
 U_CAPI int32_t U_EXPORT2
 u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
