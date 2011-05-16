@@ -26,7 +26,6 @@ struct VZone;
 /**
  * A UnicodeSet.  Use the vzone_* API to manipulate.  Create with
  * vzone_open*, and destroy with vzone_close.
- * @stable ICU 2.4
  */
 typedef struct VZone VZone;
 #endif
@@ -41,11 +40,10 @@ typedef struct VZone VZone;
  * @param idLength, length of the ID parameter
  * @return A vzone object initialized by the time zone ID,
  * or NULL when the ID is unknown.
- * @draft ICU 4.4
  */
-U_DRAFT VZone* U_EXPORT2
+U_CAPI VZone* U_EXPORT2
 vzone_openID(const UChar* ID, int32_t idLength);
-    
+
 /**
  * Create a vzone instance by RFC2445 VTIMEZONE data
  * @param vtzdata The string including VTIMEZONE data block
@@ -53,27 +51,24 @@ vzone_openID(const UChar* ID, int32_t idLength);
  * @param status Output param to filled in with a success or an error.
  * @return A vzone initialized by the VTIMEZONE data or
  * NULL if failed to load the rule from the VTIMEZONE data.
- * @draft ICU 4.4
  */
-U_DRAFT VZone* U_EXPORT2
+U_CAPI VZone* U_EXPORT2
 vzone_openData(const UChar* vtzdata, int32_t vtzdataLength, UErrorCode& status);
 
 /**
  * Disposes of the storage used by a VZone object.  This function should
  * be called exactly once for objects returned by vzone_open*.
  * @param set the object to dispose of
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_close(VZone* zone);
 
 /**
  * Returns a copy of this object.
  * @param zone the original vzone
  * @return the newly allocated copy of the vzone
- * @draft ICU 4.4
  */
-U_DRAFT VZone* U_EXPORT2
+U_CAPI VZone* U_EXPORT2
 vzone_clone(const VZone *zone);
 
 /**
@@ -82,9 +77,8 @@ vzone_clone(const VZone *zone);
  * @param zone1 to be checked for containment
  * @param zone2 to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_equals(const VZone* zone1, const VZone* zone2);
 
 /**
@@ -95,9 +89,8 @@ vzone_equals(const VZone* zone1, const VZone* zone2);
  * @param url Receives the RFC2445 TZURL property value.
  * @param urlLength, length of the url
  * @return TRUE if TZURL attribute is available and value is set.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_getTZURL(VZone* zone, UChar* & url, int32_t & urlLength);
 
 /**
@@ -105,9 +98,8 @@ vzone_getTZURL(VZone* zone, UChar* & url, int32_t & urlLength);
  * @param zone, the vzone to use
  * @param url The TZURL property value.
  * @param urlLength, length of the url
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_setTZURL(VZone* zone, UChar* url, int32_t urlLength);
 
 /**
@@ -118,18 +110,16 @@ vzone_setTZURL(VZone* zone, UChar* url, int32_t urlLength);
  * @param zone, the vzone to use
  * @param lastModified Receives the last modified date.
  * @return TRUE if lastModified attribute is available and value is set.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_getLastModified(VZone* zone, UDate& lastModified);
 
 /**
  * Sets the RFC2445 LAST-MODIFIED property value.
  * @param zone, the vzone to use
  * @param lastModified The LAST-MODIFIED date.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_setLastModified(VZone* zone, UDate lastModified);
 
 /**
@@ -138,9 +128,8 @@ vzone_setLastModified(VZone* zone, UDate lastModified);
  * @param result Output param to filled in with the VTIMEZONE data.
  * @param resultLength, length of the result output
  * @param status Output param to filled in with a success or an error.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_write(VZone* zone, UChar* & result, int32_t & resultLength, UErrorCode& status);
 
 /**
@@ -151,9 +140,8 @@ vzone_write(VZone* zone, UChar* & result, int32_t & resultLength, UErrorCode& st
  * @param result Output param to filled in with the VTIMEZONE data.
  * @param resultLength, length of the result output
  * @param status Output param to filled in with a success or an error.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_writeFromStart(VZone* zone, UDate start, UChar* & result, int32_t & resultLength, UErrorCode& status);
 
 /**
@@ -168,9 +156,8 @@ vzone_writeFromStart(VZone* zone, UDate start, UChar* & result, int32_t & result
  * @param time The date used for rule extraction.
  * @param result Output param to filled in with the VTIMEZONE data.
  * @param status Output param to filled in with a success or an error.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_writeSimple(VZone* zone, UDate time, UChar* & result, int32_t & resultLength, UErrorCode& status);
 
 /**
@@ -196,9 +183,8 @@ vzone_writeSimple(VZone* zone, UDate time, UChar* & result, int32_t & resultLeng
  * @param millis     The reference date's milliseconds in day, local standard time
  * @param status     Output param to filled in with a success or an error.
  * @return           The offset in milliseconds to add to GMT to get local time.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 vzone_getOffset(VZone* zone, uint8_t era, int32_t year, int32_t month, int32_t day,
                 uint8_t dayOfWeek, int32_t millis, UErrorCode& status);
 
@@ -220,9 +206,8 @@ vzone_getOffset(VZone* zone, uint8_t era, int32_t year, int32_t month, int32_t d
  * @param monthLength The length of the given month in days.
  * @param status     Output param to filled in with a success or an error.
  * @return           The offset in milliseconds to add to GMT to get local time.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 vzone_getOffset2(VZone* zone, uint8_t era, int32_t year, int32_t month, int32_t day,
                 uint8_t dayOfWeek, int32_t millis,
                 int32_t monthLength, UErrorCode& status);
@@ -248,9 +233,8 @@ vzone_getOffset2(VZone* zone, uint8_t era, int32_t year, int32_t month, int32_t 
  * effect, this value is zero; otherwise it is a positive value,
  * typically one hour.
  * @param ec input-output error code
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_getOffset3(VZone* zone, UDate date, UBool local, int32_t& rawOffset,
                 int32_t& dstOffset, UErrorCode& ec);
 
@@ -260,9 +244,8 @@ vzone_getOffset3(VZone* zone, UDate date, UBool local, int32_t& rawOffset,
  *
  * @param zone, the vzone to use
  * @param offsetMillis  The new raw GMT offset for this time zone.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 vzone_setRawOffset(VZone* zone, int32_t offsetMillis);
 
 /**
@@ -271,9 +254,8 @@ vzone_setRawOffset(VZone* zone, int32_t offsetMillis);
  *
  * @param zone, the vzone to use
  * @return   The TimeZone's raw GMT offset.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 vzone_getRawOffset(VZone* zone);
 
 /**
@@ -281,9 +263,8 @@ vzone_getRawOffset(VZone* zone);
  * @param zone, the vzone to use
  * @return true if this time zone uses daylight savings time,
  * false, otherwise.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_useDaylightTime(VZone* zone);
 
 /**
@@ -298,7 +279,6 @@ vzone_useDaylightTime(VZone* zone);
  * @param status Output param filled in with success/error code.
  * @return true if the given date is in daylight savings time,
  * false, otherwise.
- * @internal ICU 2.4. Use Calendar::inDaylightTime() instead.
  */
 U_INTERNAL UBool U_EXPORT2
 vzone_inDaylightTime(VZone* zone, UDate date, UErrorCode& status);
@@ -310,9 +290,8 @@ vzone_inDaylightTime(VZone* zone, UDate date, UErrorCode& status);
  * @param other the <code>TimeZone</code> object to be compared with
  * @return true if the given zone is the same as this one,
  * with the possible exception of the ID
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_hasSameRules(VZone* zone, const VZone* other);
 
 /**
@@ -322,9 +301,8 @@ vzone_hasSameRules(VZone* zone, const VZone* other);
  * @param inclusive Whether the base time is inclusive or not.
  * @param result    Receives the first transition after the base time.
  * @return  TRUE if the transition is found.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_getNextTransition(VZone* zone, UDate base, UBool inclusive, ZTrans* result);
 
 /**
@@ -334,9 +312,8 @@ vzone_getNextTransition(VZone* zone, UDate base, UBool inclusive, ZTrans* result
  * @param inclusive Whether the base time is inclusive or not.
  * @param result    Receives the most recent transition before the base time.
  * @return  TRUE if the transition is found.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_getPreviousTransition(VZone* zone, UDate base, UBool inclusive, ZTrans* result);
 
 /**
@@ -346,9 +323,8 @@ vzone_getPreviousTransition(VZone* zone, UDate base, UBool inclusive, ZTrans* re
  * @param zone, the vzone to use     
  * @param status    Receives error status code.
  * @return The number of <code>TimeZoneRule</code>s representing time transitions.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 vzone_countTransitionRules(VZone* zone, UErrorCode& status);
 
 /**
@@ -361,9 +337,8 @@ vzone_countTransitionRules(VZone* zone, UErrorCode& status);
  * </pre>
  * @param zone, the vzone to use
  * @return          The class ID for all objects of this class.
- * @draft ICU 4.4
  */
-U_DRAFT UClassID U_EXPORT2
+U_CAPI UClassID U_EXPORT2
 vzone_getStaticClassID(VZone* zone);
 
 /**
@@ -376,9 +351,8 @@ vzone_getStaticClassID(VZone* zone);
  * @return          The class ID for this object. All objects of a
  *                  given class have the same class ID.  Objects of
  *                  other classes have different class IDs.
- * @draft ICU 4.4
  */
-U_DRAFT UClassID U_EXPORT2
+U_CAPI UClassID U_EXPORT2
 vzone_getDynamicClassID(VZone* zone);
 
 #endif // __VZONE_H

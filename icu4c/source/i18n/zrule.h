@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and         *
+* Copyright (C) 2009-2011, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -21,7 +21,6 @@
 /**
  * A TimeZoneRule.  Use the zrule_* API to manipulate.  Create with
  * zrule_open*, and destroy with zrule_close.
- * @draft ICU 4.4
  */
 struct ZRule;
 typedef struct ZRule ZRule;
@@ -29,7 +28,6 @@ typedef struct ZRule ZRule;
 /**
  * An InitialTimeZoneRule.  Use the izrule_* API to manipulate.  Create with
  * izrule_open*, and destroy with izrule_close.
- * @draft ICU 4.4
  */
 struct IZRule;
 typedef struct IZRule IZRule;
@@ -37,7 +35,6 @@ typedef struct IZRule IZRule;
 /**
  * An AnnualTimeZoneRule.  Use the azrule_* API to manipulate.  Create with
  * azrule_open*, and destroy with azrule_close.
- * @draft ICU 4.4
  */
 struct AZRule;
 typedef struct AZRule AZRule;
@@ -52,9 +49,8 @@ typedef struct AZRule AZRule;
  * Disposes of the storage used by a ZRule object.  This function should
  * be called exactly once for objects returned by zrule_open*.
  * @param set the object to dispose of
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 zrule_close(ZRule* rule);
 
 /**
@@ -63,9 +59,8 @@ zrule_close(ZRule* rule);
  * @param rule1 to be checked for containment
  * @param rule2 to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 zrule_equals(const ZRule* rule1, const ZRule* rule2);
 
 /**
@@ -73,18 +68,16 @@ zrule_equals(const ZRule* rule1, const ZRule* rule2);
  * @param rule, the Zrule to use
  * @param name  Receives the name of this time zone.
  * @param nameLength, length of the returned name
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 zrule_getName(ZRule* rule, UChar* name, int32_t nameLength);
 
 /**
  * Gets the standard time offset.
  * @param rule, the Zrule to use
  * @return  The standard time offset from UTC in milliseconds.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 zrule_getRawOffset(ZRule* rule);
 
 /**
@@ -92,9 +85,8 @@ zrule_getRawOffset(ZRule* rule);
  * @param rule, the Zrule to use
  * @return  The amount of daylight saving offset used by this rule
  *          in milliseconds.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 zrule_getDSTSavings(ZRule* rule);
 
 /**
@@ -104,9 +96,8 @@ zrule_getDSTSavings(ZRule* rule);
  * @param rule1 to be checked for containment
  * @param rule2 to be checked for containment
  * @return  true if the other <code>TimeZoneRule</code> is the same as this one.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 zrule_isEquivalentTo(ZRule* rule1,  ZRule* rule2);
 
 /*********************************************************************
@@ -121,27 +112,24 @@ zrule_isEquivalentTo(ZRule* rule1,  ZRule* rule2);
  * @param rawOffset     The UTC offset of its standard time in milliseconds.
  * @param dstSavings    The amount of daylight saving offset adjustment in milliseconds.
  *                      If this ia a rule for standard time, the value of this argument is 0.
- * @draft ICU 4.4
  */
-U_DRAFT IZRule* U_EXPORT2
+U_CAPI IZRule* U_EXPORT2
 izrule_open(const UChar* name, int32_t nameLength, int32_t rawOffset, int32_t dstSavings);
 
 /**
  * Disposes of the storage used by a IZRule object.  This function should
  * be called exactly once for objects returned by izrule_open*.
  * @param set the object to dispose of
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 izrule_close(IZRule* rule);
 
 /**
  * Returns a copy of this object.
  * @param rule the original IZRule
  * @return the newly allocated copy of the IZRule
- * @draft ICU 4.4
  */
-U_DRAFT IZRule* U_EXPORT2
+U_CAPI IZRule* U_EXPORT2
 izrule_clone(IZRule *rule);
 
 /**
@@ -150,9 +138,8 @@ izrule_clone(IZRule *rule);
  * @param rule1 to be checked for containment
  * @param rule2 to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 izrule_equals(const IZRule* rule1, const IZRule* rule2);
 
 /**
@@ -160,18 +147,16 @@ izrule_equals(const IZRule* rule1, const IZRule* rule2);
  * @param rule, the IZrule to use
  * @param name  Receives the name of this time zone.
  * @param nameLength, length of the returned name
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 izrule_getName(IZRule* rule, UChar* & name, int32_t & nameLength);
 
 /**
  * Gets the standard time offset.
  * @param rule, the IZrule to use
  * @return  The standard time offset from UTC in milliseconds.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 izrule_getRawOffset(IZRule* rule);
 
 /**
@@ -179,9 +164,8 @@ izrule_getRawOffset(IZRule* rule);
  * @param rule, the IZrule to use
  * @return  The amount of daylight saving offset used by this rule
  *          in milliseconds.
- * @draft ICU 4.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 izrule_getDSTSavings(IZRule* rule);
 
 /**
@@ -191,9 +175,8 @@ izrule_getDSTSavings(IZRule* rule);
  * @param rule1 to be checked for containment
  * @param rule2 to be checked for containment
  * @return  true if the other <code>TimeZoneRule</code> is the same as this one.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 izrule_isEquivalentTo(IZRule* rule1,  IZRule* rule2);
 
 /**
@@ -206,9 +189,8 @@ izrule_isEquivalentTo(IZRule* rule1,  IZRule* rule2);
  * @param result            Receives the very first time when this rule takes effect.
  * @return  true if the start time is available.  When false is returned, output parameter
  *          "result" is unchanged.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 izrule_getFirstStart(IZRule* rule, int32_t prevRawOffset, int32_t prevDSTSavings, 
                     UDate& result);
 
@@ -222,9 +204,8 @@ izrule_getFirstStart(IZRule* rule, int32_t prevRawOffset, int32_t prevDSTSavings
  * @param result            Receives the final time when this rule takes effect.
  * @return  true if the start time is available.  When false is returned, output parameter
  *          "result" is unchanged.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 izrule_getFinalStart(IZRule* rule, int32_t prevRawOffset, int32_t prevDSTSavings, 
                     UDate& result);
 
@@ -241,9 +222,8 @@ izrule_getFinalStart(IZRule* rule, int32_t prevRawOffset, int32_t prevDSTSavings
  *                          the specified base time.
  * @return  true if the start time is available.  When false is returned, output parameter
  *          "result" is unchanged.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 izrule_getNextStart(IZRule* rule, UDate base, int32_t prevRawOffset, 
                    int32_t prevDSTSavings, UBool inclusive, UDate& result);
 
@@ -260,9 +240,8 @@ izrule_getNextStart(IZRule* rule, UDate base, int32_t prevRawOffset,
  *                          the specified base time.
  * @return  true if the start time is available.  When false is returned, output parameter
  *          "result" is unchanged.
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 izrule_getPreviousStart(IZRule* rule, UDate base, int32_t prevRawOffset, 
                        int32_t prevDSTSavings, UBool inclusive, UDate& result);
 
@@ -277,9 +256,8 @@ izrule_getPreviousStart(IZRule* rule, UDate base, int32_t prevRawOffset,
  * </pre>
  * @param rule              The IZrule to use
  * @return          The class ID for all objects of this class.
- * @draft ICU 4.4
  */
-U_DRAFT UClassID U_EXPORT2
+U_CAPI UClassID U_EXPORT2
 izrule_getStaticClassID(IZRule* rule);
 
 /**
@@ -292,9 +270,8 @@ izrule_getStaticClassID(IZRule* rule);
  * @return          The class ID for this object. All objects of a
  *                  given class have the same class ID.  Objects of
  *                  other classes have different class IDs.
- * @draft ICU 4.4
  */
-U_DRAFT UClassID U_EXPORT2
+U_CAPI UClassID U_EXPORT2
 izrule_getDynamicClassID(IZRule* rule);
 
 #endif

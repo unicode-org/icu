@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -26,7 +26,7 @@
 #define IDNAREF_DEFAULT          0x0000
 #define IDNAREF_ALLOW_UNASSIGNED 0x0001
 #define IDNAREF_USE_STD3_RULES   0x0002
-    
+
 /**
  * This function implements the ToASCII operation as defined in the IDNA draft.
  * This operation is done on <b>single labels</b> before sending it to something that expects
@@ -57,7 +57,6 @@
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of ASCII characters converted.
- * @draft ICU 2.6
  */
 U_CFUNC int32_t U_EXPORT2
 idnaref_toASCII(const UChar* src, int32_t srcLength, 
@@ -96,7 +95,6 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of Unicode characters converted.
- * @draft ICU 2.6
  */
 U_CFUNC int32_t U_EXPORT2
 idnaref_toUnicode(const UChar* src, int32_t srcLength,
@@ -140,7 +138,6 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of ASCII characters converted.
- * @draft ICU 2.6
  */
 U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
@@ -180,7 +177,6 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of ASCII characters converted.
- * @draft ICU 2.6
  */
 U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
@@ -215,7 +211,6 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
  * @param status            ICU error code in/out parameter.
  *                          Must fulfill U_SUCCESS before the function call.
  * @return <0 or 0 or >0 as usual for string comparisons
- * @draft ICU 2.6
  */
 U_CFUNC int32_t U_EXPORT2
 idnaref_compare(  const UChar *s1, int32_t length1,

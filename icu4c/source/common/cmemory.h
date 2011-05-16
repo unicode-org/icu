@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -275,7 +275,6 @@ public:
      * @param resultCapacity will be set to the returned array's capacity (output-only)
      * @return the array pointer;
      *         caller becomes responsible for deleting the array
-     * @draft ICU 4.4
      */
     inline T *orphanOrClone(int32_t length, int32_t &resultCapacity);
 private:
@@ -448,7 +447,6 @@ public:
      * @param resultCapacity will be set to the returned array's capacity (output-only)
      * @return the header pointer;
      *         caller becomes responsible for deleting the array
-     * @draft ICU 4.4
      */
     inline H *orphanOrClone(int32_t length, int32_t &resultCapacity);
 private:

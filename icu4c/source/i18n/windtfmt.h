@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2009, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -62,7 +62,6 @@ public:
      * not delete the Calendar object after it is adopted by this call.
      *
      * @param calendarToAdopt    Calendar object to be adopted.
-     * @draft ICU 3.6
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
@@ -71,8 +70,6 @@ public:
      * calendar for the specified or default locale is used.
      *
      * @param newCalendar Calendar object to be set.
-     *
-     * @draft ICU 3.6
      */
     virtual void setCalendar(const Calendar& newCalendar);
 
@@ -81,16 +78,12 @@ public:
      * no longer owns the TimeZone object and should not delete it after this call.
      *
      * @param zoneToAdopt the TimeZone to be adopted.
-     *
-     * @draft ICU 3.6
      */
     virtual void adoptTimeZone(TimeZone* zoneToAdopt);
 
     /**
      * Sets the time zone for the calendar of this DateFormat object.
      * @param zone the new time zone.
-     *
-     * @draft ICU 3.6
      */
     virtual void setTimeZone(const TimeZone& zone);
 
@@ -103,7 +96,6 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 3.6
      */
     U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -116,7 +108,6 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 3.6
      */
     virtual UClassID getDynamicClassID(void) const;
 
