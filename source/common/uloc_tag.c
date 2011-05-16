@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -1471,9 +1471,16 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     ExtensionListEntry *kwdFirst = NULL;
     ExtensionListEntry *kwd;
     const char *key, *type;
-    char kwdBuf[ULOC_KEYWORDS_CAPACITY];
+    char *kwdBuf = NULL;
+    int32_t kwdBufLength = capacity;
 
     if (U_FAILURE(*status)) {
+        return 0;
+    }
+
+    kwdBuf = (char *)uprv_malloc(kwdBufLength);
+    if (kwdBuf == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
 
@@ -1484,7 +1491,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         key = ultag_getExtensionKey(langtag, i);
         type = ultag_getExtensionValue(langtag, i);
         if (*key == LDMLEXT) {
-            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, sizeof(kwdBuf), status);
+            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, kwdBufLength, status);
             if (U_FAILURE(*status)) {
                 break;
             }
@@ -1568,6 +1575,8 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         uprv_free(kwd);
         kwd = tmpKwd;
     }
+
+    uprv_free(kwdBuf);
 
     if (U_FAILURE(*status)) {
         return 0;
