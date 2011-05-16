@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -3064,7 +3064,23 @@ final class CollationParsedRuleBuilder {
     private static final int setWeightByte(int weight, int index, int b) {
         index <<= 3;
         // 0xffffffff except a 00 "hole" for the index-th byte
-        int mask = 0xffffffff >>> index;
+        int mask;
+        if (index < 32) {
+            mask = 0xffffffff >>> index;
+        } else {
+            // Do not use int>>>32 because that does not shift at all
+            // while we need it to become 0.
+            // 
+            // Java Language Specification (Third Edition) 15.19 Shift Operators:
+            // "If the promoted type of the left-hand operand is int,
+            // only the five lowest-order bits of the right-hand operand
+            // are used as the shift distance.
+            // It is as if the right-hand operand were subjected to
+            // a bitwise logical AND operator & (§15.22.1) with the mask value 0x1f.
+            // The shift distance actually used is therefore
+            // always in the range 0 to 31, inclusive."
+            mask = 0;
+        }
         index = 32 - index;
         mask |= 0xffffff00 << index;
         return (weight & mask) | (b << index);
