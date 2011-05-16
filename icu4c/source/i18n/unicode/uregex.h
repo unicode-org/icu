@@ -420,7 +420,7 @@ uregex_getUText(URegularExpression *regexp,
   *
   * @draft ICU 4.8 
   */
-U_INTERNAL void U_EXPORT2 
+U_DRAFT void U_EXPORT2 
 uregex_refreshUText(URegularExpression *regexp,
                     UText              *text,
                     UErrorCode         *status);
