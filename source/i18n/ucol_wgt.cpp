@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -69,7 +69,20 @@ setWeightByte(uint32_t weight, int32_t idx, uint32_t byte) {
     uint32_t mask; /* 0xffffffff except a 00 "hole" for the index-th byte */
 
     idx*=8;
-    mask=((uint32_t)0xffffffff)>>idx;
+    if(idx<32) {
+        mask=((uint32_t)0xffffffff)>>idx;
+    } else {
+        // Do not use uint32_t>>32 because on some platforms that does not shift at all
+        // while we need it to become 0.
+        // PowerPC: 0xffffffff>>32 = 0           (wanted)
+        // x86:     0xffffffff>>32 = 0xffffffff  (not wanted)
+        //
+        // ANSI C99 6.5.7 Bitwise shift operators:
+        // "If the value of the right operand is negative
+        // or is greater than or equal to the width of the promoted left operand,
+        // the behavior is undefined."
+        mask=0;
+    }
     idx=32-idx;
     mask|=0xffffff00<<idx;
     return (uint32_t)((weight&mask)|(byte<<idx));
