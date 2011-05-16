@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1134,6 +1134,45 @@ public class CollationRegressionTest extends TestFmwk {
             }
         }
     }
+    
+    public  void TestBengaliSortKey() throws Exception {
+        char rules[] = { 0x26, 0x9fa, 0x3c, 0x98c, 0x3c, 0x9e1, 0x3c, 0x98f, 0x3c, 0x990, 0x3c, 0x993, 
+                0x3c, 0x994, 0x3c, 0x9bc, 0x3c, 0x982, 0x3c, 0x983, 0x3c, 0x981, 0x3c, 0x9b0, 0x3c, 
+                0x9b8, 0x3c, 0x9b9, 0x3c, 0x9bd, 0x3c, 0x9be, 0x3c, 0x9bf, 0x3c, 0x9c8, 0x3c, 0x9cb, 
+                0x3d, 0x9cb };
+ 
+        Collator col = new RuleBasedCollator(String.copyValueOf(rules));
+        
+        String str1 = "\u09be";
+        String str2 = "\u0b70";
+        
+        int result = col.compare(str1, str2);
+        System.out.flush();
+
+        if(result >= 0 ) {
+            errln("\nERROR: result is " + result + " , wanted negative.");
+            errln(printKey(col, str1).toString());
+            errln(printKey(col, str2).toString());
+        } else {
+            logln("Pass: result is OK.");
+        }
+    }
+
+    private static StringBuilder printKey(Collator col, String str1) {
+        StringBuilder sb = new StringBuilder();
+        CollationKey sortk1 = col.getCollationKey(str1);
+        byte[] bytes = sortk1.toByteArray();
+        for(int i=0;i<str1.length();i++) {
+            sb.append("\\u"+Integer.toHexString(str1.charAt(i)));
+        }
+        System.out.print(": ");
+        for(int i=0;i<bytes.length;i++) {
+            sb.append(" 0x"+Integer.toHexString(((int)bytes[i])&0xff));
+        }
+        sb.append("\n");
+        return sb;
+    }
+
     
     /* RuleBasedCollator not subclassable
      * @bug 4146160
