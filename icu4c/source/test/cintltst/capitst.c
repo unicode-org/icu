@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2010 International Business Machines
+ * Copyright (c) 1997-2011 International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -35,6 +35,7 @@
 static void TestAttribute(void);
 static void TestDefault(void);
 static void TestDefaultKeyword(void);
+static void TestBengaliSortKey(void);
         int TestBufferSize();    /* defined in "colutil.c" */
 
 
@@ -133,6 +134,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestDefault, "tscoll/capitst/TestDefault");
     addTest(root, &TestDefaultKeyword, "tscoll/capitst/TestDefaultKeyword");
     addTest(root, &TestOpenVsOpenRules, "tscoll/capitst/TestOpenVsOpenRules");
+    addTest(root, &TestBengaliSortKey, "tscoll/capitst/TestBengaliSortKey");
     addTest(root, &TestGetKeywordValuesForLocale, "tscoll/capitst/TestGetKeywordValuesForLocale");
 }
 
@@ -866,6 +868,70 @@ void TestCloneBinary(){
     ucol_close(c);
     ucol_close(col);
 }
+
+
+static void TestBengaliSortKey(void)
+{
+  const char *curLoc = "bn";
+  UChar str1[] = { 0x09BE, 0 };
+  UChar str2[] = { 0x0B70, 0 };
+  UCollator *c2 = NULL;
+  const UChar *rules;
+  int32_t rulesLength=-1;
+  uint8_t *sortKey1;
+  int32_t sortKeyLen1 = 0;
+  uint8_t *sortKey2;
+  int32_t sortKeyLen2 = 0;
+  UErrorCode status = U_ZERO_ERROR;
+  char sortKeyStr1[2048];
+  uint32_t sortKeyStrLen1 = sizeof(sortKeyStr1)/sizeof(sortKeyStr1[0]);
+  char sortKeyStr2[2048];
+  uint32_t sortKeyStrLen2 = sizeof(sortKeyStr2)/sizeof(sortKeyStr2[0]);
+  UCollationResult result;
+
+  static UChar preRules[41] = { 0x26, 0x9fa, 0x3c, 0x98c, 0x3c, 0x9e1, 0x3c, 0x98f, 0x3c, 0x990, 0x3c, 0x993, 0x3c, 0x994, 0x3c, 0x9bc, 0x3c, 0x982, 0x3c, 0x983, 0x3c, 0x981, 0x3c, 0x9b0, 0x3c, 0x9b8, 0x3c, 0x9b9, 0x3c, 0x9bd, 0x3c, 0x9be, 0x3c, 0x9bf, 0x3c, 0x9c8, 0x3c, 0x9cb, 0x3d, 0x9cb , 0};
+
+  rules = preRules;
+  
+  log_verbose("Rules: %s\n", aescstrdup(rules, rulesLength));
+
+  c2 = ucol_openRules(rules, rulesLength, UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
+  if (U_FAILURE(status)) {
+    log_err("ERROR: Creating collator from rules failed with locale: %s : %s\n", curLoc, myErrorName(status));
+    return;
+  }
+  
+  sortKeyLen1 = ucol_getSortKey(c2, str1, -1, NULL, 0);
+  sortKey1 = (uint8_t*)malloc(sortKeyLen1+1);
+  ucol_getSortKey(c2,str1,-1,sortKey1, sortKeyLen1+1);
+  ucol_sortKeyToString(c2, sortKey1, sortKeyStr1, &sortKeyStrLen1);
+  
+  
+  sortKeyLen2 = ucol_getSortKey(c2, str2, -1, NULL, 0);
+  sortKey2 = (uint8_t*)malloc(sortKeyLen2+1);
+  ucol_getSortKey(c2,str2,-1,sortKey2, sortKeyLen2+1);
+
+  ucol_sortKeyToString(c2, sortKey2, sortKeyStr2, &sortKeyStrLen2);
+
+
+
+  result=ucol_strcoll(c2, str1, -1, str2, -1);
+  if(result!=UCOL_LESS) {
+    log_err("Error: %s was not less than %s: result=%d.\n", aescstrdup(str1,-1), aescstrdup(str2,-1), result);
+    log_info("[%s] -> %s (%d, from rule)\n", aescstrdup(str1,-1), sortKeyStr1, sortKeyLen1);
+    log_info("[%s] -> %s (%d, from rule)\n", aescstrdup(str2,-1), sortKeyStr2, sortKeyLen2);
+  } else {
+    log_verbose("OK: %s was  less than %s: result=%d.\n", aescstrdup(str1,-1), aescstrdup(str2,-1), result);
+    log_verbose("[%s] -> %s (%d, from rule)\n", aescstrdup(str1,-1), sortKeyStr1, sortKeyLen1);
+    log_verbose("[%s] -> %s (%d, from rule)\n", aescstrdup(str2,-1), sortKeyStr2, sortKeyLen2);
+  }
+
+  free(sortKey1);
+  free(sortKey2);
+  ucol_close(c2);
+
+}
+
 /*
     TestOpenVsOpenRules ensures that collators from ucol_open and ucol_openRules
     will generate identical sort keys
