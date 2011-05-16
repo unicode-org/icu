@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2009-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 #ifndef __ZTRANS_H
@@ -21,7 +21,6 @@
 /**
  * A TimeZoneTransition.  Use the ztrans_* API to manipulate.  Create with
  * ztrans_open*, and destroy with ztrans_close.
- * @draft ICU 4.4
  */
 struct ZTrans;
 typedef struct ZTrans ZTrans;
@@ -35,34 +34,30 @@ typedef struct ZTrans ZTrans;
  * @param time  The time of transition in milliseconds since the base time.
  * @param from  The time zone rule used before the transition.
  * @param to    The time zone rule used after the transition.
- * @draft ICU 4.4
  */
-U_DRAFT ZTrans* U_EXPORT2
+U_CAPI ZTrans* U_EXPORT2
 ztrans_open(UDate time, const void* from, const void* to);
 
 /**
  * Constructs an empty <code>TimeZoneTransition</code>
- * @draft ICU 4.4
  */
-U_DRAFT ZTrans* U_EXPORT2
+U_CAPI ZTrans* U_EXPORT2
 ztrans_openEmpty();
 
 /**
  * Disposes of the storage used by a ZTrans object.  This function should
  * be called exactly once for objects returned by ztrans_open*.
  * @param trans the object to dispose of
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ztrans_close(ZTrans *trans);
 
 /**
  * Returns a copy of this object.
  * @param rule the original ZRule
  * @return the newly allocated copy of the ZRule
- * @draft ICU 4.4
  */
-U_DRAFT ZTrans* U_EXPORT2
+U_CAPI ZTrans* U_EXPORT2
 ztrans_clone(ZTrans *trans);
 
 /**
@@ -71,36 +66,32 @@ ztrans_clone(ZTrans *trans);
  * @param trans1 to be checked for containment
  * @param trans2 to be checked for containment
  * @return true if the test condition is met
- * @draft ICU 4.4
  */
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 ztrans_equals(const ZTrans* trans1, const ZTrans* trans2);
 
 /**
  * Returns the time of transition in milliseconds.
  * param trans, the transition to use
  * @return The time of the transition in milliseconds since the 1970 Jan 1 epoch time.
- * @draft ICU 4.4
  */
-U_DRAFT UDate U_EXPORT2
+U_CAPI UDate U_EXPORT2
 ztrans_getTime(ZTrans* trans);
 
 /**
  * Sets the time of transition in milliseconds.
  * param trans, the transition to use
  * @param time The time of the transition in milliseconds since the 1970 Jan 1 epoch time.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ztrans_setTime(ZTrans* trans, UDate time);
 
 /**
  * Returns the rule used before the transition.
  * param trans, the transition to use
  * @return The time zone rule used after the transition.
- * @draft ICU 4.4
  */
-U_DRAFT void* U_EXPORT2
+U_CAPI void* U_EXPORT2
 ztrans_getFrom(ZTrans* & trans);
 
 /**
@@ -109,9 +100,8 @@ ztrans_getFrom(ZTrans* & trans);
  * param trans, the transition to use
  * param trans, the transition to use
  * @param from The time zone rule used before the transition.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ztrans_setFrom(ZTrans* trans, const void* from);
 
 /**
@@ -119,18 +109,16 @@ ztrans_setFrom(ZTrans* trans, const void* from);
  * not delete the TimeZoneRule object passed in.
  * param trans, the transition to use
  * @param from The time zone rule used before the transition.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ztrans_adoptFrom(ZTrans* trans, void* from);
 
 /**
  * Returns the rule used after the transition.
  * param trans, the transition to use
  * @return The time zone rule used after the transition.
- * @draft ICU 4.4
  */
-U_DRAFT void* U_EXPORT2
+U_CAPI void* U_EXPORT2
 ztrans_getTo(ZTrans* trans);
 
 /**
@@ -138,9 +126,8 @@ ztrans_getTo(ZTrans* trans);
  * responsible for deleting the TimeZoneRule object.
  * param trans, the transition to use
  * @param to The time zone rule used after the transition.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ztrans_setTo(ZTrans* trans, const void* to);
 
 /**
@@ -148,9 +135,8 @@ ztrans_setTo(ZTrans* trans, const void* to);
  * not delete the TimeZoneRule object passed in.
  * param trans, the transition to use
  * @param to The time zone rule used after the transition.
- * @draft ICU 4.4
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ztrans_adoptTo(ZTrans* trans, void* to);
 
 /**
@@ -163,9 +149,8 @@ ztrans_adoptTo(ZTrans* trans, void* to);
  * </pre>
  * param trans, the transition to use
  * @return          The class ID for all objects of this class.
- * @draft ICU 4.4
  */
-U_DRAFT UClassID U_EXPORT2
+U_CAPI UClassID U_EXPORT2
 ztrans_getStaticClassID(ZTrans* trans);
 
 /**
@@ -178,9 +163,8 @@ ztrans_getStaticClassID(ZTrans* trans);
  * @return          The class ID for this object. All objects of a
  *                  given class have the same class ID.  Objects of
  *                  other classes have different class IDs.
- * @draft ICU 4.4
  */
-U_DRAFT UClassID U_EXPORT2
+U_CAPI UClassID U_EXPORT2
 ztrans_getDynamicClassID(ZTrans* trans);
 
 #endif

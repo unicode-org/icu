@@ -120,7 +120,6 @@ U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code.
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @draft ICU 2.2
  */
 U_CAPI UResourceBundle* U_EXPORT2
 ures_findResource(const char* pathToResource, 
@@ -140,7 +139,6 @@ ures_findResource(const char* pathToResource,
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code.
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @draft ICU 2.2
  */
 U_CAPI UResourceBundle* U_EXPORT2
 ures_findSubResource(const UResourceBundle *resB, 
@@ -162,9 +160,8 @@ ures_findSubResource(const UResourceBundle *resB,
  * @param status error code
  * @return  the actual buffer size needed for the full locale.  If it's greater 
  * than resultCapacity, the returned full name will be truncated and an error code will be returned.
- * @internal ICU 3.0
  */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity, 
                              const char *path, const char *resName, const char *keyword, const char *locid,
                              UBool *isAvailable, UBool omitDefault, UErrorCode *status);
@@ -175,9 +172,8 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
  * @param keyword a particular keyword to consider, must match a top level resource name 
  * within the tree.
  * @param status error code
- * @internal ICU 3.0
  */
-U_INTERNAL UEnumeration* U_EXPORT2
+U_CAPI UEnumeration* U_EXPORT2
 ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status);
 
 
@@ -196,9 +192,8 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @internal ICU 3.0
  */
-U_INTERNAL UResourceBundle* U_EXPORT2 
+U_CAPI UResourceBundle* U_EXPORT2 
 ures_getByKeyWithFallback(const UResourceBundle *resB, 
                           const char* inKey, 
                           UResourceBundle *fillIn, 
@@ -218,10 +213,8 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @internal ICU 3.4
- * @draft ICU 3.4
  */
-U_INTERNAL const UChar* U_EXPORT2 
+U_CAPI const UChar* U_EXPORT2 
 ures_getStringByKeyWithFallback(const UResourceBundle *resB, 
                           const char* inKey,  
                           int32_t* len,
@@ -233,9 +226,8 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
  * @param key the key for the version number
  * @param ver fillin for the version number
  * @param status error code
- * @internal ICU 4.2
  */
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 ures_getVersionByKey(const UResourceBundle *resB,
                      const char *key,
                      UVersionInfo ver,
@@ -250,9 +242,8 @@ ures_getVersionByKey(const UResourceBundle *resB,
  * @return  A version number string as specified in the resource bundle or its parent.
  *          The caller does not own this string.
  * @see ures_getVersion
- * @internal
  */
-U_INTERNAL const char* U_EXPORT2 
+U_CAPI const char* U_EXPORT2 
 ures_getVersionNumberInternal(const UResourceBundle *resourceBundle);
 
 /**
@@ -267,9 +258,8 @@ ures_getVersionNumberInternal(const UResourceBundle *resourceBundle);
  * @param resourceBundle resource bundle in question
  * @param status just for catching illegal arguments
  * @return  A Locale name
- * @internal
  */
-U_INTERNAL const char* U_EXPORT2 
+U_CAPI const char* U_EXPORT2 
 ures_getLocaleInternal(const UResourceBundle* resourceBundle, 
                UErrorCode* status);
 

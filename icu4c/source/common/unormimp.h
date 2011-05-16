@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -154,11 +154,11 @@ enum {
     _NORM_DECOMP_LENGTH_MASK=0x7f
 };
 
-/* Constants for options flags for normalization. @draft ICU 2.6 */
+/** Constants for options flags for normalization. */
 enum {
-    /** Options bit 0, do not decompose Hangul syllables. @draft ICU 2.6 */
+    /** Options bit 0, do not decompose Hangul syllables. */
     UNORM_NX_HANGUL=1,
-    /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
+    /** Options bit 1, do not decompose CJK compatibility characters. */
     UNORM_NX_CJK_COMPAT=2
 };
 

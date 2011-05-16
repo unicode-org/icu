@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -34,7 +34,6 @@ class TransliteratorRegistry;
  * Transliterator} for details.
  *
  * @author Alan Liu
- * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -59,7 +58,6 @@ public:
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(Transliterator* const transliterators[],
                            int32_t transliteratorCount,
@@ -71,7 +69,6 @@ public:
      * @param dir either UTRANS_FORWARD or UTRANS_REVERSE
      * @param adoptedFilter a global filter for this compound transliterator
      * or NULL
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -82,33 +79,28 @@ public:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
                            UErrorCode& status);
     /**
      * Destructor.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~CompoundTransliterator();
 
     /**
      * Copy constructor.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const CompoundTransliterator&);
 
     /**
      * Transliterator API.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual Transliterator* clone(void) const;
 
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual int32_t getCount(void) const;
 
@@ -116,20 +108,17 @@ public:
      * Returns the transliterator at the given index in this chain.
      * @param idx index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual const Transliterator& getTransliterator(int32_t idx) const;
 
     /**
      * Sets the transliterators.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     void setTransliterators(Transliterator* const transliterators[],
                             int32_t count);
 
     /**
      * Adopts the transliterators.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     void adoptTransliterators(Transliterator* adoptedTransliterators[],
                               int32_t count);
@@ -144,7 +133,6 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
@@ -164,7 +152,6 @@ public:
 protected:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& idx,
                                      UBool incremental) const;
@@ -173,15 +160,11 @@ public:
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
@@ -195,7 +178,6 @@ private:
 
     /**
      * Assignment operator.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator& operator=(const CompoundTransliterator&);
 

@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -71,8 +71,6 @@ public:
      *         <code>NULL</code> if there is an error.
      *
      * @see LEScripts.h
-     *
-     * @draft ICU 2.6
      */
     virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit, le_int32 script, LEErrorCode &success) const;
 
@@ -83,8 +81,6 @@ public:
      * @param ch - the character
      *
      * @return the glyph index
-     *
-     * @draft ICU 2.6
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const;
 
@@ -112,15 +108,11 @@ public:
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
