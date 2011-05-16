@@ -4,12 +4,12 @@
 	-->
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4C API Comparison: 4.6.1 with 4.8 r30096:30099</title>
+<title>ICU4C API Comparison: 4.6.1 with 4.8 r30114M</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="#_top"></a>
-<h1>ICU4C API Comparison: 4.6.1 with 4.8 (r30096:30099)</h1>
+<h1>ICU4C API Comparison: 4.6.1 with 4.8 (r30114M)</h1>
 <div id="toc">
 <ul>
 <li>
@@ -172,14 +172,6 @@
 <td class="file">ushape.h</td><td class="proto"><tt>#define</tt> SHAPE_TAIL_TYPE_MASK</td><td class="">Draft<br>4.2</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
-<td class="file">ustream.h</td><td class="proto">U_IO_API std::istream&amp; operator&gt;&gt;(std::istream&amp;, UnicodeString&amp;)</td><td class="stabchange">Stable<br>3.0</td><td>None<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">ustream.h</td><td class="proto">U_IO_API std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const UnicodeString&amp;)</td><td class="stabchange">Stable<br>3.0</td><td>None<br>
-<span class=""><span></span></span></td>
-</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -237,38 +229,62 @@
 <span class="verchange"><span>4.8</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">LETypes.h</td><td class="proto"><tt>#define</tt> NULL</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
-<span class="verchange"><span>2.4</span>
+<td class="file">rbbi.h</td><td class="proto">const uint8_t* RuleBasedBreakIterator::getBinaryRules(uint32_t&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">stringpiece.h</td><td class="proto">UBool operator!=(const StringPiece&amp;, const StringPiece&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">stringpiece.h</td><td class="proto">U_EXPORT UBool operator==(const StringPiece&amp;, const StringPiece&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">stringpiece.h</td><td class="proto">void StringPiece::set(const char*)</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">stringpiece.h</td><td class="proto">void StringPiece::set(const char*, int32_t)</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">tblcoll.h</td><td class="proto">int32_t RuleBasedCollator::getReorderCodes(int32_t*, int32_t, UErrorCode&amp;) const</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">tblcoll.h</td><td class="proto">void RuleBasedCollator::setReorderCodes(const int32_t*, int32_t, UErrorCode&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
+<span class="verchange"><span>4.8</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_BOCU1</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
+<span class="verchange"><span>2.2</span>
+<br>
+<b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_CESU8</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
+<span class="verchange"><span>2.2</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
 <tr class="row1">
-<td class="file">rbbi.h</td><td class="proto">const uint8_t* RuleBasedBreakIterator::getBinaryRules(uint32_t&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
+<td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_IMAP_MAILBOX</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
+<span class="verchange"><span>2.4</span>
+<br>
+<b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
 <tr class="row0">
-<td class="file">stringpiece.h</td><td class="proto">UBool operator!=(const StringPiece&amp;, const StringPiece&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
+<td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_UTF16</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
+<span class="verchange"><span>2.2</span>
+<br>
+<b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
 <tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">U_EXPORT UBool operator==(const StringPiece&amp;, const StringPiece&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">stringpiece.h</td><td class="proto">void StringPiece::set(const char*)</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">stringpiece.h</td><td class="proto">void StringPiece::set(const char*, int32_t)</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">tblcoll.h</td><td class="proto">int32_t RuleBasedCollator::getReorderCodes(int32_t*, int32_t, UErrorCode&amp;) const</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">tblcoll.h</td><td class="proto">void RuleBasedCollator::setReorderCodes(const int32_t*, int32_t, UErrorCode&amp;)</td><td class="">Internal<br>.</td><td>Draft<br>
-<span class="verchange"><span>4.8</span></span></td>
+<td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_UTF32</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
+<span class="verchange"><span>2.2</span>
+<br>
+<b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
 <tr class="row0">
 <td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_CURRENCY</td><td class="">Internal<br>.</td><td>Draft<br>
@@ -307,604 +323,622 @@
 <span class="verchange"><span>4.8</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_INLINE</td><td class="">
+<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_IGNORE</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
 <span class="verchange"><span>3.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_SCIENTIFIC</td><td class="stabchange">Stable<br>2.0</td><td>Stable<br>
 <span class="verchange"><span>2.1</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_AVESTAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BALINESE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BAMUM</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BASSA_VAH</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BATAK</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BLISSYMBOLS</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BOOK_PAHLAVI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BRAHMI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BRAILLE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_BUGINESE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CARIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CHAKMA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CHAM</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CIRTH</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CUNEIFORM</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CYPRIOT</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_DEMOTIC_EGYPTIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_DUPLOYAN_SHORTAND</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_EASTERN_SYRIAC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_EGYPTIAN_HIEROGLYPHS</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ELBASAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ESTRANGELO_SYRIAC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_GLAGOLITIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_GRANTHA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_HARAPPAN_INDUS</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_HIERATIC_EGYPTIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_IMPERIAL_ARAMAIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_INSCRIPTIONAL_PAHLAVI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_INSCRIPTIONAL_PARTHIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_JAPANESE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_JAVANESE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KAITHI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KAYAH_LI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KHAROSHTHI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KHUTSURI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KOREAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KPELLE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LANNA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LATIN_FRAKTUR</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LATIN_GAELIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LEPCHA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LIMBU</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LINEAR_A</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LINEAR_B</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LISU</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LOMA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LYCIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_LYDIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MANICHAEAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MATHEMATICAL_NOTATION</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MAYAN_HIEROGLYPHS</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MEITEI_MAYEK</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MENDE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MEROITIC_CURSIVE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_MOON</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_NABATAEAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_NAKHI_GEBA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_NEW_TAI_LUE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_NKO</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_CHURCH_SLAVONIC_CYRILLIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_HUNGARIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_NORTH_ARABIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_PERMIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_PERSIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_SOUTH_ARABIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OL_CHIKI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ORKHON</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OSMANYA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_PAHAWH_HMONG</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_PALMYRENE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_PHAGS_PA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_PHOENICIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_PHONETIC_POLLARD</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_PSALTER_PAHLAVI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_REJANG</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_RONGORONGO</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SAMARITAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SARATI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SAURASHTRA</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SHAVIAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SIGN_WRITING</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SIMPLIFIED_HAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SINDHI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SUNDANESE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.8</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SYLOTI_NAGRI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_SYMBOLS</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TAI_LE</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TAI_VIET</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.0</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TENGWAR</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TIFINAGH</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TRADITIONAL_HAN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_UGARITIC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>2.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_UNKNOWN</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_UNWRITTEN_LANGUAGES</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_VAI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_VISIBLE_SPEECH</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_WARANG_CITI</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>4.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_WESTERN_SYRIAC</td><td class="stabchange">Stable<br>2.2</td><td>Stable<br>
 <span class="verchange"><span>3.6</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
+</tr>
+<tr class="row0">
+<td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_HIDE_DRAFT_API</td><td class="">
+<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_HIDE_INTERNAL_API</td><td class="">
+<br>
+</td><td>Internal<br>
+<span class=""><span>.</span></span></td>
 </tr>
 </table>
 <P></P>
@@ -922,26 +956,6 @@
 <td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UnicodeString&amp; Normalizer::concatenate(const UnicodeString&amp;, const UnicodeString&amp;, UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.1</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_COMPOUND_TEXT</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">ulocdata.h</td><td class="proto"><tt>enum</tt> ULocaleDataExemplarSetType::ULOCDATA_ES_INDEX</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>3.4</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_HAVE_WCHAR_H</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_SIZEOF_WCHAR_T</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_AFAKA</td><td class="">None<br>
@@ -987,16 +1001,6 @@
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_WOLEAI</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>4.8</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">utypes.h</td><td class="proto"><tt>#define</tt> NULL</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">utypes.h</td><td class="proto"><tt>enum</tt> UErrorCode::U_FORMAT_INEXACT_ERROR</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
 </tr>
 </table>
 <P></P>
@@ -2092,8 +2096,8 @@
 </tr>
 <tr class="row0">
 <td class="file">ucnv.h</td><td class="proto"><tt>enum</tt> UConverterType::UCNV_COMPOUND_TEXT</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
+</td><td>Draft<br>
+<span class=""><span>4.8</span></span></td>
 </tr>
 <tr class="row1">
 <td class="file">ucol.h</td><td class="proto"><tt>enum</tt> UColReorderCode::UCOL_REORDER_CODE_DEFAULT</td><td class="">None<br>
@@ -2142,28 +2146,8 @@
 </tr>
 <tr class="row0">
 <td class="file">ulocdata.h</td><td class="proto"><tt>enum</tt> ULocaleDataExemplarSetType::ULOCDATA_ES_INDEX</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>3.4</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_ALIGN_CODE</td><td class="">None<br>
-</td><td>Internal<br>
-<span class=""><span>.</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_HAVE_WCHAR_H</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_INLINE</td><td class="">None<br>
-</td><td>Internal<br>
-<span class=""><span>.</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_SIZEOF_WCHAR_T</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
+</td><td>Draft<br>
+<span class=""><span>4.8</span></span></td>
 </tr>
 <tr class="row1">
 <td class="file">unum.h</td><td class="proto"><tt>enum</tt> UCurrencySpacing::UNUM_CURRENCY_INSERT</td><td class="">None<br>
@@ -2316,34 +2300,19 @@
 <span class=""><span>4.8</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">utypes.h</td><td class="proto"><tt>#define</tt> NULL</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
-</tr>
-<tr class="row0">
 <td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_DATE_MAX</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.8</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_DATE_MIN</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>4.8</span></span></td>
 </tr>
-<tr class="row0">
-<td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_HIDE_DRAFT_API</td><td class="">None<br>
-</td><td>Internal<br>
-<span class=""><span>.</span></span></td>
-</tr>
 <tr class="row1">
-<td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_HIDE_INTERNAL_API</td><td class="">None<br>
-</td><td>Internal<br>
-<span class=""><span>.</span></span></td>
-</tr>
-<tr class="row0">
 <td class="file">utypes.h</td><td class="proto"><tt>enum</tt> UErrorCode::U_FORMAT_INEXACT_ERROR</td><td class="">None<br>
-</td><td>Stable<br>
-<span class=""><span>2.0</span></span></td>
+</td><td>Draft<br>
+<span class=""><span>4.8</span></span></td>
 </tr>
 </table>
 <P></P>
@@ -2757,7 +2726,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI (r30028:30032M) tool on Wed May 11 11:42:52 PDT 2011<br>Copyright (C) 2011, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI (r30028:30032M) tool on Mon May 16 07:28:35 PDT 2011<br>Copyright (C) 2011, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
