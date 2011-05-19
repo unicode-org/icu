@@ -355,7 +355,7 @@
         </jar>
     </target>
 
-    <target name="jarDemos" depends="demos" description="Build ICU4J demo jar file">
+    <target name="jarDemos" depends="icu4jJar, demos" description="Build ICU4J demo jar file">
         <copy file="${icu4j.demos.jar}" tofile="${icu4jdemos.jar.file}"/>
     </target>
 
