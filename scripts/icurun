@@ -1,0 +1,148 @@
+#!/bin/sh
+
+# Copyright (C) 2011 IBM Corporation and Others. All Rights Reserved.
+#
+# This is designed for building and running single-source-file ICU programs.
+#
+# In its simplest usage,  simply type:
+#
+#     icurun  yourprogram.c 
+#       (or .cpp if it is a C++ program) 
+#
+#  The tool will compile and then run the program
+#
+#  FINDING ICU
+#  To find ICU, the following search order is used by priority:
+#
+#  1)    "-i <path>" .. the <path> will be searched for either a direct path to icu-config,
+#            or a directory containing it, or a directory containing '/bin' containing it.
+#        In other words, if icu-config is  /opt/local/bin/icu-config, any of the following will work:
+#                 -i /opt/local
+#                 -i /opt/local/bin
+#                 -i /opt/local/bin/icu-config
+#
+#  2)    If there is an executable ~/.icurunrc script, it can set the variable "ICU_CONFIG" to point
+#        directly to the icu-config file.
+#        An example ~/.icurunrc script  contains just this line:
+#               
+#              ICU_CONFIG=/home/srl/E/II/bin/icu-config
+#
+#  3)    ICU_CONFIG can be set in the environment to point to icu-config  ( it's overridden by the .icurunrc script )
+#
+#  4)    if "icu-config" is on the PATH, it will be used.
+#
+# 
+#  RUNNING
+#   Any additional arguments following the file will be passed to the application.
+#
+#  TODO
+#   * should support pkg-config, which is preferred over icu-config, although icu-config makes this usage
+#     easier
+#
+#   * need to test the $PATH and $ICU_CONFIG usage models
+
+SCRIPTVER='$Revision$'
+
+
+ICU_OVERRIDE=""
+
+usage()
+{
+    echo "Script Version ${SCRIPTVER}"
+    echo "Usage: $0 [ -i /path/to/icu | -i /path/to/icu-config ]  file.c{pp} [ program args ...]"
+}
+
+if [ $# -lt 1 ];
+then
+        usage
+        exit 1
+fi
+
+if [ "$1" == "-?" -o $1 == "-h" ];
+then
+        usage
+        exit 0
+fi
+
+
+if [ $1 == "-i" ];
+then
+        shift
+        ICU_OVERRIDE=$1
+        shift
+fi
+
+if [ ! -x "${ICU_CONFIG}" ];
+then
+    ICU_CONFIG=`which icu-config 2>/dev/null || echo`
+fi
+
+
+# now, search
+if [ -x ~/.icurunrc ];
+then
+        . ~/.icurunrc
+fi
+
+if [ "x${ICU_OVERRIDE}" != "x" ];
+then
+        if [ -f "${ICU_OVERRIDE}" -a -x "${ICU_OVERRIDE}" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}"
+        elif [ -x "${ICU_OVERRIDE}/icu-config" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}/icu-config"
+        elif [ -x "${ICU_OVERRIDE}/bin/icu-config" ];
+        then
+                ICU_CONFIG="${ICU_OVERRIDE}/bin/icu-config"
+        else
+                echo "$0: Don't know what to do with $ICU_OVERRIDE - not an executable or a directory" >&2
+                exit 1
+        fi
+fi
+
+if [ ! -x "${ICU_CONFIG}" ];
+then
+        echo "$0: Error: \"${ICU_CONFIG}\" is not an icu-config script. Bailing." >&2
+        exit 1
+fi
+
+echo 'ICU ' `${ICU_CONFIG} --version` `${ICU_CONFIG} --prefix`
+
+FILE=$1
+shift
+
+if [ ! -f "${FILE}" ];
+then
+    echo "$0: Can't open ${FILE}" >&2
+    usage
+    exit 1
+fi
+
+CPPOPTS="--cppflags"
+LINKOPTS="--ldflags --ldflags-icuio"
+
+
+case "${FILE}" in
+     *.cpp)
+        COMP=`${ICU_CONFIG} --cxx --cxxflags ${CPPOPTS} ${LINKOPTS}`
+        OUT=`basename ${FILE} .cpp`
+     ;;
+
+     *.c)
+        COMP=`${ICU_CONFIG} --cc --cflags ${CPPOPTS} ${LINKOPTS}`
+        OUT=`basename ${FILE} .c`
+     ;;
+
+     *)
+        echo "$0: error, don't know what to do with ${FILE}" >&2
+        exit 1
+     ;;
+esac
+
+echo "# ${COMP}" -o "${OUT}" "${FILE}"
+${COMP} -o "${OUT}" "${FILE}" || (rm -f "${OUT}" ; exit 1)
+INVOKE=`${ICU_CONFIG} --invoke=./${OUT}`
+echo "# ${INVOKE}"
+"${SHELL}" -c "${INVOKE}" "$@"
+

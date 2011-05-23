@@ -1,0 +1,168 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>RB Manager Tutorial - Populating the Bundle</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image: url(../images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="../images/template_ul.gif" HEIGHT="75"><IMG SRC="../images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="../images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="../images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="../images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="../faq.html">FAQ</A></LI>
+              <LI><A HREF="../future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="../future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../index.html">Home</A></LI>
+              <LI><A HREF="index.html">Tutorial</A></LI>
+              <LI><A HREF="../views/index.html">Functionality and Views</A></LI>
+              <LI><A HREF="../lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="../menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="../RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="../scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H3 ALIGN="CENTER">Step 4. Populating the Bundle with Resources</H3>
+      <P><B>Working within a Group</B></P>
+      <P>In the tutorial file, following the process described in the previous 
+        step, I created a group called 'Questions' and gave it a comment. To view 
+        the group that you created, make sure that the base class at the top of 
+        the file tree to the left is selected, press the 'Groups' tab on the right, 
+        and select your group name from the drop down menu. With any luck, you 
+        will see something like this:</P>
+      <P><IMG SRC="../images/screenshots/empty_group.gif" WIDTH="750" HEIGHT="432"></P>
+      <P>From this view, there are several options that are to be found in the 
+        six buttons to the lower right. We are now going to create a resource. 
+        This can be accomplished by either pressing the button 'Create Resource' 
+        or selecting 'Add New Resource...' from the 'Options' menu at the top 
+        of the screen.</P>
+      <P><B>Filling in Resource Information</B></P>
+      <P>Once you follow one of the above two steps, you should see a dialog similar 
+        to the following:</P>
+      <P><IMG SRC="../images/screenshots/empty_resource.gif"></P>
+      <P>The group shown is the one currently being viewed when you clicked on 
+        the 'Create Resource' button. If you used the menu to bring up this dialog, 
+        it may be a different group. You may move the resource to any group you 
+        wish by changing the value in this drop down box. Both the entry key and 
+        the translation fields are required information. These make up the lookup 
+        value and the translation value respectively stored in your bundle. The 
+        comment field is there in order to aid those who will be translating your 
+        work into other languages. This field provides a way for you to describe 
+        the context of this particular resource.</P>
+      <P>There are a few ways to create the resource once the information is entered. 
+        Pressing 'Create' will add the resource and close the dialog. If you wish 
+        to continue creating resources after the current one, pressing 'Create 
+        &amp; Continue' will create the resource, clear the information you have 
+        just entered, and allow you to enter in a new resource. Pressing 'Cancel' 
+        will close the dialog box and ignore any information currently entered. 
+        As a short cut, you can also hit enter from any of the text boxes but 
+        'Translation'. This will create the resource. Pressing enter from the 
+        translation text box, creates a translation that spans multiple lines 
+        of text.</P>
+      <P>A sample resource creation is show as follows:</P>
+      <P><IMG SRC="../images/screenshots/basic_resource.gif"></P>
+      <P><B>Using 'Look-ups'</B></P>
+      <P>Resource bundles provide a way of translating contextual information 
+        as well. For instance, what if I wanted a translation asking the user 
+        how old they were, and I wanted to ask it with their name inserted into 
+        the question. The placement of their name might be different in different 
+        languages. This is the reason for 'look-ups'. The java.text package defines 
+        a way for implementing these look-ups using numbers surrounded by curly 
+        braces. Thus, I might want to create a resource like the one below:</P>
+      <P><IMG SRC="../images/screenshots/lookup_resource.gif"></P>
+      <P>Once you enter anything into your translation surrounded by curly braces 
+        and change the focus away from the translation field, the dialog box will 
+        update itself with areas for you to enter descriptions of the look-ups 
+        you have entered. This feature of RBManager allows future translators 
+        to understand the context of each look-up.</P>
+      <P><B>Editing the Resources</B></P>
+      <P>From the 'Groups' tab view, you can at any time edit the default values 
+        for a resource. As you enter in new resources they will appear in the 
+        group view as shown:</P>
+      <P><IMG SRC="../images/screenshots/basic_group.gif" WIDTH="750" HEIGHT="432"></P>
+      <P>Double clicking on a resource will bring a dialog box up similar to the 
+        one for creating a resource. Remember that it is only from this view that 
+        you will be able to change the resource in a way that will effect the 
+        entire bundle. Thus it is only in this view that you can change the resource's 
+        group, key name, and default translation and comment.</P>
+      <P><A HREF="step3.html">Back to Step 3</A> -or- <A HREF="step5.html">Forward 
+        to Step 5</A></P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="../images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>
