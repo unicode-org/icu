@@ -1,0 +1,12 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/vai_Latn_LR.xml
+// *
+// ***************************************************************************
+vai_Latn_LR{
+    MeasurementSystem:int{1}
+    Version{"2.0.57.98"}
+}

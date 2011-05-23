@@ -1,0 +1,64 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ga.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ga.xml
+ */
+ga{
+    Currencies{
+        AFN{
+            "AFN",
+            "Afgainí",
+        }
+        BRN{
+            "BRN",
+            "Cruzado Novo Brasaíleach",
+        }
+        BYB{
+            "BYB",
+            "Rúbal Nua Béalarúiseach (1994-1999)",
+        }
+        CSK{
+            "CSK",
+            "Koruna Crua na Seicslóvaice",
+        }
+        GEK{
+            "GEK",
+            "Kupon Larit na Grúise",
+        }
+        IQD{
+            "IQD",
+            "Dínear Irácach",
+        }
+        MZE{
+            "MZE",
+            "Escudo Mósaimbíce",
+        }
+        NIC{
+            "NIC",
+            "Cordoba Nicearagua",
+        }
+        ROL{
+            "ROL",
+            "Leu Rómánach",
+        }
+        UAH{
+            "UAH",
+            "Hryvnia Úcránach",
+        }
+        WST{
+            "WST",
+            "Tala Samó Thiar",
+        }
+        YUD{
+            "YUD",
+            "Dínear Crua Iúgslavach",
+        }
+    }
+    Version{"2.0.58.44"}
+}

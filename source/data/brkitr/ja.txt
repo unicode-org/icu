@@ -1,0 +1,15 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/xml/brkitr/ja.xml
+// *
+// ***************************************************************************
+ja{
+    Version{"1.1"}
+    boundaries{
+        line:process(dependency){"line_ja.brk"}
+        word:process(dependency){"word_ja.brk"}
+    }
+}
