@@ -16,9 +16,9 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.8 Release Candidate 1 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.8 ReadMe</h1>
 
-    <p>Last updated: 2011-May-12<br />
+    <p>Last updated: 2011-May-23<br />
      Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -219,7 +219,7 @@
     See the <a href="http://site.icu-project.org/download/48">ICU 4.8 download</a> page for details.</p>
 
     <h3>Unknown system time zone - Etc/Unknown</h3>
-    <p>The behavior of the time zone factory method TimeZone::createTimeZone(const UnicodeString&) has changed in this release.
+    <p>The behavior of the time zone factory method TimeZone::createTimeZone(const UnicodeString&amp;) has changed in this release.
     When an unknown time zone ID is specified in the method, previous versions return a TimeZone instance
     with ID "GMT" (offset 0 and no daylight saving time). In ICU 4.8, the method uses "Etc/Unknown" as the
     time zone ID (but still offset 0 and no daylight saving time) for the case. Existing software checking
