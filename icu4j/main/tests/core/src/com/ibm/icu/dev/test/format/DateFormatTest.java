@@ -643,6 +643,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestTimeZoneDisplayName() {
         Calendar cal = new GregorianCalendar();
         SimpleDateFormat testfmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        testfmt.setTimeZone(TimeZone.getTimeZone("Etc/GMT"));
 
         for (int i = 0; i < fallbackTests.length; ++i) {
             String[] info = fallbackTests[i];
