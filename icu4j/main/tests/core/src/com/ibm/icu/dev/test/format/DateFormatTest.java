@@ -1448,7 +1448,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "(IN)", "Asia/Calcutta" },
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "(IN)", "Asia/Calcutta" },
-        
+
+        // Ticket#8589 Partial location name to use country name if the zone is the golden
+        // zone for the time zone's country.
+        { "en_MX", "America/Chicago", "1995-07-15T00:00:00Z", "vvvv", "Central Time (United States)", "America/Chicago"},
     };
 
     /**
