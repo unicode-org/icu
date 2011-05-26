@@ -1,13 +1,13 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
 *
 *
-*  ucnv_io.c:
+*  ucnv_io.cpp:
 *  initializes global variables and defines functions pertaining to converter 
 *  name resolution aspect of the conversion code.
 *
@@ -198,8 +198,8 @@ static UConverterAlias gMainTable;
 #define GET_NORMALIZED_STRING(idx) (const char *)(gMainTable.normalizedStringTable + (idx))
 
 static UBool U_CALLCONV
-isAcceptable(void *context,
-             const char *type, const char *name,
+isAcceptable(void * /*context*/,
+             const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo) {
     return (UBool)(
         pInfo->size>=20 &&
@@ -327,7 +327,7 @@ haveAliasData(UErrorCode *pErrorCode) {
     return TRUE;
 }
 
-static U_INLINE UBool
+static inline UBool
 isAlias(const char *alias, UErrorCode *pErrorCode) {
     if(alias==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -559,7 +559,7 @@ ucnv_compareNames(const char *name1, const char *name2) {
  * search for an alias
  * return the converter number index for gConverterList
  */
-static U_INLINE uint32_t
+static inline uint32_t
 findConverter(const char *alias, UBool *containsOption, UErrorCode *pErrorCode) {
     uint32_t mid, start, limit;
     uint32_t lastMid;
@@ -628,7 +628,7 @@ findConverter(const char *alias, UBool *containsOption, UErrorCode *pErrorCode) 
  * Is this alias in this list?
  * alias and listOffset should be non-NULL.
  */
-static U_INLINE UBool
+static inline UBool
 isAliasInList(const char *alias, uint32_t listOffset) {
     if (listOffset) {
         uint32_t currAlias;
@@ -760,7 +760,7 @@ ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *p
 }
 
 static int32_t U_CALLCONV
-ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
     int32_t value = 0;
     UAliasContext *myContext = (UAliasContext *)(enumerator->context);
     uint32_t listOffset = myContext->listOffset;
@@ -774,7 +774,7 @@ ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
 static const char* U_CALLCONV
 ucnv_io_nextStandardAliases(UEnumeration *enumerator,
                             int32_t* resultLength,
-                            UErrorCode *pErrorCode)
+                            UErrorCode * /*pErrorCode*/)
 {
     UAliasContext *myContext = (UAliasContext *)(enumerator->context);
     uint32_t listOffset = myContext->listOffset;
@@ -799,7 +799,7 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
 }
 
 static void U_CALLCONV
-ucnv_io_resetStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+ucnv_io_resetStandardAliases(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
     ((UAliasContext *)(enumerator->context))->listIdx = 0;
 }
 
@@ -835,13 +835,13 @@ ucnv_openStandardNames(const char *convName,
         if (listOffset < gMainTable.taggedAliasListsSize) {
             UAliasContext *myContext;
 
-            myEnum = uprv_malloc(sizeof(UEnumeration));
+            myEnum = reinterpret_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration)));
             if (myEnum == NULL) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
             uprv_memcpy(myEnum, &gEnumAliases, sizeof(UEnumeration));
-            myContext = uprv_malloc(sizeof(UAliasContext));
+            myContext = reinterpret_cast<UAliasContext *>(uprv_malloc(sizeof(UAliasContext)));
             if (myContext == NULL) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 uprv_free(myEnum);
@@ -1006,14 +1006,14 @@ ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErro
 }
 
 static int32_t U_CALLCONV
-ucnv_io_countAllConverters(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+ucnv_io_countAllConverters(UEnumeration * /*enumerator*/, UErrorCode * /*pErrorCode*/) {
     return gMainTable.converterListSize;
 }
 
 static const char* U_CALLCONV
 ucnv_io_nextAllConverters(UEnumeration *enumerator,
                             int32_t* resultLength,
-                            UErrorCode *pErrorCode)
+                            UErrorCode * /*pErrorCode*/)
 {
     uint16_t *myContext = (uint16_t *)(enumerator->context);
 
@@ -1032,7 +1032,7 @@ ucnv_io_nextAllConverters(UEnumeration *enumerator,
 }
 
 static void U_CALLCONV
-ucnv_io_resetAllConverters(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+ucnv_io_resetAllConverters(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
     *((uint16_t *)(enumerator->context)) = 0;
 }
 
@@ -1052,13 +1052,13 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
         uint16_t *myContext;
 
-        myEnum = uprv_malloc(sizeof(UEnumeration));
+        myEnum = reinterpret_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration)));
         if (myEnum == NULL) {
             *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
         uprv_memcpy(myEnum, &gEnumAllConverters, sizeof(UEnumeration));
-        myContext = uprv_malloc(sizeof(uint16_t));
+        myContext = reinterpret_cast<uint16_t *>(uprv_malloc(sizeof(uint16_t)));
         if (myContext == NULL) {
             *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(myEnum);

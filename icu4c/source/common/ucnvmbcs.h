@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -397,6 +397,41 @@ typedef struct UConverterMBCSTable {
     const int32_t *extIndexes;
 } UConverterMBCSTable;
 
+#define UCNV_MBCS_TABLE_INITIALIZER { \
+    /* toUnicode */ \
+    0, 0, 0, \
+    0, \
+     \
+    NULL, \
+    NULL, \
+    NULL, \
+    NULL, \
+     \
+    /* fromUnicode */ \
+    NULL, \
+    NULL, \
+    { 0 }, \
+    NULL, \
+    NULL, \
+    0, \
+    0, 0, \
+    FALSE, \
+    0, \
+     \
+    /* roundtrips */ \
+    0, \
+     \
+    /* reconstituted data that was omitted from the .cnv file */ \
+    NULL, \
+     \
+    /* converter name for swaplfnl */ \
+    NULL, \
+     \
+    /* extension data */ \
+    NULL, \
+    NULL \
+}
+
 enum {
     MBCS_OPT_LENGTH_MASK=0x3f,
     MBCS_OPT_NO_FROM_U=0x40,
@@ -436,6 +471,8 @@ typedef struct {
     /* new and optional in version 5; used if options&MBCS_OPT_NO_FROM_U */
     uint32_t fullStage2Length;  /* number of 32-bit units */
 } _MBCSHeader;
+
+#define UCNV_MBCS_HEADER_INITIALIZER { { 0 },  0, 0, 0, 0, 0, 0, 0,  0,  0 }
 
 /*
  * This is a simple version of _MBCSGetNextUChar() that is used

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -3479,7 +3479,7 @@ static void TestDefaultName(void) {
 
 /* Test that ucnv_compareNames() matches names according to spec. ----------- */
 
-static U_INLINE int
+static int
 sign(int n) {
     if(n==0) {
         return 0;

@@ -1,12 +1,12 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
 *
-* File ustrtrns.c
+* File ustrtrns.cpp
 *
 * Modification History:
 *
@@ -945,7 +945,7 @@ u_strFromUTF8Lenient(UChar *dest,
     return dest;
 }
 
-static U_INLINE uint8_t *
+static inline uint8_t *
 _appendUTF8(uint8_t *pDest, UChar32 c) {
     /* it is 0<=c<=0x10ffff and not a surrogate if called by a validating function */
     if((c)<=0x7f) {

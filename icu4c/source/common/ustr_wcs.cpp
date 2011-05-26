@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ustr_wcs.c
+*   file name:  ustr_wcs.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -31,7 +31,7 @@
 #define _BUFFER_CAPACITY_MULTIPLIER 2
 
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
-static U_INLINE UBool 
+static inline UBool 
 u_growAnyBufferFromStatic(void *context,
                        void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length, int32_t size) {

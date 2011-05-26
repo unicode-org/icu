@@ -236,7 +236,7 @@
     <ClCompile Include="ubidi_props.c" />
     <ClCompile Include="ubidiln.c" />
     <ClCompile Include="ubidiwrt.c" />
-    <ClCompile Include="ushape.c" />
+    <ClCompile Include="ushape.cpp" />
     <ClCompile Include="brkeng.cpp" />
     <ClCompile Include="brkiter.cpp" />
     <ClCompile Include="dictbe.cpp" />
@@ -264,9 +264,9 @@
     <ClCompile Include="ulist.c" />
     <ClCompile Include="ustack.cpp" />
     <ClCompile Include="ustrenum.cpp" />
-    <ClCompile Include="utrie.c" />
+    <ClCompile Include="utrie.cpp" />
     <ClCompile Include="utrie2.cpp" />
-    <ClCompile Include="utrie2_builder.c" />
+    <ClCompile Include="utrie2_builder.cpp" />
     <ClCompile Include="uvector.cpp" />
     <ClCompile Include="uvectr32.cpp" />
     <ClCompile Include="uvectr64.cpp" />
@@ -279,7 +279,7 @@
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="mutex.cpp" />
-    <ClCompile Include="putil.c">
+    <ClCompile Include="putil.cpp">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
@@ -301,21 +301,21 @@
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="ucnv.c" />
-    <ClCompile Include="ucnv2022.c" />
-    <ClCompile Include="ucnv_bld.c" />
+    <ClCompile Include="ucnv2022.cpp" />
+    <ClCompile Include="ucnv_bld.cpp" />
     <ClCompile Include="ucnv_cb.c" />
     <ClCompile Include="ucnv_cnv.c" />
     <ClCompile Include="ucnv_ct.c" />
     <ClCompile Include="ucnv_err.c" />
-    <ClCompile Include="ucnv_ext.c" />
-    <ClCompile Include="ucnv_io.c" />
+    <ClCompile Include="ucnv_ext.cpp" />
+    <ClCompile Include="ucnv_io.cpp" />
     <ClCompile Include="ucnv_lmb.c" />
     <ClCompile Include="ucnv_set.c" />
     <ClCompile Include="ucnv_u16.c" />
     <ClCompile Include="ucnv_u32.c" />
     <ClCompile Include="ucnv_u7.c" />
     <ClCompile Include="ucnv_u8.c" />
-    <ClCompile Include="ucnvbocu.c" />
+    <ClCompile Include="ucnvbocu.cpp" />
     <ClCompile Include="ucnvdisp.c" />
     <ClCompile Include="ucnvhz.c" />
     <ClCompile Include="ucnvisci.c" />
@@ -347,7 +347,7 @@
     <ClCompile Include="ustrfmt.c" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="util_props.cpp" />
-    <ClCompile Include="punycode.c" />
+    <ClCompile Include="punycode.cpp" />
     <ClCompile Include="uidna.cpp" />
     <ClCompile Include="uts46.cpp" />
     <ClCompile Include="locavailable.cpp" />
@@ -360,10 +360,10 @@
     <ClCompile Include="resbund.cpp" />
     <ClCompile Include="resbund_cnv.cpp" />
     <ClCompile Include="ucat.c" />
-    <ClCompile Include="uloc.c" />
+    <ClCompile Include="uloc.cpp" />
     <ClCompile Include="uloc_tag.c" />
     <ClCompile Include="ures_cnv.c" />
-    <ClCompile Include="uresbund.c" />
+    <ClCompile Include="uresbund.cpp" />
     <ClCompile Include="uresdata.c" />
     <ClCompile Include="caniter.cpp" />
     <ClCompile Include="filterednormalizer2.cpp" />
@@ -377,9 +377,9 @@
     <ClCompile Include="patternprops.cpp" />
     <ClCompile Include="propname.cpp" />
     <ClCompile Include="ruleiter.cpp" />
-    <ClCompile Include="ucase.c" />
+    <ClCompile Include="ucase.cpp" />
     <ClCompile Include="uchar.c" />
-    <ClCompile Include="unames.c" />
+    <ClCompile Include="unames.cpp" />
     <ClCompile Include="unifilt.cpp" />
     <ClCompile Include="unifunct.cpp" />
     <ClCompile Include="uniset.cpp" />
@@ -413,7 +413,7 @@
     <ClCompile Include="schriter.cpp" />
     <ClCompile Include="stringpiece.cpp" />
     <ClCompile Include="stringtriebuilder.cpp" />
-    <ClCompile Include="ucasemap.c" />
+    <ClCompile Include="ucasemap.cpp" />
     <ClCompile Include="ucharstrie.cpp" />
     <ClCompile Include="ucharstriebuilder.cpp" />
     <ClCompile Include="ucharstrieiterator.cpp" />
@@ -425,10 +425,10 @@
     <ClCompile Include="unistr_cnv.cpp" />
     <ClCompile Include="unistr_props.cpp" />
     <ClCompile Include="ustr_cnv.c" />
-    <ClCompile Include="ustr_wcs.c" />
-    <ClCompile Include="ustrcase.c" />
-    <ClCompile Include="ustring.c" />
-    <ClCompile Include="ustrtrns.c" />
+    <ClCompile Include="ustr_wcs.cpp" />
+    <ClCompile Include="ustrcase.cpp" />
+    <ClCompile Include="ustring.cpp" />
+    <ClCompile Include="ustrtrns.cpp" />
     <ClCompile Include="utext.cpp" />
     <ClCompile Include="utf_impl.c" />
   </ItemGroup>

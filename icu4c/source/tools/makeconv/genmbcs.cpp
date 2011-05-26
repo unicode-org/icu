@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genmbcs.c
+*   file name:  genmbcs.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -102,12 +102,12 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
 
 /* helper ------------------------------------------------------------------- */
 
-static U_INLINE char
+static inline char
 hexDigit(uint8_t digit) {
     return digit<=9 ? (char)('0'+digit) : (char)('a'-10+digit);
 }
 
-static U_INLINE char *
+static inline char *
 printBytes(char *buffer, const uint8_t *bytes, int32_t length) {
     char *s=buffer;
     while(length>0) {
@@ -555,7 +555,7 @@ MBCSIsValid(NewConverter *cnvData,
 
 static UBool
 MBCSSingleAddFromUnicode(MBCSData *mbcsData,
-                         const uint8_t *bytes, int32_t length,
+                         const uint8_t *bytes, int32_t /*length*/,
                          UChar32 c,
                          int8_t flag) {
     uint16_t *stage3, *p;
@@ -1322,7 +1322,7 @@ compactStage2(MBCSData *mbcsData) {
 }
 
 static void
-MBCSPostprocess(MBCSData *mbcsData, const UConverterStaticData *staticData) {
+MBCSPostprocess(MBCSData *mbcsData, const UConverterStaticData * /*staticData*/) {
     UCMStates *states;
     int32_t maxCharLength, stage3Width;
 
@@ -1408,7 +1408,7 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     int32_t i, stage1Top;
     uint32_t headerLength;
 
-    _MBCSHeader header={ { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0 };
+    _MBCSHeader header=UCNV_MBCS_HEADER_INITIALIZER;
 
     stage2Length=mbcsData->stage2Top;
     if(mbcsData->omitFromU) {

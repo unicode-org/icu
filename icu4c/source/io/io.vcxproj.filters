@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="locbund.c">
+    <ClCompile Include="locbund.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sprintf.c">

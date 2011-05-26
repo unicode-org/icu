@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -27,14 +27,14 @@ static void ustr_resize(struct UString *s, int32_t len, UErrorCode *status);
 /* Macros */
 #define ALLOCATION(minSize) (minSize < 0x80 ? 0x80 : (2 * minSize + 0x80) & ~(0x80 - 1))
 
-void
+U_CFUNC void
 ustr_init(struct UString *s)
 {
     s->fChars = 0;
     s->fLength = s->fCapacity = 0;
 }
 
-void
+U_CFUNC void
 ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode *status)
 {
     int i = 0;
@@ -65,7 +65,7 @@ ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode
     }
 }
 
-void
+U_CFUNC void
 ustr_deinit(struct UString *s)
 {
     if (s) {
@@ -75,7 +75,7 @@ ustr_deinit(struct UString *s)
     }
 }
 
-void
+U_CFUNC void
 ustr_cpy(struct UString *dst,
      const struct UString *src,
      UErrorCode *status)
@@ -96,7 +96,7 @@ ustr_cpy(struct UString *dst,
     dst->fChars[dst->fLength] = 0x0000;
 }
 
-void
+U_CFUNC void
 ustr_setlen(struct UString *s,
         int32_t len,
         UErrorCode *status)
@@ -114,7 +114,7 @@ ustr_setlen(struct UString *s,
     s->fChars[len] = 0x0000;
 }
 
-void
+U_CFUNC void
 ustr_cat(struct UString *dst,
      const struct UString *src,
      UErrorCode *status)
@@ -122,7 +122,7 @@ ustr_cat(struct UString *dst,
     ustr_ncat(dst, src, src->fLength, status);
 }
 
-void
+U_CFUNC void
 ustr_ncat(struct UString *dst,
       const struct UString *src,
       int32_t n,
@@ -143,7 +143,7 @@ ustr_ncat(struct UString *dst,
     dst->fChars[dst->fLength] = 0x0000;
 }
 
-void
+U_CFUNC void
 ustr_ucat(struct UString *dst,
       UChar c,
       UErrorCode *status)
@@ -162,7 +162,7 @@ ustr_ucat(struct UString *dst,
     dst->fLength += 1;
     dst->fChars[dst->fLength] = 0x0000;
 }
-void 
+U_CFUNC void 
 ustr_u32cat(struct UString *dst, UChar32 c, UErrorCode *status){
     if(c > 0x10FFFF){
         *status = U_ILLEGAL_CHAR_FOUND;
@@ -175,7 +175,7 @@ ustr_u32cat(struct UString *dst, UChar32 c, UErrorCode *status){
         ustr_ucat(dst, (UChar) c, status);
     }
 }
-void
+U_CFUNC void
 ustr_uscat(struct UString *dst,
       const UChar* src,int len,
       UErrorCode *status)

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,7 +20,7 @@
 #include "cstring.h"
 #include "errmsg.h"
 
-void error(uint32_t linenumber, const char *msg, ...)
+U_CFUNC void error(uint32_t linenumber, const char *msg, ...)
 {
     va_list va;
 
@@ -33,30 +33,30 @@ void error(uint32_t linenumber, const char *msg, ...)
 
 static UBool gShowWarning = TRUE;
 
-void setShowWarning(UBool val)
+U_CFUNC void setShowWarning(UBool val)
 {
     gShowWarning = val;
 }
 
-UBool getShowWarning(){
+U_CFUNC UBool getShowWarning(){
     return gShowWarning;
 }
 
 static UBool gStrict =FALSE;
-UBool isStrict(){
+U_CFUNC UBool isStrict(){
     return gStrict;
 }
-void setStrict(UBool val){
+U_CFUNC void setStrict(UBool val){
     gStrict = val;
 }
 static UBool gVerbose =FALSE;
-UBool isVerbose(){
+U_CFUNC UBool isVerbose(){
     return gVerbose;
 }
-void setVerbose(UBool val){
+U_CFUNC void setVerbose(UBool val){
     gVerbose = val;
 }
-void warning(uint32_t linenumber, const char *msg, ...)
+U_CFUNC void warning(uint32_t linenumber, const char *msg, ...)
 {
     if (gShowWarning)
     {
@@ -69,4 +69,3 @@ void warning(uint32_t linenumber, const char *msg, ...)
         va_end(va);
     }
 }
-

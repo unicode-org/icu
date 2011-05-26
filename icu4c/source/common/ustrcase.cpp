@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ustrcase.c
+*   file name:  ustrcase.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -27,10 +27,12 @@
 #include "ucase.h"
 #include "ustr_imp.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 /* string casing ------------------------------------------------------------ */
 
 /* append a full case mapping result, see UCASE_MAX_STRING_LENGTH */
-static U_INLINE int32_t
+static inline int32_t
 appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
              int32_t result, const UChar *s) {
     UChar32 c;
@@ -154,7 +156,7 @@ _caseMap(const UCaseMap *csm, UCaseMapFull *map,
 }
 
 static void
-setTempCaseMapLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) {
+setTempCaseMapLocale(UCaseMap *csm, const char *locale, UErrorCode * /*pErrorCode*/) {
     /*
      * We could call ucasemap_setLocale(), but here we really only care about
      * the initial language subtag, we need not return the real string via
@@ -188,7 +190,7 @@ setTempCaseMapLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) 
  * Set parameters on an empty UCaseMap, for UCaseMap-less API functions.
  * Do this fast because it is called with every function call.
  */
-static U_INLINE void
+static inline void
 setTempCaseMap(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) {
     if(csm->csp==NULL) {
         csm->csp=ucase_getSingleton();
@@ -346,8 +348,8 @@ ustr_toLower(const UCaseProps *csp,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
-    UCaseContext csc={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
+    UCaseContext csc=UCASECONTEXT_INITIALIZER;
 
     csm.csp=csp;
     setTempCaseMap(&csm, locale, pErrorCode);
@@ -366,8 +368,8 @@ ustr_toUpper(const UCaseProps *csp,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
-    UCaseContext csc={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
+    UCaseContext csc=UCASECONTEXT_INITIALIZER;
 
     csm.csp=csp;
     setTempCaseMap(&csm, locale, pErrorCode);
@@ -389,8 +391,8 @@ ustr_toTitle(const UCaseProps *csp,
              UBreakIterator *titleIter,
              const char *locale, uint32_t options,
              UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
-    UCaseContext csc={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
+    UCaseContext csc=UCASECONTEXT_INITIALIZER;
     int32_t length;
 
     csm.csp=csp;
@@ -484,7 +486,7 @@ caseMap(const UCaseMap *csm,
          (dest>=src && dest<(src+srcLength)))
     ) {
         /* overlap: provide a temporary destination buffer and later copy the result */
-        if(destCapacity<=(sizeof(buffer)/U_SIZEOF_UCHAR)) {
+        if(destCapacity<=LENGTHOF(buffer)) {
             /* the stack buffer is large enough */
             temp=buffer;
         } else {
@@ -505,7 +507,7 @@ caseMap(const UCaseMap *csm,
         destLength=ustr_foldCase(csm->csp, temp, destCapacity, src, srcLength,
                                  csm->options, pErrorCode);
     } else {
-        UCaseContext csc={ NULL };
+        UCaseContext csc=UCASECONTEXT_INITIALIZER;
 
         csc.p=(void *)src;
         csc.limit=srcLength;
@@ -556,7 +558,7 @@ u_strToLower(UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
     setTempCaseMap(&csm, locale, pErrorCode);
     return caseMap(&csm,
                    dest, destCapacity,
@@ -569,7 +571,7 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
     setTempCaseMap(&csm, locale, pErrorCode);
     return caseMap(&csm,
                    dest, destCapacity,
@@ -585,7 +587,7 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
              UBreakIterator *titleIter,
              const char *locale,
              UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
     int32_t length;
 
     csm.iter=titleIter;
@@ -618,7 +620,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
               uint32_t options,
               UErrorCode *pErrorCode) {
-    UCaseMap csm={ NULL };
+    UCaseMap csm=UCASEMAP_INITIALIZER;
     csm.csp=ucase_getSingleton();
     csm.options=options;
     return caseMap(&csm,

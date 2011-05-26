@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -28,13 +28,13 @@
 
 /* prototypes ------------------------------------------------------------- */
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static const char DATA_NAME[] = "unames";
 static const char DATA_TYPE[] = "icu";
 
 #define GROUP_SHIFT 5
-#define LINES_PER_GROUP (1UL<<GROUP_SHIFT)
+#define LINES_PER_GROUP (1L<<GROUP_SHIFT)
 #define GROUP_MASK (LINES_PER_GROUP-1)
 
 /*
@@ -171,8 +171,8 @@ static UBool U_CALLCONV unames_cleanup(void)
 }
 
 static UBool U_CALLCONV
-isAcceptable(void *context,
-             const char *type, const char *name,
+isAcceptable(void * /*context*/,
+             const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo) {
     return (UBool)(
         pInfo->size>=20 &&
@@ -1433,7 +1433,7 @@ calcNameSetsLengths(UErrorCode *pErrorCode) {
     }
 
     /* set hex digits, used in various names, and <>-, used in extended names */
-    for(i=0; i<sizeof(extChars)-1; ++i) {
+    for(i=0; i<(int32_t)sizeof(extChars)-1; ++i) {
         SET_ADD(gNameSet, extChars[i]);
     }
 

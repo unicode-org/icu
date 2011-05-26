@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ucase.c
+*   file name:  ucase.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -52,7 +52,7 @@ ucase_getSingleton() {
 /* set of property starts for UnicodeSet ------------------------------------ */
 
 static UBool U_CALLCONV
-_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uint32_t /*value*/) {
     /* add the start code point to the USet */
     const USetAdder *sa=(const USetAdder *)context;
     sa->add(sa->set, start);
@@ -308,7 +308,7 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
  * compare s, which has a length, with t, which has a maximum length or is NUL-terminated
  * must be length>0 and max>0 and length<=max
  */
-static U_INLINE int32_t
+static inline int32_t
 strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
     int32_t c1, c2;
 
@@ -415,7 +415,7 @@ ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c) {
 }
 
 /** @return UCASE_NO_DOT, UCASE_SOFT_DOTTED, UCASE_ABOVE, UCASE_OTHER_ACCENT */
-static U_INLINE int32_t
+static inline int32_t
 getDotType(const UCaseProps *csp, UChar32 c) {
     uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {

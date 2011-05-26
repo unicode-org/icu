@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006s, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -41,7 +41,7 @@ typedef struct ULocaleBundle {
  * @param loc The locale of the ULocaleBundle.
  * @return A pointer to a ULocaleBundle, or 0 if <TT>loc</TT> was invalid.
  */
-ULocaleBundle* 
+U_CAPI ULocaleBundle *
 u_locbund_init(ULocaleBundle *result, const char *loc);
 
 /**
@@ -49,7 +49,7 @@ u_locbund_init(ULocaleBundle *result, const char *loc);
  * @param loc The locale of the ULocaleBundle.
  * @return A pointer to a ULocaleBundle, or 0 if <TT>loc</TT> was invalid.
  */
-/*ULocaleBundle*
+/*U_CAPI  ULocaleBundle *
 u_locbund_new(const char *loc);*/
 
 /**
@@ -57,14 +57,14 @@ u_locbund_new(const char *loc);*/
  * @param bundle The ULocaleBundle to clone.
  * @return A new ULocaleBundle.
  */
-/*ULocaleBundle*
+/*U_CAPI ULocaleBundle *
 u_locbund_clone(const ULocaleBundle *bundle);*/
 
 /**
  * Delete the specified ULocaleBundle, freeing all associated memory.
  * @param bundle The ULocaleBundle to delete
  */
-void
+U_CAPI void
 u_locbund_close(ULocaleBundle *bundle);
 
 /**
@@ -72,7 +72,7 @@ u_locbund_close(ULocaleBundle *bundle);
  * @param bundle The ULocaleBundle to use
  * @return A pointer to the NumberFormat used for number formatting and parsing.
  */
-UNumberFormat*        
+U_CAPI UNumberFormat *
 u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

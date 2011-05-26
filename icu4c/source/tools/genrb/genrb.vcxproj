@@ -240,7 +240,7 @@
   <ItemGroup>
     <ClCompile Include="errmsg.c" />
     <ClCompile Include="genrb.c" />
-    <ClCompile Include="parse.c" />
+    <ClCompile Include="parse.cpp" />
     <ClCompile Include="prscmnts.cpp" />
     <ClCompile Include="rbutil.c" />
     <ClCompile Include="read.c" />

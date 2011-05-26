@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -243,16 +243,8 @@ typedef unsigned int uint32_t;
 #define U_IMPORT
 
 /*===========================================================================*/
-/* Code alignment and C function inlining                                    */
+/* Code alignment                                                            */
 /*===========================================================================*/
-
-#ifndef U_INLINE
-#   ifdef __cplusplus
-#       define U_INLINE inline
-#   else
-#       define U_INLINE __inline
-#   endif
-#endif
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define U_ALIGN_CODE(val)    __asm      align val

@@ -626,7 +626,7 @@ typedef struct {
 } KeywordStruct;
 
 static int32_t U_CALLCONV
-compareKeywordStructs(const void *context, const void *left, const void *right) {
+compareKeywordStructs(const void * /*context*/, const void *left, const void *right) {
     const char* leftString = ((const KeywordStruct *)left)->keyword;
     const char* rightString = ((const KeywordStruct *)right)->keyword;
     return uprv_strcmp(leftString, rightString);
@@ -1163,7 +1163,7 @@ static int16_t _findIndex(const char* const* list, const char* key)
 }
 
 /* count the length of src while copying it to dest; return strlen(src) */
-static U_INLINE int32_t
+static inline int32_t
 _copyCount(char *dest, int32_t destCapacity, const char *src) {
     const char *anchor;
     char c;
@@ -1468,7 +1468,7 @@ uloc_kw_closeKeywords(UEnumeration *enumerator) {
 }
 
 static int32_t U_CALLCONV
-uloc_kw_countKeywords(UEnumeration *en, UErrorCode *status) {
+uloc_kw_countKeywords(UEnumeration *en, UErrorCode * /*status*/) {
     char *kw = ((UKeywordsContext *)en->context)->keywords;
     int32_t result = 0;
     while(*kw) {
@@ -1481,7 +1481,7 @@ uloc_kw_countKeywords(UEnumeration *en, UErrorCode *status) {
 static const char* U_CALLCONV 
 uloc_kw_nextKeyword(UEnumeration* en,
                     int32_t* resultLength,
-                    UErrorCode* status) {
+                    UErrorCode* /*status*/) {
     const char* result = ((UKeywordsContext *)en->context)->current;
     int32_t len = 0;
     if(*result) {
@@ -1498,7 +1498,7 @@ uloc_kw_nextKeyword(UEnumeration* en,
 
 static void U_CALLCONV 
 uloc_kw_resetKeywords(UEnumeration* en, 
-                      UErrorCode* status) {
+                      UErrorCode* /*status*/) {
     ((UKeywordsContext *)en->context)->current = ((UKeywordsContext *)en->context)->keywords;
 }
 
@@ -1528,7 +1528,7 @@ uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCod
         return NULL;
     }
     uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
-    myContext = uprv_malloc(sizeof(UKeywordsContext));
+    myContext = reinterpret_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext)));
     if (myContext == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(result);
@@ -1649,9 +1649,9 @@ _canonicalize(const char* localeID,
     /* if we are doing a full canonicalization, then put results in
        localeBuffer, if necessary; otherwise send them to result. */
     if (/*OPTION_SET(options, _ULOC_CANONICALIZE) &&*/
-        (result == NULL || resultCapacity <  sizeof(localeBuffer))) {
+        (result == NULL || resultCapacity < (int32_t)sizeof(localeBuffer))) {
         name = localeBuffer;
-        nameCapacity = sizeof(localeBuffer);
+        nameCapacity = (int32_t)sizeof(localeBuffer);
     } else {
         name = result;
         nameCapacity = resultCapacity;
@@ -2216,7 +2216,7 @@ typedef struct {
 } _acceptLangItem;
 
 static int32_t U_CALLCONV
-uloc_acceptLanguageCompare(const void *context, const void *a, const void *b)
+uloc_acceptLanguageCompare(const void * /*context*/, const void *a, const void *b)
 {
     const _acceptLangItem *aa = (const _acceptLangItem*)a;
     const _acceptLangItem *bb = (const _acceptLangItem*)b;
@@ -2330,7 +2330,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         }
         if(n>=jSize) {
             if(j==smallBuffer) {  /* overflowed the small buffer. */
-                j = uprv_malloc(sizeof(j[0])*(jSize*2));
+                j = reinterpret_cast<_acceptLangItem *>(uprv_malloc(sizeof(j[0])*(jSize*2)));
                 if(j!=NULL) {
                     uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
                 }
@@ -2338,7 +2338,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
                 fprintf(stderr,"malloced at size %d\n", jSize);
 #endif
             } else {
-                j = uprv_realloc(j, sizeof(j[0])*jSize*2);
+                j = reinterpret_cast<_acceptLangItem *>(uprv_realloc(j, sizeof(j[0])*jSize*2));
 #if defined(ULOC_DEBUG)
                 fprintf(stderr,"re-alloced at size %d\n", jSize);
 #endif
@@ -2360,7 +2360,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         }
         return -1;
     }
-    strs = uprv_malloc((size_t)(sizeof(strs[0])*n));
+    strs = reinterpret_cast<char **>(uprv_malloc((size_t)(sizeof(strs[0])*n)));
     /* Check for null pointer */
     if (strs == NULL) {
         uprv_free(j); /* Free to avoid memory leak */
@@ -2405,7 +2405,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    fallbackList = uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount));
+    fallbackList = reinterpret_cast<char **>(uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount)));
     if(fallbackList==NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return -1;
