@@ -534,9 +534,17 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
             return name;
         }
         String location = null;
-        String countryCode = ZoneMeta.getSingleCountry(tzID);
+        String countryCode = ZoneMeta.getCanonicalCountry(tzID);
         if (countryCode != null) {
-            location = getLocaleDisplayNames().regionDisplayName(countryCode);
+            // Is this the golden zone for the region?
+            String regionalGolden = _tznames.getReferenceZoneID(mzID, countryCode);
+            if (tzID.equals(regionalGolden)) {
+                // Use country name
+                location = getLocaleDisplayNames().regionDisplayName(countryCode);
+            } else {
+                // Otherwise, use exemplar city name
+                location = _tznames.getExemplarLocationName(tzID);
+            }
         } else {
             location = _tznames.getExemplarLocationName(tzID);
             if (location == null) {
