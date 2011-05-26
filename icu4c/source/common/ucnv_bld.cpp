@@ -1,11 +1,11 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2010, International Business Machines Corporation and
+ * Copyright (c) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
- *  uconv_bld.c:
+ *  uconv_bld.cpp:
  *
  *  Defines functions that are used in the creation/initialization/deletion
  *  of converters and related structures.
@@ -220,8 +220,8 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
 }
 
 static UBool U_CALLCONV
-isCnvAcceptable(void *context,
-                const char *type, const char *name,
+isCnvAcceptable(void * /*context*/,
+                const char * /*type*/, const char * /*name*/,
                 const UDataInfo *pInfo) {
     return (UBool)(
         pInfo->size>=20 &&
@@ -574,7 +574,7 @@ ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err) {
  * It must be sharedData->referenceCounter != ~0
  * and this function must be called inside umtx_lock(&cnvCacheMutex).
  */
-void
+U_CAPI void
 ucnv_unload(UConverterSharedData *sharedData) {
     if(sharedData != NULL) {
         if (sharedData->referenceCounter > 0) {
@@ -587,7 +587,7 @@ ucnv_unload(UConverterSharedData *sharedData) {
     }
 }
 
-void
+U_CFUNC void
 ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
 {
     /*
@@ -595,14 +595,14 @@ ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
     in multithreaded applications because the value never changes.
     Don't check referenceCounter for any other value.
     */
-    if(sharedData != NULL && sharedData->referenceCounter != ~0) {
+    if(sharedData != NULL && sharedData->referenceCounter != (uint32_t)~0) {
         umtx_lock(&cnvCacheMutex);
         ucnv_unload(sharedData);
         umtx_unlock(&cnvCacheMutex);
     }
 }
 
-void
+U_CFUNC void
 ucnv_incrementRefCount(UConverterSharedData *sharedData)
 {
     /*
@@ -610,7 +610,7 @@ ucnv_incrementRefCount(UConverterSharedData *sharedData)
     in multithreaded applications because the value never changes.
     Don't check referenceCounter for any other value.
     */
-    if(sharedData != NULL && sharedData->referenceCounter != ~0) {
+    if(sharedData != NULL && sharedData->referenceCounter != (uint32_t)~0) {
         umtx_lock(&cnvCacheMutex);
         sharedData->referenceCounter++;
         umtx_unlock(&cnvCacheMutex);
@@ -710,7 +710,7 @@ parseConverterOptions(const char *inName,
  * -Call dataConverter initializer (Data=TRUE, Cached=TRUE)
  * -Call AlgorithmicConverter initializer (Data=FALSE, Cached=TRUE)
  */
-UConverterSharedData *
+U_CFUNC UConverterSharedData *
 ucnv_loadSharedData(const char *converterName,
                     UConverterNamePieces *pPieces,
                     UConverterLoadArgs *pArgs,
@@ -824,11 +824,11 @@ ucnv_loadSharedData(const char *converterName,
     return mySharedConverterData;
 }
 
-UConverter *
+U_CAPI UConverter *
 ucnv_createConverter(UConverter *myUConverter, const char *converterName, UErrorCode * err)
 {
     UConverterNamePieces stackPieces;
-    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
+    UConverterLoadArgs stackArgs=UCNV_LOAD_ARGS_INITIALIZER;
     UConverterSharedData *mySharedConverterData;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
@@ -858,7 +858,7 @@ U_CFUNC UBool
 ucnv_canCreateConverter(const char *converterName, UErrorCode *err) {
     UConverter myUConverter;
     UConverterNamePieces stackPieces;
-    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
+    UConverterLoadArgs stackArgs=UCNV_LOAD_ARGS_INITIALIZER;
     UConverterSharedData *mySharedConverterData;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
@@ -886,7 +886,7 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 UErrorCode *err) {
     UConverter *cnv;
     const UConverterSharedData *sharedData;
-    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
+    UConverterLoadArgs stackArgs=UCNV_LOAD_ARGS_INITIALIZER;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN_ALGORITHMIC);
     UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open algorithmic converter type %d", (int32_t)type);
@@ -903,7 +903,7 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
     in multithreaded applications because the value never changes.
     Don't check referenceCounter for any other value.
     */
-    if(sharedData == NULL || sharedData->referenceCounter != ~0) {
+    if(sharedData == NULL || sharedData->referenceCounter != (uint32_t)~0) {
         /* not a valid type, or not an algorithmic converter */
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         UTRACE_EXIT_STATUS(U_ILLEGAL_ARGUMENT_ERROR);
@@ -921,13 +921,13 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
     return cnv;
 }
 
-UConverter*
+U_CFUNC UConverter*
 ucnv_createConverterFromPackage(const char *packageName, const char *converterName, UErrorCode * err)
 {
     UConverter *myUConverter;
     UConverterSharedData *mySharedConverterData;
     UConverterNamePieces stackPieces;
-    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
+    UConverterLoadArgs stackArgs=UCNV_LOAD_ARGS_INITIALIZER;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN_PACKAGE);
 
@@ -973,7 +973,7 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
 }
 
 
-UConverter*
+U_CFUNC UConverter*
 ucnv_createConverterFromSharedData(UConverter *myUConverter,
                                    UConverterSharedData *mySharedConverterData,
                                    UConverterLoadArgs *pArgs,
@@ -1194,10 +1194,10 @@ would be the same type of default converter for a successive string.
 Since the name is a returned via ucnv_getDefaultName without copying,
 you shouldn't be modifying or deleting the string from a separate thread.
 */
-static U_INLINE void
+static inline void
 internalSetName(const char *name, UErrorCode *status) {
     UConverterNamePieces stackPieces;
-    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
+    UConverterLoadArgs stackArgs=UCNV_LOAD_ARGS_INITIALIZER;
     int32_t length=(int32_t)(uprv_strlen(name));
     UBool containsOption = (UBool)(uprv_strchr(name, UCNV_OPTION_SEP_CHAR) != NULL);
     const UConverterSharedData *algorithmicSharedData;
@@ -1396,7 +1396,7 @@ ucnv_swap(const UDataSwapper *ds,
         staticDataSize=ds->readUInt32(inStaticData->structSize);
     } else {
         length-=headerSize;
-        if( length<sizeof(UConverterStaticData) ||
+        if( length<(int32_t)sizeof(UConverterStaticData) ||
             (uint32_t)length<(staticDataSize=ds->readUInt32(inStaticData->structSize))
         ) {
             udata_printError(ds, "ucnv_swap(): too few bytes (%d after header) for an ICU .cnv conversion table\n",
@@ -1437,7 +1437,7 @@ ucnv_swap(const UDataSwapper *ds,
         inMBCSHeader=(const _MBCSHeader *)inBytes;
         outMBCSHeader=(_MBCSHeader *)outBytes;
 
-        if(0<=length && length<sizeof(_MBCSHeader)) {
+        if(0<=length && length<(int32_t)sizeof(_MBCSHeader)) {
             udata_printError(ds, "ucnv_swap(): too few bytes (%d after headers) for an ICU MBCS .cnv conversion table\n",
                                 length);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;

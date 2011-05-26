@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2003-2009, International Business Machines
+*   Copyright (C) 2003-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  ucnv_ext.c
+*   file name:  ucnv_ext.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -31,7 +31,7 @@
 /*
  * @return lookup value for the byte, if found; else 0
  */
-static U_INLINE uint32_t
+static inline uint32_t
 ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
     uint32_t word0, word;
     int32_t i, start, limit;
@@ -121,7 +121,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
                  const char *pre, int32_t preLength,
                  const char *src, int32_t srcLength,
                  uint32_t *pMatchValue,
-                 UBool useFallback, UBool flush) {
+                 UBool /*useFallback*/, UBool flush) {
     const uint32_t *toUTable, *toUSection;
 
     uint32_t value, matchValue;
@@ -229,7 +229,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
     return matchLength;
 }
 
-static U_INLINE void
+static inline void
 ucnv_extWriteToU(UConverter *cnv, const int32_t *cx,
                  uint32_t value,
                  UChar **target, const UChar *targetLimit,
@@ -448,7 +448,7 @@ ucnv_extContinueMatchToU(UConverter *cnv,
 /*
  * @return index of the UChar, if found; else <0
  */
-static U_INLINE int32_t
+static inline int32_t
 ucnv_extFindFromU(const UChar *fromUSection, int32_t length, UChar u) {
     int32_t i, start, limit;
 
@@ -665,7 +665,7 @@ ucnv_extMatchFromU(const int32_t *cx,
 /*
  * @param value fromUnicode mapping table value; ignores roundtrip and reserved bits
  */
-static U_INLINE void
+static inline void
 ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
                    uint32_t value,
                    char **target, const char *targetLimit,

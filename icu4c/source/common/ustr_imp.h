@@ -99,6 +99,12 @@ struct UCaseMap {
 typedef struct UCaseMap UCaseMap;
 #endif
 
+#if UCONFIG_NO_BREAK_ITERATION
+#   define UCASEMAP_INITIALIZER { NULL, { 0 }, 0, 0 }
+#else
+#   define UCASEMAP_INITIALIZER { NULL, NULL, { 0 }, 0, 0 }
+#endif
+
 enum {
     TO_LOWER,
     TO_UPPER,

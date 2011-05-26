@@ -21,7 +21,7 @@
     <ClCompile Include="genrb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parse.c">
+    <ClCompile Include="parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="prscmnts.cpp">

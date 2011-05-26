@@ -876,8 +876,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                 if(capacity < len) {
                     capacity = len;
                 }
-                if(capacity <= sizeof(stackAlias)) {
-                    capacity = sizeof(stackAlias);
+                if(capacity <= (int32_t)sizeof(stackAlias)) {
+                    capacity = (int32_t)sizeof(stackAlias);
                     chAlias = stackAlias;
                 } else {
                     chAlias = (char *)uprv_malloc(capacity);
@@ -2260,7 +2260,7 @@ ures_loc_closeLocales(UEnumeration *enumerator) {
 }
 
 static int32_t U_CALLCONV
-ures_loc_countLocales(UEnumeration *en, UErrorCode *status) {
+ures_loc_countLocales(UEnumeration *en, UErrorCode * /*status*/) {
     ULocalesContext *ctx = (ULocalesContext *)en->context;
     return ures_getSize(&ctx->installed);
 }
@@ -2286,7 +2286,7 @@ ures_loc_nextLocale(UEnumeration* en,
 
 static void U_CALLCONV 
 ures_loc_resetLocales(UEnumeration* en, 
-                      UErrorCode* status) {
+                      UErrorCode* /*status*/) {
     UResourceBundle *res = &((ULocalesContext *)en->context)->installed;
     ures_resetIterator(res);
 }
@@ -2309,11 +2309,11 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
     UResourceBundle *idx = NULL;
     UEnumeration *en = NULL;
     ULocalesContext *myContext = NULL;
-    
+
     if(U_FAILURE(*status)) {
         return NULL;
     }
-    myContext = uprv_malloc(sizeof(ULocalesContext));
+    myContext = reinterpret_cast<ULocalesContext *>(uprv_malloc(sizeof(ULocalesContext)));
     en =  (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
     if(!en || !myContext) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -2322,7 +2322,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
         return NULL;
     }
     uprv_memcpy(en, &gLocalesEnum, sizeof(UEnumeration));
-    
+
     ures_initStackObject(&myContext->installed);
     ures_initStackObject(&myContext->curr);
     idx = ures_openDirect(path, INDEX_LOCALE_NAME, status);

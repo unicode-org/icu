@@ -244,7 +244,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="locbund.c" />
+    <ClCompile Include="locbund.cpp" />
     <ClCompile Include="sprintf.c" />
     <ClCompile Include="sscanf.c" />
     <ClCompile Include="ucln_io.c">

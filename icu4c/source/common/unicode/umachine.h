@@ -342,7 +342,7 @@ typedef int8_t UBool;
 typedef int32_t UChar32;
 
 /*==========================================================================*/
-/* U_INLINE and U_ALIGN_CODE   Set default values if these are not already  */
+/* U_ALIGN_CODE                Set default values if these are not already  */
 /*                             defined.  Definitions normally are in        */
 /*                             platform.h or the corresponding file for     */
 /*                             the OS in use.                               */
@@ -361,20 +361,6 @@ typedef int32_t UChar32;
 #endif
 
 #endif /* U_HIDE_INTERNAL_API */
-
-/**
- * \def U_INLINE
- * This is used to request inlining of a function, on platforms and languages which support it.
- * @internal
- */
- 
-#ifndef U_INLINE
-#   ifdef XP_CPLUSPLUS
-#       define U_INLINE inline
-#   else
-#       define U_INLINE
-#   endif
-#endif
 
 #include "unicode/urename.h"
 

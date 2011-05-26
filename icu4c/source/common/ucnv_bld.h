@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2009 International Business Machines
+*   Copyright (C) 1999-2011 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -260,7 +260,7 @@ ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode);
  * Load a non-algorithmic converter.
  * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
  */
-UConverterSharedData *
+U_CAPI UConverterSharedData *
 ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err);
 
 /**
@@ -268,7 +268,7 @@ ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err);
  * It must be sharedData->referenceCounter != ~0
  * and this function must be called inside umtx_lock(&cnvCacheMutex).
  */
-void
+U_CAPI void
 ucnv_unload(UConverterSharedData *sharedData);
 
 /**

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2009, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -47,7 +47,7 @@ static void    seekUntilEndOfComment (UCHARBUF *buf, struct UString *token, UErr
 static UBool   isWhitespace          (UChar32 c);
 static UBool   isNewline             (UChar32 c);
 
-void resetLineNumber() {
+U_CFUNC void resetLineNumber() {
     lineCount = 1;
 }
 
@@ -59,11 +59,12 @@ void resetLineNumber() {
    never return eString twice in a row; instead, multiple adjacent
    string tokens will be merged into one, with no intervening
    space. */
-enum ETokenType getNextToken(UCHARBUF* buf,
-                             struct UString *token,
-                             uint32_t *linenumber, /* out: linenumber of token */
-                             struct UString *comment,
-                             UErrorCode *status) {
+U_CFUNC enum ETokenType
+getNextToken(UCHARBUF* buf,
+             struct UString *token,
+             uint32_t *linenumber, /* out: linenumber of token */
+             struct UString *comment,
+             UErrorCode *status) {
     enum ETokenType result;
     UChar32         c;
 
@@ -428,8 +429,7 @@ static void seekUntilEndOfComment(UCHARBUF *buf,
     }
 }
 
-UChar32 unescape(UCHARBUF *buf,
-                 UErrorCode *status) {
+U_CFUNC UChar32 unescape(UCHARBUF *buf, UErrorCode *status) {
     if (U_FAILURE(*status)) {
         return U_EOF;
     }

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,9 +20,8 @@
 
 extern const char *gCurrentFileName;
 
-void error   (uint32_t linenumber, const char *msg, ...);
-void warning (uint32_t linenumber, const char *msg, ...);
-
+U_CFUNC void error(uint32_t linenumber, const char *msg, ...);
+U_CFUNC void warning(uint32_t linenumber, const char *msg, ...);
 
 /* Show warnings? */
 U_CFUNC void setShowWarning(UBool val);

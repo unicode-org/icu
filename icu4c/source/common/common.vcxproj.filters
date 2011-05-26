@@ -61,7 +61,7 @@
     <ClCompile Include="ubidiwrt.c">
       <Filter>bidi</Filter>
     </ClCompile>
-    <ClCompile Include="ushape.c">
+    <ClCompile Include="ushape.cpp">
       <Filter>bidi</Filter>
     </ClCompile>
     <ClCompile Include="brkeng.cpp">
@@ -130,13 +130,13 @@
     <ClCompile Include="ustrenum.cpp">
       <Filter>collections</Filter>
     </ClCompile>
-    <ClCompile Include="utrie.c">
+    <ClCompile Include="utrie.cpp">
       <Filter>collections</Filter>
     </ClCompile>
     <ClCompile Include="utrie2.cpp">
       <Filter>collections</Filter>
     </ClCompile>
-    <ClCompile Include="utrie2_builder.c">
+    <ClCompile Include="utrie2_builder.cpp">
       <Filter>collections</Filter>
     </ClCompile>
     <ClCompile Include="uvector.cpp">
@@ -160,7 +160,7 @@
     <ClCompile Include="mutex.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
-    <ClCompile Include="putil.c">
+    <ClCompile Include="putil.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
     <ClCompile Include="umath.c">
@@ -181,10 +181,10 @@
     <ClCompile Include="ucnv.c">
       <Filter>conversion</Filter>
     </ClCompile>
-    <ClCompile Include="ucnv2022.c">
+    <ClCompile Include="ucnv2022.cpp">
       <Filter>conversion</Filter>
     </ClCompile>
-    <ClCompile Include="ucnv_bld.c">
+    <ClCompile Include="ucnv_bld.cpp">
       <Filter>conversion</Filter>
     </ClCompile>
     <ClCompile Include="ucnv_cb.c">
@@ -196,10 +196,10 @@
     <ClCompile Include="ucnv_err.c">
       <Filter>conversion</Filter>
     </ClCompile>
-    <ClCompile Include="ucnv_ext.c">
+    <ClCompile Include="ucnv_ext.cpp">
       <Filter>conversion</Filter>
     </ClCompile>
-    <ClCompile Include="ucnv_io.c">
+    <ClCompile Include="ucnv_io.cpp">
       <Filter>conversion</Filter>
     </ClCompile>
     <ClCompile Include="ucnv_lmb.c">
@@ -220,7 +220,7 @@
     <ClCompile Include="ucnv_u8.c">
       <Filter>conversion</Filter>
     </ClCompile>
-    <ClCompile Include="ucnvbocu.c">
+    <ClCompile Include="ucnvbocu.cpp">
       <Filter>conversion</Filter>
     </ClCompile>
     <ClCompile Include="ucnvdisp.c">
@@ -286,7 +286,7 @@
     <ClCompile Include="util_props.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="punycode.c">
+    <ClCompile Include="punycode.cpp">
       <Filter>idna</Filter>
     </ClCompile>
     <ClCompile Include="uidna.cpp">
@@ -325,7 +325,7 @@
     <ClCompile Include="ucat.c">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
-    <ClCompile Include="uloc.c">
+    <ClCompile Include="uloc.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
     <ClCompile Include="uloc_tag.c">
@@ -334,7 +334,7 @@
     <ClCompile Include="ures_cnv.c">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
-    <ClCompile Include="uresbund.c">
+    <ClCompile Include="uresbund.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
     <ClCompile Include="uresdata.c">
@@ -373,13 +373,13 @@
     <ClCompile Include="ruleiter.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
-    <ClCompile Include="ucase.c">
+    <ClCompile Include="ucase.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
     <ClCompile Include="uchar.c">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
-    <ClCompile Include="unames.c">
+    <ClCompile Include="unames.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
     <ClCompile Include="unifilt.cpp">
@@ -463,7 +463,7 @@
     <ClCompile Include="stringpiece.cpp">
       <Filter>strings</Filter>
     </ClCompile>
-    <ClCompile Include="ucasemap.c">
+    <ClCompile Include="ucasemap.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="uchriter.cpp">
@@ -490,16 +490,16 @@
     <ClCompile Include="ustr_cnv.c">
       <Filter>strings</Filter>
     </ClCompile>
-    <ClCompile Include="ustr_wcs.c">
+    <ClCompile Include="ustr_wcs.cpp">
       <Filter>strings</Filter>
     </ClCompile>
-    <ClCompile Include="ustrcase.c">
+    <ClCompile Include="ustrcase.cpp">
       <Filter>strings</Filter>
     </ClCompile>
-    <ClCompile Include="ustring.c">
+    <ClCompile Include="ustring.cpp">
       <Filter>strings</Filter>
     </ClCompile>
-    <ClCompile Include="ustrtrns.c">
+    <ClCompile Include="ustrtrns.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="utext.cpp">

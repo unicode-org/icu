@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -38,14 +38,15 @@ enum ETokenType
     TOK_TOKEN_COUNT      /* Number of "real" token types */
 };
 
-UChar32 unescape(UCHARBUF *buf, UErrorCode *status);
+U_CFUNC UChar32 unescape(UCHARBUF *buf, UErrorCode *status);
 
-void resetLineNumber(void);
+U_CFUNC void resetLineNumber(void);
 
-enum ETokenType getNextToken(UCHARBUF *buf,
-                 struct UString *token,
-                 uint32_t *linenumber, /* out: linenumber of token */
-                 struct UString *comment,
-                 UErrorCode *status);
+U_CFUNC enum ETokenType
+getNextToken(UCHARBUF *buf,
+             struct UString *token,
+             uint32_t *linenumber, /* out: linenumber of token */
+             struct UString *comment,
+             UErrorCode *status);
 
 #endif

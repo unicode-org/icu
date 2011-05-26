@@ -5,7 +5,7 @@
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
- *   file name:  ushape.c
+ *   file name:  ushape.cpp
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -24,6 +24,8 @@
 #include "putilimp.h"
 #include "ustr_imp.h"
 #include "ubidi_props.h"
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #if UTF_SIZE<16
     /*
@@ -373,7 +375,7 @@ _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
  *           U_SHAPE_TEXT_DIRECTION_LOGICAL
  */
 static void 
-invertBuffer(UChar *buffer,int32_t size,uint32_t options,int32_t lowlimit,int32_t highlimit) {
+invertBuffer(UChar *buffer, int32_t size, uint32_t /*options*/, int32_t lowlimit, int32_t highlimit) {
     UChar temp;
     int32_t i=0,j=0;
     for(i=lowlimit,j=size-highlimit-1;i<j;i++,j--) {
@@ -391,7 +393,7 @@ invertBuffer(UChar *buffer,int32_t size,uint32_t options,int32_t lowlimit,int32_
  *           later it'll be converted into the 0xFExx LamAlefs
  *           in the shaping function.
  */
-static U_INLINE UChar
+static inline UChar
 changeLamAlef(UChar ch) {
     switch(ch) {
     case 0x0622 :
@@ -435,7 +437,7 @@ getLink(UChar ch) {
  *           at each end of the logical buffer
  */
 static void
-countSpaces(UChar *dest,int32_t size,uint32_t options,int32_t *spacesCountl,int32_t *spacesCountr) {
+countSpaces(UChar *dest, int32_t size, uint32_t /*options*/, int32_t *spacesCountl, int32_t *spacesCountr) {
     int32_t i = 0;
     int32_t countl = 0,countr = 0;
     while(dest[i] == SPACE_CHAR) {
@@ -454,7 +456,7 @@ countSpaces(UChar *dest,int32_t size,uint32_t options,int32_t *spacesCountl,int3
  *Name     : isTashkeelChar
  *Function : Returns 1 for Tashkeel characters in 06 range else return 0
  */
-static U_INLINE int32_t
+static inline int32_t
 isTashkeelChar(UChar ch) {
     return (int32_t)( ch>=0x064B && ch<= 0x0652 );
 }
@@ -463,7 +465,7 @@ isTashkeelChar(UChar ch) {
  *Name     : isTashkeelCharFE
  *Function : Returns 1 for Tashkeel characters in FE range else return 0
  */
-static U_INLINE int32_t
+static inline int32_t
 isTashkeelCharFE(UChar ch) {
     return (int32_t)( ch>=0xFE70 && ch<= 0xFE7F );
 }
@@ -472,7 +474,7 @@ isTashkeelCharFE(UChar ch) {
  *Name     : isAlefChar
  *Function : Returns 1 for Alef characters else return 0
  */
-static U_INLINE int32_t
+static inline int32_t
 isAlefChar(UChar ch) {
     return (int32_t)( (ch==0x0622)||(ch==0x0623)||(ch==0x0625)||(ch==0x0627) );
 }
@@ -481,7 +483,7 @@ isAlefChar(UChar ch) {
  *Name     : isLamAlefChar
  *Function : Returns 1 for LamAlef characters else return 0
  */
-static U_INLINE int32_t
+static inline int32_t
 isLamAlefChar(UChar ch) {
     return (int32_t)((ch>=0xFEF5)&&(ch<=0xFEFC) );
 }
@@ -491,7 +493,7 @@ isLamAlefChar(UChar ch) {
  *Function : returns 1 if the character matches one of the tail characters (0xfe73 or 0x200b) otherwise returns 0 
  */
 
-static U_INLINE int32_t
+static inline int32_t
 isTailChar(UChar ch) {
     if(ch == OLD_TAIL_CHAR || ch == NEW_TAIL_CHAR){
             return 1;
@@ -506,7 +508,7 @@ isTailChar(UChar ch) {
  *           in the FE range otherwise returns 0
  */
 
-static U_INLINE int32_t
+static inline int32_t
 isSeenTailFamilyChar(UChar ch) {
     if(ch >= 0xfeb1 && ch < 0xfebf){
             return tailFamilyIsolatedFinal [ch - 0xFEB1];
@@ -520,7 +522,7 @@ isSeenTailFamilyChar(UChar ch) {
   *            06 range otherwise returns 0
  */
 
-static U_INLINE int32_t
+static inline int32_t
 isSeenFamilyChar(UChar  ch){
     if(ch >= 0x633 && ch <= 0x636){
         return 1;
@@ -535,7 +537,7 @@ isSeenFamilyChar(UChar  ch){
  *Function : returns 1 if the character is a Alef Maksoura Final or isolated 
  *           otherwise returns 0 
  */
-static U_INLINE int32_t
+static inline int32_t
 isAlefMaksouraChar(UChar ch) {
     return (int32_t)( (ch == 0xFEEF) || ( ch == 0xFEF0) || (ch == 0x0649));
 } 
@@ -545,7 +547,7 @@ isAlefMaksouraChar(UChar ch) {
  * Function : returns 1 if the character is a yehHamza isolated or yehhamza
  *            final is found otherwise returns 0 
  */
-static U_INLINE int32_t
+static inline int32_t
 isYehHamzaChar(UChar ch) {
     if((ch==0xFE89)||(ch==0xFE8A)){
         return 1;
@@ -561,7 +563,7 @@ isYehHamzaChar(UChar ch) {
  *           Tashkeel with shadda on tatweel (FC range)return 2 otherwise 
  *           returns 0
  */
-static U_INLINE int32_t
+static inline int32_t
 isTashkeelOnTatweelChar(UChar ch){
     if(ch >= 0xfe70 && ch <= 0xfe7f && ch != NEW_TAIL_CHAR && ch != 0xFE75 && ch != SHADDA_TATWEEL_CHAR)
     {
@@ -580,7 +582,7 @@ isTashkeelOnTatweelChar(UChar ch){
  *           with shadda is in the isolated form (i.e. Unicode FC range)
  *           returns 2 otherwise returns 0
  */
-static U_INLINE int32_t
+static inline int32_t
 isIsolatedTashkeelChar(UChar ch){
     if(ch >= 0xfe70 && ch <= 0xfe7f && ch != NEW_TAIL_CHAR && ch != 0xFE75){
         return (1 - tashkeelMedial [ch - 0xFE70]);
@@ -661,8 +663,8 @@ int32_t destSize,uint32_t options) {
  */
 static int32_t
 handleTashkeelWithTatweel(UChar *dest, int32_t sourceLength,
-             int32_t destSize,uint32_t options,
-             UErrorCode *pErrorCode) {
+             int32_t /*destSize*/, uint32_t /*options*/,
+             UErrorCode * /*pErrorCode*/) {
                  int i;
                  for(i = 0; i < sourceLength; i++){
                      if((isTashkeelOnTatweelChar(dest[i]) == 1)){
@@ -1541,8 +1543,8 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         }
 
         /* Start of Arabic letter shaping part */
-        if(outputSize<=sizeof(buffer)/U_SIZEOF_UCHAR) {
-            outputSize=sizeof(buffer)/U_SIZEOF_UCHAR;
+        if(outputSize<=LENGTHOF(buffer)) {
+            outputSize=LENGTHOF(buffer);
             tempbuffer=buffer;
         } else {
             tempbuffer = (UChar *)uprv_malloc(outputSize*U_SIZEOF_UCHAR);

@@ -1,12 +1,12 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
 *
-* File ustring.h
+* File ustring.cpp
 *
 * Modification History:
 *
@@ -35,7 +35,7 @@
  * All pointers refer to the same buffer.
  * The limit pointer may be NULL, all others must be real pointers.
  */
-static U_INLINE UBool
+static inline UBool
 isMatchAtCPBoundary(const UChar *start, const UChar *match, const UChar *matchLimit, const UChar *limit) {
     if(U16_IS_TRAIL(*match) && start!=match && U16_IS_LEAD(*(match-1))) {
         /* the leading edge of the match is in the middle of a surrogate pair */

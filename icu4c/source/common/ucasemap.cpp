@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2010, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ucasemap.c
+*   file name:  ucasemap.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -102,7 +102,7 @@ ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) {
 }
 
 U_CAPI void U_EXPORT2
-ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode) {
+ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode * /*pErrorCode*/) {
     csm->options=options;
 }
 
@@ -114,7 +114,7 @@ ucasemap_getBreakIterator(const UCaseMap *csm) {
 }
 
 U_CAPI void U_EXPORT2
-ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode) {
+ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode * /*pErrorCode*/) {
     ubrk_close(csm->iter);
     csm->iter=iterToAdopt;
 }
@@ -126,7 +126,7 @@ ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode
 /* TODO(markus): Move to a new, separate utf8case.c file. */
 
 /* append a full case mapping result, see UCASE_MAX_STRING_LENGTH */
-static U_INLINE int32_t
+static inline int32_t
 appendResult(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
              int32_t result, const UChar *s) {
     UChar32 c;
@@ -490,7 +490,7 @@ caseMap(const UCaseMap *csm,
         destLength=utf8_foldCase(csm->csp, dest, destCapacity, src, srcLength,
                                  csm->options, pErrorCode);
     } else {
-        UCaseContext csc={ NULL };
+        UCaseContext csc=UCASECONTEXT_INITIALIZER;
 
         csc.p=(void *)src;
         csc.limit=srcLength;
