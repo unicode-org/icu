@@ -33,7 +33,7 @@ struct UCaseProps {
     UDataMemory *mem;
     const int32_t *indexes;
     const uint16_t *exceptions;
-    const UChar *unfold;
+    const uint16_t *unfold;
 
     UTrie2 trie;
     uint8_t formatVersion[4];
@@ -899,7 +899,7 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
             full&=UCASE_FULL_LOWER;
             if(full!=0) {
                 /* set the output pointer to the lowercase mapping */
-                *pString=pe+1;
+                *pString=reinterpret_cast<const UChar *>(pe+1);
 
                 /* return the string length */
                 return full;
@@ -987,7 +987,7 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
 
             if(full!=0) {
                 /* set the output pointer to the result string */
-                *pString=pe;
+                *pString=reinterpret_cast<const UChar *>(pe);
 
                 /* return the string length */
                 return full;
@@ -1178,7 +1178,7 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
 
             if(full!=0) {
                 /* set the output pointer to the result string */
-                *pString=pe;
+                *pString=reinterpret_cast<const UChar *>(pe);
 
                 /* return the string length */
                 return full;
