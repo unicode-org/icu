@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -160,6 +160,8 @@ struct UCaseContext {
     int8_t b1, b2, b3;
 };
 typedef struct UCaseContext UCaseContext;
+
+#define UCASECONTEXT_INITIALIZER { NULL,  0, 0, 0,  0, 0,  0,  0, 0, 0 }
 
 enum {
     /**

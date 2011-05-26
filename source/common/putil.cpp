@@ -144,6 +144,8 @@ Cleanly installed Solaris can use this #define.
 #include "icucfg.h"
 #endif
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 /* Define the extension for data files, again... */
 #define DATA_TYPE "dat"
 
@@ -805,7 +807,7 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
 #ifdef DEBUG_TZNAME
     fprintf(stderr, "TZ=%s std=%s dst=%s daylight=%d offset=%d\n", getenv("TZ"), stdID, dstID, daylightType, offset);
 #endif
-    for (idx = 0; idx < (int32_t)sizeof(OFFSET_ZONE_MAPPINGS)/sizeof(OFFSET_ZONE_MAPPINGS[0]); idx++)
+    for (idx = 0; idx < LENGTHOF(OFFSET_ZONE_MAPPINGS); idx++)
     {
         if (offset == OFFSET_ZONE_MAPPINGS[idx].offsetSeconds
             && daylightType == OFFSET_ZONE_MAPPINGS[idx].daylightType
@@ -1479,7 +1481,7 @@ The leftmost codepage (.xxx) wins.
 
     if ((p = uprv_strchr(posixID, '.')) != NULL) {
         /* assume new locale can't be larger than old one? */
-        correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
+        correctedPOSIXLocale = reinterpret_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
         /* Exit on memory allocation error. */
         if (correctedPOSIXLocale == NULL) {
             return NULL;
@@ -1496,7 +1498,7 @@ The leftmost codepage (.xxx) wins.
     /* Note that we scan the *uncorrected* ID. */
     if ((p = uprv_strrchr(posixID, '@')) != NULL) {
         if (correctedPOSIXLocale == NULL) {
-            correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
+            correctedPOSIXLocale = reinterpret_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
             /* Exit on memory allocation error. */
             if (correctedPOSIXLocale == NULL) {
                 return NULL;
@@ -1847,7 +1849,7 @@ getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapaci
         localeBuf[localeCapacity-1] = 0; /* ensure NULL termination */
         name = uprv_strncpy(buffer, name+1, buffCapacity);
         buffer[buffCapacity-1] = 0; /* ensure NULL termination */
-        if ((variant = (uprv_strchr(name, '@'))) != NULL) {
+        if ((variant = const_cast<char *>(uprv_strchr(name, '@'))) != NULL) {
             *variant = 0;
         }
         name = remapPlatformDependentCodepage(localeBuf, name);

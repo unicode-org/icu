@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  utrie.c
+*   file name:  utrie.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -31,7 +31,7 @@
 #undef ABS
 #define ABS(x) ((x)>=0 ? (x) : -(x))
 
-static U_INLINE UBool
+static inline UBool
 equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
     while(length>0 && *s==*t) {
         ++s;
@@ -862,7 +862,7 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
     }
 
     /* enough data for a trie header? */
-    if(length<sizeof(UTrieHeader)) {
+    if(length<(int32_t)sizeof(UTrieHeader)) {
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return -1;
     }
@@ -1045,7 +1045,7 @@ utrie_unserializeDummy(UTrie *trie,
 
 /* default UTrieEnumValue() returns the input value itself */
 static uint32_t U_CALLCONV
-enumSameValue(const void *context, uint32_t value) {
+enumSameValue(const void * /*context*/, uint32_t value) {
     return value;
 }
 

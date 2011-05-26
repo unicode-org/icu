@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
-*   file name:  utrie2_builder.c
+*   file name:  utrie2_builder.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -455,7 +455,7 @@ utrie2_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
     return context.trie;
 }
 
-static U_INLINE UBool
+static inline UBool
 isInNullBlock(UNewTrie2 *trie, UChar32 c, UBool forLSCP) {
     int32_t i2, block;
 
@@ -562,12 +562,12 @@ releaseDataBlock(UNewTrie2 *trie, int32_t block) {
     trie->firstFreeBlock=block;
 }
 
-static U_INLINE UBool
+static inline UBool
 isWritableBlock(UNewTrie2 *trie, int32_t block) {
     return (UBool)(block!=trie->dataNullOffset && 1==trie->map[block>>UTRIE2_SHIFT_2]);
 }
 
-static U_INLINE void
+static inline void
 setIndex2Entry(UNewTrie2 *trie, int32_t i2, int32_t block) {
     int32_t oldBlock;
     ++trie->map[block>>UTRIE2_SHIFT_2];  /* increment first, in case block==oldBlock! */
@@ -841,7 +841,7 @@ utrie2_setRange32(UTrie2 *trie,
 
 /* compaction --------------------------------------------------------------- */
 
-static U_INLINE UBool
+static inline UBool
 equal_int32(const int32_t *s, const int32_t *t, int32_t length) {
     while(length>0 && *s==*t) {
         ++s;
@@ -851,7 +851,7 @@ equal_int32(const int32_t *s, const int32_t *t, int32_t length) {
     return (UBool)(length==0);
 }
 
-static U_INLINE UBool
+static inline UBool
 equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
     while(length>0 && *s==*t) {
         ++s;

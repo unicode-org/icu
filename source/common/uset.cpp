@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  uset.c
+*   file name:  uset.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -531,7 +531,7 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
 // ---
 // #define USET_GROW_DELTA 20
 // 
-// static U_INLINE int32_t
+// static int32_t
 // findChar(const UChar32* array, int32_t length, UChar32 c) {
 //     int32_t i;
 // 

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and
+* Copyright (C) 1997-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -94,7 +94,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
         // Use the string if we found it
         if (U_SUCCESS(status) && brkfname) {
             uprv_strncpy(actualLocale,
-                ures_getLocale(brkName, &status),
+                ures_getLocaleInternal(brkName, &status),
                 sizeof(actualLocale)/sizeof(actualLocale[0]));
 
             UChar* extStart=u_strchr(brkfname, 0x002e);
