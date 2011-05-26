@@ -3049,12 +3049,21 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "(IN)", "Alna/Calcutta" },
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "(IN)", "Asia/Calcutta" },
+
+        // Ticket#8589 Partial location name to use country name if the zone is the golden
+        // zone for the time zone's country.
+        { "en_MX", "America/Chicago", "1995-07-15T00:00:00Z", "vvvv", "Central Time (United States)", "America/Chicago"},
+
         { NULL, NULL, NULL, NULL, NULL, NULL },
     };
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = GregorianCalendar::createInstance(status);
     if (failure(status, "GregorianCalendar::createInstance", TRUE)) return;
+    SimpleDateFormat testfmt(UnicodeString("yyyy-MM-dd'T'HH:mm:ss'Z'"), status);
+    if (failure(status, "SimpleDateFormat constructor", TRUE)) return;
+    testfmt.setTimeZone(*TimeZone::getGMT());
+
     for (int i = 0; fallbackTests[i][0]; i++) {
         const char **testLine = fallbackTests[i];
         UnicodeString info[5];
@@ -3066,10 +3075,10 @@ void DateFormatTest::TestTimeZoneDisplayName()
 
         TimeZone *tz = TimeZone::createTimeZone(info[1]);
 
-        if (strcmp(testLine[2], "2004-07-15T00:00:00Z") == 0) {
-            cal->set(2004,6,15,0,0,0);
-        } else {
-            cal->set(2004,0,15,0,0,0);
+        UDate d = testfmt.parse(testLine[2], status);
+        cal->setTime(d, status);
+        if (U_FAILURE(status)) {
+            errln(UnicodeString("Failed to set date: ") + testLine[2]);
         }
 
         SimpleDateFormat fmt(info[3], Locale(testLine[0]),status);
