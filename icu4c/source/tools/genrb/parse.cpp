@@ -35,8 +35,6 @@
 #include "unicode/putil.h"
 #include <stdio.h>
 
-extern UBool gIncludeUnihanColl;
-
 /* Number of tokens to read ahead of the current stream position */
 #define MAX_LOOKAHEAD   3
 
