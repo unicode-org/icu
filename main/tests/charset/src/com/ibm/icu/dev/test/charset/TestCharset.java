@@ -2787,6 +2787,27 @@ public class TestCharset extends TestFmwk {
         smBufDecode(decoder, "UTF-7", bs, us);
         smBufEncode(encoder, "UTF-7", us, bs);
         
+        /* Testing UTF-7 toUnicode with substitute callbacks */
+        {
+            byte [] bytesTestErrorConsumption = {
+                    /* a~       a+AB~                         a+AB\x0c                      a+AB-                         a+AB.                         a+. */
+                    0x61, 0x7e, 0x61, 0x2b, 0x41, 0x42, 0x7e, 0x61, 0x2b, 0x41, 0x42, 0x0c, 0x61, 0x2b, 0x41, 0x42, 0x2d, 0x61, 0x2b, 0x41, 0x42, 0x2e, 0x61, 0x2b, 0x2e
+    
+            };
+            char [] unicodeTestErrorConsumption = {
+                    0x61, 0xfffd, 0x61, 0xfffd, 0xfffd, 0x61, 0xfffd, 0xfffd, 0x61, 0xfffd, 0x61, 0xfffd, 0x2e, 0x61, 0xfffd, 0x2e
+            };
+            bs = ByteBuffer.wrap(bytesTestErrorConsumption);
+            us = CharBuffer.wrap(unicodeTestErrorConsumption);
+    
+            CodingErrorAction savedMal = decoder.malformedInputAction();
+            CodingErrorAction savedUMap = decoder.unmappableCharacterAction();
+            decoder.onMalformedInput(CodingErrorAction.REPLACE);
+            decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+            smBufDecode(decoder, "UTF-7 DE Error Consumption", bs, us);
+            decoder.onMalformedInput(savedMal);
+            decoder.onUnmappableCharacter(savedUMap);
+        }
         /* ticket 6151 */
         CharBuffer smallus = CharBuffer.allocate(1);
         ByteBuffer bigbs = ByteBuffer.allocate(3);
