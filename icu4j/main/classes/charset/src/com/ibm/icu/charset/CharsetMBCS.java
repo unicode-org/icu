@@ -19,6 +19,7 @@ import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+import java.util.Locale;
 
 import com.ibm.icu.charset.UConverterSharedData.UConverterType;
 import com.ibm.icu.impl.ICUData;
@@ -898,14 +899,15 @@ class CharsetMBCS extends CharsetICU {
             }
         }
 
-        if (icuCanonicalName.toLowerCase().indexOf("gb18030") >= 0) {
+        String lowerCaseName = icuCanonicalName.toLowerCase(Locale.ENGLISH);
+        if (lowerCaseName.indexOf("gb18030") >= 0) {
             /* set a flag for GB 18030 mode, which changes the callback behavior */
             this.options |= MBCS_OPTION_GB18030;
-        } else if (icuCanonicalName.toLowerCase().indexOf("keis") >= 0) {
+        } else if (lowerCaseName.indexOf("keis") >= 0) {
             this.options |= MBCS_OPTION_KEIS;
-        } else if (icuCanonicalName.toLowerCase().indexOf("jef") >= 0) {
+        } else if (lowerCaseName.indexOf("jef") >= 0) {
             this.options |= MBCS_OPTION_JEF;
-        } else if (icuCanonicalName.toLowerCase().indexOf("jips") >= 0) {
+        } else if (lowerCaseName.indexOf("jips") >= 0) {
             this.options |= MBCS_OPTION_JIPS;
         }
 
