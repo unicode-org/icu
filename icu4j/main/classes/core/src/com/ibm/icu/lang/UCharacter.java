@@ -2199,7 +2199,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         private static SoftReference<Map<String, UnicodeBlock>> mref;
 
         private static String trimBlockName(String name) {
-            String upper = name.toUpperCase();
+            String upper = name.toUpperCase(Locale.ENGLISH);
             StringBuilder result = new StringBuilder(upper.length());
             for (int i = 0; i < upper.length(); i++) {
                 char c = upper.charAt(i);

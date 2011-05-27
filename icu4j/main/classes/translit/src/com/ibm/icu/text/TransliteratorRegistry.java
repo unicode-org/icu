@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -679,7 +679,7 @@ class TransliteratorRegistry {
             } else {
                 tag.append("Transliterate");
             }
-            tag.append(specToFind.get().toUpperCase());
+            tag.append(specToFind.get().toUpperCase(Locale.ENGLISH));
 
             try {
                 // The Transliterate*_xxx resource is an array of

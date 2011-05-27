@@ -219,7 +219,7 @@ public class Currency extends MeasureUnit implements Serializable {
             throw new IllegalArgumentException(
                     "The input currency code is not 3-letter alphabetic code.");
         }
-        return new Currency(theISOCode.toUpperCase(Locale.US));
+        return new Currency(theISOCode.toUpperCase(Locale.ENGLISH));
     }
 
     private static boolean isAlpha3Code(String code) {

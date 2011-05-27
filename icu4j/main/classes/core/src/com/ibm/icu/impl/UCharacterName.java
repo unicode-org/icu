@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
@@ -114,12 +115,12 @@ public final class UCharacterName
         }
 
         // try extended names first
-        int result = getExtendedChar(name.toLowerCase(), choice);
+        int result = getExtendedChar(name.toLowerCase(Locale.ENGLISH), choice);
         if (result >= -1) {
             return result;
         }
 
-        String upperCaseName = name.toUpperCase();
+        String upperCaseName = name.toUpperCase(Locale.ENGLISH);
         // try algorithmic names first, if fails then try group names
         // int result = getAlgorithmChar(choice, uppercasename);
 
@@ -382,7 +383,7 @@ public final class UCharacterName
                 m_utilStringBuffer_.append('<');
                 m_utilStringBuffer_.append(result);
                 m_utilStringBuffer_.append('-');
-                String chStr = Integer.toHexString(ch).toUpperCase();
+                String chStr = Integer.toHexString(ch).toUpperCase(Locale.ENGLISH);
                 int zeros = 4 - chStr.length();
                 while (zeros > 0) {
                     m_utilStringBuffer_.append('0');

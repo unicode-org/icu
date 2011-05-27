@@ -8,6 +8,7 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.lang.UCharacter;
@@ -964,7 +965,7 @@ public final class Utility {
         if (negative) {
             i = -i;
         }
-        String result = Long.toString(i, 16).toUpperCase();
+        String result = Long.toString(i, 16).toUpperCase(Locale.ENGLISH);
         if (result.length() < places) {
             result = "0000000000000000".substring(result.length(),places) + result;
         }
