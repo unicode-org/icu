@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -39,6 +39,10 @@
 /* The version of genrb */
 #define GENRB_VERSION "3.3"
 
+U_CDECL_BEGIN
+
+extern UBool gIncludeUnihanColl;
+
 U_CAPI void processFile(
     const char *filename,
     const char* cp,
@@ -46,5 +50,7 @@ U_CAPI void processFile(
     const char *outputDir,
     const char *packageName,
     UErrorCode *status);
+
+U_CDECL_END
 
 #endif
