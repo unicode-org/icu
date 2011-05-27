@@ -335,7 +335,6 @@ strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
 
 U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa) {
-    const UChar *unfold, *p;
     int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth;
 
     if(csp->unfold==NULL || s==NULL) {
@@ -352,7 +351,7 @@ ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length
         return FALSE;
     }
 
-    unfold=csp->unfold;
+    const uint16_t *unfold=csp->unfold;
     unfoldRows=unfold[UCASE_UNFOLD_ROWS];
     unfoldRowWidth=unfold[UCASE_UNFOLD_ROW_WIDTH];
     unfoldStringWidth=unfold[UCASE_UNFOLD_STRING_WIDTH];
@@ -368,7 +367,7 @@ ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length
     limit=unfoldRows;
     while(start<limit) {
         i=(start+limit)/2;
-        p=unfold+(i*unfoldRowWidth);
+        const UChar *p=reinterpret_cast<const UChar *>(unfold+(i*unfoldRowWidth));
         result=strcmpMax(s, length, p, unfoldStringWidth);
 
         if(result==0) {
