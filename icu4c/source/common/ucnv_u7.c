@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u7.c
@@ -688,14 +688,26 @@ unicodeMode:
 
     if(pArgs->flush && source>=sourceLimit) {
         /* flush remaining bits to the target */
-        if(!inDirectMode && base64Counter!=0) {
+        if(!inDirectMode) {
+            if (base64Counter!=0) {
+                if(target<targetLimit) {
+                    *target++=toBase64[bits];
+                    if(offsets!=NULL) {
+                        *offsets++=sourceIndex-1;
+                    }
+                } else {
+                    cnv->charErrorBuffer[cnv->charErrorBufferLength++]=toBase64[bits];
+                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                }
+            }
+            /* Add final MINUS to terminate unicodeMode */
             if(target<targetLimit) {
-                *target++=toBase64[bits];
+                *target++=MINUS;
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex-1;
                 }
             } else {
-                cnv->charErrorBuffer[cnv->charErrorBufferLength++]=toBase64[bits];
+                cnv->charErrorBuffer[cnv->charErrorBufferLength++]=MINUS;
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             }
         }

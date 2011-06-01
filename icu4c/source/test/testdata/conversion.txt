@@ -973,6 +973,13 @@ conversion:table(nofallback) {
           :intvector{},
           :int{0}, :int{0}, "illegal", ".", :bin{ 0e }
         }
+        {
+          "UTF-7",
+          :bin{ 2b414b4d2d492b414b4d4170412d },
+          "\u00a3I\u00a3\u00a4",
+          :intvector{ 1,5,7,9 },
+          :int{0}, :int{0}, "", ".", :bin{""}
+        }
       }
     }
 
@@ -1776,6 +1783,13 @@ conversion:table(nofallback) {
           "\U00020087\ue790\ue78f\u1e3f",
           :bin{ 95329031a6dca6dba8bc },
           :intvector{ 0,0,0,0,2,2,3,3,4,4 },
+          :int{1}, :int{0}, "", "0", ""
+        }
+        {
+          "UTF-7",
+          "\u00a3I\u00a3\u00a4",
+          :bin{ 2b414b4d2d492b414b4d4170412d },
+          :intvector{ 0,0,0,0,0,1,2,2,2,3,3,3,3,3 },
           :int{1}, :int{0}, "", "0", ""
         }
       }
