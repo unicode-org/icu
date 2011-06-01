@@ -469,9 +469,9 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
     if(expectLen != targ-junkout) {
       log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
       log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-      printf("\nGot:");
+      fprintf(stderr, "Got:\n");
       printSeqErr((const unsigned char*)junkout, (int32_t)(targ-junkout));
-      printf("\nExpected:");
+      fprintf(stderr, "Expected:\n");
       printSeqErr((const unsigned char*)expect, expectLen);
       return TC_MISMATCH;
     }
@@ -502,9 +502,9 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
     } else {
       log_err("String does not match u->%s\n", gNuConvTestName);
       printUSeqErr(source, sourceLen);
-      printf("\nGot:");
+      fprintf(stderr, "Got:\n");
       printSeqErr((const unsigned char *)junkout, expectLen);
-      printf("\nExpected:");
+      fprintf(stderr, "Expected:\n");
       printSeqErr((const unsigned char *)expect, expectLen);
       
       return TC_MISMATCH;
@@ -955,12 +955,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
                 Hi Mom -+Jjo--!
                 A+ImIDkQ.
                 +-
-                +ZeVnLIqe
+                +ZeVnLIqe-
             */
             0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x2b, 0x4a, 0x6a, 0x6f, 0x2d, 0x2d, 0x21,
             0x41, 0x2b, 0x49, 0x6d, 0x49, 0x44, 0x6b, 0x51, 0x2e,
             0x2b, 0x2d,
-            0x2b, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65
+            0x2b, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65, 0x2d
         };
         static const UChar unicode[] = {
             /*
@@ -984,7 +984,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 9, 10,
             11, 12, 12, 12, 13, 13, 13, 13, 14,
             15, 15,
-            16, 16, 16, 17, 17, 17, 18, 18, 18
+            16, 16, 16, 17, 17, 17, 18, 18, 18, 18
         };
 
         /* same but escaping set O (the exclamation mark) */
@@ -993,12 +993,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
                 Hi Mom -+Jjo--+ACE-
                 A+ImIDkQ.
                 +-
-                +ZeVnLIqe
+                +ZeVnLIqe-
             */
             0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x2b, 0x4a, 0x6a, 0x6f, 0x2d, 0x2d, 0x2b, 0x41, 0x43, 0x45, 0x2d,
             0x41, 0x2b, 0x49, 0x6d, 0x49, 0x44, 0x6b, 0x51, 0x2e,
             0x2b, 0x2d,
-            0x2b, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65
+            0x2b, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65, 0x2d
         };
         static const int32_t toUnicodeOffsetsR[] = {
             0, 1, 2, 3, 4, 5, 6, 7, 9, 13, 15,
@@ -1010,7 +1010,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 9, 10, 10, 10, 10, 10,
             11, 12, 12, 12, 13, 13, 13, 13, 14,
             15, 15,
-            16, 16, 16, 17, 17, 17, 18, 18, 18
+            16, 16, 16, 17, 17, 17, 18, 18, 18, 18
         };
 
         testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE);
