@@ -738,17 +738,16 @@ class CharsetUTF7 extends CharsetICU {
                             cr=CoderResult.OVERFLOW;
                         }
                     }
-                    if (useIMAP) {
-                        /* IMAP: need to terminate with a minus */
-                        if (target.hasRemaining()) {
-                            target.put(MINUS);
-                            if (offsets!=null) {
-                                offsets.put(sourceIndex - 1);
-                            }
-                        } else {
-                            errorBuffer[errorBufferLength++]=MINUS;
-                            cr=CoderResult.OVERFLOW;
+                    
+                    /* need to terminate with a minus */
+                    if (target.hasRemaining()) {
+                        target.put(MINUS);
+                        if (offsets!=null) {
+                            offsets.put(sourceIndex - 1);
                         }
+                    } else {
+                        errorBuffer[errorBufferLength++]=MINUS;
+                        cr=CoderResult.OVERFLOW;
                     }
                 }
                 /*reset the state for the next conversion */
