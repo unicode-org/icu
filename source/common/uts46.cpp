@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  uts46.cpp
@@ -22,6 +22,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "punycode.h"
+#include "ubidi_props.h"
 #include "ustr_imp.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -1102,6 +1103,7 @@ isASCIIOkBiDi(const char *s, int32_t length) {
 
 UBool
 UTS46::isLabelOkContextJ(const UChar *label, int32_t labelLength) const {
+    const UBiDiProps *bdp=ubidi_getSingleton();
     // [IDNA2008-Tables]
     // 200C..200D  ; CONTEXTJ    # ZERO WIDTH NON-JOINER..ZERO WIDTH JOINER
     for(int32_t i=0; i<labelLength; ++i) {
@@ -1123,7 +1125,7 @@ UTS46::isLabelOkContextJ(const UChar *label, int32_t labelLength) const {
             }
             // check precontext (Joining_Type:{L,D})(Joining_Type:T)*
             for(;;) {
-                UJoiningType type=(UJoiningType)u_getIntPropertyValue(c, UCHAR_JOINING_TYPE);
+                UJoiningType type=ubidi_getJoiningType(bdp, c);
                 if(type==U_JT_TRANSPARENT) {
                     if(j==0) {
                         return FALSE;
@@ -1141,7 +1143,7 @@ UTS46::isLabelOkContextJ(const UChar *label, int32_t labelLength) const {
                     return FALSE;
                 }
                 U16_NEXT_UNSAFE(label, j, c);
-                UJoiningType type=(UJoiningType)u_getIntPropertyValue(c, UCHAR_JOINING_TYPE);
+                UJoiningType type=ubidi_getJoiningType(bdp, c);
                 if(type==U_JT_TRANSPARENT) {
                     // just skip this character
                 } else if(type==U_JT_RIGHT_JOINING || type==U_JT_DUAL_JOINING) {

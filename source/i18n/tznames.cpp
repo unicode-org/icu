@@ -132,7 +132,7 @@ TimeZoneNamesDelegate::TimeZoneNamesDelegate(const Locale& locale, UErrorCode& s
             if (!gTimeZoneNamesCacheInitialized) {
                 gTimeZoneNamesCache = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
                 if (U_SUCCESS(status)) {
-                    uhash_setKeyDeleter(gTimeZoneNamesCache, uhash_freeBlock);
+                    uhash_setKeyDeleter(gTimeZoneNamesCache, uprv_free);
                     uhash_setValueDeleter(gTimeZoneNamesCache, deleteTimeZoneNamesCacheEntry);
                     gTimeZoneNamesCacheInitialized = TRUE;
                     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONENAMES, timeZoneNames_cleanup);
@@ -277,7 +277,8 @@ TimeZoneNames::getExemplarLocationName(const UnicodeString& tzID, UnicodeString&
     int32_t sep = tzID.lastIndexOf((UChar)0x2F /* '/' */);
     if (sep > 0 && sep + 1 < tzID.length()) {
         name.setTo(tzID, sep + 1);
-        name.findAndReplace("_", " ");
+        name.findAndReplace(UnicodeString((UChar)0x5f /* _ */),
+                            UnicodeString((UChar)0x20 /* space */));
     } else {
         name.setToBogus();
     }

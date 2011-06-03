@@ -233,19 +233,21 @@ void ConfusabledataBuilder::build(const char * confusables, int32_t confusablesL
     //   Capture Group 8:  A syntactically invalid line.  Anything that didn't match before.
     // Example Line from the confusables.txt source file:
     //   "1D702 ;	006E 0329 ;	SL	# MATHEMATICAL ITALIC SMALL ETA ... "
-    fParseLine = uregex_openC(
+    UnicodeString pattern(
         "(?m)^[ \\t]*([0-9A-Fa-f]+)[ \\t]+;"      // Match the source char
         "[ \\t]*([0-9A-Fa-f]+"                    // Match the replacement char(s)
            "(?:[ \\t]+[0-9A-Fa-f]+)*)[ \\t]*;"    //     (continued)
         "\\s*(?:(SL)|(SA)|(ML)|(MA))"             // Match the table type
         "[ \\t]*(?:#.*?)?$"                       // Match any trailing #comment
         "|^([ \\t]*(?:#.*?)?)$"       // OR match empty lines or lines with only a #comment
-        "|^(.*?)$",                   // OR match any line, which catches illegal lines.
-        0, NULL, &status);
+        "|^(.*?)$", -1, US_INV);      // OR match any line, which catches illegal lines.
+    // TODO: Why are we using the regex C API here? C++ would just take UnicodeString...
+    fParseLine = uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, &status);
 
     // Regular expression for parsing a hex number out of a space-separated list of them.
     //   Capture group 1 gets the number, with spaces removed.
-    fParseHexNum = uregex_openC("\\s*([0-9A-F]+)", 0, NULL, &status);
+    pattern = UNICODE_STRING_SIMPLE("\\s*([0-9A-F]+)");
+    fParseHexNum = uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, &status);
 
     // Zap any Byte Order Mark at the start of input.  Changing it to a space is benign
     //   given the syntax of the input.

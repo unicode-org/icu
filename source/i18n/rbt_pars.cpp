@@ -825,11 +825,11 @@ idBlockVector(statusReturn),
 variablesVector(statusReturn),
 segmentObjects(statusReturn)
 {
-    idBlockVector.setDeleter(uhash_deleteUnicodeString);
+    idBlockVector.setDeleter(uprv_deleteUObject);
     curData = NULL;
     compoundFilter = NULL;
     parseData = NULL;
-    variableNames.setValueDeleter(uhash_deleteUnicodeString);
+    variableNames.setValueDeleter(uprv_deleteUObject);
 }
 
 /**

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,13 +18,11 @@
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-#include "unicode/locid.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
-#include "unicode/ubrk.h"
 #include "ustr_imp.h"
 #include "uhash.h"
 
@@ -84,22 +82,13 @@ UnicodeString::doCaseCompare(int32_t start,
 // Write implementation
 //========================================
 
-/*
- * Implement argument checking and buffer handling
- * for string case mapping as a common function.
- */
-
 UnicodeString &
-UnicodeString::caseMap(BreakIterator *titleIter,
-                       const char *locale,
-                       uint32_t options,
-                       int32_t toWhichCase) {
+UnicodeString::caseMap(const UCaseMap *csm,
+                       UStringCaseMapper *stringCaseMapper) {
   if(isEmpty() || !isWritable()) {
     // nothing to do
     return *this;
   }
-
-  const UCaseProps *csp=ucase_getSingleton();
 
   // We need to allocate a new buffer for the internal string case mapping function.
   // This is very similar to how doReplace() keeps the old array pointer
@@ -135,28 +124,8 @@ UnicodeString::caseMap(BreakIterator *titleIter,
   int32_t newLength;
   do {
     errorCode = U_ZERO_ERROR;
-    if(toWhichCase==TO_LOWER) {
-      newLength = ustr_toLower(csp, getArrayStart(), getCapacity(),
-                               oldArray, oldLength,
-                               locale, &errorCode);
-    } else if(toWhichCase==TO_UPPER) {
-      newLength = ustr_toUpper(csp, getArrayStart(), getCapacity(),
-                               oldArray, oldLength,
-                               locale, &errorCode);
-    } else if(toWhichCase==TO_TITLE) {
-#if UCONFIG_NO_BREAK_ITERATION
-        errorCode=U_UNSUPPORTED_ERROR;
-#else
-      newLength = ustr_toTitle(csp, getArrayStart(), getCapacity(),
-                               oldArray, oldLength,
-                               (UBreakIterator *)titleIter, locale, options, &errorCode);
-#endif
-    } else {
-      newLength = ustr_foldCase(csp, getArrayStart(), getCapacity(),
-                                oldArray, oldLength,
-                                options,
-                                &errorCode);
-    }
+    newLength = stringCaseMapper(csm, getArrayStart(), getCapacity(),
+                                 oldArray, oldLength, &errorCode);
     setLength(newLength);
   } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(newLength, newLength, FALSE));
 
@@ -170,48 +139,11 @@ UnicodeString::caseMap(BreakIterator *titleIter,
 }
 
 UnicodeString &
-UnicodeString::toLower() {
-  return caseMap(0, Locale::getDefault().getName(), 0, TO_LOWER);
-}
-
-UnicodeString &
-UnicodeString::toLower(const Locale &locale) {
-  return caseMap(0, locale.getName(), 0, TO_LOWER);
-}
-
-UnicodeString &
-UnicodeString::toUpper() {
-  return caseMap(0, Locale::getDefault().getName(), 0, TO_UPPER);
-}
-
-UnicodeString &
-UnicodeString::toUpper(const Locale &locale) {
-  return caseMap(0, locale.getName(), 0, TO_UPPER);
-}
-
-#if !UCONFIG_NO_BREAK_ITERATION
-
-UnicodeString &
-UnicodeString::toTitle(BreakIterator *titleIter) {
-  return caseMap(titleIter, Locale::getDefault().getName(), 0, TO_TITLE);
-}
-
-UnicodeString &
-UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
-  return caseMap(titleIter, locale.getName(), 0, TO_TITLE);
-}
-
-UnicodeString &
-UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t options) {
-  return caseMap(titleIter, locale.getName(), options, TO_TITLE);
-}
-
-#endif
-
-UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
-    /* The Locale parameter isn't used. Use "" instead. */
-    return caseMap(0, "", options, FOLD_CASE);
+  UCaseMap csm=UCASEMAP_INITIALIZER;
+  csm.csp=ucase_getSingleton();
+  csm.options=options;
+  return caseMap(&csm, ustrcase_internalFold);
 }
 
 U_NAMESPACE_END
@@ -244,4 +176,3 @@ uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2) {
     }
     return str1->caseCompare(*str2, U_FOLD_CASE_DEFAULT) == 0;
 }
-

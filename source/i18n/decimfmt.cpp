@@ -433,7 +433,7 @@ DecimalFormat::construct(UErrorCode&             status,
         // For most locale, the patterns are probably the same for all
         // plural count. If not, the right pattern need to be re-applied
         // during format.
-        fCurrencyPluralInfo->getCurrencyPluralPattern("other", currencyPluralPatternForOther);
+        fCurrencyPluralInfo->getCurrencyPluralPattern(UNICODE_STRING("other", 5), currencyPluralPatternForOther);
         patternUsed = &currencyPluralPatternForOther;
         // TODO: not needed?
         setCurrencyForSymbols();
@@ -509,7 +509,7 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
                                                     *fPosPrefixPattern,
                                                     *fPosSuffixPattern,
                                                     UCURR_SYMBOL_NAME);
-        fAffixPatternsForCurrency->put("default", affixPtn, status);
+        fAffixPatternsForCurrency->put(UNICODE_STRING("default", 7), affixPtn, status);
     }
 
     // save the unique currency plural patterns of this locale.
@@ -556,14 +556,13 @@ DecimalFormat::setupCurrencyAffixes(const UnicodeString& pattern,
             const PluralRules* pluralRules = fCurrencyPluralInfo->getPluralRules();
             StringEnumeration* keywords = pluralRules->getKeywords(status);
             if (U_SUCCESS(status)) {
-                const char* pluralCountCh;
-                while ((pluralCountCh = keywords->next(NULL, status)) != NULL) {
+                const UnicodeString* pluralCount;
+                while ((pluralCount = keywords->snext(status)) != NULL) {
                     if ( U_SUCCESS(status) ) {
-                        UnicodeString pluralCount = UnicodeString(pluralCountCh);
-                        expandAffixAdjustWidth(&pluralCount);
+                        expandAffixAdjustWidth(pluralCount);
                         AffixesForCurrency* affix = new AffixesForCurrency(
                             fNegativePrefix, fNegativeSuffix, fPositivePrefix, fPositiveSuffix);
-                        fAffixesForCurrency->put(pluralCount, affix, status);
+                        fAffixesForCurrency->put(*pluralCount, affix, status);
                     }
                 }
             }
@@ -584,16 +583,15 @@ DecimalFormat::setupCurrencyAffixes(const UnicodeString& pattern,
             const PluralRules* pluralRules = fCurrencyPluralInfo->getPluralRules();
             StringEnumeration* keywords = pluralRules->getKeywords(status);
             if (U_SUCCESS(status)) {
-                const char* pluralCountCh;
-                while ((pluralCountCh = keywords->next(NULL, status)) != NULL) {
+                const UnicodeString* pluralCount;
+                while ((pluralCount = keywords->snext(status)) != NULL) {
                     if ( U_SUCCESS(status) ) {
-                        UnicodeString pluralCount = UnicodeString(pluralCountCh);
                         UnicodeString ptn;
-                        fCurrencyPluralInfo->getCurrencyPluralPattern(pluralCount, ptn);
-                        applyPatternInternally(pluralCount, ptn, false, parseErr, status);
+                        fCurrencyPluralInfo->getCurrencyPluralPattern(*pluralCount, ptn);
+                        applyPatternInternally(*pluralCount, ptn, false, parseErr, status);
                         AffixesForCurrency* affix = new AffixesForCurrency(
                             fNegativePrefix, fNegativeSuffix, fPositivePrefix, fPositiveSuffix);
-                        fPluralAffixesForCurrency->put(pluralCount, affix, status);
+                        fPluralAffixesForCurrency->put(*pluralCount, affix, status);
                     }
                 }
             }
@@ -3281,17 +3279,13 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                         // For other cases, pluralCount == null,
                         // and plural names are not needed.
                         int32_t len;
-                        // TODO: num of char in plural count
-                        char pluralCountChar[10];
-                        if (pluralCount->length() >= 10) {
-                            break;
-                        }
-                        pluralCount->extract(0, pluralCount->length(), pluralCountChar);
+                        CharString pluralCountChar;
+                        pluralCountChar.appendInvariantChars(*pluralCount, ec);
                         UBool isChoiceFormat;
                         const UChar* s = ucurr_getPluralName(currencyUChars,
                             fSymbols != NULL ? fSymbols->getLocale().getName() :
                             Locale::getDefault().getName(), &isChoiceFormat,
-                            pluralCountChar, &len, &ec);
+                            pluralCountChar.data(), &len, &ec);
                         affix += UnicodeString(s, len);
                         handler.addAttribute(kCurrencyField, beginIdx, affix.length());
                     } else if(intl) {

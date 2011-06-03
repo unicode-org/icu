@@ -12,6 +12,7 @@
 #include "propname.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
+#include "unicode/uscript.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -311,4 +312,16 @@ u_getPropertyValueEnum(UProperty property,
                        const char* alias) {
     U_NAMESPACE_USE
     return PropNameData::getPropertyValueEnum(property, alias);
+}
+
+U_CAPI const char*  U_EXPORT2
+uscript_getName(UScriptCode scriptCode){
+    return u_getPropertyValueName(UCHAR_SCRIPT, scriptCode,
+                                  U_LONG_PROPERTY_NAME);
+}
+
+U_CAPI const char*  U_EXPORT2
+uscript_getShortName(UScriptCode scriptCode){
+    return u_getPropertyValueName(UCHAR_SCRIPT, scriptCode,
+                                  U_SHORT_PROPERTY_NAME);
 }

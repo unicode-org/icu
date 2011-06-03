@@ -1349,7 +1349,8 @@ DateIntervalFormat::adjustFieldWidth(const UnicodeString& inputSkeleton,
     DateIntervalInfo::parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
     DateIntervalInfo::parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
     if ( differenceInfo == 2 ) {
-        adjustedPtn.findAndReplace("v", "z");
+        adjustedPtn.findAndReplace(UnicodeString((UChar)0x76 /* v */),
+                                   UnicodeString((UChar)0x7a /* z */));
     }
 
     UBool inQuote = false;

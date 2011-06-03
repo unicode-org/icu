@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -13,6 +13,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
+#include "cmemory.h"
 #include "uhash.h"
 
 U_NAMESPACE_BEGIN
@@ -108,7 +109,7 @@ inline void Hashtable::init(UHashFunction *keyHash, UKeyComparator *keyComp,
     uhash_init(&hashObj, keyHash, keyComp, valueComp, &status);
     if (U_SUCCESS(status)) {
         hash = &hashObj;
-        uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
+        uhash_setKeyDeleter(hash, uprv_deleteUObject);
     }
 }
 

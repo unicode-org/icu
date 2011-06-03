@@ -23,7 +23,6 @@
 U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
-class UnicodeSet;
 
 class U_COMMON_API ICU_Utility /* not : public UObject because all methods are static */ {
  public:
@@ -235,16 +234,6 @@ private:
 };
 
 U_NAMESPACE_END
-
-/**
- * Returns a new set with the Pattern_White_Space characters.
- * The caller must close/delete the result.
- * Stable set of characters, won't change.
- * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
- * @internal
- */
-U_CAPI U_NAMESPACE_QUALIFIER UnicodeSet* U_EXPORT2
-uprv_openPatternWhiteSpaceSet(UErrorCode* ec);
 
 #endif
 //eof

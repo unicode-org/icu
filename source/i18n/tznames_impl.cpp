@@ -866,7 +866,7 @@ ZNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *node, 
             if ((nameinfo->type & fTypes) != 0) {
                 // matches a requested type
                 if (fResults == NULL) {
-                    fResults = new UVector(uhash_freeBlock, NULL, status);
+                    fResults = new UVector(uprv_free, NULL, status);
                     if (fResults == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                     }
@@ -1090,7 +1090,7 @@ TimeZoneNamesImpl::getMetaZoneID(const UnicodeString& tzID, UDate date, UnicodeS
 
 UnicodeString&
 TimeZoneNamesImpl::getReferenceZoneID(const UnicodeString& mzID, const char* region, UnicodeString& tzID) const {
-    ZoneMeta::getZoneIdByMetazone(mzID, UnicodeString(region), tzID);
+    ZoneMeta::getZoneIdByMetazone(mzID, UnicodeString(region, -1, US_INV), tzID);
     return tzID;
 }
 

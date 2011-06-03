@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -14,6 +14,7 @@
 #define UHASH_H
 
 #include "unicode/utypes.h"
+#include "cmemory.h"
 
 /**
  * UHashtable stores key-value pairs and does moderately fast lookup
@@ -125,14 +126,8 @@ typedef UBool U_CALLCONV UKeyComparator(const UHashTok key1,
  */
 typedef UBool U_CALLCONV UValueComparator(const UHashTok val1,
                                           const UHashTok val2);
-/**
- * A function called by <TT>uhash_remove</TT>,
- * <TT>uhash_close</TT>, or <TT>uhash_put</TT> to delete
- * an existing key or value.
- * @param obj A key or value stored in a hashtable
- * @see uhash_deleteUObject
- */
-typedef void U_CALLCONV UObjectDeleter(void* obj);
+
+/* see cmemory.h for UObjectDeleter and uprv_deleteUObject() */
 
 /**
  * This specifies whether or not, and how, the hastable resizes itself.
@@ -579,13 +574,6 @@ uhash_hashUChars(const UHashTok key);
 U_CAPI int32_t U_EXPORT2 
 uhash_hashChars(const UHashTok key);
 
-/* Used by UnicodeString to compute its hashcode - Not public API. */
-U_CAPI int32_t U_EXPORT2 
-uhash_hashUCharsN(const UChar *key, int32_t length);
-
-U_CAPI int32_t U_EXPORT2 
-uhash_hashCharsN(const char *key, int32_t length);
-
 /**
  * Generate a case-insensitive hash code for a null-terminated char*
  * string.  If the string is not null-terminated do not use this
@@ -666,13 +654,6 @@ uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2);
 U_CAPI UBool U_EXPORT2 
 uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2);
 
-/**
- * Deleter function for UnicodeString* keys or values.
- * @param obj The object to be deleted
- */
-U_CAPI void U_EXPORT2 
-uhash_deleteUnicodeString(void *obj);
-
 /********************************************************************
  * int32_t Support Functions
  ********************************************************************/
@@ -705,20 +686,7 @@ uhash_compareLong(const UHashTok key1, const UHashTok key2);
 U_CAPI void U_EXPORT2 
 uhash_deleteHashtable(void *obj);
 
-/**
- * Deleter for UObject instances.
- * @param obj The object to be deleted
- */
-U_CAPI void U_EXPORT2 
-uhash_deleteUObject(void *obj);
-
-/**
- * Deleter for any key or value allocated using uprv_malloc.  Calls
- * uprv_free.
- * @param obj The object to be deleted
- */
-U_CAPI void U_EXPORT2 
-uhash_freeBlock(void *obj);
+/* Use uprv_free() itself as a deleter for any key or value allocated using uprv_malloc. */
 
 /**
  * Checks if the given hash tables are equal or not.

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and
+ * Copyright (C) 2001-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -458,7 +458,7 @@ ICUServiceTest::testAPI_One()
     // should not be able to locate invisible services
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+        UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, status);
         service.getVisibleIDs(ids, status);
         UnicodeString target = "en_US_BAR";
         confirmBoolean("18) find invisible", !ids.contains(&target));
@@ -551,7 +551,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
     public:
     TestMultipleKeyStringFactory(const UnicodeString ids[], int32_t count, const UnicodeString& factoryID)
         : _status(U_ZERO_ERROR)
-        , _ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, count, _status)
+        , _ids(uprv_deleteUObject, uhash_compareUnicodeString, count, _status)
         , _factoryID(factoryID + ": ") 
     {
         for (int i = 0; i < count; ++i) {
@@ -680,7 +680,7 @@ ICUServiceTest::testAPI_Two()
     // iterate over the visual ids returned by the multiple factory
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, 0, status);
+        UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, 0, status);
         service.getVisibleIDs(ids, status);
         for (int i = 0; i < ids.size(); ++i) {
             const UnicodeString* id = (const UnicodeString*)ids[i];
@@ -801,7 +801,7 @@ ICUServiceTest::testAPI_Two()
 
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, 0, status);
+        UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, 0, status);
         service.getVisibleIDs(ids, status);
         for (int i = 0; i < ids.size(); ++i) {
             const UnicodeString* id = (const UnicodeString*)ids[i];
@@ -897,7 +897,7 @@ ICUServiceTest::testRBF()
     // list all of the resources 
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, 0, status);
+        UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, 0, status);
         service.getVisibleIDs(ids, status);
         logln("all visible ids:");
         for (int i = 0; i < ids.size(); ++i) {
@@ -1164,7 +1164,7 @@ void ICUServiceTest::testLocale() {
 
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, 0, status);
+        UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, 0, status);
         service.getVisibleIDs(ids, status);
         logln("all visible ids:");
         for (int i = 0; i < ids.size(); ++i) {
@@ -1176,7 +1176,7 @@ void ICUServiceTest::testLocale() {
     Locale::setDefault(loc, status);
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, 0, status);
+        UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, 0, status);
         service.getVisibleIDs(ids, status);
         logln("all visible ids:");
         for (int i = 0; i < ids.size(); ++i) {
@@ -1368,7 +1368,7 @@ void ICUServiceTest::testCoverage()
                   }
           }
 
-      UVector ids(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+      UVector ids(uprv_deleteUObject, uhash_compareUnicodeString, status);
           // yuck, this is awkward to use.  All because we pass null in an overload.
           // TODO: change this.
           UnicodeString str("Greet");

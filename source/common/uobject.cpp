@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -111,4 +111,9 @@ UObject::~UObject() {}
 
 U_NAMESPACE_END
 
+U_NAMESPACE_USE
 
+U_CAPI void U_EXPORT2
+uprv_deleteUObject(void *obj) {
+    delete reinterpret_cast<UObject *>(obj);
+}

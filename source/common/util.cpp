@@ -9,7 +9,6 @@
 */
 
 #include "unicode/unimatch.h"
-#include "unicode/uniset.h"
 #include "patternprops.h"
 #include "util.h"
 
@@ -407,22 +406,3 @@ void ICU_Utility::appendToRule(UnicodeString& rule,
 }
 
 U_NAMESPACE_END
-
-U_CAPI U_NAMESPACE_QUALIFIER UnicodeSet* U_EXPORT2
-uprv_openPatternWhiteSpaceSet(UErrorCode* ec) {
-    if(U_FAILURE(*ec)) {
-        return NULL;
-    }
-    // create a set with the Pattern_White_Space characters,
-    // without a pattern string for fewer code dependencies
-    U_NAMESPACE_QUALIFIER UnicodeSet *set=new U_NAMESPACE_QUALIFIER UnicodeSet(9, 0xd);
-    // Check for new failure.
-    if (set == NULL) {
-        *ec = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    set->UnicodeSet::add(0x20).add(0x85).add(0x200e, 0x200f).add(0x2028, 0x2029);
-    return set;
-}
-
-//eof

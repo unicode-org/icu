@@ -391,6 +391,9 @@
     <ClCompile Include="uniset.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
+    <ClCompile Include="uniset_closure.cpp">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
     <ClCompile Include="uniset_props.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
@@ -466,6 +469,9 @@
     <ClCompile Include="ucasemap.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="ucasemap_titlecase_brkiter.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="uchriter.cpp">
       <Filter>strings</Filter>
     </ClCompile>
@@ -481,19 +487,31 @@
     <ClCompile Include="unistr_case.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="unistr_case_locale.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="unistr_cnv.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="unistr_props.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="unistr_titlecase_brkiter.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="ustr_cnv.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="ustr_titlecase_brkiter.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="ustr_wcs.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="ustrcase.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="ustrcase_locale.cpp">
       <Filter>strings</Filter>
     </ClCompile>
     <ClCompile Include="ustring.cpp">

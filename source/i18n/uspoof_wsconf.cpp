@@ -52,7 +52,6 @@ U_NAMESPACE_USE
 // The expression will match _all_ lines, including erroneous lines.
 // The result of the parse is returned via the contents of the (match) groups.
 static const char *parseExp = 
-        
         "(?m)"                                         // Multi-line mode
         "^([ \\t]*(?:#.*?)?)$"                         // A blank or comment line.  Matches Group 1.
         "|^(?:"                                        //   OR
@@ -115,7 +114,8 @@ void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
 
     anyCaseTrie = utrie2_open(0, 0, &status);
     lowerCaseTrie = utrie2_open(0, 0, &status);
-    
+
+    UnicodeString pattern(parseExp, -1, US_INV);
 
     // The scriptSets vector provides a mapping from TRIE values to the set of scripts.
     //
@@ -150,10 +150,8 @@ void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
     }
     u_strFromUTF8(input, inputLen+1, NULL, confusablesWS, confusablesWSLen, &status);
 
+    parseRegexp = uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, &status);
 
-
-    parseRegexp = uregex_openC(parseExp, 0, NULL, &status);
-    
     // Zap any Byte Order Mark at the start of input.  Changing it to a space is benign
     //   given the syntax of the input.
     if (*input == 0xfeff) {

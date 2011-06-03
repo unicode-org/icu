@@ -51,7 +51,7 @@ StringTrieBuilder::createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
     if(U_SUCCESS(errorCode)) {
-        uhash_setKeyDeleter(nodes, uhash_deleteUObject);
+        uhash_setKeyDeleter(nodes, uprv_deleteUObject);
     }
 }
 

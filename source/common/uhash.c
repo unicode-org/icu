@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -15,6 +15,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "uassert.h"
+#include "ustr_imp.h"
 
 /* This hashtable is implemented as a double hash.  All elements are
  * stored in a single array with no secondary storage for collision
@@ -832,58 +833,26 @@ uhash_tokp(void* p) {
  * PUBLIC Key Hash Functions
  ********************************************************************/
 
-/*
-  Compute the hash by iterating sparsely over about 32 (up to 63)
-  characters spaced evenly through the string.  For each character,
-  multiply the previous hash value by a prime number and add the new
-  character in, like a linear congruential random number generator,
-  producing a pseudorandom deterministic value well distributed over
-  the output range. [LIU]
-*/
-
-#define STRING_HASH(TYPE, STR, STRLEN, DEREF) \
-    int32_t hash = 0;                         \
-    const TYPE *p = (const TYPE*) STR;        \
-    if (p != NULL) {                          \
-        int32_t len = (int32_t)(STRLEN);      \
-        int32_t inc = ((len - 32) / 32) + 1;  \
-        const TYPE *limit = p + len;          \
-        while (p<limit) {                     \
-            hash = (hash * 37) + DEREF;       \
-            p += inc;                         \
-        }                                     \
-    }                                         \
-    return hash
-
 U_CAPI int32_t U_EXPORT2
 uhash_hashUChars(const UHashTok key) {
-    STRING_HASH(UChar, key.pointer, u_strlen(p), *p);
-}
-
-/* Used by UnicodeString to compute its hashcode - Not public API. */
-U_CAPI int32_t U_EXPORT2
-uhash_hashUCharsN(const UChar *str, int32_t length) {
-    STRING_HASH(UChar, str, length, *p);
-}
-
-U_CAPI int32_t U_EXPORT2
-uhash_hashCharsN(const char *str, int32_t length) {
-    STRING_HASH(char, str, length, *p);
+    const UChar *s = (const UChar *)key.pointer;
+    return s == NULL ? 0 : ustr_hashUCharsN(s, u_strlen(s));
 }
 
 U_CAPI int32_t U_EXPORT2
 uhash_hashChars(const UHashTok key) {
-    STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), *p);
+    const char *s = (const char *)key.pointer;
+    return s == NULL ? 0 : ustr_hashCharsN(s, uprv_strlen(s));
 }
 
 U_CAPI int32_t U_EXPORT2
 uhash_hashIChars(const UHashTok key) {
-    STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), uprv_tolower(*p));
+    const char *s = (const char *)key.pointer;
+    return s == NULL ? 0 : ustr_hashICharsN(s, uprv_strlen(s));
 }
 
 U_CAPI UBool U_EXPORT2 
 uhash_equals(const UHashtable* hash1, const UHashtable* hash2){
-    
     int32_t count1, count2, pos, i;
 
     if(hash1==hash2){
@@ -1002,13 +971,3 @@ U_CAPI UBool U_EXPORT2
 uhash_compareLong(const UHashTok key1, const UHashTok key2) {
     return (UBool)(key1.integer == key2.integer);
 }
-
-/********************************************************************
- * PUBLIC Deleter Functions
- ********************************************************************/
-
-U_CAPI void U_EXPORT2
-uhash_freeBlock(void *obj) {
-    uprv_free(obj);
-}
-
