@@ -150,11 +150,6 @@ uset_clear(USet* set) {
 }
 
 U_CAPI void U_EXPORT2
-uset_closeOver(USet* set, int32_t attributes) {
-    ((UnicodeSet*) set)->UnicodeSet::closeOver(attributes);
-}
-
-U_CAPI void U_EXPORT2
 uset_removeAllStrings(USet* set) {
     ((UnicodeSet*) set)->UnicodeSet::removeAllStrings();
 }

@@ -308,7 +308,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
                     std::cout << "pluralCount: " << pluralCount << "; pattern: " << result_1 << "\n";
 #endif
 
-                    fPluralCountToCurrencyUnitPattern->put(UnicodeString(pluralCount), pattern, status);
+                    fPluralCountToCurrencyUnitPattern->put(UnicodeString(pluralCount, -1, US_INV), pattern, status);
                 }
             }
         }

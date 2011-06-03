@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -288,32 +288,6 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     }
 }
 
-#if !UCONFIG_NO_NORMALIZATION
-
-U_CAPI uint8_t U_EXPORT2
-u_getCombiningClass(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
-    if(U_SUCCESS(errorCode)) {
-        return impl->getCC(impl->getNorm16(c));
-    } else {
-        return 0;
-    }
-}
-
-static uint16_t
-getFCD16(UChar32 c) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    const UTrie2 *trie=Normalizer2Factory::getFCDTrie(errorCode);
-    if(U_SUCCESS(errorCode)) {
-        return UTRIE2_GET16(trie, c);
-    } else {
-        return 0;
-    }
-}
-
-#endif
-
 struct IntProperty;
 
 typedef int32_t IntPropertyGetValue(const IntProperty &prop, UChar32 c, UProperty which);
@@ -427,7 +401,7 @@ static int32_t getLeadCombiningClass(const IntProperty &, UChar32, UProperty) {
 }
 #else
 static int32_t getLeadCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return getFCD16(c)>>8;
+    return unorm_getFCD16Simple(c)>>8;
 }
 #endif
 
@@ -437,7 +411,7 @@ static int32_t getTrailCombiningClass(const IntProperty &, UChar32, UProperty) {
 }
 #else
 static int32_t getTrailCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return getFCD16(c)&0xff;
+    return unorm_getFCD16Simple(c)&0xff;
 }
 #endif
 

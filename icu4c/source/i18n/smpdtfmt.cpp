@@ -3058,7 +3058,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // next step. Otherwise, all time zone names starting with GMT/UT/UTC
             // (for example, "UTT") will fail.
             if (gmtLen > 0 && ((text.length() - start) == gmtLen)) {
-                TimeZone *tz = TimeZone::createTimeZone(UnicodeString("Etc/GMT"));
+                TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING("Etc/GMT", 7));
                 cal.adoptTimeZone(tz);
                 return start + gmtLen;
             }
@@ -3115,7 +3115,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Step 5
             // If we saw standalone GMT zero pattern, then use GMT.
             if (gmtLen > 0) {
-                TimeZone *tz = TimeZone::createTimeZone(UnicodeString("Etc/GMT"));
+                TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING("Etc/GMT", 7));
                 cal.adoptTimeZone(tz);
                 return start + gmtLen;
             }

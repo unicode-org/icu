@@ -21,6 +21,7 @@
 #include "uhash.h"
 #include "uarrsort.h"
 #include "uassert.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -335,7 +336,7 @@ BytesTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar
 
 BytesTrieBuilder::BTLinearMatchNode::BTLinearMatchNode(const char *bytes, int32_t len, Node *nextNode)
         : LinearMatchNode(len, nextNode), s(bytes) {
-    hash=hash*37+uhash_hashCharsN(bytes, len);
+    hash=hash*37+ustr_hashCharsN(bytes, len);
 }
 
 UBool

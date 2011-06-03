@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* Decimal Context module                                             */
 /* ------------------------------------------------------------------ */
-/* Copyright (c) IBM Corporation, 2000-2010.  All rights reserved.    */
+/* Copyright (c) IBM Corporation, 2000-2011.  All rights reserved.    */
 /*                                                                    */
 /* This software is made available under the terms of the             */
 /* ICU License -- ICU 1.8.1 and later.                                */
@@ -25,10 +25,12 @@
 #include "decContext.h"       /* context and base types  */
 #include "decNumberLocal.h"   /* decNumber local types, etc.  */
 
+#if 0  /* ICU: No need to test endianness at runtime. */
 /* compile-time endian tester [assumes sizeof(Int)>1] */
 static  const  Int mfcone=1;                 /* constant 1  */
 static  const  Flag *mfctop=(Flag *)&mfcone; /* -> top byte  */
 #define LITEND *mfctop             /* named flag; 1=little-endian  */
+#endif
 
 /* ------------------------------------------------------------------ */
 /* round-for-reround digits                                           */
@@ -210,7 +212,9 @@ U_CAPI decContext * U_EXPORT2 uprv_decContextSetRounding(decContext *context,
 /* ------------------------------------------------------------------ */
 U_CAPI decContext *  U_EXPORT2 uprv_decContextSetStatus(decContext *context, uInt status) {
   context->status|=status;
+#if 0  /* ICU: Do not raise signals. */
   if (status & context->traps) raise(SIGFPE);
+#endif
   return context;} /* decContextSetStatus  */
 
 /* ------------------------------------------------------------------ */
@@ -374,6 +378,7 @@ U_CAPI const char * U_EXPORT2 uprv_decContextStatusToString(const decContext *co
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
+#if 0  /* ICU: Unused function. Anyway, do not call printf(). */
 U_CAPI Int  U_EXPORT2 uprv_decContextTestEndian(Flag quiet) {
   Int res=0;                  /* optimist  */
   uInt dle=(uInt)DECLITEND;   /* unsign  */
@@ -391,6 +396,7 @@ U_CAPI Int  U_EXPORT2 uprv_decContextTestEndian(Flag quiet) {
     }
   return res;
   } /* decContextTestEndian  */
+#endif
 
 /* ------------------------------------------------------------------ */
 /* decContextTestSavedStatus -- test bits in saved status             */

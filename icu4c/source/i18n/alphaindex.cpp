@@ -32,7 +32,7 @@
 #include "uvector.h"
 
 #include <string>
-#include <iostream>
+//#include <iostream>
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(AlphabeticIndex)
@@ -46,15 +46,6 @@ sortCollateComparator(const void *context, const void *left, const void *right);
 
 static int32_t U_CALLCONV
 recordCompareFn(const void *context, const void *left, const void *right);
-
-//
-//  UHash support function, delete a UnicodeSet
-//     TODO:  move this function into uhash.
-//
-static void U_CALLCONV
-uhash_deleteUnicodeSet(void *obj) {
-    delete static_cast<UnicodeSet *>(obj);
-}
 
 //  UVector<Bucket *> support function, delete a Bucket.
 static void U_CALLCONV
@@ -183,7 +174,7 @@ void AlphabeticIndex::buildIndex(UErrorCode &status) {
     // that are the same according to the collator
 
     UVector preferenceSorting(status);   // Vector of UnicodeStrings; owned by the vector.
-    preferenceSorting.setDeleter(uhash_deleteUnicodeString);
+    preferenceSorting.setDeleter(uprv_deleteUObject);
     appendUnicodeSetToUVector(preferenceSorting, *initialLabels_, status);
     preferenceSorting.sortWithUComparator(PreferenceComparator, &status, status);
 
@@ -236,7 +227,7 @@ void AlphabeticIndex::buildIndex(UErrorCode &status) {
     const int32_t size = labelSet.size() - 1;
     if (size > maxLabelCount_) {
         UVector *newLabels = new UVector(status);
-        newLabels->setDeleter(uhash_deleteUnicodeString);
+        newLabels->setDeleter(uprv_deleteUObject);
         int32_t count = 0;
         int32_t old = -1;
         for (int32_t srcIndex=0; srcIndex<labels_->size(); srcIndex++) {
@@ -580,13 +571,13 @@ void AlphabeticIndex::init(UErrorCode &status) {
                                         uhash_compareUnicodeString, // key Comparator,
                                         NULL,                       // value Comparator
                                         &status);
-    uhash_setKeyDeleter(alreadyIn_, uhash_deleteUnicodeString);
-    uhash_setValueDeleter(alreadyIn_, uhash_deleteUnicodeSet);
+    uhash_setKeyDeleter(alreadyIn_, uprv_deleteUObject);
+    uhash_setValueDeleter(alreadyIn_, uprv_deleteUObject);
 
     bucketList_            = new UVector(status);
     bucketList_->setDeleter(alphaIndex_deleteBucket);
     labels_                = new UVector(status);
-    labels_->setDeleter(uhash_deleteUnicodeString);
+    labels_->setDeleter(uprv_deleteUObject);
     labels_->setComparer(uhash_compareUnicodeString);
     inputRecords_          = new UVector(status);
     inputRecords_->setDeleter(alphaIndex_deleteRecord);
@@ -839,7 +830,7 @@ UVector *AlphabeticIndex::firstStringsInScript(Collator *ruleBasedCollator, UErr
     }
 
     UVector *dest = new UVector(status);
-    dest->setDeleter(uhash_deleteUnicodeString);
+    dest->setDeleter(uprv_deleteUObject);
     for (uint32_t i = 0; i < sizeof(results) / sizeof(results[0]); ++i) {
         if (results[i].length() > 0) {
             dest->addElement(results[i].clone(), status);
@@ -876,7 +867,7 @@ UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
         return NULL;
     }
     UVector *dest = new UVector(status);
-    dest->setDeleter(uhash_deleteUnicodeString);
+    dest->setDeleter(uprv_deleteUObject);
     if (dest == NULL && U_SUCCESS(status)) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }

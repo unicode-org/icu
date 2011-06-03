@@ -886,7 +886,7 @@ struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const stru
 static int32_t U_CALLCONV
 string_hash(const UHashTok key) {
     const struct SResource *res = (struct SResource *)key.pointer;
-    return uhash_hashUCharsN(res->u.fString.fChars, res->u.fString.fLength);
+    return ustr_hashUCharsN(res->u.fString.fChars, res->u.fString.fLength);
 }
 
 static UBool U_CALLCONV

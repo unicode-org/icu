@@ -1397,7 +1397,7 @@ static const char* ReorderingTokenNames[] = {
 
 static void toUpper(const char* src, char* dst, uint32_t length) {
    for (uint32_t i = 0; *src != '\0' && i < length - 1; ++src, ++dst, ++i) {
-       *dst = toupper(*src);
+       *dst = uprv_toupper(*src);
    }
    *dst = '\0';
 }

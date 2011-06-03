@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2009, International Business Machines Corporation
+*   Copyright (c) 2002-2011, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -907,7 +907,7 @@ void TransliteratorIDParser::init(UErrorCode &status) {
     	status = U_MEMORY_ALLOCATION_ERROR;
     	return;
     }
-    special_inverses->setValueDeleter(uhash_deleteUnicodeString);
+    special_inverses->setValueDeleter(uprv_deleteUObject);
 
     umtx_lock(&LOCK);
     if (SPECIAL_INVERSES == NULL) {

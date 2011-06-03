@@ -1559,7 +1559,7 @@ UBool UnicodeSet::allocateStrings(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
-    strings = new UVector(uhash_deleteUnicodeString,
+    strings = new UVector(uprv_deleteUObject,
                           uhash_compareUnicodeString, 1, status);
     if (strings == NULL) { // Check for memory allocation error.
         status = U_MEMORY_ALLOCATION_ERROR;

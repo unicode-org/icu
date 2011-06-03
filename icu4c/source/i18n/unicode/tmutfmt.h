@@ -243,7 +243,7 @@ private:
 
     // fill in fTimeUnitToCountToPatterns from locale fall-back chain
     void searchInLocaleChain(UTimeUnitFormatStyle style, const char* key, const char* localeName,
-                             TimeUnit::UTimeUnitFields field, const char*,
+                             TimeUnit::UTimeUnitFields field, const UnicodeString&,
                              const char*, Hashtable*, UErrorCode&);
 
     // initialize hash table

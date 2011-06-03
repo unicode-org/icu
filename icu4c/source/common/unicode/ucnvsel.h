@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2008-2010, International Business Machines
+*   Copyright (C) 2008-2011, International Business Machines
 *   Corporation, Google and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,8 +19,11 @@
 #ifndef __ICU_UCNV_SEL_H__
 #define __ICU_UCNV_SEL_H__
 
-#include "unicode/uset.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
+#include "unicode/uset.h"
 #include "unicode/utf16.h"
 #include "unicode/uenum.h"
 #include "unicode/ucnv.h"
@@ -178,5 +181,7 @@ ucnvsel_selectForString(const UConverterSelector* sel,
 U_STABLE UEnumeration * U_EXPORT2
 ucnvsel_selectForUTF8(const UConverterSelector* sel,
                       const char *s, int32_t length, UErrorCode *status);
+
+#endif  /* !UCONFIG_NO_CONVERSION */
 
 #endif  /* __ICU_UCNV_SEL_H__ */

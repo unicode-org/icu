@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -18,7 +18,6 @@
 #include "cmemory.h"
 #include "uvector.h"
 #include "gregoimp.h"
-#include "uhash.h"
 
 U_NAMESPACE_BEGIN
 
@@ -962,7 +961,7 @@ VTimeZone::VTimeZone(const VTimeZone& source)
     if (source.vtzlines != NULL) {
         UErrorCode status = U_ZERO_ERROR;
         int32_t size = source.vtzlines->size();
-        vtzlines = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, size, status);
+        vtzlines = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, size, status);
         if (U_SUCCESS(status)) {
             for (int32_t i = 0; i < size; i++) {
                 UnicodeString *line = (UnicodeString*)source.vtzlines->elementAt(i);
@@ -1007,7 +1006,7 @@ VTimeZone::operator=(const VTimeZone& right) {
         if (right.vtzlines != NULL) {
             UErrorCode status = U_ZERO_ERROR;
             int32_t size = right.vtzlines->size();
-            vtzlines = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, size, status);
+            vtzlines = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, size, status);
             if (U_SUCCESS(status)) {
                 for (int32_t i = 0; i < size; i++) {
                     UnicodeString *line = (UnicodeString*)right.vtzlines->elementAt(i);
@@ -1242,7 +1241,7 @@ VTimeZone::getTimeZoneRules(const InitialTimeZoneRule*& initial,
 
 void
 VTimeZone::load(VTZReader& reader, UErrorCode& status) {
-    vtzlines = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, DEFAULT_VTIMEZONE_LINES, status);
+    vtzlines = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, DEFAULT_VTIMEZONE_LINES, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -1378,7 +1377,7 @@ VTimeZone::parse(UErrorCode& status) {
      // Set the deleter to remove TimeZoneRule vectors to avoid memory leaks due to unowned TimeZoneRules.
     rules->setDeleter(deleteTimeZoneRule);
     
-    dates = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+    dates = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
     if (U_FAILURE(status)) {
         goto cleanupParse;
     }
@@ -1741,7 +1740,7 @@ VTimeZone::write(VTZWriter& writer, UErrorCode& status) const {
     } else {
         UVector *customProps = NULL;
         if (olsonzid.length() > 0 && icutzver.length() > 0) {
-            customProps = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+            customProps = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
             if (U_FAILURE(status)) {
                 return;
             }
@@ -1769,7 +1768,7 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) /*const*/ {
     }
     InitialTimeZoneRule *initial = NULL;
     UVector *transitionRules = NULL;
-    UVector customProps(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+    UVector customProps(uprv_deleteUObject, uhash_compareUnicodeString, status);
     UnicodeString tzid;
 
     // Extract rules applicable to dates after the start time
@@ -1833,7 +1832,7 @@ VTimeZone::writeSimple(UDate time, VTZWriter& writer, UErrorCode& status) /*cons
         return;
     }
 
-    UVector customProps(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+    UVector customProps(uprv_deleteUObject, uhash_compareUnicodeString, status);
     UnicodeString tzid;
 
     // Extract simple rules

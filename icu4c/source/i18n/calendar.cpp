@@ -437,7 +437,7 @@ protected:
         } else {
             ret->append((UChar)0x40); // '@' is a variant character
             ret->append(UNICODE_STRING("calendar=", 9));
-            ret->append(UnicodeString(gCalTypes[getCalendarTypeForLocale(loc.getName())]));
+            ret->append(UnicodeString(gCalTypes[getCalendarTypeForLocale(loc.getName())], -1, US_INV));
         }
         return ret;
     }

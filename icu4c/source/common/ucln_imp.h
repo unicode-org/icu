@@ -1,9 +1,9 @@
 /*
 ******************************************************************************
-*                                                                            *
-* Copyright (C) 2009, International Business Machines                   *
-*                Corporation and others. All Rights Reserved.                *
-*                                                                            *
+*
+* Copyright (C) 2009-2011, International Business Machines
+*                Corporation and others. All Rights Reserved.
+*
 ******************************************************************************
 *   file name:  ucln_imp.h
 *   encoding:   US-ASCII
@@ -56,6 +56,12 @@
  */
 /*static void ucln_unRegisterAutomaticCleanup();*/
 
+#ifdef UCLN_TYPE_IS_COMMON
+#   define UCLN_CLEAN_ME_UP u_cleanup()
+#else
+#   define UCLN_CLEAN_ME_UP ucln_cleanupOne(UCLN_TYPE)
+#endif
+
 /* ------------ automatic cleanup: registration. Choose ONE ------- */
 #if defined(UCLN_AUTO_LOCAL)
 /* To use:
@@ -75,7 +81,7 @@ static UBool gAutoCleanRegistered = FALSE;
 
 static void ucln_atexit_handler()
 {
-    ucln_cleanupOne(UCLN_TYPE);
+    UCLN_CLEAN_ME_UP;
 }
 
 static void ucln_registerAutomaticCleanup()
@@ -101,7 +107,7 @@ U_CAPI void U_EXPORT2 UCLN_FINI (void);
 U_CAPI void U_EXPORT2 UCLN_FINI ()
 {
     /* This function must be defined, if UCLN_FINI is defined, else link error. */
-     ucln_cleanupOne(UCLN_TYPE);
+     UCLN_CLEAN_ME_UP;
 }
 #elif defined(__GNUC__)
 /* GCC - use __attribute((destructor)) */
@@ -109,7 +115,7 @@ static void ucln_destructor()   __attribute__((destructor)) ;
 
 static void ucln_destructor() 
 {
-    ucln_cleanupOne(UCLN_TYPE);
+    UCLN_CLEAN_ME_UP;
 }
 
 /* Windows: DllMain */
@@ -145,7 +151,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         case DLL_PROCESS_DETACH:
             /* Here is the one we actually care about. */
 
-            ucln_cleanupOne(UCLN_TYPE);
+            UCLN_CLEAN_ME_UP;
 
             break;
 

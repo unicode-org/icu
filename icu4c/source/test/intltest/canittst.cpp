@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2010, International Business Machines Corporation and
+ * Copyright (c) 2002-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -130,7 +130,7 @@ void CanonicalIteratorTest::TestBasic() {
     // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
 
     Hashtable *permutations = new Hashtable(FALSE, status);
-    permutations->setValueDeleter(uhash_deleteUnicodeString);
+    permutations->setValueDeleter(uprv_deleteUObject);
     UnicodeString toPermute("ABC");
 
     CanonicalIterator::permute(toPermute, FALSE, permutations, status);
@@ -144,7 +144,7 @@ void CanonicalIteratorTest::TestBasic() {
     // try samples
     logln("testing samples");
     Hashtable *set = new Hashtable(FALSE, status);
-    set->setValueDeleter(uhash_deleteUnicodeString);
+    set->setValueDeleter(uprv_deleteUObject);
     int32_t i = 0;
     CanonicalIterator it("", status);
     if(U_SUCCESS(status)) {

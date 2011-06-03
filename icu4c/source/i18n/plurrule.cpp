@@ -25,7 +25,6 @@
 #include "plurrule_impl.h"
 #include "putilimp.h"
 #include "ucln_in.h"
-#include "uhash.h"
 #include "ustrfmt.h"
 #include "locutil.h"
 
@@ -1381,7 +1380,7 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
     if (U_FAILURE(status)) {
         return;
     }
-    fKeywordNames.setDeleter(uhash_deleteUObject);
+    fKeywordNames.setDeleter(uprv_deleteUObject);
     UBool  addKeywordOther=TRUE;
     RuleChain *node=header;
     while(node!=NULL) {

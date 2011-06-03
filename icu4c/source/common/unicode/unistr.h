@@ -31,6 +31,7 @@
 #include "unicode/std_string.h"
 #include "unicode/stringpiece.h"
 #include "unicode/bytestream.h"
+#include "unicode/ucasemap.h"
 
 struct UConverter;          // unicode/ucnv.h
 class  StringThreadTest;
@@ -51,6 +52,21 @@ class  StringThreadTest;
  */
 U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
+#endif
+
+#ifndef U_STRING_CASE_MAPPER_DEFINED
+#define U_STRING_CASE_MAPPER_DEFINED
+
+/**
+ * Internal string case mapping function type.
+ * @internal
+ */
+typedef int32_t U_CALLCONV
+UStringCaseMapper(const UCaseMap *csm,
+                  UChar *dest, int32_t destCapacity,
+                  const UChar *src, int32_t srcLength,
+                  UErrorCode *pErrorCode);
+
 #endif
 
 U_NAMESPACE_BEGIN
@@ -3355,12 +3371,13 @@ private:
                             int32_t **pBufferToDelete = 0,
                             UBool forceClone = FALSE);
 
-  // common function for case mappings
+  /**
+   * Common function for UnicodeString case mappings.
+   * The stringCaseMapper has the same type UStringCaseMapper
+   * as in ustr_imp.h for ustrcase_map().
+   */
   UnicodeString &
-  caseMap(BreakIterator *titleIter,
-          const char *locale,
-          uint32_t options,
-          int32_t toWhichCase);
+  caseMap(const UCaseMap *csm, UStringCaseMapper *stringCaseMapper);
 
   // ref counting
   void addRef(void);

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -517,7 +517,7 @@ TransliteratorRegistry::TransliteratorRegistry(UErrorCode& status) :
     availableIDs(status)
 {
     registry.setValueDeleter(deleteEntry);
-    availableIDs.setDeleter(uhash_deleteUnicodeString);
+    availableIDs.setDeleter(uprv_deleteUObject);
     availableIDs.setComparer(uhash_compareCaselessUnicodeString);
     specDAG.setValueDeleter(uhash_deleteHashtable);
 }
@@ -936,12 +936,12 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
         if (U_FAILURE(status) || targets == 0) {
             return;
         }
-        targets->setValueDeleter(uhash_deleteUObject);
+        targets->setValueDeleter(uprv_deleteUObject);
         specDAG.put(source, targets, status);
     }
     UVector *variants = (UVector*) targets->get(target);
     if (variants == 0) {
-        variants = new UVector(uhash_deleteUnicodeString,
+        variants = new UVector(uprv_deleteUObject,
                                uhash_compareCaselessUnicodeString, status);
         if (variants == 0) {
             return;
