@@ -69,7 +69,7 @@ hashPartialLocationKey(const UHashTok key) {
         .append(p->mzID)
         .append((UChar)0x23)
         .append((UChar)(p->isLong ? 0x4C : 0x53));
-    return uhash_hashUCharsN(str.getBuffer(), str.length());
+    return str.hashCode();
 }
 
 /**
@@ -209,7 +209,7 @@ GNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *node, 
             if ((nameinfo->type & fTypes) != 0) {
                 // matches a requested type
                 if (fResults == NULL) {
-                    fResults = new UVector(uhash_freeBlock, NULL, status);
+                    fResults = new UVector(uprv_free, NULL, status);
                     if (fResults == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                     }
@@ -350,7 +350,7 @@ TimeZoneGenericNames::initialize(const Locale& locale, UErrorCode& status) {
         cleanup();
         return;
     }
-    uhash_setKeyDeleter(fPartialLocationNamesMap, uhash_freeBlock);
+    uhash_setKeyDeleter(fPartialLocationNamesMap, uprv_free);
     // no value deleter
 
     // target region

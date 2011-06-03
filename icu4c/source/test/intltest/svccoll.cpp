@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -353,7 +353,7 @@ void CollationServiceTest::TestRegisterFactory(void)
         errln("memory allocation error");
         return;
     }
-    fuFUNames->setValueDeleter(uhash_deleteUnicodeString);
+    fuFUNames->setValueDeleter(uprv_deleteUObject);
 
     fuFUNames->put(fu_FU.getName(), new UnicodeString("ze leetle bunny Fu-Fu"), status);
     fuFUNames->put(fu_FU_FOO.getName(), new UnicodeString("zee leetel bunny Foo-Foo"), status);

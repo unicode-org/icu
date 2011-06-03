@@ -11,6 +11,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "hash.h"
@@ -495,12 +496,13 @@ TimeUnitFormat::readFromCurrentLocale(UTimeUnitFormatStyle style, const char* ke
                   if (fNumberFormat != NULL) {
                     messageFormat->setFormat(0, *fNumberFormat);
                   }
-                  MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCount);
+                  UnicodeString pluralCountUniStr(pluralCount, -1, US_INV);
+                  MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCountUniStr);
                   if (formatters == NULL) {
                     formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
                     formatters[UTMUTFMT_FULL_STYLE] = NULL;
                     formatters[UTMUTFMT_ABBREVIATED_STYLE] = NULL;
-                    countToPatterns->put(pluralCount, formatters, err);
+                    countToPatterns->put(pluralCountUniStr, formatters, err);
                     if (U_FAILURE(err)) {
                         uprv_free(formatters);
                     }
@@ -557,8 +559,8 @@ TimeUnitFormat::checkConsistency(UTimeUnitFormatStyle style, const char* key, UE
     //
     StringEnumeration* keywords = fPluralRules->getKeywords(err);
     if (U_SUCCESS(err)) {
-        const char* pluralCount;
-        while ((pluralCount = keywords->next(NULL, err)) != NULL) {
+        const UnicodeString* pluralCount;
+        while ((pluralCount = keywords->snext(err)) != NULL) {
             if ( U_SUCCESS(err) ) {
                 for (int32_t i = 0; i < TimeUnit::UTIMEUNIT_FIELD_COUNT; ++i) {
                     // for each time unit, 
@@ -572,13 +574,15 @@ TimeUnitFormat::checkConsistency(UTimeUnitFormatStyle style, const char* key, UE
                         }
                         fTimeUnitToCountToPatterns[i] = countToPatterns;
                     }
-                    MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCount);
+                    MessageFormat** formatters = (MessageFormat**)countToPatterns->get(*pluralCount);
                     if( formatters == NULL || formatters[style] == NULL ) {
                         // look through parents
                         const char* localeName = fLocale.getName();
+                        CharString pluralCountChars;
+                        pluralCountChars.appendInvariantChars(*pluralCount, err);
                         searchInLocaleChain(style, key, localeName,
                                             (TimeUnit::UTimeUnitFields)i, 
-                                            pluralCount, pluralCount, 
+                                            *pluralCount, pluralCountChars.data(), 
                                             countToPatterns, err);
                     }
                 }
@@ -601,7 +605,7 @@ TimeUnitFormat::checkConsistency(UTimeUnitFormatStyle style, const char* key, UE
 void 
 TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key, const char* localeName,
                                 TimeUnit::UTimeUnitFields srcTimeUnitField,
-                                const char* srcPluralCount,
+                                const UnicodeString& srcPluralCount,
                                 const char* searchPluralCount, 
                                 Hashtable* countToPatterns,
                                 UErrorCode& err) {

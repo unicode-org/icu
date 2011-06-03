@@ -1573,7 +1573,7 @@ public:
     Hashtable contents;
 
     TokenSymbolTable(UErrorCode& ec) : contents(FALSE, ec) {
-        contents.setValueDeleter(uhash_deleteUnicodeString);
+        contents.setValueDeleter(uprv_deleteUObject);
     }
 
     ~TokenSymbolTable() {}

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -28,7 +28,7 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
     if (U_FAILURE(status)) {
         return;
     }
-    variableNames.setValueDeleter(uhash_deleteUnicodeString);
+    variableNames.setValueDeleter(uprv_deleteUObject);
     variables = 0;
     variablesLength = 0;
 }
@@ -41,7 +41,7 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t i = 0;
-    variableNames.setValueDeleter(uhash_deleteUnicodeString);
+    variableNames.setValueDeleter(uprv_deleteUObject);
     int32_t pos = -1;
     const UHashElement *e;
     while ((e = other.variableNames.nextElement(pos)) != 0) {

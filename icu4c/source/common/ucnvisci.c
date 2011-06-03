@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvisci.c
@@ -24,7 +24,6 @@
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 #include "unicode/ucnv_cb.h"
-#include "unicode/uset.h"
 #include "cstring.h"
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
@@ -62,9 +61,6 @@
 #define PNJ_ADHAK           0x0A71
 #define PNJ_HA              0x0A39
 #define PNJ_RRA             0x0A5C
-
-static USet* PNJ_BINDI_TIPPI_SET= NULL;
-static USet* PNJ_CONSONANT_SET= NULL;
 
 typedef enum {
     DEVANAGARI =0,
@@ -151,24 +147,40 @@ static const LookupDataStruct lookupInitialData[]={
     { MALAYALAM,  MLM_MASK,  MLM }
 };
 
-static void initializeSets() {
-    /* TODO: Replace the following two lines with PNJ_CONSONANT_SET = uset_openEmpty(); */
-    PNJ_CONSONANT_SET = uset_open(0,0);
-    uset_clear(PNJ_CONSONANT_SET);
+/*
+ * For special handling of certain Gurmukhi characters.
+ * Bit 0 (value 1): PNJ consonant
+ * Bit 1 (value 2): PNJ Bindi Tippi
+ */
+static const uint8_t pnjMap[80] = {
+    /* 0A00..0A0F */
+    0, 0, 0, 0, 0, 2, 0, 2,  0, 0, 0, 0, 0, 0, 0, 0,
+    /* 0A10..0A1F */
+    0, 0, 0, 0, 0, 3, 3, 3,  3, 3, 3, 3, 3, 3, 3, 3,
+    /* 0A20..0A2F */
+    3, 3, 3, 3, 3, 3, 3, 3,  3, 0, 3, 3, 3, 3, 3, 3,
+    /* 0A30..0A3F */
+    3, 0, 0, 0, 0, 3, 3, 0,  3, 3, 0, 0, 0, 0, 0, 2,
+    /* 0A40..0A4F */
+    0, 2, 2, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0
+};
 
-    uset_addRange(PNJ_CONSONANT_SET, 0x0A15, 0x0A28);
-    uset_addRange(PNJ_CONSONANT_SET, 0x0A2A, 0x0A30);
-    uset_addRange(PNJ_CONSONANT_SET, 0x0A35, 0x0A36);
-    uset_addRange(PNJ_CONSONANT_SET, 0x0A38, 0x0A39);
-    
-    PNJ_BINDI_TIPPI_SET = uset_clone(PNJ_CONSONANT_SET);
-    uset_add(PNJ_BINDI_TIPPI_SET, 0x0A05);
-    uset_add(PNJ_BINDI_TIPPI_SET, 0x0A07);
-    uset_add(PNJ_BINDI_TIPPI_SET, 0x0A3F);
-    uset_addRange(PNJ_BINDI_TIPPI_SET, 0x0A41, 0x0A42);
-    
-    uset_compact(PNJ_CONSONANT_SET);
-    uset_compact(PNJ_BINDI_TIPPI_SET);
+static UBool
+isPNJConsonant(UChar32 c) {
+    if (c < 0xa00 || 0xa50 <= c) {
+        return FALSE;
+    } else {
+        return (UBool)(pnjMap[c - 0xa00] & 1);
+    }
+}
+
+static UBool
+isPNJBindiTippi(UChar32 c) {
+    if (c < 0xa00 || 0xa50 <= c) {
+        return FALSE;
+    } else {
+        return (UBool)(pnjMap[c - 0xa00] >> 1);
+    }
 }
 
 static void _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
@@ -176,9 +188,6 @@ static void _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *e
         return;
     }
 
-    /* Ensure that the sets used in special handling of certain Gurmukhi characters are initialized. */
-    initializeSets();
-    
     cnv->extraInfo = uprv_malloc(sizeof(UConverterDataISCII));
 
     if (cnv->extraInfo != NULL) {
@@ -224,14 +233,6 @@ static void _ISCIIClose(UConverter *cnv) {
             uprv_free(cnv->extraInfo);
         }
         cnv->extraInfo=NULL;
-    }
-    if (PNJ_CONSONANT_SET != NULL) {
-        uset_close(PNJ_CONSONANT_SET);
-        PNJ_CONSONANT_SET = NULL;
-    }
-    if (PNJ_BINDI_TIPPI_SET != NULL) {
-        uset_close(PNJ_BINDI_TIPPI_SET);
-        PNJ_BINDI_TIPPI_SET = NULL;
     }
 }
 
@@ -1031,7 +1032,7 @@ static void UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
             converterData->contextCharFromUnicode = 0x00;
             break;
         }
-        if (converterData->currentDeltaFromUnicode == PNJ_DELTA && tempContextFromUnicode == PNJ_ADHAK && uset_contains(PNJ_CONSONANT_SET, (sourceChar + PNJ_DELTA))) {
+        if (converterData->currentDeltaFromUnicode == PNJ_DELTA && tempContextFromUnicode == PNJ_ADHAK && isPNJConsonant((sourceChar + PNJ_DELTA))) {
             /* If the previous codepoint is Adhak and the current codepoint is a consonant, the targetByteUnit should be C + Halant + C. */
             /* reset context char */
             converterData->contextCharFromUnicode = 0x0000;
@@ -1425,7 +1426,7 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
 
             if (*toUnicodeStatus != missingCharMarker) {
                 /* Check to make sure that consonant clusters are handled correct for Gurmukhi script. */
-                if (data->currentDeltaToUnicode == PNJ_DELTA && data->prevToUnicodeStatus != 0 && uset_contains(PNJ_CONSONANT_SET, data->prevToUnicodeStatus) &&
+                if (data->currentDeltaToUnicode == PNJ_DELTA && data->prevToUnicodeStatus != 0 && isPNJConsonant(data->prevToUnicodeStatus) &&
                         (*toUnicodeStatus + PNJ_DELTA) == PNJ_SIGN_VIRAMA && (targetUniChar + PNJ_DELTA) == data->prevToUnicodeStatus) {
                     /* Consonant clusters C + HALANT + C should be encoded as ADHAK + C */
                     offset = (int)(source-args->source - 3);
@@ -1444,10 +1445,10 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
                     /* Check to make sure that Bindi and Tippi are handled correctly for Gurmukhi script. 
                      * If 0xA2 is preceded by a codepoint in the PNJ_BINDI_TIPPI_SET then the target codepoint should be Tippi instead of Bindi.
                      */
-                    if (data->currentDeltaToUnicode == PNJ_DELTA && (targetUniChar + PNJ_DELTA) == PNJ_BINDI && uset_contains(PNJ_BINDI_TIPPI_SET, (*toUnicodeStatus + PNJ_DELTA))) {
+                    if (data->currentDeltaToUnicode == PNJ_DELTA && (targetUniChar + PNJ_DELTA) == PNJ_BINDI && isPNJBindiTippi((*toUnicodeStatus + PNJ_DELTA))) {
                         targetUniChar = PNJ_TIPPI - PNJ_DELTA;
                         WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source-args->source -2),*toUnicodeStatus,PNJ_DELTA,err);
-                    } else if (data->currentDeltaToUnicode == PNJ_DELTA && (targetUniChar + PNJ_DELTA) == PNJ_SIGN_VIRAMA && uset_contains(PNJ_CONSONANT_SET, (*toUnicodeStatus + PNJ_DELTA))) {
+                    } else if (data->currentDeltaToUnicode == PNJ_DELTA && (targetUniChar + PNJ_DELTA) == PNJ_SIGN_VIRAMA && isPNJConsonant((*toUnicodeStatus + PNJ_DELTA))) {
                         /* Store the current toUnicodeStatus code point for later handling of consonant cluster in Gurmukhi. */
                         data->prevToUnicodeStatus = *toUnicodeStatus + PNJ_DELTA;
                     } else {

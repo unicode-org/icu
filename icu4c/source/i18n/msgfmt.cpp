@@ -539,7 +539,7 @@ void MessageFormat::setArgStartFormat(int32_t argStart,
             delete formatter;
             return;
         }
-        uhash_setValueDeleter(cachedFormatters, uhash_deleteUObject);
+        uhash_setValueDeleter(cachedFormatters, uprv_deleteUObject);
     }
     if (formatter == NULL) {
         formatter = new DummyFormat();
@@ -841,7 +841,7 @@ MessageFormat::getFormatNames(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    fFormatNames->setDeleter(uhash_deleteUObject);
+    fFormatNames->setDeleter(uprv_deleteUObject);
 
     for (int32_t partIndex = 0; (partIndex = nextTopLevelArgStart(partIndex)) >= 0;) {
         fFormatNames->addElement(new UnicodeString(getArgName(partIndex)), status);
@@ -1201,7 +1201,7 @@ void MessageFormat::copyObjects(const MessageFormat& that, UErrorCode& ec) {
             if (U_FAILURE(ec)) {
                 return;
             }
-            uhash_setValueDeleter(cachedFormatters, uhash_deleteUObject);
+            uhash_setValueDeleter(cachedFormatters, uprv_deleteUObject);
         }
 
         const int32_t count = uhash_count(that.cachedFormatters);

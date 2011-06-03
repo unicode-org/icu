@@ -383,6 +383,7 @@
     <ClCompile Include="unifilt.cpp" />
     <ClCompile Include="unifunct.cpp" />
     <ClCompile Include="uniset.cpp" />
+    <ClCompile Include="uniset_closure.cpp" />
     <ClCompile Include="uniset_props.cpp" />
     <ClCompile Include="unisetspan.cpp" />
     <ClCompile Include="uprops.cpp" />
@@ -414,6 +415,7 @@
     <ClCompile Include="stringpiece.cpp" />
     <ClCompile Include="stringtriebuilder.cpp" />
     <ClCompile Include="ucasemap.cpp" />
+    <ClCompile Include="ucasemap_titlecase_brkiter.cpp" />
     <ClCompile Include="ucharstrie.cpp" />
     <ClCompile Include="ucharstriebuilder.cpp" />
     <ClCompile Include="ucharstrieiterator.cpp" />
@@ -422,11 +424,15 @@
     <ClCompile Include="uiter.cpp" />
     <ClCompile Include="unistr.cpp" />
     <ClCompile Include="unistr_case.cpp" />
+    <ClCompile Include="unistr_case_locale.cpp" />
     <ClCompile Include="unistr_cnv.cpp" />
     <ClCompile Include="unistr_props.cpp" />
+    <ClCompile Include="unistr_titlecase_brkiter.cpp" />
     <ClCompile Include="ustr_cnv.c" />
+    <ClCompile Include="ustr_titlecase_brkiter.cpp" />
     <ClCompile Include="ustr_wcs.cpp" />
     <ClCompile Include="ustrcase.cpp" />
+    <ClCompile Include="ustrcase_locale.cpp" />
     <ClCompile Include="ustring.cpp" />
     <ClCompile Include="ustrtrns.cpp" />
     <ClCompile Include="utext.cpp" />

@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
-*                                                                            *
-* Copyright (C) 2001-2010, International Business Machines                   *
-*                Corporation and others. All Rights Reserved.                *
-*                                                                            *
+*
+* Copyright (C) 2001-2011, International Business Machines
+*                Corporation and others. All Rights Reserved.
+*
 ******************************************************************************
-*   file name:  ucln_cmn.h
+*   file name:  ucln.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -18,6 +18,7 @@
 #define __UCLN_H__
 
 #include "unicode/utypes.h"
+#include "umutex.h"
 
 /** These are the functions used to register a library's memory cleanup
  * functions.  Each library should define a single library register function
@@ -81,9 +82,16 @@ U_CAPI void U_EXPORT2 ucln_registerCleanup(ECleanupLibraryType type,
 /**
  * Request cleanup for one specific library.
  * Not thread safe.
- * Calling this with UCLN_COMMON just calls u_cleanup();
  * @param type which library to cleanup
  */
 U_CAPI void U_EXPORT2 ucln_cleanupOne(ECleanupLibraryType type);
+
+/* ucln_cmn.c variables shared with uinit.c */
+U_CDECL_BEGIN
+
+extern UBool gICUInitialized;
+extern UMTX  gICUInitMutex;
+
+U_CDECL_END
 
 #endif

@@ -547,8 +547,15 @@ unorm2_swap(const UDataSwapper *ds,
  * Get the NF*_QC property for a code point, for u_getIntPropertyValue().
  * @internal
  */
-U_CFUNC UNormalizationCheckResult U_EXPORT2
+U_CFUNC UNormalizationCheckResult
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
+
+/**
+ * Get the 16-bit FCD value (lead & trail CCs) for a code point, for u_getIntPropertyValue().
+ * @internal
+ */
+U_CFUNC uint16_t
+unorm_getFCD16Simple(UChar32 c);
 
 /**
  * Internal API, used by collation code.

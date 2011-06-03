@@ -763,7 +763,7 @@ ZoneMeta::initAvailableMetaZoneIDs () {
             if (!gMetaZoneIDsInitialized) {
                 UErrorCode status = U_ZERO_ERROR;
                 UHashtable *metaZoneIDTable = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, &status);
-                uhash_setKeyDeleter(metaZoneIDTable, uhash_deleteUnicodeString);
+                uhash_setKeyDeleter(metaZoneIDTable, uprv_deleteUObject);
                 // No valueDeleter, because the vector maintain the value objects
                 UVector *metaZoneIDs = NULL;
                 if (U_SUCCESS(status)) {
@@ -775,7 +775,7 @@ ZoneMeta::initAvailableMetaZoneIDs () {
                     uhash_close(metaZoneIDTable);
                 }
                 if (U_SUCCESS(status)) {
-                    metaZoneIDs->setDeleter(uhash_freeBlock);
+                    metaZoneIDs->setDeleter(uprv_free);
 
                     UResourceBundle *rb = ures_openDirect(NULL, gMetaZones, &status);
                     UResourceBundle *bundle = ures_getByKey(rb, gMapTimezonesTag, NULL, &status);

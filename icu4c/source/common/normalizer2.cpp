@@ -844,7 +844,18 @@ unorm2_isInert(const UNormalizer2 *norm2, UChar32 c) {
 
 // Some properties APIs ---------------------------------------------------- ***
 
-U_CFUNC UNormalizationCheckResult U_EXPORT2
+U_CAPI uint8_t U_EXPORT2
+u_getCombiningClass(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
+    if(U_SUCCESS(errorCode)) {
+        return impl->getCC(impl->getNorm16(c));
+    } else {
+        return 0;
+    }
+}
+
+U_CFUNC UNormalizationCheckResult
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
     if(mode<=UNORM_NONE || UNORM_FCD<=mode) {
         return UNORM_YES;
@@ -855,6 +866,17 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
         return ((const Normalizer2WithImpl *)norm2)->getQuickCheck(c);
     } else {
         return UNORM_MAYBE;
+    }
+}
+
+U_CFUNC uint16_t
+unorm_getFCD16Simple(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const UTrie2 *trie=Normalizer2Factory::getFCDTrie(errorCode);
+    if(U_SUCCESS(errorCode)) {
+        return UTRIE2_GET16(trie, c);
+    } else {
+        return 0;
     }
 }
 

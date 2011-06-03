@@ -369,7 +369,7 @@ TimeZoneFormatDelegate::TimeZoneFormatDelegate(const Locale& locale, UErrorCode&
             if (!gTimeZoneFormatCacheInitialized) {
                 gTimeZoneFormatCache = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
                 if (U_SUCCESS(status)) {
-                    uhash_setKeyDeleter(gTimeZoneFormatCache, uhash_freeBlock);
+                    uhash_setKeyDeleter(gTimeZoneFormatCache, uprv_free);
                     uhash_setValueDeleter(gTimeZoneFormatCache, deleteTimeZoneFormatCacheEntry);
                     gTimeZoneFormatCacheInitialized = TRUE;
                     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEFORMAT, timeZoneFormat_cleanup);

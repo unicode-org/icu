@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -157,7 +157,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     if (U_FAILURE(*status)) {
         goto allocation_failure;
     }
-    uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
+    uhash_setValueDeleter(t->prefixLookup, uprv_free);
 
     t->contractions = uprv_cnttab_open(t->mapping, status);
     if (U_FAILURE(*status)) {

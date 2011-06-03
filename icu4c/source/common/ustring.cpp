@@ -1463,3 +1463,47 @@ u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCod
     __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
     return length;
 }
+
+// Compute the hash code for a string -------------------------------------- ***
+
+// Moved here from uhash.c so that UnicodeString::hashCode() does not depend
+// on UHashtable code.
+
+/*
+  Compute the hash by iterating sparsely over about 32 (up to 63)
+  characters spaced evenly through the string.  For each character,
+  multiply the previous hash value by a prime number and add the new
+  character in, like a linear congruential random number generator,
+  producing a pseudorandom deterministic value well distributed over
+  the output range. [LIU]
+*/
+
+#define STRING_HASH(TYPE, STR, STRLEN, DEREF) \
+    int32_t hash = 0;                         \
+    const TYPE *p = (const TYPE*) STR;        \
+    if (p != NULL) {                          \
+        int32_t len = (int32_t)(STRLEN);      \
+        int32_t inc = ((len - 32) / 32) + 1;  \
+        const TYPE *limit = p + len;          \
+        while (p<limit) {                     \
+            hash = (hash * 37) + DEREF;       \
+            p += inc;                         \
+        }                                     \
+    }                                         \
+    return hash
+
+/* Used by UnicodeString to compute its hashcode - Not public API. */
+U_CAPI int32_t U_EXPORT2
+ustr_hashUCharsN(const UChar *str, int32_t length) {
+    STRING_HASH(UChar, str, length, *p);
+}
+
+U_CAPI int32_t U_EXPORT2
+ustr_hashCharsN(const char *str, int32_t length) {
+    STRING_HASH(uint8_t, str, length, *p);
+}
+
+U_CAPI int32_t U_EXPORT2
+ustr_hashICharsN(const char *str, int32_t length) {
+    STRING_HASH(char, str, length, (uint8_t)uprv_tolower(*p));
+}

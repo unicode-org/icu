@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and  *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -288,7 +288,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
     if(U_FAILURE(status)) {
         return;
     }
-    subpermute.setValueDeleter(uhash_deleteUnicodeString);
+    subpermute.setValueDeleter(uprv_deleteUObject);
 
     for (i = 0; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = source.char32At(i);
@@ -345,9 +345,9 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     if (U_FAILURE(status)) {
         return 0;
     }
-    result.setValueDeleter(uhash_deleteUnicodeString);
-    permutations.setValueDeleter(uhash_deleteUnicodeString);
-    basic.setValueDeleter(uhash_deleteUnicodeString);
+    result.setValueDeleter(uprv_deleteUObject);
+    permutations.setValueDeleter(uprv_deleteUObject);
+    basic.setValueDeleter(uprv_deleteUObject);
 
     UChar USeg[256];
     int32_t segLen = segment.extract(USeg, 256, status);
@@ -453,7 +453,7 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const UCh
         while (iter.next()) {
             UChar32 cp2 = iter.getCodepoint();
             Hashtable remainder(status);
-            remainder.setValueDeleter(uhash_deleteUnicodeString);
+            remainder.setValueDeleter(uprv_deleteUObject);
             if (extract(&remainder, cp2, segment, segLen, i, status) == NULL) {
                 continue;
             }

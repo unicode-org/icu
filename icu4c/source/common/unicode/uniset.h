@@ -24,6 +24,7 @@ U_NAMESPACE_BEGIN
 
 class BMPSet;
 class ParsePosition;
+class RBBIRuleScanner;
 class SymbolTable;
 class UnicodeSetStringSpan;
 class UVector;
@@ -1467,6 +1468,7 @@ private:
     virtual UBool matchesIndexValue(uint8_t v) const;
 
 private:
+    friend class RBBIRuleScanner;
 
     //----------------------------------------------------------------
     // Implementation: Clone as thawed (see ICU4J Freezable)
@@ -1478,10 +1480,16 @@ private:
     // Implementation: Pattern parsing
     //----------------------------------------------------------------
 
+    void applyPatternIgnoreSpace(const UnicodeString& pattern,
+                                 ParsePosition& pos,
+                                 const SymbolTable* symbols,
+                                 UErrorCode& status);
+
     void applyPattern(RuleCharacterIterator& chars,
                       const SymbolTable* symbols,
                       UnicodeString& rebuiltPat,
                       uint32_t options,
+                      UnicodeSet& (UnicodeSet::*caseClosure)(int32_t attribute),
                       UErrorCode& ec);
 
     //----------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2011, International Business Machines
 *   Corporation, Google and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,6 +25,8 @@
  */
 
 #include "unicode/ucnvsel.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 #include <string.h>
 
@@ -809,3 +811,5 @@ ucnvsel_selectForUTF8(const UConverterSelector* sel,
   }
   return selectForMask(sel, mask, status);
 }
+
+#endif  // !UCONFIG_NO_CONVERSION

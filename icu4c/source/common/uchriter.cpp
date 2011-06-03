@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1998-2010, International Business Machines Corporation and
+* Copyright (C) 1998-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
@@ -9,7 +9,7 @@
 
 #include "unicode/uchriter.h"
 #include "unicode/ustring.h"
-#include "uhash.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -83,7 +83,7 @@ UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
 
 int32_t
 UCharCharacterIterator::hashCode() const {
-    return uhash_hashUCharsN(text, textLength) ^ pos ^ begin ^ end;
+    return ustr_hashUCharsN(text, textLength) ^ pos ^ begin ^ end;
 }
 
 CharacterIterator*
