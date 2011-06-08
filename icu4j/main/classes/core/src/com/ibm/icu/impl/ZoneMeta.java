@@ -501,8 +501,7 @@ public final class ZoneMeta {
                 UResourceBundle top = UResourceBundle.getBundleInstance(
                         ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                 UResourceBundle res = openOlsonResource(top, id);
-                z = new OlsonTimeZone(top, res);
-                z.setID(id);
+                z = new OlsonTimeZone(top, res, id);
                 SYSTEM_ZONE_CACHE.put(id, z);
             }catch(Exception ex){
                 return null;
