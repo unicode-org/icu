@@ -875,7 +875,7 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
             if (tzInfo->defaultTZBuffer == NULL) {
                 rewind(tzInfo->defaultTZFilePtr);
                 tzInfo->defaultTZBuffer = (char*)uprv_malloc(sizeof(char) * tzInfo->defaultTZFileSize);
-                fread(tzInfo->defaultTZBuffer, 1, tzInfo->defaultTZFileSize, tzInfo->defaultTZFilePtr);
+                sizeFileRead = fread(tzInfo->defaultTZBuffer, 1, tzInfo->defaultTZFileSize, tzInfo->defaultTZFilePtr);
             }
             rewind(file);
             while(sizeFileLeft > 0) {
@@ -2117,18 +2117,17 @@ uprv_dl_close(void *lib, UErrorCode *status) {
 
 U_INTERNAL UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
-  UVoidFunction* ret = NULL;
-  if(U_FAILURE(*status)) return ret;
-  /*
-   * ISO forbids the following cast, but it's needed for dlsym.
-   *  See: http://pubs.opengroup.org/onlinepubs/009695399/functions/dlsym.html
-   *  See: http://www.trilithium.com/johan/2004/12/problem-with-dlsym/ 
-   */
-  *(void **)&ret = dlsym(lib, sym);
-  if(ret == NULL) {
+  union {
+      UVoidFunction *fp;
+      void *vp;
+  } uret;
+  uret.fp = NULL;
+  if(U_FAILURE(*status)) return uret.fp;
+  uret.vp = dlsym(lib, sym);
+  if(uret.vp == NULL) {
     *status = U_MISSING_RESOURCE_ERROR;
   }
-  return ret;
+  return uret.fp;
 }
 
 #else
