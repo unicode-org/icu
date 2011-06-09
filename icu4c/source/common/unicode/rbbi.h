@@ -633,6 +633,33 @@ public:
      */
     virtual const uint8_t *getBinaryRules(uint32_t &length);
 
+    /**
+     *  Set the subject text string upon which the break iterator is operating
+     *  without changing any other aspect of the matching state.
+     *  The new and previous text strings must have the same content.
+     *
+     *  This function is intended for use in environments where ICU is operating on
+     *  strings that may move around in memory.  It provides a mechanism for notifying
+     *  ICU that the string has been relocated, and providing a new UText to access the
+     *  string in its new position.
+     *
+     *  Note that the break iterator implementation never copies the underlying text
+     *  of a string being processed, but always operates directly on the original text
+     *  provided by the user. Refreshing simply drops the references to the old text
+     *  and replaces them with references to the new.
+     *
+     *  Caution:  this function is normally used only by very specialized,
+     *  system-level code.  One example use case is with garbage collection that moves
+     *  the text in memory.
+     *
+     * @param input      The new (moved) text string.
+     * @param status     Receives errors detected by this function.
+     * @return           *this
+     *
+     * @draft ICU 5.0
+     */
+    virtual RuleBasedBreakIterator &refreshInputText(UText *input, UErrorCode &status);
+
 
 protected:
     //=======================================================================
