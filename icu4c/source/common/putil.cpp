@@ -75,7 +75,6 @@ Cleanly installed Solaris can use this #define.
 #include <math.h>
 #include <locale.h>
 #include <float.h>
-#include <time.h>
 
 /* include system headers */
 #ifdef U_WINDOWS
@@ -117,6 +116,10 @@ Cleanly installed Solaris can use this #define.
 # endif
 #endif
 
+/*
+ * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
+ */
+#include <time.h>
 
 #if defined(U_DARWIN)
 #include <TargetConditionals.h>
