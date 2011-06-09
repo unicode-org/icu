@@ -5375,14 +5375,19 @@ U_USE_GCC_VISIBILITY_ATTRIBUTE=0
 OLD_CFLAGS="${CFLAGS}"
 OLD_CXXFLAGS="${CXXFLAGS}"
 if test "$ac_cv_c_compiler_gnu" = yes; then
-    LIBCFLAGS="-fvisibility=hidden"
-    LIBCXXFLAGS="-fvisibility=hidden"
-    CFLAGS="${CFLAGS} ${LIBCFLAGS}"
-    CXXFLAGS="${CXXFLAGS} ${LIBCXXFLAGS}"
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+    case "${host}" in
+    *-pc-cygwin*|*-pc-mingw*)
+        # Cygwin GCC does not have the visibility attribute
+        ;;
+    *)
+        LIBCFLAGS="-fvisibility=hidden"
+        LIBCXXFLAGS="-fvisibility=hidden"
+        CFLAGS="${CFLAGS} ${LIBCFLAGS}"
+        CXXFLAGS="${CXXFLAGS} ${LIBCXXFLAGS}"
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 __attribute__ ((visibility ("default"))) void f(void);
-#include <stdlib.h>
+        #include <stdlib.h>
 int
 main ()
 {
@@ -5398,12 +5403,13 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-    if test "$SHAREDLIBEXPORT" = no; then
-        LIBCFLAGS=
-        LIBCXXFLAGS=
-    else
-        U_USE_GCC_VISIBILITY_ATTRIBUTE=1
-    fi
+        if test "$SHAREDLIBEXPORT" = no; then
+            LIBCFLAGS=
+            LIBCXXFLAGS=
+        else
+            U_USE_GCC_VISIBILITY_ATTRIBUTE=1
+        fi
+    esac
 else
     case "${host}" in
     *-*-solaris*)
