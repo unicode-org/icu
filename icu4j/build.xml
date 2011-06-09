@@ -122,20 +122,20 @@
     <target name="check" description="Run the standard ICU4J test suite">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n"/>
-            <param name="runcheck.jvmarg" value="${jvm_options}"/>
+            <param name="runcheck.jvmarg" value="${jvm_options} -ea"/>
         </antcall>
     </target>
 
     <target name="exhaustiveCheck" description="Run the standard ICU4J test suite in exhaustive mode">
         <antcall target="_runCheck">
             <param name="runcheck.arg" value="-n -e10"/>
-            <param name="runcheck.jvmarg" value="${jvm_options}"/>
+            <param name="runcheck.jvmarg" value="${jvm_options} -ea"/>
         </antcall>
     </target>
 
     <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
         <antcall target="_runCheck">
-            <param name="runcheck.arg" value="-n -prop:TimeZoneRoundTripAll=true Core/Format/DateFormat/TimeZoneFormatTest"/>
+            <param name="runcheck.arg" value="-n -prop:TimeZoneRoundTripAll=true Core/Format/DateFormat/TimeZoneFormatTest -v"/>
             <param name="runcheck.jvmarg" value="${jvm_options}"/>
         </antcall>
     </target>

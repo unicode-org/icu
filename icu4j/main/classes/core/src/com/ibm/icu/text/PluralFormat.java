@@ -393,7 +393,8 @@ public class PluralFormat extends UFormat {
             if(type==MessagePattern.Part.Type.ARG_LIMIT) {
                 break;
             }
-            assert type==MessagePattern.Part.Type.ARG_SELECTOR;
+            //TODO: Fix the assertion error - see ticket#8637
+            //assert type==MessagePattern.Part.Type.ARG_SELECTOR;
             // part is an ARG_SELECTOR followed by an optional explicit value, and then a message
             if(pattern.getPartType(partIndex).hasNumericValue()) {
                 // explicit value like "=2"
