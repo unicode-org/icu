@@ -486,6 +486,37 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
 }
 
 
+/**
+ *  Provide a new UText for the input text.  Must reference text with contents identical
+ *  to the original.
+ *  Intended for use with text data originating in Java (garbage collected) environments
+ *  where the data may be moved in memory at arbitrary times.
+ */
+RuleBasedBreakIterator &RuleBasedBreakIterator::refreshInputText(UText *input, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    if (input == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return *this;
+    }
+    int64_t pos = utext_getNativeIndex(fText);
+    //  Shallow read-only clone of the new UText into the existing input UText
+    fText = utext_clone(fText, input, FALSE, TRUE, &status);
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    utext_setNativeIndex(fText, pos);
+    if (utext_getNativeIndex(fText) != pos) {
+        // Sanity check.  The new input utext is supposed to have the exact same
+        // contents as the old.  If we can't set to the same position, it doesn't.
+        // The contents underlying the old utext might be invalid at this point,
+        // so it's not safe to check directly.
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    return *this;
+}
+
 
 /**
  * Sets the current iteration position to the beginning of the text.
