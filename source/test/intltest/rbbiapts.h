@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2004,2008 International Business Machines Corporation and
+ * Copyright (c) 1999-2011 International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -85,6 +85,8 @@ public:
     void TestBoilerPlate();
 
     void TestRegistration();
+
+    void TestRefreshInputText();
 
     /**
      *Internal subroutines
