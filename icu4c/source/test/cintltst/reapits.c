@@ -1757,7 +1757,7 @@ static void TestUTextAPI(void) {
             nativeIndex = utext_getNativeIndex(actual);
             /*  Following returns U_INDEX_OUTOFBOUNDS_ERROR... looks like a bug in ucstrFuncs UTextFuncs [utext.cpp]  */
             /*  len16 = utext_extract(actual, nativeIndex, nativeIndex + group_len, NULL, 0, &shallowStatus);  */
-            len16 = group_len;
+            len16 = (int32_t)group_len;
             
             groupChars = (UChar *)malloc(sizeof(UChar)*(len16+1));
             utext_extract(actual, nativeIndex, nativeIndex + group_len, groupChars, len16+1, &shallowStatus);

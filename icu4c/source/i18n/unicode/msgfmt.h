@@ -991,7 +991,7 @@ private:
 
     int32_t nextTopLevelArgStart(int32_t partIndex) const;
 
-    bool argNameMatches(int32_t partIndex, const UnicodeString& argName, int32_t argNumber);
+    UBool argNameMatches(int32_t partIndex, const UnicodeString& argName, int32_t argNumber);
 
     void cacheExplicitFormats(UErrorCode& status);
 

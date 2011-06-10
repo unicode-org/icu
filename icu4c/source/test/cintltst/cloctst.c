@@ -561,28 +561,27 @@ static void TestSimpleResourceInfo() {
     cleanUpDataTable();
 }
 
-/* obviously, on non-ascii platforms this is useless, but it's test/debug code */
 /* if len < 0, we convert until we hit UChar 0x0000, which is not output. will add trailing null
  * if there's room but won't be included in result.  result < 0 indicates an error.
  * Returns the number of chars written (not those that would be written if there's enough room.*/
 static int32_t UCharsToEscapedAscii(const UChar* utext, int32_t len, char* resultChars, int32_t buflen) {
-#if U_CHARSET_FAMILY != U_ASCII_FAMILY
-    return -1;
-#else
-    static const UChar ESCAPE_MAP[] = {
-        /*a*/ 0x61, 0x07,
-        /*b*/ 0x62, 0x08,
-        /*e*/ 0x65, 0x1b,
-        /*f*/ 0x66, 0x0c,
-        /*n*/ 0x6E, 0x0a,
-        /*r*/ 0x72, 0x0d,
-        /*t*/ 0x74, 0x09,
-        /*v*/ 0x76, 0x0b
+    static const struct {
+        char escapedChar;
+        UChar sourceVal;
+    } ESCAPE_MAP[] = {
+        /*a*/ {'a', 0x07},
+        /*b*/ {'b', 0x08},
+        /*e*/ {'e', 0x1b},
+        /*f*/ {'f', 0x0c},
+        /*n*/ {'n', 0x0a},
+        /*r*/ {'r', 0x0d},
+        /*t*/ {'t', 0x09},
+        /*v*/ {'v', 0x0b}
     };
     static const int32_t ESCAPE_MAP_LENGTH = sizeof(ESCAPE_MAP)/sizeof(ESCAPE_MAP[0]);
     static const char HEX_DIGITS[] = {
-        0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-        0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
     int32_t i, j;
     int32_t resultLen = 0;
@@ -601,21 +600,19 @@ static int32_t UCharsToEscapedAscii(const UChar* utext, int32_t len, char* resul
             break;
         }
         if(uc<0x20) {
-            for(j=0;j<ESCAPE_MAP_LENGTH;j+=2) {
-                if(uc==ESCAPE_MAP[j+1]) {
-                    break;
-                }
+            for(j=0;j<ESCAPE_MAP_LENGTH && uc!=ESCAPE_MAP[j].sourceVal;j++) {
             }
             if(j<ESCAPE_MAP_LENGTH) {
                 if(resultLen>escapeLimit1) {
                     break;
                 }
                 resultChars[resultLen++]='\\';
-                resultChars[resultLen++]=ESCAPE_MAP[j];
+                resultChars[resultLen++]=ESCAPE_MAP[j].escapedChar;
                 continue;
             }
         } else if(uc<0x7f) {
-            resultChars[resultLen++] = uc;
+            u_austrncpy(resultChars + resultLen, &uc, 1);
+            resultLen++;
             continue;
         }
 
@@ -637,7 +634,6 @@ static int32_t UCharsToEscapedAscii(const UChar* utext, int32_t len, char* resul
     }
 
     return resultLen;
-#endif
 }
 
 /*
@@ -747,7 +743,7 @@ static void TestDisplayNames()
                         locale, displayLocale, preflightLen, expectedLen);
             } else if(u_strncmp(result, expected, len)) {
                 int32_t cap=len*6+1;  /* worst case + space for trailing null */
-                char* resultChars=malloc(cap);
+                char* resultChars=(char*)malloc(cap);
                 int32_t resultCharsLen=UCharsToEscapedAscii(result, len, resultChars, cap);
                 if(resultCharsLen<0 || resultCharsLen<cap-1) {
                     log_err("uloc_getDisplayName(%s, %s...) mismatch", locale, displayLocale);

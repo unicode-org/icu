@@ -712,8 +712,8 @@ void NumberFormatRegressionTest::Test4090504 (void)
             df->setMaximumFractionDigits(i);
             //sb = new StringBuffer("");
             fp.setField(0);
-            logln("  getMaximumFractionDigits() = " + i);
-            logln("  formated: " + df->format(d, sb, fp));
+            logln(UnicodeString("  getMaximumFractionDigits() = ") + i);
+            logln(UnicodeString("  formated: ") + df->format(d, sb, fp));
         }
     /*} catch (Exception foo) {
         errln("Bug 4090504 regression test failed. Message : " + foo.getMessage());
@@ -1994,12 +1994,12 @@ void NumberFormatRegressionTest::Test4147295(void)
         int minIntDig = sdf->getMinimumIntegerDigits();
         if (minIntDig != 0) {
             errln("Test failed");
-            errln(" Minimum integer digits : " + minIntDig);
+            errln(UnicodeString(" Minimum integer digits : ") + minIntDig);
             UnicodeString temp;
-            errln(" new pattern: " + sdf->toPattern(temp));
+            errln(UnicodeString(" new pattern: ") + sdf->toPattern(temp));
         } else {
             logln("Test passed");
-            logln(" Minimum integer digits : " + minIntDig);
+            logln(UnicodeString(" Minimum integer digits : ") + minIntDig);
         }
     }
     delete sdf;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2005 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2011 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -572,7 +572,7 @@ CLOSETAILOR :
     }
 
     if (options[7].doesOccur) {
-        char inputfilename[128];
+        char inputfilename[128] = "";
         // rules are to be used
         if (options[5].doesOccur) {
             strcpy(inputfilename, options[5].value);
@@ -955,75 +955,74 @@ inline UBool checkInScripts(UScriptCode script[], int scriptcount,
 * Add by Richard
 */
 int getScriptElementsFromExemplars(ScriptElement scriptelem[], const char* locale) {
-	UErrorCode error = U_ZERO_ERROR;
-    UChar32    codepoint = 0;
+    UErrorCode error = U_ZERO_ERROR;
+    UChar32 codepoint = 0;
 
-	UResourceBundle* ures = ures_open(NULL, locale, &error);
-	if (U_FAILURE(error)) {
-		fprintf(stdout, "Can not find resource bundle for locale: %s\n", locale);
+    UResourceBundle* ures = ures_open(NULL, locale, &error);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Can not find resource bundle for locale: %s\n", locale);
         return -1;
-	}
-	int32_t length;
-	const UChar* exemplarChars = ures_getStringByKey(ures, "ExemplarCharacters", &length, &error);
-	
-	if (U_FAILURE(error)) {
-		fprintf(stdout, "Can not find ExemplarCharacters in resource bundle\n");
+    }
+    int32_t length;
+    const UChar* exemplarChars = ures_getStringByKey(ures, "ExemplarCharacters", &length, &error);
+
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Can not find ExemplarCharacters in resource bundle\n");
         return -1;
-	}
+    }
 
-	UChar* upperChars = new UChar[length*2];
-	if (upperChars == 0) {
-		fprintf(stdout, "Memory error\n");
+    UChar* upperChars = new UChar[length * 2];
+    if (upperChars == 0) {
+        fprintf(stdout, "Memory error\n");
         return -1;
-	}
+    }
 
-	int32_t destLength = u_strToUpper(upperChars, length*2, exemplarChars, -1, locale, &error);
-	if (U_FAILURE(error)) {
-		fprintf(stdout, "Error when u_strToUpper() \n");
+    int32_t destLength = u_strToUpper(upperChars, length * 2, exemplarChars, -1, locale, &error);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error when u_strToUpper() \n");
         return -1;
-	}
+    }
 
-	UChar* pattern = new UChar[length + destLength + 10];
-	UChar left[2] = {0x005b, 0x0};
-	UChar right[2] = {0x005d, 0x0};
-	pattern = u_strcpy(pattern, left);
-	pattern = u_strcat(pattern, exemplarChars);
-	pattern = u_strcat(pattern, upperChars);
-	pattern = u_strcat(pattern, right);
+    UChar* pattern = new UChar[length + destLength + 10];
+    UChar left[2] = {0x005b, 0x0};
+    UChar right[2] = {0x005d, 0x0};
+    pattern = u_strcpy(pattern, left);
+    pattern = u_strcat(pattern, exemplarChars);
+    pattern = u_strcat(pattern, upperChars);
+    pattern = u_strcat(pattern, right);
 
-	UnicodeSet * uniset = new UnicodeSet(UnicodeString(pattern), error);
-	if (U_FAILURE(error)) {
-		fprintf(stdout, "Can not open USet \n");
+    UnicodeSet * uniset = new UnicodeSet(UnicodeString(pattern), error);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Can not open USet \n");
         return -1;
-	}
-	
-	UnicodeSetIterator* usetiter = new UnicodeSetIterator(*uniset);
+    }
 
-	int32_t count = 0;
+    UnicodeSetIterator* usetiter = new UnicodeSetIterator(*uniset);
 
-	while (usetiter -> next()) {
-		if (usetiter -> isString()) {
-			UnicodeString strItem = usetiter -> getString();
+    int32_t count = 0;
 
-			scriptelem[count].count = 0;
-			for (int i = 0; i < strItem.length(); i++) {
-				codepoint = strItem.char32At(i);
-				UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, 
-										scriptelem[count].count, codepoint);
-				scriptelem[count].tailored = FALSE;
-			}
-		} else {
-			codepoint = usetiter -> getCodepoint();
-			scriptelem[count].count = 0;
-			UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, 
-				                     scriptelem[count].count, codepoint);
-			scriptelem[count].tailored = FALSE;
-		}
+    while (usetiter -> next()) {
+        if (usetiter -> isString()) {
+            UnicodeString strItem = usetiter -> getString();
 
-		count++;
-	}
+            scriptelem[count].count = 0;
+            for (int i = 0; i < strItem.length(); i++) {
+                codepoint = strItem.char32At(i);
+                UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, scriptelem[count].count, codepoint);
+                scriptelem[count].tailored = FALSE;
+            }
+        } else {
+            codepoint = usetiter -> getCodepoint();
+            scriptelem[count].count = 0;
+            UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, scriptelem[count].count, codepoint);
+            scriptelem[count].tailored = FALSE;
+        }
 
-	return count;
+        count++;
+    }
+    delete []pattern;
+
+    return count;
 }
 
 /**
@@ -1483,7 +1482,7 @@ void serializeScripts() {
         if (U_FAILURE(error)) {
             fprintf(stdout, "Collator creation failed:");
             fprintf(stdout, u_errorName(error));
-            return;
+            break;
         }
         if ((error != U_USING_FALLBACK_WARNING && // not tailored
             error != U_USING_DEFAULT_WARNING) ||
@@ -1493,7 +1492,7 @@ void serializeScripts() {
             if (U_FAILURE(error)) {
                fprintf(stdout, "Collator attribute setting failed:");
                fprintf(stdout, u_errorName(error));
-               return;
+               break;
             }
 
             UScriptCode scriptcode[32];
@@ -1501,7 +1500,7 @@ void serializeScripts() {
                                                    &error);
             if (U_FAILURE(error)) {
                 fprintf(stdout, "Error getting lcale scripts\n");
-                return;
+                break;
             }
 
             strcat(filename, locale);
@@ -1509,14 +1508,14 @@ void serializeScripts() {
             OUTPUT_ = fopen(filename, "w");
             if (OUTPUT_ == NULL) {
                 fprintf(stdout, "Cannot open file:%s\n", filename);
-                return;
+                break;
             }
             outputHTMLHeader(locale, scriptcode, scriptcount);
-			fprintf(stdout, "%s\n", locale);
-			
+            fprintf(stdout, "%s\n", locale);
+
             if(options[12].doesOccur) {
               // use whole scripts
-			  serializeScripts(scriptcode, scriptcount); 
+                serializeScripts(scriptcode, scriptcount);
             } else {
               // use exemplar chars
               serializeScripts(scriptcode, scriptcount, locale);
