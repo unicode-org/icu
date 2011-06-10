@@ -5579,12 +5579,12 @@ TestIsFixedWidth() {
     for (i = 0; i < LENGTHOF(notFixedWidth); i++) {
         cnv = ucnv_open(notFixedWidth[i], &status);
         if (cnv == NULL || U_FAILURE(status)) {
-            log_data_err("Error open converter: %s - %s \n", fixedWidth[i], u_errorName(status));
+            log_data_err("Error open converter: %s - %s \n", notFixedWidth[i], u_errorName(status));
             continue;
         }
 
         if (ucnv_isFixedWidth(cnv, &status)) {
-            log_err("%s is NOT a fixedWidth converter but returned TRUE.\n", fixedWidth[i]);
+            log_err("%s is NOT a fixedWidth converter but returned TRUE.\n", notFixedWidth[i]);
         }
         ucnv_close(cnv);
     }
