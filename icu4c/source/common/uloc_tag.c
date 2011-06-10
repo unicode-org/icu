@@ -1464,6 +1464,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
             ext = uprv_malloc(sizeof(ExtensionListEntry));
             if (ext == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
+                goto cleanup;
             }
             ext->key = POSIX_KEY;
             ext->value = POSIX_VALUE;
@@ -1531,6 +1532,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 }
             } while (attr != NULL || ext != NULL);
         }
+cleanup:
         /* clean up */
         ext = firstExt;
         while (ext != NULL) {
@@ -2047,13 +2049,13 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
 
     /* create a ULanguageTag */
     t = (ULanguageTag*)uprv_malloc(sizeof(ULanguageTag));
-    _initializeULanguageTag(t);
-    t->buf = tagBuf;
     if (t == NULL) {
         uprv_free(tagBuf);
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
+    _initializeULanguageTag(t);
+    t->buf = tagBuf;
 
     if (tagLen < MINLEN) {
         /* the input tag is too short - return empty ULanguageTag */

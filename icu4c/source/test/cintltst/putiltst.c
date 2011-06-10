@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2010, International Business Machines Corporation and
+ * Copyright (c) 1998-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -185,7 +185,7 @@ static void TestPUtilAPI(void){
     }
 }
 
-static void TestVersion()
+static void TestVersion(void)
 {
     UVersionInfo versionArray = {0x01, 0x00, 0x02, 0x02};
     UVersionInfo versionArray2 = {0x01, 0x00, 0x02, 0x02};
@@ -288,7 +288,7 @@ static void TestVersion()
     }
 }
 
-static void TestCompareVersions()
+static void TestCompareVersions(void)
 {
    /* use a 1d array to be palatable to java */
    const char *testCases[] = {

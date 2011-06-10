@@ -548,7 +548,7 @@ void MessageFormat::setArgStartFormat(int32_t argStart,
 }
 
 
-bool MessageFormat::argNameMatches(int32_t partIndex, const UnicodeString& argName, int32_t argNumber) {
+UBool MessageFormat::argNameMatches(int32_t partIndex, const UnicodeString& argName, int32_t argNumber) {
     const MessagePattern::Part& part = msgPattern.getPart(partIndex);
     return part.getType() == UMSGPAT_PART_TYPE_ARG_NAME ?
         msgPattern.partSubstringMatches(part, argName) :
