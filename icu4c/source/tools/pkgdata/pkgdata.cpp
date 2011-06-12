@@ -655,7 +655,10 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
             }
 
-            pkg_checkFlag(o);
+            if (pkg_checkFlag(o) == NULL) {
+                /* Error occurred. */
+                return result;
+            }
 #endif
 
             if (pkgDataFlags[GENCCODE_ASSEMBLY_TYPE][0] != 0) {
@@ -1551,6 +1554,61 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
     int32_t start = -1;
     int32_t count = 0;
 
+    flag = pkgDataFlags[GENLIB];
+
+    /* This portion of the code replaces the 'all' in the GENLIB with the appropriate library file name.
+     * Only occurs in AIX.
+     */
+    if (uprv_strstr(flag, "rm -f all") != NULL) {
+        const char *firstPartEnd = uprv_strstr(flag, "all");
+        char *tmpGenlibFlagBuffer = NULL;
+        int32_t newLength = 0;
+        int32_t firstPartLength = firstPartEnd - flag;
+        int32_t i, n, offset;
+
+        length = uprv_strlen(pkgDataFlags[GENLIB]);
+
+        newLength = uprv_strlen(o->targetDir) + uprv_strlen(PKGDATA_FILE_SEP_STRING) + uprv_strlen(libFileNames[LIB_FILE_VERSION_TMP]);
+
+        tmpGenlibFlagBuffer = (char *)uprv_malloc(length);
+        if (tmpGenlibFlagBuffer == NULL) {
+            /* Memory allocation error */
+            fprintf(stderr,"Unable to allocate buffer of size: %d.\n", length);
+            return NULL;
+        }
+
+        uprv_strcpy(tmpGenlibFlagBuffer, flag);
+
+        /* Free and allocate a new buffer for the GENLIB flag */
+        uprv_free(pkgDataFlags[GENLIB]);
+        pkgDataFlags[GENLIB] = (char *)uprv_malloc(length + newLength);
+        if (pkgDataFlags[GENLIB] == NULL) {
+            /* Memory allocation error */
+            fprintf(stderr,"Unable to allocate buffer of size: %d.\n", length + newLength);
+            return NULL;
+        }
+
+        uprv_strncpy(pkgDataFlags[GENLIB], tmpGenlibFlagBuffer, firstPartLength);
+        /* Zero terminate the string */
+        pkgDataFlags[GENLIB][firstPartLength] = 0;
+
+        uprv_strcat(pkgDataFlags[GENLIB], o->targetDir);
+        uprv_strcat(pkgDataFlags[GENLIB], PKGDATA_FILE_SEP_STRING);
+        uprv_strcat(pkgDataFlags[GENLIB], libFileNames[LIB_FILE_VERSION_TMP]);
+
+        offset = firstPartLength + newLength;
+
+        n = 0;
+        for (i = (firstPartLength + 3); i < length; i++) {
+            pkgDataFlags[GENLIB][offset + (n++)] = tmpGenlibFlagBuffer[i];
+        }
+
+        /* Zero terminate the string */
+        pkgDataFlags[GENLIB][offset+n] = 0;
+
+        uprv_free(tmpGenlibFlagBuffer);
+    }
+
     flag = pkgDataFlags[BIR_FLAGS];
     length = uprv_strlen(pkgDataFlags[BIR_FLAGS]);
 
@@ -1597,6 +1655,7 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
         f = T_FileStream_open(mapFile, "w");
         if (f == NULL) {
             fprintf(stderr,"Unable to create map file: %s.\n", mapFile);
+            return NULL;
         } else {
             sprintf(tmpbuffer, "%s%s ", o->entryName, UDATA_CMN_INTERMEDIATE_SUFFIX);
     
