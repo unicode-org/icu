@@ -775,7 +775,8 @@ void CalendarRegressionTest::test4092362() {
 
     logln( UnicodeString(" Cal1 = ") + cal1->getTime(status) ); 
     logln( UnicodeString(" Cal1 time in ms = ") + cal1->get(UCAL_MILLISECOND,status) ); 
-    for( int32_t k = 0; k < 100 ; k++ ); 
+    for (int32_t k = 0; k < 100 ; k++)
+        ;
 
     GregorianCalendar *cal2 = new GregorianCalendar(1997, 10, 11, 10, 20, 40,status); 
     /*cal2.set( Calendar::YEAR, 1997 ); 

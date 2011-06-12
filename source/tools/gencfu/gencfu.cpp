@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -313,7 +313,8 @@ int  main(int argc, char **argv) {
     fseek(file, 0, SEEK_SET);
     result = new char[fileSize+10];
     if (result==NULL) {
-        return result;
+        fclose(file);
+        return NULL;
     }
 
     long t = fread(result, 1, fileSize, file);

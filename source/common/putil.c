@@ -2112,18 +2112,22 @@ uprv_dl_close(void *lib, UErrorCode *status) {
 
 U_INTERNAL UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
-  UVoidFunction* ret = NULL;
-  if(U_FAILURE(*status)) return ret;
+  union {
+      void* voidPtr;
+      UVoidFunction* voidFunc;
+  } ret;
+  ret.voidPtr = NULL;
+  if(U_FAILURE(*status)) return NULL;
   /*
    * ISO forbids the following cast, but it's needed for dlsym.
    *  See: http://pubs.opengroup.org/onlinepubs/009695399/functions/dlsym.html
    *  See: http://www.trilithium.com/johan/2004/12/problem-with-dlsym/ 
    */
-  *(void **)&ret = dlsym(lib, sym);
-  if(ret == NULL) {
+  ret.voidPtr = dlsym(lib, sym);
+  if(ret.voidPtr == NULL) {
     *status = U_MISSING_RESOURCE_ERROR;
   }
-  return ret;
+  return ret.voidFunc;
 }
 
 #else

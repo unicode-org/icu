@@ -903,7 +903,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 uint8_t   *data  = NULL;
                 UCollator *coll  = NULL;
                 int32_t reorderCodes[USCRIPT_CODE_LIMIT + (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST)];
-                uint32_t reorderCodeCount;
+                int32_t reorderCodeCount;
                 int32_t reorderCodeIndex;
                 UParseError parseError;
 
