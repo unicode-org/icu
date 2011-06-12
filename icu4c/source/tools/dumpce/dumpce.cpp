@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2005 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2011 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -572,7 +572,7 @@ CLOSETAILOR :
     }
 
     if (options[7].doesOccur) {
-        char inputfilename[128];
+        char inputfilename[128] = "";
         // rules are to be used
         if (options[5].doesOccur) {
             strcpy(inputfilename, options[5].value);
@@ -1022,6 +1022,7 @@ int getScriptElementsFromExemplars(ScriptElement scriptelem[], const char* local
 
 		count++;
 	}
+        delete []pattern;
 
 	return count;
 }
@@ -1483,7 +1484,7 @@ void serializeScripts() {
         if (U_FAILURE(error)) {
             fprintf(stdout, "Collator creation failed:");
             fprintf(stdout, u_errorName(error));
-            return;
+            break;
         }
         if ((error != U_USING_FALLBACK_WARNING && // not tailored
             error != U_USING_DEFAULT_WARNING) ||
@@ -1493,7 +1494,7 @@ void serializeScripts() {
             if (U_FAILURE(error)) {
                fprintf(stdout, "Collator attribute setting failed:");
                fprintf(stdout, u_errorName(error));
-               return;
+               break;
             }
 
             UScriptCode scriptcode[32];
@@ -1501,7 +1502,7 @@ void serializeScripts() {
                                                    &error);
             if (U_FAILURE(error)) {
                 fprintf(stdout, "Error getting lcale scripts\n");
-                return;
+                break;
             }
 
             strcat(filename, locale);
@@ -1509,7 +1510,7 @@ void serializeScripts() {
             OUTPUT_ = fopen(filename, "w");
             if (OUTPUT_ == NULL) {
                 fprintf(stdout, "Cannot open file:%s\n", filename);
-                return;
+                break;
             }
             outputHTMLHeader(locale, scriptcode, scriptcount);
 			fprintf(stdout, "%s\n", locale);

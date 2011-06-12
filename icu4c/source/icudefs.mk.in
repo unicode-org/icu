@@ -2,7 +2,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2010, International Business Machines Corporation and others.
+# Copyright (C) 2000-2011, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -124,7 +124,8 @@ UCLN_NO_AUTO_CLEANUP = @UCLN_NO_AUTO_CLEANUP@
 # DEFS is for common macro definitions.
 # configure prevents user defined DEFS, and configure's DEFS is not needed
 # So we ignore the DEFS that comes from configure
-DEFS =
+# U_ATTRIBUTE_DEPRECATED is defined to hide warnings about deprecated API warnings.
+DEFS = -DU_ATTRIBUTE_DEPRECATED=
 # CFLAGS is for C only flags
 CFLAGS = @CFLAGS@
 # CXXFLAGS is for C++ only flags

@@ -115,6 +115,7 @@ private:
         UnicodeSet *set=new UnicodeSet(pattern, errorCode);
         if(set==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         }
         set->freeze();
         ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
@@ -191,8 +192,8 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
             NULL, // don't need remove()
             NULL // don't need removeRange()
         };
-        incl->ensureCapacity(DEFAULT_INCLUSION_CAPACITY, status);
         if (incl != NULL) {
+            incl->ensureCapacity(DEFAULT_INCLUSION_CAPACITY, status);
             switch(src) {
             case UPROPS_SRC_CHAR:
                 uchar_addPropertyStarts(&sa, &status);

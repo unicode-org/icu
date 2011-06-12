@@ -127,7 +127,7 @@ static void TestCalendar()
     
     /*Test ucal_openTimeZones, ucal_openCountryTimeZones and ucal_openTimeZoneIDEnumeration */
     for (j=0; j<6; ++j) {
-        const char *api;
+        const char *api = "?";
         const int32_t offsetMinus5 = -5*60*60*1000;
         switch (j) {
         case 0:

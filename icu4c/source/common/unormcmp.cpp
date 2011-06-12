@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -590,6 +590,9 @@ unorm_compare(const UChar *s1, int32_t length1,
             uni32=uniset_getUnicode32Instance(*pErrorCode);
         } else {
             uni32=NULL;  // unused
+        }
+        if(U_FAILURE(*pErrorCode)) {
+            return 0;
         }
         FilteredNormalizer2 fn2(*n2, *uni32);
         if(normOptions&UNORM_UNICODE_3_2) {

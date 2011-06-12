@@ -2175,7 +2175,7 @@ void CalendarTest::Test1624() {
 
 void CalendarTest::TestTimeStamp() {
     UErrorCode status = U_ZERO_ERROR;
-    UDate start, time;
+    UDate start = 0.0, time;
     Calendar *cal;
 
     // Create a new Gregorian Calendar.

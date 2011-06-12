@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2010, International Business Machines Corporation and
+ * Copyright (c) 2005-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -1910,7 +1910,7 @@ void UTextTest::Ticket6847() {
     utext_setNativeIndex(ut, 0);
     int32_t count = 0;
     UChar32 c = 0;
-    int32_t nativeIndex = UTEXT_GETNATIVEINDEX(ut);
+    int64_t nativeIndex = UTEXT_GETNATIVEINDEX(ut);
     TEST_ASSERT(nativeIndex == 0);
     while ((c = utext_next32(ut)) != U_SENTINEL) {
         TEST_ASSERT(c == 0x41);

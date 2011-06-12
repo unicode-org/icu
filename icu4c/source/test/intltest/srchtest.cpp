@@ -1074,9 +1074,7 @@ void StringSearchTest::TestCollator()
     if (U_FAILURE(status)) {
         errln("Error opening rule based collator %s", u_errorName(status));
         delete strsrch;
-        if (tailored != NULL) {
-            delete tailored;
-        }
+        delete tailored;
         return;
     }
 
@@ -1084,16 +1082,12 @@ void StringSearchTest::TestCollator()
     if (U_FAILURE(status) || (*strsrch->getCollator()) != (*tailored)) {
         errln("Error setting rule based collator");
         delete strsrch;
-        if (tailored != NULL) {
-            delete tailored;
-        }
+        delete tailored;
     }
     strsrch->reset();
     if (!assertEqualWithStringSearch(strsrch, &COLLATOR[1])) {
         delete strsrch;
-        if (tailored != NULL) {
-            delete tailored;
-        }
+        delete tailored;
         return;
     }
         
@@ -1102,17 +1096,13 @@ void StringSearchTest::TestCollator()
     if (U_FAILURE(status) || (*strsrch->getCollator()) != (*m_en_us_)) {
         errln("Error setting rule based collator");
         delete strsrch;
-        if (tailored != NULL) {
-            delete tailored;
-        }
+        delete tailored;
     }
     if (!assertEqualWithStringSearch(strsrch, &COLLATOR[0])) {
        errln("Error searching collator test");
     }
     delete strsrch;
-    if (tailored != NULL) {
-        delete tailored;
-    }
+    delete tailored;
 }
 
 void StringSearchTest::TestPattern()

@@ -27,7 +27,7 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SpoofImpl)
 
 SpoofImpl::SpoofImpl(SpoofData *data, UErrorCode &status) :
-    fMagic(0), fSpoofData(NULL), fAllowedCharsSet(NULL) , fAllowedLocales(NULL) {
+    fMagic(0), fSpoofData(NULL), fAllowedCharsSet(NULL) , fAllowedLocales(uprv_strdup("")) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -35,12 +35,12 @@ SpoofImpl::SpoofImpl(SpoofData *data, UErrorCode &status) :
     fSpoofData = data;
     fChecks = USPOOF_ALL_CHECKS;
     UnicodeSet *allowedCharsSet = new UnicodeSet(0, 0x10ffff);
-    if (allowedCharsSet == NULL) {
+    if (allowedCharsSet == NULL || fAllowedLocales == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     allowedCharsSet->freeze();
     fAllowedCharsSet = allowedCharsSet;
-    fAllowedLocales  = uprv_strdup("");
 }
 
 

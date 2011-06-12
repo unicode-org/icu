@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 2007-2008, International Business Machines
+* Copyright (c) 2007-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -119,6 +119,8 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
             u_UCharsToChars(u, ch, len);
             ch[len] = 0; /* include terminating \0 */
             it_errln(UnicodeString("Parse Failed: Field ") + UnicodeString(ch) + UnicodeString(", err ") + UnicodeString(u_errorName(status)));
+            delete[] kv;
+            delete[] dest;
             return -1;
         }
 
@@ -132,6 +134,8 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
                 u_UCharsToChars(u, ch, len);
                 ch[len] = 0; /* include terminating \0 */
                 it_errln(UnicodeString("Parse Failed: Value ") + UnicodeString(ch) + UnicodeString(", err ") + UnicodeString(u_errorName(status)));
+                delete[] kv;
+                delete[] dest;
                 return -1;
             }
 

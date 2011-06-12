@@ -3173,7 +3173,7 @@ static UBool utextOffsetToNative(UText *utext, int32_t unistrOffset, int32_t& na
             break;
         }
     }
-    nativeIndex = UTEXT_GETNATIVEINDEX(utext);
+    nativeIndex = (int32_t)UTEXT_GETNATIVEINDEX(utext);
     return couldFind;
 }
 
@@ -3784,7 +3784,7 @@ cleanUpAndReturn:
     ucnv_close(conv);
     if (U_FAILURE(status)) {
         errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
-        delete retPtr;
+        delete []retPtr;
         retPtr = 0;
         ulen   = 0;
     };

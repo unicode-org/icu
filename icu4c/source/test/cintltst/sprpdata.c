@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2008, International Business Machines
+ *   Copyright (C) 2003-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -285,7 +285,6 @@ doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t optio
     relativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
 #endif
 
-    filename = (char*) malloc(strlen(srcdatapath)+strlen(relativepath)+strlen(txtFileName)+10 );
     profile = usprep_open(testdatapath, binFileName, errorCode);
 
     if(*errorCode == U_FILE_ACCESS_ERROR) {
@@ -295,6 +294,7 @@ doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t optio
         log_err("Failed to load %s data file. Error: %s \n", binFileName, u_errorName(*errorCode));
         return;
     }
+    filename = (char*) malloc(strlen(srcdatapath)+strlen(relativepath)+strlen(txtFileName)+10 );
     /* open and load the txt file */
     strcpy(filename,srcdatapath);
     strcat(filename,relativepath);

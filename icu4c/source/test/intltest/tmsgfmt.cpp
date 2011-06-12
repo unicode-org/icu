@@ -1410,26 +1410,41 @@ static void _testCopyConstructor2()
     const Formattable fargs( d, Formattable::kIsDate );
 
     MessageFormat* fmt1 = new MessageFormat( formatStr, status );
-    MessageFormat* fmt2 = new MessageFormat( *fmt1 );
-    MessageFormat* fmt3;
-    MessageFormat* fmt4;
+    MessageFormat* fmt2 = NULL;
+    MessageFormat* fmt3 = NULL;
+    MessageFormat* fmt4 = NULL;
 
-    if (fmt1 == NULL) it_err("testCopyConstructor2: (fmt1 != NULL)");
+    if (fmt1 == NULL) {
+        it_err("testCopyConstructor2: (fmt1 != NULL)");
+        goto cleanup;
+    }
 
+    fmt2 = new MessageFormat( *fmt1 );
     result = fmt1->format( &fargs, 1, resultStr, fp, status );
 
-    if (fmt2 == NULL) it_err("testCopyConstructor2: (fmt2 != NULL)");
+    if (fmt2 == NULL) {
+        it_err("testCopyConstructor2: (fmt2 != NULL)");
+        goto cleanup;
+    }
 
     fmt3 = (MessageFormat*) fmt1->clone();
     fmt4 = (MessageFormat*) fmt2->clone();
 
-    if (fmt3 == NULL) it_err("testCopyConstructor2: (fmt3 != NULL)");
-    if (fmt4 == NULL) it_err("testCopyConstructor2: (fmt4 != NULL)");
+    if (fmt3 == NULL) {
+        it_err("testCopyConstructor2: (fmt3 != NULL)");
+        goto cleanup;
+    }
+    if (fmt4 == NULL) {
+        it_err("testCopyConstructor2: (fmt4 != NULL)");
+        goto cleanup;
+    }
 
     result = fmt1->format( &fargs, 1, resultStr, fp, status );
     result = fmt2->format( &fargs, 1, resultStr, fp, status );
     result = fmt3->format( &fargs, 1, resultStr, fp, status );
     result = fmt4->format( &fargs, 1, resultStr, fp, status );
+
+cleanup:
     delete fmt1;
     delete fmt2;
     delete fmt3;

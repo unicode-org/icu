@@ -957,7 +957,7 @@ uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
 
     ret = GetLocaleInfoA(hostid, LOCALE_SNAME, (LPSTR)gPosixFromLCID, sizeof(gPosixFromLCID));
     if (ret > 1) {
-        FIX_LOCALE_ID_TAG_SEPARATOR(gPosixFromLCID, ret, localeIndex)
+        FIX_LOCALE_ID_TAG_SEPARATOR(gPosixFromLCID, (uint32_t)ret, localeIndex)
         FIX_LANGUAGE_ID_TAG(gPosixFromLCID, ret)
 
         return gPosixFromLCID;

@@ -1377,6 +1377,7 @@ UCollator *openRulesCollator() {
 
     int  bufLen = 10000;
     UChar *buf = (UChar *)malloc(bufLen * sizeof(UChar));
+    UChar *tmp;
     int i = 0;
 
     for(;;) {
@@ -1389,8 +1390,13 @@ UCollator *openRulesCollator() {
         }
         i++;
         if (i >= bufLen) {
+            tmp = buf;
             bufLen += 10000;
             buf = (UChar *)realloc(buf, bufLen);
+            if (buf == NULL) {
+                free(tmp);
+                return 0;
+            }
         }
     }
     buf[i] = 0;

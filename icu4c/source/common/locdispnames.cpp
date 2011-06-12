@@ -535,7 +535,7 @@ uloc_getDisplayName(const char *locale,
         int32_t langPos=0; /* position in output of language substitution */
         int32_t restLen=0; /* length of 'everything else' substitution */
         int32_t restPos=0; /* position in output of 'everything else' substitution */
-        UEnumeration* kenum; /* keyword enumeration */
+        UEnumeration* kenum = NULL; /* keyword enumeration */
 
         /* prefix of pattern, extremely likely to be empty */
         if(sub0Pos) {

@@ -1671,7 +1671,7 @@ static void TestComposeDecompose(void) {
         log_err("Set was zero. Missing data?\n");
         return;
     }
-    t = malloc(charsToTestSize * sizeof(tester *));
+    t = (tester **)malloc(charsToTestSize * sizeof(tester *));
     t[0] = (tester *)malloc(sizeof(tester));
     log_verbose("Testing UCA extensively for %d characters\n", charsToTestSize);
 
@@ -5920,7 +5920,7 @@ static void TestNonLeadBytesDuringCollationReordering(void)
 
     UChar testString[] = { 0x03b1, 0x03b2, 0x03b3 };
     
-    int i;
+    uint32_t i;
 
 
     log_verbose("Testing non-lead bytes in a sort key with and without reordering\n");
@@ -6208,7 +6208,7 @@ static int compareUScriptCodes(const void * a, const void * b)
   return ( *(int32_t*)a - *(int32_t*)b );
 }
 
-static void TestEquivalentReorderingScripts() {
+static void TestEquivalentReorderingScripts(void) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t equivalentScripts[50];
     int32_t equivalentScriptsLength;
@@ -6282,7 +6282,7 @@ static void TestEquivalentReorderingScripts() {
     }
 }
 
-static void TestReorderingAcrossCloning() 
+static void TestReorderingAcrossCloning(void) 
 {
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
@@ -6348,7 +6348,7 @@ static void TestReorderingAcrossCloning()
  */
 static void doTestOneReorderingAPITestCase(const OneTestCase testCases[], uint32_t testCasesLen, const int32_t reorderTokens[], int32_t reorderTokensLen)
 {
-    int testCaseNum;
+    uint32_t testCaseNum;
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
 
@@ -6477,7 +6477,7 @@ static void TestHaniReorder(void)
     doTestOneReorderingAPITestCase(privateUseCharacterStrings, LEN(privateUseCharacterStrings), apiRules, LEN(apiRules));
 }
 
-static void TestMultipleReorder()
+static void TestMultipleReorder(void)
 {
     const char* strRules[] = {
         "[reorder Grek Zzzz DIGIT Latn Hani]"

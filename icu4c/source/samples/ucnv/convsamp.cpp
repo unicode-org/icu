@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -397,7 +397,6 @@ UErrorCode convsample_06()
   char inBuf[BUFFERSIZE];
   const char *source;
   const char *sourceLimit;
-  UChar *uBuf;
   int32_t uBufSize = 0;
   UConverter *conv;
   UErrorCode status = U_ZERO_ERROR;
@@ -438,8 +437,6 @@ UErrorCode convsample_06()
   uBufSize = (BUFFERSIZE/ucnv_getMinCharSize(conv));
   printf("input bytes %d / min chars %d = %d UChars\n",
          BUFFERSIZE, ucnv_getMinCharSize(conv), uBufSize);
-  uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
-  assert(uBuf!=NULL);
 
   // grab another buffer's worth
   while((!feof(f)) && 
@@ -473,6 +470,9 @@ UErrorCode convsample_06()
       if(p>charCount)
       {
         fprintf(stderr, "U+%06X: oh.., we only handle BMP characters so far.. redesign!\n", p);
+        free(info);
+        fclose(f);
+        ucnv_close(conv);
         return U_UNSUPPORTED_ERROR;
       }
       info[p].frequency++;

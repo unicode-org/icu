@@ -111,6 +111,7 @@
 #   define U_CDECL_END
 #endif
 
+#ifndef U_ATTRIBUTE_DEPRECATED
 /**
  * \def U_ATTRIBUTE_DEPRECATED
  *  This is used for GCC specific attributes
@@ -128,6 +129,8 @@
 #else
 #    define U_ATTRIBUTE_DEPRECATED
 #endif
+#endif
+
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
 /** This is used to declare a function as a stable public ICU C API*/

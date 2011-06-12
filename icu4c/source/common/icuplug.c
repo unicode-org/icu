@@ -809,6 +809,7 @@ uplug_init(UErrorCode *status) {
           }
         }
       }
+      fclose(f);
     } else {
 #if UPLUG_TRACE
       DBG((stderr, "Can't open plugin file %s\n", plugin_file));

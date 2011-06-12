@@ -876,10 +876,11 @@ UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
         return NULL;
     }
     UVector *dest = new UVector(status);
-    dest->setDeleter(uhash_deleteUnicodeString);
     if (dest == NULL && U_SUCCESS(status)) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
+    dest->setDeleter(uhash_deleteUnicodeString);
     const UChar *src  = HACK_FIRST_CHARS_IN_SCRIPTS;
     const UChar *limit = src + sizeof(HACK_FIRST_CHARS_IN_SCRIPTS) / sizeof(HACK_FIRST_CHARS_IN_SCRIPTS[0]);
     do {

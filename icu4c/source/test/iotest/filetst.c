@@ -920,7 +920,7 @@ static void TestCodepageFlush(void) {
   UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "wb", "en_US_POSIX", enc);
   FILE *myCFile;
   int shift = 0;
-  int i;
+  int32_t i;
 
   if (myFile == NULL) {
     log_err("Can't write test file %s\n", STANDARD_TEST_FILE);
@@ -946,7 +946,7 @@ static void TestCodepageFlush(void) {
     }
 
     /* check if shift in and out */
-    for(i=0;i<inLen;i++) {
+    for(i=0;i<(int32_t)inLen;i++) {
       if(inBuf[i]==0x0E) {  /* SO */
         shift= 1;
       } else if(inBuf[i]==0x0F) { /* SI */

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2010, International Business Machines
+* Copyright (c) 1996-2011, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -126,13 +126,16 @@ unorm_iterate(UCharIterator *src, UBool forward,
     } else {
         uni32=NULL;  // unused
     }
+
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
     FilteredNormalizer2 fn2(*n2, *uni32);
     if(options&UNORM_UNICODE_3_2) {
         n2=&fn2;
     }
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
+    
     if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
         src==NULL
     ) {
@@ -227,13 +230,16 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
     } else {
         uni32=NULL;  // unused
     }
+
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
     FilteredNormalizer2 fn2(*n2, *uni32);
     if(options&UNORM_UNICODE_3_2) {
         n2=&fn2;
     }
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
+    
     if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
         left==NULL || leftLength<-1 ||
         right==NULL || rightLength<-1
