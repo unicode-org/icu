@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -52,8 +52,14 @@ public class SerializableWriter extends CoverageTest
 
     public static void main(String[] args)
     {
-        URL dataURL = SerializableWriter.class.getResource("data");
-        CoverageTest test = new SerializableWriter(dataURL.getPath() + "/" + folderName());
+        String outDir = null;
+        if (args.length == 0) {
+            URL dataURL = SerializableWriter.class.getResource("data");
+            outDir = dataURL.getPath() + "/" + folderName();
+        } else {
+            outDir = args[0] + "/" + folderName();
+        }
+        CoverageTest test = new SerializableWriter(outDir);
         
         test.run(args);
         

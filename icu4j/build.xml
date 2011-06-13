@@ -830,6 +830,30 @@
         </java>
     </target>
 
+    <target name="serialTestData" depends="main, tests">
+        <property name="serial.test.data.dir" value="${out.dir}/serialTestData"/>
+        <delete dir="${serial.test.data.dir}"/>
+        <mkdir dir="${serial.test.data.dir}"/>
+        <java classname="com.ibm.icu.dev.test.serializable.SerializableWriter" fork="yes" failonerror="true">
+            <arg line="${serial.test.data.dir}"/>
+            <classpath>
+                <pathelement path="${icu4j.core.jar}"/>
+                <pathelement path="${icu4j.collate.jar}"/>
+                <pathelement path="${icu4j.charset.jar}"/>
+                <pathelement path="${icu4j.currdata.jar}"/>
+                <pathelement path="${icu4j.langdata.jar}"/>
+                <pathelement path="${icu4j.regiondata.jar}"/>
+                <pathelement path="${icu4j.translit.jar}"/>
+                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement path="${icu4j.core-tests.jar}"/>
+            </classpath>
+        </java>
+        <echo message="Note: The serialization compatibility test data files were"/>
+        <echo message="created in ${serial.test.data.dir}. Once you confirm"/>
+        <echo message="the test runs clean, you should copy the data file directory to"/>
+        <echo message="main/tests/core/src/com/ibm/icu/dev/test/serializable/data."/>
+    </target>
+
     <!-- Special packaging targets -->
     <target name="translitIMEJar" depends="info" description="Build transliterator IME 'icutransime.jar' jar file">
         <property name="translit.ime.out.dir" value="${out.dir}/translit_ime"/>
