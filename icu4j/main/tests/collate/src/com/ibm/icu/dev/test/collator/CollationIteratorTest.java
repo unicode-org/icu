@@ -749,9 +749,7 @@ public class CollationIteratorTest extends TestFmwk {
             if ( ioff < noff ) {
                 errln("Error: in locale " + localeString + ", CEIterator next() returned fewer elements than expected");
             }
-            
-            /*
-            // Skip the backwards test until ticket #8382 is fixed
+
             uce.setOffset(tsceText.length());
             ioff = noff;
             do {
@@ -774,7 +772,6 @@ public class CollationIteratorTest extends TestFmwk {
             if ( ioff > 0 ) {
                 errln("Error: in locale " + localeString + ", CEIterator previous() returned fewer elements than expected");
             }
-            */
         }
     }
 }
