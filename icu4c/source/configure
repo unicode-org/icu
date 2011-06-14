@@ -2601,7 +2601,8 @@ fi
 # Compute a reasonable library version from the release version. This is
 # very bad, but that's wanted... We want to make sure that the LIB_VERSION
 # has at least a dot in it, so we'll add a .0 if needed.
-LIB_VERSION=`echo $VERSION | sed -e 's/\.//' -e 's/^\([^.]*\)$/\1.0/'`
+#[LIB_VERSION=`echo $VERSION | sed -e 's/\.//' -e 's/^\([^.]*\)$/\1.0/'`]
+LIB_VERSION=$VERSION
 LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 
 
