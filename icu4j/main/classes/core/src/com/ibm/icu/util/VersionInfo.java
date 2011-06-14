@@ -143,7 +143,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static final String ICU_DATA_VERSION_PATH = "48b";
+    public static final String ICU_DATA_VERSION_PATH = "49b";
     
     /**
      * Data version in ICU4J.
@@ -489,7 +489,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_6_0   = getInstance(6, 0, 0, 0);
 
         ICU_VERSION   = getInstance(49, 0, 1, 0);
-        ICU_DATA_VERSION = getInstance(4, 8, 0, 0);
+        ICU_DATA_VERSION = getInstance(49, 0, 1, 0);
         UNICODE_VERSION = UNICODE_6_0;
 
         UCOL_RUNTIME_VERSION = getInstance(7);
