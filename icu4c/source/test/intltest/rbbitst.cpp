@@ -2201,10 +2201,10 @@ void RBBITest::TestUnicodeFiles() {
 //-------------------------------------------------------------------------------------------
 void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
-// TODO(andy): Match line break behavior to Unicode 6.0 and remove this time bomb.
-  UVersionInfo icu49 = { 4, 9, 0, 0 };
-UBool isICUVersionPast48 = isICUVersionAtLeast(icu49);
-UBool isLineBreak = 0 == strcmp(fileName, "LineBreakTest.txt");
+    // TODO(andy): Match line break behavior to Unicode 6.0 and remove this time bomb.
+    UVersionInfo icu49 = { 49, 1, 0, 0 };
+    UBool isICUVersionPast48 = isICUVersionAtLeast(icu49);
+    UBool isLineBreak = 0 == strcmp(fileName, "LineBreakTest.txt");
     UErrorCode  status = U_ZERO_ERROR;
 
     //

@@ -867,7 +867,7 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
 }
 
 static void VerifyTranslation(void) {
-    static const UVersionInfo icu49 = { 4, 9, 0, 0 };
+    static const UVersionInfo icu49 = { 49, 1, 0, 0 };
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;

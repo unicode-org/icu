@@ -254,20 +254,20 @@
  *                                  \#define U_ICU_ENTRY_POINT icudt19_dat
  * @stable ICU 2.4
  */
-#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)
+#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM)
 
 /**
  * Do not use.
  * @internal
  */
-#define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
+#define U_DEF2_ICUDATA_ENTRY_POINT(major) U_DEF_ICUDATA_ENTRY_POINT(major)
 /**
  * Do not use.
  * @internal
  */
 #ifndef U_DEF_ICUDATA_ENTRY_POINT
 /* affected by symbol renaming. See platform.h */
-#define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
+#define U_DEF_ICUDATA_ENTRY_POINT(major) icudt##major##_dat
 #endif
 
 /**
