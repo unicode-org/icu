@@ -394,7 +394,7 @@
 # ifndef U_ICU_ENTRY_POINT_RENAME
 /* Renaming pattern:    u_strcpy_41_suffix */
 #  define U_ICU_ENTRY_POINT_RENAME(x)    x ## _ ## @LIB_VERSION_MAJOR@ ## @ICULIBSUFFIXCNAME@
-#  define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##@ICULIBSUFFIXCNAME@##major##minor##_dat
+#  define U_DEF_ICUDATA_ENTRY_POINT(major) icudt##@ICULIBSUFFIXCNAME@##major##_dat
 
 # endif
 #endif

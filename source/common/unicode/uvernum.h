@@ -42,25 +42,25 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2010, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2011, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** The current ICU major version as an integer. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_MAJOR_NUM 4
+#define U_ICU_VERSION_MAJOR_NUM 49
 
 /** The current ICU minor version as an integer. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 8
+#define U_ICU_VERSION_MINOR_NUM 0
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 0
+#define U_ICU_VERSION_PATCHLEVEL_NUM 1
 
 /** The current ICU build level version as an integer.  
  *  This value is for use by ICU clients. It defaults to 0.
@@ -74,7 +74,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _48
+#define U_ICU_VERSION_SUFFIX _49
 
 /** Glued version suffix function for renamers 
  *  This value will change in the subsequent releases of ICU.
@@ -83,7 +83,7 @@
  *  @stable ICU 4.2
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
-#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _48
+#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _49
 #endif
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
@@ -91,18 +91,18 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "4.8"
+#define U_ICU_VERSION "49.0.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "48"
+#define U_ICU_VERSION_SHORT "49"
 
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "4.8"
+#define U_ICU_DATA_VERSION "49.0.1"
 
 /*===========================================================================
  * ICU collation framework version information
