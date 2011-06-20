@@ -1189,16 +1189,16 @@ public class CollationRegressionTest extends TestFmwk {
     public void TestCaseFirstCompression() {
         RuleBasedCollator col = (RuleBasedCollator)Collator.getInstance(Locale.US);
 
-        // default
-        caseFirstCompressionSub(col);
+        // Default
+        caseFirstCompressionSub(col, "default");
 
         // Upper first
         col.setUpperCaseFirst(true);
-        caseFirstCompressionSub(col);
+        caseFirstCompressionSub(col, "upper first");
 
         // Lower first
         col.setLowerCaseFirst(true);
-        caseFirstCompressionSub(col);
+        caseFirstCompressionSub(col, "lower first");
     }
 
     /*
@@ -1206,14 +1206,14 @@ public class CollationRegressionTest extends TestFmwk {
      * Collation#compare and CollationKey#compareTo, called from
      * TestCaseFirstCompression.
      */
-    private void caseFirstCompressionSub(Collator col) {
+    private void caseFirstCompressionSub(RuleBasedCollator col, String opt) {
         final int maxLength = 50;
 
         StringBuilder buf1 = new StringBuilder();
         StringBuilder buf2 = new StringBuilder();
         String str1, str2;
 
-        for (int n = 1; n < maxLength; n++) {
+        for (int n = 1; n <= maxLength; n++) {
             buf1.setLength(0);
             buf2.setLength(0);
 
@@ -1234,7 +1234,7 @@ public class CollationRegressionTest extends TestFmwk {
             int cmpCol = col.compare(str1, str2);
 
             if ((cmpKey < 0 && cmpCol >= 0) || (cmpKey > 0 && cmpCol <= 0) || (cmpKey == 0 && cmpCol != 0)) {
-                errln("Inconsistent comparison: str1=" + str1 + ", str2=" + str2 + ", cmpKey=" + cmpKey + " , cmpCol=" + cmpCol);
+                errln("Inconsistent comparison(" + opt + "): str1=" + str1 + ", str2=" + str2 + ", cmpKey=" + cmpKey + " , cmpCol=" + cmpCol);
             }
         }
     }
