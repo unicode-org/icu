@@ -1182,7 +1182,63 @@ public class CollationRegressionTest extends TestFmwk {
         return sb;
     }
 
-    
+    /*
+     * Test case for ticket#8624
+     * Bad collation key with upper first option.
+     */
+    public void TestCaseFirstCompression() {
+        RuleBasedCollator col = (RuleBasedCollator)Collator.getInstance(Locale.US);
+
+        // default
+        caseFirstCompressionSub(col);
+
+        // Upper first
+        col.setUpperCaseFirst(true);
+        caseFirstCompressionSub(col);
+
+        // Lower first
+        col.setLowerCaseFirst(true);
+        caseFirstCompressionSub(col);
+    }
+
+    /*
+     * Compare two strings - "aaa...A" and "aaa...a" with
+     * Collation#compare and CollationKey#compareTo, called from
+     * TestCaseFirstCompression.
+     */
+    private void caseFirstCompressionSub(Collator col) {
+        final int maxLength = 50;
+
+        StringBuilder buf1 = new StringBuilder();
+        StringBuilder buf2 = new StringBuilder();
+        String str1, str2;
+
+        for (int n = 1; n < maxLength; n++) {
+            buf1.setLength(0);
+            buf2.setLength(0);
+
+            for (int i = 0; i < n - 1; i++) {
+                buf1.append('a');
+                buf2.append('a');
+            }
+            buf1.append('A');
+            buf2.append('a');
+
+            str1 = buf1.toString();
+            str2 = buf2.toString();
+
+            CollationKey key1 = col.getCollationKey(str1);
+            CollationKey key2 = col.getCollationKey(str2);
+
+            int cmpKey = key1.compareTo(key2);
+            int cmpCol = col.compare(str1, str2);
+
+            if ((cmpKey < 0 && cmpCol >= 0) || (cmpKey > 0 && cmpCol <= 0) || (cmpKey == 0 && cmpCol != 0)) {
+                errln("Inconsistent comparison: str1=" + str1 + ", str2=" + str2 + ", cmpKey=" + cmpKey + " , cmpCol=" + cmpCol);
+            }
+        }
+    }
+
     /* RuleBasedCollator not subclassable
      * @bug 4146160
     //
