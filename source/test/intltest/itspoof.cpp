@@ -269,7 +269,7 @@ void IntlTestSpoof::testInvisible() {
 
 void IntlTestSpoof::testBug8654() {
     TEST_SETUP
-        UnicodeString s = UnicodeString("B\u00c1\u0301").unescape();
+        UnicodeString s = UnicodeString("B\\u00c1\\u0301").unescape();
         int32_t position = -42;
         TEST_ASSERT_EQ(USPOOF_INVISIBLE, uspoof_checkUnicodeString(sc, s, &position, &status) & USPOOF_INVISIBLE );
         TEST_ASSERT_SUCCESS(status);
