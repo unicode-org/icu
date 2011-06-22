@@ -164,7 +164,7 @@ case $platform in
         THE_COMP="Sun's CC"
         CC=`which cc`; export CC
         CXX=`which CC`; export CXX
-        LDFLAGS="-lCrun";export LDFLAGS
+        LDFLAGS="${LDFLAGS} -lCrun";export LDFLAGS
         RELEASE_CFLAGS=-xO3
         RELEASE_CXXFLAGS=-O3
         ;;
