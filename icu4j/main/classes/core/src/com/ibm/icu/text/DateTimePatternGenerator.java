@@ -1099,12 +1099,23 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public static String getCanonicalCode(int type) {
+            try {
+                return CANONICAL_ITEMS[type];
+            } catch (Exception e) {
+                return String.valueOf(type);
+            }
+        }
+        /**
          * Check if the type of this variable field is numeric.
          * @return true if the type of this variable field is numeric.
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        protected boolean isNumeric() {
+        public boolean isNumeric() {
             return types[canonicalIndex][2] > 0;
         }
 
