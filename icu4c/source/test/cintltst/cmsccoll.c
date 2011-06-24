@@ -901,7 +901,7 @@ static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t
   realResult = func(collator, opts, first, sLen, second, tLen);
   realStrength = probeStrength(func, collator, opts, first, sLen, second, tLen, realResult);
 
-  if(strength == UCOL_IDENTICAL && realResult != UCOL_IDENTICAL) {
+  if(strength == UCOL_IDENTICAL && realResult != UCOL_EQUAL) {
     logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_EQUAL, strength, error);
     diffs++;
   } else if(realResult != UCOL_LESS || realStrength != strength) {

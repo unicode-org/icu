@@ -25,6 +25,7 @@
 
 #include "uarrsort.h"
 #include "uinvchar.h"
+#include "ustr_imp.h"
 
 /*
  * Align binary data at a 16-byte offset from the start of the resource bundle,
