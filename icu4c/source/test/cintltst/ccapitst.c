@@ -594,7 +594,7 @@ static void TestConvert()
         if (!myConverter || U_FAILURE(err))   
         {
             log_data_err("Error creating the ibm-949 converter - %s \n", u_errorName(err));
-            fclose(ucs_file_name);
+            fclose(ucs_file_in);
             break;
         }
 
@@ -3346,14 +3346,14 @@ TestToUCountPending(){
     }
     ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, oldToUAction, NULL, &status);
     for(i=0; i<LENGTHOF(toUnicodeTests); ++i) {
-        UChar tgt[10];
+        UChar tgt[20];
         UChar* target = tgt;
         UChar* targetLimit = target + 20;
         const char* source = toUnicodeTests[i].input;
         const char* sourceLimit = source + toUnicodeTests[i].len; 
         int32_t len = 0;
         ucnv_reset(cnv);
-        ucnv_toUnicode(cnv,&target, targetLimit, &source, sourceLimit, NULL, FALSE, &status);
+        ucnv_toUnicode(cnv, &target, targetLimit, &source, sourceLimit, NULL, FALSE, &status);
         len = ucnv_toUCountPending(cnv,&status);
         if(U_FAILURE(status)){
             log_err("ucnv_toUnicode call did not succeed. Error: %s\n", u_errorName(status));
