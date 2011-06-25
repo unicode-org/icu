@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1081,7 +1081,7 @@ uloc_minimizeSubtags(const char*    localeID,
  * @param localeID  the output buffer receiving a locale ID for the
  *                  specified BCP47 language tag.
  * @param localeIDCapacity  the size of the locale ID output buffer.
- * @param parsedLength  if not NULL, succsessfully parsed length
+ * @param parsedLength  if not NULL, successfully parsed length
  *                      for the input language tag is set.
  * @param err       error information if receiving the locald ID
  *                  failed.
@@ -1104,7 +1104,7 @@ uloc_forLanguageTag(const char* langtag,
  * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the
  * <code>err</code> if any locale fields do not satisfy the
  * BCP47 syntax requirement.
- * @param localeID  the input lcoale ID
+ * @param localeID  the input locale ID
  * @param langtag   the output buffer receiving BCP47 language
  *                  tag for the locale ID.
  * @param langtagCapacity   the size of the BCP47 language tag
