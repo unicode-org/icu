@@ -5377,8 +5377,8 @@ OLD_CFLAGS="${CFLAGS}"
 OLD_CXXFLAGS="${CXXFLAGS}"
 if test "$ac_cv_c_compiler_gnu" = yes; then
     case "${host}" in
-    *-pc-cygwin*|*-pc-mingw*)
-        # Cygwin GCC does not have the visibility attribute
+    *-pc-cygwin*|*-pc-mingw*|*-*-aix*)
+        # Cygwin and AIX GCC does not have the visibility attribute
         ;;
     *)
         LIBCFLAGS="-fvisibility=hidden"
