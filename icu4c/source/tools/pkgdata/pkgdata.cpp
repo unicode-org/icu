@@ -1175,7 +1175,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
     } else /* if (mode == MODE_DLL) */ {
         if (cmd == NULL) {
             length = uprv_strlen(pkgDataFlags[GENLIB]) + uprv_strlen(pkgDataFlags[LDICUDTFLAGS]) +
-                     uprv_strlen(targetDir) + uprv_strlen(libFileNames[LIB_FILE_VERSION_TMP]) +
+                     ((uprv_strlen(targetDir) + uprv_strlen(libFileNames[LIB_FILE_VERSION_TMP])) * 2) +
                      uprv_strlen(objectFile) + uprv_strlen(pkgDataFlags[LD_SONAME]) +
                      uprv_strlen(pkgDataFlags[LD_SONAME][0] == 0 ? "" : libFileNames[LIB_FILE_VERSION_MAJOR]) +
                      uprv_strlen(pkgDataFlags[RPATH_FLAGS]) + uprv_strlen(pkgDataFlags[BIR_FLAGS]) + BUFFER_PADDING_SIZE;
@@ -1195,6 +1195,15 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                 libFileNames[LIB_FILE_VERSION_TMP],
                 pkgDataFlags[LDICUDTFLAGS],
                 targetDir, libFileNames[LIB_FILE_CYGWIN_VERSION],
+#elif defined(U_AIX)
+        sprintf(cmd, "%s %s%s;%s %s -o %s%s %s %s%s %s %s",
+                RM_CMD,
+                targetDir,
+                libFileNames[LIB_FILE_VERSION_TMP],
+                pkgDataFlags[GENLIB],
+                pkgDataFlags[LDICUDTFLAGS],
+                targetDir,
+                libFileNames[LIB_FILE_VERSION_TMP],
 #else
         sprintf(cmd, "%s %s -o %s%s %s %s%s %s %s",
                 pkgDataFlags[GENLIB],
@@ -1552,24 +1561,19 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
     FileStream *f = NULL;
     char mapFile[SMALL_BUFFER_MAX_SIZE] = "";
     int32_t start = -1;
-    int32_t count = 0;
+    uint32_t count = 0;
+    const char rm_cmd[] = "rm -f all ;";
 
     flag = pkgDataFlags[GENLIB];
 
-    /* This portion of the code replaces the 'all' in the GENLIB with the appropriate library file name.
+    /* This portion of the code removes 'rm -f all' in the GENLIB.
      * Only occurs in AIX.
      */
-    if (uprv_strstr(flag, "rm -f all") != NULL) {
-        const char *firstPartEnd = uprv_strstr(flag, "all");
+    if (uprv_strstr(flag, rm_cmd) != NULL) {
         char *tmpGenlibFlagBuffer = NULL;
-        int32_t newLength = 0;
-        int32_t firstPartLength = firstPartEnd - flag;
-        int32_t i, n, offset;
+        int32_t i, offset;
 
-        length = uprv_strlen(pkgDataFlags[GENLIB]);
-
-        newLength = uprv_strlen(o->targetDir) + uprv_strlen(PKGDATA_FILE_SEP_STRING) + uprv_strlen(libFileNames[LIB_FILE_VERSION_TMP]);
-
+        length = uprv_strlen(flag) + 1;
         tmpGenlibFlagBuffer = (char *)uprv_malloc(length);
         if (tmpGenlibFlagBuffer == NULL) {
             /* Memory allocation error */
@@ -1579,32 +1583,14 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
 
         uprv_strcpy(tmpGenlibFlagBuffer, flag);
 
-        /* Free and allocate a new buffer for the GENLIB flag */
-        uprv_free(pkgDataFlags[GENLIB]);
-        pkgDataFlags[GENLIB] = (char *)uprv_malloc(length + newLength);
-        if (pkgDataFlags[GENLIB] == NULL) {
-            /* Memory allocation error */
-            fprintf(stderr,"Unable to allocate buffer of size: %d.\n", length + newLength);
-            return NULL;
-        }
+        offset = uprv_strlen(rm_cmd);
 
-        uprv_strncpy(pkgDataFlags[GENLIB], tmpGenlibFlagBuffer, firstPartLength);
-        /* Zero terminate the string */
-        pkgDataFlags[GENLIB][firstPartLength] = 0;
-
-        uprv_strcat(pkgDataFlags[GENLIB], o->targetDir);
-        uprv_strcat(pkgDataFlags[GENLIB], PKGDATA_FILE_SEP_STRING);
-        uprv_strcat(pkgDataFlags[GENLIB], libFileNames[LIB_FILE_VERSION_TMP]);
-
-        offset = firstPartLength + newLength;
-
-        n = 0;
-        for (i = (firstPartLength + 3); i < length; i++) {
-            pkgDataFlags[GENLIB][offset + (n++)] = tmpGenlibFlagBuffer[i];
+        for (i = 0; i < (length - offset); i++) {
+            flag[i] = tmpGenlibFlagBuffer[offset + i];
         }
 
         /* Zero terminate the string */
-        pkgDataFlags[GENLIB][offset+n] = 0;
+        flag[i] = 0;
 
         uprv_free(tmpGenlibFlagBuffer);
     }
