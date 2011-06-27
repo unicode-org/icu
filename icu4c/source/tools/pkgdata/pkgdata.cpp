@@ -507,7 +507,7 @@ normal_command_mode:
     printf("pkgdata: %s\n", cmd);
     int result = system(cmd);
     if (result != 0) {
-        printf("-- return status = %d\n", result);
+        fprintf(stderr, "-- return status = %d\n", result);
     }
 
     if (cmd != cmdBuffer && cmd != command) {
@@ -905,6 +905,7 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
             libFileNames[LIB_FILE_VERSION_MAJOR]);
     result = runCommand(cmd);
     if (result != 0) {
+        fprintf(stderr, "Error creating symbolic links. Failed command: %s\n", cmd);
         return result;
     }
 #endif
@@ -949,6 +950,7 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir)
     result = runCommand(cmd);
 
     if (result != 0) {
+        fprintf(stderr, "Error installing library. Failed command: %s\n", cmd);
         return result;
     }
 
@@ -962,6 +964,7 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir)
     result = runCommand(cmd);
 
     if (result != 0) {
+        fprintf(stderr, "Error installing library. Failed command: %s\n", cmd);
         return result;
     }
 #elif defined (U_CYGWIN)
@@ -974,6 +977,7 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir)
     result = runCommand(cmd);
 
     if (result != 0) {
+        fprintf(stderr, "Error installing library. Failed command: %s\n", cmd);
         return result;
     }
 #endif
@@ -1097,6 +1101,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
 
         result = runCommand(cmd); 
         if (result != 0) { 
+            fprintf(stderr, "Error creating archive library. Failed command: %s\n", cmd);
             return result; 
         } 
         
@@ -1107,6 +1112,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
         
         result = runCommand(cmd); 
         if (result != 0) {
+            fprintf(stderr, "Error creating archive library. Failed command: %s\n", cmd);
             return result;
         }
 
@@ -1118,6 +1124,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
 
         result = runCommand(cmd);
         if (result != 0) {
+            fprintf(stderr, "Error creating archive library. Failed command: %s\n", cmd);
             return result;
         }
 
@@ -1221,6 +1228,10 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
         result = runCommand(cmd);
     }
 
+    if (result != 0) {
+        fprintf(stderr, "Error generating library file. Failed command: %s\n", cmd);
+    }
+
     if (freeCmd) {
         uprv_free(cmd);
     }
@@ -1257,6 +1268,7 @@ static int32_t pkg_createWithAssemblyCode(const char *targetDir, const char mode
     result = runCommand(cmd);
     uprv_free(cmd);
     if (result != 0) {
+        fprintf(stderr, "Error creating with assembly code. Failed command: %s\n", cmd);
         return result;
     }
 
@@ -1423,6 +1435,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
                     gencmnFile);
         result = runCommand(cmd);
         if (result != 0) {
+            fprintf(stderr, "Error creating library without assembly code. Failed command: %s\n", cmd);
             break;
         }
 
@@ -1451,6 +1464,8 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     if (result == 0) {
         uprv_strcat(buffer, " ");
         uprv_strcat(buffer, tempObjectFile);
+    } else {
+        fprintf(stderr, "Error creating library without assembly code. Failed command: %s\n", cmd);
     }
 #endif
 
@@ -1475,6 +1490,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 #define DLL_EXT UDATA_SO_SUFFIX
 
 static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, UPKGOptions *o) {
+    int32_t result = 0;
     char cmd[LARGE_BUFFER_MAX_SIZE];
     if (mode == MODE_STATIC) {
         char staticLibFilePath[SMALL_BUFFER_MAX_SIZE] = "";
@@ -1547,7 +1563,12 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
                 );
     }
 
-    return runCommand(cmd, TRUE);
+    result = runCommand(cmd, TRUE);
+    if (result != 0) {
+        fprintf(stderr, "Error creating Windows DLL library. Failed command: %s\n", cmd);
+    }
+
+    return result;
 }
 #endif
 
