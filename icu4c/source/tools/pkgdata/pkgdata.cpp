@@ -99,6 +99,7 @@ U_CDECL_END
 
 #define LARGE_BUFFER_MAX_SIZE 2048
 #define SMALL_BUFFER_MAX_SIZE 512
+#define SMALL_BUFFER_FLAG_NAMES 32
 #define BUFFER_PADDING_SIZE 20
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
@@ -187,6 +188,7 @@ static UOption options[]={
     /*19*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG)
 };
 
+/* This enum and the following char array should be kept in sync. */
 enum {
     GENCCODE_ASSEMBLY_TYPE,
     SO_EXT,
@@ -206,6 +208,25 @@ enum {
     RANLIB,
     INSTALL_CMD,
     PKGDATA_FLAGS_SIZE
+};
+static const char* FLAG_NAMES[PKGDATA_FLAGS_SIZE] = {
+        "GENCCODE_ASSEMBLY_TYPE",
+        "SO",
+        "SOBJ",
+        "A",
+        "LIBPREFIX",
+        "LIB_EXT_ORDER",
+        "COMPILE",
+        "LIBFLAGS",
+        "GENLIB",
+        "LDICUDTFLAGS",
+        "LD_SONAME",
+        "RPATH_FLAGS",
+        "BIR_LDFLAGS",
+        "AR",
+        "ARFLAGS",
+        "RANLIB",
+        "INSTALL_CMD"
 };
 static char **pkgDataFlags = NULL;
 
@@ -789,7 +810,7 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
           fprintf(stdout, "# Reading options file %s\n", o->options);
         }
         status = U_ZERO_ERROR;
-        tmpResult = parseFlagsFile(o->options, pkgDataFlags, currentBufferSize, (int32_t)PKGDATA_FLAGS_SIZE, &status);
+        tmpResult = parseFlagsFile(o->options, pkgDataFlags, currentBufferSize, FLAG_NAMES, (int32_t)PKGDATA_FLAGS_SIZE, &status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
                 uprv_free(pkgDataFlags[i]);
@@ -801,9 +822,9 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
         }
 #endif
         if(o->verbose) {
-            fprintf(stdout, "# pkgDataFlags=");
-            for(int32_t i=0;i<PKGDATA_FLAGS_SIZE && pkgDataFlags[i][0];i++) {
-                fprintf(stdout, "%c \"%s\"", (i>0)?',':' ',pkgDataFlags[i]);
+            fprintf(stdout, "# pkgDataFlags=\n");
+            for(int32_t i=0;i<PKGDATA_FLAGS_SIZE;i++) {
+                fprintf(stdout, "  [%d] %s:  %s\n", i, FLAG_NAMES[i], pkgDataFlags[i]);
             }
             fprintf(stdout, "\n");
         }
