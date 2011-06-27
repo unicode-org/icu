@@ -1,14 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.charset;
 
-import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
@@ -40,15 +38,22 @@ class Charset88591 extends CharsetASCII {
             return null;
         }
 
-        protected CoderResult decodeLoopCoreUnoptimized(ByteBuffer source, CharBuffer target)
-                throws BufferUnderflowException, BufferOverflowException {
-
+        protected CoderResult decodeLoopCoreUnoptimized(ByteBuffer source, CharBuffer target) {
+            byte ch;
             /*
              * perform 88591 conversion from the source buffer to the target buffer. no range check
-             * is necessary (an exception will be generated to end the loop).
+             * is necessary.
              */
-            while (true)
-                target.put((char) (source.get() & 0xff));
+            while (source.hasRemaining()) {
+                ch = source.get();
+                if (target.hasRemaining()) {
+                    target.put((char) (ch & 0xff));
+                } else {
+                    return CoderResult.OVERFLOW;
+                }
+            }
+            
+            return CoderResult.UNDERFLOW;
         }
     }
 
@@ -88,8 +93,7 @@ class Charset88591 extends CharsetASCII {
                 return null;
         }
 
-        protected final CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target,
-                boolean flush) throws BufferUnderflowException, BufferOverflowException {
+        protected final CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target, boolean flush) {
             int ch;
 
             /*
@@ -97,19 +101,24 @@ class Charset88591 extends CharsetASCII {
              * each char in the source is within the correct range
              */
             
-            while (true) {
+            while (source.hasRemaining()) {
                 ch = (int) source.get();
                 if ((ch & 0xff00) == 0) {
-                    target.put((byte) ch);
+                    if (target.hasRemaining()) {
+                        target.put((byte) ch);
+                    } else {
+                        return CoderResult.OVERFLOW;
+                    }
                 } else {
-                    break;
+                    /*
+                     * if we reach here, it's because a character was not in the correct range, and we need
+                     * to deal with this by calling encodeMalformedOrUnmappable.
+                     */
+                    return encodeMalformedOrUnmappable(source, ch, flush);
                 }
             }
-            /*
-             * if we reach here, it's because a character was not in the correct range, and we need
-             * to deak with this by calling encodeMalformedOrUnmappable.
-             */
-            return encodeMalformedOrUnmappable(source, ch, flush);
+            
+            return CoderResult.UNDERFLOW;
         }
 
     }
