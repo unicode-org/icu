@@ -113,13 +113,13 @@ Cleanly installed Solaris can use this #define.
 #   endif
 #endif
 
-#if (defined(U_CYGWIN) || defined(__MINGW32__)) && defined(__STRICT_ANSI__)
+#if defined(U_CYGWIN) && defined(__STRICT_ANSI__)
 /* tzset isn't defined in strict ANSI on Cygwin. */
 #undef __STRICT_ANSI__
 #endif
 
 /*
- * Cygwin and MinGW with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
+ * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
  */
 #include <time.h>
 
