@@ -1962,6 +1962,7 @@ void   RegexCompile::insertOp(int32_t where) {
             opType == URX_CTR_LOOP     ||
             opType == URX_CTR_LOOP_NG  ||
             opType == URX_JMP_SAV      ||
+            opType == URX_JMP_SAV_X    ||
             opType == URX_RELOC_OPRND)    && opValue > where) {
             // Target location for this opcode is after the insertion point and
             //   needs to be incremented to adjust for the insertion.
