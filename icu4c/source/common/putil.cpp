@@ -86,9 +86,6 @@ Cleanly installed Solaris can use this #define.
 #   define NOMCX
 #   include <windows.h>
 #   include "wintz.h"
-#elif defined(U_CYGWIN) && defined(__STRICT_ANSI__)
-/* tzset isn't defined in strict ANSI on Cygwin. */
-#   undef __STRICT_ANSI__
 #elif defined(OS400)
 #   include <float.h>
 #   include <qusec.h>       /* error code structure */
@@ -104,20 +101,25 @@ Cleanly installed Solaris can use this #define.
 #   include <TextUtils.h>
 #   define ICU_NO_USER_DATA_OVERRIDE 1
 #elif defined(OS390)
-#include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
+#   include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
 #elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD)
-#include <limits.h>
-#include <unistd.h>
+#   include <limits.h>
+#   include <unistd.h>
 #elif defined(U_QNX)
-#include <sys/neutrino.h>
+#   include <sys/neutrino.h>
 #elif defined(U_SOLARIS)
-# ifndef _XPG4_2
-#  define _XPG4_2
-# endif
+#   ifndef _XPG4_2
+#       define _XPG4_2
+#   endif
+#endif
+
+#if (defined(U_CYGWIN) || defined(__MINGW32__)) && defined(__STRICT_ANSI__)
+/* tzset isn't defined in strict ANSI on Cygwin. */
+#undef __STRICT_ANSI__
 #endif
 
 /*
- * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
+ * Cygwin and MinGW with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
  */
 #include <time.h>
 
@@ -613,7 +615,7 @@ uprv_maximumPtr(void * base)
 U_CAPI void U_EXPORT2
 uprv_tzset()
 {
-#if defined(U_TZSET) && !defined(__MINGW32__)
+#if defined(U_TZSET)
     U_TZSET();
 #else
     /* no initialization*/
