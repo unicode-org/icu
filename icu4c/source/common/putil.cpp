@@ -77,7 +77,7 @@ Cleanly installed Solaris can use this #define.
 #include <float.h>
 
 /* include system headers */
-#ifdef U_WINDOWS
+#if defined(U_WINDOWS) || defined(__MINGW32__)
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
 #   define NOUSER
@@ -143,7 +143,7 @@ Cleanly installed Solaris can use this #define.
  * Simple things (presence of functions, etc) should just go in configure.in and be added to
  * icucfg.h via autoheader.
  */
-#if defined(HAVE_CONFIG_H)
+#if defined(U_HAVE_ICUCFG)
 #include "icucfg.h"
 #endif
 
@@ -176,7 +176,7 @@ static const BitPatternConversion gInf = { (int64_t) INT64_C(0x7FF0000000000000)
   functions).
   ---------------------------------------------------------------------------*/
 
-#if defined(U_WINDOWS) || defined(XP_MAC) || defined(OS400)
+#if defined(U_WINDOWS) || defined(XP_MAC) || defined(OS400) || defined(__MINGW32__)
 #   undef U_POSIX_LOCALE
 #else
 #   define U_POSIX_LOCALE    1
@@ -613,7 +613,7 @@ uprv_maximumPtr(void * base)
 U_CAPI void U_EXPORT2
 uprv_tzset()
 {
-#ifdef U_TZSET
+#if defined(U_TZSET) && !defined(__MINGW32__)
     U_TZSET();
 #else
     /* no initialization*/
@@ -1048,7 +1048,7 @@ uprv_tzname(int n)
 #endif
 
 #ifdef U_TZNAME
-#ifdef U_WINDOWS
+#if defined(U_WINDOWS) || defined(__MINGW32__)
     /* The return value is free'd in timezone.cpp on Windows because
      * the other code path returns a pointer to a heap location. */
     return uprv_strdup(U_TZNAME[n]);
@@ -1568,7 +1568,7 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif defined(U_WINDOWS)
+#elif defined(U_WINDOWS) || defined(__MINGW32__)
     UErrorCode status = U_ZERO_ERROR;
     LCID id = GetThreadLocale();
     const char* locID = uprv_convertToPosix(id, &status);
