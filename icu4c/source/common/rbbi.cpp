@@ -1565,19 +1565,8 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
 
     //
     //  Clone the source BI into the caller-supplied buffer.
-    //    TODO:  using an overloaded operator new to directly initialize the
-    //           copy in the user's buffer would be better, but it doesn't seem
-    //           to get along with namespaces.  Investigate why.
     //
-    //           The memcpy is only safe with an empty (default constructed)
-    //           break iterator.  Use on others can screw up reference counts
-    //           to data.  memcpy-ing objects is not really a good idea...
-    //
-    RuleBasedBreakIterator localIter;        // Empty break iterator, source for memcpy
-    RuleBasedBreakIterator *clone = (RuleBasedBreakIterator *)buf;
-    uprv_memcpy(clone, &localIter, sizeof(RuleBasedBreakIterator)); // init C++ gorp, BreakIterator base class part
-    clone->init();                // Init RuleBasedBreakIterator part, (user default constructor)
-    *clone = *this;               // clone = the real BI we want.
+    RuleBasedBreakIterator *clone = new(buf) RuleBasedBreakIterator(*this);
     clone->fBufferClone = TRUE;   // Flag to prevent deleting storage on close (From C code)
 
     return clone;
