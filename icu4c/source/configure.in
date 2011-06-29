@@ -1280,7 +1280,8 @@ case "${host}" in
 	*-*-aix*) 	platform=U_AIX ;;
 	*-*-hpux*) 	platform=U_HPUX ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
-	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
+	*-*-cygwin*)	platform=U_CYGWIN ;;
+	*-*-mingw*)	platform=U_MINGW ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
 			if test "${ICU_ENABLE_ASCII_STRINGS}" != "1"; then
 				ICUDATA_CHAR="e"

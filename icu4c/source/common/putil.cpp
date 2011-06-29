@@ -77,7 +77,7 @@ Cleanly installed Solaris can use this #define.
 #include <float.h>
 
 /* include system headers */
-#if defined(U_WINDOWS) || defined(__MINGW32__)
+#if defined(U_WINDOWS) || defined(U_MINGW)
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
 #   define NOUSER
@@ -113,8 +113,8 @@ Cleanly installed Solaris can use this #define.
 #   endif
 #endif
 
-#if defined(U_CYGWIN) && defined(__STRICT_ANSI__)
-/* tzset isn't defined in strict ANSI on Cygwin. */
+#if (defined(U_CYGWIN) || defined(U_MINGW)) && defined(__STRICT_ANSI__)
+/* tzset isn't defined in strict ANSI on Cygwin and MinGW. */
 #undef __STRICT_ANSI__
 #endif
 
@@ -178,7 +178,7 @@ static const BitPatternConversion gInf = { (int64_t) INT64_C(0x7FF0000000000000)
   functions).
   ---------------------------------------------------------------------------*/
 
-#if defined(U_WINDOWS) || defined(XP_MAC) || defined(OS400) || defined(__MINGW32__)
+#if defined(U_WINDOWS) || defined(XP_MAC) || defined(OS400) || defined(U_MINGW)
 #   undef U_POSIX_LOCALE
 #else
 #   define U_POSIX_LOCALE    1
@@ -1050,7 +1050,7 @@ uprv_tzname(int n)
 #endif
 
 #ifdef U_TZNAME
-#if defined(U_WINDOWS) || defined(__MINGW32__)
+#if defined(U_WINDOWS) || defined(U_MINGW)
     /* The return value is free'd in timezone.cpp on Windows because
      * the other code path returns a pointer to a heap location. */
     return uprv_strdup(U_TZNAME[n]);
@@ -1570,7 +1570,7 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif defined(U_WINDOWS) || defined(__MINGW32__)
+#elif defined(U_WINDOWS) || defined(U_MINGW)
     UErrorCode status = U_ZERO_ERROR;
     LCID id = GetThreadLocale();
     const char* locID = uprv_convertToPosix(id, &status);
