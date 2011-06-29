@@ -234,10 +234,14 @@ void StringList::add(const UnicodeString *string, UErrorCode &status)
 
     if (listSize >= listMax) {
         int32_t newMax = listMax + STRING_LIST_BUFFER_SIZE;
-
         UnicodeString *newStrings = new UnicodeString[newMax];
-
-        uprv_memcpy(newStrings, strings, listSize * sizeof(UnicodeString));
+        if (newStrings == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        for (int32_t i=0; i<listSize; ++i) {
+            newStrings[i] = strings[i];
+        }
 
 #ifdef INSTRUMENT_STRING_LIST
         int32_t _h = listSize / STRING_LIST_BUFFER_SIZE;
