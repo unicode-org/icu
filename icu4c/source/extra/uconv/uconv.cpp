@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -40,7 +40,7 @@
 
 U_NAMESPACE_USE
 
-#if (defined(U_WINDOWS) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
+#if (defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)) && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
 #if defined(U_WINDOWS)
