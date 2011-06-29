@@ -40,7 +40,7 @@
 
 /** Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
-#   if defined(__BORLANDC__) || defined(__MINGW32__)
+#   if defined(__BORLANDC__)
 #       define U_HAVE_INTTYPES_H 1
 #   else
 #       define U_HAVE_INTTYPES_H 0

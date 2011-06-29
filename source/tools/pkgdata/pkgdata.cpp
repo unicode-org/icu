@@ -30,8 +30,8 @@
 #include "unicode/utypes.h"
 
 #if U_HAVE_POPEN
-#if defined(U_CYGWIN) && defined(__STRICT_ANSI__)
-/* popen/pclose aren't defined in strict ANSI on Cygwin */
+#if (defined(U_CYGWIN) || defined(U_MINGW)) && defined(__STRICT_ANSI__)
+/* popen/pclose aren't defined in strict ANSI on Cygwin and MinGW */
 #undef __STRICT_ANSI__
 #endif
 #endif
@@ -850,7 +850,7 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         }
 
         if (version != NULL) {
-#if defined(U_CYGWIN) && !defined(__MINGW32__)
+#if defined(U_CYGWIN)
             sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s.%s",
                     libName,
                     pkgDataFlags[SO_EXT]);
@@ -889,8 +889,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
               fprintf(stdout, "# libFileName[LIB_FILE_VERSION] = %s\n", libFileNames[LIB_FILE_VERSION]);
             }
 
-#ifdef U_CYGWIN
-            /* Cygwin only deals with the version major number. */
+#if defined(U_CYGWIN) || defined(U_MINGW)
+            /* Cygwin and MinGW only deals with the version major number. */
             uprv_strcpy(libFileNames[LIB_FILE_VERSION_TMP], libFileNames[LIB_FILE_VERSION_MAJOR]);
 #endif
         }
@@ -909,6 +909,11 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
     char cmd[LARGE_BUFFER_MAX_SIZE];
     char name1[SMALL_BUFFER_MAX_SIZE]; /* symlink file name */
     char name2[SMALL_BUFFER_MAX_SIZE]; /* file name to symlink */
+
+#if defined (U_MINGW)
+    /* On MINGW, symbolic links don't need to be created. */
+    return result;
+#endif
 
 #ifndef USING_CYGWIN
     /* No symbolic link to make. */
@@ -988,7 +993,7 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir)
         fprintf(stderr, "Error installing library. Failed command: %s\n", cmd);
         return result;
     }
-#elif defined (U_CYGWIN)
+#elif defined(U_CYGWIN)
     sprintf(cmd, "cd %s && %s %s %s",
             targetDir,
             pkgDataFlags[INSTALL_CMD],
@@ -1003,12 +1008,7 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir)
     }
 #endif
 
-#if defined (__MINGW32__)
-    /* On MINGW, symbolic links don't need to be created. */
-    return result;
-#else
     return pkg_createSymLinks(installDir, TRUE);
-#endif
 }
 
 static int32_t pkg_installCommonMode(const char *installDir, const char *fileName) {
@@ -1221,7 +1221,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
             }
             freeCmd = TRUE;
         }
-#if defined(U_CYGWIN) && !defined(__MINGW32__)
+#if defined(U_CYGWIN)
         sprintf(cmd, "%s%s%s %s -o %s%s %s %s%s %s %s",
                 pkgDataFlags[GENLIB],
                 targetDir,
@@ -1697,7 +1697,7 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
             T_FileStream_close(f);
         }
     }
-#elif defined(U_CYGWIN)  && !defined(__MINGW32__)
+#elif defined(U_CYGWIN)
     /* Cygwin needs to change flag options. */
     char *flag = NULL;
     int32_t length = 0;
