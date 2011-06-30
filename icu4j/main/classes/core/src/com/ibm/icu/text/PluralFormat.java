@@ -393,8 +393,7 @@ public class PluralFormat extends UFormat {
             if(type==MessagePattern.Part.Type.ARG_LIMIT) {
                 break;
             }
-            //TODO: Fix the assertion error - see ticket#8637
-            //assert type==MessagePattern.Part.Type.ARG_SELECTOR;
+            assert type==MessagePattern.Part.Type.ARG_SELECTOR;
             // part is an ARG_SELECTOR followed by an optional explicit value, and then a message
             if(pattern.getPartType(partIndex).hasNumericValue()) {
                 // explicit value like "=2"
@@ -423,10 +422,10 @@ public class PluralFormat extends UFormat {
                             // We have already seen an "other" sub-message.
                             // Do not match "other" again.
                             haveKeywordMatch=true;
-                            continue;
+                            // Skip keyword matching but do getLimitPartIndex().
                         }
                     }
-                    if(pattern.partSubstringMatches(part, keyword)) {
+                    if(!haveKeywordMatch && pattern.partSubstringMatches(part, keyword)) {
                         // keyword matches
                         msgStart=partIndex;
                         // Do not match this keyword again.
