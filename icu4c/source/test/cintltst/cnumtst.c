@@ -1636,6 +1636,23 @@ static void TestRBNFFormat() {
         test_fmt(formats[i], (UBool)(i == 0));
     }
 
+    #define FORMAT_BUF_CAPACITY 64
+    {
+        UChar fmtbuf[FORMAT_BUF_CAPACITY];
+        int32_t len;
+        double nanvalue = uprv_getNaN();
+        status = U_ZERO_ERROR;
+        len = unum_formatDouble(formats[1], nanvalue, fmtbuf, FORMAT_BUF_CAPACITY, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err_status(status, "unum_formatDouble NAN failed with %s\n", u_errorName(status));
+        } else {
+            UChar nansym[] = { 0x4E, 0x61, 0x4E, 0 }; /* NaN */
+            if ( len != 3 || u_strcmp(fmtbuf, nansym) != 0 ) {
+                log_err("unum_formatDouble NAN produced wrong answer for en_US\n");
+            }
+        }
+    }
+
     for (i = 0; i < COUNT; ++i) {
         unum_close(formats[i]);
     }
