@@ -492,8 +492,7 @@ public final class UCharacterProperty
         new IntProperty(0, BLOCK_MASK_, BLOCK_SHIFT_),
         new CombiningClassIntProperty(SRC_NFC) {  // CANONICAL_COMBINING_CLASS
             int getValue(int c) {
-                Normalizer2Impl impl = Norm2AllModes.getNFCInstance().impl;
-                return impl.getCC(impl.getNorm16(c));
+                return Norm2AllModes.getNFCInstance().decomp.getCombiningClass(c);
             }
         },
         new IntProperty(2, DECOMPOSITION_TYPE_MASK_, 0),

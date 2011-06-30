@@ -684,6 +684,8 @@ public final class UCharacterTest extends TestFmwk
             type = 0,
             dir = 0;
 
+        Normalizer2 nfkc = Normalizer2.getInstance(null, "nfkc", Normalizer2.Mode.COMPOSE);
+
         try
         {
             BufferedReader input = TestUtil.getDataReader(
@@ -755,6 +757,12 @@ public final class UCharacterTest extends TestFmwk
                 if (UCharacter.getCombiningClass(ch) != cc)
                 {
                     errln("FAIL \\u" + hex(ch) + " expected combining " +
+                            "class " + cc);
+                    break;
+                }
+                if (nfkc.getCombiningClass(ch) != cc)
+                {
+                    errln("FAIL \\u" + hex(ch) + " expected NFKC combining " +
                             "class " + cc);
                     break;
                 }

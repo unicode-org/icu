@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -87,6 +87,16 @@ public class FilteredNormalizer2 extends Normalizer2 {
     @Override
     public String getDecomposition(int c) {
         return set.contains(c) ? norm2.getDecomposition(c) : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public int getCombiningClass(int c) {
+        return set.contains(c) ? norm2.getCombiningClass(c) : 0;
     }
 
     /**

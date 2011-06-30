@@ -209,6 +209,17 @@ public abstract class Normalizer2 {
     public abstract String getDecomposition(int c);
 
     /**
+     * Gets the combining class of c.
+     * The default implementation returns 0
+     * but all standard implementations return the Unicode Canonical_Combining_Class value.
+     * @param c code point
+     * @return c's combining class
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getCombiningClass(int c) { return 0; }
+
+    /**
      * Tests if the string is normalized.
      * Internally, in cases where the quickCheck() method would return "maybe"
      * (which is only possible for the two COMPOSE modes) this method

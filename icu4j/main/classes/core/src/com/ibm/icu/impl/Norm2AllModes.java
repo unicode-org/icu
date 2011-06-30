@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -127,6 +127,11 @@ public final class Norm2AllModes {
         @Override
         public String getDecomposition(int c) {
             return impl.getDecomposition(c);
+        }
+
+        @Override
+        public int getCombiningClass(int c) {
+            return impl.getCC(impl.getNorm16(c));
         }
 
         // quick checks

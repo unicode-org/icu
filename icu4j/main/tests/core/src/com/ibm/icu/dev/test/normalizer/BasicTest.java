@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -2570,6 +2570,21 @@ public class BasicTest extends TestFmwk {
                         "[:Segment_Starter:].contains(same)",
                         c, isStarter));
             }
+        }
+    }
+
+    public void TestFilteredNormalizer2() {
+        Normalizer2 nfcNorm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
+        UnicodeSet filter=new UnicodeSet("[^\u00a0-\u00ff\u0310-\u031f]");
+        FilteredNormalizer2 fn2=new FilteredNormalizer2(nfcNorm2, filter);
+        int c;
+        for(c=0; c<=0x3ff; ++c) {
+            int expectedCC= filter.contains(c) ? nfcNorm2.getCombiningClass(c) : 0;
+            int cc=fn2.getCombiningClass(c);
+            assertEquals(
+                    "FilteredNormalizer2(NFC, ^A0-FF,310-31F).getCombiningClass(U+"+hex(c)+
+                    ")==filtered NFC.getCC()",
+                    expectedCC, cc);
         }
     }
 }
