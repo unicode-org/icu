@@ -925,6 +925,14 @@ static void TestIdentifier()
 }
 
 /* for each line of UnicodeData.txt, check some of the properties */
+typedef struct UnicodeDataContext {
+#if UCONFIG_NO_NORMALIZATION
+    const void *dummy;
+#else
+    const UNormalizer2 *nfkc;
+#endif
+} UnicodeDataContext;
+
 /*
  * ### TODO
  * This test fails incorrectly if the First or Last code point of a repetitive area
@@ -949,6 +957,10 @@ unicodeDataLineFn(void *context,
     UChar32 c;
     int32_t i;
     int8_t type;
+
+#if !UCONFIG_NO_NORMALIZATION
+    const UNormalizer2 *nfkc;
+#endif
 
     /* get the character code, field 0 */
     c=strtoul(fields[0][0], &end, 16);
@@ -984,6 +996,10 @@ unicodeDataLineFn(void *context,
 #if !UCONFIG_NO_NORMALIZATION
     if(value!=u_getCombiningClass(c) || value!=(uint32_t)u_getIntPropertyValue(c, UCHAR_CANONICAL_COMBINING_CLASS)) {
         log_err("error: u_getCombiningClass(U+%04lx)==%hu instead of %lu\n", c, u_getCombiningClass(c), value);
+    }
+    nfkc=((UnicodeDataContext *)context)->nfkc;
+    if(value!=unorm2_getCombiningClass(nfkc, c)) {
+        log_err("error: unorm2_getCombiningClass(nfkc, U+%04lx)==%hu instead of %lu\n", c, unorm2_getCombiningClass(nfkc, c), value);
     }
 #endif
 
@@ -1191,6 +1207,8 @@ static void TestUnicodeData()
     UChar32 c;
     int8_t type;
 
+    UnicodeDataContext context;
+
     u_versionFromString(expectVersionArray, U_UNICODE_VERSION);
     u_getUnicodeVersion(versionArray);
     if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
@@ -1212,7 +1230,14 @@ static void TestUnicodeData()
     }
 
     errorCode=U_ZERO_ERROR;
-    parseUCDFile("UnicodeData.txt", fields, 15, unicodeDataLineFn, NULL, &errorCode);
+#if !UCONFIG_NO_NORMALIZATION
+    context.nfkc=unorm2_getInstance(NULL, "nfkc", UNORM2_COMPOSE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("error: unable to open an NFKC UNormalizer2 - %s\n", u_errorName(errorCode));
+        return;
+    }
+#endif
+    parseUCDFile("UnicodeData.txt", fields, 15, unicodeDataLineFn, &context, &errorCode);
     if(U_FAILURE(errorCode)) {
         return; /* if we couldn't parse UnicodeData.txt, we should return */
     }
