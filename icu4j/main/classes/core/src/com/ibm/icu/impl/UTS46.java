@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010, International Business Machines
+* Copyright (C) 2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -684,7 +684,7 @@ public final class UTS46 extends IDNA {
                 int j=i;
                 c=Character.codePointBefore(label, j);
                 j-=Character.charCount(c);
-                if(UCharacter.getCombiningClass(c)==9) {
+                if(uts46Norm2.getCombiningClass(c)==9) {
                     continue;
                 }
                 // check precontext (Joining_Type:{L,D})(Joining_Type:T)*

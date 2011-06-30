@@ -16,7 +16,6 @@ import java.util.Map;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Norm2AllModes;
-import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
@@ -3890,8 +3889,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
             throw new IllegalArgumentException("Codepoint out of bounds");
         }
-        Normalizer2Impl impl = Norm2AllModes.getNFCInstance().impl;
-        return impl.getCC(impl.getNorm16(ch));
+        return Norm2AllModes.getNFCInstance().decomp.getCombiningClass(ch);
     }
 
     /**
