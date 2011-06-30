@@ -11,7 +11,6 @@ import java.util.EnumSet;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.StringPrepParseException;
@@ -551,7 +550,7 @@ public final class UTS46 extends IDNA {
         int i=labelStart;
         c=Character.codePointAt(label, i);
         i+=Character.charCount(c);
-        int firstMask=U_MASK(UCharacter.getDirection(c));
+        int firstMask=U_MASK(UBiDiProps.INSTANCE.getClass(c));
         // 1. The first character must be a character with BIDI property L, R
         // or AL.  If it has the R or AL property, it is an RTL label; if it
         // has the L property, it is an LTR label.
@@ -568,7 +567,7 @@ public final class UTS46 extends IDNA {
             }
             c=Character.codePointBefore(label, labelLimit);
             labelLimit-=Character.charCount(c);
-            int dir=UCharacter.getDirection(c);
+            int dir=UBiDiProps.INSTANCE.getClass(c);
             if(dir!=UCharacterDirection.DIR_NON_SPACING_MARK) {
                 lastMask=U_MASK(dir);
                 break;
@@ -591,7 +590,7 @@ public final class UTS46 extends IDNA {
         while(i<labelLimit) {
             c=Character.codePointAt(label, i);
             i+=Character.charCount(c);
-            mask|=U_MASK(UCharacter.getDirection(c));
+            mask|=U_MASK(UBiDiProps.INSTANCE.getClass(c));
         }
         if((firstMask&L_MASK)!=0) {
             // 5. In an LTR label, only characters with the BIDI properties L, EN,
@@ -689,7 +688,7 @@ public final class UTS46 extends IDNA {
                 }
                 // check precontext (Joining_Type:{L,D})(Joining_Type:T)*
                 for(;;) {
-                    /* UJoiningType */ int type=UCharacter.getIntPropertyValue(c, UProperty.JOINING_TYPE);
+                    /* UJoiningType */ int type=UBiDiProps.INSTANCE.getJoiningType(c);
                     if(type==UCharacter.JoiningType.TRANSPARENT) {
                         if(j==0) {
                             return false;
@@ -709,7 +708,7 @@ public final class UTS46 extends IDNA {
                     }
                     c=Character.codePointAt(label, j);
                     j+=Character.charCount(c);
-                    /* UJoiningType */ int type=UCharacter.getIntPropertyValue(c, UProperty.JOINING_TYPE);
+                    /* UJoiningType */ int type=UBiDiProps.INSTANCE.getJoiningType(c);
                     if(type==UCharacter.JoiningType.TRANSPARENT) {
                         // just skip this character
                     } else if(type==UCharacter.JoiningType.RIGHT_JOINING || type==UCharacter.JoiningType.DUAL_JOINING) {
@@ -727,7 +726,7 @@ public final class UTS46 extends IDNA {
                     return false;
                 }
                 int c=Character.codePointBefore(label, i);
-                if(UCharacter.getCombiningClass(c)!=9) {
+                if(uts46Norm2.getCombiningClass(c)!=9) {
                     return false;
                 }
             }
