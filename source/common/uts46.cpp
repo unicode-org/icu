@@ -1120,7 +1120,7 @@ UTS46::isLabelOkContextJ(const UChar *label, int32_t labelLength) const {
             UChar32 c;
             int32_t j=i;
             U16_PREV_UNSAFE(label, j, c);
-            if(u_getCombiningClass(c)==9) {
+            if(uts46Norm2.getCombiningClass(c)==9) {
                 continue;
             }
             // check precontext (Joining_Type:{L,D})(Joining_Type:T)*
@@ -1163,7 +1163,7 @@ UTS46::isLabelOkContextJ(const UChar *label, int32_t labelLength) const {
             UChar32 c;
             int32_t j=i;
             U16_PREV_UNSAFE(label, j, c);
-            if(u_getCombiningClass(c)!=9) {
+            if(uts46Norm2.getCombiningClass(c)!=9) {
                 return FALSE;
             }
         }
