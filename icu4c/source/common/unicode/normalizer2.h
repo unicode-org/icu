@@ -191,6 +191,17 @@ public:
     getDecomposition(UChar32 c, UnicodeString &decomposition) const = 0;
 
     /**
+     * Gets the combining class of c.
+     * The default implementation returns 0
+     * but all standard implementations return the Unicode Canonical_Combining_Class value.
+     * @param c code point
+     * @return c's combining class
+     * @draft ICU 49
+     */
+    virtual uint8_t
+    getCombiningClass(UChar32 c) const;
+
+    /**
      * Tests if the string is normalized.
      * Internally, in cases where the quickCheck() method would return "maybe"
      * (which is only possible for the two COMPOSE modes) this method
@@ -393,6 +404,17 @@ public:
      */
     virtual UBool
     getDecomposition(UChar32 c, UnicodeString &decomposition) const;
+
+    /**
+     * Gets the combining class of c.
+     * The default implementation returns 0
+     * but all standard implementations return the Unicode Canonical_Combining_Class value.
+     * @param c code point
+     * @return c's combining class
+     * @draft ICU 49
+     */
+    virtual uint8_t
+    getCombiningClass(UChar32 c) const;
 
     /**
      * Tests if the string is normalized.

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1458,9 +1458,7 @@ BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
         dataerrln("Normalizer2Factory::getNFCInstance() call failed - %s", u_errorName(status));
         return;
     }
-    UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff]"), errorCode);
-    UnicodeString newString1 = UNICODE_STRING_SIMPLE("[^\\u0100-\\u01ff]");
-    UnicodeString newString2 = UNICODE_STRING_SIMPLE("[^\\u0200-\\u02ff]");
+    UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff\\u0310-\\u031f]"), errorCode);
     FilteredNormalizer2 fn2(*nfcNorm2, filter);
 
     UChar32 char32 = 0x0054;
@@ -1473,6 +1471,20 @@ BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
         errln("FilteredNormalizer2.hasBoundaryAfter() failed.");
     }
 
+    UChar32 c;
+    for(c=0; c<=0x3ff; ++c) {
+        uint8_t expectedCC= filter.contains(c) ? nfcNorm2->getCombiningClass(c) : 0;
+        uint8_t cc=fn2.getCombiningClass(c);
+        if(cc!=expectedCC) {
+            errln(
+                UnicodeString("FilteredNormalizer2(NFC, ^A0-FF,310-31F).getCombiningClass(U+")+
+                hex(c)+
+                ")==filtered NFC.getCC()");
+        }
+    }
+
+    UnicodeString newString1 = UNICODE_STRING_SIMPLE("[^\\u0100-\\u01ff]");
+    UnicodeString newString2 = UNICODE_STRING_SIMPLE("[^\\u0200-\\u02ff]");
     fn2.append(newString1, newString2, errorCode);
     if (U_FAILURE(errorCode)) {
         errln("FilteredNormalizer2.append() failed.");
