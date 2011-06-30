@@ -242,10 +242,11 @@ idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCod
 
 // don't use ICUService since we don't need fallback
 
-#if !UCONFIG_NO_SERVICE
 U_CDECL_BEGIN
 static UBool U_CALLCONV currency_cleanup(void);
 U_CDECL_END
+
+#if !UCONFIG_NO_SERVICE
 struct CReg;
 
 static UMTX gCRegLock = 0;
@@ -337,30 +338,6 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
     }
 };
 
-/**
- * Release all static memory held by currency.
- */
-/*The declaration here is needed so currency_cleanup(void)
- * can call this function.
- */
-static UBool U_CALLCONV
-currency_cache_cleanup(void);
-
-U_CDECL_BEGIN
-static UBool U_CALLCONV currency_cleanup(void) {
-#if !UCONFIG_NO_SERVICE
-    CReg::cleanup();
-#endif
-    /*
-     * There might be some cached currency data or isoCodes data.
-     */
-    currency_cache_cleanup();
-    isoCodes_cleanup();
-
-    return TRUE;
-}
-U_CDECL_END
-
 // -------------------------------------
 
 U_CAPI UCurrRegistryKey U_EXPORT2
@@ -385,6 +362,32 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
     return FALSE;
 }
 #endif /* UCONFIG_NO_SERVICE */
+
+// -------------------------------------
+
+/**
+ * Release all static memory held by currency.
+ */
+/*The declaration here is needed so currency_cleanup(void)
+ * can call this function.
+ */
+static UBool U_CALLCONV
+currency_cache_cleanup(void);
+
+U_CDECL_BEGIN
+static UBool U_CALLCONV currency_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
+    CReg::cleanup();
+#endif
+    /*
+     * There might be some cached currency data or isoCodes data.
+     */
+    currency_cache_cleanup();
+    isoCodes_cleanup();
+
+    return TRUE;
+}
+U_CDECL_END
 
 // -------------------------------------
 
