@@ -972,7 +972,7 @@ TimeZoneGenericNames::findLocal(const UnicodeString& text, int32_t start, uint32
 
     int32_t maxLen = 0;
     UVector *results = handler.getMatches(maxLen);
-    if ((results != NULL && (maxLen == (text.length() - start))) || fGNamesTrieFullyLoaded) {
+    if (results != NULL && ((maxLen == (text.length() - start)) || fGNamesTrieFullyLoaded)) {
         // perfect match
         gmatchInfo = new TimeZoneGenericNameMatchInfo(results);
         if (gmatchInfo == NULL) {
