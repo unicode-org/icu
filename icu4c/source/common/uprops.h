@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -193,9 +193,15 @@ enum {
 #define UPROPS_DT_MASK          0x0000001f
 
 /**
+ * Gets the main properties value for a code point.
+ * Implemented in uchar.c for uprops.cpp.
+ */
+U_CFUNC uint32_t
+u_getMainProperties(UChar32 c);
+
+/**
  * Get a properties vector word for a code point.
- * Implemented in uchar.c for uprops.c.
- * column==-1 gets the 32-bit main properties word instead.
+ * Implemented in uchar.c for uprops.cpp.
  * @return 0 if no data or illegal argument
  */
 U_CFUNC uint32_t

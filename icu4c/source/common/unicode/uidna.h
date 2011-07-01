@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2010, International Business Machines
+ *   Copyright (C) 2003-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -42,12 +42,14 @@
 enum {
     /**
      * Default options value: None of the other options are set.
+     * For use in static worker and factory methods.
      * @stable ICU 2.6
      */
     UIDNA_DEFAULT=0,
     /**
      * Option to allow unassigned code points in domain names and labels.
-     * This option is ignored by the UTS46 implementation.
+     * For use in static worker and factory methods.
+     * <p>This option is ignored by the UTS46 implementation.
      * (UTS #46 disallows unassigned code points.)
      * @stable ICU 2.6
      */
@@ -56,39 +58,54 @@ enum {
      * Option to check whether the input conforms to the STD3 ASCII rules,
      * for example the restriction of labels to LDH characters
      * (ASCII Letters, Digits and Hyphen-Minus).
+     * For use in static worker and factory methods.
      * @stable ICU 2.6
      */
     UIDNA_USE_STD3_RULES=2,
     /**
      * IDNA option to check for whether the input conforms to the BiDi rules.
-     * This option is ignored by the IDNA2003 implementation.
+     * For use in static worker and factory methods.
+     * <p>This option is ignored by the IDNA2003 implementation.
      * (IDNA2003 always performs a BiDi check.)
      * @draft ICU 4.6
      */
     UIDNA_CHECK_BIDI=4,
     /**
      * IDNA option to check for whether the input conforms to the CONTEXTJ rules.
-     * This option is ignored by the IDNA2003 implementation.
+     * For use in static worker and factory methods.
+     * <p>This option is ignored by the IDNA2003 implementation.
      * (The CONTEXTJ check is new in IDNA2008.)
      * @draft ICU 4.6
      */
     UIDNA_CHECK_CONTEXTJ=8,
     /**
      * IDNA option for nontransitional processing in ToASCII().
-     * By default, ToASCII() uses transitional processing.
-     * This option is ignored by the IDNA2003 implementation.
+     * For use in static worker and factory methods.
+     * <p>By default, ToASCII() uses transitional processing.
+     * <p>This option is ignored by the IDNA2003 implementation.
      * (This is only relevant for compatibility of newer IDNA implementations with IDNA2003.)
      * @draft ICU 4.6
      */
     UIDNA_NONTRANSITIONAL_TO_ASCII=0x10,
     /**
      * IDNA option for nontransitional processing in ToUnicode().
-     * By default, ToUnicode() uses transitional processing.
-     * This option is ignored by the IDNA2003 implementation.
+     * For use in static worker and factory methods.
+     * <p>By default, ToUnicode() uses transitional processing.
+     * <p>This option is ignored by the IDNA2003 implementation.
      * (This is only relevant for compatibility of newer IDNA implementations with IDNA2003.)
      * @draft ICU 4.6
      */
-    UIDNA_NONTRANSITIONAL_TO_UNICODE=0x20
+    UIDNA_NONTRANSITIONAL_TO_UNICODE=0x20,
+    /**
+     * IDNA option to check for whether the input conforms to the CONTEXTO rules.
+     * For use in static worker and factory methods.
+     * <p>This option is ignored by the IDNA2003 implementation.
+     * (The CONTEXTO check is new in IDNA2008.)
+     * <p>This is for use by registries for IDNA2008 conformance.
+     * UTS #46 does not require the CONTEXTO check.
+     * @draft ICU 49
+     */
+    UIDNA_CHECK_CONTEXTO=0x40
 };
 
 /**
@@ -471,7 +488,20 @@ enum {
      * A label does not meet the IDNA CONTEXTJ requirements.
      * @draft ICU 4.6
      */
-    UIDNA_ERROR_CONTEXTJ=0x1000
+    UIDNA_ERROR_CONTEXTJ=0x1000,
+    /**
+     * A label does not meet the IDNA CONTEXTO requirements for punctuation characters.
+     * Some punctuation characters "Would otherwise have been DISALLOWED"
+     * but are allowed in certain contexts. (RFC 5892)
+     * @draft ICU 49
+     */
+    UIDNA_ERROR_CONTEXTO_PUNCTUATION=0x2000,
+    /**
+     * A label does not meet the IDNA CONTEXTO requirements for digits.
+     * Arabic-Indic Digits (U+066x) must not be mixed with Extended Arabic-Indic Digits (U+06Fx).
+     * @draft ICU 49
+     */
+    UIDNA_ERROR_CONTEXTO_DIGITS=0x4000
 };
 
 /* IDNA2003 API ------------------------------------------------------------- */
