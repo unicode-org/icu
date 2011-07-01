@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  uts46test.cpp
@@ -55,11 +55,12 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
         logln("TestSuite UTS46Test: ");
         if(trans==NULL) {
             IcuTestErrorCode errorCode(*this, "init/createUTS46Instance()");
-            trans=IDNA::createUTS46Instance(
-                UIDNA_USE_STD3_RULES|UIDNA_CHECK_BIDI|UIDNA_CHECK_CONTEXTJ,
-                errorCode);
+            uint32_t commonOptions=
+                UIDNA_USE_STD3_RULES|UIDNA_CHECK_BIDI|
+                UIDNA_CHECK_CONTEXTJ|UIDNA_CHECK_CONTEXTO;
+            trans=IDNA::createUTS46Instance(commonOptions, errorCode);
             nontrans=IDNA::createUTS46Instance(
-                UIDNA_USE_STD3_RULES|UIDNA_CHECK_BIDI|UIDNA_CHECK_CONTEXTJ|
+                commonOptions|
                 UIDNA_NONTRANSITIONAL_TO_ASCII|UIDNA_NONTRANSITIONAL_TO_UNICODE,
                 errorCode);
             if(errorCode.logDataIfFailureAndReset("createUTS46Instance()")) {
@@ -534,6 +535,29 @@ static const TestCase testCases[]={
       "\\u06EF\\u200C\\u06EF", UIDNA_ERROR_CONTEXTJ },
     { "\\u0644\\u200C", "N",  // D ZWNJ
       "\\u0644\\u200C", UIDNA_ERROR_BIDI|UIDNA_ERROR_CONTEXTJ },
+    { "\\u0660\\u0661", "B",  // Arabic-Indic Digits alone
+      "\\u0660\\u0661", UIDNA_ERROR_BIDI },
+    { "\\u06F0\\u06F1", "B",  // Extended Arabic-Indic Digits alone
+      "\\u06F0\\u06F1", 0 },
+    { "\\u0660\\u06F1", "B",  // Mixed Arabic-Indic Digits
+      "\\u0660\\u06F1", UIDNA_ERROR_CONTEXTO_DIGITS|UIDNA_ERROR_BIDI },
+    // All of the CONTEXTO "Would otherwise have been DISALLOWED" characters
+    // in their correct contexts,
+    // then each in incorrect context.
+    { "l\\u00B7l\\u4E00\\u0375\\u03B1\\u05D0\\u05F3\\u05F4\\u30FB", "B",
+      "l\\u00B7l\\u4E00\\u0375\\u03B1\\u05D0\\u05F3\\u05F4\\u30FB", UIDNA_ERROR_BIDI },
+    { "l\\u00B7", "B",
+      "l\\u00B7", UIDNA_ERROR_CONTEXTO_PUNCTUATION },
+    { "\\u00B7l", "B",
+      "\\u00B7l", UIDNA_ERROR_CONTEXTO_PUNCTUATION },
+    { "\\u0375", "B",
+      "\\u0375", UIDNA_ERROR_CONTEXTO_PUNCTUATION },
+    { "\\u03B1\\u05F3", "B",
+      "\\u03B1\\u05F3", UIDNA_ERROR_CONTEXTO_PUNCTUATION|UIDNA_ERROR_BIDI },
+    { "\\u05F4", "B",
+      "\\u05F4", UIDNA_ERROR_CONTEXTO_PUNCTUATION },
+    { "l\\u30FB", "B",
+      "l\\u30FB", UIDNA_ERROR_CONTEXTO_PUNCTUATION },
     // Ticket #8137: UTS #46 toUnicode() fails with non-ASCII labels that turn
     // into 15 characters (UChars).
     // The bug was in u_strFromPunycode() which did not write the last character

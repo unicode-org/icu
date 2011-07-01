@@ -214,7 +214,7 @@ static const BinaryProperty binProps[UCHAR_BINARY_LIMIT]={
      * Must be in order of corresponding UProperty,
      * and there must be exactly one entry per binary UProperty.
      *
-     * Properties with mask==0 and contains==NULL are handled in code.
+     * Properties with mask==0 are handled in code.
      * For them, column is the UPropertySource value.
      */
     { 1,                U_MASK(UPROPS_ALPHABETIC), defaultContains },
@@ -345,7 +345,7 @@ static int32_t getJoiningType(const IntProperty &/*prop*/, UChar32 c, UProperty 
 }
 
 static int32_t getNumericType(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    int32_t ntv=(int32_t)GET_NUMERIC_TYPE_VALUE(u_getUnicodeProperties(c, -1));
+    int32_t ntv=(int32_t)GET_NUMERIC_TYPE_VALUE(u_getMainProperties(c));
     return UPROPS_NTV_GET_TYPE(ntv);
 }
 
@@ -421,7 +421,7 @@ static const IntProperty intProps[UCHAR_INT_LIMIT-UCHAR_INT_START]={
      * Must be in order of corresponding UProperty,
      * and there must be exactly one entry per int UProperty.
      *
-     * Properties with mask==0 and getValue==NULL are handled in code.
+     * Properties with mask==0 are handled in code.
      * For them, column is the UPropertySource value.
      */
     { UPROPS_SRC_BIDI,  0, 0,                               getBiDiClass, biDiGetMaxValue },
