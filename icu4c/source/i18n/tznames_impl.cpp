@@ -1351,7 +1351,7 @@ TimeZoneNamesImpl::find(const UnicodeString& text, int32_t start, uint32_t types
 
     int32_t maxLen = 0;
     UVector *results = handler.getMatches(maxLen);
-    if ((results != NULL && (maxLen == (text.length() - start))) || fNamesTrieFullyLoaded) {
+    if (results != NULL && ((maxLen == (text.length() - start)) || fNamesTrieFullyLoaded)) {
         // perfect match
         matchInfo = new TimeZoneNameMatchInfoImpl(results);
         if (matchInfo == NULL) {
