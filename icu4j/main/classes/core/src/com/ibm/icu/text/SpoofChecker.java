@@ -865,38 +865,29 @@ public class SpoofChecker {
                 StringBuffer fInput = new StringBuffer();
                 WSConfusableDataBuilder.readWholeFileToString(confusables, fInput);
 
-                // Regular Expression to parse a line from Confusables.txt. The
-                // expression will match
-                // any line. What was matched is determined by examining which capture
-                // groups have a match.
-                // Capture Group 1: the source char
-                // Capture Group 2: the replacement chars
-                // Capture Group 3-6 the table type, SL, SA, ML, or MA
-                // Capture Group 7: A blank or comment only line.
-                // Capture Group 8: A syntactically invalid line. Anything that didn't
-                // match before.
+                // Regular Expression to parse a line from Confusables.txt. The expression will match
+                // any line. What was matched is determined by examining which capture groups have a match.
+                //   Capture Group 1: the source char
+                //   Capture Group 2: the replacement chars
+                //   Capture Group 3-6 the table type, SL, SA, ML, or MA
+                //   Capture Group 7: A blank or comment only line.
+                //   Capture Group 8: A syntactically invalid line. Anything that didn't match before.
                 // Example Line from the confusables.txt source file:
-                // "1D702 ; 006E 0329 ; SL # MATHEMATICAL ITALIC SMALL ETA ... "
-                fParseLine = Pattern.compile("(?m)^[ \\t]*([0-9A-Fa-f]+)[ \\t]+;" + // Match
-                        // the
-                        // source
-                        // char
-                        "[ \\t]*([0-9A-Fa-f]+" + // Match the replacement char(s)
-                        "(?:[ \\t]+[0-9A-Fa-f]+)*)[ \\t]*;" + // (continued)
-                        "\\s*(?:(SL)|(SA)|(ML)|(MA))" + // Match the table type
-                        "[ \\t]*(?:#.*?)?$" + // Match any trailing #comment
-                        "|^([ \\t]*(?:#.*?)?)$" + // OR match empty lines or lines with
-                        // only a #comment
-                        "|^(.*?)$"); // OR match any line, which catches illegal lines.
+                //   "1D702 ; 006E 0329 ; SL # MATHEMATICAL ITALIC SMALL ETA ... "
+                fParseLine = Pattern.compile("(?m)^[ \\t]*([0-9A-Fa-f]+)[ \\t]+;" + // Match the source char
+                        "[ \\t]*([0-9A-Fa-f]+" +                     // Match the replacement char(s)
+                        "(?:[ \\t]+[0-9A-Fa-f]+)*)[ \\t]*;" +        //     (continued)
+                        "\\s*(?:(SL)|(SA)|(ML)|(MA))" +              // Match the table type
+                        "[ \\t]*(?:#.*?)?$" +                        // Match any trailing #comment
+                        "|^([ \\t]*(?:#.*?)?)$" +                    // OR match empty lines or lines with only a #comment
+                        "|^(.*?)$");                                 // OR match any line, which catches illegal lines.
 
-                // Regular expression for parsing a hex number out of a space-separated
-                // list of them.
+                // Regular expression for parsing a hex number out of a space-separated list of them.
                 // Capture group 1 gets the number, with spaces removed.
                 fParseHexNum = Pattern.compile("\\s*([0-9A-F]+)");
 
                 // Zap any Byte Order Mark at the start of input. Changing it to a space
-                // is benign
-                // given the syntax of the input.
+                // is benign given the syntax of the input.
                 if (fInput.charAt(0) == 0xfeff) {
                     fInput.setCharAt(0, (char) 0x20);
                 }
@@ -926,14 +917,14 @@ public class SpoofChecker {
                     }
                     Matcher m = fParseHexNum.matcher(matcher.group(2));
 
-                    StringBuffer mapString = new StringBuffer();
+                    StringBuilder mapString = new StringBuilder();
                     while (m.find()) {
                         int c = Integer.parseInt(m.group(1), 16);
                         if (keyChar > 0x10ffff) {
                             throw new ParseException("Confusables, line " + fLineNum + ": Bad code point: "
                                     + Integer.toString(c, 16), matcher.start(2));
                         }
-                        mapString.append(c);
+                        mapString.appendCodePoint(c);
                     }
                     assert (mapString.length() >= 1);
 
@@ -954,18 +945,14 @@ public class SpoofChecker {
                 // Input data is now all parsed and collected.
                 // Now create the run-time binary form of the data.
                 //
-                // This is done in two steps. First the data is assembled into vectors
-                // and strings,
-                // for ease of construction, then the contents of these collections are
-                // dumped
+                // This is done in two steps. First the data is assembled into vectors and strings,
+                // for ease of construction, then the contents of these collections are dumped
                 // into the actual raw-bytes data storage.
 
-                // Build up the string array, and record the index of each string
-                // therein
+                // Build up the string array, and record the index of each string therein
                 // in the (build time only) string pool.
                 // Strings of length one are not entered into the strings array.
-                // At the same time, build up the string lengths table, which records
-                // the
+                // At the same time, build up the string lengths table, which records the
                 // position in the string table of the first string of each length >= 4.
                 // (Strings in the table are sorted by length)
                 stringPool.sort();
@@ -1215,8 +1202,7 @@ public class SpoofChecker {
                     int offset = fStringLengthsTable.elementAt(i);
                     int length = fStringLengthsTable.elementAt(i + 1);
                     assert (offset < stringsLength);
-                    //TODO: Fix the assertion error - see ticket#8634
-                    //assert (length < 40);
+                    assert (length < 40);
                     assert (length > previousLength);
                     os.writeShort((short) offset);
                     os.writeShort((short) length);
@@ -1833,8 +1819,7 @@ public class SpoofChecker {
             assert (ix < stringLengthsLimit);
         }
 
-        //TODO: Fix the assertion error - see ticket#8634
-        //assert (value + stringLen < fSpoofData.fRawData.fCFUStringTableLen);
+        assert (value + stringLen <= fSpoofData.fRawData.fCFUStringTableLen);
         dest.append(fSpoofData.fCFUStrings, value, stringLen);
         return;
     }
