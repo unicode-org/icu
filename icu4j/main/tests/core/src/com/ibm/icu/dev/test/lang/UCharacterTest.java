@@ -2651,17 +2651,18 @@ public final class UCharacterTest extends TestFmwk
             try{
                 UCharacter.getCombiningClass(valid_tests[i]);
             } catch(Exception e){
-                errln("UCharacter.getCombiningClass(int) was not suppose to have " +
+                errln("UCharacter.getCombiningClass(int) was not supposed to have " +
                         "an exception. Value passed: " + valid_tests[i]);
             }
         }
             
         for(int i=0; i< invalid_tests.length; i++){
             try{
-                UCharacter.getCombiningClass(invalid_tests[i]);
-                errln("UCharacter.getCombiningClass(int) was suppose to have " +
-                        "an exception. Value passed: " + invalid_tests[i]);
+                assertEquals("getCombiningClass(out of range)",
+                             0, UCharacter.getCombiningClass(invalid_tests[i]));
             } catch(Exception e){
+                errln("UCharacter.getCombiningClass(int) was not supposed to have " +
+                        "an exception. Value passed: " + invalid_tests[i]);
             }
         }
     }

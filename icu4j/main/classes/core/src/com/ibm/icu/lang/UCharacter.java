@@ -3886,9 +3886,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getCombiningClass(int ch)
     {
-        if (ch < MIN_VALUE || ch > MAX_VALUE) {
-            throw new IllegalArgumentException("Codepoint out of bounds");
-        }
         return Norm2AllModes.getNFCInstance().decomp.getCombiningClass(ch);
     }
 
