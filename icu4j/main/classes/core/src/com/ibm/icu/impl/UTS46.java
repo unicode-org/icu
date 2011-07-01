@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011, International Business Machines
+* Copyright (C) 2010-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -11,6 +11,7 @@ import java.util.EnumSet;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.StringPrepParseException;
@@ -437,6 +438,9 @@ public final class UTS46 extends IDNA {
             ) {
                 addLabelError(info, Error.CONTEXTJ);
             }
+            if((options&CHECK_CONTEXTO)!=0 && oredChars>=0xb7) {
+                checkLabelContextO(labelString, labelStart, labelLength, info);
+            }
             if(toASCII) {
                 if(wasPunycode) {
                     // Leave a Punycode label unchanged if it has no severe errors.
@@ -732,6 +736,96 @@ public final class UTS46 extends IDNA {
             }
         }
         return true;
+    }
+
+    private void
+    checkLabelContextO(CharSequence label, int labelStart, int labelLength, Info info) {
+        int labelEnd=labelStart+labelLength-1;  // inclusive
+        int arabicDigits=0;  // -1 for 066x, +1 for 06Fx
+        for(int i=labelStart; i<=labelEnd; ++i) {
+            int c=label.charAt(i);
+            if(c<0xb7) {
+                // ASCII fastpath
+            } else if(c<=0x6f9) {
+                if(c==0xb7) {
+                    // Appendix A.3. MIDDLE DOT (U+00B7)
+                    // Rule Set:
+                    //  False;
+                    //  If Before(cp) .eq.  U+006C And
+                    //     After(cp) .eq.  U+006C Then True;
+                    if(!(labelStart<i && label.charAt(i-1)=='l' &&
+                         i<labelEnd && label.charAt(i+1)=='l')) {
+                        addLabelError(info, Error.CONTEXTO_PUNCTUATION);
+                    }
+                } else if(c==0x375) {
+                    // Appendix A.4. GREEK LOWER NUMERAL SIGN (KERAIA) (U+0375)
+                    // Rule Set:
+                    //  False;
+                    //  If Script(After(cp)) .eq.  Greek Then True;
+                    if(!(i<labelEnd &&
+                         UScript.GREEK==UScript.getScript(Character.codePointAt(label, i+1)))) {
+                        addLabelError(info, Error.CONTEXTO_PUNCTUATION);
+                    }
+                } else if(c==0x5f3 || c==0x5f4) {
+                    // Appendix A.5. HEBREW PUNCTUATION GERESH (U+05F3)
+                    // Rule Set:
+                    //  False;
+                    //  If Script(Before(cp)) .eq.  Hebrew Then True;
+                    //
+                    // Appendix A.6. HEBREW PUNCTUATION GERSHAYIM (U+05F4)
+                    // Rule Set:
+                    //  False;
+                    //  If Script(Before(cp)) .eq.  Hebrew Then True;
+                    if(!(labelStart<i &&
+                         UScript.HEBREW==UScript.getScript(Character.codePointBefore(label, i)))) {
+                        addLabelError(info, Error.CONTEXTO_PUNCTUATION);
+                    }
+                } else if(0x660<=c /* && c<=0x6f9 */) {
+                    // Appendix A.8. ARABIC-INDIC DIGITS (0660..0669)
+                    // Rule Set:
+                    //  True;
+                    //  For All Characters:
+                    //    If cp .in. 06F0..06F9 Then False;
+                    //  End For;
+                    //
+                    // Appendix A.9. EXTENDED ARABIC-INDIC DIGITS (06F0..06F9)
+                    // Rule Set:
+                    //  True;
+                    //  For All Characters:
+                    //    If cp .in. 0660..0669 Then False;
+                    //  End For;
+                    if(c<=0x669) {
+                        if(arabicDigits>0) {
+                            addLabelError(info, Error.CONTEXTO_DIGITS);
+                        }
+                        arabicDigits=-1;
+                    } else if(0x6f0<=c) {
+                        if(arabicDigits<0) {
+                            addLabelError(info, Error.CONTEXTO_DIGITS);
+                        }
+                        arabicDigits=1;
+                    }
+                }
+            } else if(c==0x30fb) {
+                // Appendix A.7. KATAKANA MIDDLE DOT (U+30FB)
+                // Rule Set:
+                //  False;
+                //  For All Characters:
+                //    If Script(cp) .in. {Hiragana, Katakana, Han} Then True;
+                //  End For;
+                for(int j=labelStart;; j+=Character.charCount(c)) {
+                    if(j>labelEnd) {
+                        addLabelError(info, Error.CONTEXTO_PUNCTUATION);
+                        break;
+                    }
+                    c=Character.codePointAt(label, j);
+                    int script=UScript.getScript(c);
+                    if(script==UScript.HIRAGANA || script==UScript.KATAKANA || script==UScript.HAN) {
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     // TODO: make public(?) -- in C, these are public in uchar.h

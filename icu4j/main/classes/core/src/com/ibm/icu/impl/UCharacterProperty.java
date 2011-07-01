@@ -116,21 +116,19 @@ public final class UCharacterProperty
 
     /**
      * Gets the unicode additional properties.
-     * C version getUnicodeProperties.
+     * Java version of C u_getUnicodeProperties().
      * @param codepoint codepoint whose additional properties is to be
      *                  retrieved
      * @param column The column index.
      * @return unicode properties
      */
-       public int getAdditional(int codepoint, int column) {
-        if (column == -1) {
-            return getProperty(codepoint);
+    public int getAdditional(int codepoint, int column) {
+        assert column >= 0;
+        if (column >= m_additionalColumnsCount_) {
+            return 0;
         }
-           if (column < 0 || column >= m_additionalColumnsCount_) {
-           return 0;
-       }
-       return m_additionalVectors_[m_additionalTrie_.get(codepoint) + column];
-       }
+        return m_additionalVectors_[m_additionalTrie_.get(codepoint) + column];
+    }
 
     static final int MY_MASK = UCharacterProperty.TYPE_MASK
         & ((1<<UCharacterCategory.UPPERCASE_LETTER) |

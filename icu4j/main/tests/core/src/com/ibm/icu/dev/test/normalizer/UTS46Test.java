@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010, International Business Machines
+* Copyright (C) 2010-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -26,8 +26,11 @@ public class UTS46Test extends TestFmwk {
         new UTS46Test().run(args);
     }
     public UTS46Test() {
-        trans=IDNA.getUTS46Instance(IDNA.USE_STD3_RULES|IDNA.CHECK_BIDI|IDNA.CHECK_CONTEXTJ);
-        nontrans=IDNA.getUTS46Instance(IDNA.USE_STD3_RULES|IDNA.CHECK_BIDI|IDNA.CHECK_CONTEXTJ|
+        int commonOptions=
+            IDNA.USE_STD3_RULES|IDNA.CHECK_BIDI|
+            IDNA.CHECK_CONTEXTJ|IDNA.CHECK_CONTEXTO;
+        trans=IDNA.getUTS46Instance(commonOptions);
+        nontrans=IDNA.getUTS46Instance(commonOptions|
                                        IDNA.NONTRANSITIONAL_TO_ASCII|IDNA.NONTRANSITIONAL_TO_UNICODE);
     }
 
@@ -107,6 +110,8 @@ public class UTS46Test extends TestFmwk {
         errorNamesToErrors.put("UIDNA_ERROR_INVALID_ACE_LABEL", IDNA.Error.INVALID_ACE_LABEL);
         errorNamesToErrors.put("UIDNA_ERROR_BIDI", IDNA.Error.BIDI);
         errorNamesToErrors.put("UIDNA_ERROR_CONTEXTJ", IDNA.Error.CONTEXTJ);
+        errorNamesToErrors.put("UIDNA_ERROR_CONTEXTO_PUNCTUATION", IDNA.Error.CONTEXTO_PUNCTUATION);
+        errorNamesToErrors.put("UIDNA_ERROR_CONTEXTO_DIGITS", IDNA.Error.CONTEXTO_DIGITS);
     }
 
     private static final class TestCase {
@@ -424,6 +429,29 @@ public class UTS46Test extends TestFmwk {
           "\u06EF\u200C\u06EF", "UIDNA_ERROR_CONTEXTJ" },
         { "\u0644\u200C", "N",  // D ZWNJ
           "\u0644\u200C", "UIDNA_ERROR_BIDI|UIDNA_ERROR_CONTEXTJ" },
+        { "\u0660\u0661", "B",  // Arabic-Indic Digits alone
+          "\u0660\u0661", "UIDNA_ERROR_BIDI" },
+        { "\u06F0\u06F1", "B",  // Extended Arabic-Indic Digits alone
+          "\u06F0\u06F1", "" },
+        { "\u0660\u06F1", "B",  // Mixed Arabic-Indic Digits
+          "\u0660\u06F1", "UIDNA_ERROR_CONTEXTO_DIGITS|UIDNA_ERROR_BIDI" },
+        // All of the CONTEXTO "Would otherwise have been DISALLOWED" characters
+        // in their correct contexts,
+        // then each in incorrect context.
+        { "l\u00B7l\u4E00\u0375\u03B1\u05D0\u05F3\u05F4\u30FB", "B",
+          "l\u00B7l\u4E00\u0375\u03B1\u05D0\u05F3\u05F4\u30FB", "UIDNA_ERROR_BIDI" },
+        { "l\u00B7", "B",
+          "l\u00B7", "UIDNA_ERROR_CONTEXTO_PUNCTUATION" },
+        { "\u00B7l", "B",
+          "\u00B7l", "UIDNA_ERROR_CONTEXTO_PUNCTUATION" },
+        { "\u0375", "B",
+          "\u0375", "UIDNA_ERROR_CONTEXTO_PUNCTUATION" },
+        { "\u03B1\u05F3", "B",
+          "\u03B1\u05F3", "UIDNA_ERROR_CONTEXTO_PUNCTUATION|UIDNA_ERROR_BIDI" },
+        { "\u05F4", "B",
+          "\u05F4", "UIDNA_ERROR_CONTEXTO_PUNCTUATION" },
+        { "l\u30FB", "B",
+          "l\u30FB", "UIDNA_ERROR_CONTEXTO_PUNCTUATION" },
         // { "", "B",
         //   "", "" },
     };
