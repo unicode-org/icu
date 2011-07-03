@@ -536,6 +536,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="ubrkimpl.h" />
+    <ClInclude Include="ucol_data.h" />
     <ClInclude Include="ucol_swp.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="propsvec.h" />

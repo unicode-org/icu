@@ -567,6 +567,9 @@
     <ClInclude Include="ubrkimpl.h">
       <Filter>break iteration</Filter>
     </ClInclude>
+    <ClInclude Include="ucol_data.h">
+      <Filter>collation</Filter>
+    </ClInclude>
     <ClInclude Include="ucol_swp.h">
       <Filter>collation</Filter>
     </ClInclude>
