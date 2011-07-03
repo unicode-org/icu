@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2010, International Business Machines
+*   Copyright (C) 2003-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ucol_swp.c
+*   file name:  ucol_swp.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -20,7 +20,7 @@
 #include "utrie.h"
 #include "udataswp.h"
 #include "cmemory.h"
-#include "ucol_imp.h"
+#include "ucol_data.h"
 #include "ucol_swp.h"
 
 /* swapping ----------------------------------------------------------------- */
