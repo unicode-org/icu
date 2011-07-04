@@ -38,8 +38,6 @@
 #include "unicode/fpositer.h"
 #include "unicode/stringpiece.h"
 
-union UHashTok;
-
 U_NAMESPACE_BEGIN
 
 class DigitList;

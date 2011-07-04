@@ -23,8 +23,8 @@
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
+#include "uelement.h"
 #include "ustr_imp.h"
-#include "uhash.h"
 
 U_NAMESPACE_BEGIN
 
@@ -150,7 +150,7 @@ U_NAMESPACE_END
 
 // Defined here to reduce dependencies on break iterator
 U_CAPI int32_t U_EXPORT2
-uhash_hashCaselessUnicodeString(const UHashTok key) {
+uhash_hashCaselessUnicodeString(const UElement key) {
     U_NAMESPACE_USE
     const UnicodeString *str = (const UnicodeString*) key.pointer;
     if (str == NULL) {
@@ -164,7 +164,7 @@ uhash_hashCaselessUnicodeString(const UHashTok key) {
 
 // Defined here to reduce dependencies on break iterator
 U_CAPI UBool U_EXPORT2
-uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2) {
+uhash_compareCaselessUnicodeString(const UElement key1, const UElement key2) {
     U_NAMESPACE_USE
     const UnicodeString *str1 = (const UnicodeString*) key1.pointer;
     const UnicodeString *str2 = (const UnicodeString*) key2.pointer;

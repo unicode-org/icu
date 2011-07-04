@@ -33,7 +33,8 @@
 
 #include "unicode/sortkey.h"
 #include "cmemory.h"
-#include "uhash.h"
+#include "uelement.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -361,9 +362,8 @@ CollationKey::hashCode() const
 
     if (fHashCode == kInvalidHashCode)
     {
-        UHashTok key;
-        key.pointer = fBytes;
-        ((CollationKey *)this)->fHashCode = uhash_hashChars(key);
+        const char *s = reinterpret_cast<const char *>(fBytes);
+        ((CollationKey *)this)->fHashCode = s == NULL ? 0 : ustr_hashCharsN(s, fCount);
 #if 0
         // We compute the hash by iterating sparsely over 64 (at most) characters
         // spaced evenly through the string.  For each character, we multiply the

@@ -724,10 +724,10 @@ void AlphabeticIndex::staticInit(UErrorCode &status) {
 //
 static int32_t U_CALLCONV
 sortCollateComparator(const void *context, const void *left, const void *right) {
-    const UHashTok *leftTok = static_cast<const UHashTok *>(left);
-    const UHashTok *rightTok = static_cast<const UHashTok *>(right);
-    const UnicodeString *leftString  = static_cast<const UnicodeString *>(leftTok->pointer);
-    const UnicodeString *rightString = static_cast<const UnicodeString *>(rightTok->pointer);
+    const UElement *leftElement = static_cast<const UElement *>(left);
+    const UElement *rightElement = static_cast<const UElement *>(right);
+    const UnicodeString *leftString  = static_cast<const UnicodeString *>(leftElement->pointer);
+    const UnicodeString *rightString = static_cast<const UnicodeString *>(rightElement->pointer);
     const Collator *col = static_cast<const Collator *>(context);
 
     if (leftString == rightString) {
@@ -749,10 +749,10 @@ sortCollateComparator(const void *context, const void *left, const void *right) 
 //
 static int32_t U_CALLCONV
 recordCompareFn(const void *context, const void *left, const void *right) {
-    const UHashTok *leftTok = static_cast<const UHashTok *>(left);
-    const UHashTok *rightTok = static_cast<const UHashTok *>(right);
-    const AlphabeticIndex::Record *leftRec  = static_cast<const AlphabeticIndex::Record *>(leftTok->pointer);
-    const AlphabeticIndex::Record *rightRec = static_cast<const AlphabeticIndex::Record *>(rightTok->pointer);
+    const UElement *leftElement = static_cast<const UElement *>(left);
+    const UElement *rightElement = static_cast<const UElement *>(right);
+    const AlphabeticIndex::Record *leftRec  = static_cast<const AlphabeticIndex::Record *>(leftElement->pointer);
+    const AlphabeticIndex::Record *rightRec = static_cast<const AlphabeticIndex::Record *>(rightElement->pointer);
     const Collator *col = static_cast<const Collator *>(context);
 
     Collator::EComparisonResult r = col->compare(leftRec->sortingName_, rightRec->sortingName_);
@@ -1070,16 +1070,16 @@ void AlphabeticIndex::hackName(UnicodeString &dest, const UnicodeString &name, c
  *
  * For use with array sort or UVector.
  * @param context  A UErrorCode pointer.
- * @param left     A UHashTok pointer, which must refer to a UnicodeString *
- * @param right    A UHashTok pointer, which must refer to a UnicodeString *
+ * @param left     A UElement pointer, which must refer to a UnicodeString *
+ * @param right    A UElement pointer, which must refer to a UnicodeString *
  */
 
 static int32_t U_CALLCONV
 PreferenceComparator(const void *context, const void *left, const void *right) {
-    const UHashTok *leftTok  = static_cast<const UHashTok *>(left);
-    const UHashTok *rightTok = static_cast<const UHashTok *>(right);
-    const UnicodeString *s1  = static_cast<const UnicodeString *>(leftTok->pointer);
-    const UnicodeString *s2  = static_cast<const UnicodeString *>(rightTok->pointer);
+    const UElement *leftElement  = static_cast<const UElement *>(left);
+    const UElement *rightElement = static_cast<const UElement *>(right);
+    const UnicodeString *s1  = static_cast<const UnicodeString *>(leftElement->pointer);
+    const UnicodeString *s2  = static_cast<const UnicodeString *>(rightElement->pointer);
     UErrorCode &status       = *(UErrorCode *)(context);   // Cast off both static and const.
     if (s1 == s2) {
         return 0;

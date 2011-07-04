@@ -25,7 +25,7 @@
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
-#include "uhash.h"
+#include "uelement.h"
 #include "ustr_imp.h"
 #include "umutex.h"
 
@@ -1677,7 +1677,7 @@ U_NAMESPACE_END
 U_NAMESPACE_USE
 
 U_CAPI int32_t U_EXPORT2
-uhash_hashUnicodeString(const UHashTok key) {
+uhash_hashUnicodeString(const UElement key) {
     const UnicodeString *str = (const UnicodeString*) key.pointer;
     return (str == NULL) ? 0 : str->hashCode();
 }
@@ -1685,7 +1685,7 @@ uhash_hashUnicodeString(const UHashTok key) {
 // Moved here from uhash_us.cpp so that using a UVector of UnicodeString*
 // does not depend on hashtable code.
 U_CAPI UBool U_EXPORT2
-uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2) {
+uhash_compareUnicodeString(const UElement key1, const UElement key2) {
     const UnicodeString *str1 = (const UnicodeString*) key1.pointer;
     const UnicodeString *str2 = (const UnicodeString*) key2.pointer;
     if (str1 == str2) {
