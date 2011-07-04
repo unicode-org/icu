@@ -14,29 +14,11 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "cmemory.h"
 #include "uarrsort.h"
-#include "uhash.h"
+#include "uelement.h"
 
 U_NAMESPACE_BEGIN
-
-/**
- * A token comparison function.
- * @param tok1 A token (object or integer)
- * @param tok2 A token (object or integer)
- * @return 0 if the two tokens are equal, -1 if tok1 is < tok2, or
- * +1 if tok1 is > tok2.
- */
-typedef int8_t U_CALLCONV USortComparator(UHashTok tok1,
-                                          UHashTok tok2);
-
-/**
- * A token assignment function.  It may copy an integer, copy
- * a pointer, or clone a pointer, as appropriate.
- * @param dst The token to be assigned to
- * @param src The token to assign from
- */
-typedef void U_CALLCONV UTokenAssigner(UHashTok *dst,
-                                       UHashTok *src);
 
 /**
  * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector
@@ -90,7 +72,7 @@ typedef void U_CALLCONV UTokenAssigner(UHashTok *dst,
  */
 class U_COMMON_API UVector : public UObject {
     // NOTE: UVector uses the UHashKey (union of void* and int32_t) as
-    // its basic storage type.  It uses UKeyComparator as its
+    // its basic storage type.  It uses UElementsAreEqual as its
     // comparison function.  It uses UObjectDeleter as its deleter
     // function.  These are named for hashtables, but used here as-is
     // rather than duplicating the type.  This allows sharing of
@@ -101,20 +83,20 @@ private:
 
     int32_t capacity;
 
-    UHashTok* elements;
+    UElement* elements;
 
     UObjectDeleter *deleter;
 
-    UKeyComparator *comparer;
+    UElementsAreEqual *comparer;
 
 public:
     UVector(UErrorCode &status);
 
     UVector(int32_t initialCapacity, UErrorCode &status);
 
-    UVector(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status);
+    UVector(UObjectDeleter *d, UElementsAreEqual *c, UErrorCode &status);
 
-    UVector(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status);
+    UVector(UObjectDeleter *d, UElementsAreEqual *c, int32_t initialCapacity, UErrorCode &status);
 
     virtual ~UVector();
 
@@ -122,7 +104,7 @@ public:
      * Assign this object to another (make this a copy of 'other').
      * Use the 'assign' function to assign each element.
      */
-    void assign(const UVector& other, UTokenAssigner *assign, UErrorCode &ec);
+    void assign(const UVector& other, UElementAssigner *assign, UErrorCode &ec);
 
     /**
      * Compare this vector with another.  They will be considered
@@ -209,7 +191,7 @@ public:
 
     UObjectDeleter *setDeleter(UObjectDeleter *d);
 
-    UKeyComparator *setComparer(UKeyComparator *c);
+    UElementsAreEqual *setComparer(UElementsAreEqual *c);
 
     void* operator[](int32_t index) const;
 
@@ -237,14 +219,14 @@ public:
      * as defined by 'compare'.  The current elements are assumed to
      * be sorted already.
      */
-    void sortedInsert(void* obj, USortComparator *compare, UErrorCode& ec);
+    void sortedInsert(void* obj, UElementComparator *compare, UErrorCode& ec);
 
     /**
      * Insert the given integer into this vector at its sorted position
      * as defined by 'compare'.  The current elements are assumed to
      * be sorted already.
      */
-    void sortedInsert(int32_t obj, USortComparator *compare, UErrorCode& ec);
+    void sortedInsert(int32_t obj, UElementComparator *compare, UErrorCode& ec);
 
     /**
      * Sort the contents of the vector, assuming that the contents of the
@@ -255,10 +237,10 @@ public:
     /**
       * Sort the contents of this vector, using a caller-supplied function
       * to do the comparisons.  (It's confusing that
-      *  UVector's USortComparator function is different from the
+      *  UVector's UElementComparator function is different from the
       *  UComparator function type defined in uarrsort.h)
       */
-    void sort(USortComparator *compare, UErrorCode &ec);
+    void sort(UElementComparator *compare, UErrorCode &ec);
 
     /**
      * Sort the contents of this vector using a caller-supplied function
@@ -281,9 +263,9 @@ public:
 private:
     void _init(int32_t initialCapacity, UErrorCode &status);
 
-    int32_t indexOf(UHashTok key, int32_t startIndex = 0, int8_t hint = 0) const;
+    int32_t indexOf(UElement key, int32_t startIndex = 0, int8_t hint = 0) const;
 
-    void sortedInsert(UHashTok tok, USortComparator *compare, UErrorCode& ec);
+    void sortedInsert(UElement e, UElementComparator *compare, UErrorCode& ec);
 
     // Disallow
     UVector(const UVector&);
@@ -316,9 +298,9 @@ public:
 
     UStack(int32_t initialCapacity, UErrorCode &status);
 
-    UStack(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status);
+    UStack(UObjectDeleter *d, UElementsAreEqual *c, UErrorCode &status);
 
-    UStack(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status);
+    UStack(UObjectDeleter *d, UElementsAreEqual *c, int32_t initialCapacity, UErrorCode &status);
 
     virtual ~UStack();
 

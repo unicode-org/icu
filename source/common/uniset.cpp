@@ -16,13 +16,12 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "patternprops.h"
-#include "uhash.h"
+#include "uelement.h"
 #include "util.h"
 #include "uvector.h"
 #include "charstr.h"
 #include "ustrfmt.h"
 #include "uassert.h"
-#include "hash.h"
 #include "bmpset.h"
 #include "unisetspan.h"
 
@@ -124,11 +123,11 @@ static inline void _dbgdt(UnicodeSet* set) {
 // UnicodeString in UVector support
 //----------------------------------------------------------------
 
-static void U_CALLCONV cloneUnicodeString(UHashTok *dst, UHashTok *src) {
+static void U_CALLCONV cloneUnicodeString(UElement *dst, UElement *src) {
     dst->pointer = new UnicodeString(*(UnicodeString*)src->pointer);
 }
 
-static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
+static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
     const UnicodeString &a = *(const UnicodeString*)t1.pointer;
     const UnicodeString &b = *(const UnicodeString*)t2.pointer;
     return a.compare(b);

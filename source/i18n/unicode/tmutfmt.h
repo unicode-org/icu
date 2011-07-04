@@ -26,12 +26,6 @@
 #include "unicode/plurrule.h"
 
 /**
- * @internal ICU 4.2
- */
-
-union UHashTok;
-
-/**
  * Constants for various styles.
  * There are 2 styles: full name and abbreviated name.
  * For example, for English, the full name for hour duration is "3 hours",

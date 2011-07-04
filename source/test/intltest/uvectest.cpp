@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2004-2010, International Business Machines Corporation and
+ * Copyright (c) 2004-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -9,10 +9,10 @@
 #include "intltest.h"
 
 #include "uvectest.h"
-#include "uvector.h"
-#include "hash.h"
-
 #include "cstring.h"
+#include "hash.h"
+#include "uelement.h"
+#include "uvector.h"
 
 //---------------------------------------------------------------------------
 //
@@ -67,7 +67,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     }
 
 static int8_t U_CALLCONV
-UVectorTest_compareInt32(UHashTok key1, UHashTok key2) {
+UVectorTest_compareInt32(UElement key1, UElement key2) {
     if (key1.integer > key2.integer) {
         return 1;
     }
@@ -79,7 +79,7 @@ UVectorTest_compareInt32(UHashTok key1, UHashTok key2) {
 
 U_CDECL_BEGIN
 static int8_t U_CALLCONV
-UVectorTest_compareCstrings(const UHashTok key1, const UHashTok key2) {
+UVectorTest_compareCstrings(const UElement key1, const UElement key2) {
     return !strcmp((const char *)key1.pointer, (const char *)key2.pointer);
 }
 U_CDECL_END
@@ -161,7 +161,7 @@ void UVectorTest::UStack_API() {
 }
 
 U_CDECL_BEGIN
-static UBool U_CALLCONV neverTRUE(const UHashTok /*key1*/, const UHashTok /*key2*/) {
+static UBool U_CALLCONV neverTRUE(const UElement /*key1*/, const UElement /*key2*/) {
     return FALSE;
 }
 
