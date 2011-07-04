@@ -38,6 +38,7 @@
 #include "cstring.h"
 #include "uhash.h"
 #include "ucln_cmn.h"
+#include "ustr_imp.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -635,9 +636,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
 int32_t
 Locale::hashCode() const
 {
-    UHashTok hashKey;
-    hashKey.pointer = fullName;
-    return uhash_hashChars(hashKey);
+    return ustr_hashCharsN(fullName, uprv_strlen(fullName));
 }
 
 void

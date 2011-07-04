@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and
+ * Copyright (C) 2008-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -25,14 +25,6 @@
 #include "unicode/locid.h"
 #include "unicode/ucal.h"
 #include "unicode/dtptngen.h"
-//#include "dtitv_impl.h"
-
-/**
- * @internal ICU 4.0
- */
- 
-union UHashTok;
-
 
 U_NAMESPACE_BEGIN
 

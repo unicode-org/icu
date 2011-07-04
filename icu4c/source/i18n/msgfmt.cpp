@@ -40,6 +40,8 @@
 #include "messageimpl.h"
 #include "msgfmt_impl.h"
 #include "uassert.h"
+#include "uelement.h"
+#include "uhash.h"
 #include "ustrfmt.h"
 #include "util.h"
 #include "uvector.h"

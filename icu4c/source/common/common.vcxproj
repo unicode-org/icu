@@ -569,6 +569,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="uelement.h" />
     <ClInclude Include="uenumimp.h" />
     <ClInclude Include="uhash.h" />
     <ClInclude Include="ulist.h" />

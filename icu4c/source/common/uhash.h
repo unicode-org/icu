@@ -15,6 +15,7 @@
 
 #include "unicode/utypes.h"
 #include "cmemory.h"
+#include "uelement.h"
 
 /**
  * UHashtable stores key-value pairs and does moderately fast lookup
@@ -77,20 +78,11 @@
 U_CDECL_BEGIN
 
 /**
- * A key or value within the hashtable.  It may be either a 32-bit
- * integral value or an opaque void* pointer.  The void* pointer may
- * be smaller than 32 bits (e.g. 24 bits) or may be larger (e.g. 64
- * bits).  The hashing and comparison functions take a pointer to a
+ * A key or value within a UHashtable.
+ * The hashing and comparison functions take a pointer to a
  * UHashTok, but the deleter receives the void* pointer within it.
- *
- * Because a UHashTok is the size of a native pointer or a 32-bit
- * integer, we pass it around by value.
  */
-union UHashTok {
-    void*   pointer;
-    int32_t integer;
-};
-typedef union UHashTok UHashTok;
+typedef UElement UHashTok;
 
 /**
  * This is a single hash element.
@@ -111,21 +103,14 @@ typedef struct UHashElement UHashElement;
 typedef int32_t U_CALLCONV UHashFunction(const UHashTok key);
 
 /**
- * A key comparison function.
- * @param key1 A key stored in a hashtable
- * @param key2 A key stored in a hashtable
- * @return TRUE if the two keys are equal.
+ * A key equality (boolean) comparison function.
  */
-typedef UBool U_CALLCONV UKeyComparator(const UHashTok key1,
-                                        const UHashTok key2);
+typedef UElementsAreEqual UKeyComparator;
+
 /**
- * A key comparison function.
- * @param val1 A key stored in a hashtable
- * @param val2 A key stored in a hashtable
- * @return TRUE if the two keys are equal.
+ * A value equality (boolean) comparison function.
  */
-typedef UBool U_CALLCONV UValueComparator(const UHashTok val1,
-                                          const UHashTok val2);
+typedef UElementsAreEqual UValueComparator;
 
 /* see cmemory.h for UObjectDeleter and uprv_deleteUObject() */
 
@@ -624,7 +609,7 @@ uhash_compareIChars(const UHashTok key1, const UHashTok key2);
  * @return A hash code for the key.
  */
 U_CAPI int32_t U_EXPORT2 
-uhash_hashUnicodeString(const UHashTok key);
+uhash_hashUnicodeString(const UElement key);
 
 /**
  * Hash function for UnicodeString* keys (case insensitive).
@@ -633,26 +618,7 @@ uhash_hashUnicodeString(const UHashTok key);
  * @return A hash code for the key.
  */
 U_CAPI int32_t U_EXPORT2 
-uhash_hashCaselessUnicodeString(const UHashTok key);
-
-/**
- * Comparator function for UnicodeString* keys.
- * @param key1 The string for comparison
- * @param key2 The string for comparison
- * @return true if key1 and key2 are equal, return false otherwise.
- */
-U_CAPI UBool U_EXPORT2 
-uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2);
-
-/**
- * Comparator function for UnicodeString* keys (case insensitive).
- * Make sure to use together with uhash_hashCaselessUnicodeString.
- * @param key1 The string for comparison
- * @param key2 The string for comparison
- * @return true if key1 and key2 are equal, return false otherwise.
- */
-U_CAPI UBool U_EXPORT2 
-uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2);
+uhash_hashCaselessUnicodeString(const UElement key);
 
 /********************************************************************
  * int32_t Support Functions
