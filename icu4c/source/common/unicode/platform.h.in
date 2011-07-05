@@ -298,7 +298,7 @@
 /** @} */
 
 /*===========================================================================*/
-/** @{ Symbol import-export control                                              */
+/** @{ Symbol import-export control                                          */
 /*===========================================================================*/
 
 #ifdef U_STATIC_IMPLEMENTATION
@@ -327,16 +327,8 @@
 /* @} */
 
 /*===========================================================================*/
-/** @{ Code alignment and C function inlining                                    */
+/** @{ Code alignment                                                        */
 /*===========================================================================*/
-
-#ifndef U_INLINE
-#   ifdef __cplusplus
-#       define U_INLINE inline
-#   else
-#       define U_INLINE @U_INLINE@
-#   endif
-#endif
 
 #ifndef U_ALIGN_CODE
 #define U_ALIGN_CODE(n) 
@@ -345,7 +337,7 @@
 /** @} */
 
 /*===========================================================================*/
-/** @{ GCC built in functions for atomic memory operations                       */
+/** @{ GCC built in functions for atomic memory operations                   */
 /*===========================================================================*/
 
 /**
