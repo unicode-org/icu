@@ -3079,7 +3079,7 @@ Calendar::getActualMaximum(UCalendarDateFields field, UErrorCode& status) const
             if(U_FAILURE(status)) return 0;
             Calendar *cal = clone();
             if(!cal) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
-			cal->setLenient(TRUE);
+            cal->setLenient(TRUE);
             cal->prepareGetActual(field,FALSE,status);
             result = handleGetYearLength(cal->get(UCAL_EXTENDED_YEAR, status));
             delete cal;
@@ -3201,6 +3201,11 @@ int32_t Calendar::getActualHelper(UCalendarDateFields field, int32_t startValue,
     if(U_FAILURE(status)) return startValue;
     Calendar *work = clone();
     if(!work) { status = U_MEMORY_ALLOCATION_ERROR; return startValue; }
+
+    // need to resolve time here, otherwise, fields set for actual limit
+    // may cause conflict with fields previously set (but not yet resolved).
+    work->complete(status);
+
     work->setLenient(TRUE);
     work->prepareGetActual(field, delta < 0, status);
 
