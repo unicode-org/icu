@@ -84,6 +84,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(45,TestT5555);
         CASE(46,TestT6745);
         CASE(47,TestT8057);
+        CASE(48,TestT8596);
     default: name = ""; break;
     }
 }
@@ -2809,6 +2810,49 @@ void CalendarRegressionTest::TestT8057(void) {
     }
 
     delete cal;
+}
+
+// Test case for ticket#8596.
+// Setting an year followed by getActualMaximum(Calendar.WEEK_OF_YEAR)
+// may result wrong maximum week.
+void CalendarRegressionTest::TestT8596(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar *gc = new GregorianCalendar(*TimeZone::getGMT(), status);
+
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating Calendar: %s", u_errorName(status));
+        delete gc;
+        return;
+    }
+
+    gc->setFirstDayOfWeek(UCAL_MONDAY);
+    gc->setMinimalDaysInFirstWeek(4);
+
+    // Force the calender to resolve the fields once.
+    // The maximum week number in 2011 is 52.
+    gc->set(UCAL_YEAR, 2011);
+    gc->get(UCAL_YEAR, status);
+
+    // Set a date in year 2009, but not calling get to resolve
+    // the calendar's internal field yet.
+    gc->set(2009, UCAL_JULY, 1);
+
+    // Then call getActuamMaximum for week of year.
+    // #8596 was caused by conflict between year set
+    // above and internal work calendar field resolution.
+    int32_t maxWeeks = gc->getActualMaximum(UCAL_WEEK_OF_YEAR, status);
+
+    if (U_FAILURE(status)) {
+        errln("Error calendar calculation: %s", u_errorName(status));
+        delete gc;
+        return;
+    }
+
+    if (maxWeeks != 53) {
+        errln((UnicodeString)"FAIL: Max week in 2009 in ISO calendar is 53, but got " + maxWeeks);
+    }
+
+    delete gc;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
