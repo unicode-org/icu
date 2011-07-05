@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.cpp
@@ -11,7 +11,6 @@
 *   06/25/2001  grhoten     Move iostream from unistr.h to here
 ******************************************************************************
 */
-
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
@@ -24,13 +23,9 @@
 
 // console IO
 
-#if U_IOSTREAM_SOURCE >= 198506
-
 #if U_IOSTREAM_SOURCE >= 199711
+
 #define STD_NAMESPACE std::
-#else
-#define STD_NAMESPACE
-#endif
 
 #define STD_OSTREAM STD_NAMESPACE ostream
 #define STD_ISTREAM STD_NAMESPACE istream
@@ -169,4 +164,3 @@ STOP_READING:
 U_NAMESPACE_END
 
 #endif
-
