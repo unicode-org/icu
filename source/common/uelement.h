@@ -23,6 +23,8 @@
 
 #include "unicode/utypes.h"
 
+U_CDECL_BEGIN
+
 /**
  * A UVector element, or a key or value within a UHashtable.
  * It may be either a 32-bit integral value or an opaque void* pointer.
@@ -61,6 +63,8 @@ typedef int8_t U_CALLCONV UElementComparator(UElement e1, UElement e2);
  * @param src The element to assign from
  */
 typedef void U_CALLCONV UElementAssigner(UElement *dst, UElement *src);
+
+U_CDECL_END
 
 /**
  * Comparator function for UnicodeString* keys. Implements UElementsAreEqual.
