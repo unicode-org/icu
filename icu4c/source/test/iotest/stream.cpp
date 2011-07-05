@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -31,11 +31,6 @@
 #include <fstream>
 #include <iomanip>
 using namespace std;
-#elif U_IOSTREAM_SOURCE >= 198506
-#define USE_OLD_IOSTREAM 1
-#include <strstream.h>
-#include <fstream.h>
-#endif
 
 #include <string.h>
 
@@ -51,11 +46,9 @@ const char C_NEW_LINE[] = {'\n',0};
 #endif
 U_CDECL_END
 
-#if U_IOSTREAM_SOURCE
 U_CDECL_BEGIN
 static void U_CALLCONV TestStream(void)
 {
-#if U_IOSTREAM_SOURCE >= 198506
     const UChar thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC, 0};
     const UChar mu[] = { 0x6D, 0x75, 0};
     UnicodeString str1 = UNICODE_STRING_SIMPLE("str1");
@@ -182,9 +175,6 @@ static void U_CALLCONV TestStream(void)
         log_err("Error converting string for large stream buffer testing.\n");
     }
     ucnv_close(defConv);
-#else
-    log_info("U_IOSTREAM_SOURCE is disabled\n");
-#endif
 }
 
 #define IOSTREAM_GOOD_SHIFT 3
@@ -248,12 +238,7 @@ testString(
 
     if (getBitStatus(sstrm) != expectedStatus) {
         printBits(sstrm);
-#ifdef USE_OLD_IOSTREAM
-        log_info("Warning. Expected status %d, Got %d. This maybe caused by the fact that the non-standardized iostream is being used.\n", expectedStatus, getBitStatus(sstrm));
-        log_info("See verbose output for details.\n");
-#else
         log_err("Expected status %d, Got %d. See verbose output for details\n", expectedStatus, getBitStatus(sstrm));
-#endif
     }
     if (str != UnicodeString(expectedString)) {
         log_err("Did not get expected results from \"%s\", expected \"%s\"\n", testString, expectedString);
@@ -269,11 +254,6 @@ static void U_CALLCONV TestStreamEOF(void)
     stringstream ss;
 #else
     strstream ss;
-#endif
-
-#ifdef USE_OLD_IOSTREAM
-    log_info("Old non-standardized iostream being used. This may result in inconsistent state flag settings. (e.g. failbit may not be set properly)\n");
-    log_info("In such a case, warnings will be issued instead of errors.\n");
 #endif
 
     fs << "EXAMPLE";

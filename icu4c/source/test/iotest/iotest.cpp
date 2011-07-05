@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -694,7 +694,7 @@ static void addAllTests(TestNode** root) {
     addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
     addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");
 #endif
-#if U_IOSTREAM_SOURCE
+#if U_IOSTREAM_SOURCE >= 199711
     addStreamTests(root);
 #endif
 }
