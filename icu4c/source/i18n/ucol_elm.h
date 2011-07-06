@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -137,7 +137,7 @@ U_CAPI UCATableHeader * U_EXPORT2 uprv_uca_assembleTable(tempUCATable *t, UError
 
 U_CAPI int32_t U_EXPORT2
 uprv_uca_canonicalClosure(tempUCATable *t, UColTokenParser *src,
-                          U_NAMESPACE_QUALIFIER UnicodeSet *closed, UErrorCode *status);
+                          icu::UnicodeSet *closed, UErrorCode *status);
 
 U_CDECL_END
 

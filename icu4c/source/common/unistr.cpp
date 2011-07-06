@@ -87,7 +87,7 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
 U_CDECL_BEGIN
 static UChar U_CALLCONV
 UnicodeString_charAt(int32_t offset, void *context) {
-    return ((U_NAMESPACE_QUALIFIER UnicodeString*) context)->charAt(offset);
+    return ((icu::UnicodeString*) context)->charAt(offset);
 }
 U_CDECL_END
 

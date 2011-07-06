@@ -262,7 +262,7 @@ U_NAMESPACE_END
 
 // defined in ucln_cmn.h
 
-static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
+static icu::ICULocaleService* gService = NULL;
 
 /**
  * Release all static memory held by breakiterator.

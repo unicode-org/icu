@@ -1,7 +1,7 @@
-/**
+/*
  ************************************************************************************
- * Copyright (C) 2006-2009,2011, International Business Machines Corporation        *
- * and others. All Rights Reserved.                                                 *
+ * Copyright (C) 2006-2011, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ************************************************************************************
  */
 
@@ -130,7 +130,7 @@ ICULanguageBreakFactory::~ICULanguageBreakFactory() {
 U_NAMESPACE_END
 U_CDECL_BEGIN
 static void U_CALLCONV _deleteEngine(void *obj) {
-    delete (const U_NAMESPACE_QUALIFIER LanguageBreakEngine *) obj;
+    delete (const icu::LanguageBreakEngine *) obj;
 }
 U_CDECL_END
 U_NAMESPACE_BEGIN

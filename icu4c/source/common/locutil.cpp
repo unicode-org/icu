@@ -1,6 +1,6 @@
-/**
+/*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and
+ * Copyright (C) 2002-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -18,7 +18,7 @@
 #include "umutex.h"
 
 // see LocaleUtility::getAvailableLocaleNames
-static U_NAMESPACE_QUALIFIER Hashtable * LocaleUtility_cache = NULL;
+static icu::Hashtable * LocaleUtility_cache = NULL;
 
 #define UNDERSCORE_CHAR ((UChar)0x005f)
 #define AT_SIGN_CHAR    ((UChar)64)

@@ -400,7 +400,7 @@ U_CAPI int32_t U_EXPORT2
 ucol_keyHashCode(const uint8_t *key, 
                        int32_t  length)
 {
-    U_NAMESPACE_QUALIFIER CollationKey newKey(key, length);
+    icu::CollationKey newKey(key, length);
     return newKey.hashCode();
 }
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -167,7 +167,7 @@ uenum_reset(UEnumeration* en, UErrorCode* status);
  * @draft ICU 4.2
  */
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openFromStringEnumeration(U_NAMESPACE_QUALIFIER StringEnumeration* adopted, UErrorCode* ec);
+uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec);
 
 #endif
 

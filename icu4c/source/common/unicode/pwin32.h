@@ -172,11 +172,6 @@ typedef unsigned int uint32_t;
 /** Compiler and environment features                                         */
 /*===========================================================================*/
 
-/** Define whether namespace is supported */
-#ifndef U_HAVE_NAMESPACE
-#define U_HAVE_NAMESPACE 1
-#endif
-
 /** Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 0
 

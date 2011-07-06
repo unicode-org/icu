@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,7 +28,7 @@
 
 // C++ API ----------------------------------------------------------------- ***
 
-static U_NAMESPACE_QUALIFIER Locale*  availableLocaleList = NULL;
+static icu::Locale*  availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
 
 U_CDECL_BEGIN

@@ -827,8 +827,8 @@ void UTS46Test::TestSomeCases() {
         }
         // UTF-8 if we have std::string
 #if U_HAVE_STD_STRING
-        U_STD_NSQ string input8, aT8, uT8, aN8, uN8;
-        StringByteSink<U_STD_NSQ string> aT8Sink(&aT8), uT8Sink(&uT8), aN8Sink(&aN8), uN8Sink(&uN8);
+        std::string input8, aT8, uT8, aN8, uN8;
+        StringByteSink<std::string> aT8Sink(&aT8), uT8Sink(&uT8), aN8Sink(&aN8), uN8Sink(&uN8);
         IDNAInfo aT8Info, uT8Info, aN8Info, uN8Info;
         input.toUTF8String(input8);
         trans->nameToASCII_UTF8(input8, aT8Sink, aT8Info, errorCode);

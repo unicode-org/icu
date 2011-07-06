@@ -37,13 +37,13 @@ static UHashtable *gOlsonToMeta = NULL;
 static UBool gOlsonToMetaInitialized = FALSE;
 
 // Available metazone IDs vector and table
-static U_NAMESPACE_QUALIFIER UVector *gMetaZoneIDs = NULL;
+static icu::UVector *gMetaZoneIDs = NULL;
 static UHashtable *gMetaZoneIDTable = NULL;
 static UBool gMetaZoneIDsInitialized = FALSE;
 
 // Country info vectors
-static U_NAMESPACE_QUALIFIER UVector *gSingleZoneCountries = NULL;
-static U_NAMESPACE_QUALIFIER UVector *gMultiZonesCountries = NULL;
+static icu::UVector *gSingleZoneCountries = NULL;
+static icu::UVector *gMultiZonesCountries = NULL;
 static UBool gCountryInfoVectorsInitialized = FALSE;
 
 U_CDECL_BEGIN
@@ -96,7 +96,7 @@ deleteUCharString(void *obj) {
  */
 static void U_CALLCONV
 deleteUVector(void *obj) {
-   delete (U_NAMESPACE_QUALIFIER UVector*) obj;
+   delete (icu::UVector*) obj;
 }
 
 /**
@@ -104,7 +104,7 @@ deleteUVector(void *obj) {
  */
 static void U_CALLCONV
 deleteOlsonToMetaMappingEntry(void *obj) {
-    U_NAMESPACE_QUALIFIER OlsonToMetaMappingEntry *entry = (U_NAMESPACE_QUALIFIER OlsonToMetaMappingEntry*)obj;
+    icu::OlsonToMetaMappingEntry *entry = (icu::OlsonToMetaMappingEntry*)obj;
     uprv_free(entry);
 }
 

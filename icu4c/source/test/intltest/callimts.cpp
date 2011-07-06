@@ -49,7 +49,7 @@ void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &
 
 // -------------------------------------
 void
-CalendarLimitTest::test(UDate millis, U_NAMESPACE_QUALIFIER Calendar* cal, U_NAMESPACE_QUALIFIER DateFormat* fmt)
+CalendarLimitTest::test(UDate millis, icu::Calendar* cal, icu::DateFormat* fmt)
 {
   static const UDate kDrift = 1e-10;
     UErrorCode exception = U_ZERO_ERROR;

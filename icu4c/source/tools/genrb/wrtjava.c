@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -27,7 +27,6 @@
 #include "unicode/ucnv.h"
 #include "genrb.h"
 #include "rle.h"
-#include "ucol_tok.h"
 #include "uhash.h"
 #include "uresimp.h"
 #include "unicode/ustring.h"
