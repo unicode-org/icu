@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -1837,7 +1837,6 @@
 #define SingleTableProcessor SingleTableProcessor_4_2
 #define SpoofData SpoofData_4_2
 #define SpoofImpl SpoofImpl_4_2
-#define SpoofImpl*, SpoofImpl*,_4_2
 #define StateTableProcessor StateTableProcessor_4_2
 #define StringCharacterIterator StringCharacterIterator_4_2
 #define StringEnumeration StringEnumeration_4_2
