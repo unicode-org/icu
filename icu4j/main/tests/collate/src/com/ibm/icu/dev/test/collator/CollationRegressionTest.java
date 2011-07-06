@@ -1135,6 +1135,15 @@ public class CollationRegressionTest extends TestFmwk {
         }
     }
     
+    // Fixing the infinite loop for surrogates
+    public void Test8484()
+    {
+        String s = "\u9FE1\uCEF3\u2798\uAAB6\uDA7C";
+        Collator coll = Collator.getInstance();
+        CollationKey collKey = coll.getCollationKey(s); 
+        logln("Pass: " + collKey.toString() + " generated OK.");
+    }
+    
     public  void TestBengaliSortKey() throws Exception {
         char rules[] = { 0x26, 0x9fa, 0x3c, 0x98c, 0x3c, 0x9e1, 0x3c, 0x98f, 0x3c, 0x990, 0x3c, 0x993, 
                 0x3c, 0x994, 0x3c, 0x9bc, 0x3c, 0x982, 0x3c, 0x983, 0x3c, 0x981, 0x3c, 0x9b0, 0x3c, 

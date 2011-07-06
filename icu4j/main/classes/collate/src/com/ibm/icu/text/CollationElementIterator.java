@@ -1690,10 +1690,19 @@ public final class CollationElementIterator
                 // Source string char was not in contraction table.
                 // Unless it is a discontiguous contraction, we are done
                 int miss = ch;
-                if(UTF16.isLeadSurrogate(ch)) { // in order to do the proper detection, we
-                    // need to see if we're dealing with a supplementary
-                    miss = UCharacterProperty.getRawSupplementary(ch, (char) nextChar());
-                  }
+                // ticket 8484 - porting changes from C for 6101
+                // We test whether the next two char are surrogate pairs.
+                // This test is done if the iterator is not in the end.
+                // If there is no surrogate pair, the iterator
+                // goes back one if needed. 
+                if(UTF16.isLeadSurrogate(ch) && !isEnd()) {
+                    char surrNextChar = (char)nextChar();
+                    if (UTF16.isTrailSurrogate(surrNextChar)) {
+                        miss = UCharacterProperty.getRawSupplementary(ch, surrNextChar);
+                    } else {
+                        previousChar();
+                    }
+                }
                 int sCC;
                 if (maxCC == 0 || (sCC = getCombiningClass(miss)) == 0
                     || sCC > maxCC || (allSame != 0 && sCC == maxCC) ||
