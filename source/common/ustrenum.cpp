@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -156,7 +156,7 @@ U_NAMESPACE_END
 
 // C wrapper --------------------------------------------------------------- ***
 
-#define THIS(en) ((U_NAMESPACE_QUALIFIER StringEnumeration*)(en->context))
+#define THIS(en) ((icu::StringEnumeration*)(en->context))
 
 U_CDECL_BEGIN
 
@@ -233,7 +233,7 @@ U_CDECL_END
  * delete it (regardless of error status).
  */
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openFromStringEnumeration(U_NAMESPACE_QUALIFIER StringEnumeration* adopted, UErrorCode* ec) { 
+uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec) { 
     UEnumeration* result = NULL;
     if (U_SUCCESS(*ec) && adopted != NULL) {
         result = (UEnumeration*) uprv_malloc(sizeof(UEnumeration));

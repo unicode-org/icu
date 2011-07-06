@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2009, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -24,7 +24,7 @@
  */
 U_CFUNC void
 uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
-                           U_NAMESPACE_QUALIFIER UnicodeString& result, UErrorCode& ec);
+                           icu::UnicodeString& result, UErrorCode& ec);
 
 /**
  * Attempt to parse the given string as a currency, either as a
@@ -48,8 +48,8 @@ uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
  */
 U_CFUNC void
 uprv_parseCurrency(const char* locale,
-                   const U_NAMESPACE_QUALIFIER UnicodeString& text,
-                   U_NAMESPACE_QUALIFIER ParsePosition& pos,
+                   const icu::UnicodeString& text,
+                   icu::ParsePosition& pos,
                    int8_t type,
                    UChar* result,
                    UErrorCode& ec);

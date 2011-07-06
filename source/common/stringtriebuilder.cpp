@@ -22,12 +22,12 @@ U_CDECL_BEGIN
 
 static int32_t U_CALLCONV
 hashStringTrieNode(const UHashTok key) {
-    return U_NAMESPACE_QUALIFIER StringTrieBuilder::hashNode(key.pointer);
+    return icu::StringTrieBuilder::hashNode(key.pointer);
 }
 
 static UBool U_CALLCONV
 equalStringTrieNodes(const UHashTok key1, const UHashTok key2) {
-    return U_NAMESPACE_QUALIFIER StringTrieBuilder::equalNodes(key1.pointer, key2.pointer);
+    return icu::StringTrieBuilder::equalNodes(key1.pointer, key2.pointer);
 }
 
 U_CDECL_END

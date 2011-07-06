@@ -76,9 +76,9 @@ U_CFUNC int32_t locale_getKeywords(const char *localeID,
             UBool valuesToo,
             UErrorCode *status);
 
-static U_NAMESPACE_QUALIFIER Locale *gLocaleCache         = NULL;
-static U_NAMESPACE_QUALIFIER Locale *gDefaultLocale       = NULL;
-static UHashtable                   *gDefaultLocalesHashT = NULL;
+static icu::Locale *gLocaleCache = NULL;
+static icu::Locale *gDefaultLocale = NULL;
+static UHashtable *gDefaultLocalesHashT = NULL;
 
 U_CDECL_BEGIN
 //
@@ -86,7 +86,7 @@ U_CDECL_BEGIN
 //
 static void U_CALLCONV
 deleteLocale(void *obj) {
-    delete (U_NAMESPACE_QUALIFIER Locale *) obj;
+    delete (icu::Locale *) obj;
 }
 
 static UBool U_CALLCONV locale_cleanup(void)

@@ -116,10 +116,10 @@ static const UChar         VVVV_UC_STR[] = {0x56, 0x56, 0x56, 0x56, 0x00}; /* "V
 static const int32_t       GMT_ID_LENGTH = 3;
 static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 
-static UMTX                             LOCK;
-static UMTX                             TZSET_LOCK;
-static U_NAMESPACE_QUALIFIER TimeZone*  DEFAULT_ZONE = NULL;
-static U_NAMESPACE_QUALIFIER TimeZone*  _GMT = NULL; // cf. TimeZone::GMT
+static UMTX LOCK;
+static UMTX TZSET_LOCK;
+static icu::TimeZone* DEFAULT_ZONE = NULL;
+static icu::TimeZone* _GMT = NULL; // cf. TimeZone::GMT
 
 static char TZDATA_VERSION[16];
 static UBool TZDataVersionInitialized = FALSE;

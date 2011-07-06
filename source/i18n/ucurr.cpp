@@ -252,7 +252,7 @@ struct CReg;
 static UMTX gCRegLock = 0;
 static CReg* gCRegHead = 0;
 
-struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
+struct CReg : public icu::UMemory {
     CReg *next;
     UChar iso[ISO_COUNTRY_CODE_LENGTH+1];
     char  id[ULOC_FULLNAME_CAPACITY];
@@ -1268,8 +1268,8 @@ currency_cache_cleanup(void) {
 
 U_CFUNC void
 uprv_parseCurrency(const char* locale,
-                   const U_NAMESPACE_QUALIFIER UnicodeString& text,
-                   U_NAMESPACE_QUALIFIER ParsePosition& pos,
+                   const icu::UnicodeString& text,
+                   icu::ParsePosition& pos,
                    int8_t type,
                    UChar* result,
                    UErrorCode& ec)
@@ -1421,7 +1421,7 @@ uprv_parseCurrency(const char* locale,
  */
 U_CFUNC void
 uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
-                           U_NAMESPACE_QUALIFIER UnicodeString& result, UErrorCode& ec)
+                           icu::UnicodeString& result, UErrorCode& ec)
 {
     U_NAMESPACE_USE
 

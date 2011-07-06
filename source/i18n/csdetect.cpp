@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2009, International Business Machines
+ *   Copyright (C) 2005-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -33,7 +33,7 @@
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 U_CDECL_BEGIN
-static U_NAMESPACE_QUALIFIER CharsetRecognizer **fCSRecognizers = NULL;
+static icu::CharsetRecognizer **fCSRecognizers = NULL;
 
 static int32_t fCSRecognizers_size = 0;
 

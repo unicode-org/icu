@@ -140,11 +140,6 @@
 /** @{ Compiler and environment features                                     */
 /*===========================================================================*/
 
-/* Define whether namespace is supported */
-#ifndef U_HAVE_NAMESPACE
-#define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE@
-#endif
-
 /* Determines the endianness of the platform
    It's done this way in case multiple architectures are being built at once.
    For example, Darwin supports fat binaries, which can be both PPC and x86 based. */

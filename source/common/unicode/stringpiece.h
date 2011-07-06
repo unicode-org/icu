@@ -1,4 +1,4 @@
-// Copyright (C) 2011, International Business Machines
+// Copyright (C) 2009-2011, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2001 and onwards Google Inc.
@@ -71,7 +71,7 @@ class U_COMMON_API StringPiece : public UMemory {
    * Constructs from a std::string.
    * @stable ICU 4.2
    */
-  StringPiece(const U_STD_NSQ string& str)
+  StringPiece(const std::string& str)
     : ptr_(str.data()), length_(static_cast<int32_t>(str.size())) { }
 #endif
   /**

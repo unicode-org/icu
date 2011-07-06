@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.cpp
@@ -162,8 +162,6 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(Test_UNICODE_STRING_SIMPLE);
     TESTCASE_AUTO(Test_UTF8_COUNT_TRAIL_BYTES);
     TESTCASE_AUTO(TestSTLCompatibility);
-    TESTCASE_AUTO(TestStdNamespaceQualifier);
-    TESTCASE_AUTO(TestUsingStdNamespace);
     TESTCASE_AUTO(TestStringPiece);
     TESTCASE_AUTO(TestStringPieceComparisons);
     TESTCASE_AUTO(TestByteSink);
@@ -171,36 +169,6 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestStringByteSink);
     TESTCASE_AUTO(TestCharString);
     TESTCASE_AUTO_END;
-}
-
-// Syntax check for the correct namespace qualifier for the standard string class.
-void
-StringTest::TestStdNamespaceQualifier() {
-#if U_HAVE_STD_STRING
-    U_STD_NSQ string s="abc xyz";
-    U_STD_NSQ string t="abc";
-    t.append(" ");
-    t.append("xyz");
-    if(s!=t) {
-        errln("standard string concatenation error: %s != %s", s.c_str(), t.c_str());
-    }
-#endif
-}
-
-void
-StringTest::TestUsingStdNamespace() {
-#if U_HAVE_STD_STRING
-    // Now test that "using namespace std;" is defined correctly.
-    U_STD_NS_USE
-
-    string s="abc xyz";
-    string t="abc";
-    t.append(" ");
-    t.append("xyz");
-    if(s!=t) {
-        errln("standard string concatenation error: %s != %s", s.c_str(), t.c_str());
-    }
-#endif
 }
 
 void
@@ -229,7 +197,7 @@ StringTest::TestStringPiece() {
     }
 #if U_HAVE_STD_STRING
     // Construct from std::string.
-    U_STD_NSQ string uvwxyz_string("uvwxyz");
+    std::string uvwxyz_string("uvwxyz");
     StringPiece uvwxyz(uvwxyz_string);
     if(uvwxyz.empty() || uvwxyz.data()!=uvwxyz_string.data() || uvwxyz.length()!=6 || uvwxyz.size()!=6) {
         errln("StringPiece(uvwxyz_string) failed");
@@ -481,8 +449,8 @@ StringTest::TestStringByteSink() {
 #if U_HAVE_STD_STRING
     // Not much to test because only the constructor and Append()
     // are implemented, and trivially so.
-    U_STD_NSQ string result("abc");  // std::string
-    StringByteSink<U_STD_NSQ string> sink(&result);
+    std::string result("abc");  // std::string
+    StringByteSink<std::string> sink(&result);
     sink.Append("def", 3);
     if(result != "abcdef") {
         errln("StringByteSink did not Append() as expected");

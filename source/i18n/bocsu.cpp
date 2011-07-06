@@ -95,7 +95,7 @@ u_writeDiff(int32_t diff, uint8_t *p) {
  * NFD text - there are never Hangul characters included.
  */
 U_CFUNC void
-u_writeIdenticalLevelRun(const UChar *s, int32_t length, U_NAMESPACE_QUALIFIER ByteSink &sink) {
+u_writeIdenticalLevelRun(const UChar *s, int32_t length, icu::ByteSink &sink) {
     char scratch[64];
     int32_t capacity;
 

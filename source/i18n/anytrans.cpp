@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2008, International Business Machines Corporation
+* Copyright (c) 2002-2011, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  */
 static void U_CALLCONV
 _deleteTransliterator(void *obj) {
-    delete (U_NAMESPACE_QUALIFIER Transliterator*) obj;    
+    delete (icu::Transliterator*) obj;    
 }
 U_CDECL_END
 

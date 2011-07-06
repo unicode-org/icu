@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation
+* Copyright (C) 2008-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   file name:  uspoof.h
@@ -621,7 +621,7 @@ uspoof_checkUTF8(const USpoofChecker *sc,
  */
 U_STABLE int32_t U_EXPORT2
 uspoof_checkUnicodeString(const USpoofChecker *sc,
-                          const U_NAMESPACE_QUALIFIER UnicodeString &text, 
+                          const icu::UnicodeString &text, 
                           int32_t *position,
                           UErrorCode *status);
 
@@ -733,8 +733,8 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
  */
 U_STABLE int32_t U_EXPORT2
 uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
-                                  const U_NAMESPACE_QUALIFIER UnicodeString &s1,
-                                  const U_NAMESPACE_QUALIFIER UnicodeString &s2,
+                                  const icu::UnicodeString &s1,
+                                  const icu::UnicodeString &s2,
                                   UErrorCode *status);
 #endif
 

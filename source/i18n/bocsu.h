@@ -152,7 +152,7 @@ U_NAMESPACE_END
 }
 
 U_CFUNC void
-u_writeIdenticalLevelRun(const UChar *s, int32_t length, U_NAMESPACE_QUALIFIER ByteSink &sink);
+u_writeIdenticalLevelRun(const UChar *s, int32_t length, icu::ByteSink &sink);
 
 U_CFUNC int32_t
 u_writeIdenticalLevelRunTwoChars(UChar32 first, UChar32 second, uint8_t *p);

@@ -133,12 +133,12 @@ static const UChar * const DATE_STYLE_IDS[] = {
     NULL,
 };
 
-static const U_NAMESPACE_QUALIFIER DateFormat::EStyle DATE_STYLES[] = {
-    U_NAMESPACE_QUALIFIER DateFormat::kDefault,
-    U_NAMESPACE_QUALIFIER DateFormat::kShort,
-    U_NAMESPACE_QUALIFIER DateFormat::kMedium,
-    U_NAMESPACE_QUALIFIER DateFormat::kLong,
-    U_NAMESPACE_QUALIFIER DateFormat::kFull,
+static const icu::DateFormat::EStyle DATE_STYLES[] = {
+    icu::DateFormat::kDefault,
+    icu::DateFormat::kShort,
+    icu::DateFormat::kMedium,
+    icu::DateFormat::kLong,
+    icu::DateFormat::kFull,
 };
 
 static const int32_t DEFAULT_INITIAL_CAPACITY = 10;
@@ -154,7 +154,7 @@ static const UChar OTHER_STRING[] = {
 U_CDECL_BEGIN
 static UBool U_CALLCONV equalFormatsForHash(const UHashTok key1,
                                             const UHashTok key2) {
-    return U_NAMESPACE_QUALIFIER MessageFormat::equalFormats(key1.pointer, key2.pointer);
+    return icu::MessageFormat::equalFormats(key1.pointer, key2.pointer);
 }
 
 U_CDECL_END

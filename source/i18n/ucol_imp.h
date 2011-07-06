@@ -373,12 +373,12 @@ typedef struct UCollationPCE UCollationPCE;
 
 U_NAMESPACE_END
 
-struct UCollationElements : public U_NAMESPACE_QUALIFIER UMemory
+struct UCollationElements : public icu::UMemory
 {
   /**
   * Struct wrapper for source data
   */
-        U_NAMESPACE_QUALIFIER collIterate iteratordata_;
+        icu::collIterate iteratordata_;
   /**
   * Indicates if this data has been reset.
   */
@@ -391,7 +391,7 @@ struct UCollationElements : public U_NAMESPACE_QUALIFIER UMemory
 /**
  * Data for getNextProcessed, getPreviousProcessed.
  */
-        U_NAMESPACE_QUALIFIER UCollationPCE     *pce;
+        icu::UCollationPCE     *pce;
 };
 
 #else
@@ -567,7 +567,7 @@ typedef void U_CALLCONV
 SortKeyGenerator(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        U_NAMESPACE_QUALIFIER SortKeyByteSink &result,
+        icu::SortKeyByteSink &result,
         UErrorCode *status);
 
 /* worker function for generating sortkeys */
@@ -576,7 +576,7 @@ void U_CALLCONV
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        U_NAMESPACE_QUALIFIER SortKeyByteSink &result,
+        icu::SortKeyByteSink &result,
         UErrorCode *status);
 
 U_CFUNC
@@ -584,7 +584,7 @@ void U_CALLCONV
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
-        U_NAMESPACE_QUALIFIER SortKeyByteSink &result,
+        icu::SortKeyByteSink &result,
         UErrorCode *status);
 
 #else
