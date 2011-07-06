@@ -41,7 +41,7 @@ U_NAMESPACE_USE
 
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
-typedef struct U_NAMESPACE_QUALIFIER collIterate collIterator;
+typedef struct icu::collIterate collIterator;
 
 struct RCEI
 {

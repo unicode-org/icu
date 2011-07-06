@@ -3,8 +3,8 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2006 International Business Machines Corporation   *
-*   and others. All rights reserved.                                      *
+*   Copyright (C) 2002-2011 International Business Machines Corporation
+*   and others. All rights reserved.
 ***************************************************************************
 */
 
@@ -29,7 +29,7 @@
 //
 U_CDECL_BEGIN
 static void U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
-    U_NAMESPACE_QUALIFIER RBBISymbolTableEntry *px = (U_NAMESPACE_QUALIFIER RBBISymbolTableEntry *)p;
+    icu::RBBISymbolTableEntry *px = (icu::RBBISymbolTableEntry *)p;
     delete px;
 }
 U_CDECL_END

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2010, International Business Machines
+ *   Copyright (C) 1999-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -93,7 +93,7 @@ static UMTX registryMutex = 0;
 /**
  * System transliterator registry; non-null when initialized.
  */
-static U_NAMESPACE_QUALIFIER TransliteratorRegistry* registry = 0;
+static icu::TransliteratorRegistry* registry = 0;
 
 // Macro to check/initialize the registry. ONLY USE WITHIN
 // MUTEX. Avoids function call when registry is initialized.

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.h
@@ -38,8 +38,6 @@ private:
     void Test_UNICODE_STRING();
     void Test_UNICODE_STRING_SIMPLE();
     void Test_UTF8_COUNT_TRAIL_BYTES();
-    void TestStdNamespaceQualifier();
-    void TestUsingStdNamespace();
     void TestStringPiece();
     void TestStringPieceComparisons();
     void TestByteSink();

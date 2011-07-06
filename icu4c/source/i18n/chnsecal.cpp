@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation
+ * Copyright (C) 2007-2011, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -49,9 +49,9 @@ static void debug_chnsecal_msg(const char *pat, ...)
 
 // --- The cache --
 static UMTX astroLock = 0;  // pod bay door lock
-static U_NAMESPACE_QUALIFIER CalendarAstronomer *gChineseCalendarAstro = NULL;
-static U_NAMESPACE_QUALIFIER CalendarCache *gChineseCalendarWinterSolsticeCache = NULL;
-static U_NAMESPACE_QUALIFIER CalendarCache *gChineseCalendarNewYearCache = NULL;
+static icu::CalendarAstronomer *gChineseCalendarAstro = NULL;
+static icu::CalendarCache *gChineseCalendarWinterSolsticeCache = NULL;
+static icu::CalendarCache *gChineseCalendarNewYearCache = NULL;
 
 /**
  * The start year of the Chinese calendar, the 61st year of the reign

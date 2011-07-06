@@ -52,9 +52,9 @@
 #include "uresimp.h"
 #include "ucln_in.h"
 
-static U_NAMESPACE_QUALIFIER Locale* availableLocaleList = NULL;
+static icu::Locale* availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
-static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
+static icu::ICULocaleService* gService = NULL;
 
 /**
  * Release all static memory held by collator.

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2008, International Business Machines Corporation
+* Copyright (C) 2003-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -131,7 +131,7 @@ static const int16_t  LEAP_MONTH_START[][3] = {
     {  383,        384,        385  },          // Elul
 };
 
-static U_NAMESPACE_QUALIFIER CalendarCache *gCache =  NULL;
+static icu::CalendarCache *gCache =  NULL;
 
 U_CDECL_BEGIN
 static UBool calendar_hebrew_cleanup(void) {

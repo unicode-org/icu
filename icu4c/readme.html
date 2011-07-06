@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 4.8.1</title>
+    <title>ReadMe for ICU 49</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2011 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,7 +16,7 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.8.1 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 49 ReadMe</h1>
 
     <p>Last updated: 2011-June-24<br />
      Copyright &copy; 1997-2011 International Business Machines Corporation and
@@ -224,6 +224,11 @@
     with ID "GMT" (offset 0 and no daylight saving time). In ICU 4.8, the method uses "Etc/Unknown" as the
     time zone ID (but still offset 0 and no daylight saving time) for the case. Existing software checking
     the returned time zone ID to validate the input ID may need to be updated to support the new behavior.</p>
+
+    <h3>C++ namespace support required</h3>
+    <p>ICU4C 49 requires C++ namespace support.
+    As a result, for example, rather than <code>U_NAMESPACE_QUALIFIER UnicodeString</code>
+    you can now simply write <code>icu::UnicodeString</code>.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>

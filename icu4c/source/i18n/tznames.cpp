@@ -77,8 +77,8 @@ static UBool U_CALLCONV timeZoneNames_cleanup(void)
  */
 static void U_CALLCONV
 deleteTimeZoneNamesCacheEntry(void *obj) {
-    U_NAMESPACE_QUALIFIER TimeZoneNamesCacheEntry *entry = (U_NAMESPACE_QUALIFIER TimeZoneNamesCacheEntry*)obj;
-    delete (U_NAMESPACE_QUALIFIER TimeZoneNamesImpl*) entry->names;
+    icu::TimeZoneNamesCacheEntry *entry = (icu::TimeZoneNamesCacheEntry*)obj;
+    delete (icu::TimeZoneNamesImpl*) entry->names;
     uprv_free(entry);
 }
 U_CDECL_END

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2008, International Business Machines
+ *   Copyright (C) 1999-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -21,7 +21,7 @@
 
 U_CDECL_BEGIN
 static void U_CALLCONV _deleteRule(void *rule) {
-    delete (U_NAMESPACE_QUALIFIER TransliterationRule *)rule;
+    delete (icu::TransliterationRule *)rule;
 }
 U_CDECL_END
 
@@ -133,10 +133,10 @@ inline void _debugOut(const char* msg, TransliterationRule* rule,
 
 // Fill the precontext and postcontext with the patterns of the rules
 // that are masking one another.
-static void maskingError(const U_NAMESPACE_QUALIFIER TransliterationRule& rule1,
-                         const U_NAMESPACE_QUALIFIER TransliterationRule& rule2,
+static void maskingError(const icu::TransliterationRule& rule1,
+                         const icu::TransliterationRule& rule2,
                          UParseError& parseError) {
-    U_NAMESPACE_QUALIFIER UnicodeString r;
+    icu::UnicodeString r;
     int32_t len;
 
     parseError.line = parseError.offset = -1;

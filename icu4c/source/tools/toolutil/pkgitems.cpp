@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2010, International Business Machines
+*   Copyright (C) 2003-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -390,7 +390,7 @@ ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
         }
     }
 
-    U_NAMESPACE_QUALIFIER NativeItem nativePool;
+    icu::NativeItem nativePool;
 
     if(resData.usesPoolBundle) {
         char poolName[200];

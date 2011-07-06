@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -257,7 +257,7 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
  * @stable ICU 3.4
  */
 U_STABLE UText * U_EXPORT2
-utext_openUnicodeString(UText *ut, U_NAMESPACE_QUALIFIER UnicodeString *s, UErrorCode *status);
+utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
 
 
 /**
@@ -273,7 +273,7 @@ utext_openUnicodeString(UText *ut, U_NAMESPACE_QUALIFIER UnicodeString *s, UErro
  * @stable ICU 3.4
  */
 U_STABLE UText * U_EXPORT2
-utext_openConstUnicodeString(UText *ut, const U_NAMESPACE_QUALIFIER UnicodeString *s, UErrorCode *status);
+utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode *status);
 
 
 /**
@@ -289,7 +289,7 @@ utext_openConstUnicodeString(UText *ut, const U_NAMESPACE_QUALIFIER UnicodeStrin
  * @stable ICU 3.4
  */
 U_STABLE UText * U_EXPORT2
-utext_openReplaceable(UText *ut, U_NAMESPACE_QUALIFIER Replaceable *rep, UErrorCode *status);
+utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
 
 /**
  * Open a  UText implementation over an ICU CharacterIterator.
@@ -304,7 +304,7 @@ utext_openReplaceable(UText *ut, U_NAMESPACE_QUALIFIER Replaceable *rep, UErrorC
  * @stable ICU 3.4
  */
 U_STABLE UText * U_EXPORT2
-utext_openCharacterIterator(UText *ut, U_NAMESPACE_QUALIFIER CharacterIterator *ic, UErrorCode *status);
+utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ic, UErrorCode *status);
 
 #endif
 

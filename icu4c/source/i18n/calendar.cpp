@@ -52,7 +52,7 @@
 #include "ustrenum.h"
 
 #if !UCONFIG_NO_SERVICE
-static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
+static icu::ICULocaleService* gService = NULL;
 #endif
 
 // INTERNAL - for cleanup

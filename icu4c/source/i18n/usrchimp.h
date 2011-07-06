@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2010 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2011 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  08/13/2001   synwee      Creation.
@@ -61,7 +61,7 @@ struct UStringSearch {
     struct USearch            *search;
     struct UPattern            pattern;
     const  UCollator          *collator;
-    const  U_NAMESPACE_QUALIFIER Normalizer2 *nfd;
+    const  icu::Normalizer2   *nfd;
     // positions within the collation element iterator is used to determine
     // if we are at the start of the text.
            UCollationElements *textIter;

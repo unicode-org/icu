@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008-2009, International Business Machines
+ *   Copyright (C) 2008-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -13,10 +13,10 @@
 
 U_CAPI int U_EXPORT2
 writePackageDatFile(const char *outFilename, const char *outComment,
-                    const char *sourcePath, const char *addList, U_NAMESPACE_QUALIFIER Package *pkg,
+                    const char *sourcePath, const char *addList, icu::Package *pkg,
                     char outType);
 
-U_CAPI U_NAMESPACE_QUALIFIER Package * U_EXPORT2
+U_CAPI icu::Package * U_EXPORT2
 readList(const char *filesPath, const char *listname, UBool readContents);
 
 #endif

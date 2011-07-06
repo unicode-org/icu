@@ -52,8 +52,8 @@ static void debug_islamcal_msg(const char *pat, ...)
 // --- The cache --
 // cache of months
 static UMTX astroLock = 0;  // pod bay door lock
-static U_NAMESPACE_QUALIFIER CalendarCache *gMonthCache = NULL;
-static U_NAMESPACE_QUALIFIER CalendarAstronomer *gIslamicCalendarAstro = NULL;
+static icu::CalendarCache *gMonthCache = NULL;
+static icu::CalendarAstronomer *gIslamicCalendarAstro = NULL;
 
 U_CDECL_BEGIN
 static UBool calendar_islamic_cleanup(void) {
