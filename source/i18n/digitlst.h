@@ -148,7 +148,7 @@ public:
     int32_t  compare(const DigitList& other);
 
 
-    inline UBool operator!=(const DigitList& other) const { return !operator==(other); };
+    inline UBool operator!=(const DigitList& other) const { return !operator==(other); }
 
     /**
      * Clears out the digits.
@@ -279,9 +279,9 @@ public:
     /** Test for a Nan
      * @return  TRUE if the number is a NaN
      */
-    UBool isNaN(void) const {return decNumberIsNaN(fDecNumber);};
+    UBool isNaN(void) const {return decNumberIsNaN(fDecNumber);}
 
-    UBool isInfinite() const {return decNumberIsInfinite(fDecNumber);};
+    UBool isInfinite() const {return decNumberIsInfinite(fDecNumber);}
 
     /**  Reduce, or normalize.  Removes trailing zeroes, adjusts exponent appropriately. */
     void     reduce();
@@ -290,10 +290,10 @@ public:
     void     trim();
 
     /** Set to zero */
-    void     setToZero() {uprv_decNumberZero(fDecNumber);};
+    void     setToZero() {uprv_decNumberZero(fDecNumber);}
 
     /** get the number of digits in the decimal number */
-    int32_t  digits() const {return fDecNumber->digits;};
+    int32_t  digits() const {return fDecNumber->digits;}
 
     /**
      * Round the number to the given number of digits.
@@ -310,7 +310,7 @@ public:
      */
     void  ensureCapacity(int32_t  requestedSize, UErrorCode &status); 
 
-    UBool    isPositive(void) const { return decNumberIsNegative(fDecNumber) == 0;};
+    UBool    isPositive(void) const { return decNumberIsNegative(fDecNumber) == 0;}
     void     setPositive(UBool s); 
 
     void     setDecimalAt(int32_t d);

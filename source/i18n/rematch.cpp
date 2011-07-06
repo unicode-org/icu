@@ -378,13 +378,13 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
                     // TODO:  Report errors for mal-formed \u escapes?
                     //        As this is, the original sequence is output, which may be OK.
                     if (context.lastOffset == offset) {
-                        UTEXT_PREVIOUS32(replacement);
+                        (void)UTEXT_PREVIOUS32(replacement);
                     } else if (context.lastOffset != offset-1) {
                         utext_moveIndex32(replacement, offset - context.lastOffset - 1);
                     }
                 }
             } else {
-                UTEXT_NEXT32(replacement);
+                (void)UTEXT_NEXT32(replacement);
                 // Plain backslash escape.  Just put out the escaped character.
                 if (U_IS_BMP(c)) {
                     UChar c16 = (UChar)c;
@@ -427,7 +427,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
                 if (u_isdigit(digitC) == FALSE) {
                     break;
                 }
-                UTEXT_NEXT32(replacement);
+                (void)UTEXT_NEXT32(replacement);
                 groupNum=groupNum*10 + u_charDigitValue(digitC);
                 numDigits++;
                 if (numDigits >= fPattern->fMaxCaptureDigits) {
@@ -616,7 +616,7 @@ UBool RegexMatcher::find() {
                 return FALSE;
             }
             UTEXT_SETNATIVEINDEX(fInputText, startPos);
-            UTEXT_NEXT32(fInputText);
+            (void)UTEXT_NEXT32(fInputText);
             startPos = UTEXT_GETNATIVEINDEX(fInputText);
         }
     } else {
@@ -668,7 +668,7 @@ UBool RegexMatcher::find() {
                 return FALSE;
             }
             UTEXT_SETNATIVEINDEX(fInputText, startPos);
-            UTEXT_NEXT32(fInputText);
+            (void)UTEXT_NEXT32(fInputText);
             startPos = UTEXT_GETNATIVEINDEX(fInputText);
             // Note that it's perfectly OK for a pattern to have a zero-length
             //   match at the end of a string, so we must make sure that the loop
@@ -810,7 +810,7 @@ UBool RegexMatcher::find() {
                     if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
                         ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029 )) {
                             if (c == 0x0d && startPos < fActiveLimit && UTEXT_CURRENT32(fInputText) == 0x0a) {
-                                UTEXT_NEXT32(fInputText);
+                                (void)UTEXT_NEXT32(fInputText);
                                 startPos = UTEXT_GETNATIVEINDEX(fInputText);
                             }
                             MatchAt(startPos, FALSE, fDeferredStatus);
@@ -3023,7 +3023,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                 if (UTEXT_GETNATIVEINDEX(fInputText) >= fAnchorLimit) {
                     if ((c>=0x0a && c<=0x0d) || c==0x85 || c==0x2028 || c==0x2029) {
                         // If not in the middle of a CR/LF sequence
-                        if ( !(c==0x0a && fp->fInputIdx>fAnchorStart && (UTEXT_PREVIOUS32(fInputText), UTEXT_PREVIOUS32(fInputText))==0x0d)) {
+                      if ( !(c==0x0a && fp->fInputIdx>fAnchorStart && ((void)UTEXT_PREVIOUS32(fInputText), UTEXT_PREVIOUS32(fInputText))==0x0d)) {
                             // At new-line at end of input. Success
                             fHitEnd = TRUE;
                             fRequireEnd = TRUE;
@@ -3250,7 +3250,7 @@ GC_L:
                 if (sets[URX_GC_LV]->contains(c))      goto GC_V;
                 if (sets[URX_GC_LVT]->contains(c))     goto GC_T;
                 if (sets[URX_GC_V]->contains(c))       goto GC_V;
-                UTEXT_PREVIOUS32(fInputText);
+                (void)UTEXT_PREVIOUS32(fInputText);
                 fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 goto GC_Extend;
 
@@ -3260,7 +3260,7 @@ GC_V:
                 fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 if (sets[URX_GC_V]->contains(c))       goto GC_V;
                 if (sets[URX_GC_T]->contains(c))       goto GC_T;
-                UTEXT_PREVIOUS32(fInputText);
+                (void)UTEXT_PREVIOUS32(fInputText);
                 fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 goto GC_Extend;
 
@@ -3269,7 +3269,7 @@ GC_T:
                 c = UTEXT_NEXT32(fInputText);
                 fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 if (sets[URX_GC_T]->contains(c))       goto GC_T;
-                UTEXT_PREVIOUS32(fInputText);
+                (void)UTEXT_PREVIOUS32(fInputText);
                 fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 goto GC_Extend;
 
@@ -3283,7 +3283,7 @@ GC_Extend:
                     if (sets[URX_GC_EXTEND]->contains(c) == FALSE) {
                         break;
                     }
-                    UTEXT_NEXT32(fInputText);
+                    (void)UTEXT_NEXT32(fInputText);
                     fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 }
                 goto GC_Done;
@@ -3581,7 +3581,7 @@ GC_Done:
                     // In the case of a CR/LF, we need to advance over both.
                     UChar32 nextc = UTEXT_CURRENT32(fInputText);
                     if (nextc == 0x0a) {
-                        UTEXT_NEXT32(fInputText);
+                        (void)UTEXT_NEXT32(fInputText);
                         fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                     }
                 }
@@ -4098,7 +4098,7 @@ GC_Done:
                         (*lbStartIdx)--;
                     } else {
                         UTEXT_SETNATIVEINDEX(fInputText, *lbStartIdx);
-                        UTEXT_PREVIOUS32(fInputText);
+                        (void)UTEXT_PREVIOUS32(fInputText);
                         *lbStartIdx = UTEXT_GETNATIVEINDEX(fInputText);
                     }
                 }
@@ -4174,7 +4174,7 @@ GC_Done:
                         (*lbStartIdx)--;
                     } else {
                         UTEXT_SETNATIVEINDEX(fInputText, *lbStartIdx);
-                        UTEXT_PREVIOUS32(fInputText);
+                        (void)UTEXT_PREVIOUS32(fInputText);
                         *lbStartIdx = UTEXT_GETNATIVEINDEX(fInputText);
                     }
                 }
