@@ -422,10 +422,10 @@ public class PluralFormat extends UFormat {
                             // We have already seen an "other" sub-message.
                             // Do not match "other" again.
                             haveKeywordMatch=true;
-                            continue;
+                            // Skip keyword matching but do getLimitPartIndex().
                         }
                     }
-                    if(pattern.partSubstringMatches(part, keyword)) {
+                    if(!haveKeywordMatch && pattern.partSubstringMatches(part, keyword)) {
                         // keyword matches
                         msgStart=partIndex;
                         // Do not match this keyword again.
