@@ -82,9 +82,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(42,TestISOEra);
         TESTCASE(43,TestFormalChineseDate);
         TESTCASE(44,TestNumberAsStringParsing);
+        TESTCASE(45,TestStandAloneGMTParse);
         /*
-        TESTCASE(45,TestRelativeError);
-        TESTCASE(46,TestRelativeOther);
+        TESTCASE(46,TestRelativeError);
+        TESTCASE(47,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3577,8 +3578,27 @@ void DateFormatTest::TestFormalChineseDate() {
         dataerrln((UnicodeString)"FAIL: parsed -> " + parsedres + " expected -> " + expres); 
         delete usf;
     }
-    delete sdf; 	 
-} 
+    delete sdf;
+}
+
+// Test case for #8675
+// Incorrect parse offset with stand alone GMT string on 2nd or later iteration.
+void DateFormatTest::TestStandAloneGMTParse() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat *sdf = new SimpleDateFormat("ZZZZ", Locale(""), status);
+    failure(status, "new SimpleDateFormat");
+
+    UnicodeString inText("GMT$$$");
+    for (int32_t i = 0; i < 10; i++) {
+        ParsePosition pos(0);
+        sdf->parse(inText, pos);
+        if (pos.getIndex() != 3) {
+            errln((UnicodeString)"FAIL: Incorrect output parse position: actual=" + pos.getIndex() + " expected=3");
+        }
+    }
+
+    delete sdf;
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
