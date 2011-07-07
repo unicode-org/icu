@@ -3973,15 +3973,20 @@ UnicodeString::startsWith(const UnicodeString& srcText,
 { return doCompare(0, srcLength, srcText, srcStart, srcLength) == 0; }
 
 inline UBool
-UnicodeString::startsWith(const UChar *srcChars,
-              int32_t srcLength) const
-{ return doCompare(0, srcLength, srcChars, 0, srcLength) == 0; }
+UnicodeString::startsWith(const UChar *srcChars, int32_t srcLength) const {
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars);
+  }
+  return doCompare(0, srcLength, srcChars, 0, srcLength) == 0;
+}
 
 inline UBool
-UnicodeString::startsWith(const UChar *srcChars,
-              int32_t srcStart,
-              int32_t srcLength) const
-{ return doCompare(0, srcLength, srcChars, srcStart, srcLength) == 0;}
+UnicodeString::startsWith(const UChar *srcChars, int32_t srcStart, int32_t srcLength) const {
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars);
+  }
+  return doCompare(0, srcLength, srcChars, srcStart, srcLength) == 0;
+}
 
 inline UBool
 UnicodeString::endsWith(const UnicodeString& text) const

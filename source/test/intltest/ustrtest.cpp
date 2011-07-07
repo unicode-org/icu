@@ -62,6 +62,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 20: name = "TestAppendable"; if (exec) TestAppendable(); break;
         case 21: name = "TestUnicodeStringImplementsAppendable"; if (exec) TestUnicodeStringImplementsAppendable(); break;
         case 22: name = "TestSizeofUnicodeString"; if (exec) TestSizeofUnicodeString(); break;
+        case 23: name = "TestStartsWithAndEndsWithNulTerminated"; if (exec) TestStartsWithAndEndsWithNulTerminated(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -964,6 +965,17 @@ UnicodeStringTest::TestPrefixAndSuffix()
     if (test4.startsWith(test3)) {
         errln("startsWith(test3) failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test4 + "\".");
     }
+}
+
+void
+UnicodeStringTest::TestStartsWithAndEndsWithNulTerminated() {
+    UnicodeString test("abcde");
+    const UChar ab[] = { 0x61, 0x62, 0 };
+    const UChar de[] = { 0x64, 0x65, 0 };
+    assertTrue("abcde.startsWith(ab, -1)", test.startsWith(ab, -1));
+    assertTrue("abcde.startsWith(ab, 0, -1)", test.startsWith(ab, 0, -1));
+    assertTrue("abcde.endsWith(de, -1)", test.endsWith(de, -1));
+    assertTrue("abcde.endsWith(de, 0, -1)", test.endsWith(de, 0, -1));
 }
 
 void
