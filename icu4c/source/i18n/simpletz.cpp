@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2010, International Business Machines Corporation and
+ * Copyright (C) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -1103,7 +1103,7 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         	return;
         }
         // For now, use ID + "(DST)" as the name
-        dstRule = new AnnualTimeZoneRule(tzid+DST_STR, getRawOffset(), getDSTSavings(),
+        dstRule = new AnnualTimeZoneRule(tzid+UnicodeString(DST_STR), getRawOffset(), getDSTSavings(),
             dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
         
         // Check for Null pointer
@@ -1141,7 +1141,7 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         	return;
         }
         // For now, use ID + "(STD)" as the name
-        stdRule = new AnnualTimeZoneRule(tzid+STD_STR, getRawOffset(), 0,
+        stdRule = new AnnualTimeZoneRule(tzid+UnicodeString(STD_STR), getRawOffset(), 0,
             dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
         
         //Check for Null pointer
@@ -1156,10 +1156,10 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
 
         // Create a TimeZoneRule for initial time
         if (firstStdStart < firstDstStart) {
-            initialRule = new InitialTimeZoneRule(tzid+DST_STR, getRawOffset(), dstRule->getDSTSavings());
+            initialRule = new InitialTimeZoneRule(tzid+UnicodeString(DST_STR), getRawOffset(), dstRule->getDSTSavings());
             firstTransition = new TimeZoneTransition(firstStdStart, *initialRule, *stdRule);
         } else {
-            initialRule = new InitialTimeZoneRule(tzid+STD_STR, getRawOffset(), 0);
+            initialRule = new InitialTimeZoneRule(tzid+UnicodeString(STD_STR), getRawOffset(), 0);
             firstTransition = new TimeZoneTransition(firstDstStart, *initialRule, *dstRule);
         }
         // Check for null pointers.

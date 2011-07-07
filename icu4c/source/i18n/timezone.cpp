@@ -389,7 +389,7 @@ TimeZone::createTimeZone(const UnicodeString& ID)
     }
     if (result == 0) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
-        result = new SimpleTimeZone(0, UNKNOWN_ZONE_ID);
+        result = new SimpleTimeZone(0, UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH));
     }
     return result;
 }
@@ -715,11 +715,11 @@ private:
             } else {
                 int32_t numEntries = 0;
                 for (int32_t i = 0; i < size; i++) {
-                    const UChar *id = ures_getStringByIndex(res, i, NULL, &ec);
+                    UnicodeString id = ures_getUnicodeStringByIndex(res, i, &ec);
                     if (U_FAILURE(ec)) {
                         break;
                     }
-                    if (u_strcmp(id, UNKNOWN_ZONE_ID) == 0) {
+                    if (0 == id.compare(UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH)) {
                         // exclude Etc/Unknown
                         continue;
                     }
@@ -729,7 +729,7 @@ private:
                         if (U_FAILURE(ec)) {
                             break;
                         }
-                        if (canonicalID.compare(id, -1) != 0) {
+                        if (canonicalID != id) {
                             // exclude aliases
                             continue;
                         }
@@ -836,7 +836,7 @@ public:
             res = ures_getByKey(res, kNAMES, res, &ec); // dereference Zones section
             for (int32_t i = 0; i < baseLen; i++) {
                 int32_t zidx = baseMap[i];
-                const UChar *id = ures_getStringByIndex(res, zidx, NULL, &ec);
+                UnicodeString id = ures_getUnicodeStringByIndex(res, zidx, &ec);
                 if (U_FAILURE(ec)) {
                     break;
                 }
@@ -1217,35 +1217,36 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
 #endif
 
     // select the proper format string
-    UnicodeString pat;
+    const UChar* patUChars;
     switch(style){
     case LONG:
-        pat = ZZZZ_STR;
+        patUChars = ZZZZ_STR;
         break;
     case SHORT_GENERIC:
-        pat = V_STR;
+        patUChars = V_STR;
         break;
     case LONG_GENERIC:
-        pat = VVVV_STR;
+        patUChars = VVVV_STR;
         break;
     case SHORT_GMT:
-        pat = Z_UC_STR;
+        patUChars = Z_UC_STR;
         break;
     case LONG_GMT:
-        pat = ZZZZ_UC_STR;
+        patUChars = ZZZZ_UC_STR;
         break;
     case SHORT_COMMONLY_USED:
-        //pat = V_UC_STR;
-        pat = Z_STR;
+        //patUChars = V_UC_STR;
+        patUChars = Z_STR;
         break;
     case GENERIC_LOCATION:
-        pat = VVVV_UC_STR;
+        patUChars = VVVV_UC_STR;
         break;
     default: // SHORT
-        //pat = Z_STR;
-        pat = V_UC_STR;
+        //patUChars = Z_STR;
+        patUChars = V_UC_STR;
         break;
     }
+    UnicodeString pat(TRUE, patUChars, -1);
 
     SimpleDateFormat format(pat, locale, status);
     U_DEBUG_TZ_MSG(("getDisplayName(%s)\n", buf));
@@ -1375,7 +1376,7 @@ TimeZone::parseCustomID(const UnicodeString& id, int32_t& sign,
     idUppercase.toUpper();
 
     if (id.length() > GMT_ID_LENGTH &&
-        idUppercase.startsWith(GMT_ID))
+        idUppercase.startsWith(GMT_ID, GMT_ID_LENGTH))
     {
         ParsePosition pos(GMT_ID_LENGTH);
         sign = 1;
@@ -1491,7 +1492,7 @@ UnicodeString&
 TimeZone::formatCustomID(int32_t hour, int32_t min, int32_t sec,
                          UBool negative, UnicodeString& id) {
     // Create time zone ID - GMT[+|-]hhmm[ss]
-    id.setTo(GMT_ID);
+    id.setTo(GMT_ID, GMT_ID_LENGTH);
     if (hour | min | sec) {
         if (negative) {
             id += (UChar)MINUS;

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfsubs.cpp
@@ -784,7 +784,7 @@ SameValueSubstitution::SameValueSubstitution(int32_t _pos,
                         UErrorCode& status)
 : NFSubstitution(_pos, _ruleSet, formatter, description, status)
 {
-    if (description == gEqualsEquals) {
+    if (0 == description.compare(gEqualsEquals, 2)) {
         // throw new IllegalArgumentException("== is not a legal token");
         status = U_PARSE_ERROR;
     }
@@ -835,7 +835,7 @@ ModulusSubstitution::ModulusSubstitution(int32_t _pos,
       status = U_PARSE_ERROR;
   }
 
-  if (description == gGreaterGreaterGreaterThan) {
+  if (0 == description.compare(gGreaterGreaterGreaterThan, 3)) {
     // the >>> token doesn't alter how this substituion calculates the
     // values it uses for formatting and parsing, but it changes
     // what's done with that value after it's obtained: >>> short-
@@ -982,11 +982,11 @@ FractionalPartSubstitution::FractionalPartSubstitution(int32_t _pos,
 
 {
     // akk, ruleSet can change in superclass constructor
-    if (description == gGreaterGreaterThan ||
-        description == gGreaterGreaterGreaterThan ||
+    if (0 == description.compare(gGreaterGreaterThan, 2) ||
+        0 == description.compare(gGreaterGreaterGreaterThan, 3) ||
         _ruleSet == getRuleSet()) {
         byDigits = TRUE;
-        if (description == gGreaterGreaterGreaterThan) {
+        if (0 == description.compare(gGreaterGreaterGreaterThan, 3)) {
             useSpaces = FALSE;
         }
     } else {

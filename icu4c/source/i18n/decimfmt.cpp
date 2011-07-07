@@ -454,7 +454,7 @@ DecimalFormat::construct(UErrorCode&             status,
         // need it for mix parsing
         setupCurrencyAffixPatterns(status);
         // expanded affixes for plural names
-        if (patternUsed->indexOf(fgTripleCurrencySign) != -1) {
+        if (patternUsed->indexOf(fgTripleCurrencySign, 3, 0) != -1) {
             setupCurrencyAffixes(*patternUsed, TRUE, TRUE, status);
         }
     }
@@ -2714,7 +2714,7 @@ DecimalFormat::setCurrencyForSymbols() {
     uprv_getStaticCurrencyName(intlCurrencySymbol, loc, currencySymbol, ec);
     if (U_SUCCESS(ec)
         && getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) == currencySymbol
-        && getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) == intlCurrencySymbol)
+        && getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) == UnicodeString(intlCurrencySymbol))
     {
         // Trap an error in mapping locale to currency.  If we can't
         // map, then don't fail and set the currency to "".
@@ -2943,7 +2943,7 @@ void DecimalFormat::setFormatWidth(int32_t width) {
 }
 
 UnicodeString DecimalFormat::getPadCharacterString() const {
-    return fPad;
+    return UnicodeString(fPad);
 }
 
 void DecimalFormat::setPadCharacter(const UnicodeString &padChar) {
@@ -3288,7 +3288,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                         affix += UnicodeString(s, len);
                         handler.addAttribute(kCurrencyField, beginIdx, affix.length());
                     } else if(intl) {
-                        affix += currencyUChars;
+                        affix.append(currencyUChars, -1);
                         handler.addAttribute(kCurrencyField, beginIdx, affix.length());
                     } else {
                         int32_t len;
@@ -3309,7 +3309,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                                 // return.
                                 if (fCurrencyChoice == NULL) {
                                     // TODO Replace double-check with proper thread-safe code
-                                    ChoiceFormat* fmt = new ChoiceFormat(s, ec);
+                                    ChoiceFormat* fmt = new ChoiceFormat(UnicodeString(s), ec);
                                     if (U_SUCCESS(ec)) {
                                         umtx_lock(NULL);
                                         if (fCurrencyChoice == NULL) {
@@ -3339,7 +3339,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                                 } else {
                                     // We only arrive here if the currency choice
                                     // format in the locale data is INVALID.
-                                    affix += currencyUChars;
+                                    affix.append(currencyUChars, -1);
                                     handler.addAttribute(kCurrencyField, beginIdx, affix.length());
                                 }
                             }
@@ -4503,7 +4503,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         if (fAffixPatternsForCurrency == NULL) {
             setupCurrencyAffixPatterns(status);
         }
-        if (pattern.indexOf(fgTripleCurrencySign) != -1) {
+        if (pattern.indexOf(fgTripleCurrencySign, 3, 0) != -1) {
             // only setup the affixes of the current pattern.
             setupCurrencyAffixes(pattern, TRUE, FALSE, status);
         }
@@ -4634,7 +4634,7 @@ void DecimalFormat::setCurrencyInternally(const UChar* theCurrency,
 void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
     // set the currency before compute affixes to get the right currency names
     NumberFormat::setCurrency(theCurrency, ec);
-    if (fFormatPattern.indexOf(fgTripleCurrencySign) != -1) {
+    if (fFormatPattern.indexOf(fgTripleCurrencySign, 3, 0) != -1) {
         UnicodeString savedPtn = fFormatPattern;
         setupCurrencyAffixes(fFormatPattern, TRUE, TRUE, ec);
         UParseError parseErr;

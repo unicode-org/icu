@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2009-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -68,7 +68,7 @@ zrule_isEquivalentTo(ZRule* rule1,  ZRule* rule2) {
 U_CAPI IZRule* U_EXPORT2
 izrule_open(const UChar* name, int32_t nameLength, int32_t rawOffset, int32_t dstSavings) {
     UnicodeString s(nameLength==-1, name, nameLength);
-    return (IZRule*) new InitialTimeZoneRule(name, rawOffset, dstSavings);
+    return (IZRule*) new InitialTimeZoneRule(s, rawOffset, dstSavings);
 }
 
 U_CAPI void U_EXPORT2

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010, International Business Machines Corporation and
+* Copyright (C) 2010-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -143,41 +143,36 @@ NumberingSystem::createInstance(UErrorCode& status) {
 
 NumberingSystem* U_EXPORT2
 NumberingSystem::createInstanceByName(const char *name, UErrorCode& status) {
-    
-     UResourceBundle *numberingSystemsInfo = NULL;
-     UResourceBundle *nsTop, *nsCurrent;
-     const UChar* description = NULL;
-     int32_t radix = 10;
-     int32_t algorithmic = 0;
-     int32_t len;
+    UResourceBundle *numberingSystemsInfo = NULL;
+    UResourceBundle *nsTop, *nsCurrent;
+    int32_t radix = 10;
+    int32_t algorithmic = 0;
 
-     numberingSystemsInfo = ures_openDirect(NULL,gNumberingSystems, &status);
-     nsCurrent = ures_getByKey(numberingSystemsInfo,gNumberingSystems,NULL,&status);
-     nsTop = ures_getByKey(nsCurrent,name,NULL,&status);
-     description = ures_getStringByKey(nsTop,gDesc,&len,&status);
+    numberingSystemsInfo = ures_openDirect(NULL,gNumberingSystems, &status);
+    nsCurrent = ures_getByKey(numberingSystemsInfo,gNumberingSystems,NULL,&status);
+    nsTop = ures_getByKey(nsCurrent,name,NULL,&status);
+    UnicodeString nsd = ures_getUnicodeStringByKey(nsTop,gDesc,&status);
 
-	 ures_getByKey(nsTop,gRadix,nsCurrent,&status);
-     radix = ures_getInt(nsCurrent,&status);
+    ures_getByKey(nsTop,gRadix,nsCurrent,&status);
+    radix = ures_getInt(nsCurrent,&status);
 
-     ures_getByKey(nsTop,gAlgorithmic,nsCurrent,&status);
-     algorithmic = ures_getInt(nsCurrent,&status);
+    ures_getByKey(nsTop,gAlgorithmic,nsCurrent,&status);
+    algorithmic = ures_getInt(nsCurrent,&status);
 
-     UBool isAlgorithmic = ( algorithmic == 1 );
-     UnicodeString nsd;
-     nsd.setTo(description);
+    UBool isAlgorithmic = ( algorithmic == 1 );
 
-	 ures_close(nsCurrent);
-	 ures_close(nsTop);
-     ures_close(numberingSystemsInfo);
+    ures_close(nsCurrent);
+    ures_close(nsTop);
+    ures_close(numberingSystemsInfo);
 
-     if (U_FAILURE(status)) {
-         status = U_UNSUPPORTED_ERROR;
-         return NULL;
-     }
+    if (U_FAILURE(status)) {
+        status = U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
 
-     NumberingSystem* ns = NumberingSystem::createInstance(radix,isAlgorithmic,nsd,status);
-     ns->setName(name);
-     return ns;
+    NumberingSystem* ns = NumberingSystem::createInstance(radix,isAlgorithmic,nsd,status);
+    ns->setName(name);
+    return ns;
 }
 
     /**

@@ -757,7 +757,6 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     // TODO: read localization info from resource
     LocalizationInfo* locinfo = NULL;
 
-    int32_t len = 0;
     UResourceBundle* nfrb = ures_open(U_ICUDATA_RBNF, locale.getName(), &status);
     if (U_SUCCESS(status)) {
         setLocaleIDs(ures_getLocaleByType(nfrb, ULOC_VALID_LOCALE, &status),
@@ -773,14 +772,12 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
             ures_close(nfrb);
             return;
         }
-        
+
         UnicodeString desc;
         while (ures_hasNext(ruleSets)) {
-           const UChar* currentString = ures_getNextString(ruleSets,&len,NULL,&status);
-           desc.append(currentString);
+           desc.append(ures_getNextUnicodeString(ruleSets,NULL,&status));
         }
         UParseError perror;
-        
 
         init (desc, locinfo, perror, status);
 
@@ -1089,7 +1086,7 @@ RuleBasedNumberFormat::format(int32_t number,
 {
     // return format((int64_t)number, ruleSetName, toAppendTo, pos, status);
     if (U_SUCCESS(status)) {
-        if (ruleSetName.indexOf(gPercentPercent) == 0) {
+        if (ruleSetName.indexOf(gPercentPercent, 2, 0) == 0) {
             // throw new IllegalArgumentException("Can't use internal rule set");
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
@@ -1111,7 +1108,7 @@ RuleBasedNumberFormat::format(int64_t number,
                               UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
-        if (ruleSetName.indexOf(gPercentPercent) == 0) {
+        if (ruleSetName.indexOf(gPercentPercent, 2, 0) == 0) {
             // throw new IllegalArgumentException("Can't use internal rule set");
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
@@ -1143,7 +1140,7 @@ RuleBasedNumberFormat::format(double number,
                               UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
-        if (ruleSetName.indexOf(gPercentPercent) == 0) {
+        if (ruleSetName.indexOf(gPercentPercent, 2, 0) == 0) {
             // throw new IllegalArgumentException("Can't use internal rule set");
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
@@ -1324,7 +1321,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // is, pull them out into our temporary holding place for them,
     // and delete them from the description before the real desciption-
     // parsing code sees them
-    int32_t lp = description.indexOf(gLenientParse);
+    int32_t lp = description.indexOf(gLenientParse, -1, 0);
     if (lp != -1) {
         // we've got to make sure we're not in the middle of a rule
         // (where "%%lenient-parse" would actually get treated as
@@ -1333,7 +1330,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
             // locate the beginning and end of the actual collation
             // rules (there may be whitespace between the name and
             // the first token in the description)
-            int lpEnd = description.indexOf(gSemiPercent, lp);
+            int lpEnd = description.indexOf(gSemiPercent, 2, lp);
 
             if (lpEnd == -1) {
                 lpEnd = description.length() - 1;
@@ -1361,7 +1358,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // rule sets (";%" marks the end of one rule set and the beginning
     // of the next)
     int numRuleSets = 0;
-    for (int32_t p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, p)) {
+    for (int32_t p = description.indexOf(gSemiPercent, 2, 0); p != -1; p = description.indexOf(gSemiPercent, 2, p)) {
         ++numRuleSets;
         ++p;
     }
@@ -1399,7 +1396,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     {
         int curRuleSet = 0;
         int32_t start = 0;
-        for (int32_t p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, start)) {
+        for (int32_t p = description.indexOf(gSemiPercent, 2, 0); p != -1; p = description.indexOf(gSemiPercent, 2, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
             if (ruleSets[curRuleSet] == 0) {

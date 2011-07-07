@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines Corporation
+*   Copyright (c) 2001-2011, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -18,8 +18,6 @@
 #include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
-
-static const UChar EMPTY[] = { 0 }; // empty string: ""
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringMatcher)
 
@@ -228,7 +226,7 @@ int32_t StringMatcher::replace(Replaceable& text,
         }
     }
     
-    text.handleReplaceBetween(start, limit, EMPTY); // delete original text
+    text.handleReplaceBetween(start, limit, UnicodeString()); // delete original text
     
     return outLen;
 }

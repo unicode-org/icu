@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and    *
+* Copyright (C) 1997-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -206,18 +206,17 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
         NumberingSystem* ns = NumberingSystem::createInstance(loc,status);
         if (U_SUCCESS(status) && ns->getRadix() == 10 && !ns->isAlgorithmic()) {
             nsName = ns->getName();
-            UnicodeString *DigitString = new UnicodeString(ns->getDescription());
-                setSymbol(kZeroDigitSymbol,DigitString->charAt(0),FALSE);
-                setSymbol(kOneDigitSymbol,DigitString->charAt(1),FALSE);
-                setSymbol(kTwoDigitSymbol,DigitString->charAt(2),FALSE);
-                setSymbol(kThreeDigitSymbol,DigitString->charAt(3),FALSE);
-                setSymbol(kFourDigitSymbol,DigitString->charAt(4),FALSE);
-                setSymbol(kFiveDigitSymbol,DigitString->charAt(5),FALSE);
-                setSymbol(kSixDigitSymbol,DigitString->charAt(6),FALSE);
-                setSymbol(kSevenDigitSymbol,DigitString->charAt(7),FALSE);
-                setSymbol(kEightDigitSymbol,DigitString->charAt(8),FALSE);
-                setSymbol(kNineDigitSymbol,DigitString->charAt(9),FALSE);
-            delete DigitString;
+            UnicodeString digitString(ns->getDescription());
+            setSymbol(kZeroDigitSymbol,  digitString.tempSubString(0, 1), FALSE);
+            setSymbol(kOneDigitSymbol,   digitString.tempSubString(1, 1), FALSE);
+            setSymbol(kTwoDigitSymbol,   digitString.tempSubString(2, 1), FALSE);
+            setSymbol(kThreeDigitSymbol, digitString.tempSubString(3, 1), FALSE);
+            setSymbol(kFourDigitSymbol,  digitString.tempSubString(4, 1), FALSE);
+            setSymbol(kFiveDigitSymbol,  digitString.tempSubString(5, 1), FALSE);
+            setSymbol(kSixDigitSymbol,   digitString.tempSubString(6, 1), FALSE);
+            setSymbol(kSevenDigitSymbol, digitString.tempSubString(7, 1), FALSE);
+            setSymbol(kEightDigitSymbol, digitString.tempSubString(8, 1), FALSE);
+            setSymbol(kNineDigitSymbol,  digitString.tempSubString(9, 1), FALSE);
         } else {
             nsName = gLatn;
         }
@@ -252,7 +251,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
                 }
 
                 if ( U_SUCCESS(localStatus) ) {
-                    setSymbol((ENumberFormatSymbol)i,sym);
+                    setSymbol((ENumberFormatSymbol)i, UnicodeString(TRUE, sym, len));
                     if ( i == kMonetarySeparatorSymbol ) {
                         kMonetaryDecimalSet = TRUE;
                     } else if ( i == kMonetaryGroupingSeparatorSymbol ) {
@@ -292,7 +291,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
         // Reuse numberElements[0] as a temporary buffer
         uprv_getStaticCurrencyName(curriso, locStr, tempStr, internalStatus);
         if (U_SUCCESS(internalStatus)) {
-            fSymbols[kIntlCurrencySymbol] = curriso;
+            fSymbols[kIntlCurrencySymbol].setTo(curriso, -1);
             fSymbols[kCurrencySymbol] = tempStr;
         }
         /* else use the default values. */
@@ -321,8 +320,8 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
                 currency = ures_getByIndex(currency, 2, currency, &localStatus);
                 int32_t currPatternLen = 0;
                 currPattern = ures_getStringByIndex(currency, (int32_t)0, &currPatternLen, &localStatus);
-                UnicodeString decimalSep = ures_getStringByIndex(currency, (int32_t)1, NULL, &localStatus);
-                UnicodeString groupingSep = ures_getStringByIndex(currency, (int32_t)2, NULL, &localStatus);
+                UnicodeString decimalSep = ures_getUnicodeStringByIndex(currency, (int32_t)1, &localStatus);
+                UnicodeString groupingSep = ures_getUnicodeStringByIndex(currency, (int32_t)2, &localStatus);
                 if(U_SUCCESS(localStatus)){
                     fSymbols[kMonetaryGroupingSeparatorSymbol] = groupingSep;
                     fSymbols[kMonetarySeparatorSymbol] = decimalSep;
@@ -353,8 +352,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
             if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
                 localStatus = U_ZERO_ERROR;
                 for (int32_t i = 0; i < UNUM_CURRENCY_SPACING_COUNT; i++) {
-                  currencySpcBeforeSym[i] = ures_getStringByKey(dataRes, keywords[i],
-                                                            NULL, &localStatus);
+                  currencySpcBeforeSym[i] = ures_getUnicodeStringByKey(dataRes, keywords[i], &localStatus);
                 }
                 ures_close(dataRes);
             }
@@ -363,8 +361,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
             if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
                 localStatus = U_ZERO_ERROR;
                 for (int32_t i = 0; i < UNUM_CURRENCY_SPACING_COUNT; i++) {
-                  currencySpcAfterSym[i] = ures_getStringByKey(dataRes, keywords[i],
-                                                                NULL, &localStatus);
+                  currencySpcAfterSym[i] = ures_getUnicodeStringByKey(dataRes, keywords[i], &localStatus);
                 }
                 ures_close(dataRes);
             }
@@ -402,7 +399,7 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kPlusSignSymbol] = (UChar)0x002b;          // '+' plus sign
     fSymbols[kMinusSignSymbol] = (UChar)0x2d;           // '-' minus sign
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
-    fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
+    fSymbols[kIntlCurrencySymbol].setTo(TRUE, INTL_CURRENCY_SYMBOL_STR, 2);
     fSymbols[kMonetarySeparatorSymbol] = (UChar)0x2e;   // '.' monetary decimal separator
     fSymbols[kExponentialSymbol] = (UChar)0x45;         // 'E' exponential
     fSymbols[kPerMillSymbol] = (UChar)0x2030;           // '%o' per mill

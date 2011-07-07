@@ -769,7 +769,7 @@ getCurrencyNameCount(const char* loc, int32_t* total_currency_name_count, int32_
                 }
             }
             if (isChoice) {
-                ChoiceFormat fmt(s, ec2);
+                ChoiceFormat fmt(UnicodeString(TRUE, s, len), ec2);
                 int32_t fmt_count;
                 fmt.getFormats(fmt_count);
                 *total_currency_symbol_count += fmt_count;
@@ -892,7 +892,7 @@ collectCurrencyNames(const char* locale,
                 }
             }
             if (isChoice) {
-                ChoiceFormat fmt(s, ec2);
+                ChoiceFormat fmt(UnicodeString(TRUE, s, len), ec2);
                 int32_t fmt_count;
                 const UnicodeString* formats = fmt.getFormats(fmt_count);
                 for (int i = 0; i < fmt_count; ++i) {
@@ -1434,14 +1434,14 @@ uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
         // arbitrary value; pick something != 1; more common.
         result.truncate(0);
         if (isChoiceFormat) {
-            ChoiceFormat f(currname, ec);
+            ChoiceFormat f(UnicodeString(TRUE, currname, len), ec);
             if (U_SUCCESS(ec)) {
                 f.format(2.0, result);
             } else {
-                result = iso;
+                result.setTo(iso, -1);
             }
         } else {
-            result = currname;
+            result.setTo(currname, -1);
         }
     }
 }

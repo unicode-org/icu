@@ -660,7 +660,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                         c = chars.next(opts, literal, ec);
                         if (U_FAILURE(ec)) return;
                         if (c == 0x5D /*']'*/ && !literal) {
-                            patLocal.append(HYPHEN_RIGHT_BRACE);
+                            patLocal.append(HYPHEN_RIGHT_BRACE, 2);
                             mode = 2;
                             continue;
                         }
@@ -1224,7 +1224,12 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
     }
 
     // Look for the matching close delimiter, either :] or }
-    int32_t close = pattern.indexOf(posix ? POSIX_CLOSE : PERL_CLOSE, pos);
+    int32_t close;
+    if (posix) {
+      close = pattern.indexOf(POSIX_CLOSE, 2, pos);
+    } else {
+      close = pattern.indexOf(CLOSE_BRACE, pos);
+    }
     if (close < 0) {
         // Syntax error; close delimiter missing
         FAIL(ec);

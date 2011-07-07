@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2008, International Business Machines
+ *   Copyright (C) 1999-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -501,7 +501,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
         rule.append((UChar)36/*$*/);
     }
 
-    ICU_Utility::appendToRule(rule, FORWARD_OP, TRUE, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, UnicodeString(TRUE, FORWARD_OP, 3), TRUE, escapeUnprintable, quoteBuf);
 
     // Emit the output pattern
 
