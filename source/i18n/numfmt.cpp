@@ -1283,7 +1283,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         // replace single currency sign in the pattern with double currency sign
         // if the style is UNUM_CURRENCY_ISO
         if (style == UNUM_CURRENCY_ISO) {
-            pattern.findAndReplace(gSingleCurrencySign, gDoubleCurrencySign);
+            pattern.findAndReplace(UnicodeString(TRUE, gSingleCurrencySign, 1),
+                                   UnicodeString(TRUE, gDoubleCurrencySign, 2));
         }
 
         // "new DecimalFormat()" does not adopt the symbols if its memory allocation fails.

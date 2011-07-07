@@ -288,7 +288,7 @@ Transliterator* AnyTransliterator::getTransliterator(UScriptCode source) const {
             
             // Try to pivot around Latin, our most common script
             id = sourceName;
-            id.append(LATIN_PIVOT).append(target);
+            id.append(LATIN_PIVOT, -1).append(target);
             t = Transliterator::createInstance(id, UTRANS_FORWARD, ec);
             if (U_FAILURE(ec) || t == NULL) {
                 delete t;
@@ -341,7 +341,7 @@ void AnyTransliterator::registerIDs() {
         Transliterator::_getAvailableSource(s, source);
 
         // Ignore the "Any" source
-        if (source.caseCompare(ANY, 0 /*U_FOLD_CASE_DEFAULT*/) == 0) continue;
+        if (source.caseCompare(ANY, 3, 0 /*U_FOLD_CASE_DEFAULT*/) == 0) continue;
 
         int32_t targetCount = Transliterator::_countAvailableTargets(source);
         for (int32_t t=0; t<targetCount; ++t) {
@@ -364,7 +364,7 @@ void AnyTransliterator::registerIDs() {
                 Transliterator::_getAvailableVariant(v, source, target, variant);
                 
                 UnicodeString id;
-                TransliteratorIDParser::STVtoID(ANY, target, variant, id);
+                TransliteratorIDParser::STVtoID(UnicodeString(TRUE, ANY, 3), target, variant, id);
                 ec = U_ZERO_ERROR;
                 AnyTransliterator* t = new AnyTransliterator(id, target, variant,
                                                              targetScript, ec);
@@ -372,7 +372,7 @@ void AnyTransliterator::registerIDs() {
                     delete t;
                 } else {
                     Transliterator::_registerInstance(t);
-                    Transliterator::_registerSpecialInverse(target, NULL_ID, FALSE);
+                    Transliterator::_registerSpecialInverse(target, UnicodeString(TRUE, NULL_ID, 4), FALSE);
                 }
             }
         }

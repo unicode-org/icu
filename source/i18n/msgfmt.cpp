@@ -175,7 +175,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FormatNameEnumeration)
 static UnicodeString& itos(int32_t i, UnicodeString& appendTo) {
     UChar temp[16];
     uprv_itou(temp,16,i,10,0); // 10 == radix
-    appendTo.append(temp);
+    appendTo.append(temp, -1);
     return appendTo;
 }
 

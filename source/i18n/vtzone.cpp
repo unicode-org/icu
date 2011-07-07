@@ -413,20 +413,20 @@ static void parseRRULE(const UnicodeString& rrule, int32_t& month, int32_t& dow,
             goto rruleParseError;
         }
 
-        if (attr.compare(ICAL_FREQ) == 0) {
+        if (attr.compare(ICAL_FREQ, -1) == 0) {
             // only support YEARLY frequency type
-            if (value.compare(ICAL_YEARLY) == 0) {
+            if (value.compare(ICAL_YEARLY, -1) == 0) {
                 yearly = TRUE;
             } else {
                 goto rruleParseError;
             }
-        } else if (attr.compare(ICAL_UNTIL) == 0) {
+        } else if (attr.compare(ICAL_UNTIL, -1) == 0) {
             // ISO8601 UTC format, for example, "20060315T020000Z"
             until = parseDateTimeString(value, 0, status);
             if (U_FAILURE(status)) {
                 goto rruleParseError;
             }
-        } else if (attr.compare(ICAL_BYMONTH) == 0) {
+        } else if (attr.compare(ICAL_BYMONTH, -1) == 0) {
             // Note: BYMONTH may contain multiple months, but only single month make sense for
             // VTIMEZONE property.
             if (value.length() > 2) {
@@ -436,7 +436,7 @@ static void parseRRULE(const UnicodeString& rrule, int32_t& month, int32_t& dow,
             if (U_FAILURE(status) || month < 0 || month >= 12) {
                 goto rruleParseError;
             }
-        } else if (attr.compare(ICAL_BYDAY) == 0) {
+        } else if (attr.compare(ICAL_BYDAY, -1) == 0) {
             // Note: BYDAY may contain multiple day of week separated by comma.  It is unlikely used for
             // VTIMEZONE property.  We do not support the case.
 
@@ -475,7 +475,7 @@ static void parseRRULE(const UnicodeString& rrule, int32_t& month, int32_t& dow,
             } else {
                 goto rruleParseError;
             }
-        } else if (attr.compare(ICAL_BYMONTHDAY) == 0) {
+        } else if (attr.compare(ICAL_BYMONTHDAY, -1) == 0) {
             // Note: BYMONTHDAY may contain multiple days delimitted by comma
             //
             // A value of BYMONTHDAY could be negative, for example, -1 means
@@ -885,6 +885,7 @@ public:
 
     void write(const UnicodeString& str);
     void write(UChar ch);
+    void write(const UChar* str);
     //void write(const UChar* str, int32_t length);
 private:
     UnicodeString* out;
@@ -905,6 +906,11 @@ VTZWriter::write(const UnicodeString& str) {
 void
 VTZWriter::write(UChar ch) {
     out->append(ch);
+}
+
+void
+VTZWriter::write(const UChar* str) {
+    out->append(str, -1);
 }
 
 /*
@@ -1254,7 +1260,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
         UChar ch = reader.read();
         if (ch == 0xFFFF) {
             // end of file
-            if (start && line.startsWith(ICAL_END_VTIMEZONE)) {
+            if (start && line.startsWith(ICAL_END_VTIMEZONE, -1)) {
                 vtzlines->addElement(new UnicodeString(line), status);
                 if (U_FAILURE(status)) {
                     goto cleanupVtzlines;
@@ -1289,7 +1295,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
                 // LF
                 eol = TRUE;
                 if (start) {
-                    if (line.startsWith(ICAL_END_VTIMEZONE)) {
+                    if (line.startsWith(ICAL_END_VTIMEZONE, -1)) {
                         vtzlines->addElement(new UnicodeString(line), status);
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
@@ -1298,7 +1304,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
                         break;
                     }
                 } else {
-                    if (line.startsWith(ICAL_BEGIN_VTIMEZONE)) {
+                    if (line.startsWith(ICAL_BEGIN_VTIMEZONE, -1)) {
                         vtzlines->addElement(new UnicodeString(line), status);
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
@@ -1397,27 +1403,27 @@ VTimeZone::parse(UErrorCode& status) {
 
         switch (state) {
         case INI:
-            if (name.compare(ICAL_BEGIN) == 0
-                && value.compare(ICAL_VTIMEZONE) == 0) {
+            if (name.compare(ICAL_BEGIN, -1) == 0
+                && value.compare(ICAL_VTIMEZONE, -1) == 0) {
                 state = VTZ;
             }
             break;
 
         case VTZ:
-            if (name.compare(ICAL_TZID) == 0) {
+            if (name.compare(ICAL_TZID, -1) == 0) {
                 tzid = value;
-            } else if (name.compare(ICAL_TZURL) == 0) {
+            } else if (name.compare(ICAL_TZURL, -1) == 0) {
                 tzurl = value;
-            } else if (name.compare(ICAL_LASTMOD) == 0) {
+            } else if (name.compare(ICAL_LASTMOD, -1) == 0) {
                 // Always in 'Z' format, so the offset argument for the parse method
                 // can be any value.
                 lastmod = parseDateTimeString(value, 0, status);
                 if (U_FAILURE(status)) {
                     goto cleanupParse;
                 }
-            } else if (name.compare(ICAL_BEGIN) == 0) {
-                UBool isDST = (value.compare(ICAL_DAYLIGHT) == 0);
-                if (value.compare(ICAL_STANDARD) == 0 || isDST) {
+            } else if (name.compare(ICAL_BEGIN, -1) == 0) {
+                UBool isDST = (value.compare(ICAL_DAYLIGHT, -1) == 0);
+                if (value.compare(ICAL_STANDARD, -1) == 0 || isDST) {
                     // tzid must be ready at this point
                     if (tzid.length() == 0) {
                         goto cleanupParse;
@@ -1437,20 +1443,20 @@ VTimeZone::parse(UErrorCode& status) {
                     // must not be there.
                     goto cleanupParse;
                 }
-            } else if (name.compare(ICAL_END) == 0) {
+            } else if (name.compare(ICAL_END, -1) == 0) {
                 break;
             }
             break;
         case TZI:
-            if (name.compare(ICAL_DTSTART) == 0) {
+            if (name.compare(ICAL_DTSTART, -1) == 0) {
                 dtstart = value;
-            } else if (name.compare(ICAL_TZNAME) == 0) {
+            } else if (name.compare(ICAL_TZNAME, -1) == 0) {
                 zonename = value;
-            } else if (name.compare(ICAL_TZOFFSETFROM) == 0) {
+            } else if (name.compare(ICAL_TZOFFSETFROM, -1) == 0) {
                 from = value;
-            } else if (name.compare(ICAL_TZOFFSETTO) == 0) {
+            } else if (name.compare(ICAL_TZOFFSETTO, -1) == 0) {
                 to = value;
-            } else if (name.compare(ICAL_RDATE) == 0) {
+            } else if (name.compare(ICAL_RDATE, -1) == 0) {
                 // RDATE mixed with RRULE is not supported
                 if (isRRULE) {
                     goto cleanupParse;
@@ -1474,7 +1480,7 @@ VTimeZone::parse(UErrorCode& status) {
                     }
                     dstart = dend + 1;
                 }
-            } else if (name.compare(ICAL_RRULE) == 0) {
+            } else if (name.compare(ICAL_RRULE, -1) == 0) {
                 // RRULE mixed with RDATE is not supported
                 if (!isRRULE && dates->size() != 0) {
                     goto cleanupParse;
@@ -1484,7 +1490,7 @@ VTimeZone::parse(UErrorCode& status) {
                 if (U_FAILURE(status)) {
                     goto cleanupParse;
                 }
-            } else if (name.compare(ICAL_END) == 0) {
+            } else if (name.compare(ICAL_END, -1) == 0) {
                 // Mandatory properties
                 if (dtstart.length() == 0 || from.length() == 0 || to.length() == 0) {
                     goto cleanupParse;
@@ -1719,13 +1725,13 @@ VTimeZone::write(VTZWriter& writer, UErrorCode& status) const {
     if (vtzlines != NULL) {
         for (int32_t i = 0; i < vtzlines->size(); i++) {
             UnicodeString *line = (UnicodeString*)vtzlines->elementAt(i);
-            if (line->startsWith(ICAL_TZURL)
+            if (line->startsWith(ICAL_TZURL, -1)
                 && line->charAt(u_strlen(ICAL_TZURL)) == COLON) {
                 writer.write(ICAL_TZURL);
                 writer.write(COLON);
                 writer.write(tzurl);
                 writer.write(ICAL_NEWLINE);
-            } else if (line->startsWith(ICAL_LASTMOD)
+            } else if (line->startsWith(ICAL_LASTMOD, -1)
                 && line->charAt(u_strlen(ICAL_LASTMOD)) == COLON) {
                 UnicodeString utcString;
                 writer.write(ICAL_LASTMOD);
@@ -1801,7 +1807,7 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) /*const*/ {
         icutzprop->append(olsonzid);
         icutzprop->append((UChar)0x005B/*'['*/);
         icutzprop->append(icutzver);
-        icutzprop->append(ICU_TZINFO_PARTIAL);
+        icutzprop->append(ICU_TZINFO_PARTIAL, -1);
         appendMillis(start, *icutzprop);
         icutzprop->append((UChar)0x005D/*']'*/);
         customProps.addElement(icutzprop, status);
@@ -1856,7 +1862,7 @@ VTimeZone::writeSimple(UDate time, VTZWriter& writer, UErrorCode& status) /*cons
             icutzprop->append(olsonzid);
             icutzprop->append((UChar)0x005B/*'['*/);
             icutzprop->append(icutzver);
-            icutzprop->append(ICU_TZINFO_SIMPLE);
+            icutzprop->append(ICU_TZINFO_SIMPLE, -1);
             appendMillis(time, *icutzprop);
             icutzprop->append((UChar)0x005D/*']'*/);
             customProps.addElement(icutzprop, status);

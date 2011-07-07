@@ -76,7 +76,6 @@ static const UChar gGreaterZero[] =             {0x3E, 0x30, 0};    /* ">0" */
 static const UChar gEqualPercent[] =            {0x3D, 0x25, 0};    /* "=%" */
 static const UChar gEqualHash[] =               {0x3D, 0x23, 0};    /* "=#" */
 static const UChar gEqualZero[] =               {0x3D, 0x30, 0};    /* "=0" */
-static const UChar gEmptyString[] =             {0};                /* "" */
 static const UChar gGreaterGreaterGreater[] =   {0x3E, 0x3E, 0x3E, 0}; /* ">>>" */
 
 static const UChar * const tokenStrings[] = {
@@ -242,16 +241,16 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
         // check first to see if the rule descriptor matches the token
         // for one of the special rules.  If it does, set the base
         // value to the correct identfier value
-        if (descriptor == gMinusX) {
+        if (0 == descriptor.compare(gMinusX, 2)) {
             setType(kNegativeNumberRule);
         }
-        else if (descriptor == gXDotX) {
+        else if (0 == descriptor.compare(gXDotX, 3)) {
             setType(kImproperFractionRule);
         }
-        else if (descriptor == gZeroDotX) {
+        else if (0 == descriptor.compare(gZeroDotX, 3)) {
             setType(kProperFractionRule);
         }
-        else if (descriptor == gXDotZero) {
+        else if (0 == descriptor.compare(gXDotZero, 3)) {
             setType(kMasterRule);
         }
 
@@ -409,12 +408,12 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
     // at the end of the rule text
     if (subStart == -1) {
         return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
-            ruleSet, rbnf, gEmptyString, status);
+            ruleSet, rbnf, UnicodeString(), status);
     }
 
     // special-case the ">>>" token, since searching for the > at the
     // end will actually find the > in the middle
-    if (ruleText.indexOf(gGreaterGreaterGreater) == subStart) {
+    if (ruleText.indexOf(gGreaterGreaterGreater, 3, 0) == subStart) {
         subEnd = subStart + 2;
 
         // otherwise the substitution token ends with the same character
@@ -437,7 +436,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
     // at the end of the rule
     if (subEnd == -1) {
         return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
-            ruleSet, rbnf, gEmptyString, status);
+            ruleSet, rbnf, UnicodeString(), status);
     }
 
     // if we get here, we have a real substitution token (or at least
@@ -581,10 +580,10 @@ void
 NFRule::_appendRuleText(UnicodeString& result) const
 {
     switch (getType()) {
-    case kNegativeNumberRule: result.append(gMinusX); break;
-    case kImproperFractionRule: result.append(gXDotX); break;
-    case kProperFractionRule: result.append(gZeroDotX); break;
-    case kMasterRule: result.append(gXDotZero); break;
+    case kNegativeNumberRule: result.append(gMinusX, 2); break;
+    case kImproperFractionRule: result.append(gXDotX, 3); break;
+    case kProperFractionRule: result.append(gZeroDotX, 3); break;
+    case kMasterRule: result.append(gXDotZero, 3); break;
     default:
         // for a normal rule, write out its base value, and if the radix is
         // something other than 10, write out the radix (with the preceding
@@ -609,7 +608,7 @@ NFRule::_appendRuleText(UnicodeString& result) const
     // if the rule text begins with a space, write an apostrophe
     // (whitespace after the rule descriptor is ignored; the
     // apostrophe is used to make the whitespace significant)
-    if (ruleText.startsWith(gSpace) && sub1->getPos() != 0) {
+    if (ruleText.charAt(0) == gSpace && sub1->getPos() != 0) {
         result.append(gTick);
     }
 

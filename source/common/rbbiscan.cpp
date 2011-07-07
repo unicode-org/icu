@@ -120,12 +120,17 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     //            all instances of RBBIRuleScanners.  BUT this is quite a bit simpler,
     //            and the time to build these few sets should be small compared to a
     //            full break iterator build.
-    fRuleSets[kRuleSet_rule_char-128]       = UnicodeSet(gRuleSet_rule_char_pattern,       *rb->fStatus);
+    fRuleSets[kRuleSet_rule_char-128]
+        = UnicodeSet(UnicodeString(gRuleSet_rule_char_pattern),       *rb->fStatus);
     // fRuleSets[kRuleSet_white_space-128] = [:Pattern_White_Space:]
-    fRuleSets[kRuleSet_white_space-128].add(9, 0xd).add(0x20).add(0x85).add(0x200e, 0x200f).add(0x2028, 0x2029);
-    fRuleSets[kRuleSet_name_char-128]       = UnicodeSet(gRuleSet_name_char_pattern,       *rb->fStatus);
-    fRuleSets[kRuleSet_name_start_char-128] = UnicodeSet(gRuleSet_name_start_char_pattern, *rb->fStatus);
-    fRuleSets[kRuleSet_digit_char-128]      = UnicodeSet(gRuleSet_digit_char_pattern,      *rb->fStatus);
+    fRuleSets[kRuleSet_white_space-128].
+        add(9, 0xd).add(0x20).add(0x85).add(0x200e, 0x200f).add(0x2028, 0x2029);
+    fRuleSets[kRuleSet_name_char-128]
+        = UnicodeSet(UnicodeString(gRuleSet_name_char_pattern),       *rb->fStatus);
+    fRuleSets[kRuleSet_name_start_char-128]
+        = UnicodeSet(UnicodeString(gRuleSet_name_start_char_pattern), *rb->fStatus);
+    fRuleSets[kRuleSet_digit_char-128]
+        = UnicodeSet(UnicodeString(gRuleSet_digit_char_pattern),      *rb->fStatus);
     if (*rb->fStatus == U_ILLEGAL_ARGUMENT_ERROR) {
         // This case happens if ICU's data is missing.  UnicodeSet tries to look up property
         //   names from the init string, can't find them, and claims an illegal argument.
@@ -414,7 +419,7 @@ UBool RBBIRuleScanner::doParseActions(int32_t action)
         // sets that just happen to contain only one character.
         {
             n = pushNewNode(RBBINode::setRef);
-            findSetFor(fC.fChar, n);
+            findSetFor(UnicodeString(fC.fChar), n);
             n->fFirstPos = fScanIndex;
             n->fLastPos  = fNextIndex;
             fRB->fRules.extractBetween(n->fFirstPos, n->fLastPos, n->fText);
@@ -425,7 +430,7 @@ UBool RBBIRuleScanner::doParseActions(int32_t action)
         // scanned a ".", meaning match any single character.
         {
             n = pushNewNode(RBBINode::setRef);
-            findSetFor(kAny, n);
+            findSetFor(UnicodeString(TRUE, kAny, 3), n);
             n->fFirstPos = fScanIndex;
             n->fLastPos  = fNextIndex;
             fRB->fRules.extractBetween(n->fFirstPos, n->fLastPos, n->fText);
@@ -1046,7 +1051,7 @@ void RBBIRuleScanner::parse() {
     if (fRB->fReverseTree == NULL) {
         fRB->fReverseTree  = pushNewNode(RBBINode::opStar);
         RBBINode  *operand = pushNewNode(RBBINode::setRef);
-        findSetFor(kAny, operand);
+        findSetFor(UnicodeString(TRUE, kAny, 3), operand);
         fRB->fReverseTree->fLeftChild = operand;
         operand->fParent              = fRB->fReverseTree;
         fNodeStackPtr -= 2;
