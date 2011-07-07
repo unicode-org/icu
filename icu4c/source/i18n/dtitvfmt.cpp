@@ -657,7 +657,7 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         if ( timeSkeleton.length() != 0 ) {
             if ( dateSkeleton.length() == 0 ) {
                 // prefix with yMd
-                timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort]);
+                timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort], -1);
                 UnicodeString pattern = fDtpng->getBestPattern(timeSkeleton, status);
                 if ( U_FAILURE(status) ) {
                     return;    
@@ -682,7 +682,7 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         // done
     } else if ( dateSkeleton.length() == 0 ) {
         // prefix with yMd
-        timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort]);
+        timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort], -1);
         UnicodeString pattern = fDtpng->getBestPattern(timeSkeleton, status);
         if ( U_FAILURE(status) ) {
             return;    

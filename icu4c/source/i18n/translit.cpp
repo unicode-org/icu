@@ -99,9 +99,6 @@ static icu::TransliteratorRegistry* registry = 0;
 // MUTEX. Avoids function call when registry is initialized.
 #define HAVE_REGISTRY(status) (registry!=0 || initializeRegistry(status))
 
-// Empty string
-static const UChar EMPTY[] = {0}; //""
-
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(Transliterator)
@@ -598,7 +595,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
                     int32_t rs = rollbackStart + delta - (index.limit - passStart);
 
                     // Delete the partially transliterated text
-                    text.handleReplaceBetween(passStart, index.limit, EMPTY);
+                    text.handleReplaceBetween(passStart, index.limit, UnicodeString());
 
                     // Copy the rollback text back
                     text.copy(rs, rs + uncommittedLength, passStart);
@@ -636,7 +633,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
             globalLimit += totalDelta;
 
             // Delete the rollback copy
-            text.handleReplaceBetween(rollbackOrigin, rollbackOrigin + runLength, EMPTY);
+            text.handleReplaceBetween(rollbackOrigin, rollbackOrigin + runLength, UnicodeString());
 
             // Move start past committed text
             index.start = passStart;
@@ -1110,7 +1107,8 @@ Transliterator::createFromRules(const UnicodeString& ID,
             }
             if (!parser.dataVector.isEmpty()) {
                 TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector.orphanElementAt(0);
-                RuleBasedTransliterator* temprbt = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
+                // TODO: Should passNumber be turned into a decimal-string representation (1 -> "1")?
+                RuleBasedTransliterator* temprbt = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + UnicodeString(passNumber++),
                         data, TRUE);
                 // Check if NULL before adding it to transliterators to avoid future usage of NULL pointer.
                 if (temprbt == NULL) {

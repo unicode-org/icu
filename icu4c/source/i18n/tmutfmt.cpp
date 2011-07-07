@@ -325,11 +325,11 @@ TimeUnitFormat::parseObject(const UnicodeString& source,
      */
     if (withNumberFormat == false && longestParseDistance != 0) {
         // set the number using plurrual count
-        if ( *countOfLongestMatch == PLURAL_COUNT_ZERO ) {
+        if (0 == countOfLongestMatch->compare(PLURAL_COUNT_ZERO, 4)) {
             resultNumber = 0;
-        } else if ( *countOfLongestMatch == PLURAL_COUNT_ONE ) {
+        } else if (0 == countOfLongestMatch->compare(PLURAL_COUNT_ONE, 3)) {
             resultNumber = 1;
-        } else if ( *countOfLongestMatch == PLURAL_COUNT_TWO ) {
+        } else if (0 == countOfLongestMatch->compare(PLURAL_COUNT_TWO, 3)) {
             resultNumber = 2;
         } else {
             // should not happen.
@@ -481,13 +481,11 @@ TimeUnitFormat::readFromCurrentLocale(UTimeUnitFormatStyle style, const char* ke
                 }
             }
             int32_t count = ures_getSize(countsToPatternRB);
-            const UChar* pattern;
             const char*  pluralCount;
-            int32_t ptLength; 
             for ( int32_t pluralIndex = 0; pluralIndex < count; ++pluralIndex) {
                 // resource of count to pattern
-                pattern = ures_getNextString(countsToPatternRB, &ptLength,
-                                             &pluralCount, &status);
+                UnicodeString pattern =
+                    ures_getNextUnicodeString(countsToPatternRB, &pluralCount, &status);
                 if (U_FAILURE(status)) {
                     continue;
                 }
@@ -629,7 +627,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
         pattern = ures_getStringByKeyWithFallback(countsToPatternRB, searchPluralCount, &ptLength, &status);
         if (U_SUCCESS(status)) {
             //found
-            MessageFormat* messageFormat = new MessageFormat(pattern, fLocale, err);
+            MessageFormat* messageFormat = new MessageFormat(UnicodeString(TRUE, pattern, ptLength), fLocale, err);
             if (U_SUCCESS(err)) {
                 if (fNumberFormat != NULL) {
                     messageFormat->setFormat(0, *fNumberFormat);
@@ -690,20 +688,24 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
     if ( uprv_strcmp(searchPluralCount, gPluralCountOther) == 0 ) {
         // set default fall back the same as the resource in root
         MessageFormat* messageFormat = NULL;
+        const UChar *pattern = NULL;
         if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_SECOND ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_SECOND, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_SECOND;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_MINUTE ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_MINUTE, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_MINUTE;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_HOUR ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_HOUR, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_HOUR;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_WEEK ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_WEEK, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_WEEK;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_DAY ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_DAY, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_DAY;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_MONTH ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_MONTH, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_MONTH;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_YEAR ) {
-            messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_YEAR, fLocale, err);
+            pattern = DEFAULT_PATTERN_FOR_YEAR;
+        }
+        if (pattern != NULL) {
+            messageFormat = new MessageFormat(UnicodeString(TRUE, pattern, -1), fLocale, err);
         }
         if (U_SUCCESS(err)) {
             if (fNumberFormat != NULL && messageFormat != NULL) {

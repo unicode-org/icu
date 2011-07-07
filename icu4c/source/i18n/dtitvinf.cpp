@@ -293,14 +293,12 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
                     continue;
                 }
 
-                const UChar* pattern;
                 const char* key;
-                int32_t ptLength;
                 int32_t ptnNum = ures_getSize(intervalPatterns.getAlias());
                 int32_t ptnIndex;
                 for ( ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex ) {
-                    pattern = ures_getNextString(intervalPatterns.getAlias(), &ptLength, &key,
-                                                 &status);
+                    UnicodeString pattern =
+                        ures_getNextUnicodeString(intervalPatterns.getAlias(), &key, &status);
                     if ( U_FAILURE(status) ) {
                         break;
                     }
@@ -440,14 +438,8 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
     const UnicodeString* inputSkeleton = &skeleton; 
     UnicodeString copySkeleton;
     if ( skeleton.indexOf(CHAR_Z) != -1 ) {
-        UChar zstr[2];
-        UChar vstr[2]; 
-        zstr[0]=CHAR_Z;
-        vstr[0]=CHAR_V;
-        zstr[1]=0;
-        vstr[1]=0;
         copySkeleton = skeleton;
-        copySkeleton.findAndReplace(zstr, vstr);
+        copySkeleton.findAndReplace(UnicodeString(CHAR_Z), UnicodeString(CHAR_V));
         inputSkeleton = &copySkeleton;
         replaceZWithV = true;
     }

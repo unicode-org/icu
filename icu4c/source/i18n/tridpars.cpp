@@ -72,7 +72,7 @@ TransliteratorIDParser::SingleID::SingleID(const UnicodeString& c, const Unicode
 Transliterator* TransliteratorIDParser::SingleID::createInstance() {
     Transliterator* t;
     if (basicID.length() == 0) {
-        t = createBasicInstance(ANY_NULL, &canonID);
+        t = createBasicInstance(UnicodeString(TRUE, ANY_NULL, 8), &canonID);
     } else {
         t = createBasicInstance(basicID, &canonID);
     }
@@ -498,7 +498,7 @@ void TransliteratorIDParser::instantiateList(UVector& list,
 
     // An empty list is equivalent to a NULL transliterator.
     if (tlist.size() == 0) {
-        t = createBasicInstance(ANY_NULL, NULL);
+        t = createBasicInstance(UnicodeString(TRUE, ANY_NULL, 8), NULL);
         if (t == NULL) {
             // Should never happen
             ec = U_INTERNAL_TRANSLITERATOR_ERROR;
@@ -547,7 +547,7 @@ void TransliteratorIDParser::IDtoSTV(const UnicodeString& id,
                                      UnicodeString& target,
                                      UnicodeString& variant,
                                      UBool& isSourcePresent) {
-    source = ANY;
+    source.setTo(ANY, 3);
     target.truncate(0);
     variant.truncate(0);
 
@@ -596,7 +596,7 @@ void TransliteratorIDParser::STVtoID(const UnicodeString& source,
                                      UnicodeString& id) {
     id = source;
     if (id.length() == 0) {
-        id = ANY;
+        id.setTo(ANY, 3);
     }
     id.append(TARGET_SEP).append(target);
     if (variant.length() != 0) {
@@ -791,11 +791,11 @@ TransliteratorIDParser::parseFilterID(const UnicodeString& id, int32_t& pos,
     // Empty source or target defaults to ANY
     UBool sawSource = TRUE;
     if (source.length() == 0) {
-        source = ANY;
+        source.setTo(ANY, 3);
         sawSource = FALSE;
     }
     if (target.length() == 0) {
-        target = ANY;
+        target.setTo(ANY, 3);
     }
 
     return new Specs(source, target, variant, sawSource, filter);
@@ -848,7 +848,7 @@ TransliteratorIDParser::specsToID(const Specs* specs, int32_t dir) {
  */
 TransliteratorIDParser::SingleID*
 TransliteratorIDParser::specsToSpecialInverse(const Specs& specs, UErrorCode &status) {
-    if (0!=specs.source.caseCompare(ANY, U_FOLD_CASE_DEFAULT)) {
+    if (0!=specs.source.caseCompare(ANY, 3, U_FOLD_CASE_DEFAULT)) {
         return NULL;
     }
     init(status);
@@ -868,11 +868,11 @@ TransliteratorIDParser::specsToSpecialInverse(const Specs& specs, UErrorCode &st
             buf.append(specs.filter);
         }
         if (specs.sawSource) {
-            buf.append(ANY).append(TARGET_SEP);
+            buf.append(ANY, 3).append(TARGET_SEP);
         }
         buf.append(*inverseTarget);
 
-        UnicodeString basicID(ANY);
+        UnicodeString basicID(TRUE, ANY, 3);
         basicID.append(TARGET_SEP).append(*inverseTarget);
 
         if (specs.variant.length() != 0) {

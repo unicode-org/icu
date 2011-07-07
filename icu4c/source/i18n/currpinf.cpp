@@ -159,9 +159,9 @@ CurrencyPluralInfo::getCurrencyPluralPattern(const UnicodeString&  pluralCount,
         (UnicodeString*)fPluralCountToCurrencyUnitPattern->get(pluralCount);
     if (currencyPluralPattern == NULL) {
         // fall back to "other"
-        if (pluralCount.compare(gPluralCountOther)) {
+        if (pluralCount.compare(gPluralCountOther, 5)) {
             currencyPluralPattern = 
-                (UnicodeString*)fPluralCountToCurrencyUnitPattern->get(gPluralCountOther);
+                (UnicodeString*)fPluralCountToCurrencyUnitPattern->get(UnicodeString(TRUE, gPluralCountOther, 5));
         }
         if (currencyPluralPattern == NULL) {
             // no currencyUnitPatterns defined, 
@@ -291,15 +291,15 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
                     pattern->extract(0, pattern->length(), result_1, "UTF-8");
                     std::cout << "pluralCount: " << pluralCount << "; pattern: " << result_1 << "\n";
 #endif
-                    pattern->findAndReplace(gPart0, 
+                    pattern->findAndReplace(UnicodeString(TRUE, gPart0, 3), 
                       UnicodeString(numberStylePattern, numberStylePatternLen));
-                    pattern->findAndReplace(gPart1, gTripleCurrencySign);
+                    pattern->findAndReplace(UnicodeString(TRUE, gPart1, 3), UnicodeString(TRUE, gTripleCurrencySign, 3));
 
                     if (hasSeparator) {
                         UnicodeString negPattern(patternChars, ptnLen);
-                        negPattern.findAndReplace(gPart0, 
+                        negPattern.findAndReplace(UnicodeString(TRUE, gPart0, 3), 
                           UnicodeString(negNumberStylePattern, negNumberStylePatternLen));
-                        negPattern.findAndReplace(gPart1, gTripleCurrencySign);
+                        negPattern.findAndReplace(UnicodeString(TRUE, gPart1, 3), UnicodeString(TRUE, gTripleCurrencySign, 3));
                         pattern->append(gNumberPatternSeparator);
                         pattern->append(negPattern);
                     }

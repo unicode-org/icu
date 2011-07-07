@@ -44,8 +44,10 @@ static const UChar LOCALE_SEP  = 95; // '_'
 //static const UChar VARIANT_SEP = 0x002F; // '/'
 
 // String constants
-static const UChar NO_VARIANT[] = { 0 }; // empty string
 static const UChar ANY[] = { 65, 110, 121, 0 }; // Any
+
+// empty string
+#define NO_VARIANT UnicodeString()
 
 /**
  * Resource bundle key for the RuleBasedTransliterator rule.
@@ -868,7 +870,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& source,
     UnicodeString ID;
     UnicodeString s(source);
     if (s.length() == 0) {
-        s = ANY;
+        s.setTo(TRUE, ANY, 3);
     }
     TransliteratorIDParser::STVtoID(source, target, variant, ID);
     registerEntry(ID, s, target, variant, adopted, visible);
@@ -959,7 +961,7 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
         		variants->addElement(tempus, status);
         	}
         } else {
-        	tempus = new UnicodeString(NO_VARIANT) ;
+        	tempus = new UnicodeString();  // = NO_VARIANT
         	if (tempus != NULL) {
         		variants->insertElementAt(tempus, 0, status);
         	}
@@ -1073,9 +1075,9 @@ TransliteratorEntry* TransliteratorRegistry::findInBundle(const TransliteratorSp
         // but must be consistent and documented.
         if (pass == 0) {
             utag.append(direction == UTRANS_FORWARD ?
-                        TRANSLITERATE_TO : TRANSLITERATE_FROM);
+                        TRANSLITERATE_TO : TRANSLITERATE_FROM, -1);
         } else {
-            utag.append(TRANSLITERATE);
+            utag.append(TRANSLITERATE, -1);
         }
         UnicodeString s(specToFind.get());
         utag.append(s.toUpper(""));
@@ -1282,7 +1284,8 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             }
             int32_t passNumber = 1;
             for (int32_t i = 0; U_SUCCESS(status) && i < entry->u.dataVector->size(); i++) {
-                Transliterator* t = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
+                // TODO: Should passNumber be turned into a decimal-string representation (1 -> "1")?
+                Transliterator* t = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + UnicodeString(passNumber++),
                     (TransliterationRuleData*)(entry->u.dataVector->elementAt(i)), FALSE);
                 if (t == 0)
                     status = U_MEMORY_ALLOCATION_ERROR;

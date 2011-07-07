@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2008, International Business Machines Corporation
+*   Copyright (c) 2002-2011, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -97,9 +97,9 @@ UnicodeString& FunctionReplacer::toReplacerPattern(UnicodeString& rule,
     rule.truncate(0);
     rule.append(AMPERSAND);
     rule.append(translit->getID());
-    rule.append(OPEN);
+    rule.append(OPEN, 2);
     rule.append(replacer->toReplacer()->toReplacerPattern(str, escapeUnprintable));
-    rule.append(CLOSE);
+    rule.append(CLOSE, 2);
     return rule;
 }
 

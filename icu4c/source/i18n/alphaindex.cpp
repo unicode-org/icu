@@ -1048,7 +1048,7 @@ void AlphabeticIndex::hackName(UnicodeString &dest, const UnicodeString &name, c
             index--;
             break;
         }
-        int32_t compareResult = col->compare(name, (*HACK_PINYIN_LOOKUP)[index]); 
+        int32_t compareResult = col->compare(name, UnicodeString(TRUE, (*HACK_PINYIN_LOOKUP)[index], -1));
         if (compareResult < 0) {
             index--;
         }

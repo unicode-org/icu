@@ -133,6 +133,43 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 #define UNICODE_STRING_SIMPLE(cs) UNICODE_STRING(cs, -1)
 
 /**
+ * \def UNISTR_FROM_CHAR_EXPLICIT
+ * This can be defined to be empty or "explicit".
+ * If explicit, then the UnicodeString(UChar) and UnicodeString(UChar32)
+ * constructors are marked as explicit, preventing their inadvertent use.
+ * @draft ICU 49
+ */
+#ifndef UNISTR_FROM_CHAR_EXPLICIT
+# if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION)
+    // Auto-"explicit" in ICU library code.
+#   define UNISTR_FROM_CHAR_EXPLICIT explicit
+# else
+    // Empty by default for source code compatibility.
+#   define UNISTR_FROM_CHAR_EXPLICIT
+# endif
+#endif
+
+/**
+ * \def UNISTR_FROM_STRING_EXPLICIT
+ * This can be defined to be empty or "explicit".
+ * If explicit, then the UnicodeString(const char *) and UnicodeString(const UChar *)
+ * constructors are marked as explicit, preventing their inadvertent use.
+ *
+ * In particular, this helps prevent accidentally depending on ICU conversion code
+ * by passing a string literal into an API with a const UnicodeString & parameter.
+ * @draft ICU 49
+ */
+#ifndef UNISTR_FROM_STRING_EXPLICIT
+# if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION)
+    // Auto-"explicit" in ICU library code.
+#   define UNISTR_FROM_STRING_EXPLICIT explicit
+# else
+    // Empty by default for source code compatibility.
+#   define UNISTR_FROM_STRING_EXPLICIT
+# endif
+#endif
+
+/**
  * UnicodeString is a string class that stores Unicode characters directly and provides
  * similar functionality as the Java String and StringBuffer classes.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).
@@ -2822,25 +2859,37 @@ public:
 
   /**
    * Single UChar (code unit) constructor.
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_CHAR_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
    * @param ch the character to place in the UnicodeString
    * @stable ICU 2.0
    */
-  UnicodeString(UChar ch);
+  UNISTR_FROM_CHAR_EXPLICIT UnicodeString(UChar ch);
 
   /**
    * Single UChar32 (code point) constructor.
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_CHAR_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
    * @param ch the character to place in the UnicodeString
    * @stable ICU 2.0
    */
-  UnicodeString(UChar32 ch);
+  UNISTR_FROM_CHAR_EXPLICIT UnicodeString(UChar32 ch);
 
   /**
    * UChar* constructor.
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
    * @param text The characters to place in the UnicodeString.  <TT>text</TT>
    * must be NULL (U+0000) terminated.
    * @stable ICU 2.0
    */
-  UnicodeString(const UChar *text);
+  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const UChar *text);
 
   /**
    * UChar* constructor.
@@ -2899,14 +2948,22 @@ public:
 
   /**
    * char* constructor.
+   * Uses the default converter (and thus depends on the ICU conversion code)
+   * unless U_CHARSET_IS_UTF8 is set to 1.
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
    * @param codepageData an array of bytes, null-terminated,
    *                     in the platform's default codepage.
    * @stable ICU 2.0
    */
-  UnicodeString(const char *codepageData);
+  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char *codepageData);
 
   /**
    * char* constructor.
+   * Uses the default converter (and thus depends on the ICU conversion code)
+   * unless U_CHARSET_IS_UTF8 is set to 1.
    * @param codepageData an array of bytes in the platform's default codepage.
    * @param dataLength The number of bytes in <TT>codepageData</TT>.
    * @stable ICU 2.0

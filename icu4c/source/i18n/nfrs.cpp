@@ -161,7 +161,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
         status = U_PARSE_ERROR;
     }
 
-    fIsPublic = name.indexOf(gPercentPercent) != 0;
+    fIsPublic = name.indexOf(gPercentPercent, 2, 0) != 0;
 
     // all of the other members of NFRuleSet are initialized
     // by parseRules()
@@ -701,14 +701,14 @@ NFRuleSet::appendRules(UnicodeString& result) const
 
     // followed by the regular rules...
     for (uint32_t i = 0; i < rules.size(); i++) {
-        result.append(gFourSpaces);
+        result.append(gFourSpaces, 4);
         rules[i]->_appendRuleText(result);
         result.append(gLineFeed);
     }
 
     // followed by the special rules (if they exist)
     if (negativeNumberRule) {
-        result.append(gFourSpaces);
+        result.append(gFourSpaces, 4);
         negativeNumberRule->_appendRuleText(result);
         result.append(gLineFeed);
     }
@@ -716,7 +716,7 @@ NFRuleSet::appendRules(UnicodeString& result) const
     {
         for (uint32_t i = 0; i < 3; ++i) {
             if (fractionRules[i]) {
-                result.append(gFourSpaces);
+                result.append(gFourSpaces, 4);
                 fractionRules[i]->_appendRuleText(result);
                 result.append(gLineFeed);
             }
