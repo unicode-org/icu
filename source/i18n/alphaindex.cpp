@@ -31,7 +31,7 @@
 #include "uhash.h"
 #include "uvector.h"
 
-#include <string>
+//#include <string>
 //#include <iostream>
 U_NAMESPACE_BEGIN
 
