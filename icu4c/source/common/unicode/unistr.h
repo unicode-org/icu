@@ -2951,12 +2951,19 @@ public:
    * Uses the default converter (and thus depends on the ICU conversion code)
    * unless U_CHARSET_IS_UTF8 is set to 1.
    *
+   * For ASCII (really "invariant character") strings it is more efficient to use
+   * the constructor that takes a US_INV (for its enum EInvariant).
+   * For ASCII (invariant-character) string literals, see UNICODE_STRING and
+   * UNICODE_STRING_SIMPLE.
+   *
    * It is recommended to mark this constructor "explicit" by
    * <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code>
    * on the compiler command line or similar.
    * @param codepageData an array of bytes, null-terminated,
    *                     in the platform's default codepage.
    * @stable ICU 2.0
+   * @see UNICODE_STRING
+   * @see UNICODE_STRING_SIMPLE
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char *codepageData);
 

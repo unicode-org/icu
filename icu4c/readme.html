@@ -562,6 +562,21 @@
 
  /*===========================================================================*/
 </pre></li>
+      <li><b>UnicodeString constructors:</b> The UnicodeString class has
+        several single-argument constructors that are not marked "explicit"
+        for historical reasons.
+        This can lead to inadvertent construction of a <code>UnicodeString</code>
+        with a single character by using an integer,
+        and it can lead to inadvertent dependency on the conversion framework
+        by using a C string literal.
+        <ul>
+          <li>Consider marking the from-<code>UChar</code>
+            and from-<code>UChar32</code> constructors explicit via
+            <code>-DUNISTR_FROM_CHAR_EXPLICIT=explicit</code> or similar.</li>
+          <li>Consider marking the from-<code>const char*</code> and
+            from-<code>const UChar*</code></li> constructors explicit via
+            <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code> or similar.</li>
+      </li>
       <li><b>.dat file:</b> By default, the ICU data is built into
         a shared library (DLL). This is convenient because it requires no
         install-time or runtime configuration,
