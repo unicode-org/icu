@@ -287,6 +287,15 @@
 
     <target name="_all.demos" depends="_all.core, _all.translit, _all.charset">
         <ant dir="${icu4j.demos.dir}" inheritAll="false"/>
+
+    <!-- perf -->
     </target>
+        <path id="javac.classpathref.perf">
+        <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.charset.jar}"/>
+        <pathelement location="${icu4j.collate.jar}"/>
+        <pathelement location="${icu4j.tools.jar}"/>
+    </path>
+
 
 </project>
