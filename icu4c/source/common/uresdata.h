@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 1999-2009, International Business Machines                   *
+* Copyright (C) 1999-2011, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -61,7 +61,7 @@ typedef uint32_t Resource;
 
 #define RES_BOGUS 0xffffffff
 
-#define RES_GET_TYPE(res) ((UResType)((res)>>28UL))
+#define RES_GET_TYPE(res) ((int32_t)((res)>>28UL))
 #define RES_GET_OFFSET(res) ((res)&0x0fffffff)
 #define RES_GET_POINTER(pRoot, res) ((pRoot)+RES_GET_OFFSET(res))
 
@@ -69,8 +69,8 @@ typedef uint32_t Resource;
 #define RES_GET_INT(res) (((int32_t)((res)<<4L))>>4L)
 #define RES_GET_UINT(res) ((res)&0x0fffffff)
 
-#define URES_IS_ARRAY(type) ((type)==URES_ARRAY || (type)==URES_ARRAY16)
-#define URES_IS_TABLE(type) ((type)==URES_TABLE || (type)==URES_TABLE16 || (type)==URES_TABLE32)
+#define URES_IS_ARRAY(type) ((int32_t)(type)==URES_ARRAY || (int32_t)(type)==URES_ARRAY16)
+#define URES_IS_TABLE(type) ((int32_t)(type)==URES_TABLE || (int32_t)(type)==URES_TABLE16 || (int32_t)(type)==URES_TABLE32)
 #define URES_IS_CONTAINER(type) (URES_IS_TABLE(type) || URES_IS_ARRAY(type))
 
 #define URES_MAKE_RESOURCE(type, offset) (((Resource)(type)<<28)|(Resource)(offset))
