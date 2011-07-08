@@ -976,7 +976,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                             } else if(idx != -1) {
                                 /* if there is no key, but there is an index, try to get by the index */
                                 /* here we have either a table or an array, so get the element */
-                                UResType type = RES_GET_TYPE(r);
+                                UResType type = (UResType)RES_GET_TYPE(r);
                                 if(URES_IS_TABLE(type)) {
                                     r = res_getTableItemByIndex(&(mainRes->fResData), r, idx, (const char **)&aKey);
                                 } else { /* array */
@@ -1695,7 +1695,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
         return fillIn;
     }
 
-    type = RES_GET_TYPE(resB->fRes);
+    type = (UResType)RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
@@ -1773,7 +1773,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         return fillIn;
     }
 
-    type = RES_GET_TYPE(resB->fRes);
+    type = (UResType)RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
@@ -1827,7 +1827,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         return NULL;
     }
 
-    type = RES_GET_TYPE(resB->fRes);
+    type = (UResType)RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t=0;
 
