@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010, International Business Machines Corporation and         *
+ * Copyright (C) 2010-2011, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -200,12 +200,12 @@ class CharsetCompoundText extends CharsetICU {
     
     private static int findNextEsc(ByteBuffer source) {
         int sourceLimit = source.limit();
-        for (int i = source.position(); i < sourceLimit; i++) {
+        for (int i = (source.position() + 1); i < sourceLimit; i++) {
             if (source.get(i) == 0x1B) {
                 return i;
             }
         }
-        return source.limit();
+        return sourceLimit;
     }
     
     private static byte getState(int codepoint) {
