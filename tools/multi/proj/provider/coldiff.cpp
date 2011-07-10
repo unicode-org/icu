@@ -34,12 +34,13 @@ void setup(UErrorCode &status) {
     int32_t count;
     StringEnumeration *se = Collator::getAvailableLocales();
     count = se->count(status);
-    fprintf(stderr, "# Collators now available: %d,\t%s - %d providers expected.\n", count, u_errorName(status), PROVIDER_COUNT);
+    fprintf(stderr, "# Collators now available: %d,\t%s - %d providers expected.\n", count, u_errorName(status), (int32_t)PROVIDER_COUNT);
 }
 
 int main(int /* argc*/ , const char * /*argv*/ []) {
     UErrorCode status = U_ZERO_ERROR;
     int diffs = 0;
+    int gbaddiffs =0;
     setup(status);
     if(U_FAILURE(status)) return 1;
 
@@ -63,6 +64,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             
             UErrorCode subStatus = U_ZERO_ERROR;
             uint8_t bytes[200];
+            uint8_t bytesb[200];
 #define USE_CXX 0
 
 #if USE_CXX
@@ -87,6 +89,18 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
                 printf("ERR: %s\n", u_errorName(subStatus));
                 continue;
             }
+            
+
+            char xbuf3[200];
+            {
+              int32_t def = ucol_getShortDefinitionString(col,locID/*NULL*/,xbuf3,200,&subStatus);
+              if(U_FAILURE(subStatus)) {
+                printf("Err getting short string name: %s\n", u_errorName(subStatus));
+              } else {
+                printf(" --> %s\n", xbuf3);
+              }              
+            }
+
             int32_t len = ucol_getSortKey(col, stuff, -1, bytes, 200);
 #endif
 
@@ -100,6 +114,38 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
                 printf("%02X", (0xFF&bytes[i]));
             }
             printf("\n");
+
+            char xbuf4[200];
+            UCollator *col2 = ucol_openFromShortString(xbuf3, FALSE, NULL, &subStatus);
+            if(U_FAILURE(subStatus)) {
+              printf("Err opening from new short string : %s\n", u_errorName(subStatus));
+              continue;
+            } else {
+              int32_t def4 = ucol_getShortDefinitionString(col,locID/*NULL*/,xbuf4,300,&subStatus);
+              printf(" --> reopened = %s (%s)\n", xbuf4, u_errorName(subStatus));
+            }
+            int32_t len2 = ucol_getSortKey(col2, stuff, -1, bytesb, 200);
+
+            int baddiffs=0;
+            for(int i=0;i<len;i++) {
+	      if(i<len&&bytes[i]!=bytesb[i]) {
+                  baddiffs++;
+                  printf("!");
+                } else {
+                  printf(" ");
+                }
+                printf("%02X", (0xFF&bytesb[i]));
+            }
+            if(baddiffs>0) {
+              printf(" - ERR! Diffs from %s in %d places", xbuf2,baddiffs);
+              gbaddiffs+=baddiffs;
+            } else {
+              printf("  OK.\n");
+            }
+            printf("\n");
+
+            
+
 #if USE_CXX
             delete col;
 #else
@@ -113,9 +159,19 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
 
     if(diffs==0) {
       printf("ERROR: 0 differences found between platforms.. are the platforms installed? Try 'icuinfo -L'\n");
+      return 1;
     } else {
-      printf("%d differences found among provider versions. Success!\n", diffs);
+      printf("%d differences found among provider versions!\n", diffs);
     }
+
+    if(gbaddiffs>0) {
+      printf("ERROR: %d diffs found between a collator and it's reopened (from shortstring) variant.\n", gbaddiffs);
+      return 2;
+    } else {
+      printf("Collator and reopened (shortstring) are OK.\n");
+    }
+
+    printf("Success!\n");
     
     return 0;
 }
