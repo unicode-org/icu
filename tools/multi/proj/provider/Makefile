@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 IBM Corporation and Others, All Rights Reserved.
+# Copyright (C) 2010-2011 IBM Corporation and Others, All Rights Reserved.
 #
 all: glurens ii plugs testprog
 
@@ -27,10 +27,10 @@ PROVIDER=provider
 LIBPROVIDER=lib$(PROVIDER).a
 
 #libs: $(ICU_TARBALLS_VERS:%=$(OUT)/%/lib/$(LIBPROVIDER))
-
 PLUGLIB=$(shell echo $(PROVIDER_TARGET)  | tr '.' '_' )
 PLUGLIB_MAJ=$(shell echo $(PROVIDER_TARGET) | cut -d. -f1-2 | tr -d '.' )
-PLUGLIB_ICU_CONFIG=$(C_INS)/r$(PLUGLIB)/bin/icu-config
+PLUGLIB_INST=$(C_INS)/r$(PLUGLIB)
+PLUGLIB_ICU_CONFIG=$(PLUGLIB_INST)/bin/icu-config
 #PLUGLIB_SO=$(shell $(PLUGLIB_ICU_CONFIG) --so 2>/dev/null )
 PLUGLIB_NAME=libicuprov.$(PLUGLIB_MAJ).$(PLUGLIB_SO)
 #PLUGLIB_MAJ=$(echo $(PLUGLIB) | cut -d_ -f-1 | tr -d _ )
@@ -166,13 +166,13 @@ $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG)
 
 plugs: $(PLUGLIB_OUTLIBS) $(OUT)/$(PLUGLIB_MAJ:%=icuplugins%.txt)
 
-install-plugs: $(C_INS)/r$(PLUGLIB)/lib/$(PLUGLIB_NAME) $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
+install-plugs: $(PLUGLIB_INST)/lib/$(PLUGLIB_NAME) $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
 	echo "Plugins installed for testing."
 
 #TODO: should be 'install' not 'cp'
-$(C_INS)/r$(PLUGLIB)/lib/$(PLUGLIB_NAME) $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
-	cp $(PLUGLIB_OUTLIBS) $(C_INS)/r$(PLUGLIB)/lib
-	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $(C_INS)/r$(PLUGLIB)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
+$(PLUGLIB_INST)/lib/$(PLUGLIB_NAME) $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
+	cp $(PLUGLIB_OUTLIBS) $(PLUGLIB_INST)/lib
+	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
 
 $(OUT)/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
 	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $@
@@ -182,13 +182,13 @@ TESTPROG=coldiff
 testprog: $(PLUGLIB:%=$(OUT)/%/bin/$(TESTPROG)) 
 
 check: all testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
-	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib:out/$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
-	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib:out/$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
-	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
+	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
+	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
+	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
 
 install-check: install-plugs
-	$(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib $(C_INS)/r$(PLUGLIB)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
-	$(LIBPATH_VAR)=$(C_INS)/r$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
+	$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib $(PLUGLIB_INST)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
+	$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
 
 $(OUT)/%/bin/$(TESTPROG): $(TESTPROG).cpp $(OUT)/$(PLUGLIB)/provider_version.h
 	-mkdir -p $(OUT)/$*/bin
@@ -216,10 +216,12 @@ $(BUILD)/%/$(GLUREN_H): $(BUILD)/%/ok Makefile
 	echo "#define GLUREN_VER" $* >> $@
 	echo "#define GLUREN_TINY" $(shell echo $* | cut -d_ -f1-2) >> $@
 	echo >> $@
-	echo >> $@
-	echo >> $@
+	echo '/* old style (<4.4)*/' >> $@
 	grep "^#define.*$(shell echo $* | cut -d_ -f1-2)$$" $(SRC)/$*/$(SOURCE)/common/unicode/urename.h   | fgrep -v '*' | \
 		sed -e "s@^#define \([^ ]*\) \([^ ]*\)@#define OICU_\1 \2@" >> $@
+	echo '/* new style (4.4+) */' >> $@
+	fgrep " U_ICU_ENTRY_POINT_RENAME(" $(SRC)/$*/$(SOURCE)/common/unicode/urename.h | \
+		sed -e "s@^#define \([^ ]*\) .*@#define OICU_\1 \1_$(shell echo $* | cut -d_ -f1-2 | tr -d '_')@" >> $@
 	cat $(GLUE)/gluren-bottom.h >> $@
 
 
