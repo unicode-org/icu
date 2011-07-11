@@ -93,13 +93,13 @@ MAKE_XTRA_OPTS="PKGDATA_MODE=static"
 MAKE_INSTALL_XTRA_OPTS=$(MAKE_XTRA_OPTS)
 
 # Munged source names: list of C, C++, O etc files for Backend
-GL_BE_C=$(shell cd $(GLUE) ; ls *_be.c)
-GL_BE_CXX=$(shell cd $(GLUE) ; ls *_be.cpp)
-GL_BE_O=$(GL_BE_C:%.c=%.o) $(GL_BE_CPP:%.cpp=%.o)
+#GL_BE_C=$(shell cd $(GLUE) ; ls *_be.c)
+#GL_BE_CXX=$(shell cd $(GLUE) ; ls *_be.cpp)
+#GL_BE_O=$(GL_BE_C:%.c=%.o) $(GL_BE_CPP:%.cpp=%.o)
 # Munged source names: list of C, C++, O etc files for Frontend
-GL_FE_C=$(shell cd $(GLUE) ; ls *_fe.c)
+#GL_FE_C=$(shell cd $(GLUE) ; ls *_fe.c)
 GL_FE_CXX=$(shell cd $(GLUE) ; ls *_fe.cpp)
-GL_FE_O=$(GL_FE_C:%.c=%.o) $(GL_FE_CPP:%.cpp=%.o)
+GL_FE_O=$(GL_FE_CPP:%.cpp=%.o)
 # C flags used in Glue compilation
 GLUE_CFLAGS=-I$(INCGLUE) $(GLUE_EXTRA_CFLAGS)
 
@@ -149,15 +149,12 @@ $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG)
 		echo building $$ver for $(PLUGLIB) ; \
 		if [ ! "$$ver" = "$(PLUGLIB)" ]; \
 		then \
-			echo $(GLOUT)/$(PLUGLIB)/gl_fe_c_$${ver}_x_$(PLUGLIB).o \
-			$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/gl_fe_c_$${ver}_x_$(PLUGLIB).o $(GL_FE_C:%.c=$(GLUE)/%.c) $(XOPTS) ;  \
 			$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/gl_fe_cxx_$${ver}_x_$(PLUGLIB).o $(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp) $(XOPTS) ; \
 			echo " GLUE_VER( $$ver ) " >> $(GLOUT)/$(PLUGLIB)/include/icuglue/glver.h; \
 		fi \
 	done
 # build 'this version' FE files
 	@echo Building FE for $(PLUGLIB)
-	$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/gl_fe_c_$(PLUGLIB).o $(GL_FE_C:%.c=$(GLUE)/%.c) $(XOPTS)
 	$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/gl_fe_cxx_$(PLUGLIB).o $(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp) $(XOPTS)
 # build 'this version' BE files (disabled for now)
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_c_$(PLUGLIB).o $(GL_BE_C:%.c=$(GLUE)/%.c)
