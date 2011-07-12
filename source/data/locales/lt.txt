@@ -43,7 +43,7 @@ lt{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -175,11 +175,9 @@ lt{
                     relative{
                         "-1"{"vakar"}
                         "-2"{"užvakar"}
-                        "-3"{"už užvakar"}
                         "0"{"šiandien"}
                         "1"{"rytoj"}
                         "2"{"poryt"}
-                        "3"{"užporyt"}
                     }
                 }
                 dayperiod{
@@ -478,15 +476,15 @@ lt{
             other{"{0} dienų"}
         }
         day-future{
-            0{"Po 0 dienų"}
-            1{"Po 1 dienos"}
+            0{"po 0 dienų"}
+            1{"po 1 dienos"}
             few{"po {0} dienos"}
             one{"po {0} dieną"}
             other{"po {0} dienų"}
         }
         day-past{
-            0{"Prieš 0 dienų"}
-            1{"Prieš 1 dieną"}
+            0{"prieš 0 dienų"}
+            1{"prieš 1 dieną"}
             few{"prieš {0} dienos"}
             one{"prieš {0} dieną"}
             other{"prieš {0} dienų"}
@@ -497,15 +495,15 @@ lt{
             other{"{0} valandų"}
         }
         hour-future{
-            0{"Po 0 valandų"}
-            1{"Po 1 valandos"}
+            0{"po 0 valandų"}
+            1{"po 1 valandos"}
             few{"po {0} valandos"}
             one{"po {0} valandą"}
             other{"po {0} valandų"}
         }
         hour-past{
-            0{"Prieš 0 valandų"}
-            1{"Prieš 1 valandą"}
+            0{"prieš 0 valandų"}
+            1{"prieš 1 valandą"}
             few{"prieš {0} valandos"}
             one{"prieš {0} valandą"}
             other{"prieš {0} valandų"}
@@ -516,15 +514,15 @@ lt{
             other{"{0} minučių"}
         }
         minute-future{
-            0{"Po 0 minučių"}
-            1{"Po 1 minutės"}
+            0{"po 0 minučių"}
+            1{"po 1 minutės"}
             few{"po {0} minutės"}
             one{"po {0} minutę"}
             other{"po {0} minučių"}
         }
         minute-past{
-            0{"Prieš 0 minučių"}
-            1{"Prieš 1 minutę"}
+            0{"prieš 0 minučių"}
+            1{"prieš 1 minutę"}
             few{"prieš {0} minutės"}
             one{"prieš {0} minutę"}
             other{"prieš {0} minučių"}
@@ -535,15 +533,15 @@ lt{
             other{"{0} mėnesių"}
         }
         month-future{
-            0{"Po 0 mėnesių"}
-            1{"Po 1 mėnesio"}
+            0{"po 0 mėnesių"}
+            1{"po 1 mėnesio"}
             few{"po {0} mėnesį"}
             one{"po {0} mėnesio"}
             other{"po {0} mėnesių"}
         }
         month-past{
-            0{"Prieš 0 mėnesių"}
-            1{"Prieš 1 mėnesį"}
+            0{"prieš 0 mėnesių"}
+            1{"prieš 1 mėnesį"}
             few{"prieš {0} mėnesį"}
             one{"prieš {0} mėnesio"}
             other{"prieš {0} mėnesių"}
@@ -554,15 +552,15 @@ lt{
             other{"{0} sekundžių"}
         }
         second-future{
-            0{"Po 0 sekundžių"}
-            1{"Po 1 sekundės"}
+            0{"po 0 sekundžių"}
+            1{"po 1 sekundės"}
             few{"po {0} sekundės"}
             one{"po {0} sekundę"}
             other{"po {0} sekundžių"}
         }
         second-past{
-            0{"Prieš 0 sekundžių"}
-            1{"Prieš 1 sekundę"}
+            0{"prieš 0 sekundžių"}
+            1{"prieš 1 sekundę"}
             few{"prieš {0} sekundės"}
             one{"prieš {0} sekundę"}
             other{"prieš {0} sekundžių"}
@@ -573,15 +571,15 @@ lt{
             other{"{0} savaičių"}
         }
         week-future{
-            0{"Po 0 savaičių"}
-            1{"Po 1 savaitės"}
+            0{"po 0 savaičių"}
+            1{"po 1 savaitės"}
             few{"po {0} savaitės"}
             one{"po {0} savaitę"}
             other{"po {0} savaičių"}
         }
         week-past{
-            0{"Prieš 0 savaičių"}
-            1{"Prieš 1 savaitę"}
+            0{"prieš 0 savaičių"}
+            1{"prieš 1 savaitę"}
             few{"prieš {0} savaitės"}
             one{"prieš {0} savaitę"}
             other{"prieš {0} savaičių"}
@@ -592,15 +590,15 @@ lt{
             other{"{0} metų"}
         }
         year-future{
-            0{"Po 0 metų"}
-            1{"Po 1 metų"}
+            0{"po 0 metų"}
+            1{"po 1 metų"}
             few{"po {0} metai"}
             one{"po {0} metus"}
             other{"po {0} metų"}
         }
         year-past{
-            0{"Prieš 0 metų"}
-            1{"Prieš 1 metus"}
+            0{"prieš 0 metų"}
+            1{"prieš 1 metus"}
             few{"prieš {0} metai"}
             one{"prieš {0} metus"}
             other{"prieš {0} metų"}

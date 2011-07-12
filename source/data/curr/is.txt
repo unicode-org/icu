@@ -886,5 +886,5 @@ is{
             other{"óþekktur eða ógildur gjaldeyrir"}
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

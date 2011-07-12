@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abiyán"}
@@ -515,20 +515,16 @@ es{
             ls{"Hora de Afganistán"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Hora de África central"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Hora de África oriental"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Hora de Sudáfrica"}
             ls{"Hora estándar de África meridional"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Hora de verano de África occidental"}
             ls{"Hora de África occidental"}
         }
@@ -537,13 +533,11 @@ es{
             ls{"Hora de Aktyubinsk"}
         }
         "meta:Alaska"{
-            cu:int{1}
             ld{"Hora de verano de Alaska"}
             lg{"Hora de Alaska"}
             ls{"Hora estándar de Alaska"}
         }
         "meta:Alaska_Hawaii"{
-            cu:int{1}
             ld{"Hora de verano de Alaska-Hawái"}
             lg{"Hora de Alaska-Hawái"}
             ls{"Hora estándar de Alaska-Hawái"}
@@ -554,25 +548,21 @@ es{
             ls{"Hora del Amazonas"}
         }
         "meta:America_Central"{
-            cu:int{1}
             ld{"Hora de verano central"}
             lg{"Hora central"}
             ls{"Hora estándar central"}
         }
         "meta:America_Eastern"{
-            cu:int{1}
             ld{"Hora de verano oriental"}
             lg{"Hora oriental"}
             ls{"Hora estándar oriental"}
         }
         "meta:America_Mountain"{
-            cu:int{1}
             ld{"Hora de verano de Montaña"}
             lg{"Hora de las Montañas"}
             ls{"Hora estándar de Montaña"}
         }
         "meta:America_Pacific"{
-            cu:int{1}
             ld{"Hora de verano del Pacífico"}
             lg{"Hora del Pacífico"}
             ls{"Hora estándar del Pacífico"}
@@ -585,22 +575,15 @@ es{
         "meta:Aqtau"{
             ld{"Hora de verano de Aktau"}
             ls{"Hora de Aktau"}
-            sd{"AQTST (Aktau)"}
-            ss{"AQTT (Aktau)"}
         }
         "meta:Aqtobe"{
             ld{"Hora de verano de Aktobe"}
             ls{"Hora de Aktobe"}
-            sd{"AQTST (Aktobe)"}
-            ss{"AQTT (Aktobe)"}
         }
         "meta:Arabian"{
             ld{"Hora de verano de Arabia"}
             lg{"Hora de Arabia"}
             ls{"Hora estándar de Arabia"}
-            sd{"ADT (Arabia)"}
-            sg{"AT (Arabia)"}
-            ss{"AST (Arabia)"}
         }
         "meta:Argentina"{
             ld{"Hora de verano de Argentina"}
@@ -621,31 +604,26 @@ es{
             ls{"Hora de Asjabad"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Hora de verano del Atlántico"}
             lg{"Hora del Atlántico"}
             ls{"Hora estándar del Atlántico"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Hora de verano de Australia central"}
             lg{"Hora de Australia central"}
             ls{"Hora estándar de Australia central"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Hora de verano de Australia centroccidental"}
             lg{"Hora de Australia centroccidental"}
             ls{"Hora estándar de Australia centroccidental"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Hora de verano de Australia oriental"}
             lg{"Hora de Australia oriental"}
             ls{"Hora estándar de Australia oriental"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Hora de verano de Australia occidental"}
             lg{"Hora de Australia occidental"}
             ls{"Hora estándar de Australia occidental"}
@@ -703,9 +681,6 @@ es{
             ld{"Hora de verano de China"}
             lg{"Hora de China"}
             ls{"Hora estándar de China"}
-            sd{"CDT (China)"}
-            sg{"CT (China)"}
-            ss{"CST (China)"}
         }
         "meta:Choibalsan"{
             ld{"Hora de verano de Choibalsan"}
@@ -738,17 +713,14 @@ es{
             ls{"Hora de Ecuador"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Hora de verano de Europa Central"}
             ls{"Hora estándar de Europa Central"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Hora de verano de Europa del Este"}
             ls{"Hora estándar de Europa del Este"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Hora de verano de Europa Occidental"}
             ls{"Hora de Europa Occidental"}
         }
@@ -791,7 +763,6 @@ es{
             ls{"Hora de la Guyana"}
         }
         "meta:Hawaii_Aleutian"{
-            cu:int{1}
             ld{"Hora de verano de Hawái-Aleutianas"}
             lg{"Hora de Hawái-Aleutianas"}
             ls{"Hora estándar de Hawái-Aleutianas"}
@@ -809,7 +780,6 @@ es{
             ls{"Hora estándar de la India"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"Hora del Océano Índico"}
         }
         "meta:Indochina"{
@@ -836,7 +806,6 @@ es{
             ld{"Hora de verano de Israel"}
             lg{"Hora de Israel"}
             ls{"Hora estándar de Israel"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Hora de verano de Japón"}
@@ -1002,8 +971,6 @@ es{
         "meta:Samarkand"{
             ld{"Hora de verano de Samarcanda"}
             ls{"Hora de Samarcanda"}
-            sd{"SAMST (Samarcanda)"}
-            ss{"SAMT (Samarcanda)"}
         }
         "meta:Samoa"{
             ls{"Hora estándar de Samoa"}
@@ -1014,7 +981,6 @@ es{
         }
         "meta:South_Georgia"{
             ls{"Hora de Georgia meridional"}
-            ss{"GST (Georgia del Sur)"}
         }
         "meta:Suriname"{
             ls{"Hora de Surinam"}

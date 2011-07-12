@@ -39,7 +39,7 @@ mt{
         154{"Ewropa ta’ Fuq"}
         155{"Ewropa tal-Punent"}
         172{"Commonwealth tal-Istati Independenti"}
-        419{"Amerika Latina u l-Karibew"}
+        419{"Amerika Latina"}
         830{"Gżejjer tal-Kanal Ingliż"}
         AD{"Andorra"}
         AE{"Emirati Għarab Maqgħuda"}
@@ -285,5 +285,5 @@ mt{
         ZW{"Żimbabwe"}
         ZZ{"Reġjun Mhux Magħruf jew Mhux Validu"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}
@@ -188,11 +188,6 @@ et{
             lg{"Anadõri aeg"}
             ls{"Anadõri aeg"}
         }
-        "meta:Arabian"{
-            sd{"ADT (Araabia)"}
-            sg{"AT (Araabia)"}
-            ss{"AST (Araabia)"}
-        }
         "meta:Argentina"{
             ld{"Argentina suveaeg"}
             lg{"Argentina aeg"}
@@ -204,7 +199,6 @@ et{
             ls{"Lääne-Argentina aeg"}
         }
         "meta:Atlantic"{
-            cu:int{1}
             ld{"Atlandi suveaeg"}
             lg{"Atlandi aeg"}
             ls{"Atlandi standardaeg"}
@@ -245,16 +239,10 @@ et{
         "meta:Chamorro"{
             lg{"Põhja-Mariaanide aeg"}
             ls{"Põhja-Mariaanide standardaeg"}
-            sg{"Ch. aeg"}
         }
         "meta:Chatham"{
             ld{"Chathami suveaeg"}
             ls{"Chathami standardaeg"}
-        }
-        "meta:China"{
-            sd{"CDT (Hiina)"}
-            sg{"CT (Hiina)"}
-            ss{"CST (Hiina)"}
         }
         "meta:Choibalsan"{
             ld{"Tšojbalsani suveaeg"}
@@ -344,9 +332,6 @@ et{
             ld{"Irkutski suveaeg"}
             lg{"Irkutski aeg"}
             ls{"Irkutski aeg"}
-        }
-        "meta:Israel"{
-            ss{"IST (Iisrael)"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamtšatski suveaeg"}
@@ -461,7 +446,6 @@ et{
         }
         "meta:South_Georgia"{
             ls{"Lõuna-Georgia aeg"}
-            ss{"GST (Lõuna-Georgia)"}
         }
         "meta:Syowa"{
             ls{"Syowa aeg"}

@@ -431,7 +431,7 @@ sk{
             tibt{"Tibetské číslice"}
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.53"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

@@ -728,7 +728,7 @@ bn{
             tibt{"তিব্বতি সংখ্যা"}
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.63"}
     codePatterns{
         language{"ভাষা: {0}"}
         script{"লিপি: {0}"}

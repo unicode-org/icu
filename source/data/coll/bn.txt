@@ -10,16 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/bn.xml
  */
 bn{
-    Version{"2.0.42.71"}
+    Version{"2.0.59.17"}
     collations{
         standard{
-            Sequence{
-                " [normalization on ]"
-                "&৺<৸<৹<৲<৳<অ<আ<ই<ঈ<উ<ঊ<ঋ<ৠ<ঌ<ৡ<এ<ঐ<ও<ঔ<়<ং<ঃ<ঁ<ক<খ<গ<ঘ<ঙ<চ<ছ<জ<ঝ<ঞ<ট"
-                "<ঠ<ড<ড়=ড়<ঢ<ঢ়=ঢ়<ণ<ৎ<ত<থ<দ<ধ<ন<প<ফ<ব<ভ<ম<য<য়=য়<র<ৰ<ল<ৱ<শ<ষ<স<হ<ঽ<া<"
-                "ি<ী<ু<ূ<ৃ<ৄ<ৢ<ৣ<ে<ৈ<ো=ো<ৌ=ৌ<্<ৗ"
-            }
-            Version{"2.0"}
+            Sequence{" [normalization on ]&ঔ<ং<ঃ<ঁ"}
+            Version{"2.0.1"}
         }
         traditional{
             Sequence{
@@ -638,7 +633,7 @@ bn{
                 "&যৌ<<<য়ৌ"
                 "&য্<<<য়্"
             }
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
     }
 }

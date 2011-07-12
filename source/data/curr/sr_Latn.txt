@@ -1274,7 +1274,6 @@ sr_Latn{
             few{"burundska franka"}
             many{"burundskih franaka"}
             one{"burundski franak"}
-            other{"BIF"}
         }
         BMD{
             few{"bermudska dolara"}
@@ -1448,7 +1447,6 @@ sr_Latn{
             few{"kostarikanska kolona"}
             many{"kostarikanskih kolona"}
             one{"kostarikanski kolon"}
-            other{"CRC"}
         }
         CSD{
             few{"stara srpska dinara"}
@@ -1976,7 +1974,6 @@ sr_Latn{
             few{"madagaskarska franka"}
             many{"madagaskarskih franaka"}
             one{"madagaskarski franak"}
-            other{"MGF"}
         }
         MKD{
             few{"makedonska denara"}
@@ -2723,5 +2720,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
 }

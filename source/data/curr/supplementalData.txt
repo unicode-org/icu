@@ -2820,6 +2820,17 @@ supplementalData:table(nofallback){
                     -736730976,
                 }
             }
+            {
+                id{"MVP"}
+                from:intvector{ /** 1947-01-01  */
+                    -169,
+                    3133024,
+                }
+                to:intvector{ /** 1981-07-01  */
+                    80,
+                    -736730976,
+                }
+            }
         }
         MW{
             {

@@ -39,7 +39,7 @@ et{
             }
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -135,11 +135,9 @@ et{
                     relative{
                         "-1"{"eile"}
                         "-2"{"üleeile"}
-                        "-3"{"üleüleeile"}
                         "0"{"täna"}
                         "1"{"homme"}
                         "2"{"ülehomme"}
-                        "3"{"üleülehomme"}
                     }
                 }
                 dayperiod{

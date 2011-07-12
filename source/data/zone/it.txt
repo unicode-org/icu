@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/it.xml
  */
 it{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -508,13 +508,11 @@ it{
             ls{"Ora dell'Argentina occidentale"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Ora legale dell'Atlantico"}
             lg{"Ora dell'Atlantico"}
             ls{"Ora standard dell'Atlantico"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Ora legale dell'Australia (centrale)"}
             lg{"Ora dell'Australia centrale"}
             ls{"Ora standard dell'Australia (centrale)"}
@@ -542,18 +540,11 @@ it{
         "meta:China"{
             ld{"Ora Legale Cina"}
             ls{"Ora Standard Cina"}
-            sd{"CDT (Cina)"}
-            ss{"CST (Cina)"}
         }
         "meta:Choibalsan"{
             ld{"Ora legale di Choibalsan"}
             lg{"Ora di Choibalsan"}
             ls{"Ora di Choibalsan"}
-        }
-        "meta:Cuba"{
-            sd{"CDT (Cuba)"}
-            sg{"CD (Cuba)"}
-            ss{"CST (Cuba)"}
         }
         "meta:Europe_Central"{
             cu:int{1}
@@ -561,11 +552,12 @@ it{
             ls{"Ora Standard Europa Centrale"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"Ora Legale Europa Orientale"}
             ls{"Ora Standard Europa Orientale"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
+            cu:int{1}
             ls{"Ora Europa occidentale"}
         }
         "meta:Hawaii"{
@@ -597,7 +589,6 @@ it{
         "meta:Israel"{
             ld{"Ora Legale Israele"}
             ls{"Ora Standard Israele"}
-            ss{"IST (Israele)"}
         }
         "meta:Japan"{
             ld{"Ora Legale Giappone"}
@@ -675,11 +666,6 @@ it{
             ld{"Ora legale di Samara"}
             lg{"Ora di Samara"}
             ls{"Ora di Samara"}
-        }
-        "meta:Taipei"{
-            sd{"CDT (Taipei)"}
-            sg{"CT (Taipei)"}
-            ss{"CST (Taipei)"}
         }
         "meta:Vladivostok"{
             ld{"Ora legale di Vladivostok"}

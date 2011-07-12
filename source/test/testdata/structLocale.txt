@@ -5127,6 +5127,11 @@ structLocale:table(nofallback){
                     M{""}
                     y{""}
                 }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 yMMMEd{
                     M{""}
                     d{""}
@@ -5263,6 +5268,11 @@ structLocale:table(nofallback){
                 }
                 yMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMEd{
@@ -5493,6 +5503,11 @@ structLocale:table(nofallback){
                 }
                 yMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMEd{
@@ -5729,6 +5744,11 @@ structLocale:table(nofallback){
                 }
                 yMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMEd{
@@ -6155,6 +6175,11 @@ structLocale:table(nofallback){
                     M{""}
                     y{""}
                 }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 yMMMEd{
                     M{""}
                     d{""}
@@ -6445,6 +6470,11 @@ structLocale:table(nofallback){
                     M{""}
                     y{""}
                 }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 yMMMEd{
                     M{""}
                     d{""}
@@ -6699,6 +6729,11 @@ structLocale:table(nofallback){
                     M{""}
                     y{""}
                 }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 yMMMEd{
                     M{""}
                     d{""}
@@ -6945,6 +6980,11 @@ structLocale:table(nofallback){
                     M{""}
                     y{""}
                 }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 yMMMEd{
                     M{""}
                     d{""}
@@ -7189,6 +7229,11 @@ structLocale:table(nofallback){
                 }
                 yMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMEd{
@@ -8187,6 +8232,11 @@ structLocale:table(nofallback){
                 }
                 yMMM{
                     M{""}
+                    y{""}
+                }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
                     y{""}
                 }
                 yMMMEd{
