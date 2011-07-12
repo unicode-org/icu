@@ -3,12 +3,15 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/uz_UZ.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
+/**
+ * generated alias target
+ */
 uz_Cyrl_UZ{
     /**
-     * empty target resource
+     * so genrb doesn't issue warnings
      */
     ___{""}
 }

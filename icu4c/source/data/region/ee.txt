@@ -237,7 +237,6 @@ ee{
         QO{"Outlaying Oceania nutome"}
         RE{"Réunion nutome"}
         RO{"Romania nutome"}
-        RS{"RS"}
         RU{"Russia nutome"}
         RW{"Rwanda nutome"}
         SA{"Saudi Arabia nutome"}
@@ -298,5 +297,5 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.81"}
 }

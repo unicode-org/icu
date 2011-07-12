@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sw.xml
  */
 sw{
-    Version{"2.0.58.75"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "meta:Africa_Eastern"{
             ls{"Saa za Africa Mashariki"}

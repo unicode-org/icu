@@ -40,7 +40,7 @@ br{
         151{"Europa ar Reter"}
         154{"Europa an Norzh"}
         155{"Europa ar Cʼhornôg"}
-        419{"Amerika Latin ha Karib"}
+        419{"Amerika Latin"}
         AC{"Enez Ascension"}
         AD{"Andorra"}
         AE{"Emirelezhioù Arab Unanet"}
@@ -297,5 +297,5 @@ br{
         ZW{"Zimbabwe"}
         ZZ{"Rannved dianav"}
     }
-    Version{"2.0.58.82"}
+    Version{"2.0.59.68"}
 }

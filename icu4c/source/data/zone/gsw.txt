@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gsw.xml
  */
 gsw{
-    Version{"2.0.57.98"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -299,7 +299,6 @@ gsw{
             ls{"Aktyubinsk-Ziit"}
         }
         "meta:Alaska"{
-            cu:int{1}
             lg{"Alaska-Ziit"}
             ls{"Alaska-Schtandardziit"}
         }
@@ -322,12 +321,14 @@ gsw{
             ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"Oschteuropäischi Summerziit"}
             ls{"Oschteuropäischi Ziit"}
             sd{"OESZ"}
             ss{"OEZ"}
         }
         "meta:Europe_Western"{
+            cu:int{1}
             ld{"Weschteuropäischi Summerziit"}
             ls{"Weschteuropäischi Ziit"}
             sd{"WESZ"}

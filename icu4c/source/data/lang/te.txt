@@ -737,7 +737,7 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.63"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{","}

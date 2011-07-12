@@ -518,7 +518,6 @@ is{
         Beng{"bengalska"}
         Bopo{"Bopomofo"}
         Brai{"Blindraletur"}
-        Cans{"Cans"}
         Cyrl{"kyrillísk"}
         Deva{"Devanagari"}
         Ethi{"eþíópísk"}
@@ -623,7 +622,7 @@ is{
             tibt{"Tíbeskir tölustafir"}
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

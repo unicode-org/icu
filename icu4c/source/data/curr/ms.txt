@@ -47,10 +47,6 @@ ms{
             "AWG",
             "Florin Aruba",
         }
-        AZM{
-            "AZM",
-            "AZM",
-        }
         AZN{
             "AZN",
             "Manat Azerbaijan",
@@ -174,10 +170,6 @@ ms{
         DZD{
             "DZD",
             "Dinar Algeria",
-        }
-        EEK{
-            "EEK",
-            "EEK",
         }
         EGP{
             "EGP",
@@ -640,5 +632,5 @@ ms{
             "Kwacha Zambia",
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
 }

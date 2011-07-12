@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"আবিদজান"}
@@ -1309,6 +1309,10 @@ bn{
             ld{"হোভ্ড গৃষ্মকালীন সময়"}
             lg{"হোভ্ড সময়"}
             ls{"হোভ্ড সময়"}
+        }
+        "meta:India"{
+            cu:int{1}
+            ss{"IST"}
         }
         "meta:Indonesia_Central"{
             lg{"ইন্দোনেশিয়া কেন্দ্রীয় সময়"}

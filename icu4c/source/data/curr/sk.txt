@@ -1046,7 +1046,6 @@ sk{
             other{"eur, eura"}
         }
         GBP{
-            few{"GBP"}
             one{"britská libra"}
             other{"britských libier, britskej libry"}
         }
@@ -1118,7 +1117,6 @@ sk{
         SEK{
             few{"švédske koruny"}
             one{"švédska koruna"}
-            other{"SEK"}
         }
         THB{
             few{"thajské bahty"}
@@ -1140,11 +1138,6 @@ sk{
             one{"americký dolár"}
             other{"amerických dolárov, amerického dolára"}
         }
-        XXX{
-            few{"XXX"}
-            one{"XXX"}
-            other{"XXX"}
-        }
         ZAR{
             few{"juhoafrické randy"}
             one{"juhoafrický rand"}
@@ -1155,5 +1148,5 @@ sk{
         few{"{0} {1}"}
         one{"{0} {1}"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.53"}
 }

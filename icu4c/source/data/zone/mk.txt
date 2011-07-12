@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mk.xml
  */
 mk{
-    Version{"2.0.57.98"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Сеута"}
@@ -597,9 +597,6 @@ mk{
             ld{"Бразилија летно сметање на времето"}
             ls{"Бразилија време"}
         }
-        "meta:British"{
-            cu:int{1}
-        }
         "meta:Chile"{
             ld{"Чиле летно сметање на времето"}
             ls{"Чиле време"}
@@ -642,6 +639,7 @@ mk{
             ls{"Источноевропско време"}
         }
         "meta:Europe_Western"{
+            cu:int{1}
             ld{"Западноевропско летно време"}
             ls{"Западноевропско време"}
         }
@@ -672,11 +670,7 @@ mk{
         "meta:Indian_Ocean"{
             ls{"Време на Индиски Океан"}
         }
-        "meta:Irish"{
-            cu:int{1}
-        }
         "meta:Kuybyshev"{
-            cu:int{1}
             ld{"Летно време во Кујбишев"}
             ls{"Кујбишев"}
         }
@@ -734,7 +728,6 @@ mk{
             ls{"Суринам време"}
         }
         "meta:Turkey"{
-            cu:int{1}
             ld{"Летно време во Турција"}
             ls{"Турција"}
         }

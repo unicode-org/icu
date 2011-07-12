@@ -896,7 +896,7 @@ pl{
             "szyling ugandyjski",
         }
         USD{
-            "USD",
+            "US$",
             "dolar amerykański ",
         }
         UYP{
@@ -2063,5 +2063,5 @@ pl{
         many{"{0} {1}"}
         one{"{0} {1}"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
 }

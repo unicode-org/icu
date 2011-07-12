@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/brx.xml
  */
 brx{
-    Version{"2.0.58.32"}
+    Version{"2.0.59.56"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
@@ -1387,8 +1387,6 @@ brx{
         "meta:Europe_Central"{
             ld{"मध्य यूरोप समर टाईम"}
             ls{"मध्य यूरोप स्टैंडर्ड टाईम"}
-            sd{"मध्य यूरोप समर टाईम"}
-            ss{"मध्य यूरोप स्टैंडर्ड टाईम"}
         }
         "meta:Europe_Eastern"{
             ld{"ईस्टर्न यूरोप समर टाईम"}
@@ -1468,6 +1466,7 @@ brx{
         "meta:India"{
             cu:int{1}
             ls{"भारतीय स्टैंडर्ड टाईम"}
+            ss{"IST"}
         }
         "meta:Indian_Ocean"{
             ls{"भारतीय महासगर स्टैंडर्ड टाईम"}

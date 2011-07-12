@@ -29,7 +29,7 @@ ms{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -149,11 +149,9 @@ ms{
                     relative{
                         "-1"{"Semalam"}
                         "-2"{"Hari sebelum semalam"}
-                        "-3"{"Tiga hari lalu"}
                         "0"{"Hari ini"}
                         "1"{"Esok"}
                         "2"{"Hari selepas esok"}
-                        "3"{"Tiga hari dari sekarang"}
                     }
                 }
                 dayperiod{

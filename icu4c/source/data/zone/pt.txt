@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1157,20 +1157,16 @@ pt{
             ls{"Horário do Afeganistão"}
         }
         "meta:Africa_Central"{
-            cu:int{1}
             ls{"Horário da África Central"}
         }
         "meta:Africa_Eastern"{
-            cu:int{1}
             ls{"Horário da África Oriental"}
         }
         "meta:Africa_Southern"{
-            cu:int{1}
             lg{"Horário da África do Sul"}
             ls{"Horário Padrão da África do Sul"}
         }
         "meta:Africa_Western"{
-            cu:int{1}
             ld{"Horário de Verão da África Ocidental"}
             ls{"Horário da África Ocidental"}
         }
@@ -1179,7 +1175,6 @@ pt{
             ls{"Horário do Aktyubinsk"}
         }
         "meta:Alaska"{
-            cu:int{1}
             ld{"Horário de Verão do Alasca"}
             lg{"Horário do Alaska"}
             ls{"Horário Padrão do Alasca"}
@@ -1198,6 +1193,9 @@ pt{
             ld{"Horário de Verão do Amazonas"}
             lg{"Horário do Amazonas"}
             ls{"Horário do Amazonas"}
+            sd{"AMST"}
+            sg{"AMT"}
+            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Horário de Verão Central"}
@@ -1236,9 +1234,6 @@ pt{
             ld{"Horário de Verão da Arábia"}
             lg{"Horário da Arábia"}
             ls{"Horário Padrão da Arábia"}
-            sd{"ADT (Arábia)"}
-            sg{"AT (Arábia)"}
-            ss{"AST (Arábia)"}
         }
         "meta:Argentina"{
             ld{"Horário de Verão da Argentina"}
@@ -1253,42 +1248,32 @@ pt{
         "meta:Armenia"{
             ld{"Horário de Verão da Armênia"}
             ls{"Horário da Armênia"}
-            sd{"AMST (Armênia)"}
-            ss{"AMT (Armênia)"}
         }
         "meta:Ashkhabad"{
             ld{"Horário de Verão de Ashkhabad"}
             ls{"Horário de Ashkhabad"}
         }
         "meta:Atlantic"{
-            cu:int{1}
             ld{"Horário de Verão do Atlântico"}
             lg{"Horário do Atlântico"}
             ls{"Horário Padrão do Atlântico"}
         }
         "meta:Australia_Central"{
-            cu:int{1}
             ld{"Horário de Verão da Austrália Central"}
             lg{"Horário da Austrália Central"}
             ls{"Horário Padrão da Austrália Central"}
-            sd{"ACDT (Austrália)"}
-            sg{"ACT (Austrália)"}
-            ss{"ACST (Austrália)"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{1}
             ld{"Horário de Verão da Austrália Centro-Ocidental"}
             lg{"Horário da Austrália Centro-Ocidental"}
             ls{"Horário Padrão da Austrália Centro-Ocidental"}
         }
         "meta:Australia_Eastern"{
-            cu:int{1}
             ld{"Horário de Verão da Austrália Oriental"}
             lg{"Horário da Austrália Oriental"}
             ls{"Horário Padrão da Austrália Oriental"}
         }
         "meta:Australia_Western"{
-            cu:int{1}
             ld{"Horário de Verão da Austrália Ocidental"}
             lg{"Horário da Austrália Ocidental"}
             ls{"Horário Padrão da Austrália Ocidental"}
@@ -1329,6 +1314,9 @@ pt{
             ld{"Horário de Verão de Brasília"}
             lg{"Horário de Brasília"}
             ls{"Horário de Brasília"}
+            sd{"BRST"}
+            sg{"BRT"}
+            ss{"BRT"}
         }
         "meta:Brunei"{
             ls{"Horário de Brunei Darussalam"}
@@ -1356,9 +1344,6 @@ pt{
             ld{"Horário de Verão da China"}
             lg{"Horário da China"}
             ls{"Horário Padrão da China"}
-            sd{"CDT (China)"}
-            sg{"CT (China)"}
-            ss{"CST (China)"}
         }
         "meta:Choibalsan"{
             ld{"Horário de Verão de Choibalsan"}
@@ -1383,9 +1368,6 @@ pt{
             ld{"Horário de Verão de Cuba"}
             lg{"Horário de Cuba"}
             ls{"Horário Padrão de Cuba"}
-            sd{"CDT (Cuba)"}
-            sg{"CT (Cuba)"}
-            ss{"CST (Cuba)"}
         }
         "meta:Dacca"{
             ls{"Horário de Dacca"}
@@ -1414,17 +1396,14 @@ pt{
             ls{"Horário do Equador"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Horário de Verão da Europa Central"}
             ls{"Horário da Europa Central"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Horário de Verão da Europa Oriental"}
             ls{"Horário Padrão da Europa Oriental"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Horário de Verão da Europa Ocidental"}
             ls{"Horário da Europa Ocidental"}
         }
@@ -1447,7 +1426,6 @@ pt{
             ls{"Horário de Frunze"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Horário do Meridiano de Greenwich"}
         }
         "meta:Galapagos"{
@@ -1477,7 +1455,6 @@ pt{
         }
         "meta:Guam"{
             ls{"Horário Padrão de Guam"}
-            ss{"GST (Guam)"}
         }
         "meta:Gulf"{
             lg{"Horário do Golfo"}
@@ -1487,7 +1464,6 @@ pt{
             ls{"Horário da Guiana"}
         }
         "meta:Hawaii_Aleutian"{
-            cu:int{1}
             lg{"Horário do Havaí e Ilhas Aleutas"}
             ls{"Horário Padrão do Havaí-Aleuta"}
         }
@@ -1504,7 +1480,6 @@ pt{
             ls{"Horário Padrão da Índia"}
         }
         "meta:Indian_Ocean"{
-            cu:int{1}
             ls{"Horário do Oceano Índico"}
         }
         "meta:Indochina"{
@@ -1535,7 +1510,6 @@ pt{
             ld{"Horário de Verão de Israel"}
             lg{"Horário de Israel"}
             ls{"Horário Padrão de Israel"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Horário de Verão do Japão"}
@@ -1773,7 +1747,6 @@ pt{
         }
         "meta:South_Georgia"{
             ls{"Horário da Geórgia do Sul"}
-            ss{"GST (Geórgia do Sul)"}
         }
         "meta:Suriname"{
             ls{"Horário do Suriname"}
@@ -1792,7 +1765,6 @@ pt{
             ld{"Horário de Verão de Taipei"}
             lg{"Horário de Taipei"}
             ls{"Horário Padrão de Taipei"}
-            sg{"CT (TW)"}
         }
         "meta:Tajikistan"{
             ls{"Horário do Tajiquistão"}
