@@ -2691,6 +2691,15 @@ public class DecimalFormat extends NumberFormat {
                 if (iso != null) {
                     if (currency != null) {
                         currency[0] = Currency.getInstance(iso);
+                    } else {
+                        // The formatter is currency-style but the client has not requested
+                        // the value of the parsed currency. In this case, if that value does
+                        // not match the formatter's current value, then the parse fails.
+                        Currency effectiveCurr = getEffectiveCurrency();
+                        if (iso.compareTo(effectiveCurr.getCurrencyCode()) != 0) {
+                            pos = -1;
+                            continue;
+                        }
                     }
                     pos = ppos.getIndex();
                 } else {
