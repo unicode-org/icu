@@ -21,7 +21,7 @@ az{
         }
         AFA{
             "AFA",
-            "Əfgəni (AFA)",
+            "Əfgəni (1927-2002)",
         }
         AFN{
             "AFN",
@@ -141,7 +141,7 @@ az{
         }
         BOB{
             "BOB",
-            "Boliviano",
+            "Boliviya boliviano",
         }
         BOP{
             "BOP",
@@ -889,27 +889,27 @@ az{
         }
         UYU{
             "UYU",
-            "Uruqvay pesosu (Uruguayo)",
+            "Uruqvay pesosu",
         }
         UZS{
             "UZS",
-            "özbəkistan sumu",
+            "Özbəkistan sumu",
         }
         VEB{
             "VEB",
-            "venesuela bolivarı",
+            "Venesuela bolivarı (1871-2008)",
         }
         VEF{
             "VEF",
-            "venesuela bolivar fuerti",
+            "Venesuela bolivarı",
         }
         VND{
             "₫",
-            "vyetnam donqu",
+            "Vyetnam donqu",
         }
         WST{
             "WST",
-            "qərb samoa talası",
+            "Qərb Samoa talası",
         }
         XAG{
             "XAG",
@@ -921,7 +921,7 @@ az{
         }
         XCD{
             "EC$",
-            "şərq karib dolları",
+            "Şərq karib dolları",
         }
         XFO{
             "XFO",
@@ -993,7 +993,7 @@ az{
         }
         ZWD{
             "ZWD",
-            "Zimbabve dolları",
+            "Zimbabve dolları (1980-2008)",
         }
     }
     CurrencyPlurals{
@@ -1004,7 +1004,7 @@ az{
             other{"BƏE dirhamı"}
         }
         AFA{
-            other{"Əfgən (AFA)"}
+            other{"Əfgən (1927-2002)"}
         }
         AFN{
             other{"Əfgən"}
@@ -1022,19 +1022,19 @@ az{
             other{"Anqola kvanzasi"}
         }
         AOK{
-            other{"Anqola kvanzasi (AOK)"}
+            other{"Anqola kvanzasi (1977-1990)"}
         }
         AON{
             other{"Anqola yeni kvanzasi (AON)"}
         }
         AOR{
-            other{"Anqola kvanzasi (AOR)"}
+            other{"Anqola kvanzasi (1995-1999)"}
         }
         ARA{
             other{"Argentina avstralı"}
         }
         ARP{
-            other{"Argentina pesosu (ARP)"}
+            other{"Argentina pesosu (1983-1985)"}
         }
         ARS{
             other{"Argentina pesosu"}
@@ -1049,7 +1049,7 @@ az{
             other{"Aruba qilderi"}
         }
         AZM{
-            other{"Azərbaycan manatı (AZM)"}
+            other{"Azərbaycan manatı (1993-2006)"}
         }
         AZN{
             other{"Azərbaycan manatı"}
@@ -1094,7 +1094,7 @@ az{
             other{"Bruney dolları"}
         }
         BOB{
-            other{"Boliviano"}
+            other{"Boliviya boliviano"}
         }
         BOP{
             other{"Boliviya pesosu"}
@@ -1109,7 +1109,7 @@ az{
             other{"Braziliya kruzadosu"}
         }
         BRE{
-            other{"Braziliya kruzeyrosu (BRE)"}
+            other{"Braziliya kruzeyrosu (1990-1993)"}
         }
         BRL{
             other{"Braziliya realı"}
@@ -1520,7 +1520,7 @@ az{
             other{"Polsha zlotisi"}
         }
         PLZ{
-            other{"Polsha zlotisi (PLZ)"}
+            other{"Polsha zlotisi (1950-1995)"}
         }
         PTE{
             other{"Portuqal eskudosu"}
@@ -1547,7 +1547,7 @@ az{
             other{"Rusiya rublu"}
         }
         RUR{
-            other{"Rusiya rublu (RUR)"}
+            other{"Rusiya rublu (1991-1998)"}
         }
         RWF{
             other{"Rvanda frankı"}
@@ -1634,7 +1634,7 @@ az{
             other{"Ukraina karbovenesası"}
         }
         UGS{
-            other{"Uqanda şelingi (UGS)"}
+            other{"Uqanda şelingi (1966-1987)"}
         }
         UGX{
             other{"Uqanda şelingi"}
@@ -1652,7 +1652,7 @@ az{
             other{"Uruqvay pesosu unidades indexadas"}
         }
         UYP{
-            other{"Uruqvay pesosu (UYP)"}
+            other{"Uruqvay pesosu (1975-1993)"}
         }
         UYU{
             other{"Uruqvay pesosu"}
@@ -1661,10 +1661,10 @@ az{
             other{"Özbəkistan sumu"}
         }
         VEB{
-            other{"Venesuela bolivarı"}
+            other{"Venesuela bolivarı (1871-2008)"}
         }
         VEF{
-            other{"Venesuela Bolivar fuerti"}
+            other{"Venesuela bolivarı"}
         }
         VND{
             other{"Vyetnam donqu"}
@@ -1733,8 +1733,8 @@ az{
             other{"Zair zairi"}
         }
         ZWD{
-            other{"Zimbabve dolları"}
+            other{"Zimbabve dolları (1980-2008)"}
         }
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.59.68"}
 }

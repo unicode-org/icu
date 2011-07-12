@@ -17,11 +17,11 @@ hi{
                 "&[last regular ]<*ँ-ःअ-न<ऩ<*प-र<ऱ<*लळ<ऴ<*व-ह<़<*ऽ-ौ<्<*ॐ<॑<॒<॓<॔<क़<ख़"
                 "<ग़<ज़<ड़<ढ़<फ़<य़<*ॠ-॰"
             }
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
         standard{
             Sequence{" [normalization on ]&ॐ<ं<<ँ<ः"}
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
     }
 }

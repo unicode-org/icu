@@ -99,8 +99,10 @@ metadata:table(nofallback){
         "CS",
         "CU",
         "CV",
+        "CW",
         "CX",
         "CY",
+        "CS",
         "CZ",
         "DD",
         "DE",
@@ -275,6 +277,7 @@ metadata:table(nofallback){
         "ST",
         "SU",
         "SV",
+        "SX",
         "SY",
         "SZ",
         "TA",
@@ -479,7 +482,6 @@ metadata:table(nofallback){
         520{"NR"}
         524{"NP"}
         528{"NL"}
-        530{"AN"}
         532{"AN"}
         533{"AW"}
         536{"SA IQ"}
@@ -590,8 +592,8 @@ metadata:table(nofallback){
         AIA{"AI"}
         ALA{"AX"}
         ALB{"AL"}
+        AN{"CW SX BQ"}
         AND{"AD"}
-        ANT{"AN"}
         ARE{"AE"}
         ARG{"AR"}
         ARM{"AM"}
@@ -617,7 +619,6 @@ metadata:table(nofallback){
         BLZ{"BZ"}
         BMU{"BM"}
         BOL{"BO"}
-        BQ{"AQ"}
         BRA{"BR"}
         BRB{"BB"}
         BRN{"BN"}

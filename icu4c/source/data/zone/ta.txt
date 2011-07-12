@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ta.xml
  */
 ta{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"அபிட்ஜான்"}
@@ -1407,7 +1407,6 @@ ta{
         "meta:China"{
             ld{"சீன பகலொளி நேரம்"}
             lg{"சீன நேரம்"}
-            ss{"சீன தர நேரம்"}
         }
         "meta:Choibalsan"{
             ld{"சோய்பல்சன் கோடை நேரம்"}
@@ -1470,7 +1469,6 @@ ta{
         "meta:Europe_Western"{
             ld{"மேற்கத்திய ஐரோப்பியன் கோடை நேரம்"}
             ls{"மேற்கத்திய ஐரோப்பியன் நேரம்"}
-            sd{"மேற்கு"}
         }
         "meta:Falkland"{
             ld{"பல்க்லாந்து தீவுகள் கோடை நேரம்"}
@@ -1544,6 +1542,7 @@ ta{
         "meta:India"{
             cu:int{1}
             ls{"இந்திய தர நேரம்"}
+            ss{"IST"}
         }
         "meta:Indian_Ocean"{
             ls{"இந்தியப் பெருங்கடல் நேரம்"}

@@ -41,7 +41,7 @@ vi{
         151{"Đông Âu"}
         154{"Miền Bắc Châu Âu"}
         155{"Tây Âu"}
-        419{"Châu Mỹ La-tinh và Ca-ri-be"}
+        419{"Châu Mỹ La-tinh"}
         AC{"Đảo Ascension"}
         AD{"Andorra"}
         AE{"Các Tiểu Vương quốc A-rập Thống nhất"}
@@ -69,7 +69,6 @@ vi{
         BH{"Ba-ren"}
         BI{"Bu-run-đi"}
         BJ{"Bê-nanh"}
-        BL{"BL"}
         BM{"Bermuda"}
         BN{"Bru-nây"}
         BO{"Bô-li-vi-a"}
@@ -188,7 +187,6 @@ vi{
         MC{"Mô-na-cô"}
         MD{"Môn-đô-va"}
         ME{"Montenegro"}
-        MF{"MF"}
         MG{"Ma-đa-gát-xca"}
         MH{"Quần đảo Mác-san"}
         MK{"Ma-xê-đô-ni-a"}
@@ -197,7 +195,6 @@ vi{
         MN{"Mông Cổ"}
         MO{"Đặc khu hành chính Macao thuộc CHND Trung Hoa"}
         MP{"Quần Đảo Bắc Mariana"}
-        MQ{"MQ"}
         MR{"Mô-ri-ta-ni"}
         MS{"Montserrat"}
         MT{"Man-ta"}
@@ -236,7 +233,6 @@ vi{
         PY{"Pa-ra-goay"}
         QA{"Ca-ta"}
         QO{"Vùng xa xôi thuộc Châu Đại Dương"}
-        RE{"RE"}
         RO{"Ru-ma-ni"}
         RS{"Xéc-bi"}
         RU{"Nga"}
@@ -293,11 +289,10 @@ vi{
         WF{"Wallis và Futuna"}
         WS{"Xa-moa"}
         YE{"Y-ê-men"}
-        YT{"YT"}
         ZA{"Nam Phi"}
         ZM{"Dăm-bi-a"}
         ZW{"Dim-ba-bu-ê"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

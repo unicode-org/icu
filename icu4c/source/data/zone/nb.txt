@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -575,20 +575,16 @@ nb{
             ls{"Acre-tid"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"sentralafrikansk tid"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"østafrikansk tid"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"sørafrikansk tid"}
             ls{"sørafrikansk normaltid"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"vestafrikansk sommertid"}
             ls{"vestafrikansk tid"}
         }
@@ -631,9 +627,6 @@ nb{
             ld{"arabisk sommertid"}
             lg{"arabisk tid"}
             ls{"arabisk standardtid"}
-            sd{"ADT (arabisk)"}
-            sg{"AT (arabisk)"}
-            ss{"AST (arabisk)"}
         }
         "meta:Argentina"{
             ld{"Argentinsk sommertid"}
@@ -645,37 +638,27 @@ nb{
             lg{"Argentinsk tid (vest)"}
             ls{"Argentinsk tid (vest)"}
         }
-        "meta:Armenia"{
-            sd{"AMST (Armenia)"}
-            ss{"AMT (Armenia)"}
-        }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"atlanterhavskystlig sommertid"}
             lg{"atlanterhavskystlig tid"}
             ls{"atlanterhavskystlig standardtid"}
-            sg{"AT"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"sentralaustralsk sommertid"}
             lg{"sentralaustralsk tid"}
             ls{"sentralaustralsk standardtid"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"vest-sentralaustralsk sommertid"}
             lg{"vest-sentralaustralsk tid"}
             ls{"vest-sentralaustralsk standardtid"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"østaustralsk sommertid"}
             lg{"østaustralsk tid"}
             ls{"østaustralsk standardtid"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"vestaustralsk sommertid"}
             lg{"vestaustralsk tid"}
             ls{"vestaustralsk standardtid"}
@@ -687,19 +670,11 @@ nb{
         }
         "meta:China"{
             ls{"kinesisk standardtid"}
-            sd{"CDT (Kina)"}
-            sg{"CT (Kina)"}
-            ss{"CST (Kina)"}
         }
         "meta:Choibalsan"{
             ld{"Mongolsk (Tsjoibalsan) sommertid"}
             lg{"Mongolsk (Tsjoibalsan) tid"}
             ls{"Mongolsk (Tsjoibalsan) tid"}
-        }
-        "meta:Cuba"{
-            sd{"CDT (Cuba)"}
-            sg{"CT (Cuba)"}
-            ss{"CST (Cuba)"}
         }
         "meta:Europe_Central"{
             cu:int{1}
@@ -707,16 +682,15 @@ nb{
             ls{"sentraleuropeisk normaltid"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"østeuropeisk sommertid"}
             ls{"østeuropeisk normaltid"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"vesteuropeisk sommertid"}
             ls{"vesteuropeisk tid"}
         }
         "meta:GMT"{
+            cu:int{1}
             ls{"Greenwich middeltid"}
         }
         "meta:Hawaii_Aleutian"{
@@ -757,7 +731,6 @@ nb{
         "meta:Israel"{
             ld{"israelsk sommertid"}
             ls{"israelsk standardtid"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ls{"japansk standardtid"}
@@ -842,14 +815,6 @@ nb{
             ld{"Russisk (Samara) sommertid"}
             lg{"Russisk (Samara) tid"}
             ls{"Russisk (Samara) tid"}
-        }
-        "meta:South_Georgia"{
-            ss{"GST (Sør-Georgia)"}
-        }
-        "meta:Taipei"{
-            sd{"CDT (Taipei)"}
-            sg{"CT (Taipei)"}
-            ss{"CST (Taipei)"}
         }
         "meta:Vladivostok"{
             ld{"Russisk (Vladivostok) sommertid"}

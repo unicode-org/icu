@@ -24,7 +24,6 @@ sq{
         ru{"Rusisht"}
         sh{"Serbo-Kroatisht"}
         sq{"shqipe"}
-        und{"und"}
         zh{"Kineze"}
     }
     Scripts{
@@ -32,5 +31,5 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.59.32"}
 }

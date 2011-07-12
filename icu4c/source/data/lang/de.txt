@@ -547,7 +547,6 @@ de{
         Brai{"Blindenschrift"}
         Bugi{"Buginesisch"}
         Buhd{"Buhid"}
-        Cakm{"Cakm"}
         Cans{"UCAS"}
         Cari{"Karisch"}
         Cham{"Cham"}
@@ -590,7 +589,6 @@ de{
         Khmr{"Khmer"}
         Knda{"Kannada"}
         Kore{"Koreanisch"}
-        Kthi{"Kthi"}
         Lana{"Lanna"}
         Laoo{"Laotisch"}
         Latf{"Lateinisch - Fraktur-Variante"}
@@ -619,12 +617,9 @@ de{
         Osma{"Osmanisch"}
         Perm{"Altpermisch"}
         Phag{"Phags-pa"}
-        Phli{"Phli"}
-        Phlp{"Phlp"}
         Phlv{"Pahlavi"}
         Phnx{"Phönizisch"}
         Plrd{"Pollard Phonetisch"}
-        Prti{"Prti"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runenschrift"}
@@ -644,7 +639,6 @@ de{
         Tale{"Tai Le"}
         Talu{"Tai Lue"}
         Taml{"Tamilisch"}
-        Tavt{"Tavt"}
         Telu{"Telugu"}
         Teng{"Tengwar"}
         Tfng{"Tifinagh"}
@@ -659,8 +653,6 @@ de{
         Xsux{"Sumerisch-akkadische Keilschrift"}
         Yiii{"Yi"}
         Zinh{"Geerbter Schriftwert"}
-        Zmth{"Zmth"}
-        Zsym{"Zsym"}
         Zxxx{"Schriftlos"}
         Zyyy{"Unbestimmt"}
         Zzzz{"Uncodierte Schrift"}
@@ -768,7 +760,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.83"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

@@ -245,7 +245,7 @@ to{
             traditional{"tukufakaholo"}
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Lea: {0}"}
         script{"Tohinima Fakaha: {0}"}

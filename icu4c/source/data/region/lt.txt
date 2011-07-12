@@ -43,7 +43,7 @@ lt{
         155{"Vakarų Europa"}
         172{"Nepriklausomų Valstybių Sandrauga"}
         200{"Čekoslovakija"}
-        419{"Lotynų Amerika ir Karibai"}
+        419{"Lotynų Amerika"}
         AC{"Ascension sala"}
         AD{"Andora"}
         AE{"Jungtiniai Arabų Emyratai"}
@@ -301,5 +301,5 @@ lt{
         ZW{"Zimbabvė"}
         ZZ{"nežinoma sritis"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

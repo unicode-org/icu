@@ -533,7 +533,6 @@ lt{
         Armi{"imperinė aramaikų"}
         Armn{"armėnų"}
         Avst{"avestano"}
-        Bali{"Bali"}
         Batk{"batak"}
         Beng{"bengalų"}
         Blis{"„Bliss“ simboliai"}
@@ -763,7 +762,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

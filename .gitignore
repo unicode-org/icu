@@ -375,7 +375,7 @@ icu4c/source/stubdata/*.vcxproj.user
 icu4c/source/stubdata/Debug
 icu4c/source/stubdata/Makefile
 icu4c/source/stubdata/Release
-icu4c/source/stubdata/cygicudt*.*
+icu4c/source/stubdata/cygicudata*.*
 icu4c/source/stubdata/debug
 icu4c/source/stubdata/libicu*.*
 icu4c/source/stubdata/libsicu*.*

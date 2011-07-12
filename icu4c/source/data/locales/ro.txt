@@ -39,7 +39,7 @@ ro{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -332,11 +332,9 @@ ro{
                     relative{
                         "-1"{"ieri"}
                         "-2"{"alaltăieri"}
-                        "-3"{"răsalaltăieri"}
                         "0"{"azi"}
                         "1"{"mâine"}
                         "2"{"poimâine"}
-                        "3"{"răspoimâine"}
                     }
                 }
                 dayperiod{

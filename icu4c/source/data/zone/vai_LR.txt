@@ -3,13 +3,9 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/vai_LR.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/vai_LR.xml
- */
 vai_LR{
     "%%ALIAS"{"vai_Vaii_LR"}
-    Version{"2.0.57.98"}
 }

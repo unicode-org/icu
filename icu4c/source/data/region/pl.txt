@@ -42,7 +42,7 @@ pl{
         154{"Europa Północna"}
         155{"Europa Zachodnia"}
         172{"Wspólnota Niezależnych Państw"}
-        419{"Ameryka Łacińska i Karaiby"}
+        419{"Ameryka Łacińska"}
         830{"Wyspy Normandzkie"}
         AC{"Wyspa Wniebowstąpienia"}
         AD{"Andora"}
@@ -301,5 +301,5 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany lub nieprawidłowy region"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
 }

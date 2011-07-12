@@ -20,7 +20,6 @@ sk{
         "Latn",
     }
     NumberElements{
-        default{"arab"}
         latn{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
@@ -33,7 +32,7 @@ sk{
             }
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.53"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -157,11 +156,9 @@ sk{
                     relative{
                         "-1"{"Včera"}
                         "-2"{"Predvčerom"}
-                        "-3"{"Pred tromi dňami"}
                         "0"{"Dnes"}
                         "1"{"Zajtra"}
                         "2"{"Pozajtra"}
-                        "3"{"O tri dni"}
                     }
                 }
                 dayperiod{
@@ -484,7 +481,7 @@ sk{
         }
         hour-future{
             0{"O 0 hodín"}
-            1{"0 1 hodinu"}
+            1{"O 1 hodinu"}
             few{"O {0} hodiny"}
             one{"{0} hodinu"}
             other{"O {0} hodín"}
@@ -503,7 +500,7 @@ sk{
         }
         minute-future{
             0{"O 0 minút"}
-            1{"0 1 minútu"}
+            1{"O 1 minútu"}
             few{"O {0} minúty"}
             one{"{0} minútu"}
             other{"O {0} minút"}
