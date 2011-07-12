@@ -3000,8 +3000,8 @@ public class ULocaleTest extends TestFmwk {
                 "vi"
             }, {
                 "und_VU",
-                "fr_Latn_VU",
-                "fr_VU"
+                "bi_Latn_VU",
+                "bi"
             }, {
                 "und_WF",
                 "fr_Latn_WF",
