@@ -1651,8 +1651,9 @@ public class DecimalFormat extends NumberFormat {
      *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
      *  matched character. If the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
+     * @internal
      */
-    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         return (CurrencyAmount) parse(text, pos, true);
     }
 
