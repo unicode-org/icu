@@ -2813,6 +2813,7 @@ icu4c/source/test/testdata/testnorm.txt svneol=native#text/plain
 icu4c/source/test/testdata/testtypes.txt svneol=native#text/plain
 icu4c/source/test/testdata/translit_rules.txt svneol=native#text/plain
 icu4c/source/test/testdata/uni-text.bin -text
+icu4c/source/test/testdata/wordsegments.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/thaitest/space.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/ctestfw.vcxproj -text
 icu4c/source/tools/ctestfw/ctestfw.vcxproj.filters -text
