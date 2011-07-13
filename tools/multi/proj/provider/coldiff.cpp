@@ -60,7 +60,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
                 strcat(locID, provider_version[v]);
             }
             
-            printf("%28s : ", locID);
+            printf("%-28s =  ", locID);
             
             UErrorCode subStatus = U_ZERO_ERROR;
             uint8_t bytes[200];
@@ -80,7 +80,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             strcpy(xbuf2,"X/");
             strcat(xbuf2,locID);
             strcat(xbuf2,"/");
-            printf(" -> %s\n", xbuf2);
+            //printf(" -> %s\n", xbuf2);
             UCollator *col = ucol_openFromShortString(xbuf2, FALSE,NULL, &subStatus);
 #else
             UCollator *col = ucol_open(locID, &subStatus);
@@ -104,14 +104,18 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             int32_t len = ucol_getSortKey(col, stuff, -1, bytes, 200);
 #endif
 
+            printf("     ");
+
+            int tdiffs=0;
+
             for(int i=0;i<len;i++) {
 	      if(i<oldLen&&bytes[i]!=oldBytes[i]) {
-                  diffs++;
-                  printf("*");
-                } else {
-                  printf(" ");
-                }
-                printf("%02X", (0xFF&bytes[i]));
+                diffs++;
+                printf("*");
+              } else {
+                printf(" ");
+              }
+              printf("%02X", (0xFF&bytes[i]));
             }
             printf("\n");
 
@@ -121,8 +125,10 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
               printf("Err opening from new short string : %s\n", u_errorName(subStatus));
               continue;
             } else {
-              int32_t def4 = ucol_getShortDefinitionString(col,locID/*NULL*/,xbuf4,300,&subStatus);
-              printf(" --> reopened = %s (%s)\n", xbuf4, u_errorName(subStatus));
+              int32_t def4 = ucol_getShortDefinitionString(col,locID/*NULL*/,xbuf4,200,&subStatus);
+              if(strcmp(xbuf4,xbuf3)) {
+                printf(" --> reopened = %s (%s)\n", xbuf4, u_errorName(subStatus));
+              }
             }
             int32_t len2 = ucol_getSortKey(col2, stuff, -1, bytesb, 200);
 
@@ -131,18 +137,18 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
 	      if(i<len&&bytes[i]!=bytesb[i]) {
                   baddiffs++;
                   printf("!");
-                } else {
-                  printf(" ");
-                }
-                printf("%02X", (0xFF&bytesb[i]));
+                 } else {
+                   // printf(" ");
+                 }
+                // printf("%02X", (0xFF&bytesb[i]));
             }
             if(baddiffs>0) {
-              printf(" - ERR! Diffs from %s in %d places", xbuf2,baddiffs);
+              printf(" - ERR! Diffs from %s in %d places\n", xbuf2,baddiffs);
               gbaddiffs+=baddiffs;
             } else {
-              printf("  OK.\n");
+              //printf("  OK.\n");
             }
-            printf("\n");
+            //            printf("\n");
 
             
 

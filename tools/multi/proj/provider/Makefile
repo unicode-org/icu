@@ -3,6 +3,8 @@
 #
 all: glurens ii plugs testprog
 
+# extra files that need generation.
+PLUG_EXTRA_DEPS=
 UNAME=$(shell uname)
 
 ifeq ($(UNAME),Linux)
@@ -14,7 +16,8 @@ PLUGLIB_SO=so
 else
 ifeq ($(UNAME),Darwin)
 LIBPATH_VAR=DYLD_LIBRARY_PATH
-PLUG_EXTRA_LDFLAGS=-exported_symbols_list glue/export.txt -dynamiclib -dynamic
+PLUG_EXTRA_LDFLAGS=-exported_symbols_list $(GLUE_EXPORT) -dynamiclib -dynamic
+PLUG_EXTRA_DEPS+=$(GLUE_EXPORT)
 PLUGLIB_SO=dylib
 else
 $(warning **********************************)
@@ -22,6 +25,7 @@ $(warning this script may not know how to handle your $(UNAME) system)
 endif
 endif
 
+srcdir=$(shell pwd)
 
 PROVIDER=provider
 LIBPROVIDER=lib$(PROVIDER).a
@@ -59,6 +63,7 @@ SRC=$(M_TMP)/$(P_PREFIX)src
 OUT=$(TOP)/out
 SOURCE=$(S_SRCDIR)
 GLUE=glue
+GLUE_EXPORT=$(GLUE)/export.txt
 GLOUT=$(M_TMP)/$(P_PREFIX)glout
 # header locations
 INCGLUE=$(TOP)/$(GLUE)/include
@@ -92,17 +97,14 @@ MAKE_XTRA_OPTS="PKGDATA_MODE=static"
 # additional options passed to make install
 MAKE_INSTALL_XTRA_OPTS=$(MAKE_XTRA_OPTS)
 
-# Munged source names: list of C, C++, O etc files for Backend
-#GL_BE_C=$(shell cd $(GLUE) ; ls *_be.c)
-#GL_BE_CXX=$(shell cd $(GLUE) ; ls *_be.cpp)
-#GL_BE_O=$(GL_BE_C:%.c=%.o) $(GL_BE_CPP:%.cpp=%.o)
-# Munged source names: list of C, C++, O etc files for Frontend
-#GL_FE_C=$(shell cd $(GLUE) ; ls *_fe.c)
-GL_FE_CXX=$(shell cd $(GLUE) ; ls *_fe.cpp)
+# Munged source names: list of C++, O etc files for Frontend
+PARTSUFF=_fe
+GL_FE_CXX=$(shell cd $(GLUE) ; ls *$(PARTSUFF).cpp)
+GL_FE_FILES=$(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp)
 GL_FE_O=$(GL_FE_CPP:%.cpp=%.o)
+GL_PARTS=$(GL_FE_CXX:%$(PARTSUFF).cpp=%)
 # C flags used in Glue compilation
 GLUE_CFLAGS=-I$(INCGLUE) $(GLUE_EXTRA_CFLAGS)
-
 
 # icu-config switches for compiling: C and C++
 ICU_CONFIG_COMMON=--cppflags
@@ -135,7 +137,7 @@ $(PLUGLIB_ICU_CONFIG):
 
 # build the glue objects for TARGET
 # used to be %/* instead of $(PLUGLIB) - now, wire it down to pluglib.
-$(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG)
+$(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_FILES)
 	-mkdir $(GLOUT)/$(PLUGLIB)
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_c_$(PLUGLIB).o $(GL_BE_C:%.c=$(GLUE)/%.c)
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_cxx_$(PLUGLIB).o $(GL_BE_CXX:%.cpp=$(GLUE)/%.cpp)
@@ -144,21 +146,26 @@ $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG)
 # for each version..  build all OTHER FE files
 # TODO: check is unnecessary, not permitted.
 # TODO: change to depend instead of for list. 
-	for ver in $(PLUGLIB_AVAILABLE) ; \
+	@for ver in $(PLUGLIB_AVAILABLE) ; \
 	do \
 		echo building $$ver for $(PLUGLIB) ; \
 		if [ ! "$$ver" = "$(PLUGLIB)" ]; \
 		then \
-			$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/gl_fe_cxx_$${ver}_x_$(PLUGLIB).o $(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp) $(XOPTS) ; \
+			for part in $(GL_PARTS) ; \
+			do \
+				echo $(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/$${part}_$${ver}_for_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) ; \
+				$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/$${part}_$${ver}_for_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) || exit 1; \
+			done ; \
 			echo " GLUE_VER( $$ver ) " >> $(GLOUT)/$(PLUGLIB)/include/icuglue/glver.h; \
 		fi \
 	done
 # build 'this version' FE files
 	@echo Building FE for $(PLUGLIB)
-	$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/gl_fe_cxx_$(PLUGLIB).o $(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp) $(XOPTS)
-# build 'this version' BE files (disabled for now)
-#	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_c_$(PLUGLIB).o $(GL_BE_C:%.c=$(GLUE)/%.c)
-#	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_cxx_$(PLUGLIB).o $(GL_BE_CXX:%.cpp=$(GLUE)/%.cpp)
+	@for part in $(GL_PARTS) ; \
+	do \
+		echo $(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/$${part}_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) ; \
+		$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/$${part}_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) || exit 1; \
+	done
 	touch $@
 
 plugs: $(PLUGLIB_OUTLIBS) $(OUT)/$(PLUGLIB_MAJ:%=icuplugins%.txt)
@@ -169,29 +176,58 @@ install-plugs: $(PLUGLIB_INST)/lib/$(PLUGLIB_NAME) $(PLUGLIB_INST)/lib/icu/icupl
 #TODO: should be 'install' not 'cp'
 $(PLUGLIB_INST)/lib/$(PLUGLIB_NAME) $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
 	cp $(PLUGLIB_OUTLIBS) $(PLUGLIB_INST)/lib
-	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
+	echo "# Generated. " > $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt
+	@for part in $(GL_PARTS) ; \
+	do \
+		echo "$(PLUGLIB_NAME)	$${part}_provider_plugin" >> $(PLUGLIB_INST)/lib/icu/icuplugins$(PLUGLIB_MAJ).txt ; \
+		echo " $${part}_provider_plugin" ; \
+	done
 
-$(OUT)/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS)
-	echo "$(PLUGLIB_NAME)	coll_provider_plugin" > $@
+$(GLUE_EXPORT): Makefile $(GL_FE_FILES)
+	echo "# Generated for installation. " > $@
+	@for part in $(GL_PARTS) ; \
+	do \
+		echo "_$${part}_provider_plugin" >> $@ ; \
+		echo " _$${part}_provider_plugin" ; \
+	done
 
-TESTPROG=coldiff
+$(OUT)/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS) Makefile
+	echo "# Generated for testing." > $@
+	@for part in $(GL_PARTS) ; \
+	do \
+		echo "$(PLUGLIB_NAME)	$${part}_provider_plugin" >> $@ ; \
+		echo " $${part}_provider_plugin" ; \
+	done
+
+TESTPROG=coldiff datediff
 
 testprog: $(PLUGLIB:%=$(OUT)/%/bin/$(TESTPROG)) 
 
 check: all testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
 	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
 	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
-	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
+	@for prog in $(TESTPROG) ; \
+	do \
+		echo "# ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/$${prog}" ; \
+		ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/$${prog} || ( echo "$${prog} failed." ; /bin/false ) ; \
+	done
 
 install-check: install-plugs
 	$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib $(PLUGLIB_INST)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
-	$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib out/$(PLUGLIB)/bin/coldiff || ( echo "coldiff failed." ; /bin/false )
+	@for prog in $(TESTPROG) ; \
+	do \
+		echo "# $${prog}" ; \
+		$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib out/$(PLUGLIB)/bin/$${prog} || ( echo "$${prog} against installed failed." ; /bin/false ) ; \
+	done
 
-$(OUT)/%/bin/$(TESTPROG): $(TESTPROG).cpp $(OUT)/$(PLUGLIB)/provider_version.h
-	-mkdir -p $(OUT)/$*/bin
-	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -o $@ -I$(OUT)/$(PLUGLIB) $(TESTPROG).cpp
+$(OUT)/$(PLUGLIB)/bin/$(TESTPROG):  $(GLOUT)/$(PLUGLIB)/obj-$(OK) $(OUT)/$(PLUGLIB)/provider_version.h
+	-mkdir -p $(OUT)/$(PLUGLIB)/bin
+	@for prog in $(TESTPROG) ; \
+	do \
+		$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -o $(OUT)/$(PLUGLIB)/bin/$${prog} -I$(OUT)/$(PLUGLIB) $(srcdir)/$${prog}.cpp ; \
+	done
 
-$(OUT)/%/lib/$(PLUGLIB_NAME):  $(GLOUT)/%/obj-$(OK)
+$(OUT)/%/lib/$(PLUGLIB_NAME):  $(GLOUT)/%/obj-$(OK) $(PLUG_EXTRA_DEPS)
 	-mkdir -p $(OUT)/$*/lib
 	$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) $(PLUG_EXTRA_LDFLAGS) -shared -o $@ $(GLOUT)/$*/*.o $(PLUGLIB_AVAILABLE_DATA) $(PLUGLIB_AVAILABLE_STATICS)
 
