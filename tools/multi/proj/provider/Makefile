@@ -283,7 +283,7 @@ $(BUILD)/%/config.status: $(SRC)/%/ok
 	@echo "Configging" $*
 	-[ -d $(BUILD)/$* ] && rm -rf $(BUILD)/$*
 	mkdir -p $(BUILD)/$*
-	( cd $(BUILD)/$* && env CFLAGS=$(PBLD_EXTRA_FLAGS) CXXFLAGS=$(PBLD_EXTRA_FLAGS) $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
+	( cd $(BUILD)/$* && env CFLAGS="$(CFLAGS) $(PBLD_EXTRA_FLAGS)" CXXFLAGS="$(CXXFLAGS) $(PBLD_EXTRA_FLAGS)" $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
 
 # build 
 # note: regex had renaming problems, and spoof depends on regex. Nuke them.
