@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 4.6 with ICU4J 4.8</title>
+<!-- Copyright 2011, IBM, All Rights Reserved. -->
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 4.6 with ICU4J 4.8</h1>
+
+<hr/>
+<h2>Removed from ICU4J 4.6</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter
+<ul>
+<li>(stable)     public static int <i>getPropertyEnum</i>(java.lang.String)</li>
+<li>(stable)     public static int <i>getPropertyValueEnum</i>(int, java.lang.String)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+SpoofChecker
+<ul>
+<li>(draft)      public boolean <i>check</i>(java.lang.String)</li>
+<li>(draft)      public boolean <i>check</i>(java.lang.String, SpoofChecker.CheckResult)</li>
+</ul>
+UnicodeSet
+<ul>
+<li>(stable)     public final UnicodeSet <i>add</i>(java.lang.String)</li>
+<li>(stable)     public final UnicodeSet <i>addAll</i>(java.lang.String)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Currency
+<ul>
+<li>(obsolete)   public final ULocale <i>getLocale</i>(ULocale.Type)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Deprecated or Obsoleted in ICU4J 4.8</h2>
+<p>(no API obsoleted)</p>
+
+<hr/>
+<h2>Changed in ICU4J 4.8 (old, new)</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>    (stable)     public abstract class <i>Collator</i> extends java.lang.Object implements java.util.Comparator, java.lang.Cloneable</br>
+(stable)     public abstract class <i>Collator</i> extends java.lang.Object implements java.util.Comparator, com.ibm.icu.util.Freezable</li>
+MessageFormat
+<ul>
+<li>    (stable)     public static java.lang.String <i>format</i>(java.lang.String, java.lang.Object[])</br>
+(stable)     public static java.lang.String <i>format</i>(java.lang.String, java.lang.Object...)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Promoted to stable in ICU4J 4.8</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+DateFormat
+<ul>
+<li>(stable)     public static final int MILLISECOND_FIELD</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 4.8</h2>
+
+<h3>Package com.ibm.icu.charset</h3>
+<ul>
+CharsetDecoderICU
+<ul>
+<li>(draft)      public final float <i>maxBytesPerChar</i>()</li>
+</ul>
+CharsetEncoderICU
+<ul>
+<li>(draft)      public final float <i>maxCharsPerByte</i>()</li>
+</ul>
+CharsetICU
+<ul>
+<li>(draft)      public boolean <i>isFixedWidth</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter
+<ul>
+<li>(stable)     public static int <i>getPropertyEnum</i>(java.lang.CharSequence)</li>
+<li>(stable)     public static int <i>getPropertyValueEnum</i>(int, java.lang.CharSequence)</li>
+</ul>
+UScript
+<ul>
+<li>(stable)     public static final int AFAKA</li>
+<li>(stable)     public static final int JURCHEN</li>
+<li>(stable)     public static final int MRO</li>
+<li>(stable)     public static final int NUSHU</li>
+<li>(stable)     public static final int SHARADA</li>
+<li>(stable)     public static final int SORA_SOMPENG</li>
+<li>(stable)     public static final int TAKRI</li>
+<li>(stable)     public static final int TANGUT</li>
+<li>(stable)     public static final int WOLEAI</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(draft)      public static interface <i>Collator.ReorderCodes</i></li>
+<li>(draft)      public final class <i>MessagePattern</i></li>
+<li>(draft)      public static final class <i>MessagePattern.ApostropheMode</i></li>
+<li>(draft)      public static final class <i>MessagePattern.ArgType</i></li>
+<li>(draft)      public static final class <i>MessagePattern.Part</i></li>
+<li>(draft)      public static final class <i>MessagePattern.Part.Type</i></li>
+Bidi
+<ul>
+<li>(draft)      public void <i>setContext</i>(java.lang.String, java.lang.String)</li>
+</ul>
+Collator
+<ul>
+<li>(draft)      public Collator <i>cloneAsThawed</i>()</li>
+<li>(draft)      public Collator <i>freeze</i>()</li>
+<li>(draft)      public static int[] <i>getEquivalentReorderCodes</i>(int)</li>
+<li>(draft)      public int[] <i>getReorderCodes</i>()</li>
+<li>(draft)      public boolean <i>isFrozen</i>()</li>
+<li>(draft)      public void <i>setReorderCodes</i>(int...)</li>
+</ul>
+MessageFormat
+<ul>
+<li>(draft)      public void <i>applyPattern</i>(java.lang.String, MessagePattern.ApostropheMode)</li>
+<li>(draft)      public MessagePattern.ApostropheMode <i>getApostropheMode</i>()</li>
+<li>(draft)      public java.util.Set<java.lang.String> <i>getArgumentNames</i>()</li>
+<li>(draft)      public java.text.Format <i>getFormatByArgumentName</i>(java.lang.String)</li>
+</ul>
+PluralRules
+<ul>
+<li>(draft)      public static final double NO_UNIQUE_VALUE</li>
+<li>(draft)      public java.util.Collection<java.lang.Double> <i>getAllKeywordValues</i>(java.lang.String)</li>
+<li>(draft)      public java.util.Collection<java.lang.Double> <i>getSamples</i>(java.lang.String)</li>
+<li>(draft)      public double <i>getUniqueKeywordValue</i>(java.lang.String)</li>
+</ul>
+RuleBasedBreakIterator
+<ul>
+<li>(draft)      public static void <i>compileRules</i>(java.lang.String, java.io.OutputStream)</li>
+<li>(draft)      public static RuleBasedBreakIterator <i>getInstanceFromCompiledRules</i>(java.io.InputStream)</li>
+</ul>
+RuleBasedCollator
+<ul>
+<li>(draft)      public RuleBasedCollator <i>cloneAsThawed</i>()</li>
+<li>(draft)      public Collator <i>freeze</i>()</li>
+<li>(draft)      public static int[] <i>getEquivalentReorderCodes</i>(int)</li>
+<li>(draft)      public int[] <i>getReorderCodes</i>()</li>
+<li>(draft)      public boolean <i>isFrozen</i>()</li>
+<li>(draft)      public void <i>setReorderCodes</i>(int...)</li>
+</ul>
+SpoofChecker
+<ul>
+<li>(draft)      public boolean <i>failsChecks</i>(java.lang.String)</li>
+<li>(draft)      public boolean <i>failsChecks</i>(java.lang.String, SpoofChecker.CheckResult)</li>
+</ul>
+UnicodeSet
+<ul>
+<li>(draft)      public static final UnicodeSet ALL_CODE_POINTS</li>
+<li>(draft)      public static final UnicodeSet EMPTY</li>
+<li>(stable)     public final UnicodeSet <i>add</i>(java.lang.CharSequence)</li>
+<li>(stable)     public final UnicodeSet <i>addAll</i>(java.lang.CharSequence)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(draft)      public final class <i>BytesTrie</i></li>
+<li>(draft)      public static final class <i>BytesTrie.Entry</i></li>
+<li>(draft)      public static final class <i>BytesTrie.Iterator</i></li>
+<li>(draft)      public static final class <i>BytesTrie.Result</i></li>
+<li>(draft)      public static final class <i>BytesTrie.State</i></li>
+<li>(draft)      public final class <i>BytesTrieBuilder</i></li>
+<li>(draft)      public final class <i>CharsTrie</i></li>
+<li>(draft)      public static final class <i>CharsTrie.Entry</i></li>
+<li>(draft)      public static final class <i>CharsTrie.Iterator</i></li>
+<li>(draft)      public static final class <i>CharsTrie.State</i></li>
+<li>(draft)      public final class <i>CharsTrieBuilder</i></li>
+<li>(draft)      public class <i>Output</i></li>
+<li>(draft)      public abstract class <i>StringTrieBuilder</i></li>
+<li>(draft)      public static final class <i>StringTrieBuilder.Option</i></li>
+<li>(draft)      public static final class <i>TimeZone.SystemTimeZoneType</i></li>
+TimeZone
+<ul>
+<li>(draft)      public static final java.lang.String UNKNOWN_ZONE_ID</li>
+<li>(draft)      public static java.util.Set<java.lang.String> <i>getAvailableIDs</i>(TimeZone.SystemTimeZoneType, java.lang.String, java.lang.Integer)</li>
+<li>(draft)      public static java.lang.String <i>getRegion</i>(java.lang.String)</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Fri May 13 12:38:20 EDT 2011<br/>Copyright (C) 2011, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
