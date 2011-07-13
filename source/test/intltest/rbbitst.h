@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 1999-2010, International Business Machines
+ * Copyright (c) 1999-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  *************************************************************************
  *   Date        Name        Description
@@ -68,7 +68,6 @@ public:
     void TestTrieDict();
     void TestUnicodeFiles();
     void TestBug5775();
-    void TestThaiBreaks();
     void TestTailoredBreaks();
     void TestDictRules();
     void TestBug5532();
