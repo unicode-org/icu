@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
+import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
 
@@ -130,14 +132,24 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     static final boolean HACK_CODED_FIRSTS = true;
 
-    private static UnicodeSet UNIHAN = new UnicodeSet("[:script=Hani:]");
+    private static UnicodeSet UNIHAN = new UnicodeSet("[:script=Hani:]").freeze();
+
+    static final String BASE = "\uFDD0";
+    // these are generated. Later, get from CLDR data.
+
+    static final UnicodeSet PINYIN_LABELS = new UnicodeSet("[A-Z{\uFDD0A}{\uFDD0B}{\uFDD0C}{\uFDD0D}{\uFDD0E}{\uFDD0F}{\uFDD0G}{\uFDD0H}{\uFDD0I}{\uFDD0J}{\uFDD0K}{\uFDD0L}{\uFDD0M}{\uFDD0N}{\uFDD0O}{\uFDD0P}{\uFDD0Q}{\uFDD0R}{\uFDD0S}{\uFDD0T}{\uFDD0U}{\uFDD0V}{\uFDD0W}{\uFDD0X}{\uFDD0Y}{\uFDD0Z}]").freeze();
+    static final UnicodeSet STROKE_LABELS = new UnicodeSet("[{\uFDD0\u2801}{\uFDD0\u2802}{\uFDD0\u2803}{\uFDD0\u2804}{\uFDD0\u2805}{\uFDD0\u2806}{\uFDD0\u2807}{\uFDD0\u2808}{\uFDD0\u2809}{\uFDD0\u280A}{\uFDD0\u280B}{\uFDD0\u280C}{\uFDD0\u280D}{\uFDD0\u280E}{\uFDD0\u280F}{\uFDD0\u2810}{\uFDD0\u2811}{\uFDD0\u2812}{\uFDD0\u2813}{\uFDD0\u2814}{\uFDD0\u2815}{\uFDD0\u2816}{\uFDD0\u2817}{\uFDD0\u2818}{\uFDD0\u2819}{\uFDD0\u281A}{\uFDD0\u281B}{\uFDD0\u281C}{\uFDD0\u281D}{\uFDD0\u281E}{\uFDD0\u281F}{\uFDD0\u2820}{\uFDD0\u2821}{\uFDD0\u2822}{\uFDD0\u2823}{\uFDD0\u2824}{\uFDD0\u2825}{\uFDD0\u2826}{\uFDD0\u2827}{\uFDD0\u2828}{\uFDD0\u2829}{\uFDD0\u282A}{\uFDD0\u282B}{\uFDD0\u282C}{\uFDD0\u282E}{\uFDD0\u2830}{\uFDD0\u2834}{\uFDD0\u2840}]").freeze();
+    static final UnicodeSet RADICAL_LABELS = new UnicodeSet("[{\uFDD0\u2E80}{\uFDD0\u2E81}{\uFDD0\u2E84}{\uFDD0\u2E85}{\uFDD0\u2E86}{\uFDD0\u2E87}{\uFDD0\u2E88}{\uFDD0\u2E8A}{\uFDD0\u2E8B}{\uFDD0\u2E8C}{\uFDD0\u2E91}{\uFDD0\u2E92}{\uFDD0\u2E93}{\uFDD0\u2E95}{\uFDD0\u2E97}{\uFDD0\u2E98}{\uFDD0\u2E99}{\uFDD0\u2E9B}{\uFDD0\u2E9D}{\uFDD0\u2E9E}{\uFDD0\u2E9F}{\uFDD0\u2EA0}{\uFDD0\u2EA2}{\uFDD0\u2EA3}{\uFDD0\u2EA4}{\uFDD0\u2EA7}{\uFDD0\u2EA8}{\uFDD0\u2EA9}{\uFDD0\u2EAA}{\uFDD0\u2EAB}{\uFDD0\u2EAC}{\uFDD0\u2EAE}{\uFDD0\u2EAF}{\uFDD0\u2EB0}{\uFDD0\u2EB4}{\uFDD0\u2EB8}{\uFDD0\u2EB9}{\uFDD0\u2EBB}{\uFDD0\u2EBC}{\uFDD0\u2EBD}{\uFDD0\u2EC0}{\uFDD0\u2EC1}{\uFDD0\u2EC2}{\uFDD0\u2EC3}{\uFDD0\u2EC5}{\uFDD0\u2EC6}{\uFDD0\u2EC8}{\uFDD0\u2EC9}{\uFDD0\u2ECA}{\uFDD0\u2ECB}{\uFDD0\u2ECF}{\uFDD0\u2ED0}{\uFDD0\u2ED1}{\uFDD0\u2ED3}{\uFDD0\u2ED4}{\uFDD0\u2ED6}{\uFDD0\u2ED7}{\uFDD0\u2ED8}{\uFDD0\u2ED9}{\uFDD0\u2EDA}{\uFDD0\u2EDB}{\uFDD0\u2EDC}{\uFDD0\u2EDD}{\uFDD0\u2EE0}{\uFDD0\u2EE1}{\uFDD0\u2EE2}{\uFDD0\u2EE3}{\uFDD0\u2EE4}{\uFDD0\u2EE5}{\uFDD0\u2EE6}{\uFDD0\u2EE7}{\uFDD0\u2EE8}{\uFDD0\u2EEA}{\uFDD0\u2EEB}{\uFDD0\u2EED}{\uFDD0\u2EEE}{\uFDD0\u2EEF}{\uFDD0\u2EF0}{\uFDD0\u2EF2}{\uFDD0\u2EF3}{\uFDD0\u2F00}{\uFDD0\u2F01}{\uFDD0\u2F02}{\uFDD0\u2F03}{\uFDD0\u2F05}{\uFDD0\u2F06}{\uFDD0\u2F07}{\uFDD0\u2F09}{\uFDD0\u2F0A}{\uFDD0\u2F0B}{\uFDD0\u2F0D}{\uFDD0\u2F0E}{\uFDD0\u2F10}{\uFDD0\u2F12}{\uFDD0\u2F13}{\uFDD0\u2F14}{\uFDD0\u2F15}{\uFDD0\u2F16}{\uFDD0\u2F17}{\uFDD0\u2F1B}{\uFDD0\u2F1D}{\uFDD0\u2F1E}{\uFDD0\u2F1F}{\uFDD0\u2F20}{\uFDD0\u2F21}{\uFDD0\u2F22}{\uFDD0\u2F23}{\uFDD0\u2F24}{\uFDD0\u2F25}{\uFDD0\u2F26}{\uFDD0\u2F27}{\uFDD0\u2F28}{\uFDD0\u2F2B}{\uFDD0\u2F2C}{\uFDD0\u2F2D}{\uFDD0\u2F2E}{\uFDD0\u2F2F}{\uFDD0\u2F31}{\uFDD0\u2F32}{\uFDD0\u2F34}{\uFDD0\u2F35}{\uFDD0\u2F36}{\uFDD0\u2F37}{\uFDD0\u2F38}{\uFDD0\u2F3A}{\uFDD0\u2F3B}{\uFDD0\u2F3D}{\uFDD0\u2F3E}{\uFDD0\u2F40}{\uFDD0\u2F42}{\uFDD0\u2F43}{\uFDD0\u2F44}{\uFDD0\u2F45}{\uFDD0\u2F46}{\uFDD0\u2F48}{\uFDD0\u2F4A}{\uFDD0\u2F4B}{\uFDD0\u2F4C}{\uFDD0\u2F4E}{\uFDD0\u2F50}{\uFDD0\u2F51}{\uFDD0\u2F53}{\uFDD0\u2F57}{\uFDD0\u2F58}{\uFDD0\u2F59}{\uFDD0\u2F5A}{\uFDD0\u2F5B}{\uFDD0\u2F5E}{\uFDD0\u2F60}{\uFDD0\u2F61}{\uFDD0\u2F62}{\uFDD0\u2F63}{\uFDD0\u2F64}{\uFDD0\u2F65}{\uFDD0\u2F67}{\uFDD0\u2F68}{\uFDD0\u2F69}{\uFDD0\u2F6A}{\uFDD0\u2F6B}{\uFDD0\u2F6D}{\uFDD0\u2F6E}{\uFDD0\u2F6F}{\uFDD0\u2F71}{\uFDD0\u2F72}{\uFDD0\u2F73}{\uFDD0\u2F74}{\uFDD0\u2F76}{\uFDD0\u2F78}{\uFDD0\u2F7B}{\uFDD0\u2F7D}{\uFDD0\u2F7E}{\uFDD0\u2F7F}{\uFDD0\u2F82}{\uFDD0\u2F83}{\uFDD0\u2F84}{\uFDD0\u2F86}{\uFDD0\u2F87}{\uFDD0\u2F88}{\uFDD0\u2F89}{\uFDD0\u2F8A}{\uFDD0\u2F8D}{\uFDD0\u2F8E}{\uFDD0\u2F8F}{\uFDD0\u2F92}{\uFDD0\u2F94}{\uFDD0\u2F95}{\uFDD0\u2F96}{\uFDD0\u2F97}{\uFDD0\u2F98}{\uFDD0\u2F99}{\uFDD0\u2F9A}{\uFDD0\u2F9B}{\uFDD0\u2F9D}{\uFDD0\u2F9E}{\uFDD0\u2F9F}{\uFDD0\u2FA0}{\uFDD0\u2FA1}{\uFDD0\u2FA3}{\uFDD0\u2FA4}{\uFDD0\u2FA5}{\uFDD0\u2FA6}{\uFDD0\u2FA8}{\uFDD0\u2FAA}{\uFDD0\u2FAB}{\uFDD0\u2FAE}{\uFDD0\u2FAF}{\uFDD0\u2FB0}{\uFDD0\u2FB1}{\uFDD0\u2FB2}{\uFDD0\u2FB3}{\uFDD0\u2FB4}{\uFDD0\u2FB5}{\uFDD0\u2FB6}{\uFDD0\u2FB9}{\uFDD0\u2FBA}{\uFDD0\u2FBC}{\uFDD0\u2FBD}{\uFDD0\u2FBE}{\uFDD0\u2FBF}{\uFDD0\u2FC0}{\uFDD0\u2FC2}{\uFDD0\u2FC3}{\uFDD0\u2FC4}{\uFDD0\u2FC5}{\uFDD0\u2FC6}{\uFDD0\u2FC7}{\uFDD0\u2FC8}{\uFDD0\u2FC9}{\uFDD0\u2FCA}{\uFDD0\u2FCB}{\uFDD0\u2FCC}{\uFDD0\u2FCD}{\uFDD0\u2FCE}{\uFDD0\u2FCF}{\uFDD0\u2FD0}{\uFDD0\u2FD1}{\uFDD0\u2FD5}]").freeze();
+    static final List<String> PROBES = Arrays.asList("\u4E00", "\uFDD0A", "\uFDD0\u2801", "\uFDD0\u2E80");
+    static final int PINYIN_PROBE_INDEX = 1;
+    static final UnicodeSet[] MATCHING = {null, PINYIN_LABELS, STROKE_LABELS, RADICAL_LABELS};
 
     private static final char CGJ = '\u034F';
-    private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
+    private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]").add(BASE).freeze();
     private static final UnicodeSet HANGUL = new UnicodeSet(
-    "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
-    private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
-    private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]");
+    "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]").freeze();
+    private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]").freeze();
+    private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]").freeze();
 
     private final RuleBasedCollator collatorOriginal;
     private final RuleBasedCollator collatorPrimaryOnly;
@@ -160,7 +172,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     private String overflowLabel = "\u2026";
     private String underflowLabel = "\u2026";
     private String inflowLabel = "\u2026";
-    private LangType langType;
+    private boolean hasPinyin;
 
     /**
      * Create the index object.
@@ -171,7 +183,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex(ULocale locale) {
-        this(locale, null, getIndexExemplars(locale));
+        this(locale, null, null);
     }
 
     /**
@@ -186,52 +198,53 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         this(ULocale.forLocale(locale));
     }
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-     */
-    public enum LangType { 
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-         */
-        NORMAL, 
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-         */
-        SIMPLIFIED,
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-         */
-        TRADITIONAL;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-         */
-        public static LangType fromLocale(ULocale locale) {
-            String lang = locale.getLanguage();
-            if (lang.equals("zh")) {
-                if ("Hant".equals(locale.getScript()) || "TW".equals(locale.getCountry())) {
-                    return TRADITIONAL;
-                }
-                return SIMPLIFIED;
-            }
-            return NORMAL;
-        }
-    }
+    //    /**
+    //     * @internal
+    //     * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+    //     */
+    //    public enum LangType { 
+    //        /**
+    //         * @internal
+    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+    //         */
+    //        NORMAL, 
+    //        /**
+    //         * @internal
+    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+    //         */
+    //        SIMPLIFIED,
+    //        /**
+    //         * @internal
+    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+    //         */
+    //        TRADITIONAL;
+    //        /**
+    //         * @internal
+    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+    //         */
+    //        public static LangType fromLocale(ULocale locale) {
+    //            String lang = locale.getLanguage();
+    //            if (lang.equals("zh")) {
+    //                if ("Hant".equals(locale.getScript()) || "TW".equals(locale.getCountry())) {
+    //                    return TRADITIONAL;
+    //                }
+    //                return SIMPLIFIED;
+    //            }
+    //            return NORMAL;
+    //        }
+    //    }
 
     /**
      * @internal
      * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
      */
     public AlphabeticIndex(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars) {
-        langType = LangType.fromLocale(locale);
-        // HACK because we have to know the type of the collation for Chinese
-        if (langType != LangType.NORMAL) {
-            locale = locale.setKeywordValue("collation", langType == LangType.TRADITIONAL ? "stroke" : "pinyin");
-        }
+        //        langType = LangType.fromLocale(locale);
+        //        // HACK because we have to know the type of the collation for Chinese
+        //        if (langType != LangType.NORMAL) {
+        //            locale = locale.setKeywordValue("collation", langType == LangType.TRADITIONAL ? "stroke" : "pinyin");
+        //        }
+        hasPinyin = false;
         collatorOriginal = collator != null ? collator : (RuleBasedCollator) Collator.getInstance(locale);
         try {
             collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.clone());
@@ -240,6 +253,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             throw new IllegalStateException("Collator cannot be cloned", e);
         }
         collatorPrimaryOnly.setStrength(Collator.PRIMARY);
+        if (exemplarChars == null) {
+            exemplarChars = getIndexExemplars(locale);
+        }
         addLabels(exemplarChars);
     }
 
@@ -455,10 +471,42 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @param locale
      * @return
      */
-    private static UnicodeSet getIndexExemplars(ULocale locale) {
-        UnicodeSet exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
+    private UnicodeSet getIndexExemplars(ULocale locale) {
+        UnicodeSet exemplars;
 
+        exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
         if (exemplars != null) {
+            // HACK      
+            final String language = locale.getLanguage();
+            if (language.equals("zh") || language.equals("ja") || language.equals("ko")) {
+                // find out which one we are using
+                TreeSet<String> probeSet = new TreeSet<String>(collatorOriginal);
+
+                //                UnicodeSet tailored = collatorOriginal.getTailoredSet();
+                //                tailored.addAllTo(probeSet);
+                //                System.out.println(probeSet);
+                //                probeSet.clear();
+
+                probeSet.addAll(PROBES);
+                String first = probeSet.iterator().next();
+                int location = PROBES.indexOf(first);
+                if (location > 0) {
+                    if (location == PINYIN_PROBE_INDEX) {
+                        hasPinyin = true;
+                    }
+                    exemplars.clear().addAll(MATCHING[location]);
+                }
+            }
+            //            LangType langType2 = LangType.fromLocale(locale);
+            //            if (langType2 == LangType.TRADITIONAL) {
+            //                Collator collator = Collator.getInstance(locale);
+            //                if (collator.getTailoredSet().contains(probeCharInLongStroke)) {
+            //                    exemplars = HACK_LONG_TRAD_EXEMPLARS;
+            //                } else {
+            //                    exemplars = HACK_SHORT_TRAD_EXEMPLARS;
+            //                }
+            //                return exemplars;
+            //            }
             return exemplars;
         }
 
@@ -487,7 +535,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 }
             }
         }
-        
+
         UnicodeSet uppercased = new UnicodeSet();
         for (String item : exemplars) {
             uppercased.add(UCharacter.toUpperCase(locale, item));
@@ -597,29 +645,52 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (buckets == null) {
             initBuckets();
         }
-        if (langType == LangType.SIMPLIFIED) {
-            String hackPrefix = hackName(name, collatorPrimaryOnly);
-            if (hackPrefix != null) {
-                name = hackPrefix + name;
-            }
-        }
+        //        if (langType == LangType.SIMPLIFIED) {
+        //            String hackPrefix = hackName(name, collatorPrimaryOnly);
+        //            if (hackPrefix != null) {
+        //                name = hackPrefix + name;
+        //            }
+        //        }
         return rawGetBucketIndex(name);
     }
 
     private int rawGetBucketIndex(CharSequence name) {
         // TODO use a binary search
-        int result = -1;
-        for (Bucket<V> bucket : buckets) {
+        int result = 0;
+        Bucket<V> lastBucket = null;
+        Bucket<V> bucket = null;
+        for (Iterator<Bucket<V>> it = buckets.fullIterator(); it.hasNext();) {
+            bucket = it.next();
             if (bucket.lowerBoundary == null) { // last bucket
-                return result;
+                bucket = lastBucket; // back up the bucket
+                --result;
+                break;
             }
-            int comp = collatorPrimaryOnly.compare(name, bucket.lowerBoundary);
-            if (comp < 0) { // the first boundary is always "", and so -1 will never be returned
-                return result;
-            } else if (comp == 0) {
-                return result + 1;
+            int bucketLower2name = collatorPrimaryOnly.compare(bucket.lowerBoundary, name);
+            if (bucketLower2name > 0) { // the first boundary is always "", and so -1 will never be returned
+                bucket = lastBucket; // back up the bucket
+                --result;
+                break;
+            } else if (bucketLower2name == 0) {
+                break;
             }
             result++;
+            lastBucket = bucket;
+        }
+        // we will always have at least one bucket
+        // see if we need to remap
+        if (buckets.rebucket != null) {
+            Bucket<V> temp = buckets.rebucket.get(bucket);
+            if (temp != null) {
+                bucket = temp;
+            }
+            result = 0;
+            for (Bucket<V> bucket2 : buckets) {
+                if (bucket2 == bucket) {
+                    break;
+                }
+                ++result;
+            }
         }
         return result;
     }
@@ -701,21 +772,21 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             }
         };
 
-        // If we have Pinyin, then we have a special hack to bucket items with ASCII.
-        if (langType == LangType.SIMPLIFIED) {
-            Map<String,Bucket<V>> rebucketMap = new HashMap<String, Bucket<V>>();
-            for (Record<V> name : inputList) {
-                String key = hackName(name.name, collatorOriginal);
-                if (key == null) continue;
-                Bucket<V> bucket = rebucketMap.get(key);
-                if (bucket == null) {
-                    int index = rawGetBucketIndex(key);
-                    bucket = buckets.bucketList.get(index);
-                }
-                rebucketMap.put(key, bucket);
-                name.rebucket = bucket;
-            }
-        }
+        //        // If we have Pinyin, then we have a special hack to bucket items with ASCII.
+        //        if (hasPinyin) {
+        //            Map<String,Bucket<V>> rebucketMap = new HashMap<String, Bucket<V>>();
+        //            for (Record<V> name : inputList) {
+        //                String key = hackName(name.name, collatorOriginal);
+        //                if (key == null) continue;
+        //                Bucket<V> bucket = rebucketMap.get(key);
+        //                if (bucket == null) {
+        //                    int index = rawGetBucketIndex(key);
+        //                    bucket = buckets.bucketList.get(index);
+        //                }
+        //                rebucketMap.put(key, bucket);
+        //                name.rebucket = bucket;
+        //            }
+        //        }
 
         // Set up a sorted list of the input
         TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
@@ -727,17 +798,17 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         // However, if the user adds item at a time and then gets the buckets, this isn't efficient, so
         // we need to improve it for that case.
 
-        Iterator<Bucket<V>> bucketIterator = buckets.iterator();
+        Iterator<Bucket<V>> bucketIterator = buckets.fullIterator();
         Bucket<V> currentBucket = bucketIterator.next();
         Bucket<V> nextBucket = bucketIterator.next();
         String upperBoundary = nextBucket.lowerBoundary; // there is always at least one bucket, so this is safe
         boolean atEnd = false;
         for (Record<V> s : sortedInput) {
-            // special hack for pinyin
-            if (s.rebucket != null) {
-                s.rebucket.records.add(s);
-                continue;
-            }
+//            // special hack for pinyin
+//            if (s.rebucket != null) {
+//                s.rebucket.records.add(s);
+//                continue;
+//            }
             // if the current bucket isn't the right one, find the one that is
             // We have a special flag for the last bucket so that we don't look any further
             while (!atEnd && collatorPrimaryOnly.compare(s.name, upperBoundary) >= 0) {
@@ -754,7 +825,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 }
             }
             // now put the record into the bucket.
-            currentBucket.records.add(s);
+            buckets.addTo(s, currentBucket);
         }
     }
 
@@ -825,6 +896,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     private static UnicodeSet getScriptSet(String codePoint) {
+        if (codePoint.startsWith(BASE)) {
+            return new UnicodeSet(UNIHAN);
+        }
         return new UnicodeSet().applyIntPropertyValue(UProperty.SCRIPT, UScript.getScript(codePoint.codePointAt(0)));
     }
 
@@ -870,7 +944,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public static class Record<V> {
-        private Bucket<V> rebucket = null; // special hack for Pinyin
+        //private Bucket<V> rebucket = null; // special hack for Pinyin
         private CharSequence name;
         private V data;
         private int counter;
@@ -909,7 +983,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * @provisional This API might change or be removed in a future release.
          */
         public String toString() {
-            return name + "=" + data + (rebucket == null ? "" : "{" + rebucket.label + "}");
+            return name + "=" + data 
+            //+ (rebucket == null ? "" : "{" + rebucket.label + "}")
+            ;
         }
     }
 
@@ -951,9 +1027,17 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * @provisional This API might change or be removed in a future release.
          */
         private Bucket(String label, String lowerBoundary, LabelType labelType) {
+            //            String hackLabel = HACK_TRADITIONAL.get(label);
+            //            if (hackLabel != null) {
+            //                label = hackLabel;
+            //            }
             this.label = label;
             this.lowerBoundary = lowerBoundary;
             this.labelType = labelType;
+        }
+
+        String getLowerBoundary() {
+            return lowerBoundary;
         }
 
         /**
@@ -1017,9 +1101,11 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     private class BucketList implements Iterable<Bucket<V>> {
-        private ArrayList<Bucket<V>> bucketList = new ArrayList<Bucket<V>>();
+        private final ArrayList<Bucket<V>> bucketList = new ArrayList<Bucket<V>>();
+        private final HashMap<Bucket<V>,Bucket<V>> rebucket;
+        private final List<Bucket<V>> immutableVisibleList;
 
-        BucketList() {
+        private BucketList() {
             // initialize indexCharacters;
             List<String> indexCharacters = initLabels();
 
@@ -1029,7 +1115,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             // fix up the list, adding underflow, additions, overflow
             // insert infix labels as needed, using \uFFFF.
             String last = indexCharacters.get(0);
-            bucketList.add(new Bucket<V>(last, last, Bucket.LabelType.NORMAL));
+            bucketList.add(new Bucket<V>(fixLabel(last), last, Bucket.LabelType.NORMAL));
             UnicodeSet lastSet = getScriptSet(last).removeAll(IGNORE_SCRIPTS);
 
             for (int i = 1; i < indexCharacters.size(); ++i) {
@@ -1041,22 +1127,104 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                     if (collatorPrimaryOnly.compare(overflowComparisonString, current) < 0) {
                         bucketList.add(new Bucket<V>(getInflowLabel(), overflowComparisonString,
                                 Bucket.LabelType.INFLOW));
-                        i++;
+                        //i++;
                         lastSet = set;
                     }
                 }
-                bucketList.add(new Bucket<V>(current, current, Bucket.LabelType.NORMAL));
+                bucketList.add(new Bucket<V>(fixLabel(current), current, Bucket.LabelType.NORMAL));
                 last = current;
                 lastSet = set;
             }
             // overflow bucket
             String limitString = getOverflowComparisonString(last);
-            bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final,
+            bucketList.add(new Bucket<V>(getOverflowLabel(), limitString, Bucket.LabelType.OVERFLOW)); // final
 
+            // add some redirects for Pinyin
+
+            ArrayList<Bucket<V>> publicBucketList;
+            if (hasPinyin) {
+                rebucket = new HashMap<Bucket<V>,Bucket<V>>();
+                publicBucketList = new ArrayList<Bucket<V>>();
+                HashMap<String,Bucket<V>> rebucketLabel = new HashMap<String,Bucket<V>>();
+                Bucket<V> flowBefore = null; // special handling for flow bucket before pinyin
+                boolean flowRedirect = false;
+                boolean havePinyin = false;
+
+                for (Bucket<V> bucket : bucketList) {
+                    String label = bucket.getLabel();
+                    String lowerBound = bucket.getLowerBoundary();
+                    if (lowerBound != null && lowerBound.startsWith(BASE)) { // pinyin
+                        rebucket.put(bucket, rebucketLabel.get(label));
+                        havePinyin = true;
+                    } else { // not pinyin
+                        if (bucket.labelType != LabelType.NORMAL) { // special handling for flows
+                            if (flowRedirect == false) {
+                                if (havePinyin) {
+                                    // do a redirect from the last before  pinyin to the first before;
+                                    // we do it this way so that the buckets are joined, and any between stuff goes to the end
+                                    // eg a b c alpha chinese gorp
+                                    // we want to show as ... a b c ... with the alpha and gorp both in the final bucket.
+                                    rebucket.put(flowBefore, bucket);
+                                    publicBucketList.remove(flowBefore);
+                                    flowRedirect = true;
+                                } else {
+                                    flowBefore = bucket;
+                                }
+                            }
+                        } else { // is NORMAL
+                            rebucketLabel.put(label, bucket);
+                        }
+                        publicBucketList.add(bucket);
+                    }
+                }
+            } else {
+                rebucket = null;
+                publicBucketList = bucketList;
+            }
+            immutableVisibleList = Collections.unmodifiableList(publicBucketList);
         }
 
-        public Iterator<Bucket<V>> iterator() {
+        /**
+         * @param s
+         * @param currentBucket
+         */
+        private void addTo(Record<V> s, Bucket<V> currentBucket) {
+            if (rebucket != null) {
+                Bucket<V> newBucket = rebucket.get(currentBucket);
+                if (newBucket != null) {
+                    currentBucket = newBucket;
+                }
+            }
+            currentBucket.records.add(s);
+        }
+
+        /**
+         * @param current
+         * @return
+         */
+        private String fixLabel(String current) {
+            if (!current.startsWith(BASE)) {
+                return current;
+            }
+            int rest = current.charAt(1);
+            if (0x2800 < rest && rest <= 0x28FF) { // stroke count
+                return (rest-0x2800) + "\u5283"; // HACK
+            }
+            return current.substring(1);
+        }
+
+        /**
+         * Private iterator over all the buckets, visible and invisible
+         */
+        private Iterator<Bucket<V>> fullIterator() {
             return bucketList.iterator();
+        }
+
+        /**
+         * Iterator over just the visible buckets.
+         */
+        public Iterator<Bucket<V>> iterator() {
+            return immutableVisibleList.iterator(); // use immutable list to prevent remove().
         }
     }
 
@@ -1064,98 +1232,180 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * HACKS
      */
 
-    /**
-     * Only gets called for simplified Chinese. Uses further hack to distinguish long from short pinyin table.
-     */
-    private String hackName(CharSequence name, RuleBasedCollator comparator) {
-        if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
-            return null;
-        }
-        synchronized (PINYIN_LOWER_BOUNDS_LONG) {
-            if (PINYIN_LOWER_BOUNDS == null) {
-                if (comparator.getTailoredSet().contains(probeCharInLong)) {
-                    PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_LONG;
-                    HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_LONG;
-                } else {
-                    PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_SHORT;
-                    HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_SHORT;
-                }
-            }
-        }
-        int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
-        if (index < 0) {
-            index = -index - 2;
-        }
-        return PINYIN_LOWER_BOUNDS.substring(index, index + 1);
-    }
-
-    private static String PINYIN_LOWER_BOUNDS;
-
-    private static String[] HACK_PINYIN_LOOKUP;
-
-
-    /**
-     * HACKS
-     * Generated with org.unicode.draft.GenerateUnihanCollator.
-     */
-
-    private int probeCharInLong = 0x28EAD;
-
-    private static String PINYIN_LOWER_BOUNDS_LONG = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
-
-    private static String[] HACK_PINYIN_LOOKUP_LONG = {
-        "", // A
-        "\u516B", // b : \u516B [b\u0101]
-        "\uD863\uDEAD", // c : \U00028EAD [c\u0101]
-        "\uD844\uDE51", // d : \U00021251 [d\u0101]
-        "\u59B8", // e : \u59B8 [\u0113]
-        "\u53D1", // f : \u53D1 [f\u0101]
-        "\uD844\uDE45", // g : \U00021245 [g\u0101]
-        "\u54C8", // h : \u54C8 [h\u0101]
-        "\u4E0C", // j : \u4E0C [j\u012B]
-        "\u5494", // k : \u5494 [k\u0101]
-        "\u3547", // l : \u3547 [l\u0101]
-        "\u5452", // m : \u5452 [\u1E3F]
-        "\u5514", // n : \u5514 [\u0144]
-        "\u5594", // o : \u5594 [\u014D]
-        "\uD84F\uDC7A", // p : \U00023C7A [p\u0101]
-        "\u4E03", // q : \u4E03 [q\u012B]
-        "\u513F", // r : \u513F [r]
-        "\u4EE8", // s : \u4EE8 [s\u0101]
-        "\u4ED6", // t : \u4ED6 [t\u0101]
-        "\u7A75", // w : \u7A75 [w\u0101]
-        "\u5915", // x : \u5915 [x\u012B]
-        "\u4E2B", // y : \u4E2B [y\u0101]
-        "\u5E00", // z : \u5E00 [z\u0101]
-    };
-
-    private static String PINYIN_LOWER_BOUNDS_SHORT = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
-
-    private static String[] HACK_PINYIN_LOOKUP_SHORT = {
-        "", // A
-        "\u516B", // b : \u516B [b\u0101]
-        "\u5693", // c : \u5693 [c\u0101]
-        "\u5491", // d : \u5491 [d\u0101]
-        "\u59B8", // e : \u59B8 [\u0113]
-        "\u53D1", // f : \u53D1 [f\u0101]
-        "\u65EE", // g : \u65EE [g\u0101]
-        "\u54C8", // h : \u54C8 [h\u0101]
-        "\u4E0C", // j : \u4E0C [j\u012B]
-        "\u5494", // k : \u5494 [k\u0101]
-        "\u3547", // l : \u3547 [l\u0101]
-        "\u5452", // m : \u5452 [\u1E3F]
-        "\u5514", // n : \u5514 [\u0144]
-        "\u5594", // o : \u5594 [\u014D]
-        "\u5991", // p : \u5991 [p\u0101]
-        "\u4E03", // q : \u4E03 [q\u012B]
-        "\u513F", // r : \u513F [r]
-        "\u4EE8", // s : \u4EE8 [s\u0101]
-        "\u4ED6", // t : \u4ED6 [t\u0101]
-        "\u7A75", // w : \u7A75 [w\u0101]
-        "\u5915", // x : \u5915 [x\u012B]
-        "\u4E2B", // y : \u4E2B [y\u0101]
-        "\u5E00", // z : \u5E00 [z\u0101]
-    };
+    //    /**
+    //     * Only gets called for simplified Chinese. Uses further hack to distinguish long from short pinyin table.
+    //     */
+    //    private String hackName(CharSequence name, RuleBasedCollator comparator) {
+    //        if (!UNIHAN.contains(Character.codePointAt(name, 0))) {
+    //            return null;
+    //        }
+    //        synchronized (PINYIN_LOWER_BOUNDS_LONG) {
+    //            if (PINYIN_LOWER_BOUNDS == null) {
+    //                if (comparator.getTailoredSet().contains(probeCharInLong)) {
+    //                    PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_LONG;
+    //                    HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_LONG;
+    //                } else {
+    //                    PINYIN_LOWER_BOUNDS = PINYIN_LOWER_BOUNDS_SHORT;
+    //                    HACK_PINYIN_LOOKUP = HACK_PINYIN_LOOKUP_SHORT;
+    //                }
+    //            }
+    //        }
+    //        int index = Arrays.binarySearch(HACK_PINYIN_LOOKUP, name, comparator);
+    //        if (index < 0) {
+    //            index = -index - 2;
+    //        }
+    //        return PINYIN_LOWER_BOUNDS.substring(index, index + 1);
+    //    }
+    //
+    //    private static String PINYIN_LOWER_BOUNDS;
+    //
+    //    private static String[] HACK_PINYIN_LOOKUP;
+    //
+    //
+    //    /**
+    //     * HACKS
+    //     * Generated with org.unicode.draft.GenerateUnihanCollator.
+    //     */
+    //
+    //    private static final int probeCharInLong = 0x28EAD;
+    //    private static final int probeCharInLongStroke = 0x2A6A5;
+    //
+    //    private static final String PINYIN_LOWER_BOUNDS_LONG = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
+    //
+    //    private static final String[] HACK_PINYIN_LOOKUP_LONG = {
+    //        "", // A
+    //        "\u516B", // b : \u516B [b\u0101]
+    //        "\uD863\uDEAD", // c : \U00028EAD [c\u0101]
+    //        "\uD844\uDE51", // d : \U00021251 [d\u0101]
+    //        "\u59B8", // e : \u59B8 [\u0113]
+    //        "\u53D1", // f : \u53D1 [f\u0101]
+    //        "\uD844\uDE45", // g : \U00021245 [g\u0101]
+    //        "\u54C8", // h : \u54C8 [h\u0101]
+    //        "\u4E0C", // j : \u4E0C [j\u012B]
+    //        "\u5494", // k : \u5494 [k\u0101]
+    //        "\u3547", // l : \u3547 [l\u0101]
+    //        "\u5452", // m : \u5452 [\u1E3F]
+    //        "\u5514", // n : \u5514 [\u0144]
+    //        "\u5594", // o : \u5594 [\u014D]
+    //        "\uD84F\uDC7A", // p : \U00023C7A [p\u0101]
+    //        "\u4E03", // q : \u4E03 [q\u012B]
+    //        "\u513F", // r : \u513F [r]
+    //        "\u4EE8", // s : \u4EE8 [s\u0101]
+    //        "\u4ED6", // t : \u4ED6 [t\u0101]
+    //        "\u7A75", // w : \u7A75 [w\u0101]
+    //        "\u5915", // x : \u5915 [x\u012B]
+    //        "\u4E2B", // y : \u4E2B [y\u0101]
+    //        "\u5E00", // z : \u5E00 [z\u0101]
+    //    };
+    //
+    //    private static String PINYIN_LOWER_BOUNDS_SHORT = "\u0101bcd\u0113fghjkl\u1E3F\u0144\u014Dpqrstwxyz";
+    //
+    //    private static String[] HACK_PINYIN_LOOKUP_SHORT = {
+    //        "", // A
+    //        "\u516B", // b : \u516B [b\u0101]
+    //        "\u5693", // c : \u5693 [c\u0101]
+    //        "\u5491", // d : \u5491 [d\u0101]
+    //        "\u59B8", // e : \u59B8 [\u0113]
+    //        "\u53D1", // f : \u53D1 [f\u0101]
+    //        "\u65EE", // g : \u65EE [g\u0101]
+    //        "\u54C8", // h : \u54C8 [h\u0101]
+    //        "\u4E0C", // j : \u4E0C [j\u012B]
+    //        "\u5494", // k : \u5494 [k\u0101]
+    //        "\u3547", // l : \u3547 [l\u0101]
+    //        "\u5452", // m : \u5452 [\u1E3F]
+    //        "\u5514", // n : \u5514 [\u0144]
+    //        "\u5594", // o : \u5594 [\u014D]
+    //        "\u5991", // p : \u5991 [p\u0101]
+    //        "\u4E03", // q : \u4E03 [q\u012B]
+    //        "\u513F", // r : \u513F [r]
+    //        "\u4EE8", // s : \u4EE8 [s\u0101]
+    //        "\u4ED6", // t : \u4ED6 [t\u0101]
+    //        "\u7A75", // w : \u7A75 [w\u0101]
+    //        "\u5915", // x : \u5915 [x\u012B]
+    //        "\u4E2B", // y : \u4E2B [y\u0101]
+    //        "\u5E00", // z : \u5E00 [z\u0101]
+    //    };
+    //    
+    //    private static final Map<String,String> HACK_TRADITIONAL;
+    //    static {
+    //        Map<String,String> temp = new HashMap<String,String>();
+    //        temp.put("\u4E00", "1\u5283"); 
+    //        temp.put("\u4E01", "2\u5283"); 
+    //        temp.put("\u4E07", "3\u5283"); 
+    //        temp.put("\u4E0D", "4\u5283"); 
+    //        temp.put("\u4E17", "5\u5283"); 
+    //        temp.put("\u3401", "6\u5283"); 
+    //        temp.put("\u4E23", "7\u5283"); 
+    //        temp.put("\u4E26", "8\u5283"); 
+    //        temp.put("\u4E34", "9\u5283"); 
+    //        temp.put("\uD840\uDC35", "9\u5283"); 
+    //        temp.put("\uD840\uDC3E", "10\u5283"); 
+    //        temp.put("\uD840\uDC3D", "10\u5283"); 
+    //        temp.put("\u3422", "11\u5283"); 
+    //        temp.put("\uD840\uDC41", "11\u5283"); 
+    //        temp.put("\uD840\uDC46", "12\u5283"); 
+    //        temp.put("\u4E82", "13\u5283"); 
+    //        temp.put("\uD840\uDC4C", "13\u5283"); 
+    //        temp.put("\uD840\uDC4E", "14\u5283"); 
+    //        temp.put("\u3493", "15\u5283"); 
+    //        temp.put("\uD840\uDC53", "15\u5283"); 
+    //        temp.put("\u4EB8", "16\u5283"); 
+    //        temp.put("\uD840\uDC55", "16\u5283"); 
+    //        temp.put("\u511F", "17\u5283"); 
+    //        temp.put("\uD840\uDC56", "17\u5283"); 
+    //        temp.put("\u512D", "18\u5283"); 
+    //        temp.put("\uD840\uDC5F", "18\u5283"); 
+    //        temp.put("\u3426", "19\u5283"); 
+    //        temp.put("\uD840\uDC7A", "19\u5283"); 
+    //        temp.put("\u34A5", "20\u5283"); 
+    //        temp.put("\uD840\uDC60", "20\u5283"); 
+    //        temp.put("\u34A7", "21\u5283"); 
+    //        temp.put("\uD840\uDD9E", "21\u5283"); 
+    //        temp.put("\u4EB9", "22\u5283"); 
+    //        temp.put("\uD840\uDC7B", "22\u5283"); 
+    //        temp.put("\u513D", "23\u5283"); 
+    //        temp.put("\uD840\uDCC8", "23\u5283"); 
+    //        temp.put("\u513E", "24\u5283"); 
+    //        temp.put("\uD840\uDD9F", "24\u5283"); 
+    //        temp.put("\u56D4", "25\u5283"); 
+    //        temp.put("\uD842\uDCCA", "25\u5283"); 
+    //        temp.put("\u3536", "26\u5283"); 
+    //        temp.put("\u34AA", "26\u5283"); 
+    //        temp.put("\u7065", "27\u5283"); 
+    //        temp.put("\uD842\uDE0B", "27\u5283"); 
+    //        temp.put("\u56D6", "28\u5283"); 
+    //        temp.put("\uD840\uDDA0", "28\u5283"); 
+    //        temp.put("\u7E9E", "29\u5283"); 
+    //        temp.put("\uD840\uDDA1", "29\u5283"); 
+    //        temp.put("\u53B5", "30\u5283"); 
+    //        temp.put("\uD842\uDD6C", "30\u5283"); 
+    //        temp.put("\u7069", "31\u5283"); 
+    //        temp.put("\uD844\uDD9F", "31\u5283"); 
+    //        temp.put("\u706A", "32\u5283"); 
+    //        temp.put("\uD842\uDED1", "32\u5283"); 
+    //        temp.put("\uD846\uDD3B", "33\u5283"); 
+    //        temp.put("\uD842\uDE0C", "33\u5283"); 
+    //        temp.put("\uD842\uDCCB", "34\u5283"); 
+    //        temp.put("\u9F7E", "35\u5283"); 
+    //        temp.put("\uD84C\uDF5C", "35\u5283"); 
+    //        temp.put("\u9F49", "36\u5283"); 
+    //        temp.put("\uD845\uDD19", "36\u5283"); 
+    //        temp.put("\uD86B\uDE9A", "37\u5283"); 
+    //        temp.put("\uD861\uDC04", "38\u5283"); 
+    //        temp.put("\u9750", "39\u5283"); 
+    //        temp.put("\uD845\uDD1A", "39\u5283"); 
+    //        temp.put("\uD864\uDDD3", "40\u5283"); 
+    //        temp.put("\uD869\uDCCA", "41\u5283"); 
+    //        temp.put("\uD85A\uDDC4", "42\u5283"); 
+    //        temp.put("\uD85C\uDD98", "43\u5283"); 
+    //        temp.put("\uD85E\uDCB1", "44\u5283"); 
+    //        temp.put("\uD865\uDE63", "46\u5283"); 
+    //        temp.put("\u9F98", "48\u5283"); 
+    //        temp.put("\uD85A\uDDC5", "48\u5283"); 
+    //        temp.put("\u4A3B", "52\u5283"); 
+    //        temp.put("\uD841\uDD3B", "64\u5283");
+    //        HACK_TRADITIONAL = Collections.unmodifiableMap(temp);
+    //    }
 
     /**
      * HACKS
@@ -1177,6 +1427,14 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 "\uD802\uDF40", "\uD802\uDF60", "\uD800\uDF80", "\uD800\uDFA0", "\uD808\uDC00", "\uD80C\uDC00", "\u4E00" 
         });
 
+    //    private static final UnicodeSet HACK_SHORT_TRAD_EXEMPLARS = new UnicodeSet(
+    //            "[\u3401 \u3422 \u3426 \u3493 \u34A5 \u34A7 \u3536 \u4E00 \u4E01 \u4E07 \u4E0D \u4E17 \u4E23 \u4E26 \u4E34 \u4E82 \u4EB8 \u4EB9 \u511F \u512D \u513D" +
+    //    		" \u513E \u53B5 \u56D4 \u56D6 \u7065 \u7069 \u706A \u7E9E \u9750 \u9F49 \u9F7E \u9F98 \\U0002003E \\U00020046 \\U0002004E \\U0002193B]").freeze();
+    //    private static final UnicodeSet HACK_LONG_TRAD_EXEMPLARS = new UnicodeSet(
+    //            "[\u3401\u34AA\u4A3B\u4E00\u4E01\u4E07\u4E0D\u4E17\u4E23\u4E26" +
+    //    		"\\U00020035\\U0002003D\\U00020041\\U00020046\\U0002004C\\U0002004E\\U00020053\\U00020055\\U00020056\\U0002005F\\U00020060\\U0002007A\\U0002007B\\U000200C8" +
+    //    		"\\U0002019E-\\U000201A1\\U0002053B\\U000208CA\\U000208CB\\U0002096C\\U00020A0B\\U00020A0C\\U00020AD1\\U0002119F\\U00021519\\U0002151A\\U0002335C\\U000269C4" +
+    //    		"\\U000269C5\\U00027198\\U000278B1\\U00028404\\U000291D3\\U00029663\\U0002A4CA\\U0002AE9A]").freeze();
     /**
      * Only for testing...
      * @internal
