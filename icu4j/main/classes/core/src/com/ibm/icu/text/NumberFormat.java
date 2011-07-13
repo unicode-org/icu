@@ -429,8 +429,9 @@ public abstract class NumberFormat extends UFormat {
      * on output, the position after the last matched character. If
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
+     * @internal
      */
-    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         ///CLOVER:OFF
         // Default implementation only -- subclasses should override
         Number n = parse(text, pos);
