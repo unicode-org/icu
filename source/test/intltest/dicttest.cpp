@@ -53,7 +53,7 @@ void DictionaryWordTest::TestThaiBreaks() {
     
     b = BreakIterator::createLineInstance(locale, status);
     if (U_FAILURE(status)) {
-        printf("Unable to create thai line break iterator.\n");
+        errln("Unable to create thai line break iterator.");
         return;
     }
     b->setText(text);
