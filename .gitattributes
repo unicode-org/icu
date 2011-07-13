@@ -622,6 +622,7 @@ icu4c/source/data/curr/sr_Cyrl_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sr_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sr_Latn_BA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sr_Latn_CS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/curr/sr_Latn_ME.txt -text
 icu4c/source/data/curr/sr_Latn_RS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sr_Latn_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/sr_ME.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -903,6 +904,7 @@ icu4c/source/data/lang/sr_Cyrl_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sr_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sr_Latn_BA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sr_Latn_CS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/lang/sr_Latn_ME.txt -text
 icu4c/source/data/lang/sr_Latn_RS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sr_Latn_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/sr_ME.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1805,6 +1807,7 @@ icu4c/source/data/region/sr_Cyrl_YU.txt svneol=native#text/plain%3Bcharset%3Dutf
 icu4c/source/data/region/sr_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sr_Latn_BA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sr_Latn_CS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/region/sr_Latn_ME.txt -text
 icu4c/source/data/region/sr_Latn_RS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sr_Latn_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/sr_ME.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2531,6 +2534,7 @@ icu4c/source/data/zone/sr_Cyrl_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/sr_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/sr_Latn_BA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/sr_Latn_CS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/zone/sr_Latn_ME.txt -text
 icu4c/source/data/zone/sr_Latn_RS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/sr_Latn_YU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/sr_ME.txt svneol=native#text/plain%3Bcharset%3Dutf-8
