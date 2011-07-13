@@ -1,0 +1,449 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/kn.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/kn.xml
+ */
+kn{
+    AuxExemplarCharacters{"[]"}
+    ExemplarCharacters{
+        "[\u0CBC ೦ ೧ ೨ ೩ ೪ ೫ ೬ ೭ ೮ ೯ ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಎ ಏ ಐ ಒ ಓ ಔ ಂ ಃ ಕ ಖ ಗ ಘ ಙ ಚ "
+        "ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ ಬ ಭ ಮ ಯ ರ ಱ ಲ ವ ಶ ಷ ಸ ಹ ಳ ೞ ಽ ಾ \u0CBF ೀ ು ೂ"
+        " ೃ ೄ \u0CC6 ೇ ೈ ೊ ೋ \u0CCC \u0CCD ೕ ೖ]"
+    }
+    ExemplarCharactersCurrency{"[ರ ೂ]"}
+    ExemplarCharactersIndex{
+        "[ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಎ ಏ ಐ ಒ ಓ ಔ ಕ ಖ ಗ ಘ ಙ ಚ ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ"
+        " ಬ ಭ ಮ ಯ ರ ಱ ಲ ವ ಶ ಷ ಸ ಹ ಳ ೞ]"
+    }
+    LocaleScript{
+        "Knda",
+    }
+    NumberElements{
+        default{"knda"}
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+            }
+            symbols{
+                exponential{"ಪೂರ್ವ"}
+                nan{"ಸಂಖ್ಯೆಯಲ್ಲ"}
+            }
+        }
+    }
+    Version{"2.0.59.63"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "hh:mm:ss a zzzz",
+                "hh:mm:ss a z",
+                "hh:mm:ss a",
+                "hh:mm a",
+                "EEEE d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "d-M-yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E, d/M"}
+                MMMEd{"E, d MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd-MM"}
+                Md{"d/M"}
+                yM{"M/y"}
+                yMEd{"EEE,d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM, y"}
+                yMMMd{"d, MMM, y"}
+                yMd{"d/M/y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ರ.",
+                        "ಸೋ.",
+                        "ಮಂ.",
+                        "ಬು.",
+                        "ಗು.",
+                        "ಶು.",
+                        "ಶನಿ.",
+                    }
+                    wide{
+                        "ರವಿವಾರ",
+                        "ಸೋಮವಾರ",
+                        "ಮಂಗಳವಾರ",
+                        "ಬುಧವಾರ",
+                        "ಗುರುವಾರ",
+                        "ಶುಕ್ರವಾರ",
+                        "ಶನಿವಾರ",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ರ",
+                        "ಸೋ",
+                        "ಮಂ",
+                        "ಬು",
+                        "ಗು",
+                        "ಶು",
+                        "ಶ",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ಕ್ರಿ.ಪೂ",
+                    "ಜಾಹೀ",
+                }
+                wide{
+                    "ಈಸಪೂವ೯.",
+                    "ಕ್ರಿಸ್ತ ಶಕ",
+                }
+            }
+            fields{
+                day{
+                    dn{"ದಿನ"}
+                    relative{
+                        "-1"{"ನಿನ್ನೆ"}
+                        "-2"{"ಮೊನ್ನೆ"}
+                        "0"{"ಇಂದು"}
+                        "1"{"ನಾಳೆ"}
+                        "2"{"ನಾಡಿದ್ದು"}
+                    }
+                }
+                dayperiod{
+                    dn{"ಪೂರ್ವಾಹ್ನ/ಅಪರಾಹ್ನ"}
+                }
+                era{
+                    dn{"ಯುಗ"}
+                }
+                hour{
+                    dn{"ಗಂಟೆ"}
+                }
+                minute{
+                    dn{"ನಿಮಿಷ"}
+                }
+                month{
+                    dn{"ತಿಂಗಳು"}
+                    relative{
+                        "-1"{"ಕಳೆದ ತಿಂಗಳು"}
+                        "0"{"ಈ ತಿಂಗಳು"}
+                        "1"{"ಮುಂದಿನ ತಿಂಗಳು"}
+                    }
+                }
+                second{
+                    dn{"ಸೆಕೆಂಡ್"}
+                }
+                week{
+                    dn{"ವಾರ"}
+                    relative{
+                        "-1"{"ಕೊನೆಯ ವಾರ"}
+                        "0"{"ಈ ವಾರ"}
+                        "1"{"ಮುಂದಿನ ವಾರ"}
+                    }
+                }
+                weekday{
+                    dn{"ವಾರದ ದಿನ"}
+                }
+                year{
+                    dn{"ವರ್ಷ"}
+                    relative{
+                        "-1"{"ಕೊನೆಯ ವರ್ಷ"}
+                        "0"{"ಈ ವರ್ಷ"}
+                        "1"{"ಮುಂದಿನ ವರ್ಷ"}
+                    }
+                }
+                zone{
+                    dn{"ಸಮಯ ವಲಯ:"}
+                }
+            }
+            intervalFormats{
+                MEd{
+                    M{"E,d/M-E.d/M"}
+                    d{"E,d/M-E.d/M"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E,d MMM - E,d MMM"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d –d MMM"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d/M - d/M"}
+                }
+                hv{
+                    h{"h-h a v"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, d/M/yy - E, d/M/yy"}
+                    d{"E, d/M/yy - E, d/M/yy"}
+                    y{"E, d/M/yy - E, d/M/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E,d MMM - E,d MMM, y"}
+                    d{"E,d MMM - E,d MMM, y"}
+                    y{"E,d MMM, y - E,d MMM, y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM, y"}
+                    d{"d, MMM –d y"}
+                    y{"d, MMM, y - d, MMM, y"}
+                }
+                yMd{
+                    M{"d/M/yy – d/M/yy"}
+                    d{"d/M/yy – d/M/yy"}
+                    y{"d/M/yy – d/M/yy"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "ಜನವರೀ",
+                        "ಫೆಬ್ರವರೀ",
+                        "ಮಾರ್ಚ್",
+                        "ಎಪ್ರಿಲ್",
+                        "ಮೆ",
+                        "ಜೂನ್",
+                        "ಜುಲೈ",
+                        "ಆಗಸ್ಟ್",
+                        "ಸಪ್ಟೆಂಬರ್",
+                        "ಅಕ್ಟೋಬರ್",
+                        "ನವೆಂಬರ್",
+                        "ಡಿಸೆಂಬರ್",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ಜ",
+                        "ಫೆ",
+                        "ಮಾ",
+                        "ಎ",
+                        "ಮೇ",
+                        "ಜೂ",
+                        "ಜು",
+                        "ಆ",
+                        "ಸೆ",
+                        "ಅ",
+                        "ನ",
+                        "ಡಿ",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "ಒಂದು 1",
+                        "ಎರಡು 2",
+                        "ಮೂರು 3",
+                        "ನಾಲೃಕ 4",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    listPattern{
+        standard{
+            2{"{0} ಮತ್ತು {1}"}
+            end{"{0}, ಮತ್ತು {1}"}
+        }
+    }
+    measurementSystemNames{
+        metric{"ಮೆಟ್ರಿಕ್‌"}
+    }
+    units{
+        day{
+            0{"0 ದಿನಗಳು"}
+            1{"1 ದಿನ"}
+            other{"{0} ದಿನಗಳು"}
+        }
+        day-future{
+            0{"೦ ದಿನಗಳಲ್ಲಿ"}
+            1{"1 ದಿನದಲ್ಲಿ"}
+            other{"{0} ದಿನಗಳಲ್ಲಿ"}
+        }
+        day-past{
+            0{"೦ ದಿನಗಳ ಹಿಂದೆ"}
+            1{"1 ದಿನದ ಹಿಂದೆ"}
+            other{"{0} ದಿನಗಳ ಹಿಂದೆ"}
+        }
+        hour{
+            0{"0 ಗಂಟೆಗಳು"}
+            1{"1 ಗಂಟೆ"}
+            other{"{0} ಗಂಟೆಗಳು"}
+        }
+        hour-future{
+            0{"೦ ಗಂಟೆಗಳಲ್ಲಿ"}
+            1{"1 ಗಂಟೆಯಲ್ಲಿ"}
+            other{"{0} ಗಂಟೆಗಳಲ್ಲಿ"}
+        }
+        hour-past{
+            0{"೦ ಗಂಟೆಗಳ ಹಿಂದೆ"}
+            1{"1 ಗಂಟೆಗಳ ಹಿಂದೆ"}
+            other{"{0} ಗಂಟೆಗಳ ಹಿಂದೆ"}
+        }
+        minute{
+            0{"0 ನಿಮಿಷಗಳು"}
+            1{"1 ನಿಮಿಷ"}
+            other{"{0} ನಿಮಿಷಗಳು"}
+        }
+        minute-future{
+            0{"೦ ನಿಮಿಷಗಳಲ್ಲಿ"}
+            1{"1 ನಿಮಿಷದಲ್ಲಿ"}
+            other{"{0} ನಿಮಿಷಗಳಲ್ಲಿ"}
+        }
+        minute-past{
+            0{"0 ನಿಮಿಷಗಳ ಹಿಂದೆ"}
+            1{"1 ನಿಮಿಷದ ಹಿಂದೆ"}
+            other{"{0} ನಿಮಿಷಗಳ ಹಿಂದೆ"}
+        }
+        month{
+            0{"0 ತಿಂಗಳುಗಳು"}
+            1{"1 ತಿಂಗಳು"}
+            other{"{0} ತಿಂಗಳುಗಳು"}
+        }
+        month-future{
+            0{"೦ ತಿಂಗಳಿನಲ್ಲಿ"}
+            1{"1 ತಿಂಗಳಿನಲ್ಲಿ"}
+            other{"{0} ತಿಂಗಳುಗಳಲ್ಲಿ"}
+        }
+        month-past{
+            0{"೦ ತಿಂಗಳುಗಳ ಹಿಂದೆ"}
+            1{"1 ತಿಂಗಳ ಹಿಂದೆ"}
+            other{"{0} ತಿಂಗಳುಗಳ ಹಿಂದೆ"}
+        }
+        second{
+            0{"೦ ಸೆಕೆಂಡುಗಳು"}
+            1{"1 ಸೆಕೆಂಡ್"}
+            other{"{0} ಸೆಕೆಂಡುಗಳು"}
+        }
+        second-future{
+            0{"೦ ಸೆಕೆಂಡ್‌‌ಗಳಲ್ಲಿ"}
+            1{"1 ಸೆಕೆಂಡ್‌ನಲ್ಲಿ"}
+            other{"{0} ಸೆಕೆಂಡ್‌ಗಳಲ್ಲಿ"}
+        }
+        second-past{
+            0{"೦ ಸೆಕೆಂಡುಗಳ ಹಿಂದೆ"}
+            1{"1 ಸೆಕೆಂಡ್ ಹಿಂದೆ"}
+            other{"{0} ಸೆಕೆಂಡುಗಳ ಹಿಂದೆ"}
+        }
+        week{
+            0{"0 ವಾರಗಳು"}
+            1{"1 ವಾರ"}
+            other{"{0} ವಾರಗಳು"}
+        }
+        week-future{
+            0{"೦ ವಾರಗಳಲ್ಲಿ"}
+            1{"1 ವಾರದಲ್ಲಿ"}
+            other{"{0} ವಾರಗಳಲ್ಲಿ"}
+        }
+        week-past{
+            0{"೦ ವಾರಗಳ ಹಿಂದೆ"}
+            1{"1 ವಾರದ ಹಿಂದೆ"}
+            other{"{0} ವಾರಗಳ ಹಿಂದೆ"}
+        }
+        year{
+            0{"೦ ವರ್ಷಗಳು"}
+            1{"1 ವರ್ಷ"}
+            other{"{0} ವರ್ಷಗಳು"}
+        }
+        year-future{
+            0{"೦ ವರ್ಷಗಳಲ್ಲಿ"}
+            1{"1 ವರ್ಷದಲ್ಲಿ"}
+            other{"{0} ವರ್ಷಗಳಲ್ಲಿ"}
+        }
+        year-past{
+            0{"೦ ವರ್ಷಗಳ ಹಿಂದೆ"}
+            1{"1 ವರ್ಷದ ಹಿಂದೆ"}
+            other{"{0} ವರ್ಷಗಳ ಹಿಂದೆ"}
+        }
+    }
+    unitsShort{
+        day{
+            0{"0 ದಿನ"}
+            1{"1 ದಿನ"}
+            other{"{0} ದಿನ"}
+        }
+        hour{
+            0{"೦ ಗಂ."}
+            1{"1 ಗಂ."}
+            other{"{0} ಗಂ."}
+        }
+        minute{
+            0{"0 ನಿಮಿ"}
+            1{"1 ನಿಮಿ"}
+            other{"{0} ನಿಮಿ"}
+        }
+        month{
+            0{"೦ ತಿಂ."}
+            1{"1 ತಿಂ."}
+            other{"{0} ತಿಂ."}
+        }
+        second{
+            0{"೦ ಸೆಕೆಂ"}
+            1{"1 ಸೆಕೆಂ"}
+            other{"{0} ಸೆಕೆಂ"}
+        }
+        week{
+            0{"೦ ವಾರಗಳು"}
+            1{"1 ವಾರ"}
+            other{"{0} ವಾರಗಳು"}
+        }
+        year{
+            0{"೦ ವರ್ಷಗಳು"}
+            1{"1 ವರ್ಷಗಳು"}
+            other{"{0} ವರ್ಷಗಳು"}
+        }
+    }
+}

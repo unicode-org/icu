@@ -1,0 +1,106 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/es_419.xml
+// *
+// ***************************************************************************
+es_419{
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤#,##0.00"}
+            }
+            symbols{
+                decimal{"."}
+                group{","}
+            }
+        }
+    }
+    Version{"2.0.59.5"}
+    calendar{
+        gregorian{
+            fields{
+                month{
+                    relative{
+                        "-1"{"El mes pasado"}
+                        "0"{"Este mes"}
+                        "1"{"Mes próximo"}
+                    }
+                }
+                week{
+                    relative{
+                        "-1"{"Semana pasada"}
+                        "0"{"Esta semana"}
+                        "1"{"Próxima semana"}
+                    }
+                }
+                year{
+                    relative{
+                        "-1"{"Año pasado"}
+                        "0"{"Este año"}
+                        "1"{"Año próximo"}
+                    }
+                }
+            }
+            quarters{
+                format{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+    }
+    measurementSystemNames{
+        UK{"Reino Unido"}
+    }
+    units{
+        day-future{
+            0{"En 0 días"}
+            1{"En 1 día"}
+            one{"En {0} día"}
+            other{"En {0} días"}
+        }
+        hour-future{
+            0{"En 0 horas"}
+            1{"En 1 hora"}
+            one{"En {0} hora"}
+            other{"En {0} horas"}
+        }
+        minute-future{
+            0{"En 0 minutos"}
+            1{"En 1 minuto"}
+            one{"En {0} minuto"}
+            other{"En {0} minutos"}
+        }
+        month-future{
+            0{"En 0 meses"}
+            1{"En 1 mes"}
+            one{"En {0} mes"}
+            other{"En {0} meses"}
+        }
+        second-future{
+            0{"En 0 segundos"}
+            1{"En 1 segundo"}
+            one{"En {0} segundo"}
+            other{"En {0} segundos"}
+        }
+        week-future{
+            0{"En 0 semanas"}
+            1{"En 1 semana"}
+            one{"En {0} semana"}
+            other{"En {0} semanas"}
+        }
+        year-future{
+            0{"En 0 años"}
+            1{"En 1 año"}
+            one{"En {0} año"}
+            other{"En {0} años"}
+        }
+    }
+}
