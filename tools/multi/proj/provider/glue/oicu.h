@@ -10,12 +10,14 @@
 #ifndef _OICU
 #define _OICU
 
+#include "unicode/uclean.h"
 /**
    uclean.h
 */
 U_STABLE void U_EXPORT2
 OICU_u_init(UErrorCode *status);
 
+#include "unicode/ucol.h"
 /**
  ucol.h
 */
@@ -40,9 +42,6 @@ const UChar * 	target,
 int32_t 	targetLength	 
 );
 
-U_STABLE int32_t U_EXPORT2 
-OICU_ucol_countAvailable();
-
 U_STABLE void U_EXPORT2 
 OICU_ucol_setStrength(const UCollator *, UCollationStrength );
 
@@ -53,6 +52,10 @@ OICU_ucol_setStrength(const UCollator *, UCollationStrength );
 
 U_STABLE const char * U_EXPORT2 
 OICU_ucol_getAvailable(int32_t i);
+
+U_STABLE int32_t U_EXPORT2 
+OICU_ucol_countAvailable();
+
 
 U_STABLE UCollationStrength U_EXPORT2 
 OICU_ucol_getStrength(UCollator *col);
@@ -71,11 +74,41 @@ OICU_ucol_safeClone(const UCollator *coll,
                int32_t         *pBufferSize,
                UErrorCode      *status);
 
+#include "unicode/udat.h"
+U_STABLE UDateFormat* U_EXPORT2 
+OICU_udat_open(UDateFormatStyle  timeStyle,
+          UDateFormatStyle  dateStyle,
+          const char        *locale,
+          const UChar       *tzID,
+          int32_t           tzIDLength,
+          const UChar       *pattern,
+          int32_t           patternLength,
+          UErrorCode        *status);
+
+U_STABLE const char * U_EXPORT2 
+OICU_udat_getAvailable(int32_t i);
+
+U_STABLE int32_t U_EXPORT2 
+OICU_udat_countAvailable();
+
+
+U_STABLE void U_EXPORT2 
+OICU_udat_close(UDateFormat* format);
+
+U_STABLE int32_t U_EXPORT2 
+OICU_udat_format(    const    UDateFormat*    format,
+                        UDate           dateToFormat,
+                        UChar*          result,
+                        int32_t         resultLength,
+                        UFieldPosition* position,
+                        UErrorCode*     status);
+
+
 
 /**
  end ucol.h
 */
 
 // define version
-GLUE_VER( ICUGLUE_VER )
+
 #endif

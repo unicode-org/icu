@@ -103,7 +103,13 @@ static UCollationStrength _getUCollationStrength(
 
 /* code for some version */
 #include <icuglue/gluren.h>
+
 #include "oicu.h"
+
+/* Expand GLUE_VER to define the class */
+#ifdef GLUE_VER
+GLUE_VER( ICUGLUE_VER )
+#endif
 
 GLUE_SYM ( Collator ) :: ~ GLUE_SYM(Collator) () {
 #if COLL_FE_DEBUG
