@@ -74,6 +74,11 @@ might have to #include some other header
 
 U_NAMESPACE_USE
 
+/*
+ *  Forward declarations
+ */
+static UDataMemory *udata_findCachedData(const char *path);
+
 /***********************************************************************
 *
 *    static (Global) data
@@ -123,7 +128,26 @@ udata_cleanup(void)
     return TRUE;                   /* Everything was cleaned up */
 }
 
+static UBool U_CALLCONV
+findCommonICUDataByName(const char *inBasename)
+{
+    UBool found = FALSE;
+    int32_t i;
 
+    UDataMemory  *pData = udata_findCachedData(inBasename);
+    if (pData == NULL)
+        return FALSE;
+
+    for (i = 0; i < LENGTHOF(gCommonICUDataArray); ++i) {
+        if ((gCommonICUDataArray[i] != NULL) && (gCommonICUDataArray[i]->pHeader == pData->pHeader)) {
+            /* The data pointer is already in the array. */
+            found = TRUE;
+            break;
+        }
+    }
+
+    return found;
+}
 
 
 /*
@@ -786,8 +810,6 @@ static UBool extendICUData(UErrorCode *pErr)
     umtx_lock(&extendICUDataMutex);
 #endif
     if(!gHaveTriedToLoadCommonData) {
-        gHaveTriedToLoadCommonData = TRUE;
-
         /* See if we can explicitly open a .dat file for the ICUData. */
         pData = openCommonData(
                    U_ICUDATA_NAME,            /*  "icudt20l" , for example.          */
@@ -806,12 +828,20 @@ static UBool extendICUData(UErrorCode *pErr)
                                           /*   fields in the UDataMemory that we're assigning     */
                                           /*   to CommonICUData.                                  */
 
-          didUpdate =
+          didUpdate = /* no longer using this result */
               setCommonICUData(&copyPData,/*  The new common data.                                */
                        FALSE,             /*  No warnings if write didn't happen                  */
                        pErr);             /*  setCommonICUData honors errors; NOP if error set    */
         }
+
+        gHaveTriedToLoadCommonData = TRUE;
     }
+
+    didUpdate = findCommonICUDataByName(U_ICUDATA_NAME);  /* Return 'true' when a racing writes out the extended                        */
+                                                          /* data after another thread has failed to see it (in openCommonData), so     */
+                                                          /* extended data can be examined.                                             */
+                                                          /* Also handles a race through here before gHaveTriedToLoadCommonData is set. */
+
 #if MAP_IMPLEMENTATION==MAP_STDIO
     umtx_unlock(&extendICUDataMutex);
 #endif
@@ -996,6 +1026,7 @@ static UDataMemory *doLoadFromCommonData(UBool isICUData, const char * /*pkgName
     const DataHeader   *pHeader;
     UDataMemory        *pCommonData;
     int32_t            commonDataIndex;
+    UBool              checkedExtendedICUData = FALSE;
     /* try to get common data.  The loop is for platforms such as the 390 that do
      *  not initially load the full set of ICU data.  If the lookup of an ICU data item
      *  fails, the full (but slower to load) set is loaded, the and the loop repeats,
@@ -1038,7 +1069,8 @@ static UDataMemory *doLoadFromCommonData(UBool isICUData, const char * /*pkgName
             return NULL;
         } else if (pCommonData != NULL) {
             ++commonDataIndex;  /* try the next data package */
-        } else if (extendICUData(subErrorCode)) {
+        } else if ((!checkedExtendedICUData) && extendICUData(subErrorCode)) {
+            checkedExtendedICUData = TRUE;
             /* try this data package slot again: it changed from NULL to non-NULL */
         } else {
             return NULL;
