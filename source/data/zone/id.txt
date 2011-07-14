@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.58.60"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Anchorage"}
@@ -90,244 +90,163 @@ id{
         "meta:Acre"{
             ld{"Waktu Musim Panas Acre"}
             ls{"Waktu Acre"}
-            sd{"WTA (Acre)"}
-            ss{"WA (Acre)"}
         }
         "meta:Afghanistan"{
             ls{"Waktu Afganistan"}
-            ss{"WAF"}
         }
         "meta:Africa_Central"{
             ls{"Waktu Afrika Tengah"}
-            ss{"WATA"}
         }
         "meta:Africa_Eastern"{
             ls{"Waktu Afrika Timur"}
-            ss{"WAT"}
         }
         "meta:Africa_Southern"{
             lg{"Waktu Afrika Selatan"}
             ls{"Waktu Standar Afrika Selatan"}
-            sg{"WAS"}
-            ss{"WSAS"}
         }
         "meta:Africa_Western"{
             ld{"Waktu Musim Panas Afrika Barat"}
             ls{"Waktu Afrika Barat"}
-            sd{"WMPAB"}
-            ss{"WAB"}
         }
         "meta:Aktyubinsk"{
             ld{"Waktu Musim Panas Aktyubinsk"}
             ls{"Waktu Aktyubinsk"}
-            sd{"WMPAKT"}
-            ss{"WAKT"}
         }
         "meta:Alaska"{
             ld{"Waktu Terang Alaska"}
             lg{"Waktu Alaska"}
             ls{"Waktu Standar Alaska"}
-            sd{"WTAK"}
-            sg{"WAK"}
-            ss{"WSAK"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Waktu Terang Alaska-Hawaii"}
             lg{"Waktu Alaska-Hawaii"}
             ls{"Waktu Standar Alaska-Hawaii"}
-            sd{"WTAH"}
-            sg{"WAH"}
-            ss{"WSAH"}
         }
         "meta:Almaty"{
             ld{"Waktu Musim Panas Almaty"}
             ls{"Waktu Almaty"}
-            sd{"WMPALM"}
-            ss{"WALM"}
         }
         "meta:Amazon"{
             ld{"Waktu Musim Panas Amazon"}
             lg{"Waktu Amazon"}
             ls{"Waktu Amazon"}
-            sd{"WMPAM"}
-            ss{"WAM"}
         }
         "meta:America_Central"{
             ld{"Waktu Terang Hari Tengah"}
             lg{"Waktu Tengah"}
             ls{"Waktu Baku Tengah"}
-            sd{"Waktu Terang Hari Tengah"}
-            sg{"Waktu Tengah"}
-            ss{"Waktu Baku Tengah"}
         }
         "meta:America_Eastern"{
             ld{"Waktu Terang Hari Timur"}
             lg{"Waktu Timur"}
             ls{"Waktu Baku Timur"}
-            sd{"Waktu Terang Hari Timur"}
-            sg{"Waktu Timur"}
-            ss{"Waktu Baku Timur"}
         }
         "meta:America_Mountain"{
             ld{"Waktu Terang Hari Pegunungan"}
             lg{"Waktu Pegunungan"}
             ls{"Waktu Baku Pegunungan"}
-            sd{"Waktu Terang Hari Pegunungan"}
-            sg{"Waktu Pegunungan"}
-            ss{"Waktu Baku Pegunungan"}
         }
         "meta:America_Pacific"{
             ld{"Waktu Terang Hari Pasifik"}
             lg{"Waktu Pasifik"}
             ls{"Waktu Baku Pasifik"}
-            sd{"Waktu Terang Hari Pasifik"}
-            sg{"Waktu Pasifik"}
-            ss{"Waktu Baku Pasifik"}
         }
         "meta:Anadyr"{
             ld{"Waktu Musim Panas Anadyr"}
             lg{"Waktu Anadyr"}
             ls{"Waktu Anadyr"}
-            sd{"Waktu Musim Panas Anadyr"}
-            ss{"Waktu Anadyr"}
         }
         "meta:Aqtau"{
             ld{"Waktu Musim Panas Aqtau"}
             ls{"Waktu Aqtau"}
-            sd{"WMPAQT (Aqtau)"}
-            ss{"WAQT (Aqtau)"}
         }
         "meta:Aqtobe"{
             ld{"Waktu Musim Panas Aqtobe"}
             ls{"Waktu Aqtobe"}
-            sd{"WMPAQT (Aqtobe)"}
-            ss{"WAQT (Aqtobe)"}
         }
         "meta:Arabian"{
             ld{"Waktu Terang Arab"}
             lg{"Waktu Arab"}
             ls{"Waktu Standar Arab"}
-            sd{"WTA (Arab)"}
-            sg{"Waktu Arab"}
-            ss{"WSA (Arab)"}
         }
         "meta:Argentina"{
             ld{"Waktu Musim Panas Argentina"}
             lg{"Waktu Argentina"}
             ls{"Waktu Argentina"}
-            sd{"WMPAR"}
-            ss{"WAR"}
         }
         "meta:Argentina_Western"{
             ld{"Waktu Musim Panas Argentina Barat"}
             lg{"Waktu Argentina Barat"}
             ls{"Waktu Argentina Barat"}
-            ss{"WARB"}
         }
         "meta:Armenia"{
             ld{"Waktu Musim Panas Armenia"}
             ls{"Waktu Armenia"}
-            sd{"WMPAM (Armenia)"}
-            ss{"WAM (Armenia)"}
         }
         "meta:Ashkhabad"{
             ld{"Waktu Musim Panas Ashkhabad"}
             ls{"Waktu Ashkhabad"}
-            sd{"WMPASH"}
-            ss{"WASH"}
         }
         "meta:Atlantic"{
             ld{"Waktu Terang Atlantik"}
             lg{"Waktu Atlantik"}
             ls{"Waktu Standar Atlantik"}
-            sd{"WTA"}
-            sg{"WA"}
-            ss{"WSA"}
         }
         "meta:Australia_Central"{
             ld{"Waktu Terang Tengah Australia"}
             lg{"Waktu Tengah Australia"}
             ls{"Waktu Standar Tengah Australia"}
-            sd{"WTTAA"}
-            sg{"WTA"}
-            ss{"WSTAA"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Waktu Terang Barat Tengah Australia"}
             lg{"Waktu Barat Tengah Australia"}
             ls{"Waktu Standar Barat Tengah Australia"}
-            sd{"WTBTAA"}
-            sg{"WBTAA"}
-            ss{"WSBTAA"}
         }
         "meta:Australia_Eastern"{
             ld{"Waktu Terang Timur Australia"}
             lg{"Waktu Timur Australia"}
             ls{"Waktu Standar Timur Australia"}
-            sd{"WTTA"}
-            sg{"WTA"}
-            ss{"WSTA"}
         }
         "meta:Australia_Western"{
             ld{"Waktu Terang Barat Australia"}
             lg{"Waktu Australia Barat"}
             ls{"Waktu Standar Barat Australia"}
-            sd{"WTBA"}
-            sg{"WBA"}
-            ss{"WSBA"}
         }
         "meta:Azerbaijan"{
             ld{"Waktu Musim Panas Azerbaijan"}
             ls{"Waktu Azerbaijan"}
-            sd{"WMPAZ"}
-            ss{"WAZ"}
         }
         "meta:Azores"{
             ld{"Waktu Musim Panas Azores"}
             ls{"Waktu Azores"}
-            sd{"WMPAZO"}
-            ss{"WAZO"}
         }
         "meta:Baku"{
             ld{"Waktu Musim Panas Kota Baku"}
             ls{"Waktu Kota Baku"}
-            sd{"WMPKB (Baku)"}
-            ss{"WKKB"}
         }
         "meta:Bangladesh"{
             ld{"Waktu Musim Panas Bangladesh"}
             ls{"Waktu Bangladesh"}
-            sd{"WMPBD"}
-            ss{"WBD"}
         }
         "meta:Bering"{
             ld{"Waktu Terang Bering"}
             lg{"Waktu Bering"}
             ls{"Waktu Standar Bering"}
-            sd{"WTB (Bering)"}
-            sg{"WB (Bering)"}
-            ss{"WSB (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Waktu Bhutan"}
-            ss{"WBT"}
         }
         "meta:Bolivia"{
             ls{"Waktu Bolivia"}
-            ss{"WBO"}
         }
         "meta:Borneo"{
             ld{"Waktu Musim Panas Kalimantan"}
             ls{"Waktu Kalimantan"}
-            sd{"WMPKAL"}
-            ss{"WKAL"}
         }
         "meta:Brasilia"{
             ld{"Waktu Musim Panas Brasilia"}
             lg{"Waktu Brasil"}
             ls{"Waktu Brasilia"}
-            sd{"WMPBR"}
-            ss{"WBR"}
         }
         "meta:Brunei"{
             ls{"Waktu Brunei Darussalam"}
@@ -335,172 +254,89 @@ id{
         "meta:Cape_Verde"{
             ld{"Waktu Musim Panas Cape Verde"}
             ls{"Waktu Cape Verde"}
-            sd{"WMPCV"}
-            ss{"WCV"}
-        }
-        "meta:Casey"{
-            ss{"WCAS"}
         }
         "meta:Chamorro"{
             lg{"Waktu Chamorro"}
             ls{"Waktu Standar Chamorro"}
-            sg{"WCh"}
-            ss{"WSCh"}
         }
         "meta:Changbai"{
             ls{"Waktu Changbai"}
-            ss{"WCHA"}
         }
         "meta:Chatham"{
             ld{"Waktu Terang Chatham"}
             ls{"Waktu Standar Chatham"}
-            sd{"WTCHA"}
-            ss{"WSCHA"}
-        }
-        "meta:Chile"{
-            sd{"WMPCL"}
-            ss{"WCL"}
         }
         "meta:China"{
             ld{"Waktu Terang China"}
             lg{"Waktu China"}
             ls{"Waktu Standar China"}
-            sd{"WTC (China)"}
-            sg{"WC (China)"}
-            ss{"WSC (China)"}
         }
         "meta:Choibalsan"{
             ld{"Waktu Musim Panas Choibalsan"}
             lg{"Waktu Choibalsan"}
             ls{"Waktu Choibalsan"}
-            sd{"WMPCHO"}
-            ss{"WCHO"}
         }
         "meta:Christmas"{
             ls{"Waktu Pulau Natal"}
-            ss{"WPN"}
         }
         "meta:Cocos"{
             ls{"Waktu Kepulauan Cocos"}
-            ss{"WPC"}
-        }
-        "meta:Colombia"{
-            sd{"WMPKO"}
-            ss{"WKO"}
         }
         "meta:Cook"{
             ld{"Waktu Tengah Musim Panas Kep. Cook"}
             ls{"Waktu Kep. Cook"}
-            sd{"WTMPKC"}
-            ss{"WKC"}
-        }
-        "meta:Cuba"{
-            sd{"WTK (Kuba)"}
-            sg{"WK (Kuba)"}
-            ss{"WBK (Kuba)"}
-        }
-        "meta:Dacca"{
-            ss{"WDHA"}
         }
         "meta:Davis"{
             ls{"Waktu Davis"}
-            ss{"WDAV"}
         }
         "meta:DumontDUrville"{
             ls{"Waktu Dumont-d'Urville"}
-            ss{"WDDU"}
         }
         "meta:Dushanbe"{
             sd{"WMPDUS"}
             ss{"WMPDU"}
         }
-        "meta:Dutch_Guiana"{
-            ss{"WBG"}
-        }
         "meta:Easter"{
             ld{"Waktu Musim Panas Pulau Paskah"}
             ls{"Waktu Pulau Paskah"}
-            sd{"WMPPAS"}
-            ss{"WPAS"}
-        }
-        "meta:Ecuador"{
-            ss{"WEK"}
         }
         "meta:Europe_Central"{
             ld{"Waktu Musim Panas Eropa Tengah"}
             ls{"Waktu Eropa Tengah"}
-            sd{"WMPETA"}
-            ss{"WETA"}
         }
         "meta:Europe_Eastern"{
             ld{"Waktu Musim Panas Eropa Timur"}
             ls{"Waktu Eropa Timur"}
-            sd{"WMPET"}
-            ss{"WET"}
         }
         "meta:Europe_Western"{
             ld{"Waktu Musim Panas Eropa Barat"}
             ls{"Waktu Eropa Barat"}
-            sd{"WMPEB"}
-            ss{"WEB"}
         }
         "meta:Falkland"{
             ld{"Waktu Musim Panas Kep. Falkland"}
             ls{"Waktu Kep. Falkland"}
-            sd{"WMPKF"}
-            ss{"WKF"}
         }
         "meta:Fiji"{
             ld{"Waktu Musim Panas Fiji"}
             ls{"Waktu Fiji"}
-            sd{"WMPFJ"}
-            ss{"WFJ"}
-        }
-        "meta:French_Guiana"{
-            ss{"WGP"}
         }
         "meta:French_Southern"{
             ls{"Waktu Wilayah Selatan dan Antarktika Prancis"}
-            ss{"WTF"}
-        }
-        "meta:Frunze"{
-            sd{"WMPFRU"}
-            ss{"WFRU"}
         }
         "meta:GMT"{
             ls{"Waktu Tengah Greenwich"}
-            ss{"Waktu Tengah Greenwich"}
         }
         "meta:Galapagos"{
             ls{"Waktu Galapagos"}
-            ss{"WGAL"}
         }
         "meta:Gambier"{
             ls{"Waktu Gambier"}
-            ss{"WGAM"}
         }
         "meta:Gilbert_Islands"{
             ls{"Waktu Kep. Gilbert"}
-            ss{"WKGIL"}
-        }
-        "meta:Greenland_Central"{
-            sd{"WMPGTA"}
-            ss{"WGTA"}
-        }
-        "meta:Greenland_Eastern"{
-            sd{"WMPGT"}
-            ss{"WGT"}
-        }
-        "meta:Greenland_Western"{
-            sd{"WMPGB"}
-            ss{"WGB"}
         }
         "meta:Guam"{
             ls{"Waktu Standar Guam"}
-            ss{"WSG (Guam)"}
-        }
-        "meta:Guyana"{
-            ss{"WGY"}
         }
         "meta:Hawaii_Aleutian"{
             lg{"Waktu Hawaii-Aleut"}
@@ -513,7 +349,6 @@ id{
         }
         "meta:Indian_Ocean"{
             ls{"Waktu Samudera Hindia"}
-            ss{"WSH"}
         }
         "meta:Indonesia_Central"{
             cu:int{1}
@@ -555,7 +390,6 @@ id{
         }
         "meta:Kosrae"{
             ls{"Waktu Kosrae"}
-            ss{"WKOS"}
         }
         "meta:Krasnoyarsk"{
             ld{"Waktu Musim Panas Krasnoyarsk"}
@@ -565,28 +399,20 @@ id{
         "meta:Kuybyshev"{
             ld{"Waktu Musim Panas Kuibyshev"}
             ls{"Waktu Kuibyshev"}
-            sd{"WMPKUI"}
-            ss{"WKUI"}
         }
         "meta:Kwajalein"{
             ls{"Waktu Kwajalein"}
-            ss{"WKWA"}
         }
         "meta:Line_Islands"{
             ls{"Waktu Kep. Line"}
-            ss{"WKLI"}
         }
         "meta:Lord_Howe"{
             ld{"WTLH"}
             lg{"Waktu Lord Howe"}
             ls{"WSLH"}
-            sd{"WTLH"}
-            sg{"WLH"}
-            ss{"WSLH"}
         }
         "meta:Macquarie"{
             lg{"Waktu Macquarie"}
-            ss{"WMIS"}
         }
         "meta:Magadan"{
             ld{"Waktu Musim Panas Magadan"}
@@ -595,25 +421,19 @@ id{
         }
         "meta:Maldives"{
             ls{"Waktu Maladewa"}
-            ss{"WMW"}
         }
         "meta:Marquesas"{
             ls{"Waktu Marquesas"}
-            ss{"WMAR"}
         }
         "meta:Marshall_Islands"{
             ls{"Waktu Kep. Marshall"}
-            ss{"WKM"}
         }
         "meta:Mauritius"{
             ld{"Waktu Musim Panas Mauritius"}
             ls{"Waktu Mauritius"}
-            sd{"WMPMU"}
-            ss{"WMU"}
         }
         "meta:Mawson"{
             ls{"Waktu Mawson"}
-            ss{"WMAW"}
         }
         "meta:Mongolia"{
             ld{"Waktu Musim Panas Ulan Bator"}
@@ -624,53 +444,37 @@ id{
             ld{"Waktu Musim Panas Moskow"}
             lg{"Waktu Moskow"}
             ls{"Waktu Standar Moskow"}
-            sd{"WMPMSK"}
-            ss{"WMSK"}
         }
         "meta:Nauru"{
             ls{"Waktu Nauru"}
-            ss{"WNR"}
         }
         "meta:New_Caledonia"{
             ld{"Waktu Musim Panas Kaledonia Baru"}
             ls{"Waktu Kaledonia Baru"}
-            sd{"WMPKB"}
-            ss{"WKB"}
         }
         "meta:New_Zealand"{
             ld{"Waktu Terang Selandia Baru"}
             lg{"Waktu Selandia Baru"}
             ls{"Waktu Standar Selandia Baru"}
-            sd{"WTSB"}
-            sg{"WSB"}
-            ss{"WSSB"}
         }
         "meta:Newfoundland"{
             ld{"Waktu Siang Hari Newfoundland"}
             lg{"Waktu Newfoundland"}
             ls{"Waktu Standar Newfoundland"}
-            sd{"WTN"}
-            sg{"WN"}
-            ss{"WBN"}
         }
         "meta:Niue"{
             ls{"Waktu Niue"}
-            ss{"WNU"}
         }
         "meta:Norfolk"{
             ls{"Waktu Kep. Norfolk"}
-            ss{"WKNF"}
         }
         "meta:Noronha"{
             ld{"Waktu Musim Panas Fernando de Noronha"}
             lg{"Waktu Noronha"}
             ls{"Waktu Fernando de Noronha"}
-            sd{"WMPFN"}
-            ss{"WFN"}
         }
         "meta:North_Mariana"{
             ls{"Waktu Kep. Mariana Utara"}
-            ss{"WKMU"}
         }
         "meta:Novosibirsk"{
             ld{"Waktu Musim Panas Novosibirsk"}
@@ -682,38 +486,11 @@ id{
             lg{"Waktu Omsk"}
             ls{"Waktu Omsk"}
         }
-        "meta:Palau"{
-            ss{"WPW"}
-        }
-        "meta:Papua_New_Guinea"{
-            ss{"WPG"}
-        }
-        "meta:Paraguay"{
-            sd{"WMPPY"}
-            ss{"WPY"}
-        }
-        "meta:Peru"{
-            sd{"WMPPE"}
-            ss{"WPE"}
-        }
-        "meta:Phoenix_Islands"{
-            ss{"WPHO"}
-        }
-        "meta:Pierre_Miquelon"{
-            sd{"WTPM"}
-            sg{"WPM"}
-            ss{"WBPM"}
-        }
-        "meta:Ponape"{
-            ss{"WPON"}
-        }
         "meta:Reunion"{
             ls{"Waktu Reunion"}
-            ss{"WRE"}
         }
         "meta:Rothera"{
             ls{"Waktu Rothera"}
-            ss{"WROT"}
         }
         "meta:Sakhalin"{
             ld{"Waktu Musim Panas Sakhalin"}
@@ -724,61 +501,19 @@ id{
             ld{"Waktu Musim Panas Samara"}
             lg{"Waktu Samara"}
             ls{"Waktu Samara"}
-            sd{"Waktu Musim Panas Samara"}
-            ss{"Waktu Samara"}
-        }
-        "meta:Samoa"{
-            ss{"WSS"}
         }
         "meta:Seychelles"{
             ls{"Waktu Seychelles"}
-            ss{"WSC"}
         }
         "meta:South_Georgia"{
             ls{"Waktu Georgia Selatan"}
-            ss{"WSG (Georgia Sel.)"}
-        }
-        "meta:Suriname"{
-            ss{"WSR"}
         }
         "meta:Syowa"{
             ls{"Waktu Syowa"}
-            ss{"WSYO"}
-        }
-        "meta:Taipei"{
-            sd{"WTC (Taipei)"}
-            sg{"WC (Taipei)"}
-            ss{"WMPC (Taipei)"}
-        }
-        "meta:Tokelau"{
-            ss{"WTK"}
-        }
-        "meta:Tonga"{
-            sd{"WTOS"}
-            ss{"WTO"}
-        }
-        "meta:Truk"{
-            ss{"WTRU"}
         }
         "meta:Turkey"{
             ld{"Waktu Musim Panas Turki"}
             ls{"Waktu Turki"}
-            sd{"WMPTR"}
-            ss{"WTR"}
-        }
-        "meta:Tuvalu"{
-            ss{"WTV"}
-        }
-        "meta:Uruguay"{
-            sd{"WMPUY"}
-            ss{"WUY"}
-        }
-        "meta:Vanuatu"{
-            sd{"WVUS"}
-            ss{"WVU"}
-        }
-        "meta:Venezuela"{
-            ss{"WVE"}
         }
         "meta:Vladivostok"{
             ld{"Waktu Musim Panas Vladivostok"}
@@ -789,18 +524,9 @@ id{
             ld{"Waktu Musim Panas Volgograd"}
             lg{"Waktu Volgograd"}
             ls{"Waktu Volgograd"}
-            sd{"WMPVOL"}
-            ss{"WVOL"}
         }
         "meta:Vostok"{
             ls{"Waktu Vostok"}
-            ss{"WVOS"}
-        }
-        "meta:Wake"{
-            ss{"WWAK"}
-        }
-        "meta:Wallis"{
-            ss{"WWF"}
         }
         "meta:Yakutsk"{
             ld{"Waktu Musim Panas Yakutsk"}
@@ -811,11 +537,6 @@ id{
             ld{"Waktu Musim Panas Yekaterinburg"}
             lg{"Waktu Yekaterinburg"}
             ls{"Waktu Yekaterinburg"}
-        }
-        "meta:Yukon"{
-            sd{"WTY"}
-            sg{"WY"}
-            ss{"WBY"}
         }
         fallbackRegionFormat{"Waktu {1} ({0})"}
         gmtFormat{"GMT{0}"}

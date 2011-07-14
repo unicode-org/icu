@@ -31,7 +31,7 @@ hr{
             }
         }
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.68"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -203,11 +203,9 @@ hr{
                     relative{
                         "-1"{"jučer"}
                         "-2"{"prekjučer"}
-                        "-3"{"prije tri dana"}
                         "0"{"danas"}
                         "1"{"sutra"}
                         "2"{"prekosutra"}
-                        "3"{"za tri dana"}
                     }
                 }
                 dayperiod{
@@ -588,16 +586,16 @@ hr{
             other{"{0} dan"}
         }
         day-future{
-            0{"Za 0 dana"}
-            1{"Za 1 dan"}
+            0{"za 0 dana"}
+            1{"za 1 dan"}
             few{"za {0} dana"}
             many{"za {0} dana"}
             one{"za {0} dan"}
             other{"za {0} dana"}
         }
         day-past{
-            0{"Prije 0 dana"}
-            1{"Prije 1 dana"}
+            0{"prije 0 dana"}
+            1{"prije 1 dana"}
             few{"prije {0} dana"}
             many{"prije {0} dana"}
             one{"prije {0} dan"}
@@ -610,16 +608,16 @@ hr{
             other{"{0} sat"}
         }
         hour-future{
-            0{"Za 0 sati"}
-            1{"Za 1 sat"}
+            0{"za 0 sati"}
+            1{"za 1 sat"}
             few{"za {0} sata"}
             many{"za {0} sati"}
             one{"za {0} sat"}
             other{"Za {0} sati"}
         }
         hour-past{
-            0{"Prije 0 sati"}
-            1{"Prije 1 h"}
+            0{"prije 0 sati"}
+            1{"prije 1 h"}
             few{"prije {0} sata"}
             many{"prije {0} sati"}
             one{"prije {0} sat"}
@@ -632,16 +630,16 @@ hr{
             other{"{0} minuta"}
         }
         minute-future{
-            0{"Za 0 minuta"}
-            1{"Za 1 min"}
+            0{"za 0 minuta"}
+            1{"za 1 min"}
             few{"za {0} minute"}
             many{"za {0} minuta"}
             one{"za {0} minutu"}
             other{"Za {0} minuta"}
         }
         minute-past{
-            0{"Prije 0 minuta"}
-            1{"Prije 1 minutu"}
+            0{"prije 0 minuta"}
+            1{"prije 1 minutu"}
             few{"prije {0} minute"}
             many{"prije {0} minuta"}
             one{"prije {0} minutu"}
@@ -654,20 +652,20 @@ hr{
             other{"{0} mjesec"}
         }
         month-future{
-            0{"Za 0 mjeseci"}
-            1{"Za 1 mjesec"}
+            0{"za 0 mjeseci"}
+            1{"za 1 mjesec"}
             few{"za {0} mjeseca"}
             many{"za {0} mjeseci"}
             one{"za {0} mjesec"}
-            other{"Za sljedeći broj mjeseci: {0}"}
+            other{"za sljedeći broj mjeseci: {0}"}
         }
         month-past{
-            0{"Prije 0 mjeseci"}
-            1{"Prije 1 mjeseca"}
+            0{"prije 0 mjeseci"}
+            1{"prije 1 mjeseca"}
             few{"prije {0} mjeseca"}
             many{"prije {0} mjeseci"}
             one{"prije {0} mjesec"}
-            other{"Prije ovoliko mjeseci: {0}"}
+            other{"prije ovoliko mjeseci: {0}"}
         }
         second{
             few{"{0} sekunde"}
@@ -676,20 +674,20 @@ hr{
             other{"{0} sekunda"}
         }
         second-future{
-            0{"Za 0 sekundi"}
-            1{"Za 1 sekundu"}
+            0{"za 0 sekundi"}
+            1{"za 1 sekundu"}
             few{"za {0} sekunde"}
             many{"za {0} sekundi"}
             one{"za {0} sekundu"}
-            other{"Za {0} sekundi"}
+            other{"za {0} sekundi"}
         }
         second-past{
-            0{"Prije 0 sekundi"}
-            1{"Prije 1 sekundu"}
+            0{"prije 0 sekundi"}
+            1{"prije 1 sekundu"}
             few{"prije {0} sekunde"}
             many{"prije {0} sekundi"}
             one{"prije {0} sekundu"}
-            other{"Prije {0} sekundi"}
+            other{"prije {0} sekundi"}
         }
         week{
             few{"{0} tjedna"}
@@ -698,20 +696,20 @@ hr{
             other{"{0} tjedan"}
         }
         week-future{
-            0{"Za 0 tjedana"}
-            1{"Za 1 tjedan"}
+            0{"za 0 tjedana"}
+            1{"za 1 tjedan"}
             few{"za {0} tjedna"}
             many{"za {0} tjedana"}
             one{"za {0} tjedan"}
-            other{"Za sljedeći broj tjedana: {0}"}
+            other{"za sljedeći broj tjedana: {0}"}
         }
         week-past{
-            0{"Prije 0 tjedana"}
-            1{"Prije 1 tjedna"}
+            0{"prije 0 tjedana"}
+            1{"prije 1 tjedna"}
             few{"prije {0} tjedna"}
             many{"prije {0} tjedana"}
             one{"prije {0} tjedan"}
-            other{"Prije ovoliko tjedana: {0}"}
+            other{"prije ovoliko tjedana: {0}"}
         }
         year{
             few{"{0} godine"}
@@ -720,20 +718,20 @@ hr{
             other{"{0} godina"}
         }
         year-future{
-            0{"Za 0 g."}
-            1{"Za 1 godinu"}
+            0{"za 0 g."}
+            1{"za 1 godinu"}
             few{"za {0} godine"}
             many{"za {0} godina"}
             one{"za {0} godinu"}
-            other{"Za {0} godina"}
+            other{"za {0} godina"}
         }
         year-past{
-            0{"Prije 0 godina"}
-            1{"Prije 1 godine"}
+            0{"prije 0 godina"}
+            1{"prije 1 godine"}
             few{"prije {0} godine"}
             many{"prije {0} godina"}
             one{"prije {0} godinu"}
-            other{"Prije ovoliko godina: {0}"}
+            other{"prije ovoliko godina: {0}"}
         }
     }
     unitsShort{

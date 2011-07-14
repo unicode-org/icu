@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ee.xml
  */
 ee{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.81"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidzan nutomegaƒoƒome"}
@@ -1182,47 +1182,47 @@ ee{
         "meta:Africa_Central"{
             cu:int{1}
             ls{"Titina Afrika gaƒoƒome"}
+            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             cu:int{1}
             ls{"Ɣedzeƒe Afrika gaƒoƒome"}
+            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             cu:int{1}
             lg{"Anyiehe Afrika gaƒoƒome"}
             ls{"Anyiehe Afrika gaƒoƒoɖoanyime"}
+            ss{"SAST"}
         }
         "meta:Africa_Western"{
             cu:int{1}
             ld{"Ɣetoɖoƒe Afrika dzomeŋɔli gaƒoƒome"}
             ls{"Ɣetoɖoƒe Afrika gaƒoƒome"}
+            sd{"WAST"}
+            ss{"WAT"}
         }
         "meta:America_Central"{
-            cu:int{1}
             ld{"Titina Amerika ŋkekeme gaƒoƒome"}
             lg{"Titina Amerika gaƒoƒome"}
             ls{"Titina Amerika gaƒoƒoɖoanyime"}
         }
         "meta:America_Eastern"{
-            cu:int{1}
             ld{"Ɣedzeƒe Amerika ŋkekeme gaƒoƒome"}
             lg{"Ɣedzeƒe Amerika gaƒoƒome"}
             ls{"Ɣedzeƒe Amerika gaƒoƒoɖoanyime"}
         }
         "meta:America_Mountain"{
-            cu:int{1}
             ld{"Amerika Todzidukɔwo ƒe ŋkekme gaƒoƒome"}
             lg{"Amerika Todzidukɔwo ƒe gaƒoƒome"}
             ls{"Amerika Todzidukɔwo ƒe gaƒoƒoɖoanyime"}
         }
         "meta:America_Pacific"{
-            cu:int{1}
             ld{"Amerika Pasifik ŋkekeme gaƒoƒome"}
             lg{"Amerika Pasifik gaƒoƒome"}
             ls{"Amerika Pasifik gaƒoƒoɖoanyime"}
         }
         "meta:Atlantic"{
-            cu:int{1}
             lg{"Atlantic gaƒoƒome"}
             ls{"Atlantic gaƒoƒoɖoanyime"}
         }

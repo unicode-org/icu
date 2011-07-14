@@ -311,7 +311,7 @@ am{
             tibt{"የቲቤታን አሃዞች"}
         }
     }
-    Version{"2.0.58.36"}
+    Version{"2.0.59.53"}
     localeDisplayPattern{
         separator{","}
     }

@@ -716,5 +716,5 @@ br{
             "dollar Zimbabwe (2009)",
         }
     }
-    Version{"2.0.58.82"}
+    Version{"2.0.59.68"}
 }

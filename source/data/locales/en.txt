@@ -43,7 +43,7 @@ en{
             }
         }
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.91"}
     calendar{
         buddhist{
             DateTimePatterns{

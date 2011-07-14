@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ca.xml
  */
 ca{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alger"}
@@ -289,20 +289,16 @@ ca{
             ec{"Tahití"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Hora d'Àfrica Central"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Hora d'Àfrica Oriental"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Hora d'Àfrica Austral"}
             ls{"Hora d'Àfrica Austral"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Hora d'estiu d'Àfrica Occidental"}
             ls{"Hora d'Àfrica Occidental"}
         }
@@ -343,9 +339,6 @@ ca{
             ld{"Hora d'estiu d'Aràbia"}
             lg{"Hora d'Aràbia"}
             ls{"Hora estàndard d'Aràbia"}
-            sd{"ADT (Aràbia)"}
-            sg{"AT (Aràbia)"}
-            ss{"AST (Aràbia)"}
         }
         "meta:Argentina"{
             ld{"Horari d'estiu de l'Argentina"}
@@ -363,25 +356,21 @@ ca{
             ls{"Hora estàndard de l'Atlàntic"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Hora d'estiu d'Austràlia Central"}
             lg{"Hora d'Austràlia Central"}
             ls{"Hora estàndard d'Austràlia Central"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Hora d'estiu d'Austràlia centre-occidental"}
             lg{"Hora d'Austràlia centre-occidental"}
             ls{"Hora estàndard d'Austràlia centre-occidental"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Hora d'estiu d'Austràlia Oriental"}
             lg{"Hora d'Austràlia Oriental"}
             ls{"Hora estàndard d'Austràlia Oriental"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Hora d'estiu d'Austràlia Occidental"}
             lg{"Hora d'Austràlia Occidental"}
             ls{"Hora estàndard d'Austràlia Occidental"}
@@ -393,9 +382,6 @@ ca{
         }
         "meta:China"{
             ls{"Hora estàndard de la Xina"}
-            sd{"CDT (Xina)"}
-            sg{"CT (Xina)"}
-            ss{"CST (Xina)"}
         }
         "meta:Choibalsan"{
             ld{"Horari d'estiu de Choibalsan"}
@@ -403,17 +389,14 @@ ca{
             ls{"Hora de Choibalsan"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Hora Central Europea de l'estiu"}
             ls{"Hora Central Europea"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Hora d'estiu d'Europa de l'Est"}
             ls{"Hora d'Europa de l'Est"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Hora d'estiu d'Europa Occidental"}
             ls{"Hora d'Europa Occidental"}
         }
@@ -448,7 +431,6 @@ ca{
         "meta:Israel"{
             ld{"Hora d'estiu d'Israel"}
             ls{"Hora estàndard d'Israel"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ls{"Hora estàndard del Japó"}

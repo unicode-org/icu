@@ -7,6 +7,7 @@
 // *
 // ***************************************************************************
 en_AU{
+    %%Parent{"en_GB"}
     NumberElements{
         latn{
             patterns{
@@ -14,7 +15,7 @@ en_AU{
             }
         }
     }
-    Version{"2.0.53.54"}
+    Version{"2.0.59.62"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -241,7 +241,6 @@ it{
         kaw{"kawi"}
         kbd{"kabardia"}
         kcg{"tyap"}
-        kfo{"kfo"}
         kg{"kongo"}
         kha{"khasi"}
         khi{"lingua khoisan"}
@@ -393,7 +392,6 @@ it{
         ro{"rumeno"}
         roa{"lingua romanza"}
         rom{"romani"}
-        root{"root"}
         ru{"russo"}
         rup{"arumeno"}
         rw{"kinyarwanda"}
@@ -729,7 +727,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

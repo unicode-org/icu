@@ -100,6 +100,7 @@ en{
         CS{"Serbia and Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde"}
+        CW{"Curaçao"}
         CX{"Christmas Island"}
         CY{"Cyprus"}
         CZ{"Czech Republic"}
@@ -261,6 +262,7 @@ en{
         SR{"Suriname"}
         ST{"São Tomé and Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -302,5 +304,5 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.91"}
 }

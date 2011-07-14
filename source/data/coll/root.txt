@@ -40,7 +40,7 @@ root{
                 "&Ꞧ<<<₨/s"
                 "&ﷶ<<<﷼/یال"
             }
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
         search{
             Sequence{
@@ -91,11 +91,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
         standard{
             Sequence{""}
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

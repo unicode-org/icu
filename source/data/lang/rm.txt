@@ -393,7 +393,6 @@ rm{
         ro{"rumen"}
         roa{"lingua romana"}
         rom{"romani"}
-        root{"root"}
         ru{"russ"}
         rup{"aromunic"}
         rw{"kinyarwanda"}
@@ -710,7 +709,7 @@ rm{
         VALENCIA{"valencian"}
         XIANG{"xiang/hunanais"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittira: {0}"}

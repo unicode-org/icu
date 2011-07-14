@@ -3,13 +3,9 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/az_AZ.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/az_AZ.xml
- */
 az_AZ{
     "%%ALIAS"{"az_Latn_AZ"}
-    Version{"2.0.41.23"}
 }

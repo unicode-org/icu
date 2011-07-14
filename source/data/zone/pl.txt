@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidżan"}
@@ -1183,20 +1183,16 @@ pl{
             ec{"Wallis"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Czas środkowoafrykański"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Czas wschodnioafrykański"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Czas południowoafrykański"}
             ls{"Czas południowoafrykański"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Letni czas zachodnioafrykański"}
             ls{"Czas zachodnioafrykański"}
         }
@@ -1244,31 +1240,26 @@ pl{
             ls{"Argentyna Zachodnia"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Czas atlantycki letni"}
             lg{"Czas atlantycki"}
             ls{"Czas atlantycki standardowy"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Czas środkowoaustralijski letni"}
             lg{"Czas środkowoaustralijski"}
             ls{"Czas standardowy środkowoaustralijski"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Czas środkowo-zachodnioaustralijski letni"}
             lg{"Czas środkowo-zachodnioaustralijski"}
             ls{"Czas standardowy środkowo-zachodnioaustralijski"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Czas wschodnioaustraliski letni"}
             lg{"Czas wschodnioaustraliski"}
             ls{"Czas standardowy wschodnioaustraliski"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Czas zachodnioaustralijski letni"}
             lg{"Czas zachodnioaustralijski"}
             ls{"Czas standardowy zachodnioaustralijski"}
@@ -1307,7 +1298,6 @@ pl{
             ls{"Kobdo"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"Czas strefy oceanu indyjskiego"}
         }
         "meta:Indonesia_Central"{

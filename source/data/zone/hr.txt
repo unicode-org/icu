@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.58.6"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžir"}
@@ -248,21 +248,10 @@ hr{
             lg{"Anadirska vremenska zona"}
             ls{"Anadirsko vrijeme"}
         }
-        "meta:Aqtau"{
-            sd{"AQTST (Aqtau)"}
-            ss{"AQTT (Aqtau)"}
-        }
-        "meta:Aqtobe"{
-            sd{"AQTST (Aqtobe)"}
-            ss{"AQTT (Aqtobe)"}
-        }
         "meta:Arabian"{
             ld{"arapsko ljetno vrijeme"}
             lg{"arapsko vrijeme"}
             ls{"arapsko zimsko vrijeme"}
-            sd{"ADT (arapsko)"}
-            sg{"AT (arapsko)"}
-            ss{"AST (arapsko)"}
         }
         "meta:Argentina"{
             ld{"Argentinsko ljetno vrijeme"}
@@ -274,12 +263,7 @@ hr{
             lg{"Zapadno-argentinska vremenska zona"}
             ls{"Zapadno-argentinska vremenska zona"}
         }
-        "meta:Armenia"{
-            sd{"AMST (Armenija)"}
-            ss{"AMT (Armenija)"}
-        }
         "meta:Atlantic"{
-            cu:int{1}
             ld{"atlantsko dnevno vrijeme"}
             lg{"atlantsko vrijeme"}
             ls{"atlantsko standardno vrijeme"}
@@ -329,9 +313,6 @@ hr{
             ld{"kinesko ljetno vrijeme"}
             lg{"kinesko vrijeme"}
             ls{"standardno kinesko vrijeme"}
-            sd{"CDT (Kina)"}
-            sg{"CT (Kina)"}
-            ss{"CST (Kina)"}
         }
         "meta:Choibalsan"{
             ld{"Choibalsansko ljetno vrijeme"}
@@ -399,7 +380,6 @@ hr{
         }
         "meta:Guam"{
             ls{"guamsko standardno vrijeme"}
-            ss{"GST (Guam)"}
         }
         "meta:Hawaii_Aleutian"{
             lg{"Havajsko-aleutska vremenska zona"}
@@ -440,7 +420,6 @@ hr{
             ld{"izraelsko ljetno vrijeme"}
             lg{"izraelsko vrijeme"}
             ls{"standardno izraelsko vrijeme"}
-            ss{"IST (Izrael)"}
         }
         "meta:Japan"{
             ld{"japansko ljetno vrijeme"}
@@ -607,7 +586,6 @@ hr{
         }
         "meta:South_Georgia"{
             ls{"vrijeme Južne Džordžije"}
-            ss{"GST (J. Džordžije)"}
         }
         "meta:Syowa"{
             ls{"vrijeme Syowa"}

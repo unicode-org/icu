@@ -24,6 +24,9 @@ keyTypeData:table(nofallback){
         variabletop{"vt"}
     }
     typeAlias{
+        colstrength{
+            quarternary{"quaternary"}
+        }
         timezone:alias{"/ICUDATA/timezoneTypes/typeAlias/timezone"}
     }
     typeMap{
@@ -67,7 +70,7 @@ keyTypeData:table(nofallback){
         colstrength{
             identical{"identic"}
             primary{"level1"}
-            quarternary{"level4"}
+            quaternary{"level4"}
             secondary{"level2"}
             tertiary{"level3"}
         }

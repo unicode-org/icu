@@ -28,7 +28,7 @@ fi{
             "Afganistanin afgaani",
         }
         ALK{
-            "ALK",
+            "ALK" /** ===  */,
             "Albanian lek (1946–1965)",
         }
         ALL{
@@ -84,7 +84,7 @@ fi{
             "Itävallan šillinki",
         }
         AUD{
-            "AUD",
+            "AU$",
             "Australian dollari",
         }
         AWG{
@@ -192,7 +192,7 @@ fi{
             "Brasilian cruzeiro (1990–1993)",
         }
         BRL{
-            "BRL",
+            "BR$",
             "Brasilian real",
         }
         BRN{
@@ -236,7 +236,7 @@ fi{
             "Belizen dollari",
         }
         CAD{
-            "CAD",
+            "CA$",
             "Kanadan dollari",
         }
         CDF{
@@ -268,11 +268,11 @@ fi{
             "Chilen peso",
         }
         CNX{
-            "CNX",
+            "CNX" /** ===  */,
             "Kiinan kansanpankin dollari",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Kiinan yuan",
         }
         COP{
@@ -456,7 +456,7 @@ fi{
             "Guyanan dollari",
         }
         HKD{
-            "HKD",
+            "HK$",
             "Hongkongin dollari",
         }
         HNL{
@@ -496,11 +496,11 @@ fi{
             "Israelin sekeli (1980–1985)",
         }
         ILS{
-            "ILS",
+            "₪",
             "Israelin uusi sekeli",
         }
         INR{
-            "INR",
+            "₹",
             "Intian rupia",
         }
         IQD{
@@ -564,7 +564,7 @@ fi{
             "Etelä-Korean won (1945–1953)",
         }
         KRW{
-            "KRW",
+            "₩",
             "Etelä-Korean won",
         }
         KWD{
@@ -708,7 +708,7 @@ fi{
             "Malawin kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "Meksikon peso",
         }
         MXP{
@@ -764,7 +764,7 @@ fi{
             "Nepalin rupia",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "Uuden-Seelannin dollari",
         }
         OMR{
@@ -928,7 +928,7 @@ fi{
             "Swazimaan lilangeni",
         }
         THB{
-            "THB",
+            "฿",
             "Thaimaan baht",
         }
         TJR{
@@ -972,7 +972,7 @@ fi{
             "Trinidadin ja Tobagon dollari",
         }
         TWD{
-            "TWD",
+            "NT$",
             "Taiwanin uusi dollari",
         }
         TZS{
@@ -1032,7 +1032,7 @@ fi{
             "Venezuelan bolivar",
         }
         VND{
-            "VND",
+            "₫",
             "Vietnamin dong",
         }
         VNN{
@@ -1048,7 +1048,7 @@ fi{
             "Samoan tala",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA-frangi BEAC",
         }
         XAG{
@@ -1076,7 +1076,7 @@ fi{
             "EUA (XBD)",
         }
         XCD{
-            "XCD",
+            "EC$",
             "Itä-Karibian dollari",
         }
         XDR{
@@ -1104,7 +1104,7 @@ fi{
             "palladium",
         }
         XPF{
-            "XPF",
+            "CFPF",
             "CFP-frangi",
         }
         XPT{
@@ -2354,5 +2354,5 @@ fi{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
 }

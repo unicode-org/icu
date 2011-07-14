@@ -586,7 +586,6 @@ tr{
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
-        Kore{"Kore"}
         Kthi{"Kaithi"}
         Lana{"Lanna"}
         Laoo{"Lao Dili"}
@@ -600,7 +599,6 @@ tr{
         Lyci{"Likya"}
         Lydi{"Lidya"}
         Mand{"Manden"}
-        Mani{"Mani"}
         Maya{"Maya Hiyeroglifleri"}
         Mero{"Meroitik"}
         Mlym{"Malayalam"}
@@ -765,7 +763,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.59.53"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Alfabe: {0}"}

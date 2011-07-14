@@ -3,13 +3,9 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/pa_PK.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/pa_PK.xml
- */
 pa_PK{
     "%%ALIAS"{"pa_Arab_PK"}
-    Version{"2.0.41.23"}
 }
