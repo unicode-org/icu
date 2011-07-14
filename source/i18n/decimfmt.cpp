@@ -1735,7 +1735,6 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
     int32_t pos = -1;
     const UHashElement* element = NULL;
     while ( (element = fAffixPatternsForCurrency->nextElement(pos)) != NULL ) {
-        const UHashTok keyTok = element->key;
         const UHashTok valueTok = element->value;
         const AffixPatternsForCurrency* affixPtn = (AffixPatternsForCurrency*)valueTok.pointer;
         UBool tmpStatus[fgStatusLength];
@@ -4746,7 +4745,6 @@ DecimalFormat::deleteHashForAffix(Hashtable*& table)
     int32_t pos = -1;
     const UHashElement* element = NULL;
     while ( (element = table->nextElement(pos)) != NULL ) {
-        const UHashTok keyTok = element->key;
         const UHashTok valueTok = element->value;
         const AffixesForCurrency* value = (AffixesForCurrency*)valueTok.pointer;
         delete value;
@@ -4766,7 +4764,6 @@ DecimalFormat::deleteHashForAffixPattern()
     int32_t pos = -1;
     const UHashElement* element = NULL;
     while ( (element = fAffixPatternsForCurrency->nextElement(pos)) != NULL ) {
-        const UHashTok keyTok = element->key;
         const UHashTok valueTok = element->value;
         const AffixPatternsForCurrency* value = (AffixPatternsForCurrency*)valueTok.pointer;
         delete value;
