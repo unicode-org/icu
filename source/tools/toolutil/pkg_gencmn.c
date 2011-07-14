@@ -92,6 +92,7 @@ static uint32_t fileMax = 0;
 
 static char *symPrefix = NULL;
 
+#define LINE_BUFFER_SIZE 512
 /* prototypes --------------------------------------------------------------- */
 
 static void
@@ -115,11 +116,20 @@ U_CAPI void U_EXPORT2
 createCommonDataFile(const char *destDir, const char *name, const char *entrypointName, const char *type, const char *source, const char *copyRight,
                      const char *dataFile, uint32_t max_size, UBool sourceTOC, UBool verbose, char *gencmnFileName) {
     static char buffer[4096];
-    char line[512];
-    char *s;
+    char *line;
+    char *linePtr;
+    char *s = NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t i, fileOffset, basenameOffset, length, nread;
     FileStream *in, *file;
+
+    line = (char *)uprv_malloc(sizeof(char) * LINE_BUFFER_SIZE);
+    if (line == NULL) {
+        fprintf(stderr, "gencmn: unable to allocate memory for line buffer of size %d\n", LINE_BUFFER_SIZE);
+        exit(U_MEMORY_ALLOCATION_ERROR);
+    }
+
+    linePtr = line;
 
     maxSize = max_size;
 
@@ -155,11 +165,19 @@ createCommonDataFile(const char *destDir, const char *name, const char *entrypoi
     }
 
     /* read the list of files and get their lengths */
-    while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-        /* remove trailing newline characters */
-        s=line;
+    while((s != NULL && *s != 0) || T_FileStream_readLine(in, line, LINE_BUFFER_SIZE)!=NULL) {
+        /* remove trailing newline characters and parse space separated items */
+        if (s != NULL && *s != 0) {
+            line=s;
+        } else {
+            s=line;
+        }
         while(*s!=0) {
-            if(*s=='\r' || *s=='\n') {
+            if(*s==' ') {
+                *s=0;
+                ++s;
+                break;
+            } else if(*s=='\r' || *s=='\n') {
                 *s=0;
                 break;
             }
@@ -182,6 +200,10 @@ createCommonDataFile(const char *destDir, const char *name, const char *entrypoi
         }
 #endif
         addFile(getLongPathname(line), name, source, sourceTOC, verbose);
+    }
+
+    if (linePtr) {
+        uprv_free(linePtr);
     }
 
     if(in!=T_FileStream_stdin()) {
