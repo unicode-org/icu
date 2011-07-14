@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -32,7 +32,7 @@
 
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
-#include "unum.h"
+#include "unicode/unum.h"
 
 /**
  * \file

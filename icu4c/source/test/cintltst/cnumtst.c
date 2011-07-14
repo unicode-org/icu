@@ -39,6 +39,7 @@ void addNumForTest(TestNode** root);
 static void TestTextAttributeCrash(void);
 static void TestNBSPInPattern(void);
 static void TestInt64Parse(void);
+static void TestParseCurrency(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -57,6 +58,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestNBSPInPattern);
     TESTCASE(TestInt64Parse);
     TESTCASE(TestParseZero);
+    TESTCASE(TestParseCurrency);
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -988,6 +990,136 @@ static void TestParseZero(void)
         log_verbose("Double: %f\n", dbl);
     }
     unum_close(unum);
+}
+
+static const UChar dollars2Sym[] = { 0x24,0x32,0x2E,0x30,0x30,0 }; /* $2.00 */
+static const UChar dollars4Sym[] = { 0x24,0x34,0 }; /* $4 */
+static const UChar dollars9Sym[] = { 0x39,0xA0,0x24,0 }; /* 9 $ */
+static const UChar pounds3Sym[]  = { 0xA3,0x33,0x2E,0x30,0x30,0 }; /* [POUND]3.00 */
+static const UChar pounds5Sym[]  = { 0xA3,0x35,0 }; /* [POUND]5 */
+static const UChar pounds7Sym[]  = { 0x37,0xA0,0xA3,0 }; /* 7 [POUND] */
+static const UChar euros4Sym[]   = { 0x34,0x2C,0x30,0x30,0xA0,0x20AC,0 }; /* 4,00 [EURO] */
+static const UChar euros6Sym[]   = { 0x36,0xA0,0x20AC,0 }; /* 6 [EURO] */
+static const UChar euros8Sym[]   = { 0x20AC,0x38,0 }; /* [EURO]8 */
+static const UChar dollars4PluEn[] = { 0x34,0x20,0x55,0x53,0x20,0x64,0x6F,0x6C,0x6C,0x61,0x72,0x73,0 }; /* 4 US dollars*/
+static const UChar pounds5PluEn[]  = { 0x35,0x20,0x42,0x72,0x69,0x74,0x69,0x73,0x68,0x20,0x70,0x6F,0x75,0x6E,0x64,0x73,0x20,0x73,0x74,0x65,0x72,0x6C,0x69,0x6E,0x67,0 }; /* 5 British pounds sterling */
+static const UChar euros8PluEn[]   = { 0x38,0x20,0x65,0x75,0x72,0x6F,0x73,0 }; /* 8 euros*/
+static const UChar euros6PluFr[]   = { 0x36,0x20,0x65,0x75,0x72,0x6F,0x73,0 }; /* 6 euros*/
+
+typedef struct {
+    const char *  locale;
+    const char *  descrip;
+    const UChar * currStr;
+    const UChar * plurStr;
+    UErrorCode    parsDoubExpectErr;
+    int32_t       parsDoubExpectPos;
+    double        parsDoubExpectVal;
+    UErrorCode    parsCurrExpectErr;
+    int32_t       parsCurrExpectPos;
+    double        parsCurrExpectVal;
+    const char *  parsCurrExpectCurr;
+} ParseCurrencyItem;
+
+static const ParseCurrencyItem parseCurrencyItems[] = {
+    { "en_US", "dollars2", dollars2Sym, NULL,          U_ZERO_ERROR,  5, 2.0, U_ZERO_ERROR,  5, 2.0, "USD" },
+    { "en_US", "dollars4", dollars4Sym, dollars4PluEn, U_ZERO_ERROR,  2, 4.0, U_ZERO_ERROR,  2, 4.0, "USD" },
+    { "en_US", "dollars9", dollars9Sym, NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
+    { "en_US", "pounds3",  pounds3Sym,  NULL,          U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  5, 3.0, "GBP" },
+    { "en_US", "pounds5",  pounds5Sym,  pounds5PluEn,  U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 5.0, "GBP" },
+    { "en_US", "pounds7",  pounds7Sym,  NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
+    { "en_US", "euros8",   euros8Sym,   euros8PluEn,   U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 8.0, "EUR" },
+
+    { "en_GB", "pounds3",  pounds3Sym,  NULL,          U_ZERO_ERROR,  5, 3.0, U_ZERO_ERROR,  5, 3.0, "GBP" },
+    { "en_GB", "pounds5",  pounds5Sym,  pounds5PluEn,  U_ZERO_ERROR,  2, 5.0, U_ZERO_ERROR,  2, 5.0, "GBP" },
+    { "en_GB", "pounds7",  pounds7Sym,  NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
+    { "en_GB", "euros4",   euros4Sym,   NULL,          U_PARSE_ERROR, 4, 0.0, U_PARSE_ERROR, 4, 0.0, ""    },
+    { "en_GB", "euros6",   euros6Sym,   NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
+    { "en_GB", "euros8",   euros8Sym,   euros8PluEn,   U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 8.0, "EUR" },
+    { "en_GB", "dollars4", dollars4Sym, dollars4PluEn, U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 4.0, "USD" },
+
+    { "fr_FR", "euros4",   euros4Sym,   NULL,          U_ZERO_ERROR,  6, 4.0, U_ZERO_ERROR,  6, 4.0, "EUR" },
+    { "fr_FR", "euros6",   euros6Sym,   euros6PluFr,   U_ZERO_ERROR,  3, 6.0, U_ZERO_ERROR,  3, 6.0, "EUR" },
+    { "fr_FR", "euros8",   euros8Sym,   NULL,          U_PARSE_ERROR, 0, 0.0, U_PARSE_ERROR, 0, 0.0, ""    },
+    { "fr_FR", "dollars2", dollars2Sym, NULL,          U_PARSE_ERROR, 0, 0.0, U_PARSE_ERROR, 0, 0.0, ""    },
+    { "fr_FR", "dollars4", dollars4Sym, NULL,          U_PARSE_ERROR, 0, 0.0, U_PARSE_ERROR, 0, 0.0, ""    },
+    
+    { NULL,    NULL,       NULL,        NULL,          0,             0, 0.0, 0,             0, 0.0, NULL  }
+};
+
+static void TestParseCurrency()
+{
+    const ParseCurrencyItem * itemPtr;
+    for (itemPtr = parseCurrencyItems; itemPtr->locale != NULL; ++itemPtr) {
+        UNumberFormat* unum;
+        UErrorCode status;
+        double parseVal;
+        int32_t parsePos;
+        UChar parseCurr[4];
+        char parseCurrB[4];
+
+        status = U_ZERO_ERROR;
+        unum = unum_open(UNUM_CURRENCY, NULL, 0, itemPtr->locale, NULL, &status);
+        if (U_SUCCESS(status)) {
+            status = U_ZERO_ERROR;
+            parsePos = 0;
+            parseVal = unum_parseDouble(unum, itemPtr->currStr, -1, &parsePos, &status);
+            if (status != itemPtr->parsDoubExpectErr || parsePos != itemPtr->parsDoubExpectPos || parseVal != itemPtr->parsDoubExpectVal) {
+                log_err("UNUM_CURRENCY parseDouble %s/%s, expect %s pos %d val %.1f, get %s pos %d val %.1f\n",
+                        itemPtr->locale, itemPtr->descrip,
+                        u_errorName(itemPtr->parsDoubExpectErr), itemPtr->parsDoubExpectPos, itemPtr->parsDoubExpectVal,
+                        u_errorName(status), parsePos, parseVal );
+            }
+            status = U_ZERO_ERROR;
+            parsePos = 0;
+            parseCurr[0] = 0;
+            parseVal = unum_parseDoubleCurrency(unum, itemPtr->currStr, -1, &parsePos, parseCurr, &status);
+            u_austrncpy(parseCurrB, parseCurr, 4);
+            if (status != itemPtr->parsCurrExpectErr || parsePos != itemPtr->parsCurrExpectPos || parseVal != itemPtr->parsCurrExpectVal ||
+                    strncmp(parseCurrB, itemPtr->parsCurrExpectCurr, 4) != 0) {
+                log_err("UNUM_CURRENCY parseDoubleCurrency %s/%s, expect %s pos %d val %.1f cur %s, get %s pos %d val %.1f cur %s\n",
+                        itemPtr->locale, itemPtr->descrip,
+                        u_errorName(itemPtr->parsCurrExpectErr), itemPtr->parsCurrExpectPos, itemPtr->parsCurrExpectVal, itemPtr->parsCurrExpectCurr,
+                        u_errorName(status), parsePos, parseVal, parseCurrB );
+            }
+            unum_close(unum);
+        } else {
+            log_data_err("unexpected error in unum_open UNUM_CURRENCY for locale %s: '%s'\n", itemPtr->locale, u_errorName(status));
+        }
+
+#if 0
+        /* Hmm, for UNUM_CURRENCY_PLURAL, currently unum_open always sets U_UNSUPPORTED_ERROR, save this test until it is supported */
+        if (itemPtr->plurStr != NULL) {
+            status = U_ZERO_ERROR;
+            unum = unum_open(UNUM_CURRENCY_PLURAL, NULL, 0, itemPtr->locale, NULL, &status);
+            if (U_SUCCESS(status)) {
+                status = U_ZERO_ERROR;
+                parsePos = 0;
+                parseVal = unum_parseDouble(unum, itemPtr->plurStr, -1, &parsePos, &status);
+                if (status != itemPtr->parsDoubExpectErr || parseVal != itemPtr->parsDoubExpectVal) {
+                    log_err("UNUM_CURRENCY parseDouble %s/%s, expect %s val %.1f, get %s val %.1f\n",
+                            itemPtr->locale, itemPtr->descrip,
+                            u_errorName(itemPtr->parsDoubExpectErr), itemPtr->parsDoubExpectVal,
+                            u_errorName(status), parseVal );
+                }
+                status = U_ZERO_ERROR;
+                parsePos = 0;
+                parseCurr[0] = 0;
+                parseVal = unum_parseDoubleCurrency(unum, itemPtr->plurStr, -1, &parsePos, parseCurr, &status);
+                u_austrncpy(parseCurrB, parseCurr, 4);
+                if (status != itemPtr->parsCurrExpectErr || parseVal != itemPtr->parsCurrExpectVal ||
+                        strncmp(parseCurrB, itemPtr->parsCurrExpectCurr, 4) != 0) {
+                    log_err("UNUM_CURRENCY parseDoubleCurrency %s/%s, expect %s val %.1f cur %s, get %s val %.1f cur %s\n",
+                            itemPtr->locale, itemPtr->descrip,
+                            u_errorName(itemPtr->parsCurrExpectErr), itemPtr->parsCurrExpectVal, itemPtr->parsCurrExpectCurr,
+                            u_errorName(status), parseVal, parseCurrB );
+                }
+                unum_close(unum);
+            } else {
+                log_data_err("unexpected error in unum_open UNUM_CURRENCY_PLURAL for locale %s: '%s'\n", itemPtr->locale, u_errorName(status));
+            }
+        }
+#endif
+    }
 }
 
 typedef struct {

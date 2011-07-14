@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 4.8</title>
+    <title>ReadMe for ICU 4.8.1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2011 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,9 +16,9 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.8 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.8.1 ReadMe</h1>
 
-    <p>Last updated: 2011-May-23<br />
+    <p>Last updated: 2011-June-24<br />
      Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1030,6 +1030,13 @@
       ICU, you should use the <code>--with-iostream=old</code> configure option
       when using runConfigureICU. This will prevent applications that use the
       icuio library from crashing.</li>
+      
+      <li>Also note that on current versions of z/OS, the <a href='http://www-01.ibm.com/support/docview.wss?uid=swg21202407&wv=1'>XPLINK version (C128) of the
+      C++ standard library is standard.</a> Therefore you may see an error when running
+      with XPLINK disabled. To avoid this error, set the following environment variable or similar:
+      	<pre><a href='http://www-01.ibm.com/support/docview.wss?uid=swg21376279'>export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"</a></pre>
+      </li>
+      
 
       <li>The rest of the instructions for building and testing ICU on z/OS with
       UNIX System Services are the same as the <a href="#HowToBuildUNIX">How To

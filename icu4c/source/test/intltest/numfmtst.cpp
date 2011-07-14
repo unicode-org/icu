@@ -5964,10 +5964,11 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       UnicodeString formatted = ctou(DATA[i]);
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
-      Formattable parseResult;
       if (numFmt != NULL && U_SUCCESS(status)) {
-          numFmt->parse(formatted, parseResult, status);
-          if (U_FAILURE(status) ||
+          Formattable parseResult;
+          ParsePosition parsePos;
+          numFmt->parseCurrency(formatted, parseResult, parsePos);
+          if (parsePos.getIndex() == 0 ||
               (parseResult.getType() == Formattable::kDouble &&
                parseResult.getDouble() != 1.0)) {
               errln("wrong parsing, " + formatted);
@@ -5985,10 +5986,11 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       UnicodeString formatted = ctou(WRONG_DATA[i]);
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
-      Formattable parseResult;
       if (numFmt != NULL && U_SUCCESS(status)) {
-          numFmt->parse(formatted, parseResult, status);
-          if (!U_FAILURE(status) ||
+          Formattable parseResult;
+          ParsePosition parsePos;
+          numFmt->parseCurrency(formatted, parseResult, parsePos);
+          if (parsePos.getIndex() > 0 ||
               (parseResult.getType() == Formattable::kDouble &&
                parseResult.getDouble() == 1.0)) {
               errln("parsed but should not be: " + formatted);
