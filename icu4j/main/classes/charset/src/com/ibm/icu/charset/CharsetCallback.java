@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -186,11 +186,18 @@ public class CharsetCallback {
                 char[] buffer, int length, CoderResult cr){
 
             CharsetICU cs = (CharsetICU) decoder.charset();
+            /* Use the specified replacement character if it is different than the default one. */
+            boolean useReplacement = true;
+            char [] replacementChar = decoder.replacement().toCharArray();
+            if (replacementChar.length == 1 && (replacementChar[0] == kSubstituteChar1[0] || replacementChar[0] == kSubstituteChar[0])) {
+                useReplacement = false;
+            }
+            
             /* could optimize this case, just one uchar */
             if(decoder.invalidCharLength == 1 && cs.subChar1 != 0) {
-                return CharsetDecoderICU.toUWriteUChars(decoder, kSubstituteChar1, 0, 1, target, offsets, source.position());
+                return CharsetDecoderICU.toUWriteUChars(decoder, useReplacement ? replacementChar : kSubstituteChar1, 0, useReplacement ? replacementChar.length : 1, target, offsets, source.position());
             } else {
-                return CharsetDecoderICU.toUWriteUChars(decoder, kSubstituteChar, 0, 1, target, offsets, source.position());
+                return CharsetDecoderICU.toUWriteUChars(decoder, useReplacement ? replacementChar : kSubstituteChar, 0, useReplacement ? replacementChar.length : 1, target, offsets, source.position());
             }
         }
     };
