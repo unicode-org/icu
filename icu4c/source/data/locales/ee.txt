@@ -29,7 +29,7 @@ ee{
             }
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.81"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -155,11 +155,9 @@ ee{
                     relative{
                         "-1"{"etsɔ si va yi"}
                         "-2"{"nyitsɔ"}
-                        "-3"{"ŋkeke etɔ̃ si va yi"}
                         "0"{"egbe"}
                         "1"{"etsɔ si gbɔna"}
                         "2"{"nyitsɔ si gbɔna"}
-                        "3"{"ŋkeke etɔ̃ si gbɔna"}
                     }
                 }
                 dayperiod{

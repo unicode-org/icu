@@ -42,7 +42,7 @@ cs{
             }
         }
     }
-    Version{"2.0.58.83"}
+    Version{"2.0.59.84"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -216,11 +216,9 @@ cs{
                     relative{
                         "-1"{"Včera"}
                         "-2"{"Předevčírem"}
-                        "-3"{"Před třemi dny"}
                         "0"{"Dnes"}
                         "1"{"Zítra"}
                         "2"{"Pozítří"}
-                        "3"{"Za tři dny"}
                     }
                 }
                 dayperiod{

@@ -100,7 +100,7 @@ kea{
             latn{"Numerus Arabikus"}
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.32"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}

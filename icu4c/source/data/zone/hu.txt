@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1169,12 +1169,10 @@ hu{
             ls{"Afganisztáni idő"}
         }
         "meta:Africa_Central"{
-            cu:int{1}
             lg{"Mozambiki idő"}
             ls{"Közép-afrikai idő"}
         }
         "meta:Africa_Eastern"{
-            cu:int{1}
             lg{"Kenyai idő"}
             ls{"Kelet-afrikai idő"}
         }
@@ -1182,12 +1180,10 @@ hu{
             lg{"Nyugat-szaharai idő"}
         }
         "meta:Africa_Southern"{
-            cu:int{1}
             lg{"Dél-afrikai idő"}
             ls{"Dél-afrikai szabvány idő"}
         }
         "meta:Africa_Western"{
-            cu:int{1}
             ld{"Nyugat-afrikai nyári idő"}
             lg{"Nigériai idő"}
             ls{"Nyugat-afrikai idő"}
@@ -1252,9 +1248,6 @@ hu{
             ld{"Arab nyári idő"}
             lg{"Arab idő"}
             ls{"Arab zónaidő"}
-            sd{"ADT (Arab)"}
-            sg{"AT (Arab)"}
-            ss{"AST (arab)"}
         }
         "meta:Argentina"{
             ld{"Argentínai nyári idő"}
@@ -1269,39 +1262,32 @@ hu{
         "meta:Armenia"{
             ld{"Örmény nyári idő"}
             ls{"Örmény idő"}
-            sd{"AMST (Örményország)"}
-            ss{"AMT (Örményország)"}
         }
         "meta:Ashkhabad"{
             ld{"Ashabadi nyári idő"}
             ls{"Ashabadi idő"}
         }
         "meta:Atlantic"{
-            cu:int{1}
             ld{"Atlanti-óceáni nyári idő"}
             lg{"Atlanti-óceáni idő"}
             ls{"Atlanti-óceáni zónaidő"}
         }
         "meta:Australia_Central"{
-            cu:int{1}
             ld{"Ausztrál középső nyári idő"}
             lg{"Közép-ausztráliai idő"}
             ls{"Ausztrál középső zónaidő"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{1}
             ld{"Ausztrál középső nyugati nyári idő"}
             lg{"Ausztrál középső nyugati idő"}
             ls{"Ausztrál középső nyugati zónaidő"}
         }
         "meta:Australia_Eastern"{
-            cu:int{1}
             ld{"Ausztrál keleti nyári idő"}
             lg{"Kelet-ausztrál idő"}
             ls{"Ausztrál keleti zónaidő"}
         }
         "meta:Australia_Western"{
-            cu:int{1}
             ld{"Ausztrál nyugati nyári idő"}
             lg{"Nyugat-ausztrál idő"}
             ls{"Ausztrál nyugati zónaidő"}
@@ -1326,9 +1312,6 @@ hu{
             ld{"Beringi nyári idő"}
             lg{"Bering idő"}
             ls{"Beringi zónaidő"}
-            sd{"BDT (Beringi)"}
-            sg{"BT (Beringi)"}
-            ss{"BST (Beringi)"}
         }
         "meta:Bhutan"{
             ls{"Butáni idő"}
@@ -1371,9 +1354,6 @@ hu{
             ld{"Kínai nyári idő"}
             lg{"Kínai idő"}
             ls{"Kínai zónaidő"}
-            sd{"CDT (Kína)"}
-            sg{"CT (Kína)"}
-            ss{"CST (Kína)"}
         }
         "meta:Choibalsan"{
             ld{"Csojbalszani nyári idő"}
@@ -1398,9 +1378,6 @@ hu{
             ld{"Kubai nyári idő"}
             lg{"Kubai idő"}
             ls{"Kubai zónaidő"}
-            sd{"CDT (Kuba)"}
-            sg{"CT (Kuba)"}
-            ss{"CST (Kuba)"}
         }
         "meta:Dacca"{
             ls{"Daccai idő"}
@@ -1492,7 +1469,6 @@ hu{
         }
         "meta:Guam"{
             ls{"Guami zónaidő"}
-            ss{"GST (Guam)"}
         }
         "meta:Gulf"{
             lg{"Arab-öbölbeli idő"}
@@ -1518,7 +1494,6 @@ hu{
             ls{"Indiai zónaidő"}
         }
         "meta:Indian_Ocean"{
-            cu:int{1}
             ls{"Indiai-óceáni idő"}
         }
         "meta:Indochina"{
@@ -1549,7 +1524,6 @@ hu{
             ld{"Izraeli nyári idő"}
             lg{"Izraeli idő"}
             ls{"Izraeli zónaidő"}
-            ss{"IST (Izrael)"}
         }
         "meta:Japan"{
             ld{"Japán nyári idő"}
@@ -1771,8 +1745,6 @@ hu{
         "meta:Samarkand"{
             ld{"Szamarkandi nyári idő"}
             ls{"Szamarkandi idő"}
-            sd{"SAMST (Szamarkand)"}
-            ss{"SAMT (Szamarkand)"}
         }
         "meta:Samoa"{
             ls{"Szamoai zónaidő"}
@@ -1792,7 +1764,6 @@ hu{
         }
         "meta:South_Georgia"{
             ls{"Dél-grúziai idő"}
-            ss{"GST (Dél-grúziai)"}
         }
         "meta:Suriname"{
             ls{"Szurinámi idő"}

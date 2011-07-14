@@ -39,7 +39,7 @@ ur{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -51,9 +51,9 @@ ur{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d, MMMM y",
-                "d, MMMM y",
-                "d, MMM y",
+                "EEEE؍ d؍ MMMM y",
+                "d؍ MMMM y",
+                "d؍ MMM y",
                 "d/M/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -90,11 +90,9 @@ ur{
                     relative{
                         "-1"{"کل"}
                         "-2"{"گزشتہ پرسوں"}
-                        "-3"{"تین دن پہلے"}
                         "0"{"آج"}
                         "1"{"کل"}
                         "2"{"آنے والا پرسوں"}
-                        "3"{"ابھی سے تین دن"}
                     }
                 }
                 dayperiod{

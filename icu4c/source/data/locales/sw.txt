@@ -23,7 +23,7 @@ sw{
             }
         }
     }
-    Version{"2.0.58.75"}
+    Version{"2.0.59.53"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -120,11 +120,9 @@ sw{
                     relative{
                         "-1"{"Jana"}
                         "-2"{"Mtondo"}
-                        "-3"{"Siku tatu zilizopita"}
                         "0"{"Leo"}
                         "1"{"Kesho"}
                         "2"{"Kesho kutwa"}
-                        "3"{"Siku tatu kutoka leo"}
                     }
                 }
                 dayperiod{

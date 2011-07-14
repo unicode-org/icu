@@ -4613,8 +4613,8 @@ const char* const full_data[][3] = {
     "vi"
   }, {
     "und_VU",
-    "fr_Latn_VU",
-    "fr_VU"
+    "bi_Latn_VU",
+    "bi"
   }, {
     "und_WF",
     "fr_Latn_WF",

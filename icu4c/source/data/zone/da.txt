@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Ababa"}
@@ -210,9 +210,6 @@ da{
             ld{"Arabisk sommertid"}
             lg{"Arabisk tid"}
             ls{"Arabisk normaltid"}
-            sd{"ADT (arabisk)"}
-            sg{"AT (arabisk)"}
-            ss{"AST (arabisk)"}
         }
         "meta:Argentina"{
             ld{"Argentinsk sommertid"}
@@ -227,7 +224,6 @@ da{
         "meta:Armenia"{
             ld{"Armensk sommertid"}
             ls{"Armensk tid"}
-            sd{"AMST (Armenien)"}
         }
         "meta:Ashkhabad"{
             ld{"Ashkhabad-sommertid"}
@@ -320,9 +316,6 @@ da{
             ld{"Kinesisk sommertid"}
             lg{"Kinesisk tid"}
             ls{"Kinesisk normaltid"}
-            sd{"CDT (Kina)"}
-            sg{"CT (Kina)"}
-            ss{"CST (Kina)"}
         }
         "meta:Choibalsan"{
             ld{"Choibalsan-sommertid"}
@@ -411,7 +404,6 @@ da{
             ls{"Frunze-tid"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Greenwich Mean Time"}
         }
         "meta:Galapagos"{
@@ -441,7 +433,6 @@ da{
         }
         "meta:Guam"{
             ls{"Guam, normaltid"}
-            ss{"GST (Guam)"}
         }
         "meta:Gulf"{
             ls{"Golflandene-normaltid"}
@@ -496,7 +487,6 @@ da{
             ld{"Israelsk sommertid"}
             lg{"Israelsk tid"}
             ls{"Israelsk normaltid"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Japansk sommertid"}

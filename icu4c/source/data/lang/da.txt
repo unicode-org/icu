@@ -514,7 +514,6 @@ da{
         xal{"kalmyk"}
         xh{"xhosa"}
         yao{"yao"}
-        yap{"yap"}
         yi{"jiddisch"}
         yo{"yoruba"}
         ypk{"yupisk sprog"}
@@ -751,7 +750,7 @@ da{
         REVISED{"revideret retskrivning"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

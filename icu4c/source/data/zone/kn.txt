@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kn.xml
  */
 kn{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ಅಬಿಜಾನ್‌‌"}
@@ -1306,6 +1306,10 @@ kn{
             ld{"ಹೋವ್ಡ್‌ ಬೇಸಿಗೆ ಸಮಯ"}
             lg{"ಹೋವ್ದ್‌‌ ಸಮಯ"}
             ls{"ಹೋವ್ದ್‌‌ ಸಮಯ"}
+        }
+        "meta:India"{
+            cu:int{1}
+            ss{"IST"}
         }
         "meta:Indonesia_Central"{
             lg{"ಇಂಡೊನೇಷ್ಯಾ ಕೇಂದ್ರ ಸಮಯ"}

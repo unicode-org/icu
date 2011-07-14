@@ -28,7 +28,6 @@ hu{
         af{"afrikaans"}
         afa{"afroázsiai nyelv"}
         afh{"afrihili"}
-        agq{"agq"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkád"}
@@ -131,14 +130,12 @@ hu{
         den{"szlevi"}
         dgr{"dogrib"}
         din{"dinka"}
-        dje{"dje"}
         doi{"dogri"}
         dra{"egyéb dravida"}
         dsb{"alsó szorb"}
         dua{"duala"}
         dum{"közép holland"}
         dv{"divehi"}
-        dyo{"dyo"}
         dyu{"diula"}
         dz{"butáni"}
         ebu{"embu"}
@@ -274,7 +271,6 @@ hu{
         kro{"kru"}
         kru{"kuruh"}
         ks{"kásmíri"}
-        ksf{"ksf"}
         ku{"kurd"}
         kum{"kumük"}
         kut{"kutenai"}
@@ -314,7 +310,6 @@ hu{
         men{"mende"}
         mg{"málgas"}
         mga{"közép ír"}
-        mgh{"mgh"}
         mh{"marshalli"}
         mi{"maori"}
         mic{"mikmak"}
@@ -333,7 +328,6 @@ hu{
         mr{"marathi"}
         ms{"maláj"}
         mt{"máltai"}
-        mua{"mua"}
         mul{"többszörös nyelvek"}
         mun{"munda nyelvek"}
         mus{"krík"}
@@ -357,7 +351,6 @@ hu{
         niu{"niui"}
         nl{"holland"}
         nl_BE{"flamand"}
-        nmg{"nmg"}
         nn{"norvég nynorsk"}
         no{"norvég"}
         nog{"nogaj"}
@@ -366,7 +359,6 @@ hu{
         nr{"déli ndebele"}
         nso{"északi szotó"}
         nub{"núbiai nyelv"}
-        nus{"nus"}
         nv{"navahó"}
         nwc{"klasszikus newari"}
         ny{"nyanja"}
@@ -424,7 +416,6 @@ hu{
         sam{"szamaritánus arámi"}
         sas{"sasak"}
         sat{"szantáli"}
-        sbp{"sbp"}
         sc{"szardíniai"}
         scn{"szicíliai"}
         sco{"skót"}
@@ -501,7 +492,6 @@ hu{
         tut{"altáji nyelv"}
         tvl{"tuvalu"}
         tw{"twi"}
-        twq{"twq"}
         ty{"tahiti"}
         tyv{"tuvai"}
         udm{"udmurt"}
@@ -529,7 +519,6 @@ hu{
         xh{"hosza"}
         yao{"jaó"}
         yap{"japi"}
-        yav{"yav"}
         yi{"jiddis"}
         yo{"joruba"}
         ypk{"jupik nyelv"}
@@ -569,7 +558,6 @@ hu{
         Cari{"Kari"}
         Cham{"Csám"}
         Cher{"Cseroki"}
-        Cirt{"Cirt"}
         Copt{"Kopt"}
         Cprt{"Ciprusi"}
         Cyrl{"Cirill"}
@@ -808,7 +796,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

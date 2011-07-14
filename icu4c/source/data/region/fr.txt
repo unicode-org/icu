@@ -42,7 +42,7 @@ fr{
         154{"Europe septentrionale"}
         155{"Europe occidentale"}
         172{"Communauté des États indépendants"}
-        419{"Amérique latine et Caraïbes"}
+        419{"Amérique latine"}
         830{"Îles Anglo-normandes"}
         AC{"Île de l'Ascension"}
         AD{"Andorre"}
@@ -301,5 +301,5 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/my.xml
  */
 my{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.5"}
     zoneStrings{
         "America:Anchorage"{
             ec{"အန်ကာရေ့ဂျ်"}
@@ -286,7 +286,6 @@ my{
             ls{"မော်စကို စံတော်ချိန်"}
         }
         "meta:Myanmar"{
-            cu:int{1}
             ls{"မြန်မာ အချိန်"}
         }
         "meta:Nepal"{

@@ -65,7 +65,6 @@ pt{
         bej{"beja"}
         bem{"bemba"}
         ber{"berbere"}
-        bez{"bez"}
         bg{"búlgaro"}
         bh{"biari"}
         bho{"bhojpuri"}
@@ -296,7 +295,6 @@ pt{
         lun{"lunda"}
         luo{"luo"}
         lus{"lushai"}
-        luy{"luy"}
         lv{"letão"}
         mad{"madurês"}
         mag{"magahi"}
@@ -403,7 +401,6 @@ pt{
         roa{"idioma românico"}
         rof{"rombo"}
         rom{"romani"}
-        root{"root"}
         ru{"russo"}
         rup{"aromeno"}
         rw{"kinyarwanda"}
@@ -746,58 +743,40 @@ pt{
         1959ACAD{"acadêmico"}
         1994{"ortografia resiana padronizada"}
         1996{"ortografia alemã de 1996"}
-        ALALC97{"ALALC97"}
-        ALUKU{"ALUKU"}
         AREVELA{"armênio oriental"}
         AREVMDA{"armênio ocidental"}
         BAKU1926{"alfabeto latino turco unificado"}
-        BAUDDHA{"BAUDDHA"}
         BISCAYAN{"biscainho"}
         BISKE{"dialeto san giorgio/bila"}
         BOONT{"boontling"}
         FONIPA{"fonética do Alfabeto Fonético Internacional"}
         FONUPA{"fonética do Alfabeto Fonético Urálico"}
-        FONXSAMP{"FONXSAMP"}
         HEPBURN{"romanização hepburn"}
         HOGNORSK{"alto noruego"}
-        ITIHASA{"ITIHASA"}
-        JAUER{"JAUER"}
-        JYUTPING{"JYUTPING"}
         KKCOR{"ortografia comum"}
-        LAUKIKA{"LAUKIKA"}
         LIPAW{"dialeto lipovaz de Resian"}
-        LUNA1918{"LUNA1918"}
         MONOTON{"monotônico"}
         NDYUKA{"dialeto ndyuka"}
         NEDIS{"dialeto natisone"}
         NJIVA{"dialeto gniva/njiva"}
         OSOJS{"dialeto oseacco/osojane"}
         PAMAKA{"dialeto pamaka"}
-        PETR1708{"PETR1708"}
         PINYIN{"romanização Pinyin"}
         POLYTON{"politônico"}
         POSIX{"computador"}
-        PUTER{"PUTER"}
         REVISED{"Ortografia Revisada"}
         ROZAJ{"resiano"}
-        RUMGR{"RUMGR"}
         SAAHO{"saho"}
         SCOTLAND{"inglês padrão escocês"}
         SCOUSE{"scouse"}
         SOLBA{"dialeto stolvizza/solbica"}
-        SURMIRAN{"SURMIRAN"}
-        SURSILV{"SURSILV"}
-        SUTSILV{"SUTSILV"}
         TARASK{"ortografia taraskievica"}
         UCCOR{"ortografia unificada"}
         UCRCOR{"ortografia revisada e unificada"}
-        ULSTER{"ULSTER"}
-        VAIDIKA{"VAIDIKA"}
         VALENCIA{"valenciano"}
-        VALLADER{"VALLADER"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Roteiro: {0}"}

@@ -298,7 +298,7 @@ af{
             tibt{"Tibettaanse syfers"}
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}

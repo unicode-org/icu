@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/af.xml
  */
 af{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "America:Mexico_City"{
             ec{"Meksiko"}
@@ -29,6 +29,24 @@ af{
         }
         "Europe:Moscow"{
             ec{"Moskou"}
+        }
+        "meta:Africa_Central"{
+            cu:int{1}
+            ss{"CAT"}
+        }
+        "meta:Africa_Eastern"{
+            cu:int{1}
+            ss{"EAT"}
+        }
+        "meta:Africa_Southern"{
+            cu:int{1}
+            sg{"SAT"}
+            ss{"SAST"}
+        }
+        "meta:Africa_Western"{
+            cu:int{1}
+            sd{"WAST"}
+            ss{"WAT"}
         }
         "meta:Alaska"{
             ld{"Alaska-dagligtyd"}

@@ -755,48 +755,30 @@ nb{
         ALUKU{"Aluku-dialekt"}
         AREVELA{"øst-armensk"}
         AREVMDA{"vest-armensk"}
-        BAUDDHA{"BAUDDHA"}
-        BISCAYAN{"BISCAYAN"}
         BISKE{"san giorgio- og biladialekt"}
         BOONT{"boontling"}
         FONIPA{"det internasjonale fonetiske alfabet (IPA)"}
         FONUPA{"det uraliske fonetiske alfabet (UPA)"}
-        FONXSAMP{"FONXSAMP"}
-        HOGNORSK{"HOGNORSK"}
-        ITIHASA{"ITIHASA"}
-        JAUER{"JAUER"}
-        JYUTPING{"JYUTPING"}
         KKCOR{"felles ortografi"}
-        LAUKIKA{"LAUKIKA"}
-        LUNA1918{"LUNA1918"}
         MONOTON{"monotonisk rettskriving"}
         NDYUKA{"Ndyuka-dialekt"}
         NEDIS{"natisonedialekt"}
         NJIVA{"gniva- og njivadialekt"}
         OSOJS{"oseacco- og osojanedialekt"}
         PAMAKA{"Pamaka-dialekt"}
-        PETR1708{"PETR1708"}
         PINYIN{"pinyin"}
         POLYTON{"polytonisk rettskriving"}
         POSIX{"dataspråk"}
-        PUTER{"PUTER"}
         REVISED{"revidert rettskriving"}
         ROZAJ{"resisk dialekt"}
-        RUMGR{"RUMGR"}
         SAAHO{"saaho dialekt"}
         SCOTLAND{"skotsk standard engelsk"}
         SCOUSE{"scouse dialekt"}
         SOLBA{"stolvizza- og solbicadialekt"}
-        SURMIRAN{"SURMIRAN"}
-        SURSILV{"SURSILV"}
-        SUTSILV{"SUTSILV"}
-        ULSTER{"ULSTER"}
-        VAIDIKA{"VAIDIKA"}
         VALENCIA{"valensisk dialekt"}
-        VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

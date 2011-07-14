@@ -10,6 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/bs.xml
  */
 bs{
+    Keys{
+        calendar{"Kalendar"}
+        collation{"Sortiranje"}
+        currency{"Valuta"}
+    }
     Languages{
         aa{"afarski"}
         ab{"abkazijski"}
@@ -637,7 +642,58 @@ bs{
         Zyyy{"zajedničko pismo"}
         Zzzz{"nepoznato ili nevažeće pismo"}
     }
-    Version{"2.0.58.7"}
+    Types{
+        calendar{
+            buddhist{"Budistički kalendar"}
+            chinese{"Kineski kalendar"}
+            gregorian{"Gregorijanski kalendar"}
+            hebrew{"Hebrejski kalendar"}
+            indian{"Indijski nacionalni kalendar"}
+            islamic{"Islamski kalendar"}
+            islamic-civil{"Islamski civilni kalendar"}
+            japanese{"Japanski kalendar"}
+            roc{"Kalendar Republike Kine"}
+        }
+        collation{
+            big5han{"Tradicionalno kinesko sortiranje"}
+            direct{"Direktno sortiranje"}
+            gb2312han{"Pojednostavljeno kinesko sortiranje"}
+            phonebook{"Sortiranje kao telefonski imenik"}
+            pinyin{"Pinjin sortiranje"}
+            stroke{"Sortiranje po broju crta"}
+            traditional{"Tradicionalno sortiranje"}
+        }
+    }
+    Variants{
+        1606NICT{"Francuski iz kasnog srednjeg veka do 1606."}
+        1694ACAD{"Rani moderni francuski"}
+        1901{"Tradicionalna nemačka ortografija"}
+        1994{"Standardizovana rezijanska ortografija"}
+        1996{"Nemačka ortografija 1996"}
+        AREVELA{"Istočni jermenski"}
+        AREVMDA{"Zapadno-jermenski"}
+        BAKU1926{"Ujedinjeni turski latinični alfabet"}
+        BISKE{"San Đorđijo/Bila dijalekt"}
+        BOONT{"Buntling"}
+        FONIPA{"IPA fonetika"}
+        FONUPA{"UPA fonetika"}
+        LIPAW{"Lipovac dijalekt rezijanski"}
+        MONOTON{"Monotonik"}
+        NEDIS{"Natison dijalekt"}
+        NJIVA{"Gnjiva/Njiva dijalekt"}
+        OSOJS{"Oseako/Osojane dijalekt"}
+        POLYTON{"Politonik"}
+        POSIX{"Kompjuter"}
+        REVISED{"Revidirana ortigrafija"}
+        ROZAJ{"Rezijan"}
+        SAAHO{"Saho"}
+        SCOTLAND{"Škotski standardni engleski"}
+        SCOUSE{"Skauz"}
+        SOLBA{"Stolvica/Solbica dijalekt"}
+        TARASK{"Taraskijevica ortografija"}
+        VALENCIA{"Valencijski"}
+    }
+    Version{"2.0.59.84"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}

@@ -42,7 +42,7 @@ nn{
         154{"Nord-Europa"}
         155{"Vest-Europa"}
         172{"Samveldet av uavhengige statar"}
-        419{"Latin-Amerika og Karibia"}
+        419{"Latin-Amerika"}
         830{"Kanaløyane"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -301,5 +301,5 @@ nn{
         ZW{"Zimbabwe"}
         ZZ{"ukjent område"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.68"}
 }

@@ -298,5 +298,5 @@ id{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Dikenal"}
     }
-    Version{"2.0.58.60"}
+    Version{"2.0.59.53"}
 }

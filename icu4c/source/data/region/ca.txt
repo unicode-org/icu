@@ -42,7 +42,7 @@ ca{
         154{"Europa septentrional"}
         155{"Europa Occidental"}
         172{"Comunitat d'Estats Independents"}
-        419{"Amèrica Llatina i Carib"}
+        419{"Amèrica Llatina"}
         AC{"Illa de l'Ascensió"}
         AD{"Andorra"}
         AE{"Unió dels Emirats Àrabs"}
@@ -300,5 +300,5 @@ ca{
         ZW{"Zimbabwe"}
         ZZ{"Regió desconeguda o no vàlida"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

@@ -192,7 +192,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"2.0"}
+    cldrVersion{"2.0.1"}
     codeMappings{
         {
             "AA",
@@ -350,6 +350,11 @@ supplementalData:table(nofallback){
             "BOL",
         }
         {
+            "BQ",
+            "535",
+            "BES",
+        }
+        {
             "BR",
             "076",
             "BRA",
@@ -363,11 +368,6 @@ supplementalData:table(nofallback){
             "BT",
             "064",
             "BTN",
-        }
-        {
-            "BU",
-            "104",
-            "BUR",
         }
         {
             "BV",
@@ -455,11 +455,6 @@ supplementalData:table(nofallback){
             "CRI",
         }
         {
-            "CS",
-            "891",
-            "SCG",
-        }
-        {
             "CU",
             "192",
             "CUB",
@@ -468,6 +463,11 @@ supplementalData:table(nofallback){
             "CV",
             "132",
             "CPV",
+        }
+        {
+            "CW",
+            "531",
+            "CUW",
         }
         {
             "CX",
@@ -553,6 +553,11 @@ supplementalData:table(nofallback){
             "ET",
             "231",
             "ETH",
+        }
+        {
+            "EU",
+            "967",
+            "QUU",
         }
         {
             "FI",
@@ -915,14 +920,14 @@ supplementalData:table(nofallback){
             "MNE",
         }
         {
-            "MG",
-            "450",
-            "MDG",
-        }
-        {
             "MF",
             "663",
             "MAF",
+        }
+        {
+            "MG",
+            "450",
+            "MDG",
         }
         {
             "MH",
@@ -1195,11 +1200,6 @@ supplementalData:table(nofallback){
             "QTT",
         }
         {
-            "EU",
-            "967",
-            "QUU",
-        }
-        {
             "QV",
             "968",
             "QVV",
@@ -1340,6 +1340,11 @@ supplementalData:table(nofallback){
             "SLV",
         }
         {
+            "SX",
+            "534",
+            "SXM",
+        }
+        {
             "SY",
             "760",
             "SYR",
@@ -1403,11 +1408,6 @@ supplementalData:table(nofallback){
             "TO",
             "776",
             "TON",
-        }
-        {
-            "TP",
-            "626",
-            "TMP",
         }
         {
             "TR",
@@ -1655,11 +1655,6 @@ supplementalData:table(nofallback){
             "MYT",
         }
         {
-            "YU",
-            "891",
-            "YUG",
-        }
-        {
             "ZA",
             "710",
             "ZAF",
@@ -1668,11 +1663,6 @@ supplementalData:table(nofallback){
             "ZM",
             "894",
             "ZMB",
-        }
-        {
-            "ZR",
-            "180",
-            "ZAR",
         }
         {
             "ZW",
@@ -8810,12 +8800,13 @@ supplementalData:table(nofallback){
         029{
             "AG",
             "AI",
-            "AN",
             "AW",
             "BB",
             "BL",
+            "BQ",
             "BS",
             "CU",
+            "CW",
             "DM",
             "DO",
             "GD",
@@ -8829,6 +8820,7 @@ supplementalData:table(nofallback){
             "MQ",
             "MS",
             "PR",
+            "SX",
             "TC",
             "TT",
             "VC",

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Džibutsko"}
@@ -163,20 +163,16 @@ sk{
             ec{"Pitcairn"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Stredoafrický čas"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Východoafrický čas"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Juhoafrický čas"}
             ls{"Juhoafrický čas (normálny)"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Západoafrický letný čas"}
             ls{"Západoafrický čas"}
         }
@@ -224,31 +220,26 @@ sk{
             ls{"Západoargentínsky čas"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Atlantický letný čas"}
             lg{"Atlantický čas"}
             ls{"Atlantický štandardný čas"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Stredoaustrálsky letný čas"}
             lg{"Stredoaustrálsky čas"}
             ls{"Stredoaustrálsky čas (normálny)"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Stredozápadný austrálsky letný čas"}
             lg{"Stredozápadný austrálsky čas"}
             ls{"Stredozápadný austrálsky čas (normálny)"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Východoaustrálsky letný čas"}
             lg{"Východoaustrálsky čas"}
             ls{"Východoaustrálsky čas (normálny)"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Západoaustrálsky letný čas"}
             lg{"Západoaustrálsky čas"}
             ls{"Západoaustrálsky čas (normálny)"}
@@ -264,25 +255,16 @@ sk{
             ls{"Choibalsanský čas"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Stredoeurópsky letný čas"}
             ls{"Stredoeurópsky čas"}
-            sd{"SELČ"}
-            ss{"SEČ"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Východoeurópsky letný čas"}
             ls{"Východoeurópsky čas"}
-            sd{"VELČ"}
-            ss{"VEČ"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Západoeurópsky letný čas"}
             ls{"Západoeurópsky čas"}
-            sd{"ZELČ"}
-            ss{"ZEČ"}
         }
         "meta:Hawaii_Aleutian"{
             lg{"Havajský aleuitanský čas"}

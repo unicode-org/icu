@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/te.xml
  */
 te{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"అబిడ్జాన్"}
@@ -1541,7 +1541,9 @@ te{
             ls{"హోడ్ సమయం"}
         }
         "meta:India"{
+            cu:int{1}
             ls{"భారతీయ ప్రామాణిక సమయం"}
+            ss{"IST"}
         }
         "meta:Indian_Ocean"{
             ls{"హిందుమహాసముద్రపు సమయం"}

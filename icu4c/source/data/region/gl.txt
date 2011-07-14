@@ -42,7 +42,7 @@ gl{
         154{"Europa Septentrional"}
         155{"Europa Occidental"}
         172{"Comunidade de Estados Independentes"}
-        419{"América Latina e o Caribe"}
+        419{"América Latina"}
         AC{"Illa de Ascensión"}
         AD{"Andorra"}
         AE{"Emiratos Árabes Unidos"}
@@ -300,5 +300,5 @@ gl{
         ZW{"Cimbabue"}
         ZZ{"rexión descoñecida"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

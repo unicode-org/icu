@@ -59,14 +59,6 @@ nb{
             "ARA",
             "argentinske australer",
         }
-        ARL{
-            "ARL",
-            "ARL",
-        }
-        ARM{
-            "ARM",
-            "ARM",
-        }
         ARP{
             "ARP",
             "argentinske pesos (1983-1985)",
@@ -80,7 +72,7 @@ nb{
             "østerrikske shilling",
         }
         AUD{
-            "AUD",
+            "AU$",
             "australske dollar",
         }
         AWG{
@@ -172,7 +164,7 @@ nb{
             "brasilianske cruzeiro (1990-1993)",
         }
         BRL{
-            "BRL",
+            "BR$",
             "brasilianske realer",
         }
         BRN{
@@ -182,10 +174,6 @@ nb{
         BRR{
             "BRR",
             "brasilianske cruzeiro",
-        }
-        BRZ{
-            "BRZ",
-            "BRZ",
         }
         BSD{
             "BSD",
@@ -216,7 +204,7 @@ nb{
             "beliziske dollar",
         }
         CAD{
-            "CAD",
+            "CA$",
             "kanadiske dollar",
         }
         CDF{
@@ -235,10 +223,6 @@ nb{
             "CHW",
             "WIR franc",
         }
-        CLE{
-            "CLE",
-            "CLE",
-        }
         CLF{
             "CLF",
             "chilenske unidades de fomento",
@@ -248,7 +232,7 @@ nb{
             "chilenske pesos",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "kinesiske yuan renminbi",
         }
         COP{
@@ -352,7 +336,7 @@ nb{
             "etiopiske birr",
         }
         EUR{
-            "EUR",
+            "€",
             "euro",
         }
         FIM{
@@ -372,7 +356,7 @@ nb{
             "franske franc",
         }
         GBP{
-            "GBP",
+            "£",
             "britiske pund sterling",
         }
         GEK{
@@ -432,7 +416,7 @@ nb{
             "guyanske dollar",
         }
         HKD{
-            "HKD",
+            "HK$",
             "Hongkong-dollar",
         }
         HNL{
@@ -472,11 +456,11 @@ nb{
             "israelsk gammel shekel",
         }
         ILS{
-            "ILS",
+            "₪",
             "israelske nye shekler",
         }
         INR{
-            "INR",
+            "₹",
             "indiske rupier",
         }
         IQD{
@@ -508,7 +492,7 @@ nb{
             "jordanske dinarer",
         }
         JPY{
-            "JPY",
+            "JP¥",
             "japanske yen",
         }
         KES{
@@ -532,7 +516,7 @@ nb{
             "nordkoreanske won",
         }
         KRW{
-            "KRW",
+            "₩",
             "sørkoreanske won",
         }
         KWD{
@@ -664,7 +648,7 @@ nb{
             "malawiske kwacha",
         }
         MXN{
-            "MXN",
+            "MX$",
             "meksikanske pesos",
         }
         MXP{
@@ -720,7 +704,7 @@ nb{
             "nepalske rupier",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "new zealandske dollar",
         }
         OMR{
@@ -884,7 +868,7 @@ nb{
             "swazilandske lilangeni",
         }
         THB{
-            "THB",
+            "฿",
             "thailandske baht",
         }
         TJR{
@@ -928,7 +912,7 @@ nb{
             "trinidadiske dollar",
         }
         TWD{
-            "TWD",
+            "NT$",
             "taiwanske nye dollar",
         }
         TZS{
@@ -952,7 +936,7 @@ nb{
             "ugandiske shilling",
         }
         USD{
-            "USD",
+            "US$",
             "amerikanske dollar",
         }
         USN{
@@ -984,7 +968,7 @@ nb{
             "venezuelanske bolivar fuerte",
         }
         VND{
-            "VND",
+            "₫",
             "vietnamesiske dong",
         }
         VUV{
@@ -996,7 +980,7 @@ nb{
             "vestsamoiske tala",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA franc BEAC",
         }
         XAG{
@@ -1024,7 +1008,7 @@ nb{
             "europeisk kontoenhet (XBD)",
         }
         XCD{
-            "XCD",
+            "EC$",
             "østkaribiske dollar",
         }
         XDR{
@@ -2099,5 +2083,5 @@ nb{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

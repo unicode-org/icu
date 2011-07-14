@@ -14,7 +14,7 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.66"}
     calendar{
         buddhist{
             availableFormats{
@@ -60,24 +60,6 @@ zh_Hant_HK{
                         "-1"{"上年"}
                         "0"{"本年"}
                         "1"{"下年"}
-                    }
-                }
-            }
-            monthNames{
-                stand-alone{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
                     }
                 }
             }

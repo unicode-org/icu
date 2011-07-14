@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -872,14 +872,10 @@ lt{
         "meta:Aqtau"{
             ld{"Aqtau vasaros laikas"}
             ls{"Aqtau laikas"}
-            sd{"AQTST (Aktau)"}
-            ss{"AQTT (Aktau)"}
         }
         "meta:Aqtobe"{
             ld{"Aqtobe vasaros laikas"}
             ls{"Aqtobe laikas"}
-            sd{"AQTST (Aktobė)"}
-            ss{"AQTT (Aktobė)"}
         }
         "meta:Argentina"{
             ld{"Argentinos vasaros laikas"}
@@ -900,7 +896,6 @@ lt{
             ls{"Ašchabado laikas"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Atlanto vasaros laikas"}
             lg{"Atlanto laikas"}
             ls{"Atlanto žiemos laikas"}
@@ -986,9 +981,6 @@ lt{
         "meta:China"{
             ld{"Kinijos vasaros laikas"}
             lg{"Kinijos laikas"}
-            sd{"CDT (Kinija)"}
-            sg{"CT (Kinija)"}
-            ss{"CST (Kinija)"}
         }
         "meta:Choibalsan"{
             ld{"Choibalsan vasaros laikas"}
@@ -1035,17 +1027,14 @@ lt{
             ls{"Ekvadoro laikas"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Vidurio Europos vasaros laikas"}
             ls{"Vidurio Europos laikas"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Rytų Europos vasaros laikas"}
             ls{"Rytų Europos laikas"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Vakarų Europos vasaros laikas"}
             ls{"Vakarų Europos laikas"}
         }
@@ -1349,8 +1338,6 @@ lt{
         "meta:Samarkand"{
             ld{"Samarkando vasaros laikas"}
             ls{"Samarkando laikas"}
-            sd{"SAMST (Samarkandas)"}
-            ss{"SAMT (Samarkandas)"}
         }
         "meta:Samoa"{
             ls{"Samoa žiemos laikas"}
@@ -1382,9 +1369,6 @@ lt{
             ld{"Taipėjaus vasaros laikas"}
             lg{"Taipėjaus laikas"}
             ls{"Taipėjaus žiemos laikas"}
-            sd{"CDT (Taipėjus)"}
-            sg{"CT (Taipėjus)"}
-            ss{"CST (Taipėjus)"}
         }
         "meta:Tajikistan"{
             ls{"Tadžikijos laikas"}

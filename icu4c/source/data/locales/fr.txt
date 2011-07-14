@@ -43,7 +43,7 @@ fr{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -752,14 +752,14 @@ fr{
             other{"{0} jours"}
         }
         day-future{
-            0{"Dans 0 jour"}
-            1{"Dans 1 jour"}
+            0{"dans 0 jour"}
+            1{"dans 1 jour"}
             one{"dans {0} jour"}
             other{"dans {0} jours"}
         }
         day-past{
-            0{"Il y a 0 jour"}
-            1{"Il y a 1 jour"}
+            0{"il y a 0 jour"}
+            1{"il y a 1 jour"}
             one{"il y a {0} jour"}
             other{"il y a {0} jours"}
         }
@@ -768,14 +768,14 @@ fr{
             other{"{0} heures"}
         }
         hour-future{
-            0{"Dans 0 heure"}
-            1{"Dans 1 heure"}
+            0{"dans 0 heure"}
+            1{"dans 1 heure"}
             one{"dans {0} heure"}
             other{"dans {0} heures"}
         }
         hour-past{
-            0{"Il y a 0 heure"}
-            1{"Il y a 1 heure"}
+            0{"il y a 0 heure"}
+            1{"il y a 1 heure"}
             one{"il y a {0} heure"}
             other{"il y a {0} heures"}
         }
@@ -784,14 +784,14 @@ fr{
             other{"{0} minutes"}
         }
         minute-future{
-            0{"Dans 0 minute"}
-            1{"Dans 1 minute"}
+            0{"dans 0 minute"}
+            1{"dans 1 minute"}
             one{"dans {0} minute"}
             other{"dans {0} minutes"}
         }
         minute-past{
-            0{"Il y a 0 minute"}
-            1{"Il y a 1 minute"}
+            0{"il y a 0 minute"}
+            1{"il y a 1 minute"}
             one{"il y a {0} minute"}
             other{"il y a {0} minutes"}
         }
@@ -800,14 +800,14 @@ fr{
             other{"{0} mois"}
         }
         month-future{
-            0{"Dans 0 mois"}
-            1{"Dans 1 mois"}
+            0{"dans 0 mois"}
+            1{"dans 1 mois"}
             one{"dans {0} mois"}
             other{"dans {0} mois"}
         }
         month-past{
-            0{"Il y a 0 mois"}
-            1{"Il y a 1 mois"}
+            0{"il y a 0 mois"}
+            1{"il y a 1 mois"}
             one{"il y a {0} mois"}
             other{"il y a {0} mois"}
         }
@@ -816,14 +816,14 @@ fr{
             other{"{0} secondes"}
         }
         second-future{
-            0{"Dans 0 seconde"}
-            1{"Dans 1 seconde"}
+            0{"dans 0 seconde"}
+            1{"dans 1 seconde"}
             one{"dans {0} seconde"}
             other{"dans {0} secondes"}
         }
         second-past{
-            0{"Il y a 0 seconde"}
-            1{"Il y a 1 seconde"}
+            0{"il y a 0 seconde"}
+            1{"il y a 1 seconde"}
             one{"il y a {0} seconde"}
             other{"il y a {0} secondes"}
         }
@@ -832,14 +832,14 @@ fr{
             other{"{0} semaines"}
         }
         week-future{
-            0{"Dans 0 semaine"}
-            1{"Dans 1 semaine"}
+            0{"dans 0 semaine"}
+            1{"dans 1 semaine"}
             one{"dans {0} semaine"}
             other{"dans {0} semaines"}
         }
         week-past{
-            0{"Il y a 0 semaine"}
-            1{"Il y a 1 semaine"}
+            0{"il y a 0 semaine"}
+            1{"il y a 1 semaine"}
             one{"il y a {0} semaine"}
             other{"il y a {0} semaines"}
         }
@@ -848,14 +848,14 @@ fr{
             other{"{0} années"}
         }
         year-future{
-            0{"Dans 0 an"}
-            1{"Dans 1 an"}
+            0{"dans 0 an"}
+            1{"dans 1 an"}
             one{"dans {0} an"}
             other{"dans {0} ans"}
         }
         year-past{
-            0{"Il y a 0 an"}
-            1{"Il y a 1 an"}
+            0{"il y a 0 an"}
+            1{"il y a 1 an"}
             one{"il y a {0} an"}
             other{"il y a {0} ans"}
         }

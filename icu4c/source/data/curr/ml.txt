@@ -456,7 +456,7 @@ ml{
             "ഇസ്രായേലി ഷക്കേല്‍",
         }
         INR{
-            "രൂ",
+            "₹",
             "ഇന്ത്യന്‍ രൂപ",
         }
         IQD{
@@ -1651,79 +1651,17 @@ ml{
         }
         LVR{
             one{"ലാറ്റ്വിയന്‍ റൂബിള്‍"}
-            other{"LVR"}
-        }
-        LYD{
-            one{"LYD"}
-            other{"LYD"}
-        }
-        MAD{
-            one{"MAD"}
-            other{"MAD"}
-        }
-        MAF{
-            one{"MAF"}
-            other{"MAF"}
-        }
-        MDL{
-            one{"MDL"}
-            other{"MDL"}
-        }
-        MGA{
-            one{"MGA"}
-            other{"MGA"}
-        }
-        MGF{
-            one{"MGF"}
-            other{"MGF"}
-        }
-        MKD{
-            one{"MKD"}
-            other{"MKD"}
-        }
-        MLF{
-            one{"MLF"}
-            other{"MLF"}
         }
         MMK{
             one{"മ്യാന്‍മാര്‍ ചാറ്റ്"}
-            other{"MMK"}
-        }
-        MNT{
-            one{"MNT"}
-            other{"MNT"}
         }
         MOP{
             one{"മകൌ പതാക്ക"}
             other{"മകൌ പതാക്കാസ്"}
         }
-        MRO{
-            one{"MRO"}
-            other{"MRO"}
-        }
-        MTL{
-            one{"MTL"}
-            other{"MTL"}
-        }
-        MTP{
-            one{"MTP"}
-            other{"MTP"}
-        }
-        MUR{
-            one{"MUR"}
-            other{"MUR"}
-        }
         MVR{
             one{"മാലദ്വീപ് രൂപ"}
             other{"മാലദ്വീപ് രൂപ"}
-        }
-        MWK{
-            one{"MWK"}
-            other{"MWK"}
-        }
-        MXN{
-            one{"MXN"}
-            other{"MXN"}
         }
         MXP{
             one{"മെക്സിക്കന്‍ സില്‍വര്‍ പെയ്സോ (MXP)"}
@@ -1733,38 +1671,6 @@ ml{
             one{"മെക്സിക്കന്‍ യൂണിഡാഡ് ഡി ഇന്‍വെര്‍ഷന്‍ (UDI)"}
             other{"മെക്സിക്കന്‍ യൂണിഡാഡ്സ് ഡി ഇന്‍വെര്‍ഷന്‍ (UDI)"}
         }
-        MYR{
-            one{"MYR"}
-            other{"MYR"}
-        }
-        MZE{
-            one{"MZE"}
-            other{"MZE"}
-        }
-        MZM{
-            one{"MZM"}
-            other{"MZM"}
-        }
-        MZN{
-            one{"MZN"}
-            other{"MZN"}
-        }
-        NAD{
-            one{"NAD"}
-            other{"NAD"}
-        }
-        NGN{
-            one{"NGN"}
-            other{"NGN"}
-        }
-        NIC{
-            one{"NIC"}
-            other{"NIC"}
-        }
-        NIO{
-            one{"NIO"}
-            other{"NIO"}
-        }
         NLG{
             one{"നെതര്‍ലന്‍ഡ്സ് ഗില്‍ഡര്‍"}
             other{"നെതര്‍ലന്‍ഡ്സ് ഗില്‍ഡേഴ്സ്"}
@@ -1773,17 +1679,9 @@ ml{
             one{"നോര്‍വീജിയന്‍ ക്രോണ്‍"}
             other{"നോര്‍വീജിയന്‍ ക്രോണ്‍സ്"}
         }
-        NPR{
-            one{"NPR"}
-            other{"NPR"}
-        }
         NZD{
             one{"ന്യൂസിലന്‍ഡ് ഡോളര്‍"}
             other{"ന്യൂസിലന്‍ഡ് ഡോളേഴ്സ്"}
-        }
-        OMR{
-            one{"OMR"}
-            other{"OMR"}
         }
         PAB{
             one{"പനാമെയ്നിയന്‍ ബാല്‍ബോവ"}
@@ -1817,129 +1715,12 @@ ml{
             one{"പോളിഷ് സ്ലോട്ടി"}
             other{"പോളിഷ് സ്ലോട്ടീസ്"}
         }
-        PLZ{
-            one{"PLZ"}
-            other{"PLZ"}
-        }
-        PTE{
-            one{"PTE"}
-            other{"PTE"}
-        }
-        PYG{
-            one{"PYG"}
-            other{"PYG"}
-        }
-        QAR{
-            one{"QAR"}
-            other{"QAR"}
-        }
-        RHD{
-            one{"RHD"}
-            other{"RHD"}
-        }
-        ROL{
-            one{"ROL"}
-            other{"ROL"}
-        }
-        RON{
-            one{"RON"}
-            other{"RON"}
-        }
-        RSD{
-            one{"RSD"}
-            other{"RSD"}
-        }
         RUB{
             one{"റഷ്യന്‍ റൂബിള്‍"}
             other{"റഷ്യന്‍ റൂബിള്‍സ്"}
         }
-        RUR{
-            one{"RUR"}
-            other{"RUR"}
-        }
-        RWF{
-            one{"RWF"}
-            other{"RWF"}
-        }
-        SAR{
-            one{"SAR"}
-            other{"SAR"}
-        }
-        SBD{
-            one{"SBD"}
-            other{"SBD"}
-        }
-        SCR{
-            one{"SCR"}
-            other{"SCR"}
-        }
-        SDD{
-            one{"SDD"}
-            other{"SDD"}
-        }
-        SDG{
-            one{"SDG"}
-            other{"SDG"}
-        }
-        SDP{
-            one{"SDP"}
-            other{"SDP"}
-        }
-        SEK{
-            one{"SEK"}
-            other{"SEK"}
-        }
-        SGD{
-            one{"SGD"}
-            other{"SGD"}
-        }
-        SHP{
-            one{"SHP"}
-            other{"SHP"}
-        }
-        SIT{
-            one{"SIT"}
-            other{"SIT"}
-        }
-        SKK{
-            one{"SKK"}
-            other{"SKK"}
-        }
-        SLL{
-            one{"SLL"}
-            other{"SLL"}
-        }
-        SOS{
-            one{"SOS"}
-            other{"SOS"}
-        }
-        SRD{
-            one{"SRD"}
-            other{"SRD"}
-        }
-        SRG{
-            one{"SRG"}
-            other{"SRG"}
-        }
-        STD{
-            one{"STD"}
-            other{"STD"}
-        }
-        SUR{
-            one{"SUR"}
-            other{"SUR"}
-        }
-        SVC{
-            one{"SVC"}
-            other{"SVC"}
-        }
         SYP{
-            one{"SYP"}
             other{"സിറിയന്‍ പൌണ്ട്"}
-        }
-        SZL{
-            one{"SZL"}
-            other{"SZL"}
         }
         THB{
             one{"തായ് ബട്ട്"}
@@ -1957,10 +1738,6 @@ ml{
             one{"തുര്‍ക്മെനിസ്ഥാന്‍ മനത്"}
             other{"തുര്‍ക്മെനിസ്ഥാന്‍ മനത്‌സ്"}
         }
-        TND{
-            one{"TND"}
-            other{"TND"}
-        }
         TOP{
             one{"റ്റോംഗ പാംഗ"}
             other{"റ്റോംഗ പാംഗാസ്"}
@@ -1970,24 +1747,15 @@ ml{
             other{"തിമോര്‍ എസ്ക്യൂഡോസ്"}
         }
         TRL{
-            one{"TRL"}
             other{"പ്രാചീന തുര്‍ക്കിഷ് ലിറാസ്"}
         }
         TRY{
             one{"തുര്‍ക്കിഷ് ലിറ"}
             other{"തുര്‍ക്കിഷ് ലിറാസ്"}
         }
-        TTD{
-            one{"TTD"}
-            other{"TTD"}
-        }
         TWD{
             one{"തായ്‌വാന്‍ ഡോളര്‍"}
             other{"തായ്‌വാന്‍ ഡോളേഴ്സ്"}
-        }
-        TZS{
-            one{"TZS"}
-            other{"TZS"}
         }
         UAH{
             one{"ഉക്രേനിയന്‍ ഹ്രിവ്നിയ"}
@@ -1997,24 +1765,11 @@ ml{
             one{"ഉക്രേനിയന്‍ കാര്‍ബോവാനെസ്"}
             other{"ഉക്രേനിയന്‍ കാര്‍ബോവാനെസ്"}
         }
-        UGS{
-            one{"UGS"}
-            other{"UGS"}
-        }
-        UGX{
-            one{"UGX"}
-            other{"UGX"}
-        }
         USD{
             one{"യു.എസ് ഡോളര്‍"}
             other{"യു.എസ് ഡോളേഴ്സ്"}
         }
-        USN{
-            one{"USN"}
-            other{"USN"}
-        }
         USS{
-            one{"USS"}
             other{"യുഎസ് ഡോളേഴ്സ് (അതേ ദിവസം)"}
         }
         UYI{
@@ -2040,10 +1795,6 @@ ml{
         VEF{
             one{"വെനസ്വേലന്‍ ബോലിവര്‍ ഫുവെര്‍റ്റെ"}
             other{"വെനസ്വേലന്‍ ബോലിവര്‍ ഫുവെര്‍റ്റെസ്"}
-        }
-        VND{
-            one{"VND"}
-            other{"VND"}
         }
         VUV{
             one{"വനുവാതു വാതു"}
@@ -2178,5 +1929,5 @@ ml{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.63"}
 }

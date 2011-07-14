@@ -91,7 +91,6 @@ eu{
         CM{"Kamerun"}
         CN{"Txina"}
         CO{"Kolonbia"}
-        CP{"CP"}
         CR{"Costa Rica"}
         CS{"Serbia eta Montenegro"}
         CU{"Kuba"}
@@ -100,7 +99,6 @@ eu{
         CY{"Zipre"}
         CZ{"Txekiar errepublika"}
         DE{"Alemania"}
-        DG{"DG"}
         DJ{"Djibuti"}
         DK{"Danimarka"}
         DM{"Dominika"}
@@ -140,7 +138,6 @@ eu{
         GU{"Guam"}
         GW{"Ginea-Bissau"}
         GY{"Guyana"}
-        HK{"HK"}
         HM{"Heard eta McDonald Uharteak"}
         HN{"Honduras"}
         HR{"Kroazia"}
@@ -259,7 +256,6 @@ eu{
         SV{"El Salvador"}
         SY{"Siria"}
         SZ{"Swazilandia"}
-        TA{"TA"}
         TC{"Turk eta Caicos uharteak"}
         TD{"Txad"}
         TF{"Frantziaren Lurralde Australak"}
@@ -296,7 +292,6 @@ eu{
         ZA{"Hegoafrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
-        ZZ{"ZZ"}
     }
-    Version{"2.0.58.33"}
+    Version{"2.0.59.53"}
 }

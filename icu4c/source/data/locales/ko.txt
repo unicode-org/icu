@@ -61,7 +61,7 @@ ko{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -80,8 +80,7 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d일 EEE"}
-                Ed{"d일 (E)"}
+                EEEd{"d일 (EEE)"}
                 Gy{"G y년"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
@@ -102,9 +101,10 @@ ko{
                 ms{"mm:ss"}
                 y{"G y년"}
                 yM{"G y. M."}
-                yMEd{"G y. M. d. EEE"}
+                yMEd{"G y. M. d. (EEE)"}
                 yMMM{"G y년 MMM"}
-                yMMMEd{"G y년 MMM d일 EEE"}
+                yMMMEEEEd{"G y년 MMM d일 EEEE"}
+                yMMMEd{"G y년 MMM d일 (EEE)"}
                 yMMMd{"G y년 MMM d일"}
                 yMd{"G y. M. d."}
                 yQ{"G y년 Q분기"}
@@ -158,8 +158,7 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d일 EEE"}
-                Ed{"d일 (E)"}
+                EEEd{"d일 (EEE)"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -179,9 +178,10 @@ ko{
                 ms{"mm:ss"}
                 y{"y년"}
                 yM{"yyyy. M."}
-                yMEd{"yyyy. M. d. EEE"}
+                yMEd{"yyyy. M. d. (EEE)"}
                 yMMM{"y년 MMM"}
-                yMMMEd{"y년 MMM d일 EEE"}
+                yMMMEEEEd{"y년 MMM d일 EEEE"}
+                yMMMEd{"y년 MMM d일 (EEE)"}
                 yMMMd{"y년 MMM d일"}
                 yMd{"yyyy. M. d."}
                 yQ{"y년 Q분기"}
@@ -240,11 +240,9 @@ ko{
                     relative{
                         "-1"{"어제"}
                         "-2"{"그저께"}
-                        "-3"{"그끄제"}
                         "0"{"오늘"}
                         "1"{"내일"}
                         "2"{"모레"}
-                        "3"{"3일후"}
                     }
                 }
                 dayperiod{
@@ -316,15 +314,15 @@ ko{
                     M{"M월 ~ M월"}
                 }
                 MEd{
-                    M{"M. d E ~ M. d E"}
-                    d{"M. d E ~ M. d E"}
+                    M{"M. d (E) ~ M. d (E)"}
+                    d{"M. d (E) ~ M. d (E)"}
                 }
                 MMM{
                     M{"MMM ~ MMM"}
                 }
                 MMMEd{
-                    M{"M월 d일 E ~ M월 d일 E"}
-                    d{"M월 d일 E ~ d일 E"}
+                    M{"M월 d일 (E) ~ M월 d일 (E)"}
+                    d{"M월 d일 (E) ~ d일 (E)"}
                 }
                 MMMM{
                     M{"LLLL-LLLL"}
@@ -367,18 +365,23 @@ ko{
                     y{"yyyy. M ~ yyyy. M"}
                 }
                 yMEd{
-                    M{"yy. M. d. E ~ yy. M. d. E"}
-                    d{"yy. M. d. E ~ yy. M. d. E"}
-                    y{"yy. M. d. E ~ yy. M. d. E"}
+                    M{"yy. M. d. (E) ~ yy. M. d. (E)"}
+                    d{"yy. M. d. (E) ~ yy. M. d. (E)"}
+                    y{"yy. M. d. (E) ~ yy. M. d. (E)"}
                 }
                 yMMM{
                     M{"y년 M월~M월"}
                     y{"y년 M월 ~ y년 M월"}
                 }
+                yMMMEEEEd{
+                    M{"y년 M월 d일 EEEE ~ M월 d일 EEEE"}
+                    d{"y년 M월 d일 EEEE ~ d일 EEEE"}
+                    y{"y년 M월 d일 EEEE ~ y년 M월 d일 EEEE"}
+                }
                 yMMMEd{
-                    M{"y년 M월 d일 E ~ M월 d일 E"}
-                    d{"y년 M월 d일 E ~ d일 E"}
-                    y{"y년 M월 d일 E ~ y년 M월 d일 E"}
+                    M{"y년 M월 d일 (E) ~ M월 d일 (E)"}
+                    d{"y년 M월 d일 (E) ~ d일 (E)"}
+                    y{"y년 M월 d일 (E) ~ y년 M월 d일 (E)"}
                 }
                 yMMMM{
                     M{"y년 MM월 ~ MM월"}
@@ -469,8 +472,7 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d일 EEE"}
-                Ed{"d일 (E)"}
+                EEEd{"d일 (EEE)"}
                 Gy{"G yy년"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
@@ -495,10 +497,11 @@ ko{
                 yyQ{"G yy년 Q분기"}
                 yyyy{"G yy년"}
                 yyyyM{"G y. M."}
-                yyyyMEd{"G y. M. d. EEE"}
+                yyyyMEd{"G y. M. d. (EEE)"}
                 yyyyMM{"G y. MM"}
                 yyyyMMM{"G y년 MMM"}
-                yyyyMMMEd{"G y년 MMM d일 EEE"}
+                yyyyMMMEEEEd{"G y년 MMM d일 EEEE"}
+                yyyyMMMEd{"G y년 MMM d일 (EEE)"}
                 yyyyMMMd{"G yy년 MMM d일"}
                 yyyyQ{"G yy년 Q분기"}
                 yyyyQQQ{"G y년 QQQ"}
@@ -761,8 +764,7 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d일 EEE"}
-                Ed{"d일 (E)"}
+                EEEd{"d일 (EEE)"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -785,10 +787,11 @@ ko{
                 yyQ{"G y년 Q분기"}
                 yyyy{"G yy년"}
                 yyyyM{"G y. M."}
-                yyyyMEd{"G y. M. d. EEE"}
+                yyyyMEd{"G y. M. d. (EEE)"}
                 yyyyMM{"G y. MM"}
                 yyyyMMM{"G y년 MMM"}
-                yyyyMMMEd{"G y년 MMM d일 EEE"}
+                yyyyMMMEEEEd{"G y년 MMM d일 EEEE"}
+                yyyyMMMEd{"G y년 MMM d일 (EEE)"}
                 yyyyMMMd{"G yy년 MMM d일"}
                 yyyyMd{"G y. M. d."}
                 yyyyQ{"G y년 Q분기"}

@@ -38,7 +38,7 @@ gsw{
             }
         }
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.59.68"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -162,11 +162,9 @@ gsw{
                     relative{
                         "-1"{"geschter"}
                         "-2"{"vorgeschter"}
-                        "-3"{"vor drü Tääg"}
                         "0"{"hüt"}
                         "1"{"moorn"}
                         "2"{"übermoorn"}
-                        "3"{"i drü Tääg"}
                     }
                 }
                 dayperiod{

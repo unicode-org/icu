@@ -42,7 +42,7 @@ to{
         154{"ʻIulope tokelau"}
         155{"ʻIulope hihifo"}
         172{"Kominiueli"}
-        419{"ʻAmelika fakalatina mo Kalipeane"}
+        419{"ʻAmelika fakalatina"}
         AC{"Motu ʻAsenisini"}
         AD{"ʻEnitola"}
         AE{"ʻAlepea Fakatahataha"}
@@ -299,5 +299,5 @@ to{
         ZW{"Simipapuei"}
         ZZ{"Potu fonua taʻeʻiloa pe hala"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
 }

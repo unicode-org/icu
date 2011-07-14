@@ -14,11 +14,11 @@ si{
     collations{
         dictionary{
             Sequence{" [normalization on ]&ඖ<ං<ඃ&ජ්ඤ<<ඥ"}
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
         standard{
             Sequence{" [normalization on ]&ඖ<ං<ඃ&ඥ<ඤ"}
-            Version{"2.0"}
+            Version{"2.0.1"}
         }
     }
 }

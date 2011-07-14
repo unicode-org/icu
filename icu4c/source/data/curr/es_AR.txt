@@ -13,5 +13,5 @@ es_AR{
             "peso argentino",
         }
     }
-    Version{"2.0.58.84"}
+    Version{"2.0.59.5"}
 }

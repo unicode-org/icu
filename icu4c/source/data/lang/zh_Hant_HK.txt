@@ -80,5 +80,5 @@ zh_Hant_HK{
         REVISED{"已修訂拼字法"}
         SCOTLAND{"蘇格蘭標準英語"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.66"}
 }

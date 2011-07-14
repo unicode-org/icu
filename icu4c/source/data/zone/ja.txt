@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    Version{"2.0.58.55"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -1224,8 +1224,6 @@ ja{
         "meta:Acre"{
             ld{"アクレ夏時間"}
             ls{"アクレ標準時"}
-            sd{"ACST（アクレ）"}
-            ss{"ACT（アクレ）"}
         }
         "meta:Afghanistan"{
             ls{"アフガニスタン標準時"}
@@ -1298,22 +1296,15 @@ ja{
         "meta:Aqtau"{
             ld{"アクタウ夏時間"}
             ls{"アクタウ標準時"}
-            sd{"AQTST（アクタウ）"}
-            ss{"AQTT（アクタウ）"}
         }
         "meta:Aqtobe"{
             ld{"アクトベ夏時間"}
             ls{"アクトベ標準時"}
-            sd{"AQTST（アクトベ）"}
-            ss{"AQTT（アクトベ）"}
         }
         "meta:Arabian"{
             ld{"アラブ夏時間"}
             lg{"アラブ時間"}
             ls{"アラブ標準時"}
-            sd{"ADT（アラブ）"}
-            sg{"AT（アラブ）"}
-            ss{"AST（アラブ）"}
         }
         "meta:Argentina"{
             ld{"アルゼンチン夏時間"}
@@ -1328,8 +1319,6 @@ ja{
         "meta:Armenia"{
             ld{"アルメニア夏時間"}
             ls{"アルメニア標準時"}
-            sd{"AMST（アルメニア）"}
-            ss{"AMT（アルメニア）"}
         }
         "meta:Ashkhabad"{
             ld{"アシガバート夏時間"}
@@ -1380,9 +1369,6 @@ ja{
             ld{"ベーリング夏時間"}
             lg{"ベーリング時間"}
             ls{"ベーリング標準時"}
-            sd{"BDT（ベーリング）"}
-            sg{"BT（ベーリング）"}
-            ss{"BST（ベーリング）"}
         }
         "meta:Bhutan"{
             ls{"ブータン標準時"}
@@ -1417,9 +1403,6 @@ ja{
             ld{"中国夏時間"}
             lg{"中国時間"}
             ls{"中国標準時"}
-            sd{"CDT(中国)"}
-            sg{"CT(中国)"}
-            ss{"CST(中国)"}
         }
         "meta:Choibalsan"{
             ld{"チョイバルサン夏時間"}
@@ -1440,9 +1423,6 @@ ja{
             ld{"キューバ夏時間"}
             lg{"キューバ時間"}
             ls{"キューバ標準時"}
-            sd{"CDT（キューバ）"}
-            sg{"CT（キューバ）"}
-            ss{"CST（キューバ）"}
         }
         "meta:Dacca"{
             ls{"ダッカ標準時"}
@@ -1565,10 +1545,8 @@ ja{
             ld{"イスラエル夏時間"}
             lg{"イスラエル時間"}
             ls{"イスラエル標準時"}
-            ss{"IST（イスラエル）"}
         }
         "meta:Japan"{
-            cu:int{1}
             ld{"日本夏時間"}
             lg{"日本時間"}
             ls{"日本標準時"}
@@ -1686,27 +1664,17 @@ ja{
             lg{"サマラ時間"}
             ls{"サマラ時間"}
         }
-        "meta:Samarkand"{
-            sd{"SAMST（サマルカンド）"}
-            ss{"SAMT（サマルカンド）"}
-        }
         "meta:Seychelles"{
             ls{"セーシェル標準時"}
         }
         "meta:South_Georgia"{
             ls{"サウスジョージア標準時"}
-            ss{"GST（サウスジョージア）"}
         }
         "meta:Suriname"{
             ls{"スリナム標準時"}
         }
         "meta:Syowa"{
             ls{"昭和基地時間"}
-        }
-        "meta:Taipei"{
-            sd{"CDT(台湾)"}
-            sg{"CT(台湾)"}
-            ss{"CST(台湾)"}
         }
         "meta:Turkey"{
             ld{"トルコ夏時間"}

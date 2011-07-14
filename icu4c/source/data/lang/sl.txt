@@ -192,7 +192,6 @@ sl{
         gsw{"nemščina (Švica)"}
         gu{"gudžaratščina"}
         gv{"manščina"}
-        gwi{"gwi"}
         ha{"havščina"}
         hai{"haidščina"}
         haw{"havajščina"}
@@ -215,7 +214,6 @@ sl{
         id{"indonezijščina"}
         ie{"interlingve"}
         ig{"igboščina"}
-        ii{"ii"}
         ijo{"ijo"}
         ik{"inupiaščina"}
         ilo{"ilokanščina"}
@@ -237,13 +235,11 @@ sl{
         kaa{"karakalpaščina"}
         kab{"kabilščina"}
         kac{"kačinščina"}
-        kaj{"kaj"}
         kam{"kamba"}
         kar{"karenščina"}
         kaw{"kavi"}
         kbd{"kabardinščina"}
         kcg{"tjapska nigerijščina"}
-        kfo{"kfo"}
         kg{"kongovščina"}
         kha{"kasi"}
         khi{"koisanski jezik"}
@@ -323,7 +319,6 @@ sl{
         mt{"malteščina"}
         mul{"več jezikov"}
         mun{"mundski jezik"}
-        mus{"mus"}
         mwl{"mirandeščina"}
         mwr{"marvarščina"}
         my{"burmanščina"}
@@ -338,7 +333,6 @@ sl{
         nds{"nizka nemščina"}
         ne{"nepalščina"}
         new{"nevarščina"}
-        ng{"ng"}
         nia{"niaščina"}
         nic{"nigrsko-kordofanski jezik"}
         niu{"niuejščina"}
@@ -348,7 +342,6 @@ sl{
         no{"norveščina"}
         nog{"nogajščina"}
         non{"stara nordijščina"}
-        nqo{"nqo"}
         nr{"južna ndebelščina"}
         nso{"severna sotščina"}
         nub{"nubijski jezik"}
@@ -370,7 +363,6 @@ sl{
         pa{"pandžabščina"}
         paa{"papuanski jezik"}
         pag{"pangasinanščina"}
-        pal{"pal"}
         pam{"pampanščina"}
         pap{"papiamentu"}
         pau{"palavanščina"}
@@ -395,15 +387,11 @@ sl{
         ro{"romunščina"}
         roa{"romanski jezik"}
         rom{"romščina"}
-        root{"root"}
         ru{"ruščina"}
         rup{"aromunščina"}
         rw{"ruandščina"}
         sa{"sanskrt"}
-        sad{"sad"}
         sah{"jakutščina"}
-        sai{"sai"}
-        sal{"sal"}
         sam{"samaritanska aramejščina"}
         sas{"sasaščina"}
         sat{"santalščina"}
@@ -433,9 +421,7 @@ sl{
         smn{"inarska samijščina"}
         sms{"samijščina Skolt"}
         sn{"šonščina"}
-        snk{"snk"}
         so{"somalščina"}
-        sog{"sog"}
         son{"songajščina"}
         sq{"albanščina"}
         sr{"srbščina"}
@@ -457,7 +443,6 @@ sl{
         tai{"tajski jezik"}
         te{"telugijščina"}
         tem{"temnejščina"}
-        ter{"ter"}
         tet{"tetumščina"}
         tg{"tadžiščina"}
         th{"tajščina"}
@@ -513,7 +498,6 @@ sl{
         yo{"jorubščina"}
         ypk{"jupiški jezik"}
         yue{"kantonščina"}
-        za{"za"}
         zap{"zapoteščina"}
         zbl{"znakovni jezik Bliss"}
         zen{"zenaščina"}
@@ -543,9 +527,7 @@ sl{
         Brai{"braillova pisava"}
         Bugi{"buginski"}
         Buhd{"buhidski"}
-        Cakm{"Cakm"}
         Cans{"poenotena zlogovna pisava kanadskih staroselcev"}
-        Cari{"Cari"}
         Cham{"Cham"}
         Cher{"čerokeški"}
         Cirt{"kirt"}
@@ -587,7 +569,6 @@ sl{
         Knda{"kanadski"}
         Kore{"korejski"}
         Kthi{"kajatski"}
-        Lana{"Lana"}
         Laoo{"laoški"}
         Latf{"fraktura"}
         Latg{"gelski latinični"}
@@ -607,7 +588,6 @@ sl{
         Moon{"Moonova pisava za slepe"}
         Mtei{"manipurski"}
         Mymr{"mjanmarski"}
-        Nkoo{"Nkoo"}
         Ogam{"ogamski"}
         Olck{"santalski"}
         Orkh{"orkonski"}
@@ -620,13 +600,10 @@ sl{
         Phlv{"knjižno palavanski"}
         Phnx{"feničanski"}
         Plrd{"Pollardova fonetska pisava"}
-        Prti{"Prti"}
-        Rjng{"Rjng"}
         Roro{"rongorongo"}
         Runr{"runski"}
         Samr{"samaritanski"}
         Sara{"saratski"}
-        Saur{"Saur"}
         Sgnw{"znakovna pisava"}
         Shaw{"šojevski"}
         Sinh{"sinhalski"}
@@ -637,8 +614,6 @@ sl{
         Syrj{"zahodnosirijski"}
         Syrn{"vzhodnosirijski"}
         Tagb{"tagbanski"}
-        Tale{"Tale"}
-        Talu{"Talu"}
         Taml{"tamilski"}
         Tavt{"tajsko-vietnamski"}
         Telu{"teluški"}
@@ -653,7 +628,6 @@ sl{
         Visp{"vidni govor"}
         Xpeo{"staroperzijski"}
         Xsux{"sumersko-akadski klinopis"}
-        Yiii{"Yiii"}
         Zinh{"podedovan"}
         Zmth{"matematična znamenja"}
         Zsym{"simboli"}
@@ -759,7 +733,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Jezik: {0}"}
         territory{"Regija: {0}"}

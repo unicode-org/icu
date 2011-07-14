@@ -497,7 +497,7 @@ likelySubtags:table(nofallback){
     und_VA{"la_Latn_VA"}
     und_VE{"es_Latn_VE"}
     und_VN{"vi_Latn_VN"}
-    und_VU{"fr_Latn_VU"}
+    und_VU{"bi_Latn_VU"}
     und_Vaii{"vai_Vaii_LR"}
     und_WF{"fr_Latn_WF"}
     und_WS{"sm_Latn_WS"}

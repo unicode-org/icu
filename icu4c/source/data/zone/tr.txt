@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    Version{"2.0.57.98"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abican"}
@@ -404,20 +404,16 @@ tr{
             ls{"Afganistan Saati"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Orta Afrika Saati"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Doğu Afrika Saati"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Güney Afrika Saati"}
             ls{"Güney Afrika Standart Saati"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Batı Afrika Yaz Saati"}
             ls{"Batı Afrika Saati"}
         }
@@ -472,22 +468,15 @@ tr{
         "meta:Aqtau"{
             ld{"Aktav Yaz Saati"}
             ls{"Aktav Saati"}
-            sd{"AQTST (Aktav)"}
-            ss{"AQTT (Aktav)"}
         }
         "meta:Aqtobe"{
             ld{"Aktöbe Yaz Saati"}
             ls{"Aktöbe Saati"}
-            sd{"AQTST (Aktöbe)"}
-            ss{"AQTT (Aktöbe)"}
         }
         "meta:Arabian"{
             ld{"Arabistan Yaz Saati"}
             lg{"Arabistan Saati"}
             ls{"Arabistan Standart Saati"}
-            sd{"ADT (Arabistan)"}
-            sg{"AT (Arabistan)"}
-            ss{"AST (Arabistan)"}
         }
         "meta:Argentina"{
             ld{"Arjantin Yaz Saati"}
@@ -502,39 +491,32 @@ tr{
         "meta:Armenia"{
             ld{"Ermenistan Yaz Saati"}
             ls{"Ermenistan Saati"}
-            sd{"AMST (Ermenistan)"}
-            ss{"AMT (Ermenistan)"}
         }
         "meta:Ashkhabad"{
             ld{"Aşkabat Yaz Saati"}
             ls{"Aşkabat Saati"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Atlantik Yaz Saati"}
             lg{"Atlantik Saati"}
             ls{"Atlantik Standart Saati"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Orta Avustralya Yaz Saati"}
             lg{"Orta Avustralya Saati"}
             ls{"Orta Avustralya Standart Saati"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"İçbatı Avustralya Yaz Saati"}
             lg{"İçbatı Avustralya Saati"}
             ls{"İçbatı Avustralya Standart Saati"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Doğu Avustralya Yaz Saati"}
             lg{"Doğu Avustralya Saati"}
             ls{"Doğu Avustralya Standart Saati"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Batı Avustralya Yaz Saati"}
             lg{"Batı Avustralya Saati"}
             ls{"Batı Avustralya Standart Saati"}
@@ -601,9 +583,6 @@ tr{
             ld{"Çin Yaz Saati"}
             lg{"Çin Saati"}
             ls{"Çin Standart Saati"}
-            sd{"CDT (Çin)"}
-            sg{"CT (Çin)"}
-            ss{"CST (Çin)"}
         }
         "meta:Choibalsan"{
             ld{"Çoybalsan Yaz Saati"}
@@ -628,9 +607,6 @@ tr{
             ld{"Küba Yaz Saati"}
             lg{"Küba Saati"}
             ls{"Küba Standart Saati"}
-            sd{"CDT (Küba)"}
-            sg{"CT (Küba)"}
-            ss{"CST (Küba)"}
         }
         "meta:Dacca"{
             ls{"Dakka Saati"}
@@ -659,17 +635,14 @@ tr{
             ls{"Ekvador Saati"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Orta Avrupa Yaz Saati"}
             ls{"Orta Avrupa Saati"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Doğu Avrupa Yaz Saati"}
             ls{"Doğu Avrupa Saati"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Batı Avrupa Yaz Saati"}
             ls{"Batı Avrupa Saati"}
         }
@@ -721,7 +694,6 @@ tr{
         }
         "meta:Guam"{
             ls{"Guam Standart Saati"}
-            ss{"GST (Guam)"}
         }
         "meta:Gulf"{
             lg{"Körfez Saati"}
@@ -747,7 +719,6 @@ tr{
             ls{"Hindistan Standart Saati"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"Hint Okyanusu Saati"}
         }
         "meta:Indochina"{
@@ -778,7 +749,6 @@ tr{
             ld{"İsrail Yaz Saati"}
             lg{"İsrail Saati"}
             ls{"İsrail Standart Saati"}
-            ss{"IST (İsrail)"}
         }
         "meta:Japan"{
             ld{"Japonya Yaz Saati"}
@@ -997,8 +967,6 @@ tr{
         "meta:Samarkand"{
             ld{"Semerkand Yaz Saati"}
             ls{"Semerkand Saati"}
-            sd{"SAMST (Semerkand)"}
-            ss{"SAMT (Semerkand)"}
         }
         "meta:Samoa"{
             ls{"Samoa Standart Saati"}
@@ -1018,7 +986,6 @@ tr{
         }
         "meta:South_Georgia"{
             ls{"Güney Georgia Saati"}
-            ss{"GST (Güney Georgia)"}
         }
         "meta:Suriname"{
             ls{"Surinam Saati"}
@@ -1037,9 +1004,6 @@ tr{
             ld{"Taipei Yaz Saati"}
             lg{"Taipei Saati"}
             ls{"Taipei Standart Saati"}
-            sd{"CDT (Taipei)"}
-            sg{"CT (Taipei)"}
-            ss{"CST (Taipei)"}
         }
         "meta:Tajikistan"{
             ls{"Tacikistan Saati"}

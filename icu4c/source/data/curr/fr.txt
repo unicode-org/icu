@@ -168,7 +168,7 @@ fr{
             "cruzeiro brésilien (1990–1993)",
         }
         BRL{
-            "BRL",
+            "BR$",
             "réal brésilien",
         }
         BRN{
@@ -456,11 +456,11 @@ fr{
             "livre israélienne",
         }
         ILS{
-            "ILS",
+            "₪",
             "nouveau shekel israélien",
         }
         INR{
-            "INR",
+            "₹",
             "roupie indienne",
         }
         IQD{
@@ -512,7 +512,7 @@ fr{
             "won nord-coréen",
         }
         KRW{
-            "KRW",
+            "₩",
             "won sud-coréen",
         }
         KWD{
@@ -644,7 +644,7 @@ fr{
             "kwacha malawite",
         }
         MXN{
-            "MXN",
+            "MX$",
             "peso mexicain",
         }
         MXP{
@@ -864,7 +864,7 @@ fr{
             "lilangeni swazi",
         }
         THB{
-            "THB",
+            "฿",
             "baht thaïlandais",
         }
         TJR{
@@ -908,7 +908,7 @@ fr{
             "dollar trinidadien",
         }
         TWD{
-            "TWD",
+            "NT$",
             "nouveau dollar taïwanais",
         }
         TZS{
@@ -968,7 +968,7 @@ fr{
             "bolivar fuerte vénézuélien",
         }
         VND{
-            "VND",
+            "₫",
             "dông vietnamien",
         }
         VUV{
@@ -980,7 +980,7 @@ fr{
             "tala samoan",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "franc CFA (BEAC)",
         }
         XAG{
@@ -1008,7 +1008,7 @@ fr{
             "unité de compte européenne (XBD)",
         }
         XCD{
-            "XCD",
+            "EC$",
             "dollar des Caraïbes orientales",
         }
         XDR{
@@ -1028,7 +1028,7 @@ fr{
             "franc UIC",
         }
         XOF{
-            "XOF",
+            "CFA",
             "franc CFA (BCEAO)",
         }
         XPD{
@@ -2206,5 +2206,5 @@ fr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

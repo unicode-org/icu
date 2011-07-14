@@ -146,7 +146,6 @@ et{
         enm{"keskinglise"}
         eo{"esperanto"}
         es{"hispaania"}
-        es_419{"hispaania (Ladina-Ameerika)"}
         es_ES{"hispaania (Ibeeria)"}
         et{"eesti"}
         eu{"baski"}
@@ -169,7 +168,6 @@ et{
         fur{"friuuli"}
         fy{"läänefriisi"}
         ga{"iiri"}
-        gaa{"gaa"}
         gay{"gajo"}
         gba{"gbaja"}
         gd{"gaeli"}
@@ -731,7 +729,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}

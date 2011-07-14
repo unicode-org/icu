@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžana"}
@@ -1017,10 +1017,6 @@ lv{
         "Pacific:Wallis"{
             ec{"Volisa"}
         }
-        "meta:Acre"{
-            sd{"ACST (Akri)"}
-            ss{"ACT (Akri)"}
-        }
         "meta:Afghanistan"{
             ls{"Afganistānas laiks"}
         }
@@ -1042,9 +1038,6 @@ lv{
             ld{"Aļaskas vasaras laiks"}
             lg{"Aļaskas laiks"}
             ls{"Aļaskas ziemas laiks"}
-        }
-        "meta:Alaska_Hawaii"{
-            sg{"AHT"}
         }
         "meta:Amazon"{
             ld{"Amazones vasaras laiks"}
@@ -1076,21 +1069,10 @@ lv{
             lg{"Anadiras laiks"}
             ls{"Anadiras ziemas laiks"}
         }
-        "meta:Aqtau"{
-            sd{"AQTST (Aktau)"}
-            ss{"AQTT (Aktau)"}
-        }
-        "meta:Aqtobe"{
-            sd{"AQTST (Aktebe)"}
-            ss{"AQTT (Aktebe)"}
-        }
         "meta:Arabian"{
             ld{"Arābu vasaras laiks"}
             lg{"Arābu laiks"}
             ls{"Arābu ziemas laiks"}
-            sd{"ADT (Arābija)"}
-            sg{"AT (Arābija)"}
-            ss{"AST (Arābija)"}
         }
         "meta:Argentina"{
             ld{"Argentīnas vasaras laiks"}
@@ -1105,39 +1087,32 @@ lv{
         "meta:Armenia"{
             ld{"Armēnijas vasaras laiks"}
             ls{"Armēnijas laiks"}
-            sd{"AMST (Armēnija)"}
-            ss{"AMT (Armēnija)"}
         }
         "meta:Ashkhabad"{
             ld{"Ašhabadas vasaras laiks"}
             ls{"Ašhabadas laiks"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Atlantijas vasaras laiks"}
             lg{"Atlantijas laiks"}
             ls{"Atlantijas ziemas laiks"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Austrālijas centrālais vasaras laiks"}
             lg{"Austrālijas centrālais laiks"}
             ls{"Austrālijas centrālais ziemas laiks"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Austrālijas centrālais rietumu vasaras laiks"}
             lg{"Austrālijas centrālais rietumu laiks"}
             ls{"Austrālijas centrālais rietumu ziemas laiks"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Austrālijas austrumu vasaras laiks"}
             lg{"Austrālijas austrumu laiks"}
             ls{"Austrālijas austrumu ziemas laiks"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Austrālijas rietumu vasaras laiks"}
             lg{"Rietumaustrālijas laiks"}
             ls{"Austrālijas rietumu ziemas laiks"}
@@ -1157,11 +1132,6 @@ lv{
         "meta:Bangladesh"{
             ld{"Bangladešas vasaras laiks"}
             ls{"Bangladešas laiks"}
-        }
-        "meta:Bering"{
-            sd{"BDT (Beringa)"}
-            sg{"BT (Beringa)"}
-            ss{"BST (Beringa)"}
         }
         "meta:Bhutan"{
             ls{"Butānas laiks"}
@@ -1186,9 +1156,6 @@ lv{
             ld{"Ķīnas vasaras laiks"}
             lg{"Ķīnas laiks"}
             ls{"Ķīnas ziemas laiks"}
-            sd{"CDT (Ķīna)"}
-            sg{"CT (Ķīna)"}
-            ss{"CST (Ķīna)"}
         }
         "meta:Choibalsan"{
             ld{"Čoibalsanas vasaras laiks"}
@@ -1229,7 +1196,6 @@ lv{
             ls{"Ekvadoras laiks"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Centrāleiropas vasaras laiks"}
             ls{"Centrāleiropas laiks"}
         }
@@ -1239,7 +1205,6 @@ lv{
             ls{"Austrumeiropas laiks"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Rietumeiropas vasaras laiks"}
             ls{"Rietumeiropas laiks"}
         }
@@ -1267,9 +1232,6 @@ lv{
         "meta:Galapagos"{
             ls{"Galapagu laiks"}
         }
-        "meta:Guam"{
-            ss{"GST (Guama)"}
-        }
         "meta:Guyana"{
             ls{"Gvijānas laiks"}
         }
@@ -1289,7 +1251,6 @@ lv{
             ls{"Indijas ziemas laiks"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"Indijas Okeāna laiks"}
         }
         "meta:Indonesia_Central"{
@@ -1314,7 +1275,6 @@ lv{
             ld{"Izraēlas vasaras laiks"}
             lg{"Izraēlas laiks"}
             ls{"Izraēlas ziemas laiks"}
-            ss{"IST (Izraēla)"}
         }
         "meta:Japan"{
             ld{"Japānas vasaras laiks"}
@@ -1459,8 +1419,6 @@ lv{
         "meta:Samarkand"{
             ld{"Samarkandas vasaras laiks"}
             ls{"Samarkandas laiks"}
-            sd{"SAMST (Samarkanda)"}
-            ss{"SAMT (Samarkanda)"}
         }
         "meta:Samoa"{
             ls{"Rietumsamoas ziemas laiks"}
@@ -1486,11 +1444,6 @@ lv{
         }
         "meta:Tahiti"{
             ls{"Taiti laiks"}
-        }
-        "meta:Taipei"{
-            sd{"CDT (Taipeja)"}
-            sg{"CT (Taipeja)"}
-            ss{"CST (Taipeja)"}
         }
         "meta:Tashkent"{
             ld{"Taškentas vasaras laiks"}

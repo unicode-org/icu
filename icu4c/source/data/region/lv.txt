@@ -42,7 +42,7 @@ lv{
         154{"Ziemeļeiropa"}
         155{"Rietumeiropa"}
         172{"Neatkarīgo Valstu Savienība"}
-        419{"Latīņamerika un Karību jūras reģions"}
+        419{"Latīņamerika"}
         AC{"Debesbraukšanas sala"}
         AD{"Andora"}
         AE{"Apvienotie Arābu Emirāti"}
@@ -300,5 +300,5 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms vai nederīgs reģions"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

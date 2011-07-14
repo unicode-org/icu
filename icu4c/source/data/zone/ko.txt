@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1224,8 +1224,6 @@ ko{
         "meta:Acre"{
             ld{"아크레 하계 표준시"}
             ls{"아크레 표준시"}
-            sd{"ACST (아크레)"}
-            ss{"ACT (아크레)"}
         }
         "meta:Africa_Central"{
             ls{"중앙아프리카 시간"}
@@ -1257,25 +1255,21 @@ ko{
             ls{"아마존 표준시"}
         }
         "meta:America_Central"{
-            cu:int{0}
             ld{"미 중부 하계 표준시"}
             lg{"중부 표준시"}
             ls{"중부 표준시"}
         }
         "meta:America_Eastern"{
-            cu:int{0}
             ld{"미 동부 하계 표준시"}
             lg{"동부 표준시"}
             ls{"동부 표준시"}
         }
         "meta:America_Mountain"{
-            cu:int{0}
             ld{"미 산지 하계 표준시"}
             lg{"산지 표준시"}
             ls{"산악 표준시"}
         }
         "meta:America_Pacific"{
-            cu:int{0}
             ld{"미 태평양 하계 표준시"}
             lg{"태평양 표준시"}
             ls{"태평양 표준시"}
@@ -1285,21 +1279,10 @@ ko{
             lg{"아나디리 표준시"}
             ls{"아나디리 표준시"}
         }
-        "meta:Aqtau"{
-            sd{"AQTST (아크타우)"}
-            ss{"AQTT (아크타우)"}
-        }
-        "meta:Aqtobe"{
-            sd{"AQTST (악퇴베)"}
-            ss{"AQTT (악퇴베)"}
-        }
         "meta:Arabian"{
             ld{"아라비아 하계 표준시"}
             lg{"아라비아 시간"}
             ls{"아라비아 표준시"}
-            sd{"ADT(아라비아)"}
-            sg{"AT(아라비아)"}
-            ss{"AST(아라비아)"}
         }
         "meta:Argentina"{
             ld{"아르헨티나 하계 표준시"}
@@ -1314,8 +1297,6 @@ ko{
         "meta:Armenia"{
             ld{"아르메니아 하계 표준시"}
             ls{"아르메니아 표준시"}
-            sd{"AMST(아르메니아)"}
-            ss{"AMT(아르메니아)"}
         }
         "meta:Atlantic"{
             ld{"미 대서양 하계 표준시"}
@@ -1354,17 +1335,11 @@ ko{
             ld{"방글라데시 하계 표준시"}
             ls{"방글라데시 표준시"}
         }
-        "meta:Bering"{
-            sd{"BDT (베링)"}
-            sg{"BT (베링)"}
-            ss{"BST (베링)"}
-        }
         "meta:Bhutan"{
             ls{"부탄 표준시"}
         }
         "meta:Bolivia"{
             ls{"볼리비아 표준시"}
-            ss{"BOT"}
         }
         "meta:Brasilia"{
             ld{"브라질리아 하계 표준시"}
@@ -1394,9 +1369,6 @@ ko{
             ld{"중국 하계 표준시"}
             lg{"중국 시간"}
             ls{"중국 표준시"}
-            sd{"CDT (중국)"}
-            sg{"CT (중국)"}
-            ss{"CST(중국)"}
         }
         "meta:Choibalsan"{
             ld{"초이발산 하계 표준시"}
@@ -1421,9 +1393,6 @@ ko{
             ld{"쿠바 하계 표준시"}
             lg{"쿠바 시간"}
             ls{"쿠바 표준시"}
-            sd{"CDT(쿠바)"}
-            sg{"CT (쿠바)"}
-            ss{"CST(쿠바)"}
         }
         "meta:Davis"{
             ls{"데이비스 표준시"}
@@ -1489,9 +1458,6 @@ ko{
             ld{"그린란드 서부 하계 표준시"}
             ls{"그린란드 서부 표준시"}
         }
-        "meta:Guam"{
-            ss{"GST (괌)"}
-        }
         "meta:Hawaii_Aleutian"{
             lg{"하와이 알류샨 표준시"}
         }
@@ -1506,7 +1472,6 @@ ko{
         }
         "meta:India"{
             ls{"인도 표준시"}
-            ss{"IST(인도)"}
         }
         "meta:Indian_Ocean"{
             ls{"영국령 인도양 식민지 표준시"}
@@ -1539,7 +1504,6 @@ ko{
             ld{"이스라엘 하계 표준시"}
             lg{"이스라엘 시간"}
             ls{"이스라엘 표준시"}
-            ss{"IST(이스라엘)"}
         }
         "meta:Japan"{
             ld{"일본 하계 표준시"}
@@ -1560,7 +1524,6 @@ ko{
             ls{"서부 카자흐스탄 표준시"}
         }
         "meta:Korea"{
-            cu:int{1}
             ld{"한국 하계 표준시"}
             lg{"한국 시간"}
             ls{"한국 표준시"}
@@ -1677,10 +1640,6 @@ ko{
             lg{"사마라 표준시"}
             ls{"사마라 표준시"}
         }
-        "meta:Samarkand"{
-            sd{"SAMST (사마르칸트)"}
-            ss{"SAMT (사마르칸트)"}
-        }
         "meta:Seychelles"{
             ls{"세이셸 표준시"}
         }
@@ -1689,7 +1648,6 @@ ko{
         }
         "meta:South_Georgia"{
             ls{"사우스 조지아 표준시"}
-            ss{"GST (사우스 조지아)"}
         }
         "meta:Suriname"{
             ls{"수리남 표준시"}
@@ -1701,9 +1659,6 @@ ko{
             ld{"타이베이 하계 표준시"}
             lg{"타이베이 시간"}
             ls{"타이베이 표준시"}
-            sd{"CDT(대만)"}
-            sg{"CT(대만)"}
-            ss{"CST(대만)"}
         }
         "meta:Tajikistan"{
             ls{"타지키스탄 표준시"}

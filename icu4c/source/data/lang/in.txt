@@ -3,13 +3,9 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/in.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/in.xml
- */
 in{
     "%%ALIAS"{"id"}
-    Version{"2.0.41.23"}
 }

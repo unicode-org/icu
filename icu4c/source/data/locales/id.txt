@@ -28,7 +28,7 @@ id{
             }
         }
     }
-    Version{"2.0.58.60"}
+    Version{"2.0.59.53"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -49,8 +49,8 @@ id{
             availableFormats{
                 Ed{"E, d"}
                 MEd{"E, d-M"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d-M"}
@@ -85,8 +85,8 @@ id{
                 EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d/M"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
@@ -144,11 +144,9 @@ id{
                     relative{
                         "-1"{"Kemarin"}
                         "-2"{"Kemarin lusa"}
-                        "-3"{"Tiga hari yang lalu"}
                         "0"{"Hari Ini"}
                         "1"{"Besok"}
                         "2"{"Lusa"}
-                        "3"{"Tiga hari dari sekarang"}
                     }
                 }
                 dayperiod{
@@ -355,8 +353,8 @@ id{
                 EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d-M"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d-M"}
@@ -453,8 +451,8 @@ id{
                 EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d-M"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d-M"}
@@ -485,8 +483,8 @@ id{
                 EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d-M"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"E d MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d-M"}

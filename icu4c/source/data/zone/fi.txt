@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    Version{"2.0.58.59"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1157,20 +1157,16 @@ fi{
             ls{"Acren aika"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Keski-Afrikan aika"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Itä-Afrikan aika"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Etelä-Afrikan aika"}
             ls{"Etelä-Afrikan normaaliaika"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Länsi-Afrikan kesäaika"}
             ls{"Länsi-Afrikan aika"}
         }
@@ -1190,25 +1186,21 @@ fi{
             ls{"Amazonin aika"}
         }
         "meta:America_Central"{
-            cu:int{0}
             ld{"Yhdysvaltain keskinen kesäaika"}
             lg{"Yhdysvaltain keskinen aika"}
             ls{"Yhdysvaltain keskinen normaaliaika"}
         }
         "meta:America_Eastern"{
-            cu:int{0}
             ld{"Yhdysvaltain itäinen kesäaika"}
             lg{"Yhdysvaltain itäinen aika"}
             ls{"Yhdysvaltain itäinen normaaliaika"}
         }
         "meta:America_Mountain"{
-            cu:int{0}
             ld{"Kalliovuorten kesäaika"}
             lg{"Kalliovuorten aika"}
             ls{"Kalliovuorten normaaliaika"}
         }
         "meta:America_Pacific"{
-            cu:int{0}
             ld{"Yhdysvaltain Tyynenmeren kesäaika"}
             lg{"Yhdysvaltain Tyynenmeren aika"}
             ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
@@ -1241,31 +1233,26 @@ fi{
             ls{"Ašgabatin aika"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Kanadan Atlantin kesäaika"}
             lg{"Kanadan Atlantin aika"}
             ls{"Kanadan Atlantin normaaliaika"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Keski-Australian kesäaika"}
             lg{"Keski-Australian aika"}
             ls{"Keski-Australian normaaliaika"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Läntisen Keski-Australian kesäaika"}
             lg{"Läntisen Keski-Australian aika"}
             ls{"Läntisen Keski-Australian normaaliaika"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Itä-Australian kesäaika"}
             lg{"Itä-Australian aika"}
             ls{"Itä-Australian normaaliaika"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Länsi-Australian kesäaika"}
             lg{"Länsi-Australian aika"}
             ls{"Länsi-Australian normaaliaika"}
@@ -1319,9 +1306,6 @@ fi{
             ld{"Kiinan kesäaika"}
             lg{"Kiinan aika"}
             ls{"Kiinan normaaliaika"}
-            sd{"CDT (Kiina)"}
-            sg{"CT (Kiina)"}
-            ss{"CST (Kiina)"}
         }
         "meta:Choibalsan"{
             ld{"Tšoibalsan kesäaika"}
@@ -1356,17 +1340,14 @@ fi{
             ls{"Ecuadorin aika"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Keski-Euroopan kesäaika"}
             ls{"Keski-Euroopan normaaliaika"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Itä-Euroopan kesäaika"}
             ls{"Itä-Euroopan normaaliaika"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Länsi-Euroopan kesäaika"}
             ls{"Länsi-Euroopan normaaliaika"}
         }
@@ -1425,7 +1406,6 @@ fi{
             ls{"Intian normaaliaika"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"Intian valtameren aika"}
         }
         "meta:Indochina"{
@@ -1451,7 +1431,6 @@ fi{
         "meta:Israel"{
             ld{"Israelin kesäaika"}
             ls{"Israelin normaaliaika"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Japanin kesäaika"}

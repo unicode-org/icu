@@ -748,7 +748,7 @@ th{
         SCOTLAND{"ภาษาอังกฤษมาตราฐานสก๊อต"}
         VALENCIA{"วาเลนเซีย"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.53"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

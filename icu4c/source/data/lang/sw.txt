@@ -286,7 +286,7 @@ sw{
             tibt{"Nambari za Kitibeti"}
         }
     }
-    Version{"2.0.58.75"}
+    Version{"2.0.59.53"}
     localeDisplayPattern{
         separator{","}
     }

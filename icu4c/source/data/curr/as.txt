@@ -10,11 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/as.xml
  */
 as{
-    Currencies{
-        INR{
-            "টকা",
-            "INR",
-        }
-    }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.63"}
 }

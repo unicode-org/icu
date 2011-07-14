@@ -724,53 +724,35 @@ zh{
         AREVELA{"东亚美尼亚语"}
         AREVMDA{"西亚美尼亚语"}
         BAKU1926{"统一土耳其拉丁字母"}
-        BAUDDHA{"BAUDDHA"}
-        BISCAYAN{"BISCAYAN"}
         BISKE{"圣乔治/比拉方言"}
         BOONT{"布恩特林方言"}
         FONIPA{"国际音标"}
         FONUPA{"UPA 音标"}
-        FONXSAMP{"FONXSAMP"}
         HEPBURN{"赫伯恩罗马字"}
-        HOGNORSK{"HOGNORSK"}
-        ITIHASA{"ITIHASA"}
-        JAUER{"JAUER"}
-        JYUTPING{"JYUTPING"}
         KKCOR{"常用拼字"}
-        LAUKIKA{"LAUKIKA"}
         LIPAW{"雷西亚 Lipovaz 方言"}
-        LUNA1918{"LUNA1918"}
         MONOTON{"单音字母"}
         NDYUKA{"Ndyuka 方言"}
         NEDIS{"Natisone 方言"}
         NJIVA{"Gniva/Njiva 方言"}
         OSOJS{"Oseacco/Osojane 方言"}
         PAMAKA{"Pamaka 方言"}
-        PETR1708{"PETR1708"}
         PINYIN{"拼音"}
         POLYTON{"多音"}
         POSIX{"电脑"}
-        PUTER{"PUTER"}
         REVISED{"已修订的拼字学"}
         ROZAJ{"雷西亚文"}
-        RUMGR{"RUMGR"}
         SAAHO{"萨霍"}
         SCOTLAND{"苏格兰标准英文"}
         SCOUSE{"利物浦方言"}
         SOLBA{"Stolvizza/Solbica 方言"}
-        SURMIRAN{"SURMIRAN"}
-        SURSILV{"SURSILV"}
-        SUTSILV{"SUTSILV"}
         TARASK{"Taraskievica 拼字"}
         UCCOR{"统一的拼字"}
         UCRCOR{"统一和修订的拼字"}
-        ULSTER{"ULSTER"}
-        VAIDIKA{"VAIDIKA"}
         VALENCIA{"瓦伦西亚文"}
-        VALLADER{"VALLADER"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.34"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

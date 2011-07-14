@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.58.6"}
+    Version{"2.0.59.91"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -74,6 +74,9 @@ en{
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
+            sd{"AKDT"}
+            sg{"AKT"}
+            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Daylight Time"}
@@ -128,9 +131,6 @@ en{
             ld{"Arabian Daylight Time"}
             lg{"Arabian Time"}
             ls{"Arabian Standard Time"}
-            sd{"ADT (Arabian)"}
-            sg{"AT (Arabian)"}
-            ss{"AST (Arabian)"}
         }
         "meta:Argentina"{
             ld{"Argentina Summer Time"}
@@ -142,8 +142,6 @@ en{
         "meta:Armenia"{
             ld{"Armenia Summer Time"}
             ls{"Armenia Time"}
-            sd{"AMST (Armenia)"}
-            ss{"AMT (Armenia)"}
         }
         "meta:Ashkhabad"{
             ld{"Ashkhabad Summer Time"}
@@ -159,24 +157,40 @@ en{
             ss{"AST"}
         }
         "meta:Australia_Central"{
+            cu:int{0}
             ld{"Australian Central Daylight Time"}
             lg{"Central Australia Time"}
             ls{"Australian Central Standard Time"}
+            sd{"ACDT"}
+            sg{"ACT"}
+            ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
+            cu:int{0}
             ld{"Australian Central Western Daylight Time"}
             lg{"Australian Central Western Time"}
             ls{"Australian Central Western Standard Time"}
+            sd{"ACWDT"}
+            sg{"ACWT"}
+            ss{"ACWST"}
         }
         "meta:Australia_Eastern"{
+            cu:int{0}
             ld{"Australian Eastern Daylight Time"}
             lg{"Eastern Australia Time"}
             ls{"Australian Eastern Standard Time"}
+            sd{"AEDT"}
+            sg{"AET"}
+            ss{"AEST"}
         }
         "meta:Australia_Western"{
+            cu:int{0}
             ld{"Australian Western Daylight Time"}
             lg{"Western Australia Time"}
             ls{"Australian Western Standard Time"}
+            sd{"AWDT"}
+            sg{"AWT"}
+            ss{"AWST"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaijan Summer Time"}
@@ -242,9 +256,6 @@ en{
             ld{"China Daylight Time"}
             lg{"China Time"}
             ls{"China Standard Time"}
-            sd{"CDT (China)"}
-            sg{"CT (China)"}
-            ss{"CST (China)"}
         }
         "meta:Choibalsan"{
             ld{"Choibalsan Summer Time"}
@@ -268,9 +279,6 @@ en{
             ld{"Cuba Daylight Time"}
             lg{"Cuba Time"}
             ls{"Cuba Standard Time"}
-            sd{"CDT (Cuba)"}
-            sg{"CT (Cuba)"}
-            ss{"CST (Cuba)"}
         }
         "meta:Dacca"{
             ls{"Dacca Time"}
@@ -359,7 +367,6 @@ en{
         }
         "meta:Guam"{
             ls{"Guam Standard Time"}
-            ss{"GST (Guam)"}
         }
         "meta:Gulf"{
             lg{"Gulf Time"}
@@ -371,6 +378,7 @@ en{
         "meta:Hawaii_Aleutian"{
             cu:int{1}
             ls{"Hawaii-Aleutian Standard Time"}
+            ss{"HST"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Summer Time"}
@@ -410,7 +418,6 @@ en{
             ld{"Israel Daylight Time"}
             lg{"Israel Time"}
             ls{"Israel Standard Time"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Japan Daylight Time"}
@@ -471,9 +478,13 @@ en{
             ls{"Long-Shu Time"}
         }
         "meta:Lord_Howe"{
+            cu:int{0}
             ld{"Lord Howe Daylight Time"}
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
+            sd{"LHDT"}
+            sg{"LHT"}
+            ss{"LHST"}
         }
         "meta:Macau"{
             ld{"Macau Summer Time"}
@@ -531,9 +542,13 @@ en{
             ls{"New Caledonia Time"}
         }
         "meta:New_Zealand"{
+            cu:int{0}
             ld{"New Zealand Daylight Time"}
             lg{"New Zealand Time"}
             ls{"New Zealand Standard Time"}
+            sd{"NZDT"}
+            sg{"NZT"}
+            ss{"NZST"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Daylight Time"}
@@ -637,7 +652,6 @@ en{
         }
         "meta:South_Georgia"{
             ls{"South Georgia Time"}
-            ss{"GST (S. Georgia)"}
         }
         "meta:Suriname"{
             ls{"Suriname Time"}
@@ -656,9 +670,6 @@ en{
             ld{"Taipei Daylight Time"}
             lg{"Taipei Time"}
             ls{"Taipei Standard Time"}
-            sd{"CDT (Taipei)"}
-            sg{"CT (Taipei)"}
-            ss{"CST (Taipei)"}
         }
         "meta:Tajikistan"{
             ls{"Tajikistan Time"}

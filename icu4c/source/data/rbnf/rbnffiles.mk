@@ -36,20 +36,20 @@ RBNF_ALIAS_SOURCE = $(RBNF_SYNTHETIC_ALIAS)
 # Ordinary resources
 RBNF_SOURCE = af.txt am.txt ar.txt az.txt\
  be.txt bg.txt bs.txt ca.txt cs.txt\
- cy.txt da.txt de.txt el.txt en.txt\
- eo.txt es.txt es_419.txt es_AR.txt es_BO.txt\
- es_CL.txt es_CO.txt es_CR.txt es_DO.txt es_EC.txt\
- es_GT.txt es_HN.txt es_MX.txt es_NI.txt es_PA.txt\
- es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
- es_UY.txt es_VE.txt et.txt fa.txt fa_AF.txt\
- fi.txt fil.txt fo.txt fr.txt fr_BE.txt\
- fr_CH.txt ga.txt he.txt hi.txt hr.txt\
- hu.txt hy.txt id.txt is.txt it.txt\
- ja.txt ka.txt kl.txt ko.txt lt.txt\
- lv.txt mk.txt ms.txt mt.txt nb.txt\
- nl.txt nn.txt pl.txt pt.txt pt_AO.txt\
- pt_GW.txt pt_MZ.txt pt_PT.txt pt_ST.txt ro.txt\
- ru.txt sk.txt sl.txt sq.txt sr.txt\
- sr_Latn.txt sv.txt ta.txt th.txt tr.txt\
- uk.txt vi.txt zh.txt zh_Hant.txt
+ cy.txt da.txt de.txt ee.txt el.txt\
+ en.txt eo.txt es.txt es_419.txt es_AR.txt\
+ es_BO.txt es_CL.txt es_CO.txt es_CR.txt es_DO.txt\
+ es_EC.txt es_GT.txt es_HN.txt es_MX.txt es_NI.txt\
+ es_PA.txt es_PE.txt es_PR.txt es_PY.txt es_SV.txt\
+ es_US.txt es_UY.txt es_VE.txt et.txt fa.txt\
+ fa_AF.txt fi.txt fil.txt fo.txt fr.txt\
+ fr_BE.txt fr_CH.txt ga.txt he.txt hi.txt\
+ hr.txt hu.txt hy.txt id.txt is.txt\
+ it.txt ja.txt ka.txt kl.txt ko.txt\
+ lt.txt lv.txt mk.txt ms.txt mt.txt\
+ nb.txt nl.txt nn.txt pl.txt pt.txt\
+ pt_AO.txt pt_GW.txt pt_MZ.txt pt_PT.txt pt_ST.txt\
+ ro.txt ru.txt sk.txt sl.txt sq.txt\
+ sr.txt sr_Latn.txt sv.txt ta.txt th.txt\
+ tr.txt uk.txt vi.txt zh.txt zh_Hant.txt
 

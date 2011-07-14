@@ -665,68 +665,25 @@ ca{
         calendar{
             buddhist{"calendari budista"}
             chinese{"calendari xinès"}
-            coptic{"coptic"}
-            ethiopic{"ethiopic"}
-            ethiopic-amete-alem{"ethiopic-amete-alem"}
             gregorian{"calendari gregorià"}
             hebrew{"calendari hebreu"}
             indian{"calendari hindú"}
             islamic{"calendari musulmà"}
             islamic-civil{"calendari civil islàmic"}
             japanese{"calendari japonès"}
-            persian{"persian"}
             roc{"calendari de la República de Xina"}
         }
         collation{
             big5han{"ordre del xinès tradicional - Big5"}
-            dictionary{"dictionary"}
             direct{"ordre directe"}
-            ducet{"ducet"}
             gb2312han{"ordre del xinès simplificat - GB2312"}
             phonebook{"ordre de la guia telefònica"}
             pinyin{"ordre pinyin"}
-            reformed{"reformed"}
-            search{"search"}
             stroke{"ordre dels traços"}
             traditional{"ordre tradicional"}
-            unihan{"unihan"}
         }
         numbers{
-            arab{"arab"}
-            arabext{"arabext"}
-            armn{"armn"}
-            armnlow{"armnlow"}
-            beng{"beng"}
-            deva{"deva"}
-            ethi{"ethi"}
-            fullwide{"fullwide"}
-            geor{"geor"}
-            grek{"grek"}
-            greklow{"greklow"}
-            gujr{"gujr"}
-            guru{"guru"}
-            hanidec{"hanidec"}
-            hans{"hans"}
-            hansfin{"hansfin"}
-            hant{"hant"}
-            hantfin{"hantfin"}
-            hebr{"hebr"}
-            jpan{"jpan"}
-            jpanfin{"jpanfin"}
-            khmr{"khmr"}
-            knda{"knda"}
-            laoo{"laoo"}
             latn{"Nombres aràbics"}
-            mlym{"mlym"}
-            mong{"mong"}
-            mymr{"mymr"}
-            orya{"orya"}
-            roman{"roman"}
-            romanlow{"romanlow"}
-            taml{"taml"}
-            telu{"telu"}
-            thai{"thai"}
-            tibt{"tibt"}
         }
     }
     Variants{
@@ -760,7 +717,7 @@ ca{
         VALENCIA{"valencià"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

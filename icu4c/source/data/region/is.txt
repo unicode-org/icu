@@ -42,7 +42,7 @@ is{
         154{"Norður-Evrópa"}
         155{"Vestur-Evrópa"}
         172{"Samveldi sjálfstæðra ríkja"}
-        419{"Latín-Ameríka og Karíbahaf"}
+        419{"Latín-Ameríka"}
         830{"Ermasundseyjar"}
         AC{"Ascension-eyja"}
         AD{"Andorra"}
@@ -301,5 +301,5 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt eða ógilt svæði"}
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

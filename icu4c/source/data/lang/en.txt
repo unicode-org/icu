@@ -522,7 +522,7 @@ en{
         tli{"Tlingit"}
         tmh{"Tamashek"}
         tn{"Tswana"}
-        to{"Tonga"}
+        to{"Tongan"}
         tog{"Nyasa Tonga"}
         tpi{"Tok Pisin"}
         tr{"Turkish"}
@@ -752,6 +752,7 @@ en{
             pinyin{"Pinyin Sort Order"}
             reformed{"Reformed Sort Order"}
             search{"General-Purpose Search"}
+            searchjl{"Search By Hangul Initial Consonant"}
             stroke{"Stroke Sort Order"}
             traditional{"Traditional Sort Order"}
             unihan{"Radical-Stroke Sort Order"}
@@ -836,7 +837,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.91"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

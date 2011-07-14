@@ -39,7 +39,7 @@ pl{
             }
         }
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -78,14 +78,14 @@ pl{
                 y{"y G"}
                 yM{"MM.yyyy G"}
                 yMEd{"EEE, d.MM.yyyy G"}
-                yMMM{"MMM y G"}
+                yMMM{"LLL y G"}
                 yMMMEd{"EEE, d MMM y G"}
                 yMMMM{"LLLL y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d.MM.yyyy G"}
                 yQ{"G y Q"}
                 yQQQ{"G y QQQ"}
-                yyMMM{"MMM y G"}
+                yyMMM{"LLL y G"}
                 yyQ{"Q y G"}
                 yyyyMM{"MM.yyyy G"}
                 yyyyMMMM{"LLLL y G"}
@@ -331,14 +331,14 @@ pl{
                 y{"y"}
                 yM{"MM.yyyy"}
                 yMEd{"EEE, d.MM.yyyy"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"EEE, d MMM y"}
                 yMMMM{"LLLL y"}
                 yMMMd{"d MMM y"}
                 yMd{"d.MM.yyyy"}
                 yQ{"yyyy Q"}
                 yQQQ{"y QQQ"}
-                yyMMM{"MMM yy"}
+                yyMMM{"LLL yy"}
                 yyQ{"Q yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"LLLL y"}
@@ -419,11 +419,9 @@ pl{
                     relative{
                         "-1"{"Wczoraj"}
                         "-2"{"Przedwczoraj"}
-                        "-3"{"Trzy dni temu"}
                         "0"{"Dzisiaj"}
                         "1"{"Jutro"}
                         "2"{"Pojutrze"}
-                        "3"{"Za trzy dni"}
                     }
                 }
                 dayperiod{
@@ -872,12 +870,12 @@ pl{
                 y{"y"}
                 yM{"MM.yyyy"}
                 yMEd{"EEE, d.MM.yyyy"}
-                yMMM{"MMM y"}
+                yMMM{"LLL y"}
                 yMMMEd{"EEE, d MMM y"}
                 yMMMM{"LLLL y"}
                 yQ{"yyyy Q"}
                 yQQQ{"y QQQ"}
-                yyMMM{"MMM yy G"}
+                yyMMM{"LLL yy G"}
                 yyQ{"Q y G"}
                 yyyy{"y G"}
                 yyyyMEd{"EEE, dd.MM.yyyy G"}
@@ -1002,7 +1000,7 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yyMMM{"MMM yy G"}
+                yyMMM{"LLL yy G"}
                 yyQ{"Q y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}
@@ -1131,7 +1129,7 @@ pl{
                 ms{"mm:ss"}
                 y{"y G"}
                 yyMM{"MM/y G"}
-                yyMMM{"MMM y G"}
+                yyMMM{"LLL y G"}
                 yyQ{"Q y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}

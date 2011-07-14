@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kk.xml
  */
 kk{
-    Version{"2.0.58.36"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "Asia:Almaty"{
             ec{"Алматы"}
@@ -44,11 +44,6 @@ kk{
             ld{"Батыс Африка жаздық уақыты"}
             ls{"Батыс Африка уақыты"}
         }
-        "meta:Arabian"{
-            sd{"ADT (Араб)"}
-            sg{"AT (Араб)"}
-            ss{"AST (Араб)"}
-        }
         "meta:Atlantic"{
             ld{"Атлантикалық жаздық уақыт"}
             lg{"Атлантика уақыты"}
@@ -74,11 +69,6 @@ kk{
             lg{"Батыс Австралиялық уақыт"}
             ls{"Батыс Австралиялық стандарт уақыты"}
         }
-        "meta:China"{
-            sd{"CDT (Қытай)"}
-            sg{"CT (Қытай)"}
-            ss{"CST (Қытай)"}
-        }
         "meta:Europe_Central"{
             ld{"Орталық Еуропа жаздық уақыты"}
             ls{"Орталық Еуропа уақыты"}
@@ -91,9 +81,6 @@ kk{
         "meta:Europe_Western"{
             ld{"Батыс Еуропа жаздық уақыты"}
             ls{"Батыс Еуропа уақыты"}
-        }
-        "meta:Israel"{
-            ss{"IST (Израиль)"}
         }
         fallbackRegionFormat{"{1} Уақыт ({0})"}
         regionFormat{"{0} уақыт"}

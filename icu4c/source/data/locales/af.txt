@@ -38,7 +38,7 @@ af{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -134,11 +134,9 @@ af{
                     relative{
                         "-1"{"Gister"}
                         "-2"{"Die dag voor gister"}
-                        "-3"{"Drie dae gelede"}
                         "0"{"Vandag"}
                         "1"{"Môre"}
                         "2"{"Die dag na môre"}
-                        "3"{"Drie dae van nou af"}
                     }
                 }
                 dayperiod{

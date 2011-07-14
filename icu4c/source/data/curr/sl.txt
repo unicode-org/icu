@@ -1035,10 +1035,6 @@ sl{
             "XPT",
             "platina",
         }
-        XRE{
-            "XRE",
-            "XRE",
-        }
         XTS{
             "XTS",
             "koda za potrebe testiranja",
@@ -1096,25 +1092,5 @@ sl{
             "zimbabvejski dolar (2009)",
         }
     }
-    CurrencyPlurals{
-        CUC{
-            few{"CUC"}
-            one{"CUC"}
-            other{"CUC"}
-            two{"CUC"}
-        }
-        GNF{
-            few{"GNF"}
-            one{"GNF"}
-            other{"GNF"}
-            two{"GNF"}
-        }
-        TMT{
-            few{"TMT"}
-            one{"TMT"}
-            other{"TMT"}
-            two{"TMT"}
-        }
-    }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
 }

@@ -310,7 +310,6 @@ hr{
         min{"minangkabau"}
         mis{"ostali jezici"}
         mk{"makedonski"}
-        mkh{"mkh"}
         ml{"malajalamski"}
         mn{"mongolski"}
         mnc{"mandžurski"}
@@ -761,7 +760,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.59.68"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

@@ -148,7 +148,6 @@ pl{
         enm{"średnioangielski"}
         eo{"esperanto"}
         es{"hiszpański"}
-        es_419{"hiszpański (Ameryka Łacińska)"}
         et{"estoński"}
         eu{"baskijski"}
         ewo{"ewondo"}
@@ -451,7 +450,6 @@ pl{
         syc{"syriacki"}
         syr{"syryjski"}
         ta{"tamilski"}
-        tai{"tai"}
         te{"telugu"}
         tem{"temne"}
         ter{"tereno"}
@@ -759,7 +757,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.58.59"}
+    Version{"2.0.59.92"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

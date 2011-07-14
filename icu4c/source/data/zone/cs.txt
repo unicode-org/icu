@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/cs.xml
  */
 cs{
-    Version{"2.0.58.83"}
+    Version{"2.0.59.84"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -256,7 +256,7 @@ cs{
             ec{"Chihuahua"}
         }
         "America:Cordoba"{
-            ec{"Kordoba"}
+            ec{"Córdoba"}
         }
         "America:Costa_Rica"{
             ec{"Kostarika"}
@@ -487,7 +487,7 @@ cs{
             ec{"Shiprock"}
         }
         "America:St_Johns"{
-            ec{"St. Johns"}
+            ec{"St. John's"}
         }
         "America:St_Kitts"{
             ec{"Svatý Kryštof"}
@@ -514,7 +514,7 @@ cs{
             ec{"Thunder Bay"}
         }
         "America:Tijuana"{
-            ec{"Tichuana"}
+            ec{"Tijuana"}
         }
         "America:Toronto"{
             ec{"Toronto"}
@@ -544,7 +544,7 @@ cs{
             ec{"Davis"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont D'Urville"}
+            ec{"Dumont d'Urville"}
         }
         "Antarctica:Mawson"{
             ec{"Mawson"}
@@ -928,7 +928,7 @@ cs{
             ec{"Londýn"}
         }
         "Europe:Luxembourg"{
-            ec{"Lucembursko"}
+            ec{"Lucemburk"}
         }
         "Europe:Malta"{
             ec{"Malta"}
@@ -1236,8 +1236,6 @@ cs{
         "meta:Europe_Central"{
             ld{"Středoevropský letní čas"}
             ls{"Středoevropský standardní čas"}
-            sd{"SELČ"}
-            ss{"SEČ"}
         }
         "meta:Europe_Eastern"{
             ld{"Východoevropský letní čas"}

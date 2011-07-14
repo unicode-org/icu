@@ -787,7 +787,6 @@ sv{
         PETR1708{"1708 års stavning"}
         PINYIN{"pinyin"}
         POLYTON{"polytonisk stavning"}
-        POSIX{"POSIX"}
         PUTER{"puter-dialekt"}
         REVISED{"reformerad stavning"}
         ROZAJ{"resisk dialekt"}
@@ -808,7 +807,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.58.88"}
+    Version{"2.0.59.81"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

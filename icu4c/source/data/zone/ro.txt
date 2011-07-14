@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.53"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1145,20 +1145,16 @@ ro{
             ls{"Ora Afganistanului"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Ora Africii Centrale"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Ora Africii Orientale"}
         }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Ora Africii Meridionale"}
             ls{"Ora Standard a Africii Meridionale"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Ora de vară a Africii Occidentale"}
             ls{"Ora Africii Occidentale"}
         }
@@ -1206,9 +1202,6 @@ ro{
             ld{"Ora de vară arabă"}
             lg{"Ora arabă"}
             ls{"Ora standard arabă"}
-            sd{"ADT (arabă)"}
-            sg{"AT (arabă)"}
-            ss{"AST (arabă)"}
         }
         "meta:Argentina"{
             ld{"Ora de vară a Argentinei"}
@@ -1223,34 +1216,28 @@ ro{
         "meta:Armenia"{
             ld{"Ora de vară a Armeniei"}
             ls{"Ora Armeniei"}
-            ss{"AMT (Armenia)"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Ora de vară în zona Atlantic"}
             lg{"Ora zonei Atlantic"}
             ls{"Ora standard în zona Atlantic"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Centrale"}
             lg{"Ora Australiei Centrale"}
             ls{"Ora standard a Australiei Centrale"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Central Occidentale"}
             lg{"Ora Australiei Central Occidentale"}
             ls{"Ora standard a Australiei Central Occidentale"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Orientale"}
             lg{"Ora Australiei Orientale"}
             ls{"Ora standard a Australiei Orientale"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Occidentale"}
             lg{"Ora Australiei Occidentale"}
             ls{"Ora standard a Australiei Occidentale"}
@@ -1290,9 +1277,6 @@ ro{
             ld{"Ora de vară a Chinei"}
             lg{"Ora Chinei"}
             ls{"Ora standard a Chinei"}
-            sd{"CDT (China)"}
-            sg{"CT (China)"}
-            ss{"CST (China)"}
         }
         "meta:Choibalsan"{
             ld{"Ora de vară din Choibalsan"}
@@ -1321,25 +1305,19 @@ ro{
             ls{"Ora Ecuadorului"}
         }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Ora de vară a Europei Centrale"}
             ls{"Ora Europei Centrale"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Ora de vară a Europei de Est"}
             ls{"Ora Europei de Est"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Ora de vară a Europei Occidentale"}
             ls{"Ora Europei Occidentale"}
         }
         "meta:French_Guiana"{
             ls{"Ora Guianei Franceze"}
-        }
-        "meta:GMT"{
-            cu:int{1}
         }
         "meta:Georgia"{
             ld{"Ora de vară a Georgiei"}
@@ -1368,7 +1346,6 @@ ro{
             ls{"Ora standard a Indiei"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"Ora Oceanului Indian"}
         }
         "meta:Indonesia_Central"{
@@ -1388,7 +1365,6 @@ ro{
         "meta:Israel"{
             ld{"Ora de vară a Israelului"}
             ls{"Ora standard a Israelului"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ls{"Ora standard a Japoniei"}
@@ -1493,11 +1469,6 @@ ro{
         }
         "meta:Syowa"{
             ls{"Ora Syowa"}
-        }
-        "meta:Taipei"{
-            sd{"CDT (Taipei)"}
-            sg{"CT (Taipei)"}
-            ss{"CST (Taipei)"}
         }
         "meta:Uruguay"{
             ld{"Ora de vară a statului Uruguay"}

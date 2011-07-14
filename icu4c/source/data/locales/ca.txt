@@ -39,7 +39,7 @@ ca{
             }
         }
     }
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -164,11 +164,9 @@ ca{
                     relative{
                         "-1"{"ahir"}
                         "-2"{"abans d'ahir"}
-                        "-3"{"fa tres dies"}
                         "0"{"avui"}
                         "1"{"demà"}
                         "2"{"demà passat"}
-                        "3"{"d'aquí a tres dies"}
                     }
                 }
                 dayperiod{

@@ -3,10 +3,9 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/zh_SG.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
 zh_SG{
     "%%ALIAS"{"zh_Hans_SG"}
-    Version{"2.0.41.23"}
 }

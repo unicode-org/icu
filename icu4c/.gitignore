@@ -375,7 +375,7 @@ source/stubdata/*.vcxproj.user
 source/stubdata/Debug
 source/stubdata/Makefile
 source/stubdata/Release
-source/stubdata/cygicudt*.*
+source/stubdata/cygicudata*.*
 source/stubdata/debug
 source/stubdata/libicu*.*
 source/stubdata/libsicu*.*

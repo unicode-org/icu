@@ -336,7 +336,6 @@ br{
         PETR1708{"reizhskrivadur rusianek 1708 Pêr I"}
         PINYIN{"romanekadur pinyin"}
         POLYTON{"gresianeg liestonel"}
-        POSIX{"POSIX"}
         PUTER{"rannyezh romañchek Puter"}
         REVISED{"reizhskrivadur reizhet"}
         ROZAJ{"resianeg"}
@@ -357,5 +356,5 @@ br{
         VALLADER{"rannyezh romañchek Vallader"}
         WADEGILE{"romanekadur Wade-Giles"}
     }
-    Version{"2.0.58.82"}
+    Version{"2.0.59.68"}
 }

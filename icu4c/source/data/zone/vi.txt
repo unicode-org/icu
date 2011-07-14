@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    Version{"2.0.58.79"}
+    Version{"2.0.59.68"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -272,7 +272,6 @@ vi{
             ls{"Giờ Aktyubinsk"}
         }
         "meta:Alaska"{
-            cu:int{1}
             ld{"Giờ Mùa Hè Alaska"}
             lg{"Giờ Alaska"}
             ls{"Giờ Chuẩn Alaska"}
@@ -328,9 +327,6 @@ vi{
             ld{"Giờ Mùa Hè A-rập"}
             lg{"Giờ A-rập"}
             ls{"Giờ Chuẩn A-rập"}
-            sd{"ADT (A-rập)"}
-            sg{"AT (A-rập)"}
-            ss{"AST (A-rập)"}
         }
         "meta:Argentina"{
             ld{"Giờ Mùa Hè Argentina"}
@@ -351,7 +347,6 @@ vi{
             ls{"Giờ Ashkhabad"}
         }
         "meta:Atlantic"{
-            cu:int{1}
             ld{"Giờ Mùa hè Đại Tây Dương"}
             lg{"Giờ Đại Tây Dương"}
             ls{"Giờ Chuẩn Đại Tây Dương"}
@@ -422,7 +417,6 @@ vi{
         "meta:Chamorro"{
             lg{"Giờ Chamorro"}
             ls{"Giờ Chuẩn Chamorro"}
-            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Giờ Changbai"}
@@ -439,9 +433,6 @@ vi{
             ld{"Giờ Mùa Hè Trung Quốc"}
             lg{"Giờ Trung Quốc"}
             ls{"Giờ Chuẩn Trung Quốc"}
-            sd{"CDT (Trung Quốc)"}
-            sg{"CT (Trung Quốc)"}
-            ss{"CST (Trung Quốc)"}
         }
         "meta:Choibalsan"{
             ld{"Giờ Mùa Hè Choibalsan"}
@@ -466,9 +457,6 @@ vi{
             ld{"Giờ Mùa Hè Cuba"}
             lg{"Giờ Cuba"}
             ls{"Giờ Chuẩn Cuba"}
-            sd{"CDT (Cuba)"}
-            sg{"CT (Cuba)"}
-            ss{"CST (Cuba)"}
         }
         "meta:Dacca"{
             ls{"Giờ Dacca"}
@@ -492,7 +480,6 @@ vi{
         "meta:Easter"{
             ld{"Giờ Mùa Hè Đảo Phục Sinh"}
             ls{"Giờ Đảo Phục Sinh"}
-            ss{"MIỀN ĐÔNG"}
         }
         "meta:Ecuador"{
             ls{"Giờ Ecuador"}
@@ -508,7 +495,6 @@ vi{
         "meta:Europe_Western"{
             ld{"Giờ Mùa hè Tây Âu"}
             ls{"Giờ Tây Âu"}
-            sd{"MIỀN TÂY"}
         }
         "meta:Falkland"{
             ld{"Giờ Mùa Hè Quần Đảo Falkland"}
@@ -529,7 +515,6 @@ vi{
             ls{"Giờ Frunze"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Giờ Trung Bình Greenwich"}
         }
         "meta:Galapagos"{
@@ -559,7 +544,6 @@ vi{
         }
         "meta:Guam"{
             ls{"Giờ Chuẩn Guam"}
-            ss{"GST (Guam)"}
         }
         "meta:Gulf"{
             lg{"Giờ Vùng Vịnh"}
@@ -569,7 +553,6 @@ vi{
             ls{"Giờ Guyana"}
         }
         "meta:Hawaii_Aleutian"{
-            cu:int{1}
             lg{"Giờ Hawaii Aleutian"}
             ls{"Giờ Chuẩn Hawaii-Aleutian"}
         }
@@ -615,7 +598,6 @@ vi{
             ld{"Giờ Mùa Hè Israel"}
             lg{"Giờ Israel"}
             ls{"Giờ Chuẩn Israel"}
-            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Giờ Mùa Hè Nhật Bản"}
@@ -805,7 +787,6 @@ vi{
         }
         "meta:South_Georgia"{
             ls{"Giờ Nam Georgia"}
-            ss{"GST (S. Georgia)"}
         }
         "meta:Suriname"{
             ls{"Giờ Suriname"}
@@ -815,11 +796,6 @@ vi{
         }
         "meta:Tahiti"{
             ls{"Giờ Tahiti"}
-        }
-        "meta:Taipei"{
-            sd{"CDT (Đài Bắc)"}
-            sg{"CT (Đài Bắc)"}
-            ss{"CST (Đài Bắc)"}
         }
         "meta:Tokelau"{
             ls{"Giờ Tokelau"}
