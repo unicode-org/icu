@@ -617,6 +617,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
             if (result != 0) {
                 fprintf(stderr, "Unable to move dat file (%s) to target location (%s).\n", datFileNamePath, targetFileNamePath);
+                return result;
             }
 
             if (o->install != NULL) {
@@ -624,7 +625,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
 
             return result;
-        } else /* if (mode[0] == MODE_STATIC || mode[0] == MODE_DLL) */ {
+        } else /* if (mode == MODE_STATIC || mode == MODE_DLL) */ {
             char gencFilePath[SMALL_BUFFER_MAX_SIZE] = "";
             char version_major[10] = "";
             UBool reverseExt = FALSE;
@@ -638,6 +639,11 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                         break;
                     }
                     version_major[i] = o->version[i];
+                }
+            } else {
+                if (mode == MODE_DLL) {
+                    fprintf(stderr, "Please provide a revision number with the -r option\n");
+                    return -1;
                 }
             }
 
@@ -1825,7 +1831,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 
                 /* normal mode.. o->files is just the bare list without package names */
                 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(linePtr));
-                if(uprv_pathIsAbsolute(s)) {
+                if(uprv_pathIsAbsolute(s) || s[0] == '.') {
                     fprintf(stderr, "pkgdata: Error: absolute path encountered. Old style paths are not supported. Use relative paths such as 'fur.res' or 'translit%cfur.res'.\n\tBad path: '%s'\n", U_FILE_SEP_CHAR, s);
                     exit(U_ILLEGAL_ARGUMENT_ERROR);
                 }
