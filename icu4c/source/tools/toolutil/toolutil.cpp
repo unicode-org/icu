@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -37,7 +37,7 @@
 #endif
 
 /* In MinGW environment, io.h needs to be included for _mkdir() */
-#ifdef __MINGW32__
+#ifdef U_MINGW
 #include <io.h>
 #endif
 
@@ -166,21 +166,21 @@ U_CAPI void U_EXPORT2
 uprv_mkdir(const char *pathname, UErrorCode *status) {
 
     int retVal = 0;
-#if defined(U_WINDOWS) || defined(__MINGW32__)
+#if defined(U_WINDOWS) || defined(U_MINGW)
     retVal = _mkdir(pathname);
 #else
     retVal = mkdir(pathname, S_IRWXU | (S_IROTH | S_IXOTH) | (S_IROTH | S_IXOTH));
 #endif
     if (retVal && errno != EEXIST) {
-#if defined(U_CYGWIN)
-		/*if using Cygwin and the mkdir says it failed...check if the directory already exists..*/
-		/* if it does...don't give the error, if it does not...give the error - Brian Rower - 6/25/08 */
-		struct stat st;
-		
-		if(stat(pathname,&st) != 0)
-		{
-			*status = U_FILE_ACCESS_ERROR;
-		}
+#if defined(U_CYGWIN) || defined(U_MINGW)
+        /*if using Cygwin and the mkdir says it failed...check if the directory already exists..*/
+        /* if it does...don't give the error, if it does not...give the error - Brian Rower - 6/25/08 */
+        struct stat st;
+
+        if(stat(pathname,&st) != 0)
+        {
+            *status = U_FILE_ACCESS_ERROR;
+        }
 #else
         *status = U_FILE_ACCESS_ERROR;
 #endif

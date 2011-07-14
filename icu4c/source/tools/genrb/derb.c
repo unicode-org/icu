@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#if defined(U_WINDOWS) || defined(U_CYGWIN)
+#if defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)
 #include <io.h>
 #include <fcntl.h>
 #define USE_FILENO_BINARY_MODE 1
@@ -293,7 +293,7 @@ main(int argc, char* argv[]) {
 
             if (tostdout) {
                 out = stdout;
-#if defined(U_WINDOWS) || defined(U_CYGWIN)
+#if defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)
                 if (setmode(fileno(out), O_BINARY) == -1) {
                     fprintf(stderr, "%s: couldn't set standard output to binary mode\n", pname);
                     return 4;
