@@ -24,7 +24,7 @@ es{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤ #,##0.00"}
+                currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -43,7 +43,7 @@ es{
             }
         }
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.60.15"}
     calendar{
         buddhist{
             DateTimePatterns{
