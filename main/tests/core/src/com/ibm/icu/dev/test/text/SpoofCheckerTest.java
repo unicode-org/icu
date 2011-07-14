@@ -79,6 +79,9 @@ public class SpoofCheckerTest extends TestFmwk {
      */
     public void TestUSpoof() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
+        if (sc == null) {
+            errln("FAIL: null SpoofChecker");
+        }
     }
 
     /*
@@ -90,7 +93,6 @@ public class SpoofCheckerTest extends TestFmwk {
             logln("Skip this test case because of the IBM Java 5 bug");
             return;
         }
-        SpoofChecker sc = new SpoofChecker.Builder().build();
         String fileName;
         Reader confusables;
         Reader confusablesWholeScript;
