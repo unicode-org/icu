@@ -680,7 +680,7 @@ public class SpoofChecker {
                 //
                 // printf("Number of scriptSets: %d\n", scriptSets.size());
                 {
-                    int duplicateCount = 0;
+                    //int duplicateCount = 0;
                     rtScriptSetsCount = 2;
                     for (int outeri = 2; outeri < scriptSets.size(); outeri++) {
                         BuilderScriptSet outerSet = scriptSets.elementAt(outeri);
@@ -697,7 +697,7 @@ public class SpoofChecker {
                                 innerSet.sset = outerSet.sset;
                                 innerSet.index = outeri;
                                 innerSet.rindex = outerSet.rindex;
-                                duplicateCount++;
+                                //duplicateCount++;
                             }
                             // But this doesn't get all. We need to fix the TRIE.
                         }

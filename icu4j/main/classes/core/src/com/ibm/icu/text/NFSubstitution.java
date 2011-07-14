@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1681,10 +1681,8 @@ class NumeratorSubstitution extends NFSubstitution {
             // compute the 'effective' base and prescale the value down
             long n = result.longValue();
             long d = 1;
-            int pow = 0;
             while (d <= n) {
                 d *= 10;
-                ++pow;
             }
             // now add the zeros
             while (zeroCount > 0) {

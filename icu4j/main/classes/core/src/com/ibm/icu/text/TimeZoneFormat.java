@@ -835,8 +835,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             return 0;
         }
 
-        int len = 0;
-
         int sign;
         char signChar = text.charAt(start);
         if (signChar == '+') {
@@ -848,8 +846,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             pos.setErrorIndex(start);
             return 0;
         }
-        len++;
-
         // Parse digits
         // Possible format (excluding sign char) are:
         // HHmmss

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1039,6 +1039,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
         UnicodeSetWithStrings[] sets_with_str = new UnicodeSetWithStrings[SET_COUNT];
 
         String testName = null;
+        @SuppressWarnings("unused")
         String testNameLimit;
 
         for (i = 0; i < testdata.length; ++i) {

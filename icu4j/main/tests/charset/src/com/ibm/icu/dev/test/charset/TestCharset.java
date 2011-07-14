@@ -68,10 +68,6 @@ public class TestCharset extends TestFmwk {
     
     protected void init(){
         try{
-            if ("UTF-16".equals(m_encoding)) {
-                int x = 2;
-                x++;
-            }
             CharsetProviderICU provider = new CharsetProviderICU();
             //Charset charset = CharsetICU.forName(encoding);
             m_charset = provider.charsetForName(m_encoding);

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -139,14 +139,14 @@ class UnescapeTransliterator extends Transliterator {
                                        Position pos, boolean isIncremental) {
         int start = pos.start;
         int limit = pos.limit;
-        int i, j, ipat;
+        int i, ipat;
 
       loop:
         while (start < limit) {
             // Loop over the forms in spec[].  Exit this loop when we
             // match one of the specs.  Exit the outer loop if a
             // partial match is detected and isIncremental is true.
-            for (j=0, ipat=0; spec[ipat] != END; ++j) {
+            for (ipat = 0; spec[ipat] != END;) {
 
                 // Read the header
                 int prefixLen = spec[ipat++];
