@@ -210,7 +210,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      */
     private ULocale _locale;
     private TimeZoneNames _tznames;
-    private TimeZoneGenericNames _gnames;
+    private volatile TimeZoneGenericNames _gnames;
     private String _gmtPattern;
     private String[] _gmtOffsetPatterns;
     private String[] _gmtOffsetDigits;
@@ -280,7 +280,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     protected TimeZoneFormat(ULocale locale) {
         _locale = locale;
         _tznames = TimeZoneNames.getInstance(locale);
-        _gnames = TimeZoneGenericNames.getInstance(locale);
+        // TimeZoneGenericNames _gnames will be instantiated lazily
 
         String gmtPattern = null;
         String hourFormats = null;
@@ -363,6 +363,26 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      */
     public TimeZoneNames getTimeZoneNames() {
         return _tznames;
+    }
+
+    /**
+     * Private method returning the instance of TimeZoneGenericNames
+     * used by this object. The instance of TimeZoneGenericNames might
+     * not be available until the first use (lazy instantiation) because
+     * it is only required for handling generic names (that are not used
+     * by DateFormat's default patterns) and it requires relatively heavy
+     * one time initialization.
+     * @return the instance of TimeZoneGenericNames used by this object.
+     */
+    private TimeZoneGenericNames getTimeZoneGenericNames() {
+        if (_gnames == null) { // _gnames is volatile
+            synchronized(this) {
+                if (_gnames == null) {
+                    _gnames = TimeZoneGenericNames.getInstance(_locale);
+                }
+            }
+        }
+        return _gnames;
     }
 
     /**
@@ -747,13 +767,13 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
         switch (style) {
         case GENERIC_LOCATION:
-            result = _gnames.getGenericLocationName(ZoneMeta.getCanonicalCLDRID(tz));
+            result = getTimeZoneGenericNames().getGenericLocationName(ZoneMeta.getCanonicalCLDRID(tz));
             break;
         case GENERIC_LONG:
-            result = _gnames.getDisplayName(tz, GenericNameType.LONG, date);
+            result = getTimeZoneGenericNames().getDisplayName(tz, GenericNameType.LONG, date);
             break;
         case GENERIC_SHORT:
-            result = _gnames.getDisplayName(tz, GenericNameType.SHORT, date);
+            result = getTimeZoneGenericNames().getDisplayName(tz, GenericNameType.SHORT, date);
             break;
         case SPECIFIC_LONG:
             result = formatSpecific(tz, NameType.LONG_STANDARD, NameType.LONG_DAYLIGHT, date, timeType);
@@ -1168,7 +1188,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
                 genericNameTypes = EnumSet.of(GenericNameType.SHORT, GenericNameType.LOCATION);
                 break;
             }
-            GenericMatchInfo bestGeneric = _gnames.findBestMatch(text, startIdx, genericNameTypes);
+            GenericMatchInfo bestGeneric = getTimeZoneGenericNames().findBestMatch(text, startIdx, genericNameTypes);
             if (bestGeneric != null) {
                 if (timeType != null) {
                     timeType.value = bestGeneric.timeType();
@@ -1219,7 +1239,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             }
 
             // Then generic names
-            GenericMatchInfo bestGeneric = _gnames.findBestMatch(text, startIdx, ALL_GENERIC_NAME_TYPES);
+            GenericMatchInfo bestGeneric = getTimeZoneGenericNames().findBestMatch(text, startIdx, ALL_GENERIC_NAME_TYPES);
 
             if (bestSpecific != null || bestGeneric != null) {
                 if (bestGeneric == null ||
