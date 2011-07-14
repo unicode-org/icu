@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1157,6 +1157,67 @@ void CollationRegressionTest::TestT7189() {
     ucol_close(coll);
 }
 
+void CollationRegressionTest::TestCaseFirstCompression() {
+    RuleBasedCollator *col = (RuleBasedCollator *) en_us->clone();
+    UErrorCode status = U_ZERO_ERROR;
+
+    // default
+    caseFirstCompressionSub(col, "default");
+
+    // Upper first
+    col->setAttribute(UCOL_CASE_FIRST, UCOL_UPPER_FIRST, status);
+    if (U_FAILURE(status)) {
+        errln("Failed to set UCOL_UPPER_FIRST");
+        return;
+    }
+    caseFirstCompressionSub(col, "upper first");
+
+    // Lower first
+    col->setAttribute(UCOL_CASE_FIRST, UCOL_LOWER_FIRST, status);
+    if (U_FAILURE(status)) {
+        errln("Failed to set UCOL_LOWER_FIRST");
+        return;
+    }
+    caseFirstCompressionSub(col, "lower first");
+
+    delete col;
+}
+
+void CollationRegressionTest::caseFirstCompressionSub(Collator *col, UnicodeString opt) {
+    const int32_t maxLength = 50;
+
+    UChar str1[maxLength];
+    UChar str2[maxLength];
+
+    CollationKey key1, key2;
+
+    for (int32_t len = 1; len <= maxLength; len++) {
+        int32_t i = 0;
+        for (; i < len - 1; i++) {
+            str1[i] = str2[i] = (UChar)0x61; // 'a'
+        }
+        str1[i] = (UChar)0x41; // 'A'
+        str2[i] = (UChar)0x61; // 'a'
+
+        UErrorCode status = U_ZERO_ERROR;
+        col->getCollationKey(str1, len, key1, status);
+        col->getCollationKey(str2, len, key2, status);
+
+        UCollationResult cmpKey = key1.compareTo(key2, status);
+        UCollationResult cmpCol = col->compare(str1, len, str2, len, status);
+
+        if (U_FAILURE(status)) {
+            errln("Error in caseFirstCompressionSub");
+        } else if (cmpKey != cmpCol) {
+            errln((UnicodeString)"Inconsistent comparison(" + opt
+                + "): str1=" + UnicodeString(str1, len) + ", str2=" + UnicodeString(str2, len)
+                + ", cmpKey=" + cmpKey + ", cmpCol=" + cmpCol);
+        }
+    }
+}
+
+
+
 void CollationRegressionTest::compareArray(Collator &c,
                                            const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                                            int32_t testCount)
@@ -1288,7 +1349,8 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
           case 28: name = "Test4139572"; if (exec) Test4139572(/* par */); break;
           case 29: name = "Test4141640"; if (exec) Test4141640(/* par */); break;
           case 30: name = "Test4146160"; if (exec) Test4146160(/* par */); break;
-		  case 31: name = "TestT7189";   if (exec) TestT7189(); break;
+          case 31: name = "TestT7189";   if (exec) TestT7189(); break;
+          case 32: name = "TestCaseFirstCompression"; if (exec) TestCaseFirstCompression(); break;
           default: name = ""; break;
       }
     } else {

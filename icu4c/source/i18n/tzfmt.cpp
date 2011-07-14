@@ -39,6 +39,7 @@ public:
         UnicodeString& tzID, UTimeZoneTimeType* timeType = NULL) const;
 
 private:
+    UMTX fLock;
     Locale fLocale;
     char fTargetRegion[ULOC_COUNTRY_CAPACITY];
     TimeZoneNames* fTimeZoneNames;
@@ -48,10 +49,12 @@ private:
 
     UnicodeString& formatSpecific(const TimeZone& tz, UTimeZoneNameType stdType, UTimeZoneNameType dstType,
         UDate date, UnicodeString& name, UTimeZoneTimeType *timeType) const;
+
+    const TimeZoneGenericNames* getTimeZoneGenericNames(UErrorCode& status) const;
 };
 
 TimeZoneFormatImpl::TimeZoneFormatImpl(const Locale& locale, UErrorCode& status)
-: fLocale(locale), fTimeZoneNames(NULL), fTimeZoneGenericNames(NULL) {
+: fLocale(locale), fTimeZoneNames(NULL), fTimeZoneGenericNames(NULL), fLock(NULL) {
 
     const char* region = fLocale.getCountry();
     int32_t regionLen = uprv_strlen(region);
@@ -72,10 +75,7 @@ TimeZoneFormatImpl::TimeZoneFormatImpl(const Locale& locale, UErrorCode& status)
     }
 
     fTimeZoneNames = TimeZoneNames::createInstance(locale, status);
-    fTimeZoneGenericNames = new TimeZoneGenericNames(locale, status);
-    if (U_SUCCESS(status) && fTimeZoneGenericNames == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
+    // fTimeZoneGenericNames is lazily instantiated
 }
 
 TimeZoneFormatImpl::~TimeZoneFormatImpl() {
@@ -85,11 +85,37 @@ TimeZoneFormatImpl::~TimeZoneFormatImpl() {
     if (fTimeZoneGenericNames != NULL) {
         delete fTimeZoneGenericNames;
     }
+    umtx_destroy(&fLock);
 }
 
 const TimeZoneNames*
 TimeZoneFormatImpl::getTimeZoneNames() const {
     return fTimeZoneNames;
+}
+
+const TimeZoneGenericNames*
+TimeZoneFormatImpl::getTimeZoneGenericNames(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+
+    UBool create;
+    UMTX_CHECK(&gZoneMetaLock, (fTimeZoneGenericNames == NULL), create);
+    if (create) {
+        TimeZoneFormatImpl *nonConstThis = const_cast<TimeZoneFormatImpl *>(this);
+        umtx_lock(&nonConstThis->fLock);
+        {
+            if (fTimeZoneGenericNames == NULL) {
+                nonConstThis->fTimeZoneGenericNames = new TimeZoneGenericNames(fLocale, status);
+                if (U_SUCCESS(status) && fTimeZoneGenericNames == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                }
+            }
+        }
+        umtx_unlock(&nonConstThis->fLock);
+    }
+
+    return fTimeZoneGenericNames;
 }
 
 UnicodeString&
@@ -163,7 +189,11 @@ TimeZoneFormatImpl::parse(UTimeZoneFormatStyle style, const UnicodeString& text,
     UErrorCode status = U_ZERO_ERROR;
 
     if (isGeneric) {
-        int32_t len = fTimeZoneGenericNames->findBestMatch(text, startIdx, types, parsedTzID, parsedTimeType, status);
+        int32_t len = 0;
+        const TimeZoneGenericNames *gnames = getTimeZoneGenericNames(status);
+        if (U_SUCCESS(status)) {
+            len = gnames->findBestMatch(text, startIdx, types, parsedTzID, parsedTimeType, status);
+        }
         if (U_FAILURE(status) || len == 0) {
             pos.setErrorIndex(startIdx);
             return tzID;
@@ -221,7 +251,9 @@ TimeZoneFormatImpl::parse(UTimeZoneFormatStyle style, const UnicodeString& text,
 
 UnicodeString&
 TimeZoneFormatImpl::formatGeneric(const TimeZone& tz, UTimeZoneGenericNameType genType, UDate date, UnicodeString& name) const {
-    if (fTimeZoneGenericNames == NULL) {
+    UErrorCode status = U_ZERO_ERROR;
+    const TimeZoneGenericNames* gnames = getTimeZoneGenericNames(status);
+    if (U_FAILURE(status)) {
         name.setToBogus();
         return name;
     }
@@ -232,9 +264,9 @@ TimeZoneFormatImpl::formatGeneric(const TimeZone& tz, UTimeZoneGenericNameType g
             name.setToBogus();
             return name;
         }
-        return fTimeZoneGenericNames->getGenericLocationName(UnicodeString(canonicalID), name);
+        return gnames->getGenericLocationName(UnicodeString(canonicalID), name);
     }
-    return fTimeZoneGenericNames->getDisplayName(tz, genType, date, name);
+    return gnames->getDisplayName(tz, genType, date, name);
 }
 
 UnicodeString&

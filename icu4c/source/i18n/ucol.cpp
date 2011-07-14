@@ -6417,7 +6417,7 @@ void ucol_updateInternalState(UCollator *coll, UErrorCode *status) {
         }
 
         /* Set the compression values */
-        uint8_t tertiaryTotal = (uint8_t)(coll->tertiaryTop - UCOL_COMMON_BOT3-1);
+        uint8_t tertiaryTotal = (uint8_t)(coll->tertiaryTop - coll->tertiaryBottom - 1);
         coll->tertiaryTopCount = (uint8_t)(UCOL_PROPORTION3*tertiaryTotal); /* we multilply double with int, but need only int */
         coll->tertiaryBottomCount = (uint8_t)(tertiaryTotal - coll->tertiaryTopCount);
 
