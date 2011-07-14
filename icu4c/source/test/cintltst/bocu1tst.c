@@ -895,7 +895,7 @@ roundtripBOCU1(UConverter *bocu1, int32_t number, const UChar *text, int32_t len
     bocu1ICULength=ucnv_fromUChars(bocu1, bocu1ICU, DEFAULT_BUFFER_SIZE, text, length, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("ucnv_fromUChars(BOCU-1, text(%d)[%d]) failed: %s\n", number, length, u_errorName(errorCode));
-        goto cleanup;
+        goto cleanup; 
     }
 
     if(bocu1RefLength!=bocu1ICULength || 0!=uprv_memcmp(bocu1Ref, bocu1ICU, bocu1RefLength)) {

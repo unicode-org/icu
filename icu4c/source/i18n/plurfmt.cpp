@@ -419,10 +419,10 @@ int32_t PluralFormat::findSubMessage(const MessagePattern& pattern, int32_t part
                         // We have already seen an "other" sub-message.
                         // Do not match "other" again.
                         haveKeywordMatch=TRUE;
-                        continue;
+                        // Skip keyword matching but do getLimitPartIndex().
                     }
                 }
-                if(pattern.partSubstringMatches(*part, keyword)) {
+                if(!haveKeywordMatch && pattern.partSubstringMatches(*part, keyword)) {
                     // keyword matches
                     msgStart=partIndex;
                     // Do not match this keyword again.

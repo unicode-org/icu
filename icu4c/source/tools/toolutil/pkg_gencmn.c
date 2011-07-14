@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008-2010, International Business Machines
+ *   Copyright (C) 2008-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -18,7 +18,7 @@
 #include "putilimp.h"
 #include "pkg_gencmn.h"
 
-#define STRING_STORE_SIZE 100000
+#define STRING_STORE_SIZE 200000
 
 #define COMMON_DATA_NAME U_ICUDATA_NAME
 #define DATA_TYPE "dat"
