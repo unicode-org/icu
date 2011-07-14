@@ -171,6 +171,8 @@ public: // package
 
     void TestFormalChineseDate(void);
 
+    void TestStandAloneGMTParse(void);
+
 public:
     /**
      * Test host-specific formatting.
