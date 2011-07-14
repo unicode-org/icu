@@ -1,7 +1,7 @@
 @echo off
 REM  ********************************************************************
 REM  * COPYRIGHT:
-REM  * Copyright (c) 2010, International Business Machines Corporation
+REM  * Copyright (c) 2010-2011, International Business Machines Corporation
 REM  * and others. All Rights Reserved.
 REM  ********************************************************************
 
@@ -21,7 +21,14 @@ exit /b 1
 set ICU_OPATH=%PATH%
 
 set ICU_ICUDIR=%~f0\..\..\..
+
+
 set ICU_BINDIR=%ICU_ICUDIR%\bin
+
+if "%ICU_ARCH%" == "x64" (
+set ICU_BINDIR=%ICU_ICUDIR%\bin64
+)
+
 set PATH=%ICU_BINDIR%;%PATH%
 
 echo testing ICU in %ICU_ICUDIR%  arch=%ICU_ARCH% type=%ICU_DBRL%
@@ -107,7 +114,7 @@ echo -
 echo -
 echo -
 echo ============================================================
-echo Summary:
+echo Summary: ICU in %ICU_ICUDIR%  arch=%ICU_ARCH% type=%ICU_DBRL%
 echo -
 echo Tests Run    : %ICURUN%
 
