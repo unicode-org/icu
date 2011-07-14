@@ -48,21 +48,6 @@ public class SpoofCheckerTest extends TestFmwk {
         }
     }
 
-    /*
-     * setup() and teardown() macros to handle the boilerplate around setting up test case. Put arbitrary test code
-     * between SETUP and TEARDOWN. "sc" is the ready-to-go SpoofChecker for use in the tests.
-     */
-    SpoofChecker sc;
-    SpoofChecker.Builder builder;
-
-    void setup() {
-        builder = new SpoofChecker.Builder();
-        sc = builder.build();
-    }
-
-    void teardown() {
-        sc = null;
-    }
 
     /*
      * Identifiers for verifying that spoof checking is minimally alive and working.
@@ -93,8 +78,7 @@ public class SpoofCheckerTest extends TestFmwk {
      * Test basic constructor.
      */
     public void TestUSpoof() {
-        setup();
-        teardown();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
     }
 
     /*
@@ -106,7 +90,7 @@ public class SpoofCheckerTest extends TestFmwk {
             logln("Skip this test case because of the IBM Java 5 bug");
             return;
         }
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         String fileName;
         Reader confusables;
         Reader confusablesWholeScript;
@@ -117,62 +101,61 @@ public class SpoofCheckerTest extends TestFmwk {
             fileName = "unicode/confusablesWholeScript.txt";
             confusablesWholeScript = TestUtil.getDataReader(fileName, "UTF-8");
 
-            SpoofChecker rsc = builder.setData(confusables, confusablesWholeScript).build();
+            SpoofChecker rsc = new SpoofChecker.Builder().setData(confusables, confusablesWholeScript).build();
             if (rsc == null) {
                 errln("FAIL: null SpoofChecker");
-            }
+                return;
+            }            
+            // Check that newly built-from-rules SpoofChecker is able to function.
+            checkSkeleton(rsc);
         } catch (java.io.IOException e) {
             errln(e.toString());
         } catch (ParseException e) {
             errln(e.toString());
         }
-        teardown();
     }
 
     /*
      * Set & Get Check Flags
      */
     public void TestGetSetChecks1() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.ALL_CHECKS).build();
         int t;
-        sc = builder.setChecks(SpoofChecker.ALL_CHECKS).build();
         t = sc.getChecks();
         TEST_ASSERT_EQ(t, SpoofChecker.ALL_CHECKS);
 
-        sc = builder.setChecks(0).build();
+        sc = new SpoofChecker.Builder().setChecks(0).build();
         t = sc.getChecks();
         TEST_ASSERT_EQ(0, t);
 
         int checks = SpoofChecker.WHOLE_SCRIPT_CONFUSABLE | SpoofChecker.MIXED_SCRIPT_CONFUSABLE
                 | SpoofChecker.ANY_CASE;
-        sc = builder.setChecks(checks).build();
+        sc = new SpoofChecker.Builder().setChecks(checks).build();
         t = sc.getChecks();
         TEST_ASSERT_EQ(checks, t);
-        teardown();
     }
 
     /*
      * get & setAllowedChars
      */
     public void TestGetSetAllowedChars() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         UnicodeSet us;
         UnicodeSet uset;
 
         uset = sc.getAllowedChars();
         TEST_ASSERT(uset.isFrozen());
         us = new UnicodeSet((int) 0x41, (int) 0x5A); /* [A-Z] */
-        sc = builder.setAllowedChars(us).build();
+        sc = new SpoofChecker.Builder().setAllowedChars(us).build();
         TEST_ASSERT_NE(us, sc.getAllowedChars());
         TEST_ASSERT(us.equals(sc.getAllowedChars()));
-        teardown();
     }
 
     /*
      * get & set Checks
      */
     public void TestGetSetChecks() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         int checks;
         int checks2;
         boolean checkResults;
@@ -181,7 +164,7 @@ public class SpoofCheckerTest extends TestFmwk {
         TEST_ASSERT_EQ(SpoofChecker.ALL_CHECKS, checks);
 
         checks &= ~(SpoofChecker.SINGLE_SCRIPT | SpoofChecker.MIXED_SCRIPT_CONFUSABLE);
-        sc = builder.setChecks(checks).build();
+        sc = new SpoofChecker.Builder().setChecks(checks).build();
         checks2 = sc.getChecks();
         TEST_ASSERT_EQ(checks, checks2);
 
@@ -191,14 +174,13 @@ public class SpoofCheckerTest extends TestFmwk {
          */
         checkResults = sc.failsChecks(scMixed);
         TEST_ASSERT(false == checkResults);
-        teardown();
     }
 
     /*
-     * AllowedLoacles
+     * AllowedLocales
      */
-    public void TestAllowedLoacles() {
-        setup();
+    public void TestAllowedLocales() {
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         Set<ULocale> allowedLocales = new LinkedHashSet<ULocale>();
         boolean checkResults;
 
@@ -211,7 +193,7 @@ public class SpoofCheckerTest extends TestFmwk {
         ULocale ruloc = new ULocale("ru_RU");
         allowedLocales.add(enloc);
         allowedLocales.add(ruloc);
-        sc = builder.setAllowedLocales(allowedLocales).build();
+        sc = new SpoofChecker.Builder().setAllowedLocales(allowedLocales).build();
         allowedLocales = sc.getAllowedLocales();
         TEST_ASSERT(allowedLocales.contains(enloc));
         TEST_ASSERT(allowedLocales.contains(ruloc));
@@ -220,8 +202,8 @@ public class SpoofCheckerTest extends TestFmwk {
          * Limit checks to SpoofChecker.CHAR_LIMIT. Some of the test data has whole script confusables also, which we
          * don't want to see in this test.
          */
-        sc = builder.setChecks(SpoofChecker.CHAR_LIMIT).build();
-
+        sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CHAR_LIMIT).setAllowedLocales(allowedLocales).build();
+        
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         checkResults = sc.failsChecks(goodLatin);
         TEST_ASSERT(false == checkResults);
@@ -234,18 +216,17 @@ public class SpoofCheckerTest extends TestFmwk {
 
         /* Reset with an empty locale list, which should allow all characters to pass */
         allowedLocales = new LinkedHashSet<ULocale>();
-        sc = builder.setAllowedLocales(allowedLocales).build();
+        sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CHAR_LIMIT).setAllowedLocales(allowedLocales).build();
 
         checkResults = sc.failsChecks(goodGreek);
         TEST_ASSERT(false == checkResults);
-        teardown();
     }
 
     /*
      * AllowedChars set/get the UnicodeSet of allowed characters.
      */
     public void TestAllowedChars() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         UnicodeSet set;
         UnicodeSet tmpSet;
         boolean checkResults;
@@ -256,11 +237,11 @@ public class SpoofCheckerTest extends TestFmwk {
         TEST_ASSERT(tmpSet.equals(set));
 
         /* Setting the allowed chars should enable the check. */
-        sc = builder.setChecks(SpoofChecker.ALL_CHECKS & ~SpoofChecker.CHAR_LIMIT).build();
+        sc = new SpoofChecker.Builder().setChecks(SpoofChecker.ALL_CHECKS & ~SpoofChecker.CHAR_LIMIT).build();
 
         /* Remove a character that is in our good Latin test identifier from the allowed chars set. */
         tmpSet.remove(goodLatin.charAt(1));
-        sc = builder.setAllowedChars(tmpSet).build();
+        sc = new SpoofChecker.Builder().setAllowedChars(tmpSet).build();
 
         /* Latin Identifier should now fail; other non-latin test cases should still be OK */
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
@@ -271,11 +252,10 @@ public class SpoofCheckerTest extends TestFmwk {
         checkResults = sc.failsChecks(goodGreek, result);
         TEST_ASSERT(checkResults);
         TEST_ASSERT_EQ(SpoofChecker.WHOLE_SCRIPT_CONFUSABLE, result.checks);
-        teardown();
     }
 
     public void TestCheck() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         boolean checkResults;
 
@@ -298,12 +278,10 @@ public class SpoofCheckerTest extends TestFmwk {
         TEST_ASSERT(false == checkResults);
         TEST_ASSERT_EQ(666, result.position);
         TEST_ASSERT_EQ(0, result.checks);
-
-        teardown();
     }
 
     public void TestAreConfusable1() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         int checkResults;
         checkResults = sc.areConfusable(scLatin, scMixed);
         TEST_ASSERT_EQ(SpoofChecker.MIXED_SCRIPT_CONFUSABLE, checkResults);
@@ -313,17 +291,15 @@ public class SpoofCheckerTest extends TestFmwk {
 
         checkResults = sc.areConfusable(lll_Latin_a, lll_Latin_b);
         TEST_ASSERT_EQ(SpoofChecker.SINGLE_SCRIPT_CONFUSABLE, checkResults);
-        teardown();
     }
 
     public void TestGetSkeleton() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         String dest;
         dest = sc.getSkeleton(SpoofChecker.ANY_CASE, lll_Latin_a);
         TEST_ASSERT(lll_Skel.equals(dest));
         TEST_ASSERT_EQ(lll_Skel.length(), dest.length());
         TEST_ASSERT_EQ(3, dest.length());
-        teardown();
     }
 
     /**
@@ -336,8 +312,7 @@ public class SpoofCheckerTest extends TestFmwk {
      * IntlTestSpoof tests for USpoofDetector
      */
     public void TestSpoofAPI() {
-
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         String s = "xyz";  // Many latin ranges are whole-script confusable with other scripts.
                            // If this test starts failing, consult confusablesWholeScript.txt
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
@@ -345,33 +320,34 @@ public class SpoofCheckerTest extends TestFmwk {
         boolean checkResults = sc.failsChecks(s, result);
         TEST_ASSERT(false == checkResults);
         TEST_ASSERT_EQ(666, result.position); // not changed
-        teardown();
 
-        setup();
+        sc = new SpoofChecker.Builder().build();
         String s1 = "cxs";
         String s2 = Utility.unescape("\\u0441\\u0445\\u0455"); // Cyrillic "cxs"
         int checkResult = sc.areConfusable(s1, s2);
         TEST_ASSERT_EQ(SpoofChecker.MIXED_SCRIPT_CONFUSABLE | SpoofChecker.WHOLE_SCRIPT_CONFUSABLE, checkResult);
-        teardown();
 
-        setup();
+        sc = new SpoofChecker.Builder().build();
         s = "I1l0O";
         String dest = sc.getSkeleton(SpoofChecker.ANY_CASE, s);
         TEST_ASSERT(dest.equals("lllOO"));
-        teardown();
     }
 
+    public void TestSkeleton() {
+        SpoofChecker sc = new SpoofChecker.Builder().build();
+        checkSkeleton(sc);
+    }
+    
     // testSkeleton. Spot check a number of confusable skeleton substitutions from the
     // Unicode data file confusables.txt
     // Test cases chosen for substitutions of various lengths, and
     // membership in different mapping tables.
-    public void TestSkeleton() {
+    public void checkSkeleton(SpoofChecker sc) {
         int ML = 0;
         int SL = SpoofChecker.SINGLE_SCRIPT_CONFUSABLE;
         int MA = SpoofChecker.ANY_CASE;
         int SA = SpoofChecker.SINGLE_SCRIPT_CONFUSABLE | SpoofChecker.ANY_CASE;
 
-        setup();
         // A long "identifier" that will overflow implementation stack buffers, forcing heap allocations.
         //    (in the C implementation)
         checkSkeleton(
@@ -425,8 +401,6 @@ public class SpoofCheckerTest extends TestFmwk {
         checkSkeleton(sc, SA, "\"", "\\u0027\\u0027");
         checkSkeleton(sc, ML, "\"", "\\u0027\\u0027");
         checkSkeleton(sc, MA, "\"", "\\u0027\\u0027");
-
-        teardown();
     }
 
     // Internal function to run a single skeleton test case.
@@ -445,17 +419,16 @@ public class SpoofCheckerTest extends TestFmwk {
     }
 
     public void TestAreConfusable() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         String s1 = "A long string that will overflow stack buffers.  A long string that will overflow stack buffers. "
                 + "A long string that will overflow stack buffers.  A long string that will overflow stack buffers. ";
         String s2 = "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. "
                 + "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. ";
         TEST_ASSERT_EQ(SpoofChecker.SINGLE_SCRIPT_CONFUSABLE, sc.areConfusable(s1, s2));
-        teardown();
     }
 
     public void TestInvisible() {
-        setup();
+        SpoofChecker sc = new SpoofChecker.Builder().build();
         String s = Utility.unescape("abcd\\u0301ef");
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         result.position = -42;
@@ -475,7 +448,6 @@ public class SpoofCheckerTest extends TestFmwk {
         TEST_ASSERT(true == sc.failsChecks(s3, result));
         TEST_ASSERT_EQ(SpoofChecker.INVISIBLE, result.checks);
         TEST_ASSERT_EQ(7, result.position);
-        teardown();
     }
 
     private String parseHex(String in) {
