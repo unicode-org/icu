@@ -1685,6 +1685,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
     /*UResourceDataEntry *realData = NULL;*/
     const char *key = inKey;
     UResourceBundle *helper = NULL;
+	int32_t type;
 
     if (status==NULL || U_FAILURE(*status)) {
         return fillIn;
@@ -1694,7 +1695,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
         return fillIn;
     }
 
-    int32_t type = RES_GET_TYPE(resB->fRes);
+    type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
@@ -1762,6 +1763,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     Resource res = RES_BOGUS;
     UResourceDataEntry *realData = NULL;
     const char *key = inKey;
+	int32_t type;
 
     if (status==NULL || U_FAILURE(*status)) {
         return fillIn;
@@ -1771,7 +1773,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         return fillIn;
     }
 
-    int32_t type = RES_GET_TYPE(resB->fRes);
+    type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
@@ -1814,6 +1816,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* inKey, int32_t* len, UErrorCode *status) {
     Resource res = RES_BOGUS;
     UResourceDataEntry *realData = NULL;
+	int32_t type;
     const char* key = inKey;
 
     if (status==NULL || U_FAILURE(*status)) {
@@ -1824,7 +1827,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         return NULL;
     }
 
-    int32_t type = RES_GET_TYPE(resB->fRes);
+    type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t=0;
 
