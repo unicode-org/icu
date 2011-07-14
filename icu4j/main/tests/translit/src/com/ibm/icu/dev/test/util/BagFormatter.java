@@ -914,6 +914,7 @@ public class BagFormatter {
     // ===== CONVENIENCES =====
     private class Join extends Visitor {
         StringBuffer output = new StringBuffer();
+        @SuppressWarnings("unused")
         int depth = 0;
         String join (Object o) {
             output.setLength(0);

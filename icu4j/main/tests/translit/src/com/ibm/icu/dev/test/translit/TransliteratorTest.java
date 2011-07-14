@@ -3184,6 +3184,7 @@ public class TransliteratorTest extends TestFmwk {
 
             String test = nfd.normalize("\u0104");
             boolean DEBUG = true;
+            @SuppressWarnings("unused")
             int count = 0; // for debugging
             for (String s : toTest) {
                 if (s.equals(test)) {

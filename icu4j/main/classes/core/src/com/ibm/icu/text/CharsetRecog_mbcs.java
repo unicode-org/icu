@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2010, International Business Machines Corporation and *
+ * Copyright (C) 2005-2011, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  *
@@ -43,7 +43,8 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
      *             bits 8-15: The match reason, an enum-like value.
      */
     int match(CharsetDetector det, int [] commonChars) {
-        int   singleByteCharCount = 0;
+        @SuppressWarnings("unused")
+        int   singleByteCharCount = 0;  //TODO Do we really need this?
         int   doubleByteCharCount = 0;
         int   commonCharCount     = 0;
         int   badCharCount        = 0;

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and   *
+* Copyright (C) 1996-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -30,7 +30,7 @@ class UCharacterNameIterator implements ValueIterator
     * be updated.</p>
     * @param element for storing the result codepoint and name
     * @return true if we are not at the end of the iteration, false otherwise.
-    * @see ValueIterator.Element
+    * @see com.ibm.icu.util.ValueIterator.Element
     */
     public boolean next(ValueIterator.Element element)
     {
