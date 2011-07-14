@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 2009, International Business Machines Corporation 
+* Copyright (C) 2011, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -33,6 +33,8 @@ public:
     void testInvisible();
 
     void testConfData();
+
+    void testBug8654();
 
     // Internal function to run a single skeleton test case.
     void  checkSkeleton(const USpoofChecker *sc, uint32_t flags, 

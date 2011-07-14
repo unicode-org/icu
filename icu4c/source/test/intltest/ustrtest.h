@@ -54,6 +54,7 @@ public:
      * Test methods startsWith and endsWith
      **/
     void TestPrefixAndSuffix(void);
+    void TestStartsWithAndEndsWithNulTerminated();
     /**
      * Test method findAndReplace
      **/

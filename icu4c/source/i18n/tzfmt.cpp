@@ -54,7 +54,7 @@ private:
 };
 
 TimeZoneFormatImpl::TimeZoneFormatImpl(const Locale& locale, UErrorCode& status)
-: fLocale(locale), fTimeZoneNames(NULL), fTimeZoneGenericNames(NULL), fLock(NULL) {
+: fLock(NULL),fLocale(locale), fTimeZoneNames(NULL), fTimeZoneGenericNames(NULL) {
 
     const char* region = fLocale.getCountry();
     int32_t regionLen = uprv_strlen(region);

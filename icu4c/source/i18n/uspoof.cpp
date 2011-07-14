@@ -24,9 +24,6 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
-
-#include <stdio.h>      // debug
-
 U_NAMESPACE_USE
 
 
@@ -255,7 +252,7 @@ uspoof_check(const USpoofChecker *sc,
             UBool       haveMultipleMarks = FALSE;  
             UnicodeSet  marksSeenSoFar;   // Set of combining marks in a single combining sequence.
             
-            for (i=0; i<length ;) {
+            for (i=0; i<nfdLength ;) {
                 U16_NEXT(nfdText, i, nfdLength, c);
                 if (u_charType(c) != U_NON_SPACING_MARK) {
                     firstNonspacingMark = 0;
@@ -278,6 +275,11 @@ uspoof_check(const USpoofChecker *sc,
                     // No need to find more than the first failure.
                     result |= USPOOF_INVISIBLE;
                     failPos = i;
+                    // TODO: Bug 8655: failPos is the position in the NFD buffer, but what we want
+                    //       to give back to our caller is a position in the original input string.
+                    if (failPos > length) {
+                        failPos = length;
+                    }
                     break;
                 }
                 marksSeenSoFar.add(c);

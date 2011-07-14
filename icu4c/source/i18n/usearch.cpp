@@ -3448,7 +3448,13 @@ U_NAMESPACE_BEGIN
 //
 //  CEBuffer   A circular buffer of CEs from the text being searched.
 //
-#define   DEFAULT_CEBUFFER_SIZE 50
+#define   DEFAULT_CEBUFFER_SIZE 96
+#define   CEBUFFER_EXTRA 32
+// Some typical max values to make buffer size more reasonable for asymmetric search.
+// #8694 is for a better long-term solution to allocation of this buffer.
+#define   MAX_TARGET_IGNORABLES_PER_PAT_JAMO_L 8
+#define   MAX_TARGET_IGNORABLES_PER_PAT_OTHER 3
+#define   MIGHT_BE_JAMO_L(c) ((c >= 0x1100 && c <= 0x115E) || (c >= 0x3131 && c <= 0x314E) || (c >= 0x3165 && c <= 0x3186))
 struct CEBuffer {
     CEI                  defBuf[DEFAULT_CEBUFFER_SIZE];
     CEI                 *buf;
@@ -3470,7 +3476,22 @@ struct CEBuffer {
 CEBuffer::CEBuffer(UStringSearch *ss, UErrorCode *status) {
     buf = defBuf;
     strSearch = ss;
-    bufSize = ss->pattern.PCELength+10;
+    bufSize = ss->pattern.PCELength + CEBUFFER_EXTRA;
+    if (ss->search->elementComparisonType != 0) {
+        const UChar * patText = ss->pattern.text;
+        if (patText) {
+            const UChar * patTextLimit = patText + ss->pattern.textLength;
+            while ( patText < patTextLimit ) {
+                UChar c = *patText++;
+                if (MIGHT_BE_JAMO_L(c)) {
+                    bufSize += MAX_TARGET_IGNORABLES_PER_PAT_JAMO_L;
+                } else {
+                    // No check for surrogates, we might allocate slightly more buffer than necessary.
+                    bufSize += MAX_TARGET_IGNORABLES_PER_PAT_OTHER;
+                }
+            }
+        }
+    }
     ceIter    = ss->textIter;
     firstIx = 0;
     limitIx = 0;
@@ -3853,6 +3874,16 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //  position from the outer loop.
         int32_t targetIxOffset = 0;
         int64_t patCE = 0;
+        // For targetIx > 0, this ceb.get gets a CE that is as far back in the ring buffer
+        // (compared to the last CE fetched for the previous targetIx value) as we need to go
+        // for this targetIx value, so if it is non-NULL then other ceb.get calls should be OK.
+        const CEI *firstCEI = ceb.get(targetIx);
+        if (firstCEI == NULL) {
+            *status = U_INTERNAL_PROGRAM_ERROR;
+            found = FALSE;
+            break;
+        }
+        
         for (patIx=0; patIx<strsrch->pattern.PCELength; patIx++) {
             patCE = strsrch->pattern.PCE[patIx];
             targetCEI = ceb.get(targetIx+patIx+targetIxOffset);
@@ -3892,7 +3923,6 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         //  There still is a chance of match failure if the CE range not correspond to
         //     an acceptable character range.
         //
-        const CEI *firstCEI = ceb.get(targetIx);
         const CEI *lastCEI  = ceb.get(targetIx + targetIxOffset - 1);
 
         mStart   = firstCEI->lowIndex;
@@ -4123,6 +4153,15 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
     for(targetIx = limitIx; ; targetIx += 1)
     {
         found = TRUE;
+        // For targetIx > limitIx, this ceb.getPrevious gets a CE that is as far back in the ring buffer
+        // (compared to the last CE fetched for the previous targetIx value) as we need to go
+        // for this targetIx value, so if it is non-NULL then other ceb.getPrevious calls should be OK.
+        const CEI *lastCEI  = ceb.getPrevious(targetIx);
+        if (lastCEI == NULL) {
+            *status = U_INTERNAL_PROGRAM_ERROR;
+            found = FALSE;
+             break;
+        }
         //  Inner loop checks for a match beginning at each
         //  position from the outer loop.
         int32_t targetIxOffset = 0;
@@ -4185,7 +4224,6 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
         }
 
 
-        const CEI *lastCEI  = ceb.getPrevious(targetIx);
         minLimit = lastCEI->lowIndex;
 
         if (targetIx > 0) {

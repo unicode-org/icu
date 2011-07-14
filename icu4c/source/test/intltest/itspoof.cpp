@@ -91,7 +91,13 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
                 testConfData();
             }
             break;
-        default: name=""; break;
+          case 5:
+            name = "testBug8654";
+            if (exec) {
+                testBug8654();
+            }
+            break;
+         default: name=""; break;
     }
 }
 
@@ -251,7 +257,7 @@ void IntlTestSpoof::testInvisible() {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(7, position);
 
-        // Tow acute accents, one from the composed a with acute accent, \u00e1,
+        // Two acute accents, one from the composed a with acute accent, \u00e1,
         // and one separate.
         position = -42;
         UnicodeString  s3 = UnicodeString("abcd\\u00e1\\u0301xyz").unescape();
@@ -261,6 +267,15 @@ void IntlTestSpoof::testInvisible() {
     TEST_TEARDOWN;
 }
 
+void IntlTestSpoof::testBug8654() {
+    TEST_SETUP
+        UnicodeString s = UnicodeString("B\\u00c1\\u0301").unescape();
+        int32_t position = -42;
+        TEST_ASSERT_EQ(USPOOF_INVISIBLE, uspoof_checkUnicodeString(sc, s, &position, &status) & USPOOF_INVISIBLE );
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(3, position);
+    TEST_TEARDOWN;
+}
 
 static UnicodeString parseHex(const UnicodeString &in) {
     // Convert a series of hex numbers in a Unicode String to a string with the
