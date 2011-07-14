@@ -43,6 +43,7 @@ The following names can be supplied as the argument for platform:
     Linux/ICC           Use the Intel ICC compiler on Linux
     Linux/VA            Use the IBM Visual Age compiler on Power PC Linux
     MacOSX              Use the GNU gcc/g++ compilers on MacOS X (Darwin)
+    MinGW               Use the GNU gcc/g++ compilers on MinGW
     QNX                 Use the QNX QCC compiler on QNX/Neutrino
     Solaris             Use the Sun cc/CC compilers on Solaris
     Solaris/GCC         Use the GNU gcc/g++ compilers on Solaris
@@ -275,6 +276,12 @@ case $platform in
         RELEASE_CXXFLAGS='-O2'
         DEBUG_CFLAGS='-g -O0'
         DEBUG_CXXFLAGS='-g -O0'
+        ;;
+    MinGW)
+        THE_OS="MinGW"
+        THE_COMP="the GNU C++"
+        RELEASE_CFLAGS='-O3'
+        RELEASE_CXXFLAGS='-O3'
         ;;
     *BSD)
         THE_OS="BSD"
