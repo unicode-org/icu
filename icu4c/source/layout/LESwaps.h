@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -45,8 +45,8 @@ class U_LAYOUT_API LESwaps /* not : public UObject because all methods are stati
 public:
 
     /**
-     * This method does the byte swap required on little endian platforms
-     * to correctly access a (16-bit) word.
+     * Reads a big-endian 16-bit word and returns a native-endian value.
+     * No-op on a big-endian platform, byte-swaps on a little-endian platform.
      *
      * @param value - the word to be byte swapped
      *
@@ -56,12 +56,19 @@ public:
      */
     static le_uint16 swapWord(le_uint16 value)
     {
-        return (le_uint16)((value << 8) | (value >> 8));
+#if (defined(U_IS_BIG_ENDIAN) && U_IS_BIG_ENDIAN) || (defined(BYTE_ORDER) && defined(BIG_ENDIAN)) || defined(__BIG_ENDIAN__)
+        // Fastpath when we know that the platform is big-endian.
+        return value;
+#else
+        // Reads a big-endian value on any platform.
+        const le_uint8 *p = reinterpret_cast<const le_uint8 *>(&value);
+        return (le_uint16)((p[0] << 8) | p[1]);
+#endif
     };
 
     /**
-     * This method does the byte swapping required on little endian platforms
-     * to correctly access a (32-bit) long.
+     * Reads a big-endian 32-bit word and returns a native-endian value.
+     * No-op on a big-endian platform, byte-swaps on a little-endian platform.
      *
      * @param value - the long to be byte swapped
      *
@@ -71,11 +78,14 @@ public:
      */
     static le_uint32 swapLong(le_uint32 value)
     {
-        return (le_uint32)(
-            (value << 24) |
-            ((value << 8) & 0xff0000) |
-            ((value >> 8) & 0xff00) |
-            (value >> 24));
+#if (defined(U_IS_BIG_ENDIAN) && U_IS_BIG_ENDIAN) || (defined(BYTE_ORDER) && defined(BIG_ENDIAN)) || defined(__BIG_ENDIAN__)
+        // Fastpath when we know that the platform is big-endian.
+        return value;
+#else
+        // Reads a big-endian value on any platform.
+        const le_uint8 *p = reinterpret_cast<const le_uint8 *>(&value);
+        return (le_uint32)((p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
+#endif
     };
 
 private:

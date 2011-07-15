@@ -740,13 +740,22 @@ TimeZoneGenericNames::getPartialLocationName(const UnicodeString& tzCanonicalID,
 
     UnicodeString location;
     UnicodeString usCountryCode;
-    ZoneMeta::getSingleCountry(tzCanonicalID, usCountryCode);
+    ZoneMeta::getCanonicalCountry(tzCanonicalID, usCountryCode);
     if (!usCountryCode.isEmpty()) {
         char countryCode[ULOC_COUNTRY_CAPACITY];
         U_ASSERT(usCountryCode.length() < ULOC_COUNTRY_CAPACITY);
         int32_t ccLen = usCountryCode.extract(0, usCountryCode.length(), countryCode, sizeof(countryCode), US_INV);
         countryCode[ccLen] = 0;
-        fLocaleDisplayNames->regionDisplayName(countryCode, location);
+
+        UnicodeString regionalGolden;
+        fTimeZoneNames->getReferenceZoneID(mzID, countryCode, regionalGolden);
+        if (tzCanonicalID == regionalGolden) {
+            // Use country name
+            fLocaleDisplayNames->regionDisplayName(countryCode, location);
+        } else {
+            // Otherwise, use exemplar city name
+            fTimeZoneNames->getExemplarLocationName(tzCanonicalID, location);
+        }
     } else {
         fTimeZoneNames->getExemplarLocationName(tzCanonicalID, location);
         if (location.isEmpty()) {
