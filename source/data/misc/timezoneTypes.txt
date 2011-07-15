@@ -287,7 +287,7 @@ timezoneTypes:table(nofallback){
             "America:Montserrat"{"msmni"}
             "America:Nassau"{"bsnas"}
             "America:New_York"{"usnyc"}
-            "America:Nipigon"{"cathu"}
+            "America:Nipigon"{"canpg"}
             "America:Nome"{"usome"}
             "America:Noronha"{"brfen"}
             "America:North_Dakota:Beulah"{"usxul"}
