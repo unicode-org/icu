@@ -75,7 +75,6 @@ Cleanly installed Solaris can use this #define.
 #include <math.h>
 #include <locale.h>
 #include <float.h>
-#include <time.h>
 
 /* include system headers */
 #if defined(U_WINDOWS) || defined(U_MINGW)
