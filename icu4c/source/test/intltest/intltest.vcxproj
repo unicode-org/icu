@@ -224,6 +224,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bytestrietest.cpp" />
+    <ClCompile Include="dicttest.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
     <ClCompile Include="rbbiapts.cpp" />
@@ -389,6 +390,7 @@
     <ClCompile Include="bidiconf.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dicttest.h" />
     <ClInclude Include="itrbbi.h" />
     <ClInclude Include="rbbiapts.h" />
     <ClInclude Include="rbbitst.h" />
