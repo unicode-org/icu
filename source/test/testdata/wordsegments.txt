@@ -1,0 +1,23 @@
+# Copyright (C) 2011-2011, International Business Machines Corporation
+# and others. All Rights Reserved.
+#
+#   file name:  wordsegments.txt
+#   encoding:   UTF-8
+#
+#   created on: 2011may14
+#   created by: George Rhoten
+#   created by: Nathan Wells
+#
+# Word boundary test data for languages that contain no spaces.
+# Boundaries are deliminated with the | character so that it's easier to debug.
+#
+# If you have test data with zero width spaces to deliminate the words, use the following command example.
+# Be sure to copy the zero width space in the sed command.
+# echo 'សូម​ចំណាយពេល​បន្តិច​ដើម្បី​អធិស្ឋាន​អរ​ព្រះគុណ​ដល់​ព្រះអង្គ' | sed 's/​/\|/g'
+#
+
+# Thai
+กู| |กิน|กุ้ง| |ปิ้่|งอ|ยู่|ใน|ถ้ำ
+
+# Khmer
+សូម|ចំណាយពេល|បន្តិច|ដើម្បី|អធិស្ឋាន|អរ|ព្រះគុណ|ដល់|ព្រះអង្គ
