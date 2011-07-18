@@ -20,7 +20,9 @@ import java.util.TreeSet;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Row;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.Row.R4;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
@@ -35,6 +37,9 @@ import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Type;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * @author markdavis
@@ -92,7 +97,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             /* Ukrainian*/  {"uk", "\u0410:\u0411:\u0412:\u0413:\u0490:\u0414:\u0415:\u0404:\u0416:\u0417:\u0418:\u0406:\u0407:\u0419:\u041A:\u041B:\u041C:\u041D:\u041E:\u041F:\u0420:\u0421:\u0422:\u0423:\u0424:\u0425:\u0426:\u0427:\u0428:\u0429:\u042E:\u042F"},
             /* Vietnamese*/ {"vi", "A:\u0102:\u00C2:B:C:D:\u0110:E:\u00CA:F:G:H:I:J:K:L:M:N:O:\u00D4:\u01A0:P:Q:R:S:T:U:\u01AF:V:W:X:Y:Z"},
             /* Chinese*/    {"zh", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
-            /* Chinese (Traditional Han)*/  {"zh_Hant", "\u4E00:\u4E01:\u4E08:\u4E0D:\u4E14:\u4E1E:\u4E32:\u4E26:\u4EAD:\u4E58:\u4E7E:\u5080:\u4E82:\u50CE:\u50F5:\u5110:\u511F:\u53E2:\u5133:\u56B4:\u5137:\u513B:\u56CC:\u56D1:\u5EF3"},
+            /* Chinese (Traditional Han)*/  {"zh_Hant", "1\u5283:2\u5283:3\u5283:4\u5283:5\u5283:6\u5283:7\u5283:8\u5283:9\u5283:10\u5283:11\u5283:12\u5283:13\u5283:14\u5283:15\u5283:16\u5283:17\u5283:18\u5283:19\u5283:20\u5283:21\u5283:22\u5283:23\u5283:24\u5283:25\u5283:26\u5283:27\u5283:28\u5283:29\u5283:30\u5283:31\u5283:32\u5283:33\u5283:35\u5283:36\u5283:39\u5283:48\u5283"},
 
             // Comment these out to make the test run faster. Later, make these run under extended
 
@@ -166,6 +171,79 @@ public class AlphabeticIndexTest extends TestFmwk {
     };
     public static void main(String[] args) throws Exception{
         new AlphabeticIndexTest().run(args);
+    }
+    
+//    public void TestAAKeyword() {
+//    ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+//            ICUResourceBundle.ICU_COLLATION_BASE_NAME, "zh");
+//    showBundle(rb, 0);
+//        String[] keywords = Collator.getKeywords();
+//        System.out.println(Arrays.asList(keywords));
+//        String locale = "zh";
+//        ULocale ulocale = new ULocale(locale);
+//        for (String keyword : keywords) {
+//            List<String> values = Arrays.asList(Collator.getKeywordValuesForLocale(keyword, ulocale, false));
+//            List<String> allValues = Arrays.asList(Collator.getKeywordValues(keyword));
+//            for (String value : allValues) {
+//                System.out.println(keyword + "=" + value);
+//                checkKeyword(locale, value, values.contains(value));
+//            }
+//        }
+//    }
+//
+//    private void checkKeyword(String locale, String collationValue, boolean shouldExist) {
+//        final ULocale base = new ULocale(locale);
+//        final ULocale desired = new ULocale(locale + "@collation=" + collationValue);
+//        Collator foo = Collator.getInstance(desired);
+//        ULocale actual = foo.getLocale(ULocale.ACTUAL_LOCALE);
+//        if (shouldExist) {
+//            assertEquals("actual should match desired", desired, actual);
+//        } else {
+//            assertEquals("actual should match base", base, actual);
+//        }
+//        int comp = foo.compare("a", "ā");
+//        assertEquals("should fall back to default for zh", -1, comp);
+//    }
+    
+    /**
+     * @param rb
+     * @param i
+     */
+    private static void showBundle(UResourceBundle rb, int i) {
+        for (String key : rb.keySet()) {
+            System.out.print("\n" + Utility.repeat("  ", i) + key);
+            UResourceBundle rb2 = rb.get(key);
+            showBundle(rb2, i+1);
+        }
+    }
+
+    
+    public void TestA() {
+        String[][] tests = {{"zh_Hant", "渡辺", "12劃"},
+                {"zh", "渡辺", "D"}
+                /*, "zh@collation=unihan", "ja@collation=unihan", "ko@collation=unihan"*/ 
+                };
+        for (String[] test : tests) {
+            AlphabeticIndex<Integer> alphabeticIndex = new AlphabeticIndex<Integer>(new ULocale(test[0]));
+            final String probe = test[1];
+            final String expectedLabel = test[2];
+            alphabeticIndex.addRecord(probe, 1);
+            List labels = alphabeticIndex.getBucketLabels();
+            logln(labels.toString());
+            Bucket<Integer> bucket = find(alphabeticIndex, probe);
+            assertEquals(probe + " found in right bucket", expectedLabel, bucket.getLabel());
+        }
+    }
+
+    private Bucket<Integer> find(AlphabeticIndex<Integer> alphabeticIndex, final String probe) {
+        for (Bucket<Integer> bucket : alphabeticIndex) {
+            for (Record<Integer> record : bucket) {
+                if (record.getName().equals(probe)) {
+                    return bucket;
+                }
+            }
+        }
+        return null;
     }
 
     public void TestFirstCharacters() {
@@ -317,6 +395,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public <T> void showIndex(AlphabeticIndex<T> index, boolean showEmpty) {
+        logln("Actual");
         StringBuilder UI = new StringBuilder();
         for (AlphabeticIndex.Bucket<T> bucket : index) {
             if (showEmpty || bucket.size() != 0) {
@@ -335,6 +414,7 @@ public class AlphabeticIndexTest extends TestFmwk {
      * @param b
      */
     private void showIndex(List<String> myBucketLabels, ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>> myBucketContents, boolean showEmpty) {
+        logln("Alternative");
         StringBuilder UI = new StringBuilder();
 
         for (int i = 0; i < myBucketLabels.size(); ++i) {
@@ -468,7 +548,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     //    }
 
     public void TestClientSupport() {
-        for (String localeString : KEY_LOCALES) { // KEY_LOCALES, new String[] {"zh"}
+        for (String localeString : new String[] {"zh"}) { // KEY_LOCALES, new String[] {"zh"}
             ULocale ulocale = new ULocale(localeString);
             AlphabeticIndex<Double> alphabeticIndex = new AlphabeticIndex<Double>(ulocale).addLabels(ULocale.ENGLISH);
             RuleBasedCollator collator = alphabeticIndex.getCollator();
@@ -498,6 +578,9 @@ public class AlphabeticIndexTest extends TestFmwk {
                 }
                 for (String name : shortTest) {
                     int bucketIndex = alphabeticIndex.getBucketIndex(name);
+                    if (bucketIndex > myBucketContents.size()) {
+                        alphabeticIndex.getBucketIndex(name); // call again for debugging
+                    }
                     Set<R4<RawCollationKey, String, Integer, Double>> myBucket = myBucketContents.get(bucketIndex);
                     RawCollationKey rawCollationKey = collator.getRawCollationKey(name, null);
                     R4<RawCollationKey, String, Integer, Double> row = Row.of(rawCollationKey, name, name.length(), testValue++);
@@ -639,21 +722,25 @@ public class AlphabeticIndexTest extends TestFmwk {
         checkBuckets("zh_Hant", traditionalNames, ULocale.ENGLISH, "\u4e9f", "\u5357\u9580");
     }
 
-    static final String[] SimpleTests = { "$", "\u00a3", "12", "2", 
+    static final String[] SimpleTests = { 
+        "斎藤",
+        "\u1f2d\u03c1\u03b1", 
+        "$", "\u00a3", "12", "2", 
         "Davis", "Davis", "Abbot", "\u1D05avis", "Zach", "\u1D05avis", "\u01b5", "\u0130stanbul", "Istanbul", "istanbul", "\u0131stanbul",
         "\u00deor", "\u00c5berg", "\u00d6stlund",
-        "\u1f2d\u03c1\u03b1", "\u1f08\u03b8\u03b7\u03bd\u1fb6", "\u0396\u03b5\u03cd\u03c2", "\u03a0\u03bf\u03c3\u03b5\u03b9\u03b4\u1f63\u03bd", "\u1f0d\u03b9\u03b4\u03b7\u03c2", "\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1", "\u1f19\u03c3\u03c4\u03b9\u03ac", 
+        "\u1f2d\u03c1\u03b1", "\u1f08\u03b8\u03b7\u03bd\u1fb6", 
+        "\u0396\u03b5\u03cd\u03c2", "\u03a0\u03bf\u03c3\u03b5\u03b9\u03b4\u1f63\u03bd", "\u1f0d\u03b9\u03b4\u03b7\u03c2", "\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1", "\u1f19\u03c3\u03c4\u03b9\u03ac", 
         //"\u1f08\u03c0\u03cc\u03bb\u03bb\u03c9\u03bd", "\u1f0c\u03c1\u03c4\u03b5\u03bc\u03b9\u03c2", "\u1f19\u03c1\u03bc\u1f23\u03c2", "\u1f0c\u03c1\u03b7\u03c2", "\u1f08\u03c6\u03c1\u03bf\u03b4\u03af\u03c4\u03b7", "\u1f2d\u03c6\u03b1\u03b9\u03c3\u03c4\u03bf\u03c2", "\u0394\u03b9\u03cc\u03bd\u03c5\u03c3\u03bf\u03c2",
         "\u6589\u85e4", "\u4f50\u85e4", "\u9234\u6728", "\u9ad8\u6a4b", "\u7530\u4e2d", "\u6e21\u8fba", "\u4f0a\u85e4", "\u5c71\u672c", "\u4e2d\u6751", "\u5c0f\u6797", "\u658e\u85e4", "\u52a0\u85e4",
         //"\u5409\u7530", "\u5c71\u7530", "\u4f50\u3005\u6728", "\u5c71\u53e3", "\u677e\u672c", "\u4e95\u4e0a", "\u6728\u6751", "\u6797", "\u6e05\u6c34"
     };
 
     static final String[] hackPinyin = { 
-        "\u0101", "\u5416", "\u58ba", //
+        "a", "\u5416", "\u58ba", //
         "b", "\u516b", "\u62d4", "\u8500", //
         "c", "\u5693", "\u7938", "\u9e7e", //
         "d", "\u5491", "\u8fcf", "\u964a", //
-        "\u0113","\u59b8", "\u92e8", "\u834b", //
+        "e","\u59b8", "\u92e8", "\u834b", //
         "f", "\u53d1", "\u9197", "\u99a5", //
         "g", "\u7324", "\u91d3", "\u8142", //
         "h", "\u598e", "\u927f", "\u593b", //
@@ -662,7 +749,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         "l", "\u5783", "\u62c9", "\u9ba5", //
         "m", "\u5638", "\u9ebb", "\u65c0", //
         "n", "\u62ff", "\u80ad", "\u685b", //
-        "\u014D", "\u5662", "\u6bee", "\u8bb4", //
+        "o", "\u5662", "\u6bee", "\u8bb4", //
         "p", "\u5991", "\u8019", "\u8c31", //
         "q", "\u4e03", "\u6053", "\u7f56", //
         "r", "\u5465", "\u72aa", "\u6e03", //
@@ -702,33 +789,71 @@ public class AlphabeticIndexTest extends TestFmwk {
         "\u5546", "\u725f", "\u4f58", "\u4f74", "\u4f2f", "\u8d4f", "\u5357\u5bab", "\u58a8", "\u54c8", "\u8c2f", "\u7b2a", "\u5e74", "\u7231", "\u9633", "\u4f5f"
     };
 
-    static final String[] traditionalNames = { 
-        "Abbot", "Morton", "Zachary", "Williams", "\u8d99", "\u9322", "\u5b6b", "\u674e", "\u5468", "\u5433", "\u912d", "\u738b", "\u99ae", "\u9673", "\u696e", "\u885b", "\u8523", "\u6c88",
-        "\u97d3", "\u694a", "\u6731", "\u79e6", "\u5c24", "\u8a31", "\u4f55", "\u5442", "\u65bd", "\u5f35", "\u5b54", "\u66f9", "\u56b4", "\u83ef", "\u91d1", "\u9b4f", "\u9676", "\u59dc", "\u621a", "\u8b1d", "\u9112",
-        "\u55bb", "\u67cf", "\u6c34", "\u7ac7", "\u7ae0", "\u96f2", "\u8607", "\u6f58", "\u845b", "\u595a", "\u7bc4", "\u5f6d", "\u90ce", "\u9b6f", "\u97cb", "\u660c", "\u99ac", "\u82d7", "\u9cf3", "\u82b1", "\u65b9",
-        "\u4fde", "\u4efb", "\u8881", "\u67f3", "\u9146", "\u9b91", "\u53f2", "\u5510", "\u8cbb", "\u5ec9", "\u5c91", "\u859b", "\u96f7", "\u8cc0", "\u502a", "\u6e6f", "\u6ed5", "\u6bb7", "\u7f85", "\u7562", "\u90dd",
-        "\u9114", "\u5b89", "\u5e38", "\u6a02", "\u65bc", "\u6642", "\u5085", "\u76ae", "\u535e", "\u9f4a", "\u5eb7", "\u4f0d", "\u9918", "\u5143", "\u535c", "\u9867", "\u5b5f", "\u5e73", "\u9ec3", "\u548c", "\u7a46",
-        "\u856d", "\u5c39", "\u59da", "\u90b5", "\u6e5b", "\u6c6a", "\u7941", "\u6bdb", "\u79b9", "\u72c4", "\u7c73", "\u8c9d", "\u660e", "\u81e7", "\u8a08", "\u4f0f", "\u6210", "\u6234", "\u8ac7", "\u5b8b", "\u8305",
-        "\u9f90", "\u718a", "\u7d00", "\u8212", "\u5c48", "\u9805", "\u795d", "\u8463", "\u6881", "\u675c", "\u962e", "\u85cd", "\u95a9", "\u5e2d", "\u5b63", "\u9ebb", "\u5f37", "\u8cc8", "\u8def", "\u5a41", "\u5371",
-        "\u6c5f", "\u7ae5", "\u984f", "\u90ed", "\u6885", "\u76db", "\u6797", "\u5201", "\u937e", "\u5f90", "\u4e18", "\u99f1", "\u9ad8", "\u590f", "\u8521", "\u7530", "\u6a0a", "\u80e1", "\u51cc", "\u970d", "\u865e",
-        "\u842c", "\u652f", "\u67ef", "\u661d", "\u7ba1", "\u76e7", "\u83ab", "\u7d93", "\u623f", "\u88d8", "\u7e46", "\u5e79", "\u89e3", "\u61c9", "\u5b97", "\u4e01", "\u5ba3", "\u8cc1", "\u9127", "\u9b31", "\u55ae",
-        "\u676d", "\u6d2a", "\u5305", "\u8af8", "\u5de6", "\u77f3", "\u5d14", "\u5409", "\u9215", "\u9f94", "\u7a0b", "\u5d47", "\u90a2", "\u6ed1", "\u88f4", "\u9678", "\u69ae", "\u7fc1", "\u8340", "\u7f8a", "\u65bc",
-        "\u60e0", "\u7504", "\u9eb4", "\u5bb6", "\u5c01", "\u82ae", "\u7fbf", "\u5132", "\u9773", "\u6c72", "\u90b4", "\u7cdc", "\u677e", "\u4e95", "\u6bb5", "\u5bcc", "\u5deb", "\u70cf", "\u7126", "\u5df4", "\u5f13",
-        "\u7267", "\u9697", "\u5c71", "\u8c37", "\u8eca", "\u4faf", "\u5b93", "\u84ec", "\u5168", "\u90d7", "\u73ed", "\u4ef0", "\u79cb", "\u4ef2", "\u4f0a", "\u5bae", "\u5be7", "\u4ec7", "\u6b12", "\u66b4", "\u7518",
-        "\u659c", "\u53b2", "\u620e", "\u7956", "\u6b66", "\u7b26", "\u5289", "\u666f", "\u8a79", "\u675f", "\u9f8d", "\u8449", "\u5e78", "\u53f8", "\u97f6", "\u90dc", "\u9ece", "\u858a", "\u8584", "\u5370", "\u5bbf",
-        "\u767d", "\u61f7", "\u84b2", "\u90b0", "\u5f9e", "\u9102", "\u7d22", "\u54b8", "\u7c4d", "\u8cf4", "\u5353", "\u85fa", "\u5c60", "\u8499", "\u6c60", "\u55ac", "\u9670", "\u9b31", "\u80e5", "\u80fd", "\u84bc",
-        "\u96d9", "\u805e", "\u8398", "\u9ee8", "\u7fdf", "\u8b5a", "\u8ca2", "\u52de", "\u9004", "\u59ec", "\u7533", "\u6276", "\u5835", "\u5189", "\u5bb0", "\u9148", "\u96cd", "\u90e4", "\u74a9", "\u6851", "\u6842",
-        "\u6fee", "\u725b", "\u58fd", "\u901a", "\u908a", "\u6248", "\u71d5", "\u5180", "\u90df", "\u6d66", "\u5c1a", "\u8fb2", "\u6eab", "\u5225", "\u838a", "\u664f", "\u67f4", "\u77bf", "\u95bb", "\u5145", "\u6155",
-        "\u9023", "\u8339", "\u7fd2", "\u5ba6", "\u827e", "\u9b5a", "\u5bb9", "\u5411", "\u53e4", "\u6613", "\u614e", "\u6208", "\u5ed6", "\u5ebe", "\u7d42", "\u66a8", "\u5c45", "\u8861", "\u6b65", "\u90fd", "\u803f",
-        "\u6eff", "\u5f18", "\u5321", "\u570b", "\u6587", "\u5bc7", "\u5ee3", "\u797f", "\u95d5", "\u6771", "\u6b50", "\u6bb3", "\u6c83", "\u5229", "\u851a", "\u8d8a", "\u5914", "\u9686", "\u5e2b", "\u978f", "\u5399",
-        "\u8076", "\u6641", "\u52fe", "\u6556", "\u878d", "\u51b7", "\u8a3e", "\u8f9b", "\u95de", "\u90a3", "\u7c21", "\u9952", "\u7a7a", "\u66fe", "\u6bcb", "\u6c99", "\u4e5c", "\u990a", "\u97a0", "\u9808", "\u8c50",
-        "\u5de2", "\u95dc", "\u84af", "\u76f8", "\u67e5", "\u5f8c", "\u834a", "\u7d05", "\u904a", "\u7afa", "\u6b0a", "\u9011", "\u84cb", "\u76ca", "\u6853", "\u516c", "\u4e07\u4fdf", "\u53f8\u99ac", "\u4e0a\u5b98", "\u6b50\u967d",
-        "\u590f\u4faf", "\u8af8\u845b", "\u805e\u4eba", "\u6771\u65b9", "\u8d6b\u9023", "\u7687\u752b", "\u5c09\u9072", "\u516c\u7f8a", "\u6fb9\u53f0", "\u516c\u51b6", "\u5b97\u653f", "\u6fee\u967d", "\u6df3\u4e8e", "\u55ae\u4e8e", "\u592a\u53d4", "\u7533\u5c60", "\u516c\u5b6b", "\u4ef2\u5b6b",
-        "\u8ed2\u8f45", "\u4ee4\u72d0", "\u937e\u96e2", "\u5b87\u6587", "\u9577\u5b6b", "\u6155\u5bb9", "\u9bae\u4e8e", "\u95ad\u4e18", "\u53f8\u5f92", "\u53f8\u7a7a", "\u4e0c\u5b98", "\u53f8\u5bc7", "\u4ec9", "\u7763", "\u5b50\u8eca", "\u9853\u5b6b", "\u7aef\u6728", "\u5deb\u99ac",
-        "\u516c\u897f", "\u6f06\u96d5", "\u6a02\u6b63", "\u58e4\u99df", "\u516c\u826f", "\u62d3\u62d4", "\u593e\u8c37", "\u5bb0\u7236", "\u7a40\u6881", "\u6649", "\u695a", "\u95bb", "\u6cd5", "\u6c5d", "\u9122", "\u5857", "\u6b3d", "\u6bb5\u5e72", "\u767e\u91cc",
-        "\u6771\u90ed", "\u5357\u9580", "\u547c\u5ef6", "\u6b78", "\u6d77", "\u7f8a\u820c", "\u5fae\u751f", "\u5cb3", "\u5e25", "\u7df1", "\u4ea2", "\u6cc1", "\u5f8c", "\u6709", "\u7434", "\u6881\u4e18", "\u5de6\u4e18", "\u6771\u9580", "\u897f\u9580",
-        "\u5546", "\u725f", "\u4f58", "\u4f74", "\u4f2f", "\u8cde", "\u5357\u5bae", "\u58a8", "\u54c8", "\u8b59", "\u7b2a", "\u5e74", "\u611b", "\u967d", "\u4f5f" 
-    };
+    static final String[] traditionalNames = { "丁", "Abbot", "Morton", "Zachary", "Williams", "\u8d99", "\u9322", "\u5b6b",
+            "\u674e", "\u5468", "\u5433", "\u912d", "\u738b", "\u99ae", "\u9673", "\u696e", "\u885b", "\u8523",
+            "\u6c88", "\u97d3", "\u694a", "\u6731", "\u79e6", "\u5c24", "\u8a31", "\u4f55", "\u5442", "\u65bd",
+            "\u5f35", "\u5b54", "\u66f9", "\u56b4", "\u83ef", "\u91d1", "\u9b4f", "\u9676", "\u59dc", "\u621a",
+            "\u8b1d", "\u9112", "\u55bb", "\u67cf", "\u6c34", "\u7ac7", "\u7ae0", "\u96f2", "\u8607", "\u6f58",
+            "\u845b", "\u595a", "\u7bc4", "\u5f6d", "\u90ce", "\u9b6f", "\u97cb", "\u660c", "\u99ac", "\u82d7",
+            "\u9cf3", "\u82b1", "\u65b9", "\u4fde", "\u4efb", "\u8881", "\u67f3", "\u9146", "\u9b91", "\u53f2",
+            "\u5510", "\u8cbb", "\u5ec9", "\u5c91", "\u859b", "\u96f7", "\u8cc0", "\u502a", "\u6e6f", "\u6ed5",
+            "\u6bb7", "\u7f85", "\u7562", "\u90dd", "\u9114", "\u5b89", "\u5e38", "\u6a02", "\u65bc", "\u6642",
+            "\u5085", "\u76ae", "\u535e", "\u9f4a", "\u5eb7", "\u4f0d", "\u9918", "\u5143", "\u535c", "\u9867",
+            "\u5b5f", "\u5e73", "\u9ec3", "\u548c", "\u7a46", "\u856d", "\u5c39", "\u59da", "\u90b5", "\u6e5b",
+            "\u6c6a", "\u7941", "\u6bdb", "\u79b9", "\u72c4", "\u7c73", "\u8c9d", "\u660e", "\u81e7", "\u8a08",
+            "\u4f0f", "\u6210", "\u6234", "\u8ac7", "\u5b8b", "\u8305", "\u9f90", "\u718a", "\u7d00", "\u8212",
+            "\u5c48", "\u9805", "\u795d", "\u8463", "\u6881", "\u675c", "\u962e", "\u85cd", "\u95a9", "\u5e2d",
+            "\u5b63", "\u9ebb", "\u5f37", "\u8cc8", "\u8def", "\u5a41", "\u5371", "\u6c5f", "\u7ae5", "\u984f",
+            "\u90ed", "\u6885", "\u76db", "\u6797", "\u5201", "\u937e", "\u5f90", "\u4e18", "\u99f1", "\u9ad8",
+            "\u590f", "\u8521", "\u7530", "\u6a0a", "\u80e1", "\u51cc", "\u970d", "\u865e", "\u842c", "\u652f",
+            "\u67ef", "\u661d", "\u7ba1", "\u76e7", "\u83ab", "\u7d93", "\u623f", "\u88d8", "\u7e46", "\u5e79",
+            "\u89e3", "\u61c9", "\u5b97", "\u4e01", "\u5ba3", "\u8cc1", "\u9127", "\u9b31", "\u55ae", "\u676d",
+            "\u6d2a", "\u5305", "\u8af8", "\u5de6", "\u77f3", "\u5d14", "\u5409", "\u9215", "\u9f94", "\u7a0b",
+            "\u5d47", "\u90a2", "\u6ed1", "\u88f4", "\u9678", "\u69ae", "\u7fc1", "\u8340", "\u7f8a", "\u65bc",
+            "\u60e0", "\u7504", "\u9eb4", "\u5bb6", "\u5c01", "\u82ae", "\u7fbf", "\u5132", "\u9773", "\u6c72",
+            "\u90b4", "\u7cdc", "\u677e", "\u4e95", "\u6bb5", "\u5bcc", "\u5deb", "\u70cf", "\u7126", "\u5df4",
+            "\u5f13", "\u7267", "\u9697", "\u5c71", "\u8c37", "\u8eca", "\u4faf", "\u5b93", "\u84ec", "\u5168",
+            "\u90d7", "\u73ed", "\u4ef0", "\u79cb", "\u4ef2", "\u4f0a", "\u5bae", "\u5be7", "\u4ec7", "\u6b12",
+            "\u66b4", "\u7518", "\u659c", "\u53b2", "\u620e", "\u7956", "\u6b66", "\u7b26", "\u5289", "\u666f",
+            "\u8a79", "\u675f", "\u9f8d", "\u8449", "\u5e78", "\u53f8", "\u97f6", "\u90dc", "\u9ece", "\u858a",
+            "\u8584", "\u5370", "\u5bbf", "\u767d", "\u61f7", "\u84b2", "\u90b0", "\u5f9e", "\u9102", "\u7d22",
+            "\u54b8", "\u7c4d", "\u8cf4", "\u5353", "\u85fa", "\u5c60", "\u8499", "\u6c60", "\u55ac", "\u9670",
+            "\u9b31", "\u80e5", "\u80fd", "\u84bc", "\u96d9", "\u805e", "\u8398", "\u9ee8", "\u7fdf", "\u8b5a",
+            "\u8ca2", "\u52de", "\u9004", "\u59ec", "\u7533", "\u6276", "\u5835", "\u5189", "\u5bb0", "\u9148",
+            "\u96cd", "\u90e4", "\u74a9", "\u6851", "\u6842", "\u6fee", "\u725b", "\u58fd", "\u901a", "\u908a",
+            "\u6248", "\u71d5", "\u5180", "\u90df", "\u6d66", "\u5c1a", "\u8fb2", "\u6eab", "\u5225", "\u838a",
+            "\u664f", "\u67f4", "\u77bf", "\u95bb", "\u5145", "\u6155", "\u9023", "\u8339", "\u7fd2", "\u5ba6",
+            "\u827e", "\u9b5a", "\u5bb9", "\u5411", "\u53e4", "\u6613", "\u614e", "\u6208", "\u5ed6", "\u5ebe",
+            "\u7d42", "\u66a8", "\u5c45", "\u8861", "\u6b65", "\u90fd", "\u803f", "\u6eff", "\u5f18", "\u5321",
+            "\u570b", "\u6587", "\u5bc7", "\u5ee3", "\u797f", "\u95d5", "\u6771", "\u6b50", "\u6bb3", "\u6c83",
+            "\u5229", "\u851a", "\u8d8a", "\u5914", "\u9686", "\u5e2b", "\u978f", "\u5399", "\u8076", "\u6641",
+            "\u52fe", "\u6556", "\u878d", "\u51b7", "\u8a3e", "\u8f9b", "\u95de", "\u90a3", "\u7c21", "\u9952",
+            "\u7a7a", "\u66fe", "\u6bcb", "\u6c99", "\u4e5c", "\u990a", "\u97a0", "\u9808", "\u8c50", "\u5de2",
+            "\u95dc", "\u84af", "\u76f8", "\u67e5", "\u5f8c", "\u834a", "\u7d05", "\u904a", "\u7afa", "\u6b0a",
+            "\u9011", "\u84cb", "\u76ca", "\u6853", "\u516c", "\u4e07\u4fdf", "\u53f8\u99ac", "\u4e0a\u5b98",
+            "\u6b50\u967d", "\u590f\u4faf", "\u8af8\u845b", "\u805e\u4eba", "\u6771\u65b9", "\u8d6b\u9023",
+            "\u7687\u752b", "\u5c09\u9072", "\u516c\u7f8a", "\u6fb9\u53f0", "\u516c\u51b6", "\u5b97\u653f",
+            "\u6fee\u967d", "\u6df3\u4e8e", "\u55ae\u4e8e", "\u592a\u53d4", "\u7533\u5c60", "\u516c\u5b6b",
+            "\u4ef2\u5b6b", "\u8ed2\u8f45", "\u4ee4\u72d0", "\u937e\u96e2", "\u5b87\u6587", "\u9577\u5b6b",
+            "\u6155\u5bb9", "\u9bae\u4e8e", "\u95ad\u4e18", "\u53f8\u5f92", "\u53f8\u7a7a", "\u4e0c\u5b98",
+            "\u53f8\u5bc7", "\u4ec9", "\u7763", "\u5b50\u8eca", "\u9853\u5b6b", "\u7aef\u6728", "\u5deb\u99ac",
+            "\u516c\u897f", "\u6f06\u96d5", "\u6a02\u6b63", "\u58e4\u99df", "\u516c\u826f", "\u62d3\u62d4",
+            "\u593e\u8c37", "\u5bb0\u7236", "\u7a40\u6881", "\u6649", "\u695a", "\u95bb", "\u6cd5", "\u6c5d", "\u9122",
+            "\u5857", "\u6b3d", "\u6bb5\u5e72", "\u767e\u91cc", "\u6771\u90ed", "\u5357\u9580", "\u547c\u5ef6",
+            "\u6b78", "\u6d77", "\u7f8a\u820c", "\u5fae\u751f", "\u5cb3", "\u5e25", "\u7df1", "\u4ea2", "\u6cc1",
+            "\u5f8c", "\u6709", "\u7434", "\u6881\u4e18", "\u5de6\u4e18", "\u6771\u9580", "\u897f\u9580", "\u5546",
+            "\u725f", "\u4f58", "\u4f74", "\u4f2f", "\u8cde", "\u5357\u5bae", "\u58a8", "\u54c8", "\u8b59", "\u7b2a",
+            "\u5e74", "\u611b", "\u967d", "\u4f5f", "\u3401", "\u3422", "\u3426", "\u3493", "\u34A5", "\u34A7",
+            "\u34AA", "\u3536", "\u4A3B", "\u4E00", "\u4E01", "\u4E07", "\u4E0D", "\u4E17", "\u4E23", "\u4E26",
+            "\u4E34", "\u4E82", "\u4EB8", "\u4EB9", "\u511F", "\u512D", "\u513D", "\u513E", "\u53B5", "\u56D4",
+            "\u56D6", "\u7065", "\u7069", "\u706A", "\u7E9E", "\u9750", "\u9F49", "\u9F7E", "\u9F98", "\uD840\uDC35",
+            "\uD840\uDC3D", "\uD840\uDC3E", "\uD840\uDC41", "\uD840\uDC46", "\uD840\uDC4C", "\uD840\uDC4E",
+            "\uD840\uDC53", "\uD840\uDC55", "\uD840\uDC56", "\uD840\uDC5F", "\uD840\uDC60", "\uD840\uDC7A",
+            "\uD840\uDC7B", "\uD840\uDCC8", "\uD840\uDD9E", "\uD840\uDD9F", "\uD840\uDDA0", "\uD840\uDDA1",
+            "\uD841\uDD3B", "\uD842\uDCCA", "\uD842\uDCCB", "\uD842\uDD6C", "\uD842\uDE0B", "\uD842\uDE0C",
+            "\uD842\uDED1", "\uD844\uDD9F", "\uD845\uDD19", "\uD845\uDD1A", "\uD846\uDD3B", "\uD84C\uDF5C",
+            "\uD85A\uDDC4", "\uD85A\uDDC5", "\uD85C\uDD98", "\uD85E\uDCB1", "\uD861\uDC04", "\uD864\uDDD3",
+            "\uD865\uDE63", "\uD869\uDCCA", "\uD86B\uDE9A", };
 
 
 }
