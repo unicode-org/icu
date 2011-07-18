@@ -208,7 +208,6 @@ class KhmerBreakEngine : public DictionaryBreakEngine {
   UnicodeSet                fKhmerWordSet; 
   UnicodeSet                fEndWordSet; 
   UnicodeSet                fBeginWordSet; 
-  UnicodeSet                fSuffixSet; 
   UnicodeSet                fMarkSet; 
   const TrieWordDictionary  *fDictionary; 
  
