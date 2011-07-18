@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2011, International Business Machines Corporation
+﻿# Copyright (C) 2011-2011, International Business Machines Corporation
 # and others. All Rights Reserved.
 #
 #   file name:  wordsegments.txt
