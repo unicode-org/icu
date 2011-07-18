@@ -1373,7 +1373,7 @@ TimeZone::parseCustomID(const UnicodeString& id, int32_t& sign,
 
     NumberFormat* numberFormat = 0;
     UnicodeString idUppercase = id;
-    idUppercase.toUpper();
+    idUppercase.toUpper("");
 
     if (id.length() > GMT_ID_LENGTH &&
         idUppercase.startsWith(GMT_ID, GMT_ID_LENGTH))
