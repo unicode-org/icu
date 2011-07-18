@@ -801,16 +801,15 @@ getCurrencyNameCount(const char* loc, int32_t* total_currency_name_count, int32_
     }
 }
 
-// TODO: locale dependent
 static UChar* 
-toUpperCase(const UChar* source, int32_t len) {
+toUpperCase(const UChar* source, int32_t len, const char* locale) {
     UChar* dest = NULL;
     UErrorCode ec = U_ZERO_ERROR;
-    int32_t destLen = u_strToUpper(dest, 0, source, len, NULL, &ec);
+    int32_t destLen = u_strToUpper(dest, 0, source, len, locale, &ec);
 
     ec = U_ZERO_ERROR;
     dest = (UChar*)uprv_malloc(sizeof(UChar) * MAX(destLen, len));
-    u_strToUpper(dest, destLen, source, len, NULL, &ec);
+    u_strToUpper(dest, destLen, source, len, locale, &ec);
     if (U_FAILURE(ec)) {
         uprv_memcpy(dest, source, sizeof(UChar) * len);
     } 
@@ -818,7 +817,7 @@ toUpperCase(const UChar* source, int32_t len) {
 }
 
 
-// Collect all available currency names associated with the give locale
+// Collect all available currency names associated with the given locale
 // (enable fallback chain).
 // Read currenc names defined in resource bundle "Currencies" and
 // "CurrencyPlural", enable fallback chain.
@@ -916,7 +915,7 @@ collectCurrencyNames(const char* locale,
             // Add currency long name.
             s = ures_getStringByIndex(names, UCURR_LONG_NAME, &len, &ec2);
             (*currencyNames)[*total_currency_name_count].IsoCode = iso;
-            UChar* upperName = toUpperCase(s, len);
+            UChar* upperName = toUpperCase(s, len, locale);
             (*currencyNames)[*total_currency_name_count].currencyName = upperName;
             (*currencyNames)[*total_currency_name_count].flag = NEED_TO_BE_DELETED;
             (*currencyNames)[(*total_currency_name_count)++].currencyNameLen = len;
@@ -958,7 +957,7 @@ collectCurrencyNames(const char* locale,
                 // currency long name?
                 s = ures_getStringByIndex(names, j, &len, &ec3);
                 (*currencyNames)[*total_currency_name_count].IsoCode = iso;
-                UChar* upperName = toUpperCase(s, len);
+                UChar* upperName = toUpperCase(s, len, locale);
                 (*currencyNames)[*total_currency_name_count].currencyName = upperName;
                 (*currencyNames)[*total_currency_name_count].flag = NEED_TO_BE_DELETED;
                 (*currencyNames)[(*total_currency_name_count)++].currencyNameLen = len;
@@ -1366,7 +1365,7 @@ uprv_parseCurrency(const char* locale,
     int32_t textLen = MIN(MAX_CURRENCY_NAME_LEN, text.length() - start);
     text.extract(start, textLen, inputText);
     UErrorCode ec1 = U_ZERO_ERROR;
-    textLen = u_strToUpper(upperText, MAX_CURRENCY_NAME_LEN, inputText, textLen, NULL, &ec1);
+    textLen = u_strToUpper(upperText, MAX_CURRENCY_NAME_LEN, inputText, textLen, locale, &ec1);
 
     int32_t max = 0;
     int32_t matchIndex = -1;

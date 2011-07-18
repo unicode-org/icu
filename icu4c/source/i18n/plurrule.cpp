@@ -351,7 +351,7 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
     if (U_FAILURE(status)) {
         return;
     }
-    UnicodeString ruleData = data.toLower();
+    UnicodeString ruleData = data.toLower("");
     while (ruleIndex< ruleData.length()) {
         mParser->getNextToken(ruleData, &ruleIndex, token, type, status);
         if (U_FAILURE(status)) {
