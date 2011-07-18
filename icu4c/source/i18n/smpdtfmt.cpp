@@ -1100,10 +1100,10 @@ SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const 
 void
 SimpleDateFormat::formatGMTDefault(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t offset) const {
     if (offset < 0) {
-        appendTo += gGmtMinus;
+        appendTo.append(gGmtMinus, 4);
         offset = -offset; // suppress the '-' sign for text display.
     }else{
-        appendTo += gGmtPlus;
+        appendTo.append(gGmtPlus, 4);
     }
 
     offset /= U_MILLIS_PER_SECOND; // now in seconds
@@ -3058,7 +3058,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // next step. Otherwise, all time zone names starting with GMT/UT/UTC
             // (for example, "UTT") will fail.
             if (gmtLen > 0 && ((text.length() - start) == gmtLen)) {
-                TimeZone *tz = TimeZone::createTimeZone(UnicodeString("Etc/GMT"));
+                TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING("Etc/GMT", 7));
                 cal.adoptTimeZone(tz);
                 return start + gmtLen;
             }
@@ -3115,7 +3115,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Step 5
             // If we saw standalone GMT zero pattern, then use GMT.
             if (gmtLen > 0) {
-                TimeZone *tz = TimeZone::createTimeZone(UnicodeString("Etc/GMT"));
+                TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING("Etc/GMT", 7));
                 cal.adoptTimeZone(tz);
                 return start + gmtLen;
             }
@@ -3178,7 +3178,7 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
     DecimalFormat* df = NULL;
     if (!allowNegative && (df = dynamic_cast<DecimalFormat*>(fmt)) != NULL) {
         df->getNegativePrefix(oldPrefix);
-        df->setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
+        df->setNegativePrefix(UnicodeString(TRUE, SUPPRESS_NEGATIVE_PREFIX, -1));
     }
     int32_t oldPos = pos.getIndex();
     fmt->parse(text, number, pos);
@@ -3264,7 +3264,9 @@ UnicodeString&
 SimpleDateFormat::toLocalizedPattern(UnicodeString& result,
                                      UErrorCode& status) const
 {
-    translatePattern(fPattern, result, DateFormatSymbols::getPatternUChars(), fSymbols->fLocalPatternChars, status);
+    translatePattern(fPattern, result,
+                     UnicodeString(DateFormatSymbols::getPatternUChars()),
+                     fSymbols->fLocalPatternChars, status);
     return result;
 }
 
@@ -3282,7 +3284,9 @@ void
 SimpleDateFormat::applyLocalizedPattern(const UnicodeString& pattern,
                                         UErrorCode &status)
 {
-    translatePattern(pattern, fPattern, fSymbols->fLocalPatternChars, DateFormatSymbols::getPatternUChars(), status);
+    translatePattern(pattern, fPattern,
+                     fSymbols->fLocalPatternChars,
+                     UnicodeString(DateFormatSymbols::getPatternUChars()), status);
 }
 
 //----------------------------------------------------------------------

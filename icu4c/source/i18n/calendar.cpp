@@ -52,7 +52,7 @@
 #include "ustrenum.h"
 
 #if !UCONFIG_NO_SERVICE
-static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
+static icu::ICULocaleService* gService = NULL;
 #endif
 
 // INTERNAL - for cleanup
@@ -437,7 +437,7 @@ protected:
         } else {
             ret->append((UChar)0x40); // '@' is a variant character
             ret->append(UNICODE_STRING("calendar=", 9));
-            ret->append(UnicodeString(gCalTypes[getCalendarTypeForLocale(loc.getName())]));
+            ret->append(UnicodeString(gCalTypes[getCalendarTypeForLocale(loc.getName())], -1, US_INV));
         }
         return ret;
     }
@@ -3079,7 +3079,7 @@ Calendar::getActualMaximum(UCalendarDateFields field, UErrorCode& status) const
             if(U_FAILURE(status)) return 0;
             Calendar *cal = clone();
             if(!cal) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
-			cal->setLenient(TRUE);
+            cal->setLenient(TRUE);
             cal->prepareGetActual(field,FALSE,status);
             result = handleGetYearLength(cal->get(UCAL_EXTENDED_YEAR, status));
             delete cal;
@@ -3201,6 +3201,11 @@ int32_t Calendar::getActualHelper(UCalendarDateFields field, int32_t startValue,
     if(U_FAILURE(status)) return startValue;
     Calendar *work = clone();
     if(!work) { status = U_MEMORY_ALLOCATION_ERROR; return startValue; }
+
+    // need to resolve time here, otherwise, fields set for actual limit
+    // may cause conflict with fields previously set (but not yet resolved).
+    work->complete(status);
+
     work->setLenient(TRUE);
     work->prepareGetActual(field, delta < 0, status);
 

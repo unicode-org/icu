@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2010-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -418,7 +418,7 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
     while ((key = e->next((int32_t *)0, status)) != NULL) {
       locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
       appendWithSep(resultRemainder, keyDisplayName(key, temp))
-          .append("=")
+          .append((UChar)0x3d /* = */)
           .append(keyValueDisplayName(key, value, temp2));
     }
     delete e;

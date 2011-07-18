@@ -267,43 +267,38 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
         int32_t size = ures_getSize(itvDtPtnResource);
         int32_t index;
         for ( index = 0; index < size; ++index ) {
-            UResourceBundle* oneRes = ures_getByIndex(itvDtPtnResource, index, 
-                                                     NULL, &status);
+            LocalUResourceBundlePointer oneRes(ures_getByIndex(itvDtPtnResource, index, 
+                                                     NULL, &status));
             if ( U_SUCCESS(status) ) {
-                const char* skeleton = ures_getKey(oneRes);
-                if ( skeleton == NULL || 
-                     skeletonSet.geti(UnicodeString(skeleton)) == 1 ) {
-                    ures_close(oneRes);
+                const char* skeleton = ures_getKey(oneRes.getAlias());
+                if (skeleton == NULL) {
                     continue;
                 }
-                skeletonSet.puti(UnicodeString(skeleton), 1, status);
+                UnicodeString skeletonUniStr(skeleton, -1, US_INV);
+                if ( skeletonSet.geti(skeletonUniStr) == 1 ) {
+                    continue;
+                }
+                skeletonSet.puti(skeletonUniStr, 1, status);
                 if ( uprv_strcmp(skeleton, gFallbackPatternTag) == 0 ) {
-                    ures_close(oneRes);
                     continue;  // fallback
                 }
-    
-                UResourceBundle* intervalPatterns = ures_getByKey(
-                                     itvDtPtnResource, skeleton, NULL, &status);
-    
+
+                LocalUResourceBundlePointer intervalPatterns(ures_getByKey(
+                                     itvDtPtnResource, skeleton, NULL, &status));
+
                 if ( U_FAILURE(status) ) {
-                    ures_close(intervalPatterns);
-                    ures_close(oneRes);
                     break;
                 }
                 if ( intervalPatterns == NULL ) {
-                    ures_close(intervalPatterns);
-                    ures_close(oneRes);
                     continue;
                 }
-    
-                const UChar* pattern;
+
                 const char* key;
-                int32_t ptLength;
-                int32_t ptnNum = ures_getSize(intervalPatterns);
+                int32_t ptnNum = ures_getSize(intervalPatterns.getAlias());
                 int32_t ptnIndex;
                 for ( ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex ) {
-                    pattern = ures_getNextString(intervalPatterns, &ptLength, &key,
-                                                 &status);
+                    UnicodeString pattern =
+                        ures_getNextUnicodeString(intervalPatterns.getAlias(), &key, &status);
                     if ( U_FAILURE(status) ) {
                         break;
                     }
@@ -323,12 +318,10 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
                         calendarField = UCAL_MINUTE;
                     }
                     if ( calendarField != UCAL_FIELD_COUNT ) {
-                        setIntervalPatternInternally(skeleton, calendarField, pattern,status);
+                        setIntervalPatternInternally(skeletonUniStr, calendarField, pattern,status);
                     }
                 }
-                ures_close(intervalPatterns);
             }
-            ures_close(oneRes);
         }
     }
     ures_close(itvDtPtnResource);
@@ -445,14 +438,8 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
     const UnicodeString* inputSkeleton = &skeleton; 
     UnicodeString copySkeleton;
     if ( skeleton.indexOf(CHAR_Z) != -1 ) {
-        UChar zstr[2];
-        UChar vstr[2]; 
-        zstr[0]=CHAR_Z;
-        vstr[0]=CHAR_V;
-        zstr[1]=0;
-        vstr[1]=0;
         copySkeleton = skeleton;
-        copySkeleton.findAndReplace(zstr, vstr);
+        copySkeleton.findAndReplace(UnicodeString(CHAR_Z), UnicodeString(CHAR_V));
         inputSkeleton = &copySkeleton;
         replaceZWithV = true;
     }

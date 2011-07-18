@@ -33,27 +33,27 @@ SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode *status)
   fTimeIgnorables(NULL),
   fOtherIgnorables(NULL)
 {
-    fDateIgnorables  = new UnicodeSet("[-,./[:whitespace:]]", *status);
-    fTimeIgnorables  = new UnicodeSet("[-.:[:whitespace:]]",  *status);
-    fOtherIgnorables = new UnicodeSet("[:whitespace:]",       *status);
-    
+    fDateIgnorables  = new UnicodeSet(UNICODE_STRING("[-,./[:whitespace:]]", 20), *status);
+    fTimeIgnorables  = new UnicodeSet(UNICODE_STRING("[-.:[:whitespace:]]", 19),  *status);
+    fOtherIgnorables = new UnicodeSet(UNICODE_STRING("[:whitespace:]", 14),       *status);
+
     // Check for null pointers
     if (fDateIgnorables == NULL || fTimeIgnorables == NULL || fOtherIgnorables == NULL) {
         goto ExitConstrDeleteAll;
     }
-    
+
     // Freeze all the sets
     fDateIgnorables->freeze();
     fTimeIgnorables->freeze();
     fOtherIgnorables->freeze();
-	
+
     return; // If we reached this point, everything is fine so just exit
-    
+
 ExitConstrDeleteAll: // Remove all sets and return error
     delete fDateIgnorables;  fDateIgnorables = NULL;
     delete fTimeIgnorables;  fTimeIgnorables = NULL;
     delete fOtherIgnorables; fOtherIgnorables = NULL;
-    
+
     *status = U_MEMORY_ALLOCATION_ERROR;
 }
 
