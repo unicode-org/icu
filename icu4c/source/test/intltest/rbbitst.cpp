@@ -4650,8 +4650,10 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 UErrorCode status = U_ZERO_ERROR;
                 errorText.extract(charErrorTxt, sizeof(charErrorTxt), NULL, status);
                 charErrorTxt[sizeof(charErrorTxt)-1] = 0;
-                errln("%s break monkey test error.  %s. Operation = %s; Random seed = %d;  buf Idx = %d\n%s",
-                    name, (expectedBreaks[i]? "break expected but not found" : "break found but not expected"),
+                const char *badLocale = bi->getLocaleID(ULOC_ACTUAL_LOCALE, status);
+                
+                errln("%s break monkey test error [%s].  %s. Operation = %s; Random seed = %d;  buf Idx = %d\n%s",
+                    name, badLocale, (expectedBreaks[i]? "break expected but not found" : "break found but not expected"),
                     errorType, seed, i, charErrorTxt);
                 break;
             }
