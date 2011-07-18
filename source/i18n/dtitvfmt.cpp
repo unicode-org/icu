@@ -657,7 +657,7 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         if ( timeSkeleton.length() != 0 ) {
             if ( dateSkeleton.length() == 0 ) {
                 // prefix with yMd
-                timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort]);
+                timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort], -1);
                 UnicodeString pattern = fDtpng->getBestPattern(timeSkeleton, status);
                 if ( U_FAILURE(status) ) {
                     return;    
@@ -682,7 +682,7 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         // done
     } else if ( dateSkeleton.length() == 0 ) {
         // prefix with yMd
-        timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort]);
+        timeSkeleton.insert(0, gDateFormatSkeleton[DateFormat::kShort], -1);
         UnicodeString pattern = fDtpng->getBestPattern(timeSkeleton, status);
         if ( U_FAILURE(status) ) {
             return;    
@@ -1349,7 +1349,8 @@ DateIntervalFormat::adjustFieldWidth(const UnicodeString& inputSkeleton,
     DateIntervalInfo::parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
     DateIntervalInfo::parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
     if ( differenceInfo == 2 ) {
-        adjustedPtn.findAndReplace("v", "z");
+        adjustedPtn.findAndReplace(UnicodeString((UChar)0x76 /* v */),
+                                   UnicodeString((UChar)0x7a /* z */));
     }
 
     UBool inQuote = false;
