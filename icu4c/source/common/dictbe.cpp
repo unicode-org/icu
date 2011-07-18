@@ -406,7 +406,236 @@ foundBest:
                 utext_setNativeIndex(text, current+wordLength);
             }
         }
-        
+
+        // Did we find a word on this iteration? If so, push it on the break stack
+        if (wordLength > 0) {
+            foundBreaks.push((current+wordLength), status);
+        }
+    }
+
+    // Don't return a break for the end of the dictionary range if there is one there.
+    if (foundBreaks.peeki() >= rangeEnd) {
+        (void) foundBreaks.popi();
+        wordsFound -= 1;
+    }
+
+    return wordsFound;
+}
+
+// How many words in a row are "good enough"?
+#define KHMER_LOOKAHEAD 3
+
+// Will not combine a non-word with a preceding dictionary word longer than this
+#define KHMER_ROOT_COMBINE_THRESHOLD 3
+
+// Will not combine a non-word that shares at least this much prefix with a
+// dictionary word, with a preceding word
+#define KHMER_PREFIX_COMBINE_THRESHOLD 3
+
+// Minimum word size
+#define KHMER_MIN_WORD 2
+
+// Minimum number of characters for two words
+#define KHMER_MIN_WORD_SPAN (KHMER_MIN_WORD * 2)
+
+KhmerBreakEngine::KhmerBreakEngine(const TrieWordDictionary *adoptDictionary, UErrorCode &status)
+    : DictionaryBreakEngine((1<<UBRK_WORD) | (1<<UBRK_LINE)),
+      fDictionary(adoptDictionary)
+{
+    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status);
+    if (U_SUCCESS(status)) {
+        setCharacters(fKhmerWordSet);
+    }
+    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.add(0x0020);
+    fEndWordSet = fKhmerWordSet;
+    fBeginWordSet.add(0x1780, 0x17B3);
+    //fBeginWordSet.add(0x17A3, 0x17A4);      // deprecated vowels
+    //fEndWordSet.remove(0x17A5, 0x17A9);     // Khmer independent vowels that can't end a word
+    //fEndWordSet.remove(0x17B2);             // Khmer independent vowel that can't end a word
+    fEndWordSet.remove(0x17D2);             // KHMER SIGN COENG that combines some following characters
+    //fEndWordSet.remove(0x17B6, 0x17C5);     // Remove dependent vowels
+//    fEndWordSet.remove(0x0E31);             // MAI HAN-AKAT
+//    fEndWordSet.remove(0x0E40, 0x0E44);     // SARA E through SARA AI MAIMALAI
+//    fBeginWordSet.add(0x0E01, 0x0E2E);      // KO KAI through HO NOKHUK
+//    fBeginWordSet.add(0x0E40, 0x0E44);      // SARA E through SARA AI MAIMALAI
+//    fSuffixSet.add(THAI_PAIYANNOI);
+//    fSuffixSet.add(THAI_MAIYAMOK);
+
+    // Compact for caching.
+    fMarkSet.compact();
+    fEndWordSet.compact();
+    fBeginWordSet.compact();
+//    fSuffixSet.compact();
+}
+
+KhmerBreakEngine::~KhmerBreakEngine() {
+    delete fDictionary;
+}
+
+int32_t
+KhmerBreakEngine::divideUpDictionaryRange( UText *text,
+                                                int32_t rangeStart,
+                                                int32_t rangeEnd,
+                                                UStack &foundBreaks ) const {
+    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
+        return 0;       // Not enough characters for two words
+    }
+
+    uint32_t wordsFound = 0;
+    int32_t wordLength;
+    int32_t current;
+    UErrorCode status = U_ZERO_ERROR;
+    PossibleWord words[KHMER_LOOKAHEAD];
+    UChar32 uc;
+
+    utext_setNativeIndex(text, rangeStart);
+
+    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+        wordLength = 0;
+
+        // Look for candidate words at the current position
+        int candidates = words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+
+        // If we found exactly one, use that
+        if (candidates == 1) {
+            wordLength = words[wordsFound%KHMER_LOOKAHEAD].acceptMarked(text);
+            wordsFound += 1;
+        }
+
+        // If there was more than one, see which one can take us forward the most words
+        else if (candidates > 1) {
+            // If we're already at the end of the range, we're done
+            if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+                goto foundBest;
+            }
+            do {
+                int wordsMatched = 1;
+                if (words[(wordsFound+1)%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) > 0) {
+                    if (wordsMatched < 2) {
+                        // Followed by another dictionary word; mark first word as a good candidate
+                        words[wordsFound%KHMER_LOOKAHEAD].markCurrent();
+                        wordsMatched = 2;
+                    }
+
+                    // If we're already at the end of the range, we're done
+                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+                        goto foundBest;
+                    }
+
+                    // See if any of the possible second words is followed by a third word
+                    do {
+                        // If we find a third word, stop right away
+                        if (words[(wordsFound+2)%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd)) {
+                            words[wordsFound%KHMER_LOOKAHEAD].markCurrent();
+                            goto foundBest;
+                        }
+                    }
+                    while (words[(wordsFound+1)%KHMER_LOOKAHEAD].backUp(text));
+                }
+            }
+            while (words[wordsFound%KHMER_LOOKAHEAD].backUp(text));
+foundBest:
+            wordLength = words[wordsFound%KHMER_LOOKAHEAD].acceptMarked(text);
+            wordsFound += 1;
+        }
+
+        // We come here after having either found a word or not. We look ahead to the
+        // next word. If it's not a dictionary word, we will combine it with the word we
+        // just found (if there is one), but only if the preceding word does not exceed
+        // the threshold.
+        // The text iterator should now be positioned at the end of the word we found.
+        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && wordLength < KHMER_ROOT_COMBINE_THRESHOLD) {
+            // if it is a dictionary word, do nothing. If it isn't, then if there is
+            // no preceding word, or the non-word shares less than the minimum threshold
+            // of characters with a dictionary word, then scan to resynchronize
+            if (words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0
+                  && (wordLength == 0
+                      || words[wordsFound%KHMER_LOOKAHEAD].longestPrefix() < KHMER_PREFIX_COMBINE_THRESHOLD)) {
+                // Look for a plausible word boundary
+                //TODO: This section will need a rework for UText.
+                int32_t remaining = rangeEnd - (current+wordLength);
+                UChar32 pc = utext_current32(text);
+                int32_t chars = 0;
+                for (;;) {
+                    utext_next32(text);
+                    uc = utext_current32(text);
+                    // TODO: Here we're counting on the fact that the SA languages are all
+                    // in the BMP. This should get fixed with the UText rework.
+                    chars += 1;
+                    if (--remaining <= 0) {
+                        break;
+                    }
+                    if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) {
+                        // Maybe. See if it's in the dictionary.
+                        int candidates = words[(wordsFound+1)%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+                        utext_setNativeIndex(text, current+wordLength+chars);
+                        if (candidates > 0) {
+                            break;
+                        }
+                    }
+                    pc = uc;
+                }
+
+                // Bump the word count if there wasn't already one
+                if (wordLength <= 0) {
+                    wordsFound += 1;
+                }
+
+                // Update the length with the passed-over characters
+                wordLength += chars;
+            }
+            else {
+                // Back up to where we were for next iteration
+                utext_setNativeIndex(text, current+wordLength);
+            }
+        }
+
+        // Never stop before a combining mark.
+        int32_t currPos;
+        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+            utext_next32(text);
+            wordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+        }
+
+        // Look ahead for possible suffixes if a dictionary word does not follow.
+        // We do this in code rather than using a rule so that the heuristic
+        // resynch continues to function. For example, one of the suffix characters
+        // could be a typo in the middle of a word.
+//        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && wordLength > 0) {
+//            if (words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0
+//                && fSuffixSet.contains(uc = utext_current32(text))) {
+//                if (uc == KHMER_PAIYANNOI) {
+//                    if (!fSuffixSet.contains(utext_previous32(text))) {
+//                        // Skip over previous end and PAIYANNOI
+//                        utext_next32(text);
+//                        utext_next32(text);
+//                        wordLength += 1;            // Add PAIYANNOI to word
+//                        uc = utext_current32(text);     // Fetch next character
+//                    }
+//                    else {
+//                        // Restore prior position
+//                        utext_next32(text);
+//                    }
+//                }
+//                if (uc == KHMER_MAIYAMOK) {
+//                    if (utext_previous32(text) != KHMER_MAIYAMOK) {
+//                        // Skip over previous end and MAIYAMOK
+//                        utext_next32(text);
+//                        utext_next32(text);
+//                        wordLength += 1;            // Add MAIYAMOK to word
+//                    }
+//                    else {
+//                        // Restore prior position
+//                        utext_next32(text);
+//                    }
+//                }
+//            }
+//            else {
+//                utext_setNativeIndex(text, current+wordLength);
+//            }
+//        }
+
         // Did we find a word on this iteration? If so, push it on the break stack
         if (wordLength > 0) {
             foundBreaks.push((current+wordLength), status);
@@ -422,234 +651,6 @@ foundBest:
     return wordsFound;
 }
 
-// How many words in a row are "good enough"? 
-#define KHMER_LOOKAHEAD 3 
- 
-// Will not combine a non-word with a preceding dictionary word longer than this 
-#define KHMER_ROOT_COMBINE_THRESHOLD 3 
- 
-// Will not combine a non-word that shares at least this much prefix with a 
-// dictionary word, with a preceding word 
-#define KHMER_PREFIX_COMBINE_THRESHOLD 3 
- 
-// Minimum word size 
-#define KHMER_MIN_WORD 2 
- 
-// Minimum number of characters for two words 
-#define KHMER_MIN_WORD_SPAN (KHMER_MIN_WORD * 2) 
- 
-KhmerBreakEngine::KhmerBreakEngine(const TrieWordDictionary *adoptDictionary, UErrorCode &status) 
-    : DictionaryBreakEngine((1<<UBRK_WORD) | (1<<UBRK_LINE)), 
-      fDictionary(adoptDictionary) 
-{ 
-    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status); 
-    if (U_SUCCESS(status)) { 
-        setCharacters(fKhmerWordSet); 
-    } 
-    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status); 
-    fMarkSet.add(0x0020); 
-    fEndWordSet = fKhmerWordSet; 
-    fBeginWordSet.add(0x1780, 0x17B3); 
-//    fEndWordSet.remove(0x0E31);             // MAI HAN-AKAT 
-//    fEndWordSet.remove(0x0E40, 0x0E44);     // SARA E through SARA AI MAIMALAI 
-//    fBeginWordSet.add(0x0E01, 0x0E2E);      // KO KAI through HO NOKHUK 
-//    fBeginWordSet.add(0x0E40, 0x0E44);      // SARA E through SARA AI MAIMALAI 
-//    fSuffixSet.add(THAI_PAIYANNOI); 
-//    fSuffixSet.add(THAI_MAIYAMOK); 
- 
-    // Compact for caching. 
-    fMarkSet.compact(); 
-    fEndWordSet.compact(); 
-    fBeginWordSet.compact(); 
-    fSuffixSet.compact(); 
-} 
- 
-KhmerBreakEngine::~KhmerBreakEngine() { 
-    delete fDictionary; 
-} 
- 
-int32_t 
-KhmerBreakEngine::divideUpDictionaryRange( UText *text, 
-                                                int32_t rangeStart, 
-                                                int32_t rangeEnd, 
-                                                UStack &foundBreaks ) const { 
-    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) { 
-        return 0;       // Not enough characters for two words 
-    } 
- 
-    uint32_t wordsFound = 0; 
-    int32_t wordLength; 
-    int32_t current; 
-    UErrorCode status = U_ZERO_ERROR; 
-    PossibleWord words[KHMER_LOOKAHEAD]; 
-    UChar32 uc; 
-     
-    utext_setNativeIndex(text, rangeStart); 
-     
-    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) { 
-        wordLength = 0; 
- 
-        // Look for candidate words at the current position 
-        int candidates = words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd); 
-         
-        // If we found exactly one, use that 
-        if (candidates == 1) { 
-            wordLength = words[wordsFound%KHMER_LOOKAHEAD].acceptMarked(text); 
-            wordsFound += 1; 
-        } 
-         
-        // If there was more than one, see which one can take us forward the most words 
-        else if (candidates > 1) { 
-            // If we're already at the end of the range, we're done 
-            if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) { 
-                goto foundBest; 
-            } 
-            do { 
-                int wordsMatched = 1; 
-                if (words[(wordsFound+1)%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) > 0) { 
-                    if (wordsMatched < 2) { 
-                        // Followed by another dictionary word; mark first word as a good candidate 
-                        words[wordsFound%KHMER_LOOKAHEAD].markCurrent(); 
-                        wordsMatched = 2; 
-                    } 
-                     
-                    // If we're already at the end of the range, we're done 
-                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) { 
-                        goto foundBest; 
-                    } 
-                     
-                    // See if any of the possible second words is followed by a third word 
-                    do { 
-                        // If we find a third word, stop right away 
-                        if (words[(wordsFound+2)%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd)) { 
-                            words[wordsFound%KHMER_LOOKAHEAD].markCurrent(); 
-                            goto foundBest; 
-                        } 
-                    } 
-                    while (words[(wordsFound+1)%KHMER_LOOKAHEAD].backUp(text)); 
-                } 
-            } 
-            while (words[wordsFound%KHMER_LOOKAHEAD].backUp(text)); 
-foundBest: 
-            wordLength = words[wordsFound%KHMER_LOOKAHEAD].acceptMarked(text); 
-            wordsFound += 1; 
-        } 
-         
-        // We come here after having either found a word or not. We look ahead to the 
-        // next word. If it's not a dictionary word, we will combine it withe the word we 
-        // just found (if there is one), but only if the preceding word does not exceed 
-        // the threshold. 
-        // The text iterator should now be positioned at the end of the word we found. 
-        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && wordLength < KHMER_ROOT_COMBINE_THRESHOLD) { 
-            // if it is a dictionary word, do nothing. If it isn't, then if there is 
-            // no preceding word, or the non-word shares less than the minimum threshold 
-            // of characters with a dictionary word, then scan to resynchronize 
-            if (words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0 
-                  && (wordLength == 0 
-                      || words[wordsFound%KHMER_LOOKAHEAD].longestPrefix() < KHMER_PREFIX_COMBINE_THRESHOLD)) { 
-                // Look for a plausible word boundary 
-                //TODO: This section will need a rework for UText. 
-                int32_t remaining = rangeEnd - (current+wordLength); 
-                UChar32 pc = utext_current32(text); 
-                int32_t chars = 0; 
-                for (;;) { 
-                    utext_next32(text); 
-                    uc = utext_current32(text); 
-                    // TODO: Here we're counting on the fact that the SA languages are all 
-                    // in the BMP. This should get fixed with the UText rework. 
-                    chars += 1; 
-                    if (--remaining <= 0) { 
-                        break; 
-                    } 
-                    if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) { 
-                        // Maybe. See if it's in the dictionary. 
-                        // NOTE: In the original Apple code, checked that the next 
-                        // two characters after uc were not 0x0E4C THANTHAKHAT before 
-                        // checking the dictionary. That is just a performance filter, 
-                        // but it's not clear it's faster than checking the trie. 
-                        int candidates = words[(wordsFound+1)%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd); 
-                        utext_setNativeIndex(text, current+wordLength+chars); 
-                        if (candidates > 0) { 
-                            break; 
-                        } 
-                    } 
-                    pc = uc; 
-                } 
-                 
-                // Bump the word count if there wasn't already one 
-                if (wordLength <= 0) { 
-                    wordsFound += 1; 
-                } 
-                 
-                // Update the length with the passed-over characters 
-                wordLength += chars; 
-            } 
-            else { 
-                // Back up to where we were for next iteration 
-                utext_setNativeIndex(text, current+wordLength); 
-            } 
-        } 
-         
-        // Never stop before a combining mark. 
-        int32_t currPos; 
-        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) { 
-            utext_next32(text); 
-            wordLength += (int32_t)utext_getNativeIndex(text) - currPos; 
-        } 
-         
-        // Look ahead for possible suffixes if a dictionary word does not follow. 
-        // We do this in code rather than using a rule so that the heuristic 
-        // resynch continues to function. For example, one of the suffix characters 
-        // could be a typo in the middle of a word. 
-        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && wordLength > 0) { 
-            if (words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0 
-                && fSuffixSet.contains(uc = utext_current32(text))) { 
-//                if (uc == KHMER_PAIYANNOI) { 
-//                    if (!fSuffixSet.contains(utext_previous32(text))) { 
-//                        // Skip over previous end and PAIYANNOI 
-//                        utext_next32(text); 
-//                        utext_next32(text); 
-//                        wordLength += 1;            // Add PAIYANNOI to word 
-//                        uc = utext_current32(text);     // Fetch next character 
-//                    } 
-//                    else { 
-//                        // Restore prior position 
-//                        utext_next32(text); 
-//                    } 
-//                } 
-//                if (uc == KHMER_MAIYAMOK) { 
-//                    if (utext_previous32(text) != KHMER_MAIYAMOK) { 
-//                        // Skip over previous end and MAIYAMOK 
-//                        utext_next32(text); 
-//                        utext_next32(text); 
-//                        wordLength += 1;            // Add MAIYAMOK to word 
-//                    } 
-//                    else { 
-//                        // Restore prior position 
-//                        utext_next32(text); 
-//                    } 
-//                } 
-            } 
-            else { 
-                utext_setNativeIndex(text, current+wordLength); 
-            } 
-        } 
-         
-        // Did we find a word on this iteration? If so, push it on the break stack 
-        if (wordLength > 0) { 
-            foundBreaks.push((current+wordLength), status); 
-        } 
-    } 
-     
-    // Don't return a break for the end of the dictionary range if there is one there. 
-    if (foundBreaks.peeki() >= rangeEnd) { 
-        (void) foundBreaks.popi(); 
-        wordsFound -= 1; 
-    } 
- 
-    return wordsFound; 
-} 
- 
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
