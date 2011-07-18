@@ -897,7 +897,7 @@ static void TestBengaliSortKey(void)
 
   c2 = ucol_openRules(rules, rulesLength, UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
   if (U_FAILURE(status)) {
-    log_err("ERROR: Creating collator from rules failed with locale: %s : %s\n", curLoc, myErrorName(status));
+    log_data_err("ERROR: Creating collator from rules failed with locale: %s : %s\n", curLoc, myErrorName(status));
     return;
   }
   
