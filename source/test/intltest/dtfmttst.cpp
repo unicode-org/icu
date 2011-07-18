@@ -3586,18 +3586,20 @@ void DateFormatTest::TestFormalChineseDate() {
 void DateFormatTest::TestStandAloneGMTParse() {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdf = new SimpleDateFormat("ZZZZ", Locale(""), status);
-    failure(status, "new SimpleDateFormat");
+    
+    if (!failure(status, "new SimpleDateFormat")) {
 
-    UnicodeString inText("GMT$$$");
-    for (int32_t i = 0; i < 10; i++) {
-        ParsePosition pos(0);
-        sdf->parse(inText, pos);
-        if (pos.getIndex() != 3) {
-            errln((UnicodeString)"FAIL: Incorrect output parse position: actual=" + pos.getIndex() + " expected=3");
+        UnicodeString inText("GMT$$$");
+        for (int32_t i = 0; i < 10; i++) {
+            ParsePosition pos(0);
+            sdf->parse(inText, pos);
+            if (pos.getIndex() != 3) {
+                errln((UnicodeString)"FAIL: Incorrect output parse position: actual=" + pos.getIndex() + " expected=3");
+            }
         }
-    }
 
-    delete sdf;
+        delete sdf;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
