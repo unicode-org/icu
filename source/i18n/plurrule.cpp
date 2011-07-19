@@ -419,6 +419,9 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
                 }
                 ruleChain=ruleChain->next=new RuleChain();
             }
+            if (ruleChain->ruleHeader != NULL) {
+                delete ruleChain->ruleHeader;
+            }
             orNode = ruleChain->ruleHeader = new OrConstraint();
             curAndConstraint = orNode->add();
             ruleChain->keyword = token;
