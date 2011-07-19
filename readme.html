@@ -13,12 +13,12 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.8</h3>
-(Last Update: May 19, 2011)
+<h3>Read Me for ICU4J 4.8.1</h3>
+(Last Update: July 19, 2011)
 <hr size="2" width="100%">
 
-<p><b>Note:</b>This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality. 
+<p><b>Note:</b>This is an update release of ICU4J 4.8. This release contains bug fixes and updated data,
+but does not introduce any new APIs for functionalities.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -140,6 +140,20 @@ When an unknown time zone ID is specified in the method, previous versions retur
 with ID "GMT" (offset 0 and no daylight saving time). In ICU 4.8, the method uses "Etc/Unknown" as the
 time zone ID (but still offset 0 and no daylight saving time) for the case. Existing software checking
 the returned time zone ID to validate the input ID may need to be updated to support the new behavior.
+
+<h4 class="doc">Summary of updates in 4.8.1 (July 19, 2011)</h4>
+<h5>CLDR 2.0.1 updates</h5>
+<p>ICU4J 4.8.1 imported locale data updates from <a href="http://cldr.unicode.org/index/downloads/cldr-2-0-1">CLDR
+2.0.1</a> release.
+
+<h5>Time zone data update</h5>
+<p>ICU4J 4.8.1 updates the time zone data to version <a href="http://source.icu-project.org/repos/icu/data/trunk/tzdata/icunew/2011h/44/">2011h</a>
+from the Olson tz database.
+
+<h5>Bug fixes</h5>
+<p>See the <a href="http://bugs.icu-project.org/trac/milestone/4.8.1">ICU Trac 4.8.1 page</a> about
+fixes done in this update release.
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -956,9 +970,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-2-0'</li>
-    <li>Checkout ICU4C with tag 'release-4-8'</li>
-    <li>Checkout ICU4J with tag 'release-4-8'</li>
+    <li>Checkout or download CLDR version 'release-2-0-1'</li>
+    <li>Checkout ICU4C with tag 'release-4-8-1'</li>
+    <li>Checkout ICU4J with tag 'release-4-8-1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -970,7 +984,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.8 includes time zone data version 2011g, which is the latest one as of
+<p>ICU4J 4.8.1 includes time zone data version 2011h, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
