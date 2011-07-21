@@ -5296,6 +5296,56 @@ fi
 $as_echo "$enabled" >&6; }
 
 
+# When building release static library, there might be some optimization flags we can use
+if test "$ENABLE_STATIC" = "YES"; then
+    if test "$ENABLE_SHARED" != "YES"; then
+        if test "$ENABLE_RELEASE" = 1; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we can use static library optimization option" >&5
+$as_echo_n "checking whether we can use static library optimization option... " >&6; }
+            CHECK_STATIC_OPT_FLAG=no
+
+            OLD_CPPFLAGS="${CPPFLAGS}"
+            OLD_LDFLAGS="${LDFLAGS}"
+
+            case "${host}" in
+            *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
+                if test "$ac_cv_c_compiler_gnu" = yes; then
+                    CPPFLAGS="${CPPFLAGS} -ffunction-sections -fdata-sections"
+                    LDFLAGS="${LDFLAGS} -Wl,--gc-sections"
+                fi
+                ;;
+            *)
+                ;;
+            esac
+
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  CHECK_STATIC_OPT_FLAG=yes
+else
+  CHECK_STATIC_OPT_FLAG=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CHECK_STATIC_OPT_FLAG" >&5
+$as_echo "$CHECK_STATIC_OPT_FLAG" >&6; }
+            if test "$CHECK_STATIC_OPT_FLAG" = no; then
+                CPPFLAGS="${OLD_CPPFLAGS}"
+                LDFLAGS="${OLD_LDFLAGS}"
+            fi
+        fi
+    fi
+fi
+
 # Check whether to enable auto cleanup of libraries
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable auto cleanup of libraries" >&5
 $as_echo_n "checking whether to enable auto cleanup of libraries... " >&6; }

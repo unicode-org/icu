@@ -261,6 +261,37 @@ AC_ARG_ENABLE(static,
 AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_STATIC)
 
+# When building release static library, there might be some optimization flags we can use
+if test "$ENABLE_STATIC" = "YES"; then
+    if test "$ENABLE_SHARED" != "YES"; then
+        if test "$ENABLE_RELEASE" = 1; then
+            AC_MSG_CHECKING([whether we can use static library optimization option])
+            CHECK_STATIC_OPT_FLAG=no
+            
+            OLD_CPPFLAGS="${CPPFLAGS}"
+            OLD_LDFLAGS="${LDFLAGS}"
+            
+            case "${host}" in
+            *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
+                if test "$ac_cv_c_compiler_gnu" = yes; then
+                    CPPFLAGS="${CPPFLAGS} -ffunction-sections -fdata-sections"
+                    LDFLAGS="${LDFLAGS} -Wl,--gc-sections"
+                fi
+                ;;
+            *)
+                ;;
+            esac
+            
+            AC_LINK_IFELSE(AC_LANG_PROGRAM, CHECK_STATIC_OPT_FLAG=yes, CHECK_STATIC_OPT_FLAG=no, )
+            AC_MSG_RESULT($CHECK_STATIC_OPT_FLAG)
+            if test "$CHECK_STATIC_OPT_FLAG" = no; then
+                CPPFLAGS="${OLD_CPPFLAGS}"
+                LDFLAGS="${OLD_LDFLAGS}"
+            fi
+        fi
+    fi
+fi
+
 # Check whether to enable auto cleanup of libraries
 AC_MSG_CHECKING([whether to enable auto cleanup of libraries])
 enabled=no
