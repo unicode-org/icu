@@ -70,7 +70,7 @@
 #  define UMTX_FULL_BARRIER
 # elif U_HAVE_GCC_ATOMICS
 #  define UMTX_FULL_BARRIER __sync_synchronize();
-# elif defined(U_WINDOWS)
+# elif defined(U_WINDOWS) && !(defined(_MSC_VER) && !(_MSC_VER >= 1500))
 #  define UMTX_FULL_BARRIER _ReadWriteBarrier();
 # elif defined(U_DARWIN)
 #  define UMTX_FULL_BARRIER OSMemoryBarrier();
