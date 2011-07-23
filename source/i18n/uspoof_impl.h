@@ -22,7 +22,7 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 
@@ -390,7 +390,7 @@ struct SpoofDataHeader {
 
 
 U_NAMESPACE_END
-#endif /* XP_CPLUSPLUS */
+#endif /* __cplusplus */
 
 /**
   * Endianness swap function for binary spoof data.

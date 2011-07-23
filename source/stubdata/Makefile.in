@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2007, International Business Machines
+#   Copyright (C) 1999-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -43,9 +43,6 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 CPPFLAGS += -I$(top_srcdir)/common $(LIBCPPFLAGS)
 LDFLAGS += $(LDFLAGSICUDT)
 
@@ -118,10 +115,6 @@ check-local:
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-../common/unicode/platform.h: $(srcdir)/../common/unicode/platform.h.in $(top_builddir)/config.status
-	cd $(top_builddir) \
-	 && CONFIG_FILES=common/unicode/platform.h CONFIG_HEADERS= $(SHELL) ./config.status
 
 ifneq ($(ENABLE_STATIC),)
 $(TARGET): $(STATIC_OBJECTS)

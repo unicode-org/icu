@@ -662,7 +662,7 @@ static UCollationResult ucaTest(void *collator, const int object, const UChar *s
 
 /*
 static UCollationResult winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
   LCID lcid = (LCID)collator;
   return (UCollationResult)CompareString(lcid, 0, source, sLen, target, tLen);
 #else

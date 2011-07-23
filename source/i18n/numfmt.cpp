@@ -1110,7 +1110,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         return NULL;
     }
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
     char buffer[8];
     int32_t count = desiredLocale.getKeywordValue("compat", buffer, sizeof(buffer), status);
 

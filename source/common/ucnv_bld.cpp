@@ -1274,7 +1274,7 @@ ucnv_getDefaultName() {
 #if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
             name = "US-ASCII";
             /* there is no 'algorithmic' converter for EBCDIC */
-#elif defined(OS390)
+#elif U_PLATFORM == U_PF_OS390
             name = "ibm-1047_P100-1995" UCNV_SWAP_LFNL_OPTION_STRING;
 #else
             name = "ibm-37_P100-1995";

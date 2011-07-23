@@ -259,10 +259,10 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
  * @internal
  */
 #ifndef U_MAX_PTR
-#  if defined(OS390) && !defined(_LP64)
+#  if U_PLATFORM == U_PF_OS390 && !defined(_LP64)
     /* We have 31-bit pointers. */
 #    define U_MAX_PTR(base) ((void *)0x7fffffff)
-#  elif defined(OS400)
+#  elif U_PLATFORM == U_PF_OS400
 #    define U_MAX_PTR(base) uprv_maximumPtr((void *)base)
 #  elif 0
     /*

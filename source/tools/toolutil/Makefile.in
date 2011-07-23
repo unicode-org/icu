@@ -43,9 +43,6 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 CFLAGS += $(LIBCFLAGS)
 CXXFLAGS += $(LIBCXXFLAGS)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
 DEFS += -DU_TOOLUTIL_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICUTOOLUTIL)

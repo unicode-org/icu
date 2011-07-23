@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,7 +22,7 @@
 #include "unicode/utypes.h"
 
 /* This should usually be called before calling u_parseArgs */
-/*#if defined(OS390) && (U_CHARSET_FAMILY == U_ASCII_FAMILY)*/
+/*#if U_PLATFORM == U_PF_OS390 && (U_CHARSET_FAMILY == U_ASCII_FAMILY)*/
     /* translate args from EBCDIC to ASCII */
 /*#   define U_MAIN_INIT_ARGS(argc, argv) __argvtoascii_a(argc, argv)*/
 /*#elif defined(XP_MAC_CONSOLE)*/

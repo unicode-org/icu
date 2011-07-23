@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2008, International Business Machines
+#   Copyright (C) 1999-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -52,9 +52,6 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 CFLAGS += $(LIBCFLAGS)
 CXXFLAGS += $(LIBCXXFLAGS)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 CPPFLAGS += -I$(srcdir) -I$(srcdir)/unicode -I$(srcdir)/.. -I$(top_srcdir)/common $(LIBCPPFLAGS)
 DEFS += -DU_LAYOUTEX_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICULX)

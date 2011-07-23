@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -40,7 +40,7 @@ struct TestResult
     float     *positions;
 };
 
-#ifndef XP_CPLUSPLUS
+#ifndef __cplusplus
 typedef struct TestResult TestResult;
 #endif
 

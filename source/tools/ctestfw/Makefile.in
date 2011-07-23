@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2010, International Business Machines
+#   Copyright (C) 1999-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -43,9 +43,6 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 CFLAGS += $(LIBCFLAGS)
 CXXFLAGS += $(LIBCXXFLAGS)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil -I$(srcdir) $(LIBCPPFLAGS) $(CPPFLAGSCTESTFW)
 DEFS += -DT_CTEST_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSCTESTFW)

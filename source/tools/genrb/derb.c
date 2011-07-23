@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#if defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)
+#if U_PLATFORM_HAS_WIN32_API
 #include <io.h>
 #include <fcntl.h>
 #define USE_FILENO_BINARY_MODE 1
@@ -237,7 +237,7 @@ main(int argc, char* argv[]) {
 
         if (!(fromICUData = !uprv_strcmp(inputDir, "-"))) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
             if (!absfilename) {
                 absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0])
                     && arg[1] == ':' && arg[2] == U_FILE_SEP_CHAR);
@@ -293,7 +293,7 @@ main(int argc, char* argv[]) {
 
             if (tostdout) {
                 out = stdout;
-#if defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)
+#if U_PLATFORM_HAS_WIN32_API
                 if (setmode(fileno(out), O_BINARY) == -1) {
                     fprintf(stderr, "%s: couldn't set standard output to binary mode\n", pname);
                     return 4;

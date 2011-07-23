@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2009, International Business Machines Corporation and
+ * Copyright (c) 1999-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -28,12 +28,17 @@
 #include <string.h>
 #include <ctype.h>    // tolower, toupper
 
-#if !defined(U_WINDOWS) && !defined(XP_MAC) && !defined(U_RHAPSODY)
-#define POSIX 1
+#if U_PLATFORM_HAS_WIN32_API
+    /* Prefer native Windows APIs even if POSIX is implemented (i.e., on Cygwin). */
+#   undef POSIX
+#elif U_PLATFORM_IMPLEMENTS_POSIX
+#   define POSIX
+#else
+#   undef POSIX
 #endif
 
 /* Needed by z/OS to get usleep */
-#if defined(OS390)
+#if U_PLATFORM == U_PF_OS390
 #define __DOT1 1
 #define __UU
 #define _XOPEN_SOURCE_EXTENDED 1
@@ -44,7 +49,7 @@
 /*#include "platform_xopen_source_extended.h"*/
 #endif
 
-#if defined(POSIX) || defined(U_SOLARIS) || defined(U_AIX) || defined(U_HPUX)
+#if defined(POSIX)
 #define HAVE_IMP
 
 #if (ICU_USE_THREADS == 1)
@@ -62,11 +67,11 @@
 #define __EXTENSIONS__
 #endif
 
-#if defined(OS390)
+#if U_PLATFORM == U_PF_OS390
 #include <sys/types.h>
 #endif
 
-#if !defined(OS390)
+#if U_PLATFORM != U_PF_OS390
 #include <signal.h>
 #endif
 
@@ -130,7 +135,7 @@
 #include "unicode/calendar.h"
 #include "ucaconf.h"
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
 #define HAVE_IMP
 
 #   define VC_EXTRALEAN
@@ -255,7 +260,7 @@ void SimpleThread::sleep(int32_t millis)
 //   class SimpleThread   NULL  Implementation
 //
 //-----------------------------------------------------------------------------------
-#elif defined XP_MAC
+#elif U_PLATFORM == U_PF_CLASSIC_MACOS
 
 // since the Mac has no preemptive threading (at least on MacOS 8), only
 // cooperative threading, threads are a no-op.  We have no yield() calls
@@ -310,7 +315,7 @@ SimpleThread::isRunning() {
 //        system level cleanup has happened.
 //
 //-----------------------------------------------------------------------------------
-#if defined(POSIX)||defined(U_SOLARIS)||defined(U_AIX)||defined(U_HPUX)
+#if defined(POSIX)
 #define HAVE_IMP
 
 struct PosixThreadImplementation
@@ -373,7 +378,7 @@ int32_t SimpleThread::start()
 #else
     if (attrIsInitialized == FALSE) {
         rc = pthread_attr_init(&attr);
-#if defined(OS390)
+#if U_PLATFORM == U_PF_OS390
         {
             int detachstate = 0;  // jdc30: detach state of zero causes
                                   //threads created with this attr to be in
@@ -417,13 +422,13 @@ SimpleThread::isRunning() {
 
 void SimpleThread::sleep(int32_t millis)
 {
-#ifdef U_SOLARIS
+#if U_PLATFORM == U_PF_SOLARIS
     sigignore(SIGALRM);
 #endif
 
 #ifdef HPUX_CMA
     cma_sleep(millis/100);
-#elif defined(U_HPUX) || defined(OS390)
+#elif U_PLATFORM == U_PF_HPUX || U_PLATFORM == U_PF_OS390
     millis *= 1000;
     while(millis >= 1000000) {
         usleep(999999);

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -19,49 +19,10 @@
 
 #include "unicode/utypes.h"
 
-U_NAMESPACE_BEGIN
-
 /**
  * \file
  * \brief C++ API: Common ICU base class UObject.
  */
-
-/**  U_OVERRIDE_CXX_ALLOCATION - Define this to override operator new and
- *                               delete in UMemory. Enabled by default for ICU.
- *
- *         Enabling forces all allocation of ICU object types to use ICU's
- *         memory allocation. On Windows, this allows the ICU DLL to be used by
- *         applications that statically link the C Runtime library, meaning that
- *         the app and ICU will be using different heaps.
- *
- * @stable ICU 2.2
- */                              
-#ifndef U_OVERRIDE_CXX_ALLOCATION
-#define U_OVERRIDE_CXX_ALLOCATION 1
-#endif
-
-/** 
- * \def U_HAVE_PLACEMENT_NEW
- *  Define this to define the placement new and
- *                          delete in UMemory for STL.
- *
- * @stable ICU 2.6
- */                              
-#ifndef U_HAVE_PLACEMENT_NEW
-#define U_HAVE_PLACEMENT_NEW 1
-#endif
-
-
-/** 
- * \def U_HAVE_DEBUG_LOCATION_NEW 
- * Define this to define the MFC debug
- * version of the operator new.
- *
- * @stable ICU 3.4
- */                              
-#ifndef U_HAVE_DEBUG_LOCATION_NEW
-#define U_HAVE_DEBUG_LOCATION_NEW 0
-#endif
 
 /**
  * @{
@@ -76,12 +37,65 @@ U_NAMESPACE_BEGIN
  *         data, (which it typically does), the result is a segmentation violation.
  *
  * @draft ICU 4.2
- */                              
+ */
 #ifndef U_NO_THROW
 #define U_NO_THROW throw()
 #endif
 
 /** @} */
+
+/*===========================================================================*/
+/* UClassID-based RTTI */
+/*===========================================================================*/
+
+/**
+ * UClassID is used to identify classes without using the compiler's RTTI.
+ * This was used before C++ compilers consistently supported RTTI.
+ * ICU 4.6 requires compiler RTTI to be turned on.
+ *
+ * Each class hierarchy which needs
+ * to implement polymorphic clone() or operator==() defines two methods,
+ * described in detail below.  UClassID values can be compared using
+ * operator==(). Nothing else should be done with them.
+ *
+ * \par
+ * getDynamicClassID() is declared in the base class of the hierarchy as
+ * a pure virtual.  Each concrete subclass implements it in the same way:
+ *
+ * \code
+ *      class Base {
+ *      public:
+ *          virtual UClassID getDynamicClassID() const = 0;
+ *      }
+ *
+ *      class Derived {
+ *      public:
+ *          virtual UClassID getDynamicClassID() const
+ *            { return Derived::getStaticClassID(); }
+ *      }
+ * \endcode
+ *
+ * Each concrete class implements getStaticClassID() as well, which allows
+ * clients to test for a specific type.
+ *
+ * \code
+ *      class Derived {
+ *      public:
+ *          static UClassID U_EXPORT2 getStaticClassID();
+ *      private:
+ *          static char fgClassID;
+ *      }
+ *
+ *      // In Derived.cpp:
+ *      UClassID Derived::getStaticClassID()
+ *        { return (UClassID)&Derived::fgClassID; }
+ *      char Derived::fgClassID = 0; // Value is irrelevant
+ * \endcode
+ * @stable ICU 2.0
+ */
+typedef void* UClassID;
+
+U_NAMESPACE_BEGIN
 
 /**
  * UMemory is the common ICU base class.
