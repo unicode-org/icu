@@ -61,7 +61,7 @@ class CharString;
 //    Macintosh produces duplicate definition linker errors with the explicit template
 //    instantiation.
 //
-#if !defined(U_DARWIN)
+#if !U_PLATFORM_IS_DARWIN_BASED
 template class U_I18N_API MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS>;
 #endif
 

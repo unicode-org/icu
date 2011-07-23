@@ -1,5 +1,5 @@
-## Makefile.in for ICU - samples/tzdate
-## Copyright (c) 1999-2007, International Business Machines Corporation and
+## Makefile.in for ICU - test/compat
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -20,7 +20,7 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = tzdate$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = tzdate.o

@@ -24,12 +24,18 @@
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
 #include "putilimp.h"
-#if !defined(U_WINDOWS) && !defined(XP_MAC) && !defined(U_RHAPSODY)
-#define POSIX 1
+
+#if U_PLATFORM_HAS_WIN32_API
+    /* Prefer native Windows APIs even if POSIX is implemented (i.e., on Cygwin). */
+#   undef POSIX
+#elif U_PLATFORM_IMPLEMENTS_POSIX
+#   define POSIX
+#else
+#   undef POSIX
 #endif
 
 /* Needed by z/OS to get usleep */
-#if defined(OS390)
+#if U_PLATFORM == U_PF_OS390
 #define __DOT1 1
 #define __UU
 #define _XOPEN_SOURCE_EXTENDED 1
@@ -39,7 +45,7 @@
 #include <unistd.h>
 /*#include "platform_xopen_source_extended.h"*/
 #endif
-#if defined(POSIX) || defined(U_SOLARIS) || defined(U_AIX) || defined(U_HPUX)
+#if defined(POSIX)
 
 #define HAVE_IMP
 
@@ -58,11 +64,11 @@
 #define __EXTENSIONS__
 #endif
 
-#if defined(OS390)
+#if U_PLATFORM == U_PF_OS390
 #include <sys/types.h>
 #endif
 
-#if !defined(OS390)
+#if U_PLATFORM != U_PF_OS390
 #include <signal.h>
 #endif
 

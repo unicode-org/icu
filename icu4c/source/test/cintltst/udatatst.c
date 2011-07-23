@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #include <io.h>
 #else
 #include <unistd.h>
@@ -1151,7 +1151,7 @@ static void TestICUDataName()
 
 /* test data swapping ------------------------------------------------------- */
 
-#ifdef OS400
+#if U_PLATFORM == U_PF_OS400
 /* See comments in genccode.c on when this special implementation can be removed. */
 static const struct {
     double bogus;

@@ -32,9 +32,6 @@ BUILDDIR := $(BUILDDIR:test\\cintltst/../../=)
 # Simplify the path for Windows 98
 BUILDDIR := $(BUILDDIR:TEST\\CINTLTST/../../=)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 # we define ICU_UNICODE_VERSION so we can test it
 CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
 DEFS += -D'ICU_UNICODE_VERSION="$(UNICODE_VERSION)"' -D'ICU_VERSION="@VERSION@"' -D'ICUDATA_NAME="$(ICUDATA_PLATFORM_NAME)"' -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'

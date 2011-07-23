@@ -43,6 +43,8 @@
         <ul >
           <li><a href="#RecBuild">Recommended Build Options</a></li>
 
+          <li><a href="#UserConfig">User-Configurable Settings</a></li>
+
           <li><a href="#HowToBuildWindows">Windows</a></li>
 
           <li><a href="#HowToBuildCygwin">Cygwin</a></li>
@@ -229,6 +231,28 @@
     <p>ICU4C 49 requires C++ namespace support.
     As a result, for example, rather than <code>U_NAMESPACE_QUALIFIER UnicodeString</code>
     you can now simply write <code>icu::UnicodeString</code>.</p>
+
+    <h3>One shared platform.h</h3>
+    <p>ICU4C 49 does not generate any source code files via autoconf any more.
+    Instead, platform.h itself is now a normal source header file,
+    and determines platform-specific settings via <code>#if ...</code> etc.</p>
+
+    <p>As a result, it is easier to cross-compile ICU4C and/or use different build systems.
+    No more headers are <code>#include</code>d from the build-output directory,
+    and all platforms use the same set of source code files.</p>
+
+    <p>However, it is likely that ICU4C 49 will not compile on some platforms
+    (non-POSIX and/or older/unusual compilers etc.) that the ICU team did not test.
+    As a temporary workaround, any platform-dependent macro for which <code>platform.h</code>
+    does not determine the correct value can be predefined via <code>CPPFLAGS</code>
+    or by adding an explicit <code>#define ...</code> into <code>platform.h</code>
+    before it first tests that macro.</p>
+
+    <p>Please submit a bug ticket per platform with details about your compiler,
+    its version and its predefined macros.
+    (For example, preprocessing an empty source file with gcc's <code>-dM</code> option
+    outputs all of gcc's predefined macros: <code>gcc -E -dM -x c /dev/null | sort</code>)
+    A patch to fix the problem would be welcome too!</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -661,6 +685,22 @@
         The public header files from this configuration must be installed
         for applications to include and get the correct entry point names.</li>
     </ul>
+
+    <h3><a name="UserConfig" href="#UserConfig" id="UserConfig">User-Configurable Settings</a></h3>
+    <p>ICU4C can be customized via a number of user-configurable settings.
+    Many of them are controlled by preprocessor macros which are
+    defined in the <code>source/common/unicode/uconfig.h</code> header file.
+    Some turn off parts of ICU, for example conversion or collation,
+    trading off a smaller library for reduced functionality.
+    Other settings are recommended (see previous section)
+    but their default values are set for better source code compatibility.</p>
+
+    <p>In order to change such user-configurable settings, you can
+    either modify the <code>uconfig.h</code> header file by adding
+    a specific <code>#define ...</code> for one or more of the macros
+    before they are first tested,
+    or set the compiler's preprocessor flags (<code>CPPFLAGS</code>) to include
+    an equivalent <code>-D</code> macro definition.</p>
 
     <h3><a name="HowToBuildWindows" href="#HowToBuildWindows" id=
     "HowToBuildWindows">How To Build And Install On Windows</a></h3>

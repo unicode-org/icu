@@ -412,7 +412,7 @@ uchar_swapNames(const UDataSwapper *ds,
                 const void *inData, int32_t length, void *outData,
                 UErrorCode *pErrorCode);
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 

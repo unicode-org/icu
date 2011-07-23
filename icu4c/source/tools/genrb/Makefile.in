@@ -1,6 +1,6 @@
 #################################################################################
 ## Makefile.in for ICU - tools/genrb                                            #
-## Copyright (c) 1999-2009, International Business Machines Corporation and     #
+## Copyright (c) 1999-2011, International Business Machines Corporation and     #
 ## others. All Rights Reserved.                                                 #
 #################################################################################
 
@@ -30,9 +30,6 @@ CLEANFILES = *~ $(MAN_FILES) $(DEPS) $(DERB_DEPS)
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 DERB = $(BINDIR)/$(DERB_STUB_NAME)$(EXEEXT)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 

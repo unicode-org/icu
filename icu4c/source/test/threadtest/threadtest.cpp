@@ -1,6 +1,6 @@
 //
 //********************************************************************
-//   Copyright (C) 2002-2005, International Business Machines
+//   Copyright (C) 2002-2011, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //********************************************************************
 //
@@ -32,7 +32,7 @@ extern  AbstractThreadTest *createConvertTest();
 //   Windows specific code for starting threads
 //
 //------------------------------------------------------------------------------
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
 
 #include "Windows.h"
 #include "process.h"

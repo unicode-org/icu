@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -37,7 +37,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-#if defined(U_WINDOWS) && !defined(fileno)
+#if U_PLATFORM_USES_ONLY_WIN32_API && !defined(fileno)
 /* Windows likes to rename Unix-like functions */
 #define fileno _fileno
 #endif
@@ -62,7 +62,7 @@ finit_owner(FILE         *f,
     uprv_memset(result, 0, sizeof(UFILE));
     result->fFileno = fileno(f);
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
     if (0 <= result->fFileno && result->fFileno <= 2) {
         /* stdin, stdout and stderr need to be special cased for Windows 98 */
 #if _MSC_VER >= 1400

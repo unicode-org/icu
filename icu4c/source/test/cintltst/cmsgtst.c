@@ -219,7 +219,7 @@ static void MessageFormatTest( void )
                         austrdup(result), austrdup(testResultStrings[i]) );
                 }
 
-#if defined (U_DARWIN)  /* add platforms here .. */
+#if U_PLATFORM == U_PF_DARWIN  /* add platforms here .. */
                 log_verbose("Skipping potentially crashing test for mismatched varargs.\n");
 #else
                 log_verbose("Note: the next is a platform dependent test. If it crashes, add an exclusion for your platform near %s:%d\n", __FILE__, __LINE__); 

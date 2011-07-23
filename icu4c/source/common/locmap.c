@@ -30,7 +30,15 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-#if defined(U_WINDOWS) && defined(_MSC_VER) && (_MSC_VER >= 1500)
+#if U_PLATFORM == U_PF_WINDOWS && defined(_MSC_VER) && (_MSC_VER >= 1500)
+/*
+ * TODO: It seems like we should widen this to
+ * either U_PLATFORM_USES_ONLY_WIN32_API (includes MinGW)
+ * or U_PLATFORM_HAS_WIN32_API (includes MinGW and Cygwin)
+ * but those use gcc and won't have defined(_MSC_VER).
+ * We might need to #include some Windows header and test for some version macro from there.
+ * Or call some Windows function and see what it returns.
+ */
 #define USE_WINDOWS_LOCALE_API
 #endif
 

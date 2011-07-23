@@ -107,7 +107,7 @@ typedef void U_CALLCONV UObjectDeleter(void* obj);
 U_CAPI void U_EXPORT2
 uprv_deleteUObject(void *obj);
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 
@@ -549,5 +549,5 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
 
 U_NAMESPACE_END
 
-#endif  /* XP_CPLUSPLUS */
+#endif  /* __cplusplus */
 #endif  /* CMEMORY_H */

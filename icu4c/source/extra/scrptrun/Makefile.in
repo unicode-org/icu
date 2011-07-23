@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - extra/scrptrun
-## Copyright (c) 2001, International Business Machines Corporation and
+## Copyright (c) 2001-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -23,7 +23,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET = srtest
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir) 
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir) 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@

@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 #include "unicode/utypes.h"
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
 #   define VC_EXTRALEAN
 #   define WIN32_LEAN_AND_MEAN
 #   define NOUSER
@@ -37,7 +37,7 @@
 #endif
 
 /* In MinGW environment, io.h needs to be included for _mkdir() */
-#ifdef U_MINGW
+#if U_PLATFORM == U_PF_MINGW
 #include <io.h>
 #endif
 
@@ -86,7 +86,7 @@ U_CAPI int32_t U_EXPORT2 getCurrentYear() {
 
 U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
     /* anticipate problems with "short" pathnames */
     static WIN32_FIND_DATAA info;
     HANDLE file=FindFirstFileA(pathname, &info);
@@ -166,13 +166,13 @@ U_CAPI void U_EXPORT2
 uprv_mkdir(const char *pathname, UErrorCode *status) {
 
     int retVal = 0;
-#if defined(U_WINDOWS) || defined(U_MINGW)
+#if U_PLATFORM_USES_ONLY_WIN32_API
     retVal = _mkdir(pathname);
 #else
     retVal = mkdir(pathname, S_IRWXU | (S_IROTH | S_IXOTH) | (S_IROTH | S_IXOTH));
 #endif
     if (retVal && errno != EEXIST) {
-#if defined(U_CYGWIN) || defined(U_MINGW)
+#if U_PF_MINGW <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
         /*if using Cygwin and the mkdir says it failed...check if the directory already exists..*/
         /* if it does...don't give the error, if it does not...give the error - Brian Rower - 6/25/08 */
         struct stat st;

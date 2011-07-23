@@ -179,7 +179,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     DecimalFormat *s = (DecimalFormat*)fFormat;
     logln((UnicodeString)"  Pattern " + s->toPattern(str));
 
-#if defined(OS390) || defined(OS400)
+#if U_PF_OS390 <= U_PLATFORM && U_PLATFORM <= U_PF_OS400
     tryIt(-2.02147304840132e-68);
     tryIt(3.88057859588817e-68); // Test rounding when only some digits are shown because exponent is close to -maxfrac
     tryIt(-2.64651110485945e+65); // Overflows to +INF when shown as a percent
@@ -196,7 +196,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     // These fail due to round-off
     // The least significant digit drops by one during each format-parse cycle.
     // Both numbers DON'T have a round-off problem when multiplied by 100! (shown as %)
-#ifdef OS390
+#if U_PLATFORM == U_PF_OS390
     tryIt(-9.18228054496402e+64);
     tryIt(-9.69413034454191e+64);
 #else
@@ -204,7 +204,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(-9.69413034454191e+273);
 #endif
 
-#ifndef OS390
+#if U_PLATFORM != U_PF_OS390
     tryIt(1.234e-200);
     tryIt(-2.3e-168);
 

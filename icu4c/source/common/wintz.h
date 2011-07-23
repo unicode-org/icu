@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -14,7 +14,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
 
 /**
  * \file 
@@ -29,6 +29,6 @@ U_CDECL_END
 U_CFUNC const char* U_EXPORT2
 uprv_detectWindowsTimeZone();
 
-#endif /* #ifdef U_WINDOWS */
+#endif /* U_PLATFORM_HAS_WIN32_API */
 
 #endif /* __WINTZ */

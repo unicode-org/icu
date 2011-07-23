@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -618,7 +618,7 @@ U_CDECL_END
 
 /* C++ convenience wrappers ------------------------------------------------- */
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 #include "mutex.h"
 

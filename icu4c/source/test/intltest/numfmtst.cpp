@@ -376,7 +376,7 @@ NumberFormatTest::TestExponential(void)
                 a = af.getLong();
             else if (af.getType() == Formattable::kDouble) {
                 a = af.getDouble();
-#if defined(OS390) || defined(OS400)
+#if U_PF_OS390 <= U_PLATFORM && U_PLATFORM <= U_PF_OS400
                 // S/390 will show a failure like this:
                 //| -3.141592652999999e-271 -format-> -3.1416E-271
                 //|                          -parse-> -3.1416e-271
@@ -2620,7 +2620,7 @@ void NumberFormatTest::TestJB3832(){
 
 void NumberFormatTest::TestHost()
 {
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
     Win32NumberTest::testLocales(this);
 #endif
     Locale loc("en_US@compat=host");
