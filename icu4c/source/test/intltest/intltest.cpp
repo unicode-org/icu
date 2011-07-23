@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -92,7 +92,7 @@ Int64ToUnicodeString(int64_t num)
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-#ifdef U_WINDOWS
+#if defined(_MSC_VER)
     sprintf(buffer, "%I64d", num);
 #else
     sprintf(buffer, "%lld", (long long)num);

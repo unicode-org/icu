@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005,2008 International Business Machines
+*   Copyright (C) 1999-2011 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -45,7 +45,7 @@ ubrk_swap(const UDataSwapper *ds,
           const void *inData, int32_t length, void *outData,
           UErrorCode *pErrorCode);
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"

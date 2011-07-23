@@ -458,13 +458,13 @@ StringTest::TestStringByteSink() {
 #endif
 }
 
-#if defined(U_WINDOWS) && defined(_MSC_VER)
+#if defined(_MSC_VER)
 #include <vector>
 #endif
 
 void
 StringTest::TestSTLCompatibility() {
-#if defined(U_WINDOWS) && defined(_MSC_VER)
+#if defined(_MSC_VER)
     /* Just make sure that it compiles with STL's placement new usage. */
     std::vector<UnicodeString> myvect;
     myvect.push_back(UnicodeString("blah"));

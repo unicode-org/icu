@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2008-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -14,7 +14,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
 /**
  * \file 
  * \brief C API: Utilities for dealing w/ Windows time zones.
@@ -32,6 +32,6 @@ U_CAPI UBool U_EXPORT2
 uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length);
 
 
-#endif /* #ifdef U_WINDOWS */
+#endif /* U_PLATFORM_HAS_WIN32_API */
 
 #endif /* __WINTZIMPL */

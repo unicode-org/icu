@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2007, International Business Machines Corporation
+* Copyright (C) 1999-2011, International Business Machines Corporation
 * and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -13,7 +13,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_TRANSLITERATION
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 #include "unicode/uobject.h"
 #include "unicode/parseerr.h"
@@ -335,7 +335,7 @@ private:
 
 U_NAMESPACE_END
 
-#endif /* #ifdef XP_CPLUSPLUS */
+#endif /* #ifdef __cplusplus */
 
 /**
  * Strip/convert the following from the transliterator rules:

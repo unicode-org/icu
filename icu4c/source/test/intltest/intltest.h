@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -17,9 +17,9 @@
 
 U_NAMESPACE_USE
 
-#ifdef OS390
+#if U_PLATFORM == U_PF_OS390
 // avoid collision with math.h/log()
-// this must be after including utypes.h so that OS390 is actually defined
+// this must be after including utypes.h so that U_PLATFORM is actually defined
 #pragma map(IntlTest::log( const UnicodeString &message ),"logos390")
 #endif
 

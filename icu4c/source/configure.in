@@ -1418,8 +1418,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/utfperf/Makefile \
 		test/perf/utrie2perf/Makefile \
 		samples/Makefile samples/date/Makefile \
-		samples/cal/Makefile samples/layout/Makefile \
-		common/unicode/platform.h])
+		samples/cal/Makefile samples/layout/Makefile])
 AC_OUTPUT
 
 echo 

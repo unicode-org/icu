@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/perf/charperf
-## Copyright (c) 2001-2006, International Business Machines Corporation and
+## Copyright (c) 2001-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -19,7 +19,7 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = charperf
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = charperf.o

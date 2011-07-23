@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.h
@@ -19,7 +19,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -75,7 +75,7 @@ tests[];
 extern const int
 bidiTestCount;
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 }
 #endif
 

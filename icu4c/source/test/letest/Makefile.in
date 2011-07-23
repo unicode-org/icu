@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/letest
-## Copyright (c) 2001-2007, International Business Machines Corporation and
+## Copyright (c) 2001-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -31,11 +31,7 @@ BUILDDIR := $(BUILDDIR:test\\cintltst/../../=)
 # Simplify the path for Windows 98
 BUILDDIR := $(BUILDDIR:TEST\\CINTLTST/../../=)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
-
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/layout -I$(top_srcdir)/layoutex -I$(top_srcdir)
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/layout -I$(top_srcdir)/layoutex -I$(top_srcdir)
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBICULX) $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) $(LIBCTESTFW) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 

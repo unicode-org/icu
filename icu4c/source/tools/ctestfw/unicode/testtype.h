@@ -1,6 +1,6 @@
 /*
  *****************************************************************************************
- *   Copyright (C) 2004-2007, International Business Machines
+ *   Copyright (C) 2004-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *****************************************************************************************
  */
@@ -16,7 +16,7 @@
     #define T_CTEST_IMPORT
 #endif
 
-#if defined(U_WINDOWS)
+#if defined(_MSC_VER)
 #define T_CTEST_EXPORT2 __cdecl
 #else
 #define T_CTEST_EXPORT2

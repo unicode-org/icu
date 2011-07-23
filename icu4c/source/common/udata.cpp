@@ -14,9 +14,9 @@
 *   created by: Markus W. Scherer
 */
 
-#include "unicode/utypes.h"  /* U_LINUX */
+#include "unicode/utypes.h"  /* U_PLATFORM etc. */
 
-#ifdef U_LINUX
+#ifdef __GNUC__
 /* if gcc
 #define ATTRIBUTE_WEAK __attribute__ ((weak))
 might have to #include some other header

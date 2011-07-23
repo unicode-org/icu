@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 #include "unicode/uobject.h"
 #endif
 
@@ -258,7 +258,7 @@ struct LEPoint
     float fY;
 };
 
-#ifndef XP_CPLUSPLUS
+#ifndef __cplusplus
 /**
  * Used to hold a pair of (x, y) values which represent a point.
  *
@@ -542,7 +542,7 @@ enum LEErrorCode {
     LE_MISSING_FONT_TABLE_ERROR     = U_MISSING_RESOURCE_ERROR   /**< The requested font table does not exist. */
 };
 
-#ifndef XP_CPLUSPLUS
+#ifndef __cplusplus
 /**
  * Error codes returned by the LayoutEngine.
  *

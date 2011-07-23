@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -21,7 +21,7 @@ U_NAMESPACE_BEGIN
 
 // Windows needs us to DLL-export the MaybeStackArray template specialization,
 // but MacOS X cannot handle it. Same as in digitlst.h.
-#if !defined(U_DARWIN)
+#if !U_PLATFORM_IS_DARWIN_BASED
 template class U_COMMON_API MaybeStackArray<char, 40>;
 #endif
 

@@ -40,10 +40,10 @@
 
 U_NAMESPACE_USE
 
-#if (defined(U_WINDOWS) || defined(U_CYGWIN) || defined(U_MINGW)) && !defined(__STRICT_ANSI__)
+#if U_PLATFORM_USES_ONLY_WIN32_API && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
-#if defined(U_WINDOWS)
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #define USE_FILENO_BINARY_MODE 1
 /* Windows likes to rename Unix-like functions */
 #ifndef fileno
@@ -1134,7 +1134,7 @@ main(int argc, char **argv)
 
     // Get and prettify pname.
     pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
     if (!pname) {
         pname = uprv_strrchr(*argv, '/');
     }

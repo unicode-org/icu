@@ -344,7 +344,7 @@ DateFormat* U_EXPORT2
 DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 {
     UErrorCode status = U_ZERO_ERROR;
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
     char buffer[8];
     int32_t count = locale.getKeywordValue("compat", buffer, sizeof(buffer), status);
 

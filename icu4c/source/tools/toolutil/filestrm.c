@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -43,7 +43,7 @@ U_CAPI FileStream* U_EXPORT2
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 {
    // TBD: _wfopen is believed to be MS-specific? 
-#if defined(U_WINDOWS)
+#if U_PLATFORM_USES_ONLY_WIN32_API
     FILE* result = _wfopen(filename, mode);
     return (FileStream*)result;
 #else

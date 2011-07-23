@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - samples/layout
-## Copyright (c) 2001-2007, International Business Machines Corporation and
+## Copyright (c) 2001-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -23,7 +23,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET  = gnomelayout
 CTARGET = cgnomelayout
 
-CPPFLAGS += -DLE_USE_CMEMORY `pkg-config --cflags libgnomeui-2.0 freetype2 cairo` -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layoutex -I$(top_srcdir)/layout -I$(top_srcdir) -g
+CPPFLAGS += -DLE_USE_CMEMORY `pkg-config --cflags libgnomeui-2.0 freetype2 cairo` -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layoutex -I$(top_srcdir)/layout -I$(top_srcdir) -g
 
 LIBS = $(LIBICULX) $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) @LIBS@ @LIB_M@ `pkg-config --libs libgnomeui-2.0 freetype2 cairo`
 

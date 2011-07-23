@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2008 International Business Machines Corporation
+ * Copyright (C) 2001-2011 International Business Machines Corporation
  * and others. All Rights Reserved.
  *
  ********************************************************************/
@@ -21,7 +21,7 @@
 
 
 #if 0
-#ifdef U_DARWIN
+#if U_PLATFORM_IS_DARWIN_BASED
 #include <ApplicationServices/ApplicationServices.h>
 enum{
   kUCTextBreakAllMask = (kUCTextBreakClusterMask | kUCTextBreakWordMask | kUCTextBreakLineMask)
@@ -83,7 +83,7 @@ void doForwardTest() {
 
     elapsedTime = timeGetTime()-startTime;
   } else if(opt_mac) {
-#ifdef U_DARWIN
+#if U_PLATFORM_IS_DARWIN_BASED
     createMACBrkIt();
     UniChar* filePtr = text;
     OSStatus status = noErr;

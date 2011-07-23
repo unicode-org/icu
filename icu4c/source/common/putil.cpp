@@ -77,7 +77,12 @@ Cleanly installed Solaris can use this #define.
 #include <float.h>
 
 /* include system headers */
-#if defined(U_WINDOWS) || defined(U_MINGW)
+#if U_PLATFORM_USES_ONLY_WIN32_API
+    /*
+     * TODO: U_PLATFORM_USES_ONLY_WIN32_API includes MinGW.
+     * Should Cygwin be included as well (U_PLATFORM_HAS_WIN32_API)
+     * to use native APIs as much as possible?
+     */
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
 #   define NOUSER
@@ -86,13 +91,13 @@ Cleanly installed Solaris can use this #define.
 #   define NOMCX
 #   include <windows.h>
 #   include "wintz.h"
-#elif defined(OS400)
+#elif U_PLATFORM == U_PF_OS400
 #   include <float.h>
 #   include <qusec.h>       /* error code structure */
 #   include <qusrjobi.h>
 #   include <qliept.h>      /* EPT_CALL macro  - this include must be after all other "QSYSINCs" */
 #   include <mih/testptr.h> /* For uprv_maximumPtr */
-#elif defined(XP_MAC)
+#elif U_PLATFORM == U_PF_CLASSIC_MACOS
 #   include <Files.h>
 #   include <IntlResources.h>
 #   include <Script.h>
@@ -100,20 +105,20 @@ Cleanly installed Solaris can use this #define.
 #   include <MacTypes.h>
 #   include <TextUtils.h>
 #   define ICU_NO_USER_DATA_OVERRIDE 1
-#elif defined(OS390)
+#elif U_PLATFORM == U_PF_OS390
 #   include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
-#elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD)
+#elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD
 #   include <limits.h>
 #   include <unistd.h>
-#elif defined(U_QNX)
+#elif U_PLATFORM == U_PF_QNX
 #   include <sys/neutrino.h>
-#elif defined(U_SOLARIS)
+#elif U_PLATFORM == U_PF_SOLARIS
 #   ifndef _XPG4_2
 #       define _XPG4_2
 #   endif
 #endif
 
-#if (defined(U_CYGWIN) || defined(U_MINGW)) && defined(__STRICT_ANSI__)
+#if (U_PF_MINGW <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
 /* tzset isn't defined in strict ANSI on Cygwin and MinGW. */
 #undef __STRICT_ANSI__
 #endif
@@ -123,11 +128,7 @@ Cleanly installed Solaris can use this #define.
  */
 #include <time.h>
 
-#if defined(U_DARWIN)
-#include <TargetConditionals.h>
-#endif
-
-#ifndef U_WINDOWS
+#if !U_PLATFORM_USES_ONLY_WIN32_API
 #include <sys/time.h>
 #endif
 
@@ -146,7 +147,15 @@ Cleanly installed Solaris can use this #define.
  * icucfg.h via autoheader.
  */
 #if defined(U_HAVE_ICUCFG)
-#include "icucfg.h"
+#   include "icucfg.h"
+#elif U_PLATFORM_IMPLEMENTS_POSIX
+#   define HAVE_DLFCN_H 1
+#   define HAVE_DLOPEN 1
+#   define HAVE_GETTIMEOFDAY 1
+#else
+#   undef HAVE_DLFCN_H
+#   undef HAVE_DLOPEN
+#   undef HAVE_GETTIMEOFDAY
 #endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -178,7 +187,7 @@ static const BitPatternConversion gInf = { (int64_t) INT64_C(0x7FF0000000000000)
   functions).
   ---------------------------------------------------------------------------*/
 
-#if defined(U_WINDOWS) || defined(XP_MAC) || defined(OS400) || defined(U_MINGW)
+#if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CLASSIC_MACOS || U_PLATFORM == U_PF_OS400
 #   undef U_POSIX_LOCALE
 #else
 #   define U_POSIX_LOCALE    1
@@ -264,7 +273,7 @@ static UDate getUTCtime_fake() {
 }
 #endif
 
-#if defined(U_WINDOWS)
+#if U_PLATFORM_USES_ONLY_WIN32_API
 typedef union {
     int64_t int64;
     FILETIME fileTime;
@@ -297,7 +306,7 @@ uprv_getUTCtime()
 U_CAPI UDate U_EXPORT2
 uprv_getRawUTCtime()
 {
-#if defined(XP_MAC)
+#if U_PLATFORM == U_PF_CLASSIC_MACOS
     time_t t, t1, t2;
     struct tm tmrec;
 
@@ -311,7 +320,7 @@ uprv_getRawUTCtime()
     uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);    /* seconds of current GMT*/
     return (UDate)(t2 - t1) * U_MILLIS_PER_SECOND;         /* GMT (or UTC) in seconds since 1970*/
-#elif defined(U_WINDOWS)
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 
     FileTimeConversion winTime;
     GetSystemTimeAsFileTime(&winTime.fileTime);
@@ -350,7 +359,7 @@ uprv_isNaN(double number)
     /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
     return (UBool)((convertedNumber.i64 & U_INT64_MAX) > gInf.i64);
 
-#elif defined(OS390)
+#elif U_PLATFORM == U_PF_OS390
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                         sizeof(uint32_t));
     uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
@@ -375,7 +384,7 @@ uprv_isInfinite(double number)
     convertedNumber.d64 = number;
     /* Infinity is exactly 0x7FF0000000000000U. */
     return (UBool)((convertedNumber.i64 & U_INT64_MAX) == gInf.i64);
-#elif defined(OS390)
+#elif U_PLATFORM == U_PF_OS390
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                         sizeof(uint32_t));
     uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
@@ -394,7 +403,7 @@ uprv_isInfinite(double number)
 U_CAPI UBool U_EXPORT2
 uprv_isPositiveInfinity(double number)
 {
-#if IEEE_754 || defined(OS390)
+#if IEEE_754 || U_PLATFORM == U_PF_OS390
     return (UBool)(number > 0 && uprv_isInfinite(number));
 #else
     return uprv_isInfinite(number);
@@ -404,7 +413,7 @@ uprv_isPositiveInfinity(double number)
 U_CAPI UBool U_EXPORT2
 uprv_isNegativeInfinity(double number)
 {
-#if IEEE_754 || defined(OS390)
+#if IEEE_754 || U_PLATFORM == U_PF_OS390
     return (UBool)(number < 0 && uprv_isInfinite(number));
 
 #else
@@ -418,7 +427,7 @@ uprv_isNegativeInfinity(double number)
 U_CAPI double U_EXPORT2
 uprv_getNaN()
 {
-#if IEEE_754 || defined(OS390)
+#if IEEE_754 || U_PLATFORM == U_PF_OS390
     return gNan.d64;
 #else
     /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
@@ -431,7 +440,7 @@ uprv_getNaN()
 U_CAPI double U_EXPORT2
 uprv_getInfinity()
 {
-#if IEEE_754 || defined(OS390)
+#if IEEE_754 || U_PLATFORM == U_PF_OS390
     return gInf.d64;
 #else
     /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
@@ -573,7 +582,7 @@ uprv_log(double d)
 U_CAPI void * U_EXPORT2
 uprv_maximumPtr(void * base)
 {
-#if defined(OS400)
+#if U_PLATFORM == U_PF_OS400
     /*
      * With the provided function we should never be out of range of a given segment
      * (a traditional/typical segment that is).  Our segments have 5 bytes for the
@@ -651,15 +660,15 @@ uprv_timezone()
 /* Note that U_TZNAME does *not* have to be tzname, but if it is,
    some platforms need to have it declared here. */
 
-#if defined(U_TZNAME) && (defined(U_IRIX) || defined(U_DARWIN) || defined(U_CYGWIN))
+#if defined(U_TZNAME) && (U_PLATFORM == U_PF_IRIX || U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM == U_PF_CYGWIN)
 /* RS6000 and others reject char **tzname.  */
 extern U_IMPORT char *U_TZNAME[];
 #endif
 
-#if !UCONFIG_NO_FILE_IO && (defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD))
+#if !UCONFIG_NO_FILE_IO && (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD)
 /* These platforms are likely to use Olson timezone IDs. */
 #define CHECK_LOCALTIME_LINK 1
-#if defined(U_DARWIN)
+#if U_PLATFORM_IS_DARWIN_BASED
 #include <tzfile.h>
 #define TZZONEINFO      (TZDIR "/")
 #else
@@ -679,7 +688,7 @@ static char gTimeZoneBuffer[PATH_MAX];
 static char *gTimeZoneBufferPtr = NULL;
 #endif
 
-#ifndef U_WINDOWS
+#if !U_PLATFORM_USES_ONLY_WIN32_API
 #define isNonDigit(ch) (ch < '0' || '9' < ch)
 static UBool isValidOlsonID(const char *id) {
     int32_t idx = 0;
@@ -722,7 +731,7 @@ static void skipZoneIDPrefix(const char** id) {
 }
 #endif
 
-#if defined(U_TZNAME) && !defined(U_WINDOWS)
+#if defined(U_TZNAME) && !U_PLATFORM_USES_ONLY_WIN32_API
 
 #define CONVERT_HOURS_TO_SECONDS(offset) (int32_t)(offset*3600)
 typedef struct OffsetZoneMapping {
@@ -969,7 +978,7 @@ U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
     const char *tzid = NULL;
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
     tzid = uprv_detectWindowsTimeZone();
 
     if (tzid != NULL) {
@@ -977,7 +986,7 @@ uprv_tzname(int n)
     }
 #else
 
-/*#if defined(U_DARWIN)
+/*#if U_PLATFORM_IS_DARWIN_BASED
     int ret;
 
     tzid = getenv("TZFILE");
@@ -1050,7 +1059,7 @@ uprv_tzname(int n)
 #endif
 
 #ifdef U_TZNAME
-#if defined(U_WINDOWS) || defined(U_MINGW)
+#if U_PLATFORM_USES_ONLY_WIN32_API
     /* The return value is free'd in timezone.cpp on Windows because
      * the other code path returns a pointer to a heap location. */
     return uprv_strdup(U_TZNAME[n]);
@@ -1169,7 +1178,7 @@ uprv_pathIsAbsolute(const char *path)
   }
 #endif
 
-#if defined(U_WINDOWS)
+#if U_PLATFORM_USES_ONLY_WIN32_API
   if( (((path[0] >= 'A') && (path[0] <= 'Z')) ||
        ((path[0] >= 'a') && (path[0] <= 'z'))) &&
       path[1] == ':' ) {
@@ -1182,7 +1191,7 @@ uprv_pathIsAbsolute(const char *path)
 
 /* Temporary backup setting of ICU_DATA_DIR_PREFIX_ENV_VAR
    until some client wrapper makefiles are updated */
-#if defined(U_DARWIN) && TARGET_IPHONE_SIMULATOR
+#if U_PLATFORM_IS_DARWIN_BASED && TARGET_IPHONE_SIMULATOR
 # if !defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
 #  define ICU_DATA_DIR_PREFIX_ENV_VAR "IPHONE_SIMULATOR_ROOT"
 # endif
@@ -1260,7 +1269,7 @@ u_getDataDirectory(void) {
 
 
 /* Macintosh-specific locale information ------------------------------------ */
-#ifdef XP_MAC
+#if U_PLATFORM == U_PF_CLASSIC_MACOS
 
 typedef struct {
     int32_t script;
@@ -1570,7 +1579,7 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif defined(U_WINDOWS) || defined(U_MINGW)
+#elif U_PLATFORM_USES_ONLY_WIN32_API
     UErrorCode status = U_ZERO_ERROR;
     LCID id = GetThreadLocale();
     const char* locID = uprv_convertToPosix(id, &status);
@@ -1580,7 +1589,7 @@ The leftmost codepage (.xxx) wins.
     }
     return locID;
 
-#elif defined(XP_MAC)
+#elif U_PLATFORM == U_PF_CLASSIC_MACOS
     int32_t script = MAC_LC_INIT_NUMBER;
     /* = IntlScript(); or GetScriptManagerVariable(smSysScript);*/
     int32_t region = MAC_LC_INIT_NUMBER;
@@ -1615,7 +1624,7 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif defined(OS400)
+#elif U_PLATFORM == U_PF_OS400
     /* locales are process scoped and are by definition thread safe */
     static char correctedLocale[64];
     const  char *localeID = getenv("LC_ALL");
@@ -1728,7 +1737,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
     if (name == NULL) {
         return NULL;
     }
-#if defined(U_AIX)
+#if U_PLATFORM == U_PF_AIX
     if (uprv_strcmp(name, "IBM-943") == 0) {
         /* Use the ASCII compatible ibm-943 */
         name = "Shift-JIS";
@@ -1737,7 +1746,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         /* Use the windows-1252 that contains the Euro */
         name = "IBM-5348";
     }
-#elif defined(U_SOLARIS)
+#elif U_PLATFORM == U_PF_SOLARIS
     if (locale != NULL && uprv_strcmp(name, "EUC") == 0) {
         /* Solaris underspecifies the "EUC" name. */
         if (uprv_strcmp(locale, "zh_CN") == 0) {
@@ -1764,7 +1773,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
          */
         name = "ISO-8859-1";
     }
-#elif defined(U_DARWIN)
+#elif U_PLATFORM_IS_DARWIN_BASED
     if (locale == NULL && *name == 0) {
         /*
         No locale was specified, and an empty name was passed in.
@@ -1783,12 +1792,12 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
          */
         name = "UTF-8";
     }
-#elif defined(U_BSD)
+#elif U_PLATFORM == U_PF_BSD
     if (uprv_strcmp(name, "CP949") == 0) {
         /* Remap CP949 to a similar codepage to avoid issues with backslash and won symbol. */
         name = "EUC-KR";
     }
-#elif defined(U_HPUX)
+#elif U_PLATFORM == U_PF_HPUX
     if (locale != NULL && uprv_strcmp(locale, "zh_HK") == 0 && uprv_strcmp(name, "big5") == 0) {
         /* HP decided to extend big5 as hkbig5 even though it's not compatible :-( */
         /* zh_TW.big5 is not the same charset as zh_HK.big5! */
@@ -1802,7 +1811,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         */
         name = "eucjis";
     }
-#elif defined(U_LINUX)
+#elif U_PLATFORM == U_PF_LINUX
     if (locale != NULL && uprv_strcmp(name, "euc") == 0) {
         /* Linux underspecifies the "EUC" name. */
         if (uprv_strcmp(locale, "korean") == 0) {
@@ -1866,7 +1875,7 @@ getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapaci
 static const char*
 int_getDefaultCodepage()
 {
-#if defined(OS400)
+#if U_PLATFORM == U_PF_OS400
     uint32_t ccsid = 37; /* Default to ibm-37 */
     static char codepage[64];
     Qwc_JOBI0400_t jobinfo;
@@ -1887,7 +1896,7 @@ int_getDefaultCodepage()
     sprintf(codepage,"ibm-%d", ccsid);
     return codepage;
 
-#elif defined(OS390)
+#elif U_PLATFORM == U_PF_OS390
     static char codepage[64];
 
     strncpy(codepage, nl_langinfo(CODESET),63-strlen(UCNV_SWAP_LFNL_OPTION_STRING));
@@ -1896,10 +1905,10 @@ int_getDefaultCodepage()
 
     return codepage;
 
-#elif defined(XP_MAC)
+#elif U_PLATFORM == U_PF_CLASSIC_MACOS
     return "macintosh"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
 
-#elif defined(U_WINDOWS)
+#elif U_PLATFORM_USES_ONLY_WIN32_API
     static char codepage[64];
     sprintf(codepage, "windows-%d", GetACP());
     return codepage;
@@ -1917,7 +1926,7 @@ int_getDefaultCodepage()
        nl_langinfo may use the same buffer as setlocale. */
     {
         const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
-#if defined(U_DARWIN) || defined(U_LINUX)
+#if U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED
         /*
          * On Linux and MacOSX, ensure that default codepage for non C/POSIX locale is UTF-8
          * instead of ASCII.
@@ -2086,9 +2095,10 @@ u_getVersion(UVersionInfo versionArray) {
  
 #if defined(U_CHECK_DYLOAD)
 
-#if defined(HAVE_DLOPEN) 
+#if defined(HAVE_DLOPEN) && !U_PLATFORM_HAS_WIN32_API
 
 #ifdef HAVE_DLFCN_H
+
 #ifdef __MVS__
 #ifndef __SUSV3
 #define __SUSV3 1
@@ -2163,7 +2173,7 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
 
 #endif
 
-#elif defined U_WINDOWS
+#elif U_PLATFORM_HAS_WIN32_API
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {

@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -14,7 +14,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef U_WINDOWS
+#if U_PLATFORM_HAS_WIN32_API
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -36,6 +36,6 @@ private:
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
-#endif // #ifdef U_WINDOWS
+#endif // U_PLATFORM_HAS_WIN32_API
 
 #endif // __WINDTTST

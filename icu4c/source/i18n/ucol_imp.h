@@ -41,7 +41,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 #include "unicode/normalizer2.h"
 #include "unicode/unistr.h"
 #endif
@@ -281,7 +281,7 @@ minimum number for special Jamo
 
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 
@@ -364,7 +364,7 @@ uprv_delete_collIterate(U_NAMESPACE_QUALIFIER collIterate *s);
 U_CAPI UBool U_EXPORT2
 uprv_collIterateAtEnd(U_NAMESPACE_QUALIFIER collIterate *s);
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 
@@ -548,7 +548,7 @@ U_CFUNC uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
 /* get some memory */
 void *ucol_getABuffer(const UCollator *coll, uint32_t size);
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 
@@ -1085,7 +1085,7 @@ ucol_getLeadBytesForReorderCode(const UCollator *uca, int reorderCode, uint16_t*
 U_CFUNC int U_EXPORT2 
 ucol_getReorderCodesForLeadByte(const UCollator *uca, int leadByte, int16_t* returnReorderCodes, int returnCapacity);
 
-#ifdef XP_CPLUSPLUS
+#ifdef __cplusplus
 /*
  *  Test whether a character is potentially "unsafe" for use as a collation
  *  starting point.  Unsafe chars are those with combining class != 0 plus
@@ -1114,7 +1114,7 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     htbyte = coll->unsafeCP[hash>>3];
     return ((htbyte >> (hash & 7)) & 1);
 }
-#endif /* XP_CPLUSPLUS */
+#endif /* __cplusplus */
 
 /* The offsetBuffer in collIterate might need to be freed to avoid memory leaks. */
 void ucol_freeOffsetBuffer(U_NAMESPACE_QUALIFIER collIterate *s); 

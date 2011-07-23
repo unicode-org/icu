@@ -21,11 +21,11 @@
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
 
-#if defined(U_WINDOWS)
+#if defined(_MSC_VER) && _MSC_VER >= 1500
 # include <intrin.h>
 #endif
 
-#if defined(U_DARWIN)
+#if U_PLATFORM_IS_DARWIN_BASED
 #if defined(__STRICT_ANSI__)
 #define UPRV_REMAP_INLINE
 #define inline
@@ -49,30 +49,15 @@
 # define ANNOTATE_UNPROTECTED_READ(x) (x)
 #endif
 
-/* APP_NO_THREADS is an old symbol. We'll honour it if present. */
-#ifdef APP_NO_THREADS
-# define ICU_USE_THREADS 0
-#endif
-
-/* ICU_USE_THREADS
- *
- *   Allows thread support (use of mutexes) to be compiled out of ICU.
- *   Default: use threads.
- *   Even with thread support compiled out, applications may override the
- *   (empty) mutex implementation with the u_setMutexFunctions() functions.
- */
-#ifndef ICU_USE_THREADS
-# define ICU_USE_THREADS 1
-#endif
-
 #ifndef UMTX_FULL_BARRIER
 # if !ICU_USE_THREADS
 #  define UMTX_FULL_BARRIER
 # elif U_HAVE_GCC_ATOMICS
 #  define UMTX_FULL_BARRIER __sync_synchronize();
-# elif defined(U_WINDOWS) && !(defined(_MSC_VER) && !(_MSC_VER >= 1500))
+# elif defined(_MSC_VER) && _MSC_VER >= 1500
+    /* From MSVC intrin.h. Use _ReadWriteBarrier() only on MSVC 9 and higher. */
 #  define UMTX_FULL_BARRIER _ReadWriteBarrier();
-# elif defined(U_DARWIN)
+# elif U_PLATFORM_IS_DARWIN_BASED
 #  define UMTX_FULL_BARRIER OSMemoryBarrier();
 # else
 #  define UMTX_FULL_BARRIER \

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -62,7 +62,7 @@ uprv_ebcdictolower(char c);
 #define uprv_strtod(source, end) U_STANDARD_CPP_NAMESPACE strtod(source, end)
 #define uprv_strtoul(str, end, base) U_STANDARD_CPP_NAMESPACE strtoul(str, end, base)
 #define uprv_strtol(str, end, base) U_STANDARD_CPP_NAMESPACE strtol(str, end, base)
-#ifdef U_WINDOWS
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #   if defined(__BORLANDC__)
 #       define uprv_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE stricmp(str1, str2)
 #       define uprv_strnicmp(str1, str2, n) U_STANDARD_CPP_NAMESPACE strnicmp(str1, str2, n)
