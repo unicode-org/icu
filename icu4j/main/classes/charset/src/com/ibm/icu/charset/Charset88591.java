@@ -86,7 +86,7 @@ class Charset88591 extends CharsetASCII {
              * early termination of the loop
              */
             if ((ch & 0xff00) != 0) {
-                source.position(i + 1);
+                source.position((i + 1) - source.arrayOffset());
                 target.position(i + offset);
                 return encodeMalformedOrUnmappable(source, ch, flush);
             } else

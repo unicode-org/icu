@@ -5674,4 +5674,47 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
+    
+    /*
+     * When converting slices of a larger CharBuffer, Charset88591 and CharsetASCII does not handle the buffer correctly when
+     * an unmappable character occurs.
+     * Ticket #8729
+     */
+    public void TestCharsetASCII8859BufferHandling() {
+        String firstLine = "C077693790=|MEMO=|00=|022=|Blanche st and the driveway grate was fault and rotated under my car=|\r\n";
+        String secondLine = "C077693790=|MEMO=|00=|023=|puncturing the fuel tank. I spoke to the store operator (Ram Reddi –=|\r\n";
+        
+        String charsetNames[] = {
+                "ASCII",
+                "ISO-8859-1"
+        };
+        
+        CoderResult result = CoderResult.UNDERFLOW;
+        
+        CharsetEncoder encoder;
+        
+        ByteBuffer outBuffer = ByteBuffer.allocate(500);
+        CharBuffer charBuffer = CharBuffer.allocate(firstLine.length() + secondLine.length());
+        charBuffer.put(firstLine);
+        charBuffer.put(secondLine);
+        charBuffer.flip();
+        
+        for (int i = 0; i < charsetNames.length; i++) {
+            encoder =  CharsetICU.forNameICU(charsetNames[i]).newEncoder();
+            
+            charBuffer.position(firstLine.length());
+            CharBuffer charBufferSlice = charBuffer.slice();
+            charBufferSlice.limit(secondLine.length() - 2);
+    
+    
+            try {
+                result = encoder.encode(charBufferSlice, outBuffer, false);
+                if (!result.isUnmappable()) {
+                    errln("Result of encoding " + charsetNames[i] + " should be: \"Unmappable\". Instead got: " + result);
+                }
+            } catch (IllegalArgumentException ex) {
+                errln("IllegalArgumentException should not have been thrown when encoding: " + charsetNames[i]);
+            }
+        }
+    }
 }
