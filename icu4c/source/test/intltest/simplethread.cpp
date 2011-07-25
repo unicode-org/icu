@@ -10,6 +10,11 @@
 # endif
 #endif
 
+/* Define __EXTENSIONS__ for Solaris and old friends in strict mode. */
+#ifndef __EXTENSIONS__
+#define __EXTENSIONS__
+#endif
+
 // Defines _XOPEN_SOURCE for access to POSIX functions.
 // Must be before any other #includes.
 #include "uposixdefs.h"
@@ -62,11 +67,6 @@
 # if defined(read)  // read being defined as cma_read causes trouble with iostream::read
 #  undef read
 # endif
-#endif
-
-/* Define __EXTENSIONS__ for Solaris and old friends in strict mode. */
-#ifndef __EXTENSIONS__
-#define __EXTENSIONS__
 #endif
 
 #if U_PLATFORM == U_PF_OS390
