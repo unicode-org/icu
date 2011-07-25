@@ -633,6 +633,9 @@
     <ClInclude Include="umutex.h">
       <Filter>configuration</Filter>
     </ClInclude>
+    <ClInclude Include="uposixdefs.h">
+      <Filter>configuration</Filter>
+    </ClInclude>
     <ClInclude Include="utracimp.h">
       <Filter>configuration</Filter>
     </ClInclude>

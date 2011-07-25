@@ -38,12 +38,10 @@
 #if U_PLATFORM == U_PF_OS390
 #define __DOT1 1
 #define __UU
-#define _XOPEN_SOURCE_EXTENDED 1
 #ifndef _XPG4_2
 #define _XPG4_2
 #endif
 #include <unistd.h>
-/*#include "platform_xopen_source_extended.h"*/
 #endif
 #if defined(POSIX)
 

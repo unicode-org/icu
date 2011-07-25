@@ -2,7 +2,7 @@
  *   Copyright (C) 2000-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
- *   file name:  pkgdata.c
+ *   file name:  pkgdata.cpp
  *   encoding:   ANSI X3.4 (1968)
  *   tab size:   8 (not used)
  *   indentation:4
@@ -14,18 +14,9 @@
  *   (DLL, common data, etc.)
  */
 
-/*
- * We define _XOPEN_SOURCE so that we can get popen and pclose.
- */
-#if !defined(_XOPEN_SOURCE)
-#if __STDC_VERSION__ >= 199901L
-/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 on Solaris */
-#define _XOPEN_SOURCE 600
-#else
-#define _XOPEN_SOURCE 4
-#endif
-#endif
-
+// Defines _XOPEN_SOURCE for access to POSIX functions.
+// Must be before any other #includes.
+#include "uposixdefs.h"
 
 #include "unicode/utypes.h"
 
