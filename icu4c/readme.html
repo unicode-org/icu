@@ -571,7 +571,9 @@
         and statically linked ICU libraries become smaller.
         (See the <a href="http://icu-project.org/apiref/icu4c/utypes_8h.html#0a33e1edf3cd23d9e9c972b63c9f7943">U_CHARSET_IS_UTF8</a>
         API documentation for more details.)<br>
-        You can <code>-DU_CHARSET_IS_UTF8=1</code> or modify unicode/utypes.h:
+        You can <code>-DU_CHARSET_IS_UTF8=1</code> or
+        modify unicode/utypes.h (in ICU 4.8 and below)
+        or modify unicode/platform.h (in ICU 49 and higher):
 <pre>Index: source/common/unicode/utypes.h
 ===================================================================
 --- source/common/unicode/utypes.h      (revision 26606)
