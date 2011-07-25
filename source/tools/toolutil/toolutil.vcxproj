@@ -299,7 +299,6 @@
     <ClInclude Include="pkg_gencmn.h" />
     <ClInclude Include="pkg_icu.h" />
     <ClInclude Include="pkg_imp.h" />
-    <ClInclude Include="platform_xopen_source_extended.h" />
     <ClInclude Include="swapimpl.h" />
     <ClInclude Include="toolutil.h" />
     <ClInclude Include="ucbuf.h" />

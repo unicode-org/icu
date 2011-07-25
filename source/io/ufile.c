@@ -18,15 +18,11 @@
 ******************************************************************************
 */
 
-/* define for fileno.  */
-#ifndef _XOPEN_SOURCE
-#if __STDC_VERSION__ >= 199901L
-/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 */
-#define _XOPEN_SOURCE 600
-#else
-#define _XOPEN_SOURCE 4
-#endif
-#endif
+/*
+ * Defines _XOPEN_SOURCE for access to POSIX functions.
+ * Must be before any other #includes.
+ */
+#include "uposixdefs.h"
 
 #include "locmap.h"
 #include "unicode/ustdio.h"
