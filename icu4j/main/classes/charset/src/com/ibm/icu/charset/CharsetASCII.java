@@ -281,7 +281,7 @@ class CharsetASCII extends CharsetICU {
              * early termination of the loop
              */
             if ((ch & 0xff80) != 0) {
-                source.position(i + 1);
+                source.position((i + 1) - source.arrayOffset());
                 target.position(i + offset);
                 return encodeMalformedOrUnmappable(source, ch, flush);
             } else
