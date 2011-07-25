@@ -144,7 +144,7 @@
 #   define U_PLATFORM U_PF_IRIX
 #elif defined(__APPLE__) && defined(__MACH__)
 #   include <TargetConditionals.h>
-#   ifdef TARGET_OS_IPHONE  /* variant of TARGET_OS_MAC */
+#   if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE  /* variant of TARGET_OS_MAC */
 #       define U_PLATFORM U_PF_IPHONE
 #   else
 #       define U_PLATFORM U_PF_DARWIN
