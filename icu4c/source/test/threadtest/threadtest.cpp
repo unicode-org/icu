@@ -16,6 +16,7 @@
 #include "umutex.h"
 #include "threadtest.h"
 
+AbstractThreadTest::~AbstractThreadTest() {}
 
 //------------------------------------------------------------------------------
 //

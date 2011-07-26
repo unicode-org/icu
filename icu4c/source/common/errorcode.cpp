@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,6 +18,8 @@
 #include "unicode/errorcode.h"
 
 U_NAMESPACE_BEGIN
+
+ErrorCode::~ErrorCode() {}
 
 UErrorCode ErrorCode::reset() {
     UErrorCode code = errorCode;

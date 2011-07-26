@@ -931,11 +931,7 @@ public:
         }
     }
 
-    virtual ~TZEnumeration() {
-        if (localMap != NULL) {
-            uprv_free(localMap);
-        }
-    }
+    virtual ~TZEnumeration();
 
     virtual StringEnumeration *clone() const {
         return new TZEnumeration(*this);
@@ -962,6 +958,12 @@ public:
     static UClassID U_EXPORT2 getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 };
+
+TZEnumeration::~TZEnumeration() {
+    if (localMap != NULL) {
+        uprv_free(localMap);
+    }
+}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TZEnumeration)
 

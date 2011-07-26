@@ -199,7 +199,7 @@ public:
         return NULL;
     }
 
-    virtual ~ServiceEnumeration() {}
+    virtual ~ServiceEnumeration();
 
     virtual StringEnumeration *clone() const {
         UErrorCode status = U_ZERO_ERROR;
@@ -247,6 +247,8 @@ public:
     static UClassID U_EXPORT2 getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 };
+
+ServiceEnumeration::~ServiceEnumeration() {}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ServiceEnumeration)
 

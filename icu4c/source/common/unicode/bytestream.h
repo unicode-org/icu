@@ -1,4 +1,4 @@
-// Copyright (C) 2009-2010, International Business Machines
+// Copyright (C) 2009-2011, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2007 Google Inc. All Rights Reserved.
@@ -56,7 +56,7 @@ public:
    * Virtual destructor.
    * @stable ICU 4.2
    */
-  virtual ~ByteSink() { }
+  virtual ~ByteSink();
 
   /**
    * Append "bytes[0,n-1]" to this.
@@ -149,6 +149,11 @@ public:
    * @stable ICU 4.2
    */
   CheckedArrayByteSink(char* outbuf, int32_t capacity);
+  /**
+   * Destructor.
+   * @stable ICU 4.2
+   */
+  virtual ~CheckedArrayByteSink();
   /**
    * Returns the sink to its original state, without modifying the buffer.
    * Useful for reusing both the buffer and the sink for multiple streams.

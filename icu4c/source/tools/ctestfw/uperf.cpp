@@ -15,6 +15,9 @@
 #include <stdlib.h>
 
 #if !UCONFIG_NO_CONVERSION
+
+UPerfFunction::~UPerfFunction() {}
+
 static const char delim = '/';
 static int32_t execCount = 0;
 UPerfTest* UPerfTest::gTest = NULL;

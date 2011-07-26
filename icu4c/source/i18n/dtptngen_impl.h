@@ -166,7 +166,7 @@ public:
     int32_t extraFieldMask;
 
     DistanceInfo() {}
-    virtual ~DistanceInfo() {}
+    virtual ~DistanceInfo();
     void clear() { missingFieldMask = extraFieldMask = 0; }
     void setTo(DistanceInfo& other);
     void addMissing(int32_t field) { missingFieldMask |= (1<<field); }
@@ -188,7 +188,7 @@ public:
     int32_t getDistance(const DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo);
     DateTimeMatcher();
     DateTimeMatcher(const DateTimeMatcher& other);
-    virtual ~DateTimeMatcher() {}
+    virtual ~DateTimeMatcher();
     int32_t getFieldMask();
 };
 

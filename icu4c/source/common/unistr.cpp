@@ -1626,6 +1626,8 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
 
 // UnicodeStringAppendable ------------------------------------------------- ***
 
+UnicodeStringAppendable::~UnicodeStringAppendable() {}
+
 UBool
 UnicodeStringAppendable::appendCodeUnit(UChar c) {
   return str.doReplace(str.length(), 0, &c, 0, 1).isWritable();

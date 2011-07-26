@@ -32,8 +32,15 @@ _obj_files = {}
 _symbols_to_files = {}
 _return_value = 0
 
+# Classes with vtables (and thus virtual methods).
+_virtual_classes = set()
+# Classes with weakly defined destructors.
+# nm shows a symbol class of "W" rather than "T".
+_weak_destructors = set()
+
 def _ReadObjFile(root_path, library_name, obj_name):
   global _ignored_symbols, _obj_files, _symbols_to_files
+  global _virtual_classes, _weak_destructors
   lib_obj_name = library_name + "/" + obj_name
   if lib_obj_name in _obj_files:
     print "Warning: duplicate .o file " + lib_obj_name
@@ -60,9 +67,15 @@ def _ReadObjFile(root_path, library_name, obj_name):
     if type == "U":
       obj_imports.add(name)
     else:
-      # TODO: Investigate weak symbols (V, W) with or without values.
       obj_exports.add(name)
       _symbols_to_files[name] = lib_obj_name
+      # Is this a vtable? E.g., "vtable for icu_49::ByteSink".
+      if name.startswith("vtable for icu"):
+        _virtual_classes.add(name[name.index("::") + 2:])
+      # Is this a destructor? E.g., "icu_49::ByteSink::~ByteSink()".
+      index = name.find("::~")
+      if index >= 0 and type == "W":
+        _weak_destructors.add(name[index + 3:name.index("(", index)])
   _obj_files[lib_obj_name] = {"imports": obj_imports, "exports": obj_exports}
 
 def _ReadLibrary(root_path, library_name):
@@ -126,6 +139,7 @@ def Process(root_path):
   Modifies dependencies.items: Recursively builds each item's system_symbols and exports.
   """
   global _ignored_symbols, _obj_files, _return_value
+  global _virtual_classes, _weak_destructors
   dependencies.Load()
   for name_and_item in dependencies.items.iteritems():
     name = name_and_item[0]
@@ -150,6 +164,14 @@ def Process(root_path):
   if not _return_value:
     for library_name in dependencies.libraries:
       _Resolve(library_name, [])
+  if not _return_value:
+    virtual_classes_with_weak_destructors = _virtual_classes & _weak_destructors
+    if virtual_classes_with_weak_destructors:
+      sys.stderr.write("Error: Some classes have virtual methods, and "
+                       "an implicit or inline destructor "
+                       "(see ICU ticket #8454 for details):\n%s\n" %
+                       sorted(virtual_classes_with_weak_destructors))
+      _return_value = 1
 
 def main():
   global _return_value

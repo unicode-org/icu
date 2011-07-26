@@ -49,6 +49,12 @@ class UnicodeString;
 class U_COMMON_API Appendable : public UObject {
 public:
     /**
+     * Destructor.
+     * @draft ICU 4.8
+     */
+    ~Appendable();
+
+    /**
      * Appends a 16-bit code unit.
      * @param c code unit
      * @return TRUE if the operation succeeded
@@ -154,6 +160,12 @@ public:
      * @draft ICU 4.8
      */
     explicit UnicodeStringAppendable(UnicodeString &s) : str(s) {}
+
+    /**
+     * Destructor.
+     * @draft ICU 4.8
+     */
+    ~UnicodeStringAppendable();
 
     /**
      * Appends a 16-bit code unit to the string.
