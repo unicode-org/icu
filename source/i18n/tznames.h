@@ -47,10 +47,6 @@ public:
     virtual UnicodeString& getMetaZoneID(int32_t index, UnicodeString& mzID) const = 0;
 };
 
-inline
-TimeZoneNameMatchInfo::~TimeZoneNameMatchInfo() {
-}
-
 class U_I18N_API TimeZoneNames : public UMemory {
 public:
     virtual ~TimeZoneNames();
@@ -71,10 +67,6 @@ public:
 
     virtual TimeZoneNameMatchInfo* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const = 0;
 };
-
-inline
-TimeZoneNames::~TimeZoneNames() {
-}
 
 U_NAMESPACE_END
 #endif

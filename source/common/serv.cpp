@@ -120,6 +120,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ICUServiceKey)
 ******************************************************************
 */
 
+ICUServiceFactory::~ICUServiceFactory() {}
+
 SimpleFactory::SimpleFactory(UObject* instanceToAdopt, const UnicodeString& id, UBool visible) 
 : _instance(instanceToAdopt), _id(id), _visible(visible)
 {
@@ -187,6 +189,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleFactory)
 /*
 ******************************************************************
 */
+
+ServiceListener::~ServiceListener() {}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ServiceListener)
 

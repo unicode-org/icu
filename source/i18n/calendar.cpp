@@ -357,7 +357,7 @@ public:
     BasicCalendarFactory()
         : LocaleKeyFactory(LocaleKeyFactory::INVISIBLE) { }
 
-        virtual ~BasicCalendarFactory() {}
+    virtual ~BasicCalendarFactory();
 
 protected:
     //virtual UBool isSupportedID( const UnicodeString& id, UErrorCode& status) const { 
@@ -416,6 +416,7 @@ protected:
     }
 };
 
+BasicCalendarFactory::~BasicCalendarFactory() {}
 
 /** 
 * A factory which looks up the DefaultCalendar resource to determine which class of calendar to use
@@ -423,7 +424,8 @@ protected:
 
 class DefaultCalendarFactory : public ICUResourceBundleFactory {
 public:
-    DefaultCalendarFactory():  ICUResourceBundleFactory() { } 
+    DefaultCalendarFactory() : ICUResourceBundleFactory() { }
+    virtual ~DefaultCalendarFactory();
 protected:
     virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const  {
 
@@ -443,6 +445,8 @@ protected:
     }
 };
 
+DefaultCalendarFactory::~DefaultCalendarFactory() {}
+
 // -------------------------------------
 class CalendarService : public ICULocaleService {
 public:
@@ -452,6 +456,8 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new DefaultCalendarFactory(), status);
     }
+
+    virtual ~CalendarService();
 
     virtual UObject* cloneInstance(UObject* instance) const {
         UnicodeString *s = dynamic_cast<UnicodeString *>(instance);
@@ -491,6 +497,8 @@ public:
         return countFactories() == 1;
     }
 };
+
+CalendarService::~CalendarService() {}
 
 // -------------------------------------
 

@@ -982,9 +982,7 @@ public:
         }
     }
 
-    virtual ~KeywordEnumeration() {
-        uprv_free(keywords);
-    }
+    virtual ~KeywordEnumeration();
 
     virtual StringEnumeration * clone() const
     {
@@ -1033,6 +1031,10 @@ public:
 };
 
 const char KeywordEnumeration::fgClassID = '\0';
+
+KeywordEnumeration::~KeywordEnumeration() {
+    uprv_free(keywords);
+}
 
 StringEnumeration *
 Locale::createKeywords(UErrorCode &status) const

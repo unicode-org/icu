@@ -1,6 +1,6 @@
 //
 //********************************************************************
-//   Copyright (C) 2002, International Business Machines
+//   Copyright (C) 2002-2011, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //********************************************************************
 //
@@ -37,10 +37,9 @@
 class AbstractThreadTest {
 public:
                      AbstractThreadTest() {};
-    virtual         ~AbstractThreadTest() {};
+    virtual         ~AbstractThreadTest();
     virtual void     check()   = 0;
     virtual void     runOnce() = 0;
 };
 
 #endif // ABSTRACTTHREADTEST_H
-

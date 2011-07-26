@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -52,8 +52,8 @@ protected:
 
 class CharsetRecog_2022JP :public CharsetRecog_2022
 {
-public:        
-    virtual ~CharsetRecog_2022JP() {}
+public:
+    virtual ~CharsetRecog_2022JP();
 
     const char *getName() const;
 
@@ -61,8 +61,8 @@ public:
 };
 
 class CharsetRecog_2022KR :public CharsetRecog_2022 {
-public:       
-    virtual ~CharsetRecog_2022KR() {}
+public:
+    virtual ~CharsetRecog_2022KR();
 
     const char *getName() const;
 
@@ -72,8 +72,8 @@ public:
 
 class CharsetRecog_2022CN :public CharsetRecog_2022
 {
-public:        
-    virtual ~CharsetRecog_2022CN() {}
+public:
+    virtual ~CharsetRecog_2022CN();
 
     const char* getName() const;
 

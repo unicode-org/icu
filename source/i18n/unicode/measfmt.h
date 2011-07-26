@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -39,8 +39,12 @@ U_NAMESPACE_BEGIN
  * @stable ICU 3.0
  */
 class U_I18N_API MeasureFormat : public Format {
-
  public:
+    /**
+     * Destructor.
+     * @stable ICU 3.0
+     */
+    virtual ~MeasureFormat();
 
     /**
      * Return a formatter for CurrencyAmount objects in the given

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2009, International Business Machines
+ *   Copyright (C) 2005-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -136,6 +136,8 @@ static const uint8_t escapeSequences_2022CN[][5] = {
     {0x1b, 0x4f, 0x00, 0x00, 0x00},   // SS3
 };
 
+CharsetRecog_2022JP::~CharsetRecog_2022JP() {}
+
 const char *CharsetRecog_2022JP::getName() const
 {
     return "ISO-2022-JP";
@@ -146,6 +148,8 @@ int32_t CharsetRecog_2022JP::match(InputText *textIn)
     return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences_2022JP, ARRAY_SIZE(escapeSequences_2022JP));
 }
 
+CharsetRecog_2022KR::~CharsetRecog_2022KR() {}
+
 const char *CharsetRecog_2022KR::getName() const
 {
     return "ISO-2022-KR";
@@ -155,6 +159,8 @@ int32_t CharsetRecog_2022KR::match(InputText *textIn)
 {
     return match_2022(textIn->fInputBytes, textIn->fInputLen, escapeSequences_2022KR, ARRAY_SIZE(escapeSequences_2022KR));
 }
+
+CharsetRecog_2022CN::~CharsetRecog_2022CN() {}
 
 const char *CharsetRecog_2022CN::getName() const
 {

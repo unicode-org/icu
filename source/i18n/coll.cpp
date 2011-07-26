@@ -112,10 +112,13 @@ CollatorFactory::getDisplayName(const Locale& objectLocale,
 
 class ICUCollatorFactory : public ICUResourceBundleFactory {
  public:
-    ICUCollatorFactory():  ICUResourceBundleFactory(UnicodeString(U_ICUDATA_COLL, -1, US_INV)) { } 
+    ICUCollatorFactory() : ICUResourceBundleFactory(UnicodeString(U_ICUDATA_COLL, -1, US_INV)) { }
+    virtual ~ICUCollatorFactory();
  protected:
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 };
+
+ICUCollatorFactory::~ICUCollatorFactory() {}
 
 UObject*
 ICUCollatorFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const {
@@ -142,7 +145,9 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUCollatorFactory(), status);
     }
-    
+
+    virtual ~ICUCollatorService();
+
     virtual UObject* cloneInstance(UObject* instance) const {
         return ((Collator*)instance)->clone();
     }
@@ -187,6 +192,8 @@ public:
         return countFactories() == 1;
     }
 };
+
+ICUCollatorService::~ICUCollatorService() {}
 
 // -------------------------------------
 
@@ -630,13 +637,9 @@ public:
             }
         }
     }
-    
-    virtual ~CFactory()
-    {
-        delete _delegate;
-        delete _ids;
-    }
-    
+
+    virtual ~CFactory();
+
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
     
 protected:
@@ -651,6 +654,12 @@ protected:
     virtual UnicodeString&
         getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const;
 };
+
+CFactory::~CFactory()
+{
+    delete _delegate;
+    delete _ids;
+}
 
 UObject* 
 CFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const
@@ -722,8 +731,7 @@ public:
         //isAvailableLocaleListInitialized(status);
     }
 
-    virtual ~CollationLocaleListEnumeration() {
-    }
+    virtual ~CollationLocaleListEnumeration();
 
     virtual StringEnumeration * clone() const
     {
@@ -764,6 +772,8 @@ public:
         index = 0;
     }
 };
+
+CollationLocaleListEnumeration::~CollationLocaleListEnumeration() {}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationLocaleListEnumeration)
 

@@ -1539,6 +1539,8 @@ PatternMap::getDuplicateElem(
 DateTimeMatcher::DateTimeMatcher(void) {
 }
 
+DateTimeMatcher::~DateTimeMatcher() {}
+
 DateTimeMatcher::DateTimeMatcher(const DateTimeMatcher& other) {
     copyFrom(other.skeleton);
 }
@@ -1831,6 +1833,8 @@ FormatParser::isPatternSeparator(UnicodeString& field) {
     }
     return TRUE;
 }
+
+DistanceInfo::~DistanceInfo() {}
 
 void
 DistanceInfo::setTo(DistanceInfo &other) {

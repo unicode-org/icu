@@ -755,11 +755,15 @@ NumberFormat::getAvailableLocales(int32_t& count)
 // -------------------------------------
 
 class ICUNumberFormatFactory : public ICUResourceBundleFactory {
+public:
+    virtual ~ICUNumberFormatFactory();
 protected:
     virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* /* service */, UErrorCode& status) const {
         return NumberFormat::makeInstance(loc, (UNumberFormatStyle)kind, status);
     }
 };
+
+ICUNumberFormatFactory::~ICUNumberFormatFactory() {}
 
 // -------------------------------------
 
@@ -776,11 +780,7 @@ public:
     {
     }
 
-    virtual ~NFFactory()
-    {
-        delete _delegate;
-        delete _ids;
-    }
+    virtual ~NFFactory();
 
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
     {
@@ -824,6 +824,12 @@ protected:
     }
 };
 
+NFFactory::~NFFactory()
+{
+    delete _delegate;
+    delete _ids;
+}
+
 class ICUNumberFormatService : public ICULocaleService {
 public:
     ICUNumberFormatService()
@@ -832,6 +838,8 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUNumberFormatFactory(), status);
     }
+
+    virtual ~ICUNumberFormatService();
 
     virtual UObject* cloneInstance(UObject* instance) const {
         return ((NumberFormat*)instance)->clone();
@@ -849,6 +857,8 @@ public:
         return countFactories() == 1;
     }
 };
+
+ICUNumberFormatService::~ICUNumberFormatService() {}
 
 // -------------------------------------
 

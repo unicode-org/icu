@@ -17,6 +17,8 @@
 
 U_NAMESPACE_BEGIN
 
+Appendable::~Appendable() {}
+
 UBool
 Appendable::appendCodePoint(UChar32 c) {
     if(c<=0xffff) {

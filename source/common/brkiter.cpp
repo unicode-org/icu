@@ -222,11 +222,15 @@ BreakIterator::~BreakIterator()
 // -------------------------------------
 
 class ICUBreakIteratorFactory : public ICUResourceBundleFactory {
+public:
+    virtual ~ICUBreakIteratorFactory();
 protected:
     virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* /*service*/, UErrorCode& status) const {
         return BreakIterator::makeInstance(loc, kind, status);
     }
 };
+
+ICUBreakIteratorFactory::~ICUBreakIteratorFactory() {}
 
 // -------------------------------------
 
@@ -238,6 +242,8 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUBreakIteratorFactory(), status);
     }
+
+    virtual ~ICUBreakIteratorService();
 
     virtual UObject* cloneInstance(UObject* instance) const {
         return ((BreakIterator*)instance)->clone();
@@ -255,6 +261,8 @@ public:
         return countFactories() == 1;
     }
 };
+
+ICUBreakIteratorService::~ICUBreakIteratorService() {}
 
 // -------------------------------------
 
