@@ -29,6 +29,9 @@
 #   define NOMCX
 #include <windows.h>
 
+#define MAX_LENGTH_STDNAME 32
+#define MAX_LENGTH_ICUID 16
+
 /* The layout of the Tzi value in the registry */
 typedef struct
 {
@@ -227,6 +230,11 @@ uprv_detectWindowsTimeZone() {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* bundle = NULL;
     char* icuid = NULL;
+    UChar apiStd[MAX_LENGTH_STDNAME];
+    char stdName[MAX_LENGTH_STDNAME];
+    char tmpid[MAX_LENGTH_ICUID];
+    int32_t apiStdLength = 0;
+    int32_t len;
 
     LONG result;
     TZI tziKey;
@@ -246,13 +254,19 @@ uprv_detectWindowsTimeZone() {
     uprv_memcpy((char *)&tziKey.daylightDate, (char*)&apiTZI.DaylightDate,
            sizeof(apiTZI.DaylightDate));
 
+    /* Convert the wchar_t* standard name to char* */
+    u_strFromWCS(apiStd, MAX_LENGTH_STDNAME, &apiStdLength, apiTZI.StandardName, -1, &status);
+    u_austrncpy(stdName, apiStd, apiStdLength);
+
+    uprv_memset(tmpid, 0, sizeof(tmpid));
+
     bundle = ures_openDirect(NULL, "windowsZones", &status);
     ures_getByKey(bundle, "mapTimezones", bundle, &status);
 
     /* Note: We get the winid not from static tables but from resource bundle. */
     while (U_SUCCESS(status) && ures_hasNext(bundle)) {
+        UBool idFound = FALSE;
         const char* winid;
-        int32_t len;
         UResourceBundle* winTZ = ures_getNextResource(bundle, NULL, &status);
         if (U_FAILURE(status)) {
             break;
@@ -270,16 +284,34 @@ uprv_detectWindowsTimeZone() {
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
                 const UChar* icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
                 if (U_SUCCESS(status)) {
-                    icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
-                    uprv_memset(icuid, 0, len + 1);
-                    u_austrncpy(icuid, icuTZ, len);
+                    if (uprv_strcmp(stdName, winid) == 0) {
+                        idFound = TRUE;
+                    }
+
+                    /* tmpid buffer holds the ICU timezone ID corresponding to the timezone ID from Windows.
+                     * If none is found, tmpid buffer will contain a fallback ID (i.e. the time zone ID matching
+                     * the current time zone information)
+                     */
+                    if (idFound || tmpid[0] != 0) {
+                        u_austrncpy(tmpid, icuTZ, len);
+                    }
                 }
             }
         }
         ures_close(winTZ);
-        if (icuid != NULL) {
+        if (idFound) {
             break;
         }
+    }
+
+    /*
+     * Copy the timezone ID to icuid to be returned.
+     */
+    if (tmpid[0] != 0) {
+        len = uprv_strlen(tmpid);
+        icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
+        uprv_memset(icuid, 0, len + 1);
+        uprv_strcpy(icuid, tmpid);
     }
 
     ures_close(bundle);
