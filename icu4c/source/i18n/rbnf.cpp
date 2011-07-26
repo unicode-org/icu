@@ -75,7 +75,7 @@ The RTTI code was also removed due to lack of code coverage.
 */
 class LocalizationInfo : public UMemory {
 protected:
-    virtual ~LocalizationInfo() {}
+    virtual ~LocalizationInfo();
     uint32_t refcount;
     
 public:
@@ -108,6 +108,8 @@ public:
 //    virtual UClassID getDynamicClassID() const = 0;
 //    static UClassID getStaticClassID(void);
 };
+
+LocalizationInfo::~LocalizationInfo() {}
 
 //UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(LocalizationInfo)
 

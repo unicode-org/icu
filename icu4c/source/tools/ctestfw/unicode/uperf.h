@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2007, International Business Machines
+* Copyright (c) 2002-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -65,6 +65,11 @@ U_NAMESPACE_USE
 class T_CTEST_EXPORT_API UPerfFunction {
 public:
     /**
+     * destructor
+     */
+    virtual ~UPerfFunction();
+
+    /**
      * Subclasses must implement this method to do the action to be
      * measured.
      */
@@ -85,11 +90,6 @@ public:
     virtual long getEventsPerIteration(){
         return -1;
     }
-    /**
-     * destructor
-     */
-    virtual ~UPerfFunction() {}
-
     /**
      * Call call() n times in a tight loop and return the elapsed
      * milliseconds.  If n is small and call() is fast the return

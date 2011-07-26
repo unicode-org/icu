@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -57,7 +57,7 @@ U_NAMESPACE_BEGIN
  * \code
  *   class IcuErrorCode: public icu::ErrorCode {
  *   public:
- *     virtual ~IcuErrorCode() {
+ *     virtual ~IcuErrorCode() {  // should be defined in .cpp as "key function"
  *       // Safe because our handleFailure() does not throw exceptions.
  *       if(isFailure()) { handleFailure(); }
  *     }
@@ -84,7 +84,7 @@ public:
      */
     ErrorCode() : errorCode(U_ZERO_ERROR) {}
     /** Destructor, does nothing. See class documentation for details. @stable ICU 4.2 */
-    virtual ~ErrorCode() {}
+    virtual ~ErrorCode();
     /** Conversion operator, returns a reference. @stable ICU 4.2 */
     operator UErrorCode & () { return errorCode; }
     /** Conversion operator, returns a pointer. @stable ICU 4.2 */

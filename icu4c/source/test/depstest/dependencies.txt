@@ -705,7 +705,7 @@ group: errorcode  # ErrorCode base class
     errorcode.o
   deps
     utypes
-    PIC
+    platform
 
 group: utypes  # u_errorName()
     utypes.o

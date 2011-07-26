@@ -143,6 +143,8 @@ public:
               const UVector* variablesVector = 0,
               const Hashtable* variableNames = 0);
 
+    virtual ~ParseData();
+
     virtual const UnicodeString* lookup(const UnicodeString& s) const;
 
     virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const;
@@ -170,6 +172,8 @@ ParseData::ParseData(const TransliterationRuleData* d,
                      const UVector* sets,
                      const Hashtable* vNames) :
     data(d), variablesVector(sets), variableNames(vNames) {}
+
+ParseData::~ParseData() {}
 
 /**
  * Implement SymbolTable API.

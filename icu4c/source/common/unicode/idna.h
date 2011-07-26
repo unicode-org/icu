@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  idna.h
@@ -47,6 +47,12 @@ class U_COMMON_API IDNAInfo;
  */
 class U_COMMON_API IDNA : public UObject {
 public:
+    /**
+     * Destructor.
+     * @draft ICU 4.6
+     */
+    ~IDNA();
+
     /**
      * Returns an IDNA instance which implements UTS #46.
      * Returns an unmodifiable instance, owned by the caller.

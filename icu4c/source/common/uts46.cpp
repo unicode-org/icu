@@ -66,6 +66,8 @@ isASCIIOkBiDi(const char *s, int32_t length);
 
 // IDNA class default implementations -------------------------------------- ***
 
+IDNA::~IDNA() {}
+
 void
 IDNA::labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
                         IDNAInfo &info, UErrorCode &errorCode) const {

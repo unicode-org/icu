@@ -33,8 +33,12 @@ U_NAMESPACE_BEGIN
 
 // Public API dispatch via Normalizer2 subclasses -------------------------- ***
 
+Normalizer2::~Normalizer2() {}
+
 // Normalizer2 implementation for the old UNORM_NONE.
 class NoopNormalizer2 : public Normalizer2 {
+    virtual ~NoopNormalizer2();
+
     virtual UnicodeString &
     normalize(const UnicodeString &src,
               UnicodeString &dest,
@@ -95,11 +99,14 @@ class NoopNormalizer2 : public Normalizer2 {
     virtual UBool isInert(UChar32) const { return TRUE; }
 };
 
+NoopNormalizer2::~NoopNormalizer2() {}
+
 // Intermediate class:
 // Has Normalizer2Impl and does boilerplate argument checking and setup.
 class Normalizer2WithImpl : public Normalizer2 {
 public:
     Normalizer2WithImpl(const Normalizer2Impl &ni) : impl(ni) {}
+    virtual ~Normalizer2WithImpl();
 
     // normalize
     virtual UnicodeString &
@@ -234,9 +241,12 @@ public:
     const Normalizer2Impl &impl;
 };
 
+Normalizer2WithImpl::~Normalizer2WithImpl() {}
+
 class DecomposeNormalizer2 : public Normalizer2WithImpl {
 public:
     DecomposeNormalizer2(const Normalizer2Impl &ni) : Normalizer2WithImpl(ni) {}
+    virtual ~DecomposeNormalizer2();
 
 private:
     virtual void
@@ -264,10 +274,13 @@ private:
     virtual UBool isInert(UChar32 c) const { return impl.isDecompInert(c); }
 };
 
+DecomposeNormalizer2::~DecomposeNormalizer2() {}
+
 class ComposeNormalizer2 : public Normalizer2WithImpl {
 public:
     ComposeNormalizer2(const Normalizer2Impl &ni, UBool fcc) :
         Normalizer2WithImpl(ni), onlyContiguous(fcc) {}
+    virtual ~ComposeNormalizer2();
 
 private:
     virtual void
@@ -335,9 +348,12 @@ private:
     const UBool onlyContiguous;
 };
 
+ComposeNormalizer2::~ComposeNormalizer2() {}
+
 class FCDNormalizer2 : public Normalizer2WithImpl {
 public:
     FCDNormalizer2(const Normalizer2Impl &ni) : Normalizer2WithImpl(ni) {}
+    virtual ~FCDNormalizer2();
 
 private:
     virtual void
@@ -361,6 +377,8 @@ private:
     virtual UBool hasBoundaryAfter(UChar32 c) const { return impl.hasFCDBoundaryAfter(c); }
     virtual UBool isInert(UChar32 c) const { return impl.isFCDInert(c); }
 };
+
+FCDNormalizer2::~FCDNormalizer2() {}
 
 // instance cache ---------------------------------------------------------- ***
 

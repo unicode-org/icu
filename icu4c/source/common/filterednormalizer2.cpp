@@ -26,6 +26,8 @@
 
 U_NAMESPACE_BEGIN
 
+FilteredNormalizer2::~FilteredNormalizer2() {}
+
 UnicodeString &
 FilteredNormalizer2::normalize(const UnicodeString &src,
                                UnicodeString &dest,

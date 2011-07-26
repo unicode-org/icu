@@ -4281,7 +4281,7 @@ public:
             capacity_ = 0;
         }
     }
-    virtual ~SortKeyByteSink() { uprv_free(ownedBuffer_); }
+    virtual ~SortKeyByteSink();
 
     virtual void Append(const char *bytes, int32_t n);
     void Append(const uint8_t *bytes, int32_t n) { Append(reinterpret_cast<const char *>(bytes), n); }
@@ -4349,6 +4349,10 @@ private:
 };
 
 uint8_t SortKeyByteSink::lastResortByte_ = 0;
+
+SortKeyByteSink::~SortKeyByteSink() {
+    uprv_free(ownedBuffer_);
+}
 
 void
 SortKeyByteSink::Append(const char *bytes, int32_t n) {

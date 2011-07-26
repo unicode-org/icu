@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -18,6 +18,8 @@
 U_NAMESPACE_BEGIN
 
 MeasureFormat::MeasureFormat() {}
+
+MeasureFormat::~MeasureFormat() {}
 
 MeasureFormat* U_EXPORT2 MeasureFormat::createCurrencyFormat(const Locale& locale,
                                                    UErrorCode& ec) {

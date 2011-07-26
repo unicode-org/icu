@@ -51,6 +51,7 @@ public:
         const RuleBasedNumberFormat* formatter,
         const UnicodeString& description,
         UErrorCode& status);
+    virtual ~SameValueSubstitution();
 
     virtual int64_t transformNumber(int64_t number) const { return number; }
     virtual double transformNumber(double number) const { return number; }
@@ -62,6 +63,8 @@ public:
     static UClassID getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 };
+
+SameValueSubstitution::~SameValueSubstitution() {}
 
 class MultiplierSubstitution : public NFSubstitution {
     double divisor;
@@ -81,6 +84,7 @@ public:
             status = U_PARSE_ERROR;
         }
     }
+    virtual ~MultiplierSubstitution();
 
     virtual void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
         divisor = uprv_pow(radix, exponent);
@@ -118,6 +122,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 };
 
+MultiplierSubstitution::~MultiplierSubstitution() {}
+
 class ModulusSubstitution : public NFSubstitution {
     double divisor;
     int64_t  ldivisor;
@@ -130,6 +136,7 @@ public:
         const RuleBasedNumberFormat* formatter,
         const UnicodeString& description,
         UErrorCode& status);
+    virtual ~ModulusSubstitution();
 
     virtual void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
         divisor = uprv_pow(radix, exponent);
@@ -170,6 +177,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 };
 
+ModulusSubstitution::~ModulusSubstitution() {}
+
 class IntegralPartSubstitution : public NFSubstitution {
 public:
     IntegralPartSubstitution(int32_t _pos,
@@ -178,6 +187,7 @@ public:
         const UnicodeString& description,
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
+    virtual ~IntegralPartSubstitution();
 
     virtual int64_t transformNumber(int64_t number) const { return number; }
     virtual double transformNumber(double number) const { return uprv_floor(number); }
@@ -190,6 +200,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 };
 
+IntegralPartSubstitution::~IntegralPartSubstitution() {}
+
 class FractionalPartSubstitution : public NFSubstitution {
     UBool byDigits;
     UBool useSpaces;
@@ -200,6 +212,7 @@ public:
         const RuleBasedNumberFormat* formatter,
         const UnicodeString& description,
         UErrorCode& status);
+    virtual ~FractionalPartSubstitution();
 
     virtual UBool operator==(const NFSubstitution& rhs) const;
 
@@ -224,6 +237,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 };
 
+FractionalPartSubstitution::~FractionalPartSubstitution() {}
+
 class AbsoluteValueSubstitution : public NFSubstitution {
 public:
     AbsoluteValueSubstitution(int32_t _pos,
@@ -232,6 +247,7 @@ public:
         const UnicodeString& description,
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
+    virtual ~AbsoluteValueSubstitution();
 
     virtual int64_t transformNumber(int64_t number) const { return number >= 0 ? number : -number; }
     virtual double transformNumber(double number) const { return uprv_fabs(number); }
@@ -243,6 +259,8 @@ public:
     static UClassID getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 };
+
+AbsoluteValueSubstitution::~AbsoluteValueSubstitution() {}
 
 class NumeratorSubstitution : public NFSubstitution {
     double denominator;
@@ -267,6 +285,7 @@ public:
         ldenominator = util64_fromDouble(denominator);
         withZeros = description.endsWith(LTLT, 2);
     }
+    virtual ~NumeratorSubstitution();
 
     virtual UBool operator==(const NFSubstitution& rhs) const;
 
@@ -293,6 +312,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 };
 
+NumeratorSubstitution::~NumeratorSubstitution() {}
+
 class NullSubstitution : public NFSubstitution {
 public:
     NullSubstitution(int32_t _pos,
@@ -301,6 +322,7 @@ public:
         const UnicodeString& description,
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
+    virtual ~NullSubstitution();
 
     virtual void toString(UnicodeString& /*result*/) const {}
     virtual void doSubstitution(double /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
@@ -323,6 +345,8 @@ public:
     static UClassID getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 };
+
+NullSubstitution::~NullSubstitution() {}
 
 NFSubstitution*
 NFSubstitution::makeSubstitution(int32_t pos,
