@@ -560,7 +560,7 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *ip, UMtxAtomicFn *
     pDecFn = dp;
     gIncDecContext = context;
 
-#if !U_RELEASE
+#if U_DEBUG
     {
         int32_t   testInt = 0;
         U_ASSERT(umtx_atomic_inc(&testInt) == 1);     /* Sanity Check.    Do the functions work at all? */
