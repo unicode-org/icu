@@ -19,6 +19,12 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 
+/** Define this to 1 if your platform supports IEEE 754 floating point,
+   to 0 if it does not. */
+#ifndef IEEE_754
+#   define IEEE_754 1
+#endif
+
 /**
  * \def U_HAVE_MSVC_2003_OR_EARLIER
  * Flag for workaround of MSVC 2003 optimization bugs
@@ -119,6 +125,26 @@
 #   define U_HAVE_GCC_ATOMICS 1
 #else
 #   define U_HAVE_GCC_ATOMICS 0
+#endif
+
+/** @} */
+
+/*===========================================================================*/
+/** @{ Code alignment                                                        */
+/*===========================================================================*/
+
+/**
+ * \def U_ALIGN_CODE
+ * This is used to align code fragments to a specific byte boundary.
+ * This is useful for getting consistent performance test results.
+ * @internal
+ */
+#ifdef U_ALIGN_CODE
+    /* Use the predefined value. */
+#elif defined(_MSC_VER) && defined(_M_IX86) && !defined(_MANAGED)
+#   define U_ALIGN_CODE(boundarySize) __asm  align boundarySize
+#else
+#   define U_ALIGN_CODE(boundarySize) 
 #endif
 
 /** @} */
@@ -280,6 +306,29 @@ U_INTERNAL double  U_EXPORT2 uprv_round(double x);
  */
 /*U_INTERNAL int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);*/
 #endif
+
+#if !U_CHARSET_IS_UTF8
+/**
+ * Please use ucnv_getDefaultName() instead.
+ * Return the default codepage for this platform and locale.
+ * This function can call setlocale() on Unix platforms. Please read the
+ * platform documentation on setlocale() before calling this function.
+ * @return the default codepage for this platform 
+ * @internal
+ */
+U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
+#endif
+
+/**
+ * Please use uloc_getDefault() instead.
+ * Return the default locale ID string by querying ths system, or
+ *     zero if one cannot be found. 
+ * This function can call setlocale() on Unix platforms. Please read the
+ * platform documentation on setlocale() before calling this function.
+ * @return the default locale ID string
+ * @internal
+ */
+U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
 /**
  * Time zone utilities

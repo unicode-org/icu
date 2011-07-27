@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* Decimal Context module header                                      */
 /* ------------------------------------------------------------------ */
-/* Copyright (c) IBM Corporation, 2000-2010.   All rights reserved.   */
+/* Copyright (c) IBM Corporation, 2000-2011.   All rights reserved.   */
 /*                                                                    */
 /* This software is made available under the terms of the             */
 /* ICU License -- ICU 1.8.1 and later.                                */
@@ -28,6 +28,7 @@
  *    Remove a few compiler warnings.
  */
 #include "unicode/utypes.h"
+#include "putilimp.h"
 
 /*                                                                    */
 /* Context variables must always have valid values:                   */
