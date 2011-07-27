@@ -69,19 +69,8 @@
      * which disables assert().
      */
 #   define U_DEBUG 1
-#elif defined(U_RELEASE)
-#   define U_DEBUG (!U_RELEASE)
 # else
 #   define U_DEBUG 0
-#endif
-
-/**
- * \def U_DEBUG
- * Opposite of U_DEBUG.
- * @internal
- */
-#ifndef U_RELEASE
-#define U_RELEASE (!U_DEBUG)
 #endif
 
 /**
