@@ -18,6 +18,7 @@
 #define __UTRIE2_H__
 
 #include "unicode/utypes.h"
+#include "putilimp.h"
 #include "udataswp.h"
 
 U_CDECL_BEGIN
