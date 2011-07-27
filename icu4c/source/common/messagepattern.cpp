@@ -18,6 +18,7 @@
 
 #include "unicode/messagepattern.h"
 #include "unicode/unistr.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "messageimpl.h"

@@ -873,7 +873,7 @@ void outputScriptElem(ScriptElement &element, int compare, UBool expansion)
     while (i < element.count) {
         char    str[128];
         UChar32 codepoint;
-        UTF_NEXT_CHAR(element.ch, i, element.count, codepoint);
+        U16_NEXT(element.ch, i, element.count, codepoint);
         int32_t temp = u_charName(codepoint, U_UNICODE_CHAR_NAME, str, 128, 
                                       &error);
         if (U_FAILURE(error)) {
@@ -938,7 +938,7 @@ inline UBool checkInScripts(UScriptCode script[], int scriptcount,
     int i = 0;
     while (i < scriptelem.count) {
         UChar32     codepoint;
-        UTF_NEXT_CHAR(scriptelem.ch, i, scriptelem.count, codepoint);
+        U16_NEXT(scriptelem.ch, i, scriptelem.count, codepoint);
         UErrorCode  error = U_ZERO_ERROR;
         if (checkInScripts(script, scriptcount, codepoint)) {
             return TRUE;

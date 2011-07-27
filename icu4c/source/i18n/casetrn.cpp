@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,6 +22,8 @@
 
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "tolowtrn.h"
 #include "ucase.h"
 #include "cpputils.h"

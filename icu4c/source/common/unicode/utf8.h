@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,11 +19,9 @@
  * \brief C API: 8-bit Unicode handling macros
  * 
  * This file defines macros to deal with 8-bit Unicode (UTF-8) code units (bytes) and strings.
- * utf8.h is included by utf.h after unicode/umachine.h
- * and some common definitions.
  *
  * For more information see utf.h and the ICU User Guide Strings chapter
- * (http://icu-project.org/userguide/strings.html).
+ * (http://userguide.icu-project.org/strings).
  *
  * <em>Usage:</em>
  * ICU coding guidelines for if() statements should be followed when using these macros.
@@ -34,7 +32,7 @@
 #ifndef __UTF8_H__
 #define __UTF8_H__
 
-/* utf.h must be included first. */
+#include "unicode/umachine.h"
 #ifndef __UTF_H__
 #   include "unicode/utf.h"
 #endif

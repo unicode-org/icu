@@ -15,6 +15,7 @@
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "hash.h"
 #include "normalizer2impl.h"
@@ -207,14 +208,14 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
     // i should initialy be the number of code units at the 
     // start of the string
-    i = UTF16_CHAR_LENGTH(source.char32At(0));
+    i = U16_LENGTH(source.char32At(0));
     //int32_t i = 1;
     // find the segments
     // This code iterates through the source string and 
     // extracts segments that end up on a codepoint that
     // doesn't start any decompositions. (Analysis is done
     // on the NFD form - see above).
-    for (; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
+    for (; i < source.length(); i += U16_LENGTH(cp)) {
         cp = source.char32At(i);
         if (nfcImpl.isCanonSegmentStarter(cp)) {
             source.extract(start, i-start, list[list_length++]); // add up to i
@@ -290,7 +291,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
     }
     subpermute.setValueDeleter(uprv_deleteUObject);
 
-    for (i = 0; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
+    for (i = 0; i < source.length(); i += U16_LENGTH(cp)) {
         cp = source.char32At(i);
         const UHashElement *ne = NULL;
         int32_t el = -1;
@@ -308,7 +309,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
 
         // see what the permutations of the characters before and after this one are
         //Hashtable *subpermute = permute(source.substring(0,i) + source.substring(i + UTF16.getCharCount(cp)));
-        permute(subPermuteString.replace(i, UTF16_CHAR_LENGTH(cp), NULL, 0), skipZeros, &subpermute, status);
+        permute(subPermuteString.replace(i, U16_LENGTH(cp), NULL, 0), skipZeros, &subpermute, status);
         /* Test for buffer overflows */
         if(U_FAILURE(status)) {
             return;
@@ -442,9 +443,9 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const UCh
 
     // cycle through all the characters
     UChar32 cp;
-    for (int32_t i = 0; i < segLen; i += UTF16_CHAR_LENGTH(cp)) {
+    for (int32_t i = 0; i < segLen; i += U16_LENGTH(cp)) {
         // see if any character is at the start of some decomposition
-        UTF_GET_CHAR(segment, 0, i, segLen, cp);
+        U16_GET(segment, 0, i, segLen, cp);
         if (!nfcImpl.getCanonStartSet(cp, starts)) {
             continue;
         }

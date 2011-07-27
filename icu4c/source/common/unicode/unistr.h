@@ -1296,7 +1296,7 @@ public:
    *         or 0xffff if the offset is not valid for this string
    * @stable ICU 2.0
    */
-  inline UChar32 char32At(int32_t offset) const;
+  UChar32 char32At(int32_t offset) const;
 
   /**
    * Adjust a random-access offset so that
@@ -1313,7 +1313,7 @@ public:
    * @see U16_SET_CP_START
    * @stable ICU 2.0
    */
-  inline int32_t getChar32Start(int32_t offset) const;
+  int32_t getChar32Start(int32_t offset) const;
 
   /**
    * Adjust a random-access offset so that
@@ -1331,7 +1331,7 @@ public:
    * @see U16_SET_CP_LIMIT
    * @stable ICU 2.0
    */
-  inline int32_t getChar32Limit(int32_t offset) const;
+  int32_t getChar32Limit(int32_t offset) const;
 
   /**
    * Move the code unit index along the string by delta code points.
@@ -2122,7 +2122,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  inline UnicodeString& append(UChar32 srcChar);
+  UnicodeString& append(UChar32 srcChar);
 
 
   /* Insert operations */
@@ -2317,9 +2317,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  inline UnicodeString& replace(int32_t start,
-             int32_t length,
-             UChar32 srcChar);
+  UnicodeString& replace(int32_t start, int32_t length, UChar32 srcChar);
 
   /**
    * Replace the characters in the range [<TT>start</TT>, <TT>limit</TT>)
@@ -4126,17 +4124,6 @@ UnicodeString::replace(int32_t start,
 { return doReplace(start, _length, &srcChar, 0, 1); }
 
 inline UnicodeString&
-UnicodeString::replace(int32_t start,
-               int32_t _length,
-               UChar32 srcChar) {
-  UChar buffer[U16_MAX_LENGTH];
-  int32_t count = 0;
-  UBool isError = FALSE;
-  U16_APPEND(buffer, count, U16_MAX_LENGTH, srcChar, isError);
-  return doReplace(start, _length, buffer, 0, count);
-}
-
-inline UnicodeString&
 UnicodeString::replaceBetween(int32_t start,
                   int32_t limit,
                   const UnicodeString& srcText)
@@ -4233,43 +4220,6 @@ UnicodeString::charAt(int32_t offset) const
 inline UChar
 UnicodeString::operator[] (int32_t offset) const
 { return doCharAt(offset); }
-
-inline UChar32
-UnicodeString::char32At(int32_t offset) const
-{
-  int32_t len = length();
-  if((uint32_t)offset < (uint32_t)len) {
-    const UChar *array = getArrayStart();
-    UChar32 c;
-    U16_GET(array, 0, offset, len, c);
-    return c;
-  } else {
-    return kInvalidUChar;
-  }
-}
-
-inline int32_t
-UnicodeString::getChar32Start(int32_t offset) const {
-  if((uint32_t)offset < (uint32_t)length()) {
-    const UChar *array = getArrayStart();
-    U16_SET_CP_START(array, 0, offset);
-    return offset;
-  } else {
-    return 0;
-  }
-}
-
-inline int32_t
-UnicodeString::getChar32Limit(int32_t offset) const {
-  int32_t len = length();
-  if((uint32_t)offset < (uint32_t)len) {
-    const UChar *array = getArrayStart();
-    U16_SET_CP_LIMIT(array, 0, offset, len);
-    return offset;
-  } else {
-    return len;
-  }
-}
 
 inline UBool
 UnicodeString::isEmpty() const {
@@ -4422,15 +4372,6 @@ UnicodeString::append(const UChar *srcChars,
 inline UnicodeString&
 UnicodeString::append(UChar srcChar)
 { return doReplace(length(), 0, &srcChar, 0, 1); }
-
-inline UnicodeString&
-UnicodeString::append(UChar32 srcChar) {
-  UChar buffer[U16_MAX_LENGTH];
-  int32_t _length = 0;
-  UBool isError = FALSE;
-  U16_APPEND(buffer, _length, U16_MAX_LENGTH, srcChar, isError);
-  return doReplace(length(), 0, buffer, 0, _length);
-}
 
 inline UnicodeString&
 UnicodeString::operator+= (UChar ch)

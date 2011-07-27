@@ -172,13 +172,7 @@ public:
      * @return The match/value Result.
      * @draft ICU 4.8
      */
-    inline UStringTrieResult firstForCodePoint(UChar32 cp) {
-        return cp<=0xffff ?
-            first(cp) :
-            (USTRINGTRIE_HAS_NEXT(first(U16_LEAD(cp))) ?
-                next(U16_TRAIL(cp)) :
-                USTRINGTRIE_NO_MATCH);
-    }
+    UStringTrieResult firstForCodePoint(UChar32 cp);
 
     /**
      * Traverses the trie from the current state for this input UChar.
@@ -195,13 +189,7 @@ public:
      * @return The match/value Result.
      * @draft ICU 4.8
      */
-    inline UStringTrieResult nextForCodePoint(UChar32 cp) {
-        return cp<=0xffff ?
-            next(cp) :
-            (USTRINGTRIE_HAS_NEXT(next(U16_LEAD(cp))) ?
-                next(U16_TRAIL(cp)) :
-                USTRINGTRIE_NO_MATCH);
-    }
+    UStringTrieResult nextForCodePoint(UChar32 cp);
 
     /**
      * Traverses the trie from the current state for this string.

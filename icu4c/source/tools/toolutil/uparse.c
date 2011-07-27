@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,11 +19,12 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
+#include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 #include "filestrm.h"
 #include "uparse.h"
-#include "unicode/uchar.h"
-#include "unicode/ustring.h"
 #include "ustr_imp.h"
 
 #include <stdio.h>

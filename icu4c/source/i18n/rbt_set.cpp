@@ -14,6 +14,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
+#include "unicode/utf16.h"
 #include "rbt_set.h"
 #include "rbt_rule.h"
 #include "cmemory.h"
@@ -90,7 +91,7 @@ UnicodeString& _escape(const UnicodeString &source,
                        UnicodeString &target) {
     for (int32_t i = 0; i < source.length(); ) {
         UChar32 ch = source.char32At(i);
-        i += UTF_CHAR_LENGTH(ch);
+        i += U16_LENGTH(ch);
         if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E) {
             if (ch <= 0xFFFF) {
                 target += "\\u";
@@ -416,7 +417,7 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
         }
     }
     // No match or partial match from any rule
-    pos.start += UTF_CHAR_LENGTH(text.char32At(pos.start));
+    pos.start += U16_LENGTH(text.char32At(pos.start));
     _debugOut("no match", NULL, text, pos);
     return TRUE;
 }

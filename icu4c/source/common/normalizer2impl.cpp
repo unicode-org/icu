@@ -21,6 +21,7 @@
 #include "unicode/normalizer2.h"
 #include "unicode/udata.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "mutex.h"
 #include "normalizer2impl.h"

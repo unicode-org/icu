@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -25,6 +25,8 @@
 #include "unicode/ustring.h"
 #include "nccbtst.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/utf16.h"
+
 #define NEW_MAX_BUFFER 999
 
 #define nct_min(x,y)  ((x<y) ? x : y)
@@ -1736,10 +1738,10 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             in4[]={ 0x00, 0x01, 0x02, 0x03,   0x00, 0x11, 0x12, 0x00,   0x00, 0x00, 0x4e, 0x00 };
 
         static const UChar
-            out1[]={ UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfeff },
-            out2[]={ UTF16_LEAD(0x0f1000), UTF16_TRAIL(0x0f1000), 0xfffe },
-            out3[]={ 0xfefe, UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfffd, 0xfffd },
-            out4[]={ UTF16_LEAD(0x10203), UTF16_TRAIL(0x10203), 0xfffd, 0x4e00 };
+            out1[]={ U16_LEAD(0x100f00), U16_TRAIL(0x100f00), 0xfeff },
+            out2[]={ U16_LEAD(0x0f1000), U16_TRAIL(0x0f1000), 0xfffe },
+            out3[]={ 0xfefe, U16_LEAD(0x100f00), U16_TRAIL(0x100f00), 0xfffd, 0xfffd },
+            out4[]={ U16_LEAD(0x10203), U16_TRAIL(0x10203), 0xfffd, 0x4e00 };
 
         static const int32_t
             offsets1[]={ 4, 4, 8 },

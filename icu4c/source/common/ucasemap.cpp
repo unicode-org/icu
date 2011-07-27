@@ -25,6 +25,9 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 #include "unicode/utext.h"
 #endif
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "ucase.h"

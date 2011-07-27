@@ -1439,7 +1439,7 @@ static void TestCharLength()
     for(i=0; i<(int32_t)(sizeof(codepoint)/sizeof(codepoint[0])); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         if(UTF_CHAR_LENGTH(c) != codepoint[i] || U16_LENGTH(c) != codepoint[i]){
-            log_err("The no: of code units for U+%04x:- Expected: %d Got: %d\n", c, codepoint[i], UTF_CHAR_LENGTH(c));
+            log_err("The no: of code units for U+%04x:- Expected: %d Got: %d\n", c, codepoint[i], U16_LENGTH(c));
         }
         multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF_NEED_MULTIPLE_UCHAR(c) != multiple){

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2010, International Business Machines Corporation        *
+* Copyright (C) 1999-2011, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uarrsort.h"

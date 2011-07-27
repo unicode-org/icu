@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u8.c
@@ -23,6 +23,9 @@
 #if !UCONFIG_NO_CONVERSION
 
 #include "unicode/ucnv.h"
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "cmemory.h"
@@ -130,7 +133,7 @@ morebytes:
                 if (mySource < sourceLimit)
                 {
                     toUBytes[i] = (char) (ch2 = *mySource);
-                    if (!UTF8_IS_TRAIL(ch2))
+                    if (!U8_IS_TRAIL(ch2))
                     {
                         break; /* i < inBytes */
                     }
@@ -164,7 +167,7 @@ morebytes:
              * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
              */
             if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] &&
-                (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
+                (isCESU8 ? i <= 3 : !U_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -259,7 +262,7 @@ morebytes:
                 if (mySource < sourceLimit)
                 {
                     toUBytes[i] = (char) (ch2 = *mySource);
-                    if (!UTF8_IS_TRAIL(ch2))
+                    if (!U8_IS_TRAIL(ch2))
                     {
                         break; /* i < inBytes */
                     }
@@ -292,7 +295,7 @@ morebytes:
              * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
              */
             if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] &&
-                (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
+                (isCESU8 ? i <= 3 : !U_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -387,13 +390,13 @@ U_CFUNC void ucnv_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
         }
         else {
             /* Check for surrogates */
-            if(UTF_IS_SURROGATE(ch) && isNotCESU8) {
+            if(U16_IS_SURROGATE(ch) && isNotCESU8) {
 lowsurrogate:
                 if (mySource < sourceLimit) {
                     /* test both code units */
-                    if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_SECOND_SURROGATE(*mySource)) {
+                    if(U16_IS_SURROGATE_LEAD(ch) && U16_IS_TRAIL(*mySource)) {
                         /* convert and consume this supplementary code point */
-                        ch=UTF16_GET_PAIR_VALUE(ch, *mySource);
+                        ch=U16_GET_SUPPLEMENTARY(ch, *mySource);
                         ++mySource;
                         /* exit this condition tree */
                     }
@@ -513,13 +516,13 @@ U_CFUNC void ucnv_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * ar
         {
             nextSourceIndex = offsetNum + 1;
 
-            if(UTF_IS_SURROGATE(ch) && isNotCESU8) {
+            if(U16_IS_SURROGATE(ch) && isNotCESU8) {
 lowsurrogate:
                 if (mySource < sourceLimit) {
                     /* test both code units */
-                    if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_SECOND_SURROGATE(*mySource)) {
+                    if(U16_IS_SURROGATE_LEAD(ch) && U16_IS_TRAIL(*mySource)) {
                         /* convert and consume this supplementary code point */
-                        ch=UTF16_GET_PAIR_VALUE(ch, *mySource);
+                        ch=U16_GET_SUPPLEMENTARY(ch, *mySource);
                         ++mySource;
                         ++nextSourceIndex;
                         /* exit this condition tree */
@@ -662,7 +665,7 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     case 6:
         ch += (myByte = *source);
         ch <<= 6;
-        if (!UTF8_IS_TRAIL(myByte))
+        if (!U8_IS_TRAIL(myByte))
         {
             isLegalSequence = 0;
             break;
@@ -671,7 +674,7 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     case 5:
         ch += (myByte = *source);
         ch <<= 6;
-        if (!UTF8_IS_TRAIL(myByte))
+        if (!U8_IS_TRAIL(myByte))
         {
             isLegalSequence = 0;
             break;
@@ -680,7 +683,7 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     case 4:
         ch += (myByte = *source);
         ch <<= 6;
-        if (!UTF8_IS_TRAIL(myByte))
+        if (!U8_IS_TRAIL(myByte))
         {
             isLegalSequence = 0;
             break;
@@ -689,7 +692,7 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     case 3:
         ch += (myByte = *source);
         ch <<= 6;
-        if (!UTF8_IS_TRAIL(myByte))
+        if (!U8_IS_TRAIL(myByte))
         {
             isLegalSequence = 0;
             break;
@@ -697,7 +700,7 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
         ++source;
     case 2:
         ch += (myByte = *source);
-        if (!UTF8_IS_TRAIL(myByte))
+        if (!U8_IS_TRAIL(myByte))
         {
             isLegalSequence = 0;
             break;

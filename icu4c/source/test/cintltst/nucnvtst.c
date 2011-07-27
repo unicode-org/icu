@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ucol.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "nucnvtst.h"
 
@@ -2972,9 +2973,9 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
             log_err("%s ucnv_getNextUChar() failed: %s\n", message, u_errorName(errorCode));
             break;
         } else {
-            if(UTF_IS_FIRST_SURROGATE(*r)){
+            if(U16_IS_LEAD(*r)){
                 int i =0, len = 2;
-                UTF_NEXT_CHAR_SAFE(r, i, len, exC, FALSE);
+                U16_NEXT(r, i, len, exC);
                 r++;
             }else{
                 exC = *r;
@@ -3476,9 +3477,9 @@ unescape(UChar* dst, int32_t dstLen,const char* src,int32_t srcLen,UErrorCode *s
         }
         if(dstIndex < dstLen){
             if(c>0xFFFF){
-               dst[dstIndex++] = UTF16_LEAD(c);
+               dst[dstIndex++] = U16_LEAD(c);
                if(dstIndex<dstLen){
-                    dst[dstIndex]=UTF16_TRAIL(c);
+                    dst[dstIndex]=U16_TRAIL(c);
                }else{
                    *status=U_BUFFER_OVERFLOW_ERROR;
                }
@@ -3516,8 +3517,8 @@ TestFullRoundtrip(const char* cp){
             usource[0] =(UChar) i;
             len=1;
         }else{
-            usource[0]=UTF16_LEAD(i);
-            usource[1]=UTF16_TRAIL(i);
+            usource[0]=U16_LEAD(i);
+            usource[1]=U16_TRAIL(i);
             len=2;
         }
         ulen=len;

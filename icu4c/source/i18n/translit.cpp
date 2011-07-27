@@ -24,6 +24,7 @@
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
 #include "unicode/strenum.h"
+#include "unicode/utf16.h"
 #include "cpdtrans.h"
 #include "nultrans.h"
 #include "rbt_data.h"
@@ -368,7 +369,7 @@ void Transliterator::_transliterate(Replaceable& text,
     }
 
     if (index.limit > 0 &&
-        UTF_IS_LEAD(text.charAt(index.limit - 1))) {
+        U16_IS_LEAD(text.charAt(index.limit - 1))) {
         // Oops, there is a dangling lead surrogate in the buffer.
         // This will break most transliterators, since they will
         // assume it is part of a pair.  Don't transliterate until
@@ -407,7 +408,7 @@ void Transliterator::_transliterate(Replaceable& text,
     int32_t n = getMaximumContextLength();
     while (newCS > originalStart && n-- > 0) {
         --newCS;
-        newCS -= UTF_CHAR_LENGTH(text.char32At(newCS)) - 1;
+        newCS -= U16_LENGTH(text.char32At(newCS)) - 1;
     }
     index.contextStart = uprv_max(newCS, originalStart);
 #endif
@@ -478,14 +479,14 @@ void Transliterator::filteredTransliterate(Replaceable& text,
             UChar32 c;
             while (index.start < globalLimit &&
                    !filter->contains(c=text.char32At(index.start))) {
-                index.start += UTF_CHAR_LENGTH(c);
+                index.start += U16_LENGTH(c);
             }
 
             // Find the end of this run of unfiltered chars
             index.limit = index.start;
             while (index.limit < globalLimit &&
                    filter->contains(c=text.char32At(index.limit))) {
-                index.limit += UTF_CHAR_LENGTH(c);
+                index.limit += U16_LENGTH(c);
             }
         }
 
@@ -568,8 +569,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
             // transliterations and commit complete transliterations.
             for (;;) {
                 // Length of additional code point, either one or two
-                int32_t charLength =
-                    UTF_CHAR_LENGTH(text.char32At(passLimit));
+                int32_t charLength = U16_LENGTH(text.char32At(passLimit));
                 passLimit += charLength;
                 if (passLimit > runLimit) {
                     break;
@@ -1144,7 +1144,7 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
             if (!ICU_Utility::escapeUnprintable(rulesSource, c)) {
                 rulesSource.append(c);
             }
-            i += UTF_CHAR_LENGTH(c);
+            i += U16_LENGTH(c);
         }
     } else {
         rulesSource = getID();

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2008, International Business Machines
+*   Copyright (C) 2003-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,6 +20,7 @@
 
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
+#include "unicode/utf.h"
 #include "unorm_it.h"
 #include "cmemory.h"
 

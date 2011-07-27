@@ -23,6 +23,8 @@
 #include "unicode/ustring.h"
 #include "unicode/ucasemap.h"
 #include "unicode/ubrk.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "ucase.h"
 #include "ustr_imp.h"

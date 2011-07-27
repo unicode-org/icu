@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -22,6 +22,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "unicode/uset.h"
+#include "unicode/utf16.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "ucnv_imp.h"
@@ -446,17 +447,17 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                 /* oops.. the code point is unassigned */
                 /*Handle surrogates */
                 /*check if the char is a First surrogate*/
-                if(UTF_IS_SURROGATE(mySourceChar)) {
-                    if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                if(U16_IS_SURROGATE(mySourceChar)) {
+                    if(U16_IS_SURROGATE_LEAD(mySourceChar)) {
                         args->converter->fromUChar32=mySourceChar;
 getTrail:
                         /*look ahead to find the trail surrogate*/
                         if(mySourceIndex <  mySourceLength) {
                             /* test the following code unit */
                             UChar trail=(UChar) args->source[mySourceIndex];
-                            if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            if(U16_IS_TRAIL(trail)) {
                                 ++mySourceIndex;
-                                mySourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUChar32, trail);
+                                mySourceChar=U16_GET_SUPPLEMENTARY(args->converter->fromUChar32, trail);
                                 args->converter->fromUChar32=0x00;
                                 /* there are no surrogates in GB2312*/
                                 *err = U_INVALID_CHAR_FOUND;

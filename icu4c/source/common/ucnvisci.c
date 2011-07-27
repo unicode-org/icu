@@ -19,11 +19,12 @@
 
 #if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION
 
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_cb.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "ucnv_bld.h"
-#include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
-#include "unicode/ucnv_cb.h"
 #include "cstring.h"
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
@@ -1054,16 +1055,16 @@ static void UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
         } else {
             /* oops.. the code point is unassigned */
             /*check if the char is a First surrogate*/
-            if (UTF_IS_SURROGATE(sourceChar)) {
-                if (UTF_IS_SURROGATE_FIRST(sourceChar)) {
+            if (U16_IS_SURROGATE(sourceChar)) {
+                if (U16_IS_SURROGATE_LEAD(sourceChar)) {
 getTrail:
                     /*look ahead to find the trail surrogate*/
                     if (source < sourceLimit) {
                         /* test the following code unit */
                         UChar trail= (*source);
-                        if (UTF_IS_SECOND_SURROGATE(trail)) {
+                        if (U16_IS_TRAIL(trail)) {
                             source++;
-                            sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
+                            sourceChar=U16_GET_SUPPLEMENTARY(sourceChar, trail);
                             *err =U_INVALID_CHAR_FOUND;
                             /* convert this surrogate code point */
                             /* exit this condition tree */

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/normalizer2.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 #include "nortrans.h"
 

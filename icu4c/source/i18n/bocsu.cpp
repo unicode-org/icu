@@ -16,10 +16,11 @@
 
 
 #include "unicode/utypes.h"
-#include "unicode/bytestream.h"
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/bytestream.h"
+#include "unicode/utf16.h"
 #include "bocsu.h"
 
 /*

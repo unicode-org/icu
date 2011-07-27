@@ -53,6 +53,7 @@
 #include "unicode/curramt.h"
 #include "unicode/currpinf.h"
 #include "unicode/plurrule.h"
+#include "unicode/utf16.h"
 #include "uresimp.h"
 #include "ucurrimp.h"
 #include "charstr.h"

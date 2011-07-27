@@ -16,6 +16,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/uobject.h"
+#include "unicode/utf16.h"
 #include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"

@@ -31,6 +31,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cintltst.h"
 
@@ -715,7 +716,7 @@ writeString(const UChar *s, int32_t length, uint8_t *p) {
     p0=p;
     i=0;
     while(i<length) {
-        UTF_NEXT_CHAR(s, i, length, c);
+        U16_NEXT(s, i, length, c);
         p+=writePacked(encodeBocu1(&prev, c), p);
     }
     return (int32_t)(p-p0);
@@ -743,7 +744,7 @@ readString(const uint8_t *p, int32_t length, UChar *s) {
             return -1;
         }
         if(c>=0) {
-            UTF_APPEND_CHAR_UNSAFE(s, sLength, c);
+            U16_APPEND_UNSAFE(s, sLength, c);
         }
     }
     return sLength;

@@ -12,10 +12,11 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
+#include "unicode/uniset.h"
+#include "unicode/utf16.h"
 #include "strrepl.h"
 #include "rbt_data.h"
 #include "util.h"
-#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -142,7 +143,7 @@ int32_t StringReplacer::replace(Replaceable& text,
         int32_t tempStart = text.length(); // start of temp buffer
         int32_t destStart = tempStart; // copy new text to here
         if (start > 0) {
-            int32_t len = UTF_CHAR_LENGTH(text.char32At(start-1));
+            int32_t len = U16_LENGTH(text.char32At(start-1));
             text.copy(start-len, start, tempStart);
             destStart += len;
         } else {
@@ -176,7 +177,7 @@ int32_t StringReplacer::replace(Replaceable& text,
                 int32_t len = r->replace(text, destLimit, destLimit, cursor);
                 destLimit += len;
             }
-            oOutput += UTF_CHAR_LENGTH(c);
+            oOutput += U16_LENGTH(c);
         }
         // Insert any accumulated straight text.
         if (buf.length() > 0) {
@@ -208,7 +209,7 @@ int32_t StringReplacer::replace(Replaceable& text,
             int32_t n = cursorPos;
             // Outside the output string, cursorPos counts code points
             while (n < 0 && newStart > 0) {
-                newStart -= UTF_CHAR_LENGTH(text.char32At(newStart-1));
+                newStart -= U16_LENGTH(text.char32At(newStart-1));
                 ++n;
             }
             newStart += n;
@@ -217,7 +218,7 @@ int32_t StringReplacer::replace(Replaceable& text,
             int32_t n = cursorPos - output.length();
             // Outside the output string, cursorPos counts code points
             while (n > 0 && newStart < text.length()) {
-                newStart += UTF_CHAR_LENGTH(text.char32At(newStart));
+                newStart += U16_LENGTH(text.char32At(newStart));
                 --n;
             }
             newStart += n;
@@ -292,7 +293,7 @@ UnicodeString& StringReplacer::toReplacerPattern(UnicodeString& rule,
  */
 void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
     UChar32 ch;
-    for (int32_t i=0; i<output.length(); i+=UTF_CHAR_LENGTH(ch)) {
+    for (int32_t i=0; i<output.length(); i+=U16_LENGTH(ch)) {
     ch = output.char32At(i);
     UnicodeReplacer* r = data->lookupReplacer(ch);
     if (r == NULL) {
@@ -315,7 +316,7 @@ void StringReplacer::setData(const TransliterationRuleData* d) {
         if (f != NULL) {
             f->setData(data);
         }
-        i += UTF_CHAR_LENGTH(c);
+        i += U16_LENGTH(c);
     }
 }
 
