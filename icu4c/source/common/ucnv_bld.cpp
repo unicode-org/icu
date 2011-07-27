@@ -27,6 +27,7 @@
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
 #include "unicode/uloc.h"
+#include "putilimp.h"
 #include "utracimp.h"
 #include "ucnv_io.h"
 #include "ucnv_bld.h"

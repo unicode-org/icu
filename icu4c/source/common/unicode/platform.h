@@ -671,26 +671,6 @@
 /* @} */
 
 /*===========================================================================*/
-/** @{ Code alignment                                                        */
-/*===========================================================================*/
-
-/**
- * \def U_ALIGN_CODE
- * This is used to align code fragments to a specific byte boundary.
- * This is useful for getting consistent performance test results.
- * @internal
- */
-#ifdef U_ALIGN_CODE
-    /* Use the predefined value. */
-#elif defined(_MSC_VER) && defined(_M_IX86) && !defined(_MANAGED)
-#   define U_ALIGN_CODE(boundarySize) __asm  align boundarySize
-#else
-#   define U_ALIGN_CODE(boundarySize) 
-#endif
-
-/** @} */
-
-/*===========================================================================*/
 /* Custom icu entry point renaming                                           */
 /*===========================================================================*/
 
