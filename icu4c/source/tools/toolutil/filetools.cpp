@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2009, International Business Machines
+ *   Copyright (C) 2009-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -8,6 +8,7 @@
 #include "filestrm.h"
 #include "cstring.h"
 #include "unicode/putil.h"
+#include "putilimp.h"
 
 #include <stdio.h>
 #include <stdlib.h>

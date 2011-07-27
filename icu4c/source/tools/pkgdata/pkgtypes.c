@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -22,7 +22,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "pkgtypes.h"
-
+#include "putilimp.h"
 
 const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk, int32_t quote)
 {

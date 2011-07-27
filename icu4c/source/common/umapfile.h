@@ -25,6 +25,7 @@
 
 #include "unicode/putil.h"
 #include "unicode/udata.h"
+#include "putilimp.h"
 
 U_CFUNC UBool uprv_mapFile(UDataMemory *pdm, const char *path);
 U_CFUNC void  uprv_unmapFile(UDataMemory *pData);
