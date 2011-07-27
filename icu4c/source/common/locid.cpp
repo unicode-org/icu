@@ -32,6 +32,7 @@
 
 #include "unicode/locid.h"
 #include "unicode/uloc.h"
+#include "putilimp.h"
 #include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"

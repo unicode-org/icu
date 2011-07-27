@@ -24,6 +24,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "unicode/utf16.h"
+#include "putilimp.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 
