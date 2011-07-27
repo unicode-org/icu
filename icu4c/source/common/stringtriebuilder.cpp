@@ -329,7 +329,7 @@ StringTrieBuilder::registerNode(Node *newNode, UErrorCode &errorCode) {
     }
     // If uhash_puti() returns a non-zero value from an equivalent, previously
     // registered node, then uhash_find() failed to find that and we will leak newNode.
-#if !U_RELEASE
+#if U_DEBUG
     int32_t oldValue=  // Only in debug mode to avoid a compiler warning about unused oldValue.
 #endif
     uhash_puti(nodes, newNode, 1, &errorCode);
@@ -358,7 +358,7 @@ StringTrieBuilder::registerFinalValue(int32_t value, UErrorCode &errorCode) {
     }
     // If uhash_puti() returns a non-zero value from an equivalent, previously
     // registered node, then uhash_find() failed to find that and we will leak newNode.
-#if !U_RELEASE
+#if U_DEBUG
     int32_t oldValue=  // Only in debug mode to avoid a compiler warning about unused oldValue.
 #endif
     uhash_puti(nodes, newNode, 1, &errorCode);
