@@ -12,6 +12,7 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
+#include "unicode/utf16.h"
 #include "esctrn.h"
 #include "util.h"
 
@@ -140,7 +141,7 @@ void EscapeTransliterator::handleTransliterate(Replaceable& text,
 
     while (start < limit) {
         int32_t c = grokSupplementals ? text.char32At(start) : text.charAt(start);
-        int32_t charLen = grokSupplementals ? UTF_CHAR_LENGTH(c) : 1;
+        int32_t charLen = grokSupplementals ? U16_LENGTH(c) : 1;
 
         if ((c & 0xFFFF0000) != 0 && supplementalHandler != NULL) {
             buf.truncate(0);

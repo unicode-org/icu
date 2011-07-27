@@ -16,6 +16,7 @@
 #include "rbt_data.h"
 #include "util.h"
 #include "unicode/uniset.h"
+#include "unicode/utf16.h"
 
 U_NAMESPACE_BEGIN
 
@@ -194,7 +195,7 @@ UBool StringMatcher::matchesIndexValue(uint8_t v) const {
  */
 void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
     UChar32 ch;
-    for (int32_t i=0; i<pattern.length(); i+=UTF_CHAR_LENGTH(ch)) {
+    for (int32_t i=0; i<pattern.length(); i+=U16_LENGTH(ch)) {
         ch = pattern.char32At(i);
         const UnicodeMatcher* matcher = data->lookupMatcher(ch);
         if (matcher == NULL) {
@@ -276,8 +277,8 @@ void StringMatcher::setData(const TransliterationRuleData* d) {
         if (f != NULL) {
             f->setData(data);
         }
-        i += UTF_CHAR_LENGTH(c);
-    }    
+        i += U16_LENGTH(c);
+    }
 }
 
 U_NAMESPACE_END

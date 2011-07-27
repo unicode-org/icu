@@ -594,7 +594,8 @@
         This can lead to inadvertent construction of a <code>UnicodeString</code>
         with a single character by using an integer,
         and it can lead to inadvertent dependency on the conversion framework
-        by using a C string literal.
+        by using a C string literal.<br>
+        Beginning with ICU 49, you should do the following:
         <ul>
           <li>Consider marking the from-<code>UChar</code>
             and from-<code>UChar32</code> constructors explicit via
@@ -602,7 +603,18 @@
           <li>Consider marking the from-<code>const char*</code> and
             from-<code>const UChar*</code></li> constructors explicit via
             <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code> or similar.</li>
+        Note: The ICU test suites cannot be compiled with these settings.
       </li>
+      <li><b>utf.h, utf8.h, utf16.h, utf_old.h:</b>
+        By default, utypes.h (and thus almost every public ICU header)
+        includes all of these header files.
+        Often, none of them are needed, or only one or two of them.
+        All of utf_old.h is deprecated or obsolete.<br>
+        Beginning with ICU 49,
+        you should define <code>U_NO_DEFAULT_INCLUDE_UTF_HEADERS</code> to 1
+        (via -D or uconfig.h, as above)
+        and include those header files explicitly that you actually need.<br>
+        Note: The ICU test suites cannot be compiled with this setting.</li>
       <li><b>.dat file:</b> By default, the ICU data is built into
         a shared library (DLL). This is convenient because it requires no
         install-time or runtime configuration,

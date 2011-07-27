@@ -31,6 +31,7 @@
 #include "unicode/unistr.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/normlzr.h"
+#include "unicode/utf16.h"
 #include "normalizer2impl.h"
 #include "ucol_elm.h"
 #include "ucol_tok.h"
@@ -767,7 +768,7 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
     for (c=0; c<0xffff; c++) {
         fcd = unorm_getFCD16(fcdTrieIndex, c);
         if (fcd >= 0x100 ||               // if the leading combining class(c) > 0 ||
-            (UTF_IS_LEAD(c) && fcd != 0)) {//    c is a leading surrogate with some FCD data
+            (U16_IS_LEAD(c) && fcd != 0)) {//    c is a leading surrogate with some FCD data
             if (buildCMTable) {
                 uint32_t cClass = fcd & 0xff;
                 //uint32_t temp=(cClass<<8)+index[cClass];
@@ -845,7 +846,7 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     for (j = 1; j<element->prefixSize; j++) {   /* First add NFD prefix chars to unsafe CP hash table */
         // Unless it is a trail surrogate, which is handled algoritmically and
         // shouldn't take up space in the table.
-        if(!(UTF_IS_TRAIL(element->prefix[j]))) {
+        if(!(U16_IS_TRAIL(element->prefix[j]))) {
             unsafeCPSet(t->unsafeCP, element->prefix[j]);
         }
     }
@@ -868,13 +869,13 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 #endif
 
     // the first codepoint is also unsafe, as it forms a 'contraction' with the prefix
-    if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
+    if(!(U16_IS_TRAIL(element->cPoints[0]))) {
         unsafeCPSet(t->unsafeCP, element->cPoints[0]);
     }
 
     // Maybe we need this... To handle prefixes completely in the forward direction...
     //if(element->cSize == 1) {
-    //  if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
+    //  if(!(U16_IS_TRAIL(element->cPoints[0]))) {
     //    ContrEndCPSet(t->contrEndCP, element->cPoints[0]);
     //  }
     //}
@@ -885,12 +886,12 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     // Add the last char of the contraction to the contraction-end hash table.
     // unless it is a trail surrogate, which is handled algorithmically and
     // shouldn't be in the table
-    if(!(UTF_IS_TRAIL(element->cPoints[element->cSize -1]))) {
+    if(!(U16_IS_TRAIL(element->cPoints[element->cSize -1]))) {
         ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
     }
 
     // First we need to check if contractions starts with a surrogate
-    UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
+    U16_NEXT(element->cPoints, cpsize, element->cSize, cp);
 
     // If there are any Jamos in the contraction, we should turn on special
     // processing for Jamos
@@ -943,21 +944,21 @@ static uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
     contractions->currentTag = CONTRACTION_TAG;
 
     // First we need to check if contractions starts with a surrogate
-    UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
+    U16_NEXT(element->cPoints, cpsize, element->cSize, cp);
 
     if(cpsize<element->cSize) { // This is a real contraction, if there are other characters after the first
         uint32_t j = 0;
         for (j=1; j<element->cSize; j++) {   /* First add contraction chars to unsafe CP hash table */
             // Unless it is a trail surrogate, which is handled algoritmically and 
             // shouldn't take up space in the table.
-            if(!(UTF_IS_TRAIL(element->cPoints[j]))) {
+            if(!(U16_IS_TRAIL(element->cPoints[j]))) {
                 unsafeCPSet(t->unsafeCP, element->cPoints[j]);
             }
         }
         // Add the last char of the contraction to the contraction-end hash table.
         // unless it is a trail surrogate, which is handled algorithmically and 
         // shouldn't be in the table
-        if(!(UTF_IS_TRAIL(element->cPoints[element->cSize -1]))) {
+        if(!(U16_IS_TRAIL(element->cPoints[element->cSize -1]))) {
             ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
         }
 
@@ -1065,7 +1066,7 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
     uint32_t i = 0;
     if(element->mapCE == 0) {
         for(i = 0; i < element->cSize; i++) {
-            if(!UTF_IS_TRAIL(element->cPoints[i])) {
+            if(!U16_IS_TRAIL(element->cPoints[i])) {
                 unsafeCPSet(t->unsafeCP, element->cPoints[i]);
             }
         }
@@ -1074,7 +1075,7 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
         uint32_t i = 0;
         UChar32 cp;
 
-        UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
+        U16_NEXT(element->cPoints, i, element->cSize, cp);
         /*CE = ucmpe32_get(t->mapping, cp);*/
         CE = utrie_get32(t->mapping, cp, NULL);
 
@@ -1286,7 +1287,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
     // We need to use the canonical iterator here
     // the way we do it is to generate the canonically equivalent strings 
     // for the contraction and then add the sequences that pass FCD check
-    if(element->cSize > 1 && !(element->cSize==2 && UTF16_IS_LEAD(element->cPoints[0]) && UTF16_IS_TRAIL(element->cPoints[1]))) { // this is a contraction, we should check whether a composed form should also be included
+    if(element->cSize > 1 && !(element->cSize==2 && U16_IS_LEAD(element->cPoints[0]) && U16_IS_TRAIL(element->cPoints[1]))) { // this is a contraction, we should check whether a composed form should also be included
         UnicodeString source(element->cPoints, element->cSize);
         CanonicalIterator it(source, *status);
         source = it.next();
@@ -1406,7 +1407,7 @@ UBool enumRange(const void *context, UChar32 start, UChar32 limit, uint32_t valu
     if(start<0x10000) {
         fprintf(stdout, "%08X, %08X, %08X\n", start, limit, value);
     } else {
-        fprintf(stdout, "%08X=%04X %04X, %08X=%04X %04X, %08X\n", start, UTF16_LEAD(start), UTF16_TRAIL(start), limit, UTF16_LEAD(limit), UTF16_TRAIL(limit), value);
+        fprintf(stdout, "%08X=%04X %04X, %08X=%04X %04X, %08X\n", start, U16_LEAD(start), U16_TRAIL(start), limit, U16_LEAD(limit), U16_TRAIL(limit), value);
     }
     return TRUE;
 }

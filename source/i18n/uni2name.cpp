@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -14,6 +14,7 @@
 
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
+#include "unicode/utf16.h"
 #include "uni2name.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -94,7 +95,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
     while (cursor < limit) {
         UChar32 c = text.char32At(cursor);
-        int32_t clen = UTF_CHAR_LENGTH(c);
+        int32_t clen = U16_LENGTH(c);
         status = U_ZERO_ERROR;
         if ((len = u_charName(c, U_EXTENDED_CHAR_NAME, buf, maxLen, &status)) >0 && !U_FAILURE(status)) {
             str.truncate(OPEN_DELIM_LEN);

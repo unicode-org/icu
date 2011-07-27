@@ -27,6 +27,9 @@
 #define UCOL_IMP_H
 
 #include "unicode/utypes.h"
+#ifdef __cplusplus
+#   include "unicode/utf16.h"
+#endif
 
 #define UCA_DATA_TYPE "icu"
 #define UCA_DATA_NAME "ucadata"
@@ -1104,7 +1107,7 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 
     hash = c;
     if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
-        if(UTF_IS_SURROGATE(c)) {
+        if(U16_IS_SURROGATE(c)) {
             /*  Lead or trail surrogate             */
             /*  These are always considered unsafe. */
             return TRUE;

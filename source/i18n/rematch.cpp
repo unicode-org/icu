@@ -19,6 +19,8 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/rbbi.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "uassert.h"
 #include "cmemory.h"
 #include "uvector.h"

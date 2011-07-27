@@ -27,6 +27,7 @@
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "normalizer2impl.h"
 #include "ucol_bld.h"
 #include "ucol_elm.h"
@@ -982,7 +983,7 @@ _processUCACompleteIgnorables(const void *context, UChar32 start, UChar32 limit,
                 el.cPoints = el.uchars;
 
                 el.cSize = 0;
-                UTF_APPEND_CHAR(el.uchars, el.cSize, 1024, start);
+                U16_APPEND_UNSAFE(el.uchars, el.cSize, start);
 
                 el.noOfCEs = 1;
                 el.CEs[0] = 0;

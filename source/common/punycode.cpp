@@ -46,11 +46,13 @@ Disclaimer and license
 
 #if !UCONFIG_NO_IDNA
 
+#include "unicode/ustring.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "ustr_imp.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "punycode.h"
-#include "unicode/ustring.h"
 
 
 /* Punycode ----------------------------------------------------------------- */
@@ -222,11 +224,11 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
                 ++destLength;
             } else {
                 n=(caseFlags!=NULL && caseFlags[j])<<31L;
-                if(UTF_IS_SINGLE(c)) {
+                if(U16_IS_SINGLE(c)) {
                     n|=c;
-                } else if(UTF_IS_LEAD(c) && UTF_IS_TRAIL(c2=src[j+1])) {
+                } else if(U16_IS_LEAD(c) && U16_IS_TRAIL(c2=src[j+1])) {
                     ++j;
-                    n|=(int32_t)UTF16_GET_PAIR_VALUE(c, c2);
+                    n|=(int32_t)U16_GET_SUPPLEMENTARY(c, c2);
                 } else {
                     /* error: unmatched surrogate */
                     *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -255,11 +257,11 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
                 ++destLength;
             } else {
                 n=(caseFlags!=NULL && caseFlags[j])<<31L;
-                if(UTF_IS_SINGLE(c)) {
+                if(U16_IS_SINGLE(c)) {
                     n|=c;
-                } else if(UTF_IS_LEAD(c) && (j+1)<srcLength && UTF_IS_TRAIL(c2=src[j+1])) {
+                } else if(U16_IS_LEAD(c) && (j+1)<srcLength && U16_IS_TRAIL(c2=src[j+1])) {
                     ++j;
-                    n|=(int32_t)UTF16_GET_PAIR_VALUE(c, c2);
+                    n|=(int32_t)U16_GET_SUPPLEMENTARY(c, c2);
                 } else {
                     /* error: unmatched surrogate */
                     *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -510,14 +512,14 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
         /* not needed for Punycode: */
         /* if (decode_digit(n) <= BASE) return punycode_invalid_input; */
 
-        if(n>0x10ffff || UTF_IS_SURROGATE(n)) {
+        if(n>0x10ffff || U_IS_SURROGATE(n)) {
             /* Unicode code point overflow */
             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
             return 0;
         }
 
         /* Insert n at position i of the output: */
-        cpLength=UTF_CHAR_LENGTH(n);
+        cpLength=U16_LENGTH(n);
         if((destLength+cpLength)<=destCapacity) {
             int32_t codeUnitIndex;
 
@@ -540,7 +542,7 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
                 }
             } else {
                 codeUnitIndex=firstSupplementaryIndex;
-                UTF_FWD_N(dest, codeUnitIndex, destLength, i-codeUnitIndex);
+                U16_FWD_N(dest, codeUnitIndex, destLength, i-codeUnitIndex);
             }
 
             /* use the UChar index codeUnitIndex instead of the code point index i */
@@ -559,8 +561,8 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
                 dest[codeUnitIndex]=(UChar)n;
             } else {
                 /* supplementary character, insert two code units */
-                dest[codeUnitIndex]=UTF16_LEAD(n);
-                dest[codeUnitIndex+1]=UTF16_TRAIL(n);
+                dest[codeUnitIndex]=U16_LEAD(n);
+                dest[codeUnitIndex+1]=U16_TRAIL(n);
             }
             if(caseFlags!=NULL) {
                 /* Case of last character determines uppercase flag: */

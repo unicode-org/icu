@@ -15,6 +15,7 @@
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "name2uni.h"
 #include "patternprops.h"
@@ -194,7 +195,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                     if (U_SUCCESS(status)) {
                         // Lookup succeeded
 
-                        // assert(UTF_CHAR_LENGTH(CLOSE_DELIM) == 1);
+                        // assert(U16_LENGTH(CLOSE_DELIM) == 1);
                         cursor++; // advance over CLOSE_DELIM
 
                         str.truncate(0);
@@ -238,7 +239,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             break;
         }
 
-        cursor += UTF_CHAR_LENGTH(c);
+        cursor += U16_LENGTH(c);
     }
         
     offsets.contextLimit += limit - offsets.limit;

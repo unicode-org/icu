@@ -14,6 +14,7 @@
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 #include "normalizer2impl.h"
 #include "tstnorm.h"
@@ -688,8 +689,8 @@ void
 BasicNormalizerTest::TestPreviousNext() {
     // src and expect strings
     static const UChar src[]={
-        UTF16_LEAD(0x2f999), UTF16_TRAIL(0x2f999),
-        UTF16_LEAD(0x1d15f), UTF16_TRAIL(0x1d15f),
+        U16_LEAD(0x2f999), U16_TRAIL(0x2f999),
+        U16_LEAD(0x1d15f), U16_TRAIL(0x1d15f),
         0xc4,
         0x1ed0
     };
@@ -711,7 +712,7 @@ BasicNormalizerTest::TestPreviousNext() {
 
     // src and expect strings for regression test for j2911
     static const UChar src_j2911[]={
-        UTF16_LEAD(0x2f999), UTF16_TRAIL(0x2f999),
+        U16_LEAD(0x2f999), U16_TRAIL(0x2f999),
         0xdd00, 0xd900, // unpaired surrogates - regression test for j2911
         0xc4,
         0x4f, 0x302, 0x301

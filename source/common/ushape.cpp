@@ -27,17 +27,13 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-#if UTF_SIZE<16
-    /*
-     * This implementation assumes that the internal encoding is UTF-16
-     * or UTF-32, not UTF-8.
-     * The main assumption is that the Arabic characters and their
-     * presentation forms each fit into a single UChar.
-     * With UTF-8, they occupy 2 or 3 bytes, and more than the ASCII
-     * characters.
-     */
-#   error This implementation assumes UTF-16 or UTF-32 (check UTF_SIZE)
-#endif
+/*
+ * This implementation is designed for 16-bit Unicode strings.
+ * The main assumption is that the Arabic characters and their
+ * presentation forms each fit into a single UChar.
+ * With UTF-8, they occupy 2 or 3 bytes, and more than the ASCII
+ * characters.
+ */
 
 /*
  * ### TODO in general for letter shaping:

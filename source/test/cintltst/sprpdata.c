@@ -23,6 +23,7 @@
 #include "unicode/putil.h"
 #include "cintltst.h"
 #include "unicode/usprep.h"
+#include "unicode/utf16.h"
 #include "sprpimpl.h"
 #include "uparse.h"
 #include "cmemory.h"
@@ -206,8 +207,8 @@ compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping,i
                     log_err("Did not get the expected result. Expected: 0x%04X Got: 0x%04X \n", mapping[i], mappingData[index+i]);
                 }
             }else{
-                UChar lead  = UTF16_LEAD(mapping[i]);
-                UChar trail = UTF16_TRAIL(mapping[i]);
+                UChar lead  = U16_LEAD(mapping[i]);
+                UChar trail = U16_TRAIL(mapping[i]);
                 if(mappingData[index+i] != lead ||
                     mappingData[index+i+1] != trail){
                     log_err( "Did not get the expected result. Expected: 0x%04X 0x%04X  Got: 0x%04X 0x%04X\n", lead, trail, mappingData[index+i], mappingData[index+i+1]);
@@ -234,7 +235,7 @@ compareFlagsForRange(UStringPrepProfile* data,
     UTrie trie = data->sprepTrie;
 /*
     // supplementary code point
-    UChar __lead16=UTF16_LEAD(0x2323E);
+    UChar __lead16=U16_LEAD(0x2323E);
     int32_t __offset;
 
     // get data for lead surrogate

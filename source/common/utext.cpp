@@ -19,6 +19,9 @@
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/utext.h"
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "ustr_imp.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -118,13 +121,13 @@ utext_setNativeIndex(UText *ut, int64_t index) {
     // Adjust the index position if it is in the middle of a surrogate pair.
     if (ut->chunkOffset<ut->chunkLength) {
         UChar c= ut->chunkContents[ut->chunkOffset];
-        if (UTF16_IS_TRAIL(c)) {
+        if (U16_IS_TRAIL(c)) {
             if (ut->chunkOffset==0) {
                 ut->pFuncs->access(ut, ut->chunkNativeStart, FALSE);
             }
             if (ut->chunkOffset>0) {
                 UChar lead = ut->chunkContents[ut->chunkOffset-1];
-                if (UTF16_IS_LEAD(lead)) {
+                if (U16_IS_LEAD(lead)) {
                     ut->chunkOffset--;
                 }
             }
@@ -1768,9 +1771,9 @@ utext_strFromUTF8(UChar *dest,
             if(U_IS_BMP(ch)){
                 *(pDest++)=(UChar)ch;
             }else{
-                *(pDest++)=UTF16_LEAD(ch);
+                *(pDest++)=U16_LEAD(ch);
                 if(pDest<pDestLimit){
-                    *(pDest++)=UTF16_TRAIL(ch);
+                    *(pDest++)=U16_TRAIL(ch);
                 }else{
                     reqLength++;
                     break;

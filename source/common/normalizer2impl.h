@@ -25,6 +25,7 @@
 #include "unicode/udata.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm.h"
+#include "unicode/utf16.h"
 #include "mutex.h"
 #include "uset_imp.h"
 #include "utrie2.h"

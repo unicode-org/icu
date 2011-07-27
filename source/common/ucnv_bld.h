@@ -23,6 +23,7 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/utf16.h"
 #include "ucnv_cnv.h"
 #include "ucnvmbcs.h"
 #include "ucnv_ext.h"

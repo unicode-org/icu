@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,6 +19,9 @@
 #include "unicode/chariter.h"
 #include "unicode/rep.h"
 #include "unicode/uiter.h"
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 
 U_NAMESPACE_USE
@@ -1038,22 +1041,22 @@ uiter_current32(UCharIterator *iter) {
     UChar32 c, c2;
 
     c=iter->current(iter);
-    if(UTF_IS_SURROGATE(c)) {
-        if(UTF_IS_SURROGATE_FIRST(c)) {
+    if(U16_IS_SURROGATE(c)) {
+        if(U16_IS_SURROGATE_LEAD(c)) {
             /*
              * go to the next code unit
              * we know that we are not at the limit because c!=U_SENTINEL
              */
             iter->move(iter, 1, UITER_CURRENT);
-            if(UTF_IS_SECOND_SURROGATE(c2=iter->current(iter))) {
-                c=UTF16_GET_PAIR_VALUE(c, c2);
+            if(U16_IS_TRAIL(c2=iter->current(iter))) {
+                c=U16_GET_SUPPLEMENTARY(c, c2);
             }
 
             /* undo index movement */
             iter->move(iter, -1, UITER_CURRENT);
         } else {
-            if(UTF_IS_FIRST_SURROGATE(c2=iter->previous(iter))) {
-                c=UTF16_GET_PAIR_VALUE(c2, c);
+            if(U16_IS_LEAD(c2=iter->previous(iter))) {
+                c=U16_GET_SUPPLEMENTARY(c2, c);
             }
             if(c2>=0) {
                 /* undo index movement */
@@ -1069,9 +1072,9 @@ uiter_next32(UCharIterator *iter) {
     UChar32 c, c2;
 
     c=iter->next(iter);
-    if(UTF_IS_FIRST_SURROGATE(c)) {
-        if(UTF_IS_SECOND_SURROGATE(c2=iter->next(iter))) {
-            c=UTF16_GET_PAIR_VALUE(c, c2);
+    if(U16_IS_LEAD(c)) {
+        if(U16_IS_TRAIL(c2=iter->next(iter))) {
+            c=U16_GET_SUPPLEMENTARY(c, c2);
         } else if(c2>=0) {
             /* unmatched first surrogate, undo index movement */
             iter->move(iter, -1, UITER_CURRENT);
@@ -1085,9 +1088,9 @@ uiter_previous32(UCharIterator *iter) {
     UChar32 c, c2;
 
     c=iter->previous(iter);
-    if(UTF_IS_SECOND_SURROGATE(c)) {
-        if(UTF_IS_FIRST_SURROGATE(c2=iter->previous(iter))) {
-            c=UTF16_GET_PAIR_VALUE(c2, c);
+    if(U16_IS_TRAIL(c)) {
+        if(U16_IS_LEAD(c2=iter->previous(iter))) {
+            c=U16_GET_SUPPLEMENTARY(c2, c);
         } else if(c2>=0) {
             /* unmatched second surrogate, undo index movement */
             iter->move(iter, 1, UITER_CURRENT);

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -25,6 +25,7 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/utf16.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "cmemory.h"
@@ -1098,17 +1099,17 @@ loop:
                     *offsets++=sourceIndex;
                 }
                 --targetCapacity;
-            } else if(UTF_IS_SURROGATE(c)) {
-                if(UTF_IS_SURROGATE_FIRST(c)) {
+            } else if(U16_IS_SURROGATE(c)) {
+                if(U16_IS_SURROGATE_LEAD(c)) {
 getTrailSingle:
                     lead=(UChar)c;
                     if(source<sourceLimit) {
                         /* test the following code unit */
                         trail=*source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             ++source;
                             ++nextSourceIndex;
-                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            c=U16_GET_SUPPLEMENTARY(c, trail);
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
@@ -1296,16 +1297,16 @@ getTrailSingle:
                 goto outputBytes;
             } else if(c<0xe000) {
                 /* c is a surrogate */
-                if(UTF_IS_SURROGATE_FIRST(c)) {
+                if(U16_IS_SURROGATE_LEAD(c)) {
 getTrailUnicode:
                     lead=(UChar)c;
                     if(source<sourceLimit) {
                         /* test the following code unit */
                         trail=*source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             ++source;
                             ++nextSourceIndex;
-                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            c=U16_GET_SUPPLEMENTARY(c, trail);
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
@@ -1573,16 +1574,16 @@ loop:
                 /* use the current dynamic window */
                 *target++=(uint8_t)(delta|0x80);
                 --targetCapacity;
-            } else if(UTF_IS_SURROGATE(c)) {
-                if(UTF_IS_SURROGATE_FIRST(c)) {
+            } else if(U16_IS_SURROGATE(c)) {
+                if(U16_IS_SURROGATE_LEAD(c)) {
 getTrailSingle:
                     lead=(UChar)c;
                     if(source<sourceLimit) {
                         /* test the following code unit */
                         trail=*source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             ++source;
-                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            c=U16_GET_SUPPLEMENTARY(c, trail);
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
@@ -1758,15 +1759,15 @@ getTrailSingle:
                 goto outputBytes;
             } else if(c<0xe000) {
                 /* c is a surrogate */
-                if(UTF_IS_SURROGATE_FIRST(c)) {
+                if(U16_IS_SURROGATE_LEAD(c)) {
 getTrailUnicode:
                     lead=(UChar)c;
                     if(source<sourceLimit) {
                         /* test the following code unit */
                         trail=*source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             ++source;
-                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            c=U16_GET_SUPPLEMENTARY(c, trail);
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {

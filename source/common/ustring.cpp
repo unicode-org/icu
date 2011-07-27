@@ -18,6 +18,7 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 #include "cwchar.h"
 #include "cmemory.h"
@@ -791,8 +792,8 @@ uprv_strCompare(const UChar *s1, int32_t length1,
     if(c1>=0xd800 && c2>=0xd800 && codePointOrder) {
         /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
         if(
-            (c1<=0xdbff && (s1+1)!=limit1 && UTF_IS_TRAIL(*(s1+1))) ||
-            (UTF_IS_TRAIL(c1) && start1!=s1 && UTF_IS_LEAD(*(s1-1)))
+            (c1<=0xdbff && (s1+1)!=limit1 && U16_IS_TRAIL(*(s1+1))) ||
+            (U16_IS_TRAIL(c1) && start1!=s1 && U16_IS_LEAD(*(s1-1)))
         ) {
             /* part of a surrogate pair, leave >=d800 */
         } else {
@@ -801,8 +802,8 @@ uprv_strCompare(const UChar *s1, int32_t length1,
         }
 
         if(
-            (c2<=0xdbff && (s2+1)!=limit2 && UTF_IS_TRAIL(*(s2+1))) ||
-            (UTF_IS_TRAIL(c2) && start2!=s2 && UTF_IS_LEAD(*(s2-1)))
+            (c2<=0xdbff && (s2+1)!=limit2 && U16_IS_TRAIL(*(s2+1))) ||
+            (U16_IS_TRAIL(c2) && start2!=s2 && U16_IS_LEAD(*(s2-1)))
         ) {
             /* part of a surrogate pair, leave >=d800 */
         } else {
@@ -853,8 +854,8 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
     if(c1>=0xd800 && c2>=0xd800 && codePointOrder) {
         /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
         if(
-            (c1<=0xdbff && UTF_IS_TRAIL(iter1->current(iter1))) ||
-            (UTF_IS_TRAIL(c1) && (iter1->previous(iter1), UTF_IS_LEAD(iter1->previous(iter1))))
+            (c1<=0xdbff && U16_IS_TRAIL(iter1->current(iter1))) ||
+            (U16_IS_TRAIL(c1) && (iter1->previous(iter1), U16_IS_LEAD(iter1->previous(iter1))))
         ) {
             /* part of a surrogate pair, leave >=d800 */
         } else {
@@ -863,8 +864,8 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
         }
 
         if(
-            (c2<=0xdbff && UTF_IS_TRAIL(iter2->current(iter2))) ||
-            (UTF_IS_TRAIL(c2) && (iter2->previous(iter2), UTF_IS_LEAD(iter2->previous(iter2))))
+            (c2<=0xdbff && U16_IS_TRAIL(iter2->current(iter2))) ||
+            (U16_IS_TRAIL(c2) && (iter2->previous(iter2), U16_IS_LEAD(iter2->previous(iter2))))
         ) {
             /* part of a surrogate pair, leave >=d800 */
         } else {
@@ -897,14 +898,14 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
 void fragment {
         /* iff a surrogate is part of a surrogate pair, leave >=d800 */
         if(c1<=0xdbff) {
-            if(!UTF_IS_TRAIL(iter1->current(iter1))) {
+            if(!U16_IS_TRAIL(iter1->current(iter1))) {
                 /* lead surrogate code point - make <d800 */
                 c1-=0x2800;
             }
         } else if(c1<=0xdfff) {
             int32_t idx=iter1->getIndex(iter1, UITER_CURRENT);
             iter1->previous(iter1); /* ==c1 */
-            if(!UTF_IS_LEAD(iter1->previous(iter1))) {
+            if(!U16_IS_LEAD(iter1->previous(iter1))) {
                 /* trail surrogate code point - make <d800 */
                 c1-=0x2800;
             }
@@ -1012,7 +1013,7 @@ u_countChar32(const UChar *s, int32_t length) {
     if(length>=0) {
         while(length>0) {
             ++count;
-            if(UTF_IS_LEAD(*s) && length>=2 && UTF_IS_TRAIL(*(s+1))) {
+            if(U16_IS_LEAD(*s) && length>=2 && U16_IS_TRAIL(*(s+1))) {
                 s+=2;
                 length-=2;
             } else {
@@ -1033,7 +1034,7 @@ u_countChar32(const UChar *s, int32_t length) {
              * sufficient to look ahead one because of UTF-16;
              * safe to look ahead one because at worst that would be the terminating NUL
              */
-            if(UTF_IS_LEAD(c) && UTF_IS_TRAIL(*s)) {
+            if(U16_IS_LEAD(c) && U16_IS_TRAIL(*s)) {
                 ++s;
             }
         }
@@ -1306,11 +1307,11 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
     /* Map \cX to control-X: X & 0x1F */
     if (c == 0x0063 /*'c'*/ && *offset < length) {
         c = charAt((*offset)++, context);
-        if (UTF_IS_FIRST_SURROGATE(c) && *offset < length) {
+        if (U16_IS_LEAD(c) && *offset < length) {
             UChar c2 = charAt(*offset, context);
-            if (UTF_IS_SECOND_SURROGATE(c2)) {
+            if (U16_IS_TRAIL(c2)) {
                 ++(*offset);
-                c = (UChar) UTF16_GET_PAIR_VALUE(c, c2); /* [sic] */
+                c = (UChar) U16_GET_SUPPLEMENTARY(c, c2); /* [sic] */
             }
         }
         return 0x1F & c;
@@ -1319,11 +1320,11 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
     /* If no special forms are recognized, then consider
      * the backslash to generically escape the next character.
      * Deal with surrogate pairs. */
-    if (UTF_IS_FIRST_SURROGATE(c) && *offset < length) {
+    if (U16_IS_LEAD(c) && *offset < length) {
         UChar c2 = charAt(*offset, context);
-        if (UTF_IS_SECOND_SURROGATE(c2)) {
+        if (U16_IS_TRAIL(c2)) {
             ++(*offset);
-            return UTF16_GET_PAIR_VALUE(c, c2);
+            return U16_GET_SUPPLEMENTARY(c, c2);
         }
     }
     return c;
@@ -1383,10 +1384,10 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
                 goto err;
             }
             src += lenParsed; /* advance past escape seq. */
-            if (dest != NULL && UTF_CHAR_LENGTH(c32) <= (destCapacity - i)) {
-                UTF_APPEND_CHAR_UNSAFE(dest, i, c32);
+            if (dest != NULL && U16_LENGTH(c32) <= (destCapacity - i)) {
+                U16_APPEND_UNSAFE(dest, i, c32);
             } else {
-                i += UTF_CHAR_LENGTH(c32);
+                i += U16_LENGTH(c32);
             }
             segment = src;
         } else {

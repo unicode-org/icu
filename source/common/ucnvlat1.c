@@ -1,6 +1,6 @@
 /* 
 **********************************************************************
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvlat1.cpp
@@ -18,6 +18,7 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/uset.h"
+#include "unicode/utf8.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 

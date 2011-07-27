@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (c) 2001-2008, International Business Machines
+ *   Copyright (c) 2001-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/uchar.h"
+#include "unicode/utf16.h"
 #include "unesctrn.h"
 #include "util.h"
 
@@ -229,7 +230,7 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
                     if (digit < 0) {
                         break;
                     }
-                    s += UTF_CHAR_LENGTH(ch);
+                    s += U16_LENGTH(ch);
                     u = (u * radix) + digit;
                     if (++digitCount == maxDigits) {
                         break;
@@ -273,7 +274,7 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         }
 
         if (start < limit) {
-            start += UTF_CHAR_LENGTH(text.char32At(start));
+            start += U16_LENGTH(text.char32At(start));
         }
     }
 

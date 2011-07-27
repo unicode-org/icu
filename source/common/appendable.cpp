@@ -14,6 +14,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/appendable.h"
+#include "unicode/utf16.h"
 
 U_NAMESPACE_BEGIN
 
