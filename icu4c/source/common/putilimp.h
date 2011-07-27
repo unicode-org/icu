@@ -31,9 +31,11 @@
  * "On XSI-conformant systems, the intptr_t and uintptr_t types are required;
  * otherwise, they are optional."
  * We assume that when uintptr_t is defined, UINTPTR_MAX is defined as well.
+ *
+ * Do not use ptrdiff_t since it is signed. size_t is unsigned.
  */
 #if !defined(__intptr_t_defined) && !defined(UINTPTR_MAX)
-typedef ptrdiff_t uintptr_t;
+typedef size_t uintptr_t;
 #endif
 
 /**
