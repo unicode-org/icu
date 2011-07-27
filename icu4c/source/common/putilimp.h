@@ -26,6 +26,17 @@
 #endif
 
 /**
+ * uintptr_t is an optional part of the standard definitions in stdint.h.
+ * The opengroup.org documentation for stdint.h says
+ * "On XSI-conformant systems, the intptr_t and uintptr_t types are required;
+ * otherwise, they are optional."
+ * We assume that when uintptr_t is defined, UINTPTR_MAX is defined as well.
+ */
+#if !defined(__intptr_t_defined) && !defined(UINTPTR_MAX)
+typedef ptrdiff_t uintptr_t;
+#endif
+
+/**
  * \def U_HAVE_MSVC_2003_OR_EARLIER
  * Flag for workaround of MSVC 2003 optimization bugs
  * @internal

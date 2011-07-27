@@ -20,6 +20,18 @@
 #ifndef _PTYPES_H
 #define _PTYPES_H
 
+/**
+ * \def __STDC_LIMIT_MACROS
+ * According to the Linux stdint.h, the ISO C99 standard specifies that in C++ implementations
+ * macros like INT32_MIN and UINTPTR_MAX should only be defined if explicitly requested.
+ * We need to define __STDC_LIMIT_MACROS before including stdint.h in C++ code
+ * that uses such limit macros.
+ * @internal
+ */
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
+
 #include <sys/types.h>
 
 #include "unicode/platform.h"
