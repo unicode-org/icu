@@ -954,7 +954,6 @@ tools/release/java/APIChangeReport*
 tools/release/java/Makefile.local
 tools/release/java/classes
 tools/release/java/lib
-tools/release/java/src/com/ibm/icu/dev/tools/misc/*.class
 tools/trac/IcuCodeTools/0.11/*.egg-info
 tools/trac/IcuCodeTools/0.11/build
 tools/trac/IcuCodeTools/0.11/icucodetools/*.pyc
