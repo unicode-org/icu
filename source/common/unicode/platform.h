@@ -241,19 +241,6 @@
 #endif
 
 /**
- * \def U_HAVE_DIRENT_H
- * Defines whether dirent.h is available.
- * @internal
- */
-#ifdef U_HAVE_DIRENT_H
-    /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_HAVE_DIRENT_H 0
-#else
-#   define U_HAVE_DIRENT_H 1
-#endif
-
-/**
  * \def U_HAVE_STDINT_H
  * Defines whether stdint.h is available. It is a C99 standard header.
  * We used to include inttypes.h which includes stdint.h but we usually do not need
@@ -626,70 +613,6 @@
 /** @} */
 
 /*===========================================================================*/
-/** @{ Information about POSIX support                                       */
-/*===========================================================================*/
-
-#ifdef U_HAVE_NL_LANGINFO_CODESET
-    /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_HAVE_NL_LANGINFO_CODESET 0
-#else
-#   define U_HAVE_NL_LANGINFO_CODESET 1
-#endif
-
-#ifdef U_NL_LANGINFO_CODESET
-    /* Use the predefined value. */
-#elif !U_HAVE_NL_LANGINFO_CODESET
-#   define U_NL_LANGINFO_CODESET -1
-#else
-#   define U_NL_LANGINFO_CODESET CODESET
-#endif
-
-#ifdef U_TZSET
-    /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_TZSET _tzset
-#else
-#   define U_TZSET tzset
-#endif
-
-#ifdef U_TIMEZONE
-    /* Use the predefined value. */
-#elif U_PLATFORM_IS_LINUX_BASED
-#   define U_TIMEZONE __timezone
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_TIMEZONE _timezone
-#else
-#   define U_TIMEZONE timezone
-#endif
-
-#ifdef U_TZNAME
-    /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_TZNAME _tzname
-#else
-#   define U_TZNAME tzname
-#endif
-
-#ifdef U_HAVE_MMAP
-    /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_HAVE_MMAP 0
-#else
-#   define U_HAVE_MMAP 1
-#endif
-
-#ifdef U_HAVE_POPEN
-    /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
-#   define U_HAVE_POPEN 0
-#else
-#   define U_HAVE_POPEN 1
-#endif
-
-/** @} */
-
-/*===========================================================================*/
 /** @{ Symbol import-export control                                          */
 /*===========================================================================*/
 
@@ -763,51 +686,6 @@
 #   define U_ALIGN_CODE(boundarySize) __asm  align boundarySize
 #else
 #   define U_ALIGN_CODE(boundarySize) 
-#endif
-
-/** @} */
-
-/**
- * \def U_HAVE_MSVC_2003_OR_EARLIER
- * Flag for workaround of MSVC 2003 optimization bugs
- * @internal
- */
-#if !defined(U_HAVE_MSVC_2003_OR_EARLIER) && defined(_MSC_VER) && (_MSC_VER < 1400)
-#define U_HAVE_MSVC_2003_OR_EARLIER
-#endif
-
-/*===========================================================================*/
-/** @{ GCC built in functions for atomic memory operations                   */
-/*===========================================================================*/
-
-/**
- * \def U_HAVE_GCC_ATOMICS
- * @internal
- */
-#ifdef U_HAVE_GCC_ATOMICS
-    /* Use the predefined value. */
-#elif defined(__GNUC__)
-#   define U_HAVE_GCC_ATOMICS 1
-#else
-#   define U_HAVE_GCC_ATOMICS 0
-#endif
-
-/** @} */
-
-/*===========================================================================*/
-/** @{ Programs used by ICU code                                             */
-/*===========================================================================*/
-
-/**
- * \def U_MAKE_IS_NMAKE
- * Defines whether the "make" program is Windows nmake.
- */
-#ifdef U_MAKE_IS_NMAKE
-    /* Use the predefined value. */
-#elif U_PLATFORM == U_PF_WINDOWS
-#   define U_MAKE_IS_NMAKE 1
-#else
-#   define U_MAKE_IS_NMAKE 0
 #endif
 
 /** @} */
