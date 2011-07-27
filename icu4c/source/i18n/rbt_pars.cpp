@@ -19,6 +19,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/uniset.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 #include "funcrepl.h"
 #include "hash.h"
@@ -793,7 +794,7 @@ void RuleHalf::removeContext() {
 UBool RuleHalf::isValidOutput(TransliteratorParser& transParser) {
     for (int32_t i=0; i<text.length(); ) {
         UChar32 c = text.char32At(i);
-        i += UTF_CHAR_LENGTH(c);
+        i += U16_LENGTH(c);
         if (!transParser.parseData->isReplacer(c)) {
             return FALSE;
         }
@@ -808,7 +809,7 @@ UBool RuleHalf::isValidOutput(TransliteratorParser& transParser) {
 UBool RuleHalf::isValidInput(TransliteratorParser& transParser) {
     for (int32_t i=0; i<text.length(); ) {
         UChar32 c = text.char32At(i);
-        i += UTF_CHAR_LENGTH(c);
+        i += U16_LENGTH(c);
         if (!transParser.parseData->isMatcher(c)) {
             return FALSE;
         }

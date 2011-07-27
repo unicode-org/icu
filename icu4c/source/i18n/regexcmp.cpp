@@ -21,6 +21,8 @@
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h"
 #include "unicode/regex.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "patternprops.h"
 #include "putilimp.h"
 #include "cmemory.h"

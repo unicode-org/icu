@@ -19,6 +19,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
+#include "unicode/utf16.h"
 #include "ubidi_props.h"
 #include "ubidiimp.h"
 #include "uassert.h"

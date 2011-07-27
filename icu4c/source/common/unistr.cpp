@@ -25,6 +25,8 @@
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "uelement.h"
 #include "ustr_imp.h"
 #include "umutex.h"
@@ -158,7 +160,7 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
     allocate(capacity);
   } else {
     // count > 0, allocate and fill the new string with count c's
-    int32_t unitCount = UTF_CHAR_LENGTH(c), length = count * unitCount;
+    int32_t unitCount = U16_LENGTH(c), length = count * unitCount;
     if(capacity < length) {
       capacity = length;
     }
@@ -174,8 +176,8 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
         }
       } else {
         // get the code units for c
-        UChar units[UTF_MAX_CHAR_LENGTH];
-        UTF_APPEND_CHAR_UNSAFE(units, i, c);
+        UChar units[U16_MAX_LENGTH];
+        U16_APPEND_UNSAFE(units, i, c);
 
         // now it must be i==unitCount
         i = 0;
@@ -686,6 +688,43 @@ UnicodeString::getChar32At(int32_t offset) const {
   return char32At(offset);
 }
 
+UChar32
+UnicodeString::char32At(int32_t offset) const
+{
+  int32_t len = length();
+  if((uint32_t)offset < (uint32_t)len) {
+    const UChar *array = getArrayStart();
+    UChar32 c;
+    U16_GET(array, 0, offset, len, c);
+    return c;
+  } else {
+    return kInvalidUChar;
+  }
+}
+
+int32_t
+UnicodeString::getChar32Start(int32_t offset) const {
+  if((uint32_t)offset < (uint32_t)length()) {
+    const UChar *array = getArrayStart();
+    U16_SET_CP_START(array, 0, offset);
+    return offset;
+  } else {
+    return 0;
+  }
+}
+
+int32_t
+UnicodeString::getChar32Limit(int32_t offset) const {
+  int32_t len = length();
+  if((uint32_t)offset < (uint32_t)len) {
+    const UChar *array = getArrayStart();
+    U16_SET_CP_LIMIT(array, 0, offset, len);
+    return offset;
+  } else {
+    return len;
+  }
+}
+
 int32_t
 UnicodeString::countChar32(int32_t start, int32_t length) const {
   pinIndices(start, length);
@@ -712,9 +751,9 @@ UnicodeString::moveIndex32(int32_t index, int32_t delta) const {
 
   const UChar *array = getArrayStart();
   if(delta>0) {
-    UTF_FWD_N(array, index, len, delta);
+    U16_FWD_N(array, index, len, delta);
   } else {
-    UTF_BACK_N(array, 0, index, -delta);
+    U16_BACK_N(array, 0, index, -delta);
   }
 
   return index;
@@ -1194,6 +1233,26 @@ UnicodeString::setCharAt(int32_t offset,
     getArrayStart()[offset] = c;
   }
   return *this;
+}
+
+UnicodeString&
+UnicodeString::replace(int32_t start,
+               int32_t _length,
+               UChar32 srcChar) {
+  UChar buffer[U16_MAX_LENGTH];
+  int32_t count = 0;
+  UBool isError = FALSE;
+  U16_APPEND(buffer, count, U16_MAX_LENGTH, srcChar, isError);
+  return doReplace(start, _length, buffer, 0, count);
+}
+
+UnicodeString&
+UnicodeString::append(UChar32 srcChar) {
+  UChar buffer[U16_MAX_LENGTH];
+  int32_t _length = 0;
+  UBool isError = FALSE;
+  U16_APPEND(buffer, _length, U16_MAX_LENGTH, srcChar, isError);
+  return doReplace(length(), 0, buffer, 0, _length);
 }
 
 UnicodeString&

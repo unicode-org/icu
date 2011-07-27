@@ -26,6 +26,9 @@
 
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
@@ -268,8 +271,8 @@ static UChar32
 utf8_nextCharSafeBodyTerminated(const uint8_t **ps, UChar32 c) {
     const uint8_t *s=*ps;
     uint8_t trail, illegal=0;
-    uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
-    UTF8_MASK_LEAD_BYTE((c), count);
+    uint8_t count=U8_COUNT_TRAIL_BYTES(c);
+    U8_MASK_LEAD_BYTE((c), count);
     /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
     switch(count) {
     /* each branch falls through to the next one */
@@ -309,11 +312,11 @@ utf8_nextCharSafeBodyTerminated(const uint8_t **ps, UChar32 c) {
 
     /* correct sequence - all trail bytes have (b7..b6)==(10)? */
     /* illegal is also set if count>=4 */
-    if(illegal || c<utf8_minLegal[count] || UTF_IS_SURROGATE(c)) {
+    if(illegal || c<utf8_minLegal[count] || U_IS_SURROGATE(c)) {
         /* error handling */
         /* don't go beyond this sequence */
         s=*ps;
-        while(count>0 && UTF8_IS_TRAIL(*s)) {
+        while(count>0 && U8_IS_TRAIL(*s)) {
             ++s;
             --count;
         }
@@ -336,9 +339,9 @@ static UChar32
 utf8_nextCharSafeBodyPointer(const uint8_t **ps, const uint8_t *limit, UChar32 c) {
     const uint8_t *s=*ps;
     uint8_t trail, illegal=0;
-    uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
+    uint8_t count=U8_COUNT_TRAIL_BYTES(c);
     if((limit-s)>=count) {
-        UTF8_MASK_LEAD_BYTE((c), count);
+        U8_MASK_LEAD_BYTE((c), count);
         /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
         switch(count) {
         /* each branch falls through to the next one */
@@ -376,11 +379,11 @@ utf8_nextCharSafeBodyPointer(const uint8_t **ps, const uint8_t *limit, UChar32 c
 
     /* correct sequence - all trail bytes have (b7..b6)==(10)? */
     /* illegal is also set if count>=4 */
-    if(illegal || c<utf8_minLegal[count] || UTF_IS_SURROGATE(c)) {
+    if(illegal || c<utf8_minLegal[count] || U_IS_SURROGATE(c)) {
         /* error handling */
         /* don't go beyond this sequence */
         s=*ps;
-        while(count>0 && s<limit && UTF8_IS_TRAIL(*s)) {
+        while(count>0 && s<limit && U8_IS_TRAIL(*s)) {
             ++s;
             --count;
         }
@@ -479,9 +482,9 @@ u_strFromUTF8WithSub(UChar *dest,
                 } else if(ch<=0xFFFF) {
                     *(pDest++)=(UChar)ch;
                 } else {
-                    *(pDest++)=UTF16_LEAD(ch);
+                    *(pDest++)=U16_LEAD(ch);
                     if(pDest<pDestLimit) {
-                        *(pDest++)=UTF16_TRAIL(ch);
+                        *(pDest++)=U16_TRAIL(ch);
                     } else {
                         reqLength++;
                         break;
@@ -600,8 +603,8 @@ u_strFromUTF8WithSub(UChar *dest,
                     }else if(ch<=0xFFFF){
                         *(pDest++)=(UChar)ch;
                     }else{
-                        *(pDest++)=UTF16_LEAD(ch);
-                        *(pDest++)=UTF16_TRAIL(ch);
+                        *(pDest++)=U16_LEAD(ch);
+                        *(pDest++)=U16_TRAIL(ch);
                     }
                 }
             } while(--count > 0);
@@ -646,9 +649,9 @@ u_strFromUTF8WithSub(UChar *dest,
                 }else if(ch<=0xFFFF){
                     *(pDest++)=(UChar)ch;
                 }else{
-                    *(pDest++)=UTF16_LEAD(ch);
+                    *(pDest++)=U16_LEAD(ch);
                     if(pDest<pDestLimit){
-                        *(pDest++)=UTF16_TRAIL(ch);
+                        *(pDest++)=U16_TRAIL(ch);
                     }else{
                         reqLength++;
                         break;
@@ -693,7 +696,7 @@ u_strFromUTF8WithSub(UChar *dest,
                     *pErrorCode = U_INVALID_CHAR_FOUND;
                     return NULL;
                 }
-                reqLength+=UTF_CHAR_LENGTH(ch);
+                reqLength+=U16_LENGTH(ch);
             }
         }
     }
@@ -1029,10 +1032,10 @@ u_strToUTF8WithSub(char *dest,
             } else /* ch is a surrogate */ {
                 int32_t length;
 
-                /*need not check for NUL because NUL fails UTF_IS_TRAIL() anyway*/
-                if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                /*need not check for NUL because NUL fails U16_IS_TRAIL() anyway*/
+                if(U16_IS_SURROGATE_LEAD(ch) && U16_IS_TRAIL(ch2=*pSrc)) { 
                     ++pSrc;
-                    ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+                    ch=U16_GET_SUPPLEMENTARY(ch, ch2);
                 } else if(subchar>=0) {
                     ch=subchar;
                     ++numSubstitutions;
@@ -1057,9 +1060,9 @@ u_strToUTF8WithSub(char *dest,
                 ++reqLength;
             } else if(ch<=0x7ff) {
                 reqLength+=2;
-            } else if(!UTF_IS_SURROGATE(ch)) {
+            } else if(!U16_IS_SURROGATE(ch)) {
                 reqLength+=3;
-            } else if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_TRAIL(ch2=*pSrc)) {
+            } else if(U16_IS_SURROGATE_LEAD(ch) && U16_IS_TRAIL(ch2=*pSrc)) {
                 ++pSrc;
                 reqLength+=4;
             } else if(subchar>=0) {
@@ -1117,9 +1120,9 @@ u_strToUTF8WithSub(char *dest,
                         break;  /* recompute count */
                     }
 
-                    if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                    if(U16_IS_SURROGATE_LEAD(ch) && U16_IS_TRAIL(ch2=*pSrc)) { 
                         ++pSrc;
-                        ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+                        ch=U16_GET_SUPPLEMENTARY(ch, ch2);
 
                         /* writing 4 bytes per 2 UChars is ok */
                         *pDest++=(uint8_t)((ch>>18)|0xf0);
@@ -1172,9 +1175,9 @@ u_strToUTF8WithSub(char *dest,
             } else /* ch is a surrogate */ {
                 int32_t length;
 
-                if(UTF_IS_SURROGATE_FIRST(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                if(U16_IS_SURROGATE_LEAD(ch) && pSrc<pSrcLimit && U16_IS_TRAIL(ch2=*pSrc)) { 
                     ++pSrc;
-                    ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+                    ch=U16_GET_SUPPLEMENTARY(ch, ch2);
                 } else if(subchar>=0) {
                     ch=subchar;
                     ++numSubstitutions;
@@ -1200,9 +1203,9 @@ u_strToUTF8WithSub(char *dest,
                 ++reqLength;
             } else if(ch<=0x7ff) {
                 reqLength+=2;
-            } else if(!UTF_IS_SURROGATE(ch)) {
+            } else if(!U16_IS_SURROGATE(ch)) {
                 reqLength+=3;
-            } else if(UTF_IS_SURROGATE_FIRST(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
+            } else if(U16_IS_SURROGATE_LEAD(ch) && pSrc<pSrcLimit && U16_IS_TRAIL(ch2=*pSrc)) {
                 ++pSrc;
                 reqLength+=4;
             } else if(subchar>=0) {

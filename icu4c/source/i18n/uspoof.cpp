@@ -17,6 +17,7 @@
 #include "unicode/uspoof.h"
 #include "unicode/unorm.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "uspoof_impl.h"
 #include "uassert.h"

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -23,6 +23,9 @@
 #endif
 
 #include "unicode/utypes.h"
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf_old.h"
 
 /*
  * This table could be replaced on many machines by
@@ -107,11 +110,11 @@ utf8_errorValue[6]={
 U_CAPI UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) {
     int32_t i=*pi;
-    uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
+    uint8_t count=U8_COUNT_TRAIL_BYTES(c);
     if((i)+count<=(length)) {
         uint8_t trail, illegal=0;
 
-        UTF8_MASK_LEAD_BYTE((c), count);
+        U8_MASK_LEAD_BYTE((c), count);
         /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
         switch(count) {
         /* each branch falls through to the next one */
@@ -161,12 +164,12 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
 
         /* correct sequence - all trail bytes have (b7..b6)==(10)? */
         /* illegal is also set if count>=4 */
-        if(illegal || (c)<utf8_minLegal[count] || (UTF_IS_SURROGATE(c) && strict!=-2)) {
+        if(illegal || (c)<utf8_minLegal[count] || (U_IS_SURROGATE(c) && strict!=-2)) {
             /* error handling */
             uint8_t errorCount=count;
             /* don't go beyond this sequence */
             i=*pi;
-            while(count>0 && UTF8_IS_TRAIL(s[i])) {
+            while(count>0 && U8_IS_TRAIL(s[i])) {
                 ++(i);
                 --count;
             }
@@ -175,7 +178,7 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
             } else {
                 c=U_SENTINEL;
             }
-        } else if((strict)>0 && UTF_IS_UNICODE_NONCHAR(c)) {
+        } else if((strict)>0 && U_IS_UNICODE_NONCHAR(c)) {
             /* strict: forbid non-characters like U+fffe */
             c=utf8_errorValue[count];
         }
@@ -183,7 +186,7 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
         /* error handling */
         int32_t i0=i;
         /* don't just set (i)=(length) in case there is an illegal sequence */
-        while((i)<(length) && UTF8_IS_TRAIL(s[i])) {
+        while((i)<(length) && U8_IS_TRAIL(s[i])) {
             ++(i);
         }
         if(strict>=0) {
@@ -265,14 +268,14 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
         if((uint8_t)(b-0x80)<0x7e) { /* 0x80<=b<0xfe */
             if(b&0x40) {
                 /* lead byte, this will always end the loop */
-                uint8_t shouldCount=UTF8_COUNT_TRAIL_BYTES(b);
+                uint8_t shouldCount=U8_COUNT_TRAIL_BYTES(b);
 
                 if(count==shouldCount) {
                     /* set the new position */
                     *pi=i;
-                    UTF8_MASK_LEAD_BYTE(b, count);
+                    U8_MASK_LEAD_BYTE(b, count);
                     c|=(UChar32)b<<shift;
-                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || (UTF_IS_SURROGATE(c) && strict!=-2) || (strict>0 && UTF_IS_UNICODE_NONCHAR(c))) {
+                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || (U_IS_SURROGATE(c) && strict!=-2) || (strict>0 && U_IS_UNICODE_NONCHAR(c))) {
                         /* illegal sequence or (strict and non-character) */
                         if(count>=4) {
                             count=3;
@@ -351,7 +354,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i) {
         if((uint8_t)(b-0x80)>=0x7e) { /* not 0x80<=b<0xfe */
             break;
         } else if(b>=0xc0) {
-            if(UTF8_COUNT_TRAIL_BYTES(b)>=(i-I)) {
+            if(U8_COUNT_TRAIL_BYTES(b)>=(i-I)) {
                 return I;
             } else {
                 break;

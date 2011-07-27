@@ -17,6 +17,7 @@
 #include "unicode/ustream.h"
 #include "unicode/ucnv.h"
 #include "unicode/uchar.h"
+#include "unicode/utf16.h"
 #include "ustr_cnv.h"
 #include "cmemory.h"
 #include <string.h>

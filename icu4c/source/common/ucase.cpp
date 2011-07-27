@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
 #include "unicode/udata.h" /* UDataInfo */
+#include "unicode/utf16.h"
 #include "ucmndata.h" /* DataHeader */
 #include "udatamem.h"
 #include "umutex.h"

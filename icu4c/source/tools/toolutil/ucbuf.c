@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -17,14 +17,15 @@
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/uchar.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "filestrm.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "ustrfmt.h"
-#include "unicode/ustring.h"
-#include "unicode/uchar.h"
 #include "ucbuf.h"
 #include <stdio.h>
 
@@ -353,8 +354,8 @@ ucbuf_getc32(UCHARBUF* buf,UErrorCode* error){
             return U_EOF;
         }
     }
-    if(UTF_IS_LEAD(*(buf->currentPos))){
-        retVal=UTF16_GET_PAIR_VALUE(buf->currentPos[0],buf->currentPos[1]);
+    if(U16_IS_LEAD(*(buf->currentPos))){
+        retVal=U16_GET_SUPPLEMENTARY(buf->currentPos[0],buf->currentPos[1]);
         buf->currentPos+=2;
     }else{
         retVal = *(buf->currentPos++);

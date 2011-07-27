@@ -26,6 +26,7 @@
 #include "unicode/locid.h"
 #include "unicode/ulocdata.h"
 #include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "putilimp.h"
 #include "cmemory.h"
 #include "transrt.h"
@@ -439,7 +440,7 @@ UBool RTTest::isCamel(const UnicodeString& a) {
     // see if string is of the form aB; e.g. lower, then upper or title
     UChar32 cp;
     UBool haveLower = FALSE;
-    for (int32_t i = 0; i < a.length(); i += UTF_CHAR_LENGTH(cp)) {
+    for (int32_t i = 0; i < a.length(); i += U16_LENGTH(cp)) {
         cp = a.char32At(i);
         int8_t t = u_charType(cp);
         switch (t) {

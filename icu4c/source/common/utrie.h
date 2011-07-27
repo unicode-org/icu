@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -18,6 +18,7 @@
 #define __UTRIE_H__
 
 #include "unicode/utypes.h"
+#include "unicode/utf16.h"
 #include "udataswp.h"
 
 U_CDECL_BEGIN
@@ -210,7 +211,7 @@ typedef struct UTrie UTrie;
         (result)=_UTRIE_GET_FROM_BMP(trie, data, c32); \
     } else if((uint32_t)(c32)<=0x10ffff) { \
         /* supplementary code point */ \
-        UChar __lead16=UTF16_LEAD(c32); \
+        UChar __lead16=U16_LEAD(c32); \
         _UTRIE_GET_FROM_PAIR(trie, data, __lead16, c32, result, resultType); \
     } else { \
         /* out of range */ \
@@ -220,10 +221,10 @@ typedef struct UTrie UTrie;
 /** Internal next-post-increment: get the next code point (c, c2) and its data */
 #define _UTRIE_NEXT(trie, data, src, limit, c, c2, result, resultType) { \
     (c)=*(src)++; \
-    if(!UTF_IS_LEAD(c)) { \
+    if(!U16_IS_LEAD(c)) { \
         (c2)=0; \
         (result)=_UTRIE_GET_RAW((trie), data, 0, (c)); \
-    } else if((src)!=(limit) && UTF_IS_TRAIL((c2)=*(src))) { \
+    } else if((src)!=(limit) && U16_IS_TRAIL((c2)=*(src))) { \
         ++(src); \
         _UTRIE_GET_FROM_PAIR((trie), data, (c), (c2), (result), resultType); \
     } else { \
@@ -236,12 +237,12 @@ typedef struct UTrie UTrie;
 /** Internal previous: get the previous code point (c, c2) and its data */
 #define _UTRIE_PREVIOUS(trie, data, start, src, c, c2, result, resultType) { \
     (c)=*--(src); \
-    if(!UTF_IS_SURROGATE(c)) { \
+    if(!U16_IS_SURROGATE(c)) { \
         (c2)=0; \
         (result)=_UTRIE_GET_RAW((trie), data, 0, (c)); \
-    } else if(!UTF_IS_SURROGATE_FIRST(c)) { \
+    } else if(!U16_IS_SURROGATE_LEAD(c)) { \
         /* trail surrogate */ \
-        if((start)!=(src) && UTF_IS_LEAD((c2)=*((src)-1))) { \
+        if((start)!=(src) && U16_IS_LEAD((c2)=*((src)-1))) { \
             --(src); \
             (result)=(c); (c)=(c2); (c2)=(UChar)(result); /* swap c, c2 */ \
             _UTRIE_GET_FROM_PAIR((trie), data, (c), (c2), (result), resultType); \

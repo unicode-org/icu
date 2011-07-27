@@ -20,6 +20,7 @@
 #include "unicode/uset.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/utf16.h"
 #include "ucnv_imp.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
@@ -356,16 +357,16 @@ UConverter_fromUnicode_CompoundText_OFFSETS(UConverterFromUnicodeArgs* args, UEr
 
             sourceChar  = *(source++);
             /*check if the char is a First surrogate*/
-             if(UTF_IS_SURROGATE(sourceChar)) {
-                if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
+             if(U16_IS_SURROGATE(sourceChar)) {
+                if(U16_IS_SURROGATE_LEAD(sourceChar)) {
 getTrail:
                     /*look ahead to find the trail surrogate*/
                     if(source < sourceLimit) {
                         /* test the following code unit */
                         UChar trail=(UChar) *source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             source++;
-                            sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
+                            sourceChar=U16_GET_SUPPLEMENTARY(sourceChar, trail);
                             cnv->fromUChar32=0x00;
                             /* convert this supplementary code point */
                             /* exit this condition tree */

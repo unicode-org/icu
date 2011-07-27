@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,6 +19,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
+#include "unicode/utf16.h"
 
 U_NAMESPACE_BEGIN
 

@@ -45,6 +45,7 @@
 #include "unicode/basictz.h"
 #include "unicode/simpletz.h"
 #include "unicode/rbtz.h"
+#include "unicode/utf16.h"
 #include "unicode/vtzone.h"
 #include "olsontz.h"
 #include "patternprops.h"
@@ -2562,7 +2563,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         if (!u_isUWhiteSpace(c) /*||*/ && !PatternProps::isWhiteSpace(c)) {
             break;
         }
-        start += UTF_CHAR_LENGTH(c);
+        start += U16_LENGTH(c);
     }
     pos.setIndex(start);
 

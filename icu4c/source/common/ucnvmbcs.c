@@ -48,6 +48,8 @@
 #include "unicode/ucnv_cb.h"
 #include "unicode/udata.h"
 #include "unicode/uset.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
 #include "ucnv_ext.h"
@@ -3352,16 +3354,16 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                  * If it does, then surrogates are not paired but mapped separately.
                  * Note that in this case unmatched surrogates are not detected.
                  */
-                if(UTF_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
-                    if(UTF_IS_SURROGATE_FIRST(c)) {
+                if(U16_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
+                    if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
                         if(source<sourceLimit) {
                             /* test the following code unit */
                             UChar trail=*source;
-                            if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            if(U16_IS_TRAIL(trail)) {
                                 ++source;
                                 ++nextSourceIndex;
-                                c=UTF16_GET_PAIR_VALUE(c, trail);
+                                c=U16_GET_SUPPLEMENTARY(c, trail);
                                 if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
                                     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                     /* callback(unassigned) */
@@ -3557,16 +3559,16 @@ ucnv_MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
              */
             c=*source++;
             ++nextSourceIndex;
-            if(UTF_IS_SURROGATE(c)) {
-                if(UTF_IS_SURROGATE_FIRST(c)) {
+            if(U16_IS_SURROGATE(c)) {
+                if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
                     if(source<sourceLimit) {
                         /* test the following code unit */
                         UChar trail=*source;
-                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        if(U16_IS_TRAIL(trail)) {
                             ++source;
                             ++nextSourceIndex;
-                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            c=U16_GET_SUPPLEMENTARY(c, trail);
                             if(!hasSupplementary) {
                                 /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                 /* callback(unassigned) */
@@ -3805,16 +3807,16 @@ unrolled:
             /* normal end of conversion: prepare for a new character */
             c=0;
             continue;
-        } else if(!UTF_IS_SURROGATE(c)) {
+        } else if(!U16_IS_SURROGATE(c)) {
             /* normal, unassigned BMP character */
-        } else if(UTF_IS_SURROGATE_FIRST(c)) {
+        } else if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
             if(source<sourceLimit) {
                 /* test the following code unit */
                 UChar trail=*source;
-                if(UTF_IS_SECOND_SURROGATE(trail)) {
+                if(U16_IS_TRAIL(trail)) {
                     ++source;
-                    c=UTF16_GET_PAIR_VALUE(c, trail);
+                    c=U16_GET_SUPPLEMENTARY(c, trail);
                     /* this codepage does not map supplementary code points */
                     /* callback(unassigned) */
                 } else {
@@ -4235,16 +4237,16 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                  * If it does, then surrogates are not paired but mapped separately.
                  * Note that in this case unmatched surrogates are not detected.
                  */
-                if(UTF_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
-                    if(UTF_IS_SURROGATE_FIRST(c)) {
+                if(U16_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
+                    if(U16_IS_SURROGATE_LEAD(c)) {
 getTrail:
                         if(source<sourceLimit) {
                             /* test the following code unit */
                             UChar trail=*source;
-                            if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            if(U16_IS_TRAIL(trail)) {
                                 ++source;
                                 ++nextSourceIndex;
-                                c=UTF16_GET_PAIR_VALUE(c, trail);
+                                c=U16_GET_SUPPLEMENTARY(c, trail);
                                 if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
                                     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                     cnv->fromUnicodeStatus=prevLength; /* save the old state */

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -22,7 +22,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/ustring.h"
-
+#include "unicode/utf16.h"
 #include "uprintf.h"
 #include "ufmt_cmn.h"
 #include "cmemory.h"
@@ -246,7 +246,7 @@ u_printf_char_handler(const u_printf_stream_handler  *handler,
                       const u_printf_spec_info       *info,
                       const ufmt_args                *args)
 {
-    UChar s[UTF_MAX_CHAR_LENGTH+1];
+    UChar s[U16_MAX_LENGTH+1];
     int32_t len = 1, written;
     unsigned char arg = (unsigned char)(args[0].int64Value);
 

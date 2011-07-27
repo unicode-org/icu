@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/utf16.h"
 #include "utrie.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -156,7 +157,7 @@ testTrieIteration(const char *testName,
         c=checkRanges[i].limit;
         if(c!=0) {
             --c;
-            UTF_APPEND_CHAR_UNSAFE(s, length, c);
+            U16_APPEND_UNSAFE(s, length, c);
             values[countValues++]=checkRanges[i].value;
         }
     }
@@ -179,7 +180,7 @@ testTrieIteration(const char *testName,
         if(
             c2==0 ?
                 c!=*(p-1) :
-                !UTF_IS_LEAD(c) || !UTF_IS_TRAIL(c2) || c!=*(p-2) || c2!=*(p-1)
+                !U16_IS_LEAD(c) || !U16_IS_TRAIL(c2) || c!=*(p-2) || c2!=*(p-1)
         ) {
             log_err("error: wrong (c, c2) from UTRIE_NEXT(%s): (U+%04lx, U+%04lx)\n",
                     testName, c, c2);
@@ -243,7 +244,7 @@ testTrieIteration(const char *testName,
         if(
             c2==0 ?
                 c!=*p:
-                !UTF_IS_LEAD(c) || !UTF_IS_TRAIL(c2) || c!=*p || c2!=*(p+1)
+                !U16_IS_LEAD(c) || !U16_IS_TRAIL(c2) || c!=*p || c2!=*(p+1)
         ) {
             log_err("error: wrong (c, c2) from UTRIE_PREVIOUS(%s): (U+%04lx, U+%04lx)\n",
                     testName, c, c2);
@@ -384,7 +385,7 @@ testTrieRangesWithMalloc(const char *testName,
                     log_err("error: unserialized trie(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
                             testName, start, value2, value);
                 }
-                if(!UTF_IS_LEAD(start)) {
+                if(!U16_IS_LEAD(start)) {
                     if(dataIs32) {
                         value2=UTRIE_GET32_FROM_LEAD(&trie, start);
                     } else {
@@ -593,7 +594,7 @@ testTrieRanges(const char *testName,
                     log_err("error: unserialized trie(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
                             testName, start, value2, value);
                 }
-                if(!UTF_IS_LEAD(start)) {
+                if(!U16_IS_LEAD(start)) {
                     if(dataIs32) {
                         value2=UTRIE_GET32_FROM_LEAD(&trie, start);
                     } else {

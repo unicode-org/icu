@@ -27,6 +27,9 @@
 #endif
 
 #include "unicode/utypes.h"
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"

@@ -9,6 +9,7 @@
 */
 
 #include "unicode/unimatch.h"
+#include "unicode/utf16.h"
 #include "patternprops.h"
 #include "util.h"
 
@@ -170,9 +171,9 @@ int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t& pos,
 //?    while (pos != stop &&
 //?           PatternProps::isWhiteSpace(c = text.char32At(pos))) {
 //?        if (isForward) {
-//?            pos += UTF_CHAR_LENGTH(c);
+//?            pos += U16_LENGTH(c);
 //?        } else {
-//?            pos -= UTF_CHAR_LENGTH(c);
+//?            pos -= U16_LENGTH(c);
 //?        }
 //?    }
 //?
@@ -242,7 +243,7 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& pat,
         // parse \s*
         if (cpat == 126 /*~*/) {
             if (PatternProps::isWhiteSpace(c)) {
-                index += UTF_CHAR_LENGTH(c);
+                index += U16_LENGTH(c);
                 continue;
             } else {
                 if (++ipat == pat.length()) {
@@ -254,8 +255,8 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& pat,
 
         // parse literal
         else if (c == cpat) {
-            index += UTF_CHAR_LENGTH(c);
-            ipat += UTF_CHAR_LENGTH(cpat);
+            index += U16_LENGTH(c);
+            ipat += U16_LENGTH(cpat);
             if (ipat == pat.length()) {
                 return index; // success; c parsed
             }

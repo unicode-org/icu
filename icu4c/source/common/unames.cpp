@@ -18,6 +18,8 @@
 #include "unicode/putil.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "ustr_imp.h"
 #include "umutex.h"
 #include "cmemory.h"
@@ -442,12 +444,12 @@ compareName(UCharNames *names,
 static uint8_t getCharCat(UChar32 cp) {
     uint8_t cat;
 
-    if (UTF_IS_UNICODE_NONCHAR(cp)) {
+    if (U_IS_UNICODE_NONCHAR(cp)) {
         return U_NONCHARACTER_CODE_POINT;
     }
 
     if ((cat = u_charType(cp)) == U_SURROGATE) {
-        cat = UTF_IS_LEAD(cp) ? U_LEAD_SURROGATE : U_TRAIL_SURROGATE;
+        cat = U_IS_LEAD(cp) ? U_LEAD_SURROGATE : U_TRAIL_SURROGATE;
     }
 
     return cat;

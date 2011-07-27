@@ -23,6 +23,7 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/utf16.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 
@@ -476,15 +477,15 @@ fastSingle:
                 continue;
             }
 
-            if(UTF_IS_LEAD(c)) {
+            if(U16_IS_LEAD(c)) {
 getTrail:
                 if(source<sourceLimit) {
                     /* test the following code unit */
                     UChar trail=*source;
-                    if(UTF_IS_SECOND_SURROGATE(trail)) {
+                    if(U16_IS_TRAIL(trail)) {
                         ++source;
                         ++nextSourceIndex;
-                        c=UTF16_GET_PAIR_VALUE(c, trail);
+                        c=U16_GET_SUPPLEMENTARY(c, trail);
                     }
                 } else {
                     /* no more input */
@@ -711,14 +712,14 @@ fastSingle:
                 continue;
             }
 
-            if(UTF_IS_LEAD(c)) {
+            if(U16_IS_LEAD(c)) {
 getTrail:
                 if(source<sourceLimit) {
                     /* test the following code unit */
                     UChar trail=*source;
-                    if(UTF_IS_SECOND_SURROGATE(trail)) {
+                    if(U16_IS_TRAIL(trail)) {
                         ++source;
-                        c=UTF16_GET_PAIR_VALUE(c, trail);
+                        c=U16_GET_SUPPLEMENTARY(c, trail);
                     }
                 } else {
                     /* no more input */
@@ -1110,15 +1111,15 @@ getTrail:
             *offsets++=sourceIndex;
         } else {
             /* output surrogate pair */
-            *target++=UTF16_LEAD(c);
+            *target++=U16_LEAD(c);
             if(target<targetLimit) {
-                *target++=UTF16_TRAIL(c);
+                *target++=U16_TRAIL(c);
                 *offsets++=sourceIndex;
                 *offsets++=sourceIndex;
             } else {
                 /* target overflow */
                 *offsets++=sourceIndex;
-                cnv->UCharErrorBuffer[0]=UTF16_TRAIL(c);
+                cnv->UCharErrorBuffer[0]=U16_TRAIL(c);
                 cnv->UCharErrorBufferLength=1;
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
@@ -1315,12 +1316,12 @@ getTrail:
             *target++=(UChar)c;
         } else {
             /* output surrogate pair */
-            *target++=UTF16_LEAD(c);
+            *target++=U16_LEAD(c);
             if(target<targetLimit) {
-                *target++=UTF16_TRAIL(c);
+                *target++=U16_TRAIL(c);
             } else {
                 /* target overflow */
-                cnv->UCharErrorBuffer[0]=UTF16_TRAIL(c);
+                cnv->UCharErrorBuffer[0]=U16_TRAIL(c);
                 cnv->UCharErrorBufferLength=1;
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;

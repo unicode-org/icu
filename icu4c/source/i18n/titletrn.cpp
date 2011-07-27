@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -15,6 +15,7 @@
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "titletrn.h"
 #include "umutex.h"
 #include "ucase.h"

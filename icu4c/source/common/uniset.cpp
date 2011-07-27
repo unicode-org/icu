@@ -9,9 +9,11 @@
 */
 
 #include "unicode/utypes.h"
-#include "unicode/uniset.h"
 #include "unicode/parsepos.h"
 #include "unicode/symtable.h"
+#include "unicode/uniset.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "ruleiter.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -1059,7 +1061,7 @@ int32_t UnicodeSet::getSingleCP(const UnicodeString& s) {
  */
 UnicodeSet& UnicodeSet::addAll(const UnicodeString& s) {
     UChar32 cp;
-    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+    for (int32_t i = 0; i < s.length(); i += U16_LENGTH(cp)) {
         cp = s.char32At(i);
         add(cp);
     }
@@ -1892,7 +1894,7 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
 void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool
 escapeUnprintable) {
     UChar32 cp;
-    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+    for (int32_t i = 0; i < s.length(); i += U16_LENGTH(cp)) {
         _appendToPat(buf, cp = s.char32At(i), escapeUnprintable);
     }
 }
