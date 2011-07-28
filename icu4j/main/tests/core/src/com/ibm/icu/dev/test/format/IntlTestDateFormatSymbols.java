@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2010, International Business Machines
+ *   Copyright (C) 1996-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -19,6 +19,8 @@ package com.ibm.icu.dev.test.format;
 import java.util.Locale;
 
 import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ULocale;
 
 public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
 {
@@ -476,5 +478,47 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         if(! en.equals(fr)) {
             errln("ERROR: Clone failed");
         }
+    }
+
+    public void TestConstructorWithCalendar() {
+        ULocale[] TestLocales = {
+            new ULocale("en_US@caleandar=gregorian"),
+            new ULocale("ja_JP@calendar=japanese"),
+            new ULocale("th_TH@calendar=buddhist"),
+            new ULocale("zh_TW@calendar=roc"),
+            new ULocale("ar_IR@calendar=persian"),
+            new ULocale("ar_EG@calendar=islamic"),
+            new ULocale("he_IL@calendar=hebrew"),
+            new ULocale("zh_CN@calendar=chinese"),
+            new ULocale("hi_IN@calendar=indian"),
+            new ULocale("ar_EG@calendar=coptic"),
+            new ULocale("am_ET@calendar=ethiopic"),
+        };
+
+        int i;
+
+        // calendars
+        Calendar[] calendars = new Calendar[TestLocales.length];
+        for (i = 0; i < TestLocales.length; i++) {
+            calendars[i] = Calendar.getInstance(TestLocales[i]);
+        }
+
+        // Creates an instance from a base locale + calendar
+        DateFormatSymbols[] symbols = new DateFormatSymbols[TestLocales.length];
+        for (i = 0; i < TestLocales.length; i++) {
+            symbols[i] = new DateFormatSymbols(calendars[i], new ULocale(TestLocales[i].getBaseName()));
+        }
+
+        // Compare an instance created from a base locale + calendar
+        // with an instance created from its base locale + calendar class
+        for (i = 0; i < TestLocales.length; i++) {
+            DateFormatSymbols dfs = new DateFormatSymbols(calendars[i].getClass(), new ULocale(TestLocales[i].getBaseName()));
+            if (!dfs.equals(symbols[i])) {
+                errln("FAIL: DateFormatSymbols created from a base locale and calendar instance"
+                        + " is different from one created from the same base locale and calendar class - "
+                        + TestLocales[i]);
+            }
+        }
+
     }
 }
