@@ -102,7 +102,7 @@ util.o util_props.o parsepos.o locbased.o cwchar.o wintz.o mutex.o dtintrv.o ucn
 ulist.o uloc_tag.o icudataver.o icuplug.o
 
 ## Header files to install
-HEADERS = $(srcdir)/unicode/*.h unicode/*.h
+HEADERS = $(srcdir)/unicode/*.h
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
