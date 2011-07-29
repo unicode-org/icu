@@ -496,13 +496,13 @@ static int runCommand(const char* command, UBool specialHandling) {
     }
 
     if (!specialHandling) {
-#if defined(USING_CYGWIN) || U_PLATFORM == U_PF_OS400
+#if defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW || U_PLATFORM == U_PF_OS400
         if ((len + BUFFER_PADDING_SIZE) >= SMALL_BUFFER_MAX_SIZE) {
             cmd = (char *)uprv_malloc(len + BUFFER_PADDING_SIZE);
         } else {
             cmd = cmdBuffer;
         }
-#ifdef USING_CYGWIN
+#if defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW
         sprintf(cmd, "bash -c \"%s\"", command);
 
 #elif U_PLATFORM == U_PF_OS400
@@ -907,12 +907,7 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
     char name1[SMALL_BUFFER_MAX_SIZE]; /* symlink file name */
     char name2[SMALL_BUFFER_MAX_SIZE]; /* file name to symlink */
 
-#if U_PLATFORM == U_PF_MINGW
-    /* On MINGW, symbolic links don't need to be created. */
-    return result;
-#endif
-
-#ifndef USING_CYGWIN
+#if !defined(USING_CYGWIN) && U_PLATFORM != U_PF_MINGW
     /* No symbolic link to make. */
     if (uprv_strlen(libFileNames[LIB_FILE_VERSION]) == 0 || uprv_strlen(libFileNames[LIB_FILE_VERSION_MAJOR]) == 0 ||
         uprv_strcmp(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_MAJOR]) == 0) {
