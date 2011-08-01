@@ -147,7 +147,7 @@ public:
      */
     static TimeZone* U_EXPORT2 createTimeZone(const UnicodeString& ID);
 
-
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns an enumeration over system time zone IDs with the given
      * filter conditions.
@@ -168,6 +168,7 @@ public:
         const char* region,
         const int32_t* rawOffset,
         UErrorCode& ec);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns an enumeration over all recognized time zone IDs. (i.e.,
@@ -272,6 +273,7 @@ public:
      */
     static void U_EXPORT2 adoptDefault(TimeZone* zone);
 
+#ifndef U_HIDE_SYSTEM_API
     /**
      * Same as adoptDefault(), except that the TimeZone object passed in is NOT adopted;
      * the caller remains responsible for deleting it.
@@ -280,6 +282,7 @@ public:
      * @system
      */
     static void U_EXPORT2 setDefault(const TimeZone& zone);
+#endif  /* U_HIDE_SYSTEM_API */
 
     /**
      * Returns the timezone data version currently used by ICU.
@@ -663,7 +666,8 @@ public:
      */
     virtual int32_t getDSTSavings() const;
 
-    /** 
+#ifndef U_HIDE_DRAFT_API
+    /**
      * Gets the region code associated with the given
      * system time zone ID. The region code is either ISO 3166
      * 2-letter country code or UN M.49 3-digit area code.
@@ -682,6 +686,7 @@ public:
      */ 
     static int32_t U_EXPORT2 getRegion(const UnicodeString& id, 
         char *region, int32_t capacity, UErrorCode& status); 
+#endif  /* U_HIDE_DRAFT_API */
 
 protected:
 
@@ -712,6 +717,7 @@ protected:
      */
     TimeZone& operator=(const TimeZone& right);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Utility function. For internally loading rule data.
      * @param top Top resource bundle for tz data
@@ -722,7 +728,7 @@ protected:
      * @internal
      */
     static UResourceBundle* loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode&status);
-
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     friend class ZoneMeta;

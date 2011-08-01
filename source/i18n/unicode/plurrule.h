@@ -27,12 +27,14 @@
 
 #include "unicode/format.h"
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Value returned by PluralRules::getUniqueKeywordValue() when there is no
  * unique value to return.
  * @draft ICU 4.8
  */
 #define UPLRULES_NO_UNIQUE_VALUE ((double)-0.00123456777)
+#endif  /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_BEGIN
 
@@ -233,6 +235,7 @@ public:
      */
     StringEnumeration* getKeywords(UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns a unique value for this keyword if it exists, else the constant
      * UPLRULES_NO_UNIQUE_VALUE.
@@ -288,6 +291,7 @@ public:
     int32_t getSamples(const UnicodeString &keyword,
                        double *dest, int32_t destCapacity,
                        UErrorCode& status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns TRUE if the given keyword is defined in this

@@ -99,10 +99,12 @@
  */
 #define U_ICU_VERSION_SHORT "49"
 
+#ifndef U_HIDE_INTERNAL_API
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
 #define U_ICU_DATA_VERSION "49.0.1"
+#endif  /* U_HIDE_INTERNAL_API */
 
 /*===========================================================================
  * ICU collation framework version information

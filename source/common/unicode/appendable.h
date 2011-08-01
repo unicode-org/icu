@@ -23,6 +23,8 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
+#ifndef U_HIDE_DRAFT_API
+
 U_NAMESPACE_BEGIN
 
 class UnicodeString;
@@ -233,4 +235,5 @@ private:
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif  // __APPENDABLE_H__

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -116,6 +116,7 @@ public:
      */
     void setSource(const UnicodeString &newSource, UErrorCode &status);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Dumb recursive implementation of permutation.
      * TODO: optimize
@@ -126,6 +127,7 @@ public:
      * @internal
      */
     static void U_EXPORT2 permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -560,6 +560,7 @@ typedef enum UProperty {
     /** One more than the last constant for string Unicode properties. @stable ICU 2.4 */
     UCHAR_STRING_LIMIT=0x400D,
 
+#ifndef U_HIDE_DRAFT_API
     /** Provisional property Script_Extensions (new in Unicode 6.0).
         As a provisional property, it may be modified or removed
         in future versions of the Unicode Standard, and thus in ICU.
@@ -573,6 +574,7 @@ typedef enum UProperty {
     /** One more than the last constant for Unicode properties with unusual value types.
      * @draft ICU 4.6 */
     UCHAR_OTHER_PROPERTY_LIMIT=0x7001,
+#endif  /* U_HIDE_DRAFT_API */
 
     /** Represents a nonexistent or invalid property or property value. @stable ICU 2.4 */
     UCHAR_INVALID_CODE = -1

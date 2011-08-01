@@ -2027,6 +2027,7 @@ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status);
 U_STABLE int32_t U_EXPORT2
 ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Returns whether or not the charset of the converter has a fixed number of bytes
  * per charset character.
@@ -2044,6 +2045,7 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
  */
 U_DRAFT UBool U_EXPORT2
 ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif
 

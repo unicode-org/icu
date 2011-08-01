@@ -20,6 +20,8 @@
 #include "unicode/stringpiece.h"
 #include "unicode/stringtriebuilder.h"
 
+#ifndef U_HIDE_DRAFT_API
+
 U_NAMESPACE_BEGIN
 
 class BytesTrieElement;
@@ -130,6 +132,7 @@ private:
     virtual int32_t getMinLinearMatch() const { return BytesTrie::kMinLinearMatch; }
     virtual int32_t getMaxLinearMatchLength() const { return BytesTrie::kMaxLinearMatchLength; }
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * @internal
      */
@@ -141,6 +144,7 @@ private:
     private:
         const char *s;
     };
+#endif  /* U_HIDE_INTERNAL_API */
 
     virtual Node *createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
                                         Node *nextNode) const;
@@ -167,4 +171,5 @@ private:
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif  // __BYTESTRIEBUILDER_H__

@@ -442,6 +442,7 @@ uscript_getShortName(UScriptCode scriptCode);
 U_STABLE UScriptCode  U_EXPORT2 
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Is code point c used in script sc?
  * That is, does code point c have the Script property value sc,
@@ -488,5 +489,6 @@ U_DRAFT int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
                             UScriptCode *scripts, int32_t capacity,
                             UErrorCode *errorCode);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif

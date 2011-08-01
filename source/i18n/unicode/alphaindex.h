@@ -19,6 +19,7 @@
  * \brief C++ API: Index Characters
  */
 
+#ifndef U_HIDE_DRAFT_API
 
 U_CDECL_BEGIN
 
@@ -29,37 +30,37 @@ U_CDECL_BEGIN
  * @draft ICU 4.8
  */
 typedef enum UAlphabeticIndexLabelType {
-         /**
-          *  Normal Label, typically the starting letter of the names
-          *  in the bucket with this label.
-          * @draft ICU 4.8
-          */
-         U_ALPHAINDEX_NORMAL    = 0,
+    /**
+     *  Normal Label, typically the starting letter of the names
+     *  in the bucket with this label.
+     * @draft ICU 4.8
+     */
+    U_ALPHAINDEX_NORMAL    = 0,
 
-         /**
-          * Undeflow Label.  The bucket with this label contains names
-          * in scripts that sort before any of the bucket labels in this index.
-          * @draft ICU 4.8
-          */
-         U_ALPHAINDEX_UNDERFLOW = 1,
+    /**
+     * Undeflow Label.  The bucket with this label contains names
+     * in scripts that sort before any of the bucket labels in this index.
+     * @draft ICU 4.8
+     */
+    U_ALPHAINDEX_UNDERFLOW = 1,
 
-         /**
-          * Inflow Label.  The bucket with this label contains names
-          * in scripts that sort between two of the bucket labels in this index.
-          * Inflow labels are created when an index contains normal labels for
-          * multiple scripts, and skips other scripts that sort between some of the
-          * included scripts.
-          * @draft ICU 4.8
-          */
-         U_ALPHAINDEX_INFLOW    = 2,
+    /**
+     * Inflow Label.  The bucket with this label contains names
+     * in scripts that sort between two of the bucket labels in this index.
+     * Inflow labels are created when an index contains normal labels for
+     * multiple scripts, and skips other scripts that sort between some of the
+     * included scripts.
+     * @draft ICU 4.8
+     */
+    U_ALPHAINDEX_INFLOW    = 2,
 
-         /**
-          * Overflow Label. Te bucket with this label contains names in scripts
-          * that sort after all of the bucket labels in this index.
-          * @draft ICU 4.8
-          */
-         U_ALPHAINDEX_OVERFLOW  = 3
-     } UAlphabeticIndexLabelType;
+    /**
+     * Overflow Label. Te bucket with this label contains names in scripts
+     * that sort after all of the bucket labels in this index.
+     * @draft ICU 4.8
+     */
+    U_ALPHAINDEX_OVERFLOW  = 3
+} UAlphabeticIndexLabelType;
 
 
 struct UHashtable;
@@ -546,12 +547,14 @@ private:
      void initPinyinBounds(const Collator *coll, UErrorCode &status);
 
    public:
+#ifndef U_HIDE_INTERNAL_API
      /**
       *   Delete all shared (static) data associated with an AlphabeticIndex.
       *   Internal function, not intended for direct use.
       *   @internal.
       */
      static void staticCleanup();
+#endif  /* U_HIDE_INTERNAL_API */
    private:
 
      // Add index characters from the specified locale to the dest set.
@@ -575,6 +578,7 @@ private:
     //  implementation code written in plain C.  They are not intended for
     //  public use.
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * A record, or item, in the index.
      * @internal
@@ -588,6 +592,7 @@ private:
          Record(AlphabeticIndex *alphaIndex, const UnicodeString &name, const void *data);
          ~Record();
      };
+#endif  /* U_HIDE_INTERNAL_API */
 
      /**
        * Holds all user records before they are distributed into buckets.
@@ -615,6 +620,7 @@ private:
 
   public:
 
+#ifndef U_HIDE_INTERNAL_API
     /** 
       * Language Types.  For internal ICU use only.
       * @internal
@@ -633,6 +639,7 @@ private:
       * @internal
       */
     static ELangType  langTypeFromLocale(const Locale &loc);
+#endif  /* U_HIDE_INTERNAL_API */
 
 
    private:
@@ -716,5 +723,6 @@ private:
 };
 
 U_NAMESPACE_END
-#endif
 
+#endif  /* U_HIDE_DRAFT_API */
+#endif

@@ -697,48 +697,6 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="unicode\udeprctd.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\udraft.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uintrnal.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <CustomBuild Include="unicode\umachine.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
@@ -754,36 +712,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="umutex.h" />
-    <CustomBuild Include="unicode\uobslete.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="uposixdefs.h" />
     <CustomBuild Include="unicode\urename.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\usystem.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>

@@ -835,25 +835,10 @@
     <CustomBuild Include="unicode\uconfig.h">
       <Filter>configuration</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\udeprctd.h">
-      <Filter>configuration</Filter>
-    </CustomBuild>
-    <CustomBuild Include="unicode\udraft.h">
-      <Filter>configuration</Filter>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uintrnal.h">
-      <Filter>configuration</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\umachine.h">
       <Filter>configuration</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\uobslete.h">
-      <Filter>configuration</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\urename.h">
-      <Filter>configuration</Filter>
-    </CustomBuild>
-    <CustomBuild Include="unicode\usystem.h">
       <Filter>configuration</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\utrace.h">

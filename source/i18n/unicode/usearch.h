@@ -709,6 +709,7 @@ U_STABLE int32_t U_EXPORT2 usearch_previous(UStringSearch *strsrch,
 */
 U_STABLE void U_EXPORT2 usearch_reset(UStringSearch *strsrch);
 
+#ifndef U_HIDE_INTERNAL_API
 /**
   *  Simple forward search for the pattern, starting at a specified index,
   *     and using using a default set search options.
@@ -828,6 +829,7 @@ U_INTERNAL UBool U_EXPORT2 usearch_searchBackwards(UStringSearch *strsrch,
                                                    int32_t        *matchStart,
                                                    int32_t        *matchLimit,
                                                    UErrorCode     *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif /* #if !UCONFIG_NO_COLLATION  && !UCONFIG_NO_BREAK_ITERATION */
 

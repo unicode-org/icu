@@ -229,12 +229,14 @@ typedef UChar LEUnicode16;
  */
 typedef UChar32 LEUnicode32;
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Used to represent 16-bit Unicode code points.
  *
  * @deprecated since ICU 2.4. Use LEUnicode16 instead
  */
 typedef UChar LEUnicode;
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Used to hold a pair of (x, y) values which represent a point.
@@ -268,6 +270,7 @@ typedef struct LEPoint LEPoint;
 #endif
 
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * A convenience macro to get the length of an array.
  *
@@ -307,6 +310,7 @@ typedef struct LEPoint LEPoint;
  */
 #define LE_DELETE_ARRAY(array) uprv_free((void *) (array))
 #endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * A macro to construct the four-letter tags used to

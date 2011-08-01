@@ -201,6 +201,7 @@ public:
    * @stable ICU 4.2
    */
   UBool Overflowed() const { return overflowed_; }
+#ifndef U_HIDE_DRAFT_API
   /**
    * Returns the number of bytes appended to the sink.
    * If Overflowed() then NumberOfBytesAppended()>NumberOfBytesWritten()
@@ -209,6 +210,7 @@ public:
    * @draft ICU 4.6
    */
   int32_t NumberOfBytesAppended() const { return appended_; }
+#endif  /* U_HIDE_DRAFT_API */
 private:
   char* outbuf_;
   const int32_t capacity_;

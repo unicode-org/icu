@@ -683,6 +683,7 @@ private:
     static DateFormat* U_EXPORT2 create(EStyle timeStyle, EStyle dateStyle, const Locale& inLocale);
 
 public:
+#ifndef U_HIDE_OBSOLETE_API
     /**
      * Field selector for FieldPosition for DateFormat fields.
      * @obsolete ICU 3.4 use UDateFormatField instead, since this API will be
@@ -735,6 +736,7 @@ public:
         HOUR0_FIELD = UDAT_HOUR0_FIELD,
         TIMEZONE_FIELD = UDAT_TIMEZONE_FIELD
     };
+#endif  /* U_HIDE_OBSOLETE_API */
 };
 
 inline UnicodeString&

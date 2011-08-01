@@ -140,11 +140,13 @@
  * @stable ICU 2.0
  */
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * The time zone ID reserved for unknown time zone.
  * @draft ICU 4.8
  */
 #define UCAL_UNKNOWN_ZONE_ID "Etc/Unknown"
+#endif  /* U_HIDE_DRAFT_API */
 
 /** A calendar.
  *  For usage in C programs.
@@ -521,6 +523,7 @@ enum UCalendarAMPMs {
 /** @stable ICU 2.0 */
 typedef enum UCalendarAMPMs UCalendarAMPMs;
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * System time zone type constants used by filtering zones
  * in ucal_openTimeZoneIDEnumeration.
@@ -567,6 +570,7 @@ typedef enum USystemTimeZoneType USystemTimeZoneType;
 U_DRAFT UEnumeration* U_EXPORT2
 ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char* region,
                                 const int32_t* rawOffset, UErrorCode* ec);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Create an enumeration over all time zones.
@@ -1332,6 +1336,7 @@ ucal_getWeekendTransition(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, U
 U_STABLE UBool U_EXPORT2
 ucal_isWeekend(const UCalendar *cal, UDate date, UErrorCode *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Return the difference between the target time and the time this calendar object is currently set to.
  * If the target time is after the current calendar setting, the the returned value will be positive.
@@ -1361,7 +1366,7 @@ ucal_getFieldDifference(UCalendar* cal,
                         UDate target,
                         UCalendarDateFields field,
                         UErrorCode* status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

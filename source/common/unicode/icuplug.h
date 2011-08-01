@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -110,6 +110,7 @@
 
 /* === Basic types === */
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * @{
  * Opaque structure passed to/from a plugin. 
@@ -365,6 +366,6 @@ uplug_loadPlugFromLibrary(const char *libName, const char *sym, const char *conf
  */
 U_CAPI void U_EXPORT2
 uplug_removePlug(UPlugData *plug, UErrorCode *status);
-
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif

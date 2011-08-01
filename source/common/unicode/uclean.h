@@ -1,9 +1,7 @@
 /*
 ******************************************************************************
-*                                                                            *
-* Copyright (C) 2001-2009, International Business Machines                   *
-*                Corporation and others. All Rights Reserved.                *
-*                                                                            *
+* Copyright (C) 2001-2011, International Business Machines
+*                Corporation and others. All Rights Reserved.
 ******************************************************************************
 *   file name:  uclean.h
 *   encoding:   US-ASCII

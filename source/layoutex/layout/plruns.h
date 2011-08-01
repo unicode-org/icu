@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -8,6 +8,9 @@
 #define __PLRUNS_H
 
 #include "unicode/utypes.h"
+
+#ifndef U_HIDE_INTERNAL_API
+
 #include "unicode/ubidi.h"
 #include "layout/LETypes.h"
 
@@ -434,4 +437,5 @@ pl_addLocaleRun(pl_localeRuns *localeRuns,
                 const char *locale,
                 le_int32 limit);
 
+#endif  /* U_HIDE_INTERNAL_API */
 #endif

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -11,6 +11,7 @@
 
 U_NAMESPACE_BEGIN
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * This is a helper class that is used to
  * recognize a set of glyph indices.
@@ -38,6 +39,7 @@ public:
      */
     virtual le_bool accept(LEGlyphID glyph) const = 0;
 };
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
 #endif

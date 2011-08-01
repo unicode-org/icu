@@ -105,6 +105,7 @@ public:
     DateFormatSymbols(const Locale& locale,
                       UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the default locale, in the default calendar (Gregorian).
@@ -139,6 +140,7 @@ public:
     DateFormatSymbols(const Locale& locale,
                       const char *type,
                       UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Copy constructor.
@@ -396,6 +398,7 @@ public:
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Gets timezone strings. These strings are stored in a 2-dimensional array.
      * @param rowCount      Output param to receive number of rows.
@@ -404,6 +407,7 @@ public:
      * @deprecated ICU 3.6
      */
     const UnicodeString** getZoneStrings(int32_t& rowCount, int32_t& columnCount) const;
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Sets timezone strings. These strings are stored in a 2-dimensional array.
