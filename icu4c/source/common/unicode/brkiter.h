@@ -506,6 +506,7 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /** Get the locale for this break iterator object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual)
      *  @param status error code for the operation
@@ -513,6 +514,7 @@ public:
      *  @internal
      */
     const char *getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      *  Set the subject text string upon which the break iterator is operating
@@ -537,7 +539,7 @@ public:
      * @param status     Receives errors detected by this function.
      * @return           *this
      *
-     * @draft ICU 5.0
+     * @draft ICU 49
      */
     virtual BreakIterator &refreshInputText(UText *input, UErrorCode &status) = 0;
 
@@ -550,6 +552,8 @@ public:
     friend class ICUBreakIteratorService;
 
 protected:
+    // Do not enclose protected default/copy constructors with #ifndef U_HIDE_INTERNAL_API
+    // or else the compiler will create a public ones.
     /** @internal */
     BreakIterator();
     /** @internal */

@@ -133,7 +133,8 @@ typedef enum {
 
 } UColAttributeValue;
 
-/** 
+#ifndef U_HIDE_DRAFT_API
+/**
  * Enum containing the codes for reordering segments of the collation table that are not script
  * codes. These reordering codes are to be used in conjunction with the script codes.
  * @see ucol_getReorderCodes
@@ -196,6 +197,7 @@ typedef enum {
     */    
     UCOL_REORDER_CODE_LIMIT         = 0x1005
 } UColReorderCode;
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Base letter represents a primary difference.  Set comparison
@@ -398,6 +400,7 @@ ucol_openFromShortString( const char *definition,
                           UParseError *parseError,
                           UErrorCode *status);
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Get a set containing the contractions defined by the collator. The set includes
  * both the UCA contractions and the contractions defined by the collator. This set
@@ -415,6 +418,7 @@ U_DEPRECATED int32_t U_EXPORT2
 ucol_getContractions( const UCollator *coll,
                   USet *conts,
                   UErrorCode *status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Get a set containing the expansions defined by the collator. The set includes
@@ -586,6 +590,7 @@ U_STABLE void U_EXPORT2
 ucol_setStrength(UCollator *coll,
                  UCollationStrength strength);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Retrieves the reordering codes for this collator.
  * These reordering codes are a combination of UScript codes and UColReorderCode entries.
@@ -663,6 +668,7 @@ ucol_getEquivalentReorderCodes(int32_t reorderCode,
                     int32_t* dest,
                     int32_t destCapacity,
                     UErrorCode *pErrorCode);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Get the display name for a UCollator.
@@ -1160,6 +1166,7 @@ ucol_safeClone(const UCollator *coll,
 U_STABLE int32_t U_EXPORT2 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * gets the locale name of the collator. If the collator
  * is instantiated from the rules, then this function returns
@@ -1176,7 +1183,7 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
  */
 U_DEPRECATED const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
-
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * gets the locale name of the collator. If the collator
@@ -1208,6 +1215,7 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
 U_STABLE USet * U_EXPORT2
 ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Universal attribute getter that returns UCOL_DEFAULT if the value is default
  * @param coll collator which attributes are to be changed
@@ -1280,6 +1288,7 @@ ucol_prepareShortStringOpen( const char *definition,
                           UBool forceDefaults,
                           UParseError *parseError,
                           UErrorCode *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 /** Creates a binary image of a collator. This binary image can be stored and 
  *  later used to instantiate a collator using ucol_openBinary.

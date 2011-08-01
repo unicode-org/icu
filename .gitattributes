@@ -2829,7 +2829,6 @@ icu4c/source/tools/gencnval/gencnval.vcxproj -text
 icu4c/source/tools/gencnval/gencnval.vcxproj.filters -text
 icu4c/source/tools/genctd/genctd.vcxproj -text
 icu4c/source/tools/genctd/genctd.vcxproj.filters -text
-icu4c/source/tools/gendraft/exclude.txt svneol=native#text/plain
 icu4c/source/tools/gennorm2/gennorm2.vcxproj -text
 icu4c/source/tools/genrb/derb.vcxproj -text
 icu4c/source/tools/genrb/derb.vcxproj.filters -text

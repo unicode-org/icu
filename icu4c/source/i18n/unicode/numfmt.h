@@ -639,6 +639,7 @@ public:
     static NumberFormat* U_EXPORT2 createInstance(const Locale& inLocale,
                                         UErrorCode&);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates the specified decimal format style of the desired locale.
      * @param desiredLocale    the given locale.
@@ -650,7 +651,7 @@ public:
     static NumberFormat* U_EXPORT2 createInstance(const Locale& desiredLocale,
                                                   UNumberFormatStyle style,
                                                   UErrorCode& errorCode);
-
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a currency format for the current default locale.

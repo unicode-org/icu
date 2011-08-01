@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -12,6 +12,7 @@
 
 #include "unicode/utypes.h"
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * @internal ICU 4.4
  */
@@ -53,5 +54,6 @@ U_INTERNAL UBool U_EXPORT2 u_isDataOlder(UVersionInfo dataVersionFillin, UBool *
  * @internal ICU 4.4
  */
 U_INTERNAL void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif

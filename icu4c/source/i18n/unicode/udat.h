@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines
+ * Copyright (C) 1996-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -937,6 +937,7 @@ udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
 
+#ifndef U_HIDE_INTERNAL_API
 /**
 * Extract the date pattern from a UDateFormat set for relative date formatting.
 * The pattern will follow the pattern syntax rules.
@@ -990,7 +991,7 @@ udat_applyPatternRelative(UDateFormat *format,
                           const UChar *timePattern,
                           int32_t     timePatternLength,
                           UErrorCode  *status);
-
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

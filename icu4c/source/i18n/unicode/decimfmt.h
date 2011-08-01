@@ -657,11 +657,13 @@ public:
                              towards zero if equidistant */
         kRoundHalfUp,   /**< Round towards the nearest integer, or
                              away from zero if equidistant */
+#ifndef U_HIDE_DRAFT_API
         /**
           *  Return U_FORMAT_INEXACT_ERROR if number does not format exactly. 
           *  @draft ICU 4.8 
           */
-        kRoundUnnecessary 
+        kRoundUnnecessary
+#endif  /* U_HIDE_DRAFT_API */
     };
 
     /**
@@ -729,6 +731,7 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * This API is for ICU use only.
      * Create a DecimalFormat from the given pattern, symbols, and style.
@@ -745,6 +748,7 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UNumberFormatStyle style,
                     UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Create a DecimalFormat from the given pattern and symbols.

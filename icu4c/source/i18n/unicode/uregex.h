@@ -136,7 +136,8 @@ uregex_open( const  UChar          *pattern,
                     uint32_t        flags,
                     UParseError    *pe,
                     UErrorCode     *status);
-                    
+
+#ifndef U_HIDE_DRAFT_API
 /**
   *  Open (compile) an ICU regular expression.  Compiles the regular expression in
   *  string form into an internal representation using the specified match mode flags.
@@ -165,7 +166,8 @@ uregex_openUText(UText          *pattern,
                  uint32_t        flags,
                  UParseError    *pe,
                  UErrorCode     *status);
-    
+#endif  /* U_HIDE_DRAFT_API */
+
 /**
   *  Open (compile) an ICU regular expression.  The resulting regular expression
   *   handle can then be used to perform various matching operations.
@@ -271,6 +273,7 @@ uregex_pattern(const URegularExpression *regexp,
                      int32_t            *patLength,
                      UErrorCode         *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  *  Returns the source text of the pattern for this regular expression.
  *  This function will work even if the pattern was originally specified as a UChar string.
@@ -285,7 +288,7 @@ uregex_pattern(const URegularExpression *regexp,
 U_DRAFT UText * U_EXPORT2 
 uregex_patternUText(const URegularExpression *regexp,
                           UErrorCode         *status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   * Get the match mode flags that were specified when compiling this regular expression.
@@ -327,6 +330,7 @@ uregex_setText(URegularExpression *regexp,
                UErrorCode         *status);
 
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *  Set the subject text string upon which the regular expression will look for matches.
   *  This function may be called any number of times, allowing the regular
@@ -347,6 +351,7 @@ U_DRAFT void U_EXPORT2
 uregex_setUText(URegularExpression *regexp,
                 UText              *text,
                 UErrorCode         *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *  Get the subject text that is currently associated with this 
@@ -372,8 +377,8 @@ U_STABLE const UChar * U_EXPORT2
 uregex_getText(URegularExpression *regexp,
                int32_t            *textLength,
                UErrorCode         *status);
-               
-               
+
+#ifndef U_HIDE_DRAFT_API
 /**
   *  Get the subject text that is currently associated with this 
   *   regular expression object.
@@ -424,6 +429,7 @@ U_DRAFT void U_EXPORT2
 uregex_refreshUText(URegularExpression *regexp,
                     UText              *text,
                     UErrorCode         *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *   Attempts to match the input string against the pattern.
@@ -450,6 +456,7 @@ uregex_matches(URegularExpression *regexp,
                 int32_t            startIndex,
                 UErrorCode        *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *   64bit version of uregex_matches.
   *   Attempts to match the input string against the pattern.
@@ -475,6 +482,7 @@ U_DRAFT UBool U_EXPORT2
 uregex_matches64(URegularExpression *regexp,
                  int64_t            startIndex,
                  UErrorCode        *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *   Attempts to match the input string, starting from the specified index, against the pattern.
@@ -504,6 +512,7 @@ uregex_lookingAt(URegularExpression *regexp,
                  int32_t             startIndex,
                  UErrorCode         *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *   64bit version of uregex_lookingAt.
   *   Attempts to match the input string, starting from the specified index, against the pattern.
@@ -532,6 +541,7 @@ U_DRAFT UBool U_EXPORT2
 uregex_lookingAt64(URegularExpression *regexp,
                    int64_t             startIndex,
                    UErrorCode         *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *   Find the first matching substring of the input string that matches the pattern.
@@ -557,6 +567,7 @@ uregex_find(URegularExpression *regexp,
             int32_t             startIndex, 
             UErrorCode         *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *   64bit version of uregex_find.
   *   Find the first matching substring of the input string that matches the pattern.
@@ -581,6 +592,7 @@ U_DRAFT UBool U_EXPORT2
 uregex_find64(URegularExpression *regexp,
               int64_t             startIndex, 
               UErrorCode         *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *  Find the next pattern match in the input string.  Begin searching 
@@ -633,7 +645,7 @@ uregex_group(URegularExpression *regexp,
              int32_t             destCapacity,
              UErrorCode          *status);
 
-
+#ifndef U_HIDE_DRAFT_API
 /** Returns a shallow immutable clone of the entire input string.  The returned UText current native index
   *   is set to the beginning of the requested capture group.  The capture group length is also
   *   returned via groupLength.
@@ -662,8 +674,9 @@ uregex_groupUText(URegularExpression *regexp,
                   UText              *dest,
                   int64_t            *groupLength,
                   UErrorCode         *status);
+#endif  /* U_HIDE_DRAFT_API */
 
-
+#ifndef U_HIDE_INTERNAL_API
 /** Extract the string for the specified matching expression or subexpression.
   * Group #0 is the complete string of matched text.
   * Group #1 is the text matched by the first set of capturing parentheses.
@@ -686,6 +699,7 @@ uregex_groupUTextDeep(URegularExpression *regexp,
                   int32_t             groupNum,
                   UText              *dest,
                   UErrorCode         *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
   *   Returns the index in the input string of the start of the text matched by the
@@ -706,6 +720,7 @@ uregex_start(URegularExpression *regexp,
              int32_t             groupNum,
              UErrorCode          *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *   64bit version of uregex_start.
   *   Returns the index in the input string of the start of the text matched by the
@@ -725,6 +740,7 @@ U_DRAFT int64_t U_EXPORT2
 uregex_start64(URegularExpression *regexp,
                int32_t             groupNum,
                UErrorCode          *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *   Returns the index in the input string of the position following the end
@@ -744,6 +760,7 @@ uregex_end(URegularExpression   *regexp,
            int32_t               groupNum,
            UErrorCode           *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *   64bit version of uregex_end.
   *   Returns the index in the input string of the position following the end
@@ -762,6 +779,7 @@ U_DRAFT int64_t U_EXPORT2
 uregex_end64(URegularExpression *regexp,
              int32_t               groupNum,
              UErrorCode           *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *  Reset any saved state from the previous match.  Has the effect of
@@ -780,7 +798,8 @@ U_STABLE void U_EXPORT2
 uregex_reset(URegularExpression    *regexp,
              int32_t               index,
              UErrorCode            *status);
-             
+
+#ifndef U_HIDE_DRAFT_API
 /**
   *  64bit version of uregex_reset.
   *  Reset any saved state from the previous match.  Has the effect of
@@ -799,6 +818,7 @@ U_DRAFT void U_EXPORT2
 uregex_reset64(URegularExpression  *regexp,
                int64_t               index,
                UErrorCode            *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   * Sets the limits of the matching region for this URegularExpression.
@@ -826,6 +846,7 @@ uregex_setRegion(URegularExpression   *regexp,
                  int32_t               regionLimit,
                  UErrorCode           *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * 64bit version of uregex_setRegion.
   * Sets the limits of the matching region for this URegularExpression.
@@ -873,6 +894,7 @@ uregex_setRegionAndStart(URegularExpression *regexp,
                  int64_t               regionLimit,
                  int64_t               startIndex,
                  UErrorCode           *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   * Reports the start index of the matching region. Any matches found are limited to
@@ -887,6 +909,7 @@ U_STABLE int32_t U_EXPORT2
 uregex_regionStart(const  URegularExpression   *regexp,
                           UErrorCode           *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * 64bit version of uregex_regionStart.
   * Reports the start index of the matching region. Any matches found are limited to
@@ -900,6 +923,7 @@ uregex_regionStart(const  URegularExpression   *regexp,
 U_DRAFT int64_t U_EXPORT2 
 uregex_regionStart64(const  URegularExpression   *regexp,
                             UErrorCode           *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   * Reports the end index (exclusive) of the matching region for this URegularExpression.
@@ -915,6 +939,7 @@ U_STABLE int32_t U_EXPORT2
 uregex_regionEnd(const  URegularExpression   *regexp,
                         UErrorCode           *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * 64bit version of uregex_regionEnd.
   * Reports the end index (exclusive) of the matching region for this URegularExpression.
@@ -929,6 +954,7 @@ uregex_regionEnd(const  URegularExpression   *regexp,
 U_DRAFT int64_t U_EXPORT2 
 uregex_regionEnd64(const  URegularExpression   *regexp,
                           UErrorCode           *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   * Queries the transparency of region bounds for this URegularExpression.
@@ -1067,6 +1093,7 @@ uregex_replaceAll(URegularExpression    *regexp,
                   int32_t                destCapacity,
                   UErrorCode            *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *    Replaces every substring of the input that matches the pattern
   *    with the given replacement string.  This is a convenience function that
@@ -1093,6 +1120,7 @@ uregex_replaceAllUText(URegularExpression *regexp,
                        UText              *replacement,
                        UText              *dest,
                        UErrorCode         *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *    Replaces the first substring of the input that matches the pattern
@@ -1126,6 +1154,7 @@ uregex_replaceFirst(URegularExpression  *regexp,
                     int32_t              destCapacity,
                     UErrorCode          *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   *    Replaces the first substring of the input that matches the pattern
   *    with the given replacement string.  This is a convenience function that
@@ -1152,7 +1181,7 @@ uregex_replaceFirstUText(URegularExpression *regexp,
                          UText              *replacement,
                          UText              *dest,
                          UErrorCode         *status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   *   Implements a replace operation intended to be used as part of an
@@ -1208,7 +1237,7 @@ uregex_appendReplacement(URegularExpression    *regexp,
                          int32_t               *destCapacity,
                          UErrorCode            *status);
 
-
+#ifndef U_HIDE_DRAFT_API
 /**
   *   Implements a replace operation intended to be used as part of an
   *   incremental find-and-replace.
@@ -1236,7 +1265,7 @@ uregex_appendReplacementUText(URegularExpression    *regexp,
                               UText                 *replacementText,
                               UText                 *dest,
                               UErrorCode            *status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
   * As the final step in a find-and-replace operation, append the remainder
@@ -1267,8 +1296,8 @@ uregex_appendTail(URegularExpression    *regexp,
                   UChar                **destBuf,
                   int32_t               *destCapacity,
                   UErrorCode            *status);
-                  
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * As the final step in a find-and-replace operation, append the remainder
   * of the input string, starting at the position following the last match,
@@ -1291,8 +1320,7 @@ U_DRAFT UText * U_EXPORT2
 uregex_appendTailUText(URegularExpression    *regexp,
                        UText                 *dest,
                        UErrorCode            *status);
-
-
+#endif  /* U_HIDE_DRAFT_API */
 
  /**
    * Split a string into fields.  Somewhat like split() from Perl.
@@ -1354,7 +1382,7 @@ uregex_split(   URegularExpression      *regexp,
                   int32_t                destFieldsCapacity,
                   UErrorCode            *status);
 
-
+#ifndef U_HIDE_DRAFT_API
   /**
    * Split a string into fields.  Somewhat like split() from Perl.
    * The pattern matches identify delimiters that separate the input
@@ -1386,9 +1414,7 @@ uregex_splitUText(URegularExpression    *regexp,
                   UText                 *destFields[],
                   int32_t                destFieldsCapacity,
                   UErrorCode            *status);
-
-
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Set a processing time limit for match operations with this URegularExpression.
@@ -1529,7 +1555,7 @@ uregex_getMatchCallback(const URegularExpression    *regexp,
                         const void                 **context,
                         UErrorCode                  *status);
 
-
+#ifndef U_HIDE_DRAFT_API
 /**
  * Function pointer for a regular expression find callback function.
  * 
@@ -1583,7 +1609,6 @@ uregex_setFindProgressCallback(URegularExpression              *regexp,
                                 const void                      *context,
                                 UErrorCode                      *status);
 
-
 /**
  *  Get the find progress callback function for this URegularExpression.
  *
@@ -1600,6 +1625,7 @@ uregex_getFindProgressCallback(const URegularExpression          *regexp,
                                 URegexFindProgressCallback        **callback,
                                 const void                        **context,
                                 UErrorCode                        *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 #endif   /*  UREGEX_H  */

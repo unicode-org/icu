@@ -134,6 +134,7 @@ class U_COMMON_API StringPiece : public UMemory {
    */
   void clear() { ptr_ = NULL; length_ = 0; }
 
+#ifndef U_HIDE_DRAFT_API
   /**
    * Reset the stringpiece to refer to new data.
    * @param xdata pointer the new string data.  Need not be nul terminated.
@@ -148,6 +149,7 @@ class U_COMMON_API StringPiece : public UMemory {
    * @draft ICU 4.8
    */
   void set(const char* str);
+#endif  /* U_HIDE_DRAFT_API */
 
   /**
    * Removes the first n string units.
@@ -198,6 +200,7 @@ class U_COMMON_API StringPiece : public UMemory {
   }
 };
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Global operator == for StringPiece
  * @param x The first StringPiece to compare.
@@ -218,6 +221,7 @@ operator==(const StringPiece& x, const StringPiece& y);
 inline UBool operator!=(const StringPiece& x, const StringPiece& y) {
   return !(x == y);
 }
+#endif  /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_END
 

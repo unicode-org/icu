@@ -11,10 +11,14 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/localpointer.h"
 
 /**
+ * \file
+ * \brief C API: Plural rules, select plural keywords for numeric values.
+ *
  * A UPluralRules object defines rules for mapping non-negative numeric
  * values onto a small set of keywords. Rules are constructed from a text
  * description, consisting of a series of keywords and conditions.
@@ -99,6 +103,7 @@ uplrules_select(const UPluralRules *uplrules,
                UChar *keyword, int32_t capacity,
                UErrorCode *status);
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

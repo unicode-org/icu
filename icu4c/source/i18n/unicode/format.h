@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and others.
+* Copyright (C) 1997-2011, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -248,6 +248,7 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /** Get the locale for this format object. You can choose between valid and actual locale.
      *  @param type type of the locale we're looking for (valid or actual) 
      *  @param status error code for the operation
@@ -255,6 +256,7 @@ public:
      *  @internal
      */
     const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
  protected:
     /** @stable ICU 2.8 */

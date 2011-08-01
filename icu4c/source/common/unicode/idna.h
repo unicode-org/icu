@@ -23,6 +23,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_IDNA
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/bytestream.h"
 #include "unicode/stringpiece.h"
@@ -323,5 +324,6 @@ private:
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif  // UCONFIG_NO_IDNA
 #endif  // __IDNA_H__

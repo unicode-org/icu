@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -13,6 +13,7 @@
  */
 #include "unicode/ubidi.h"
 #if ! UCONFIG_NO_BREAK_ITERATION
+#ifndef U_HIDE_INTERNAL_API
 
 #include "layout/LETypes.h"
 #include "plruns.h"
@@ -460,5 +461,6 @@ pl_getVisualRunDescent(const pl_visualRun *run);
 U_INTERNAL le_int32 U_EXPORT2
 pl_getVisualRunLeading(const pl_visualRun *run);
 
+#endif  /* U_HIDE_INTERNAL_API */
 #endif
 #endif

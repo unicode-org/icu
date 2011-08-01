@@ -301,6 +301,7 @@ protected:
 //     UBool instanceOf(UClassID type) const;
 };
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * This is a simple macro to add ICU RTTI to an ICU object implementation.
  * This does not go into the header. This should only be used in *.cpp files.
@@ -359,7 +360,7 @@ protected:
         return myClass::getStaticClassID(); \
     }
 */
-
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
 

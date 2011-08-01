@@ -995,6 +995,7 @@ protected:
     */
     Collator();
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
     * Constructor.
     * Empty constructor, does not handle the arguments.
@@ -1008,6 +1009,7 @@ protected:
     */
     Collator(UCollationStrength collationStrength,
              UNormalizationMode decompositionMode);
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
     * Copy constructor.
@@ -1030,11 +1032,13 @@ protected:
 
 public:
 #if !UCONFIG_NO_SERVICE
+#ifndef U_HIDE_INTERNAL_API
     /**
      * used only by ucol_open, not for public use
      * @internal
      */
     static UCollator* createUCollator(const char* loc, UErrorCode* status);
+#endif  /* U_HIDE_INTERNAL_API */
 #endif
 private:
     /**

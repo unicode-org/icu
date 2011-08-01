@@ -675,6 +675,7 @@ utext_extract(UText *ut,
              UErrorCode *status);
 
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Compare two UTexts (binary order). The comparison begins at each source text's
  * iteration position. The iteration position of each UText will be left following
@@ -815,6 +816,7 @@ U_INTERNAL int32_t U_EXPORT2
 utext_caseCompareNativeLimit(UText *s1, int64_t limit1,
                              UText *s2, int64_t limit2,
                              uint32_t options, UErrorCode *pErrorCode);    
+#endif  /* U_HIDE_INTERNAL_API */
 
 
 /************************************************************************************
@@ -832,6 +834,7 @@ utext_caseCompareNativeLimit(UText *s1, int64_t limit1,
  *
  ************************************************************************************/
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * inline version of utext_current32(), for performance-critical situations.
  *
@@ -844,6 +847,7 @@ utext_caseCompareNativeLimit(UText *s1, int64_t limit1,
 #define UTEXT_CURRENT32(ut)  \
     ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset]<0xd800 ? \
     ((ut)->chunkContents)[((ut)->chunkOffset)] : utext_current32(ut))
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * inline version of utext_next32(), for performance-critical situations.
@@ -1692,6 +1696,7 @@ struct UText {
 U_STABLE UText * U_EXPORT2
 utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 
+#ifndef U_HIDE_INTERNAL_API
 /**
   * @internal
   *  Value used to help identify correctly initialized UText structs.
@@ -1700,6 +1705,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 enum {
     UTEXT_MAGIC = 0x345ad82c
 };
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * initializer to be used with local (stack) instances of a UText

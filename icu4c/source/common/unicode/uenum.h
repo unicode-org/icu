@@ -157,6 +157,7 @@ uenum_reset(UEnumeration* en, UErrorCode* status);
 
 #if U_SHOW_CPLUSPLUS_API
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Given a StringEnumeration, wrap it in a UEnumeration.  The
  * StringEnumeration is adopted; after this call, the caller must not
@@ -168,6 +169,7 @@ uenum_reset(UEnumeration* en, UErrorCode* status);
  */
 U_CAPI UEnumeration* U_EXPORT2
 uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif
 
