@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2007-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 #ifndef VTZONE_H
@@ -89,6 +89,7 @@ public:
      */
     static VTimeZone* createVTimeZoneByID(const UnicodeString& ID);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Create a <code>VTimeZone</code> instance using a basic time zone.
      * @param basicTZ The basic time zone instance
@@ -98,6 +99,7 @@ public:
      */
     static VTimeZone* createVTimeZoneFromBasicTimeZone(const BasicTimeZone& basicTZ,
                                                        UErrorCode &status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Create a <code>VTimeZone</code> instance by RFC2445 VTIMEZONE data

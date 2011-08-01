@@ -75,7 +75,7 @@ class Hashtable;
  * <P>
  * @see TimeUnitAmount
  * @see TimeUnitFormat
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 class U_I18N_API TimeUnitFormat: public MeasureFormat {
 public:
@@ -93,11 +93,13 @@ public:
      */
     TimeUnitFormat(const Locale& locale, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Create TimeUnitFormat given locale and style.
      * @draft ICU 4.8
      */
     TimeUnitFormat(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Copy constructor.

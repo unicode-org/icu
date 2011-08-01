@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2010, International Business Machines Corporation and Others.
+ * Copyright (C) 1996-2011, International Business Machines Corporation and Others.
  * All rights reserved.
  */
 
@@ -18,6 +18,8 @@
 
 #include "unicode/ucol.h"
 
+#ifndef U_HIDE_INTERNAL_API
+
 /**
  * A <code>UCD</code> object holds the Collator-specific data needed to
  * compute the length of the shortest string that can
@@ -31,6 +33,8 @@
  * If you do not need to reuse any unreferenced objects in the cache, you can call
  * <code>ucd_flushCCache</code>. If you no longer need any <code>UCD</code>
  * objects, you can call <code>ucd_freeCache</code>
+ *
+ * @internal ICU 4.0.1 technology preview
  */
 typedef void UCD;
 
@@ -268,6 +272,8 @@ bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end);
  */
 U_CAPI void U_EXPORT2
 bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status);
+
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif
 

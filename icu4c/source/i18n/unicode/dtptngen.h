@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -355,7 +355,8 @@ public:
      * @stable ICU 3.8
      */
      StringEnumeration* getBaseSkeletons(UErrorCode& status) const;
-     
+
+#ifndef U_HIDE_INTERNAL_API
      /**
       * Return a list of redundant patterns are those which if removed, make no 
       * difference in the resulting getBestPattern values. This method returns a 
@@ -369,7 +370,8 @@ public:
       * @internal ICU 3.8
       */
      StringEnumeration* getRedundants(UErrorCode& status);
-      
+#endif  /* U_HIDE_INTERNAL_API */
+
     /**
      * The decimal value is used in formatting fractions of seconds. If the
      * skeleton contains fractional seconds, then this is used with the

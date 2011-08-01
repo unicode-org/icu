@@ -447,6 +447,7 @@ public:
      */
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Set the value for a keyword.
      *
@@ -459,6 +460,7 @@ public:
      * @internal 
      */
     void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -683,11 +685,13 @@ public:
     virtual UClassID getDynamicClassID() const;
 
 protected: /* only protected for testing purposes. DO NOT USE. */
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Set this from a single POSIX style locale string.
      * @internal
      */
     void setFromPOSIXID(const char *posixID);
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     /**

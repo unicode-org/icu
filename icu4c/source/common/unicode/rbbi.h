@@ -170,6 +170,7 @@ protected:
     // constructors
     //=======================================================================
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Constant to be used in the constructor
      * RuleBasedBreakIterator(RBBIDataHeader*, EDontAdopt, UErrorCode &);
@@ -203,6 +204,7 @@ protected:
      * @internal
      */
     RuleBasedBreakIterator(const RBBIDataHeader* data, enum EDontAdopt dontAdopt, UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 
     friend class RBBIRuleBuilder;
@@ -239,9 +241,7 @@ public:
                              UParseError           &parseError,
                              UErrorCode            &status);
 
-
-
-
+#ifndef U_HIDE_DRAFT_API
     /**
      * Contruct a RuleBasedBreakIterator from a set of precompiled binary rules.
      * Binary rules are obtained from RulesBasedBreakIterator::getBinaryRules().
@@ -268,7 +268,7 @@ public:
     RuleBasedBreakIterator(const uint8_t *compiledRules,
                            uint32_t       ruleLength,
                            UErrorCode    &status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * This constructor uses the udata interface to create a BreakIterator
@@ -656,7 +656,7 @@ public:
      * @param status     Receives errors detected by this function.
      * @return           *this
      *
-     * @draft ICU 5.0
+     * @draft ICU 49
      */
     virtual RuleBasedBreakIterator &refreshInputText(UText *input, UErrorCode &status);
 
@@ -696,12 +696,14 @@ protected:
       */
     virtual void setBreakType(int32_t type);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
       * Common initialization function, used by constructors and bufferClone.
       *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
       * @internal
       */
     void init();
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
 
@@ -729,6 +731,7 @@ private:
 
 protected:
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * This is the function that actually implements dictionary-based
      * breaking.  Covering at least the range from startPos to endPos,
@@ -744,6 +747,7 @@ protected:
      * @internal
      */
     int32_t checkDictionary(int32_t startPos, int32_t endPos, UBool reverse);
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2010, International Business Machines
+*   Copyright (C) 1997-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -208,6 +208,7 @@ ures_openU(const UChar* packageName,
            const char* locale, 
            UErrorCode* status);
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Returns the number of strings/arrays in resource bundles.
  * Better to use ures_getSize, as this function will be deprecated. 
@@ -228,6 +229,7 @@ U_DEPRECATED int32_t U_EXPORT2
 ures_countArrayItems(const UResourceBundle* resourceBundle,
                      const char* resourceKey,
                      UErrorCode* err);
+#endif  /* U_HIDE_DEPRECATED_API */
 /**
  * Close a resource bundle, all pointers returned from the various ures_getXXX calls
  * on this particular bundle should be considered invalid henceforth.
@@ -258,6 +260,7 @@ U_NAMESPACE_END
 
 #endif
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Return the version number associated with this ResourceBundle as a string. Please
  * use ures_getVersion as this function is going to be deprecated.
@@ -270,6 +273,7 @@ U_NAMESPACE_END
  */
 U_DEPRECATED const char* U_EXPORT2 
 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Return the version number associated with this ResourceBundle as an 
@@ -284,6 +288,7 @@ U_STABLE void U_EXPORT2
 ures_getVersion(const UResourceBundle* resB, 
                 UVersionInfo versionInfo);
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Return the name of the Locale associated with this ResourceBundle. This API allows
  * you to query for the real locale of the resource. For example, if you requested 
@@ -299,7 +304,7 @@ ures_getVersion(const UResourceBundle* resB,
 U_DEPRECATED const char* U_EXPORT2 
 ures_getLocale(const UResourceBundle* resourceBundle, 
                UErrorCode* status);
-
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Return the name of the Locale associated with this ResourceBundle. 
@@ -319,6 +324,7 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
                      UErrorCode* status);
 
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Same as ures_open() but uses the fill-in parameter instead of allocating
  * a bundle, if r!=NULL.
@@ -340,6 +346,7 @@ ures_openFillIn(UResourceBundle *r,
                 const char* packageName,
                 const char* localeID, 
                 UErrorCode* status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * Returns a string from a string resource type

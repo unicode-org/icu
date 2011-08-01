@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -91,11 +91,13 @@ enum {
      */
     USET_ADD_CASE_MAPPINGS = 4,
     
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Enough for any single-code point set
      * @internal
      */
     USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8
+#endif  /* U_HIDE_INTERNAL_API */
 };
 
 /**

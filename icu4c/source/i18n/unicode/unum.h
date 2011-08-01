@@ -183,6 +183,7 @@ typedef enum UNumberFormatStyle {
      * @stable ICU 3.0
      */
     UNUM_PATTERN_RULEBASED,
+#ifndef U_HIDE_DRAFT_API
     /**
      * Currency format with an ISO currency code, e.g., "USD1.00".
      * @draft ICU 4.8
@@ -199,6 +200,7 @@ typedef enum UNumberFormatStyle {
      * @draft ICU 4.8
      */
     UNUM_FORMAT_STYLE_COUNT,
+#endif  /* U_HIDE_DRAFT_API */
     /**
      * Default format
      * @stable ICU 2.0
@@ -220,22 +222,26 @@ typedef enum UNumberFormatRoundingMode {
     UNUM_ROUND_DOWN,
     UNUM_ROUND_UP,
     /**
+     * Half-even rounding
+     * @stable, ICU 3.8
+     */
+    UNUM_ROUND_HALFEVEN,
+#ifndef U_HIDE_DEPRECATED_API
+    /**
      * Half-even rounding, misspelled name
      * @deprecated, ICU 3.8
      */
-    UNUM_FOUND_HALFEVEN,
+    UNUM_FOUND_HALFEVEN = UNUM_ROUND_HALFEVEN,
+#endif  /* U_HIDE_DEPRECATED_API */
     UNUM_ROUND_HALFDOWN,
     UNUM_ROUND_HALFUP,
+#ifndef U_HIDE_DRAFT_API
     /** 
       * ROUND_UNNECESSARY reports an error if formatted result is not exact.
       * @draft ICU 4.8
       */
-    UNUM_ROUND_UNNECESSARY,
-    /**
-     * Half-even rounding
-     * @stable, ICU 3.8
-     */
-    UNUM_ROUND_HALFEVEN = UNUM_FOUND_HALFEVEN
+    UNUM_ROUND_UNNECESSARY
+#endif  /* U_HIDE_DRAFT_API */
 } UNumberFormatRoundingMode;
 
 /** The possible number format pad positions. 
@@ -248,6 +254,7 @@ typedef enum UNumberFormatPadPosition {
     UNUM_PAD_AFTER_SUFFIX
 } UNumberFormatPadPosition;
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Constants for specifying currency spacing
  * @draft ICU 4.8
@@ -259,6 +266,7 @@ enum UCurrencySpacing {
     UNUM_CURRENCY_SPACING_COUNT
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @draft ICU 4.8 */
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Create and return a new UNumberFormat for formatting and parsing
@@ -949,7 +957,8 @@ typedef enum UNumberFormatSymbol {
   /** The monetary grouping separator 
    * @stable ICU 3.6
    */
-  UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL = 17,  
+  UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL = 17,
+#ifndef U_HIDE_DRAFT_API
   /** One
    * @draft ICU 4.6
    */
@@ -986,6 +995,7 @@ typedef enum UNumberFormatSymbol {
    * @draft ICU 4.6
    */
   UNUM_NINE_DIGIT_SYMBOL = 26,
+#endif  /* U_HIDE_DRAFT_API */
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT = 27
 } UNumberFormatSymbol;

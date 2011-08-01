@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2010, International Business Machines                 *
+ *   Copyright (C) 1996-2011, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -29,6 +29,7 @@ class BadCharacterTable;
 class GoodSuffixTable;
 class Target;
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * BoyerMooreSearch
  *
@@ -219,6 +220,7 @@ private:
     UnicodeString pattern;
     Target *target;
 };
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
 

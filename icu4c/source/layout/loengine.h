@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
  *
  */
 
@@ -9,6 +9,7 @@
 
 #include "LETypes.h"
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * \file 
  * \brief C API for complex text layout.
@@ -219,5 +220,6 @@ le_getGlyphPosition(le_engine *engine,
 U_INTERNAL void U_EXPORT2
 le_reset(le_engine *engine,
          LEErrorCode *success);
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif

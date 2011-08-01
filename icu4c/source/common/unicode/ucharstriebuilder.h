@@ -20,6 +20,8 @@
 #include "unicode/ucharstrie.h"
 #include "unicode/unistr.h"
 
+#ifndef U_HIDE_DRAFT_API
+
 U_NAMESPACE_BEGIN
 
 class UCharsTrieElement;
@@ -171,4 +173,5 @@ private:
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif  // __UCHARSTRIEBUILDER_H__

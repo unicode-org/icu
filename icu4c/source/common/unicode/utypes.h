@@ -85,26 +85,6 @@
 #define U_HIDE_INTERNAL_API 1
 #endif
 
-#ifdef U_HIDE_DRAFT_API
-#include "unicode/udraft.h"
-#endif
-
-#ifdef U_HIDE_DEPRECATED_API
-#include "unicode/udeprctd.h"
-#endif
-
-#ifdef U_HIDE_DEPRECATED_API
-#include "unicode/uobslete.h"
-#endif
-
-#ifdef U_HIDE_INTERNAL_API
-#include "unicode/uintrnal.h"
-#endif
-
-#ifdef U_HIDE_SYSTEM_API
-#include "unicode/usystem.h"
-#endif
-
 /** @} */
 
 /*===========================================================================*/
@@ -155,8 +135,10 @@
  * @stable ICU 2.0
  */
 #define U_ICUDATA_NAME    "icudt" U_ICU_VERSION_SHORT U_ICUDATA_TYPE_LETTER  /**< @internal */
+#ifndef U_HIDE_INTERNAL_API
 #define U_USRDATA_NAME    "usrdt" U_ICU_VERSION_SHORT U_ICUDATA_TYPE_LETTER  /**< @internal */
 #define U_USE_USRDATA     1  /**< @internal */
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  *  U_ICU_ENTRY_POINT is the name of the DLL entry point to the ICU data library.
@@ -171,6 +153,7 @@
  */
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM)
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Do not use.
  * @internal
@@ -184,6 +167,7 @@
 /* affected by symbol renaming. See platform.h */
 #define U_DEF_ICUDATA_ENTRY_POINT(major) icudt##major##_dat
 #endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * \def NULL
@@ -220,6 +204,7 @@ typedef double UDate;
 /** The number of milliseconds per day @stable ICU 2.0 */
 #define U_MILLIS_PER_DAY       (86400000)
 
+#ifndef U_HIDE_DRAFT_API
 /** 
  * Maximum UDate value 
  * @draft ICU 4.8 
@@ -231,6 +216,7 @@ typedef double UDate;
  * @draft ICU 4.8 
  */ 
 #define U_DATE_MIN -U_DATE_MAX
+#endif  /* U_HIDE_DRAFT_API */
 
 /*===========================================================================*/
 /* Shared library/DLL import-export API control                              */

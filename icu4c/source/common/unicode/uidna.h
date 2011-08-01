@@ -62,6 +62,7 @@ enum {
      * @stable ICU 2.6
      */
     UIDNA_USE_STD3_RULES=2,
+#ifndef U_HIDE_DRAFT_API
     /**
      * IDNA option to check for whether the input conforms to the BiDi rules.
      * For use in static worker and factory methods.
@@ -106,8 +107,10 @@ enum {
      * @draft ICU 49
      */
     UIDNA_CHECK_CONTEXTO=0x40
+#endif  /* U_HIDE_DRAFT_API */
 };
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Opaque C service object type for the new IDNA API.
  * @draft ICU 4.6
@@ -503,6 +506,7 @@ enum {
      */
     UIDNA_ERROR_CONTEXTO_DIGITS=0x4000
 };
+#endif  /* U_HIDE_DRAFT_API */
 
 /* IDNA2003 API ------------------------------------------------------------- */
 

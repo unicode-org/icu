@@ -23,6 +23,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/parseerr.h"
 #include "unicode/unistr.h"
@@ -927,6 +928,7 @@ private:
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif  // !UCONFIG_NO_FORMATTING
 
 #endif  // __MESSAGEPATTERN_H__

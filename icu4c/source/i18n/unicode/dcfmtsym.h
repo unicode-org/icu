@@ -263,6 +263,7 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
       * Get pattern string for 'CurrencySpacing' that can be applied to
       * currency format.
@@ -295,6 +296,7 @@ public:
      void setPatternForCurrencySpacing(UCurrencySpacing type,
                                        UBool beforeCurrency,
                                        const UnicodeString& pattern);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -333,6 +335,7 @@ private:
     void setCurrencyForSymbols();
 
 public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * _Internal_ function - more efficient version of getSymbol,
      * returning a const reference to one of the symbol strings.
@@ -351,6 +354,7 @@ public:
      * @internal
      */
     inline const UChar* getCurrencyPattern(void) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     /**

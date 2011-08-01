@@ -259,6 +259,7 @@ unorm2_append(const UNormalizer2 *norm2,
               const UChar *second, int32_t secondLength,
               UErrorCode *pErrorCode);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Gets the decomposition mapping of c. Equivalent to unorm2_normalize(string(c))
  * on a UNORM2_DECOMPOSE UNormalizer2 instance, but much faster.
@@ -291,6 +292,7 @@ unorm2_getDecomposition(const UNormalizer2 *norm2,
  */
 U_DRAFT uint8_t U_EXPORT2
 unorm2_getCombiningClass(const UNormalizer2 *norm2, UChar32 c);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Tests if the string is normalized.

@@ -189,7 +189,7 @@ public:
         UParseError          &pe,
         UErrorCode           &status);
 
-
+#ifndef U_HIDE_DRAFT_API
    /**
     * Compiles the regular expression in string form into a RegexPattern
     * object.  These compile methods, rather than the constructors, are the usual
@@ -219,6 +219,7 @@ public:
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         UParseError          &pe,
         UErrorCode           &status);
+#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Compiles the regular expression in string form into a RegexPattern
@@ -248,8 +249,8 @@ public:
         uint32_t             flags,
         UParseError          &pe,
         UErrorCode           &status);
-        
-        
+
+#ifndef U_HIDE_DRAFT_API
    /**
     * Compiles the regular expression in string form into a RegexPattern
     * object using the specified match mode flags.  These compile methods,
@@ -280,7 +281,7 @@ public:
         uint32_t             flags,
         UParseError          &pe,
         UErrorCode           &status);
-    
+#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Compiles the regular expression in string form into a RegexPattern
@@ -308,7 +309,7 @@ public:
         uint32_t             flags,
         UErrorCode           &status);
 
-
+#ifndef U_HIDE_DRAFT_API
    /**
     * Compiles the regular expression in string form into a RegexPattern
     * object using the specified match mode flags.  These compile methods,
@@ -336,7 +337,7 @@ public:
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         uint32_t             flags,
         UErrorCode           &status);
-    
+#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Get the match mode flags that were used when compiling this pattern.
@@ -417,7 +418,7 @@ public:
               UParseError     &pe,
               UErrorCode      &status);
 
-
+#ifndef U_HIDE_DRAFT_API
    /**
     * Test whether a string matches a regular expression.  This convenience function
     * both compiles the regular expression and applies it in a single operation.
@@ -436,7 +437,7 @@ public:
         UText           *input,
         UParseError     &pe,
         UErrorCode      &status);
-
+#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Returns the regular expression from which this pattern was compiled. This method will work
@@ -660,6 +661,7 @@ public:
       */
     RegexMatcher(const UnicodeString &regexp, uint32_t flags, UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
       * Construct a RegexMatcher for a regular expression.
       * This is a convenience method that avoids the need to explicitly create
@@ -676,7 +678,8 @@ public:
       *  @draft ICU 4.6
       */
     RegexMatcher(UText *regexp, uint32_t flags, UErrorCode &status);
-    
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
       * Construct a RegexMatcher for a regular expression.
       * This is a convenience method that avoids the need to explicitly create
@@ -701,6 +704,7 @@ public:
     RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
         uint32_t flags, UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
       * Construct a RegexMatcher for a regular expression.
       * This is a convenience method that avoids the need to explicitly create
@@ -724,6 +728,7 @@ public:
       */
     RegexMatcher(UText *regexp, UText *input,
         uint32_t flags, UErrorCode &status);
+#endif  /* U_HIDE_DRAFT_API */
 
 private:
     /**
@@ -1712,14 +1717,14 @@ public:
                                               const void                      *&context,
                                               UErrorCode                      &status);
 
-
+#ifndef U_HIDE_INTERNAL_API
    /**
      *   setTrace   Debug function, enable/disable tracing of the matching engine.
      *              For internal ICU development use only.  DO NO USE!!!!
      *   @internal
      */
     void setTrace(UBool state);
-
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
     * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -1748,8 +1753,10 @@ private:
     friend class RegexPattern;
     friend class RegexCImpl;
 public:
+#ifndef U_HIDE_INTERNAL_API
     /** @internal  */
     void resetPreserveRegion();  // Reset matcher state, but preserve any region.
+#endif  /* U_HIDE_INTERNAL_API */
 private:
 
     //

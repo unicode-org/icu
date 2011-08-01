@@ -243,7 +243,8 @@ typedef enum UCurrCurrencyType {
 U_STABLE UEnumeration * U_EXPORT2
 ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
 
-/** 
+#ifndef U_HIDE_DRAFT_API
+/**
   * Queries if the given ISO 4217 3-letter code is available on the specified date range. 
   * 
   * Note: For checking availability of a currency on a specific date, specify the date on both 'from' and 'to' 
@@ -274,7 +275,7 @@ ucurr_isAvailable(const UChar* isoCode,
              UDate from, 
              UDate to, 
              UErrorCode* errorCode);
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /** 
  * Finds the number of valid currency codes for the

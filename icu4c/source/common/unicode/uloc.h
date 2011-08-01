@@ -286,12 +286,14 @@
  */
 #define ULOC_KEYWORD_SEPARATOR '@'
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * Unicode code point for '@' separating keywords from the locale string.
   * @see ULOC_KEYWORD_SEPARATOR
   * @draft ICU 4.6
   */
 #define ULOC_KEYWORD_SEPARATOR_UNICODE 0x40
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Invariant character for assigning value to a keyword
@@ -299,12 +301,14 @@
  */
 #define ULOC_KEYWORD_ASSIGN '='
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * Unicode code point for '=' for assigning value to a keyword.
   * @see ULOC_KEYWORD_ASSIGN
   * @draft ICU 4.6 
   */
 #define ULOC_KEYWORD_ASSIGN_UNICODE 0x3D
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Invariant character separating keywords
@@ -312,12 +316,14 @@
  */
 #define ULOC_KEYWORD_ITEM_SEPARATOR ';'
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * Unicode code point for ';' separating keywords
   * @see ULOC_KEYWORD_ITEM_SEPARATOR
   * @draft ICU 4.6
   */
 #define ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE 0x3B
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Constants for *_getLocale()
@@ -352,7 +358,6 @@ typedef enum {
 
   ULOC_DATA_LOCALE_TYPE_LIMIT = 3
 } ULocDataLocaleType ;
-
 
 /**
  * Gets ICU's default locale.  
@@ -1065,7 +1070,8 @@ uloc_minimizeSubtags(const char*    localeID,
          int32_t minimizedLocaleIDCapacity,
          UErrorCode* err);
 
-/** 
+#ifndef U_HIDE_DRAFT_API
+/**
  * Returns a locale ID for the specified BCP47 language tag string.
  * If the specified language tag contains any ill-formed subtags,
  * the first such subtag and all following subtags are ignored.
@@ -1095,7 +1101,7 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t* parsedLength,
                     UErrorCode* err);
 
-/** 
+/**
  * Returns a well-formed language tag for this locale ID. 
  * <p> 
  * <b>Note</b>: When <code>strict</code> is FALSE, any locale
@@ -1122,5 +1128,6 @@ uloc_toLanguageTag(const char* localeID,
                    int32_t langtagCapacity,
                    UBool strict,
                    UErrorCode* err);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif /*_ULOC*/

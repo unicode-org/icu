@@ -29,6 +29,7 @@
  */
  
 #if !UCONFIG_NO_COLLATION
+#ifndef U_HIDE_DEPRECATED_API
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
@@ -324,6 +325,7 @@ CollationKey::getByteArray(int32_t &count) const
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DEPRECATED_API */
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

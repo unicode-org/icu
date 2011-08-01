@@ -150,6 +150,7 @@ U_NAMESPACE_BEGIN
 
 class U_I18N_API DateIntervalInfo : public UObject {
 public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Default constructor.
      * It does not initialize any interval patterns except
@@ -164,6 +165,7 @@ public:
      * @internal ICU 4.0
      */
     DateIntervalInfo(UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 
     /** 
@@ -354,13 +356,15 @@ private:
         kIPI_MAX_INDEX
     };
 public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Max index for stored interval patterns
      * @internal ICU 4.4 
      */
      enum {
-     	kMaxIntervalPatternIndex = kIPI_MAX_INDEX
+         kMaxIntervalPatternIndex = kIPI_MAX_INDEX
      };
+#endif  /* U_HIDE_INTERNAL_API */
 private:
 
 
