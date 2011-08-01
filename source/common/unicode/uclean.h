@@ -50,6 +50,7 @@
 U_STABLE void U_EXPORT2 
 u_init(UErrorCode *status);
 
+#ifndef U_HIDE_SYSTEM_API
 /**
  * Clean up the system resources, such as allocated memory or open files,
  * used in all ICU libraries. This will free/delete all memory owned by the
@@ -245,5 +246,6 @@ typedef void  U_CALLCONV UMemFreeFn (const void *context, void *mem);
 U_STABLE void U_EXPORT2 
 u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, 
                     UErrorCode *status);
+#endif  /* U_HIDE_SYSTEM_API */
 
 #endif
