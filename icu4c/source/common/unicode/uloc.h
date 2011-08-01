@@ -359,6 +359,7 @@ typedef enum {
   ULOC_DATA_LOCALE_TYPE_LIMIT = 3
 } ULocDataLocaleType ;
 
+#ifndef U_HIDE_SYSTEM_API
 /**
  * Gets ICU's default locale.  
  * The returned string is a snapshot in time, and will remain valid
@@ -393,6 +394,7 @@ uloc_getDefault(void);
 U_STABLE void U_EXPORT2
 uloc_setDefault(const char* localeID,
         UErrorCode*       status);
+#endif  /* U_HIDE_SYSTEM_API */
 
 /**
  * Gets the language code for the specified locale.
