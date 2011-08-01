@@ -321,6 +321,7 @@ public:
      */
     Locale *clone() const;
 
+#ifndef U_HIDE_SYSTEM_API
     /**
      * Common methods of getting the current default Locale. Used for the
      * presentation: menus, dialogs, etc. Generally set once when your applet or
@@ -352,6 +353,7 @@ public:
      */
     static void U_EXPORT2 setDefault(const Locale& newLocale,
                                      UErrorCode&   success);
+#endif  /* U_HIDE_SYSTEM_API */
 
     /**
      * Creates a locale which has had minimal canonicalization

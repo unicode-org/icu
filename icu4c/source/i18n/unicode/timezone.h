@@ -280,6 +280,7 @@ public:
      *
      * @param zone  The given timezone.
      * @system
+     * @stable ICU 2.0
      */
     static void U_EXPORT2 setDefault(const TimeZone& zone);
 #endif  /* U_HIDE_SYSTEM_API */

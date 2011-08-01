@@ -1857,6 +1857,7 @@ ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErro
 U_STABLE const char * U_EXPORT2
 ucnv_getDefaultName(void);
 
+#ifndef U_HIDE_SYSTEM_API
 /**
  * This function is not thread safe. DO NOT call this function when ANY ICU
  * function is being used from more than one thread! This function sets the
@@ -1875,6 +1876,7 @@ ucnv_getDefaultName(void);
  */
 U_STABLE void U_EXPORT2
 ucnv_setDefaultName(const char *name);
+#endif  /* U_HIDE_SYSTEM_API */
 
 /**
  * Fixes the backslash character mismapping.  For example, in SJIS, the backslash 
