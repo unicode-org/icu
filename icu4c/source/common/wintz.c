@@ -29,8 +29,7 @@
 #   define NOMCX
 #include <windows.h>
 
-#define MAX_LENGTH_STDNAME 32
-#define MAX_LENGTH_ICUID 16
+#define MAX_LENGTH_ID 32
 
 /* The layout of the Tzi value in the registry */
 typedef struct
@@ -173,6 +172,28 @@ static LONG getTZI(const char *winid, TZI *tzi)
     return result;
 }
 
+static LONG getSTDName(const char *winid, char *regStdName, int32_t length) {
+    DWORD cbData = length;
+    LONG result;
+    HKEY hkey;
+
+    result = openTZRegKey(&hkey, winid);
+
+    if (result == ERROR_SUCCESS) {
+        result = RegQueryValueExA(hkey,
+                                    STD_REGKEY,
+                                    NULL,
+                                    NULL,
+                                    (LPBYTE)regStdName,
+                                    &cbData);
+
+    }
+
+    RegCloseKey(hkey);
+
+    return result;
+}
+
 /*
   This code attempts to detect the Windows time zone, as set in the
   Windows Date and Time control panel.  It attempts to work on
@@ -230,9 +251,10 @@ uprv_detectWindowsTimeZone() {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* bundle = NULL;
     char* icuid = NULL;
-    UChar apiStd[MAX_LENGTH_STDNAME];
-    char stdName[MAX_LENGTH_STDNAME];
-    char tmpid[MAX_LENGTH_ICUID];
+    UChar apiStd[MAX_LENGTH_ID];
+    char apiStdName[MAX_LENGTH_ID];
+	char regStdName[MAX_LENGTH_ID];
+    char tmpid[MAX_LENGTH_ID];
     int32_t apiStdLength = 0;
     int32_t len;
 
@@ -255,10 +277,11 @@ uprv_detectWindowsTimeZone() {
            sizeof(apiTZI.DaylightDate));
 
     /* Convert the wchar_t* standard name to char* */
-    u_strFromWCS(apiStd, MAX_LENGTH_STDNAME, &apiStdLength, apiTZI.StandardName, -1, &status);
-    u_austrncpy(stdName, apiStd, apiStdLength);
+    uprv_memset(apiStdName, 0, sizeof(apiStdName));
+    u_strFromWCS(apiStd, MAX_LENGTH_ID, &apiStdLength, apiTZI.StandardName, -1, &status);
+    u_austrncpy(apiStdName, apiStd, apiStdLength);
 
-    uprv_memset(tmpid, 0, sizeof(tmpid));
+    tmpid[0] = 0;
 
     bundle = ures_openDirect(NULL, "windowsZones", &status);
     ures_getByKey(bundle, "mapTimezones", bundle, &status);
@@ -284,15 +307,22 @@ uprv_detectWindowsTimeZone() {
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
                 const UChar* icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
                 if (U_SUCCESS(status)) {
-                    if (uprv_strcmp(stdName, winid) == 0) {
-                        idFound = TRUE;
+                    /* Get the standard name from the registry key to compare with
+                       the one from Windows API call. */
+                    uprv_memset(regStdName, 0, sizeof(regStdName));
+                    result = getSTDName(winid, regStdName, sizeof(regStdName));
+                    if (result == ERROR_SUCCESS) {
+                        if (uprv_strcmp(apiStdName, regStdName) == 0) {
+                            idFound = TRUE;
+                        }
                     }
 
                     /* tmpid buffer holds the ICU timezone ID corresponding to the timezone ID from Windows.
                      * If none is found, tmpid buffer will contain a fallback ID (i.e. the time zone ID matching
                      * the current time zone information)
                      */
-                    if (idFound || tmpid[0] != 0) {
+                    if (idFound || tmpid[0] == 0) {
+                        uprv_memset(tmpid, 0, sizeof(tmpid));
                         u_austrncpy(tmpid, icuTZ, len);
                     }
                 }
@@ -310,8 +340,10 @@ uprv_detectWindowsTimeZone() {
     if (tmpid[0] != 0) {
         len = uprv_strlen(tmpid);
         icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
-        uprv_memset(icuid, 0, len + 1);
-        uprv_strcpy(icuid, tmpid);
+        if (icuid != NULL) {
+            uprv_memset(icuid, 0, len + 1);
+            uprv_strcpy(icuid, tmpid);
+        }
     }
 
     ures_close(bundle);
