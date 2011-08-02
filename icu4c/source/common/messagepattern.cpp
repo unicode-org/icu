@@ -342,7 +342,7 @@ MessagePattern::autoQuoteApostropheDeep() const {
     for(int32_t i=count; i>0;) {
         const Part &part=getPart(--i);
         if(part.getType()==UMSGPAT_PART_TYPE_INSERT_CHAR) {
-            modified.insert(part.index, part.value);
+            modified.insert(part.index, (UChar)part.value);
         }
     }
     return modified;
