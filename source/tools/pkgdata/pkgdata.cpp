@@ -20,14 +20,16 @@
 
 #include "unicode/utypes.h"
 
+#include "unicode/putil.h"
+#include "putilimp.h"
+
 #if U_HAVE_POPEN
-#if (U_PF_MINGW <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
+#if (U_PF_MINGW <= U_PLATFORM || U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
 /* popen/pclose aren't defined in strict ANSI on Cygwin and MinGW */
 #undef __STRICT_ANSI__
 #endif
 #endif
 
-#include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -35,7 +37,6 @@
 #include "unicode/uclean.h"
 #include "unewdata.h"
 #include "uoptions.h"
-#include "putilimp.h"
 #include "package.h"
 #include "pkg_icu.h"
 #include "pkg_genc.h"
