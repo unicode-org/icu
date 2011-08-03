@@ -103,7 +103,7 @@ typedef size_t uintptr_t;
 
 #ifdef U_HAVE_POPEN
     /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM == U_PF_WINDOWS
 #   define U_HAVE_POPEN 0
 #else
 #   define U_HAVE_POPEN 1
