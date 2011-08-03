@@ -185,7 +185,11 @@
 #ifdef U_PLATFORM_HAS_WIN32_API
     /* Use the predefined value. */
 #elif U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#   define U_PLATFORM_HAS_WIN32_API 1
+#   if U_PLATFORM == U_PF_CYGWIN && defined(__GNUC__)
+#       define U_PLATFORM_HAS_WIN32_API 0
+#   else
+#       define U_PLATFORM_HAS_WIN32_API 1
+#   endif
 #else
 #   define U_PLATFORM_HAS_WIN32_API 0
 #endif
@@ -504,7 +508,7 @@
      * Newer Mac OS X has size 4.
      */
 #   define U_SIZEOF_WCHAR_T 1
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM_HAS_WIN32_API || U_PLATFORM == U_PF_CYGWIN
 #   define U_SIZEOF_WCHAR_T 2
 #elif U_PLATFORM == U_PF_AIX
     /*
