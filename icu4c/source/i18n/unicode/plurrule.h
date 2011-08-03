@@ -309,7 +309,6 @@ public:
      * Returns keyword for default plural form.
      *
      * @return         keyword for default plural form.
-     * @internal 4.0
      * @stable ICU 4.0
      */
     UnicodeString getKeywordOther() const;
