@@ -48,9 +48,9 @@ pl{
             "200: <%spellout-cardinal-feminine<\u015Bcie[ >>];",
             "300: <%spellout-cardinal-feminine<sta[ >>];",
             "500: <%spellout-cardinal-feminine<set[ >>];",
-            "1000: <%spellout-cardinal-feminine< tysi\u0105c[ >>];",
-            "2000: <%spellout-cardinal-feminine< tysi\u0105ce[ >>];",
-            "5000: <%spellout-cardinal-feminine< tysi\u0119cy[ >>];",
+            "1000: <%spellout-cardinal-masculine< tysi\u0105c[ >>];",
+            "2000: <%spellout-cardinal-masculine< tysi\u0105ce[ >>];",
+            "5000: <%spellout-cardinal-masculine< tysi\u0119cy[ >>];",
             "1000000: <%spellout-cardinal-masculine< milion[ >>];",
             "2000000: <%spellout-cardinal-masculine< miliony[ >>];",
             "5000000: <%spellout-cardinal-masculine< milion\u00F3w[ >>];",
@@ -78,9 +78,9 @@ pl{
             "200: <%spellout-cardinal-feminine<\u015Bcie[ >>];",
             "300: <%spellout-cardinal-feminine<sta[ >>];",
             "500: <%spellout-cardinal-feminine<set[ >>];",
-            "1000: <%spellout-cardinal-feminine< tysi\u0105c[ >>];",
-            "2000: <%spellout-cardinal-feminine< tysi\u0105ce[ >>];",
-            "5000: <%spellout-cardinal-feminine< tysi\u0119cy[ >>];",
+            "1000: <%spellout-cardinal-masculine< tysi\u0105c[ >>];",
+            "2000: <%spellout-cardinal-masculine< tysi\u0105ce[ >>];",
+            "5000: <%spellout-cardinal-masculine< tysi\u0119cy[ >>];",
             "1000000: <%spellout-cardinal-masculine< milion[ >>];",
             "2000000: <%spellout-cardinal-masculine< miliony[ >>];",
             "5000000: <%spellout-cardinal-masculine< milion\u00F3w[ >>];",
@@ -109,9 +109,9 @@ pl{
             "200: <%spellout-cardinal-feminine<\u015Bcie[ >>];",
             "300: <%spellout-cardinal-feminine<sta[ >>];",
             "500: <%spellout-cardinal-feminine<set[ >>];",
-            "1000: <%spellout-cardinal-feminine< tysi\u0105c[ >>];",
-            "2000: <%spellout-cardinal-feminine< tysi\u0105ce[ >>];",
-            "5000: <%spellout-cardinal-feminine< tysi\u0119cy[ >>];",
+            "1000: <%spellout-cardinal-masculine< tysi\u0105c[ >>];",
+            "2000: <%spellout-cardinal-masculine< tysi\u0105ce[ >>];",
+            "5000: <%spellout-cardinal-masculine< tysi\u0119cy[ >>];",
             "1000000: <%spellout-cardinal-masculine< milion[ >>];",
             "2000000: <%spellout-cardinal-masculine< miliony[ >>];",
             "5000000: <%spellout-cardinal-masculine< milion\u00F3w[ >>];",
@@ -127,5 +127,5 @@ pl{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.0.41.26"}
+    Version{"2.0.60.66"}
 }
