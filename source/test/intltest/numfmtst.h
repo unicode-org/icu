@@ -152,6 +152,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestExponentParse();
     void TestExplicitParents();
+    void TestAvailableNumberingSystems();
+
 
  private:
 

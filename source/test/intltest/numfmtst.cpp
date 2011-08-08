@@ -115,6 +115,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(49,TestExponentParse); 
         CASE(50,TestExplicitParents); 
         CASE(51,TestLenientParse);
+        CASE(52,TestAvailableNumberingSystems);
         default: name = ""; break;
     }
 }
@@ -6448,5 +6449,32 @@ void NumberFormatTest::TestExplicitParents() {
         delete fmt;
     }
 
+}
+
+/**
+ * Test available numbering systems API.
+ */
+void NumberFormatTest::TestAvailableNumberingSystems() {
+    UErrorCode status = U_ZERO_ERROR;
+    StringEnumeration *availableNumberingSystems = NumberingSystem::getAvailableNames(status);
+
+    int32_t nsCount = availableNumberingSystems->count(status);
+    if ( nsCount < 36 ) {
+        errln("FAIL: Didn't get as many numbering systems as we had hoped for. Need at least 36, got %d",nsCount);
+    }
+
+    /* A relatively simple test of the API.  We call getAvailableNames() and cycle through */
+    /* each name returned, attempting to create a numbering system based on that name and  */
+    /* verifying that the name returned from the resulting numbering system is the same    */
+    /* one that we initially thought.                                                      */
+
+    int32_t len;
+    for ( int32_t i = 0 ; i < nsCount ; i++ ) {
+        const char *nsname = availableNumberingSystems->next(&len,status);
+        NumberingSystem* ns = NumberingSystem::createInstanceByName(nsname,status);
+        if ( uprv_strcmp(nsname,ns->getName()) ) {
+            errln("FAIL: Numbering system name didn't match for name = %s\n",nsname);
+        }
+    }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
