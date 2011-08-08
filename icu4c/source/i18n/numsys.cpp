@@ -24,6 +24,7 @@
 #include "unicode/numsys.h"
 #include "cstring.h"
 #include "uresimp.h"
+#include "numsys_impl.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -42,6 +43,7 @@ static const char gLatn[] = "latn";
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NumberingSystem)
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NumsysNameEnumeration)
 
     /**
      * Default Constructor.
@@ -217,6 +219,44 @@ UBool NumberingSystem::isAlgorithmic() const {
     return ( algorithmic );
 }
 
+StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
+
+    static StringEnumeration* availableNames = NULL;
+
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+
+    if ( availableNames == NULL ) {
+        UVector *fNumsysNames = new UVector(status);
+        if (U_FAILURE(status)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        
+        UErrorCode rbstatus = U_ZERO_ERROR;
+        UResourceBundle *numberingSystemsInfo = ures_openDirect(NULL, "numberingSystems", &rbstatus);
+        numberingSystemsInfo = ures_getByKey(numberingSystemsInfo,"numberingSystems",numberingSystemsInfo,&rbstatus);
+        if(U_FAILURE(rbstatus)) {
+            status = U_MISSING_RESOURCE_ERROR;
+            ures_close(numberingSystemsInfo);
+            return NULL;
+        }
+
+        while ( ures_hasNext(numberingSystemsInfo) ) {
+            UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo,NULL,&rbstatus);
+            const char *nsName = ures_getKey(nsCurrent);
+            fNumsysNames->addElement(new UnicodeString(nsName),status);
+            ures_close(nsCurrent);
+        }
+
+        ures_close(numberingSystemsInfo);
+        availableNames = new NumsysNameEnumeration(fNumsysNames,status);
+
+    }
+
+    return availableNames;
+}
 
 UBool NumberingSystem::isValidDigitString(const UnicodeString& str) {
 
@@ -234,6 +274,33 @@ UBool NumberingSystem::isValidDigitString(const UnicodeString& str) {
        prev = c;
     }
     return TRUE;   
+}
+
+NumsysNameEnumeration::NumsysNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {
+    pos=0;
+    fNumsysNames = fNameList;
+}
+
+const UnicodeString*
+NumsysNameEnumeration::snext(UErrorCode& status) {
+    if (U_SUCCESS(status) && pos < fNumsysNames->size()) {
+        return (const UnicodeString*)fNumsysNames->elementAt(pos++);
+    }
+    return NULL;
+}
+
+void
+NumsysNameEnumeration::reset(UErrorCode& /*status*/) {
+    pos=0;
+}
+
+int32_t
+NumsysNameEnumeration::count(UErrorCode& /*status*/) const {
+    return (fNumsysNames==NULL) ? 0 : fNumsysNames->size();
+}
+
+NumsysNameEnumeration::~NumsysNameEnumeration() {
+    delete fNumsysNames;
 }
 U_NAMESPACE_END
 
