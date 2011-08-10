@@ -287,8 +287,8 @@ int  main(int argc, char **argv) {
 
     uspoof_close(sc);
     delete [] outData;
-    delete confusables;
-    delete wsConfsables;
+    delete [] confusables;
+    delete [] wsConfsables;
     u_cleanup();
     printf("gencfu: tool completed successfully.\n");
     return 0;
