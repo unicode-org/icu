@@ -89,15 +89,7 @@ enum {
      * of each existing element in the set.
      * @stable ICU 3.2
      */
-    USET_ADD_CASE_MAPPINGS = 4,
-    
-#ifndef U_HIDE_INTERNAL_API
-    /**
-     * Enough for any single-code point set
-     * @internal
-     */
-    USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8
-#endif  /* U_HIDE_INTERNAL_API */
+    USET_ADD_CASE_MAPPINGS = 4
 };
 
 /**
@@ -208,6 +200,16 @@ typedef enum USetSpanCondition {
      */
     USET_SPAN_CONDITION_COUNT
 } USetSpanCondition;
+
+enum {
+    /**
+     * Capacity of USerializedSet::staticArray.
+     * Enough for any single-code point set.
+     * Also provides padding for nice sizeof(USerializedSet).
+     * @stable ICU 2.4
+     */
+    USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8
+};
 
 /**
  * A serialized form of a Unicode set.  Limited manipulations are
