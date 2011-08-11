@@ -29,6 +29,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * This class provides flexible generation of date format patterns, like
@@ -105,11 +106,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * Construct a flexible generator according to data for the default locale.
+     * Construct a flexible generator according to data for the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getInstance() {
-        return getInstance(ULocale.getDefault());
+        return getInstance(ULocale.getDefault(Category.FORMAT));
     }
 
     /**
