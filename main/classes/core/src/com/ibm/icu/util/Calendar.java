@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -26,6 +26,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.util.Calendar}.{@icu _usage_}
@@ -1486,13 +1487,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Constructs a Calendar with the default time zone
-     * and locale.
+     * and the default <code>FORMAT</code> locale.
      * @see     TimeZone#getDefault
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     protected Calendar()
     {
-        this(TimeZone.getDefault(), ULocale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -1618,7 +1620,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     private static Calendar getInstanceInternal(TimeZone tz, ULocale locale) {
         if (locale == null) {
-            locale = ULocale.getDefault();
+            locale = ULocale.getDefault(Category.FORMAT);
         }
         if (tz == null) {
             tz = TimeZone.getDefault();

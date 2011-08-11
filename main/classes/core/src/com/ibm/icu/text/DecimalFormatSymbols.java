@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,6 +21,7 @@ import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DecimalFormatSymbols}.{@icu _usage_}
@@ -40,11 +41,12 @@ import com.ibm.icu.util.UResourceBundle;
  */
 public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
-     * Creates a DecimalFormatSymbols object for the default locale.
+     * Creates a DecimalFormatSymbols object for the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormatSymbols() {
-        initialize(ULocale.getDefault());
+        initialize(ULocale.getDefault(Category.FORMAT));
     }
 
     /**

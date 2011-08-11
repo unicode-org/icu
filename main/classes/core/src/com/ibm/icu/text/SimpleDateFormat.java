@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -38,6 +38,7 @@ import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 
 /**
@@ -361,11 +362,12 @@ public class SimpleDateFormat extends DateFormat {
     private transient boolean useFastFormat;
 
     /**
-     * Constructs a SimpleDateFormat using the default pattern for the default
+     * Constructs a SimpleDateFormat using the default pattern for the default <code>FORMAT</code>
      * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
      *
      * @see DateFormat
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public SimpleDateFormat() {
@@ -373,9 +375,10 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Constructs a SimpleDateFormat using the given pattern in the default
+     * Constructs a SimpleDateFormat using the given pattern in the default <code>FORMAT</code>
      * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public SimpleDateFormat(String pattern)
@@ -426,7 +429,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Constructs a SimpleDateFormat using the given pattern and
      * locale-specific symbol data.
-     * Warning: uses default locale for digits!
+     * Warning: uses default <code>FORMAT</code> locale for digits!
      * @stable ICU 2.0
      */
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData)
@@ -495,7 +498,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     private void initialize() {
         if (locale == null) {
-            locale = ULocale.getDefault();
+            locale = ULocale.getDefault(Category.FORMAT);
         }
         if (formatData == null) {
             formatData = new DateFormatSymbols(locale);
@@ -536,7 +539,7 @@ public class SimpleDateFormat extends DateFormat {
      * This method is only used by the default SimpleDateFormat constructor.
      */
     private static synchronized String getDefaultPattern() {
-        ULocale defaultLocale = ULocale.getDefault();
+        ULocale defaultLocale = ULocale.getDefault(Category.FORMAT);
         if (!defaultLocale.equals(cachedDefaultLocale)) {
             cachedDefaultLocale = defaultLocale;
             Calendar cal = Calendar.getInstance(cachedDefaultLocale);

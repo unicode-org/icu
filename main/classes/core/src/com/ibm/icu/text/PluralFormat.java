@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <p>
@@ -180,13 +181,14 @@ public class PluralFormat extends UFormat {
     private NumberFormat numberFormat = null;
 
     /**
-     * Creates a new <code>PluralFormat</code> for the default locale.
+     * Creates a new <code>PluralFormat</code> for the default <code>FORMAT</code> locale.
      * This locale will be used to get the set of plural rules and for standard
      * number formatting.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat() {
-        init(null, ULocale.getDefault());
+        init(null, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -202,13 +204,14 @@ public class PluralFormat extends UFormat {
 
     /**
      * Creates a new <code>PluralFormat</code> for a given set of rules.
-     * The standard number formatting will be done using the default locale.
+     * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules) {
-        init(rules, ULocale.getDefault());
+        init(rules, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -226,14 +229,15 @@ public class PluralFormat extends UFormat {
 
     /**
      * Creates a new <code>PluralFormat</code> for a given pattern string.
-     * The default locale will be used to get the set of plural rules and for
+     * The default <code>FORMAT</code> locale will be used to get the set of plural rules and for
      * standard number formatting.
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat(String pattern) {
-        init(null, ULocale.getDefault());
+        init(null, ULocale.getDefault(Category.FORMAT));
         applyPattern(pattern);
     }
 
@@ -257,15 +261,16 @@ public class PluralFormat extends UFormat {
     /**
      * Creates a new <code>PluralFormat</code> for a given set of rules and a
      * pattern.
-     * The standard number formatting will be done using the default locale.
+     * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules, String pattern) {
-        init(rules, ULocale.getDefault());
+        init(rules, ULocale.getDefault(Category.FORMAT));
         applyPattern(pattern);
     }
 
@@ -507,12 +512,13 @@ public class PluralFormat extends UFormat {
      *     constructed from {@link #PluralFormat(ULocale)}.
      * @param ulocale the <code>ULocale</code> used to configure the
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
-     *     default locale will be used.
+     *     default <code>FORMAT</code> locale will be used.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public void setLocale(ULocale ulocale) {
         if (ulocale == null) {
-            ulocale = ULocale.getDefault();
+            ulocale = ULocale.getDefault(Category.FORMAT);
         }
         init(null, ulocale);
     }
@@ -553,7 +559,7 @@ public class PluralFormat extends UFormat {
      */
     private void parsingFailure(String errorText) {
         // Set PluralFormat to a valid state.
-        init(null, ULocale.getDefault());
+        init(null, ULocale.getDefault(Category.FORMAT));
         throw new IllegalArgumentException(errorText);
     }
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
+import com.ibm.icu.util.ULocale.Category;
 
 
 /**
@@ -130,11 +131,12 @@ class NumberingSystem {
     }
 
     /**
-     * Returns the default numbering system for the default locale.
+     * Returns the default numbering system for the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 4.2
      */
     public static NumberingSystem getInstance() {
-        return getInstance(ULocale.getDefault());
+        return getInstance(ULocale.getDefault(Category.FORMAT));
     }
 
     /**

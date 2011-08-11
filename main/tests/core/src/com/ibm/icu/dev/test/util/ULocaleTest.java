@@ -12,9 +12,13 @@ package com.ibm.icu.dev.test.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -23,17 +27,19 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Builder;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.ULocale.Builder;
 
 public class ULocaleTest extends TestFmwk {
+
+    private static final boolean JAVA7_OR_LATER = (VersionInfo.javaVersion().compareTo(VersionInfo.getInstance(1, 7)) >= 0);
 
     public static void main(String[] args) throws Exception {
         new ULocaleTest().run(args);
@@ -187,8 +193,6 @@ public class ULocaleTest extends TestFmwk {
      * ticket#5060
      */
     public void TestJavaLocaleCompatibility() {
-        boolean isJava7 = VersionInfo.javaVersion().getMinor() == 7;
-
         Locale backupDefault = Locale.getDefault();
         
         // Java Locale for ja_JP with Japanese calendar
@@ -200,12 +204,8 @@ public class ULocaleTest extends TestFmwk {
         Calendar cal = Calendar.getInstance(jaJPJP);
         String caltype = cal.getType();
         if (!caltype.equals("japanese")) {
-            if (isJava7 && skipIfBeforeICU(4,4,3)) {
-                logln("Known Issue: Invalid calendar type: " + caltype + " /expected: japanese");
-            } else {
                 errln("FAIL: Invalid calendar type: " + caltype + " /expected: japanese");
             }
-        }
 
         cal = Calendar.getInstance(jaJP);
         caltype = cal.getType();
@@ -216,10 +216,12 @@ public class ULocaleTest extends TestFmwk {
         // Default locale
         Locale.setDefault(jaJPJP);
         ULocale defUloc = ULocale.getDefault();
+        if (JAVA7_OR_LATER) {
+            if (!defUloc.toString().equals("ja_JP_JP@calendar=japanese")) {
+                errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: ja_JP_JP@calendar=japanese");
+            }
+        } else {
         if (!defUloc.toString().equals("ja_JP@calendar=japanese")) {
-            if (isJava7 && skipIfBeforeICU(4,4,3)) {
-                logln("Known Issue: Invalid default ULocale: " + defUloc + " /expected: ja_JP@calendar=japanese");
-            } else {
                 errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: ja_JP@calendar=japanese");
             }
         }
@@ -227,18 +229,14 @@ public class ULocaleTest extends TestFmwk {
         cal = Calendar.getInstance();
         caltype = cal.getType();
         if (!caltype.equals("japanese")) {
-            if (isJava7 && skipIfBeforeICU(4,4,3)) {
-                logln("Known Issue: Invalid calendar type: " + caltype + " /expected: japanese");
-            } else {
                 errln("FAIL: Invalid calendar type: " + caltype + " /expected: japanese");
             }
-        }
         Locale.setDefault(backupDefault);
 
         // Set default via ULocale
         ULocale ujaJP_calJP = new ULocale("ja_JP@calendar=japanese");
         ULocale.setDefault(ujaJP_calJP);
-        if (!Locale.getDefault().equals(jaJPJP)) {
+        if (!JAVA7_OR_LATER && !Locale.getDefault().equals(jaJPJP)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale ja_JP_JP /actual: " + Locale.getDefault());
         }
         // Ticket#6672 - missing keywords
@@ -257,7 +255,7 @@ public class ULocaleTest extends TestFmwk {
 
         // We also want to map ICU locale ja@calendar=japanese to Java ja_JP_JP
         ULocale.setDefault(new ULocale("ja@calendar=japanese"));
-        if (!Locale.getDefault().equals(jaJPJP)) {
+        if (!JAVA7_OR_LATER && !Locale.getDefault().equals(jaJPJP)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale ja_JP_JP /actual: " + Locale.getDefault());
         }
         Locale.setDefault(backupDefault);
@@ -266,28 +264,28 @@ public class ULocaleTest extends TestFmwk {
         Locale noNONY = new Locale("no", "NO", "NY");
         Locale.setDefault(noNONY);
         defUloc = ULocale.getDefault();
-        if (defUloc.toString().equals("nn_NY")) {
-            errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: nn_NY");
+        if (!defUloc.toString().equals("nn_NO")) {
+            errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: nn_NO");
         }
         Locale.setDefault(backupDefault);
 
         // Java th_TH_TH -> ICU th_TH@numbers=thai
         ULocale.setDefault(new ULocale("th@numbers=thai"));
-        if (!Locale.getDefault().equals(thTHTH)) {
+        if (!JAVA7_OR_LATER && !Locale.getDefault().equals(thTHTH)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale th_TH_TH /actual: " + Locale.getDefault());
         }
         Locale.setDefault(backupDefault);
 
         // Set default via ULocale
         ULocale.setDefault(new ULocale("nn_NO"));
-        if (!Locale.getDefault().equals(noNONY)) {
+        if (!JAVA7_OR_LATER && !Locale.getDefault().equals(noNONY)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale no_NO_NY /actual: " + Locale.getDefault());
         }
         Locale.setDefault(backupDefault);        
 
         // We also want to map ICU locale nn to Java no_NO_NY
         ULocale.setDefault(new ULocale("nn"));
-        if (!Locale.getDefault().equals(noNONY)) {
+        if (!JAVA7_OR_LATER && !Locale.getDefault().equals(noNONY)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale no_NO_NY /actual: " + Locale.getDefault());
         }
         Locale.setDefault(backupDefault);
@@ -3730,26 +3728,28 @@ public class ULocaleTest extends TestFmwk {
             {"en_US",       "en-US"},
             {"iw_IL",       "he-IL"},
             {"sr_Latn_SR",  "sr-Latn-SR"},
-            {"en__POSIX",   "en-posix"},
-            // {"en_POSIX",    "en"}, /* ICU4J locale parser successfully parse en_POSIX as language:en/variant:POSIX */
+            {"en_US_POSIX@ca=japanese", "en-US-u-ca-japanese-va-posix"},
+            {"en__POSIX",   "en-u-va-posix"},
+            {"en_US_POSIX_VAR", "en-US-posix-x-lvariant-var"},  // variant POSIX_VAR is processed as regular variant
+            {"en_US_VAR_POSIX", "en-US-x-lvariant-var-posix"},  // variant VAR_POSIX is processed as regular variant
+            {"en_US_POSIX@va=posix2",   "en-US-u-va-posix2"},   // if keyword va=xxx already exists, variant POSIX is simply dropped
             {"und_555",     "und-555"},
             {"123",         "und"},
             {"%$#&",        "und"},
             {"_Latn",       "und-Latn"},
             {"_DE",         "und-DE"},
             {"und_FR",      "und-FR"},
-            {"th_TH_TH",    "th-TH-x-variant-th"},
+            {"th_TH_TH",    "th-TH-x-lvariant-th"},
             {"bogus",       "bogus"},
             {"foooobarrr",  "und"},
-            //{"az_AZ_CYRL",  "az-cyrl-az"}, /* ICU4J does not have this specia locale mapping */
-            {"aa_BB_CYRL",  "aa-BB-x-variant-cyrl"},
+            {"aa_BB_CYRL",  "aa-BB-x-lvariant-cyrl"},
             {"en_US_1234",  "en-US-1234"},
             {"en_US_VARIANTA_VARIANTB", "en-US-varianta-variantb"},
             {"en_US_VARIANTB_VARIANTA", "en-US-variantb-varianta"},
             {"ja__9876_5432",   "ja-9876-5432"},
-            {"zh_Hant__VAR",    "zh-Hant-x-variant-var"},
+            {"zh_Hant__VAR",    "zh-Hant-x-lvariant-var"},
             {"es__BADVARIANT_GOODVAR",  "es"},
-            {"es__GOODVAR_BAD_BADVARIANT",  "es-goodvar-x-variant-bad"},
+            {"es__GOODVAR_BAD_BADVARIANT",  "es-goodvar-x-lvariant-bad"},
             {"en@calendar=gregorian",   "en-u-ca-gregory"},
             {"de@collation=phonebook;calendar=gregorian",   "de-u-ca-gregory-co-phonebk"},
             {"th@numbers=thai;z=extz;x=priv-use;a=exta",   "th-a-exta-u-nu-thai-z-extz-x-priv-use"},
@@ -3757,6 +3757,10 @@ public class ULocaleTest extends TestFmwk {
             {"en@timezone=US/Eastern",    "en-u-tz-usnyc"},
             {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z"},
             {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic"},
+            {"en_US_POSIX", "en-US-u-va-posix"},
+            {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
+            {"@x=elmer",    "x-elmer"},
+            {"_US@x=elmer", "und-US-x-elmer"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -3788,7 +3792,7 @@ public class ULocaleTest extends TestFmwk {
             {"zh-cmn-CH",           "cmn_CH",               NOERROR},
             {"xxx-yy",              "xxx_YY",               NOERROR},
             {"fr-234",              "fr_234",               NOERROR},
-            {"i-default",           "",                     NOERROR},
+            {"i-default",           "en@x=i-default",       NOERROR},
             {"i-test",              "",                     Integer.valueOf(0)},
             {"ja-jp-jp",            "ja_JP",                Integer.valueOf(6)},
             {"bogus",               "bogus",                NOERROR},
@@ -3798,15 +3802,21 @@ public class ULocaleTest extends TestFmwk {
             {"und-varzero-var1-vartwo", "__VARZERO",        Integer.valueOf(12)},
             {"en-u-ca-gregory",     "en@calendar=gregorian",    NOERROR},
             {"en-U-cu-USD",         "en@currency=usd",      NOERROR},
+            {"en-us-u-va-posix",    "en_US_POSIX",          NOERROR},
+            {"en-us-u-ca-gregory-va-posix", "en_US_POSIX@calendar=gregorian",   NOERROR},
+            {"en-us-posix-u-va-posix",  "en_US_POSIX@va=posix", NOERROR},
+            {"en-us-u-va-posix2",   "en_US@va=posix2",      NOERROR},
+            {"en-us-vari1-u-va-posix",   "en_US_VARI1@va=posix",  NOERROR},
             {"ar-x-1-2-3",          "ar@x=1-2-3",           NOERROR},
             {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", NOERROR},
             {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   NOERROR},
-            {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      Integer.valueOf(15)},
+            {"ja-u-cu-jpy-ca-jp",   "ja@calendar=true;currency=jpy;jp=true",  NOERROR},
             {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",      NOERROR},
             {"und-a-abc-def",       "@a=abc-def",           NOERROR},
             {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   NOERROR},
             {"fr--FR",              "fr",                   Integer.valueOf(3)},
             {"fr-",                 "fr",                   Integer.valueOf(3)},
+            {"x-elmer",             "@x=elmer",             NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
@@ -3894,6 +3904,248 @@ public class ULocaleTest extends TestFmwk {
             for (int i = 1; i < chain.length; i++) {
                 ULocale fallback = chain[i-1].getFallback();
                 assertEquals("ULocale(" + chain[i-1] + ").getFallback()", chain[i], fallback);
+            }
+        }
+    }
+
+    public void TestExtension() {
+        String[][] TESTCASES = {
+                // {"<langtag>", "<ext key1>", "<ext val1>", "<ext key2>", "<ext val2>", ....},
+                {"en"},
+                {"en-a-exta-b-extb", "a", "exta", "b", "extb"},
+                {"en-b-extb-a-exta", "a", "exta", "b", "extb"},
+                {"de-x-a-bc-def", "x", "a-bc-def"},
+                {"ja-JP-u-cu-jpy-ca-japanese-x-java", "u", "ca-japanese-cu-jpy", "x", "java"},
+        };
+
+        for (String[] testcase : TESTCASES) {
+            ULocale loc = ULocale.forLanguageTag(testcase[0]);
+
+            int nExtensions = (testcase.length - 1) / 2;
+
+            Set<Character> keys = loc.getExtensionKeys();
+            if (keys.size() != nExtensions) {
+                errln("Incorrect number of extensions: returned="
+                        + keys.size() + ", expected=" + nExtensions
+                        + ", locale=" + testcase[0]);
+            }
+
+            for (int i = 0; i < nExtensions; i++) {
+                String kstr = testcase[i/2 + 1];
+                String ext = loc.getExtension(Character.valueOf(kstr.charAt(0)));
+                if (ext == null || !ext.equals(testcase[i/2 + 2])) {
+                    errln("Incorrect extension value: key=" 
+                            + kstr + ", returned=" + ext + ", expected=" + testcase[i/2 + 2]
+                            + ", locale=" + testcase[0]);
+                }
+            }
+        }
+
+        // Exception handling
+        boolean sawException = false;
+        try {
+            ULocale l = ULocale.forLanguageTag("en-US-a-exta");
+            l.getExtension('$');
+        } catch (IllegalArgumentException e) {
+            sawException = true;
+        }
+        if (!sawException) {
+            errln("getExtension must throw an exception on illegal input key");
+        }
+    }
+
+    public void TestUnicodeLocaleExtension() {
+        String[][] TESTCASES = {
+                //"<langtag>", "<attr1>,<attr2>,...", "<key1>,<key2>,...", "<type1>", "<type2>", ...},
+                {"en", null, null},
+                {"en-a-ext1-x-privuse", null, null},
+                {"en-u-attr1-attr2", "attr1,attr2", null},
+                {"ja-u-ca-japanese-cu-jpy", null, "ca,cu", "japanese", "jpy"},
+                {"th-TH-u-number-attr-nu-thai-ca-buddhist", "attr,number", "ca,nu", "buddhist", "thai"},
+        };
+
+        for (String[] testcase : TESTCASES) {
+            ULocale loc = ULocale.forLanguageTag(testcase[0]);
+
+            Set<String> expectedAttributes = new HashSet<String>();
+            if (testcase[1] != null) {
+                String[] attrs = testcase[1].split(",");
+                for (String s : attrs) {
+                    expectedAttributes.add(s);
+                }
+            }
+
+            Map<String, String> expectedKeywords = new HashMap<String, String>();
+            if (testcase[2] != null) {
+                String[] ukeys = testcase[2].split(",");
+                for (int i = 0; i < ukeys.length; i++) {
+                    expectedKeywords.put(ukeys[i], testcase[i + 3]);
+                }
+            }
+
+            // Check attributes
+            Set<String> attributes = loc.getUnicodeLocaleAttributes();
+            if (attributes.size() != expectedAttributes.size()) {
+                errln("Incorrect number for Unicode locale attributes: returned=" 
+                        + attributes.size() + ", expected=" + expectedAttributes.size()
+                        + ", locale=" + testcase[0]);
+            }
+            if (!attributes.containsAll(expectedAttributes) || !expectedAttributes.containsAll(attributes)) {
+                errln("Incorrect set of attributes for locale " + testcase[0]);
+            }
+
+            // Check keywords
+            Set<String> keys = loc.getUnicodeLocaleKeys();
+            Set<String> expectedKeys = expectedKeywords.keySet();
+            if (keys.size() != expectedKeys.size()) {
+                errln("Incorrect number for Unicode locale keys: returned=" 
+                        + keys.size() + ", expected=" + expectedKeys.size()
+                        + ", locale=" + testcase[0]);
+            }
+
+            for (String expKey : expectedKeys) {
+                String type = loc.getUnicodeLocaleType(expKey);
+                String expType = expectedKeywords.get(expKey);
+
+                if (type == null || !expType.equals(type)) {
+                    errln("Incorrect Unicode locale type: key=" 
+                            + expKey + ", returned=" + type + ", expected=" + expType
+                            + ", locale=" + testcase[0]);
+                }
+            }
+        }
+
+        // Exception handling
+        boolean sawException = false;
+        try {
+            ULocale l = ULocale.forLanguageTag("en-US-u-ca-gregory");
+            l.getUnicodeLocaleType("$%");
+        } catch (IllegalArgumentException e) {
+            sawException = true;
+        }
+        if (!sawException) {
+            errln("getUnicodeLocaleType must throw an exception on illegal input key");
+        }
+    }
+
+    public void TestForLocale() {
+        Object[][] DATA = {
+            {new Locale(""),                    ""},
+            {new Locale("en", "US"),            "en_US"},
+            {new Locale("en", "US", "POSIX"),   "en_US_POSIX"},
+            {new Locale("", "US"),              "_US"},
+            {new Locale("en", "", "POSIX"),     "en__POSIX"},
+            {new Locale("no", "NO", "NY"),      "nn_NO"},
+            {new Locale("en", "BOGUS"),         "en__BOGUS"}, // ill-formed country is mapped to variant - see #8383 and #8384
+        };
+
+        for (int i = 0; i < DATA.length; i++) {
+            ULocale uloc = ULocale.forLocale((Locale) DATA[i][0]);
+            assertEquals("forLocale with " + DATA[i][0], DATA[i][1], uloc.getName());
+        }
+
+        if (JAVA7_OR_LATER) {
+            Object[][] DATA7 = {
+                {new Locale("ja", "JP", "JP"),      "ja_JP_JP@calendar=japanese"},
+                {new Locale("th", "TH", "TH"),      "th_TH_TH@numbers=thai"},
+            };
+            for (int i = 0; i < DATA7.length; i++) {
+                ULocale uloc = ULocale.forLocale((Locale) DATA7[i][0]);
+                assertEquals("forLocale with " + DATA7[i][0], DATA7[i][1], uloc.getName());
+            }
+
+            try {
+                Method localeForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
+
+                String[][] DATA7EXT = {
+                    {"en-Latn-US",                  "en_Latn_US"},
+                    {"zh-Hant-TW",                  "zh_Hant_TW"},
+                    {"und-US-u-cu-usd",             "_US@currency=usd"},
+                    {"th-TH-u-ca-buddhist-nu-thai", "th_TH@calendar=buddhist;numbers=thai"},
+                    {"en-US-u-va-POSIX",            "en_US_POSIX"},
+                    {"de-DE-u-co-phonebk",          "de_DE@collation=phonebook"},
+                    {"en-a-exta-b-extb-x-privu",    "en@a=exta;b=extb;x=privu"},
+                    {"fr-u-attr1-attr2-cu-eur",     "fr@attribute=attr1-attr2;currency=eur"},
+                };
+
+                for (int i = 0; i < DATA7EXT.length; i++) {
+                    Locale loc = (Locale) localeForLanguageTag.invoke(null, DATA7EXT[i][0]);
+                    ULocale uloc = ULocale.forLocale(loc);
+                    assertEquals("forLocale with " + loc, DATA7EXT[i][1], uloc.getName());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            Object[][] DATA6 = {
+                {new Locale("ja", "JP", "JP"),      "ja_JP@calendar=japanese"},
+                {new Locale("th", "TH", "TH"),      "th_TH@numbers=thai"},
+            };
+            for (int i = 0; i < DATA6.length; i++) {
+                ULocale uloc = ULocale.forLocale((Locale) DATA6[i][0]);
+                assertEquals("forLocale with " + DATA6[i][0], DATA6[i][1], uloc.getName());
+            }
+        }
+    }
+
+    public void TestToLocale() {
+        Object[][] DATA = {
+            {"",                new Locale("")},
+            {"en_US",           new Locale("en", "US")},
+            {"_US",             new Locale("", "US")},
+            {"en__POSIX",       new Locale("en", "", "POSIX")},
+        };
+
+        for (int i = 0; i < DATA.length; i++) {
+            Locale loc = new ULocale((String) DATA[i][0]).toLocale();
+            assertEquals("toLocale with " + DATA[i][0], DATA[i][1], loc);
+        }
+
+        if (JAVA7_OR_LATER) {
+            Object[][] DATA7 = {
+                    {"nn_NO",                       new Locale("nn", "NO")},
+                    {"no_NO_NY",                    new Locale("no", "NO", "NY")},
+            };
+            for (int i = 0; i < DATA7.length; i++) {
+                Locale loc = new ULocale((String) DATA7[i][0]).toLocale();
+                assertEquals("toLocale with " + DATA7[i][0], DATA7[i][1], loc);
+            }
+
+            try {
+                Method localeForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
+
+                String[][] DATA7EXT = {
+                    {"en_Latn_US",                  "en-Latn-US"},
+                    {"zh_Hant_TW",                  "zh-Hant-TW"},
+                    {"ja_JP@calendar=japanese",     "ja-JP-u-ca-japanese"},
+                    {"ja_JP_JP@calendar=japanese",  "ja-JP-u-ca-japanese-x-lvariant-JP"},
+                    {"th_TH@numbers=thai",          "th-TH-u-nu-thai"},
+                    {"th_TH_TH@numbers=thai",       "th-TH-u-nu-thai-x-lvariant-TH"},
+                    {"de@collation=phonebook",      "de-u-co-phonebk"},
+                    {"en@a=exta;b=extb;x=privu",    "en-a-exta-b-extb-x-privu"},
+                    {"fr@attribute=attr1-attr2;currency=eur",   "fr-u-attr1-attr2-cu-eur"},
+                };
+
+                for (int i = 0; i < DATA7EXT.length; i++) {
+                    Locale loc = new ULocale((String) DATA7EXT[i][0]).toLocale();
+                    Locale expected = (Locale) localeForLanguageTag.invoke(null, DATA7EXT[i][1]);
+                    assertEquals("toLocale with " + DATA7EXT[i][0], expected, loc);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            Object[][] DATA6 = {
+                {"nn_NO",                       new Locale("no", "NO", "NY")},
+                {"no_NO_NY",                    new Locale("no", "NO", "NY")},
+                {"ja_JP@calendar=japanese",     new Locale("ja", "JP", "JP")},
+                {"th_TH@numbers=thai",          new Locale("th", "TH", "TH")},
+            };
+            for (int i = 0; i < DATA6.length; i++) {
+                Locale loc = new ULocale((String) DATA6[i][0]).toLocale();
+                assertEquals("toLocale with " + DATA6[i][0], DATA6[i][1], loc);
             }
         }
     }
