@@ -254,6 +254,24 @@ public final class ULocale implements Serializable {
      */
     public static final ULocale ROOT = new ULocale("", EMPTY_LOCALE);
 
+    /**
+     * Enum for locale categories. These locale categories are used to get/set the default locale for
+     * the specific functionality represented by the category.
+     * @stable ICU 49
+     */
+    public enum Category {
+        /**
+         * Category used to represent the default locale for displaying user interfaces.
+         * @stable ICU 49
+         */
+        DISPLAY,
+        /**
+         * Category used to represent the default locale for formatting date, number and/or currency.
+         * @stable ICU 49
+         */
+        FORMAT
+    }
+
     private static final SimpleCache<Locale, ULocale> CACHE = new SimpleCache<Locale, ULocale>();
 
     /**
@@ -393,11 +411,7 @@ public final class ULocale implements Serializable {
         }
         ULocale result = CACHE.get(loc);
         if (result == null) {
-            if (defaultULocale != null && loc == defaultULocale.locale) {
-                result = defaultULocale;
-            } else {
-                result = JDKLocaleMapper.INSTANCE.toULocale(loc);
-            }
+            result = JDKLocaleHelper.toULocale(loc);
             CACHE.put(loc, result);
         }
         return result;
@@ -503,20 +517,33 @@ public final class ULocale implements Serializable {
      */
     public Locale toLocale() {
         if (locale == null) {
-            locale = JDKLocaleMapper.INSTANCE.toLocale(this);
+            locale = JDKLocaleHelper.toLocale(this);
         }
         return locale;
     }
 
     private static ICUCache<String, String> nameCache = new SimpleCache<String, String>();
+
     /**
      * Keep our own default ULocale.
      */
     private static Locale defaultLocale = Locale.getDefault();
-    private static ULocale defaultULocale = new ULocale(defaultLocale);
+    private static ULocale defaultULocale = forLocale(defaultLocale);
+
+    private static Locale[] defaultCategoryLocales = new Locale[Category.values().length];
+    private static ULocale[] defaultCategoryULocales = new ULocale[Category.values().length];
+
+    static {
+        for (Category cat: Category.values()) {
+            int idx = cat.ordinal();
+            defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
+            defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+        }
+    }
 
     /**
      * Returns the current default ULocale.
+     * @return the default ULocale.
      * @stable ICU 2.8
      */
     public static ULocale getDefault() {
@@ -524,7 +551,18 @@ public final class ULocale implements Serializable {
             Locale currentDefault = Locale.getDefault();
             if (!defaultLocale.equals(currentDefault)) {
                 defaultLocale = currentDefault;
-                defaultULocale = new ULocale(defaultLocale);
+                defaultULocale = forLocale(currentDefault);
+
+                if (!JDKLocaleHelper.isJava7orNewer()) {
+                    // Detected Java default Locale change.
+                    // We need to update category defaults to match the
+                    // Java 7's behavior on Java 6 or older environment.
+                    for (Category cat : Category.values()) {
+                        int idx = cat.ordinal();
+                        defaultCategoryLocales[idx] = currentDefault;
+                        defaultCategoryULocales[idx] = forLocale(currentDefault);
+                    }
+                }
             }
             return defaultULocale;
         }
@@ -535,17 +573,100 @@ public final class ULocale implements Serializable {
      * If the caller does not have write permission to the
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
+     * <p>
+     * By setting the default ULocale with this method, all of the default categoy locales
+     * are also set to the specified default ULocale.
      * @param newLocale the new default locale
      * @throws SecurityException if a security manager exists and its
      *        <code>checkPermission</code> method doesn't allow the operation.
      * @throws NullPointerException if <code>newLocale</code> is null
      * @see SecurityManager#checkPermission(java.security.Permission)
      * @see java.util.PropertyPermission
+     * @see ULocale#setDefault(Category, ULocale)
      * @stable ICU 3.0
      */
     public static synchronized void setDefault(ULocale newLocale){
         Locale.setDefault(newLocale.toLocale());
         defaultULocale = newLocale;
+        // This method also updates all category default locales
+        for (Category cat : Category.values()) {
+            setDefault(cat, newLocale);
+        }
+    }
+
+    /**
+     * Returns the current default ULocale for the specified category.
+     * 
+     * @param category the category
+     * @return the default ULocale for the specified category.
+     * @stable ICU 49
+     */
+    public static ULocale getDefault(Category category) {
+        synchronized (ULocale.class) {
+            int idx = category.ordinal();
+            if (defaultCategoryULocales[idx] == null) {
+                // Just in case this method is called during ULocale class
+                // initialization. Unlike getDefault(), we do not have
+                // cyclic dependency for category default.
+                return ULocale.ROOT;
+            }
+            if (JDKLocaleHelper.isJava7orNewer()) {
+                Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
+                if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
+                    defaultCategoryLocales[idx] = currentCategoryDefault;
+                    defaultCategoryULocales[idx] = forLocale(currentCategoryDefault);
+                }
+            } else {
+                // java.util.Locale.setDefault(Locale) in Java 7 updates
+                // category locale defaults. On Java 6 or older environment,
+                // ICU4J checks if the default locale has changed and update
+                // category ULocales here if necessary.
+                
+                // Note: When java.util.Locale.setDefault(Locale) is called
+                // with a Locale same with the previous one, Java 7 still
+                // updates category locale defaults. On Java 6 or older env,
+                // there is no good way to detect the event, ICU4J simply
+                // check if the default Java Locale has changed since last
+                // time.
+
+                Locale currentDefault = Locale.getDefault();
+                if (!defaultLocale.equals(currentDefault)) {
+                    defaultLocale = currentDefault;
+                    defaultULocale = forLocale(currentDefault);
+
+                    for (Category cat : Category.values()) {
+                        int tmpIdx = cat.ordinal();
+                        defaultCategoryLocales[tmpIdx] = currentDefault;
+                        defaultCategoryULocales[tmpIdx] = forLocale(currentDefault);
+                    }
+                }
+                
+                // No synchronization with JDK Locale, because category default
+                // is not supported in Java 6 or older versions
+            }
+            return defaultCategoryULocales[idx];
+        }
+    }
+
+    /**
+     * Sets the default <code>ULocale</code> for the specified <code>Category</code>.
+     * This also sets the default <code>Locale</code> for the specified <code>Category</code>
+     * of the JVM. If the caller does not have write permission to the
+     * user.language property, a security exception will be thrown,
+     * and the default ULocale for the specified Category will remain unchanged.
+     * 
+     * @param category the specified category to set the default locale
+     * @param newLocale the new default locale
+     * @see SecurityManager#checkPermission(java.security.Permission)
+     * @see java.util.PropertyPermission
+     * @stable ICU 49
+     */
+    public static synchronized void setDefault(Category category, ULocale newLocale) {
+        Locale newJavaDefault = newLocale.toLocale();
+        int idx = category.ordinal();
+        defaultCategoryULocales[idx] = newLocale;
+        defaultCategoryLocales[idx] = newJavaDefault;
+        JDKLocaleHelper.setDefault(category, newJavaDefault);
     }
 
     /**
@@ -1056,12 +1177,13 @@ public final class ULocale implements Serializable {
     // display names
 
     /**
-     * Returns this locale's language localized for display in the default locale.
+     * Returns this locale's language localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized language name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayLanguage() {
-        return getDisplayLanguageInternal(this, getDefault(), false);
+        return getDisplayLanguageInternal(this, getDefault(Category.DISPLAY), false);
     }
 
     /**
@@ -1099,13 +1221,14 @@ public final class ULocale implements Serializable {
         return getDisplayLanguageInternal(new ULocale(localeID), displayLocale, false);
     }
     /**
-     * {@icu} Returns this locale's language localized for display in the default locale.
+     * {@icu} Returns this locale's language localized for display in the default <code>DISPLAY</code> locale.
      * If a dialect name is present in the data, then it is returned.
      * @return the localized language name.
+     * @see Category#DISPLAY
      * @stable ICU 4.4
      */
     public String getDisplayLanguageWithDialect() {
-        return getDisplayLanguageInternal(this, getDefault(), true);
+        return getDisplayLanguageInternal(this, getDefault(Category.DISPLAY), true);
     }
 
     /**
@@ -1153,12 +1276,13 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * {@icu} Returns this locale's script localized for display in the default locale.
+     * {@icu} Returns this locale's script localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized script name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayScript() {
-        return getDisplayScriptInternal(this, getDefault());
+        return getDisplayScriptInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1201,12 +1325,13 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Returns this locale's country localized for display in the default locale.
+     * Returns this locale's country localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized country name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayCountry() {
-        return getDisplayCountryInternal(this, getDefault());
+        return getDisplayCountryInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1250,12 +1375,13 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Returns this locale's variant localized for display in the default locale.
+     * Returns this locale's variant localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized variant name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayVariant() {
-        return getDisplayVariantInternal(this, getDefault());
+        return getDisplayVariantInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1298,14 +1424,15 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * {@icu} Returns a keyword localized for display in the default locale.
+     * {@icu} Returns a keyword localized for display in the default <code>DISPLAY</code> locale.
      * @param keyword the keyword to be displayed.
      * @return the localized keyword name.
      * @see #getKeywords()
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public static String getDisplayKeyword(String keyword) {
-        return getDisplayKeywordInternal(keyword, getDefault());
+        return getDisplayKeywordInternal(keyword, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1337,13 +1464,14 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * {@icu} Returns a keyword value localized for display in the default locale.
+     * {@icu} Returns a keyword value localized for display in the default <code>DISPLAY</code> locale.
      * @param keyword the keyword whose value is to be displayed.
      * @return the localized value name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayKeywordValue(String keyword) {
-        return getDisplayKeywordValueInternal(this, keyword, getDefault());
+        return getDisplayKeywordValueInternal(this, keyword, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1395,12 +1523,13 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Returns this locale name localized for display in the default locale.
+     * Returns this locale name localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized locale name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayName() {
-        return getDisplayNameInternal(this, getDefault());
+        return getDisplayNameInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1442,13 +1571,14 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * {@icu} Returns this locale name localized for display in the default locale.
+     * {@icu} Returns this locale name localized for display in the default <code>DISPLAY</code> locale.
      * If a dialect name is present in the locale data, then it is returned.
      * @return the localized locale name.
+     * @see Category#DISPLAY
      * @stable ICU 4.4
      */
     public String getDisplayNameWithDialect() {
-        return getDisplayNameWithDialectInternal(this, getDefault());
+        return getDisplayNameWithDialectInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -3511,11 +3641,9 @@ public final class ULocale implements Serializable {
     }
 
     /*
-     * JDK Locale Mapper
+     * JDK Locale Helper
      */
-    private static final class JDKLocaleMapper {
-        public static final JDKLocaleMapper INSTANCE = new JDKLocaleMapper();
-
+    private static final class JDKLocaleHelper {
         private static boolean isJava7orNewer = false;
 
         /*
@@ -3528,6 +3656,11 @@ public final class ULocale implements Serializable {
         private static Method mGetUnicodeLocaleAttributes;
         private static Method mGetUnicodeLocaleType;
         private static Method mForLanguageTag;
+
+        private static Method mGetDefault;
+        private static Method mSetDefault;
+        private static Object eDISPLAY;
+        private static Object eFORMAT;
 
         /*
          * This table is used for mapping between ICU and special Java
@@ -3545,32 +3678,70 @@ public final class ULocale implements Serializable {
         };
 
         static {
-            try {
-                mGetScript = Locale.class.getMethod("getScript", (Class[]) null);
-                mGetExtensionKeys = Locale.class.getMethod("getExtensionKeys", (Class[]) null);
-                mGetExtension = Locale.class.getMethod("getExtension", char.class);
-                mGetUnicodeLocaleKeys = Locale.class.getMethod("getUnicodeLocaleKeys", (Class[]) null);
-                mGetUnicodeLocaleAttributes = Locale.class.getMethod("getUnicodeLocaleAttributes", (Class[]) null);
-                mGetUnicodeLocaleType = Locale.class.getMethod("getUnicodeLocaleType", String.class);
-                mForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
-                isJava7orNewer = true;
-            } catch (NoSuchMethodException e) {
-                // Java 6 or older
-            }
+            do {
+                try {
+                    mGetScript = Locale.class.getMethod("getScript", (Class[]) null);
+                    mGetExtensionKeys = Locale.class.getMethod("getExtensionKeys", (Class[]) null);
+                    mGetExtension = Locale.class.getMethod("getExtension", char.class);
+                    mGetUnicodeLocaleKeys = Locale.class.getMethod("getUnicodeLocaleKeys", (Class[]) null);
+                    mGetUnicodeLocaleAttributes = Locale.class.getMethod("getUnicodeLocaleAttributes", (Class[]) null);
+                    mGetUnicodeLocaleType = Locale.class.getMethod("getUnicodeLocaleType", String.class);
+                    mForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
+    
+                    Class<?> cCategory = null;
+                    Class<?>[] classes = Locale.class.getDeclaredClasses();
+                    for (Class<?> c : classes) {
+                        if (c.getName().equals("java.util.Locale$Category")) {
+                            cCategory = c;
+                            break;
+                        }
+                    }
+                    if (cCategory == null) {
+                        break;
+                    }
+                    mGetDefault = Locale.class.getDeclaredMethod("getDefault", cCategory);
+                    mSetDefault = Locale.class.getDeclaredMethod("setDefault", cCategory, Locale.class);
+    
+                    Method mName = cCategory.getMethod("name", (Class[]) null);
+                    Object[] enumConstants = cCategory.getEnumConstants();
+                    for (Object e : enumConstants) {
+                        String catVal = (String)mName.invoke(e, (Object[])null);
+                        if (catVal.equals("DISPLAY")) {
+                            eDISPLAY = e;
+                        } else if (catVal.equals("FORMAT")) {
+                            eFORMAT = e;
+                        }
+                    }
+                    if (eDISPLAY == null || eFORMAT == null) {
+                        break;
+                    }    
+                    isJava7orNewer = true;
+                } catch (NoSuchMethodException e) {
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException e) {
+                } catch (SecurityException e) {
+                    // TODO : report?
+                }
+            } while (false);
         }
 
-        private JDKLocaleMapper() {
+        private JDKLocaleHelper() {
         }
 
-        public ULocale toULocale(Locale loc) {
+        public static boolean isJava7orNewer() {
+            return isJava7orNewer;
+        }
+
+        public static ULocale toULocale(Locale loc) {
             return isJava7orNewer ? toULocale7(loc) : toULocale6(loc);
         }
 
-        public Locale toLocale(ULocale uloc) {
+        public static Locale toLocale(ULocale uloc) {
             return isJava7orNewer ? toLocale7(uloc) : toLocale6(uloc);
         }
 
-        private ULocale toULocale7(Locale loc) {
+        private static ULocale toULocale7(Locale loc) {
             String language = loc.getLanguage();
             String script = "";
             String country = loc.getCountry();
@@ -3707,7 +3878,7 @@ public final class ULocale implements Serializable {
             return new ULocale(getName(buf.toString()), loc);
         }
 
-        private ULocale toULocale6(Locale loc) {
+        private static ULocale toULocale6(Locale loc) {
             ULocale uloc = null;
             String locStr = loc.toString();
             if (locStr.length() == 0) {
@@ -3726,7 +3897,7 @@ public final class ULocale implements Serializable {
             return uloc;
         }
 
-        private Locale toLocale7(ULocale uloc) {
+        private static Locale toLocale7(ULocale uloc) {
             Locale loc = null;
             String ulocStr = uloc.getName();
             if (uloc.getScript().length() > 0 || ulocStr.contains("@")) {
@@ -3767,7 +3938,7 @@ public final class ULocale implements Serializable {
             return loc;
         }
 
-        private Locale toLocale6(ULocale uloc) {
+        private static Locale toLocale6(ULocale uloc) {
             String locstr = uloc.getBaseName();
             for (int i = 0; i < JAVA6_MAPDATA.length; i++) {
                 if (locstr.equals(JAVA6_MAPDATA[i][1]) || locstr.equals(JAVA6_MAPDATA[i][4])) {
@@ -3786,6 +3957,58 @@ public final class ULocale implements Serializable {
             LocaleIDParser p = new LocaleIDParser(locstr);
             String[] names = p.getLanguageScriptCountryVariant();
             return new Locale(names[0], names[2], names[3]);
+        }
+
+        public static Locale getDefault(Category category) {
+            Locale loc = Locale.getDefault();
+            if (isJava7orNewer) {
+                Object cat = null;
+                switch (category) {
+                case DISPLAY:
+                    cat = eDISPLAY;
+                    break;
+                case FORMAT:
+                    cat = eFORMAT;
+                    break;
+                }
+                if (cat != null) {
+                    try {
+                        loc = (Locale)mGetDefault.invoke(null, cat);
+                    } catch (InvocationTargetException e) {
+                        // fall through - use the base default
+                    } catch (IllegalArgumentException e) {
+                        // fall through - use the base default
+                    } catch (IllegalAccessException e) {
+                        // fall through - use the base default
+                    }
+                }
+            }
+            return loc;
+        }
+
+        public static void setDefault(Category category, Locale newLocale) {
+            if (isJava7orNewer) {
+                Object cat = null;
+                switch (category) {
+                case DISPLAY:
+                    cat = eDISPLAY;
+                    break;
+                case FORMAT:
+                    cat = eFORMAT;
+                    break;
+                }
+                if (cat != null) {
+                    try {
+                        mSetDefault.invoke(null, cat, newLocale);
+                    } catch (InvocationTargetException e) {
+                        // fall through - no effects
+                    } catch (IllegalArgumentException e) {
+                        // fall through - no effects
+                    } catch (IllegalAccessException e) {
+                        // fall through - no effects
+                    }
+                }
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DateFormatSymbols}.{@icu _usage_}
@@ -126,15 +127,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Constructs a DateFormatSymbols object by loading format data from
-     * resources for the default locale.
+     * resources for the default <code>FORMAT</code> locale.
      *
      * @throws java.util.MissingResourceException if the resources for the default locale
      *          cannot be found or cannot be loaded.
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public DateFormatSymbols()
     {
-        this(ULocale.getDefault());
+        this(ULocale.getDefault(Category.FORMAT));
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  **************************************************************************************
- * Copyright (C) 2009-2010, Google, Inc.; International Business Machines Corporation *
+ * Copyright (C) 2009-2011, Google, Inc.; International Business Machines Corporation *
  * and others. All Rights Reserved.                                                   *
  **************************************************************************************
  */
@@ -10,6 +10,7 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * A class for accessing miscelleneous data in the locale bundles
@@ -189,13 +190,14 @@ public final class LocaleData {
     }
     
     /**
-     * Gets the LocaleData object associated with the default locale
+     * Gets the LocaleData object associated with the default <code>FORMAT</code> locale
      *
      * @return          A locale data object.
+     * @see Category#FORMAT
      * @stable ICU 3.4
      */
     public static final LocaleData getInstance() {
-       return LocaleData.getInstance(ULocale.getDefault());
+       return LocaleData.getInstance(ULocale.getDefault(Category.FORMAT));
     }
 
     /**
