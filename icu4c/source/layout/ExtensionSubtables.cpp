@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 static inline le_uint32 READ_LONG(le_uint32 code) {
     le_uint16* first = ((le_uint16*)&code);
     le_uint16* second = (((le_uint16*)&code) + 1);
-    return (le_uint32)(SWAPW(*first << 16) + SWAPW(*second));
+    return (le_uint32)((SWAPW(*first) << 16) + SWAPW(*second));
 }
 
 // FIXME: should look at the format too... maybe have a sub-class for it?
