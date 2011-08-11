@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ import java.util.Map;
 
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * This class represents the information needed by
@@ -37,11 +38,12 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     private static final long serialVersionUID = 1;
 
     /**
-     * Create a CurrencyPluralInfo object for the default locale.
+     * Create a CurrencyPluralInfo object for the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 4.2
      */
     public CurrencyPluralInfo() {
-        initialize(ULocale.getDefault());
+        initialize(ULocale.getDefault(Category.FORMAT));
     }
 
     /**

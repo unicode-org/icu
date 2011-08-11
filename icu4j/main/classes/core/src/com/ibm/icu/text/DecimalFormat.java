@@ -31,6 +31,7 @@ import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_}
@@ -601,7 +602,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Creates a DecimalFormat using the default pattern and symbols for the default
-     * locale. This is a convenient way to obtain a DecimalFormat when
+     * <code>FORMAT</code> locale. This is a convenient way to obtain a DecimalFormat when
      * internationalization is not the main concern.
      *
      * <p>To obtain standard formats for a given locale, use the factory methods on
@@ -612,10 +613,11 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormat() {
-        ULocale def = ULocale.getDefault();
+        ULocale def = ULocale.getDefault(Category.FORMAT);
         String pattern = getPattern(def, 0);
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
@@ -632,7 +634,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Creates a DecimalFormat from the given pattern and the symbols for the default
-     * locale. This is a convenient way to obtain a DecimalFormat when
+     * <code>FORMAT</code> locale. This is a convenient way to obtain a DecimalFormat when
      * internationalization is not the main concern.
      *
      * <p>To obtain standard formats for a given locale, use the factory methods on
@@ -645,11 +647,12 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormat(String pattern) {
         // Always applyPattern after the symbols are set
-        ULocale def = ULocale.getDefault();
+        ULocale def = ULocale.getDefault(Category.FORMAT);
         this.symbols = new DecimalFormatSymbols(def);
         setCurrency(Currency.getInstance(def));
         applyPatternWithoutExpandAffix(pattern, false);

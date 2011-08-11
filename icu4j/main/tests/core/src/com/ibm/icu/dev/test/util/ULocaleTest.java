@@ -33,6 +33,7 @@ import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Builder;
+import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
@@ -4153,5 +4154,64 @@ public class ULocaleTest extends TestFmwk {
                 assertEquals("toLocale with " + DATA6[i][0], DATA6[i][1], loc);
             }
         }
+    }
+
+    public void TestCategoryDefault() {
+        Locale backupDefault = Locale.getDefault();
+
+        ULocale orgDefault = ULocale.getDefault();
+
+        // Setting a category default won't change default ULocale
+        ULocale uJaJp = new ULocale("ja_JP");
+        ULocale uDeDePhonebook = new ULocale("de_DE@collation=phonebook");
+
+        ULocale.setDefault(Category.DISPLAY, uJaJp);
+        ULocale.setDefault(Category.FORMAT, uDeDePhonebook);
+
+        if (!ULocale.getDefault().equals(orgDefault)) {
+            errln("FAIL: Default ULocale is " + ULocale.getDefault() + ", expected: " + orgDefault);
+        }
+
+        if (!ULocale.getDefault(Category.DISPLAY).equals(uJaJp)) {
+            errln("FAIL: DISPLAY ULocale is " + ULocale.getDefault(Category.DISPLAY) + ", expected: " + uJaJp);
+        }
+
+        if (!ULocale.getDefault(Category.FORMAT).equals(uDeDePhonebook)) {
+            errln("FAIL: FORMAT ULocale is " + ULocale.getDefault(Category.FORMAT) + ", expected: " + uDeDePhonebook);
+        }
+
+        // Setting ULocale default will overrides category defaults
+        ULocale uFrFr = new ULocale("fr_FR");
+
+        ULocale.setDefault(uFrFr);
+
+        if (!ULocale.getDefault(Category.DISPLAY).equals(uFrFr)) {
+            errln("FAIL: DISPLAY ULocale is " + ULocale.getDefault(Category.DISPLAY) + ", expected: " + uFrFr);
+        }
+
+        if (!ULocale.getDefault(Category.FORMAT).equals(uFrFr)) {
+            errln("FAIL: FORMAT ULocale is " + ULocale.getDefault(Category.FORMAT) + ", expected: " + uFrFr);
+        }
+
+        // Setting Locale default will updates ULocale default and category defaults
+        Locale arEg = new Locale("ar", "EG");
+        ULocale uArEg = ULocale.forLocale(arEg);
+
+        Locale.setDefault(arEg);
+
+        if (!ULocale.getDefault().equals(uArEg)) {
+            errln("FAIL: Default ULocale is " + ULocale.getDefault() + ", expected: " + uArEg);
+        }
+
+        if (!ULocale.getDefault(Category.DISPLAY).equals(uArEg)) {
+            errln("FAIL: DISPLAY ULocale is " + ULocale.getDefault(Category.DISPLAY) + ", expected: " + uArEg);
+        }
+
+        if (!ULocale.getDefault(Category.FORMAT).equals(uArEg)) {
+            errln("FAIL: FORMAT ULocale is " + ULocale.getDefault(Category.FORMAT) + ", expected: " + uArEg);
+        }
+
+        // Restore back up
+        Locale.setDefault(backupDefault);
     }
 }

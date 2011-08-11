@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,8 @@ package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * Base class for EthiopicCalendar and CopticCalendar.
@@ -49,20 +51,20 @@ abstract class CECalendar extends Calendar {
 
     /**
      * Constructs a default <code>CECalendar</code> using the current time
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      */
     protected CECalendar() {
-        this(TimeZone.getDefault(), ULocale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**
      * Constructs a <code>CECalendar</code> based on the current time
-     * in the given time zone with the default locale.
+     * in the given time zone with the default <code>FORMAT</code> locale.
      *
      * @param zone The time zone for the new calendar.
      */
     protected CECalendar(TimeZone zone) {
-        this(zone, ULocale.getDefault());
+        this(zone, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -113,7 +115,7 @@ abstract class CECalendar extends Calendar {
 
     /**
      * Constructs a <code>CECalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      *
@@ -123,24 +125,24 @@ abstract class CECalendar extends Calendar {
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
      */
     protected CECalendar(int year, int month, int date) {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.set(year, month, date);
     }
 
     /**
      * Constructs a <code>CECalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param date      The date to which the new calendar is set.
      */
     protected CECalendar(Date date) {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.setTime(date);
     }
 
     /**
      * Constructs a <code>CECalendar</code> with the given date
-     * and time set for the default time zone with the default locale.
+     * and time set for the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
@@ -153,7 +155,7 @@ abstract class CECalendar extends Calendar {
     protected CECalendar(int year, int month, int date, int hour,
                          int minute, int second)
     {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.set(year, month, date, hour, minute, second);
     }
 

@@ -24,6 +24,7 @@ import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.text.TimeZoneNames;
 import com.ibm.icu.text.TimeZoneNames.NameType;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.util.TimeZone}.{@icu _usage_}
@@ -373,15 +374,16 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
-     * in the default locale.
+     * in the default <code>DISPLAY</code> locale.
      * This method returns the long generic name.
      * If the display name is not available for the locale,
      * a fallback based on the country, city, or time zone id will be used.
      * @return the human-readable name of this time zone in the default locale.
+     * @see Category#DISPLAY
      * @stable ICU 2.0
      */
     public final String getDisplayName() {
-        return _getDisplayName(LONG_GENERIC, false, ULocale.getDefault());
+        return _getDisplayName(LONG_GENERIC, false, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**
@@ -416,7 +418,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
-     * in the default locale.
+     * in the default <code>DISPLAY</code> locale.
      * If the display name is not available for the locale,
      * then this method returns a string in the localized GMT offset format
      * such as <code>GMT[+-]HH:mm</code>.
@@ -426,10 +428,11 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * <code>LONG_GENERIC</code>, <code>SHORT_GMT</code>, <code>LONG_GMT</code>,
      * <code>SHORT_COMMONLY_USED</code> or <code>GENERIC_LOCATION</code>.
      * @return the human-readable name of this time zone in the default locale.
+     * @see Category#DISPLAY
      * @stable ICU 2.0
      */
     public final String getDisplayName(boolean daylight, int style) {
-        return getDisplayName(daylight, style, ULocale.getDefault());
+        return getDisplayName(daylight, style, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**

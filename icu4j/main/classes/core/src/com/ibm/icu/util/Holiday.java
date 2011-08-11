@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <b>Note:</b> The Holiday framework is a technology preview.
@@ -28,7 +30,7 @@ public abstract class Holiday implements DateRule
      */
     public static Holiday[] getHolidays()
     {
-        return getHolidays(ULocale.getDefault());
+        return getHolidays(ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -138,12 +140,13 @@ public abstract class Holiday implements DateRule
     }
 
     /**
-     * Return the name of this holiday in the language of the default locale.
+     * Return the name of this holiday in the language of the default <code>DISPLAY</code> locale.
+     * @see Category#DISPLAY
      * @draft ICU 2.8
      * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName() {
-        return getDisplayName(ULocale.getDefault());
+        return getDisplayName(ULocale.getDefault(Category.DISPLAY));
     }
 
     /**

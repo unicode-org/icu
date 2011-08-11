@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2010, International Business Machines
+ * Copyright (C) 2000-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  *********************************************************************
  */
@@ -15,6 +15,7 @@ import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarCache;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <code>ChineseCalendar</code> is a concrete subclass of {@link Calendar}
@@ -153,7 +154,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Constructs a <code>ChineseCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
@@ -161,10 +162,11 @@ public class ChineseCalendar extends Calendar {
      * @param isLeapMonth The value used to set the Chinese calendar's (@link #IS_LEAP_MONTH)
      *                  time field.
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
+     * @see Category#FORMAT
      * @stable ICU 4.0
      */
     public ChineseCalendar(int year, int month, int isLeapMonth, int date) {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
 
         // We need to set the current time once to initialize the ChineseCalendar's
         // ERA field to be the current era.
@@ -181,7 +183,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Constructs a <code>ChineseCalendar</code> with the given date
-     * and time set for the default time zone with the default locale.
+     * and time set for the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year  the value used to set the {@link #YEAR YEAR} time field in the calendar.
      * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
@@ -195,12 +197,13 @@ public class ChineseCalendar extends Calendar {
      *              in the calendar.
      * @param second the value used to set the {@link #SECOND SECOND} time field
      *              in the calendar.
+     * @see Category#FORMAT
      * @stable ICU 4.0
      */
     public ChineseCalendar(int year, int month, int isLeapMonth, int date, int hour,
                              int minute, int second)
     {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
 
         // We need to set the current time once to initialize the ChineseCalendar's
         // ERA field to be the current era.
@@ -220,7 +223,7 @@ public class ChineseCalendar extends Calendar {
 
     /** 
      * Constructs a <code>ChineseCalendar</code> with the given date set 
-     * in the default time zone with the default locale. 
+     * in the default time zone with the default <code>FORMAT</code> locale. 
      * 
      * @param era       The value used to set the calendar's {@link #ERA ERA} time field. 
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field. 
@@ -228,13 +231,14 @@ public class ChineseCalendar extends Calendar {
      *                  The value is 0-based. e.g., 0 for January. 
      * @param isLeapMonth The value used to set the Chinese calendar's (@link #IS_LEAP_MONTH) 
      *                  time field. 
-     * @param date      The value used to set the calendar's {@link #DATE DATE} time field. 
+     * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
+     * @see Category#FORMAT
      * @draft ICU 4.6 
      * @provisional This API might change or be removed in a future release.
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date) 
     { 
-        super(TimeZone.getDefault(), ULocale.getDefault()); 
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT)); 
 
         // We need to set the current time once to initialize the ChineseCalendar's 
         // ERA field to be the current era. 
@@ -253,7 +257,7 @@ public class ChineseCalendar extends Calendar {
   
     /** 
      * Constructs a <code>ChineseCalendar</code> with the given date 
-     * and time set for the default time zone with the default locale. 
+     * and time set for the default time zone with the default <code>FORMAT</code> locale. 
      * 
      * @param era   the value used to set the calendar's {@link #ERA ERA} time field. 
      * @param year  the value used to set the {@link #YEAR YEAR} time field in the calendar. 
@@ -267,14 +271,15 @@ public class ChineseCalendar extends Calendar {
      * @param minute the value used to set the {@link #MINUTE MINUTE} time field 
      *              in the calendar. 
      * @param second the value used to set the {@link #SECOND SECOND} time field 
-     *              in the calendar. 
+     *              in the calendar.
+     * @see Category#FORMAT
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date, int hour, 
                            int minute, int second) 
     { 
-        super(TimeZone.getDefault(), ULocale.getDefault()); 
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT)); 
 
         // We need to set the current time once to initialize the ChineseCalendar's 
         // ERA field to be the current era. 
@@ -307,12 +312,13 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Construct a <code>ChineseCalendar</code> based on the current time
-     * in the given time zone with the default locale.
+     * in the given time zone with the default <code>FORMAT</code> locale.
      * @param zone the given time zone
+     * @see Category#FORMAT
      * @stable ICU 4.0
      */
     public ChineseCalendar(TimeZone zone) {
-        super(zone, ULocale.getDefault());
+        super(zone, ULocale.getDefault(Category.FORMAT));
         setTimeInMillis(System.currentTimeMillis());
     }
 

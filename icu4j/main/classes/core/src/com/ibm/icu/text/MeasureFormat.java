@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2007, International Business Machines
+* Copyright (c) 2004-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -11,6 +11,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * A formatter for Measure objects.  This is an abstract base class.
@@ -46,11 +47,12 @@ public abstract class MeasureFormat extends UFormat {
 
     /**
      * Return a formatter for CurrencyAmount objects in the default
-     * locale.
+     * <code>FORMAT</code> locale.
      * @return a formatter object
+     * @see Category#FORMAT
      * @stable ICU 3.0
      */
     public static MeasureFormat getCurrencyFormat() {
-        return getCurrencyFormat(ULocale.getDefault());
+        return getCurrencyFormat(ULocale.getDefault(Category.FORMAT));
     }
 }
