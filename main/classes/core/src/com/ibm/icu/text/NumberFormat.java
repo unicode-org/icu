@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,6 +26,7 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.NumberFormat}.{@icu _usage_}
@@ -498,16 +499,17 @@ public abstract class NumberFormat extends UFormat {
     //============== Locale Stuff =====================
 
     /**
-     * Returns the default number format for the current default locale.
+     * Returns the default number format for the current default <code>FORMAT</code> locale.
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getIntegerInstance,
      * getCurrencyInstance or getPercentInstance.
      * Exactly which one is locale-dependent.
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getInstance() {
-        return getInstance(ULocale.getDefault(), NUMBERSTYLE);
+        return getInstance(ULocale.getDefault(Category.FORMAT), NUMBERSTYLE);
     }
 
     /**
@@ -533,12 +535,13 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * {@icu} Returns a specific style number format for default locale.
+     * {@icu} Returns a specific style number format for default <code>FORMAT</code> locale.
      * @param style  number format style
+     * @see Category#FORMAT
      * @stable ICU 4.2
      */
     public final static NumberFormat getInstance(int style) {
-        return getInstance(ULocale.getDefault(), style);
+        return getInstance(ULocale.getDefault(Category.FORMAT), style);
     }
 
     /**
@@ -553,11 +556,12 @@ public abstract class NumberFormat extends UFormat {
 
 
     /**
-     * Returns a general-purpose number format for the current default locale.
+     * Returns a general-purpose number format for the current default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public final static NumberFormat getNumberInstance() {
-        return getInstance(ULocale.getDefault(), NUMBERSTYLE);
+        return getInstance(ULocale.getDefault(Category.FORMAT), NUMBERSTYLE);
     }
 
     /**
@@ -577,7 +581,7 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Returns an integer number format for the current default locale. The
+     * Returns an integer number format for the current default <code>FORMAT</code> locale. The
      * returned number format is configured to round floating point numbers
      * to the nearest integer using IEEE half-even rounding (see {@link
      * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
@@ -585,11 +589,12 @@ public abstract class NumberFormat extends UFormat {
      * #isParseIntegerOnly isParseIntegerOnly}).
      *
      * @return a number format for integer values
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getIntegerInstance() {
-        return getInstance(ULocale.getDefault(), INTEGERSTYLE);
+        return getInstance(ULocale.getDefault(Category.FORMAT), INTEGERSTYLE);
     }
 
     /**
@@ -626,12 +631,13 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Returns a currency format for the current default locale.
+     * Returns a currency format for the current default <code>FORMAT</code> locale.
      * @return a number format for currency
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public final static NumberFormat getCurrencyInstance() {
-        return getInstance(ULocale.getDefault(), CURRENCYSTYLE);
+        return getInstance(ULocale.getDefault(Category.FORMAT), CURRENCYSTYLE);
     }
 
     /**
@@ -653,12 +659,13 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Returns a percentage format for the current default locale.
+     * Returns a percentage format for the current default <code>FORMAT</code> locale.
      * @return a number format for percents
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public final static NumberFormat getPercentInstance() {
-        return getInstance(ULocale.getDefault(), PERCENTSTYLE);
+        return getInstance(ULocale.getDefault(Category.FORMAT), PERCENTSTYLE);
     }
 
     /**
@@ -680,12 +687,13 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * {@icu} Returns a scientific format for the current default locale.
+     * {@icu} Returns a scientific format for the current default <code>FORMAT</code> locale.
      * @return a scientific number format
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public final static NumberFormat getScientificInstance() {
-        return getInstance(ULocale.getDefault(), SCIENTIFICSTYLE);
+        return getInstance(ULocale.getDefault(Category.FORMAT), SCIENTIFICSTYLE);
     }
 
     /**
@@ -1197,7 +1205,7 @@ public abstract class NumberFormat extends UFormat {
         if (c == null) {
             ULocale uloc = getLocale(ULocale.VALID_LOCALE);
             if (uloc == null) {
-                uloc = ULocale.getDefault();
+                uloc = ULocale.getDefault(Category.FORMAT);
             }
             c = Currency.getInstance(uloc);
         }

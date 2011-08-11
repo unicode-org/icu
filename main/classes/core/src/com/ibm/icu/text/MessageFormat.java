@@ -34,6 +34,7 @@ import java.util.Set;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.MessageFormat}.{@icu _usage_}
@@ -381,7 +382,7 @@ public class MessageFormat extends UFormat {
     static final long serialVersionUID = 7136212545847378651L;
 
     /**
-     * Constructs a MessageFormat for the default locale and the
+     * Constructs a MessageFormat for the default <code>FORMAT</code> locale and the
      * specified pattern.
      * The constructor first sets the locale, then parses the pattern and
      * creates a list of subformats for the format elements contained in it.
@@ -390,10 +391,11 @@ public class MessageFormat extends UFormat {
      *
      * @param pattern the pattern for this message format
      * @exception IllegalArgumentException if the pattern is invalid
+     * @see Category#FORMAT
      * @stable ICU 3.0
      */
     public MessageFormat(String pattern) {
-        this.ulocale = ULocale.getDefault();
+        this.ulocale = ULocale.getDefault(Category.FORMAT);
         applyPattern(pattern);
     }
 

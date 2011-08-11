@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarCache;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>
@@ -163,23 +164,25 @@ public class IslamicCalendar extends Calendar {
 
     /**
      * Constructs a default <code>IslamicCalendar</code> using the current time
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 2.8
      */
     public IslamicCalendar()
     {
-        this(TimeZone.getDefault(), ULocale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**
      * Constructs an <code>IslamicCalendar</code> based on the current time
-     * in the given time zone with the default locale.
+     * in the given time zone with the default <code>FORMAT</code> locale.
      * @param zone the given time zone.
+     * @see Category#FORMAT
      * @stable ICU 2.8
      */
     public IslamicCalendar(TimeZone zone)
     {
-        this(zone, ULocale.getDefault());
+        this(zone, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -236,29 +239,31 @@ public class IslamicCalendar extends Calendar {
 
     /**
      * Constructs an <code>IslamicCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param date      The date to which the new calendar is set.
+     * @see Category#FORMAT
      * @stable ICU 2.8
      */
     public IslamicCalendar(Date date) {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.setTime(date);
     }
 
     /**
      * Constructs an <code>IslamicCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year the value used to set the {@link #YEAR YEAR} time field in the calendar.
      * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
      *              Note that the month value is 0-based. e.g., 0 for Muharram.
      * @param date the value used to set the {@link #DATE DATE} time field in the calendar.
+     * @see Category#FORMAT
      * @stable ICU 2.8
      */
     public IslamicCalendar(int year, int month, int date)
     {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.set(Calendar.YEAR, year);
         this.set(Calendar.MONTH, month);
         this.set(Calendar.DATE, date);
@@ -266,7 +271,7 @@ public class IslamicCalendar extends Calendar {
 
     /**
      * Constructs an <code>IslamicCalendar</code> with the given date
-     * and time set for the default time zone with the default locale.
+     * and time set for the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year  the value used to set the {@link #YEAR YEAR} time field in the calendar.
      * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
@@ -278,12 +283,13 @@ public class IslamicCalendar extends Calendar {
      *              in the calendar.
      * @param second the value used to set the {@link #SECOND SECOND} time field
      *              in the calendar.
+     * @see Category#FORMAT
      * @stable ICU 2.8
      */
     public IslamicCalendar(int year, int month, int date, int hour,
                              int minute, int second)
     {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.set(Calendar.YEAR, year);
         this.set(Calendar.MONTH, month);
         this.set(Calendar.DATE, date);

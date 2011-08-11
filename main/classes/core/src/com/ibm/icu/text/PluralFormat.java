@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <p>
@@ -189,7 +190,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat() {
-        init(null, ULocale.getDefault());
+        init(null, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -211,7 +212,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules) {
-        init(rules, ULocale.getDefault());
+        init(rules, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -236,7 +237,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(String pattern) {
-        init(null, ULocale.getDefault());
+        init(null, ULocale.getDefault(Category.FORMAT));
         applyPattern(pattern);
     }
 
@@ -268,7 +269,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules, String pattern) {
-        init(rules, ULocale.getDefault());
+        init(rules, ULocale.getDefault(Category.FORMAT));
         applyPattern(pattern);
     }
 
@@ -510,12 +511,13 @@ public class PluralFormat extends UFormat {
      *     constructed from {@link #PluralFormat(ULocale)}.
      * @param ulocale the <code>ULocale</code> used to configure the
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
-     *     default locale will be used.
+     *     default <code>FORMAT</code> locale will be used.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public void setLocale(ULocale ulocale) {
         if (ulocale == null) {
-            ulocale = ULocale.getDefault();
+            ulocale = ULocale.getDefault(Category.FORMAT);
         }
         init(null, ulocale);
     }

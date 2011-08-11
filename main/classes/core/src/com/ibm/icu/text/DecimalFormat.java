@@ -31,6 +31,7 @@ import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_}
@@ -601,7 +602,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Creates a DecimalFormat using the default pattern and symbols for the default
-     * locale. This is a convenient way to obtain a DecimalFormat when
+     * <code>FORMAT</code> locale. This is a convenient way to obtain a DecimalFormat when
      * internationalization is not the main concern.
      *
      * <p>To obtain standard formats for a given locale, use the factory methods on
@@ -612,10 +613,11 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormat() {
-        ULocale def = ULocale.getDefault();
+        ULocale def = ULocale.getDefault(Category.FORMAT);
         String pattern = getPattern(def, 0);
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
@@ -632,7 +634,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Creates a DecimalFormat from the given pattern and the symbols for the default
-     * locale. This is a convenient way to obtain a DecimalFormat when
+     * <code>FORMAT</code> locale. This is a convenient way to obtain a DecimalFormat when
      * internationalization is not the main concern.
      *
      * <p>To obtain standard formats for a given locale, use the factory methods on
@@ -645,11 +647,12 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormat(String pattern) {
         // Always applyPattern after the symbols are set
-        ULocale def = ULocale.getDefault();
+        ULocale def = ULocale.getDefault(Category.FORMAT);
         this.symbols = new DecimalFormatSymbols(def);
         setCurrency(Currency.getInstance(def));
         applyPatternWithoutExpandAffix(pattern, false);
@@ -689,7 +692,7 @@ public class DecimalFormat extends NumberFormat {
         setCurrencyForSymbols();
         applyPatternWithoutExpandAffix(pattern, false);
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-            currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
+            currencyPluralInfo = new CurrencyPluralInfo(symbols.getULocale());
         } else {
             expandAffixAdjustWidth(null);
         }
@@ -758,7 +761,7 @@ public class DecimalFormat extends NumberFormat {
     DecimalFormat(String pattern, DecimalFormatSymbols inputSymbols, int style) {
         CurrencyPluralInfo info = null;
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
-            info = new CurrencyPluralInfo(inputSymbols.getLocale());
+            info = new CurrencyPluralInfo(inputSymbols.getULocale());
         }
         create(pattern, inputSymbols, info, style);
     }
@@ -1882,7 +1885,7 @@ public class DecimalFormat extends NumberFormat {
     // currency plural pattern (CurrencyUnitPatterns).
     private void setupCurrencyAffixForAllPatterns() {
         if (currencyPluralInfo == null) {
-            currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
+            currencyPluralInfo = new CurrencyPluralInfo(symbols.getULocale());
         }
         affixPatternsForCurrency = new HashSet<AffixForCurrency>();
 
@@ -1893,7 +1896,7 @@ public class DecimalFormat extends NumberFormat {
         // CURRENCYSTYLE and ISOCURRENCYSTYLE should have the same prefix and suffix, so,
         // only need to save one of them.  Here, chose onlyApplyPatternWithoutExpandAffix
         // without saving the actualy pattern in 'pattern' data member.  TODO: is it uloc?
-        applyPatternWithoutExpandAffix(getPattern(symbols.getLocale(), NumberFormat.CURRENCYSTYLE),
+        applyPatternWithoutExpandAffix(getPattern(symbols.getULocale(), NumberFormat.CURRENCYSTYLE),
                                        false);
         AffixForCurrency affixes = new AffixForCurrency(
             negPrefixPattern, negSuffixPattern, posPrefixPattern, posSuffixPattern,
@@ -2811,12 +2814,12 @@ public class DecimalFormat extends NumberFormat {
         // object. If it is a default symbols object for its locale, we change the
         // currency object to one for that locale. If it is custom, we set the currency to
         // null.
-        DecimalFormatSymbols def = new DecimalFormatSymbols(symbols.getLocale());
+        DecimalFormatSymbols def = new DecimalFormatSymbols(symbols.getULocale());
 
         if (symbols.getCurrencySymbol().equals(def.getCurrencySymbol())
                 && symbols.getInternationalCurrencySymbol()
                        .equals(def.getInternationalCurrencySymbol())) {
-            setCurrency(Currency.getInstance(symbols.getLocale()));
+            setCurrency(Currency.getInstance(symbols.getULocale()));
         } else {
             setCurrency(null);
         }
@@ -4703,7 +4706,7 @@ public class DecimalFormat extends NumberFormat {
             // initialize currencyPluralInfo if needed
             if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT
                 && currencyPluralInfo == null) {
-                currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
+                currencyPluralInfo = new CurrencyPluralInfo(symbols.getULocale());
             }
         }
     }
