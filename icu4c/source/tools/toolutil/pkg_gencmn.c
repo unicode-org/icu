@@ -411,7 +411,7 @@ addFile(const char *filename, const char *name, const char *source, UBool source
       fileMax += CHUNK_FILE_COUNT;
       files = uprv_realloc(files, fileMax*sizeof(files[0])); /* note: never freed. */
       if(files==NULL) {
-        fprintf(stderr, "pkgdata/gencmn: Could not allocate %ld bytes for %d files\n", (fileMax*sizeof(files[0])), fileCount);
+        fprintf(stderr, "pkgdata/gencmn: Could not allocate %u bytes for %d files\n", (fileMax*sizeof(files[0])), fileCount);
         exit(U_MEMORY_ALLOCATION_ERROR);
       }
     }
