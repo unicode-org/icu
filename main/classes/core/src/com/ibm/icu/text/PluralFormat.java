@@ -184,9 +184,10 @@ public class PluralFormat extends UFormat {
     private NumberFormat numberFormat = null;
 
     /**
-     * Creates a new <code>PluralFormat</code> for the default locale.
+     * Creates a new <code>PluralFormat</code> for the default <code>FORMAT</code> locale.
      * This locale will be used to get the set of plural rules and for standard
      * number formatting.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat() {
@@ -206,9 +207,10 @@ public class PluralFormat extends UFormat {
 
     /**
      * Creates a new <code>PluralFormat</code> for a given set of rules.
-     * The standard number formatting will be done using the default locale.
+     * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules) {
@@ -230,10 +232,11 @@ public class PluralFormat extends UFormat {
 
     /**
      * Creates a new <code>PluralFormat</code> for a given pattern string.
-     * The default locale will be used to get the set of plural rules and for
+     * The default <code>FORMAT</code> locale will be used to get the set of plural rules and for
      * standard number formatting.
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat(String pattern) {
@@ -261,11 +264,12 @@ public class PluralFormat extends UFormat {
     /**
      * Creates a new <code>PluralFormat</code> for a given set of rules and a
      * pattern.
-     * The standard number formatting will be done using the default locale.
+     * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules, String pattern) {
