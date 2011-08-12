@@ -513,7 +513,9 @@ static int runCommand(const char* command, UBool specialHandling) {
         goto normal_command_mode;
 #endif
     } else {
+#if !(defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW || U_PLATFORM == U_PF_OS400)
 normal_command_mode:
+#endif
         cmd = (char *)command;
     }
 
@@ -937,7 +939,9 @@ static int32_t pkg_createSymLinks(const char *targetDir, UBool specialHandling) 
         goto normal_symlink_mode;
 #endif
     } else {
+#if U_PLATFORM != U_PF_CYGWIN
 normal_symlink_mode:
+#endif
         sprintf(name1, "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[SO_EXT]);
         sprintf(name2, "%s", libFileNames[LIB_FILE_VERSION]);
     }

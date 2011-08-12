@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -330,7 +330,7 @@ parseFile(FileStream *in) {
         /* Read non-empty lines that don't start with a space character. */
         while (T_FileStream_readLine(in, lastLine, MAX_LINE_SIZE) != NULL) {
             lastLineSize = chomp(lastLine);
-            if (lineSize == 0 || (lastLineSize > 0 && isspace(*lastLine))) {
+            if (lineSize == 0 || (lastLineSize > 0 && isspace((int)*lastLine))) {
                 uprv_strcpy(line + lineSize, lastLine);
                 lineSize += lastLineSize;
             } else if (lineSize > 0) {
@@ -341,7 +341,7 @@ parseFile(FileStream *in) {
         }
 
         if (validParse || lineSize > 0) {
-            if (isspace(*line)) {
+            if (isspace((int)*line)) {
                 fprintf(stderr, "%s:%d: error: cannot start an alias with a space\n", path, lineNum-1);
                 exit(U_PARSE_ERROR);
             } else if (line[0] == '{') {
@@ -386,7 +386,7 @@ chomp(char *line) {
             *s = 0;
             break;
         }
-        if (!isspace(*s)) {
+        if (!isspace((int)*s)) {
             lastNonSpace = s;
         }
         ++s;
@@ -417,7 +417,7 @@ parseLine(const char *line) {
 
     /* get the converter name */
     start=pos;
-    while(line[pos]!=0 && !isspace(line[pos])) {
+    while(line[pos]!=0 && !isspace((int)line[pos])) {
         ++pos;
     }
     limit=pos;
@@ -436,7 +436,7 @@ parseLine(const char *line) {
     for(;;) {
 
         /* skip white space */
-        while(line[pos]!=0 && isspace(line[pos])) {
+        while(line[pos]!=0 && isspace((int)line[pos])) {
             ++pos;
         }
 
@@ -447,7 +447,7 @@ parseLine(const char *line) {
 
         /* get an alias name */
         start=pos;
-        while(line[pos]!=0 && line[pos]!='{' && !isspace(line[pos])) {
+        while(line[pos]!=0 && line[pos]!='{' && !isspace((int)line[pos])) {
             ++pos;
         }
         limit=pos;
@@ -469,7 +469,7 @@ parseLine(const char *line) {
         /* addAlias(alias, 0, cnv, FALSE);*/
 
         /* skip whitespace */
-        while (line[pos] && isspace(line[pos])) {
+        while (line[pos] && isspace((int)line[pos])) {
             ++pos;
         }
 
@@ -478,7 +478,7 @@ parseLine(const char *line) {
             ++pos;
             do {
                 start = pos;
-                while (line[pos] && line[pos] != '}' && !isspace( line[pos])) {
+                while (line[pos] && line[pos] != '}' && !isspace((int)line[pos])) {
                     ++pos;
                 }
                 limit = pos;
@@ -489,7 +489,7 @@ parseLine(const char *line) {
                     addAlias(alias, tag, cnv, (UBool)(line[limit-1] == '*'));
                 }
 
-                while (line[pos] && isspace(line[pos])) {
+                while (line[pos] && isspace((int)line[pos])) {
                     ++pos;
                 }
             } while (line[pos] && line[pos] != '}');
