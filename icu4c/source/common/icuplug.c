@@ -755,29 +755,29 @@ uplug_init(UErrorCode *status) {
           continue;
         } else {
           p = linebuf;
-          while(*p&&isspace(*p))
+          while(*p&&isspace((int)*p))
             p++;
           if(!*p || *p=='#') continue;
           libName = p;
-          while(*p&&!isspace(*p)) {
+          while(*p&&!isspace((int)*p)) {
             p++;
           }
           if(!*p || *p=='#') continue; /* no tab after libname */
           *p=0; /* end of libname */
           p++;
-          while(*p&&isspace(*p)) {
+          while(*p&&isspace((int)*p)) {
             p++;
           }
           if(!*p||*p=='#') continue; /* no symname after libname +tab */
           symName = p;
-          while(*p&&!isspace(*p)) {
+          while(*p&&!isspace((int)*p)) {
             p++;
           }
                     
           if(*p) { /* has config */
             *p=0;
             ++p;
-            while(*p&&isspace(*p)) {
+            while(*p&&isspace((int)*p)) {
               p++;
             }
             if(*p) {
@@ -788,7 +788,7 @@ uplug_init(UErrorCode *status) {
           /* chop whitespace at the end of the config */
           if(config!=NULL&&*config!=0) {
             p = config+strlen(config);
-            while(p>config&&isspace(*(--p))) {
+            while(p>config&&isspace((int)*(--p))) {
               *p=0;
             }
           }

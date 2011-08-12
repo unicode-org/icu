@@ -1213,13 +1213,13 @@ ctest_xml_init(const char *rootName) {
     fprintf(stderr," Error: couldn't open XML output file %s\n", XML_FILE_NAME);
     return 1;
   }
-  while(*rootName&&!isalnum(*rootName)) {
+  while(*rootName&&!isalnum((int)*rootName)) {
     rootName++;
   }
   strcpy(XML_PREFIX,rootName);
   {
     char *p = XML_PREFIX+strlen(XML_PREFIX);
-    for(p--;*p&&p>XML_PREFIX&&!isalnum(*p);p--) {
+    for(p--;*p&&p>XML_PREFIX&&!isalnum((int)*p);p--) {
       *p=0;
     }
   }
