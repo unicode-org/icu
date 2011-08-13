@@ -1309,6 +1309,7 @@ static void TestCurrencyList(void){
 }
 
 static void TestAvailableIsoCodes(void){
+#if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
     const char* eurCode = "EUR";
     const char* usdCode = "USD";
@@ -1404,6 +1405,7 @@ static void TestAvailableIsoCodes(void){
     }
 
     free(isoCode);
+#endif
 }
 
 #define TESTCASE(name) addTest(root, &name, "tsutil/cldrtest/" #name)

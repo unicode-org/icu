@@ -928,6 +928,14 @@ private:
 
 U_NAMESPACE_END
 
+#else
+U_NAMESPACE_BEGIN
+class MessagePattern; /* forward reference, though draft API. */
+enum UMessagePatternApostropheMode{};
+typedef enum UMessagePatternApostropheMode UMessagePatternApostropheMode;
+
+U_NAMESPACE_END
+
 #endif  /* U_HIDE_DRAFT_API */
 #endif  // !UCONFIG_NO_FORMATTING
 

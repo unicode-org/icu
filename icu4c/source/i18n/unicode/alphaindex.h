@@ -14,6 +14,9 @@
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 
+
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
+
 /**
  * \file
  * \brief C++ API: Index Characters
@@ -620,10 +623,9 @@ private:
 
   public:
 
-#ifndef U_HIDE_INTERNAL_API
     /** 
       * Language Types.  For internal ICU use only.
-      * @internal
+      * @internal (but not hidden with U_HIDE_INTERNAL_API because it is used in public API)
       */
     enum ELangType {
         /** @internal */
@@ -639,7 +641,6 @@ private:
       * @internal
       */
     static ELangType  langTypeFromLocale(const Locale &loc);
-#endif  /* U_HIDE_INTERNAL_API */
 
 
    private:
@@ -725,4 +726,5 @@ private:
 U_NAMESPACE_END
 
 #endif  /* U_HIDE_DRAFT_API */
+#endif /* UCONFIG_NO_COLLATION / UCONFIG_NO_NORMALIZATION */
 #endif

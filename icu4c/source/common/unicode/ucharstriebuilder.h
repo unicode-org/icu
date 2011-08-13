@@ -139,6 +139,7 @@ private:
     virtual int32_t getMinLinearMatch() const { return UCharsTrie::kMinLinearMatch; }
     virtual int32_t getMaxLinearMatchLength() const { return UCharsTrie::kMaxLinearMatchLength; }
 
+#ifndef U_HIDE_INTERNAL_API
     class UCTLinearMatchNode : public LinearMatchNode {
     public:
         UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode);
@@ -147,6 +148,7 @@ private:
     private:
         const UChar *s;
     };
+#endif
 
     virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
                                         Node *nextNode) const;

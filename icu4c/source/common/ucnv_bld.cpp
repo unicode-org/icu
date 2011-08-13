@@ -88,7 +88,12 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
 
     &_ASCIIData,
     &_UTF7Data, &_Bocu1Data, &_UTF16Data, &_UTF32Data, &_CESU8Data, &_IMAPData,
+
+#if UCONFIG_NO_LEGACY_CONVERSION
+    NULL,
+#else
     &_CompoundTextData
+#endif
 };
 
 /* Please keep this in binary sorted order for getAlgorithmicTypeFromName.
