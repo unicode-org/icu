@@ -1555,7 +1555,7 @@ uregex_getMatchCallback(const URegularExpression    *regexp,
                         const void                 **context,
                         UErrorCode                  *status);
 
-#ifndef U_HIDE_DRAFT_API
+/* #ifndef U_HIDE_DRAFT_API -- Don't hide this, used in regex.h */
 /**
  * Function pointer for a regular expression find callback function.
  * 
@@ -1591,6 +1591,8 @@ typedef UBool U_CALLCONV URegexFindProgressCallback (
                    const void *context,
                    int64_t     matchIndex);
 U_CDECL_END
+
+#ifndef U_HIDE_DRAFT_API
 
 /**
  *  Set the find progress callback function for this URegularExpression.

@@ -2309,10 +2309,12 @@ DecimalFormat::format(int32_t number,
     return format((int64_t)number, appendTo, pos);
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline const UnicodeString &
 DecimalFormat::getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const {
     return fSymbols->getConstSymbol(symbol);
 }
+#endif
 
 U_NAMESPACE_END
 

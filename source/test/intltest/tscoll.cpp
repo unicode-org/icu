@@ -98,7 +98,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
       //TESTCLASS(21, RandomCollatorTest); // See ticket 5747 about reenabling this test.
       TESTCLASS(21, SSearchTest);
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
       TESTCLASS(22, AlphabeticIndexTest);
+#endif
 
       default: name = ""; break;
     }

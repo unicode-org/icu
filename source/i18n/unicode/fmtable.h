@@ -665,9 +665,12 @@ inline UnicodeString& Formattable::getString(void) {
     return *fValue.fString;
 }
 
+#ifndef U_HIDE_DEPRECATED_API
 inline int32_t Formattable::getLong(UErrorCode* status) const {
     return getLong(*status);
 }
+#endif
+
 
 U_NAMESPACE_END
 

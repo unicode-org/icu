@@ -254,7 +254,7 @@ typedef enum UNumberFormatPadPosition {
     UNUM_PAD_AFTER_SUFFIX
 } UNumberFormatPadPosition;
 
-#ifndef U_HIDE_DRAFT_API
+/* #ifndef U_HIDE_DRAFT_API:  can't hide- used in dcfmtshm.h for size of DecimalFormatSymbols */
 /**
  * Constants for specifying currency spacing
  * @draft ICU 4.8
@@ -266,7 +266,7 @@ enum UCurrencySpacing {
     UNUM_CURRENCY_SPACING_COUNT
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @draft ICU 4.8 */
-#endif  /* U_HIDE_DRAFT_API */
+/* #endif  U_HIDE_DRAFT_API */
 
 /**
  * Create and return a new UNumberFormat for formatting and parsing

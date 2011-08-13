@@ -12,6 +12,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/alphaindex.h"
 #include "unicode/coll.h"
 #include "unicode/normalizer2.h"
@@ -1309,3 +1311,5 @@ AlphabeticIndex::Bucket::~Bucket() {
 }
 
 U_NAMESPACE_END
+
+#endif
