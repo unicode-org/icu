@@ -2256,11 +2256,13 @@ Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
     roll(field, (int32_t)(up ? +1 : -1), status);
 }
 
+#ifndef U_HIDE_DEPRECATED_API
 inline void
 Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
 {
     roll((UCalendarDateFields) field, up, status);
 }
+#endif
 
 
 // -------------------------------------
@@ -2278,11 +2280,13 @@ Calendar::internalSet(UCalendarDateFields field, int32_t value)
     fIsSet[field]     = TRUE; // Remove later
 }
 
+
+#ifndef U_HIDE_INTERNAL_API
 inline int32_t  Calendar::weekNumber(int32_t dayOfPeriod, int32_t dayOfWeek)
 {
   return weekNumber(dayOfPeriod, dayOfPeriod, dayOfWeek);
 }
-
+#endif
 
 U_NAMESPACE_END
 

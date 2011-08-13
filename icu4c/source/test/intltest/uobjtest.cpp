@@ -480,7 +480,10 @@ void UObjectTest::testIDs()
 //    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
 //#endif
 #endif
+
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
     TESTCLASSID_NONE_CTOR(AlphabeticIndex, (Locale::getEnglish(), status));
+#endif
 
 #if UOBJTEST_DUMP_IDS
     int i;

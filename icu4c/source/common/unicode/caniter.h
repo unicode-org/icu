@@ -1,3 +1,5 @@
+/* spam */
+
 /*
  *******************************************************************************
  * Copyright (C) 1996-2011, International Business Machines Corporation and
