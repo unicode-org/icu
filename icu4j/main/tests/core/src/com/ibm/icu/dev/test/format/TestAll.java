@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2010, International Business Machines
+ * Copyright (c) 2004-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc.                                            
  *******************************************************************************
@@ -122,6 +122,7 @@ public class TestAll extends TestGroup {
             super(new String[] {
                 "TestMessageFormat",
                 "MessageRegression",
+                "MessagePatternUtilTest",
             });
         }
     }
