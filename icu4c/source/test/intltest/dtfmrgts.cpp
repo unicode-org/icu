@@ -362,7 +362,6 @@ void DateFormatRegressionTest::Test4060212(void)
         errln((UnicodeString) "Fail: Got " + cal->get(UCAL_DAY_OF_YEAR, status) +
                             " Want 40");
 
-#if 0
     // this is an odd usage of "ddd" and it doesn't
     // work now that date values are range checked per #3579.
     logln("Using yyyy-ddd.hh:mm:ss");
@@ -379,7 +378,6 @@ void DateFormatRegressionTest::Test4060212(void)
     if ((cal->get(UCAL_DAY_OF_YEAR, status) != 40) || failure(status, "cal->get"))
         errln((UnicodeString) "Fail: Got " + cal->get(UCAL_DAY_OF_YEAR, status) +
                             " Want 40");
-#endif
 
     delete formatter;
     delete fmt;
@@ -401,8 +399,8 @@ void DateFormatRegressionTest::Test4061287(void)
     }
     failure(status, "new SimpleDateFormat");
     //try {
-    logln(UnicodeString("") + df->parse("30/02/1971", status));  
-    failure(status, "df->parse(\"30/02/1971\")");
+    logln(UnicodeString("") + df->parse("35/01/1971", status));  
+    failure(status, "df->parse(\"35/01/1971\")");
     //logln(df.parse("35/01/1971").toString());
     //}
     /*catch (ParseException e) {
@@ -412,7 +410,7 @@ void DateFormatRegressionTest::Test4061287(void)
     df->setLenient(FALSE);
     UBool ok = FALSE;
     //try {
-    logln(UnicodeString("") + df->parse("30/02/1971", status));
+    logln(UnicodeString("") + df->parse("35/01/1971", status));
     if(U_FAILURE(status))
         ok = TRUE;
     //logln(df.parse("35/01/1971").toString());
