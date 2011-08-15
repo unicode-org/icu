@@ -946,6 +946,8 @@ tools/multi/proj/chello/out
 tools/multi/proj/provider/Makefile.local
 tools/multi/proj/provider/out
 tools/multi/tmp
+tools/release/c/uconfigtest
+tools/release/c/uconfigtest.local
 tools/release/java/APIChangeReport*
 tools/release/java/Makefile.local
 tools/release/java/classes
