@@ -56,7 +56,9 @@ public:
      */
     static le_uint16 swapWord(le_uint16 value)
     {
-#if (defined(U_IS_BIG_ENDIAN) && U_IS_BIG_ENDIAN) || (defined(BYTE_ORDER) && defined(BIG_ENDIAN)) || defined(__BIG_ENDIAN__)
+#if (defined(U_IS_BIG_ENDIAN) && U_IS_BIG_ENDIAN) || \
+    (defined(BYTE_ORDER) && defined(BIG_ENDIAN) && (BYTE_ORDER == BIG_ENDIAN)) || \
+    defined(__BIG_ENDIAN__)
         // Fastpath when we know that the platform is big-endian.
         return value;
 #else
