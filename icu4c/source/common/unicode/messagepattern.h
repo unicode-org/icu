@@ -23,7 +23,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
+/* #ifndef U_HIDE_DRAFT_API -- cannot be hidden, as this API is used by other API public classes. */
 
 #include "unicode/parseerr.h"
 #include "unicode/unistr.h"
@@ -928,15 +928,6 @@ private:
 
 U_NAMESPACE_END
 
-#else
-U_NAMESPACE_BEGIN
-class MessagePattern; /* forward reference, though draft API. */
-enum UMessagePatternApostropheMode{};
-typedef enum UMessagePatternApostropheMode UMessagePatternApostropheMode;
-
-U_NAMESPACE_END
-
-#endif  /* U_HIDE_DRAFT_API */
 #endif  // !UCONFIG_NO_FORMATTING
 
 #endif  // __MESSAGEPATTERN_H__
