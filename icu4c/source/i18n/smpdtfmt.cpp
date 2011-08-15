@@ -2619,14 +2619,15 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             else {
                 txtLoc = checkIntSuffix(text, txtLoc, patLoc+1, FALSE);
             }
-            
-            // Check the range of the value
-            int32_t bias = gFieldRangeBias[patternCharIndex];
-            
-            if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
-                return -start;
+
+            if (!lenient) {
+                // Check the range of the value
+                int32_t bias = gFieldRangeBias[patternCharIndex];
+                if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
+                    return -start;
+                }
             }
-            
+
             pos.setIndex(txtLoc);
         }
     }
@@ -3141,14 +3142,17 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         parseInt(*src, number, pos, allowNegative,currentNumberFormat);
         if (pos.getIndex() != parseStart) {
             int32_t value = number.getLong();
-            
-            // Check the range of the value
-            int32_t bias = gFieldRangeBias[patternCharIndex];
-            
-            if (bias < 0 || (value >= cal.getMinimum(field) + bias && value <= cal.getMaximum(field) + bias)) {
-                cal.set(field, value);
-                return pos.getIndex();
+
+            if (!lenient) {
+                // Check the range of the value
+                int32_t bias = gFieldRangeBias[patternCharIndex];
+                if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
+                    return -start;
+                }
             }
+
+            cal.set(field, value);
+            return pos.getIndex();
         }
         return -start;
     }
