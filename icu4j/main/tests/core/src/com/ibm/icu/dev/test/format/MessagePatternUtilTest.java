@@ -15,11 +15,11 @@ import java.util.List;
 
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
-import com.ibm.icu.text.MessagePatternUtil.MessageNode;
-import com.ibm.icu.text.MessagePatternUtil.MessageContentsNode;
-import com.ibm.icu.text.MessagePatternUtil.TextNode;
 import com.ibm.icu.text.MessagePatternUtil.ArgNode;
 import com.ibm.icu.text.MessagePatternUtil.ComplexArgStyleNode;
+import com.ibm.icu.text.MessagePatternUtil.MessageContentsNode;
+import com.ibm.icu.text.MessagePatternUtil.MessageNode;
+import com.ibm.icu.text.MessagePatternUtil.TextNode;
 import com.ibm.icu.text.MessagePatternUtil.VariantNode;
 
 /**
@@ -375,6 +375,19 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
                     expectTextThatContains("num=").expectReplaceNumber().
                     expectTextThatContains("#=").expectReplaceNumber().
                     expectTextThatContains("#=").expectSimpleArg(1, "number", "##").
+                    expectTextThatContains("!").finishVariant().
+                finishComplexArg().
+            expectTextThatContains("_z");
+        expect.checkMatches(msg);
+        // Plural with explicit offset:0.
+        msg = MessagePatternUtil.buildMessageNode(
+                "a_{0,plural,offset:0 other{num=#!}}_z");
+        expect = new ExpectMessageNode().
+            expectTextThatContains("a_").
+            expectPluralArg(0).
+                expectOffset(0).
+                expectVariant("other").
+                    expectTextThatContains("num=").expectReplaceNumber().
                     expectTextThatContains("!").finishVariant().
                 finishComplexArg().
             expectTextThatContains("_z");
