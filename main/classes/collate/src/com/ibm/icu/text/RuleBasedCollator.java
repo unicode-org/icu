@@ -3939,7 +3939,7 @@ public final class RuleBasedCollator extends Collator {
         }
 
         // Set the compression values
-        int total3 = m_top3_ - COMMON_BOTTOM_3_ - 1;
+        int total3 = m_top3_ - m_bottom3_ - 1;
         // we multilply double with int, but need only int
         m_topCount3_ = (int) (PROPORTION_3_ * total3);
         m_bottomCount3_ = total3 - m_topCount3_;
