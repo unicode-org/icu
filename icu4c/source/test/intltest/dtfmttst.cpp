@@ -83,9 +83,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(43,TestFormalChineseDate);
         TESTCASE(44,TestNumberAsStringParsing);
         TESTCASE(45,TestStandAloneGMTParse);
+        TESTCASE(46,TestParsePosition);
         /*
-        TESTCASE(46,TestRelativeError);
-        TESTCASE(47,TestRelativeOther);
+        TESTCASE(47,TestRelativeError);
+        TESTCASE(48,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3595,6 +3596,51 @@ void DateFormatTest::TestStandAloneGMTParse() {
             if (pos.getIndex() != 3) {
                 errln((UnicodeString)"FAIL: Incorrect output parse position: actual=" + pos.getIndex() + " expected=3");
             }
+        }
+
+        delete sdf;
+    }
+}
+
+void DateFormatTest::TestParsePosition() {
+    const char* TestData[][4] = {
+        // {<pattern>, <lead>, <date string>, <trail>}
+        {"yyyy-MM-dd HH:mm:ssZ", "", "2010-01-10 12:30:00+0500", ""},
+        {"yyyy-MM-dd HH:mm:ss ZZZZ", "", "2010-01-10 12:30:00 GMT+05:00", ""},
+        {"Z HH:mm:ss", "", "-0100 13:20:30", ""},
+        {"y-M-d Z", "", "2011-8-25 -0400", " Foo"},
+        {"y/M/d H:mm:ss z", "", "2011/7/1 12:34:00 PDT", ""},
+        {"y/M/d H:mm:ss z", "+123", "2011/7/1 12:34:00 PDT", " PST"},
+        {"vvvv a h:mm:ss", "", "Pacific Time AM 10:21:45", ""},
+        {"HH:mm v M/d", "111", "14:15 PT 8/10", " 12345"},
+        {"'time zone:' VVVV 'date:' yyyy-MM-dd", "xxxx", "time zone: United States Time (Los Angeles) date: 2010-02-25", "xxxx"},
+        {0, 0, 0, 0},
+    };
+
+    for (int32_t i = 0; TestData[i][0]; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        SimpleDateFormat *sdf = new SimpleDateFormat(UnicodeString(TestData[i][0]), status);
+        if (failure(status, "new SimpleDateFormat", TRUE)) return;
+
+        int32_t startPos, resPos;
+
+        // lead text
+        UnicodeString input(TestData[i][1]);
+        startPos = input.length();
+
+        // date string
+        input += TestData[i][2];
+        resPos = input.length();
+
+        // trail text
+        input += TestData[i][3];
+
+        ParsePosition pos(startPos);
+        UDate d = sdf->parse(input, pos);
+
+        if (pos.getIndex() != resPos) {
+            errln(UnicodeString("FAIL: Parsing [") + input + "] with pattern [" + TestData[i][0] + "] returns position - "
+                + pos.getIndex() + ", expected - " + resPos);
         }
 
         delete sdf;
