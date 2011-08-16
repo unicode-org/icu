@@ -1133,7 +1133,16 @@ public class CollationRegressionTest extends TestFmwk {
             }
         }
     }
-    
+
+    // Fixing the infinite loop for surrogates
+    public void Test8484()
+    {
+        String s = "\u9FE1\uCEF3\u2798\uAAB6\uDA7C";
+        Collator coll = Collator.getInstance();
+        CollationKey collKey = coll.getCollationKey(s); 
+        logln("Pass: " + collKey.toString() + " generated OK.");
+    }
+
     /*
      * Test case for ticket#8624
      * Bad collation key with upper first option.
