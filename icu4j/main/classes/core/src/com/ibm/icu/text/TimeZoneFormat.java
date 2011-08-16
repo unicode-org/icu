@@ -907,7 +907,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             return 0;
         }
 
-        pos.setIndex(1 + numDigits);
+        pos.setIndex(start + 1 + numDigits);
         return ((((hour * 60) + min) * 60) + sec) * 1000 * sign;
     }
 

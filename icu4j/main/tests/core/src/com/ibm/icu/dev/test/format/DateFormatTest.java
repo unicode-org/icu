@@ -3771,10 +3771,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {
                 errln((String)"FAIL: " + in + " -> " + out + " expected -> " + expected);
             }
-
         }
-
     }
+
     public void TestFormalChineseDate() { 
         
         String pattern = "y\u5e74M\u6708d\u65e5";
@@ -3803,6 +3802,50 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     } 
 
+    public void TestParsePosition() {
+        class ParseTestData {
+            String pattern; // format pattern
+            String input;   // input date string
+            int startPos;   // start position
+            int resPos;     // expected result parse position
+
+            ParseTestData(String pattern, String dateStr) {
+                this.pattern = pattern;
+                this.input = dateStr;
+                this.startPos = 0;
+                this.resPos = dateStr.length();
+            }
+
+            ParseTestData(String pattern, String lead, String dateStr, String trail) {
+                this.pattern = pattern;
+                this.input = lead + dateStr + trail;
+                this.startPos = lead.length();
+                this.resPos = lead.length() + dateStr.length();
+            }
+        }
+
+        ParseTestData[] TestData = {
+            new ParseTestData("yyyy-MM-dd HH:mm:ssZ", "2010-01-10 12:30:00+0500"),
+            new ParseTestData("yyyy-MM-dd HH:mm:ss ZZZZ", "2010-01-10 12:30:00 GMT+05:00"),
+            new ParseTestData("Z HH:mm:ss", "-0100 13:20:30"),
+            new ParseTestData("y-M-d Z", "", "2011-8-25 -0400", " Foo"),
+            new ParseTestData("y/M/d H:mm:ss z", "2011/7/1 12:34:00 PDT"),
+            new ParseTestData("y/M/d H:mm:ss z", "+123", "2011/7/1 12:34:00 PDT", " PST"),
+            new ParseTestData("vvvv a h:mm:ss", "Pacific Time AM 10:21:45"),
+            new ParseTestData("HH:mm v M/d", "111", "14:15 PT 8/10", " 12345"),
+            new ParseTestData("'time zone:' VVVV 'date:' yyyy-MM-dd", "xxxx", "time zone: United States Time (Los Angeles) date: 2010-02-25", "xxxx"),
+        };
+
+        for (ParseTestData data : TestData) {
+            SimpleDateFormat sdf = new SimpleDateFormat(data.pattern);
+            ParsePosition pos = new ParsePosition(data.startPos);
+            /* Date d = */sdf.parse(data.input, pos);
+            if (pos.getIndex() != data.resPos) {
+                errln("FAIL: Parsing [" + data.input + "] with pattern [" + data.pattern + "] returns position - "
+                        + pos.getIndex() + ", expected - " + data.resPos);
+            }
+        }
+    }
 }
 
 
