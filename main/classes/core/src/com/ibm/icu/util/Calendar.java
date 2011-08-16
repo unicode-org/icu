@@ -2466,6 +2466,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // clone the calendar so we don't mess with the real one, and set it to
         // accept anything for the field values
         Calendar work = (Calendar) clone();
+
+        // need to resolve time here, otherwise, fields set for actual limit
+        // may cause conflict with fields previously set (but not yet resolved).
+        work.complete();
+
         work.setLenient(true);
         work.prepareGetActual(field, delta < 0);
 
@@ -2494,7 +2499,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         } while (startValue != endValue);
 
         return result;
-
     }
 
     /**
