@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -528,7 +528,7 @@ final class DigitList {
      * Upon return, count will be less than or equal to maximumDigits.
      * This now performs rounding when maximumDigits is 0, formerly it did not.
      */
-    public final void round(int maximumDigits) {        
+    public final void round(int maximumDigits) {
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
         // [bnf] rewritten to fix 4179818
@@ -557,12 +557,12 @@ final class DigitList {
                 ++maximumDigits; // Increment for use as count
             }
             count = maximumDigits;
-            /*Bug 4217661 DecimalFormat formats 1.001 to "1.00" instead of "1"
-              Eliminate trailing zeros. [Richard/GCL]
-            */
-            while (count > 1 && digits[count-1] == '0') {
-                --count;
-            } //[Richard/GCL]
+        }
+        // Bug 4217661 DecimalFormat formats 1.001 to "1.00" instead of "1"
+        // Eliminate trailing zeros. [Richard/GCL]
+        // [dlf] moved outside if block, see ticket #6408
+        while (count > 1 && digits[count-1] == '0') {
+          --count;
         }
     }
 
