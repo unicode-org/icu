@@ -11,6 +11,7 @@ package com.ibm.icu.dev.demo.messagepattern;
 
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
+import com.ibm.icu.text.MessagePatternUtil.VariantNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,8 @@ public class MessagePatternUtilDemo {
             double value;
             switch (argType) {
             case CHOICE:
-                System.out.println(indent + variant.getSelectorValue() + " " + variant.getSelector() + ":");
+                System.out.println(indent + variant.getSelectorValue() + " " +
+                                   variant.getSelector() + ":");
                 break;
             case PLURAL:
                 value = variant.getSelectorValue();
@@ -189,7 +191,8 @@ public class MessagePatternUtilDemo {
         if (!keywordVariants.isEmpty()) {
             System.out.println(manySpaces.substring(0, depth * 2) +
                                "_keyword = PluralRules.select(" + pluralNumber + ")");
-            genCodeForKeywordVariants(keywordVariants, depth++, firstResult, "_keyword", pluralNumber);
+            genCodeForKeywordVariants(keywordVariants, depth++, firstResult,
+                                      "_keyword", pluralNumber);
         }
         genCode(otherVariant.getMessage(), depth, firstResult, pluralNumber);
         if (origDepth < depth) {
@@ -216,7 +219,7 @@ public class MessagePatternUtilDemo {
         }
     }
 
-    private static final void genCodeForNumericVariants(List<MessagePatternUtil.VariantNode> variants,
+    private static final void genCodeForNumericVariants(List<VariantNode> variants,
                                                         int depth,
                                                         boolean firstResult,
                                                         String varName,
@@ -234,7 +237,7 @@ public class MessagePatternUtilDemo {
         System.out.println(indent + "} else {");
     }
 
-    private static final void genCodeForKeywordVariants(List<MessagePatternUtil.VariantNode> variants,
+    private static final void genCodeForKeywordVariants(List<VariantNode> variants,
                                                         int depth,
                                                         boolean firstResult,
                                                         String varName,
@@ -334,9 +337,10 @@ public class MessagePatternUtilDemo {
         msg="_'__{gender, select, female{Her n'ame is {person_name}.}"+
                                  "other{His n'ame is {person_name}.}}__'_";
         print(msg);
-        print("{num,plural,offset:1 =0{no one} =1{one, that is one and # others} " +
-                                   "one{one and # (probably 1) others} few{one and # others} " +
-                                   "other{lots & lots}}");
+        print("{num,plural,offset:1 " +
+                "=0{no one} =1{one, that is one and # others} " +
+                "one{one and # (probably 1) others} few{one and # others} " +
+                "other{lots & lots}}");
         print(
             "{p1_gender,select," +
               "female{" +

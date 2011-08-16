@@ -20,6 +20,9 @@ import java.util.List;
  * Intended for use in tools when convenience is more important than
  * minimizing runtime and object creations.
  *
+ * <p>This class only has static methods.
+ * Each of the nested classes is immutable and thread-safe.
+ *
  * <p>This class and its nested classes are not intended for public subclassing.
  * @draft ICU 49
  * @provisional This API might change or be removed in a future release.
@@ -62,6 +65,7 @@ public final class MessagePatternUtil {
     /**
      * Common base class for all elements in a tree of nodes
      * returned by {@link MessagePatternUtil#buildMessageNode(MessagePattern)}.
+     * This class and all subclasses are immutable and thread-safe.
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
@@ -165,6 +169,10 @@ public final class MessagePatternUtil {
          */
         @Override
         public String toString() {
+            // Note: There is no specific subclass for REPLACE_NUMBER
+            // because it would not provide any additional API.
+            // Therefore we have a little bit of REPLACE_NUMBER-specific code
+            // here in the contents-node base class.
             return "{REPLACE_NUMBER}";
         }
 
