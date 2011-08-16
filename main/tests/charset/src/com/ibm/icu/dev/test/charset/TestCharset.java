@@ -3160,7 +3160,7 @@ public class TestCharset extends TestFmwk {
         
         //test for overflow buffer error
         ccus.put((char)0x2262);
-        ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x6d); ccbs.put((byte)0x49);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x6d); ccbs.put((byte)0x49); ccbs.put((byte)0x2d);
         
         ccbs.limit(ccbs.position());
         ccbs.position(0);
@@ -3178,7 +3178,7 @@ public class TestCharset extends TestFmwk {
         //test for overflow buffer error
         encoder.reset();
         ccus.put((char)0x3980); ccus.put((char)0x2715);
-        ccbs.put((byte)0x2b); ccbs.put((byte)0x4f); ccbs.put((byte)0x59);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x4f); ccbs.put((byte)0x59); ccbs.put((byte)0x2d);
         
         ccbs.limit(ccbs.position());
         ccbs.position(0);
