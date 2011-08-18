@@ -162,6 +162,16 @@
 #endif
 
 /**
+ * \def CYGWINMSVC
+ * Defined if this is Windows with Cygwin, but using MSVC rather than gcc.
+ * Otherwise undefined.
+ * @internal
+ */
+#if U_PLATFORM == U_PF_CYGWIN && defined(_MSC_VER)
+#   define CYGWINMSVC
+#endif
+
+/**
  * \def U_PLATFORM_USES_ONLY_WIN32_API
  * Defines whether the platform uses only the Win32 API.
  * Set to 1 for Windows/MSVC and MinGW but not Cygwin.
@@ -169,7 +179,7 @@
  */
 #ifdef U_PLATFORM_USES_ONLY_WIN32_API
     /* Use the predefined value. */
-#elif U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_MINGW
+#elif (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_MINGW) || defined(CYGWINMSVC)
 #   define U_PLATFORM_USES_ONLY_WIN32_API 1
 #else
     /* Cygwin implements POSIX. */
@@ -185,11 +195,7 @@
 #ifdef U_PLATFORM_HAS_WIN32_API
     /* Use the predefined value. */
 #elif U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-#   if U_PLATFORM == U_PF_CYGWIN && defined(__GNUC__)
-#       define U_PLATFORM_HAS_WIN32_API 0
-#   else
-#       define U_PLATFORM_HAS_WIN32_API 1
-#   endif
+#   define U_PLATFORM_HAS_WIN32_API 1
 #else
 #   define U_PLATFORM_HAS_WIN32_API 0
 #endif
@@ -206,16 +212,6 @@
 #   define U_PLATFORM_IMPLEMENTS_POSIX 0
 #else
 #   define U_PLATFORM_IMPLEMENTS_POSIX 1
-#endif
-
-/**
- * \def CYGWINMSVC
- * Defined if this is Windows with Cygwin, but using MSVC rather than gcc.
- * Otherwise undefined.
- * @internal
- */
-#if U_PLATFORM == U_PF_CYGWIN && defined(_MSC_VER)
-#   define CYGWINMSVC
 #endif
 
 /**

@@ -382,7 +382,9 @@ void UObjectTest::testIDs()
     TESTCLASSID_FACTORY(TaiwanCalendar, Calendar::createInstance(Locale("@calendar=roc"), status));
 #if U_PLATFORM_HAS_WIN32_API
     TESTCLASSID_FACTORY(Win32DateFormat, DateFormat::createDateInstance(DateFormat::kFull, Locale("@compat=host")));
+#if U_PLATFORM_USES_ONLY_WIN32_API
     TESTCLASSID_FACTORY(Win32NumberFormat, NumberFormat::createInstance(Locale("@compat=host"), status));
+#endif
 #endif
 #endif
 

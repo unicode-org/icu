@@ -493,7 +493,7 @@ TimeZone::initDefault()
     hostStrID.truncate(hostStrID.length()-1);
     default_zone = createSystemTimeZone(hostStrID);
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
     // hostID points to a heap-allocated location on Windows.
     uprv_free(const_cast<char *>(hostID));
 #endif
