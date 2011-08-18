@@ -37,7 +37,7 @@
 #include <string.h>
 #include <ctype.h>    // tolower, toupper
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
     /* Prefer native Windows APIs even if POSIX is implemented (i.e., on Cygwin). */
 #   undef POSIX
 #elif U_PLATFORM_IMPLEMENTS_POSIX
@@ -137,7 +137,7 @@
 #include "unicode/calendar.h"
 #include "ucaconf.h"
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #define HAVE_IMP
 
 #   define VC_EXTRALEAN

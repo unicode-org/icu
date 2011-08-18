@@ -69,7 +69,7 @@ typedef size_t uintptr_t;
 
 #ifdef U_TZSET
     /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TZSET _tzset
 #else
 #   define U_TZSET tzset
@@ -79,7 +79,7 @@ typedef size_t uintptr_t;
     /* Use the predefined value. */
 #elif U_PLATFORM_IS_LINUX_BASED
 #   define U_TIMEZONE __timezone
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TIMEZONE _timezone
 #else
 #   define U_TIMEZONE timezone
@@ -87,7 +87,7 @@ typedef size_t uintptr_t;
 
 #ifdef U_TZNAME
     /* Use the predefined value. */
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TZNAME _tzname
 #else
 #   define U_TZNAME tzname
@@ -103,7 +103,7 @@ typedef size_t uintptr_t;
 
 #ifdef U_HAVE_POPEN
     /* Use the predefined value. */
-#elif U_PLATFORM == U_PF_WINDOWS
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_HAVE_POPEN 0
 #else
 #   define U_HAVE_POPEN 1

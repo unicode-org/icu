@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 #include "unicode/utypes.h"
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #   define VC_EXTRALEAN
 #   define WIN32_LEAN_AND_MEAN
 #   define NOUSER
@@ -86,7 +86,7 @@ U_CAPI int32_t U_EXPORT2 getCurrentYear() {
 
 U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
     /* anticipate problems with "short" pathnames */
     static WIN32_FIND_DATAA info;
     HANDLE file=FindFirstFileA(pathname, &info);

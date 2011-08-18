@@ -25,7 +25,7 @@
 #include "unicode/locid.h"
 #include "putilimp.h"
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
     /* Prefer native Windows APIs even if POSIX is implemented (i.e., on Cygwin). */
 #   undef POSIX
 #elif U_PLATFORM_IMPLEMENTS_POSIX

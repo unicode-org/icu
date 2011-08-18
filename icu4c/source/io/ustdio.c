@@ -37,7 +37,7 @@
 #define DELIM_PS 0x2029
 
 /* TODO: is this correct for all codepages? Should we just use \n and let the converter handle it? */
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
 static const UChar DELIMITERS [] = { DELIM_CR, DELIM_LF, 0x0000 };
 static const uint32_t DELIMITERS_LEN = 2;
 /* TODO: Default newline writing should be detected based upon the converter being used. */
