@@ -13,11 +13,10 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.4.2.1</h3>
+<h3>Read Me for ICU4J 4.4.2.2</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-July 1, 2011<br>
-</p>
+August 24, 2011</p>
 
 <p><b>Note:</b> This is an update release of ICU4J 4.4.  This release contains
 several bug fixes and updated data, but does not introduce any new APIs or
@@ -166,6 +165,31 @@ See the <a href="http://icu-project.org/download/4.4.html">ICU 4.4 download page
 new features in this release.  The list of API changes since the previous ICU4J release
 is available
 <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-4/APIChangeReport.html">here</a>.
+</p>
+
+<h4 class="doc">Summary of updates in 4.4.2.2 (August 24, 2011)</h4>
+<p><b>Java 7 Locale support</b></p>
+<p>Java 7 was shipped in July 2011 including some enhancements in java.util.Locale class.
+For supporting the enhancements in Locale class, ICU4J com.ibm.icu.util.ULocale was also
+updated in the latest code stream by following tickets.
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8078">#8078</a> ICU4J APIs taking Locale to use new JDK7 APIs to access script/extensions</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8630">#8630</a> Java 7 Locale Category support</li>
+</ul>
+These changes in ULocale class were back-ported to this release. (<b>Note</b>: The new APIs for locale category
+are tagged as @stable ICU 49, indicating these APIs are back-ported from later code stream.)</p>
+
+<p><b>Bug fixes</b></p>
+<p>This release contains following bug fixes
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6108">#6108</a> DecimalFormat fraction digit problem with rounding + BigDecimal</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8410">#8410</a> In IndianCalendar, the add operation performs like roll</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8484">#8484</a> endless loop in RuleBasedCollator.getSortKeyBytes</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8549">#8549</a> UTF-7 error handling consumes too many valid subsequent chars</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8569">#8569</a> UTF-7 missing terminating shift character</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8596">#8596</a> GregorianCalendar.getActualMaximum(Calendar.WEEK_OF_YEAR) returns 52 when it should return 53</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8624">#8624</a> ucol_getSortKey+strncmp and ucol_strcoll give different comparison result</li>
+</ul>
 </p>
 
 <h4 class="doc">Summary of updates in 4.4.2.1 (July 1, 2011)</h4>
@@ -1116,8 +1140,8 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
     the CLDR source files checked out.</li>
     <li>Update <I>$cldr_root</I>/common to 'release-1-8-1' tag</li>
     <li>Update <I>$cldr_root</I>/tools to 'release-1-8-1' tag</li>
-    <li>Checkout ICU4C with tag 'release-4-4-1'</li>
-    <li>Checkout ICU4J with tag 'release-4-4-1'</li>
+    <li>Checkout ICU4C with tag 'release-4-4-2'</li>
+    <li>Checkout ICU4J with tag 'release-4-4-2-2'</li>
     <li>Build ICU4J</li>
     <li>Build ICU4C</li>
     <li>Change to <I>$cldr_root</I>/tools/java directory</li>
@@ -1131,7 +1155,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.4.2.1 includes time zone data version 2011h, which is the latest one as of
+<p>ICU4J 4.4.2.2 includes time zone data version 2011h, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
