@@ -13,11 +13,10 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.6.1</h3>
+<h3>Read Me for ICU4J 4.6.1.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-March 11, 2011<br>
-</p>
+August 24, 2011</p>
 
 <p><b>Note:</b> This is an update release of ICU4J 4.6.  This release contains several
 bug fixes and updated data, but does not introduce any new APIs for functionalities.
@@ -133,6 +132,26 @@ new features in this release.  The list of API changes since the previous ICU4J 
 is available
 <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-6/APIChangeReport.html">here</a>.
 </p>
+
+<h4 class="doc">Summary of updates in 4.6.1.1 (August 24, 2011)</h4>
+<p><b>Java 7 Locale support</b></p>
+<p>Java 7 was shipped in July 2011 including some enhancements in java.util.Locale class.
+For supporting the enhancements in Locale class, ICU4J com.ibm.icu.util.ULocale was also
+updated in the latest code stream by following tickets.
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8078">#8078</a> ICU4J APIs taking Locale to use new JDK7 APIs to access script/extensions</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/8630">#8630</a> Java 7 Locale Category support</li>
+</ul>
+These changes in ULocale class were back-ported to this release. (<b>Note</b>: The new APIs for locale category
+are tagged as @stable ICU 49, indicating these APIs are back-ported from later code stream.)</p>
+
+<p><b>Time zone data update</b>
+<p>ICU4J 4.6.1 updates the time zone data to version <a href="http://source.icu-project.org/repos/icu/data/trunk/tzdata/icunew/2011h/44/">2011h</a>
+from the Olson tz database.
+
+<p><b>Bug fixes</b>
+<p>See the <a href="http://bugs.icu-project.org/trac/milestone/4.6.1.1J">ICU Trac 4.6.1.1J page</a> about
+fixes done in this update release.
 
 <h4 class="doc">Summary of updates in 4.6.1 (March 11, 2011)</h4>
 <p><b>CLDR 1.9.1 updates</b>
@@ -969,7 +988,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <ol>
     <li>Checkout or download CLDR version 1.9.1</li>
     <li>Checkout ICU4C with tag 'release-4-6-1'</li>
-    <li>Checkout ICU4J with tag 'release-4-6-1'</li>
+    <li>Checkout ICU4J with tag 'release-4-6-1-1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -981,7 +1000,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.6.1 includes time zone data version 2011c, which is the latest one as of
+<p>ICU4J 4.6.1.1 includes time zone data version 2011h, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
