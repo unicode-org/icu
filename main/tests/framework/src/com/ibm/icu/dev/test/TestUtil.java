@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
 
 public final class TestUtil {
     /**
@@ -208,4 +209,34 @@ public final class TestUtil {
             4*1024);
     }
 
+    public enum JavaVendor {
+        Unknown,
+        Oracle,
+        IBM
+    }
+
+    public static JavaVendor getJavaVendor() {
+        JavaVendor vendor = JavaVendor.Unknown;
+        String javaVendorProp = System.getProperty("java.vendor", "").toLowerCase(Locale.US).trim();
+        if (javaVendorProp.startsWith("ibm")) {
+            vendor = JavaVendor.IBM;
+        } else if (javaVendorProp.startsWith("sun") || javaVendorProp.startsWith("oracle")) {
+            vendor = JavaVendor.Oracle;
+        }
+        return vendor;
+    }
+
+    public static int getJavaVersion() {
+        int ver = -1;
+        String verstr = System.getProperty("java.version");
+        if (verstr != null) {
+            String[] numbers = verstr.split("\\.");
+            try {
+                ver = Integer.parseInt(numbers[1]);
+            } catch (NumberFormatException e) {
+                ver = -1;
+            }
+        }
+        return ver;
+    }
 }

@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.SpoofChecker;
@@ -109,6 +110,11 @@ public class SpoofCheckerTest extends TestFmwk {
      * Test build from source rules.
      */
     public void TestOpenFromSourceRules() {
+        if (TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 5) {
+            // Note: IBM Java 5 has a bug reading a large UTF-8 text contents
+            logln("Skip this test case because of the IBM Java 5 bug");
+            return;
+        }
         setup();
         String fileName;
         Reader confusables;
@@ -503,6 +509,11 @@ public class SpoofCheckerTest extends TestFmwk {
     // Verify that each item from the Unicode confusables.txt file
     // transforms into the expected skeleton.
     public void testConfData() {
+        if (TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 5) {
+            // Note: IBM Java 5 has a bug reading a large UTF-8 text contents
+            logln("Skip this test case because of the IBM Java 5 bug");
+            return;
+        }
         try {
             // Read in the confusables.txt file. (Distributed by Unicode.org)
             String fileName = "unicode/confusables.txt";
