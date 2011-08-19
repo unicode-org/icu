@@ -23,8 +23,8 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * {@icuenhanced java.text.DecimalFormatSymbols}.{@icu _usage_}

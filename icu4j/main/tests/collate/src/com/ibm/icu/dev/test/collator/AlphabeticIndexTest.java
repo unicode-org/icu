@@ -20,10 +20,9 @@ import java.util.TreeSet;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Row;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.Row.R4;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
@@ -37,9 +36,7 @@ import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Type;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * @author markdavis
