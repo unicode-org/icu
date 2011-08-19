@@ -194,7 +194,8 @@ public class ULocaleTest extends TestFmwk {
      */
     public void TestJavaLocaleCompatibility() {
         Locale backupDefault = Locale.getDefault();
-        
+        ULocale orgUlocDefault = ULocale.getDefault();
+
         // Java Locale for ja_JP with Japanese calendar
         Locale jaJPJP = new Locale("ja", "JP", "JP");
         Locale jaJP = new Locale("ja", "JP");
@@ -289,6 +290,11 @@ public class ULocaleTest extends TestFmwk {
             errln("FAIL: ULocale#setDefault failed to set Java Locale no_NO_NY /actual: " + Locale.getDefault());
         }
         Locale.setDefault(backupDefault);
+
+        // Make sure default ULocale is restored
+        if (!ULocale.getDefault().equals(orgUlocDefault)) {
+            errln("FAIL: Original default ULocale is not restored - " + ULocale.getDefault() + ", expected(orginal) - " + orgUlocDefault);
+        }
     }
     
     // ================= Infrastructure =================
