@@ -18,9 +18,9 @@ import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.ULocale.Category;
 
 /**
 * {@icuenhanced java.text.Collator}.{@icu _usage_}
