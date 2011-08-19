@@ -586,7 +586,8 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static synchronized void setDefault(ULocale newLocale){
-        Locale.setDefault(newLocale.toLocale());
+        defaultLocale = newLocale.toLocale();
+        Locale.setDefault(defaultLocale);
         defaultULocale = newLocale;
         // This method also updates all category default locales
         for (Category cat : Category.values()) {
