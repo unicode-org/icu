@@ -167,9 +167,11 @@
  * Otherwise undefined.
  * @internal
  */
+/* Commented out because this is already set in mh-cygwin-msvc
 #if U_PLATFORM == U_PF_CYGWIN && defined(_MSC_VER)
 #   define CYGWINMSVC
 #endif
+*/
 
 /**
  * \def U_PLATFORM_USES_ONLY_WIN32_API
