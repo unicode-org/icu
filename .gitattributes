@@ -55,6 +55,7 @@ eclipse-build/features.template/com.ibm.icu.base/.project -text
 eclipse-build/features.template/com.ibm.icu.base/build.properties -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/.classpath -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/.project -text
+eclipse-build/plugins.template/com.ibm.icu.base.tests/.settings/org.eclipse.core.resources.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.core.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.ui.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/META-INF/MANIFEST.MF -text
@@ -62,13 +63,16 @@ eclipse-build/plugins.template/com.ibm.icu.base.tests/build.properties -text
 eclipse-build/plugins.template/com.ibm.icu.base.tests/plugin.properties -text
 eclipse-build/plugins.template/com.ibm.icu.base/.classpath -text
 eclipse-build/plugins.template/com.ibm.icu.base/.project -text
+eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.core.resources.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.core.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.ui.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.base/META-INF/MANIFEST.MF -text
 eclipse-build/plugins.template/com.ibm.icu.base/build.properties -text
 eclipse-build/plugins.template/com.ibm.icu.base/plugin.properties -text
+eclipse-build/plugins.template/com.ibm.icu.tests/.settings/org.eclipse.core.resources.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
 eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text
+eclipse-build/plugins.template/com.ibm.icu/.settings/org.eclipse.core.resources.prefs -text
 eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 main/classes/charset/.classpath -text
 main/classes/charset/.project -text
