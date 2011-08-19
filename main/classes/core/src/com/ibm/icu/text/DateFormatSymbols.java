@@ -24,8 +24,8 @@ import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * {@icuenhanced java.text.DateFormatSymbols}.{@icu _usage_}

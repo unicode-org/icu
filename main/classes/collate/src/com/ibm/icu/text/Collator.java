@@ -20,9 +20,9 @@ import com.ibm.icu.impl.Norm2AllModes;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.ULocale.Category;
 
 /**
 * {@icuenhanced java.text.Collator}.{@icu _usage_}
