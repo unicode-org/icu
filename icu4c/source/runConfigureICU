@@ -158,7 +158,7 @@ case $platform in
         CC=gcc; export CC
         CXX=g++; export CXX
         RELEASE_CFLAGS=-O1
-        RELEASE_CXXFLAGS=-O3
+        RELEASE_CXXFLAGS=-O2
         ;;
     SolarisX86)
         THE_OS="SOLARIS X86"

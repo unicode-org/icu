@@ -136,6 +136,13 @@
 #elif defined(sun) || defined(__sun)
     /* Check defined(__SVR4) || defined(__svr4__) to distinguish Solaris from SunOS? */
 #   define U_PLATFORM U_PF_SOLARIS
+#   if defined(__GNUC__)
+        /* Solaris/GCC needs this header file to get the proper endianness. Normally, this
+         * header file is included with stddef.h but on Solairs/GCC, the GCC version of stddef.h
+         *  is included which does not include this header file.
+         */
+#       include <sys/isa_defs.h>
+#   endif
 #elif defined(_AIX) || defined(__TOS_AIX__)
 #   define U_PLATFORM U_PF_AIX
 #elif defined(_hpux) || defined(hpux) || defined(__hpux)
