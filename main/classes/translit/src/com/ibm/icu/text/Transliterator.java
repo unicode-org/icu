@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,6 +20,7 @@ import com.ibm.icu.text.RuleBasedTransliterator.Data;
 import com.ibm.icu.text.TransliteratorIDParser.SingleID;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -1176,12 +1177,13 @@ public abstract class Transliterator implements StringTransform  {
 
     /**
      * Returns a name for this transliterator that is appropriate for
-     * display to the user in the default locale.  See {@link
+     * display to the user in the default <code>DISPLAY</code> locale.  See {@link
      * #getDisplayName(String,Locale)} for details.
+     * @see com.ibm.icu.util.ULocale.Category#DISPLAY
      * @stable ICU 2.0
      */
     public final static String getDisplayName(String ID) {
-        return getDisplayName(ID, ULocale.getDefault());
+        return getDisplayName(ID, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**

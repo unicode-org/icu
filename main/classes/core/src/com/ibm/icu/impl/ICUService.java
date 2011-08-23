@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,12 +17,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <p>A Service provides access to service objects that implement a
@@ -625,7 +626,7 @@ public class ICUService extends ICUNotifier {
      * uses the current default locale.
      */
     public String getDisplayName(String id) {
-        return getDisplayName(id, ULocale.getDefault());
+        return getDisplayName(id, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**
@@ -657,7 +658,7 @@ public class ICUService extends ICUNotifier {
      * the comparator, and null for the matchID.
      */
     public SortedMap<String, String> getDisplayNames() {
-        ULocale locale = ULocale.getDefault();
+        ULocale locale = ULocale.getDefault(Category.DISPLAY);
         return getDisplayNames(locale, null, null);
     }
 

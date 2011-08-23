@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -276,12 +276,52 @@ class CharsetUTF7 extends CharsetICU {
                             b=(char)source.get();
                             sourceArrayIndex++;
                             toUBytesArray[byteIndex++]=(byte)b;
-                            if ((!useIMAP && b>=126) || (useIMAP && b>0x7e)) {
-                                /* illegal - test other illegal US-ASCII values by base64Value==-3 */
+                            base64Value = -3; /* initialize as illegal */
+                            if ((!useIMAP && (b>=126 || (base64Value=FROM_BASE_64[b])==-3 || base64Value==-1)) || (useIMAP && b>0x7e)) {
+                                /* either
+                                 * base64Value==-1 for any legal character except base64 and minus sign, or
+                                 * base64Value==-3 for illegal characters:
+                                 * 1. In either case, leave Unicode mode.
+                                 * 2.1. If we ended with an incomplete UChar or none after the +, then
+                                 *      generate an error for the preceding erroneous sequence and deal with
+                                 *      the current (possibly illegal) character next time through.
+                                 * 2.2. Else the current char comes after a complete UChar, which was already
+                                 *      pushed to the output buf, so:
+                                 * 2.2.1. If the current char is legal, just save it for processing next time.
+                                 *        It may be for example, a plus which we need to deal with in direct mode.
+                                 * 2.2.2. Else if the current char is illegal, we might as well deal with it here.
+                                 */
                                 inDirectMode=1;
-                                cr=CoderResult.malformedForLength(sourceArrayIndex);
-                                break directMode;
-                            } else if (((base64Value=FROM_BASE_64[b])>=0 && !useIMAP) || ((base64Value=FROM_BASE64_IMAP(b))>=0) && useIMAP) {
+                                
+                                if(base64Counter==-1) {
+                                    /* illegal: + immediately followed by something other than base64 or minus sign */
+                                    /* include the plus sign in the reported sequence, but not the subsequent char */
+                                    source.position(source.position() -1);
+                                    toUBytesArray[0]=PLUS;
+                                    byteIndex=1;
+                                    cr=CoderResult.malformedForLength(sourceArrayIndex);
+                                    break directMode;
+                                } else if(bits!=0) {
+                                    /* bits are illegally left over, a UChar is incomplete */
+                                    /* don't include current char (legal or illegal) in error seq */
+                                    source.position(source.position() -1);
+                                    --byteIndex;
+                                    cr=CoderResult.malformedForLength(sourceArrayIndex);
+                                    break directMode;
+                                } else {
+                                    /* previous UChar was complete */
+                                    if(base64Value==-3) {
+                                        /* current character is illegal, deal with it here */
+                                        cr=CoderResult.malformedForLength(sourceArrayIndex);
+                                        break directMode;
+                                    } else {
+                                        /* un-read the current character in case it is a plus sign */
+                                        source.position(source.position() -1);
+                                        sourceIndex=nextSourceIndex-1;
+                                        continue directMode;
+                                    }
+                                }
+                            } else if ((!useIMAP && (base64Value=FROM_BASE_64[b])>=0) || (useIMAP && (base64Value=FROM_BASE64_IMAP(b))>=0)) {
                                 /* collect base64 bytes */
                                 switch (base64Counter) {
                                 case -1: /* -1 is immediately after the + */
@@ -356,7 +396,7 @@ class CharsetUTF7 extends CharsetICU {
                                     /* will never occur */
                                     //break;                                                           
                                 }//end of switch
-                            } else if (base64Value==-2) {
+                            } else if (!useIMAP || (useIMAP && base64Value==-2)) {
                                 /* minus sign terminates the base64 sequence */
                                 inDirectMode=1;
                                 if (base64Counter==-1) {
@@ -375,30 +415,8 @@ class CharsetUTF7 extends CharsetICU {
                                 }
                                 sourceIndex=nextSourceIndex;
                                 continue directMode;
-                            } else if (!useIMAP && base64Value==-1) { /* for any legal character except base64 and minus sign */
-                                /* leave the Unicode Mode */
-                                inDirectMode=1;
+                            } else if (useIMAP) { 
                                 if (base64Counter==-1) {
-                                    /* illegal:  + immediately followed by something other than base64 minus sign */
-                                    /* include the plus sign in the reported sequence */
-                                    --sourceIndex;
-                                    toUBytesArray[0]=PLUS;
-                                    toUBytesArray[1]=(byte)b;
-                                    byteIndex=2;
-                                    cr=CoderResult.malformedForLength(sourceArrayIndex);
-                                    break;
-                                } else if (bits==0) {
-                                    /* un-read the character in case it is a plus sign */
-                                    source.position(--sourceArrayIndex);
-                                    sourceIndex=nextSourceIndex - 1;
-                                    continue directMode;
-                                } else {
-                                    /* bits are illegally left over, a unicode character is incomplete */
-                                    cr=CoderResult.malformedForLength(sourceArrayIndex);
-                                    break;
-                                }
-                            } else { 
-                                if (useIMAP && base64Counter==-1) {
                                     // illegal: & immediately followed by something other than base64 or minus sign
                                     // include the ampersand in the reported sequence
                                     --sourceIndex;
@@ -718,17 +736,16 @@ class CharsetUTF7 extends CharsetICU {
                             cr=CoderResult.OVERFLOW;
                         }
                     }
-                    if (useIMAP) {
-                        /* IMAP: need to terminate with a minus */
-                        if (target.hasRemaining()) {
-                            target.put(MINUS);
-                            if (offsets!=null) {
-                                offsets.put(sourceIndex - 1);
-                            }
-                        } else {
-                            errorBuffer[errorBufferLength++]=MINUS;
-                            cr=CoderResult.OVERFLOW;
+                    
+                    /* need to terminate with a minus */
+                    if (target.hasRemaining()) {
+                        target.put(MINUS);
+                        if (offsets!=null) {
+                            offsets.put(sourceIndex - 1);
                         }
+                    } else {
+                        errorBuffer[errorBufferLength++]=MINUS;
+                        cr=CoderResult.OVERFLOW;
                     }
                 }
                 /*reset the state for the next conversion */

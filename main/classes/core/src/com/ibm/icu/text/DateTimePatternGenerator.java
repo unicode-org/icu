@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2006-2010, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2011, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -26,6 +26,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -103,11 +104,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * Construct a flexible generator according to data for the default locale.
+     * Construct a flexible generator according to data for the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getInstance() {
-        return getInstance(ULocale.getDefault());
+        return getInstance(ULocale.getDefault(Category.FORMAT));
     }
 
     /**

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -2787,6 +2787,27 @@ public class TestCharset extends TestFmwk {
         smBufDecode(decoder, "UTF-7", bs, us);
         smBufEncode(encoder, "UTF-7", us, bs);
         
+        /* Testing UTF-7 toUnicode with substitute callbacks */
+        {
+            byte [] bytesTestErrorConsumption = {
+                    /* a~       a+AB~                         a+AB\x0c                      a+AB-                         a+AB.                         a+. */
+                    0x61, 0x7e, 0x61, 0x2b, 0x41, 0x42, 0x7e, 0x61, 0x2b, 0x41, 0x42, 0x0c, 0x61, 0x2b, 0x41, 0x42, 0x2d, 0x61, 0x2b, 0x41, 0x42, 0x2e, 0x61, 0x2b, 0x2e
+    
+            };
+            char [] unicodeTestErrorConsumption = {
+                    0x61, 0xfffd, 0x61, 0xfffd, 0xfffd, 0x61, 0xfffd, 0xfffd, 0x61, 0xfffd, 0x61, 0xfffd, 0x2e, 0x61, 0xfffd, 0x2e
+            };
+            bs = ByteBuffer.wrap(bytesTestErrorConsumption);
+            us = CharBuffer.wrap(unicodeTestErrorConsumption);
+    
+            CodingErrorAction savedMal = decoder.malformedInputAction();
+            CodingErrorAction savedUMap = decoder.unmappableCharacterAction();
+            decoder.onMalformedInput(CodingErrorAction.REPLACE);
+            decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+            smBufDecode(decoder, "UTF-7 DE Error Consumption", bs, us);
+            decoder.onMalformedInput(savedMal);
+            decoder.onUnmappableCharacter(savedUMap);
+        }
         /* ticket 6151 */
         CharBuffer smallus = CharBuffer.allocate(1);
         ByteBuffer bigbs = ByteBuffer.allocate(3);
@@ -3139,7 +3160,7 @@ public class TestCharset extends TestFmwk {
         
         //test for overflow buffer error
         ccus.put((char)0x2262);
-        ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x6d); ccbs.put((byte)0x49);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x6d); ccbs.put((byte)0x49); ccbs.put((byte)0x2d);
         
         ccbs.limit(ccbs.position());
         ccbs.position(0);
@@ -3157,7 +3178,7 @@ public class TestCharset extends TestFmwk {
         //test for overflow buffer error
         encoder.reset();
         ccus.put((char)0x3980); ccus.put((char)0x2715);
-        ccbs.put((byte)0x2b); ccbs.put((byte)0x4f); ccbs.put((byte)0x59);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x4f); ccbs.put((byte)0x59); ccbs.put((byte)0x2d);
         
         ccbs.limit(ccbs.position());
         ccbs.position(0);

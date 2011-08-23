@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,6 +9,8 @@ package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * <code>IndianCalendar</code> is a subclass of <code>GregorianCalendar</code>
@@ -153,22 +155,24 @@ public class IndianCalendar extends Calendar {
     
     /**
      * Constructs a <code>IndianCalendar</code> using the current time
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public IndianCalendar() {
-       this(TimeZone.getDefault(), ULocale.getDefault());
+       this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**
      * Constructs a <code>IndianCalendar</code> based on the current time
-     * in the given time zone with the default locale.
+     * in the given time zone with the default <code>FORMAT</code> locale.
      *
      * @param zone the given time zone.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public IndianCalendar(TimeZone zone) {
-       this(zone, ULocale.getDefault());
+       this(zone, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -223,19 +227,20 @@ public class IndianCalendar extends Calendar {
 
     /**
      * Constructs a <code>IndianCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param date      The date to which the new calendar is set.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public IndianCalendar(Date date) {
-        super(TimeZone.getDefault(), ULocale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.setTime(date);
     }
 
     /**
      * Constructs a <code>IndianCalendar</code> with the given date set
-     * in the default time zone with the default locale.
+     * in the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      *
@@ -243,10 +248,11 @@ public class IndianCalendar extends Calendar {
      *                  The value is 0-based. e.g., 0 for January.
      *
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public IndianCalendar(int year, int month, int date) {
-       super(TimeZone.getDefault(), ULocale.getDefault());
+       super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
        this.set(Calendar.YEAR, year);
        this.set(Calendar.MONTH, month);
        this.set(Calendar.DATE, date);
@@ -255,7 +261,7 @@ public class IndianCalendar extends Calendar {
 
     /**
      * Constructs a IndianCalendar with the given date
-     * and time set for the default time zone with the default locale.
+     * and time set for the default time zone with the default <code>FORMAT</code> locale.
      *
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      *
@@ -269,12 +275,13 @@ public class IndianCalendar extends Calendar {
      * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
      *
      * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
+     * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public IndianCalendar(int year, int month, int date, int hour,
                              int minute, int second)
     {
-       super(TimeZone.getDefault(), ULocale.getDefault());
+       super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
        this.set(Calendar.YEAR, year);
        this.set(Calendar.MONTH, month);
        this.set(Calendar.DATE, date);
@@ -434,6 +441,12 @@ public class IndianCalendar extends Calendar {
 
        //month is 0 based; converting it to 1-based 
        int imonth;
+       
+       // If the month is out of range, adjust it into range, and adjust the extended year accordingly
+       if (month < 0 || month > 11) {
+           year += month / 12;
+           month %= 12;
+       }
        
        if(month == 12) {
            imonth = 1;

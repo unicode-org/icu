@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.util.Set;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
@@ -767,24 +768,26 @@ public abstract class Collator implements Comparator<Object>, Cloneable
 
     /**
      * {@icu} Returns the name of the collator for the objectLocale, localized for the
-     * current locale.
+     * default <code>DISPLAY</code> locale.
      * @param objectLocale the locale of the collator
      * @return the display name
+     * @see com.ibm.icu.util.ULocale.Category#DISPLAY
      * @stable ICU 2.6
      */
     static public String getDisplayName(Locale objectLocale) {
-        return getShim().getDisplayName(ULocale.forLocale(objectLocale), ULocale.getDefault());
+        return getShim().getDisplayName(ULocale.forLocale(objectLocale), ULocale.getDefault(Category.DISPLAY));
     }
 
     /**
      * {@icu} Returns the name of the collator for the objectLocale, localized for the
-     * current locale.
+     * default <code>DISPLAY</code> locale.
      * @param objectLocale the locale of the collator
      * @return the display name
+     * @see com.ibm.icu.util.ULocale.Category#DISPLAY
      * @stable ICU 3.2
      */
     static public String getDisplayName(ULocale objectLocale) {
-        return getShim().getDisplayName(objectLocale, ULocale.getDefault());
+        return getShim().getDisplayName(objectLocale, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**

@@ -1617,6 +1617,29 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestBigDecimalRounding() {
+	String figure = "50.000000004"; 
+	Double dbl = new Double(figure); 
+	BigDecimal dec = new BigDecimal(figure);
+
+	DecimalFormat f = (DecimalFormat) NumberFormat.getInstance(); 
+	f.applyPattern("00.00######");
+
+	assertEquals("double format", "50.00", f.format(dbl));
+	assertEquals("bigdec format", "50.00", f.format(dec));
+
+	int maxFracDigits = f.getMaximumFractionDigits();
+	BigDecimal roundingIncrement = new BigDecimal("1").movePointLeft(maxFracDigits);
+
+	f.setRoundingIncrement(roundingIncrement);
+	f.setRoundingMode(BigDecimal.ROUND_DOWN); 
+	assertEquals("Rounding down", f.format(dbl), f.format(dec));
+
+	f.setRoundingIncrement(roundingIncrement);
+	f.setRoundingMode(BigDecimal.ROUND_HALF_UP); 
+	assertEquals("Rounding half up", f.format(dbl), f.format(dec));
+    }
+
     void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
         nf.setRoundingIncrement(increment.toBigDecimal());
         BigDecimal lastParsed = new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic

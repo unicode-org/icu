@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,8 +12,8 @@ import java.util.MissingResourceException;
 import java.util.Vector;
 
 import com.ibm.icu.dev.test.ModuleTest;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;

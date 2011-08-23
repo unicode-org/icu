@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1658,23 +1658,22 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     /**
-     * WEEK_OF_YEAR computed incorrectly. A failure of this test can indicate a
-     * problem in several different places in the
+     * WEEK_OF_YEAR computed incorrectly. A failure of this test can indicate a problem in several different places in
+     * the
      */
-    public void Test4288792() throws Exception 
-    {
-    TimeZone savedTZ = TimeZone.getDefault();
-    TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-    GregorianCalendar cal = new GregorianCalendar();
-        
-    for (int i = 1900; i < 2100; i++) {
-        for (int j1 = 1; j1 <= 7; j1++) {
-        // Loop for MinimalDaysInFirstWeek: 1..7
-        for (int j = Calendar.SUNDAY; j <= Calendar.SATURDAY; j++) {
-            // Loop for FirstDayOfWeek: SUNDAY..SATURDAY
-            cal.clear();
-            cal.setMinimalDaysInFirstWeek(j1);
-            cal.setFirstDayOfWeek(j);
+    public void Test4288792() throws Exception {
+        TimeZone savedTZ = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+        GregorianCalendar cal = new GregorianCalendar();
+
+        for (int i = 1900; i < 2100; i++) {
+            for (int j1 = 1; j1 <= 7; j1++) {
+                // Loop for MinimalDaysInFirstWeek: 1..7
+                for (int j = Calendar.SUNDAY; j <= Calendar.SATURDAY; j++) {
+                    // Loop for FirstDayOfWeek: SUNDAY..SATURDAY
+                    cal.clear();
+                    cal.setMinimalDaysInFirstWeek(j1);
+                    cal.setFirstDayOfWeek(j);
                     // Set the calendar to the first day of the last week
                     // of the year. This may overlap some of the start of
                     // the next year; that is, the last week of 1999 may
@@ -1683,31 +1682,33 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                     // get(WEEK_OF_YEAR). The result should be the same
                     // for the whole week. Note that a bug in
                     // getActualMaximum() will break this test.
-            cal.set(Calendar.YEAR, i);
-            int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
-            cal.set(Calendar.WEEK_OF_YEAR, maxWeek);
-            cal.set(Calendar.DAY_OF_WEEK, j);
-            for (int k = 1; k < 7; k++) {
-            cal.add(Calendar.DATE, 1);
-            int WOY = cal.get(Calendar.WEEK_OF_YEAR);
-            if (WOY != maxWeek) {
-                errln(cal.getTime() + ",got=" + WOY
-                  + ",expected=" + maxWeek 
-                  + ",min=" + j1 + ",first=" + j);
-            }
-            }
+
+                    // Set date to the mid year first before getActualMaximum(WEEK_OF_YEAR).
+                    // getActualMaximum(WEEK_OF_YEAR) is based on the current calendar's
+                    // year of week of year. After clear(), calendar is set to January 1st,
+                    // which may belongs to previous year of week of year.
+                    cal.set(i, Calendar.JULY, 1);
+                    int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
+                    cal.set(Calendar.WEEK_OF_YEAR, maxWeek);
+                    cal.set(Calendar.DAY_OF_WEEK, j);
+                    for (int k = 1; k < 7; k++) {
+                        cal.add(Calendar.DATE, 1);
+                        int WOY = cal.get(Calendar.WEEK_OF_YEAR);
+                        if (WOY != maxWeek) {
+                            errln(cal.getTime() + ",got=" + WOY + ",expected=" + maxWeek + ",min=" + j1 + ",first=" + j);
+                        }
+                    }
                     // Now advance the calendar one more day. This should
                     // put it at the first day of week 1 of the next year.
-            cal.add(Calendar.DATE, 1);
-            int WOY = cal.get(Calendar.WEEK_OF_YEAR);
-            if (WOY != 1) {
-            errln(cal.getTime() + ",got=" + WOY 
-                  + ",expected=1,min=" + j1 + ",first" + j);
+                    cal.add(Calendar.DATE, 1);
+                    int WOY = cal.get(Calendar.WEEK_OF_YEAR);
+                    if (WOY != 1) {
+                        errln(cal.getTime() + ",got=" + WOY + ",expected=1,min=" + j1 + ",first" + j);
+                    }
+                }
             }
         }
-        }
-    }
-    TimeZone.setDefault(savedTZ);
+        TimeZone.setDefault(savedTZ);
     }
 
     /**
@@ -2153,6 +2154,34 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+
+    /*
+     * Test case for ticket#8596.
+     * Setting an year followed by getActualMaximum(Calendar.WEEK_OF_YEAR)
+     * may result wrong maximum week.
+     */
+    public void TestT8596() {
+        GregorianCalendar gc = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
+        gc.setFirstDayOfWeek(Calendar.MONDAY);
+        gc.setMinimalDaysInFirstWeek(4);
+
+        // Force the calender to resolve the fields once.
+        // The maximum week number in 2011 is 52.
+        gc.set(Calendar.YEAR, 2011);
+        gc.get(Calendar.YEAR);
+
+        // Set a date in year 2009, but not calling get to resolve
+        // the calendar's internal field yet.
+        gc.set(2009, Calendar.JULY, 1);
+
+        // Then call getActuamMaximum for week of year.
+        // #8596 was caused by conflict between year set
+        // above and internal work calendar field resolution.
+        int maxWeeks = gc.getActualMaximum(Calendar.WEEK_OF_YEAR);
+        if (maxWeeks != 53) {
+            errln("FAIL: Max week in 2009 in ISO calendar is 53, but got " + maxWeeks);
+        }
+    }
 }
 
 //eof

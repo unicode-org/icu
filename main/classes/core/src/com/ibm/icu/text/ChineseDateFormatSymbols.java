@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and
+ * Copyright (C) 2000-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ****************************************************************************
  */
@@ -12,6 +12,7 @@ import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * A subclass of {@link DateFormatSymbols} for {@link ChineseDateFormat}.
@@ -34,11 +35,12 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
     String isLeapMonth[]; // Do NOT add =null initializer
 
     /**
-     * Construct a ChineseDateFormatSymbols for the default locale.
+     * Construct a ChineseDateFormatSymbols for the default <code>FORMAT</code> locale.
+     * @see Category#FORMAT
      * @stable ICU 2.0
      */
     public ChineseDateFormatSymbols() {
-        this(ULocale.getDefault());
+        this(ULocale.getDefault(Category.FORMAT));
     }
 
     /**
