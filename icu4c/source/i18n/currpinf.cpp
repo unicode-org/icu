@@ -19,6 +19,7 @@
 #include "unicode/locid.h"
 #include "unicode/plurrule.h"
 #include "unicode/ures.h"
+#include "unicode/numsys.h"
 #include "cstring.h"
 #include "hash.h"
 #include "uresimp.h"
@@ -239,13 +240,21 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         return;
     }
 
+	static NumberingSystem *ns = NumberingSystem::createInstance(loc,status);
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle *rb = ures_open(NULL, loc.getName(), &ec);
-    rb = ures_getByKeyWithFallback(rb, gNumberElementsTag, rb, &ec);
-    rb = ures_getByKeyWithFallback(rb, gLatnTag, rb, &ec);
+    UResourceBundle *numElements = ures_getByKeyWithFallback(rb, gNumberElementsTag, NULL, &ec);
+    rb = ures_getByKeyWithFallback(numElements, ns->getName(), rb, &ec);
     rb = ures_getByKeyWithFallback(rb, gPatternsTag, rb, &ec);
     int32_t ptnLen;
     const UChar* numberStylePattern = ures_getStringByKeyWithFallback(rb, gDecimalFormatTag, &ptnLen, &ec);
+    // Fall back to "latn" if num sys specific pattern isn't there.
+    if ( ec == U_MISSING_RESOURCE_ERROR && uprv_strcmp(ns->getName(),gLatnTag)) {
+        ec = U_ZERO_ERROR;
+        rb = ures_getByKeyWithFallback(numElements, gLatnTag, rb, &ec);
+        rb = ures_getByKeyWithFallback(rb, gPatternsTag, rb, &ec);
+        numberStylePattern = ures_getStringByKeyWithFallback(rb, gDecimalFormatTag, &ptnLen, &ec);
+    }
     int32_t numberStylePatternLen = ptnLen;
     const UChar* negNumberStylePattern = NULL;
     int32_t negNumberStylePatternLen = 0;
@@ -263,6 +272,8 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
             }
         }
     }
+
+    ures_close(numElements);
     ures_close(rb);
 
     if (U_FAILURE(ec)) {

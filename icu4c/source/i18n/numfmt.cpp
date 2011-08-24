@@ -1151,54 +1151,6 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         }
     }
 #endif
-
-    LocalPointer<DecimalFormatSymbols> symbolsToAdopt;
-    UnicodeString pattern;
-    LocalUResourceBundlePointer ownedResource(ures_open(NULL, desiredLocale.getName(), &status));
-    if (U_FAILURE(status)) {
-        // We don't appear to have resource data available -- use the last-resort data
-        status = U_USING_FALLBACK_WARNING;
-        // When the data is unavailable, and locale isn't passed in, last resort data is used.
-        symbolsToAdopt.adoptInstead(new DecimalFormatSymbols(status));
-        if (symbolsToAdopt.isNull()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-
-        // Creates a DecimalFormat instance with the last resort number patterns.
-        pattern.setTo(TRUE, gLastResortNumberPatterns[style], -1);
-    }
-    else {
-        // Loads the decimal symbols of the desired locale.
-        symbolsToAdopt.adoptInstead(new DecimalFormatSymbols(desiredLocale, status));
-        if (symbolsToAdopt.isNull()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-
-        UResourceBundle *resource = ownedResource.orphan();
-        resource = ures_getByKeyWithFallback(resource, gNumberElements, resource, &status);
-        // TODO : Get patterns on a per numbering system basis, for right now assumes "latn" for patterns
-        resource = ures_getByKeyWithFallback(resource, gLatn, resource, &status);
-        resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
-        ownedResource.adoptInstead(resource);
-
-        int32_t patLen = 0;
-        const UChar *patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
-
-        // Creates the specified decimal format style of the desired locale.
-        pattern.setTo(TRUE, patResStr, patLen);
-    }
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO){
-        const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
-        if(currPattern!=NULL){
-            pattern.setTo(currPattern, u_strlen(currPattern));
-        }
-    }
-
     // Use numbering system cache hashtable
     UHashtable *cache;
     UMTX_CHECK(&nscacheMutex, NumberingSystem_cache, cache);
@@ -1252,6 +1204,61 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     if (U_FAILURE(status)) {
         return NULL;
     }
+
+    LocalPointer<DecimalFormatSymbols> symbolsToAdopt;
+    UnicodeString pattern;
+    LocalUResourceBundlePointer ownedResource(ures_open(NULL, desiredLocale.getName(), &status));
+    if (U_FAILURE(status)) {
+        // We don't appear to have resource data available -- use the last-resort data
+        status = U_USING_FALLBACK_WARNING;
+        // When the data is unavailable, and locale isn't passed in, last resort data is used.
+        symbolsToAdopt.adoptInstead(new DecimalFormatSymbols(status));
+        if (symbolsToAdopt.isNull()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+
+        // Creates a DecimalFormat instance with the last resort number patterns.
+        pattern.setTo(TRUE, gLastResortNumberPatterns[style], -1);
+    }
+    else {
+        // Loads the decimal symbols of the desired locale.
+        symbolsToAdopt.adoptInstead(new DecimalFormatSymbols(desiredLocale, status));
+        if (symbolsToAdopt.isNull()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+
+        UResourceBundle *resource = ownedResource.orphan();
+        UResourceBundle *numElements = ures_getByKeyWithFallback(resource, gNumberElements, NULL, &status);
+        resource = ures_getByKeyWithFallback(numElements, ns->getName(), resource, &status);
+        resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
+        ownedResource.adoptInstead(resource);
+
+        int32_t patLen = 0;
+        const UChar *patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
+
+        // Didn't find a pattern specific to the numbering system, so fall back to "latn"
+        if ( status == U_MISSING_RESOURCE_ERROR && uprv_strcmp(gLatn,ns->getName())) {  
+            status = U_ZERO_ERROR;
+            resource = ures_getByKeyWithFallback(numElements, gLatn, resource, &status);
+            resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
+            patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
+        }
+
+        // Creates the specified decimal format style of the desired locale.
+        pattern.setTo(TRUE, patResStr, patLen);
+    }
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO){
+        const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
+        if(currPattern!=NULL){
+            pattern.setTo(currPattern, u_strlen(currPattern));
+        }
+    }
+
 
     NumberFormat *f;
     if (ns->isAlgorithmic()) {
