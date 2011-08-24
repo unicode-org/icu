@@ -54,6 +54,7 @@
 #include "unicode/currpinf.h"
 #include "unicode/plurrule.h"
 #include "unicode/utf16.h"
+#include "unicode/numsys.h"
 #include "uresimp.h"
 #include "ucurrimp.h"
 #include "charstr.h"
@@ -386,6 +387,12 @@ DecimalFormat::construct(UErrorCode&             status,
             return;
         }
     }
+    UErrorCode nsStatus = U_ZERO_ERROR;
+    NumberingSystem *ns = NumberingSystem::createInstance(nsStatus);
+    if (U_FAILURE(nsStatus)) {
+        status = nsStatus;
+        return;
+    }
 
     UnicodeString str;
     // Uses the default locale's number format pattern if there isn't
@@ -393,16 +400,23 @@ DecimalFormat::construct(UErrorCode&             status,
     if (pattern == NULL)
     {
         int32_t len = 0;
-        UResourceBundle *resource = ures_open(NULL, Locale::getDefault().getName(), &status);
+        UResourceBundle *top = ures_open(NULL, Locale::getDefault().getName(), &status);
 
-        resource = ures_getByKeyWithFallback(resource, fgNumberElements, resource, &status);
-        // TODO : Get the pattern based on the active numbering system for the locale. Right now assumes "latn".
-        resource = ures_getByKeyWithFallback(resource, fgLatn, resource, &status);
+        UResourceBundle *resource = ures_getByKeyWithFallback(top, fgNumberElements, NULL, &status);
+        resource = ures_getByKeyWithFallback(resource, ns->getName(), resource, &status);
         resource = ures_getByKeyWithFallback(resource, fgPatterns, resource, &status);
         const UChar *resStr = ures_getStringByKeyWithFallback(resource, fgDecimalFormat, &len, &status);
+        if ( status == U_MISSING_RESOURCE_ERROR && uprv_strcmp(fgLatn,ns->getName())) {
+            status = U_ZERO_ERROR;
+            resource = ures_getByKeyWithFallback(top, fgNumberElements, resource, &status);
+            resource = ures_getByKeyWithFallback(resource, fgLatn, resource, &status);
+            resource = ures_getByKeyWithFallback(resource, fgPatterns, resource, &status);
+            resStr = ures_getStringByKeyWithFallback(resource, fgDecimalFormat, &len, &status);
+        }
         str.setTo(TRUE, resStr, len);
         pattern = &str;
         ures_close(resource);
+        ures_close(top);
     }
 
     if (U_FAILURE(status))
@@ -486,6 +500,8 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
         return;
     }
 
+    NumberingSystem *ns = NumberingSystem::createInstance(fSymbols->getLocale(),status);
+
     // Save the default currency patterns of this locale.
     // Here, chose onlyApplyPatternWithoutExpandAffix without
     // expanding the affix patterns into affixes.
@@ -493,12 +509,18 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
     UErrorCode error = U_ZERO_ERROR;   
     
     UResourceBundle *resource = ures_open(NULL, fSymbols->getLocale().getName(), &error);
-    resource = ures_getByKeyWithFallback(resource, fgNumberElements, resource, &error);
-    // TODO : Get the pattern based on the active numbering system for the locale. Right now assumes "latn".
-    resource = ures_getByKeyWithFallback(resource, fgLatn, resource, &error);
+    UResourceBundle *numElements = ures_getByKeyWithFallback(resource, fgNumberElements, NULL, &error);
+    resource = ures_getByKeyWithFallback(numElements, ns->getName(), resource, &error);
     resource = ures_getByKeyWithFallback(resource, fgPatterns, resource, &error);
     int32_t patLen = 0;
     const UChar *patResStr = ures_getStringByKeyWithFallback(resource, fgCurrencyFormat,  &patLen, &error);
+    if ( error == U_MISSING_RESOURCE_ERROR && uprv_strcmp(ns->getName(),fgLatn)) {
+        error = U_ZERO_ERROR;
+        resource = ures_getByKeyWithFallback(numElements, fgLatn, resource, &error);
+        resource = ures_getByKeyWithFallback(resource, fgPatterns, resource, &error);
+        patResStr = ures_getStringByKeyWithFallback(resource, fgCurrencyFormat,  &patLen, &error);
+    }
+    ures_close(numElements);
     ures_close(resource);
 
     if (U_SUCCESS(error)) {
