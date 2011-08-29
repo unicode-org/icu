@@ -163,6 +163,7 @@ timezoneTypes:table(nofallback){
             "Africa:Gaborone"{"bwgbe"}
             "Africa:Harare"{"zwhre"}
             "Africa:Johannesburg"{"zajnb"}
+            "Africa:Juba"{"ssjub"}
             "Africa:Kampala"{"ugkla"}
             "Africa:Khartoum"{"sdkrt"}
             "Africa:Kigali"{"rwkgl"}
