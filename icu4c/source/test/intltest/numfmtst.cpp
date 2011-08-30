@@ -6475,6 +6475,10 @@ void NumberFormatTest::TestAvailableNumberingSystems() {
         if ( uprv_strcmp(nsname,ns->getName()) ) {
             errln("FAIL: Numbering system name didn't match for name = %s\n",nsname);
         }
+
+        delete ns;
     }
+
+    delete availableNumberingSystems;
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

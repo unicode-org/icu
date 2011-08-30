@@ -228,7 +228,7 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
     }
 
     if ( availableNames == NULL ) {
-        UVector *fNumsysNames = new UVector(status);
+        UVector *fNumsysNames = new UVector(uprv_deleteUObject, NULL, status);
         if (U_FAILURE(status)) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;

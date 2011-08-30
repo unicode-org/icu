@@ -1246,6 +1246,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
         }
 
+        ures_close(numElements);
+
         // Creates the specified decimal format style of the desired locale.
         pattern.setTo(TRUE, patResStr, patLen);
     }
