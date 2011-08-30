@@ -240,7 +240,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         return;
     }
 
-	static NumberingSystem *ns = NumberingSystem::createInstance(loc,status);
+    NumberingSystem *ns = NumberingSystem::createInstance(loc,status);
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle *rb = ures_open(NULL, loc.getName(), &ec);
     UResourceBundle *numElements = ures_getByKeyWithFallback(rb, gNumberElementsTag, NULL, &ec);
@@ -275,6 +275,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
 
     ures_close(numElements);
     ures_close(rb);
+    delete ns;
 
     if (U_FAILURE(ec)) {
         return;

@@ -419,6 +419,8 @@ DecimalFormat::construct(UErrorCode&             status,
         ures_close(top);
     }
 
+    delete ns;
+
     if (U_FAILURE(status))
     {
         return;
@@ -501,6 +503,9 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
     }
 
     NumberingSystem *ns = NumberingSystem::createInstance(fSymbols->getLocale(),status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // Save the default currency patterns of this locale.
     // Here, chose onlyApplyPatternWithoutExpandAffix without
@@ -522,6 +527,7 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
     }
     ures_close(numElements);
     ures_close(resource);
+    delete ns;
 
     if (U_SUCCESS(error)) {
         applyPatternWithoutExpandAffix(UnicodeString(patResStr, patLen), false,
