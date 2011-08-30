@@ -620,7 +620,7 @@ void RBBITest::TestJapaneseWordBreak() {
         Locale("ja"), status);
     if (U_FAILURE(status))
     {
-        errcheckln(status, "Failed to create the BreakIterator for Japanese locale in TestJapaneseWordBreak.\n");
+        errcheckln(status, "Failed to create the BreakIterator for Japanese locale in TestJapaneseWordBreak.");
         return;
     }
 

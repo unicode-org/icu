@@ -849,28 +849,30 @@ static void TestBreakIteratorRefresh(void) {
     ubrk_setUText(bi, &ut1, &status);
     TEST_ASSERT_SUCCESS(status);
 
-    /* Line boundaries will occur before each letter in the original string */
-    TEST_ASSERT(1 == ubrk_next(bi));
-    TEST_ASSERT(3 == ubrk_next(bi));
+    if (U_SUCCESS(status)) {
+        /* Line boundaries will occur before each letter in the original string */
+        TEST_ASSERT(1 == ubrk_next(bi));
+        TEST_ASSERT(3 == ubrk_next(bi));
+
+        /* Move the string, kill the original string.  */
+        u_strcpy(movedStr, testStr);
+        u_memset(testStr, 0x20, u_strlen(testStr));
+        utext_openUChars(&ut2, movedStr, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        ubrk_refreshUText(bi, &ut2, &status);
+        TEST_ASSERT_SUCCESS(status);
     
-    /* Move the string, kill the original string.  */
-    u_strcpy(movedStr, testStr);
-    u_memset(testStr, 0x20, u_strlen(testStr));
-    utext_openUChars(&ut2, movedStr, -1, &status);
-    TEST_ASSERT_SUCCESS(status);
-    ubrk_refreshUText(bi, &ut2, &status);
-    TEST_ASSERT_SUCCESS(status);
+        /* Find the following matches, now working in the moved string. */
+        TEST_ASSERT(5 == ubrk_next(bi));
+        TEST_ASSERT(7 == ubrk_next(bi));
+        TEST_ASSERT(8 == ubrk_next(bi));
+        TEST_ASSERT(UBRK_DONE == ubrk_next(bi));
+        TEST_ASSERT_SUCCESS(status);
 
-    /* Find the following matches, now working in the moved string. */
-    TEST_ASSERT(5 == ubrk_next(bi));
-    TEST_ASSERT(7 == ubrk_next(bi));
-    TEST_ASSERT(8 == ubrk_next(bi));
-    TEST_ASSERT(UBRK_DONE == ubrk_next(bi));
-    TEST_ASSERT_SUCCESS(status);
-
+        utext_close(&ut1);
+        utext_close(&ut2);
+    }
     ubrk_close(bi);
-    utext_close(&ut1);
-    utext_close(&ut2);
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

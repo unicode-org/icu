@@ -30,7 +30,7 @@
 
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) {\
-errln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
+dataerrln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if ((expr) == FALSE) { \
     errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
@@ -1141,31 +1141,34 @@ void RBBIAPITest::TestRefreshInputText() {
 
     utext_openUChars(&ut1, testStr, -1, &status);
     TEST_ASSERT_SUCCESS(status);
-    bi->setText(&ut1, status);
-    TEST_ASSERT_SUCCESS(status);
 
-    /* Line boundaries will occur before each letter in the original string */
-    TEST_ASSERT(1 == bi->next());
-    TEST_ASSERT(3 == bi->next());
+    if (U_SUCCESS(status)) {
+        bi->setText(&ut1, status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* Line boundaries will occur before each letter in the original string */
+        TEST_ASSERT(1 == bi->next());
+        TEST_ASSERT(3 == bi->next());
+
+        /* Move the string, kill the original string.  */
+        u_strcpy(movedStr, testStr);
+        u_memset(testStr, 0x20, u_strlen(testStr));
+        utext_openUChars(&ut2, movedStr, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        RuleBasedBreakIterator *returnedBI = &bi->refreshInputText(&ut2, status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(bi == returnedBI);
+
+        /* Find the following matches, now working in the moved string. */
+        TEST_ASSERT(5 == bi->next());
+        TEST_ASSERT(7 == bi->next());
+        TEST_ASSERT(8 == bi->next());
+        TEST_ASSERT(UBRK_DONE == bi->next());
     
-    /* Move the string, kill the original string.  */
-    u_strcpy(movedStr, testStr);
-    u_memset(testStr, 0x20, u_strlen(testStr));
-    utext_openUChars(&ut2, movedStr, -1, &status);
-    TEST_ASSERT_SUCCESS(status);
-    RuleBasedBreakIterator *returnedBI = &bi->refreshInputText(&ut2, status);
-    TEST_ASSERT_SUCCESS(status);
-    TEST_ASSERT(bi == returnedBI);
-
-    /* Find the following matches, now working in the moved string. */
-    TEST_ASSERT(5 == bi->next());
-    TEST_ASSERT(7 == bi->next());
-    TEST_ASSERT(8 == bi->next());
-    TEST_ASSERT(UBRK_DONE == bi->next());
-
+        utext_close(&ut1);
+        utext_close(&ut2);
+    }
     delete bi;
-    utext_close(&ut1);
-    utext_close(&ut2);
 
 }
 
