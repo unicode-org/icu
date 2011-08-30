@@ -6457,6 +6457,7 @@ void NumberFormatTest::TestExplicitParents() {
 void NumberFormatTest::TestAvailableNumberingSystems() {
     UErrorCode status = U_ZERO_ERROR;
     StringEnumeration *availableNumberingSystems = NumberingSystem::getAvailableNames(status);
+    CHECK_DATA(status, "NumberingSystem::getAvailableNames()")
 
     int32_t nsCount = availableNumberingSystems->count(status);
     if ( nsCount < 36 ) {
