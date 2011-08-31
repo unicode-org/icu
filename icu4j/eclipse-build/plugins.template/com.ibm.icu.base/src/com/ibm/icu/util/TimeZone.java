@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.util.ULocale.Category;
+
 /**
  * {@icuenhanced java.util.TimeZone}.{@icu _usage_}
  *
@@ -368,7 +370,7 @@ public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName(boolean daylight, int style) {
-        return getDisplayName(daylight, style, ULocale.getDefault());
+        return getDisplayName(daylight, style, ULocale.getDefault(Category.DISPLAY));
     }
 
     /**

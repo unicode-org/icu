@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.util.Calendar}.{@icu _usage_}
@@ -1139,7 +1140,7 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
      */
     protected Calendar()
     {
-        this(TimeZone.getDefault(), ULocale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
 
     /**

@@ -8,12 +8,18 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.LocaleIDParser;
@@ -21,6 +27,14 @@ import com.ibm.icu.impl.LocaleIDs;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.locale.AsciiUtil;
+import com.ibm.icu.impl.locale.BaseLocale;
+import com.ibm.icu.impl.locale.Extension;
+import com.ibm.icu.impl.locale.InternalLocaleBuilder;
+import com.ibm.icu.impl.locale.LanguageTag;
+import com.ibm.icu.impl.locale.LocaleExtensions;
+import com.ibm.icu.impl.locale.LocaleSyntaxException;
+import com.ibm.icu.impl.locale.ParseStatus;
+import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
 
 /**
  * {@icuenhanced java.util.Locale}.{@icu _usage_}
@@ -87,7 +101,8 @@ import com.ibm.icu.impl.locale.AsciiUtil;
  * @stable ICU 2.8
  */
 public final class ULocale implements Serializable {
-    private static final long serialVersionUID = 1L;
+    // using serialver from jdk1.4.2_05
+    private static final long serialVersionUID = 3715177670352309217L;
 
     /**
      * Useful constant for language.
@@ -226,11 +241,32 @@ public final class ULocale implements Serializable {
     // default empty locale
     private static final Locale EMPTY_LOCALE = new Locale("", "");
 
+    // special keyword key for Unicode locale attributes
+    private static final String LOCALE_ATTRIBUTE_KEY = "attribute";
+
     /**
      * The root ULocale.
      * @stable ICU 2.8
      */
     public static final ULocale ROOT = new ULocale("", EMPTY_LOCALE);
+
+    /**
+     * Enum for locale categories. These locale categories are used to get/set the default locale for
+     * the specific functionality represented by the category.
+     * @stable ICU 49
+     */
+    public enum Category {
+        /**
+         * Category used to represent the default locale for displaying user interfaces.
+         * @stable ICU 49
+         */
+        DISPLAY,
+        /**
+         * Category used to represent the default locale for formatting date, number and/or currency.
+         * @stable ICU 49
+         */
+        FORMAT
+    }
 
     private static final SimpleCache<Locale, ULocale> CACHE = new SimpleCache<Locale, ULocale>();
 
@@ -243,6 +279,14 @@ public final class ULocale implements Serializable {
      * The raw localeID that we were passed in.
      */
     private String localeID;
+
+    /**
+     * Cache the locale data container fields.
+     * In future, we want to use them as the primary locale identifier storage.
+     */
+    private transient volatile BaseLocale baseLocale;
+    private transient volatile LocaleExtensions extensions;
+
 
     private static String[][] CANONICALIZE_MAP;
     private static String[][] variantsToKeywords;
@@ -334,21 +378,6 @@ public final class ULocale implements Serializable {
         }
     }
 
-    /*
-     * This table is used for mapping between ICU and special Java
-     * locales.  When an ICU locale matches <minumum base> with
-     * <keyword>/<value>, the ICU locale is mapped to <Java> locale.
-     * For example, both ja_JP@calendar=japanese and ja@calendar=japanese
-     * are mapped to Java locale "ja_JP_JP".  ICU locale "nn" is mapped
-     * to Java locale "no_NO_NY".
-     */
-    private static final String[][] _javaLocaleMap = {
-    //  { <Java>,       <ICU base>, <keyword>,  <value>,    <minimum base>
-        { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
-        { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
-        { "th_TH_TH",   "th_TH",    "numbers",  "thai",     "th"},
-    };
-
     /**
      * Private constructor used by static initializers.
      */
@@ -378,24 +407,7 @@ public final class ULocale implements Serializable {
         }
         ULocale result = CACHE.get(loc);
         if (result == null) {
-            if (defaultULocale != null && loc == defaultULocale.locale) {
-            result = defaultULocale;
-        } else {
-                String locStr = loc.toString();
-                if (locStr.length() == 0) {
-                    result = ROOT;
-                } else {
-                    for (int i = 0; i < _javaLocaleMap.length; i++) {
-                        if (_javaLocaleMap[i][0].equals(locStr)) {
-                            LocaleIDParser p = new LocaleIDParser(_javaLocaleMap[i][1]);
-                            p.setKeywordValue(_javaLocaleMap[i][2], _javaLocaleMap[i][3]);
-                            locStr = p.getName();
-                            break;
-                        }
-                    }
-                    result = new ULocale(locStr, loc);
-                }
-            }
+            result = JDKLocaleHelper.toULocale(loc);
             CACHE.put(loc, result);
         }
         return result;
@@ -501,45 +513,63 @@ public final class ULocale implements Serializable {
      */
     public Locale toLocale() {
         if (locale == null) {
-            LocaleIDParser p = new LocaleIDParser(localeID);
-            String base = p.getBaseName();
-            for (int i = 0; i < _javaLocaleMap.length; i++) {
-                if (base.equals(_javaLocaleMap[i][1]) || base.equals(_javaLocaleMap[i][4])) {
-                    if (_javaLocaleMap[i][2] != null) {
-                        String val = p.getKeywordValue(_javaLocaleMap[i][2]);
-                        if (val != null && val.equals(_javaLocaleMap[i][3])) {
-                            p = new LocaleIDParser(_javaLocaleMap[i][0]);
-                            break;
-                        }
-                    } else {
-                        p = new LocaleIDParser(_javaLocaleMap[i][0]);
-                        break;
-                    }
-                }
-            }
-            String[] names = p.getLanguageScriptCountryVariant();
-            locale = new Locale(names[0], names[2], names[3]);
+            locale = JDKLocaleHelper.toLocale(this);
         }
         return locale;
     }
 
     private static ICUCache<String, String> nameCache = new SimpleCache<String, String>();
+
     /**
      * Keep our own default ULocale.
      */
     private static Locale defaultLocale = Locale.getDefault();
-    private static ULocale defaultULocale = new ULocale(defaultLocale);
+    private static ULocale defaultULocale = forLocale(defaultLocale);
+
+    private static Locale[] defaultCategoryLocales = new Locale[Category.values().length];
+    private static ULocale[] defaultCategoryULocales = new ULocale[Category.values().length];
+
+    static {
+        for (Category cat: Category.values()) {
+            int idx = cat.ordinal();
+            defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
+            defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+        }
+    }
 
     /**
      * Returns the current default ULocale.
+     * @return the default ULocale.
      * @stable ICU 2.8
      */
     public static ULocale getDefault() {
         synchronized (ULocale.class) {
+            if (defaultULocale == null) {
+                // When Java's default locale has extensions (such as ja-JP-u-ca-japanese),
+                // Locale -> ULocale mapping requires BCP47 keyword mapping data that is currently
+                // stored in a resource bundle. However, UResourceBundle currently requires
+                // non-null default ULocale. For now, this implementation returns ULocale.ROOT
+                // to avoid the problem.
+
+                // TODO: Consider moving BCP47 mapping data out of resource bundle later.
+
+                return ULocale.ROOT;
+            }
             Locale currentDefault = Locale.getDefault();
             if (!defaultLocale.equals(currentDefault)) {
                 defaultLocale = currentDefault;
-                defaultULocale = new ULocale(defaultLocale);
+                defaultULocale = forLocale(currentDefault);
+
+                if (!JDKLocaleHelper.isJava7orNewer()) {
+                    // Detected Java default Locale change.
+                    // We need to update category defaults to match the
+                    // Java 7's behavior on Java 6 or older environment.
+                    for (Category cat : Category.values()) {
+                        int idx = cat.ordinal();
+                        defaultCategoryLocales[idx] = currentDefault;
+                        defaultCategoryULocales[idx] = forLocale(currentDefault);
+                    }
+                }
             }
             return defaultULocale;
         }
@@ -550,17 +580,101 @@ public final class ULocale implements Serializable {
      * If the caller does not have write permission to the
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
+     * <p>
+     * By setting the default ULocale with this method, all of the default categoy locales
+     * are also set to the specified default ULocale.
      * @param newLocale the new default locale
      * @throws SecurityException if a security manager exists and its
      *        <code>checkPermission</code> method doesn't allow the operation.
      * @throws NullPointerException if <code>newLocale</code> is null
      * @see SecurityManager#checkPermission(java.security.Permission)
      * @see java.util.PropertyPermission
+     * @see ULocale#setDefault(Category, ULocale)
      * @stable ICU 3.0
      */
     public static synchronized void setDefault(ULocale newLocale){
-        Locale.setDefault(newLocale.toLocale());
+        defaultLocale = newLocale.toLocale();
+        Locale.setDefault(defaultLocale);
         defaultULocale = newLocale;
+        // This method also updates all category default locales
+        for (Category cat : Category.values()) {
+            setDefault(cat, newLocale);
+        }
+    }
+
+    /**
+     * Returns the current default ULocale for the specified category.
+     * 
+     * @param category the category
+     * @return the default ULocale for the specified category.
+     * @stable ICU 49
+     */
+    public static ULocale getDefault(Category category) {
+        synchronized (ULocale.class) {
+            int idx = category.ordinal();
+            if (defaultCategoryULocales[idx] == null) {
+                // Just in case this method is called during ULocale class
+                // initialization. Unlike getDefault(), we do not have
+                // cyclic dependency for category default.
+                return ULocale.ROOT;
+            }
+            if (JDKLocaleHelper.isJava7orNewer()) {
+                Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
+                if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
+                    defaultCategoryLocales[idx] = currentCategoryDefault;
+                    defaultCategoryULocales[idx] = forLocale(currentCategoryDefault);
+                }
+            } else {
+                // java.util.Locale.setDefault(Locale) in Java 7 updates
+                // category locale defaults. On Java 6 or older environment,
+                // ICU4J checks if the default locale has changed and update
+                // category ULocales here if necessary.
+                
+                // Note: When java.util.Locale.setDefault(Locale) is called
+                // with a Locale same with the previous one, Java 7 still
+                // updates category locale defaults. On Java 6 or older env,
+                // there is no good way to detect the event, ICU4J simply
+                // check if the default Java Locale has changed since last
+                // time.
+
+                Locale currentDefault = Locale.getDefault();
+                if (!defaultLocale.equals(currentDefault)) {
+                    defaultLocale = currentDefault;
+                    defaultULocale = forLocale(currentDefault);
+
+                    for (Category cat : Category.values()) {
+                        int tmpIdx = cat.ordinal();
+                        defaultCategoryLocales[tmpIdx] = currentDefault;
+                        defaultCategoryULocales[tmpIdx] = forLocale(currentDefault);
+                    }
+                }
+                
+                // No synchronization with JDK Locale, because category default
+                // is not supported in Java 6 or older versions
+            }
+            return defaultCategoryULocales[idx];
+        }
+    }
+
+    /**
+     * Sets the default <code>ULocale</code> for the specified <code>Category</code>.
+     * This also sets the default <code>Locale</code> for the specified <code>Category</code>
+     * of the JVM. If the caller does not have write permission to the
+     * user.language property, a security exception will be thrown,
+     * and the default ULocale for the specified Category will remain unchanged.
+     * 
+     * @param category the specified category to set the default locale
+     * @param newLocale the new default locale
+     * @see SecurityManager#checkPermission(java.security.Permission)
+     * @see java.util.PropertyPermission
+     * @stable ICU 49
+     */
+    public static synchronized void setDefault(Category category, ULocale newLocale) {
+        Locale newJavaDefault = newLocale.toLocale();
+        int idx = category.ordinal();
+        defaultCategoryULocales[idx] = newLocale;
+        defaultCategoryLocales[idx] = newJavaDefault;
+        JDKLocaleHelper.setDefault(category, newJavaDefault);
     }
 
     /**
@@ -608,6 +722,7 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static ULocale[] getAvailableLocales() {
+        //#com.ibm.icu.base
         if (availableLocales == null) {
             synchronized (ULocale.class) {
                 if (availableLocales == null) {
@@ -806,6 +921,36 @@ public final class ULocale implements Serializable {
     public String getName() {
         return localeID; // always normalized
     }
+    
+    /**
+     * Gets the shortest length subtag's size.
+     *
+     * @param localeID
+     * @return The size of the shortest length subtag
+     **/
+    private static int getShortestSubtagLength(String localeID) {
+        int localeIDLength = localeID.length();
+        int length = localeIDLength;
+        boolean reset = true;
+        int tmpLength = 0;
+        
+        for (int i = 0; i < localeIDLength; i++) {
+            if (localeID.charAt(i) != '_' && localeID.charAt(i) != '-') {
+                if (reset) {
+                    reset = false;
+                    tmpLength = 0;
+                }
+                tmpLength++;
+            } else {
+                if (tmpLength != 0 && tmpLength < length) {
+                    length = tmpLength;
+                }
+                reset = true;
+            }
+        }
+        
+        return length;
+    }
 
     /**
      * {@icu} Returns the (normalized) full name for the specified locale.
@@ -815,10 +960,20 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static String getName(String localeID){
-        String name = nameCache.get(localeID);
+        String tmpLocaleID;
+        // Convert BCP47 id if necessary
+        if (localeID != null && !localeID.contains("@") && getShortestSubtagLength(localeID) == 1) {
+            tmpLocaleID = forLanguageTag(localeID).getName();
+            if (tmpLocaleID.length() == 0) {
+                tmpLocaleID = localeID;
+            }
+        } else {
+            tmpLocaleID = localeID;
+        }
+        String name = nameCache.get(tmpLocaleID);
         if (name == null) {
-            name = new LocaleIDParser(localeID).getName();
-            nameCache.put(localeID, name);
+            name = new LocaleIDParser(tmpLocaleID).getName();
+            nameCache.put(tmpLocaleID, name);
         }
         return name;
     }
@@ -1043,12 +1198,13 @@ public final class ULocale implements Serializable {
     // display names
 
     /**
-     * Returns this locale's language localized for display in the default locale.
+     * Returns this locale's language localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized language name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayLanguage() {
-        return getDisplayLanguageInternal(this, getDefault(), false);
+        return getDisplayLanguageInternal(this, getDefault(Category.DISPLAY), false);
     }
 
     /**
@@ -1086,14 +1242,14 @@ public final class ULocale implements Serializable {
         return getDisplayLanguageInternal(new ULocale(localeID), displayLocale, false);
     }
     /**
-     * {@icu} Returns this locale's language localized for display in the default locale.
+     * {@icu} Returns this locale's language localized for display in the default <code>DISPLAY</code> locale.
      * If a dialect name is present in the data, then it is returned.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @see Category#DISPLAY
+     * @stable ICU 4.4
      */
     public String getDisplayLanguageWithDialect() {
-        return getDisplayLanguageInternal(this, getDefault(), true);
+        return getDisplayLanguageInternal(this, getDefault(Category.DISPLAY), true);
     }
 
     /**
@@ -1101,8 +1257,7 @@ public final class ULocale implements Serializable {
      * If a dialect name is present in the data, then it is returned.
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getDisplayLanguageWithDialect(ULocale displayLocale) {
         return getDisplayLanguageInternal(this, displayLocale, true);
@@ -1115,8 +1270,7 @@ public final class ULocale implements Serializable {
      * @param localeID the id of the locale whose language will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayLanguageWithDialect(String localeID, String displayLocaleID) {
         return getDisplayLanguageInternal(new ULocale(localeID), new ULocale(displayLocaleID),
@@ -1130,8 +1284,7 @@ public final class ULocale implements Serializable {
      * @param localeID the id of the locale whose language will be displayed.
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayLanguageWithDialect(String localeID, ULocale displayLocale) {
         return getDisplayLanguageInternal(new ULocale(localeID), displayLocale, true);
@@ -1139,17 +1292,19 @@ public final class ULocale implements Serializable {
 
     private static String getDisplayLanguageInternal(ULocale locale, ULocale displayLocale,
             boolean useDialect) {
+        //#com.ibm.icu.base
         // No dialect support
         return locale.toLocale().getDisplayLanguage(displayLocale.toLocale());
     }
 
     /**
-     * {@icu} Returns this locale's script localized for display in the default locale.
+     * {@icu} Returns this locale's script localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized script name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayScript() {
-        return getDisplayScriptInternal(this, getDefault());
+        return getDisplayScriptInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1187,17 +1342,32 @@ public final class ULocale implements Serializable {
 
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayScriptInternal(ULocale locale, ULocale displayLocale) {
-        // No localization, just return the script code
-        return locale.getScript();
+        //#com.ibm.icu.base
+        String dispScript = null;
+        try {
+            // Calling Locale#getDisplayScript on Java 7 or later
+            Method mGetDisplayScript = Locale.class.getMethod("getDisplayScript", Locale.class);
+            dispScript = (String) mGetDisplayScript.invoke(locale.toLocale(), displayLocale.toLocale());
+            
+        } catch (NoSuchMethodException e) {
+        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
+        }
+
+        if (dispScript == null) {
+            dispScript = locale.getScript();
+        }
+        return dispScript;
     }
 
     /**
-     * Returns this locale's country localized for display in the default locale.
+     * Returns this locale's country localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized country name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayCountry() {
-        return getDisplayCountryInternal(this, getDefault());
+        return getDisplayCountryInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1236,16 +1406,18 @@ public final class ULocale implements Serializable {
 
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayCountryInternal(ULocale locale, ULocale displayLocale) {
+        //#com.ibm.icu.base
         return locale.toLocale().getDisplayCountry(displayLocale.toLocale());
     }
 
     /**
-     * Returns this locale's variant localized for display in the default locale.
+     * Returns this locale's variant localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized variant name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayVariant() {
-        return getDisplayVariantInternal(this, getDefault());
+        return getDisplayVariantInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1283,18 +1455,20 @@ public final class ULocale implements Serializable {
     }
 
     private static String getDisplayVariantInternal(ULocale locale, ULocale displayLocale) {
+        //#com.ibm.icu.base
         return locale.toLocale().getDisplayVariant(displayLocale.toLocale());
     }
 
     /**
-     * {@icu} Returns a keyword localized for display in the default locale.
+     * {@icu} Returns a keyword localized for display in the default <code>DISPLAY</code> locale.
      * @param keyword the keyword to be displayed.
      * @return the localized keyword name.
      * @see #getKeywords()
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public static String getDisplayKeyword(String keyword) {
-        return getDisplayKeywordInternal(keyword, getDefault());
+        return getDisplayKeywordInternal(keyword, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1322,18 +1496,20 @@ public final class ULocale implements Serializable {
     }
 
     private static String getDisplayKeywordInternal(String keyword, ULocale displayLocale) {
+        //#com.ibm.icu.base
         // No localization
         return keyword;
     }
 
     /**
-     * {@icu} Returns a keyword value localized for display in the default locale.
+     * {@icu} Returns a keyword value localized for display in the default <code>DISPLAY</code> locale.
      * @param keyword the keyword whose value is to be displayed.
      * @return the localized value name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayKeywordValue(String keyword) {
-        return getDisplayKeywordValueInternal(this, keyword, getDefault());
+        return getDisplayKeywordValueInternal(this, keyword, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1379,18 +1555,21 @@ public final class ULocale implements Serializable {
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayKeywordValueInternal(ULocale locale, String keyword,
             ULocale displayLocale) {
+        //#com.ibm.icu.base
         keyword = AsciiUtil.toLowerString(keyword.trim());
         String value = locale.getKeywordValue(keyword);
+        // No localization
         return value;
     }
 
     /**
-     * Returns this locale name localized for display in the default locale.
+     * Returns this locale name localized for display in the default <code>DISPLAY</code> locale.
      * @return the localized locale name.
+     * @see Category#DISPLAY
      * @stable ICU 3.0
      */
     public String getDisplayName() {
-        return getDisplayNameInternal(this, getDefault());
+        return getDisplayNameInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1428,19 +1607,19 @@ public final class ULocale implements Serializable {
     }
 
     private static String getDisplayNameInternal(ULocale locale, ULocale displayLocale) {
-        // No localization, no script and keywords
+        //#com.ibm.icu.base
         return locale.toLocale().getDisplayName(displayLocale.toLocale());
     }
 
     /**
-     * {@icu} Returns this locale name localized for display in the default locale.
+     * {@icu} Returns this locale name localized for display in the default <code>DISPLAY</code> locale.
      * If a dialect name is present in the locale data, then it is returned.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @see Category#DISPLAY
+     * @stable ICU 4.4
      */
     public String getDisplayNameWithDialect() {
-        return getDisplayNameWithDialectInternal(this, getDefault());
+        return getDisplayNameWithDialectInternal(this, getDefault(Category.DISPLAY));
     }
 
     /**
@@ -1448,8 +1627,7 @@ public final class ULocale implements Serializable {
      * If a dialect name is present in the locale data, then it is returned.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getDisplayNameWithDialect(ULocale displayLocale) {
         return getDisplayNameWithDialectInternal(this, displayLocale);
@@ -1462,8 +1640,7 @@ public final class ULocale implements Serializable {
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocaleID the id of the locale in which to display the locale name.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayNameWithDialect(String localeID, String displayLocaleID) {
         return getDisplayNameWithDialectInternal(new ULocale(localeID),
@@ -1477,15 +1654,15 @@ public final class ULocale implements Serializable {
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static String getDisplayNameWithDialect(String localeID, ULocale displayLocale) {
         return getDisplayNameWithDialectInternal(new ULocale(localeID), displayLocale);
     }
 
     private static String getDisplayNameWithDialectInternal(ULocale locale, ULocale displayLocale) {
-        // No dialect support, no script and keyword support
+        //#com.ibm.icu.base
+        // No dialect handling
         return locale.toLocale().getDisplayName(displayLocale.toLocale());
     }
 
@@ -1497,7 +1674,17 @@ public final class ULocale implements Serializable {
      * @stable ICU 4.0
      */
     public String getCharacterOrientation() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        //#com.ibm.icu.base
+        // Hardcoded
+        String lang = getLanguage();
+        if (lang.equals("ar") || lang.equals("fa") || lang.equals("he") || lang.equals("ps") || lang.equals("ur")) {
+            return "right-to-left";
+        }
+        String script = getScript();
+        if (script.equals("Arab")) {
+            return "right-to-left";
+        }
+        return "left-to-right";
     }
 
     /**
@@ -1508,7 +1695,8 @@ public final class ULocale implements Serializable {
      * @stable ICU 4.0
      */
     public String getLineOrientation() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        //#com.ibm.icu.base
+        return "top-to-bottom";
     }
 
     /**
@@ -1618,6 +1806,21 @@ public final class ULocale implements Serializable {
                             setFallback[0]=false; // first time with this locale - not a fallback.
                         }
                         return availableLocales[j];
+                    }
+                    // compare to scriptless alias, so locales such as
+                    // zh_TW, zh_CN are considered as available locales - see #7190
+                    if (aLocale.getScript().length() == 0
+                            && availableLocales[j].getScript().length() > 0
+                            && availableLocales[j].getLanguage().equals(aLocale.getLanguage())
+                            && availableLocales[j].getCountry().equals(aLocale.getCountry())
+                            && availableLocales[j].getVariant().equals(aLocale.getVariant())) {
+                        ULocale minAvail = ULocale.minimizeSubtags(availableLocales[j]);
+                        if (minAvail.getScript().length() == 0) {
+                            if(setFallback != null) {
+                                setFallback[0] = false; // not a fallback.
+                            }
+                            return aLocale;
+                        }
                     }
                 }
                 Locale loc = aLocale.toLocale();
@@ -1933,6 +2136,8 @@ public final class ULocale implements Serializable {
         return acceptList;
     }
 
+    private static final String UNDEFINED_LANGUAGE = "und";
+
     /**
      * {@icu} Adds the likely subtags for a provided locale ID, per the algorithm
      * described in the following CLDR technical report:
@@ -1961,7 +2166,8 @@ public final class ULocale implements Serializable {
      * @stable ICU 4.0
      */
     public static ULocale addLikelySubtags(ULocale loc) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        //#com.ibm.icu.base
+        return loc;
     }
 
     /**
@@ -1992,7 +2198,194 @@ public final class ULocale implements Serializable {
      * @stable ICU 4.0
      */
     public static ULocale minimizeSubtags(ULocale loc) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        //#com.ibm.icu.base
+        return loc;
+    }
+
+    /**
+     * A trivial utility function that checks for a null
+     * reference or checks the length of the supplied String.
+     *
+     *   @param string The string to check
+     *
+     *   @return true if the String is empty, or if the reference is null.
+     */
+    private static boolean isEmptyString(String string) {
+      return string == null || string.length() == 0;
+    }
+
+    /**
+     * Append a tag to a StringBuilder, adding the separator if necessary.The tag must
+     * not be a zero-length string.
+     *
+     * @param tag The tag to add.
+     * @param buffer The output buffer.
+     **/
+    private static void appendTag(String tag, StringBuilder buffer) {
+        if (buffer.length() != 0) {
+            buffer.append(UNDERSCORE);
+        }
+
+        buffer.append(tag);
+    }
+
+    /**
+     * Create a tag string from the supplied parameters.  The lang, script and region
+     * parameters may be null references.
+     *
+     * If any of the language, script or region parameters are empty, and the alternateTags
+     * parameter is not null, it will be parsed for potential language, script and region tags
+     * to be used when constructing the new tag.  If the alternateTags parameter is null, or
+     * it contains no language tag, the default tag for the unknown language is used.
+     *
+     * @param lang The language tag to use.
+     * @param script The script tag to use.
+     * @param region The region tag to use.
+     * @param trailing Any trailing data to append to the new tag.
+     * @param alternateTags A string containing any alternate tags.
+     * @return The new tag string.
+     **/
+    private static String createTagString(String lang, String script, String region,
+        String trailing, String alternateTags) {
+
+        LocaleIDParser parser = null;
+        boolean regionAppended = false;
+
+        StringBuilder tag = new StringBuilder();
+
+        if (!isEmptyString(lang)) {
+            appendTag(
+                lang,
+                tag);
+        }
+        else if (isEmptyString(alternateTags)) {
+            /*
+             * Append the value for an unknown language, if
+             * we found no language.
+             */
+            appendTag(
+                UNDEFINED_LANGUAGE,
+                tag);
+        }
+        else {
+            parser = new LocaleIDParser(alternateTags);
+
+            String alternateLang = parser.getLanguage();
+
+            /*
+             * Append the value for an unknown language, if
+             * we found no language.
+             */
+            appendTag(
+                !isEmptyString(alternateLang) ? alternateLang : UNDEFINED_LANGUAGE,
+                tag);
+        }
+
+        if (!isEmptyString(script)) {
+            appendTag(
+                script,
+                tag);
+        }
+        else if (!isEmptyString(alternateTags)) {
+            /*
+             * Parse the alternateTags string for the script.
+             */
+            if (parser == null) {
+                parser = new LocaleIDParser(alternateTags);
+            }
+
+            String alternateScript = parser.getScript();
+
+            if (!isEmptyString(alternateScript)) {
+                appendTag(
+                    alternateScript,
+                    tag);
+            }
+        }
+
+        if (!isEmptyString(region)) {
+            appendTag(
+                region,
+                tag);
+
+            regionAppended = true;
+        }
+        else if (!isEmptyString(alternateTags)) {
+            /*
+             * Parse the alternateTags string for the region.
+             */
+            if (parser == null) {
+                parser = new LocaleIDParser(alternateTags);
+            }
+
+            String alternateRegion = parser.getCountry();
+
+            if (!isEmptyString(alternateRegion)) {
+                appendTag(
+                    alternateRegion,
+                    tag);
+
+                regionAppended = true;
+            }
+        }
+
+        if (trailing != null && trailing.length() > 1) {
+            /*
+             * The current ICU format expects two underscores
+             * will separate the variant from the preceeding
+             * parts of the tag, if there is no region.
+             */
+            int separators = 0;
+
+            if (trailing.charAt(0) == UNDERSCORE) {
+                if (trailing.charAt(1) == UNDERSCORE) {
+                    separators = 2;
+                }
+                }
+                else {
+                    separators = 1;
+                }
+
+            if (regionAppended) {
+                /*
+                 * If we appended a region, we may need to strip
+                 * the extra separator from the variant portion.
+                 */
+                if (separators == 2) {
+                    tag.append(trailing.substring(1));
+                }
+                else {
+                    tag.append(trailing);
+                }
+            }
+            else {
+                /*
+                 * If we did not append a region, we may need to add
+                 * an extra separator to the variant portion.
+                 */
+                if (separators == 1) {
+                    tag.append(UNDERSCORE);
+                }
+                tag.append(trailing);
+            }
+        }
+
+        return tag.toString();
+    }
+
+    /**
+     * Create a tag string from the supplied parameters.  The lang, script and region
+     * parameters may be null references.If the lang parameter is an empty string, the
+     * default value for an unknown language is written to the output buffer.
+     *
+     * @param lang The language tag to use.
+     * @param script The script tag to use.
+     * @param region The region tag to use.
+     * @param trailing Any trailing data to append to the new tag.
+     * @return The new String.
+     **/
+    static String createTagString(String lang, String script, String region, String trailing) {
+        return createTagString(lang, script, region, trailing, null);
     }
 
     // --------------------------------
@@ -2023,15 +2416,15 @@ public final class ULocale implements Serializable {
 
     /**
      * {@icu} Returns the extension (or private use) value associated with
-     * the specified singleton key, or null if there is no extension
-     * associated with the key.  To be valid, the key must be one
-     * of <code>[0-9A-Za-z]</code>.  Keys are case-insensitive, so
+     * the specified key, or null if there is no extension
+     * associated with the key. To be well-formed, the key must be one
+     * of <code>[0-9A-Za-z]</code>. Keys are case-insensitive, so
      * for example 'z' and 'Z' represent the same extension.
      *
      * @param key the extension key
-     * @return the extension, or null if this locale defines no
-     * extension for the specified key
-     * @throws IllegalArgumentException if the key is not valid
+     * @return The extension, or null if this locale defines no
+     * extension for the specified key.
+     * @throws IllegalArgumentException if key is not well-formed
      * @see #PRIVATE_USE_EXTENSION
      * @see #UNICODE_LOCALE_EXTENSION
      *
@@ -2039,104 +2432,125 @@ public final class ULocale implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public String getExtension(char key) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        if (!LocaleExtensions.isValidKey(key)) {
+            throw new IllegalArgumentException("Invalid extension key: " + key);
+        }
+        return extensions().getExtensionValue(key);
     }
 
     /**
      * {@icu} Returns the set of extension keys associated with this locale, or the
-     * empty set if it has no extensions.  The returned set is unmodifiable.
+     * empty set if it has no extensions. The returned set is unmodifiable.
+     * The keys will all be lower-case.
      *
      * @return the set of extension keys, or the empty set if this locale has
      * no extensions
-     *
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public Set<Character> getExtensionKeys() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        return extensions().getKeys();
     }
 
     /**
-     * {@icu} Returns the Unicode locale type associated with the specified Unicode
-     * locale key for this locale.  Unicode locale keywrods are specified
-     * by the 'u' extension and consist of key/type pairs.  The key must be
-     * two alphanumeric characters in length, or an IllegalArgumentException
-     * is thrown.
-     * @param key the Unicode locale key
-     * @return the Unicode locale type associated with the key, or null if the
-     * locale does not define a value for the key.
-     * @throws IllegalArgumentException if the key is not valid.
+     * {@icu} Returns the set of unicode locale attributes associated with
+     * this locale, or the empty set if it has no attributes. The
+     * returned set is unmodifiable.
      *
+     * @return The set of attributes.
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Set<String> getUnicodeLocaleAttributes() {
+        return extensions().getUnicodeLocaleAttributes();
+    }
+
+    /**
+     * {@icu} Returns the Unicode locale type associated with the specified Unicode locale key
+     * for this locale. Returns the empty string for keys that are defined with no type.
+     * Returns null if the key is not defined. Keys are case-insensitive. The key must
+     * be two alphanumeric characters ([0-9a-zA-Z]), or an IllegalArgumentException is
+     * thrown.
+     *
+     * @param key the Unicode locale key
+     * @return The Unicode locale type associated with the key, or null if the
+     * locale does not define the key.
+     * @throws IllegalArgumentException if the key is not well-formed
+     * @throws NullPointerException if <code>key</code> is null
+     * 
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
     public String getUnicodeLocaleType(String key) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        if (!LocaleExtensions.isValidUnicodeLocaleKey(key)) {
+            throw new IllegalArgumentException("Invalid Unicode locale key: " + key);
+        }
+        return extensions().getUnicodeLocaleType(key);
     }
 
     /**
-     * {@icu} Returns the set of keys for Unicode locale keywords defined by this locale,
-     * or null if this locale has no locale extension.  The returned set is
-     * immutable.
+     * {@icu} Returns the set of Unicode locale keys defined by this locale, or the empty set if
+     * this locale has none.  The returned set is immutable.  Keys are all lower case.
      *
-     * @return the set of the Unicode locale keys, or null
-     *
+     * @return The set of Unicode locale keys, or the empty set if this locale has
+     * no Unicode locale keywords.
+     * 
      * @draft ICU 4.4
      * @provisional This API might change or be removed in a future release.
      */
     public Set<String> getUnicodeLocaleKeys() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        return extensions().getUnicodeLocaleKeys();
     }
 
     /**
      * {@icu} Returns a well-formed IETF BCP 47 language tag representing
      * this locale.
      *
-     * <p>
-     * If this <code>ULocale</code> object has language, country, or variant
-     * that does not satisfy the IETF BCP 47 language tag syntax requirements,
-     * this method handles these fields as described below:
-     * <p>
-     * <b>Language:</b> If language is empty or ill-formed (for example "a" or "e2"),
-     * it will be emitted as "und" (Undetermined).
-     * <p>
-     * <b>Country:</b> If country is ill-formed (for example "12" or "USA"), it
-     * will be omitted.
-     * <p>
-     * <b>Variant:</b> Variant is treated as consisting of subtags separated by
-     * underscore and converted to lower case letters.  'Well-formed' subtags
-     * consist of either an ASCII letter followed by 4-7 ASCII characters, or an
-     * ASCII digit followed by 3-7 ASCII characters.  If well-formed, the variant
-     * is emitted as each subtag in order (separated by hyphen).  Otherwise:
-     * <ul>
-     * <li>if all sub-segments consist of 1 to 8 ASCII alphanumerics (for example
-     * "WIN", "WINDOWS_XP", "SOLARIS_10"), the first ill-formed variant subtag
-     * and all following sub-segments will be emitted as private use subtags prefixed
-     * by the special private use subtag "variant" followed by each subtag in order
-     * (separated by hyphen).  For example, locale "en_US_WIN" is converted to language
-     * tag "en-US-x-variant-win", locale "de_WINDOWS_XP" is converted to language tag
-     * "de-windows-x-variant-xp".  If this locale has a private use extension value,
-     * the special private use subtags prefixed by "variant" are appended after the
-     * locale's private use value.
-     * <li>if any subtag does not consist of 1 to 8 ASCII alphanumerics, the
-     * variant will be truncated and the problematic subtag and all following
-     * sub-segments will be omitted.  If the remainder is non-empty, it will be
-     * emitted as a private use subtag as above (even if the remainder turns out
-     * to be well-formed).  For example, "Solaris_isjustthecoolestthing" is emitted
-     * as "x-jvariant-Solaris", not as "solaris".</li>
-     * </ul>
+     * <p>If this <code>ULocale</code> has a language, script, country, or
+     * variant that does not satisfy the IETF BCP 47 language tag
+     * syntax requirements, this method handles these fields as
+     * described below:
      *
-     * <p><b>Note:</b> Although the language tag created by this method
-     * satisfies the syntax requirements defined by the IETF BCP 47
-     * specification, it is not always a valid BCP 47 language tag.
-     * For example,
+     * <p><b>Language:</b> If language is empty, or not well-formed
+     * (for example "a" or "e2"), it will be emitted as "und" (Undetermined).
+     *
+     * <p><b>Script:</b> If script is not well-formed (for example "12"
+     * or "Latin"), it will be omitted.
+     * 
+     * <p><b>Country:</b> If country is not well-formed (for example "12"
+     * or "USA"), it will be omitted.
+     *
+     * <p><b>Variant:</b> If variant <b>is</b> well-formed, each sub-segment
+     * (delimited by '-' or '_') is emitted as a subtag.  Otherwise:
+     * <ul>
+     *
+     * <li>if all sub-segments match <code>[0-9a-zA-Z]{1,8}</code>
+     * (for example "WIN" or "Oracle_JDK_Standard_Edition"), the first
+     * ill-formed sub-segment and all following will be appended to
+     * the private use subtag.  The first appended subtag will be
+     * "lvariant", followed by the sub-segments in order, separated by
+     * hyphen. For example, "x-lvariant-WIN",
+     * "Oracle-x-lvariant-JDK-Standard-Edition".
+     *
+     * <li>if any sub-segment does not match
+     * <code>[0-9a-zA-Z]{1,8}</code>, the variant will be truncated
+     * and the problematic sub-segment and all following sub-segments
+     * will be omitted.  If the remainder is non-empty, it will be
+     * emitted as a private use subtag as above (even if the remainder
+     * turns out to be well-formed).  For example,
+     * "Solaris_isjustthecoolestthing" is emitted as
+     * "x-lvariant-Solaris", not as "solaris".</li></ul>
+     *
+     * <p><b>Note:</b> Although the language tag created by this
+     * method is well-formed (satisfies the syntax requirements
+     * defined by the IETF BCP 47 specification), it is not
+     * necessarily a valid BCP 47 language tag.  For example,
      * <pre>
-     *   new ULocale("xx_YY").toLanguageTag();
-     * </pre>
-     * will return "xx-YY", but the language subtag "xx" and the region subtag "YY"
-     * are invalid because they are not registered in the
-     * <a href="http://www.iana.org/assignments/language-subtag-registry">
-     * IANA Language Subtag Registry</a>.
+     *   new Locale("xx", "YY").toLanguageTag();</pre>
+     * 
+     * will return "xx-YY", but the language subtag "xx" and the
+     * region subtag "YY" are invalid because they are not registered
+     * in the IANA Language Subtag Registry.
      *
      * @return a BCP47 language tag representing the locale
      * @see #forLanguageTag(String)
@@ -2145,71 +2559,204 @@ public final class ULocale implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public String toLanguageTag() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        BaseLocale base = base();
+        LocaleExtensions exts = extensions();
+
+        if (base.getVariant().equalsIgnoreCase("POSIX")) {
+            // special handling for variant POSIX
+            base = BaseLocale.getInstance(base.getLanguage(), base.getScript(), base.getRegion(), "");
+            if (exts.getUnicodeLocaleType("va") == null) {
+                // add va-posix
+                InternalLocaleBuilder ilocbld = new InternalLocaleBuilder();
+                try {
+                    ilocbld.setLocale(BaseLocale.ROOT, exts);
+                    ilocbld.setUnicodeLocaleKeyword("va", "posix");
+                    exts = ilocbld.getLocaleExtensions();
+                } catch (LocaleSyntaxException e) {
+                    // this should not happen
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        LanguageTag tag = LanguageTag.parseLocale(base, exts);
+
+        StringBuilder buf = new StringBuilder();
+        String subtag = tag.getLanguage();
+        if (subtag.length() > 0) {
+            buf.append(LanguageTag.canonicalizeLanguage(subtag));
+        }
+ 
+        subtag = tag.getScript();
+        if (subtag.length() > 0) {
+            buf.append(LanguageTag.SEP);
+            buf.append(LanguageTag.canonicalizeScript(subtag));
+        }
+
+        subtag = tag.getRegion();
+        if (subtag.length() > 0) {
+            buf.append(LanguageTag.SEP);
+            buf.append(LanguageTag.canonicalizeRegion(subtag));
+        }
+
+        List<String>subtags = tag.getVariants();
+        for (String s : subtags) {
+            buf.append(LanguageTag.SEP);
+            buf.append(LanguageTag.canonicalizeVariant(s));
+        }
+
+        subtags = tag.getExtensions();
+        for (String s : subtags) {
+            buf.append(LanguageTag.SEP);
+            buf.append(LanguageTag.canonicalizeExtension(s));
+        }
+
+        subtag = tag.getPrivateuse();
+        if (subtag.length() > 0) {
+            if (buf.length() > 0) {
+                buf.append(LanguageTag.SEP);
+            }
+            buf.append(LanguageTag.PRIVATEUSE).append(LanguageTag.SEP);
+            buf.append(LanguageTag.canonicalizePrivateuse(subtag));
+        }
+
+        return buf.toString();
     }
 
     /**
      * {@icu} Returns a locale for the specified IETF BCP 47 language tag string.
-     * If the specified language tag contains any ill-formed subtags,
-     * the first such subtag and all following subtags are ignored.
+     *
+     * <p>If the specified language tag contains any ill-formed subtags,
+     * the first such subtag and all following subtags are ignored.  Compare
+     * to {@link ULocale.Builder#setLanguageTag} which throws an exception
+     * in this case.
+     *
+     * <p>The following <b>conversions</b> are performed:<ul>
+     *
+     * <li>The language code "und" is mapped to language "".
+     *
+     * <li>The portion of a private use subtag prefixed by "lvariant",
+     * if any, is removed and appended to the variant field in the
+     * result locale (without case normalization).  If it is then
+     * empty, the private use subtag is discarded:
+     *
+     * <pre>
+     *     ULocale loc;
+     *     loc = ULocale.forLanguageTag("en-US-x-lvariant-icu4j);
+     *     loc.getVariant(); // returns "ICU4J"
+     *     loc.getExtension('x'); // returns null
+     *
+     *     loc = Locale.forLanguageTag("de-icu4j-x-URP-lvariant-Abc-Def");
+     *     loc.getVariant(); // returns "ICU4J_ABC_DEF"
+     *     loc.getExtension('x'); // returns "urp"
+     * </pre>
+     *
+     * <li>When the languageTag argument contains an extlang subtag,
+     * the first such subtag is used as the language, and the primary
+     * language subtag and other extlang subtags are ignored:
+     *
+     * <pre>
+     *     ULocale.forLanguageTag("ar-aao").getLanguage(); // returns "aao"
+     *     ULocale.forLanguageTag("en-abc-def-us").toString(); // returns "abc_US"
+     * </pre>
+     *
+     * <li>Case is normalized. Language is normalized to lower case,
+     * script to title case, country to upper case, variant to upper case,
+     * and extensions to lower case.
      *
      * <p>This implements the 'Language-Tag' production of BCP47, and
      * so supports grandfathered (regular and irregular) as well as
      * private use language tags.  Stand alone private use tags are
      * represented as empty language and extension 'x-whatever',
      * and grandfathered tags are converted to their canonical replacements
-     * where they exist.  Note that a few grandfathered tags have no
-     * modern replacement; these will be converted using the fallback
-     * described above so some information might be lost.
+     * where they exist.  
      *
-     * <p>For a list of grandfathered tags, see the
-     * <a href="http://www.iana.org/assignments/language-subtag-registry">
-     * IANA Language Subtag Registry</a>.
+     * <p>Grandfathered tags with canonical replacements are as follows:
      *
-     * <p><b>Notes:</b> This method converts private use subtags prefixed
-     * by "variant" to variant field in the result locale.  For example,
-     * the code below will return "POSIX".
-     * <pre>
-     *   ULocale.forLanguageTag("en-US-x-variant-posix).getVariant();
-     * </pre>
+     * <table>
+     * <tbody align="center">
+     * <tr><th>grandfathered tag</th><th>&nbsp;</th><th>modern replacement</th></tr>
+     * <tr><td>art-lojban</td><td>&nbsp;</td><td>jbo</td></tr>
+     * <tr><td>i-ami</td><td>&nbsp;</td><td>ami</td></tr>
+     * <tr><td>i-bnn</td><td>&nbsp;</td><td>bnn</td></tr>
+     * <tr><td>i-hak</td><td>&nbsp;</td><td>hak</td></tr>
+     * <tr><td>i-klingon</td><td>&nbsp;</td><td>tlh</td></tr>
+     * <tr><td>i-lux</td><td>&nbsp;</td><td>lb</td></tr>
+     * <tr><td>i-navajo</td><td>&nbsp;</td><td>nv</td></tr>
+     * <tr><td>i-pwn</td><td>&nbsp;</td><td>pwn</td></tr>
+     * <tr><td>i-tao</td><td>&nbsp;</td><td>tao</td></tr>
+     * <tr><td>i-tay</td><td>&nbsp;</td><td>tay</td></tr>
+     * <tr><td>i-tsu</td><td>&nbsp;</td><td>tsu</td></tr>
+     * <tr><td>no-bok</td><td>&nbsp;</td><td>nb</td></tr>
+     * <tr><td>no-nyn</td><td>&nbsp;</td><td>nn</td></tr>
+     * <tr><td>sgn-BE-FR</td><td>&nbsp;</td><td>sfb</td></tr>
+     * <tr><td>sgn-BE-NL</td><td>&nbsp;</td><td>vgt</td></tr>
+     * <tr><td>sgn-CH-DE</td><td>&nbsp;</td><td>sgg</td></tr>
+     * <tr><td>zh-guoyu</td><td>&nbsp;</td><td>cmn</td></tr>
+     * <tr><td>zh-hakka</td><td>&nbsp;</td><td>hak</td></tr>
+     * <tr><td>zh-min-nan</td><td>&nbsp;</td><td>nan</td></tr>
+     * <tr><td>zh-xiang</td><td>&nbsp;</td><td>hsn</td></tr>
+     * </tbody>
+     * </table>
+     *
+     * <p>Grandfathered tags with no modern replacement will be
+     * converted as follows:
+     *
+     * <table>
+     * <tbody align="center">
+     * <tr><th>grandfathered tag</th><th>&nbsp;</th><th>converts to</th></tr>
+     * <tr><td>cel-gaulish</td><td>&nbsp;</td><td>xtg-x-cel-gaulish</td></tr>
+     * <tr><td>en-GB-oed</td><td>&nbsp;</td><td>en-GB-x-oed</td></tr>
+     * <tr><td>i-default</td><td>&nbsp;</td><td>en-x-i-default</td></tr>
+     * <tr><td>i-enochian</td><td>&nbsp;</td><td>und-x-i-enochian</td></tr>
+     * <tr><td>i-mingo</td><td>&nbsp;</td><td>see-x-i-mingo</td></tr>
+     * <tr><td>zh-min</td><td>&nbsp;</td><td>nan-x-zh-min</td></tr>
+     * </tbody>
+     * </table>
+     *
+     * <p>For a list of all grandfathered tags, see the
+     * IANA Language Subtag Registry (search for "Type: grandfathered").
+     *
+     * <p><b>Note</b>: there is no guarantee that <code>toLanguageTag</code>
+     * and <code>forLanguageTag</code> will round-trip.
      *
      * @param languageTag the language tag
-     * @return the locale that best represents the language tag
-     * @exception NullPointerException if <code>languageTag</code> is <code>null</code>
+     * @return The locale that best represents the language tag.
+     * @throws NullPointerException if <code>languageTag</code> is <code>null</code>
      * @see #toLanguageTag()
+     * @see ULocale.Builder#setLanguageTag(String)
      *
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale forLanguageTag(String languageTag) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+        LanguageTag tag = LanguageTag.parse(languageTag, null);
+        InternalLocaleBuilder bldr = new InternalLocaleBuilder();
+        bldr.setLanguageTag(tag);
+        return getInstance(bldr.getBaseLocale(), bldr.getLocaleExtensions());
     }
 
 
     /**
      * <code>Builder</code> is used to build instances of <code>ULocale</code>
-     * from values configured by the setter.  Unlike the <code>ULocale</code>
+     * from values configured by the setters.  Unlike the <code>ULocale</code>
      * constructors, the <code>Builder</code> checks if a value configured by a
-     * setter satisfies the syntactical requirements defined by the <code>ULocale</code>
+     * setter satisfies the syntax requirements defined by the <code>ULocale</code>
      * class.  A <code>ULocale</code> object created by a <code>Builder</code> is
      * well-formed and can be transformed to a well-formed IETF BCP 47 language tag
      * without losing information.
      *
-     * <p>
-     * <b>Note:</b> The <code>ULocale</code> class does not provide
-     * any syntactical restrictions on variant, while BCP 47
-     * requires each variant subtag to be 5 to 8 alphanumeric letters or a single
-     * numeric letter followed by 3 alphanumeric letters.  By default,
-     * the <code>setVariant</code> method throws <code>IllformedLocaleException</code>
-     * for a variant that does not satisfy the syntax above.  If it is
-     * necessary to support such a variant, you could use the constructor <code>
-     * Builder(boolean isLenientVariant)</code> passing <code>true</code> to
-     * skip the syntax validation for variant.  However, you should keep in
-     * mind that a <code>Locale</code> object created this way might lose
-     * the variant information when transformed to a BCP 47 language tag.
+     * <p><b>Note:</b> The <code>ULocale</code> class does not provide any
+     * syntactic restrictions on variant, while BCP 47 requires each variant
+     * subtag to be 5 to 8 alphanumerics or a single numeric followed by 3
+     * alphanumerics.  The method <code>setVariant</code> throws
+     * <code>IllformedLocaleException</code> for a variant that does not satisfy
+     * this restriction. If it is necessary to support such a variant, use a
+     * ULocale constructor.  However, keep in mind that a <code>ULocale</code>
+     * object created this way might lose the variant information when
+     * transformed to a BCP 47 language tag.
      *
-     * <p>
-     * The following example shows how to create a <code>ULocale</code> object
+     * <p>The following example shows how to create a <code>Locale</code> object
      * with the <code>Builder</code>.
      * <blockquote>
      * <pre>
@@ -2227,6 +2774,8 @@ public final class ULocale implements Serializable {
      */
     public static final class Builder {
 
+        private final InternalLocaleBuilder _locbld;
+
         /**
          * Constructs an empty Builder. The default value of all
          * fields, extensions, and private use information is the
@@ -2236,187 +2785,188 @@ public final class ULocale implements Serializable {
          * @provisional This API might change or be removed in a future release.
          */
         public Builder() {
-            throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+            _locbld = new InternalLocaleBuilder();
         }
 
         /**
-         * Constructs an empty Builder with an option whether to allow
-         * <code>setVariant</code> to accept a value that does not
-         * conform to the IETF BCP 47 variant subtag's syntax requirements.
+         * Resets the <code>Builder</code> to match the provided
+         * <code>locale</code>.  Existing state is discarded.
          *
-         * @param isLenientVariant When true, this <code>Builder</code>
-         * will accept an ill-formed variant.
-         * @see #setVariant(String)
+         * <p>All fields of the locale must be well-formed, see {@link Locale}.
          *
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public Builder(boolean isLenientVariant) {
-            throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-        }
-
-        /**
-         * Returns true if this <code>Builder</code> accepts a value that does
-         * not conform to the IETF BCP 47 variant subtag's syntax requirements
-         * in <code>setVariant</code>
-         *
-         * @return true if this <code>Build</code> accepts an ill-formed variant.
-         *
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public boolean isLenientVariant() {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-        }
-
-
-        /**
-         * Resets the <code>Builder</code> to match the provided <code>locale</code>.
-         * The previous state of the builder is discarded.  Fields that do
-         * not conform to the <code>ULocale</code> class specification, for example,
-         * a single letter language, are ill-formed.
+         * <p>Locales with any ill-formed fields cause
+         * <code>IllformedLocaleException</code> to be thrown.
          *
          * @param locale the locale
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>locale</code> has
          * any ill-formed fields.
+         * @throws NullPointerException if <code>locale</code> is null.
          *
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setLocale(ULocale locale) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setLocale(locale.base(), locale.extensions());
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
-         * Resets the builder to match the provided IETF BCP 47 language tag.
-         * The previous state of the builder is discarded.
+         * Resets the Builder to match the provided IETF BCP 47
+         * language tag.  Discards the existing state.  Null and the
+         * empty string cause the builder to be reset, like {@link
+         * #clear}.  Grandfathered tags (see {@link
+         * ULocale#forLanguageTag}) are converted to their canonical
+         * form before being processed.  Otherwise, the language tag
+         * must be well-formed (see {@link ULocale}) or an exception is
+         * thrown (unlike <code>ULocale.forLanguageTag</code>, which
+         * just discards ill-formed and following portions of the
+         * tag).
          *
          * @param languageTag the language tag
-         * @return this builder
-         * @throws IllformedLocaleException if <code>languageTag</code> is ill-formed.
-         * @throws NullPointerException if <code>languageTag</code> is null.
+         * @return This builder.
+         * @throws IllformedLocaleException if <code>languageTag</code> is ill-formed
          * @see ULocale#forLanguageTag(String)
          *
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setLanguageTag(String languageTag) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            ParseStatus sts = new ParseStatus();
+            LanguageTag tag = LanguageTag.parse(languageTag, sts);
+            if (sts.isError()) {
+                throw new IllformedLocaleException(sts.getErrorMessage(), sts.getErrorIndex());
+            }
+            _locbld.setLanguageTag(tag);
+
+            return this;
         }
 
         /**
-         * Sets the language.  If <code>language</code> is the empty string,
-         * the language in this <code>Builder</code> will be removed.
-         * Typical language value is a two or three-letter language
+         * Sets the language.  If <code>language</code> is the empty string or
+         * null, the language in this <code>Builder</code> is removed.  Otherwise,
+         * the language must be <a href="./Locale.html#def_language">well-formed</a>
+         * or an exception is thrown.
+         *
+         * <p>The typical language value is a two or three-letter language
          * code as defined in ISO639.
-         * Well-formed values are any string of two to eight alpha
-         * letters.  This method accepts upper case alpha letters
-         * [A-Z], but the language value in the <code>ULocale</code>
-         * created by the <code>Builder</code> is always normalized
-         * to lower case letters.
          *
          * @param language the language
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>language</code> is ill-formed
          *
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setLanguage(String language) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setLanguage(language);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
-         * Sets the script.  If <code>script</code> is the empty string,
+         * Sets the script. If <code>script</code> is null or the empty string,
          * the script in this <code>Builder</code> is removed.
-         * Typical script value is a four-letter script code as defined by ISO 15924.
-         * Well-formed values are any string of four alpha letters.
-         * This method accepts both upper and lower case alpha letters [a-zA-Z],
-         * but the script value in the <code>ULocale</code> created by the
-         * <code>Builder</code> is always normalized to title case
-         * (the first letter is upper case and the rest of letters are lower case).
+         * Otherwise, the script must be well-formed or an exception is thrown.
+         *
+         * <p>The typical script value is a four-letter script code as defined by ISO 15924.
          *
          * @param script the script
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>script</code> is ill-formed
          *
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setScript(String script) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setScript(script);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
-         * Sets the region.  If region is the empty string, the region
-         * in this <code>Builder</code> is removed.
-         * Typical region value is a two-letter ISO 3166 code or a three-digit UN M.49
-         * area code.  Well-formed values are any two-letter or three-digit string.
-         * This method accepts lower case letters [a-z], but the country value in
-         * the <code>ULocale</code> created by the <code>Builder</code> is always
-         * normalized to upper case.
+         * Sets the region.  If region is null or the empty string, the region
+         * in this <code>Builder</code> is removed.  Otherwise,
+         * the region must be well-formed or an exception is thrown.
+         *
+         * <p>The typical region value is a two-letter ISO 3166 code or a
+         * three-digit UN M.49 area code.
+         *
+         * <p>The country value in the <code>Locale</code> created by the
+         * <code>Builder</code> is always normalized to upper case.
          *
          * @param region the region
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>region</code> is ill-formed
          *
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setRegion(String region) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setRegion(region);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
-         * Sets the variant.  If variant is the empty string, the
-         * variant in this <code>Builder</code> is removed.
-         * <p>
-         * <b>Note:</b> By default, this method checks if <code>variant</code>
-         * satisfies the IETF BCP 47 variant subtag's syntax requirements.
-         * However, the <code>ULocale</code> class itself does not impose any syntactical
-         * restriction on variant.  When a <code>Builder</code> is created by the
-         * constructor <code>Builder(boolean isLenientVariant)</code>
-         * with <code>true</code>, this method skips the syntax check.
+         * Sets the variant.  If variant is null or the empty string, the
+         * variant in this <code>Builder</code> is removed.  Otherwise, it
+         * must consist of one or more well-formed subtags, or an exception is thrown.
+         *
+         * <p><b>Note:</b> This method checks if <code>variant</code>
+         * satisfies the IETF BCP 47 variant subtag's syntax requirements,
+         * and normalizes the value to lowercase letters.  However,
+         * the <code>ULocale</code> class does not impose any syntactic
+         * restriction on variant.  To set such a variant,
+         * use a ULocale constructor.
          *
          * @param variant the variant
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>variant</code> is ill-formed
          *
          * @draft ICU 4.2
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setVariant(String variant) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setVariant(variant);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
-         * Sets the extension for the given key. If the value is the
-         * empty string, the extension is removed. Legal keys are
-         * characters in the ranges <code>[0-9A-Za-z]</code>.  Keys
-         * are case-insensitive, so for example 'z' and 'Z' represent
-         * the same extension. In general, well-formed values are any
-         * series of fields of two to eight alphanumeric characters,
-         * separated by hyphen or underscore.
+         * Sets the extension for the given key. If the value is null or the
+         * empty string, the extension is removed.  Otherwise, the extension
+         * must be well-formed or an exception is thrown.
          *
          * <p><b>Note:</b> The key {@link ULocale#UNICODE_LOCALE_EXTENSION
          * UNICODE_LOCALE_EXTENSION} ('u') is used for the Unicode locale extension.
          * Setting a value for this key replaces any existing Unicode locale key/type
          * pairs with those defined in the extension.
-         * To be well-formed, a value for this extension must meet the additional
-         * constraints that each locale key is two alphanumeric characters,
-         * followed by at least one locale type subtag represented by
-         * three to eight alphanumeric characters, and that the keys and types
-         * be legal Unicode locale keys and values.
          *
          * <p><b>Note:</b> The key {@link ULocale#PRIVATE_USE_EXTENSION
          * PRIVATE_USE_EXTENSION} ('x') is used for the private use code. To be
-         * well-formed, the value for this key needs only to have fields of one to
+         * well-formed, the value for this key needs only to have subtags of one to
          * eight alphanumeric characters, not two to eight as in the general case.
          *
          * @param key the extension key
          * @param value the extension value
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>key</code> is illegal
          * or <code>value</code> is ill-formed
          * @see #setUnicodeLocaleKeyword(String, String)
@@ -2425,30 +2975,92 @@ public final class ULocale implements Serializable {
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setExtension(char key, String value) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setExtension(key, value);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
-         * Sets the Unicode locale keyword type for the given key.  If the
-         * value is the empty string, the Unicode keyword is removed.
-         * Well-formed keys are strings of two alphanumeric characters.
-         * Well-formed types are one or more subtags where each of them is
-         * three to eight alphanumeric characters.
-         * <p>
-         * <b>Note</b>:Setting the 'u' extension replaces all Unicode locale
-         * keywords with those defined in the extension.
+         * Sets the Unicode locale keyword type for the given key.  If the type
+         * is null, the Unicode keyword is removed.  Otherwise, the key must be
+         * non-null and both key and type must be well-formed or an exception
+         * is thrown.
+         *
+         * <p>Keys and types are converted to lower case.
+         *
+         * <p><b>Note</b>:Setting the 'u' extension via {@link #setExtension}
+         * replaces all Unicode locale keywords with those defined in the
+         * extension.
+         *
          * @param key the Unicode locale key
          * @param type the Unicode locale type
-         * @return this builder
+         * @return This builder.
          * @throws IllformedLocaleException if <code>key</code> or <code>type</code>
          * is ill-formed
+         * @throws NullPointerException if <code>key</code> is null
          * @see #setExtension(char, String)
          *
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
         public Builder setUnicodeLocaleKeyword(String key, String type) {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            try {
+                _locbld.setUnicodeLocaleKeyword(key, type);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
+        }
+
+        /**
+         * Adds a unicode locale attribute, if not already present, otherwise
+         * has no effect.  The attribute must not be null and must be well-formed
+         * or an exception is thrown.
+         *
+         * @param attribute the attribute
+         * @return This builder.
+         * @throws NullPointerException if <code>attribute</code> is null
+         * @throws IllformedLocaleException if <code>attribute</code> is ill-formed
+         * @see #setExtension(char, String)
+         *
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder addUnicodeLocaleAttribute(String attribute) {
+            try {
+                _locbld.addUnicodeLocaleAttribute(attribute);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
+        }
+
+        /**
+         * Removes a unicode locale attribute, if present, otherwise has no
+         * effect.  The attribute must not be null and must be well-formed
+         * or an exception is thrown.
+         *
+         * <p>Attribute comparision for removal is case-insensitive.
+         *
+         * @param attribute the attribute
+         * @return This builder.
+         * @throws NullPointerException if <code>attribute</code> is null
+         * @throws IllformedLocaleException if <code>attribute</code> is ill-formed
+         * @see #setExtension(char, String)
+         *
+         * @draft ICU 4.6
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder removeUnicodeLocaleAttribute(String attribute) {
+            try {
+                _locbld.removeUnicodeLocaleAttribute(attribute);
+            } catch (LocaleSyntaxException e) {
+                throw new IllformedLocaleException(e.getMessage(), e.getErrorIndex());
+            }
+            return this;
         }
 
         /**
@@ -2460,7 +3072,8 @@ public final class ULocale implements Serializable {
          * @provisional This API might change or be removed in a future release.
          */
         public Builder clear() {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            _locbld.clear();
+            return this;
         }
 
         /**
@@ -2474,11 +3087,12 @@ public final class ULocale implements Serializable {
          * @provisional This API might change or be removed in a future release.
          */
         public Builder clearExtensions() {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            _locbld.clearExtensions();
+            return this;
         }
 
         /**
-         * Returns an instance of Locale created from the fields set
+         * Returns an instance of <code>ULocale</code> created from the fields set
          * on this builder.
          *
          * @return a new Locale
@@ -2487,7 +3101,1305 @@ public final class ULocale implements Serializable {
          * @provisional This API might change or be removed in a future release.
          */
         public ULocale build() {
-            throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+            return getInstance(_locbld.getBaseLocale(), _locbld.getLocaleExtensions());
         }
     }
+
+    private static ULocale getInstance(BaseLocale base, LocaleExtensions exts) {
+        String id = lscvToID(base.getLanguage(), base.getScript(), base.getRegion(),
+                base.getVariant());
+
+        Set<Character> extKeys = exts.getKeys();
+        if (!extKeys.isEmpty()) {
+            // legacy locale ID assume Unicode locale keywords and
+            // other extensions are at the same level.
+            // e.g. @a=ext-for-aa;calendar=japanese;m=ext-for-mm;x=priv-use
+
+            TreeMap<String, String> kwds = new TreeMap<String, String>();
+            for (Character key : extKeys) {
+                Extension ext = exts.getExtension(key);
+                if (ext instanceof UnicodeLocaleExtension) {
+                    UnicodeLocaleExtension uext = (UnicodeLocaleExtension)ext;
+                    Set<String> ukeys = uext.getUnicodeLocaleKeys();
+                    for (String bcpKey : ukeys) {
+                        String bcpType = uext.getUnicodeLocaleType(bcpKey);
+                        // convert to legacy key/type
+                        String lkey = bcp47ToLDMLKey(bcpKey);
+                        String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "true" : bcpType)); // use "true" as the value of typeless keywords
+                        // special handling for u-va-posix, since this is a variant, not a keyword
+                        if (lkey.equals("va") && ltype.equals("posix") && base.getVariant().length() == 0) {
+                            id = id + "_POSIX";
+                        } else {
+                            kwds.put(lkey, ltype);
+                        }
+                    }
+                    // Mapping Unicode locale attribute to the special keyword, attribute=xxx-yyy
+                    Set<String> uattributes = uext.getUnicodeLocaleAttributes();
+                    if (uattributes.size() > 0) {
+                        StringBuilder attrbuf = new StringBuilder();
+                        for (String attr : uattributes) {
+                            if (attrbuf.length() > 0) {
+                                attrbuf.append('-');
+                            }
+                            attrbuf.append(attr);
+                        }
+                        kwds.put(LOCALE_ATTRIBUTE_KEY, attrbuf.toString());
+                    }
+                } else {
+                    kwds.put(String.valueOf(key), ext.getValue());
+                }
+            }
+
+            if (!kwds.isEmpty()) {
+                StringBuilder buf = new StringBuilder(id);
+                buf.append("@");
+                Set<Map.Entry<String, String>> kset = kwds.entrySet();
+                boolean insertSep = false;
+                for (Map.Entry<String, String> kwd : kset) {
+                    if (insertSep) {
+                        buf.append(";");
+                    } else {
+                        insertSep = true;
+                    }
+                    buf.append(kwd.getKey());
+                    buf.append("=");
+                    buf.append(kwd.getValue());
+                }
+
+                id = buf.toString();
+            }
+        }
+        return new ULocale(id);
+    }
+
+    private BaseLocale base() {
+        if (baseLocale == null) {
+            String language = getLanguage();
+            if (equals(ULocale.ROOT)) {
+                language = "";
+            }
+            baseLocale = BaseLocale.getInstance(language, getScript(), getCountry(), getVariant());
+        }
+        return baseLocale;
+    }
+
+    private LocaleExtensions extensions() {
+        if (extensions == null) {
+            Iterator<String> kwitr = getKeywords();
+            if (kwitr == null) {
+                extensions = LocaleExtensions.EMPTY_EXTENSIONS;
+            } else {
+                InternalLocaleBuilder intbld = new InternalLocaleBuilder();
+                while (kwitr.hasNext()) {
+                    String key = kwitr.next();
+                    if (key.equals(LOCALE_ATTRIBUTE_KEY)) {
+                        // special keyword used for representing Unicode locale attributes
+                        String[] uattributes = getKeywordValue(key).split("[-_]");
+                        for (String uattr : uattributes) {
+                            try {
+                                intbld.addUnicodeLocaleAttribute(uattr);
+                            } catch (LocaleSyntaxException e) {
+                                // ignore and fall through
+                            }
+                        }
+                    } else if (key.length() >= 2) {
+                        String bcpKey = ldmlKeyToBCP47(key);
+                        String bcpType = ldmlTypeToBCP47(key, getKeywordValue(key));
+                        if (bcpKey != null && bcpType != null) {
+                            try {
+                                intbld.setUnicodeLocaleKeyword(bcpKey, bcpType);
+                            } catch (LocaleSyntaxException e) {
+                                // ignore and fall through
+                            }
+                        }
+                    } else if (key.length() == 1 && (key.charAt(0) != UNICODE_LOCALE_EXTENSION)) {
+                        try  {
+                            intbld.setExtension(key.charAt(0), getKeywordValue(key).replace("_",
+                                    LanguageTag.SEP));
+                        } catch (LocaleSyntaxException e) {
+                            // ignore and fall through
+                        }
+                    }
+                }
+                extensions = intbld.getLocaleExtensions();
+            }
+        }
+        return extensions;
+    }
+
+    //
+    // LDML legacy/BCP47 key and type mapping functions
+    //
+    private static String ldmlKeyToBCP47(String key) {
+        //#com.ibm.icu.base
+        // normalize key to lowercase
+        key = AsciiUtil.toLowerString(key);
+        String bcpKey = null;
+
+        for (int i = 0; i < KEYMAP.length; i += 2) {
+            if (key.equals(KEYMAP[i])) {
+                bcpKey = KEYMAP[i + 1];
+                break;
+            }
+        }
+
+        if (bcpKey == null) {
+            if (key.length() == 2 && LanguageTag.isExtensionSubtag(key)) {
+                return key;
+            }
+            return null;
+        }
+
+        return bcpKey;
+    }
+
+    private static String bcp47ToLDMLKey(String bcpKey) {
+        //#com.ibm.icu.base
+        // normalize bcp key to lowercase
+        bcpKey = AsciiUtil.toLowerString(bcpKey);
+        String key = null;
+
+        for (int i = 0; i < KEYMAP.length; i += 2) {
+            if (bcpKey.equals(KEYMAP[i + 1])) {
+                key = KEYMAP[i];
+                break;
+            }
+        }
+
+        if (key == null) {
+            return bcpKey;
+        }
+
+        return key;
+    }
+
+    private static String ldmlTypeToBCP47(String key, String type) {
+        //#com.ibm.icu.base
+
+        // keys are case-insensitive, while types are case-sensitive
+        key = AsciiUtil.toLowerString(key);
+        String bcpType = null;
+        String[] map = null;
+        String[] aliasMap = null;
+
+        if (key.equals("calendar")) {
+            map = TYPEMAP_CALENDAR;
+        } else if (key.equals("colalternate")) {
+            map = TYPEMAP_COLALTERNATE;
+        } else if (key.equals("colbackwards")) {
+            map = TYPEMAP_COLBACKWARDS;
+        } else if (key.equals("colcasefirst")) {
+            map = TYPEMAP_COLCASEFIRST;
+        } else if (key.equals("colcaselevel")) {
+            map = TYPEMAP_COLCASELEVEL;
+        } else if (key.equals("colhiraganaquaternary")) {
+            map = TYPEMAP_COLHIRAGANAQUATERNARY;
+        } else if (key.equals("collation")) {
+            map = TYPEMAP_COLLATION;
+        } else if (key.equals("colnormalization")) {
+            map = TYPEMAP_COLNORMALIZATION;
+        } else if (key.equals("colnumeric")) {
+            map = TYPEMAP_COLNUMERIC;
+        } else if (key.equals("colstrength")) {
+            map = TYPEMAP_COLSTRENGTH;
+            aliasMap = TYPEALIAS_COLSTRENGTH;
+        } else if (key.equals("timezone")) {
+            map = TYPEMAP_TIMEZONE;
+            aliasMap = TYPEALIAS_TIMEZONE;
+        }
+
+        // LDML alias -> LDML canonical
+        if (aliasMap != null) {
+            for (int i = 0; i < aliasMap.length; i += 2) {
+                if (type.equals(aliasMap[i])) {
+                    type = aliasMap[i + 1];
+                    break;
+                }
+            }
+        }
+
+        // LDML type -> BCP47 type
+        if (map != null) {
+            for (int i = 0; i < map.length; i += 2) {
+                if (type.equals(map[i])) {
+                    bcpType = map[i + 1];
+                    break;
+                }
+            }
+        }
+
+        if (bcpType == null) {
+            int typeLen = type.length();
+            if (typeLen >= 3 && typeLen <= 8 && LanguageTag.isExtensionSubtag(type)) {
+                return type;
+            }
+            return null;
+        }
+        return bcpType;
+    }
+
+    private static String bcp47ToLDMLType(String key, String bcpType) {
+        //#com.ibm.icu.base
+
+        // normalize key/bcpType to lowercase
+        key = AsciiUtil.toLowerString(key);
+        bcpType = AsciiUtil.toLowerString(bcpType);
+        String type = null;
+        String[] map = null;
+
+        if (key.equals("calendar")) {
+            map = TYPEMAP_CALENDAR;
+        } else if (key.equals("colalternate")) {
+            map = TYPEMAP_COLALTERNATE;
+        } else if (key.equals("colbackwards")) {
+            map = TYPEMAP_COLBACKWARDS;
+        } else if (key.equals("colcasefirst")) {
+            map = TYPEMAP_COLCASEFIRST;
+        } else if (key.equals("colcaselevel")) {
+            map = TYPEMAP_COLCASELEVEL;
+        } else if (key.equals("colhiraganaquaternary")) {
+            map = TYPEMAP_COLHIRAGANAQUATERNARY;
+        } else if (key.equals("collation")) {
+            map = TYPEMAP_COLLATION;
+        } else if (key.equals("colnormalization")) {
+            map = TYPEMAP_COLNORMALIZATION;
+        } else if (key.equals("colnumeric")) {
+            map = TYPEMAP_COLNUMERIC;
+        } else if (key.equals("colstrength")) {
+            map = TYPEMAP_COLSTRENGTH;
+        } else if (key.equals("timezone")) {
+            map = TYPEMAP_TIMEZONE;
+        }
+
+        if (map != null) {
+            for (int i = 0; i < map.length; i += 2) {
+                if (bcpType.equals(map[i + 1])) {
+                    type = map[i];
+                    break;
+                }
+            }
+        }
+
+        return (type != null) ? type : bcpType;
+    }
+
+    /*
+     * JDK Locale Helper
+     */
+    private static final class JDKLocaleHelper {
+        private static boolean isJava7orNewer = false;
+
+        /*
+         * New methods in Java 7 Locale class
+         */
+        private static Method mGetScript;
+        private static Method mGetExtensionKeys;
+        private static Method mGetExtension;
+        private static Method mGetUnicodeLocaleKeys;
+        private static Method mGetUnicodeLocaleAttributes;
+        private static Method mGetUnicodeLocaleType;
+        private static Method mForLanguageTag;
+
+        private static Method mGetDefault;
+        private static Method mSetDefault;
+        private static Object eDISPLAY;
+        private static Object eFORMAT;
+
+        /*
+         * This table is used for mapping between ICU and special Java
+         * 6 locales.  When an ICU locale matches <minumum base> with
+         * <keyword>/<value>, the ICU locale is mapped to <Java> locale.
+         * For example, both ja_JP@calendar=japanese and ja@calendar=japanese
+         * are mapped to Java locale "ja_JP_JP".  ICU locale "nn" is mapped
+         * to Java locale "no_NO_NY".
+         */
+        private static final String[][] JAVA6_MAPDATA = {
+        //  { <Java>,       <ICU base>, <keyword>,  <value>,    <minimum base>
+            { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
+            { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
+            { "th_TH_TH",   "th_TH",    "numbers",  "thai",     "th"},
+        };
+
+        static {
+            do {
+                try {
+                    mGetScript = Locale.class.getMethod("getScript", (Class[]) null);
+                    mGetExtensionKeys = Locale.class.getMethod("getExtensionKeys", (Class[]) null);
+                    mGetExtension = Locale.class.getMethod("getExtension", char.class);
+                    mGetUnicodeLocaleKeys = Locale.class.getMethod("getUnicodeLocaleKeys", (Class[]) null);
+                    mGetUnicodeLocaleAttributes = Locale.class.getMethod("getUnicodeLocaleAttributes", (Class[]) null);
+                    mGetUnicodeLocaleType = Locale.class.getMethod("getUnicodeLocaleType", String.class);
+                    mForLanguageTag = Locale.class.getMethod("forLanguageTag", String.class);
+    
+                    Class<?> cCategory = null;
+                    Class<?>[] classes = Locale.class.getDeclaredClasses();
+                    for (Class<?> c : classes) {
+                        if (c.getName().equals("java.util.Locale$Category")) {
+                            cCategory = c;
+                            break;
+                        }
+                    }
+                    if (cCategory == null) {
+                        break;
+                    }
+                    mGetDefault = Locale.class.getDeclaredMethod("getDefault", cCategory);
+                    mSetDefault = Locale.class.getDeclaredMethod("setDefault", cCategory, Locale.class);
+    
+                    Method mName = cCategory.getMethod("name", (Class[]) null);
+                    Object[] enumConstants = cCategory.getEnumConstants();
+                    for (Object e : enumConstants) {
+                        String catVal = (String)mName.invoke(e, (Object[])null);
+                        if (catVal.equals("DISPLAY")) {
+                            eDISPLAY = e;
+                        } else if (catVal.equals("FORMAT")) {
+                            eFORMAT = e;
+                        }
+                    }
+                    if (eDISPLAY == null || eFORMAT == null) {
+                        break;
+                    }    
+                    isJava7orNewer = true;
+                } catch (NoSuchMethodException e) {
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException e) {
+                } catch (SecurityException e) {
+                    // TODO : report?
+                }
+            } while (false);
+        }
+
+        private JDKLocaleHelper() {
+        }
+
+        public static boolean isJava7orNewer() {
+            return isJava7orNewer;
+        }
+
+        public static ULocale toULocale(Locale loc) {
+            return isJava7orNewer ? toULocale7(loc) : toULocale6(loc);
+        }
+
+        public static Locale toLocale(ULocale uloc) {
+            return isJava7orNewer ? toLocale7(uloc) : toLocale6(uloc);
+        }
+
+        private static ULocale toULocale7(Locale loc) {
+            String language = loc.getLanguage();
+            String script = "";
+            String country = loc.getCountry();
+            String variant = loc.getVariant();
+
+            Set<String> attributes = null;
+            Map<String, String> keywords = null;
+
+            try {
+                script = (String) mGetScript.invoke(loc, (Object[]) null);
+                @SuppressWarnings("unchecked")
+                Set<Character> extKeys = (Set<Character>) mGetExtensionKeys.invoke(loc, (Object[]) null);
+                if (!extKeys.isEmpty()) {
+                    for (Character extKey : extKeys) {
+                        if (extKey.charValue() == 'u') {
+                            // Found Unicode locale extension
+
+                            // attributes
+                            @SuppressWarnings("unchecked")
+                            Set<String> uAttributes = (Set<String>) mGetUnicodeLocaleAttributes.invoke(loc, (Object[]) null);
+                            if (!uAttributes.isEmpty()) {
+                                attributes = new TreeSet<String>();
+                                for (String attr : uAttributes) {
+                                    attributes.add(attr);
+                                }
+                            }
+
+                            // keywords
+                            @SuppressWarnings("unchecked")
+                            Set<String> uKeys = (Set<String>) mGetUnicodeLocaleKeys.invoke(loc, (Object[]) null);
+                            for (String kwKey : uKeys) {
+                                String kwVal = (String) mGetUnicodeLocaleType.invoke(loc, kwKey);
+                                if (kwVal != null) {
+                                    if (kwKey.equals("va")) {
+                                        // va-* is interpreted as a variant
+                                        variant = (variant.length() == 0) ? kwVal : kwVal + "_" + variant;
+                                    } else {
+                                        if (keywords == null) {
+                                            keywords = new TreeMap<String, String>();
+                                        }
+                                        keywords.put(kwKey, kwVal);
+                                    }
+                                }
+                            }
+                        } else {
+                            String extVal = (String) mGetExtension.invoke(loc, extKey);
+                            if (extVal != null) {
+                                if (keywords == null) {
+                                    keywords = new TreeMap<String, String>();
+                                }
+                                keywords.put(String.valueOf(extKey), extVal);
+                            }
+                        }
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+
+            // JDK locale no_NO_NY is not interpreted as Nynorsk by ICU,
+            // and it should be transformed to nn_NO.
+
+            // Note: JDK7+ unerstand both no_NO_NY and nn_NO. When convert
+            // ICU locale to JDK, we do not need to map nn_NO back to no_NO_NY.
+
+            if (language.equals("no") && country.equals("NO") && variant.equals("NY")) {
+                language = "nn";
+                variant = "";
+            }
+
+            // Constructing ID
+            StringBuilder buf = new StringBuilder(language);
+
+            if (script.length() > 0) {
+                buf.append('_');
+                buf.append(script);
+            }
+
+            if (country.length() > 0) {
+                buf.append('_');
+                buf.append(country);
+            }
+
+            if (variant.length() > 0) {
+                if (country.length() == 0) {
+                    buf.append('_');
+                }
+                buf.append('_');
+                buf.append(variant);
+            }
+
+            if (attributes != null) {
+                // transform Unicode attributes into a keyword
+                StringBuilder attrBuf = new StringBuilder();
+                for (String attr : attributes) {
+                    if (attrBuf.length() != 0) {
+                        attrBuf.append('-');
+                    }
+                    attrBuf.append(attr);
+                }
+                if (keywords == null) {
+                    keywords = new TreeMap<String, String>();
+                }
+                keywords.put(LOCALE_ATTRIBUTE_KEY, attrBuf.toString());
+            }
+
+            if (keywords != null) {
+                buf.append('@');
+                boolean addSep = false;
+                for (Entry<String, String> kwEntry : keywords.entrySet()) {
+                    String kwKey = kwEntry.getKey();
+                    String kwVal = kwEntry.getValue();
+
+                    if (kwKey.length() != 1) {
+                        // Unicode locale key
+                        kwKey = bcp47ToLDMLKey(kwKey);
+                        // use "true" as the value of typeless keywords
+                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "true" : kwVal));
+                    }
+
+                    if (addSep) {
+                        buf.append(';');
+                    } else {
+                        addSep = true;
+                    }
+                    buf.append(kwKey);
+                    buf.append('=');
+                    buf.append(kwVal);
+                }
+            }
+
+            return new ULocale(getName(buf.toString()), loc);
+        }
+
+        private static ULocale toULocale6(Locale loc) {
+            ULocale uloc = null;
+            String locStr = loc.toString();
+            if (locStr.length() == 0) {
+                uloc = ULocale.ROOT;
+            } else {
+                for (int i = 0; i < JAVA6_MAPDATA.length; i++) {
+                    if (JAVA6_MAPDATA[i][0].equals(locStr)) {
+                        LocaleIDParser p = new LocaleIDParser(JAVA6_MAPDATA[i][1]);
+                        p.setKeywordValue(JAVA6_MAPDATA[i][2], JAVA6_MAPDATA[i][3]);
+                        locStr = p.getName();
+                        break;
+                    }
+                }
+                uloc = new ULocale(getName(locStr), loc);
+            }
+            return uloc;
+        }
+
+        private static Locale toLocale7(ULocale uloc) {
+            Locale loc = null;
+            String ulocStr = uloc.getName();
+            if (uloc.getScript().length() > 0 || ulocStr.contains("@")) {
+                // With script or keywords available, the best way
+                // to get a mapped Locale is to go through a language tag.
+                // A Locale with script or keywords can only have variants
+                // that is 1 to 8 alphanum. If this ULocale has a variant
+                // subtag not satisfying the criteria, the variant subtag
+                // will be lost.
+                String tag = uloc.toLanguageTag();
+
+                // Workaround for variant casing problem:
+                //
+                // The variant field in ICU is case insensitive and normalized
+                // to upper case letters by getVariant(), while
+                // the variant field in JDK Locale is case sensitive.
+                // ULocale#toLanguageTag use lower case characters for
+                // BCP 47 variant and private use x-lvariant.
+                //
+                // Locale#forLanguageTag in JDK preserves character casing
+                // for variant. Because ICU always normalizes variant to
+                // upper case, we convert language tag to upper case here.
+                tag = AsciiUtil.toUpperString(tag);
+
+                try {
+                    loc = (Locale)mForLanguageTag.invoke(null, tag);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (loc == null) {
+                // Without script or keywords, use a Locale constructor,
+                // so we can preserve any ill-formed variants.
+                loc = new Locale(uloc.getLanguage(), uloc.getCountry(), uloc.getVariant());
+            }
+            return loc;
+        }
+
+        private static Locale toLocale6(ULocale uloc) {
+            String locstr = uloc.getBaseName();
+            for (int i = 0; i < JAVA6_MAPDATA.length; i++) {
+                if (locstr.equals(JAVA6_MAPDATA[i][1]) || locstr.equals(JAVA6_MAPDATA[i][4])) {
+                    if (JAVA6_MAPDATA[i][2] != null) {
+                        String val = uloc.getKeywordValue(JAVA6_MAPDATA[i][2]);
+                        if (val != null && val.equals(JAVA6_MAPDATA[i][3])) {
+                            locstr = JAVA6_MAPDATA[i][0];
+                            break;
+                        }
+                    } else {
+                        locstr = JAVA6_MAPDATA[i][0];
+                        break;
+                    }
+                }
+            }
+            LocaleIDParser p = new LocaleIDParser(locstr);
+            String[] names = p.getLanguageScriptCountryVariant();
+            return new Locale(names[0], names[2], names[3]);
+        }
+
+        public static Locale getDefault(Category category) {
+            Locale loc = Locale.getDefault();
+            if (isJava7orNewer) {
+                Object cat = null;
+                switch (category) {
+                case DISPLAY:
+                    cat = eDISPLAY;
+                    break;
+                case FORMAT:
+                    cat = eFORMAT;
+                    break;
+                }
+                if (cat != null) {
+                    try {
+                        loc = (Locale)mGetDefault.invoke(null, cat);
+                    } catch (InvocationTargetException e) {
+                        // fall through - use the base default
+                    } catch (IllegalArgumentException e) {
+                        // fall through - use the base default
+                    } catch (IllegalAccessException e) {
+                        // fall through - use the base default
+                    }
+                }
+            }
+            return loc;
+        }
+
+        public static void setDefault(Category category, Locale newLocale) {
+            if (isJava7orNewer) {
+                Object cat = null;
+                switch (category) {
+                case DISPLAY:
+                    cat = eDISPLAY;
+                    break;
+                case FORMAT:
+                    cat = eFORMAT;
+                    break;
+                }
+                if (cat != null) {
+                    try {
+                        mSetDefault.invoke(null, cat, newLocale);
+                    } catch (InvocationTargetException e) {
+                        // fall through - no effects
+                    } catch (IllegalArgumentException e) {
+                        // fall through - no effects
+                    } catch (IllegalAccessException e) {
+                        // fall through - no effects
+                    }
+                }
+            }
+        }
+    }
+
+    private static final String[] KEYMAP = {
+        "calendar", "ca",
+        "colalternate", "ka",
+        "colbackwards", "kb",
+        "colcasefirst", "kf",
+        "colcaselevel", "kc",
+        "colhiraganaquaternary", "kh",
+        "collation", "co",
+        "colnormalization", "kk",
+        "colnumeric", "kn",
+        "colstrength", "ks",
+        "currency", "cu",
+        "numbers", "nu",
+        "timezone", "tz",
+        "variabletop", "vt",
+    };
+
+    private static final String[] TYPEMAP_CALENDAR = {
+        "ethiopic-amete-alem", "ethioaa",
+        "gregorian", "gregory",
+        "islamic-civil", "islamicc",
+    };
+
+    private static final String[] TYPEMAP_COLALTERNATE = {
+        "non-ignorable", "noignore",
+    };
+
+    private static final String[] TYPEMAP_COLBACKWARDS = {
+        "no", "false",
+        "yes", "true",
+    };
+
+    private static final String[] TYPEMAP_COLCASEFIRST = {
+        "no", "false",
+    };
+
+    private static final String[] TYPEMAP_COLCASELEVEL = {
+        "no", "false",
+        "yes", "true",
+    };
+
+    private static final String[] TYPEMAP_COLHIRAGANAQUATERNARY = {
+        "no", "false",
+        "yes", "true",
+    };
+
+    private static final String[] TYPEMAP_COLLATION = {
+        "dictionary", "dict",
+        "gb2312han", "gb2312",
+        "phonebook", "phonebk",
+        "traditional", "trad",
+    };
+
+    private static final String[] TYPEMAP_COLNORMALIZATION = {
+        "no", "false",
+        "yes", "true",
+    };
+
+    private static final String[] TYPEMAP_COLNUMERIC = {
+        "no", "false",
+        "yes", "true",
+    };
+
+    private static final String[] TYPEMAP_COLSTRENGTH = {
+        "identical", "identic",
+        "primary", "level1",
+        "quaternary", "level4",
+        "secondary", "level2",
+        "tertiary", "level3",
+    };
+
+    private static final String[] TYPEMAP_TIMEZONE = {
+        "Africa/Abidjan", "ciabj",
+        "Africa/Accra", "ghacc",
+        "Africa/Addis_Ababa", "etadd",
+        "Africa/Algiers", "dzalg",
+        "Africa/Asmera", "erasm",
+        "Africa/Bamako", "mlbko",
+        "Africa/Bangui", "cfbgf",
+        "Africa/Banjul", "gmbjl",
+        "Africa/Bissau", "gwoxb",
+        "Africa/Blantyre", "mwblz",
+        "Africa/Brazzaville", "cgbzv",
+        "Africa/Bujumbura", "bibjm",
+        "Africa/Cairo", "egcai",
+        "Africa/Casablanca", "macas",
+        "Africa/Ceuta", "esceu",
+        "Africa/Conakry", "gncky",
+        "Africa/Dakar", "sndkr",
+        "Africa/Dar_es_Salaam", "tzdar",
+        "Africa/Djibouti", "djjib",
+        "Africa/Douala", "cmdla",
+        "Africa/El_Aaiun", "eheai",
+        "Africa/Freetown", "slfna",
+        "Africa/Gaborone", "bwgbe",
+        "Africa/Harare", "zwhre",
+        "Africa/Johannesburg", "zajnb",
+        "Africa/Kampala", "ugkla",
+        "Africa/Khartoum", "sdkrt",
+        "Africa/Kigali", "rwkgl",
+        "Africa/Kinshasa", "cdfih",
+        "Africa/Lagos", "nglos",
+        "Africa/Libreville", "galbv",
+        "Africa/Lome", "tglfw",
+        "Africa/Luanda", "aolad",
+        "Africa/Lubumbashi", "cdfbm",
+        "Africa/Lusaka", "zmlun",
+        "Africa/Malabo", "gqssg",
+        "Africa/Maputo", "mzmpm",
+        "Africa/Maseru", "lsmsu",
+        "Africa/Mbabane", "szqmn",
+        "Africa/Mogadishu", "somgq",
+        "Africa/Monrovia", "lrmlw",
+        "Africa/Nairobi", "kenbo",
+        "Africa/Ndjamena", "tdndj",
+        "Africa/Niamey", "nenim",
+        "Africa/Nouakchott", "mrnkc",
+        "Africa/Ouagadougou", "bfoua",
+        "Africa/Porto-Novo", "bjptn",
+        "Africa/Sao_Tome", "sttms",
+        "Africa/Tripoli", "lytip",
+        "Africa/Tunis", "tntun",
+        "Africa/Windhoek", "nawdh",
+        "America/Adak", "usadk",
+        "America/Anchorage", "usanc",
+        "America/Anguilla", "aiaxa",
+        "America/Antigua", "aganu",
+        "America/Araguaina", "braux",
+        "America/Argentina/La_Rioja", "arirj",
+        "America/Argentina/Rio_Gallegos", "arrgl",
+        "America/Argentina/Salta", "arsla",
+        "America/Argentina/San_Juan", "aruaq",
+        "America/Argentina/San_Luis", "arluq",
+        "America/Argentina/Tucuman", "artuc",
+        "America/Argentina/Ushuaia", "arush",
+        "America/Aruba", "awaua",
+        "America/Asuncion", "pyasu",
+        "America/Bahia", "brssa",
+        "America/Bahia_Banderas", "mxpvr",
+        "America/Barbados", "bbbgi",
+        "America/Belem", "brbel",
+        "America/Belize", "bzbze",
+        "America/Blanc-Sablon", "caybx",
+        "America/Boa_Vista", "brbvb",
+        "America/Bogota", "cobog",
+        "America/Boise", "usboi",
+        "America/Buenos_Aires", "arbue",
+        "America/Cambridge_Bay", "caycb",
+        "America/Campo_Grande", "brcgr",
+        "America/Cancun", "mxcun",
+        "America/Caracas", "veccs",
+        "America/Catamarca", "arctc",
+        "America/Cayenne", "gfcay",
+        "America/Cayman", "kygec",
+        "America/Chicago", "uschi",
+        "America/Chihuahua", "mxchi",
+        "America/Coral_Harbour", "cayzs",
+        "America/Cordoba", "arcor",
+        "America/Costa_Rica", "crsjo",
+        "America/Cuiaba", "brcgb",
+        "America/Curacao", "ancur",
+        "America/Danmarkshavn", "gldkshvn",
+        "America/Dawson", "cayda",
+        "America/Dawson_Creek", "caydq",
+        "America/Denver", "usden",
+        "America/Detroit", "usdet",
+        "America/Dominica", "dmdom",
+        "America/Edmonton", "caedm",
+        "America/Eirunepe", "brern",
+        "America/El_Salvador", "svsal",
+        "America/Fortaleza", "brfor",
+        "America/Glace_Bay", "caglb",
+        "America/Godthab", "glgoh",
+        "America/Goose_Bay", "cagoo",
+        "America/Grand_Turk", "tcgdt",
+        "America/Grenada", "gdgnd",
+        "America/Guadeloupe", "gpbbr",
+        "America/Guatemala", "gtgua",
+        "America/Guayaquil", "ecgye",
+        "America/Guyana", "gygeo",
+        "America/Halifax", "cahal",
+        "America/Havana", "cuhav",
+        "America/Hermosillo", "mxhmo",
+        "America/Indiana/Knox", "usknx",
+        "America/Indiana/Marengo", "usaeg",
+        "America/Indiana/Petersburg", "uswsq",
+        "America/Indiana/Tell_City", "ustel",
+        "America/Indiana/Vevay", "usinvev",
+        "America/Indiana/Vincennes", "usoea",
+        "America/Indiana/Winamac", "uswlz",
+        "America/Indianapolis", "usind",
+        "America/Inuvik", "cayev",
+        "America/Iqaluit", "caiql",
+        "America/Jamaica", "jmkin",
+        "America/Jujuy", "arjuj",
+        "America/Juneau", "usjnu",
+        "America/Kentucky/Monticello", "usmoc",
+        "America/La_Paz", "bolpb",
+        "America/Lima", "pelim",
+        "America/Los_Angeles", "uslax",
+        "America/Louisville", "uslui",
+        "America/Maceio", "brmcz",
+        "America/Managua", "nimga",
+        "America/Manaus", "brmao",
+        "America/Marigot", "gpmsb",
+        "America/Martinique", "mqfdf",
+        "America/Matamoros", "mxmam",
+        "America/Mazatlan", "mxmzt",
+        "America/Mendoza", "armdz",
+        "America/Menominee", "usmnm",
+        "America/Merida", "mxmid",
+        "America/Metlakatla", "usmtm",
+        "America/Mexico_City", "mxmex",
+        "America/Miquelon", "pmmqc",
+        "America/Moncton", "camon",
+        "America/Monterrey", "mxmty",
+        "America/Montevideo", "uymvd",
+        "America/Montreal", "camtr",
+        "America/Montserrat", "msmni",
+        "America/Nassau", "bsnas",
+        "America/New_York", "usnyc",
+        "America/Nipigon", "canpg",
+        "America/Nome", "usome",
+        "America/Noronha", "brfen",
+        "America/North_Dakota/Beulah", "usxul",
+        "America/North_Dakota/Center", "usndcnt",
+        "America/North_Dakota/New_Salem", "usndnsl",
+        "America/Ojinaga", "mxoji",
+        "America/Panama", "papty",
+        "America/Pangnirtung", "capnt",
+        "America/Paramaribo", "srpbm",
+        "America/Phoenix", "usphx",
+        "America/Port-au-Prince", "htpap",
+        "America/Port_of_Spain", "ttpos",
+        "America/Porto_Velho", "brpvh",
+        "America/Puerto_Rico", "prsju",
+        "America/Rainy_River", "caffs",
+        "America/Rankin_Inlet", "cayek",
+        "America/Recife", "brrec",
+        "America/Regina", "careg",
+        "America/Resolute", "careb",
+        "America/Rio_Branco", "brrbr",
+        "America/Santa_Isabel", "mxstis",
+        "America/Santarem", "brstm",
+        "America/Santiago", "clscl",
+        "America/Santo_Domingo", "dosdq",
+        "America/Sao_Paulo", "brsao",
+        "America/Scoresbysund", "globy",
+        "America/Shiprock", "usnavajo",
+        "America/Sitka", "ussit",
+        "America/St_Barthelemy", "gpsbh",
+        "America/St_Johns", "casjf",
+        "America/St_Kitts", "knbas",
+        "America/St_Lucia", "lccas",
+        "America/St_Thomas", "vistt",
+        "America/St_Vincent", "vcsvd",
+        "America/Swift_Current", "cayyn",
+        "America/Tegucigalpa", "hntgu",
+        "America/Thule", "glthu",
+        "America/Thunder_Bay", "cathu",
+        "America/Tijuana", "mxtij",
+        "America/Toronto", "cator",
+        "America/Tortola", "vgtov",
+        "America/Vancouver", "cavan",
+        "America/Whitehorse", "cayxy",
+        "America/Winnipeg", "cawnp",
+        "America/Yakutat", "usyak",
+        "America/Yellowknife", "cayzf",
+        "Antarctica/Casey", "aqcas",
+        "Antarctica/Davis", "aqdav",
+        "Antarctica/DumontDUrville", "aqddu",
+        "Antarctica/Macquarie", "aumqi",
+        "Antarctica/Mawson", "aqmaw",
+        "Antarctica/McMurdo", "aqmcm",
+        "Antarctica/Palmer", "aqplm",
+        "Antarctica/Rothera", "aqrot",
+        "Antarctica/South_Pole", "aqams",
+        "Antarctica/Syowa", "aqsyw",
+        "Antarctica/Vostok", "aqvos",
+        "Arctic/Longyearbyen", "sjlyr",
+        "Asia/Aden", "yeade",
+        "Asia/Almaty", "kzala",
+        "Asia/Amman", "joamm",
+        "Asia/Anadyr", "rudyr",
+        "Asia/Aqtau", "kzaau",
+        "Asia/Aqtobe", "kzakx",
+        "Asia/Ashgabat", "tmasb",
+        "Asia/Baghdad", "iqbgw",
+        "Asia/Bahrain", "bhbah",
+        "Asia/Baku", "azbak",
+        "Asia/Bangkok", "thbkk",
+        "Asia/Beirut", "lbbey",
+        "Asia/Bishkek", "kgfru",
+        "Asia/Brunei", "bnbwn",
+        "Asia/Calcutta", "inccu",
+        "Asia/Choibalsan", "mncoq",
+        "Asia/Chongqing", "cnckg",
+        "Asia/Colombo", "lkcmb",
+        "Asia/Damascus", "sydam",
+        "Asia/Dhaka", "bddac",
+        "Asia/Dili", "tldil",
+        "Asia/Dubai", "aedxb",
+        "Asia/Dushanbe", "tjdyu",
+        "Asia/Gaza", "gaza",
+        "Asia/Harbin", "cnhrb",
+        "Asia/Hong_Kong", "hkhkg",
+        "Asia/Hovd", "mnhvd",
+        "Asia/Irkutsk", "ruikt",
+        "Asia/Jakarta", "idjkt",
+        "Asia/Jayapura", "iddjj",
+        "Asia/Jerusalem", "jeruslm",
+        "Asia/Kabul", "afkbl",
+        "Asia/Kamchatka", "rupkc",
+        "Asia/Karachi", "pkkhi",
+        "Asia/Kashgar", "cnkhg",
+        "Asia/Katmandu", "npktm",
+        "Asia/Krasnoyarsk", "rukra",
+        "Asia/Kuala_Lumpur", "mykul",
+        "Asia/Kuching", "mykch",
+        "Asia/Kuwait", "kwkwi",
+        "Asia/Macau", "momfm",
+        "Asia/Magadan", "rugdx",
+        "Asia/Makassar", "idmak",
+        "Asia/Manila", "phmnl",
+        "Asia/Muscat", "ommct",
+        "Asia/Nicosia", "cynic",
+        "Asia/Novokuznetsk", "runoz",
+        "Asia/Novosibirsk", "ruovb",
+        "Asia/Omsk", "ruoms",
+        "Asia/Oral", "kzura",
+        "Asia/Phnom_Penh", "khpnh",
+        "Asia/Pontianak", "idpnk",
+        "Asia/Pyongyang", "kpfnj",
+        "Asia/Qatar", "qadoh",
+        "Asia/Qyzylorda", "kzkzo",
+        "Asia/Rangoon", "mmrgn",
+        "Asia/Riyadh", "saruh",
+        "Asia/Saigon", "vnsgn",
+        "Asia/Sakhalin", "ruuus",
+        "Asia/Samarkand", "uzskd",
+        "Asia/Seoul", "krsel",
+        "Asia/Shanghai", "cnsha",
+        "Asia/Singapore", "sgsin",
+        "Asia/Taipei", "twtpe",
+        "Asia/Tashkent", "uztas",
+        "Asia/Tbilisi", "getbs",
+        "Asia/Tehran", "irthr",
+        "Asia/Thimphu", "btthi",
+        "Asia/Tokyo", "jptyo",
+        "Asia/Ulaanbaatar", "mnuln",
+        "Asia/Urumqi", "cnurc",
+        "Asia/Vientiane", "lavte",
+        "Asia/Vladivostok", "ruvvo",
+        "Asia/Yakutsk", "ruyks",
+        "Asia/Yekaterinburg", "ruyek",
+        "Asia/Yerevan", "amevn",
+        "Atlantic/Azores", "ptpdl",
+        "Atlantic/Bermuda", "bmbda",
+        "Atlantic/Canary", "eslpa",
+        "Atlantic/Cape_Verde", "cvrai",
+        "Atlantic/Faeroe", "fotho",
+        "Atlantic/Madeira", "ptfnc",
+        "Atlantic/Reykjavik", "isrey",
+        "Atlantic/South_Georgia", "gsgrv",
+        "Atlantic/St_Helena", "shshn",
+        "Atlantic/Stanley", "fkpsy",
+        "Australia/Adelaide", "auadl",
+        "Australia/Brisbane", "aubne",
+        "Australia/Broken_Hill", "aubhq",
+        "Australia/Currie", "aukns",
+        "Australia/Darwin", "audrw",
+        "Australia/Eucla", "aueuc",
+        "Australia/Hobart", "auhba",
+        "Australia/Lindeman", "auldc",
+        "Australia/Lord_Howe", "auldh",
+        "Australia/Melbourne", "aumel",
+        "Australia/Perth", "auper",
+        "Australia/Sydney", "ausyd",
+        "CST6CDT", "cst6cdt",
+        "EST5EDT", "est5edt",
+        "Etc/GMT", "utc",
+        "Etc/GMT+1", "utcw01",
+        "Etc/GMT+10", "utcw10",
+        "Etc/GMT+11", "utcw11",
+        "Etc/GMT+12", "utcw12",
+        "Etc/GMT+2", "utcw02",
+        "Etc/GMT+3", "utcw03",
+        "Etc/GMT+4", "utcw04",
+        "Etc/GMT+5", "utcw05",
+        "Etc/GMT+6", "utcw06",
+        "Etc/GMT+7", "utcw07",
+        "Etc/GMT+8", "utcw08",
+        "Etc/GMT+9", "utcw09",
+        "Etc/GMT-1", "utce01",
+        "Etc/GMT-10", "utce10",
+        "Etc/GMT-11", "utce11",
+        "Etc/GMT-12", "utce12",
+        "Etc/GMT-13", "utce13",
+        "Etc/GMT-14", "utce14",
+        "Etc/GMT-2", "utce02",
+        "Etc/GMT-3", "utce03",
+        "Etc/GMT-4", "utce04",
+        "Etc/GMT-5", "utce05",
+        "Etc/GMT-6", "utce06",
+        "Etc/GMT-7", "utce07",
+        "Etc/GMT-8", "utce08",
+        "Etc/GMT-9", "utce09",
+        "Etc/Unknown", "unk",
+        "Europe/Amsterdam", "nlams",
+        "Europe/Andorra", "adalv",
+        "Europe/Athens", "grath",
+        "Europe/Belgrade", "rsbeg",
+        "Europe/Berlin", "deber",
+        "Europe/Bratislava", "skbts",
+        "Europe/Brussels", "bebru",
+        "Europe/Bucharest", "robuh",
+        "Europe/Budapest", "hubud",
+        "Europe/Chisinau", "mdkiv",
+        "Europe/Copenhagen", "dkcph",
+        "Europe/Dublin", "iedub",
+        "Europe/Gibraltar", "gigib",
+        "Europe/Guernsey", "gggci",
+        "Europe/Helsinki", "fihel",
+        "Europe/Isle_of_Man", "imdgs",
+        "Europe/Istanbul", "trist",
+        "Europe/Jersey", "jesth",
+        "Europe/Kaliningrad", "rukgd",
+        "Europe/Kiev", "uaiev",
+        "Europe/Lisbon", "ptlis",
+        "Europe/Ljubljana", "silju",
+        "Europe/London", "gblon",
+        "Europe/Luxembourg", "lulux",
+        "Europe/Madrid", "esmad",
+        "Europe/Malta", "mtmla",
+        "Europe/Mariehamn", "fimhq",
+        "Europe/Minsk", "bymsq",
+        "Europe/Monaco", "mcmon",
+        "Europe/Moscow", "rumow",
+        "Europe/Oslo", "noosl",
+        "Europe/Paris", "frpar",
+        "Europe/Podgorica", "metgd",
+        "Europe/Prague", "czprg",
+        "Europe/Riga", "lvrix",
+        "Europe/Rome", "itrom",
+        "Europe/Samara", "rukuf",
+        "Europe/San_Marino", "smsai",
+        "Europe/Sarajevo", "basjj",
+        "Europe/Simferopol", "uasip",
+        "Europe/Skopje", "mkskp",
+        "Europe/Sofia", "bgsof",
+        "Europe/Stockholm", "sesto",
+        "Europe/Tallinn", "eetll",
+        "Europe/Tirane", "altia",
+        "Europe/Uzhgorod", "uauzh",
+        "Europe/Vaduz", "livdz",
+        "Europe/Vatican", "vavat",
+        "Europe/Vienna", "atvie",
+        "Europe/Vilnius", "ltvno",
+        "Europe/Volgograd", "ruvog",
+        "Europe/Warsaw", "plwaw",
+        "Europe/Zagreb", "hrzag",
+        "Europe/Zaporozhye", "uaozh",
+        "Europe/Zurich", "chzrh",
+        "Indian/Antananarivo", "mgtnr",
+        "Indian/Chagos", "iodga",
+        "Indian/Christmas", "cxxch",
+        "Indian/Cocos", "cccck",
+        "Indian/Comoro", "kmyva",
+        "Indian/Kerguelen", "tfpfr",
+        "Indian/Mahe", "scmaw",
+        "Indian/Maldives", "mvmle",
+        "Indian/Mauritius", "muplu",
+        "Indian/Mayotte", "ytmam",
+        "Indian/Reunion", "rereu",
+        "MST7MDT", "mst7mdt",
+        "PST8PDT", "pst8pdt",
+        "Pacific/Apia", "wsapw",
+        "Pacific/Auckland", "nzakl",
+        "Pacific/Chatham", "nzcht",
+        "Pacific/Easter", "clipc",
+        "Pacific/Efate", "vuvli",
+        "Pacific/Enderbury", "kipho",
+        "Pacific/Fakaofo", "tkfko",
+        "Pacific/Fiji", "fjsuv",
+        "Pacific/Funafuti", "tvfun",
+        "Pacific/Galapagos", "ecgps",
+        "Pacific/Gambier", "pfgmr",
+        "Pacific/Guadalcanal", "sbhir",
+        "Pacific/Guam", "gugum",
+        "Pacific/Honolulu", "ushnl",
+        "Pacific/Johnston", "umjon",
+        "Pacific/Kiritimati", "kicxi",
+        "Pacific/Kosrae", "fmksa",
+        "Pacific/Kwajalein", "mhkwa",
+        "Pacific/Majuro", "mhmaj",
+        "Pacific/Marquesas", "pfnhv",
+        "Pacific/Midway", "ummdy",
+        "Pacific/Nauru", "nrinu",
+        "Pacific/Niue", "nuiue",
+        "Pacific/Norfolk", "nfnlk",
+        "Pacific/Noumea", "ncnou",
+        "Pacific/Pago_Pago", "asppg",
+        "Pacific/Palau", "pwror",
+        "Pacific/Pitcairn", "pnpcn",
+        "Pacific/Ponape", "fmpni",
+        "Pacific/Port_Moresby", "pgpom",
+        "Pacific/Rarotonga", "ckrar",
+        "Pacific/Saipan", "mpspn",
+        "Pacific/Tahiti", "pfppt",
+        "Pacific/Tarawa", "kitrw",
+        "Pacific/Tongatapu", "totbu",
+        "Pacific/Truk", "fmtkk",
+        "Pacific/Wake", "umawk",
+        "Pacific/Wallis", "wfmau",
+    };
+
+    private static final String[] TYPEALIAS_COLSTRENGTH = {
+        "quarternary", "quaternary",
+    };
+
+    private static final String[] TYPEALIAS_TIMEZONE = {
+        "Africa/Asmara", "Africa/Asmera",
+        "Africa/Timbuktu", "Africa/Bamako",
+        "America/Argentina/Buenos_Aires", "America/Buenos_Aires",
+        "America/Argentina/Catamarca", "America/Catamarca",
+        "America/Argentina/ComodRivadavia", "America/Catamarca",
+        "America/Argentina/Cordoba", "America/Cordoba",
+        "America/Argentina/Jujuy", "America/Jujuy",
+        "America/Argentina/Mendoza", "America/Mendoza",
+        "America/Atikokan", "America/Coral_Harbour",
+        "America/Atka", "America/Adak",
+        "America/Ensenada", "America/Tijuana",
+        "America/Fort_Wayne", "America/Indianapolis",
+        "America/Indiana/Indianapolis", "America/Indianapolis",
+        "America/Kentucky/Louisville", "America/Louisville",
+        "America/Knox_IN", "America/Indiana/Knox",
+        "America/Porto_Acre", "America/Rio_Branco",
+        "America/Rosario", "America/Cordoba",
+        "America/Virgin", "America/St_Thomas",
+        "Asia/Ashkhabad", "Asia/Ashgabat",
+        "Asia/Chungking", "Asia/Chongqing",
+        "Asia/Dacca", "Asia/Dhaka",
+        "Asia/Ho_Chi_Minh", "Asia/Saigon",
+        "Asia/Istanbul", "Europe/Istanbul",
+        "Asia/Kathmandu", "Asia/Katmandu",
+        "Asia/Kolkata", "Asia/Calcutta",
+        "Asia/Macao", "Asia/Macau",
+        "Asia/Tel_Aviv", "Asia/Jerusalem",
+        "Asia/Thimbu", "Asia/Thimphu",
+        "Asia/Ujung_Pandang", "Asia/Makassar",
+        "Asia/Ulan_Bator", "Asia/Ulaanbaatar",
+        "Atlantic/Faroe", "Atlantic/Faeroe",
+        "Atlantic/Jan_Mayen", "Arctic/Longyearbyen",
+        "Australia/ACT", "Australia/Sydney",
+        "Australia/Canberra", "Australia/Sydney",
+        "Australia/LHI", "Australia/Lord_Howe",
+        "Australia/NSW", "Australia/Sydney",
+        "Australia/North", "Australia/Darwin",
+        "Australia/Queensland", "Australia/Brisbane",
+        "Australia/South", "Australia/Adelaide",
+        "Australia/Tasmania", "Australia/Hobart",
+        "Australia/Victoria", "Australia/Melbourne",
+        "Australia/West", "Australia/Perth",
+        "Australia/Yancowinna", "Australia/Broken_Hill",
+        "Brazil/Acre", "America/Rio_Branco",
+        "Brazil/DeNoronha", "America/Noronha",
+        "Brazil/East", "America/Sao_Paulo",
+        "Brazil/West", "America/Manaus",
+        "Canada/Atlantic", "America/Halifax",
+        "Canada/Central", "America/Winnipeg",
+        "Canada/East-Saskatchewan", "America/Regina",
+        "Canada/Eastern", "America/Toronto",
+        "Canada/Mountain", "America/Edmonton",
+        "Canada/Newfoundland", "America/St_Johns",
+        "Canada/Pacific", "America/Vancouver",
+        "Canada/Saskatchewan", "America/Regina",
+        "Canada/Yukon", "America/Whitehorse",
+        "Chile/Continental", "America/Santiago",
+        "Chile/EasterIsland", "Pacific/Easter",
+        "Cuba", "America/Havana",
+        "EST", "Etc/GMT+5",
+        "Egypt", "Africa/Cairo",
+        "Eire", "Europe/Dublin",
+        "Etc/GMT+0", "Etc/GMT",
+        "Etc/GMT-0", "Etc/GMT",
+        "Etc/GMT0", "Etc/GMT",
+        "Etc/Greenwich", "Etc/GMT",
+        "Etc/UCT", "Etc/GMT",
+        "Etc/UTC", "Etc/GMT",
+        "Etc/Universal", "Etc/GMT",
+        "Etc/Zulu", "Etc/GMT",
+        "Europe/Belfast", "Europe/London",
+        "Europe/Nicosia", "Asia/Nicosia",
+        "Europe/Tiraspol", "Europe/Chisinau",
+        "GB", "Europe/London",
+        "GB-Eire", "Europe/London",
+        "GMT", "Etc/GMT",
+        "GMT+0", "Etc/GMT",
+        "GMT-0", "Etc/GMT",
+        "GMT0", "Etc/GMT",
+        "Greenwich", "Etc/GMT",
+        "HST", "Etc/GMT+10",
+        "Hongkong", "Asia/Hong_Kong",
+        "Iceland", "Atlantic/Reykjavik",
+        "Iran", "Asia/Tehran",
+        "Israel", "Asia/Jerusalem",
+        "Jamaica", "America/Jamaica",
+        "Japan", "Asia/Tokyo",
+        "Kwajalein", "Pacific/Kwajalein",
+        "Libya", "Africa/Tripoli",
+        "MST", "Etc/GMT+7",
+        "Mexico/BajaNorte", "America/Tijuana",
+        "Mexico/BajaSur", "America/Mazatlan",
+        "Mexico/General", "America/Mexico_City",
+        "NZ", "Pacific/Auckland",
+        "NZ-CHAT", "Pacific/Chatham",
+        "Navajo", "America/Shiprock",
+        "PRC", "Asia/Shanghai",
+        "Pacific/Chuuk", "Pacific/Truk",
+        "Pacific/Pohnpei", "Pacific/Ponape",
+        "Pacific/Samoa", "Pacific/Pago_Pago",
+        "Pacific/Yap", "Pacific/Truk",
+        "Poland", "Europe/Warsaw",
+        "Portugal", "Europe/Lisbon",
+        "ROC", "Asia/Taipei",
+        "ROK", "Asia/Seoul",
+        "Singapore", "Asia/Singapore",
+        "Turkey", "Europe/Istanbul",
+        "UCT", "Etc/GMT",
+        "US/Alaska", "America/Anchorage",
+        "US/Aleutian", "America/Adak",
+        "US/Arizona", "America/Phoenix",
+        "US/Central", "America/Chicago",
+        "US/East-Indiana", "America/Indianapolis",
+        "US/Eastern", "America/New_York",
+        "US/Hawaii", "Pacific/Honolulu",
+        "US/Indiana-Starke", "America/Indiana/Knox",
+        "US/Michigan", "America/Detroit",
+        "US/Mountain", "America/Denver",
+        "US/Pacific", "America/Los_Angeles",
+        "US/Pacific-New", "America/Los_Angeles",
+        "US/Samoa", "Pacific/Pago_Pago",
+        "UTC", "Etc/GMT",
+        "Universal", "Etc/GMT",
+        "W-SU", "Europe/Moscow",
+        "Zulu", "Etc/GMT",
+    };
 }

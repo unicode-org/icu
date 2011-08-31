@@ -8,6 +8,8 @@
 package com.ibm.icu.text;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -174,7 +176,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static DateFormatSymbols getInstance() {
-        return new DateFormatSymbols(java.text.DateFormatSymbols.getInstance());
+        return new DateFormatSymbols(new java.text.DateFormatSymbols());
     }
 
     /**
@@ -190,7 +192,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static DateFormatSymbols getInstance(Locale locale) {
-        return new DateFormatSymbols(java.text.DateFormatSymbols.getInstance(locale));
+        return new DateFormatSymbols(new java.text.DateFormatSymbols(locale));
     }
 
     /**
@@ -206,7 +208,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static DateFormatSymbols getInstance(ULocale locale) {
-        return new DateFormatSymbols(java.text.DateFormatSymbols.getInstance(locale.toLocale()));
+        return new DateFormatSymbols(new java.text.DateFormatSymbols(locale.toLocale()));
     }
 
     /**
@@ -223,7 +225,26 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
-        return java.text.DateFormatSymbols.getAvailableLocales();
+        Locale[] avlocs = null;
+        boolean isJava5 = true;
+        try {
+            Method mGetAvailableLocales = java.text.DateFormatSymbols.class.getMethod("getAvailableLocales", (Class[])null);
+            avlocs = (Locale[]) mGetAvailableLocales.invoke(null, (Object[]) null);
+            isJava5 = false;
+        } catch (NoSuchMethodException nsme) {
+            // fall through
+        } catch (InvocationTargetException ite) {
+            // fall through
+        } catch (IllegalAccessException iae) {
+            // fall through
+        }
+
+        if (isJava5) {
+            // Use DateFormat's getAvailableLocales as fallback
+           avlocs = DateFormat.getAvailableLocales();
+        }
+
+        return avlocs;
     }
 
     /**
@@ -241,7 +262,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-        Locale[] locales = java.text.DateFormatSymbols.getAvailableLocales();
+        Locale[] locales = getAvailableLocales();
         ULocale[] ulocales = new ULocale[locales.length];
         for (int i = 0; i < locales.length; ++i) {
             ulocales[i] = ULocale.forLocale(locales[i]);

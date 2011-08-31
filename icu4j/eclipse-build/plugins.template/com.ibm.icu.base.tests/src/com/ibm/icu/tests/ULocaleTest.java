@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 public class ULocaleTest extends ICUTestCase {
     private String sampleName;
@@ -744,5 +745,103 @@ public class ULocaleTest extends ICUTestCase {
         result = ULocale.acceptLanguage(accept_locales2, fallback);
         assertNotNull(result); // actual result depends on jdk
         assertTrue(fallback[0]);
+    }
+
+    /*
+     * Test method for 'com.ibm.icu.x.util.ULocale.toLanguageTag()'
+     */
+    public void testToLanguageTag() {
+        ULocale[] test_ulocales = {
+            new ULocale("en_US"),
+            new ULocale(""),
+            new ULocale("de_DE@collation=phonebook"),
+            new ULocale("en_Latn_US_POSIX"),
+            new ULocale("th_TH@numbers=thai;calendar=buddhist"),
+            new ULocale("und_CN@timezone=PRC"),
+            new ULocale("iw_IL"),
+        };
+
+        String[] expected = {
+            "en-US",
+            "und",
+            "de-DE-u-co-phonebk",
+            "en-Latn-US-u-va-posix",
+            "th-TH-u-ca-buddhist-nu-thai",
+            "und-CN-u-tz-cnsha",
+            "he-IL",
+        };
+
+        for (int i = 0; i < test_ulocales.length; i++) {
+            String result = test_ulocales[i].toLanguageTag();
+            assertEquals(expected[i], result);
+        }
+    }
+
+    /*
+     * Test method for 'com.ibm.icu.x.util.ULocale.forLanguageTag()'
+     */
+    public void testForLanguageTag() {
+        String[] test_tags = {
+            "en-us",
+            "Und-Us",
+            "ja-jp-u-ca-japanese",
+            "fr-FR-u-tz-frpar-ca-gregory",
+        };
+
+        ULocale[] expected = {
+            new ULocale("en_US"),
+            new ULocale("und_US"),
+            new ULocale("ja_JP@calendar=japanese"),
+            new ULocale("fr_FR@calendar=gregorian;timezone=Europe/Paris"),
+        };
+
+        for (int i = 0; i < test_tags.length; i++) {
+            ULocale result = ULocale.forLanguageTag(test_tags[i]);
+            assertEquals(expected[i], result);
+        }
+    }
+
+    /*
+     * Test method for 'com.ibm.icu.x.util.ULocale.getDefault(Category)'
+     */
+    public void testGetDefaultCategory() {
+        ULocale dispLoc = ULocale.getDefault(Category.DISPLAY);
+        assertNotNull(dispLoc);
+        ULocale formLoc = ULocale.getDefault(Category.FORMAT);
+        assertNotNull(formLoc);
+    }
+
+    /*
+     * Test method for 'com.ibm.icu.x.util.ULocale.setDefault(Category, ULocale)'
+     */
+    public void testSetDefaultCategoryULocale() {
+        ULocale orgDefault = ULocale.getDefault();
+        ULocale orgDisplay = ULocale.getDefault(Category.DISPLAY);
+        ULocale orgFormat = ULocale.getDefault(Category.FORMAT);
+
+        ULocale jaUS = new ULocale("ja_US");
+        ULocale.setDefault(jaUS);
+
+        // setDefault(ULocale) updates category defaults
+        assertEquals(ULocale.getDefault(), jaUS);
+        assertEquals(ULocale.getDefault(Category.DISPLAY), jaUS);
+        assertEquals(ULocale.getDefault(Category.FORMAT), jaUS);
+
+        ULocale frDE = new ULocale("fr_DE");
+        ULocale.setDefault(Category.DISPLAY, frDE);
+
+        // setDefault(Category, ULocale) only updates the category default
+        assertEquals(ULocale.getDefault(), jaUS);
+        assertEquals(ULocale.getDefault(Category.DISPLAY), frDE);
+        assertEquals(ULocale.getDefault(Category.FORMAT), jaUS);
+
+        // restore the original
+        ULocale.setDefault(orgDefault);
+        ULocale.setDefault(Category.DISPLAY, orgDisplay);
+        ULocale.setDefault(Category.FORMAT, orgFormat);
+
+        assertEquals(ULocale.getDefault(), orgDefault);
+        assertEquals(ULocale.getDefault(Category.DISPLAY), orgDisplay);
+        assertEquals(ULocale.getDefault(Category.FORMAT), orgFormat);
     }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DateFormat}.{@icu _usage_}
@@ -1417,7 +1418,7 @@ public class DateFormat extends Format {
      * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal) {
-        return getInstance(cal, ULocale.getDefault());
+        return getInstance(cal, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -1425,7 +1426,7 @@ public class DateFormat extends Format {
      * @stable ICU 2.0
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
-        return getDateInstance(cal, dateStyle, ULocale.getDefault());
+        return getDateInstance(cal, dateStyle, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -1433,7 +1434,7 @@ public class DateFormat extends Format {
      * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
-        return getTimeInstance(cal, timeStyle, ULocale.getDefault());
+        return getTimeInstance(cal, timeStyle, Locale.getDefault());
     }
 
     /**
@@ -1441,7 +1442,7 @@ public class DateFormat extends Format {
      * @stable ICU 2.0
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
-        return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
+        return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault(Category.FORMAT));
     }
 
     /**

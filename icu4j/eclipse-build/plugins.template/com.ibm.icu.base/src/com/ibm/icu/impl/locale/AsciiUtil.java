@@ -167,6 +167,9 @@ public final class AsciiUtil {
         }
 
         public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
             if (o instanceof CaseInsensitiveKey) {
                 return AsciiUtil.caseIgnoreMatch(_key, ((CaseInsensitiveKey)o)._key);
             }
