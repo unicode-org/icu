@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.MessageFormat}.{@icu _usage_}
@@ -437,7 +438,7 @@ public class MessageFormat extends UFormat {
      * @stable ICU 3.0
      */
     public MessageFormat(String pattern) {
-        this(new java.text.MessageFormat(pattern));
+        this(new java.text.MessageFormat(pattern, ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**

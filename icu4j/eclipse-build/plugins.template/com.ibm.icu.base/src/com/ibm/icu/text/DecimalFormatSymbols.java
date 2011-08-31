@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * This class represents the set of symbols (such as the decimal separator, the
@@ -54,7 +55,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public DecimalFormatSymbols() {
-        this(new java.text.DecimalFormatSymbols());
+        this(new java.text.DecimalFormatSymbols(ULocale.getDefault(Category.FORMAT).toLocale()));
     }
         
     /**

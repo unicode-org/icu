@@ -1172,7 +1172,7 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
      */
     public static synchronized Calendar getInstance()
     {
-        return new Calendar(java.util.Calendar.getInstance());
+        return new Calendar(java.util.Calendar.getInstance(ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -1183,7 +1183,7 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
      */
     public static synchronized Calendar getInstance(TimeZone zone)
     {
-        return new Calendar(java.util.Calendar.getInstance(zone.timeZone));
+        return new Calendar(java.util.Calendar.getInstance(zone.timeZone, ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
