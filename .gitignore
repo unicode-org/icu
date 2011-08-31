@@ -920,6 +920,7 @@ icu4j/*.jar
 icu4j/.project
 icu4j/demos/out
 icu4j/doc
+icu4j/eclipse-build/out
 icu4j/main/classes/charset/out
 icu4j/main/classes/collate/out
 icu4j/main/classes/core/out
