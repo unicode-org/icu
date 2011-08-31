@@ -131,7 +131,10 @@ public class DateFormat extends Format {
      * work correctly unless they manipulate the delegate.
      */
     protected DateFormat() {
-        this.dateFormat = java.text.DateFormat.getInstance();
+        this.dateFormat = java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.SHORT,
+                ULocale.getDefault(Category.FORMAT).toLocale());
     }
 
     /**
@@ -897,7 +900,9 @@ public class DateFormat extends Format {
      */
     public final static DateFormat getTimeInstance()
     {
-        return new DateFormat(java.text.DateFormat.getTimeInstance());
+        return new DateFormat(java.text.DateFormat.getTimeInstance(
+                java.text.DateFormat.DEFAULT,
+                ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -910,7 +915,9 @@ public class DateFormat extends Format {
      */
     public final static DateFormat getTimeInstance(int style)
     {
-        return new DateFormat(java.text.DateFormat.getTimeInstance(getJDKFormatStyle(style)));
+        return new DateFormat(java.text.DateFormat.getTimeInstance(
+                getJDKFormatStyle(style),
+                ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -951,7 +958,9 @@ public class DateFormat extends Format {
      */
     public final static DateFormat getDateInstance()
     {
-        return new DateFormat(java.text.DateFormat.getDateInstance());
+        return new DateFormat(java.text.DateFormat.getDateInstance(
+                java.text.DateFormat.DEFAULT,
+                ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -964,7 +973,9 @@ public class DateFormat extends Format {
      */
     public final static DateFormat getDateInstance(int style)
     {
-        return new DateFormat(java.text.DateFormat.getDateInstance(getJDKFormatStyle(style)));
+        return new DateFormat(java.text.DateFormat.getDateInstance(
+                getJDKFormatStyle(style),
+                ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -1005,7 +1016,10 @@ public class DateFormat extends Format {
      */
     public final static DateFormat getDateTimeInstance()
     {
-        return new DateFormat(java.text.DateFormat.getDateTimeInstance());
+        return new DateFormat(java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.DEFAULT,
+                java.text.DateFormat.DEFAULT,
+                ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -1023,13 +1037,20 @@ public class DateFormat extends Format {
     {
         if (dateStyle != NONE) {
             if (timeStyle != NONE) {
-                return new DateFormat(java.text.DateFormat.getDateTimeInstance(getJDKFormatStyle(dateStyle), getJDKFormatStyle(timeStyle)));
+                return new DateFormat(java.text.DateFormat.getDateTimeInstance(
+                        getJDKFormatStyle(dateStyle),
+                        getJDKFormatStyle(timeStyle),
+                        ULocale.getDefault(Category.FORMAT).toLocale()));
             } else {
-                return new DateFormat(java.text.DateFormat.getDateInstance(getJDKFormatStyle(dateStyle)));
+                return new DateFormat(java.text.DateFormat.getDateInstance(
+                        getJDKFormatStyle(dateStyle),
+                        ULocale.getDefault(Category.FORMAT).toLocale()));
             }
         }
         if (timeStyle != NONE) {
-            return new DateFormat(java.text.DateFormat.getTimeInstance(getJDKFormatStyle(timeStyle)));
+            return new DateFormat(java.text.DateFormat.getTimeInstance(
+                    getJDKFormatStyle(timeStyle),
+                    ULocale.getDefault(Category.FORMAT).toLocale()));
         }
         return null;
     }
@@ -1090,7 +1111,10 @@ public class DateFormat extends Format {
      * @stable ICU 2.0
      */
     public final static DateFormat getInstance() {
-        return new DateFormat(java.text.DateFormat.getInstance());
+        return new DateFormat(java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.SHORT,
+                ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -1434,7 +1458,7 @@ public class DateFormat extends Format {
      * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
-        return getTimeInstance(cal, timeStyle, Locale.getDefault());
+        return getTimeInstance(cal, timeStyle, ULocale.getDefault(Category.FORMAT));
     }
 
     /**

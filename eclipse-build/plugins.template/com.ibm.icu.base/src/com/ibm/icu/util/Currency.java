@@ -11,6 +11,8 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
+import com.ibm.icu.util.ULocale.Category;
+
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A
  * <tt>Currency</tt> object can be created given a <tt>Locale</tt> or
@@ -230,7 +232,7 @@ public class Currency implements Serializable {
      * @stable ICU 3.4
      */
     public String getSymbol() {
-        return currency.getSymbol();
+        return currency.getSymbol(ULocale.getDefault(Category.DISPLAY).toLocale());
     }
 
     /**
