@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and    *
+* Copyright (C) 1997-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -444,8 +444,8 @@
                 nodeprecatedlist="true"
                 windowtitle="icu4j"
                 doctitle="icu4j"
-                encoding="iso-8859-1"
-                docencoding="iso-8859-1"
+                encoding="${java.src.encoding}"
+                docencoding="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
                 link="http://java.sun.com/javase/6/docs/api/"
@@ -547,7 +547,8 @@
 
     <!-- Release management targets -->
     <target name="checktags" depends="info, build-tools" description="Check API tags before release">
-        <javadoc source="1.5">
+        <javadoc source="1.5"
+                 encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
@@ -566,7 +567,8 @@
 
     <target name="gatherapi" depends="info, build-tools" description="Run API database generator tool">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.5">
+        <javadoc source="1.5"
+                 encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
@@ -609,7 +611,8 @@
 
     <target name="gatherapiOld" depends="info, build-tools" description="Run API database generator tool (Pre Java 5 style)">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.5">
+        <javadoc source="1.5"
+                 encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
@@ -696,6 +699,7 @@
         <javac destdir="${translit.ime.out.dir}/bin"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.translit.dir}/src"/>
@@ -723,6 +727,7 @@
         <javac destdir="${indic.ime.out.dir}/bin"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.tools.dir}/src"/>
@@ -749,6 +754,7 @@
         <javac destdir="${cldr.util.out.dir}/bin"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
 
             <src path="${icu4j.core.dir}/src"/>
@@ -782,6 +788,7 @@
         <javac destdir="${xliff.out.dir}/bin"
                 source="1.3"
                 target="1.3"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <src path="${icu4j.tools.dir}/src"/>
             <include name="com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java"/>
@@ -863,6 +870,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/impl/UCharacterName.java"/>
             <include name="com/ibm/icu/impl/data/*Break*.java"/>
@@ -877,6 +885,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -898,6 +907,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/impl/data/*Holiday*.java"/>
             <include name="com/ibm/icu/lang/UCharacter.java"/>
@@ -926,6 +936,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -950,6 +961,7 @@
         <javac  destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.collate.dir}/src"/>
@@ -981,6 +993,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -1015,6 +1028,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/text/SCSU.java"/>
             <include name="com/ibm/icu/text/UnicodeCompressor.java"/>
@@ -1027,6 +1041,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -1045,6 +1060,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/lang/UCharacter.java"/>
             <include name="com/ibm/icu/text/*Collator*.java"/>
@@ -1057,12 +1073,14 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off"/>
 
         <javac srcdir="${icu4j.currdata.dir}/src"
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off"/>
 
         <!-- Format does not require BreakIterator data -->
@@ -1080,6 +1098,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -1109,6 +1128,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/lang/**/*"/>
             <include name="com/ibm/icu/text/CanonicalIterator.java"/>
@@ -1139,6 +1159,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -1208,6 +1229,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/impl/data/*Break*.java"/>
             <include name="com/ibm/icu/lang/**/*"/>
@@ -1222,6 +1244,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -1256,6 +1279,7 @@
         <javac  destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
             <src path="${icu4j.translit.dir}/src"/>
@@ -1291,6 +1315,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
@@ -1314,6 +1339,7 @@
                 destdir="${module.bin.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/impl/*StringPrep*.java"/>
             <include name="com/ibm/icu/text/*IDNA*.java"/>
@@ -1338,6 +1364,7 @@
         <javac destdir="${module.tests.dir}"
                 source="${javac.source}"
                 target="${javac.target}"
+                encoding="${java.src.encoding}"
                 classpath="${module.bin.dir}"
                 debug="on" deprecation="off">
             <src path="${icu4j.core.dir}/src"/>
