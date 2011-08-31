@@ -2,6 +2,7 @@
 /.project
 demos/out
 /doc
+eclipse-build/out
 main/classes/charset/out
 main/classes/collate/out
 main/classes/core/out
