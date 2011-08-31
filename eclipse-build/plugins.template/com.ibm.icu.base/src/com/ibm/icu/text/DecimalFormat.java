@@ -13,6 +13,7 @@ import java.text.AttributedString;
 import java.text.CharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,6 +21,8 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_}
@@ -613,7 +616,19 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public DecimalFormat() {
+        // There is no way to construct java.text.DecimalFormat with an
+        // explicit Locale.
         this(new java.text.DecimalFormat());
+
+        if (!ULocale.getDefault(Category.FORMAT).toLocale().equals(Locale.getDefault())) {
+            // On Java 6 or older JRE, ULocale's FORMAT default might be different
+            // from the locale used for constructing java.text.DecimalFormat
+            java.text.NumberFormat jdkNfmt = java.text.NumberFormat.getInstance(ULocale.getDefault(Category.FORMAT).toLocale());
+            if (jdkNfmt instanceof java.text.DecimalFormat) {
+                ((java.text.DecimalFormat)numberFormat).applyPattern(((java.text.DecimalFormat)jdkNfmt).toPattern());
+                ((java.text.DecimalFormat)numberFormat).setDecimalFormatSymbols(((java.text.DecimalFormat)jdkNfmt).getDecimalFormatSymbols());
+            }
+        }
     }
 
     /**
@@ -634,7 +649,9 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public DecimalFormat(String pattern) {
-        this(new java.text.DecimalFormat(pattern));
+        this(new java.text.DecimalFormat(
+                pattern,
+                new java.text.DecimalFormatSymbols(ULocale.getDefault(Category.FORMAT).toLocale())));
     }
 
     /**
