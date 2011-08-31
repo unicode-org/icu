@@ -1137,13 +1137,13 @@ public class NumberFormat extends Format {
     }
 
     /**
-     * Empty constructor.  Public for compatibily with JDK which lets the
+     * Empty constructor.  Public for compatibility with JDK which lets the
      * compiler generate a default public constructor even though this is
      * an abstract class.
      * @stable ICU 2.6
      */
     public NumberFormat() {
-        this(java.text.NumberFormat.getInstance());
+        this(java.text.NumberFormat.getInstance(ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**

@@ -322,7 +322,7 @@ public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName() {
-        return timeZone.getDisplayName();
+        return timeZone.getDisplayName(ULocale.getDefault(Category.DISPLAY).toLocale());
     }
 
     /**

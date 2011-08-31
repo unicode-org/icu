@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DateFormatSymbols}.{@icu _usage_}
@@ -135,7 +136,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols()
     {
-        this(new java.text.DateFormatSymbols());
+        this(new java.text.DateFormatSymbols(ULocale.getDefault(Category.FORMAT).toLocale()));
     }
 
     /**
@@ -176,7 +177,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static DateFormatSymbols getInstance() {
-        return new DateFormatSymbols(new java.text.DateFormatSymbols());
+        return new DateFormatSymbols();
     }
 
     /**
