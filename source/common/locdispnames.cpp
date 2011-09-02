@@ -277,6 +277,7 @@ U_NAMESPACE_USE
  the locale ResourceBundle data file.*/
 static const char _kLanguages[]       = "Languages";
 static const char _kScripts[]         = "Scripts";
+static const char _kScriptsStandAlone[] = "Scripts%stand-alone";
 static const char _kCountries[]       = "Countries";
 static const char _kVariants[]        = "Variants";
 static const char _kKeys[]            = "Keys";
@@ -400,8 +401,27 @@ uloc_getDisplayScript(const char* locale,
                       UChar *dest, int32_t destCapacity,
                       UErrorCode *pErrorCode)
 {
+	UErrorCode err = U_ZERO_ERROR;
+	int32_t res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                uloc_getScript, _kScriptsStandAlone, &err);
+	
+	if ( err == U_USING_DEFAULT_WARNING ) {
+        return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                    uloc_getScript, _kScripts, pErrorCode);
+	} else {
+		*pErrorCode = err;
+		return res;
+	}
+}
+
+U_INTERNAL int32_t U_EXPORT2
+uloc_getDisplayScriptInContext(const char* locale,
+                      const char* displayLocale,
+                      UChar *dest, int32_t destCapacity,
+                      UErrorCode *pErrorCode)
+{
     return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                uloc_getScript, _kScripts, pErrorCode);
+                    uloc_getScript, _kScripts, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -579,7 +599,7 @@ uloc_getDisplayName(const char *locale,
                     switch(resti++) {
                         case 0:
                             restPos=length;
-                            len=uloc_getDisplayScript(locale, displayLocale, p, cap, pErrorCode);
+                            len=uloc_getDisplayScriptInContext(locale, displayLocale, p, cap, pErrorCode);
                             break;
                         case 1:
                             len=uloc_getDisplayCountry(locale, displayLocale, p, cap, pErrorCode);
