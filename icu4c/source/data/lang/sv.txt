@@ -682,6 +682,10 @@ sv{
         Zyyy{"gemensamma"}
         Zzzz{"okänt skriftsystem"}
     }
+    Scripts%stand-alone{
+        Hans{"förenklade han-tecken"}
+        Hant{"traditionella han-tecken"}
+    }
     Types{
         calendar{
             buddhist{"buddistisk kalender"}

@@ -659,6 +659,10 @@ fr{
         Zyyy{"commun"}
         Zzzz{"écriture inconnue ou non valide"}
     }
+    Scripts%stand-alone{
+        Hans{"chinois simplifié"}
+        Hant{"chinois traditionnel"}
+    }
     Types{
         calendar{
             buddhist{"Calendrier bouddhiste"}

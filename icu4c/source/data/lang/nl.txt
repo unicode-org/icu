@@ -663,6 +663,10 @@ nl{
         Zyyy{"Algemeen"}
         Zzzz{"Code voor ongecodeerde schriftsystemen"}
     }
+    Scripts%stand-alone{
+        Hans{"Vereenvoudigd Chinees"}
+        Hant{"Traditioneel Chinees"}
+    }
     Types{
         calendar{
             buddhist{"Boeddhistische kalender"}

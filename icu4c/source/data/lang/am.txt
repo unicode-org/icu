@@ -243,6 +243,10 @@ am{
         Zyyy{"የጋራ"}
         Zzzz{"ያልታወቀ ስክሪፕት"}
     }
+    Scripts%stand-alone{
+        Hans{"ቀለል ያለው ሃን"}
+        Hant{"ልማዳዊ ሃን"}
+    }
     Types{
         calendar{
             buddhist{"የቡዲስት ቀን አቆጣጠር"}

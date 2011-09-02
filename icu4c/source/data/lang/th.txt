@@ -661,6 +661,10 @@ th{
         Zyyy{"สามัญ"}
         Zzzz{"ไม่ทราบภาษา"}
     }
+    Scripts%stand-alone{
+        Hans{"อักษรฮั่นแบบย่อ"}
+        Hant{"อักษรฮั่นตัวเต็ม"}
+    }
     Types{
         calendar{
             buddhist{"ปฏิทินพุทธ"}

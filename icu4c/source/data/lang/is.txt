@@ -554,6 +554,10 @@ is{
         Zyyy{"Almennt"}
         Zzzz{"Óþekkt eða ógilt letur"}
     }
+    Scripts%stand-alone{
+        Hans{"Einfaldað han"}
+        Hant{"Hefðbundið han"}
+    }
     Types{
         calendar{
             buddhist{"Búddískt dagatal"}

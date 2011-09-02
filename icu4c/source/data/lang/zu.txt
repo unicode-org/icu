@@ -217,6 +217,10 @@ zu{
         Zyyy{"i-Common"}
         Zzzz{"Iskripthi esingaziwa"}
     }
+    Scripts%stand-alone{
+        Hans{"i-Simplified Han"}
+        Hant{"i-Traditional Han"}
+    }
     Types{
         calendar{
             buddhist{"i-Buddhist Calender"}

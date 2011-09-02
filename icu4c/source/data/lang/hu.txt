@@ -670,6 +670,10 @@ hu{
         Zyyy{"Meghatározatlan"}
         Zzzz{"Ismeretlen vagy érvénytelen írásrendszer"}
     }
+    Scripts%stand-alone{
+        Hans{"Egyszerűsített kínai"}
+        Hant{"Hagyományos kínai"}
+    }
     Types{
         calendar{
             buddhist{"buddhista naptár"}

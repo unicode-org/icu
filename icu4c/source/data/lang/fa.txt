@@ -619,6 +619,10 @@ fa{
         Zyyy{"مشترک"}
         Zzzz{"خط نامشخص"}
     }
+    Scripts%stand-alone{
+        Hans{"هان ساده‌شده"}
+        Hant{"هان سنتی"}
+    }
     Types{
         calendar{
             buddhist{"تقویم بودایی"}

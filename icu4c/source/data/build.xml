@@ -127,6 +127,7 @@
 		  <remap sourcePath="/Languages" targetDir="lang" />
 		  <remap sourcePath="/LanguagesShort" targetDir="lang" />
 		  <remap sourcePath="/Scripts" targetDir="lang" />
+		  <remap sourcePath="/Scripts%stand-alone" targetDir="lang" />
 		  <remap sourcePath="/Types" targetDir="lang" />
 		  <remap sourcePath="/Variants" targetDir="lang" />
 		  <remap sourcePath="/codePatterns" targetDir="lang" />

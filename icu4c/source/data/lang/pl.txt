@@ -656,6 +656,10 @@ pl{
         Zyyy{"wspólne"}
         Zzzz{"nieznane lub niepoprawne"}
     }
+    Scripts%stand-alone{
+        Hans{"chiński uproszczony"}
+        Hant{"chiński tradycyjny"}
+    }
     Types{
         calendar{
             buddhist{"kalendarz buddyjski"}

@@ -218,6 +218,10 @@ sw{
         Zyyy{"Kawaida"}
         Zzzz{"Hati isiyojulikana"}
     }
+    Scripts%stand-alone{
+        Hans{"Kihan Rahisi"}
+        Hant{"Kihan cha Jadi"}
+    }
     Types{
         calendar{
             buddhist{"Kalenda ya Kibuddha"}

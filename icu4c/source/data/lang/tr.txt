@@ -660,6 +660,10 @@ tr{
         Zyyy{"Ortak"}
         Zzzz{"Bilinmeyen Betik"}
     }
+    Scripts%stand-alone{
+        Hans{"Basitleştirilmiş Han"}
+        Hant{"Geleneksel Han"}
+    }
     Types{
         calendar{
             buddhist{"Budist Takvimi"}

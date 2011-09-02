@@ -678,6 +678,10 @@ nb{
         Zyyy{"felles"}
         Zzzz{"ukjent skrift"}
     }
+    Scripts%stand-alone{
+        Hans{"forenklet han"}
+        Hant{"tradisjonell han"}
+    }
     Types{
         calendar{
             buddhist{"buddhistisk kalender"}

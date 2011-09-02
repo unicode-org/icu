@@ -661,6 +661,10 @@ gu{
         Zyyy{"સામાન્ય"}
         Zzzz{"અજ્ઞાત અથવા અમાન્ય લિપિ"}
     }
+    Scripts%stand-alone{
+        Hans{"સરળીકૃત હેન"}
+        Hant{"પરંપરાગત હાન"}
+    }
     Types{
         calendar{
             buddhist{"બુદ્ધિસ્ટ કેલેન્ડર"}

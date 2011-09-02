@@ -651,6 +651,10 @@ bg{
         Zyyy{"Обща"}
         Zzzz{"Непозната или недействителна писменост"}
     }
+    Scripts%stand-alone{
+        Hans{"Опростен хан"}
+        Hant{"Традиционен хан"}
+    }
     Types{
         calendar{
             buddhist{"Будистки календар"}
