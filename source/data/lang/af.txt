@@ -230,6 +230,10 @@ af{
         Zyyy{"Algemeen"}
         Zzzz{"Onbekende skryfstelsel"}
     }
+    Scripts%stand-alone{
+        Hans{"Vereenvoudigde Han"}
+        Hant{"Tradisionele Han"}
+    }
     Types{
         calendar{
             buddhist{"Boeddhistiese kalender"}

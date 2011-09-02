@@ -635,6 +635,10 @@ ar{
         Zyyy{"عام"}
         Zzzz{"نص مكتوب غير معروف"}
     }
+    Scripts%stand-alone{
+        Hans{"الهان المبسطة"}
+        Hant{"الهان التقليدية"}
+    }
     Types{
         calendar{
             buddhist{"التقويم البوذي"}

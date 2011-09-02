@@ -666,6 +666,10 @@ da{
         Zyyy{"fælles"}
         Zzzz{"ukendt skriftsprog"}
     }
+    Scripts%stand-alone{
+        Hans{"forenklet han"}
+        Hant{"traditionelt han"}
+    }
     Types{
         calendar{
             buddhist{"buddhistisk kalender"}

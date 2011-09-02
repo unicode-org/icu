@@ -643,6 +643,10 @@ it{
         Zyyy{"comune"}
         Zzzz{"ignoto o non valido"}
     }
+    Scripts%stand-alone{
+        Hans{"han semplificati"}
+        Hant{"han tradizionali"}
+    }
     Types{
         calendar{
             buddhist{"calendario buddista"}

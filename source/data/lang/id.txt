@@ -642,6 +642,10 @@ id{
         Zyyy{"Umum"}
         Zzzz{"Skrip Tak Dikenal"}
     }
+    Scripts%stand-alone{
+        Hans{"Han Sederhana"}
+        Hant{"Han Tradisional"}
+    }
     Types{
         calendar{
             buddhist{"Kalender Buddha"}

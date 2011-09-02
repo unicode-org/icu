@@ -660,6 +660,10 @@ hi{
         Zyyy{"आम"}
         Zzzz{"अज्ञात या अवैध लिपि"}
     }
+    Scripts%stand-alone{
+        Hans{"सरलीकृत हान"}
+        Hant{"पारंपरिक हान"}
+    }
     Types{
         calendar{
             buddhist{"बौद्ध पंचांग"}

@@ -4928,6 +4928,10 @@ structLocale:table(nofallback){
         Zyyy{""}
         Zzzz{""}
     }
+    Scripts%stand-alone{
+        Hans{""}
+        Hant{""}
+    }
     Types{
         calendar{
             buddhist{""}

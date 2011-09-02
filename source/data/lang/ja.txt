@@ -648,6 +648,10 @@ ja{
         Zyyy{"共用文字"}
         Zzzz{"言語不明または無効な文字"}
     }
+    Scripts%stand-alone{
+        Hans{"漢字（簡体字）"}
+        Hant{"漢字（繁体字）"}
+    }
     Types{
         calendar{
             buddhist{"タイ仏教暦"}

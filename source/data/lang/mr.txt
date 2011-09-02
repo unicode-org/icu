@@ -662,6 +662,10 @@ mr{
         Zyyy{"सामान्य"}
         Zzzz{"अज्ञात वा अवैध लिपी"}
     }
+    Scripts%stand-alone{
+        Hans{"सरलीकृत हान"}
+        Hant{"पारंपारिक हान"}
+    }
     Types{
         calendar{
             buddhist{"बौद्ध दिनदर्शिका"}

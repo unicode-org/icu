@@ -226,6 +226,10 @@ vi{
         Zyyy{"Chung"}
         Zzzz{"Chữ viết Không xác định"}
     }
+    Scripts%stand-alone{
+        Hans{"Chữ Hán giản thể"}
+        Hant{"Chữ Hán phồn thể"}
+    }
     Types{
         calendar{
             buddhist{"Lịch Phật Giáo"}

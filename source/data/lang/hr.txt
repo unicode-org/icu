@@ -661,6 +661,10 @@ hr{
         Zyyy{"zajedničko pismo"}
         Zzzz{"nepoznato ili nevažeće pismo"}
     }
+    Scripts%stand-alone{
+        Hans{"Pojednostavljeno pismo han"}
+        Hant{"Tradicionalno pismo han"}
+    }
     Types{
         calendar{
             buddhist{"budistički kalendar"}

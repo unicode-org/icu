@@ -360,6 +360,10 @@ he{
         Zyyy{"רגיל"}
         Zzzz{"כתב לא ידוע או לא תקף"}
     }
+    Scripts%stand-alone{
+        Hans{"כתב האן פשוט"}
+        Hant{"כתב האן מסורתי"}
+    }
     Types{
         calendar{
             buddhist{"לוח שנה בודהיסטי"}

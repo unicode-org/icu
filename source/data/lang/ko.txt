@@ -642,6 +642,10 @@ ko{
         Zyyy{"일반 문자"}
         Zzzz{"기록되지 않은 문자(구전)"}
     }
+    Scripts%stand-alone{
+        Hans{"한자 간체"}
+        Hant{"한자 번체"}
+    }
     Types{
         calendar{
             buddhist{"불교력"}

@@ -10,6 +10,10 @@ es_419{
     Keys{
         numbers{"Números"}
     }
+    Scripts%stand-alone{
+        Hans{"Han simplificado"}
+        Hant{"Han tradicional"}
+    }
     Types{
         calendar{
             coptic{"Calendario cóptico"}

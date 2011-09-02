@@ -660,6 +660,10 @@ bn{
         Zyyy{"সাধারন"}
         Zzzz{"অজানা বা ভুল লিপি"}
     }
+    Scripts%stand-alone{
+        Hans{"সরলিকৃত হ্যান"}
+        Hant{"ঐতিহ্যবাহী হ্যান"}
+    }
     Types{
         calendar{
             buddhist{"বৌদ্ধ বর্ষপঞ্জী"}

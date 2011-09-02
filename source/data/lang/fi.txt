@@ -671,6 +671,10 @@ fi{
         Zyyy{"määrittämätön"}
         Zzzz{"tuntematon tai virheellinen kirjoitusjärjestelmä"}
     }
+    Scripts%stand-alone{
+        Hans{"yksinkertaistettu han"}
+        Hant{"perinteinen han"}
+    }
     Types{
         calendar{
             buddhist{"buddhalainen kalenteri"}

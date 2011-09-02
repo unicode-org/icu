@@ -344,6 +344,10 @@ ro{
         Zyyy{"comună"}
         Zzzz{"scriere necunoscută sau nevalidă"}
     }
+    Scripts%stand-alone{
+        Hans{"alfabet han simplificat"}
+        Hant{"alfabet han tradiţional"}
+    }
     Types{
         calendar{
             buddhist{"calendar budist"}

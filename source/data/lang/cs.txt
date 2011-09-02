@@ -504,6 +504,10 @@ cs{
         Zyyy{"obecné"}
         Zzzz{"neznámé písmo"}
     }
+    Scripts%stand-alone{
+        Hans{"han - zjednodušené"}
+        Hant{"han - tradiční"}
+    }
     Types{
         calendar{
             buddhist{"Buddhistický kalendář"}
