@@ -222,6 +222,10 @@ eu{
         Zyyy{"Ohikoa"}
         Zzzz{"Idazkera ezezaguna"}
     }
+    Scripts%stand-alone{
+        Hans{"Idazkera txinatar sinplifikatua"}
+        Hant{"Idazkera txinatar tradizionala"}
+    }
     Types{
         calendar{
             buddhist{"Egutegi budista"}

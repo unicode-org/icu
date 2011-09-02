@@ -598,6 +598,10 @@ lv{
         Zyyy{"vispārējs"}
         Zzzz{"nezināma vai nederīga rakstība"}
     }
+    Scripts%stand-alone{
+        Hans{"hanu [vienkāršotā]"}
+        Hant{"hanu [tradicionālā]"}
+    }
     Types{
         calendar{
             buddhist{"budistu kalendārs"}

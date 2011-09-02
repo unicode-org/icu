@@ -660,6 +660,10 @@ kn{
         Zyyy{"ಸಾಮಾನ್ಯ"}
         Zzzz{"ಅಜ್ಞಾತ ಅಥವ ಅಮಾನ್ಯವಾದ ಲಿಪಿ"}
     }
+    Scripts%stand-alone{
+        Hans{"ಸರಳೀಕೃತ ಹ್ಯಾನ್‌"}
+        Hant{"ಸಾಂಪ್ರದಾಯಿಕ ಹ್ಯಾನ್‌‌"}
+    }
     Types{
         calendar{
             buddhist{"ಬೌದ್ಧ ಕ್ಯಾಲೆಂಡರ್‌"}

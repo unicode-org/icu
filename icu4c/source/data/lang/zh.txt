@@ -644,6 +644,10 @@ zh{
         Zyyy{"通用"}
         Zzzz{"脚本未知或者无效"}
     }
+    Scripts%stand-alone{
+        Hans{"简体中文"}
+        Hant{"繁体中文"}
+    }
     Types{
         calendar{
             buddhist{"佛教日历"}

@@ -257,6 +257,10 @@ gl{
         Zyyy{"Común"}
         Zzzz{"escritura descoñecida"}
     }
+    Scripts%stand-alone{
+        Hans{"Han simplificado"}
+        Hant{"Han tradicional"}
+    }
     Types{
         calendar{
             buddhist{"calendario budista"}

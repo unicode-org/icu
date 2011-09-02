@@ -648,6 +648,10 @@ es{
         Zyyy{"común"}
         Zzzz{"alfabeto desconocido"}
     }
+    Scripts%stand-alone{
+        Hans{"hanzi simplificado"}
+        Hant{"hanzi tradicional"}
+    }
     Types{
         calendar{
             buddhist{"calendario budista"}

@@ -224,6 +224,10 @@ ur{
         Zyyy{"عام"}
         Zzzz{"نامعلوم رسم الخط"}
     }
+    Scripts%stand-alone{
+        Hans{"آسان ہان"}
+        Hant{"روایتی ہان"}
+    }
     Types{
         calendar{
             buddhist{"بودھ کلینڈر"}

@@ -657,6 +657,10 @@ de{
         Zyyy{"Unbestimmt"}
         Zzzz{"Uncodierte Schrift"}
     }
+    Scripts%stand-alone{
+        Hans{"Vereinfachtes Chinesisch"}
+        Hant{"Traditionelles Chinesisch"}
+    }
     Types{
         calendar{
             buddhist{"Buddhistischer Kalender"}

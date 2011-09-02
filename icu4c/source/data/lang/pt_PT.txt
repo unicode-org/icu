@@ -102,6 +102,10 @@ pt_PT{
         Zxxx{"não escrito"}
         Zzzz{"inválido ou desconhecido"}
     }
+    Scripts%stand-alone{
+        Hans{"Han Simplificado"}
+        Hant{"Han Tradicional"}
+    }
     Types{
         calendar{
             coptic{"Calendário Copta"}

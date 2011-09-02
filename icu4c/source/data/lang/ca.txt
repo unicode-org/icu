@@ -661,6 +661,10 @@ ca{
         Zyyy{"comú"}
         Zzzz{"escriptura desconeguda o no vàlida"}
     }
+    Scripts%stand-alone{
+        Hans{"xinès simplificat"}
+        Hant{"xinès tradicional"}
+    }
     Types{
         calendar{
             buddhist{"calendari budista"}

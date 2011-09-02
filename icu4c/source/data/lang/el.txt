@@ -671,6 +671,10 @@ el{
         Zyyy{"Κοινό"}
         Zzzz{"Άγνωστη ή ακατάλληλη γραφή"}
     }
+    Scripts%stand-alone{
+        Hans{"Απλοποιημένα Χαν"}
+        Hant{"Παραδοσιακά Χαν"}
+    }
     Types{
         calendar{
             buddhist{"Βουδιστικό ημερολόγιο"}

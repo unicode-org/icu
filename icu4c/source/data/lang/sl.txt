@@ -635,6 +635,10 @@ sl{
         Zyyy{"splošno"}
         Zzzz{"neznan ali neveljaven zapis"}
     }
+    Scripts%stand-alone{
+        Hans{"Poenostavljeni han"}
+        Hant{"Tradicionalni han"}
+    }
     Types{
         calendar{
             buddhist{"budistični koledar"}

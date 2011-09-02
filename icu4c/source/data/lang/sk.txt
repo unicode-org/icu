@@ -363,6 +363,10 @@ sk{
         Zyyy{"Obecný"}
         Zzzz{"Neznáme písmo"}
     }
+    Scripts%stand-alone{
+        Hans{"Han (zjednodušené)"}
+        Hant{"Han (tradičné)"}
+    }
     Types{
         calendar{
             buddhist{"Buddhistický kalendár"}

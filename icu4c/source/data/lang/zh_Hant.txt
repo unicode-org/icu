@@ -642,6 +642,10 @@ zh_Hant{
         Zyyy{"一般文字"}
         Zzzz{"未編碼工序指令碼"}
     }
+    Scripts%stand-alone{
+        Hans{"簡體中文"}
+        Hant{"繁體中文"}
+    }
     Types{
         calendar{
             buddhist{"佛教曆法"}

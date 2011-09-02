@@ -23,6 +23,9 @@ zh_Hant_HK{
         Cyrl{"西里爾語字母"}
         Hang{"韓文字母"}
     }
+    Scripts%stand-alone{
+        Hant{"繁體漢字"}
+    }
     Types{
         calendar{
             ethiopic{"埃及曆"}
