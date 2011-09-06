@@ -130,6 +130,11 @@ public:
     /**
      * The GMT time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
+     *
+     * <p>Note: For backward compatibility reason, the ID used by the time
+     * zone returned by this method is "GMT", although the ICU's canonical
+     * ID for the GMT time zone is "Etc/GMT".
+     *
      * @return the GMT time zone.
      * @stable ICU 2.0
      */
