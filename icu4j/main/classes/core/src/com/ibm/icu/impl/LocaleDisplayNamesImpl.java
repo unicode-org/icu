@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -144,7 +144,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         StringBuilder buf = new StringBuilder();
         if (hasScript) {
             // first element, don't need appender
-            buf.append(scriptDisplayName(script));
+            buf.append(scriptDisplayNameInContext(script));
         }
         if (hasCountry) {
             appender.append(regionDisplayName(country), buf);
@@ -191,6 +191,16 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     @Override
     public String scriptDisplayName(String script) {
+        String str = langData.get("Scripts%stand-alone", script);
+        if ( str.equals(script) ) {
+            return langData.get("Scripts", script);
+        } else {
+            return str;
+        }
+    }
+
+    @Override
+    public String scriptDisplayNameInContext(String script) {
         return langData.get("Scripts", script);
     }
 

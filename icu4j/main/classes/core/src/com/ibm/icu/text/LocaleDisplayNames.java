@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -118,6 +118,18 @@ public abstract class LocaleDisplayNames {
      * @stable ICU 4.4
      */
     public abstract String scriptDisplayName(String script);
+ 
+    /**
+     * Returns the display name of the provided script code
+     * when used in the context of a full locale name.
+     * @param script the script code
+     * @return the display name of the provided script code
+     * @internal ICU 49
+     * @deprecated This API is ICU internal only.
+     */
+    public String scriptDisplayNameInContext(String script) {
+        return scriptDisplayName(script);
+    }
 
     /**
      * Returns the display name of the provided script code.  See
