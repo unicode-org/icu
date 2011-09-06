@@ -670,9 +670,9 @@ ucal_getNow(void);
  * month, and day.
  * <p>
  * Note: When unknown TimeZone ID is specified, the UCalendar returned
- * by the function is initialized with GMT ("Etc/GMT") without any
- * errors/warnings.  If you want to check if a TimeZone ID is valid,
- * use ucal_getCanonicalTimeZoneID prior to this function.
+ * by the function is initialized with GMT zone with TimeZone ID <code>UCAL_UNKNOWN_ZONE_ID</code>
+ * ("Etc/Unknown") without any errors/warnings.  If you want to check if a TimeZone ID is valid
+ * prior to this function, use <code>ucal_getCanonicalTimeZoneID</code>.
  * 
  * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
  * @param len The length of zoneID, or -1 if null-terminated.
@@ -684,6 +684,7 @@ ucal_getNow(void);
  * and then pass the locale to ucal_open with UCAL_DEFAULT as the type.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UCalendar, or 0 if an error occurred.
+ * @see #UCAL_UNKNOWN_ZONE_ID
  * @stable ICU 2.0
  */
 U_STABLE UCalendar* U_EXPORT2 
