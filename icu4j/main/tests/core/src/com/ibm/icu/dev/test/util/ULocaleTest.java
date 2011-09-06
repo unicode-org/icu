@@ -991,7 +991,7 @@ public class ULocaleTest extends TestFmwk {
                       ", " + l.getDisplayName(ULocale.FRANCE));
 
                 String language = l.getDisplayLanguage();
-                String script = l.getDisplayScript();
+                String script = l.getDisplayScriptInContext();
                 String country = l.getDisplayCountry();
                 String variant = l.getDisplayVariant();
 
@@ -1002,7 +1002,7 @@ public class ULocaleTest extends TestFmwk {
 
                     name = l.getDisplayName(dl);
                     language = l.getDisplayLanguage(dl);
-                    script = l.getDisplayScript(dl);
+                    script = l.getDisplayScriptInContext(dl);
                     country = l.getDisplayCountry(dl);
                     variant = l.getDisplayVariant(dl);
 
@@ -1075,7 +1075,7 @@ public class ULocaleTest extends TestFmwk {
                 logln("Testing "+ testLocale+".....");
                 name = ULocale.getDisplayName(localeID, testLocale);
                 language = ULocale.getDisplayLanguage(localeID, testLocale);
-                script = ULocale.getDisplayScript(localeID, testLocale);
+                script = ULocale.getDisplayScriptInContext(localeID, testLocale);
                 country = ULocale.getDisplayCountry(localeID, testLocale);
                 variant = ULocale.getDisplayVariant(localeID, testLocale);
 
@@ -1092,7 +1092,7 @@ public class ULocaleTest extends TestFmwk {
                 logln("Testing "+ testLocale+".....");
                 name = ULocale.getDisplayName(localeID, loc);
                 language = ULocale.getDisplayLanguage(localeID, loc);
-                script = ULocale.getDisplayScript(localeID, loc);
+                script = ULocale.getDisplayScriptInContext(localeID, loc);
                 country = ULocale.getDisplayCountry(localeID, loc);
                 variant = ULocale.getDisplayVariant(localeID, loc);
 

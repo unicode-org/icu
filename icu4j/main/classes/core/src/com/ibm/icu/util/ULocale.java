@@ -1298,6 +1298,17 @@ public final class ULocale implements Serializable {
     }
 
     /**
+     * {@icu} Returns this locale's script localized for display in the default <code>DISPLAY</code> locale.
+     * @return the localized script name.
+     * @see Category#DISPLAY
+     * @internal ICU 49
+     * @deprecated This API is ICU internal only.
+     */
+    public String getDisplayScriptInContext() {
+        return getDisplayScriptInContextInternal(this, getDefault(Category.DISPLAY));
+    }
+
+    /**
      * {@icu} Returns this locale's script localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
@@ -1305,6 +1316,17 @@ public final class ULocale implements Serializable {
      */
     public String getDisplayScript(ULocale displayLocale) {
         return getDisplayScriptInternal(this, displayLocale);
+    }
+
+    /**
+     * {@icu} Returns this locale's script localized for display in the provided locale.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized script name.
+     * @internal ICU 49
+     * @deprecated This API is ICU internal only.
+     */
+    public String getDisplayScriptInContext(ULocale displayLocale) {
+        return getDisplayScriptInContextInternal(this, displayLocale);
     }
 
     /**
@@ -1318,6 +1340,18 @@ public final class ULocale implements Serializable {
     public static String getDisplayScript(String localeID, String displayLocaleID) {
         return getDisplayScriptInternal(new ULocale(localeID), new ULocale(displayLocaleID));
     }
+    /**
+     * {@icu} Returns a locale's script localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose script will be displayed
+     * @param displayLocaleID the id of the locale in which to display the name.
+     * @return the localized script name.
+     * @internal ICU 49
+     * @deprecated This API is ICU internal only.
+     */
+    public static String getDisplayScriptInContext(String localeID, String displayLocaleID) {
+        return getDisplayScriptInContextInternal(new ULocale(localeID), new ULocale(displayLocaleID));
+    }
 
     /**
      * {@icu} Returns a locale's script localized for display in the provided locale.
@@ -1329,11 +1363,27 @@ public final class ULocale implements Serializable {
     public static String getDisplayScript(String localeID, ULocale displayLocale) {
         return getDisplayScriptInternal(new ULocale(localeID), displayLocale);
     }
+    /**
+     * {@icu} Returns a locale's script localized for display in the provided locale.
+     * @param localeID the id of the locale whose script will be displayed.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized script name.
+     * @internal ICU 49
+     * @deprecated This API is ICU internal only.
+     */
+    public static String getDisplayScriptInContext(String localeID, ULocale displayLocale) {
+        return getDisplayScriptInContextInternal(new ULocale(localeID), displayLocale);
+    }
 
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayScriptInternal(ULocale locale, ULocale displayLocale) {
         return LocaleDisplayNames.getInstance(displayLocale)
             .scriptDisplayName(locale.getScript());
+    }
+
+    private static String getDisplayScriptInContextInternal(ULocale locale, ULocale displayLocale) {
+        return LocaleDisplayNames.getInstance(displayLocale)
+            .scriptDisplayNameInContext(locale.getScript());
     }
 
     /**
