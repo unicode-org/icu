@@ -2006,6 +2006,16 @@ private:
     static UBool matchSymbol(const UnicodeString &text, int32_t position, int32_t length, const UnicodeString &symbol,
                              UnicodeSet *sset, UChar32 schar);
 
+    static UBool matchDecimal(UChar32 symbolChar,
+                            UBool sawDecimal,  UChar32 sawDecimalChar,
+                             const UnicodeSet *sset, UChar32 schar);
+
+    static UBool matchGrouping(UChar32 groupingChar,
+                            UBool sawGrouping, UChar32 sawGroupingChar,
+                             const UnicodeSet *sset,
+                             UChar32 decimalChar, const UnicodeSet *decimalSet,
+                             UChar32 schar);
+
     /**
      * Get a decimal format symbol.
      * Returns a const reference to the symbol string.

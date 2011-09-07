@@ -35,7 +35,7 @@ public:
     static void    initSets(UErrorCode *status);
     static UBool   cleanup();
 
-    static UnicodeSet *getSimilarDecimals(UChar32 decimal, UBool strictParse, UnicodeSet *fallback);
+    static const UnicodeSet *getSimilarDecimals(UChar32 decimal, UBool strictParse);
 
     UnicodeSet *fDotEquivalents;
     UnicodeSet *fCommaEquivalents;

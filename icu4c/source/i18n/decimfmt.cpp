@@ -1945,6 +1945,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         const UnicodeString *groupingString = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
         UChar32 groupingChar = groupingString->char32At(0);
         UBool sawDecimal = FALSE;
+        UChar32 sawDecimalChar = 0xFFFF;
+        UBool sawGrouping = FALSE;
+        UChar32 sawGroupingChar = 0xFFFF;
         UBool sawDigit = FALSE;
         int32_t backup = -1;
         int32_t digit;
@@ -1955,33 +1958,24 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         int32_t groupingCharLength   = U16_LENGTH(groupingChar);
 
         // equivalent grouping and decimal support
-        // TODO markdavis Cache these if it makes a difference in performance.
-        UnicodeSet decimalFallback;
-        UnicodeSet *decimalSet = NULL;
-        UnicodeSet *groupingSet = NULL;
+        const UnicodeSet *decimalSet = NULL;
+        const UnicodeSet *groupingSet = NULL;
 
         if (decimalCharLength == decimalStringLength) {
-            decimalSet = (UnicodeSet *) DecimalFormatStaticSets::getSimilarDecimals(decimalChar, strictParse, &decimalFallback)->cloneAsThawed();
+            decimalSet = DecimalFormatStaticSets::getSimilarDecimals(decimalChar, strictParse);
         }
 
         if (groupingCharLength == groupingStringLength) {
             if (strictParse) {
-                groupingSet = (UnicodeSet *) DecimalFormatStaticSets::gStaticSets->fStrictDefaultGroupingSeparators->cloneAsThawed();
+                groupingSet = DecimalFormatStaticSets::gStaticSets->fStrictDefaultGroupingSeparators;
             } else {
-                groupingSet = (UnicodeSet *) DecimalFormatStaticSets::gStaticSets->fDefaultGroupingSeparators->cloneAsThawed();
-            }
-
-            groupingSet->add(groupingChar);
-
-            if (decimalSet != NULL) {
-                groupingSet->removeAll(*decimalSet);
+                groupingSet = DecimalFormatStaticSets::gStaticSets->fDefaultGroupingSeparators;
             }
         }
 
-        // we are guaranteed that
-        // decimalSet contains the decimal, and
-        // groupingSet contains the groupingSeparator
-        // (unless decimal and grouping are the same, which should never happen. But in that case, groupingSet will just be empty.)
+        // We need to test groupingChar and decimalChar separately from groupingSet and decimalSet, if the sets are even initialized.
+        // If sawDecimal is TRUE, only consider sawDecimalChar and NOT decimalSet
+        // If a character matches decimalSet, don't consider it to be a member of the groupingSet.
 
         // We have to track digitCount ourselves, because digits.fCount will
         // pin when the maximum allowable digits is reached.
@@ -2059,7 +2053,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                     
                 position += U16_LENGTH(ch);
             }
-            else if (groupingStringLength > 0 && matchSymbol(text, position, groupingStringLength, *groupingString, groupingSet, ch) && isGroupingUsed())
+            else if (groupingStringLength > 0 && 
+                matchGrouping(groupingChar, sawGrouping, sawGroupingChar, groupingSet, 
+                            decimalChar, decimalSet,
+                            ch) && isGroupingUsed())
             {
                 if (sawDecimal) {
                     break;
@@ -2078,13 +2075,11 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                 // reprocess them.
                 backup = position;
                 position += groupingStringLength;
-
-                if (groupingSet != NULL) {
-                    // Once we see a grouping character, we only accept that grouping character from then on.
-                    groupingSet->set(ch, ch);
-                }
+                sawGrouping=TRUE;
+                // Once we see a grouping character, we only accept that grouping character from then on.
+                sawGroupingChar=ch;
             }
-            else if (matchSymbol(text, position, decimalStringLength, *decimalString, decimalSet, ch))
+            else if (matchDecimal(decimalChar,sawDecimal,sawDecimalChar, decimalSet, ch))
             {
                 if (strictParse) {
                     if (backup != -1 ||
@@ -2103,11 +2098,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                 parsedNum.append('.', err);
                 position += decimalStringLength;
                 sawDecimal = TRUE;
-
-                if (decimalSet != NULL) {
-                    // Once we see a decimal character, we only accept that decimal character from then on.
-                    decimalSet->set(ch, ch);
-                }
+                // Once we see a decimal character, we only accept that decimal character from then on.
+                sawDecimalChar=ch;
+                // decimalSet is considered to consist of (ch,ch)
             }
             else {
                 const UnicodeString *tmp;
@@ -2167,9 +2160,6 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                 }
             }
         }
-
-        delete groupingSet;
-        delete decimalSet;
 
         if (backup != -1)
         {
@@ -2641,6 +2631,38 @@ UBool DecimalFormat::matchSymbol(const UnicodeString &text, int32_t position, in
 
     return text.compare(position, length, symbol) == 0;
 }
+
+UBool DecimalFormat::matchDecimal(UChar32 symbolChar,
+                            UBool sawDecimal,  UChar32 sawDecimalChar,
+                             const UnicodeSet *sset, UChar32 schar) {
+   if(sawDecimal) {
+       return schar==sawDecimalChar;
+   } else if(schar==symbolChar) {
+       return TRUE;
+   } else if(sset!=NULL) {
+        return sset->contains(schar);
+   } else {
+       return FALSE;
+   }
+}
+
+UBool DecimalFormat::matchGrouping(UChar32 groupingChar,
+                            UBool sawGrouping, UChar32 sawGroupingChar,
+                             const UnicodeSet *sset,
+                             UChar32 decimalChar, const UnicodeSet *decimalSet,
+                             UChar32 schar) {
+    if(sawGrouping) {
+        return schar==sawGroupingChar;  // previously found
+    } else if(schar==groupingChar) {
+        return TRUE; // char from symbols
+    } else if(sset!=NULL) {
+        return sset->contains(schar) &&  // in groupingSet but...
+           ((decimalSet==NULL) || !decimalSet->contains(schar)); // Exclude decimalSet from groupingSet
+    } else {
+        return FALSE;
+    }
+}
+
 
 
 //------------------------------------------------------------------------------
