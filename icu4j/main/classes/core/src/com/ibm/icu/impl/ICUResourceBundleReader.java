@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
@@ -271,42 +272,101 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate {
     private byte[] resourceBytes;
     private int resourceBottom;  // File offset where the mixed-type resources start.
 
-    private ICUResourceBundleReader(InputStream stream, String resolvedName){
-        BufferedInputStream bs = new BufferedInputStream(stream);
-        try{
-            if(DEBUG) System.out.println("The InputStream class is: " + stream.getClass().getName());
-            if(DEBUG) System.out.println("The BufferedInputStream class is: " + bs.getClass().getName());
-            if(DEBUG) System.out.println("The bytes avialable in stream before reading the header: " + bs.available());
-            
-            dataVersion = ICUBinary.readHeader(bs,DATA_FORMAT_ID,this);
+    private static ReaderCache CACHE = new ReaderCache();
+    private static final ICUResourceBundleReader NULL_READER = new ICUResourceBundleReader();
 
-            if(DEBUG) System.out.println("The bytes available in stream after reading the header: " + bs.available());
-                 
+    private static class ReaderInfo {
+        final String baseName;
+        final String localeID;
+        final ClassLoader loader;
+
+        ReaderInfo(String baseName, String localeID, ClassLoader loader) {
+            this.baseName = (baseName == null) ? "" : baseName;
+            this.localeID = (localeID == null) ? "" : localeID;
+            this.loader = loader;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof ReaderInfo)) {
+                return false;
+            }
+            ReaderInfo info = (ReaderInfo)obj;
+            return this.baseName.equals(info.baseName)
+                    && this.localeID.equals(info.localeID)
+                    && this.loader.equals(info.loader);
+        }
+
+        public int hashCode() {
+            return baseName.hashCode() ^ localeID.hashCode() ^ loader.hashCode();
+        }
+    }
+
+    private static class ReaderCache extends SoftCache<ReaderInfo, ICUResourceBundleReader, ReaderInfo> {
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
+         */
+        @Override
+        protected ICUResourceBundleReader createInstance(ReaderInfo key, ReaderInfo data) {
+            String fullName = ICUResourceBundleReader.getFullName(data.baseName, data.localeID);
+            InputStream stream = ICUData.getStream(data.loader, fullName);
+            if (stream == null) {
+                return NULL_READER;
+            }
+            return new ICUResourceBundleReader(stream, data.baseName, data.localeID, data.loader);
+        }
+    }
+
+    /*
+     * Sole constructor, just used for NULL_READER
+     */
+    private ICUResourceBundleReader() {
+    }
+
+    private ICUResourceBundleReader(InputStream stream, String baseName, String localeID, ClassLoader loader) {
+        BufferedInputStream bs = new BufferedInputStream(stream);
+        try {
+            if (DEBUG)  {
+                System.out.println("The InputStream class is: " + stream.getClass().getName());
+                System.out.println("The BufferedInputStream class is: " + bs.getClass().getName());
+                System.out.println("The bytes avialable in stream before reading the header: " + bs.available());
+            }
+
+            dataVersion = ICUBinary.readHeader(bs, DATA_FORMAT_ID, this);
+
+            if (DEBUG) System.out.println("The bytes available in stream after reading the header: " + bs.available());
+
             readData(bs);
             stream.close();
-        }catch(IOException ex){
-            throw new RuntimeException("Data file "+ resolvedName+ " is corrupt - " + ex.getMessage());   
+
+        } catch (IOException ex) {
+            String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
+            throw new RuntimeException("Data file " + fullName + " is corrupt - " + ex.getMessage());
+        }
+
+        // set pool bundle keys if necessary
+        if (usesPoolBundle) {
+            ICUResourceBundleReader poolBundleReader = getReader(baseName, "pool", loader);
+            if (!poolBundleReader.isPoolBundle) {
+                throw new IllegalStateException("pool.res is not a pool bundle");
+            }
+            if (poolBundleReader.indexes[URES_INDEX_POOL_CHECKSUM] != indexes[URES_INDEX_POOL_CHECKSUM]) {
+                throw new IllegalStateException("pool.res has a different checksum than this bundle");
+            }
+            poolBundleKeys = poolBundleReader.keyStrings;
+            poolBundleKeysAsString = poolBundleReader.keyStringsAsString;
         }
     }
-    static ICUResourceBundleReader getReader(String resolvedName, ClassLoader root) {
-        InputStream stream = ICUData.getStream(root,resolvedName);
-        
-        if(stream==null){
+
+    static ICUResourceBundleReader getReader(String baseName, String localeID, ClassLoader root) {
+        ReaderInfo info = new ReaderInfo(baseName, localeID, root);
+        ICUResourceBundleReader reader = CACHE.getInstance(info, info);
+        if (reader == NULL_READER) {
             return null;
         }
-        ICUResourceBundleReader reader = new ICUResourceBundleReader(stream, resolvedName);
         return reader;
-    }
-    
-    void setPoolBundleKeys(ICUResourceBundleReader poolBundleReader) {
-        if(!poolBundleReader.isPoolBundle) {
-            throw new IllegalStateException("pool.res is not a pool bundle");
-        }
-        if(poolBundleReader.indexes[URES_INDEX_POOL_CHECKSUM] != indexes[URES_INDEX_POOL_CHECKSUM]) {
-            throw new IllegalStateException("pool.res has a different checksum than this bundle");
-        }
-        poolBundleKeys = poolBundleReader.keyStrings;
-        poolBundleKeysAsString = poolBundleReader.keyStringsAsString;
     }
 
     // See res_init() in ICU4C/source/common/uresdata.c.
@@ -857,6 +917,35 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate {
             key32Offsets = reader.getTable32KeyOffsets(offset);
             size = key32Offsets.length;
             itemsOffset = offset + 4 * (1 + size);
+        }
+    }
+
+    private static final String ICU_RESOURCE_SUFFIX = ".res";
+
+    /**
+     * Gets the full name of the resource with suffix.
+     */
+    public static String getFullName(String baseName, String localeName) {
+        if (baseName == null || baseName.length() == 0) {
+            if (localeName.length() == 0) {
+                return localeName = ULocale.getDefault().toString();
+            }
+            return localeName + ICU_RESOURCE_SUFFIX;
+        } else {
+            if (baseName.indexOf('.') == -1) {
+                if (baseName.charAt(baseName.length() - 1) != '/') {
+                    return baseName + "/" + localeName + ICU_RESOURCE_SUFFIX;
+                } else {
+                    return baseName + localeName + ICU_RESOURCE_SUFFIX;
+                }
+            } else {
+                baseName = baseName.replace('.', '/');
+                if (localeName.length() == 0) {
+                    return baseName + ICU_RESOURCE_SUFFIX;
+                } else {
+                    return baseName + "_" + localeName + ICU_RESOURCE_SUFFIX;
+                }
+            }
         }
     }
 }

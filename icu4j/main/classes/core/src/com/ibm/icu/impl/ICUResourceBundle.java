@@ -825,7 +825,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         if(localeName.indexOf('@')>=0){
             localeName = ULocale.getBaseName(localeID);
         }
-        String fullName = getFullName(baseName, localeName);
+        String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         ICUResourceBundle b = (ICUResourceBundle)loadFromCache(root, fullName, defaultLocale);
 
         // here we assume that java type resource bundle organization
@@ -836,7 +836,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         // com.mycompany.data.MyLocaleElements.res
         //
         final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-        final String defaultID = defaultLocale.toString();
+        final String defaultID = defaultLocale.getBaseName();
 
         if(localeName.equals("")){
             localeName = rootLocale;
@@ -905,7 +905,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 obj = (ICUResourceBundle)obj.get(aKey, table, requested);
             }
             if (obj == null) {
-                String fullName = getFullName(getBaseName(), getLocaleID());
+                String fullName = ICUResourceBundleReader.getFullName(getBaseName(), getLocaleID());
                 throw new MissingResourceException(
                         "Can't find resource for bundle " + fullName + ", key "
                                 + aKey, this.getClass().getName(), aKey);
@@ -913,34 +913,6 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         obj.setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
         return obj;
-    }
-
-    private static final String ICU_RESOURCE_SUFFIX = ".res";
-    /**
-     * Gets the full name of the resource with suffix.
-     */
-    public static String getFullName(String baseName, String localeName){
-        if(baseName==null || baseName.length()==0){
-            if(localeName.length()==0){
-                return localeName=ULocale.getDefault().toString();   
-            }
-            return localeName+ICU_RESOURCE_SUFFIX;
-        }else{
-            if(baseName.indexOf('.')==-1){
-                if(baseName.charAt(baseName.length()-1)!= '/'){
-                    return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
-                }else{
-                    return baseName+localeName+ICU_RESOURCE_SUFFIX;   
-                }
-            }else{
-                baseName = baseName.replace('.','/');
-                if(localeName.length()==0){
-                    return baseName+ICU_RESOURCE_SUFFIX;   
-                }else{
-                    return baseName+"_"+localeName+ICU_RESOURCE_SUFFIX;
-                }
-            }
-        }
     }
 
     protected String localeID;
@@ -994,74 +966,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public static final int ARRAY16 = 9;
 
-    /*
-     * Bundle cache stuff 
-     */
-
-    /**
-     * Place holder in the bundle cache indicating that the requested bundle is not available
-     */
-    private static final ICUResourceBundle NULL_BUNDLE =
-        new ICUResourceBundle(null, null, null, 0, null) {
-            public int hashCode() {
-                return 0;
-            }
-            public boolean equals(Object rhs) {
-                return this == rhs;
-            }
-        };
-
-    /**
-     * An object storing information required for creating a bundle, used by
-     * the bundle cache.
-     */
-    private static class BundleCacheData {
-        ClassLoader root;
-        String baseName;
-        String localeID;
-
-        BundleCacheData(ClassLoader root, String baseName, String localeID) {
-            this.root = root;
-            this.baseName = baseName;
-            this.localeID = localeID;
-        }
-
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof BundleCacheData)) {
-                return false;
-            }
-            BundleCacheData data = (BundleCacheData)obj;
-            return this.root.equals(data.root) &&
-                    this.baseName.equals(data.baseName) &&
-                    this.localeID.equals(data.localeID);
-        }
-
-        public int hashCode() {
-            return root.hashCode() ^ baseName.hashCode() ^ localeID.hashCode();
-        }
-    }
-
-    private static class BundleCache extends SoftCache<BundleCacheData, ICUResourceBundle, BundleCacheData> {
-
-        /* (non-Javadoc)
-         * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
-         */
-        @Override
-        protected ICUResourceBundle createInstance(BundleCacheData key, BundleCacheData data) {
-            String resolvedName = getFullName(data.baseName, data.localeID);
-            ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(resolvedName, data.root);
-            if (reader == null) {
-                return NULL_BUNDLE;
-            }
-            return ICUResourceBundle.getBundle(reader, data.baseName, data.localeID, data.root);
-        }
-    }
-
-    private static final BundleCache BUNDLE_CACHE = new BundleCache();
-
     /**
     * Create a bundle using a reader.
     * @param baseName The name for the bundle.
@@ -1070,9 +974,12 @@ public  class ICUResourceBundle extends UResourceBundle {
     * @return the new bundle
     */
     public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root) {
-        BundleCacheData bundleKey = new BundleCacheData(root, baseName, localeID);
-        ICUResourceBundle b =  BUNDLE_CACHE.getInstance(bundleKey, bundleKey);
-        return b == NULL_BUNDLE ? null : b;
+        ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(baseName, localeID, root);
+        if (reader == null) {
+            // could not open the .res file
+            return null;
+        }
+        return getBundle(reader, baseName, localeID, root);
     }
 
     protected String getLocaleID() {
@@ -1147,10 +1054,6 @@ public  class ICUResourceBundle extends UResourceBundle {
         bundle.localeID = localeID;
         bundle.ulocale = new ULocale(localeID);
         bundle.loader = loader;
-        if(bundle.reader.getUsesPoolBundle()) {
-            bundle.reader.setPoolBundleKeys(
-                ((ICUResourceBundleImpl)getBundleInstance(baseName, "pool", loader, true)).reader);
-        }
         UResourceBundle alias = bundle.handleGetImpl("%%ALIAS", null, bundle, null, null); // handleGet will cache the bundle with no parent set
         if(alias != null) {
             return (ICUResourceBundle)UResourceBundle.getBundleInstance(baseName, alias.getString());
