@@ -212,15 +212,14 @@ void DecimalFormatStaticSets::initSets(UErrorCode *status)
     }
 }
 
-UnicodeSet *DecimalFormatStaticSets::getSimilarDecimals(UChar32 decimal, UBool strictParse, UnicodeSet *fallback)
+const UnicodeSet *DecimalFormatStaticSets::getSimilarDecimals(UChar32 decimal, UBool strictParse)
 {
     UErrorCode status = U_ZERO_ERROR;
 
     initSets(&status);
 
     if (U_FAILURE(status)) {
-        fallback->set(decimal, decimal);
-        return fallback;
+        return NULL;
     }
 
     if (gStaticSets->fDotEquivalents->contains(decimal)) {
@@ -231,9 +230,8 @@ UnicodeSet *DecimalFormatStaticSets::getSimilarDecimals(UChar32 decimal, UBool s
         return strictParse ? gStaticSets->fStrictCommaEquivalents : gStaticSets->fCommaEquivalents;
     }
 
-    // if there is no match, return the character itself
-    fallback->set(decimal, decimal);
-    return fallback;
+    // if there is no match, return NULL
+    return NULL;
 }
 
 
