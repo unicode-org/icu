@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,6 +21,7 @@ import java.util.TreeSet;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.impl.SimpleCache;
 
@@ -541,7 +542,7 @@ public abstract class UResourceBundle extends ResourceBundle {
         {
         case ROOT_ICU:
             if(disableFallback) {
-                String fullName = ICUResourceBundle.getFullName(baseName, localeName);
+                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
                 b = loadFromCache(root, fullName, defaultLocale);
                 if (b == null) {
                     b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, 
@@ -686,7 +687,7 @@ public abstract class UResourceBundle extends ResourceBundle {
     public UResourceBundle get(String aKey) {
         UResourceBundle obj = findTopLevel(aKey);
         if (obj == null) {
-            String fullName = ICUResourceBundle.getFullName(getBaseName(), getLocaleID());
+            String fullName = ICUResourceBundleReader.getFullName(getBaseName(), getLocaleID());
             throw new MissingResourceException(
                     "Can't find resource for bundle " + fullName + ", key "
                     + aKey, this.getClass().getName(), aKey);
