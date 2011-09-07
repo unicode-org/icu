@@ -1706,7 +1706,7 @@ public class MessageFormat extends UFormat {
                     pluralProvider = new PluralSelectorProvider(ulocale);
                 }
                 int subMsgStart=PluralFormat.findSubMessage(msgPattern, i, pluralProvider, number);
-                double offset=msgPattern.getPluralOffset(subMsgStart);
+                double offset=msgPattern.getPluralOffset(i);
                 formatComplexSubMessage(subMsgStart, number-offset, args, argsMap, dest);
             } else if(argType==ArgType.SELECT) {
                 int subMsgStart=SelectFormat.findSubMessage(msgPattern, i, arg.toString());
