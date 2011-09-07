@@ -1067,7 +1067,7 @@ void MessageFormat::format(int32_t msgStart, double pluralNumber,
             double number = arg->getDouble(success);
             int32_t subMsgStart = PluralFormat::findSubMessage(msgPattern, i, pluralProvider, number,
                                                                success);
-            double offset = msgPattern.getPluralOffset(subMsgStart);
+            double offset = msgPattern.getPluralOffset(i);
             formatComplexSubMessage(subMsgStart, number-offset, arguments, argumentNames,
                                     cnt, appendTo, success);
         } else if (argType == UMSGPAT_ARG_TYPE_SELECT) {
