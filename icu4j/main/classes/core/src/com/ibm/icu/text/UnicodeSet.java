@@ -285,6 +285,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @provisional This API might change or be removed in a future release.
      */
     public static final UnicodeSet ALL_CODE_POINTS = new UnicodeSet(0, 0x10FFFF).freeze();
+    
+    private static XSymbolTable XSYMBOL_TABLE = null; // for overriding the the function processing
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
     private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
@@ -3282,7 +3284,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     public UnicodeSet applyPropertyAlias(String propertyAlias, String valueAlias) {
         return applyPropertyAlias(propertyAlias, valueAlias, null);
     }
-
+    
     /**
      * Modifies this set to contain those code points which have the
      * given value for the given property.  Prior contents of this
@@ -3305,6 +3307,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 && (symbols instanceof XSymbolTable)
                 && ((XSymbolTable)symbols).applyPropertyAlias(propertyAlias, valueAlias, this)) {
             return this;
+        }
+        
+        if (XSYMBOL_TABLE != null) {
+            if (XSYMBOL_TABLE.applyPropertyAlias(propertyAlias, valueAlias, this)) {
+                return this;
+            }
         }
 
         if (valueAlias.length() > 0) {
@@ -4539,6 +4547,31 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * @stable ICU 4.4
          */
         CONDITION_COUNT
+    }
+
+    /**
+     * Get the default symbol table. Null means ordinary processing. For internal use only.
+     * @return
+     * @internal
+     */
+    public static XSymbolTable getDefaultXSymbolTable() {
+        return XSYMBOL_TABLE;
+    }
+
+    /**
+     * Set the default symbol table. Null means ordinary processing. For internal use only. Will affect all subsequent parsing
+     * of UnicodeSets.
+ * <p>
+ * WARNING: If this function is used with a {@link UnicodeProperty}, and the
+ * Unassigned characters (gc=Cn) are different than in ICU other than in ICU, you MUST call
+ * {@code UnicodeProperty.ResetCacheProperties} afterwards. If you then call {@code UnicodeSet.setDefaultXSymbolTable}
+ * with null to clear the value, you MUST also call {@code UnicodeProperty.ResetCacheProperties}.
+ * 
+     * @param xSymbolTable the new default symbol table.
+     * @internal
+     */
+    public static void setDefaultXSymbolTable(XSymbolTable xSymbolTable) {
+        XSYMBOL_TABLE = xSymbolTable;
     }
 }
 //eof
