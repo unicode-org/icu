@@ -714,6 +714,10 @@ icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -
 icu4j/main/tests/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestUnicodeProperty.java -text
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/IcuUnicodeNormalizerFactory.java -text
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/UnicodePropertySymbolTable.java -text
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/UnicodeTransform.java -text
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/manifest.stub -text
 icu4j/tools/build/.settings/org.eclipse.core.resources.prefs -text

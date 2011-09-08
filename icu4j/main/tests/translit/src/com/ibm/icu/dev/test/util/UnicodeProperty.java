@@ -10,19 +10,25 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeLabel;
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.CollectionUtilities.InverseMatcher;
 import com.ibm.icu.dev.test.util.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.SymbolTable;
+import com.ibm.icu.text.Transform;
 import com.ibm.icu.text.UFormat;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
@@ -31,17 +37,87 @@ import com.ibm.icu.text.UnicodeSetIterator;
 
 public abstract class UnicodeProperty extends UnicodeLabel {
 
-    public static final UnicodeSet UNASSIGNED = new UnicodeSet("[:gc=unassigned:]").freeze();
+    public static final UnicodeSet NONCHARACTERS = new UnicodeSet("[:noncharactercodepoint:]").freeze();
     public static final UnicodeSet PRIVATE_USE = new UnicodeSet("[:gc=privateuse:]").freeze();
     public static final UnicodeSet SURROGATE = new UnicodeSet("[:gc=surrogate:]").freeze();
-    public static final UnicodeSet SPECIALS = new UnicodeSet(UNASSIGNED).addAll(PRIVATE_USE).addAll(SURROGATE).freeze();
-    public static final int SAMPLE_UNASSIGNED = UNASSIGNED.charAt(0);
-    public static final int SAMPLE_PRIVATE_USE = 0xE000;
-    public static final int SAMPLE_SURROGATE = 0xD800;
-    public static final UnicodeSet STUFF_TO_TEST = new UnicodeSet(SPECIALS).complement()
-    .add(SAMPLE_UNASSIGNED).add(SAMPLE_PRIVATE_USE).add(SAMPLE_SURROGATE).freeze();
-    public static final UnicodeSet STUFF_TO_TEST_WITH_UNASSIGNED = new UnicodeSet("[:any:]").freeze();
 
+    public static final UnicodeSet HIGH_SURROGATES = new UnicodeSet("[\\uD800-\\uDB7F]").freeze();
+    public static final int SAMPLE_HIGH_SURROGATE = HIGH_SURROGATES.charAt(0);
+    public static final UnicodeSet HIGH_PRIVATE_USE_SURROGATES = new UnicodeSet("[\\uDB80-\\uDBFF]").freeze();
+    public static final int SAMPLE_HIGH_PRIVATE_USE_SURROGATE = HIGH_PRIVATE_USE_SURROGATES.charAt(0);
+    public static final UnicodeSet LOW_SURROGATES = new UnicodeSet("[\\uDC00-\\uDFFF]").freeze();
+    public static final int SAMPLE_LOW_SURROGATE = LOW_SURROGATES.charAt(0);
+
+    public static final UnicodeSet PRIVATE_USE_AREA = new UnicodeSet("[\\uE000-\\uF8FF]").freeze();
+    public static final int SAMPLE_PRIVATE_USE_AREA = PRIVATE_USE_AREA.charAt(0);
+    public static final UnicodeSet PRIVATE_USE_AREA_A = new UnicodeSet("[\\U000F0000-\\U000FFFFD]").freeze();
+    public static final int SAMPLE_PRIVATE_USE_AREA_A = PRIVATE_USE_AREA_A.charAt(0);
+    public static final UnicodeSet PRIVATE_USE_AREA_B = new UnicodeSet("[\\U00100000-\\U0010FFFD]").freeze();
+    public static final int SAMPLE_PRIVATE_USE_AREA_B = PRIVATE_USE_AREA_B.charAt(0);
+
+    // The following are special. They are used for performance, but must be changed if the version of Unicode for the UnicodeProperty changes.
+    private static UnicodeSet UNASSIGNED;
+    private static int SAMPLE_UNASSIGNED;
+    private static UnicodeSet SPECIALS;
+    private static UnicodeSet STUFF_TO_TEST;
+    private static UnicodeSet STUFF_TO_TEST_WITH_UNASSIGNED;
+
+    public static synchronized UnicodeSet getUNASSIGNED() {
+        if (UNASSIGNED == null) {
+            UNASSIGNED = new UnicodeSet("[:gc=unassigned:]").freeze();
+        }
+        return UNASSIGNED;
+    }
+
+    public static synchronized int getSAMPLE_UNASSIGNED() {
+        if (SAMPLE_UNASSIGNED == 0) {
+            SAMPLE_UNASSIGNED = getUNASSIGNED().charAt(0);
+        }
+        return SAMPLE_UNASSIGNED;
+    }
+
+    public static synchronized UnicodeSet getSPECIALS() {
+        if (SPECIALS == null) {
+            SPECIALS = new UnicodeSet(getUNASSIGNED()).addAll(PRIVATE_USE).addAll(SURROGATE).freeze();
+        }
+        return SPECIALS;
+    }
+
+    public static synchronized UnicodeSet getSTUFF_TO_TEST() {
+        if (STUFF_TO_TEST == null) {
+            STUFF_TO_TEST = new UnicodeSet(getSPECIALS()).complement()
+            .addAll(NONCHARACTERS)
+            .add(getSAMPLE_UNASSIGNED())
+            .add(SAMPLE_HIGH_SURROGATE)
+            .add(SAMPLE_HIGH_PRIVATE_USE_SURROGATE)
+            .add(SAMPLE_LOW_SURROGATE)
+            .add(SAMPLE_PRIVATE_USE_AREA)
+            .add(SAMPLE_PRIVATE_USE_AREA_A)
+            .add(SAMPLE_PRIVATE_USE_AREA_B)
+            .freeze();
+        }
+        return STUFF_TO_TEST;
+    }
+
+    public static synchronized UnicodeSet getSTUFF_TO_TEST_WITH_UNASSIGNED() {
+        if (STUFF_TO_TEST_WITH_UNASSIGNED == null) {
+            STUFF_TO_TEST_WITH_UNASSIGNED = new UnicodeSet(getSTUFF_TO_TEST()).addAll(getUNASSIGNED()).freeze();
+        }
+        return STUFF_TO_TEST_WITH_UNASSIGNED;
+    }
+
+    /**
+     * Reset the cache properties. Must be done if the version of Unicode is different than the ICU one, AND any UnicodeProperty has already been instantiated.
+     * TODO make this a bit more robust.
+     * @internal
+     */
+    public static synchronized void ResetCacheProperties() {
+        UNASSIGNED = null;
+        SAMPLE_UNASSIGNED = 0;
+        SPECIALS = null;
+        STUFF_TO_TEST = null;
+        STUFF_TO_TEST_WITH_UNASSIGNED = null;
+    }
 
     public static boolean DEBUG = false;
 
@@ -57,7 +133,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
     private Map valueToFirstValueAlias = null;
 
-    private boolean hasUniformUnassigned = false;
+    private boolean hasUniformUnassigned = true;
 
     /*
      * Name: Unicode_1_Name Name: ISO_Comment Name: Name Name: Unicode_1_Name
@@ -238,7 +314,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return maxFirstValueAliasWidth;
         return maxValueWidth;
     }
-    
+
     public final UnicodeSet getSet(String propertyValue) {
         return getSet(propertyValue, null);
     }
@@ -247,6 +323,8 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         return getSet(matcher, null);
     }
 
+    /** Adds the property value set to the result. Clear the result first if you don't want to keep the original contents.
+     */
     public final UnicodeSet getSet(String propertyValue, UnicodeSet result) {
         return getSet(new SimpleMatcher(propertyValue,
                 isType(STRING_OR_MISC_MASK) ? null : PROPERTY_COMPARATOR),
@@ -257,7 +335,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
     public static final String UNUSED = "??";
 
-    public final UnicodeSet getSet(PatternMatcher matcher, UnicodeSet result) {
+    public UnicodeSet getSet(PatternMatcher matcher, UnicodeSet result) {
         if (result == null)
             result = new UnicodeSet();
         boolean uniformUnassigned = hasUniformUnassigned();
@@ -422,7 +500,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     }
 
     private static UnicodeSetIterator getStuffToTest(boolean uniformUnassigned) {
-        return new UnicodeSetIterator(uniformUnassigned ? STUFF_TO_TEST : STUFF_TO_TEST_WITH_UNASSIGNED);
+        return new UnicodeSetIterator(uniformUnassigned ? getSTUFF_TO_TEST() : getSTUFF_TO_TEST_WITH_UNASSIGNED());
     }
 
     /**
@@ -654,7 +732,9 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         Map propertyCache = new HashMap(1);
 
         public final Factory add(UnicodeProperty sp) {
-            canonicalNames.put(sp.getName(), sp);
+            String name2 = sp.getName();
+            canonicalNames.put(name2, sp);
+            skeletonNames.put(toSkeleton(name2), sp);
             List c = sp.getNameAliases(new ArrayList(1));
             Iterator it = c.iterator();
             while (it.hasNext()) {
@@ -1178,7 +1258,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     }
 
     public static abstract class SimpleProperty extends BaseProperty {
-        List values;
+        LinkedHashSet values;
 
         public UnicodeProperty addName(String alias) {
             propertyAliases.add(alias);
@@ -1209,7 +1289,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         }
 
         public SimpleProperty setValues(List valueAliases) {
-            this.values = new ArrayList(valueAliases);
+            this.values = new LinkedHashSet(valueAliases);
             for (Iterator it = this.values.iterator(); it.hasNext();) {
                 _addToValues((String) it.next(), null);
             }
@@ -1233,7 +1313,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
         private void _addToValues(String item, String alias) {
             if (values == null)
-                values = new ArrayList(1);
+                values = new LinkedHashSet();
             if (toValueAliases == null)
                 _fixValueAliases();
             addUnique(item, values);
@@ -1328,32 +1408,57 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
 
     public static UnicodeSet addUntested(UnicodeSet result, boolean uniformUnassigned) {
-        if (!uniformUnassigned) return result;
+        if (uniformUnassigned && result.contains(UnicodeProperty.getSAMPLE_UNASSIGNED())) {
+            result.addAll(UnicodeProperty.getUNASSIGNED());
+        }
+        
+        if (result.contains(UnicodeProperty.SAMPLE_HIGH_SURROGATE)) {
+            result.addAll(UnicodeProperty.HIGH_SURROGATES);
+        }
+        if (result.contains(UnicodeProperty.SAMPLE_HIGH_PRIVATE_USE_SURROGATE)) {
+            result.addAll(UnicodeProperty.HIGH_PRIVATE_USE_SURROGATES);
+        }
+        if (result.contains(UnicodeProperty.SAMPLE_LOW_SURROGATE)) {
+            result.addAll(UnicodeProperty.LOW_SURROGATES);
+        }
+        
+        if (result.contains(UnicodeProperty.SAMPLE_PRIVATE_USE_AREA)) {
+            result.addAll(UnicodeProperty.PRIVATE_USE_AREA);
+        }
+        if (result.contains(UnicodeProperty.SAMPLE_PRIVATE_USE_AREA_A)) {
+            result.addAll(UnicodeProperty.PRIVATE_USE_AREA_A);
+        }
+        if (result.contains(UnicodeProperty.SAMPLE_PRIVATE_USE_AREA_B)) {
+            result.addAll(UnicodeProperty.PRIVATE_USE_AREA_B);
+        }
 
-        if (result.contains(UnicodeProperty.SAMPLE_UNASSIGNED)) {
-            result.addAll(UnicodeProperty.UNASSIGNED);
-        }
-        if (result.contains(UnicodeProperty.SAMPLE_PRIVATE_USE)) {
-            result.addAll(UnicodeProperty.PRIVATE_USE);
-        }
-        if (result.contains(UnicodeProperty.SAMPLE_SURROGATE)) {
-            result.addAll(UnicodeProperty.SURROGATE);
-        }
         return result;
     }
 
     public static UnicodeMap addUntested(UnicodeMap result, boolean uniformUnassigned) {
-        if (!uniformUnassigned) return result;
-
         Object temp;
-        if (null != (temp = result.get(UnicodeProperty.SAMPLE_UNASSIGNED))) {
-            result.putAll(UnicodeProperty.UNASSIGNED, temp);
+        if (uniformUnassigned && null != (temp = result.get(UnicodeProperty.getSAMPLE_UNASSIGNED()))) {
+            result.putAll(UnicodeProperty.getUNASSIGNED(), temp);
         }
-        if (null != (temp = result.get(UnicodeProperty.SAMPLE_PRIVATE_USE))) {
-            result.putAll(UnicodeProperty.PRIVATE_USE, temp);
+
+        if (null != (temp = result.get(UnicodeProperty.SAMPLE_HIGH_SURROGATE))) {
+            result.putAll(UnicodeProperty.HIGH_SURROGATES, temp);
         }
-        if (null != (temp = result.get(UnicodeProperty.SAMPLE_SURROGATE))) {
-            result.putAll(UnicodeProperty.SURROGATE, temp);
+        if (null != (temp = result.get(UnicodeProperty.SAMPLE_HIGH_PRIVATE_USE_SURROGATE))) {
+            result.putAll(UnicodeProperty.HIGH_PRIVATE_USE_SURROGATES, temp);
+        }
+        if (null != (temp = result.get(UnicodeProperty.SAMPLE_LOW_SURROGATE))) {
+            result.putAll(UnicodeProperty.LOW_SURROGATES, temp);
+        }
+
+        if (null != (temp = result.get(UnicodeProperty.SAMPLE_PRIVATE_USE_AREA))) {
+            result.putAll(UnicodeProperty.PRIVATE_USE_AREA, temp);
+        }
+        if (null != (temp = result.get(UnicodeProperty.SAMPLE_PRIVATE_USE_AREA_A))) {
+            result.putAll(UnicodeProperty.PRIVATE_USE_AREA_A, temp);
+        }
+        if (null != (temp = result.get(UnicodeProperty.SAMPLE_PRIVATE_USE_AREA_B))) {
+            result.putAll(UnicodeProperty.PRIVATE_USE_AREA_B, temp);
         }
         return result;
     }
@@ -1363,7 +1468,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         if (isType(STRING_OR_MISC_MASK)) {
             return equals(cp, value);
         }
-        String defaultValue = getValue(SAMPLE_UNASSIGNED);
+        String defaultValue = getValue(getSAMPLE_UNASSIGNED());
         return defaultValue == null ? value == null : defaultValue.equals(value);   
     }
 
@@ -1373,6 +1478,54 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     protected UnicodeProperty setUniformUnassigned(boolean hasUniformUnassigned) {
         this.hasUniformUnassigned = hasUniformUnassigned;
         return this;
+    }
+    
+    public static class UnicodeSetProperty extends BaseProperty {
+        protected UnicodeSet unicodeSet;
+        private static final String[] YESNO_ARRAY = new String[]{"Yes", "No"};
+        private static final List YESNO = Arrays.asList(YESNO_ARRAY);
+
+        public UnicodeSetProperty set(UnicodeSet set) {
+            unicodeSet = set.freeze();
+            return this;
+        }
+
+        public UnicodeSetProperty set(String string) {
+            // TODO Auto-generated method stub
+            return set(new UnicodeSet(string).freeze());
+        }
+
+        protected String _getValue(int codepoint) {
+            return YESNO_ARRAY[unicodeSet.contains(codepoint) ? 0 : 1];
+        }
+
+        protected List _getAvailableValues(List result) {
+            return YESNO;
+        }
+    }
+    
+    private static class StringTransformProperty extends SimpleProperty {
+        Transform<String,String> transform;
+
+        public StringTransformProperty(Transform<String,String> transform, boolean hasUniformUnassigned) {
+            this.transform = transform;
+            setUniformUnassigned(hasUniformUnassigned);
+        }
+        protected String _getValue(int codepoint) {
+            return transform.transform(UTF16.valueOf(codepoint));
+        }
+    }
+
+    private static class CodepointTransformProperty extends SimpleProperty {
+        Transform<Integer,String> transform;
+
+        public CodepointTransformProperty(Transform<Integer,String> transform, boolean hasUniformUnassigned) {
+            this.transform = transform;
+            setUniformUnassigned(hasUniformUnassigned);
+        }
+        protected String _getValue(int codepoint) {
+            return transform.transform(codepoint);
+        }
     }
 }
 

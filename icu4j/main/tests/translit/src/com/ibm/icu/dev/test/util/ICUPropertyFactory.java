@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -437,7 +437,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
 //        NFKD = UProperty.STRING_LIMIT+3
         ;
 
-    private ICUPropertyFactory() {
+    protected ICUPropertyFactory() {
         Collection c = getInternalAvailablePropertyAliases(new ArrayList());
         Iterator it = c.iterator();
         while (it.hasNext()) {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -277,7 +277,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable, StringTransfor
             throw new UnsupportedOperationException("Attempt to modify locked object");
         }
         if (errorOnReset && values[baseIndex] != null) {
-            throw new IllegalArgumentException("Attempt to reset value for " + Utility.hex(codepoint)
+            throw new UnsupportedOperationException("Attempt to reset value for " + Utility.hex(codepoint)
                     + " when that is disallowed. Old: " + values[baseIndex] + "; New: " + value);
         }
 
