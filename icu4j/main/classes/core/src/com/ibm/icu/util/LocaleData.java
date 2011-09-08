@@ -7,6 +7,8 @@
 package com.ibm.icu.util;
 
 import java.util.MissingResourceException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
@@ -54,10 +56,16 @@ public final class LocaleData {
     public static final int ES_CURRENCY = 3;
 
     /**
+     * EXType for {@link #getExemplarSet(int, int)}.
+     * @draft ICU 49
+     */
+     public static final int ES_PUNCTUATION = 4;
+
+    /**
      * Count of EXTypes for {@link #getExemplarSet(int, int)}.
      * @stable ICU 3.4
      */
-    public static final int ES_COUNT = 4;
+    public static final int ES_COUNT = 5;
     
     /**
      * Delimiter type for {@link #getDelimiter(int)}.
@@ -154,7 +162,8 @@ public final class LocaleData {
     public UnicodeSet getExemplarSet(int options, int extype) {
         String [] exemplarSetTypes = { 
             "ExemplarCharacters", "AuxExemplarCharacters",
-            "ExemplarCharactersIndex", "ExemplarCharactersCurrency"
+            "ExemplarCharactersIndex", "ExemplarCharactersCurrency",
+            "ExemplarCharactersPunctuation"
         };
 
         try{
@@ -163,7 +172,18 @@ public final class LocaleData {
             if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
                return null;
     
-            return new UnicodeSet(stringBundle.getString(), UnicodeSet.IGNORE_SPACE | options);
+            String unicodeSetPattern = stringBundle.getString();
+            // HACK
+            if (extype == ES_PUNCTUATION) {
+                Matcher matcher = US_SYNTAX.matcher(" " + unicodeSetPattern.substring(1,unicodeSetPattern.length()-1) + " ");
+                unicodeSetPattern = '[' + matcher.replaceAll(" \\\\$1") + ']';
+                try {
+                    return new UnicodeSet(unicodeSetPattern, UnicodeSet.IGNORE_SPACE | options);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Can't create exemplars for " + exemplarSetTypes[extype] + " in " + bundle.getLocale(), e);
+                }
+            }
+            return new UnicodeSet(unicodeSetPattern, UnicodeSet.IGNORE_SPACE | options);
         }catch(MissingResourceException ex){
             if(extype==LocaleData.ES_AUXILIARY){
                 return new UnicodeSet();
@@ -173,6 +193,8 @@ public final class LocaleData {
             throw ex;
         }
     }
+    
+    static final Pattern US_SYNTAX = Pattern.compile(" ([\\-\\&\\{\\}\\[\\]])");
 
     /**
      * Gets the LocaleData object associated with the ULocale specified in locale
