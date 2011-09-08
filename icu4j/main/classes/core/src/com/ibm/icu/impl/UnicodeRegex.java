@@ -15,7 +15,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
     // particularly for the regex style supported.
 
     private SymbolTable symbolTable;
-    private ParsePosition parsePosition = new ParsePosition(0);
 
     /**
      * Set the symbol table for internal processing

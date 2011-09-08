@@ -4551,7 +4551,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Get the default symbol table. Null means ordinary processing. For internal use only.
-     * @return
+     * @return the symbol table
      * @internal
      */
     public static XSymbolTable getDefaultXSymbolTable() {
@@ -4562,7 +4562,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Set the default symbol table. Null means ordinary processing. For internal use only. Will affect all subsequent parsing
      * of UnicodeSets.
  * <p>
- * WARNING: If this function is used with a {@link UnicodeProperty}, and the
+ * WARNING: If this function is used with a UnicodeProperty, and the
  * Unassigned characters (gc=Cn) are different than in ICU other than in ICU, you MUST call
  * {@code UnicodeProperty.ResetCacheProperties} afterwards. If you then call {@code UnicodeSet.setDefaultXSymbolTable}
  * with null to clear the value, you MUST also call {@code UnicodeProperty.ResetCacheProperties}.
