@@ -612,7 +612,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         /**
          * Returns the length of the pattern substring associated with this Part.
          * This is 0 for some parts.
-         * @return this part's pattern string index.
+         * @return this part's pattern substring length.
          * @draft ICU 4.8
          * @provisional This API might change or be removed in a future release.
          */
@@ -715,6 +715,10 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
              * Start of an argument.
              * The length is 1 for the '{'.
              * The value is the ordinal value of the ArgType. Use getArgType().
+             * <p>
+             * This part is followed by either an ARG_NUMBER or ARG_NAME,
+             * followed by optional argument sub-parts (see ArgType constants)
+             * and finally an ARG_LIMIT part.
              * @draft ICU 4.8
              * @provisional This API might change or be removed in a future release.
              */
@@ -723,10 +727,6 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
              * End of an argument.
              * The length is 1 for the '}'.
              * The value is the ordinal value of the ArgType. Use getArgType().
-             * <p>
-             * This part is followed by either an ARG_NUMBER or ARG_NAME,
-             * followed by optional argument sub-parts (see ArgType constants)
-             * and finally an ARG_LIMIT part.
              * @draft ICU 4.8
              * @provisional This API might change or be removed in a future release.
              */
