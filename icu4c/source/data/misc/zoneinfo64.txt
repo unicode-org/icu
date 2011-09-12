@@ -3,9 +3,9 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Mon Aug 29 15:01:00 2011
+// Build date: Mon Sep 12 10:50:15 2011
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2011i
+// Olson version: 2011j
 // ICU version: 49.0.1
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
@@ -13,7 +13,7 @@
 //---------------------------------------------------------
 
 zoneinfo64:table(nofallback) {
- TZVersion { "2011i" }
+ TZVersion { "2011j" }
  Zones:array { 
   /* ACT */ :int { 343 } //Z#0
   /* AET */ :int { 355 } //Z#1
@@ -119,8 +119,8 @@ zoneinfo64:table(nofallback) {
     typeMap:bin { "0102" }
   } //Z#22
   /* Africa/Dar_es_Salaam */ :table {
-    trans:intvector { -1230777428, -694321200, -284006685 }
-    typeOffsets:intvector { 9428, 0, 9885, 0, 10800, 0 }
+    trans:intvector { -1230777428, -694321200, -284006700 }
+    typeOffsets:intvector { 9428, 0, 9900, 0, 10800, 0 }
     typeMap:bin { "020102" }
   } //Z#23
   /* Africa/Djibouti */ :table {
@@ -167,8 +167,8 @@ zoneinfo64:table(nofallback) {
     typeMap:bin { "01020102010201020102010201020102010201020102010201020102010201020103" }
   } //Z#31
   /* Africa/Kampala */ :table {
-    trans:intvector { -1309745380, -1262314800, -694319400, -410237085 }
-    typeOffsets:intvector { 7780, 0, 9000, 0, 9885, 0, 10800, 0 }
+    trans:intvector { -1309745380, -1262314800, -694319400, -410237100 }
+    typeOffsets:intvector { 7780, 0, 9000, 0, 9900, 0, 10800, 0 }
     typeMap:bin { "03010203" }
   } //Z#32
   /* Africa/Khartoum */ :table {
@@ -249,8 +249,8 @@ zoneinfo64:table(nofallback) {
     typeMap:bin { "0102" }
   } //Z#47
   /* Africa/Nairobi */ :table {
-    trans:intvector { -1309746436, -1262314800, -946780200, -315629085 }
-    typeOffsets:intvector { 8836, 0, 9000, 0, 9885, 0, 10800, 0 }
+    trans:intvector { -1309746436, -1262314800, -946780200, -315629100 }
+    typeOffsets:intvector { 8836, 0, 9000, 0, 9900, 0, 10800, 0 }
     typeMap:bin { "03010203" }
   } //Z#48
   /* Africa/Ndjamena */ :table {
@@ -2745,9 +2745,9 @@ zoneinfo64:table(nofallback) {
   } //Z#536
   /* Pacific/Apia */ :table {
     transPre32:intvector { -1, 1439229312 }
-    trans:intvector { -1861878784, -631110600, 1285498800, 1301752800, 1325242800 }
-    typeOffsets:intvector { 45184, 0, -41400, 0, -41216, 0, -39600, 0, -39600, 3600, 46800, 0 }
-    typeMap:bin { "020103040305" }
+    trans:intvector { -1861878784, -631110600, 1285498800, 1301752800, 1316872800, 1325239200, 1333202400 }
+    typeOffsets:intvector { 45184, 0, -41400, 0, -41216, 0, -39600, 0, -39600, 3600, 46800, 0, 46800, 3600 }
+    typeMap:bin { "0201030403040605" }
     links:intvector { 517, 537 }
   } //Z#537
   /* Pacific/Auckland */ :table {
