@@ -528,7 +528,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
     UBool hasChopped = TRUE;
     UBool usingUSRData = U_USE_USRDATA && ( path == NULL || uprv_strncmp(path,U_ICUDATA_NAME,8) == 0);
 
-    char name[96];
+    char name[ULOC_FULLNAME_CAPACITY];
     char usrDataPath[96];
 
     initCache(status);
@@ -537,16 +537,18 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         return NULL;
     }
 
-    uprv_strcpy(name, localeID);
+    uprv_strncpy(name, localeID, sizeof(name) - 1);
+    name[sizeof(name) - 1] = 0;
 
     if ( usingUSRData ) {
         if ( path == NULL ) {
-           uprv_strcpy(usrDataPath,U_USRDATA_NAME);
+            uprv_strcpy(usrDataPath, U_USRDATA_NAME);
         } else {
-           uprv_strcpy(usrDataPath,path);
-           usrDataPath[0] = 'u';
-           usrDataPath[1] = 's';
-           usrDataPath[2] = 'r';
+            uprv_strncpy(usrDataPath, path, sizeof(usrDataPath) - 1);
+            usrDataPath[0] = 'u';
+            usrDataPath[1] = 's';
+            usrDataPath[2] = 'r';
+            usrDataPath[sizeof(usrDataPath) - 1] = 0;
         }
     }
  
@@ -1990,6 +1992,13 @@ ures_openFillIn(UResourceBundle *r, const char* path,
     } else {
         UResourceDataEntry *firstData;
         UBool isStackObject = ures_isStackObject(r);
+        char canonLocaleID[ULOC_FULLNAME_CAPACITY];
+
+        uloc_getBaseName(localeID, canonLocaleID, sizeof(canonLocaleID), status);
+        if(U_FAILURE(*status) || *status == U_STRING_NOT_TERMINATED_WARNING) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
 
         ures_closeBundle(r, FALSE);
         uprv_memset(r, 0, sizeof(UResourceBundle));
@@ -1997,7 +2006,7 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         r->fHasFallback = TRUE;
         r->fIsTopLevel = TRUE;
         r->fIndex = -1;
-        r->fData = entryOpen(path, localeID, status);
+        r->fData = entryOpen(path, canonLocaleID, status);
         if(U_FAILURE(*status)) {
             return;
         }
@@ -2019,7 +2028,7 @@ ures_open(const char* path,
                     const char* localeID,
                     UErrorCode* status)
 {
-    char canonLocaleID[100];
+    char canonLocaleID[ULOC_FULLNAME_CAPACITY];
     UResourceDataEntry *hasData = NULL;
     UResourceBundle *r;
 
