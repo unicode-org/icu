@@ -1931,7 +1931,7 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     };
 
     int i;
-    for (i = 0; i < sizeof(badLocales); i++) {
+    for (i = 0; i < sizeof(badLocales) / sizeof(char*); i++) {
         const char *localeName = badLocales[i];
         Locale locBad(localeName);
         UErrorCode status = U_ZERO_ERROR;
