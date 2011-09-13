@@ -1932,8 +1932,8 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     Locale::setDefault(locBad, status);
     logln("Current locale is %s", Locale::getDefault().getName());
     DecimalFormatSymbols mySymbols(status);
-    if (status != U_USING_FALLBACK_WARNING) {
-        errln("DecimalFormatSymbols should returned U_USING_FALLBACK_WARNING.");
+    if (status != U_USING_DEFAULT_WARNING) {
+        errln("DecimalFormatSymbols should returned U_USING_DEFAULT_WARNING.");
     }
     if (strcmp(mySymbols.getLocale().getName(), locBad.getName()) != 0) {
         errln("DecimalFormatSymbols does not have the right locale.");

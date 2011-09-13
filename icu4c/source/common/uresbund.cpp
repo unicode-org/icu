@@ -319,7 +319,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     UResourceDataEntry *r = NULL;
     UResourceDataEntry find;
     /*int32_t hashValue;*/
-    char name[96];
+    char name[ULOC_FULLNAME_CAPACITY];
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
     /*UBool isAlias = FALSE;*/
@@ -335,7 +335,8 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     } else if(*localeID == 0) { /* if localeID is "" then we try to open root locale */
         uprv_strcpy(name, kRootLocaleName);
     } else { /* otherwise, we'll open what we're given */
-        uprv_strcpy(name, localeID);
+        uprv_strncpy(name, localeID, sizeof(name) - 1);
+        name[sizeof(name) - 1] = 0;
     }
 
     find.fName = name;
