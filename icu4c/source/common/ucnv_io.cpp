@@ -749,13 +749,32 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
 
 U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        uint32_t convNum = findConverter(alias, containsOption, pErrorCode);
-        if (convNum < gMainTable.converterListSize) {
-            return GET_STRING(gMainTable.converterList[convNum]);
+    const char *aliasTmp = alias;
+    int32_t i = 0;
+    for (i = 0; i < 2; i++) {
+        if (i == 1) {
+            /*
+             * After the first unsuccess converter lookup, check to see if
+             * the name begins with 'x-'. If it does, strip it off and try
+             * again.  This behaviour is similar to how ICU4J does it.
+             */
+            if (aliasTmp[0] == 'x' || aliasTmp[1] == '-') {
+                aliasTmp = aliasTmp+2;
+            } else {
+                break;
+            }
         }
-        /* else converter not found */
+        if(haveAliasData(pErrorCode) && isAlias(aliasTmp, pErrorCode)) {
+            uint32_t convNum = findConverter(aliasTmp, containsOption, pErrorCode);
+            if (convNum < gMainTable.converterListSize) {
+                return GET_STRING(gMainTable.converterList[convNum]);
+            }
+            /* else converter not found */
+        } else {
+            break;
+        }
     }
+
     return NULL;
 }
 
