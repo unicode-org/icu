@@ -617,11 +617,21 @@ public class TestCharsetDetector extends TestFmwk
         charsetMatch = m.getName();
         CheckAssert(charsetMatch.equals("IBM424_rtl"));
         CheckAssert(m.getLanguage().equals("he"));
+        try {
+            m.getString();
+        } catch (Exception ex) {
+            errln("Error getting string for charsetMatch: " + charsetMatch);
+        }
         
         m = _testIBM424_he_ltr(s);
         charsetMatch = m.getName();
         CheckAssert(charsetMatch.equals("IBM424_ltr"));
         CheckAssert(m.getLanguage().equals("he"));
+        try {
+            m.getString();
+        } catch (Exception ex) {
+            errln("Error getting string for charsetMatch: " + charsetMatch);
+        }
     }
     
     private CharsetMatch _test1255(String s) throws Exception {
