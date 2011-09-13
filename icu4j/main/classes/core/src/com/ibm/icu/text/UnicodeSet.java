@@ -1598,6 +1598,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         if (c < MIN_VALUE || c > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
         }
+        if (bmpSet != null) {
+            return bmpSet.contains(c);
+        }
+        if (stringSpan != null) {
+            return stringSpan.contains(c);
+        }
 
         /*
         // Set i to the index of the start item greater than ch
