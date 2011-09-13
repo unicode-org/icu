@@ -931,7 +931,7 @@ macos-38_2-10.2 { UTR22* }      x-mac-romania { MIME* } x-MacRomania { JAVA* } M
 macos-518-10.2 { UTR22* }       x-mac-arabic { MIME* } x-MacArabic { JAVA* } MacArabic { JAVA }
 macos-1285-10.2 { UTR22* }      x-mac-hebrew { MIME* } x-MacHebrew { JAVA* } MacHebrew { JAVA }
 
-ibm-1051_P100-1995 { UTR22* }   ibm-1051 { IBM* } hp-roman8 { IANA* } roman8 { IANA } r8 { IANA } csHPRoman8 { IANA }   # HP Latin1
+ibm-1051_P100-1995 { UTR22* }   ibm-1051 { IBM* } hp-roman8 { IANA* } roman8 { IANA } r8 { IANA } csHPRoman8 { IANA } x-roman8 { JAVA}   # HP Latin1
 ibm-1276_P100-1995 { UTR22* }   ibm-1276 { IBM* } Adobe-Standard-Encoding { IANA* } csAdobeStandardEncoding { IANA } # Different from ISO-Unicode-IBM-1276 (GCSGID: 1276)
 
 ibm-1006_P100-1995 { UTR22* }   ibm-1006 { IBM* } IBM1006 { JAVA } cp1006 { JAVA* } 1006 { JAVA } x-IBM1006 { JAVA }  # Urdu
