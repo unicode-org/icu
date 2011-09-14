@@ -1039,10 +1039,14 @@ void TestOpenVsOpenRules(){
             ucol_getSortKey(c2, str, u_strlen(str), sortKey2, sortKeyLen2 + 1);
 
             /* Check that the lengths are the same */
-            doAssert((sortKeyLen1 == sortKeyLen2), "Sort key lengths do not match.");
+            if (sortKeyLen1 != sortKeyLen2) {
+                log_err("ERROR : Sort key lengths for locale '%s' do not match.\n", curLoc);
+            }
 
             /* check that the keys are the same */
-            doAssert((memcmp(sortKey1, sortKey2, sortKeyLen1) == 0), "Keys are not equivalent");
+            if (memcmp(sortKey1, sortKey2, sortKeyLen1) != 0) {
+                log_err("ERROR :  Sort keys for locale '%s' are not equivalent.\n", curLoc);
+            }
 
             /* clean up after each string */
             free(sortKey1);
