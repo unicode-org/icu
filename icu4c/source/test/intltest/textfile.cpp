@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004,2011 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -145,6 +145,7 @@ UBool TextFile::setBuffer(int32_t index, char c, UErrorCode& ec) {
  * Return TRUE upon success. Upon return, 'buffer' may change
  * value. In any case, previous contents are preserved.
  */
+ #define LOWEST_MIN_CAPACITY 64
 UBool TextFile::ensureCapacity(int32_t mincapacity) {
     if (capacity >= mincapacity) {
         return TRUE;
@@ -152,8 +153,8 @@ UBool TextFile::ensureCapacity(int32_t mincapacity) {
 
     // Grow by factor of 2 to prevent frequent allocation
     // Note: 'capacity' may be 0
-    int32_t i;
-    for (i = capacity || 1024; i < mincapacity; ) {
+    int32_t i = (capacity < LOWEST_MIN_CAPACITY)? LOWEST_MIN_CAPACITY: capacity;
+    while (i < mincapacity) {
         i <<= 1;
         if (i < 0) {
             i = 0x7FFFFFFF;
