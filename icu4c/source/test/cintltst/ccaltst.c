@@ -807,17 +807,30 @@ static void TestFieldGetSet()
     udat_close(datdef);
 }
  
+typedef struct {
+    const char * zone;
+    int32_t      year;
+    int32_t      month;
+    int32_t      day;
+    int32_t      hour;
+} TransitionItem;
 
- 
+static const TransitionItem transitionItems[] = {
+    { "America/Caracas", 2007, UCAL_DECEMBER,  8, 10 }, /* day before change in UCAL_ZONE_OFFSET */
+    { "US/Pacific",      2011,    UCAL_MARCH, 12, 10 }, /* day before change in UCAL_DST_OFFSET */
+    { NULL,                 0,             0,  0,  0 }
+};
+
 /* ------------------------------------- */
 /**
  * Execute adding and rolling in Calendar extensively,
  */
 static void TestAddRollExtensive()
 {
+    const TransitionItem * itemPtr;
     UCalendar *cal = 0;
     int32_t i,limit;
-    UChar tzID[4];
+    UChar tzID[32];
     UCalendarDateFields e;
     int32_t y,m,d,hr,min,sec,ms;
     int32_t maxlimit = 40;
@@ -974,6 +987,34 @@ static void TestAddRollExtensive()
     }
 
     ucal_close(cal);
+/*--------------- */
+    log_verbose("\nTesting ucal_add() across ZONE_OFFSET and DST_OFFSE transitions.\n");
+    for (itemPtr = transitionItems; itemPtr->zone != NULL; itemPtr++) {
+        status=U_ZERO_ERROR;
+        u_uastrcpy(tzID, itemPtr->zone);
+        cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
+        if (U_FAILURE(status)) {
+            log_err("ucal_open failed for zone %s: %s\n", itemPtr->zone, u_errorName(status));
+            continue; 
+        }
+        ucal_setDateTime(cal, itemPtr->year, itemPtr->month, itemPtr->day, itemPtr->hour, 0, 0, &status);
+        ucal_add(cal, UCAL_DATE, 1, &status);
+        hr = ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("ucal_add failed adding day across transition for zone %s: %s\n", itemPtr->zone, u_errorName(status));
+        } else if ( hr != itemPtr->hour ) {
+            log_err("ucal_add produced wrong hour %d when adding day across transition for zone %s\n", hr, itemPtr->zone);
+        } else {
+            ucal_add(cal, UCAL_DATE, -1, &status);
+            hr = ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("ucal_add failed subtracting day across transition for zone %s: %s\n", itemPtr->zone, u_errorName(status));
+            } else if ( hr != itemPtr->hour ) {
+                log_err("ucal_add produced wrong hour %d when subtracting day across transition for zone %s\n", hr, itemPtr->zone);
+            }
+        }
+        ucal_close(cal);
+    }
 }
 
 /*------------------------------------------------------ */
