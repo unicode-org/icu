@@ -1813,7 +1813,8 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
 
     // We handle most fields in the same way.  The algorithm is to add
     // a computed amount of millis to the current millis.  The only
-    // wrinkle is with DST -- for some fields, like the DAY_OF_MONTH,
+    // wrinkle is with DST (and/or a change to the zone's UTC offset, which
+    // we'll include with DST) -- for some fields, like the DAY_OF_MONTH,
     // we don't want the HOUR to shift due to changes in DST.  If the
     // result of the add operation is to move from DST to Standard, or
     // vice versa, we need to adjust by an hour forward or back,
@@ -1905,14 +1906,14 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
     int32_t dst = 0;
     int32_t hour = 0;
     if (keepHourInvariant) {
-        dst = get(UCAL_DST_OFFSET, status);
+        dst = get(UCAL_DST_OFFSET, status) + get(UCAL_ZONE_OFFSET, status);
         hour = internalGet(UCAL_HOUR_OF_DAY);
     }
 
     setTimeInMillis(getTimeInMillis(status) + delta, status);
 
     if (keepHourInvariant) {
-        dst -= get(UCAL_DST_OFFSET, status);
+        dst -= get(UCAL_DST_OFFSET, status) + get(UCAL_ZONE_OFFSET, status);
         if (dst != 0) {
             // We have done an hour-invariant adjustment but the
             // DST offset has altered.  We adjust millis to keep
