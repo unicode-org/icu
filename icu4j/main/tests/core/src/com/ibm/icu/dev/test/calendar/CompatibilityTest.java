@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009,2011 International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -752,6 +752,56 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         else logln("Confirmed: " +
                    y + "/" + (m+1) + "/" + d);
+    }
+
+    // Verify that add works across ZONE_OFFSET and DST_OFFSET transitions
+    public void TestAddAcrossOffsetTransitions() {
+        class TransitionItem {
+            private String zoneName;
+            private int year;
+            private int month;
+            private int day;
+            private int hour;
+            TransitionItem(String zn, int y, int m, int d, int h) {
+                zoneName = zn;
+                year = y;
+                month = m;
+                day = d;
+                hour = h;
+            }
+            public String getZoneName() { return zoneName; }
+            public int getYear() { return year; }
+            public int getMonth() { return month; }
+            public int getDay() { return day; }
+            public int getHour() { return hour; }
+        }
+        final TransitionItem[] transitionItems = { 
+            new TransitionItem( "America/Caracas", 2007, Calendar.DECEMBER,  8, 10 ), // day before change in ZONE_OFFSET
+            new TransitionItem( "US/Pacific",      2011,    Calendar.MARCH, 12, 10 ), // day before change in DST_OFFSET
+        };
+        for (TransitionItem transitionItem: transitionItems) {
+            String zoneName = transitionItem.getZoneName();
+            Calendar cal = null;
+            try {
+                cal = Calendar.getInstance(TimeZone.getTimeZone(zoneName), Locale.ENGLISH);
+            } catch (Exception e) {
+                errln("Error: Calendar.getInstance fails for zone " + zoneName);
+                continue;
+            }
+            int itemHour = transitionItem.getHour();
+            cal.set( transitionItem.getYear(), transitionItem.getMonth(), transitionItem.getDay(), itemHour, 0 );
+            cal.add( Calendar.DATE, 1 );
+            int hr = cal.get( Calendar.HOUR_OF_DAY );
+            if ( hr != itemHour ) {
+                errln("Error: Calendar.add produced wrong hour " + hr + " when adding day across transition for zone " + zoneName);
+            } else {
+                cal.add( Calendar.DATE, -1 );
+                hr = cal.get( Calendar.HOUR_OF_DAY );
+                if ( hr != itemHour ) {
+                    errln("Error: Calendar.add produced wrong hour " + hr + " when subtracting day across transition for zone " + zoneName);
+                }
+            }
+        }
     }
 
     // Verify that setting fields works.  This test fails when an exception is thrown.
