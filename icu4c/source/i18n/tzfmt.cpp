@@ -140,9 +140,6 @@ TimeZoneFormatImpl::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate
     case UTZFMT_STYLE_SPECIFIC_SHORT:
         formatSpecific(tz, UTZNM_SHORT_STANDARD, UTZNM_SHORT_DAYLIGHT, date, name, timeType);
         break;
-    case UTZFMT_STYLE_SPECIFIC_SHORT_COMMONLY_USED:
-        formatSpecific(tz, UTZNM_SHORT_STANDARD_COMMONLY_USED, UTZNM_SHORT_DAYLIGHT_COMMONLY_USED, date, name, timeType);
-        break;
     }
     return name;
 }
@@ -178,9 +175,6 @@ TimeZoneFormatImpl::parse(UTimeZoneFormatStyle style, const UnicodeString& text,
         break;
     case UTZFMT_STYLE_SPECIFIC_SHORT:
         types = UTZNM_SHORT_STANDARD | UTZNM_SHORT_DAYLIGHT;
-        break;
-    case UTZFMT_STYLE_SPECIFIC_SHORT_COMMONLY_USED:
-        types = UTZNM_SHORT_STANDARD_COMMONLY_USED | UTZNM_SHORT_DAYLIGHT_COMMONLY_USED;
         break;
     }
 
@@ -226,12 +220,10 @@ TimeZoneFormatImpl::parse(UTimeZoneFormatStyle style, const UnicodeString& text,
             switch (nameType) {
             case UTZNM_LONG_STANDARD:
             case UTZNM_SHORT_STANDARD:
-            case UTZNM_SHORT_STANDARD_COMMONLY_USED:
                 parsedTimeType = UTZFMT_TIME_TYPE_STANDARD;
                 break;
             case UTZNM_LONG_DAYLIGHT:
             case UTZNM_SHORT_DAYLIGHT:
-            case UTZNM_SHORT_DAYLIGHT_COMMONLY_USED:
                 parsedTimeType = UTZFMT_TIME_TYPE_DAYLIGHT;
                 break;
             default:
