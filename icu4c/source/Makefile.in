@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2010, International Business Machines
+#   Copyright (C) 1998-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -91,11 +91,15 @@ xperf-recursive: all tests
 	@$(MAKE) -C test/perf xperf
 
 ifeq ($(DOXYGEN),)
-doc:
+doc doc-searchengine:
 	@echo you need Doxygen to generate documentation. Doxygen can be found on the Web
 	@echo at http://www.doxygen.org/
 else
 doc: doc/html/index.html
+
+doc-searchengine: Doxyfile $(wildcard ./common/unicode/platform.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h $(srcdir)/io/unicode/*.h)
+	sed < Doxyfile -e 's%[^#]*SEARCHENGINE.*%SEARCHENGINE=YES%' | $(DOXYGEN) -
+	@echo Docs created - WARNING, probably contains non-GPL .js files
 
 doc/html/index.html: Doxyfile $(wildcard ./common/unicode/platform.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h $(srcdir)/io/unicode/*.h)
 	$(DOXYGEN)
