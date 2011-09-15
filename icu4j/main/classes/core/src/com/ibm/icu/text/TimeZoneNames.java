@@ -63,8 +63,8 @@ import com.ibm.icu.util.ULocale;
  * may provide time zone names only through {@link #getTimeZoneDisplayName(String, NameType)}, or only through
  * {@link #getMetaZoneDisplayName(String, NameType)}, or both.
  * 
- * @internal ICU 4.8 technology preview
- * @deprecated This API might change or be removed in a future release. 
+ * @draft ICU 49
+ * @provisional This API might change or be removed in a future release.
  */
 public abstract class TimeZoneNames implements Serializable {
 
@@ -73,70 +73,52 @@ public abstract class TimeZoneNames implements Serializable {
     /**
      * Time zone display name types
      * 
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum NameType {
         /**
          * Long display name, such as "Eastern Time".
          * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release. 
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         LONG_GENERIC,
         /**
          * Long display name for standard time, such as "Eastern Standard Time".
          * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         LONG_STANDARD,
         /**
          * Long display name for daylight saving time, such as "Eastern Daylight Time".
          * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         LONG_DAYLIGHT,
         /**
          * Short display name, such as "ET".
          * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         SHORT_GENERIC,
         /**
          * Short display name for standard time, such as "EST".
          * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         SHORT_STANDARD,
         /**
          * Short display name for daylight saving time, such as "EDT".
          * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         SHORT_DAYLIGHT,
-        /**
-         * Short display name for standard time, such as "EST".
-         * <p><b>Note:</b> The short abbreviation might not be well understood by people not familiar with the zone.
-         * Unlike {@link #SHORT_STANDARD}, this type excludes short standard names not commonly used by the region.
-         * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
-         */
-        SHORT_STANDARD_COMMONLY_USED,
-        /**
-         * Short display name for daylight saving time, such as "EDT".
-         * <p><b>Note:</b> The short abbreviation might not be well understood by people not familiar with the zone.
-         * Unlike {@link #SHORT_DAYLIGHT}, this type excludes short daylight names not commonly used by the region.
-         * 
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
-         */
-        SHORT_DAYLIGHT_COMMONLY_USED
     }
 
     private static Cache TZNAMES_CACHE = new Cache();
@@ -178,8 +160,8 @@ public abstract class TimeZoneNames implements Serializable {
      * @param locale
      *            The locale.
      * @return An instance of <code>TimeZoneDisplayNames</code>
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public static TimeZoneNames getInstance(ULocale locale) {
         String key = locale.getBaseName();
@@ -189,8 +171,8 @@ public abstract class TimeZoneNames implements Serializable {
     /**
      * Returns an immutable set of all available meta zone IDs.
      * @return An immutable set of all available meta zone IDs.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract Set<String> getAvailableMetaZoneIDs();
 
@@ -200,8 +182,8 @@ public abstract class TimeZoneNames implements Serializable {
      * @param tzID
      *            The canonical time zone ID.
      * @return An immutable set of all available meta zone IDs used by the given time zone.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract Set<String> getAvailableMetaZoneIDs(String tzID);
 
@@ -215,8 +197,8 @@ public abstract class TimeZoneNames implements Serializable {
      * @return The meta zone ID for the given time zone ID at the given date. If the time zone does not have a
      *         corresponding meta zone at the given date or the implementation does not support meta zones, null is
      *         returned.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getMetaZoneID(String tzID, long date);
 
@@ -229,8 +211,8 @@ public abstract class TimeZoneNames implements Serializable {
      *            The region.
      * @return The reference zone ID ("golden zone" in the LDML specification) for the given time zone ID for the
      *         region. If the meta zone is unknown or the implementation does not support meta zones, null is returned.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getReferenceZoneID(String mzID, String region);
 
@@ -244,8 +226,8 @@ public abstract class TimeZoneNames implements Serializable {
      * @return The display name of the meta zone. When this object does not have a localized display name for the given
      *         meta zone with the specified type or the implementation does not provide any display names associated
      *         with meta zones, null is returned.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getMetaZoneDisplayName(String mzID, NameType type);
 
@@ -265,8 +247,8 @@ public abstract class TimeZoneNames implements Serializable {
      *            The date
      * @return The display name for the time zone at the given date. When this object does not have a localized display
      *         name for the time zone with the specified type and date, null is returned.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final String getDisplayName(String tzID, NameType type, long date) {
         String name = getTimeZoneDisplayName(tzID, type);
@@ -287,8 +269,8 @@ public abstract class TimeZoneNames implements Serializable {
      *            The display name type. See {@link TimeZoneNames.NameType}.
      * @return The display name for the time zone. When this object does not have a localized display name for the given
      *         time zone with the specified type, null is returned.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String getTimeZoneDisplayName(String tzID, NameType type);
 
@@ -309,8 +291,8 @@ public abstract class TimeZoneNames implements Serializable {
      *            The canonical time zone ID
      * @return The exemplar location name for the given time zone, or null when a localized location name is not
      *         available and the fallback logic described above cannot extract location from the ID.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String getExemplarLocationName(String tzID) {
         if (tzID == null || tzID.length() == 0 || LOC_EXCLUSION_PATTERN.matcher(tzID).matches()) {
@@ -336,18 +318,18 @@ public abstract class TimeZoneNames implements Serializable {
      * @return A collection of matches.
      * @see NameType
      * @see MatchInfo
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
-    public Collection<MatchInfo> find(String text, int start, EnumSet<NameType> types) {
+    public Collection<MatchInfo> find(CharSequence text, int start, EnumSet<NameType> types) {
         throw new UnsupportedOperationException("The method is not implemented in TimeZoneNames base class.");
     }
 
     /**
      * A <code>MatchInfo</code> represents a time zone name match used by
-     * {@link TimeZoneNames#find(String, int, EnumSet)}.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * {@link TimeZoneNames#find(CharSequence, int, EnumSet)}.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public static class MatchInfo {
         private NameType _nameType;
@@ -366,8 +348,8 @@ public abstract class TimeZoneNames implements Serializable {
          * or 2) both <code>tzID</code> and <code>mzID</code> are <code>null</code>,
          * or 3) <code>matchLength</code> is 0 or smaller.
          * @see NameType
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         public MatchInfo(NameType nameType, String tzID, String mzID, int matchLength) {
             if (nameType == null) {
@@ -393,8 +375,8 @@ public abstract class TimeZoneNames implements Serializable {
          * 
          * @return the time zone ID, or <code>null</code>.
          * @see #mzID()
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         public String tzID() {
             return _tzID;
@@ -408,8 +390,8 @@ public abstract class TimeZoneNames implements Serializable {
          * 
          * @return the meta zone ID, or <code>null</code>.
          * @see #tzID()
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         public String mzID() {
             return _mzID;
@@ -419,8 +401,8 @@ public abstract class TimeZoneNames implements Serializable {
          * Returns the time zone name type.
          * @return the time zone name type enum.
          * @see NameType
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         public NameType nameType() {
             return _nameType;
@@ -429,8 +411,8 @@ public abstract class TimeZoneNames implements Serializable {
         /**
          * Returns the match length.
          * @return the match length.
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         public int matchLength() {
             return _matchLength;
@@ -440,8 +422,8 @@ public abstract class TimeZoneNames implements Serializable {
     /**
      * Sole constructor for invocation by subclass constructors.
      * 
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release. 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     protected TimeZoneNames() {
     }
@@ -545,10 +527,10 @@ public abstract class TimeZoneNames implements Serializable {
         }
 
         /* (non-Javadoc)
-         * @see com.ibm.icu.text.TimeZoneNames#find(java.lang.String, int, com.ibm.icu.text.TimeZoneNames.NameType[])
+         * @see com.ibm.icu.text.TimeZoneNames#find(java.lang.CharSequence, int, com.ibm.icu.text.TimeZoneNames.NameType[])
          */
         @Override
-        public Collection<MatchInfo> find(String text, int start, EnumSet<NameType> nameTypes) {
+        public Collection<MatchInfo> find(CharSequence text, int start, EnumSet<NameType> nameTypes) {
             return Collections.emptyList();
         }
 

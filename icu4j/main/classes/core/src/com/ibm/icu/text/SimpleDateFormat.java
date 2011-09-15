@@ -1003,7 +1003,7 @@ public class SimpleDateFormat extends DateFormat {
         case 17: // 'z' - ZONE_OFFSET
             if (count < 4) {
                 // "z", "zz", "zzz"
-                result = tzFormat().format(Style.SPECIFIC_SHORT_COMMONLY_USED, tz, date);
+                result = tzFormat().format(Style.SPECIFIC_SHORT, tz, date);
             } else {
                 result = tzFormat().format(Style.SPECIFIC_LONG, tz, date);
             }
@@ -2043,7 +2043,7 @@ public class SimpleDateFormat extends DateFormat {
             case 17: // 'z' - ZONE_OFFSET
             {
                 Output<TimeType> tzTimeType = new Output<TimeType>();
-                Style style = (count < 4) ? Style.SPECIFIC_SHORT_COMMONLY_USED : Style.SPECIFIC_LONG;
+                Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.SPECIFIC_LONG;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
                     if (tzTimeType.value == TimeType.STANDARD) {
@@ -2347,8 +2347,8 @@ public class SimpleDateFormat extends DateFormat {
      * 
      * @return the time zone formatter which this date/time
      * formatter uses.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat getTimeZoneFormat() {
         return tzFormat().freeze();
@@ -2358,8 +2358,8 @@ public class SimpleDateFormat extends DateFormat {
      * {@icu} Allows you to set the time zoen formatter.
      * 
      * @param tzfmt the new time zone formatter
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public void setTimeZoneFormat(TimeZoneFormat tzfmt) {
         if (tzfmt.isFrozen()) {

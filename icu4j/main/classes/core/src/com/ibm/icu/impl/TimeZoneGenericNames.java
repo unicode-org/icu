@@ -40,6 +40,12 @@ import com.ibm.icu.util.ULocale;
  */
 public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGenericNames> {
 
+    // Note: This class implements Serializable, but we no longer serialize instance of
+    // TimeZoneGenericNames in ICU 49. ICU 4.8 com.ibm.icu.text.TimeZoneFormat used to
+    // serialize TimeZoneGenericNames field. TimeZoneFormat no longer read TimeZoneGenericNames
+    // field, we have to keep TimeZoneGenericNames Serializable. Otherwise it fails to read
+    // (unused) TimeZoneGenericNames serialized data.
+
     private static final long serialVersionUID = 2729910342063468417L;
 
     /**
@@ -367,7 +373,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
             }
             if (useStandard) {
                 NameType stdNameType = (nameType == NameType.LONG_GENERIC) ?
-                        NameType.LONG_STANDARD : NameType.SHORT_STANDARD_COMMONLY_USED;
+                        NameType.LONG_STANDARD : NameType.SHORT_STANDARD;
                 String stdName = _tznames.getDisplayName(tzID, stdNameType, date);
                 if (stdName != null) {
                     name = stdName;
@@ -700,7 +706,17 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
                     // and the location name. When the match is a long standard name,
                     // then we need to check if the name is same with the location name.
                     // This is probably a data error or a design bug.
-                    if (bestMatch.nameType != GenericNameType.LONG || bestMatch.timeType != TimeType.STANDARD) {
+//                    if (bestMatch.nameType != GenericNameType.LONG || bestMatch.timeType != TimeType.STANDARD) {
+//                        return bestMatch;
+//                    }
+
+                    // TODO The deprecation of commonlyUsed flag introduced the name
+                    // conflict not only for long standard names, but short standard names too.
+                    // These short names (found in zh_Hant) should be gone once we clean
+                    // up CLDR time zone display name data. Once the short name conflict
+                    // problem (with location name) is resolved, we should change the condition
+                    // below back to the original one above. -Yoshito (2011-09-14)
+                    if (bestMatch.timeType != TimeType.STANDARD) {
                         return bestMatch;
                     }
                 }
@@ -768,7 +784,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         case LONG_GENERIC:
             nameType = GenericNameType.LONG;
             break;
-        case SHORT_STANDARD_COMMONLY_USED:
+        case SHORT_STANDARD:
             nameType = GenericNameType.SHORT;
             timeType = TimeType.STANDARD;
             break;
@@ -815,7 +831,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         }
         if (types.contains(GenericNameType.SHORT)) {
             nameTypes.add(NameType.SHORT_GENERIC);
-            nameTypes.add(NameType.SHORT_STANDARD_COMMONLY_USED);
+            nameTypes.add(NameType.SHORT_STANDARD);
         }
         
         if (!nameTypes.isEmpty()) {

@@ -67,11 +67,11 @@ public class TextTrieMap<V> {
      * longest prefix matching matching key, or null if no 
      * matching entry is found.
      */
-    public Iterator<V> get(String text, int start) {
+    public Iterator<V> get(CharSequence text, int start) {
         return get(text, start, null);
     }
 
-    public Iterator<V> get(String text, int start, int[] matchLen) {
+    public Iterator<V> get(CharSequence text, int start, int[] matchLen) {
         LongestMatchHandler<V> handler = new LongestMatchHandler<V>();
         find(text, start, handler);
         if (matchLen != null && matchLen.length > 0) {
@@ -80,11 +80,11 @@ public class TextTrieMap<V> {
         return handler.getMatches();
     }
 
-    public void find(String text, ResultHandler<V> handler) {
+    public void find(CharSequence text, ResultHandler<V> handler) {
         find(text, 0, handler);
     }
     
-    public void find(String text, int offset, ResultHandler<V> handler) {
+    public void find(CharSequence text, int offset, ResultHandler<V> handler) {
         CharIterator chitr = new CharIterator(text, offset, _ignoreCase);
         find(_root, chitr, handler);
     }
