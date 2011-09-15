@@ -180,10 +180,13 @@ case $platform in
     IBMi)
         THE_OS="IBM i"
         THE_COMP="the iCC C++"
-        CC=/usr/bin/icc; export CC
-        CXX=/usr/bin/icc; export CXX
+        CC=icc; export CC
+        CXX=icc; export CXX
         CPP="$CC -c -qpponly"; export CPP
-        MAKE=/usr/bin/gmake; export MAKE
+        MAKE=gmake; export MAKE
+        U_MAKE=gmake; export U_MAKE
+        # gmake is a .pgm and may not be on the path.  Don't use a full path, just use gmake.
+        ac_cv_path_U_MAKE=gmake; export ac_cv_path_U_MAKE
         RELEASE_CFLAGS='-O4'
         RELEASE_CXXFLAGS='-O4'
         ;;

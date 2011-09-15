@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## OS400-specific setup (for cross build)
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
@@ -12,13 +12,16 @@ THREADSCPPFLAGS = -D_MULTI_THREADED
 # -qTERASPACE: large pointers
 # -qPFROPT=*STRDONLY: Strings are read-only
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qPFROPT=*STRDONLY
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qPFROPT=*STRDONLY
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qPFROPT=*STRDONLY -qRTTIALL
+
+## ICULD program - run bldiculd.sh in icu/as_is/os400/ to build it
+ICULD=/qsys.lib/$(OUTPUTDIR).lib/iculd.pgm
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
-LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
+LINK.c=		$(ICULD)  $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
+LINK.cc=	$(ICULD) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
 
 ## Commands to make a shared library
 # -qALWLIBUPD: It allows the compiled service program to have dependencies on

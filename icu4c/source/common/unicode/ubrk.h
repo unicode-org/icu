@@ -267,7 +267,7 @@ ubrk_safeClone(
   * A recommended size (in bytes) for the memory buffer to be passed to ubrk_saveClone().
   * @stable ICU 2.0
   */
-#define U_BRK_SAFECLONE_BUFFERSIZE 512
+#define U_BRK_SAFECLONE_BUFFERSIZE 528
 
 /**
 * Close a UBreakIterator.

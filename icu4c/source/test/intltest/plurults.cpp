@@ -439,7 +439,7 @@ void PluralRulesTest::testWithin() {
     return;
   }
 
-  UnicodeString keyword = rules->select(26);
+  UnicodeString keyword = rules->select((int32_t)26);
   if (keyword != "a") {
     errln("expected 'a' for 26 but didn't get it.");
   }
