@@ -399,7 +399,7 @@ MessageFormat::operator==(const Format& rhs) const
     if (count != rhs_count) {
         return FALSE;
     }
-    int idx = 0, rhs_idx = 0, pos = -1, rhs_pos = -1;
+    int32_t idx = 0, rhs_idx = 0, pos = -1, rhs_pos = -1;
     for (; idx < count && rhs_idx < rhs_count && U_SUCCESS(ec); ++idx, ++rhs_idx) {
         const UHashElement* cur = uhash_nextElement(customFormatArgStarts, &pos);
         const UHashElement* rhs_cur = uhash_nextElement(that.customFormatArgStarts, &rhs_pos);

@@ -423,7 +423,7 @@ static void TestBreakIteratorSafeClone(void)
         /* Verify our define is large enough  */
         if (U_BRK_SAFECLONE_BUFFERSIZE < bufferSize)
         {
-            log_err("FAIL: Pre-calculated buffer size is too small\n");
+          log_err("FAIL: Pre-calculated buffer size is too small - %d but needed %d\n", U_BRK_SAFECLONE_BUFFERSIZE, bufferSize);
         }
         /* Verify we can use this run-time calculated size */
         if (0 == (brk = ubrk_safeClone(someIterators[i], buffer[i], &bufferSize, &status)) || U_FAILURE(status))

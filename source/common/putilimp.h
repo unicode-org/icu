@@ -502,6 +502,24 @@ U_INTERNAL UVoidFunction* U_EXPORT2 uprv_dlsym_func( void *lib, const char *symb
  */
 /* U_INTERNAL void * U_EXPORT2 uprv_dlsym_data( void *lib, const char *symbolName, UErrorCode *status); */
 
+
+/**
+ * Define malloc and related functions
+ * @internal
+ */
+#if defined(OS400)
+# define uprv_default_malloc(x) _C_TS_malloc(x)
+# define uprv_default_realloc(x,y) _C_TS_realloc(x,y)
+# define uprv_default_free(x) _C_TS_free(x)
+/* also _C_TS_calloc(x) */
+#else
+/* C defaults */
+# define uprv_default_malloc(x) malloc(x)
+# define uprv_default_realloc(x,y) realloc(x,y)
+# define uprv_default_free(x) free(x)
+#endif
+
+
 #endif
 
 #endif

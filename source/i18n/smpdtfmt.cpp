@@ -1394,7 +1394,7 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
     UBool moreToProcess = TRUE;
 
     while (moreToProcess) {
-        int32_t delimiterPosition = str.indexOf(ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE,start);
+        int32_t delimiterPosition = str.indexOf((UChar)ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE,start);
         if (delimiterPosition == -1) {
             moreToProcess = FALSE;
             len = str.length() - start;
@@ -1402,7 +1402,7 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
             len = delimiterPosition - start;
         }
         UnicodeString currentString(str,start,len);
-        int32_t equalSignPosition = currentString.indexOf(ULOC_KEYWORD_ASSIGN_UNICODE,0);
+        int32_t equalSignPosition = currentString.indexOf((UChar)ULOC_KEYWORD_ASSIGN_UNICODE,0);
         if (equalSignPosition == -1) { // Simple override string such as "hebrew"
             nsName.setTo(currentString);
             ovrField.setToBogus();
