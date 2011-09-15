@@ -39,73 +39,23 @@ static void TestBengaliSortKey(void);
         int TestBufferSize();    /* defined in "colutil.c" */
 
 
+static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t len) {
+    uint32_t position = 0;
+    uint8_t b;
 
-
-/* next two function is modified from "i18n/ucol.cpp" to avoid include "ucol_imp.h" */
-static void uprv_appendByteToHexString(char *dst, uint8_t val) {
-  uint32_t len = (uint32_t)strlen(dst);
-  sprintf(dst+len, "%02X", val);
+    if (position + 1 < len)
+        position += sprintf(buffer + position, "[");
+    while ((b = *sortkey++) != 0) {
+        if (b == 1 && position + 5 < len) {
+            position += sprintf(buffer + position, "%02X . ", b);
+        } else if (b != 1 && position + 3 < len) {
+            position += sprintf(buffer + position, "%02X ", b);
+        }
+    }
+    if (position + 3 < len)
+        position += sprintf(buffer + position, "%02X]", b);
+    return buffer;
 }
-
-static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
-  int32_t strength = UCOL_PRIMARY;
-  uint32_t res_size = 0;
-  UBool doneCase = FALSE;
-
-  char *current = buffer;
-  const uint8_t *currentSk = sortkey;
-
-  UErrorCode error_code = U_ZERO_ERROR;
-
-  strcpy(current, "[");
-
-  while(strength <= UCOL_QUATERNARY && strength <= ucol_getAttribute(coll,UCOL_STRENGTH, &error_code)) {
-    if(U_FAILURE(error_code)) {
-      log_err("ucol_getAttribute returned error: %s\n", u_errorName(error_code));
-    }
-    if(strength > UCOL_PRIMARY) {
-      strcat(current, " . ");
-    }
-    while(*currentSk != 0x01 && *currentSk != 0x00) { /* print a level */
-      uprv_appendByteToHexString(current, *currentSk++);
-      strcat(current, " ");
-    }
-    if(ucol_getAttribute(coll,UCOL_CASE_LEVEL, &error_code) == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
-        doneCase = TRUE;
-    } else if(ucol_getAttribute(coll,UCOL_CASE_LEVEL, &error_code) == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
-      strength ++;
-    }
-    if(U_FAILURE(error_code)) {
-      log_err("ucol_getAttribute returned error: %s\n", u_errorName(error_code));
-    }
-    uprv_appendByteToHexString(current, *currentSk++); /* This should print '01' */
-    if(strength == UCOL_QUATERNARY && ucol_getAttribute(coll,UCOL_ALTERNATE_HANDLING, &error_code) == UCOL_NON_IGNORABLE) {
-      break;
-    }
-  }
-
-  if(ucol_getAttribute(coll,UCOL_STRENGTH, &error_code) == UCOL_IDENTICAL) {
-    strcat(current, " . ");
-    while(*currentSk != 0) {
-      uprv_appendByteToHexString(current, *currentSk++);
-      strcat(current, " ");
-    }
-
-    uprv_appendByteToHexString(current, *currentSk++);
-  }
-  if(U_FAILURE(error_code)) {
-    log_err("ucol_getAttribute returned error: %s\n", u_errorName(error_code));
-  }
-  strcat(current, "]");
-
-  if(res_size > *len) {
-    return NULL;
-  }
-
-  return buffer;
-}
-/* end of  avoid include "ucol_imp.h" */
-
 
 void addCollAPITest(TestNode** root)
 {
@@ -904,14 +854,14 @@ static void TestBengaliSortKey(void)
   sortKeyLen1 = ucol_getSortKey(c2, str1, -1, NULL, 0);
   sortKey1 = (uint8_t*)malloc(sortKeyLen1+1);
   ucol_getSortKey(c2,str1,-1,sortKey1, sortKeyLen1+1);
-  ucol_sortKeyToString(c2, sortKey1, sortKeyStr1, &sortKeyStrLen1);
+  ucol_sortKeyToString(c2, sortKey1, sortKeyStr1, sortKeyStrLen1);
   
   
   sortKeyLen2 = ucol_getSortKey(c2, str2, -1, NULL, 0);
   sortKey2 = (uint8_t*)malloc(sortKeyLen2+1);
   ucol_getSortKey(c2,str2,-1,sortKey2, sortKeyLen2+1);
 
-  ucol_sortKeyToString(c2, sortKey2, sortKeyStr2, &sortKeyStrLen2);
+  ucol_sortKeyToString(c2, sortKey2, sortKeyStr2, sortKeyStrLen2);
 
 
 
@@ -951,6 +901,9 @@ void TestOpenVsOpenRules(){
     int32_t rulesLength;
     int32_t sortKeyLen1, sortKeyLen2;
     uint8_t *sortKey1 = NULL, *sortKey2 = NULL;
+    char sortKeyStr1[512], sortKeyStr2[512];
+    uint32_t sortKeyStrLen1 = sizeof(sortKeyStr1) / sizeof(sortKeyStr1[0]),
+             sortKeyStrLen2 = sizeof(sortKeyStr2) / sizeof(sortKeyStr2[0]);
     ULocaleData *uld;
     int32_t x, y, z;
     USet *eSet;
@@ -1032,20 +985,24 @@ void TestOpenVsOpenRules(){
             sortKey1 = (uint8_t*)malloc(sizeof(uint8_t) * (sortKeyLen1 + 1));
             /*memset(sortKey1, 0xFE, sortKeyLen1);*/
             ucol_getSortKey(c1, str, u_strlen(str), sortKey1, sortKeyLen1 + 1);
+            ucol_sortKeyToString(c1, sortKey1, sortKeyStr1, sortKeyStrLen1);
 
             sortKeyLen2 = ucol_getSortKey(c2, str, u_strlen(str),  NULL, 0);
             sortKey2 = (uint8_t*)malloc(sizeof(uint8_t) * (sortKeyLen2 + 1));
             /*memset(sortKey2, 0xFE, sortKeyLen2);*/
             ucol_getSortKey(c2, str, u_strlen(str), sortKey2, sortKeyLen2 + 1);
+            ucol_sortKeyToString(c2, sortKey2, sortKeyStr2, sortKeyStrLen2);
 
             /* Check that the lengths are the same */
             if (sortKeyLen1 != sortKeyLen2) {
-                log_err("ERROR : Sort key lengths for locale '%s' do not match.\n", curLoc);
+                log_err("ERROR : Sort key lengths %d and %d for text '%s' in locale '%s' do not match.\n",
+                    sortKeyLen1, sortKeyLen2, str, curLoc);
             }
 
             /* check that the keys are the same */
             if (memcmp(sortKey1, sortKey2, sortKeyLen1) != 0) {
-                log_err("ERROR :  Sort keys for locale '%s' are not equivalent.\n", curLoc);
+                log_err("ERROR : Sort keys '%s' and '%s' for text '%s' in locale '%s' are not equivalent.\n",
+                    sortKeyStr1, sortKeyStr2, str, curLoc);
             }
 
             /* clean up after each string */
@@ -1069,11 +1026,11 @@ void TestSortKey()
 {
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL, *sortkEmpty = NULL;
     int32_t sortklen, osortklen;
-    uint32_t toStringLen=0;
     UCollator *col;
     UChar *test1, *test2, *test3;
     UErrorCode status = U_ZERO_ERROR;
     char toStringBuffer[256], *resultP;
+    uint32_t toStringLen=sizeof(toStringBuffer)/sizeof(toStringBuffer[0]);
 
 
     uint8_t s1[] = { 0x9f, 0x00 };
@@ -1144,7 +1101,7 @@ void TestSortKey()
     doAssert( (memcmp(sortk2, sortk1, sortklen) < 0), "Result should be \"abcda\" < \"Abcda\"");
     doAssert( (memcmp(sortk2, sortk3, sortklen) == 0), "Result should be \"abcda\" ==  \"abcda\"");
 
-    resultP = ucol_sortKeyToString(col, sortk3, toStringBuffer, &toStringLen);
+    resultP = ucol_sortKeyToString(col, sortk3, toStringBuffer, toStringLen);
     doAssert( (resultP != 0), "sortKeyToString failed!");
 
 #if 1 /* verobse log of sortkeys */
@@ -1938,14 +1895,14 @@ void TestMergeSortKeys(void) {
            if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) >= 0) {
              log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
              log_err("%s\n%s\n",
-                         ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, &l1),
-                         ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, &l2));
+                         ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, l1),
+                         ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, l2));
            }
            if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) >= 0) {
              log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
              log_err("%s\n%s\n",
-                         ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, &l1),
-                         ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff2, &l2));
+                         ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, l1),
+                         ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff2, l2));
            }
          }
        }
