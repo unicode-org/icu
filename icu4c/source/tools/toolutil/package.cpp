@@ -329,9 +329,10 @@ readFile(const char *path, const char *name, int32_t &length, char &type) {
 
     /* allocate the buffer, pad to multiple of 16 */
     length=(fileLength+0xf)&~0xf;
-    data=(uint8_t *)malloc(length);
+    data=(uint8_t *)uprv_malloc(length);
     if(data==NULL) {
         fclose(file);
+        fprintf(stderr, "icupkg: malloc error allocating %d bytes.\n", (int)length);
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 

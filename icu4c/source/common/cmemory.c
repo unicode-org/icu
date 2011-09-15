@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -20,6 +20,7 @@
 */
 #include "unicode/uclean.h"
 #include "cmemory.h"
+#include "putilimp.h"
 #include <stdlib.h>
 
 /* uprv_malloc(0) returns a pointer to this read-only data. */                
@@ -42,7 +43,7 @@ uprv_malloc(size_t s) {
         if (pAlloc) {
             return (*pAlloc)(pContext, s);
         } else {
-            return malloc(s);
+            return uprv_default_malloc(s);
         }
     } else {
         return (void *)zeroMem;
@@ -57,7 +58,7 @@ uprv_realloc(void * buffer, size_t size) {
         if (pFree) {
             (*pFree)(pContext, buffer);
         } else {
-            free(buffer);
+            uprv_default_free(buffer);
         }
         return (void *)zeroMem;
     } else {
@@ -65,7 +66,7 @@ uprv_realloc(void * buffer, size_t size) {
         if (pRealloc) {
             return (*pRealloc)(pContext, buffer, size);
         } else {
-            return realloc(buffer, size);
+            return uprv_default_realloc(buffer, size);
         }
     }
 }
@@ -76,7 +77,7 @@ uprv_free(void *buffer) {
         if (pFree) {
             (*pFree)(pContext, buffer);
         } else {
-            free(buffer);
+            uprv_default_free(buffer);
         }
     }
 }

@@ -144,7 +144,7 @@ static void TestUSpoofCAPI(void) {
     fileName = malloc(strlen(dataSrcDir) + 100);
     strcpy(fileName, dataSrcDir);
     strcat(fileName, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING "confusables.txt");
-    f = fopen(fileName, "r");
+    f = fopen(fileName, "rb");
     TEST_ASSERT_NE(f, NULL);
     confusables = malloc(3000000);
     confusablesLength = fread(confusables, 1, 3000000, f);
@@ -153,7 +153,7 @@ static void TestUSpoofCAPI(void) {
     
     strcpy(fileName, dataSrcDir);
     strcat(fileName, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING "confusablesWholeScript.txt");
-    f = fopen(fileName, "r");
+    f = fopen(fileName, "rb");
     TEST_ASSERT_NE(f, NULL);
     confusablesWholeScript = malloc(1000000);
     confusablesWholeScriptLength = fread(confusablesWholeScript, 1, 1000000, f);

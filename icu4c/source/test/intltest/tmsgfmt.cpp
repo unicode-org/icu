@@ -634,7 +634,7 @@ void TestMessageFormat::testApostropheInPluralAndSelect() {
         return;
     }
     UnicodeString expected = UNICODE_STRING_SIMPLE("abc_3#3{3'_def_sel}ect'_xyz");
-    Formattable args[] = { 3, UNICODE_STRING_SIMPLE("x") };
+    Formattable args[] = { (int32_t)3, UNICODE_STRING_SIMPLE("x") };
     internalFormat(
         &msgFmt, args, 2, expected,
         "MessageFormat with apostrophes in plural/select arguments failed:\n");
@@ -1639,7 +1639,7 @@ void TestMessageFormat::TestCompatibleApostrophe() {
         errln("wrong value from  icuMsg.getApostropheMode().");
     }
 
-    Formattable zero0[] = { 0 };
+    Formattable zero0[] = { (int32_t)0 };
     FieldPosition fieldpos(0);
     UnicodeString buffer1, buffer2;
     assertEquals("incompatible ICU MessageFormat compatibility-apostrophe behavior",
@@ -1798,7 +1798,7 @@ void TestMessageFormat::TestTrimArgumentName() {
     if (errorCode.logDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
         return;
     }
-    Formattable args[1] = { 2 };
+    Formattable args[1] = { (int32_t)2 };
     FieldPosition ignore(0);
     UnicodeString result;
     assertEquals("trim-numbered-arg format() failed", "a  #,#2.0  z",
