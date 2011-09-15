@@ -545,10 +545,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
                 nameType = daylight ? NameType.LONG_DAYLIGHT : NameType.LONG_STANDARD;
                 break;
             case SHORT:
-                nameType = daylight ? NameType.SHORT_DAYLIGHT : NameType.SHORT_STANDARD;
-                break;
             case SHORT_COMMONLY_USED:
-                nameType = daylight ? NameType.SHORT_DAYLIGHT_COMMONLY_USED : NameType.SHORT_STANDARD_COMMONLY_USED;
+                nameType = daylight ? NameType.SHORT_DAYLIGHT : NameType.SHORT_STANDARD;
                 break;
             }
             result = tznames.getDisplayName(ZoneMeta.getCanonicalCLDRID(this), nameType, date);

@@ -7,7 +7,10 @@
 package com.ibm.icu.text;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
@@ -27,6 +30,7 @@ import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.TimeZoneGenericNames;
 import com.ibm.icu.impl.TimeZoneGenericNames.GenericMatchInfo;
 import com.ibm.icu.impl.TimeZoneGenericNames.GenericNameType;
+import com.ibm.icu.impl.TimeZoneNamesImpl;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneNames.MatchInfo;
@@ -50,8 +54,8 @@ import com.ibm.icu.util.ULocale;
  * 
  * @see SimpleDateFormat
  * @see TimeZoneNames
- * @internal ICU 4.8 technology preview
- * @deprecated This API might change or be removed in a future release.
+ * @draft ICU 49
+ * @provisional This API might change or be removed in a future release.
  */
 public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>, Serializable {
 
@@ -63,61 +67,52 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @see TimeZoneFormat#format(Style, TimeZone, long)
      * @see TimeZoneFormat#format(Style, TimeZone, long, Output)
      * @see TimeZoneFormat#parse(Style, String, ParsePosition, Output)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum Style {
         /**
          * Generic location format, such as "United States Time (New York)", "Italy Time"
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         GENERIC_LOCATION,
         /**
          * Generic long non-location format, such as "Eastern Time".
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         GENERIC_LONG,
         /**
          * Generic short non-location format, such as "ET".
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         GENERIC_SHORT,
         /**
          * Specific long format, such as "Eastern Standard Time".
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         SPECIFIC_LONG,
         /**
          * Specific short format, such as "EST", "PDT".
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         SPECIFIC_SHORT,
         /**
          * RFC822 format, such as "-0500"
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         RFC822,
         /**
          * Localized GMT offset format, such as "GMT-05:00", "UTC+0100"
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         LOCALIZED_GMT,
-        /**
-         * Specific short format, such as "EST", "PDT".
-         * <p><b>Note</b>: This is a variant of {@link #SPECIFIC_SHORT}, but
-         * excluding short abbreviations not commonly recognized by people
-         * for the locale.
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
-         */
-        SPECIFIC_SHORT_COMMONLY_USED;
     }
 
     /**
@@ -125,32 +120,32 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @see TimeZoneFormat#getGMTOffsetPattern(GMTOffsetPatternType)
      * @see TimeZoneFormat#setGMTOffsetPattern(GMTOffsetPatternType, String)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum GMTOffsetPatternType {
         /**
          * Positive offset with hour and minute fields
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         POSITIVE_HM ("+HH:mm", "Hm", true),
         /**
          * Positive offset with hour, minute and second fields
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         POSITIVE_HMS ("+HH:mm:ss", "Hms", true),
         /**
          * Negative offset with hour and minute fields
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         NEGATIVE_HM ("-HH:mm", "Hm", false),
         /**
          * Negative offset with hour, minute and second fields
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         NEGATIVE_HMS ("-HH:mm:ss", "Hms", false);
 
@@ -181,36 +176,35 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Time type enum used for receiving time type (standard time, daylight time or unknown)
      * in <code>TimeZoneFormat</code> APIs.
      * 
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum TimeType {
         /**
          * Unknown
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         UNKNOWN,
         /**
          * Standard time
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         STANDARD,
         /**
          * Daylight saving time
-         * @internal ICU 4.8 technology preview
-         * @deprecated This API might change or be removed in a future release.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         DAYLIGHT;
     }
 
     /*
-     * Serialized fields
+     * fields to be serialized
      */
     private ULocale _locale;
     private TimeZoneNames _tznames;
-    private volatile TimeZoneGenericNames _gnames;
     private String _gmtPattern;
     private String[] _gmtOffsetPatterns;
     private String[] _gmtOffsetDigits;
@@ -220,6 +214,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /*
      * Transient fields
      */
+    private transient volatile TimeZoneGenericNames _gnames;
+
     private transient String[] _gmtPatternTokens;
     private transient Object[][] _gmtOffsetPatternItems;
 
@@ -262,8 +258,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     // The filter used for searching all specific names
     private static final EnumSet<NameType> ALL_SPECIFIC_NAME_TYPES = EnumSet.of(
         NameType.LONG_STANDARD, NameType.LONG_DAYLIGHT,
-        NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT,
-        NameType.SHORT_STANDARD_COMMONLY_USED, NameType.SHORT_DAYLIGHT_COMMONLY_USED
+        NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT
     );
 
     // The filter used for searching all generic names
@@ -274,8 +269,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * The protected constructor for subclassing.
      * @param locale the locale
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     protected TimeZoneFormat(ULocale locale) {
         _locale = locale;
@@ -343,8 +338,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @param locale the locale.
      * @return a frozen instance of <code>TimeZoneFormat</code> for the given locale.
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public static TimeZoneFormat getInstance(ULocale locale) {
         if (locale == null) {
@@ -358,8 +353,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @return the time zone display name data.
      * @see #setTimeZoneNames(TimeZoneNames)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneNames getTimeZoneNames() {
         return _tznames;
@@ -392,8 +387,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return this object.
      * @throws UnsupportedOperationException when this object is frozen.
      * @see #getTimeZoneNames()
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat setTimeZoneNames(TimeZoneNames tznames) {
         if (isFrozen()) {
@@ -410,8 +405,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @return the localized GMT format pattern.
      * @see #setGMTPattern(String)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String getGMTPattern() {
         return _gmtPattern;
@@ -426,8 +421,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @throws IllegalArgumentException when the pattern string does not contain "{0}"
      * @throws UnsupportedOperationException when this object is frozen.
      * @see #getGMTPattern()
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat setGMTPattern(String pattern) {
         if (isFrozen()) {
@@ -443,8 +438,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @param type the offset pattern enum
      * @return the offset pattern enum.
      * @see #setGMTOffsetPattern(GMTOffsetPatternType, String)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String getGMTOffsetPattern(GMTOffsetPatternType type) {
         return _gmtOffsetPatterns[type.ordinal()];
@@ -459,8 +454,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @throws IllegalArgumentException when the pattern string does not have required time field letters.
      * @throws UnsupportedOperationException when this object is frozen.
      * @see #getGMTOffsetPattern(GMTOffsetPatternType)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat setGMTOffsetPattern(GMTOffsetPatternType type, String pattern) {
         if (isFrozen()) {
@@ -484,8 +479,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @return the decimal digits for localized GMT format.
      * @see #setGMTOffsetDigits(String)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String getGMTOffsetDigits() {
         StringBuilder buf = new StringBuilder(_gmtOffsetDigits.length);
@@ -503,8 +498,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @throws IllegalArgumentException when the string did not contain ten characters.
      * @throws UnsupportedOperationException when this object is frozen.
      * @see #getGMTOffsetDigits()
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat setGMTOffsetDigits(String digits) {
         if (isFrozen()) {
@@ -526,8 +521,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @return the localized GMT string string for GMT(UTC) itself.
      * @see #setGMTZeroFormat(String)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String getGMTZeroFormat() {
         return _gmtZeroFormat;
@@ -540,8 +535,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return this object.
      * @throws UnsupportedOperationException when this object is frozen.
      * @see #getGMTZeroFormat()
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat setGMTZeroFormat(String gmtZeroFormat) {
         if (isFrozen()) {
@@ -566,8 +561,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @return <code>true</code> when this instance is configure for parsing all available names.
      * @see #setParseAllStyles(boolean)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isParseAllStyles() {
         return _parseAllStyles;
@@ -581,8 +576,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return this object.
      * @throws UnsupportedOperationException when this object is frozen.
      * @see #isParseAllStyles()
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat setParseAllStyles(boolean parseAllStyles) {
         if (isFrozen()) {
@@ -599,8 +594,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @param offset the offset for GMT(UTC) in milliseconds.
      * @return the RFC822 style GMT(UTC) offset format.
      * @see #parseOffsetRFC822(String, ParsePosition)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final String formatOffsetRFC822(int offset) {
         StringBuilder buf = new StringBuilder();
@@ -652,8 +647,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @param offset the offset from GMT(UTC) in milliseconds.
      * @return the localized GMT format string
      * @see #parseOffsetLocalizedGMT(String, ParsePosition)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String formatOffsetLocalizedGMT(int offset) {
         if (offset == 0) {
@@ -733,8 +728,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the display name of the time zone.
      * @see Style
      * @see #format(Style, TimeZone, long, Output)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final String format(Style style, TimeZone tz, long date) {
         return format(style, tz, date, null);
@@ -755,8 +750,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the display name of the time zone.
      * @see Style
      * @see #format(Style, TimeZone, long)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public String format(Style style, TimeZone tz, long date, Output<TimeType> timeType) {
         String result = null;
@@ -780,9 +775,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             break;
         case SPECIFIC_SHORT:
             result = formatSpecific(tz, NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT, date, timeType);
-            break;
-        case SPECIFIC_SHORT_COMMONLY_USED:
-            result = formatSpecific(tz, NameType.SHORT_STANDARD_COMMONLY_USED, NameType.SHORT_DAYLIGHT_COMMONLY_USED, date, timeType);
             break;
         case RFC822:
         case LOCALIZED_GMT:
@@ -823,8 +815,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the offset from GMT(UTC) in milliseconds for the given RFC822 style
      * time zone string.
      * @see #formatOffsetRFC822(int)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final int parseOffsetRFC822(String text, ParsePosition pos) {
         int start = pos.getIndex();
@@ -922,8 +914,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the offset from GMT(UTC) in milliseconds for the given localized GMT
      * offset format string.
      * @see #formatOffsetLocalizedGMT(int)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public int parseOffsetLocalizedGMT(String text, ParsePosition pos) {
         return parseOffsetLocalizedGMT(text, pos, null);
@@ -948,8 +940,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @see Style
      * @see #format(Style, TimeZone, long, Output)
      * @see #setParseAllStyles(boolean)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZone parse(Style style, String text, ParsePosition pos, Output<TimeType> timeType) {
         return parse(style, text, pos, _parseAllStyles, timeType);
@@ -966,8 +958,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @param pos the position.
      * @return A <code>TimeZone</code>, or null if the input could not be parsed.
      * @see #parse(Style, String, ParsePosition, Output)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final TimeZone parse(String text, ParsePosition pos) {
         return parse(Style.GENERIC_LOCATION, text, pos, true, null);
@@ -980,8 +972,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @throws ParseException when the input could not be parsed as a time zone string.
      * @see #parse(String, ParsePosition)
      * @see #parse(Style, String, ParsePosition, Output)
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final TimeZone parse(String text) throws ParseException {
         ParsePosition pos = new ParsePosition(0);
@@ -996,8 +988,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * {@inheritDoc}
      * 
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
@@ -1028,8 +1020,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * {@inheritDoc}
      * 
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
@@ -1047,8 +1039,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * {@inheritDoc}
      * 
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Object parseObject(String source, ParsePosition pos) {
@@ -1067,8 +1059,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @return the time zone's specific format name string
      */
     private String formatSpecific(TimeZone tz, NameType stdType, NameType dstType, long date, Output<TimeType> timeType) {
-        assert(stdType == NameType.LONG_STANDARD || stdType == NameType.SHORT_STANDARD || stdType == NameType.SHORT_STANDARD_COMMONLY_USED);
-        assert(dstType == NameType.LONG_DAYLIGHT || dstType == NameType.SHORT_DAYLIGHT || dstType == NameType.SHORT_DAYLIGHT_COMMONLY_USED);
+        assert(stdType == NameType.LONG_STANDARD || stdType == NameType.SHORT_STANDARD);
+        assert(dstType == NameType.LONG_DAYLIGHT || dstType == NameType.SHORT_DAYLIGHT);
 
         boolean isDaylight = tz.inDaylightTime(new Date(date));
         String name = isDaylight?
@@ -1137,7 +1129,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         }
 
         // Find the best match within names which are possibly produced by the style
-        if (style == Style.SPECIFIC_LONG || style == Style.SPECIFIC_SHORT || style == Style.SPECIFIC_SHORT_COMMONLY_USED) {
+        if (style == Style.SPECIFIC_LONG || style == Style.SPECIFIC_SHORT) {
             // Specific styles
             EnumSet<NameType> nameTypes = null;
             switch (style) {
@@ -1146,9 +1138,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
                 break;
             case SPECIFIC_SHORT:
                 nameTypes = EnumSet.of(NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT);
-                break;
-            case SPECIFIC_SHORT_COMMONLY_USED:
-                nameTypes = EnumSet.of(NameType.SHORT_STANDARD_COMMONLY_USED, NameType.SHORT_DAYLIGHT_COMMONLY_USED);
                 break;
             }
             Collection<MatchInfo> specificMatches = _tznames.find(text, startIdx, nameTypes);
@@ -1317,12 +1306,10 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         switch (nameType) {
         case LONG_STANDARD:
         case SHORT_STANDARD:
-        case SHORT_STANDARD_COMMONLY_USED:
             return TimeType.STANDARD;
 
         case LONG_DAYLIGHT:
         case SHORT_DAYLIGHT:
-        case SHORT_DAYLIGHT_COMMONLY_USED:
             return TimeType.DAYLIGHT;
         }
         return TimeType.UNKNOWN;
@@ -2039,17 +2026,122 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     }
 
     /**
-     * Custom readObject for initializing transient fields.
+     * @serialField _locale ULocale The locale of this TimeZoneFormat object.
+     * @serialField _tznames TimeZoneNames The time zone name data.
+     * @serialField _gmtPattern String The pattern string for localized GMT format.
+     * @serialField _gmtOffsetPatterns Stirng[] The array of GMT offset patterns used by localized GMT format
+     *              (positive hour-min, positive hour-min-sec, negative hour-min, negative hour-min-sec).
+     * @serialField _gmtOffsetDigits String[] The array of decimal digits used by localized GMT format
+     *              (the size of array is 10).
+     * @serialField _gmtZeroFormat String The localized GMT string used for GMT(UTC).
+     * @serialField _parseAllStyles boolean <code>true</code> if this TimeZoneFormat object is configure
+     *              for parsing all available names.
+     */
+    private static final ObjectStreamField[] serialPersistentFields = {
+        new ObjectStreamField("_locale", ULocale.class),
+        new ObjectStreamField("_tznames", TimeZoneNames.class),
+        new ObjectStreamField("_gmtPattern", String.class),
+        new ObjectStreamField("_gmtOffsetPatterns", String[].class),
+        new ObjectStreamField("_gmtOffsetDigits", String[].class),
+        new ObjectStreamField("_gmtZeroFormat", String.class),
+        new ObjectStreamField("_parseAllStyles", boolean.class),
+    };
+
+    /**
+     * 
+     * @param oos the object output stream
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        ObjectOutputStream.PutField fields = oos.putFields();
+
+        fields.put("_locale", _locale);
+        fields.put("_tznames", _tznames);
+        fields.put("_gmtPattern", _gmtPattern);
+        fields.put("_gmtOffsetPatterns", _gmtOffsetPatterns);
+        fields.put("_gmtOffsetDigits", _gmtOffsetDigits);
+        fields.put("_gmtZeroFormat", _gmtZeroFormat);
+        fields.put("_parseAllStyles", _parseAllStyles);
+
+        oos.writeFields();
+    }
+
+    /**
      * 
      * @param ois the object input stream
      * @throws ClassNotFoundException
      * @throws IOException
      */
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        ois.defaultReadObject();
+        ObjectInputStream.GetField fields = ois.readFields();
 
+        _locale = (ULocale)fields.get("_locale", null);
+        if (_locale == null) {
+            throw new InvalidObjectException("Missing field: locale");
+        }
+
+        _tznames = (TimeZoneNames)fields.get("_tznames", null);
+        if (_tznames == null) {
+            throw new InvalidObjectException("Missing field: tznames");
+        }
+
+        _gmtPattern = (String)fields.get("_gmtPattern", null);
+        if (_gmtPattern == null) {
+            throw new InvalidObjectException("Missing field: gmtPattern");
+        }
+
+        _gmtOffsetPatterns = (String[])fields.get("_gmtOffsetPatterns", null);
+        if (_gmtOffsetPatterns == null) {
+            throw new InvalidObjectException("Missing field: gmtOffsetPatterns");
+        } else if (_gmtOffsetPatterns.length < 4) {
+            throw new InvalidObjectException("Incompatible field: gmtOffsetPatterns");
+        }
+
+        _gmtOffsetDigits = (String[])fields.get("_gmtOffsetDigits", null);
+        if (_gmtOffsetDigits == null) {
+            throw new InvalidObjectException("Missing field: gmtOffsetDigits");
+        } else if (_gmtOffsetDigits.length != 10) {
+            throw new InvalidObjectException("Incompatible field: gmtOffsetDigits");
+        }
+
+        _gmtZeroFormat = (String)fields.get("_gmtZeroFormat", null);
+        if (_gmtZeroFormat == null) {
+            throw new InvalidObjectException("Missing field: gmtZeroFormat");
+        }
+
+        _parseAllStyles = (boolean)fields.get("_parseAllStyles", false);
+        if (fields.defaulted("_parseAllStyles")) {
+            throw new InvalidObjectException("Missing field: parseAllStyles");
+        }
+
+        // Optimization for TimeZoneNames
+        //
+        // Note:
+        //
+        // com.ibm.icu.impl.TimeZoneNamesImpl is a read-only object initialized
+        // by locale only. But it loads time zone names from resource bundles and
+        // builds trie for parsing. We want to keep TimeZoneNamesImpl as singleton
+        // per locale. We cannot do this for custom TimeZoneNames provided by user.
+        //
+        // com.ibm.icu.impl.TimeZoneGenericNames is a runtime generated object
+        // initialized by ULocale and TimeZoneNames. Like TimeZoneNamesImpl, it
+        // also composes time zone names and trie for parsing. We also want to keep
+        // TimeZoneGenericNames as siongleton per locale. If TimeZoneNames is
+        // actually a TimeZoneNamesImpl, we can reuse cached TimeZoneGenericNames
+        // instance.
+        if (_tznames instanceof TimeZoneNamesImpl) {
+            _tznames = TimeZoneNames.getInstance(_locale);
+            _gnames = null; // will be created by _locale later when necessary
+        } else {
+            // Custom TimeZoneNames implementation is used. We need to create
+            // a new instance of TimeZoneGenericNames here.
+            _gnames = new TimeZoneGenericNames(_locale, _tznames);
+        }
+
+        // Transient fields requiring initialization
         initGMTPattern(_gmtPattern);
         initGMTOffsetPatterns(_gmtOffsetPatterns);
+
     }
 
     /**
@@ -2070,8 +2162,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * {@inheritDoc}
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isFrozen() {
         return _frozen;
@@ -2079,8 +2171,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * {@inheritDoc}
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat freeze() {
         _frozen = true;
@@ -2089,8 +2181,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * {@inheritDoc}
-     * @internal ICU 4.8 technology preview
-     * @deprecated This API might change or be removed in a future release.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZoneFormat cloneAsThawed() {
         TimeZoneFormat copy = (TimeZoneFormat)super.clone();
