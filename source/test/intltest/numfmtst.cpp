@@ -1923,38 +1923,28 @@ void NumberFormatTest::TestCurrencyAmount(void){
 void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     Locale locDefault;
     static const char *badLocales[] = {
-        // length < ULOC_FULLNAME_CAPACITY => expect U_USING_DEFAULT_WARNING
+        // length < ULOC_FULLNAME_CAPACITY
         "x-crazy_ZZ_MY_SPECIAL_ADMINISTRATION_REGION_NEEDS_A_SPECIAL_VARIANT_WITH_A_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_LONG_NAME",
 
-        // length > ULOC_FULLNAME_CAPACITY => expect U_USING_FALLBACK_WARNING
+        // length > ULOC_FULLNAME_CAPACITY
         "x-crazy_ZZ_MY_SPECIAL_ADMINISTRATION_REGION_NEEDS_A_SPECIAL_VARIANT_WITH_A_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_LONG_NAME"
-    };
+    }; // expect U_USING_DEFAULT_WARNING for both
 
     int i;
     for (i = 0; i < sizeof(badLocales) / sizeof(char*); i++) {
         const char *localeName = badLocales[i];
         Locale locBad(localeName);
         UErrorCode status = U_ZERO_ERROR;
-        UErrorCode expectedStatus;
-        char *expectedStatusName;
         UnicodeString intlCurrencySymbol((UChar)0xa4);
 
         intlCurrencySymbol.append((UChar)0xa4);
-
-        if (uprv_strlen(localeName) < ULOC_FULLNAME_CAPACITY) {
-            expectedStatus = U_USING_DEFAULT_WARNING;
-            expectedStatusName = "U_USING_DEFAULT_WARNING";
-        } else {
-            expectedStatus = U_USING_FALLBACK_WARNING;
-            expectedStatusName = "U_USING_FALLBACK_WARNING";
-        }
 
         logln("Current locale is %s", Locale::getDefault().getName());
         Locale::setDefault(locBad, status);
         logln("Current locale is %s", Locale::getDefault().getName());
         DecimalFormatSymbols mySymbols(status);
-        if (status != expectedStatus) {
-            errln("DecimalFormatSymbols should return %s.", expectedStatusName);
+        if (status != U_USING_DEFAULT_WARNING) {
+            errln("DecimalFormatSymbols should return U_USING_DEFAULT_WARNING.");
         }
         if (strcmp(mySymbols.getLocale().getName(), locBad.getName()) != 0) {
             errln("DecimalFormatSymbols does not have the right locale.", locBad.getName());
