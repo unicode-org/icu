@@ -11,9 +11,9 @@
 #include "plurults.h"
 #include "plurfmts.h"
 #include "cmemory.h"
+#include "unicode/msgfmt.h"
 #include "unicode/plurrule.h"
 #include "unicode/plurfmt.h"
-
 
 #define PLURAL_PATTERN_DATA 4
 #define PLURAL_TEST_ARRAY_SIZE 256
@@ -518,7 +518,11 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
 
   UErrorCode status = U_ZERO_ERROR;
   UnicodeString fmtString(fmt, -1, US_INV);
-  PluralFormat pf(fmtString, status);
+  PluralFormat pf(Locale::getEnglish(), fmtString, status);
+  MessageFormat mf(UNICODE_STRING_SIMPLE("{0,plural,").append(fmtString).append((UChar)0x7d /* '}' */),
+                   Locale::getEnglish(), status);
+  Formattable args;
+  FieldPosition ignore;
   if (U_FAILURE(status)) {
     dataerrln("Failed to apply pattern - %s", u_errorName(status));
     return;
@@ -526,17 +530,31 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
   for (int i = 0; i < 7; ++i) {
     UnicodeString result = pf.format(i, status);
     if (U_FAILURE(status)) {
-      errln("Failed to format - %s", u_errorName(status));
+      errln("PluralFormat.format(value %d) failed - %s", i, u_errorName(status));
+      return;
     }
     UnicodeString expected(targets[i], -1, US_INV);
     if (expected != result) {
-      UnicodeString message("Expected '", -1, US_INV);
+      UnicodeString message("PluralFormat.format(): Expected '", -1, US_INV);
       message.append(expected);
       message.append(UnicodeString("' but got '", -1, US_INV));
       message.append(result);
       message.append("'", -1, US_INV);
       errln(message);
+    }
+    args.setLong(i);
+    mf.format(&args, 1, result.remove(), ignore, status);
+    if (U_FAILURE(status)) {
+      errln("MessageFormat.format(value %d) failed - %s", i, u_errorName(status));
       return;
+    }
+    if (expected != result) {
+      UnicodeString message("MessageFormat.format(): Expected '", -1, US_INV);
+      message.append(expected);
+      message.append(UnicodeString("' but got '", -1, US_INV));
+      message.append(result);
+      message.append("'", -1, US_INV);
+      errln(message);
     }
   }
 }
