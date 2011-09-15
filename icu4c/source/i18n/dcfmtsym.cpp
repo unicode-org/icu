@@ -189,7 +189,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
 
     if (U_FAILURE(status)) {
         if ( useLastResortData ) {
-            status = U_USING_FALLBACK_WARNING;
+            status = U_USING_DEFAULT_WARNING;
             initialize();
         }
         return;
