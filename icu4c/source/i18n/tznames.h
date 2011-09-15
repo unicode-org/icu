@@ -27,7 +27,7 @@ typedef enum UTimeZoneNameType {
     UTZNM_LONG_DAYLIGHT     = 0x04,
     UTZNM_SHORT_GENERIC     = 0x08,
     UTZNM_SHORT_STANDARD    = 0x10,
-    UTZNM_SHORT_DAYLIGHT    = 0x20,
+    UTZNM_SHORT_DAYLIGHT    = 0x20
 } UTimeZoneNameType;
 
 U_CDECL_END
