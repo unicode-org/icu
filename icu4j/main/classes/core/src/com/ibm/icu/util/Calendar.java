@@ -2995,7 +2995,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         // We handle most fields in the same way.  The algorithm is to add
         // a computed amount of millis to the current millis.  The only
-        // wrinkle is with DST -- for some fields, like the DAY_OF_MONTH,
+        // wrinkle is with DST (and/or a change to the zone's UTC offset, which
+        // we'll include with DST) -- for some fields, like the DAY_OF_MONTH,
         // we don't want the HOUR to shift due to changes in DST.  If the
         // result of the add operation is to move from DST to Standard, or
         // vice versa, we need to adjust by an hour forward or back,
@@ -3081,14 +3082,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int dst = 0;
         int hour = 0;
         if (keepHourInvariant) {
-            dst = get(DST_OFFSET);
+            dst = get(DST_OFFSET) + get(ZONE_OFFSET);
             hour = internalGet(HOUR_OF_DAY);
         }
 
         setTimeInMillis(getTimeInMillis() + delta);
 
         if (keepHourInvariant) {
-            dst -= get(DST_OFFSET);
+            dst -= get(DST_OFFSET) + get(ZONE_OFFSET);
             if (dst != 0) {
                 // We have done an hour-invariant adjustment but the
                 // DST offset has altered.  We adjust millis to keep
