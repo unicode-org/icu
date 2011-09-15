@@ -290,7 +290,7 @@ static void initCache(UErrorCode *status) {
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
-static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
+static void setEntryName(UResourceDataEntry *res, const char *name, UErrorCode *status) {
     int32_t len = (int32_t)uprv_strlen(name);
     if(res->fName != NULL && res->fName != res->fNameBuffer) {
         uprv_free(res->fName);
@@ -319,7 +319,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     UResourceDataEntry *r = NULL;
     UResourceDataEntry find;
     /*int32_t hashValue;*/
-    char name[ULOC_FULLNAME_CAPACITY];
+    const char *name;
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
     /*UBool isAlias = FALSE;*/
@@ -331,15 +331,14 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 
     /* here we try to deduce the right locale name */
     if(localeID == NULL) { /* if localeID is NULL, we're trying to open default locale */
-        uprv_strcpy(name, uloc_getDefault());
+        name = uloc_getDefault();
     } else if(*localeID == 0) { /* if localeID is "" then we try to open root locale */
-        uprv_strcpy(name, kRootLocaleName);
+        name = kRootLocaleName;
     } else { /* otherwise, we'll open what we're given */
-        uprv_strncpy(name, localeID, sizeof(name) - 1);
-        name[sizeof(name) - 1] = 0;
+        name = localeID;
     }
 
-    find.fName = name;
+    find.fName = (char *)name;
     find.fPath = (char *)path;
 
     /* calculate the hash value of the entry */
