@@ -284,17 +284,22 @@ public class PluralFormatUnitTest extends TestFmwk {
             "There is a bling widget and 5 other widgets.",
             "There is a bling widget and 6 other widgets.",
         };
-        PluralFormat pf = new PluralFormat(
-                ULocale.ENGLISH,
-                "offset:1.0 "
-                + "=0 {There are no widgets.} "
-                + "=1.0 {There is one widget.} "
-                + "=5 {Widgets, five (5-1=#) there be.} "
-                + "one {There is a bling widget and one other widget.} "
-                + "other {There is a bling widget and # other widgets.}");
+        String pluralStyle =
+            "offset:1.0 "
+            + "=0 {There are no widgets.} "
+            + "=1.0 {There is one widget.} "
+            + "=5 {Widgets, five (5-1=#) there be.} "
+            + "one {There is a bling widget and one other widget.} "
+            + "other {There is a bling widget and # other widgets.}";
+        PluralFormat pf = new PluralFormat(ULocale.ENGLISH, pluralStyle);
+        MessageFormat mf = new MessageFormat("{0,plural," + pluralStyle + "}", ULocale.ENGLISH);
+        Integer args[] = new Integer[1];
         for (int i = 0; i < 7; ++i) {
             String result = pf.format(i);
-            assertEquals("value = " + i, targets[i], result);
+            assertEquals("PluralFormat.format(value " + i + ")", targets[i], result);
+            args[0] = i;
+            result = mf.format(args);
+            assertEquals("MessageFormat.format(value " + i + ")", targets[i], result);
         }
 
         // Try explicit values after keywords.
