@@ -1675,6 +1675,11 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
     ures_getByKeyWithFallback(resB, inKey, &stack, status);
     retVal = ures_getString(&stack, len, status);
     ures_close(&stack);
+    if ( retVal != NULL && u_strlen(retVal) == 3 && retVal[0] == EMPTY_SET && retVal[1] == EMPTY_SET && retVal[2] == EMPTY_SET ) {
+        retVal = NULL;
+        *len = 0;
+        *status = U_MISSING_RESOURCE_ERROR;
+    }
     return retVal;
 }
 
