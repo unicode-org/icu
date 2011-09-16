@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Ababa"}
@@ -368,22 +368,28 @@ da{
             ls{"Ecuadoriansk tid"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Mellemeuropæisk sommertid"}
             lg{"Mellemeuropæisk tid"}
             ls{"Mellemeuropæisk normaltid"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Østeuropæisk sommertid"}
             lg{"Østeuropæisk tid"}
             ls{"Østeuropæisk normaltid"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Vesteuropæisk sommertid"}
             lg{"Vesteuropæisk tid"}
             ls{"Vesteuropæisk normaltid"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandsøerne-sommertid"}

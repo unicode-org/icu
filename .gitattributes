@@ -2369,6 +2369,7 @@ icu4c/source/data/zone/en_CA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_GB.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_GU.txt -text
 icu4c/source/data/zone/en_HK.txt -text
+icu4c/source/data/zone/en_IE.txt -text
 icu4c/source/data/zone/en_IN.txt -text
 icu4c/source/data/zone/en_NZ.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_PK.txt -text
