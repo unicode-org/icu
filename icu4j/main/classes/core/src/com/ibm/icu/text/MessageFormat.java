@@ -138,6 +138,10 @@ import com.ibm.icu.util.ULocale.Category;
  * only in program syntax, like quoting in MessageFormat.
  * See the annotations for U+0027 Apostrophe in The Unicode Standard.
  *
+ * <p>The <code>choice</code> argument type is deprecated.
+ * Use <code>plural</code> arguments for proper plural selection,
+ * and <code>select</code> arguments for simple selection among a fixed set of choices.
+ *
  * <p>The <code>argType</code> and <code>argStyle</code> values are used to create
  * a <code>Format</code> instance for the format element. The following
  * table shows how the values map to Format instances. Combinations not
