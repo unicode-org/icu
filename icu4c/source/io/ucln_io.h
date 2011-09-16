@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2006, International Business Machines                   *
+* Copyright (C) 2001-2011, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -26,6 +26,7 @@ as the functions are suppose to be called. */
 typedef enum ECleanupIOType {
     UCLN_IO_START = -1,
     UCLN_IO_LOCBUND,
+    UCLN_IO_PRINTF,
     UCLN_IO_COUNT /* This must be last */
 } ECleanupIOType;
 
