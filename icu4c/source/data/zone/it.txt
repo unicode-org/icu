@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/it.xml
  */
 it{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -547,18 +547,24 @@ it{
             ls{"Ora di Choibalsan"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Ora Legale Europa Centrale"}
             ls{"Ora Standard Europa Centrale"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Ora Legale Europa Orientale"}
             ls{"Ora Standard Europa Orientale"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ls{"Ora Europa occidentale"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Hawaii"{
             ld{"Ora Legale Hawaii"}

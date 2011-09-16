@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/brx.xml
  */
 brx{
-    Version{"2.0.59.56"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
@@ -1464,7 +1464,6 @@ brx{
             ls{"होव्ड स्टैंडर्ड टाईम"}
         }
         "meta:India"{
-            cu:int{1}
             ls{"भारतीय स्टैंडर्ड टाईम"}
             ss{"IST"}
         }

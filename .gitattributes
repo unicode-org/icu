@@ -79,6 +79,7 @@ icu4c/source/data/region/pool.res -text
 icu4c/source/data/region/sr_Latn_ME.txt -text
 icu4c/source/data/zone/en_GU.txt -text
 icu4c/source/data/zone/en_HK.txt -text
+icu4c/source/data/zone/en_IE.txt -text
 icu4c/source/data/zone/en_IN.txt -text
 icu4c/source/data/zone/en_PK.txt -text
 icu4c/source/data/zone/en_SG.txt -text

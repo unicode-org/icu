@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gu.xml
  */
 gu{
-    Version{"2.0.59.63"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -1541,7 +1541,6 @@ gu{
             ls{"હોવ્ડ સમય"}
         }
         "meta:India"{
-            cu:int{1}
             ls{"ભારતીય પ્રમાણભૂત સમય"}
             ss{"IST"}
         }

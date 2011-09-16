@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fr_CA{
-    Version{"2.0.59.96"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "America:Cayman"{
             ec{"Îles Caïmans"}
@@ -58,16 +58,24 @@ fr_CA{
             ec{"Uvéa"}
         }
         "meta:America_Central"{
-            cu:int{1}
+            sd{"HAC"}
+            sg{"HC"}
+            ss{"HNC"}
         }
         "meta:America_Eastern"{
-            cu:int{1}
+            sd{"HAE"}
+            sg{"HE"}
+            ss{"HNE"}
         }
         "meta:America_Mountain"{
-            cu:int{1}
+            sd{"HAR"}
+            sg{"HR"}
+            ss{"HNR"}
         }
         "meta:America_Pacific"{
-            cu:int{1}
+            sd{"HAP"}
+            sg{"HP"}
+            ss{"HNP"}
         }
         "meta:Choibalsan"{
             ld{"Heure avancée de Choibalsan"}
@@ -88,7 +96,9 @@ fr_CA{
             ls{"Heure d'Oulan-Bator"}
         }
         "meta:Newfoundland"{
-            cu:int{1}
+            sd{"HAT"}
+            sg{"HT"}
+            ss{"HNT"}
         }
         "meta:Noronha"{
             ld{"Heure avancée de Fernando de Noronha"}

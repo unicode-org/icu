@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.59.5"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Jibuti"}
@@ -112,9 +112,11 @@ pt_PT{
             ec{"Reunião"}
         }
         "meta:Acre"{
-            cu:int{0}
             ld{"Hora de Verão do Acre"}
             ls{"Hora do Acre"}
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
         }
         "meta:Afghanistan"{
             ls{"Hora do Afeganistão"}
@@ -156,10 +158,12 @@ pt_PT{
             ls{"Hora de Almaty"}
         }
         "meta:Amazon"{
-            cu:int{0}
             ld{"Hora de Verão do Amazonas"}
             lg{"Hora da Amazónia"}
             ls{"Hora do Amazonas"}
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
         }
         "meta:America_Central"{
             ld{"Hora de Verão Central"}
@@ -250,7 +254,6 @@ pt_PT{
             ls{"Hora do Azerbeijão"}
         }
         "meta:Azores"{
-            cu:int{1}
             ld{"Hora de Verão dos Açores"}
             ls{"Hora dos Açores"}
             sd{"AZOST"}
@@ -284,10 +287,12 @@ pt_PT{
             ls{"Hora do Bornéu"}
         }
         "meta:Brasilia"{
-            cu:int{0}
             ld{"Hora de Verão de Brasília"}
             lg{"Hora de Brasília"}
             ls{"Hora de Brasília"}
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
         }
         "meta:Brunei"{
             lg{"Hora do Brunei"}
@@ -372,19 +377,25 @@ pt_PT{
             ls{"Hora do Equador"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Hora de Verão da Europa Central"}
             ls{"Horário Padrão da Europa Central"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Hora de Verão da Europa Oriental"}
             ls{"Hora da Europa Oriental"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Hora de Verão da Europa Ocidental"}
             ls{"Hora da Europa Ocidental"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Hora de Verão das Ilhas Malvinas"}

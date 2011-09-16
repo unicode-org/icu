@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžir"}
@@ -340,19 +340,25 @@ hr{
             ls{"vrijeme Uskršnjih Otoka"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"srednjoeuropsko ljetno vrijeme"}
             ls{"srednjoeuropsko vrijeme"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"istočnoeuropsko ljetno vrijeme"}
             ls{"istočnoeuropsko vrijeme"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"zapadnoeuropsko ljetno vrijeme"}
             ls{"zapadnoeuropsko vrijeme"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"falklandsko ljetno vrijeme"}
@@ -366,8 +372,8 @@ hr{
             ls{"južno francusko i antarktičko vrijeme"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"univerzalno vrijeme"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"vrijeme Galapagosa"}
