@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 2010, International Business Machines Corporation and others.  All Rights Reserved.
+#   Copyright (C) 2010-2011, International Business Machines Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
 # This is to be called from ../Makefile.in
@@ -64,6 +64,7 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP): $(SVNDOT) $(DISTY_DAT) $(DISTY_TMP)
 	$(RMV) $(DISTY_RMDIR)
 	$(MKINSTALLDIRS) $(DISTY_IN)
 	cp $(DISTY_DAT) $(DISTY_IN)
+	( cd $(DISTY_TMP)/icu ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
 	( cd $(DISTY_TMP) ; tar cfpz $(DISTY_FILE_TGZ) icu )
 	( cd $(DISTY_TMP) ; zip -rlq $(DISTY_FILE_ZIP) icu )
 	ls -l $(DISTY_FILE)

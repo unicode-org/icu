@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 2008-2010, International Business Machines
+#   Copyright (C) 2008-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # Make sure we have the right version of Make.
@@ -12,7 +12,9 @@ endif
 ifeq ($(PLATFORM),OS390)
 at_least=3.79.1
 endif
-
+ifeq ($(MACHTYPE),powerpc-ibm-os400)
+at_least=3.77
+endif
 
 latest_a=$(firstword $(sort $(MAKE_VERSION) $(at_least)))
 
@@ -23,6 +25,5 @@ err:
 else
 ok:
 	@echo "$(MAKE_VERSION) (we wanted at least $(at_least))"
-	@true
 endif
 

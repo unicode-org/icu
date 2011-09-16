@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 4.8.1</title>
+    <title>ReadMe for ICU 4.8.x</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2011 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,9 +16,9 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.8.1 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.8.x ReadMe</h1>
 
-    <p>Last updated: 2011-July-14<br />
+    <p>Last updated: 2011-Sep-15<br />
      Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1162,23 +1162,29 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>') REPLACE(*YES)   </samp>
       <li>
       Set up the following environment variables and job characteristics in your build process
 <pre>
-<samp>ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake') REPLACE(*YES)
+<samp>ADDENVVAR ENVVAR(MAKE) VALUE('gmake') REPLACE(*YES)
 CHGJOB CCSID(37)</samp>
 </pre></li>
 
       <li>Run <tt>'QSH'</tt></li>
+      
+      <li>Run: <br><tt>export PATH=/QIBM/ProdData/DeveloperTools/qsh/bin:$PATH:/QOpenSys/usr/bin</tt>
+      </li>
 
-      <li>Run gunzip on the ICU source code compressed tar archive
+      <li>Run <b><tt>gzip -d</tt></b> on the ICU source code compressed tar archive
       (icu-<i>X</i>.<i>Y</i>.tgz).</li>
 
       <li>Run <a href='as_is/os400/unpax-icu.sh'>unpax-icu.sh</a> on the tar file generated from the previous step.</li>
+
+      <li>Change your current directory to icu/as_is/os400.</li>
+      <li>Run <tt>qsh bldiculd.sh</tt> to build the program ICULD which ICU will use for linkage.</li>
 
       <li>Change your current directory to icu/source.</li>
 
       <li>Run <tt>'./runConfigureICU IBMi'</tt>  (See <a href="#HowToConfigureICU">configuration
       note</a> for details).</li>
 
-      <li>Run <tt>'gmake'</tt> to build ICU.</li>
+      <li>Run <tt>'gmake'</tt> to build ICU. (Do not use the -j option)</li>
 
       <li>Run <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> to build and run the tests.
       You can look at the <a href=

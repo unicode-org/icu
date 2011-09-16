@@ -1,4 +1,4 @@
-# Copyright (C) 2006-2009, International Business Machines Corporation
+# Copyright (C) 2006-2011, International Business Machines Corporation
 # and others.  All Rights Reserved.
 #
 # Use "test -x" instead of "test -f" most of the time.
@@ -23,6 +23,7 @@ s/ diff / cmp -s /g
 ## srl
 # trouble w/ redirects.
 s% >&$3%%g
+s% >&$4% >$4%g
 s%^ac_cr=%# AWK reads ASCII, not EBCDIC\
 touch -C 819 $tmp/defines.awk $tmp/subs.awk $tmp/subs1.awk conf$$subs.awk\
 \

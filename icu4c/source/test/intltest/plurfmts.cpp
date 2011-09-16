@@ -268,7 +268,7 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     }
     numberFormatTest(&pluralFmt, numFmt, 5, 5, NULL, NULL, FALSE, &message);
     pluralFmt.applyPattern(UNICODE_STRING_SIMPLE("odd__{odd} other{even}"), status);
-    if (pluralFmt.format(1, status) != UNICODE_STRING_SIMPLE("even")) {
+    if (pluralFmt.format((int32_t)1, status) != UNICODE_STRING_SIMPLE("even")) {
         errln("SetLocale should reset rules but did not.");
     }
     status = U_ZERO_ERROR;
@@ -527,7 +527,7 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
     dataerrln("Failed to apply pattern - %s", u_errorName(status));
     return;
   }
-  for (int i = 0; i < 7; ++i) {
+  for (int32_t i = 0; i < 7; ++i) {
     UnicodeString result = pf.format(i, status);
     if (U_FAILURE(status)) {
       errln("PluralFormat.format(value %d) failed - %s", i, u_errorName(status));

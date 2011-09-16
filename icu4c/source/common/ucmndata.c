@@ -317,7 +317,9 @@ U_CFUNC void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
         return;
     }
 
-    if(!(udm->pHeader->dataHeader.magic1==0xda &&
+    if(udm==NULL || udm->pHeader==NULL) {
+      *err=U_INVALID_FORMAT_ERROR;
+    } else if(!(udm->pHeader->dataHeader.magic1==0xda &&
         udm->pHeader->dataHeader.magic2==0x27 &&
         udm->pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
         udm->pHeader->info.charsetFamily==U_CHARSET_FAMILY)
