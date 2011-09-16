@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -440,6 +440,17 @@ U_STABLE UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
 #if !UCONFIG_NO_FORMATTING
 
 /* Output functions */
+
+/**
+ * Write formatted data to <TT>stdout</TT>.
+ * @param patternSpecification A pattern specifying how <TT>u_printf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @return The number of Unicode characters written to <TT>stdout</TT>
+ * @draft ICU 49
+ */
+U_DRAFT int32_t U_EXPORT2
+u_printf(const char *patternSpecification,
+         ... );
 
 /**
  * Write formatted data to a UFILE.
