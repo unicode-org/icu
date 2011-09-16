@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+as_is/bomlist.py -text
 /icu4c.css -text
 source/allinone/icucheck.bat -text
 source/common/common.vcxproj -text

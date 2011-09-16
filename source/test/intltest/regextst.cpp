@@ -10,6 +10,16 @@
 //      ICU Regular Expressions test, part of intltest.
 //
 
+/*
+     NOTE!!
+
+     PLEASE be careful about ASCII assumptions in this test.
+     This test is one of the worst repeat offenders.
+     If you have questions, contact someone on the ICU PMC
+     who has access to an EBCDIC system.
+
+ */
+
 #include "intltest.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
@@ -114,11 +124,15 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 19: name = "Bug 7029";
             if (exec) Bug7029();
             break;
+        case 20: name = "CheckInvBufSize";
+            if (exec) CheckInvBufSize();
+            break;
 
         default: name = "";
             break; //needed to end loop
     }
 }
+
 
 
 /**
@@ -127,18 +141,6 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
  * @see utext_openUTF8
  */
 static UText* regextst_openUTF8FromInvariant(UText* ut, const char *inv, int64_t length, UErrorCode *status);
-
-static UText* regextst_openUTF8FromInvariant(UText *ut, const char *inv, int64_t length, UErrorCode *status) {
-#if U_CHARSET_FAMILY==U_ASCII_FAMILY
-  return utext_openUTF8(ut, inv, length, status);
-#else
-  char buf[1024];
-
-  uprv_aestrncpy((uint8_t*)buf, (const uint8_t*)inv, length);
-  
-  return utext_openUTF8(ut, buf, length, status);
-#endif
-}
 
 //---------------------------------------------------------------------------
 //
@@ -175,6 +177,53 @@ static void utextToPrintable(char *buf, int32_t bufLen, UText *text) {
   utext_setNativeIndex(text, oldIndex);
 }
 
+static inline UChar toHex(int32_t i) {
+    return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10)));
+}
+
+static UnicodeString& escape(const UnicodeString& s, UnicodeString& result) {
+    for (int32_t i=0; i<s.length(); ++i) {
+        UChar c = s[i];
+        if ((c <= (UChar)0x7F) && (c>0)) {
+            result += c;
+        } else {
+            result += (UChar)0x5c;
+            result += (UChar)0x75;
+            result += toHex((c >> 12) & 0xF);
+            result += toHex((c >>  8) & 0xF);
+            result += toHex((c >>  4) & 0xF);
+            result += toHex( c        & 0xF);
+        }
+    }
+    return result;
+}
+
+static char ASSERT_BUF[1024];
+
+static const char* extractToAssertBuf(const UnicodeString& message) {
+  if(message.length()==0) {
+    strcpy(ASSERT_BUF, "[[empty UnicodeString]]");
+  } else {
+    UnicodeString buf;
+    escape(message, buf);
+    if(buf.length()==0) {
+      strcpy(ASSERT_BUF, "[[escape() returned 0 chars]]");
+    } else {
+      buf.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF)-1);
+      if(ASSERT_BUF[0]==0) {
+        ASSERT_BUF[0]=0;
+        for(int32_t i=0;i<buf.length();i++) {
+          UChar ch = buf[i];
+          sprintf(ASSERT_BUF+strlen(ASSERT_BUF),"\\u%02x",ch);
+        }
+      }
+    }
+  }
+  ASSERT_BUF[sizeof(ASSERT_BUF)-1] = 0;
+  return ASSERT_BUF;
+}
+
+
 #define REGEX_VERBOSE_TEXT(text) {char buf[200];utextToPrintable(buf,sizeof(buf)/sizeof(buf[0]),text);logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf);}
 
 #define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: RegexTest failure.  status=%s", \
@@ -191,6 +240,8 @@ if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=
 
 #define REGEX_ASSERT_L(expr, line) {if ((expr)==FALSE) { \
     errln("RegexTest failure at line %d, from %d.", __LINE__, (line)); return;}}
+
+#define REGEX_ASSERT_UNISTR(ustr,inv) {if (!(ustr==inv)) {errln("%s:%d: RegexTest failure: REGEX_ASSERT_UNISTR(%s,%s) failed \n", __FILE__, __LINE__, extractToAssertBuf(ustr),inv);};}
 
 /**
  * @param expected expected text in UTF-8 (not platform) codepage
@@ -248,6 +299,45 @@ void RegexTest::assertUTextInvariant(const char *expected, UText *actual, const 
  * Assumes Invariant input 
  */
 #define REGEX_ASSERT_UTEXT_INVARIANT(expected, actual) assertUTextInvariant((expected), (actual), __FILE__, __LINE__)
+
+/**
+ * This buffer ( inv_buf ) is used to hold the UTF-8 strings
+ * passed into utext_openUTF8. An error will be given if
+ * INV_BUFSIZ is too small.  It's only used on EBCDIC systems.
+ */ 
+
+#define INV_BUFSIZ 2048 /* increase this if too small */
+
+static int32_t inv_next=0;
+
+#if U_CHARSET_FAMILY!=U_ASCII_FAMILY
+static char inv_buf[INV_BUFSIZ];
+#endif
+
+static UText* regextst_openUTF8FromInvariant(UText *ut, const char *inv, int64_t length, UErrorCode *status) {
+  if(length==-1) length=strlen(inv);
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+  inv_next+=length;
+  return utext_openUTF8(ut, inv, length, status);
+#else
+  if(inv_next+length+1>INV_BUFSIZ) {
+    fprintf(stderr, "%s:%d Error: INV_BUFSIZ #defined to be %d but needs to be at least %d.\n",
+            __FILE__, __LINE__, INV_BUFSIZ, (inv_next+length+1));
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
+
+  unsigned char *buf = (unsigned char*)inv_buf+inv_next;
+  uprv_aestrncpy(buf, (const uint8_t*)inv, length);
+  inv_next+=length;
+
+#if 0
+  fprintf(stderr, " Note: INV_BUFSIZ at %d, used=%d\n", INV_BUFSIZ, inv_next);
+#endif
+
+  return utext_openUTF8(ut, (const char*)buf, length, status);
+#endif
+}
 
 
 //---------------------------------------------------------------------------
@@ -2965,11 +3055,11 @@ void RegexTest::API_Pattern_UTF8() {
     REGEX_ASSERT(pat1->pattern() == "");
     REGEX_ASSERT_UTEXT_UTF8("", pat1->patternText(status));
     delete pat1;
-
-    regextst_openUTF8FromInvariant(&re1, "(Hello, world)*", -1, &status);
+    const char *helloWorldInvariant = "(Hello, world)*";
+    regextst_openUTF8FromInvariant(&re1, helloWorldInvariant, -1, &status);
     pat1 = RegexPattern::compile(&re1, pe, status);
     REGEX_CHECK_STATUS;
-    REGEX_ASSERT(pat1->pattern() == "(Hello, world)*");
+    REGEX_ASSERT_UNISTR(pat1->pattern(),"(Hello, world)*");
     REGEX_ASSERT_UTEXT_INVARIANT("(Hello, world)*", pat1->patternText(status));
     delete pat1;
 
@@ -5088,5 +5178,15 @@ void RegexTest::Bug7029() {
     REGEX_ASSERT(numFields == 8);
     delete pMatcher;
 }
+
+void RegexTest::CheckInvBufSize() {
+  if(inv_next>=INV_BUFSIZ) {
+    errln("%s: increase #define of INV_BUFSIZ ( is %d but needs to be at least %d )\n",
+          __FILE__, INV_BUFSIZ, inv_next);
+  } else {
+    logln("%s: INV_BUFSIZ is %d, usage %d\n", __FILE__, INV_BUFSIZ, inv_next);
+  }
+}
+
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 
