@@ -63,6 +63,8 @@ typedef size_t uintptr_t;
     /* Use the predefined value. */
 #elif !U_HAVE_NL_LANGINFO_CODESET
 #   define U_NL_LANGINFO_CODESET -1
+#elif U_PLATFORM == U_PF_OS400
+   /* not defined */
 #else
 #   define U_NL_LANGINFO_CODESET CODESET
 #endif
@@ -71,6 +73,8 @@ typedef size_t uintptr_t;
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TZSET _tzset
+#elif U_PLATFORM == U_PF_OS400
+   /* not defined */
 #else
 #   define U_TZSET tzset
 #endif
@@ -81,6 +85,8 @@ typedef size_t uintptr_t;
 #   define U_TIMEZONE __timezone
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TIMEZONE _timezone
+#elif U_PLATFORM == U_PF_OS400
+   /* not defined */
 #else
 #   define U_TIMEZONE timezone
 #endif
@@ -89,6 +95,8 @@ typedef size_t uintptr_t;
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TZNAME _tzname
+#elif U_PLATFORM == U_PF_OS400
+   /* not defined */
 #else
 #   define U_TZNAME tzname
 #endif
@@ -104,6 +112,8 @@ typedef size_t uintptr_t;
 #ifdef U_HAVE_POPEN
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
+#   define U_HAVE_POPEN 0
+#elif U_PLATFORM == U_PF_OS400
 #   define U_HAVE_POPEN 0
 #else
 #   define U_HAVE_POPEN 1

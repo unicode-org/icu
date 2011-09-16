@@ -134,8 +134,13 @@
 #if defined(U_HAVE_ICUCFG)
 #   include "icucfg.h"
 #elif U_PLATFORM_IMPLEMENTS_POSIX
-#   define HAVE_DLFCN_H 1
-#   define HAVE_DLOPEN 1
+#   if U_PLATFORM == U_PF_OS400
+#    undef HAVE_DLFCN_H 1
+#    undef HAVE_DLOPEN 1
+#   else
+#    define HAVE_DLFCN_H 1
+#    define HAVE_DLOPEN 1
+#   endif
 #   define HAVE_GETTIMEOFDAY 1
 #else
 #   undef HAVE_DLFCN_H
