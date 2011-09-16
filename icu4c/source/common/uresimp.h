@@ -30,6 +30,8 @@
 #define URES_MAX_ALIAS_LEVEL 256
 #define URES_MAX_BUFFER_SIZE 256
 
+#define EMPTY_SET 0x2205
+
 /*
 enum UResEntryType {
     ENTRY_OK = 0,
