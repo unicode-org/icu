@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ee.xml
  */
 ee{
-    Version{"2.0.59.81"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidzan nutomegaƒoƒome"}
@@ -1180,26 +1180,23 @@ ee{
             ec{"Wallis nutomegaƒoƒome"}
         }
         "meta:Africa_Central"{
-            cu:int{1}
             ls{"Titina Afrika gaƒoƒome"}
             ss{"CAT"}
         }
         "meta:Africa_Eastern"{
-            cu:int{1}
             ls{"Ɣedzeƒe Afrika gaƒoƒome"}
             ss{"EAT"}
         }
         "meta:Africa_Southern"{
-            cu:int{1}
             lg{"Anyiehe Afrika gaƒoƒome"}
             ls{"Anyiehe Afrika gaƒoƒoɖoanyime"}
             ss{"SAST"}
         }
         "meta:Africa_Western"{
-            cu:int{1}
             ld{"Ɣetoɖoƒe Afrika dzomeŋɔli gaƒoƒome"}
             ls{"Ɣetoɖoƒe Afrika gaƒoƒome"}
             sd{"WAST"}
+            sg{"WAT"}
             ss{"WAT"}
         }
         "meta:America_Central"{

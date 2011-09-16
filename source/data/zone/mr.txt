@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mr.xml
  */
 mr{
-    Version{"2.0.59.63"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
@@ -1539,7 +1539,6 @@ mr{
             ls{"हॉव्ड वेळ"}
         }
         "meta:India"{
-            cu:int{1}
             ls{"भारतीय प्रमाणवेळ"}
             ss{"IST"}
         }

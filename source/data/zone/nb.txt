@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -677,9 +677,11 @@ nb{
             ls{"Mongolsk (Tsjoibalsan) tid"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"sentraleuropeisk sommertid"}
             ls{"sentraleuropeisk normaltid"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"østeuropeisk sommertid"}
@@ -690,8 +692,8 @@ nb{
             ls{"vesteuropeisk tid"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Greenwich middeltid"}
+            ss{"GMT"}
         }
         "meta:Hawaii_Aleutian"{
             lg{"Tidssone for Hawaii og Aleutene"}

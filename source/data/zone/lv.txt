@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžana"}
@@ -1200,9 +1200,11 @@ lv{
             ls{"Centrāleiropas laiks"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Austrumeiropas vasaras laiks"}
             ls{"Austrumeiropas laiks"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Rietumeiropas vasaras laiks"}

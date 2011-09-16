@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1147,10 +1147,10 @@ pt{
             ec{"Wallis"}
         }
         "meta:Acre"{
-            cu:int{1}
             ld{"Horário de Verão do Acre"}
             ls{"Horário do Acre"}
             sd{"ACST"}
+            sg{"ACT"}
             ss{"ACT"}
         }
         "meta:Afghanistan"{
@@ -1189,7 +1189,6 @@ pt{
             ls{"Horário do Almaty"}
         }
         "meta:Amazon"{
-            cu:int{1}
             ld{"Horário de Verão do Amazonas"}
             lg{"Horário do Amazonas"}
             ls{"Horário do Amazonas"}
@@ -1310,7 +1309,6 @@ pt{
             ls{"Horário de Bornéu"}
         }
         "meta:Brasilia"{
-            cu:int{1}
             ld{"Horário de Verão de Brasília"}
             lg{"Horário de Brasília"}
             ls{"Horário de Brasília"}

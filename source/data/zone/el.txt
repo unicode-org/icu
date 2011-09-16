@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Ακτή Ελεφαντοστού"}
@@ -1314,19 +1314,25 @@ el{
             ls{"Ώρα Τσοϊμπαλσάν"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Θερινή ώρα Κεντρικής Ευρώπης"}
             ls{"Ώρα Κεντρικής Ευρώπης"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Θερινή ώρα Ανατολικής Ευρώπης"}
             ls{"Ώρα Ανατολικής Ευρώπης"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Θερινή ώρα Δυτικής Ευρώπης"}
             ls{"Ώρα Δυτικής Ευρώπης"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Hawaii_Aleutian"{
             lg{"Ώρα Χαβάης-Αλεούτιων νήσων"}

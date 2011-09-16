@@ -10,10 +10,9 @@
  *  ICU <specials> source: <path>/xml/main/pa.xml
  */
 pa{
-    Version{"2.0.59.63"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "meta:India"{
-            cu:int{1}
             ss{"IST"}
         }
     }

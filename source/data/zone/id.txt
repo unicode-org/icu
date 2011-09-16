@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.59.53"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Anchorage"}
@@ -351,19 +351,16 @@ id{
             ls{"Waktu Samudera Hindia"}
         }
         "meta:Indonesia_Central"{
-            cu:int{1}
             lg{"Waktu Indonesia Tengah"}
             ls{"Waktu Indonesia Tengah"}
             ss{"WITA"}
         }
         "meta:Indonesia_Eastern"{
-            cu:int{1}
             lg{"Waktu Indonesia Timur"}
             ls{"Waktu Indonesia Timur"}
             ss{"WIT"}
         }
         "meta:Indonesia_Western"{
-            cu:int{1}
             lg{"Waktu Indonesia Barat"}
             ls{"Waktu Indonesia Barat"}
             ss{"WIB"}

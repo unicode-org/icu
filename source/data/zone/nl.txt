@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -550,19 +550,25 @@ nl{
             ls{"Ecuadoriaanse tijd"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Midden-Europese zomertijd"}
             ls{"Midden-Europese standaardtijd"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Oost-Europese zomertijd"}
             ls{"Oost-Europese standaardtijd"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"West-Europese zomertijd"}
             ls{"West-Europese tijd"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandeilandse zomertijd"}

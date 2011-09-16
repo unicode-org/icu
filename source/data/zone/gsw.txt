@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gsw.xml
  */
 gsw{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -314,21 +314,18 @@ gsw{
             ld{"Amazonas-Summerziit"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Mitteleuropäischi Summerziit"}
             ls{"Mitteleuropäischi Ziit"}
             sd{"MESZ"}
             ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Oschteuropäischi Summerziit"}
             ls{"Oschteuropäischi Ziit"}
             sd{"OESZ"}
             ss{"OEZ"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Weschteuropäischi Summerziit"}
             ls{"Weschteuropäischi Ziit"}
             sd{"WESZ"}

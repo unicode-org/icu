@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.60.64"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -443,7 +443,6 @@ de{
             ls{"Osterinsel-Zeit"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Mitteleuropäische Sommerzeit"}
             ls{"Mitteleuropäische Zeit"}
             sd{"MESZ"}
@@ -451,7 +450,6 @@ de{
             ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Osteuropäische Sommerzeit"}
             ls{"Osteuropäische Zeit"}
             sd{"OESZ"}
@@ -459,7 +457,6 @@ de{
             ss{"OEZ"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Westeuropäische Sommerzeit"}
             ls{"Westeuropäische Zeit"}
             sd{"WESZ"}

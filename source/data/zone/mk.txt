@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mk.xml
  */
 mk{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Сеута"}
@@ -629,19 +629,25 @@ mk{
             ls{"Еквадор време"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Средноевропско летно време"}
             ls{"Средноевропско време"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Источноевропско летно време"}
             ls{"Источноевропско време"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Западноевропско летно време"}
             ls{"Западноевропско време"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:French_Guiana"{
             ls{"Француска Гвајана време"}

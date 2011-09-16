@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kk.xml
  */
 kk{
-    Version{"2.0.59.53"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Asia:Almaty"{
             ec{"Алматы"}
@@ -74,9 +74,11 @@ kk{
             ls{"Орталық Еуропа уақыты"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Шығыс Еуропа жаздық уақыты"}
             ls{"Шығыс Еуропа уақыты"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Батыс Еуропа жаздық уақыты"}

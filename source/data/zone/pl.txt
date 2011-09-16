@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
-    Version{"2.0.59.92"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidżan"}
@@ -1275,19 +1275,25 @@ pl{
             ls{"Czojbalsan"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Czas środkowoeuropejski letni"}
             ls{"Czas środkowoeuropejski"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Czas wschodnioeuropejski letni"}
             ls{"Czas wschodnioeuropejski"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Czas zachodnioeuropejski letni"}
             ls{"Czas zachodnioeuropejski"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Hawaii_Aleutian"{
             lg{"Hawaje (czas aleucki)"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1406,19 +1406,25 @@ hu{
             ls{"Ecuadori idő"}
         }
         "meta:Europe_Central"{
-            cu:int{1}
             ld{"Közép-európai nyári idő"}
             ls{"Közép-európai idő"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            cu:int{1}
             ld{"Kelet-európai nyári idő"}
             ls{"Kelet-európai idő"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
-            cu:int{1}
             ld{"Nyugat-európai nyári idő"}
             ls{"Nyugat-európai idő"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland-szigeteki nyári idő"}
@@ -1439,8 +1445,8 @@ hu{
             ls{"Frunzei idő"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Greenwichi középidő"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagosi idő"}

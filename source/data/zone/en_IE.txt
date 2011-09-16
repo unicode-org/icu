@@ -3,21 +3,14 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/es_AR.xml
+// * Source File:<path>/common/main/en_IE.xml
 // *
 // ***************************************************************************
-es_AR{
-    Version{"2.0.61.44"}
+en_IE{
+    Version{"2.0.61.46"}
     zoneStrings{
-        "meta:Argentina"{
-            sd{"ARST"}
-            sg{"ART"}
-            ss{"ART"}
-        }
-        "meta:Argentina_Western"{
-            sd{"WARST"}
-            sg{"WART"}
-            ss{"WART"}
+        "Europe:Dublin"{
+            sd{"IST"}
         }
     }
 }
