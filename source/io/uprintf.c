@@ -43,6 +43,7 @@ static UBool U_CALLCONV uprintf_cleanup()
         u_fclose(gStdOut);
         gStdOut = NULL;
     }
+    return TRUE;
 }
 
 static UFILE * U_EXPORT2
