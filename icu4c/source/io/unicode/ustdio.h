@@ -483,6 +483,25 @@ u_vfprintf(UFILE        *f,
            va_list      ap);
 
 /**
+ * Write formatted data to <TT>stdout</TT>.
+ * @param patternSpecification A pattern specifying how <TT>u_printf_u</TT> will
+ * interpret the variable arguments received and format the data.
+ * @return The number of Unicode characters written to <TT>stdout</TT>
+ * @draft ICU 49
+ */
+U_DRAFT int32_t U_EXPORT2
+u_printf_u(const UChar *patternSpecification,
+           ... );
+
+/**
+ * Get a UFILE for <TT>stdout</TT>.
+ * @return UFILE that writes to <TT>stdout</TT>
+ * @draft ICU 49
+ */
+U_DRAFT UFILE * U_EXPORT2
+u_get_stdout();
+
+/**
  * Write formatted data to a UFILE.
  * @param f The UFILE to which to write.
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
