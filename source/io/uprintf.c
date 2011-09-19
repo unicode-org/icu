@@ -46,7 +46,7 @@ static UBool U_CALLCONV uprintf_cleanup()
     return TRUE;
 }
 
-static UFILE * U_EXPORT2
+U_CAPI UFILE * U_EXPORT2
 u_get_stdout()
 {
     if (gStdOut == NULL) {
@@ -138,6 +138,18 @@ u_fprintf_u(    UFILE        *f,
     count = u_vfprintf_u(f, patternSpecification, ap);
     va_end(ap);
 
+    return count;
+}
+
+U_CAPI int32_t U_EXPORT2
+u_printf_u(const UChar *patternSpecification,
+           ...)
+{
+    va_list ap;
+    int32_t count;
+    va_start(ap, patternSpecification);
+    count = u_vfprintf_u(u_get_stdout(), patternSpecification, ap);
+    va_end(ap);
     return count;
 }
 
