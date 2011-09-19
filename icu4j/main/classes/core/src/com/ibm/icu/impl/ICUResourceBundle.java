@@ -78,6 +78,8 @@ public  class ICUResourceBundle extends UResourceBundle {
     public static final String ICU_REGION_BASE_NAME = ICU_BASE_NAME + "/region";
     public static final String ICU_ZONE_BASE_NAME = ICU_BASE_NAME + "/zone";
 
+    private static final String NO_INHERITANCE_MARKER = "\u2205\u2205\u2205";
+
     /**
      * The actual path of the resource
      */
@@ -347,6 +349,11 @@ public  class ICUResourceBundle extends UResourceBundle {
                 + this.getClass().getName() + ", key " + getType(),
                 path, getKey());
         }
+
+        if ( result.getType() == ICUResourceBundle.STRING && result.getString().equals(NO_INHERITANCE_MARKER)) {
+            throw new MissingResourceException("Encountered NO_INHERITANCE_MARKER",path,getKey());
+        }
+
         return result;
     }
     
