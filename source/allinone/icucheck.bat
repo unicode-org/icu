@@ -20,7 +20,7 @@ exit /b 1
 
 set ICU_OPATH=%PATH%
 
-set ICU_ICUDIR=%~f0\..\..\..
+set ICU_ICUDIR="%~f0"\..\..\..
 
 
 set ICU_BINDIR=%ICU_ICUDIR%\bin
