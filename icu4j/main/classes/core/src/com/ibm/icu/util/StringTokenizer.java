@@ -14,6 +14,8 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
+ * {@icuenhanced java.util.Calendar}.{@icu _usage_}
+ *
  * <p>The string tokenizer class allows an application to break a string 
  * into tokens by performing code point comparison. 
  * The <code>StringTokenizer</code> methods do not distinguish 
@@ -103,9 +105,9 @@ public final class StringTokenizer implements Enumeration<Object>
     // public constructors ---------------------------------------------
      
     /**
-     * <p>Constructs a string tokenizer for the specified string. All 
+     * {@icu} Constructs a string tokenizer for the specified string. All 
      * characters in the delim argument are the delimiters for separating 
-     * tokens.</p> 
+     * tokens. 
      * <p>If the returnDelims flag is false, the delimiter characters are 
      * skipped and only serve as separators between tokens.</p>
      * <p>If the returnDelims flag is true, then the delimiter characters 
@@ -123,9 +125,9 @@ public final class StringTokenizer implements Enumeration<Object>
     }
 
     /**
-     * <p>Constructs a string tokenizer for the specified string. All 
+     * {@icu} Constructs a string tokenizer for the specified string. All 
      * characters in the delim argument are the delimiters for separating 
-     * tokens.</p> 
+     * tokens. 
      * <p>If the returnDelims flag is false, the delimiter characters are 
      * skipped and only serve as separators between tokens.</p>
      * <p>If the returnDelims flag is true, then the delimiter characters 
@@ -171,9 +173,9 @@ public final class StringTokenizer implements Enumeration<Object>
     }
     
     /**
-     * <p>Constructs a string tokenizer for the specified string. The 
+     * {@icu} Constructs a string tokenizer for the specified string. The 
      * characters in the delim argument are the delimiters for separating 
-     * tokens.</p> 
+     * tokens. 
      * <p>Delimiter characters themselves will not be treated as tokens.</p>
      * @param str a string to be parsed.
      * @param delim the delimiters.
@@ -406,7 +408,7 @@ public final class StringTokenizer implements Enumeration<Object>
     }
     
     /**
-     * Returns the next token in this string tokenizer's string. First, 
+     * {@icu} Returns the next token in this string tokenizer's string. First, 
      * the set of characters considered to be delimiters by this 
      * <tt>StringTokenizer</tt> object is changed to be the characters in 
      * the string <tt>delim</tt>. Then the next token in the string
