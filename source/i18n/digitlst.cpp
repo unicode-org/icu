@@ -60,6 +60,18 @@ static const char I64_MIN_REP[] = "9223372036854775808";
 
 U_NAMESPACE_BEGIN
 
+static void
+loadDecimalChar() {
+    if (gDecimal == 0) {
+        char rep[MAX_DIGITS];
+        // For machines that decide to change the decimal on you,
+        // and try to be too smart with localization.
+        // This normally should be just a '.'.
+        sprintf(rep, "%+1.1f", 1.0);
+        gDecimal = rep[2];
+    }
+}
+
 // -------------------------------------
 // default constructor
 
@@ -408,15 +420,6 @@ DigitList::getDouble() const
     }
     DigitList *nonConstThis = const_cast<DigitList *>(this);
 
-    if (gDecimal == 0) {
-        char rep[MAX_DIGITS];
-        // For machines that decide to change the decimal on you,
-        // and try to be too smart with localization.
-        // This normally should be just a '.'.
-        sprintf(rep, "%+1.1f", 1.0);
-        gDecimal = rep[2];
-    }
-
     if (isZero()) {
         nonConstThis->fDouble = 0.0;
         if (decNumberIsNegative(fDecNumber)) {
@@ -451,6 +454,7 @@ DigitList::getDouble() const
         }
         U_ASSERT(uprv_strlen(&s[0]) < MAX_DBL_DIGITS+18);
         
+        loadDecimalChar();
         if (gDecimal != '.') {
             char *decimalPt = strchr(s, '.');
             if (decimalPt != NULL) {
@@ -740,6 +744,17 @@ DigitList::set(double source)
     // Generate a representation of the form /[+-][0-9]+e[+-][0-9]+/
     sprintf(rep, "%+1.*e", MAX_DBL_DIGITS - 1, source);
     U_ASSERT(uprv_strlen(rep) < sizeof(rep));
+
+    // uprv_decNumberFromString() will parse the string expecting '.' as a
+    // decimal separator, however sprintf() can use ',' in certain locales.
+    // Overwrite a different decimal separator with '.' here before proceeding.
+    loadDecimalChar();
+    if (gDecimal != '.') {
+        char *decimalPt = strchr(rep, gDecimal);
+        if (decimalPt != NULL) {
+            *decimalPt = '.';
+        }
+    }
 
     // Create a decNumber from the string.
     uprv_decNumberFromString(fDecNumber, rep, &fContext);
