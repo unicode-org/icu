@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -11,6 +11,7 @@
 *   Date        Name        Description
 *   06/11/99    stephen     Creation.
 *   06/16/99    stephen     Modified to use uprint.
+*   08/11/11    srl         added Parse and milli/second in/out
 *******************************************************************************
 */
 
@@ -30,11 +31,11 @@
 
 int main(int argc, char **argv);
 
-#if UCONFIG_NO_FORMATTING
+#if UCONFIG_NO_FORMATTING || UCONFIG_NO_CONVERSION
 
 int main(int argc, char **argv)
 {
-  printf("%s: Sorry, UCONFIG_NO_FORMATTING was turned on (see uconfig.h). No formatting can be done. \n", argv[0]);
+  printf("%s: Sorry, UCONFIG_NO_FORMATTING or UCONFIG_NO_CONVERSION was turned on (see uconfig.h). No formatting can be done. \n", argv[0]);
   return 0;
 }
 #else
@@ -43,8 +44,10 @@ int main(int argc, char **argv)
 /* Protos */
 static void usage(void);
 static void version(void);
-static void date(const UChar *tz, UDateFormatStyle style, char *format, UErrorCode *status);
+static void date(UDate when, const UChar *tz, UDateFormatStyle style, const char *format, UErrorCode *status);
+static UDate getWhen(const char *millis, const char *seconds, const char *format, UDateFormatStyle style, const char *parse, const UChar *tz, UErrorCode *status);
 
+UConverter *cnv = NULL;
 
 /* The version of date */
 #define DATE_VERSION "1.0"
@@ -52,6 +55,8 @@ static void date(const UChar *tz, UDateFormatStyle style, char *format, UErrorCo
 /* "GMT" */
 static const UChar GMT_ID [] = { 0x0047, 0x004d, 0x0054, 0x0000 };
 
+#define FORMAT_MILLIS "%"
+#define FORMAT_SECONDS "%%"
 
 int
 main(int argc,
@@ -64,8 +69,11 @@ main(int argc,
   const UChar *tz = 0;
   UDateFormatStyle style = UDAT_DEFAULT;
   UErrorCode status = U_ZERO_ERROR;
-  char *format = NULL;
-
+  const char *format = NULL;
+  char *parse = NULL;
+  char *seconds = NULL;
+  char *millis = NULL;
+  UDate when;
 
   /* parse the options */
   for(optind = 1; optind < argc; ++optind) {
@@ -104,6 +112,21 @@ main(int argc,
          optind++;
          format = argv[optind];
       }
+    } else if(strcmp(arg, "-r") == 0) {
+      if ( optind + 1 < argc ) { 
+         optind++;
+         seconds = argv[optind];
+      }
+    } else if(strcmp(arg, "-R") == 0) {
+      if ( optind + 1 < argc ) { 
+         optind++;
+         millis = argv[optind];
+      }
+    } else if(strcmp(arg, "-P") == 0) {
+      if ( optind + 1 < argc ) { 
+         optind++;
+         parse = argv[optind];
+      }
     }
     /* POSIX.1 says all arguments after -- are not options */
     else if(strcmp(arg, "--") == 0) {
@@ -134,8 +157,16 @@ main(int argc,
     return 0;
   }
 
+  /* get the 'when' (or now) */
+  when = getWhen(millis, seconds, format, style, parse, tz, &status);
+  if(parse != NULL) {
+    format = FORMAT_MILLIS; /* output in millis */
+  }
+
   /* print the date */
-  date(tz, style, format, &status);
+  date(when, tz, style, format, &status);
+
+  ucnv_close(cnv);
 
   u_cleanup();
   return (U_FAILURE(status) ? 1 : 0);
@@ -154,6 +185,11 @@ usage()
   puts("  -l, --long        Use long display format.");
   puts("  -m, --medium      Use medium display format.");
   puts("  -s, --short       Use short display format.");
+  puts("  -F <format>, --format <format>       Use <format> as the display format.");
+  puts("                    (Special formats: \"%\" alone is Millis since 1970, \"%%\" alone is Seconds since 1970)");
+  puts("  -r <seconds>      Use <seconds> as the time (Epoch 1970) rather than now.");
+  puts("  -R <millis>       Use <millis> as the time (Epoch 1970) rather than now.");
+  puts("  -P <string>       Parse <string> as the time, output in millis format.");
 }
 
 /* Version information */
@@ -181,37 +217,62 @@ version()
   u_init(&status);
   len = ucal_getDefaultTimeZone(tzName, len, &status);
   if(U_FAILURE(status)) {
-    printf(" ** Error getting default zone: %s\n", u_errorName(status));
+    fprintf(stderr, " ** Error getting default zone: %s\n", u_errorName(status));
   }
   uprint(tzName, stdout, &status);
   printf("\n\n");
 }
 
+static int32_t charsToUCharsDefault(UChar *uchars, int32_t ucharsSize, const char*chars, int32_t charsSize, UErrorCode *status) {
+  int32_t len=-1;
+  if(U_FAILURE(*status)) return len;
+  if(cnv==NULL) {
+    cnv = ucnv_open(NULL, status);
+  }
+  if(cnv&&U_SUCCESS(*status)) {
+    len = ucnv_toUChars(cnv, uchars, ucharsSize, chars,charsSize, status);
+  }
+  return len;
+}
+
 /* Format the date */
 static void
-date(const UChar *tz,
+date(UDate when,
+     const UChar *tz,
      UDateFormatStyle style,
-     char *format,
-     UErrorCode *status)
+     const char *format,
+     UErrorCode *status )
 {
   UChar *s = 0;
   int32_t len = 0;
   UDateFormat *fmt;
   UChar uFormat[100];
 
+  if(U_FAILURE(*status)) return;
+
+  if( format != NULL ) {
+    if(!strcmp(format,FORMAT_MILLIS)) {
+      printf("%.0lf\n", when);
+      return;
+    } else if(!strcmp(format, FORMAT_SECONDS)) {
+      printf("%.3lf\n", when/1000.0);
+      return;
+    }
+  }
+
   fmt = udat_open(style, style, 0, tz, -1,NULL,0, status);
   if ( format != NULL ) {
-     u_charsToUChars(format,uFormat,strlen(format)),
-     udat_applyPattern(fmt,FALSE,uFormat,strlen(format));
+    charsToUCharsDefault(uFormat,sizeof(uFormat)/sizeof(uFormat[0]),format,-1,status);
+    udat_applyPattern(fmt,FALSE,uFormat,-1);
   }
-  len = udat_format(fmt, ucal_getNow(), 0, len, 0, status);
+  len = udat_format(fmt, when, 0, len, 0, status);
   if(*status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
     s = (UChar*) malloc(sizeof(UChar) * (len+1));
     if(s == 0) goto finish;
-    udat_format(fmt, ucal_getNow(), s, len + 1, 0, status);
-    if(U_FAILURE(*status)) goto finish;
+    udat_format(fmt, when, s, len + 1, 0, status);
   }
+  if(U_FAILURE(*status)) goto finish;
 
   /* print the date string */
   uprint(s, stdout, status);
@@ -220,7 +281,63 @@ date(const UChar *tz,
   printf("\n");
 
  finish:
+  if(U_FAILURE(*status)) {
+    fprintf(stderr, "Error in Print: %s\n", u_errorName(*status));
+  }
   udat_close(fmt);
   free(s);
 }
+
+static UDate getWhen(const char *millis, const char *seconds, const char *format, 
+                     UDateFormatStyle style, const char *parse, const UChar *tz, UErrorCode *status) {
+  UDateFormat *fmt = NULL; 
+  UChar uFormat[100];
+  UChar uParse[256];
+  UDate when=0;
+  int32_t parsepos = 0;
+
+  if(millis != NULL) {
+    sscanf(millis, "%lf", &when);
+    return when;
+  } else if(seconds != NULL) {
+    sscanf(seconds, "%lf", &when);
+    return when*1000.0;
+  }
+
+  if(parse!=NULL) {
+    if( format != NULL ) {
+      if(!strcmp(format,FORMAT_MILLIS)) {
+        sscanf(parse, "%lf", &when);
+        return when;
+      } else if(!strcmp(format, FORMAT_SECONDS)) {
+        sscanf(parse, "%lf", &when);
+        return when*1000.0;
+      }
+    }
+
+    fmt = udat_open(style, style, 0, tz, -1,NULL,0, status);
+    if ( format != NULL ) {
+      charsToUCharsDefault(uFormat,sizeof(uFormat)/sizeof(uFormat[0]), format,-1,status);
+      udat_applyPattern(fmt,FALSE,uFormat,-1);
+    }
+    
+    charsToUCharsDefault(uParse,sizeof(uParse)/sizeof(uParse[0]), parse,-1,status);
+    when = udat_parse(fmt, uParse, -1, &parsepos, status);
+    if(U_FAILURE(*status)) {
+      fprintf(stderr, "Error in Parse: %s\n", u_errorName(*status));
+      if(parsepos>0&&parsepos<=strlen(parse)) {
+        fprintf(stderr, "ERR>\"%s\" @%d\n"
+                        "ERR> %*s^\n",
+                parse,parsepos,parsepos,"");
+                
+      }
+    }
+
+    udat_close(fmt);
+    return when;
+  } else {
+    return ucal_getNow();
+  }
+}
+
 #endif
