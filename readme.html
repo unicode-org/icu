@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 4.8.x</title>
+    <title>ReadMe for ICU 4.8.1.1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2011 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,9 +16,9 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.8.x ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.8.1.1 ReadMe</h1>
 
-    <p>Last updated: 2011-Sep-15<br />
+    <p>Last updated: 2011-Sep-20<br />
      Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1182,7 +1182,7 @@ CHGJOB CCSID(37)</samp>
       <li>Change your current directory to icu/source.</li>
 
       <li>Run <tt>'./runConfigureICU IBMi'</tt>  (See <a href="#HowToConfigureICU">configuration
-      note</a> for details).</li>
+      note</a> for details). Note that --with-data-packaging=archive and setting the --prefix are recommended, building in default (dll) mode is currently not supported.</li>
 
       <li>Run <tt>'gmake'</tt> to build ICU. (Do not use the -j option)</li>
 
