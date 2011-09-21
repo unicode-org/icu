@@ -517,7 +517,7 @@ U_INTERNAL UVoidFunction* U_EXPORT2 uprv_dlsym_func( void *lib, const char *symb
  * Define malloc and related functions
  * @internal
  */
-#if defined(OS400)
+#if U_PLATFORM == U_PF_OS400
 # define uprv_default_malloc(x) _C_TS_malloc(x)
 # define uprv_default_realloc(x,y) _C_TS_realloc(x,y)
 # define uprv_default_free(x) _C_TS_free(x)

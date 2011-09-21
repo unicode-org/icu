@@ -57,10 +57,6 @@
 #include "uoptions.h"
 #include "pkg_genc.h"
 
-#if U_PLATFORM_HAS_WIN32_API || defined(U_ELF)
-#define CAN_GENERATE_OBJECTS
-#endif
-
 enum {
   kOptHelpH = 0,
   kOptHelpQuestionMark,
