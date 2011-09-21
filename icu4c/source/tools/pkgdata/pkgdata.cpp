@@ -23,13 +23,6 @@
 #include "unicode/putil.h"
 #include "putilimp.h"
 
-#if U_HAVE_POPEN
-#if (U_PF_MINGW <= U_PLATFORM || U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
-/* popen/pclose aren't defined in strict ANSI on Cygwin and MinGW */
-#undef __STRICT_ANSI__
-#endif
-#endif
-
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -55,44 +48,6 @@ U_CDECL_BEGIN
 #include "pkgtypes.h"
 U_CDECL_END
 
-#if U_PLATFORM_HAS_WIN32_API
-#ifdef __GNUC__
-#define WINDOWS_WITH_GNUC
-#else
-#define WINDOWS_WITH_MSVC
-#endif
-#endif
-#if !defined(WINDOWS_WITH_MSVC) && !U_PLATFORM_IS_LINUX_BASED
-#define BUILD_DATA_WITHOUT_ASSEMBLY
-#endif
-#if defined(WINDOWS_WITH_MSVC) || U_PLATFORM_IS_LINUX_BASED
-#define CAN_WRITE_OBJ_CODE
-#endif
-#if U_PLATFORM == U_PF_CYGWIN || defined(CYGWINMSVC)
-#define USING_CYGWIN
-#endif
-
-/*
- * When building the data library without assembly,
- * some platforms use a single c code file for all of
- * the data to generate the final data library. This can
- * increase the performance of the pkdata tool.
- */
-#if U_PLATFORM == U_PF_OS400
-#define USE_SINGLE_CCODE_FILE
-#endif
-
-/* Need to fix the file seperator character when using MinGW. */
-#if defined(WINDOWS_WITH_GNUC) || defined(USING_CYGWIN)
-#define PKGDATA_FILE_SEP_STRING "/"
-#else
-#define PKGDATA_FILE_SEP_STRING U_FILE_SEP_STRING
-#endif
-
-#define LARGE_BUFFER_MAX_SIZE 2048
-#define SMALL_BUFFER_MAX_SIZE 512
-#define SMALL_BUFFER_FLAG_NAMES 32
-#define BUFFER_PADDING_SIZE 20
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
@@ -725,6 +680,9 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 #endif
 #elif defined(BUILD_DATA_WITHOUT_ASSEMBLY)
                 result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
+#else
+                fprintf(stderr, "Error- neither CAN_WRITE_OBJ_CODE nor BUILD_DATA_WITHOUT_ASSEMBLY are defined. Internal error.\n");
+                return 1;
 #endif
                 if (result != 0) {
                     fprintf(stderr, "Error generating package data.\n");
@@ -1338,6 +1296,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     char tempObjectFile[SMALL_BUFFER_MAX_SIZE] = "";
 #ifdef USE_SINGLE_CCODE_FILE
     char icudtAll[SMALL_BUFFER_MAX_SIZE] = "";
+    FileStream *icudtAllFile = NULL;
     
     sprintf(icudtAll, "%s%s%sall.c",
             o->tmpDir,
@@ -1346,6 +1305,11 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     /* Remove previous icudtall.c file. */
     if (T_FileStream_file_exists(icudtAll) && (result = remove(icudtAll)) != 0) {
         fprintf(stderr, "Unable to remove old icudtall file: %s\n", icudtAll);
+        return result;
+    }
+
+    if((icudtAllFile = T_FileStream_open(icudtAll, "w"))==NULL) {
+        fprintf(stderr, "Unable to write to icudtall file: %s\n", icudtAll);
         return result;
     }
 #endif
@@ -1430,20 +1394,16 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
                 }
             }
 
-            writeCCode(file, o->tmpDir, dataName[0] != 0 ? dataName : o->shortName, newName[0] != 0 ? newName : NULL, gencmnFile);
-#ifdef USE_SINGLE_CCODE_FILE
-            sprintf(cmd, "cat %s >> %s", gencmnFile, icudtAll);
-            
-            result = runCommand(cmd);
-            if (result != 0) {
-                break;
-            } else {
-                /* Remove the c code file after concatenating it to icudtall.c file. */
-                if ((result = remove(gencmnFile)) != 0) {
-                    fprintf(stderr, "Unable to remove c code file: %s\n", gencmnFile);
-                    return result;
-                }
+            if(o->verbose) {
+              printf("# Generating %s \n", gencmnFile);
             }
+
+            writeCCode(file, o->tmpDir, dataName[0] != 0 ? dataName : o->shortName, newName[0] != 0 ? newName : NULL, gencmnFile);
+
+#ifdef USE_SINGLE_CCODE_FILE
+            sprintf(cmd, "#include \"%s\"\n", gencmnFile);
+            T_FileStream_writeLine(icudtAllFile, cmd);
+            /* don't delete the file */
 #endif
         }
 
@@ -1474,10 +1434,11 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     }
 
 #ifdef USE_SINGLE_CCODE_FILE
+    T_FileStream_close(icudtAllFile);
     uprv_strcpy(tempObjectFile, icudtAll);
     tempObjectFile[uprv_strlen(tempObjectFile) - 1] = 'o';
 
-    sprintf(cmd, "%s %s -o %s %s",
+    sprintf(cmd, "%s %s -I. -o %s %s",
         pkgDataFlags[COMPILER],
         pkgDataFlags[LIBFLAGS],
         tempObjectFile,

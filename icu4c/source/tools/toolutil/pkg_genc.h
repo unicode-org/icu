@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008-2009, International Business Machines
+ *   Copyright (C) 2008-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -8,6 +8,7 @@
 #define __PKG_GENC_H__
 
 #include "unicode/utypes.h"
+#include "toolutil.h"
 
 U_INTERNAL void U_EXPORT2
 printAssemblyHeadersToStdErr(void);

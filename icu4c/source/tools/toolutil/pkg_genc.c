@@ -51,9 +51,6 @@
 #define HEX_0X 0 /*  0x1234 */
 #define HEX_0H 1 /*  01234h */
 
-#if U_PLATFORM_HAS_WIN32_API || defined(U_ELF)
-#define CAN_GENERATE_OBJECTS
-#endif
 
 /* prototypes --------------------------------------------------------------- */
 static void
@@ -373,8 +370,11 @@ writeCCode(const char *filename, const char *destdir, const char *optName, const
     [grhoten 4/24/2003]
     */
     sprintf(buffer,
+        "#ifndef IN_GENERATED_CCODE\n"
+        "#define IN_GENERATED_CCODE\n"
         "#define U_DISABLE_RENAMING 1\n"
         "#include \"unicode/umachine.h\"\n"
+        "#endif\n"
         "U_CDECL_BEGIN\n"
         "const struct {\n"
         "    double bogus;\n"
@@ -397,8 +397,11 @@ writeCCode(const char *filename, const char *destdir, const char *optName, const
 #else
     /* Function renaming shouldn't be done in data */
     sprintf(buffer,
+        "#ifndef IN_GENERATED_CCODE\n"
+        "#define IN_GENERATED_CCODE\n"
         "#define U_DISABLE_RENAMING 1\n"
         "#include \"unicode/umachine.h\"\n"
+        "#endif\n"
         "U_CDECL_BEGIN\n"
         "const struct {\n"
         "    double bogus;\n"
