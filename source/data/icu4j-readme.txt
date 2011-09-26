@@ -1,5 +1,5 @@
 ********************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation         *
+* Copyright (C) 2008-2011, International Business Machines Corporation         *
 * and others. All Rights Reserved.                                             *
 *                                                                              *
 * 6/26/08 - Created by Brian Rower - heavy copying from ICU4J readme & others  *
@@ -49,6 +49,9 @@ platform.
        (You can omit the JAR if it's just jar.)
 
 	Continue with step 3, in Java:
+
+Step 2 on either platform will produce two files: icudata.jar and
+icutzdata.jar in $icu4j_root/main/shared/data.
 
 *Java*
 
