@@ -139,10 +139,10 @@ public:
      * Creates a <code>TimeZone</code> for the given ID.
      * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
      * or a custom ID such as "GMT-8:00".
-     * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
-     * cannot be understood.  Return result guaranteed to be non-null.  If you
-     * require that the specific zone asked for be returned, check the ID of the
-     * return result.
+     * @return the specified <code>TimeZone</code>, or the GMT zone with ID
+     * <code>UCAL_UNKNOWN_ZONE_ID</code> ("Etc/Unknown") if the given ID cannot be understood.
+     * Return result guaranteed to be non-null. If you require that the specific zone asked
+     * for be returned, check the ID of the return result.
      * @stable ICU 2.0
      */
     static TimeZone* U_EXPORT2 createTimeZone(const UnicodeString& ID);
