@@ -41,6 +41,11 @@
                 <exclude name="**/cnvalias.icu"/>
             </patternset>
         </unjar>
+        <unjar src="${icu4j.tzdata.jar}" dest="${bin.dir}">
+            <patternset>
+                <include name="**/*.res" />
+            </patternset>
+        </unjar>
 
         <antcall target="@full-locale-names">
             <param name="res.dir" value="${bin.dir}/${icu4j.data.path}"/>
