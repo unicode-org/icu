@@ -299,6 +299,7 @@ icu4j/main/classes/translit/translit-build.launch -text
 icu4j/main/shared/.project -text
 icu4j/main/shared/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/shared/data/icudata.jar -text
+icu4j/main/shared/data/icutzdata.jar -text
 icu4j/main/shared/data/testdata.jar -text
 icu4j/main/tests/charset/.classpath -text
 icu4j/main/tests/charset/.project -text

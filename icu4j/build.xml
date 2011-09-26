@@ -1099,6 +1099,11 @@
                 <exclude name="**/translit/*.res" />
             </patternset>
         </unjar>
+        <unjar src="${icu4j.tzdata.jar}" dest="${module.bin.dir}">
+            <patternset>
+                <include name="**/*.res" />
+            </patternset>
+        </unjar>
     </target>
 
     <target name="calendarTests" depends="calendar" description="Modular build of calendar test suite">
@@ -1264,6 +1269,11 @@
                 <exclude name="**/translit/*.res"/>
             </patternset>
         </unjar>
+        <unjar src="${icu4j.tzdata.jar}" dest="${module.bin.dir}">
+            <patternset>
+                <include name="**/*.res" />
+            </patternset>
+        </unjar>
     </target>
 
     <target name="formatTests" depends="format" description="Modular build of format test suite">
@@ -1393,6 +1403,11 @@
                 <exclude name="**/coll/*.res"/>
                 <exclude name="**/translit/*.res"/>
                 <exclude name="**/rbnf/*.res"/>
+            </patternset>
+        </unjar>
+        <unjar src="${icu4j.tzdata.jar}" dest="${module.bin.dir}">
+            <patternset>
+                <include name="**/*.res" />
             </patternset>
         </unjar>
     </target>
