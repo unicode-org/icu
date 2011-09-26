@@ -775,26 +775,43 @@ JAR=jar
 
 # For building the testdata.jar see ../test/testdata/Makefile.
 
+ICU4J_TZDATA=$(OUTDIR)/icu4j/icutzdata.jar
+ICU4J_TZDATA_FILES=zoneinfo64 metaZones timezoneTypes windowsZones
+ICU4J_DATA_DIRNAME=com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
+ICU4J_TZDATA_PATHS=$(ICU4J_TZDATA_FILES:%="$(ICU4J_DATA_DIRNAME)/%.res")
+
+# generate icu4j-related data to $(OUTDIR)/icu4j/com/ibm/icu/impl/data/...
+generate-data: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
+	mkdir -p $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
+	mkdir -p $(OUTDIR)/icu4j/tzdata/$(ICU4J_DATA_DIRNAME)
+	echo pnames.icu ubidi.icu ucase.icu uprops.icu > $(OUTDIR)/icu4j/add.txt
+	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
+	mv $(ICU4J_TZDATA_PATHS:%=$(OUTDIR)/icu4j/%) "$(OUTDIR)/icu4j/tzdata/$(ICU4J_DATA_DIRNAME)"
+
+$(OUTDIR)/icu4j/icutzdata.jar: generate-data
+	$(JAR) cf $(OUTDIR)/icu4j/icutzdata.jar -C $(OUTDIR)/icu4j/tzdata $(ICU4J_DATA_DIRNAME)/
+
 # Build icudata.jar:
 # - add the uni-core-data to the ICU package
 # - swap the ICU data
 # - extract all data items
 # - package them into the .jar file
-$(OUTDIR)/icu4j/icudata.jar: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
-	mkdir -p $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
-	echo pnames.icu ubidi.icu ucase.icu uprops.icu > $(OUTDIR)/icu4j/add.txt
-	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
-	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
+$(OUTDIR)/icu4j/icudata.jar: generate-data
+	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j $(ICU4J_DATA_DIRNAME)/
 
 ICU4J_DATA=$(OUTDIR)/icu4j/icudata.jar
 
 ifdef ICU4J_ROOT
 
-ICU4J_DATA_INSTALLED=$(ICU4J_ROOT)/main/shared/data/icudata.jar
+ICU4J_DATA_INSTALLED=$(ICU4J_ROOT)/main/shared/data/icudata.jar $(ICU4J_ROOT)/main/shared/data/icutzdata.jar
 
 $(ICU4J_ROOT)/main/shared/data/icudata.jar: $(OUTDIR)/icu4j/icudata.jar
 	mkdir -p $(ICU4J_ROOT)/main/shared/data
 	cp $(OUTDIR)/icu4j/icudata.jar $(ICU4J_ROOT)/main/shared/data
+
+$(ICU4J_ROOT)/main/shared/data/icutzdata.jar: $(OUTDIR)/icu4j/icutzdata.jar
+	mkdir -p $(ICU4J_ROOT)/main/shared/data
+	cp $(OUTDIR)/icu4j/icutzdata.jar $(ICU4J_ROOT)/main/shared/data
 
 icu4j-data-install: $(ICU4J_DATA_INSTALLED)
 
@@ -807,7 +824,7 @@ icu4j-data-install: icu4j-data
 
 endif
 
-icu4j-data: $(ICU4J_DATA)
+icu4j-data: $(ICU4J_DATA) $(ICU4J_TZDATA)
 
 
 ###################################################################
