@@ -1,7 +1,7 @@
 /*
  **************************************************************************
  * Copyright (C) 2008-2011, Google, International Business Machines
- * Corporationand others. All Rights Reserved.
+ * Corporation and others. All Rights Reserved.
  **************************************************************************
  */
 package com.ibm.icu.text;
@@ -11,6 +11,7 @@ import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
@@ -193,10 +194,8 @@ public class TimeUnitFormat extends MeasureFormat {
         if (isReady == false) {
             return this;
         }
-        for (TimeUnit timeUnit : timeUnitToCountToPatterns.keySet()) {
-            Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(timeUnit);
-            for (String count : countToPattern.keySet()) {
-                Object[] pair = countToPattern.get(count);
+        for (Map<String, Object[]> countToPattern : timeUnitToCountToPatterns.values()) {
+            for (Object[] pair : countToPattern.values()) {
                 MessageFormat pattern = (MessageFormat)pair[FULL_NAME];
                 pattern.setFormatByArgumentIndex(0, format);
                 pattern = (MessageFormat)pair[ABBREVIATED_NAME];
@@ -249,9 +248,10 @@ public class TimeUnitFormat extends MeasureFormat {
         // and looking for the longest match.
         for (TimeUnit timeUnit : timeUnitToCountToPatterns.keySet()) {
             Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(timeUnit);
-            for (String count : countToPattern.keySet()) {
+            for (Entry<String, Object[]> patternEntry : countToPattern.entrySet()) {
+              String count = patternEntry.getKey();
               for (int styl = FULL_NAME; styl < TOTAL_STYLES; ++styl) {
-                MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[styl];
+                MessageFormat pattern = (MessageFormat)(patternEntry.getValue())[styl];
                 pos.setErrorIndex(-1);
                 pos.setIndex(oldPos);
                 // see if we can parse

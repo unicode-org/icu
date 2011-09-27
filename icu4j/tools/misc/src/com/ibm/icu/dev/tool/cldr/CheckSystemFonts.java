@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2009-2010, Google, International Business Machines
+ * Copyright (c) 2009-2011, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -236,8 +237,9 @@ public class CheckSystemFonts {
         System.out.println("\n***RAW COVERAGE (bridging unassigned)\n");
         PrintWriter out = BagFormatter.openUTF8Writer(outputDirectoryName, "raw_coverage.txt");
 
-        for (UnicodeSet s : data.keySet()) {
-            Set<String> nameSet = data.get(s);
+        for (Entry<UnicodeSet, Set<String>> entry : data.entrySet()) {
+            UnicodeSet s = entry.getKey();
+            Set<String> nameSet = entry.getValue();
             String name = nameSet.iterator().next();
             UnicodeSet bridged = new UnicodeSet(s).addBridges(DONT_CARE);
             out.println(name + "\t" + s.size() + "\t" + bridged);
@@ -253,8 +255,9 @@ public class CheckSystemFonts {
 
         Map<String,Set<String>> nameToSingleton = new HashMap<String,Set<String>>();
 
-        for (UnicodeSet s : data.keySet()) {
-            Set<String> nameSet = data.get(s);
+        for (Entry<UnicodeSet, Set<String>> entry : data.entrySet()) {
+            UnicodeSet s = entry.getKey();
+            Set<String> nameSet = entry.getValue();
             String name = nameSet.iterator().next();
             //System.out.println(s);
             Set<String> temp2 = nameToSingleton.get(name);
@@ -371,8 +374,9 @@ public class CheckSystemFonts {
             }
             fontMap.put(name,font);
         }
-        for (String name : fontMap.keySet()) {
-            Font font = fontMap.get(name);
+        for (Entry<String, Font> entry : fontMap.entrySet()) {
+            String name = entry.getKey();
+            Font font = entry.getValue();
             System.out.println(name);
             UnicodeSet coverage = getCoverage(font);
             Set<String> sameFonts = data.get(coverage);
@@ -555,8 +559,7 @@ public class CheckSystemFonts {
         //System.out.println(result.size() + "\t" + result);
         for (Rectangle2D bounds : boundsToData.keySet()) {
             Map<Shape, UnicodeSet> map = boundsToData.get(bounds);
-            for (Shape shape : map.keySet()) {
-                UnicodeSet set = map.get(shape);
+            for (UnicodeSet set : map.values()) {
                 set.removeAll(CONTROLS);
                 if (set.size() != 1) {
                     //System.out.println(set.toPattern(false));
