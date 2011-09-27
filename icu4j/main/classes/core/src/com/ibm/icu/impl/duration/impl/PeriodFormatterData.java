@@ -7,6 +7,8 @@
 
 package com.ibm.icu.impl.duration.impl;
 
+import java.util.Arrays;
+
 import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
 import com.ibm.icu.impl.duration.impl.DataRecord.EDecimalHandling;
@@ -206,7 +208,7 @@ public class PeriodFormatterData {
       try {
         name = dr.pluralNames[px][form];
       } catch (NullPointerException e) {
-        System.out.println("Null Pointer in PeriodFormatterData["+localeName+"].au px: " + px + " form: " + form + " pn: " + dr.pluralNames);
+        System.out.println("Null Pointer in PeriodFormatterData["+localeName+"].au px: " + px + " form: " + form + " pn: " + Arrays.toString(dr.pluralNames));
         throw e;
       }
     }
