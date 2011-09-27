@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -713,6 +713,6 @@ class LabelComparator implements Comparator {
     }
 
     public boolean equals(Object obj1) {
-        return this.equals(obj1);
+        return compare(this, obj1) == 0;
     }
 }
