@@ -249,8 +249,6 @@ public class CharsetCallback {
             int valueStringLength = 0;
             int i = 0;
             
-            cr = CoderResult.UNDERFLOW;
-            
             if (context == null || !(context instanceof String)) {
                 while (i < length) {
                     valueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
@@ -317,9 +315,7 @@ public class CharsetCallback {
                     }
                 }
             }
-
-            cr = encoder.cbFromUWriteUChars(encoder, CharBuffer.wrap(valueString, 0, valueStringLength), target, offsets);
-            return cr;
+            return encoder.cbFromUWriteUChars(encoder, CharBuffer.wrap(valueString, 0, valueStringLength), target, offsets);
         }
     };
     /**

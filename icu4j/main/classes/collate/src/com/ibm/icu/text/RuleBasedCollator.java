@@ -2739,7 +2739,7 @@ public final class RuleBasedCollator extends Collator {
      * @param buffer collation buffer temporary state
      */
     private final void doSecondaryBytes(int ce, boolean notIsContinuation, boolean doFrench, CollationBuffer buffer) {
-        int s = (ce >>= 8) & LAST_BYTE_MASK_; // int for comparison
+        int s = (ce >> 8) & LAST_BYTE_MASK_; // int for comparison
         if (s != 0) {
             if (!doFrench) {
                 // This is compression code.
