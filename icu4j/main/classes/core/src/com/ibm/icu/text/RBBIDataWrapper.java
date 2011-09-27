@@ -384,11 +384,11 @@ final class RBBIDataWrapper {
         } else {
             int n;
             int state;
-            String header = " Row  Acc Look  Tag";
+            StringBuilder header = new StringBuilder(" Row  Acc Look  Tag");
             for (n=0; n<fHeader.fCatCount; n++) {
-                header += intToString(n, 5);     
+                header.append(intToString(n, 5));
             }
-            System.out.println(header);
+            System.out.println(header.toString());
             for (n=0; n<header.length(); n++) {
                 System.out.print("-");
             }

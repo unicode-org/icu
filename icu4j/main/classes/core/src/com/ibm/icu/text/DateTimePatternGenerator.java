@@ -1756,13 +1756,16 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     private static String showMask(int mask) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < TYPE_LIMIT; ++i) {
-            if ((mask & (1<<i)) == 0) continue;
-            if (result.length() != 0) result += " | ";
-            result += FIELD_NAME[i] + " ";
+            if ((mask & (1<<i)) == 0)
+                continue;
+            if (result.length() != 0)
+                result.append(" | ");
+            result.append(FIELD_NAME[i]);
+            result.append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     static private String[] CLDR_FIELD_APPEND = {
