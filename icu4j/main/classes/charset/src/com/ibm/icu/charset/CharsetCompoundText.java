@@ -150,15 +150,12 @@ class CharsetCompoundText extends CharsetICU {
     }
     
     private static boolean isIBM912(int codepoint) {
-        if ((codepoint >= 0x0102 && codepoint <= 0x0107) || (codepoint >= 0x010C && codepoint <= 0x0111) || (codepoint >= 0x0118 && codepoint <= 0x011B) ||
-                (codepoint == 0x0139) || (codepoint == 0x013A) || (codepoint == 0x013D) || (codepoint == 0x013E) || (codepoint >= 0x0141 && codepoint <= 0x0144) ||
-                (codepoint == 0x0147) || (codepoint == 0x0147) || (codepoint == 0x0150) || (codepoint == 0x0151) || (codepoint == 0x0154) || (codepoint == 0x0155) || 
-                (codepoint >= 0x0158 && codepoint <= 0x015B) || (codepoint == 0x015E) || (codepoint == 0x015F) || (codepoint >= 0x0160 && codepoint <= 0x0165) ||
+        return ((codepoint >= 0x0102  && codepoint <= 0x0107)  || (codepoint >= 0x010C && codepoint <= 0x0111)    || (codepoint >= 0x0118 && codepoint <= 0x011B) ||
+                (codepoint == 0x0139) || (codepoint == 0x013A) || (codepoint == 0x013D) || (codepoint == 0x013E)  || (codepoint >= 0x0141 && codepoint <= 0x0144) ||
+                (codepoint == 0x0147) || (codepoint == 0x0150) || (codepoint == 0x0151) || (codepoint == 0x0154)  || (codepoint == 0x0155)                        ||
+                (codepoint >= 0x0158  && codepoint <= 0x015B)  || (codepoint == 0x015E) || (codepoint == 0x015F)  || (codepoint >= 0x0160 && codepoint <= 0x0165) ||
                 (codepoint == 0x016E) || (codepoint == 0x016F) || (codepoint == 0x0170) || (codepoint ==  0x0171) || (codepoint >= 0x0179 && codepoint <= 0x017E) ||
-                (codepoint == 0x02C7) || (codepoint == 0x02D8) || (codepoint == 0x02D9) || (codepoint == 0x02DB) || (codepoint == 0x02DD)) {
-            return true;
-        }
-        return false;
+                (codepoint == 0x02C7) || (codepoint == 0x02D8) || (codepoint == 0x02D9) || (codepoint == 0x02DB)  || (codepoint == 0x02DD));
     }
     
     private static boolean isIBM913(int codepoint) {
