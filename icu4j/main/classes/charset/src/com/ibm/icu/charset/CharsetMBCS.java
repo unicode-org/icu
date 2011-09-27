@@ -1063,8 +1063,7 @@ class CharsetMBCS extends CharsetICU {
         }
         
         /* set the canonical converter name */
-        newName = new String(icuCanonicalName);
-        newName.concat(UConverterConstants.OPTION_SWAP_LFNL_STRING);
+        newName = icuCanonicalName.concat(UConverterConstants.OPTION_SWAP_LFNL_STRING);
         
         if (mbcsTable.swapLFNLStateTable == null) {
             mbcsTable.swapLFNLStateTable = newStateTable;
