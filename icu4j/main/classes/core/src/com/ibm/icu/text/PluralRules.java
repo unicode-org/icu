@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.ibm.icu.impl.PatternProps;
@@ -981,8 +982,8 @@ public class PluralRules implements Serializable {
             }
 
             // Make lists immutable so we can return them directly
-            for (String key : sampleMap.keySet()) {
-                sampleMap.put(key, Collections.unmodifiableList(sampleMap.get(key)));
+            for (Entry<String, List<Double>> entry : sampleMap.entrySet()) {
+                sampleMap.put(entry.getKey(), Collections.unmodifiableList(entry.getValue()));
             }
             _keySamplesMap = sampleMap;
         }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -105,10 +106,11 @@ public class SimpleDateFormatICU extends java.text.SimpleDateFormat {
                 int end = aci.getRunLimit();
                 Map<AttributedCharacterIterator.Attribute,Object> jdkAttributes = 
                     new HashMap<AttributedCharacterIterator.Attribute,Object>();
-                Set<AttributedCharacterIterator.Attribute> keys = attributes.keySet();
-                for (AttributedCharacterIterator.Attribute key : keys) {
+                for (Entry<AttributedCharacterIterator.Attribute, Object> entry
+                        : attributes.entrySet()) {
+                    AttributedCharacterIterator.Attribute key = entry.getKey();
                     AttributedCharacterIterator.Attribute jdkKey = mapAttribute(key);
-                    Object jdkVal = attributes.get(key);
+                    Object jdkVal = entry.getValue();
                     if (jdkVal instanceof AttributedCharacterIterator.Attribute) {
                         jdkVal = mapAttribute((AttributedCharacterIterator.Attribute)jdkVal);
                     }

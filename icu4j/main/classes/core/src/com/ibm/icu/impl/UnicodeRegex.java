@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -204,13 +205,16 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
         // brute force replacement; do twice to allow for different order
         // later on can optimize
         for (int i = 0; i < 2; ++i) {
-            for (String variable : variables.keySet()) {
-                String definition = variables.get(variable);
-                for (String variable2 : variables.keySet()) {
+            for (Entry<String, String> entry : variables.entrySet()) {
+                String variable   = entry.getKey(),
+                       definition = entry.getValue();
+                
+                for (Entry<String, String> entry2 : variables.entrySet()) {
+                    String variable2 = entry2.getKey(),
+                           definition2 = entry2.getValue();
                     if (variable.equals(variable2)) {
                         continue;
                     }
-                    String definition2 = variables.get(variable2);
                     String altered2 = definition2.replace(variable, definition);
                     if (!altered2.equals(definition2)) {
                         unused.remove(variable);

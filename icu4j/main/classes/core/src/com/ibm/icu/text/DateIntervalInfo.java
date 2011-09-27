@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUCache;
@@ -760,8 +761,9 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             for (String skeleton : fIntervalPatterns.keySet()) {
                 Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
                 Map<String, PatternInfo> oneSetPtn = new HashMap<String, PatternInfo>();
-                for (String calField : patternsOfOneSkeleton.keySet()) {
-                    PatternInfo value = patternsOfOneSkeleton.get(calField);
+                for (Entry<String, PatternInfo> calEntry : patternsOfOneSkeleton.entrySet()) {
+                    String calField = calEntry.getKey();
+                    PatternInfo value = calEntry.getValue();
                     oneSetPtn.put(calField, value);
                 }
                 other.fIntervalPatterns.put(skeleton, oneSetPtn);
