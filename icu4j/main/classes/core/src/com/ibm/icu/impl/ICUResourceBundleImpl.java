@@ -7,6 +7,7 @@
 package com.ibm.icu.impl;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
@@ -150,7 +151,7 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
                 index[0] = i;
             }
             if (i < 0) {
-                throw new UResourceTypeMismatchException("Could not get the correct value for index: "+ index);
+                throw new UResourceTypeMismatchException("Could not get the correct value for index: "+ Arrays.toString(index));
             }
             return createBundleObject(i, indexStr, table, requested, isAlias);
         }
