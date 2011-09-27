@@ -185,7 +185,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             if (srb != null) {
                 ICUResourceBundle brb = srb.findWithFallback("beforeCurrency");
                 ICUResourceBundle arb = srb.findWithFallback("afterCurrency");
-                if (brb != null && brb != null) {
+                if (brb != null) {
                     String beforeCurrencyMatch = brb.findWithFallback("currencyMatch").getString();
                     String beforeContextMatch = brb.findWithFallback("surroundingMatch").getString();
                     String beforeInsert = brb.findWithFallback("insertBetween").getString();
