@@ -1802,6 +1802,16 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+
+    public void TestZoneFields() {
+        assertEquals("UNKNOWN_ZONE wrong ID", "Etc/Unknown", TimeZone.UNKNOWN_ZONE.getID());
+        assertEquals("UNKNOWN_ZONE wrong offset", 0, TimeZone.UNKNOWN_ZONE.getRawOffset());
+        assertFalse("UNKNOWN_ZONE uses DST", TimeZone.UNKNOWN_ZONE.useDaylightTime());
+
+        assertEquals("GMT_ZONE wrong ID", "Etc/GMT", TimeZone.GMT_ZONE.getID());
+        assertEquals("GMT_ZONE wrong offset", 0, TimeZone.GMT_ZONE.getRawOffset());
+        assertFalse("GMT_ZONE uses DST", TimeZone.GMT_ZONE.useDaylightTime());
+    }
 }
 
 //eof

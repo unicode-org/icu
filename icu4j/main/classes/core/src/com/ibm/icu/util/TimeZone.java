@@ -214,6 +214,32 @@ abstract public class TimeZone implements Serializable, Cloneable {
     public static final String UNKNOWN_ZONE_ID = "Etc/Unknown";
 
     /**
+     * {@icu} The "unknown" time zone.
+     * It behaves like the GMT/UTC time zone but has the UNKNOWN_ZONE_ID = "Etc/Unknown".
+     * {@link TimeZone#getTimeZone(String)} returns a mutable clone of this
+     * time zone if the input ID is not recognized.
+     *
+     * <p>In the future, this object will become immutable.
+     * @see #UNKNOWN_ZONE_ID
+     * @see #getTimeZone(String)
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final TimeZone UNKNOWN_ZONE = new SimpleTimeZone(0, UNKNOWN_ZONE_ID);
+
+    /**
+     * {@icu} The GMT (=UTC) time zone. Its ID is "Etc/GMT".
+     *
+     * <p>In the future, this object will become immutable.
+     * @see #UNKNOWN_ZONE
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final TimeZone GMT_ZONE = new SimpleTimeZone(0, "Etc/GMT");
+
+    /**
      * {@icu} System time zone type constants used by filtering zones in
      * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
      *
@@ -619,9 +645,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * or a custom ID such as "GMT-8:00". Note that the support of abbreviations,
      * such as "PST", is for JDK 1.1.x compatibility only and full names should be used.
      *
-     * @return the specified <code>TimeZone</code>, or the GMT zone with ID "Etc/Unknown"
+     * @return the specified <code>TimeZone</code>, or a mutable clone of the UNKNOWN_ZONE
      * if the given ID cannot be understood.
-     * @see #UNKNOWN_ZONE_ID
+     * @see #UNKNOWN_ZONE
      * @stable ICU 2.0
      */
     public static synchronized TimeZone getTimeZone(String ID) {
@@ -635,8 +661,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * "PST", is for JDK 1.1.x compatibility only and full names should be used.
      * @param type Time zone type, either <code>TIMEZONE_ICU</code> or
      * <code>TIMEZONE_JDK</code>.
-     * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
+     * @return the specified <code>TimeZone</code>, or a mutable clone of the UNKNOWN_ZONE if the given ID
      * cannot be understood.
+     * @see #UNKNOWN_ZONE
      * @stable ICU 4.0
      */
     public static synchronized TimeZone getTimeZone(String ID, int type) {
@@ -666,7 +693,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
                     TimeZoneLogger.warning(
                         "\"" +ID + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
                 }
-                result = new SimpleTimeZone(0, UNKNOWN_ZONE_ID);
+                result = (TimeZone)UNKNOWN_ZONE.clone();  // TODO(yoshito): cloneAsThawed()
             }
         }
         return result;
