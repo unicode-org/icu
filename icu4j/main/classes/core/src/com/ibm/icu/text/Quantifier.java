@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,7 +22,7 @@ class Quantifier implements UnicodeMatcher {
 
     public Quantifier(UnicodeMatcher theMatcher,
                       int theMinCount, int theMaxCount) {
-        if (theMatcher == null || minCount < 0 || maxCount < 0 || minCount > maxCount) {
+        if (theMatcher == null || theMinCount < 0 || theMaxCount < 0 || theMinCount > theMaxCount) {
             throw new IllegalArgumentException();
         }
         matcher = theMatcher;
