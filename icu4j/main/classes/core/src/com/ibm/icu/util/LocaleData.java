@@ -268,7 +268,7 @@ public final class LocaleData {
         if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
            return null;
 
-        return new String (stringBundle.getString());
+        return stringBundle.getString();
     }
 
     /**

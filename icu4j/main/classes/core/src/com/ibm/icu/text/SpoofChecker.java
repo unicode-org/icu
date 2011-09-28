@@ -1134,7 +1134,7 @@ public class SpoofChecker {
                 default:
                     assert (false);
                 }
-                return new String();
+                return "";
             }
 
             // Populate the final binary output data array with the compiled data.
