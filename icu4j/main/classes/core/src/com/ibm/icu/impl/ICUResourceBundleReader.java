@@ -860,7 +860,7 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate {
             start=0;
             limit=size;
             while(start<limit) {
-                mid = (start + limit) / 2;
+                mid = (start + limit) >>> 1;
                 if (keyOffsets != null) {
                     result = reader.compareKeys(key, keyOffsets[mid]);
                 } else {

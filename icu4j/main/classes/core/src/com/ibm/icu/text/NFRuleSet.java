@@ -529,7 +529,7 @@ final class NFRuleSet {
         int hi = rules.length;
     if (hi > 0) {
         while (lo < hi) {
-        int mid = (lo + hi) / 2;
+        int mid = (lo + hi) >>> 1;
         if (rules[mid].getBaseValue() == number) {
             return rules[mid];
         }

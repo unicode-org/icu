@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2009, International Business Machines
+*   Copyright (C) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -984,7 +984,7 @@ final class BidiLine {
 
             /* the middle if() is guaranteed to find the run, we don't need a loop limit */
             for ( ; ; ) {
-                i = (begin + limit) / 2;
+                i = (begin + limit) >>> 1;
                 if (visualIndex >= runs[i].limit) {
                     begin = i + 1;
                 } else if (i==0 || visualIndex >= runs[i-1].limit) {

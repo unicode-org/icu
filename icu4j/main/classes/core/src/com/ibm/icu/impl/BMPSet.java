@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2009-2010, International Business Machines
+ *   Copyright (C) 2009-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -481,7 +481,7 @@ public final class BMPSet {
         // invariant: c >= list[lo]
         // invariant: c < list[hi]
         for (;;) {
-            int i = (lo + hi) >> 1;
+            int i = (lo + hi) >>> 1;
             if (i == lo) {
                 break; // Found!
             } else if (c < list[i]) {

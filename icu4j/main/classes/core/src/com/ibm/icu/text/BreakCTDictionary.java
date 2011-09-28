@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -228,7 +228,7 @@ class BreakCTDictionary {
                 int middle;
                 node = null; // If we don't find a match, we'll fall out of the loop
                 while (high >= low) {
-                    middle = (high + low) / 2;
+                    middle = (high + low) >>> 1;
                     if (uc == hnode[middle].ch) {
                         // We hit a match; get the next node and next character
                         node = getCompactTrieNode(hnode[middle].equal);
