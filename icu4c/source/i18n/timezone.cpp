@@ -119,7 +119,8 @@ static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 static UMTX LOCK;
 static UMTX TZSET_LOCK;
 static icu::TimeZone* DEFAULT_ZONE = NULL;
-static icu::TimeZone* _GMT = NULL; // cf. TimeZone::GMT
+static icu::TimeZone* _GMT = NULL;
+static icu::TimeZone* _UNKNOWN_ZONE = NULL;
 
 static char TZDATA_VERSION[16];
 static UBool TZDataVersionInitialized = FALSE;
@@ -140,6 +141,9 @@ static UBool U_CALLCONV timeZone_cleanup(void)
 
     delete _GMT;
     _GMT = NULL;
+
+    delete _UNKNOWN_ZONE;
+    _UNKNOWN_ZONE = NULL;
 
     uprv_memset(TZDATA_VERSION, 0, sizeof(TZDATA_VERSION));
     TZDataVersionInitialized = FALSE;
@@ -297,25 +301,48 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
 
 // -------------------------------------
 
-const TimeZone* U_EXPORT2
-TimeZone::getGMT(void)
-{
+namespace {
+
+void
+ensureStaticTimeZones() {
     UBool needsInit;
     UMTX_CHECK(&LOCK, (_GMT == NULL), needsInit);   /* This is here to prevent race conditions. */
 
     // Initialize _GMT independently of other static data; it should
     // be valid even if we can't load the time zone UDataMemory.
     if (needsInit) {
+        SimpleTimeZone *tmpUnknown =
+            new SimpleTimeZone(0, UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH));
         SimpleTimeZone *tmpGMT = new SimpleTimeZone(0, UnicodeString(TRUE, GMT_ID, GMT_ID_LENGTH));
         umtx_lock(&LOCK);
+        if (_UNKNOWN_ZONE == 0) {
+            _UNKNOWN_ZONE = tmpUnknown;
+            tmpUnknown = NULL;
+        }
         if (_GMT == 0) {
             _GMT = tmpGMT;
             tmpGMT = NULL;
         }
         umtx_unlock(&LOCK);
         ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
+        delete tmpUnknown;
         delete tmpGMT;
     }
+}
+
+}  // anonymous namespace
+
+const TimeZone& U_EXPORT2
+TimeZone::getUnknown()
+{
+    ensureStaticTimeZones();
+    return *_UNKNOWN_ZONE;
+}
+
+const TimeZone* U_EXPORT2
+TimeZone::getGMT(void)
+{
+    ensureStaticTimeZones();
     return _GMT;
 }
 
@@ -389,7 +416,7 @@ TimeZone::createTimeZone(const UnicodeString& ID)
     }
     if (result == 0) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
-        result = new SimpleTimeZone(0, UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH));
+        result = getUnknown().clone();
     }
     return result;
 }
