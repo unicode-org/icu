@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005 - 2010, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2011, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -28,7 +28,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
         int         confidence;
         
         if (det.fRawLength >= 3 && 
-                (input[0] & 0xFF) == 0xef && (input[1] & 0xFF) == 0xbb & (input[2] & 0xFF) == 0xbf) {
+                (input[0] & 0xFF) == 0xef && (input[1] & 0xFF) == 0xbb && (input[2] & 0xFF) == 0xbf) {
             hasBOM = true;
         }
         
