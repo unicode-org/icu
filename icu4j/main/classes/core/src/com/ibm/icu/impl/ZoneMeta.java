@@ -559,10 +559,9 @@ public final class ZoneMeta {
      */
     static boolean parseCustomID(String id, int[] fields) {
         NumberFormat numberFormat = null;
-        String idUppercase = id.toUpperCase(Locale.ENGLISH);
 
         if (id != null && id.length() > kGMT_ID.length() &&
-            idUppercase.startsWith(kGMT_ID)) {
+                id.toUpperCase(Locale.ENGLISH).startsWith(kGMT_ID)) {
             ParsePosition pos = new ParsePosition(kGMT_ID.length());
             int sign = 1;
             int hour = 0;

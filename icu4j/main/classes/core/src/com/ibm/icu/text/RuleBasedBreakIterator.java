@@ -1170,6 +1170,10 @@ public int getRuleStatusVec(int[] fillInArray) {
     
     
     private int handlePrevious(short stateTable[]) {
+        if (fText == null || stateTable == null) {
+            return 0;
+        }
+        
         int            state;
         int            category           = 0;
         int            mode;
@@ -1182,10 +1186,6 @@ public int getRuleStatusVec(int[] fillInArray) {
         boolean        lookAheadHardBreak = 
             (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
         
-        
-        if (fText == null || stateTable == null) {
-            return 0;
-        }
         // handlePrevious() never gets the rule status.
         // Flag the status as invalid; if the user ever asks for status, we will need
         // to back up, then re-find the break position using handleNext(), which does
