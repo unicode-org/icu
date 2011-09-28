@@ -713,6 +713,6 @@ class LabelComparator implements Comparator {
     }
 
     public boolean equals(Object obj1) {
-        return compare(this, obj1) == 0;
+        return false;
     }
 }
