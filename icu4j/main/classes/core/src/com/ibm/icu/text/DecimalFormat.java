@@ -1759,7 +1759,7 @@ public class DecimalFormat extends NumberFormat {
                     n = new Long(l);
                 } else {
                     BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
-                    n = (big.bitLength() < 64) ? (Number) new Long(big.longValue()) : (Number) big;
+                    n = (big.bitLength() < 64) ? (Number) Long.valueOf(big.longValue()) : (Number) big;
                 }
             }
             // Handle non-integral values or the case where parseBigDecimal is set

@@ -716,7 +716,7 @@ final class NFRuleSet {
         // that determines the value we return.
 
         ParsePosition highWaterMark = new ParsePosition(0);
-        Number result = new Long(0);
+        Number result = Long.valueOf(0);
         Number tempResult = null;
 
         // dump out if there's no text to parse

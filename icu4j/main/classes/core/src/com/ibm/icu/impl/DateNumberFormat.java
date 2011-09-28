@@ -226,7 +226,7 @@ public final class DateNumberFormat extends NumberFormat {
         Number result = null;
         if (sawNumber) {
             num = negative ? num * (-1) : num;
-            result = new Long(num);
+            result = Long.valueOf(num);
             parsePosition.setIndex(base + offset);
         }
         return result;

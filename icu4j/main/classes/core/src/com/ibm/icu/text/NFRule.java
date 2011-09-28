@@ -865,7 +865,7 @@ final class NFRule {
 
         // return the result as a Long if possible, or as a Double
         if (result == (long)result) {
-            return new Long((long)result);
+            return Long.valueOf((long)result);
         } else {
             return new Double(result);
         }
@@ -1001,7 +1001,7 @@ final class NFRule {
             // "text" as possible.
         } else {
             ParsePosition tempPP = new ParsePosition(0);
-            Number result = new Long(0);
+            Number result = Long.valueOf(0);
             Number tempResult;
 
             // try to match the whole string against the substitution

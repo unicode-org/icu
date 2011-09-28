@@ -465,7 +465,7 @@ abstract class NFSubstitution {
             // the result.
             result = composeRuleValue(result, baseValue);
             if (result == (long)result) {
-                return new Long((long)result);
+                return Long.valueOf((long)result);
             } else {
                 return new Double(result);
             }
@@ -987,7 +987,7 @@ class ModulusSubstitution extends NFSubstitution {
 
                 result = composeRuleValue(result, baseValue);
                 if (result == (long)result) {
-                    return new Long((long)result);
+                    return Long.valueOf((long)result);
                 } else {
                     return new Double(result);
                 }
@@ -1817,7 +1817,7 @@ class NullSubstitution extends NFSubstitution {
     public Number doParse(String text, ParsePosition parsePosition, double baseValue,
                         double upperBound, boolean lenientParse) {
         if (baseValue == (long)baseValue) {
-            return new Long((long)baseValue);
+            return Long.valueOf((long)baseValue);
         } else {
             return new Double(baseValue);
         }
