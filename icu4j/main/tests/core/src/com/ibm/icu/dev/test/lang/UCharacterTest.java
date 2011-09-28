@@ -2996,7 +2996,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointAt(reg_text, 100, limitCases[i]);
                 errln("UCharacter.codePointAt was suppose to return an exception " +
                         "but got " + UCharacter.codePointAt(reg_text, 100, limitCases[i]) +
-                        ". The following passed parameters were Text: " + reg_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + Arrays.toString(reg_text) + ", Start: " +
                         100 + ", Limit: " + limitCases[i] + ".");
             } catch(Exception e){
             }
@@ -3008,7 +3008,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointAt(empty_text, 0, limitCases[i]);
                 errln("UCharacter.codePointAt was suppose to return an exception " +
                         "but got " + UCharacter.codePointAt(empty_text, 0, limitCases[i]) +
-                        ". The following passed parameters were Text: " + empty_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + Arrays.toString(empty_text) + ", Start: " +
                         0 + ", Limit: " + limitCases[i] + ".");
             } catch(Exception e){
             }
@@ -3017,7 +3017,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointCount(one_char_text, 0, limitCases[i]);
                 errln("UCharacter.codePointCount was suppose to return an exception " +
                         "but got " + UCharacter.codePointCount(one_char_text, 0, limitCases[i]) +
-                        ". The following passed parameters were Text: " + one_char_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + Arrays.toString(one_char_text) + ", Start: " +
                         0 + ", Limit: " + limitCases[i] + ".");
             } catch(Exception e){
             }
@@ -3181,7 +3181,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointCount(reg_text, 100, limitCases[i]);
                 errln("UCharacter.codePointCount was suppose to return an exception " +
                         "but got " + UCharacter.codePointCount(reg_text, 100, limitCases[i]) +
-                        ". The following passed parameters were Text: " + reg_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + Arrays.toString(reg_text) + ", Start: " +
                         100 + ", Limit: " + limitCases[i] + ".");
             } catch(Exception e){
             }
@@ -3193,7 +3193,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointCount(empty_text, 0, limitCases[i]);
                 errln("UCharacter.codePointCount was suppose to return an exception " +
                         "but got " + UCharacter.codePointCount(empty_text, 0, limitCases[i]) +
-                        ". The following passed parameters were Text: " + empty_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + Arrays.toString(empty_text) + ", Start: " +
                         0 + ", Limit: " + limitCases[i] + ".");
             } catch(Exception e){
             }
@@ -3202,7 +3202,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.codePointCount(one_char_text, 0, limitCases[i]);
                 errln("UCharacter.codePointCount was suppose to return an exception " +
                         "but got " + UCharacter.codePointCount(one_char_text, 0, limitCases[i]) +
-                        ". The following passed parameters were Text: " + one_char_text.toString() + ", Start: " + 
+                        ". The following passed parameters were Text: " + Arrays.toString(one_char_text) + ", Start: " +
                         0 + ", Limit: " + limitCases[i] + ".");
             } catch(Exception e){
             }
