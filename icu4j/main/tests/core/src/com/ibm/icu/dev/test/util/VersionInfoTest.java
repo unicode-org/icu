@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -8,6 +8,8 @@
 
 package com.ibm.icu.dev.test.util;
 
+
+import java.util.Arrays;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.VersionInfo;
@@ -119,8 +121,8 @@ public final class VersionInfoTest extends TestFmwk
             VersionInfo v1 = getInstance(COMPARE_EQUAL_INT_[i]);
             VersionInfo v2 = getInstance(COMPARE_EQUAL_INT_[i + 1]);
             if (v1.compareTo(v2) != 0) {
-                errln(COMPARE_EQUAL_INT_[i] + " should equal " +
-                      COMPARE_EQUAL_INT_[i + 1]);
+                errln(Arrays.toString(COMPARE_EQUAL_INT_[i]) + " should equal " +
+                        Arrays.toString(COMPARE_EQUAL_INT_[i + 1]));
             }
         }
         for (int i = 0; i < COMPARE_LESS_.length - 1; i ++) {
@@ -181,7 +183,7 @@ public final class VersionInfoTest extends TestFmwk
             }
             v = getInstance(TOSTRING_INT_[i]);
             if (!v.toString().equals(TOSTRING_RESULT_[i])) {
-                errln("toString() for " + TOSTRING_INT_[i] + 
+                errln("toString() for " + Arrays.toString(TOSTRING_INT_[i]) +
                       " should produce " + TOSTRING_RESULT_[i]);
             }
         }
