@@ -731,8 +731,12 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (this == obj) return true;
+        if (!(obj instanceof DecimalFormatSymbols)) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
         DecimalFormatSymbols other = (DecimalFormatSymbols) obj;
         for (int i = 0; i <= CURRENCY_SPC_INSERT; i++) {
             if (!currencySpcBeforeSym[i].equals(other.currencySpcBeforeSym[i])) {

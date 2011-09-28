@@ -2055,7 +2055,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         public boolean equals(Object other) {
-            if (other == null) return false;
+            if (!(other instanceof DateTimeMatcher)) {
+                return false;
+            }
             DateTimeMatcher that = (DateTimeMatcher) other;
             for (int i = 0; i < original.length; ++i) {
                 if (!original[i].equals(that.original[i])) return false;
