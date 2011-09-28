@@ -128,14 +128,29 @@ public:
     virtual ~TimeZone();
 
     /**
-     * The GMT time zone has a raw offset of zero and does not use daylight
+     * Returns the "unknown" time zone.
+     * It behaves like the GMT/UTC time zone but has the
+     * <code>UCAL_UNKNOWN_ZONE_ID</code> = "Etc/Unknown".
+     * createTimeZone() returns a mutable clone of this time zone if the input ID is not recognized.
+     *
+     * @return the "unknown" time zone.
+     * @see UCAL_UNKNOWN_ZONE_ID
+     * @see createTimeZone
+     * @see getGMT
+     * @draft ICU 49
+     */
+    static const TimeZone& U_EXPORT2 getUnknown();
+
+    /**
+     * The GMT (=UTC) time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
      *
      * <p>Note: For backward compatibility reason, the ID used by the time
      * zone returned by this method is "GMT", although the ICU's canonical
      * ID for the GMT time zone is "Etc/GMT".
      *
-     * @return the GMT time zone.
+     * @return the GMT/UTC time zone.
+     * @see getUnknown
      * @stable ICU 2.0
      */
     static const TimeZone* U_EXPORT2 getGMT(void);
@@ -144,10 +159,11 @@ public:
      * Creates a <code>TimeZone</code> for the given ID.
      * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
      * or a custom ID such as "GMT-8:00".
-     * @return the specified <code>TimeZone</code>, or the GMT zone with ID
-     * <code>UCAL_UNKNOWN_ZONE_ID</code> ("Etc/Unknown") if the given ID cannot be understood.
-     * Return result guaranteed to be non-null. If you require that the specific zone asked
-     * for be returned, check the ID of the return result.
+     * @return the specified <code>TimeZone</code>, or a mutable clone of getUnknown()
+     * if the given ID cannot be understood.
+     * The return result is guaranteed to be non-NULL.
+     * If you require that the specific zone asked for be returned,
+     * compare the result with getUnknown() or check the ID of the return result.
      * @stable ICU 2.0
      */
     static TimeZone* U_EXPORT2 createTimeZone(const UnicodeString& ID);

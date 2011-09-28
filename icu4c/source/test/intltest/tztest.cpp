@@ -41,30 +41,32 @@ const char * TimeZoneTest::REFERENCE_DATA_VERSION = "2009d";
 
 void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    if (exec) logln("TestSuite TestTimeZone");
-    switch (index) {
-        CASE(0, TestPRTOffset);
-        CASE(1, TestVariousAPI518);
-        CASE(2, TestGetAvailableIDs913);
-        CASE(3, TestGenericAPI);
-        CASE(4, TestRuleAPI);
-        CASE(5, TestShortZoneIDs);
-        CASE(6, TestCustomParse);
-        CASE(7, TestDisplayName);
-        CASE(8, TestDSTSavings);
-        CASE(9, TestAlternateRules);
-        CASE(10,TestCountries); 
-        CASE(11,TestHistorical);
-        CASE(12,TestEquivalentIDs);
-        CASE(13, TestAliasedNames);
-        CASE(14, TestFractionalDST);
-        CASE(15, TestFebruary);
-        CASE(16, TestCanonicalID);
-        CASE(17, TestDisplayNamesMeta);
-        CASE(18, TestGetRegion);
-        CASE(19, TestGetAvailableIDsNew);
-        default: name = ""; break;
+    if (exec) {
+        logln("TestSuite TestTimeZone");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestPRTOffset);
+    TESTCASE_AUTO(TestVariousAPI518);
+    TESTCASE_AUTO(TestGetAvailableIDs913);
+    TESTCASE_AUTO(TestGenericAPI);
+    TESTCASE_AUTO(TestRuleAPI);
+    TESTCASE_AUTO(TestShortZoneIDs);
+    TESTCASE_AUTO(TestCustomParse);
+    TESTCASE_AUTO(TestDisplayName);
+    TESTCASE_AUTO(TestDSTSavings);
+    TESTCASE_AUTO(TestAlternateRules);
+    TESTCASE_AUTO(TestCountries); 
+    TESTCASE_AUTO(TestHistorical);
+    TESTCASE_AUTO(TestEquivalentIDs);
+    TESTCASE_AUTO(TestAliasedNames);
+    TESTCASE_AUTO(TestFractionalDST);
+    TESTCASE_AUTO(TestFebruary);
+    TESTCASE_AUTO(TestCanonicalID);
+    TESTCASE_AUTO(TestDisplayNamesMeta);
+    TESTCASE_AUTO(TestGetRegion);
+    TESTCASE_AUTO(TestGetAvailableIDsNew);
+    TESTCASE_AUTO(TestGetUnknown);
+    TESTCASE_AUTO_END;
 }
 
 const int32_t TimeZoneTest::millisPerHour = 3600000;
@@ -2307,4 +2309,14 @@ void TimeZoneTest::TestGetRegion()
         }
     }
 }
+
+void TimeZoneTest::TestGetUnknown() {
+    const TimeZone &unknown = TimeZone::getUnknown();
+    UnicodeString expectedID = UNICODE_STRING_SIMPLE("Etc/Unknown");
+    UnicodeString id;
+    assertEquals("getUnknown() wrong ID", expectedID, unknown.getID(id));
+    assertTrue("getUnknown() wrong offset", 0 == unknown.getRawOffset());
+    assertFalse("getUnknown() uses DST", unknown.useDaylightTime());
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
