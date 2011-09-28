@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -376,7 +376,7 @@ public class PropsVectors {
         // sort the properties vectors to find unique vector values
         Integer[] indexArray = new Integer[rows];
         for (int i = 0; i < rows; ++i) {
-            indexArray[i] = new Integer(columns * i);
+            indexArray[i] = Integer.valueOf(columns * i);
         }
 
         Arrays.sort(indexArray, new Comparator<Integer>() {

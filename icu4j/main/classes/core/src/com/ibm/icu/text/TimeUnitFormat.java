@@ -298,7 +298,7 @@ public class TimeUnitFormat extends MeasureFormat {
             } else {
                 // should not happen.
                 // TODO: how to handle?
-                resultNumber = new Integer(3);
+                resultNumber = Integer.valueOf(3);
             }
         }
         if (longestParseDistance == 0) {

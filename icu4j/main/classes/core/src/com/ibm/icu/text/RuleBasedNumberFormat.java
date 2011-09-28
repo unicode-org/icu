@@ -1196,7 +1196,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // keep track of the largest number of characters consumed in
         // the various trials, and the result that corresponds to it
-        Number result = new Long(0);
+        Number result = Long.valueOf(0);
         ParsePosition highWaterMark = new ParsePosition(workingPos.getIndex());
 
         // iterate over the public rule sets (beginning with the default one)

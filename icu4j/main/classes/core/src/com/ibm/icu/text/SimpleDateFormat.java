@@ -2232,7 +2232,7 @@ public class SimpleDateFormat extends DateFormat {
                     nDigits--;
                 }
                 pos.setIndex(oldPos + maxDigits);
-                number = new Integer((int)val);
+                number = Integer.valueOf((int)val);
             }
         }
         return number;
@@ -2816,7 +2816,7 @@ public class SimpleDateFormat extends DateFormat {
     protected NumberFormat getNumberFormat(char ch) {
 
        Character ovrField;
-       ovrField = new Character(ch);
+       ovrField = Character.valueOf(ch);
        if (overrideMap != null && overrideMap.containsKey(ovrField)) {
            String nsName = overrideMap.get(ovrField).toString();
            NumberFormat nf = numberFormatters.get(nsName);
@@ -2862,7 +2862,7 @@ public class SimpleDateFormat extends DateFormat {
                fullOverride = true;
             } else { // Field specific override string such as "y=hebrew"
                nsName = currentString.substring(equalSignPosition+1);
-               ovrField = new Character(currentString.charAt(0));
+               ovrField = Character.valueOf(currentString.charAt(0));
                overrideMap.put(ovrField,nsName);
                fullOverride = false;
             }
