@@ -110,7 +110,7 @@
 #define U_PF_LINUX 4000
 /** Android is based on Linux. @internal */
 #define U_PF_ANDROID 4050
-/** "Classic" Mac OS (1984–2001) @internal */
+/** "Classic" Mac OS (1984-2001) @internal */
 #define U_PF_CLASSIC_MACOS 8000
 /** z/OS is the successor to OS/390 which was the successor to MVS. @internal */
 #define U_PF_OS390 9000
@@ -522,8 +522,8 @@
 #elif U_PLATFORM == U_PF_AIX
     /*
      * AIX 6.1 information, section "Wide character data representation":
-     * "... the wchar_t datatype is 32–bit in the 64–bit environment and
-     * 16–bit in the 32–bit environment."
+     * "... the wchar_t datatype is 32-bit in the 64-bit environment and
+     * 16-bit in the 32-bit environment."
      * and
      * "All locales use Unicode for their wide character code values (process code),
      * except the IBM-eucTW codeset."

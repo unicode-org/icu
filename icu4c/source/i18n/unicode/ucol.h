@@ -618,7 +618,7 @@ ucol_getReorderCodes(const UCollator* coll,
  * at the start and/or the end of the collation order. These groups are specified using
  * UScript codes and UColReorderCode entries.
  * <p>By default, reordering codes specified for the start of the order are placed in the 
- * order given after a group of “special” non-script blocks. These special groups of characters 
+ * order given after a group of "special" non-script blocks. These special groups of characters 
  * are space, punctuation, symbol, currency, and digit. These special groups are represented with
  * UColReorderCode entries. Script groups can be intermingled with 
  * these special non-script blocks if those special blocks are explicitly specified in the reordering.
