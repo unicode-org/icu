@@ -151,21 +151,26 @@
  *                                  \#define U_ICU_ENTRY_POINT icudt19_dat
  * @stable ICU 2.4
  */
-#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM)
+#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM,U_LIB_SUFFIX_C_NAME)
 
 #ifndef U_HIDE_INTERNAL_API
 /**
- * Do not use.
+ * Do not use. Note that it's OK for the 2nd argument to be undefined (literal).
  * @internal
  */
-#define U_DEF2_ICUDATA_ENTRY_POINT(major) U_DEF_ICUDATA_ENTRY_POINT(major)
+#define U_DEF2_ICUDATA_ENTRY_POINT(major,suff) U_DEF_ICUDATA_ENTRY_POINT(major,suff)
+
 /**
  * Do not use.
  * @internal
  */
 #ifndef U_DEF_ICUDATA_ENTRY_POINT
 /* affected by symbol renaming. See platform.h */
-#define U_DEF_ICUDATA_ENTRY_POINT(major) icudt##major##_dat
+#ifndef U_LIB_SUFFIX_C_NAME
+#define U_DEF_ICUDATA_ENTRY_POINT(major, suff) icudt##major##_dat
+#else
+#define U_DEF_ICUDATA_ENTRY_POINT(major, suff) icudt##suff ## major##_dat
+#endif
 #endif
 #endif  /* U_HIDE_INTERNAL_API */
 
