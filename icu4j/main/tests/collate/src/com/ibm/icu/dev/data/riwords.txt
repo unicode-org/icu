@@ -1,6 +1,6 @@
-﻿#*******************************************************************************
+#*******************************************************************************
 #*
-#*   Copyright (C) 2003-2011, National Electronics and Computer Technology Center
+#*   Copyright (C) 2003, National Electronics and Computer Technology Center
 #*   and others.  All Rights Reserved.
 #* 
 #*******************************************************************************

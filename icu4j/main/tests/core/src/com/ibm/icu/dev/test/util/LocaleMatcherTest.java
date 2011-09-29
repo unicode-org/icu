@@ -1,6 +1,6 @@
-﻿/*
+/*
  ******************************************************************************************
- * Copyright (C) 2009-2011, Google, Inc.; International Business Machines Corporation and *
+ * Copyright (C) 2009-2010, Google, Inc.; International Business Machines Corporation and *
  * others. All Rights Reserved.                                                           *
  ******************************************************************************************
  */

@@ -1,4 +1,4 @@
-﻿=fullPluralizedFormCounts
+=fullPluralizedFormCounts
 -3
 -2
 -1

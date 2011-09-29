@@ -1,4 +1,4 @@
-﻿UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
+UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE
 
     Unicode Data Files include all data files under the directories
 http://www.unicode.org/Public/, http://www.unicode.org/reports/, and

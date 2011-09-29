@@ -1,6 +1,6 @@
-﻿/*
+/*
  **********************************************************************
- * Copyright (c) 2002-2011, Google, International Business Machines
+ * Copyright (c) 2002-2010, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis

@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (C) 1998-2011 International Business Machines Corporation and
+/*
+ * Copyright (C) 1998-2007 International Business Machines Corporation and
  * Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.
