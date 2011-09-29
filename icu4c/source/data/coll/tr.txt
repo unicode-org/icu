@@ -68,7 +68,7 @@ tr{
                 "&S<ş<<<Ş"
                 "&U<ü<<<Ü"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         standard{
             Sequence{
@@ -80,7 +80,7 @@ tr{
                 "&S<ş<<<Ş"
                 "&U<ü<<<Ü"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

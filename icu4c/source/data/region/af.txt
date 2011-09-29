@@ -299,5 +299,5 @@ af{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend gebied"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.61.44"}
 }

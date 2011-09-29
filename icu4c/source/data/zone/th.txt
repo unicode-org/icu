@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/th.xml
  */
 th{
-    Version{"2.0.59.53"}
+    Version{"2.0.61.77"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"อาบีจาน"}

@@ -306,5 +306,5 @@ it{
         ZW{"Zimbabwe"}
         ZZ{"Regione non valida o sconosciuta"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
 }

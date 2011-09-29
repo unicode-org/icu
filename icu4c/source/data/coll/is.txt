@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/is.xml
  */
 is{
-    Version{"2.0.58.71"}
+    Version{"2.0.61.82"}
     collations{
         search{
             Sequence{
@@ -69,7 +69,7 @@ is{
                 "&[before 1]z<ý<<<Ý"
                 "&[before 1]ǀ<æ<<<Æ<<ä<<<Ä<ö<<<Ö<<ø<<<Ø<å<<<Å"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         standard{
             Sequence{
@@ -82,7 +82,7 @@ is{
                 "&[before 1]z<ý<<<Ý"
                 "&[before 1]ǀ<æ<<<Æ<<ä<<<Ä<ö<<<Ö<<ø<<<Ø<å<<<Å"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

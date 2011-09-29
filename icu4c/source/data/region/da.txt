@@ -299,5 +299,5 @@ da{
         ZW{"Zimbabwe"}
         ZZ{"Ukendt område"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
 }

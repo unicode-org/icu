@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ml.xml
  */
 ml{
-    Version{"2.0.61.44"}
+    Version{"2.0.61.77"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"അബിദ്‌ജാന്‍‌"}

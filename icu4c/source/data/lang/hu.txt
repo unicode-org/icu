@@ -800,7 +800,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

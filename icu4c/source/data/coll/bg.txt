@@ -10,11 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/bg.xml
  */
 bg{
-    Version{"2.0.49.75"}
+    Version{"2.0.61.82"}
     collations{
         standard{
             Sequence{"[suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкУуЧчЫыЭэѴѵ] ]"}
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }
