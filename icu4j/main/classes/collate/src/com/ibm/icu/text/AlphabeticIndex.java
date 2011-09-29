@@ -1,4 +1,4 @@
-﻿/*
+/*
  *******************************************************************************
  * Copyright (C) 2008-2011, Google Inc, International Business Machines Corporation
  * and others. All Rights Reserved.

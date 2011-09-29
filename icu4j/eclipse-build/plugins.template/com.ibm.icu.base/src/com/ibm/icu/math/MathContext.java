@@ -1,4 +1,4 @@
-﻿/* Generated from 'MathContext.nrx' 8 Sep 2000 11:07:48 [v2.00] */
+/* Generated from 'MathContext.nrx' 8 Sep 2000 11:07:48 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.icu.math;
 
