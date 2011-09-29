@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.ibm.icu.base; singleton:=true
+Bundle-Version: @BUILD_VERSION@
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-Copyright: @COPYRIGHT@
+Export-Package: com.ibm.icu.text;base=true;version="@IMPL_VERSION@",
+ com.ibm.icu.util;base=true;version="@IMPL_VERSION@",
+ com.ibm.icu.math;base=true;version="@IMPL_VERSION@",
+ com.ibm.icu.impl;x-internal:=true,
+ com.ibm.icu.impl.locale;x-internal:=true
+Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
