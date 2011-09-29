@@ -689,7 +689,7 @@ brx{
         TARASK{"तारास्कीएवीचा वर्तनी"}
         XIANG{"ज़ीयाँग हुनानी"}
     }
-    Version{"2.0.59.56"}
+    Version{"2.0.61.77"}
     codePatterns{
         script{"देवनागरी: {0}"}
         territory{"क्षेत्र:भारत {0}"}

@@ -701,7 +701,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.61.77"}
     codePatterns{
         language{"زبان: {0}"}
         script{"خط: {0}"}

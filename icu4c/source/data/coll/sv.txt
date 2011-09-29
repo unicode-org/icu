@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/sv.xml
  */
 sv{
-    Version{"2.0.58.71"}
+    Version{"2.0.61.82"}
     collations{
         default{"reformed"}
         reformed{
@@ -22,7 +22,7 @@ sv{
                 "&[before 1]ǀ<å<<<Å<ä<<<Ä<<æ<<<Æ<<ę<<<Ę<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<œ<<<Œ<"
                 "<ô<<<Ô"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         search{
             Sequence{
@@ -80,7 +80,7 @@ sv{
                 "&[before 1]ǀ<å<<<Å<ä<<<Ä<<æ<<<Æ<<ę<<<Ę<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<œ<<<Œ<"
                 "<ô<<<Ô"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         standard{
             Sequence{
@@ -92,7 +92,7 @@ sv{
                 "&[before 1]ǀ<å<<<Å<ä<<<Ä<<æ<<<Æ<<ę<<<Ę<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<œ<<<Œ<"
                 "<ô<<<Ô"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

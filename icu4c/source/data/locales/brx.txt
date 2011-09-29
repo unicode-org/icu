@@ -24,7 +24,7 @@ brx{
         "Deva",
     }
     NumberElements{
-        default{"deva"}
+        default{"latn"}
         latn{
             patterns{
                 currencyFormat{"¤ #,##,##0.00"}
@@ -46,7 +46,7 @@ brx{
             }
         }
     }
-    Version{"2.0.59.56"}
+    Version{"2.0.61.77"}
     calendar{
         gregorian{
             AmPmMarkers{

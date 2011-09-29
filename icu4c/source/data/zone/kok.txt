@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kok.xml
  */
 kok{
-    Version{"2.0.61.44"}
+    Version{"2.0.61.77"}
     zoneStrings{
         "meta:India"{
             ls{"भारतीय समय"}

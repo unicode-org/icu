@@ -769,6 +769,7 @@ en{
             beng{"Bengali Digits"}
             deva{"Devanagari Digits"}
             ethi{"Ethiopic Numerals"}
+            finance{"Financial Numerals"}
             fullwide{"Full Width Digits"}
             geor{"Georgian Numerals"}
             grek{"Greek Numerals"}
@@ -790,6 +791,7 @@ en{
             mlym{"Malayalam Digits"}
             mong{"Mongolian Digits"}
             mymr{"Myanmar Digits"}
+            native{"Native Digits"}
             orya{"Oriya Digits"}
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
@@ -798,6 +800,7 @@ en{
             telu{"Telugu Digits"}
             thai{"Thai Digits"}
             tibt{"Tibetan Digits"}
+            traditional{"Traditional Numerals"}
         }
     }
     Variants{
@@ -841,7 +844,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.61.26"}
+    Version{"2.0.61.76"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

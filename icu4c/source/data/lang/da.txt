@@ -754,7 +754,7 @@ da{
         REVISED{"revideret retskrivning"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

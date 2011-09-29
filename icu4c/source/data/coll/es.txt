@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/es.xml
  */
 es{
-    Version{"2.0.58.71"}
+    Version{"2.0.61.82"}
     collations{
         search{
             Sequence{
@@ -62,15 +62,15 @@ es{
                 "&ᅮᅵ=ᅱ"
                 "&N<ñ<<<Ñ"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         standard{
             Sequence{"&N<ñ<<<Ñ"}
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         traditional{
             Sequence{"&N<ñ<<<Ñ&C<ch<<<Ch<<<CH&l<ll<<<Ll<<<LL"}
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

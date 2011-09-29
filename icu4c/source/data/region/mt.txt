@@ -285,5 +285,5 @@ mt{
         ZW{"Żimbabwe"}
         ZZ{"Reġjun Mhux Magħruf jew Mhux Validu"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
 }

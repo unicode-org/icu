@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/cy.xml
  */
 cy{
-    Version{"2.0.42.8"}
+    Version{"2.0.61.82"}
     collations{
         standard{
             Sequence{
@@ -23,7 +23,7 @@ cy{
                 "&R<rh<<<Rh<<<RH"
                 "&T<th<<<Th<<<TH"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

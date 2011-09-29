@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    Version{"2.0.59.53"}
+    Version{"2.0.61.77"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -1550,6 +1550,9 @@ ja{
             ld{"日本夏時間"}
             lg{"日本時間"}
             ls{"日本標準時"}
+            sd{"JDT"}
+            sg{"JT"}
+            ss{"JST"}
         }
         "meta:Kamchatka"{
             ld{"ペトロパブロフスク カムチャツキー夏時間"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/my.xml
  */
 my{
-    Version{"2.0.59.5"}
+    Version{"2.0.61.77"}
     zoneStrings{
         "America:Anchorage"{
             ec{"အန်ကာရေ့ဂျ်"}

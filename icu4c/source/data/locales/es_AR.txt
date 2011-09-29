@@ -16,7 +16,7 @@ es_AR{
             }
         }
     }
-    Version{"2.0.59.5"}
+    Version{"2.0.61.44"}
     calendar{
         gregorian{
             DateTimePatterns{
