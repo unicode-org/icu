@@ -131,21 +131,25 @@
  * Simple things (presence of functions, etc) should just go in configure.in and be added to
  * icucfg.h via autoheader.
  */
-#if defined(U_HAVE_ICUCFG)
-#   include "icucfg.h"
-#elif U_PLATFORM_IMPLEMENTS_POSIX
+#if U_PLATFORM_IMPLEMENTS_POSIX
 #   if U_PLATFORM == U_PF_OS400
-#    undef HAVE_DLFCN_H 1
-#    undef HAVE_DLOPEN 1
+#    define HAVE_DLFCN_H 0
+#    define HAVE_DLOPEN 0
 #   else
+#   ifndef HAVE_DLFCN_H
 #    define HAVE_DLFCN_H 1
+#   endif
+#   ifndef HAVE_DLOPEN
 #    define HAVE_DLOPEN 1
 #   endif
-#   define HAVE_GETTIMEOFDAY 1
+#   endif
+#   ifndef HAVE_GETTIMEOFDAY
+#    define HAVE_GETTIMEOFDAY 1
+#   endif
 #else
-#   undef HAVE_DLFCN_H
-#   undef HAVE_DLOPEN
-#   undef HAVE_GETTIMEOFDAY
+#   define HAVE_DLFCN_H 0
+#   define HAVE_DLOPEN 0
+#   define HAVE_GETTIMEOFDAY 0
 #endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -317,7 +321,7 @@ uprv_getRawUTCtime()
     return (UDate)((winTime.int64 - EPOCH_BIAS) / HECTONANOSECOND_PER_MILLISECOND);
 #else
 
-#if defined(HAVE_GETTIMEOFDAY)
+#if HAVE_GETTIMEOFDAY
     struct timeval posixTime;
     gettimeofday(&posixTime, NULL);
     return (UDate)(((int64_t)posixTime.tv_sec * U_MILLIS_PER_SECOND) + (posixTime.tv_usec/1000));
@@ -2083,11 +2087,9 @@ u_getVersion(UVersionInfo versionArray) {
 
 #if U_ENABLE_DYLOAD
  
-#if defined(U_CHECK_DYLOAD)
+#if HAVE_DLOPEN && !U_PLATFORM_HAS_WIN32_API
 
-#if defined(HAVE_DLOPEN) && !U_PLATFORM_HAS_WIN32_API
-
-#ifdef HAVE_DLFCN_H
+#if HAVE_DLFCN_H
 
 #ifdef __MVS__
 #ifndef __SUSV3
@@ -2239,9 +2241,6 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   }
   return (UVoidFunction*)NULL;
 }
-
-
-#endif
 
 #endif /* U_ENABLE_DYLOAD */
 

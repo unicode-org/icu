@@ -192,10 +192,8 @@
  */
 #ifdef U_HAVE_LIB_SUFFIX
     /* Use the predefined value. */
-#elif defined(U_LIB_SUFFIX_C_NAME) || defined(U_LIB_SUFFIX_C_NAME_STRING)
+#elif defined(U_LIB_SUFFIX_C_NAME)
 #   define U_HAVE_LIB_SUFFIX 1
-#else
-#   define U_HAVE_LIB_SUFFIX 0
 #endif
 
 /**
@@ -209,17 +207,6 @@
 #   define U_LIB_SUFFIX_C_NAME_STRING #U_LIB_SUFFIX_C_NAME
 #else
 #   define U_LIB_SUFFIX_C_NAME_STRING ""
-#endif
-
-/**
- * \def U_LIB_SUFFIX_C_NAME
- * Defines the library suffix with C syntax.
- * @internal
- */
-#ifdef U_LIB_SUFFIX_C_NAME
-    /* Use the predefined value. */
-#else
-#   define U_LIB_SUFFIX_C_NAME
 #endif
 
 /* common/i18n library switches --------------------------------------------- */

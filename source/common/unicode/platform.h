@@ -683,17 +683,4 @@
 
 /* @} */
 
-/*===========================================================================*/
-/* Custom icu entry point renaming                                           */
-/*===========================================================================*/
-
-#if U_HAVE_LIB_SUFFIX
-# ifndef U_ICU_ENTRY_POINT_RENAME
-/* Renaming pattern:    u_strcpy_41_suffix */
-#  define U_ICU_ENTRY_POINT_RENAME(x)    x ## _ ## U_ICU_VERSION_MAJOR_NUM ## U_LIB_SUFFIX_C_NAME
-#  define U_DEF_ICUDATA_ENTRY_POINT(major) icudt ## U_LIB_SUFFIX_C_NAME ## major ##_dat
-
-# endif
-#endif
-
 #endif
