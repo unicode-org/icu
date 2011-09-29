@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/et.xml
  */
 et{
-    Version{"2.0.41.26"}
+    Version{"2.0.61.82"}
     collations{
         standard{
             Sequence{
@@ -18,7 +18,7 @@ et{
                 "&v<<w<<<W"
                 "&[before 1]X<õ<<<Õ<ä<<<Ä<ö<<<Ö<ü<<<Ü"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

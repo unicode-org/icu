@@ -2293,38 +2293,38 @@ static void TestDefaultKeyword(void) {
 static void TestGetKeywordValuesForLocale(void) {
 #define INCLUDE_UNIHAN_COLLATION 0
 #define PREFERRED_SIZE 16
-#define MAX_NUMBER_OF_KEYWORDS 8
+#define MAX_NUMBER_OF_KEYWORDS 9
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
-            { "und",            "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
-            { "en_US",          "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
-            { "en_029",         "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
-            { "de_DE",          "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
-            { "de_Latn_DE",     "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
+            { "und",            "standard", "ducet", "eor", "search", NULL, NULL, NULL, NULL, NULL },
+            { "en_US",          "standard", "ducet", "eor", "search", NULL, NULL, NULL, NULL, NULL },
+            { "en_029",         "standard", "ducet", "eor", "search", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE",          "standard", "phonebook", "search", "ducet", "eor", NULL, NULL, NULL, NULL },
+            { "de_Latn_DE",     "standard", "phonebook", "search", "ducet", "eor", NULL, NULL, NULL, NULL },
 #if INCLUDE_UNIHAN_COLLATION
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search" },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search" },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
+            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "eor", "search" },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "eor", "search" },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "eor", "search" },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "eor", "search" },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "eor", "search" },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "eor", "search" },
 #else
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "ducet", "search", NULL },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "ducet", "search", NULL },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
+            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "eor", "search", NULL },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "eor", "search", NULL },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "eor", "search", NULL },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "ducet", "eor", "search", NULL },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "ducet", "eor", "search", NULL },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "eor", "search", NULL },
 #endif
-            { "es_ES",          "standard", "search", "traditional", "ducet", NULL, NULL, NULL, NULL },
-            { "es__TRADITIONAL","traditional", "search", "standard", "ducet", NULL, NULL, NULL, NULL },
-            { "und@collation=phonebook",    "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL },
-            { "de_DE@collation=big5han",    "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
-            { "zzz@collation=xxx",          "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL }
+            { "es_ES",          "standard", "search", "traditional", "ducet", "eor", NULL, NULL, NULL, NULL },
+            { "es__TRADITIONAL","traditional", "search", "standard", "ducet", "eor", NULL, NULL, NULL, NULL },
+            { "und@collation=phonebook",    "standard", "ducet", "eor", "search", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE@collation=big5han",    "standard", "phonebook", "search", "ducet", "eor", NULL, NULL, NULL, NULL },
+            { "zzz@collation=xxx",          "standard", "ducet", "eor", "search", NULL, NULL, NULL, NULL, NULL }
     };
 #if INCLUDE_UNIHAN_COLLATION
-    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 8, 8, 8, 8, 8, 8, 4, 4, 3, 4, 3 };
+    const int32_t expectedLength[PREFERRED_SIZE] = { 4, 4, 4, 5, 5, 9, 9, 9, 9, 9, 9, 5, 5, 4, 5, 4 };
 #else
-    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 7, 7, 7, 7, 7, 7, 4, 4, 3, 4, 3 };
+    const int32_t expectedLength[PREFERRED_SIZE] = { 4, 4, 4, 5, 5, 8, 8, 8, 8, 8, 8, 5, 5, 4, 5, 4 };
 #endif
 
     UErrorCode status = U_ZERO_ERROR;

@@ -14,7 +14,7 @@ bn{
     collations{
         standard{
             Sequence{" [normalization on ]&ঔ<ং<ঃ<ঁ"}
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
         traditional{
             Sequence{
@@ -633,7 +633,7 @@ bn{
                 "&যৌ<<<য়ৌ"
                 "&য্<<<য়্"
             }
-            Version{"2.0.1"}
+            Version{"21.0"}
         }
     }
 }

@@ -1698,5 +1698,5 @@ it{
             other{"kwacha zambiani"}
         }
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh.xml
  */
 zh{
-    Version{"2.0.59.34"}
+    Version{"2.0.61.77"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1921,8 +1921,8 @@ zh{
         }
         fallbackFormat{"{1}（{0}）"}
         fallbackRegionFormat{"{1}时间（{0}）"}
-        gmtFormat{"格林尼治标准时间{0}"}
-        gmtZeroFormat{"格林尼治标准时间"}
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"{0}时间"}
     }

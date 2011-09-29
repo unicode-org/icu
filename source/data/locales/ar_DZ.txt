@@ -10,7 +10,7 @@ ar_DZ{
     NumberElements{
         default{"latn"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.61.77"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -598,7 +598,7 @@ mk{
         PINYIN{"Пинјин романизација"}
         WADEGILE{"Вејд-Џајлс романизација"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.61.44"}
     codePatterns{
         language{"Јазик: {0}"}
         script{"Писмо: {0}"}

@@ -27,7 +27,7 @@ bo{
         "Tibt",
     }
     NumberElements{
-        default{"tibt"}
+        default{"latn"}
         latn{
             patterns{
                 percentFormat{"#,##0%"}
@@ -43,7 +43,7 @@ bo{
             }
         }
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.61.77"}
     calendar{
         gregorian{
             AmPmMarkers{

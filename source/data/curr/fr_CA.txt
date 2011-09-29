@@ -13,5 +13,5 @@ fr_CA{
             "dollar canadien",
         }
     }
-    Version{"2.0.59.96"}
+    Version{"2.0.61.44"}
 }

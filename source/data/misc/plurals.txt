@@ -50,6 +50,7 @@ plurals:table(nofallback){
         fur{"set2"}
         fy{"set2"}
         ga{"set7"}
+        gd{"set23"}
         gl{"set2"}
         gsw{"set2"}
         gu{"set2"}
@@ -249,6 +250,11 @@ plurals:table(nofallback){
         }
         set22{
             one{"n mod 10 in 1..2 or n mod 20 is 0"}
+        }
+        set23{
+            few{"n in 3..10,13..19"}
+            one{"n in 1,11"}
+            two{"n in 2,12"}
         }
         set3{
             one{"n in 0..1"}
