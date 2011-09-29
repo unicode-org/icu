@@ -1,7 +1,7 @@
-// Copyright 2006 Google Inc.  All Rights Reserved.
+﻿// Copyright 2006 Google Inc.  All Rights Reserved.
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and        *
+* Copyright (C) 2007-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */

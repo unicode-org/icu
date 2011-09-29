@@ -1,4 +1,4 @@
-package com.ibm.icu.dev.test.normalizer;
+﻿package com.ibm.icu.dev.test.normalizer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  *******************************************************************************
- * Copyright (C) 1998-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2011, International Business Machines Corporation and    *
  * Unicode, Inc. All Rights Reserved.                                          *
  *******************************************************************************
  *

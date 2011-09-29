@@ -1,11 +1,11 @@
-/* Generated from 'MathContext.nrx' 8 Sep 2000 11:07:48 [v2.00] */
+﻿/* Generated from 'MathContext.nrx' 8 Sep 2000 11:07:48 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.icu.math;
 
 /* ------------------------------------------------------------------ */
 /* MathContext -- Math context settings                               */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1997, 2000, 2005, 2007.  All Rights Reserved. */
+/* Copyright IBM Corporation, 1997, 2000, 2005, 2007, 2011.  All Rights Reserved. */
 /*                                                                    */
 /*   The MathContext object encapsulates the settings used by the     */
 /*   BigDecimal class; it could also be used by other arithmetics.    */

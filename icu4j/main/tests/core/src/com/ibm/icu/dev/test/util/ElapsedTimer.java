@@ -1,8 +1,8 @@
-//
+﻿//
 //  ElapsedTimer.java
 //
 //  Created by Steven R. Loomis on 11/11/2005.
-//  Copyright 2005-2010 IBM. All rights reserved.
+//  Copyright 2005-2011 IBM. All rights reserved.
 //
 
 package com.ibm.icu.dev.test.util;

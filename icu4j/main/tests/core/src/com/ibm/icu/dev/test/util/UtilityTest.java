@@ -1,6 +1,6 @@
-/*
+﻿/*
 **********************************************************************
-* Copyright (c) 2003-2009, International Business Machines
+* Copyright (c) 2003-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu

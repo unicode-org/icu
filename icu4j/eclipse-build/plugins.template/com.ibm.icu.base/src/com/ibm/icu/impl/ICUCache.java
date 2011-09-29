@@ -1,4 +1,4 @@
-/*
+﻿/*
  ***************************************************************************
  * Copyright (c) 2007-2011 International Business Machines Corporation and *
  * others.  All rights reserved.                                           *
