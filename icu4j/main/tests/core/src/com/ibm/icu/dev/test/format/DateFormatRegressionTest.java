@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -950,7 +950,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String what;
 
         {
-            DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new Locale("hi","IN"));
+            DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new ULocale("hi_IN@numbers=deva"));
             what = "Gregorian Calendar, hindi";
             s = df.format(new Date(0)); /* 31/12/1969 */
             logln(what + "=" + s);

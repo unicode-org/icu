@@ -123,8 +123,8 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
         final String ad = "\u897f\u66a6";
         final String jstLong = "\u65e5\u672c\u6a19\u6e96\u6642";
         final String jdtLong = "\u65e5\u672c\u590f\u6642\u9593";
-        final String jstShort = null; // "JST" is no longer available for locale en in CLDR 2.0.1+
-        final String jdtShort = null; // "JDT" is no longer available for locale en in CLDR 2.0.1+
+        final String jstShort = "JST";
+        final String jdtShort = "JDT";
         final String tzID = "Asia/Tokyo";
 
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.JAPAN);

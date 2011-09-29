@@ -1356,8 +1356,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale loc1 = new ULocale("en_US@numbers=thai");
         ULocale loc2 = new ULocale("en_US@numbers=hebr");
         ULocale loc3 = new ULocale("en_US@numbers=arabext");
-        ULocale loc4 = new ULocale("hi_IN@numbers=foobar");
-        ULocale loc5 = new ULocale("ar_EG"); // ar_EG uses arab numbering system
+        ULocale loc4 = new ULocale("hi_IN@numbers=deva");
+        ULocale loc5 = new ULocale("ar_EG@numbers=foobar"); // ar_EG uses arab numbering system
         ULocale loc6 = new ULocale("ar_MA"); // ar_MA users latn numbering system
         ULocale loc7 = new ULocale("en_US@numbers=hanidec"); // hanidec is a non-contiguous ns
         

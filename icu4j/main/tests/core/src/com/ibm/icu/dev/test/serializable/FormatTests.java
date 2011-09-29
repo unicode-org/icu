@@ -1817,6 +1817,8 @@ public class FormatTests
                 DateFormatSymbols dfsa = ((SimpleDateFormat)dfa).getDateFormatSymbols();
                 DateFormatSymbols tmp = (DateFormatSymbols)((SimpleDateFormat)dfb).getDateFormatSymbols().clone();
 
+                TimeZoneFormat tmptzf = (TimeZoneFormat)((SimpleDateFormat)dfb).getTimeZoneFormat().clone();
+
                 tmp.setMonths(dfsa.getMonths());
                 tmp.setShortMonths(dfsa.getShortMonths());
                 tmp.setWeekdays(dfsa.getWeekdays());
@@ -1824,10 +1826,11 @@ public class FormatTests
                 tmp.setAmPmStrings(dfsa.getAmPmStrings());
 
                 ((SimpleDateFormat)dfa).setDateFormatSymbols(tmp);
+                ((SimpleDateFormat)dfa).setTimeZoneFormat(tmptzf);
 
                 sfa = dfa.format(fixedDate);
             }
-
+            
             return sfa.equals(sfb);
         }
         
