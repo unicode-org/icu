@@ -80,10 +80,19 @@
  *  This value will change in the subsequent releases of ICU.
  *  If a custom suffix (such as matching library suffixes) is desired, this can be modified.
  *  Note that if present, platform.h may contain an earlier definition of this macro.
+ *  \def U_ICU_ENTRY_POINT_RENAME
  *  @stable ICU 4.2
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
-#define U_ICU_ENTRY_POINT_RENAME(x)    x ## _49
+#ifdef U_HAVE_LIB_SUFFIX
+#define U_DEF_ICU_ENTRY_POINT_RENAME(x,y,z) x ## y ##  z
+#define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y,z) U_DEF_ICU_ENTRY_POINT_RENAME(x,y,z)
+#define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX,U_LIB_SUFFIX_C_NAME)
+#else
+#define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y
+#define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)
+#define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)
+#endif
 #endif
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
