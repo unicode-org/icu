@@ -1,6 +1,6 @@
-/**
+﻿/**
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and
+ * Copyright (C) 2003-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  * Partial port from ICU4C's Grego class in i18n/gregoimp.h.

@@ -1,4 +1,4 @@
-/* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
+﻿/* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
 package com.ibm.icu.dev.test.bigdec;
 
@@ -10,7 +10,7 @@ import com.ibm.icu.util.VersionInfo;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests mfc */
-/* Copyright (c) IBM Corporation 1996-2010. All Rights Reserved. */
+/* Copyright (c) IBM Corporation 1996-2011. All Rights Reserved. */
 /* ------------------------------------------------------------------ */
 /* DiagBigDecimal */
 /*                                                                    */
