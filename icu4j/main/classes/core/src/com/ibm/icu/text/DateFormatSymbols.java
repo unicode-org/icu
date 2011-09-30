@@ -1363,7 +1363,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Variant of DateFormatSymbols(Calendar, Locale) that takes the Calendar class
-     * instead of a Calandar instance.
+     * instead of a Calendar instance.
      * @see #DateFormatSymbols(Calendar, Locale)
      * @stable ICU 2.2
      */
