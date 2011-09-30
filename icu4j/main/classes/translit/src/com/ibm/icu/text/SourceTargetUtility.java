@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010, Google, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2010-2011, Google, International Business Machines            *
+ * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
