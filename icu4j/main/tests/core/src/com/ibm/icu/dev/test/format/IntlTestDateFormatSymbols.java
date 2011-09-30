@@ -482,7 +482,7 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
 
     public void TestConstructorWithCalendar() {
         ULocale[] TestLocales = {
-            new ULocale("en_US@caleandar=gregorian"),
+            new ULocale("en_US@calandar=gregorian"),
             new ULocale("ja_JP@calendar=japanese"),
             new ULocale("th_TH@calendar=buddhist"),
             new ULocale("zh_TW@calendar=roc"),
