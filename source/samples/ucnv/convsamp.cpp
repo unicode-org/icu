@@ -212,7 +212,9 @@ UErrorCode convsample_02()
   int32_t     len;
 
   // set up the converter
+  //! [ucnv_open]
   conv = ucnv_open("koi8-r", &status);
+  //! [ucnv_open]
   assert(U_SUCCESS(status));
 
   // convert to koi8-r
