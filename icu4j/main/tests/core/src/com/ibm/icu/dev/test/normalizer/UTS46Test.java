@@ -89,8 +89,8 @@ public class UTS46Test extends TestFmwk {
         input="a\u2260b\u226Ec\u226Fd";
         not3.nameToUnicode(input, result, info);
         if(!UTF16Plus.equal(result, input) || info.hasErrors()) {
-            errln(String.format("notSTD3.nameToUnicode(equiv to non-LDH ASCII) unexpected errors %04x string %s",
-                                info.getErrors(), prettify(result.toString())));
+            errln(String.format("notSTD3.nameToUnicode(equiv to non-LDH ASCII) unexpected errors %s string %s",
+                                info.getErrors().toString(), prettify(result.toString())));
         }
     }
 
@@ -602,8 +602,8 @@ public class UTS46Test extends TestFmwk {
             if(aN.indexOf(".")<0) {
                 if(!UTF16Plus.equal(aN, aNL) || !sameErrors(aNInfo, aNLInfo)) {
                     errln(String.format("N.nameToASCII([%d] %s)!=N.labelToASCII() "+
-                                        "(errors %s vs %04x) %s vs. %s",
-                                        i, testCase.s, aNInfo.getErrors(), aNLInfo.getErrors(),
+                                        "(errors %s vs %s) %s vs. %s",
+                                        i, testCase.s, aNInfo.getErrors().toString(), aNLInfo.getErrors().toString(),
                                         prettify(aN.toString()), prettify(aNL.toString())));
                     continue;
                 }
@@ -617,8 +617,8 @@ public class UTS46Test extends TestFmwk {
             if(aT.indexOf(".")<0) {
                 if(!UTF16Plus.equal(aT, aTL) || !sameErrors(aTInfo, aTLInfo)) {
                     errln(String.format("T.nameToASCII([%d] %s)!=T.labelToASCII() "+
-                                        "(errors %s vs %04x) %s vs. %s",
-                                        i, testCase.s, aTInfo.getErrors(), aTLInfo.getErrors(),
+                                        "(errors %s vs %s) %s vs. %s",
+                                        i, testCase.s, aTInfo.getErrors().toString(), aTLInfo.getErrors().toString(),
                                         prettify(aT.toString()), prettify(aTL.toString())));
                     continue;
                 }
@@ -632,8 +632,8 @@ public class UTS46Test extends TestFmwk {
             if(uN.indexOf(".")<0) {
                 if(!UTF16Plus.equal(uN, uNL) || !sameErrors(uNInfo, uNLInfo)) {
                     errln(String.format("N.nameToUnicode([%d] %s)!=N.labelToUnicode() "+
-                                        "(errors %s vs %04x) %s vs. %s",
-                                        i, testCase.s, uNInfo.getErrors(), uNLInfo.getErrors(),
+                                        "(errors %s vs %s) %s vs. %s",
+                                        i, testCase.s, uNInfo.getErrors().toString(), uNLInfo.getErrors().toString(),
                                         prettify(uN.toString()), prettify(uNL.toString())));
                     continue;
                 }
@@ -647,8 +647,8 @@ public class UTS46Test extends TestFmwk {
             if(uT.indexOf(".")<0) {
                 if(!UTF16Plus.equal(uT, uTL) || !sameErrors(uTInfo, uTLInfo)) {
                     errln(String.format("T.nameToUnicode([%d] %s)!=T.labelToUnicode() "+
-                                        "(errors %s vs %04x) %s vs. %s",
-                                        i, testCase.s, uTInfo.getErrors(), uTLInfo.getErrors(),
+                                        "(errors %s vs %s) %s vs. %s",
+                                        i, testCase.s, uTInfo.getErrors().toString(), uTLInfo.getErrors().toString(),
                                         prettify(uT.toString()), prettify(uTL.toString())));
                     continue;
                 }

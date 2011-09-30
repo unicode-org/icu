@@ -77,13 +77,8 @@ public final class Utility {
             return(arrayEquals((Object[]) source,target));
         if (source instanceof int[])
             return(arrayEquals((int[]) source,target));
-        if (source instanceof double[]) {
-            double[] oldSource = (double[]) source;
-            int[] newSource = new int[oldSource.length];
-            for (int i = 0; i < oldSource.length; i++)
-                newSource[i] = (int)oldSource[i];
-            return arrayEquals(newSource, target);
-        }
+        if (source instanceof double[])
+            return(arrayEquals((double[]) source, target));
         if (source instanceof byte[])
             return(arrayEquals((byte[]) source,target));
         return source.equals(target);
