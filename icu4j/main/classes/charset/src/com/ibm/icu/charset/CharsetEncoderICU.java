@@ -944,6 +944,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @return Size of a buffer that will be large enough to hold the output of bytes
      *
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public static int getMaxBytesForString(int length, int maxCharSize) {
         return ((length + 10) * maxCharSize);
