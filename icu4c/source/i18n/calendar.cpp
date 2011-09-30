@@ -1900,9 +1900,9 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
     }
 
     // In order to keep the hour invariant (for fields where this is
-    // appropriate), record the DST_OFFSET before and after the add()
-    // operation.  If it has changed, then adjust the millis to
-    // compensate.
+    // appropriate), check the combined DST & ZONE offset before and
+    // after the add() operation. If it changes, then adjust the millis
+    // to compensate.
     int32_t prevOffset = 0;
     int32_t hour = 0;
     if (keepHourInvariant) {
@@ -1916,10 +1916,10 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
         int32_t newOffset = get(UCAL_DST_OFFSET, status) + get(UCAL_ZONE_OFFSET, status);
         if (newOffset != prevOffset) {
             // We have done an hour-invariant adjustment but the
-            // DST offset has altered.  We adjust millis to keep
-            // the hour constant.  In cases such as midnight after
+            // combined offset has changed. We adjust millis to keep
+            // the hour constant. In cases such as midnight after
             // a DST change which occurs at midnight, there is the
-            // danger of adjusting into a different day.  To avoid
+            // danger of adjusting into a different day. To avoid
             // this we make the adjustment only if it actually
             // maintains the hour.
             double t = internalGetTime();
