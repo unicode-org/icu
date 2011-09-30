@@ -3076,30 +3076,30 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         // In order to keep the hour invariant (for fields where this is
-        // appropriate), record the DST_OFFSET before and after the add()
-        // operation.  If it has changed, then adjust the millis to
-        // compensate.
-        int dst = 0;
+        // appropriate), check the combined DST & ZONE offset before and
+        // after the add() operation. If it changes, then adjust the millis
+        // to compensate.
+        int prevOffset = 0;
         int hour = 0;
         if (keepHourInvariant) {
-            dst = get(DST_OFFSET) + get(ZONE_OFFSET);
+            prevOffset = get(DST_OFFSET) + get(ZONE_OFFSET);
             hour = internalGet(HOUR_OF_DAY);
         }
 
         setTimeInMillis(getTimeInMillis() + delta);
 
         if (keepHourInvariant) {
-            dst -= get(DST_OFFSET) + get(ZONE_OFFSET);
-            if (dst != 0) {
+            int newOffset = get(DST_OFFSET) + get(ZONE_OFFSET);
+            if (newOffset != prevOffset) {
                 // We have done an hour-invariant adjustment but the
-                // DST offset has altered.  We adjust millis to keep
-                // the hour constant.  In cases such as midnight after
+                // combined offset has changed. We adjust millis to keep
+                // the hour constant. In cases such as midnight after
                 // a DST change which occurs at midnight, there is the
-                // danger of adjusting into a different day.  To avoid
+                // danger of adjusting into a different day. To avoid
                 // this we make the adjustment only if it actually
                 // maintains the hour.
                 long t = time;
-                setTimeInMillis(time + dst);
+                setTimeInMillis(time + prevOffset - newOffset);
                 if (get(HOUR_OF_DAY) != hour) {
                     setTimeInMillis(t);
                 }
