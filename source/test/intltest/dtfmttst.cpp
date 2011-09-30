@@ -828,10 +828,15 @@ DateFormatTest::TestBadInput135()
                     if (U_SUCCESS(status))
                     {
                         UnicodeString format;
+                        UnicodeString pattern;
+                        SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(df);
+                        if (sdtfmt != NULL) {
+                            sdtfmt->toPattern(pattern);
+                        }
                         full->format(when, format);
                         logln(prefix + "OK: " + format);
                         if (0!=format.compareBetween(0, expected.length(), expected, 0, expected.length()))
-                            errln((UnicodeString)"FAIL: Expected " + expected + " got " + format);
+                            errln((UnicodeString)"FAIL: Parse \"" + text + "\", pattern \"" + pattern + "\", expected " + expected + " got " + format);
                     }
                 //}
                 //catch(ParseException e) {
@@ -958,7 +963,7 @@ DateFormatTest::TestBadInput135a()
           if (expected == 0)
             errln((UnicodeString)"FAIL: Expected parse failure, got " + result);
           else if (!(result == expected))
-            errln(UnicodeString("FAIL: Expected ") + expected + UnicodeString(", got ") + result);
+            errln(UnicodeString("FAIL: Parse \"") + s + UnicodeString("\", expected ") + expected + UnicodeString(", got ") + result);
         }
       }
       else if (expected != 0) {
@@ -1256,7 +1261,7 @@ void DateFormatTest::TestSpaceParsing() {
         // pattern, input, expected parse or NULL if expect parse failure
         "MMMM d yy", " 04 05 06",  "2006 04 05 00:00:00",
         NULL,        "04 05 06",   "2006 04 05 00:00:00",
-		
+
         "MM d yy",   " 04 05 06",    "2006 04 05 00:00:00",
         NULL,        "04 05 06",     "2006 04 05 00:00:00",
         NULL,        "04/05/06",     "2006 04 05 00:00:00",
@@ -1266,16 +1271,16 @@ void DateFormatTest::TestSpaceParsing() {
         NULL,        "Apr / 05/ 06", "2006 04 05 00:00:00",
         NULL,        "Apr-05-06",    "2006 04 05 00:00:00",
         NULL,        "Apr 05, 2006", "2006 04 05 00:00:00",
-		
+
         "MMMM d yy", " Apr 05 06", "2006 04 05 00:00:00",
         NULL,        "Apr 05 06",  "2006 04 05 00:00:00",
-		NULL,        "Apr05 06",   "2006 04 05 00:00:00",
-		
-		"hh:mm:ss a", "12:34:56 PM", "1970 01 01 12:34:56",
-		NULL,         "12:34:56PM",  "1970 01 01 12:34:56",
+        NULL,        "Apr05 06",   "2006 04 05 00:00:00",
+
+        "hh:mm:ss a", "12:34:56 PM", "1970 01 01 12:34:56",
+        NULL,         "12:34:56PM",  "1970 01 01 12:34:56",
         NULL,         "12.34.56PM",  "1970 01 01 12:34:56",
         NULL,         "12-34-56 PM", "1970 01 01 12:34:56",
-		NULL,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
+        NULL,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
         
         "MM d yy 'at' hh:mm:ss a", "04/05/06 12:34:56 PM", "2006 04 05 12:34:56",
         
@@ -3482,35 +3487,73 @@ void DateFormatTest::Test6880() {
     delete fmt;
 }
 
+typedef struct {
+    const char * localeStr;
+    UBool        lenient;
+    UBool        expectFail;
+    UnicodeString datePattern;
+    UnicodeString dateString;
+} NumAsStringItem;
+
 void DateFormatTest::TestNumberAsStringParsing()
 {
-    UErrorCode status = U_ZERO_ERROR;
-    UnicodeString dateString("2009 7 2 08:14:16");
-    UnicodeString datePattern("y MMMM d HH:mm:ss");
-    SimpleDateFormat *formatter = new SimpleDateFormat(datePattern, Locale(""), status);
-    UDate date1 = 0;
-    
-    if (formatter == NULL || U_FAILURE(status)) {
-        dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
-        return;
-    }
-    
-    formatter->setLenient(FALSE);
-    date1 = formatter->parse(dateString, status);
-    
-    if (U_FAILURE(status)) {
-        errln("FAIL: Could not parse \"2009 7 2 08:14:16\" with pattern \"y MMMM d HH:mm:ss\"");
-    } else {
-        UnicodeString formatted;
-        
-        formatter->format(date1, formatted);
-        
-        if (formatted != dateString) {
-            errln("FAIL: parsed string did not match input.");
+    const NumAsStringItem items[] = {
+        // loc lenient fail?  datePattern                                         dateString
+        { "",   FALSE, FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") },
+        { "",   TRUE,  FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") },
+        { "en", FALSE, FALSE, UnicodeString("MMM d, y"),                          UnicodeString("Jul 14, 2009") },
+        { "en", TRUE,  FALSE, UnicodeString("MMM d, y"),                          UnicodeString("Jul 14, 2009") },
+        { "en", FALSE, TRUE,  UnicodeString("MMM d, y"),                          UnicodeString("7 14, 2009") },
+        { "en", TRUE,  FALSE, UnicodeString("MMM d, y"),                          UnicodeString("7 14, 2009") },
+        { "ja", FALSE, FALSE, UnicodeString("yyyy/MM/dd"),                        UnicodeString("2009/07/14")         },
+        { "ja", TRUE,  FALSE, UnicodeString("yyyy/MM/dd"),                        UnicodeString("2009/07/14")         },
+      //{ "ja", FALSE, FALSE, UnicodeString("yyyy/MMMMM/d"),                      UnicodeString("2009/7/14")          }, // #8860 covers test failure
+        { "ja", TRUE,  FALSE, UnicodeString("yyyy/MMMMM/d"),                      UnicodeString("2009/7/14")          },
+        { "ja", FALSE, FALSE, CharsToUnicodeString("y\\u5E74M\\u6708d\\u65E5"),   CharsToUnicodeString("2009\\u5E747\\u670814\\u65E5")   },
+        { "ja", TRUE,  FALSE, CharsToUnicodeString("y\\u5E74M\\u6708d\\u65E5"),   CharsToUnicodeString("2009\\u5E747\\u670814\\u65E5")   },
+        { "ja", FALSE, FALSE, CharsToUnicodeString("y\\u5E74MMMd\\u65E5"),        CharsToUnicodeString("2009\\u5E747\\u670814\\u65E5")   },
+        { "ja", TRUE,  FALSE, CharsToUnicodeString("y\\u5E74MMMd\\u65E5"),        CharsToUnicodeString("2009\\u5E747\\u670814\\u65E5")   }, // #8820 fixes test failure
+        { "ko", FALSE, FALSE, UnicodeString("yyyy. M. d."),                       UnicodeString("2009. 7. 14.")       },
+        { "ko", TRUE,  FALSE, UnicodeString("yyyy. M. d."),                       UnicodeString("2009. 7. 14.")       },
+        { "ko", FALSE, FALSE, UnicodeString("yyyy. MMMMM d."),                    CharsToUnicodeString("2009. 7\\uC6D4 14.")             },
+        { "ko", TRUE,  FALSE, UnicodeString("yyyy. MMMMM d."),                    CharsToUnicodeString("2009. 7\\uC6D4 14.")             }, // #8820 fixes test failure
+        { "ko", FALSE, FALSE, CharsToUnicodeString("y\\uB144 M\\uC6D4 d\\uC77C"), CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") },
+        { "ko", TRUE,  FALSE, CharsToUnicodeString("y\\uB144 M\\uC6D4 d\\uC77C"), CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") },
+        { "ko", FALSE, FALSE, CharsToUnicodeString("y\\uB144 MMM d\\uC77C"),      CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") },
+        { "ko", TRUE,  FALSE, CharsToUnicodeString("y\\uB144 MMM d\\uC77C"),      CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") }, // #8820 fixes test failure
+        { NULL, FALSE, FALSE, UnicodeString(""),                                  UnicodeString("")                   }
+    };
+    const NumAsStringItem * itemPtr;
+    for (itemPtr = items; itemPtr->localeStr != NULL; itemPtr++ ) {
+        Locale locale = Locale::createFromName(itemPtr->localeStr);
+        UErrorCode status = U_ZERO_ERROR;
+        SimpleDateFormat *formatter = new SimpleDateFormat(itemPtr->datePattern, locale, status);
+        if (formatter == NULL || U_FAILURE(status)) {
+            dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+            return;
         }
+
+        formatter->setLenient(itemPtr->lenient);
+        UDate date1 = formatter->parse(itemPtr->dateString, status);
+        if (U_FAILURE(status)) {
+            if (!itemPtr->expectFail) {
+                errln("FAIL, err when expected success: Locale \"" + UnicodeString(itemPtr->localeStr) + "\", lenient " + itemPtr->lenient +
+                        ": using pattern \"" + itemPtr->datePattern + "\", could not parse \"" + itemPtr->dateString + "\"; err: " + u_errorName(status) );
+            }
+        } else if (itemPtr->expectFail) {
+                errln("FAIL, expected err but got none: Locale \"" + UnicodeString(itemPtr->localeStr) + "\", lenient " + itemPtr->lenient +
+                        ": using pattern \"" + itemPtr->datePattern + "\", did parse \"" + itemPtr->dateString + "\"." );
+        } else if (!itemPtr->lenient) {
+            UnicodeString formatted;
+            formatter->format(date1, formatted);
+            if (formatted != itemPtr->dateString) {
+                errln("FAIL, mismatch formatting parsed date: Locale \"" + UnicodeString(itemPtr->localeStr) + "\", lenient " + itemPtr->lenient +
+                        ": using pattern \"" + itemPtr->datePattern + "\", did parse \"" + itemPtr->dateString + "\", formatted result \"" + formatted + "\".");
+            }
+        }
+
+        delete formatter;
     }
-        
-    delete formatter;
 }
 
 void DateFormatTest::TestISOEra() { 
@@ -3556,7 +3599,7 @@ void DateFormatTest::TestISOEra() {
         } 
     } 
  
-    delete fmt1; 	 
+    delete fmt1; 
 } 
 void DateFormatTest::TestFormalChineseDate() { 
    
@@ -3648,7 +3691,8 @@ void DateFormatTest::TestParsePosition() {
         input += TestData[i][3];
 
         ParsePosition pos(startPos);
-        UDate d = sdf->parse(input, pos);
+        //UDate d = sdf->parse(input, pos);
+        (void)sdf->parse(input, pos);
 
         if (pos.getIndex() != resPos) {
             errln(UnicodeString("FAIL: Parsing [") + input + "] with pattern [" + TestData[i][0] + "] returns position - "

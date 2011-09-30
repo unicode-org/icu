@@ -2571,19 +2571,19 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     // a number value.  We handle further, more generic cases below.  We need
     // to handle some of them here because some fields require extra processing on
     // the parsed value.
-    if (patternCharIndex == UDAT_HOUR_OF_DAY1_FIELD ||
-        patternCharIndex == UDAT_HOUR_OF_DAY0_FIELD ||
-        patternCharIndex == UDAT_HOUR1_FIELD ||
-        patternCharIndex == UDAT_HOUR0_FIELD ||
-        patternCharIndex == UDAT_DOW_LOCAL_FIELD ||
-        patternCharIndex == UDAT_STANDALONE_DAY_FIELD ||
-        patternCharIndex == UDAT_MONTH_FIELD ||
-        patternCharIndex == UDAT_STANDALONE_MONTH_FIELD ||
-        patternCharIndex == UDAT_QUARTER_FIELD ||
-        patternCharIndex == UDAT_STANDALONE_QUARTER_FIELD ||
-        patternCharIndex == UDAT_YEAR_FIELD ||
-        patternCharIndex == UDAT_YEAR_WOY_FIELD ||
-        patternCharIndex == UDAT_FRACTIONAL_SECOND_FIELD)
+    if (patternCharIndex == UDAT_HOUR_OF_DAY1_FIELD ||                       // k
+        patternCharIndex == UDAT_HOUR_OF_DAY0_FIELD ||                       // H
+        patternCharIndex == UDAT_HOUR1_FIELD ||                              // h
+        patternCharIndex == UDAT_HOUR0_FIELD ||                              // K
+        (patternCharIndex == UDAT_DOW_LOCAL_FIELD && count <= 2) ||          // e
+        (patternCharIndex == UDAT_STANDALONE_DAY_FIELD && count <= 2) ||     // c
+        (patternCharIndex == UDAT_MONTH_FIELD && count <= 2) ||              // M
+        (patternCharIndex == UDAT_STANDALONE_MONTH_FIELD && count <= 2) ||   // L
+        (patternCharIndex == UDAT_QUARTER_FIELD && count <= 2) ||            // Q
+        (patternCharIndex == UDAT_STANDALONE_QUARTER_FIELD && count <= 2) || // q
+        patternCharIndex == UDAT_YEAR_FIELD ||                               // y
+        patternCharIndex == UDAT_YEAR_WOY_FIELD ||                           // Y
+        patternCharIndex == UDAT_FRACTIONAL_SECOND_FIELD)                    // S
     {
         int32_t parseStart = pos.getIndex();
         // It would be good to unify this with the obeyCount logic below,
@@ -2653,26 +2653,6 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // these must be a number
             if (! gotNumber) {
                 return -start;
-            }
-            
-            break;
-            
-        case UDAT_DOW_LOCAL_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-        case UDAT_QUARTER_FIELD:
-        case UDAT_STANDALONE_QUARTER_FIELD:
-            // in strict mode, these can only
-            // be a number if count <= 2
-            if (!lenient && gotNumber && count > 2) {
-                // We have a string pattern in strict mode
-                // but the input parsed as a number. Ignore
-                // the fact that the input parsed as a number
-                // and try to match it as a string. (Some
-                // locales have numbers for the month names.)
-                gotNumber = FALSE;
-                pos.setIndex(start);
             }
             
             break;
@@ -2786,13 +2766,17 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Try count == 4 first:
             int32_t newStart = 0;
 
-            if ((newStart = matchString(text, start, UCAL_MONTH,
+            if ((newStart = matchString(text, start, UCAL_MONTH, // try MMMM
                                       fSymbols->fMonths, fSymbols->fMonthsCount, cal)) > 0)
                 return newStart;
-            else // count == 4 failed, now try count == 3
-                return matchString(text, start, UCAL_MONTH,
-                                   fSymbols->fShortMonths, fSymbols->fShortMonthsCount, cal);
+            else if ((newStart = matchString(text, start, UCAL_MONTH, // try MMM
+                                          fSymbols->fShortMonths, fSymbols->fShortMonthsCount, cal)) > 0)
+                return newStart;
+            else if (!lenient) // currently we do not try to parse MMMMM: #8860
+                return newStart;
+            // else we allowing parsing as number, below
         }
+        break;
 
     case UDAT_STANDALONE_MONTH_FIELD:
         if (gotNumber) // i.e., L or LL.
@@ -2811,10 +2795,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if ((newStart = matchString(text, start, UCAL_MONTH,
                                       fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, cal)) > 0)
                 return newStart;
-            else // count == 4 failed, now try count == 3
-                return matchString(text, start, UCAL_MONTH,
-                                   fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, cal);
+            else if ((newStart = matchString(text, start, UCAL_MONTH,
+                                          fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, cal)) > 0)
+                return newStart;
+            else if (!lenient) // currently we do not try to parse LLLLL: #8860
+                return newStart;
+            // else we allowing parsing as number, below
         }
+        break;
 
     case UDAT_HOUR_OF_DAY1_FIELD:
         // [We computed 'value' above.]
@@ -2868,10 +2856,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                                    fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, cal)) > 0)
                 return newStart;
             // EEE failed, now try EEEEE
-            else
-                return matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, cal);
+            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                   fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, cal)) > 0)
+                return newStart;
+            else if (!lenient || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
+                return newStart;
+            // else we allowing parsing as number, below
         }
+        break;
 
     case UDAT_STANDALONE_DAY_FIELD:
         {
@@ -2887,10 +2879,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                       fSymbols->fStandaloneWeekdays, fSymbols->fStandaloneWeekdaysCount, cal)) > 0)
                 return newStart;
-            else // cccc failed, now try ccc
-                return matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, cal);
+            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                          fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, cal)) > 0)
+                return newStart;
+            else if (!lenient)
+                return newStart;
+            // else we allowing parsing as number, below
         }
+        break;
 
     case UDAT_AM_PM_FIELD:
         return matchString(text, start, UCAL_AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, cal);
@@ -2923,10 +2919,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                       fSymbols->fQuarters, fSymbols->fQuartersCount, cal)) > 0)
                 return newStart;
-            else // count == 4 failed, now try count == 3
-                return matchQuarterString(text, start, UCAL_MONTH,
-                                   fSymbols->fShortQuarters, fSymbols->fShortQuartersCount, cal);
+            else if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+                                          fSymbols->fShortQuarters, fSymbols->fShortQuartersCount, cal)) > 0)
+                return newStart;
+            else if (!lenient)
+                return newStart;
+            // else we allowing parsing as number, below
         }
+        break;
 
     case UDAT_STANDALONE_QUARTER_FIELD:
         if (gotNumber) // i.e., q or qq.
@@ -2945,10 +2945,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                       fSymbols->fStandaloneQuarters, fSymbols->fStandaloneQuartersCount, cal)) > 0)
                 return newStart;
-            else // count == 4 failed, now try count == 3
-                return matchQuarterString(text, start, UCAL_MONTH,
-                                   fSymbols->fStandaloneShortQuarters, fSymbols->fStandaloneShortQuartersCount, cal);
+            else if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+                                          fSymbols->fStandaloneShortQuarters, fSymbols->fStandaloneShortQuartersCount, cal)) > 0)
+                return newStart;
+            else if (!lenient)
+                return newStart;
+            // else we allowing parsing as number, below
         }
+        break;
 
     case UDAT_TIMEZONE_FIELD:
     case UDAT_TIMEZONE_RFC_FIELD:
@@ -3128,34 +3132,79 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     default:
         // Handle "generic" fields
-        int32_t parseStart = pos.getIndex();
-        const UnicodeString* src;
-        if (obeyCount) {
-            if ((start+count) > text.length()) {
+        // this is now handled below, outside the switch block
+        break;
+    }
+    // Handle "generic" fields:
+    // switch default case now handled here (outside switch block) to allow
+    // parsing of some string fields as digits for lenient case
+
+    int32_t parseStart = pos.getIndex();
+    const UnicodeString* src;
+    if (obeyCount) {
+        if ((start+count) > text.length()) {
+            return -start;
+        }
+        text.extractBetween(0, start + count, temp);
+        src = &temp;
+    } else {
+        src = &text;
+    }
+    parseInt(*src, number, pos, allowNegative,currentNumberFormat);
+    if (pos.getIndex() != parseStart) {
+        int32_t value = number.getLong();
+
+        // Don't need suffix processing here (as in number processing at the beginning of the function);
+        // the new fields being handled as numeric values (month, weekdays, quarters) should not have suffixes.
+
+        if (!lenient) {
+            // Check the range of the value
+            int32_t bias = gFieldRangeBias[patternCharIndex];
+            if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
                 return -start;
             }
-            text.extractBetween(0, start + count, temp);
-            src = &temp;
-        } else {
-            src = &text;
         }
-        parseInt(*src, number, pos, allowNegative,currentNumberFormat);
-        if (pos.getIndex() != parseStart) {
-            int32_t value = number.getLong();
 
-            if (!lenient) {
-                // Check the range of the value
-                int32_t bias = gFieldRangeBias[patternCharIndex];
-                if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
-                    return -start;
+        // For the following, need to repeat some of the "if (gotNumber)" code above:
+        // UDAT_[STANDALONE_]MONTH_FIELD, UDAT_DOW_LOCAL_FIELD, UDAT_STANDALONE_DAY_FIELD,
+        // UDAT_[STANDALONE_]QUARTER_FIELD
+        switch (patternCharIndex) {
+        case UDAT_MONTH_FIELD:
+            // See notes under UDAT_MONTH_FIELD case above
+            if (!strcmp(cal.getType(),"hebrew")) {
+                HebrewCalendar *hc = (HebrewCalendar*)&cal;
+                if (cal.isSet(UCAL_YEAR)) {
+                   UErrorCode status = U_ZERO_ERROR;
+                   if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6) {
+                       cal.set(UCAL_MONTH, value);
+                   } else {
+                       cal.set(UCAL_MONTH, value - 1);
+                   }
+                } else {
+                    saveHebrewMonth = value;
                 }
+            } else {
+                cal.set(UCAL_MONTH, value - 1);
             }
-
+            break;
+        case UDAT_STANDALONE_MONTH_FIELD:
+            cal.set(UCAL_MONTH, value - 1);
+            break;
+        case UDAT_DOW_LOCAL_FIELD:
+        case UDAT_STANDALONE_DAY_FIELD:
+            cal.set(UCAL_DOW_LOCAL, value);
+            break;
+        case UDAT_QUARTER_FIELD:
+        case UDAT_STANDALONE_QUARTER_FIELD:
+             cal.set(UCAL_MONTH, (value - 1) * 3);
+             break;
+        default:
             cal.set(field, value);
-            return pos.getIndex();
+            break;
         }
-        return -start;
+        return pos.getIndex();
     }
+    return -start;
 }
 
 /**
