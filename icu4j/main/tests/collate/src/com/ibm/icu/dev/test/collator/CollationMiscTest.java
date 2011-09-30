@@ -1875,6 +1875,7 @@ public class CollationMiscTest extends TestFmwk {
             if (rule.equals("")) {
                 errln("UCA rule string should not be empty");
             }
+            coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
             warnln(e.getMessage());
         }
