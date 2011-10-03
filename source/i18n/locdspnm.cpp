@@ -120,7 +120,7 @@ ICUDataTable::get(const char* tableKey, const char* subTableKey, const char* ite
   const UChar *s = uloc_getTableStringWithFallback(path, locale.getName(),
                                                    tableKey, subTableKey, itemKey,
                                                    &len, &status);
-  if (U_SUCCESS(status)) {
+  if (U_SUCCESS(status) && len > 0) {
     return result.setTo(s, len);
   }
   return result.setTo(UnicodeString(itemKey, -1, US_INV));
