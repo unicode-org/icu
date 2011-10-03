@@ -82,7 +82,9 @@ die ("Can't find $cpyskip. Please download it from ".
     unless -f $cpyskip;
 
 open SKIP, "<$cpyskip" or die "Error opening $cpyskip.";
-our @ignore_globs = map { chomp; glob_to_regex($_) } <SKIP>;
+our @ignore_globs = map  { chomp; glob_to_regex($_) }
+                    grep { ! m/^\s*#/ }
+                    <SKIP>;
 close SKIP;
 
 # list of file extensions to ignore
