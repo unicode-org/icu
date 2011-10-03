@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2011, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -31,6 +31,7 @@ public class ICUResourceTableAccess {
      */
     public static String getTableString(ICUResourceBundle bundle, String tableName,
             String subtableName, String item) {
+        String result = null;
         try {
             for (;;) {
                 // special case currency
@@ -50,7 +51,8 @@ public class ICUResourceTableAccess {
                     if (stable != null) {
                         ICUResourceBundle sbundle = lookup(stable, item);
                         if (sbundle != null) {
-                            return sbundle.getString(); // possible real exception
+                            result = sbundle.getString(); // possible real exception
+                            break;
                         }
                     }
 
@@ -65,7 +67,8 @@ public class ICUResourceTableAccess {
                         }
                         ICUResourceBundle sbundle = lookup(table, currentName);
                         if (sbundle != null) {
-                            return sbundle.getString(); // possible real exception
+                            result = sbundle.getString(); // possible real exception
+                            break;
                         }
                     }
 
@@ -93,7 +96,8 @@ public class ICUResourceTableAccess {
             // not a string.  That will throw an exception, which we catch and ignore here.
         }
 
-        return item;
+        // If the result is empty return item instead
+        return ((result != null && result.length() > 0) ? result : item);
     }
 
     // utility to make the call sites in the above code cleaner
