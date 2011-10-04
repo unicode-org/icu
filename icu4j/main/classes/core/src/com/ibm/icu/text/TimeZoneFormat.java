@@ -2109,7 +2109,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             throw new InvalidObjectException("Missing field: gmtZeroFormat");
         }
 
-        _parseAllStyles = (boolean)fields.get("_parseAllStyles", false);
+        _parseAllStyles = fields.get("_parseAllStyles", false);
         if (fields.defaulted("_parseAllStyles")) {
             throw new InvalidObjectException("Missing field: parseAllStyles");
         }
