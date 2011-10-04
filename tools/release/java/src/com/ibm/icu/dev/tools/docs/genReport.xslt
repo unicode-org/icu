@@ -1,26 +1,22 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2008-2010, International Business Machines Corporation and         *
+* Copyright (C) 2008-2011, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the XSLT for the API Report. 
 */
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<!--
-  <xsl:param name="leftStatus" />
-  <xsl:param name="rightStatus" />
--->
   <xsl:param name="leftVer" />
   <xsl:param name="rightVer" />
   <xsl:param name="dateTime" />
   <xsl:param name="rightMilestone" />
+  <xsl:param name="leftMilestone" />
   <xsl:param name="nul" />
-
   <xsl:param name="ourYear" />
 
-<xsl:output method="html" version="4.0"  doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
+  <xsl:output method="html" version="4.0"  doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
 doctype-system="http://www.w3.org/TR/html4/loose.dtd"
 	omit-xml-declaration="yes"	encoding="utf-8" indent="yes"/>
   
@@ -31,7 +27,7 @@ doctype-system="http://www.w3.org/TR/html4/loose.dtd"
 	 Copyright (C)  <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved. 
 	</xsl:comment>
     <head>
-    <title>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </title>
+    <title>ICU4C API Comparison: <xsl:value-of select="$leftVer"/><xsl:value-of select="$leftMilestone" /> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </title>
     <link rel="stylesheet" href="icu4c.css" type="text/css" />
     </head>
     
@@ -39,7 +35,7 @@ doctype-system="http://www.w3.org/TR/html4/loose.dtd"
     
     <a name="#_top"></a>
     
-    <h1>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </h1>
+    <h1>ICU4C API Comparison: <xsl:value-of select="$leftVer"/><xsl:value-of select="$leftMilestone" /> with <xsl:value-of select="$rightVer" /><xsl:value-of select="$rightMilestone" /> </h1>
     
     <div id="toc">
 	    <ul>

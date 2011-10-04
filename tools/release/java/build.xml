@@ -1,13 +1,13 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU tools. 
 */
 -->
-<project name="release-tools" default="tools" basedir=".">
+<project name="release-tools" default="tools" basedir="." >
     <target name="init">
         <tstamp/>
         <property name="src.dir" value="src"/>
@@ -25,7 +25,7 @@
     </target>
 
     <target name="tools"  depends="init" description="compile release tools">
-        <javac includes="**/*.java"
+        <javac includeantruntime="false" includes="**/*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             source="1.5"

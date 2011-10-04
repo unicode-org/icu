@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2006-2010, International Business Machines
+ * Copyright (c) 2006-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-7-24 ?
@@ -85,10 +85,12 @@ public class StableAPI {
 	private String leftVer;
     private File leftDir = null;
 //    private String leftStatus;
+    private String leftMilestone = "";
     
     private String rightVer;
     private File rightDir = null;
 //    private String rightStatus;
+    private String rightMilestone = "";
 
     private InputStream dumpCppXsltStream = null; 
 	private InputStream dumpCXsltStream = null;
@@ -102,7 +104,6 @@ public class StableAPI {
     private File reportXsl;
     private File resultFile;
     
-    private String milestoneOf = "";
     
     final private static String nul = "None"; 
 
@@ -216,21 +217,25 @@ public class StableAPI {
             int icuidx = ver.lastIndexOf(ICU_);
             int icuidx1 = ver.lastIndexOf(ICU);
             if(icuidx>=0) {
+                warn("Trimming text before 'ICU': " + ver.substring(0,icuidx+ICU_.length()));
                 ver = ver.substring(icuidx+ICU_.length()).trim();
             } else if(icuidx1>=0) {
-                warn("trimming: '" + ver + "'");
+                warn("Trimming text before 'ICU ': " + ver.substring(0,icuidx1+ICU.length()));
                 ver = ver.substring(icuidx1+ICU.length()).trim();
-            } else {
+            }
+            
+            // always trim anything after a version #
+            {
                 int n;
                 for(n=ver.length()-1;n>0 && ((ver.charAt(n)=='.') || Character.isDigit(ver.charAt(n))) ;n--)
                     ;
-                warn("Trimming extraneous 'version' text: '" + ver + "'");
-                if(!didWarnSuperTrim) {
+                if(n>0) {
+                    warn("Trimming extraneous text after version: '" + ver.substring(n+1,ver.length()) + "'");
+                    ver = ver.substring(n+1).trim();
+                    if(!didWarnSuperTrim) {
                 	didWarnSuperTrim = true;
                 	warn("Please ONLY use:  '@whatever ICU X.Y.Z'");
-                }
-                if(n>0) {
-                    ver = ver.substring(n+1).trim();
+                    }
                 }
             }
         } 
@@ -294,15 +299,55 @@ public class StableAPI {
                     String initStr = initVal.getNodeValue().trim().replaceAll("\"","");
                     result = ICU_SPACE_PREFIX+initStr;
                     System.err.println("Detected "+whichVer + " version: " + result);
-                    if(whichVer.equals("new") && result.startsWith("ICU ")) {
-                    		String vers[] = result.substring(4).split("\\.");
-                    		int maj = Integer.parseInt(vers[0]);
-                    		int min = Integer.parseInt(vers[1]);
-                    		if((min%2)==1) {
-                    			milestoneOf = " ("+result+")";
-                    			result = "ICU "+(maj)+"."+(min+1);
-                    			System.err.println("    .. " + milestoneOf + " is a milestone towards " + result);
-                    		}
+
+                    String milestoneOf = "";
+                    
+                    // TODO:  #1 use UVersionInfo. (this tool doesn't depend on ICU4J yet) 
+                    //        #2 move this to a utility function: strip/"explain" an ICU version #.
+                    if(result.startsWith("ICU ")) {
+                        String vers[] = result.substring(4).split("\\.");
+                        int maj = Integer.parseInt(vers[0]);
+                        int min = vers.length>1?Integer.parseInt(vers[1]):0;
+                        int micr = vers.length>2?Integer.parseInt(vers[2]):0;
+                        int patch = vers.length>3?Integer.parseInt(vers[3]):0;
+                        
+                        if(maj >= 49) {
+                            // new scheme: 49 and following. 
+                            String truncVersion = "ICU " +maj;
+                            if(min == 0) {
+                                milestoneOf = " (m"+micr+")";
+                                System.err.println("    .. " + milestoneOf + " is a milestone towards " + truncVersion);
+                            } else if(min == 1) {
+                                // Don't denote as milestone
+                                result = "ICU "+(maj);
+                                System.err.println("    .. " + milestoneOf + " is the release of " + truncVersion);
+                            } else {
+                                milestoneOf = " (update "+micr+"."+patch+")";
+                                result = "ICU "+(maj);
+                                System.err.println("    .. " + milestoneOf + " is an update to  " + truncVersion);
+                            }
+                            // always truncate to major # for comparing tags.
+                            result = truncVersion;
+                        } else {
+                            // old scheme - 1.0.* .. 4.8.*
+                            String truncVersion = "ICU " + maj+"."+min;
+                            if((min%2)==1) {
+                                milestoneOf = " ("+maj+"."+(min+1)+"m"+micr+")";
+                                truncVersion = "ICU "+(maj)+"."+(min+1);
+                                System.err.println("    .. " + milestoneOf + " is a milestone towards " + truncVersion);
+                            } else if(micr==0 && patch==0) {
+                                System.err.println("    .. " + milestoneOf + " is the release of " + truncVersion);
+                            } else {
+                                milestoneOf = " (update "+micr+"."+patch+")";
+                                System.err.println("    .. " + milestoneOf + " is an update to " + truncVersion);
+                            }
+                            result = truncVersion;
+                        }
+                        if(whichVer.equals("new")) {
+                            rightMilestone = milestoneOf;
+                        } else {
+                            leftMilestone = milestoneOf;
+                        }
                     }
                 }
                 
@@ -323,20 +368,26 @@ public class StableAPI {
                 if(!result.equals(prevVer)) { 
                     System.err.println("Note: Detected " + result + " version but we'll use your requested --"+whichVer+"ver "+prevVer);
                     result = prevVer;
-                	if(!milestoneOf.isEmpty()&&whichVer.equals("new")) {
-                		System.err.println(" .. ignoring milestone indicator " + milestoneOf);
-                		milestoneOf = "";
-                	}
+                    if(!rightMilestone.isEmpty()&&whichVer.equals("new")) {
+                        System.err.println(" .. ignoring milestone indicator " + rightMilestone);
+                        rightMilestone = "";
+                    }
+                    if(!leftMilestone.isEmpty()&&!whichVer.equals("new")) {
+                        leftMilestone="";
+                    }
                 } else {
                     System.err.println("Note: You don't need to use  '--"+whichVer+"ver "+result+"' anymore - we detected it correctly.");
                 }
             } else {
                 System.err.println("Note: Didn't detect version so we'll use your requested --"+whichVer+"ver "+prevVer);
             	result = prevVer;
-            	if(!milestoneOf.isEmpty()&&whichVer.equals("new")) {
-            		System.err.println(" .. ignoring milestone indicator " + milestoneOf);
-            		milestoneOf = "";
+            	if(!rightMilestone.isEmpty()&&whichVer.equals("new")) {
+            		System.err.println(" .. ignoring milestone indicator " + rightMilestone);
+            		rightMilestone = "";
             	}
+                if(!leftMilestone.isEmpty()&&!whichVer.equals("new")) {
+                    leftMilestone="";
+                }
             }
         }
         
@@ -676,7 +727,8 @@ public class StableAPI {
 //        report.setParameter("rightStatus", rightStatus);
         report.setParameter("ourYear", new Integer(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
         report.setParameter("rightVer", rightVer);
-        report.setParameter("rightMilestone", milestoneOf);
+        report.setParameter("rightMilestone", rightMilestone);
+        report.setParameter("leftMilestone", leftMilestone);
         report.setParameter("dateTime", new GregorianCalendar().getTime());
         report.setParameter("nul", nul);
         
