@@ -25,7 +25,6 @@ import com.ibm.icu.dev.test.util.CollectionUtilities.InverseMatcher;
 import com.ibm.icu.dev.test.util.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.SymbolTable;
-import com.ibm.icu.text.Transform;
 import com.ibm.icu.text.UFormat;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
@@ -1501,28 +1500,28 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         }
     }
     
-    private static class StringTransformProperty extends SimpleProperty {
-        Transform<String,String> transform;
-
-        public StringTransformProperty(Transform<String,String> transform, boolean hasUniformUnassigned) {
-            this.transform = transform;
-            setUniformUnassigned(hasUniformUnassigned);
-        }
-        protected String _getValue(int codepoint) {
-            return transform.transform(UTF16.valueOf(codepoint));
-        }
-    }
-
-    private static class CodepointTransformProperty extends SimpleProperty {
-        Transform<Integer,String> transform;
-
-        public CodepointTransformProperty(Transform<Integer,String> transform, boolean hasUniformUnassigned) {
-            this.transform = transform;
-            setUniformUnassigned(hasUniformUnassigned);
-        }
-        protected String _getValue(int codepoint) {
-            return transform.transform(codepoint);
-        }
-    }
+//    private static class StringTransformProperty extends SimpleProperty {
+//        Transform<String,String> transform;
+//
+//        public StringTransformProperty(Transform<String,String> transform, boolean hasUniformUnassigned) {
+//            this.transform = transform;
+//            setUniformUnassigned(hasUniformUnassigned);
+//        }
+//        protected String _getValue(int codepoint) {
+//            return transform.transform(UTF16.valueOf(codepoint));
+//        }
+//    }
+//
+//    private static class CodepointTransformProperty extends SimpleProperty {
+//        Transform<Integer,String> transform;
+//
+//        public CodepointTransformProperty(Transform<Integer,String> transform, boolean hasUniformUnassigned) {
+//            this.transform = transform;
+//            setUniformUnassigned(hasUniformUnassigned);
+//        }
+//        protected String _getValue(int codepoint) {
+//            return transform.transform(codepoint);
+//        }
+//    }
 }
 
