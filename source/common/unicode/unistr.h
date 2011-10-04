@@ -54,6 +54,11 @@ U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
 
+/**
+ * \def U_STRING_CASE_MAPPER_DEFINED
+ * @internal
+ */
+
 #ifndef U_STRING_CASE_MAPPER_DEFINED
 #define U_STRING_CASE_MAPPER_DEFINED
 
