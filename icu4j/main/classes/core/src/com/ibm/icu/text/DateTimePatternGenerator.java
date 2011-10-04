@@ -28,8 +28,8 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * This class provides flexible generation of date format patterns, like

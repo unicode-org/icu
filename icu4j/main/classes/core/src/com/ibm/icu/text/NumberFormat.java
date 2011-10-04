@@ -22,12 +22,11 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * {@icuenhanced java.text.NumberFormat}.{@icu _usage_}

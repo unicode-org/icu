@@ -23,8 +23,8 @@ import com.ibm.icu.text.RuleBasedTransliterator.Data;
 import com.ibm.icu.text.TransliteratorIDParser.SingleID;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * <code>Transliterator</code> is an abstract class that transliterates text from one format to another. The most common

@@ -9,8 +9,6 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.text.MessagePattern;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

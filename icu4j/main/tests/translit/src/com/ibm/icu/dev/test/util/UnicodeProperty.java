@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.UnicodeLabel;
-import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.CollectionUtilities.InverseMatcher;
 import com.ibm.icu.dev.test.util.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.impl.Utility;

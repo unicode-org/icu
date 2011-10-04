@@ -9,8 +9,6 @@ package com.ibm.icu.dev.test.util;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import com.ibm.icu.dev.test.util.UnicodeProperty.PatternMatcher;
 import com.ibm.icu.impl.UnicodeRegex;
