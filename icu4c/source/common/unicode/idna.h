@@ -50,7 +50,7 @@ class U_COMMON_API IDNA : public UObject {
 public:
     /**
      * Destructor.
-     * @draft ICU 49
+     * @draft ICU 4.6
      */
     ~IDNA();
 
