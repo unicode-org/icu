@@ -74,6 +74,7 @@ group: stdio_input
 
 group: stdio_output
     fflush fwrite
+    stdout
 
 group: file_io
     open close stat
