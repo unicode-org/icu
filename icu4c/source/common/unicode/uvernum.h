@@ -76,6 +76,14 @@
  */
 #define U_ICU_VERSION_SUFFIX _49
 
+/**
+ * \def U_DEF2_ICU_ENTRY_POINT_RENAME
+ * @internal
+ */
+/**
+ * \def U_DEF_ICU_ENTRY_POINT_RENAME
+ * @internal
+ */
 /** Glued version suffix function for renamers 
  *  This value will change in the subsequent releases of ICU.
  *  If a custom suffix (such as matching library suffixes) is desired, this can be modified.
@@ -83,6 +91,7 @@
  *  \def U_ICU_ENTRY_POINT_RENAME
  *  @stable ICU 4.2
  */
+
 #ifndef U_ICU_ENTRY_POINT_RENAME
 #ifdef U_HAVE_LIB_SUFFIX
 #define U_DEF_ICU_ENTRY_POINT_RENAME(x,y,z) x ## y ##  z
