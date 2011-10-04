@@ -246,7 +246,7 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
         while ( ures_hasNext(numberingSystemsInfo) ) {
             UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo,NULL,&rbstatus);
             const char *nsName = ures_getKey(nsCurrent);
-            fNumsysNames->addElement(new UnicodeString(nsName),status);
+            fNumsysNames->addElement(new UnicodeString(nsName, -1, US_INV),status);
             ures_close(nsCurrent);
         }
 
