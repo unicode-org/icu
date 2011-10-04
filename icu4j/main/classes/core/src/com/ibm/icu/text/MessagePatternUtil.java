@@ -27,6 +27,11 @@ import java.util.List;
  * @author Markus Scherer
  */
 public final class MessagePatternUtil {
+
+    // Private constructor preventing object instantiation
+    private MessagePatternUtil() {
+    }
+
     /**
      * Factory method, builds and returns a MessageNode from a MessageFormat pattern string.
      * @param patternString a MessageFormat pattern string
