@@ -35,7 +35,7 @@
 
 #include "cmemory.h"
 
-UFILE *gStdOut = NULL;
+static UFILE *gStdOut = NULL;
 
 static UBool U_CALLCONV uprintf_cleanup()
 {
