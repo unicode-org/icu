@@ -52,7 +52,7 @@ class U_COMMON_API Appendable : public UObject {
 public:
     /**
      * Destructor.
-     * @draft ICU 49
+     * @draft ICU 4.8
      */
     ~Appendable();
 
@@ -165,7 +165,7 @@ public:
 
     /**
      * Destructor.
-     * @draft ICU 49
+     * @draft ICU 4.8
      */
     ~UnicodeStringAppendable();
 
