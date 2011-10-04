@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -681,7 +681,6 @@ public class HolidayCalendarDemo extends DemoApplet
 
                 // See if any of the holidays land on this day....
                 HolidayInfo info = null;
-                int count = 0;
 
                 // Coordinates of lower-left corner of cell.
                 x = (int)((cellPos.x) * cellWidth);
@@ -699,7 +698,6 @@ public class HolidayCalendarDemo extends DemoApplet
                         box.draw(g, x + INSET, y - INSET - box.getHeight());
 
                         y -= (box.getHeight() + INSET);
-                        count++;
                     }
                     h++;
                 }
