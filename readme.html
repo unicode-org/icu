@@ -16,9 +16,15 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 49 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 49 (DRAFT - M1) ReadMe</h1>
 
-    <p>Last updated: 2011-Sep-20<br />
+  	<p><b>Note:</b> This is a development milestone release of ICU4J 49.
+			The contents of this document may not reflect the recent changes done
+			for ICU 49 development. This milestone is inteneded for those wishing
+			to get an early look at ICU 4.8 new features and API changes. It is not
+			recommended for production use.
+		</p>
+    <p>Last updated: 2011-Oct-4<br />
      Copyright &copy; 1997-2011 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -214,18 +220,6 @@
     For more news about
     this release, see the <a href="http://site.icu-project.org/download">ICU
     download page</a>.</p>
-
-    <h3>MessageFormat Changes</h3>
-    <p>MessageFormat and related classes (choice/plural/select) have been reimplemented,
-    with several improvements and some incompatible changes.
-    See the <a href="http://site.icu-project.org/download/48">ICU 4.8 download</a> page for details.</p>
-
-    <h3>Unknown system time zone - Etc/Unknown</h3>
-    <p>The behavior of the time zone factory method TimeZone::createTimeZone(const UnicodeString&amp;) has changed in this release.
-    When an unknown time zone ID is specified in the method, previous versions return a TimeZone instance
-    with ID "GMT" (offset 0 and no daylight saving time). In ICU 4.8, the method uses "Etc/Unknown" as the
-    time zone ID (but still offset 0 and no daylight saving time) for the case. Existing software checking
-    the returned time zone ID to validate the input ID may need to be updated to support the new behavior.</p>
 
     <h3>C++ namespace support required</h3>
     <p>ICU4C 49 requires C++ namespace support.
