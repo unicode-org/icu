@@ -674,7 +674,12 @@
         </java>
 
         <!-- Generate HTML coverage report -->
-        <clover-html-report outdir="${clover.out.dir}/html" title="ICU4J Code Coverage"/>
+        <!-- <clover-html-report outdir="${clover.out.dir}/html" title="ICU4J Code Coverage"/> -->
+        <clover-report>
+            <current outfile="${clover.out.dir}/html" title="ICU4J Code Coverage">
+                <format type="html" filter="assert" />
+            </current>
+        </clover-report>
     </target>
 
     <!-- Release management targets -->
