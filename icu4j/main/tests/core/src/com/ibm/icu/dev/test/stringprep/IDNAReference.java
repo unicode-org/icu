@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -276,96 +276,68 @@ public class IDNAReference {
     public static StringBuffer convertToUnicode(UCharacterIterator iter, int options)
            throws StringPrepParseException{
 
-        char[] caseFlags = null;
-        
-        //get the options
-        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
-
         // the source contains all ascii codepoints
-        boolean srcIsASCII  = true;
-        // assume the source contains all LDH codepoints
-        boolean srcIsLDH = true; 
-               
-        int failPos = -1;
+        boolean srcIsASCII = true;
+
         int ch;
         int saveIndex = iter.getIndex();
-        // step 1: find out if all the codepoints in src are ASCII  
-        while((ch=iter.next())!= UCharacterIterator.DONE){
-            if(ch>0x7F){
+        // step 1: find out if all the codepoints in src are ASCII
+        while ((ch = iter.next()) != UCharacterIterator.DONE) {
+            if (ch > 0x7F) {
                 srcIsASCII = false;
-            }else if(isLDHChar(ch)==false){
-                failPos = iter.getIndex();
-                srcIsLDH = false;
+                break;
             }
         }
-        StringBuffer processOut;
-        
-        if(srcIsASCII == false){
-            // step 2: process the string
-            iter.setIndex(saveIndex);
-            processOut = transform.prepare(iter,options);
 
-        }else{
-            //just point to source
-            processOut = new StringBuffer(iter.getText());
-        }
-        // TODO:
-        // The RFC states that 
+        // The RFC states that
         // <quote>
         // ToUnicode never fails. If any step fails, then the original input
         // is returned immediately in that step.
         // </quote>
-        
-        //step 3: verify ACE Prefix
-        if(startsWithPrefix(processOut)){
-
-           //step 4: Remove the ACE Prefix
-           String temp = processOut.substring(ACE_PREFIX_LENGTH,processOut.length());
-
-           //step 5: Decode using punycode
-           StringBuffer decodeOut = PunycodeReference.decode(new StringBuffer(temp),caseFlags);
-        
-            //step 6:Apply toASCII
-            StringBuffer toASCIIOut = convertToASCII(decodeOut, options);
-
-            //step 7: verify
-            if(compareCaseInsensitiveASCII(processOut, toASCIIOut) !=0){
-                throw new StringPrepParseException("The verification step prescribed by the RFC 3491 failed",
-                                          StringPrepParseException.VERIFICATION_ERROR); 
-             }
-
-            //step 8: return output of step 5
-            return decodeOut;
-            
-        }else{
-            // verify that STD3 ASCII rules are satisfied
-            if(useSTD3ASCIIRules == true){
-                if( srcIsLDH == false /* source contains some non-LDH characters */
-                    || processOut.charAt(0) ==  HYPHEN 
-                    || processOut.charAt(processOut.length()-1) == HYPHEN){
-    
-                        if(srcIsLDH==false){
-                            throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                                     StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
-                                                     (failPos>0) ? (failPos-1) : failPos);
-                        }else if(processOut.charAt(0) == HYPHEN){
-                            throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                                     StringPrepParseException.STD3_ASCII_RULES_ERROR,
-                                                     processOut.toString(),0);
-         
-                        }else{
-                            throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
-                                                     StringPrepParseException.STD3_ASCII_RULES_ERROR,
-                                                     processOut.toString(),
-                                                     processOut.length());
-    
-                        }
-                  }
+        do {
+            StringBuffer processOut;
+            if (srcIsASCII == false) {
+                // step 2: process the string
+                iter.setIndex(saveIndex);
+                try {
+                    processOut = transform.prepare(iter, options);
+                } catch (StringPrepParseException e) {
+                    break;
+                }
+            } else {
+                // just point to source
+                processOut = new StringBuffer(iter.getText());
             }
-            // just return the source
-            return new StringBuffer(iter.getText());
-        }  
+
+            // step 3: verify ACE Prefix
+            if (startsWithPrefix(processOut)) {
+
+                // step 4: Remove the ACE Prefix
+                String temp = processOut.substring(ACE_PREFIX_LENGTH, processOut.length());
+
+                // step 5: Decode using punycode
+                StringBuffer decodeOut = null;
+                try {
+                    decodeOut = PunycodeReference.decode(new StringBuffer(temp), null);
+                } catch (StringPrepParseException e) {
+                    break;
+                }
+
+                // step 6:Apply toASCII
+                StringBuffer toASCIIOut = convertToASCII(decodeOut, options);
+
+                // step 7: verify
+                if (compareCaseInsensitiveASCII(processOut, toASCIIOut) != 0) {
+                    break;
+                }
+                // step 8: return output of step 5
+                return decodeOut;
+            }
+        } while (false);
+
+        return new StringBuffer(iter.getText());
     }
+
     public static StringBuffer convertIDNToUnicode(UCharacterIterator iter, int options)
         throws StringPrepParseException{
         return convertIDNToUnicode(iter.getText(), options);

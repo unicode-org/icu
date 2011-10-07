@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -380,7 +380,7 @@ public class TestData {
           },
           "www.-abcde.com",
           new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
-          true, true, false
+          true, false /* ToUnicode preserves casing for this case */, false
         ),
         new ErrorCase( new char[] {
             0x0077, 0x0077, 0x0077, 0x002e, // www. 
@@ -390,7 +390,7 @@ public class TestData {
           },
           "www.abcde-.com",
           new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
-          true, true, false
+          true, false /* ToUnicode preserves casing for this case */, false
         ),
         new ErrorCase( new char[]{
             0x0077, 0x0077, 0x0077, 0x002e, // www. 
@@ -400,7 +400,7 @@ public class TestData {
           },
           "www.abcde@.com",
           new StringPrepParseException("",StringPrepParseException.STD3_ASCII_RULES_ERROR),
-          true, true, false
+          true, false /* ToUnicode preserves casing for this case */, false
         ),
         new ErrorCase( new char[]{
             0x0077, 0x0077, 0x0077, 0x002e, // www. 
