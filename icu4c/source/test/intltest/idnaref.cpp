@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2007, International Business Machines
+ *   Copyright (C) 2003-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -285,31 +285,33 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
         }
         b1[b1Len++] = src[j];
     }
-    // step 2
-    NamePrepTransform* prep = TestIDNA::getInstance(*status);
 
+    NamePrepTransform* prep = TestIDNA::getInstance(*status);
     if(U_FAILURE(*status)){
         goto CLEANUP;
     }
 
-    b1Len = prep->process(src,srcLength,b1, b1Capacity,allowUnassigned,parseError,*status);
+    // step 2 is performed only if the source contains non ASCII
+    if (!srcIsASCII) {
+        b1Len = prep->process(src,srcLength,b1, b1Capacity,allowUnassigned,parseError,*status);
 
-    if(*status == U_BUFFER_OVERFLOW_ERROR){
-        // redo processing of string
-        /* we do not have enough room so grow the buffer*/
-        b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
-        if(b1==NULL){
-            *status = U_MEMORY_ALLOCATION_ERROR;
+        if(*status == U_BUFFER_OVERFLOW_ERROR){
+            // redo processing of string
+            /* we do not have enough room so grow the buffer*/
+            b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
+            if(b1==NULL){
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                goto CLEANUP;
+            }
+
+            *status = U_ZERO_ERROR; // reset error
+
+            b1Len = prep->process(src,srcLength,b1, b1Len,allowUnassigned, parseError, *status);
+        }
+        // error bail out
+        if(U_FAILURE(*status)){
             goto CLEANUP;
         }
-
-        *status = U_ZERO_ERROR; // reset error
-
-        b1Len = prep->process(src,srcLength,b1, b1Len,allowUnassigned, parseError, *status);
-    }
-    // error bail out
-    if(U_FAILURE(*status)){
-        goto CLEANUP;
     }
 
     if(b1Len == 0){

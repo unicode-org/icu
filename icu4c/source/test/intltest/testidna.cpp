@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2010, International Business Machines
+ *   Copyright (C) 2003-2011, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -1520,23 +1520,24 @@ void TestIDNA::TestIDNAMonkeyTest(){
 }
 
 void TestIDNA::TestCompareReferenceImpl(){
-    
+
     UChar src [2] = {0,0};
     int32_t srcLen = 0;
-    
 
-    for(int32_t i = 0x40000 ; i< 0x10ffff; i++){
-        if(quick==TRUE && i> 0x1FFFF){
+
+    for (int32_t i = 0; i <= 0x10FFFF; i++){
+        if (quick == TRUE && i > 0x0FFF){
             return;
         }
-        if(i >= 0x30000 && i <= 0xF0000){
-           i+=0xB0000;
+        if(i == 0x30000){
+            // jump to E0000, no characters assigned in plain 3 to plain 13 as of Unicode 6.0
+            i = 0xE0000;
         }
-        if(i>0xFFFF){
-           src[0] = U16_LEAD(i);
-           src[1] = U16_TRAIL(i);
-           srcLen =2;
-        }else{
+        if (i > 0xFFFF){
+            src[0] = U16_LEAD(i);
+            src[1] = U16_TRAIL(i);
+            srcLen =2;
+        } else {
             src[0] = (UChar)i;
             src[1] = 0;
             srcLen = 1;
