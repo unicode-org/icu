@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -343,9 +343,8 @@ public class TestIDNA extends TestFmwk {
             }else{
                 doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNA.USE_STD3_RULES,errCase.expected);
             }
-            
             //TestToUnicode
-            if(false && errCase.testToUnicode==true){
+            if(errCase.testToUnicode==true){
                 if(errCase.useSTD3ASCIIRules!=true){
                     // Test IDNToUnicode
                     doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNA.DEFAULT,errCase.expected);
@@ -635,76 +634,89 @@ public class TestIDNA extends TestFmwk {
          doTestCompareReferenceImpl(source);
          doTestToASCII(source.toString(),expected.toString(), IDNA.DEFAULT, null);
     }
-    private void doTestCompareReferenceImpl(StringBuffer src) throws Exception{
-        
-        StringBuffer label = src;  
 
-        StringPrepParseException expected = null;
-        StringBuffer ascii = null;
-        int options = IDNA.DEFAULT;
-        logln("Comparing idnaref_toASCII with uidna_toASCII for input: " + prettify(label));
-        try{       
-            ascii = IDNAReference.convertToASCII(label, options);
-        }catch( StringPrepParseException e){
-            expected = e;
-            if(e.equals(unassignedException)){
-                options = IDNA.ALLOW_UNASSIGNED;
-                expected = null;
-                try{
-                    ascii = IDNAReference.convertToASCII(label, options);
-                }catch( StringPrepParseException ex){
-                    expected = ex;                  
-                }
-            }
-        }
-        
-        doTestToASCII(label.toString(), 
-                      (ascii == null) ? null : ascii.toString(),
-                      options,
-                      expected);
+    private StringBuffer _doTestCompareReferenceImpl(StringBuffer src, boolean toASCII, int options) {
+        String refIDNAName = toASCII ? "IDNAReference.convertToASCII" : "IDNAReference.convertToUnicode";
+        String uIDNAName = toASCII ? "IDNA.convertToASCII" : "IDNA.convertToUnicode";
 
-        logln("Comparing idnaref_toUnicode with uidna_toUnicode for input: " + prettify(label));
-        StringBuffer uni =null;
-        
-        if(expected == null){
-            options = IDNA.DEFAULT;
-            try{
-                 uni = IDNAReference.convertToUnicode(ascii, options);
-            }catch( StringPrepParseException e ){
-                expected = e;
-                if(expected.equals(unassignedException)){
-                    options = IDNA.ALLOW_UNASSIGNED;
-                    expected = null;
-                    try{
-                        uni = IDNAReference.convertToUnicode(ascii, options);
-                    }catch(StringPrepParseException ex){
-                        expected = ex;
-                    }
-                }
-            }
-            doTestToUnicode(ascii.toString(),
-                            (uni==null)? null : uni.toString(),
-                            options,
-                            expected);
+        logln("Comparing " + refIDNAName + " with " + uIDNAName + " for input: "
+                + prettify(src) + " with options: " + options);
+
+        StringBuffer exp = null;
+        int expStatus = -1;
+        try {
+            exp = toASCII ? IDNAReference.convertToASCII(src, options) : IDNAReference.convertToUnicode(src, options);
+        } catch (StringPrepParseException e) {
+            expStatus = e.getError();
         }
 
+        StringBuffer got = null;
+        int gotStatus = -1;
+        try {
+            got = toASCII ? IDNA.convertToASCII(src, options) : IDNA.convertToUnicode(src, options);
+        } catch (StringPrepParseException e) {
+            gotStatus = e.getError();
+        }
+
+        if (expStatus != gotStatus) {
+            errln("Did not get the expected status while comparing " + refIDNAName + " with " + uIDNAName
+                    + " Expected: " + expStatus
+                    + " Got: " + gotStatus
+                    + " for Source: "+ prettify(src)
+                    + " Options: " + options);
+        } else {
+            // now we know that both implementation yielded same status
+            if (gotStatus == -1) {
+                // compare the outputs
+                if (!got.toString().equals(exp.toString())) {
+                    errln("Did not get the expected output while comparing " + refIDNAName + " with " + uIDNAName
+                            + " Expected: " + exp
+                            + " Got: " + got
+                            + " for Source: "+ prettify(src)
+                            + " Options: " + options);
+                }
+            } else {
+                logln("Got the same error while comparing " + refIDNAName + " with " + uIDNAName
+                        +" for input: " + prettify(src) + " with options: " + options);
+            }
+        }
+
+        return exp;
     }
-    public void TestCompareRefImpl() throws Exception{
-        
-        for(int i = 0x40000 ; i< 0x10ffff; i++){
+
+    private void doTestCompareReferenceImpl(StringBuffer src) throws Exception{
+        // test toASCII
+        src.setLength(0);
+        src.append("[");
+        StringBuffer asciiLabel = _doTestCompareReferenceImpl(src, true, IDNA.ALLOW_UNASSIGNED);
+        _doTestCompareReferenceImpl(src, true, IDNA.DEFAULT);
+        _doTestCompareReferenceImpl(src, true, IDNA.USE_STD3_RULES);
+        _doTestCompareReferenceImpl(src, true, IDNA.USE_STD3_RULES | IDNA.ALLOW_UNASSIGNED);
+
+        if (asciiLabel != null) {
+            // test toUnicode
+            _doTestCompareReferenceImpl(src, false, IDNA.ALLOW_UNASSIGNED);
+            _doTestCompareReferenceImpl(src, false, IDNA.DEFAULT);
+            _doTestCompareReferenceImpl(src, false, IDNA.USE_STD3_RULES);
+            _doTestCompareReferenceImpl(src, false, IDNA.USE_STD3_RULES | IDNA.ALLOW_UNASSIGNED);
+        }
+    }
+
+    public void TestCompareRefImpl() throws Exception {
+        for (int i = 65; i < 0x10FFFF; i++) {
             StringBuffer src = new StringBuffer();
-           
-            if(isQuick()==true && i> 0x1FFFF){
+            if (isQuick() == true && i > 0x0FFF) {
                 return;
             }
-            if(i >= 0x30000 && i<=0xf0000){
-               i+=0xB0000;
+            if (i == 0x30000) {
+                // jump to E0000, no characters assigned in plain 3 to plain 13 as of Unicode 6.0
+                i = 0xE0000;
             }
-            UTF16.append(src,i);
+            UTF16.append(src, i);
             doTestCompareReferenceImpl(src);
-
-        }  
+        }
     }
+
     public void TestJB4490(){
         String[] in = new String[]{
                 "\u00F5\u00dE\u00dF\u00dD",
