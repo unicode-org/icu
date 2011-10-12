@@ -2,10 +2,14 @@
  * Copyright (C) 1999-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *
- * file name: uchar_props_data.c
+ * file name: uchar_props_data.h
  *
- * machine-generated on: 2011-05-10
+ * machine-generated on: 2011-10-12
  */
+
+#ifndef INCLUDED_FROM_UCHAR_C
+#   error This file must be #included from uchar.c only.
+#endif
 
 static const UVersionInfo dataVersion={6,0,0,0};
 
