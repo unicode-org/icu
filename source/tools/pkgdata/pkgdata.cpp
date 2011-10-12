@@ -37,10 +37,17 @@
 #include "flagparser.h"
 #include "filetools.h"
 
+#if U_HAVE_POPEN
+#if (U_PF_MINGW <= U_PLATFORM || U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
+/* popen/pclose aren't defined in strict ANSI on Cygwin and MinGW */
+#undef __STRICT_ANSI__
+#endif
+#endif
 
 #if U_HAVE_POPEN
 # include <unistd.h>
 #endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
