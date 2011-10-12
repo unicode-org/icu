@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -426,8 +426,11 @@ generateData(const char *dataDir, UBool csource) {
 
     if(csource) {
         /* write .c file for hardcoded data */
-        FILE *f=usrc_create(dataDir, "uchar_props_data.c");
+        FILE *f=usrc_create(dataDir, "uchar_props_data.h");
         if(f!=NULL) {
+            fputs("#ifndef INCLUDED_FROM_UCHAR_C\n"
+                  "#   error This file must be #included from uchar.c only.\n"
+                  "#endif\n\n", f);
             /* unused
             usrc_writeArray(f,
                 "static const UVersionInfo formatVersion={",

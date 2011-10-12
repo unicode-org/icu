@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -384,8 +384,11 @@ generateData(const char *dataDir, UBool csource) {
 
     if(csource) {
         /* write .c file for hardcoded data */
-        FILE *f=usrc_create(dataDir, "ubidi_props_data.c");
+        FILE *f=usrc_create(dataDir, "ubidi_props_data.h");
         if(f!=NULL) {
+            fputs("#ifndef INCLUDED_FROM_UBIDI_PROPS_C\n"
+                  "#   error This file must be #included from ubidi_props.c only.\n"
+                  "#endif\n\n", f);
             usrc_writeArray(f,
                 "static const UVersionInfo ubidi_props_dataVersion={",
                 dataInfo.dataVersion, 8, 4,

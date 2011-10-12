@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -735,7 +735,7 @@ parseName(char *name, int16_t length) {
     }
 }
 
-static UBool U_INLINE
+static UBool
 isWordChar(char c) {
     return ('A'<=c && c<='I') || /* EBCDIC-safe check for letters */
            ('J'<=c && c<='R') ||
