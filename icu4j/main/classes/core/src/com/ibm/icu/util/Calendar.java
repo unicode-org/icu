@@ -1733,6 +1733,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     // ==== Factory Stuff ====
+    ///CLOVER:OFF
     /**
      * A CalendarFactory is used to register new calendar implementation.
      * The factory should be able to create a calendar instance for the
@@ -1754,6 +1755,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         protected CalendarFactory() {
         }
     }
+    ///CLOVER:ON
 
     //  shim so we can build without service code
     static abstract class CalendarShim {
