@@ -664,6 +664,7 @@ public class PluralRules implements Serializable {
      * Implementation of Rule that uses a constraint.
      * Provides 'and' and 'or' to combine constraints.  Immutable.
      */
+    ///CLOVER:OFF
     private static class ConstrainedRule implements Rule, Serializable {
         private static final long serialVersionUID = 1;
         private final String keyword;
@@ -704,6 +705,7 @@ public class PluralRules implements Serializable {
             return keyword + ": " + constraint;
         }
     }
+    ///CLOVER:ON
 
     /*
      * Implementation of RuleList that is itself a node in a linked list.
