@@ -177,35 +177,15 @@ static void utextToPrintable(char *buf, int32_t bufLen, UText *text) {
   utext_setNativeIndex(text, oldIndex);
 }
 
-static inline UChar toHex(int32_t i) {
-    return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10)));
-}
-
-static UnicodeString& escape(const UnicodeString& s, UnicodeString& result) {
-    for (int32_t i=0; i<s.length(); ++i) {
-        UChar c = s[i];
-        if ((c <= (UChar)0x7F) && (c>0)) {
-            result += c;
-        } else {
-            result += (UChar)0x5c;
-            result += (UChar)0x75;
-            result += toHex((c >> 12) & 0xF);
-            result += toHex((c >>  8) & 0xF);
-            result += toHex((c >>  4) & 0xF);
-            result += toHex( c        & 0xF);
-        }
-    }
-    return result;
-}
 
 static char ASSERT_BUF[1024];
 
-static const char* extractToAssertBuf(const UnicodeString& message) {
+const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
   if(message.length()==0) {
     strcpy(ASSERT_BUF, "[[empty UnicodeString]]");
   } else {
     UnicodeString buf;
-    escape(message, buf);
+    IntlTest::prettify(message,buf);
     if(buf.length()==0) {
       strcpy(ASSERT_BUF, "[[escape() returned 0 chars]]");
     } else {
