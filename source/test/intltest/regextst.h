@@ -59,6 +59,8 @@ public:
     virtual UChar *ReadAndConvertFile(const char *fileName, int32_t &len, const char *charset, UErrorCode &status);
     virtual const char *getPath(char buffer[2048], const char *filename);
 
+    static const char* extractToAssertBuf(const UnicodeString& message);
+    
 };
 
 #endif   // !UCONFIG_NO_REGULAR_EXPRESSIONS
