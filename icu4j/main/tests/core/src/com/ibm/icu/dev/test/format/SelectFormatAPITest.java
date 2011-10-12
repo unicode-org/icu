@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2010, International Business Machines
+ * Copyright (c) 2004-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc.                                            
  *******************************************************************************
@@ -136,6 +136,16 @@ public class SelectFormatAPITest extends TestFmwk {
         assertEquals("Failed in TestFormat with unexpected output 2"
                      , expected
                      , (selFmt1.format("other", strBuf, new FieldPosition(0))).toString());
+       
+        //Check format throws exception on invalid argument.
+        boolean threwException = false;
+        try {
+            StringBuffer buf = new StringBuffer("AppendHere-");
+            selFmt1.format(Integer.valueOf(0), buf, new FieldPosition(0));
+        } catch (IllegalArgumentException e) {
+            threwException = true;
+        }
+        assertTrue("Did not throw IllegalArgumentException.", threwException);
     }
 
     /**
