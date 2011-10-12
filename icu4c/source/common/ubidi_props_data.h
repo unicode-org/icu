@@ -1,11 +1,15 @@
 /*
- * Copyright (C) 1999-2010, International Business Machines
+ * Copyright (C) 1999-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *
- * file name: ubidi_props_data.c
+ * file name: ubidi_props_data.h
  *
- * machine-generated on: 2010-09-19
+ * machine-generated on: 2011-10-12
  */
+
+#ifndef INCLUDED_FROM_UBIDI_PROPS_C
+#   error This file must be #included from ubidi_props.c only.
+#endif
 
 static const UVersionInfo ubidi_props_dataVersion={6,0,0,0};
 

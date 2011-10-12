@@ -1,11 +1,15 @@
 /*
- * Copyright (C) 1999-2010, International Business Machines
+ * Copyright (C) 1999-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *
- * file name: ucase_props_data.c
+ * file name: ucase_props_data.h
  *
- * machine-generated on: 2010-09-19
+ * machine-generated on: 2011-10-12
  */
+
+#ifndef INCLUDED_FROM_UCASE_CPP
+#   error This file must be #included from ucase.cpp only.
+#endif
 
 static const UVersionInfo ucase_props_dataVersion={6,0,0,0};
 
