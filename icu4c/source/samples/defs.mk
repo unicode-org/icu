@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2005 IBM, Inc. and others
+# Copyright (c) 2002-2011 IBM, Inc. and others
 # Sample code makefile definitions 
 
 CLEANFILES=*~ $(TARGET).out
@@ -17,7 +17,7 @@ GENRB=$(shell icu-config --invoke=genrb)
 GENRBOPT=
 PKGDATA=$(shell icu-config --invoke=pkgdata)
 SO=$(shell icu-config --so)
-PKGDATAOPTS=-v -d .
+PKGDATAOPTS=-r $(shell icu-config --version) -v -d .
 # default - resources in same mode as ICU
 RESMODE=$(shell icu-config --icudata-mode)
 
