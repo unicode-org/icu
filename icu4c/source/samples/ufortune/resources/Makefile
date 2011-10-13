@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2010 IBM, Inc. and others
+# Copyright (c) 2001-2011 IBM, Inc. and others
 #
 # File
 #    icu/source/samples/ufortune/resources/Makefile
@@ -35,7 +35,7 @@ include ../fortunedefs.mk
 # target file for resource bundle - this must be set, or 'make all' won't
 # build any resources.
 ifeq ($(RESMODE),dll)
-RESTARGET=lib$(RESNAME).$(SO)
+RESTARGET=lib$(RESNAME)*.$(SO)*
 endif
 ifeq ($(RESMODE),static)
 RESTARGET=lib$(RESNAME).a

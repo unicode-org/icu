@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2002 IBM, Inc. and others
+# Copyright (c) 2001-2011 IBM, Inc. and others
 # common makefile between ufortune and ufortune/resources
 
 # mode of resource bundle -
@@ -28,7 +28,6 @@ CHECK_VARS= ICU_DATA=$(RESDIR)
 # DLL and static modes are identical here
 ifeq ($(RESMODE),dll)
 RESLDFLAGS= -L$(RESDIR) -l$(RESNAME)
-RESCPPFLAGS=
 CHECK_VARS=
 endif
 
