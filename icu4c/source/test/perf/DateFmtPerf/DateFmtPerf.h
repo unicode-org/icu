@@ -356,6 +356,69 @@ public:
     }
 };
 
+
+
+#define NUM_STRING "9876543210.123"
+#define NUM_NUM 9876543210.123
+class StdioNumFmtFunction : public UPerfFunction
+{
+
+ private:
+  int num;
+  char locale[25];
+ public:
+	
+  StdioNumFmtFunction()
+    {
+      num = -1;
+    }
+
+  StdioNumFmtFunction(int a, const char* loc)
+    {
+      num = a;
+      strcpy(locale, loc);
+    }
+
+  virtual void call(UErrorCode* status2)
+  {
+    Locale loc(locale);
+    UErrorCode status = U_ZERO_ERROR;
+        
+    // Parse a string.  The string uses the digits '0' through '9'
+    // and the decimal separator '.', standard in the US locale
+
+    double result;
+    char outbuf[500];
+    const char *str = NUM_STRING;
+        
+    for(int i = 0; i < num; i++)
+      {
+        if(sscanf(str, "%lg", &result)!=1) {
+          cout << "Failed Stdio: failed to sscanf" << endl;
+          *status2 = U_PARSE_ERROR;
+          return;
+        }
+
+        sprintf(outbuf, "%lg", result);
+      }
+    
+    if(result!=NUM_NUM) {
+      cout << "Failed Stdio: sscanf got wrong result, expected " << NUM_NUM << " got " << result << endl;
+      *status2 = U_PARSE_ERROR;
+    }
+    if(strcmp(str,NUM_STRING)) {
+      cout << "Failed Stdio: sprintf got wrong result, expected " << NUM_STRING << " got " << str << endl;
+      *status2 = U_PARSE_ERROR;
+    }
+  }
+ 
+  virtual long getOperationsPerIteration()
+  {
+    return num;
+  }
+    
+};
+
 class CollationFunction : public UPerfFunction
 {
 
