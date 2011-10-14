@@ -10,6 +10,9 @@ package com.ibm.icu.util;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.AccessControlException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
@@ -528,21 +531,76 @@ public final class ULocale implements Serializable {
      * Keep our own default ULocale.
      */
     private static Locale defaultLocale = Locale.getDefault();
-    private static ULocale defaultULocale = forLocale(defaultLocale);
+    private static ULocale defaultULocale;
 
     private static Locale[] defaultCategoryLocales = new Locale[Category.values().length];
     private static ULocale[] defaultCategoryULocales = new ULocale[Category.values().length];
 
     static {
-        for (Category cat: Category.values()) {
-            int idx = cat.ordinal();
-            defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
-            defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+        defaultULocale = forLocale(defaultLocale);
+
+        // For Java 6 or older JRE, ICU initializes the default script from
+        // "user.script" system property. The system property was added
+        // in Java 7. On JRE 7, Locale.getDefault() should reflect the
+        // property value to the Locale's default. So ICU just relies on
+        // Locale.getDefault().
+        
+        // Note: The "user.script" property is only used by initialization.
+        // 
+        if (JDKLocaleHelper.isJava7orNewer()) {
+            for (Category cat: Category.values()) {
+                int idx = cat.ordinal();
+                defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
+                defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+            }
+        } else {
+            // Make sure the current default Locale is original.
+            // If not, it means that someone updated the default Locale.
+            // In this case, user.XXX properties are already out of date
+            // and we should not use user.script.
+            if (JDKLocaleHelper.isOriginalDefaultLocale(defaultLocale)) {
+                // Use "user.script" if available
+                String userScript = JDKLocaleHelper.getSystemProperty("user.script");
+                if (userScript != null && LanguageTag.isScript(userScript)) {
+                    // Note: Builder or forLanguageTag cannot be used here
+                    // when one of Locale fields is not well-formed.
+                    BaseLocale base = defaultULocale.base();
+                    BaseLocale newBase = BaseLocale.getInstance(base.getLanguage(), userScript,
+                            base.getRegion(), base.getVariant());
+                    defaultULocale = getInstance(newBase, defaultULocale.extensions());
+                }
+            }
+
+            // Java 6 or older does not have separated category locales,
+            // use the non-category default for all
+            for (Category cat: Category.values()) {
+                int idx = cat.ordinal();
+                defaultCategoryLocales[idx] = defaultLocale;
+                defaultCategoryULocales[idx] = defaultULocale;
+            }
         }
     }
 
     /**
      * Returns the current default ULocale.
+     * <p>
+     * The default ULocale is synchronized the default Java Locale. This method checks
+     * the current default Java Locale and returns an equivalent ULocale.
+     * <p>
+     * <b>Note:</b> JDK Locale before Java 7 is not capable to represent a locale's script.
+     * Therefore, the script field in the default ULocale is always empty unless
+     * an ULocale with non-empty script is explicitly set by {@link #setDefault(ULocale)}
+     * on Java 6 or older systems.
+     * <p>
+     * <b>Note for ICU 49 or later:</b> Some JRE implementations allows user to override default
+     * JDK Locale using system properties - <code>user.language</code>, <code>user.country</code>
+     * and <code>user.variant</code>. In addition to these system properties, some Java 7
+     * implementations support <code>user.script</code> for overriding default Locale's script.
+     * ICU 49 or later versions use <code>user.script</code> system property on Java 6
+     * or older systems supporting other <code>user.*</code> system properties to initialize
+     * the default ULocale. The <code>user.script</code> override for default ULocale is not
+     * used on Java 7 or the current Java default Locale was changed after start up.
+     * 
      * @return the default ULocale.
      * @stable ICU 2.8
      */
@@ -4071,6 +4129,48 @@ public final class ULocale implements Serializable {
                     }
                 }
             }
+        }
+
+        // Returns true if the given Locale matches the original
+        // default locale initialized by JVM by checking user.XXX
+        // system properties. When the system properties are not accessible,
+        // this method returns false.
+        public static boolean isOriginalDefaultLocale(Locale loc) {
+            if (isJava7orNewer) {
+                String script = "";
+                try {
+                    script = (String) mGetScript.invoke(loc, (Object[]) null);
+                } catch (Exception e) {
+                    return false;
+                }
+
+                return loc.getLanguage().equals(getSystemProperty("user.language"))
+                        && loc.getCountry().equals(getSystemProperty("user.country"))
+                        && loc.getVariant().equals(getSystemProperty("user.variant"))
+                        && script.equals(getSystemProperty("user.script"));
+            }
+            return loc.getLanguage().equals(getSystemProperty("user.language"))
+                    && loc.getCountry().equals(getSystemProperty("user.country"))
+                    && loc.getVariant().equals(getSystemProperty("user.variant"));
+        }
+
+        public static String getSystemProperty(String key) {
+            String val = null;
+            final String fkey = key;
+            if (System.getSecurityManager() != null) {
+                try {
+                    val = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                        public String run() {
+                            return System.getProperty(fkey);
+                        }
+                    });
+                } catch (AccessControlException e) {
+                    // ignore
+                }
+            } else {
+                val = System.getProperty(fkey);
+            }
+            return val;
         }
     }
 }
