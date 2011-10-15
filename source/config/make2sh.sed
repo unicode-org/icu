@@ -1,4 +1,4 @@
-# Copyright (C) 1999-2010, International Business Machines  Corporation and others.  All Rights Reserved.
+# Copyright (C) 1999-2011, International Business Machines  Corporation and others.  All Rights Reserved.
 s%^\([a-zA-Z0-9\._-]*\)[ 	]*+=%\1=$(\1) %
 s%^[A-Z]*_SO_TARG*%## &%
 s%^SHARED_OBJECT.*%## &%
@@ -15,3 +15,4 @@ if [ "x${\1}" = "x" ]; then \1="$default_\1"; fi@
 s@^\(ENABLE_RPATH\)=\(.*\)@default_\1=\2\
 if [ "x${\1}" = "x" ]; then \1="$default_\1"; fi@
 s%^#SH#[ ]*%%
+s%'\$\$'%\\\$\\\$%g
