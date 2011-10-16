@@ -28,6 +28,7 @@ CHECK_VARS= ICU_DATA=$(RESDIR)
 # DLL and static modes are identical here
 ifeq ($(RESMODE),dll)
 RESLDFLAGS= -L$(RESDIR) -l$(RESNAME)
+RESCPPFLAGS=
 CHECK_VARS=
 endif
 
