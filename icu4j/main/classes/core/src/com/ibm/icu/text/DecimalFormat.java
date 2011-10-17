@@ -3908,6 +3908,8 @@ public class DecimalFormat extends NumberFormat {
             text = format(number.doubleValue(), new StringBuffer(), new FieldPosition(0), true);
         } else if (obj instanceof Integer || obj instanceof Long) {
             text = format(number.longValue(), new StringBuffer(), new FieldPosition(0), true);
+        } else {
+            throw new IllegalArgumentException();
         }
 
         AttributedString as = new AttributedString(text.toString());
