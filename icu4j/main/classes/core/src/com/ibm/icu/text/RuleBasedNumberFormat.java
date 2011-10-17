@@ -1183,7 +1183,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         //TODO: We need a real fix.  See #6895 / #6896
         if (noParse) {
             // skip parsing
-            return new Long(0);
+            return Long.valueOf(0);
         }
 
         // parsePosition tells us where to start parsing.  We copy the

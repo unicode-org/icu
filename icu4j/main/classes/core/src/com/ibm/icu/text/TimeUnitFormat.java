@@ -290,11 +290,11 @@ public class TimeUnitFormat extends MeasureFormat {
         if (resultNumber == null && longestParseDistance != 0) {
             // set the number using plurrual count
             if ( countOfLongestMatch.equals("zero") ) {
-                resultNumber = new Integer(0);
+                resultNumber = Integer.valueOf(0);
             } else if ( countOfLongestMatch.equals("one") ) {
-                resultNumber = new Integer(1);
+                resultNumber = Integer.valueOf(1);
             } else if ( countOfLongestMatch.equals("two") ) {
-                resultNumber = new Integer(2);
+                resultNumber = Integer.valueOf(2);
             } else {
                 // should not happen.
                 // TODO: how to handle?
