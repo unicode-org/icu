@@ -7,7 +7,7 @@
 *   created by: Markus W. Scherer
 */
 
-package com.ibm.icu.dev.demo.messagepattern;
+package com.ibm.icu.samples.text.messagepattern;
 
 import com.ibm.icu.text.MessagePattern;
 

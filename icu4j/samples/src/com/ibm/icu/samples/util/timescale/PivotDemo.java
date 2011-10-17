@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  */
 
-package com.ibm.icu.dev.demo.timescale;
+package com.ibm.icu.samples.util.timescale;
 
 import java.util.Locale;
 

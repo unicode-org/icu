@@ -2874,14 +2874,10 @@ icu4j/demos/src/com/ibm/icu/dev/demo/impl/DemoUtility.java svneol=native#text/pl
 icu4j/demos/src/com/ibm/icu/dev/demo/impl/DumbTextComponent.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/impl/Selection.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/impl/package.html svneol=native#text/html
-icu4j/demos/src/com/ibm/icu/dev/demo/messagepattern/MessagePatternDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/demos/src/com/ibm/icu/dev/demo/messagepattern/MessagePatternUtilDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/demos/src/com/ibm/icu/dev/demo/messagepattern/MiniMessageFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/number/CurrencyDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/package.html svneol=native#text/html
-icu4j/demos/src/com/ibm/icu/dev/demo/timescale/PivotDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/AnyTransliterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/CaseIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/demos/src/com/ibm/icu/dev/demo/translit/Demo.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4306,6 +4302,14 @@ icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ResourceBundlePerf.java svneol=na
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UCharacterPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UnicodeSetPerf.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/readme.html svneol=native#text/html
+icu4j/samples/build.properties -text
+icu4j/samples/manifest.stub -text
+icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternUtilDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MiniMessageFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/util/timescale/PivotDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/util/timezone/BasicTimeZoneExample.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/stylesheet.css svneol=native#text/css
 icu4j/tools/build/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/build/README.txt svneol=native#text/plain
 icu4j/tools/build/icu4j28.api.gz -text svneol=unset#application/gzip

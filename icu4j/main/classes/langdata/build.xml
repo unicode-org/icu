@@ -28,7 +28,7 @@
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="src-jar" depends="@src-jar" description="Create the proeject's source jar file"/>
+    <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
 
     <target name="copy-data" description="Extract pre-built ICU language data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">

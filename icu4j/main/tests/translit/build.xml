@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2010, International Business Machines Corporation and    *
+* Copyright (C) 2009-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -27,7 +27,7 @@
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="src-jar" depends="@src-jar" description="Create the proeject's source jar file"/>
+    <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
 
     <target name="copy-translit-test-data" description="Extract pre-built ICU collation test data files and copy them to the project's binary directory">
         <copy todir="${bin.dir}">
