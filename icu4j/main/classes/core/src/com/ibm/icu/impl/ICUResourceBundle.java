@@ -640,6 +640,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                                         }
                                     }
                                 }
+                                br.close();
                             }
                         } catch (IOException e) {
                             // swallow it
