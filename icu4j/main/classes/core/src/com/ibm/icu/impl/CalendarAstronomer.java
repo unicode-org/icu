@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -692,7 +692,7 @@ public class CalendarAstronomer {
         // Make a rough guess: 6am or 6pm local time on the current day
         long noon = ((time + fGmtOffset)/DAY_MS)*DAY_MS - fGmtOffset + 12*HOUR_MS;
         
-        setTime(noon + (long)((rise ? -6 : 6) * HOUR_MS));
+        setTime(noon + (rise ? -6L : 6L) * HOUR_MS);
         
         long t = riseOrSet(new CoordFunc() {
                             public Equatorial eval() { return getSunPosition(); }

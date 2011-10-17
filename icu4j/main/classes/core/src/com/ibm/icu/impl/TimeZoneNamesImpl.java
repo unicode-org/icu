@@ -649,7 +649,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
             }
 
             long date = Grego.fieldsToDay(year, month - 1, day) * Grego.MILLIS_PER_DAY
-                        + hour * Grego.MILLIS_PER_HOUR + min * Grego.MILLIS_PER_MINUTE;
+                        + (long)hour * Grego.MILLIS_PER_HOUR + (long)min * Grego.MILLIS_PER_MINUTE;
             return date;
          }
     }
