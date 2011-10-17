@@ -2706,7 +2706,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 if (newHour < 0) {
                     newHour += max + 1;
                 }
-                setTimeInMillis(start + ONE_HOUR * (newHour - oldHour));
+                setTimeInMillis(start + ONE_HOUR * ((long)newHour - oldHour));
                 return;
             }
 
@@ -5497,7 +5497,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             return (int)(numerator / denominator);
         }
         int quotient = (int)(((numerator + 1) / denominator) - 1);
-        remainder[0] = (int)(numerator - (quotient * denominator));
+        remainder[0] = (int)(numerator - ((long)quotient * denominator));
         return quotient;
     }
 
