@@ -1756,7 +1756,7 @@ public class DecimalFormat extends NumberFormat {
                             l = -l;
                         }
                     }
-                    n = new Long(l);
+                    n = Long.valueOf(l);
                 } else {
                     BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
                     n = (big.bitLength() < 64) ? (Number) Long.valueOf(big.longValue()) : (Number) big;
