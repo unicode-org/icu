@@ -94,6 +94,7 @@
         <ant dir="${icu4j.build-tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.tools.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.demos.dir}" target="clean" inheritAll="false"/>
+        <ant dir="${icu4j.samples.dir}" target="clean" inheritAll="false"/>
         <ant dir="${icu4j.perf.dir}" target="clean" inheritAll="false"/>
 
         <!-- delete all .jar files root directory -->
@@ -110,7 +111,7 @@
     </target>
 
     <!-- meta build targets -->
-    <target name="all" depends="info, main, tests, build-tools, tools, demos, perf, jar, docs" description="Build all primary targets"/>
+    <target name="all" depends="info, main, tests, build-tools, tools, demos, samples, perf, jar, docs" description="Build all primary targets"/>
     <target name="main" depends="info, core, collate, charset, currdata, langdata, regiondata, translit, localespi" description="Build ICU4J runtime library classes"/>
     <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests, localespi-tests" description="Build ICU4J test classes"/>
     <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution"/>
@@ -414,6 +415,7 @@
                 eol="crlf">
             <include name="main/**/*"/>
             <include name="demos/**/*"/>
+            <include name="samples/**/*"/>
             <include name="tools/**/*"/>
             <include name="*.html"/>
             <include name="*.xml"/>
@@ -453,6 +455,7 @@
                 eol="lf">
             <include name="main/**/*"/>
             <include name="demos/**/*"/>
+            <include name="samples/**/*"/>
             <include name="tools/**/*"/>
             <include name="*.html"/>
             <include name="*.xml"/>
@@ -558,6 +561,10 @@
         <ant dir="${icu4j.demos.dir}" inheritAll="false"/>
     </target>
 
+    <target name="samples" depends="core, charset, collate, translit" description="Build sample classes">
+        <ant dir="${icu4j.samples.dir}" inheritAll="false"/>
+    </target>
+
     <target name="build-tools" description="Build build-tool classes">
         <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
     </target>
@@ -570,7 +577,60 @@
     </target>
 
     <!-- doc targets -->
-    <target name="docs" depends="info, build-tools" description="Build API documents">
+    <target name="docs" depends="info, build-tools, _checkJCite" description="Build API documents">
+        <antcall target="_docsWithJCite"/>
+        <antcall target="_docsWithoutJCite"/>
+    </target>
+
+    <target name="_checkJCite" if="env.JCITE_DIR">
+        <fileset dir="${env.JCITE_DIR}" id="jcite.files">
+            <include name="build/*.jar"/>
+            <include name="lib/*.jar"/>
+        </fileset>
+        <pathconvert property="jcite.libs" refid="jcite.files"/>
+
+        <dirset dir="${basedir}" id="jcite.src.dirs">
+            <include name="samples/src"/>
+            <include name="demos/src"/>
+            <include name="main/tests/*/src"/>
+        </dirset>
+        <pathconvert property="jcite.addl.src" refid="jcite.src.dirs"/>
+    </target>
+
+    <target name="_docsWithJCite" if="jcite.libs">
+        <echo message="JCite library path:             ${jcite.libs}"/>
+        <echo message="JCite additional source path:   ${jcite.addl.src}"/>
+        <javadoc
+                destdir="${doc.dir}"
+                nodeprecatedlist="true"
+                windowtitle="icu4j"
+                doctitle="icu4j"
+                encoding="${java.src.encoding}"
+                docencoding="UTF-8"
+                bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
+                additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src}"
+                link="http://java.sun.com/javase/6/docs/api/"
+                source="1.5"
+                stylesheetfile="stylesheet.css">
+            <packageset dir="${icu4j.core.dir}/src">
+                <include name="com/ibm/icu/lang/**"/>
+                <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
+            </packageset>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <packageset dir="${icu4j.translit.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <packageset dir="${icu4j.charset.dir}/src">
+                <include name="com/ibm/icu/charset/**"/>
+            </packageset>
+        </javadoc>
+    </target>
+
+    <target name="_docsWithoutJCite" unless="jcite.libs">
         <javadoc
                 destdir="${doc.dir}"
                 nodeprecatedlist="true"
@@ -581,7 +641,8 @@
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
                 link="http://java.sun.com/javase/6/docs/api/"
-                source="1.5">
+                source="1.5"
+                stylesheetfile="stylesheet.css">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>

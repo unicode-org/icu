@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -43,12 +43,7 @@ public class Launcher extends DemoApplet {
         "calendar.CalendarApp",
         "charsetdet.DetectingViewer",
         "holiday.HolidayCalendarDemo",
-//        "number.CurrencyDemo", -- console
-//        "rbbi.DBBIDemo",
-//        "rbbi.RBBIDemo",
-//        "rbbi.TextBoundDemo",
         "rbnf.RbnfDemo",
-//        "timescale.PivotDemo",  -- console
         "translit.Demo",
     };
 
