@@ -163,6 +163,7 @@ timezoneTypes:table(nofallback){
             "Africa:Gaborone"{"bwgbe"}
             "Africa:Harare"{"zwhre"}
             "Africa:Johannesburg"{"zajnb"}
+            "Africa:Juba"{"ssjub"}
             "Africa:Kampala"{"ugkla"}
             "Africa:Khartoum"{"sdkrt"}
             "Africa:Kigali"{"rwkgl"}
@@ -371,6 +372,7 @@ timezoneTypes:table(nofallback){
             "Asia:Dushanbe"{"tjdyu"}
             "Asia:Gaza"{"gaza"}
             "Asia:Harbin"{"cnhrb"}
+            "Asia:Hebron"{"hebron"}
             "Asia:Hong_Kong"{"hkhkg"}
             "Asia:Hovd"{"mnhvd"}
             "Asia:Irkutsk"{"ruikt"}
