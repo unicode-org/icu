@@ -1,8 +1,8 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reader", "reader.vcproj", "{BFEFC070-C5A9-42E3-BAAE-A51FB2C4BA28}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reader", "reader.vcxproj", "{BFEFC070-C5A9-42E3-BAAE-A51FB2C4BA28}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "writer", "writer.vcproj", "{40A90302-F173-4629-A003-F571D2D93D16}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "writer", "writer.vcxproj", "{40A90302-F173-4629-A003-F571D2D93D16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
