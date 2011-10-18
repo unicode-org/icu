@@ -1,6 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uciter8", "uciter8.vcproj", "{94379DD9-E6CC-47AC-8E62-0A4ABD8EB121}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uciter8", "uciter8.vcxproj", "{94379DD9-E6CC-47AC-8E62-0A4ABD8EB121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
