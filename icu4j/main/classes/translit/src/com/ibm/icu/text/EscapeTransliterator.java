@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2010, International Business Machines
+*   Copyright (c) 2001-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -127,6 +127,14 @@ class EscapeTransliterator extends Transliterator {
             }
         });
 
+        // Plain: "FFFF" hex, min=4, max=6
+        Transliterator.registerFactory("Any-Hex/Plain", new Transliterator.Factory() {
+            public Transliterator getInstance(String ID) {
+                return new EscapeTransliterator("Any-Hex/Plain",
+                                                "", "", 16, 4, true, null);
+            }
+        });
+        
         // Generic
         Transliterator.registerFactory("Any-Hex", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
