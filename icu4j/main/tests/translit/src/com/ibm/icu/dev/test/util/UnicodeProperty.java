@@ -65,6 +65,13 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         return UNASSIGNED;
     }
 
+    public static synchronized UnicodeSet contractUNASSIGNED(UnicodeSet toBeUnassigned) {
+        UnicodeSet temp = UNASSIGNED;
+        ResetCacheProperties();
+        UNASSIGNED = temp == null ? toBeUnassigned.freeze() : new UnicodeSet(temp).retainAll(toBeUnassigned).freeze();
+        return UNASSIGNED;
+    }
+
     public static synchronized int getSAMPLE_UNASSIGNED() {
         if (SAMPLE_UNASSIGNED == 0) {
             SAMPLE_UNASSIGNED = getUNASSIGNED().charAt(0);
