@@ -380,11 +380,11 @@ public class IndianCalendar extends Calendar {
         } else {
               mday = yday - leapMonth;
               if (mday < (31 * 5)) {
-                 IndianMonth = (int)Math.floor(mday / 31) + 1;
+                 IndianMonth = mday / 31 + 1;
                  IndianDayOfMonth = (mday % 31) + 1;
               } else {
                  mday -= 31 * 5;
-                 IndianMonth = (int)Math.floor(mday / 30) + 6;
+                 IndianMonth = mday / 30 + 6;
                  IndianDayOfMonth = (mday % 30) + 1;
               }
         }
@@ -508,18 +508,15 @@ public class IndianCalendar extends Calendar {
      */
     private static double gregorianToJD(int year, int month, int date) {
        double JULIAN_EPOCH = 1721425.5;
-       double jd = (JULIAN_EPOCH - 1) +
-          (365 * (year - 1)) +
-          Math.floor((year - 1) / 4) +
-          (-Math.floor((year - 1) / 100)) +
-          Math.floor((year - 1) / 400) +
-          Math.floor((((367 * month) - 362) / 12) +
-                ((month <= 2) ? 0 :
-                 (isGregorianLeap(year) ? -1 : -2)
-                ) +
-                date);
-       
-       return jd;
+       int y = year - 1;
+       int result = (365 * y)
+                  + (y / 4)
+                  - (y / 100)
+                  + (y / 400)
+                  + (((367 * month) - 362) / 12)
+                  + ((month <= 2) ? 0 : (isGregorianLeap(year) ? -1 : -2))
+                  + date;
+       return result - 1 + JULIAN_EPOCH;
     }
     
     /*
