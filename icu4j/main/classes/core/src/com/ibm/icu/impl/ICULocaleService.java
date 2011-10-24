@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -486,14 +486,19 @@ public class ICULocaleService extends ICUService {
          * Returns the service object if kind/locale match.  Service is not used.
          */
         public Object create(Key key, ICUService service) {
-            LocaleKey lkey = (LocaleKey)key;
-            if (kind == LocaleKey.KIND_ANY || kind == lkey.kind()) {
-                String keyID = lkey.currentID();
-                if (id.equals(keyID)) {
-                    return obj;
-                }
+            if (!(key instanceof LocaleKey)) {
+                return null;
             }
-            return null;
+            
+            LocaleKey lkey = (LocaleKey)key;
+            if (kind != LocaleKey.KIND_ANY && kind != lkey.kind()) {
+                return null;
+            }
+            if (!id.equals(lkey.currentID())) {
+                return null;
+            }
+            
+            return obj;
         }
 
         protected boolean isSupportedID(String idToCheck) {
