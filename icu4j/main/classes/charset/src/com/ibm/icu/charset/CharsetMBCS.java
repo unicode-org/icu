@@ -890,7 +890,7 @@ class CharsetMBCS extends CharsetICU {
                 try {
                     if (!EBCDICSwapLFNL()) {
                         /* this option does not apply, remove it */
-                        this.options = myOptions &= ~UConverterConstants.OPTION_SWAP_LFNL;
+                        this.options = myOptions & ~UConverterConstants.OPTION_SWAP_LFNL;
                     }
                 } catch (Exception e) {
                     /* something went wrong. */
