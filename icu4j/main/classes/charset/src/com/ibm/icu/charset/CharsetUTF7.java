@@ -20,7 +20,7 @@ import com.ibm.icu.text.UnicodeSet;
  *
  */
 class CharsetUTF7 extends CharsetICU {
-    private final String IMAP_NAME="IMAP-mailbox-name";
+    private final static String IMAP_NAME="IMAP-mailbox-name";
     private boolean useIMAP;
     protected byte[] fromUSubstitution=new byte[]{0x3F};
    
