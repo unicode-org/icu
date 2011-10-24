@@ -106,7 +106,7 @@ class CharsetISCII extends CharsetICU {
         static final short ZERO = 0x00;
     }
     
-    private final String ISCII_CNV_PREFIX = "ISCII,version=";
+    private final static String ISCII_CNV_PREFIX = "ISCII,version=";
     
     @SuppressWarnings("unused")
     private final class UConverterDataISCII {

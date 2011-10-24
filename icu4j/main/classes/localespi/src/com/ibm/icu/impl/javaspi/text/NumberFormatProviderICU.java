@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,10 +16,10 @@ import com.ibm.icu.impl.jdkadapter.NumberFormatICU;
 
 public class NumberFormatProviderICU extends NumberFormatProvider {
 
-    private final int NUMBER = 0;
-    private final int INTEGER = 1;
-    private final int CURRENCY = 2;
-    private final int PERCENT = 3;
+    private final static int NUMBER   = 0;
+    private final static int INTEGER  = 1;
+    private final static int CURRENCY = 2;
+    private final static int PERCENT  = 3;
 
     @Override
     public NumberFormat getCurrencyInstance(Locale locale) {
