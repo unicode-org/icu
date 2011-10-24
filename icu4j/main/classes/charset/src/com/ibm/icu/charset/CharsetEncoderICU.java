@@ -581,8 +581,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                                 source.get(preFromUArray, 0, length);
                                 preFromULength = (byte) -length;
                             }
-                            source = realSource;
-                            flush = realFlush;
                         }
                         return cr;
                     }

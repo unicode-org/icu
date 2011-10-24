@@ -601,9 +601,6 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                                 source.get(preToUArray, preToUBegin, length);
                                 preToULength=(byte)-length;
                             }
-    
-                            source=realSource;
-                            flush=realFlush;
                         }
                         return cr;
                     }
