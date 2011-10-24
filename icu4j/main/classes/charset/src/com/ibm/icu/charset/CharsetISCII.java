@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -766,7 +766,7 @@ class CharsetISCII extends CharsetICU {
         
         extraInfo = new UConverterDataISCII( 
                             option,
-                            new String(ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK))  /* name */
+                            ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK)  /* name */
                         );
         
         initializePNJSets();
