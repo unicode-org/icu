@@ -389,6 +389,9 @@ public abstract class UResourceBundle extends ResourceBundle {
         private int hashCodeCache;
         ///CLOVER:OFF
         public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
             if (this == other) {
                 return true;
             }

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2010, Google, International Business Machines
+ * Copyright (c) 2002-2011, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -102,6 +102,12 @@ public class Row<C0, C1, C2, C3, C4> implements java.lang.Comparable, Cloneable,
     }
 
     public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (this == other) {
+            return true;
+        }
         try {
             Row<C0, C1, C2, C3, C4> that = (Row<C0, C1, C2, C3, C4>)other;
             if (items.length != that.items.length) {

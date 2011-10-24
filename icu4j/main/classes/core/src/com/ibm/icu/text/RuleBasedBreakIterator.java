@@ -116,6 +116,12 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
     public boolean equals(Object that) {
+        if (that == null) {
+            return false;
+        }
+        if (this == that) {
+            return true;
+        }
         try {
             RuleBasedBreakIterator other = (RuleBasedBreakIterator) that;
             if (fRData != other.fRData && (fRData == null || other.fRData == null)) {System.out.println("GOT HERE");
