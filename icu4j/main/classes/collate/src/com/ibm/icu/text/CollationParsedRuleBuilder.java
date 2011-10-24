@@ -789,7 +789,7 @@ final class CollationParsedRuleBuilder {
         MaxJamoExpansionTable() {
             m_endExpansionCE_ = new ArrayList<Integer>();
             m_isV_ = new ArrayList<Boolean>();
-            m_endExpansionCE_.add(new Integer(0));
+            m_endExpansionCE_.add(Integer.valueOf(0));
             m_isV_.add(Boolean.FALSE);
             m_maxLSize_ = 1;
             m_maxVSize_ = 1;
@@ -811,8 +811,8 @@ final class CollationParsedRuleBuilder {
         MaxExpansionTable() {
             m_endExpansionCE_ = new ArrayList<Integer>();
             m_expansionCESize_ = new ArrayList<Byte>();
-            m_endExpansionCE_.add(new Integer(0));
-            m_expansionCESize_.add(new Byte((byte) 0));
+            m_endExpansionCE_.add(Integer.valueOf(0));
+            m_expansionCESize_.add(Byte.valueOf((byte) 0));
         }
 
         MaxExpansionTable(MaxExpansionTable table) {
@@ -1030,9 +1030,9 @@ final class CollationParsedRuleBuilder {
             m_maxExpansions_ = maxet;
             // adding an extra initial value for easier manipulation
             for (int i = 0; i < RuleBasedCollator.UCA_.m_expansionEndCE_.length; i++) {
-                maxet.m_endExpansionCE_.add(new Integer(
+                maxet.m_endExpansionCE_.add(Integer.valueOf(
                         RuleBasedCollator.UCA_.m_expansionEndCE_[i]));
-                maxet.m_expansionCESize_.add(new Byte(
+                maxet.m_expansionCESize_.add(Byte.valueOf(
                         RuleBasedCollator.UCA_.m_expansionEndCEMaxSize_[i]));
             }
             m_maxJamoExpansions_ = maxjet;
@@ -2170,7 +2170,7 @@ final class CollationParsedRuleBuilder {
      * @return the current position of the new element
      */
     private static final int addExpansion(List<Integer> expansions, int value) {
-        expansions.add(new Integer(value));
+        expansions.add(Integer.valueOf(value));
         return expansions.size() - 1;
     }
 
@@ -2219,14 +2219,14 @@ final class CollationParsedRuleBuilder {
             // is smaller
             Object currentsize = maxexpansion.m_expansionCESize_.get(result);
             if (((Byte) currentsize).byteValue() < expansionsize) {
-                maxexpansion.m_expansionCESize_.set(result, new Byte(
-                        expansionsize));
+                maxexpansion.m_expansionCESize_.set(result, Byte.valueOf(
+                            expansionsize));
             }
         } else {
             // we'll need to squeeze the value into the array. initial
             // implementation. shifting the subarray down by 1
-            maxexpansion.m_endExpansionCE_.add(start + 1, new Integer(endexpansion));
-            maxexpansion.m_expansionCESize_.add(start + 1, new Byte(expansionsize));
+            maxexpansion.m_endExpansionCE_.add(start + 1, Integer.valueOf(endexpansion));
+            maxexpansion.m_expansionCESize_.add(start + 1, Byte.valueOf(expansionsize));
         }
         return maxexpansion.m_endExpansionCE_.size();
     }
@@ -2280,7 +2280,7 @@ final class CollationParsedRuleBuilder {
                 return maxexpansion.m_endExpansionCE_.size();
             }
         }
-        maxexpansion.m_endExpansionCE_.add(new Integer(endexpansion));
+        maxexpansion.m_endExpansionCE_.add(Integer.valueOf(endexpansion));
         maxexpansion.m_isV_.add(isV ? Boolean.TRUE : Boolean.FALSE);
 
         return maxexpansion.m_endExpansionCE_.size();
@@ -2519,7 +2519,7 @@ final class CollationParsedRuleBuilder {
             element = table.m_elements_.size() - 1;
         }
 
-        tbl.m_CEs_.add(new Integer(value));
+        tbl.m_CEs_.add(Integer.valueOf(value));
         tbl.m_codePoints_.append(codePoint);
         return constructSpecialCE(table.m_currentTag_, element);
     }
@@ -2714,7 +2714,7 @@ final class CollationParsedRuleBuilder {
             }
         }
         if (codePoint == tbl.m_codePoints_.charAt(position)) {
-            tbl.m_CEs_.set(position, new Integer(newCE));
+            tbl.m_CEs_.set(position, Integer.valueOf(newCE));
             return element & 0xFFFFFF;
         } else {
             return CE_NOT_FOUND_;
@@ -2745,7 +2745,7 @@ final class CollationParsedRuleBuilder {
             element = table.m_elements_.size() - 1;
         }
 
-        tbl.m_CEs_.set(offset, new Integer(value));
+        tbl.m_CEs_.set(offset, Integer.valueOf(value));
         tbl.m_codePoints_.setCharAt(offset, codePoint);
         return constructSpecialCE(table.m_currentTag_, element);
     }
@@ -2779,7 +2779,7 @@ final class CollationParsedRuleBuilder {
             offset++;
         }
 
-        tbl.m_CEs_.add(offset, new Integer(value));
+        tbl.m_CEs_.add(offset, Integer.valueOf(value));
         tbl.m_codePoints_.insert(offset, codePoint);
 
         return constructSpecialCE(table.m_currentTag_, element);
@@ -2978,7 +2978,7 @@ final class CollationParsedRuleBuilder {
             return 0;
         }
 
-        tbl.m_CEs_.set(tbl.m_CEs_.size() - 1, new Integer(value));
+        tbl.m_CEs_.set(tbl.m_CEs_.size() - 1, Integer.valueOf(value));
         return constructSpecialCE(table.m_currentTag_, element & 0xFFFFFF);
     }
 
@@ -3667,7 +3667,7 @@ final class CollationParsedRuleBuilder {
         table.m_offsets_.clear();
         int position = 0;
         for (int i = 0; i < tsize; i++) {
-            table.m_offsets_.add(new Integer(position));
+            table.m_offsets_.add(Integer.valueOf(position));
             position += table.m_elements_.get(i).m_CEs_
                     .size();
         }
@@ -3701,7 +3701,7 @@ final class CollationParsedRuleBuilder {
                 if (isContractionTableElement(CEPointer.get(offset + j).intValue())) {
                     int ce = CEPointer.get(offset + j).intValue();
                     CEPointer.set(offset + j,
-                            new Integer(constructSpecialCE(getCETag(ce),
+                            Integer.valueOf(constructSpecialCE(getCETag(ce),
                                     table.m_offsets_.get(getContractionOffset(ce))
                                     .intValue())));
                 }
