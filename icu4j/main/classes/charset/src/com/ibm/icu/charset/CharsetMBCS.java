@@ -2641,7 +2641,7 @@ class CharsetMBCS extends CharsetICU {
                 toUFallbacks = mbcsTable.toUFallbacks;
                 start = 0;
                 while (start < limit - 1) {
-                    i = (start + limit) / 2;
+                    i = (start + limit) >>> 1;
                     if (offset < toUFallbacks[i].offset) {
                         limit = i;
                     } else {
