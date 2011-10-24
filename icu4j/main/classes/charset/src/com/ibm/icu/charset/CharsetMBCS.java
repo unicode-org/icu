@@ -623,7 +623,7 @@ class CharsetMBCS extends CharsetICU {
             int st1, st2, st3, i;
             
             for (st1 = 0; stageUTF8Index < stageUTF8Length; ++st1) {
-                st2 = ((char)stage[2*st1]<<8) | stage[2*st1+1];
+                st2 = ((char)stage[2*st1]<<8) | (0xff & stage[2*st1+1]);
                 if (st2 != stage1Length/2) {
                     /* each stage 2 block has 64 entries corresponding to 16 entries in the mbcsIndex */
                     for (i = 0; i < 16; ++i) {

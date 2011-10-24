@@ -1234,7 +1234,7 @@ class CharsetISCII extends CharsetICU {
                 /* Write the language code following LF only if LF is not the last character. */
                 if (fromUnicodeStatus == LF) {
                     targetByteUnit = ATR << 8;
-                    targetByteUnit += (byte)lookupInitialData[range].isciiLang;
+                    targetByteUnit += 0xff & (byte)lookupInitialData[range].isciiLang;
                     fromUnicodeStatus = 0x0000;
                     /* now append ATR and language code */
                     cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
