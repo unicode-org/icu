@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -345,7 +345,7 @@ public final class CollationKey implements Comparable<CollationKey>
                 StringBuilder key = new StringBuilder(size);
                 int i = 0;
                 while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
-                    key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
+                    key.append((char)((m_key_[i] << 8) | (0xff & m_key_[i + 1])));
                     i += 2;
                 }
                 if (m_key_[i] != 0) {
