@@ -4981,14 +4981,14 @@ class CharsetMBCS extends CharsetICU {
            if(c>=0){
                setFillIn.add(c);
            } else {
-               String normalizedString=""; // String for composite characters 
+               StringBuilder normalizedStringBuilder = new StringBuilder();
                for(int j=0; j<length;j++){
-                   normalizedString+=s[j];
+                   normalizedStringBuilder.append(s[j]);
                }
+               String normalizedString = normalizedStringBuilder.toString();
                for(int j=0;j<length;j++){
                    setFillIn.add(normalizedString);
                }
-             
              }
        }
        
@@ -5003,11 +5003,11 @@ class CharsetMBCS extends CharsetICU {
                        FROM_U_GET_PARTIAL_INDEX(value));
            } else if ((useFallback ? (value&FROM_U_RESERVED_MASK)==0:((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))==FROM_U_ROUNDTRIP_FLAG)) 
                    && FROM_U_GET_LENGTH(value)>=minLength) {
-               String normalizedString=""; // String for composite characters 
+               StringBuilder normalizedStringBuilder = new StringBuilder(); // String for composite characters
                for(int j=0; j<(length+1);j++){
-                   normalizedString+=s[j];
+                   normalizedStringBuilder.append(s[j]);
                }
-             setFillIn.add(normalizedString);
+             setFillIn.add(normalizedStringBuilder.toString());
            }
        }
         

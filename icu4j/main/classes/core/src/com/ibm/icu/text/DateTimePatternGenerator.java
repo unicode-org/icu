@@ -1659,7 +1659,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 newPattern.append(fp.quoteLiteral((String)item));
             } else {
                 final VariableField variableField = (VariableField) item;
-                String field = variableField.toString();
+                StringBuilder fieldBuilder = new StringBuilder(variableField.toString());
                 //                int canonicalIndex = getCanonicalIndex(field, true);
                 //                if (canonicalIndex < 0) {
                 //                    continue; // don't adjust
@@ -1669,7 +1669,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
                 if (fixFractionalSeconds && type == SECOND) {
                     String newField = inputRequest.original[FRACTIONAL_SECOND];
-                    field = field + decimal + newField;
+                    fieldBuilder.append(decimal);
+                    fieldBuilder.append(newField);
                 } else if (inputRequest.type[type] != 0) {
                     // Here:
                     // - "reqField" is the field from the originally requested skeleton, with length
@@ -1705,7 +1706,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     if ( (type == HOUR && (options & MATCH_HOUR_FIELD_LENGTH)==0) ||
                          (type == MINUTE && (options & MATCH_MINUTE_FIELD_LENGTH)==0) ||
                          (type == SECOND && (options & MATCH_SECOND_FIELD_LENGTH)==0) ) {
-                        adjFieldLen = field.length();
+                        adjFieldLen = fieldBuilder.length();
                     } else if (matcherWithSkeleton != null) {
                         String skelField = matcherWithSkeleton.origStringForField(type);
                         int skelFieldLen = skelField.length();
@@ -1713,14 +1714,14 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                         boolean skelFieldIsNumeric = matcherWithSkeleton.fieldIsNumeric(type);
                         if (skelFieldLen == reqFieldLen || (patFieldIsNumeric && !skelFieldIsNumeric) || (skelFieldIsNumeric && !patFieldIsNumeric)) {
                             // don't adjust the field length in the found pattern
-                            adjFieldLen = field.length();
+                            adjFieldLen = fieldBuilder.length();
                         }
                     }
-                    char c = (type != HOUR && type != MONTH && type != WEEKDAY)? reqField.charAt(0): field.charAt(0);
-                    field = "";
-                    for (int i = adjFieldLen; i > 0; --i) field += c;
+                    char c = (type != HOUR && type != MONTH && type != WEEKDAY)? reqField.charAt(0): fieldBuilder.charAt(0);
+                    fieldBuilder = new StringBuilder();
+                    for (int i = adjFieldLen; i > 0; --i) fieldBuilder.append(c);
                 }
-                newPattern.append(field);
+                newPattern.append(fieldBuilder);
             }
         }
         //if (SHOW_DISTANCE) System.out.println("\tRaw: " + pattern);
