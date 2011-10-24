@@ -2222,6 +2222,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         if (this == obj) {
             return true;
         }

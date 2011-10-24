@@ -254,6 +254,12 @@ abstract class NFSubstitution {
     public boolean equals(Object that) {
         // compare class and all of the fields all substitutions have
         // in common
+        if (that == null) {
+            return false;
+        }
+        if (this == that) {
+            return true;
+        }
         if (this.getClass() == that.getClass()) {
             NFSubstitution that2 = (NFSubstitution)that;
 

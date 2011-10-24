@@ -166,6 +166,12 @@ public class LocalePriorityList implements Iterable<ULocale> {
      */
     @Override
     public boolean equals(final Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
         try {
             final LocalePriorityList that = (LocalePriorityList) o;
             return languagesAndWeights.equals(that.languagesAndWeights);

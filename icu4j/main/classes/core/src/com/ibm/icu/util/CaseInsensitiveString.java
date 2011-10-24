@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -56,8 +56,13 @@ public class CaseInsensitiveString {
      * @stable ICU 2.0
      */
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
         getFolded();
-        
         try {
             CaseInsensitiveString cis = (CaseInsensitiveString) o;
             

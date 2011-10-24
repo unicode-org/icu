@@ -2258,6 +2258,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.0
      */
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
         try {
             UnicodeSet that = (UnicodeSet) o;
             if (len != that.len) return false;
