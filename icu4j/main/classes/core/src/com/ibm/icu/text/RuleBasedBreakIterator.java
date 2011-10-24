@@ -144,7 +144,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
     public String toString() {
-        String   retStr = null;
+        String retStr = "";
         if (fRData != null) {
             retStr =  fRData.fRuleSource;
         }
