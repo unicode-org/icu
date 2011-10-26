@@ -108,7 +108,7 @@ parseFlagsFile(const char *fileName, char **flagBuffer, int32_t flagBufferSize, 
 static int32_t extractFlag(char* buffer, int32_t bufferSize, char* flag, int32_t flagSize, const char **flagNames, int32_t numOfFlags, UErrorCode *status) {
     int32_t i, index = -1;
     char *pBuffer;
-    int32_t offset;
+    int32_t offset=0;
     UBool bufferWritten = FALSE;
 
     if (buffer[0] != 0) {
@@ -137,7 +137,7 @@ static int32_t extractFlag(char* buffer, int32_t bufferSize, char* flag, int32_t
         flag[0] = 0;
     }
 
-    if (flagNames != NULL) {
+    if (flagNames != NULL && offset>0) {
         offset--;  /* Move offset back 1 because of '='*/
         for (i = 0; i < numOfFlags; i++) {
             if (uprv_strncmp(buffer, flagNames[i], offset) == 0) {

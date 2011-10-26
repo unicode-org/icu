@@ -341,7 +341,6 @@ CurrencyPluralInfo::deleteHash(Hashtable* hTable)
     int32_t pos = -1;
     const UHashElement* element = NULL;
     while ( (element = hTable->nextElement(pos)) != NULL ) {
-        const UHashTok keyTok = element->key;
         const UHashTok valueTok = element->value;
         const UnicodeString* value = (UnicodeString*)valueTok.pointer;
         delete value;
