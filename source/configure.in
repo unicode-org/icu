@@ -352,10 +352,7 @@ AC_SUBST(U_DEFAULT_SHOW_DRAFT)
 AC_PROG_RANLIB
 
 # look for 'ar' the proper way
-AC_CHECK_TOOL(AR, ar)
-if test "x$AR" = "x"; then
-  AC_MSG_ERROR(Archiver ar not found. Set AR= or fix PATH)
-fi
+AC_CHECK_TARGET_TOOL(AR, ar, false)
 
 AC_MSG_CHECKING([whether to enable renaming of symbols])
 enabled=yes
@@ -1294,6 +1291,9 @@ else
 echo "** WARNING: $U_MAKE may not be GNU make."
 echo "This may cause ICU to fail to build. Please make sure that GNU make"
 echo "is in your PATH so that the configure script can detect its location."
+fi
+if test "x$AR" = "xfalse"; then
+  echo "*** WARNING: Archiver ar not found. Set AR= or fix PATH. Some builds (such as static) may fail."
 fi
 
 AC_MSG_CHECKING([the version of "$U_MAKE"])

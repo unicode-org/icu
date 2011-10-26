@@ -5498,9 +5498,8 @@ fi
 
 
 # look for 'ar' the proper way
-if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
-set dummy ${ac_tool_prefix}ar; ac_word=$2
+# Extract the first word of "$target_alias-ar", so it can be a program name with args.
+set dummy $target_alias-ar; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_prog_AR+:} false; then :
@@ -5516,7 +5515,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_AR="${ac_tool_prefix}ar"
+    ac_cv_prog_AR="$target_alias-ar"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -5536,10 +5535,10 @@ $as_echo "no" >&6; }
 fi
 
 
-fi
 if test -z "$ac_cv_prog_AR"; then
-  ac_ct_AR=$AR
-  # Extract the first word of "ar", so it can be a program name with args.
+  if test "$build" = "$target"; then
+    ac_ct_AR=$AR
+    # Extract the first word of "ar", so it can be a program name with args.
 set dummy ar; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -5564,6 +5563,7 @@ done
   done
 IFS=$as_save_IFS
 
+  test -z "$ac_cv_prog_ac_ct_AR" && ac_cv_prog_ac_ct_AR="false"
 fi
 fi
 ac_ct_AR=$ac_cv_prog_ac_ct_AR
@@ -5575,24 +5575,14 @@ else
 $as_echo "no" >&6; }
 fi
 
-  if test "x$ac_ct_AR" = x; then
-    AR=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
     AR=$ac_ct_AR
+  else
+    AR="false"
   fi
 else
   AR="$ac_cv_prog_AR"
 fi
 
-if test "x$AR" = "x"; then
-  as_fn_error $? "Archiver ar not found. Set AR= or fix PATH" "$LINENO" 5
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable renaming of symbols" >&5
 $as_echo_n "checking whether to enable renaming of symbols... " >&6; }
@@ -8779,6 +8769,9 @@ else
 echo "** WARNING: $U_MAKE may not be GNU make."
 echo "This may cause ICU to fail to build. Please make sure that GNU make"
 echo "is in your PATH so that the configure script can detect its location."
+fi
+if test "x$AR" = "xfalse"; then
+  echo "*** WARNING: Archiver ar not found. Set AR= or fix PATH. Some builds (such as static) may fail."
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking the version of \"$U_MAKE\"" >&5
