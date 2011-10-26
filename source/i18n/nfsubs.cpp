@@ -172,6 +172,8 @@ public:
 
     virtual UChar tokenChar() const { return (UChar)0x003e; } // '>'
 
+	virtual void toString(UnicodeString& result) const;
+
 public:
     static UClassID getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
@@ -976,8 +978,29 @@ ModulusSubstitution::doParse(const UnicodeString& text,
         return TRUE;
     }
 }
+/**
+ * Returns a textual description of the substitution
+ * @return A textual description of the substitution.  This might
+ * not be identical to the description it was created from, but
+ * it'll produce the same result.
+ */
+void
+ModulusSubstitution::toString(UnicodeString& text) const
+{
+  // use tokenChar() to get the character at the beginning and
+  // end of the substitutin token.  In between them will go
+  // either the name of the rule set it uses, or the pattern of
+  // the DecimalFormat it uses
 
-
+  if ( ruleToUse != NULL ) { // Must have been a >>> substitution.
+      text.remove();
+      text.append(tokenChar());
+      text.append(tokenChar());
+      text.append(tokenChar());
+  } else { // Otherwise just use the super-class function.
+	  NFSubstitution::toString(text);
+  }
+}
 //===================================================================
 // IntegralPartSubstitution
 //===================================================================
