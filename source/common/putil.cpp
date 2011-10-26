@@ -61,6 +61,11 @@
 #include <locale.h>
 #include <float.h>
 
+#ifndef U_COMMON_IMPLEMENTATION
+#error U_COMMON_IMPLEMENTATION not set - must be set for all ICU source files in common/ - see http://userguide.icu-project.org/howtouseicu
+#endif
+
+
 /* include system headers */
 #if U_PLATFORM_USES_ONLY_WIN32_API
     /*
