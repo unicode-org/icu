@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2010, International Business Machines
+*   Copyright (C) 2003-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -976,7 +976,7 @@ ucm_countChars(UCMStates *states,
     uint8_t state;
 
     offset=0;
-    i=count=0;
+    count=0;
     state=0;
 
     if(states->countStates==0) {

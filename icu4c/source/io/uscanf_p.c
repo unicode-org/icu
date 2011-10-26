@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -747,12 +747,11 @@ u_scanf_percent_handler(UFILE       *input,
     double          num;
     UNumberFormat   *format;
     int32_t         parsePos    = 0;
-    int32_t         skipped;
     UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
-    skipped = u_scanf_skip_leading_ws(input, info->fPadChar);
+    u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
@@ -772,7 +771,7 @@ u_scanf_percent_handler(UFILE       *input,
         return 0;
 
     /* Skip the positive prefix. ICU normally can't handle this due to strict parsing. */
-    skipped += u_scanf_skip_leading_positive_sign(input, format, &status);
+    u_scanf_skip_leading_positive_sign(input, format, &status);
 
     /* parse the number */
     num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
