@@ -70,6 +70,11 @@ static void TestCurrencyRegression(void);
  **/
 static void TestParseZero(void);
 
+/**
+ * Test cloning formatter with RBNF
+ **/
+static void TestCloneWithRBNF(void);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
