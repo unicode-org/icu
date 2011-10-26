@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2009, International Business Machines                   *
+* Copyright (C) 2001-2011, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -18,6 +18,11 @@
 #include "ucln_io.h"
 #include "umutex.h"
 #include "uassert.h"
+
+#ifndef U_IO_IMPLEMENTATION
+#error U_IO_IMPLEMENTATION not set - must be set for all ICU source files in io/ - see http://userguide.icu-project.org/howtouseicu
+#endif
+
 
 /**  Auto-client */
 #define UCLN_TYPE UCLN_IO
