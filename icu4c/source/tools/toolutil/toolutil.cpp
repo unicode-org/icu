@@ -22,6 +22,10 @@
 #include <sys/stat.h>
 #include "unicode/utypes.h"
 
+#ifndef U_TOOLUTIL_IMPLEMENTATION
+#error U_TOOLUTIL_IMPLEMENTATION not set - must be set for all ICU source files in common/ - see http://userguide.icu-project.org/howtouseicu
+#endif
+
 #if U_PLATFORM_USES_ONLY_WIN32_API
 #   define VC_EXTRALEAN
 #   define WIN32_LEAN_AND_MEAN
