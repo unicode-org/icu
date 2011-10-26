@@ -40,10 +40,8 @@ sc ; Latf ; Latf
 sc ; Latg ; Latg 
 sc ; Lina ; Lina 
 sc ; Maya ; Maya 
-sc ; Mero ; Mero 
 sc ; Moon ; Moon 
 sc ; Perm ; Perm 
-sc ; Plrd ; Plrd 
 sc ; Roro ; Roro 
 sc ; Sara ; Sara 
 sc ; Sgnw ; Sgnw
@@ -54,7 +52,6 @@ sc ; Teng ; Teng
 sc ; Visp ; Visp 
 sc ; Zxxx ; Zxxx 
 
-sc ; Cakm ; Cakm
 sc ; Kore ; Kore
 sc ; Mani ; Mani
 sc ; Phlp ; Phlp
@@ -71,7 +68,6 @@ sc ; Gran ; Gran
 sc ; Kpel ; Kpel
 sc ; Loma ; Loma
 sc ; Mend ; Mend
-sc ; Merc ; Merc
 sc ; Narb ; Narb
 sc ; Nbat ; Nbat
 sc ; Palm ; Palm
@@ -82,8 +78,8 @@ sc ; Afak ; Afak
 sc ; Jurc ; Jurc
 sc ; Mroo ; Mroo
 sc ; Nshu ; Nshu
-sc ; Shrd ; Shrd
-sc ; Sora ; Sora
-sc ; Takr ; Takr
 sc ; Tang ; Tang
 sc ; Wole ; Wole
+
+sc ; Khoj ; Khoj
+sc ; Tirh ; Tirh

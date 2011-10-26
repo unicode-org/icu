@@ -166,6 +166,7 @@ enum {
     UNI_5_1,
     UNI_5_2,
     UNI_6_0,
+    UNI_6_1,
     UNI_VER_COUNT
 };
 
@@ -183,10 +184,11 @@ unicodeVersions[]={
     { 5, 0, 0, 0 },
     { 5, 1, 0, 0 },
     { 5, 2, 0, 0 },
-    { 6, 0, 0, 0 }
+    { 6, 0, 0, 0 },
+    { 6, 1, 0, 0 }
 };
 
-static int32_t ucdVersion=UNI_5_2;
+static int32_t ucdVersion=UNI_6_1;
 
 static int32_t
 findUnicodeVersion(const UVersionInfo version) {
@@ -1259,7 +1261,10 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
 
     size=0;
 
-    if(ucdVersion>=UNI_5_2) {
+    if(ucdVersion>=UNI_6_1) {
+        /* Unicode 6.1 and up has a longer CJK Unihan range than before */
+        cjk.rangeEnd=0x9FCC;
+    } else if(ucdVersion>=UNI_5_2) {
         /* Unicode 5.2 and up has a longer CJK Unihan range than before */
         cjk.rangeEnd=0x9FCB;
     } else if(ucdVersion>=UNI_5_1) {
