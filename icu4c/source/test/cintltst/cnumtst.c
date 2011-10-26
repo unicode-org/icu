@@ -1967,7 +1967,7 @@ static void TestNBSPInPattern(void) {
 
 }
 static void TestCloneWithRBNF(void) {
-//    const wchar_t* pattern = L"\
+/*    const wchar_t* pattern = L"\
 //%main:0.x: >%%millis-only>;\n\
 //x.0: <%%duration<;\n\
 //x.x: <%%durationwithmillis<>%%millis-added>;\n\
@@ -2018,6 +2018,6 @@ static void TestCloneWithRBNF(void) {
 //	if (u_strcmp(buffer,buffer_cloned)) {
 //		log_err("Result from cloned formatter not identical to the original. Original: %s Cloned: %s",u_austrcpy(temp1, buffer),u_austrcpy(temp2,buffer_cloned));
 //	}
-
+*/
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
