@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -91,10 +91,10 @@ upvec_close(UPropsVectors *pv) {
 static uint32_t *
 _findRow(UPropsVectors *pv, UChar32 rangeStart) {
     uint32_t *row;
-    int32_t columns, i, start, limit, prevRow, rows;
+    int32_t columns, i, start, limit, prevRow;
 
     columns=pv->columns;
-    rows=limit=pv->rows;
+    limit=pv->rows;
     prevRow=pv->prevRow;
 
     /* check the vicinity of the last-seen row (start searching with an unrolled loop) */

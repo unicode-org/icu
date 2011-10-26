@@ -66,7 +66,7 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     /* unread the bytes beyond what was consumed for U+FEFF */
     T_FileStream_rewind(in);
     if (*signatureLength > 0) {
-        numRead = T_FileStream_read(in, start, *signatureLength);
+        T_FileStream_read(in, start, *signatureLength);
     }
 
     if(*cp==NULL){
