@@ -160,7 +160,7 @@ void serialize(FILE *f, const UChar *c, int l)
 * @param iter collation element iterator
 */
 void serialize(FILE *f, UCollationElements *iter) {
-    UChar   *codepoint = iter->iteratordata_.string;
+    const UChar   *codepoint = iter->iteratordata_.string;
     // unlikely that sortkeys will be over this size 
     uint8_t  sortkey[64];
     uint8_t *psortkey = sortkey;
