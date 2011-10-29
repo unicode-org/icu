@@ -1,5 +1,5 @@
 #!/usr/bin/python2.4
-#   Copyright (C) 2010, International Business Machines
+#   Copyright (C) 2010-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #   file name:  idna2nrm.py
@@ -27,6 +27,8 @@ replacements = [
   # we treat these values here like their regular siblings.
   (re.compile(r"^([^;]+)  ; disallowed_STD3_valid"), r"# \1disallowed_STD3_valid"),
   (re.compile(r"; disallowed_STD3_mapped +; "), ">"),
+  # For UTS #46, we do not care about "not valid in IDNA2008".
+  (re.compile(r"; *; NV8 +"), ""),
   # Normal transformations.
   (re.compile(r"; disallowed"), ">FFFD"),
   (re.compile(r"; ignored"), ">"),
