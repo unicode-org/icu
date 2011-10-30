@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2010, International Business Machines
+*   Copyright (C) 2000-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -669,7 +669,20 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
             } else if (what_to_do == READUCAVERSION) { //vt[cnt].what_to_do == READUCAVERSION
               u_versionFromString(UCAVersion, buffer+vtLen);
               if(VERBOSE) {
-                fprintf(stdout, "UCA version [%hu.%hu.%hu.%hu]\n", UCAVersion[0], UCAVersion[1], UCAVersion[2], UCAVersion[3]);
+                char uca[U_MAX_VERSION_STRING_LENGTH];
+                u_versionToString(UCAVersion, uca);
+                fprintf(stdout, "UCA version %s\n", uca);
+              }
+              UVersionInfo UCDVersion;
+              u_getUnicodeVersion(UCDVersion);
+              if (UCAVersion[0] != UCDVersion[0] || UCAVersion[1] != UCDVersion[1]) {
+                char uca[U_MAX_VERSION_STRING_LENGTH];
+                char ucd[U_MAX_VERSION_STRING_LENGTH];
+                u_versionToString(UCAVersion, uca);
+                u_versionToString(UCDVersion, ucd);
+                fprintf(stderr, "error: UCA version %s != UCD version %s (temporarily change the FractionalUCA.txt UCA version during Unicode version upgrade)\n", uca, ucd);
+                *status = U_INVALID_FORMAT_ERROR;
+                return NULL;
               }
             } else if (what_to_do == READLEADBYTETOSCRIPTS) { //vt[cnt].what_to_do == READLEADBYTETOSCRIPTS
                 pointer = buffer + vtLen;
