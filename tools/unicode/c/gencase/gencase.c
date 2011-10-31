@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2009, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -299,10 +299,18 @@ main(int argc, char* argv[]) {
     /* process SpecialCasing.txt */
     writeUCDFilename(basename, "SpecialCasing", suffix);
     parseSpecialCasing(filename, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error parsing SpecialCasing.txt: %s\n", u_errorName(errorCode));
+        return errorCode;
+    }
 
     /* process CaseFolding.txt */
     writeUCDFilename(basename, "CaseFolding", suffix);
     parseCaseFolding(filename, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error parsing CaseFolding.txt: %s\n", u_errorName(errorCode));
+        return errorCode;
+    }
 
     /* process additional properties files */
     *basename=0;
@@ -318,6 +326,10 @@ main(int argc, char* argv[]) {
     /* process UnicodeData.txt */
     writeUCDFilename(basename, "UnicodeData", suffix);
     parseDB(filename, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));
+        return errorCode;
+    }
 
     /* process parsed data */
     makeCaseClosure();
@@ -424,7 +436,16 @@ specialCasingLineFn(void *context,
     char *end;
 
     /* get code point */
-    specialCasings[specialCasingCount].code=(UChar32)uprv_strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
+    const char *s=u_skipWhitespace(fields[0][0]);
+    if(0==uprv_strncmp(s, "0000..10FFFF", 12)) {
+        /*
+         * Ignore the line
+         * # @missing: 0000..10FFFF; <slc>; <stc>; <suc>;
+         * because maps-to-self is already our default, and this line breaks this parser.
+         */
+        return;
+    }
+    specialCasings[specialCasingCount].code=(UChar32)uprv_strtoul(s, &end, 16);
     end=(char *)u_skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "gencase: syntax error in SpecialCasing.txt field 0 at %s\n", fields[0][0]);
@@ -543,7 +564,16 @@ caseFoldingLineFn(void *context,
     char status;
 
     /* get code point */
-    caseFoldings[caseFoldingCount].code=(UChar32)uprv_strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
+    const char *s=u_skipWhitespace(fields[0][0]);
+    if(0==uprv_strncmp(s, "0000..10FFFF", 12)) {
+        /*
+         * Ignore the line
+         * # @missing: 0000..10FFFF; C; <code point>
+         * because maps-to-self is already our default, and this line breaks this parser.
+         */
+        return;
+    }
+    caseFoldings[caseFoldingCount].code=(UChar32)uprv_strtoul(s, &end, 16);
     end=(char *)u_skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "gencase: syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
