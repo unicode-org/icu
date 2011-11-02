@@ -341,6 +341,8 @@ ucnv_compareNames(const char *name1, const char *name2);
  * other than its an alias starting with the letters "cp". Please do not
  * associate any meaning to these aliases.</p>
  *
+ * \snippet samples/ucnv/convsamp.cpp ucnv_open
+ *
  * @param converterName Name of the coded character set table.
  *          This may have options appended to the string.
  *          IANA alias character set names, IBM CCSIDs starting with "ibm-",
@@ -1956,34 +1958,7 @@ ucnv_usesFallback(const UConverter *cnv);
  * instead of the input signature bytes.
  * <p>
  * Usage:
- * @code     
- *      UErrorCode err = U_ZERO_ERROR;
- *      char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
- *      int32_t signatureLength = 0;
- *      char *encoding = ucnv_detectUnicodeSignature(input,sizeof(input),&signatureLength,&err);
- *      UConverter *conv = NULL;
- *      UChar output[100];
- *      UChar *target = output, *out;
- *      char *source = input;
- *      if(encoding!=NULL && U_SUCCESS(err)){
- *          // should signature be discarded ?
- *          conv = ucnv_open(encoding, &err);
- *          // do the conversion
- *          ucnv_toUnicode(conv,
- *                         target, output + sizeof(output)/U_SIZEOF_UCHAR,
- *                         source, input + sizeof(input),
- *                         NULL, TRUE, &err);
- *          out = output;
- *          if (discardSignature){
- *              ++out; // ignore initial U+FEFF
- *          }
- *          while(out != target) {
- *              printf("%04x ", *out++);
- *          }
- *          puts("");
- *      }
- *     
- * @endcode
+ * \snippet samples/ucnv/convsamp.cpp ucnv_detectUnicodeSignature
  *
  * @param source            The source string in which the signature should be detected.
  * @param sourceLength      Length of the input string, or -1 if terminated with a NUL byte.

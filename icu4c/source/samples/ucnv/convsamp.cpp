@@ -212,7 +212,9 @@ UErrorCode convsample_02()
   int32_t     len;
 
   // set up the converter
+  //! [ucnv_open]
   conv = ucnv_open("koi8-r", &status);
+  //! [ucnv_open]
   assert(U_SUCCESS(status));
 
   // convert to koi8-r
@@ -1073,6 +1075,42 @@ UErrorCode convsample_46()
 
 #define BUFFERSIZE 219
 
+void convsample_50() {
+  printf("\n\n==============================================\n"
+         "Sample 50: C: ucnv_detectUnicodeSignature\n");
+
+  //! [ucnv_detectUnicodeSignature]
+  UErrorCode err = U_ZERO_ERROR;
+  UBool discardSignature = TRUE; /* set to TRUE to throw away the initial U+FEFF */
+  char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
+  int32_t signatureLength = 0;
+  const char *encoding = ucnv_detectUnicodeSignature(input,sizeof(input),&signatureLength,&err);
+  UConverter *conv = NULL;
+  UChar output[100];
+  UChar *target = output, *out;
+  const char *source = input;
+  if(encoding!=NULL && U_SUCCESS(err)){
+    // should signature be discarded ?
+    conv = ucnv_open(encoding, &err);
+    // do the conversion
+    ucnv_toUnicode(conv,
+                   &target, output + sizeof(output)/U_SIZEOF_UCHAR,
+                   &source, input + sizeof(input),
+                   NULL, TRUE, &err);
+    out = output;
+    if (discardSignature){
+      ++out; // ignore initial U+FEFF
+    }
+    while(out != target) {
+      printf("%04x ", *out++);
+    }
+    puts("");
+  }
+  //! [ucnv_detectUnicodeSignature]
+  puts("");
+}
+
+
 
 /* main */
 
@@ -1096,6 +1134,8 @@ int main()
   convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
   
   convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
+
+  convsample_50();  // C, detect unicode signature
   
   printf("End of converter samples.\n");
   
