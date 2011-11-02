@@ -1003,7 +1003,7 @@ uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
 
     uint32_t   low    = 0;
     uint32_t   high   = gLocaleCount;
-    uint32_t   mid    = high;
+    uint32_t   mid;
     uint32_t   oldmid = 0;
     int32_t    compVal;
 
