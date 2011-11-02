@@ -667,9 +667,7 @@ static void uplug_loadWaitingPlugs(UErrorCode *status) {
         pluginToLoad->awaitingLoad = FALSE;
       } 
     }
-  }
-  currentLevel = uplug_getCurrentLevel();
-    
+  }    
   for(i=0;i<pluginCount;i++) {
     UErrorCode subStatus = U_ZERO_ERROR;
     UPlugData *pluginToLoad = &pluginList[i];
