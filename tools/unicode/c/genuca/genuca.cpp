@@ -141,12 +141,16 @@ int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
     }
     char buffer[1024];
     int32_t i = 0;
-    while(**from != separator) {
-        if (**from == '\0') {
+    for(;;) {
+        char c = **from;
+        if(c == separator || (separator == ' ' && c == '\t')) {
+            break;
+        }
+        if (c == '\0') {
             return 0;
         }
-        if(**from != ' ') {
-            *(buffer+i++) = **from;
+        if(c != ' ') {
+            *(buffer+i++) = c;
         }
         (*from)++;
     }
@@ -497,21 +501,35 @@ static int32_t hex2num(char hex) {
 //     U_CURRENCY_SYMBOL + CHARACTER_CATEGORY_REORDER_CODE_OFFSET
 // };
 
-int32_t getReorderCode(const char* name, int32_t* fillIn, int32_t capacity, UErrorCode *err) {
-    if(U_FAILURE(*err)) {
-        return 0;
-    }
-    if (capacity < 1) {
-        return 0;
-    }
-    int32_t code = ucol_findReorderingEntry(name);
-    if (code != USCRIPT_INVALID_CODE) {
-        *fillIn = code;
-        return 1;
-    }
+static const struct {
+    const char *name;
+    int32_t code;
+} specialReorderTokens[] = {
+    { "TERMINATOR", -2 },  // -2 means "ignore"
+    { "LEVEL-SEPARATOR", -2 },
+    { "FIELD-SEPARATOR", -2 },
+    { "COMPRESS", -2 },  // TODO: We should parse/store which lead bytes are compressible; there is a ticket for that.
+    { "PUNCTUATION", UCOL_REORDER_CODE_PUNCTUATION },
+    { "IMPLICIT", USCRIPT_HAN },  // Implicit weights are usually for Han characters. Han & unassigned share a lead byte.
+    { "TRAILING", -2 },  // We do not reorder trailing weights (those after implicits).
+    { "SPECIAL", -2 }  // We must never reorder internal, special CE lead bytes.
+};
 
-    int32_t length = uscript_getCode(name, reinterpret_cast<UScriptCode*>(fillIn), capacity, err);
-    return length;
+int32_t getReorderCode(const char* name) {
+    int32_t code = ucol_findReorderingEntry(name);
+    if (code >= 0) {
+        return code;
+    }
+    code = u_getPropertyValueEnum(UCHAR_SCRIPT, name);
+    if (code >= 0) {
+        return code;
+    }
+    for (int32_t i = 0; i < LENGTHOF(specialReorderTokens); ++i) {
+        if (0 == strcmp(name, specialReorderTokens[i].name)) {
+            return specialReorderTokens[i].code;
+        }
+    }
+    return -1;  // Same as UCHAR_INVALID_CODE or USCRIPT_INVALID_CODE.
 }
 
 UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, LeadByteConstants *leadByteConstants, UErrorCode *status) {
@@ -696,7 +714,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                     return NULL;
                 }
                 skipWhiteSpace(&pointer, status);
-                
+
                 int32_t reorderCodeArray[100];
                 uint32_t reorderCodeArrayCount = 0;
                 char scriptName[100];
@@ -705,19 +723,21 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                     if (scriptName[0] == ']') {
                         break;
                     }
-
-                    // TODO: fix the FractionalUCA data and then the parsing code
-                    if (strcmp(scriptName, "IMPLICIT") == 0) {
-                        strcpy(scriptName, "Hani");
+                    int32_t reorderCode = getReorderCode(scriptName);
+                    if (reorderCode == -2) {
+                        continue;  // Ignore "TERMINATOR" etc.
                     }
-                    int32_t reorderCodeCount = getReorderCode(scriptName, &reorderCodeArray[reorderCodeArrayCount], sizeof(reorderCodeArray) / sizeof(reorderCodeArray[0]) - reorderCodeArrayCount, status);
-                    //fprintf(stdout, "\treorderCodeCount = %d, status = %x\n", reorderCodeCount, status);
-                    reorderCodeArrayCount += reorderCodeCount;
-                    if (reorderCodeArrayCount > sizeof(reorderCodeArray) / sizeof(reorderCodeArray[0])) {
-                        fprintf(stdout, "reorder code array count is greater than allocated size!");
+                    if (reorderCode < 0) {
+                        fprintf(stdout, "Syntax error: unable to parse reorder code from '%s'\n", scriptName);
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return NULL;
+                    }
+                    if (reorderCodeArrayCount >= LENGTHOF(reorderCodeArray)) {
+                        fprintf(stdout, "reorder code array count is greater than allocated size!\n");
                         *status = U_INTERNAL_PROGRAM_ERROR;
                         return NULL;
                     }
+                    reorderCodeArray[reorderCodeArrayCount++] = reorderCode;
                 }
                 //fprintf(stdout, "reorderCodeArrayCount = %d\n", reorderCodeArrayCount);
                 switch (reorderCodeArrayCount) {
@@ -741,17 +761,15 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
             } else if (what_to_do == READSCRIPTTOLEADBYTES) { //vt[cnt].what_to_do == READSCRIPTTOLEADBYTES
                 uint16_t leadByteArray[100];
                 uint32_t leadByteArrayCount = 0;
-                int32_t reorderCodeArray[100];
-                uint32_t reorderCodeArrayCount = 0;
                 char scriptName[100];
 
                 pointer = buffer + vtLen;
                 uint32_t scriptNameLength = readElement(&pointer, scriptName, '\t', status);
-                int32_t reorderCodeCount = getReorderCode(scriptName, &reorderCodeArray[reorderCodeArrayCount], sizeof(reorderCodeArray) / sizeof(reorderCodeArray[0]), status);
-                if (reorderCodeCount > 0 && reorderCodeArray[0] != USCRIPT_INVALID_CODE) {
-                    //fprintf(stdout, "^^^ processing reorder code = %04x (%s)\n", reorderCodeArray[0], scriptName);
+                int32_t reorderCode = getReorderCode(scriptName);
+                if (reorderCode >= 0) {
+                    //fprintf(stdout, "^^^ processing reorder code = %04x (%s)\n", reorderCode, scriptName);
                     skipWhiteSpace(&pointer, status);
-                
+
                     int32_t elementLength = 0;
                     char leadByteString[100];
                     while ((elementLength = readElement(&pointer, leadByteString, '=', status)) == 2) {
@@ -760,7 +778,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                         leadByteArray[leadByteArrayCount++] = (uint16_t) leadByte;
                         skipUntilWhiteSpace(&pointer, status);
                     }
-                    
+
                     if (leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT >= leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_LENGTH) {
                         //fprintf(stdout, "\tError condition\n");
                         //fprintf(stdout, "\tindex count = %d, total index size = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT, sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX) / sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]));
@@ -768,15 +786,15 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                         *status = U_INTERNAL_PROGRAM_ERROR;
                         return NULL;
                     }
-                    leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].reorderCode = reorderCodeArray[0];
-                    
+                    leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].reorderCode = reorderCode;
+
                     //fprintf(stdout, "\tlead byte count = %d\n", leadByteArrayCount);
                     //fprintf(stdout, "\tlead byte array = ");
                     //for (int i = 0; i < leadByteArrayCount; i++) {
                     //    fprintf(stdout, "%02x, ", leadByteArray[i]);
                     //}
                     //fprintf(stdout, "\n");
-                    
+
                     switch (leadByteArrayCount) {
                         case 0:
                             leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].offset = 0;
@@ -822,7 +840,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                             //}
                             //fprintf(stdout, "\n");
                     }
-                    //if (reorderCodeArray[0] >= 0x1000) {
+                    //if (reorderCode >= 0x1000) {
                      //   fprintf(stdout, "@@@@ reorderCode = %x, offset = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].offset);
                      //   for (int i = 0; i < leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET; i++) {
                     //        fprintf(stdout, "%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
