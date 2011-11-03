@@ -129,6 +129,11 @@ endif
 ifneq ($(ENABLE_SHARED),)
 $(SHARED_OBJECT): $(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
+ifeq ($(ENABLE_RPATH),YES)
+ifneq ($(wildcard $(libdir)/$(MIDDLE_SO_TARGET)),)
+	$(warning RPATH warning: --enable-rpath means test programs may use existing $(libdir)/$(MIDDLE_SO_TARGET))
+endif
+endif
 endif
 
 ifeq (,$(MAKECMDGOALS))

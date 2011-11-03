@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2010, International Business Machines
+#   Copyright (C) 1999-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
@@ -63,13 +63,18 @@ RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 
 #SH## icu-config version of above 'if':
-#SH#case "$ENABLE_RPATH" in 
-#SH#     [yY]*)
+#SH#case "x$ENABLE_RPATH" in 
+#SH#     x[yY]*)
 #SH# 	ENABLE_RPATH=YES
 #SH# 	RPATHLDFLAGS="${LD_RPATH}${LD_RPATH_PRE}${libdir}"
 #SH# 	;;
 #SH#
-#SH#     [nN]*)
+#SH#     x[nN]*)
+#SH# 	ENABLE_RPATH=NO
+#SH# 	RPATHLDFLAGS=""
+#SH# 	;;
+#SH#
+#SH#     x)
 #SH# 	ENABLE_RPATH=NO
 #SH# 	RPATHLDFLAGS=""
 #SH# 	;;

@@ -196,6 +196,11 @@ endif
 ifneq ($(ENABLE_SHARED),)
 $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
+ifeq ($(ENABLE_RPATH),YES)
+ifneq ($(wildcard $(libdir)/$(MIDDLE_SO_TARGET)),)
+	$(warning RPATH warning: --enable-rpath means test programs may use existing $(libdir)/$(MIDDLE_SO_TARGET))
+endif
+endif
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET):$(OBJECTS)
