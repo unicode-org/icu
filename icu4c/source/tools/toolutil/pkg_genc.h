@@ -23,7 +23,7 @@
 #endif
 
 
-#if !defined(WINDOWS_WITH_MSVC) && !U_PLATFORM_IS_LINUX_BASED
+#if !defined(WINDOWS_WITH_MSVC)
 #define BUILD_DATA_WITHOUT_ASSEMBLY
 #endif
 
