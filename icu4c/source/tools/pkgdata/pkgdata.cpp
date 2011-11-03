@@ -99,7 +99,8 @@ enum {
     REVISION,
     FORCE_PREFIX,
     LIBNAME,
-    QUIET
+    QUIET,
+    WITHOUT_ASSEMBLY
 };
 
 /* This sets the modes that are available */
@@ -139,7 +140,8 @@ static UOption options[]={
     /*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
     /*17*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG),
     /*18*/    UOPTION_DEF( "libname", 'L', UOPT_REQUIRES_ARG),
-    /*19*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG)
+    /*19*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG),
+    /*20*/    UOPTION_DEF( "without-assembly", 'w', UOPT_NO_ARG)
 };
 
 /* This enum and the following char array should be kept in sync. */
@@ -409,6 +411,16 @@ main(int argc, char* argv[]) {
         o.entryName = o.cShortName;
     }
 
+    o.withoutAssembly = FALSE;
+    if (options[WITHOUT_ASSEMBLY].doesOccur) {
+#ifndef BUILD_DATA_WITHOUT_ASSEMBLY
+        fprintf(stdout, "Warning: You are using the option to build without assembly code which is not supported on this platform.\n");
+        fprintf(stdout, "Warning: This option will be ignored.\n");
+#else
+        o.withoutAssembly = TRUE;
+#endif
+    }
+
     /* OK options are set up. Now the file lists. */
     tail = NULL;
     for( n=1; n<argc; n++) {
@@ -644,7 +656,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
 #endif
 
-            if (pkgDataFlags[GENCCODE_ASSEMBLY_TYPE][0] != 0) {
+            if (!o->withoutAssembly && pkgDataFlags[GENCCODE_ASSEMBLY_TYPE][0] != 0) {
                 const char* genccodeAssembly = pkgDataFlags[GENCCODE_ASSEMBLY_TYPE];
 
                 if(o->verbose) {
@@ -678,19 +690,24 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if(o->verbose) {
                   fprintf(stdout, "# Writing object code to %s ..\n", gencFilePath);
                 }
+                if (o->withoutAssembly) {
+                    result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
+                } else {
 #ifdef CAN_WRITE_OBJ_CODE
-                writeObjectCode(datFileNamePath, o->tmpDir, o->entryName, NULL, NULL, gencFilePath);
+                    writeObjectCode(datFileNamePath, o->tmpDir, o->entryName, NULL, NULL, gencFilePath);
 #if U_PLATFORM_IS_LINUX_BASED
-                result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);
+                    result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);
 #elif defined(WINDOWS_WITH_MSVC)
-                result = pkg_createWindowsDLL(mode, gencFilePath, o);
+                    result = pkg_createWindowsDLL(mode, gencFilePath, o);
 #endif
 #elif defined(BUILD_DATA_WITHOUT_ASSEMBLY)
-                result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
+                    result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
 #else
-                fprintf(stderr, "Error- neither CAN_WRITE_OBJ_CODE nor BUILD_DATA_WITHOUT_ASSEMBLY are defined. Internal error.\n");
-                return 1;
+                    fprintf(stderr, "Error- neither CAN_WRITE_OBJ_CODE nor BUILD_DATA_WITHOUT_ASSEMBLY are defined. Internal error.\n");
+                    return 1;
 #endif
+                }
+
                 if (result != 0) {
                     fprintf(stderr, "Error generating package data.\n");
                     return result;

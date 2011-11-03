@@ -125,6 +125,7 @@ typedef struct UPKGOptions_
   UBool      rebuild;
   UBool      verbose;
   UBool      quiet;
+  UBool      withoutAssembly;
 } UPKGOptions;
 
 char * convertToNativePathSeparators(char *path);
