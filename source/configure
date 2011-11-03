@@ -1392,7 +1392,7 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug          build debug libraries default=no
+  --enable-debug          build debug libraries and enable the U_DEBUG define default=no
   --enable-release        build release libraries default=yes
   --enable-strict         compile with strict compiler options default=yes
   --enable-64bit-libs     (deprecated, use --with-library-bits) build 64-bit libraries default= platform default
@@ -2749,6 +2749,9 @@ test -n "$target_alias" &&
 _CXX_CXXSUFFIX=cpp
 export _CXX_CXXSUFFIX
 
+# Accumulate #defines
+CONFIG_CPPFLAGS=""
+
 # Check whether to build debug libraries
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build debug libraries" >&5
 $as_echo_n "checking whether to build debug libraries... " >&6; }
@@ -2757,7 +2760,7 @@ ENABLE_DEBUG=0
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug;  case "${enableval}" in
-         yes|"") enabled=yes; ENABLE_DEBUG=1 ;;
+         yes|"") enabled=yes; ENABLE_DEBUG=1; CONFIG_CPPFLAGS="$CONFIG_CPPFLAGS -DU_DEBUG=1" ;;
          *) ;;
     esac
 fi
@@ -5324,8 +5327,6 @@ $as_echo "$CHECK_STATIC_OPT_FLAG" >&6; }
     fi
 fi
 
-# Accumulate #defines
-CONFIG_CPPFLAGS=""
 
 # Check whether to enable auto cleanup of libraries
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable auto cleanup of libraries" >&5
