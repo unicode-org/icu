@@ -548,6 +548,17 @@ public final class ULocale implements Serializable {
      */
     public static ULocale getDefault() {
         synchronized (ULocale.class) {
+            if (defaultULocale == null) {
+                // When Java's default locale has extensions (such as ja-JP-u-ca-japanese),
+                // Locale -> ULocale mapping requires BCP47 keyword mapping data that is currently
+                // stored in a resource bundle. However, UResourceBundle currently requires
+                // non-null default ULocale. For now, this implementation returns ULocale.ROOT
+                // to avoid the problem.
+
+                // TODO: Consider moving BCP47 mapping data out of resource bundle later.
+
+                return ULocale.ROOT;
+            }
             Locale currentDefault = Locale.getDefault();
             if (!defaultLocale.equals(currentDefault)) {
                 defaultLocale = currentDefault;
