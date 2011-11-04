@@ -2970,9 +2970,6 @@ public class Bidi {
         this.direction=saveDirection;
         this.levels = saveLevels;
         this.trailingWSStart = saveTrailingWSStart;
-        /* free memory for mapping table and visual text */
-        visualMap = null;
-        visualText = null;
         if (runCount > 1) {
             this.direction = MIXED;
         }
@@ -4778,7 +4775,6 @@ public class Bidi {
         for (i = 0; i < count; i++) {
             logicalToVisualRunsMap[i] = (int)(keys[i] & 0x00000000FFFFFFFF);
         }
-        keys = null;
         isGoodLogicalToVisualRunsMap = true;
      }
 

@@ -773,7 +773,6 @@ public  class ICUResourceBundle extends UResourceBundle {
             if (path.indexOf('/') == -1) { // skip the tokenizer
                 sub = (ICUResourceBundle) current.handleGet(path, null, requested);
                 if (sub != null) {
-                    current = sub;
                     break;
                 }
             } else {

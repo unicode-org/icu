@@ -613,7 +613,6 @@ public class IslamicCalendar extends Calendar {
             year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
             month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
             month = Math.min(month, 11);
-            monthStart = monthStart(year, month);
         } else {
             // Guess at the number of elapsed full months since the epoch
             int months = (int)Math.floor(days / CalendarAstronomer.SYNODIC_MONTH);

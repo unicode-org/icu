@@ -1512,7 +1512,7 @@ final class CollationRuleParser
                             m_current_ = m_optionEnd_;
                             if ((result & TOKEN_TOP_MASK_) != 0) {
                                 if (newstrength == TOKEN_RESET_) {
-                                    top = doSetTop();
+                                    doSetTop();
                                     if (before != 0) {
                                         // This is a combination of before and
                                         // indirection like

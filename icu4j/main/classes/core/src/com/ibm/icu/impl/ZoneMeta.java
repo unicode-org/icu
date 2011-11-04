@@ -683,11 +683,10 @@ public final class ZoneMeta {
             tmp = -offset;
         }
 
-        int hour, min, sec, millis;
+        int hour, min, sec;
 
-        millis = tmp % 1000;
         if (ASSERT) {
-            Assert.assrt("millis!=0", millis != 0);
+            Assert.assrt("millis!=0", tmp % 1000 != 0);
         }
         tmp /= 1000;
         sec = tmp % 60;
