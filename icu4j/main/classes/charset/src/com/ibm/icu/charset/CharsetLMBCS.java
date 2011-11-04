@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -524,7 +524,7 @@ class CharsetLMBCS extends CharsetICU {
      * locale. We have one structure instantiated for each of the 12 possible
      * optimization groups.
      */
-    private class UConverterDataLMBCS {
+    private static class UConverterDataLMBCS {
         UConverterSharedData[] OptGrpConverter; /* Converter per Opt. grp. */
         short OptGroup;                         /* default Opt. grp. for this LMBCS session */
         short localeConverterIndex;             /* reasonable locale match for index */

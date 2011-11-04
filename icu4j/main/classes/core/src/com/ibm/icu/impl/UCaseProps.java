@@ -93,7 +93,7 @@ public final class UCaseProps {
     }
 
     // implement ICUBinary.Authenticate
-    private final class IsAcceptable implements ICUBinary.Authenticate {
+    private final static class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==2;

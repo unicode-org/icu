@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -31,7 +31,7 @@ public class RelativeDateFormat extends DateFormat {
      * @author srl
      *
      */
-    public class URelativeString {
+    public static class URelativeString {
         URelativeString(int offset, String string) {
             this.offset = offset;
             this.string = string;

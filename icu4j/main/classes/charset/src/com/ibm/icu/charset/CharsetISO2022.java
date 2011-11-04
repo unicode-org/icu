@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -317,7 +317,7 @@ class CharsetISO2022 extends CharsetICU {
     // } Cnv2002Type;
 */
 
-    private class ISO2022State {
+    private static class ISO2022State {
         private byte []cs;  /* Charset number for SI (G0)/SO (G1)/SS2 (G2)/SS3 (G3) */
         private byte g;     /* 0..3 for G0..G3 (SI/SO/SS2/SS3) */
         private byte prevG; /* g before single shift (SS2 or SS3) */
@@ -337,7 +337,7 @@ class CharsetISO2022 extends CharsetICU {
     private static final byte UCNV_2022_MAX_CONVERTERS  = 10;
     
     @SuppressWarnings("unused")
-    private class UConverterDataISO2022 {
+    private static class UConverterDataISO2022 {
         UConverterSharedData []myConverterArray;
         CharsetEncoderMBCS currentEncoder;
         CharsetDecoderMBCS currentDecoder;

@@ -849,7 +849,7 @@ public final class RuleBasedCollator extends Collator {
         }
     }
 
-    private class contContext {
+    private static class contContext {
         RuleBasedCollator coll;
         UnicodeSet contractions;
         UnicodeSet expansions;
@@ -4221,7 +4221,7 @@ public final class RuleBasedCollator extends Collator {
      * Generate latin-1 tables
      */
 
-    private class shiftValues {
+    private static class shiftValues {
         int primShift = 24;
         int secShift = 24;
         int terShift = 24;
@@ -4438,7 +4438,7 @@ public final class RuleBasedCollator extends Collator {
         return true;
     }
 
-    private class ContractionInfo {
+    private static class ContractionInfo {
         int index;
     }
 
