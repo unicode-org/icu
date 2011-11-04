@@ -1895,7 +1895,7 @@ public final class CollationElementIterator
                     // and add 5 (to avoid overlapping magic CE byte 
                     // values). The last byte we subtract 1 to ensure it is 
                     // less than all the other bytes.
-                    if (digIndx % 2 == 1) {
+                    if (digIndx % 2 != 0) {
                         collateVal += digVal;  
                         // This removes trailing zeroes.
                         if (collateVal == 0 && trailingZeroIndex == 0) {
@@ -2487,7 +2487,7 @@ public final class CollationElementIterator
                     // first digit encountered into the ones place and the 
                     // second digit encountered into the tens place.
                 
-                    if (digIndx % 2 == 1){
+                    if (digIndx % 2 != 0){
                         collateVal += digVal * 10;
                     
                         // This removes leading zeroes.

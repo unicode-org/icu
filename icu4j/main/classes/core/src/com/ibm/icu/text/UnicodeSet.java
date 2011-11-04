@@ -666,7 +666,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     // number of backslashes, then it has been escaped.
                     // Before unescaping it, we delete the final
                     // backslash.
-                    if ((backslashCount % 2) == 1) {
+                    if (backslashCount % 2 != 0) {
                         result.setLength(result.length() - 1);
                     }
                     Utility.escapeUnprintable(result, c);

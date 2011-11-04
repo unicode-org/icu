@@ -9,7 +9,7 @@ import com.ibm.icu.lang.UCharacter;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996-2010.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2011.  All Rights Reserved.       */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */
@@ -3697,7 +3697,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                         if ((!(allzero(oldmant, len + 1))))
                             increment = sign;
                         else /* 0.5000 */
-                        if ((((mant[mant.length - 1]) % 2)) == 1)
+                        if ((((mant[mant.length - 1]) % 2)) != 0)
                             increment = sign;
                     }
                 } else if (mode == ROUND_DOWN) {
