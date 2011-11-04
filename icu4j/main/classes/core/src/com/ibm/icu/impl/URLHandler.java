@@ -184,7 +184,7 @@ public abstract class URLHandler {
             try {
                 prefix = url.getPath();
                 
-                int ix = prefix.indexOf("!/");
+                int ix = prefix.lastIndexOf("!/");
                 
                 if (ix >= 0) {
                     prefix = prefix.substring(ix + 2); // truncate after "!/"
