@@ -223,7 +223,8 @@ const char options_help[][320]={
     "Specify a version when packaging in dll or static mode",
     "Add package to all file names if not present",
     "Library name to build (if different than package name)",
-    "Quite mode. (e.g. Do not output a readme file for static libraries)"
+    "Quite mode. (e.g. Do not output a readme file for static libraries)",
+    "Build the data without assembly code"
 };
 
 const char  *progname = "PKGDATA";
