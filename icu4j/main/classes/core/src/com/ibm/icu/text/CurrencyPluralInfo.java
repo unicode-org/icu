@@ -218,6 +218,11 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
         }
         return false;
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
 
     /**
      * Given a number, returns the keyword of the first rule that applies

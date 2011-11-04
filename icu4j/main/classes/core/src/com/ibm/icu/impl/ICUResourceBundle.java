@@ -815,6 +815,12 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         return false;
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
+    
     // This method is for super class's instantiateBundle method
     public static UResourceBundle getBundleInstance(String baseName, String localeID,
                                                     ClassLoader root, boolean disableFallback){

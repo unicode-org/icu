@@ -587,6 +587,11 @@ public final class CollationElementIterator
         }
         return false;
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
 
     // package private constructors ------------------------------------------
 

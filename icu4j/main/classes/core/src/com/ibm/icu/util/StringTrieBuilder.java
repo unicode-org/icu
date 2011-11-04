@@ -622,6 +622,10 @@ public abstract class StringTrieBuilder {
             return true;
         }
         @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+        @Override
         public int markRightEdgesFirst(int edgeNumber) {
             if(offset==0) {
                 firstEdgeNumber=edgeNumber;
@@ -726,6 +730,10 @@ public abstract class StringTrieBuilder {
             }
             SplitBranchNode o=(SplitBranchNode)other;
             return unit==o.unit && lessThan==o.lessThan && greaterOrEqual==o.greaterOrEqual;
+        }
+        @Override
+        public int hashCode() {
+            return super.hashCode();
         }
         @Override
         public int markRightEdgesFirst(int edgeNumber) {
