@@ -17,7 +17,7 @@ GENRB=$(shell icu-config --invoke=genrb)
 GENRBOPT=
 PKGDATA=$(shell icu-config --invoke=pkgdata)
 SO=$(shell icu-config --so)
-PKGDATAOPTS=-r $(shell icu-config --version) -v -d .
+PKGDATAOPTS=-r $(shell icu-config --version) -w -v -d .
 # default - resources in same mode as ICU
 RESMODE=$(shell icu-config --icudata-mode)
 
