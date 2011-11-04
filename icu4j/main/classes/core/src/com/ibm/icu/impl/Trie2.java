@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and
+ * Copyright (C) 2009-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -219,8 +219,12 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             }
         is.mark(4);
         byte sig[] = new byte[4];
-        is.read(sig);
+        int read = is.read(sig);
         is.reset();
+        
+        if (read != sig.length) {
+            return 0;
+        }
         
         if (sig[0]=='T' && sig[1]=='r' && sig[2]=='i' && sig[3]=='e') {
             return 1;
