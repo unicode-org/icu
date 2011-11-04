@@ -691,7 +691,12 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                   fprintf(stdout, "# Writing object code to %s ..\n", gencFilePath);
                 }
                 if (o->withoutAssembly) {
+#ifdef BUILD_DATA_WITHOUT_ASSEMBLY
                     result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
+#else
+                    /* This error should not occur. */
+                    fprintf(stderr, "Error- BUILD_DATA_WITHOUT_ASSEMBLY is not defined. Internal error.\n");
+#endif
                 } else {
 #ifdef CAN_WRITE_OBJ_CODE
                     writeObjectCode(datFileNamePath, o->tmpDir, o->entryName, NULL, NULL, gencFilePath);
