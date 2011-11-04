@@ -369,6 +369,11 @@ public abstract class Transliterator implements StringTransform  {
             }
             return false;
         }
+        
+        public int hashCode() {
+            assert false : "hashCode not designed";
+            return 42;
+        }
 
         /**
          * Returns a string representation of this Position.

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -136,6 +136,12 @@ public class StringPrepParseException extends ParseException {
         return ((StringPrepParseException)other).error == this.error;
         
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
+    
     /**
      * Returns the position of error in the rules string
      * 

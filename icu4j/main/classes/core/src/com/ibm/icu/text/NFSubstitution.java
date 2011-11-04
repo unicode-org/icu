@@ -269,6 +269,11 @@ abstract class NFSubstitution {
         }
         return false;
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
 
     /**
      * Returns a textual description of the substitution
@@ -715,6 +720,11 @@ class MultiplierSubstitution extends NFSubstitution {
             return false;
         }
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
 
     //-----------------------------------------------------------------------
     // formatting
@@ -889,6 +899,11 @@ class ModulusSubstitution extends NFSubstitution {
         } else {
             return false;
         }
+    }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
     }
 
     //-----------------------------------------------------------------------
@@ -1566,6 +1581,11 @@ class NumeratorSubstitution extends NFSubstitution {
             return false;
         }
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
 
     //-----------------------------------------------------------------------
     // formatting
@@ -1769,6 +1789,11 @@ class NullSubstitution extends NFSubstitution {
      */
     public boolean equals(Object that) {
         return super.equals(that);
+    }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
     }
 
     /**

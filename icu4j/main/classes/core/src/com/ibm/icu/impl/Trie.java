@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and   *
+* Copyright (C) 1996-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -107,6 +107,11 @@ public abstract class Trie
                && m_options_ == othertrie.m_options_
                && m_dataLength_ == othertrie.m_dataLength_
                && Arrays.equals(m_index_, othertrie.m_index_);
+    }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
     }
     ///CLOVER:ON
     

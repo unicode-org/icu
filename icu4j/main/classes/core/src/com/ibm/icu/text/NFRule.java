@@ -549,6 +549,11 @@ final class NFRule {
         }
         return false;
     }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
 
     /**
      * Returns a textual representation of the rule.  This won't
