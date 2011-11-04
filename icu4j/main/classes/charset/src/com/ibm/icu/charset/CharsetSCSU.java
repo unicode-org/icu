@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -109,7 +109,7 @@ class CharsetSCSU extends CharsetICU{
   //  };
     
     @SuppressWarnings("unused")
-    private final class SCSUData{   
+    private final static class SCSUData{   
         /* dynamic window offsets, intitialize to default values from initialDynamicOffsets */
         int toUDynamicOffsets[] = new int[8] ;
         int fromUDynamicOffsets[] = new int[8] ; 

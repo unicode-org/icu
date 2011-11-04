@@ -109,7 +109,7 @@ class CharsetISCII extends CharsetICU {
     private final static String ISCII_CNV_PREFIX = "ISCII,version=";
     
     @SuppressWarnings("unused")
-    private final class UConverterDataISCII {
+    private static final class UConverterDataISCII {
         int option;
         int contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
         int contextCharFromUnicode;    /* previous Unicode codepoint for contextual analysis */

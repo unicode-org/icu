@@ -50,7 +50,7 @@ class CharsetMBCS extends CharsetICU {
      * Fallbacks to Unicode are stored outside the normal state table and code point structures in a vector of items of
      * this type. They are sorted by offset.
      */
-    final class MBCSToUFallback {
+    final static class MBCSToUFallback {
         int offset;
         int codePoint;
     }
@@ -136,7 +136,7 @@ class CharsetMBCS extends CharsetICU {
     /**
      * MBCS data header. See data format description above.
      */
-    final class MBCSHeader {
+    final static class MBCSHeader {
         byte version[/* U_MAX_VERSION_LENGTH */];
         int countStates, countToUFallbacks, offsetToUCodeUnits, offsetFromUTable, offsetFromUBytes;
         int flags;

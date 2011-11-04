@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -677,7 +677,7 @@ class CharsetBOCU1 extends CharsetICU {
        
     }
     
-    class CharsetDecoderBOCU extends CharsetDecoderICU{
+    static class CharsetDecoderBOCU extends CharsetDecoderICU{
         public CharsetDecoderBOCU(CharsetICU cs) {
             super(cs);
         }

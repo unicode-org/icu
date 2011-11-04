@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2010, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -88,7 +88,7 @@ public final class UBiDiProps {
     }
 
     // implement ICUBinary.Authenticate
-    private final class IsAcceptable implements ICUBinary.Authenticate {
+    private final static class IsAcceptable implements ICUBinary.Authenticate {
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==2;
         }

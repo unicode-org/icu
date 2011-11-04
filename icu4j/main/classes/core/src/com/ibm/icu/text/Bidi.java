@@ -427,12 +427,12 @@ import com.ibm.icu.lang.UCharacterDirection;
 
 public class Bidi {
 
-    class Point {
+    static class Point {
         int pos;    /* position in text */
         int flag;   /* flag for LRM/RLM, before/after */
     }
 
-    class InsertPoints {
+    static class InsertPoints {
         int size;
         int confirmed;
         Point[] points = new Point[0];
@@ -2376,7 +2376,7 @@ public class Bidi {
             ImpTabPair(impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS,
                        impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS, impAct0, impAct2);
 
-    private class LevState {
+    private static class LevState {
         byte[][] impTab;                /* level table pointer          */
         short[] impAct;                 /* action map array             */
         int startON;                    /* start of ON sequence         */
