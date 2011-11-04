@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -85,7 +85,6 @@ public class CalendarCache
                 put(oldKeys[i], oldValues[i]);
             }
         }
-        oldKeys = oldValues = null; // Help out the garbage collector
     }
     
     

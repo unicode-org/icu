@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,8 +41,7 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
             offset[0] += UTF16.getCharCount(c);
             return U_MATCH;
         }
-        if (offset[0] > limit &&
-            contains(c = text.char32At(offset[0]))) {
+        if (offset[0] > limit && contains(text.char32At(offset[0]))) {
             // Backup offset by 1, unless the preceding character is a
             // surrogate pair -- then backup by 2 (keep offset pointing at
             // the lead surrogate).
