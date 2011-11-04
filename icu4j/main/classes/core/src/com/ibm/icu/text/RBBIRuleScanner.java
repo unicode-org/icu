@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2003-2011, International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
  
@@ -20,7 +20,7 @@ import com.ibm.icu.lang.UCharacter;
   */
 class RBBIRuleScanner {
     
-    private  final int    kStackSize = 100;               // The size of the state stack for
+    private final static int    kStackSize = 100;               // The size of the state stack for
     //   rules parsing.  Corresponds roughly
     //   to the depth of parentheses nesting
     //   that is allowed in the rules.

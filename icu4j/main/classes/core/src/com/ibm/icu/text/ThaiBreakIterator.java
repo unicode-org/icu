@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,7 +21,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
     static class PossibleWord {
         // List size, limited by the maximum number of words in the dictionary
         // that form a nested sequence.
-        private final int POSSIBLE_WORD_LIST_MAX = 20;
+        private final static int POSSIBLE_WORD_LIST_MAX = 20;
         //list of word candidate lengths, in increasing length order
         private int lengths[];
         private int count[];    // Count of candidates
