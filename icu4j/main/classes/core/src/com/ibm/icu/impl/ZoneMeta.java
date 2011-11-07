@@ -351,7 +351,7 @@ public final class ZoneMeta {
      * the id itself. If the given tzid is not known, return null.
      * 
      * Note: This internal API supports all known system IDs and "Etc/Unknown" (which is
-     * NOT a sysmte ID).
+     * NOT a system ID).
      */
     public static String getCanonicalCLDRID(String tzid) {
         String canonical = CANONICAL_ID_CACHE.get(tzid);
@@ -377,9 +377,11 @@ public final class ZoneMeta {
                             ICUResourceBundle.ICU_BASE_NAME, "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                     UResourceBundle typeAlias = keyTypeData.get("typeAlias");
                     UResourceBundle aliasesForKey = typeAlias.get("timezone");
-                    String cldrCanonical = aliasesForKey.getString(canonical.replace('/', ':'));
-                    if (cldrCanonical != null) {
-                        canonical = cldrCanonical;
+                    if (canonical != null) {
+                        String cldrCanonical = aliasesForKey.getString(canonical.replace('/', ':'));
+                        if (cldrCanonical != null) {
+                            canonical = cldrCanonical;
+                        }
                     }
                 } catch (MissingResourceException e) {
                     // fall through
