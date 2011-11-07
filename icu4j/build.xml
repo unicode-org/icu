@@ -173,7 +173,16 @@
         </java>
     </target>
 
-    <target name="runTest" description="Run a ICU4J test case, without calling any other build targets">
+    <target name="_runTestArgCheck" unless="testarg">
+        <echo message="No test arguments are supplied. Using the default argument '-n'."/>
+        <echo message="For specifying test arguments, use '-Dtestarg=[test args]' as"/>
+        <echo message="ant command line argument. For example:"/>
+        <echo message="  &#x3E;ant runTest -Dtestarg=&#x22;Core/Format -e10&#x22;"/>
+        <echo message="for running ICU4J core format test suite in exhaustive mode."/>
+        <property name="testarg" value="-n"/>
+    </target>
+
+    <target name="runTest" depends="_runTestArgCheck" description="Run a ICU4J test case, without calling any other build targets">
         <echo message="JVM argument:   ${jvm_options} -Djava.awt.headless=true"/>
         <echo message="Test argument:   ${testarg}"/>
 
