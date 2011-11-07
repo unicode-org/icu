@@ -218,13 +218,15 @@ public final class ZoneMeta {
      */
     public static synchronized int countEquivalentIDs(String id) {
         int count = 0;
-        try {
-            UResourceBundle res = openOlsonResource(null, id);
-            UResourceBundle links = res.get("links");
-            int[] v = links.getIntVector();
-            count = v.length;
-        } catch (MissingResourceException ex) {
-            // throw away
+        UResourceBundle res = openOlsonResource(null, id);
+        if (res != null) {
+            try {
+                UResourceBundle links = res.get("links");
+                int[] v = links.getIntVector();
+                count = v.length;
+            } catch (MissingResourceException ex) {
+                // throw away
+            }
         }
         return count;
     }
@@ -249,25 +251,25 @@ public final class ZoneMeta {
      */
     public static synchronized String getEquivalentID(String id, int index) {
         String result = "";
-        int zoneIdx = -1;
-
         if (index >= 0) {
-            try {
-                UResourceBundle res = openOlsonResource(null, id);
-                UResourceBundle links = res.get("links");
-                int[] zones = links.getIntVector();
-                if (index < zones.length) {
-                    zoneIdx = zones[index];
+            UResourceBundle res = openOlsonResource(null, id);
+            if (res != null) {
+                int zoneIdx = -1;
+                try {
+                    UResourceBundle links = res.get("links");
+                    int[] zones = links.getIntVector();
+                    if (index < zones.length) {
+                        zoneIdx = zones[index];
+                    }
+                } catch (MissingResourceException ex) {
+                    // throw away
                 }
-            } catch (MissingResourceException ex) {
-                // throw away
-                zoneIdx = -1;
-            }
-        }
-        if (zoneIdx >= 0) {
-            String tmp = getZoneID(zoneIdx);
-            if (tmp != null) {
-                result = tmp;
+                if (zoneIdx >= 0) {
+                    String tmp = getZoneID(zoneIdx);
+                    if (tmp != null) {
+                        result = tmp;
+                    }
+                }
             }
         }
         return result;
