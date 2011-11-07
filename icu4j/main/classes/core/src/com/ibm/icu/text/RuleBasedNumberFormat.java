@@ -869,6 +869,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
             return true;
         }
     }
+    
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     /**
      * Generates a textual description of this formatter.
