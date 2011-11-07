@@ -243,6 +243,10 @@ public final class DateNumberFormat extends NumberFormat {
                 && this.positiveOnly == other.positiveOnly
                 && Arrays.equals(this.digits, other.digits));
     }
+    
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
