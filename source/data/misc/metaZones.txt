@@ -3496,7 +3496,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1990-06-30 23:00",
-                "2011-03-27 00:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Lisbon"{
@@ -3675,7 +3675,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1997-03-30 01:00",
-                "2011-03-27 01:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Skopje"{
@@ -3724,7 +3724,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1991-03-31 02:00",
-                "2011-03-27 01:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Vaduz"{
@@ -3788,7 +3788,7 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1991-03-30 23:00",
-                "2011-03-27 01:00",
+                "9999-12-31 23:59",
             }
         }
         "Europe:Zurich"{
