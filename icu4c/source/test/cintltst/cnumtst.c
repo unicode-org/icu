@@ -2022,6 +2022,9 @@ static void TestCloneWithRBNF(void) {
     pform_cloned = unum_clone(pform,&status);
     unum_formatDouble(pform_cloned, 3600, buffer_cloned, 256, NULL, &status);
 
+    unum_close(pform);
+    unum_close(pform_cloned);
+
     if (u_strcmp(buffer,buffer_cloned)) {
         log_err("Result from cloned formatter not identical to the original. Original: %s Cloned: %s",u_austrcpy(temp1, buffer),u_austrcpy(temp2,buffer_cloned));
     }
