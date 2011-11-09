@@ -3507,8 +3507,8 @@ public final class ULocale implements Serializable {
     }
 
     private static ULocale getInstance(BaseLocale base, LocaleExtensions exts) {
-        String id = lscvToID(base.getLanguage(), base.getScript(), base.getRegion(),
-                base.getVariant());
+        StringBuilder idBuilder = new StringBuilder(lscvToID(base.getLanguage(),
+                base.getScript(), base.getRegion(), base.getVariant()));
 
         Set<Character> extKeys = exts.getKeys();
         if (!extKeys.isEmpty()) {
@@ -3529,7 +3529,7 @@ public final class ULocale implements Serializable {
                         String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "true" : bcpType)); // use "true" as the value of typeless keywords
                         // special handling for u-va-posix, since this is a variant, not a keyword
                         if (lkey.equals("va") && ltype.equals("posix") && base.getVariant().length() == 0) {
-                            id = id + "_POSIX";
+                            idBuilder.append("_POSIX");
                         } else {
                             kwds.put(lkey, ltype);
                         }
@@ -3552,25 +3552,22 @@ public final class ULocale implements Serializable {
             }
 
             if (!kwds.isEmpty()) {
-                StringBuilder buf = new StringBuilder(id);
-                buf.append("@");
+                idBuilder.append("@");
                 Set<Map.Entry<String, String>> kset = kwds.entrySet();
                 boolean insertSep = false;
                 for (Map.Entry<String, String> kwd : kset) {
                     if (insertSep) {
-                        buf.append(";");
+                        idBuilder.append(";");
                     } else {
                         insertSep = true;
                     }
-                    buf.append(kwd.getKey());
-                    buf.append("=");
-                    buf.append(kwd.getValue());
+                    idBuilder.append(kwd.getKey());
+                    idBuilder.append("=");
+                    idBuilder.append(kwd.getValue());
                 }
-
-                id = buf.toString();
             }
         }
-        return new ULocale(id);
+        return new ULocale(idBuilder.toString());
     }
 
     private BaseLocale base() {
