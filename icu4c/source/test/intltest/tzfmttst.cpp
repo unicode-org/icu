@@ -8,6 +8,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "intltest.h"
 #include "tzfmttst.h"
 
 #include "simplethread.h"
@@ -259,6 +260,10 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         UBool REALLY_VERBOSE = FALSE;
 
+        // Timebomb for TZData update
+        UVersionInfo icu49 = { 49, 0, 2, 0 };
+        UBool isICUVersionPast49M1 = log.isICUVersionAtLeast(icu49);
+
         // Whether each pattern is ambiguous at DST->STD local time overlap
         UBool AMBIGUOUS_DST_DECESSION[] = { FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE };
         // Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
@@ -398,7 +403,9 @@ public:
                             if (parsedDate != testTimes[testidx]) {
                                 UnicodeString msg = (UnicodeString) "Time round trip failed for " + "tzid=" + *tzid + ", locale=" + data.locales[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                         + ", text=" + text + ", time=" + testTimes[testidx] + ", restime=" + parsedDate + ", diff=" + (parsedDate - testTimes[testidx]);
-                                if (expectedRoundTrip[testidx]) {
+                                // Timebomb for TZData update
+                                if (expectedRoundTrip[testidx] &&
+                                    isICUVersionPast49M1) {
                                     log.errln((UnicodeString) "FAIL: " + msg);
                                 } else if (REALLY_VERBOSE) {
                                     log.logln(msg);
