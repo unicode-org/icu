@@ -125,9 +125,9 @@ findDirname(const char *path, char *buffer, int32_t bufLen, UErrorCode* status) 
   }
 #endif
   if(!basename) {
-    /* no basename - return '.'. */
-    resultPtr = ".";
-    resultLen = 1;
+    /* no basename - return ''. */
+    resultPtr = "";
+    resultLen = 0;
   } else {
     resultPtr = path;
     resultLen = basename - path;
