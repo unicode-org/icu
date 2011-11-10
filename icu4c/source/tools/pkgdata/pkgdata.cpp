@@ -1873,7 +1873,9 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     /* #1 try the same path where pkgdata was called from. */
     findDirname(progname, cmdBuf, 1024, &status);
     if(U_SUCCESS(status)) {
-      uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
+      if (cmdBuf[0] != 0) {
+          uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
+      }
       uprv_strncat(cmdBuf, cmd, 1024);
       
       if(verbose) {
