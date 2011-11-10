@@ -640,21 +640,9 @@ static void toolutil_findDirname(void)
     },
     {
       "pkgdata",
-      1,
-      U_BUFFER_OVERFLOW_ERROR,
-      NULL
-    },
-    {
-      "pkgdata",
       2,
       U_ZERO_ERROR,
-      "."
-    },
-    {
-      "pkgdata",
-      20,
-      U_ZERO_ERROR,
-      "."
+      ""
     }
   };
   int32_t count=(sizeof(testCases)/sizeof(testCases[0]));
