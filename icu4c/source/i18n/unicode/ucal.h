@@ -669,10 +669,10 @@ ucal_getNow(void);
  * A UCalendar may be used to convert a millisecond value to a year,
  * month, and day.
  * <p>
- * Note: When unknown TimeZone ID is specified, the UCalendar returned
- * by the function is initialized with GMT zone with TimeZone ID <code>UCAL_UNKNOWN_ZONE_ID</code>
- * ("Etc/Unknown") without any errors/warnings.  If you want to check if a TimeZone ID is valid
- * prior to this function, use <code>ucal_getCanonicalTimeZoneID</code>.
+ * Note: When unknown TimeZone ID is specified or if the TimeZone ID specified is "Etc/Unknown",
+ * the UCalendar returned by the function is initialized with GMT zone with TimeZone ID
+ * <code>UCAL_UNKNOWN_ZONE_ID</code> ("Etc/Unknown") without any errors/warnings.  If you want
+ * to check if a TimeZone ID is valid prior to this function, use <code>ucal_getCanonicalTimeZoneID</code>.
  * 
  * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
  * @param len The length of zoneID, or -1 if null-terminated.

@@ -82,7 +82,10 @@ class StringEnumeration;
  * For example, you might specify GMT+14:00 as a custom
  * time zone ID.  The <code>TimeZone</code> that is returned
  * when you specify a custom time zone ID does not include
- * daylight savings time.
+ * daylight savings time.  If a custom time zone ID is used,
+ * the meaning of what a positive offset is should also be specified.
+ * In addition, <code>getCanonicalID</code> can also be used to
+ * normalize a custom time zone ID.
  *
  * TimeZone is an abstract class representing a time zone.  A TimeZone is needed for
  * Calendar to produce local time for a particular time zone.  A TimeZone comprises
@@ -98,8 +101,8 @@ class StringEnumeration;
  * </ul>
  *
  * (Only the ID is actually implemented in TimeZone; subclasses of TimeZone may handle
- * daylight savings time and GMT offset in different ways.  Currently we only have one
- * TimeZone subclass: SimpleTimeZone.)
+ * daylight savings time and GMT offset in different ways.  Currently we have the following
+ * TimeZone subclasses: RuleBasedTimeZone, SimpleTimeZone, and VTimeZone.)
  * <P>
  * The TimeZone class contains a static list containing a TimeZone object for every
  * combination of GMT offset and daylight-savings time rules currently in use in the
@@ -160,7 +163,7 @@ public:
      * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
      * or a custom ID such as "GMT-8:00".
      * @return the specified <code>TimeZone</code>, or a mutable clone of getUnknown()
-     * if the given ID cannot be understood.
+     * if the given ID cannot be understood or if the given ID is "Etc/Unknown".
      * The return result is guaranteed to be non-NULL.
      * If you require that the specific zone asked for be returned,
      * compare the result with getUnknown() or check the ID of the return result.
