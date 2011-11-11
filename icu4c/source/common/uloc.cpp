@@ -111,11 +111,11 @@ static const char * const LANGUAGES[] = {
     "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
     "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",
     "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  
-    "ga",  "gaa", "gay", "gba", "gd",  "gem", "gez", "gil", 
+    "ga",  "gaa", "gan", "gay", "gba", "gd",  "gem", "gez", "gil", 
     "gl",  "gmh", "gn",  "goh", "gon", "gor", "got", "grb", 
     "grc", "gsw", "gu",  "guz", "gv",  "gwi",
-    "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
-    "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",
+    "ha",  "hai", "hak", "haw", "he",  "hi",  "hil", "him",
+    "hit", "hmn", "ho",  "hr",  "hsb", "hsn", "ht",  "hu",  "hup", "hy",  "hz",
     "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
     "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
     "iu",  "ja",  "jbo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
@@ -129,7 +129,7 @@ static const char * const LANGUAGES[] = {
     "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mgh", "mh",  "mi",  "mic", "min",
     "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",
     "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mua", "mul", "mun",
-    "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap", "naq",
+    "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nan", "nap", "naq",
     "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
     "niu", "nl",  "nmg", "nn",  "no",  "nog", "non", "nqo", "nr",  "nso", "nub", "nus",
     "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
@@ -149,8 +149,8 @@ static const char * const LANGUAGES[] = {
     "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw", "twq",
     "ty",  "tyv", "tzm", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
     "uz",  "vai", "ve",  "vi",  "vo",  "vot", "vun", "wa",  "wak",
-    "wal", "war", "was", "wen", "wo",  "xal", "xh",  "xog", "yao", "yap", "yav",
-    "yi",  "yo",  "ypk", "za",  "zap", "zbl", "zen", "zh",  "znd",
+    "wal", "war", "was", "wen", "wo",  "wuu", "xal", "xh",  "xog", "yao", "yap", "yav",
+    "yi",  "yo",  "ypk", "yue", "za",  "zap", "zbl", "zen", "zh",  "znd",
     "zu",  "zun", "zxx", "zza",
 NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
@@ -212,16 +212,16 @@ static const char * const LANGUAGES_3[] = {
     "enm", "epo", "spa", "est", "eus", "ewo", "fas",
 /*  "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",    */
     "fan", "fat", "ful", "fin", "fil", "fiu", "fij", "fao", "fon",
-/*  "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  "ga",  "gaa", "gay",    */
-    "fra", "frm", "fro", "frr", "frs", "fur", "fry", "gle", "gaa", "gay",
+/*  "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  "ga",  "gaa", "gan", "gay",    */
+    "fra", "frm", "fro", "frr", "frs", "fur", "fry", "gle", "gaa", "gan", "gay",
 /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
     "gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
 /*  "goh", "gon", "gor", "got", "grb", "grc", "gsw", "gu",  "guz", "gv",     */
     "goh", "gon", "gor", "got", "grb", "grc", "gsw", "guj", "guz", "glv",
-/*  "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
-    "gwi", "hau", "hai", "haw", "heb", "hin", "hil", "him",
-/*  "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
-    "hit", "hmn", "hmo", "hrv", "hsb", "hat", "hun", "hup", "hye", "her",
+/*  "gwi", "ha",  "hai", "hak", "haw", "he",  "hi",  "hil", "him",    */
+    "gwi", "hau", "hai", "hak", "haw", "heb", "hin", "hil", "him",
+/*  "hit", "hmn", "ho",  "hr",  "hsb", "hsn", "ht",  "hu",  "hup", "hy",  "hz",     */
+    "hit", "hmn", "hmo", "hrv", "hsb", "hsn", "hat", "hun", "hup", "hye", "her",
 /*  "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",     */
     "ina", "iba", "ind", "ile", "ibo", "iii", "ijo", "ipk",
 /*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
@@ -248,8 +248,8 @@ static const char * const LANGUAGES_3[] = {
     "mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
 /*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mua", "mul", "mun",    */
     "mol", "moh", "mos", "mar", "msa", "mlt", "mua", "mul", "mun",
-/*  "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap", "naq",   */
-    "mus", "mwl", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap", "naq",
+/*  "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nan", "nap", "naq",   */
+    "mus", "mwl", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nan", "nap", "naq",
 /*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
     "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
 /*  "niu", "nl",  "nmg", "nn",  "no",  "nog", "non", "nqo", "nr",  "nso", "nub", "nus",   */
@@ -288,10 +288,10 @@ static const char * const LANGUAGES_3[] = {
     "tah", "tyv", "tzm", "udm", "uig", "uga", "ukr", "umb", "und", "urd",
 /*  "uz",  "vai", "ve",  "vi",  "vo",  "vot", "vun", "wa",  "wak",    */
     "uzb", "vai", "ven", "vie", "vol", "vot", "vun", "wln", "wak",
-/*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "xog", "yao", "yap", "yav",   */
-    "wal", "war", "was", "wen", "wol", "xal", "xho", "xog", "yao", "yap", "yav",
-/*  "yi",  "yo",  "ypk", "za",  "zap", "zbl", "zen", "zh",  "znd",    */
-    "yid", "yor", "ypk", "zha", "zap", "zbl", "zen", "zho", "znd",
+/*  "wal", "war", "was", "wen", "wo",  "wuu", "xal", "xh",  "xog", "yao", "yap", "yav",   */
+    "wal", "war", "was", "wen", "wol", "wuu", "xal", "xho", "xog", "yao", "yap", "yav",
+/*  "yi",  "yo",  "ypk", "yue", "za",  "zap", "zbl", "zen", "zh",  "znd",    */
+    "yid", "yor", "ypk", "yue", "zha", "zap", "zbl", "zen", "zho", "znd",
 /*  "zu",  "zun", "zxx", "zza",                                         */
     "zul", "zun", "zxx", "zza",
 NULL,
@@ -467,16 +467,11 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "az_AZ_CYRL",     "az_Cyrl_AZ", NULL, NULL }, /* .NET name */
     { "az_AZ_LATN",     "az_Latn_AZ", NULL, NULL }, /* .NET name */
     { "ca_ES_PREEURO",  "ca_ES", "currency", "ESP" },
-    { "cel_GAULISH",    "cel__GAULISH", NULL, NULL }, /* registered name */
-    { "de_1901",        "de__1901", NULL, NULL }, /* registered name */
-    { "de_1906",        "de__1906", NULL, NULL }, /* registered name */
     { "de__PHONEBOOK",  "de", "collation", "phonebook" }, /* Old ICU name */
     { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
     { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
     { "de_LU_PREEURO",  "de_LU", "currency", "LUF" },
     { "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
-    { "en_BOONT",       "en__BOONT", NULL, NULL }, /* registered name */
-    { "en_SCOUSE",      "en__SCOUSE", NULL, NULL }, /* registered name */
     { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
     { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
     { "es__TRADITIONAL", "es", "collation", "traditional" }, /* Old ICU name */
@@ -495,7 +490,6 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
     { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
     { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
-    { "sl_ROZAJ",       "sl__ROZAJ", NULL, NULL }, /* registered name */
     { "sr_SP_CYRL",     "sr_Cyrl_RS", NULL, NULL }, /* .NET name */
     { "sr_SP_LATN",     "sr_Latn_RS", NULL, NULL }, /* .NET name */
     { "sr_YU_CYRILLIC", "sr_Cyrl_RS", NULL, NULL }, /* Linux name */
@@ -505,14 +499,13 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "uz_UZ_LATN",     "uz_Latn_UZ", NULL, NULL }, /* .NET name */
     { "zh_CHS",         "zh_Hans", NULL, NULL }, /* .NET name */
     { "zh_CHT",         "zh_Hant", NULL, NULL }, /* .NET name */
-    { "zh_GAN",         "zh__GAN", NULL, NULL }, /* registered name */
+    { "zh_GAN",         "gan", NULL, NULL }, /* registered name */
     { "zh_GUOYU",       "zh", NULL, NULL }, /* registered name */
-    { "zh_HAKKA",       "zh__HAKKA", NULL, NULL }, /* registered name */
-    { "zh_MIN",         "zh__MIN", NULL, NULL }, /* registered name */
-    { "zh_MIN_NAN",     "zh__MINNAN", NULL, NULL }, /* registered name */
-    { "zh_WUU",         "zh__WUU", NULL, NULL }, /* registered name */
-    { "zh_XIANG",       "zh__XIANG", NULL, NULL }, /* registered name */
-    { "zh_YUE",         "zh__YUE", NULL, NULL }, /* registered name */
+    { "zh_HAKKA",       "hak", NULL, NULL }, /* registered name */
+    { "zh_MIN_NAN",     "nan", NULL, NULL }, /* registered name */
+    { "zh_WUU",         "wuu", NULL, NULL }, /* registered name */
+    { "zh_XIANG",       "hsn", NULL, NULL }, /* registered name */
+    { "zh_YUE",         "yue", NULL, NULL }, /* registered name */
 };
 
 typedef struct VariantMap {
