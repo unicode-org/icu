@@ -4040,6 +4040,7 @@ structLocale:table(nofallback){
         fy{""}
         ga{""}
         gaa{""}
+        gan{""}
         gay{""}
         gba{""}
         gd{""}
@@ -4062,6 +4063,7 @@ structLocale:table(nofallback){
         gwi{""}
         ha{""}
         hai{""}
+        hak{""}
         haw{""}
         he{""}
         hi{""}
@@ -4072,6 +4074,7 @@ structLocale:table(nofallback){
         ho{""}
         hr{""}
         hsb{""}
+        hsn{""}
         ht{""}
         hu{""}
         hup{""}
@@ -4212,6 +4215,7 @@ structLocale:table(nofallback){
         na{""}
         nah{""}
         nai{""}
+        nan{""}
         nap{""}
         naq{""}
         nb{""}
@@ -4400,6 +4404,7 @@ structLocale:table(nofallback){
         was{""}
         wen{""}
         wo{""}
+        wuu{""}
         xal{""}
         xh{""}
         xog{""}
@@ -4409,6 +4414,7 @@ structLocale:table(nofallback){
         yi{""}
         yo{""}
         ypk{""}
+        yue{""}
         za{""}
         zap{""}
         zbl{""}
