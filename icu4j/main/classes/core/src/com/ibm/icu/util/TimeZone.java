@@ -63,7 +63,10 @@ import com.ibm.icu.util.ULocale.Category;
  * For example, you might specify GMT+14:00 as a custom
  * time zone ID.  The <code>TimeZone</code> that is returned
  * when you specify a custom time zone ID does not include
- * daylight savings time.
+ * daylight savings time.  If a custom time zone ID is used,
+ * the meaning of what a positive offset is should also be specified.
+ * In addition, <code>getCanonicalID</code> can also be used to
+ * normalize a custom time zone ID.
  *
  * <p>For compatibility with JDK 1.1.x, some other three-letter time zone IDs
  * (such as "PST", "CTT", "AST") are also supported. However, <strong>their
@@ -646,7 +649,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * such as "PST", is for JDK 1.1.x compatibility only and full names should be used.
      *
      * @return the specified <code>TimeZone</code>, or a mutable clone of the UNKNOWN_ZONE
-     * if the given ID cannot be understood.
+     * if the given ID cannot be understood or if the given ID is "Etc/Unknown".
      * @see #UNKNOWN_ZONE
      * @stable ICU 2.0
      */
@@ -662,7 +665,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param type Time zone type, either <code>TIMEZONE_ICU</code> or
      * <code>TIMEZONE_JDK</code>.
      * @return the specified <code>TimeZone</code>, or a mutable clone of the UNKNOWN_ZONE if the given ID
-     * cannot be understood.
+     * cannot be understood or if the given ID is "Etc/Unknown".
      * @see #UNKNOWN_ZONE
      * @stable ICU 4.0
      */
