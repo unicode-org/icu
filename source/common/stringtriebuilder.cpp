@@ -47,11 +47,12 @@ StringTrieBuilder::createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode
     }
     nodes=uhash_openSize(hashStringTrieNode, equalStringTrieNodes, NULL,
                          sizeGuess, &errorCode);
-    if(U_SUCCESS(errorCode) && nodes==NULL) {
-        errorCode=U_MEMORY_ALLOCATION_ERROR;
-    }
     if(U_SUCCESS(errorCode)) {
-        uhash_setKeyDeleter(nodes, uprv_deleteUObject);
+        if(nodes==NULL) {
+          errorCode=U_MEMORY_ALLOCATION_ERROR;
+        } else {
+          uhash_setKeyDeleter(nodes, uprv_deleteUObject);
+        }
     }
 }
 

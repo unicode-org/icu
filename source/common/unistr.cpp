@@ -30,6 +30,7 @@
 #include "uelement.h"
 #include "ustr_imp.h"
 #include "umutex.h"
+#include "uassert.h"
 
 #if 0
 
@@ -573,7 +574,6 @@ UnicodeString::doCompare( int32_t start,
               int32_t srcLength) const
 {
   // compare illegal string values
-  // treat const UChar *srcChars==NULL as an empty string
   if(isBogus()) {
     return -1;
   }
@@ -582,7 +582,8 @@ UnicodeString::doCompare( int32_t start,
   pinIndices(start, length);
 
   if(srcChars == NULL) {
-    srcStart = srcLength = 0;
+    // treat const UChar *srcChars==NULL as an empty string
+    return length == 0 ? 0 : 1;
   }
 
   // get the correct pointer
@@ -664,7 +665,7 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
     srcStart = srcLength = 0;
   }
 
-  int32_t diff = uprv_strCompare(getArrayStart() + start, length, srcChars + srcStart, srcLength, FALSE, TRUE);
+  int32_t diff = uprv_strCompare(getArrayStart() + start, length, (srcChars!=NULL)?(srcChars + srcStart):NULL, srcLength, FALSE, TRUE);
   /* translate the 32-bit result into an 8-bit one */
   if(diff!=0) {
     return (int8_t)(diff >> 15 | 1);
@@ -1320,6 +1321,9 @@ UnicodeString::doReplace(int32_t start,
 
   // optimize append() onto a large-enough, owned string
   if(start >= oldLength) {
+    if(srcLength == 0) {
+      return *this;
+    }
     newLength = oldLength + srcLength;
     if(newLength <= getCapacity() && isBufferWritable()) {
       UChar *oldArray = getArrayStart();
@@ -1614,7 +1618,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
      newCapacity > getCapacity()
   ) {
     // check growCapacity for default value and use of the stack buffer
-    if(growCapacity == -1) {
+    if(growCapacity < 0) {
       growCapacity = newCapacity;
     } else if(newCapacity <= US_STACKBUF_SIZE && growCapacity > US_STACKBUF_SIZE) {
       growCapacity = US_STACKBUF_SIZE;
@@ -1626,6 +1630,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
     uint8_t flags = fFlags;
 
     if(flags&kUsingStackBuffer) {
+      U_ASSERT(!(flags&kRefCounted)); /* kRefCounted and kUsingStackBuffer are mutally exclusive */
       if(doCopyArray && growCapacity > US_STACKBUF_SIZE) {
         // copy the stack buffer contents because it will be overwritten with
         // fUnion.fFields values
@@ -1636,6 +1641,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
       }
     } else {
       oldArray = fUnion.fFields.fArray;
+      U_ASSERT(oldArray!=NULL); /* when stack buffer is not used, oldArray must have a non-NULL reference */
     }
 
     // allocate a new array

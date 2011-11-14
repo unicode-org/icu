@@ -425,7 +425,7 @@ ufile_fill_uchar_buffer(UFILE *f)
 
     /* shift the buffer if it isn't empty */
     if(dataSize != 0) {
-        uprv_memmove(f->fUCBuffer, str->fPos, dataSize * sizeof(UChar));
+        uprv_memmove(f->fUCBuffer, str->fPos, dataSize * sizeof(UChar)); /* not accessing beyond memory */
     }
 
 

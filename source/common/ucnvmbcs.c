@@ -826,9 +826,9 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                                     switch(st3Multiplier) {
                                     case 4:
                                         b|=*stage3++;
-                                    case 3:
+                                    case 3: /*fall through*/
                                         b|=*stage3++;
-                                    case 2:
+                                    case 2: /*fall through*/
                                         b|=stage3[0]|stage3[1];
                                         stage3+=2;
                                     default:
@@ -4497,11 +4497,11 @@ unassigned:
                         /* each branch falls through to the next one */
                     case 4:
                         *target++=(uint8_t)(value>>24);
-                    case 3:
+                    case 3: /*fall through*/
                         *target++=(uint8_t)(value>>16);
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(value>>8);
-                    case 1:
+                    case 1: /*fall through*/
                         *target++=(uint8_t)value;
                     default:
                         /* will never occur */
@@ -4513,13 +4513,13 @@ unassigned:
                     case 4:
                         *target++=(uint8_t)(value>>24);
                         *offsets++=sourceIndex;
-                    case 3:
+                    case 3: /*fall through*/
                         *target++=(uint8_t)(value>>16);
                         *offsets++=sourceIndex;
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(value>>8);
                         *offsets++=sourceIndex;
-                    case 1:
+                    case 1: /*fall through*/
                         *target++=(uint8_t)value;
                         *offsets++=sourceIndex;
                     default:
@@ -4544,9 +4544,9 @@ unassigned:
                     /* each branch falls through to the next one */
                 case 3:
                     *charErrorBuffer++=(uint8_t)(value>>16);
-                case 2:
+                case 2: /*fall through*/
                     *charErrorBuffer++=(uint8_t)(value>>8);
-                case 1:
+                case 1: /*fall through*/
                     *charErrorBuffer=(uint8_t)value;
                 default:
                     /* will never occur */
@@ -4563,12 +4563,12 @@ unassigned:
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
-                case 2:
+                case 2: /*fall through*/
                     *target++=(uint8_t)(value>>8);
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
-                case 1:
+                case 1: /*fall through*/
                     *target++=(uint8_t)value;
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;

@@ -275,7 +275,7 @@ public:
                     where = (StackBranch) fBranchStack.push(kLessThan, status);
                     break;
                 }
-            case kEqual:
+            case kEqual: /*fall through*/
                 emit = (node->flags & kEndsWord) != 0;
                 equal = (node->equal != NULL);
                 // If this node should be part of the next emitted string, append
@@ -296,7 +296,7 @@ public:
                 if (equal) {
                     break;
                 }
-            case kGreaterThan:
+            case kGreaterThan: /*fall through*/
                 // If this node's character is in the string, remove it.
                 if (node->equal != NULL || (node->flags & kEndsWord)) {
                     unistr.truncate(unistr.length()-1);
@@ -307,7 +307,7 @@ public:
                     where = (StackBranch) fBranchStack.push(kLessThan, status);
                     break;
                 }
-            case kDone:
+            case kDone: /*fall through*/
                 fNodeStack.pop();
                 fBranchStack.popi();
                 node = (TernaryNode *) fNodeStack.peek();

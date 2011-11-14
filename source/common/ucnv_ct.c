@@ -341,7 +341,7 @@ UConverter_fromUnicode_CompoundText_OFFSETS(UConverterFromUnicodeArgs* args, UEr
     COMPOUND_TEXT_CONVERTERS currentState, tmpState;
     uint32_t pValue;
     int32_t pValueLength = 0;
-    int32_t i, n;
+    int32_t i, n, j;
 
     UConverterDataCompoundText *myConverterData = (UConverterDataCompoundText *) cnv->extraInfo;
 
@@ -410,8 +410,8 @@ getTrail:
                          tmpState = (COMPOUND_TEXT_CONVERTERS)i;
                          if (currentState != tmpState) {
                              currentState = tmpState;
-                             for (i = 0; escSeqCompoundText[currentState][i] != 0; i++) {
-                                 tmpTargetBuffer[tmpTargetBufferLength++] = escSeqCompoundText[currentState][i];
+                             for (j = 0; escSeqCompoundText[currentState][j] != 0; j++) {
+                                 tmpTargetBuffer[tmpTargetBufferLength++] = escSeqCompoundText[currentState][j];
                              }
                          }
                          for (n = (pValueLength - 1); n >= 0; n--) {

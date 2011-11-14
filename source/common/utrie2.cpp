@@ -33,6 +33,7 @@
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"
+#include "uassert.h"
 
 /* Public UTrie2 API implementation ----------------------------------------- */
 
@@ -532,6 +533,7 @@ enumEitherTrie(const UTrie2 *trie,
     if(trie->newTrie==NULL) {
         /* frozen trie */
         idx=trie->index;
+        U_ASSERT(idx!=NULL); /* the following code assumes trie->newTrie is not NULL when idx is NULL */
         data32=trie->data32;
 
         index2NullOffset=trie->index2NullOffset;
@@ -540,6 +542,7 @@ enumEitherTrie(const UTrie2 *trie,
         /* unfrozen, mutable trie */
         idx=NULL;
         data32=trie->newTrie->data;
+        U_ASSERT(data32!=NULL); /* the following code assumes idx is not NULL when data32 is NULL */
 
         index2NullOffset=trie->newTrie->index2NullOffset;
         nullBlock=trie->newTrie->dataNullOffset;

@@ -29,6 +29,7 @@
 #include "ucln_in.h"
 #include "ucol_imp.h"
 #include "umutex.h"
+#include "uassert.h"
 
 #include "unicode/colldata.h"
 
@@ -893,6 +894,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
 #endif
 
             if (ceList->matchesAt(offset, ceList2)) {
+                U_ASSERT(ceList2 != NULL);
                 int32_t clength = ceList2->size();
                 int32_t slength = string->length();
                 int32_t roffset = offset + clength;

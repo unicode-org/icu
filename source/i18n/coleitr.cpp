@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
+* Copyright (C) 1996-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -31,6 +31,7 @@
 #include "unicode/coleitr.h"
 #include "unicode/ustring.h"
 #include "ucol_imp.h"
+#include "uassert.h"
 #include "cmemory.h"
 
 
@@ -418,7 +419,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
         }
 
         /* start and end of string */
-        coliter->endp = coliter->string + length;
+        coliter->endp = coliter->string == NULL ? NULL : coliter->string + length;
 
         /* handle writable buffer here */
 
@@ -431,6 +432,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
         if (othercoliter->pos >= othercoliter->string && 
             othercoliter->pos <= othercoliter->endp)
         {
+            U_ASSERT(coliter->string != NULL);
             coliter->pos = coliter->string + 
                 (othercoliter->pos - othercoliter->string);
         }
@@ -462,6 +464,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
         }
 
         if (othercoliter->fcdPosition != NULL) {
+            U_ASSERT(coliter->string != NULL);
             coliter->fcdPosition = coliter->string + 
                 (othercoliter->fcdPosition 
                 - othercoliter->string);

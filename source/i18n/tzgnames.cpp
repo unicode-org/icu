@@ -215,6 +215,7 @@ GNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *node, 
                     }
                 }
                 if (U_SUCCESS(status)) {
+                    U_ASSERT(fResults != NULL);
                     GMatchInfo *gmatch = (GMatchInfo *)uprv_malloc(sizeof(GMatchInfo));
                     if (gmatch == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;

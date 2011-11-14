@@ -24,6 +24,7 @@
 #include "putilimp.h"
 #include "ustr_imp.h"
 #include "ubidi_props.h"
+#include "uassert.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -909,6 +910,9 @@ expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UE
         while(i >= 0 && j >= 0) {
             if( countl>0 && isLamAlefChar(dest[i])) {
                 tempbuffer[j] = LAM_CHAR;
+                /* to ensure the array index is within the range */
+                U_ASSERT(dest[i]-0xFEF5 >= 0
+                    && dest[i]-0xFEF5 < sizeof(convertLamAlef)/sizeof(convertLamAlef[0]));
                 tempbuffer[j-1] = convertLamAlef[ dest[i] - 0xFEF5 ];
                 j--;
                 countl--;
@@ -1298,8 +1302,11 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                     if (tashkeelFlag == 2){
                         dest[i] = TASHKEEL_SPACE_SUB;
                         tashkeelFound  = 1;
-                    }else {
-                    dest[i] =  0xFE70 + IrrelevantPos[(dest[i] - 0x064B)] + Shape;
+                    } else {
+                        /* to ensure the array index is within the range */
+                        U_ASSERT(dest[i]-0x064B >= 0
+                            && dest[i]-0x064B < sizeof(IrrelevantPos)/sizeof(IrrelevantPos[0]));
+                        dest[i] =  0xFE70 + IrrelevantPos[(dest[i] - 0x064B)] + Shape;
                     }
                 }else if ((currLink & APRESENT) > 0) {
                     dest[i] = (UChar)(0xFB50 + (currLink >> 8) + Shape);

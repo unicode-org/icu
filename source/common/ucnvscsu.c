@@ -1395,11 +1395,11 @@ outputBytes:
                 /* each branch falls through to the next one */
             case 4:
                 *target++=(uint8_t)(c>>24);
-            case 3:
+            case 3: /*fall through*/
                 *target++=(uint8_t)(c>>16);
-            case 2:
+            case 2: /*fall through*/
                 *target++=(uint8_t)(c>>8);
-            case 1:
+            case 1: /*fall through*/
                 *target++=(uint8_t)c;
             default:
                 /* will never occur */
@@ -1411,13 +1411,13 @@ outputBytes:
             case 4:
                 *target++=(uint8_t)(c>>24);
                 *offsets++=sourceIndex;
-            case 3:
+            case 3: /*fall through*/
                 *target++=(uint8_t)(c>>16);
                 *offsets++=sourceIndex;
-            case 2:
+            case 2: /*fall through*/
                 *target++=(uint8_t)(c>>8);
                 *offsets++=sourceIndex;
-            case 1:
+            case 1: /*fall through*/
                 *target++=(uint8_t)c;
                 *offsets++=sourceIndex;
             default:
@@ -1448,11 +1448,11 @@ outputBytes:
             /* each branch falls through to the next one */
         case 4:
             *p++=(uint8_t)(c>>24);
-        case 3:
+        case 3: /*fall through*/
             *p++=(uint8_t)(c>>16);
-        case 2:
+        case 2: /*fall through*/
             *p++=(uint8_t)(c>>8);
-        case 1:
+        case 1: /*fall through*/
             *p=(uint8_t)c;
         default:
             /* will never occur */
@@ -1469,12 +1469,12 @@ outputBytes:
             if(offsets!=NULL) {
                 *offsets++=sourceIndex;
             }
-        case 2:
+        case 2: /*fall through*/
             *target++=(uint8_t)(c>>8);
             if(offsets!=NULL) {
                 *offsets++=sourceIndex;
             }
-        case 1:
+        case 1: /*fall through*/
             *target++=(uint8_t)c;
             if(offsets!=NULL) {
                 *offsets++=sourceIndex;
@@ -1853,11 +1853,11 @@ outputBytes:
             /* each branch falls through to the next one */
         case 4:
             *target++=(uint8_t)(c>>24);
-        case 3:
+        case 3: /*fall through*/
             *target++=(uint8_t)(c>>16);
-        case 2:
+        case 2: /*fall through*/
             *target++=(uint8_t)(c>>8);
-        case 1:
+        case 1: /*fall through*/
             *target++=(uint8_t)c;
         default:
             /* will never occur */
@@ -1885,11 +1885,11 @@ outputBytes:
             /* each branch falls through to the next one */
         case 4:
             *p++=(uint8_t)(c>>24);
-        case 3:
+        case 3: /*fall through*/
             *p++=(uint8_t)(c>>16);
-        case 2:
+        case 2: /*fall through*/
             *p++=(uint8_t)(c>>8);
-        case 1:
+        case 1: /*fall through*/
             *p=(uint8_t)c;
         default:
             /* will never occur */
@@ -1903,9 +1903,9 @@ outputBytes:
             /* each branch falls through to the next one */
         case 3:
             *target++=(uint8_t)(c>>16);
-        case 2:
+        case 2: /*fall through*/
             *target++=(uint8_t)(c>>8);
-        case 1:
+        case 1: /*fall through*/
             *target++=(uint8_t)c;
         default:
             break;

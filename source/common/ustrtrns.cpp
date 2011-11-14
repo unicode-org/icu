@@ -32,6 +32,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
+#include "uassert.h"
 
 U_CAPI UChar* U_EXPORT2 
 u_strFromUTF32WithSub(UChar *dest,
@@ -65,7 +66,7 @@ u_strFromUTF32WithSub(UChar *dest,
     }
 
     pDest = dest;
-    destLimit = dest + destCapacity;
+    destLimit = (dest!=NULL)?(dest + destCapacity):NULL;
     reqLength = 0;
     numSubstitutions = 0;
 
@@ -86,7 +87,7 @@ u_strFromUTF32WithSub(UChar *dest,
             while(*++srcLimit != 0) {}
         }
     } else {
-        srcLimit = src + srcLength;
+      srcLimit = (src!=NULL)?(src + srcLength):NULL;
     }
 
     /* convert with length */
@@ -102,7 +103,7 @@ u_strFromUTF32WithSub(UChar *dest,
                 }
                 break;
             } else if(0x10000 <= ch && ch <= 0x10ffff) {
-                if((pDest + 2) <= destLimit) {
+                if(pDest!=NULL && ((pDest + 2) <= destLimit)) {
                     *pDest++ = U16_LEAD(ch);
                     *pDest++ = U16_TRAIL(ch);
                 } else {
@@ -180,7 +181,7 @@ u_strToUTF32WithSub(UChar32 *dest,
     }
 
     pDest = dest;
-    destLimit = dest + destCapacity;
+    destLimit = (dest!=NULL)?(dest + destCapacity):NULL;
     reqLength = 0;
     numSubstitutions = 0;
 
@@ -200,7 +201,7 @@ u_strToUTF32WithSub(UChar32 *dest,
             while(*++srcLimit != 0) {}
         }
     } else {
-        srcLimit = src + srcLength;
+        srcLimit = (src!=NULL)?(src + srcLength):NULL;
     }
 
     /* convert with length */
@@ -272,6 +273,7 @@ utf8_nextCharSafeBodyTerminated(const uint8_t **ps, UChar32 c) {
     const uint8_t *s=*ps;
     uint8_t trail, illegal=0;
     uint8_t count=U8_COUNT_TRAIL_BYTES(c);
+    U_ASSERT(count<6);
     U8_MASK_LEAD_BYTE((c), count);
     /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
     switch(count) {
@@ -289,7 +291,7 @@ utf8_nextCharSafeBodyTerminated(const uint8_t **ps, UChar32 c) {
             illegal=1;
             break;
         }
-    case 2:
+    case 2: /*fall through*/
         trail=(uint8_t)(*s++ - 0x80);
         if(trail>0x3f) {
             /* not a trail byte */
@@ -297,7 +299,7 @@ utf8_nextCharSafeBodyTerminated(const uint8_t **ps, UChar32 c) {
             break;
         }
         c=(c<<6)|trail;
-    case 1:
+    case 1: /*fall through*/
         trail=(uint8_t)(*s++ - 0x80);
         if(trail>0x3f) {
             /* not a trail byte */
@@ -360,11 +362,11 @@ utf8_nextCharSafeBodyPointer(const uint8_t **ps, const uint8_t *limit, UChar32 c
                 illegal=1;
                 break;
             }
-        case 2:
+        case 2: /*fall through*/
             trail=*s++;
             c=(c<<6)|(trail&0x3f);
             illegal|=(trail&0xc0)^0x80;
-        case 1:
+        case 1: /*fall through*/
             trail=*s++;
             c=(c<<6)|(trail&0x3f);
             illegal|=(trail&0xc0)^0x80;
@@ -379,6 +381,7 @@ utf8_nextCharSafeBodyPointer(const uint8_t **ps, const uint8_t *limit, UChar32 c
 
     /* correct sequence - all trail bytes have (b7..b6)==(10)? */
     /* illegal is also set if count>=4 */
+    U_ASSERT(count<sizeof(utf8_minLegal)/sizeof(utf8_minLegal[0]));
     if(illegal || c<utf8_minLegal[count] || U_IS_SURROGATE(c)) {
         /* error handling */
         /* don't go beyond this sequence */
@@ -757,7 +760,7 @@ u_strFromUTF8Lenient(UChar *dest,
 
     if(srcLength < 0) {
         /* Transform a NUL-terminated string. */
-        UChar *pDestLimit = dest+destCapacity;
+        UChar *pDestLimit = (dest!=NULL)?(dest+destCapacity):NULL;
         uint8_t t1, t2, t3; /* trail bytes */
 
         while(((ch = *pSrc) != 0) && (pDest < pDestLimit)) {
@@ -843,7 +846,7 @@ u_strFromUTF8Lenient(UChar *dest,
             break;
         }
     } else /* srcLength >= 0 */ {
-        const uint8_t *pSrcLimit = pSrc + srcLength;
+      const uint8_t *pSrcLimit = (pSrc!=NULL)?(pSrc + srcLength):NULL;
 
         /*
          * This function requires that if srcLength is given, then it must be
@@ -981,7 +984,7 @@ u_strToUTF8WithSub(char *dest,
     int32_t reqLength=0;
     uint32_t ch=0,ch2=0;
     uint8_t *pDest = (uint8_t *)dest;
-    uint8_t *pDestLimit = pDest + destCapacity;
+    uint8_t *pDestLimit = (pDest!=NULL)?(pDest + destCapacity):NULL;
     int32_t numSubstitutions;
 
     /* args check */
@@ -1075,7 +1078,7 @@ u_strToUTF8WithSub(char *dest,
             }
         }
     } else {
-        const UChar *pSrcLimit = pSrc+srcLength;
+        const UChar *pSrcLimit = (pSrc!=NULL)?(pSrc+srcLength):NULL;
         int32_t count;
 
         /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
@@ -1547,7 +1550,7 @@ u_strToJavaModifiedUTF8(
     }
 
     /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
-    pSrcLimit = src+srcLength;
+    pSrcLimit = (src!=NULL)?(src+srcLength):NULL;
     for(;;) {
         count = (int32_t)(pDestLimit - pDest);
         srcLength = (int32_t)(pSrcLimit - src);

@@ -20,6 +20,7 @@
 #include "unicode/utf16.h"
 #include "cmemory.h"
 #include "bmpset.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -63,6 +64,9 @@ BMPSet::~BMPSet() {
  * start<limit<=0x800
  */
 static void set32x64Bits(uint32_t table[64], int32_t start, int32_t limit) {
+    U_ASSERT(start<limit);
+    U_ASSERT(limit<=0x800);
+
     int32_t lead=start>>6;
     int32_t trail=start&0x3f;
 

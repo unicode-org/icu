@@ -752,32 +752,33 @@ ICUService::getDisplayNames(UVector& result,
 
         if (dnCache == NULL) {
             const Hashtable* m = getVisibleIDMap(status);
-            if (m != NULL) {
-                ncthis->dnCache = new DNCache(locale); 
-                if (dnCache == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    return result;
-                }
+            if (U_FAILURE(status)) {
+                return result;
+            }
+            ncthis->dnCache = new DNCache(locale); 
+            if (dnCache == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return result;
+            }
 
-                int32_t pos = -1;
-                const UHashElement* entry = NULL;
-                while ((entry = m->nextElement(pos)) != NULL) {
-                    const UnicodeString* id = (const UnicodeString*)entry->key.pointer;
-                    ICUServiceFactory* f = (ICUServiceFactory*)entry->value.pointer;
-                    UnicodeString dname;
-                    f->getDisplayName(*id, locale, dname);
-                    if (dname.isBogus()) {
-                        status = U_MEMORY_ALLOCATION_ERROR;
-                    } else {
-                        dnCache->cache.put(dname, (void*)id, status); // share pointer with visibleIDMap
-                        if (U_SUCCESS(status)) {
-                            continue;
-                        }
+            int32_t pos = -1;
+            const UHashElement* entry = NULL;
+            while ((entry = m->nextElement(pos)) != NULL) {
+                const UnicodeString* id = (const UnicodeString*)entry->key.pointer;
+                ICUServiceFactory* f = (ICUServiceFactory*)entry->value.pointer;
+                UnicodeString dname;
+                f->getDisplayName(*id, locale, dname);
+                if (dname.isBogus()) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                } else {
+                    dnCache->cache.put(dname, (void*)id, status); // share pointer with visibleIDMap
+                    if (U_SUCCESS(status)) {
+                        continue;
                     }
-                    delete dnCache;
-                    ncthis->dnCache = NULL;
-                    return result;
                 }
+                delete dnCache;
+                ncthis->dnCache = NULL;
+                return result;
             }
         }
     }

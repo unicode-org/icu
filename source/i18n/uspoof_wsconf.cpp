@@ -397,11 +397,13 @@ cleanup:
     uprv_free(input);
 
     int32_t i;
-    for (i=0; i<scriptSets->size(); i++) {
-        BuilderScriptSet *bsset = static_cast<BuilderScriptSet *>(scriptSets->elementAt(i));
-        delete bsset;
+    if (scriptSets != NULL) {
+        for (i=0; i<scriptSets->size(); i++) {
+            BuilderScriptSet *bsset = static_cast<BuilderScriptSet *>(scriptSets->elementAt(i));
+            delete bsset;
+        }
+        delete scriptSets;
     }
-    delete scriptSets;
     utrie2_close(anyCaseTrie);
     utrie2_close(lowerCaseTrie);
     return;

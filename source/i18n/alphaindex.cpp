@@ -869,8 +869,10 @@ UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
         return NULL;
     }
     UVector *dest = new UVector(status);
-    if (dest == NULL && U_SUCCESS(status)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    if (dest == NULL) {
+        if (U_SUCCESS(status)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
         return NULL;
     }
     dest->setDeleter(uprv_deleteUObject);
@@ -883,9 +885,10 @@ UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
         UnicodeString *str = new UnicodeString(src, -1);
         if (str == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            dest->addElement(str, status);
+            src += str->length() + 1;
         }
-        dest->addElement(str, status);
-        src += str->length() + 1;
     } while (src < limit);
     dest->sortWithUComparator(sortCollateComparator, collator_, status);
     return dest;

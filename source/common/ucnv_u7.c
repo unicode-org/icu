@@ -21,6 +21,7 @@
 #include "unicode/ucnv.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
+#include "uassert.h"
 
 /* UTF-7 -------------------------------------------------------------------- */
 
@@ -486,6 +487,7 @@ _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         inDirectMode=(UBool)((status>>24)&1);
         base64Counter=(int8_t)(status>>16);
         bits=(uint8_t)status;
+        U_ASSERT(bits<=sizeof(toBase64)/sizeof(toBase64[0]));
     }
 
     /* UTF-7 always encodes UTF-16 code units, therefore we need only a simple sourceIndex */

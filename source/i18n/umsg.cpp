@@ -634,6 +634,7 @@ int32_t umsg_autoQuoteApostrophe(const UChar* pattern,
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
+    U_ASSERT(destCapacity >= 0);
 
     if (patternLength == -1) {
         patternLength = u_strlen(pattern);
@@ -695,6 +696,7 @@ int32_t umsg_autoQuoteApostrophe(const UChar* pattern,
             break;
         }
 
+        U_ASSERT(len >= 0);
         MAppend(c);
     }
 

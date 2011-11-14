@@ -26,6 +26,7 @@
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "cstring.h"
+#include "uassert.h"
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
 #define NUKTA               0x093c
@@ -1333,6 +1334,7 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
                 i=1;
                 found=FALSE;
                 for (; i<vowelSignESpecialCases[0][0]; i++) {
+                    U_ASSERT(i<sizeof(vowelSignESpecialCases)/sizeof(vowelSignESpecialCases[0]));
                     if (vowelSignESpecialCases[i][0]==(uint8_t)*contextCharToUnicode) {
                         targetUniChar=vowelSignESpecialCases[i][1];
                         found=TRUE;

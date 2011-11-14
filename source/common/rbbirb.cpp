@@ -1,7 +1,7 @@
 //
 //  file:  rbbirb.cpp
 //
-//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2011, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the RBBIRuleBuilder class implementation.  This is the main class for
@@ -260,19 +260,14 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     builder.fReverseTables = new RBBITableBuilder(&builder, &builder.fReverseTree);
     builder.fSafeFwdTables = new RBBITableBuilder(&builder, &builder.fSafeFwdTree);
     builder.fSafeRevTables = new RBBITableBuilder(&builder, &builder.fSafeRevTree);
-    if (U_SUCCESS(status)
-        && (builder.fForwardTables == NULL || builder.fReverseTables == NULL ||
-            builder.fSafeFwdTables == NULL || builder.fSafeRevTables == NULL)) 
+    if (builder.fForwardTables == NULL || builder.fReverseTables == NULL ||
+        builder.fSafeFwdTables == NULL || builder.fSafeRevTables == NULL)
     {
         status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    
-    // Before building the tables, check to make sure the status is ok.
-    if (U_FAILURE(status)) {
-    	delete builder.fForwardTables; builder.fForwardTables = NULL;
-    	delete builder.fReverseTables; builder.fReverseTables = NULL;
-    	delete builder.fSafeFwdTables; builder.fSafeFwdTables = NULL;
-    	delete builder.fSafeRevTables; builder.fSafeRevTables = NULL;
+        delete builder.fForwardTables; builder.fForwardTables = NULL;
+        delete builder.fReverseTables; builder.fReverseTables = NULL;
+        delete builder.fSafeFwdTables; builder.fSafeFwdTables = NULL;
+        delete builder.fSafeRevTables; builder.fSafeRevTables = NULL;
         return NULL;
     }
 

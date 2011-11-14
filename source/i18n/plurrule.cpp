@@ -27,6 +27,7 @@
 #include "ucln_in.h"
 #include "ustrfmt.h"
 #include "locutil.h"
+#include "uassert.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -363,6 +364,7 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
         }
         switch (type) {
         case tAnd:
+            U_ASSERT(curAndConstraint != NULL);
             curAndConstraint = curAndConstraint->add();
             break;
         case tOr:
@@ -380,19 +382,24 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             curAndConstraint = orNode->add();
             break;
         case tIs:
+            U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->rangeHigh=-1;
             break;
         case tNot:
+            U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->notIn=TRUE;
             break;
         case tIn:
+            U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
             curAndConstraint->integerOnly = TRUE;
             break;
         case tWithin:
+            U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
             break;
         case tNumber:
+            U_ASSERT(curAndConstraint != NULL);
             if ( (curAndConstraint->op==AndConstraint::MOD)&&
                  (curAndConstraint->opNum == -1 ) ) {
                 curAndConstraint->opNum=getNumberValue(token);
@@ -407,6 +414,7 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             }
             break;
         case tMod:
+            U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->op=AndConstraint::MOD;
             break;
         case tKeyword:

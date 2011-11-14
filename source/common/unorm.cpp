@@ -114,31 +114,15 @@ unorm_normalize(const UChar *src, int32_t srcLength,
 /* iteration functions ------------------------------------------------------ */
 
 static int32_t
-unorm_iterate(UCharIterator *src, UBool forward,
+_iterate(UCharIterator *src, UBool forward,
               UChar *dest, int32_t destCapacity,
-              UNormalizationMode mode, int32_t options,
+              const Normalizer2 *n2,
               UBool doNormalize, UBool *pNeededToNormalize,
               UErrorCode *pErrorCode) {
-    const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
-    const UnicodeSet *uni32;
-    if(options&UNORM_UNICODE_3_2) {
-        uni32=uniset_getUnicode32Instance(*pErrorCode);
-    } else {
-        uni32=NULL;  // unused
-    }
-
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-
-    FilteredNormalizer2 fn2(*n2, *uni32);
-    if(options&UNORM_UNICODE_3_2) {
-        n2=&fn2;
-    }
-    
-    if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
-        src==NULL
-    ) {
+    if(destCapacity<0 || (dest==NULL && destCapacity>0) || src==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -189,6 +173,26 @@ unorm_iterate(UCharIterator *src, UBool forward,
     }
 }
 
+static int32_t
+unorm_iterate(UCharIterator *src, UBool forward,
+              UChar *dest, int32_t destCapacity,
+              UNormalizationMode mode, int32_t options,
+              UBool doNormalize, UBool *pNeededToNormalize,
+              UErrorCode *pErrorCode) {
+    const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
+    if(options&UNORM_UNICODE_3_2) {
+        const UnicodeSet *uni32 = uniset_getUnicode32Instance(*pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return 0;
+        }
+        FilteredNormalizer2 fn2(*n2, *uni32);
+        return _iterate(src, forward, dest, destCapacity,
+            &fn2, doNormalize, pNeededToNormalize, pErrorCode);
+    }
+    return _iterate(src, forward, dest, destCapacity,
+            n2, doNormalize, pNeededToNormalize, pErrorCode);
+}
+
 U_CAPI int32_t U_EXPORT2
 unorm_previous(UCharIterator *src,
                UChar *dest, int32_t destCapacity,
@@ -217,33 +221,17 @@ unorm_next(UCharIterator *src,
 
 /* Concatenation of normalized strings -------------------------------------- */
 
-U_CAPI int32_t U_EXPORT2
-unorm_concatenate(const UChar *left, int32_t leftLength,
+static int32_t
+_concatenate(const UChar *left, int32_t leftLength,
                   const UChar *right, int32_t rightLength,
                   UChar *dest, int32_t destCapacity,
-                  UNormalizationMode mode, int32_t options,
+                  const Normalizer2 *n2,
                   UErrorCode *pErrorCode) {
-    const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
-    const UnicodeSet *uni32;
-    if(options&UNORM_UNICODE_3_2) {
-        uni32=uniset_getUnicode32Instance(*pErrorCode);
-    } else {
-        uni32=NULL;  // unused
-    }
-
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-
-    FilteredNormalizer2 fn2(*n2, *uni32);
-    if(options&UNORM_UNICODE_3_2) {
-        n2=&fn2;
-    }
-    
-    if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
-        left==NULL || leftLength<-1 ||
-        right==NULL || rightLength<-1
-    ) {
+    if(destCapacity<0 || (dest==NULL && destCapacity>0) ||
+        left==NULL || leftLength<-1 || right==NULL || rightLength<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -267,6 +255,26 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
     }
     return n2->append(destString, UnicodeString(rightLength<0, right, rightLength), *pErrorCode).
            extract(dest, destCapacity, *pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+unorm_concatenate(const UChar *left, int32_t leftLength,
+                  const UChar *right, int32_t rightLength,
+                  UChar *dest, int32_t destCapacity,
+                  UNormalizationMode mode, int32_t options,
+                  UErrorCode *pErrorCode) {
+    const Normalizer2 *n2=Normalizer2Factory::getInstance(mode, *pErrorCode);
+    if(options&UNORM_UNICODE_3_2) {
+        const UnicodeSet *uni32 = uniset_getUnicode32Instance(*pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return 0;
+        }
+        FilteredNormalizer2 fn2(*n2, *uni32);
+        return _concatenate(left, leftLength, right, rightLength,
+            dest, destCapacity, &fn2, pErrorCode);
+    }
+    return _concatenate(left, leftLength, right, rightLength,
+        dest, destCapacity, n2, pErrorCode);
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

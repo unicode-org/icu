@@ -41,6 +41,7 @@
 #include "ucnvmbcs.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "uassert.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -2836,7 +2837,7 @@ getTrailByte:
 *
 */
 
-/* The following are defined this way to make the strings truely readonly */
+/* The following are defined this way to make the strings truly readonly */
 static const char GB_2312_80_STR[] = "\x1B\x24\x29\x41";
 static const char ISO_IR_165_STR[] = "\x1B\x24\x29\x45";
 static const char CNS_11643_1992_Plane_1_STR[] = "\x1B\x24\x29\x47";
@@ -2849,9 +2850,9 @@ static const char CNS_11643_1992_Plane_7_STR[] = "\x1B\x24\x2B\x4D";
 
 /********************** ISO2022-CN Data **************************/
 static const char* const escSeqCharsCN[10] ={
-        SHIFT_IN_STR,           /* ASCII */
-        GB_2312_80_STR,
-        ISO_IR_165_STR,
+        SHIFT_IN_STR,                   /* 0 ASCII */
+        GB_2312_80_STR,                 /* 1 GB2312_1 */
+        ISO_IR_165_STR,                 /* 2 ISO_IR_165 */
         CNS_11643_1992_Plane_1_STR,
         CNS_11643_1992_Plane_2_STR,
         CNS_11643_1992_Plane_3_STR,
@@ -3056,6 +3057,7 @@ getTrail:
                             }
                         } else {
                             /* GB2312_1 or ISO-IR-165 */
+                            U_ASSERT(cs0<UCNV_2022_MAX_CONVERTERS);
                             len2 = MBCS_FROM_UCHAR32_ISO2022(
                                         converterData->myConverterArray[cs0],
                                         sourceChar,
@@ -3081,6 +3083,7 @@ getTrail:
                         if(cs < CNS_11643) {
                             uprv_memcpy(buffer, escSeqCharsCN[cs], 4);
                         } else {
+                            U_ASSERT(cs >= CNS_11643_1);
                             uprv_memcpy(buffer, escSeqCharsCN[CNS_11643 + (cs - CNS_11643_1)], 4);
                         }
                         len = 4;
@@ -3339,6 +3342,7 @@ getTrailByte:
                                 tempBufLen = 3;
 
                             }else{
+                                U_ASSERT(tempState<UCNV_2022_MAX_CONVERTERS);
                                 cnv = myData->myConverterArray[tempState];
                                 tempBuf[0] = (char) (mySourceChar);
                                 tempBuf[1] = (char) trailByte;
