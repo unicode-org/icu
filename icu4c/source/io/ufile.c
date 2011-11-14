@@ -143,7 +143,7 @@ u_fopen(const char    *filename,
         fclose(systemFile);
     }
 
-    return result;
+    return result; /* not a file leak */
 }
 
 U_CAPI UFILE* U_EXPORT2

@@ -589,6 +589,7 @@ Normalizer2::getInstance(const char *packageName,
     }
     if(name==NULL || *name==0) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
     Norm2AllModes *allModes=NULL;
     if(packageName==NULL) {
@@ -752,9 +753,11 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
                 // Restore the modified suffix of the first string.
                 // This does not restore first[] array contents between firstLength and firstCapacity.
                 // (That might be uninitialized memory, as far as we know.)
-                safeMiddle.extract(0, 0x7fffffff, first+firstLength-safeMiddle.length());
-                if(firstLength<firstCapacity) {
+                if(first!=NULL) { /* don't dereference NULL */
+                  safeMiddle.extract(0, 0x7fffffff, first+firstLength-safeMiddle.length());
+                  if(firstLength<firstCapacity) {
                     first[firstLength]=0;  // NUL-terminate in case it was originally.
+                  }
                 }
             }
         } else {

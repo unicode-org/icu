@@ -50,6 +50,7 @@
 #include "locbased.h"
 #include "uresimp.h"
 #include "ustrenum.h"
+#include "uassert.h"
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = NULL;
@@ -2485,6 +2486,7 @@ UCalendarDateFields Calendar::resolveFields(const UFieldResolutionTable* precede
             int32_t lineStamp = kUnset;
             // Skip over first entry if it is negative
             for (int32_t i=((precedenceTable[g][l][0]>=kResolveRemap)?1:0); precedenceTable[g][l][i]!=-1; ++i) {
+                U_ASSERT(precedenceTable[g][l][i] < UCAL_FIELD_COUNT);
                 int32_t s = fStamp[precedenceTable[g][l][i]];
                 // If any field is unset then don't use this line
                 if (s == kUnset) {

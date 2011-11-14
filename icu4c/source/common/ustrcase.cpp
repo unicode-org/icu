@@ -544,10 +544,10 @@ u_strcmpFold(const UChar *s1, int32_t length1,
                 /* reached end of level buffer, pop one level */
                 do {
                     --level1;
-                    start1=stack1[level1].start;
+                    start1=stack1[level1].start;    /*Not uninitialized*/
                 } while(start1==NULL);
-                s1=stack1[level1].s;
-                limit1=stack1[level1].limit;
+                s1=stack1[level1].s;                /*Not uninitialized*/
+                limit1=stack1[level1].limit;        /*Not uninitialized*/
             }
         }
 
@@ -567,10 +567,10 @@ u_strcmpFold(const UChar *s1, int32_t length1,
                 /* reached end of level buffer, pop one level */
                 do {
                     --level2;
-                    start2=stack2[level2].start;
+                    start2=stack2[level2].start;    /*Not uninitialized*/
                 } while(start2==NULL);
-                s2=stack2[level2].s;
-                limit2=stack2[level2].limit;
+                s2=stack2[level2].s;                /*Not uninitialized*/
+                limit2=stack2[level2].limit;        /*Not uninitialized*/
             }
         }
 

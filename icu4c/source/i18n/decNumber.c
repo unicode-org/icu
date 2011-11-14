@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* Decimal Number arithmetic module                                   */
 /* ------------------------------------------------------------------ */
-/* Copyright (c) IBM Corporation, 2000-2010.  All rights reserved.    */
+/* Copyright (c) IBM Corporation, 2000-2011.  All rights reserved.    */
 /*                                                                    */
 /* This software is made available under the terms of the             */
 /* ICU License -- ICU 1.8.1 and later.                                */
@@ -181,6 +181,7 @@
 #include "cmemory.h"               /* for uprv_malloc, etc., in ICU */
 #include "decNumber.h"             /* base number library  */
 #include "decNumberLocal.h"        /* decNumber local types, etc.  */
+#include "uassert.h"
 
 /* Constants */
 /* Public lookup table used by the D2U macro  */
@@ -4059,6 +4060,8 @@ static decNumber * decAddOp(decNumber *res, const decNumber *lhs,
     #endif
 
     /* add [A+B*m] or subtract [A+B*(-m)]  */
+    U_ASSERT(rhs->digits > 0);
+    U_ASSERT(lhs->digits > 0);
     res->digits=decUnitAddSub(lhs->lsu, D2U(lhs->digits),
                               rhs->lsu, D2U(rhs->digits),
                               rhsshift, acc, mult)
@@ -4971,6 +4974,10 @@ static decNumber * decMultiplyOp(decNumber *res, const decNumber *lhs,
       /* (rounded up to a multiple of 8 bytes), and the uLong  */
       /* accumulator starts offset the appropriate number of units  */
       /* to the right to avoid overwrite during the unchunking.  */
+
+      /* Make sure no signed int overflow below. This is always true */
+      /* if the given numbers have less digits than DEC_MAX_DIGITS. */
+      U_ASSERT(iacc <= INT32_MAX/sizeof(uLong));
       needbytes=iacc*sizeof(uLong);
       #if DECDPUN==1
       zoff=(iacc+7)/8;        /* items to offset by  */
@@ -6978,6 +6985,7 @@ static void decSetCoeff(decNumber *dn, decContext *set, const Unit *lsu,
     if (cut==0) quot=*up;          /* is at bottom of unit  */
      else /* cut>0 */ {            /* it's not at bottom of unit  */
       #if DECDPUN<=4
+        U_ASSERT(cut >= 0 && cut <= 4);
         quot=QUOT10(*up, cut);
         rem=*up-quot*powers[cut];
       #else

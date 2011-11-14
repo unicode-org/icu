@@ -112,6 +112,7 @@ UCharsTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorC
         UCharsTrieElement *newElements=new UCharsTrieElement[newCapacity];
         if(newElements==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
+            return *this;
         }
         if(elementsLength>0) {
             uprv_memcpy(newElements, elements, elementsLength*sizeof(UCharsTrieElement));

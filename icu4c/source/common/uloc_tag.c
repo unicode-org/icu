@@ -1279,7 +1279,7 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
 static int32_t
 _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UBool hadPosix, UErrorCode* status) {
     char buf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
-    char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
+    char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY] = { 0 };
     int32_t attrBufLength = 0;
     UBool isAttribute = FALSE;
     UEnumeration *keywordEnum = NULL;
