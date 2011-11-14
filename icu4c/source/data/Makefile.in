@@ -104,7 +104,8 @@ TOOLDIR=$(top_builddir)/tools
 .PHONY : all all-local all-recursive install install-local install-files	\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive build-local clean-resindex build-dir icudata.jar
+check check-local check-recursive build-local clean-resindex build-dir icudata.jar	\
+check-exhaustive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -116,6 +117,8 @@ clean: clean-local
 distclean : distclean-local
 dist: 
 check: all
+
+check-exhaustive: check
 
 -include Makefile.local
 
