@@ -1,5 +1,5 @@
 ## Makefile.in for ICU samples
-## Copyright (c) 1999-2010, International Business Machines Corporation and
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Install directory information
@@ -26,7 +26,7 @@ ALLSUBDIRS = break case csdet datefmt msgfmt numfmt props translit ucnv udata uf
 .PHONY : all all-local all-recursive install install-local		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-recursive dist-local	\
-check check-recursive check-local
+check check-recursive check-local check-exhaustive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -46,6 +46,7 @@ check-samples: check-samples-recursive
 #check: all check-recursive check-local
 check: all check-local
 
+check-exhaustive: check
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
