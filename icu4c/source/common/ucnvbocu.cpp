@@ -27,6 +27,7 @@
 #include "putilimp.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
+#include "uassert.h"
 
 /* BOCU-1 constants and macros ---------------------------------------------- */
 
@@ -208,6 +209,17 @@ bocu1TrailToByte[BOCU1_TRAIL_CONTROLS_COUNT]={
     } \
 }
 
+/* Faster versions of packDiff() for single-byte-encoded diff values. */
+
+/** Is a diff value encodable in a single byte? */
+#define DIFF_IS_SINGLE(diff) (BOCU1_REACH_NEG_1<=(diff) && (diff)<=BOCU1_REACH_POS_1)
+
+/** Encode a diff value in a single byte. */
+#define PACK_SINGLE_DIFF(diff) (BOCU1_MIDDLE+(diff))
+
+/** Is a diff value encodable in two bytes? */
+#define DIFF_IS_DOUBLE(diff) (BOCU1_REACH_NEG_2<=(diff) && (diff)<=BOCU1_REACH_POS_2)
+
 /* BOCU-1 implementation functions ------------------------------------------ */
 
 #define BOCU1_SIMPLE_PREV(c) (((c)&~0x7f)+BOCU1_ASCII_PREV)
@@ -256,7 +268,7 @@ bocu1Prev(int32_t c) {
  * Encode a difference -0x10ffff..0x10ffff in 1..4 bytes
  * and return a packed integer with them.
  *
- * The encoding favors small absolut differences with short encodings
+ * The encoding favors small absolute differences with short encodings
  * to compress runs of same-script characters.
  *
  * Optimized version with unrolled loops and fewer floating-point operations
@@ -273,6 +285,7 @@ static int32_t
 packDiff(int32_t diff) {
     int32_t result, m;
 
+    U_ASSERT(!DIFF_IS_SINGLE(diff)); /* assume we won't be called where diff==BOCU1_REACH_NEG_1=-64 */
     if(diff>=BOCU1_REACH_NEG_1) {
         /* mostly positive differences, and single-byte negative ones */
 #if 0   /* single-byte case handled in macros, see below */
@@ -372,16 +385,6 @@ packDiff(int32_t diff) {
     return result;
 }
 
-/* Faster versions of packDiff() for single-byte-encoded diff values. */
-
-/** Is a diff value encodable in a single byte? */
-#define DIFF_IS_SINGLE(diff) (BOCU1_REACH_NEG_1<=(diff) && (diff)<=BOCU1_REACH_POS_1)
-
-/** Encode a diff value in a single byte. */
-#define PACK_SINGLE_DIFF(diff) (BOCU1_MIDDLE+(diff))
-
-/** Is a diff value encodable in two bytes? */
-#define DIFF_IS_DOUBLE(diff) (BOCU1_REACH_NEG_2<=(diff) && (diff)<=BOCU1_REACH_POS_2)
 
 static void
 _Bocu1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
@@ -548,10 +551,10 @@ getTrail:
                     case 4:
                         *target++=(uint8_t)(diff>>24);
                         *offsets++=sourceIndex;
-                    case 3:
+                    case 3: /*fall through*/
                         *target++=(uint8_t)(diff>>16);
                         *offsets++=sourceIndex;
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(diff>>8);
                         *offsets++=sourceIndex;
                     /* case 1: handled above */
@@ -579,9 +582,9 @@ getTrail:
                         /* each branch falls through to the next one */
                     case 3:
                         *charErrorBuffer++=(uint8_t)(diff>>16);
-                    case 2:
+                    case 2: /*fall through*/
                         *charErrorBuffer++=(uint8_t)(diff>>8);
-                    case 1:
+                    case 1: /*fall through*/
                         *charErrorBuffer=(uint8_t)diff;
                     default:
                         /* will never occur */
@@ -596,10 +599,10 @@ getTrail:
                     case 3:
                         *target++=(uint8_t)(diff>>16);
                         *offsets++=sourceIndex;
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(diff>>8);
                         *offsets++=sourceIndex;
-                    case 1:
+                    case 1: /*fall through*/
                         *target++=(uint8_t)diff;
                         *offsets++=sourceIndex;
                     default:
@@ -776,7 +779,7 @@ getTrail:
                         /* each branch falls through to the next one */
                     case 4:
                         *target++=(uint8_t)(diff>>24);
-                    case 3:
+                    case 3: /*fall through*/
                         *target++=(uint8_t)(diff>>16);
                     /* case 2: handled above */
                         *target++=(uint8_t)(diff>>8);
@@ -803,9 +806,9 @@ getTrail:
                         /* each branch falls through to the next one */
                     case 3:
                         *charErrorBuffer++=(uint8_t)(diff>>16);
-                    case 2:
+                    case 2: /*fall through*/
                         *charErrorBuffer++=(uint8_t)(diff>>8);
-                    case 1:
+                    case 1: /*fall through*/
                         *charErrorBuffer=(uint8_t)diff;
                     default:
                         /* will never occur */
@@ -819,9 +822,9 @@ getTrail:
                         /* each branch falls through to the next one */
                     case 3:
                         *target++=(uint8_t)(diff>>16);
-                    case 2:
+                    case 2: /*fall through*/
                         *target++=(uint8_t)(diff>>8);
-                    case 1:
+                    case 1: /*fall through*/
                         *target++=(uint8_t)diff;
                     default:
                         /* will never occur */

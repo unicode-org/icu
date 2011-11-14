@@ -25,6 +25,7 @@
 #include "ucnv_cnv.h"
 #include "ucnv_ext.h"
 #include "cmemory.h"
+#include "uassert.h"
 
 /* to Unicode --------------------------------------------------------------- */
 
@@ -690,9 +691,9 @@ ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
         switch(length) {
         case 3:
             *p++=(uint8_t)(value>>16);
-        case 2:
+        case 2: /*fall through*/
             *p++=(uint8_t)(value>>8);
-        case 1:
+        case 1: /*fall through*/
             *p++=(uint8_t)value;
         default:
             break; /* will never occur */
@@ -902,6 +903,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
         s=pArgs->source;
         match=-match-2; /* remove 2 for the initial code point */
         for(j=cnv->preFromULength; j<match; ++j) {
+            U_ASSERT(j>=0);
             cnv->preFromU[j]=*s++;
         }
         pArgs->source=s; /* same as *src=srcLimit; because we reached the end of input */

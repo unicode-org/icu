@@ -410,6 +410,7 @@ unum_parseDecimal(const UNumberFormat*  fmt,
         uprv_strncpy(outBuf, sp.data(), sp.size());
         *status = U_STRING_NOT_TERMINATED_WARNING;
     } else {
+        U_ASSERT(outBufLength > 0);
         uprv_strcpy(outBuf, sp.data());
     }
     return sp.size();

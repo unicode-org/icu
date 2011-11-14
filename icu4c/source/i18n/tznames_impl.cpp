@@ -164,6 +164,7 @@ TextTrieMap::put(const UChar *key, void *value, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
+    U_ASSERT(fLazyContents != NULL);
     UChar *s = const_cast<UChar *>(key);
     fLazyContents->addElement(s, status);
     fLazyContents->addElement(value, status);
@@ -845,6 +846,7 @@ ZNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *node, 
                     }
                 }
                 if (U_SUCCESS(status)) {
+                    U_ASSERT(fResults != NULL);
                     ZMatchInfo *zmatch = (ZMatchInfo *)uprv_malloc(sizeof(ZMatchInfo));
                     if (zmatch == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;
@@ -1038,6 +1040,7 @@ TimeZoneNamesImpl::getAvailableMetaZoneIDs(const UnicodeString& tzID, UErrorCode
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     if (U_SUCCESS(status)) {
+        U_ASSERT(mzIDs != NULL);
         for (int32_t i = 0; U_SUCCESS(status) && i < mappings->size(); i++) {
 
             OlsonToMetaMappingEntry *map = (OlsonToMetaMappingEntry *)mappings->elementAt(i);

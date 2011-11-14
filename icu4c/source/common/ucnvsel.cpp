@@ -757,19 +757,21 @@ ucnvsel_selectForString(const UConverterSelector* sel,
   }
   uprv_memset(mask, ~0, columns *4);
 
-  const UChar *limit;
-  if (length >= 0) {
-    limit = s + length;
-  } else {
-    limit = NULL;
-  }
-
-  while (limit == NULL ? *s != 0 : s != limit) {
-    UChar32 c;
-    uint16_t pvIndex;
-    UTRIE2_U16_NEXT16(sel->trie, s, limit, c, pvIndex);
-    if (intersectMasks(mask, sel->pv+pvIndex, columns)) {
-      break;
+  if(s!=NULL) {
+    const UChar *limit;
+    if (length >= 0) {
+      limit = s + length;
+    } else {
+      limit = NULL;
+    }
+    
+    while (limit == NULL ? *s != 0 : s != limit) {
+      UChar32 c;
+      uint16_t pvIndex;
+      UTRIE2_U16_NEXT16(sel->trie, s, limit, c, pvIndex);
+      if (intersectMasks(mask, sel->pv+pvIndex, columns)) {
+        break;
+      }
     }
   }
   return selectForMask(sel, mask, status);
@@ -800,13 +802,16 @@ ucnvsel_selectForUTF8(const UConverterSelector* sel,
   if (length < 0) {
     length = (int32_t)uprv_strlen(s);
   }
-  const char *limit = s + length;
 
-  while (s != limit) {
-    uint16_t pvIndex;
-    UTRIE2_U8_NEXT16(sel->trie, s, limit, pvIndex);
-    if (intersectMasks(mask, sel->pv+pvIndex, columns)) {
-      break;
+  if(s!=NULL) {
+    const char *limit = s + length;
+    
+    while (s != limit) {
+      uint16_t pvIndex;
+      UTRIE2_U8_NEXT16(sel->trie, s, limit, pvIndex);
+      if (intersectMasks(mask, sel->pv+pvIndex, columns)) {
+        break;
+      }
     }
   }
   return selectForMask(sel, mask, status);

@@ -113,8 +113,8 @@ struct  RBBIStateTableRow {
                                     /*     tags (rule status values)                      */
     int16_t          fReserved;
     uint16_t         fNextState[2]; /*  Next State, indexed by char category.             */
-                                    /*    Array Size is fNumCols from the                 */
-                                    /*    state table header.                             */
+                                    /*  This array does not have two elements             */
+                                    /*    Array Size is actually fData->fHeader->fCatCount         */
                                     /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
                                     /*              before changing anything here.        */
 };

@@ -1462,7 +1462,7 @@ void *FCDTrieSingleton::createInstance(const void *context, UErrorCode &errorCod
 void Normalizer2Impl::setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
                                          UTrie2 *newFCDTrie, UErrorCode &errorCode) const {
     // Only loops for 1:1 algorithmic mappings.
-    for(;;) {
+  for(;;) { /* loop doesn't iterate */
         if(norm16>=MIN_NORMAL_MAYBE_YES) {
             norm16&=0xff;
             norm16|=norm16<<8;

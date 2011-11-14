@@ -923,7 +923,7 @@ MessagePattern::parseDouble(int32_t start, int32_t limit, UBool allowInfinity,
     }
     U_ASSERT(start<limit);
     // fake loop for easy exit and single throw statement
-    for(;;) {
+    for(;;) { /*loop doesn't iterate*/
         // fast path for small integers and infinity
         int32_t value=0;
         int32_t isNegative=0;  // not boolean so that we can easily add it to value

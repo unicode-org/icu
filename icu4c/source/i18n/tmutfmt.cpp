@@ -17,6 +17,7 @@
 #include "hash.h"
 #include "uresimp.h"
 #include "unicode/msgfmt.h"
+#include "uassert.h"
 
 #define LEFT_CURLY_BRACKET  ((UChar)0x007B)
 #define RIGHT_CURLY_BRACKET ((UChar)0x007D)
@@ -614,6 +615,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
     char parentLocale[ULOC_FULLNAME_CAPACITY];
     uprv_strcpy(parentLocale, localeName);
     int32_t locNameLen;
+    U_ASSERT(countToPatterns != NULL);
     while ((locNameLen = uloc_getParent(parentLocale, parentLocale,
                                         ULOC_FULLNAME_CAPACITY, &status)) >= 0){
         // look for pattern for srcPluralCount in locale tree
@@ -677,9 +679,9 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
         uprv_strcat(pLocale, "_");
         searchInLocaleChain(style, gUnitsTag, pLocale, srcTimeUnitField, srcPluralCount,
                              searchPluralCount, countToPatterns, err);
-        if (countToPatterns != NULL) {
-            MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
-            if (formatters != NULL && formatters[style] != NULL) return;
+        MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
+        if (formatters != NULL && formatters[style] != NULL) {
+            return;
         }
     }
 

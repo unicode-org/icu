@@ -447,7 +447,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
                                              dest, destSize,
                                              options, pErrorCode);
                 }
-                dest+=runLength;
+                if(dest!=NULL) {
+                  dest+=runLength;
+                }
                 destSize-=runLength;
             }
         } else {
@@ -489,7 +491,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteForward(src, runLength,
                                              dest, destSize,
                                              (uint16_t)(options&~UBIDI_DO_MIRRORING), pErrorCode);
-                    dest+=runLength;
+                    if(dest!=NULL) {
+                      dest+=runLength;
+                    }
                     destSize-=runLength;
 
                     if((pBiDi->isInverse) &&
@@ -531,7 +535,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteReverse(src, runLength,
                                              dest, destSize,
                                              options, pErrorCode);
-                    dest+=runLength;
+                    if(dest!=NULL) {
+                      dest+=runLength;
+                    }
                     destSize-=runLength;
 
                     if((pBiDi->isInverse) &&
@@ -568,7 +574,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
                                              dest, destSize,
                                              options, pErrorCode);
                 }
-                dest+=runLength;
+                if(dest!=NULL) {
+                  dest+=runLength;
+                }
                 destSize-=runLength;
             }
         } else {
@@ -593,7 +601,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteReverse(src, runLength,
                                              dest, destSize,
                                              (uint16_t)(options&~UBIDI_DO_MIRRORING), pErrorCode);
-                    dest+=runLength;
+                    if(dest!=NULL) {
+                      dest+=runLength;
+                    }
                     destSize-=runLength;
 
                     if(/*run>0 &&*/ dirProps[logicalStart]!=L) {
@@ -613,7 +623,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteForward(src, runLength,
                                              dest, destSize,
                                              options, pErrorCode);
-                    dest+=runLength;
+                    if(dest!=NULL) {
+                      dest+=runLength;
+                    }
                     destSize-=runLength;
 
                     if(/*run>0 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart+runLength-1]))) {

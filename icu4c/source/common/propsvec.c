@@ -23,6 +23,7 @@
 #include "utrie2.h"
 #include "uarrsort.h"
 #include "propsvec.h"
+#include "uassert.h"
 
 struct UPropsVectors {
     uint32_t *v;
@@ -352,6 +353,7 @@ upvec_compact(UPropsVectors *pv, UPVecCompactHandler *handler, void *context, UE
 
     rows=pv->rows;
     columns=pv->columns;
+    U_ASSERT(columns>=3); /* upvec_open asserts this */
     valueColumns=columns-2; /* not counting start & limit */
 
     /* sort the properties vectors to find unique vector values */

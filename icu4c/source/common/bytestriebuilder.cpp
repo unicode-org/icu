@@ -162,6 +162,7 @@ BytesTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode
         BytesTrieElement *newElements=new BytesTrieElement[newCapacity];
         if(newElements==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
+            return *this; // error instead of dereferencing null
         }
         if(elementsLength>0) {
             uprv_memcpy(newElements, elements, elementsLength*sizeof(BytesTrieElement));

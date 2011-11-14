@@ -204,6 +204,7 @@ void    RegexCompile::compile(
             if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 &&   // Table specs a char class &&
                 fC.fQuoted == FALSE &&                                       //   char is not escaped &&
                 fC.fChar != (UChar32)-1) {                                   //   char is not EOF
+                U_ASSERT(tableEl->fCharClass <= 137);
                 if (RegexStaticSets::gStaticSets->fRuleSets[tableEl->fCharClass-128].contains(fC.fChar)) {
                     // Table row specified a character class, or set of characters,
                     //   and the current char matches it.

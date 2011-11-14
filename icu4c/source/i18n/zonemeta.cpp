@@ -446,6 +446,8 @@ ZoneMeta::getSingleCountry(const UnicodeString &tzid, UnicodeString &country) {
             country.setToBogus();
             return country;
         }
+        U_ASSERT(gSingleZoneCountries != NULL);
+        U_ASSERT(gMultiZonesCountries != NULL);
     }
 
     // Check if it was already cached
@@ -775,6 +777,7 @@ ZoneMeta::initAvailableMetaZoneIDs () {
                     uhash_close(metaZoneIDTable);
                 }
                 if (U_SUCCESS(status)) {
+                    U_ASSERT(metaZoneIDs != NULL);
                     metaZoneIDs->setDeleter(uprv_free);
 
                     UResourceBundle *rb = ures_openDirect(NULL, gMetaZones, &status);

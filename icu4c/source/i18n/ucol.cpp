@@ -301,6 +301,7 @@ void collIterate::appendOffset(int32_t offset, UErrorCode &errorCode) {
         return;
     }
     int32_t length = offsetStore == NULL ? 0 : (int32_t)(offsetStore - offsetBuffer);
+    U_ASSERT(length >= offsetBufferSize || offsetStore != NULL);
     if(length >= offsetBufferSize) {
         int32_t newCapacity = 2 * offsetBufferSize + UCOL_EXPAND_CE_BUFFER_SIZE;
         int32_t *newBuffer = reinterpret_cast<int32_t *>(uprv_malloc(newCapacity * 4));
@@ -1946,7 +1947,7 @@ inline UBool isAtStartPrevIterate(collIterate *data) {
     }
     //return (collIter_bos(data)) ||
     return (data->pos == data->string) ||
-              ((data->flags & UCOL_ITER_INNORMBUF) &&
+              ((data->flags & UCOL_ITER_INNORMBUF) && (data->pos != NULL) &&
               *(data->pos - 1) == 0 && data->fcdPosition == NULL);
 }
 

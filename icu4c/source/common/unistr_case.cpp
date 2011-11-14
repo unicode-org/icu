@@ -57,7 +57,9 @@ UnicodeString::doCaseCompare(int32_t start,
   const UChar *chars = getArrayStart();
 
   chars += start;
-  srcChars += srcStart;
+  if(srcStart!=0) {
+    srcChars += srcStart;
+  }
 
   if(chars != srcChars) {
     UErrorCode errorCode=U_ZERO_ERROR;

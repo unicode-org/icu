@@ -735,11 +735,13 @@ static void skipZoneIDPrefix(const char** id) {
 #define CONVERT_HOURS_TO_SECONDS(offset) (int32_t)(offset*3600)
 typedef struct OffsetZoneMapping {
     int32_t offsetSeconds;
-    int32_t daylightType; /* 1=daylight in June, 2=daylight in December*/
+    int32_t daylightType; /* 0=U_DAYLIGHT_NONE, 1=daylight in June-U_DAYLIGHT_JUNE, 2=daylight in December=U_DAYLIGHT_DECEMBER*/
     const char *stdID;
     const char *dstID;
     const char *olsonID;
 } OffsetZoneMapping;
+
+enum { U_DAYLIGHT_NONE=0,U_DAYLIGHT_JUNE=1,U_DAYLIGHT_DECEMBER=2 };
 
 /*
 This list tries to disambiguate a set of abbreviated timezone IDs and offsets
@@ -749,7 +751,7 @@ icu/source/tools/tzcode/tz.alias
 Sometimes no daylight savings (0) is important to define due to aliases.
 This list can be tested with icu/source/test/compat/tzone.pl
 More values could be added to daylightType to increase precision.
-*/
+g*/
 static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {-45900, 2, "CHAST", "CHADT", "Pacific/Chatham"},
     {-43200, 1, "PETT", "PETST", "Asia/Kamchatka"},
@@ -1006,7 +1008,7 @@ uprv_tzname(int n)
     /* else U_TZNAME will give a better result. */
 #endif
 
-#if defined(CHECK_LOCALTIME_LINK)
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
     /* Caller must handle threading issues */
     if (gTimeZoneBufferPtr == NULL) {
         /*
@@ -1080,7 +1082,14 @@ uprv_tzname(int n)
         /* This probing will tell us when daylight savings occurs.  */
         localtime_r(&juneSolstice, &juneSol);
         localtime_r(&decemberSolstice, &decemberSol);
-        daylightType = ((decemberSol.tm_isdst > 0) << 1) | (juneSol.tm_isdst > 0);
+        if(decemberSol.tm_isdst > 0) {
+          daylightType = U_DAYLIGHT_DECEMBER;
+        } else if(juneSol.tm_isdst > 0) {
+          daylightType = U_DAYLIGHT_JUNE;
+        } else {
+          daylightType = U_DAYLIGHT_NONE;
+        }
+        printf("daylightType=%d\n", daylightType);
         tzid = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], daylightType, uprv_timezone());
         if (tzid != NULL) {
             return tzid;
