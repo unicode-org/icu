@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2010, International Business Machines
+#   Copyright (C) 1998-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -29,7 +29,7 @@ SUBDIRS =
 .PHONY : all all-local all-recursive install install-local	\
 install-recursive clean clean-local clean-recursive distclean	\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive build-dir testdata.jar xcheck
+check check-local check-recursive build-dir testdata.jar xcheck check-exhaustive
 
 xcheck: all-local
 
@@ -45,6 +45,8 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
+
+check-exhaustive: check
 
 all-local: build-dir build-testdata testdata packagetest
 

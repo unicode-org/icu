@@ -68,7 +68,8 @@ EXTRA_DATA =
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
-doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive xperf xcheck xperf-recursive
+doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive xperf xcheck xperf-recursive \
+check-exhaustive check-exhaustive-recursive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -83,6 +84,7 @@ check: all check-recursive
 check-recursive: all
 xcheck: all xcheck-recursive
 xperf: all xperf-recursive
+check-exhaustive: all check-exhaustive-recursive
 
 xcheck-recursive: all xcheck-local
 	@$(MAKE) -C test xcheck
@@ -119,7 +121,7 @@ $(LIBDIR) $(BINDIR):
 	-$(MKINSTALLDIRS) $@
 
 ## Recursive targets
-all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive: $(LIBDIR) $(BINDIR)
+all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive check-exhaustive-recursive: $(LIBDIR) $(BINDIR)
 	@dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(LOCAL_SUBDIRS)'; for subdir in $$list; do \

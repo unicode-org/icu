@@ -74,7 +74,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
 distclean distclean-local install-library install-headers dist	\
-dist-local check check-local
+dist-local check check-local check-exhaustive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -86,6 +86,8 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
+
+check-exhaustive: check
 
 all-local: $(ALL_TARGETS)
 

@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tests
-## Copyright (c) 1999-2010, International Business Machines Corporation and
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -24,7 +24,8 @@ SUBDIRS = testdata intltest $(IOTEST) cintltst
 .PHONY : everything all all-local all-recursive install install-local		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-recursive dist-local	\
-check check-recursive check-local xcheck xcheck-recursive xcheck-local
+check check-recursive check-local xcheck xcheck-recursive xcheck-local	\
+check-exhaustive check-exhaustive-recursive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -48,6 +49,7 @@ check-recursive: all-recursive
 # the xcheck targets create a ../test-*.xml file in JUnit format.
 xcheck: everything xcheck-recursive xcheck-local
 xcheck-recursive: all-recursive
+check-exhaustive: everything check-exhaustive-recursive check-local
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive:
@@ -67,7 +69,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit; \
 	fi
 
-xcheck-recursive check-recursive:
+xcheck-recursive check-recursive check-exhaustive-recursive:
 	@goods=; \
 	bads=; \
 	target=`echo $@ | sed s/-recursive//`; \

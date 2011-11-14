@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tools
-## Copyright (c) 1999-2010, International Business Machines Corporation and
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -21,7 +21,7 @@ gentest gennorm2 gencfu
 .PHONY : all all-local all-recursive install install-local	\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive build-local
+check check-local check-recursive build-local check-exhaustive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -33,6 +33,8 @@ clean: clean-local clean-recursive
 distclean : distclean-recursive
 dist: dist-recursive 
 check: all check-recursive
+
+check-exhaustive: check
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
