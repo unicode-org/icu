@@ -23,12 +23,17 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.DateTimeRule;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.InitialTimeZoneRule;
+import com.ibm.icu.util.RuleBasedTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeArrayTimeZoneRule;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VTimeZone;
 
 /**
  * @test 1.22 99/09/21
@@ -1826,6 +1831,255 @@ public class TimeZoneTest extends TestFmwk
         assertEquals("GMT_ZONE wrong ID", "Etc/GMT", TimeZone.GMT_ZONE.getID());
         assertEquals("GMT_ZONE wrong offset", 0, TimeZone.GMT_ZONE.getRawOffset());
         assertFalse("GMT_ZONE uses DST", TimeZone.GMT_ZONE.useDaylightTime());
+    }
+
+    /*
+     * Test case for Freezable
+     */
+    public void TestFreezable() {
+        // Test zones - initially thawed
+        TimeZone[] ZA1 = {
+            TimeZone.getDefault(),
+            TimeZone.getTimeZone("America/Los_Angeles", TimeZone.TIMEZONE_ICU),
+            TimeZone.getTimeZone("America/Los_Angeles", TimeZone.TIMEZONE_JDK),
+            new SimpleTimeZone(0, "stz"),
+            new RuleBasedTimeZone("rbtz", new InitialTimeZoneRule("rbtz0", 0, 0)),
+            VTimeZone.create("America/New_York"),
+        };
+
+        checkThawed(ZA1, "ZA1");
+        // freeze
+        for (int i = 0; i < ZA1.length; i++) {
+            ZA1[i].freeze();
+        }
+        checkFrozen(ZA1, "ZA1(frozen)");
+
+        // Test zones - initially frozen
+        final TimeZone[] ZA2 = {
+            TimeZone.GMT_ZONE,
+            TimeZone.UNKNOWN_ZONE,
+            TimeZone.getFrozenTimeZone("America/Los_Angeles"),
+            new SimpleTimeZone(3600000, "frz_stz").freeze(),
+            new RuleBasedTimeZone("frz_rbtz", new InitialTimeZoneRule("frz_rbtz0", 3600000, 0)).freeze(),
+            VTimeZone.create("Asia/Tokyo").freeze(),
+        };
+
+        checkFrozen(ZA2, "ZA2");
+        TimeZone[] ZA2_thawed = new TimeZone[ZA2.length];
+        // create thawed clone
+        for (int i = 0; i < ZA2_thawed.length; i++) {
+            ZA2_thawed[i] = ZA2[i].cloneAsThawed();
+        }
+        checkThawed(ZA2_thawed, "ZA2(thawed)");
+
+    }
+
+    private void checkThawed(TimeZone[] thawedZones, String zaName) {
+        for (int i = 0; i < thawedZones.length; i++) {
+            if (thawedZones[i].isFrozen()) {
+                errln("Fail: " + zaName + "[" + i + "] is frozen.");
+            }
+
+            // clone
+            TimeZone copy = (TimeZone)thawedZones[i].clone();
+            if (thawedZones[i] == copy || !thawedZones[i].equals(copy)) {
+                errln("Fail: " + zaName + "[" + i + "] - clone does not work.");
+            }
+
+            // cloneAsThawed
+            TimeZone thawed = (TimeZone)thawedZones[i].cloneAsThawed();
+            if (thawed.isFrozen() || !thawedZones[i].equals(thawed)) {
+                errln("Fail: " + zaName + "[" + i + "] - cloneAsThawed does not work.");
+            }
+
+            // setID
+            try {
+                String newID = "foo";
+                thawedZones[i].setID(newID);
+                if (!thawedZones[i].getID().equals(newID)) {
+                    errln("Fail: " + zaName + "[" + i + "] - setID(\"" + newID + "\") does not work.");
+                }
+            } catch (UnsupportedOperationException e) {
+                errln("Fail: " + zaName + "[" + i + "] - setID throws UnsupportedOperationException.");
+            }
+
+            // setRawOffset
+            if (!(thawedZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not supprot setRawOffset
+                try {
+                    int newOffset = -3600000;
+                    thawedZones[i].setRawOffset(newOffset);
+                    if (thawedZones[i].getRawOffset() != newOffset) {
+                        errln("Fail: " + zaName + "[" + i + "] - setRawOffset(" + newOffset + ") does not work.");
+                    }
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: " + zaName + "[" + i + "] - setRawOffset throws UnsupportedOperationException.");
+                }
+            }
+
+            if (thawedZones[i] instanceof SimpleTimeZone) {
+                SimpleTimeZone stz = (SimpleTimeZone)thawedZones[i];
+                // setDSTSavings
+                try {
+                    int newDSTSavings = 1800000;
+                    stz.setDSTSavings(newDSTSavings);
+                    if (stz.getDSTSavings() != newDSTSavings) {
+                        errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setDSTSavings(" + newDSTSavings + ") does not work.");
+                    }
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setDSTSavings throws UnsupportedOperationException.");
+                }
+                // setStartRule
+                try {
+                    stz.setStartRule(Calendar.JANUARY, -1, Calendar.SUNDAY, 0);
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartRule throws UnsupportedOperationException.");
+                }
+                // setEndRule
+                try {
+                    stz.setEndRule(Calendar.DECEMBER, 1, Calendar.SUNDAY, 0);
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setEndRule throws UnsupportedOperationException.");
+                }
+                // setStartYear
+                try {
+                    stz.setStartYear(2000);
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartYear throws UnsupportedOperationException.");
+                }
+            } else if (thawedZones[i] instanceof RuleBasedTimeZone) {
+                RuleBasedTimeZone rbtz = (RuleBasedTimeZone)thawedZones[i];
+                // addTransitionRule
+                try {
+                    TimeArrayTimeZoneRule tr1 = new TimeArrayTimeZoneRule("tr1", 7200000, 0, new long[] {0}, DateTimeRule.UTC_TIME);
+                    rbtz.addTransitionRule(tr1);
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (RuleBasedTimeZone)" + zaName + "[" + i + "] - addTransitionRule throws UnsupportedOperationException.");
+                }
+            } else if (thawedZones[i] instanceof VTimeZone) {
+                VTimeZone vtz = (VTimeZone)thawedZones[i];
+                // setTZURL
+                try {
+                    String tzUrl = "http://icu-project.org/timezone";
+                    vtz.setTZURL(tzUrl);
+                    if (!vtz.getTZURL().equals(tzUrl)) {
+                        errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setTZURL does not work.");
+                    }
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setTZURL throws UnsupportedOperationException.");
+                }
+                // setLastModified
+                try {
+                    Date d = new Date();
+                    vtz.setLastModified(d);
+                    if (!vtz.getLastModified().equals(d)) {
+                        errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setLastModified does not work.");
+                    }
+                } catch (UnsupportedOperationException e) {
+                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setLastModified throws UnsupportedOperationException.");
+                }
+            }
+        }
+    }
+
+    private void checkFrozen(TimeZone[] frozenZones, String zaName) {
+        for (int i = 0; i < frozenZones.length; i++) {
+            if (!frozenZones[i].isFrozen()) {
+                errln("Fail: " + zaName + "[" + i + "] is not frozen.");
+            }
+
+            // clone
+            TimeZone copy = (TimeZone)frozenZones[i].clone();
+            if (frozenZones[i] != copy) {
+                errln("Fail: " + zaName + "[" + i + "] - clone does not return the object itself.");
+            }
+
+            // cloneAsThawed
+            TimeZone thawed = (TimeZone)frozenZones[i].cloneAsThawed();
+            if (thawed.isFrozen() || !frozenZones[i].equals(thawed)) {
+                errln("Fail: " + zaName + "[" + i + "] - cloneAsThawed does not work.");
+            }
+
+            // setID
+            try {
+                String newID = "foo";
+                frozenZones[i].setID(newID);
+                errln("Fail: " + zaName + "[" + i + "] - setID must throw UnsupportedOperationException.");
+            } catch (UnsupportedOperationException e) {
+                // OK
+            }
+
+            // setRawOffset
+            if (!(frozenZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not supprot setRawOffset
+                try {
+                    int newOffset = -3600000;
+                    frozenZones[i].setRawOffset(newOffset);
+                    errln("Fail: " + zaName + "[" + i + "] - setRawOffset must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+            }
+
+            if (frozenZones[i] instanceof SimpleTimeZone) {
+                SimpleTimeZone stz = (SimpleTimeZone)frozenZones[i];
+                // setDSTSavings
+                try {
+                    int newDSTSavings = 1800000;
+                    stz.setDSTSavings(newDSTSavings);
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setDSTSavings must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+                // setStartRule
+                try {
+                    stz.setStartRule(Calendar.JANUARY, -1, Calendar.SUNDAY, 0);
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartRule must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+                // setEndRule
+                try {
+                    stz.setEndRule(Calendar.DECEMBER, 1, Calendar.SUNDAY, 0);
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setEndRule must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+                // setStartYear
+                try {
+                    stz.setStartYear(2000);
+                    errln("Fail: (SimpleTimeZone)" + zaName + "[" + i + "] - setStartYear must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+            } else if (frozenZones[i] instanceof RuleBasedTimeZone) {
+                RuleBasedTimeZone rbtz = (RuleBasedTimeZone)frozenZones[i];
+                // addTransitionRule
+                try {
+                    TimeArrayTimeZoneRule tr1 = new TimeArrayTimeZoneRule("tr1", 7200000, 0, new long[] {0}, DateTimeRule.UTC_TIME);
+                    rbtz.addTransitionRule(tr1);
+                    errln("Fail: (RuleBasedTimeZone)" + zaName + "[" + i + "] - addTransitionRule must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+            } else if (frozenZones[i] instanceof VTimeZone) {
+                VTimeZone vtz = (VTimeZone)frozenZones[i];
+                // setTZURL
+                try {
+                    String tzUrl = "http://icu-project.org/timezone";
+                    vtz.setTZURL(tzUrl);
+                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setTZURL must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+                // setLastModified
+                try {
+                    Date d = new Date();
+                    vtz.setLastModified(d);
+                    errln("Fail: (VTimeZone)" + zaName + "[" + i + "] - setLastModified must throw UnsupportedOperationException.");
+                } catch (UnsupportedOperationException e) {
+                    // OK
+                }
+            }
+        }
     }
 }
 

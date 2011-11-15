@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,7 +16,7 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
 
     @Override
     public String getDisplayName(String ID, boolean daylight, int style, Locale locale) {
-        TimeZone tz = TimeZone.getTimeZone(ID);
+        TimeZone tz = TimeZone.getFrozenTimeZone(ID);
         Locale actualLocale = ICULocaleServiceProvider.canonicalize(locale);
         String disp = tz.getDisplayName(daylight, style, actualLocale);
         if (disp.length() == 0) {

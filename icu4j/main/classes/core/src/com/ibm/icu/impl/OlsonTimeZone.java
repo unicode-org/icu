@@ -120,6 +120,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getOffset(int, int, int, int, int, int)
      */
+    @Override
     public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
         if (month < Calendar.JANUARY || month > Calendar.DECEMBER) {
             throw new IllegalArgumentException("Month is not in the legal range: " +month);
@@ -166,7 +167,12 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
+    @Override
     public void setRawOffset(int offsetMillis) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen OlsonTimeZone instance.");
+        }
+
         if (getRawOffset() == offsetMillis) {
             return;
         }
@@ -246,32 +252,18 @@ public class OlsonTimeZone extends BasicTimeZone {
         transitionRulesInitialized = false;
     }
 
+    @Override
     public Object clone() {
-        OlsonTimeZone other = (OlsonTimeZone) super.clone();
-        if(finalZone != null){
-            finalZone.setID(getID());
-            other.finalZone = (SimpleTimeZone)finalZone.clone();
+        if (isFrozen()) {
+            return this;
         }
-
-        // Following data are read-only and never changed.
-        // Therefore, shallow copies should be sufficient.
-
-        /*
-        if (transitionTimes64 != null) {
-            other.transitionTimes64 = transitionTimes64.clone();
-        }
-        if (typeMapData != null) {
-            other.typeMapData = typeMapData.clone();
-        }
-        other.typeOffsets = typeOffsets.clone();
-        */
-
-        return other;
+        return cloneAsThawed();
     }
 
     /**
      * TimeZone API.
      */
+    @Override
     public void getOffset(long date, boolean local, int[] offsets)  {
         if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffset(date, local, offsets);
@@ -286,6 +278,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         if (finalZone != null && date >= finalStartMillis) {
@@ -298,6 +291,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getRawOffset()
      */
+    @Override
     public int getRawOffset() {
         int[] ret = new int[2];
         getOffset(System.currentTimeMillis(), false, ret);
@@ -307,6 +301,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#useDaylightTime()
      */
+    @Override
     public boolean useDaylightTime() {
         // If DST was observed in 1942 (for example) but has never been
         // observed from 1943 to the present, most clients will expect
@@ -344,6 +339,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      * Returns the amount of time to be added to local standard time
      * to get local wall clock time.
      */
+    @Override
     public int getDSTSavings() {
         if (finalZone != null){
             return finalZone.getDSTSavings();
@@ -354,6 +350,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#inDaylightTime(java.util.Date)
      */
+    @Override
     public boolean inDaylightTime(Date date) {
         int[] temp = new int[2];
         getOffset(date.getTime(), false, temp);
@@ -363,7 +360,11 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#hasSameRules(com.ibm.icu.util.TimeZone)
      */
+    @Override
     public boolean hasSameRules(TimeZone other) {
+        if (this == other) {
+            return true;
+        }
         // The super class implementation only check raw offset and
         // use of daylight saving time.
         if (!super.hasSameRules(other)) {
@@ -447,7 +448,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      * @param id time zone ID
      */
     public OlsonTimeZone(UResourceBundle top, UResourceBundle res, String id){
-        super.setID(id);
+        super(id);
         construct(top, res);
     }
 
@@ -601,6 +602,7 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     // This constructor is used for testing purpose only
     public OlsonTimeZone(String id){
+        super(id);
         UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
                 ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle res = ZoneMeta.openOlsonResource(top, id);
@@ -608,7 +610,6 @@ public class OlsonTimeZone extends BasicTimeZone {
         if (finalZone != null){
             finalZone.setID(id);
         }
-        super.setID(id);
     }
 
     /* (non-Javadoc)
@@ -616,6 +617,10 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     @Override
     public void setID(String id){
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen OlsonTimeZone instance.");
+        }
+
         // Before updating the ID, preserve the original ID's canonical ID.
         if (canonicalID == null) {
             canonicalID = getCanonicalID(getID());
@@ -736,6 +741,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
 
     // temp
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append(super.toString());
@@ -849,9 +855,10 @@ public class OlsonTimeZone extends BasicTimeZone {
         return r;
     }
 
+    @Override
     public boolean equals(Object obj){
         if (!super.equals(obj)) return false; // super does class check
-        
+
         OlsonTimeZone z = (OlsonTimeZone) obj;
 
         return (Utility.arrayEquals(typeMapData, z.typeMapData) ||
@@ -871,6 +878,7 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     }
 
+    @Override
     public int hashCode(){
         int ret =   (int)  (finalStartYear ^ (finalStartYear>>>4) +
                    transitionCount ^ (transitionCount>>>6) +
@@ -901,6 +909,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.BasicTimeZone#getNextTransition(long, boolean)
      */
+    @Override
     public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
         initTransitionRules();
 
@@ -951,6 +960,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.BasicTimeZone#getPreviousTransition(long, boolean)
      */
+    @Override
     public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
         initTransitionRules();
 
@@ -1002,6 +1012,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.BasicTimeZone#getTimeZoneRules()
      */
+    @Override
     public TimeZoneRule[] getTimeZoneRules() {
         initTransitionRules();
         int size = 1;
@@ -1212,5 +1223,45 @@ public class OlsonTimeZone extends BasicTimeZone {
 
         // need to rebuild transition rules when requested
         transitionRulesInitialized = false;
+    }
+
+    // Freezable stuffs
+    private transient boolean isFrozen = false;
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#isFrozen()
+     */
+    public boolean isFrozen() {
+        return isFrozen;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#freeze()
+     */
+    public TimeZone freeze() {
+        isFrozen = true;
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#cloneAsThawed()
+     */
+    public TimeZone cloneAsThawed() {
+        OlsonTimeZone tz = (OlsonTimeZone)super.cloneAsThawed();
+        if (finalZone != null) {
+            // TODO Do we really need this?
+            finalZone.setID(getID());
+            tz.finalZone = (SimpleTimeZone) finalZone.clone();
+        }
+
+        // Following data are read-only and never changed.
+        // Therefore, shallow copies should be sufficient.
+        //
+        // transitionTimes64
+        // typeMapData
+        // typeOffsets
+
+        tz.isFrozen = false;
+        return tz;
     }
 }

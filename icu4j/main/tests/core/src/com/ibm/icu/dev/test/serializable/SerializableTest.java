@@ -534,7 +534,8 @@ public class SerializableTest extends TestFmwk.TestGroup
         public Object[] getTestObjects() {
             JavaTimeZone zones[] = new JavaTimeZone[ZONES.length];
             for(int z = 0; z < ZONES.length; z += 1) {
-                zones[z] = new JavaTimeZone(ZONES[z]);
+                java.util.TimeZone tz = java.util.TimeZone.getTimeZone(ZONES[z]);
+                zones[z] = new JavaTimeZone(tz, ZONES[z]);
             }
             return zones;
         }

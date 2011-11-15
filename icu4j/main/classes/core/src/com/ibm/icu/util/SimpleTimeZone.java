@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2010, International Business Machines
+*   Copyright (C) 1996-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -62,12 +62,12 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID) {
+        super(ID);
         construct(rawOffset, 0, 0, 0,
                 0, WALL_TIME,
                 0, 0, 0,
                 0, WALL_TIME,
                 Grego.MILLIS_PER_HOUR);
-        super.setID(ID);
     }
 
     /**
@@ -131,13 +131,13 @@ public class SimpleTimeZone extends BasicTimeZone {
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime) {
+        super(ID);
         construct(rawOffset,
                 startMonth, startDay, startDayOfWeek,
                 startTime, WALL_TIME,
                 endMonth, endDay, endDayOfWeek,
                 endTime, WALL_TIME,
                 Grego.MILLIS_PER_HOUR);
-        super.setID(ID);
     }
 
     /**
@@ -182,13 +182,13 @@ public class SimpleTimeZone extends BasicTimeZone {
                           int endMonth, int endDay,
                           int endDayOfWeek, int endTime,
                           int endTimeMode,int dstSavings){
+        super(ID);
         construct(rawOffset,
                   startMonth, startDay, startDayOfWeek,
                   startTime, startTimeMode,
                   endMonth, endDay, endDayOfWeek,
                   endTime, endTimeMode,
                   dstSavings);
-        super.setID(ID);
     }
 
     /**
@@ -225,13 +225,13 @@ public class SimpleTimeZone extends BasicTimeZone {
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime,
                           int dstSavings) {
+        super(ID);
         construct(rawOffset,
                 startMonth, startDay, startDayOfWeek,
                 startTime, WALL_TIME,
                 endMonth, endDay, endDayOfWeek,
                 endTime, WALL_TIME,
                 dstSavings);
-        super.setID(ID);
     }
 
     /**
@@ -239,9 +239,12 @@ public class SimpleTimeZone extends BasicTimeZone {
      *
      * @stable ICU 3.8
      */
+    @Override
     public void setID(String ID) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
         super.setID(ID);
-
         transitionRulesInitialized = false;
     }
 
@@ -252,9 +255,13 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @param offsetMillis the raw offset of the time zone
      * @stable ICU 2.0
      */
+    @Override
     public void setRawOffset(int offsetMillis) {
-        raw = offsetMillis;
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
 
+        raw = offsetMillis;
         transitionRulesInitialized = false;
     }
 
@@ -264,6 +271,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @return the raw offset
      * @stable ICU 2.0
      */
+    @Override
     public int getRawOffset() {
         return raw;
     }
@@ -275,11 +283,12 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setStartYear(int year) {
-        //unwrapSTZ().setStartYear(year);
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
 
         getSTZInfo().sy = year;
         this.startYear = year;
-
         transitionRulesInitialized = false;
     }
 
@@ -306,6 +315,10 @@ public class SimpleTimeZone extends BasicTimeZone {
      */
     public void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                              int time) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
+
         getSTZInfo().setStart(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
         setStartRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);
     }
@@ -349,6 +362,8 @@ public class SimpleTimeZone extends BasicTimeZone {
      * description for an example.
      */
     private void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time, int mode) {
+        assert (!isFrozen());
+
         startMonth     =  month;
         startDay       = dayOfWeekInMonth;
         startDayOfWeek = dayOfWeek;
@@ -372,7 +387,9 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int time) {
-       // unwrapSTZ().setStartRule(month, dayOfMonth, time);
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
 
         getSTZInfo().setStart(month, -1, -1, time, dayOfMonth, false);
         setStartRule(month, dayOfMonth, 0, time, WALL_TIME);
@@ -396,6 +413,10 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
+
         getSTZInfo().setStart(month, -1, dayOfWeek, time, dayOfMonth, after);
         setStartRule(month, after ? dayOfMonth : -dayOfMonth,
                 -dayOfWeek, time, WALL_TIME);
@@ -422,6 +443,10 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
+
         getSTZInfo().setEnd(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
         setEndRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);
     }
@@ -439,6 +464,10 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int time) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
+
         getSTZInfo().setEnd(month, -1, -1, time, dayOfMonth, false);
         setEndRule(month, dayOfMonth, WALL_TIME, time);
     }
@@ -461,12 +490,17 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
+
         getSTZInfo().setEnd(month, -1, dayOfWeek, time, dayOfMonth, after);
         setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after);
     }
 
     private void setEndRule(int month, int dayOfMonth, int dayOfWeek,
                                                 int time, int mode, boolean after){
+        assert (!isFrozen());
         setEndRule(month, after ? dayOfMonth : -dayOfMonth, -dayOfWeek, time, mode);
     }
 
@@ -488,6 +522,8 @@ public class SimpleTimeZone extends BasicTimeZone {
      * description for an example.
      */
     private void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time, int mode){
+        assert (!isFrozen());
+
         endMonth     = month;
         endDay       = dayOfWeekInMonth;
         endDayOfWeek = dayOfWeek;
@@ -506,6 +542,10 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 2.0
      */
     public void setDSTSavings(int millisSavedDuringDST) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen SimpleTimeZone instance.");
+        }
+
         if (millisSavedDuringDST <= 0) {
             throw new IllegalArgumentException();
         }
@@ -521,6 +561,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * are in effect. A positive number, typically one hour (3600000).
      * @stable ICU 2.0
      */
+    @Override
     public int getDSTSavings() {
         return dst;
     }
@@ -569,6 +610,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @return  a string representation of this object
      * @stable ICU 3.6
      */
+    @Override
     public String toString() {
         return "SimpleTimeZone: " + getID();
     }
@@ -596,6 +638,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 2.0
      */
+    @Override
     public int getOffset(int era, int year, int month, int day,
                          int dayOfWeek, int millis)
     {
@@ -635,7 +678,7 @@ public class SimpleTimeZone extends BasicTimeZone {
                          Grego.monthLength(year, month), Grego.previousMonthLength(year, month));
     }
 
-    int getOffset(int era, int year, int month, int day,
+    private int getOffset(int era, int year, int month, int day,
                   int dayOfWeek, int millis,
                   int monthLength, int prevMonthLength ){
 
@@ -908,6 +951,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * Queries if this time zone uses Daylight Saving Time.
      * @stable ICU 2.0
      */
+    @Override
     public boolean useDaylightTime(){
         return useDaylight;
     }
@@ -917,6 +961,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * Queries if the give date is in Daylight Saving Time.
      * @stable ICU 2.0
      */
+    @Override
     public boolean inDaylightTime(Date date){
         GregorianCalendar gc = new GregorianCalendar(this);
         gc.setTime(date);
@@ -1081,6 +1126,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @return true if obj is a SimpleTimeZone equivalent to this
      * @stable ICU 3.6
      */
+    @Override
     public boolean equals(Object obj){
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -1120,6 +1166,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * Overrides hashCode.
      * @stable ICU 3.6
      */
+    @Override
     public int hashCode(){
         int ret = super.hashCode()
                     + raw ^ (raw >>> 8)
@@ -1147,8 +1194,12 @@ public class SimpleTimeZone extends BasicTimeZone {
      * Overrides clone.
      * @stable ICU 3.6
      */
+    @Override
     public Object clone() {
-        return super.clone();
+        if (isFrozen()) {
+            return this;
+        }
+        return cloneAsThawed();
     }
 
     /**
@@ -1157,9 +1208,13 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @return true if the given zone has the same rules and offset as this one
      * @stable ICU 2.0
      */
+    @Override
     public boolean hasSameRules(TimeZone othr) {
+        if (this == othr) {
+            return true;
+        }
         if(!(othr instanceof SimpleTimeZone)){
-                return false;
+            return false;
         }
         SimpleTimeZone other = (SimpleTimeZone)othr;
         return other != null &&
@@ -1189,6 +1244,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
         if (!useDaylight) {
             return null;
@@ -1216,6 +1272,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
         if (!useDaylight) {
             return null;
@@ -1243,6 +1300,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public TimeZoneRule[] getTimeZoneRules() {
         initTransitionRules();
 
@@ -1339,5 +1397,32 @@ public class SimpleTimeZone extends BasicTimeZone {
             initialRule = new InitialTimeZoneRule(getID(), getRawOffset(), 0);
         }
         transitionRulesInitialized = true;
+    }
+
+    // Freezable stuffs
+    private transient boolean isFrozen = false;
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#isFrozen()
+     */
+    public boolean isFrozen() {
+        return isFrozen;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#freeze()
+     */
+    public TimeZone freeze() {
+        isFrozen = true;
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#cloneAsThawed()
+     */
+    public TimeZone cloneAsThawed() {
+        SimpleTimeZone tz = (SimpleTimeZone)super.cloneAsThawed();
+        tz.isFrozen = false;
+        return tz;
     }
 }
