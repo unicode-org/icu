@@ -69,7 +69,7 @@ install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
 doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive xperf xcheck xperf-recursive \
-check-exhaustive check-exhaustive-recursive
+check-exhaustive check-exhaustive-local check-exhaustive-recursive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -85,6 +85,8 @@ check-recursive: all
 xcheck: all xcheck-recursive
 xperf: all xperf-recursive
 check-exhaustive: all check-exhaustive-recursive
+
+check-exhaustive-local: check-local
 
 xcheck-recursive: all xcheck-local
 	@$(MAKE) -C test xcheck
