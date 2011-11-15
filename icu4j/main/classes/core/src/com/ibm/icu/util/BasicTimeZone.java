@@ -105,9 +105,10 @@ public abstract class BasicTimeZone extends TimeZone {
      */
     public boolean hasEquivalentTransitions(TimeZone tz, long start, long end, 
                                             boolean ignoreDstAmount) {
-        if (hasSameRules(tz)) {
+        if (this == tz) {
             return true;
         }
+
         if (!(tz instanceof BasicTimeZone)) {
             return false;
         }
@@ -595,5 +596,15 @@ public abstract class BasicTimeZone extends TimeZone {
      * @stable ICU 3.8
      */
     protected BasicTimeZone() {
+    }
+
+    /**
+     * Constructing a BasicTimeZone with the given time zone ID.
+     * @param ID the time zone ID.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected BasicTimeZone(String ID) {
+        super(ID);
     }
 }

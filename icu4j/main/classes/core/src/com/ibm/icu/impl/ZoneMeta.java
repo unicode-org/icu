@@ -491,27 +491,40 @@ public final class ZoneMeta {
     }
 
 
-    private static ICUCache<String, TimeZone> SYSTEM_ZONE_CACHE = new SimpleCache<String, TimeZone>();
+    /**
+     * System time zone object cache
+     */
+    private static class SystemTimeZoneCache extends SoftCache<String, OlsonTimeZone, String> {
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
+         */
+        @Override
+        protected OlsonTimeZone createInstance(String key, String data) {
+            OlsonTimeZone tz = null;
+            try {
+                UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                        ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle res = openOlsonResource(top, data);
+                if (res != null) {
+                    tz = new OlsonTimeZone(top, res, data);
+                    tz.freeze();
+                }
+            } catch (MissingResourceException e) {
+                // do nothing
+            }
+            return tz;
+        }
+    }
+
+    private static final SystemTimeZoneCache SYSTEM_ZONE_CACHE = new SystemTimeZoneCache();
 
     /**
-     * Lookup the given name in our system zone table.  If found,
-     * instantiate a new zone of that name and return it.  If not
-     * found, return 0.
+     * Returns a frozen OlsonTimeZone instance for the given ID.
+     * This method returns null when the given ID is unknown.
      */
     public static TimeZone getSystemTimeZone(String id) {
-        TimeZone z = SYSTEM_ZONE_CACHE.get(id);
-        if (z == null) {
-            try{
-                UResourceBundle top = UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                UResourceBundle res = openOlsonResource(top, id);
-                z = new OlsonTimeZone(top, res, id);
-                SYSTEM_ZONE_CACHE.put(id, z);
-            }catch(Exception ex){
-                return null;
-            }
-        }
-        return (TimeZone)z.clone();
+        return SYSTEM_ZONE_CACHE.getInstance(id, id);
     }
 
     // Maximum value of valid custom time zone hour/min
@@ -520,18 +533,47 @@ public final class ZoneMeta {
     private static final int kMAX_CUSTOM_SEC = 59;
 
     /**
+     * Custom time zone object cache
+     */
+    private static class CustomTimeZoneCache extends SoftCache<Integer, SimpleTimeZone, int[]> {
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
+         */
+        @Override
+        protected SimpleTimeZone createInstance(Integer key, int[] data) {
+            assert (data.length == 4);
+            assert (data[0] == 1 || data[0] == -1);
+            assert (data[1] >= 0 && data[1] <= kMAX_CUSTOM_HOUR);
+            assert (data[2] >= 0 && data[2] <= kMAX_CUSTOM_MIN);
+            assert (data[3] >= 0 && data[3] <= kMAX_CUSTOM_SEC);
+            String id = formatCustomID(data[1], data[2], data[3], data[0] < 0);
+            int offset = data[0] * ((data[1] * 60 + data[2]) * 60 + data[3]) * 1000;
+            SimpleTimeZone tz = new SimpleTimeZone(offset, id);
+            tz.freeze();
+            return tz;
+        }
+    }
+
+    private static final CustomTimeZoneCache CUSTOM_ZONE_CACHE = new CustomTimeZoneCache();
+
+    /**
      * Parse a custom time zone identifier and return a corresponding zone.
      * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
      * GMT[+-]hh.
-     * @return a newly created SimpleTimeZone with the given offset and
+     * @return a frozen SimpleTimeZone with the given offset and
      * no Daylight Savings Time, or null if the id cannot be parsed.
     */
     public static TimeZone getCustomTimeZone(String id){
         int[] fields = new int[4];
         if (parseCustomID(id, fields)) {
-            String zid = formatCustomID(fields[1], fields[2], fields[3], fields[0] < 0);
-            int offset = fields[0] * ((fields[1] * 60 + fields[2]) * 60 + fields[3]) * 1000;
-            return new SimpleTimeZone(offset, zid);
+            // fields[0] - sign
+            // fields[1] - hour / 5-bit
+            // fields[2] - min  / 6-bit
+            // fields[3] - sec  / 6-bit
+            Integer key = Integer.valueOf(
+                    fields[0] * (fields[1] | fields[2] << 5 | fields[3] << 11));
+            return CUSTOM_ZONE_CACHE.getInstance(key, fields);
         }
         return null;
     }

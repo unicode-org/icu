@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -46,13 +46,19 @@ public abstract class SoftCache<K, V, D> extends CacheBase<K, V, D> {
                 } else {
                     // The instance has been evicted, its SoftReference cleared.
                     // Create and set a new instance.
-                    valueRef.ref = new SoftReference<V>(value = createInstance(key, data));
+                    value = createInstance(key, data);
+                    if (value != null) {
+                        valueRef.ref = new SoftReference<V>(value);
+                    }
                     return value;
                 }
             }
         } else /* valueRef == null */ {
             // We had never cached an instance for this key.
             value = createInstance(key, data);
+            if (value == null) {
+                return null;
+            }
             valueRef = map.putIfAbsent(key, new SettableSoftReference<V>(value));
             if(valueRef == null) {
                 // Normal "put": Our new value is now cached.

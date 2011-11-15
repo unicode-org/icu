@@ -399,7 +399,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
                     // golden zone at the given date.
                     String goldenID = _tznames.getReferenceZoneID(mzID, getTargetRegion());
                     if (goldenID != null && !goldenID.equals(tzID)) {
-                        TimeZone goldenZone = TimeZone.getTimeZone(goldenID);
+                        TimeZone goldenZone = TimeZone.getFrozenTimeZone(goldenID);
                         int[] offsets1 = {0, 0};
 
                         // Check offset in the golden zone with wall time.

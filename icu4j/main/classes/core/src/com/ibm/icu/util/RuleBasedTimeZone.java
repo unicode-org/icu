@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     public RuleBasedTimeZone(String id, InitialTimeZoneRule initialRule) {
-        super.setID(id);
+        super(id);
         this.initialRule = initialRule;
     }
 
@@ -56,6 +56,9 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     public void addTransitionRule(TimeZoneRule rule) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen RuleBasedTimeZone instance.");
+        }
         if (!rule.isTransitionRule()) {
             throw new IllegalArgumentException("Rule must be a transition rule");
         }
@@ -88,6 +91,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public int getOffset(int era, int year, int month, int day, int dayOfWeek,
             int milliseconds) {
         if (era == GregorianCalendar.BC) {
@@ -105,6 +109,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public void getOffset(long time, boolean local, int[] offsets) {
         getOffset(time, local, LOCAL_FORMER, LOCAL_LATTER, offsets);
     }
@@ -114,6 +119,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         getOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
@@ -124,6 +130,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public int getRawOffset() {
         // Note: This implementation returns standard GMT offset
         // as of current time.
@@ -138,6 +145,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public boolean inDaylightTime(Date date) {
         int[] offsets = new int[2];
         getOffset(date.getTime(), false, offsets);
@@ -149,6 +157,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     ///CLOVER:OFF
     public void setRawOffset(int offsetMillis) {
         // TODO: Do nothing for now..
@@ -161,6 +170,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public boolean useDaylightTime() {
         // Note: This implementation returns true when
         // daylight saving time is used as of now or
@@ -184,7 +194,12 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public boolean hasSameRules(TimeZone other) {
+        if (this == other) {
+            return true;
+        }
+
         if (!(other instanceof RuleBasedTimeZone)) {
             // We cannot reasonably compare rules in different types
             return false;
@@ -243,6 +258,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public TimeZoneRule[] getTimeZoneRules() {
         int size = 1;
         if (historicRules != null) {
@@ -279,6 +295,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
         complete();
         if (historicTransitions == null) {
@@ -352,6 +369,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * 
      * @stable ICU 3.8
      */
+    @Override
     public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
         complete();
         if (historicTransitions == null) {
@@ -416,15 +434,12 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public Object clone() {
-        RuleBasedTimeZone other = (RuleBasedTimeZone)super.clone();
-        if (historicRules != null) {
-            other.historicRules = new ArrayList<TimeZoneRule>(historicRules); // rules are immutable
+        if (isFrozen()) {
+            return this;
         }
-        if (finalRules != null) {
-            other.finalRules = finalRules.clone();
-        }
-        return other;
+        return cloneAsThawed();
     }
 
     // private stuff
@@ -685,6 +700,40 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             }
         }
         return delta;
+    }
+
+    // Freezable stuffs
+    private transient boolean isFrozen = false;
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#isFrozen()
+     */
+    public boolean isFrozen() {
+        return isFrozen;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#freeze()
+     */
+    public TimeZone freeze() {
+        complete();
+        isFrozen = true;
+        return this;
+    }
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#cloneAsThawed()
+     */
+    public TimeZone cloneAsThawed() {
+        RuleBasedTimeZone tz = (RuleBasedTimeZone)super.cloneAsThawed();
+        if (historicRules != null) {
+            tz.historicRules = new ArrayList<TimeZoneRule>(historicRules); // rules are immutable
+        }
+        if (finalRules != null) {
+            tz.finalRules = finalRules.clone();
+        }
+        tz.isFrozen = false;
+        return tz;
     }
 }
 

@@ -465,7 +465,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (timezone == null) {
             return guessTimeZone();
         }
-        return (TimeZone) timezone.clone(); // clone for safety
+        return (TimeZone) timezone.cloneAsThawed(); // clone for safety
     }
 
     /**
@@ -605,7 +605,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
                 break;
             case ID_TIMEZONE:
                 SimpleDateFormat dtf = new SimpleDateFormat("vvvv",locale);
-                dtf.setTimeZone(TimeZone.getTimeZone(id));
+                dtf.setTimeZone(TimeZone.getFrozenTimeZone(id));
                 result = dtf.format(new Date());
                 // TODO, have method that doesn't require us to create a timezone
                 // fix other hacks
