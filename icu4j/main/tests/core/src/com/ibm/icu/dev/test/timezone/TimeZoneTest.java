@@ -1019,6 +1019,21 @@ public class TimeZoneTest extends TestFmwk
                         ") returned \"" + outOfRangeID + "\", expected empty string");
             }
         }
+
+        // Ticket#8927 invalid system ID
+        final String[] invaldIDs = {"GMT-05:00", "Hello World!", ""};
+        for (String invld : invaldIDs) {
+            int nEquiv = TimeZone.countEquivalentIDs(invld);
+            if (nEquiv != 0) {
+                errln("FAIL: countEquivalentIDs(" + invld + ") returned: " + nEquiv
+                        + ", expected: 0");
+            }
+            String sEquiv0 = TimeZone.getEquivalentID(invld, 0);
+            if (sEquiv0.length() > 0) {
+                errln("FAIL: getEquivalentID(" + invld + ", 0) returned \"" + sEquiv0
+                        + "\", expected empty string");
+            }
+        }
     }
 
     public void TestCountries() {
