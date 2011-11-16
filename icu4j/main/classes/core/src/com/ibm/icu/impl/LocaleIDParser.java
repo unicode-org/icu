@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2009, International Business Machines Corporation and   *
+* Copyright (C) 2003-2011, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -59,25 +59,26 @@ public final class LocaleIDParser {
     }
 
     // utilities for working on text in the buffer
+    
+    private void resizeBuffer(int newSize) {
+        if (newSize > 1024) {
+            // if buffer is too large, something is wrong. die.
+            throw new IndexOutOfBoundsException("Buffer has grown too large.");
+        }
+        
+        char[] nbuffer = new char[newSize];
+        System.arraycopy(buffer, 0, nbuffer, 0, Math.min(buffer.length, newSize));
+        buffer = nbuffer;
+    }
 
     /**
      * Append c to the buffer.
      */
     private void append(char c) {
-        try {
-            buffer[blen] = c;
+        if (blen >= buffer.length) {
+            resizeBuffer(buffer.length * 2);
         }
-        catch (IndexOutOfBoundsException e) {
-            if (buffer.length > 512) {
-                // something is seriously wrong, let this go
-                throw e;
-            }
-            char[] nbuffer = new char[buffer.length * 2];
-            System.arraycopy(buffer, 0, nbuffer, 0, buffer.length);
-            nbuffer[blen] = c;
-            buffer = nbuffer;
-        }
-        ++blen;
+        buffer[blen++] = c;
     }
 
     private void addSeparator() {
@@ -106,8 +107,12 @@ public final class LocaleIDParser {
      * Append the string to the buffer.
      */
     private void append(String s) {
-        for (int i = 0; i < s.length(); ++i) {
-            append(s.charAt(i));
+        int slen = s.length();
+        if (blen + slen > buffer.length) {
+            resizeBuffer(buffer.length * 2 + slen);
+        }
+        for (int i = 0; i < slen; ++i) {
+            buffer[blen++] = s.charAt(i);
         }
     }
 
@@ -136,8 +141,7 @@ public final class LocaleIDParser {
      * Advance index until the next terminator or id separator, and leave it there.
      */
     private void skipUntilTerminatorOrIDSeparator() {
-        while (!isTerminatorOrIDSeparator(next())) {
-        }
+        while (!isTerminatorOrIDSeparator(next()));
         --index;
     }
 
@@ -147,13 +151,6 @@ public final class LocaleIDParser {
     private boolean atTerminator() {
         return index >= id.length || isTerminator(id[index]);
     }
-
-    /*
-     * Returns true if the character is an id separator (underscore or hyphen).
-     */
-    /*        private boolean isIDSeparator(char c) {
-            return c == UNDERSCORE || c == HYPHEN;
-        }*/
 
     /**
      * Returns true if the character is a terminator (keyword separator, dot, or DONE).
@@ -168,8 +165,7 @@ public final class LocaleIDParser {
      * Returns true if the character is a terminator or id separator.
      */
     private boolean isTerminatorOrIDSeparator(char c) {
-        return c == KEYWORD_SEPARATOR || c == UNDERSCORE || c == HYPHEN ||
-        c == DONE || c == DOT;
+        return c == UNDERSCORE || c == HYPHEN || isTerminator(c);
     }
 
     /**
