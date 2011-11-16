@@ -1,6 +1,6 @@
 ## -*-sh-*-
 ## BEGIN of icu-config-bottom.
-## Copyright (c) 2002-2010, International Business Machines Corporation and
+## Copyright (c) 2002-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ICUUC_FILE="${libdir}/${ICULIBS_COMMON_LIB_NAME}"
@@ -352,12 +352,17 @@ do
 	    ;;
 
 	--version)
-        echo $ECHO_N $VERSION
-        ;;
+	    echo $ECHO_N $VERSION
+	    ;;
 
-    --unicode-version)
-        echo $ECHO_N $UNICODE_VERSION
-        ;;
+	--unicode-version)
+	    echo $ECHO_N $UNICODE_VERSION
+	    ;;
+	
+	--host)
+	    echo $host
+	    exit 0
+	    ;;
 
 	--help)
 	    usage

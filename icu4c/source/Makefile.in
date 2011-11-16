@@ -69,7 +69,7 @@ install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
 doc install-doc tests icu4j-data icu4j-data-install update-windows-makefiles xcheck-local xcheck-recursive xperf xcheck xperf-recursive \
-check-exhaustive check-exhaustive-local check-exhaustive-recursive
+check-exhaustive check-exhaustive-local check-exhaustive-recursive releaseDist
 
 ## Clear suffix list
 .SUFFIXES :
@@ -343,3 +343,18 @@ update-windows-makefiles: config.status
 # For building a source distribution.
 distcheck dist-local:
 	$(MAKE) -C . -f config/dist.mk srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $@
+
+ifeq ($(DESTDIR),)
+releaseDist:
+	@echo "Please provide DESTDIR when calling the target releaseDist."
+else
+releaseDist: install
+	@echo -n "ICU Version: " > $(DESTDIR)/readme.txt
+	@echo `./config/icu-config --noverify --version` >> $(DESTDIR)/readme.txt
+	@echo -n "HOST: " >> $(DESTDIR)/readme.txt
+	@echo `./config/icu-config --noverify --host` >> $(DESTDIR)/readme.txt
+	@echo -n "CC Compiler: " >> $(DESTDIR)/readme.txt
+	@echo `./config/icu-config --noverify --cc` >> $(DESTDIR)/readme.txt
+	@echo -n "CXX Compiler: " >> $(DESTDIR)/readme.txt
+	@echo `./config/icu-config --noverify --cxx` >> $(DESTDIR)/readme.txt
+endif
