@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1787,5 +1787,42 @@ public class TimeZoneRuleTest extends TestFmwk {
             time = tr1.getTime() > tr2.getTime() ? tr1.getTime() : tr2.getTime();
         }
         return true;
+    }
+
+    // Test case for ticket#8943
+    // RuleBasedTimeZone#getOffsets throws NPE
+    public void TestT8943() {
+        String id = "Ekaterinburg Time";
+        String stdName = "Ekaterinburg Standard Time";
+        String dstName = "Ekaterinburg Daylight Time";
+
+        InitialTimeZoneRule initialRule = new InitialTimeZoneRule(stdName, 18000000, 0);
+        RuleBasedTimeZone rbtz = new RuleBasedTimeZone(id, initialRule);
+
+        DateTimeRule dtRule = new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 10800000, DateTimeRule.WALL_TIME);
+        AnnualTimeZoneRule atzRule = new AnnualTimeZoneRule(stdName, 18000000, 0, dtRule, 2000, 2010);
+        rbtz.addTransitionRule(atzRule);
+
+        dtRule = new DateTimeRule(Calendar.MARCH, -1, Calendar.SUNDAY, 7200000, DateTimeRule.WALL_TIME);
+        atzRule = new AnnualTimeZoneRule(dstName, 18000000, 3600000, dtRule, 2000, 2010);
+        rbtz.addTransitionRule(atzRule);
+
+        dtRule = new DateTimeRule(Calendar.JANUARY, 1, 0, DateTimeRule.WALL_TIME);
+        atzRule = new AnnualTimeZoneRule(stdName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
+        rbtz.addTransitionRule(atzRule);
+
+        atzRule = new AnnualTimeZoneRule(dstName, 21600000, 3600000, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
+        rbtz.addTransitionRule(atzRule);
+
+        int[] expected = {21600000, 0};
+        int[] offsets = new int[2];
+        try {
+            rbtz.getOffset(1293822000000L /* 2010-12-32 19:00:00 UTC */, false, offsets);
+            if (offsets[0] != expected[0] || offsets[1] != expected[1]) {
+                errln("Fail: Wrong offsets: " + offsets[0] + "/" + offsets[1] + " Expected: " + expected[0] + "/" + expected[1]);
+            }
+        } catch (Exception e) {
+            errln("Fail: Exception thrown - " + e.getMessage());
+        }
     }
 }

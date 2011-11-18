@@ -572,7 +572,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      */
     private void getOffset(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
         complete();
-        TimeZoneRule rule;
+        TimeZoneRule rule = null;
         if (historicTransitions == null) {
             rule = initialRule;
         } else {
@@ -587,8 +587,10 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 if (time > tend) {
                     if (finalRules != null) {
                         rule = findRuleInFinal(time, local, NonExistingTimeOpt, DuplicatedTimeOpt);
-                    } else {
-                        // no final rule, use the last rule
+                    }
+                    if (rule == null) {
+                        // no final rules or the given time is before the first transition
+                        // specified by the final rules -> use the last rule
                         rule = (historicTransitions.get(idx)).getTo();
                     }
                 } else {
@@ -637,6 +639,16 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             base -= localDelta;
         }
         start1 = finalRules[1].getPreviousStart(base, finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), true);
+
+        if (start0 == null || start1 == null) {
+            if (start0 != null) {
+                return finalRules[0];
+            } else if (start1 != null) {
+                return finalRules[1];
+            }
+            // Both rules take effect after the given time
+            return null;
+        }
 
         return start0.after(start1) ? finalRules[0] : finalRules[1];
     }
