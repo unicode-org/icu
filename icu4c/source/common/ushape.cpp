@@ -77,7 +77,7 @@
 
 static UChar tailChar = OLD_TAIL_CHAR;
 static uint32_t uShapeLamalefBegin = U_SHAPE_LAMALEF_BEGIN;
-static uint32_t uShapeLamalefEnd    = U_SHAPE_LAMALEF_END;        
+static uint32_t uShapeLamalefEnd    = U_SHAPE_LAMALEF_END;
 static uint32_t uShapeTashkeelBegin = U_SHAPE_TASHKEEL_BEGIN;
 static uint32_t uShapeTashkeelEnd = U_SHAPE_TASHKEEL_END;
 static int spacesRelativeToTextBeginEnd = 0;
@@ -191,7 +191,7 @@ static const UChar araLink[178]=
          4         + 256 * 1,   /*0x0652*/
          4         + 256 * 7,   /*0x0653*/
          4         + 256 * 8,   /*0x0654*/
-         4         + 256 * 8,   /*0x0655*/ 
+         4         + 256 * 8,   /*0x0655*/
          4         + 256 * 1,   /*0x0656*/
   0, 0, 0, 0, 0,                /*0x0657-0x065B*/
   1                + 256 * 0x85,/*0x065C*/
@@ -255,10 +255,10 @@ static const uint8_t presALink[] = {
 static const uint8_t presBLink[]=
 {
 /***********0*****1*****2*****3*****4*****5*****6*****7*****8*****9*****A*****B*****C*****D*****E*****F*/
-/*FE7*/1 + 2,1 + 2,1 + 2,    0,1 + 2,    0,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2, 
+/*FE7*/1 + 2,1 + 2,1 + 2,    0,1 + 2,    0,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,
 /*FE8*/    0,    0,    1,    0,    1,    0,    1,    0,    1,    0,    1,    2,1 + 2,    0,    1,    0,
 /*FE9*/    1,    2,1 + 2,    0,    1,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
-/*FEA*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    0,    1,    0,    1,    0,  
+/*FEA*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    0,    1,    0,    1,    0,
 /*FEB*/    1,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
 /*FEC*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
 /*FED*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
@@ -371,7 +371,7 @@ _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
  *           in case the user specifies the buffer to be
  *           U_SHAPE_TEXT_DIRECTION_LOGICAL
  */
-static void 
+static void
 invertBuffer(UChar *buffer, int32_t size, uint32_t /*options*/, int32_t lowlimit, int32_t highlimit) {
     UChar temp;
     int32_t i=0,j=0;
@@ -437,13 +437,15 @@ static void
 countSpaces(UChar *dest, int32_t size, uint32_t /*options*/, int32_t *spacesCountl, int32_t *spacesCountr) {
     int32_t i = 0;
     int32_t countl = 0,countr = 0;
-    while(dest[i] == SPACE_CHAR) {
+    while((dest[i] == SPACE_CHAR) && (countl < size)) {
        countl++;
        i++;
     }
-    while(dest[size-1] == SPACE_CHAR) {
-       countr++;
-       size--;
+    if (countl < size) {  /* the entire buffer is not all space */
+        while(dest[size-1] == SPACE_CHAR) {
+            countr++;
+            size--;
+        }
     }
     *spacesCountl = countl;
     *spacesCountr = countr;
@@ -487,7 +489,7 @@ isLamAlefChar(UChar ch) {
 
 /*BIDI
  *Name     : isTailChar
- *Function : returns 1 if the character matches one of the tail characters (0xfe73 or 0x200b) otherwise returns 0 
+ *Function : returns 1 if the character matches one of the tail characters (0xfe73 or 0x200b) otherwise returns 0
  */
 
 static inline int32_t
@@ -501,7 +503,7 @@ isTailChar(UChar ch) {
 
 /*BIDI
  *Name     : isSeenTailFamilyChar
- *Function : returns 1 if the character is a seen family isolated character 
+ *Function : returns 1 if the character is a seen family isolated character
  *           in the FE range otherwise returns 0
  */
 
@@ -531,18 +533,18 @@ isSeenFamilyChar(UChar  ch){
 /*Start of BIDI*/
 /*
  *Name     : isAlefMaksouraChar
- *Function : returns 1 if the character is a Alef Maksoura Final or isolated 
- *           otherwise returns 0 
+ *Function : returns 1 if the character is a Alef Maksoura Final or isolated
+ *           otherwise returns 0
  */
 static inline int32_t
 isAlefMaksouraChar(UChar ch) {
     return (int32_t)( (ch == 0xFEEF) || ( ch == 0xFEF0) || (ch == 0x0649));
-} 
+}
 
 /*
  * Name     : isYehHamzaChar
  * Function : returns 1 if the character is a yehHamza isolated or yehhamza
- *            final is found otherwise returns 0 
+ *            final is found otherwise returns 0
  */
 static inline int32_t
 isYehHamzaChar(UChar ch) {
@@ -551,13 +553,13 @@ isYehHamzaChar(UChar ch) {
     }else{
         return 0;
     }
-} 
+}
 
- /* 
+ /*
  * Name: isTashkeelOnTatweelChar
- * Function: Checks if the Tashkeel Character is on Tatweel or not,if the 
- *           Tashkeel on tatweel (FE range), it returns 1 else if the 
- *           Tashkeel with shadda on tatweel (FC range)return 2 otherwise 
+ * Function: Checks if the Tashkeel Character is on Tatweel or not,if the
+ *           Tashkeel on tatweel (FE range), it returns 1 else if the
+ *           Tashkeel with shadda on tatweel (FC range)return 2 otherwise
  *           returns 0
  */
 static inline int32_t
@@ -574,8 +576,8 @@ isTashkeelOnTatweelChar(UChar ch){
 
 /*
  * Name: isIsolatedTashkeelChar
- * Function: Checks if the Tashkeel Character is in the isolated form 
- *           (i.e. Unicode FE range) returns 1 else if the Tashkeel 
+ * Function: Checks if the Tashkeel Character is in the isolated form
+ *           (i.e. Unicode FE range) returns 1 else if the Tashkeel
  *           with shadda is in the isolated form (i.e. Unicode FC range)
  *           returns 2 otherwise returns 0
  */
@@ -595,9 +597,9 @@ isIsolatedTashkeelChar(UChar ch){
 
 /*
  *Name     : calculateSize
- *Function : This function calculates the destSize to be used in preflighting 
+ *Function : This function calculates the destSize to be used in preflighting
  *           when the destSize is equal to 0
- *           It is used also to calculate the new destsize in case the 
+ *           It is used also to calculate the new destsize in case the
  *           destination buffer will be resized.
  */
 
@@ -605,12 +607,12 @@ static int32_t
 calculateSize(const UChar *source, int32_t sourceLength,
 int32_t destSize,uint32_t options) {
     int32_t i = 0;
-    
+
     int lamAlefOption = 0;
     int tashkeelOption = 0;
 
     destSize = sourceLength;
-    
+
     if (((options&U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE ||
         ((options&U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED )) &&
         ((options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE )){
@@ -620,7 +622,7 @@ int32_t destSize,uint32_t options) {
        ((options&U_SHAPE_TASHKEEL_MASK) == U_SHAPE_TASHKEEL_RESIZE ) ){
             tashkeelOption = 1;
         }
-    
+
     if(lamAlefOption || tashkeelOption){
         if((options&U_SHAPE_TEXT_DIRECTION_MASK)==U_SHAPE_TEXT_DIRECTION_VISUAL_LTR) {
             for(i=0;i<sourceLength;i++) {
@@ -636,7 +638,7 @@ int32_t destSize,uint32_t options) {
                 }
             }
         }
-    
+
     if ((options&U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_UNSHAPE){
         if ( (options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE){
             for(i=0;i<sourceLength;i++) {
@@ -651,9 +653,9 @@ int32_t destSize,uint32_t options) {
 
 /*
  *Name     : handleTashkeelWithTatweel
- *Function : Replaces Tashkeel as following: 
- *            Case 1 :if the Tashkeel on tatweel, replace it with Tatweel.   
- *            Case 2 :if the Tashkeel aggregated with Shadda on Tatweel, replace 
+ *Function : Replaces Tashkeel as following:
+ *            Case 1 :if the Tashkeel on tatweel, replace it with Tatweel.
+ *            Case 2 :if the Tashkeel aggregated with Shadda on Tatweel, replace
  *                   it with Shadda on Tatweel.
  *            Case 3: if the Tashkeel is isolated replace it with Space.
  *
@@ -680,20 +682,20 @@ handleTashkeelWithTatweel(UChar *dest, int32_t sourceLength,
 /*
  *Name     : handleGeneratedSpaces
  *Function : The shapeUnicode function converts Lam + Alef into LamAlef + space,
- *           and Tashkeel to space. 
- *           handleGeneratedSpaces function puts these generated spaces 
+ *           and Tashkeel to space.
+ *           handleGeneratedSpaces function puts these generated spaces
  *           according to the options the user specifies. LamAlef and Tashkeel
- *           spaces can be replaced at begin, at end, at near or decrease the 
+ *           spaces can be replaced at begin, at end, at near or decrease the
  *           buffer size.
  *
  *           There is also Auto option for LamAlef and tashkeel, which will put
- *           the spaces at end of the buffer (or end of text if the user used 
+ *           the spaces at end of the buffer (or end of text if the user used
  *           the option U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END).
  *
- *           If the text type was visual_LTR and the option 
- *           U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END was selected the END 
+ *           If the text type was visual_LTR and the option
+ *           U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END was selected the END
  *           option will place the space at the beginning of the buffer and
- *           BEGIN will place the space at the end of the buffer. 
+ *           BEGIN will place the space at the end of the buffer.
  */
 
 static int32_t
@@ -732,7 +734,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
         i = j = 0; count = 0;
         while(i < sourceLength) {
             if ( (lamAlefOption && dest[i] == LAMALEF_SPACE_SUB) ||
-               (tashkeelOption && dest[i] == TASHKEEL_SPACE_SUB) ){ 
+               (tashkeelOption && dest[i] == TASHKEEL_SPACE_SUB) ){
                 j--;
                 count++;
             } else {
@@ -759,7 +761,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
             lamAlefOption = 1;
         }
     }
-    
+
     if (lamAlefOption){
         /* Lam+Alef is already shaped into LamAlef + FFFF */
         i = 0;
@@ -775,7 +777,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
     tashkeelOption = 0;
 
     if (shapingMode == 0) {
-        if ( ((options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefBegin) || 
+        if ( ((options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefBegin) ||
               (((options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_AUTO )
               && (spacesRelativeToTextBeginEnd==1)) ) {
             lamAlefOption = 1;
@@ -787,7 +789,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
 
     if(lamAlefOption || tashkeelOption){
         tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
-        
+
         /* Test for NULL */
         if(tempbuffer == NULL) {
             *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -807,11 +809,11 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
             i--;
             j--;
         }
-        
+
         for(i=0 ;i < count; i++){
                 tempbuffer[i] = SPACE_CHAR;
         }
-        
+
         uprv_memcpy(dest, tempbuffer, sourceLength*U_SIZEOF_UCHAR);
         destSize = sourceLength;
     }
@@ -822,7 +824,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
     tashkeelOption = 0;
 
     if (shapingMode == 0) {
-        if ( ((options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefEnd) || 
+        if ( ((options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefEnd) ||
               (((options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_AUTO )
               && (spacesRelativeToTextBeginEnd==0)) ) {
             lamAlefOption = 1;
@@ -831,7 +833,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
             tashkeelOption = 1;
         }
     }
-            
+
     if(lamAlefOption || tashkeelOption){
         tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
        /* Test for NULL */
@@ -865,7 +867,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
         destSize = sourceLength;
     }
 
-    
+
     if(tempbuffer){
         uprv_free(tempbuffer);
     }
@@ -876,11 +878,11 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
 /*
  *Name     :expandCompositCharAtBegin
  *Function :Expands the LamAlef character to Lam and Alef consuming the required
- *         space from beginning of the buffer. If the text type was visual_LTR 
+ *         space from beginning of the buffer. If the text type was visual_LTR
  *         and the option U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END was selected
  *         the spaces will be located at end of buffer.
  *         If there are no spaces to expand the LamAlef, an error
- *         will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h 
+ *         will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h
  */
 
 static int32_t
@@ -888,7 +890,7 @@ expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UE
     int32_t      i = 0,j = 0;
     int32_t      countl = 0;
     UChar    *tempbuffer=NULL;
-    
+
     tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 
     /* Test for NULL */
@@ -906,7 +908,7 @@ expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UE
         }
 
         i = j = sourceLength-1;
-        
+
         while(i >= 0 && j >= 0) {
             if( countl>0 && isLamAlefChar(dest[i])) {
                 tempbuffer[j] = LAM_CHAR;
@@ -926,21 +928,21 @@ expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UE
             j--;
         }
         uprv_memcpy(dest, tempbuffer, sourceLength*U_SIZEOF_UCHAR);
-        
+
         uprv_free(tempbuffer);
-        
+
         destSize = sourceLength;
         return destSize;
 }
 
 /*
  *Name     : expandCompositCharAtEnd
- *Function : Expands the LamAlef character to Lam and Alef consuming the 
+ *Function : Expands the LamAlef character to Lam and Alef consuming the
  *           required space from end of the buffer. If the text type was
  *           Visual LTR and the option U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END
- *           was used, the spaces will be consumed from begin of buffer. If 
+ *           was used, the spaces will be consumed from begin of buffer. If
  *           there are no spaces to expand the LamAlef, an error
- *           will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h 
+ *           will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h
  */
 
 static int32_t
@@ -958,17 +960,17 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
          return 0;
     }
-    
+
     uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
-    
+
     while(dest[inpsize-1] == SPACE_CHAR) {
         countr++;
         inpsize--;
     }
-    
+
     i = sourceLength - countr - 1;
     j = sourceLength - 1;
-    
+
     while(i >= 0 && j >= 0) {
         if( countr>0 && isLamAlefChar(dest[i]) ) {
             tempbuffer[j] = LAM_CHAR;
@@ -984,7 +986,7 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
         i--;
         j--;
     }
-    
+
     if(countr > 0) {
         uprv_memmove(tempbuffer, tempbuffer+countr, sourceLength*U_SIZEOF_UCHAR);
         if(u_strlen(tempbuffer) < sourceLength) {
@@ -996,7 +998,7 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
     uprv_memcpy(dest, tempbuffer, sourceLength*U_SIZEOF_UCHAR);
 
     uprv_free(tempbuffer);
-    
+
     destSize = sourceLength;
     return destSize;
 }
@@ -1004,10 +1006,10 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
 /*
  *Name     : expandCompositCharAtNear
  *Function : Expands the LamAlef character into Lam + Alef, YehHamza character
- *           into Yeh + Hamza, SeenFamily character into SeenFamily character 
- *           + Tail, while consuming the space next to the character. 
+ *           into Yeh + Hamza, SeenFamily character into SeenFamily character
+ *           + Tail, while consuming the space next to the character.
  *           If there are no spaces next to the character, an error
- *           will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h 
+ *           will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h
  */
 
 static int32_t
@@ -1031,7 +1033,7 @@ expandCompositCharAtNear(UChar *dest, int32_t sourceLength, int32_t destSize,UEr
                     dest[i] = yehHamzaToYeh[yehhamzaChar - YEH_HAMZAFE_CHAR];
                     dest[i-1] = HAMZAFE_CHAR;
                 }else {
-                    
+
                     *pErrorCode=U_NO_SPACE_AVAILABLE;
                 }
             }else if(lamAlefOption && isLamAlefChar(dest[i+1])) {
@@ -1047,22 +1049,22 @@ expandCompositCharAtNear(UChar *dest, int32_t sourceLength, int32_t destSize,UEr
        destSize = sourceLength;
        return destSize;
 }
- /* 
+ /*
  * Name     : expandCompositChar
- * Function : LamAlef, need special handling, since it expands from one 
- *            character into two characters while shaping or deshaping. 
+ * Function : LamAlef, need special handling, since it expands from one
+ *            character into two characters while shaping or deshaping.
  *            In order to expand it, near or far spaces according to the
  *            options user specifies. Also buffer size can be increased.
  *
  *            For SeenFamily characters and YehHamza only the near option is
  *            supported, while for LamAlef we can take spaces from begin, end,
  *            near or even increase the buffer size.
- *            There is also the Auto option for LamAlef only, which will first 
+ *            There is also the Auto option for LamAlef only, which will first
  *            search for a space at end, begin then near, respectively.
- *            If there are no spaces to expand these characters, an error will be set to 
- *            U_NO_SPACE_AVAILABLE as defined in utypes.h 
+ *            If there are no spaces to expand these characters, an error will be set to
+ *            U_NO_SPACE_AVAILABLE as defined in utypes.h
  */
- 
+
 static int32_t
 expandCompositChar(UChar *dest, int32_t sourceLength,
               int32_t destSize,uint32_t options,
@@ -1074,29 +1076,29 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
     int yehHamzaOption = 0;
     int seenTailOption = 0;
     int lamAlefOption = 0;
-    
+
     if (shapingMode == 1){
         if ( (options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_AUTO){
-            
+
             if(spacesRelativeToTextBeginEnd == 0) {
                 destSize = expandCompositCharAtEnd(dest, sourceLength, destSize, pErrorCode);
-                
+
                 if(*pErrorCode == U_NO_SPACE_AVAILABLE) {
                     *pErrorCode = U_ZERO_ERROR;
                     destSize = expandCompositCharAtBegin(dest, sourceLength, destSize, pErrorCode);
                 }
             }else {
                 destSize = expandCompositCharAtBegin(dest, sourceLength, destSize, pErrorCode);
-                
+
                 if(*pErrorCode == U_NO_SPACE_AVAILABLE) {
                     *pErrorCode = U_ZERO_ERROR;
                     destSize = expandCompositCharAtEnd(dest, sourceLength, destSize, pErrorCode);
                 }
             }
-            
+
             if(*pErrorCode == U_NO_SPACE_AVAILABLE) {
                 *pErrorCode = U_ZERO_ERROR;
-                destSize = expandCompositCharAtNear(dest, sourceLength, destSize, pErrorCode, yehHamzaOption, 
+                destSize = expandCompositCharAtNear(dest, sourceLength, destSize, pErrorCode, yehHamzaOption,
                                                 seenTailOption, 1);
             }
         }
@@ -1113,7 +1115,7 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
             destSize = expandCompositCharAtBegin(dest, sourceLength, destSize, pErrorCode);
         }
     }
-    
+
     if (shapingMode == 0){
          if ((options&U_SHAPE_YEHHAMZA_MASK) == U_SHAPE_YEHHAMZA_TWOCELL_NEAR){
              yehHamzaOption = 1;
@@ -1130,24 +1132,24 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
 
 
     if (yehHamzaOption || seenTailOption || lamAlefOption){
-        destSize = expandCompositCharAtNear(dest, sourceLength, destSize, pErrorCode, yehHamzaOption, 
-                                            seenTailOption,lamAlefOption); 
+        destSize = expandCompositCharAtNear(dest, sourceLength, destSize, pErrorCode, yehHamzaOption,
+                                            seenTailOption,lamAlefOption);
     }
- 
-    
+
+
     if (shapingMode == 1){
         if ( (options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE){
             destSize = calculateSize(dest,sourceLength,destSize,options);
             tempbuffer = (UChar *)uprv_malloc((destSize+1)*U_SIZEOF_UCHAR);
-            
+
             /* Test for NULL */
             if(tempbuffer == NULL) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             }
-            
+
             uprv_memset(tempbuffer, 0, (destSize+1)*U_SIZEOF_UCHAR);
-            
+
             i = j = 0;
             while(i < destSize && j < destSize) {
                 if(isLamAlefChar(dest[i]) ) {
@@ -1160,11 +1162,11 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
                 i++;
                 j++;
             }
-            
+
             uprv_memcpy(dest, tempbuffer, destSize*U_SIZEOF_UCHAR);
         }
     }
-    
+
     if(tempbuffer) {
         uprv_free(tempbuffer);
     }
@@ -1257,7 +1259,7 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                 lastLink = prevLink;             /* spaces generated during lamalef generation.      */
                 currLink = getLink(wLamalef);    /* LAMALEF_SPACE_SUB is added here and is replaced by spaces   */
             }                                    /* in removeLamAlefSpaces()                         */
-            
+
 			if ((i > 0) && (dest[i-1] == SPACE_CHAR)){
              if ( isSeenFamilyChar(dest[i])){
                     seenfamFound = 1;
@@ -1273,14 +1275,14 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                 }
 			}
 
-            /*  
+            /*
              * get the proper shape according to link ability of neighbors
              * and of character; depends on the order of the shapes
              * (isolated, initial, middle, final) in the compatibility area
              */
             Shape = shapeTable[nextLink & (LINKR + LINKL)]
                               [lastLink & (LINKR + LINKL)]
-                              [currLink & (LINKR + LINKL)]; 
+                              [currLink & (LINKR + LINKL)];
 
             if ((currLink & (LINKR+LINKL)) == 1) {
                 Shape &= 1;
@@ -1288,9 +1290,9 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                 if( (lastLink & LINKL) && (nextLink & LINKR) && (tashkeelFlag == 1) &&
                      dest[i] != 0x064C && dest[i] != 0x064D )
                 {
-                    Shape = 1; 
+                    Shape = 1;
                     if( (nextLink&ALEFTYPE) == ALEFTYPE && (lastLink&LAMTYPE) == LAMTYPE ) {
-                        Shape = 0; 
+                        Shape = 0;
                     }
                 }
                 else {
@@ -1363,18 +1365,18 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
      *This for loop changes the buffer from the Unicode FE range to
      *the Unicode 06 range
      */
-    
+
     for(i = 0; i < sourceLength; i++) {
         UChar  inputChar = dest[i];
         if ( (inputChar >= 0xFB50) && (inputChar <= 0xFBFF)) { /* FBxx Arabic range */
             UChar c = convertFBto06 [ (inputChar - 0xFB50) ];
             if (c != 0)
                 dest[i] = c;
-        } else if( (yehHamzaComposeEnabled == 1) && ((inputChar == HAMZA06_CHAR) || (inputChar == HAMZAFE_CHAR)) 
+        } else if( (yehHamzaComposeEnabled == 1) && ((inputChar == HAMZA06_CHAR) || (inputChar == HAMZAFE_CHAR))
                 && (i < (sourceLength - 1)) && isAlefMaksouraChar(dest[i+1] )) {
                  dest[i] = SPACE_CHAR;
                  dest[i+1] = YEH_HAMZA_CHAR;
-        } else if ( (seenComposeEnabled == 1) && (isTailChar(inputChar)) && (i< (sourceLength - 1)) 
+        } else if ( (seenComposeEnabled == 1) && (isTailChar(inputChar)) && (i< (sourceLength - 1))
                         && (isSeenTailFamilyChar(dest[i+1])) ) {
                 dest[i] = SPACE_CHAR;
         } else if (( inputChar >= 0xFE70) && (inputChar <= 0xFEF4 )) { /* FExx Arabic range */
@@ -1386,7 +1388,7 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
         if( isLamAlefChar(dest[i]) )
             lamalef_found = 1;
     }
-  
+
    destSize = sourceLength;
    if (lamalef_found != 0){
           destSize = expandCompositChar(dest,sourceLength,destSize,options,pErrorCode,DESHAPE_MODE);
@@ -1394,11 +1396,11 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
    return destSize;
 }
 
-/* 
+/*
  ****************************************
  * u_shapeArabic
  ****************************************
- */    
+ */
 
 U_CAPI int32_t U_EXPORT2
 u_shapeArabic(const UChar *source, int32_t sourceLength,
@@ -1407,7 +1409,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
               UErrorCode *pErrorCode) {
 
     int32_t destLength;
-    
+
     spacesRelativeToTextBeginEnd = 0;
     uShapeLamalefBegin = U_SHAPE_LAMALEF_BEGIN;
     uShapeLamalefEnd = U_SHAPE_LAMALEF_END;
@@ -1431,7 +1433,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
                 (options&U_SHAPE_AGGREGATE_TASHKEEL_MASK) != 0) ||
                 ((options&U_SHAPE_AGGREGATE_TASHKEEL_MASK) == U_SHAPE_AGGREGATE_TASHKEEL &&
                 (options&U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED) != U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)
-    ) 
+    )
     {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -1472,7 +1474,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    
+
     /* Does Options contain the new Seen Tail Unicode code point option */
     if ( (options&U_SHAPE_TAIL_TYPE_MASK) == U_SHAPE_TAIL_NEW_UNICODE){
         tailChar = NEW_TAIL_CHAR;
@@ -1487,8 +1489,8 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
         if((options&U_SHAPE_AGGREGATE_TASHKEEL_MASK)>0) {
             int32_t logical_order = (options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL;
-            int32_t aggregate_tashkeel = 
-                        (options&(U_SHAPE_AGGREGATE_TASHKEEL_MASK+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)) == 
+            int32_t aggregate_tashkeel =
+                        (options&(U_SHAPE_AGGREGATE_TASHKEEL_MASK+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)) ==
                         (U_SHAPE_AGGREGATE_TASHKEEL+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED);
             int step=logical_order?1:-1;
             int j=logical_order?-1:2*sourceLength;
@@ -1508,7 +1510,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
                 prevLink = currLink;
                 currLink = getLink(source[i]);
                 if (aggregate_tashkeel && ((prevLink|currLink)&COMBINE) == COMBINE && aggregation_possible) {
-                    aggregation_possible = 0; 
+                    aggregation_possible = 0;
                     tempsource[j] = (prev<source[i]?prev:source[i])-0x064C+0xFC5E;
                     currLink = getLink(tempsource[j]);
                 } else {
@@ -1524,7 +1526,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
         /* calculate destination size */
         /* TODO: do we ever need to do this pure preflighting? */
-        if(((options&U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_RESIZE) || 
+        if(((options&U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_RESIZE) ||
            ((options&U_SHAPE_TASHKEEL_MASK)==U_SHAPE_TASHKEEL_RESIZE)) {
             outputSize=calculateSize(source,sourceLength,destCapacity,options);
         } else {
@@ -1586,7 +1588,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
         switch(options&U_SHAPE_LETTERS_MASK) {
         case U_SHAPE_LETTERS_SHAPE :
-             if( (options&U_SHAPE_TASHKEEL_MASK)> 0 
+             if( (options&U_SHAPE_TASHKEEL_MASK)> 0
                  && ((options&U_SHAPE_TASHKEEL_MASK) !=U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL)) {
                 /* Call the shaping function with tashkeel flag == 2 for removal of tashkeel */
                 destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,2);
