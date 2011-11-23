@@ -6501,6 +6501,88 @@ static void TestMultipleReorder(void)
     doTestOneReorderingAPITestCase(collationTestCases, LEN(collationTestCases), apiRules, LEN(apiRules));
 }
 
+/*
+ * Test that covers issue reported in ticket 8814
+ */
+static void TestReorderWithNumericCollation()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
+    UCollator  *myReorderCollation;
+    int32_t reorderCodes[] = {UCOL_REORDER_CODE_SPACE, UCOL_REORDER_CODE_PUNCTUATION, UCOL_REORDER_CODE_SYMBOL, UCOL_REORDER_CODE_DIGIT, USCRIPT_GREEK,USCRIPT_LATIN, USCRIPT_HEBREW, UCOL_REORDER_CODE_OTHERS};
+    /* UChar fortyS[] = { 0x0034, 0x0030, 0x0053 };
+    UChar fortyThreeP[] = { 0x0034, 0x0033, 0x0050 }; */
+    UChar fortyS[] = { 0x0053 };
+    UChar fortyThreeP[] = { 0x0050 };
+    uint8_t fortyS_sortKey[128];
+    int32_t fortyS_sortKey_Length;
+    uint8_t fortyThreeP_sortKey[128];
+    int32_t fortyThreeP_sortKey_Length;
+    uint8_t fortyS_sortKey_reorder[128];
+    int32_t fortyS_sortKey_reorder_Length;
+    uint8_t fortyThreeP_sortKey_reorder[128];
+    int32_t fortyThreeP_sortKey_reorder_Length;
+    UCollationResult collResult;
+    UCollationResult collResultReorder;
+    int i;
+
+    log_verbose("Testing reordering with and without numeric collation\n");
+
+    /* build collator tertiary with numeric */
+    myCollation = ucol_open("", &status);
+    /*
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    */
+    ucol_setAttribute(myCollation, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+    
+    /* build collator tertiary with numeric and reordering */
+    myReorderCollation = ucol_open("", &status);
+    /*
+    ucol_setStrength(myReorderCollation, UCOL_TERTIARY);
+    */
+    ucol_setAttribute(myReorderCollation, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
+    ucol_setReorderCodes(myReorderCollation, reorderCodes, LEN(reorderCodes), &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+    
+    fortyS_sortKey_Length = ucol_getSortKey(myCollation, fortyS, LEN(fortyS), fortyS_sortKey, 128);
+    fortyThreeP_sortKey_Length = ucol_getSortKey(myCollation, fortyThreeP, LEN(fortyThreeP), fortyThreeP_sortKey, 128);
+    fortyS_sortKey_reorder_Length = ucol_getSortKey(myReorderCollation, fortyS, LEN(fortyS), fortyS_sortKey_reorder, 128);
+    fortyThreeP_sortKey_reorder_Length = ucol_getSortKey(myReorderCollation, fortyThreeP, LEN(fortyThreeP), fortyThreeP_sortKey_reorder, 128);
+
+    if (fortyS_sortKey_Length < 0 || fortyThreeP_sortKey_Length < 0 || fortyS_sortKey_reorder_Length < 0 || fortyThreeP_sortKey_reorder_Length < 0) {
+        log_err_status(status, "ERROR: couldn't generate sort keys\n");
+        return;
+    }
+    collResult = ucol_strcoll(myCollation, fortyS, LEN(fortyS), fortyThreeP, LEN(fortyThreeP));
+    collResultReorder = ucol_strcoll(myReorderCollation, fortyS, LEN(fortyS), fortyThreeP, LEN(fortyThreeP));
+    /*
+    fprintf(stderr, "\tcollResult = %x\n", collResult);
+    fprintf(stderr, "\tcollResultReorder = %x\n", collResultReorder);
+    fprintf(stderr, "\nfortyS\n");
+    for (i = 0; i < fortyS_sortKey_Length; i++) {
+        fprintf(stderr, "%x --- %x\n", fortyS_sortKey[i], fortyS_sortKey_reorder[i]);
+    }
+    fprintf(stderr, "\nfortyThreeP\n");
+    for (i = 0; i < fortyThreeP_sortKey_Length; i++) {
+        fprintf(stderr, "%x --- %x\n", fortyThreeP_sortKey[i], fortyThreeP_sortKey_reorder[i]);
+    }
+    */
+    if (collResult != collResultReorder) {
+        log_err_status(status, "ERROR: collation results should have been the same.\n");
+        return;
+    }
+    
+    ucol_close(myCollation);
+    ucol_close(myReorderCollation);
+}
+
 static int compare_uint8_t_arrays(const uint8_t* a, const uint8_t* b)
 {
   for (; *a == *b; ++a, ++b) {
@@ -6912,7 +6994,9 @@ void addMiscCollTest(TestNode** root)
     TEST(TestHaniReorder);
     TEST(TestMultipleReorder);
     TEST(TestReorderingAcrossCloning);
-
+    /* test for ticket 8814 - disabled until resolved */
+    /*TEST(TestReorderWithNumericCollation);*/
+    
     TEST(TestCaseLevelBufferOverflow);
 }
 
