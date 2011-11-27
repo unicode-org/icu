@@ -929,6 +929,7 @@ typedef struct UnicodeDataContext {
 #if UCONFIG_NO_NORMALIZATION
     const void *dummy;
 #else
+    const UNormalizer2 *nfc;
     const UNormalizer2 *nfkc;
 #endif
 } UnicodeDataContext;
@@ -952,14 +953,18 @@ unicodeDataLineFn(void *context,
                   UErrorCode *pErrorCode)
 {
     char buffer[100];
+    const char *d;
     char *end;
     uint32_t value;
     UChar32 c;
     int32_t i;
     int8_t type;
+    int32_t dt;
+    UChar dm[32], s[32];
+    int32_t dmLength, length;
 
 #if !UCONFIG_NO_NORMALIZATION
-    const UNormalizer2 *nfkc;
+    const UNormalizer2 *nfc, *nfkc;
 #endif
 
     /* get the character code, field 0 */
@@ -1009,6 +1014,77 @@ unicodeDataLineFn(void *context,
     if(i!=u_charDirection(c) || i!=u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)) {
         log_err("error: u_charDirection(U+%04lx)==%u instead of %u (%s)\n", c, u_charDirection(c), MakeDir(fields[4][0]), fields[4][0]);
     }
+
+    /* get Decomposition_Type & Decomposition_Mapping, field 5 */
+    if(fields[5][0]==fields[5][1]) {
+        /* no decomposition, except UnicodeData.txt omits Hangul syllable decompositions */
+        if(c==0xac00 || c==0xd7a3) {
+            dt=U_DT_CANONICAL;
+        } else {
+            dt=U_DT_NONE;
+        }
+    } else {
+        d=fields[5][0];
+        *fields[5][1]=0;
+        dt=UCHAR_INVALID_CODE;
+        if(*d=='<') {
+            end=strchr(++d, '>');
+            if(end!=NULL) {
+                *end=0;
+                dt=u_getPropertyValueEnum(UCHAR_DECOMPOSITION_TYPE, d);
+                d=u_skipWhitespace(end+1);
+            }
+        } else {
+            dt=U_DT_CANONICAL;
+        }
+    }
+    if(dt>U_DT_NONE) {
+        if(c==0xac00) {
+            dm[0]=0x1100;
+            dm[1]=0x1161;
+            dm[2]=0;
+            dmLength=2;
+        } else if(c==0xd7a3) {
+            dm[0]=0xd788;
+            dm[1]=0x11c2;
+            dm[2]=0;
+            dmLength=2;
+        } else {
+            dmLength=u_parseString(d, dm, 32, NULL, pErrorCode);
+        }
+    } else {
+        dmLength=-1;
+    }
+    if(dt<0 || U_FAILURE(*pErrorCode)) {
+        log_err("error in UnicodeData.txt: syntax error in U+%04lX decomposition field\n", (long)c);
+        return;
+    }
+#if !UCONFIG_NO_NORMALIZATION
+    i=u_getIntPropertyValue(c, UCHAR_DECOMPOSITION_TYPE);
+    if(i!=dt) {
+        log_err("error: u_getIntPropertyValue(U+%04lx, UCHAR_DECOMPOSITION_TYPE)==%d instead of %d\n", c, i, dt);
+    }
+    /* Expect Decomposition_Mapping=nfkc.getRawDecomposition(c). */
+    length=unorm2_getRawDecomposition(nfkc, c, s, 32, pErrorCode);
+    if(U_FAILURE(*pErrorCode) || length!=dmLength || (length>0 && 0!=u_strcmp(s, dm))) {
+        log_err("error: unorm2_getRawDecomposition(nfkc, U+%04lx)==%d instead of %d "
+                "or the Decomposition_Mapping is different (%s)\n",
+                c, length, dmLength, u_errorName(*pErrorCode));
+        return;
+    }
+    /* For canonical decompositions only, expect Decomposition_Mapping=nfc.getRawDecomposition(c). */
+    if(dt!=U_DT_CANONICAL) {
+        dmLength=-1;
+    }
+    nfc=((UnicodeDataContext *)context)->nfc;
+    length=unorm2_getRawDecomposition(nfc, c, s, 32, pErrorCode);
+    if(U_FAILURE(*pErrorCode) || length!=dmLength || (length>0 && 0!=u_strcmp(s, dm))) {
+        log_err("error: unorm2_getRawDecomposition(nfc, U+%04lx)==%d instead of %d "
+                "or the Decomposition_Mapping is different (%s)\n",
+                c, length, dmLength, u_errorName(*pErrorCode));
+        return;
+    }
+#endif
 
     /* get ISO Comment, field 11 */
     *fields[11][1]=0;
@@ -1231,9 +1307,10 @@ static void TestUnicodeData()
 
     errorCode=U_ZERO_ERROR;
 #if !UCONFIG_NO_NORMALIZATION
+    context.nfc=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, &errorCode);
     context.nfkc=unorm2_getInstance(NULL, "nfkc", UNORM2_COMPOSE, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_data_err("error: unable to open an NFKC UNormalizer2 - %s\n", u_errorName(errorCode));
+        log_data_err("error: unable to open an NFC or NFKC UNormalizer2 - %s\n", u_errorName(errorCode));
         return;
     }
 #endif

@@ -1167,6 +1167,14 @@ BasicNormalizerTest::TestCompare() {
         errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
     }
 
+    // test getRawDecomposition() for some characters that do not decompose
+    if( nfcNorm2->getRawDecomposition(0x20, s2) ||
+        nfcNorm2->getRawDecomposition(0x4e00, s2) ||
+        nfcNorm2->getRawDecomposition(0x20002, s2)
+    ) {
+        errln("NFC.getRawDecomposition() returns TRUE for characters which do not have decompositions");
+    }
+
     // test FilteredNormalizer2::getDecomposition()
     UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff]"), errorCode);
     FilteredNormalizer2 fn2(*nfcNorm2, filter);
@@ -1174,6 +1182,13 @@ BasicNormalizerTest::TestCompare() {
         s2.length()!=2 || s2[0]!=0x41 || s2[1]!=0x304
     ) {
         errln("FilteredNormalizer2(NFC, ^A0-FF).getDecomposition() failed");
+    }
+
+    // test FilteredNormalizer2::getRawDecomposition()
+    if( fn2.getRawDecomposition(0xe4, s1) || !fn2.getRawDecomposition(0x100, s2) ||
+        s2.length()!=2 || s2[0]!=0x41 || s2[1]!=0x304
+    ) {
+        errln("FilteredNormalizer2(NFC, ^A0-FF).getRawDecomposition() failed");
     }
 }
 

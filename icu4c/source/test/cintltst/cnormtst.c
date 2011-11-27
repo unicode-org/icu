@@ -65,6 +65,9 @@ TestFCD(void);
 static void
 TestGetDecomposition(void);
 
+static void
+TestGetRawDecomposition(void);
+
 static void TestAppendRestoreMiddle(void);
 
 static const char* const canonTests[][3] = {
@@ -154,6 +157,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestFCNFKCClosure, "tsnorm/cnormtst/TestFCNFKCClosure");
     addTest(root, &TestComposition, "tsnorm/cnormtst/TestComposition");
     addTest(root, &TestGetDecomposition, "tsnorm/cnormtst/TestGetDecomposition");
+    addTest(root, &TestGetRawDecomposition, "tsnorm/cnormtst/TestGetRawDecomposition");
     addTest(root, &TestAppendRestoreMiddle, "tsnorm/cnormtst/TestAppendRestoreMiddle");
 }
 
@@ -1486,32 +1490,97 @@ TestGetDecomposition() {
 
     length=unorm2_getDecomposition(n2, 0x20, decomp, LENGTHOF(decomp), &errorCode);
     if(U_FAILURE(errorCode) || length>=0) {
-        log_err("unorm2_getDecomposition(space) failed\n");
+        log_err("unorm2_getDecomposition(fcc, space) failed\n");
     }
     errorCode=U_ZERO_ERROR;
     length=unorm2_getDecomposition(n2, 0xe4, decomp, LENGTHOF(decomp), &errorCode);
     if(U_FAILURE(errorCode) || length!=2 || decomp[0]!=0x61 || decomp[1]!=0x308 || decomp[2]!=0) {
-        log_err("unorm2_getDecomposition(a-umlaut) failed\n");
+        log_err("unorm2_getDecomposition(fcc, a-umlaut) failed\n");
     }
     errorCode=U_ZERO_ERROR;
     length=unorm2_getDecomposition(n2, 0xac01, decomp, LENGTHOF(decomp), &errorCode);
     if(U_FAILURE(errorCode) || length!=3 || decomp[0]!=0x1100 || decomp[1]!=0x1161 || decomp[2]!=0x11a8 || decomp[3]!=0) {
-        log_err("unorm2_getDecomposition(Hangul syllable U+AC01) failed\n");
+        log_err("unorm2_getDecomposition(fcc, Hangul syllable U+AC01) failed\n");
     }
     errorCode=U_ZERO_ERROR;
     length=unorm2_getDecomposition(n2, 0xac01, NULL, 0, &errorCode);
     if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=3) {
-        log_err("unorm2_getDecomposition(Hangul syllable U+AC01) overflow failed\n");
+        log_err("unorm2_getDecomposition(fcc, Hangul syllable U+AC01) overflow failed\n");
     }
     errorCode=U_ZERO_ERROR;
     length=unorm2_getDecomposition(n2, 0xac01, decomp, -1, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("unorm2_getDecomposition(capacity<0) failed\n");
+        log_err("unorm2_getDecomposition(fcc, capacity<0) failed\n");
     }
     errorCode=U_ZERO_ERROR;
     length=unorm2_getDecomposition(n2, 0xac01, NULL, 4, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("unorm2_getDecomposition(decomposition=NULL) failed\n");
+        log_err("unorm2_getDecomposition(fcc, decomposition=NULL) failed\n");
+    }
+}
+
+static void
+TestGetRawDecomposition() {
+    UChar decomp[32];
+    int32_t length;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const UNormalizer2 *n2=unorm2_getInstance(NULL, "nfkc", UNORM2_COMPOSE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getInstance(nfkc) failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    /*
+     * Raw decompositions from NFKC data are the Unicode Decomposition_Mapping values,
+     * without recursive decomposition.
+     */
+
+    length=unorm2_getRawDecomposition(n2, 0x20, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length>=0) {
+        log_err("unorm2_getDecomposition(nfkc, space) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0xe4, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || decomp[0]!=0x61 || decomp[1]!=0x308 || decomp[2]!=0) {
+        log_err("unorm2_getDecomposition(nfkc, a-umlaut) failed\n");
+    }
+    /* U+1E08 LATIN CAPITAL LETTER C WITH CEDILLA AND ACUTE */
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0x1e08, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || decomp[0]!=0xc7 || decomp[1]!=0x301 || decomp[2]!=0) {
+        log_err("unorm2_getDecomposition(nfkc, c-cedilla-acute) failed\n");
+    }
+    /* U+212B ANGSTROM SIGN */
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0x212b, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=1 || decomp[0]!=0xc5 || decomp[1]!=0) {
+        log_err("unorm2_getDecomposition(nfkc, angstrom sign) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0xac00, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || decomp[0]!=0x1100 || decomp[1]!=0x1161 || decomp[2]!=0) {
+        log_err("unorm2_getDecomposition(nfkc, Hangul syllable U+AC00) failed\n");
+    }
+    /* A Hangul LVT syllable has a raw decomposition of an LV syllable + T. */
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0xac01, decomp, LENGTHOF(decomp), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || decomp[0]!=0xac00 || decomp[1]!=0x11a8 || decomp[2]!=0) {
+        log_err("unorm2_getDecomposition(nfkc, Hangul syllable U+AC01) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0xac01, NULL, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=2) {
+        log_err("unorm2_getDecomposition(nfkc, Hangul syllable U+AC01) overflow failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0xac01, decomp, -1, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("unorm2_getDecomposition(nfkc, capacity<0) failed\n");
+    }
+    errorCode=U_ZERO_ERROR;
+    length=unorm2_getRawDecomposition(n2, 0xac01, NULL, 4, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("unorm2_getDecomposition(nfkc, decomposition=NULL) failed\n");
     }
 }
 

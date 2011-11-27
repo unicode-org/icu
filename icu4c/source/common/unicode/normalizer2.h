@@ -197,6 +197,33 @@ public:
     getDecomposition(UChar32 c, UnicodeString &decomposition) const = 0;
 
     /**
+     * Gets the raw decomposition mapping of c.
+     *
+     * This is similar to the getDecomposition() method but returns the
+     * raw decomposition mapping as specified in UnicodeData.txt or
+     * (for custom data) in the mapping files processed by the gennorm2 tool.
+     * By contrast, getDecomposition() returns the processed,
+     * recursively-decomposed version of this mapping.
+     *
+     * When used on a standard NFKC Normalizer2 instance,
+     * getRawDecomposition() returns the Unicode Decomposition_Mapping (dm) property.
+     *
+     * When used on a standard NFC Normalizer2 instance,
+     * it returns the Decomposition_Mapping only if the Decomposition_Type (dt) is Canonical (Can);
+     * in this case, the result contains either one or two code points (=1..4 UChars).
+     *
+     * This function is independent of the mode of the Normalizer2.
+     * The default implementation returns FALSE.
+     * @param c code point
+     * @param decomposition String object which will be set to c's
+     *                      raw decomposition mapping, if there is one.
+     * @return TRUE if c has a decomposition, otherwise FALSE
+     * @draft ICU 49
+     */
+    virtual UBool
+    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const;
+
+    /**
      * Gets the combining class of c.
      * The default implementation returns 0
      * but all standard implementations return the Unicode Canonical_Combining_Class value.
@@ -405,8 +432,9 @@ public:
            UErrorCode &errorCode) const;
 
     /**
-     * Gets the decomposition mapping of c. Equivalent to normalize(UnicodeString(c))
-     * on a UNORM2_DECOMPOSE Normalizer2 instance, but much faster.
+     * Gets the decomposition mapping of c.
+     * For details see the base class documentation.
+     *
      * This function is independent of the mode of the Normalizer2.
      * @param c code point
      * @param decomposition String object which will be set to c's
@@ -416,6 +444,20 @@ public:
      */
     virtual UBool
     getDecomposition(UChar32 c, UnicodeString &decomposition) const;
+
+    /**
+     * Gets the raw decomposition mapping of c.
+     * For details see the base class documentation.
+     *
+     * This function is independent of the mode of the Normalizer2.
+     * @param c code point
+     * @param decomposition String object which will be set to c's
+     *                      raw decomposition mapping, if there is one.
+     * @return TRUE if c has a decomposition, otherwise FALSE
+     * @draft ICU 49
+     */
+    virtual UBool
+    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const;
 
     /**
      * Gets the combining class of c.

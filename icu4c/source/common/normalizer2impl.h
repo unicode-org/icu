@@ -86,6 +86,24 @@ public:
             return 3;
         }
     }
+
+    /**
+     * Decomposes c, which must be a Hangul syllable, into buffer.
+     * This is the raw, not recursive, decomposition. Its length is always 2.
+     */
+    static inline void getRawDecomposition(UChar32 c, UChar buffer[2]) {
+        UChar32 orig=c;
+        c-=HANGUL_BASE;
+        UChar32 c2=c%JAMO_T_COUNT;
+        if(c2==0) {
+            c/=JAMO_T_COUNT;
+            buffer[0]=(UChar)(JAMO_L_BASE+c/JAMO_V_COUNT);
+            buffer[1]=(UChar)(JAMO_V_BASE+c%JAMO_V_COUNT);
+        } else {
+            buffer[0]=orig-c2;  // LV syllable
+            buffer[1]=(UChar)(JAMO_T_BASE+c2);
+        }
+    }
 private:
     Hangul();  // no instantiation
 };
@@ -253,6 +271,8 @@ public:
         return getFCD16FromSupplementary(U16_GET_SUPPLEMENTARY(c, c2));
     }
 
+    uint16_t getFCD16FromNormData(UChar32 c) const;
+
     void setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
                             UTrie2 *newFCDTrie, UErrorCode &errorCode) const;
 
@@ -260,13 +280,22 @@ public:
                                      CanonIterData &newData, UErrorCode &errorCode) const;
 
     /**
-     * Get the decomposition for one code point.
+     * Gets the decomposition for one code point.
      * @param c code point
      * @param buffer out-only buffer for algorithmic decompositions
      * @param length out-only, takes the length of the decomposition, if any
      * @return pointer to the decomposition, or NULL if none
      */
     const UChar *getDecomposition(UChar32 c, UChar buffer[4], int32_t &length) const;
+
+    /**
+     * Gets the raw decomposition for one code point.
+     * @param c code point
+     * @param buffer out-only buffer for algorithmic decompositions
+     * @param length out-only, takes the length of the decomposition, if any
+     * @return pointer to the decomposition, or NULL if none
+     */
+    const UChar *getRawDecomposition(UChar32 c, UChar buffer[30], int32_t &length) const;
 
     UBool isCanonSegmentStarter(UChar32 c) const;
     UBool getCanonStartSet(UChar32 c, UnicodeSet &set) const;
@@ -287,7 +316,7 @@ public:
         // Byte offsets from the start of the data, after the generic header.
         IX_NORM_TRIE_OFFSET,
         IX_EXTRA_DATA_OFFSET,
-        IX_RESERVED2_OFFSET,
+        IX_SMALL_FCD_OFFSET,
         IX_RESERVED3_OFFSET,
         IX_RESERVED4_OFFSET,
         IX_RESERVED5_OFFSET,
@@ -311,7 +340,7 @@ public:
 
     enum {
         MAPPING_HAS_CCC_LCCC_WORD=0x80,
-        MAPPING_PLUS_COMPOSITION_LIST=0x40,
+        MAPPING_HAS_RAW_MAPPING=0x40,
         MAPPING_NO_COMP_BOUNDARY_AFTER=0x20,
         MAPPING_LENGTH_MASK=0x1f
     };
@@ -414,7 +443,7 @@ private:
     uint8_t getCCFromNoNo(uint16_t norm16) const {
         const uint16_t *mapping=getMapping(norm16);
         if(*mapping&MAPPING_HAS_CCC_LCCC_WORD) {
-            return (uint8_t)mapping[1];
+            return (uint8_t)*(mapping-1);
         } else {
             return 0;
         }
@@ -442,8 +471,7 @@ private:
         const uint16_t *list=extraData+norm16;  // composite has both mapping & compositions list
         return list+  // mapping pointer
             1+  // +1 to skip the first unit with the mapping lenth
-            (*list&MAPPING_LENGTH_MASK)+  // + mapping length
-            ((*list>>7)&1);  // +1 if MAPPING_HAS_CCC_LCCC_WORD
+            (*list&MAPPING_LENGTH_MASK);  // + mapping length
     }
     /**
      * @param c code point must have compositions
@@ -497,6 +525,8 @@ private:
     UTrie2 *normTrie;
     const uint16_t *maybeYesCompositions;
     const uint16_t *extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
+    const uint8_t *smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
+    uint8_t tccc180[0x180];  // tccc values for U+0000..U+017F
 
     SimpleSingleton fcdTrieSingleton;
     SimpleSingleton canonIterDataSingleton;
@@ -650,7 +680,7 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
 
 /**
  * Format of Normalizer2 .nrm data files.
- * Format version 1.0.
+ * Format version 2.0.
  *
  * Normalizer2 .nrm data files provide data for the Unicode Normalization algorithms.
  * ICU ships with data files for standard Unicode Normalization Forms
@@ -747,6 +777,29 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
  *      The norm16 values of those characters are directly indexes into the extraData array.
  *
  *      The data structures for composition lists and mappings are described in the design doc.
+ *
+ * uint8_t smallFCD[0x100]; -- new in format version 2
+ *
+ *      This is a bit set to help speed up FCD value lookups in the absence of a full
+ *      UTrie2 or other large data structure with the full FCD value mapping.
+ *
+ *      Each smallFCD bit is set if any of the corresponding 32 BMP code points
+ *      has a non-zero FCD value (lccc!=0 or tccc!=0).
+ *      Bit 0 of smallFCD[0] is for U+0000..U+001F. Bit 7 of smallFCD[0xff] is for U+FFE0..U+FFFF.
+ *      A bit for 32 lead surrogates is set if any of the 32k corresponding
+ *      _supplementary_ code points has a non-zero FCD value.
+ *
+ *      This bit set is most useful for the large blocks of CJK characters with FCD=0.
+ *
+ * Changes from format version 1 to format version 2 ---------------------------
+ *
+ * - Addition of data for raw (not recursively decomposed) mappings.
+ *   + The MAPPING_NO_COMP_BOUNDARY_AFTER bit in the extraData is now also set when
+ *     the mapping is to an empty string or when the character combines-forward.
+ *     This subsumes the one actual use of the MAPPING_PLUS_COMPOSITION_LIST bit which
+ *     is then repurposed for the MAPPING_HAS_RAW_MAPPING bit.
+ *   + For details see the design doc.
+ * - Addition of the smallFCD[] bit set.
  */
 
 #endif  /* !UCONFIG_NO_NORMALIZATION */

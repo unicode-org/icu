@@ -35,6 +35,18 @@ U_NAMESPACE_BEGIN
 
 Normalizer2::~Normalizer2() {}
 
+UBool
+Normalizer2::getRawDecomposition(UChar32, UnicodeString &) const {
+    return FALSE;
+}
+
+uint8_t
+Normalizer2::getCombiningClass(UChar32 /*c*/) const {
+    return 0;
+}
+
+UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Normalizer2)
+
 // Normalizer2 implementation for the old UNORM_NONE.
 class NoopNormalizer2 : public Normalizer2 {
     virtual ~NoopNormalizer2();
@@ -82,6 +94,7 @@ class NoopNormalizer2 : public Normalizer2 {
     getDecomposition(UChar32, UnicodeString &) const {
         return FALSE;
     }
+    // No need to override the default getRawDecomposition().
     virtual UBool
     isNormalized(const UnicodeString &, UErrorCode &) const {
         return TRUE;
@@ -190,6 +203,21 @@ public:
         }
         if(d==buffer) {
             decomposition.setTo(buffer, length);  // copy the string (Jamos from Hangul syllable c)
+        } else {
+            decomposition.setTo(FALSE, d, length);  // read-only alias
+        }
+        return TRUE;
+    }
+    virtual UBool
+    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const {
+        UChar buffer[30];
+        int32_t length;
+        const UChar *d=impl.getRawDecomposition(c, buffer, length);
+        if(d==NULL) {
+            return FALSE;
+        }
+        if(d==buffer) {
+            decomposition.setTo(buffer, length);  // copy the string (algorithmic decomposition)
         } else {
             decomposition.setTo(FALSE, d, length);  // read-only alias
         }
@@ -656,13 +684,6 @@ Normalizer2::getInstance(const char *packageName,
     return NULL;
 }
 
-uint8_t
-Normalizer2::getCombiningClass(UChar32 /*c*/) const {
-    return 0;
-}
-
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Normalizer2)
-
 U_NAMESPACE_END
 
 // C API ------------------------------------------------------------------- ***
@@ -807,6 +828,25 @@ unorm2_getDecomposition(const UNormalizer2 *norm2,
     }
     UnicodeString destString(decomposition, 0, capacity);
     if(reinterpret_cast<const Normalizer2 *>(norm2)->getDecomposition(c, destString)) {
+        return destString.extract(decomposition, capacity, *pErrorCode);
+    } else {
+        return -1;
+    }
+}
+
+U_DRAFT int32_t U_EXPORT2
+unorm2_getRawDecomposition(const UNormalizer2 *norm2,
+                           UChar32 c, UChar *decomposition, int32_t capacity,
+                           UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(decomposition==NULL ? capacity!=0 : capacity<0) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    UnicodeString destString(decomposition, 0, capacity);
+    if(reinterpret_cast<const Normalizer2 *>(norm2)->getRawDecomposition(c, destString)) {
         return destString.extract(decomposition, capacity, *pErrorCode);
     } else {
         return -1;

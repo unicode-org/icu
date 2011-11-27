@@ -261,8 +261,11 @@ unorm2_append(const UNormalizer2 *norm2,
 
 #ifndef U_HIDE_DRAFT_API
 /**
- * Gets the decomposition mapping of c. Equivalent to unorm2_normalize(string(c))
- * on a UNORM2_DECOMPOSE UNormalizer2 instance, but much faster.
+ * Gets the decomposition mapping of c.
+ * Roughly equivalent to normalizing the String form of c
+ * on a UNORM2_DECOMPOSE UNormalizer2 instance, but much faster, and except that this function
+ * returns a negative value and does not write a string
+ * if c does not have a decomposition mapping in this instance's data.
  * This function is independent of the mode of the UNormalizer2.
  * @param norm2 UNormalizer2 instance
  * @param c code point
@@ -280,6 +283,40 @@ U_DRAFT int32_t U_EXPORT2
 unorm2_getDecomposition(const UNormalizer2 *norm2,
                         UChar32 c, UChar *decomposition, int32_t capacity,
                         UErrorCode *pErrorCode);
+
+/**
+ * Gets the raw decomposition mapping of c.
+ *
+ * This is similar to the unorm2_getDecomposition() function but returns the
+ * raw decomposition mapping as specified in UnicodeData.txt or
+ * (for custom data) in the mapping files processed by the gennorm2 tool.
+ * By contrast, unorm2_getDecomposition() returns the processed,
+ * recursively-decomposed version of this mapping.
+ *
+ * When used on a standard NFKC Normalizer2 instance,
+ * unorm2_getRawDecomposition() returns the Unicode Decomposition_Mapping (dm) property.
+ *
+ * When used on a standard NFC Normalizer2 instance,
+ * it returns the Decomposition_Mapping only if the Decomposition_Type (dt) is Canonical (Can);
+ * in this case, the result contains either one or two code points (=1..4 UChars).
+ *
+ * This function is independent of the mode of the UNormalizer2.
+ * @param norm2 UNormalizer2 instance
+ * @param c code point
+ * @param decomposition String buffer which will be set to c's
+ *                      raw decomposition mapping, if there is one.
+ * @param capacity number of UChars that can be written to decomposition
+ * @param pErrorCode Standard ICU error code. Its input value must
+ *                   pass the U_SUCCESS() test, or else the function returns
+ *                   immediately. Check for U_FAILURE() on output or use with
+ *                   function chaining. (See User Guide for details.)
+ * @return the non-negative length of c's raw decomposition, if there is one; otherwise a negative value
+ * @draft ICU 49
+ */
+U_DRAFT int32_t U_EXPORT2
+unorm2_getRawDecomposition(const UNormalizer2 *norm2,
+                           UChar32 c, UChar *decomposition, int32_t capacity,
+                           UErrorCode *pErrorCode);
 
 /**
  * Gets the combining class of c.

@@ -155,6 +155,11 @@ FilteredNormalizer2::getDecomposition(UChar32 c, UnicodeString &decomposition) c
     return set.contains(c) && norm2.getDecomposition(c, decomposition);
 }
 
+UBool
+FilteredNormalizer2::getRawDecomposition(UChar32 c, UnicodeString &decomposition) const {
+    return set.contains(c) && norm2.getRawDecomposition(c, decomposition);
+}
+
 uint8_t
 FilteredNormalizer2::getCombiningClass(UChar32 c) const {
     return set.contains(c) ? norm2.getCombiningClass(c) : 0;
