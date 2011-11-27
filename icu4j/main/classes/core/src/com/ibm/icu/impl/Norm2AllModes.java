@@ -133,6 +133,10 @@ public final class Norm2AllModes {
         public String getRawDecomposition(int c) {
             return impl.getRawDecomposition(c);
         }
+        @Override
+        public int composePair(int a, int b) {
+            return impl.composePair(a, b);
+        }
 
         @Override
         public int getCombiningClass(int c) {
