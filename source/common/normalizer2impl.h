@@ -297,6 +297,8 @@ public:
      */
     const UChar *getRawDecomposition(UChar32 c, UChar buffer[30], int32_t &length) const;
 
+    UChar32 composePair(UChar32 a, UChar32 b) const;
+
     UBool isCanonSegmentStarter(UChar32 c) const;
     UBool getCanonStartSet(UChar32 c, UnicodeSet &set) const;
 
@@ -328,12 +330,13 @@ public:
         IX_MIN_COMP_NO_MAYBE_CP,
 
         // Norm16 value thresholds for quick check combinations and types of extra data.
-        IX_MIN_YES_NO,
+        IX_MIN_YES_NO,  // Mappings & compositions in [minYesNo..minYesNoMappingsOnly[.
         IX_MIN_NO_NO,
         IX_LIMIT_NO_NO,
         IX_MIN_MAYBE_YES,
 
-        IX_RESERVED14,
+        IX_MIN_YES_NO_MAPPINGS_ONLY,  // Mappings only in [minYesNoMappingsOnly..minNoNo[.
+
         IX_RESERVED15,
         IX_COUNT
     };
@@ -407,7 +410,7 @@ private:
     UBool isMaybe(uint16_t norm16) const { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
     UBool isMaybeOrNonZeroCC(uint16_t norm16) const { return norm16>=minMaybeYes; }
     static UBool isInert(uint16_t norm16) { return norm16==0; }
-    // static UBool isJamoL(uint16_t norm16) const { return norm16==1; }
+    static UBool isJamoL(uint16_t norm16) { return norm16==1; }
     static UBool isJamoVT(uint16_t norm16) { return norm16==JAMO_VT; }
     UBool isHangul(uint16_t norm16) const { return norm16==minYesNo; }
     UBool isCompYesAndZeroCC(uint16_t norm16) const { return norm16<minNoNo; }
@@ -518,6 +521,7 @@ private:
 
     // Norm16 value thresholds for quick check combinations and types of extra data.
     uint16_t minYesNo;
+    uint16_t minYesNoMappingsOnly;
     uint16_t minNoNo;
     uint16_t limitNoNo;
     uint16_t minMaybeYes;
@@ -718,12 +722,13 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
  *      minCompNoMaybeCP=indexes[IX_MIN_COMP_NO_MAYBE_CP] is the lowest code point
  *      with NF*C_QC=No (has a one-way mapping) or Maybe (combines backward).
  *
- *      The next four indexes are thresholds of 16-bit trie values for ranges of
+ *      The next five indexes are thresholds of 16-bit trie values for ranges of
  *      values indicating multiple normalization properties.
  *          minYesNo=indexes[IX_MIN_YES_NO];
  *          minNoNo=indexes[IX_MIN_NO_NO];
  *          limitNoNo=indexes[IX_LIMIT_NO_NO];
  *          minMaybeYes=indexes[IX_MIN_MAYBE_YES];
+ *          minYesNoMappingsOnly=indexes[IX_MIN_YES_NO_MAPPINGS_ONLY];
  *      See the normTrie description below and the design doc for details.
  *
  * UTrie2 normTrie; -- see utrie2_impl.h and utrie2.h
@@ -735,7 +740,7 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
  *      means that the character has NF*C_QC=Yes and NF*D_QC=No properties,
  *      which means it has a two-way (round-trip) decomposition mapping.
  *      Values in the range 2<=norm16<limitNoNo are also directly indexes into the extraData
- *      pointing to mappings, composition lists, or both.
+ *      pointing to mappings, compositions lists, or both.
  *      Value norm16==0 means that the character is normalization-inert, that is,
  *      it does not have a mapping, does not participate in composition, has a zero
  *      canonical combining class, and forms a boundary where text before it and after it
@@ -760,7 +765,7 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
  *      There is only one byte offset for the end of these two arrays.
  *      The split between them is given by the constant and variable mentioned above.
  *
- *      The maybeYesCompositions array contains composition lists for characters that
+ *      The maybeYesCompositions array contains compositions lists for characters that
  *      combine both forward (as starters in composition pairs)
  *      and backward (as trailing characters in composition pairs).
  *      Such characters do not occur in Unicode 5.2 but are allowed by
@@ -770,13 +775,13 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
  *      If there are such characters, then minMaybeYes is subtracted from their norm16 values
  *      to get the index into this array.
  *
- *      The extraData array contains composition lists for "YesYes" characters,
- *      followed by mappings and optional composition lists for "YesNo" characters,
+ *      The extraData array contains compositions lists for "YesYes" characters,
+ *      followed by mappings and optional compositions lists for "YesNo" characters,
  *      followed by only mappings for "NoNo" characters.
  *      (Referring to pairs of NFC/NFD quick check values.)
  *      The norm16 values of those characters are directly indexes into the extraData array.
  *
- *      The data structures for composition lists and mappings are described in the design doc.
+ *      The data structures for compositions lists and mappings are described in the design doc.
  *
  * uint8_t smallFCD[0x100]; -- new in format version 2
  *
@@ -799,6 +804,11 @@ unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
  *     This subsumes the one actual use of the MAPPING_PLUS_COMPOSITION_LIST bit which
  *     is then repurposed for the MAPPING_HAS_RAW_MAPPING bit.
  *   + For details see the design doc.
+ * - Addition of indexes[IX_MIN_YES_NO_MAPPINGS_ONLY] and separation of the yesNo extraData into
+ *   distinct ranges (combines-forward vs. not)
+ *   so that a range check can be used to find out if there is a compositions list.
+ *   This is fully equivalent with formatVersion 1's MAPPING_PLUS_COMPOSITION_LIST flag.
+ *   It is needed for the new (in ICU 49) composePair(), not for other normalization.
  * - Addition of the smallFCD[] bit set.
  */
 

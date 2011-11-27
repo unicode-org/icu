@@ -301,6 +301,7 @@ Normalizer2Impl::load(const char *packageName, const char *name, UErrorCode &err
     minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
 
     minYesNo=inIndexes[IX_MIN_YES_NO];
+    minYesNoMappingsOnly=inIndexes[IX_MIN_YES_NO_MAPPINGS_ONLY];
     minNoNo=inIndexes[IX_MIN_NO_NO];
     limitNoNo=inIndexes[IX_LIMIT_NO_NO];
     minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
@@ -965,6 +966,50 @@ void Normalizer2Impl::recompose(ReorderingBuffer &buffer, int32_t recomposeStart
         }
     }
     buffer.setReorderingLimit(limit);
+}
+
+UChar32
+Normalizer2Impl::composePair(UChar32 a, UChar32 b) const {
+    uint16_t norm16=getNorm16(a);  // maps an out-of-range 'a' to inert norm16=0
+    const uint16_t *list;
+    if(isInert(norm16)) {
+        return U_SENTINEL;
+    } else if(norm16<minYesNoMappingsOnly) {
+        if(isJamoL(norm16)) {
+            b-=Hangul::JAMO_V_BASE;
+            if(0<=b && b<Hangul::JAMO_V_COUNT) {
+                return
+                    (Hangul::HANGUL_BASE+
+                     ((a-Hangul::JAMO_L_BASE)*Hangul::JAMO_V_COUNT+b)*
+                     Hangul::JAMO_T_COUNT);
+            } else {
+                return U_SENTINEL;
+            }
+        } else if(isHangul(norm16)) {
+            b-=Hangul::JAMO_T_BASE;
+            if(Hangul::isHangulWithoutJamoT(a) && 0<b && b<Hangul::JAMO_T_COUNT) {  // not b==0!
+                return a+b;
+            } else {
+                return U_SENTINEL;
+            }
+        } else {
+            // 'a' has a compositions list in extraData
+            list=extraData+norm16;
+            if(norm16>minYesNo) {  // composite 'a' has both mapping & compositions list
+                list+=  // mapping pointer
+                    1+  // +1 to skip the first unit with the mapping lenth
+                    (*list&MAPPING_LENGTH_MASK);  // + mapping length
+            }
+        }
+    } else if(norm16<minMaybeYes || MIN_NORMAL_MAYBE_YES<=norm16) {
+        return U_SENTINEL;
+    } else {
+        list=maybeYesCompositions+norm16-minMaybeYes;
+    }
+    if(b<0 || 0x10ffff<b) {  // combine(list, b) requires a valid code point b
+        return U_SENTINEL;
+    }
+    return combine(list, b)>>1;
 }
 
 // Very similar to composeQuickCheck(): Make the same changes in both places if relevant.

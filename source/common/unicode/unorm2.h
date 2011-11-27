@@ -319,6 +319,24 @@ unorm2_getRawDecomposition(const UNormalizer2 *norm2,
                            UErrorCode *pErrorCode);
 
 /**
+ * Performs pairwise composition of a & b and returns the composite if there is one.
+ *
+ * Returns a composite code point c only if c has a two-way mapping to a+b.
+ * In standard Unicode normalization, this means that
+ * c has a canonical decomposition to a+b
+ * and c does not have the Full_Composition_Exclusion property.
+ *
+ * This function is independent of the mode of the UNormalizer2.
+ * @param norm2 UNormalizer2 instance
+ * @param a A (normalization starter) code point.
+ * @param b Another code point.
+ * @return The non-negative composite code point if there is one; otherwise a negative value.
+ * @draft ICU 49
+ */
+U_DRAFT UChar32 U_EXPORT2
+unorm2_composePair(const UNormalizer2 *norm2, UChar32 a, UChar32 b);
+
+/**
  * Gets the combining class of c.
  * The default implementation returns 0
  * but all standard implementations return the Unicode Canonical_Combining_Class value.

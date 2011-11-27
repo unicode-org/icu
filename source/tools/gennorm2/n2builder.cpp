@@ -132,8 +132,18 @@ struct Norm {
     UBool hasNoCompBoundaryAfter;
 
     enum OffsetType {
-        OFFSET_NONE, OFFSET_MAYBE_YES,
-        OFFSET_YES_YES, OFFSET_YES_NO, OFFSET_NO_NO,
+        OFFSET_NONE,
+        // Composition for back-combining character. Allowed, but not normally used.
+        OFFSET_MAYBE_YES,
+        // Composition for a starter that does not have a decomposition mapping.
+        OFFSET_YES_YES,
+        // Round-trip mapping & composition for a starter.
+        OFFSET_YES_NO_MAPPING_AND_COMPOSITION,
+        // Round-trip mapping for a starter that itself does not combine-forward.
+        OFFSET_YES_NO_MAPPING_ONLY,
+        // One-way mapping.
+        OFFSET_NO_NO,
+        // Delta for an algorithmic one-way mapping.
         OFFSET_DELTA
     };
     enum { OFFSET_SHIFT=4, OFFSET_MASK=(1<<OFFSET_SHIFT)-1 };
@@ -784,7 +794,7 @@ public:
     ExtraDataWriter(Normalizer2DataBuilder &b) :
         Normalizer2DBEnumerator(b),
         yesYesCompositions(1000, (UChar32)0xffff, 2),  // 0=inert, 1=Jamo L, 2=start of compositions
-        yesNoData(1000, (UChar32)0, 1) {}  // 0=Hangul, 1=start of normal data
+        yesNoMappingsAndCompositions(1000, (UChar32)0, 1) {}  // 0=Hangul, 1=start of normal data
     virtual UBool rangeHandler(UChar32 start, UChar32 end, uint32_t value) {
         if(value!=0) {
             if(start!=end) {
@@ -800,7 +810,8 @@ public:
     }
     UnicodeString maybeYesCompositions;
     UnicodeString yesYesCompositions;
-    UnicodeString yesNoData;
+    UnicodeString yesNoMappingsAndCompositions;
+    UnicodeString yesNoMappingsOnly;
     UnicodeString noNoMappings;
     Hashtable previousNoNoMappings;  // If constructed in runtime code, pass in UErrorCode.
 };
@@ -844,10 +855,15 @@ void Normalizer2DataBuilder::writeExtraData(UChar32 c, uint32_t value, ExtraData
             writeCompositions(c, p, writer.yesYesCompositions);
         }
     } else if(p->mappingType==Norm::ROUND_TRIP) {
-        int32_t offset=writer.yesNoData.length()+writeMapping(c, p, writer.yesNoData);
-        p->offset=(offset<<Norm::OFFSET_SHIFT)|Norm::OFFSET_YES_NO;
         if(p->compositions!=NULL) {
-            writeCompositions(c, p, writer.yesNoData);
+            int32_t offset=writer.yesNoMappingsAndCompositions.length()+
+                           writeMapping(c, p, writer.yesNoMappingsAndCompositions);
+            p->offset=(offset<<Norm::OFFSET_SHIFT)|Norm::OFFSET_YES_NO_MAPPING_AND_COMPOSITION;
+            writeCompositions(c, p, writer.yesNoMappingsAndCompositions);
+        } else {
+            int32_t offset=writer.yesNoMappingsOnly.length()+
+                           writeMapping(c, p, writer.yesNoMappingsOnly);
+            p->offset=(offset<<Norm::OFFSET_SHIFT)|Norm::OFFSET_YES_NO_MAPPING_ONLY;
         }
     } else /* one-way */ {
         if(p->compositions!=NULL) {
@@ -929,8 +945,12 @@ void Normalizer2DataBuilder::writeNorm16(UChar32 start, UChar32 end, uint32_t va
         case Norm::OFFSET_YES_YES:
             norm16=offset;
             break;
-        case Norm::OFFSET_YES_NO:
+        case Norm::OFFSET_YES_NO_MAPPING_AND_COMPOSITION:
             norm16=indexes[Normalizer2Impl::IX_MIN_YES_NO]+offset;
+            isDecompNo=TRUE;
+            break;
+        case Norm::OFFSET_YES_NO_MAPPING_ONLY:
+            norm16=indexes[Normalizer2Impl::IX_MIN_YES_NO_MAPPINGS_ONLY]+offset;
             isDecompNo=TRUE;
             break;
         case Norm::OFFSET_NO_NO:
@@ -1042,7 +1062,8 @@ void Normalizer2DataBuilder::processData() {
 
     extraData=extraDataWriter.maybeYesCompositions;
     extraData.append(extraDataWriter.yesYesCompositions).
-              append(extraDataWriter.yesNoData).
+              append(extraDataWriter.yesNoMappingsAndCompositions).
+              append(extraDataWriter.yesNoMappingsOnly).
               append(extraDataWriter.noNoMappings);
     // Pad to even length for 4-byte alignment of following data.
     if(extraData.length()&1) {
@@ -1051,9 +1072,12 @@ void Normalizer2DataBuilder::processData() {
 
     indexes[Normalizer2Impl::IX_MIN_YES_NO]=
         extraDataWriter.yesYesCompositions.length();
-    indexes[Normalizer2Impl::IX_MIN_NO_NO]=
+    indexes[Normalizer2Impl::IX_MIN_YES_NO_MAPPINGS_ONLY]=
         indexes[Normalizer2Impl::IX_MIN_YES_NO]+
-        extraDataWriter.yesNoData.length();
+        extraDataWriter.yesNoMappingsAndCompositions.length();
+    indexes[Normalizer2Impl::IX_MIN_NO_NO]=
+        indexes[Normalizer2Impl::IX_MIN_YES_NO_MAPPINGS_ONLY]+
+        extraDataWriter.yesNoMappingsOnly.length();
     indexes[Normalizer2Impl::IX_LIMIT_NO_NO]=
         indexes[Normalizer2Impl::IX_MIN_NO_NO]+
         extraDataWriter.noNoMappings.length();
@@ -1147,6 +1171,7 @@ void Normalizer2DataBuilder::writeBinaryFile(const char *filename) {
         printf("minDecompNoCodePoint:              U+%04lX\n", (long)indexes[Normalizer2Impl::IX_MIN_DECOMP_NO_CP]);
         printf("minCompNoMaybeCodePoint:           U+%04lX\n", (long)indexes[Normalizer2Impl::IX_MIN_COMP_NO_MAYBE_CP]);
         printf("minYesNo:                          0x%04x\n", (int)indexes[Normalizer2Impl::IX_MIN_YES_NO]);
+        printf("minYesNoMappingsOnly:              0x%04x\n", (int)indexes[Normalizer2Impl::IX_MIN_YES_NO_MAPPINGS_ONLY]);
         printf("minNoNo:                           0x%04x\n", (int)indexes[Normalizer2Impl::IX_MIN_NO_NO]);
         printf("limitNoNo:                         0x%04x\n", (int)indexes[Normalizer2Impl::IX_LIMIT_NO_NO]);
         printf("minMaybeYes:                       0x%04x\n", (int)indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]);
