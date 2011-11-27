@@ -1084,6 +1084,23 @@ unicodeDataLineFn(void *context,
                 c, length, dmLength, u_errorName(*pErrorCode));
         return;
     }
+    /* recompose */
+    if(dt==U_DT_CANONICAL && !u_hasBinaryProperty(c, UCHAR_FULL_COMPOSITION_EXCLUSION)) {
+        UChar32 a, b, composite;
+        i=0;
+        U16_NEXT(dm, i, dmLength, a);
+        U16_NEXT(dm, i, dmLength, b);
+        /* i==dmLength */
+        composite=unorm2_composePair(nfc, a, b);
+        if(composite!=c) {
+            log_err("error: nfc U+%04lX decomposes to U+%04lX+U+%04lX but does not compose back (instead U+%04lX)\n",
+                    (long)c, (long)a, (long)b, (long)composite);
+        }
+        /*
+         * Note: NFKC has fewer round-trip mappings than NFC,
+         * so we can't just test unorm2_composePair(nfkc, a, b) here without further data.
+         */
+    }
 #endif
 
     /* get ISO Comment, field 11 */

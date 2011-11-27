@@ -40,6 +40,11 @@ Normalizer2::getRawDecomposition(UChar32, UnicodeString &) const {
     return FALSE;
 }
 
+UChar32
+Normalizer2::composePair(UChar32, UChar32) const {
+    return U_SENTINEL;
+}
+
 uint8_t
 Normalizer2::getCombiningClass(UChar32 /*c*/) const {
     return 0;
@@ -222,6 +227,10 @@ public:
             decomposition.setTo(FALSE, d, length);  // read-only alias
         }
         return TRUE;
+    }
+    virtual UChar32
+    composePair(UChar32 a, UChar32 b) const {
+        return impl.composePair(a, b);
     }
 
     virtual uint8_t
@@ -851,6 +860,11 @@ unorm2_getRawDecomposition(const UNormalizer2 *norm2,
     } else {
         return -1;
     }
+}
+
+U_DRAFT UChar32 U_EXPORT2
+unorm2_composePair(const UNormalizer2 *norm2, UChar32 a, UChar32 b) {
+    return reinterpret_cast<const Normalizer2 *>(norm2)->composePair(a, b);
 }
 
 U_DRAFT uint8_t U_EXPORT2

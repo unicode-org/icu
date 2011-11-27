@@ -224,6 +224,24 @@ public:
     getRawDecomposition(UChar32 c, UnicodeString &decomposition) const;
 
     /**
+     * Performs pairwise composition of a & b and returns the composite if there is one.
+     *
+     * Returns a composite code point c only if c has a two-way mapping to a+b.
+     * In standard Unicode normalization, this means that
+     * c has a canonical decomposition to a+b
+     * and c does not have the Full_Composition_Exclusion property.
+     *
+     * This function is independent of the mode of the Normalizer2.
+     * The default implementation returns a negative value.
+     * @param a A (normalization starter) code point.
+     * @param b Another code point.
+     * @return The non-negative composite code point if there is one; otherwise a negative value.
+     * @draft ICU 49
+     */
+    virtual UChar32
+    composePair(UChar32 a, UChar32 b) const;
+
+    /**
      * Gets the combining class of c.
      * The default implementation returns 0
      * but all standard implementations return the Unicode Canonical_Combining_Class value.
@@ -458,6 +476,19 @@ public:
      */
     virtual UBool
     getRawDecomposition(UChar32 c, UnicodeString &decomposition) const;
+
+    /**
+     * Performs pairwise composition of a & b and returns the composite if there is one.
+     * For details see the base class documentation.
+     *
+     * This function is independent of the mode of the Normalizer2.
+     * @param a A (normalization starter) code point.
+     * @param b Another code point.
+     * @return The non-negative composite code point if there is one; otherwise a negative value.
+     * @draft ICU 49
+     */
+    virtual UChar32
+    composePair(UChar32 a, UChar32 b) const;
 
     /**
      * Gets the combining class of c.
