@@ -2069,6 +2069,15 @@ public class BasicTest extends TestFmwk {
             errln("getRawDecomposition() returns TRUE for characters which do not have decompositions");
         }
 
+        // test composePair() for some pairs of characters that do not compose
+        if( nfcNorm2.composePair(0x20, 0x301)>=0 ||
+            nfcNorm2.composePair(0x61, 0x305)>=0 ||
+            nfcNorm2.composePair(0x1100, 0x1160)>=0 ||
+            nfcNorm2.composePair(0xac00, 0x11a7)>=0
+        ) {
+            errln("NFC.composePair() incorrectly composes some pairs of characters");
+        }
+
         // test FilteredNormalizer2.getDecomposition()
         UnicodeSet filter=new UnicodeSet("[^\u00a0-\u00ff]");
         FilteredNormalizer2 fn2=new FilteredNormalizer2(nfcNorm2, filter);
@@ -2079,6 +2088,13 @@ public class BasicTest extends TestFmwk {
         // test FilteredNormalizer2.getRawDecomposition()
         if(fn2.getRawDecomposition(0xe4)!=null || !"A\u0304".equals(fn2.getRawDecomposition(0x100))) {
             errln("FilteredNormalizer2(NFC, ^A0-FF).getRawDecomposition() failed");
+        }
+
+        // test FilteredNormalizer2::composePair()
+        if( 0x100!=fn2.composePair(0x41, 0x304) ||
+            fn2.composePair(0xc7, 0x301)>=0 // unfiltered result: U+1E08
+        ) {
+            errln("FilteredNormalizer2(NFC, ^A0-FF).composePair() failed");
         }
     }
 

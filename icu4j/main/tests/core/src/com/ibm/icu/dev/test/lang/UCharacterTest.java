@@ -815,6 +815,23 @@ public final class UCharacterTest extends TestFmwk
                 assertEquals(
                         String.format("error: nfc.getRawDecomposition(U+%04lx) is wrong", ch),
                         dm, mapping);
+                /* recompose */
+                if(dt==UCharacter.DecompositionType.CANONICAL
+                        && !UCharacter.hasBinaryProperty(ch, UProperty.FULL_COMPOSITION_EXCLUSION)) {
+                    int a=dm.codePointAt(0);
+                    int b=dm.codePointBefore(dm.length());
+                    int composite=nfc.composePair(a, b);
+                    assertEquals(
+                            String.format(
+                                    "error: nfc U+%04lX decomposes to U+%04lX+U+%04lX "+
+                                    "but does not compose back (instead U+%04lX)",
+                                    ch, a, b, composite),
+                            ch, composite);
+                    /*
+                     * Note: NFKC has fewer round-trip mappings than NFC,
+                     * so we can't just test nfkc.composePair(a, b) here without further data.
+                     */
+                }
 
                 // testing iso comment
                 try{

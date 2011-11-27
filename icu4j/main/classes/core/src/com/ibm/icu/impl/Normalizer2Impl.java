@@ -436,6 +436,7 @@ public final class Normalizer2Impl {
             minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
     
             minYesNo=inIndexes[IX_MIN_YES_NO];
+            minYesNoMappingsOnly=inIndexes[IX_MIN_YES_NO_MAPPINGS_ONLY];
             minNoNo=inIndexes[IX_MIN_NO_NO];
             limitNoNo=inIndexes[IX_LIMIT_NO_NO];
             minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
@@ -926,10 +927,14 @@ public final class Normalizer2Impl {
     public static final int IX_MIN_COMP_NO_MAYBE_CP=9;
 
     // Norm16 value thresholds for quick check combinations and types of extra data.
+    // Mappings & compositions in [minYesNo..minYesNoMappingsOnly[.
     public static final int IX_MIN_YES_NO=10;
     public static final int IX_MIN_NO_NO=11;
     public static final int IX_LIMIT_NO_NO=12;
     public static final int IX_MIN_MAYBE_YES=13;
+
+    // Mappings only in [minYesNoMappingsOnly..minNoNo[.
+    public static final int IX_MIN_YES_NO_MAPPINGS_ONLY=14;
 
     public static final int IX_COUNT=16;
 
@@ -1658,7 +1663,7 @@ public final class Normalizer2Impl {
     private boolean isMaybe(int norm16) { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
     private boolean isMaybeOrNonZeroCC(int norm16) { return norm16>=minMaybeYes; }
     private static boolean isInert(int norm16) { return norm16==0; }
-    // static UBool isJamoL(uint16_t norm16) const { return norm16==1; }
+    private static boolean isJamoL(int norm16) { return norm16==1; }
     private static boolean isJamoVT(int norm16) { return norm16==JAMO_VT; }
     private boolean isHangul(int norm16) { return norm16==minYesNo; }
     private boolean isCompYesAndZeroCC(int norm16) { return norm16<minNoNo; }
@@ -1804,26 +1809,28 @@ public final class Normalizer2Impl {
         }
     }
 
-    /*
+    /**
      * Finds the recomposition result for
      * a forward-combining "lead" character,
      * specified with a pointer to its compositions list,
      * and a backward-combining "trail" character.
      *
-     * If the lead and trail characters combine, then this function returns
+     * <p>If the lead and trail characters combine, then this function returns
      * the following "compositeAndFwd" value:
+     * <pre>
      * Bits 21..1  composite character
      * Bit      0  set if the composite is a forward-combining starter
+     * </pre>
      * otherwise it returns -1.
      *
-     * The compositions list has (trail, compositeAndFwd) pair entries,
+     * <p>The compositions list has (trail, compositeAndFwd) pair entries,
      * encoded as either pairs or triples of 16-bit units.
      * The last entry has the high bit of its first unit set.
      *
-     * The list is sorted by ascending trail characters (there are no duplicates).
+     * <p>The list is sorted by ascending trail characters (there are no duplicates).
      * A linear search is used.
      *
-     * See normalizer2impl.h for a more detailed description
+     * <p>See normalizer2impl.h for a more detailed description
      * of the compositions list format.
      */
     private static int combine(String compositions, int list, int trail) {
@@ -2049,6 +2056,51 @@ public final class Normalizer2Impl {
         buffer.flush();
     }
 
+    public int composePair(int a, int b) {
+        int norm16=getNorm16(a);  // maps an out-of-range 'a' to inert norm16=0
+        int list;
+        if(isInert(norm16)) {
+            return -1;
+        } else if(norm16<minYesNoMappingsOnly) {
+            if(isJamoL(norm16)) {
+                b-=Hangul.JAMO_V_BASE;
+                if(0<=b && b<Hangul.JAMO_V_COUNT) {
+                    return
+                        (Hangul.HANGUL_BASE+
+                         ((a-Hangul.JAMO_L_BASE)*Hangul.JAMO_V_COUNT+b)*
+                         Hangul.JAMO_T_COUNT);
+                } else {
+                    return -1;
+                }
+            } else if(isHangul(norm16)) {
+                b-=Hangul.JAMO_T_BASE;
+                if(Hangul.isHangulWithoutJamoT((char)a) && 0<b && b<Hangul.JAMO_T_COUNT) {  // not b==0!
+                    return a+b;
+                } else {
+                    return -1;
+                }
+            } else {
+                // 'a' has a compositions list in extraData
+                list=norm16;
+                if(norm16>minYesNo) {  // composite 'a' has both mapping & compositions list
+                    list+=  // mapping pointer
+                        1+  // +1 to skip the first unit with the mapping lenth
+                        (extraData.charAt(list)&MAPPING_LENGTH_MASK);  // + mapping length
+                }
+                // Turn the offset-into-extraData into an offset-into-maybeYesCompositions.
+                list+=MIN_NORMAL_MAYBE_YES-minMaybeYes;
+            }
+        } else if(norm16<minMaybeYes || MIN_NORMAL_MAYBE_YES<=norm16) {
+            return -1;
+        } else {
+            list=norm16-minMaybeYes;  // offset into maybeYesCompositions
+        }
+        if(b<0 || 0x10ffff<b) {  // combine(list, b) requires a valid code point b
+            return -1;
+        }
+        return combine(maybeYesCompositions, list, b)>>1;
+    }
+
     /**
      * Does c have a composition boundary before it?
      * True if its decomposition begins with a character that has
@@ -2157,6 +2209,7 @@ public final class Normalizer2Impl {
 
     // Norm16 value thresholds for quick check combinations and types of extra data.
     private int minYesNo;
+    private int minYesNoMappingsOnly;
     private int minNoNo;
     private int limitNoNo;
     private int minMaybeYes;

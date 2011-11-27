@@ -234,6 +234,24 @@ public abstract class Normalizer2 {
     public String getRawDecomposition(int c) { return null; }
 
     /**
+     * Performs pairwise composition of a & b and returns the composite if there is one.
+     *
+     * <p>Returns a composite code point c only if c has a two-way mapping to a+b.
+     * In standard Unicode normalization, this means that
+     * c has a canonical decomposition to a+b
+     * and c does not have the Full_Composition_Exclusion property.
+     *
+     * <p>This function is independent of the mode of the Normalizer2.
+     * The default implementation returns a negative value.
+     * @param a A (normalization starter) code point.
+     * @param b Another code point.
+     * @return The non-negative composite code point if there is one; otherwise a negative value.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int composePair(int a, int b) { return -1; }
+
+    /**
      * Gets the combining class of c.
      * The default implementation returns 0
      * but all standard implementations return the Unicode Canonical_Combining_Class value.
