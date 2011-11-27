@@ -678,70 +678,34 @@ public final class UCharacterTest extends TestFmwk
         final String DIR =
             "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
 
-        final int LASTUNICODECHAR = 0xFFFD;
-        int ch = 0,
-            index = 0,
-            type = 0,
-            dir = 0;
-
+        Normalizer2 nfc = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
         Normalizer2 nfkc = Normalizer2.getInstance(null, "nfkc", Normalizer2.Mode.COMPOSE);
 
         try
         {
-            BufferedReader input = TestUtil.getDataReader(
-                                                "unicode/UnicodeData.txt");
+            BufferedReader input = TestUtil.getDataReader("unicode/UnicodeData.txt");
             int numErrors = 0;
 
-            while (ch != LASTUNICODECHAR)
-            {
+            for (;;) {
                 String s = input.readLine();
+                if(s == null) {
+                    break;
+                }
                 if(s.length()<4 || s.startsWith("#")) {
                     continue;
                 }
-                // geting the unicode character, its type and its direction
-                ch = Integer.parseInt(s.substring(0, 4), 16);
-                index = s.indexOf(';', 5);
-                String t = s.substring(index + 1, index + 3);
-                index += 4;
-                int oldindex = index;
-                index = s.indexOf(';', index);
-                int cc = Integer.parseInt(s.substring(oldindex, index));
-                oldindex = index + 1;
-                index = s.indexOf(';', oldindex);
-                String d = s.substring(oldindex, index);
+                String[] fields = s.split(";");
+                int ch = Integer.parseInt(fields[0], 16);
 
-                for (int i = 0; i < 6; i ++) {
-                    index = s.indexOf(';', index + 1);
-                    // skipping to the 11th field
-                }
-                // iso comment
-                oldindex = index + 1;
-                index = s.indexOf(';', oldindex);
-                String isocomment = s.substring(oldindex, index);
-                // uppercase
-                oldindex = index + 1;
-                index = s.indexOf(';', oldindex);
-                String upper = s.substring(oldindex, index);
-                // lowercase
-                oldindex = index + 1;
-                index = s.indexOf(';', oldindex);
-                String lower = s.substring(oldindex, index);
-                // titlecase last element
-                oldindex = index + 1;
-                String title = s.substring(oldindex);
-
-                // testing the category
-                // we override the general category of some control
-                // characters
-                type = TYPE.indexOf(t);
+                // testing the general category
+                int type = TYPE.indexOf(fields[2]);
                 if (type < 0)
                     type = 0;
                 else
                     type = (type >> 1) + 1;
                 if (UCharacter.getType(ch) != type)
                 {
-                    errln("FAIL \\u" + hex(ch) + " expected type " +
-                            type);
+                    errln("FAIL \\u" + hex(ch) + " expected type " + type);
                     break;
                 }
 
@@ -754,6 +718,7 @@ public final class UCharacterTest extends TestFmwk
                 }
 
                 // testing combining class
+                int cc = Integer.parseInt(fields[3]);
                 if (UCharacter.getCombiningClass(ch) != cc)
                 {
                     errln("FAIL \\u" + hex(ch) + " expected combining " +
@@ -768,15 +733,15 @@ public final class UCharacterTest extends TestFmwk
                 }
 
                 // testing the direction
+                String d = fields[4];
                 if (d.length() == 1)
                     d = d + "   ";
 
-                dir = DIR.indexOf(d) >> 2;
+                int dir = DIR.indexOf(d) >> 2;
                 if (UCharacter.getDirection(ch) != dir)
                 {
                     errln("FAIL \\u" + hex(ch) +
-                        " expected direction " + dir + " but got " +
-              UCharacter.getDirection(ch));
+                        " expected direction " + dir + " but got " + UCharacter.getDirection(ch));
                     break;
                 }
 
@@ -785,12 +750,75 @@ public final class UCharacterTest extends TestFmwk
                 {
                     errln("FAIL \\u" + hex(ch) +
                         " expected directionality " + bdir + " but got " +
-              UCharacter.getDirectionality(ch));
+                        UCharacter.getDirectionality(ch));
                     break;
                 }
 
+                /* get Decomposition_Type & Decomposition_Mapping, field 5 */
+                int dt;
+                if(fields[5].length()==0) {
+                    /* no decomposition, except UnicodeData.txt omits Hangul syllable decompositions */
+                    if(ch==0xac00 || ch==0xd7a3) {
+                        dt=UCharacter.DecompositionType.CANONICAL;
+                    } else {
+                        dt=UCharacter.DecompositionType.NONE;
+                    }
+                } else {
+                    d=fields[5];
+                    dt=-1;
+                    if(d.charAt(0)=='<') {
+                        int end=d.indexOf('>', 1);
+                        if(end>=0) {
+                            dt=UCharacter.getPropertyValueEnum(UProperty.DECOMPOSITION_TYPE, d.substring(1, end));
+                            while(d.charAt(++end)==' ') {}  // skip spaces
+                            d=d.substring(end);
+                        }
+                    } else {
+                        dt=UCharacter.DecompositionType.CANONICAL;
+                    }
+                }
+                String dm;
+                if(dt>UCharacter.DecompositionType.NONE) {
+                    if(ch==0xac00) {
+                        dm="\u1100\u1161";
+                    } else if(ch==0xd7a3) {
+                        dm="\ud788\u11c2";
+                    } else {
+                        String[] dmChars=d.split(" +");
+                        StringBuilder dmb=new StringBuilder(dmChars.length);
+                        for(String dmc : dmChars) {
+                            dmb.appendCodePoint(Integer.parseInt(dmc, 16));
+                        }
+                        dm=dmb.toString();
+                    }
+                } else {
+                    dm=null;
+                }
+                if(dt<0) {
+                    errln(String.format("error in UnicodeData.txt: syntax error in U+%04lX decomposition field", ch));
+                    return;
+                }
+                int i=UCharacter.getIntPropertyValue(ch, UProperty.DECOMPOSITION_TYPE);
+                assertEquals(
+                        String.format("error: u_getIntPropertyValue(U+%04lx, UCHAR_DECOMPOSITION_TYPE) is wrong", ch),
+                        dt, i);
+                /* Expect Decomposition_Mapping=nfkc.getRawDecomposition(c). */
+                String mapping=nfkc.getRawDecomposition(ch);
+                assertEquals(
+                        String.format("error: nfkc.getRawDecomposition(U+%04lx) is wrong", ch),
+                        dm, mapping);
+                /* For canonical decompositions only, expect Decomposition_Mapping=nfc.getRawDecomposition(c). */
+                if(dt!=UCharacter.DecompositionType.CANONICAL) {
+                    dm=null;
+                }
+                mapping=nfc.getRawDecomposition(ch);
+                assertEquals(
+                        String.format("error: nfc.getRawDecomposition(U+%04lx) is wrong", ch),
+                        dm, mapping);
+
                 // testing iso comment
                 try{
+                    String isocomment = fields[11];
                     String comment = UCharacter.getISOComment(ch);
                     if (comment == null) {
                         comment = "";
@@ -808,6 +836,7 @@ public final class UCharacterTest extends TestFmwk
                     }
                 }
 
+                String upper = fields[12];
                 int tempchar = ch;
                 if (upper.length() > 0) {
                     tempchar = Integer.parseInt(upper, 16);
@@ -818,6 +847,7 @@ public final class UCharacterTest extends TestFmwk
                             + Utility.hex(tempchar, 4));
                     break;
                 }
+                String lower = fields[13];
                 tempchar = ch;
                 if (lower.length() > 0) {
                     tempchar = Integer.parseInt(lower, 16);
@@ -828,6 +858,7 @@ public final class UCharacterTest extends TestFmwk
                             + Utility.hex(tempchar, 4));
                     break;
                 }
+                String title = fields[14];
                 tempchar = ch;
                 if (title.length() > 0) {
                     tempchar = Integer.parseInt(title, 16);
@@ -861,8 +892,8 @@ public final class UCharacterTest extends TestFmwk
         }
 
         // sanity check on repeated properties
-        for (ch = 0xfffe; ch <= 0x10ffff;) {
-            type = UCharacter.getType(ch);
+        for (int ch = 0xfffe; ch <= 0x10ffff;) {
+            int type = UCharacter.getType(ch);
             if (UCharacter.getIntPropertyValue(ch,
                                                UProperty.GENERAL_CATEGORY_MASK)
                 != (1 << type)) {
@@ -886,8 +917,8 @@ public final class UCharacterTest extends TestFmwk
         }
 
         // test that PUA is not "unassigned"
-        for(ch = 0xe000; ch <= 0x10fffd;) {
-            type = UCharacter.getType(ch);
+        for(int ch = 0xe000; ch <= 0x10fffd;) {
+            int type = UCharacter.getType(ch);
             if (UCharacter.getIntPropertyValue(ch,
                                                UProperty.GENERAL_CATEGORY_MASK)
                 != (1 << type)) {

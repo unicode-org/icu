@@ -74,6 +74,29 @@ public final class Normalizer2Impl {
                 throw new RuntimeException(e);
             }
         }
+
+        /**
+         * Decomposes c, which must be a Hangul syllable, into buffer.
+         * This is the raw, not recursive, decomposition. Its length is always 2.
+         */
+        public static void getRawDecomposition(int c, Appendable buffer) {
+            try {
+                int orig=c;
+                c-=HANGUL_BASE;
+                int c2=c%JAMO_T_COUNT;
+                if(c2==0) {
+                    c/=JAMO_T_COUNT;
+                    buffer.append((char)(JAMO_L_BASE+c/JAMO_V_COUNT));
+                    buffer.append((char)(JAMO_V_BASE+c%JAMO_V_COUNT));
+                } else {
+                    buffer.append((char)(orig-c2));  // LV syllable
+                    buffer.append((char)(JAMO_T_BASE+c2));
+                }
+            } catch(IOException e) {
+                // Will not occur because we do not write to I/O.
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
@@ -388,7 +411,7 @@ public final class Normalizer2Impl {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==1;
+            return version[0]==2;
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
@@ -429,7 +452,7 @@ public final class Normalizer2Impl {
     
             // Read the composition and mapping data.
             offset=nextOffset;
-            nextOffset=inIndexes[IX_RESERVED2_OFFSET];
+            nextOffset=inIndexes[IX_SMALL_FCD_OFFSET];
             int numChars=(nextOffset-offset)/2;
             char[] chars;
             if(numChars!=0) {
@@ -440,6 +463,31 @@ public final class Normalizer2Impl {
                 maybeYesCompositions=new String(chars);
                 extraData=maybeYesCompositions.substring(MIN_NORMAL_MAYBE_YES-minMaybeYes);
             }
+
+            // smallFCD: new in formatVersion 2
+            offset=nextOffset;
+            smallFCD=new byte[0x100];
+            for(int i=0; i<0x100; ++i) {
+                smallFCD[i]=ds.readByte();
+            }
+
+            // Build tccc180[].
+            // gennorm2 enforces lccc=0 for c<MIN_CCC_LCCC_CP=U+0300.
+            tccc180=new int[0x180];
+            int bits=0;
+            for(int c=0; c<0x180; bits>>=1) {
+                if((c&0xff)==0) {
+                    bits=smallFCD[c>>8];  // one byte per 0x100 code points
+                }
+                if((bits&1)!=0) {
+                    for(int i=0; i<0x20; ++i, ++c) {
+                        tccc180[c]=getFCD16FromNormData(c)&0xff;
+                    }
+                } else {
+                    c+=0x20;
+                }
+            }
+
             data.close();
             return this;
         } catch(IOException e) {
@@ -575,16 +623,16 @@ public final class Normalizer2Impl {
                         }
                         if(minYesNo<=norm16_2 && norm16_2<limitNoNo) {
                             // c decomposes, get everything from the variable-length extra data
-                            int firstUnit=extraData.charAt(norm16_2++);
+                            int firstUnit=extraData.charAt(norm16_2);
                             int length=firstUnit&MAPPING_LENGTH_MASK;
                             if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                                if(c==c2 && (extraData.charAt(norm16_2)&0xff)!=0) {
+                                if(c==c2 && (extraData.charAt(norm16_2-1)&0xff)!=0) {
                                     newValue|=CANON_NOT_SEGMENT_STARTER;  // original c has cc!=0
                                 }
-                                ++norm16_2;
                             }
                             // Skip empty mappings (no characters in the decomposition).
                             if(length!=0) {
+                                ++norm16_2;  // skip over the firstUnit
                                 // add c to first code point's start set
                                 int limit=norm16_2+length;
                                 c2=extraData.codePointAt(norm16_2);
@@ -661,6 +709,41 @@ public final class Normalizer2Impl {
      */
     public int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
 
+    /** Gets the FCD value from the regular normalization data. */
+    public int getFCD16FromNormData(int c) {
+        // Only loops for 1:1 algorithmic mappings.
+        for(;;) {
+            int norm16=getNorm16(c);
+            if(norm16<=minYesNo) {
+                // no decomposition or Hangul syllable, all zeros
+                return 0;
+            } else if(norm16>=MIN_NORMAL_MAYBE_YES) {
+                // combining mark
+                norm16&=0xff;
+                return norm16|(norm16<<8);
+            } else if(norm16>=minMaybeYes) {
+                return 0;
+            } else if(isDecompNoAlgorithmic(norm16)) {
+                c=mapAlgorithmic(c, norm16);
+            } else {
+                // c decomposes, get everything from the variable-length extra data
+                int firstUnit=extraData.charAt(norm16);
+                if((firstUnit&MAPPING_LENGTH_MASK)==0) {
+                    // A character that is deleted (maps to an empty string) must
+                    // get the worst-case lccc and tccc values because arbitrary
+                    // characters on both sides will become adjacent.
+                    return 0x1ff;
+                } else {
+                    int fcd16=firstUnit>>8;  // tccc
+                    if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
+                        fcd16|=extraData.charAt(norm16-1)&0xff00;  // lccc
+                    }
+                    return fcd16;
+                }
+            }
+        }
+    }
+
     private void setFCD16FromNorm16(int start, int end, int norm16, Trie2Writable newFCDTrie) {
         // Only loops for 1:1 algorithmic mappings.
         for(;;) {
@@ -692,12 +775,11 @@ public final class Normalizer2Impl {
                     // characters on both sides will become adjacent.
                     norm16=0x1ff;
                 } else {
+                    int fcd16=firstUnit>>8;  // tccc
                     if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                        norm16=extraData.charAt(norm16+1)&0xff00;  // lccc
-                    } else {
-                        norm16=0;
+                        fcd16|=extraData.charAt(norm16-1)&0xff00;  // lccc
                     }
-                    norm16|=firstUnit>>8;  // tccc
+                    norm16=fcd16;
                 }
             }
             newFCDTrie.setRange(start, end, norm16, true);
@@ -706,7 +788,7 @@ public final class Normalizer2Impl {
     }
 
     /**
-     * Get the decomposition for one code point.
+     * Gets the decomposition for one code point.
      * @param c code point
      * @return c's decomposition, if it has one; returns null if it does not have a decomposition
      */
@@ -726,17 +808,56 @@ public final class Normalizer2Impl {
                 continue;
             } else {
                 // c decomposes, get everything from the variable-length extra data
-                int firstUnit=extraData.charAt(norm16++);
-                int length=firstUnit&MAPPING_LENGTH_MASK;
-                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                    ++norm16;
-                }
+                int length=extraData.charAt(norm16++)&MAPPING_LENGTH_MASK;
                 return extraData.substring(norm16, norm16+length);
             }
             if(decomp<0) {
                 return null;
             } else {
                 return UTF16.valueOf(decomp);
+            }
+        }
+    }
+
+    /**
+     * Gets the raw decomposition for one code point.
+     * @param c code point
+     * @return c's raw decomposition, if it has one; returns null if it does not have a decomposition
+     */
+    public String getRawDecomposition(int c) {
+        // We do not loop in this method because an algorithmic mapping itself
+        // becomes a final result rather than having to be decomposed recursively.
+        int norm16;
+        if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
+            // c does not decompose
+            return null;
+        } else if(isHangul(norm16)) {
+            // Hangul syllable: decompose algorithmically
+            StringBuilder buffer=new StringBuilder();
+            Hangul.getRawDecomposition(c, buffer);
+            return buffer.toString();
+        } else if(isDecompNoAlgorithmic(norm16)) {
+            return UTF16.valueOf(mapAlgorithmic(c, norm16));
+        } else {
+            // c decomposes, get everything from the variable-length extra data
+            int firstUnit=extraData.charAt(norm16);
+            int mLength=firstUnit&MAPPING_LENGTH_MASK;  // length of normal mapping
+            if((firstUnit&MAPPING_HAS_RAW_MAPPING)!=0) {
+                // Read the raw mapping from before the firstUnit and before the optional ccc/lccc word.
+                // Bit 7=MAPPING_HAS_CCC_LCCC_WORD
+                int rawMapping=norm16-((firstUnit>>7)&1)-1;
+                char rm0=extraData.charAt(rawMapping);
+                if(rm0<=MAPPING_LENGTH_MASK) {
+                    return extraData.substring(rawMapping-rm0, rawMapping);
+                } else {
+                    // Copy the normal mapping and replace its first two code units with rm0.
+                    StringBuilder buffer=new StringBuilder(mLength-1).append(rm0);
+                    norm16+=1+2;  // skip over the firstUnit and the first two mapping code units
+                    return buffer.append(extraData, norm16, norm16+mLength-2).toString();
+                }
+            } else {
+                norm16+=1;  // skip over the firstUnit
+                return extraData.substring(norm16, norm16+mLength);
             }
         }
     }
@@ -796,7 +917,8 @@ public final class Normalizer2Impl {
     // Byte offsets from the start of the data, after the generic header.
     public static final int IX_NORM_TRIE_OFFSET=0;
     public static final int IX_EXTRA_DATA_OFFSET=1;
-    public static final int IX_RESERVED2_OFFSET=2;
+    public static final int IX_SMALL_FCD_OFFSET=2;
+    public static final int IX_RESERVED3_OFFSET=3;
     public static final int IX_TOTAL_SIZE=7;
 
     // Code point thresholds for quick check codes.
@@ -812,7 +934,7 @@ public final class Normalizer2Impl {
     public static final int IX_COUNT=16;
 
     public static final int MAPPING_HAS_CCC_LCCC_WORD=0x80;
-    public static final int MAPPING_PLUS_COMPOSITION_LIST=0x40;
+    public static final int MAPPING_HAS_RAW_MAPPING=0x40;
     public static final int MAPPING_NO_COMP_BOUNDARY_AFTER=0x20;
     public static final int MAPPING_LENGTH_MASK=0x1f;
 
@@ -1469,7 +1591,7 @@ public final class Normalizer2Impl {
                 c=mapAlgorithmic(c, norm16);
             } else {
                 // c decomposes, get everything from the variable-length extra data
-                int firstUnit=extraData.charAt(norm16++);
+                int firstUnit=extraData.charAt(norm16);
                 if((firstUnit&MAPPING_LENGTH_MASK)==0) {
                     return false;
                 }
@@ -1485,7 +1607,7 @@ public final class Normalizer2Impl {
                     // if(trailCC==1) test leadCC==0, same as checking for before-boundary
                 }
                 // true if leadCC==0 (hasFCDBoundaryBefore())
-                return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (extraData.charAt(norm16)&0xff00)==0;
+                return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (extraData.charAt(norm16-1)&0xff00)==0;
             }
         }
     }
@@ -1500,7 +1622,8 @@ public final class Normalizer2Impl {
             if(isInert(norm16)) {
                 return true;
             } else if(norm16<=minYesNo) {
-                // Hangul LVT (==minYesNo) has a boundary after it.
+                // Hangul: norm16==minYesNo
+                // Hangul LVT has a boundary after it.
                 // Hangul LV and non-inert yesYes characters combine forward.
                 return isHangul(norm16) && !Hangul.isHangulWithoutJamoT((char)c);
             } else if(norm16>= (testInert ? minNoNo : minMaybeYes)) {
@@ -1513,12 +1636,13 @@ public final class Normalizer2Impl {
                 // otherwise it could be a noNo.
                 int firstUnit=extraData.charAt(norm16);
                 // true if
-                //      c is not deleted, and
-                //      it and its decomposition do not combine forward, and it has a starter, and
-                //      if FCC then trailCC<=1
+                //   not MAPPING_NO_COMP_BOUNDARY_AFTER
+                //     (which is set if
+                //       c is not deleted, and
+                //       it and its decomposition do not combine forward, and it has a starter)
+                //   and if FCC then trailCC<=1
                 return
-                    (firstUnit&MAPPING_LENGTH_MASK)!=0 &&
-                    (firstUnit&(MAPPING_PLUS_COMPOSITION_LIST|MAPPING_NO_COMP_BOUNDARY_AFTER))==0 &&
+                    (firstUnit&MAPPING_NO_COMP_BOUNDARY_AFTER)==0 &&
                     (!onlyContiguous || firstUnit<=0x1ff);
             }
         }
@@ -1569,7 +1693,7 @@ public final class Normalizer2Impl {
     // }
     private int getCCFromNoNo(int norm16) {
         if((extraData.charAt(norm16)&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-            return extraData.charAt(norm16+1)&0xff;
+            return extraData.charAt(norm16-1)&0xff;
         } else {
             return 0;
         }
@@ -1622,8 +1746,7 @@ public final class Normalizer2Impl {
         int firstUnit=extraData.charAt(norm16);
         return (MIN_NORMAL_MAYBE_YES-minMaybeYes)+norm16+  // mapping in maybeYesCompositions
             1+  // +1 to skip the first unit with the mapping lenth
-            (firstUnit&MAPPING_LENGTH_MASK)+  // + mapping length
-            ((firstUnit>>7)&1);  // +1 if MAPPING_HAS_CCC_LCCC_WORD
+            (firstUnit&MAPPING_LENGTH_MASK);  // + mapping length
     }
     /**
      * @param c code point must have compositions
@@ -1665,15 +1788,16 @@ public final class Normalizer2Impl {
                 continue;
             } else {
                 // c decomposes, get everything from the variable-length extra data
-                int firstUnit=extraData.charAt(norm16++);
+                int firstUnit=extraData.charAt(norm16);
                 int length=firstUnit&MAPPING_LENGTH_MASK;
                 int leadCC, trailCC;
                 trailCC=firstUnit>>8;
                 if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                    leadCC=extraData.charAt(norm16++)>>8;
+                    leadCC=extraData.charAt(norm16-1)>>8;
                 } else {
                     leadCC=0;
                 }
+                ++norm16;  // skip over the firstUnit
                 buffer.append(extraData, norm16, norm16+length, leadCC, trailCC);
             }
             return;
@@ -1943,14 +2067,14 @@ public final class Normalizer2Impl {
                 norm16=getNorm16(c);
             } else {
                 // c decomposes, get everything from the variable-length extra data
-                int firstUnit=extraData.charAt(norm16++);
+                int firstUnit=extraData.charAt(norm16);
                 if((firstUnit&MAPPING_LENGTH_MASK)==0) {
                     return false;
                 }
-                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0 && (extraData.charAt(norm16++)&0xff00)!=0) {
+                if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0 && (extraData.charAt(norm16-1)&0xff00)!=0) {
                     return false;  // non-zero leadCC
                 }
-                return isCompYesAndZeroCC(getNorm16(Character.codePointAt(extraData, norm16)));
+                return isCompYesAndZeroCC(getNorm16(Character.codePointAt(extraData, norm16+1)));
             }
         }
     }
@@ -2040,6 +2164,8 @@ public final class Normalizer2Impl {
     private Trie2_16 normTrie;
     private String maybeYesCompositions;
     private String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
+    private byte[] smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
+    private int[] tccc180;  // [0x180] tccc values for U+0000..U+017F
 
     private Trie2_16 fcdTrie;
     private Trie2_32 canonIterData;

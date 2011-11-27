@@ -2061,11 +2061,24 @@ public class BasicTest extends TestFmwk {
             errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
         }
 
+        // test getRawDecomposition() for some characters that do not decompose
+        if( nfcNorm2.getRawDecomposition(0x20)!=null ||
+            nfcNorm2.getRawDecomposition(0x4e00)!=null ||
+            nfcNorm2.getRawDecomposition(0x20002)!=null
+        ) {
+            errln("getRawDecomposition() returns TRUE for characters which do not have decompositions");
+        }
+
         // test FilteredNormalizer2.getDecomposition()
         UnicodeSet filter=new UnicodeSet("[^\u00a0-\u00ff]");
         FilteredNormalizer2 fn2=new FilteredNormalizer2(nfcNorm2, filter);
         if(fn2.getDecomposition(0xe4)!=null || !"A\u0304".equals(fn2.getDecomposition(0x100))) {
             errln("FilteredNormalizer2(NFC, ^A0-FF).getDecomposition() failed");
+        }
+
+        // test FilteredNormalizer2.getRawDecomposition()
+        if(fn2.getRawDecomposition(0xe4)!=null || !"A\u0304".equals(fn2.getRawDecomposition(0x100))) {
+            errln("FilteredNormalizer2(NFC, ^A0-FF).getRawDecomposition() failed");
         }
     }
 
@@ -2484,6 +2497,40 @@ public class BasicTest extends TestFmwk {
                 errln("unexpected result for case "+i);
             }
         }
+    }
+
+    public void TestGetDecomposition() {
+        Normalizer2 n2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE_CONTIGUOUS);
+        String decomp=n2.getDecomposition(0x20);
+        assertEquals("fcc.getDecomposition(space) failed", null, decomp);
+        decomp=n2.getDecomposition(0xe4);
+        assertEquals("fcc.getDecomposition(a-umlaut) failed", "a\u0308", decomp);
+        decomp=n2.getDecomposition(0xac01);
+        assertEquals("fcc.getDecomposition(Hangul syllable U+AC01) failed", "\u1100\u1161\u11a8", decomp);
+    }
+
+    public void TestGetRawDecomposition() {
+        Normalizer2 n2=Normalizer2.getInstance(null, "nfkc", Normalizer2.Mode.COMPOSE);
+        /*
+         * Raw decompositions from NFKC data are the Unicode Decomposition_Mapping values,
+         * without recursive decomposition.
+         */
+
+        String decomp=n2.getRawDecomposition(0x20);
+        assertEquals("nfkc.getRawDecomposition(space) failed", null, decomp);
+        decomp=n2.getRawDecomposition(0xe4);
+        assertEquals("nfkc.getRawDecomposition(a-umlaut) failed", "a\u0308", decomp);
+        /* U+1E08 LATIN CAPITAL LETTER C WITH CEDILLA AND ACUTE */
+        decomp=n2.getRawDecomposition(0x1e08);
+        assertEquals("nfkc.getRawDecomposition(c-cedilla-acute) failed", "\u00c7\u0301", decomp);
+        /* U+212B ANGSTROM SIGN */
+        decomp=n2.getRawDecomposition(0x212b);
+        assertEquals("nfkc.getRawDecomposition(angstrom sign) failed", "\u00c5", decomp);
+        decomp=n2.getRawDecomposition(0xac00);
+        assertEquals("nfkc.getRawDecomposition(Hangul syllable U+AC00) failed", "\u1100\u1161", decomp);
+        /* A Hangul LVT syllable has a raw decomposition of an LV syllable + T. */
+        decomp=n2.getRawDecomposition(0xac01);
+        assertEquals("nfkc.getRawDecomposition(Hangul syllable U+AC01) failed", "\uac00\u11a8", decomp);
     }
 
     public void TestCustomComp() {

@@ -58,6 +58,7 @@ public final class Norm2AllModes {
         public String getDecomposition(int c) {
             return null;
         }
+        // No need to override the default getRawDecomposition().
         @Override
         public boolean isNormalized(CharSequence s) { return true; }
         @Override
@@ -127,6 +128,10 @@ public final class Norm2AllModes {
         @Override
         public String getDecomposition(int c) {
             return impl.getDecomposition(c);
+        }
+        @Override
+        public String getRawDecomposition(int c) {
+            return impl.getRawDecomposition(c);
         }
 
         @Override

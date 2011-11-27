@@ -209,6 +209,31 @@ public abstract class Normalizer2 {
     public abstract String getDecomposition(int c);
 
     /**
+     * Gets the raw decomposition mapping of c.
+     *
+     * <p>This is similar to the getDecomposition() method but returns the
+     * raw decomposition mapping as specified in UnicodeData.txt or
+     * (for custom data) in the mapping files processed by the gennorm2 tool.
+     * By contrast, getDecomposition() returns the processed,
+     * recursively-decomposed version of this mapping.
+     *
+     * <p>When used on a standard NFKC Normalizer2 instance,
+     * getRawDecomposition() returns the Unicode Decomposition_Mapping (dm) property.
+     *
+     * <p>When used on a standard NFC Normalizer2 instance,
+     * it returns the Decomposition_Mapping only if the Decomposition_Type (dt) is Canonical (Can);
+     * in this case, the result contains either one or two code points (=1..4 Java chars).
+     *
+     * <p>This function is independent of the mode of the Normalizer2.
+     * The default implementation returns null.
+     * @param c code point
+     * @return c's raw decomposition mapping, if any; otherwise null
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getRawDecomposition(int c) { return null; }
+
+    /**
      * Gets the combining class of c.
      * The default implementation returns 0
      * but all standard implementations return the Unicode Canonical_Combining_Class value.
