@@ -270,7 +270,7 @@ Normalizer2Impl::isAcceptable(void *context,
         pInfo->dataFormat[1]==0x72 &&
         pInfo->dataFormat[2]==0x6d &&
         pInfo->dataFormat[3]==0x32 &&
-        pInfo->formatVersion[0]==1
+        pInfo->formatVersion[0]==2
     ) {
         Normalizer2Impl *me=(Normalizer2Impl *)context;
         uprv_memcpy(me->dataVersion, pInfo->dataVersion, 4);
@@ -315,8 +315,30 @@ Normalizer2Impl::load(const char *packageName, const char *name, UErrorCode &err
     }
 
     offset=nextOffset;
+    nextOffset=inIndexes[IX_SMALL_FCD_OFFSET];
     maybeYesCompositions=(const uint16_t *)(inBytes+offset);
     extraData=maybeYesCompositions+(MIN_NORMAL_MAYBE_YES-minMaybeYes);
+
+    // smallFCD: new in formatVersion 2
+    offset=nextOffset;
+    smallFCD=inBytes+offset;
+
+    // Build tccc180[].
+    // gennorm2 enforces lccc=0 for c<MIN_CCC_LCCC_CP=U+0300.
+    uint8_t bits=0;
+    for(UChar c=0; c<0x180; bits>>=1) {
+        if((c&0xff)==0) {
+            bits=smallFCD[c>>8];  // one byte per 0x100 code points
+        }
+        if(bits&1) {
+            for(int i=0; i<0x20; ++i, ++c) {
+                tccc180[c]=(uint8_t)getFCD16FromNormData(c);
+            }
+        } else {
+            uprv_memset(tccc180+c, 0, 0x20);
+            c+=0x20;
+        }
+    }
 }
 
 uint8_t Normalizer2Impl::getTrailCCFromCompYesAndZeroCC(const UChar *cpStart, const UChar *cpLimit) const {
@@ -524,16 +546,16 @@ UBool Normalizer2Impl::decompose(UChar32 c, uint16_t norm16,
         } else {
             // c decomposes, get everything from the variable-length extra data
             const uint16_t *mapping=getMapping(norm16);
-            uint16_t firstUnit=*mapping++;
+            uint16_t firstUnit=*mapping;
             int32_t length=firstUnit&MAPPING_LENGTH_MASK;
             uint8_t leadCC, trailCC;
             trailCC=(uint8_t)(firstUnit>>8);
             if(firstUnit&MAPPING_HAS_CCC_LCCC_WORD) {
-                leadCC=(uint8_t)(*mapping++>>8);
+                leadCC=(uint8_t)(*(mapping-1)>>8);
             } else {
                 leadCC=0;
             }
-            return buffer.append((const UChar *)mapping, length, leadCC, trailCC, errorCode);
+            return buffer.append((const UChar *)mapping+1, length, leadCC, trailCC, errorCode);
         }
     }
 }
@@ -558,12 +580,57 @@ Normalizer2Impl::getDecomposition(UChar32 c, UChar buffer[4], int32_t &length) c
         } else {
             // c decomposes, get everything from the variable-length extra data
             const uint16_t *mapping=getMapping(norm16);
-            uint16_t firstUnit=*mapping++;
-            length=firstUnit&MAPPING_LENGTH_MASK;
-            if(firstUnit&MAPPING_HAS_CCC_LCCC_WORD) {
-                ++mapping;
+            length=*mapping&MAPPING_LENGTH_MASK;
+            return (const UChar *)mapping+1;
+        }
+    }
+}
+
+// The capacity of the buffer must be 30=MAPPING_LENGTH_MASK-1
+// so that a raw mapping fits that consists of one unit ("rm0")
+// plus all but the first two code units of the normal mapping.
+// The maximum length of a normal mapping is 31=MAPPING_LENGTH_MASK.
+const UChar *
+Normalizer2Impl::getRawDecomposition(UChar32 c, UChar buffer[30], int32_t &length) const {
+    // We do not loop in this method because an algorithmic mapping itself
+    // becomes a final result rather than having to be decomposed recursively.
+    uint16_t norm16;
+    if(c<minDecompNoCP || isDecompYes(norm16=getNorm16(c))) {
+        // c does not decompose
+        return NULL;
+    } else if(isHangul(norm16)) {
+        // Hangul syllable: decompose algorithmically
+        Hangul::getRawDecomposition(c, buffer);
+        length=2;
+        return buffer;
+    } else if(isDecompNoAlgorithmic(norm16)) {
+        c=mapAlgorithmic(c, norm16);
+        length=0;
+        U16_APPEND_UNSAFE(buffer, length, c);
+        return buffer;
+    } else {
+        // c decomposes, get everything from the variable-length extra data
+        const uint16_t *mapping=getMapping(norm16);
+        uint16_t firstUnit=*mapping;
+        int32_t mLength=firstUnit&MAPPING_LENGTH_MASK;  // length of normal mapping
+        if(firstUnit&MAPPING_HAS_RAW_MAPPING) {
+            // Read the raw mapping from before the firstUnit and before the optional ccc/lccc word.
+            // Bit 7=MAPPING_HAS_CCC_LCCC_WORD
+            const uint16_t *rawMapping=mapping-((firstUnit>>7)&1)-1;
+            uint16_t rm0=*rawMapping;
+            if(rm0<=MAPPING_LENGTH_MASK) {
+                length=rm0;
+                return rawMapping-rm0;
+            } else {
+                // Copy the normal mapping and replace its first two code units with rm0.
+                buffer[0]=(UChar)rm0;
+                u_memcpy(buffer+1, mapping+1+2, mLength-2);
+                length=mLength-1;
+                return buffer;
             }
-            return (const UChar *)mapping;
+        } else {
+            length=mLength;
+            return (const UChar *)mapping+1;
         }
     }
 }
@@ -611,7 +678,7 @@ UBool Normalizer2Impl::hasDecompBoundary(UChar32 c, UBool before) const {
         } else {
             // c decomposes, get everything from the variable-length extra data
             const uint16_t *mapping=getMapping(norm16);
-            uint16_t firstUnit=*mapping++;
+            uint16_t firstUnit=*mapping;
             if((firstUnit&MAPPING_LENGTH_MASK)==0) {
                 return FALSE;
             }
@@ -627,7 +694,7 @@ UBool Normalizer2Impl::hasDecompBoundary(UChar32 c, UBool before) const {
                 // if(trailCC==1) test leadCC==0, same as checking for before-boundary
             }
             // TRUE if leadCC==0 (hasFCDBoundaryBefore())
-            return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (*mapping&0xff00)==0;
+            return (firstUnit&MAPPING_HAS_CCC_LCCC_WORD)==0 || (*(mapping-1)&0xff00)==0;
         }
     }
 }
@@ -1327,14 +1394,14 @@ UBool Normalizer2Impl::hasCompBoundaryBefore(UChar32 c, uint16_t norm16) const {
         } else {
             // c decomposes, get everything from the variable-length extra data
             const uint16_t *mapping=getMapping(norm16);
-            uint16_t firstUnit=*mapping++;
+            uint16_t firstUnit=*mapping;
             if((firstUnit&MAPPING_LENGTH_MASK)==0) {
                 return FALSE;
             }
-            if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD) && (*mapping++&0xff00)) {
+            if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD) && (*(mapping-1)&0xff00)) {
                 return FALSE;  // non-zero leadCC
             }
-            int32_t i=0;
+            int32_t i=1;  // skip over the firstUnit
             UChar32 c;
             U16_NEXT_UNSAFE(mapping, i, c);
             return isCompYesAndZeroCC(getNorm16(c));
@@ -1348,7 +1415,8 @@ UBool Normalizer2Impl::hasCompBoundaryAfter(UChar32 c, UBool onlyContiguous, UBo
         if(isInert(norm16)) {
             return TRUE;
         } else if(norm16<=minYesNo) {
-            // Hangul LVT (==minYesNo) has a boundary after it.
+            // Hangul: norm16==minYesNo
+            // Hangul LVT has a boundary after it.
             // Hangul LV and non-inert yesYes characters combine forward.
             return isHangul(norm16) && !Hangul::isHangulWithoutJamoT((UChar)c);
         } else if(norm16>= (testInert ? minNoNo : minMaybeYes)) {
@@ -1362,12 +1430,13 @@ UBool Normalizer2Impl::hasCompBoundaryAfter(UChar32 c, UBool onlyContiguous, UBo
             const uint16_t *mapping=getMapping(norm16);
             uint16_t firstUnit=*mapping;
             // TRUE if
-            //      c is not deleted, and
-            //      it and its decomposition do not combine forward, and it has a starter, and
-            //      if FCC then trailCC<=1
+            //   not MAPPING_NO_COMP_BOUNDARY_AFTER
+            //     (which is set if
+            //       c is not deleted, and
+            //       it and its decomposition do not combine forward, and it has a starter)
+            //   and if FCC then trailCC<=1
             return
-                (firstUnit&MAPPING_LENGTH_MASK)!=0 &&
-                (firstUnit&(MAPPING_PLUS_COMPOSITION_LIST|MAPPING_NO_COMP_BOUNDARY_AFTER))==0 &&
+                (firstUnit&MAPPING_NO_COMP_BOUNDARY_AFTER)==0 &&
                 (!onlyContiguous || firstUnit<=0x1ff);
         }
     }
@@ -1462,7 +1531,7 @@ void *FCDTrieSingleton::createInstance(const void *context, UErrorCode &errorCod
 void Normalizer2Impl::setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
                                          UTrie2 *newFCDTrie, UErrorCode &errorCode) const {
     // Only loops for 1:1 algorithmic mappings.
-  for(;;) { /* loop doesn't iterate */
+    for(;;) {
         if(norm16>=MIN_NORMAL_MAYBE_YES) {
             norm16&=0xff;
             norm16|=norm16<<8;
@@ -1492,12 +1561,10 @@ void Normalizer2Impl::setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t no
                 // characters on both sides will become adjacent.
                 norm16=0x1ff;
             } else {
+                norm16=firstUnit>>8;  // tccc
                 if(firstUnit&MAPPING_HAS_CCC_LCCC_WORD) {
-                    norm16=mapping[1]&0xff00;  // lccc
-                } else {
-                    norm16=0;
+                    norm16|=*(mapping-1)&0xff00;  // lccc
                 }
-                norm16|=firstUnit>>8;  // tccc
             }
         }
         utrie2_setRange32(newFCDTrie, start, end, norm16, TRUE, &errorCode);
@@ -1509,6 +1576,42 @@ const UTrie2 *Normalizer2Impl::getFCDTrie(UErrorCode &errorCode) const {
     // Logically const: Synchronized instantiation.
     Normalizer2Impl *me=const_cast<Normalizer2Impl *>(this);
     return FCDTrieSingleton(me->fcdTrieSingleton, *me, errorCode).getInstance(errorCode);
+}
+
+// Gets the FCD value from the regular normalization data.
+uint16_t Normalizer2Impl::getFCD16FromNormData(UChar32 c) const {
+    // Only loops for 1:1 algorithmic mappings.
+    for(;;) {
+        uint16_t norm16=getNorm16(c);
+        if(norm16<=minYesNo) {
+            // no decomposition or Hangul syllable, all zeros
+            return 0;
+        } else if(norm16>=MIN_NORMAL_MAYBE_YES) {
+            // combining mark
+            norm16&=0xff;
+            return norm16|(norm16<<8);
+        } else if(norm16>=minMaybeYes) {
+            return 0;
+        } else if(isDecompNoAlgorithmic(norm16)) {
+            c=mapAlgorithmic(c, norm16);
+        } else {
+            // c decomposes, get everything from the variable-length extra data
+            const uint16_t *mapping=getMapping(norm16);
+            uint16_t firstUnit=*mapping;
+            if((firstUnit&MAPPING_LENGTH_MASK)==0) {
+                // A character that is deleted (maps to an empty string) must
+                // get the worst-case lccc and tccc values because arbitrary
+                // characters on both sides will become adjacent.
+                return 0x1ff;
+            } else {
+                norm16=firstUnit>>8;  // tccc
+                if(firstUnit&MAPPING_HAS_CCC_LCCC_WORD) {
+                    norm16|=*(mapping-1)&0xff00;  // lccc
+                }
+                return norm16;
+            }
+        }
+    }
 }
 
 // Dual functionality:
@@ -1836,16 +1939,16 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, ui
             if(minYesNo<=norm16_2 && norm16_2<limitNoNo) {
                 // c decomposes, get everything from the variable-length extra data
                 const uint16_t *mapping=getMapping(norm16_2);
-                uint16_t firstUnit=*mapping++;
+                uint16_t firstUnit=*mapping;
                 int32_t length=firstUnit&MAPPING_LENGTH_MASK;
                 if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                    if(c==c2 && (*mapping&0xff)!=0) {
+                    if(c==c2 && (*(mapping-1)&0xff)!=0) {
                         newValue|=CANON_NOT_SEGMENT_STARTER;  // original c has cc!=0
                     }
-                    ++mapping;
                 }
                 // Skip empty mappings (no characters in the decomposition).
                 if(length!=0) {
+                    ++mapping;  // skip over the firstUnit
                     // add c to first code point's start set
                     int32_t i=0;
                     U16_NEXT_UNSAFE(mapping, i, c2);
@@ -1954,7 +2057,7 @@ unorm2_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x72 &&
         pInfo->dataFormat[2]==0x6d &&
         pInfo->dataFormat[3]==0x32 &&
-        pInfo->formatVersion[0]==1
+        (pInfo->formatVersion[0]==1 || pInfo->formatVersion[0]==2)
     )) {
         udata_printError(ds, "unorm2_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as Normalizer2 data\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
@@ -2013,8 +2116,12 @@ unorm2_swap(const UDataSwapper *ds,
         offset=nextOffset;
 
         /* swap the uint16_t extraData[] */
-        nextOffset=indexes[Normalizer2Impl::IX_EXTRA_DATA_OFFSET+1];
+        nextOffset=indexes[Normalizer2Impl::IX_SMALL_FCD_OFFSET];
         ds->swapArray16(ds, inBytes+offset, nextOffset-offset, outBytes+offset, pErrorCode);
+        offset=nextOffset;
+
+        /* no need to swap the uint8_t smallFCD[] (new in formatVersion 2) */
+        nextOffset=indexes[Normalizer2Impl::IX_SMALL_FCD_OFFSET+1];
         offset=nextOffset;
 
         U_ASSERT(offset==size);
