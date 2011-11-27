@@ -94,6 +94,15 @@ public class FilteredNormalizer2 extends Normalizer2 {
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
+    public String getRawDecomposition(int c) {
+        return set.contains(c) ? norm2.getRawDecomposition(c) : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public int getCombiningClass(int c) {
         return set.contains(c) ? norm2.getCombiningClass(c) : 0;
