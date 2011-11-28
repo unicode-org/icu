@@ -601,9 +601,6 @@ public final class CollationElementIterator
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
         m_buffer_ = new StringBuilder();
         m_utilSpecialBackUp_ = new Backup();
-        if (collator.getDecomposition() != Collator.NO_DECOMPOSITION) {
-            m_nfcImpl_.getFCDTrie();  // ensure the FCD data is initialized
-        }
     }
 
     /**
@@ -1077,17 +1074,25 @@ public final class CollationElementIterator
         m_FCDStart_ = offset - 1;
         m_source_.setIndex(offset);
         // trie access
-        int fcd = m_nfcImpl_.getFCD16FromSingleLead((char)ch);
-        if (fcd != 0 && Character.isHighSurrogate((char)ch)) {
-            int c2 = m_source_.next(); 
-            if (c2 < 0) {
-                fcd = 0;  // end of input
-            } else if (Character.isLowSurrogate((char)c2)) {
-                fcd = m_nfcImpl_.getFCD16(Character.toCodePoint((char)ch, (char)c2));
+        int fcd;
+        if (ch < 0x180) {
+            fcd = m_nfcImpl_.getFCD16FromBelow180(ch);
+        } else if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
+            if (Character.isHighSurrogate((char)ch)) {
+                int c2 = m_source_.next(); 
+                if (c2 < 0) {
+                    fcd = 0;  // end of input
+                } else if (Character.isLowSurrogate((char)c2)) {
+                    fcd = m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint((char)ch, (char)c2));
+                } else {
+                    m_source_.moveIndex(-1);
+                    fcd = 0;
+                }
             } else {
-                m_source_.moveIndex(-1);
-                fcd = 0;
+                fcd = m_nfcImpl_.getFCD16FromNormData(ch);
             }
+        } else {
+            fcd = 0;
         }
 
         int prevTrailCC = fcd & LAST_BYTE_MASK_;
@@ -1216,21 +1221,25 @@ public final class CollationElementIterator
         int fcd;
         m_FCDLimit_ = offset + 1;
         m_source_.setIndex(offset);
-        if (!UTF16.isSurrogate((char)ch)) {
-            fcd = m_nfcImpl_.getFCD16FromSingleLead((char)ch);
+        if (ch < 0x180) {
+            fcd = m_nfcImpl_.getFCD16FromBelow180(ch);
+        } else if (!Character.isLowSurrogate((char)ch)) {
+            if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
+                fcd = m_nfcImpl_.getFCD16FromNormData(ch);
+            } else {
+                fcd = 0;
+            }
         } else {
-            fcd = 0;
-            if (!Normalizer2Impl.UTF16Plus.isSurrogateLead(ch)) {
-                int c2 = m_source_.previous();
-                if (c2 < 0) {
-                    // start of input
-                } else if (Character.isHighSurrogate((char)c2)) {
-                    ch = Character.toCodePoint((char)c2, (char)ch);
-                    fcd = m_nfcImpl_.getFCD16(ch);
-                    --offset;
-                } else {
-                    m_source_.moveIndex(1);
-                }
+            int c2 = m_source_.previous();
+            if (c2 < 0) {
+                fcd = 0;  // start of input
+            } else if (Character.isHighSurrogate((char)c2)) {
+                ch = Character.toCodePoint((char)c2, (char)ch);
+                fcd = m_nfcImpl_.getFCD16FromNormData(ch);
+                --offset;
+            } else {
+                m_source_.moveIndex(1);
+                fcd = 0;
             }
         }
 

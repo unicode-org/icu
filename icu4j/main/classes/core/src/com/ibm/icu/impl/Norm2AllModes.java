@@ -357,9 +357,7 @@ public final class Norm2AllModes {
      * @return FCD normalizer
      */
     public static Normalizer2 getFCDNormalizer2() {
-        Norm2AllModes allModes=getNFCInstance();
-        allModes.impl.getFCDTrie();
-        return allModes.fcd;
+        return getNFCInstance().fcd;
     }
 
     private static final class Norm2AllModesSingleton {

@@ -549,12 +549,12 @@ public final class UCharacterProperty
         new NormQuickCheckIntProperty(SRC_NFKC, UProperty.NFKC_QUICK_CHECK, 2),
         new CombiningClassIntProperty(SRC_NFC) {  // LEAD_CANONICAL_COMBINING_CLASS
             int getValue(int c) {
-                return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(c)>>8;
+                return Norm2AllModes.getNFCInstance().impl.getFCD16(c)>>8;
             }
         },
         new CombiningClassIntProperty(SRC_NFC) {  // TRAIL_CANONICAL_COMBINING_CLASS
             int getValue(int c) {
-                return Norm2AllModes.getNFCInstance().impl.getFCDTrie().get(c)&0xff;
+                return Norm2AllModes.getNFCInstance().impl.getFCD16(c)&0xff;
             }
         },
         new IntProperty(2, GCB_MASK, GCB_SHIFT),  // GRAPHEME_CLUSTER_BREAK
