@@ -254,7 +254,6 @@ struct CanonIterData : public UMemory {
 Normalizer2Impl::~Normalizer2Impl() {
     udata_close(memory);
     utrie2_close(normTrie);
-    UTrie2Singleton(fcdTrieSingleton).deleteInstance();
     delete (CanonIterData *)canonIterDataSingleton.fInstance;
 }
 
@@ -1507,121 +1506,13 @@ const UChar *Normalizer2Impl::findNextCompBoundary(const UChar *p, const UChar *
     return iter.codePointStart;
 }
 
-class FCDTrieSingleton : public UTrie2Singleton {
-public:
-    FCDTrieSingleton(SimpleSingleton &s, Normalizer2Impl &ni, UErrorCode &ec) :
-        UTrie2Singleton(s), impl(ni), errorCode(ec) {}
-    UTrie2 *getInstance(UErrorCode &errorCode) {
-        return UTrie2Singleton::getInstance(createInstance, this, errorCode);
-    }
-    static void *createInstance(const void *context, UErrorCode &errorCode);
-    UBool rangeHandler(UChar32 start, UChar32 end, uint32_t value) {
-        if(value!=0) {
-            impl.setFCD16FromNorm16(start, end, (uint16_t)value, newFCDTrie, errorCode);
-        }
-        return U_SUCCESS(errorCode);
-    }
-
-    Normalizer2Impl &impl;
-    UTrie2 *newFCDTrie;
-    UErrorCode &errorCode;
-};
-
-U_CDECL_BEGIN
-
-// Set the FCD value for a range of same-norm16 characters.
-static UBool U_CALLCONV
-enumRangeHandler(const void *context, UChar32 start, UChar32 end, uint32_t value) {
-    return ((FCDTrieSingleton *)context)->rangeHandler(start, end, value);
-}
-
-// Collect (OR together) the FCD values for a range of supplementary characters,
-// for their lead surrogate code unit.
-static UBool U_CALLCONV
-enumRangeOrValue(const void *context, UChar32 /*start*/, UChar32 /*end*/, uint32_t value) {
-    *((uint32_t *)context)|=value;
-    return TRUE;
-}
-
-U_CDECL_END
-
-void *FCDTrieSingleton::createInstance(const void *context, UErrorCode &errorCode) {
-    FCDTrieSingleton *me=(FCDTrieSingleton *)context;
-    me->newFCDTrie=utrie2_open(0, 0, &errorCode);
-    if(U_SUCCESS(errorCode)) {
-        utrie2_enum(me->impl.getNormTrie(), NULL, enumRangeHandler, me);
-        for(UChar lead=0xd800; lead<0xdc00; ++lead) {
-            uint32_t oredValue=utrie2_get32(me->newFCDTrie, lead);
-            utrie2_enumForLeadSurrogate(me->newFCDTrie, lead, NULL, enumRangeOrValue, &oredValue);
-            if(oredValue!=0) {
-                // Set a "bad" value for makeFCD() to break the quick check loop
-                // and look up the value for the supplementary code point.
-                // If there is any lccc, then set the worst-case lccc of 1.
-                // The ORed-together value's tccc is already the worst case.
-                if(oredValue>0xff) {
-                    oredValue=0x100|(oredValue&0xff);
-                }
-                utrie2_set32ForLeadSurrogateCodeUnit(me->newFCDTrie, lead, oredValue, &errorCode);
-            }
-        }
-        utrie2_freeze(me->newFCDTrie, UTRIE2_16_VALUE_BITS, &errorCode);
-        if(U_SUCCESS(errorCode)) {
-            return me->newFCDTrie;
-        }
-    }
-    utrie2_close(me->newFCDTrie);
-    return NULL;
-}
-
-void Normalizer2Impl::setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
-                                         UTrie2 *newFCDTrie, UErrorCode &errorCode) const {
-    // Only loops for 1:1 algorithmic mappings.
-    for(;;) {
-        if(norm16>=MIN_NORMAL_MAYBE_YES) {
-            norm16&=0xff;
-            norm16|=norm16<<8;
-        } else if(norm16<=minYesNo || minMaybeYes<=norm16) {
-            // no decomposition or Hangul syllable, all zeros
-            break;
-        } else if(limitNoNo<=norm16) {
-            int32_t delta=norm16-(minMaybeYes-MAX_DELTA-1);
-            if(start==end) {
-                start+=delta;
-                norm16=getNorm16(start);
-            } else {
-                // the same delta leads from different original characters to different mappings
-                do {
-                    UChar32 c=start+delta;
-                    setFCD16FromNorm16(c, c, getNorm16(c), newFCDTrie, errorCode);
-                } while(++start<=end);
-                break;
-            }
-        } else {
-            // c decomposes, get everything from the variable-length extra data
-            const uint16_t *mapping=getMapping(norm16);
-            uint16_t firstUnit=*mapping;
-            if((firstUnit&MAPPING_LENGTH_MASK)==0) {
-                // A character that is deleted (maps to an empty string) must
-                // get the worst-case lccc and tccc values because arbitrary
-                // characters on both sides will become adjacent.
-                norm16=0x1ff;
-            } else {
-                norm16=firstUnit>>8;  // tccc
-                if(firstUnit&MAPPING_HAS_CCC_LCCC_WORD) {
-                    norm16|=*(mapping-1)&0xff00;  // lccc
-                }
-            }
-        }
-        utrie2_setRange32(newFCDTrie, start, end, norm16, TRUE, &errorCode);
-        break;
-    }
-}
-
-const UTrie2 *Normalizer2Impl::getFCDTrie(UErrorCode &errorCode) const {
-    // Logically const: Synchronized instantiation.
-    Normalizer2Impl *me=const_cast<Normalizer2Impl *>(this);
-    return FCDTrieSingleton(me->fcdTrieSingleton, *me, errorCode).getInstance(errorCode);
-}
+// Note: normalizer2impl.cpp r30982 (2011-nov-27)
+// still had getFCDTrie() which built and cached an FCD trie.
+// That provided faster access to FCD data than getFCD16FromNormData()
+// but required synchronization and consumed some 10kB of heap memory
+// in any process that uses FCD (e.g., via collation).
+// tccc180[] and smallFCD[] are intended to help with any loss of performance,
+// at least for Latin & CJK.
 
 // Gets the FCD value from the regular normalization data.
 uint16_t Normalizer2Impl::getFCD16FromNormData(UChar32 c) const {
@@ -1679,7 +1570,7 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
             prevBoundary=src;
             // We know that the previous character's lccc==0.
             // Fetching the fcd16 value was deferred for this below-U+0300 code point.
-            prevFCD16=getFCD16FromSingleLead(*(src-1));
+            prevFCD16=getFCD16(*(src-1));
             if(prevFCD16>1) {
                 --prevBoundary;
             }
@@ -1693,8 +1584,6 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
     // The exception is the call to decomposeShort() which uses the buffer
     // in the normal way.
 
-    const UTrie2 *trie=fcdTrie();
-
     const UChar *prevSrc;
     UChar32 c=0;
     uint16_t fcd16=0;
@@ -1705,24 +1594,24 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
             if((c=*src)<MIN_CCC_LCCC_CP) {
                 prevFCD16=~c;
                 ++src;
-            } else if((fcd16=UTRIE2_GET16_FROM_U16_SINGLE_LEAD(trie, c))<=0xff) {
-                prevFCD16=fcd16;
+            } else if(!singleLeadMightHaveNonZeroFCD16(c)) {
+                prevFCD16=0;
                 ++src;
-            } else if(!U16_IS_SURROGATE(c)) {
-                break;
             } else {
-                UChar c2;
-                if(U16_IS_SURROGATE_LEAD(c)) {
-                    if((src+1)!=limit && U16_IS_TRAIL(c2=src[1])) {
-                        c=U16_GET_SUPPLEMENTARY(c, c2);
-                    }
-                } else /* trail surrogate */ {
-                    if(prevSrc<src && U16_IS_LEAD(c2=*(src-1))) {
-                        --src;
-                        c=U16_GET_SUPPLEMENTARY(c2, c);
+                if(U16_IS_SURROGATE(c)) {
+                    UChar c2;
+                    if(U16_IS_SURROGATE_LEAD(c)) {
+                        if((src+1)!=limit && U16_IS_TRAIL(c2=src[1])) {
+                            c=U16_GET_SUPPLEMENTARY(c, c2);
+                        }
+                    } else /* trail surrogate */ {
+                        if(prevSrc<src && U16_IS_LEAD(c2=*(src-1))) {
+                            --src;
+                            c=U16_GET_SUPPLEMENTARY(c2, c);
+                        }
                     }
                 }
-                if((fcd16=getFCD16(c))<=0xff) {
+                if((fcd16=getFCD16FromNormData(c))<=0xff) {
                     prevFCD16=fcd16;
                     src+=U16_LENGTH(c);
                 } else {
@@ -1742,7 +1631,8 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
             // We know that the previous character's lccc==0.
             if(prevFCD16<0) {
                 // Fetching the fcd16 value was deferred for this below-U+0300 code point.
-                prevFCD16=getFCD16FromSingleLead((UChar)~prevFCD16);
+                UChar32 prev=~prevFCD16;
+                prevFCD16= prev<0x180 ? tccc180[prev] : getFCD16FromNormData(prev);
                 if(prevFCD16>1) {
                     --prevBoundary;
                 }
@@ -1752,7 +1642,7 @@ Normalizer2Impl::makeFCD(const UChar *src, const UChar *limit,
                     --p;
                     // Need to fetch the previous character's FCD value because
                     // prevFCD16 was just for the trail surrogate code point.
-                    prevFCD16=getFCD16FromSurrogatePair(p[0], p[1]);
+                    prevFCD16=getFCD16FromNormData(U16_GET_SUPPLEMENTARY(p[0], p[1]));
                     // Still known to have lccc==0 because its lead surrogate unit had lccc==0.
                 }
                 if(prevFCD16>1) {
@@ -1840,21 +1730,18 @@ void Normalizer2Impl::makeFCDAndAppend(const UChar *src, const UChar *limit,
 }
 
 const UChar *Normalizer2Impl::findPreviousFCDBoundary(const UChar *start, const UChar *p) const {
-    BackwardUTrie2StringIterator iter(fcdTrie(), start, p);
-    uint16_t fcd16;
-    do {
-        fcd16=iter.previous16();
-    } while(fcd16>0xff);
-    return iter.codePointStart;
+    while(start<p && previousFCD16(start, p)>0xff) {}
+    return p;
 }
 
 const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *limit) const {
-    ForwardUTrie2StringIterator iter(fcdTrie(), p, limit);
-    uint16_t fcd16;
-    do {
-        fcd16=iter.next16();
-    } while(fcd16>0xff);
-    return iter.codePointStart;
+    while(p<limit) {
+        const UChar *codePointStart=p;
+        if(nextFCD16(p, limit)<=0xff) {
+            return codePointStart;
+        }
+    }
+    return p;
 }
 
 // CanonicalIterator data -------------------------------------------------- ***

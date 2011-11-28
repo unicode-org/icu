@@ -523,12 +523,7 @@ const Normalizer2 *Normalizer2Factory::getNFDInstance(UErrorCode &errorCode) {
 
 const Normalizer2 *Normalizer2Factory::getFCDInstance(UErrorCode &errorCode) {
     Norm2AllModes *allModes=Norm2AllModesSingleton(nfcSingleton, "nfc").getInstance(errorCode);
-    if(allModes!=NULL) {
-        allModes->impl.getFCDTrie(errorCode);
-        return &allModes->fcd;
-    } else {
-        return NULL;
-    }
+    return allModes!=NULL ? &allModes->fcd : NULL;
 }
 
 const Normalizer2 *Normalizer2Factory::getFCCInstance(UErrorCode &errorCode) {
@@ -605,17 +600,6 @@ Normalizer2Factory::getImpl(const Normalizer2 *norm2) {
     return &((Normalizer2WithImpl *)norm2)->impl;
 }
 
-const UTrie2 *
-Normalizer2Factory::getFCDTrie(UErrorCode &errorCode) {
-    Norm2AllModes *allModes=
-        Norm2AllModesSingleton(nfcSingleton, "nfc").getInstance(errorCode);
-    if(allModes!=NULL) {
-        return allModes->impl.getFCDTrie(errorCode);
-    } else {
-        return NULL;
-    }
-}
-
 const Normalizer2 *
 Normalizer2::getInstance(const char *packageName,
                          const char *name,
@@ -682,7 +666,6 @@ Normalizer2::getInstance(const char *packageName,
         case UNORM2_DECOMPOSE:
             return &allModes->decomp;
         case UNORM2_FCD:
-            allModes->impl.getFCDTrie(errorCode);
             return &allModes->fcd;
         case UNORM2_COMPOSE_CONTIGUOUS:
             return &allModes->fcc;
@@ -960,24 +943,13 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
 }
 
 U_CFUNC uint16_t
-unorm_getFCD16Simple(UChar32 c) {
+unorm_getFCD16(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    const UTrie2 *trie=Normalizer2Factory::getFCDTrie(errorCode);
+    const Normalizer2Impl *impl=Normalizer2Factory::getNFCImpl(errorCode);
     if(U_SUCCESS(errorCode)) {
-        return UTRIE2_GET16(trie, c);
+        return impl->getFCD16(c);
     } else {
         return 0;
-    }
-}
-
-U_CAPI const uint16_t * U_EXPORT2
-unorm_getFCDTrieIndex(UChar32 &fcdHighStart, UErrorCode *pErrorCode) {
-    const UTrie2 *trie=Normalizer2Factory::getFCDTrie(*pErrorCode);
-    if(U_SUCCESS(*pErrorCode)) {
-        fcdHighStart=trie->highStart;
-        return trie->index;
-    } else {
-        return NULL;
     }
 }
 

@@ -37,8 +37,7 @@ U_NAMESPACE_USE
 #define SECOND_LAST_BYTE_SHIFT_  8
 #define SUPPLEMENTARY_MIN_VALUE_ 0x10000
 
-static const uint16_t *fcdTrieIndex = NULL;
-static UChar32 fcdHighStart = 0;
+static const Normalizer2Impl *g_nfcImpl = NULL;
 
 // internal methods -------------------------------------------------
 
@@ -103,7 +102,7 @@ inline int hash(uint32_t ce)
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 usearch_cleanup(void) {
-    fcdTrieIndex = NULL;
+    g_nfcImpl = NULL;
     return TRUE;
 }
 U_CDECL_END
@@ -117,8 +116,8 @@ U_CDECL_END
 static
 inline void initializeFCD(UErrorCode *status)
 {
-    if (fcdTrieIndex == NULL) {
-        fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+    if (g_nfcImpl == NULL) {
+        g_nfcImpl = Normalizer2Factory::getNFCImpl(*status);
         ucln_i18n_registerCleanup(UCLN_I18N_USEARCH, usearch_cleanup);
     }
 }
@@ -138,7 +137,7 @@ uint16_t getFCD(const UChar   *str, int32_t *offset,
                              int32_t  strlength)
 {
     const UChar *temp = str + *offset;
-    uint16_t    result = unorm_nextFCD16(fcdTrieIndex, fcdHighStart, temp, str + strlength);
+    uint16_t    result = g_nfcImpl->nextFCD16(temp, str + strlength);
     *offset = (int32_t)(temp - str);
     return result;
 }
