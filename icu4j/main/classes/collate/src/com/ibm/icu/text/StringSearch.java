@@ -819,16 +819,19 @@ public final class StringSearch extends SearchIterator
     private final char getFCD(CharacterIterator str, int offset)
     {
         char ch = str.setIndex(offset);
-        int result = m_nfcImpl_.getFCD16FromSingleLead(ch);
-        if (result != 0 && Character.isHighSurrogate(ch)) {
-            char c2 = str.next();
-            if (Character.isLowSurrogate(c2)) {
-                result = m_nfcImpl_.getFCD16(Character.toCodePoint(ch, c2));
+        if (ch < 0x180) {
+            return (char)m_nfcImpl_.getFCD16FromBelow180(ch);
+        } else if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
+            if (!Character.isHighSurrogate(ch)) {
+                return (char)m_nfcImpl_.getFCD16FromNormData(ch);
             } else {
-                result = 0;
+                char c2 = str.next();
+                if (Character.isLowSurrogate(c2)) {
+                    return (char)m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(ch, c2));
+                }
             }
         }
-        return (char)result;
+        return 0;
     }
     /**
      * Gets the FCD value for the code point before the input offset.
@@ -838,24 +841,21 @@ public final class StringSearch extends SearchIterator
      * @return FCD value for the character before offset
      */
     private final int getFCDBefore(CharacterIterator iter, int offset) {
-        int result;
         iter.setIndex(offset);
         char c = iter.previous();
-        if (UTF16.isSurrogate(c)) {
-            if (Normalizer2Impl.UTF16Plus.isSurrogateLead(c)) {
-                result = 0;
-            } else {
-                char lead = iter.previous();
-                if (Character.isHighSurrogate(lead)) {
-                    result = m_nfcImpl_.getFCD16(Character.toCodePoint(lead, c));
-                } else {
-                    result = 0;
-                }
+        if (c < 0x180) {
+            return (char)m_nfcImpl_.getFCD16FromBelow180(c);
+        } else if (!Character.isLowSurrogate(c)) {
+            if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(c)) {
+                return (char)m_nfcImpl_.getFCD16FromNormData(c);
             }
         } else {
-            result = m_nfcImpl_.getFCD16FromSingleLead(c);
+            char lead = iter.previous();
+            if (Character.isHighSurrogate(lead)) {
+                return (char)m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(lead, c));
+            }
         }
-        return result;
+        return 0;
     }
     /**
      * Gets the fcd value for a character at the argument index.
@@ -867,16 +867,19 @@ public final class StringSearch extends SearchIterator
     private final char getFCD(String str, int offset)
     {
         char ch = str.charAt(offset);
-        int result = m_nfcImpl_.getFCD16FromSingleLead(ch);
-        if (result != 0 && Character.isHighSurrogate(ch)) {
-            char c2;
-            if (++offset < str.length() && Character.isLowSurrogate(c2 = str.charAt(offset))) {
-                result = m_nfcImpl_.getFCD16(Character.toCodePoint(ch, c2));
+        if (ch < 0x180) {
+            return (char)m_nfcImpl_.getFCD16FromBelow180(ch);
+        } else if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(ch)) {
+            if (!Character.isHighSurrogate(ch)) {
+                return (char)m_nfcImpl_.getFCD16FromNormData(ch);
             } else {
-                result = 0;
+                char c2;
+                if (++offset < str.length() && Character.isLowSurrogate(c2 = str.charAt(offset))) {
+                    return (char)m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(ch, c2));
+                }
             }
         }
-        return (char)result;
+        return 0;
     }
 
     /**
@@ -1058,7 +1061,6 @@ public final class StringSearch extends SearchIterator
      */ 
     private final void initialize()
     {
-        m_nfcImpl_.getFCDTrie();  // ensure the FCD data is initialized
         int expandlength  = initializePattern();   
         if (m_pattern_.m_CELength_ > 0) {
             char minlength = (char)(m_pattern_.m_CELength_ > expandlength 
@@ -1147,18 +1149,22 @@ public final class StringSearch extends SearchIterator
         // iteration ends with reading CharacterIterator.DONE which has fcd==0
         char c = text.setIndex(textoffset);
         for (;;) {
-            if ((m_nfcImpl_.getFCD16FromSingleLead(c) >> SECOND_LAST_BYTE_SHIFT_) == 0) {
+            if (c < Normalizer2Impl.MIN_CCC_LCCC_CP || !m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(c)) {
                 return textoffset;
             }
             char next = text.next();
             if (Character.isSurrogatePair(c, next)) {
-                int fcd = m_nfcImpl_.getFCD16(Character.toCodePoint(c, next));
+                int fcd = m_nfcImpl_.getFCD16FromNormData(Character.toCodePoint(c, next));
                 if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
                     return textoffset;
                 }
                 next = text.next();
                 textoffset += 2;
             } else {
+                int fcd = m_nfcImpl_.getFCD16FromNormData(c);
+                if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
+                    return textoffset;
+                }
                 ++textoffset;
             }
             c = next;

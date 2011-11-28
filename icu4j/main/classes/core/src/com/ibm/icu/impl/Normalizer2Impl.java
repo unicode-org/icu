@@ -536,48 +536,14 @@ public final class Normalizer2Impl {
     // low-level properties ------------------------------------------------ ***
 
     public Trie2_16 getNormTrie() { return normTrie; }
-    /**
-     * Builds and returns the FCD trie based on the data used in this instance.
-     * This is required before any of {@link #getFCD16(int)} or
-     * {@link #getFCD16FromSingleLead(char)} are called,
-     * or else they crash.
-     * This method is called automatically by Normalizer2.getInstance(..., Mode.FCD).
-     * @return The FCD trie for this instance's data.
-     */
-    public synchronized Trie2_16 getFCDTrie() {
-        if(fcdTrie!=null) {
-            return fcdTrie;
-        }
-        Trie2Writable newFCDTrie=new Trie2Writable(0, 0);
-        Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-        Trie2.Range range;
-        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
-            // Set the FCD value for a range of same-norm16 characters.
-            if(range.value!=0) {
-                setFCD16FromNorm16(range.startCodePoint, range.endCodePoint, range.value, newFCDTrie);
-            }
-        }
-        for(char lead=0xd800; lead<0xdc00; ++lead) {
-            // Collect (OR together) the FCD values for a range of supplementary characters,
-            // for their lead surrogate code unit.
-            int oredValue=newFCDTrie.get(lead);
-            trieIterator=normTrie.iteratorForLeadSurrogate(lead);
-            while(trieIterator.hasNext()) {
-                oredValue|=trieIterator.next().value;
-            }
-            if(oredValue!=0) {
-                // Set a "bad" value for makeFCD() to break the quick check loop
-                // and look up the value for the supplementary code point.
-                // If there is any lccc, then set the worst-case lccc of 1.
-                // The ORed-together value's tccc is already the worst case.
-                if(oredValue>0xff) {
-                    oredValue=0x100|(oredValue&0xff);
-                }
-                newFCDTrie.setForLeadSurrogateCodeUnit(lead, oredValue);
-            }
-        }
-        return fcdTrie=newFCDTrie.toTrie2_16();
-    }
+
+    // Note: Normalizer2Impl.java r30983 (2011-nov-27)
+    // still had getFCDTrie() which built and cached an FCD trie.
+    // That provided faster access to FCD data than getFCD16FromNormData()
+    // but required synchronization and consumed some 10kB of heap memory
+    // in any process that uses FCD (e.g., via collation).
+    // tccc180[] and smallFCD[] are intended to help with any loss of performance,
+    // at least for Latin & CJK.
 
     /**
      * Builds the canonical-iterator data for this instance.
@@ -695,20 +661,28 @@ public final class Normalizer2Impl {
 
     /**
      * Returns the FCD data for code point c.
-     * <b>{@link #getFCDTrie()} must have been called before this method,
-     * or else this method will crash.</b>
      * @param c A Unicode code point.
      * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
      */
-    public int getFCD16(int c) { return fcdTrie.get(c); }
-    /**
-     * Returns the FCD data for the single-or-lead code unit c.
-     * <b>{@link #getFCDTrie()} must have been called before this method,
-     * or else this method will crash.</b>
-     * @param c A Unicode code point.
-     * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
-     */
-    public int getFCD16FromSingleLead(char c) { return fcdTrie.getFromU16SingleLead(c); }
+    public int getFCD16(int c) {
+        if(c<0) {
+            return 0;
+        } else if(c<0x180) {
+            return tccc180[c];
+        } else if(c<=0xffff) {
+            if(!singleLeadMightHaveNonZeroFCD16(c)) { return 0; }
+        }
+        return getFCD16FromNormData(c);
+    }
+    /** Returns the FCD data for U+0000<=c<U+0180. */
+    public int getFCD16FromBelow180(int c) { return tccc180[c]; }
+    /** Returns true if the single-or-lead code unit c might have non-zero FCD data. */
+    public boolean singleLeadMightHaveNonZeroFCD16(int lead) {
+        // 0<=lead<=0xffff
+        byte bits=smallFCD[lead>>8];
+        if(bits==0) { return false; }
+        return ((bits>>((lead>>5)&7))&1)!=0;
+    }
 
     /** Gets the FCD value from the regular normalization data. */
     public int getFCD16FromNormData(int c) {
@@ -742,49 +716,6 @@ public final class Normalizer2Impl {
                     return fcd16;
                 }
             }
-        }
-    }
-
-    private void setFCD16FromNorm16(int start, int end, int norm16, Trie2Writable newFCDTrie) {
-        // Only loops for 1:1 algorithmic mappings.
-        for(;;) {
-            if(norm16>=MIN_NORMAL_MAYBE_YES) {
-                norm16&=0xff;
-                norm16|=norm16<<8;
-            } else if(norm16<=minYesNo || minMaybeYes<=norm16) {
-                // no decomposition or Hangul syllable, all zeros
-                break;
-            } else if(limitNoNo<=norm16) {
-                int delta=norm16-(minMaybeYes-MAX_DELTA-1);
-                if(start==end) {
-                    start+=delta;
-                    norm16=getNorm16(start);
-                } else {
-                    // the same delta leads from different original characters to different mappings
-                    do {
-                        int c=start+delta;
-                        setFCD16FromNorm16(c, c, getNorm16(c), newFCDTrie);
-                    } while(++start<=end);
-                    break;
-                }
-            } else {
-                // c decomposes, get everything from the variable-length extra data
-                int firstUnit=extraData.charAt(norm16);
-                if((firstUnit&MAPPING_LENGTH_MASK)==0) {
-                    // A character that is deleted (maps to an empty string) must
-                    // get the worst-case lccc and tccc values because arbitrary
-                    // characters on both sides will become adjacent.
-                    norm16=0x1ff;
-                } else {
-                    int fcd16=firstUnit>>8;  // tccc
-                    if((firstUnit&MAPPING_HAS_CCC_LCCC_WORD)!=0) {
-                        fcd16|=extraData.charAt(norm16-1)&0xff00;  // lccc
-                    }
-                    norm16=fcd16;
-                }
-            }
-            newFCDTrie.setRange(start, end, norm16, true);
-            break;
         }
     }
 
@@ -1450,24 +1381,24 @@ public final class Normalizer2Impl {
                 if((c=s.charAt(src))<MIN_CCC_LCCC_CP) {
                     prevFCD16=~c;
                     ++src;
-                } else if((fcd16=fcdTrie.getFromU16SingleLead((char)c))<=0xff) {
-                    prevFCD16=fcd16;
+                } else if(!singleLeadMightHaveNonZeroFCD16(c)) {
+                    prevFCD16=0;
                     ++src;
-                } else if(!UTF16.isSurrogate((char)c)) {
-                    break;
                 } else {
-                    char c2;
-                    if(UTF16Plus.isSurrogateLead(c)) {
-                        if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
-                            c=Character.toCodePoint((char)c, c2);
-                        }
-                    } else /* trail surrogate */ {
-                        if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
-                            --src;
-                            c=Character.toCodePoint(c2, (char)c);
+                    if(UTF16.isSurrogate((char)c)) {
+                        char c2;
+                        if(UTF16Plus.isSurrogateLead(c)) {
+                            if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
+                                c=Character.toCodePoint((char)c, c2);
+                            }
+                        } else /* trail surrogate */ {
+                            if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
+                                --src;
+                                c=Character.toCodePoint(c2, (char)c);
+                            }
                         }
                     }
-                    if((fcd16=getFCD16(c))<=0xff) {
+                    if((fcd16=getFCD16FromNormData(c))<=0xff) {
                         prevFCD16=fcd16;
                         src+=Character.charCount(c);
                     } else {
@@ -1487,7 +1418,8 @@ public final class Normalizer2Impl {
                 // We know that the previous character's lccc==0.
                 if(prevFCD16<0) {
                     // Fetching the fcd16 value was deferred for this below-U+0300 code point.
-                    prevFCD16=getFCD16FromSingleLead((char)~prevFCD16);
+                    int prev=~prevFCD16;
+                    prevFCD16= prev<0x180 ? tccc180[prev] : getFCD16FromNormData(prev);
                     if(prevFCD16>1) {
                         --prevBoundary;
                     }
@@ -1499,7 +1431,7 @@ public final class Normalizer2Impl {
                         --p;
                         // Need to fetch the previous character's FCD value because
                         // prevFCD16 was just for the trail surrogate code point.
-                        prevFCD16=getFCD16(Character.toCodePoint(s.charAt(p), s.charAt(p+1)));
+                        prevFCD16=getFCD16FromNormData(Character.toCodePoint(s.charAt(p), s.charAt(p+1)));
                         // Still known to have lccc==0 because its lead surrogate unit had lccc==0.
                     }
                     if(prevFCD16>1) {
@@ -2158,7 +2090,7 @@ public final class Normalizer2Impl {
         while(p>0) {
             int c=Character.codePointBefore(s, p);
             p-=Character.charCount(c);
-            if(fcdTrie.get(c)<=0xff) {
+            if(c<MIN_CCC_LCCC_CP || getFCD16(c)<=0xff) {
                 break;
             }
         }
@@ -2167,8 +2099,7 @@ public final class Normalizer2Impl {
     private int findNextFCDBoundary(CharSequence s, int p, int limit) {
         while(p<limit) {
             int c=Character.codePointAt(s, p);
-            int fcd16=fcdTrie.get(c);
-            if(fcd16<=0xff) {
+            if(c<MIN_CCC_LCCC_CP || getFCD16(c)<=0xff) {
                 break;
             }
             p+=Character.charCount(c);
@@ -2220,7 +2151,6 @@ public final class Normalizer2Impl {
     private byte[] smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
     private int[] tccc180;  // [0x180] tccc values for U+0000..U+017F
 
-    private Trie2_16 fcdTrie;
     private Trie2_32 canonIterData;
     private ArrayList<UnicodeSet> canonStartSets;
 

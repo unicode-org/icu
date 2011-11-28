@@ -47,7 +47,6 @@ final class CollationParsedRuleBuilder {
      *                thrown when argument rules have an invalid syntax
      */
     CollationParsedRuleBuilder(String rules) throws ParseException {
-        m_nfcImpl_.getFCDTrie();  // initialize the optional FCD trie
         m_parser_ = new CollationRuleParser(rules);
         m_parser_.assembleTokenList();
         m_utilColEIter_ = RuleBasedCollator.UCA_
@@ -1815,7 +1814,7 @@ final class CollationParsedRuleBuilder {
                 }
                 if (!buildCMTabFlag) {
                     // check combining class
-                    int fcd = m_nfcImpl_.getFCD16FromSingleLead(m_utilElement_.m_cPoints_.charAt(i));  // TODO: review for handling supplementary characters
+                    int fcd = m_nfcImpl_.getFCD16(m_utilElement_.m_cPoints_.charAt(i));  // TODO: review for handling supplementary characters
                     if ((fcd & 0xff) == 0) {
                         // reset flag when current char is not combining mark.
                         containCombinMarks = false;
@@ -3809,7 +3808,20 @@ final class CollationParsedRuleBuilder {
             cm = new char[0x10000];
         }
         for (char c = 0; c < 0xffff; c++) {
-            int fcd = m_nfcImpl_.getFCD16FromSingleLead(c);  // TODO: review for handling supplementary characters
+            int fcd;
+            if (UTF16.isLeadSurrogate(c)) {
+                fcd = 0;
+                if (m_nfcImpl_.singleLeadMightHaveNonZeroFCD16(c)) {
+                    int supp = Character.toCodePoint(c, (char)0xdc00);
+                    int suppLimit = supp + 0x400;
+                    while (supp < suppLimit) {
+                        fcd |= m_nfcImpl_.getFCD16(supp++);
+                    }
+                }
+            } else {
+                fcd = m_nfcImpl_.getFCD16(c);
+            }
+            // TODO: review for handling supplementary characters
             if (fcd >= 0x100 || // if the leading combining class(c) > 0 ||
                     (UTF16.isLeadSurrogate(c) && fcd != 0)) {
                 // c is a leading surrogate with some FCD data
@@ -3979,7 +3991,7 @@ final class CollationParsedRuleBuilder {
                 for (int j = 0; j < m_utilElement_.m_cPoints_.length()
                         - m_utilElement_.m_cPointsOffset_; j++) {
 
-                    int fcd = m_nfcImpl_.getFCD16FromSingleLead(m_utilElement_.m_cPoints_.charAt(j));  // TODO: review for handling supplementary characters
+                    int fcd = m_nfcImpl_.getFCD16(m_utilElement_.m_cPoints_.charAt(j));  // TODO: review for handling supplementary characters
                     if ((fcd & 0xff) == 0) {
                         baseChar = m_utilElement_.m_cPoints_.charAt(j);
                     } else {
@@ -4008,7 +4020,7 @@ final class CollationParsedRuleBuilder {
         }
         CombinClassTable cmLookup = t.cmLookup;
         int[] index = cmLookup.index;
-        int cClass = m_nfcImpl_.getFCD16FromSingleLead(cMark) & 0xff;  // TODO: review for handling supplementary characters
+        int cClass = m_nfcImpl_.getFCD16(cMark) & 0xff;  // TODO: review for handling supplementary characters
         int maxIndex = 0;
         char[] precompCh = new char[256];
         int[] precompClass = new int[256];
@@ -4024,7 +4036,7 @@ final class CollationParsedRuleBuilder {
             String comp = Normalizer.compose(decompBuf.toString(), false);
             if (comp.length() == 1) {
                 precompCh[precompLen] = comp.charAt(0);
-                precompClass[precompLen] = (m_nfcImpl_.getFCD16FromSingleLead(cmLookup.cPoints[i]) & 0xff);  // TODO: review for handling supplementary characters
+                precompClass[precompLen] = m_nfcImpl_.getFCD16(cmLookup.cPoints[i]) & 0xff;  // TODO: review for handling supplementary characters
                 precompLen++;
                 StringBuilder decomp = new StringBuilder();
                 for (int j = 0; j < m_utilElement_.m_cPoints_.length(); j++) {
