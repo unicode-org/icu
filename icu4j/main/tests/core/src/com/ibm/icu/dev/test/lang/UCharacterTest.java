@@ -800,12 +800,12 @@ public final class UCharacterTest extends TestFmwk
                 }
                 int i=UCharacter.getIntPropertyValue(ch, UProperty.DECOMPOSITION_TYPE);
                 assertEquals(
-                        String.format("error: u_getIntPropertyValue(U+%04lx, UCHAR_DECOMPOSITION_TYPE) is wrong", ch),
+                        String.format("error: u_getIntPropertyValue(U+%04x, UCHAR_DECOMPOSITION_TYPE) is wrong", ch),
                         dt, i);
                 /* Expect Decomposition_Mapping=nfkc.getRawDecomposition(c). */
                 String mapping=nfkc.getRawDecomposition(ch);
                 assertEquals(
-                        String.format("error: nfkc.getRawDecomposition(U+%04lx) is wrong", ch),
+                        String.format("error: nfkc.getRawDecomposition(U+%04x) is wrong", ch),
                         dm, mapping);
                 /* For canonical decompositions only, expect Decomposition_Mapping=nfc.getRawDecomposition(c). */
                 if(dt!=UCharacter.DecompositionType.CANONICAL) {
@@ -813,7 +813,7 @@ public final class UCharacterTest extends TestFmwk
                 }
                 mapping=nfc.getRawDecomposition(ch);
                 assertEquals(
-                        String.format("error: nfc.getRawDecomposition(U+%04lx) is wrong", ch),
+                        String.format("error: nfc.getRawDecomposition(U+%04x) is wrong", ch),
                         dm, mapping);
                 /* recompose */
                 if(dt==UCharacter.DecompositionType.CANONICAL
@@ -823,8 +823,8 @@ public final class UCharacterTest extends TestFmwk
                     int composite=nfc.composePair(a, b);
                     assertEquals(
                             String.format(
-                                    "error: nfc U+%04lX decomposes to U+%04lX+U+%04lX "+
-                                    "but does not compose back (instead U+%04lX)",
+                                    "error: nfc U+%04X decomposes to U+%04X+U+%04X "+
+                                    "but does not compose back (instead U+%04X)",
                                     ch, a, b, composite),
                             ch, composite);
                     /*
@@ -834,57 +834,68 @@ public final class UCharacterTest extends TestFmwk
                 }
 
                 // testing iso comment
-                try{
-                    String isocomment = fields[11];
-                    String comment = UCharacter.getISOComment(ch);
-                    if (comment == null) {
-                        comment = "";
-                    }
-                    if (!comment.equals(isocomment)) {
-                        errln("FAIL \\u" + hex(ch) +
-                            " expected iso comment " + isocomment);
-                        break;
-                    }
-                }catch(Exception e){
-                    if(e.getMessage().indexOf("unames.icu") >= 0){
-                        numErrors++;
-                    }else{
-                        throw e;
+                if (fields.length >= 12) {
+                    try{
+                        String isocomment = fields[11];
+                        String comment = UCharacter.getISOComment(ch);
+                        if (comment == null) {
+                            comment = "";
+                        }
+                        if (!comment.equals(isocomment)) {
+                            errln("FAIL \\u" + hex(ch) +
+                                " expected iso comment " + isocomment);
+                            break;
+                        }
+                    }catch(Exception e){
+                        if(e.getMessage().indexOf("unames.icu") >= 0){
+                            numErrors++;
+                        }else{
+                            throw e;
+                        }
                     }
                 }
 
-                String upper = fields[12];
-                int tempchar = ch;
-                if (upper.length() > 0) {
-                    tempchar = Integer.parseInt(upper, 16);
+                int tempchar;
+                if (fields.length >= 13) {
+                    String upper = fields[12];
+                    tempchar = ch;
+                    if (upper.length() > 0) {
+                        tempchar = Integer.parseInt(upper, 16);
+                    }
+                    if (UCharacter.toUpperCase(ch) != tempchar) {
+                        errln("FAIL \\u" + Utility.hex(ch, 4)
+                                + " expected uppercase \\u"
+                                + Utility.hex(tempchar, 4));
+                        break;
+                    }
                 }
-                if (UCharacter.toUpperCase(ch) != tempchar) {
-                    errln("FAIL \\u" + Utility.hex(ch, 4)
-                            + " expected uppercase \\u"
-                            + Utility.hex(tempchar, 4));
-                    break;
+                
+                if (fields.length >= 14) {
+                    String lower = fields[13];
+                    tempchar = ch;
+                    if (lower.length() > 0) {
+                        tempchar = Integer.parseInt(lower, 16);
+                    }
+                    if (UCharacter.toLowerCase(ch) != tempchar) {
+                        errln("FAIL \\u" + Utility.hex(ch, 4)
+                                + " expected lowercase \\u"
+                                + Utility.hex(tempchar, 4));
+                        break;
+                    }
                 }
-                String lower = fields[13];
-                tempchar = ch;
-                if (lower.length() > 0) {
-                    tempchar = Integer.parseInt(lower, 16);
-                }
-                if (UCharacter.toLowerCase(ch) != tempchar) {
-                    errln("FAIL \\u" + Utility.hex(ch, 4)
-                            + " expected lowercase \\u"
-                            + Utility.hex(tempchar, 4));
-                    break;
-                }
-                String title = fields[14];
-                tempchar = ch;
-                if (title.length() > 0) {
-                    tempchar = Integer.parseInt(title, 16);
-                }
-                if (UCharacter.toTitleCase(ch) != tempchar) {
-                    errln("FAIL \\u" + Utility.hex(ch, 4)
-                            + " expected titlecase \\u"
-                            + Utility.hex(tempchar, 4));
-                    break;
+                
+                if (fields.length >= 15) {
+                    String title = fields[14];
+                    tempchar = ch;
+                    if (title.length() > 0) {
+                        tempchar = Integer.parseInt(title, 16);
+                    }
+                    if (UCharacter.toTitleCase(ch) != tempchar) {
+                        errln("FAIL \\u" + Utility.hex(ch, 4)
+                                + " expected titlecase \\u"
+                                + Utility.hex(tempchar, 4));
+                        break;
+                    }
                 }
             }
             input.close();
