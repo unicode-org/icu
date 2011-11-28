@@ -52,13 +52,11 @@ U_NAMESPACE_USE
 
 #define ZERO_CC_LIMIT_            0xC0
 
-// this is static pointer to the normalizer fcdTrieIndex
+// This is static pointer to the NFC implementation instance.
 // it is always the same between calls to u_cleanup
 // and therefore writing to it is not synchronized.
 // It is cleaned in ucol_cleanup
-static const uint16_t *fcdTrieIndex=NULL;
-// Code points at fcdHighStart and above have a zero FCD value.
-static UChar32 fcdHighStart = 0;
+static const Normalizer2Impl *g_nfcImpl = NULL;
 
 // These are values from UCA required for
 // implicit generation and supressing sort key compression
@@ -72,7 +70,7 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV
 ucol_cleanup(void)
 {
-    fcdTrieIndex = NULL;
+    g_nfcImpl = NULL;
     return TRUE;
 }
 
@@ -86,11 +84,13 @@ U_CDECL_END
 // init FCD data
 static inline
 UBool initializeFCD(UErrorCode *status) {
-    if (fcdTrieIndex != NULL) {
+    if (g_nfcImpl != NULL) {
         return TRUE;
     } else {
         // The result is constant, until the library is reloaded.
-        fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+        g_nfcImpl = Normalizer2Factory::getNFCImpl(*status);
+        // Note: Alternatively, we could also store this pointer in each collIterate struct,
+        // same as Normalizer2Factory::getImpl(collIterate->nfd).
         ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
         return U_SUCCESS(*status);
     }
@@ -1433,10 +1433,8 @@ inline UBool collIterFCD(collIterate *collationSource) {
         endP = NULL;
     }
 
-    // Get the trailing combining class of the current character.  If it's zero,
-    //   we are OK.
-    /* trie access */
-    fcd = unorm_nextFCD16(fcdTrieIndex, fcdHighStart, srcP, endP);
+    // Get the trailing combining class of the current character. If it's zero, we are OK.
+    fcd = g_nfcImpl->nextFCD16(srcP, endP);
     if (fcd != 0) {
         prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
 
@@ -1447,8 +1445,7 @@ inline UBool collIterFCD(collIterate *collationSource) {
             {
                 const UChar *savedSrcP = srcP;
 
-                /* trie access */
-                fcd = unorm_nextFCD16(fcdTrieIndex, fcdHighStart, srcP, endP);
+                fcd = g_nfcImpl->nextFCD16(srcP, endP);
                 leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
                 if (leadingCC == 0) {
                     srcP = savedSrcP;      // Hit char that is not part of combining sequence.
@@ -1809,7 +1806,7 @@ inline UBool collPrevIterFCD(collIterate *data)
     src = data->pos + 1;
 
     /* Get the trailing combining class of the current character. */
-    fcd = unorm_prevFCD16(fcdTrieIndex, fcdHighStart, start, src);
+    fcd = g_nfcImpl->previousFCD16(start, src);
 
     leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
 
@@ -1825,7 +1822,7 @@ inline UBool collPrevIterFCD(collIterate *data)
                 return result;
             }
 
-            fcd = unorm_prevFCD16(fcdTrieIndex, fcdHighStart, start, src);
+            fcd = g_nfcImpl->previousFCD16(start, src);
 
             trailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
 
