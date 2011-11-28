@@ -845,8 +845,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     UColToken *tok = lh->first;
     UColToken *expt = NULL;
     uint32_t i = 0, j = 0;
-    UChar32 fcdHighStart;
-    const uint16_t *fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+    const Normalizer2Impl *nfcImpl = Normalizer2Factory::getNFCImpl(*status);
 
     while(tok != NULL && U_SUCCESS(*status)) {
         /* first, check if there are any expansions */
@@ -942,7 +941,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
             if (!src->buildCCTabFlag && el.cSize > 0) {
                 // Check the trailing canonical combining class (tccc) of the last character.
                 const UChar *s = el.cPoints + el.cSize;
-                uint16_t fcd = unorm_prevFCD16(fcdTrieIndex, fcdHighStart, el.cPoints, s);
+                uint16_t fcd = nfcImpl->previousFCD16(el.cPoints, s);
                 if ((fcd & 0xff) != 0) {
                     src->buildCCTabFlag = TRUE;
                 }

@@ -401,7 +401,7 @@ static int32_t getLeadCombiningClass(const IntProperty &, UChar32, UProperty) {
 }
 #else
 static int32_t getLeadCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return unorm_getFCD16Simple(c)>>8;
+    return unorm_getFCD16(c)>>8;
 }
 #endif
 
@@ -411,7 +411,7 @@ static int32_t getTrailCombiningClass(const IntProperty &, UChar32, UProperty) {
 }
 #else
 static int32_t getTrailCombiningClass(const IntProperty &/*prop*/, UChar32 c, UProperty /*which*/) {
-    return unorm_getFCD16Simple(c)&0xff;
+    return unorm_getFCD16(c)&0xff;
 }
 #endif
 

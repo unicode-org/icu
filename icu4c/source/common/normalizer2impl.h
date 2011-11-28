@@ -216,7 +216,6 @@ private:
 class U_COMMON_API Normalizer2Impl : public UMemory {
 public:
     Normalizer2Impl() : memory(NULL), normTrie(NULL) {
-        fcdTrieSingleton.fInstance=NULL;
         canonIterDataSingleton.fInstance=NULL;
     }
     ~Normalizer2Impl();
@@ -229,7 +228,6 @@ public:
     // low-level properties ------------------------------------------------ ***
 
     const UTrie2 *getNormTrie() const { return normTrie; }
-    const UTrie2 *getFCDTrie(UErrorCode &errorCode) const ;
 
     UBool ensureCanonIterData(UErrorCode &errorCode) const;
 
@@ -260,21 +258,79 @@ public:
         return norm16>=MIN_NORMAL_MAYBE_YES ? (uint8_t)norm16 : 0;
     }
 
-    uint16_t getFCD16(UChar32 c) const { return UTRIE2_GET16(fcdTrie(), c); }
-    uint16_t getFCD16FromSingleLead(UChar c) const {
-        return UTRIE2_GET16_FROM_U16_SINGLE_LEAD(fcdTrie(), c);
+    /**
+     * Returns the FCD data for code point c.
+     * @param c A Unicode code point.
+     * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
+     */
+    uint16_t getFCD16(UChar32 c) const {
+        if(c<0) {
+            return 0;
+        } else if(c<0x180) {
+            return tccc180[c];
+        } else if(c<=0xffff) {
+            if(!singleLeadMightHaveNonZeroFCD16(c)) { return 0; }
+        }
+        return getFCD16FromNormData(c);
     }
-    uint16_t getFCD16FromSupplementary(UChar32 c) const {
-        return UTRIE2_GET16_FROM_SUPP(fcdTrie(), c);
+    /**
+     * Returns the FCD data for the next code point (post-increment).
+     * Might skip only a lead surrogate rather than the whole surrogate pair if none of
+     * the supplementary code points associated with the lead surrogate have non-zero FCD data.
+     * @param s A valid pointer into a string. Requires s!=limit.
+     * @param limit The end of the string, or NULL.
+     * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
+     */
+    uint16_t nextFCD16(const UChar *&s, const UChar *limit) const {
+        UChar32 c=*s++;
+        if(c<0x180) {
+            return tccc180[c];
+        } else if(!singleLeadMightHaveNonZeroFCD16(c)) {
+            return 0;
+        }
+        UChar c2;
+        if(U16_IS_LEAD(c) && s!=limit && U16_IS_TRAIL(c2=*s)) {
+            c=U16_GET_SUPPLEMENTARY(c, c2);
+            ++s;
+        }
+        return getFCD16FromNormData(c);
     }
-    uint16_t getFCD16FromSurrogatePair(UChar c, UChar c2) const {
-        return getFCD16FromSupplementary(U16_GET_SUPPLEMENTARY(c, c2));
+    /**
+     * Returns the FCD data for the previous code point (pre-decrement).
+     * @param start The start of the string.
+     * @param s A valid pointer into a string. Requires start<s.
+     * @return The lccc(c) in bits 15..8 and tccc(c) in bits 7..0.
+     */
+    uint16_t previousFCD16(const UChar *start, const UChar *&s) const {
+        UChar32 c=*--s;
+        if(c<0x180) {
+            return tccc180[c];
+        }
+        if(!U16_IS_TRAIL(c)) {
+            if(!singleLeadMightHaveNonZeroFCD16(c)) {
+                return 0;
+            }
+        } else {
+            UChar c2;
+            if(start<s && U16_IS_LEAD(c2=*(s-1))) {
+                c=U16_GET_SUPPLEMENTARY(c2, c);
+                --s;
+            }
+        }
+        return getFCD16FromNormData(c);
     }
 
+    /** Returns the FCD data for U+0000<=c<U+0180. */
+    uint16_t getFCD16FromBelow180(UChar32 c) const { return tccc180[c]; }
+    /** Returns TRUE if the single-or-lead code unit c might have non-zero FCD data. */
+    UBool singleLeadMightHaveNonZeroFCD16(UChar32 lead) const {
+        // 0<=lead<=0xffff
+        uint8_t bits=smallFCD[lead>>8];
+        if(bits==0) { return false; }
+        return (UBool)((bits>>((lead>>5)&7))&1);
+    }
+    /** Returns the FCD value from the regular normalization data. */
     uint16_t getFCD16FromNormData(UChar32 c) const;
-
-    void setFCD16FromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
-                            UTrie2 *newFCDTrie, UErrorCode &errorCode) const;
 
     void makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, uint16_t norm16,
                                      CanonIterData &newData, UErrorCode &errorCode) const;
@@ -504,8 +560,6 @@ private:
     const UChar *findPreviousCompBoundary(const UChar *start, const UChar *p) const;
     const UChar *findNextCompBoundary(const UChar *p, const UChar *limit) const;
 
-    const UTrie2 *fcdTrie() const { return (const UTrie2 *)fcdTrieSingleton.fInstance; }
-
     const UChar *findPreviousFCDBoundary(const UChar *start, const UChar *p) const;
     const UChar *findNextFCDBoundary(const UChar *p, const UChar *limit) const;
 
@@ -532,7 +586,6 @@ private:
     const uint8_t *smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
     uint8_t tccc180[0x180];  // tccc values for U+0000..U+017F
 
-    SimpleSingleton fcdTrieSingleton;
     SimpleSingleton canonIterDataSingleton;
 };
 
@@ -565,8 +618,6 @@ public:
     // Get the Impl instance of the Normalizer2.
     // Must be used only when it is known that norm2 is a Normalizer2WithImpl instance.
     static const Normalizer2Impl *getImpl(const Normalizer2 *norm2);
-
-    static const UTrie2 *getFCDTrie(UErrorCode &errorCode);
 private:
     Normalizer2Factory();  // No instantiation.
 };
@@ -586,101 +637,11 @@ U_CFUNC UNormalizationCheckResult
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
 
 /**
- * Get the 16-bit FCD value (lead & trail CCs) for a code point, for u_getIntPropertyValue().
+ * Gets the 16-bit FCD value (lead & trail CCs) for a code point, for u_getIntPropertyValue().
  * @internal
  */
 U_CFUNC uint16_t
-unorm_getFCD16Simple(UChar32 c);
-
-/**
- * Internal API, used by collation code.
- * Get access to the internal FCD trie table to be able to perform
- * incremental, per-code unit, FCD checks in collation.
- * One pointer is sufficient because the trie index values are offset
- * by the index size, so that the same pointer is used to access the trie data.
- * Code points at fcdHighStart and above have a zero FCD value.
- * @internal
- */
-U_CAPI const uint16_t * U_EXPORT2
-unorm_getFCDTrieIndex(UChar32 &fcdHighStart, UErrorCode *pErrorCode);
-
-/**
- * Internal API, used by collation code.
- * Get the FCD value for a code unit, with
- * bits 15..8   lead combining class
- * bits  7..0   trail combining class
- *
- * If c is a lead surrogate and the value is not 0,
- * then some of c's associated supplementary code points have a non-zero FCD value.
- *
- * @internal
- */
-static inline uint16_t
-unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
-    return fcdTrieIndex[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(fcdTrieIndex, c)];
-}
-
-/**
- * Internal API, used by collation code.
- * Get the FCD value of the next code point (post-increment), with
- * bits 15..8   lead combining class
- * bits  7..0   trail combining class
- *
- * @internal
- */
-static inline uint16_t
-unorm_nextFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
-                const UChar *&s, const UChar *limit) {
-    UChar32 c=*s++;
-    uint16_t fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(fcdTrieIndex, c)];
-    if(fcd!=0 && U16_IS_LEAD(c)) {
-        UChar c2;
-        if(s!=limit && U16_IS_TRAIL(c2=*s)) {
-            ++s;
-            c=U16_GET_SUPPLEMENTARY(c, c2);
-            if(c<fcdHighStart) {
-                fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_SUPP(fcdTrieIndex, c)];
-            } else {
-                fcd=0;
-            }
-        } else /* unpaired lead surrogate */ {
-            fcd=0;
-        }
-    }
-    return fcd;
-}
-
-/**
- * Internal API, used by collation code.
- * Get the FCD value of the previous code point (pre-decrement), with
- * bits 15..8   lead combining class
- * bits  7..0   trail combining class
- *
- * @internal
- */
-static inline uint16_t
-unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
-                const UChar *start, const UChar *&s) {
-    UChar32 c=*--s;
-    uint16_t fcd;
-    if(!U16_IS_SURROGATE(c)) {
-        fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(fcdTrieIndex, c)];
-    } else {
-        UChar c2;
-        if(U16_IS_SURROGATE_TRAIL(c) && s!=start && U16_IS_LEAD(c2=*(s-1))) {
-            --s;
-            c=U16_GET_SUPPLEMENTARY(c2, c);
-            if(c<fcdHighStart) {
-                fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_SUPP(fcdTrieIndex, c)];
-            } else {
-                fcd=0;
-            }
-        } else /* unpaired surrogate */ {
-            fcd=0;
-        }
-    }
-    return fcd;
-}
+unorm_getFCD16(UChar32 c);
 
 /**
  * Format of Normalizer2 .nrm data files.

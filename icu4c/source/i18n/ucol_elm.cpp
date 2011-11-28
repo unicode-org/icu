@@ -743,15 +743,12 @@ uprv_uca_copyCMTable(tempUCATable *t, UChar *cm, uint16_t *index) {
 static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
 
     UChar              c;
-    uint16_t           fcd;     // Hi byte is lead combining class.
-    // lo byte is trailing combing class.
-    const uint16_t    *fcdTrieIndex;
-    UChar32            fcdHighStart;
+    uint16_t           fcd;     // Hi byte is lead combining class. lo byte is trailing combing class.
     UBool buildCMTable = (t->cmLookup==NULL); // flag for building combining class table
     UChar *cm=NULL;
     uint16_t index[256];
     int32_t count=0;
-    fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+    const Normalizer2Impl *nfcImpl = Normalizer2Factory::getNFCImpl(*status);
     if (U_FAILURE(*status)) {
         return;
     }
@@ -767,7 +764,18 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
         uprv_memset(index, 0, sizeof(index));
     }
     for (c=0; c<0xffff; c++) {
-        fcd = unorm_getFCD16(fcdTrieIndex, c);
+        if (U16_IS_LEAD(c)) {
+            fcd = 0;
+            if (nfcImpl->singleLeadMightHaveNonZeroFCD16(c)) {
+                UChar32 supp = U16_GET_SUPPLEMENTARY(c, 0xdc00);
+                UChar32 suppLimit = supp + 0x400;
+                while (supp < suppLimit) {
+                    fcd |= nfcImpl->getFCD16FromNormData(supp++);
+                }
+            }
+        } else {
+            fcd = nfcImpl->getFCD16(c);
+        }
         if (fcd >= 0x100 ||               // if the leading combining class(c) > 0 ||
             (U16_IS_LEAD(c) && fcd != 0)) {//    c is a leading surrogate with some FCD data
             if (buildCMTable) {
@@ -1785,12 +1793,11 @@ uprv_uca_addMultiCMContractions(tempUCATable *t,
     CombinClassTable *cmLookup = t->cmLookup;
     UChar  newDecomp[256];
     int32_t maxComp, newDecLen;
-    UChar32 fcdHighStart;
-    const uint16_t *fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+    const Normalizer2Impl *nfcImpl = Normalizer2Factory::getNFCImpl(*status);
     if (U_FAILURE(*status)) {
         return;
     }
-    int16_t curClass = (unorm_getFCD16(fcdTrieIndex, c->tailoringCM) & 0xff);
+    int16_t curClass = nfcImpl->getFCD16(c->tailoringCM) & 0xff;
     CompData *precomp = c->precomp;
     int32_t  compLen = c->compLen;
     UChar *comp = c->comp;
@@ -1855,12 +1862,11 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
                                   UCAElements *el,
                                   UErrorCode *status) {
     CombinClassTable *cmLookup = t->cmLookup;
-    UChar32 fcdHighStart;
-    const uint16_t *fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
+    const Normalizer2Impl *nfcImpl = Normalizer2Factory::getNFCImpl(*status);
     if (U_FAILURE(*status)) {
         return;
     }
-    int16_t maxIndex = (unorm_getFCD16(fcdTrieIndex, cMark) & 0xff );
+    int16_t maxIndex = nfcImpl->getFCD16(cMark) & 0xff;
     UCAElements element;
     uint16_t *index;
     UChar  decomp[256];
@@ -1874,8 +1880,8 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
         return;
     }
     index = cmLookup->index;
-    int32_t cClass=(unorm_getFCD16(fcdTrieIndex, cMark) & 0xff);
-    maxIndex = (int32_t)index[(unorm_getFCD16(fcdTrieIndex, cMark) & 0xff)-1];
+    int32_t cClass=nfcImpl->getFCD16(cMark) & 0xff;
+    maxIndex = (int32_t)index[(nfcImpl->getFCD16(cMark) & 0xff)-1];
     c.comp = comp;
     c.decomp = decomp;
     c.precomp = precomp;
@@ -1898,7 +1904,7 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
             // other combining mark combinations.
             precomp[precompLen].cp=comp[0];
             curClass = precomp[precompLen].cClass =
-                       index[unorm_getFCD16(fcdTrieIndex, decomp[1]) & 0xff];
+                       index[nfcImpl->getFCD16(decomp[1]) & 0xff];
             precompLen++;
             replacedPos=0;
             for (decompLen=0; decompLen< (int32_t)el->cSize; decompLen++) {
@@ -1938,7 +1944,7 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
             // This is a fix for tailoring contractions with accented
             // character at the end of contraction string.
             if ((len>2) && 
-                (unorm_getFCD16(fcdTrieIndex, comp[len-2]) & 0xff00)==0) {
+                (nfcImpl->getFCD16(comp[len-2]) & 0xff00)==0) {
                 uprv_uca_addFCD4AccentedContractions(t, colEl, comp, len, &element, status);
             }
 
@@ -1967,8 +1973,6 @@ uprv_uca_canonicalClosure(tempUCATable *t,
     UColToken *tok;
     uint32_t i = 0, j = 0;
     UChar  baseChar, firstCM;
-    UChar32 fcdHighStart;
-    const uint16_t *fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
     context.nfcImpl=Normalizer2Factory::getNFCImpl(*status);
     if(U_FAILURE(*status)) {
         return 0;
@@ -2039,7 +2043,7 @@ uprv_uca_canonicalClosure(tempUCATable *t,
             }
             if(src->UCA != NULL) {
                 for(j = 0; j<el.cSize; j++) {
-                    int16_t fcd = unorm_getFCD16(fcdTrieIndex, el.cPoints[j]);
+                    int16_t fcd = context.nfcImpl->getFCD16(el.cPoints[j]);
                     if ( (fcd & 0xff) == 0 ) {
                         baseChar = el.cPoints[j];  // last base character
                         firstCM=0;  // reset combining mark value
