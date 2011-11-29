@@ -620,11 +620,11 @@ Normalizer2Impl::getRawDecomposition(UChar32 c, UChar buffer[30], int32_t &lengt
             uint16_t rm0=*rawMapping;
             if(rm0<=MAPPING_LENGTH_MASK) {
                 length=rm0;
-                return rawMapping-rm0;
+                return (const UChar *)rawMapping-rm0;
             } else {
                 // Copy the normal mapping and replace its first two code units with rm0.
                 buffer[0]=(UChar)rm0;
-                u_memcpy(buffer+1, mapping+1+2, mLength-2);
+                u_memcpy(buffer+1, (const UChar *)mapping+1+2, mLength-2);
                 length=mLength-1;
                 return buffer;
             }
