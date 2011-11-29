@@ -358,31 +358,23 @@ public final class ZoneMeta {
     public static String getCanonicalCLDRID(String tzid) {
         String canonical = CANONICAL_ID_CACHE.get(tzid);
         if (canonical == null) {
-            int zoneIdx = getZoneIndex(tzid);
-            if (zoneIdx >= 0) {
+            canonical = findCLDRCanonicalID(tzid);
+            if (canonical == null) {
+                // Resolve Olson link and try it again if necessary
                 try {
-                    UResourceBundle top = UResourceBundle.getBundleInstance(
-                            ICUResourceBundle.ICU_BASE_NAME, ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                    UResourceBundle zones = top.get(kZONES);
-                    UResourceBundle zone = zones.get(zoneIdx);
-                    if (zone.getType() == UResourceBundle.INT) {
-                        // resolve link
-                        String tmp = getZoneID(zone.getInt());
-                        if (tmp != null) {
-                            canonical = tmp;
+                    int zoneIdx = getZoneIndex(tzid);
+                    if (zoneIdx >= 0) {
+                        UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                                ZONEINFORESNAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                        UResourceBundle zones = top.get(kZONES);
+                        UResourceBundle zone = zones.get(zoneIdx);
+                        if (zone.getType() == UResourceBundle.INT) {
+                            // It's a link - resolve link and lookup
+                            tzid = getZoneID(zone.getInt());
+                            canonical = findCLDRCanonicalID(tzid);
                         }
-                    } else {
-                        canonical = tzid;
-                    }
-                    // check canonical mapping in CLDR
-                    UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(
-                            ICUResourceBundle.ICU_BASE_NAME, "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                    UResourceBundle typeAlias = keyTypeData.get("typeAlias");
-                    UResourceBundle aliasesForKey = typeAlias.get("timezone");
-                    if (canonical != null) {
-                        String cldrCanonical = aliasesForKey.getString(canonical.replace('/', ':'));
-                        if (cldrCanonical != null) {
-                            canonical = cldrCanonical;
+                        if (canonical == null) {
+                            canonical = tzid;
                         }
                     }
                 } catch (MissingResourceException e) {
@@ -392,6 +384,35 @@ public final class ZoneMeta {
             if (canonical != null) {
                 CANONICAL_ID_CACHE.put(tzid, canonical);
             }
+        }
+        return canonical;
+    }
+
+    private static String findCLDRCanonicalID(String tzid) {
+        String canonical = null;
+        String tzidKey = tzid.replace('/', ':');
+
+        try {
+            // First, try check if the given ID is canonical
+            UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                    "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle typeMap = keyTypeData.get("typeMap");
+            UResourceBundle typeKeys = typeMap.get("timezone");
+            try {
+                /* UResourceBundle canonicalEntry = */ typeKeys.get(tzidKey);
+                // The given tzid is available in the canonical list
+                canonical = tzid;
+            } catch (MissingResourceException e) {
+                // fall through
+            }
+            if (canonical == null) {
+                // Try alias map
+                UResourceBundle typeAlias = keyTypeData.get("typeAlias");
+                UResourceBundle aliasesForKey = typeAlias.get("timezone");
+                canonical = aliasesForKey.getString(tzidKey);
+            }
+        } catch (MissingResourceException e) {
+            // fall through
         }
         return canonical;
     }
