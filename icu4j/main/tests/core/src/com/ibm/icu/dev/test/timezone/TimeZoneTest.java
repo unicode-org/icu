@@ -1597,6 +1597,8 @@ public class TimeZoneTest extends TestFmwk
                 {"Etc/Unknown", "Etc/Unknown", null},
                 {"bogus", null, null},
                 {"", null, null},
+                {"America/Marigot", "America/Marigot", "true"},     // Olson link, but CLDR canonical (#8953)
+                {"Europe/Bratislava", "Europe/Bratislava", "true"}, // Same as above
                 {null, null, null},
         };
         boolean[] isSystemID = new boolean[1];
