@@ -834,68 +834,61 @@ public final class UCharacterTest extends TestFmwk
                 }
 
                 // testing iso comment
-                if (fields.length >= 12) {
-                    try{
-                        String isocomment = fields[11];
-                        String comment = UCharacter.getISOComment(ch);
-                        if (comment == null) {
-                            comment = "";
-                        }
-                        if (!comment.equals(isocomment)) {
-                            errln("FAIL \\u" + hex(ch) +
-                                " expected iso comment " + isocomment);
-                            break;
-                        }
-                    }catch(Exception e){
-                        if(e.getMessage().indexOf("unames.icu") >= 0){
-                            numErrors++;
-                        }else{
-                            throw e;
-                        }
+                try{
+                    String isocomment = fields[11];
+                    String comment = UCharacter.getISOComment(ch);
+                    if (comment == null) {
+                        comment = "";
+                    }
+                    if (!comment.equals(isocomment)) {
+                        errln("FAIL \\u" + hex(ch) +
+                            " expected iso comment " + isocomment);
+                        break;
+                    }
+                }catch(Exception e){
+                    if(e.getMessage().indexOf("unames.icu") >= 0){
+                        numErrors++;
+                    }else{
+                        throw e;
                     }
                 }
 
-                int tempchar;
-                if (fields.length >= 13) {
-                    String upper = fields[12];
-                    tempchar = ch;
-                    if (upper.length() > 0) {
-                        tempchar = Integer.parseInt(upper, 16);
-                    }
-                    if (UCharacter.toUpperCase(ch) != tempchar) {
-                        errln("FAIL \\u" + Utility.hex(ch, 4)
-                                + " expected uppercase \\u"
-                                + Utility.hex(tempchar, 4));
-                        break;
-                    }
+                String upper = fields[12];
+                int tempchar = ch;
+                if (upper.length() > 0) {
+                    tempchar = Integer.parseInt(upper, 16);
                 }
-                
-                if (fields.length >= 14) {
-                    String lower = fields[13];
-                    tempchar = ch;
-                    if (lower.length() > 0) {
-                        tempchar = Integer.parseInt(lower, 16);
-                    }
-                    if (UCharacter.toLowerCase(ch) != tempchar) {
-                        errln("FAIL \\u" + Utility.hex(ch, 4)
-                                + " expected lowercase \\u"
-                                + Utility.hex(tempchar, 4));
-                        break;
-                    }
+                if (UCharacter.toUpperCase(ch) != tempchar) {
+                    errln("FAIL \\u" + Utility.hex(ch, 4)
+                            + " expected uppercase \\u"
+                            + Utility.hex(tempchar, 4));
+                    break;
                 }
+
+                String lower = fields[13];
+                tempchar = ch;
+                if (lower.length() > 0) {
+                    tempchar = Integer.parseInt(lower, 16);
+                }
+                if (UCharacter.toLowerCase(ch) != tempchar) {
+                    errln("FAIL \\u" + Utility.hex(ch, 4)
+                            + " expected lowercase \\u"
+                            + Utility.hex(tempchar, 4));
+                    break;
+                }
+
                 
-                if (fields.length >= 15) {
-                    String title = fields[14];
-                    tempchar = ch;
-                    if (title.length() > 0) {
-                        tempchar = Integer.parseInt(title, 16);
-                    }
-                    if (UCharacter.toTitleCase(ch) != tempchar) {
-                        errln("FAIL \\u" + Utility.hex(ch, 4)
-                                + " expected titlecase \\u"
-                                + Utility.hex(tempchar, 4));
-                        break;
-                    }
+
+                String title = fields[14];
+                tempchar = ch;
+                if (title.length() > 0) {
+                    tempchar = Integer.parseInt(title, 16);
+                }
+                if (UCharacter.toTitleCase(ch) != tempchar) {
+                    errln("FAIL \\u" + Utility.hex(ch, 4)
+                            + " expected titlecase \\u"
+                            + Utility.hex(tempchar, 4));
+                    break;
                 }
             }
             input.close();
