@@ -197,8 +197,7 @@ static UNewTrie *sprepTrie;
 extern void
 init() {
 
-    sprepTrie = (UNewTrie *)uprv_malloc(sizeof(UNewTrie));
-    uprv_memset(sprepTrie, 0, sizeof(UNewTrie));
+    sprepTrie = (UNewTrie *)uprv_calloc(1, sizeof(UNewTrie));
 
     /* initialize the two tries */
     if(NULL==utrie_open(sprepTrie, NULL, MAX_DATA_LENGTH, 0, 0, FALSE)) {
@@ -254,9 +253,7 @@ storeMappingData(){
     elementCount = uhash_count(hashTable);
 
 	/*initialize the mapping data */
-    mappingData = (uint16_t*) uprv_malloc(U_SIZEOF_UCHAR * (mappingDataCapacity));
-
-    uprv_memset(mappingData,0,U_SIZEOF_UCHAR * mappingDataCapacity);
+    mappingData = (uint16_t*) uprv_calloc(mappingDataCapacity, U_SIZEOF_UCHAR);
 
     while(writtenElementCount < elementCount){
 
@@ -459,9 +456,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
          */
     }
 
-    map = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * (adjustedLen+1));
-    uprv_memset(map,0,U_SIZEOF_UCHAR * (adjustedLen+1));
-
+    map = (UChar*) uprv_calloc(adjustedLen + 1, U_SIZEOF_UCHAR);
     i=0;
     
     while(i<length){

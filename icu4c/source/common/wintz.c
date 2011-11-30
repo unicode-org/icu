@@ -339,9 +339,8 @@ uprv_detectWindowsTimeZone() {
      */
     if (tmpid[0] != 0) {
         len = uprv_strlen(tmpid);
-        icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
+        icuid = (char*)uprv_calloc(len + 1, sizeof(char));
         if (icuid != NULL) {
-            uprv_memset(icuid, 0, len + 1);
             uprv_strcpy(icuid, tmpid);
         }
     }
