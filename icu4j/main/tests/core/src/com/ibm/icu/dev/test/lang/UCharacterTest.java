@@ -694,7 +694,9 @@ public final class UCharacterTest extends TestFmwk
                 if(s.length()<4 || s.startsWith("#")) {
                     continue;
                 }
-                String[] fields = s.split(";");
+                String[] fields = s.split(";", -1);
+                assert (fields.length == 15 ) : "Number of fields is " + fields.length + ": " + s;
+
                 int ch = Integer.parseInt(fields[0], 16);
 
                 // testing the general category
