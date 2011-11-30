@@ -82,6 +82,16 @@ uprv_free(void *buffer) {
     }
 }
 
+U_CAPI void * U_EXPORT2
+uprv_calloc(size_t num, size_t size) {
+    size *= num;
+    void * mem = uprv_malloc(size);
+    if (mem) {
+        uprv_memset(mem, 0, size);
+    }
+    return mem;
+}
+
 U_CAPI void U_EXPORT2
 u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f,  UErrorCode *status)
 {
