@@ -81,9 +81,8 @@ _HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
     cnv->fromUChar32=0x0000;
-    cnv->extraInfo = uprv_malloc(sizeof(UConverterDataHZ));
+    cnv->extraInfo = uprv_calloc(1, sizeof(UConverterDataHZ));
     if(cnv->extraInfo != NULL){
-        uprv_memset(cnv->extraInfo, 0, sizeof(UConverterDataHZ));
         ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = gbConverter;
     }
     else {
