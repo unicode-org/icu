@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.ibm.icu.lang.CharSequences;
-import com.ibm.icu.text.Normalizer2.Mode;
 
 /**
  * Simple internal utility class for helping with getSource/TargetSet
@@ -20,7 +19,7 @@ class SourceTargetUtility {
     final UnicodeSet sourceCache;
     final Set<String> sourceStrings;
     static final UnicodeSet NON_STARTERS = new UnicodeSet("[:^ccc=0:]").freeze();
-    static Normalizer2 NFC = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
+    static Normalizer2 NFC = Normalizer2.getNFCInstance();
     //static final UnicodeSet TRAILING_COMBINING = new UnicodeSet();
 
     public SourceTargetUtility(Transform<String, String> transform) {

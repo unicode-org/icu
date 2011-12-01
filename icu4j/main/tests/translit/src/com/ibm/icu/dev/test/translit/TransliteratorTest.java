@@ -25,7 +25,6 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Normalizer2;
-import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.StringTransform;
@@ -3016,8 +3015,8 @@ public class TransliteratorTest extends TestFmwk {
     public void TestSourceTargetSet2() {
 
 
-        Normalizer2 nfc = Normalizer2.getInstance(null, "nfc", Mode.COMPOSE);
-        Normalizer2 nfd = Normalizer2.getInstance(null, "nfc", Mode.DECOMPOSE);
+        Normalizer2 nfc = Normalizer2.getNFCInstance();
+        Normalizer2 nfd = Normalizer2.getNFDInstance();
 
         //        Normalizer2 nfkd = Normalizer2.getInstance(null, "nfkd", Mode.DECOMPOSE);
         //        UnicodeSet nfkdSource = new UnicodeSet();

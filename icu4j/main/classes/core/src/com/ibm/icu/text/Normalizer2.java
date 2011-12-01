@@ -106,6 +106,66 @@ public abstract class Normalizer2 {
     };
 
     /**
+     * Returns a Normalizer2 instance for Unicode NFC normalization.
+     * Same as getInstance(null, "nfc", Mode.COMPOSE).
+     * Returns an unmodifiable singleton instance.
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Normalizer2 getNFCInstance() {
+        return Norm2AllModes.getNFCInstance().comp;
+    }
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFD normalization.
+     * Same as getInstance(null, "nfc", Mode.DECOMPOSE).
+     * Returns an unmodifiable singleton instance.
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Normalizer2 getNFDInstance() {
+        return Norm2AllModes.getNFCInstance().decomp;
+    }
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFKC normalization.
+     * Same as getInstance(null, "nfkc", Mode.COMPOSE).
+     * Returns an unmodifiable singleton instance.
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Normalizer2 getNFKCInstance() {
+        return Norm2AllModes.getNFKCInstance().comp;
+    }
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFKD normalization.
+     * Same as getInstance(null, "nfkc", Mode.DECOMPOSE).
+     * Returns an unmodifiable singleton instance.
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Normalizer2 getNFKDInstance() {
+        return Norm2AllModes.getNFKCInstance().decomp;
+    }
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFKC_Casefold normalization.
+     * Same as getInstance(null, "nfkc_cf", Mode.COMPOSE).
+     * Returns an unmodifiable singleton instance.
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Normalizer2 getNFKCCasefoldInstance() {
+        return Norm2AllModes.getNFKC_CFInstance().comp;
+    }
+
+    /**
      * Returns a Normalizer2 instance which uses the specified data file
      * (an ICU data file if data=null, or else custom binary data)
      * and which composes or decomposes text according to the specified mode.

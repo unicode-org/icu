@@ -19,10 +19,14 @@ public class IcuUnicodeNormalizerFactory implements UnicodeTransform.Factory {
 
     public UnicodeTransform getInstance(Type type) {
         switch (type) {
-        case NFC: case NFKC:
-            return new IcuUnicodeNormalizer(Normalizer2.getInstance(null, type.toString(), Mode.COMPOSE));
-        case NFD: case NFKD:
-            return new IcuUnicodeNormalizer(Normalizer2.getInstance(null, type == Type.NFD ? "NFC" : "NFKC", Mode.DECOMPOSE));
+        case NFC:
+            return new IcuUnicodeNormalizer(Normalizer2.getNFCInstance());
+        case NFKC:
+            return new IcuUnicodeNormalizer(Normalizer2.getNFKCInstance());
+        case NFD:
+            return new IcuUnicodeNormalizer(Normalizer2.getNFDInstance());
+        case NFKD:
+            return new IcuUnicodeNormalizer(Normalizer2.getNFKDInstance());
         case CASEFOLD:
             return new CaseFolder();
         default:

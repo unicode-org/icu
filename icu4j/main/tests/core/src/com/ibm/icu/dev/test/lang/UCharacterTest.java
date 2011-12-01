@@ -678,8 +678,8 @@ public final class UCharacterTest extends TestFmwk
         final String DIR =
             "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
 
-        Normalizer2 nfc = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
-        Normalizer2 nfkc = Normalizer2.getInstance(null, "nfkc", Normalizer2.Mode.COMPOSE);
+        Normalizer2 nfc = Normalizer2.getNFCInstance();
+        Normalizer2 nfkc = Normalizer2.getNFKCInstance();
 
         try
         {
@@ -2492,7 +2492,7 @@ public final class UCharacterTest extends TestFmwk
         * In general, the set for the middle such character should be a subset
         * of the set for the first.
         */
-       Normalizer2 norm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.DECOMPOSE);
+       Normalizer2 norm2=Normalizer2.getNFDInstance();
        set1=new UnicodeSet();
        Norm2AllModes.getNFCInstance().impl.
            ensureCanonIterData().getCanonStartSet(0x49, set1);

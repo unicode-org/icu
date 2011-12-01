@@ -2015,7 +2015,7 @@ public class BasicTest extends TestFmwk {
         }
 
         // test all of these precomposed characters
-        Normalizer2 nfcNorm2 = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
+        Normalizer2 nfcNorm2 = Normalizer2.getNFCInstance();
         UnicodeSetIterator it = new UnicodeSetIterator(set);
         int c;
         while(it.next() && (c=it.codepoint)!=UnicodeSetIterator.IS_STRING) {
@@ -2322,7 +2322,7 @@ public class BasicTest extends TestFmwk {
 
         // For each character about which we are unsure, see if it changes when we add
         // one of the back-combining characters.
-        Normalizer2 norm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
+        Normalizer2 norm2=Normalizer2.getNFCInstance();
         StringBuilder s=new StringBuilder();
         iter.reset(unsure);
         while(iter.next()) {
@@ -2526,7 +2526,7 @@ public class BasicTest extends TestFmwk {
     }
 
     public void TestGetRawDecomposition() {
-        Normalizer2 n2=Normalizer2.getInstance(null, "nfkc", Normalizer2.Mode.COMPOSE);
+        Normalizer2 n2=Normalizer2.getNFKCInstance();
         /*
          * Raw decompositions from NFKC data are the Unicode Decomposition_Mapping values,
          * without recursive decomposition.
@@ -2637,7 +2637,7 @@ public class BasicTest extends TestFmwk {
     }
 
     public void TestFilteredNormalizer2() {
-        Normalizer2 nfcNorm2=Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.COMPOSE);
+        Normalizer2 nfcNorm2=Normalizer2.getNFCInstance();
         UnicodeSet filter=new UnicodeSet("[^\u00a0-\u00ff\u0310-\u031f]");
         FilteredNormalizer2 fn2=new FilteredNormalizer2(nfcNorm2, filter);
         int c;
@@ -2649,5 +2649,46 @@ public class BasicTest extends TestFmwk {
                     ")==filtered NFC.getCC()",
                     expectedCC, cc);
         }
+    }
+
+    public void TestGetEasyToUseInstance() {
+        // Test input string:
+        // U+00A0 -> <noBreak> 0020
+        // U+00C7 0301 = 1E08 = 0043 0327 0301
+        String in="\u00A0\u00C7\u0301";
+        Normalizer2 n2=Normalizer2.getNFCInstance();
+        String out=n2.normalize(in);
+        assertEquals(
+                "getNFCInstance() did not return an NFC instance " +
+                "(normalizes to " + prettify(out) + ')',
+                "\u00A0\u1E08", out);
+
+        n2=Normalizer2.getNFDInstance();
+        out=n2.normalize(in);
+        assertEquals(
+                "getNFDInstance() did not return an NFD instance " +
+                "(normalizes to " + prettify(out) + ')',
+                "\u00A0C\u0327\u0301", out);
+
+        n2=Normalizer2.getNFKCInstance();
+        out=n2.normalize(in);
+        assertEquals(
+                "getNFKCInstance() did not return an NFKC instance " +
+                "(normalizes to " + prettify(out) + ')',
+                " \u1E08", out);
+
+        n2=Normalizer2.getNFKDInstance();
+        out=n2.normalize(in);
+        assertEquals(
+                "getNFKDInstance() did not return an NFKD instance " +
+                "(normalizes to " + prettify(out) + ')',
+                " C\u0327\u0301", out);
+
+        n2=Normalizer2.getNFKCCasefoldInstance();
+        out=n2.normalize(in);
+        assertEquals(
+                "getNFKCCasefoldInstance() did not return an NFKC_Casefold instance " +
+                "(normalizes to " + prettify(out) + ')',
+                " \u1E09", out);
     }
 }
