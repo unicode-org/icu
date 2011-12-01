@@ -3815,7 +3815,7 @@ final class CollationParsedRuleBuilder {
                     int supp = Character.toCodePoint(c, (char)0xdc00);
                     int suppLimit = supp + 0x400;
                     while (supp < suppLimit) {
-                        fcd |= m_nfcImpl_.getFCD16(supp++);
+                        fcd |= m_nfcImpl_.getFCD16FromNormData(supp++);
                     }
                 }
             } else {
@@ -3826,7 +3826,7 @@ final class CollationParsedRuleBuilder {
                     (UTF16.isLeadSurrogate(c) && fcd != 0)) {
                 // c is a leading surrogate with some FCD data
                 unsafeCPSet(t.m_unsafeCP_, c);
-                if (buildCMTable && (fcd != 0)) {
+                if (buildCMTable) {
                     int cc = (fcd & 0xff);
                     int pos = (cc << 8) + index[cc];
                     cm[pos] = c;
