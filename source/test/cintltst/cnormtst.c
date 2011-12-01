@@ -1525,9 +1525,9 @@ TestGetRawDecomposition() {
     int32_t length;
 
     UErrorCode errorCode=U_ZERO_ERROR;
-    const UNormalizer2 *n2=unorm2_getInstance(NULL, "nfkc", UNORM2_COMPOSE, &errorCode);
+    const UNormalizer2 *n2=unorm2_getNFKCInstance(&errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err_status(errorCode, "unorm2_getInstance(nfkc) failed: %s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "unorm2_getNFKCInstance() failed: %s\n", u_errorName(errorCode));
         return;
     }
     /*
@@ -1592,9 +1592,9 @@ TestAppendRestoreMiddle() {
     static const UChar expected[]={ 0x61, 0x62, 0x63, 0xC5, 0x327, 0x64, 0x65, 0x66 };
     int32_t length;
     UErrorCode errorCode=U_ZERO_ERROR;
-    const UNormalizer2 *n2=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, &errorCode);
+    const UNormalizer2 *n2=unorm2_getNFCInstance(&errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err_status(errorCode, "unorm2_getInstance(nfc/COMPOSE) failed: %s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "unorm2_getNFCInstance() failed: %s\n", u_errorName(errorCode));
         return;
     }
     /*
@@ -1618,6 +1618,76 @@ TestAppendRestoreMiddle() {
     if(U_FAILURE(errorCode) || length!=LENGTHOF(expected) || 0!=u_memcmp(a, expected, length)) {
         log_err("unorm2_append(real) failed - %s, length %d\n", u_errorName(errorCode), (int)length);
         return;
+    }
+}
+
+static void
+TestGetEasyToUseInstance() {
+    static const UChar in[]={
+        0xA0,  /* -> <noBreak> 0020 */
+        0xC7, 0x301  /* = 1E08 = 0043 0327 0301 */
+    };
+    UChar out[32];
+    int32_t length;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    const UNormalizer2 *n2=unorm2_getNFCInstance(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getNFCInstance() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=unorm2_normalize(n2, in, LENGTHOF(in), out, LENGTHOF(out), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || out[0]!=0xa0 || out[1]!=0x1e08) {
+        log_err("unorm2_getNFCInstance() did not return an NFC instance (normalized length=%d; %s)\n",
+                (int)length, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    n2=unorm2_getNFDInstance(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getNFDInstance() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=unorm2_normalize(n2, in, LENGTHOF(in), out, LENGTHOF(out), &errorCode);
+    if(U_FAILURE(errorCode) || length!=4 || out[0]!=0xa0 || out[1]!=0x43 || out[2]!=0x327 || out[3]!=0x301) {
+        log_err("unorm2_getNFDInstance() did not return an NFD instance (normalized length=%d; %s)\n",
+                (int)length, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    n2=unorm2_getNFKCInstance(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getNFKCInstance() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=unorm2_normalize(n2, in, LENGTHOF(in), out, LENGTHOF(out), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || out[0]!=0x20 || out[1]!=0x1e08) {
+        log_err("unorm2_getNFKCInstance() did not return an NFKC instance (normalized length=%d; %s)\n",
+                (int)length, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    n2=unorm2_getNFKDInstance(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getNFKDInstance() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=unorm2_normalize(n2, in, LENGTHOF(in), out, LENGTHOF(out), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || out[0]!=0x20 || out[1]!=0x43 || out[2]!=0x327 || out[3]!=0x301) {
+        log_err("unorm2_getNFKDInstance() did not return an NFKD instance (normalized length=%d; %s)\n",
+                (int)length, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    n2=unorm2_getNFKCCasefoldInstance(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getNFKCCasefoldInstance() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+    length=unorm2_normalize(n2, in, LENGTHOF(in), out, LENGTHOF(out), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2 || out[0]!=0x20 || out[1]!=0x1e09) {
+        log_err("unorm2_getNFKCCasefoldInstance() did not return an NFKC_Casefold instance (normalized length=%d; %s)\n",
+                (int)length, u_errorName(errorCode));
     }
 }
 

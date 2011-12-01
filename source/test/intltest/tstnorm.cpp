@@ -1346,7 +1346,7 @@ initExpectedSkippables(UnicodeSet skipSets[UNORM_MODE_COUNT], UErrorCode &errorC
 
     // For each character about which we are unsure, see if it changes when we add
     // one of the back-combining characters.
-    const Normalizer2 *norm2=Normalizer2::getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode);
+    const Normalizer2 *norm2=Normalizer2::getNFCInstance(errorCode);
     UnicodeString s;
     iter.reset(*unsure);
     while(iter.next()) {

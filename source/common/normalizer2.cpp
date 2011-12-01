@@ -601,6 +601,31 @@ Normalizer2Factory::getImpl(const Normalizer2 *norm2) {
 }
 
 const Normalizer2 *
+Normalizer2::getNFCInstance(UErrorCode &errorCode) {
+    return Normalizer2Factory::getNFCInstance(errorCode);
+}
+
+const Normalizer2 *
+Normalizer2::getNFDInstance(UErrorCode &errorCode) {
+    return Normalizer2Factory::getNFDInstance(errorCode);
+}
+
+const Normalizer2 *
+Normalizer2::getNFKCInstance(UErrorCode &errorCode) {
+    return Normalizer2Factory::getNFKCInstance(errorCode);
+}
+
+const Normalizer2 *
+Normalizer2::getNFKDInstance(UErrorCode &errorCode) {
+    return Normalizer2Factory::getNFKDInstance(errorCode);
+}
+
+const Normalizer2 *
+Normalizer2::getNFKCCasefoldInstance(UErrorCode &errorCode) {
+    return Normalizer2Factory::getNFKC_CFInstance(errorCode);
+}
+
+const Normalizer2 *
 Normalizer2::getInstance(const char *packageName,
                          const char *name,
                          UNormalization2Mode mode,
@@ -681,6 +706,31 @@ U_NAMESPACE_END
 // C API ------------------------------------------------------------------- ***
 
 U_NAMESPACE_USE
+
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFCInstance(UErrorCode *pErrorCode) {
+    return (const UNormalizer2 *)Normalizer2::getNFCInstance(*pErrorCode);
+}
+
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFDInstance(UErrorCode *pErrorCode) {
+    return (const UNormalizer2 *)Normalizer2::getNFDInstance(*pErrorCode);
+}
+
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFKCInstance(UErrorCode *pErrorCode) {
+    return (const UNormalizer2 *)Normalizer2::getNFKCInstance(*pErrorCode);
+}
+
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFKDInstance(UErrorCode *pErrorCode) {
+    return (const UNormalizer2 *)Normalizer2::getNFKDInstance(*pErrorCode);
+}
+
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFKCCasefoldInstance(UErrorCode *pErrorCode) {
+    return (const UNormalizer2 *)Normalizer2::getNFKCCasefoldInstance(*pErrorCode);
+}
 
 U_DRAFT const UNormalizer2 * U_EXPORT2
 unorm2_getInstance(const char *packageName,
