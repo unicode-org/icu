@@ -140,6 +140,7 @@ typedef enum {
  * @see ucol_getReorderCodes
  * @see ucol_setReorderCodes
  * @see ucol_getEquivalentReorderCodes
+ * @see UScriptCode
  * @draft ICU 4.8
  */
  typedef enum {
@@ -163,36 +164,43 @@ typedef enum {
     UCOL_REORDER_CODE_OTHERS        = USCRIPT_UNKNOWN,
    /**
     * Characters with the space property.
+    * This is equivalent to the rule value "space".
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_SPACE         = 0x1000,
    /**
-    * The first entry in the enumeration of reordering groups.
+    * The first entry in the enumeration of reordering groups. This is intended for use in
+    * range checking and enumeration of the reorder codes.
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_FIRST         = UCOL_REORDER_CODE_SPACE,
    /**
     * Characters with the punctuation property.
+    * This is equivalent to the rule value "punct".
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_PUNCTUATION   = 0x1001,
    /**
     * Characters with the symbol property.
+    * This is equivalent to the rule value "symbol".
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_SYMBOL        = 0x1002,
    /**
     * Characters with the currency property.
+    * This is equivalent to the rule value "currency".
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_CURRENCY      = 0x1003,
    /**
     * Characters with the digit property.
+    * This is equivalent to the rule value "digit".
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_DIGIT         = 0x1004,
    /**
-    * The limit of the reorder codes.
+    * The limit of the reorder codes. This is intended for use in range checking 
+    * and enumeration of the reorder codes.
     * @draft ICU 4.8
     */    
     UCOL_REORDER_CODE_LIMIT         = 0x1005
@@ -603,6 +611,8 @@ ucol_setStrength(UCollator *coll,
  * @return The number of reordering codes written to the dest array.
  * @see ucol_setReorderCodes
  * @see ucol_getEquivalentReorderCodes
+ * @see UScriptCode
+ * @see UColReorderCode
  * @draft ICU 4.8
  */
 U_DRAFT int32_t U_EXPORT2 
@@ -631,7 +641,7 @@ ucol_getReorderCodes(const UCollator* coll,
  * DEFAULT code <b>must</b> be the sole code supplied when it used. If not
  * that will result in an U_ILLEGAL_ARGUMENT_ERROR being set.
  * <p>The special reorder code NONE will remove any reordering for this collator.
- * The result of setting no reordering will be to have the DUCET/CLDR reordering used. The 
+ * The result of setting no reordering will be to have the DUCET/CLDR ordering used. The 
  * NONE code <b>must</b> be the sole code supplied when it used.
  * @param coll The UCollator to set.
  * @param reorderCodes An array of script codes in the new order. This can be NULL if the 
@@ -641,6 +651,8 @@ ucol_getReorderCodes(const UCollator* coll,
  * failure before the function call.
  * @see ucol_getReorderCodes
  * @see ucol_getEquivalentReorderCodes
+ * @see UScriptCode
+ * @see UColReorderCode
  * @draft ICU 4.8
  */ 
 U_DRAFT void U_EXPORT2 
@@ -661,6 +673,8 @@ ucol_setReorderCodes(UCollator* coll,
  * @return The number of reordering codes written to the dest array.
  * @see ucol_setReorderCodes
  * @see ucol_getReorderCodes
+ * @see UScriptCode
+ * @see UColReorderCode
  * @draft ICU 4.8
  */
 U_DRAFT int32_t U_EXPORT2 

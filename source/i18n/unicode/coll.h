@@ -608,6 +608,8 @@ public:
      * @see ucol_setReorderCodes
      * @see Collator#getEquivalentReorderCodes
      * @see Collator#setReorderCodes
+     * @see UScriptCode
+     * @see UColReorderCode
      * @draft ICU 4.8 
      */
      virtual int32_t U_EXPORT2 getReorderCodes(int32_t *dest,
@@ -616,12 +618,16 @@ public:
 
     /**
      * Sets the ordering of scripts for this collator.
+     *
+     * <p>The reordering codes are a combination of script codes and reorder codes.
      * @param reorderCodes An array of script codes in the new order. This can be NULL if the 
      * length is also set to 0. An empty array will clear any reordering codes on the collator.
      * @param reorderCodesLength The length of reorderCodes.
+     * @param status error code
      * @see Collator#getReorderCodes
      * @see Collator#getEquivalentReorderCodes
-     * @param status error code
+     * @see UScriptCode
+     * @see UColReorderCode
      * @draft ICU 4.8 
      */
      virtual void U_EXPORT2 setReorderCodes(const int32_t* reorderCodes,
@@ -642,6 +648,8 @@ public:
      * @see ucol_setReorderCodes
      * @see Collator#getReorderCodes
      * @see Collator#setReorderCodes
+     * @see UScriptCode
+     * @see UColReorderCode
      * @draft ICU 4.8 
      */
     static int32_t U_EXPORT2 getEquivalentReorderCodes(int32_t reorderCode,
