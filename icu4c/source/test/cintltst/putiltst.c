@@ -25,6 +25,23 @@
 #include "uinvchar.h"
 #include <stdio.h>
 
+/* See the comments on U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC. */
+static void TestSignedRightShiftIsArithmetic() {
+    int32_t x=0xfff5fff3;
+    int32_t m=-1;
+    int32_t x4=x>>4;
+    int32_t m1=m>>1;
+    UBool signedRightShiftIsArithmetic= x4==0xffff5fff && m1==-1;
+    if(signedRightShiftIsArithmetic==U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC) {
+        log_info("signed right shift is Arithmetic Shift Right: %d\n",
+                 signedRightShiftIsArithmetic);
+    } else {
+        log_err("error: unexpected signed right shift is Arithmetic Shift Right: %d\n"
+                "       You need to change the value of U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC "
+                "for your platform.\n",
+                signedRightShiftIsArithmetic);
+    }
+}
 
 static UBool compareWithNAN(double x, double y);
 static void doAssert(double expect, double got, const char *message);
@@ -192,7 +209,6 @@ static void TestVersion(void)
     char versionString[17]; /* xxx.xxx.xxx.xxx\0 */
     UChar versionUString[] = { 0x0031, 0x002E, 0x0030, 0x002E,
                                0x0032, 0x002E, 0x0038, 0x0000 }; /* 1.0.2.8 */
-    UBool isModified = FALSE;
     UVersionInfo version;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -674,6 +690,7 @@ static void toolutil_findDirname(void)
 static void addToolUtilTests(TestNode** root) {
     addTest(root, &toolutil_findBasename,       "putiltst/toolutil/findBasename");
     addTest(root, &toolutil_findDirname,       "putiltst/toolutil/findDirname");
+    addTest(root, &TestSignedRightShiftIsArithmetic, "putiltst/toolutil/TestSignedRightShiftIsArithmetic");
   /*
     Not yet tested:
 

@@ -19,6 +19,37 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 
+/**
+ * \def U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC
+ * Nearly all CPUs and compilers implement a right-shift of a signed integer
+ * as an Arithmetic Shift Right which copies the sign bit (the Most Significant Bit (MSB))
+ * into the vacated bits (sign extension).
+ * For example, (int32_t)0xfff5fff3>>4 becomes 0xffff5fff and -1>>1=-1.
+ *
+ * This can be useful for storing a signed value in the upper bits
+ * and another bit field in the lower bits.
+ * The signed value can be retrieved by simple right-shifting.
+ *
+ * This is consistent with the Java language.
+ *
+ * However, the C standard allows compilers to implement a right-shift of a signed integer
+ * as a Logical Shift Right which copies a 0 into the vacated bits.
+ * For example, (int32_t)0xfff5fff3>>4 becomes 0x0fff5fff and -1>>1=0x7fffffff.
+ *
+ * Code that depends on the natural behavior should be guarded with this macro,
+ * with an alternate path for unusual platforms.
+ * @internal
+ */
+#ifdef U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC
+    /* Use the predefined value. */
+#else
+    /*
+     * Nearly all CPUs & compilers implement a right-shift of a signed integer
+     * as an Arithmetic Shift Right (with sign extension).
+     */
+#   define U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC 1
+#endif
+
 /** Define this to 1 if your platform supports IEEE 754 floating point,
    to 0 if it does not. */
 #ifndef IEEE_754
