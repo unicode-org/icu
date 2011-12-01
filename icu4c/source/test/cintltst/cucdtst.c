@@ -1324,8 +1324,8 @@ static void TestUnicodeData()
 
     errorCode=U_ZERO_ERROR;
 #if !UCONFIG_NO_NORMALIZATION
-    context.nfc=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, &errorCode);
-    context.nfkc=unorm2_getInstance(NULL, "nfkc", UNORM2_COMPOSE, &errorCode);
+    context.nfc=unorm2_getNFCInstance(&errorCode);
+    context.nfkc=unorm2_getNFKCInstance(&errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("error: unable to open an NFC or NFKC UNormalizer2 - %s\n", u_errorName(errorCode));
         return;

@@ -84,6 +84,76 @@ public:
     ~Normalizer2();
 
     /**
+     * Returns a Normalizer2 instance for Unicode NFC normalization.
+     * Same as getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode).
+     * Returns an unmodifiable singleton instance. Do not delete it.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     */
+    static const Normalizer2 *
+    getNFCInstance(UErrorCode &errorCode);
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFD normalization.
+     * Same as getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode).
+     * Returns an unmodifiable singleton instance. Do not delete it.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     */
+    static const Normalizer2 *
+    getNFDInstance(UErrorCode &errorCode);
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFKC normalization.
+     * Same as getInstance(NULL, "nfkc", UNORM2_COMPOSE, errorCode).
+     * Returns an unmodifiable singleton instance. Do not delete it.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     */
+    static const Normalizer2 *
+    getNFKCInstance(UErrorCode &errorCode);
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFKD normalization.
+     * Same as getInstance(NULL, "nfkc", UNORM2_DECOMPOSE, errorCode).
+     * Returns an unmodifiable singleton instance. Do not delete it.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     */
+    static const Normalizer2 *
+    getNFKDInstance(UErrorCode &errorCode);
+
+    /**
+     * Returns a Normalizer2 instance for Unicode NFKC_Casefold normalization.
+     * Same as getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, errorCode).
+     * Returns an unmodifiable singleton instance. Do not delete it.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return the requested Normalizer2, if successful
+     * @draft ICU 49
+     */
+    static const Normalizer2 *
+    getNFKCCasefoldInstance(UErrorCode &errorCode);
+
+    /**
      * Returns a Normalizer2 instance which uses the specified data file
      * (packageName/name similar to ucnv_openPackage() and ures_open()/ResourceBundle)
      * and which composes or decomposes text according to the specified mode.

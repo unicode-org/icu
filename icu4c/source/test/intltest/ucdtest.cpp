@@ -340,7 +340,7 @@ void UnicodeTest::TestConsistency() {
      * of the set for the first.
      */
     IcuTestErrorCode errorCode(*this, "TestConsistency");
-    const Normalizer2 *nfd=Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
+    const Normalizer2 *nfd=Normalizer2::getNFDInstance(errorCode);
     const Normalizer2Impl *nfcImpl=Normalizer2Factory::getNFCImpl(errorCode);
     if(!nfcImpl->ensureCanonIterData(errorCode) || errorCode.isFailure()) {
         dataerrln("Normalizer2::getInstance(NFD) or Normalizer2Factory::getNFCImpl() failed - %s\n",

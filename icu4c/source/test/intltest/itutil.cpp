@@ -352,7 +352,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
 #endif  /* UCONFIG_NO_FORMATTING  */
 
 #if !UCONFIG_NO_NORMALIZATION
-    const UNormalizer2 *nfc=unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode);
+    const UNormalizer2 *nfc=unorm2_getNFCInstance(errorCode);
     UnicodeSet emptySet;
     LocalUNormalizer2Pointer fn2(unorm2_openFiltered(nfc, emptySet.toUSet(), errorCode));
     if(errorCode.logIfFailureAndReset("unorm2_openFiltered()")) {
