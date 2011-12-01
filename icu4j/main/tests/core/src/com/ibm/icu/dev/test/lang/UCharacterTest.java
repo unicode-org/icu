@@ -2855,7 +2855,7 @@ public final class UCharacterTest extends TestFmwk
                 0x8cb3, //CJK_IDEOGRAPH_COMPLEX_TWO_
                 0x4e09, //CJK_IDEOGRAPH_THIRD_
                 0x53c3, //CJK_IDEOGRAPH_COMPLEX_THREE_
-                0x56d8, //CJK_IDEOGRAPH_FOURTH_
+                0x56db, //CJK_IDEOGRAPH_FOURTH_
                 0x8086, //CJK_IDEOGRAPH_COMPLEX_FOUR_
                 0x4e94, //CJK_IDEOGRAPH_FIFTH_
                 0x4f0d, //CJK_IDEOGRAPH_COMPLEX_FIVE_

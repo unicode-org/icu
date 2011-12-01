@@ -4956,20 +4956,27 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Return numeric value of Han code points.
-     * <br> This returns the value of Han 'numeric' code points,
+     * {@icu} Returns the numeric value of a Han character.
+     *
+     * <p>This returns the value of Han 'numeric' code points,
      * including those for zero, ten, hundred, thousand, ten thousand,
      * and hundred million.
      * This includes both the standard and 'checkwriting'
      * characters, the 'big circle' zero character, and the standard
      * zero character.
+     *
+     * <p>Note: The Unicode Standard has numeric values for more
+     * Han characters recognized by this method
+     * (see {@link #getNumericValue(int)} and the UCD file DerivedNumericValues.txt),
+     * and a {@link com.ibm.icu.text.NumberFormat} can be used with
+     * a Chinese {@link com.ibm.icu.text.NumberingSystem}.
+     *
      * @param ch code point to query
      * @return value if it is a Han 'numeric character,' otherwise return -1.
      * @stable ICU 2.4
      */
     public static int getHanNumericValue(int ch)
     {
-        // TODO: Are these all covered by Unicode numeric value data?
         switch(ch)
         {
         case IDEOGRAPHIC_NUMBER_ZERO_ :
@@ -5994,7 +6001,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * CJK Ideograph, Fourth code point
      */
-    private static final int CJK_IDEOGRAPH_FOURTH_ = 0x56d8;
+    private static final int CJK_IDEOGRAPH_FOURTH_ = 0x56db;
 
     /**
      * CJK Ideograph, FIFTH code point
