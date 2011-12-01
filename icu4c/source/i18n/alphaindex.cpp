@@ -701,7 +701,7 @@ void AlphabeticIndex::staticInit(UErrorCode &status) {
 
         EMPTY_STRING = new UnicodeString();
 
-        nfkdNormalizer = Normalizer2::getInstance(NULL, "nfkc", UNORM2_DECOMPOSE, status);
+        nfkdNormalizer = Normalizer2::getNFKDInstance(status);
         if (nfkdNormalizer == NULL) {
             goto err;
         }
@@ -812,7 +812,7 @@ UVector *AlphabeticIndex::firstStringsInScript(Collator *ruleBasedCollator, UErr
     ucol_getContractionsAndExpansions(uRuleBasedCollator, extras.toUSet(), expansions.toUSet(), true, &status);
     extras.addAll(expansions).removeAll(*TO_TRY);
     if (extras.size() != 0) {
-        const Normalizer2 *normalizer = Normalizer2::getInstance(NULL, "nfkc", UNORM2_COMPOSE, status);
+        const Normalizer2 *normalizer = Normalizer2::getNFKCInstance(status);
         UnicodeSetIterator extrasIter(extras);
         while (extrasIter.next()) {
             const UnicodeString &current = extrasIter.next();

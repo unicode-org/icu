@@ -119,6 +119,76 @@ typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer
 #if !UCONFIG_NO_NORMALIZATION
 
 /**
+ * Returns a UNormalizer2 instance for Unicode NFC normalization.
+ * Same as unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, pErrorCode).
+ * Returns an unmodifiable singleton instance. Do not delete it.
+ * @param errorCode Standard ICU error code. Its input value must
+ *                  pass the U_SUCCESS() test, or else the function returns
+ *                  immediately. Check for U_FAILURE() on output or use with
+ *                  function chaining. (See User Guide for details.)
+ * @return the requested Normalizer2, if successful
+ * @draft ICU 49
+ */
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFCInstance(UErrorCode *pErrorCode);
+
+/**
+ * Returns a UNormalizer2 instance for Unicode NFD normalization.
+ * Same as unorm2_getInstance(NULL, "nfc", UNORM2_DECOMPOSE, pErrorCode).
+ * Returns an unmodifiable singleton instance. Do not delete it.
+ * @param errorCode Standard ICU error code. Its input value must
+ *                  pass the U_SUCCESS() test, or else the function returns
+ *                  immediately. Check for U_FAILURE() on output or use with
+ *                  function chaining. (See User Guide for details.)
+ * @return the requested Normalizer2, if successful
+ * @draft ICU 49
+ */
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFDInstance(UErrorCode *pErrorCode);
+
+/**
+ * Returns a UNormalizer2 instance for Unicode NFKC normalization.
+ * Same as unorm2_getInstance(NULL, "nfkc", UNORM2_COMPOSE, pErrorCode).
+ * Returns an unmodifiable singleton instance. Do not delete it.
+ * @param errorCode Standard ICU error code. Its input value must
+ *                  pass the U_SUCCESS() test, or else the function returns
+ *                  immediately. Check for U_FAILURE() on output or use with
+ *                  function chaining. (See User Guide for details.)
+ * @return the requested Normalizer2, if successful
+ * @draft ICU 49
+ */
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFKCInstance(UErrorCode *pErrorCode);
+
+/**
+ * Returns a UNormalizer2 instance for Unicode NFKD normalization.
+ * Same as unorm2_getInstance(NULL, "nfkc", UNORM2_DECOMPOSE, pErrorCode).
+ * Returns an unmodifiable singleton instance. Do not delete it.
+ * @param errorCode Standard ICU error code. Its input value must
+ *                  pass the U_SUCCESS() test, or else the function returns
+ *                  immediately. Check for U_FAILURE() on output or use with
+ *                  function chaining. (See User Guide for details.)
+ * @return the requested Normalizer2, if successful
+ * @draft ICU 49
+ */
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFKDInstance(UErrorCode *pErrorCode);
+
+/**
+ * Returns a UNormalizer2 instance for Unicode NFKC_Casefold normalization.
+ * Same as unorm2_getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, pErrorCode).
+ * Returns an unmodifiable singleton instance. Do not delete it.
+ * @param errorCode Standard ICU error code. Its input value must
+ *                  pass the U_SUCCESS() test, or else the function returns
+ *                  immediately. Check for U_FAILURE() on output or use with
+ *                  function chaining. (See User Guide for details.)
+ * @return the requested Normalizer2, if successful
+ * @draft ICU 49
+ */
+U_DRAFT const UNormalizer2 * U_EXPORT2
+unorm2_getNFKCCasefoldInstance(UErrorCode *pErrorCode);
+
+/**
  * Returns a UNormalizer2 instance which uses the specified data file
  * (packageName/name similar to ucnv_openPackage() and ures_open()/ResourceBundle)
  * and which composes or decomposes text according to the specified mode.
