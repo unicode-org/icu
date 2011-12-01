@@ -1008,7 +1008,12 @@ Normalizer2Impl::composePair(UChar32 a, UChar32 b) const {
     if(b<0 || 0x10ffff<b) {  // combine(list, b) requires a valid code point b
         return U_SENTINEL;
     }
+#if U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC
     return combine(list, b)>>1;
+#else
+    int32_t compositeAndFwd=combine(list, b);
+    return compositeAndFwd>=0 ? compositeAndFwd>>1 : U_SENTINEL;
+#endif
 }
 
 // Very similar to composeQuickCheck(): Make the same changes in both places if relevant.
