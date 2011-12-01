@@ -30,7 +30,6 @@ import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.text.AlphabeticIndex.Record;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer2;
-import com.ibm.icu.text.Normalizer2.Mode;
 import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.UnicodeSet;
@@ -662,7 +661,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             ruleBasedCollator.getContractionsAndExpansions(extras, expansions, true);
             extras.addAll(expansions).removeAll(TO_TRY);
             if (extras.size() != 0) {
-                Normalizer2 normalizer = Normalizer2.getInstance(null, "nfkc", Mode.COMPOSE);
+                Normalizer2 normalizer = Normalizer2.getNFKCInstance();
                 for (String current : extras) {
                     if (!TO_TRY.containsAll(current))
                         continue;

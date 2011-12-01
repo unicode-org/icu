@@ -484,7 +484,7 @@ public class SpoofCheckerTest extends TestFmwk {
                     "\\ufeff?" + "(?:([0-9A-F\\s]+);([0-9A-F\\s]+);\\s*(SL|ML|SA|MA)\\s*(?:#.*?)?$)"
                             + "|\\ufeff?(\\s*(?:#.*)?)"). // Comment line
                     matcher("");
-            Normalizer2 normalizer = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.DECOMPOSE);
+            Normalizer2 normalizer = Normalizer2.getNFDInstance();
             int lineNum = 0;
             String inputLine;
             while ((inputLine = confusablesRdr.readLine()) != null) {
