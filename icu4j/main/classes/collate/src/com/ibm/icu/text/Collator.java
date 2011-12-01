@@ -243,7 +243,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
          */
         public final static int DEFAULT          = 1;
         /**
-         * A speical reordering code that is used to specify no reordering codes.
+         * A special reordering code that is used to specify no reordering codes.
          * @draft ICU 4.8
          */
         public final static int NONE          = UScript.UNKNOWN;
@@ -255,36 +255,43 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         public final static int OTHERS          = UScript.UNKNOWN;
         /**
          * Characters with the space property.
+         * This is equivalent to the rule value "space".
          * @draft ICU 4.8
          */
         public final static int SPACE          = 0x1000;
         /**
-         * The first entry in the enumeration.
+         * The first entry in the enumeration of reordering groups. This is intended for use in
+         * range checking and enumeration of the reorder codes.
          * @draft ICU 4.8
          */
         public final static int FIRST          = SPACE;
         /**
          * Characters with the punctuation property.
+         * This is equivalent to the rule value "punct".
          * @draft ICU 4.8
          */
         public final static int PUNCTUATION    = 0x1001;
         /**
          * Characters with the symbol property.
+         * This is equivalent to the rule value "symbol".
          * @draft ICU 4.8
          */
         public final static int SYMBOL         = 0x1002;
         /**
          * Characters with the currency property.
+         * This is equivalent to the rule value "currency".
          * @draft ICU 4.8
          */
         public final static int CURRENCY       = 0x1003;
         /**
          * Characters with the digit property.
+         * This is equivalent to the rule value "digit".
          * @draft ICU 4.8
          */
         public final static int DIGIT          = 0x1004;
         /**
-         * The limit of the reorder codes..
+         * The limit of the reorder codes. This is intended for use in range checking 
+         * and enumeration of the reorder codes.
          * @draft ICU 4.8
          */
         public final static int LIMIT          = 0x1005;        
@@ -409,6 +416,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * then this clears any existing reordering
      * @see #getReorderCodes
      * @see #getEquivalentReorderCodes
+     * @see Collator.ReorderCodes
+     * @see UScript
      * @draft ICU 4.8
      */ 
     public void setReorderCodes(int... order) 
@@ -1101,6 +1110,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * if none are set then returns an empty array
      * @see #setReorderCodes
      * @see #getEquivalentReorderCodes
+     * @see Collator.ReorderCodes
+     * @see UScript
      * @draft ICU 4.8
      */ 
     public int[] getReorderCodes() 
@@ -1116,6 +1127,8 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @return the set of all reorder codes in the same group as the given reorder code.
      * @see #setReorderCodes
      * @see #getReorderCodes
+     * @see Collator.ReorderCodes
+     * @see UScript
      * @draft ICU 4.8
      */
     public static int[] getEquivalentReorderCodes(int reorderCode)
