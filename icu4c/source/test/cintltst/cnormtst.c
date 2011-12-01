@@ -69,6 +69,7 @@ static void
 TestGetRawDecomposition(void);
 
 static void TestAppendRestoreMiddle(void);
+static void TestGetEasyToUseInstance(void);
 
 static const char* const canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
@@ -159,6 +160,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestGetDecomposition, "tsnorm/cnormtst/TestGetDecomposition");
     addTest(root, &TestGetRawDecomposition, "tsnorm/cnormtst/TestGetRawDecomposition");
     addTest(root, &TestAppendRestoreMiddle, "tsnorm/cnormtst/TestAppendRestoreMiddle");
+    addTest(root, &TestGetEasyToUseInstance, "tsnorm/cnormtst/TestGetEasyToUseInstance");
 }
 
 static const char* const modeStrings[]={
@@ -1673,7 +1675,7 @@ TestGetEasyToUseInstance() {
         return;
     }
     length=unorm2_normalize(n2, in, LENGTHOF(in), out, LENGTHOF(out), &errorCode);
-    if(U_FAILURE(errorCode) || length!=2 || out[0]!=0x20 || out[1]!=0x43 || out[2]!=0x327 || out[3]!=0x301) {
+    if(U_FAILURE(errorCode) || length!=4 || out[0]!=0x20 || out[1]!=0x43 || out[2]!=0x327 || out[3]!=0x301) {
         log_err("unorm2_getNFKDInstance() did not return an NFKD instance (normalized length=%d; %s)\n",
                 (int)length, u_errorName(errorCode));
     }
