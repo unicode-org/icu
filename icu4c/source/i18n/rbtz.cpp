@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and
+* Copyright (C) 2007-2011, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -428,8 +428,10 @@ RuleBasedTimeZone::getOffsetInternal(UDate date, UBool local,
             if (date > tend) {
                 if (fFinalRules != NULL) {
                     rule = findRuleInFinal(date, local, NonExistingTimeOpt, DuplicatedTimeOpt);
-                } else {
-                    // no final rule, use the last rule
+                }
+                if (rule == NULL) {
+                    // no final rules or the given time is before the first transition
+                    // specified by the final rules -> use the last rule 
                     rule = ((Transition*)fHistoricTransitions->elementAt(idx))->to;
                 }
             } else {
@@ -701,12 +703,17 @@ RuleBasedTimeZone::findRuleInFinal(UDate date, UBool local,
     }
     UBool avail1 = fr1->getPreviousStart(base, fr0->getRawOffset(), fr0->getDSTSavings(), TRUE, start1);
 
-    if (avail0 && (!avail1 || start0 > start1)) {
-        return fr0;
-    } else if (avail1) {
-        return fr1;
+    if (!avail0 || !avail1) {
+        if (avail0) {
+            return fr0;
+        } else if (avail1) {
+            return fr1;
+        }
+        // Both rules take effect after the given time
+        return NULL;
     }
-    return NULL;
+
+    return (start0 > start1) ? fr0 : fr1;
 }
 
 UBool
