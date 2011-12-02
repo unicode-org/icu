@@ -1811,13 +1811,14 @@ public class TimeZoneRuleTest extends TestFmwk {
         atzRule = new AnnualTimeZoneRule(stdName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
         rbtz.addTransitionRule(atzRule);
 
-        atzRule = new AnnualTimeZoneRule(dstName, 21600000, 3600000, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
+        dtRule = new DateTimeRule(Calendar.JANUARY, 1, 1, DateTimeRule.WALL_TIME);
+        atzRule = new AnnualTimeZoneRule(dstName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule.MAX_YEAR);
         rbtz.addTransitionRule(atzRule);
 
         int[] expected = {21600000, 0};
         int[] offsets = new int[2];
         try {
-            rbtz.getOffset(1293822000000L /* 2010-12-32 19:00:00 UTC */, false, offsets);
+            rbtz.getOffset(1293822000000L /* 2010-12-31 19:00:00 UTC */, false, offsets);
             if (offsets[0] != expected[0] || offsets[1] != expected[1]) {
                 errln("Fail: Wrong offsets: " + offsets[0] + "/" + offsets[1] + " Expected: " + expected[0] + "/" + expected[1]);
             }
