@@ -2097,6 +2097,8 @@ void TimeZoneTest::TestCanonicalID() {
         {"Etc/Unknown", "Etc/Unknown", FALSE},
         {"bogus", 0, FALSE},
         {"", 0, FALSE},
+        {"America/Marigot", "America/Marigot", TRUE},     // Olson link, but CLDR canonical (#8953)
+        {"Europe/Bratislava", "Europe/Bratislava", TRUE}, // Same as above
         {0, 0, FALSE}
     };
 
