@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and    *
+* Copyright (C) 2007-2011, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -140,6 +140,7 @@ void TimeZoneRuleTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(14, TestT6216);
         CASE(15, TestT6669);
         CASE(16, TestVTimeZoneWrapper);
+        CASE(17, TestT8943);
         default: name = ""; break;
     }
 }
@@ -2616,6 +2617,49 @@ static UBool hasEquivalentTransitions(/*const*/ BasicTimeZone& tz1, /*const*/Bas
     return TRUE;
 }
 
+// Test case for ticket#8943
+// RuleBasedTimeZone#getOffsets throws NPE
+void
+TimeZoneRuleTest::TestT8943(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString id("Ekaterinburg Time");
+    UnicodeString stdName("Ekaterinburg Standard Time");
+    UnicodeString dstName("Ekaterinburg Daylight Time");
+
+    InitialTimeZoneRule *initialRule = new InitialTimeZoneRule(stdName, 18000000, 0);
+    RuleBasedTimeZone *rbtz = new RuleBasedTimeZone(id, initialRule);
+
+    DateTimeRule *dtRule = new DateTimeRule(UCAL_OCTOBER, -1, UCAL_SUNDAY, 10800000, DateTimeRule::WALL_TIME);
+    AnnualTimeZoneRule *atzRule = new AnnualTimeZoneRule(stdName, 18000000, 0, dtRule, 2000, 2010);
+    rbtz->addTransitionRule(atzRule, status);
+
+    dtRule = new DateTimeRule(UCAL_MARCH, -1, UCAL_SUNDAY, 7200000, DateTimeRule::WALL_TIME);
+    atzRule = new AnnualTimeZoneRule(dstName, 18000000, 3600000, dtRule, 2000, 2010);
+    rbtz->addTransitionRule(atzRule, status);
+
+    dtRule = new DateTimeRule(UCAL_JANUARY, 1, 0, DateTimeRule::WALL_TIME);
+    atzRule = new AnnualTimeZoneRule(stdName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule::MAX_YEAR);
+    rbtz->addTransitionRule(atzRule, status);
+
+    dtRule = new DateTimeRule(UCAL_JANUARY, 1, 1, DateTimeRule::WALL_TIME);
+    atzRule = new AnnualTimeZoneRule(dstName, 21600000, 0, dtRule, 2011, AnnualTimeZoneRule::MAX_YEAR);
+    rbtz->addTransitionRule(atzRule, status);
+    rbtz->complete(status);
+
+    if (U_FAILURE(status)) {
+        errln("Failed to construct a RuleBasedTimeZone");
+    } else {
+        int raw, dst;
+        rbtz->getOffset(1293822000000.0 /* 2010-12-31 19:00:00 UTC */, FALSE, raw, dst, status);
+        if (U_FAILURE(status)) {
+            errln("Error invoking getOffset");
+        } else if (raw != 21600000 || dst != 0) {
+            errln(UnicodeString("Fail: Wrong offsets: ") + raw + "/" + dst + " Expected: 21600000/0");
+        }
+    }
+
+    delete rbtz;
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
