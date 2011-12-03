@@ -524,6 +524,15 @@ nameAliasesLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
 
+    /*
+     * Only use "correction" aliases for now, from Unicode 6.1 NameAliases.txt with 3 fields per line.
+     * TODO: Work on ticket #8963 to deal with multiple type:alias pairs per character.
+     */
+    fields[2][1]=0;
+    if(0!=uprv_strcmp("correction", fields[2][0])) {
+        return;
+    }
+
     /* check that the code points (code) are in ascending order */
     if(code<=prevCode && code>0) {
         fprintf(stderr, "gennames: error - NameAliases entries out of order, U+%04lx after U+%04lx\n",
@@ -647,13 +656,17 @@ lineFn(void *context,
 
 static void
 parseNameAliases(const char *filename, Options *storeOptions) {
-    char *fields[2][2];
+    char *fields[3][2];
     UErrorCode errorCode=U_ZERO_ERROR;
 
     if(!storeOptions->storeNames) {
         return;
     }
-    u_parseDelimitedFile(filename, ';', fields, 2, nameAliasesLineFn, NULL, &errorCode);
+    /*
+     * This works only for Unicode 6.1 NameAliases.txt with 3 fields per line.
+     * TODO: Work on ticket #8963 to deal with multiple type:alias pairs per character.
+     */
+    u_parseDelimitedFile(filename, ';', fields, 3, nameAliasesLineFn, NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
         exit(errorCode);
