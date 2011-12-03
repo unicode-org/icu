@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -471,8 +471,15 @@ static void U_CALLCONV
 mirrorLineFn(void *context,
              char *fields[][2], int32_t fieldCount,
              UErrorCode *pErrorCode) {
+    const char *s;
     char *end;
     UChar32 src, mirror;
+
+    /* ignore "<code point>" which is on the @missing line */
+    s=u_skipWhitespace(fields[1][0]);
+    if(0==uprv_strncmp(s, "<code point>", 12)) {
+        return;
+    }
 
     src=(UChar32)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
@@ -481,8 +488,8 @@ mirrorLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
 
-    mirror=(UChar32)uprv_strtoul(fields[1][0], &end, 16);
-    if(end<=fields[1][0] || end!=fields[1][1]) {
+    mirror=(UChar32)uprv_strtoul(s, &end, 16);
+    if(end<=s || end!=fields[1][1]) {
         fprintf(stderr, "genbidi: syntax error in BidiMirroring.txt field 1 at %s\n", fields[1][0]);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2010, International Business Machines
+*   Copyright (C) 2002-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -527,7 +527,7 @@ ageLineFn(void *context,
 
     /* ignore "unassigned" (the default is already set to 0.0) */
     s=(char *)u_skipWhitespace(fields[1][0]);
-    if(0==uprv_strncmp(s, "unassigned", 10)) {
+    if(0==uprv_strncmp(s, "unassigned", 10) || 0==uprv_strncmp(s, "Unassigned", 10)) {
         return;
     }
 
