@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -8,6 +8,7 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.HashMap;
 
@@ -19,7 +20,9 @@ import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -300,7 +303,22 @@ public class SerializableTest extends TestFmwk.TestGroup
             "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
             "Europe/Paris", "Europe/Rome"
         };
-        
+
+        long sampleTimes[] = {
+            1136073600000L, // 20060101T000000Z
+            1138752000000L, // 20060201T000000Z
+            1141171200000L, // 20060301T000000Z
+            1143849600000L, // 20060401T000000Z
+            1146441600000L, // 20060501T000000Z
+            1149120000000L, // 20060601T000000Z
+            1151712000000L, // 20060701T000000Z
+            1154390400000L, // 20060801T000000Z
+            1157068800000L, // 20060901T000000Z
+            1159660800000L, // 20061001T000000Z
+            1162339200000L, // 20061101T000000Z
+            1164931200000L, // 20061201T000000Z
+        };
+
         public Object[] getTestObjects()
         {
             TimeZoneAdapter timeZones[] = new TimeZoneAdapter[zoneIDs.length];
@@ -315,14 +333,32 @@ public class SerializableTest extends TestFmwk.TestGroup
         
         public boolean hasSameBehavior(Object a, Object b)
         {
+            GregorianCalendar cal = new GregorianCalendar();
             TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
             TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
-
-            if (!tza_a.getID().equals(tza_b.getID())
-                || tza_a.getRawOffset() != tza_b.getRawOffset()) {
-                return false;
+            
+            int a_offset, b_offset;
+            boolean a_dst, b_dst;
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                cal.setTimeInMillis(sampleTimes[i]);
+                int era = cal.get(Calendar.ERA);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int dow = cal.get(Calendar.DAY_OF_WEEK);
+                int mid = cal.get(Calendar.MILLISECONDS_IN_DAY);
+                a_offset = tza_a.getOffset(era, year, month, day, dow, mid);
+                b_offset = tza_b.getOffset(era, year, month, day, dow, mid);
+                Date d = new Date(sampleTimes[i]);
+                a_dst = tza_a.inDaylightTime(d);
+                b_dst = tza_b.inDaylightTime(d);
+                if (a_offset != b_offset || a_dst != b_dst) {
+                    bSame = false;
+                    break;
+                }
             }
-            return true;
+            return bSame;
         }
     }
     
