@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -102,7 +102,7 @@ public class TimeZoneTest extends TestFmwk
     public void TestShortZoneIDs() throws Exception {
 
         ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, false),
+            new ZoneDescriptor("MIT", -660, true), // as of 2011n
             new ZoneDescriptor("HST", -600, false),
             new ZoneDescriptor("AST", -540, true),
             new ZoneDescriptor("PST", -480, true),
@@ -113,7 +113,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("EST", -300, false),// updated Aug 2003 aliu
             new ZoneDescriptor("PRT", -240, false),
             new ZoneDescriptor("CNT", -210, true),
-            new ZoneDescriptor("AGT", -180, true), // updated by tzdata 2007k
+            new ZoneDescriptor("AGT", -180, false), // as of 2011n
             new ZoneDescriptor("BET", -180, true),
             // new ZoneDescriptor("CAT", -60, false), // Wrong:
             // As of bug 4130885, fix CAT (Central Africa)
@@ -121,7 +121,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("GMT", 0, false),
             new ZoneDescriptor("UTC", 0, false),
             new ZoneDescriptor("ECT", 60, true),
-            new ZoneDescriptor("ART", 120, true),
+            new ZoneDescriptor("ART", 120, false), // as of 2011n
             new ZoneDescriptor("EET", 120, true),
             new ZoneDescriptor("EAT", 180, false),
             // new ZoneDescriptor("MET", 210, true),
