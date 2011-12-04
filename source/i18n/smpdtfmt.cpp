@@ -830,17 +830,25 @@ UnicodeString&
 SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo, FieldPositionHandler& handler,
                           UErrorCode& status) const
 {
-    Calendar *workCal = &cal;
-    TimeZone *backupTZ = NULL;
+    if ( U_FAILURE(status) ) {
+       return appendTo; 
+    }
+    Calendar* workCal = &cal;
+    Calendar* calClone = NULL;
     if (&cal != fCalendar && uprv_strcmp(cal.getType(), fCalendar->getType()) != 0) {
         // Different calendar type
         // We use the time and time zone from the input calendar, but
         // do not use the input calendar for field calculation.
-        UDate t = cal.getTime(status);
-        fCalendar->setTime(t, status);
-        backupTZ = fCalendar->getTimeZone().clone();
-        fCalendar->setTimeZone(cal.getTimeZone());
-        workCal = fCalendar;
+        calClone = fCalendar->clone();
+        if (calClone != NULL) {
+            UDate t = cal.getTime(status);
+            calClone->setTime(t, status);
+            calClone->setTimeZone(cal.getTimeZone());
+            workCal = calClone;
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return appendTo;
+        }
     }
 
     UBool inQuote = FALSE;
@@ -885,9 +893,8 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo, FieldPositionH
         subFormat(appendTo, prevCh, count, handler, *workCal, status);
     }
 
-    if (backupTZ != NULL) {
-        // Restore the original time zone
-        fCalendar->adoptTimeZone(backupTZ);
+    if (calClone != NULL) {
+        delete calClone;
     }
 
     return appendTo;
@@ -1875,19 +1882,24 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
     const UnicodeString numericFormatChars(NUMERIC_FORMAT_CHARS);
 
-    TimeZone *backupTZ = NULL;
+    Calendar* calClone = NULL;
     Calendar *workCal = &cal;
     if (&cal != fCalendar && uprv_strcmp(cal.getType(), fCalendar->getType()) != 0) {
         // Different calendar type
         // We use the time/zone from the input calendar, but
         // do not use the input calendar for field calculation.
-        fCalendar->setTime(cal.getTime(status),status);
-        if (U_FAILURE(status)) {
+        calClone = fCalendar->clone();
+        if (calClone != NULL) {
+            calClone->setTime(cal.getTime(status),status);
+            if (U_FAILURE(status)) {
+                goto ExitParse;
+            }
+            calClone->setTimeZone(cal.getTimeZone());
+            workCal = calClone;
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
             goto ExitParse;
         }
-        backupTZ = fCalendar->getTimeZone().clone();
-        fCalendar->setTimeZone(cal.getTimeZone());
-        workCal = fCalendar;
     }
 
     for (int32_t i=0; i<fPattern.length(); ++i) {
@@ -2187,9 +2199,8 @@ ExitParse:
         cal.setTime(workCal->getTime(status), status);
     }
 
-    // Restore the original time zone if required
-    if (backupTZ != NULL) {
-        fCalendar->adoptTimeZone(backupTZ);
+    if (calClone != NULL) {
+        delete calClone;
     }
 
     // If any Calendar calls failed, we pretend that we
