@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -126,7 +126,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("GMT", 0, false),
             new ZoneDescriptor("UTC", 0, false),
             new ZoneDescriptor("ECT", 60, true),
-            new ZoneDescriptor("ART", 120, true),
+            new ZoneDescriptor("ART", 120, false), // as of 2011n
             new ZoneDescriptor("EET", 120, true),
             new ZoneDescriptor("EAT", 180, false),
             // new ZoneDescriptor("MET", 210, true),
