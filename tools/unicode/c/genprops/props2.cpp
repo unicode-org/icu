@@ -576,6 +576,11 @@ scriptExtensionsLineFn(void *context,
         exit(*pErrorCode);
     }
 
+    /* ignore "<script>" on the @missing line */
+    if(*u_skipWhitespace(fields[1][0])=='<') {
+        return;
+    }
+
     /* parse list of script codes */
     UnicodeString codes;  // vector of 16-bit UScriptCode values
     char *s=fields[1][0];
