@@ -601,14 +601,16 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             uprv_memcpy(language, fullName, fieldLen[0]);
             language[fieldLen[0]] = 0;
         }
-        if (fieldLen[1] == 4) {
+        if (fieldLen[1] == 4 && uprv_isalpha(field[1][0]) &&
+                uprv_isalpha(field[1][1]) && uprv_isalpha(field[1][2]) &&
+                uprv_isalpha(field[1][3])) {
             /* We have at least a script */
             uprv_memcpy(script, field[1], fieldLen[1]);
             script[fieldLen[1]] = 0;
             variantField++;
         }
 
-        if (fieldLen[variantField] > 0 && fieldLen[variantField] <= (int32_t)(sizeof(country))) {
+        if (fieldLen[variantField] == 2 || fieldLen[variantField] == 3) {
             /* We have a country */
             uprv_memcpy(country, field[variantField], fieldLen[variantField]);
             country[fieldLen[variantField]] = 0;

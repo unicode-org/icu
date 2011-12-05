@@ -401,6 +401,7 @@ static void TestPrefixes() {
         {"zh", "Hans", "", "PINYIN", "zh-Hans-pinyin", "zh_Hans_PINYIN", "zh_Hans@collation=pinyin"},
         {"hy", "", "", "AREVMDA", "hy_AREVMDA", "hy_AREVMDA", NULL},
         
+        {"de", "", "", "1901", "de-1901", "de_1901", NULL},
         {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
         {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
         {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
@@ -415,7 +416,7 @@ static void TestPrefixes() {
         {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", "zh_Hant_TW@collation=stroke"},
         {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", NULL},
         {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", NULL},
-        {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", NULL}, /* total garbage */
+        {"ab", "Cdef", "GH", "IJ", "ab_cdef_gh_ij", "ab_Cdef_GH_IJ", NULL}, /* total garbage */
         
         {NULL,NULL,NULL,NULL,NULL,NULL,NULL}
     };
