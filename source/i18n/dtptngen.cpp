@@ -907,7 +907,7 @@ DateTimePatternGenerator::addPatternWithSkeleton(
         matcher.set(pattern, fp, skeleton);
         matcher.getBasePattern(basePattern);
     } else {
-        matcher.set(*skeletonToUse, fp, skeleton); // this still trims skeleton fields to max len 3, may need to change it.
+        matcher.set(*skeletonToUse, fp, skeleton); // no longer trims skeleton fields to max len 3, per #7930
         matcher.getBasePattern(basePattern); // or perhaps instead: basePattern = *skeletonToUse;
     }
     UBool entryHadSpecifiedSkeleton;
@@ -1578,7 +1578,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         int32_t typeValue = row->field;
         skeletonResult.original[typeValue]=field;
         UChar repeatChar = row->patternChar;
-        int32_t repeatCount = row->minLen > 3 ? 3: row->minLen;
+        int32_t repeatCount = row->minLen; // #7930 removes cap at 3
         while (repeatCount-- > 0) {
             skeletonResult.baseOriginal[typeValue] += repeatChar;
         }
