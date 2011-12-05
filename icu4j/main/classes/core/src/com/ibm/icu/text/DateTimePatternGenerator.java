@@ -1990,7 +1990,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 original[typeValue] = field;
                 char repeatChar = (char)row[0];
                 int repeatCount = row[3];
-                if (repeatCount > 3) repeatCount = 3; // hack to discard differences
+                // #7930 removes hack to cap repeatCount at 3
                 if ("GEzvQ".indexOf(repeatChar) >= 0) repeatCount = 1;
                 baseOriginal[typeValue] = Utility.repeat(String.valueOf(repeatChar),repeatCount);
                 int subTypeValue = row[2];
