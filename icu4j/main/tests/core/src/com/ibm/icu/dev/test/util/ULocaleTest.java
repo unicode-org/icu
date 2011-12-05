@@ -653,6 +653,7 @@ public class ULocaleTest extends TestFmwk {
             {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", null},
             {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", null},
 
+            {"de", "", "", "1901", "de-1901", "de__1901", null},
             {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
             {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
             {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
@@ -669,7 +670,7 @@ public class ULocaleTest extends TestFmwk {
             {"zh", "Hant", "TW", "PINYIN", "zh-hant_TW_PINYIN", "zh_Hant_TW_PINYIN", "zh_Hant_TW@collation=pinyin"},
             {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
             {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
-            {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
+            {"ab", "Cdef", "GH", "IJ", "ab_cdef_gh_ij", "ab_Cdef_GH_IJ", null}, /* total garbage */
 
             // odd cases
             {"", "", "", "", "@FOO=bar", "@foo=bar", null},
@@ -874,6 +875,7 @@ public class ULocaleTest extends TestFmwk {
             { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL@currency=NLG" },
             { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT@currency=PTE" },
             { "de__PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
+            { "de_PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
             { "en_GB_EURO", "en_GB_EURO", "en_GB@currency=EUR" },
             { "en_GB@EURO", null, "en_GB@currency=EUR" }, /* POSIX ID */
             { "es__TRADITIONAL", "es__TRADITIONAL", "es@collation=traditional" },
@@ -892,8 +894,8 @@ public class ULocaleTest extends TestFmwk {
             { "no-no.utf32@B", null, "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
             { "qz-qz@Euro", null, "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
             { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
-            { "de-1901", "de_1901", "de__1901" }, /* registered name */
-            { "de-1906", "de_1906", "de__1906" }, /* registered name */
+            { "de-1901", "de__1901", "de__1901" }, /* registered name */
+            { "de-1906", "de__1906", "de__1906" }, /* registered name */
             { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_RS" }, /* .NET name */
             { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_RS" }, /* .NET name */
             { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_RS" }, /* Linux name */
