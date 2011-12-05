@@ -1260,7 +1260,8 @@ ulocimp_getScript(const char *localeID,
     }
 
     /* copy the second item as far as possible and count its length */
-    while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])) {
+    while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])
+            && uprv_isalpha(localeID[idLen])) {
         idLen++;
     }
 
