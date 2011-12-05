@@ -2082,6 +2082,10 @@ void LocaleTest::TestVariantWithOutCountry(void) {
     if (0 != strcmp(loc5.getVariant(), "FOUR")) {
         errln("FAIL: _Latn_US_FOUR didn't get parsed correctly - name is %s - expected %s got %s", loc5.getName(), "FOUR", loc5.getVariant());
     }
+    Locale loc6("de-1901");
+    if (0 != strcmp(loc6.getVariant(), "1901")) {
+        errln("FAIL: de-1901 didn't get parsed correctly - name is %s - expected %s got %s", loc6.getName(), "1901", loc6.getVariant());
+    }
 }
 
 static Locale _canonicalize(int32_t selector, /* 0==createFromName, 1==createCanonical, 2==Locale ct */
