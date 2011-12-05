@@ -243,7 +243,7 @@ public final class LocaleIDParser {
             int oldBlen = buffer.length(); // get before append hyphen, if we truncate everything is undone
             char c;
             boolean firstPass = true;
-            while(!isTerminatorOrIDSeparator(c = next())) {
+            while(!isTerminatorOrIDSeparator(c = next()) && Character.isLetter(c)) {
                 if (firstPass) {
                     addSeparator();
                     append(Character.toUpperCase(c));
@@ -278,8 +278,11 @@ public final class LocaleIDParser {
         if (!atTerminator()) {
             int oldIndex = index;
             ++index;
+            
+            char c;
+            while (!isTerminatorOrIDSeparator(c = next()) && Character.isLetter(c));
+            --index;
 
-            skipUntilTerminatorOrIDSeparator();
             if (index - oldIndex != 5) { // +1 to account for separator
                 index = oldIndex;
             }
@@ -343,7 +346,9 @@ public final class LocaleIDParser {
      */
     private void skipCountry() {
         if (!atTerminator()) {
-            ++index;
+            if (id[index] == UNDERSCORE || id[index] == HYPHEN) {
+                ++index;
+            }
             /*
              * Save the index point after the separator, since the format
              * requires two separators if the country is not present.
@@ -404,6 +409,9 @@ public final class LocaleIDParser {
                 needSeparator = true; // add another underscore if we have more text
             } else if (start) {
                 start = false;
+                if (c != UNDERSCORE && c != HYPHEN) {
+                    index--;
+                }
             } else if (!skipping) {
                 if (needSeparator) {
                     needSeparator = false;
