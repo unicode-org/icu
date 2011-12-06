@@ -995,6 +995,20 @@ _appendSymbol(UnicodeString& dst,
     }
 }
 
+static inline void
+_appendSymbolWithMonthPattern(UnicodeString& dst, int32_t value, const UnicodeString* symbols, int32_t symbolsCount,
+              int32_t isLeapMonth, const UnicodeString& monthPattern, UErrorCode& status) {
+    U_ASSERT(0 <= value && value < symbolsCount);
+    if (0 <= value && value < symbolsCount) {
+        if (isLeapMonth == 0) {
+            dst += symbols[value];
+        } else {
+            Formattable monthName((const UnicodeString&)(symbols[value]));
+            MessageFormat::format(monthPattern, &monthName, 1, dst, status);
+        }
+    }
+}
+
 //---------------------------------------------------------------------
 void
 SimpleDateFormat::appendGMT(NumberFormat *currentNumberFormat,UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const{
@@ -1540,7 +1554,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // if the pattern character is unrecognized, signal an error and dump out
     if (patternCharPtr == NULL)
     {
-        status = U_INVALID_FORMAT_ERROR;
+        if (ch != 0x6C) { // pattern char 'l' (SMALL LETTER L) just gets ignored
+            status = U_INVALID_FORMAT_ERROR;
+        }
         return;
     }
 
@@ -1550,6 +1566,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     if (U_FAILURE(status)) {
         return;
     }
+    int32_t isLeapMonth = 0;
 
     currentNumberFormat = getNumberFormatByIndex(patternCharIndex);
     switch (patternCharIndex) {
@@ -1581,11 +1598,12 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             zeroPaddingNumber(currentNumberFormat, appendTo, value, count, maxIntCount);
         break;
 
-    // for "MMMM", write out the whole month name, for "MMM", write out the month
-    // abbreviation, for "M" or "MM", write out the month as a number with the
+    // for "MMMM"/"LLLL", write out the whole month name, for "MMM"/"LLL", write out the month
+    // abbreviation, for "M"/"L" or "MM"/"LL", write out the month as a number with the
     // appropriate number of digits
-    // for "MMMMM", use the narrow form
+    // for "MMMMM"/"LLLLL", use the narrow form
     case UDAT_MONTH_FIELD:
+    case UDAT_STANDALONE_MONTH_FIELD:
         if ( isHebrewCalendar ) {
            HebrewCalendar *hc = (HebrewCalendar*)&cal;
            if (hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value == 6 && count >= 3 )
@@ -1593,35 +1611,39 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
            if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6 && count < 3 )
                value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
         }
-        if (count == 5)
-            _appendSymbol(appendTo, value, fSymbols->fNarrowMonths,
-                          fSymbols->fNarrowMonthsCount);
-        else if (count == 4)
-            _appendSymbol(appendTo, value, fSymbols->fMonths,
-                          fSymbols->fMonthsCount);
-        else if (count == 3)
-            _appendSymbol(appendTo, value, fSymbols->fShortMonths,
-                          fSymbols->fShortMonthsCount);
-        else
-            zeroPaddingNumber(currentNumberFormat,appendTo, value + 1, count, maxIntCount);
-        break;
-
-    // for "LLLL", write out the whole month name, for "LLL", write out the month
-    // abbreviation, for "L" or "LL", write out the month as a number with the
-    // appropriate number of digits
-    // for "LLLLL", use the narrow form
-    case UDAT_STANDALONE_MONTH_FIELD:
-        if (count == 5)
-            _appendSymbol(appendTo, value, fSymbols->fStandaloneNarrowMonths,
-                          fSymbols->fStandaloneNarrowMonthsCount);
-        else if (count == 4)
-            _appendSymbol(appendTo, value, fSymbols->fStandaloneMonths,
-                          fSymbols->fStandaloneMonthsCount);
-        else if (count == 3)
-            _appendSymbol(appendTo, value, fSymbols->fStandaloneShortMonths,
-                          fSymbols->fStandaloneShortMonthsCount);
-        else
-            zeroPaddingNumber(currentNumberFormat,appendTo, value + 1, count, maxIntCount);
+        isLeapMonth = (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount)?
+                    cal.get(UCAL_IS_LEAP_MONTH, status): 0;
+        // should consolidate the next section by using arrays of pointers & counts for the right symbols...
+        if (count == 5) {
+            if (patternCharIndex == UDAT_MONTH_FIELD) {
+                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fNarrowMonths, fSymbols->fNarrowMonthsCount,
+                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatNarrow], status);
+            } else {
+                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneNarrowMonths, fSymbols->fStandaloneNarrowMonthsCount,
+                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneNarrow], status);
+            }
+        } else if (count == 4) {
+            if (patternCharIndex == UDAT_MONTH_FIELD) {
+                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fMonths, fSymbols->fMonthsCount,
+                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide], status);
+            } else {
+                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount,
+                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide], status);
+            }
+        } else if (count == 3) {
+            if (patternCharIndex == UDAT_MONTH_FIELD) {
+                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fShortMonths, fSymbols->fShortMonthsCount,
+                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev], status);
+            } else {
+                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount,
+                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev], status);
+            }
+        } else {
+            UnicodeString monthNumber;
+            zeroPaddingNumber(currentNumberFormat,monthNumber, value + 1, count, maxIntCount);
+            _appendSymbolWithMonthPattern(appendTo, 0, &monthNumber, 1,
+                    isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev], status);
+        }
         break;
 
     // for "k" and "kk", write out the hour, adjusting midnight to appear as "24"
@@ -1986,7 +2008,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             // Handle non-numeric fields and non-abutting numeric
             // fields.
-            else {
+            else if (ch != 0x6C) { // pattern char 'l' (SMALL LETTER L) just gets ignored
                 int32_t s = subParse(text, pos, ch, count,
                                FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i);
 

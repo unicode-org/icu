@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"2.0.58.84"}
+    Version{"2.0.62.55"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -27,23 +27,6 @@ zh_Hans_SG{
             }
             availableFormats{
                 yMEd{"Gy年M月d日，EEE"}
-            }
-        }
-        chinese{
-            DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
-                "ah:mm:ss",
-                "ahh:mm",
-                "y'x'G-Ml-dEEEE",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
-                "{1} {0}",
-                "{1} {0}",
             }
         }
         gregorian{

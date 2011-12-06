@@ -42,7 +42,7 @@ cs{
             }
         }
     }
-    Version{"2.0.59.84"}
+    Version{"2.0.62.55"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -82,10 +82,10 @@ cs{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d. Ml. y'x'G",
-                "d. Ml. y'x'G",
-                "d. Ml. y'x'G",
-                "d. Ml. y'x'G",
+                "EEEE, d. M. y",
+                "d. M. y",
+                "d. M. y",
+                "d. M. y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

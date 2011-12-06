@@ -73,7 +73,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.62.19"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -151,10 +151,10 @@ root{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
+                "EEEE, y MMMM d",
+                "y MMMM d",
+                "y MMM d",
+                "y-M-d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -207,6 +207,27 @@ root{
                         "12",
                     }
                     wide:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
+                }
+            }
+            monthPatterns{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthPatterns/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/chinese/monthPatterns/stand-alone/narrow"}
+                    wide{
+                        leap{"{0}bis"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0}bis"}
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthPatterns/format/abbreviated"}
+                    narrow{
+                        leap{"{0}bis"}
+                    }
+                    wide:alias{"/LOCALE/calendar/chinese/monthPatterns/format/wide"}
                 }
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
