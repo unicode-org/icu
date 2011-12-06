@@ -49,6 +49,7 @@ U_CAPI void processFile(
     const char *inputDir,
     const char *outputDir,
     const char *packageName,
+    UBool omitBinaryCollation,
     UErrorCode *status);
 
 U_CDECL_END

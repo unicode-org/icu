@@ -84,9 +84,9 @@ typedef struct {
     uint32_t        inputdirLength;
     const char     *outputdir;
     uint32_t        outputdirLength;
+    UBool           makeBinaryCollation;
 } ParseState;
 
-static UBool gMakeBinaryCollation = TRUE;
 static UBool gOmitCollationRules  = FALSE;
 
 typedef struct SResource *
@@ -772,18 +772,23 @@ static const UChar* importFromDataFile(void* context, const char* locale, const 
     }
 
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, genrbdata->inputDir, genrbdata->outputDir, status);
+    data = parse(ucbuf, genrbdata->inputDir, genrbdata->outputDir, FALSE, status);
 
     root = data->fRoot;
     collations = resLookup(root, "collations");
-    collation = resLookup(collations, type);
-    sequence = resLookup(collation, "Sequence");
-    urules = sequence->u.fString.fChars;
-    urulesLength = sequence->u.fString.fLength;
-    *pLength = urulesLength;
+    if (collations != NULL) {
+      collation = resLookup(collations, type);
+      if (collation != NULL) {
+        sequence = resLookup(collation, "Sequence");
+        if (sequence != NULL) {
+          urules = sequence->u.fString.fChars;
+          urulesLength = sequence->u.fString.fLength;
+          *pLength = urulesLength;
+        }
+      }
+    }
 
 finish:
-
     if (inputDirBuf != NULL) {
         uprv_free(inputDirBuf);
     }
@@ -893,8 +898,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
 #if UCONFIG_NO_COLLATION || UCONFIG_NO_FILE_IO
             warning(line, "Not building collation elements because of UCONFIG_NO_COLLATION and/or UCONFIG_NO_FILE_IO, see uconfig.h");
 #else
-            if(gMakeBinaryCollation) {
-                UErrorCode intStatus = U_ZERO_ERROR;
+            if(state->makeBinaryCollation) {
 
                 /* do the collation elements */
                 int32_t     len   = 0;
@@ -908,6 +912,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 genrbdata.inputDir = state->inputdir;
                 genrbdata.outputDir = state->outputdir;
 
+                UErrorCode intStatus = U_ZERO_ERROR;
                 coll = ucol_openRulesForImport(member->u.fString.fChars, member->u.fString.fLength,
                                                UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, importFromDataFile, &genrbdata, &intStatus);
 
@@ -958,9 +963,9 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 else
                 {
                     if(intStatus == U_FILE_ACCESS_ERROR) {
-                      error(startline, "Collation could not be built- U_FILE_ACCESS_ERROR. Make sure ICU's data has been built and is loading properly.");
-                      *status = intStatus;
-                      return NULL;
+                        error(startline, "Collation could not be built- U_FILE_ACCESS_ERROR. Make sure ICU's data has been built and is loading properly.");
+                        *status = intStatus;
+                        return NULL;
                     }
                     warning(line, "%%Collation could not be constructed from CollationElements - check context!");
                     if(isStrict()){
@@ -982,11 +987,6 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 table_add(result, member, line, status);
             }
         }
-
-        /*member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);*/
-
-        /*expect(TOK_CLOSE_BRACE, NULL, NULL, status);*/
-
         if (U_FAILURE(*status))
         {
             res_close(result);
@@ -994,10 +994,9 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
         }
     }
 
-    /* not reached */
-    /* A compiler warning will appear if all paths don't contain a return statement. */
-/*    *status = U_INTERNAL_PROGRAM_ERROR;
-    return NULL;*/
+    // Reached the end without a TOK_CLOSE_BRACE.  Should be an error.
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return NULL;
 }
 
 static struct SResource *
@@ -1090,7 +1089,6 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
                     u_UCharsToChars(tokenValue->fChars, typeKeyword, u_strlen(tokenValue->fChars) + 1);
                     if(uprv_strcmp(typeKeyword, "alias") == 0) {
                         member = parseResource(state, subtag, NULL, status);
-
                         if (U_FAILURE(*status))
                         {
                             res_close(result);
@@ -1137,6 +1135,7 @@ realParseTable(ParseState* state, struct SResource *table, char *tag, uint32_t s
     UBool             readToken = FALSE;
 
     /* '{' . (name resource)* '}' */
+
     if(isVerbose()){
         printf(" parsing table %s at line %i \n", (tag == NULL) ? "(null)" : tag, (int)startline);
     }
@@ -1200,7 +1199,7 @@ realParseTable(ParseState* state, struct SResource *table, char *tag, uint32_t s
         }
         readToken = TRUE;
         ustr_deinit(&comment);
-    }
+   }
 
     /* not reached */
     /* A compiler warning will appear if all paths don't contain a return statement. */
@@ -1231,7 +1230,6 @@ parseTable(ParseState* state, char *tag, uint32_t startline, const struct UStrin
     {
         return NULL;
     }
-
     return realParseTable(state, result, tag, startline,  status);
 }
 
@@ -1815,7 +1813,7 @@ static struct {
     {"reserved", NULL, NULL}
 };
 
-void initParser(UBool omitBinaryCollation, UBool omitCollationRules)
+void initParser(UBool omitCollationRules)
 {
     U_STRING_INIT(k_type_string,    "string",    6);
     U_STRING_INIT(k_type_binary,    "binary",    6);
@@ -1836,7 +1834,6 @@ void initParser(UBool omitBinaryCollation, UBool omitCollationRules)
     U_STRING_INIT(k_type_plugin_transliterator, "process(transliterator)",   23);
     U_STRING_INIT(k_type_plugin_dependency,     "process(dependency)",       19);
 
-    gMakeBinaryCollation = !omitBinaryCollation;
     gOmitCollationRules = omitCollationRules;
 }
 
@@ -1897,6 +1894,7 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
     uint32_t                 startline;
     uint32_t                 line;
 
+
     token = getToken(state, &tokenValue, NULL, &startline, status);
 
     if(isVerbose()){
@@ -1937,6 +1935,7 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
         error(startline, "syntax error while reading a resource, expected '{' or ':'");
         return NULL;
     }
+
 
     if (resType == RT_UNKNOWN)
     {
@@ -1998,6 +1997,7 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
         return NULL;
     }
 
+
     /* We should now know what we need to parse next, so call the appropriate parser
     function and return. */
     parseFunction = gResourceTypes[resType].parseFunction;
@@ -2014,7 +2014,8 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
 
 /* parse the top-level resource */
 struct SRBRoot *
-parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *status)
+parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UBool makeBinaryCollation,
+      UErrorCode *status)
 {
     struct UString    *tokenValue;
     struct UString    comment;
@@ -2023,6 +2024,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     enum ETokenType    token;
     ParseState state;
     uint32_t i;
+
 
     for (i = 0; i < MAX_LOOKAHEAD + 1; i++)
     {
@@ -2036,6 +2038,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     state.inputdirLength = (state.inputdir != NULL) ? (uint32_t)uprv_strlen(state.inputdir) : 0;
     state.outputdir       = outputDir;
     state.outputdirLength = (state.outputdir != NULL) ? (uint32_t)uprv_strlen(state.outputdir) : 0;
+    state.makeBinaryCollation = makeBinaryCollation;
 
     ustr_init(&comment);
     expect(&state, TOK_STRING, &tokenValue, &comment, NULL, status);
@@ -2063,9 +2066,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
         else
         {
             *status=U_PARSE_ERROR;
-            /* printf("asdsdweqdasdad\n"); */
-
-            error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
+             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
         }
     }
     else
@@ -2101,12 +2102,11 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     }
     /* top-level tables need not handle special table names like "collations" */
     realParseTable(&state, state.bundle->fRoot, NULL, line, status);
-
     if(dependencyArray!=NULL){
         table_add(state.bundle->fRoot, dependencyArray, 0, status);
         dependencyArray = NULL;
     }
-    if (U_FAILURE(*status))
+   if (U_FAILURE(*status))
     {
         bundle_close(state.bundle, status);
         res_close(dependencyArray);
