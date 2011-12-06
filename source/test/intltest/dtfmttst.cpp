@@ -3757,14 +3757,24 @@ void DateFormatTest::TestMonthPatterns()
                     rootChineseCalendar->set(datePtr->year, datePtr->month-1, datePtr->day);
                     rootChineseCalendar->set(UCAL_IS_LEAP_MONTH, datePtr->isLeapMonth);
                     UnicodeString result;
-                    FieldPosition pos(0);
-                    dmft->format(*rootChineseCalendar, result, pos);
+                    FieldPosition fpos(0);
+                    dmft->format(*rootChineseCalendar, result, fpos);
                     if ( result.compare(itemPtr->dateString[idate]) != 0 ) {
                         errln( UnicodeString("FAIL: Chinese calendar format for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
                                 ", expected \"" + itemPtr->dateString[idate] + "\", got \"" + result + "\"");
                     } else {
                         // formatted OK, try parse
-                        // (to be supplied)
+                        ParsePosition ppos(0);
+                        dmft->parse(result, *rootChineseCalendar, ppos);
+                        int32_t year = rootChineseCalendar->get(UCAL_YEAR, status);
+                        int32_t month = rootChineseCalendar->get(UCAL_MONTH, status) + 1;
+                        int32_t isLeapMonth = rootChineseCalendar->get(UCAL_IS_LEAP_MONTH, status);
+                        int32_t day = rootChineseCalendar->get(UCAL_DATE, status);
+                        if ( ppos.getIndex() < result.length() || year != datePtr->year || month != datePtr->month || isLeapMonth != datePtr->isLeapMonth || day != datePtr->day ) {
+                            errln( UnicodeString("FAIL: Chinese calendar parse for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
+                                ", string \"" + result + "\", expected " + datePtr->year +"-"+datePtr->month+"("+datePtr->isLeapMonth+")-"+datePtr->day + ", got pos " +
+                                ppos.getIndex() + " " + year +"-"+month+"("+isLeapMonth+")-"+day);
+                        }
                     }
                 }
             }
