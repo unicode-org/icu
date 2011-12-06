@@ -148,15 +148,90 @@ zh_Hant{
                 "zah時mm分ss秒",
                 "ah:mm:ss",
                 "ah:mm",
-                "EEEEy'x'G-Ml-d",
-                "y'x'G-M-d",
-                "y'x'G-M-d",
-                "y'x'G-M-d",
+                {
+                    "y年MMMd日EEEE",
+                    "hanidec",
+                }
+                {
+                    "y年MMMd日",
+                    "hanidec",
+                }
+                {
+                    "y年MMMd日",
+                    "hanidec",
+                }
+                "yy-M-d",
                 "{1} {0}",
                 "{1}{0}",
                 "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                EEEd{"d日EEE"}
+                M{"M月"}
+                MEd{"M-dE"}
+                MMMEd{"M月d日E"}
+                MMMd{"M月d日"}
+                d{"d日"}
+                y{"y年"}
+                yM{"y年M月"}
+                yMEd{"y年M月d日，E"}
+                yMMM{"y年M月"}
+                yMMMEd{"y年M月d日EEE"}
+                yMMMd{"y年M月d日"}
+                yMd{"y年M月d日"}
+            }
+            monthNames{
+                format{
+                    wide{
+                        "正月",
+                        "二月",
+                        "三月",
+                        "四月",
+                        "五月",
+                        "六月",
+                        "七月",
+                        "八月",
+                        "九月",
+                        "十月",
+                        "十一月",
+                        "十二月",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "正",
+                        "二",
+                        "三",
+                        "四",
+                        "五",
+                        "六",
+                        "七",
+                        "八",
+                        "九",
+                        "十",
+                        "十一",
+                        "十二",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"闰{0}"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"闰{0}"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"闰{0}"}
+                    }
+                }
             }
         }
         coptic{

@@ -43,7 +43,7 @@ fr{
             }
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.62.55"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -108,6 +108,38 @@ fr{
             }
         }
         chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "d/M/y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                M{"L"}
+                MEd{"EEE d/M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"EEE d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE d MMM y"}
+                yMMMd{"d MMM y"}
+                yQ{"'T'Q y"}
+                yQQQ{"QQQ y"}
+            }
             monthNames{
                 format{
                     abbreviated{

@@ -181,11 +181,15 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
  */
 static const char gErasTag[]="eras";
 static const char gMonthNamesTag[]="monthNames";
+static const char gMonthPatternsTag[]="monthPatterns";
 static const char gDayNamesTag[]="dayNames";
 static const char gNamesWideTag[]="wide";
 static const char gNamesAbbrTag[]="abbreviated";
 static const char gNamesNarrowTag[]="narrow";
+static const char gNamesAllTag[]="all";
+static const char gNamesLeapTag[]="leap";
 static const char gNamesStandaloneTag[]="stand-alone";
+static const char gNamesNumericTag[]="numeric";
 static const char gAmPmMarkersTag[]="AmPmMarkers";
 static const char gQuartersTag[]="quarters";
 
@@ -707,6 +711,13 @@ DateFormatSymbols::getAmPmStrings(int32_t &count) const
     return fAmPms;
 }
 
+const UnicodeString*
+DateFormatSymbols::getLeapMonthPatterns(int32_t &count) const
+{
+    count = fLeapMonthPatternsCount;
+    return fLeapMonthPatterns;
+}
+
 //------------------------------------------------------
 
 void
@@ -1209,6 +1220,19 @@ initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortS
     }
 }
 
+static void
+initLeapMonthPattern(UnicodeString *field, int32_t index, const UResourceBundle *data, UErrorCode &status) {
+    field[index].remove();
+    if (U_SUCCESS(status)) {
+        int32_t strLen = 0;
+        const UChar *resStr = ures_getStringByKey(data, gNamesLeapTag, &strLen, &status);
+        if (U_SUCCESS(status)) {
+            field[index].setTo(TRUE, resStr, strLen);
+        }
+    }
+    status = U_ZERO_ERROR;
+}
+
 void
 DateFormatSymbols::initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData)
 {
@@ -1256,6 +1280,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fStandaloneQuartersCount = 0;
     fStandaloneShortQuarters = NULL;
     fStandaloneShortQuartersCount = 0;
+    fLeapMonthPatterns = NULL;
+    fLeapMonthPatternsCount = 0;
     fGmtHourFormats = NULL;
     fGmtHourFormatsCount = 0;
     fZoneStringsRowCount = 0;
@@ -1293,12 +1319,29 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
        status = oldStatus;
        eraNames = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
     }
-	// current ICU4J falls back to abbreviated if narrow eras are missing, so we will too
+    // current ICU4J falls back to abbreviated if narrow eras are missing, so we will too
     oldStatus = status;
     UResourceBundle *narrowEras = ures_getByKeyWithFallback(erasMain, gNamesNarrowTag, NULL, &status);
     if ( status == U_MISSING_RESOURCE_ERROR ) {
        status = oldStatus;
        narrowEras = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
+    }
+
+    UResourceBundle *monthPatterns = calData.getByKey(gMonthPatternsTag, status);
+    if (U_SUCCESS(status) && monthPatterns != NULL) {
+        fLeapMonthPatterns = newUnicodeStringArray(kMonthPatternsCount);
+        if (fLeapMonthPatterns) {
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatWide, calData.getByKey2(gMonthPatternsTag, gNamesWideTag, status), status);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatAbbrev, calData.getByKey2(gMonthPatternsTag, gNamesAbbrTag, status), status);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatNarrow, calData.getByKey2(gMonthPatternsTag, gNamesNarrowTag, status), status);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneWide, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesWideTag, status), status);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneAbbrev, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesAbbrTag, status), status);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneNarrow, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesNarrowTag, status), status);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternNumeric, calData.getByKey3(gMonthPatternsTag, gNamesNumericTag, gNamesAllTag, status), status);
+            fLeapMonthPatternsCount = kMonthPatternsCount;
+        }
+    } else {
+        status = U_ZERO_ERROR;
     }
 
     UResourceBundle *lsweekdaysData = NULL; // Data closed by calData

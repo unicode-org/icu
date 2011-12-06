@@ -61,7 +61,7 @@ ko{
             }
         }
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.62.55"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -126,10 +126,10 @@ ko{
                 "a h시 m분 s초 z",
                 "a h:mm:ss",
                 "a h:mm",
-                "y'x'G-Ml-d EEEE",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
+                "y-M-d EEEE",
+                "y MMMM d",
+                "y MMM d",
+                "y-M-d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
