@@ -76,7 +76,7 @@ AC_MSG_RESULT([release $VERSION, library $LIB_VERSION, unicode version $UNICODE_
 AC_SUBST(UNICODE_VERSION)
 
 # Determine the host system
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 
 AC_SUBST(CPPFLAGS)
 
