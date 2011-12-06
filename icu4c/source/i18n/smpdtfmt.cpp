@@ -1642,7 +1642,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             UnicodeString monthNumber;
             zeroPaddingNumber(currentNumberFormat,monthNumber, value + 1, count, maxIntCount);
             _appendSymbolWithMonthPattern(appendTo, 0, &monthNumber, 1,
-                    isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev], status);
+                    isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternNumeric], status);
         }
         break;
 
