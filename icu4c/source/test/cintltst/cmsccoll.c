@@ -6593,6 +6593,132 @@ static int compare_uint8_t_arrays(const uint8_t* a, const uint8_t* b)
   return (*a < *b ? -1 : 1);
 }
 
+static void TestImportRulesDeWithPhonebook(void)
+{
+  const char* normalRules[] = {
+    "&a<\\u00e6<\\u00c6<\\u00dc<\\u00fc",
+    "&a<<\\u00e6<<\\u00c6<<\\u00dc<<\\u00fc",
+    "&a<<\\u00e6<<<\\u00c6<<\\u00dc<<\\u00fc",
+  };
+  const OneTestCase normalTests[] = {
+    { {0x00e6}, {0x00c6}, UCOL_LESS},
+    { {0x00fc}, {0x00dc}, UCOL_GREATER},
+  };
+
+  const char* importRules[] = {
+    "&a<\\u00e6<\\u00c6<\\u00dc<\\u00fc[import de-u-co-phonebk]",
+    "&a<<\\u00e6<<\\u00c6<<\\u00dc<<\\u00fc[import de-u-co-phonebk]",
+    "&a<<\\u00e6<<<\\u00c6<<\\u00dc<<\\u00fc[import de-u-co-phonebk]",
+  };
+  const OneTestCase importTests[] = {
+    { {0x00e6}, {0x00c6}, UCOL_LESS},
+    { {0x00fc}, {0x00dc}, UCOL_LESS},
+  };
+
+  doTestOneTestCase(normalTests, LEN(normalTests), normalRules, LEN(normalRules));
+  doTestOneTestCase(importTests, LEN(importTests), importRules, LEN(importRules));
+}
+
+static void TestImportRulesFiWithEor(void)
+{
+  /* DUCET. */
+  const char* defaultRules[] = {
+    "&a<b",                                    /* Dummy rule. */
+  };
+
+  const OneTestCase defaultTests[] = {
+    { {0x0110}, {0x00F0}, UCOL_LESS},          /* "Đ" < "ð" */
+    { {0x00a3}, {0x00a5}, UCOL_LESS},          /* "£" < "¥" */
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_LESS},  /* "a" < "a£" */
+  };
+
+  /* European Ordering rules: ignore currency characters. */
+  const char* eorRules[] = {
+    "[import root-u-co-eor]",
+  };
+
+  const OneTestCase eorTests[] = {
+    { {0x0110}, {0x00F0}, UCOL_LESS},           /* "Đ" < "ð" */
+    { {0x00a3}, {0x00a5}, UCOL_EQUAL},          /* "£" = "¥" */
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},  /* "a" = "a£" */
+  };
+
+  /* Fi standard rules:  "Đ" >  "ð". */
+  const char* fiStdRules[] = {
+    "[import fi-u-co-standard]",
+  };
+
+  const OneTestCase fiStdTests[] = {
+    { {0x0110}, {0x00F0}, UCOL_GREATER},         /* "Đ" > "ð" */
+    { {0x00a3}, {0x00a5}, UCOL_LESS},            /* "£" < "¥" */
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_LESS},    /* "a" < "a£" */
+  };
+
+  /* Both European Ordering Rules and Fi Standard Rules. */
+  const char* eorFiStdRules[] = {
+    "[import root-u-co-eor][import fi-u-co-standard]",
+  };
+
+  /* This is essentially same as the one before once fi.txt is updated with import. */
+  const char* fiEorRules[] = {
+    "[import fi-u-co-eor]",
+  };
+
+  const OneTestCase fiEorTests[] = {
+    { {0x0110}, {0x00F0}, UCOL_GREATER},         /* "Đ" > "ð" */
+    { {0x00a3}, {0x00a5}, UCOL_EQUAL},           /* "£" = "¥" */
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},   /* "a" = "a£" */
+  };
+
+  doTestOneTestCase(defaultTests, LEN(defaultTests), defaultRules, LEN(defaultRules));
+  doTestOneTestCase(eorTests, LEN(eorTests), eorRules, LEN(eorRules));
+  doTestOneTestCase(fiStdTests, LEN(fiStdTests), fiStdRules, LEN(fiStdRules));
+  doTestOneTestCase(fiEorTests, LEN(fiEorTests), eorFiStdRules, LEN(eorFiStdRules));
+
+  /* TODO: Fix ICU ticket #8962 by uncommenting the following test after fi.txt is updated with the following rule:
+        eor{
+            Sequence{
+                "[import root-u-co-eor][import fi-u-co-standard]"
+            }
+            Version{"21.0"}
+        }
+  */
+  /* doTestOneTestCase(fiEorTests, LEN(fiEorTests), fiEorRules, LEN(fiEorRules)); */
+
+}
+
+#if 0
+/*
+ * This test case tests inclusion with the unihan rules, but this cannot be included now, unless
+ * the resource files are built with -includeUnihanColl option.
+ * TODO: Uncomment this function and make it work when unihan rules are built by default.
+ */
+static void TestImportRulesCJKWithUnihan(void)
+{
+  /* DUCET. */
+  const char* defaultRules[] = {
+    "&a<b",                                    /* Dummy rule. */
+  };
+
+  const OneTestCase defaultTests[] = {
+    { {0x3402}, {0x4e1e}, UCOL_GREATER},          /* "Đ" < "ð" */
+  };
+
+  /* European Ordering rules: ignore currency characters. */
+  const char* unihanRules[] = {
+    "[import ko-u-co-unihan]",
+  };
+
+  const OneTestCase unihanTests[] = {
+    { {0x3402}, {0x4e1e}, UCOL_LESS},          /* "Đ" < "ð" */
+  };
+
+  doTestOneTestCase(defaultTests, LEN(defaultTests), defaultRules, LEN(defaultRules));
+  doTestOneTestCase(unihanTests, LEN(unihanTests), unihanRules, LEN(unihanRules));
+
+}
+#endif
+
 static void TestImport(void)
 {
     UCollator* vicoll;
@@ -6980,6 +7106,9 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPrivateUseCharactersInList);
     TEST(TestPrivateUseCharactersInRange);
     TEST(TestInvalidListsAndRanges);
+    TEST(TestImportRulesDeWithPhonebook);
+    TEST(TestImportRulesFiWithEor);
+    /* TEST(TestImportRulesCJKWithUnihan); */
     TEST(TestImport);
     TEST(TestImportWithType);
 

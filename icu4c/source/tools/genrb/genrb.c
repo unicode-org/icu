@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,7 +22,8 @@
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
 
 /* Protos */
-void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status);
+void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir,
+    const char *packageName, UBool omitBinaryCollation, UErrorCode *status);
 static char *make_res_filename(const char *filename, const char *outputDir,
                                const char *packageName, UErrorCode *status);
 
@@ -285,7 +286,7 @@ main(int argc,
         }
     }
 
-    initParser(options[NO_BINARY_COLLATION].doesOccur, options[NO_COLLATION_RULES].doesOccur);
+    initParser(options[NO_COLLATION_RULES].doesOccur);
 
     /*added by Jing*/
     if(options[LANGUAGE].doesOccur) {
@@ -424,7 +425,9 @@ main(int argc,
         if (isVerbose()) {
             printf("Processing file \"%s\"\n", theCurrentFileName);
         }
-        processFile(arg, encoding, inputDir, outputDir, gPackageName, &status);
+        processFile(arg, encoding, inputDir, outputDir, gPackageName,
+                    options[NO_BINARY_COLLATION].doesOccur,
+                    &status);
     }
 
     uprv_free(poolBundle.fBytes);
@@ -448,7 +451,9 @@ main(int argc,
 
 /* Process a file */
 void
-processFile(const char *filename, const char *cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status) {
+processFile(
+    const char *filename, const char *cp, const char *inputDir, const char *outputDir, const char *packageName,
+    UBool omitBinaryCollation, UErrorCode *status) {
     /*FileStream     *in           = NULL;*/
     struct SRBRoot *data         = NULL;
     UCHARBUF       *ucbuf        = NULL;
@@ -471,6 +476,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     }else{
         filelen = (int32_t)uprv_strlen(filename);
     }
+
     if(inputDir == NULL) {
         const char *filenameBegin = uprv_strrchr(filename, U_FILE_SEP_CHAR);
         openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
@@ -555,7 +561,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         printf("autodetected encoding %s\n", cp);
     }
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, inputDir, outputDir, status);
+    data = parse(ucbuf, inputDir, outputDir, !omitBinaryCollation, status);
 
     if (data == NULL || U_FAILURE(*status)) {
         fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename,u_errorName(*status));
@@ -636,6 +642,7 @@ make_res_filename(const char *filename,
     char *resName;
 
     int32_t pkgLen = 0; /* length of package prefix */
+
 
     if (U_FAILURE(*status)) {
         return 0;
