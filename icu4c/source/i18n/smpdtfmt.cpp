@@ -1903,6 +1903,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     UBool inQuote = FALSE;
 
     const UnicodeString numericFormatChars(NUMERIC_FORMAT_CHARS);
+    MessageFormat * numericLeapMonthFormatter = NULL;
 
     Calendar* calClone = NULL;
     Calendar *workCal = &cal;
@@ -1921,6 +1922,14 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         } else {
             status = U_MEMORY_ALLOCATION_ERROR;
             goto ExitParse;
+        }
+    }
+    
+    if (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount) {
+        UErrorCode nlmfStatus = U_ZERO_ERROR;
+        numericLeapMonthFormatter = new MessageFormat(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternNumeric], fLocale, nlmfStatus);
+        if (U_FAILURE(nlmfStatus)) {
+            numericLeapMonthFormatter = NULL;
         }
     }
 
@@ -1995,7 +2004,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 }
 
                 pos = subParse(text, pos, ch, count,
-                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i);
+                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
@@ -2010,7 +2019,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // fields.
             else if (ch != 0x6C) { // pattern char 'l' (SMALL LETTER L) just gets ignored
                 int32_t s = subParse(text, pos, ch, count,
-                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i);
+                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter);
 
                 if (s == -pos-1) {
                     // era not present, in special cases allow this to continue
@@ -2221,6 +2230,9 @@ ExitParse:
         cal.setTime(workCal->getTime(status), status);
     }
 
+    if (numericLeapMonthFormatter != NULL) {
+        delete numericLeapMonthFormatter;
+    }
     if (calClone != NULL) {
         delete calClone;
     }
@@ -2461,6 +2473,7 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
                               UCalendarDateFields field,
                               const UnicodeString* data,
                               int32_t dataCount,
+                              const UnicodeString* monthPattern,
                               Calendar& cal) const
 {
     int32_t i = 0;
@@ -2473,6 +2486,8 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     // We keep track of the longest match, and return that.  Note that this
     // unfortunately requires us to test all array elements.
     int32_t bestMatchLength = 0, bestMatch = -1;
+    UnicodeString bestMatchName;
+    int32_t isLeapMonth = 0;
 
     // {sfb} kludge to support case-insensitive comparison
     // {markus 2002oct11} do not just use caseCompareBetween because we do not know
@@ -2497,6 +2512,28 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
         {
             bestMatch = i;
             bestMatchLength = length;
+            bestMatchName.setTo(data[i]);
+            isLeapMonth = 0;
+        }
+
+        if (monthPattern != NULL) {
+            UErrorCode status = U_ZERO_ERROR;
+            UnicodeString leapMonthName;
+            Formattable monthName((const UnicodeString&)(data[i]));
+            MessageFormat::format(*monthPattern, &monthName, 1, leapMonthName, status);
+            if (U_SUCCESS(status)) {
+                lcase.fastCopyFrom(leapMonthName).foldCase();
+                length = lcase.length();
+
+                if (length > bestMatchLength &&
+                    lcaseText.compareBetween(0, length, lcase, 0, length) == 0)
+                {
+                    bestMatch = i;
+                    bestMatchLength = length;
+                    bestMatchName.setTo(leapMonthName);
+                    isLeapMonth = 1;
+                }
+            }
         }
     }
     if (bestMatch >= 0)
@@ -2508,11 +2545,14 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
         else {
             cal.set(field, bestMatch);
         }
+        if (isLeapMonth) {
+            cal.set(UCAL_IS_LEAP_MONTH, isLeapMonth);
+        }
 
         // Once we have a match, we have to determine the length of the
         // original source string.  This will usually be == the length of
         // the case folded string, but it may differ (e.g. sharp s).
-        lcase.fastCopyFrom(data[bestMatch]).foldCase();
+        lcase.fastCopyFrom(bestMatchName).foldCase();
 
         // Most of the time, the length will be the same as the length
         // of the string from the locale data.  Sometimes it will be
@@ -2520,7 +2560,7 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
         // adding a character at a time, until we have a match.  We do
         // this all in one loop, where we try 'len' first (at index
         // i==0).
-        int32_t len = data[bestMatch].length(); // 99+% of the time
+        int32_t len = bestMatchName.length(); // 99+% of the time
         int32_t n = text.length() - start;
         for (i=0; i<=n; ++i) {
             int32_t j=i;
@@ -2560,7 +2600,7 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                            UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                           int32_t patLoc) const
+                           int32_t patLoc, MessageFormat * numericLeapMonthFormatter) const
 {
     Formattable number;
     int32_t value = 0;
@@ -2585,6 +2625,10 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     patternCharIndex = (UDateFormatField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
     currentNumberFormat = getNumberFormatByIndex(patternCharIndex);
     UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
+
+    if (numericLeapMonthFormatter != NULL) {
+        numericLeapMonthFormatter->setFormats((const Format **)&currentNumberFormat, 1);
+    }
 
     // If there are any spaces here, skip over them.  If we hit the end
     // of the string, then fail.
@@ -2623,18 +2667,32 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // but that's going to be difficult.
         const UnicodeString* src;
 
-        if (obeyCount) {
-            if ((start+count) > text.length()) {
-                return -start;
+        UBool parsedNumericLeapMonth = FALSE;
+        if (numericLeapMonthFormatter != NULL && (patternCharIndex == UDAT_MONTH_FIELD || patternCharIndex == UDAT_STANDALONE_MONTH_FIELD)) {
+            int32_t argCount;
+            Formattable * args = numericLeapMonthFormatter->parse(text, pos, argCount);
+            if (args != NULL && argCount == 1 && pos.getIndex() > parseStart && args[0].isNumeric()) {
+                parsedNumericLeapMonth = TRUE;
+                number.setLong(args[0].getLong());
+            } else {
+                pos.setIndex(parseStart);
             }
-
-            text.extractBetween(0, start + count, temp);
-            src = &temp;
-        } else {
-            src = &text;
         }
 
-        parseInt(*src, number, pos, allowNegative,currentNumberFormat);
+        if (!parsedNumericLeapMonth) {
+            if (obeyCount) {
+                if ((start+count) > text.length()) {
+                    return -start;
+                }
+
+                text.extractBetween(0, start + count, temp);
+                src = &temp;
+            } else {
+                src = &text;
+            }
+
+            parseInt(*src, number, pos, allowNegative,currentNumberFormat);
+        }
 
         int32_t txtLoc = pos.getIndex();
 
@@ -2698,11 +2756,11 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     switch (patternCharIndex) {
     case UDAT_ERA_FIELD:
         if (count == 5) {
-            ps = matchString(text, start, UCAL_ERA, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount, cal);
+            ps = matchString(text, start, UCAL_ERA, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount, NULL, cal);
         } else if (count == 4) {
-            ps = matchString(text, start, UCAL_ERA, fSymbols->fEraNames, fSymbols->fEraNamesCount, cal);
+            ps = matchString(text, start, UCAL_ERA, fSymbols->fEraNames, fSymbols->fEraNamesCount, NULL, cal);
         } else {
-            ps = matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, cal);
+            ps = matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, NULL, cal);
         }
 
         // check return position, if it equals -start, then matchString error
@@ -2797,13 +2855,19 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // count >= 3 // i.e., MMM or MMMM
             // Want to be able to parse both short and long forms.
             // Try count == 4 first:
+            UnicodeString * wideMonthPat = NULL;
+            UnicodeString * shortMonthPat = NULL;
+            if (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount) {
+                wideMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide];
+                shortMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev];
+            }
             int32_t newStart = 0;
 
             if ((newStart = matchString(text, start, UCAL_MONTH, // try MMMM
-                                      fSymbols->fMonths, fSymbols->fMonthsCount, cal)) > 0)
+                                      fSymbols->fMonths, fSymbols->fMonthsCount, wideMonthPat, cal)) > 0)
                 return newStart;
             else if ((newStart = matchString(text, start, UCAL_MONTH, // try MMM
-                                          fSymbols->fShortMonths, fSymbols->fShortMonthsCount, cal)) > 0)
+                                          fSymbols->fShortMonths, fSymbols->fShortMonthsCount, shortMonthPat, cal)) > 0)
                 return newStart;
             else if (!lenient) // currently we do not try to parse MMMMM: #8860
                 return newStart;
@@ -2823,13 +2887,19 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // count >= 3 // i.e., LLL or LLLL
             // Want to be able to parse both short and long forms.
             // Try count == 4 first:
+            UnicodeString * wideMonthPat = NULL;
+            UnicodeString * shortMonthPat = NULL;
+            if (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount) {
+                wideMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide];
+                shortMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev];
+            }
             int32_t newStart = 0;
 
             if ((newStart = matchString(text, start, UCAL_MONTH,
-                                      fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, cal)) > 0)
+                                      fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, wideMonthPat, cal)) > 0)
                 return newStart;
             else if ((newStart = matchString(text, start, UCAL_MONTH,
-                                          fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, cal)) > 0)
+                                          fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, shortMonthPat, cal)) > 0)
                 return newStart;
             else if (!lenient) // currently we do not try to parse LLLLL: #8860
                 return newStart;
@@ -2882,15 +2952,15 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Try count == 4 (EEEE) first:
             int32_t newStart = 0;
             if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                      fSymbols->fWeekdays, fSymbols->fWeekdaysCount, cal)) > 0)
+                                      fSymbols->fWeekdays, fSymbols->fWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
             // EEEE failed, now try EEE
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, cal)) > 0)
+                                   fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
             // EEE failed, now try EEEEE
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, cal)) > 0)
+                                   fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
             else if (!lenient || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
                 return newStart;
@@ -2910,10 +2980,10 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Try count == 4 (cccc) first:
             int32_t newStart = 0;
             if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                      fSymbols->fStandaloneWeekdays, fSymbols->fStandaloneWeekdaysCount, cal)) > 0)
+                                      fSymbols->fStandaloneWeekdays, fSymbols->fStandaloneWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                          fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, cal)) > 0)
+                                          fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
             else if (!lenient)
                 return newStart;
@@ -2922,7 +2992,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         break;
 
     case UDAT_AM_PM_FIELD:
-        return matchString(text, start, UCAL_AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, cal);
+        return matchString(text, start, UCAL_AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, NULL, cal);
 
     case UDAT_HOUR1_FIELD:
         // [We computed 'value' above.]

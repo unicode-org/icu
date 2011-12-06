@@ -889,13 +889,15 @@ private:
      * @param field the date field being parsed.
      * @param stringArray the string array to parsed.
      * @param stringArrayCount the size of the array.
+     * @param monthPattern pointer to leap month pattern, or NULL if none.
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t matchString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
-                        const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
+                        const UnicodeString* stringArray, int32_t stringArrayCount,
+                        const UnicodeString* monthPattern, Calendar& cal) const;
 
     /**
      * Private code-size reduction function used by subParse.
@@ -942,12 +944,13 @@ private:
      * @param cal a Calendar set to the date and time to be formatted
      *            into a date/time string.
      * @param patLoc
+     * @param numericLeapMonthFormatter If non-null, used to parse numeric leap months.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                      UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                     int32_t patLoc) const;
+                     int32_t patLoc, MessageFormat * numericLeapMonthFormatter) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
