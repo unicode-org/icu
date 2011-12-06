@@ -5188,10 +5188,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
-                "",
-                "",
-                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
                 "",
                 "A4",
                 "A4",
@@ -5395,6 +5395,35 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    abbreviated{
+                        leap{""}
+                    }
+                    narrow{
+                        leap{""}
+                    }
+                    wide{
+                        leap{""}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{""}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        leap{""}
+                    }
+                    narrow{
+                        leap{""}
+                    }
+                    wide{
+                        leap{""}
                     }
                 }
             }

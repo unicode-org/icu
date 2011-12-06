@@ -398,6 +398,43 @@ public:
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Somewhat temporary constants for leap month pattern types, adequate for supporting
+     * just leap month patterns as needed for Chinese lunar calendar.
+     * Eventually we will add full support for different month pattern types (needed for
+     * other calendars such as Hindu) at which point this approach will be replaced by a
+     * more complete approach.
+     * @internal
+     */
+    enum EMonthPatternType
+    {
+        kLeapMonthPatternFormatWide,
+        kLeapMonthPatternFormatAbbrev,
+        kLeapMonthPatternFormatNarrow,
+        kLeapMonthPatternStandaloneWide,
+        kLeapMonthPatternStandaloneAbbrev,
+        kLeapMonthPatternStandaloneNarrow,
+        kLeapMonthPatternNumeric,
+        kMonthPatternsCount
+    };
+
+    /**
+     * Somewhat temporary function for getting complete set of leap month patterns for all
+     * contexts & widths, indexed by EMonthPatternType values. Returns NULL if calendar
+     * does not have leap month patterns. Note, there is currently no setter for this.
+     * Eventually we will add full support for different month pattern types (needed for
+     * other calendars such as Hindu) at which point this approach will be replaced by a
+     * more complete approach.
+     * @param count        Filled in with length of the array (may be 0).
+     * @return             The leap month patterns (DateFormatSymbols retains ownership).
+     *                     May be NULL if there are no leap month patterns for this calendar.
+     * @internal
+     */
+    const UnicodeString* getLeapMonthPatterns(int32_t& count) const;
+
+#endif  /* U_HIDE_INTERNAL_API */
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * Gets timezone strings. These strings are stored in a 2-dimensional array.
@@ -594,6 +631,12 @@ private:
      */
     UnicodeString  *fStandaloneShortQuarters;
     int32_t         fStandaloneShortQuartersCount;
+
+    /**
+     * All leap month patterns, for example "{0}bis".
+     */
+    UnicodeString  *fLeapMonthPatterns;
+    int32_t         fLeapMonthPatternsCount;
 
     /**
      * Localized names of time zones in this locale.  This is a

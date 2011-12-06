@@ -14,17 +14,12 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.59.66"}
+    Version{"2.0.62.55"}
     calendar{
         buddhist{
             availableFormats{
                 MEd{"M-d（E）"}
                 Md{"M-d"}
-            }
-        }
-        chinese{
-            availableFormats{
-                yMEd{"y年M月d日，E"}
             }
         }
         gregorian{

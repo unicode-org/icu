@@ -84,9 +84,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(44,TestNumberAsStringParsing);
         TESTCASE(45,TestStandAloneGMTParse);
         TESTCASE(46,TestParsePosition);
+        TESTCASE(47,TestMonthPatterns);
         /*
-        TESTCASE(47,TestRelativeError);
-        TESTCASE(48,TestRelativeOther);
+        TESTCASE(48,TestRelativeError);
+        TESTCASE(49,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3700,6 +3701,74 @@ void DateFormatTest::TestParsePosition() {
         }
 
         delete sdf;
+    }
+}
+
+
+typedef struct {
+    int32_t year;
+    int32_t month; // 1-based
+    int32_t isLeapMonth;
+    int32_t day;
+} ChineseCalTestDate;
+
+#define NUM_TEST_DATES 3
+
+typedef struct {
+    const char *       locale;
+    DateFormat::EStyle style;
+    UnicodeString      dateString[NUM_TEST_DATES];
+} MonthPatternItem;
+
+void DateFormatTest::TestMonthPatterns()
+{
+    const ChineseCalTestDate dates[NUM_TEST_DATES] = {
+        // yr mo lp da
+        {  29, 4, 0, 2 }, // (in chinese era 78) gregorian 2012-4-22
+        {  29, 4, 1, 2 }, // (in chinese era 78) gregorian 2012-5-22
+        {  29, 5, 0, 2 }, // (in chinese era 78) gregorian 2012-6-20
+    };
+
+    const MonthPatternItem items[] = {
+        //                                          dateString
+        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("29 4 2"),                        UnicodeString("29 4bis 2"),                        UnicodeString("29 5 2") } },
+        { "root@calendar=chinese",    DateFormat::kShort, { UnicodeString("29-4-2"),                        UnicodeString("29-4bis-2"),                        UnicodeString("29-5-2") } },
+        { "zh@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
+        { "zh@calendar=chinese",      DateFormat::kShort, { UnicodeString("29-4-2"),                        CharsToUnicodeString("29-\\u95F04-2"),             UnicodeString("29-5-2") } },
+        { "zh_Hant@calendar=chinese", DateFormat::kLong,  { CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
+        { "zh_Hant@calendar=chinese", DateFormat::kShort, { UnicodeString("29-4-2"),                        CharsToUnicodeString("29-\\u95F04-2"),             UnicodeString("29-5-2") } },
+        { "fr@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("2 s\\u00ECyu\\u00E8 29"), CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis 29"), CharsToUnicodeString("2 w\\u01D4yu\\u00E8 29") } },
+        { "fr@calendar=chinese",      DateFormat::kShort, { UnicodeString("2/4/29"),                        UnicodeString("2/4bis/29"),                        UnicodeString("2/5/29") } },
+        { NULL,                       DateFormat::kNone,  { UnicodeString(""), UnicodeString(""), UnicodeString("") } }
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    Locale rootChineseCalLocale = Locale::createFromName("root@calendar=chinese");
+    Calendar * rootChineseCalendar = Calendar::createInstance(rootChineseCalLocale, status);
+    if (U_SUCCESS(status)) {
+        const MonthPatternItem * itemPtr;
+        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+            Locale locale = Locale::createFromName(itemPtr->locale);
+            DateFormat * dmft = DateFormat::createDateInstance(itemPtr->style, locale);
+            if ( dmft != NULL ) {
+                const ChineseCalTestDate * datePtr = dates;
+                int32_t idate;
+                for (idate = 0; idate < NUM_TEST_DATES; idate++, datePtr++) {
+                    rootChineseCalendar->set(datePtr->year, datePtr->month-1, datePtr->day);
+                    rootChineseCalendar->set(UCAL_IS_LEAP_MONTH, datePtr->isLeapMonth);
+                    UnicodeString result;
+                    FieldPosition pos(0);
+                    dmft->format(*rootChineseCalendar, result, pos);
+                    if ( result.compare(itemPtr->dateString[idate]) != 0 ) {
+                        errln( UnicodeString("FAIL: Chinese calendar format for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
+                                ", expected \"" + itemPtr->dateString[idate] + "\", got \"" + result + "\"");
+                    } else {
+                        // formatted OK, try parse
+                        // (to be supplied)
+                    }
+                }
+            }
+        }
     }
 }
 

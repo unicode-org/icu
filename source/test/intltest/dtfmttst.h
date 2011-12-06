@@ -175,6 +175,8 @@ public: // package
 
     void TestParsePosition(void);
 
+    void TestMonthPatterns(void);
+
 public:
     /**
      * Test host-specific formatting.
