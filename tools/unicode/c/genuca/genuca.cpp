@@ -613,9 +613,9 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                   {"[fixed last special byte",      &consts->UCA_PRIMARY_SPECIAL_MAX,   READHEX1},
                   {"[variable top = ",              &t->options->variableTopValue,      READHEX2},
                   {"[UCA version = ",               NULL,                               READUCAVERSION},
-                  {"[top_byte\t",                   NULL,                               READLEADBYTETOSCRIPTS},
-                  {"[reorderingTokens\t",           NULL,                               READSCRIPTTOLEADBYTES},
-                  {"[categories\t",                 NULL,                               IGNORE},
+                  {"[top_byte",                     NULL,                               READLEADBYTETOSCRIPTS},
+                  {"[reorderingTokens",             NULL,                               READSCRIPTTOLEADBYTES},
+                  {"[categories",                   NULL,                               IGNORE},
                   {"[first tertiary in secondary non-ignorable",                 NULL,                               IGNORE},
                   {"[last tertiary in secondary non-ignorable",                 NULL,                               IGNORE},
                   {"[first secondary in primary non-ignorable",                 NULL,                               IGNORE},
@@ -704,7 +704,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
               }
             } else if (what_to_do == READLEADBYTETOSCRIPTS) { //vt[cnt].what_to_do == READLEADBYTETOSCRIPTS
                 pointer = buffer + vtLen;
-                
+                skipWhiteSpace(&pointer, status);
+
                 uint16_t leadByte = (hex2num(*pointer++) * 16) + hex2num(*pointer++);
                 //fprintf(stdout, "~~~~ processing lead byte = %02x\n", leadByte);
                 if (leadByte >= leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH) {
@@ -764,6 +765,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                 char scriptName[100];
 
                 pointer = buffer + vtLen;
+                skipWhiteSpace(&pointer, status);
                 uint32_t scriptNameLength = readElement(&pointer, scriptName, '\t', status);
                 int32_t reorderCode = getReorderCode(scriptName);
                 if (reorderCode >= 0) {
