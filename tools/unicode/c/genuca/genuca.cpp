@@ -24,12 +24,15 @@
 *   10/26/2010  sgill                   Support for reordering codes
 */
 
+#define U_NO_DEFAULT_INCLUDE_UTF_HEADERS 1
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/udata.h"
 #include "unicode/uclean.h"
 #include "unicode/uscript.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "ucol_bld.h"
 #include "ucol_imp.h"
 #include "genuca.h"
@@ -44,6 +47,8 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+/** The maximum UTF-16 length (number of UChars) in a UCA contraction. */
+static const int32_t MAX_UCA_CONTRACTION_LENGTH=4;
 
 // script reordering structures
 typedef struct {
@@ -1021,7 +1026,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
 void writeOutData(UCATableHeader *data,
                   UCAConstants *consts,
                   LeadByteConstants *leadByteConstants,
-                  UChar contractions[][3],
+                  UChar contractions[][MAX_UCA_CONTRACTION_LENGTH],
                   uint32_t noOfcontractions,
                   const char *outputDir,
                   const char *copyright,
@@ -1037,16 +1042,14 @@ void writeOutData(UCATableHeader *data,
     data->size += paddedsize(sizeof(UCAConstants));
 
     if(noOfcontractions != 0) {
-      contractions[noOfcontractions][0] = 0;
-      contractions[noOfcontractions][1] = 0;
-      contractions[noOfcontractions][2] = 0;
+      uprv_memset(&contractions[noOfcontractions][0], 0, MAX_UCA_CONTRACTION_LENGTH*U_SIZEOF_UCHAR);
       noOfcontractions++;
 
 
       data->contractionUCACombos = data->size;
-      data->contractionUCACombosWidth = 3;
+      data->contractionUCACombosWidth = (uint8_t)MAX_UCA_CONTRACTION_LENGTH;
       data->contractionUCACombosSize = noOfcontractions;
-      data->size += paddedsize((noOfcontractions*3*sizeof(UChar)));
+      data->size += paddedsize((noOfcontractions*MAX_UCA_CONTRACTION_LENGTH*U_SIZEOF_UCHAR));
     }
     data->scriptToLeadByte = data->size;
     //fprintf(stdout, "@@@@ script to lead byte offset = 0x%x (%d)\n", data->size, data->size);
@@ -1100,8 +1103,8 @@ void writeOutData(UCATableHeader *data,
     }
     
     if(noOfcontractions != 0) {
-      udata_writeBlock(pData, contractions, noOfcontractions*3*sizeof(UChar));
-      udata_writePadding(pData, paddedsize((noOfcontractions*3*sizeof(UChar))) - noOfcontractions*3*sizeof(uint16_t));
+      udata_writeBlock(pData, contractions, noOfcontractions*MAX_UCA_CONTRACTION_LENGTH*U_SIZEOF_UCHAR);
+      udata_writePadding(pData, paddedsize((noOfcontractions*MAX_UCA_CONTRACTION_LENGTH*U_SIZEOF_UCHAR)) - noOfcontractions*MAX_UCA_CONTRACTION_LENGTH*U_SIZEOF_UCHAR);
     }
 
     // output the script to lead bytes table here
@@ -1160,7 +1163,7 @@ enum {
      * Maximum number of UCA contractions we can store.
      * May need to be increased for a new Unicode version.
      */
-    MAX_UCA_CONTRACTION_CES=2048
+    MAX_UCA_CONTRACTIONS=2048
 };
 
 static int32_t
@@ -1193,8 +1196,8 @@ write_uca_table(const char *filename,
         return 0;
     }
     uprv_memset(opts, 0, sizeof(UColOptionSet));
-    UChar contractionCEs[MAX_UCA_CONTRACTION_CES][3];
-    uprv_memset(contractionCEs, 0, sizeof(contractionCEs));
+    UChar contractions[MAX_UCA_CONTRACTIONS][MAX_UCA_CONTRACTION_LENGTH];
+    uprv_memset(contractions, 0, sizeof(contractions));
     uint32_t noOfContractions = 0;
     UCAConstants consts;
     uprv_memset(&consts, 0, sizeof(consts));
@@ -1314,24 +1317,31 @@ write_uca_table(const char *filename,
         if(element != NULL) {
             // we have read the line, now do something sensible with the read data!
 
-            // if element is a contraction, we want to add it to contractions
-            if(element->cSize > 1 && element->cPoints[0] != 0xFDD0) { // this is a contraction
-              if(UTF_IS_LEAD(element->cPoints[0]) && UTF_IS_TRAIL(element->cPoints[1]) && element->cSize == 2) {
+            // if element is a contraction, we want to add it to contractions[]
+            int32_t length = (int32_t)element->cSize;
+            if(length > 1 && element->cPoints[0] != 0xFDD0) { // this is a contraction
+              if(U16_IS_LEAD(element->cPoints[0]) && U16_IS_TRAIL(element->cPoints[1]) && length == 2) {
                 surrogateCount++;
               } else {
-                if(noOfContractions>=MAX_UCA_CONTRACTION_CES) {
+                if(noOfContractions>=MAX_UCA_CONTRACTIONS) {
                   fprintf(stderr,
-                          "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTION_CES in genuca.cpp. "
+                          "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTIONS in genuca.cpp. "
                           "Exiting...\n",
-                          (int)MAX_UCA_CONTRACTION_CES);
-                  exit(*status);
+                          (int)MAX_UCA_CONTRACTIONS);
+                  exit(U_BUFFER_OVERFLOW_ERROR);
                 }
-                contractionCEs[noOfContractions][0] = element->cPoints[0];
-                contractionCEs[noOfContractions][1] = element->cPoints[1];
-                if(element->cSize > 2) { // the third one
-                  contractionCEs[noOfContractions][2] = element->cPoints[2];
-                } else {
-                  contractionCEs[noOfContractions][2] = 0;
+                if(length > MAX_UCA_CONTRACTION_LENGTH) {
+                  fprintf(stderr,
+                          "\nLine %d: Contraction of length %d is too long. Please increase MAX_UCA_CONTRACTION_LENGTH in genuca.cpp. "
+                          "Exiting...\n",
+                          (int)line, (int)length);
+                  exit(U_BUFFER_OVERFLOW_ERROR);
+                }
+                UChar *t = &contractions[noOfContractions][0];
+                u_memcpy(t, element->cPoints, length);
+                t += length;
+                for(; length < MAX_UCA_CONTRACTION_LENGTH; ++length) {
+                    *t++ = 0;
                 }
                 noOfContractions++;
               }
@@ -1341,26 +1351,32 @@ write_uca_table(const char *filename,
                 // The following code is to handle the UCA pre-context rules
                 // for L/l with middle dot. We share the structures for contractionCombos.
                 // The format for pre-context character is
-                // contractionCEs[0]: codepoint in element->cPoints[0]
-                // contractionCEs[1]: '\0' to differentiate with contractions.
-                // contractionCEs[2]: prefix char
+                // contractions[0]: codepoint in element->cPoints[0]
+                // contractions[1]: '\0' to differentiate from a contraction
+                // contractions[2]: prefix char
                 if (element->prefixSize>0) {
-                    if(element->cSize > 1 || element->prefixSize > 1) {
+                    if(length > 1 || element->prefixSize > 1) {
                         fprintf(stderr,
-                                "\nCharacter with prefix, "
-                                "either too many characters or prefix too long.\n");
-                        exit(*status);
+                                "\nLine %d: Character with prefix, "
+                                "either too many characters or prefix too long.\n",
+                                (int)line);
+                        exit(U_INTERNAL_PROGRAM_ERROR);
                     }
-                    if(noOfContractions>=MAX_UCA_CONTRACTION_CES) {
+                    if(noOfContractions>=MAX_UCA_CONTRACTIONS) {
                       fprintf(stderr,
-                              "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTION_CES in genuca.cpp. "
+                              "\nMore than %d contractions. Please increase MAX_UCA_CONTRACTIONS in genuca.cpp. "
                               "Exiting...\n",
-                              (int)MAX_UCA_CONTRACTION_CES);
-                      exit(*status);
+                              (int)MAX_UCA_CONTRACTIONS);
+                      exit(U_BUFFER_OVERFLOW_ERROR);
                     }
-                    contractionCEs[noOfContractions][0]=element->cPoints[0];
-                    contractionCEs[noOfContractions][1]='\0';
-                    contractionCEs[noOfContractions][2]=element->prefixChars[0];
+                    UChar *t = &contractions[noOfContractions][0];
+                    t[0]=element->cPoints[0];
+                    t[1]=0;
+                    t[2]=element->prefixChars[0];
+                    t += 3;
+                    for(length = 3; length < MAX_UCA_CONTRACTION_LENGTH; ++length) {
+                        *t++ = 0;
+                    }
                     noOfContractions++;
                 }
             }
@@ -1376,7 +1392,7 @@ write_uca_table(const char *filename,
                 // but omitting this special element from invuca is simple and effective.
                 addToInverse(element, status);
             }
-            if(!(element->cSize > 1 && element->cPoints[0] == 0xFDD0)) {
+            if(!(length > 1 && element->cPoints[0] == 0xFDD0)) {
               uprv_uca_addAnElement(t, element, status);
             }
         }
@@ -1451,7 +1467,7 @@ write_uca_table(const char *filename,
     uprv_memcpy(myData->UCAVersion, UCAVersion, sizeof(UVersionInfo));
     u_getUnicodeVersion(myData->UCDVersion);
 
-    writeOutData(myData, &consts, &leadByteConstants, contractionCEs, noOfContractions, outputDir, copyright, status);
+    writeOutData(myData, &consts, &leadByteConstants, contractions, noOfContractions, outputDir, copyright, status);
 
     InverseUCATableHeader *inverse = assembleInverseTable(status);
     uprv_memcpy(inverse->UCAVersion, UCAVersion, sizeof(UVersionInfo));
