@@ -194,14 +194,14 @@ public final class LocaleIDParser {
         int startLength = buffer.length();
         
         if (haveExperimentalLanguagePrefix()) {
-            append(Character.toLowerCase(id[0]));
+            append(AsciiUtil.toLower(id[0]));
             append(HYPHEN);
             index = 2;
         }
 
         char c;
         while(!isTerminatorOrIDSeparator(c = next())) {
-            append(Character.toLowerCase(c));
+            append(AsciiUtil.toLower(c));
         }
         --index; // unget
 
@@ -243,13 +243,13 @@ public final class LocaleIDParser {
             int oldBlen = buffer.length(); // get before append hyphen, if we truncate everything is undone
             char c;
             boolean firstPass = true;
-            while(!isTerminatorOrIDSeparator(c = next()) && Character.isLetter(c)) {
+            while(!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c)) {
                 if (firstPass) {
                     addSeparator();
-                    append(Character.toUpperCase(c));
+                    append(AsciiUtil.toUpper(c));
                     firstPass = false;
                 } else {
-                    append(Character.toLowerCase(c));
+                    append(AsciiUtil.toLower(c));
                 }
             }
             --index; // unget
@@ -280,7 +280,7 @@ public final class LocaleIDParser {
             ++index;
             
             char c;
-            while (!isTerminatorOrIDSeparator(c = next()) && Character.isLetter(c));
+            while (!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c));
             --index;
 
             if (index - oldIndex != 5) { // +1 to account for separator
@@ -309,7 +309,7 @@ public final class LocaleIDParser {
                     ++oldBlen; // increment past hyphen
                     firstPass = false;
                 }
-                append(Character.toUpperCase(c));
+                append(AsciiUtil.toUpper(c));
             }
             --index; // unget
 
@@ -425,7 +425,7 @@ public final class LocaleIDParser {
                         firstPass = false;
                     }
                 }
-                c = Character.toUpperCase(c);
+                c = AsciiUtil.toUpper(c);
                 if (c == HYPHEN || c == COMMA) {
                     c = UNDERSCORE;
                 }
