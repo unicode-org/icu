@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2010. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2011. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 10/26/2010 02:53:33 PM PDT
+ * Generated on: 11/01/2011 04:08:11 PM PDT
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -115,13 +115,13 @@ const LETag lepcScriptTag = 0x6C657063; /* 'lepc' (LEPCHA) */
 const LETag linaScriptTag = 0x6C696E61; /* 'lina' (LINA) */
 const LETag mandScriptTag = 0x6D616E64; /* 'mand' (MANDAIC) */
 const LETag mayaScriptTag = 0x6D617961; /* 'maya' (MAYA) */
-const LETag meroScriptTag = 0x6D65726F; /* 'mero' (MERO) */
+const LETag meroScriptTag = 0x6D65726F; /* 'mero' (MEROITIC_HIEROGLYPHS) */
 const LETag nkooScriptTag = 0x6E6B6F20; /* 'nko ' (NKO) */
 const LETag orkhScriptTag = 0x6F726B68; /* 'orkh' (OLD_TURKIC) */
 const LETag permScriptTag = 0x7065726D; /* 'perm' (PERM) */
 const LETag phagScriptTag = 0x70686167; /* 'phag' (PHAGS_PA) */
 const LETag phnxScriptTag = 0x70686E78; /* 'phnx' (PHOENICIAN) */
-const LETag plrdScriptTag = 0x706C7264; /* 'plrd' (PLRD) */
+const LETag plrdScriptTag = 0x706C7264; /* 'plrd' (MIAO) */
 const LETag roroScriptTag = 0x726F726F; /* 'roro' (RORO) */
 const LETag saraScriptTag = 0x73617261; /* 'sara' (SARA) */
 const LETag syreScriptTag = 0x73797265; /* 'syre' (SYRE) */
@@ -147,7 +147,7 @@ const LETag moonScriptTag = 0x6D6F6F6E; /* 'moon' (MOON) */
 const LETag mteiScriptTag = 0x6D746569; /* 'mtei' (MEETEI_MAYEK) */
 const LETag armiScriptTag = 0x61726D69; /* 'armi' (IMPERIAL_ARAMAIC) */
 const LETag avstScriptTag = 0x61767374; /* 'avst' (AVESTAN) */
-const LETag cakmScriptTag = 0x63616B6D; /* 'cakm' (CAKM) */
+const LETag cakmScriptTag = 0x63616B6D; /* 'cakm' (CHAKMA) */
 const LETag koreScriptTag = 0x6B6F7265; /* 'kore' (KORE) */
 const LETag kthiScriptTag = 0x6B746869; /* 'kthi' (KAITHI) */
 const LETag maniScriptTag = 0x6D616E69; /* 'mani' (MANI) */
@@ -170,12 +170,23 @@ const LETag granScriptTag = 0x6772616E; /* 'gran' (GRAN) */
 const LETag kpelScriptTag = 0x6B70656C; /* 'kpel' (KPEL) */
 const LETag lomaScriptTag = 0x6C6F6D61; /* 'loma' (LOMA) */
 const LETag mendScriptTag = 0x6D656E64; /* 'mend' (MEND) */
-const LETag mercScriptTag = 0x6D657263; /* 'merc' (MERC) */
+const LETag mercScriptTag = 0x6D657263; /* 'merc' (MEROITIC_CURSIVE) */
 const LETag narbScriptTag = 0x6E617262; /* 'narb' (NARB) */
 const LETag nbatScriptTag = 0x6E626174; /* 'nbat' (NBAT) */
 const LETag palmScriptTag = 0x70616C6D; /* 'palm' (PALM) */
 const LETag sindScriptTag = 0x73696E64; /* 'sind' (SIND) */
 const LETag waraScriptTag = 0x77617261; /* 'wara' (WARA) */
+const LETag afakScriptTag = 0x6166616B; /* 'afak' (AFAK) */
+const LETag jurcScriptTag = 0x6A757263; /* 'jurc' (JURC) */
+const LETag mrooScriptTag = 0x6D726F6F; /* 'mroo' (MROO) */
+const LETag nshuScriptTag = 0x6E736875; /* 'nshu' (NSHU) */
+const LETag shrdScriptTag = 0x73687264; /* 'shrd' (SHARADA) */
+const LETag soraScriptTag = 0x736F7261; /* 'sora' (SORA_SOMPENG) */
+const LETag takrScriptTag = 0x74616B72; /* 'takr' (TAKRI) */
+const LETag tangScriptTag = 0x74616E67; /* 'tang' (TANG) */
+const LETag woleScriptTag = 0x776F6C65; /* 'wole' (WOLE) */
+const LETag khojScriptTag = 0x6B686F6A; /* 'khoj' (KHOJ) */
+const LETag tirhScriptTag = 0x74697268; /* 'tirh' (TIRH) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 

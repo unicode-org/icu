@@ -1,12 +1,12 @@
 #
-#   Copyright (C) 2002-2010, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2011, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  char.txt 
 #
 #   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
 #      See Unicode Standard Annex #29.
-#      These rules are based on TR29 Revision 16, for Unicode Version 6.0
+#      These rules are based on UAX #29 Revision 19 for Unicode Version 6.1
 #
 
 #
@@ -15,7 +15,7 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [\p{Grapheme_Cluster_Break = Control}];
-$Prepend     = [\p{Grapheme_Cluster_Break = Prepend}];
+# TODO: Restore if the Prepend set becomes non-empty again: $Prepend     = [\p{Grapheme_Cluster_Break = Prepend}];
 $Extend      = [\p{Grapheme_Cluster_Break = Extend}];
 $SpacingMark = [\p{Grapheme_Cluster_Break = SpacingMark}];
 
@@ -44,7 +44,7 @@ $L ($L | $V | $LV | $LVT);
 [^$Control $CR $LF] $Extend;
 
 [^$Control $CR $LF] $SpacingMark;
-$Prepend [^$Control $CR $LF];
+# TODO: Restore if the Prepend set becomes non-empty again: $Prepend [^$Control $CR $LF];
 
 
 ## -------------------------------------------------
@@ -57,7 +57,7 @@ $T ($LVT | $T);
 
 $Extend      [^$Control $CR $LF];
 $SpacingMark [^$Control $CR $LF];
-[^$Control $CR $LF] $Prepend;
+# TODO: Restore if the Prepend set becomes non-empty again: [^$Control $CR $LF] $Prepend;
 
 
 ## -------------------------------------------------

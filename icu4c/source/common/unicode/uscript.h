@@ -382,10 +382,15 @@ typedef enum UScriptCode {
       /** @stable ICU 4.8 */
       USCRIPT_WOLEAI                        = 155,/* Wole */
 
+      /** @stable ICU 49 */
+      USCRIPT_KHOJKI                        = 156,/* Khoj */
+      /** @stable ICU 49 */
+      USCRIPT_TIRHUTA                       = 157,/* Tirh */
+
       /* Private use codes from Qaaa - Qabx are not supported */
 
       /** @stable ICU 2.2 */
-      USCRIPT_CODE_LIMIT    = 156
+      USCRIPT_CODE_LIMIT    = 158
 } UScriptCode;
 
 /**

@@ -1,12 +1,12 @@
 #
-# Copyright (C) 2002-2010, International Business Machines Corporation 
+# Copyright (C) 2002-2011, International Business Machines Corporation 
 # and others. All Rights Reserved.
 #
 # file:  word_POSIX.txt
 #
 # ICU Word Break Rules, POSIX locale.
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX-29 Revision 16 for Unicode 6.0
+#      These rules are based on UAX #29 Revision 19 for Unicode Version 6.1
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt and word_ja.txt also.

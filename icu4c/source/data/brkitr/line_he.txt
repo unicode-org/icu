@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2010  International Business Machines Corporation and
+# Copyright (c) 2002-2011  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line_he.txt
@@ -65,6 +65,7 @@ $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
+$CJ = [:LineBreak =  Conditional_Japanese_Starter:];
 $CL = [:LineBreak =  Close_Punctuation:];
 $CM = [:LineBreak =  Combining_Mark:];
 $CP = [:LineBreak =  Close_Parenthesis:];
@@ -82,7 +83,7 @@ $JV = [:LineBreak =  JV:];
 $JT = [:LineBreak =  JT:];
 $LF = [:LineBreak =  Line_Feed:];
 $NL = [:LineBreak =  Next_Line:];
-$NS = [:LineBreak =  Nonstarter:];
+$NS = [[:LineBreak =  Nonstarter:] $CJ];
 $NU = [:LineBreak =  Numeric:];
 $OP = [:LineBreak =  Open_Punctuation:];
 $PO = [:LineBreak =  Postfix_Numeric:];

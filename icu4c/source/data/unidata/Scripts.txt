@@ -1,8 +1,8 @@
-# Scripts-6.0.0.txt
-# Date: 2010-08-19, 00:48:47 GMT [MD]
+# Scripts-6.1.0.txt
+# Date: 2011-12-02, 19:17:42 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2010 Unicode, Inc.
+# Copyright (c) 1991-2011 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 
@@ -47,7 +47,8 @@
 00A0          ; Common
 00A1          ; Common
 00A2..00A5    ; Common
-00A6..00A7    ; Common
+00A6          ; Common
+00A7          ; Common
 00A8          ; Common
 00A9          ; Common
 00AB          ; Common
@@ -60,8 +61,7 @@
 00B2..00B3    ; Common
 00B4          ; Common
 00B5          ; Common
-00B6          ; Common
-00B7          ; Common
+00B6..00B7    ; Common
 00B8          ; Common
 00B9          ; Common
 00BB          ; Common
@@ -90,7 +90,6 @@
 0660..0669    ; Common
 06DD          ; Common
 0964..0965    ; Common
-0970          ; Common
 0E3F          ; Common
 0FD5..0FD8    ; Common
 10FB          ; Common
@@ -102,7 +101,8 @@
 1CE1          ; Common
 1CE9..1CEC    ; Common
 1CEE..1CF1    ; Common
-1CF2          ; Common
+1CF2..1CF3    ; Common
+1CF5..1CF6    ; Common
 2000..200A    ; Common
 200B          ; Common
 200E..200F    ; Common
@@ -247,9 +247,7 @@
 27C0..27C4    ; Common
 27C5          ; Common
 27C6          ; Common
-27C7..27CA    ; Common
-27CC          ; Common
-27CE..27E5    ; Common
+27C7..27E5    ; Common
 27E6          ; Common
 27E7          ; Common
 27E8          ; Common
@@ -329,7 +327,8 @@
 2E29          ; Common
 2E2A..2E2E    ; Common
 2E2F          ; Common
-2E30..2E31    ; Common
+2E30..2E39    ; Common
+2E3A..2E3B    ; Common
 2FF0..2FFB    ; Common
 3000          ; Common
 3001..3003    ; Common
@@ -373,7 +372,9 @@
 3196..319F    ; Common
 31C0..31E3    ; Common
 3220..3229    ; Common
-322A..3250    ; Common
+322A..3247    ; Common
+3248..324F    ; Common
+3250          ; Common
 3251..325F    ; Common
 327F          ; Common
 3280..3289    ; Common
@@ -481,8 +482,7 @@ FFE9..FFEC    ; Common
 FFED..FFEE    ; Common
 FFF9..FFFB    ; Common
 FFFC..FFFD    ; Common
-10100..10101  ; Common
-10102         ; Common
+10100..10102  ; Common
 10107..10133  ; Common
 10137..1013F  ; Common
 10190..1019B  ; Common
@@ -548,7 +548,7 @@ FFFC..FFFD    ; Common
 1F0D1..1F0DF  ; Common
 1F100..1F10A  ; Common
 1F110..1F12E  ; Common
-1F130..1F169  ; Common
+1F130..1F16B  ; Common
 1F170..1F19A  ; Common
 1F1E6..1F1FF  ; Common
 1F201..1F202  ; Common
@@ -567,26 +567,16 @@ FFFC..FFFD    ; Common
 1F442..1F4F7  ; Common
 1F4F9..1F4FC  ; Common
 1F500..1F53D  ; Common
+1F540..1F543  ; Common
 1F550..1F567  ; Common
-1F5FB..1F5FF  ; Common
-1F601..1F610  ; Common
-1F612..1F614  ; Common
-1F616         ; Common
-1F618         ; Common
-1F61A         ; Common
-1F61C..1F61E  ; Common
-1F620..1F625  ; Common
-1F628..1F62B  ; Common
-1F62D         ; Common
-1F630..1F633  ; Common
-1F635..1F640  ; Common
+1F5FB..1F640  ; Common
 1F645..1F64F  ; Common
 1F680..1F6C5  ; Common
 1F700..1F773  ; Common
 E0001         ; Common
 E0020..E007F  ; Common
 
-# Total code points: 6379
+# Total code points: 6412
 
 # ================================================
 
@@ -621,22 +611,23 @@ E0020..E007F  ; Common
 2160..2182    ; Latin
 2183..2184    ; Latin
 2185..2188    ; Latin
-2C60..2C7C    ; Latin
-2C7D          ; Latin
+2C60..2C7B    ; Latin
+2C7C..2C7D    ; Latin
 2C7E..2C7F    ; Latin
 A722..A76F    ; Latin
 A770          ; Latin
 A771..A787    ; Latin
 A78B..A78E    ; Latin
-A790..A791    ; Latin
-A7A0..A7A9    ; Latin
+A790..A793    ; Latin
+A7A0..A7AA    ; Latin
+A7F8..A7F9    ; Latin
 A7FA          ; Latin
 A7FB..A7FF    ; Latin
 FB00..FB06    ; Latin
 FF21..FF3A    ; Latin
 FF41..FF5A    ; Latin
 
-# Total code points: 1267
+# Total code points: 1272
 
 # ================================================
 
@@ -710,12 +701,13 @@ A66E          ; Cyrillic
 A66F          ; Cyrillic
 A670..A672    ; Cyrillic
 A673          ; Cyrillic
-A67C..A67D    ; Cyrillic
+A674..A67D    ; Cyrillic
 A67E          ; Cyrillic
 A67F          ; Cyrillic
 A680..A697    ; Cyrillic
+A69F          ; Cyrillic
 
-# Total code points: 408
+# Total code points: 417
 
 # ================================================
 
@@ -724,9 +716,10 @@ A680..A697    ; Cyrillic
 055A..055F    ; Armenian
 0561..0587    ; Armenian
 058A          ; Armenian
+058F          ; Armenian
 FB13..FB17    ; Armenian
 
-# Total code points: 90
+# Total code points: 91
 
 # ================================================
 
@@ -757,7 +750,7 @@ FB46..FB4F    ; Hebrew
 
 # ================================================
 
-0600..0603    ; Arabic
+0600..0604    ; Arabic
 0606..0608    ; Arabic
 0609..060A    ; Arabic
 060B          ; Arabic
@@ -786,6 +779,9 @@ FB46..FB4F    ; Hebrew
 06FD..06FE    ; Arabic
 06FF          ; Arabic
 0750..077F    ; Arabic
+08A0          ; Arabic
+08A2..08AC    ; Arabic
+08E4..08FE    ; Arabic
 FB50..FBB1    ; Arabic
 FBB2..FBC1    ; Arabic
 FBD3..FD3D    ; Arabic
@@ -796,8 +792,42 @@ FDFC          ; Arabic
 FE70..FE74    ; Arabic
 FE76..FEFC    ; Arabic
 10E60..10E7E  ; Arabic
+1EE00..1EE03  ; Arabic
+1EE05..1EE1F  ; Arabic
+1EE21..1EE22  ; Arabic
+1EE24         ; Arabic
+1EE27         ; Arabic
+1EE29..1EE32  ; Arabic
+1EE34..1EE37  ; Arabic
+1EE39         ; Arabic
+1EE3B         ; Arabic
+1EE42         ; Arabic
+1EE47         ; Arabic
+1EE49         ; Arabic
+1EE4B         ; Arabic
+1EE4D..1EE4F  ; Arabic
+1EE51..1EE52  ; Arabic
+1EE54         ; Arabic
+1EE57         ; Arabic
+1EE59         ; Arabic
+1EE5B         ; Arabic
+1EE5D         ; Arabic
+1EE5F         ; Arabic
+1EE61..1EE62  ; Arabic
+1EE64         ; Arabic
+1EE67..1EE6A  ; Arabic
+1EE6C..1EE72  ; Arabic
+1EE74..1EE77  ; Arabic
+1EE79..1EE7C  ; Arabic
+1EE7E         ; Arabic
+1EE80..1EE89  ; Arabic
+1EE8B..1EE9B  ; Arabic
+1EEA1..1EEA3  ; Arabic
+1EEA5..1EEA9  ; Arabic
+1EEAB..1EEBB  ; Arabic
+1EEF0..1EEF1  ; Arabic
 
-# Total code points: 1051
+# Total code points: 1234
 
 # ================================================
 
@@ -838,6 +868,7 @@ FE76..FEFC    ; Arabic
 0958..0961    ; Devanagari
 0962..0963    ; Devanagari
 0966..096F    ; Devanagari
+0970          ; Devanagari
 0971          ; Devanagari
 0972..0977    ; Devanagari
 0979..097F    ; Devanagari
@@ -846,7 +877,7 @@ A8F2..A8F7    ; Devanagari
 A8F8..A8FA    ; Devanagari
 A8FB          ; Devanagari
 
-# Total code points: 150
+# Total code points: 151
 
 # ================================================
 
@@ -927,9 +958,10 @@ A8FB          ; Devanagari
 0AE0..0AE1    ; Gujarati
 0AE2..0AE3    ; Gujarati
 0AE6..0AEF    ; Gujarati
+0AF0          ; Gujarati
 0AF1          ; Gujarati
 
-# Total code points: 83
+# Total code points: 84
 
 # ================================================
 
@@ -1119,16 +1151,18 @@ A8FB          ; Devanagari
 0EC6          ; Lao
 0EC8..0ECD    ; Lao
 0ED0..0ED9    ; Lao
-0EDC..0EDD    ; Lao
+0EDC..0EDF    ; Lao
 
-# Total code points: 65
+# Total code points: 67
 
 # ================================================
 
 0F00          ; Tibetan
 0F01..0F03    ; Tibetan
 0F04..0F12    ; Tibetan
-0F13..0F17    ; Tibetan
+0F13          ; Tibetan
+0F14          ; Tibetan
+0F15..0F17    ; Tibetan
 0F18..0F19    ; Tibetan
 0F1A..0F1F    ; Tibetan
 0F20..0F29    ; Tibetan
@@ -1212,11 +1246,16 @@ AA7B          ; Myanmar
 # ================================================
 
 10A0..10C5    ; Georgian
+10C7          ; Georgian
+10CD          ; Georgian
 10D0..10FA    ; Georgian
 10FC          ; Georgian
+10FD..10FF    ; Georgian
 2D00..2D25    ; Georgian
+2D27          ; Georgian
+2D2D          ; Georgian
 
-# Total code points: 120
+# Total code points: 127
 
 # ================================================
 
@@ -1256,8 +1295,7 @@ FFDA..FFDC    ; Hangul
 1312..1315    ; Ethiopic
 1318..135A    ; Ethiopic
 135D..135F    ; Ethiopic
-1360          ; Ethiopic
-1361..1368    ; Ethiopic
+1360..1368    ; Ethiopic
 1369..137C    ; Ethiopic
 1380..138F    ; Ethiopic
 1390..1399    ; Ethiopic
@@ -1393,16 +1431,15 @@ FF71..FF9D    ; Katakana
 3038..303A    ; Han
 303B          ; Han
 3400..4DB5    ; Han
-4E00..9FCB    ; Han
-F900..FA2D    ; Han
-FA30..FA6D    ; Han
+4E00..9FCC    ; Han
+F900..FA6D    ; Han
 FA70..FAD9    ; Han
 20000..2A6D6  ; Han
 2A700..2B734  ; Han
 2B740..2B81D  ; Han
 2F800..2FA1D  ; Han
 
-# Total code points: 75960
+# Total code points: 75963
 
 # ================================================
 
@@ -1447,6 +1484,7 @@ A490..A4C6    ; Yi
 1CD4..1CE0    ; Inherited
 1CE2..1CE8    ; Inherited
 1CED          ; Inherited
+1CF4          ; Inherited
 1DC0..1DE6    ; Inherited
 1DFC..1DFF    ; Inherited
 200C..200D    ; Inherited
@@ -1466,7 +1504,7 @@ FE20..FE26    ; Inherited
 1D1AA..1D1AD  ; Inherited
 E0100..E01EF  ; Inherited
 
-# Total code points: 523
+# Total code points: 524
 
 # ================================================
 
@@ -1587,11 +1625,12 @@ E0100..E01EF  ; Inherited
 2CE5..2CEA    ; Coptic
 2CEB..2CEE    ; Coptic
 2CEF..2CF1    ; Coptic
+2CF2..2CF3    ; Coptic
 2CF9..2CFC    ; Coptic
 2CFD          ; Coptic
 2CFE..2CFF    ; Coptic
 
-# Total code points: 135
+# Total code points: 137
 
 # ================================================
 
@@ -1614,12 +1653,12 @@ E0100..E01EF  ; Inherited
 
 # ================================================
 
-2D30..2D65    ; Tifinagh
+2D30..2D67    ; Tifinagh
 2D6F          ; Tifinagh
 2D70          ; Tifinagh
 2D7F          ; Tifinagh
 
-# Total code points: 57
+# Total code points: 59
 
 # ================================================
 
@@ -1729,10 +1768,14 @@ A874..A877    ; Phags_Pa
 1BA6..1BA7    ; Sundanese
 1BA8..1BA9    ; Sundanese
 1BAA          ; Sundanese
+1BAB          ; Sundanese
+1BAC..1BAD    ; Sundanese
 1BAE..1BAF    ; Sundanese
 1BB0..1BB9    ; Sundanese
+1BBA..1BBF    ; Sundanese
+1CC0..1CC7    ; Sundanese
 
-# Total code points: 55
+# Total code points: 72
 
 # ================================================
 
@@ -1940,6 +1983,15 @@ A9DE..A9DF    ; Javanese
 
 # ================================================
 
+AAE0..AAEA    ; Meetei_Mayek
+AAEB          ; Meetei_Mayek
+AAEC..AAED    ; Meetei_Mayek
+AAEE..AAEF    ; Meetei_Mayek
+AAF0..AAF1    ; Meetei_Mayek
+AAF2          ; Meetei_Mayek
+AAF3..AAF4    ; Meetei_Mayek
+AAF5          ; Meetei_Mayek
+AAF6          ; Meetei_Mayek
 ABC0..ABE2    ; Meetei_Mayek
 ABE3..ABE4    ; Meetei_Mayek
 ABE5          ; Meetei_Mayek
@@ -1951,7 +2003,7 @@ ABEC          ; Meetei_Mayek
 ABED          ; Meetei_Mayek
 ABF0..ABF9    ; Meetei_Mayek
 
-# Total code points: 56
+# Total code points: 79
 
 # ================================================
 
@@ -2039,5 +2091,75 @@ ABF0..ABF9    ; Meetei_Mayek
 085E          ; Mandaic
 
 # Total code points: 29
+
+# ================================================
+
+11100..11102  ; Chakma
+11103..11126  ; Chakma
+11127..1112B  ; Chakma
+1112C         ; Chakma
+1112D..11134  ; Chakma
+11136..1113F  ; Chakma
+11140..11143  ; Chakma
+
+# Total code points: 67
+
+# ================================================
+
+109A0..109B7  ; Meroitic_Cursive
+109BE..109BF  ; Meroitic_Cursive
+
+# Total code points: 26
+
+# ================================================
+
+10980..1099F  ; Meroitic_Hieroglyphs
+
+# Total code points: 32
+
+# ================================================
+
+16F00..16F44  ; Miao
+16F50         ; Miao
+16F51..16F7E  ; Miao
+16F8F..16F92  ; Miao
+16F93..16F9F  ; Miao
+
+# Total code points: 133
+
+# ================================================
+
+11180..11181  ; Sharada
+11182         ; Sharada
+11183..111B2  ; Sharada
+111B3..111B5  ; Sharada
+111B6..111BE  ; Sharada
+111BF..111C0  ; Sharada
+111C1..111C4  ; Sharada
+111C5..111C8  ; Sharada
+111D0..111D9  ; Sharada
+
+# Total code points: 83
+
+# ================================================
+
+110D0..110E8  ; Sora_Sompeng
+110F0..110F9  ; Sora_Sompeng
+
+# Total code points: 35
+
+# ================================================
+
+11680..116AA  ; Takri
+116AB         ; Takri
+116AC         ; Takri
+116AD         ; Takri
+116AE..116AF  ; Takri
+116B0..116B5  ; Takri
+116B6         ; Takri
+116B7         ; Takri
+116C0..116C9  ; Takri
+
+# Total code points: 66
 
 # EOF

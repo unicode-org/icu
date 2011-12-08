@@ -73,7 +73,7 @@ public:
     void TestBug5532();
 
     void TestDebug();
-
+    void TestProperties();
 
 /***********************/
 private:
