@@ -2072,23 +2072,29 @@ public class VTimeZone extends BasicTimeZone {
     // Freezable stuffs
     private transient boolean isFrozen = false;
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.TimeZone#isFrozen()
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isFrozen() {
         return isFrozen;
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.TimeZone#freeze()
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZone freeze() {
         isFrozen = true;
         return this;
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.TimeZone#cloneAsThawed()
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZone cloneAsThawed() {
         VTimeZone vtz = (VTimeZone)super.cloneAsThawed();
