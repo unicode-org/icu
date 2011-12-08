@@ -219,6 +219,12 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
         return false;
     }
     
+    /**
+     * Mock implementation of hashCode(). This implementation always returns a constant
+     * value. When Java assertion is enabled, this method triggers an assertion failure.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
