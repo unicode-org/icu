@@ -1,15 +1,22 @@
-# ScriptExtensions-6.0.0.txt
-# Date: 2010-08-30, 01:48:36 GMT [MD]
+# ScriptExtensions-6.1.0.txt
+# Date: 2011-12-02, 22:11:38 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2010 Unicode, Inc.
+# Copyright (c) 1991-2011 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
+# The Script_Extensions property indicates which characters are commonly used
+# with a limited number of scripts, but with more than one.
+# The property is provisional: values are expected to change over time as more information becomes available.
+# For each code point, there is one or more property values.  Each such value is a Script property value.
+# For more information, see:
+#   UAX #24: http://www.unicode.org/reports/tr24/ and
+#   UAX #44: http://www.unicode.org/reports/tr44/
 #
-# The Script Extensions contain data about characters that belong to multiple scripts.
-# This data is provisional, and expected to change over time, as more information becomes available.
-# The script values are space-delimited short values, such as Hang for Hangul.
-# For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
+#  All code points not explicitly listed for Script_Extensions
+#  have as their value the corresponding Script property value
+#
+# @missing: 0000..10FFFF; <script>
 
 # ================================================
 
@@ -19,11 +26,10 @@
 
 # Script_Extensions=Arab Syrc
 
-0640          ; Arab Syrc # Lm       ARABIC TATWEEL
 064B..0655    ; Arab Syrc # Mn  [11] ARABIC FATHATAN..ARABIC HAMZA BELOW
 0670          ; Arab Syrc # Mn       ARABIC LETTER SUPERSCRIPT ALEF
 
-# Total code points: 13
+# Total code points: 12
 
 # ================================================
 
@@ -53,6 +59,16 @@ FDFD          ; Arab Thaa # So       ARABIC LIGATURE BISMILLAH AR-RAHMAN AR-RAHE
 
 # ================================================
 
+# Script_Extensions=Cprt Linb
+
+10100..10102  ; Cprt Linb # Po   [3] AEGEAN WORD SEPARATOR LINE..AEGEAN CHECK MARK
+10107..10133  ; Cprt Linb # No  [45] AEGEAN NUMBER ONE..AEGEAN NUMBER NINETY THOUSAND
+10137..1013F  ; Cprt Linb # So   [9] AEGEAN WEIGHT BASE UNIT..AEGEAN MEASURE THIRD SUBUNIT
+
+# Total code points: 57
+
+# ================================================
+
 # Script_Extensions=Hira Kana
 
 3031..3035    ; Hira Kana # Lm   [5] VERTICAL KANA REPEAT MARK..VERTICAL KANA REPEAT MARK LOWER HALF
@@ -73,6 +89,14 @@ FF9E..FF9F    ; Hira Kana # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK..HALFW
 1805          ; Mong Phag # Po       MONGOLIAN FOUR DOTS
 
 # Total code points: 3
+
+# ================================================
+
+# Script_Extensions=Arab Mand Syrc
+
+0640          ; Arab Mand Syrc # Lm       ARABIC TATWEEL
+
+# Total code points: 1
 
 # ================================================
 
@@ -137,6 +161,17 @@ FF9E..FF9F    ; Hira Kana # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK..HALFW
 FE45..FE46    ; Bopo Hang Hani Hira Kana # Po   [2] SESAME DOT..WHITE SESAME DOT
 
 # Total code points: 206
+
+# ================================================
+
+# Script_Extensions=Deva Gujr Guru Kthi Takr
+
+A830..A835    ; Deva Gujr Guru Kthi Takr # No   [6] NORTH INDIC FRACTION ONE QUARTER..NORTH INDIC FRACTION THREE SIXTEENTHS
+A836..A837    ; Deva Gujr Guru Kthi Takr # So   [2] NORTH INDIC QUARTER MARK..NORTH INDIC PLACEHOLDER MARK
+A838          ; Deva Gujr Guru Kthi Takr # Sc       NORTH INDIC RUPEE MARK
+A839          ; Deva Gujr Guru Kthi Takr # So       NORTH INDIC QUANTITY MARK
+
+# Total code points: 10
 
 # ================================================
 
