@@ -130,7 +130,6 @@ final class RBBIDataWrapper {
         return ROW_DATA + state * (fHeader.fCatCount + 4);
     }
     
-    ///CLOVER:OFF
     static class TrieFoldingFunc implements  Trie.DataManipulate {
         public int getFoldingOffset(int data) {
             if ((data & 0x8000) != 0) {
@@ -140,7 +139,6 @@ final class RBBIDataWrapper {
             }
         }
     }
-    ///CLOVER:ON
     static TrieFoldingFunc  fTrieFoldingFunc = new TrieFoldingFunc();
  
     

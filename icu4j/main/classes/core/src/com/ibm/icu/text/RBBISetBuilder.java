@@ -301,7 +301,6 @@ class RBBISetBuilder {
     //                       getFoldedValue() function needed for Trie table creation.
     //
     //-----------------------------------------------------------------------------------
-   ///CLOVER:OFF
    class RBBIDataManipulate implements IntTrieBuilder.DataManipulate {
         public int getFoldedValue(int start, int offset) {
             int  value;
@@ -322,7 +321,6 @@ class RBBISetBuilder {
             return 0;
          }
     }
-    ///CLOVER:ON
     RBBIDataManipulate dm = new RBBIDataManipulate();
     
     //-----------------------------------------------------------------------------------
