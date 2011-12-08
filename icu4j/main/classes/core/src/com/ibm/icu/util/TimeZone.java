@@ -750,7 +750,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
                 TimeZoneLogger.warning(
                     "\"" +ID + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
             }
-            result = (TimeZone)UNKNOWN_ZONE;
+            result = UNKNOWN_ZONE;
         }
 
         return frozen ? result : result.cloneAsThawed();
@@ -906,7 +906,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
                 defaultZone = getFrozenTimeZone(temp.getID());
             }
         }
-        return (TimeZone) defaultZone.cloneAsThawed();
+        return defaultZone.cloneAsThawed();
     }
 
     /**
@@ -1094,22 +1094,28 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     // Freezable stuffs
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.Freezable#isFrozen()
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isFrozen() {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.Freezable#freeze()
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZone freeze() {
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.util.Freezable#cloneAsThawed()
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public TimeZone cloneAsThawed() {
         try {
