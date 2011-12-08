@@ -89,10 +89,14 @@ import com.ibm.icu.util.ULocale.Category;
  * a        am/pm marker            (Text)              PM
  * k        hour in day (1~24)      (Number)            24
  * K        hour in am/pm (0~11)    (Number)            0
- * z        time zone               (Text)              Pacific Standard Time
+ * z        time zone               (Text)              PST
+ * zzzz     time zone               (Text)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
- * v        time zone (generic)     (Text)              Pacific Time
- * V        time zone (location)    (Text)              United States (Los Angeles)
+ * ZZZZ     time zone (RFC 822)     (Text & Number)     GMT-08:00
+ * v        time zone (generic)     (Text)              PT
+ * vvvv     time zone (generic)     (Text)              Pacific Time
+ * V        time zone (abreviation) (Text)              PST
+ * VVVV     time zone (location)    (Text)              United States Time (Los Angeles)
  * g*       Julian day              (Number)            2451334
  * A*       milliseconds in day     (Number)            69540000
  * Q*       quarter in year         (Text & Number)     Q1 & 01
