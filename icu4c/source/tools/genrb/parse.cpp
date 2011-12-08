@@ -804,6 +804,27 @@ finish:
     return urules;
 }
 
+// Quick-and-dirty escaping function.
+// Assumes that we are on an ASCII-based platform.
+static void
+escape(const UChar *s, char *buffer) {
+    int32_t length = u_strlen(s);
+    int32_t i = 0;
+    for (;;) {
+        UChar32 c;
+        U16_NEXT(s, i, length, c);
+        if (c == 0) {
+            *buffer = 0;
+            return;
+        } else if (0x20 <= c && c <= 0x7e) {
+            // printable ASCII
+            *buffer++ = (char)c;  // assumes ASCII-based platform
+        } else {
+            buffer += sprintf(buffer, "\\u%04X", (int)c);
+        }
+    }
+}
+
 static struct SResource *
 addCollation(ParseState* state, struct SResource  *result, uint32_t startline, UErrorCode *status)
 {
@@ -913,6 +934,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                 genrbdata.outputDir = state->outputdir;
 
                 UErrorCode intStatus = U_ZERO_ERROR;
+                uprv_memset(&parseError, 0, sizeof(parseError));
                 coll = ucol_openRulesForImport(member->u.fString.fChars, member->u.fString.fLength,
                                                UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, importFromDataFile, &genrbdata, &intStatus);
 
@@ -967,7 +989,19 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                         *status = intStatus;
                         return NULL;
                     }
-                    warning(line, "%%Collation could not be constructed from CollationElements - check context!");
+                    char preBuffer[100], postBuffer[100];
+                    escape(parseError.preContext, preBuffer);
+                    escape(parseError.postContext, postBuffer);
+                    warning(line,
+                            "%%%%CollationBin could not be constructed from CollationElements\n"
+                            "  check context, check that the FractionalUCA.txt UCA version "
+                            "matches the current UCD version\n"
+                            "  UErrorCode=%s  UParseError={ line=%d offset=%d pre=<> post=<> }",
+                            u_errorName(intStatus),
+                            parseError.line,
+                            parseError.offset,
+                            preBuffer,
+                            postBuffer);
                     if(isStrict()){
                         *status = intStatus;
                         return NULL;

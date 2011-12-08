@@ -718,9 +718,10 @@ static void TestBreakIteratorUText(void) {
 /* Thai/Lao grapheme break tailoring */
 static const UChar thTest[] = { 0x0020, 0x0E40, 0x0E01, 0x0020,
                                 0x0E01, 0x0E30, 0x0020, 0x0E01, 0x0E33, 0x0020, 0 };
-static const int32_t thTestOffs_enFwd[] = {  1,      3,  4,      6,  7,      9, 10 };
+/*in Unicode 6.1 en should behave just like th for this*/
+/*static const int32_t thTestOffs_enFwd[] = {  1,      3,  4,      6,  7,      9, 10 };*/
 static const int32_t thTestOffs_thFwd[] = {  1,  2,  3,  4,  5,  6,  7,      9, 10 };
-static const int32_t thTestOffs_enRev[] = {  9,      7,  6,      4,  3,      1,  0 };
+/*static const int32_t thTestOffs_enRev[] = {  9,      7,  6,      4,  3,      1,  0 };*/
 static const int32_t thTestOffs_thRev[] = {  9,      7,  6,  5,  4,  3,  2,  1,  0 };
 
 /* Hebrew line break tailoring, for cldrbug 3028 */
@@ -729,9 +730,10 @@ static const UChar heTest[] = { 0x0020, 0x002D, 0x0031, 0x0032, 0x0020,
                                 0x0061, 0x0300, 0x2010, 0x006B, 0x0020,
                                 0x05DE, 0x05D4, 0x002D, 0x0069, 0x0020,
                                 0x05D1, 0x05BC, 0x2010, 0x0047, 0x0020, 0 };
-static const int32_t heTestOffs_enFwd[] = {  1,  5,  7,  9, 12, 14, 17, 19, 22, 24 };
+/*in Unicode 6.1 en should behave just like he for this*/
+/*static const int32_t heTestOffs_enFwd[] = {  1,  5,  7,  9, 12, 14, 17, 19, 22, 24 };*/
 static const int32_t heTestOffs_heFwd[] = {  1,  5,  7,  9, 12, 14,     19,     24 };
-static const int32_t heTestOffs_enRev[] = { 22, 19, 17, 14, 12,  9,  7,  5,  1,  0 };
+/*static const int32_t heTestOffs_enRev[] = { 22, 19, 17, 14, 12,  9,  7,  5,  1,  0 };*/
 static const int32_t heTestOffs_heRev[] = {     19,     14, 12,  9,  7,  5,  1,  0 };
 
 /* Finnish line break tailoring, for cldrbug 3029 */
@@ -765,9 +767,9 @@ typedef struct {
 } RBBITailoringTest;
 
 static const RBBITailoringTest tailoringTests[] = {
-    { "en", UBRK_CHARACTER, thTest, thTestOffs_enFwd, thTestOffs_enRev, sizeof(thTestOffs_enFwd)/sizeof(thTestOffs_enFwd[0]) },
+    { "en", UBRK_CHARACTER, thTest, thTestOffs_thFwd, thTestOffs_thRev, sizeof(thTestOffs_thFwd)/sizeof(thTestOffs_thFwd[0]) },
     { "th", UBRK_CHARACTER, thTest, thTestOffs_thFwd, thTestOffs_thRev, sizeof(thTestOffs_thFwd)/sizeof(thTestOffs_thFwd[0]) },
-    { "en", UBRK_LINE,      heTest, heTestOffs_enFwd, heTestOffs_enRev, sizeof(heTestOffs_enFwd)/sizeof(heTestOffs_enFwd[0]) },
+    { "en", UBRK_LINE,      heTest, heTestOffs_heFwd, heTestOffs_heRev, sizeof(heTestOffs_heFwd)/sizeof(heTestOffs_heFwd[0]) },
     { "he", UBRK_LINE,      heTest, heTestOffs_heFwd, heTestOffs_heRev, sizeof(heTestOffs_heFwd)/sizeof(heTestOffs_heFwd[0]) },
     { "en", UBRK_LINE,      fiTest, fiTestOffs_enFwd, fiTestOffs_enRev, sizeof(fiTestOffs_enFwd)/sizeof(fiTestOffs_enFwd[0]) },
     { "fi", UBRK_LINE,      fiTest, fiTestOffs_fiFwd, fiTestOffs_fiRev, sizeof(fiTestOffs_fiFwd)/sizeof(fiTestOffs_fiFwd[0]) },

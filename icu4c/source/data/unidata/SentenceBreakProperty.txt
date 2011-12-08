@@ -1,8 +1,8 @@
-# SentenceBreakProperty-6.0.0.txt
-# Date: 2010-08-19, 00:48:47 GMT [MD]
+# SentenceBreakProperty-6.1.0.txt
+# Date: 2011-12-05, 16:44:37 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2010 Unicode, Inc.
+# Copyright (c) 1991-2011 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see http://www.unicode.org/reports/tr44/
 
@@ -53,6 +53,7 @@
 0825..0827    ; Extend
 0829..082D    ; Extend
 0859..085B    ; Extend
+08E4..08FE    ; Extend
 0900..0902    ; Extend
 0903          ; Extend
 093A          ; Extend
@@ -195,6 +196,7 @@
 1732..1734    ; Extend
 1752..1753    ; Extend
 1772..1773    ; Extend
+17B4..17B5    ; Extend
 17B6          ; Extend
 17B7..17BD    ; Extend
 17BE..17C5    ; Extend
@@ -246,6 +248,8 @@
 1BA6..1BA7    ; Extend
 1BA8..1BA9    ; Extend
 1BAA          ; Extend
+1BAB          ; Extend
+1BAC..1BAD    ; Extend
 1BE6          ; Extend
 1BE7          ; Extend
 1BE8..1BE9    ; Extend
@@ -263,7 +267,8 @@
 1CE1          ; Extend
 1CE2..1CE8    ; Extend
 1CED          ; Extend
-1CF2          ; Extend
+1CF2..1CF3    ; Extend
+1CF4          ; Extend
 1DC0..1DE6    ; Extend
 1DFC..1DFF    ; Extend
 200C..200D    ; Extend
@@ -275,11 +280,13 @@
 2CEF..2CF1    ; Extend
 2D7F          ; Extend
 2DE0..2DFF    ; Extend
-302A..302F    ; Extend
+302A..302D    ; Extend
+302E..302F    ; Extend
 3099..309A    ; Extend
 A66F          ; Extend
 A670..A672    ; Extend
-A67C..A67D    ; Extend
+A674..A67D    ; Extend
+A69F          ; Extend
 A6F0..A6F1    ; Extend
 A802          ; Extend
 A806          ; Extend
@@ -316,6 +323,11 @@ AAB2..AAB4    ; Extend
 AAB7..AAB8    ; Extend
 AABE..AABF    ; Extend
 AAC1          ; Extend
+AAEB          ; Extend
+AAEC..AAED    ; Extend
+AAEE..AAEF    ; Extend
+AAF5          ; Extend
+AAF6          ; Extend
 ABE3..ABE4    ; Extend
 ABE5          ; Extend
 ABE6..ABE7    ; Extend
@@ -343,6 +355,24 @@ FF9E..FF9F    ; Extend
 110B3..110B6  ; Extend
 110B7..110B8  ; Extend
 110B9..110BA  ; Extend
+11100..11102  ; Extend
+11127..1112B  ; Extend
+1112C         ; Extend
+1112D..11134  ; Extend
+11180..11181  ; Extend
+11182         ; Extend
+111B3..111B5  ; Extend
+111B6..111BE  ; Extend
+111BF..111C0  ; Extend
+116AB         ; Extend
+116AC         ; Extend
+116AD         ; Extend
+116AE..116AF  ; Extend
+116B0..116B5  ; Extend
+116B6         ; Extend
+116B7         ; Extend
+16F51..16F7E  ; Extend
+16F8F..16F92  ; Extend
 1D165..1D166  ; Extend
 1D167..1D169  ; Extend
 1D16D..1D172  ; Extend
@@ -352,7 +382,7 @@ FF9E..FF9F    ; Extend
 1D242..1D244  ; Extend
 E0100..E01EF  ; Extend
 
-# Total code points: 1502
+# Total code points: 1649
 
 # ================================================
 
@@ -365,10 +395,9 @@ E0100..E01EF  ; Extend
 # ================================================
 
 00AD          ; Format
-0600..0603    ; Format
+0600..0604    ; Format
 06DD          ; Format
 070F          ; Format
-17B4..17B5    ; Format
 200B          ; Format
 200E..200F    ; Format
 202A..202E    ; Format
@@ -381,7 +410,7 @@ FFF9..FFFB    ; Format
 E0001         ; Format
 E0020..E007F  ; Format
 
-# Total code points: 138
+# Total code points: 137
 
 # ================================================
 
@@ -673,8 +702,8 @@ E0020..E007F  ; Format
 0527          ; Lower
 0561..0587    ; Lower
 1D00..1D2B    ; Lower
-1D2C..1D61    ; Lower
-1D62..1D77    ; Lower
+1D2C..1D6A    ; Lower
+1D6B..1D77    ; Lower
 1D78          ; Lower
 1D79..1D9A    ; Lower
 1D9B..1DBF    ; Lower
@@ -822,7 +851,9 @@ E0020..E007F  ; Format
 1FE0..1FE7    ; Lower
 1FF2..1FF4    ; Lower
 1FF6..1FF7    ; Lower
-2090..2094    ; Lower
+2071          ; Lower
+207F          ; Lower
+2090..209C    ; Lower
 210A          ; Lower
 210E..210F    ; Lower
 2113          ; Lower
@@ -843,8 +874,8 @@ E0020..E007F  ; Format
 2C6C          ; Lower
 2C71          ; Lower
 2C73..2C74    ; Lower
-2C76..2C7C    ; Lower
-2C7D          ; Lower
+2C76..2C7B    ; Lower
+2C7C..2C7D    ; Lower
 2C81          ; Lower
 2C83          ; Lower
 2C85          ; Lower
@@ -897,7 +928,10 @@ E0020..E007F  ; Format
 2CE3..2CE4    ; Lower
 2CEC          ; Lower
 2CEE          ; Lower
+2CF3          ; Lower
 2D00..2D25    ; Lower
+2D27          ; Lower
+2D2D          ; Lower
 A641          ; Lower
 A643          ; Lower
 A645          ; Lower
@@ -983,11 +1017,13 @@ A787          ; Lower
 A78C          ; Lower
 A78E          ; Lower
 A791          ; Lower
+A793          ; Lower
 A7A1          ; Lower
 A7A3          ; Lower
 A7A5          ; Lower
 A7A7          ; Lower
 A7A9          ; Lower
+A7F8..A7F9    ; Lower
 A7FA          ; Lower
 FB00..FB06    ; Lower
 FB13..FB17    ; Lower
@@ -1022,7 +1058,7 @@ FF41..FF5A    ; Lower
 1D7C4..1D7C9  ; Lower
 1D7CB         ; Lower
 
-# Total code points: 1917
+# Total code points: 1933
 
 # ================================================
 
@@ -1294,6 +1330,8 @@ FF41..FF5A    ; Lower
 0526          ; Upper
 0531..0556    ; Upper
 10A0..10C5    ; Upper
+10C7          ; Upper
+10CD          ; Upper
 1E00          ; Upper
 1E02          ; Upper
 1E04          ; Upper
@@ -1513,6 +1551,7 @@ FF41..FF5A    ; Lower
 2CE2          ; Upper
 2CEB          ; Upper
 2CED          ; Upper
+2CF2          ; Upper
 A640          ; Upper
 A642          ; Upper
 A644          ; Upper
@@ -1596,11 +1635,13 @@ A786          ; Upper
 A78B          ; Upper
 A78D          ; Upper
 A790          ; Upper
+A792          ; Upper
 A7A0          ; Upper
 A7A2          ; Upper
 A7A4          ; Upper
 A7A6          ; Upper
 A7A8          ; Upper
+A7AA          ; Upper
 FF21..FF3A    ; Upper
 10400..10427  ; Upper
 1D400..1D419  ; Upper
@@ -1635,7 +1676,7 @@ FF21..FF3A    ; Upper
 1D790..1D7A8  ; Upper
 1D7CA         ; Upper
 
-# Total code points: 1509
+# Total code points: 1514
 
 # ================================================
 
@@ -1673,6 +1714,8 @@ FF21..FF3A    ; Upper
 0824          ; OLetter
 0828          ; OLetter
 0840..0858    ; OLetter
+08A0          ; OLetter
+08A2..08AC    ; OLetter
 0904..0939    ; OLetter
 093D          ; OLetter
 0950          ; OLetter
@@ -1780,7 +1823,7 @@ FF21..FF3A    ; Upper
 0EBD          ; OLetter
 0EC0..0EC4    ; OLetter
 0EC6          ; OLetter
-0EDC..0EDD    ; OLetter
+0EDC..0EDF    ; OLetter
 0F00          ; OLetter
 0F40..0F47    ; OLetter
 0F49..0F6C    ; OLetter
@@ -1796,7 +1839,7 @@ FF21..FF3A    ; Upper
 108E          ; OLetter
 10D0..10FA    ; OLetter
 10FC          ; OLetter
-1100..1248    ; OLetter
+10FD..1248    ; OLetter
 124A..124D    ; OLetter
 1250..1256    ; OLetter
 1258          ; OLetter
@@ -1846,20 +1889,18 @@ FF21..FF3A    ; Upper
 1B45..1B4B    ; OLetter
 1B83..1BA0    ; OLetter
 1BAE..1BAF    ; OLetter
-1BC0..1BE5    ; OLetter
+1BBA..1BE5    ; OLetter
 1C00..1C23    ; OLetter
 1C4D..1C4F    ; OLetter
 1C5A..1C77    ; OLetter
 1C78..1C7D    ; OLetter
 1CE9..1CEC    ; OLetter
 1CEE..1CF1    ; OLetter
-2071          ; OLetter
-207F          ; OLetter
-2095..209C    ; OLetter
+1CF5..1CF6    ; OLetter
 2135..2138    ; OLetter
 2180..2182    ; OLetter
 2185..2188    ; OLetter
-2D30..2D65    ; OLetter
+2D30..2D67    ; OLetter
 2D6F          ; OLetter
 2D80..2D96    ; OLetter
 2DA0..2DA6    ; OLetter
@@ -1890,7 +1931,7 @@ FF21..FF3A    ; Upper
 31A0..31BA    ; OLetter
 31F0..31FF    ; OLetter
 3400..4DB5    ; OLetter
-4E00..9FCB    ; OLetter
+4E00..9FCC    ; OLetter
 A000..A014    ; OLetter
 A015          ; OLetter
 A016..A48C    ; OLetter
@@ -1934,6 +1975,9 @@ AAC0          ; OLetter
 AAC2          ; OLetter
 AADB..AADC    ; OLetter
 AADD          ; OLetter
+AAE0..AAEA    ; OLetter
+AAF2          ; OLetter
+AAF3..AAF4    ; OLetter
 AB01..AB06    ; OLetter
 AB09..AB0E    ; OLetter
 AB11..AB16    ; OLetter
@@ -1943,8 +1987,7 @@ ABC0..ABE2    ; OLetter
 AC00..D7A3    ; OLetter
 D7B0..D7C6    ; OLetter
 D7CB..D7FB    ; OLetter
-F900..FA2D    ; OLetter
-FA30..FA6D    ; OLetter
+F900..FA6D    ; OLetter
 FA70..FAD9    ; OLetter
 FB1D          ; OLetter
 FB1F..FB28    ; OLetter
@@ -1996,6 +2039,8 @@ FFDA..FFDC    ; OLetter
 1083F..10855  ; OLetter
 10900..10915  ; OLetter
 10920..10939  ; OLetter
+10980..109B7  ; OLetter
+109BE..109BF  ; OLetter
 10A00         ; OLetter
 10A10..10A13  ; OLetter
 10A15..10A17  ; OLetter
@@ -2007,17 +2052,58 @@ FFDA..FFDC    ; OLetter
 10C00..10C48  ; OLetter
 11003..11037  ; OLetter
 11083..110AF  ; OLetter
+110D0..110E8  ; OLetter
+11103..11126  ; OLetter
+11183..111B2  ; OLetter
+111C1..111C4  ; OLetter
+11680..116AA  ; OLetter
 12000..1236E  ; OLetter
 12400..12462  ; OLetter
 13000..1342E  ; OLetter
 16800..16A38  ; OLetter
+16F00..16F44  ; OLetter
+16F50         ; OLetter
+16F93..16F9F  ; OLetter
 1B000..1B001  ; OLetter
+1EE00..1EE03  ; OLetter
+1EE05..1EE1F  ; OLetter
+1EE21..1EE22  ; OLetter
+1EE24         ; OLetter
+1EE27         ; OLetter
+1EE29..1EE32  ; OLetter
+1EE34..1EE37  ; OLetter
+1EE39         ; OLetter
+1EE3B         ; OLetter
+1EE42         ; OLetter
+1EE47         ; OLetter
+1EE49         ; OLetter
+1EE4B         ; OLetter
+1EE4D..1EE4F  ; OLetter
+1EE51..1EE52  ; OLetter
+1EE54         ; OLetter
+1EE57         ; OLetter
+1EE59         ; OLetter
+1EE5B         ; OLetter
+1EE5D         ; OLetter
+1EE5F         ; OLetter
+1EE61..1EE62  ; OLetter
+1EE64         ; OLetter
+1EE67..1EE6A  ; OLetter
+1EE6C..1EE72  ; OLetter
+1EE74..1EE77  ; OLetter
+1EE79..1EE7C  ; OLetter
+1EE7E         ; OLetter
+1EE80..1EE89  ; OLetter
+1EE8B..1EE9B  ; OLetter
+1EEA1..1EEA3  ; OLetter
+1EEA5..1EEA9  ; OLetter
+1EEAB..1EEBB  ; OLetter
 20000..2A6D6  ; OLetter
 2A700..2B734  ; OLetter
 2B740..2B81D  ; OLetter
 2F800..2FA1D  ; OLetter
 
-# Total code points: 97369
+# Total code points: 97841
 
 # ================================================
 
@@ -2058,9 +2144,13 @@ AA50..AA59    ; Numeric
 ABF0..ABF9    ; Numeric
 104A0..104A9  ; Numeric
 11066..1106F  ; Numeric
+110F0..110F9  ; Numeric
+11136..1113F  ; Numeric
+111D0..111D9  ; Numeric
+116C0..116C9  ; Numeric
 1D7CE..1D7FF  ; Numeric
 
-# Total code points: 412
+# Total code points: 452
 
 # ================================================
 
@@ -2109,6 +2199,7 @@ A8CE..A8CF    ; STerm
 A92F          ; STerm
 A9C8..A9C9    ; STerm
 AA5D..AA5F    ; STerm
+AAF0..AAF1    ; STerm
 ABEB          ; STerm
 FE56..FE57    ; STerm
 FF01          ; STerm
@@ -2117,8 +2208,10 @@ FF61          ; STerm
 10A56..10A57  ; STerm
 11047..11048  ; STerm
 110BE..110C1  ; STerm
+11141..11143  ; STerm
+111C5..111C6  ; STerm
 
-# Total code points: 73
+# Total code points: 80
 
 # ================================================
 

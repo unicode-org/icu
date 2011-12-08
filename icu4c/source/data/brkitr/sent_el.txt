@@ -1,12 +1,12 @@
 #
-#   Copyright (C) 2002-2010, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2011, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  sent_el.txt
 #
 #   ICU Sentence Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX 29 Revision 16 for Unicode Version 6.0
+#      These rules are based on UAX #29 Revision 19 for Unicode Version 6.1
 #
 
 
