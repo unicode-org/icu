@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2011, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-CURR_CLDR_VERSION = 2.0
+CURR_CLDR_VERSION = 21.0
 # A list of txt's to build
 # Note:
 #
@@ -80,21 +80,21 @@ CURR_SOURCE = af.txt af_NA.txt agq.txt ak.txt\
  mk.txt ml.txt mr.txt ms.txt ms_BN.txt\
  mt.txt mua.txt my.txt naq.txt nb.txt\
  nd.txt ne.txt ne_IN.txt nl.txt nl_AW.txt\
- nmg.txt nn.txt nus.txt nyn.txt om.txt\
- om_KE.txt or.txt pa.txt pa_Arab.txt pa_Guru.txt\
- pl.txt ps.txt pt.txt pt_AO.txt pt_MZ.txt\
- pt_PT.txt pt_ST.txt rm.txt rn.txt ro.txt\
- rof.txt ru.txt rw.txt rwk.txt saq.txt\
- sbp.txt seh.txt ses.txt sg.txt shi.txt\
- shi_Latn.txt shi_Tfng.txt si.txt sk.txt sl.txt\
- sn.txt so.txt so_DJ.txt so_ET.txt so_KE.txt\
- sq.txt sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Latn.txt\
- sv.txt sw.txt swc.txt ta.txt ta_LK.txt\
- te.txt teo.txt teo_KE.txt th.txt ti.txt\
- ti_ER.txt to.txt tr.txt twq.txt tzm.txt\
- tzm_Latn.txt uk.txt ur.txt uz.txt uz_Arab.txt\
- uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt\
- vi.txt vun.txt xog.txt yav.txt yo.txt\
- zh.txt zh_Hans.txt zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt\
- zh_Hant.txt zh_Hant_HK.txt zu.txt
+ nl_CW.txt nl_SX.txt nmg.txt nn.txt nus.txt\
+ nyn.txt om.txt om_KE.txt or.txt pa.txt\
+ pa_Arab.txt pa_Guru.txt pl.txt ps.txt pt.txt\
+ pt_AO.txt pt_MZ.txt pt_PT.txt pt_ST.txt rm.txt\
+ rn.txt ro.txt rof.txt ru.txt rw.txt\
+ rwk.txt saq.txt sbp.txt seh.txt ses.txt\
+ sg.txt shi.txt shi_Latn.txt shi_Tfng.txt si.txt\
+ sk.txt sl.txt sn.txt so.txt so_DJ.txt\
+ so_ET.txt so_KE.txt sq.txt sr.txt sr_Cyrl.txt\
+ sr_Cyrl_BA.txt sr_Latn.txt sv.txt sw.txt swc.txt\
+ ta.txt ta_LK.txt te.txt teo.txt teo_KE.txt\
+ th.txt ti.txt ti_ER.txt to.txt tr.txt\
+ twq.txt tzm.txt tzm_Latn.txt uk.txt ur.txt\
+ uz.txt uz_Arab.txt uz_Cyrl.txt uz_Latn.txt vai.txt\
+ vai_Latn.txt vai_Vaii.txt vi.txt vun.txt xog.txt\
+ yav.txt yo.txt zh.txt zh_Hans.txt zh_Hans_HK.txt\
+ zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zu.txt
 

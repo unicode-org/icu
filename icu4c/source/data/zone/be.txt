@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/be.xml
  */
 be{
-    Version{"2.0.59.5"}
+    Version{"2.0.62.33"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Анкорыдж"}
@@ -75,14 +75,17 @@ be{
         }
         "meta:Europe_Central"{
             ld{"Цэнтральнаэўрапейскі летні час"}
+            lg{"Цэнтральнаэўрапейскі час"}
             ls{"Цэнтральнаэўрапейскі час"}
         }
         "meta:Europe_Eastern"{
             ld{"Усходнеэўрапейскі летні час"}
+            lg{"Усходнеэўрапейскі час"}
             ls{"Усходнеэўрапейскі час"}
         }
         "meta:Europe_Western"{
             ld{"Заходнеэўрапейскі летні час"}
+            lg{"Заходнеэўрапейскі час"}
             ls{"Заходнеэўрапейскі час"}
         }
         "meta:GMT"{

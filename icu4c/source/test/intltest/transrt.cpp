@@ -1402,7 +1402,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
 //        logln("Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
 //    }
     test.test(UnicodeString(latinForIndic, ""), 
-        UnicodeString("[[[:Devanagari:][\\u094d][\\u0964\\u0965]]&[:Age=4.1:]]", ""), "[\\u0965\\u0904]", this, quick, 
+        UnicodeString("[[[:Devanagari:][\\u094d][\\u0964\\u0965]]&[:Age=4.1:]]", ""), "[\\u0965\\u0904\\0970]", this, quick, 
             legal, 50);
 
     delete legal;
@@ -1413,52 +1413,52 @@ static const int32_t INTER_INDIC_ARRAY_WIDTH = 4;
 static const char * const interIndicArray[] = {
 
     "BENGALI-DEVANAGARI", "[:BENGALI:]", "[:Devanagari:]", 
-    "[\\u0904\\u0951-\\u0954\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u097d]", /*roundtrip exclusions*/
+    "[\\u0904\\u0951-\\u0954\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-BENGALI", "[:Devanagari:]", "[:BENGALI:]",
-    "[\\u0951-\\u0954\\u0951-\\u0954\\u09D7\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1\\u09f2-\\u09fa\\u09ce]", /*roundtrip exclusions*/
+    "[\\u0951-\\u0954\\u0951-\\u0954\\u09D7\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1\\u09f2-\\u09fa\\u09ce\\0970]", /*roundtrip exclusions*/
 
     "GURMUKHI-DEVANAGARI", "[:GURMUKHI:]", "[:Devanagari:]", 
-    "[\\u0904\\u0901\\u0902\\u0936\\u0933\\u0951-\\u0954\\u0902\\u0903\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u097d]", /*roundtrip exclusions*/
+    "[\\u0904\\u0901\\u0902\\u0936\\u0933\\u0951-\\u0954\\u0902\\u0903\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-GURMUKHI", "[:Devanagari:]", "[:GURMUKHI:]",
-    "[\\u0904\\u0A02\\u0946\\u0A5C\\u0951-\\u0954\\u0A70\\u0A71\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
+    "[\\u0904\\u0A02\\u0946\\u0A5C\\u0951-\\u0954\\u0A70\\u0A71\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74\\0970]", /*roundtrip exclusions*/
 
     "GUJARATI-DEVANAGARI", "[:GUJARATI:]", "[:Devanagari:]", 
-    "[\\u0946\\u094A\\u0962\\u0963\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912\\u097d]", /*roundtrip exclusions*/
+    "[\\u0946\\u094A\\u0962\\u0963\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-GUJARATI", "[:Devanagari:]", "[:GUJARATI:]",
-    "[\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912]", /*roundtrip exclusions*/
+    "[\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912\\0970]", /*roundtrip exclusions*/
 
     "ORIYA-DEVANAGARI", "[:ORIYA:]", "[:Devanagari:]", 
-    "[\\u0904\\u0943-\\u094a\\u0962\\u0963\\u0951-\\u0954\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935\\u097d]", /*roundtrip exclusions*/
+    "[\\u0904\\u0943-\\u094a\\u0962\\u0963\\u0951-\\u0954\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-ORIYA", "[:Devanagari:]", "[:ORIYA:]",
-    "[\\u0b5f\\u0b56\\u0b57\\u0b70\\u0b71\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931]", /*roundtrip exclusions*/
+    "[\\u0b5f\\u0b56\\u0b57\\u0b70\\u0b71\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\0970]", /*roundtrip exclusions*/
 
     "Tamil-DEVANAGARI", "[:tamil:]", "[:Devanagari:]", 
-    "[\\u0901\\u0904\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]\\u097d]", /*roundtrip exclusions*/
+    "[\\u0901\\u0904\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-Tamil", "[:Devanagari:]", "[:tamil:]", 
-    "[\\u0bd7\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
+    "[\\u0bd7\\u0BF0\\u0BF1\\u0BF2\\0970]", /*roundtrip exclusions*/
 
     "Telugu-DEVANAGARI", "[:telugu:]", "[:Devanagari:]", 
-    "[\\u0904\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d]", /*roundtrip exclusions*/
+    "[\\u0904\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-TELUGU", "[:Devanagari:]", "[:TELUGU:]",
-    "[\\u0c55\\u0c56\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+    "[\\u0c55\\u0c56\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\0970]", /*roundtrip exclusions*/
 
     "KANNADA-DEVANAGARI", "[:KANNADA:]", "[:Devanagari:]", 
-    "[\\u0901\\u0904\\u0946\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d]", /*roundtrip exclusions*/
+    "[\\u0901\\u0904\\u0946\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-KANNADA", "[:Devanagari:]", "[:KANNADA:]",
-    "[{\\u0cb0\\u0cbc}{\\u0cb3\\u0cbc}\\u0cde\\u0cd5\\u0cd6\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/ 
+    "[{\\u0cb0\\u0cbc}{\\u0cb3\\u0cbc}\\u0cde\\u0cd5\\u0cd6\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\0970]", /*roundtrip exclusions*/ 
 
     "MALAYALAM-DEVANAGARI", "[:MALAYALAM:]", "[:Devanagari:]", 
-    "[\\u0901\\u0904\\u094a\\u094b\\u094c\\u093c\\u0950\\u0944\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d]", /*roundtrip exclusions*/
+    "[\\u0901\\u0904\\u094a\\u094b\\u094c\\u093c\\u0950\\u0944\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d\\0970]", /*roundtrip exclusions*/
 
     "DEVANAGARI-MALAYALAM", "[:Devanagari:]", "[:MALAYALAM:]",
-    "[\\u0d4c\\u0d57\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+    "[\\u0d4c\\u0d57\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\0970]", /*roundtrip exclusions*/
 
     "GURMUKHI-BENGALI", "[:GURMUKHI:]", "[:BENGALI:]",  
     "[\\u0981\\u0982\\u09b6\\u09e2\\u09e3\\u09c3\\u09c4\\u09d7\\u098B\\u098C\\u09B7\\u09E0\\u09E1\\u09F0\\u09F1\\u09f2-\\u09fa\\u09ce]", /*roundtrip exclusions*/

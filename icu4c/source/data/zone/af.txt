@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/af.xml
  */
 af{
-    Version{"2.0.61.44"}
+    Version{"2.0.62.33"}
     zoneStrings{
         "America:Mexico_City"{
             ec{"Meksiko"}
@@ -37,7 +37,6 @@ af{
             ss{"EAT"}
         }
         "meta:Africa_Southern"{
-            sg{"SAT"}
             ss{"SAST"}
         }
         "meta:Africa_Western"{
@@ -51,7 +50,9 @@ af{
             ls{"Alaska-standaardtyd"}
         }
         "meta:Amazon"{
+            ld{"Amasone-somertyd"}
             lg{"Amasone-tyd"}
+            ls{"Amasone-tyd"}
         }
         "meta:America_Central"{
             ld{"Sentrale dagligtyd"}
@@ -124,7 +125,9 @@ af{
             ls{"Choibalsan-tyd"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Hawaii Aleutiese dagligtyd"}
             lg{"Hawaii Aleutiese tyd"}
+            ls{"Hawaii Aleutiese standaardtyd"}
         }
         "meta:Hovd"{
             ld{"Hovd-somertyd"}
@@ -132,13 +135,13 @@ af{
             ls{"Hovd-tyd"}
         }
         "meta:Indonesia_Central"{
-            lg{"Indonesië-sentraal-tyd"}
+            ls{"Indonesië-sentraal-tyd"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Indonesiese Oostelike tyd"}
+            ls{"Indonesiese Oostelike tyd"}
         }
         "meta:Indonesia_Western"{
-            lg{"Indonesiese Westelike tyd"}
+            ls{"Indonesiese Westelike tyd"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk-somertyd"}
@@ -171,7 +174,7 @@ af{
             ls{"Lord Howe-standaardtyd"}
         }
         "meta:Macquarie"{
-            lg{"Macquarie-tyd"}
+            ls{"Macquarie-tyd"}
         }
         "meta:Magadan"{
             ld{"Magadan-somertyd"}

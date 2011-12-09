@@ -23,7 +23,7 @@ sq{
         pt{"Portugeze"}
         ru{"Rusisht"}
         sh{"Serbo-Kroatisht"}
-        sq{"shqipe"}
+        sq{"shqip"}
         zh{"Kineze"}
     }
     Scripts{
@@ -31,5 +31,5 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur"}
     }
-    Version{"2.0.59.32"}
+    Version{"2.0.62.69"}
 }

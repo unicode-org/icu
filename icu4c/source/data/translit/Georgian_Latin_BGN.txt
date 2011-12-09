@@ -9,7 +9,7 @@
 #
 :: [აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ] ;
 :: NFD (NFC) ;
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 ა → a ; # GEORGIAN LETTER AN
 ბ → b ; # GEORGIAN LETTER BAN
 გ → g ; # GEORGIAN LETTER GAN

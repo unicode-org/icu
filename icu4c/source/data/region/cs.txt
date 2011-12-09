@@ -302,5 +302,5 @@ cs{
         ZW{"Zimbabwe"}
         ZZ{"Neznámá nebo neplatná oblast"}
     }
-    Version{"2.0.59.84"}
+    Version{"2.0.62.55"}
 }

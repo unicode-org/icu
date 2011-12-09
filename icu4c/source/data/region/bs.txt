@@ -295,5 +295,5 @@ bs{
         ZW{"Zimbabve"}
         ZZ{"Nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.59.84"}
+    Version{"2.0.62.77"}
 }

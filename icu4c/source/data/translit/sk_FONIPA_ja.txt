@@ -7,7 +7,7 @@
 # File: sk_FONIPA_ja.txt
 # Generated from CLDR 
 #
-$vowel = [aeiouw] ;       # Vowels and glides
+$vowel = [aeiouw] ; # Vowels and glides
 $not_vowel = [^$vowel] ;
 t \' → | t ʃ ;
 t \u0361 → | t ;
@@ -88,7 +88,7 @@ le → レ ;
 li → リ ;
 lo → ロ ;
 lu → ル ;
-l →  ル ;
+l → ル ;
 ma → マ ;
 me → メ ;
 mi → ミ ;

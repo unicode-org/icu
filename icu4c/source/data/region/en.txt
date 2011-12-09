@@ -76,6 +76,7 @@ en{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Bonaire, Sint Eustatius, and Saba"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -260,6 +261,7 @@ en{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Suriname"}
+        SS{"South Sudan"}
         ST{"São Tomé and Príncipe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
@@ -304,5 +306,5 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
-    Version{"2.0.61.76"}
+    Version{"2.0.62.77"}
 }

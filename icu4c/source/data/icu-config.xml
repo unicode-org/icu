@@ -19,6 +19,7 @@
         <include locales="am"/>
         <include locales="am_ET"/>
         <include locales="ar"/>
+        <include locales="ar_001"/> 
         <include locales="ar_AE"/> 
         <include locales="ar_BH"/> 
         <include locales="ar_DZ"/> 
@@ -356,7 +357,9 @@
         <include locales="nl"/>        
         <include locales="nl_AW"/> 
         <include locales="nl_BE"/> 
+        <include locales="nl_CW"/> 
         <include locales="nl_NL"/> 
+        <include locales="nl_SX"/> 
         <include locales="nmg"/>
         <include locales="nmg_CM"/>
         <include locales="nn"/>

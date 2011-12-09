@@ -39,7 +39,7 @@ fi{
             }
         }
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.62.84"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -113,8 +113,8 @@ fi{
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
                 MEd{"E d.M."}
-                MMMEd{"E d. MMM"}
-                MMMd{"d. MMM"}
+                MMMEd{"E d.M."}
+                MMMd{"d.M."}
                 Md{"d.M."}
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}

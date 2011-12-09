@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sq.xml
  */
 sq{
-    Version{"2.0.59.32"}
+    Version{"2.0.62.69"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"I panjohur"}

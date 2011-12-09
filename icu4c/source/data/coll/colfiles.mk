@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2011, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-COLLATION_CLDR_VERSION = 2.0
+COLLATION_CLDR_VERSION = 21.0
 # A list of txt's to build
 # Note:
 #
@@ -39,53 +39,53 @@ COLLATION_ALIAS_SOURCE = $(COLLATION_SYNTHETIC_ALIAS)
 
 
 # Empty locales, used for validSubLocale fallback.
-COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_AE.txt ar_BH.txt\
- ar_DZ.txt ar_EG.txt ar_IQ.txt ar_JO.txt ar_KW.txt\
- ar_LB.txt ar_LY.txt ar_MA.txt ar_OM.txt ar_QA.txt\
- ar_SA.txt ar_SD.txt ar_SY.txt ar_TN.txt ar_YE.txt\
- as_IN.txt az_Latn.txt az_Latn_AZ.txt be_BY.txt bg_BG.txt\
- bn_BD.txt bn_IN.txt bs_BA.txt ca_ES.txt chr.txt\
- chr_US.txt cs_CZ.txt cy_GB.txt da_DK.txt de_AT.txt\
- de_BE.txt de_CH.txt de_DE.txt de_LI.txt de_LU.txt\
- ee.txt ee_GH.txt ee_TG.txt el_CY.txt el_GR.txt\
- en_AS.txt en_AU.txt en_BB.txt en_BE.txt en_BM.txt\
- en_BW.txt en_BZ.txt en_CA.txt en_GB.txt en_GU.txt\
- en_HK.txt en_IE.txt en_IN.txt en_JM.txt en_MH.txt\
- en_MP.txt en_MT.txt en_MU.txt en_NA.txt en_NZ.txt\
- en_PH.txt en_PK.txt en_SG.txt en_TT.txt en_UM.txt\
- en_VI.txt en_ZA.txt en_ZW.txt es_419.txt es_AR.txt\
- es_BO.txt es_CL.txt es_CO.txt es_CR.txt es_DO.txt\
- es_EC.txt es_ES.txt es_GQ.txt es_GT.txt es_HN.txt\
- es_MX.txt es_NI.txt es_PA.txt es_PE.txt es_PR.txt\
- es_PY.txt es_SV.txt es_US.txt es_UY.txt es_VE.txt\
- et_EE.txt fa_IR.txt fi_FI.txt fil_PH.txt fo_FO.txt\
- fr_BE.txt fr_BF.txt fr_BI.txt fr_BJ.txt fr_BL.txt\
- fr_CD.txt fr_CF.txt fr_CG.txt fr_CH.txt fr_CI.txt\
- fr_CM.txt fr_DJ.txt fr_FR.txt fr_GA.txt fr_GN.txt\
- fr_GP.txt fr_GQ.txt fr_KM.txt fr_LU.txt fr_MC.txt\
- fr_MF.txt fr_MG.txt fr_ML.txt fr_MQ.txt fr_NE.txt\
- fr_RE.txt fr_RW.txt fr_SN.txt fr_TD.txt fr_TG.txt\
- ga.txt ga_IE.txt gu_IN.txt ha_Latn.txt ha_Latn_GH.txt\
- ha_Latn_NE.txt ha_Latn_NG.txt he_IL.txt hi_IN.txt hr_HR.txt\
- hu_HU.txt hy_AM.txt id.txt id_ID.txt ig_NG.txt\
- is_IS.txt it.txt it_CH.txt it_IT.txt ja_JP.txt\
- ka.txt ka_GE.txt kk_KZ.txt kl_GL.txt km_KH.txt\
- kn_IN.txt ko_KR.txt kok_IN.txt ln_CD.txt ln_CG.txt\
- lt_LT.txt lv_LV.txt mk_MK.txt ml_IN.txt mr_IN.txt\
- ms.txt ms_BN.txt ms_MY.txt mt_MT.txt my_MM.txt\
- nb_NO.txt nl.txt nl_AW.txt nl_BE.txt nl_NL.txt\
- nn_NO.txt om_ET.txt om_KE.txt or_IN.txt pa_Arab.txt\
- pa_Arab_PK.txt pa_Guru.txt pa_Guru_IN.txt pl_PL.txt ps_AF.txt\
- pt.txt pt_AO.txt pt_BR.txt pt_GW.txt pt_MZ.txt\
- pt_PT.txt pt_ST.txt ro_MD.txt ro_RO.txt ru_MD.txt\
- ru_RU.txt ru_UA.txt si_LK.txt sk_SK.txt sl_SI.txt\
- sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
- sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv_FI.txt sv_SE.txt\
- sw.txt sw_KE.txt sw_TZ.txt ta_IN.txt ta_LK.txt\
- te_IN.txt th_TH.txt tr_TR.txt uk_UA.txt ur_IN.txt\
- ur_PK.txt vi_VN.txt yo_NG.txt zh_Hans.txt zh_Hans_CN.txt\
- zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt\
- zu_ZA.txt
+COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_001.txt ar_AE.txt\
+ ar_BH.txt ar_DZ.txt ar_EG.txt ar_IQ.txt ar_JO.txt\
+ ar_KW.txt ar_LB.txt ar_LY.txt ar_MA.txt ar_OM.txt\
+ ar_QA.txt ar_SA.txt ar_SD.txt ar_SY.txt ar_TN.txt\
+ ar_YE.txt as_IN.txt az_Latn.txt az_Latn_AZ.txt be_BY.txt\
+ bg_BG.txt bn_BD.txt bn_IN.txt bs_BA.txt ca_ES.txt\
+ chr.txt chr_US.txt cs_CZ.txt cy_GB.txt da_DK.txt\
+ de_AT.txt de_BE.txt de_CH.txt de_DE.txt de_LI.txt\
+ de_LU.txt ee.txt ee_GH.txt ee_TG.txt el_CY.txt\
+ el_GR.txt en_AS.txt en_AU.txt en_BB.txt en_BE.txt\
+ en_BM.txt en_BW.txt en_BZ.txt en_CA.txt en_GB.txt\
+ en_GU.txt en_HK.txt en_IE.txt en_IN.txt en_JM.txt\
+ en_MH.txt en_MP.txt en_MT.txt en_MU.txt en_NA.txt\
+ en_NZ.txt en_PH.txt en_PK.txt en_SG.txt en_TT.txt\
+ en_UM.txt en_VI.txt en_ZA.txt en_ZW.txt es_419.txt\
+ es_AR.txt es_BO.txt es_CL.txt es_CO.txt es_CR.txt\
+ es_DO.txt es_EC.txt es_ES.txt es_GQ.txt es_GT.txt\
+ es_HN.txt es_MX.txt es_NI.txt es_PA.txt es_PE.txt\
+ es_PR.txt es_PY.txt es_SV.txt es_US.txt es_UY.txt\
+ es_VE.txt et_EE.txt fa_IR.txt fi_FI.txt fil_PH.txt\
+ fo_FO.txt fr_BE.txt fr_BF.txt fr_BI.txt fr_BJ.txt\
+ fr_BL.txt fr_CD.txt fr_CF.txt fr_CG.txt fr_CH.txt\
+ fr_CI.txt fr_CM.txt fr_DJ.txt fr_FR.txt fr_GA.txt\
+ fr_GN.txt fr_GP.txt fr_GQ.txt fr_KM.txt fr_LU.txt\
+ fr_MC.txt fr_MF.txt fr_MG.txt fr_ML.txt fr_MQ.txt\
+ fr_NE.txt fr_RE.txt fr_RW.txt fr_SN.txt fr_TD.txt\
+ fr_TG.txt ga.txt ga_IE.txt gu_IN.txt ha_Latn.txt\
+ ha_Latn_GH.txt ha_Latn_NE.txt ha_Latn_NG.txt he_IL.txt hi_IN.txt\
+ hr_HR.txt hu_HU.txt hy_AM.txt id.txt id_ID.txt\
+ ig_NG.txt is_IS.txt it.txt it_CH.txt it_IT.txt\
+ ja_JP.txt ka.txt ka_GE.txt kk_KZ.txt kl_GL.txt\
+ km_KH.txt kn_IN.txt ko_KR.txt kok_IN.txt ln_CD.txt\
+ ln_CG.txt lt_LT.txt lv_LV.txt mk_MK.txt ml_IN.txt\
+ mr_IN.txt ms.txt ms_BN.txt ms_MY.txt mt_MT.txt\
+ my_MM.txt nb_NO.txt nl.txt nl_AW.txt nl_BE.txt\
+ nl_CW.txt nl_NL.txt nl_SX.txt nn_NO.txt om_ET.txt\
+ om_KE.txt or_IN.txt pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt\
+ pa_Guru_IN.txt pl_PL.txt ps_AF.txt pt.txt pt_AO.txt\
+ pt_BR.txt pt_GW.txt pt_MZ.txt pt_PT.txt pt_ST.txt\
+ ro_MD.txt ro_RO.txt ru_MD.txt ru_RU.txt ru_UA.txt\
+ si_LK.txt sk_SK.txt sl_SI.txt sq_AL.txt sr_Cyrl.txt\
+ sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_ME.txt\
+ sr_Latn_RS.txt sv_FI.txt sv_SE.txt sw.txt sw_KE.txt\
+ sw_TZ.txt ta_IN.txt ta_LK.txt te_IN.txt th_TH.txt\
+ tr_TR.txt uk_UA.txt ur_IN.txt ur_PK.txt vi_VN.txt\
+ yo_NG.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt zu.txt zu_ZA.txt
 
 
 # Ordinary resources

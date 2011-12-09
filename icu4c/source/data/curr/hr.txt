@@ -885,7 +885,7 @@ hr{
         }
         TMM{
             "TMM",
-            "turkmenistanski manat  (1993.-2009.)",
+            "turkmenistanski manat (1993.-2009.)",
         }
         TMT{
             "TMT",
@@ -1329,9 +1329,9 @@ hr{
         }
         BRB{
             few{"brazilska nova cruzeira (1967.-1986.)"}
-            many{"brazilskih novih cruzeira  (1967.-1986.)"}
-            one{"brazilski novi cruzeir  (1967.-1986.)"}
-            other{"brazilskih novih cruzeira  (1967.-1986.)"}
+            many{"brazilskih novih cruzeira (1967.-1986.)"}
+            one{"brazilski novi cruzeir (1967.-1986.)"}
+            other{"brazilskih novih cruzeira (1967.-1986.)"}
         }
         BRC{
             few{"brazilska cruzada"}
@@ -2418,10 +2418,10 @@ hr{
             other{"tadžikistanskih somona"}
         }
         TMM{
-            few{"turkmenistanska manata  (1993.-2009.)"}
-            many{"turkmenistanskih manata  (1993.-2009.)"}
-            one{"turkmenistanski manat  (1993.-2009.)"}
-            other{"turkmenistanskih manata  (1993.-2009.)"}
+            few{"turkmenistanska manata (1993.-2009.)"}
+            many{"turkmenistanskih manata (1993.-2009.)"}
+            one{"turkmenistanski manat (1993.-2009.)"}
+            other{"turkmenistanskih manata (1993.-2009.)"}
         }
         TMT{
             few{"turkmenistanska manata"}
@@ -2778,5 +2778,5 @@ hr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.62.55"}
 }

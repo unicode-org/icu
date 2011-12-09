@@ -513,9 +513,7 @@
                 <include name="en_US.txt" />
                 <include name="en_US_POSIX.txt" />
                 <include name="fi.txt" />
-                <include name="he.txt" />
                 <include name="ja.txt" />
-                <include name="th.txt" />
             </fileset>
             <fileset id="brkfiles" dir="${env.ICU4C_DIR}/source/data/brkitr">
                 <include name="brkfiles.mk" />

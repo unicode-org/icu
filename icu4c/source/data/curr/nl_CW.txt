@@ -3,12 +3,15 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/xml/brkitr/he.xml
+// * Source File:<path>/common/main/nl_CW.xml
 // *
 // ***************************************************************************
-he{
-    Version{"2.2.88.46"}
-    boundaries{
-        line:process(dependency){"line_he.brk"}
+nl_CW{
+    Currencies{
+        ANG{
+            "NAf.",
+            "Nederlands-Antilliaanse gulden",
+        }
     }
+    Version{"2.0.61.59"}
 }

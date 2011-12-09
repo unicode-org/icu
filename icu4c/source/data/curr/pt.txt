@@ -1262,8 +1262,8 @@ pt{
             other{"Florins de Aruba"}
         }
         AZM{
-            one{"Manat do Azeibaijão  (1993-2006)"}
-            other{"Manats do Azeibaijão  (1993-2006)"}
+            one{"Manat do Azeibaijão (1993-2006)"}
+            other{"Manats do Azeibaijão (1993-2006)"}
         }
         AZN{
             one{"Manat do Azeibaijão"}

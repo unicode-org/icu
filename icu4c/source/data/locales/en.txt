@@ -43,7 +43,7 @@ en{
             }
         }
     }
-    Version{"2.0.61.76"}
+    Version{"2.0.62.77"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -85,6 +85,28 @@ en{
                 yMd{"M/d/y GGGGG"}
                 yQ{"Q y G"}
                 yQQQ{"QQQ y G"}
+            }
+        }
+        chinese{
+            cyclicNameSets{
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "Rat",
+                            "Ox",
+                            "Tiger",
+                            "Rabbit",
+                            "Dragon",
+                            "Snake",
+                            "Horse",
+                            "Goat",
+                            "Monkey",
+                            "Rooster",
+                            "Dog",
+                            "Pig",
+                        }
+                    }
+                }
             }
         }
         gregorian{
