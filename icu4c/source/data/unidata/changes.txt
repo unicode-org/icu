@@ -17,12 +17,15 @@ Unicode 6.1 update
 
 *** ICU Trac
 
-- ticket 8827 "update ICU to Unicode 6.1"
-- C++ branches/markus/uni61 at r30864 from trunk at r30843
-- Java branches/markus/uni61 at r30865 from trunk at r30863
+- ticket 8995 final update to Unicode 6.1
+- ticket 8994 regenerate source/layout/CanonData.cpp
 
 - ticket 8961 support Unicode "Age" value *names*
 - ticket 8963 support multiple character name aliases & types
+
+- ticket 8827 "update ICU to Unicode 6.1"
+- C++ branches/markus/uni61 at r30864 from trunk at r30843
+- Java branches/markus/uni61 at r30865 from trunk at r30863
 
 *** Unicode version numbers
 - makedata.mak
