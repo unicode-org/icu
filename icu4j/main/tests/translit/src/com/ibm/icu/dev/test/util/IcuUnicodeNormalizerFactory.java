@@ -9,7 +9,6 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.util.UnicodeTransform.Type;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Normalizer2;
-import com.ibm.icu.text.Normalizer2.Mode;
 
 /**
  * @author markdavis

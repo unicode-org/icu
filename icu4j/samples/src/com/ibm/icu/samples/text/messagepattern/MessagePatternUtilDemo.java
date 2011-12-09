@@ -9,12 +9,12 @@
 
 package com.ibm.icu.samples.text.messagepattern;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
 import com.ibm.icu.text.MessagePatternUtil.VariantNode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Demo code for MessagePattern class.
