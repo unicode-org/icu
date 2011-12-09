@@ -1,4 +1,4 @@
-# WordBreakTest-6.1.0.txt
+﻿# WordBreakTest-6.1.0.txt
 # Date: 2011-08-23, 19:45:22 GMT [MD]
 #
 # Unicode Character Database

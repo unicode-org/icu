@@ -1,4 +1,4 @@
-# GraphemeBreakTest-6.1.0.txt
+﻿# GraphemeBreakTest-6.1.0.txt
 # Date: 2011-12-07, 17:54:39 GMT [MD]
 #
 # Unicode Character Database
