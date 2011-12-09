@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2000-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
@@ -72,6 +72,19 @@ public class RoundTripTest extends TestFmwk {
     static String HALFWIDTH_KATAKANA = "[\uFF65-\uFF9D]";
     static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
     static String HIRAGANA_ITERATION = "[\u309D\u309E]";
+
+    // TODO(Mark): Fix ticket #8989, transliterate U+0970.
+    // Remove all references to beforeICU49 & minusDevAbbBefore49.
+    private boolean beforeICU49;
+    private String minusDevAbbBefore49;
+
+    @Override
+    public void init() {
+        // TODO(Mark): Fix ticket #8989, transliterate U+0970.
+        // Remove this method?
+        beforeICU49 = skipIfBeforeICU(49, 0, 2);  // actually tests <= 49m2 not <
+        minusDevAbbBefore49 = beforeICU49 ? "-[\u0970]" : "";
+    }
 
     //------------------------------------------------------------------
     // AbbreviatedUnicodeSetIterator
@@ -494,7 +507,7 @@ public class RoundTripTest extends TestFmwk {
         logln("Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
 
         new Test("Latin-DEVANAGARI", 50)
-        .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
+        .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]" + minusDevAbbBefore49 + "]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
         showElapsed(start, "TestDevanagariLatin");
     }
 
@@ -877,9 +890,10 @@ public class RoundTripTest extends TestFmwk {
              */
             /* comment lines below  when transliterator is fixed */
             // start
+            // TODO(Mark): Fix ticket #8989, transliterate U+0970.
             new Test(interIndicArray[i][0], 50)
-            .test("["+interIndicArray[i][1]+" &[:Age=4.1:]]",
-                    "["+interIndicArray[i][2]+" &[:Age=4.1:]]",
+            .test("[["+interIndicArray[i][1] + minusDevAbbBefore49 + "] &[:Age=4.1:]]",
+                    "[["+interIndicArray[i][2] + minusDevAbbBefore49 + "] &[:Age=4.1:]]",
                     interIndicArray[i][3],
                     this, new LegalIndic());
             //end

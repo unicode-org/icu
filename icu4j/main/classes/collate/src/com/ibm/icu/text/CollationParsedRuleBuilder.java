@@ -563,7 +563,6 @@ final class CollationParsedRuleBuilder {
         }
 
         m_utilElement_.clear();
-        StringBuilder str = new StringBuilder();
 
         // add latin-1 stuff
         copyRangeFromUCA(t, 0, 0xFF);
@@ -579,16 +578,24 @@ final class CollationParsedRuleBuilder {
 
         // copy contractions from the UCA - this is felt mostly for cyrillic
         char conts[] = RuleBasedCollator.UCA_CONTRACTIONS_;
+        int maxUCAContractionLength = RuleBasedCollator.MAX_UCA_CONTRACTION_LENGTH;
         int offset = 0;
         while (conts[offset] != 0) {
-            // tailoredCE = ucmpe32_get(t.m_mapping, *conts);
-            int tailoredCE = t.m_mapping_.getValue(conts[offset]);
+            // A continuation is NUL-terminated and NUL-padded
+            // except if it has the maximum length.
+            int contractionLength = maxUCAContractionLength;
+            while (contractionLength > 0 && conts[offset + contractionLength - 1] == 0) {
+                --contractionLength;
+            }
+            int first = Character.codePointAt(conts, offset);
+            int firstLength = Character.charCount(first);
+            int tailoredCE = t.m_mapping_.getValue(first);
             Elements prefixElm = null;
             if (tailoredCE != CE_NOT_FOUND_) {
                 boolean needToAdd = true;
                 if (isContractionTableElement(tailoredCE)) {
                     if (isTailored(t.m_contractions_, tailoredCE, conts,
-                            offset + 1) == true) {
+                            offset + firstLength) == true) {
                         needToAdd = false;
                     }
                 }
@@ -598,10 +605,10 @@ final class CollationParsedRuleBuilder {
                     // The format for pre-context character is
                     // conts[0]: baseCP conts[1]:0 conts[2]:pre-context CP
                     Elements elm = new Elements();
-                    elm.m_cPoints_ = m_utilElement_.m_uchars_;
                     elm.m_CELength_ = 0;
-                    elm.m_uchars_ = UCharacter.toString(conts[offset]);
-                    elm.m_prefixChars_ = UCharacter.toString(conts[offset + 2]);
+                    elm.m_uchars_ = Character.toString(conts[offset]);
+                    elm.m_cPoints_ = m_utilElement_.m_uchars_;
+                    elm.m_prefixChars_ = Character.toString(conts[offset + 2]);
                     elm.m_prefix_ = 0; // TODO(claireho) : confirm!
                     prefixElm = t.m_prefixLookup_.get(elm);
                     if ((prefixElm == null)
@@ -610,7 +617,7 @@ final class CollationParsedRuleBuilder {
                     }
                 }
                 if (m_parser_.m_removeSet_ != null
-                        && m_parser_.m_removeSet_.contains(conts[offset])) {
+                        && m_parser_.m_removeSet_.contains(first)) {
                     needToAdd = false;
                 }
 
@@ -619,26 +626,16 @@ final class CollationParsedRuleBuilder {
                     if (conts[offset + 1] != 0) { // not precontext
                         m_utilElement_.m_prefix_ = 0;
                         m_utilElement_.m_prefixChars_ = null;
+                        m_utilElement_.m_uchars_ = new String(conts, offset, contractionLength);
                         m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
-                        str.delete(0, str.length());
-                        str.append(conts[offset]);
-                        str.append(conts[offset + 1]);
-                        if (conts[offset + 2] != 0) {
-                            str.append(conts[offset + 2]);
-                        }
-                        m_utilElement_.m_uchars_ = str.toString();
                         m_utilElement_.m_CELength_ = 0;
                         m_utilColEIter_.setText(m_utilElement_.m_uchars_);
                     } else { // add a pre-context element
                         int preKeyLen = 0;
-                        str.delete(0, str.length()); // clean up
-                        m_utilElement_.m_cPoints_ = UCharacter
-                                .toString(conts[offset]);
+                        m_utilElement_.m_uchars_ = Character.toString(conts[offset]);
+                        m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
                         m_utilElement_.m_CELength_ = 0;
-                        m_utilElement_.m_uchars_ = UCharacter
-                                .toString(conts[offset]);
-                        m_utilElement_.m_prefixChars_ = UCharacter
-                                .toString(conts[offset + 2]);
+                        m_utilElement_.m_prefixChars_ = Character.toString(conts[offset + 2]);
                         if (prefixElm == null) {
                             m_utilElement_.m_prefix_ = 0;
                         } else { // TODO (claireho): confirm!
@@ -650,9 +647,7 @@ final class CollationParsedRuleBuilder {
                             // count number of keys for pre-context char.
                             preKeyLen++;
                         }
-                        str.append(conts[offset + 2]);
-                        str.append(conts[offset]);
-                        m_utilColEIter_.setText(str.toString());
+                        m_utilColEIter_.setText(m_utilElement_.m_prefixChars_ + m_utilElement_.m_uchars_);
                         // Skip the keys for prefix character, then copy the
                         // rest to el.
                         while ((preKeyLen-- > 0)
@@ -672,11 +667,11 @@ final class CollationParsedRuleBuilder {
                     addAnElement(t, m_utilElement_);
                 }
             } else if (m_parser_.m_removeSet_ != null
-                    && m_parser_.m_removeSet_.contains(conts[offset])) {
-                copyRangeFromUCA(t, conts[offset], conts[offset]);
+                    && m_parser_.m_removeSet_.contains(first)) {
+                copyRangeFromUCA(t, first, first);
             }
 
-            offset += 3;
+            offset += maxUCAContractionLength;
         }
 
         // Add completely ignorable elements

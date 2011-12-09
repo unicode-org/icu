@@ -1,15 +1,15 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2010. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2011. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 10/26/2010 02:53:33 PM PDT
+ * Generated on: 11/01/2011 04:08:11 PM PDT
  */
 
-ICU Version=4.6
-Total Script=146
+ICU Version=49.0
+Total Script=157
 Total Language=71
 Scripts={
 	 ICU_2.2=40
@@ -21,7 +21,10 @@ Scripts={
 	 ICU_3.6=42
 	 ICU_3.8=12
 	 ICU_4.0=14
-         ICU_4.6=17
+         ICU_4.4=4
+         ICU_4.6=13
+         ICU_4.8=9
+         ICU_49.0=2
         }
 Languages={
 	   ICU_2.6=30

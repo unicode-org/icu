@@ -22,6 +22,7 @@ import com.ibm.icu.dev.test.util.CollectionUtilities;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R4;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
@@ -261,7 +262,20 @@ public class AlphabeticIndexTest extends TestFmwk {
             missingScripts.removeAll(s);
         }
         if (missingScripts.size() != 0) {
-            errln("Missing character from: " + missingScripts);
+            String missingScriptNames = "";
+            UnicodeSet missingChars = new UnicodeSet(missingScripts);
+            for(;;) {
+                int c = missingChars.charAt(0);
+                if (c < 0) {
+                    break;
+                }
+                int script = UScript.getScript(c);
+                missingScriptNames += " " +
+                        UCharacter.getPropertyValueName(
+                                UProperty.SCRIPT, script, UProperty.NameChoice.SHORT);
+                missingChars.removeAll(new UnicodeSet().applyIntPropertyValue(UProperty.SCRIPT, script));
+            }
+            errln("Missing character from:" + missingScriptNames + " -- " + missingScripts);
         }
     }
 

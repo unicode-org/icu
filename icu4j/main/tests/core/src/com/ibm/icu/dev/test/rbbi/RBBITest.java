@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.rbbi;
@@ -680,9 +680,10 @@ public class RBBITest extends TestFmwk {
         final int[]  thCharTOffsets = { 1, 2, 3, 5, 6, 7, 8, 9, 10, 11,
                                         12, 13, 15, 16, 17, 19, 20, 22, 23, 24, 25, 26, 27, 28,
                                         29, 30, 32, 33, 35, 37, 38, 39, 40, 41 };
-        final int[]  thCharROffsets = { 1,    3, 5, 6, 7, 8, 9,     11,
-                                        12, 13, 15,     17, 19, 20, 22,     24,     26, 27, 28,
-                                        29,     32, 33, 35, 37, 38,     40, 41 };
+        //starting in Unicode 6.1, root behavior should be the same as Thai above
+        //final int[]  thCharROffsets = { 1,    3, 5, 6, 7, 8, 9,     11,
+        //                                12, 13, 15,     17, 19, 20, 22,     24,     26, 27, 28,
+        //                                29,     32, 33, 35, 37, 38,     40, 41 };
         
         final TBItem[] tests = {
             new TBItem( BreakIterator.KIND_WORD,      new ULocale("en_US_POSIX"), posxWordText, posxWordTOffsets ),
@@ -692,7 +693,7 @@ public class RBBITest extends TestFmwk {
             new TBItem( BreakIterator.KIND_SENTENCE,  new ULocale("el"),          elSentText,   elSentTOffsets   ),
             new TBItem( BreakIterator.KIND_SENTENCE,  ULocale.ROOT,               elSentText,   elSentROffsets   ),
             new TBItem( BreakIterator.KIND_CHARACTER, new ULocale("th"),          thCharText,   thCharTOffsets   ),
-            new TBItem( BreakIterator.KIND_CHARACTER, ULocale.ROOT,               thCharText,   thCharROffsets   ),
+            new TBItem( BreakIterator.KIND_CHARACTER, ULocale.ROOT,               thCharText,   thCharTOffsets   ),
         };
         for (int iTest = 0; iTest < tests.length; iTest++) {
             tests[iTest].doTest();

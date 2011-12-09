@@ -1416,15 +1416,30 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 "\u0710",  // Syriac
                 "\u0840",  // Mandaic
                 "\u0780", "\u07CA", "\u2D30", "\u1200", "\u0950", "\u0985", "\u0A74", "\u0AD0", "\u0B05", "\u0BD0", 
-                "\u0C05", "\u0C85", "\u0D05", "\u0D85", "\uABC0", "\uA800", "\uA882", "\uD804\uDC83",
+                "\u0C05", "\u0C85", "\u0D05", "\u0D85",
+                "\uAAF2",  // Meetei Mayek
+                "\uA800", "\uA882", "\uD804\uDC83",
+                UCharacter.toString(0x111C4),  // Sharada
+                UCharacter.toString(0x11680),  // Takri
                 "\u1B83",  // Sundanese
                 "\uD804\uDC05",  // Brahmi (U+11005)
-                "\uD802\uDE00", "\u0E01", "\u0E81", "\uAA80", "\u0F40", "\u1C00", "\uA840", "\u1900", "\u1700", "\u1720", "\u1740", "\u1760", 
+                "\uD802\uDE00", "\u0E01",
+                "\u0EDE",  // Lao
+                "\uAA80", "\u0F40", "\u1C00", "\uA840", "\u1900", "\u1700", "\u1720", "\u1740", "\u1760", 
                 "\u1A00",  // Buginese
                 "\u1BC0",  // Batak
-                "\uA930", "\uA90A", "\u1000", "\u1780", "\u1950", "\u1980", "\u1A20", "\uAA00", "\u1B05", "\uA984", "\u1880", "\u1C5A", "\u13A0", "\u1401", "\u1681", "\u16A0", "\uD803\uDC00", "\uA500", "\uA6A0", "\u1100", 
-                "\u3041", "\u30A1", "\u3105", "\uA000", "\uA4F8", "\uD800\uDE80", "\uD800\uDEA0", "\uD802\uDD20", "\uD800\uDF00", "\uD800\uDF30", "\uD801\uDC28", "\uD801\uDC50", "\uD801\uDC80", "\uD800\uDC00", "\uD802\uDC00", "\uD802\uDE60", "\uD802\uDF00", "\uD802\uDC40", 
-                "\uD802\uDF40", "\uD802\uDF60", "\uD800\uDF80", "\uD800\uDFA0", "\uD808\uDC00", "\uD80C\uDC00", "\u4E00" 
+                "\uA930", "\uA90A", "\u1000",
+                UCharacter.toString(0x11103),  // Chakma
+                "\u1780", "\u1950", "\u1980", "\u1A20", "\uAA00", "\u1B05", "\uA984", "\u1880", "\u1C5A", "\u13A0", "\u1401", "\u1681", "\u16A0", "\uD803\uDC00", "\uA500", "\uA6A0", "\u1100", 
+                "\u3041", "\u30A1", "\u3105", "\uA000", "\uA4F8",
+                UCharacter.toString(0x16F00),  // Miao
+                "\uD800\uDE80", "\uD800\uDEA0", "\uD802\uDD20", "\uD800\uDF00", "\uD800\uDF30", "\uD801\uDC28", "\uD801\uDC50", "\uD801\uDC80",
+                UCharacter.toString(0x110D0),  // Sora Sompeng
+                "\uD800\uDC00", "\uD802\uDC00", "\uD802\uDE60", "\uD802\uDF00", "\uD802\uDC40", 
+                "\uD802\uDF40", "\uD802\uDF60", "\uD800\uDF80", "\uD800\uDFA0", "\uD808\uDC00", "\uD80C\uDC00",
+                UCharacter.toString(0x109A0),  // Meroitic Cursive
+                UCharacter.toString(0x10980),  // Meroitic Hieroglyphs
+                "\u4E00" 
         });
 
     //    private static final UnicodeSet HACK_SHORT_TRAD_EXEMPLARS = new UnicodeSet(

@@ -381,7 +381,9 @@ public class TestUScript extends TestFmwk {
         if(!UScript.getScriptExtensions(0x063f, scripts).isEmpty()) {
             errln("UScript.getScriptExtensions(U+063F) is not empty");
         }
-        if(UScript.getScriptExtensions(0x0640, scripts).cardinality()!=2 || !scripts.get(UScript.ARABIC) || !scripts.get(UScript.SYRIAC)) {
+        if(UScript.getScriptExtensions(0x0640, scripts).cardinality()!=3 ||
+           !scripts.get(UScript.ARABIC) || !scripts.get(UScript.SYRIAC) || !scripts.get(UScript.MANDAIC)
+        ) {
             errln("UScript.getScriptExtensions(U+0640) failed");
         }
         UScript.getScriptExtensions(0xfdf2, scripts);
@@ -438,23 +440,25 @@ public class TestUScript extends TestFmwk {
         String[] expectedLong = new String[]{
             "Balinese", "Batak", "Blis", "Brahmi", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyptian_Hieroglyphs", 
             "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Javanese", "Kayah_Li", "Latf", "Latg", 
-            "Lepcha", "Lina", "Mandaic", "Maya", "Mero", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
-            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
+            "Lepcha", "Lina", "Mandaic", "Maya", "Meroitic_Hieroglyphs", "Nko", "Old_Turkic", "Perm", "Phags_Pa", "Phoenician", 
+            "Miao", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
             "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
             "Moon", "Meetei_Mayek",
 
             // ICU 4.0
-            "Imperial_Aramaic", "Avestan", "Cakm", "Kore",
+            "Imperial_Aramaic", "Avestan", "Chakma", "Kore",
             "Kaithi", "Mani", "Inscriptional_Pahlavi", "Phlp", "Phlv", "Inscriptional_Parthian", "Samaritan", "Tai_Viet",
             "Zmth", "Zsym",
             /* new in ICU 4.4 */
             "Bamum", "Lisu", "Nkgb", "Old_South_Arabian",
             /* new in ICU 4.6 */
-            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Merc",
+            "Bass", "Dupl", "Elba", "Gran", "Kpel", "Loma", "Mend", "Meroitic_Cursive",
             "Narb", "Nbat", "Palm", "Sind", "Wara",
             /* new in ICU 4.8 */
-            "Afak", "Jurc", "Mroo", "Nshu", "Shrd", "Sora", "Takr", "Tang", "Wole",
+            "Afak", "Jurc", "Mroo", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tang", "Wole",
+            /* new in ICU 49 */
+            "Khoj", "Tirh",
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -475,6 +479,8 @@ public class TestUScript extends TestFmwk {
             "Narb", "Nbat", "Palm", "Sind", "Wara",
             /* new in ICU 4.8 */
             "Afak", "Jurc", "Mroo", "Nshu", "Shrd", "Sora", "Takr", "Tang", "Wole",
+            /* new in ICU 49 */
+            "Khoj", "Tirh",
         };
         if(expectedLong.length!=(UScript.CODE_LIMIT-UScript.BALINESE)) {
             errln("need to add new script codes in lang.TestUScript.java!");
