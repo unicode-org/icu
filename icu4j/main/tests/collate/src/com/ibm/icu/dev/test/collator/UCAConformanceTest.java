@@ -137,17 +137,17 @@ public class UCAConformanceTest extends TestFmwk {
 
 
 
-    private void initRbUCA() 
-    {
-        if(rbUCA == null) {
-            String ucarules = UCA.getRules(true);
-            try {
-                rbUCA = new RuleBasedCollator(ucarules);
-            } catch(Exception e) {
-                errln("Failure creating UCA rule-based collator: " + e);
-            }
-        }
-    }
+//    private void initRbUCA() 
+//    {
+//        if(rbUCA == null) {
+//            String ucarules = UCA.getRules(true);
+//            try {
+//                rbUCA = new RuleBasedCollator(ucarules);
+//            } catch(Exception e) {
+//                errln("Failure creating UCA rule-based collator: " + e);
+//            }
+//        }
+//    }
 
     private String parseString(String line) {
         int i = 0, value;
