@@ -465,7 +465,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         if (timezone == null) {
             return guessTimeZone();
         }
-        return (TimeZone) timezone.cloneAsThawed(); // clone for safety
+        return timezone.cloneAsThawed(); // clone for safety
     }
 
     /**
