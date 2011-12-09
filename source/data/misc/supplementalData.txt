@@ -1266,7 +1266,7 @@ supplementalData:table(nofallback){
         }
         {
             "SD",
-            "736",
+            "729",
             "SDN",
         }
         {
@@ -1323,6 +1323,11 @@ supplementalData:table(nofallback){
             "SR",
             "740",
             "SUR",
+        }
+        {
+            "SS",
+            "728",
+            "SSD",
         }
         {
             "ST",
@@ -8762,6 +8767,7 @@ supplementalData:table(nofallback){
             "LY",
             "MA",
             "SD",
+            "SS",
             "TN",
             "EA",
             "IC",

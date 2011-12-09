@@ -9,7 +9,7 @@
 #
 :: [АӘБВГҒДЕЁЖЗИЙКҚЛМНҢОӨПРСТУҰҮФХҺЦЧШЩЪЫІЬЭЮЯаәбвгғдеёжзийкқлмнңоөпрстуұүфхһцчшщъыіьэюя] ;
 :: NFD (NFC) ;
-$prime  = ʹ ;
+$prime = ʹ ;
 $doublePrime = ʺ ;
 $upperConsonants = [БВГҒДЖЗЙКҚЛМНҢПРСТФХҺЦЧШЩЪЬ] ;
 $lowerConsonants = [бвгғджзйкқлмнңпрстфхһцчшщъь] ;
@@ -18,7 +18,7 @@ $upperVowels = [АӘЕЁИОӨУҰҮЫІЭЮЯ] ;
 $lowerVowels = [аәеёиоөуұүыіэюя] ;
 $vowels = [$upperVowels $lowerVowels] ;
 $lower = [$lowerConsonants $lowerVowels] ;
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 А → A ; # CYRILLIC CAPITAL LETTER A
 а → a ; # CYRILLIC SMALL LETTER A
 Ә → Ä ; # CYRILLIC CAPITAL LETTER SCHWA

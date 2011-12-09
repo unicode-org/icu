@@ -87,5 +87,5 @@
 ૭→\uE06D; # DIGIT SEVEN
 ૮→\uE06E; # DIGIT EIGHT
 ૯→\uE06F; # DIGIT NINE
-।→\uE064;        # DANDA
-॥→\uE065;        # DOUBLE DANDA
+।→\uE064; # DANDA
+॥→\uE065; # DOUBLE DANDA

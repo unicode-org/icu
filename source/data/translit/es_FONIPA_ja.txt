@@ -8,7 +8,7 @@
 # Generated from CLDR 
 #
 $word_boundary = [-\ $] ;
-$vowel = [aeijouw] ;       # Vowels and glides
+$vowel = [aeijouw] ; # Vowels and glides
 $not_vowel = [^$vowel] ;
 β → | b;
 ð → | d;

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/chr.xml
  */
 chr{
-    Version{"2.0.59.5"}
+    Version{"2.0.62.29"}
     zoneStrings{
         "meta:America_Central"{
             ld{"ᎠᏰᎵ ᎢᎦ ᎢᏳᏩᎪᏗ"}

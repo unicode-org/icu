@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
-    Version{"2.0.59.68"}
+    Version{"2.0.62.33"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seuta"}
@@ -476,14 +476,17 @@ az{
         }
         "meta:Europe_Central"{
             ld{"Orta Avropa/yay"}
+            lg{"Orta Avropa"}
             ls{"Orta Avropa"}
         }
         "meta:Europe_Eastern"{
             ld{"Şərq Avropa/yay"}
+            lg{"Şərq Avropa"}
             ls{"Şərq Avropa"}
         }
         "meta:Kuybyshev"{
             ld{"Kuybuşev/yay"}
+            lg{"Kuybuşev"}
             ls{"Kuybuşev"}
         }
         "meta:Moscow"{
@@ -493,14 +496,17 @@ az{
         }
         "meta:Samara"{
             ld{"Samara/yay"}
+            lg{"Samara"}
             ls{"Samara"}
         }
         "meta:Turkey"{
             ld{"Türkiya/yay"}
+            lg{"Türkiya"}
             ls{"Türkiya"}
         }
         "meta:Volgograd"{
             ld{"Volqoqrad/yay"}
+            lg{"Volqoqrad"}
             ls{"Volqoqrad"}
         }
     }

@@ -74,7 +74,7 @@ zh_Hans_SG{
         SAAHO{"萨霍文"}
         WADEGILE{"韦氏拼音罗马字"}
     }
-    Version{"2.0.58.84"}
+    Version{"2.0.62.55"}
     codePatterns{
         script{"语系：{0}"}
         territory{"地区：{0}"}

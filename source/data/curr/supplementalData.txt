@@ -797,10 +797,6 @@ supplementalData:table(nofallback){
                     -463,
                     419518048,
                 }
-                to:intvector{ /** 1974-04-16  */
-                    29,
-                    -1322378880,
-                }
             }
         }
         BU{

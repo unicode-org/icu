@@ -42,5 +42,6 @@ BRK_SOURCE =  sent_el.txt word_POSIX.txt line_fi.txt word_ja.txt line_ja.txt cha
 
 
 # Ordinary resources
-BRK_RES_SOURCE = el.txt en.txt en_US.txt en_US_POSIX.txt fi.txt ja.txt
+BRK_RES_SOURCE = el.txt en.txt en_US.txt en_US_POSIX.txt\
+ fi.txt ja.txt
 

@@ -8,7 +8,7 @@
 # Generated from CLDR 
 #
 :: NFD (NFC) ;
-$prime  = ʹ ;
+$prime = ʹ ;
 $doublePrime = ʺ ;
 $upperConsonants = [БВГДЖҖЗЙКЛМНҢПРСТФХЦЧШЩЪЬ] ;
 $lowerConsonants = [бвгджҗзйклмнңпрстфхцчшщъь] ;
@@ -17,7 +17,7 @@ $upperVowels = [АЕЁИОӨУҮЫЭӘЮЯ] ;
 $lowerVowels = [аеёиоөуүыэәюя] ;
 $vowels = [$upperVowels $lowerVowels] ;
 $lower = [$lowerConsonants $lowerVowels] ;
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 А → A ; # CYRILLIC CAPITAL LETTER A
 а → a ; # CYRILLIC SMALL LETTER A
 Б → B ; # CYRILLIC CAPITAL LETTER BE
@@ -31,10 +31,10 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 Е}[[$upperVowels - [Ә]] [ЙЪЬ]] → YE ; # CYRILLIC CAPITAL LETTER IE
 Е}[[$lowerVowels - [ә]] [йъь]] → Ye ; # CYRILLIC CAPITAL LETTER IE
 $wordBoundary{Е → Ye ; # CYRILLIC CAPITAL LETTER IE
-Е →  E ; # CYRILLIC CAPITAL LETTER IE
+Е → E ; # CYRILLIC CAPITAL LETTER IE
 е}[[$upperVowels - [Ә]] [$lowerVowels - [ә]] [ЙйЪъЬь]] → ye ; # CYRILLIC SMALL LETTER IE
 $wordBoundary{е → ye ; # CYRILLIC SMALL LETTER IE
-е →  e ; # CYRILLIC SMALL LETTER IE
+е → e ; # CYRILLIC SMALL LETTER IE
 Ё} $lower → Yo ; # CYRILLIC CAPITAL LETTER IO
 Ё → YO ; # CYRILLIC CAPITAL LETTER IO
 ё → yo ; # CYRILLIC SMALL LETTER IO

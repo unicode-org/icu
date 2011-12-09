@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ee.xml
  */
 ee{
-    Version{"2.0.61.44"}
+    Version{"2.0.61.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidzan nutomegaƒoƒome"}

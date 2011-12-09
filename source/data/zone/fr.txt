@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fr.xml
  */
 fr{
-    Version{"2.0.61.44"}
+    Version{"2.0.62.75"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}

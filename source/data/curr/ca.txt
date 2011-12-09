@@ -641,7 +641,7 @@ ca{
         }
         MKN{
             "MKN",
-            "denar macedoni  (1992-1993)",
+            "denar macedoni (1992-1993)",
         }
         MLF{
             "MLF",

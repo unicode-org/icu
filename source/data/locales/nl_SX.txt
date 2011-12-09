@@ -3,12 +3,9 @@
 // * Copyright (C) 2011 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/xml/brkitr/th.xml
+// * Source File:<path>/common/main/nl_SX.xml
 // *
 // ***************************************************************************
-th{
-    Version{"1.1"}
-    boundaries{
-        grapheme:process(dependency){"char_th.brk"}
-    }
+nl_SX{
+    Version{"2.0.61.59"}
 }

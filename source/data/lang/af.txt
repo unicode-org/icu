@@ -302,7 +302,7 @@ af{
             tibt{"Tibettaanse syfers"}
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.62.33"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}

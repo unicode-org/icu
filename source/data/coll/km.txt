@@ -15,7 +15,8 @@ km{
         standard{
             Sequence{
                 " [normalization on ]"
-                "&[last tertiary ignorable ]='\u17B4'='\u17B5'&។ល។<<<៘"
+                "&[last tertiary ignorable ]=឴=឵"
+                "&។ល។<<<៘"
                 "&ៈ<<៎<<៏<<៑<<័<<ៈ<<៝<<់<<៉<<៊<<៍"
                 "&រ<ឫ<ឬ"
                 "&ល<ឭ<ឮ"

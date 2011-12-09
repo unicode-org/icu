@@ -20,11 +20,11 @@ $wr=\uE00B;
 $wl=\uE00C;
 $wce=\uE00D; # LETTER CANDRA E
 $wse=\uE00E; # LETTER SHORT E
-$we=\uE00F;  # ए LETTER E
+$we=\uE00F; # ए LETTER E
 $wai=\uE010;
 $wco=\uE011; # LETTER CANDRA O
 $wso=\uE012; # LETTER SHORT O
-$wo=\uE013;  # ओ LETTER O
+$wo=\uE013; # ओ LETTER O
 $wau=\uE014;
 $ka=\uE015;
 $kha=\uE016;
@@ -79,13 +79,13 @@ $e=\uE047;
 $ai=\uE048;
 $co=\uE049; # VOWEL SIGN CANDRA O
 $so=\uE04A; # VOWEL SIGN SHORT O
-$o=\uE04B;  # ो
+$o=\uE04B; # ो
 $au=\uE04C;
 $virama=\uE04D;
 $om = \uE050; # OM
-$lm = \uE055;#  Telugu Length Mark
-$ailm=\uE056;#  AI Length Mark
-$aulm=\uE057;#  AU Length Mark
+$lm = \uE055;# Telugu Length Mark
+$ailm=\uE056;# AI Length Mark
+$aulm=\uE057;# AU Length Mark
 $uka=\uE058;
 $ukha=\uE059;
 $ugha=\uE05A;
@@ -100,16 +100,16 @@ $rrh=\uE062;
 $llh=\uE063;
 $danda=\uE064;
 $doubleDanda=\uE065;
-$zero=\uE066;     # DIGIT ZERO
-$one=\uE067;      # DIGIT ONE
-$two=\uE068;      # DIGIT TWO
-$three=\uE069;    # DIGIT THREE
-$four=\uE06A;     # DIGIT FOUR
-$five=\uE06B;     # DIGIT FIVE
-$six=\uE06C;      # DIGIT SIX
-$seven=\uE06D;    # DIGIT SEVEN
-$eight=\uE06E;    # DIGIT EIGHT
-$nine=\uE06F;     # DIGIT NINE
+$zero=\uE066; # DIGIT ZERO
+$one=\uE067; # DIGIT ONE
+$two=\uE068; # DIGIT TWO
+$three=\uE069; # DIGIT THREE
+$four=\uE06A; # DIGIT FOUR
+$five=\uE06B; # DIGIT FIVE
+$six=\uE06C; # DIGIT SIX
+$seven=\uE06D; # DIGIT SEVEN
+$eight=\uE06E; # DIGIT EIGHT
+$nine=\uE06F; # DIGIT NINE
 $dgs=\uE082;
 $ecp0=\uE070;
 $ecp1=\uE071;
@@ -199,18 +199,18 @@ o\u0306→$wco;
 e→$wse;
 ''om→$om;
 o→$wso;
-n}r\u0325           → $na|$virama;
-n}l\u0325           → $na|$virama;
-n}na                → $na|$virama;
-n\u0307}[kg]        → $anusvara;
-n\u0307}n\u0307     → $anusvara;
-n\u0304}[cj]        → $anusvara;
-n\u0304}n\u0303     → $anusvara;
+n}r\u0325 → $na|$virama;
+n}l\u0325 → $na|$virama;
+n}na → $na|$virama;
+n\u0307}[kg] → $anusvara;
+n\u0307}n\u0307 → $anusvara;
+n\u0304}[cj] → $anusvara;
+n\u0304}n\u0303 → $anusvara;
 n\u0323}[tdn]\u0323 → $anusvara;
-n}[tdn]             → $anusvara;
-m}[pbm]             → $anusvara;
-n}[ylvshr]          → $anusvara;
-m\u0307             → $anusvara;
+n}[tdn] → $anusvara;
+m}[pbm] → $anusvara;
+n}[ylvshr] → $anusvara;
+m\u0307 → $anusvara;
 q→$uka|$virama;
 k\u0331h\u0331→$ukha |$virama;
 g\u0307→ $ugha | $virama;

@@ -9,8 +9,8 @@
 #
 :: [あいうえおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろわゐゑをんゔアイウエオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロワヰヱヲンヴ] ;
 :: NFD (NFC) ;
-$apostrophe  = ’;
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$apostrophe = ’;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 ッ}[カキクケコ] → k ; # KATAKANA LETTER SMALL TU
 っ}[かきくけこ] → k ; # HIRAGANA LETTER SMALL TU
 ッ}[サシスセソ] → s ; # KATAKANA LETTER SMALL TU
