@@ -15,13 +15,13 @@ dě → ɟɛ ;
 mě → mɲɛ ;
 tě → cɛ ;
 ně → ɲɛ ;
-dž → d \u0361 ʒ;  # affricate indicated by ligature tie
-dz → d \u0361 z;  # affricate indicated by ligature tie
+dž → d \u0361 ʒ; # affricate indicated by ligature tie
+dz → d \u0361 z; # affricate indicated by ligature tie
 a → a ;
 á → aː ;
 b → b ;
-c → t \u0361 s;  # affricate indicated by ligature tie
-č → t \u0361 ʃ;  # affricate indicated by ligature tie
+c → t \u0361 s; # affricate indicated by ligature tie
+č → t \u0361 ʃ; # affricate indicated by ligature tie
 d → d ;
 ď → ɟ ;
 e → ɛ ;

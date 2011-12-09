@@ -2297,5 +2297,5 @@ ee{
     CurrencyUnitPatterns{
         other{"{1} {0}"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.61.87"}
 }

@@ -467,6 +467,7 @@ likelySubtags:table(nofallback){
     und_SN{"fr_Latn_SN"}
     und_SO{"so_Latn_SO"}
     und_SR{"nl_Latn_SR"}
+    und_SS{"en_Latn_SS"}
     und_ST{"pt_Latn_ST"}
     und_SV{"es_Latn_SV"}
     und_SY{"ar_Arab_SY"}

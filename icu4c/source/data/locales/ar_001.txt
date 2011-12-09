@@ -1,0 +1,16 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2011 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ar_001.xml
+// *
+// ***************************************************************************
+ar_001{
+    MeasurementSystem:int{0}
+    PaperSize:intvector{
+        297,
+        210,
+    }
+    Version{"2.0.62.28"}
+}

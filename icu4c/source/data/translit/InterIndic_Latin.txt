@@ -20,11 +20,11 @@ $wr=\uE00B;
 $wl=\uE00C;
 $wce=\uE00D; # LETTER CANDRA E
 $wse=\uE00E; # LETTER SHORT E
-$we=\uE00F;  # ए LETTER E
+$we=\uE00F; # ए LETTER E
 $wai=\uE010;
 $wco=\uE011; # LETTER CANDRA O
 $wso=\uE012; # LETTER SHORT O
-$wo=\uE013;  # ओ LETTER O
+$wo=\uE013; # ओ LETTER O
 $wau=\uE014;
 $ka=\uE015;
 $kha=\uE016;
@@ -79,17 +79,17 @@ $e=\uE047;
 $ai=\uE048;
 $co=\uE049; # VOWEL SIGN CANDRA O
 $so=\uE04A; # VOWEL SIGN SHORT O
-$o=\uE04B;  # ो
+$o=\uE04B; # ो
 $au=\uE04C;
 $virama=\uE04D;
 $om=\uE050; # OM
-\uE051→;        # UNMAPPED STRESS SIGN UDATTA
-\uE052→;        # UNMAPPED STRESS SIGN ANUDATTA
-\uE053→;        # UNMAPPED GRAVE ACCENT
-\uE054→;        # UNMAPPED ACUTE ACCENT
-$lm = \uE055;#  Telugu Length Mark
-$ailm=\uE056;#  AI Length Mark
-$aulm=\uE057;#  AU Length Mark
+\uE051→; # UNMAPPED STRESS SIGN UDATTA
+\uE052→; # UNMAPPED STRESS SIGN ANUDATTA
+\uE053→; # UNMAPPED GRAVE ACCENT
+\uE054→; # UNMAPPED ACUTE ACCENT
+$lm = \uE055;# Telugu Length Mark
+$ailm=\uE056;# AI Length Mark
+$aulm=\uE057;# AU Length Mark
 $uka=\uE058;
 $ukha=\uE059;
 $ugha=\uE05A;
@@ -104,16 +104,16 @@ $rrh=\uE062;
 $llh=\uE063;
 $danda=\uE064;
 $doubleDanda=\uE065;
-$zero=\uE066;     # DIGIT ZERO
-$one=\uE067;      # DIGIT ONE
-$two=\uE068;      # DIGIT TWO
-$three=\uE069;    # DIGIT THREE
-$four=\uE06A;     # DIGIT FOUR
-$five=\uE06B;     # DIGIT FIVE
-$six=\uE06C;      # DIGIT SIX
-$seven=\uE06D;    # DIGIT SEVEN
-$eight=\uE06E;    # DIGIT EIGHT
-$nine=\uE06F;     # DIGIT NINE
+$zero=\uE066; # DIGIT ZERO
+$one=\uE067; # DIGIT ONE
+$two=\uE068; # DIGIT TWO
+$three=\uE069; # DIGIT THREE
+$four=\uE06A; # DIGIT FOUR
+$five=\uE06B; # DIGIT FIVE
+$six=\uE06C; # DIGIT SIX
+$seven=\uE06D; # DIGIT SEVEN
+$eight=\uE06E; # DIGIT EIGHT
+$nine=\uE06F; # DIGIT NINE
 $dgs=\uE082;
 $kta=\uE083;
 $depVowelAbove=[\uE03E-\uE040\uE045-\uE04C];
@@ -122,70 +122,70 @@ $x=[$aa$ai$au$ii$i$uu$u$rrh$rh$lh$llh$e$o$se$ce$so$co];
 $z=[bcdfghjklmnpqrstvwxyz];
 $vowels=[aeiour\u0304\u0325\u0306];
 $forceIndependentMatra = [^[[:L:][\u0300-\u034C]]];
-$anusvara} [$ka$kha$ga$gha$nga]             → n\u0307;
-$anusvara} [$ca$cha$ja$jha$nya]             → n\u0304;
-$anusvara} [$tta$ttha$dda$ddha$nna]         → n\u0323;
-$anusvara} [$ta$tha$da$dha$na]              → n;
-$anusvara} [$pa$pha$ba$bha$ma]              → m;
+$anusvara} [$ka$kha$ga$gha$nga] → n\u0307;
+$anusvara} [$ca$cha$ja$jha$nya] → n\u0304;
+$anusvara} [$tta$ttha$dda$ddha$nna] → n\u0323;
+$anusvara} [$ta$tha$da$dha$na] → n;
+$anusvara} [$pa$pha$ba$bha$ma] → m;
 $anusvara} [$ya$ra$lla$la$va$ssa$sha$sa$ha] → n;
 $anusvara→ m\u0307;
-$ya$nukta}$x        → y\u0307;
-$ya$nukta$virama    → y\u0307;
-$ya$nukta           → y\u0307a;
-$la$nukta }$x       → l\u0331;
-$la$nukta$virama    → l\u0331;
-$la$nukta           → l\u0331a;
-$na$nukta }$x       → n\u0331;
-$na$nukta$virama    → n\u0331;
-$na$nukta           → n\u0331a;
-$ena }$x            → n\u0331;
-$ena$virama         → n\u0331;
-$ena                → n\u0331a;
-$uka                → qa;
-$ka$nukta }$x       → q;
-$ka$nukta$virama    → q;
-$ka$nukta           → qa;
-$kha$nukta }$x      → k\u0331h\u0331;
-$kha$nukta$virama   → k\u0331h\u0331;
-$kha$nukta          → k\u0331h\u0331a;
-$ukha$virama        → k\u0331h\u0331;
-$ukha               → k\u0331h\u0331a;
-$ugha               → g\u0307a;
-$ga$nukta }$x       → g\u0307;
-$ga$nukta$virama    → g\u0307;
-$ga$nukta           → g\u0307a;
-$ujha               → za;
-$ja$nukta }$x       → z;
-$ja$nukta$virama    → z;
-$ja$nukta           → za;
-$ddha$nukta}$x      → r\u0323h;
-$ddha$nukta$virama  → r\u0323h;
-$ddha$nukta         → r\u0323ha;
-$uddha}$x           → r\u0323;
-$uddha$virama       → r\u0323;
-$uddha              → r\u0323a;
-$udha               → r\u0323a;
-$dda$nukta}$x       → r\u0323;
-$dda$nukta$virama   → r\u0323;
-$dda$nukta          → r\u0323a;
-$pha$nukta }$x      → f;
-$pha$nukta$virama   → f;
-$pha$nukta          → fa;
-$ufa }$x            → f;
-$ufa$virama         → f;
-$ufa                → fa;
-$ra$nukta}$x        → r\u0331;
-$ra$nukta$virama    → r\u0331;
-$ra$nukta           → r\u0331a;
-$lla$nukta}$x       → l\u0331;
-$lla$nukta$virama   → l\u0331;
-$lla$nukta          → l\u0331a;
-$ela}$x             → l\u0331;
-$ela$virama         → l\u0331;
-$ela                → l\u0331a;
-$uya}$x             → y\u0307;
-$uya$virama         → y\u0307;
-$uya                → y\u0307a;
+$ya$nukta}$x → y\u0307;
+$ya$nukta$virama → y\u0307;
+$ya$nukta → y\u0307a;
+$la$nukta }$x → l\u0331;
+$la$nukta$virama → l\u0331;
+$la$nukta → l\u0331a;
+$na$nukta }$x → n\u0331;
+$na$nukta$virama → n\u0331;
+$na$nukta → n\u0331a;
+$ena }$x → n\u0331;
+$ena$virama → n\u0331;
+$ena → n\u0331a;
+$uka → qa;
+$ka$nukta }$x → q;
+$ka$nukta$virama → q;
+$ka$nukta → qa;
+$kha$nukta }$x → k\u0331h\u0331;
+$kha$nukta$virama → k\u0331h\u0331;
+$kha$nukta → k\u0331h\u0331a;
+$ukha$virama → k\u0331h\u0331;
+$ukha → k\u0331h\u0331a;
+$ugha → g\u0307a;
+$ga$nukta }$x → g\u0307;
+$ga$nukta$virama → g\u0307;
+$ga$nukta → g\u0307a;
+$ujha → za;
+$ja$nukta }$x → z;
+$ja$nukta$virama → z;
+$ja$nukta → za;
+$ddha$nukta}$x → r\u0323h;
+$ddha$nukta$virama → r\u0323h;
+$ddha$nukta → r\u0323ha;
+$uddha}$x → r\u0323;
+$uddha$virama → r\u0323;
+$uddha → r\u0323a;
+$udha → r\u0323a;
+$dda$nukta}$x → r\u0323;
+$dda$nukta$virama → r\u0323;
+$dda$nukta → r\u0323a;
+$pha$nukta }$x → f;
+$pha$nukta$virama → f;
+$pha$nukta → fa;
+$ufa }$x → f;
+$ufa$virama → f;
+$ufa → fa;
+$ra$nukta}$x → r\u0331;
+$ra$nukta$virama → r\u0331;
+$ra$nukta → r\u0331a;
+$lla$nukta}$x → l\u0331;
+$lla$nukta$virama → l\u0331;
+$lla$nukta → l\u0331a;
+$ela}$x → l\u0331;
+$ela$virama → l\u0331;
+$ela → l\u0331a;
+$uya}$x → y\u0307;
+$uya$virama → y\u0307;
+$uya → y\u0307a;
 $ka$virama}$ha→k'';
 $ka}$x→k;
 $ka$virama→k;
@@ -325,42 +325,42 @@ $ssa→s\u0323a;
 $ha}$x→h;
 $ha$virama→h;
 $ha→ha;
-$forceIndependentMatra{$aa  → \u0314a\u0304;
-$forceIndependentMatra{$ai  → \u0314ai;
-$forceIndependentMatra{$au  → \u0314au;
-$forceIndependentMatra{$ii  → \u0314i\u0304;
-$forceIndependentMatra{$i   → \u0314i;
-$forceIndependentMatra{$uu  → \u0314u\u0304;
-$forceIndependentMatra{$u   → \u0314u;
+$forceIndependentMatra{$aa → \u0314a\u0304;
+$forceIndependentMatra{$ai → \u0314ai;
+$forceIndependentMatra{$au → \u0314au;
+$forceIndependentMatra{$ii → \u0314i\u0304;
+$forceIndependentMatra{$i → \u0314i;
+$forceIndependentMatra{$uu → \u0314u\u0304;
+$forceIndependentMatra{$u → \u0314u;
 $forceIndependentMatra{$rrh → \u0314r\u0325\u0304;
-$forceIndependentMatra{$rh  → \u0314r\u0325;
+$forceIndependentMatra{$rh → \u0314r\u0325;
 $forceIndependentMatra{$llh → \u0314l\u0325\u0304;
-$forceIndependentMatra{$lh  → \u0314l\u0325;
-$forceIndependentMatra{$e   → \u0314e\u0304;
-$forceIndependentMatra{$o   → \u0314o\u0304;
-$forceIndependentMatra{$ce  → \u0314e\u0306;
-$forceIndependentMatra{$co  → \u0314o\u0306;
-$forceIndependentMatra{$se  → \u0314e;
-$forceIndependentMatra{$so  → \u0314o;
-$forceIndependentMatra{$nukta  →; # Nukta cannot appear independently or as first character
+$forceIndependentMatra{$lh → \u0314l\u0325;
+$forceIndependentMatra{$e → \u0314e\u0304;
+$forceIndependentMatra{$o → \u0314o\u0304;
+$forceIndependentMatra{$ce → \u0314e\u0306;
+$forceIndependentMatra{$co → \u0314o\u0306;
+$forceIndependentMatra{$se → \u0314e;
+$forceIndependentMatra{$so → \u0314o;
+$forceIndependentMatra{$nukta →; # Nukta cannot appear independently or as first character
 $forceIndependentMatra{$virama →; # Virama cannot appear independently or as first character
-$aa  → a\u0304;
-$ai  → ai;
-$au  → au;
-$ii  → i\u0304;
-$i   → i;
-$uu  → u\u0304;
-$u   → u;
+$aa → a\u0304;
+$ai → ai;
+$au → au;
+$ii → i\u0304;
+$i → i;
+$uu → u\u0304;
+$u → u;
 $rrh → r\u0325\u0304;
-$rh  → r\u0325;
+$rh → r\u0325;
 $llh → l\u0325\u0304;
-$lh  → l\u0325;
-$e   → e\u0304;
-$o   → o\u0304;
-$ce  → e\u0306;
-$co  → o\u0306;
-$se  → e;
-$so  → o;
+$lh → l\u0325;
+$e → e\u0304;
+$o → o\u0304;
+$ce → e\u0306;
+$co → o\u0306;
+$se → e;
+$so → o;
 $waa} $x → a\u0304\u0314;
 $wai} $x → ai\u0314;
 $wau} $x → au\u0314;
@@ -380,38 +380,38 @@ $wco} $x → o\u0306\u0314;
 $wse} $x → e\u0314;
 $wso} $x → o\u0314;
 $om} $x → ''om\u0314;
-$vowels{$waa  → ''a\u0304;
-$vowels{$wai  → ''ai;
-$vowels{$wau  → ''au;
-$vowels{$wii  → ''i\u0304;
-$vowels{$wi   → ''i;
-$vowels{$wuu  → ''u\u0304;
-$vowels{$wu   → ''u;
-$vowels{$wrr  → ''r\u0325\u0304;
-$vowels{$wr   → ''r\u0325;
-$vowels{$wll  → ''l\u0325\u0304;
-$vowels{$wl   → ''l\u0325;
-$vowels{$we   → ''e\u0304;
-$vowels{$wo   → ''o\u0304;
-$vowels{$wa   → ''a;
-$vowels{$wce  → ''e\u0306;
-$vowels{$wco  → ''o\u0306;
-$vowels{$wse  → ''e;
-$vowels{$wso  → ''o;
+$vowels{$waa → ''a\u0304;
+$vowels{$wai → ''ai;
+$vowels{$wau → ''au;
+$vowels{$wii → ''i\u0304;
+$vowels{$wi → ''i;
+$vowels{$wuu → ''u\u0304;
+$vowels{$wu → ''u;
+$vowels{$wrr → ''r\u0325\u0304;
+$vowels{$wr → ''r\u0325;
+$vowels{$wll → ''l\u0325\u0304;
+$vowels{$wl → ''l\u0325;
+$vowels{$we → ''e\u0304;
+$vowels{$wo → ''o\u0304;
+$vowels{$wa → ''a;
+$vowels{$wce → ''e\u0306;
+$vowels{$wco → ''o\u0306;
+$vowels{$wse → ''e;
+$vowels{$wso → ''o;
 $waa → a\u0304;
 $wai → ai;
 $wau → au;
 $wii → i\u0304;
-$wi  → i;
+$wi → i;
 $wuu → u\u0304;
-$wu  → u;
+$wu → u;
 $wrr → r\u0325\u0304;
-$wr  → r\u0325;
+$wr → r\u0325;
 $wll → l\u0325\u0304;
-$wl  → l\u0325;
-$we  → e\u0304;
-$wo  → o\u0304;
-$wa  → a;
+$wl → l\u0325;
+$we → e\u0304;
+$wo → o\u0304;
+$wa → a;
 $wce → e\u0306;
 $wco → o\u0306;
 $wse → e;
@@ -421,42 +421,42 @@ $avagraha → \u0315;
 $chandrabindu$anusvara→\u0303;
 $chandrabindu → m\u0310;
 $visarga→h\u0323;
-$zero  → 0;
-$one   → 1;
-$two   → 2;
+$zero → 0;
+$one → 1;
+$two → 2;
 $three → 3;
-$four  → 4;
-$five  → 5;
-$six   → 6;
+$four → 4;
+$five → 5;
+$six → 6;
 $seven → 7;
 $eight → 8;
-$nine  → 9;
-$lm   →;
+$nine → 9;
+$lm →;
 $ailm →;
 $aulm →;
 $dgs→ʔ;
 $kta→t\u0331;
 $danda→'.';
 $doubleDanda→'.';
-\uE070→;       # ABBREVIATION SIGN
+\uE070→; # ABBREVIATION SIGN
 \uE071}$x→ra;
 \uE071$virama→r;
 \uE071→ra;
 \uE072}$x→ra;
 \uE072$virama→r;
 \uE072→ra;
-\uE073→;       # RUPEE MARK
-\uE074→;       # RUPEE SIGN
-\uE075→;       # CURRENCY NUMERATOR ONE
-\uE076→;       # CURRENCY NUMERATOR TWO
-\uE077→;       # CURRENCY NUMERATOR THREE
-\uE078→;       # CURRENCY NUMERATOR FOUR
-\uE079→;       # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
-\uE07A→;       # CURRENCY DENOMINATOR SIXTEEN
-\uE07B→;       # ISSHAR
-\uE07C→;       # TIPPI
-\uE07D→;       # ADDAK
-\uE07E→;       # IRI
-\uE07F→;       # URA
-\uE080→;       # EK ONKAR
-\uE004→;       # DEVANAGARI VOWEL SIGN SHORT A
+\uE073→; # RUPEE MARK
+\uE074→; # RUPEE SIGN
+\uE075→; # CURRENCY NUMERATOR ONE
+\uE076→; # CURRENCY NUMERATOR TWO
+\uE077→; # CURRENCY NUMERATOR THREE
+\uE078→; # CURRENCY NUMERATOR FOUR
+\uE079→; # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\uE07A→; # CURRENCY DENOMINATOR SIXTEEN
+\uE07B→; # ISSHAR
+\uE07C→; # TIPPI
+\uE07D→; # ADDAK
+\uE07E→; # IRI
+\uE07F→; # URA
+\uE080→; # EK ONKAR
+\uE004→; # DEVANAGARI VOWEL SIGN SHORT A

@@ -14,14 +14,14 @@ $lengthMarker = [\u0302\u0304];
 [\-\'] → ;
 e $lengthMarker → | e i ;
 $lengthMarker → ;
-[^$consonant] { ( [aiueoyw] ) → ᄋ | $1 ;  # Supply a required null initial.
+[^$consonant] { ( [aiueoyw] ) → ᄋ | $1 ; # Supply a required null initial.
 a → ᅡ ;
-i\~e → | ie ;  # イェ
+i\~e → | ie ; # イェ
 i → ᅵ ;
-u\~a → | wa ;  # クァ, グァ
-u\~i → ᅱ ;     # ウィ, クィ, etc.
-u\~e → ᅰ ;     # ウェ
-u\~o → ᅯ ;     # ウォ
+u\~a → | wa ; # クァ, グァ
+u\~i → ᅱ ; # ウィ, クィ, etc.
+u\~e → ᅰ ; # ウェ
+u\~o → ᅯ ; # ウォ
 u → ᅮ ;
 e → ᅦ ;
 o → ᅩ ;
@@ -40,34 +40,34 @@ dd → ᆺ | d ;
 bb → ᆺ | b ;
 vv → ᆺ | v ;
 pp → ᆺ | p ;
-' ' { k → | g ;   # Beginning of a word (after space).
-^k      → | g ;   # Beginning of the string.
+' ' { k → | g ; # Beginning of a word (after space).
+^k → | g ; # Beginning of the string.
 k → ᄏ ;
 sh → | sy ;
 su → 스 ;
 s → ᄉ ;
-te\~     → | t ;   # テュ
-to\~     → | t ;   # トゥ
-tsu\~    → | ch ;  # ツァ, ツィ, etc.
+te\~ → | t ; # テュ
+to\~ → | t ; # トゥ
+tsu\~ → | ch ; # ツァ, ツィ, etc.
 tsu → 쓰 ;
-ts       → | ch ;
-' ' { t  → | d ;
-^t       → | d ;
+ts → | ch ;
+' ' { t → | d ;
+^t → | d ;
 t → ᄐ ;
 ' ' { ch → | j ;
-^ch      → | j ;
+^ch → | j ;
 ch → ᄎ ;
 n } [\ \'bcdfghjkmnprstwz] → ᆫ ;
 n$ → ᆫ ;
 n → ᄂ ;
 h → ᄒ ;
-fu\~ → | p ;   # フュ
-fu   → | hu ;
-f    → | p ;
+fu\~ → | p ; # フュ
+fu → | hu ;
+f → | p ;
 m } [bmp] → ᆫ ;
 m → ᄆ ;
 ya → ᅣ ;
-yi → ᅵ ;  # Added for convenience, after shi.
+yi → ᅵ ; # Added for convenience, after shi.
 yu → ᅲ ;
 ye → ᅨ ;
 yo → ᅭ ;
@@ -78,16 +78,16 @@ g → ᄀ ;
 zu → 즈 ;
 z → | j ;
 j → ᄌ ;
-de\~  → | d ;   # デュ
-dji\~ → | j ;   # ヂァ, ヂゥ, etc.
-dji   → | ji ;  # ヂ
-do\~  → | d ;   # ドゥ
-dzu\~ → | j ;   # ヅァ, ヅィ, etc.
-dzu   → | zu ;  # ヅ
-dz    → | j ;
+de\~ → | d ; # デュ
+dji\~ → | j ; # ヂァ, ヂゥ, etc.
+dji → | ji ; # ヂ
+do\~ → | d ; # ドゥ
+dzu\~ → | j ; # ヅァ, ヅィ, etc.
+dzu → | zu ; # ヅ
+dz → | j ;
 d → ᄃ ;
 b → ᄇ ;
-vu\~ → | b ;  # ヴァ, etc.
-v    → | b ;
+vu\~ → | b ; # ヴァ, etc.
+v → | b ;
 p → ᄑ ;
 ::NFC(NFD);

@@ -7,6 +7,286 @@
 // *
 // ***************************************************************************
 metadata:table(nofallback){
+    languageAlias{
+        aa_SAAHO{"ssy"}
+        aar{"aa"}
+        abk{"ab"}
+        afr{"af"}
+        aju{"jrb"}
+        aka{"ak"}
+        als{"sq"}
+        amh{"am"}
+        ara{"ar"}
+        arb{"ar"}
+        arg{"an"}
+        art-lojban{"jbo"}
+        asm{"as"}
+        ava{"av"}
+        ave{"ae"}
+        aym{"ay"}
+        ayr{"ay"}
+        aze{"az"}
+        azj{"az"}
+        bak{"ba"}
+        bam{"bm"}
+        bcc{"bal"}
+        bcl{"bik"}
+        bel{"be"}
+        ben{"bn"}
+        bh{"bho"}
+        bih{"bho"}
+        bis{"bi"}
+        bod{"bo"}
+        bos{"bs"}
+        bre{"br"}
+        bul{"bg"}
+        bxk{"luy"}
+        bxr{"bua"}
+        cat{"ca"}
+        ces{"cs"}
+        cha{"ch"}
+        che{"ce"}
+        chu{"cu"}
+        chv{"cv"}
+        cld{"syr"}
+        cmn{"zh"}
+        cor{"kw"}
+        cos{"co"}
+        cre{"cr"}
+        cwd{"cr"}
+        cym{"cy"}
+        dan{"da"}
+        deu{"de"}
+        dgo{"doi"}
+        dhd{"mwr"}
+        dik{"din"}
+        diq{"zza"}
+        div{"dv"}
+        dzo{"dz"}
+        ekk{"et"}
+        ell{"el"}
+        emk{"man"}
+        eng{"en"}
+        epo{"eo"}
+        esk{"ik"}
+        est{"et"}
+        eus{"eu"}
+        ewe{"ee"}
+        fao{"fo"}
+        fas{"fa"}
+        fat{"ak"}
+        fij{"fj"}
+        fin{"fi"}
+        fra{"fr"}
+        fry{"fy"}
+        fuc{"ff"}
+        ful{"ff"}
+        gaz{"om"}
+        gbo{"grb"}
+        gla{"gd"}
+        gle{"ga"}
+        glg{"gl"}
+        glv{"gv"}
+        gno{"gon"}
+        grn{"gn"}
+        gug{"gn"}
+        guj{"gu"}
+        gya{"gba"}
+        hat{"ht"}
+        hau{"ha"}
+        hbs{"sr_Latn"}
+        hdn{"hai"}
+        hea{"hmn"}
+        heb{"he"}
+        her{"hz"}
+        him{"srx"}
+        hin{"hi"}
+        hmo{"ho"}
+        hrv{"hr"}
+        hun{"hu"}
+        hye{"hy"}
+        i-ami{"ami"}
+        i-bnn{"bnn"}
+        i-hak{"hak"}
+        i-klingon{"tlh"}
+        i-lux{"lb"}
+        i-navajo{"nv"}
+        i-pwn{"pwn"}
+        i-tao{"tao"}
+        i-tay{"tay"}
+        i-tsu{"tsu"}
+        ibo{"ig"}
+        ido{"io"}
+        iii{"ii"}
+        ike{"iu"}
+        iku{"iu"}
+        ile{"ie"}
+        in{"id"}
+        ina{"ia"}
+        ind{"id"}
+        ipk{"ik"}
+        isl{"is"}
+        ita{"it"}
+        iw{"he"}
+        jav{"jv"}
+        ji{"yi"}
+        jpn{"ja"}
+        jw{"jv"}
+        kal{"kl"}
+        kan{"kn"}
+        kas{"ks"}
+        kat{"ka"}
+        kau{"kr"}
+        kaz{"kk"}
+        khk{"mn"}
+        khm{"km"}
+        kik{"ki"}
+        kin{"rw"}
+        kir{"ky"}
+        kmr{"ku"}
+        knc{"kr"}
+        kng{"kg"}
+        knn{"kok"}
+        kom{"kv"}
+        kon{"kg"}
+        kor{"ko"}
+        kpv{"kv"}
+        kua{"kj"}
+        kur{"ku"}
+        lao{"lo"}
+        lat{"la"}
+        lav{"lv"}
+        lbk{"bnc"}
+        lim{"li"}
+        lin{"ln"}
+        lit{"lt"}
+        ltz{"lb"}
+        lub{"lu"}
+        lug{"lg"}
+        lvs{"lv"}
+        mah{"mh"}
+        mal{"ml"}
+        mar{"mr"}
+        mhr{"chm"}
+        mkd{"mk"}
+        mlg{"mg"}
+        mlt{"mt"}
+        mo{"ro"}
+        mol{"ro"}
+        mon{"mn"}
+        mri{"mi"}
+        msa{"ms"}
+        mup{"raj"}
+        mya{"my"}
+        nau{"na"}
+        nav{"nv"}
+        nbl{"nr"}
+        nde{"nd"}
+        ndo{"ng"}
+        nep{"ne"}
+        nld{"nl"}
+        nno{"nn"}
+        no{"nb"}
+        no-bok{"nb"}
+        no-nyn{"nn"}
+        no_BOKMAL{"nb"}
+        no_NYNORSK{"nn"}
+        nob{"nb"}
+        nor{"nb"}
+        nya{"ny"}
+        oci{"oc"}
+        ojg{"oj"}
+        oji{"oj"}
+        ori{"or"}
+        orm{"om"}
+        oss{"os"}
+        pan{"pa"}
+        pbu{"ps"}
+        pes{"fa"}
+        pli{"pi"}
+        plt{"mg"}
+        pnb{"lah"}
+        pol{"pl"}
+        por{"pt"}
+        pus{"ps"}
+        que{"qu"}
+        qxp{"qu"}
+        rmy{"rom"}
+        roh{"rm"}
+        ron{"ro"}
+        run{"rn"}
+        rus{"ru"}
+        sag{"sg"}
+        san{"sa"}
+        sgn-BE-FR{"sfb"}
+        sgn-BE-NL{"vgt"}
+        sgn-CH-DE{"sgg"}
+        sh{"sr_Latn"}
+        sin{"si"}
+        slk{"sk"}
+        slv{"sl"}
+        sme{"se"}
+        smo{"sm"}
+        sna{"sn"}
+        snd{"sd"}
+        som{"so"}
+        sot{"st"}
+        spa{"es"}
+        spy{"kln"}
+        sqi{"sq"}
+        src{"sc"}
+        srd{"sc"}
+        srp{"sr"}
+        ssw{"ss"}
+        sun{"su"}
+        swa{"sw"}
+        swe{"sv"}
+        swh{"sw"}
+        tah{"ty"}
+        tam{"ta"}
+        tat{"tt"}
+        tel{"te"}
+        tgk{"tg"}
+        tgl{"fil"}
+        tha{"th"}
+        tir{"ti"}
+        tl{"fil"}
+        ton{"to"}
+        tsn{"tn"}
+        tso{"ts"}
+        ttq{"tmh"}
+        tuk{"tk"}
+        tur{"tr"}
+        tw{"ak"}
+        twi{"ak"}
+        uig{"ug"}
+        ukr{"uk"}
+        umu{"del"}
+        urd{"ur"}
+        uzb{"uz"}
+        uzn{"uz"}
+        ven{"ve"}
+        vie{"vi"}
+        vol{"vo"}
+        wln{"wa"}
+        wol{"wo"}
+        xho{"xh"}
+        xpe{"kpe"}
+        xsl{"den"}
+        ydd{"yi"}
+        yid{"yi"}
+        yor{"yo"}
+        zai{"zap"}
+        zh-guoyu{"zh"}
+        zh-hakka{"hak"}
+        zh-min-nan{"nan"}
+        zh-xiang{"hsn"}
+        zha{"za"}
+        zho{"zh"}
+        zsm{"ms"}
+        zul{"zu"}
+        zyb{"za"}
+    }
     regionCodes{
         "001",
         "002",
@@ -30,7 +310,6 @@ metadata:table(nofallback){
         "054",
         "057",
         "061",
-        "062",
         "142",
         "143",
         "145",
@@ -39,9 +318,6 @@ metadata:table(nofallback){
         "154",
         "155",
         "419",
-        "172",
-        "200",
-        "830",
         "AC",
         "AD",
         "AE",
@@ -110,7 +386,6 @@ metadata:table(nofallback){
         "DK",
         "DM",
         "DO",
-        "DY",
         "DZ",
         "EA",
         "EC",
@@ -126,7 +401,6 @@ metadata:table(nofallback){
         "FK",
         "FM",
         "FO",
-        "FQ",
         "FR",
         "FX",
         "GA",
@@ -154,7 +428,6 @@ metadata:table(nofallback){
         "HR",
         "HT",
         "HU",
-        "HV",
         "IC",
         "ID",
         "IE",
@@ -170,7 +443,6 @@ metadata:table(nofallback){
         "JM",
         "JO",
         "JP",
-        "JT",
         "KE",
         "KG",
         "KH",
@@ -200,7 +472,6 @@ metadata:table(nofallback){
         "MF",
         "MG",
         "MH",
-        "MI",
         "MK",
         "ML",
         "MM",
@@ -222,19 +493,16 @@ metadata:table(nofallback){
         "NE",
         "NF",
         "NG",
-        "NH",
         "NI",
         "NL",
         "NO",
         "NP",
-        "NQ",
         "NR",
         "NT",
         "NU",
         "NZ",
         "OM",
         "PA",
-        "PC",
         "PE",
         "PF",
         "PG",
@@ -246,10 +514,8 @@ metadata:table(nofallback){
         "PR",
         "PS",
         "PT",
-        "PU",
         "PW",
         "PY",
-        "PZ",
         "QA",
         "QO",
         "QU",
@@ -273,6 +539,7 @@ metadata:table(nofallback){
         "SN",
         "SO",
         "SR",
+        "SS",
         "ST",
         "SU",
         "SV",
@@ -321,6 +588,9 @@ metadata:table(nofallback){
         "ZR",
         "ZW",
         "ZZ",
+    }
+    scriptAlias{
+        Qaai{"Zinh"}
     }
     territoryAlias{
         004{"AF"}
@@ -540,6 +810,8 @@ metadata:table(nofallback){
         716{"ZW"}
         720{"YE"}
         724{"ES"}
+        728{"SS"}
+        729{"SD"}
         732{"EH"}
         736{"SD"}
         740{"SR"}
@@ -872,5 +1144,10 @@ metadata:table(nofallback){
         ZR{"CD"}
         ZWE{"ZW"}
         ZZZ{"ZZ"}
+    }
+    variantAlias{
+        AALAND{"AX"}
+        HEPLOC{"alalc97"}
+        POLYTONI{"POLYTON"}
     }
 }

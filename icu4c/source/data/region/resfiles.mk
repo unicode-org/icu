@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2011, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-REGION_CLDR_VERSION = 2.0
+REGION_CLDR_VERSION = 21.0
 # A list of txt's to build
 # Note:
 #

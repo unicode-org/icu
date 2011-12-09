@@ -52,6 +52,7 @@ en{
         anp{"Angika"}
         apa{"Apache Language"}
         ar{"Arabic"}
+        ar_001{"Modern Standard Arabic"}
         arc{"Aramaic"}
         arn{"Araucanian"}
         arp{"Arapaho"}
@@ -634,7 +635,7 @@ en{
         Hebr{"Hebrew"}
         Hira{"Hiragana"}
         Hmng{"Pahawh Hmong"}
-        Hrkt{"Katakana or Hiragana"}
+        Hrkt{"Japanese syllabaries"}
         Hung{"Old Hungarian"}
         Inds{"Indus"}
         Ital{"Old Italic"}
@@ -644,6 +645,7 @@ en{
         Kana{"Katakana"}
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
+        Khoj{"Khojki"}
         Knda{"Kannada"}
         Kore{"Korean"}
         Kthi{"Kaithi"}
@@ -712,6 +714,7 @@ en{
         Thaa{"Thaana"}
         Thai{"Thai"}
         Tibt{"Tibetan"}
+        Tirh{"Tirhuta"}
         Ugar{"Ugaritic"}
         Vaii{"Vai"}
         Visp{"Visible Speech"}
@@ -751,6 +754,7 @@ en{
             dictionary{"Dictionary Sort Order"}
             direct{"Direct Sort Order"}
             ducet{"Default Unicode Sort Order"}
+            eor{"European Ordering Rules"}
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
             pinyin{"Pinyin Sort Order"}
@@ -844,7 +848,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.61.76"}
+    Version{"2.0.62.77"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

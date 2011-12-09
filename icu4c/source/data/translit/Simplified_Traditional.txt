@@ -2161,7 +2161,7 @@ $SCDigit { 出 } 戏 → 齣;
 京沈↔京瀋;
 辽沈↔遼瀋;
 沈←瀋;
-墨渖未干↔墨瀋未乾;	 # 瀋 meaning liquid
+墨渖未干↔墨瀋未乾; # 瀋 meaning liquid
 渖→瀋;
 石沉大海↔石沈大海; # 沈 meaning sink
 鱼沉雁杳↔魚沈雁杳;

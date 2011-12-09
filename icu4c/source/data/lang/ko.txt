@@ -719,7 +719,7 @@ ko{
         REVISED{"개정"}
         UCRCOR{"통합 개정 표기법"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.62.55"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

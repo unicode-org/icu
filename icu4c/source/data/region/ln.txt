@@ -140,7 +140,6 @@ ln{
         MH{"Bisanga bya Marishalɛ"}
         MK{"Masedwanɛ"}
         ML{"Malí"}
-        MM{"Mozambiki"}
         MN{"Mongolí"}
         MP{"Bisanga bya Marianɛ ya nɔ́rdi"}
         MQ{"Martiniki"}
@@ -238,5 +237,5 @@ ln{
         ZM{"Zambi"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.62.5"}
 }
