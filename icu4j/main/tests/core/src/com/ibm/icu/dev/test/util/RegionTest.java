@@ -55,7 +55,7 @@ public class RegionTest extends TestFmwk {
             { "054", "054", "009", "SUBCONTINENT" },
             { "057", "057", "009", "SUBCONTINENT" },
             { "061", "061", "009", "SUBCONTINENT" },
-            { "062", "062", null,  "DEPRECATED"  },
+            //{ "062", "062", null,  "DEPRECATED"  }, //deleted per cldrbug 4105:
             { "142", "142", "001", "CONTINENT" },
             { "143", "143", "142", "SUBCONTINENT" },
             { "145", "145", "142", "SUBCONTINENT" },
@@ -64,9 +64,9 @@ public class RegionTest extends TestFmwk {
             { "154", "154", "150", "SUBCONTINENT" },
             { "155", "155", "150", "SUBCONTINENT" },
             { "419", "419", null,  "GROUPING" },
-            { "172", "172", null,  "DEPRECATED" },
-            { "200", "200", null,  "DEPRECATED" },
-            { "830", "830", null,  "DEPRECATED" },
+            //{ "172", "172", null,  "DEPRECATED" }, //deleted per cldrbug 4105:
+            //{ "200", "200", null,  "DEPRECATED" }, //deleted per cldrbug 4105:
+            //{ "830", "830", null,  "DEPRECATED" }, //deleted per cldrbug 4105:
             { "AC" , "-1" , "QO" , "TERRITORY" },
             { "AD" , "020", "039", "TERRITORY" },
             { "AE" , "784", "145", "TERRITORY" },
@@ -134,7 +134,7 @@ public class RegionTest extends TestFmwk {
             { "DK" , "208", "154", "TERRITORY" },
             { "DM" , "212", "029", "TERRITORY" },
             { "DO" , "214", "029", "TERRITORY" },
-            { "DY" , "204", "011", "TERRITORY" },
+            //{ "DY" , "204", "011", "TERRITORY" }, //deleted per cldrbug 4105:
             { "DZ" , "012", "015", "TERRITORY" },
             { "EA" , "-1" , "015", "TERRITORY" },
             { "EC" , "218", "005", "TERRITORY" },
@@ -150,7 +150,7 @@ public class RegionTest extends TestFmwk {
             { "FK" , "238", "005", "TERRITORY" },
             { "FM" , "583", "057", "TERRITORY" },
             { "FO" , "234", "154", "TERRITORY" },
-            { "FQ" , "-1",  null , "DEPRECATED" },
+            //{ "FQ" , "-1",  null , "DEPRECATED" }, //deleted per cldrbug 4105:
             { "FR" , "250", "155", "TERRITORY" },
             { "FX" , "250", "155", "TERRITORY" },
             { "GA" , "266", "017", "TERRITORY" },
@@ -178,7 +178,7 @@ public class RegionTest extends TestFmwk {
             { "HR" , "191", "039", "TERRITORY" },
             { "HT" , "332", "029", "TERRITORY" },
             { "HU" , "348", "151", "TERRITORY" },
-            { "HV" , "854", "011", "TERRITORY" },
+            //{ "HV" , "854", "011", "TERRITORY" }, //deleted per cldrbug 4105:
             { "IC" , "-1" , "015", "TERRITORY" },
             { "ID" , "360", "035", "TERRITORY" },
             { "IE" , "372", "154", "TERRITORY" },
@@ -194,7 +194,7 @@ public class RegionTest extends TestFmwk {
             { "JM" , "388", "029", "TERRITORY" },
             { "JO" , "400", "145", "TERRITORY" },
             { "JP" , "392", "030", "TERRITORY" },
-            { "JT" , "581", "QO" , "TERRITORY" },
+            //{ "JT" , "581", "QO" , "TERRITORY" }, //deleted per cldrbug 4105:
             { "KE" , "404", "014", "TERRITORY" },
             { "KG" , "417", "143", "TERRITORY" },
             { "KH" , "116", "035", "TERRITORY" },
@@ -224,7 +224,7 @@ public class RegionTest extends TestFmwk {
             { "MF" , "663", "029", "TERRITORY" },
             { "MG" , "450", "014", "TERRITORY" },
             { "MH" , "584", "057", "TERRITORY" },
-            { "MI" , "581", "QO" , "TERRITORY" },
+            //{ "MI" , "581", "QO" , "TERRITORY" }, //deleted per cldrbug 4105:
             { "MK" , "807", "039", "TERRITORY" },
             { "ML" , "466", "011", "TERRITORY" },
             { "MM" , "104", "035", "TERRITORY" },
@@ -246,19 +246,19 @@ public class RegionTest extends TestFmwk {
             { "NE" , "562", "011", "TERRITORY" },
             { "NF" , "574", "053", "TERRITORY" },
             { "NG" , "566", "011", "TERRITORY" },
-            { "NH" , "548", "054", "TERRITORY" },
+            //{ "NH" , "548", "054", "TERRITORY" }, //deleted per cldrbug 4105:
             { "NI" , "558", "013", "TERRITORY" },
             { "NL" , "528", "155", "TERRITORY" },
             { "NO" , "578", "154", "TERRITORY" },
             { "NP" , "524", "034", "TERRITORY" },
-            { "NQ" , "010", "QO" , "TERRITORY" },
+            //{ "NQ" , "010", "QO" , "TERRITORY" }, //deleted per cldrbug 4105:
             { "NR" , "520", "057", "TERRITORY" },
             { "NT" , "536", null , "DEPRECATED" },
             { "NU" , "570", "061", "TERRITORY" },
             { "NZ" , "554", "053", "TERRITORY" },
             { "OM" , "512", "145", "TERRITORY" },
             { "PA" , "591", "013", "TERRITORY" },
-            { "PC" , "-1",  null,  "DEPRECATED" },
+            //{ "PC" , "-1",  null,  "DEPRECATED" }, //deleted per cldrbug 4105:
             { "PE" , "604", "005", "TERRITORY" },
             { "PF" , "258", "061", "TERRITORY" },
             { "PG" , "598", "054", "TERRITORY" },
@@ -270,10 +270,10 @@ public class RegionTest extends TestFmwk {
             { "PR" , "630", "029", "TERRITORY" },
             { "PS" , "275", "145", "TERRITORY" },
             { "PT" , "620", "039", "TERRITORY" },
-            { "PU" , "581", "QO" , "TERRITORY" },
+            //{ "PU" , "581", "QO" , "TERRITORY" }, //deleted per cldrbug 4105:
             { "PW" , "585", "057", "TERRITORY" },
             { "PY" , "600", "005", "TERRITORY" },
-            { "PZ" , "591", "013", "TERRITORY" },
+            //{ "PZ" , "591", "013", "TERRITORY" }, //deleted per cldrbug 4105:
             { "QA" , "634", "145", "TERRITORY" },
             { "QO" , "961", "009", "SUBCONTINENT" },
             { "QU" , "967", null,  "GROUPING" },
@@ -285,7 +285,7 @@ public class RegionTest extends TestFmwk {
             { "SA" , "682", "145", "TERRITORY" },
             { "SB" , "090", "054", "TERRITORY" },
             { "SC" , "690", "014", "TERRITORY" },
-            { "SD" , "736", "015", "TERRITORY" },
+            { "SD" , "729", "015", "TERRITORY" }, //updated per cldrbug 4105:
             { "SE" , "752", "154", "TERRITORY" },
             { "SG" , "702", "035", "TERRITORY" },
             { "SH" , "654", "011", "TERRITORY" },
@@ -297,6 +297,7 @@ public class RegionTest extends TestFmwk {
             { "SN" , "686", "011", "TERRITORY" },
             { "SO" , "706", "014", "TERRITORY" },
             { "SR" , "740", "005", "TERRITORY" },
+            { "SS" , "728", "015", "TERRITORY" }, //added per cldrbug 4105:
             { "ST" , "678", "017", "TERRITORY" },
             { "SU" , "810", null , "DEPRECATED" },
             { "SV" , "222", "013", "TERRITORY" },
