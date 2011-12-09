@@ -6639,9 +6639,9 @@ static void TestImportRulesFiWithEor(void)
   };
 
   const OneTestCase defaultTests[] = {
-    { {0x0110}, {0x00F0}, UCOL_LESS},          /* "Đ" < "ð" */
-    { {0x00a3}, {0x00a5}, UCOL_LESS},          /* "£" < "¥" */
-    { {0x0061}, {0x0061, 0x00a3}, UCOL_LESS},  /* "a" < "a£" */
+    { {0x0110}, {0x00F0}, UCOL_LESS},
+    { {0x00a3}, {0x00a5}, UCOL_LESS},
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_LESS},
   };
 
   /* European Ordering rules: ignore currency characters. */
@@ -6650,20 +6650,19 @@ static void TestImportRulesFiWithEor(void)
   };
 
   const OneTestCase eorTests[] = {
-    { {0x0110}, {0x00F0}, UCOL_LESS},           /* "Đ" < "ð" */
-    { {0x00a3}, {0x00a5}, UCOL_EQUAL},          /* "£" = "¥" */
-    { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},  /* "a" = "a£" */
+    { {0x0110}, {0x00F0}, UCOL_LESS},
+    { {0x00a3}, {0x00a5}, UCOL_EQUAL},
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},
   };
 
-  /* Fi standard rules:  "Đ" >  "ð". */
   const char* fiStdRules[] = {
     "[import fi-u-co-standard]",
   };
 
   const OneTestCase fiStdTests[] = {
-    { {0x0110}, {0x00F0}, UCOL_GREATER},         /* "Đ" > "ð" */
-    { {0x00a3}, {0x00a5}, UCOL_LESS},            /* "£" < "¥" */
-    { {0x0061}, {0x0061, 0x00a3}, UCOL_LESS},    /* "a" < "a£" */
+    { {0x0110}, {0x00F0}, UCOL_GREATER},
+    { {0x00a3}, {0x00a5}, UCOL_LESS},
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_LESS},
   };
 
   /* Both European Ordering Rules and Fi Standard Rules. */
@@ -6677,9 +6676,9 @@ static void TestImportRulesFiWithEor(void)
   };
 
   const OneTestCase fiEorTests[] = {
-    { {0x0110}, {0x00F0}, UCOL_GREATER},         /* "Đ" > "ð" */
-    { {0x00a3}, {0x00a5}, UCOL_EQUAL},           /* "£" = "¥" */
-    { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},   /* "a" = "a£" */
+    { {0x0110}, {0x00F0}, UCOL_GREATER},
+    { {0x00a3}, {0x00a5}, UCOL_EQUAL},
+    { {0x0061}, {0x0061, 0x00a3}, UCOL_EQUAL},
   };
 
   doTestOneTestCase(defaultTests, LEN(defaultTests), defaultRules, LEN(defaultRules));
@@ -6713,7 +6712,7 @@ static void TestImportRulesCJKWithUnihan(void)
   };
 
   const OneTestCase defaultTests[] = {
-    { {0x3402}, {0x4e1e}, UCOL_GREATER},          /* "Đ" < "ð" */
+    { {0x3402}, {0x4e1e}, UCOL_GREATER},
   };
 
   /* European Ordering rules: ignore currency characters. */
@@ -6722,7 +6721,7 @@ static void TestImportRulesCJKWithUnihan(void)
   };
 
   const OneTestCase unihanTests[] = {
-    { {0x3402}, {0x4e1e}, UCOL_LESS},          /* "Đ" < "ð" */
+    { {0x3402}, {0x4e1e}, UCOL_LESS},
   };
 
   doTestOneTestCase(defaultTests, LEN(defaultTests), defaultRules, LEN(defaultRules));
