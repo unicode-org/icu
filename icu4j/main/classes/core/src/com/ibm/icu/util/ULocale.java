@@ -592,7 +592,7 @@ public final class ULocale implements Serializable {
      * a ULocale with non-empty script is explicitly set by {@link #setDefault(ULocale)}
      * on Java 6 or older systems.
      * <p>
-     * <b>Note for ICU 49 or later:</b> Some JRE implementations allow users to override default
+     * <b>Note for ICU 49 or later:</b> Some JRE implementations allow users to override the default
      * JDK Locale using system properties - <code>user.language</code>, <code>user.country</code>
      * and <code>user.variant</code>. In addition to these system properties, some Java 7
      * implementations support <code>user.script</code> for overriding the default Locale's script.
