@@ -132,6 +132,12 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static final VersionInfo UNICODE_6_0;
 
     /**
+     * Unicode 6.1 version
+     * @stable ICU 49
+     */
+    public static final VersionInfo UNICODE_6_1;
+
+    /**
      * ICU4J current release version
      * @stable ICU 2.8
      */
@@ -487,10 +493,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_5_1   = getInstance(5, 1, 0, 0);
         UNICODE_5_2   = getInstance(5, 2, 0, 0);
         UNICODE_6_0   = getInstance(6, 0, 0, 0);
+        UNICODE_6_1   = getInstance(6, 1, 0, 0);
 
         ICU_VERSION   = getInstance(49, 0, 1, 0);
         ICU_DATA_VERSION = getInstance(49, 0, 1, 0);
-        UNICODE_VERSION = UNICODE_6_0;
+        UNICODE_VERSION = UNICODE_6_1;
 
         UCOL_RUNTIME_VERSION = getInstance(7);
         UCOL_BUILDER_VERSION = getInstance(8);

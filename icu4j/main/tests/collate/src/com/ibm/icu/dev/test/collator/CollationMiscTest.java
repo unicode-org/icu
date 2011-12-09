@@ -22,6 +22,8 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ImplicitCEGenerator;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
@@ -3360,13 +3362,30 @@ public class CollationMiscTest extends TestFmwk {
                 UScript.UGARITIC,               //Ugar
                 UScript.OLD_PERSIAN,            //Xpeo
                 UScript.CUNEIFORM,              //Xsux
-                UScript.EGYPTIAN_HIEROGLYPHS    //Egyp
+                UScript.EGYPTIAN_HIEROGLYPHS,   //Egyp
+                UScript.PHONETIC_POLLARD,       //Plrd
+                UScript.SORA_SOMPENG,           //Sora
+                UScript.MEROITIC_CURSIVE,       //Merc
+                UScript.MEROITIC_HIEROGLYPHS    //Mero
         };
         Arrays.sort(equivalentScriptsResult);
         
         int[] equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.GOTHIC);
         Arrays.sort(equivalentScripts);
-        assertTrue("Script Equivalents for Reordering", Arrays.equals(equivalentScripts, equivalentScriptsResult));
+        boolean equal = Arrays.equals(equivalentScripts, equivalentScriptsResult);
+        assertTrue("Script Equivalents for Reordering", equal);
+        if (!equal) {
+            StringBuilder s = new StringBuilder("    {");
+            for (int code : equivalentScripts) {
+                s.append(" " + UCharacter.getPropertyValueName(UProperty.SCRIPT, code, UProperty.NameChoice.SHORT));
+            }
+            s.append(" } vs. {");
+            for (int code : equivalentScriptsResult) {
+                s.append(" " + UCharacter.getPropertyValueName(UProperty.SCRIPT, code, UProperty.NameChoice.SHORT));
+            }
+            s.append(" }");
+            errln(s.toString());
+        }
 
         equivalentScripts = RuleBasedCollator.getEquivalentReorderCodes(UScript.SHAVIAN);
         Arrays.sort(equivalentScripts);

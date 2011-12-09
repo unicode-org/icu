@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -20,6 +20,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CollationParsedRuleBuilder.InverseUCA;
 import com.ibm.icu.text.RuleBasedCollator.LeadByteConstants;
 import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -39,14 +40,15 @@ import com.ibm.icu.util.VersionInfo;
  */
 
 final class CollatorReader {
-    static char[] read(RuleBasedCollator rbc, UCAConstants ucac, LeadByteConstants leadByteConstants)
+    static char[] read(RuleBasedCollator rbc, UCAConstants ucac,
+                       LeadByteConstants leadByteConstants, Output<Integer> maxUCAContractionLength)
             throws IOException {
         InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/coll/ucadata.icu");
         BufferedInputStream b = new BufferedInputStream(i, 90000);
         CollatorReader reader = new CollatorReader(b);
-        char[] result = reader.readImp(rbc, ucac, leadByteConstants);
+        char[] ucaContractions = reader.readImp(rbc, ucac, leadByteConstants, maxUCAContractionLength);
         b.close();
-        return result;
+        return ucaContractions;
     }
 
     public static InputStream makeByteBufferInputStream(final ByteBuffer buf) {
@@ -74,9 +76,9 @@ final class CollatorReader {
         // Consider changing ICUBinary to also work with a ByteBuffer.
         CollatorReader reader = new CollatorReader(makeByteBufferInputStream(data), false);
         if (dataLength > MIN_BINARY_DATA_SIZE_) {
-            reader.readImp(rbc, null, null);
+            reader.readImp(rbc, null, null, null);
         } else {
-            reader.readHeader(rbc);
+            reader.readHeader(rbc, null);
             reader.readOptions(rbc);
             // duplicating UCA_'s data
             rbc.setWithUCATables();
@@ -157,7 +159,7 @@ final class CollatorReader {
      * @exception IOException
      *                thrown when there's a data error.
      */
-    private void readHeader(RuleBasedCollator rbc) throws IOException {
+    private void readHeader(RuleBasedCollator rbc, Output<Integer> maxUCAContractionLength) throws IOException {
         m_size_ = m_dataInputStream_.readInt();
         // all the offsets are in bytes
         // to get the address add to the header address and cast properly
@@ -216,6 +218,11 @@ final class CollatorReader {
         m_dataInputStream_.skipBytes(2);
         readcount += 2;
         int contractionUCACombosWidth = m_dataInputStream_.readByte();
+        if (maxUCAContractionLength != null) {
+            maxUCAContractionLength.value = contractionUCACombosWidth;
+        }
+        // We want to be able to output this value if it's not 0.
+        assert contractionUCACombosWidth == 0 || maxUCAContractionLength != null;
         readcount += 1;
         rbc.m_version_ = readVersion(m_dataInputStream_);
         readcount += 4;
@@ -328,10 +335,11 @@ final class CollatorReader {
      *                thrown when there's a data error.
      */
     private char[] readImp(RuleBasedCollator rbc, RuleBasedCollator.UCAConstants UCAConst,
-            RuleBasedCollator.LeadByteConstants leadByteConstants) throws IOException {
+            RuleBasedCollator.LeadByteConstants leadByteConstants,
+            Output<Integer> maxUCAContractionLength) throws IOException {
         char ucaContractions[] = null; // return result
 
-        readHeader(rbc);
+        readHeader(rbc, maxUCAContractionLength);
         // header size has been checked by readHeader
         int readcount = m_headerSize_;
         // option size has been checked by readOptions
@@ -472,6 +480,7 @@ final class CollatorReader {
             readcount += readUCAConstcount;
 
             int resultsize = (rbc.m_scriptToLeadBytes - readcount) / 2;
+            assert resultsize == m_UCAcontractionSize_ / 2;
             ucaContractions = new char[resultsize];
             for (int i = 0; i < resultsize; i++) {
                 ucaContractions[i] = m_dataInputStream_.readChar();

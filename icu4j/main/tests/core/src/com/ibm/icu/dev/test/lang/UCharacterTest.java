@@ -46,7 +46,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.0.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.1.0.0");
 
     // constructor ===================================================
 
@@ -860,10 +860,13 @@ public final class UCharacterTest extends TestFmwk
                 if (upper.length() > 0) {
                     tempchar = Integer.parseInt(upper, 16);
                 }
-                if (UCharacter.toUpperCase(ch) != tempchar) {
+                int resultCp = UCharacter.toUpperCase(ch);
+                if (resultCp != tempchar) {
                     errln("FAIL \\u" + Utility.hex(ch, 4)
                             + " expected uppercase \\u"
-                            + Utility.hex(tempchar, 4));
+                            + Utility.hex(tempchar, 4)
+                            + " but got \\u"
+                            + Utility.hex(resultCp, 4));
                     break;
                 }
 
@@ -1483,12 +1486,13 @@ public final class UCharacterTest extends TestFmwk
                         {0xe0041, UCharacterCategory.FORMAT},
                         {0xeffff, UCharacterCategory.UNASSIGNED}};
 
-        // default Bidi classes for unassigned code points
+        // default Bidi classes for unassigned code points, from the DerivedBidiClass.txt header
         int defaultBidi[][]={
             { 0x0590, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x0600, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
-            { 0x0900, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x08A0, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x0900, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
             { 0xFB1D, UCharacterDirection.LEFT_TO_RIGHT },
             { 0xFB50, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xFE00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
@@ -1497,6 +1501,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x10800, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x11000, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x1E800, UCharacterDirection.LEFT_TO_RIGHT },  /* new default-R range in Unicode 5.2: U+1E800 - U+1EFFF */
+            { 0x1EE00, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x1EF00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+1EE00..U+1EEFF from R to AL */
             { 0x1F000, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x110000, UCharacterDirection.LEFT_TO_RIGHT }
         };
@@ -1847,7 +1853,7 @@ public final class UCharacterTest extends TestFmwk
             { 0x05ed, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.DIR_NON_SPACING_MARK }, /* Nko, new in Unicode 5.0 */
             { 0x07fe, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT }, /* unassigned R */
-            { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x089f, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xfb37, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xfb42, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x10806, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
@@ -2042,6 +2048,10 @@ public final class UCharacterTest extends TestFmwk
 
             { -1, 0x520, 0 }, /* version break for Unicode 5.2 */
 
+            /* unassigned code points in new default Bidi R blocks */
+            { 0x1ede4, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x1efe4, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+
             /* test some script codes >127 */
             { 0xa6e6,  UProperty.SCRIPT, UScript.BAMUM },
             { 0xa4d0,  UProperty.SCRIPT, UScript.LISU },
@@ -2051,6 +2061,12 @@ public final class UCharacterTest extends TestFmwk
 
             /* value changed in Unicode 6.0 */
             { 0x06C3, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.TEH_MARBUTA_GOAL },
+
+            { -1, 0x610, 0 }, /* version break for Unicode 6.1 */
+
+            /* unassigned code points in new/changed default Bidi AL blocks */
+            { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x1eee4, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
 
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },

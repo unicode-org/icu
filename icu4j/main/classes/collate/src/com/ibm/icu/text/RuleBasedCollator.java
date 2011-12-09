@@ -31,6 +31,7 @@ import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -1952,6 +1953,7 @@ public final class RuleBasedCollator extends Collator {
      * Table for UCA and builder use
      */
     static final char UCA_CONTRACTIONS_[];
+    static final int MAX_UCA_CONTRACTION_LENGTH;
 
     private static boolean UCA_INIT_COMPLETE;
 
@@ -1980,6 +1982,7 @@ public final class RuleBasedCollator extends Collator {
         UCAConstants iUCA_CONSTANTS_ = null;
         LeadByteConstants iLEADBYTE_CONSTANTS = null;
         char iUCA_CONTRACTIONS_[] = null;
+        Output<Integer> maxUCAContractionLength = new Output<Integer>();
         ImplicitCEGenerator iimpCEGen_ = null;
         try {
             // !!! note what's going on here...
@@ -1990,7 +1993,7 @@ public final class RuleBasedCollator extends Collator {
             iUCA_ = new RuleBasedCollator();
             iUCA_CONSTANTS_ = new UCAConstants();
             iLEADBYTE_CONSTANTS = new LeadByteConstants();
-            iUCA_CONTRACTIONS_ = CollatorReader.read(iUCA_, iUCA_CONSTANTS_, iLEADBYTE_CONSTANTS);
+            iUCA_CONTRACTIONS_ = CollatorReader.read(iUCA_, iUCA_CONSTANTS_, iLEADBYTE_CONSTANTS, maxUCAContractionLength);
 
             // called before doing canonical closure for the UCA.
             iimpCEGen_ = new ImplicitCEGenerator(minImplicitPrimary, maxImplicitPrimary);
@@ -2011,6 +2014,7 @@ public final class RuleBasedCollator extends Collator {
         UCA_CONSTANTS_ = iUCA_CONSTANTS_;
         LEADBYTE_CONSTANTS_ = iLEADBYTE_CONSTANTS;
         UCA_CONTRACTIONS_ = iUCA_CONTRACTIONS_;
+        MAX_UCA_CONTRACTION_LENGTH = maxUCAContractionLength.value;
         impCEGen_ = iimpCEGen_;
 
         UCA_INIT_COMPLETE = true;
