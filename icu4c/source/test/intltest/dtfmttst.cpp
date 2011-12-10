@@ -3730,17 +3730,24 @@ void DateFormatTest::TestMonthPatterns()
     };
 
     const MonthPatternItem items[] = {
-        //                                          dateString
+        // locale                     date style;           expected formats for the 3 dates above
+        // NULL=>done                 kNone=>custom
         { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("29-4-2"),                        UnicodeString("29-4bis-2"),                        UnicodeString("29-5-2") } },
         { "root@calendar=chinese",    DateFormat::kShort, { UnicodeString("29-4-2"),                        UnicodeString("29-4bis-2"),                        UnicodeString("29-5-2") } },
+        { "root@calendar=chinese",    DateFormat::kNone,  { UnicodeString("29-4-2"),                        UnicodeString("29-4bis-2"),                        UnicodeString("29-5-2") } },
+        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("29-4-2"),                        UnicodeString("29-4bis-2"),                        UnicodeString("29-5-2") } },
+        { "en@calendar=chinese",      DateFormat::kShort, { UnicodeString("29-4-2"),                        UnicodeString("29-4bis-2"),                        UnicodeString("29-5-2") } },
         { "zh@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
         { "zh@calendar=chinese",      DateFormat::kShort, { UnicodeString("29-4-2"),                        CharsToUnicodeString("29-\\u95F04-2"),             UnicodeString("29-5-2") } },
         { "zh_Hant@calendar=chinese", DateFormat::kLong,  { CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"), CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
         { "zh_Hant@calendar=chinese", DateFormat::kShort, { UnicodeString("29-4-2"),                        CharsToUnicodeString("29-\\u95F04-2"),             UnicodeString("29-5-2") } },
         { "fr@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("2 s\\u00ECyu\\u00E8 29"), CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis 29"), CharsToUnicodeString("2 w\\u01D4yu\\u00E8 29") } },
         { "fr@calendar=chinese",      DateFormat::kShort, { UnicodeString("2/4/29"),                        UnicodeString("2/4bis/29"),                        UnicodeString("2/5/29") } },
+        // terminator
         { NULL,                       DateFormat::kNone,  { UnicodeString(""), UnicodeString(""), UnicodeString("") } }
     };
+    
+    const UnicodeString customPattern("y-Ml-d"); // like old root pattern, using 'l'
 
     UErrorCode status = U_ZERO_ERROR;
     Locale rootChineseCalLocale = Locale::createFromName("root@calendar=chinese");
@@ -3753,6 +3760,13 @@ void DateFormatTest::TestMonthPatterns()
             if ( dmft != NULL ) {
                 const ChineseCalTestDate * datePtr = dates;
                 int32_t idate;
+                if (itemPtr->style == DateFormat::kNone) {
+                    // use custom pattern
+                    SimpleDateFormat* sdmft;
+                    if ((sdmft = dynamic_cast<SimpleDateFormat*>(reinterpret_cast<DateFormat*>(dmft))) != NULL) {
+                        sdmft->applyPattern(customPattern);
+                    }
+                }
                 for (idate = 0; idate < NUM_TEST_DATES; idate++, datePtr++) {
                     rootChineseCalendar->set(datePtr->year, datePtr->month-1, datePtr->day);
                     rootChineseCalendar->set(UCAL_IS_LEAP_MONTH, datePtr->isLeapMonth);
