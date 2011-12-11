@@ -1089,7 +1089,6 @@ uprv_tzname(int n)
         } else {
           daylightType = U_DAYLIGHT_NONE;
         }
-        printf("daylightType=%d\n", daylightType);
         tzid = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], daylightType, uprv_timezone());
         if (tzid != NULL) {
             return tzid;
