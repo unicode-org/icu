@@ -3791,8 +3791,10 @@ void DateFormatTest::TestMonthPatterns()
                         }
                     }
                 }
+                delete dmft;
             }
         }
+        delete rootChineseCalendar;
     }
 }
 
