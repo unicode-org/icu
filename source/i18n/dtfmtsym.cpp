@@ -396,6 +396,7 @@ void DateFormatSymbols::dispose()
     if (fStandaloneQuarters)       delete[] fStandaloneQuarters;
     if (fStandaloneShortQuarters)  delete[] fStandaloneShortQuarters;
     if (fGmtHourFormats)           delete[] fGmtHourFormats;
+    if (fLeapMonthPatterns)        delete[] fLeapMonthPatterns;
 
     disposeZoneStrings();
 }
