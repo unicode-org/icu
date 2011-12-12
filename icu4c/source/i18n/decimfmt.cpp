@@ -2649,7 +2649,7 @@ UBool DecimalFormat::matchDecimal(UChar32 symbolChar,
 UBool DecimalFormat::matchGrouping(UChar32 groupingChar,
                             UBool sawGrouping, UChar32 sawGroupingChar,
                              const UnicodeSet *sset,
-                             UChar32 decimalChar, const UnicodeSet *decimalSet,
+                             UChar32 /*decimalChar*/, const UnicodeSet *decimalSet,
                              UChar32 schar) {
     if(sawGrouping) {
         return schar==sawGroupingChar;  // previously found
