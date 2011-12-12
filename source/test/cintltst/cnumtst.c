@@ -59,7 +59,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestInt64Parse);
     TESTCASE(TestParseZero);
     TESTCASE(TestParseCurrency);
-	TESTCASE(TestCloneWithRBNF);
+    TESTCASE(TestCloneWithRBNF);
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -2026,7 +2026,7 @@ static void TestCloneWithRBNF(void) {
     unum_close(pform_cloned);
 
     if (u_strcmp(buffer,buffer_cloned)) {
-        log_err("Result from cloned formatter not identical to the original. Original: %s Cloned: %s",u_austrcpy(temp1, buffer),u_austrcpy(temp2,buffer_cloned));
+        log_data_err("Result from cloned formatter not identical to the original. Original: %s Cloned: %s - (Are you missing data?)",u_austrcpy(temp1, buffer),u_austrcpy(temp2,buffer_cloned));
     }
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */

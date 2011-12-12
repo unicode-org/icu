@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2009, International Business Machines
+ * Copyright (c) 1997-2011, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -135,7 +135,7 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
 
     DateFormatSymbols fr(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errcheckln(status, "ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
+        dataerrln("ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
         return;
     }
 

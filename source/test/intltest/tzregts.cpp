@@ -147,7 +147,7 @@ void TimeZoneRegressionTest:: Test4073215()
 
     SimpleDateFormat sdf((UnicodeString)"E d MMM yyyy G HH:mm", status); 
     if(U_FAILURE(status)) {
-      errcheckln(status, "Error creating date format %s", u_errorName(status));
+      dataerrln("Error creating date format %s", u_errorName(status));
       return;
     }
     sdf.setCalendar(cal); 
