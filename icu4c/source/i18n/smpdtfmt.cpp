@@ -1926,10 +1926,12 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     }
     
     if (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount) {
-        UErrorCode nlmfStatus = U_ZERO_ERROR;
-        numericLeapMonthFormatter = new MessageFormat(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternNumeric], fLocale, nlmfStatus);
-        if (U_FAILURE(nlmfStatus)) {
-            numericLeapMonthFormatter = NULL;
+        numericLeapMonthFormatter = new MessageFormat(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternNumeric], fLocale, status);
+        if (numericLeapMonthFormatter == NULL) {
+             status = U_MEMORY_ALLOCATION_ERROR;
+             goto ExitParse;
+        } else if (U_FAILURE(status)) {
+             goto ExitParse; // this will delete numericLeapMonthFormatter
         }
     }
 
