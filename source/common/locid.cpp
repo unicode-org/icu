@@ -510,6 +510,8 @@ Locale::operator==( const   Locale& other) const
     return (uprv_strcmp(other.fullName, fullName) == 0);
 }
 
+#define ISASCIIALPHA(c) ((c) >= 'a' && (c) <= 'z' || (c) >= 'A' && (c) <= 'Z')
+
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID, UBool canonicalize)
 {
@@ -601,9 +603,9 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             uprv_memcpy(language, fullName, fieldLen[0]);
             language[fieldLen[0]] = 0;
         }
-        if (fieldLen[1] == 4 && uprv_isalpha(field[1][0]) &&
-                uprv_isalpha(field[1][1]) && uprv_isalpha(field[1][2]) &&
-                uprv_isalpha(field[1][3])) {
+        if (fieldLen[1] == 4 && ISASCIIALPHA(field[1][0]) &&
+                ISASCIIALPHA(field[1][1]) && ISASCIIALPHA(field[1][2]) &&
+                ISASCIIALPHA(field[1][3])) {
             /* We have at least a script */
             uprv_memcpy(script, field[1], fieldLen[1]);
             script[fieldLen[1]] = 0;
