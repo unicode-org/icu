@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and         *
+* Copyright (C) 2007-2011, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -193,7 +193,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
 
     SimpleDateFormat df(UnicodeString("yyyy-MM-dd HH:mm:ss"), status);
     if (U_FAILURE(status)) {
-        errcheckln(status, "Failed to initialize a SimpleDateFormat - %s", u_errorName(status));
+        dataerrln("Failed to initialize a SimpleDateFormat - %s", u_errorName(status));
     }
     df.setTimeZone(*utc);
     UnicodeString dateStr;

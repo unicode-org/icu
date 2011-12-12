@@ -1373,7 +1373,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     Calendar *cal=Calendar::createInstance(Locale::getGermany(), status);
     if (failure(status, "Calendar::createInstance", TRUE)) return;
     SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::getGermany(), status);
-    if (U_FAILURE(status)) { errcheckln(status, "Couldn't create SimpleDateFormat - %s", u_errorName(status)); return; }
+    if (U_FAILURE(status)) { dataerrln("Couldn't create SimpleDateFormat - %s", u_errorName(status)); return; }
 
     // ICU no longer use localized date-time pattern characters by default.
     // So we set pattern chars using 'J' instead of 'Y'.

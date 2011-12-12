@@ -353,8 +353,8 @@ void DateFormatTest::TestFieldPosition() {
 
     // Verify data
     DateFormatSymbols rootSyms(Locale(""), ec);
-    assertSuccess("DateFormatSymbols", ec);
     if (U_FAILURE(ec)) {
+        dataerrln("Unable to create DateFormatSymbols - %s", u_errorName(ec));
         return;
     }
 
@@ -1108,7 +1108,10 @@ DateFormatTest::TestDateFormatZone146()
 
             for (int32_t i=0; i<DATA_length; i+=3) {
                 DateFormat *fmt = new SimpleDateFormat(DATA[i+2], Locale::getEnglish(), status);
-                if(failure(status, "new SimpleDateFormat")) break;
+                if (U_FAILURE(status)) {
+                    dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+                    break;
+                }
                 fmt->setCalendar(*greenwichcalendar);
                 UnicodeString result;
                 result = fmt->format(greenwichdate, result);
@@ -3643,7 +3646,7 @@ void DateFormatTest::TestStandAloneGMTParse() {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdf = new SimpleDateFormat("ZZZZ", Locale(""), status);
     
-    if (!failure(status, "new SimpleDateFormat")) {
+    if (U_SUCCESS(status)) {
 
         UnicodeString inText("GMT$$$");
         for (int32_t i = 0; i < 10; i++) {
@@ -3655,6 +3658,8 @@ void DateFormatTest::TestStandAloneGMTParse() {
         }
 
         delete sdf;
+    } else {
+        dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
     }
 }
 

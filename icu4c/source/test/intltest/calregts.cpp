@@ -1409,7 +1409,11 @@ void CalendarRegressionTest::test4125881()
       return;
     }
     DateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"),status);
-    if(!assertSuccess("trying to construct", status))return;
+    if(U_FAILURE(status)) {
+      dataerrln("Error creating SimpleDateFormat - %s", u_errorName(status));
+      delete cal;
+      return;
+    }
     cal->clear();
     for (int32_t y=-20; y<=10; ++y) {
         cal->set(UCAL_ERA, y < 1 ? GregorianCalendar::BC : GregorianCalendar::AD);
@@ -1439,7 +1443,11 @@ void CalendarRegressionTest::test4125892() {
       return;
     }
     DateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"),status);
-    if(!assertSuccess("trying to construct", status))return;
+    if(U_FAILURE(status)) {
+      dataerrln("Error creating SimpleDateFormat - %s", u_errorName(status));
+      delete cal;
+      return;
+    }
     cal->clear();
     cal->set(UCAL_ERA, GregorianCalendar::BC);
     cal->set(UCAL_YEAR, 81); // 81 BC is a leap year (proleptically)
@@ -2233,7 +2241,7 @@ void CalendarRegressionTest::TestJ438(void) {
     SimpleDateFormat fmt(UnicodeString("MMM dd yyyy",""), ec);
     fmt.setCalendar(cal);
     UnicodeString s, t, u;
-    if (!failure(ec, "setup")) {
+    if (U_SUCCESS(ec)) {
         for (i=0; i<DATA_length; i+=6) {
             int32_t y1 = DATA[i];
             int32_t m1 = DATA[i+1];
@@ -2310,6 +2318,8 @@ void CalendarRegressionTest::TestJ438(void) {
                       fmt.format(date22, t.remove()));
             }
         }
+    } else {
+        dataerrln("Error creating SimpleDateFormat - %s", u_errorName(ec));
     }
     delete pcal;
 }

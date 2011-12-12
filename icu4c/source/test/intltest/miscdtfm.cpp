@@ -159,7 +159,10 @@ DateFormatMiscTests::test4099975()
     {
         UErrorCode status = U_ZERO_ERROR;
         DateFormatSymbols* symbols = new DateFormatSymbols(Locale::getUS(), status);
-        if(failure(status, "new DateFormatSymbols")) return;
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create DateFormatSymbols - %s", u_errorName(status));
+            return;	
+        }
         SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), *symbols, status);
         if(failure(status, "new SimpleDateFormat")) return;
         UnicodeString format0;
@@ -324,7 +327,7 @@ DateFormatMiscTests::test4117335()
     UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::getJapan(), status);
     if(U_FAILURE(status)) {
-      errcheckln(status, "Failure creating DateFormatSymbols, %s", u_errorName(status));
+      dataerrln("Failure creating DateFormatSymbols, %s", u_errorName(status));
       delete symbols;
       return;
     }
