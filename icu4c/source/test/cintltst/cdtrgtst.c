@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -163,7 +163,7 @@ void Test4056591()
     def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, NULL, 0, pat, u_strlen(pat), &status);
     if(U_FAILURE(status))
     {
-        log_err_status(status, "FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
+        log_data_err("FAIL: error in creating the dateformat using u_openPattern(): %s - (Are you missing data?)\n", myErrorName(status));
         return;
     }
     start = 1800;

@@ -116,7 +116,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
             SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
             if (U_FAILURE(status)) {
-                errcheckln(status, (UnicodeString)"new SimpleDateFormat failed for pattern " +
+                dataerrln((UnicodeString)"new SimpleDateFormat failed for pattern " +
                     PATTERNS[patidx] + " for locale " + LOCALES[locidx].getName() + " - " + u_errorName(status));
                 status = U_ZERO_ERROR;
                 continue;
