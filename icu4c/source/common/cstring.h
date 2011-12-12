@@ -41,8 +41,6 @@
 #define uprv_strstr(s, c) U_STANDARD_CPP_NAMESPACE strstr(s, c)
 #define uprv_strrchr(s, c) U_STANDARD_CPP_NAMESPACE strrchr(s, c)
 
-#define uprv_isalpha(c) U_STANDARD_CPP_NAMESPACE isalpha(c)
-
 U_CAPI char U_EXPORT2
 uprv_toupper(char c);
 
