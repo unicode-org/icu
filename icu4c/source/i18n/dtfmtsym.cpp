@@ -1331,21 +1331,25 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
        narrowEras = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
     }
 
-    UResourceBundle *monthPatterns = calData.getByKey(gMonthPatternsTag, status);
-    if (U_SUCCESS(status) && monthPatterns != NULL) {
+    UErrorCode monthPatternStatus = U_ZERO_ERROR;
+    UResourceBundle *monthPatterns = calData.getByKey(gMonthPatternsTag, monthPatternStatus);
+    if (U_SUCCESS(monthPatternStatus) && monthPatterns != NULL) {
         fLeapMonthPatterns = newUnicodeStringArray(kMonthPatternsCount);
         if (fLeapMonthPatterns) {
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatWide, calData.getByKey2(gMonthPatternsTag, gNamesWideTag, status), status);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatAbbrev, calData.getByKey2(gMonthPatternsTag, gNamesAbbrTag, status), status);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatNarrow, calData.getByKey2(gMonthPatternsTag, gNamesNarrowTag, status), status);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneWide, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesWideTag, status), status);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneAbbrev, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesAbbrTag, status), status);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneNarrow, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesNarrowTag, status), status);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternNumeric, calData.getByKey3(gMonthPatternsTag, gNamesNumericTag, gNamesAllTag, status), status);
-            fLeapMonthPatternsCount = kMonthPatternsCount;
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatWide, calData.getByKey2(gMonthPatternsTag, gNamesWideTag, monthPatternStatus), monthPatternStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatAbbrev, calData.getByKey2(gMonthPatternsTag, gNamesAbbrTag, monthPatternStatus), monthPatternStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatNarrow, calData.getByKey2(gMonthPatternsTag, gNamesNarrowTag, monthPatternStatus), monthPatternStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneWide, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesWideTag, monthPatternStatus), monthPatternStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneAbbrev, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesAbbrTag, monthPatternStatus), monthPatternStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneNarrow, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesNarrowTag, monthPatternStatus), monthPatternStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternNumeric, calData.getByKey3(gMonthPatternsTag, gNamesNumericTag, gNamesAllTag, monthPatternStatus), monthPatternStatus);
+            if (U_SUCCESS(monthPatternStatus)) {
+                fLeapMonthPatternsCount = kMonthPatternsCount;
+            } else {
+                delete[] fLeapMonthPatterns;
+                fLeapMonthPatterns = NULL;
+            }
         }
-    } else {
-        status = U_ZERO_ERROR;
     }
 
     UResourceBundle *lsweekdaysData = NULL; // Data closed by calData
