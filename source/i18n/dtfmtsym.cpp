@@ -335,6 +335,7 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     assignArray(fShortQuarters, fShortQuartersCount, other.fShortQuarters, other.fShortQuartersCount);
     assignArray(fStandaloneQuarters, fStandaloneQuartersCount, other.fStandaloneQuarters, other.fStandaloneQuartersCount);
     assignArray(fStandaloneShortQuarters, fStandaloneShortQuartersCount, other.fStandaloneShortQuarters, other.fStandaloneShortQuartersCount);
+    assignArray(fLeapMonthPatterns, fLeapMonthPatternsCount, other.fLeapMonthPatterns, other.fLeapMonthPatternsCount);
     fGmtZero = other.fGmtZero;
     fGmtFormat = other.fGmtFormat;
     assignArray(fGmtHourFormats, fGmtHourFormatsCount, other.fGmtHourFormats, other.fGmtHourFormatsCount);
@@ -395,8 +396,8 @@ void DateFormatSymbols::dispose()
     if (fShortQuarters)            delete[] fShortQuarters;
     if (fStandaloneQuarters)       delete[] fStandaloneQuarters;
     if (fStandaloneShortQuarters)  delete[] fStandaloneShortQuarters;
-    if (fGmtHourFormats)           delete[] fGmtHourFormats;
     if (fLeapMonthPatterns)        delete[] fLeapMonthPatterns;
+    if (fGmtHourFormats)           delete[] fGmtHourFormats;
 
     disposeZoneStrings();
 }
@@ -463,6 +464,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fShortQuartersCount == other.fShortQuartersCount &&
         fStandaloneQuartersCount == other.fStandaloneQuartersCount &&
         fStandaloneShortQuartersCount == other.fStandaloneShortQuartersCount &&
+        fLeapMonthPatternsCount == other.fLeapMonthPatternsCount &&
         fGmtHourFormatsCount == other.fGmtHourFormatsCount &&
         fGmtZero == other.fGmtZero &&
         fGmtFormat == other.fGmtFormat)
@@ -488,6 +490,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             arrayCompare(fShortQuarters, other.fShortQuarters, fShortQuartersCount) &&
             arrayCompare(fStandaloneQuarters, other.fStandaloneQuarters, fStandaloneQuartersCount) &&
             arrayCompare(fStandaloneShortQuarters, other.fStandaloneShortQuarters, fStandaloneShortQuartersCount) &&
+            arrayCompare(fLeapMonthPatterns, other.fLeapMonthPatterns, fLeapMonthPatternsCount) &&
             arrayCompare(fGmtHourFormats, other.fGmtHourFormats, fGmtHourFormatsCount))
         {
             // Compare the contents of fZoneStrings
