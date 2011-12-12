@@ -1248,7 +1248,7 @@ ulocimp_getLanguage(const char *localeID,
     return i;
 }
 
-#define ISASCIIALPHA(c) ((c) >= 'a' && (c) <= 'z' || (c) >= 'A' && (c) <= 'Z')
+#define ISASCIIALPHA(c) (((c) >= 'a' && (c) <= 'z' || (c) >= 'A' && (c) <= 'Z'))
 
 U_CFUNC int32_t
 ulocimp_getScript(const char *localeID,
