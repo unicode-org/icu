@@ -2676,6 +2676,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if (args != NULL && argCount == 1 && pos.getIndex() > parseStart && args[0].isNumeric()) {
                 parsedNumericLeapMonth = TRUE;
                 number.setLong(args[0].getLong());
+                delete[] args;
             } else {
                 pos.setIndex(parseStart);
             }
