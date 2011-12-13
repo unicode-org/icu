@@ -200,5 +200,5 @@ case "${FILE}" in
 esac
 
 echo "# ${COMP}" -o "${OUT}" "${FILE}" "${XTRA_OPTS}"
-( ${COMP} ${SRC_OPTS} -o "${OUT}" "${FILE}" "${XTRA_OPTS}" || (rm -f "${OUT}" ; exit 1) )  && ( echo "# ${INVOKE} ./${OUT}" ; "${SHELL}" -c "${INVOKE} ./${OUT}" "$@")
+( ${COMP} ${SRC_OPTS} -o "${OUT}" "${FILE}" ${XTRA_OPTS} || (rm -f "${OUT}" ; exit 1) )  && ( echo "# ${INVOKE} ./${OUT}" ; "${SHELL}" -c "${INVOKE} ./${OUT}" "$@")
 
