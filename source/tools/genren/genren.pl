@@ -105,6 +105,10 @@ print HEADER <<"EndOfHeaderComment";
    Normally (if utypes.h or umachine.h was included first) this will not be necessary as it will already be defined.
  */
 #ifndef U_ICU_ENTRY_POINT_RENAME
+#include "unicode/uconfig.h"
+#endif
+
+#ifndef U_ICU_ENTRY_POINT_RENAME
 #include "unicode/umachine.h"
 #endif
 
