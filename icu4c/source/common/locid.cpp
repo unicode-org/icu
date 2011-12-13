@@ -510,7 +510,7 @@ Locale::operator==( const   Locale& other) const
     return (uprv_strcmp(other.fullName, fullName) == 0);
 }
 
-#define ISASCIIALPHA(c) (((c) >= 'a' && (c) <= 'z' || (c) >= 'A' && (c) <= 'Z'))
+#define ISASCIIALPHA(c) (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z'))
 
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID, UBool canonicalize)
