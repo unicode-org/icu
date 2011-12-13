@@ -48,7 +48,8 @@ import com.ibm.icu.util.ULocale.Category;
  * </pre>
  * </blockquote>
  * You can use the {@link #getAvailableIDs()} method to iterate through
- * all the supported time zone IDs. You can then choose a
+ * all the supported time zone IDs, or getCanonicalID method to check
+ * if a time zone ID is supported or not. You can then choose a
  * supported ID to get a <code>TimeZone</code>.
  * If the time zone you want is not represented by one of the
  * supported IDs, then you can create a custom time zone ID with
@@ -62,10 +63,12 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * For example, you might specify GMT+14:00 as a custom
  * time zone ID.  The <code>TimeZone</code> that is returned
- * when you specify a custom time zone ID does not include
- * daylight savings time.  If a custom time zone ID is used,
- * the meaning of what a positive offset is should also be specified.
- * In addition, <code>getCanonicalID</code> can also be used to
+ * when you specify a custom time zone ID uses the specified
+ * offset from GMT(=UTC) and does not observe daylight saving
+ * time. For example, you might specify GMT+14:00 as a custom
+ * time zone ID to create a TimeZone representing 14 hours ahead
+ * of GMT (with no daylight saving time). In addition, 
+ * <code>getCanonicalID</code> can also be used to
  * normalize a custom time zone ID.
  *
  * <p>For compatibility with JDK 1.1.x, some other three-letter time zone IDs
