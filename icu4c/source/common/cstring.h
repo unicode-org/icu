@@ -41,6 +41,14 @@
 #define uprv_strstr(s, c) U_STANDARD_CPP_NAMESPACE strstr(s, c)
 #define uprv_strrchr(s, c) U_STANDARD_CPP_NAMESPACE strrchr(s, c)
 
+/**
+ * Is c an ASCII-repertoire letter a-z or A-Z?
+ * Note: The implementation is specific to whether ICU is compiled for
+ * an ASCII-based or EBCDIC-based machine. There just does not seem to be a better name for this.
+ */
+U_CAPI UBool U_EXPORT2
+uprv_isASCIILetter(char c);
+
 U_CAPI char U_EXPORT2
 uprv_toupper(char c);
 
