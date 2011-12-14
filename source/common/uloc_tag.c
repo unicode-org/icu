@@ -59,7 +59,7 @@ typedef struct ULanguageTag {
 #define LOCALE_KEYWORD_SEP ';'
 #define LOCALE_KEY_TYPE_SEP '='
 
-#define ISALPHA(c) (((c)>='A' && (c)<='Z') || ((c)>='a' && (c)<='z'))
+#define ISALPHA(c) uprv_isASCIILetter(c)
 #define ISNUMERIC(c) ((c)>='0' && (c)<='9')
 
 static const char* EMPTY = "";
