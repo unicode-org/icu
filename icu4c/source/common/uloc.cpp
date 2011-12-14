@@ -1248,8 +1248,6 @@ ulocimp_getLanguage(const char *localeID,
     return i;
 }
 
-#define ISASCIIALPHA(c) (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z'))
-
 U_CFUNC int32_t
 ulocimp_getScript(const char *localeID,
                   char *script, int32_t scriptCapacity,
@@ -1263,7 +1261,7 @@ ulocimp_getScript(const char *localeID,
 
     /* copy the second item as far as possible and count its length */
     while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])
-            && ISASCIIALPHA(localeID[idLen])) {
+            && uprv_isASCIILetter(localeID[idLen])) {
         idLen++;
     }
 
