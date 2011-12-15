@@ -3302,7 +3302,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * <p>A "double" return type is necessary because some numeric values are
      * fractions, negative, or too large for int.</p>
      * <p>For characters without any numeric values in the Unicode Character
-     * Database, this function will return NO_NUMERIC_VALUE.</p>
+     * Database, this function will return NO_NUMERIC_VALUE.
+     * Note: This is different from the Unicode Standard which specifies NaN as the default value.</p>
      * <p><em>API Change:</em> In release 2.2 and prior, this API has a
      * return type int and returns -1 when the argument ch does not have a
      * corresponding numeric value. This has been changed to synch with ICU4C
