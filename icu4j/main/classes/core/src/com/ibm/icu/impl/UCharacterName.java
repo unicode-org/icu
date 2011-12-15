@@ -144,10 +144,6 @@ public final class UCharacterName
                                   UCharacterNameChoice.UNICODE_CHAR_NAME);
             if (result == -1) {
                 result = getGroupChar(upperCaseName,
-                                      UCharacterNameChoice.UNICODE_10_CHAR_NAME);
-            }
-            if (result == -1) {
-                result = getGroupChar(upperCaseName,
                                       UCharacterNameChoice.CHAR_NAME_ALIAS);
             }
         }
@@ -319,10 +315,7 @@ public final class UCharacterName
     {
         String result = getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
         if (result == null) {
-            if (getType(ch) == UCharacterCategory.CONTROL) {
-                result = getName(ch,
-                                 UCharacterNameChoice.UNICODE_10_CHAR_NAME);
-            }
+            // TODO: Return Name_Alias/control names for control codes 0..1F & 7F..9F.
             if (result == null) {
                 result = getExtendedOr10Name(ch);
             }
@@ -364,10 +357,7 @@ public final class UCharacterName
     public String getExtendedOr10Name(int ch)
     {
         String result = null;
-        if (getType(ch) == UCharacterCategory.CONTROL) {
-            result = getName(ch,
-                             UCharacterNameChoice.UNICODE_10_CHAR_NAME);
-        }
+        // TODO: Return Name_Alias/control names for control codes 0..1F & 7F..9F.
         if (result == null) {
             int type = getType(ch);
             // Return unknown if the table of names above is not up to

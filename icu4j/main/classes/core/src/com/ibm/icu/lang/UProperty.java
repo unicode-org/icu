@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -764,9 +764,9 @@ public interface UProperty
     public static final int CASE_FOLDING = 0x4002;
 
     /**
-     * String property ISO_Comment.
+     * Deprecated string property ISO_Comment.
      * Corresponds to UCharacter.getISOComment(int).
-     * @stable ICU 2.4
+     * @deprecated ICU 49
      */
     public static final int ISO_COMMENT = 0x4003;
 
@@ -821,8 +821,10 @@ public interface UProperty
 
     /**
      * String property Unicode_1_Name.
+     * This property is of little practical value.
+     * Beginning with ICU 49, ICU APIs return null or an empty string for this property.
      * Corresponds to UCharacter.getName1_0(int).
-     * @stable ICU 2.4
+     * @deprecated ICU 49
      */
     public static final int UNICODE_1_NAME = 0x400B;
 

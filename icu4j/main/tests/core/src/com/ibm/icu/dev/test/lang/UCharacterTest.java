@@ -986,7 +986,6 @@ public final class UCharacterTest extends TestFmwk
             if (length < 83) { // Unicode 3.2 max char name length
                errln("getMaxCharNameLength()=" + length + " is too short");
             }
-            // ### TODO same tests for max ISO comment length as for max name length
 
             int c[] = {0x0061,                //LATIN SMALL LETTER A
                        0x000284,              //LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK
@@ -1014,9 +1013,9 @@ public final class UCharacterTest extends TestFmwk
                              "",
                              "CJK UNIFIED IDEOGRAPH-23456"
                              };
-            String oldname[] = {"", "LATIN SMALL LETTER DOTLESS J BAR HOOK", "",
+            String oldname[] = {"", "", "",
                             "",
-                            "", "", "", "", "FULLWIDTH OPENING PARENTHESIS", "",
+                            "", "", "", "", "", "",
                             "", ""};
             String extendedname[] = {"LATIN SMALL LETTER A",
                                  "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
