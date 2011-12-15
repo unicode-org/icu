@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,10 +17,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.VersionInfo;
@@ -106,6 +109,8 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             case isCased:
                 return String.valueOf(UCharacter.toLowerCase(Locale.ENGLISH, UTF16.valueOf(codePoint)).equals(
                         UTF16.valueOf(codePoint)));
+            case UProperty.SCRIPT_EXTENSIONS: 
+                return getStringScriptExtensions(codePoint);
             }
             if (propEnum < UProperty.INT_LIMIT) {
                 int enumValue = -1;
@@ -342,6 +347,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             case UProperty.ISO_COMMENT:
             case UProperty.NAME:
             case UProperty.UNICODE_1_NAME:
+            case UProperty.SCRIPT_EXTENSIONS:
                 return UnicodeProperty.MISC;
             case UProperty.BIDI_MIRRORING_GLYPH:
             case UProperty.CASE_FOLDING:
@@ -445,6 +451,25 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
         }
     }
 
+    static BitSet BITSET = new BitSet();
+    /**
+     * @param codePoint
+     * @return
+     */
+    public static synchronized String getStringScriptExtensions(int codePoint) {
+        UScript.getScriptExtensions(codePoint, BITSET);
+        if (BITSET.cardinality() == 0) {
+            int scriptCode = UScript.getScript(codePoint);
+            return UScript.getName(scriptCode);
+        }
+        TreeMap<String,String> sorted = new TreeMap<String,String>();
+        for (int scriptCode = BITSET.nextSetBit(0); scriptCode >= 0; scriptCode = BITSET.nextSetBit(scriptCode+1)) {
+            // sort by short form
+            sorted.put(UScript.getShortName(scriptCode), UScript.getName(scriptCode));
+        }
+        return CollectionUtilities.join(sorted.values(), " ");
+    }
+
     private static ICUPropertyFactory singleton = null;
 
     public static synchronized ICUPropertyFactory make() {
@@ -460,6 +485,8 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 {UProperty.INT_START,       UProperty.INT_LIMIT},
                 {UProperty.DOUBLE_START,    UProperty.DOUBLE_LIMIT},
                 {UProperty.STRING_START,    UProperty.STRING_LIMIT},
+                {UProperty.OTHER_PROPERTY_START, UProperty.OTHER_PROPERTY_LIMIT},
+
         };
         for (int i = 0; i < ranges.length; ++i) {
             for (int j = ranges[i][0]; j < ranges[i][1]; ++j) {
