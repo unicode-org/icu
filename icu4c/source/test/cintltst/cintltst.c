@@ -692,9 +692,15 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
  *--------------------------------------------------------------------
  */
 
-U_CFUNC UBool isICUVersionAtLeast(const UVersionInfo x) {
-    UVersionInfo v;
-    u_getVersion(v);
-    return (uprv_memcmp(v, x, U_MAX_VERSION_LENGTH) >= 0);
+U_CFUNC UBool isICUVersionBefore(int major, int minor, int milli) {
+    UVersionInfo iv;
+    UVersionInfo ov = { (uint8_t)major, (uint8_t)minor, (uint8_t)milli, 0 };
+    u_getVersion(iv);
+    return uprv_memcmp(iv, ov, U_MAX_VERSION_LENGTH) < 0;
 }
+
+U_CFUNC UBool isICUVersionAtLeast(int major, int minor, int milli) {
+    return !isICUVersionBefore(major, minor, milli);
+}
+
 #endif

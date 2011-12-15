@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -105,10 +105,13 @@ U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
                            const char* actualString);
 
 /**
- * Time bomb - allows temporary behavior that expires at a given
- *             release
- *
+ * Returns true if u_getVersion() < major.minor.milli.
  */
-U_CFUNC UBool isICUVersionAtLeast(const UVersionInfo x);
+U_CFUNC UBool isICUVersionBefore(int major, int minor, int milli);
+
+/**
+ * Returns true if u_getVersion() >= major.minor.milli.
+ */
+U_CFUNC UBool isICUVersionAtLeast(int major, int minor, int milli);
 
 #endif

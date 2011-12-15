@@ -175,10 +175,30 @@ public:
     static float random();
 
     /**
-     * Ascertain the version of ICU. Useful for 
-     * time bomb testing
+     * Returns true if u_getVersion() < major.minor.
      */
-    UBool isICUVersionAtLeast(const UVersionInfo x);
+    static UBool isICUVersionBefore(int major, int minor) {
+        return isICUVersionBefore(major, minor, 0);
+    }
+
+    /**
+     * Returns true if u_getVersion() < major.minor.milli.
+     */
+    static UBool isICUVersionBefore(int major, int minor, int milli);
+
+    /**
+     * Returns true if u_getVersion() >= major.minor.
+     */
+    static UBool isICUVersionAtLeast(int major, int minor) {
+        return isICUVersionAtLeast(major, minor, 0);
+    }
+
+    /**
+     * Returns true if u_getVersion() >= major.minor.milli.
+     */
+    static UBool isICUVersionAtLeast(int major, int minor, int milli) {
+        return !isICUVersionBefore(major, minor, milli);
+    }
 
     enum { kMaxProps = 16 };
 
