@@ -3366,16 +3366,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     return this;
                 }
                 case UProperty.NAME:
-                case UProperty.UNICODE_1_NAME:
                 {
                     // Must munge name, since
                     // UCharacter.charFromName() does not do
                     // 'loose' matching.
                     String buf = mungeCharName(valueAlias);
-                    int ch =
-                        (p == UProperty.NAME) ?
-                            UCharacter.getCharFromExtendedName(buf) :
-                            UCharacter.getCharFromName1_0(buf);
+                    int ch = UCharacter.getCharFromExtendedName(buf);
                     if (ch == -1) {
                         throw new IllegalArgumentException("Invalid character name");
                     }
@@ -3383,6 +3379,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     add_unchecked(ch);
                     return this;
                 }
+                case UProperty.UNICODE_1_NAME:
+                    // ICU 49 deprecates the Unicode_1_Name property APIs.
+                    throw new IllegalArgumentException("Unicode_1_Name (na1) not supported");
                 case UProperty.AGE:
                 {
                     // Must munge name, since

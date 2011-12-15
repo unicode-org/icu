@@ -4049,20 +4049,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Returns the earlier version 1.0 Unicode name of the argument code
-     * point, or null if the character is unassigned or outside the range
-     * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
-     * <br>
-     * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * {@icu} Returns null.
+     * Used to return the Unicode_1_Name property value which was of little practical value.
      * @param ch the code point for which to get the name
-     * @return version 1.0 Unicode name
-     * @stable ICU 2.1
+     * @return null
+     * @deprecated ICU 49
      */
     public static String getName1_0(int ch)
     {
-        return UCharacterName.INSTANCE.getName(ch,
-                             UCharacterNameChoice.UNICODE_10_CHAR_NAME);
+        return null;
     }
 
     /**
@@ -4075,7 +4070,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * <li> Most current Unicode name if there is any
      * <li> Unicode 1.0 name if there is any
      * <li> Extended name in the form of
-     *      "<codepoint_type-codepoint_hex_digits>". E.g. <noncharacter-fffe>
+     *      "&lt;codepoint_type-codepoint_hex_digits&gt;". E.g., &lt;noncharacter-fffe&gt;
      * </ul>
      * Note calling any methods related to code point names, e.g. get*Name*()
      * incurs a one-time initialisation cost to construct the name tables.
@@ -4104,28 +4099,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Returns the ISO 10646 comment for a character.
-     * The ISO 10646 comment is an informative field in the Unicode Character
-     * Database (UnicodeData.txt field 11) and is from the ISO 10646 names list.
-     *
-     * Note: Unicode 5.2 removes all ISO comment data, resulting in empty strings
-     * returned for all characters.
+     * {@icu} Returns null.
+     * Used to return the ISO 10646 comment for a character.
+     * The Unicode ISO_Comment property is deprecated and has no values.
      *
      * @param ch The code point for which to get the ISO comment.
      *           It must be the case that {@code 0 <= ch <= 0x10ffff}.
-     * @return The ISO comment, or null if there is no comment for this
-     *         character.
-     * @stable ICU 2.4
+     * @return null
+     * @deprecated ICU 49
      */
     public static String getISOComment(int ch)
     {
-        if (ch < UCharacter.MIN_VALUE || ch > UCharacter.MAX_VALUE) {
-            return null;
-        }
-
-        String result = UCharacterName.INSTANCE.getGroupName(ch,
-                                           UCharacterNameChoice.ISO_COMMENT_);
-        return result;
+        return null;
     }
 
     /**
@@ -4144,18 +4129,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} <p>Find a Unicode character by its version 1.0 Unicode name and return
-     * its code point value. All Unicode names are in uppercase.</p>
-     * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
-     * @param name Unicode 1.0 code point name whose code point is to
+     * {@icu} Returns -1.
+     * <p>Used to find a Unicode character by its version 1.0 Unicode name and return
+     * its code point value.</p>
+     * @param name Unicode 1.0 code point name whose code point is to be
      *             returned
-     * @return code point or -1 if name is not found
-     * @stable ICU 2.1
+     * @return -1
+     * @deprecated ICU 49
+     * @see #getName1_0(int)
      */
     public static int getCharFromName1_0(String name){
-        return UCharacterName.INSTANCE.getCharFromName(
-                     UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
+        return -1;
     }
 
     /**
@@ -5162,27 +5146,20 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} <p>Returns an iterator for character names, iterating over codepoints.</p>
-     * <p>This API only gets the iterator for the older 1.0 Unicode names.
-     * For modern, most up-to-date Unicode names use getNameIterator() or
-     * for extended names use getExtendedNameIterator().</p>
-     * Example of use:<br>
-     * <pre>
-     * ValueIterator iterator = UCharacter.get1_0NameIterator();
-     * ValueIterator.Element element = new ValueIterator.Element();
-     * while (iterator.next(element)) {
-     *     System.out.println("Codepoint \\u" +
-     *                        Integer.toHexString(element.codepoint) +
-     *                        " has the name " + (String)element.value);
-     * }
-     * </pre>
-     * <p>The maximal range which the name iterator iterates is from
-     * @return an iterator
-     * @stable ICU 2.6
+     * {@icu} Returns an empty iterator.
+     * <p>Used to return an iterator for the older 1.0 Unicode character names, iterating over codepoints.</p>
+     * @return an empty iterator
+     * @deprecated ICU 49
+     * @see #getName1_0(int)
      */
     public static ValueIterator getName1_0Iterator(){
-        return new UCharacterNameIterator(UCharacterName.INSTANCE,
-                      UCharacterNameChoice.UNICODE_10_CHAR_NAME);
+        return new DummyValueIterator();
+    }
+
+    private static final class DummyValueIterator implements ValueIterator {
+        public boolean next(Element element) { return false; }
+        public void reset() {}
+        public void setRange(int start, int limit) {}
     }
 
     /**

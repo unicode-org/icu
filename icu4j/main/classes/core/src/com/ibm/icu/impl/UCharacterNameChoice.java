@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -22,7 +22,7 @@ public interface UCharacterNameChoice
   // public variables =============================================
   
   static final int UNICODE_CHAR_NAME = 0;
-  static final int UNICODE_10_CHAR_NAME = 1;
+  static final int OBSOLETE_UNUSED_UNICODE_10_CHAR_NAME = 1;
   static final int EXTENDED_CHAR_NAME = 2;
   /* Corrected name from NameAliases.txt. */
   static final int CHAR_NAME_ALIAS = 3;
