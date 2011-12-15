@@ -82,7 +82,7 @@ public class RoundTripTest extends TestFmwk {
     public void init() {
         // TODO(Mark): Fix ticket #8989, transliterate U+0970.
         // Remove this method?
-        beforeICU49 = skipIfBeforeICU(49, 0, 2);  // actually tests <= 49m2 not <
+        beforeICU49 = isICUVersionBefore(49, 1);
         minusDevAbbBefore49 = beforeICU49 ? "-[\u0970]" : "";
     }
 
