@@ -70,21 +70,6 @@ uprv_ebcdictolower(char c);
 #define uprv_strtod(source, end) U_STANDARD_CPP_NAMESPACE strtod(source, end)
 #define uprv_strtoul(str, end, base) U_STANDARD_CPP_NAMESPACE strtoul(str, end, base)
 #define uprv_strtol(str, end, base) U_STANDARD_CPP_NAMESPACE strtol(str, end, base)
-#if U_PLATFORM == U_PF_WINDOWS
-#   if defined(__BORLANDC__)
-#       define uprv_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE stricmp(str1, str2)
-#       define uprv_strnicmp(str1, str2, n) U_STANDARD_CPP_NAMESPACE strnicmp(str1, str2, n)
-#   else
-#       define uprv_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE _stricmp(str1, str2)
-#       define uprv_strnicmp(str1, str2, n) U_STANDARD_CPP_NAMESPACE _strnicmp(str1, str2, n)
-#   endif
-#elif defined(POSIX) 
-#   define uprv_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE strcasecmp(str1, str2) 
-#   define uprv_strnicmp(str1, str2, n) U_STANDARD_CPP_NAMESPACE strncasecmp(str1, str2, n) 
-#else
-#   define uprv_stricmp(str1, str2) T_CString_stricmp(str1, str2)
-#   define uprv_strnicmp(str1, str2, n) T_CString_strnicmp(str1, str2, n)
-#endif
 
 /* Conversion from a digit to the character with radix base from 2-19 */
 /* May need to use U_UPPER_ORDINAL*/
@@ -119,10 +104,18 @@ T_CString_int64ToString(char *buffer, int64_t n, uint32_t radix);
 U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix);
 
+/**
+ * Case-insensitive, language-independent string comparison
+ * limited to the ASCII character repertoire.
+ */
 U_CAPI int U_EXPORT2
-T_CString_stricmp(const char *str1, const char *str2);
+uprv_stricmp(const char *str1, const char *str2);
 
+/**
+ * Case-insensitive, language-independent string comparison
+ * limited to the ASCII character repertoire.
+ */
 U_CAPI int U_EXPORT2
-T_CString_strnicmp(const char *str1, const char *str2, uint32_t n);
+uprv_strnicmp(const char *str1, const char *str2, uint32_t n);
 
 #endif /* ! CSTRING_H */

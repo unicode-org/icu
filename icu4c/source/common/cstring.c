@@ -228,9 +228,9 @@ T_CString_stringToInteger(const char *integerString, int32_t radix)
     return uprv_strtoul(integerString, &end, radix);
 
 }
-    
+
 U_CAPI int U_EXPORT2
-T_CString_stricmp(const char *str1, const char *str2) {
+uprv_stricmp(const char *str1, const char *str2) {
     if(str1==NULL) {
         if(str2==NULL) {
             return 0;
@@ -269,7 +269,7 @@ T_CString_stricmp(const char *str1, const char *str2) {
 }
 
 U_CAPI int U_EXPORT2
-T_CString_strnicmp(const char *str1, const char *str2, uint32_t n) {
+uprv_strnicmp(const char *str1, const char *str2, uint32_t n) {
     if(str1==NULL) {
         if(str2==NULL) {
             return 0;

@@ -2064,7 +2064,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
 
     /* check if the tag is grandfathered */
     for (i = 0; GRANDFATHERED[i] != NULL; i += 2) {
-        if (T_CString_stricmp(GRANDFATHERED[i], tagBuf) == 0) {
+        if (uprv_stricmp(GRANDFATHERED[i], tagBuf) == 0) {
             /* a grandfathered tag is always longer than its preferred mapping */
             int32_t newTagLength = uprv_strlen(GRANDFATHERED[i+1]);
             if (tagLen < newTagLength) {
