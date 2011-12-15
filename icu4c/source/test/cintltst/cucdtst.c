@@ -1581,12 +1581,10 @@ static const struct {
     const char *name, *oldName, *extName, *alias;
 } names[]={
     {0x0061, "LATIN SMALL LETTER A", "", "LATIN SMALL LETTER A"},
-    {0x01a2, "LATIN CAPITAL LETTER OI",
-             "LATIN CAPITAL LETTER O I",
+    {0x01a2, "LATIN CAPITAL LETTER OI", "",
              "LATIN CAPITAL LETTER OI",
              "LATIN CAPITAL LETTER GHA"},
-    {0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
-             "LATIN SMALL LETTER DOTLESS J BAR HOOK",
+    {0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", "",
              "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK" },
     {0x0fd0, "TIBETAN MARK BSKA- SHOG GI MGO RGYAN", "",
              "TIBETAN MARK BSKA- SHOG GI MGO RGYAN",
@@ -1597,7 +1595,7 @@ static const struct {
     {0xd7a3, "HANGUL SYLLABLE HIH", "", "HANGUL SYLLABLE HIH" },
     {0xd800, "", "", "<lead surrogate-D800>" },
     {0xdc00, "", "", "<trail surrogate-DC00>" },
-    {0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS", "FULLWIDTH LEFT PARENTHESIS" },
+    {0xff08, "FULLWIDTH LEFT PARENTHESIS", "", "FULLWIDTH LEFT PARENTHESIS" },
     {0xffe5, "FULLWIDTH YEN SIGN", "", "FULLWIDTH YEN SIGN" },
     {0xffff, "", "", "<noncharacter-FFFF>" },
     {0x1d0c5, "BYZANTINE MUSICAL SYMBOL FHTORA SKLIRON CHROMA VASIS", "",

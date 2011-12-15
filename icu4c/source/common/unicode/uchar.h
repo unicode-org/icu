@@ -527,8 +527,8 @@ typedef enum UProperty {
     /** String property Case_Folding.
         Corresponds to u_strFoldCase in ustring.h. @stable ICU 2.4 */
     UCHAR_CASE_FOLDING=0x4002,
-    /** String property ISO_Comment.
-        Corresponds to u_getISOComment. @stable ICU 2.4 */
+    /** Deprecated string property ISO_Comment.
+        Corresponds to u_getISOComment. @deprecated ICU 49 */
     UCHAR_ISO_COMMENT=0x4003,
     /** String property Lowercase_Mapping.
         Corresponds to u_strToLower in ustring.h. @stable ICU 2.4 */
@@ -552,7 +552,9 @@ typedef enum UProperty {
         Corresponds to u_strToTitle in ustring.h. @stable ICU 2.4 */
     UCHAR_TITLECASE_MAPPING=0x400A,
     /** String property Unicode_1_Name.
-        Corresponds to u_charName. @stable ICU 2.4 */
+        This property is of little practical value.
+        Beginning with ICU 49, ICU APIs return an empty string for this property.
+        Corresponds to u_charName(U_UNICODE_10_CHAR_NAME). @deprecated ICU 49 */
     UCHAR_UNICODE_1_NAME=0x400B,
     /** String property Uppercase_Mapping.
         Corresponds to u_strToUpper in ustring.h. @stable ICU 2.4 */
@@ -1451,10 +1453,19 @@ typedef enum UEastAsianWidth {
  * @stable ICU 2.0
  */
 typedef enum UCharNameChoice {
+    /** Unicode character name (Name property). @stable ICU 2.0 */
     U_UNICODE_CHAR_NAME,
+    /**
+     * The Unicode_1_Name property value which is of little practical value.
+     * Beginning with ICU 49, ICU APIs return an empty string for this name choice.
+     * @deprecated ICU 49
+     */
     U_UNICODE_10_CHAR_NAME,
+    /** Standard or synthetic character name. @stable ICU 2.0 */
     U_EXTENDED_CHAR_NAME,
-    U_CHAR_NAME_ALIAS,          /**< Corrected name from NameAliases.txt. @stable ICU 4.4 */
+    /** Corrected name from NameAliases.txt. @stable ICU 4.4 */
+    U_CHAR_NAME_ALIAS,
+    /** @stable ICU 2.0 */
     U_CHAR_NAME_CHOICE_COUNT
 } UCharNameChoice;
 
@@ -2584,12 +2595,9 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
            UErrorCode *pErrorCode);
 
 /**
- * Get the ISO 10646 comment for a character.
- * The ISO 10646 comment is an informative field in the Unicode Character
- * Database (UnicodeData.txt field 11) and is from the ISO 10646 names list.
- *
- * Note: Unicode 5.2 removes all ISO comment data, resulting in empty strings
- * returned for all characters.
+ * Returns an empty string.
+ * Used to return the ISO 10646 comment for a character.
+ * The Unicode ISO_Comment property is deprecated and has no values.
  *
  * @param c The character (code point) for which to get the ISO comment.
  *             It must be <code>0<=c<=0x10ffff</code>.
@@ -2600,13 +2608,9 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
  * @param pErrorCode Pointer to a UErrorCode variable;
  *        check for <code>U_SUCCESS()</code> after <code>u_getISOComment()</code>
  *        returns.
- * @return The length of the comment, or 0 if there is no comment for this character.
- *         If the destCapacity is less than or equal to the length, then the buffer
- *         contains the truncated name and the returned length indicates the full
- *         length of the name.
- *         The length does not include the zero-termination.
+ * @return 0
  *
- * @stable ICU 2.2
+ * @deprecated ICU 49
  */
 U_STABLE int32_t U_EXPORT2
 u_getISOComment(UChar32 c,
