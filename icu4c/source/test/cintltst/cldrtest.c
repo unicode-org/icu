@@ -489,7 +489,6 @@ TestLocaleStructure(void) {
     int32_t locIndex;
     UErrorCode errorCode = U_ZERO_ERROR;
     const char *currLoc, *resolvedLoc;
-    static const UVersionInfo icu48 = { 4, 8, 0, 0 };
 
     /* TODO: Compare against parent's data too. This code can't handle fallbacks that some tools do already. */
 /*    char locName[ULOC_FULLNAME_CAPACITY];
@@ -549,9 +548,7 @@ TestLocaleStructure(void) {
                 currLoc);
         }
         resolvedLoc = ures_getLocaleByType(currentLocale, ULOC_ACTUAL_LOCALE, &errorCode);
-        if ( strcmp(resolvedLoc, currLoc) != 0 && 
-            ( strcmp(currLoc,"vai_LR") != 0 || isICUVersionAtLeast(icu48))) {
-            /* Time bomb for weird case with vai_LR - needs investigation */
+        if (strcmp(resolvedLoc, currLoc) != 0) {
             /* All locales have at least a Version resource.
                If it's absolutely empty, then the previous test will fail too.*/
             log_err("Locale resolves to different locale. Is %s an alias of %s?\n",
@@ -867,7 +864,6 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
 }
 
 static void VerifyTranslation(void) {
-    static const UVersionInfo icu49 = { 49, 1, 0, 0 };
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
@@ -938,7 +934,7 @@ static void VerifyTranslation(void) {
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
-            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(icu49)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
+            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(49, 1, 0)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
               strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",

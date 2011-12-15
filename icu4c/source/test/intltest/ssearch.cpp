@@ -904,7 +904,6 @@ static char *printOrders(char *buffer, OrderList &list)
 
 void SSearchTest::offsetTest()
 {
-    static const UVersionInfo icu49 = { 49, 1, 0, 0 };
     const char *test[] = {
         // The sequence \u0FB3\u0F71\u0F71\u0F80 contains a discontiguous
         // contraction (\u0FB3\u0F71\u0F80) logically followed by \u0F71.
@@ -981,7 +980,7 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        if (!isICUVersionAtLeast(icu49) && i>=4 && i<=6) {
+        if (!isICUVersionAtLeast(49, 1) && i>=4 && i<=6) {
             continue; // timebomb until ticket #8080 is resolved
         }
         UnicodeString ts = CharsToUnicodeString(test[i]);
@@ -2342,7 +2341,6 @@ void SSearchTest::monkeyTest(char *params)
 
 void SSearchTest::bmMonkeyTest(char *params)
 {
-    static const UVersionInfo icu49 = { 49, 1, 0, 0 }; // for timebomb
     static const UChar skipChars[] = { 0x0E40, 0x0E41, 0x0E42, 0x0E43, 0x0E44, 0xAAB5, 0xAAB6, 0xAAB9, 0xAABB, 0xAABC, 0 }; // for timebomb
     // ook!
     UErrorCode status = U_ZERO_ERROR;
@@ -2448,7 +2446,7 @@ void SSearchTest::bmMonkeyTest(char *params)
             generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);
             generateTestCase(coll, monkeys, monkeyCount, suffix,  altSuffix);
             
-            if (!isICUVersionAtLeast(icu49) && skipSet->containsSome(pattern)) {
+            if (!isICUVersionAtLeast(49, 1) && skipSet->containsSome(pattern)) {
                 continue; // timebomb until ticket #8080 is resolved
             }
 
