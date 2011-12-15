@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tests
-## Copyright (c) 1999-2010, International Business Machines Corporation and
+## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -18,7 +18,7 @@ subdir = test/perf
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = collationperf charperf dicttrieperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf DateFmtPerf
+SUBDIRS = collationperf charperf dicttrieperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf DateFmtPerf howExpensiveIs
 
 # Subdirs that support 'xperf'
 XSUBDIRS = DateFmtPerf

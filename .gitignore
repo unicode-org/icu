@@ -499,6 +499,10 @@ icu4c/source/test/perf/convperf/release
 icu4c/source/test/perf/convperf/x64
 icu4c/source/test/perf/convperf/x86
 icu4c/source/test/perf/dicttrieperf/Makefile
+icu4c/source/test/perf/howExpensiveIs/*.d
+icu4c/source/test/perf/howExpensiveIs/*.xml
+icu4c/source/test/perf/howExpensiveIs/Makefile
+icu4c/source/test/perf/howExpensiveIs/howExpensiveIs
 icu4c/source/test/perf/ipch
 icu4c/source/test/perf/normperf/*.d
 icu4c/source/test/perf/normperf/*.o

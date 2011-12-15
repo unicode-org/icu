@@ -167,18 +167,18 @@ typedef void FuntionToBeTimed(void* param);
         LARGE_INTEGER placeHolder;
     };      
         
-    int uprv_initFrequency(UTimer* timer)
+static    int uprv_initFrequency(UTimer* timer)
     {
         return QueryPerformanceFrequency(&timer->placeHolder);
     }
-    void uprv_start(UTimer* timer)
+static    void uprv_start(UTimer* timer)
     {
         QueryPerformanceCounter(&timer->start);
     }
-    double uprv_delta(UTimer* timer1, UTimer* timer2){
+static    double uprv_delta(UTimer* timer1, UTimer* timer2){
         return ((double)(timer2->start.QuadPart - timer1->start.QuadPart))/((double)timer1->placeHolder.QuadPart);
     }
-    UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
+static    UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
         return (timer1->placeHolder.QuadPart == timer2->placeHolder.QuadPart);
     }
 
@@ -189,22 +189,22 @@ typedef void FuntionToBeTimed(void* param);
         struct timeval placeHolder;
     };
     
-    int32_t uprv_initFrequency(UTimer* /*timer*/)
+static    int32_t uprv_initFrequency(UTimer* /*timer*/)
     {
         return 0;
     }
-    void uprv_start(UTimer* timer)
+static    void uprv_start(UTimer* timer)
     {
         gettimeofday(&timer->start, 0);
     }
-    double uprv_delta(UTimer* timer1, UTimer* timer2){
+static    double uprv_delta(UTimer* timer1, UTimer* timer2){
         double t1, t2;
 
         t1 =  (double)timer1->start.tv_sec + (double)timer1->start.tv_usec/(1000*1000);
         t2 =  (double)timer2->start.tv_sec + (double)timer2->start.tv_usec/(1000*1000);
         return (t2-t1);
     }
-    UBool uprv_compareFrequency(UTimer* /*timer1*/, UTimer* /*timer2*/){
+static    UBool uprv_compareFrequency(UTimer* /*timer1*/, UTimer* /*timer2*/){
         return TRUE;
     }
 
