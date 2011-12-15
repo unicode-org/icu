@@ -26,54 +26,7 @@
 #include "cmemory.h"  /* for UAlignedMemory */
 #include "cintltst.h"
 #include "ccapitst.h"
-
-/* for not including "cstring.h" -begin*/    
-#if U_PLATFORM_USES_ONLY_WIN32_API
-#   define ctest_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE _stricmp(str1, str2)
-#elif defined(POSIX) 
-#   define ctest_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE strcasecmp(str1, str2) 
-#else
-#   define ctest_stricmp(str1, str2) T_CString_stricmp(str1, str2)
-#endif
-
-static int U_EXPORT2
-T_CString_stricmp(const char *str1, const char *str2) {
-    if(str1==NULL) {
-        if(str2==NULL) {
-            return 0;
-        } else {
-            return -1;
-        }
-    } else if(str2==NULL) {
-        return 1;
-    } else {
-        /* compare non-NULL strings lexically with lowercase */
-        int rc;
-        unsigned char c1, c2;
-        for(;;) {
-            c1=(unsigned char)*str1;
-            c2=(unsigned char)*str2;
-            if(c1==0) {
-                if(c2==0) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            } else if(c2==0) {
-                return 1;
-            } else {
-                /* compare non-zero characters with lowercase */
-                rc=(int)(unsigned char)tolower(c1)-(int)(unsigned char)tolower(c2);
-                if(rc!=0) {
-                    return rc;
-                }
-            }
-            ++str1;
-            ++str2;
-        }
-    }
-}
-/* for not including "cstring.h"  -end*/    
+#include "cstring.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -607,7 +560,7 @@ static void TestConvert()
         {
             log_verbose("getName o.k. %s\n", ucnv_getName(myConverter, &err));
         }
-        if (ctest_stricmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
+        if (uprv_stricmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
             log_err("getName failed\n");
         else 
             log_verbose("getName ok\n");
