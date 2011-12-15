@@ -5122,7 +5122,6 @@ TestTailor6179(void)
     static const uint8_t lastPrimaryIgnCE[]={1, 0xE3, 1, 5, 0};
     static const uint8_t firstSecondaryIgnCE[]={1, 1, 0xbf, 0x04, 0};
     static const uint8_t lastSecondaryIgnCE[]={1, 1, 0xbf, 0x04, 0};
-    static const UVersionInfo icu49={ 49, 1, 0, 0 };
 
     /* Test [Last Primary ignorable] */
 
@@ -5171,7 +5170,7 @@ TestTailor6179(void)
         }
         log_err("\n");
     }
-if(isICUVersionAtLeast(icu49)) {  /* TODO: debug & fix, see ticket #8982 */
+if(isICUVersionAtLeast(49, 1, 0)) {  /* TODO: debug & fix, see ticket #8982 */
     tLen = u_strlen(tData2[1]);
     rLen = ucol_getSortKey(coll, tData2[1], tLen, resColl, 100);
     if (rLen != LEN(firstSecondaryIgnCE) || uprv_memcmp(resColl, firstSecondaryIgnCE, rLen) != 0) {
