@@ -1040,15 +1040,12 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 }
                 break;
             case UCHAR_NAME:
-            case UCHAR_UNICODE_1_NAME:
                 {
                     // Must munge name, since u_charFromName() does not do
                     // 'loose' matching.
                     char buf[128]; // it suffices that this be > uprv_getMaxCharNameLength
                     if (!mungeCharName(buf, vname.data(), sizeof(buf))) FAIL(ec);
-                    UCharNameChoice choice = (p == UCHAR_NAME) ?
-                        U_EXTENDED_CHAR_NAME : U_UNICODE_10_CHAR_NAME;
-                    UChar32 ch = u_charFromName(choice, buf, &ec);
+                    UChar32 ch = u_charFromName(U_EXTENDED_CHAR_NAME, buf, &ec);
                     if (U_SUCCESS(ec)) {
                         clear();
                         add(ch);
@@ -1058,6 +1055,9 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     }
                 }
                 break;
+            case UCHAR_UNICODE_1_NAME:
+                // ICU 49 deprecates the Unicode_1_Name property APIs.
+                FAIL(ec);
             case UCHAR_AGE:
                 {
                     // Must munge name, since u_versionFromString() does not do
