@@ -700,6 +700,18 @@ enumNames(UCharNames *names,
     /* find the group that contains start, or the highest before it */
     group=getGroup(names, start);
 
+    if(startGroupMSB<group[GROUP_MSB] && nameChoice==U_EXTENDED_CHAR_NAME) {
+        /* enumerate synthetic names between start and the group start */
+        UChar32 extLimit=((UChar32)group[GROUP_MSB]<<GROUP_SHIFT);
+        if(extLimit>limit) {
+            extLimit=limit;
+        }
+        if(!enumExtNames(start, extLimit-1, fn, context)) {
+            return FALSE;
+        }
+        start=extLimit;
+    }
+
     if(startGroupMSB==endGroupMSB) {
         if(startGroupMSB==group[GROUP_MSB]) {
             /* if start and limit-1 are in the same group, then enumerate only in that one */
@@ -1508,11 +1520,9 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
 }
 
 U_CAPI int32_t U_EXPORT2
-u_getISOComment(UChar32 c,
+u_getISOComment(UChar32 /*c*/,
                 char *dest, int32_t destCapacity,
                 UErrorCode *pErrorCode) {
-    int32_t length;
-
     /* check the argument values */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
@@ -1521,13 +1531,7 @@ u_getISOComment(UChar32 c,
         return 0;
     }
 
-    if((uint32_t)c>UCHAR_MAX_VALUE || !isDataLoaded(pErrorCode)) {
-        return u_terminateChars(dest, destCapacity, 0, pErrorCode);
-    }
-
-    /* the ISO comment is stored like a normal character name */
-    length=getName(uCharNames, (uint32_t)c, U_ISO_COMMENT, dest, (uint16_t)destCapacity);
-    return u_terminateChars(dest, destCapacity, length, pErrorCode);
+    return u_terminateChars(dest, destCapacity, 0, pErrorCode);
 }
 
 U_CAPI UChar32 U_EXPORT2

@@ -58,20 +58,13 @@ void prettyPrintUChar(UChar c)
     char buf[1000];
     UErrorCode status = U_ZERO_ERROR;
     int32_t o;
-    
-    o = u_charName(c, U_UNICODE_CHAR_NAME, buf, 1000, &status);
+
+    o = u_charName(c, U_EXTENDED_CHAR_NAME, buf, 1000, &status);
     if(U_SUCCESS(status) && (o>0) ) {
       buf[6] = 0;
       printf("%7s", buf);
     } else {
-      o = u_charName(c, U_UNICODE_10_CHAR_NAME, buf, 1000, &status);
-      if(U_SUCCESS(status) && (o>0)) {
-        buf[5] = 0;
-        printf("~%6s", buf);
-      }
-      else {
-        printf(" ??????");
-      }
+      printf(" ??????");
     }
   } else {
     switch((char)(c & 0x007F)) {
