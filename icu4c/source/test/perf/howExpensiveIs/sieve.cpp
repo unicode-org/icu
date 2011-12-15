@@ -16,7 +16,7 @@
 
 U_CAPI double uprv_calcSieveTime() {
 #if 1
-#define SIEVE_SIZE U_TEN_MILLION_TIMES /* standardized size */
+#define SIEVE_SIZE U_LOTS_OF_TIMES /* standardized size */
 #else
 #define SIEVE_SIZE  <something_smaller>
 #endif

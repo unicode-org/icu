@@ -19,7 +19,7 @@ subdir = test/perf/$(TARGET)
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
 
-CPPFLAGS += -I$(top_srcdir)/common -I$(top_builddir)/i18n -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_builddir)/i18n -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw 
 
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 

@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 2008-2010, International Business Machines
+* Copyright (c) 2008-2011, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -11,7 +11,7 @@
 #define _UDBGUTIL_H
 
 #include "unicode/utypes.h"
-
+#include <stdio.h>
 
 enum UDebugEnumType {
     UDBG_UDebugEnumType = 0, /* Self-referential, strings for UDebugEnumType. Count=ENUM_COUNT. */
@@ -74,5 +74,33 @@ U_CAPI int32_t U_EXPORT2 udbg_enumArrayValue(UDebugEnumType type, int32_t field)
  * @return should be a field value or -1 if not found.
  */
 U_CAPI int32_t U_EXPORT2 udbg_enumByName(UDebugEnumType type, const char *name);
+
+
+/**
+ * Return the Platform (U_PLATFORM) as a string
+ */
+U_CAPI const char *udbg_getPlatform(void);
+
+/**
+ * Get the nth system parameter's name
+ * @param i index of name, starting from zero
+ * @return name, or NULL if off the end
+ * @see udbg_getSystemParameterValue
+ */
+U_CAPI const char *udbg_getSystemParameterNameByIndex(int32_t i);
+
+/**
+ * Get the nth system parameter's value, in a user supplied buffer
+ * @parameter i index of value, starting from zero
+ * @param status error status
+ * @return length written (standard termination rules)
+ * @see udbg_getSystemParameterName
+ */
+U_CAPI int32_t udbg_getSystemParameterValueByIndex(int32_t i, char *buffer, int32_t bufferCapacity, UErrorCode *status);
+
+/**
+ * Write ICU info as XML
+ */
+U_CAPI void udbg_writeIcuInfo(FILE *f);
 
 #endif

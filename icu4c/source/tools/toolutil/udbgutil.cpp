@@ -1,12 +1,16 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007-2010, International Business Machines Corporation and
+ * Copyright (c) 2007-2011, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #include "udbgutil.h"
 #include <string.h>
-
+#include "ustr_imp.h"
+#include "cstring.h"
+#include "putilimp.h"
+#include "unicode/ulocdata.h"
+#include "unicode/ucnv.h"
 /*
 To add a new enum type 
       (For example: UShoeSize  with values USHOE_WIDE=0, USHOE_REGULAR, USHOE_NARROW, USHOE_COUNT)
@@ -326,4 +330,222 @@ int32_t udbg_enumByName(UDebugEnumType type, const char *value) {
     }
     // fail
     return -1;
+}
+
+/* platform info */
+/** 
+ * Print the current platform 
+ */
+U_CAPI const char *udbg_getPlatform(void)
+{
+#if U_PLATFORM_HAS_WIN32_API
+    return "Windows";
+#elif U_PLATFORM == U_PF_UNKNOWN
+    return "unknown"
+#else
+    return "Other (POSIX-like)";
+#endif
+}
+
+struct USystemParams;
+
+typedef int32_t U_CALLCONV USystemParameterCallback(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status);
+
+struct USystemParams {
+  const char *paramName;
+  USystemParameterCallback *paramFunction;
+  const char *paramStr;
+  int32_t paramInt;
+};
+
+/* parameter types */
+U_CAPI  int32_t
+paramEmpty(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+  if(U_FAILURE(*status))return 0;
+  return u_terminateChars(target, targetCapacity, 0, status);
+}
+
+U_CAPI  int32_t
+paramStatic(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+  if(param->paramStr==NULL) return paramEmpty(param,target,targetCapacity,status);
+  if(U_FAILURE(*status))return 0;
+  int32_t len = uprv_strlen(param->paramStr);
+  if(target!=NULL) {
+    uprv_strncpy(target,param->paramStr,uprv_min(len,targetCapacity));
+  }
+  return u_terminateChars(target, targetCapacity, len, status);
+}
+
+static int32_t stringToStringBuffer(char *target, int32_t targetCapacity, const char *str, UErrorCode *status) {
+  int32_t len = uprv_strlen(str);
+  if(target!=NULL) {
+    uprv_strncpy(target,str,uprv_min(len,targetCapacity));
+  }
+  return u_terminateChars(target, targetCapacity, len, status);
+}
+
+static int32_t integerToStringBuffer(char *target, int32_t targetCapacity, int32_t n, int32_t radix, UErrorCode *status) {
+  if(U_FAILURE(*status)) return 0;
+  char str[300];
+  int32_t len =  T_CString_integerToString(str,n,radix);
+  return stringToStringBuffer(target,targetCapacity,str,status);
+}
+
+U_CAPI  int32_t
+paramInteger(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+  if(U_FAILURE(*status))return 0;
+  if(param->paramStr==NULL || param->paramStr[0]=='d') {
+    return integerToStringBuffer(target,targetCapacity,param->paramInt, 10,status);
+  } else if(param->paramStr[0]=='x') {
+    return integerToStringBuffer(target,targetCapacity,param->paramInt, 16,status);
+  } else if(param->paramStr[0]=='o') {
+    return integerToStringBuffer(target,targetCapacity,param->paramInt, 8,status);
+  } else if(param->paramStr[0]=='b') {
+    return integerToStringBuffer(target,targetCapacity,param->paramInt, 2,status);
+  } else {
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return 0;
+  }
+}
+
+
+U_CAPI  int32_t
+paramCldrVersion(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+  if(U_FAILURE(*status))return 0;
+  char str[200]="";
+  UVersionInfo icu;
+
+  ulocdata_getCLDRVersion(icu, status);
+  if(U_SUCCESS(*status)) {
+    u_versionToString(icu, str);
+    return stringToStringBuffer(target,targetCapacity,str,status);
+  } else {
+    return 0;
+  }
+}
+
+
+#if !UCONFIG_NO_FORMATTING
+U_CAPI  int32_t
+paramTimezoneDefault(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+  if(U_FAILURE(*status))return 0;
+  UChar buf[100];
+  char buf2[100];
+  int32_t len;
+  
+  len = ucal_getDefaultTimeZone(buf, 100, status);
+  if(U_SUCCESS(*status)&&len>0) {
+    u_UCharsToChars(buf, buf2, len+1);
+    return stringToStringBuffer(target,targetCapacity, buf2,status);
+  } else {
+    return 0;
+  }
+}
+#endif
+
+U_CAPI  int32_t
+paramLocaleDefaultBcp47(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+  if(U_FAILURE(*status))return 0;
+  const char *def = uloc_getDefault();
+  return uloc_toLanguageTag(def,target,targetCapacity,FALSE,status);
+}
+
+
+/* simple 1-liner param functions */
+#define STRING_PARAM(func, str) U_CAPI  int32_t \
+  func(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) \
+  {  return stringToStringBuffer(target,targetCapacity,(str),status); }
+
+STRING_PARAM(paramIcudataPath, u_getDataDirectory())
+STRING_PARAM(paramPlatform, udbg_getPlatform())
+STRING_PARAM(paramLocaleDefault, uloc_getDefault())
+#if !UCONFIG_NO_CONVERSION
+STRING_PARAM(paramConverterDefault, ucnv_getDefaultName())
+#endif
+
+#if !UCONFIG_NO_FORMATTING
+STRING_PARAM(paramTimezoneVersion, ucal_getTZDataVersion(status))
+#endif
+
+static USystemParams systemParams[] = {
+  { "copyright",    paramStatic, U_COPYRIGHT_STRING,0 },
+  { "product",      paramStatic, "icu4c",0 },
+  { "product.full", paramStatic, "International Components for Unicode for C/C++",0 },
+  { "version",      paramStatic, U_ICU_VERSION,0 },
+  { "version.unicode", paramStatic, U_UNICODE_VERSION,0 },
+  { "platform.number", paramInteger, "d",U_PLATFORM},
+  { "platform.type", paramPlatform, NULL ,0},
+  { "locale.default", paramLocaleDefault, NULL, 0},
+  { "locale.default.bcp47", paramLocaleDefaultBcp47, NULL, 0},
+#if !UCONFIG_NO_CONVERSION
+  { "converter.default", paramConverterDefault, NULL, 0},
+#endif
+  { "icudata.name", paramStatic, U_ICUDATA_NAME, 0},
+  { "icudata.path", paramIcudataPath, NULL, 0},
+
+  { "cldr.version", paramCldrVersion, NULL, 0},
+  
+#if !UCONFIG_NO_FORMATTING
+  { "tz.version", paramTimezoneVersion, NULL, 0},
+  { "tz.default", paramTimezoneDefault, NULL, 0},
+#endif
+  
+  { "cpu.bits",       paramInteger, "d", (sizeof(void*))*8},
+  { "cpu.big_endian", paramInteger, "b", U_IS_BIG_ENDIAN},
+  { "os.wchar_width", paramInteger, "d", U_SIZEOF_WCHAR_T},
+  { "os.charset_family", paramInteger, "d", U_CHARSET_FAMILY},
+#if defined (U_HOST)
+  { "os.host", paramStatic, U_HOST, 0},
+#endif
+#if defined (U_BUILD)
+  { "build.build", paramStatic, U_BUILD, 0},
+#endif
+#if defined (U_CC)
+  { "build.cc", paramStatic, U_CC, 0},
+#endif
+#if defined (U_CXX)
+  { "build.cxx", paramStatic, U_CXX, 0},
+#endif
+#if defined (CYGWINMSVC)
+  { "build.cygwinmsvc", paramInteger, "b", 1},
+#endif
+
+
+
+};
+
+#define U_SYSPARAM_COUNT (sizeof(systemParams)/sizeof(systemParams[0]))
+
+U_CAPI const char *udbg_getSystemParameterNameByIndex(int32_t i) {
+  if(i>=0 && i< U_SYSPARAM_COUNT) {
+    return systemParams[i].paramName;
+  } else {
+    return NULL;
+  }
+}
+
+
+U_CAPI int32_t udbg_getSystemParameterValueByIndex(int32_t i, char *buffer, int32_t bufferCapacity, UErrorCode *status) {
+  if(i>=0 && i< U_SYSPARAM_COUNT) {
+    return systemParams[i].paramFunction(&(systemParams[i]),buffer,bufferCapacity,status);
+  } else {
+    return NULL;
+  }
+}
+
+U_CAPI void udbg_writeIcuInfo(FILE *out) {
+  char str[2000];
+  /* todo: API for writing DTD? */
+  fprintf(out, " <icuSystemParams type=\"icu4c\">\n");
+  const char *paramName;
+  for(int32_t i=0;(paramName=udbg_getSystemParameterNameByIndex(i))!=NULL;i++) {
+    UErrorCode status2 = U_ZERO_ERROR;
+    int32_t l = udbg_getSystemParameterValueByIndex(i, str,2000,&status2);
+    if(U_SUCCESS(status2)) {
+      fprintf(out,"    <param name=\"%s\">%s</param>\n", paramName,str);
+    } else {
+      fprintf(out,"  <!-- n=\"%s\" ERROR: %s -->\n", paramName, u_errorName(status2));
+    }
+  }
+  fprintf(out, " </icuSystemParams>\n");
 }
