@@ -8,7 +8,7 @@
 #ifndef SIEVE_H
 #define SIEVE_H
 
-#define U_TEN_MILLION_TIMES 10000000
+#define U_LOTS_OF_TIMES 1000000
 
 #include "unicode/utypes.h"
 /**

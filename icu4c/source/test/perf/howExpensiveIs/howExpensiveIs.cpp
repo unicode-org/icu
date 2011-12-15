@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include "sieve.h"
 #include "unicode/utimer.h"
+#include "udbgutil.h"
+
 void runTests(void);
 
 FILE *out = NULL;
@@ -20,7 +22,7 @@ int main(int argc, const char* argv[]){
   {
     double m;
     double s = uprv_getSieveTime(&m);
-    fprintf(stderr, "** Standard sieve time: %.9fs +/- %.9fs (%d iterations)\n", s,m, (int)U_TEN_MILLION_TIMES);
+    fprintf(stderr, "** Standard sieve time: %.9fs +/- %.9fs (%d iterations)\n", s,m, (int)U_LOTS_OF_TIMES);
   }
 #endif
 
@@ -30,7 +32,8 @@ int main(int argc, const char* argv[]){
       fprintf(stderr,"Err: can't open %s for writing.\n", argv[1]);
       return 1;
     }
-    fprintf(out, "<tests icu='%s'>\n", U_ICU_VERSION);
+    fprintf(out, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
+    fprintf(out, "<tests icu=\"%s\">\n", U_ICU_VERSION);
     fprintf(out, "<!-- %s -->\n", U_COPYRIGHT_STRING);
   } else if(argc>2) {
     fprintf(stderr, "Err: usage: %s [ output-file.xml ]\n", argv[0]);
@@ -41,6 +44,7 @@ int main(int argc, const char* argv[]){
   
 
   if(out!=NULL) {
+    udbg_writeIcuInfo(out);
     fprintf(out, "</tests>\n");
     fclose(out);
   }
@@ -81,6 +85,10 @@ public:
     int subIterations = 0;
     for(int i=0;i<ITERATIONS;i++) {
       subIterations = runTest(&times[i]);
+#if U_DEBUG
+      fprintf(stderr, "trial: %d/%d = %.9fs\n", i, ITERATIONS,times[i]);
+      fflush(stderr);
+#endif
     }
     *subTime = uprv_getMeanTime(times,ITERATIONS,marginOfError);
     return subIterations;
@@ -97,16 +105,21 @@ void runTestOn(HowExpensiveTest &t) {
   double sieveTime = uprv_getSieveTime(NULL);
   double st;
   double me;
-  /* warmup.. */
+  
+  fflush(stdout);
+  fflush(stderr);
   int32_t iter = t.runTests(&st,&me);
+  fflush(stdout);
+  fflush(stderr);
   
   double stn = st/sieveTime;
 
   printf("%s\t%.9f\t%.9f +/- %.9f,  @ %d iter\n", t.fName,stn,st,me,iter);
 
   if(out!=NULL) {
-    fprintf(out, "   <test name='%s' standardizedTime='%f' realDuration='%f' marginOfError='%f' iterations='%d' />\n",
+    fprintf(out, "   <test name=\"%s\" standardizedTime=\"%f\" realDuration=\"%f\" marginOfError=\"%f\" iterations=\"%d\" />\n",
             t.fName,stn,st,me,iter);
+    fflush(out);
   }
 }
 
@@ -119,11 +132,11 @@ public:
   virtual int32_t run(){return 0;} // dummy
   int32_t runTest(double *subTime) {
     *subTime = uprv_getSieveTime(NULL);
-    return U_TEN_MILLION_TIMES;
+    return U_LOTS_OF_TIMES;
   }
   virtual int32_t runTests(double *subTime, double *marginOfError) {
     *subTime = uprv_getSieveTime(marginOfError);
-    return U_TEN_MILLION_TIMES;
+    return U_LOTS_OF_TIMES;
   }
 };
 
@@ -135,7 +148,7 @@ public:
 #define OCStr(svc,ub,suffix,n) "Test_" # svc # ub # suffix # n
 #define OCRun(svc,ub,suffix) svc ## ub ## suffix
 // TODO: run away screaming
-#define OpenCloseTest(n, svc,suffix,c,a,d) class OCName(svc,_,Test_,suffix,n) : public HowExpensiveTest { public: OCName(svc,_,Test_,suffix,n)():HowExpensiveTest(OCStr(svc,_,suffix,n),__FILE__,__LINE__) c int32_t run() { int32_t i; for(i=0;i<U_TEN_MILLION_TIMES;i++){ OCRun(svc,_,close) (  OCRun(svc,_,suffix) a );  } return i; }   void warmup() { OCRun(svc,_,close) ( OCRun(svc,_,suffix) a); } virtual ~ OCName(svc,_,Test_,suffix,n) () d };
+#define OpenCloseTest(n, svc,suffix,c,a,d) class OCName(svc,_,Test_,suffix,n) : public HowExpensiveTest { public: OCName(svc,_,Test_,suffix,n)():HowExpensiveTest(OCStr(svc,_,suffix,n),__FILE__,__LINE__) c int32_t run() { int32_t i; for(i=0;i<U_LOTS_OF_TIMES;i++){ OCRun(svc,_,close) (  OCRun(svc,_,suffix) a );  } return i; }   void warmup() { OCRun(svc,_,close) ( OCRun(svc,_,suffix) a); } virtual ~ OCName(svc,_,Test_,suffix,n) () d };
 #define QuickTest(n,c,r,d)  class n : public HowExpensiveTest { public: n():HowExpensiveTest(#n,__FILE__,__LINE__) c int32_t run() r virtual ~n () d };
 
 // TODO: move, scope.
@@ -144,9 +157,10 @@ static UChar pattern[] = { 0x23 }; // '#'
 UNumberFormat *NumParseTest_fmt;
 
 // TODO: de-uglify.
-QuickTest(NumParseTest,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;    static UChar str[] = { 0x31 };double val;    for(i=0;i<U_TEN_MILLION_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,str,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
+QuickTest(NumParseTest,{    static UChar pattern[] = { 0x23 };    NumParseTest_fmt = unum_open(UNUM_PATTERN_DECIMAL,         pattern,                    1,                    "en_US",                    0,                    &setupStatus);  },{    int32_t i;    static UChar str[] = { 0x31 };double val;    for(i=0;i<U_LOTS_OF_TIMES;i++) {      val=unum_parse(NumParseTest_fmt,str,1,NULL,&setupStatus);    }    return i;  },{unum_close(NumParseTest_fmt);})
 
 
+QuickTest(NullTest,{},{int j=U_LOTS_OF_TIMES;while(--j);return U_LOTS_OF_TIMES;},{})
 OpenCloseTest(pattern,unum,open,{},(UNUM_PATTERN_DECIMAL,pattern,1,"en_US",0,&setupStatus),{})
 OpenCloseTest(default,unum,open,{},(UNUM_DEFAULT,NULL,-1,"en_US",0,&setupStatus),{})
 #include "unicode/ucnv.h"
@@ -157,6 +171,10 @@ OpenCloseTest(root,ures,open,{},(NULL,"root",&setupStatus),{})
 void runTests() {
   {
     SieveTest t;
+    runTestOn(t);
+  }
+  {
+    NullTest t;
     runTestOn(t);
   }
   {
