@@ -1947,6 +1947,8 @@ u_getIntPropertyMaxValue(UProperty which);
  *
  * For characters without any numeric values in the Unicode Character Database,
  * this function will return U_NO_NUMERIC_VALUE.
+ * Note: This is different from the Unicode Standard which specifies NaN as the default value.
+ * (NaN is not available on all platforms.)
  *
  * Similar to java.lang.Character.getNumericValue(), but u_getNumericValue()
  * also supports negative values, large values, and fractions,
