@@ -1,4 +1,4 @@
-# Copyright (C) 2010, International Business Machines
+# Copyright (C) 2010-2011, International Business Machines
 # Corporation and others.  All Rights Reserved.
 #
 # Parses Unicode Character Database files and build ICU core properties files.
@@ -27,7 +27,7 @@ $UNITOOLS_BLD/c/gencase/gencase -d $SRC_DATA_IN      -s $UNIDATA -i $BLD_DATA_FI
 $UNITOOLS_BLD/c/gencase/gencase -d $COMMON --csource -s $UNIDATA -i $BLD_DATA_FILES -u $UNICODE_VERSION
 
 # unames.icu
-$UNITOOLS_BLD/c/gennames/gennames -d $SRC_DATA_IN -1 -q $UNIDATA/UnicodeData.txt $UNIDATA/NameAliases.txt -u $UNICODE_VERSION
+$UNITOOLS_BLD/c/gennames/gennames -d $SRC_DATA_IN -q $UNIDATA/UnicodeData.txt $UNIDATA/NameAliases.txt -u $UNICODE_VERSION
 
 # unidata/norm2/*.txt
 $UNITOOLS_BLD/c/gennorm/gennorm -d $UNIDATA/norm2 -s $UNIDATA -i $BLD_DATA_FILES
