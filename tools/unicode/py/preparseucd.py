@@ -600,6 +600,8 @@ def ParseUnicodeData(in_file):
     raise SyntaxError(
         "error: unterminated range started at\n  %s\n" %
         range_first_line)
+  # Hangul syllables have canonical decompositions which are not listed in UnicodeData.txt.
+  SetPropertyValue("dt", "Can", 0xac00, 0xd7a3)
   _alg_names_ranges.sort()
 
 

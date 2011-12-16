@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,26 +23,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
-#include "unicode/uchar.h"
+#include "unicode/localpointer.h"
 #include "unicode/putil.h"
+#include "unicode/uchar.h"
 #include "unicode/uclean.h"
+#include "unicode/uniset.h"
+#include "unicode/unistr.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "genprops.h"
+#include "propsvec.h"
+#include "ppucd.h"
+#include "toolutil.h"
 #include "unewdata.h"
 #include "uoptions.h"
 #include "uparse.h"
 #include "uprops.h"
-#include "propsvec.h"
-
-U_CDECL_BEGIN
-#include "genprops.h"
-U_CDECL_END
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
+// TODO: remove
+#define USE_NEW 1
 
 U_NAMESPACE_USE
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
+
+void PropsWriter::setUnicodeVersion(const UVersionInfo version) {}
+void PropsWriter::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -59,7 +68,6 @@ enum
     COPYRIGHT,
     DESTDIR,
     SOURCEDIR,
-    UNICODE_VERSION,
     ICUDATADIR,
     CSOURCE
 };
@@ -72,7 +80,6 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    UOPTION_DEF("unicode", 'u', UOPT_REQUIRES_ARG),
     UOPTION_ICUDATADIR,
     UOPTION_DEF("csource", 'C', UOPT_NO_ARG)
 };
@@ -82,14 +89,12 @@ main(int argc, char* argv[]) {
     char filename[300];
     const char *srcDir=NULL, *destDir=NULL, *suffix=NULL;
     char *basename=NULL;
-    UErrorCode errorCode=U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
     options[DESTDIR].value=u_getDataDirectory();
     options[SOURCEDIR].value="";
-    options[UNICODE_VERSION].value="";
     options[ICUDATADIR].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
@@ -136,16 +141,46 @@ main(int argc, char* argv[]) {
     srcDir=options[SOURCEDIR].value;
     destDir=options[DESTDIR].value;
 
+    /* initialize */
+    initStore();
+
+    IcuToolErrorCode errorCode("genprops");
+    LocalPointer<PropsWriter> corePropsWriter(createCorePropsWriter(errorCode));
+    LocalPointer<PropsWriter> props2Writer(createProps2Writer(errorCode));
+    if(errorCode.isFailure()) {
+        fprintf(stderr, "genprops: unable to create PropsWriters - %s\n", errorCode.errorName());
+        return errorCode.reset();
+    }
+
+    CharString ppucdPath(srcDir, errorCode);
+    ppucdPath.appendPathPart("ppucd.txt", errorCode);
+
+    PreparsedUCD ppucd(ppucdPath.data(), errorCode);
+    if(errorCode.isFailure()) {
+        fprintf(stderr, "genprops: unable to open %s - %s\n",
+                ppucdPath.data(), errorCode.errorName());
+        return errorCode.reset();
+    }
+    PreparsedUCD::LineType lineType;
+    UnicodeSet newValues;
+    int i=0;
+    while((lineType=ppucd.readLine(errorCode))!=PreparsedUCD::NO_LINE) {
+        if(ppucd.lineHasPropertyValues()) {
+            const UniProps *props=ppucd.getProps(newValues, errorCode);
+            props2Writer->setProps(*props, newValues, errorCode);
+        } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
+            const UVersionInfo &version=ppucd.getUnicodeVersion();
+            corePropsWriter->setUnicodeVersion(version);
+        }
+        ++i;
+    }
+    printf("*** parsed %d lines from ppucd.txt\n", i);
+
     if(argc>=2) {
         suffix=argv[1];
     } else {
         suffix=NULL;
     }
-
-    if(options[UNICODE_VERSION].doesOccur) {
-        setUnicodeVersion(options[UNICODE_VERSION].value);
-    }
-    /* else use the default dataVersion in store.c */
 
     if (options[ICUDATADIR].doesOccur) {
         u_setDataDirectory(options[ICUDATADIR].value);
@@ -158,16 +193,13 @@ main(int argc, char* argv[]) {
         *basename++=U_FILE_SEP_CHAR;
     }
 
-    /* initialize */
-    initStore();
-
     /* process UnicodeData.txt */
     writeUCDFilename(basename, "UnicodeData", suffix);
-    parseDB(filename, &errorCode);
+    parseDB(filename, errorCode);
 
     /* process additional properties files */
     *basename=0;
-    generateAdditionalProperties(filename, suffix, &errorCode);
+    generateAdditionalProperties(filename, suffix, errorCode);
 
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
@@ -259,28 +291,6 @@ genCategoryNames[U_CHAR_CATEGORY_COUNT]={
     "Pi", "Pf"
 };
 
-const char *const
-decompositionTypeNames[U_DT_COUNT]={
-    NULL,
-    NULL,
-    "compat",
-    "circle",
-    "final",
-    "font",
-    "fraction",
-    "initial",
-    "isolated",
-    "medial",
-    "narrow",
-    "noBreak",
-    "small",
-    "square",
-    "sub",
-    "super",
-    "vertical",
-    "wide"
-};
-
 static struct {
     uint32_t first, last, props;
     char name[80];
@@ -318,34 +328,6 @@ unicodeDataLineFn(void *context,
             fields[2][0], (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
-    }
-
-    /* get decomposition type, field 5 */
-    if(fields[5][0]<fields[5][1]) {
-        /* there is some decomposition */
-        if(*fields[5][0]!='<') {
-            /* canonical */
-            i=U_DT_CANONICAL;
-        } else {
-            /* get compatibility type */
-            end=fields[5][0]+1;
-            while(end<fields[5][1] && *end!='>') {
-                ++end;
-            }
-            *end='#';
-            i=getTokenIndex(decompositionTypeNames, U_DT_COUNT, fields[5][0]+1);
-            if(i<0) {
-                fprintf(stderr, "genprops: unknown decomposition type \"%s\" at code 0x%lx\n",
-                    fields[5][0], (unsigned long)p.code);
-                *pErrorCode=U_PARSE_ERROR;
-                exit(U_PARSE_ERROR);
-            }
-        }
-        upvec_setValue(pv, p.code, p.code, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(*pErrorCode));
-            exit(*pErrorCode);
-        }
     }
 
     /* decimal digit value, field 6 */
@@ -543,14 +525,6 @@ repeatAreaProps() {
         if(!hasPlane16PUA) {
             repeatProps(0x100000, 0x10fffd, puaProps);
         }
-    }
-
-    /* Hangul have canonical decompositions */
-    errorCode=U_ZERO_ERROR;
-    upvec_setValue(pv, 0xac00, 0xd7a3, 2, (uint32_t)U_DT_CANONICAL, UPROPS_DT_MASK, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(errorCode));
-        exit(errorCode);
     }
 }
 

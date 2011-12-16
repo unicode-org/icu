@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2010, International Business Machines
+*   Copyright (C) 1999-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,12 +18,24 @@
 #define __GENPROPS_H__
 
 #include "unicode/utypes.h"
-#include "utrie.h"
+#include "unicode/uniset.h"
+#include "ppucd.h"
 #include "propsvec.h"
 
 /* file definitions */
 #define DATA_NAME "uprops"
 #define DATA_TYPE "icu"
+
+class PropsWriter {
+public:
+    virtual void setUnicodeVersion(const UVersionInfo version);
+    virtual void setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode);
+    // virtual writeCSourceFile(icusrcroot);
+    // virtual writeBinaryData(icusrcroot);
+};
+
+PropsWriter *createCorePropsWriter(UErrorCode &errorCode);
+PropsWriter *createProps2Writer(UErrorCode &errorCode);
 
 /* character properties */
 typedef struct {
@@ -51,9 +63,6 @@ isToken(const char *token, const char *s);
 
 U_CFUNC int32_t
 getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s);
-
-U_CFUNC void
-setUnicodeVersion(const char *v);
 
 U_CFUNC void
 initStore(void);
