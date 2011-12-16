@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines
+*   Copyright (C) 2010-2011, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  charstr.cpp
@@ -125,6 +125,21 @@ UBool CharString::ensureCapacity(int32_t capacity,
         }
     }
     return TRUE;
+}
+
+CharString &CharString::appendPathPart(const StringPiece &s, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) {
+        return *this;
+    }
+    if(s.length()==0) {
+        return *this;
+    }
+    char c;
+    if(len>0 && (c=buffer[len-1])!=U_FILE_SEP_CHAR && c!=U_FILE_ALT_SEP_CHAR) {
+        append(U_FILE_SEP_CHAR, errorCode);
+    }
+    append(s, errorCode);
+    return *this;
 }
 
 U_NAMESPACE_END
