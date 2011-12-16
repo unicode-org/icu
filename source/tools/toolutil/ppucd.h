@@ -40,14 +40,16 @@ struct U_TOOLUTIL_API UniProps {
     UniProps();
     ~UniProps();
 
+    int32_t getIntProp(int32_t prop) const { return intProps[prop-UCHAR_INT_START]; }
+
     UChar32 start, end;
     UBool binProps[UCHAR_BINARY_LIMIT];
     int32_t intProps[UCHAR_INT_LIMIT-UCHAR_INT_START];
     UVersionInfo age;
     UChar32 bmg;
+    int32_t digitValue;
     const char *numericValue;
     const char *name;
-    const char *uni1Name;
     const char *nameAlias;
     UnicodeString cf;
 };
@@ -71,7 +73,7 @@ public:
         VALUE_LINE,
 
         /** defaults;0000..10FFFF;age=NA;bc=L;... */
-        DEFAULT_LINE,
+        DEFAULTS_LINE,
         /** block;0000..007F;age=1.1;blk=ASCII;ea=Na;... */
         BLOCK_LINE,
         /** cp;0030;AHex;bc=EN;gc=Nd;na=DIGIT ZERO;... */
@@ -108,7 +110,7 @@ public:
     const UVersionInfo &getUnicodeVersion() const { return ucdVersion; }
 
     /** Returns TRUE if the current line has property values. */
-    UBool lineHasPropertyValues() const { return DEFAULT_LINE<=lineType && lineType<=CP_LINE; }
+    UBool lineHasPropertyValues() const { return DEFAULTS_LINE<=lineType && lineType<=CP_LINE; }
 
     /**
      * Parses properties from the current line.

@@ -2033,7 +2033,7 @@ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
 }
 
 U_CAPI void U_EXPORT2
-u_versionToString(UVersionInfo versionArray, char *versionString) {
+u_versionToString(const UVersionInfo versionArray, char *versionString) {
     uint16_t count, part;
     uint8_t field;
 

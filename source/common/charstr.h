@@ -107,6 +107,13 @@ public:
 
     CharString &appendInvariantChars(const UnicodeString &s, UErrorCode &errorCode);
 
+    /**
+     * Appends a filename/path part, e.g., a directory name.
+     * First appends a U_FILE_SEP_CHAR if necessary.
+     * Does nothing if s is empty.
+     */
+    CharString &appendPathPart(const StringPiece &s, UErrorCode &errorCode);
+
 private:
     MaybeStackArray<char, 40> buffer;
     int32_t len;
