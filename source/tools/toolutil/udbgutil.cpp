@@ -360,7 +360,7 @@ struct USystemParams {
 
 /* parameter types */
 U_CAPI  int32_t
-paramEmpty(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+paramEmpty(const USystemParams * /* param */, char *target, int32_t targetCapacity, UErrorCode *status) {
   if(U_FAILURE(*status))return 0;
   return u_terminateChars(target, targetCapacity, 0, status);
 }
@@ -387,7 +387,7 @@ static int32_t stringToStringBuffer(char *target, int32_t targetCapacity, const 
 static int32_t integerToStringBuffer(char *target, int32_t targetCapacity, int32_t n, int32_t radix, UErrorCode *status) {
   if(U_FAILURE(*status)) return 0;
   char str[300];
-  int32_t len =  T_CString_integerToString(str,n,radix);
+  T_CString_integerToString(str,n,radix);
   return stringToStringBuffer(target,targetCapacity,str,status);
 }
 
@@ -410,7 +410,7 @@ paramInteger(const USystemParams *param, char *target, int32_t targetCapacity, U
 
 
 U_CAPI  int32_t
-paramCldrVersion(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+paramCldrVersion(const USystemParams * /* param */, char *target, int32_t targetCapacity, UErrorCode *status) {
   if(U_FAILURE(*status))return 0;
   char str[200]="";
   UVersionInfo icu;
@@ -427,7 +427,7 @@ paramCldrVersion(const USystemParams *param, char *target, int32_t targetCapacit
 
 #if !UCONFIG_NO_FORMATTING
 U_CAPI  int32_t
-paramTimezoneDefault(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+paramTimezoneDefault(const USystemParams * /* param */, char *target, int32_t targetCapacity, UErrorCode *status) {
   if(U_FAILURE(*status))return 0;
   UChar buf[100];
   char buf2[100];
@@ -444,7 +444,7 @@ paramTimezoneDefault(const USystemParams *param, char *target, int32_t targetCap
 #endif
 
 U_CAPI  int32_t
-paramLocaleDefaultBcp47(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) {
+paramLocaleDefaultBcp47(const USystemParams * /* param */, char *target, int32_t targetCapacity, UErrorCode *status) {
   if(U_FAILURE(*status))return 0;
   const char *def = uloc_getDefault();
   return uloc_toLanguageTag(def,target,targetCapacity,FALSE,status);
@@ -453,7 +453,7 @@ paramLocaleDefaultBcp47(const USystemParams *param, char *target, int32_t target
 
 /* simple 1-liner param functions */
 #define STRING_PARAM(func, str) U_CAPI  int32_t \
-  func(const USystemParams *param, char *target, int32_t targetCapacity, UErrorCode *status) \
+  func(const USystemParams *, char *target, int32_t targetCapacity, UErrorCode *status) \
   {  return stringToStringBuffer(target,targetCapacity,(str),status); }
 
 STRING_PARAM(paramIcudataPath, u_getDataDirectory())
@@ -517,7 +517,7 @@ static USystemParams systemParams[] = {
 #define U_SYSPARAM_COUNT (sizeof(systemParams)/sizeof(systemParams[0]))
 
 U_CAPI const char *udbg_getSystemParameterNameByIndex(int32_t i) {
-  if(i>=0 && i< U_SYSPARAM_COUNT) {
+  if(i>=0 && i < (int32_t)U_SYSPARAM_COUNT) {
     return systemParams[i].paramName;
   } else {
     return NULL;
@@ -526,7 +526,7 @@ U_CAPI const char *udbg_getSystemParameterNameByIndex(int32_t i) {
 
 
 U_CAPI int32_t udbg_getSystemParameterValueByIndex(int32_t i, char *buffer, int32_t bufferCapacity, UErrorCode *status) {
-  if(i>=0 && i< U_SYSPARAM_COUNT) {
+  if(i>=0 && i< (int32_t)U_SYSPARAM_COUNT) {
     return systemParams[i].paramFunction(&(systemParams[i]),buffer,bufferCapacity,status);
   } else {
     return NULL;
@@ -540,7 +540,7 @@ U_CAPI void udbg_writeIcuInfo(FILE *out) {
   const char *paramName;
   for(int32_t i=0;(paramName=udbg_getSystemParameterNameByIndex(i))!=NULL;i++) {
     UErrorCode status2 = U_ZERO_ERROR;
-    int32_t l = udbg_getSystemParameterValueByIndex(i, str,2000,&status2);
+    udbg_getSystemParameterValueByIndex(i, str,2000,&status2);
     if(U_SUCCESS(status2)) {
       fprintf(out,"    <param name=\"%s\">%s</param>\n", paramName,str);
     } else {
