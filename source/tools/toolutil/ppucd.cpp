@@ -1,0 +1,438 @@
+/*
+*******************************************************************************
+*   Copyright (C) 2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  ppucd.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2011dec11
+*   created by: Markus W. Scherer
+*/
+
+#include "unicode/utypes.h"
+#include "unicode/uchar.h"
+#include "charstr.h"
+#include "cstring.h"
+#include "ppucd.h"
+#include "uassert.h"
+#include "uparse.h"
+
+#include <stdio.h>
+#include <string.h>
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
+U_NAMESPACE_BEGIN
+
+PropertyNames::~PropertyNames() {}
+
+int32_t
+PropertyNames::getPropertyEnum(const char *name) const {
+    return u_getPropertyEnum(name);
+}
+
+int32_t
+PropertyNames::getPropertyValueEnum(int32_t property, const char *name) const {
+    return u_getPropertyValueEnum((UProperty)property, name);
+}
+
+UniProps::UniProps()
+        : start(U_SENTINEL), end(U_SENTINEL),
+          bmg(U_SENTINEL),
+          numericValue(NULL),
+          name(NULL), uni1Name(NULL), nameAlias(NULL) {
+    memset(binProps, 0, sizeof(binProps));
+    memset(intProps, 0, sizeof(intProps));
+    memset(age, 0, 4);
+}
+
+UniProps::~UniProps() {}
+
+const int32_t PreparsedUCD::kNumLineBuffers;
+
+PreparsedUCD::PreparsedUCD(const char *filename, UErrorCode &errorCode)
+        : icuPnames(new PropertyNames()), pnames(icuPnames),
+          file(NULL),
+          defaultLineIndex(-1), blockLineIndex(-1), lineIndex(0),
+          lineNumber(0),
+          lineType(NO_LINE),
+          fieldLimit(NULL), lineLimit(NULL) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    if(filename==NULL || *filename==0 || (*filename=='-' && filename[1]==0)) {
+        filename=NULL;
+        file=stdin;
+    } else {
+        file=fopen(filename, "r");
+    }
+    if(file==NULL) {
+        perror("error opening preparsed UCD");
+        fprintf(stderr, "error opening preparsed UCD file %s\n", filename);
+        errorCode=U_FILE_ACCESS_ERROR;
+        return;
+    }
+
+    memset(ucdVersion, 0, 4);
+    lines[0][0]=0;
+}
+
+PreparsedUCD::~PreparsedUCD() {
+    if(file!=stdin) {
+        fclose(file);
+    }
+    delete icuPnames;
+}
+
+// Same order as the LineType values.
+static const char *lineTypeStrings[]={
+    NULL,
+    NULL,
+    "ucd",
+    "property",
+    "binary",
+    "value",
+    "default",
+    "block",
+    "cp",
+    "algnamesrange"
+};
+
+PreparsedUCD::LineType
+PreparsedUCD::readLine(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NO_LINE; }
+    // Select the next available line buffer.
+    while(!isLineBufferAvailable(lineIndex)) {
+        lineIndex= (lineIndex==kNumLineBuffers-1) ? lineIndex=0 : lineIndex+1;
+    }
+    char *line=lines[lineIndex];
+    *line=0;
+    lineLimit=fieldLimit=line;
+    lineType=NO_LINE;
+    char *result=fgets(line, sizeof(lines[0]), file);
+    if(result==NULL) {
+        if(ferror(file)) {
+            perror("error reading preparsed UCD");
+            fprintf(stderr, "error reading preparsed UCD before line %ld\n", (long)lineNumber);
+            errorCode=U_FILE_ACCESS_ERROR;
+        }
+        return NO_LINE;
+    }
+    ++lineNumber;
+    if(*line=='#') {
+        fieldLimit=strchr(line, 0);
+        return lineType=EMPTY_LINE;
+    }
+    // Remove trailing /r/n.
+    char c;
+    char *limit=strchr(line, 0);
+    while(line<limit && ((c=*(limit-1))=='\n' || c=='\r')) { --limit; }
+    // Remove trailing white space.
+    while(line<limit && ((c=*(limit-1))==' ' || c=='\t')) { --limit; }
+    *limit=0;
+    lineLimit=limit;
+    if(line==limit) {
+        fieldLimit=limit;
+        return lineType=EMPTY_LINE;
+    }
+    // Split by ';'.
+    char *semi=line;
+    while((semi=strchr(semi, ';'))!=NULL) { *semi++=0; }
+    fieldLimit=strchr(line, 0);
+    // Determine the line type.
+    int32_t type;
+    for(type=EMPTY_LINE+1;; ++type) {
+        if(type==LINE_TYPE_COUNT) {
+            fprintf(stderr,
+                    "error in preparsed UCD: unknown line type (first field) '%s' on line %ld\n",
+                    line, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+            return NO_LINE;
+        }
+        if(0==strcmp(line, lineTypeStrings[type])) {
+            break;
+        }
+    }
+    lineType=(LineType)type;
+    if(lineType==UNICODE_VERSION_LINE && fieldLimit<lineLimit) {
+        u_versionFromString(ucdVersion, fieldLimit+1);
+    }
+    return lineType;
+}
+
+const char *
+PreparsedUCD::firstField() {
+    char *field=lines[lineIndex];
+    fieldLimit=strchr(field, 0);
+    return field;
+}
+
+const char *
+PreparsedUCD::nextField() {
+    if(fieldLimit==lineLimit) { return NULL; }
+    char *field=fieldLimit+1;
+    fieldLimit=strchr(field, 0);
+    return field;
+}
+
+const UniProps *
+PreparsedUCD::getProps(UnicodeSet &newValues, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    newValues.clear();
+    if(!lineHasPropertyValues()) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    firstField();
+    const char *field=nextField();
+    if(field==NULL) {
+        // No range field after the type.
+        fprintf(stderr,
+                "error in preparsed UCD: missing default/block/cp range field "
+                "(no second field) on line %ld\n",
+                (long)lineNumber);
+        errorCode=U_PARSE_ERROR;
+        return NULL;
+    }
+    UChar32 start, end;
+    if(!parseCodePointRange(field, start, end, errorCode)) { return NULL; }
+    UniProps *props;
+    switch(lineType) {
+    case DEFAULT_LINE:
+        if(defaultLineIndex>=0) {
+            fprintf(stderr,
+                    "error in preparsed UCD: second line with default properties on line %ld\n",
+                    (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+            return NULL;
+        }
+        if(start!=0 || end!=0x10ffff) {
+            fprintf(stderr,
+                    "error in preparsed UCD: default range must be 0..10FFFF, not '%s' on line %ld\n",
+                    field, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+            return NULL;
+        }
+        props=&defaultProps;
+        defaultLineIndex=lineIndex;
+        break;
+    case BLOCK_LINE:
+        blockProps=defaultProps;  // Block inherits default properties.
+        props=&blockProps;
+        blockLineIndex=lineIndex;
+        break;
+    case CP_LINE:
+        if(blockProps.start<=start && end<=blockProps.end) {
+            // Code point range fully inside the last block inherits the block properties.
+            cpProps=blockProps;
+        } else if(start>blockProps.end || end<blockProps.start) {
+            // Code point range fully outside the last block inherits the default properties.
+            cpProps=defaultProps;
+        } else {
+            // Code point range partially overlapping with the last block is illegal.
+            fprintf(stderr,
+                    "error in preparsed UCD: cp range %s on line %ld only "
+                    "partially overlaps with block range %04lX..%04lX\n",
+                    field, (long)lineNumber, (long)blockProps.start, (long)blockProps.end);
+            errorCode=U_PARSE_ERROR;
+            return NULL;
+        }
+        props=&cpProps;
+        break;
+    default:
+        // Will not occur because of the range check above.
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    props->start=start;
+    props->end=end;
+    while((field=nextField())!=NULL) {
+        if(!parseProperty(*props, field, newValues, errorCode)) { return NULL; }
+    }
+    return props;
+}
+
+static const struct {
+    const char *name;
+    int32_t prop;
+} ppucdProperties[]={
+    { "Name_Alias", PPUCD_NAME_ALIAS }
+};
+
+// Returns TRUE for "ok to continue parsing fields".
+UBool
+PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newValues,
+                            UErrorCode &errorCode) {
+    CharString pBuffer;
+    const char *p=field;
+    const char *v=strchr(p, '=');
+    int binaryValue;
+    if(*p=='-') {
+        if(v!=NULL) {
+            fprintf(stderr,
+                    "error in preparsed UCD: mix of binary-property-no and "
+                    "enum-property syntax '%s' on line %ld\n",
+                    field, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+            return FALSE;
+        }
+        binaryValue=0;
+        ++p;
+    } else if(v==NULL) {
+        binaryValue=1;
+    } else {
+        binaryValue=-1;
+        // Copy out the property name rather than modifying the field (writing a NUL).
+        pBuffer.append(p, (int32_t)(v-p), errorCode);
+        p=pBuffer.data();
+        ++v;
+    }
+    int32_t prop=pnames->getPropertyEnum(p);
+    if(prop<0) {
+        for(int32_t i=0;; ++i) {
+            if(i==LENGTHOF(ppucdProperties)) {
+                // Ignore unknown property names.
+                return TRUE;
+            }
+            if(0==uprv_stricmp(p, ppucdProperties[i].name)) {
+                prop=ppucdProperties[i].prop;
+                U_ASSERT(prop>=0);
+                break;
+            }
+        }
+    }
+    if(prop<UCHAR_BINARY_LIMIT) {
+        if(binaryValue>=0) {
+            props.binProps[prop]=(UBool)binaryValue;
+        } else {
+            // No binary value for a binary property.
+            fprintf(stderr,
+                    "error in preparsed UCD: enum-property syntax '%s' "
+                    "for binary property on line %ld\n",
+                    field, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+        }
+    } else if(binaryValue>=0) {
+        // Binary value for a non-binary property.
+        fprintf(stderr,
+                "error in preparsed UCD: binary-property syntax '%s' "
+                "for non-binary property on line %ld\n",
+                field, (long)lineNumber);
+        errorCode=U_PARSE_ERROR;
+    } else if(prop<UCHAR_INT_LIMIT) {
+        int32_t value;
+        if((value=pnames->getPropertyValueEnum(prop, v))==UCHAR_INVALID_CODE) {
+            fprintf(stderr,
+                    "error in preparsed UCD: '%s' is not a valid value on line %ld\n",
+                    field, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+        } else {
+            props.intProps[prop]=value;
+        }
+    } else {
+        switch(prop) {
+        case UCHAR_NUMERIC_VALUE:
+            props.numericValue=v;
+            break;
+        case UCHAR_NAME:
+            props.name=v;
+            break;
+        case UCHAR_UNICODE_1_NAME:
+            props.uni1Name=v;
+            break;
+        case UCHAR_AGE:
+            u_versionFromString(props.age, v);  // Writes 0.0.0.0 if v is not numeric.
+            break;
+        case UCHAR_BIDI_MIRRORING_GLYPH:
+            props.bmg=parseCodePoint(v, errorCode);
+            break;
+        case UCHAR_CASE_FOLDING:
+            parseString(v, props.cf, errorCode);
+            break;
+        case PPUCD_NAME_ALIAS:
+            props.nameAlias=v;
+            break;
+        default:
+            // Ignore unhandled properties.
+            return TRUE;
+        }
+    }
+    if(U_SUCCESS(errorCode)) {
+        newValues.add((UChar32)prop);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+UBool
+PreparsedUCD::getRangeForAlgNames(UChar32 &start, UChar32 &end, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    if(lineType!=ALG_NAMES_RANGE_LINE) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
+    firstField();
+    const char *field=nextField();
+    if(field==NULL) {
+        // No range field after the type.
+        fprintf(stderr,
+                "error in preparsed UCD: missing algnamesrange range field "
+                "(no second field) on line %ld\n",
+                (long)lineNumber);
+        errorCode=U_PARSE_ERROR;
+        return FALSE;
+    }
+    return parseCodePointRange(field, start, end, errorCode);
+}
+
+UChar32
+PreparsedUCD::parseCodePoint(const char *s, UErrorCode &errorCode) {
+    char *end;
+    uint32_t value=(uint32_t)uprv_strtoul(s, &end, 16);
+    if(end<=s || *end!=0 || value>=0x110000) {
+        fprintf(stderr,
+                "error in preparsed UCD: '%s' is not a valid code point on line %ld\n",
+                s, (long)lineNumber);
+        errorCode=U_PARSE_ERROR;
+        return U_SENTINEL;
+    }
+    return (UChar32)value;
+}
+
+UBool
+PreparsedUCD::parseCodePointRange(const char *s, UChar32 &start, UChar32 &end, UErrorCode &errorCode) {
+    uint32_t st, e;
+    u_parseCodePointRange(s, &st, &e, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "error in preparsed UCD: '%s' is not a valid code point range on line %ld\n",
+                s, (long)lineNumber);
+        return FALSE;
+    }
+    start=(UChar32)st;
+    end=(UChar32)e;
+    return TRUE;
+}
+
+void
+PreparsedUCD::parseString(const char *s, UnicodeString &uni, UErrorCode &errorCode) {
+    UChar *buffer=uni.getBuffer(-1);
+    int32_t length=u_parseString(s, buffer, uni.getCapacity(), NULL, &errorCode);
+    if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+        errorCode=U_ZERO_ERROR;
+        uni.releaseBuffer(0);
+        buffer=uni.getBuffer(length);
+        length=u_parseString(s, buffer, uni.getCapacity(), NULL, &errorCode);
+    }
+    uni.releaseBuffer(length);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "error in preparsed UCD: '%s' is not a valid Unicode string on line %ld\n",
+                s, (long)lineNumber);
+    }
+}
+
+U_NAMESPACE_END
