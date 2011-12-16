@@ -265,6 +265,7 @@
     </ClCompile>
     <ClCompile Include="pkg_icu.cpp" />
     <ClCompile Include="pkgitems.cpp" />
+    <ClCompile Include="ppucd.cpp" />
     <ClCompile Include="swapimpl.cpp" />
     <ClCompile Include="toolutil.cpp">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
@@ -299,6 +300,7 @@
     <ClInclude Include="pkg_gencmn.h" />
     <ClInclude Include="pkg_icu.h" />
     <ClInclude Include="pkg_imp.h" />
+    <ClInclude Include="ppucd.h" />
     <ClInclude Include="swapimpl.h" />
     <ClInclude Include="toolutil.h" />
     <ClInclude Include="ucbuf.h" />
