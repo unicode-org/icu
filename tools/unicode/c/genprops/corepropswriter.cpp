@@ -252,13 +252,6 @@ static UTrie2 *pTrie=NULL;
 /* -------------------------------------------------------------------------- */
 
 U_CFUNC void
-setUnicodeVersion(const char *v) {
-    UVersionInfo version;
-    u_versionFromString(version, v);
-    uprv_memcpy(dataInfo.dataVersion, version, 4);
-}
-
-U_CFUNC void
 initStore() {
     UErrorCode errorCode=U_ZERO_ERROR;
     pTrie=utrie2_open(0, 0, &errorCode);
@@ -494,6 +487,31 @@ generateData(const char *dataDir, UBool csource) {
     if(beVerbose) {
         printf("data size:                            %6lu\n", (unsigned long)size);
     }
+}
+
+class CorePropsWriter : public PropsWriter {
+public:
+    virtual void setUnicodeVersion(const UVersionInfo version);
+    virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
+};
+
+void
+CorePropsWriter::setUnicodeVersion(const UVersionInfo version) {
+    uprv_memcpy(dataInfo.dataVersion, version, 4);
+}
+
+void
+CorePropsWriter::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
+}
+
+PropsWriter *
+createCorePropsWriter(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    PropsWriter *pw=new CorePropsWriter();
+    if(pw==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    }
+    return pw;
 }
 
 /*

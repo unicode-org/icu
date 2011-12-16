@@ -503,6 +503,20 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     parseSingleEnumFile(filename, basename, suffix, &eawSingleEnum, pErrorCode);
 
     newTrie=upvec_compactToUTrie2WithRowIndexes(pv, pErrorCode);
+// TODO: remove
+#if 0
+const uint32_t *pvArray;
+int32_t pvRows;
+pvArray=upvec_getArray(pv, &pvRows, NULL);
+for(int32_t c=0; c<=0x10ffff; ++c) {
+  uint16_t ri=utrie2_get32(newTrie, c);
+  uint32_t v2=pvArray[ri+2];
+  int32_t dt=v2&UPROPS_DT_MASK;
+  if(dt!=0) {
+    printf("%04x %d\n", c, dt);
+  }
+}
+#endif
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
                 u_errorName(*pErrorCode));
@@ -922,4 +936,34 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
     }
 
     return additionalPropsSize;
+}
+
+class Props2Writer : public PropsWriter {
+public:
+    virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
+};
+
+void
+Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    if(newValues.contains(UCHAR_DECOMPOSITION_TYPE)) {
+        upvec_setValue(pv, props.start, props.end,
+                       2, (uint32_t)props.getIntProp(UCHAR_DECOMPOSITION_TYPE), UPROPS_DT_MASK,
+                       &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "genprops error: unable to set decomposition type: %s\n",
+                    u_errorName(errorCode));
+            exit(errorCode);
+        }
+    }
+}
+
+PropsWriter *
+createProps2Writer(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    PropsWriter *pw=new Props2Writer();
+    if(pw==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    }
+    return pw;
 }
