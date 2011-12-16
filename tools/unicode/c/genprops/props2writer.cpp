@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  props2.cpp
+*   file name:  props2writer.cpp (was props2.cpp)
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
