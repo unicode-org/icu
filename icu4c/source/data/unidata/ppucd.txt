@@ -17195,7 +17195,7 @@ cp;ABF8;-Alpha;gc=Nd;-IDS;InSC=Other;lb=NU;na=MEETEI MAYEK DIGIT EIGHT;nt=De;nv=
 cp;ABF9;-Alpha;gc=Nd;-IDS;InSC=Other;lb=NU;na=MEETEI MAYEK DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 cp;ABFA..ABFF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;InSC=Other;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;AC00..D7AF;age=2.0;Alpha;blk=Hangul;ea=W;gc=Lo;GCB=LVT;Gr_Base;IDC;IDS;lb=H3;NFD_QC=N;NFKD_QC=N;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
+block;AC00..D7AF;age=2.0;Alpha;blk=Hangul;dt=Can;ea=W;gc=Lo;GCB=LVT;Gr_Base;IDC;IDS;lb=H3;NFD_QC=N;NFKD_QC=N;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
 # AC00..D7A3 Hangul Syllables
 algnamesrange;AC00..D7A3;hangul
 cp;AC00;GCB=LV;lb=H2
@@ -17597,7 +17597,7 @@ cp;D734;GCB=LV;lb=H2
 cp;D750;GCB=LV;lb=H2
 cp;D76C;GCB=LV;lb=H2
 cp;D788;GCB=LV;lb=H2
-cp;D7A4..D7AF;age=NA;-Alpha;ea=N;gc=Cn;GCB=XX;-Gr_Base;-IDC;-IDS;lb=XX;NFD_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
+cp;D7A4..D7AF;age=NA;-Alpha;dt=None;ea=N;gc=Cn;GCB=XX;-Gr_Base;-IDC;-IDS;lb=XX;NFD_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
 block;D7B0..D7FF;age=5.2;Alpha;blk=Jamo_Ext_B;ea=W;gc=Lo;GCB=T;Gr_Base;IDC;IDS;lb=JT;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
 # D7B0..D7FF Hangul Jamo Extended-B

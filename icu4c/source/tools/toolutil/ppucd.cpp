@@ -42,8 +42,8 @@ PropertyNames::getPropertyValueEnum(int32_t property, const char *name) const {
 UniProps::UniProps()
         : start(U_SENTINEL), end(U_SENTINEL),
           bmg(U_SENTINEL),
-          numericValue(NULL),
-          name(NULL), uni1Name(NULL), nameAlias(NULL) {
+          digitValue(-1), numericValue(NULL),
+          name(NULL), nameAlias(NULL) {
     memset(binProps, 0, sizeof(binProps));
     memset(intProps, 0, sizeof(intProps));
     memset(age, 0, 4);
@@ -94,7 +94,7 @@ static const char *lineTypeStrings[]={
     "property",
     "binary",
     "value",
-    "default",
+    "defaults",
     "block",
     "cp",
     "algnamesrange"
@@ -200,7 +200,7 @@ PreparsedUCD::getProps(UnicodeSet &newValues, UErrorCode &errorCode) {
     if(!parseCodePointRange(field, start, end, errorCode)) { return NULL; }
     UniProps *props;
     switch(lineType) {
-    case DEFAULT_LINE:
+    case DEFAULTS_LINE:
         if(defaultLineIndex>=0) {
             fprintf(stderr,
                     "error in preparsed UCD: second line with default properties on line %ld\n",
@@ -322,25 +322,40 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
                 field, (long)lineNumber);
         errorCode=U_PARSE_ERROR;
     } else if(prop<UCHAR_INT_LIMIT) {
-        int32_t value;
-        if((value=pnames->getPropertyValueEnum(prop, v))==UCHAR_INVALID_CODE) {
+        int32_t value=pnames->getPropertyValueEnum(prop, v);
+        if(value==UCHAR_INVALID_CODE && prop==UCHAR_CANONICAL_COMBINING_CLASS) {
+            // TODO: Make getPropertyValueEnum(UCHAR_CANONICAL_COMBINING_CLASS, v) work.
+            char *end;
+            unsigned long ccc=uprv_strtoul(v, &end, 10);
+            if(v<end && *end==0 && ccc<=254) {
+                value=(int32_t)ccc;
+            }
+        }
+        if(value==UCHAR_INVALID_CODE) {
             fprintf(stderr,
                     "error in preparsed UCD: '%s' is not a valid value on line %ld\n",
                     field, (long)lineNumber);
             errorCode=U_PARSE_ERROR;
         } else {
-            props.intProps[prop]=value;
+            props.intProps[prop-UCHAR_INT_START]=value;
         }
+    } else if(*v=='<' && lineType==DEFAULTS_LINE) {
+        // Ignore default values like <code point>.
+        return TRUE;
     } else {
+        char c;
         switch(prop) {
         case UCHAR_NUMERIC_VALUE:
             props.numericValue=v;
+            c=*v;
+            if('0'<=c && c<='9' && v[1]==0) {
+                props.digitValue=c-'0';
+            } else {
+                props.digitValue=-1;
+            }
             break;
         case UCHAR_NAME:
             props.name=v;
-            break;
-        case UCHAR_UNICODE_1_NAME:
-            props.uni1Name=v;
             break;
         case UCHAR_AGE:
             u_versionFromString(props.age, v);  // Writes 0.0.0.0 if v is not numeric.

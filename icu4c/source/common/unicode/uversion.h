@@ -178,7 +178,7 @@ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString);
  * @stable ICU 2.4
  */
 U_STABLE void U_EXPORT2
-u_versionToString(UVersionInfo versionArray, char *versionString);
+u_versionToString(const UVersionInfo versionArray, char *versionString);
 
 /**
  * Gets the ICU release version.  The version array stores the version information
