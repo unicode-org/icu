@@ -45,20 +45,6 @@ static UnicodeString *scriptExtensions;
 
 /* miscellaneous ------------------------------------------------------------ */
 
-static char *
-trimTerminateField(char *s, char *limit) {
-    /* trim leading whitespace */
-    s=(char *)u_skipWhitespace(s);
-
-    /* trim trailing whitespace */
-    while(s<limit && U_IS_INV_WHITESPACE(*(limit-1))) {
-        --limit;
-    }
-    *limit=0;
-
-    return s;
-}
-
 static void
 parseTwoFieldFile(char *filename, char *basename,
                   const char *ucdFile, const char *suffix,
@@ -108,137 +94,6 @@ numericLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode);
 
-/* parse files with single enumerated properties ---------------------------- */
-
-struct SingleEnum {
-    const char *ucdFile, *propName;
-    UProperty prop;
-    int32_t vecWord, vecShift;
-    uint32_t vecMask;
-};
-typedef struct SingleEnum SingleEnum;
-
-static void
-parseSingleEnumFile(char *filename, char *basename, const char *suffix,
-                    const SingleEnum *sen,
-                    UErrorCode *pErrorCode);
-
-static const SingleEnum scriptSingleEnum={ 
-    "Scripts", "script", 
-    UCHAR_SCRIPT, 
-    0, 0, UPROPS_SCRIPT_MASK
-};
-
-static const SingleEnum blockSingleEnum={
-    "Blocks", "block",
-    UCHAR_BLOCK,
-    0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK
-};
-
-static const SingleEnum graphemeClusterBreakSingleEnum={
-    "GraphemeBreakProperty", "Grapheme_Cluster_Break",
-    UCHAR_GRAPHEME_CLUSTER_BREAK,
-    2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK
-};
-
-static const SingleEnum wordBreakSingleEnum={
-    "WordBreakProperty", "Word_Break",
-    UCHAR_WORD_BREAK,
-    2, UPROPS_WB_SHIFT, UPROPS_WB_MASK
-};
-
-static const SingleEnum sentenceBreakSingleEnum={
-    "SentenceBreakProperty", "Sentence_Break",
-    UCHAR_SENTENCE_BREAK,
-    2, UPROPS_SB_SHIFT, UPROPS_SB_MASK
-};
-
-static const SingleEnum lineBreakSingleEnum={
-    "LineBreak", "line break",
-    UCHAR_LINE_BREAK,
-    2, UPROPS_LB_SHIFT, UPROPS_LB_MASK
-};
-
-static const SingleEnum eawSingleEnum={
-    "EastAsianWidth", "east asian width",
-    UCHAR_EAST_ASIAN_WIDTH,
-    0, UPROPS_EA_SHIFT, UPROPS_EA_MASK
-};
-
-static void U_CALLCONV
-singleEnumLineFn(void *context,
-                 char *fields[][2], int32_t fieldCount,
-                 UErrorCode *pErrorCode) {
-    const SingleEnum *sen;
-    char *s;
-    uint32_t start, end, uv;
-    int32_t value;
-
-    sen=(const SingleEnum *)context;
-
-    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in %s.txt field 0 at %s\n", sen->ucdFile, fields[0][0]);
-        exit(*pErrorCode);
-    }
-
-    /* parse property alias */
-    s=trimTerminateField(fields[1][0], fields[1][1]);
-    value=u_getPropertyValueEnum(sen->prop, s);
-    if(value<0) {
-        if(sen->prop==UCHAR_BLOCK) {
-            if(isToken("Greek", s)) {
-                value=UBLOCK_GREEK; /* Unicode 3.2 renames this to "Greek and Coptic" */
-            } else if(isToken("Combining Marks for Symbols", s)) {
-                value=UBLOCK_COMBINING_MARKS_FOR_SYMBOLS; /* Unicode 3.2 renames this to "Combining Diacritical Marks for Symbols" */
-            } else if(isToken("Private Use", s)) {
-                value=UBLOCK_PRIVATE_USE; /* Unicode 3.2 renames this to "Private Use Area" */
-            }
-        }
-    }
-    if(value<0) {
-        fprintf(stderr, "genprops error: unknown %s name in %s.txt field 1 at %s\n",
-                        sen->propName, sen->ucdFile, s);
-        exit(U_PARSE_ERROR);
-    }
-
-    uv=(uint32_t)(value<<sen->vecShift);
-    if((uv&sen->vecMask)!=uv) {
-        fprintf(stderr, "genprops error: %s value overflow (0x%x) at %s\n",
-                        sen->propName, (int)uv, s);
-        exit(U_INTERNAL_PROGRAM_ERROR);
-    }
-
-    if(start==0 && end==0x10ffff) {
-        /* Also set bits for initialValue and errorValue. */
-        end=UPVEC_MAX_CP;
-    }
-    upvec_setValue(pv, start, end, sen->vecWord, uv, sen->vecMask, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set %s code: %s\n",
-                        sen->propName, u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-static void
-parseSingleEnumFile(char *filename, char *basename, const char *suffix,
-                    const SingleEnum *sen,
-                    UErrorCode *pErrorCode) {
-    char *fields[2][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    writeUCDFilename(basename, sen->ucdFile, suffix);
-
-    u_parseDelimitedFile(filename, ';', fields, 2, singleEnumLineFn, (void *)sen, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "error parsing %s.txt: %s\n", sen->ucdFile, u_errorName(*pErrorCode));
-    }
-}
-
 /* -------------------------------------------------------------------------- */
 
 static void
@@ -271,55 +126,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* add Han numeric types & values */
     parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 2, numericLineFn, pErrorCode);
 
-    parseSingleEnumFile(filename, basename, suffix, &scriptSingleEnum, pErrorCode);
-
     parseTwoFieldFile(filename, basename, "ScriptExtensions", suffix, scriptExtensionsLineFn, pErrorCode);
-
-    parseSingleEnumFile(filename, basename, suffix, &blockSingleEnum, pErrorCode);
-
-    parseSingleEnumFile(filename, basename, suffix, &graphemeClusterBreakSingleEnum, pErrorCode);
-
-    parseSingleEnumFile(filename, basename, suffix, &wordBreakSingleEnum, pErrorCode);
-
-    parseSingleEnumFile(filename, basename, suffix, &sentenceBreakSingleEnum, pErrorCode);
-
-    /*
-     * LineBreak-4.0.0.txt:
-     *  - All code points, assigned and unassigned, that are not listed 
-     *         explicitly are given the value "XX".
-     *
-     * XX==U_LB_UNKNOWN==0 - nothing to do
-     */
-    parseSingleEnumFile(filename, basename, suffix, &lineBreakSingleEnum, pErrorCode);
-
-    /*
-     * Preset East Asian Width defaults:
-     *
-     * http://www.unicode.org/reports/tr11/#Unassigned
-     * 7.1 Unassigned and Private Use characters
-     *
-     * All unassigned characters are by default classified as non-East Asian neutral,
-     * except for the range U+20000 to U+2FFFD,
-     * since all code positions from U+20000 to U+2FFFD are intended for CJK ideographs (W).
-     * All Private use characters are by default classified as ambiguous,
-     * since their definition depends on context.
-     *
-     * N for all ==0 - nothing to do
-     * A for Private Use
-     * W for plane 2
-     */
-    *pErrorCode=U_ZERO_ERROR;
-    upvec_setValue(pv, 0xe000, 0xf8ff, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
-    upvec_setValue(pv, 0xf0000, 0xffffd, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
-    upvec_setValue(pv, 0x100000, 0x10fffd, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
-    upvec_setValue(pv, 0x20000, 0x2fffd, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: unable to set default East Asian Widths: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-
-    /* parse EastAsianWidth.txt */
-    parseSingleEnumFile(filename, basename, suffix, &eawSingleEnum, pErrorCode);
 
     newTrie=upvec_compactToUTrie2WithRowIndexes(pv, pErrorCode);
 // TODO: remove
@@ -736,7 +543,8 @@ propToBinaries[]={
     // Note: The Noncharacter_Code_Point property is probably stable enough
     // so that it could be hardcoded.
     { UCHAR_NONCHARACTER_CODE_POINT,        1, UPROPS_NONCHARACTER_CODE_POINT },
-    // Note: The Grapheme_Link property is deprecated since Unicode 5.0.
+    // Note: The Grapheme_Link property is deprecated since Unicode 5.0
+    // because it is a "Duplication of ccc=9" (UAX #44).
     { UCHAR_GRAPHEME_LINK,                  1, UPROPS_GRAPHEME_LINK },
     { UCHAR_IDS_BINARY_OPERATOR,            1, UPROPS_IDS_BINARY_OPERATOR },
     { UCHAR_IDS_TRINARY_OPERATOR,           1, UPROPS_IDS_TRINARY_OPERATOR },
@@ -761,6 +569,23 @@ propToBinaries[]={
     { UCHAR_GRAPHEME_BASE,                  1, UPROPS_GRAPHEME_BASE },
 };
 
+struct PropToEnum {
+    int32_t prop;  // UProperty
+    int32_t vecWord, vecShift;
+    uint32_t vecMask;
+};
+
+static const PropToEnum
+propToEnums[]={
+    { UCHAR_SCRIPT,                     0, 0, UPROPS_SCRIPT_MASK },
+    { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
+    { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
+    { UCHAR_GRAPHEME_CLUSTER_BREAK,     2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK },
+    { UCHAR_WORD_BREAK,                 2, UPROPS_WB_SHIFT, UPROPS_WB_MASK },
+    { UCHAR_SENTENCE_BREAK,             2, UPROPS_SB_SHIFT, UPROPS_SB_MASK },
+    { UCHAR_LINE_BREAK,                 2, UPROPS_LB_SHIFT, UPROPS_LB_MASK },
+};
+
 void
 Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
@@ -778,6 +603,18 @@ Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErro
                 uint32_t mask=U_MASK(p2b.vecShift);
                 uint32_t value= props.binProps[p2b.prop] ? mask : 0;
                 upvec_setValue(pv, start, end, p2b.vecWord, value, mask, &errorCode);
+            }
+        }
+    }
+    if(newValues.containsSome(UCHAR_INT_START, UCHAR_INT_LIMIT-1)) {
+        for(int32_t i=0; i<LENGTHOF(propToEnums); ++i) {
+            const PropToEnum &p2e=propToEnums[i];
+            U_ASSERT(p2e.vecShift<32);
+            if(newValues.contains(p2e.prop)) {
+                uint32_t mask=p2e.vecMask;
+                uint32_t value=(uint32_t)(props.getIntProp(p2e.prop)<<p2e.vecShift);
+                U_ASSERT((value&mask)==value);
+                upvec_setValue(pv, start, end, p2e.vecWord, value, mask, &errorCode);
             }
         }
     }
