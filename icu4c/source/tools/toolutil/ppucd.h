@@ -103,6 +103,9 @@ public:
      */
     LineType readLine(UErrorCode &errorCode);
 
+    /** Returns the number of the line read by readLine(). */
+    int32_t getLineNumber() const { return lineNumber; }
+
     /** Returns the line's next field, or NULL. */
     const char *nextField();
 
