@@ -27,6 +27,7 @@
 #include "utrie2.h"
 #include "uprops.h"
 #include "propsvec.h"
+#include "uassert.h"
 #include "uparse.h"
 #include "writesrc.h"
 #include "genprops.h"
@@ -238,178 +239,6 @@ parseSingleEnumFile(char *filename, char *basename, const char *suffix,
     }
 }
 
-/* parse files with multiple binary properties ------------------------------ */
-
-struct Binary {
-    const char *propName;
-    int32_t vecWord, vecShift;
-};
-typedef struct Binary Binary;
-
-struct Binaries {
-    const char *ucdFile;
-    const Binary *binaries;
-    int32_t binariesCount;
-};
-typedef struct Binaries Binaries;
-
-static const Binary
-propListNames[]={
-    { "White_Space",                        1, UPROPS_WHITE_SPACE },
-    { "Dash",                               1, UPROPS_DASH },
-    { "Hyphen",                             1, UPROPS_HYPHEN },
-    { "Quotation_Mark",                     1, UPROPS_QUOTATION_MARK },
-    { "Terminal_Punctuation",               1, UPROPS_TERMINAL_PUNCTUATION },
-    { "Hex_Digit",                          1, UPROPS_HEX_DIGIT },
-    { "ASCII_Hex_Digit",                    1, UPROPS_ASCII_HEX_DIGIT },
-    { "Ideographic",                        1, UPROPS_IDEOGRAPHIC },
-    { "Diacritic",                          1, UPROPS_DIACRITIC },
-    { "Extender",                           1, UPROPS_EXTENDER },
-    { "Noncharacter_Code_Point",            1, UPROPS_NONCHARACTER_CODE_POINT },
-    { "Grapheme_Link",                      1, UPROPS_GRAPHEME_LINK },
-    { "IDS_Binary_Operator",                1, UPROPS_IDS_BINARY_OPERATOR },
-    { "IDS_Trinary_Operator",               1, UPROPS_IDS_TRINARY_OPERATOR },
-    { "Radical",                            1, UPROPS_RADICAL },
-    { "Unified_Ideograph",                  1, UPROPS_UNIFIED_IDEOGRAPH },
-    { "Deprecated",                         1, UPROPS_DEPRECATED },
-    { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION },
-
-    /* new properties in Unicode 4.0.1 */
-    { "STerm",                              1, UPROPS_S_TERM },
-    { "Variation_Selector",                 1, UPROPS_VARIATION_SELECTOR },
-
-    /* new properties in Unicode 4.1 */
-    { "Pattern_Syntax",                     1, UPROPS_PATTERN_SYNTAX },
-    { "Pattern_White_Space",                1, UPROPS_PATTERN_WHITE_SPACE }
-};
-
-static const Binaries
-propListBinaries={
-    "PropList", propListNames, LENGTHOF(propListNames)
-};
-
-static const Binary
-derCorePropsNames[]={
-    { "XID_Start",                          1, UPROPS_XID_START },
-    { "XID_Continue",                       1, UPROPS_XID_CONTINUE },
-
-    /* before Unicode 4/ICU 2.6/format version 3.2, these used to be Other_XYZ from PropList.txt */
-    { "Math",                               1, UPROPS_MATH },
-    { "Alphabetic",                         1, UPROPS_ALPHABETIC },
-    { "Grapheme_Extend",                    1, UPROPS_GRAPHEME_EXTEND },
-    { "Default_Ignorable_Code_Point",       1, UPROPS_DEFAULT_IGNORABLE_CODE_POINT },
-
-    /* new properties bits in ICU 2.6/format version 3.2 */
-    { "ID_Start",                           1, UPROPS_ID_START },
-    { "ID_Continue",                        1, UPROPS_ID_CONTINUE },
-    { "Grapheme_Base",                      1, UPROPS_GRAPHEME_BASE },
-
-    /*
-     * Unicode 5/ICU 3.6 moves Grapheme_Link from PropList.txt
-     * to DerivedCoreProperties.txt and deprecates it.
-     */
-    { "Grapheme_Link",                      1, UPROPS_GRAPHEME_LINK }
-};
-
-static const Binaries
-derCorePropsBinaries={
-    "DerivedCoreProperties", derCorePropsNames, LENGTHOF(derCorePropsNames)
-};
-
-static char ignoredProps[100][64];
-static int32_t ignoredPropsCount;
-
-static void
-addIgnoredProp(char *s, char *limit) {
-    int32_t i;
-
-    s=trimTerminateField(s, limit);
-    for(i=0; i<ignoredPropsCount; ++i) {
-        if(0==uprv_strcmp(ignoredProps[i], s)) {
-            return;
-        }
-    }
-    uprv_strcpy(ignoredProps[ignoredPropsCount++], s);
-}
-
-static void U_CALLCONV
-binariesLineFn(void *context,
-               char *fields[][2], int32_t fieldCount,
-               UErrorCode *pErrorCode) {
-    const Binaries *bin;
-    char *s;
-    uint32_t start, end, uv;
-    int32_t i;
-
-    bin=(const Binaries *)context;
-
-    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in %s.txt field 0 at %s\n", bin->ucdFile, fields[0][0]);
-        exit(*pErrorCode);
-    }
-
-    /* parse binary property name */
-    s=(char *)u_skipWhitespace(fields[1][0]);
-    for(i=0;; ++i) {
-        if(i==bin->binariesCount) {
-            /* ignore unrecognized properties */
-            if(beVerbose) {
-                addIgnoredProp(s, fields[1][1]);
-            }
-            return;
-        }
-        if(isToken(bin->binaries[i].propName, s)) {
-            break;
-        }
-    }
-
-    if(bin->binaries[i].vecShift>=32) {
-        fprintf(stderr, "genprops error: shift value %d>=32 for %s %s\n",
-                        (int)bin->binaries[i].vecShift, bin->ucdFile, bin->binaries[i].propName);
-        exit(U_INTERNAL_PROGRAM_ERROR);
-    }
-    uv=U_MASK(bin->binaries[i].vecShift);
-
-    if(start==0 && end==0x10ffff) {
-        /* Also set bits for initialValue and errorValue. */
-        end=UPVEC_MAX_CP;
-    }
-    upvec_setValue(pv, start, end, bin->binaries[i].vecWord, uv, uv, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set %s code: %s\n",
-                        bin->binaries[i].propName, u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-static void
-parseBinariesFile(char *filename, char *basename, const char *suffix,
-                  const Binaries *bin,
-                  UErrorCode *pErrorCode) {
-    char *fields[2][2];
-    int32_t i;
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    writeUCDFilename(basename, bin->ucdFile, suffix);
-
-    ignoredPropsCount=0;
-
-    u_parseDelimitedFile(filename, ';', fields, 2, binariesLineFn, (void *)bin, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "error parsing %s.txt: %s\n", bin->ucdFile, u_errorName(*pErrorCode));
-    }
-
-    if(beVerbose) {
-        for(i=0; i<ignoredPropsCount; ++i) {
-            printf("genprops: ignoring property %s in %s.txt\n", ignoredProps[i], bin->ucdFile);
-        }
-    }
-}
-
 /* -------------------------------------------------------------------------- */
 
 static void
@@ -447,10 +276,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     parseTwoFieldFile(filename, basename, "ScriptExtensions", suffix, scriptExtensionsLineFn, pErrorCode);
 
     parseSingleEnumFile(filename, basename, suffix, &blockSingleEnum, pErrorCode);
-
-    parseBinariesFile(filename, basename, suffix, &propListBinaries, pErrorCode);
-
-    parseBinariesFile(filename, basename, suffix, &derCorePropsBinaries, pErrorCode);
 
     parseSingleEnumFile(filename, basename, suffix, &graphemeClusterBreakSingleEnum, pErrorCode);
 
@@ -887,6 +712,55 @@ public:
     virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
 };
 
+struct PropToBinary {
+    int32_t prop;  // UProperty
+    int32_t vecWord, vecShift;
+};
+
+static const PropToBinary
+propToBinaries[]={
+    { UCHAR_WHITE_SPACE,                    1, UPROPS_WHITE_SPACE },
+    { UCHAR_DASH,                           1, UPROPS_DASH },
+    // Note: The Hyphen property is stabilized since Unicode 4.0
+    // and deprecated since Unicode 6.0.
+    { UCHAR_HYPHEN,                         1, UPROPS_HYPHEN },
+    { UCHAR_QUOTATION_MARK,                 1, UPROPS_QUOTATION_MARK },
+    { UCHAR_TERMINAL_PUNCTUATION,           1, UPROPS_TERMINAL_PUNCTUATION },
+    // Note: The Hex_Digit and ASCII_Hex_Digit properties are probably stable enough
+    // so that they could be hardcoded.
+    { UCHAR_HEX_DIGIT,                      1, UPROPS_HEX_DIGIT },
+    { UCHAR_ASCII_HEX_DIGIT,                1, UPROPS_ASCII_HEX_DIGIT },
+    { UCHAR_IDEOGRAPHIC,                    1, UPROPS_IDEOGRAPHIC },
+    { UCHAR_DIACRITIC,                      1, UPROPS_DIACRITIC },
+    { UCHAR_EXTENDER,                       1, UPROPS_EXTENDER },
+    // Note: The Noncharacter_Code_Point property is probably stable enough
+    // so that it could be hardcoded.
+    { UCHAR_NONCHARACTER_CODE_POINT,        1, UPROPS_NONCHARACTER_CODE_POINT },
+    // Note: The Grapheme_Link property is deprecated since Unicode 5.0.
+    { UCHAR_GRAPHEME_LINK,                  1, UPROPS_GRAPHEME_LINK },
+    { UCHAR_IDS_BINARY_OPERATOR,            1, UPROPS_IDS_BINARY_OPERATOR },
+    { UCHAR_IDS_TRINARY_OPERATOR,           1, UPROPS_IDS_TRINARY_OPERATOR },
+    { UCHAR_RADICAL,                        1, UPROPS_RADICAL },
+    { UCHAR_UNIFIED_IDEOGRAPH,              1, UPROPS_UNIFIED_IDEOGRAPH },
+    { UCHAR_DEPRECATED,                     1, UPROPS_DEPRECATED },
+    { UCHAR_LOGICAL_ORDER_EXCEPTION,        1, UPROPS_LOGICAL_ORDER_EXCEPTION },
+    { UCHAR_S_TERM,                         1, UPROPS_S_TERM },
+    { UCHAR_VARIATION_SELECTOR,             1, UPROPS_VARIATION_SELECTOR },
+    // Note: Pattern_Syntax & Pattern_White_Space are available via
+    // the internal PatternProps class and need not be stored here any more.
+    { UCHAR_PATTERN_SYNTAX,                 1, UPROPS_PATTERN_SYNTAX },
+    { UCHAR_PATTERN_WHITE_SPACE,            1, UPROPS_PATTERN_WHITE_SPACE },
+    { UCHAR_XID_START,                      1, UPROPS_XID_START },
+    { UCHAR_XID_CONTINUE,                   1, UPROPS_XID_CONTINUE },
+    { UCHAR_MATH,                           1, UPROPS_MATH },
+    { UCHAR_ALPHABETIC,                     1, UPROPS_ALPHABETIC },
+    { UCHAR_GRAPHEME_EXTEND,                1, UPROPS_GRAPHEME_EXTEND },
+    { UCHAR_DEFAULT_IGNORABLE_CODE_POINT,   1, UPROPS_DEFAULT_IGNORABLE_CODE_POINT },
+    { UCHAR_ID_START,                       1, UPROPS_ID_START },
+    { UCHAR_ID_CONTINUE,                    1, UPROPS_ID_CONTINUE },
+    { UCHAR_GRAPHEME_BASE,                  1, UPROPS_GRAPHEME_BASE },
+};
+
 void
 Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
@@ -895,6 +769,17 @@ Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErro
     if(start==0 && end==0x10ffff) {
         // Also set bits for initialValue and errorValue.
         end=UPVEC_MAX_CP;
+    }
+    if(newValues.containsSome(0, UCHAR_BINARY_LIMIT-1)) {
+        for(int32_t i=0; i<LENGTHOF(propToBinaries); ++i) {
+            const PropToBinary &p2b=propToBinaries[i];
+            U_ASSERT(p2b.vecShift<32);
+            if(newValues.contains(p2b.prop)) {
+                uint32_t mask=U_MASK(p2b.vecShift);
+                uint32_t value= props.binProps[p2b.prop] ? mask : 0;
+                upvec_setValue(pv, start, end, p2b.vecWord, value, mask, &errorCode);
+            }
+        }
     }
     if(newValues.contains(UCHAR_DECOMPOSITION_TYPE)) {
         upvec_setValue(pv, start, end,
