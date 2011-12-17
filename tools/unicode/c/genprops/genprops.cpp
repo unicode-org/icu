@@ -50,6 +50,7 @@ U_NAMESPACE_USE
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
+PropsWriter::~PropsWriter() {}
 void PropsWriter::setUnicodeVersion(const UVersionInfo version) {}
 void PropsWriter::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
 
@@ -142,8 +143,6 @@ main(int argc, char* argv[]) {
     destDir=options[DESTDIR].value;
 
     /* initialize */
-    initStore();
-
     IcuToolErrorCode errorCode("genprops");
     LocalPointer<PropsWriter> corePropsWriter(createCorePropsWriter(errorCode));
     LocalPointer<PropsWriter> props2Writer(createProps2Writer(errorCode));
@@ -163,7 +162,6 @@ main(int argc, char* argv[]) {
     }
     PreparsedUCD::LineType lineType;
     UnicodeSet newValues;
-    int i=0;
     while((lineType=ppucd.readLine(errorCode))!=PreparsedUCD::NO_LINE) {
         if(ppucd.lineHasPropertyValues()) {
             const UniProps *props=ppucd.getProps(newValues, errorCode);
@@ -172,9 +170,13 @@ main(int argc, char* argv[]) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
             corePropsWriter->setUnicodeVersion(version);
         }
-        ++i;
+        if(errorCode.isFailure()) {
+            fprintf(stderr,
+                    "genprops: error parsing or setting values from ppucd.txt line %ld - %s\n",
+                    (long)ppucd.getLineNumber(), errorCode.errorName());
+            return errorCode.reset();
+        }
     }
-    printf("*** parsed %d lines from ppucd.txt\n", i);
 
     if(argc>=2) {
         suffix=argv[1];
@@ -207,8 +209,6 @@ main(int argc, char* argv[]) {
         generateData(destDir, options[CSOURCE].doesOccur);
     }
 
-    exitStore();
-    u_cleanup();
     return errorCode;
 }
 

@@ -28,6 +28,7 @@
 
 class PropsWriter {
 public:
+    virtual ~PropsWriter();
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode);
     // virtual writeCSourceFile(icusrcroot);
@@ -51,9 +52,6 @@ U_CFUNC UBool beVerbose, haveCopyright;
 U_CFUNC const char *const
 genCategoryNames[];
 
-/* properties vectors in props2.cpp */
-U_CFUNC UPropsVectors *pv;
-
 /* prototypes */
 U_CFUNC void
 writeUCDFilename(char *basename, const char *filename, const char *suffix);
@@ -63,12 +61,6 @@ isToken(const char *token, const char *s);
 
 U_CFUNC int32_t
 getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s);
-
-U_CFUNC void
-initStore(void);
-
-U_CFUNC void
-exitStore(void);
 
 U_CFUNC uint32_t
 makeProps(Props *p);
@@ -84,13 +76,6 @@ repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
 U_CFUNC void
 generateData(const char *dataDir, UBool csource);
-
-/* props2.c */
-U_CFUNC void
-initAdditionalProperties(void);
-
-U_CFUNC void
-exitAdditionalProperties(void);
 
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
