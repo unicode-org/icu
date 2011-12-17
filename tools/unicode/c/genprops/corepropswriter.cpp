@@ -251,22 +251,20 @@ static UTrie2 *pTrie=NULL;
 
 /* -------------------------------------------------------------------------- */
 
-U_CFUNC void
+static void
 initStore() {
     UErrorCode errorCode=U_ZERO_ERROR;
     pTrie=utrie2_open(0, 0, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie2_open() failed - %s\n", u_errorName(errorCode));
+        fprintf(stderr, "genprops error: corepropswriter utrie2_open() failed - %s\n",
+                u_errorName(errorCode));
         exit(errorCode);
     }
-
-    initAdditionalProperties();
 }
 
-U_CFUNC void
+static void
 exitStore() {
     utrie2_close(pTrie);
-    exitAdditionalProperties();
 }
 
 /* store a character's properties ------------------------------------------- */
@@ -419,7 +417,8 @@ generateData(const char *dataDir, UBool csource) {
 
     if(csource) {
         /* write .c file for hardcoded data */
-        FILE *f=usrc_create(dataDir, "uchar_props_data.h");
+        FILE *f=usrc_createFromGenerator(dataDir, "uchar_props_data.h",
+                                         "icu/tools/src/unicode/c/genprops/corepropswriter.cpp");
         if(f!=NULL) {
             fputs("#ifndef INCLUDED_FROM_UCHAR_C\n"
                   "#   error This file must be #included from uchar.c only.\n"
@@ -491,6 +490,9 @@ generateData(const char *dataDir, UBool csource) {
 
 class CorePropsWriter : public PropsWriter {
 public:
+    CorePropsWriter() { initStore(); }
+    virtual ~CorePropsWriter() { exitStore(); }
+
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
 };

@@ -38,7 +38,7 @@ U_NAMESPACE_USE
 /* data --------------------------------------------------------------------- */
 
 static UTrie2 *newTrie;
-UPropsVectors *pv;
+static UPropsVectors *pv;
 
 static UnicodeString *scriptExtensions;
 
@@ -76,11 +76,6 @@ parseTwoFieldFile(char *filename, char *basename,
         fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
     }
 }
-
-static void U_CALLCONV
-ageLineFn(void *context,
-          char *fields[][2], int32_t fieldCount,
-          UErrorCode *pErrorCode);
 
 static void U_CALLCONV
 scriptExtensionsLineFn(void *context,
@@ -417,18 +412,19 @@ parseBinariesFile(char *filename, char *basename, const char *suffix,
 
 /* -------------------------------------------------------------------------- */
 
-U_CFUNC void
+static void
 initAdditionalProperties() {
     UErrorCode errorCode=U_ZERO_ERROR;
     pv=upvec_open(UPROPS_VECTOR_WORDS, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: upvec_open() failed - %s\n", u_errorName(errorCode));
+        fprintf(stderr, "genprops error: props2writer upvec_open() failed - %s\n",
+                u_errorName(errorCode));
         exit(errorCode);
     }
     scriptExtensions=new UnicodeString;
 }
 
-U_CFUNC void
+static void
 exitAdditionalProperties() {
     utrie2_close(newTrie);
     upvec_close(pv);
@@ -445,8 +441,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     /* add Han numeric types & values */
     parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 2, numericLineFn, pErrorCode);
-
-    parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
     parseSingleEnumFile(filename, basename, suffix, &scriptSingleEnum, pErrorCode);
 
@@ -520,59 +514,6 @@ for(int32_t c=0; c<=0x10ffff; ++c) {
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
                 u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-/* DerivedAge.txt ----------------------------------------------------------- */
-
-static void U_CALLCONV
-ageLineFn(void *context,
-          char *fields[][2], int32_t fieldCount,
-          UErrorCode *pErrorCode) {
-    char *s, *numberLimit;
-    uint32_t value, start, end, version;
-
-    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in DerivedAge.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-
-    /* ignore "unassigned" (the default is already set to 0.0) */
-    s=(char *)u_skipWhitespace(fields[1][0]);
-    if(0==uprv_strncmp(s, "unassigned", 10) || 0==uprv_strncmp(s, "Unassigned", 10)) {
-        return;
-    }
-
-    /* parse version number */
-    value=(uint32_t)uprv_strtoul(s, &numberLimit, 10);
-    if(s==numberLimit || value==0 || value>15 || (*numberLimit!='.' && *numberLimit!=' ' && *numberLimit!='\t' && *numberLimit!=0)) {
-        fprintf(stderr, "genprops: syntax error in DerivedAge.txt field 1 at %s\n", fields[1][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    version=value<<4;
-
-    /* parse minor version number */
-    if(*numberLimit=='.') {
-        s=(char *)u_skipWhitespace(numberLimit+1);
-        value=(uint32_t)uprv_strtoul(s, &numberLimit, 10);
-        if(s==numberLimit || value>15 || (*numberLimit!=' ' && *numberLimit!='\t' && *numberLimit!=0)) {
-            fprintf(stderr, "genprops: syntax error in DerivedAge.txt field 1 at %s\n", fields[1][0]);
-            *pErrorCode=U_PARSE_ERROR;
-            exit(U_PARSE_ERROR);
-        }
-        version|=value;
-    }
-
-    if(start==0 && end==0x10ffff) {
-        /* Also set bits for initialValue and errorValue. */
-        end=UPVEC_MAX_CP;
-    }
-    upvec_setValue(pv, start, end, 0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set character age: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
 }
@@ -940,21 +881,42 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
 
 class Props2Writer : public PropsWriter {
 public:
+    Props2Writer() { initAdditionalProperties(); }
+    virtual ~Props2Writer() { exitAdditionalProperties(); }
+
     virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
 };
 
 void
 Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
+    UChar32 start=props.start;
+    UChar32 end=props.end;
+    if(start==0 && end==0x10ffff) {
+        // Also set bits for initialValue and errorValue.
+        end=UPVEC_MAX_CP;
+    }
     if(newValues.contains(UCHAR_DECOMPOSITION_TYPE)) {
-        upvec_setValue(pv, props.start, props.end,
+        upvec_setValue(pv, start, end,
                        2, (uint32_t)props.getIntProp(UCHAR_DECOMPOSITION_TYPE), UPROPS_DT_MASK,
                        &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "genprops error: unable to set decomposition type: %s\n",
-                    u_errorName(errorCode));
-            exit(errorCode);
+    }
+    if(newValues.contains(UCHAR_AGE)) {
+        if(props.age[0]>15 || props.age[1]>15 || props.age[2]!=0 || props.age[3]!=0) {
+            char buffer[U_MAX_VERSION_STRING_LENGTH];
+            u_versionToString(props.age, buffer);
+            fprintf(stderr, "genprops error: age %s cannot be encoded\n", buffer);
+            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            return;
         }
+        uint32_t version=(props.age[0]<<4)|props.age[1];
+        upvec_setValue(pv, start, end,
+                       0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK,
+                       &errorCode);
+    }
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops error: unable to set values for %04lX..%04lX: %s\n",
+                (long)start, (long)end, u_errorName(errorCode));
     }
 }
 
