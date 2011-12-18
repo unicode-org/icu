@@ -23,7 +23,6 @@
 #include "unicode/unistr.h"
 #include "unicode/uscript.h"
 #include "cstring.h"
-#include "cmemory.h"
 #include "utrie2.h"
 #include "uprops.h"
 #include "propsvec.h"
@@ -70,31 +69,6 @@ scriptExtensionsLineFn(void *context,
                        char *fields[][2], int32_t fieldCount,
                        UErrorCode *pErrorCode);
 
-static void
-parseMultiFieldFile(char *filename, char *basename,
-                    const char *ucdFile, const char *suffix,
-                    int32_t fieldCount,
-                    UParseLineFn *lineFn,
-                    UErrorCode *pErrorCode) {
-    char *fields[20][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    writeUCDFilename(basename, ucdFile, suffix);
-
-    u_parseDelimitedFile(filename, ';', fields, fieldCount, lineFn, NULL, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
-    }
-}
-
-static void U_CALLCONV
-numericLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
-              UErrorCode *pErrorCode);
-
 /* -------------------------------------------------------------------------- */
 
 U_CFUNC void
@@ -102,11 +76,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     char *basename;
 
     basename=filename+uprv_strlen(filename);
-
-    /* process various UCD .txt files */
-
-    /* add Han numeric types & values */
-    parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 2, numericLineFn, pErrorCode);
 
     parseTwoFieldFile(filename, basename, "ScriptExtensions", suffix, scriptExtensionsLineFn, pErrorCode);
 }
@@ -245,140 +214,6 @@ scriptExtensionsLineFn(void *context,
     } while(start<=end);
 }
 
-/* DerivedNumericValues.txt ------------------------------------------------- */
-
-static void U_CALLCONV
-numericLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
-              UErrorCode *pErrorCode) {
-    Props newProps={ 0 };
-    char *s, *numberLimit;
-    uint32_t start, end, value, oldProps32;
-    char c;
-    UBool isFraction;
-
-    /* get the code point range */
-    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in DerivedNumericValues.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-
-    /*
-     * Ignore the
-     * # @missing: 0000..10FFFF; NaN
-     * line from Unicode 5.1's DerivedNumericValues.txt:
-     * The following code cannot parse "NaN", and we don't want to overwrite
-     * the numeric values for all characters after reading most
-     * from UnicodeData.txt already.
-     */
-    if(start==0 && end==0x10ffff) {
-        return;
-    }
-
-    /* check if the numeric value is a fraction (this code does not handle any) */
-    isFraction=FALSE;
-    s=uprv_strchr(fields[1][0], '.');
-    if(s!=NULL) {
-        numberLimit=s+1;
-        while('0'<=(c=*numberLimit++) && c<='9') {
-            if(c!='0') {
-                isFraction=TRUE;
-                break;
-            }
-        }
-    }
-
-    if(isFraction) {
-        value=0;
-    } else {
-        /* parse numeric value */
-        s=(char *)u_skipWhitespace(fields[1][0]);
-
-        /* try large, single-significant-digit numbers, may otherwise overflow strtoul() */
-        if('1'<=s[0] && s[0]<='9' && s[1]=='0' && s[2]=='0') {
-            /* large integers are encoded in a special way, see store.c */
-            uint8_t exp=0;
-
-            value=s[0]-'0';
-            numberLimit=s;
-            while(*(++numberLimit)=='0') {
-                ++exp;
-            }
-            newProps.exponent=exp;
-        } else {
-            /* normal number parsing */
-            value=(uint32_t)uprv_strtoul(s, &numberLimit, 10);
-        }
-        if(numberLimit<=s || (*numberLimit!='.' && u_skipWhitespace(numberLimit)!=fields[1][1]) || value>=0x80000000) {
-            fprintf(stderr, "genprops: syntax error in DerivedNumericValues.txt field 1 at %s\n", fields[0][0]);
-            exit(U_PARSE_ERROR);
-        }
-    }
-
-    /*
-     * Unicode 4.0.1 removes the third column that used to list the numeric type.
-     * Assume that either the data is the same as in UnicodeData.txt,
-     * or else that the numeric type is "numeric".
-     * This should work because we only expect to add numeric values for
-     * Han characters; for those, UnicodeData.txt lists only ranges without
-     * specific properties for single characters.
-     */
-
-    /* set the new numeric value */
-    newProps.code=start;
-    newProps.numericValue=(int32_t)value;       /* newly parsed numeric value */
-    /* the exponent may have been set above */
-
-    for(; start<=end; ++start) {
-        uint32_t newProps32;
-        int32_t oldNtv;
-        oldProps32=getProps(start);
-        oldNtv=(int32_t)GET_NUMERIC_TYPE_VALUE(oldProps32);
-
-        if(isFraction) {
-            if(UPROPS_NTV_FRACTION_START<=oldNtv && oldNtv<UPROPS_NTV_LARGE_START) {
-                /* this code point was already listed with its numeric value in UnicodeData.txt */
-                continue;
-            } else {
-                fprintf(stderr, "genprops: not prepared for new fractions in DerivedNumericValues.txt field 1 at %s\n", fields[1][0]);
-                exit(U_PARSE_ERROR);
-            }
-        }
-
-        /*
-         * For simplicity, and because we only expect to set numeric values for Han characters,
-         * for now we only allow to set these values for Lo characters.
-         */
-        if(oldNtv==UPROPS_NTV_NONE && GET_CATEGORY(oldProps32)!=U_OTHER_LETTER) {
-            fprintf(stderr, "genprops error: new numeric value for a character other than Lo in DerivedNumericValues.txt at %s\n", fields[0][0]);
-            exit(U_PARSE_ERROR);
-        }
-
-        /* verify that we do not change an existing value (fractions were excluded above) */
-        if(oldNtv!=UPROPS_NTV_NONE) {
-            /* the code point already has a value stored */
-            newProps.numericType=UPROPS_NTV_GET_TYPE(oldNtv);
-            newProps32=makeProps(&newProps);
-            if(oldNtv!=GET_NUMERIC_TYPE_VALUE(newProps32)) {
-                fprintf(stderr, "genprops error: new numeric value differs from old one for U+%04lx\n", (long)start);
-                exit(U_PARSE_ERROR);
-            }
-            /* same value, continue */
-        } else {
-            /* the code point is getting a new numeric value */
-            newProps.numericType=(uint8_t)U_NT_NUMERIC; /* assumed numeric type, see Unicode 4.0.1 comment */
-            newProps32=makeProps(&newProps);
-            if(beVerbose) {
-                printf("adding U+%04x numeric type %d encoded-numeric-type-value 0x%03x from %s\n",
-                       (int)start, U_NT_NUMERIC, (int)GET_NUMERIC_TYPE_VALUE(newProps32), fields[0][0]);
-            }
-
-            addProps(start, newProps32|GET_CATEGORY(oldProps32));
-        }
-    }
-}
-
 class Props2Writer : public PropsWriter {
 public:
     Props2Writer(UErrorCode &errorCode);
@@ -463,6 +298,7 @@ propToEnums[]={
     { UCHAR_SCRIPT,                     0, 0, UPROPS_SCRIPT_MASK },
     { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
+    { UCHAR_DECOMPOSITION_TYPE,         2, 0, UPROPS_DT_MASK },
     { UCHAR_GRAPHEME_CLUSTER_BREAK,     2, UPROPS_GCB_SHIFT, UPROPS_GCB_MASK },
     { UCHAR_WORD_BREAK,                 2, UPROPS_WB_SHIFT, UPROPS_WB_MASK },
     { UCHAR_SENTENCE_BREAK,             2, UPROPS_SB_SHIFT, UPROPS_SB_MASK },
@@ -501,11 +337,6 @@ Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErro
             }
         }
     }
-    if(newValues.contains(UCHAR_DECOMPOSITION_TYPE)) {
-        upvec_setValue(pv, start, end,
-                       2, (uint32_t)props.getIntProp(UCHAR_DECOMPOSITION_TYPE), UPROPS_DT_MASK,
-                       &errorCode);
-    }
     if(newValues.contains(UCHAR_AGE)) {
         if(props.age[0]>15 || props.age[1]>15 || props.age[2]!=0 || props.age[3]!=0) {
             char buffer[U_MAX_VERSION_STRING_LENGTH];
@@ -520,7 +351,7 @@ Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErro
                        &errorCode);
     }
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: unable to set values for %04lX..%04lX: %s\n",
+        fprintf(stderr, "genprops error: unable to set props2 values for %04lX..%04lX: %s\n",
                 (long)start, (long)end, u_errorName(errorCode));
     }
 }
