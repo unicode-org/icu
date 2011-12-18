@@ -20,199 +20,27 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/uniset.h"
 #include "unicode/unistr.h"
+#include "unicode/usetiter.h"
 #include "unicode/uscript.h"
 #include "cstring.h"
-#include "utrie2.h"
-#include "uprops.h"
+#include "genprops.h"
 #include "propsvec.h"
 #include "uassert.h"
-#include "uparse.h"
-#include "writesrc.h"
-#include "genprops.h"
 #include "unewdata.h"
+#include "uprops.h"
+#include "utrie2.h"
+#include "writesrc.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 U_NAMESPACE_USE
 
-/* data --------------------------------------------------------------------- */
-
 static UTrie2 *newTrie=NULL;
 static UPropsVectors *pv=NULL;
 
 static UnicodeString *scriptExtensions=NULL;
-
-/* miscellaneous ------------------------------------------------------------ */
-
-static void
-parseTwoFieldFile(char *filename, char *basename,
-                  const char *ucdFile, const char *suffix,
-                  UParseLineFn *lineFn,
-                  UErrorCode *pErrorCode) {
-    char *fields[2][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    writeUCDFilename(basename, ucdFile, suffix);
-
-    u_parseDelimitedFile(filename, ';', fields, 2, lineFn, NULL, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
-    }
-}
-
-static void U_CALLCONV
-scriptExtensionsLineFn(void *context,
-                       char *fields[][2], int32_t fieldCount,
-                       UErrorCode *pErrorCode);
-
-/* -------------------------------------------------------------------------- */
-
-U_CFUNC void
-generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode) {
-    char *basename;
-
-    basename=filename+uprv_strlen(filename);
-
-    parseTwoFieldFile(filename, basename, "ScriptExtensions", suffix, scriptExtensionsLineFn, pErrorCode);
-}
-
-/* ScriptExtensions.txt ----------------------------------------------------- */
-
-static void U_CALLCONV
-scriptExtensionsLineFn(void *context,
-                       char *fields[][2], int32_t fieldCount,
-                       UErrorCode *pErrorCode) {
-    uint32_t start, end;
-    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in ScriptExtensions.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-
-    /* ignore "<script>" on the @missing line */
-    if(*u_skipWhitespace(fields[1][0])=='<') {
-        return;
-    }
-
-    /* parse list of script codes */
-    UnicodeString codes;  // vector of 16-bit UScriptCode values
-    char *s=fields[1][0];
-    for(;;) {
-        // skip whitespace before each token
-        s=(char *)u_skipWhitespace(s);
-        if(*s==0 || *s==';') {
-            break;
-        }
-        // skip non-whitespace, non-terminator characters to find the token limit
-        char *limit=s;
-        char c;
-        do {
-            c=*++limit;
-        } while(!U_IS_INV_WHITESPACE(c) && c!=0 && c!=';');
-        // NUL-terminated this token
-        *limit=0;
-        // convert the token (script property value alias) into a UScriptCode value
-        int32_t value=u_getPropertyValueEnum(UCHAR_SCRIPT, s);
-        if(value<0) {
-            fprintf(stderr, "genprops: syntax error in ScriptExtensions.txt field 1 at %s\n", s);
-            exit(U_INVALID_FORMAT_ERROR);
-        }
-        // Insertion sort into the list of script codes.
-        for(int32_t i=0;; ++i) {
-            if(i<codes.length()) {
-                if(value<codes[i]) {
-                    codes.insert(i, (UChar)value);
-                    break;
-                } else if(value==codes[i]) {
-                    fprintf(stderr,
-                            "genprops: duplicate script code in ScriptExtensions.txt field 1 at %s "
-                            "for U+%04lx..U+%04lx\n",
-                            s, (long)start, (long)end);
-                    exit(U_INVALID_FORMAT_ERROR);
-                }
-                // continue while value>codes[i]
-            } else {
-                codes.append((UChar)value);
-                break;
-            }
-        }
-        if(c==0 || c==';') {
-            // the token ended at a terminator
-            break;
-        } else {
-            // the token ended at U_IS_INV_WHITESPACE(c), continue after c
-            s=limit+1;
-        }
-    }
-    int32_t length=codes.length();
-    if(length==0) {
-        fprintf(stderr,
-                "genprops: missing values in ScriptExtensions.txt field 1 "
-                "for U+%04lx..U+%04lx\n",
-                (long)start, (long)end);
-        exit(U_INVALID_FORMAT_ERROR);
-    }
-    // Set bit 15 on the last script code, for termination.
-    codes.setCharAt(length-1, (UChar)(codes[length-1]|0x8000));
-    // Find this list of codes in the Script_Extensions data so far, or add this list.
-    int32_t index=scriptExtensions->indexOf(codes);
-    if(index<0) {
-        index=scriptExtensions->length();
-        scriptExtensions->append(codes);
-    }
-    // Modify the Script data for each of the start..end code points
-    // to include the Script_Extensions index.
-    do {
-        uint32_t scriptX=upvec_getValue(pv, (UChar32)start, 0)&UPROPS_SCRIPT_X_MASK;
-        // Find the next code point that has a different script value.
-        // We want to add the Script_Extensions index to the code point range start..next-1.
-        UChar32 next;
-        for(next=(UChar32)start+1;
-            next<=(UChar32)end && scriptX==(upvec_getValue(pv, next, 0)&UPROPS_SCRIPT_X_MASK);
-            ++next) {}
-        if(scriptX>=UPROPS_SCRIPT_X_WITH_COMMON) {
-            fprintf(stderr,
-                    "genprops: ScriptExtensions.txt has values for U+%04lx..U+%04lx "
-                    "which overlaps with a range including U+%04lx..U+%04lx\n",
-                    (long)start, (long)end, (long)start, (long)(next-1));
-            exit(U_INVALID_FORMAT_ERROR);
-        }
-        // Encode the (Script, Script_Extensions index) pair.
-        if(scriptX==USCRIPT_COMMON) {
-            scriptX=UPROPS_SCRIPT_X_WITH_COMMON|(uint32_t)index;
-        } else if(scriptX==USCRIPT_INHERITED) {
-            scriptX=UPROPS_SCRIPT_X_WITH_INHERITED|(uint32_t)index;
-        } else {
-            // Store an additional pair of 16-bit units for an unusual main Script code
-            // together with the Script_Extensions index.
-            UnicodeString codeIndexPair;
-            codeIndexPair.append((UChar)scriptX).append((UChar)index);
-            index=scriptExtensions->indexOf(codeIndexPair);
-            if(index<0) {
-                index=scriptExtensions->length();
-                scriptExtensions->append(codeIndexPair);
-            }
-            scriptX=UPROPS_SCRIPT_X_WITH_OTHER|(uint32_t)index;
-        }
-        if(index>UPROPS_SCRIPT_MASK) {
-            fprintf(stderr, "genprops: Script_Extensions indexes overflow bit field\n");
-            exit(U_BUFFER_OVERFLOW_ERROR);
-        }
-        // Write the (Script, Script_Extensions index) pair into
-        // the properties vector for start..next-1.
-        upvec_setValue(pv, (UChar32)start, (UChar32)(next-1),
-                        0, scriptX, UPROPS_SCRIPT_X_MASK, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            fprintf(stderr, "genprops error: unable to set Script_Extensions: %s\n", u_errorName(*pErrorCode));
-            exit(*pErrorCode);
-        }
-        start=next;
-    } while(start<=end);
-}
 
 class Props2Writer : public PropsWriter {
 public:
@@ -228,7 +56,7 @@ Props2Writer::Props2Writer(UErrorCode &errorCode) {
         fprintf(stderr, "genprops error: props2writer upvec_open() failed - %s\n",
                 u_errorName(errorCode));
     }
-    scriptExtensions=new UnicodeString;
+    scriptExtensions=new UnicodeString();
 }
 
 Props2Writer::~Props2Writer() {
@@ -295,7 +123,10 @@ struct PropToEnum {
 
 static const PropToEnum
 propToEnums[]={
-    { UCHAR_SCRIPT,                     0, 0, UPROPS_SCRIPT_MASK },
+    // Use UPROPS_SCRIPT_X_MASK not UPROPS_SCRIPT_MASK:
+    // When writing a Script code, remove Script_Extensions bits as well.
+    // If needed, they will get written again.
+    { UCHAR_SCRIPT,                     0, 0, UPROPS_SCRIPT_X_MASK },
     { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
     { UCHAR_DECOMPOSITION_TYPE,         2, 0, UPROPS_DT_MASK },
@@ -350,6 +181,52 @@ Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErro
                        0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK,
                        &errorCode);
     }
+    // Write a new (Script, Script_Extensions) value if there are Script_Extensions
+    // and either Script or Script_Extensions are new on the current line.
+    // (If only Script is new, then it just clobbered the relevant bits.)
+    if( !props.scx.isEmpty() &&
+        (newValues.contains(UCHAR_SCRIPT) || newValues.contains(UCHAR_SCRIPT_EXTENSIONS))
+    ) {
+        UnicodeString codes;  // vector of 16-bit UScriptCode values
+        UnicodeSetIterator iter(props.scx);
+        while(iter.next()) { codes.append((UChar)iter.getCodepoint()); }
+
+        // Set bit 15 on the last script code, for termination.
+        int32_t length=codes.length();
+        codes.setCharAt(length-1, (UChar)(codes[length-1]|0x8000));
+        // Find this list of codes in the Script_Extensions data so far, or add this list.
+        int32_t index=scriptExtensions->indexOf(codes);
+        if(index<0) {
+            index=scriptExtensions->length();
+            scriptExtensions->append(codes);
+        }
+
+        // Encode the (Script, Script_Extensions index) pair.
+        int32_t script=props.getIntProp(UCHAR_SCRIPT);
+        uint32_t scriptX;
+        if(script==USCRIPT_COMMON) {
+            scriptX=UPROPS_SCRIPT_X_WITH_COMMON|(uint32_t)index;
+        } else if(script==USCRIPT_INHERITED) {
+            scriptX=UPROPS_SCRIPT_X_WITH_INHERITED|(uint32_t)index;
+        } else {
+            // Store an additional pair of 16-bit units for an unusual main Script code
+            // together with the Script_Extensions index.
+            UnicodeString codeIndexPair;
+            codeIndexPair.append((UChar)script).append((UChar)index);
+            index=scriptExtensions->indexOf(codeIndexPair);
+            if(index<0) {
+                index=scriptExtensions->length();
+                scriptExtensions->append(codeIndexPair);
+            }
+            scriptX=UPROPS_SCRIPT_X_WITH_OTHER|(uint32_t)index;
+        }
+        if(index>UPROPS_SCRIPT_MASK) {
+            fprintf(stderr, "genprops: Script_Extensions indexes overflow bit field\n");
+            errorCode=U_BUFFER_OVERFLOW_ERROR;
+            return;
+        }
+        upvec_setValue(pv, start, end, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
+    }
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: unable to set props2 values for %04lX..%04lX: %s\n",
                 (long)start, (long)end, u_errorName(errorCode));
@@ -381,17 +258,6 @@ props2FinalizeData(int32_t indexes[UPROPS_INDEX_COUNT], UErrorCode &errorCode) {
     int32_t pvRows;
     const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
-// TODO: remove
-#if 0
-for(int32_t c=0; c<=0x10ffff; ++c) {
-  uint16_t ri=utrie2_get32(newTrie, c);
-  uint32_t v2=pvArray[ri+2];
-  int32_t dt=v2&UPROPS_DT_MASK;
-  if(dt!=0) {
-    printf("%04x %d\n", c, dt);
-  }
-}
-#endif
 
     /* round up scriptExtensions to multiple of 4 bytes */
     if(scriptExtensions->length()&1) {

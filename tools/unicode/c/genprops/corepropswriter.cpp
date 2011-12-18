@@ -20,14 +20,14 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/udata.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "utrie2.h"
-#include "unicode/udata.h"
-#include "unewdata.h"
-#include "writesrc.h"
-#include "uprops.h"
 #include "genprops.h"
+#include "unewdata.h"
+#include "uprops.h"
+#include "utrie2.h"
+#include "writesrc.h"
 
 /* Unicode character properties file format ------------------------------------
 
@@ -229,6 +229,8 @@ than a script code.
 Change from UTrie to UTrie2.
 
 ----------------------------------------------------------------------------- */
+
+U_NAMESPACE_USE
 
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
@@ -448,13 +450,7 @@ CorePropsWriter::finalizeData(UErrorCode &errorCode) {
                 u_errorName(errorCode), (long)trieSize);
         return;
     }
-// TODO: remove
-#if 0
-for(int32_t c=0; c<=0x10ffff; ++c) {
-  uint32_t v=utrie2_get32(pTrie, c);
-  printf("%04x ntv=%3d gc=%2d\n", c, v>>6, v&0x1f);
-}
-#endif
+
     int32_t offset=sizeof(indexes)/4;       /* uint32_t offset to the properties trie */
     offset+=trieSize>>2;
     indexes[UPROPS_PROPS32_INDEX]=          /* set indexes to the same offsets for empty */
