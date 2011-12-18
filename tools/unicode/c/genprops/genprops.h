@@ -34,19 +34,8 @@ public:
 };
 
 PropsWriter *createCorePropsWriter(UErrorCode &errorCode);
-PropsWriter *createProps2Writer(UErrorCode &errorCode);
 
 /* global flags */
 U_CFUNC UBool beVerbose;
-
-/* prototypes */
-int32_t
-props2FinalizeData(int32_t indexes[], UErrorCode &errorCode);
-
-void
-props2AppendToCSourceFile(FILE *f, UErrorCode &errorCode);
-
-void
-props2AppendToBinaryFile(UNewDataMemory *pData, UErrorCode &errorCode);
 
 #endif
