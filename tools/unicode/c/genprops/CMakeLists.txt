@@ -5,5 +5,5 @@
 # created by: Markus W. Scherer
 # edited on: 2010jul20
 # edited by: Stuart G. Gill
-add_executable(genprops genprops.cpp corepropswriter.cpp props2writer.cpp)
+add_executable(genprops genprops.cpp corepropswriter.cpp)
 target_link_libraries(genprops icuuc icutu)

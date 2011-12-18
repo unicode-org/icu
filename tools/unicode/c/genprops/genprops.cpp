@@ -95,7 +95,6 @@ main(int argc, char* argv[]) {
     /* initialize */
     IcuToolErrorCode errorCode("genprops");
     LocalPointer<PropsWriter> corePropsWriter(createCorePropsWriter(errorCode));
-    LocalPointer<PropsWriter> props2Writer(createProps2Writer(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsWriters - %s\n", errorCode.errorName());
         return errorCode.reset();
@@ -125,7 +124,6 @@ main(int argc, char* argv[]) {
         if(ppucd.lineHasPropertyValues()) {
             const UniProps *props=ppucd.getProps(newValues, errorCode);
             corePropsWriter->setProps(*props, newValues, errorCode);
-            props2Writer->setProps(*props, newValues, errorCode);
         } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
             corePropsWriter->setUnicodeVersion(version);
