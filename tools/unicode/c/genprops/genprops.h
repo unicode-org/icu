@@ -25,6 +25,7 @@
 
 class PropsWriter {
 public:
+    PropsWriter();
     virtual ~PropsWriter();
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const icu::UniProps &props, const icu::UnicodeSet &newValues, UErrorCode &errorCode);
@@ -33,7 +34,13 @@ public:
     virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 };
 
+class PNamesWriter : public PropsWriter {
+public:
+    virtual const PropertyNames *getPropertyNames() = 0;
+};
+
 PropsWriter *createCorePropsWriter(UErrorCode &errorCode);
+PNamesWriter *createPNamesWriter(UErrorCode &errorCode);
 
 /* global flags */
 U_CFUNC UBool beVerbose;

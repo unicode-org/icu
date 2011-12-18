@@ -35,6 +35,7 @@ U_NAMESPACE_USE
 
 UBool beVerbose=FALSE;
 
+PropsWriter::PropsWriter() {}
 PropsWriter::~PropsWriter() {}
 void PropsWriter::setUnicodeVersion(const UVersionInfo) {}
 void PropsWriter::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
@@ -94,6 +95,7 @@ main(int argc, char* argv[]) {
 
     /* initialize */
     IcuToolErrorCode errorCode("genprops");
+    LocalPointer<PNamesWriter> pnamesWriter(createPNamesWriter(errorCode));
     LocalPointer<PropsWriter> corePropsWriter(createCorePropsWriter(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsWriters - %s\n", errorCode.errorName());
@@ -118,6 +120,16 @@ main(int argc, char* argv[]) {
                 ppucdPath.data(), errorCode.errorName());
         return errorCode.reset();
     }
+
+    // The PNamesWriter uses preparsed pnames_data.h.
+    pnamesWriter->finalizeData(errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: PNamesWriter::finalizeData() failed - %s\n",
+                errorCode.errorName());
+        return errorCode.reset();
+    }
+    ppucd.setPropertyNames(pnamesWriter->getPropertyNames());
+
     PreparsedUCD::LineType lineType;
     UnicodeSet newValues;
     while((lineType=ppucd.readLine(errorCode))!=PreparsedUCD::NO_LINE) {
@@ -152,6 +164,8 @@ main(int argc, char* argv[]) {
 
     UBool withCopyright=options[COPYRIGHT].doesOccur;
 
+    pnamesWriter->writeCSourceFile(sourceCommon.data(), errorCode);
+    pnamesWriter->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     corePropsWriter->writeCSourceFile(sourceCommon.data(), errorCode);
     corePropsWriter->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 

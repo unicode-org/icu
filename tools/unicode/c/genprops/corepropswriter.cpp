@@ -707,6 +707,7 @@ CorePropsWriter::finalizeData(UErrorCode &errorCode) {
         ((int32_t)U_DT_COUNT-1);
 
     if(beVerbose) {
+        puts("* uprops.icu stats *");
         printf("trie size in bytes:                    %5u\n", (int)trieSize);
         printf("size in bytes of additional props trie:%5u\n", (int)props2TrieSize);
         printf("number of additional props vectors:    %5u\n", (int)pvRows);
