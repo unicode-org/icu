@@ -1,4 +1,4 @@
-# Copyright (C) 2010, International Business Machines
+# Copyright (C) 2010-2011, International Business Machines
 # Corporation and others.  All Rights Reserved.
 #
 # created on: 2010jun03
@@ -21,7 +21,6 @@ add_subdirectory(genbidi)
 add_subdirectory(gencase)
 add_subdirectory(gennames)
 add_subdirectory(gennorm)
-add_subdirectory(genpname)
 add_subdirectory(genprops)
 add_subdirectory(genuca)
 add_subdirectory(genuts46)

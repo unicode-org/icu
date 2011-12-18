@@ -6,21 +6,23 @@
 *   Date        Name        Description
 *   10/11/02    aliu        Creation.
 *   2010nov19   Markus Scherer  Rewrite for formatVersion 2.
+*   2011dec18   Markus Scherer  Moved genpname/genpname.cpp to genprops/pnameswriter.cpp.
 **********************************************************************
 */
 
 #include "unicode/utypes.h"
+#include "unicode/bytestrie.h"
 #include "unicode/bytestriebuilder.h"
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
-#include "cmemory.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "denseranges.h"
-#include "unewdata.h"
-#include "uoptions.h"
+#include "genprops.h"
 #include "propname.h"
 #include "toolutil.h"
+#include "uinvchar.h"
+#include "unewdata.h"
 #include "uvectr32.h"
 #include "writesrc.h"
 
@@ -132,7 +134,7 @@ Property::Property(int32_t _enumValue,
 }
 
 // *** Include the data header ***
-#include "data.h"
+#include "pnames_data.h"
 
 /* return a list of unique names, not including "", for this property
  * @param stringIndices array of at least MAX_NAMES_PER_GROUP
@@ -174,13 +176,32 @@ int32_t Alias::getUniqueNames(int32_t* stringIndices) const {
 // END DATA
 //----------------------------------------------------------------------
 
-class Builder {
+class PNamesWriterImpl;
+
+class PNamesPropertyNames : public PropertyNames {
 public:
-    Builder(UErrorCode &errorCode) : valueMaps(errorCode), btb(errorCode), maxNameLength(0) {}
+    PNamesPropertyNames(const PNamesWriterImpl &pnwi)
+            : impl(pnwi), valueMaps(NULL), bytesTries(NULL) {}
+    void init();
+    virtual int32_t getPropertyEnum(const char *name) const;
+    virtual int32_t getPropertyValueEnum(int32_t property, const char *name) const;
+private:
+    int32_t findProperty(int32_t property) const;
+    UBool containsName(BytesTrie &trie, const char *name) const;
+    int32_t getPropertyOrValueEnum(int32_t bytesTrieOffset, const char *alias) const;
 
-    void build() {
-        IcuToolErrorCode errorCode("genpname Builder::build()");
+    const PNamesWriterImpl &impl;
+    const int32_t *valueMaps;
+    const uint8_t *bytesTries;
+};
 
+class PNamesWriterImpl : public PNamesWriter {
+public:
+    PNamesWriterImpl(UErrorCode &errorCode)
+            : valueMaps(errorCode), btb(errorCode), maxNameLength(0),
+              pnames(*this) {}
+
+    virtual void finalizeData(UErrorCode &errorCode) {
         // Build main property aliases value map at value map offset 0,
         // so that we need not store another offset for it.
         UVector32 propEnums(errorCode);
@@ -265,7 +286,18 @@ public:
         for(i=PropNameData::IX_RESERVED7; i<PropNameData::IX_COUNT; ++i) {
             indexes[i]=0;
         }
+
+        if(beVerbose) {
+            puts("* pnames.icu stats *");
+            printf("length of all value maps:  %6ld\n", (long)valueMaps.size());
+            printf("length of all BytesTries:  %6ld\n", (long)bytesTries.length());
+            printf("length of all name groups: %6ld\n", (long)nameGroups.length());
+            printf("length of pnames.icu data: %6ld\n", (long)indexes[PropNameData::IX_TOTAL_SIZE]);
+        }
     }
+
+    virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
+    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 
     int32_t writeNameGroup(const Alias &alias, UErrorCode &errorCode) {
         int32_t nameOffset=nameGroups.length();
@@ -403,12 +435,18 @@ public:
         return bytesTrieOffset;
     }
 
+    virtual const PropertyNames *getPropertyNames() {
+        pnames.init();
+        return &pnames;
+    }
+
     int32_t indexes[PropNameData::IX_COUNT];
     UVector32 valueMaps;
     BytesTrieBuilder btb;
     CharString bytesTries;
     CharString nameGroups;
     int32_t maxNameLength;
+    PNamesPropertyNames pnames;
 };
 
 /* UDataInfo cf. udata.h */
@@ -426,29 +464,38 @@ static const UDataInfo dataInfo = {
     { VERSION_0, VERSION_1, VERSION_2, VERSION_3 } /* Unicode version */
 };
 
-static void writeDataFile(const char *destdir, const Builder& builder, UBool useCopyright) {
-    IcuToolErrorCode errorCode("genpname writeDataFile()");
-    UNewDataMemory *pdata=udata_create(destdir, PNAME_DATA_TYPE, PNAME_DATA_NAME, &dataInfo,
-                                       useCopyright ? U_COPYRIGHT_STRING : 0, errorCode);
-    errorCode.assertSuccess();
+void
+PNamesWriterImpl::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    UNewDataMemory *pdata=udata_create(path, PNAME_DATA_TYPE, PNAME_DATA_NAME, &dataInfo,
+                                       withCopyright ? U_COPYRIGHT_STRING : 0, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: udata_create(%s, pnames.icu) failed - %s\n",
+                path, u_errorName(errorCode));
+        return;
+    }
 
-    udata_writeBlock(pdata, builder.indexes, PropNameData::IX_COUNT*4);
-    udata_writeBlock(pdata, builder.valueMaps.getBuffer(), builder.valueMaps.size()*4);
-    udata_writeBlock(pdata, builder.bytesTries.data(), builder.bytesTries.length());
-    udata_writeBlock(pdata, builder.nameGroups.data(), builder.nameGroups.length());
+    udata_writeBlock(pdata, indexes, PropNameData::IX_COUNT*4);
+    udata_writeBlock(pdata, valueMaps.getBuffer(), valueMaps.size()*4);
+    udata_writeBlock(pdata, bytesTries.data(), bytesTries.length());
+    udata_writeBlock(pdata, nameGroups.data(), nameGroups.length());
 
-    int32_t dataLength=(int32_t)udata_finish(pdata, errorCode);
-    if(dataLength!=builder.indexes[PropNameData::IX_TOTAL_SIZE]) {
+    int32_t dataLength=(int32_t)udata_finish(pdata, &errorCode);
+    if(dataLength!=indexes[PropNameData::IX_TOTAL_SIZE]) {
         fprintf(stderr,
                 "udata_finish(pnames.icu) reports %ld bytes written but should be %ld\n",
-                (long)dataLength, (long)builder.indexes[PropNameData::IX_TOTAL_SIZE]);
-        exit(U_INTERNAL_PROGRAM_ERROR);
+                (long)dataLength, (long)indexes[PropNameData::IX_TOTAL_SIZE]);
+        errorCode=U_INTERNAL_PROGRAM_ERROR;
     }
 }
 
-static void writeCSourceFile(const char *destdir, const Builder& builder) {
-    FILE *f=usrc_create(destdir, "propname_data.h");
+void
+PNamesWriterImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    FILE *f=usrc_createFromGenerator(path, "propname_data.h",
+                                     "icu/tools/src/unicode/c/genprops/pnameswriter.cpp");
     if(f==NULL) {
+        errorCode=U_FILE_ACCESS_ERROR;
         return;  // usrc_create() reported an error.
     }
 
@@ -459,17 +506,17 @@ static void writeCSourceFile(const char *destdir, const Builder& builder) {
     fputs("U_NAMESPACE_BEGIN\n\n", f);
 
     usrc_writeArray(f, "const int32_t PropNameData::indexes[%ld]={",
-                    builder.indexes, 32, PropNameData::IX_COUNT,
+                    indexes, 32, PropNameData::IX_COUNT,
                     "};\n\n");
     usrc_writeArray(f, "const int32_t PropNameData::valueMaps[%ld]={\n",
-                    builder.valueMaps.getBuffer(), 32, builder.valueMaps.size(),
+                    valueMaps.getBuffer(), 32, valueMaps.size(),
                     "\n};\n\n");
     usrc_writeArray(f, "const uint8_t PropNameData::bytesTries[%ld]={\n",
-                    builder.bytesTries.data(), 8, builder.bytesTries.length(),
+                    bytesTries.data(), 8, bytesTries.length(),
                     "\n};\n\n");
     usrc_writeArrayOfMostlyInvChars(
         f, "const char PropNameData::nameGroups[%ld]={\n",
-        builder.nameGroups.data(), builder.nameGroups.length(),
+        nameGroups.data(), nameGroups.length(),
         "\n};\n\n");
 
     fputs("U_NAMESPACE_END\n", f);
@@ -477,68 +524,87 @@ static void writeCSourceFile(const char *destdir, const Builder& builder) {
     fclose(f);
 }
 
-enum {
-    HELP_H,
-    HELP_QUESTION_MARK,
-    VERBOSE,
-    COPYRIGHT,
-    DESTDIR,
-    CSOURCE
-};
-
-/* Keep these values in sync with the above enums */
-static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_VERBOSE,
-    UOPTION_COPYRIGHT,
-    UOPTION_DESTDIR,
-    UOPTION_DEF("csource", 'C', UOPT_NO_ARG)
-};
-
-extern int main(int argc, char *argv[]) {
-    U_MAIN_INIT_ARGS(argc, argv);
-
-    /* preset then read command line options */
-    options[DESTDIR].value=u_getDataDirectory();
-    argc=u_parseArgs(argc, argv, LENGTHOF(options), options);
-
-    /* error handling, printing usage message */
-    if(argc<0) {
-        fprintf(stderr, "error in command line argument \"%s\"\n", argv[-argc]);
+PNamesWriter *
+createPNamesWriter(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    PNamesWriter *pw=new PNamesWriterImpl(errorCode);
+    if(pw==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
-    if(argc!=1 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
-        fprintf(stderr,
-            "Usage: %s [-options]\n"
-            "\tCreates " PNAME_DATA_NAME "." PNAME_DATA_TYPE "\n"
-            "\n",
-            argv[0]);
-        fprintf(stderr,
-            "Options:\n"
-            "\t-h or -? or --help  this usage text\n"
-            "\t-v or --verbose     turn on verbose output\n"
-            "\t-c or --copyright   include a copyright notice\n"
-            "\t-d or --destdir     destination directory, followed by the path\n"
-            "\t-C or --csource     generate a .h source file rather than the .icu binary\n");
-        return argc!=1 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
-    }
+    return pw;
+}
 
-    IcuToolErrorCode errorCode("genpname main() Builder()");
-    Builder builder(errorCode);
-    errorCode.assertSuccess();
-    builder.build();
-    if(options[VERBOSE].doesOccur) {
-        printf("length of all value maps:  %6ld\n", (long)builder.valueMaps.size());
-        printf("length of all BytesTries:  %6ld\n", (long)builder.bytesTries.length());
-        printf("length of all name groups: %6ld\n", (long)builder.nameGroups.length());
-        printf("length of pnames.icu data: %6ld\n", (long)builder.indexes[PropNameData::IX_TOTAL_SIZE]);
-    }
+// Note: The following is a partial copy of runtime propname.cpp code.
+// Consider changing that into a semi-public API to avoid duplication.
 
-    if(options[CSOURCE].doesOccur) {
-        writeCSourceFile(options[DESTDIR].value, builder);
+void PNamesPropertyNames::init() {
+    valueMaps=impl.valueMaps.getBuffer();
+    bytesTries=reinterpret_cast<const uint8_t *>(impl.bytesTries.data());
+}
+
+int32_t PNamesPropertyNames::findProperty(int32_t property) const {
+    int32_t i=1;  // valueMaps index, initially after numRanges
+    for(int32_t numRanges=valueMaps[0]; numRanges>0; --numRanges) {
+        // Read and skip the start and limit of this range.
+        int32_t start=valueMaps[i];
+        int32_t limit=valueMaps[i+1];
+        i+=2;
+        if(property<start) {
+            break;
+        }
+        if(property<limit) {
+            return i+(property-start)*2;
+        }
+        i+=(limit-start)*2;  // Skip all entries for this range.
+    }
+    return 0;
+}
+
+UBool PNamesPropertyNames::containsName(BytesTrie &trie, const char *name) const {
+    if(name==NULL) {
+        return FALSE;
+    }
+    UStringTrieResult result=USTRINGTRIE_NO_VALUE;
+    char c;
+    while((c=*name++)!=0) {
+        c=uprv_invCharToLowercaseAscii(c);
+        // Ignore delimiters '-', '_', and ASCII White_Space.
+        if(c==0x2d || c==0x5f || c==0x20 || (0x09<=c && c<=0x0d)) {
+            continue;
+        }
+        if(!USTRINGTRIE_HAS_NEXT(result)) {
+            return FALSE;
+        }
+        result=trie.next((uint8_t)c);
+    }
+    return USTRINGTRIE_HAS_VALUE(result);
+}
+
+int32_t PNamesPropertyNames::getPropertyOrValueEnum(int32_t bytesTrieOffset, const char *alias) const {
+    BytesTrie trie(bytesTries+bytesTrieOffset);
+    if(containsName(trie, alias)) {
+        return trie.getValue();
     } else {
-        writeDataFile(options[DESTDIR].value, builder, options[COPYRIGHT].doesOccur);
+        return UCHAR_INVALID_CODE;
     }
+}
 
-    return 0; // success
+int32_t
+PNamesPropertyNames::getPropertyEnum(const char *alias) const {
+    return getPropertyOrValueEnum(0, alias);
+}
+
+int32_t
+PNamesPropertyNames::getPropertyValueEnum(int32_t property, const char *alias) const {
+    int32_t valueMapIndex=findProperty(property);
+    if(valueMapIndex==0) {
+        return UCHAR_INVALID_CODE;  // Not a known property.
+    }
+    valueMapIndex=valueMaps[valueMapIndex+1];
+    if(valueMapIndex==0) {
+        return UCHAR_INVALID_CODE;  // The property does not have named values.
+    }
+    // valueMapIndex is the start of the property's valueMap,
+    // where the first word is the BytesTrie offset.
+    return getPropertyOrValueEnum(valueMaps[valueMapIndex], alias);
 }
