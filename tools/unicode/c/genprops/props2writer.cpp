@@ -31,6 +31,7 @@
 #include "uparse.h"
 #include "writesrc.h"
 #include "genprops.h"
+#include "unewdata.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -38,10 +39,10 @@ U_NAMESPACE_USE
 
 /* data --------------------------------------------------------------------- */
 
-static UTrie2 *newTrie;
-static UPropsVectors *pv;
+static UTrie2 *newTrie=NULL;
+static UPropsVectors *pv=NULL;
 
-static UnicodeString *scriptExtensions;
+static UnicodeString *scriptExtensions=NULL;
 
 /* miscellaneous ------------------------------------------------------------ */
 
@@ -96,25 +97,6 @@ numericLineFn(void *context,
 
 /* -------------------------------------------------------------------------- */
 
-static void
-initAdditionalProperties() {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    pv=upvec_open(UPROPS_VECTOR_WORDS, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: props2writer upvec_open() failed - %s\n",
-                u_errorName(errorCode));
-        exit(errorCode);
-    }
-    scriptExtensions=new UnicodeString;
-}
-
-static void
-exitAdditionalProperties() {
-    utrie2_close(newTrie);
-    upvec_close(pv);
-    delete scriptExtensions;
-}
-
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode) {
     char *basename;
@@ -127,27 +109,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 2, numericLineFn, pErrorCode);
 
     parseTwoFieldFile(filename, basename, "ScriptExtensions", suffix, scriptExtensionsLineFn, pErrorCode);
-
-    newTrie=upvec_compactToUTrie2WithRowIndexes(pv, pErrorCode);
-// TODO: remove
-#if 0
-const uint32_t *pvArray;
-int32_t pvRows;
-pvArray=upvec_getArray(pv, &pvRows, NULL);
-for(int32_t c=0; c<=0x10ffff; ++c) {
-  uint16_t ri=utrie2_get32(newTrie, c);
-  uint32_t v2=pvArray[ri+2];
-  int32_t dt=v2&UPROPS_DT_MASK;
-  if(dt!=0) {
-    printf("%04x %d\n", c, dt);
-  }
-}
-#endif
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
-                u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
 }
 
 /* ScriptExtensions.txt ----------------------------------------------------- */
@@ -418,106 +379,28 @@ numericLineFn(void *context,
     }
 }
 
-/* data serialization ------------------------------------------------------- */
-
-U_CFUNC int32_t
-writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
-    const uint32_t *pvArray;
-    int32_t pvRows, pvCount;
-    int32_t length;
-    UErrorCode errorCode;
-
-    pvArray=upvec_getArray(pv, &pvRows, NULL);
-    pvCount=pvRows*UPROPS_VECTOR_WORDS;
-
-    errorCode=U_ZERO_ERROR;
-    length=utrie2_serialize(newTrie, p, capacity, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr,
-                "genprops error: utrie2_freeze(additional properties)+utrie2_serialize() failed: %s\n",
-                u_errorName(errorCode));
-        exit(errorCode);
-    }
-
-    /* round up scriptExtensions to multiple of 4 bytes */
-    if(scriptExtensions->length()&1) {
-        scriptExtensions->append((UChar)0);
-    }
-
-    /* set indexes */
-    indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
-        indexes[UPROPS_ADDITIONAL_TRIE_INDEX]+length/4;
-    indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
-    indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]=
-        indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
-    indexes[UPROPS_RESERVED_INDEX_7]=
-        indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]+scriptExtensions->length()/2;
-    indexes[UPROPS_RESERVED_INDEX_8]=indexes[UPROPS_RESERVED_INDEX_7];
-    indexes[UPROPS_DATA_TOP_INDEX]=indexes[UPROPS_RESERVED_INDEX_8];
-
-    indexes[UPROPS_MAX_VALUES_INDEX]=
-        (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
-        (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
-        (((int32_t)USCRIPT_CODE_LIMIT-1)&UPROPS_SCRIPT_MASK);
-    indexes[UPROPS_MAX_VALUES_2_INDEX]=
-        (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
-        (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
-        (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
-        (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
-        ((int32_t)U_DT_COUNT-1);
-
-    int32_t additionalPropsSize=4*(indexes[UPROPS_DATA_TOP_INDEX]-indexes[UPROPS_ADDITIONAL_TRIE_INDEX]);
-    if(p!=NULL && additionalPropsSize<=capacity) {
-        if(beVerbose) {
-            printf("size in bytes of additional props trie:%5u\n", (int)length);
-        }
-        if(f!=NULL) {
-            usrc_writeUTrie2Arrays(f,
-                "static const uint16_t propsVectorsTrie_index[%ld]={\n", NULL,
-                newTrie,
-                "\n};\n\n");
-            usrc_writeUTrie2Struct(f,
-                "static const UTrie2 propsVectorsTrie={\n",
-                newTrie, "propsVectorsTrie_index", NULL,
-                "};\n\n");
-
-            usrc_writeArray(f,
-                "static const uint32_t propsVectors[%ld]={\n",
-                pvArray, 32, pvCount,
-                "};\n\n");
-            fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
-            fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]);
-
-            usrc_writeArray(f,
-                "static const uint16_t scriptExtensions[%ld]={\n",
-                scriptExtensions->getBuffer(), 16, scriptExtensions->length(),
-                "};\n\n");
-        } else {
-            p+=length;
-            length=pvCount*4;
-            uprv_memcpy(p, pvArray, length);
-
-            p+=length;
-            length=scriptExtensions->length()*2;
-            uprv_memcpy(p, scriptExtensions->getBuffer(), length);
-        }
-        if(beVerbose) {
-            printf("number of additional props vectors:    %5u\n", (int)pvRows);
-            printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
-            printf("number of 16-bit scriptExtensions:     %5u\n", (int)scriptExtensions->length());
-        }
-    }
-
-    return additionalPropsSize;
-}
-
 class Props2Writer : public PropsWriter {
 public:
-    Props2Writer() { initAdditionalProperties(); }
-    virtual ~Props2Writer() { exitAdditionalProperties(); }
+    Props2Writer(UErrorCode &errorCode);
+    virtual ~Props2Writer();
 
     virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
 };
+
+Props2Writer::Props2Writer(UErrorCode &errorCode) {
+    pv=upvec_open(UPROPS_VECTOR_WORDS, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops error: props2writer upvec_open() failed - %s\n",
+                u_errorName(errorCode));
+    }
+    scriptExtensions=new UnicodeString;
+}
+
+Props2Writer::~Props2Writer() {
+    utrie2_close(newTrie);
+    upvec_close(pv);
+    delete scriptExtensions;
+}
 
 struct PropToBinary {
     int32_t prop;  // UProperty
@@ -642,10 +525,127 @@ Props2Writer::setProps(const UniProps &props, const UnicodeSet &newValues, UErro
     }
 }
 
+static uint8_t trieBlock[100000];
+static int32_t trieSize;
+
+int32_t
+props2FinalizeData(int32_t indexes[UPROPS_INDEX_COUNT], UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return 0; }
+
+    newTrie=upvec_compactToUTrie2WithRowIndexes(pv, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
+                u_errorName(errorCode));
+        return 0;
+    }
+
+    trieSize=utrie2_serialize(newTrie, trieBlock, (int32_t)sizeof(trieBlock), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops error: utrie2_freeze(additional properties)+utrie2_serialize() failed: %s\n",
+                u_errorName(errorCode));
+        return 0;
+    }
+
+    int32_t pvRows;
+    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
+// TODO: remove
+#if 0
+for(int32_t c=0; c<=0x10ffff; ++c) {
+  uint16_t ri=utrie2_get32(newTrie, c);
+  uint32_t v2=pvArray[ri+2];
+  int32_t dt=v2&UPROPS_DT_MASK;
+  if(dt!=0) {
+    printf("%04x %d\n", c, dt);
+  }
+}
+#endif
+
+    /* round up scriptExtensions to multiple of 4 bytes */
+    if(scriptExtensions->length()&1) {
+        scriptExtensions->append((UChar)0);
+    }
+
+    /* set indexes */
+    indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
+        indexes[UPROPS_ADDITIONAL_TRIE_INDEX]+trieSize/4;
+    indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
+    indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]=
+        indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
+    indexes[UPROPS_RESERVED_INDEX_7]=
+        indexes[UPROPS_SCRIPT_EXTENSIONS_INDEX]+scriptExtensions->length()/2;
+    indexes[UPROPS_RESERVED_INDEX_8]=indexes[UPROPS_RESERVED_INDEX_7];
+    indexes[UPROPS_DATA_TOP_INDEX]=indexes[UPROPS_RESERVED_INDEX_8];
+
+    indexes[UPROPS_MAX_VALUES_INDEX]=
+        (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
+        (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
+        (((int32_t)USCRIPT_CODE_LIMIT-1)&UPROPS_SCRIPT_MASK);
+    indexes[UPROPS_MAX_VALUES_2_INDEX]=
+        (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
+        (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
+        (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
+        (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
+        ((int32_t)U_DT_COUNT-1);
+
+    if(beVerbose) {
+        printf("size in bytes of additional props trie:%5u\n", (int)trieSize);
+        printf("number of additional props vectors:    %5u\n", (int)pvRows);
+        printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
+        printf("number of 16-bit scriptExtensions:     %5u\n", (int)scriptExtensions->length());
+    }
+
+    return 4*(indexes[UPROPS_DATA_TOP_INDEX]-indexes[UPROPS_ADDITIONAL_TRIE_INDEX]);
+}
+
+void
+props2AppendToCSourceFile(FILE *f, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    int32_t pvRows;
+    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
+
+    usrc_writeUTrie2Arrays(f,
+        "static const uint16_t propsVectorsTrie_index[%ld]={\n", NULL,
+        newTrie,
+        "\n};\n\n");
+    usrc_writeUTrie2Struct(f,
+        "static const UTrie2 propsVectorsTrie={\n",
+        newTrie, "propsVectorsTrie_index", NULL,
+        "};\n\n");
+
+    usrc_writeArray(f,
+        "static const uint32_t propsVectors[%ld]={\n",
+        pvArray, 32, pvCount,
+        "};\n\n");
+    fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
+    fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)UPROPS_VECTOR_WORDS);
+
+    usrc_writeArray(f,
+        "static const uint16_t scriptExtensions[%ld]={\n",
+        scriptExtensions->getBuffer(), 16, scriptExtensions->length(),
+        "};\n\n");
+}
+
+void
+props2AppendToBinaryFile(UNewDataMemory *pData, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    int32_t pvRows;
+    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
+
+    udata_writeBlock(pData, trieBlock, trieSize);
+    udata_writeBlock(pData, pvArray, pvCount*4);
+    udata_writeBlock(pData, scriptExtensions->getBuffer(), scriptExtensions->length()*2);
+}
+
 PropsWriter *
 createProps2Writer(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PropsWriter *pw=new Props2Writer();
+    PropsWriter *pw=new Props2Writer(errorCode);
     if(pw==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
