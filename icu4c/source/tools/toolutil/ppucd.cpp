@@ -339,9 +339,33 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
         } else {
             props.intProps[prop-UCHAR_INT_START]=value;
         }
-    } else if(*v=='<' && lineType==DEFAULTS_LINE) {
-        // Ignore default values like <code point>.
-        return TRUE;
+    } else if(*v=='<') {
+        // Do not parse default values like <code point>, just set null values.
+        switch(prop) {
+        case UCHAR_BIDI_MIRRORING_GLYPH:
+            props.bmg=U_SENTINEL;
+            break;
+        case UCHAR_CASE_FOLDING:
+            props.cf.remove();
+            break;
+        case UCHAR_SCRIPT_EXTENSIONS:
+            props.scx.clear();
+            break;
+        case UCHAR_LOWERCASE_MAPPING:
+        case UCHAR_SIMPLE_CASE_FOLDING:
+        case UCHAR_SIMPLE_LOWERCASE_MAPPING:
+        case UCHAR_SIMPLE_TITLECASE_MAPPING:
+        case UCHAR_SIMPLE_UPPERCASE_MAPPING:
+        case UCHAR_TITLECASE_MAPPING:
+        case UCHAR_UPPERCASE_MAPPING:
+            // Ignore unhandled properties.
+            break;
+        default:
+            fprintf(stderr,
+                    "error in preparsed UCD: '%s' is not a valid default value on line %ld\n",
+                    field, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+        }
     } else {
         char c;
         switch(prop) {
@@ -368,6 +392,9 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
             break;
         case PPUCD_NAME_ALIAS:
             props.nameAlias=v;
+            break;
+        case UCHAR_SCRIPT_EXTENSIONS:
+            parseScriptExtensions(v, props.scx, errorCode);
             break;
         default:
             // Ignore unhandled properties.
@@ -447,6 +474,48 @@ PreparsedUCD::parseString(const char *s, UnicodeString &uni, UErrorCode &errorCo
         fprintf(stderr,
                 "error in preparsed UCD: '%s' is not a valid Unicode string on line %ld\n",
                 s, (long)lineNumber);
+    }
+}
+
+void
+PreparsedUCD::parseScriptExtensions(const char *s, UnicodeSet &scx, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    scx.clear();
+    CharString scString;
+    for(;;) {
+        const char *scs;
+        const char *scLimit=strchr(s, ' ');
+        if(scLimit!=NULL) {
+            scs=scString.clear().append(s, (int32_t)(scLimit-s), errorCode).data();
+            if(U_FAILURE(errorCode)) { return; }
+        } else {
+            scs=s;
+        }
+        int32_t script=pnames->getPropertyValueEnum(UCHAR_SCRIPT, scs);
+        if(script==UCHAR_INVALID_CODE) {
+            fprintf(stderr,
+                    "error in preparsed UCD: '%s' is not a valid script code on line %ld\n",
+                    scs, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+            return;
+        } else if(scx.contains(script)) {
+            fprintf(stderr,
+                    "error in preparsed UCD: scx has duplicate '%s' codes on line %ld\n",
+                    scs, (long)lineNumber);
+            errorCode=U_PARSE_ERROR;
+            return;
+        } else {
+            scx.add(script);
+        }
+        if(scLimit!=NULL) {
+            s=scLimit+1;
+        } else {
+            break;
+        }
+    }
+    if(scx.isEmpty()) {
+        fprintf(stderr, "error in preparsed UCD: empty scx= on line %ld\n", (long)lineNumber);
+        errorCode=U_PARSE_ERROR;
     }
 }
 

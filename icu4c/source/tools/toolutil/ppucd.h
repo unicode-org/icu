@@ -52,6 +52,7 @@ struct U_TOOLUTIL_API UniProps {
     const char *name;
     const char *nameAlias;
     UnicodeString cf;
+    UnicodeSet scx;
 };
 
 class U_TOOLUTIL_API PreparsedUCD {
@@ -145,6 +146,7 @@ private:
     UChar32 parseCodePoint(const char *s, UErrorCode &errorCode);
     UBool parseCodePointRange(const char *s, UChar32 &start, UChar32 &end, UErrorCode &errorCode);
     void parseString(const char *s, UnicodeString &uni, UErrorCode &errorCode);
+    void parseScriptExtensions(const char *s, UnicodeSet &scx, UErrorCode &errorCode);
 
     static const int32_t kNumLineBuffers=3;
 

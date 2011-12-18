@@ -885,7 +885,7 @@ value;WB;NL;Newline
 value;WB;NU;Numeric
 value;WB;XX;Other
 
-defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bmg=<code point>;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;hst=NA;InMC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<slc>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=Script_Extensions;slc=<code point>;stc=<code point>;suc=<code point>;tc=<stc>;uc=<suc>;WB=XX
+defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bmg=<code point>;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;hst=NA;InMC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<slc>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<stc>;uc=<suc>;WB=XX
 
 block;0000..007F;age=1.1;blk=ASCII;ea=Na;gc=Cc;Gr_Base;lb=AL;sc=Zyyy
 # 0000..007F C0 Controls and Basic Latin (Basic Latin)
@@ -13621,7 +13621,7 @@ cp;31E0;na=CJK STROKE HXWG
 cp;31E1;na=CJK STROKE HZZZG
 cp;31E2;na=CJK STROKE PG
 cp;31E3;na=CJK STROKE Q
-cp;31E4..31EF;age=NA;bc=L;ea=N;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;scx=Script_Extensions
+cp;31E4..31EF;age=NA;bc=L;ea=N;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;scx=<script>
 
 block;31F0..31FF;age=3.2;Alpha;blk=Katakana_Ext;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=CJ;SB=LE;sc=Kana;WB=KA;XIDC;XIDS
 # 31F0..31FF Katakana Phonetic Extensions
@@ -16391,7 +16391,7 @@ cp;A837;gc=So;na=NORTH INDIC PLACEHOLDER MARK
 cp;A838;bc=ET;gc=Sc;lb=PO;na=NORTH INDIC RUPEE MARK
 # Miscellaneous sign
 cp;A839;bc=ET;gc=So;na=NORTH INDIC QUANTITY MARK
-cp;A83A..A83F;age=NA;-Gr_Base;lb=XX;sc=Zzzz;scx=Script_Extensions
+cp;A83A..A83F;age=NA;-Gr_Base;lb=XX;sc=Zzzz;scx=<script>
 
 block;A840..A87F;age=5.0;Alpha;blk=Phags_Pa;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Phag;WB=LE;XIDC;XIDS
 # A840..A87F Phags-pa
@@ -19639,7 +19639,7 @@ block;10100..1013F;age=4.0;blk=Aegean_Numbers;gc=No;Gr_Base;lb=AL;nt=Nu;sc=Zyyy;
 cp;10100;gc=Po;lb=BA;na=AEGEAN WORD SEPARATOR LINE;nt=None
 cp;10101;bc=ON;gc=Po;lb=BA;na=AEGEAN WORD SEPARATOR DOT;nt=None
 cp;10102;gc=Po;lb=BA;na=AEGEAN CHECK MARK;nt=None
-cp;10103..10106;age=NA;gc=Cn;-Gr_Base;lb=XX;nt=None;sc=Zzzz;scx=Script_Extensions
+cp;10103..10106;age=NA;gc=Cn;-Gr_Base;lb=XX;nt=None;sc=Zzzz;scx=<script>
 # Numbers
 cp;10107;na=AEGEAN NUMBER ONE;nv=1
 cp;10108;na=AEGEAN NUMBER TWO;nv=2
@@ -19686,7 +19686,7 @@ cp;10130;na=AEGEAN NUMBER SIXTY THOUSAND;nv=60000
 cp;10131;na=AEGEAN NUMBER SEVENTY THOUSAND;nv=70000
 cp;10132;na=AEGEAN NUMBER EIGHTY THOUSAND;nv=80000
 cp;10133;na=AEGEAN NUMBER NINETY THOUSAND;nv=90000
-cp;10134..10136;age=NA;gc=Cn;-Gr_Base;lb=XX;nt=None;sc=Zzzz;scx=Script_Extensions
+cp;10134..10136;age=NA;gc=Cn;-Gr_Base;lb=XX;nt=None;sc=Zzzz;scx=<script>
 # Measures
 cp;10137;gc=So;na=AEGEAN WEIGHT BASE UNIT;nt=None
 cp;10138;gc=So;na=AEGEAN WEIGHT FIRST SUBUNIT;nt=None
