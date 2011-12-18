@@ -23,9 +23,8 @@
 #include "propsvec.h"
 #include "unewdata.h"
 
-/* file definitions */
-#define DATA_NAME "uprops"
-#define DATA_TYPE "icu"
+// TODO: remove
+#define USE_NEW 1
 
 class PropsWriter {
 public:
@@ -51,30 +50,9 @@ typedef struct {
 /* global flags */
 U_CFUNC UBool beVerbose;
 
-U_CFUNC const char *const
-genCategoryNames[];
-
 /* prototypes */
 U_CFUNC void
 writeUCDFilename(char *basename, const char *filename, const char *suffix);
-
-U_CFUNC UBool
-isToken(const char *token, const char *s);
-
-U_CFUNC int32_t
-getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s);
-
-U_CFUNC uint32_t
-makeProps(Props *p);
-
-U_CFUNC void
-addProps(uint32_t c, uint32_t props);
-
-U_CFUNC uint32_t
-getProps(uint32_t c);
-
-U_CFUNC void
-repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);

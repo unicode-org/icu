@@ -29,8 +29,6 @@
 #include "uprops.h"
 #include "genprops.h"
 
-#define DO_DEBUG_OUT 0
-
 /* Unicode character properties file format ------------------------------------
 
 The file format prepared and written here contains several data
@@ -249,111 +247,6 @@ static UDataInfo dataInfo={
 
 static UTrie2 *pTrie=NULL;
 
-/* store a character's properties ------------------------------------------- */
-
-U_CFUNC uint32_t
-makeProps(Props *p) {
-    uint32_t den;
-    int32_t type, value, exp, ntv;
-
-    /* encode numeric type & value */
-    type=p->numericType;
-    value=p->numericValue;
-    den=p->denominator;
-    exp=p->exponent;
-
-    ntv=-1; /* the numeric type and value cannot be encoded if ntv remains -1 */
-    switch(type) {
-    case U_NT_NONE:
-        if(value==0 && den==0 && exp==0) {
-            ntv=UPROPS_NTV_NONE;
-        }
-        break;
-    case U_NT_DECIMAL:
-        if(0<=value && value<=9 && den==0 && exp==0) {
-            ntv=UPROPS_NTV_DECIMAL_START+value;
-        }
-        break;
-    case U_NT_DIGIT:
-        if(0<=value && value<=9 && den==0 && exp==0) {
-            ntv=UPROPS_NTV_DIGIT_START+value;
-        }
-        break;
-    case U_NT_NUMERIC:
-        if(den==0) {
-            if(exp==2 && (value*100)<=UPROPS_NTV_MAX_SMALL_INT) {
-                /* small integer parsed like a large one */
-                ntv=UPROPS_NTV_NUMERIC_START+value*100;
-            } else if(exp==0 && value>=0) {
-                if(value<=UPROPS_NTV_MAX_SMALL_INT) {
-                    /* small integer */
-                    ntv=UPROPS_NTV_NUMERIC_START+value;
-                } else {
-                    /* large integer parsed like a small one */
-                    /* split the value into mantissa and exponent, base 10 */
-                    int32_t mant=value;
-                    while((mant%10)==0) {
-                        mant/=10;
-                        ++exp;
-                    }
-                    if(mant<=9) {
-                        ntv=((mant+14)<<5)+(exp-2);
-                    }
-                }
-            } else if(2<=exp && exp<=33 && 1<=value && value<=9) {
-                /* large, single-significant-digit integer */
-                ntv=((value+14)<<5)+(exp-2);
-            }
-        } else if(exp==0) {
-            if(-1<=value && value<=17 && 1<=den && den<=16) {
-                /* fraction */
-                ntv=((value+12)<<4)+(den-1);
-            }
-        }
-    default:
-        break;
-    }
-    if(ntv<0) {
-        fprintf(stderr, "genprops error: unable to encode numeric type %d & value %ld/%lu E%d\n",
-                (int)type, (long)value, (unsigned long)den, exp);
-        exit(U_ILLEGAL_ARGUMENT_ERROR);
-    }
-
-    /* encode the properties */
-    return
-        (uint32_t)p->generalCategory |
-        (ntv<<UPROPS_NUMERIC_TYPE_VALUE_SHIFT);
-}
-
-U_CFUNC void
-addProps(uint32_t c, uint32_t x) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    utrie2_set32(pTrie, (UChar32)c, x, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie2_set32(properties trie) failed - %s\n",
-                u_errorName(errorCode));
-        exit(errorCode);
-    }
-}
-
-U_CFUNC uint32_t
-getProps(uint32_t c) {
-    return utrie2_get32(pTrie, (UChar32)c);
-}
-
-/* areas of same properties ------------------------------------------------- */
-
-U_CFUNC void
-repeatProps(uint32_t first, uint32_t last, uint32_t x) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    utrie2_setRange32(pTrie, (UChar32)first, (UChar32)last, x, FALSE, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie2_set32(properties trie) failed - %s\n",
-                u_errorName(errorCode));
-        exit(errorCode);
-    }
-}
-
 class CorePropsWriter : public PropsWriter {
 public:
     CorePropsWriter(UErrorCode &errorCode);
@@ -383,8 +276,154 @@ CorePropsWriter::setUnicodeVersion(const UVersionInfo version) {
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
+// For nt=U_NT_NUMERIC.
+static int32_t
+encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
+    /* get a possible minus sign */
+    UBool isNegative;
+    if(*s=='-') {
+        isNegative=TRUE;
+        ++s;
+    } else {
+        isNegative=FALSE;
+    }
+
+    int32_t value=0, den=0, exp=0, ntv=0;
+    char *numberLimit;
+    /* try large, single-significant-digit numbers, may otherwise overflow strtoul() */
+    if('1'<=s[0] && s[0]<='9' && s[1]=='0' && s[2]=='0') {
+        value=s[0]-'0';
+        numberLimit=const_cast<char *>(s);
+        while(*(++numberLimit)=='0') {
+            ++exp;
+        }
+    } else {
+        /* normal number parsing */
+        unsigned long ul=uprv_strtoul(s, &numberLimit, 10);
+        if(ul>0x7fffffff) {
+            ntv=-1;
+        } else {
+            value=(int32_t)ul;
+        }
+        if(s<numberLimit && *numberLimit=='/') {
+            /* fractional value, get the denominator */
+            ul=uprv_strtoul(numberLimit+1, &numberLimit, 10);
+            if(ul==0 || ul>0x7fffffff) {
+                ntv=-1;
+            } else {
+                den=(int32_t)ul;
+            }
+        }
+    }
+    if(isNegative) {
+        value=-(int32_t)value;
+    }
+
+    if(ntv<0) {
+        // pass
+    } else if(den==0) {
+        if(exp==2 && (value*100)<=UPROPS_NTV_MAX_SMALL_INT) {
+            /* small integer parsed like a large one */
+            ntv=UPROPS_NTV_NUMERIC_START+value*100;
+        } else if(exp==0 && value>=0) {
+            if(value<=UPROPS_NTV_MAX_SMALL_INT) {
+                /* small integer */
+                ntv=UPROPS_NTV_NUMERIC_START+value;
+            } else {
+                /* large integer parsed like a small one */
+                /* split the value into mantissa and exponent, base 10 */
+                int32_t mant=value;
+                while((mant%10)==0) {
+                    mant/=10;
+                    ++exp;
+                }
+                if(mant<=9) {
+                    ntv=((mant+14)<<5)+(exp-2);
+                }
+            }
+        } else if(2<=exp && exp<=33 && 1<=value && value<=9) {
+            /* large, single-significant-digit integer */
+            ntv=((value+14)<<5)+(exp-2);
+        }
+    } else if(exp==0) {
+        if(-1<=value && value<=17 && 1<=den && den<=16) {
+            /* fraction */
+            ntv=((value+12)<<4)+(den-1);
+        }
+    }
+    if(ntv<0 || *numberLimit!=0) {
+        fprintf(stderr, "genprops error: unable to encode numeric value nv=%s\n", s);
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    return ntv;
+}
+
 void
 CorePropsWriter::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    UChar32 start=props.start;
+    UChar32 end=props.end;
+
+    int32_t type=props.getIntProp(UCHAR_NUMERIC_TYPE);
+    const char *nvString=props.numericValue;
+    if(type!=U_NT_NONE && nvString==NULL && start==end) {
+        fprintf(stderr, "genprops error: cp line has Numeric_Type but no Numeric_Value\n");
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if(!newValues.contains(UCHAR_GENERAL_CATEGORY) && !newValues.contains(UCHAR_NUMERIC_VALUE)) {
+        return;
+    }
+
+    int32_t ntv=UPROPS_NTV_NONE;  // numeric type & value
+    if(nvString!=NULL) {
+        int32_t digitValue=props.digitValue;
+        if( type<=U_NT_NONE || U_NT_NUMERIC<type ||
+            ((type==U_NT_DECIMAL || type==U_NT_DIGIT) && digitValue<0)
+        ) {
+            fprintf(stderr, "genprops error: nt=%d but nv=%s\n",
+                    (int)type, nvString==NULL ? "NULL" : nvString);
+            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+
+        switch(type) {
+        case U_NT_NONE:
+            ntv=UPROPS_NTV_NONE;
+            break;
+        case U_NT_DECIMAL:
+            ntv=UPROPS_NTV_DECIMAL_START+digitValue;
+            break;
+        case U_NT_DIGIT:
+            ntv=UPROPS_NTV_DIGIT_START+digitValue;
+            break;
+        case U_NT_NUMERIC:
+            if(digitValue>=0) {
+                ntv=UPROPS_NTV_NUMERIC_START+digitValue;
+            } else {
+                ntv=encodeNumericValue(start, nvString, errorCode);
+                if(U_FAILURE(errorCode)) {
+                    return;
+                }
+            }
+        default:
+            break;  // unreachable
+        }
+    }
+
+    uint32_t value=
+        (uint32_t)props.getIntProp(UCHAR_GENERAL_CATEGORY) |
+        (ntv<<UPROPS_NUMERIC_TYPE_VALUE_SHIFT);
+    if(start==end) {
+        utrie2_set32(pTrie, start, value, &errorCode);
+    } else {
+        utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
+    }
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: utrie2_setRange32(properties trie %04lX..%04lX) failed - %s\n",
+                (long)start, (long)end, u_errorName(errorCode));
+    }
 }
 
 static int32_t indexes[UPROPS_INDEX_COUNT]={
@@ -409,7 +448,13 @@ CorePropsWriter::finalizeData(UErrorCode &errorCode) {
                 u_errorName(errorCode), (long)trieSize);
         return;
     }
-
+// TODO: remove
+#if 0
+for(int32_t c=0; c<=0x10ffff; ++c) {
+  uint32_t v=utrie2_get32(pTrie, c);
+  printf("%04x ntv=%3d gc=%2d\n", c, v>>6, v&0x1f);
+}
+#endif
     int32_t offset=sizeof(indexes)/4;       /* uint32_t offset to the properties trie */
     offset+=trieSize>>2;
     indexes[UPROPS_PROPS32_INDEX]=          /* set indexes to the same offsets for empty */
