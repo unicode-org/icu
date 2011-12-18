@@ -13,22 +13,17 @@
 *   created on: 1999dec08
 *   created by: Markus W. Scherer
 *
-*   This program reads several of the Unicode character database text files,
-*   parses them, and extracts most of the properties for each character.
-*   It then writes a binary file containing the properties
-*   that is designed to be used directly for random-access to
-*   the properties of each Unicode character.
+*   This program parses the ppucd.txt preparsed Unicode Character Database file
+*   and writes several source and binary files into the ICU source tree.
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
-#include "unicode/putil.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "charstr.h"
-#include "cstring.h"
 #include "genprops.h"
 #include "ppucd.h"
 #include "toolutil.h"
@@ -51,9 +46,7 @@ enum {
     HELP_H,
     HELP_QUESTION_MARK,
     VERBOSE,
-    COPYRIGHT,
-    SOURCEDIR,
-    ICUDATADIR
+    COPYRIGHT
 };
 
 /* Keep these values in sync with the above enums */
@@ -61,22 +54,12 @@ static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
-    UOPTION_COPYRIGHT,
-    UOPTION_SOURCEDIR,
-    UOPTION_ICUDATADIR
+    UOPTION_COPYRIGHT
 };
 
 extern int
 main(int argc, char* argv[]) {
-    char filename[300];
-    const char *srcDir=NULL;
-    char *basename=NULL;
-
     U_MAIN_INIT_ARGS(argc, argv);
-
-    /* preset then read command line options */
-    options[SOURCEDIR].value="";
-    options[ICUDATADIR].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, LENGTHOF(options), options);
 
     /* error handling, printing usage message */
@@ -103,17 +86,11 @@ main(int argc, char* argv[]) {
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     verbose output\n"
             "\t-c or --copyright   include a copyright notice\n");
-        fprintf(stderr,
-            "\t-s or --sourcedir   source directory, followed by the path\n"
-            "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
-            "\t                    followed by path, defaults to %s\n",
-            u_getDataDirectory());
         return argc<2 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     /* get the options values */
     beVerbose=options[VERBOSE].doesOccur;
-    srcDir=options[SOURCEDIR].value;
 
     /* initialize */
     IcuToolErrorCode errorCode("genprops");
@@ -161,21 +138,6 @@ main(int argc, char* argv[]) {
         }
     }
 
-    if (options[ICUDATADIR].doesOccur) {
-        u_setDataDirectory(options[ICUDATADIR].value);
-    }
-
-    /* prepare the filename beginning with the source dir */
-    uprv_strcpy(filename, srcDir);
-    basename=filename+uprv_strlen(filename);
-    if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
-        *basename++=U_FILE_SEP_CHAR;
-    }
-
-    /* process additional properties files */
-    *basename=0;
-    generateAdditionalProperties(filename, NULL, errorCode);
-
     corePropsWriter->finalizeData(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
@@ -196,18 +158,6 @@ main(int argc, char* argv[]) {
     corePropsWriter->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
-}
-
-U_CFUNC void
-writeUCDFilename(char *basename, const char *filename, const char *suffix) {
-    int32_t length=(int32_t)uprv_strlen(filename);
-    uprv_strcpy(basename, filename);
-    if(suffix!=NULL) {
-        basename[length++]='-';
-        uprv_strcpy(basename+length, suffix);
-        length+=(int32_t)uprv_strlen(suffix);
-    }
-    uprv_strcpy(basename+length, ".txt");
 }
 
 /*
