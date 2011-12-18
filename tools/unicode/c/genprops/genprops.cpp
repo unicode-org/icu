@@ -41,18 +41,21 @@
 #include "uparse.h"
 #include "uprops.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 // TODO: remove
 #define USE_NEW 1
 
 U_NAMESPACE_USE
 
-UBool beVerbose=FALSE, haveCopyright=TRUE;
+UBool beVerbose=FALSE;
 
 PropsWriter::~PropsWriter() {}
-void PropsWriter::setUnicodeVersion(const UVersionInfo version) {}
+void PropsWriter::setUnicodeVersion(const UVersionInfo) {}
 void PropsWriter::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
+void PropsWriter::finalizeData(UErrorCode &) {}
+void PropsWriter::writeCSourceFile(const char *, UErrorCode &) {}
+void PropsWriter::writeBinaryData(const char *, UBool, UErrorCode &) {}
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -67,10 +70,8 @@ enum
     HELP_QUESTION_MARK,
     VERBOSE,
     COPYRIGHT,
-    DESTDIR,
     SOURCEDIR,
-    ICUDATADIR,
-    CSOURCE
+    ICUDATADIR
 };
 
 /* Keep these values in sync with the above enums */
@@ -79,25 +80,22 @@ static UOption options[]={
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
     UOPTION_COPYRIGHT,
-    UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    UOPTION_ICUDATADIR,
-    UOPTION_DEF("csource", 'C', UOPT_NO_ARG)
+    UOPTION_ICUDATADIR
 };
 
 extern int
 main(int argc, char* argv[]) {
     char filename[300];
-    const char *srcDir=NULL, *destDir=NULL, *suffix=NULL;
+    const char *srcDir=NULL;
     char *basename=NULL;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
-    options[DESTDIR].value=u_getDataDirectory();
     options[SOURCEDIR].value="";
     options[ICUDATADIR].value=u_getDataDirectory();
-    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+    argc=u_parseArgs(argc, argv, LENGTHOF(options), options);
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -105,42 +103,35 @@ main(int argc, char* argv[]) {
             "error in command line argument \"%s\"\n",
             argv[-argc]);
     }
-    if(argc<0 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
+    if(argc<2 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
         /*
-         * Broken into chucks because the C89 standard says the minimum
+         * Broken into chunks because the C89 standard says the minimum
          * required supported string length is 509 bytes.
          */
         fprintf(stderr,
-            "Usage: %s [-options] [suffix]\n"
+            "Usage: %s [-options] path/to/ICU/src/root\n"
             "\n"
-            "read the UnicodeData.txt file and other Unicode properties files and\n"
-            "create a binary file " DATA_NAME "." DATA_TYPE " with the character properties\n"
+            "Reads the preparsed UCD file path/to/ICU/src/root/source/data/unidata/ppucd.txt and\n"
+            "writes source and binary data files with the character properties.\n"
+            "(UCD=Unicode Character Database)\n"
             "\n",
             argv[0]);
         fprintf(stderr,
             "Options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     verbose output\n"
-            "\t-c or --copyright   include a copyright notice\n"
-            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n"
-            "\t-C or --csource     generate a .c source file rather than the .icu binary\n");
+            "\t-c or --copyright   include a copyright notice\n");
         fprintf(stderr,
-            "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n"
             "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
-            "\t                    followed by path, defaults to %s\n"
-            "\tsuffix              suffix that is to be appended with a '-'\n"
-            "\t                    to the source file basenames before opening;\n"
-            "\t                    'genprops new' will read UnicodeData-new.txt etc.\n",
+            "\t                    followed by path, defaults to %s\n",
             u_getDataDirectory());
-        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+        return argc<2 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     /* get the options values */
     beVerbose=options[VERBOSE].doesOccur;
-    haveCopyright=options[COPYRIGHT].doesOccur;
     srcDir=options[SOURCEDIR].value;
-    destDir=options[DESTDIR].value;
 
     /* initialize */
     IcuToolErrorCode errorCode("genprops");
@@ -151,7 +142,16 @@ main(int argc, char* argv[]) {
         return errorCode.reset();
     }
 
-    CharString ppucdPath(srcDir, errorCode);
+    CharString icuSrcRoot(argv[1], errorCode);
+
+    CharString icuSource(icuSrcRoot, errorCode);
+    icuSource.appendPathPart("source", errorCode);
+
+    CharString icuSourceData(icuSource, errorCode);
+    icuSourceData.appendPathPart("data", errorCode);
+
+    CharString ppucdPath(icuSourceData, errorCode);
+    ppucdPath.appendPathPart("unidata", errorCode);
     ppucdPath.appendPathPart("ppucd.txt", errorCode);
 
     PreparsedUCD ppucd(ppucdPath.data(), errorCode);
@@ -178,12 +178,6 @@ main(int argc, char* argv[]) {
         }
     }
 
-    if(argc>=2) {
-        suffix=argv[1];
-    } else {
-        suffix=NULL;
-    }
-
     if (options[ICUDATADIR].doesOccur) {
         u_setDataDirectory(options[ICUDATADIR].value);
     }
@@ -196,18 +190,31 @@ main(int argc, char* argv[]) {
     }
 
     /* process UnicodeData.txt */
-    writeUCDFilename(basename, "UnicodeData", suffix);
+    writeUCDFilename(basename, "UnicodeData", NULL);
     parseDB(filename, errorCode);
 
     /* process additional properties files */
     *basename=0;
-    generateAdditionalProperties(filename, suffix, errorCode);
+    generateAdditionalProperties(filename, NULL, errorCode);
 
-    /* process parsed data */
-    if(U_SUCCESS(errorCode)) {
-        /* write the properties data file */
-        generateData(destDir, options[CSOURCE].doesOccur);
+    corePropsWriter->finalizeData(errorCode);
+    if(errorCode.isFailure()) {
+        fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
+                errorCode.errorName());
+        return errorCode.reset();
     }
+
+    // Write the files with the generated data.
+    CharString sourceCommon(icuSource, errorCode);
+    sourceCommon.appendPathPart("common", errorCode);
+
+    CharString sourceDataIn(icuSourceData, errorCode);
+    sourceDataIn.appendPathPart("in", errorCode);
+
+    UBool withCopyright=options[COPYRIGHT].doesOccur;
+
+    corePropsWriter->writeCSourceFile(sourceCommon.data(), errorCode);
+    corePropsWriter->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }

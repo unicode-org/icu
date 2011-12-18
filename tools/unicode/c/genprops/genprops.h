@@ -21,6 +21,7 @@
 #include "unicode/uniset.h"
 #include "ppucd.h"
 #include "propsvec.h"
+#include "unewdata.h"
 
 /* file definitions */
 #define DATA_NAME "uprops"
@@ -31,8 +32,9 @@ public:
     virtual ~PropsWriter();
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode);
-    // virtual writeCSourceFile(icusrcroot);
-    // virtual writeBinaryData(icusrcroot);
+    virtual void finalizeData(UErrorCode &errorCode);
+    virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
+    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 };
 
 PropsWriter *createCorePropsWriter(UErrorCode &errorCode);
@@ -47,7 +49,7 @@ typedef struct {
 } Props;
 
 /* global flags */
-U_CFUNC UBool beVerbose, haveCopyright;
+U_CFUNC UBool beVerbose;
 
 U_CFUNC const char *const
 genCategoryNames[];
@@ -75,12 +77,15 @@ U_CFUNC void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
 U_CFUNC void
-generateData(const char *dataDir, UBool csource);
-
-U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
 
-U_CFUNC int32_t
-writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[16]);
+int32_t
+props2FinalizeData(int32_t indexes[], UErrorCode &errorCode);
+
+void
+props2AppendToCSourceFile(FILE *f, UErrorCode &errorCode);
+
+void
+props2AppendToBinaryFile(UNewDataMemory *pData, UErrorCode &errorCode);
 
 #endif

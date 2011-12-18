@@ -249,24 +249,6 @@ static UDataInfo dataInfo={
 
 static UTrie2 *pTrie=NULL;
 
-/* -------------------------------------------------------------------------- */
-
-static void
-initStore() {
-    UErrorCode errorCode=U_ZERO_ERROR;
-    pTrie=utrie2_open(0, 0, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: corepropswriter utrie2_open() failed - %s\n",
-                u_errorName(errorCode));
-        exit(errorCode);
-    }
-}
-
-static void
-exitStore() {
-    utrie2_close(pTrie);
-}
-
 /* store a character's properties ------------------------------------------- */
 
 U_CFUNC uint32_t
@@ -372,130 +354,29 @@ repeatProps(uint32_t first, uint32_t last, uint32_t x) {
     }
 }
 
-/* generate output data ----------------------------------------------------- */
-
-U_CFUNC void
-generateData(const char *dataDir, UBool csource) {
-    static int32_t indexes[UPROPS_INDEX_COUNT]={
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0
-    };
-    static uint8_t trieBlock[40000];
-    static uint8_t additionalProps[120000];
-
-    UNewDataMemory *pData;
-    UErrorCode errorCode=U_ZERO_ERROR;
-    uint32_t size = 0;
-    int32_t trieSize, additionalPropsSize, offset;
-    long dataLength;
-
-    utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
-    trieSize=utrie2_serialize(pTrie, trieBlock, sizeof(trieBlock), &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie2_freeze(main trie)+utrie2_serialize() failed: %s (length %ld)\n",
-                u_errorName(errorCode), (long)trieSize);
-        exit(errorCode);
-    }
-
-    offset=sizeof(indexes)/4;               /* uint32_t offset to the properties trie */
-
-    /* round up trie size to 4-alignment */
-    while(trieSize&3) {
-        trieBlock[trieSize++]=0;
-    }
-    offset+=trieSize>>2;
-    indexes[UPROPS_PROPS32_INDEX]=          /* set indexes to the same offsets for empty */
-    indexes[UPROPS_EXCEPTIONS_INDEX]=       /* structures from the old format version 3 */
-    indexes[UPROPS_EXCEPTIONS_TOP_INDEX]=   /* so that less runtime code has to be changed */
-    indexes[UPROPS_ADDITIONAL_TRIE_INDEX]=offset;
-
-    if(beVerbose) {
-        printf("trie size in bytes:                    %5u\n", (int)trieSize);
-    }
-
-    if(csource) {
-        /* write .c file for hardcoded data */
-        FILE *f=usrc_createFromGenerator(dataDir, "uchar_props_data.h",
-                                         "icu/tools/src/unicode/c/genprops/corepropswriter.cpp");
-        if(f!=NULL) {
-            fputs("#ifndef INCLUDED_FROM_UCHAR_C\n"
-                  "#   error This file must be #included from uchar.c only.\n"
-                  "#endif\n\n", f);
-            /* unused
-            usrc_writeArray(f,
-                "static const UVersionInfo formatVersion={",
-                dataInfo.formatVersion, 8, 4,
-                "};\n\n");
-             */
-            usrc_writeArray(f,
-                "static const UVersionInfo dataVersion={",
-                dataInfo.dataVersion, 8, 4,
-                "};\n\n");
-            usrc_writeUTrie2Arrays(f,
-                "static const uint16_t propsTrie_index[%ld]={\n", NULL,
-                pTrie,
-                "\n};\n\n");
-            usrc_writeUTrie2Struct(f,
-                "static const UTrie2 propsTrie={\n",
-                pTrie, "propsTrie_index", NULL,
-                "};\n\n");
-
-            additionalPropsSize=writeAdditionalData(f, additionalProps, sizeof(additionalProps), indexes);
-            size=4*offset+additionalPropsSize;      /* total size of data */
-
-            usrc_writeArray(f,
-                "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
-                indexes, 32, UPROPS_INDEX_COUNT,
-                "};\n\n");
-            fclose(f);
-        }
-    } else {
-        /* write the data */
-        pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
-                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "genprops: udata_create(%s, %s.%s) failed - %s\n",
-                    dataDir, DATA_NAME, DATA_TYPE,
-                    u_errorName(errorCode));
-            exit(errorCode);
-        }
-
-        additionalPropsSize=writeAdditionalData(NULL, additionalProps, sizeof(additionalProps), indexes);
-        size=4*offset+additionalPropsSize;      /* total size of data */
-
-        udata_writeBlock(pData, indexes, sizeof(indexes));
-        udata_writeBlock(pData, trieBlock, trieSize);
-        udata_writeBlock(pData, additionalProps, additionalPropsSize);
-
-        /* finish up */
-        dataLength=udata_finish(pData, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "genprops: error %d writing the output file\n", errorCode);
-            exit(errorCode);
-        }
-
-        if(dataLength!=(long)size) {
-            fprintf(stderr, "genprops: data length %ld != calculated size %lu\n",
-                dataLength, (unsigned long)size);
-            exit(U_INTERNAL_PROGRAM_ERROR);
-        }
-    }
-
-    if(beVerbose) {
-        printf("data size:                            %6lu\n", (unsigned long)size);
-    }
-}
-
 class CorePropsWriter : public PropsWriter {
 public:
-    CorePropsWriter() { initStore(); }
-    virtual ~CorePropsWriter() { exitStore(); }
+    CorePropsWriter(UErrorCode &errorCode);
+    virtual ~CorePropsWriter();
 
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
+    virtual void finalizeData(UErrorCode &errorCode);
+    virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
+    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 };
+
+CorePropsWriter::CorePropsWriter(UErrorCode &errorCode) {
+    pTrie=utrie2_open(0, 0, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops error: corepropswriter utrie2_open() failed - %s\n",
+                u_errorName(errorCode));
+    }
+}
+
+CorePropsWriter::~CorePropsWriter() {
+    utrie2_close(pTrie);
+}
 
 void
 CorePropsWriter::setUnicodeVersion(const UVersionInfo version) {
@@ -506,10 +387,115 @@ void
 CorePropsWriter::setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) {
 }
 
+static int32_t indexes[UPROPS_INDEX_COUNT]={
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0
+};
+
+static uint8_t trieBlock[40000];
+static int32_t trieSize;
+static int32_t totalSize;
+
+void
+CorePropsWriter::finalizeData(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
+    trieSize=utrie2_serialize(pTrie, trieBlock, sizeof(trieBlock), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops error: utrie2_freeze(main trie)+utrie2_serialize() failed: %s (length %ld)\n",
+                u_errorName(errorCode), (long)trieSize);
+        return;
+    }
+
+    int32_t offset=sizeof(indexes)/4;       /* uint32_t offset to the properties trie */
+    offset+=trieSize>>2;
+    indexes[UPROPS_PROPS32_INDEX]=          /* set indexes to the same offsets for empty */
+    indexes[UPROPS_EXCEPTIONS_INDEX]=       /* structures from the old format version 3 */
+    indexes[UPROPS_EXCEPTIONS_TOP_INDEX]=   /* so that less runtime code has to be changed */
+    indexes[UPROPS_ADDITIONAL_TRIE_INDEX]=offset;
+
+    if(beVerbose) {
+        printf("trie size in bytes:                    %5u\n", (int)trieSize);
+    }
+
+    totalSize=4*offset+props2FinalizeData(indexes, errorCode);
+
+    if(beVerbose) {
+        printf("data size:                            %6ld\n", (long)totalSize);
+    }
+}
+
+void
+CorePropsWriter::writeCSourceFile(const char *path, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    FILE *f=usrc_createFromGenerator(path, "uchar_props_data.h",
+                                     "icu/tools/src/unicode/c/genprops/corepropswriter.cpp");
+    if(f==NULL) {
+        errorCode=U_FILE_ACCESS_ERROR;
+        return;
+    }
+    fputs("#ifndef INCLUDED_FROM_UCHAR_C\n"
+          "#   error This file must be #included from uchar.c only.\n"
+          "#endif\n\n", f);
+    usrc_writeArray(f,
+        "static const UVersionInfo dataVersion={",
+        dataInfo.dataVersion, 8, 4,
+        "};\n\n");
+    usrc_writeUTrie2Arrays(f,
+        "static const uint16_t propsTrie_index[%ld]={\n", NULL,
+        pTrie,
+        "\n};\n\n");
+    usrc_writeUTrie2Struct(f,
+        "static const UTrie2 propsTrie={\n",
+        pTrie, "propsTrie_index", NULL,
+        "};\n\n");
+
+    props2AppendToCSourceFile(f, errorCode);
+
+    usrc_writeArray(f,
+        "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
+        indexes, 32, UPROPS_INDEX_COUNT,
+        "};\n\n");
+    fclose(f);
+}
+
+void
+CorePropsWriter::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    UNewDataMemory *pData=udata_create(path, "icu", "uprops", &dataInfo,
+                                       withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: udata_create(%s, uprops.icu) failed - %s\n",
+                path, u_errorName(errorCode));
+        return;
+    }
+
+    udata_writeBlock(pData, indexes, sizeof(indexes));
+    udata_writeBlock(pData, trieBlock, trieSize);
+    props2AppendToBinaryFile(pData, errorCode);
+
+    long dataLength=udata_finish(pData, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: error %s writing the output file\n", u_errorName(errorCode));
+        return;
+    }
+
+    if(dataLength!=(long)totalSize) {
+        fprintf(stderr, "genprops: data length %ld != calculated size %ld\n",
+                dataLength, (long)totalSize);
+        errorCode=U_INTERNAL_PROGRAM_ERROR;
+    }
+}
+
 PropsWriter *
 createCorePropsWriter(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PropsWriter *pw=new CorePropsWriter();
+    PropsWriter *pw=new CorePropsWriter(errorCode);
     if(pw==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
