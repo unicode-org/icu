@@ -323,11 +323,11 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
 
     if(ntv<0) {
         // pass
-    } else if(den==0) {
+    } else if(den==0 && value>=0) {
         if(exp==2 && (value*100)<=UPROPS_NTV_MAX_SMALL_INT) {
             /* small integer parsed like a large one */
             ntv=UPROPS_NTV_NUMERIC_START+value*100;
-        } else if(exp==0 && value>=0) {
+        } else if(exp==0) {
             if(value<=UPROPS_NTV_MAX_SMALL_INT) {
                 /* small integer */
                 ntv=UPROPS_NTV_NUMERIC_START+value;
