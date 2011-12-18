@@ -39,6 +39,32 @@ _ucd_version = "?"
 _copyright = ""
 _terms_of_use = ""
 
+# ISO 15924 script codes --------------------------------------------------- ***
+
+# Script codes from ISO 15924 http://www.unicode.org/iso15924/codechanges.html
+# that are not yet in the UCD.
+_scripts_only_in_iso15924 = (
+    "Blis", "Cirt", "Cyrs",
+    "Egyd", "Egyh", "Geok",
+    "Hans", "Hant", "Hmng", "Hung",
+    "Inds", "Jpan", "Latf", "Latg", "Lina",
+    "Maya", "Moon", "Perm", "Roro",
+    "Sara", "Sgnw", "Syre", "Syrj", "Syrn",
+    "Teng", "Visp", "Zxxx",
+
+    "Kore", "Mani", "Phlp", "Phlv", "Zmth", "Zsym",
+
+    "Nkgb",
+
+    "Bass", "Dupl", "Elba", "Gran",
+    "Kpel", "Loma", "Mend", "Narb", "Nbat",
+    "Palm", "Sind", "Wara",
+
+    "Afak", "Jurc", "Mroo", "Nshu", "Tang", "Wole",
+
+    "Khoj", "Tirh"
+)
+
 # Properties --------------------------------------------------------------- ***
 
 _ignored_properties = set((
@@ -484,6 +510,26 @@ def ParsePropertyValueAliases(in_file):
     _defaults["hst"] = "NA"
   if "gc" not in _defaults:  # No @missing line in any .txt file?
     _defaults["gc"] = "Cn"
+  # Add ISO 15924-only script codes.
+  # Only for the ICU script code API, not necessary for parsing the UCD.
+  script_prop = _properties["sc"]
+  short_script_names = script_prop[2]  # set
+  script_values = script_prop[3]  # dict
+  remove_scripts = []
+  for script in _scripts_only_in_iso15924:
+    if script in short_script_names:
+      remove_scripts.append(script)
+    else:
+      short_script_names.add(script)
+      # Do not invent a Unicode long script name before the UCD adds the script.
+      script_list = [script, script]  # [short, long]
+      script_values[script] = script_list
+      # Probably not necessary because
+      # we will not parse these scripts from the UCD:
+      script_values[NormPropName(script)] = script_list
+  if remove_scripts:
+    raise ValueError(
+        "remove %s from _scripts_only_in_iso15924" % remove_scripts)
 
 
 def ParseBlocks(in_file):
@@ -1087,6 +1133,15 @@ def CopyAndStripAndMerge(s, t):
   return CopyAndStripWithOptionalMerge(s, t, True)
 
 
+def PrependBOM(s, t):
+  # TODO: With Python 2.7+, combine the two with statements into one.
+  with open(s, "r") as in_file:
+    with open(t, "w") as out_file:
+      out_file.write("\xef\xbb\xbf")  # UTF-8 BOM for ICU svn
+      shutil.copyfileobj(in_file, out_file)
+  return t
+
+
 def CopyOnly(s, t):
   shutil.copy(s, t)
   return t
@@ -1118,11 +1173,11 @@ _files = {
   "DerivedNumericValues.txt": (CopyOnly, ParseDerivedNumericValues),
   "EastAsianWidth.txt": (CopyAndStripAndMerge, ParseEastAsianWidth),
   "GraphemeBreakProperty.txt": (CopyAndStrip, ParseGraphemeBreakProperty),
-  "GraphemeBreakTest.txt": (CopyOnly, "testdata"),
+  "GraphemeBreakTest.txt": (PrependBOM, "testdata"),
   "IndicMatraCategory.txt": (DontCopy, ParseIndicMatraCategory),
   "IndicSyllabicCategory.txt": (DontCopy, ParseIndicSyllabicCategory),
   "LineBreak.txt": (CopyAndStripAndMerge, ParseLineBreak),
-  "LineBreakTest.txt": (CopyOnly, "testdata"),
+  "LineBreakTest.txt": (PrependBOM, "testdata"),
   "NameAliases.txt": (CopyOnly, ParseNameAliases),
   "NamesList.txt": (DontCopy, ParseNamesList),
   "NormalizationCorrections.txt": (CopyOnly,),  # Only used in gensprep.
@@ -1131,13 +1186,13 @@ _files = {
   "PropertyValueAliases.txt": (CopyOnly, ParsePropertyValueAliases, 1),
   "PropList.txt": (CopyAndStrip, ParseNamedProperties),
   "SentenceBreakProperty.txt": (CopyAndStrip, ParseSentenceBreak),
-  "SentenceBreakTest.txt": (CopyOnly, "testdata"),
+  "SentenceBreakTest.txt": (PrependBOM, "testdata"),
   "Scripts.txt": (CopyAndStrip, ParseScripts),
   "ScriptExtensions.txt": (CopyOnly, ParseScriptExtensions),
   "SpecialCasing.txt": (CopyOnly, ParseSpecialCasing),
   "UnicodeData.txt": (CopyOnly, ParseUnicodeData, 2),
   "WordBreakProperty.txt": (CopyAndStrip, ParseWordBreak),
-  "WordBreakTest.txt": (CopyOnly, "testdata")
+  "WordBreakTest.txt": (PrependBOM, "testdata")
 }
 
 # List of lists of files to be parsed in order.
@@ -1151,7 +1206,13 @@ _file_version_re = re.compile("([a-zA-Z0-9]+)" +
                               "-[0-9]+(?:\\.[0-9]+)*(?:d[0-9]+)?" +
                               "(\\.[a-z]+)$")
 
-def PreprocessFiles(source_files, out_root):
+def PreprocessFiles(source_files, icu_src_root):
+  unidata_path = os.path.join(icu_src_root, "source", "data", "unidata")
+  testdata_path = os.path.join(icu_src_root, "source", "test", "testdata")
+  folder_to_path = {
+    "unidata": unidata_path,
+    "testdata": testdata_path
+  }
   files_processed = set()
   for source_file in source_files:
     basename = os.path.basename(source_file)
@@ -1173,7 +1234,7 @@ def PreprocessFiles(source_files, out_root):
         # The value was [preprocessor, ...], leave [...].
         dest_folder = "unidata"
         value = value[1:]
-      dest_path = os.path.join(out_root, dest_folder)
+      dest_path = folder_to_path[dest_folder]
       if not os.path.exists(dest_path): os.makedirs(dest_path)
       dest_file = os.path.join(dest_path, basename)
       parse_file = preprocessor(source_file, dest_file)
@@ -1185,7 +1246,7 @@ def PreprocessFiles(source_files, out_root):
 
 # TODO: Turn this script into a module that
 # a) gives access to the parsed data
-# b) has a PreparseUCD(ucd_root, out_root) function
+# b) has a PreparseUCD(ucd_root, icu_src_root) function
 # c) has a ParsePreparsedUCD(filename) function
 # d) has a WritePreparsedUCD(filename) function
 # and then use it from a new script for names.
@@ -1356,13 +1417,16 @@ def PrintNameStats():
 
 def main():
   global _null_or_defaults
+  if len(sys.argv) < 3:
+    print """Usage: preparseucd path/to/UCD/root path/to/ICU/src/root"""
+    return
   ucd_root = sys.argv[1]
-  out_root = sys.argv[2]
+  icu_src_root = sys.argv[2]
   source_files = []
   for root, dirs, files in os.walk(ucd_root):
     for file in files:
       source_files.append(os.path.join(root, file))
-  PreprocessFiles(source_files, out_root)
+  PreprocessFiles(source_files, icu_src_root)
   # Parse the processed files in a particular order.
   for files in _files_to_parse:
     for (basename, path, parser) in files:
@@ -1385,7 +1449,9 @@ def main():
   # Optimize block vs. cp properties.
   CompactBlocks()
   # Write the ppucd.txt output file.
-  out_path = os.path.join(out_root, "unidata", "ppucd.txt")
+  unidata_path = os.path.join(icu_src_root, "source", "data", "unidata")
+  if not os.path.exists(unidata_path): os.makedirs(unidata_path)
+  out_path = os.path.join(unidata_path, "ppucd.txt")
   with open(out_path, "w") as out_file:
     WritePreparsedUCD(out_file)
     out_file.flush()

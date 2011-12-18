@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  corepropswriter.cpp (was store.c && props2.cpp)
+*   file name:  corepropswriter.cpp (was store.c & props2.cpp)
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
