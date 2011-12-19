@@ -23,24 +23,24 @@
 #include "ppucd.h"
 #include "unewdata.h"
 
-class PropsWriter {
+class PropsBuilder {
 public:
-    PropsWriter();
-    virtual ~PropsWriter();
+    PropsBuilder();
+    virtual ~PropsBuilder();
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const icu::UniProps &props, const icu::UnicodeSet &newValues, UErrorCode &errorCode);
-    virtual void finalizeData(UErrorCode &errorCode);
+    virtual void build(UErrorCode &errorCode);
     virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
     virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 };
 
-class PNamesWriter : public PropsWriter {
+class PNamesBuilder : public PropsBuilder {
 public:
     virtual const PropertyNames *getPropertyNames() = 0;
 };
 
-PropsWriter *createCorePropsWriter(UErrorCode &errorCode);
-PNamesWriter *createPNamesWriter(UErrorCode &errorCode);
+PNamesBuilder *createPNamesBuilder(UErrorCode &errorCode);
+PropsBuilder *createCorePropsBuilder(UErrorCode &errorCode);
 
 /* global flags */
 U_CFUNC UBool beVerbose;

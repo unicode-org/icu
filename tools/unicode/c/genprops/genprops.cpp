@@ -35,13 +35,13 @@ U_NAMESPACE_USE
 
 UBool beVerbose=FALSE;
 
-PropsWriter::PropsWriter() {}
-PropsWriter::~PropsWriter() {}
-void PropsWriter::setUnicodeVersion(const UVersionInfo) {}
-void PropsWriter::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
-void PropsWriter::finalizeData(UErrorCode &) {}
-void PropsWriter::writeCSourceFile(const char *, UErrorCode &) {}
-void PropsWriter::writeBinaryData(const char *, UBool, UErrorCode &) {}
+PropsBuilder::PropsBuilder() {}
+PropsBuilder::~PropsBuilder() {}
+void PropsBuilder::setUnicodeVersion(const UVersionInfo) {}
+void PropsBuilder::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
+void PropsBuilder::build(UErrorCode &) {}
+void PropsBuilder::writeCSourceFile(const char *, UErrorCode &) {}
+void PropsBuilder::writeBinaryData(const char *, UBool, UErrorCode &) {}
 
 enum {
     HELP_H,
@@ -95,10 +95,10 @@ main(int argc, char* argv[]) {
 
     /* initialize */
     IcuToolErrorCode errorCode("genprops");
-    LocalPointer<PNamesWriter> pnamesWriter(createPNamesWriter(errorCode));
-    LocalPointer<PropsWriter> corePropsWriter(createCorePropsWriter(errorCode));
+    LocalPointer<PNamesBuilder> pnamesBuilder(createPNamesBuilder(errorCode));
+    LocalPointer<PropsBuilder> corePropsBuilder(createCorePropsBuilder(errorCode));
     if(errorCode.isFailure()) {
-        fprintf(stderr, "genprops: unable to create PropsWriters - %s\n", errorCode.errorName());
+        fprintf(stderr, "genprops: unable to create PropsBuilders - %s\n", errorCode.errorName());
         return errorCode.reset();
     }
 
@@ -121,24 +121,24 @@ main(int argc, char* argv[]) {
         return errorCode.reset();
     }
 
-    // The PNamesWriter uses preparsed pnames_data.h.
-    pnamesWriter->finalizeData(errorCode);
+    // The PNamesBuilder uses preparsed pnames_data.h.
+    pnamesBuilder->build(errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops: PNamesWriter::finalizeData() failed - %s\n",
+        fprintf(stderr, "genprops: PNamesBuilder::build() failed - %s\n",
                 errorCode.errorName());
         return errorCode.reset();
     }
-    ppucd.setPropertyNames(pnamesWriter->getPropertyNames());
+    ppucd.setPropertyNames(pnamesBuilder->getPropertyNames());
 
     PreparsedUCD::LineType lineType;
     UnicodeSet newValues;
     while((lineType=ppucd.readLine(errorCode))!=PreparsedUCD::NO_LINE) {
         if(ppucd.lineHasPropertyValues()) {
             const UniProps *props=ppucd.getProps(newValues, errorCode);
-            corePropsWriter->setProps(*props, newValues, errorCode);
+            corePropsBuilder->setProps(*props, newValues, errorCode);
         } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
-            corePropsWriter->setUnicodeVersion(version);
+            corePropsBuilder->setUnicodeVersion(version);
         }
         if(errorCode.isFailure()) {
             fprintf(stderr,
@@ -148,7 +148,7 @@ main(int argc, char* argv[]) {
         }
     }
 
-    corePropsWriter->finalizeData(errorCode);
+    corePropsBuilder->build(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
                 errorCode.errorName());
@@ -164,10 +164,10 @@ main(int argc, char* argv[]) {
 
     UBool withCopyright=options[COPYRIGHT].doesOccur;
 
-    pnamesWriter->writeCSourceFile(sourceCommon.data(), errorCode);
-    pnamesWriter->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
-    corePropsWriter->writeCSourceFile(sourceCommon.data(), errorCode);
-    corePropsWriter->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    pnamesBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
+    pnamesBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    corePropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
+    corePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }

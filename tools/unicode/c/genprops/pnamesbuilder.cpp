@@ -6,7 +6,7 @@
 *   Date        Name        Description
 *   10/11/02    aliu        Creation.
 *   2010nov19   Markus Scherer  Rewrite for formatVersion 2.
-*   2011dec18   Markus Scherer  Moved genpname/genpname.cpp to genprops/pnameswriter.cpp.
+*   2011dec18   Markus Scherer  Moved genpname/genpname.cpp to genprops/pnamesbuilder.cpp.
 **********************************************************************
 */
 
@@ -176,11 +176,11 @@ int32_t Alias::getUniqueNames(int32_t* stringIndices) const {
 // END DATA
 //----------------------------------------------------------------------
 
-class PNamesWriterImpl;
+class PNamesBuilderImpl;
 
 class PNamesPropertyNames : public PropertyNames {
 public:
-    PNamesPropertyNames(const PNamesWriterImpl &pnwi)
+    PNamesPropertyNames(const PNamesBuilderImpl &pnwi)
             : impl(pnwi), valueMaps(NULL), bytesTries(NULL) {}
     void init();
     virtual int32_t getPropertyEnum(const char *name) const;
@@ -190,18 +190,18 @@ private:
     UBool containsName(BytesTrie &trie, const char *name) const;
     int32_t getPropertyOrValueEnum(int32_t bytesTrieOffset, const char *alias) const;
 
-    const PNamesWriterImpl &impl;
+    const PNamesBuilderImpl &impl;
     const int32_t *valueMaps;
     const uint8_t *bytesTries;
 };
 
-class PNamesWriterImpl : public PNamesWriter {
+class PNamesBuilderImpl : public PNamesBuilder {
 public:
-    PNamesWriterImpl(UErrorCode &errorCode)
+    PNamesBuilderImpl(UErrorCode &errorCode)
             : valueMaps(errorCode), btb(errorCode), maxNameLength(0),
               pnames(*this) {}
 
-    virtual void finalizeData(UErrorCode &errorCode) {
+    virtual void build(UErrorCode &errorCode) {
         // Build main property aliases value map at value map offset 0,
         // so that we need not store another offset for it.
         UVector32 propEnums(errorCode);
@@ -465,7 +465,7 @@ static const UDataInfo dataInfo = {
 };
 
 void
-PNamesWriterImpl::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
+PNamesBuilderImpl::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     UNewDataMemory *pdata=udata_create(path, PNAME_DATA_TYPE, PNAME_DATA_NAME, &dataInfo,
                                        withCopyright ? U_COPYRIGHT_STRING : 0, &errorCode);
@@ -490,10 +490,10 @@ PNamesWriterImpl::writeBinaryData(const char *path, UBool withCopyright, UErrorC
 }
 
 void
-PNamesWriterImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
+PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     FILE *f=usrc_createFromGenerator(path, "propname_data.h",
-                                     "icu/tools/src/unicode/c/genprops/pnameswriter.cpp");
+                                     "icu/tools/src/unicode/c/genprops/pnamesbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;  // usrc_create() reported an error.
@@ -524,10 +524,10 @@ PNamesWriterImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     fclose(f);
 }
 
-PNamesWriter *
-createPNamesWriter(UErrorCode &errorCode) {
+PNamesBuilder *
+createPNamesBuilder(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PNamesWriter *pw=new PNamesWriterImpl(errorCode);
+    PNamesBuilder *pw=new PNamesBuilderImpl(errorCode);
     if(pw==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
