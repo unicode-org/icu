@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  corepropswriter.cpp (was store.c & props2.cpp)
+*   file name:  corepropsbuilder.cpp (was store.c & props2.cpp)
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -255,14 +255,14 @@ static UDataInfo dataInfo={
     { 6, 0, 0, 0 }                              /* dataVersion */
 };
 
-class CorePropsWriter : public PropsWriter {
+class CorePropsBuilder : public PropsBuilder {
 public:
-    CorePropsWriter(UErrorCode &errorCode);
-    virtual ~CorePropsWriter();
+    CorePropsBuilder(UErrorCode &errorCode);
+    virtual ~CorePropsBuilder();
 
     virtual void setUnicodeVersion(const UVersionInfo version);
     virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
-    virtual void finalizeData(UErrorCode &errorCode);
+    virtual void build(UErrorCode &errorCode);
     virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
     virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 
@@ -275,28 +275,28 @@ private:
     UnicodeString scriptExtensions;
 };
 
-CorePropsWriter::CorePropsWriter(UErrorCode &errorCode)
+CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
         : pTrie(NULL), props2Trie(NULL), pv(NULL) {
     pTrie=utrie2_open(0, 0, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: corepropswriter utrie2_open() failed - %s\n",
+        fprintf(stderr, "genprops error: corepropsbuilder utrie2_open() failed - %s\n",
                 u_errorName(errorCode));
     }
     pv=upvec_open(UPROPS_VECTOR_WORDS, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: corepropswriter upvec_open() failed - %s\n",
+        fprintf(stderr, "genprops error: corepropsbuilder upvec_open() failed - %s\n",
                 u_errorName(errorCode));
     }
 }
 
-CorePropsWriter::~CorePropsWriter() {
+CorePropsBuilder::~CorePropsBuilder() {
     utrie2_close(pTrie);
     utrie2_close(props2Trie);
     upvec_close(pv);
 }
 
 void
-CorePropsWriter::setUnicodeVersion(const UVersionInfo version) {
+CorePropsBuilder::setUnicodeVersion(const UVersionInfo version) {
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
@@ -383,8 +383,8 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
 }
 
 void
-CorePropsWriter::setGcAndNumeric(const UniProps &props, const UnicodeSet &newValues,
-                                 UErrorCode &errorCode) {
+CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newValues,
+                                  UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     UChar32 start=props.start;
     UChar32 end=props.end;
@@ -523,8 +523,8 @@ propToEnums[]={
 };
 
 void
-CorePropsWriter::setProps(const UniProps &props, const UnicodeSet &newValues,
-                          UErrorCode &errorCode) {
+CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
+                           UErrorCode &errorCode) {
     setGcAndNumeric(props, newValues, errorCode);
     if(U_FAILURE(errorCode)) { return; }
 
@@ -637,7 +637,7 @@ static int32_t props2TrieSize;
 static int32_t totalSize;
 
 void
-CorePropsWriter::finalizeData(UErrorCode &errorCode) {
+CorePropsBuilder::build(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
     utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
@@ -718,7 +718,7 @@ CorePropsWriter::finalizeData(UErrorCode &errorCode) {
 }
 
 void
-CorePropsWriter::writeCSourceFile(const char *path, UErrorCode &errorCode) {
+CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
     int32_t pvRows;
@@ -726,7 +726,7 @@ CorePropsWriter::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     FILE *f=usrc_createFromGenerator(path, "uchar_props_data.h",
-                                     "icu/tools/src/unicode/c/genprops/corepropswriter.cpp");
+                                     "icu/tools/src/unicode/c/genprops/corepropsbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
@@ -776,7 +776,7 @@ CorePropsWriter::writeCSourceFile(const char *path, UErrorCode &errorCode) {
 }
 
 void
-CorePropsWriter::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
+CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
     int32_t pvRows;
@@ -810,10 +810,10 @@ CorePropsWriter::writeBinaryData(const char *path, UBool withCopyright, UErrorCo
     }
 }
 
-PropsWriter *
-createCorePropsWriter(UErrorCode &errorCode) {
+PropsBuilder *
+createCorePropsBuilder(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PropsWriter *pw=new CorePropsWriter(errorCode);
+    PropsBuilder *pw=new CorePropsBuilder(errorCode);
     if(pw==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
