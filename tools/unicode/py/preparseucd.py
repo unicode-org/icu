@@ -142,6 +142,9 @@ _null_or_defaults = {}
 # Dictionary of short property names mapped to ICU4C UProperty enum constants.
 _property_name_to_enum = {}
 
+# Dictionary of short gc value names mapped to UCharCategory enum constants.
+_gc_vname_to_enum = {}
+
 _non_alnum_re = re.compile("[^a-zA-Z0-9]")
 
 def NormPropName(pname):
@@ -1473,8 +1476,7 @@ def ParseUScriptHeader(icu_src_root):
     for line in uscript_file:
       match = _uscript_re.match(line)
       if match:
-        script_enum = match.group(1)
-        script_code = match.group(2)
+        (script_enum, script_code) = match.group(1, 2)
         if script_code not in short_script_name_to_enum:
           scripts_not_in_ucd.add(script_code)
         else:
@@ -1490,8 +1492,16 @@ _uchar_re = re.compile(
     " *(UCHAR_[0-9A-Z_]+) *= *(?:[0-9]+|0x[0-9a-fA-F]+),")
 
 # Sample line to match:
+#    /** Zs @stable ICU 2.0 */
+_gc_comment_re = re.compile(" */\*\* *([A-Z][a-z]) *")
+
+# Sample line to match:
+#    U_SPACE_SEPARATOR         = 12,
+_gc_re = re.compile(" *(U_[A-Z_]+) *= *[0-9]+,")
+
+# Sample line to match:
 #    /** L @stable ICU 2.0 */
-_bc_comment_re = re.compile(" */\*\* *([A-Z]+) *")
+_bc_comment_re = re.compile(" */\*\* *([A-Z]{1,3}) *")
 
 # Sample line to match:
 #    U_LEFT_TO_RIGHT               = 0,
@@ -1519,12 +1529,36 @@ def ParseUCharHeader(icu_src_root):
     prop = None
     comment_value = "??"
     for line in uchar_file:
+      # Parse some enums via context-sensitive "modes".
+      # Necessary because the enum constant names do not contain
+      # enough information.
+      if "enum UCharCategory" in line:
+        mode = "gc"
+        prop = _properties["gc"]
+        continue
+      if mode == "gc":
+        # Leave the normal short-to-enum map which is shared between gc & gcm
+        # with enums like U_GC_ZS_MASK.
+        # For writing gc enums to pnames_data.h use _gc_vname_to_enum.
+        if line.startswith("}"):
+          mode = ""
+          continue
+        match = _gc_comment_re.match(line)
+        if match:
+          comment_value = match.group(1)
+          continue
+        match = _gc_re.match(line)
+        if match:
+          gc_enum = match.group(1)
+          vname = GetShortPropertyValueName(prop, comment_value)
+          _gc_vname_to_enum[vname] = gc_enum
+        continue
       if "enum UCharDirection {" in line:
-        mode = "UCharDirection"
+        mode = "bc"
         prop = _properties["bc"]
         comment_value = "??"
         continue
-      if mode == "UCharDirection":
+      if mode == "bc":
         if line.startswith("}"):
           mode = ""
           continue
@@ -1538,6 +1572,8 @@ def ParseUCharHeader(icu_src_root):
           vname = GetShortPropertyValueName(prop, comment_value)
           prop[2][vname] = bc_enum
         continue
+      # No mode, parse enum constants whose names contain
+      # enough information to parse without requiring context.
       match = _uchar_re.match(line)
       if match:
         prop_enum = match.group(1)
@@ -1558,8 +1594,7 @@ def ParseUCharHeader(icu_src_root):
         continue
       match = _prop_and_value_re.match(line)
       if match:
-        prop_enum = match.group(1)
-        vname = match.group(3)
+        (prop_enum, vname) = match.group(1, 3)
         if vname == "COUNT" or _prop_and_alias_re.match(line):
           continue
         prop = GetProperty(match.group(2))
@@ -1569,14 +1604,92 @@ def ParseUCharHeader(icu_src_root):
   short_gcm_name_to_enum = _properties["gcm"][2]
   for value in short_gcm_name_to_enum:
     short_gcm_name_to_enum[value] = "U_GC_" + value.upper() + "_MASK"
+  # Hardcode known values for the normalization quick check properties,
+  # see unorm2.h for the UNormalizationCheckResult enum.
+  short_name_to_enum = _properties["NFC_QC"][2]
+  short_name_to_enum["N"] = "UNORM_NO"
+  short_name_to_enum["Y"] = "UNORM_YES"
+  short_name_to_enum["M"] = "UNORM_MAYBE"
+  short_name_to_enum = _properties["NFKC_QC"][2]
+  short_name_to_enum["N"] = "UNORM_NO"
+  short_name_to_enum["Y"] = "UNORM_YES"
+  short_name_to_enum["M"] = "UNORM_MAYBE"
+  # No "maybe" values for NF[K]D.
+  short_name_to_enum = _properties["NFD_QC"][2]
+  short_name_to_enum["N"] = "UNORM_NO"
+  short_name_to_enum["Y"] = "UNORM_YES"
+  short_name_to_enum = _properties["NFKD_QC"][2]
+  short_name_to_enum["N"] = "UNORM_NO"
+  short_name_to_enum["Y"] = "UNORM_YES"
 
 
-def WritePNamesDataHeader(icu_tools_root):
+def WritePNamesDataHeader(out_path):
+  # Build a sorted list of (key0, enum) tuples
+  # to emulate the output order of the old genpname/preparse.pl.
+  #   key0 is either a preparse.pl property type string (for property names)
+  #        or a Unicode short property name (for property value names).
+  #   enum is the ICU4C enum constant name.
+  # TODO: rename prop to not collide with usual properties[x]
+  # TODO: once we are sure this works, simplify the order;
+  #       for example, change all "_bp" etc. to just ""
+  #       (outputs property names first in enum order),
+  #       and sorting ccc by numbers not strings
+  # TODO: simplify further, to make pnames_data.h more stable;
+  #       try not to print string or group index numbers
+  # TODO: wiki/ReviewTicket8972 with diff links
+  prop_type_to_old_type = {
+    "Binary": "_bp",
+    "Bitmask": "_op",
+    "Catalog": "_ep",
+    "Enumerated": "_ep",
+    "Miscellaneous": "_sp",
+    "Numeric": "_dp",
+    "String": "_sp"
+  }
+  pnames_data = [("binprop", "0"), ("binprop", "1")]
+  # Only properties that have ICU API.
+  missing_enums = []
+  for (pname, prop_enum) in _property_name_to_enum.iteritems():
+    prop = _properties[pname]
+    # Sometimes the uchar.h UProperty type differs
+    # from the PropertyAliases.txt type.
+    if pname == "age":
+      type = "_sp"
+    elif pname in ("gcm", "scx"):
+      type = "_op"
+    else:
+      type = prop_type_to_old_type[prop[0]]
+    pnames_data.append((type, prop_enum))
+    if type != "_bp" and pname != "age":
+      short_name_to_enum = prop[2]
+      if pname.endswith("ccc"):
+        # ccc, lccc, tccc use the string forms of their numeric values
+        # as "enum" values.
+        # In the UCD data, these numeric strings are the first value names,
+        # followed by the short & long value names.
+        for name in short_name_to_enum:
+          pnames_data.append((pname, name))
+      else:
+        if pname == "gc":
+          # See comment about _gc_vname_to_enum in ParseUCharHeader().
+          short_name_to_enum = _gc_vname_to_enum
+        for (name, enum) in short_name_to_enum.iteritems():
+          if enum:
+            pnames_data.append((pname, enum))
+          else:
+            missing_enums.append((pname, name))
+  if missing_enums:
+    raise ValueError(
+        "missing uchar.h enum constants for some property values: %s" %
+        missing_enums)
+  pnames_data.sort()
+  for item in pnames_data:
+    print item
   short_script_name_to_enum = _properties["sc"][2]
   # print short_script_name_to_enum
   # print _property_name_to_enum
-  print _properties["ea"][2]
-  print _properties["gcm"][2]
+  # print _properties["ea"][2]
+  # print _properties["gcm"][2]
 
 # main() ------------------------------------------------------------------- ***
 
@@ -1621,9 +1734,13 @@ def main():
     WritePreparsedUCD(out_file)
     out_file.flush()
   # TODO: PrintNameStats()
+  # ICU data for property & value names API
   ParseUScriptHeader(icu_src_root)
   ParseUCharHeader(icu_src_root)
-  WritePNamesDataHeader(icu_tools_root)
+  genprops_path = os.path.join(icu_tools_root, "unicode", "c", "genprops")
+  if not os.path.exists(genprops_path): os.makedirs(genprops_path)
+  out_path = os.path.join(genprops_path, "pnames_data.h")
+  WritePNamesDataHeader(out_path)
 
 
 if __name__ == "__main__":
