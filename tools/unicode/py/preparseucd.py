@@ -13,16 +13,17 @@
 #
 # Copies Unicode Character Database (UCD) files from a tree
 # of files downloaded from (for example) ftp://www.unicode.org/Public/6.1.0/
-# to a folder like ICU's source/data/unidata/
+# to ICU's source/data/unidata/ and source/test/testdata/
 # and modifies some of the files to make them more compact.
-# Parses them an writes a ppucd.txt file (PreParsed UCD) with simple syntax.
+# Parses them and writes unidata/ppucd.txt (PreParsed UCD) with simple syntax.
 #
-# Invoke with two command-line parameters:
+# Invoke with three command-line parameters:
 # 1. source folder with UCD files
-# 2. destination folder for processed output files
+# 2. ICU source root folder
+# 3. ICU tools root folder
 #
 # Sample invocation:
-#   ~/svn.icu/tools/trunk/src/unicode/py$ ./preparseucd.py ~/uni61/20111205/ucd /tmp/ucd
+#   ~/svn.icu/tools/trunk/src/unicode$ py/preparseucd.py ~/uni61/20111205mod/ucd ~/svn.icu/trunk/src ~/svn.icu/tools/trunk/src
 
 import array
 import bisect
@@ -108,7 +109,8 @@ _ignored_properties = set((
 # 0: Type of property (binary, enum, ...)
 # 1: List of aliases; short & long name followed by other aliases.
 #    The short name is "" if it is listed as "n/a" in PropertyValueAliases.txt.
-# 2: Set of short property value names.
+# 2: Dictionary, maps short property value names
+#    initially to None, later to ICU4C API enum constants.
 # 3: Dictionary of property values.
 #    For Catalog & Enumerated properties,
 #    maps each value name to a list of aliases.
@@ -136,6 +138,9 @@ _defaults = {}
 # _null_values overridden by explicit _defaults.
 # Initialized after parsing is done.
 _null_or_defaults = {}
+
+# Dictionary of short property names mapped to ICU4C UProperty enum constants.
+_property_name_to_enum = {}
 
 _non_alnum_re = re.compile("[^a-zA-Z0-9]")
 
@@ -378,6 +383,22 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
       raise SyntaxError("unable to parse line\n  %s\n" % line)
 
 
+def AddBinaryProperty(short_name, long_name):
+  _null_values[short_name] = False
+  bin_prop = _properties["Math"]
+  prop = ("Binary", [short_name, long_name], bin_prop[2], bin_prop[3])
+  _properties[short_name] = prop
+  _properties[long_name] = prop
+  _properties[NormPropName(short_name)] = prop
+  _properties[NormPropName(long_name)] = prop
+
+
+def AddPOSIXBinaryProperty(short_name, long_name):
+  AddBinaryProperty(short_name, long_name)
+  # This is to match UProperty UCHAR_POSIX_ALNUM etc.
+  _properties["posix" + NormPropName(short_name)] = _properties[short_name]
+
+
 # Match a comment line like
 # PropertyAliases-6.1.0.txt
 # and extract the Unicode version.
@@ -424,7 +445,7 @@ def ParsePropertyAliases(in_file):
           _null_values[name] = 0
         else:
           _null_values[name] = null_value
-        prop = (prop_type, aliases, set(), {})
+        prop = (prop_type, aliases, {}, {})
         for alias in aliases:
           _properties[alias] = prop
           _properties[NormPropName(alias)] = prop
@@ -438,13 +459,13 @@ def ParsePropertyAliases(in_file):
   # Turkic_Case_Folding: The 'T' mappings in CaseFolding.txt.
   name = "Turkic_Case_Folding"
   _null_values[name] = ""
-  prop = ("String", [name, name], set(), {})
+  prop = ("String", [name, name], {}, {})
   _properties[name] = prop
   _properties[NormPropName(name)] = prop
   # Conditional_Case_Mappings: SpecialCasing.txt lines with conditions.
   name = "Conditional_Case_Mappings"
   _null_values[name] = ""
-  prop = ("Miscellaneous", [name, name], set(), {})
+  prop = ("Miscellaneous", [name, name], {}, {})
   _properties[name] = prop
   _properties[NormPropName(name)] = prop
   # lccc = ccc of first cp in canonical decomposition.
@@ -465,10 +486,31 @@ def ParsePropertyAliases(in_file):
   # Script_Extensions
   if "scx" not in _properties:
     _null_values["scx"] = ""
-    prop = ("Miscellaneous", ["scx", "Script_Extensions"], set(), {})
+    prop = ("Miscellaneous", ["scx", "Script_Extensions"], {}, {})
     _properties["scx"] = prop
     _properties["Script_Extensions"] = prop
     _properties["scriptextensions"] = prop
+  # General Category as a bit mask.
+  _null_values["gcm"] = "??"
+  gc_prop = _properties["gc"]
+  prop = ("Bitmask", ["gcm", "General_Category_Mask"], gc_prop[2], gc_prop[3])
+  _properties["gcm"] = prop
+  _properties["General_Category_Mask"] = prop
+  _properties["generalcategorymask"] = prop
+  # Various binary properties.
+  AddBinaryProperty("Sensitive", "Case_Sensitive")
+  AddBinaryProperty("nfdinert", "NFD_Inert")
+  AddBinaryProperty("nfkdinert", "NFKD_Inert")
+  AddBinaryProperty("nfcinert", "NFC_Inert")
+  AddBinaryProperty("nfkcinert", "NFKC_Inert")
+  AddBinaryProperty("segstart", "Segment_Starter")
+  # C/POSIX character classes that do not have Unicode property [value] aliases.
+  # See uchar.h.
+  AddPOSIXBinaryProperty("alnum", "alnum")
+  AddPOSIXBinaryProperty("blank", "blank")
+  AddPOSIXBinaryProperty("graph", "graph")
+  AddPOSIXBinaryProperty("print", "print")
+  AddPOSIXBinaryProperty("xdigit", "xdigit")
 
 
 def ParsePropertyValueAliases(in_file):
@@ -488,7 +530,7 @@ def ParsePropertyValueAliases(in_file):
         if short_name == "n/a":  # no short name
           fields[0] = ""
           short_name = fields[1]
-        prop[2].add(short_name)
+        prop[2][short_name] = None
         values = prop[3]
         for alias in fields:
           if alias:
@@ -510,17 +552,19 @@ def ParsePropertyValueAliases(in_file):
     _defaults["hst"] = "NA"
   if "gc" not in _defaults:  # No @missing line in any .txt file?
     _defaults["gc"] = "Cn"
+  # Copy the gc default value to gcm.
+  _defaults["gcm"] = _defaults["gc"]
   # Add ISO 15924-only script codes.
   # Only for the ICU script code API, not necessary for parsing the UCD.
   script_prop = _properties["sc"]
-  short_script_names = script_prop[2]  # set
+  short_script_names = script_prop[2]  # dict
   script_values = script_prop[3]  # dict
   remove_scripts = []
   for script in _scripts_only_in_iso15924:
     if script in short_script_names:
       remove_scripts.append(script)
     else:
-      short_script_names.add(script)
+      short_script_names[script] = None
       # Do not invent a Unicode long script name before the UCD adds the script.
       script_list = [script, script]  # [short, long]
       script_values[script] = script_list
@@ -1413,15 +1457,136 @@ def PrintNameStats():
               "%5d * %d-byte token for %2d='%s'") %
           (i1, cumul_savings, t[0], t[1], n, len(t[2]), t[2]))
 
+# ICU API ------------------------------------------------------------------ ***
+
+# Sample line to match:
+#    USCRIPT_LOMA   = 139,/* Loma */
+_uscript_re = re.compile(
+    " *(USCRIPT_[A-Z_]+) *= *[0-9]+ *, */\* *([A-Z][a-z]{3}) *\*/")
+
+def ParseUScriptHeader(icu_src_root):
+  uscript_path = os.path.join(icu_src_root, "source",
+                              "common", "unicode", "uscript.h")
+  short_script_name_to_enum = _properties["sc"][2]
+  scripts_not_in_ucd = set()
+  with open(uscript_path, "r") as uscript_file:
+    for line in uscript_file:
+      match = _uscript_re.match(line)
+      if match:
+        script_enum = match.group(1)
+        script_code = match.group(2)
+        if script_code not in short_script_name_to_enum:
+          scripts_not_in_ucd.add(script_code)
+        else:
+          short_script_name_to_enum[script_code] = script_enum
+  if scripts_not_in_ucd:
+    raise ValueError("uscript.h has UScript constants for scripts "
+                     "not in the UCD nor in ISO 15924: %s" % scripts_not_in_ucd)
+
+
+# Sample line to match:
+#    UCHAR_UNIFIED_IDEOGRAPH=29,
+_uchar_re = re.compile(
+    " *(UCHAR_[0-9A-Z_]+) *= *(?:[0-9]+|0x[0-9a-fA-F]+),")
+
+# Sample line to match:
+#    /** L @stable ICU 2.0 */
+_bc_comment_re = re.compile(" */\*\* *([A-Z]+) *")
+
+# Sample line to match:
+#    U_LEFT_TO_RIGHT               = 0,
+_bc_re = re.compile(" *(U_[A-Z_]+) *= *[0-9]+,")
+
+# Sample line to match:
+#    UBLOCK_CYRILLIC =9, /*[0400]*/
+_ublock_re = re.compile(" *(UBLOCK_[0-9A-Z_]+) *= *[0-9]+,")
+
+# Sample line to match:
+#    U_EA_AMBIGUOUS, /*[A]*/
+_prop_and_value_re = re.compile(
+    " *(U_(DT|EA|GCB|HST|LB|JG|JT|NT|SB|WB)_([0-9A-Z_]+))")
+
+# Sample line to match if it has matched _prop_and_value_re
+# (we want to exclude aliases):
+#    U_JG_HAMZA_ON_HEH_GOAL=U_JG_TEH_MARBUTA_GOAL,
+_prop_and_alias_re = re.compile(" *U_[0-9A-Z_]+ *= *U")
+
+def ParseUCharHeader(icu_src_root):
+  uchar_path = os.path.join(icu_src_root, "source",
+                            "common", "unicode", "uchar.h")
+  with open(uchar_path, "r") as uchar_file:
+    mode = ""
+    prop = None
+    comment_value = "??"
+    for line in uchar_file:
+      if "enum UCharDirection {" in line:
+        mode = "UCharDirection"
+        prop = _properties["bc"]
+        comment_value = "??"
+        continue
+      if mode == "UCharDirection":
+        if line.startswith("}"):
+          mode = ""
+          continue
+        match = _bc_comment_re.match(line)
+        if match:
+          comment_value = match.group(1)
+          continue
+        match = _bc_re.match(line)
+        if match:
+          bc_enum = match.group(1)
+          vname = GetShortPropertyValueName(prop, comment_value)
+          prop[2][vname] = bc_enum
+        continue
+      match = _uchar_re.match(line)
+      if match:
+        prop_enum = match.group(1)
+        if prop_enum.endswith("_LIMIT"):
+          # Ignore "UCHAR_BINARY_LIMIT=57," etc.
+          continue
+        pname = GetShortPropertyName(prop_enum[6:])
+        _property_name_to_enum[pname] = prop_enum
+        continue
+      match = _ublock_re.match(line)
+      if match:
+        prop_enum = match.group(1)
+        if prop_enum == "UBLOCK_COUNT":
+          continue
+        prop = _properties["blk"]
+        vname = GetShortPropertyValueName(prop, prop_enum[7:])
+        prop[2][vname] = prop_enum
+        continue
+      match = _prop_and_value_re.match(line)
+      if match:
+        prop_enum = match.group(1)
+        vname = match.group(3)
+        if vname == "COUNT" or _prop_and_alias_re.match(line):
+          continue
+        prop = GetProperty(match.group(2))
+        vname = GetShortPropertyValueName(prop, vname)
+        prop[2][vname] = prop_enum
+  # No need to parse predictable General_Category_Mask enum constants.
+  short_gcm_name_to_enum = _properties["gcm"][2]
+  for value in short_gcm_name_to_enum:
+    short_gcm_name_to_enum[value] = "U_GC_" + value.upper() + "_MASK"
+
+
+def WritePNamesDataHeader(icu_tools_root):
+  short_script_name_to_enum = _properties["sc"][2]
+  # print short_script_name_to_enum
+  # print _property_name_to_enum
+  print _properties["ea"][2]
+  print _properties["gcm"][2]
+
 # main() ------------------------------------------------------------------- ***
 
 def main():
   global _null_or_defaults
-  if len(sys.argv) < 3:
-    print """Usage: preparseucd path/to/UCD/root path/to/ICU/src/root"""
+  if len(sys.argv) < 4:
+    print ("Usage: %s  path/to/UCD/root  path/to/ICU/src/root  "
+           "path/to/ICU/tools/root" % sys.argv[0])
     return
-  ucd_root = sys.argv[1]
-  icu_src_root = sys.argv[2]
+  (ucd_root, icu_src_root, icu_tools_root) = sys.argv[1:4]
   source_files = []
   for root, dirs, files in os.walk(ucd_root):
     for file in files:
@@ -1456,6 +1621,10 @@ def main():
     WritePreparsedUCD(out_file)
     out_file.flush()
   # TODO: PrintNameStats()
+  ParseUScriptHeader(icu_src_root)
+  ParseUCharHeader(icu_src_root)
+  WritePNamesDataHeader(icu_tools_root)
+
 
 if __name__ == "__main__":
   main()
