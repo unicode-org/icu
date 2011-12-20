@@ -760,9 +760,9 @@ DigitList::set(double source)
     // uprv_decNumberFromString() will parse the string expecting '.' as a
     // decimal separator, however sprintf() can use ',' in certain locales.
     // Overwrite a ',' with '.' here before proceeding.
-    char *decimalPt = strchr(rep, ',');
-    if (decimalPt != NULL) {
-        *decimalPt = '.';
+    char *decimalSeparator = strchr(rep, ',');
+    if (decimalSeparator != NULL) {
+        *decimalSeparator = '.';
     }
 
     // Create a decNumber from the string.
