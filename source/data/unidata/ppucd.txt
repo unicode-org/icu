@@ -5,10 +5,12 @@ ucd;6.1.0
 
 property;Catalog;age;Age
 property;Binary;AHex;ASCII_Hex_Digit
+property;Binary;;alnum
 property;Binary;Alpha;Alphabetic
 property;Enumerated;bc;Bidi_Class
 property;Binary;Bidi_C;Bidi_Control
 property;Binary;Bidi_M;Bidi_Mirrored
+property;Binary;;blank
 property;Catalog;blk;Block
 property;String;bmg;Bidi_Mirroring_Glyph
 property;Binary;Cased;Cased
@@ -35,6 +37,8 @@ property;Binary;Ext;Extender
 property;String;FC_NFKC;FC_NFKC_Closure
 property;Enumerated;gc;General_Category
 property;Enumerated;GCB;Grapheme_Cluster_Break
+property;Bitmask;gcm;General_Category_Mask
+property;Binary;;graph
 property;Binary;Gr_Base;Grapheme_Base
 property;Binary;Gr_Ext;Grapheme_Extend
 property;Binary;Gr_Link;Grapheme_Link
@@ -62,15 +66,20 @@ property;Miscellaneous;na;Name
 property;Miscellaneous;na1;Unicode_1_Name
 property;Miscellaneous;Name_Alias;Name_Alias
 property;Binary;NChar;Noncharacter_Code_Point
+property;Binary;nfcinert;NFC_Inert
 property;Enumerated;NFC_QC;NFC_Quick_Check
+property;Binary;nfdinert;NFD_Inert
 property;Enumerated;NFD_QC;NFD_Quick_Check
 property;String;NFKC_CF;NFKC_Casefold
+property;Binary;nfkcinert;NFKC_Inert
 property;Enumerated;NFKC_QC;NFKC_Quick_Check
+property;Binary;nfkdinert;NFKD_Inert
 property;Enumerated;NFKD_QC;NFKD_Quick_Check
 property;Enumerated;nt;Numeric_Type
 property;Numeric;nv;Numeric_Value
 property;Binary;Pat_Syn;Pattern_Syntax
 property;Binary;Pat_WS;Pattern_White_Space
+property;Binary;;print
 property;Binary;QMark;Quotation_Mark
 property;Binary;Radical;Radical
 property;Enumerated;SB;Sentence_Break
@@ -78,6 +87,8 @@ property;Catalog;sc;Script
 property;String;scf;Simple_Case_Folding;sfc
 property;Miscellaneous;scx;Script_Extensions
 property;Binary;SD;Soft_Dotted
+property;Binary;segstart;Segment_Starter
+property;Binary;Sensitive;Case_Sensitive
 property;String;slc;Simple_Lowercase_Mapping
 property;String;stc;Simple_Titlecase_Mapping
 property;Binary;STerm;STerm
@@ -92,6 +103,7 @@ property;Binary;Upper;Uppercase
 property;Binary;VS;Variation_Selector
 property;Enumerated;WB;Word_Break
 property;Binary;WSpace;White_Space;space
+property;Binary;;xdigit
 property;Binary;XIDC;XID_Continue
 property;Binary;XIDS;XID_Start
 
@@ -481,6 +493,44 @@ value;GCB;SM;SpacingMark
 value;GCB;T;T
 value;GCB;V;V
 value;GCB;XX;Other
+value;gcm;C;Other
+value;gcm;Cc;Control;cntrl
+value;gcm;Cf;Format
+value;gcm;Cn;Unassigned
+value;gcm;Co;Private_Use
+value;gcm;Cs;Surrogate
+value;gcm;L;Letter
+value;gcm;LC;Cased_Letter
+value;gcm;Ll;Lowercase_Letter
+value;gcm;Lm;Modifier_Letter
+value;gcm;Lo;Other_Letter
+value;gcm;Lt;Titlecase_Letter
+value;gcm;Lu;Uppercase_Letter
+value;gcm;M;Mark;Combining_Mark
+value;gcm;Mc;Spacing_Mark
+value;gcm;Me;Enclosing_Mark
+value;gcm;Mn;Nonspacing_Mark
+value;gcm;N;Number
+value;gcm;Nd;Decimal_Number;digit
+value;gcm;Nl;Letter_Number
+value;gcm;No;Other_Number
+value;gcm;P;Punctuation;punct
+value;gcm;Pc;Connector_Punctuation
+value;gcm;Pd;Dash_Punctuation
+value;gcm;Pe;Close_Punctuation
+value;gcm;Pf;Final_Punctuation
+value;gcm;Pi;Initial_Punctuation
+value;gcm;Po;Other_Punctuation
+value;gcm;Ps;Open_Punctuation
+value;gcm;S;Symbol
+value;gcm;Sc;Currency_Symbol
+value;gcm;Sk;Modifier_Symbol
+value;gcm;Sm;Math_Symbol
+value;gcm;So;Other_Symbol
+value;gcm;Z;Separator
+value;gcm;Zl;Line_Separator
+value;gcm;Zp;Paragraph_Separator
+value;gcm;Zs;Space_Separator
 value;hst;L;Leading_Jamo
 value;hst;LV;LV_Syllable
 value;hst;LVT;LVT_Syllable
@@ -939,7 +989,7 @@ value;WB;NL;Newline
 value;WB;NU;Numeric
 value;WB;XX;Other
 
-defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bmg=<code point>;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;hst=NA;InMC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<slc>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<stc>;uc=<suc>;WB=XX
+defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bmg=<code point>;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;gcm=Cn;hst=NA;InMC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<slc>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<stc>;uc=<suc>;WB=XX
 
 block;0000..007F;age=1.1;blk=ASCII;ea=Na;gc=Cc;Gr_Base;lb=AL;sc=Zyyy
 # 0000..007F C0 Controls and Basic Latin (Basic Latin)
