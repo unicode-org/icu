@@ -4439,8 +4439,6 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
                         return;
                     }
                 }
-                fRoundingIncrement->getDouble();   // forces caching of double in the DigitList,
-                                                   //    makes getting it thread safe.
                 fRoundingMode = kRoundHalfEven;
             } else {
                 setRoundingIncrement(0.0);
