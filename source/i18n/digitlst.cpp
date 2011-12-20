@@ -31,6 +31,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "mutex.h"
 #include "putilimp.h"
 #include "uassert.h"
 #include <stdlib.h>
@@ -51,7 +52,6 @@
  */
 #define kZero '0'
 
-static char gDecimal = 0;
 
 /* Only for 32 bit numbers. Ignore the negative sign. */
 static const char LONG_MIN_REP[] = "2147483648";
@@ -59,18 +59,6 @@ static const char I64_MIN_REP[] = "9223372036854775808";
 
 
 U_NAMESPACE_BEGIN
-
-static void
-loadDecimalChar() {
-    if (gDecimal == 0) {
-        char rep[MAX_DIGITS];
-        // For machines that decide to change the decimal on you,
-        // and try to be too smart with localization.
-        // This normally should be just a '.'.
-        sprintf(rep, "%+1.1f", 1.0);
-        gDecimal = rep[2];
-    }
-}
 
 // -------------------------------------
 // default constructor
@@ -123,8 +111,14 @@ DigitList::operator=(const DigitList& other)
         fContext.digits = fStorage.getCapacity();
         uprv_decNumberCopy(fDecNumber, other.fDecNumber);
 
-        fDouble = other.fDouble;
-        fHaveDouble = other.fHaveDouble;
+        {
+            // fDouble is lazily created and cached.
+            // Avoid potential races with that happening with other.fDouble
+            // while we are doing the assignment.
+            Mutex mutex;
+            fDouble = other.fDouble;
+            fHaveDouble = other.fHaveDouble;
+        }
     }
     return *this;
 }
@@ -402,7 +396,7 @@ DigitList::append(char digit)
 // -------------------------------------
 
 /**
- * Currently, getDouble() depends on atof() to do its conversion.
+ * Currently, getDouble() depends on strtod() to do its conversion.
  *
  * WARNING!!
  * This is an extremely costly function. ~1/2 of the conversion time
@@ -411,28 +405,40 @@ DigitList::append(char digit)
 double
 DigitList::getDouble() const
 {
-    // TODO:  fix thread safety.  Can probably be finessed some by analyzing
-    //        what public const functions can see which DigitLists.
-    //        Like precompute fDouble for DigitLists coming in from a parse
-    //        or from a Formattable::set(), but not for any others.
-    if (fHaveDouble) {
-        return fDouble;
+    static char gDecimal = 0;
+    char decimalSeparator;
+    {
+        Mutex mutex;
+        if (fHaveDouble) {
+            return fDouble;
+        }
+        decimalSeparator = gDecimal;
     }
-    DigitList *nonConstThis = const_cast<DigitList *>(this);
 
+    if (decimalSeparator == 0) {
+        // We need to know the decimal separator character that will be used with strtod().
+        // Depends on the C runtime global locale.
+        // Most commonly is '.'
+        // TODO: caching could fail if the global locale is changed on the fly.
+        char rep[MAX_DIGITS];
+        sprintf(rep, "%+1.1f", 1.0);
+        decimalSeparator = rep[2];
+    }
+
+    double tDouble = 0.0;
     if (isZero()) {
-        nonConstThis->fDouble = 0.0;
+        tDouble = 0.0;
         if (decNumberIsNegative(fDecNumber)) {
-            nonConstThis->fDouble /= -1;
+            tDouble /= -1;
         }
     } else if (isInfinite()) {
         if (std::numeric_limits<double>::has_infinity) {
-            nonConstThis->fDouble = std::numeric_limits<double>::infinity();
+            tDouble = std::numeric_limits<double>::infinity();
         } else {
-            nonConstThis->fDouble = std::numeric_limits<double>::max();
+            tDouble = std::numeric_limits<double>::max();
         }
         if (!isPositive()) {
-            nonConstThis->fDouble = -fDouble;
+            tDouble = -fDouble;
         } 
     } else {
         MaybeStackArray<char, MAX_DBL_DIGITS+18> s;
@@ -454,18 +460,23 @@ DigitList::getDouble() const
         }
         U_ASSERT(uprv_strlen(&s[0]) < MAX_DBL_DIGITS+18);
         
-        loadDecimalChar();
-        if (gDecimal != '.') {
+        if (decimalSeparator != '.') {
             char *decimalPt = strchr(s, '.');
             if (decimalPt != NULL) {
-                *decimalPt = gDecimal;
+                *decimalPt = decimalSeparator;
             }
         }
         char *end = NULL;
-        nonConstThis->fDouble = uprv_strtod(s, &end);
+        tDouble = uprv_strtod(s, &end);
     }
-    nonConstThis->fHaveDouble = TRUE;
-    return fDouble;
+    {
+        Mutex mutex;
+        DigitList *nonConstThis = const_cast<DigitList *>(this);
+        nonConstThis->fDouble = tDouble;
+        nonConstThis->fHaveDouble = TRUE;
+        gDecimal = decimalSeparator;
+    }
+    return tDouble;
 }
 
 // -------------------------------------
@@ -741,19 +752,17 @@ DigitList::set(double source)
     // for now, simple implementation; later, do proper IEEE stuff
     char rep[MAX_DIGITS + 8]; // Extra space for '+', '.', e+NNN, and '\0' (actually +8 is enough)
 
-    // Generate a representation of the form /[+-][0-9]+e[+-][0-9]+/
+    // Generate a representation of the form /[+-][0-9].[0-9]+e[+-][0-9]+/
+    // Can also generate /[+-]nan/ or /[+-]inf/
     sprintf(rep, "%+1.*e", MAX_DBL_DIGITS - 1, source);
     U_ASSERT(uprv_strlen(rep) < sizeof(rep));
 
     // uprv_decNumberFromString() will parse the string expecting '.' as a
     // decimal separator, however sprintf() can use ',' in certain locales.
-    // Overwrite a different decimal separator with '.' here before proceeding.
-    loadDecimalChar();
-    if (gDecimal != '.') {
-        char *decimalPt = strchr(rep, gDecimal);
-        if (decimalPt != NULL) {
-            *decimalPt = '.';
-        }
+    // Overwrite a ',' with '.' here before proceeding.
+    char *decimalPt = strchr(rep, ',');
+    if (decimalPt != NULL) {
+        *decimalPt = '.';
     }
 
     // Create a decNumber from the string.
