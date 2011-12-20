@@ -28,6 +28,7 @@
 import array
 import bisect
 import codecs
+import datetime
 import os
 import os.path
 import re
@@ -177,7 +178,9 @@ def GetProperty(pname):
 def GetShortPropertyName(pname):
   if pname in _null_values: return pname  # pname is already the short name.
   prop = GetProperty(pname)
-  return prop[1][0] if prop else ""  # "" for ignored properties.
+  if not prop: return ""  # For ignored properties.
+  name = prop[1][0]
+  return name if name else prop[1][1]  # Long name if no short name.
 
 
 def GetShortPropertyValueName(prop, vname):
@@ -396,10 +399,15 @@ def AddBinaryProperty(short_name, long_name):
   _properties[NormPropName(long_name)] = prop
 
 
-def AddPOSIXBinaryProperty(short_name, long_name):
-  AddBinaryProperty(short_name, long_name)
+def AddPOSIXBinaryProperty(name):
+  # We only define a long name for ICU-specific (non-UCD) POSIX properties.
+  _null_values[name] = False
+  bin_prop = _properties["Math"]
+  prop = ("Binary", ["", name], bin_prop[2], bin_prop[3])
+  _properties[name] = prop
+  _properties[NormPropName(name)] = prop
   # This is to match UProperty UCHAR_POSIX_ALNUM etc.
-  _properties["posix" + NormPropName(short_name)] = _properties[short_name]
+  _properties["posix" + NormPropName(name)] = prop
 
 
 # Match a comment line like
@@ -509,11 +517,11 @@ def ParsePropertyAliases(in_file):
   AddBinaryProperty("segstart", "Segment_Starter")
   # C/POSIX character classes that do not have Unicode property [value] aliases.
   # See uchar.h.
-  AddPOSIXBinaryProperty("alnum", "alnum")
-  AddPOSIXBinaryProperty("blank", "blank")
-  AddPOSIXBinaryProperty("graph", "graph")
-  AddPOSIXBinaryProperty("print", "print")
-  AddPOSIXBinaryProperty("xdigit", "xdigit")
+  AddPOSIXBinaryProperty("alnum")
+  AddPOSIXBinaryProperty("blank")
+  AddPOSIXBinaryProperty("graph")
+  AddPOSIXBinaryProperty("print")
+  AddPOSIXBinaryProperty("xdigit")
 
 
 def ParsePropertyValueAliases(in_file):
@@ -1624,12 +1632,14 @@ def ParseUCharHeader(icu_src_root):
 
 
 def WritePNamesDataHeader(out_path):
-  # Build a sorted list of (key0, enum) tuples
+  # Build a sorted list of (key0, enum, aliases) tuples
   # to emulate the output order of the old genpname/preparse.pl.
   #   key0 is either a preparse.pl property type string (for property names)
   #        or a Unicode short property name (for property value names).
   #   enum is the ICU4C enum constant name.
-  # TODO: rename prop to not collide with usual properties[x]
+  #   aliases is the tuple of the property's or value's names and aliases.
+  #       (We use a tuple, not the original list,
+  #        so that we can use it as a dict key.)
   # TODO: once we are sure this works, simplify the order;
   #       for example, change all "_bp" etc. to just ""
   #       (outputs property names first in enum order),
@@ -1646,9 +1656,12 @@ def WritePNamesDataHeader(out_path):
     "Numeric": "_dp",
     "String": "_sp"
   }
-  pnames_data = [("binprop", "0"), ("binprop", "1")]
-  # Only properties that have ICU API.
+  pnames_data = [
+    ("binprop", "0", tuple(_binary_values["N"])),
+    ("binprop", "1", tuple(_binary_values["Y"]))
+  ]
   missing_enums = []
+  # Only properties that have ICU API.
   for (pname, prop_enum) in _property_name_to_enum.iteritems():
     prop = _properties[pname]
     # Sometimes the uchar.h UProperty type differs
@@ -1659,7 +1672,7 @@ def WritePNamesDataHeader(out_path):
       type = "_op"
     else:
       type = prop_type_to_old_type[prop[0]]
-    pnames_data.append((type, prop_enum))
+    pnames_data.append((type, prop_enum, tuple(prop[1])))
     if type != "_bp" and pname != "age":
       short_name_to_enum = prop[2]
       if pname.endswith("ccc"):
@@ -1667,15 +1680,16 @@ def WritePNamesDataHeader(out_path):
         # as "enum" values.
         # In the UCD data, these numeric strings are the first value names,
         # followed by the short & long value names.
+        # Omit the numeric strings from the aliases as well.
         for name in short_name_to_enum:
-          pnames_data.append((pname, name))
+          pnames_data.append((pname, name, tuple(prop[3][name][1:])))
       else:
         if pname == "gc":
           # See comment about _gc_vname_to_enum in ParseUCharHeader().
           short_name_to_enum = _gc_vname_to_enum
         for (name, enum) in short_name_to_enum.iteritems():
           if enum:
-            pnames_data.append((pname, enum))
+            pnames_data.append((pname, enum, tuple(prop[3][name])))
           else:
             missing_enums.append((pname, name))
   if missing_enums:
@@ -1683,13 +1697,144 @@ def WritePNamesDataHeader(out_path):
         "missing uchar.h enum constants for some property values: %s" %
         missing_enums)
   pnames_data.sort()
-  for item in pnames_data:
-    print item
-  short_script_name_to_enum = _properties["sc"][2]
-  # print short_script_name_to_enum
-  # print _property_name_to_enum
-  # print _properties["ea"][2]
-  # print _properties["gcm"][2]
+
+  # Write pnames_data.h.
+  year = datetime.date.today().strftime("%Y")
+  with open(out_path, "w") as out_file:
+    out_file.write("""/**
+ * Copyright (C) 2002-""" + year +
+""", International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *
+ * machine-generated by: icu/tools/unicode/py/preparseucd.py
+ */
+
+""")
+
+    out_file.write("/* Unicode version %s */\n" % _ucd_version)
+    v = _ucd_version.split(".")
+    while len(v) < 4: v.append("0")
+    for i in xrange(4):
+      out_file.write("const uint8_t VERSION_%d = %s;\n" % (i, v[i]))
+    out_file.write("\n")
+
+    # Write the string table with all of the names and aliases
+    # of all of the properties and their values.
+    # Unique strings in ASCII order.
+    # The first string must be the empty string.
+    strings_set = set([""])
+    for (key0, enum, aliases) in pnames_data:
+      for s in aliases: strings_set.add(s)
+    strings = sorted(strings_set)
+
+    out_file.write("const int32_t STRING_COUNT = %d;\n\n" % len(strings))
+
+    # While printing, create a mapping from string table entry to index.
+    string_to_id = {}
+    out_file.write("const AliasName STRING_TABLE[] = {\n")
+    for s in strings:
+      i = len(string_to_id)
+      out_file.write('    AliasName("%s", %d),\n' % (s, i))
+      string_to_id[s] = i
+    out_file.write("};\n\n")
+
+    # Emit the name group table.
+    # [A table of name groups. A name group is the list of names and aliases
+    # for a property or property value.
+    # The name group table looks like this:
+    #
+    #  114, -115, 116, -117, 0, -118, 65, -64, ...
+    #  [0]        [2]        [4]      [6]
+    #
+    # The entry at [0] consists of 2 strings, 114 and 115.
+    # The entry at [2] consists of 116 and 117, etc.
+    # The last entry is negative.
+
+    # Build the name group list with nameGroup indices.
+    name_groups = []
+    # Count the total number of values, not just the groups.
+    name_groups_total_length = 0
+
+    # Check for duplicate name groups, and reuse the first of a kind.
+    group_to_int = {}
+    for (key0, enum, aliases) in pnames_data:
+      index = group_to_int.get(aliases)
+      if index == None:
+        index = name_groups_total_length
+        group_to_int[aliases] = index
+        name_groups.append([string_to_id[s] for s in aliases])
+        name_groups_total_length += len(aliases)
+
+    out_file.write("const int32_t NAME_GROUP_COUNT = %d;\n\n" %
+                   name_groups_total_length)
+
+    out_file.write("int32_t NAME_GROUP[] = {\n")
+    # Emit one group per line, with annotations.
+    max_names = 0  # Maximum number of names & aliases per item.
+    start = 0
+    for group in name_groups:
+      line = "    "
+      aliases = []  # For comments.
+      for i in group[:-1]:
+        line += "%d, " % i
+        aliases.append('"%s"' % strings[i])
+      # Negative entry terminates the group.
+      i = group[-1]
+      line += "%d, " % -i
+      aliases.append('"%s"' % strings[i])
+      out_file.write(
+          line + " " * (24 - len(line)) +
+          "/* %3d: " % start + ", ".join(aliases) + " */\n")
+      length = len(group)
+      if length > max_names: max_names = length
+      start += length
+    out_file.write("};\n\n")
+
+    out_file.write("#define MAX_NAMES_PER_GROUP %d\n\n" % max_names)
+
+    # Emit the enumerated property values.
+    i = 0
+    while i < len(pnames_data):
+      pname = pnames_data[i][0]
+      if pname.startswith("_"):
+        i += 1
+        continue
+      if pname == "binprop":
+        count = 2
+      elif pname == "gc":
+        count = len(_gc_vname_to_enum)
+      else:
+        count = len(_properties[pname][2])
+      out_file.write("const int32_t VALUES_%s_COUNT = %d;\n\n" %
+                     (pname, count))
+      out_file.write("const Alias VALUES_%s[] = {\n" % pname)
+      limit = i + count
+      while i < limit:
+        (pname, enum, aliases) = pnames_data[i]
+        out_file.write("    Alias((int32_t) %s, %d),\n" %
+                       (enum, group_to_int[aliases]))
+        i += 1
+      out_file.write("};\n\n")
+
+    # Emit the top-level properties (binary, enumerated, etc.).
+    out_file.write("const int32_t PROPERTY_COUNT = %d;\n\n" %
+                   len(_property_name_to_enum))
+    out_file.write("const Property PROPERTY[] = {\n")
+    for (pname, enum, aliases) in pnames_data:
+      if not pname.startswith("_"): continue
+      pname = aliases[0]
+      if not pname: pname = aliases[1]  # Long name if no short name.
+      prop = _properties[pname]
+      group_index = group_to_int[aliases]
+      if prop[2] and pname != "age":  # Property with named values.
+        if prop[0] == "Binary": pname = "binprop"
+        out_file.write(
+            "    Property((int32_t) %s, %d, VALUES_%s_COUNT, VALUES_%s),\n" %
+            (enum, group_index, pname, pname))
+      else:
+        out_file.write("    Property((int32_t) %s, %d, 0, NULL),\n" %
+                       (enum, group_index))
+    out_file.write("};\n")
 
 # main() ------------------------------------------------------------------- ***
 
