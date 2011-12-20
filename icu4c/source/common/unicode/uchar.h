@@ -140,6 +140,7 @@ U_CDECL_BEGIN
 #define U_MASK(x) ((uint32_t)1<<(x))
 
 /*
+ * TODO: update
  * !! Note: Several comments in this file are machine-read by the
  * genpname tool.  These comments describe the correspondence between
  * icu enum constants and UCD entities.  Do not delete them.  Update
@@ -172,7 +173,8 @@ U_CDECL_BEGIN
  * @stable ICU 2.1
  */
 typedef enum UProperty {
-    /*  See note !!.  Comments of the form "Binary property Dash",
+    /*  TODO: update
+        See note !!.  Comments of the form "Binary property Dash",
         "Enumerated property Script", "Double property Numeric_Value",
         and "String property Age" are read by genpname. */
 
@@ -1065,16 +1067,6 @@ enum UBlockCode {
     UBLOCK_LOW_SURROGATES =77, /*[DC00]*/
 
     /**
-     * Same as UBLOCK_PRIVATE_USE_AREA.
-     * Until Unicode 3.1.1, the corresponding block name was "Private Use",
-     * and multiple code point ranges had this block.
-     * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
-     * adds separate blocks for the supplementary PUAs.
-     *
-     * @stable ICU 2.0
-     */
-    UBLOCK_PRIVATE_USE = 78,
-    /**
      * Same as UBLOCK_PRIVATE_USE.
      * Until Unicode 3.1.1, the corresponding block name was "Private Use",
      * and multiple code point ranges had this block.
@@ -1083,7 +1075,17 @@ enum UBlockCode {
      *
      * @stable ICU 2.0
      */
-    UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE, /*[E000]*/
+    UBLOCK_PRIVATE_USE_AREA =78, /*[E000]*/
+    /**
+     * Same as UBLOCK_PRIVATE_USE_AREA.
+     * Until Unicode 3.1.1, the corresponding block name was "Private Use",
+     * and multiple code point ranges had this block.
+     * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
+     * adds separate blocks for the supplementary PUAs.
+     *
+     * @stable ICU 2.0
+     */
+    UBLOCK_PRIVATE_USE = UBLOCK_PRIVATE_USE_AREA,
 
     /** @stable ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS =79, /*[F900]*/
@@ -1115,33 +1117,33 @@ enum UBlockCode {
     /* New blocks in Unicode 3.1 */
 
     /** @stable ICU 2.0 */
-    UBLOCK_OLD_ITALIC = 88  , /*[10300]*/
+    UBLOCK_OLD_ITALIC = 88, /*[10300]*/
     /** @stable ICU 2.0 */
-    UBLOCK_GOTHIC = 89 , /*[10330]*/
+    UBLOCK_GOTHIC = 89, /*[10330]*/
     /** @stable ICU 2.0 */
-    UBLOCK_DESERET = 90 , /*[10400]*/
+    UBLOCK_DESERET = 90, /*[10400]*/
     /** @stable ICU 2.0 */
-    UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91 , /*[1D000]*/
+    UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91, /*[1D000]*/
     /** @stable ICU 2.0 */
-    UBLOCK_MUSICAL_SYMBOLS = 92 , /*[1D100]*/
+    UBLOCK_MUSICAL_SYMBOLS = 92, /*[1D100]*/
     /** @stable ICU 2.0 */
-    UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93  , /*[1D400]*/
+    UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93, /*[1D400]*/
     /** @stable ICU 2.0 */
-    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94 , /*[20000]*/
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94, /*[20000]*/
     /** @stable ICU 2.0 */
-    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 , /*[2F800]*/
+    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95, /*[2F800]*/
     /** @stable ICU 2.0 */
     UBLOCK_TAGS = 96, /*[E0000]*/
 
     /* New blocks in Unicode 3.2 */
 
+    /** @stable ICU 3.0  */
+    UBLOCK_CYRILLIC_SUPPLEMENT = 97, /*[0500]*/
     /**
      * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
      * @stable ICU 2.2
      */
-    UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, 
-    /** @stable ICU 3.0  */
-    UBLOCK_CYRILLIC_SUPPLEMENT = UBLOCK_CYRILLIC_SUPPLEMENTARY, /*[0500]*/
+    UBLOCK_CYRILLIC_SUPPLEMENTARY = UBLOCK_CYRILLIC_SUPPLEMENT, 
     /** @stable ICU 2.2 */
     UBLOCK_TAGALOG = 98, /*[1700]*/
     /** @stable ICU 2.2 */
@@ -1436,10 +1438,6 @@ typedef enum UEastAsianWidth {
     U_EA_WIDE,      /*[W]*/
     U_EA_COUNT
 } UEastAsianWidth;
-/*
- * Implementation note:
- * Keep UEastAsianWidth constant values in sync with names list in genprops/props2.c.
- */
 
 /**
  * Selector constants for u_charName().
@@ -1694,9 +1692,9 @@ typedef enum ULineBreak {
     U_LB_GLUE = 12,              /*[GL]*/
     U_LB_HYPHEN = 13,            /*[HY]*/
     U_LB_IDEOGRAPHIC = 14,       /*[ID]*/
-    U_LB_INSEPERABLE = 15,
     /** Renamed from the misspelled "inseperable" in Unicode 4.0.1/ICU 3.0 @stable ICU 3.0 */
-    U_LB_INSEPARABLE=U_LB_INSEPERABLE,/*[IN]*/
+    U_LB_INSEPARABLE = 15,       /*[IN]*/
+    U_LB_INSEPERABLE = U_LB_INSEPARABLE,
     U_LB_INFIX_NUMERIC = 16,     /*[IS]*/
     U_LB_LINE_FEED = 17,         /*[LF]*/
     U_LB_NONSTARTER = 18,        /*[NS]*/
