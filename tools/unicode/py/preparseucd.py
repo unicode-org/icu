@@ -1690,8 +1690,7 @@ def WritePNamesDataHeader(out_path):
 
     # Write an array of "binprop" Value object initializers
     # with the value aliases shared among all binary properties.
-    out_file.write("const int32_t VALUES_binprop_COUNT = 2;\n\n")
-    out_file.write("const Value VALUES_binprop[] = {\n")
+    out_file.write("static const Value VALUES_binprop[2] = {\n")
     out_file.write('    Value(0, "%s"),\n' % " ".join(_binary_values["N"]))
     out_file.write('    Value(1, "%s"),\n' % " ".join(_binary_values["Y"]))
     out_file.write("};\n\n")
@@ -1703,9 +1702,8 @@ def WritePNamesDataHeader(out_path):
       aliases = prop[1]
       if len(aliases) > max_aliases: max_aliases = len(aliases)
       if not values: continue
-      out_file.write("const int32_t VALUES_%s_COUNT = %d;\n\n" %
+      out_file.write("static const Value VALUES_%s[%d] = {\n" %
                      (pname, len(values)))
-      out_file.write("const Value VALUES_%s[] = {\n" % pname)
       for (v_enum, vname) in values:
         aliases = _properties[pname][3][vname]
         # ccc, lccc, tccc: Omit the numeric strings from the aliases.
@@ -1719,18 +1717,16 @@ def WritePNamesDataHeader(out_path):
 
     # For each property, write a Property object initializer
     # with the property enum, its aliases, and a reference to its values.
-    out_file.write("const int32_t PROPERTIES_COUNT = %d;\n\n" %
+    out_file.write("static const Property PROPERTIES[%d] = {\n" %
                    len(_icu_properties))
-    out_file.write("const Property PROPERTIES[] = {\n")
     for (enum, pname, values) in _icu_properties:
       prop = _properties[pname]
       aliases = " ".join(prop[1])
       if prop[0] == "Binary":
         out_file.write('    Property(%s, "%s"),\n' % (enum, aliases))
       elif values:  # Property with named values.
-        out_file.write(
-            '    Property(%s, "%s", VALUES_%s, VALUES_%s_COUNT),\n' %
-            (enum, aliases, pname, pname))
+        out_file.write('    Property(%s, "%s", VALUES_%s, %d),\n' %
+                       (enum, aliases, pname, len(values)))
       else:
         out_file.write('    Property(%s, "%s"),\n' % (enum, aliases))
     out_file.write("};\n\n")
