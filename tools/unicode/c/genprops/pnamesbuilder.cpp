@@ -144,7 +144,7 @@ public:
 Property::Property(int32_t enumValue, const char *joinedAliases)
         : Value(enumValue, joinedAliases),
           values(enumValue<UCHAR_BINARY_LIMIT ? VALUES_binprop : NULL),
-          valueCount(enumValue<UCHAR_BINARY_LIMIT ? VALUES_binprop_COUNT : 0) {}
+          valueCount(enumValue<UCHAR_BINARY_LIMIT ? 2 : 0) {}
 
 // END DATA
 //----------------------------------------------------------------------
@@ -193,11 +193,12 @@ public:
         // so that we need not store another offset for it.
         UVector32 propEnums(errorCode);
         int32_t propIndex;
-        for(propIndex=0; propIndex<PROPERTIES_COUNT; ++propIndex) {
+        for(propIndex=0; propIndex<LENGTHOF(PROPERTIES); ++propIndex) {
             propEnums.sortedInsert(PROPERTIES[propIndex].enumValue, errorCode);
         }
         int32_t ranges[10][2];
-        int32_t numPropRanges=uprv_makeDenseRanges(propEnums.getBuffer(), PROPERTIES_COUNT, 0x100,
+        int32_t numPropRanges=uprv_makeDenseRanges(propEnums.getBuffer(),
+                                                   LENGTHOF(PROPERTIES), 0x100,
                                                    ranges, LENGTHOF(ranges));
         valueMaps.addElement(numPropRanges, errorCode);
         int32_t i, j;
@@ -213,7 +214,7 @@ public:
 
         // Build the properties trie first, at BytesTrie offset 0,
         // so that we need not store another offset for it.
-        buildPropertiesBytesTrie(PROPERTIES, PROPERTIES_COUNT, errorCode);
+        buildPropertiesBytesTrie(PROPERTIES, LENGTHOF(PROPERTIES), errorCode);
 
         // Build the name group for the first property, at nameGroups offset 0.
         // Name groups for *value* aliases must not start at offset 0
@@ -223,9 +224,9 @@ public:
 
         // Build the known-repeated binary properties once.
         int32_t binPropsValueMapOffset=valueMaps.size();
-        int32_t bytesTrieOffset=buildValuesBytesTrie(VALUES_binprop, VALUES_binprop_COUNT, errorCode);
+        int32_t bytesTrieOffset=buildValuesBytesTrie(VALUES_binprop, 2, errorCode);
         valueMaps.addElement(bytesTrieOffset, errorCode);
-        buildValueMap(VALUES_binprop, VALUES_binprop_COUNT, errorCode);
+        buildValueMap(VALUES_binprop, 2, errorCode);
 
         // Note: It is slightly wasteful to store binary properties like all others.
         // Since we know that they are in the lowest range of property enum values
@@ -235,12 +236,12 @@ public:
 
         // Build the known-repeated canonical combining class properties once.
         int32_t cccValueMapOffset=valueMaps.size();
-        bytesTrieOffset=buildValuesBytesTrie(VALUES_ccc, VALUES_ccc_COUNT, errorCode);
+        bytesTrieOffset=buildValuesBytesTrie(VALUES_ccc, LENGTHOF(VALUES_ccc), errorCode);
         valueMaps.addElement(bytesTrieOffset, errorCode);
-        buildValueMap(VALUES_ccc, VALUES_ccc_COUNT, errorCode);
+        buildValueMap(VALUES_ccc, LENGTHOF(VALUES_ccc), errorCode);
 
         // Build the rest of the data.
-        for(propIndex=0; propIndex<PROPERTIES_COUNT; ++propIndex) {
+        for(propIndex=0; propIndex<LENGTHOF(PROPERTIES); ++propIndex) {
             if(propIndex>0) {
                 // writeValueAliases(PROPERTIES[0], ...) already done
                 setPropertyInt(PROPERTIES[propIndex].enumValue, 0,

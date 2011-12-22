@@ -7,16 +7,12 @@
 
 #define UNICODE_VERSION { 6, 1, 0, 0 }
 
-const int32_t VALUES_binprop_COUNT = 2;
-
-const Value VALUES_binprop[] = {
+static const Value VALUES_binprop[2] = {
     Value(0, "N No F False"),
     Value(1, "Y Yes T True"),
 };
 
-const int32_t VALUES_bc_COUNT = 19;
-
-const Value VALUES_bc[] = {
+static const Value VALUES_bc[19] = {
     Value(U_LEFT_TO_RIGHT, "L Left_To_Right"),
     Value(U_RIGHT_TO_LEFT, "R Right_To_Left"),
     Value(U_EUROPEAN_NUMBER, "EN European_Number"),
@@ -38,9 +34,7 @@ const Value VALUES_bc[] = {
     Value(U_BOUNDARY_NEUTRAL, "BN Boundary_Neutral"),
 };
 
-const int32_t VALUES_blk_COUNT = 221;
-
-const Value VALUES_blk[] = {
+static const Value VALUES_blk[221] = {
     Value(UBLOCK_NO_BLOCK, "NB No_Block"),
     Value(UBLOCK_BASIC_LATIN, "ASCII Basic_Latin"),
     Value(UBLOCK_LATIN_1_SUPPLEMENT, "Latin_1_Sup Latin_1_Supplement Latin_1"),
@@ -264,9 +258,7 @@ const Value VALUES_blk[] = {
     Value(UBLOCK_TAKRI, "Takri Takri"),
 };
 
-const int32_t VALUES_ccc_COUNT = 56;
-
-const Value VALUES_ccc[] = {
+static const Value VALUES_ccc[56] = {
     Value(0, "NR Not_Reordered"),
     Value(1, "OV Overlay"),
     Value(7, "NK Nukta"),
@@ -325,9 +317,7 @@ const Value VALUES_ccc[] = {
     Value(240, "IS Iota_Subscript"),
 };
 
-const int32_t VALUES_dt_COUNT = 18;
-
-const Value VALUES_dt[] = {
+static const Value VALUES_dt[18] = {
     Value(U_DT_NONE, "None None none"),
     Value(U_DT_CANONICAL, "Can Canonical can"),
     Value(U_DT_COMPAT, "Com Compat com"),
@@ -348,9 +338,7 @@ const Value VALUES_dt[] = {
     Value(U_DT_WIDE, "Wide Wide wide"),
 };
 
-const int32_t VALUES_ea_COUNT = 6;
-
-const Value VALUES_ea[] = {
+static const Value VALUES_ea[6] = {
     Value(U_EA_NEUTRAL, "N Neutral"),
     Value(U_EA_AMBIGUOUS, "A Ambiguous"),
     Value(U_EA_HALFWIDTH, "H Halfwidth"),
@@ -359,9 +347,7 @@ const Value VALUES_ea[] = {
     Value(U_EA_WIDE, "W Wide"),
 };
 
-const int32_t VALUES_gc_COUNT = 30;
-
-const Value VALUES_gc[] = {
+static const Value VALUES_gc[30] = {
     Value(U_GENERAL_OTHER_TYPES, "Cn Unassigned"),
     Value(U_UPPERCASE_LETTER, "Lu Uppercase_Letter"),
     Value(U_LOWERCASE_LETTER, "Ll Lowercase_Letter"),
@@ -394,9 +380,7 @@ const Value VALUES_gc[] = {
     Value(U_FINAL_PUNCTUATION, "Pf Final_Punctuation"),
 };
 
-const int32_t VALUES_jg_COUNT = 58;
-
-const Value VALUES_jg[] = {
+static const Value VALUES_jg[58] = {
     Value(U_JG_NO_JOINING_GROUP, "No_Joining_Group No_Joining_Group"),
     Value(U_JG_AIN, "Ain Ain"),
     Value(U_JG_ALAPH, "Alaph Alaph"),
@@ -457,9 +441,7 @@ const Value VALUES_jg[] = {
     Value(U_JG_ROHINGYA_YEH, "Rohingya_Yeh Rohingya_Yeh"),
 };
 
-const int32_t VALUES_jt_COUNT = 6;
-
-const Value VALUES_jt[] = {
+static const Value VALUES_jt[6] = {
     Value(U_JT_NON_JOINING, "U Non_Joining"),
     Value(U_JT_JOIN_CAUSING, "C Join_Causing"),
     Value(U_JT_DUAL_JOINING, "D Dual_Joining"),
@@ -468,9 +450,7 @@ const Value VALUES_jt[] = {
     Value(U_JT_TRANSPARENT, "T Transparent"),
 };
 
-const int32_t VALUES_lb_COUNT = 39;
-
-const Value VALUES_lb[] = {
+static const Value VALUES_lb[39] = {
     Value(U_LB_UNKNOWN, "XX Unknown"),
     Value(U_LB_AMBIGUOUS, "AI Ambiguous"),
     Value(U_LB_ALPHABETIC, "AL Alphabetic"),
@@ -512,18 +492,14 @@ const Value VALUES_lb[] = {
     Value(U_LB_HEBREW_LETTER, "HL Hebrew_Letter"),
 };
 
-const int32_t VALUES_nt_COUNT = 4;
-
-const Value VALUES_nt[] = {
+static const Value VALUES_nt[4] = {
     Value(U_NT_NONE, "None None"),
     Value(U_NT_DECIMAL, "De Decimal"),
     Value(U_NT_DIGIT, "Di Digit"),
     Value(U_NT_NUMERIC, "Nu Numeric"),
 };
 
-const int32_t VALUES_sc_COUNT = 158;
-
-const Value VALUES_sc[] = {
+static const Value VALUES_sc[158] = {
     Value(USCRIPT_COMMON, "Zyyy Common"),
     Value(USCRIPT_INHERITED, "Zinh Inherited Qaai"),
     Value(USCRIPT_ARABIC, "Arab Arabic"),
@@ -684,9 +660,7 @@ const Value VALUES_sc[] = {
     Value(USCRIPT_TIRHUTA, "Tirh Tirh"),
 };
 
-const int32_t VALUES_hst_COUNT = 6;
-
-const Value VALUES_hst[] = {
+static const Value VALUES_hst[6] = {
     Value(U_HST_NOT_APPLICABLE, "NA Not_Applicable"),
     Value(U_HST_LEADING_JAMO, "L Leading_Jamo"),
     Value(U_HST_VOWEL_JAMO, "V Vowel_Jamo"),
@@ -695,39 +669,29 @@ const Value VALUES_hst[] = {
     Value(U_HST_LVT_SYLLABLE, "LVT LVT_Syllable"),
 };
 
-const int32_t VALUES_NFD_QC_COUNT = 2;
-
-const Value VALUES_NFD_QC[] = {
+static const Value VALUES_NFD_QC[2] = {
     Value(UNORM_NO, "N No"),
     Value(UNORM_YES, "Y Yes"),
 };
 
-const int32_t VALUES_NFKD_QC_COUNT = 2;
-
-const Value VALUES_NFKD_QC[] = {
+static const Value VALUES_NFKD_QC[2] = {
     Value(UNORM_NO, "N No"),
     Value(UNORM_YES, "Y Yes"),
 };
 
-const int32_t VALUES_NFC_QC_COUNT = 3;
-
-const Value VALUES_NFC_QC[] = {
+static const Value VALUES_NFC_QC[3] = {
     Value(UNORM_NO, "N No"),
     Value(UNORM_YES, "Y Yes"),
     Value(UNORM_MAYBE, "M Maybe"),
 };
 
-const int32_t VALUES_NFKC_QC_COUNT = 3;
-
-const Value VALUES_NFKC_QC[] = {
+static const Value VALUES_NFKC_QC[3] = {
     Value(UNORM_NO, "N No"),
     Value(UNORM_YES, "Y Yes"),
     Value(UNORM_MAYBE, "M Maybe"),
 };
 
-const int32_t VALUES_lccc_COUNT = 56;
-
-const Value VALUES_lccc[] = {
+static const Value VALUES_lccc[56] = {
     Value(0, "NR Not_Reordered"),
     Value(1, "OV Overlay"),
     Value(7, "NK Nukta"),
@@ -786,9 +750,7 @@ const Value VALUES_lccc[] = {
     Value(240, "IS Iota_Subscript"),
 };
 
-const int32_t VALUES_tccc_COUNT = 56;
-
-const Value VALUES_tccc[] = {
+static const Value VALUES_tccc[56] = {
     Value(0, "NR Not_Reordered"),
     Value(1, "OV Overlay"),
     Value(7, "NK Nukta"),
@@ -847,9 +809,7 @@ const Value VALUES_tccc[] = {
     Value(240, "IS Iota_Subscript"),
 };
 
-const int32_t VALUES_GCB_COUNT = 12;
-
-const Value VALUES_GCB[] = {
+static const Value VALUES_GCB[12] = {
     Value(U_GCB_OTHER, "XX Other"),
     Value(U_GCB_CONTROL, "CN Control"),
     Value(U_GCB_CR, "CR CR"),
@@ -864,9 +824,7 @@ const Value VALUES_GCB[] = {
     Value(U_GCB_PREPEND, "PP Prepend"),
 };
 
-const int32_t VALUES_SB_COUNT = 15;
-
-const Value VALUES_SB[] = {
+static const Value VALUES_SB[15] = {
     Value(U_SB_OTHER, "XX Other"),
     Value(U_SB_ATERM, "AT ATerm"),
     Value(U_SB_CLOSE, "CL Close"),
@@ -884,9 +842,7 @@ const Value VALUES_SB[] = {
     Value(U_SB_SCONTINUE, "SC SContinue"),
 };
 
-const int32_t VALUES_WB_COUNT = 13;
-
-const Value VALUES_WB[] = {
+static const Value VALUES_WB[13] = {
     Value(U_WB_OTHER, "XX Other"),
     Value(U_WB_ALETTER, "LE ALetter"),
     Value(U_WB_FORMAT, "FO Format"),
@@ -902,9 +858,7 @@ const Value VALUES_WB[] = {
     Value(U_WB_NEWLINE, "NL Newline"),
 };
 
-const int32_t VALUES_gcm_COUNT = 38;
-
-const Value VALUES_gcm[] = {
+static const Value VALUES_gcm[38] = {
     Value((int32_t)U_GC_C_MASK, "C Other"),
     Value((int32_t)U_GC_CC_MASK, "Cc Control cntrl"),
     Value((int32_t)U_GC_CF_MASK, "Cf Format"),
@@ -945,9 +899,7 @@ const Value VALUES_gcm[] = {
     Value((int32_t)U_GC_ZS_MASK, "Zs Space_Separator"),
 };
 
-const int32_t PROPERTIES_COUNT = 94;
-
-const Property PROPERTIES[] = {
+static const Property PROPERTIES[94] = {
     Property(UCHAR_ALPHABETIC, "Alpha Alphabetic"),
     Property(UCHAR_ASCII_HEX_DIGIT, "AHex ASCII_Hex_Digit"),
     Property(UCHAR_BIDI_CONTROL, "Bidi_C Bidi_Control"),
@@ -1005,28 +957,28 @@ const Property PROPERTIES[] = {
     Property(UCHAR_CHANGES_WHEN_CASEFOLDED, "CWCF Changes_When_Casefolded"),
     Property(UCHAR_CHANGES_WHEN_CASEMAPPED, "CWCM Changes_When_Casemapped"),
     Property(UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED, "CWKCF Changes_When_NFKC_Casefolded"),
-    Property(UCHAR_BIDI_CLASS, "bc Bidi_Class", VALUES_bc, VALUES_bc_COUNT),
-    Property(UCHAR_BLOCK, "blk Block", VALUES_blk, VALUES_blk_COUNT),
-    Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, VALUES_ccc_COUNT),
-    Property(UCHAR_DECOMPOSITION_TYPE, "dt Decomposition_Type", VALUES_dt, VALUES_dt_COUNT),
-    Property(UCHAR_EAST_ASIAN_WIDTH, "ea East_Asian_Width", VALUES_ea, VALUES_ea_COUNT),
-    Property(UCHAR_GENERAL_CATEGORY, "gc General_Category", VALUES_gc, VALUES_gc_COUNT),
-    Property(UCHAR_JOINING_GROUP, "jg Joining_Group", VALUES_jg, VALUES_jg_COUNT),
-    Property(UCHAR_JOINING_TYPE, "jt Joining_Type", VALUES_jt, VALUES_jt_COUNT),
-    Property(UCHAR_LINE_BREAK, "lb Line_Break", VALUES_lb, VALUES_lb_COUNT),
-    Property(UCHAR_NUMERIC_TYPE, "nt Numeric_Type", VALUES_nt, VALUES_nt_COUNT),
-    Property(UCHAR_SCRIPT, "sc Script", VALUES_sc, VALUES_sc_COUNT),
-    Property(UCHAR_HANGUL_SYLLABLE_TYPE, "hst Hangul_Syllable_Type", VALUES_hst, VALUES_hst_COUNT),
-    Property(UCHAR_NFD_QUICK_CHECK, "NFD_QC NFD_Quick_Check", VALUES_NFD_QC, VALUES_NFD_QC_COUNT),
-    Property(UCHAR_NFKD_QUICK_CHECK, "NFKD_QC NFKD_Quick_Check", VALUES_NFKD_QC, VALUES_NFKD_QC_COUNT),
-    Property(UCHAR_NFC_QUICK_CHECK, "NFC_QC NFC_Quick_Check", VALUES_NFC_QC, VALUES_NFC_QC_COUNT),
-    Property(UCHAR_NFKC_QUICK_CHECK, "NFKC_QC NFKC_Quick_Check", VALUES_NFKC_QC, VALUES_NFKC_QC_COUNT),
-    Property(UCHAR_LEAD_CANONICAL_COMBINING_CLASS, "lccc Lead_Canonical_Combining_Class", VALUES_lccc, VALUES_lccc_COUNT),
-    Property(UCHAR_TRAIL_CANONICAL_COMBINING_CLASS, "tccc Trail_Canonical_Combining_Class", VALUES_tccc, VALUES_tccc_COUNT),
-    Property(UCHAR_GRAPHEME_CLUSTER_BREAK, "GCB Grapheme_Cluster_Break", VALUES_GCB, VALUES_GCB_COUNT),
-    Property(UCHAR_SENTENCE_BREAK, "SB Sentence_Break", VALUES_SB, VALUES_SB_COUNT),
-    Property(UCHAR_WORD_BREAK, "WB Word_Break", VALUES_WB, VALUES_WB_COUNT),
-    Property(UCHAR_GENERAL_CATEGORY_MASK, "gcm General_Category_Mask", VALUES_gcm, VALUES_gcm_COUNT),
+    Property(UCHAR_BIDI_CLASS, "bc Bidi_Class", VALUES_bc, 19),
+    Property(UCHAR_BLOCK, "blk Block", VALUES_blk, 221),
+    Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, 56),
+    Property(UCHAR_DECOMPOSITION_TYPE, "dt Decomposition_Type", VALUES_dt, 18),
+    Property(UCHAR_EAST_ASIAN_WIDTH, "ea East_Asian_Width", VALUES_ea, 6),
+    Property(UCHAR_GENERAL_CATEGORY, "gc General_Category", VALUES_gc, 30),
+    Property(UCHAR_JOINING_GROUP, "jg Joining_Group", VALUES_jg, 58),
+    Property(UCHAR_JOINING_TYPE, "jt Joining_Type", VALUES_jt, 6),
+    Property(UCHAR_LINE_BREAK, "lb Line_Break", VALUES_lb, 39),
+    Property(UCHAR_NUMERIC_TYPE, "nt Numeric_Type", VALUES_nt, 4),
+    Property(UCHAR_SCRIPT, "sc Script", VALUES_sc, 158),
+    Property(UCHAR_HANGUL_SYLLABLE_TYPE, "hst Hangul_Syllable_Type", VALUES_hst, 6),
+    Property(UCHAR_NFD_QUICK_CHECK, "NFD_QC NFD_Quick_Check", VALUES_NFD_QC, 2),
+    Property(UCHAR_NFKD_QUICK_CHECK, "NFKD_QC NFKD_Quick_Check", VALUES_NFKD_QC, 2),
+    Property(UCHAR_NFC_QUICK_CHECK, "NFC_QC NFC_Quick_Check", VALUES_NFC_QC, 3),
+    Property(UCHAR_NFKC_QUICK_CHECK, "NFKC_QC NFKC_Quick_Check", VALUES_NFKC_QC, 3),
+    Property(UCHAR_LEAD_CANONICAL_COMBINING_CLASS, "lccc Lead_Canonical_Combining_Class", VALUES_lccc, 56),
+    Property(UCHAR_TRAIL_CANONICAL_COMBINING_CLASS, "tccc Trail_Canonical_Combining_Class", VALUES_tccc, 56),
+    Property(UCHAR_GRAPHEME_CLUSTER_BREAK, "GCB Grapheme_Cluster_Break", VALUES_GCB, 12),
+    Property(UCHAR_SENTENCE_BREAK, "SB Sentence_Break", VALUES_SB, 15),
+    Property(UCHAR_WORD_BREAK, "WB Word_Break", VALUES_WB, 13),
+    Property(UCHAR_GENERAL_CATEGORY_MASK, "gcm General_Category_Mask", VALUES_gcm, 38),
     Property(UCHAR_NUMERIC_VALUE, "nv Numeric_Value"),
     Property(UCHAR_AGE, "age Age"),
     Property(UCHAR_BIDI_MIRRORING_GLYPH, "bmg Bidi_Mirroring_Glyph"),
