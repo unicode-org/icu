@@ -55,15 +55,17 @@ U_NAMESPACE_USE
 // So we define a second constant and at runtime check that it's >=MAX_ALIASES.
 static const int32_t VALUE_MAX_ALIASES=4;
 
+static const int32_t JOINED_ALIASES_CAPACITY=100;
+
 class Value {
 public:
     Value(int32_t enumValue, const char *joinedAliases)
             : enumValue(enumValue), joinedAliases(joinedAliases), count(0) {
-        if(uprv_strlen(joinedAliases)>=LENGTHOF(aliasesBuffer)) {
+        if(uprv_strlen(joinedAliases)>=JOINED_ALIASES_CAPACITY) {
             fprintf(stderr,
                     "genprops error: pnamesbuilder.cpp Value::Value(%ld, \"%s\"): "
-                    "joined aliases too long: make Value::aliasesBuffer[] larger, "
-                    "at least %ld\n",
+                    "joined aliases too long: "
+                    "increase JOINED_ALIASES_CAPACITY, to at least %ld\n",
                     (long)enumValue, joinedAliases, uprv_strlen(joinedAliases)+1);
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
@@ -76,14 +78,12 @@ public:
         do {
             aliases[count]=a;
             normalized[count++]=n;
-            char c;
-            while((c=*j)!=' ' && c!=0) {
+            while((c=*j++)!=' ' && c!=0) {
                 *a++=c;
                 // Ignore delimiters '-' and '_'.
                 if(!(c=='-' || c=='_')) {
                     *n++=uprv_tolower(c);
                 }
-                ++j;
             }
             *a++=0;
             *n++=0;
@@ -117,8 +117,8 @@ public:
 
     int32_t enumValue;
     const char *joinedAliases;
-    char aliasesBuffer[100];
-    char normalizedBuffer[100];  // Same capacity as aliasesBuffer!
+    char aliasesBuffer[JOINED_ALIASES_CAPACITY];
+    char normalizedBuffer[JOINED_ALIASES_CAPACITY];
     const char *aliases[VALUE_MAX_ALIASES];
     const char *normalized[VALUE_MAX_ALIASES];
     int32_t count;
@@ -126,10 +126,13 @@ public:
 
 class Property : public Value {
 public:
+    // A property with a values array.
     Property(int32_t enumValue, const char *joinedAliases,
              const Value *values, int32_t valueCount)
             : Value(enumValue, joinedAliases),
               values(values), valueCount(valueCount) {}
+    // A binary property (enumValue<UCHAR_BINARY_LIMIT), or one without values.
+    Property(int32_t enumValue, const char *joinedAliases);
 
     const Value *values;
     int32_t valueCount;
@@ -137,6 +140,11 @@ public:
 
 // *** Include the data header ***
 #include "pnames_data.h"
+
+Property::Property(int32_t enumValue, const char *joinedAliases)
+        : Value(enumValue, joinedAliases),
+          values(enumValue<UCHAR_BINARY_LIMIT ? VALUES_binprop : NULL),
+          valueCount(enumValue<UCHAR_BINARY_LIMIT ? VALUES_binprop_COUNT : 0) {}
 
 // END DATA
 //----------------------------------------------------------------------
@@ -219,6 +227,12 @@ public:
         valueMaps.addElement(bytesTrieOffset, errorCode);
         buildValueMap(VALUES_binprop, VALUES_binprop_COUNT, errorCode);
 
+        // Note: It is slightly wasteful to store binary properties like all others.
+        // Since we know that they are in the lowest range of property enum values
+        // and share the same name group and BytesTrie,
+        // we could just store those two indexes once.
+        // (This would save 8 bytes per binary property, or about half a kilobyte.)
+
         // Build the known-repeated canonical combining class properties once.
         int32_t cccValueMapOffset=valueMaps.size();
         bytesTrieOffset=buildValuesBytesTrie(VALUES_ccc, VALUES_ccc_COUNT, errorCode);
@@ -281,7 +295,6 @@ public:
     int32_t writeValueAliases(const Value &value, UErrorCode &errorCode) {
         int32_t nameOffset=uhash_geti(nameGroupToOffset, (void *)value.joinedAliases);
         if(nameOffset!=0) {
-printf("* duplicate joinedAliases: \"%s\"\n", value.joinedAliases);
             // The same list of aliases has been written already.
             return nameOffset-1;  // Was incremented to reserve 0 for "not found".
         }
@@ -476,7 +489,7 @@ void
 PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     FILE *f=usrc_createFromGenerator(path, "propname_data.h",
-                                     "icu/tools/src/unicode/c/genprops/pnamesbuilder.cpp");
+                                     "icu/tools/unicode/c/genprops/pnamesbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;  // usrc_create() reported an error.
