@@ -1724,15 +1724,15 @@ def WritePNamesDataHeader(out_path):
     out_file.write("const Property PROPERTIES[] = {\n")
     for (enum, pname, values) in _icu_properties:
       prop = _properties[pname]
-      aliases = prop[1]
-      if values:  # Property with named values.
-        if prop[0] == "Binary": pname = "binprop"
+      aliases = " ".join(prop[1])
+      if prop[0] == "Binary":
+        out_file.write('    Property(%s, "%s"),\n' % (enum, aliases))
+      elif values:  # Property with named values.
         out_file.write(
             '    Property(%s, "%s", VALUES_%s, VALUES_%s_COUNT),\n' %
-            (enum, " ".join(aliases), pname, pname))
+            (enum, aliases, pname, pname))
       else:
-        out_file.write('    Property(%s, "%s", NULL, 0),\n' %
-                       (enum, " ".join(aliases)))
+        out_file.write('    Property(%s, "%s"),\n' % (enum, aliases))
     out_file.write("};\n\n")
 
     out_file.write("const int32_t MAX_ALIASES = %d;\n" % max_aliases)
