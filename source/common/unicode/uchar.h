@@ -139,20 +139,6 @@ U_CDECL_BEGIN
  */
 #define U_MASK(x) ((uint32_t)1<<(x))
 
-/*
- * TODO: update
- * !! Note: Several comments in this file are machine-read by the
- * genpname tool.  These comments describe the correspondence between
- * icu enum constants and UCD entities.  Do not delete them.  Update
- * these comments as needed.
- *
- * Any comment of the form "/ *[name]* /" (spaces added) is such
- * a comment.
- *
- * The U_JG_* and U_GC_*_MASK constants are matched by their symbolic
- * name, which must match PropertyValueAliases.txt.
- */
-
 /**
  * Selection constants for Unicode properties.
  * These constants are used in functions like u_hasBinaryProperty to select
@@ -173,10 +159,11 @@ U_CDECL_BEGIN
  * @stable ICU 2.1
  */
 typedef enum UProperty {
-    /*  TODO: update
-        See note !!.  Comments of the form "Binary property Dash",
-        "Enumerated property Script", "Double property Numeric_Value",
-        and "String property Age" are read by genpname. */
+    /*
+     * Note: UProperty constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     UCHAR_<Unicode property name>=<integer>,
+     */
 
     /*  Note: Place UCHAR_ALPHABETIC before UCHAR_BINARY_START so that
     debuggers display UCHAR_ALPHABETIC as the symbolic name for 0,
@@ -591,7 +578,12 @@ typedef enum UProperty {
  */
 typedef enum UCharCategory
 {
-    /** See note !!.  Comments of the form "Cn" are read by genpname. */
+    /*
+     * Note: UCharCategory constants and their API comments are parsed by preparseucd.py.
+     * It matches pairs of lines like
+     *     / ** <Unicode 2-letter General_Category value> comment... * /
+     *     U_<[A-Z_]+> = <integer>,
+     */
 
     /** Non-category for unassigned and non-character code points. @stable ICU 2.0 */
     U_UNASSIGNED              = 0,
@@ -776,7 +768,12 @@ typedef enum UCharCategory
  * @stable ICU 2.0
  */
 typedef enum UCharDirection {
-    /** See note !!.  Comments of the form "EN" are read by genpname. */
+    /*
+     * Note: UCharDirection constants and their API comments are parsed by preparseucd.py.
+     * It matches pairs of lines like
+     *     / ** <Unicode 1..3-letter Bidi_Class value> comment... * /
+     *     U_<[A-Z_]+> = <integer>,
+     */
 
     /** L @stable ICU 2.0 */
     U_LEFT_TO_RIGHT               = 0,
@@ -825,12 +822,17 @@ typedef enum UCharDirection {
  * @stable ICU 2.0
  */
 enum UBlockCode {
+    /*
+     * Note: UBlockCode constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     UBLOCK_<Unicode Block value name> = <integer>,
+     */
 
     /** New No_Block value in Unicode 4. @stable ICU 2.6 */
     UBLOCK_NO_BLOCK = 0, /*[none]*/ /* Special range indicating No_Block */
 
     /** @stable ICU 2.0 */
-    UBLOCK_BASIC_LATIN = 1, /*[0000]*/ /*See note !!*/
+    UBLOCK_BASIC_LATIN = 1, /*[0000]*/
 
     /** @stable ICU 2.0 */
     UBLOCK_LATIN_1_SUPPLEMENT=2, /*[0080]*/
@@ -1430,7 +1432,13 @@ typedef enum UBlockCode UBlockCode;
  * @stable ICU 2.2
  */
 typedef enum UEastAsianWidth {
-    U_EA_NEUTRAL,   /*[N]*/ /*See note !!*/
+    /*
+     * Note: UEastAsianWidth constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_EA_<Unicode East_Asian_Width value name>
+     */
+
+    U_EA_NEUTRAL,   /*[N]*/
     U_EA_AMBIGUOUS, /*[A]*/
     U_EA_HALFWIDTH, /*[H]*/
     U_EA_FULLWIDTH, /*[F]*/
@@ -1493,7 +1501,13 @@ typedef enum UPropertyNameChoice {
  * @stable ICU 2.2
  */
 typedef enum UDecompositionType {
-    U_DT_NONE,              /*[none]*/ /*See note !!*/
+    /*
+     * Note: UDecompositionType constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_DT_<Unicode Decomposition_Type value name>
+     */
+
+    U_DT_NONE,              /*[none]*/
     U_DT_CANONICAL,         /*[can]*/
     U_DT_COMPAT,            /*[com]*/
     U_DT_CIRCLE,            /*[enc]*/
@@ -1521,7 +1535,13 @@ typedef enum UDecompositionType {
  * @stable ICU 2.2
  */
 typedef enum UJoiningType {
-    U_JT_NON_JOINING,       /*[U]*/ /*See note !!*/
+    /*
+     * Note: UJoiningType constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_JT_<Unicode Joining_Type value name>
+     */
+
+    U_JT_NON_JOINING,       /*[U]*/
     U_JT_JOIN_CAUSING,      /*[C]*/
     U_JT_DUAL_JOINING,      /*[D]*/
     U_JT_LEFT_JOINING,      /*[L]*/
@@ -1537,6 +1557,12 @@ typedef enum UJoiningType {
  * @stable ICU 2.2
  */
 typedef enum UJoiningGroup {
+    /*
+     * Note: UJoiningGroup constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_JG_<Unicode Joining_Group value name>
+     */
+
     U_JG_NO_JOINING_GROUP,
     U_JG_AIN,
     U_JG_ALAPH,
@@ -1606,7 +1632,13 @@ typedef enum UJoiningGroup {
  * @stable ICU 3.4
  */
 typedef enum UGraphemeClusterBreak {
-    U_GCB_OTHER = 0,            /*[XX]*/ /*See note !!*/
+    /*
+     * Note: UGraphemeClusterBreak constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_GCB_<Unicode Grapheme_Cluster_Break value name>
+     */
+
+    U_GCB_OTHER = 0,            /*[XX]*/
     U_GCB_CONTROL = 1,          /*[CN]*/
     U_GCB_CR = 2,               /*[CR]*/
     U_GCB_EXTEND = 3,           /*[EX]*/
@@ -1629,7 +1661,13 @@ typedef enum UGraphemeClusterBreak {
  * @stable ICU 3.4
  */
 typedef enum UWordBreakValues {
-    U_WB_OTHER = 0,             /*[XX]*/ /*See note !!*/
+    /*
+     * Note: UWordBreakValues constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_WB_<Unicode Word_Break value name>
+     */
+
+    U_WB_OTHER = 0,             /*[XX]*/
     U_WB_ALETTER = 1,           /*[LE]*/
     U_WB_FORMAT = 2,            /*[FO]*/
     U_WB_KATAKANA = 3,          /*[KA]*/
@@ -1652,7 +1690,13 @@ typedef enum UWordBreakValues {
  * @stable ICU 3.4
  */
 typedef enum USentenceBreak {
-    U_SB_OTHER = 0,             /*[XX]*/ /*See note !!*/
+    /*
+     * Note: USentenceBreak constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_SB_<Unicode Sentence_Break value name>
+     */
+
+    U_SB_OTHER = 0,             /*[XX]*/
     U_SB_ATERM = 1,             /*[AT]*/
     U_SB_CLOSE = 2,             /*[CL]*/
     U_SB_FORMAT = 3,            /*[FO]*/
@@ -1677,7 +1721,13 @@ typedef enum USentenceBreak {
  * @stable ICU 2.2
  */
 typedef enum ULineBreak {
-    U_LB_UNKNOWN = 0,           /*[XX]*/ /*See note !!*/
+    /*
+     * Note: ULineBreak constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_LB_<Unicode Line_Break value name>
+     */
+
+    U_LB_UNKNOWN = 0,           /*[XX]*/
     U_LB_AMBIGUOUS = 1,         /*[AI]*/
     U_LB_ALPHABETIC = 2,        /*[AL]*/
     U_LB_BREAK_BOTH = 3,        /*[B2]*/
@@ -1728,7 +1778,13 @@ typedef enum ULineBreak {
  * @stable ICU 2.2
  */
 typedef enum UNumericType {
-    U_NT_NONE,              /*[None]*/ /*See note !!*/
+    /*
+     * Note: UNumericType constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_NT_<Unicode Numeric_Type value name>
+     */
+
+    U_NT_NONE,              /*[None]*/
     U_NT_DECIMAL,           /*[de]*/
     U_NT_DIGIT,             /*[di]*/
     U_NT_NUMERIC,           /*[nu]*/
@@ -1742,7 +1798,13 @@ typedef enum UNumericType {
  * @stable ICU 2.6
  */
 typedef enum UHangulSyllableType {
-    U_HST_NOT_APPLICABLE,   /*[NA]*/ /*See note !!*/
+    /*
+     * Note: UHangulSyllableType constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_HST_<Unicode Hangul_Syllable_Type value name>
+     */
+
+    U_HST_NOT_APPLICABLE,   /*[NA]*/
     U_HST_LEADING_JAMO,     /*[L]*/
     U_HST_VOWEL_JAMO,       /*[V]*/
     U_HST_TRAILING_JAMO,    /*[T]*/
