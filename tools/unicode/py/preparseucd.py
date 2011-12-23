@@ -1495,11 +1495,11 @@ _bc_comment_re = re.compile(" */\*\* *([A-Z]{1,3}) ")
 _bc_re = re.compile(" *(U_[A-Z_]+) *= *[0-9]+,")
 
 # Sample line to match:
-#    UBLOCK_CYRILLIC =9, /*[0400]*/
+#    UBLOCK_CYRILLIC =9,
 _ublock_re = re.compile(" *(UBLOCK_[0-9A-Z_]+) *= *[0-9]+,")
 
 # Sample line to match:
-#    U_EA_AMBIGUOUS, /*[A]*/
+#    U_EA_AMBIGUOUS,
 _prop_and_value_re = re.compile(
     " *(U_(DT|EA|GCB|HST|LB|JG|JT|NT|SB|WB)_([0-9A-Z_]+))")
 
@@ -1679,6 +1679,18 @@ def WritePNamesDataHeader(out_path):
  */
 
 """)
+
+    # Note: The uchar.h & uscript.h parsers store the ICU Unicode properties
+    # and values in the order of their definition,
+    # and this function writes them in that order.
+    # Since the ICU API constants are stable and new values are only
+    # appended at the end
+    # (new properties are added at the end of each binary/enum/... range),
+    # the output is stable as well.
+    # When a property or value constant is renamed,
+    # it only changes the name itself in the output;
+    # it does not move in the output since there is no sorting.
+    # This minimizes diffs and assists with reviewing and evaluating updates.
 
     version = _ucd_version.split('.')
     while len(version) < 4: version.append("0")
