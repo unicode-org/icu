@@ -44,6 +44,13 @@
  * @stable ICU 2.2
  */
 typedef enum UScriptCode {
+    /*
+     * Note: UScriptCode constants and their ISO script code comments
+     * are parsed by preparseucd.py.
+     * It matches lines like
+     *     USCRIPT_<Unicode Script value name> = <integer>,  / * <ISO script code> * /
+     */
+
       /** @stable ICU 2.2 */
       USCRIPT_INVALID_CODE = -1,
       /** @stable ICU 2.2 */
