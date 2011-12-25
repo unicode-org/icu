@@ -97,6 +97,7 @@ main(int argc, char* argv[]) {
     IcuToolErrorCode errorCode("genprops");
     LocalPointer<PNamesBuilder> pnamesBuilder(createPNamesBuilder(errorCode));
     LocalPointer<PropsBuilder> corePropsBuilder(createCorePropsBuilder(errorCode));
+    LocalPointer<PropsBuilder> bidiPropsBuilder(createBiDiPropsBuilder(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsBuilders - %s\n", errorCode.errorName());
         return errorCode.reset();
@@ -136,9 +137,11 @@ main(int argc, char* argv[]) {
         if(ppucd.lineHasPropertyValues()) {
             const UniProps *props=ppucd.getProps(newValues, errorCode);
             corePropsBuilder->setProps(*props, newValues, errorCode);
+            bidiPropsBuilder->setProps(*props, newValues, errorCode);
         } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
             corePropsBuilder->setUnicodeVersion(version);
+            bidiPropsBuilder->setUnicodeVersion(version);
         }
         if(errorCode.isFailure()) {
             fprintf(stderr,
@@ -149,6 +152,7 @@ main(int argc, char* argv[]) {
     }
 
     corePropsBuilder->build(errorCode);
+    bidiPropsBuilder->build(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
                 errorCode.errorName());
@@ -168,6 +172,8 @@ main(int argc, char* argv[]) {
     pnamesBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     corePropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
     corePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    bidiPropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
+    bidiPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }
