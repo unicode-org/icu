@@ -41,6 +41,7 @@ public:
 
 PNamesBuilder *createPNamesBuilder(UErrorCode &errorCode);
 PropsBuilder *createCorePropsBuilder(UErrorCode &errorCode);
+PropsBuilder *createBiDiPropsBuilder(UErrorCode &errorCode);
 
 /* global flags */
 U_CFUNC UBool beVerbose;

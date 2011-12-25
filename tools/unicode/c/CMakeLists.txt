@@ -17,7 +17,6 @@ include_directories(
   ${ICU_SRC_DIR}/source/i18n
   ${ICU_SRC_DIR}/source/tools/toolutil)
 link_directories(${ICU_INST_DIR}/lib)
-add_subdirectory(genbidi)
 add_subdirectory(gencase)
 add_subdirectory(gennames)
 add_subdirectory(gennorm)
