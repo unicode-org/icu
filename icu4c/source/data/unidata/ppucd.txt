@@ -15,7 +15,6 @@ property;Catalog;blk;Block
 property;String;bmg;Bidi_Mirroring_Glyph
 property;Binary;Cased;Cased
 property;Enumerated;ccc;Canonical_Combining_Class
-property;Binary;CE;Composition_Exclusion
 property;String;cf;Case_Folding
 property;Binary;CI;Case_Ignorable
 property;Binary;Comp_Ex;Full_Composition_Exclusion
