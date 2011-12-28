@@ -42,7 +42,7 @@ usrc_createFromGenerator(const char *path, const char *filename, const char *gen
  * Writes the comment with # lines, as used in scripts and text data.
  */
 U_CAPI FILE * U_EXPORT2
-usrc_createTextData(const char *path, const char *filename);
+usrc_createTextData(const char *path, const char *filename, const char *generator);
 
 /**
  * Writes the contents of an array of 8/16/32-bit words.
