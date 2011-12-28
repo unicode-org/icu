@@ -19,7 +19,6 @@ include_directories(
 link_directories(${ICU_INST_DIR}/lib)
 add_subdirectory(gencase)
 add_subdirectory(gennames)
-add_subdirectory(gennorm)
 add_subdirectory(genprops)
 add_subdirectory(genuca)
 add_subdirectory(genuts46)
