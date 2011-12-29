@@ -116,6 +116,8 @@
     <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests, localespi-tests" description="Build ICU4J test classes"/>
     <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution"/>
 
+    <target name="findbugs" depends="charset-findbugs, collate-findbugs, core-findbugs, currdata-findbugs, langdata-findbugs, localespi-findbugs, regiondata-findbugs, translit-findbugs" description="Run FindBugs on all projects." />
+
     <target name="secure" depends="icu4jJar" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
     
     <!-- Check to see if JVM_OPTIONS enviroment variable is set. This can be use to set the heap size. -->
@@ -495,6 +497,40 @@
 
         <delete dir="${src.release.wrk.dir}"/>
         <delete file="${icu4jsrc.tar}"/>
+    </target>
+
+    <!-- findbugs targets -->
+
+    <target name="core-findbugs" description="Find bugs in core">
+        <ant dir="${icu4j.core.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="collate-findbugs" description="Find bugs in collate">
+        <ant dir="${icu4j.collate.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="charset-findbugs" description="Find bugs in charset">
+        <ant dir="${icu4j.charset.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="currdata-findbugs" description="Find bugs in currdata">
+        <ant dir="${icu4j.currdata.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="langdata-findbugs" description="Find bugs in langdata">
+        <ant dir="${icu4j.langdata.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="localespi-findbugs" description="Find bugs in localespi">
+        <ant dir="${icu4j.localespi.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="regiondata-findbugs" description="Find bugs in regiondata">
+        <ant dir="${icu4j.regiondata.dir}" inheritAll="false" target="findbugs" />
+    </target>
+
+    <target name="translit-findbugs" description="Find bugs in translit">
+        <ant dir="${icu4j.translit.dir}" inheritAll="false" target="findbugs" />
     </target>
 
     <!-- compile targets -->

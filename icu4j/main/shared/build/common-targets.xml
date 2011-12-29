@@ -106,6 +106,49 @@
         <echo message="${full.locale.names}" file="${res.dir}/fullLocaleNames.lst"/>
     </target>
 
+    <!-- fail if findbugs.home is not given or the findbugs task is
+         unavailable -->
+    <target name="_findbugs_check">
+        <fail message="findbugs.home must be defined.">
+            <condition>
+                <not>
+                    <available file="${findbugs.home}" type="dir" />
+                </not>
+            </condition>
+        </fail>
+        <fail message="FindBugs task not found">
+            <condition>
+                <not>
+                    <or>
+                        <available classname="edu.umd.cs.findbugs.anttask.FindBugsTask" property="_findbugs.task.available" />
+                        <available file="${findbugs.home}/lib/findbugs-ant.jar" />
+                    </or>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <!-- if findbugs-ant.jar is already on the path, just define the task -->
+    <target name="_findbugs_task_available" depends="_findbugs_check" if="_findbugs.task.available">
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
+    </target>
+
+    <!-- otherwise, specify findbugs-ant.jar on the path -->
+    <target name="_findbugs_task_unavailable" depends="_findbugs_check" unless="_findbugs.task.available">
+        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+            classpath="${findbugs.home}/lib/findbugs-ant.jar" />
+    </target>
+
+    <target name="_findbugs_task" depends="_findbugs_task_available, _findbugs_task_unavailable" />
+
+    <target name="@findbugs" depends="_findbugs_task, @build-all">
+        <findbugs home="${findbugs.home}" output="html" outputFile="${out.dir}/fb-${ant.project.name}.html">
+            <sourcePath path="${src.dir}" />
+            <class location="${jar.dir}/${jar.name}" />
+            <auxClasspath path="${toString:javac.classpathref}" />
+        </findbugs>
+    </target>
+
     <!-- Dependencies -->
 
     <!-- collate -->

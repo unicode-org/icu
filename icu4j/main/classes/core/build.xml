@@ -29,6 +29,8 @@
 
     <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
 
+    <target name="findbugs" depends="@findbugs" description="Search the project for possible defects using FindBugs." />
+
     <target name="copy-data" description="Extract pre-built ICU core data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
             <patternset>

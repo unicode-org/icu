@@ -28,4 +28,6 @@
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
     <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
+
+    <target name="findbugs" depends="@findbugs" description="Search the project for possible defects using FindBugs." />
 </project>
