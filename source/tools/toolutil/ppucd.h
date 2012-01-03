@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ppucd.h
@@ -24,7 +24,7 @@
 /** Additions to the uchar.h enum UProperty. */
 enum {
     /** Name_Alias */
-    PPUCD_NAME_ALIAS=UCHAR_OTHER_PROPERTY_LIMIT
+    PPUCD_NAME_ALIAS=UCHAR_STRING_LIMIT
 };
 
 U_NAMESPACE_BEGIN

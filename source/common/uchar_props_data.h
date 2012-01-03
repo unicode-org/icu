@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2011, International Business Machines
+ * Copyright (C) 1999-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *
  * file name: uchar_props_data.h
