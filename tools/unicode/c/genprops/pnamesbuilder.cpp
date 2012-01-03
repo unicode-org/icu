@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -33,8 +33,6 @@
 #if U_CHARSET_FAMILY!=U_ASCII_FAMILY
 #   error This builder requires U_CHARSET_FAMILY==U_ASCII_FAMILY.
 #endif
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 U_NAMESPACE_USE
 
@@ -524,11 +522,11 @@ PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
 PNamesBuilder *
 createPNamesBuilder(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PNamesBuilder *pw=new PNamesBuilderImpl(errorCode);
-    if(pw==NULL) {
+    PNamesBuilder *pb=new PNamesBuilderImpl(errorCode);
+    if(pb==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
-    return pw;
+    return pb;
 }
 
 // Note: The following is a partial copy of runtime propname.cpp code.

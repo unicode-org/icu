@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  gennames.c
+*   file name:  namespropsbuilder.cpp (was gennames/gennames.c)
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -13,11 +13,8 @@
 *   created on: 1999sep30
 *   created by: Markus W. Scherer
 *
-*   This program reads the Unicode character database text file,
-*   parses it, and extracts the character code,
-*   the "modern" character name, and optionally the
-*   Unicode 1.0 character name, and (starting with ICU 2.2) the ISO 10646 comment.
-*   It then tokenizes and compresses the names and builds
+*   This builder reads Unicode character names and aliases,
+*   tokenizes and compresses them, and builds
 *   compact binary tables for random-access lookup
 *   in a u_charName() API function.
 *
@@ -121,16 +118,16 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-#include "unicode/uclean.h"
 #include "unicode/udata.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "genprops.h"
+#include "ppucd.h"
 #include "uarrsort.h"
+#include "uassert.h"
 #include "unewdata.h"
 #include "uoptions.h"
-#include "uparse.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #define STRING_STORE_SIZE 1000000
 #define GROUP_STORE_SIZE 5000
@@ -143,65 +140,7 @@
 #define MAX_WORD_COUNT 20000
 #define MAX_GROUP_COUNT 5000
 
-#define DATA_NAME "unames"
-#define DATA_TYPE "icu"
-#define VERSION_STRING "unam"
 #define NAME_SEPARATOR_CHAR ';'
-
-#define ISO_DATA_NAME "ucomment"
-
-/* Unicode versions --------------------------------------------------------- */
-
-enum {
-    UNI_1_0,
-    UNI_1_1,
-    UNI_2_0,
-    UNI_3_0,
-    UNI_3_1,
-    UNI_3_2,
-    UNI_4_0,
-    UNI_4_0_1,
-    UNI_4_1,
-    UNI_5_0,
-    UNI_5_1,
-    UNI_5_2,
-    UNI_6_0,
-    UNI_6_1,
-    UNI_VER_COUNT
-};
-
-static const UVersionInfo
-unicodeVersions[]={
-    { 1, 0, 0, 0 },
-    { 1, 1, 0, 0 },
-    { 2, 0, 0, 0 },
-    { 3, 0, 0, 0 },
-    { 3, 1, 0, 0 },
-    { 3, 2, 0, 0 },
-    { 4, 0, 0, 0 },
-    { 4, 0, 1, 0 },
-    { 4, 1, 0, 0 },
-    { 5, 0, 0, 0 },
-    { 5, 1, 0, 0 },
-    { 5, 2, 0, 0 },
-    { 6, 0, 0, 0 },
-    { 6, 1, 0, 0 }
-};
-
-static int32_t ucdVersion=UNI_6_1;
-
-static int32_t
-findUnicodeVersion(const UVersionInfo version) {
-    int32_t i;
-
-    for(i=0; /* while(version>unicodeVersions[i]) {} */
-        i<UNI_VER_COUNT && uprv_memcmp(version, unicodeVersions[i], 4)>0;
-        ++i) {}
-    if(0<i && i<UNI_VER_COUNT && uprv_memcmp(version, unicodeVersions[i], 4)<0) {
-        --i; /* fix 4.0.2 to land before 4.1, for valid x>=ucdVersion comparisons */
-    }
-    return i; /* version>=unicodeVersions[i] && version<unicodeVersions[i+1]; possible: i==UNI_VER_COUNT */
-}
 
 /* generator data ----------------------------------------------------------- */
 
@@ -219,27 +158,6 @@ static UDataInfo dataInfo={
     {1, 0, 0, 0},                 /* formatVersion */
     {3, 0, 0, 0}                  /* dataVersion */
 };
-
-static UBool beVerbose=FALSE, beQuiet=FALSE, haveCopyright=TRUE;
-
-typedef struct Options {
-    UBool storeNames;
-    UBool store10Names;
-    UBool storeISOComments;
-} Options;
-
-/*
- * Pair of code point and name alias.
- * Try to keep sizeof(CpNameAlias) a multiple of 4 to avoid padding.
- */
-typedef struct CpNameAlias {
-    uint32_t code;
-    char nameAlias[124];
-} CpNameAlias;
-
-static CpNameAlias cpNameAliases[50];
-
-static uint32_t cpNameAliasesIndex=0, cpNameAliasesTop=0;
 
 static uint8_t stringStore[STRING_STORE_SIZE],
                groupStore[GROUP_STORE_SIZE],
@@ -272,28 +190,59 @@ static int16_t leadByteCount;
 static int16_t tokens[LEADBYTE_LIMIT*256];
 static uint32_t tokenCount;
 
+/* the structure for algorithmic names needs to be 4-aligned */
+struct AlgorithmicRange {
+    UChar32 start, end;
+    uint8_t type, variant;
+    uint16_t size;
+};
+
+class NamesPropsBuilder : public PropsBuilder {
+public:
+    NamesPropsBuilder(UErrorCode &errorCode);
+    virtual ~NamesPropsBuilder();
+
+    virtual void setUnicodeVersion(const UVersionInfo version);
+    virtual void setProps(const UniProps &, const UnicodeSet &newValues, UErrorCode &errorCode);
+    virtual void build(UErrorCode &errorCode);
+    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
+
+private:
+    virtual void setAlgNamesRange(UChar32 start, UChar32 end,
+                                  const char *type, const char *prefix, UErrorCode &errorCode);
+
+    CharString algRanges;
+    int32_t countAlgRanges;
+};
+
+NamesPropsBuilder::NamesPropsBuilder(UErrorCode &errorCode)
+        : countAlgRanges(0) {
+    for(int i=0; i<256; ++i) {
+        tokens[i]=0;
+    }
+}
+
+NamesPropsBuilder::~NamesPropsBuilder() {
+}
+
+void
+NamesPropsBuilder::setUnicodeVersion(const UVersionInfo version) {
+    uprv_memcpy(dataInfo.dataVersion, version, 4);
+}
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
-init(void);
-
-static void
-parseNameAliases(const char *filename, Options *options);
-
-static void
-parseDB(const char *filename, Options *options);
-
-static void
-parseName(char *name, int16_t length);
+parseName(const char *name, int16_t length);
 
 static int16_t
-skipNoise(char *line, int16_t start, int16_t limit);
+skipNoise(const char *line, int16_t start, int16_t limit);
 
 static int16_t
-getWord(char *line, int16_t start, int16_t limit);
+getWord(const char *line, int16_t start, int16_t limit);
 
 static void
-compress(void);
+compress(UErrorCode &errorCode);
 
 static void
 compressLines(void);
@@ -304,26 +253,20 @@ compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop);
 static int32_t
 compareWords(const void *context, const void *word1, const void *word2);
 
-static void
-generateData(const char *dataDir, Options *options);
-
-static uint32_t
-generateAlgorithmicData(UNewDataMemory *pData, Options *options);
-
 static int16_t
 findToken(uint8_t *s, int16_t length);
 
 static Word *
-findWord(char *s, int16_t length);
+findWord(const char *s, int16_t length);
 
 static Word *
-addWord(char *s, int16_t length);
+addWord(const char *s, int16_t length);
 
 static void
 countWord(Word *word);
 
 static void
-addLine(uint32_t code, char *names[], int16_t lengths[], int16_t count);
+addLine(UChar32 code, const char *names[], int16_t lengths[], int16_t count);
 
 static void
 addGroup(uint32_t groupMSB, uint8_t *strings, int16_t length);
@@ -343,368 +286,55 @@ allocLine(int32_t length);
 static uint8_t *
 allocWord(uint32_t length);
 
-/* -------------------------------------------------------------------------- */
-
-enum {
-    HELP_H,
-    HELP_QUESTION_MARK,
-    VERBOSE,
-    QUIET,
-    COPYRIGHT,
-    DESTDIR,
-    UNICODE,
-    UNICODE1_NAMES,
-    NO_ISO_COMMENTS,
-    ONLY_ISO_COMMENTS
-};
-
-static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_VERBOSE,
-    UOPTION_QUIET,
-    UOPTION_COPYRIGHT,
-    UOPTION_DESTDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
-    { "unicode1-names", NULL, NULL, NULL, '1', UOPT_NO_ARG, 0 },
-    { "no-iso-comments", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 },
-    { "only-iso-comments", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 }
-};
-
-extern int
-main(int argc, char* argv[]) {
-    UVersionInfo version;
-    Options moreOptions={ TRUE, FALSE, TRUE };
-    UErrorCode errorCode = U_ZERO_ERROR;
-
-    U_MAIN_INIT_ARGS(argc, argv);
-
-    /* Initialize ICU */
-    u_init(&errorCode);
-    if (U_FAILURE(errorCode) && errorCode != U_FILE_ACCESS_ERROR) {
-        /* Note: u_init() will try to open ICU property data.
-         *       failures here are expected when building ICU from scratch.
-         *       ignore them.
-         */
-        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
-            argv[0], u_errorName(errorCode));
-        exit(1);
-    }
-
-    /* preset then read command line options */
-    options[DESTDIR].value=u_getDataDirectory();
-    options[UNICODE].value="4.1";
-    argc=u_parseArgs(argc, argv, LENGTHOF(options), options);
-
-    /* error handling, printing usage message */
-    if(argc<0) {
-        fprintf(stderr,
-            "error in command line argument \"%s\"\n",
-            argv[-argc]);
-    } else if(argc<2) {
-        argc=-1;
-    }
-    if(argc<0 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
-        /*
-         * Broken into chucks because the C89 standard says the minimum
-         * required supported string length is 509 bytes.
-         */
-        fprintf(stderr,
-            "Usage: %s [-1[+|-]] [-v[+|-]] [-c[+|-]] [filename_ud [filename_na]]\n"
-            "\n"
-            "Read the UnicodeData.txt file and \n"
-            "create a binary file " DATA_NAME "." DATA_TYPE " with the character names\n"
-            "\n"
-            "\tfilename_ud  absolute path/filename for the UnicodeData.txt file\n"
-            "\t             (default: standard input)\n"
-            "\tfilename_na  absolute path/filename for the NameAliases.txt file\n"
-            "\t             (default: no name aliases)\n"
-            "\n",
-            argv[0]);
-        fprintf(stderr,
-            "Options:\n"
-            "\t-h or -? or --help  this usage text\n"
-            "\t-v or --verbose     verbose output\n"
-            "\t-q or --quiet       no output\n"
-            "\t-c or --copyright   include a copyright notice\n"
-            "\t-d or --destdir     destination directory, followed by the path\n"
-            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n");
-        fprintf(stderr,
-            "\t-1 or --unicode1-names     store Unicode 1.0 character names\n"
-            "\t      --no-iso-comments    do not store ISO comments\n"
-            "\t      --only-iso-comments  write ucomment.icu with only ISO comments\n");
-        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
-    }
-
-    /* get the options values */
-    beVerbose=options[VERBOSE].doesOccur;
-    beQuiet=options[QUIET].doesOccur;
-    haveCopyright=options[COPYRIGHT].doesOccur;
-    moreOptions.store10Names=options[UNICODE1_NAMES].doesOccur;
-    moreOptions.storeISOComments=!options[NO_ISO_COMMENTS].doesOccur;
-    if(options[ONLY_ISO_COMMENTS].doesOccur) {
-        moreOptions.storeNames=moreOptions.store10Names=FALSE;
-        moreOptions.storeISOComments=TRUE;
-    }
-
-    /* set the Unicode version */
-    u_versionFromString(version, options[UNICODE].value);
-    uprv_memcpy(dataInfo.dataVersion, version, 4);
-    ucdVersion=findUnicodeVersion(version);
-
-    init();
-    if(argc>=3) {
-        parseNameAliases(argv[2], &moreOptions);
-    }
-    parseDB(argc>=2 ? argv[1] : "-", &moreOptions);
-    compress();
-    generateData(options[DESTDIR].value, &moreOptions);
-
-    u_cleanup();
-    return 0;
-}
-
-static void
-init() {
-    int i;
-
-    for(i=0; i<256; ++i) {
-        tokens[i]=0;
-    }
-}
-
 /* parsing ------------------------------------------------------------------ */
 
-/* get a name, strip leading and trailing whitespace */
-static int16_t
-getName(char **pStart, char *limit) {
-    /* strip leading whitespace */
-    char *start=(char *)u_skipWhitespace(*pStart);
-
-    /* strip trailing whitespace */
-    while(start<limit && (*(limit-1)==' ' || *(limit-1)=='\t')) {
-        --limit;
-    }
-
-    /* return results */
-    *pStart=start;
-    return (int16_t)(limit-start);
-}
-
-static void U_CALLCONV
-nameAliasesLineFn(void *context,
-       char *fields[][2], int32_t fieldCount,
-       UErrorCode *pErrorCode) {
-    char *name;
-    int16_t length=0;
-    static uint32_t prevCode=0;
-    uint32_t code=0;
-
-    if(U_FAILURE(*pErrorCode)) {
-        return;
-    }
-    /* get the character code */
-    code=uprv_strtoul(fields[0][0], NULL, 16);
-
-    /* get the character name */
-    name=fields[1][0];
-    length=getName(&name, fields[1][1]);
-    if(length==0 || length>=sizeof(cpNameAliases[cpNameAliasesTop].nameAlias)) {
-        fprintf(stderr, "gennames: error - name alias %s empty or too long for code point U+%04lx\n",
-                name, (unsigned long)code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* check for non-character code points */
-    if(!U_IS_UNICODE_CHAR(code)) {
-        fprintf(stderr, "gennames: error - name alias for non-character code point U+%04lx\n",
-                (unsigned long)code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /*
-     * Only use "correction" aliases for now, from Unicode 6.1 NameAliases.txt with 3 fields per line.
-     * TODO: Work on ticket #8963 to deal with multiple type:alias pairs per character.
-     */
-    fields[2][1]=0;
-    if(0!=uprv_strcmp("correction", fields[2][0])) {
+void
+NamesPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
+                            UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+    if(!newValues.contains(UCHAR_NAME) && !newValues.contains(PPUCD_NAME_ALIAS)) {
         return;
     }
 
-    /* check that the code points (code) are in ascending order */
-    if(code<=prevCode && code>0) {
-        fprintf(stderr, "gennames: error - NameAliases entries out of order, U+%04lx after U+%04lx\n",
-                (unsigned long)code, (unsigned long)prevCode);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    prevCode=code;
+    U_ASSERT(props.start==props.end);
 
-    if(cpNameAliasesTop>=LENGTHOF(cpNameAliases)) {
-        fprintf(stderr, "gennames: error - too many name aliases\n");
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    cpNameAliases[cpNameAliasesTop].code=code;
-    uprv_memcpy(cpNameAliases[cpNameAliasesTop].nameAlias, name, length);
-    cpNameAliases[cpNameAliasesTop].nameAlias[length]=0;
-    ++cpNameAliasesTop;
-
-    parseName(name, length);
-}
-
-static void U_CALLCONV
-lineFn(void *context,
-       char *fields[][2], int32_t fieldCount,
-       UErrorCode *pErrorCode) {
-    Options *storeOptions=(Options *)context;
-    char *names[4];
+    const char *names[4]={ NULL, NULL, NULL, NULL };
     int16_t lengths[4]={ 0, 0, 0, 0 };
-    static uint32_t prevCode=0;
-    uint32_t code=0;
-
-    if(U_FAILURE(*pErrorCode)) {
-        return;
-    }
-    /* get the character code */
-    code=uprv_strtoul(fields[0][0], NULL, 16);
 
     /* get the character name */
-    if(storeOptions->storeNames) {
-        names[0]=fields[1][0];
-        lengths[0]=getName(names+0, fields[1][1]);
-        if(names[0][0]=='<') {
-            /* do not store pseudo-names in <> brackets */
-            lengths[0]=0;
+    if(props.name!=NULL) {
+        names[0]=props.name;
+        lengths[0]=(int16_t)uprv_strlen(props.name);
+        parseName(names[0], lengths[0]);
+    }
+
+    CharString buffer;
+    if(props.nameAlias!=NULL) {
+        /*
+         * Only use "correction" aliases for now, from Unicode 6.1 NameAliases.txt with 3 fields per line.
+         * TODO: Work on ticket #8963 to deal with multiple type:alias pairs per character.
+         */
+        const char *corr=uprv_strstr(props.nameAlias, "correction=");
+        if(corr!=NULL) {
+            corr+=11;  // skip "correction="
+            const char *limit=uprv_strchr(corr, ',');
+            if(limit!=NULL) {
+                buffer.append(corr, limit-corr, errorCode);
+                names[3]=buffer.data();
+                lengths[3]=(int16_t)(limit-corr);
+            } else {
+                names[3]=corr;
+                lengths[3]=(int16_t)uprv_strlen(corr);
+            }
+            parseName(names[3], lengths[3]);
         }
     }
 
-    /* store 1.0 names */
-    /* get the second character name, the one from Unicode 1.0 */
-    if(storeOptions->store10Names) {
-        names[1]=fields[10][0];
-        lengths[1]=getName(names+1, fields[10][1]);
-        if(names[1][0]=='<') {
-            /* do not store pseudo-names in <> brackets */
-            lengths[1]=0;
-        }
-    }
-
-    /* get the ISO 10646 comment */
-    if(storeOptions->storeISOComments) {
-        names[2]=fields[11][0];
-        lengths[2]=getName(names+2, fields[11][1]);
-    }
-
-    if(lengths[0]+lengths[1]+lengths[2]==0) {
-        return;
-    }
-
-    /* check for non-character code points */
-    if(!U_IS_UNICODE_CHAR(code)) {
-        fprintf(stderr, "gennames: error - properties for non-character code point U+%04lx\n",
-                (unsigned long)code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* check that the code points (code) are in ascending order */
-    if(code<=prevCode && code>0) {
-        fprintf(stderr, "gennames: error - UnicodeData entries out of order, U+%04lx after U+%04lx\n",
-                (unsigned long)code, (unsigned long)prevCode);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    prevCode=code;
-
-    parseName(names[0], lengths[0]);
-    parseName(names[1], lengths[1]);
-    parseName(names[2], lengths[2]);
-
-    if(cpNameAliasesIndex<cpNameAliasesTop && code>=cpNameAliases[cpNameAliasesIndex].code) {
-        if(code==cpNameAliases[cpNameAliasesIndex].code) {
-            names[3]=cpNameAliases[cpNameAliasesIndex].nameAlias;
-            lengths[3]=(int16_t)uprv_strlen(cpNameAliases[cpNameAliasesIndex].nameAlias);
-            ++cpNameAliasesIndex;
-        } else {
-            fprintf(stderr, "gennames: error - NameAlias but no UnicodeData entry for U+%04lx\n",
-                    (unsigned long)code);
-            *pErrorCode=U_PARSE_ERROR;
-            exit(U_PARSE_ERROR);
-        }
-    }
-
-    /*
-     * set the count argument to
-     * 1: only store regular names, or only store ISO 10646 comments
-     * 2: store regular and 1.0 names
-     * 3: store names and ISO 10646 comment
-     * 4: also store name alias
-     *
-     * addLine() will ignore empty trailing names
-     */
-    if(storeOptions->storeNames) {
-        /* store names and comments as parsed according to storeOptions */
-        addLine(code, names, lengths, LENGTHOF(names));
-    } else {
-        /* store only ISO 10646 comments */
-        addLine(code, names+2, lengths+2, 1);
-    }
+    addLine(props.start, names, lengths, LENGTHOF(names));
 }
 
 static void
-parseNameAliases(const char *filename, Options *storeOptions) {
-    char *fields[3][2];
-    UErrorCode errorCode=U_ZERO_ERROR;
-
-    if(!storeOptions->storeNames) {
-        return;
-    }
-    /*
-     * This works only for Unicode 6.1 NameAliases.txt with 3 fields per line.
-     * TODO: Work on ticket #8963 to deal with multiple type:alias pairs per character.
-     */
-    u_parseDelimitedFile(filename, ';', fields, 3, nameAliasesLineFn, NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
-
-    if(!beQuiet) {
-        printf("number of name aliases: %lu\n", (unsigned long)cpNameAliasesTop);
-    }
-}
-
-static void
-parseDB(const char *filename, Options *storeOptions) {
-    char *fields[15][2];
-    UErrorCode errorCode=U_ZERO_ERROR;
-
-    u_parseDelimitedFile(filename, ';', fields, 15, lineFn, storeOptions, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
-    if(cpNameAliasesIndex<cpNameAliasesTop) {
-        fprintf(stderr, "gennames: error - NameAlias but no UnicodeData entry for U+%04lx\n",
-                (unsigned long)cpNameAliases[cpNameAliasesIndex].code);
-        exit(U_PARSE_ERROR);
-    }
-
-    if(!beQuiet) {
-        printf("size of all names in the database: %lu\n",
-            (unsigned long)lineTop);
-        printf("number of named Unicode characters: %lu\n",
-            (unsigned long)lineCount);
-        printf("number of words in the dictionary from these names: %lu\n",
-            (unsigned long)wordCount);
-    }
-}
-
-static void
-parseName(char *name, int16_t length) {
+parseName(const char *name, int16_t length) {
     int16_t start=0, limit, wordLength/*, prevStart=-1*/;
     Word *word;
 
@@ -756,15 +386,11 @@ isWordChar(char c) {
            ('J'<=c && c<='R') ||
            ('S'<=c && c<='Z') ||
 
-           ('a'<=c && c<='i') || /* lowercase letters for ISO comments */
-           ('j'<=c && c<='r') ||
-           ('s'<=c && c<='z') ||
-
            ('0'<=c && c<='9');
 }
 
 static int16_t
-skipNoise(char *line, int16_t start, int16_t limit) {
+skipNoise(const char *line, int16_t start, int16_t limit) {
     /* skip anything that is not part of a word in this sense */
     while(start<limit && !isWordChar(line[start])) {
         ++start;
@@ -774,7 +400,7 @@ skipNoise(char *line, int16_t start, int16_t limit) {
 }
 
 static int16_t
-getWord(char *line, int16_t start, int16_t limit) {
+getWord(const char *line, int16_t start, int16_t limit) {
     char c=0; /* initialize to avoid a compiler warning although the code was safe */
 
     /* a unicode character name word consists of A-Z0-9 */
@@ -790,18 +416,82 @@ getWord(char *line, int16_t start, int16_t limit) {
     return start;
 }
 
+void
+NamesPropsBuilder::setAlgNamesRange(UChar32 start, UChar32 end,
+                                    const char *type,
+                                    const char *prefix,  // number of hex digits
+                                    UErrorCode &errorCode) {
+    /* modulo factors, maximum 8 */
+    /* 3 factors: 19, 21, 28, most-to-least-significant */
+    static const uint16_t hangulFactors[3]={
+        19, 21, 28
+    };
+
+    static const char jamo[]=
+        "HANGUL SYLLABLE \0"
+
+        "G\0GG\0N\0D\0DD\0R\0M\0B\0BB\0"
+        "S\0SS\0\0J\0JJ\0C\0K\0T\0P\0H\0"
+
+        "A\0AE\0YA\0YAE\0EO\0E\0YEO\0YE\0O\0"
+        "WA\0WAE\0OE\0YO\0U\0WEO\0WE\0WI\0"
+        "YU\0EU\0YI\0I\0"
+
+        "\0G\0GG\0GS\0N\0NJ\0NH\0D\0L\0LG\0LM\0"
+        "LB\0LS\0LT\0LP\0LH\0M\0B\0BS\0"
+        "S\0SS\0NG\0J\0C\0K\0T\0P\0H";
+
+    int32_t prefixLength=0;
+    AlgorithmicRange range;
+    uprv_memset(&range, 0, sizeof(AlgorithmicRange));
+    int32_t rangeSize=(int32_t)sizeof(AlgorithmicRange);
+    range.start=start;
+    range.end=end;
+    if(0==uprv_strcmp(type, "han")) {
+        range.type=0;
+        range.variant= end<=0xffff ? 4 : 5;
+        prefixLength=uprv_strlen(prefix)+1;
+        rangeSize+=prefixLength;
+    } else if(0==uprv_strcmp(type, "hangul")) {
+        range.type=1;
+        range.variant=(uint8_t)LENGTHOF(hangulFactors);
+        rangeSize+=(int32_t)sizeof(hangulFactors);
+        rangeSize+=(int32_t)sizeof(jamo);
+    } else {
+        fprintf(stderr, "genprops error: unknown algnamesrange type '%s'\n", prefix);
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    int32_t paddingLength=paddingLength=rangeSize&3;
+    if(paddingLength) {
+        paddingLength=4-paddingLength;
+        rangeSize+=paddingLength;
+    }
+    range.size=(uint16_t)rangeSize;
+    algRanges.append((char *)&range, (int32_t)sizeof(AlgorithmicRange), errorCode);
+    if(range.type==0) {  // han
+        algRanges.append(prefix, prefixLength, errorCode);
+    } else /* type==1 */ {  // hangul
+        algRanges.append((char *)hangulFactors, (int32_t)sizeof(hangulFactors), errorCode);
+        algRanges.append(jamo, (int32_t)sizeof(jamo), errorCode);
+    }
+    while(paddingLength) {
+        algRanges.append((char)0xaa, errorCode);
+        --paddingLength;
+    }
+    ++countAlgRanges;
+}
+
 /* compressing -------------------------------------------------------------- */
 
 static void
-compress() {
+compress(UErrorCode &errorCode) {
     uint32_t i, letterCount;
     int16_t wordNumber;
-    UErrorCode errorCode;
 
     /* sort the words in reverse order by weight */
-    errorCode=U_ZERO_ERROR;
     uprv_sortArray(words, wordCount, sizeof(Word),
-                    compareWords, NULL, FALSE, &errorCode);
+                   compareWords, NULL, FALSE, &errorCode);
 
     /* remove the words that do not save anything */
     while(wordCount>0 && words[wordCount-1].weight<1) {
@@ -826,11 +516,13 @@ compress() {
         for(i=0, wordNumber=0; wordNumber<(int16_t)wordCount; ++i) {
             if(tokens[i]!=-1) {
                 tokens[i]=wordNumber;
+#ifdef DEBUG_NAMES
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
                             (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
+#endif
                 ++wordNumber;
             }
         }
@@ -880,11 +572,13 @@ compress() {
 
         /* set token 0 to word 0 */
         tokens[0]=0;
+#ifdef DEBUG_NAMES
         if(beVerbose) {
             printf("tokens[0x000]: word%8ld \"%.*s\"\n",
                     (long)words[0].weight,
                     words[0].length, words[0].s);
         }
+#endif
         wordNumber=1;
 
         /* set the lead byte tokens */
@@ -897,11 +591,13 @@ compress() {
             /* if store10Names then the parser set tokens[NAME_SEPARATOR_CHAR]=-1 */
             if(tokens[i]!=-1) {
                 tokens[i]=wordNumber;
+#ifdef DEBUG_NAMES
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
                             (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
+#endif
                 ++wordNumber;
             }
         }
@@ -912,11 +608,13 @@ compress() {
                 tokens[i]=-1; /* do not use NAME_SEPARATOR_CHAR as a second token byte */
             } else {
                 tokens[i]=wordNumber;
+#ifdef DEBUG_NAMES
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
                             (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
+#endif
                 ++wordNumber;
             }
         }
@@ -1051,26 +749,41 @@ compareWords(const void *context, const void *word1, const void *word2) {
     return ((Word *)word2)->weight-((Word *)word1)->weight;
 }
 
+void
+NamesPropsBuilder::build(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    if(!beQuiet) {
+        puts("* unames.icu stats *");
+        printf("size of all names in the database: %lu\n",
+            (unsigned long)lineTop);
+        printf("number of named Unicode characters: %lu\n",
+            (unsigned long)lineCount);
+        printf("number of words in the dictionary from these names: %lu\n",
+            (unsigned long)wordCount);
+    }
+    compress(errorCode);
+}
+
 /* generate output data ----------------------------------------------------- */
 
-static void
-generateData(const char *dataDir, Options *storeOptions) {
-    UNewDataMemory *pData;
-    UErrorCode errorCode=U_ZERO_ERROR;
+void
+NamesPropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return; }
+
+    UNewDataMemory *pData=udata_create(path, "icu", "unames", &dataInfo,
+                                       withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: udata_create(%s, unames.icu) failed - %s\n",
+                path, u_errorName(errorCode));
+        return;
+    }
+
     uint16_t groupWords[3];
-    uint32_t i, groupTop=lineTop, offset, size,
+    uint32_t i, groupTop=lineTop, size,
              tokenStringOffset, groupsOffset, groupStringOffset, algNamesOffset;
     long dataLength;
     int16_t token;
-
-    pData=udata_create(dataDir,
-                       DATA_TYPE, storeOptions->storeNames ? DATA_NAME : ISO_DATA_NAME,
-                       &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gennames: unable to create data memory, error %d\n", errorCode);
-        exit(errorCode);
-    }
 
     /* first, see how much space we need, and prepare the token strings */
     for(i=0; i<tokenCount; ++i) {
@@ -1140,14 +853,13 @@ generateData(const char *dataDir, Options *storeOptions) {
     groupStringOffset=groupsOffset+2+6*lineCount;
     algNamesOffset=(groupStringOffset+(groupTop-groupBottom)+3)&~3;
 
-    offset=generateAlgorithmicData(NULL, storeOptions);
-    size=algNamesOffset+offset;
+    size=algNamesOffset+4+algRanges.length();
 
     if(!beQuiet) {
         printf("size of the Unicode Names data:\n"
                "total data length %lu, token strings %lu, compressed strings %lu, algorithmic names %lu\n",
                 (unsigned long)size, (unsigned long)(lineTop-groupTop),
-                (unsigned long)(groupTop-groupBottom), (unsigned long)offset);
+                (unsigned long)(groupTop-groupBottom), (unsigned long)(4+algRanges.length()));
     }
 
     /* write the data to the file */
@@ -1175,7 +887,7 @@ generateData(const char *dataDir, Options *storeOptions) {
         groupWords[0]=(uint16_t)lines[i].code;
 
         /* offset */
-        offset = (uint32_t)((lines[i].s - stringStore)-groupBottom);
+        uint32_t offset = (uint32_t)((lines[i].s - stringStore)-groupBottom);
         groupWords[1]=(uint16_t)(offset>>16);
         groupWords[2]=(uint16_t)(offset);
         udata_writeBlock(pData, groupWords, 6);
@@ -1187,7 +899,8 @@ generateData(const char *dataDir, Options *storeOptions) {
     /* 4-align the algorithmic names data */
     udata_writePadding(pData, algNamesOffset-(groupStringOffset+(groupTop-groupBottom)));
 
-    generateAlgorithmicData(pData, storeOptions);
+    udata_write32(pData, countAlgRanges);
+    udata_writeBlock(pData, algRanges.data(), algRanges.length());
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -1201,205 +914,6 @@ generateData(const char *dataDir, Options *storeOptions) {
 dataLength, (unsigned long)size);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
-}
-
-/* the structure for algorithmic names needs to be 4-aligned */
-typedef struct AlgorithmicRange {
-    uint32_t rangeStart, rangeEnd;
-    uint8_t algorithmType, algorithmVariant;
-    uint16_t rangeSize;
-} AlgorithmicRange;
-
-static uint32_t
-generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
-    static char prefix[] = "CJK UNIFIED IDEOGRAPH-";
-#   define PREFIX_LENGTH 23
-#   define PREFIX_LENGTH_4 24
-    uint32_t countAlgRanges;
-
-    static AlgorithmicRange cjkExtA={
-        0x3400, 0x4db5,
-        0, 4,
-        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
-    };
-    static AlgorithmicRange cjk={
-        0x4e00, 0x9fa5,
-        0, 4,
-        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
-    };
-    static AlgorithmicRange cjkExtB={
-        0x20000, 0x2a6d6,
-        0, 5,
-        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
-    };
-    static AlgorithmicRange cjkExtC={
-        0x2a700, 0x2b734,
-        0, 5,
-        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
-    };
-    static AlgorithmicRange cjkExtD={
-        0x2b740, 0x2b81d,
-        0, 5,
-        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
-    };
-
-    static char jamo[]=
-        "HANGUL SYLLABLE \0"
-
-        "G\0GG\0N\0D\0DD\0R\0M\0B\0BB\0"
-        "S\0SS\0\0J\0JJ\0C\0K\0T\0P\0H\0"
-
-        "A\0AE\0YA\0YAE\0EO\0E\0YEO\0YE\0O\0"
-        "WA\0WAE\0OE\0YO\0U\0WEO\0WE\0WI\0"
-        "YU\0EU\0YI\0I\0"
-
-        "\0G\0GG\0GS\0N\0NJ\0NH\0D\0L\0LG\0LM\0"
-        "LB\0LS\0LT\0LP\0LH\0M\0B\0BS\0"
-        "S\0SS\0NG\0J\0C\0K\0T\0P\0H"
-    ;
-
-    static AlgorithmicRange hangul={
-        0xac00, 0xd7a3,
-        1, 3,
-        sizeof(AlgorithmicRange)+6+sizeof(jamo)
-    };
-
-    /* modulo factors, maximum 8 */
-    /* 3 factors: 19, 21, 28, most-to-least-significant */
-    static uint16_t hangulFactors[3]={
-        19, 21, 28
-    };
-
-    uint32_t size;
-
-    size=0;
-
-    if(ucdVersion>=UNI_6_1) {
-        /* Unicode 6.1 and up has a longer CJK Unihan range than before */
-        cjk.rangeEnd=0x9FCC;
-    } else if(ucdVersion>=UNI_5_2) {
-        /* Unicode 5.2 and up has a longer CJK Unihan range than before */
-        cjk.rangeEnd=0x9FCB;
-    } else if(ucdVersion>=UNI_5_1) {
-        /* Unicode 5.1 and up has a longer CJK Unihan range than before */
-        cjk.rangeEnd=0x9FC3;
-    } else if(ucdVersion>=UNI_4_1) {
-        /* Unicode 4.1 and up has a longer CJK Unihan range than before */
-        cjk.rangeEnd=0x9FBB;
-    }
-
-    /* number of ranges of algorithmic names */
-    if(!storeOptions->storeNames) {
-        countAlgRanges=0;
-    } else if(ucdVersion>=UNI_6_0) {
-        /* Unicode 6.0 and up has 6 ranges including CJK Extension D */
-        countAlgRanges=6;
-    } else if(ucdVersion>=UNI_5_2) {
-        /* Unicode 5.2 and up has 5 ranges including CJK Extension C */
-        countAlgRanges=5;
-    } else if(ucdVersion>=UNI_3_1) {
-        /* Unicode 3.1 and up has 4 ranges including CJK Extension B */
-        countAlgRanges=4;
-    } else if(ucdVersion>=UNI_3_0) {
-        /* Unicode 3.0 has 3 ranges including CJK Extension A */
-        countAlgRanges=3;
-    } else {
-        /* Unicode 2.0 has 2 ranges including Hangul and CJK Unihan */
-        countAlgRanges=2;
-    }
-
-    if(pData!=NULL) {
-        udata_write32(pData, countAlgRanges);
-    } else {
-        size+=4;
-    }
-    if(countAlgRanges==0) {
-        return size;
-    }
-
-    /*
-     * each range:
-     * uint32_t rangeStart
-     * uint32_t rangeEnd
-     * uint8_t algorithmType
-     * uint8_t algorithmVariant
-     * uint16_t size of range data
-     * uint8_t[size] data
-     */
-
-    /* range 0: cjk extension a */
-    if(countAlgRanges>=3) {
-        if(pData!=NULL) {
-            udata_writeBlock(pData, &cjkExtA, sizeof(AlgorithmicRange));
-            udata_writeString(pData, prefix, PREFIX_LENGTH);
-            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
-            }
-        } else {
-            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
-        }
-    }
-
-    /* range 1: cjk */
-    if(pData!=NULL) {
-        udata_writeBlock(pData, &cjk, sizeof(AlgorithmicRange));
-        udata_writeString(pData, prefix, PREFIX_LENGTH);
-        if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-            udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
-        }
-    } else {
-        size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
-    }
-
-    /* range 2: hangul syllables */
-    if(pData!=NULL) {
-        udata_writeBlock(pData, &hangul, sizeof(AlgorithmicRange));
-        udata_writeBlock(pData, hangulFactors, 6);
-        udata_writeString(pData, jamo, sizeof(jamo));
-    } else {
-        size+=sizeof(AlgorithmicRange)+6+sizeof(jamo);
-    }
-
-    /* range 3: cjk extension b */
-    if(countAlgRanges>=4) {
-        if(pData!=NULL) {
-            udata_writeBlock(pData, &cjkExtB, sizeof(AlgorithmicRange));
-            udata_writeString(pData, prefix, PREFIX_LENGTH);
-            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
-            }
-        } else {
-            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
-        }
-    }
-
-    /* range 4: cjk extension c */
-    if(countAlgRanges>=5) {
-        if(pData!=NULL) {
-            udata_writeBlock(pData, &cjkExtC, sizeof(AlgorithmicRange));
-            udata_writeString(pData, prefix, PREFIX_LENGTH);
-            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
-            }
-        } else {
-            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
-        }
-    }
-
-    /* range 5: cjk extension d */
-    if(countAlgRanges>=6) {
-        if(pData!=NULL) {
-            udata_writeBlock(pData, &cjkExtD, sizeof(AlgorithmicRange));
-            udata_writeString(pData, prefix, PREFIX_LENGTH);
-            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
-            }
-        } else {
-            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
-        }
-    }
-
-    return size;
 }
 
 /* helpers ------------------------------------------------------------------ */
@@ -1419,7 +933,7 @@ findToken(uint8_t *s, int16_t length) {
 }
 
 static Word *
-findWord(char *s, int16_t length) {
+findWord(const char *s, int16_t length) {
     uint32_t i;
 
     for(i=0; i<wordCount; ++i) {
@@ -1432,7 +946,7 @@ findWord(char *s, int16_t length) {
 }
 
 static Word *
-addWord(char *s, int16_t length) {
+addWord(const char *s, int16_t length) {
     uint8_t *stringStart;
     Word *word;
 
@@ -1468,7 +982,7 @@ countWord(Word *word) {
 }
 
 static void
-addLine(uint32_t code, char *names[], int16_t lengths[], int16_t count) {
+addLine(UChar32 code, const char *names[], int16_t lengths[], int16_t count) {
     uint8_t *stringStart;
     Line *line;
     int16_t i, length;
@@ -1607,6 +1121,16 @@ allocWord(uint32_t length) {
     }
     wordBottom=bottom;
     return stringStore+bottom;
+}
+
+PropsBuilder *
+createNamesPropsBuilder(UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) { return NULL; }
+    PropsBuilder *pb=new NamesPropsBuilder(errorCode);
+    if(pb==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    }
+    return pb;
 }
 
 /*

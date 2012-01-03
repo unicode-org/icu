@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -235,8 +235,6 @@ than a script code.
 Change from UTrie to UTrie2.
 
 ----------------------------------------------------------------------------- */
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 U_NAMESPACE_USE
 
@@ -813,11 +811,11 @@ CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
 PropsBuilder *
 createCorePropsBuilder(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PropsBuilder *pw=new CorePropsBuilder(errorCode);
-    if(pw==NULL) {
+    PropsBuilder *pb=new CorePropsBuilder(errorCode);
+    if(pb==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
-    return pw;
+    return pb;
 }
 
 /*
