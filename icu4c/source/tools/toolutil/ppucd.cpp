@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ppucd.cpp
@@ -411,7 +411,7 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
 
 UBool
 PreparsedUCD::getRangeForAlgNames(UChar32 &start, UChar32 &end, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return FALSE; }
     if(lineType!=ALG_NAMES_RANGE_LINE) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
