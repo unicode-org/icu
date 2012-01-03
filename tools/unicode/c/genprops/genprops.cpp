@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,15 +29,16 @@
 #include "toolutil.h"
 #include "uoptions.h"
 
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
-
 U_NAMESPACE_USE
 
 UBool beVerbose=FALSE;
+UBool beQuiet=FALSE;
 
 PropsBuilder::PropsBuilder() {}
 PropsBuilder::~PropsBuilder() {}
 void PropsBuilder::setUnicodeVersion(const UVersionInfo) {}
+void PropsBuilder::setAlgNamesRange(UChar32, UChar32,
+                                    const char *, const char *, UErrorCode &) {}
 void PropsBuilder::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
 void PropsBuilder::build(UErrorCode &) {}
 void PropsBuilder::writeCSourceFile(const char *, UErrorCode &) {}
@@ -47,6 +48,7 @@ enum {
     HELP_H,
     HELP_QUESTION_MARK,
     VERBOSE,
+    QUIET,
     COPYRIGHT
 };
 
@@ -55,6 +57,7 @@ static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
+    UOPTION_QUIET,
     UOPTION_COPYRIGHT
 };
 
@@ -86,18 +89,21 @@ main(int argc, char* argv[]) {
             "Options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     verbose output\n"
+            "\t-q or --quiet       no output\n"
             "\t-c or --copyright   include a copyright notice\n");
         return argc<2 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     /* get the options values */
     beVerbose=options[VERBOSE].doesOccur;
+    beQuiet=options[QUIET].doesOccur;
 
     /* initialize */
     IcuToolErrorCode errorCode("genprops");
     LocalPointer<PNamesBuilder> pnamesBuilder(createPNamesBuilder(errorCode));
     LocalPointer<PropsBuilder> corePropsBuilder(createCorePropsBuilder(errorCode));
     LocalPointer<PropsBuilder> bidiPropsBuilder(createBiDiPropsBuilder(errorCode));
+    LocalPointer<PropsBuilder> namesPropsBuilder(createNamesPropsBuilder(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsBuilders - %s\n", errorCode.errorName());
         return errorCode.reset();
@@ -138,10 +144,19 @@ main(int argc, char* argv[]) {
             const UniProps *props=ppucd.getProps(newValues, errorCode);
             corePropsBuilder->setProps(*props, newValues, errorCode);
             bidiPropsBuilder->setProps(*props, newValues, errorCode);
+            namesPropsBuilder->setProps(*props, newValues, errorCode);
         } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
             corePropsBuilder->setUnicodeVersion(version);
             bidiPropsBuilder->setUnicodeVersion(version);
+            namesPropsBuilder->setUnicodeVersion(version);
+        } else if(lineType==PreparsedUCD::ALG_NAMES_RANGE_LINE) {
+            UChar32 start, end;
+            if(ppucd.getRangeForAlgNames(start, end, errorCode)) {
+                const char *type=ppucd.nextField();
+                const char *prefix=ppucd.nextField();  // NULL if type==hangul
+                namesPropsBuilder->setAlgNamesRange(start, end, type, prefix, errorCode);
+            }
         }
         if(errorCode.isFailure()) {
             fprintf(stderr,
@@ -153,6 +168,7 @@ main(int argc, char* argv[]) {
 
     corePropsBuilder->build(errorCode);
     bidiPropsBuilder->build(errorCode);
+    namesPropsBuilder->build(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
                 errorCode.errorName());
@@ -174,6 +190,7 @@ main(int argc, char* argv[]) {
     corePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     bidiPropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
     bidiPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    namesPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }

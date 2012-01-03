@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,11 +23,15 @@
 #include "ppucd.h"
 #include "unewdata.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 class PropsBuilder {
 public:
     PropsBuilder();
     virtual ~PropsBuilder();
     virtual void setUnicodeVersion(const UVersionInfo version);
+    virtual void setAlgNamesRange(UChar32 start, UChar32 end,
+                                  const char *type, const char *prefix, UErrorCode &errorCode);
     virtual void setProps(const icu::UniProps &props, const icu::UnicodeSet &newValues, UErrorCode &errorCode);
     virtual void build(UErrorCode &errorCode);
     virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
@@ -42,8 +46,10 @@ public:
 PNamesBuilder *createPNamesBuilder(UErrorCode &errorCode);
 PropsBuilder *createCorePropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createBiDiPropsBuilder(UErrorCode &errorCode);
+PropsBuilder *createNamesPropsBuilder(UErrorCode &errorCode);
 
 /* global flags */
-U_CFUNC UBool beVerbose;
+extern UBool beVerbose;
+extern UBool beQuiet;
 
 #endif

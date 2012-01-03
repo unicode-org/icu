@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2011, International Business Machines
+# Copyright (C) 2010-2012, International Business Machines
 # Corporation and others.  All Rights Reserved.
 #
 # created on: 2010jun03
@@ -18,7 +18,6 @@ include_directories(
   ${ICU_SRC_DIR}/source/tools/toolutil)
 link_directories(${ICU_INST_DIR}/lib)
 add_subdirectory(gencase)
-add_subdirectory(gennames)
 add_subdirectory(genprops)
 add_subdirectory(genuca)
 add_subdirectory(genuts46)

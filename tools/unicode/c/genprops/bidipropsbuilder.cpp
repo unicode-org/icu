@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -32,8 +32,6 @@
 #include "writesrc.h"
 #include "ubidi_props.h"
 #include "genprops.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /* Unicode bidi/shaping properties file format ---------------------------------
 
@@ -519,11 +517,11 @@ BiDiPropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
 PropsBuilder *
 createBiDiPropsBuilder(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
-    PropsBuilder *pw=new BiDiPropsBuilder(errorCode);
-    if(pw==NULL) {
+    PropsBuilder *pb=new BiDiPropsBuilder(errorCode);
+    if(pb==NULL) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
-    return pw;
+    return pb;
 }
 
 /*
