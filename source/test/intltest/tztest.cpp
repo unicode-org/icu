@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -1874,12 +1874,6 @@ static struct   {
       {"America/Anchorage", "en", TRUE,  TimeZone::SHORT, "AKDT"},
       {"America/Anchorage", "en", TRUE,  TimeZone::LONG,  "Alaska Daylight Time"},
       
-      // Southern Hemisphere, all data from meta:Australia_Western
-      {"Australia/Perth",   "en", FALSE, TimeZone::SHORT, "GMT+08:00"/*"AWST"*/},
-      {"Australia/Perth",   "en", FALSE, TimeZone::LONG,  "Australian Western Standard Time"},
-      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+09:00"/*"AWDT"*/},
-      {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
-       
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-03:00"/*"BRT"*/},
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::LONG,  "Brasilia Time"},
       {"America/Sao_Paulo",  "en", TRUE,  TimeZone::SHORT, "GMT-02:00"/*"BRST"*/},

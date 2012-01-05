@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -198,63 +198,62 @@ static const WindowsICUMap NEW_ZONE_MAP[] = {
  * ICU zone id from the first one is the preferred match.
  */
 static const WindowsICUMap ZONE_MAP[] = {
-    /* S (GMT-12:00) International Date Line West */
+    /* (UTC-12:00) International Date Line West */
     {"Etc/GMT+12",                  "Dateline"},
 
-    /* S (GMT-11:00) Midway Island, Samoa */
-    {"Pacific/Apia",                "Samoa"},
-    {"Pacific/Midway",              "Samoa"},
+    /* (UTC-11:00) Coordinated Universal Time-11 */
+    {"Etc/GMT+11",                  "UTC-11"},
+    {"Pacific/Pago_Pago",           "UTC-11"},
+    {"Pacific/Midway",              "UTC-11"},
+    {"Pacific/Niue",                "UTC-11"},
 
-    /* S (GMT-10:00) Hawaii */
+    /* (UTC-10:00) Hawaii */
     {"Pacific/Honolulu",            "Hawaiian"},
+    {"Pacific/Johnston",            "Hawaiian"},
+    {"Etc/GMT+10",                  "Hawaiian"},
+    {"Pacific/Tahiti",              "Hawaiian"},
+    {"Pacific/Fakaofo",             "Hawaiian"},
 
-    /* D (GMT-09:00) Alaska */
+    /* (UTC-09:00) Alaska */
     {"America/Anchorage",           "Alaskan"},
     {"America/Juneau",              "Alaskan"},
-    {"America/Yakutat",             "Alaskan"},
     {"America/Nome",                "Alaskan"},
+    {"America/Sitka",               "Alaskan"},
+    {"America/Yakutat",             "Alaskan"},
 
-    /* D (GMT-08:00) Pacific Time (US & Canada) */
+    /* (UTC-08:00) Baja California */
+    {"America/Santa_Isabel",        "Pacific Standard Time (Mexico)"},
+
+    /* (UTC-08:00) Pacific Time (US & Canada) */
     {"America/Los_Angeles",         "Pacific"},
-    {"America/Dawson",              "Pacific"},
     {"America/Vancouver",           "Pacific"},
+    {"America/Dawson",              "Pacific"},
     {"America/Whitehorse",          "Pacific"},
+    {"America/Tijuana",             "Pacific"},
+    {"PST8PDT",                     "Pacific"},
 
-    /* D (GMT-08:00) Tijuana, Baja California */
-    {"America/Tijuana",             "Pacific Standard Time (Mexico)"},
-
-    /* D (GMT-07:00) Mountain Time (US & Canada) */
-    {"America/Denver",              "Mountain"},
-    {"America/Boise",               "Mountain"},
-    {"America/Cambridge_Bay",       "Mountain"},
-    {"America/Edmonton",            "Mountain"},
-    {"America/Inuvik",              "Mountain"},
-    {"America/Shiprock",            "Mountain"},
-    {"America/Yellowknife",         "Mountain"},
-
-    /* S (GMT-07:00) Arizona */
+    /* (UTC-07:00) Arizona */
     {"America/Phoenix",             "US Mountain"},
+    {"America/Dawson_Creek",        "US Mountain"},
+    {"America/Hermosillo",          "US Mountain"},
+    {"Etc/GMT+7",                   "US Mountain"},
 
-    /* D (GMT-07:00) Chihuahua, La Paz, Mazatlan */
+    /* (UTC-07:00) Chihuahua, La Paz, Mazatlan */
     {"America/Chihuahua",           "Mountain Standard Time (Mexico)"},
     {"America/Mazatlan",            "Mountain Standard Time (Mexico)"},
 
-    /* D (GMT-06:00) Central Time (US & Canada) */
-    {"America/Chicago",             "Central"},
-    {"America/Indiana/Knox",        "Central"},
-    {"America/Indiana/Tell_City",   "Central"},
-    {"America/Menominee",           "Central"},
-    {"America/North_Dakota/Center", "Central"},
-    {"America/North_Dakota/New_Salem",      "Central"},
-    {"America/Rainy_River",         "Central"},
-    {"America/Rankin_Inlet",        "Central"},
-    {"America/Winnipeg",            "Central"},
+    /* (UTC-07:00) Mountain Time (US & Canada) */
+    {"America/Denver",              "Mountain"},
+    {"America/Boise",               "Mountain"},
+    {"America/Shiprock",            "Mountain"},
+    {"America/Edmonton",            "Mountain"},
+    {"America/Cambridge_Bay",       "Mountain"},
+    {"America/Inuvik",              "Mountain"},
+    {"America/Yellowknife",         "Mountain"},
+    {"America/Ojinaga",             "Mountain"},
+    {"MST7MDT",                     "Mountain"},
 
-    /* D (GMT-06:00) Guadalajara, Mexico City, Monterrey */
-    {"America/Mexico_City",         "Central Standard Time (Mexico)"},
-    {"America/Monterrey",           "Central Standard Time (Mexico)"},
-
-    /* S (GMT-06:00) Central America */
+    /* (UTC-06:00) Central America */
     {"America/Guatemala",           "Central America"},
     {"America/Belize",              "Central America"},
     {"America/Costa_Rica",          "Central America"},
@@ -262,306 +261,565 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"America/Managua",             "Central America"},
     {"America/Tegucigalpa",         "Central America"},
     {"Pacific/Galapagos",           "Central America"},
+    {"Etc/GMT+6",                   "Central America"},
 
-    /* S (GMT-06:00) Saskatchewan */
+    /* (UTC-06:00) Central Time (US & Canada) */
+    {"America/Chicago",             "Central"},
+    {"America/Indiana/Knox",        "Central"},
+    {"America/Indiana/Tell_City",   "Central"},
+    {"America/Menominee",           "Central"},
+    {"America/North_Dakota/Center", "Central"},
+    {"America/North_Dakota/New_Salem",      "Central"},
+    {"America/North_Dakota/Beulah", "Central"},
+    {"America/Winnipeg",            "Central"},
+    {"America/Rainy_River",         "Central"},
+    {"America/Resolute",            "Central"},
+    {"America/Matamoros",           "Central"},
+    {"CST6CDT",                     "Central"},
+
+    /* (UTC-06:00) Guadalajara, Mexico City, Monterrey */
+    {"America/Mexico_City",         "Central Standard Time (Mexico)"},
+    {"America/Monterrey",           "Central Standard Time (Mexico)"},
+    {"America/Bahia_Banderas",      "Central Standard Time (Mexico)"},
+    {"America/Cancun",              "Central Standard Time (Mexico)"},
+    {"America/Merida",              "Central Standard Time (Mexico)"},
+
+    /* (UTC-06:00) Saskatchewan */
     {"America/Regina",              "Canada Central"},
     {"America/Swift_Current",       "Canada Central"},
 
-    /* D (GMT-05:00) Eastern Time (US & Canada) */
-    {"America/New_York",            "Eastern"},
-    {"America/Detroit",             "Eastern"},
-    {"America/Grand_Turk",          "Eastern"},
-    {"America/Indiana/Marengo",     "Eastern"},
-    {"America/Indiana/Petersburg",  "Eastern"},
-    {"America/Indiana/Vevay",       "Eastern"},
-    {"America/Indiana/Vincennes",   "Eastern"},
-    {"America/Indiana/Winamac",     "Eastern"},
-    {"America/Indianapolis",        "Eastern"},
-    {"America/Iqaluit",             "Eastern"},
-    {"America/Kentucky/Monticello", "Eastern"},
-    {"America/Louisville",          "Eastern"},
-    {"America/Montreal",            "Eastern"},
-    {"America/Nassau",              "Eastern"},
-    {"America/Nipigon",             "Eastern"},
-    {"America/Pangnirtung",         "Eastern"},
-    {"America/Thunder_Bay",         "Eastern"},
-    {"America/Toronto",             "Eastern"},
-
-    /* S (GMT-05:00) Bogota, Lima, Quito, Rio Branco */
+    /* (UTC-05:00) Bogota, Lima, Quito, Rio Branco */
     {"America/Bogota",              "SA Pacific"},
     {"America/Lima",                "SA Pacific"},
     {"America/Guayaquil",           "SA Pacific"},
-    {"America/Rio_Branco",          "SA Pacific"},
+    {"Etc/GMT+5",                   "SA Pacific"},
+    {"America/Coral_Harbour",       "SA Pacific"},
+    {"America/Havana",              "SA Pacific"},
+    {"America/Port-au-Prince",      "SA Pacific"},
+    {"America/Jamaica",             "SA Pacific"},
+    {"America/Cayman",              "SA Pacific"},
+    {"America/Panama",              "SA Pacific"},
 
-    /* S (GMT-05:00) Indiana (East) */
-    {"Etc/GMT+5",                   "US Eastern"},
+    /* (UTC-05:00) Eastern Time (US & Canada) */
+    {"America/New_York",            "Eastern"},
+    {"America/Detroit",             "Eastern"},
+    {"America/Grand_Turk",          "Eastern"},
+    {"America/Indiana/Petersburg",  "Eastern"},
+    {"America/Indiana/Vincennes",   "Eastern"},
+    {"America/Indiana/Winamac",     "Eastern"},
+    {"America/Kentucky/Monticello", "Eastern"},
+    {"America/Louisville",          "Eastern"},
+    {"America/Nassau",              "Eastern"},
+    {"America/Toronto",             "Eastern"},
+    {"America/Iqaluit",             "Eastern"},
+    {"America/Montreal",            "Eastern"},
+    {"America/Nipigon",             "Eastern"},
+    {"America/Pangnirtung",         "Eastern"},
+    {"America/Thunder_Bay",         "Eastern"},
+    {"America/Grand_Turk",          "Eastern"},
+    {"EST5EDT",                     "Eastern"},
 
-    /* S (GMT-04:30) Caracas */
+    /* (UTC-05:00) Indiana (East) */
+    {"America/Indianapolis",        "US Eastern"},
+    {"America/Indiana/Marengo",     "US Eastern"},
+    {"America/Indiana/Vevay",       "US Eastern"},
+
+    /* (UTC-04:30) Caracas */
     {"America/Caracas",             "Venezuela"},
 
-    /* D (GMT-04:00) Atlantic Time (Canada) */
+    /* (UTC-04:00) Asuncion */
+    {"America/Asuncion",            "Paraguay"}, 
+
+    /* (UTC-04:00) Atlantic Time (Canada) */
     {"America/Halifax",             "Atlantic"},
     {"America/Glace_Bay",           "Atlantic"},
+    {"America/Goose_Bay",           "Atlantic"},
     {"America/Moncton",             "Atlantic"},
+    {"Atlantic/Bermuda",            "Atlantic"},
+    {"America/Thule",               "Atlantic"},
 
-    /* D (GMT-04:00) Santiago */
+    /* (UTC-04:00) Cuiaba */
+    {"America/Cuiaba",              "Central Brazilian"},
+    {"America/Campo_Grande",        "Central Brazilian"},
+
+    /* (UTC-04:00) Georgetown, La Paz, Manaus, San Juan */
+    {"America/La_Paz",              "SA Western"},
+    {"America/Guyana",              "SA Western"},
+    {"America/Manaus",              "SA Western"},
+    {"America/Eirunepe",            "SA Western"},
+    {"America/Porto_Velho",         "SA Western"},
+    {"America/Puerto_Rico",         "SA Western"},
+    {"America/Anguilla",            "SA Western"},
+    {"America/Antigua",             "SA Western"},
+    {"America/Aruba",               "SA Western"},
+    {"America/Barbados",            "SA Western"},
+    {"America/St_Barthelemy",       "SA Western"},
+    {"America/Blanc-Sablon",        "SA Western"},
+    {"America/Curacao",             "SA Western"},
+    {"America/Dominica",            "SA Western"},
+    {"America/Santo_Domingo",       "SA Western"},
+    {"America/Grenada",             "SA Western"},
+    {"America/Guadeloupe",          "SA Western"},
+    {"America/St_Lucia",            "SA Western"},
+    {"America/St_Kitts",            "SA Western"},
+    {"America/Marigot",             "SA Western"},
+    {"America/Martinique",          "SA Western"},
+    {"America/Montserrat",          "SA Western"},
+    {"America/Port_of_Spain",       "SA Western"},
+    {"America/St_Vincent",          "SA Western"},
+    {"America/Tortola",             "SA Western"},
+    {"America/St_Thomas",           "SA Western"},
+    {"Etc/GMT+4",                   "SA Western"},
+
+    /* (UTC-04:00) Santiago */
     {"America/Santiago",            "Pacific SA"},
+    {"Antarctica/Palmer",           "Pacific SA"},
 
-    /* D (GMT-04:00) Manaus */ /* MS bug - DST is not used */
-    {"America/Manaus",              "Central Brazilian"}, 
-
-    /* S (GMT-04:00) La Paz */
-    {"America/La_Paz",              "SA Western"}, 
-
-    /* D (GMT-03:30) Newfoundland */
+    /* (UTC-03:30) Newfoundland */
     {"America/St_Johns",            "Newfoundland"},
 
-    /* D (GMT-03:00) Brasilia */
+    /* (UTC-03:00) Brasilia */
     {"America/Sao_Paulo",           "E. South America"},
 
-    /* D (GMT-03:00) Buenos Aires */
-    {"America/Buenos_Aires",        "Argentina"}, 
+    /* (UTC-03:00) Buenos Aires */
+    {"America/Buenos_Aires",        "Argentina"},
+    {"America/Argentina/La_Rioja",  "Argentina"},
+    {"America/Argentina/Rio_Gallegos",  "Argentina"},
+    {"America/Argentina/Salta",     "Argentina"},
+    {"America/Argentina/San_Juan",  "Argentina"},
+    {"America/Argentina/San_Luis",  "Argentina"},
+    {"America/Argentina/Tucuman",   "Argentina"},
+    {"America/Argentina/Ushuaia",   "Argentina"},
+    {"America/Catamarca",           "Argentina"},
+    {"America/Cordoba",             "Argentina"},
+    {"America/Jujuy",               "Argentina"},
+    {"America/Mendoza",             "Argentina"},
 
-    /* D (GMT-03:00) Greenland */
+    /* (UTC-03:00) Cayenne, Fortaleza */
+    {"America/Cayenne",             "SA Eastern"},
+    {"America/Fortaleza",           "SA Eastern"},
+    {"America/Araguaina",           "SA Eastern"},
+    {"America/Belem",               "SA Eastern"},
+    {"America/Maceio",              "SA Eastern"},
+    {"America/Recife",              "SA Eastern"},
+    {"America/Santarem",            "SA Eastern"},
+    {"America/Paramaribo",          "SA Eastern"},
+    {"Etc/GMT+3",                   "SA Eastern"},
+    {"Antarctica/Rothera",          "SA Eastern"},
+    {"Atlantic/Stanley",            "SA Eastern"},
+
+    /* (UTC-03:00) Greenland */
     {"America/Godthab",             "Greenland"},
 
-    /* D (GMT-03:00) Montevideo */
+    /* (UTC-03:00) Montevideo */
     {"America/Montevideo",          "Montevideo"},
 
-    /* S (GMT-03:00) Georgetown */ /* MS bug - Georgetown uses GMT-04:00 */
-    {"Etc/GMT+3",                   "SA Eastern"}, 
+    /* (UTC-03:00) Salvador */
+    {"America/Bahia",               "Bahia"},
 
-    /* D (GMT-02:00) Mid-Atlantic */ /* MS bug - There is no such zone using GMT-02:00 with DST */
-    {"America/South_Georgia",       "Mid-Atlantic"},
-    {"America/Noronha",             "Mid-Atlantic"},
+    /* (UTC-02:00) Coordinated Universal Time-02 */
+    {"Etc/GMT+2",                   "UTC-02"},
+    {"America/Noronha",             "UTC-02"},
+    {"Atlantic/South_Georgia",      "UTC-02"},
 
-    /* D (GMT-01:00) Azores */
+    /* (GMT-02:00) Mid-Atlantic */ /* MS bug - There is no such zone using GMT-02:00 with DST */
+
+    /* (GMT-01:00) Azores */
     {"Atlantic/Azores",             "Azores"},
+    {"America/Scoresbysund",        "Azores"},
 
-    /* S (GMT-01:00) Cape Verde Is. */
+    /* (GMT-01:00) Cape Verde Is. */
     {"Atlantic/Cape_Verde",         "Cape Verde"},
+    {"Etc/GMT+1",                   "Cape Verde"},
 
-    /* D (GMT) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London */
+    /* (UTC) Casablanca */
+    {"Africa/Casablanca",           "Morocco"},
+
+    /* (UTC) Coordinated Universal Time */
+    {"Etc/GMT",                     "UTC"},
+    {"America/Danmarkshavn",        "UTC"},
+
+    /* (UTC) Dublin, Edinburgh, Lisbon, London */
     {"Europe/London",               "GMT"},
+    {"Atlantic/Canary",             "GMT"},
+    {"Europe/Guernsey",             "GMT"},
+    {"Atlantic/Faeroe",             "GMT"},
     {"Europe/Dublin",               "GMT"},
+    {"Europe/Isle_of_Man",          "GMT"},
+    {"Europe/Jersey",               "GMT"},
     {"Europe/Lisbon",               "GMT"},
+    {"Atlantic/Madeira",            "GMT"},
 
-    /* S (GMT) Casablanca, Monrovia, Reykjavik */
-    {"Africa/Casablanca",           "Greenwich"},
-    {"Africa/Monrovia",             "Greenwich"},
+    /* (UTC) Monrovia, Reykjavik */
     {"Atlantic/Reykjavik",          "Greenwich"},
+    {"Africa/Monrovia",             "Greenwich"},
+    {"Africa/Abidjan",              "Greenwich"},
+    {"Africa/Ouagadougou",          "Greenwich"},
+    {"Africa/Accra",                "Greenwich"},
+    {"Africa/Banjul",               "Greenwich"},
+    {"Africa/Conakry",              "Greenwich"},
+    {"Africa/Bissau",               "Greenwich"},
+    {"Africa/Bamako",               "Greenwich"},
+    {"Africa/Nouakchott",           "Greenwich"},
+    {"Atlantic/St_Helena",          "Greenwich"},
+    {"Africa/Freetown",             "Greenwich"},
+    {"Africa/Dakar",                "Greenwich"},
+    {"Africa/Sao_Tome",             "Greenwich"},
+    {"Africa/Lome",                 "Greenwich"},
+    {"Africa/El_Aaiun",             "Greenwich"},
 
-    /* D (GMT+01:00) Brussels, Copenhagen, Madrid, Paris */
-    {"Europe/Paris",                "Romance"},
-    {"Europe/Brussels",             "Romance"},
-    {"Europe/Copenhagen",           "Romance"},
-    {"Europe/Madrid",               "Romance"},
-
-    /* D (GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna */
+    /* (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna */
     {"Europe/Berlin",               "W. Europe"},
     {"Europe/Amsterdam",            "W. Europe"},
     {"Europe/Zurich",               "W. Europe"},
     {"Europe/Rome",                 "W. Europe"},
+    {"Europe/San_Marino",           "W. Europe"},
+    {"Europe/Vatican",              "W. Europe"},
     {"Europe/Stockholm",            "W. Europe"},
     {"Europe/Vienna",               "W. Europe"},
+    {"Europe/Luxembourg",           "W. Europe"},
+    {"Europe/Monaco",               "W. Europe"},
+    {"Europe/Oslo",                 "W. Europe"},
+    {"Europe/Andorra",              "W. Europe"},
+    {"Europe/Gibraltar",            "W. Europe"},
+    {"Europe/Malta",                "W. Europe"},
+    {"Europe/Vaduz",                "W. Europe"},
+    {"Arctic/Longyearbyen",         "W. Europe"},
 
-    /* D (GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague */
-    {"Europe/Budapest",             "Central Europe"}, 
-    {"Europe/Belgrade",             "Central Europe"}, 
-    {"Europe/Bratislava",           "Central Europe"}, 
-    {"Europe/Ljubljana",            "Central Europe"}, 
-    {"Europe/Prague",               "Central Europe"}, 
+    /* (UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague */
+    {"Europe/Budapest",             "Central Europe"},
+    {"Europe/Belgrade",             "Central Europe"},
+    {"Europe/Podgorica",            "Central Europe"},
+    {"Europe/Bratislava",           "Central Europe"},
+    {"Europe/Ljubljana",            "Central Europe"},
+    {"Europe/Prague",               "Central Europe"},
+    {"Europe/Tirane",               "Central Europe"},
 
-    /* D (GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb */
+    /* (UTC+01:00) Brussels, Copenhagen, Madrid, Paris */
+    {"Europe/Paris",                "Romance"},
+    {"Europe/Brussels",             "Romance"},
+    {"Europe/Copenhagen",           "Romance"},
+    {"Europe/Madrid",               "Romance"},
+    {"Africa/Ceuta",                "Romance"},
+
+    /* (UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb */
     {"Eurpoe/Warsaw",               "Central European"},
     {"Eurpoe/Sarajevo",             "Central European"},
     {"Eurpoe/Skopje",               "Central European"},
     {"Eurpoe/Zagreb",               "Central European"},
 
-    /* S (GMT+01:00) West Central Africa */
+    /* (UTC+01:00) West Central Africa */
     {"Africa/Lagos",                "W. Central Africa"},
-    {"Africa/Luanda",               "W. Central Africa"},
-    {"Africa/Porto-Novo",           "W. Central Africa"},
-    {"Africa/Douala",               "W. Central Africa"},
+    {"Africa/Algiers",              "W. Central Africa"},
     {"Africa/Bangui",               "W. Central Africa"},
-    {"Africa/Ndjamena",             "W. Central Africa"},
-    {"Africa/Kinshasa",             "W. Central Africa"},
     {"Africa/Brazzaville",          "W. Central Africa"},
-    {"Africa/Malabo",               "W. Central Africa"},
+    {"Africa/Douala",               "W. Central Africa"},
+    {"Africa/Kinshasa",             "W. Central Africa"},
     {"Africa/Libreville",           "W. Central Africa"},
+    {"Africa/Luanda",               "W. Central Africa"},
+    {"Africa/Malabo",               "W. Central Africa"},
+    {"Africa/Ndjamena",             "W. Central Africa"},
     {"Africa/Niamey",               "W. Central Africa"},
+    {"Africa/Porto-Novo",           "W. Central Africa"},
+    {"Etc/GMT-1",                   "W. Central Africa"},
+    {"Africa/Tunis",                "W. Central Africa"},
 
-    /* D (GMT+02:00) Athens, Bucharest, Istanbul */
-    {"Europe/Istanbul",             "GTB"},
+    /* (UTC+01:00) Windhoek */
+    {"Africa/Windhoek",             "Namibia"},
+
+    /* (UTC+02:00) Amman */
+    {"Asia/Amman",                  "Jordan"},
+
+    /* (UTC+02:00) Athens, Bucharest */
     {"Europe/Athens",               "GTB"},
     {"Europe/Bucharest",            "GTB"},
 
-    /* D (GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius */
+    /* (UTC+02:00) Beirut */
+    {"Asia/Beirut",                 "Middle East"},
+
+    /* (UTC+02:00) Cairo */
+    {"Africa/Cairo",                "Egypt"},
+    {"Asia/Gaza",                   "Egypt"},
+    {"Asia/Hebron",                 "Egypt"},
+
+    /* (UTC+02:00) Damascus */
+    {"Asia/Damascus",               "Syria"},
+
+    /* (UTC+02:00) Harare, Pretoria */
+    {"Africa/Johannesburg",         "South Africa"},
+    {"Africa/Harare",               "South Africa"},
+    {"Africa/Blantyre",             "South Africa"},
+    {"Africa/Bujumbura",            "South Africa"},
+    {"Africa/Gaborone",             "South Africa"},
+    {"Africa/Kigali",               "South Africa"},
+    {"Africa/Lubumbashi",           "South Africa"},
+    {"Africa/Lusaka",               "South Africa"},
+    {"Africa/Maputo",               "South Africa"},
+    {"Africa/Maseru",               "South Africa"},
+    {"Africa/Mbabane",              "South Africa"},
+    {"Africa/Mbabane",              "South Africa"},
+    {"Etc/GMT-2",                   "South Africa"},
+    {"Africa/Tripoli",              "South Africa"},
+    {"Europe/Simferopol",           "South Africa"},
+
+    /* (UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius */
     {"Europe/Kiev",                 "FLE"},
+    {"Europe/Uzhgorod",             "FLE"},
+    {"Europe/Zaporozhye",           "FLE"},
     {"Europe/Helsinki",             "FLE"},
+    {"Europe/Mariehamn",            "FLE"},
     {"Europe/Riga",                 "FLE"},
     {"Europe/Sofia",                "FLE"},
     {"Europe/Tallinn",              "FLE"},
     {"Europe/Vilnius",              "FLE"},
 
-    /* D (GMT+02:00) Jerusalem */
+    /* (UTC+02:00) Istanbul */
+    {"Europe/Istanbul",             "Turkey"},
+
+    /* (UTC+02:00) Jerusalem */
     {"Asia/Jerusalem",              "Israel"},
 
-    /* D (GMT+02:00) Minsk */
-    {"Europe/Minsk",                "E. Europe"}, 
+    /* (UTC+02:00) Nicosia */
+    {"Europe/Nicosia",              "E. Europe"},
 
-    /* D (GMT+02:00) Cairo */
-    {"Africa/Cairo",                "Egypt"},
-
-    /* D (GMT+02:00) Amman */
-    {"Asia/Amman",                  "Jordan"},
-
-    /* D (GMT+02:00) Beirut */
-    {"Asia/Beirut",                 "Middle East"},
-
-    /* D (GMT+02:00) Windhoek */
-    {"Africa/Windhoek",             "Namibia"},
-
-    /* S (GMT+02:00) Harare, Pretoria */
-    {"Africa/Johannesburg",         "South Africa"},
-    {"Africa/Harare",               "South Africa"},
-
-    /* D (GMT+03:00) Moscow, St. Petersburg, Volgograd */
-    {"Europe/Moscow",               "Russian"},
-    {"Europe/Volgograd",            "Russian"},
-
-    /* D (GMT+03:00) Baghdad */
+    /* (UTC+03:00) Baghdad */
     {"Asia/Baghdad",                "Arabic"},
 
-    /* S (GMT+03:00) Kuwait, Riyadh */
+    /* (UTC+03:00) Kaliningrad, Minsk */
+    {"Europe/Kaliningrad",          "Kaliningrad"},
+    {"Europe/Minsk",                "Kaliningrad"},
+
+    /* (UTC+03:00) Kuwait, Riyadh */
     {"Asia/Riyadh",                 "Arab"},
     {"Asia/Kuwait",                 "Arab"},
+    {"Asia/Aden",                   "Arab"},
+    {"Asia/Bahrain",                "Arab"},
+    {"Asia/Qatar",                  "Arab"},
 
-    /* S (GMT+03:00) Nairobi */
+    /* (GMT+03:00) Nairobi */
     {"Africa/Nairobi",              "E. Africa"},
+    {"Africa/Addis_Ababa",          "E. Africa"},
+    {"Africa/Asmera",               "E. Africa"},
+    {"Africa/Dar_es_Salaam",        "E. Africa"},
+    {"Africa/Djibouti",             "E. Africa"},
+    {"Africa/Juba",                 "E. Africa"},
+    {"Africa/Kampala",              "E. Africa"},
+    {"Africa/Khartoum",             "E. Africa"},
+    {"Africa/Mogadishu",            "E. Africa"},
+    {"Africa/Antananarivo",         "E. Africa"},
+    {"Africa/Comoro",               "E. Africa"},
+    {"Africa/Mayotte",              "E. Africa"},
+    {"Etc/GMT-3",                   "E. Africa"},
+    {"Antarctica/Syowa",            "E. Africa"},
 
-    /* S (GMT+03:00) Tbilisi */ /* MS bug - Tbilisi uses GMT+04:00 */
-    {"Etc/GMT-3",                   "Georgian"},
-
-    /* D (GMT+03:30) Tehran */
+    /* (UTC+03:30) Tehran */
     {"Asia/Tehran",                 "Iran"},
 
-    /* D (GMT+04:00) Yerevan */
-    {"Asia/Yerevan",                "Armenian"}, 
-
-    /* D (GMT+04:00) Baku */
-    {"Asia/Baku",                   "Azerbaijan"}, 
-
-    /* S (GMT+04:00) Abu Dhabi, Muscat */
+    /* (UTC+04:00) Abu Dhabi, Muscat */
     {"Asia/Dubai",                  "Arabian"},
     {"Asia/Muscat",                 "Arabian"},
+    {"Etc/GMT-4",                   "Arabian"},
 
-    /* S (GMT+04:00) Caucasus Standard Time */
-    {"Asia/Tbilisi",                "Caucasus"},
+    /* (UTC+04:00) Baku */
+    {"Asia/Baku",                   "Azerbaijan"}, 
 
-    /* S (GMT+04:30) Kabul */
+    /* (UTC+04:00) Moscow, St. Petersburg, Volgograd */
+    {"Europe/Moscow",               "Russian"},
+    {"Europe/Volgograd",            "Russian"},
+    {"Europe/Samara",               "Russian"},
+
+    /* (UTC+04:00) Port Louis */
+    {"Indian/Mauritius",            "Mauritius"},
+    {"Indian/Mahe",                 "Mauritius"},
+    {"Indian/Reunion",              "Mauritius"},
+
+    /* (UTC+04:00) Tbilisi */
+    {"Asia/Tbilisi",                "Georgian"},
+
+    /* (UTC+04:00) Yerevan */
+    {"Asia/Yerevan",                "Caucasus"}, 
+
+    /* (UTC+04:30) Kabul */
     {"Asia/Kabul",                  "Afghanistan"},
 
-    /* D (GMT+05:00) Ekaterinburg */
-    {"Asia/Yekaterinburg",          "Ekaterinburg"},
+    /* (UTC+05:00) Islamabad, Karachi */
+    {"Asia/Karachi",                "Pakistan"},
 
-    /* S (GMT+05:00) Islamabad, Karachi, Tashkent */
-    {"Asia/Karachi",                "West Asia"},
+    /* (UTC+05:00) Tashkent */
     {"Asia/Tashkent",               "West Asia"},
+    {"Asia/Samarkand",              "West Asia"},
+    {"Asia/Aqtau",                  "West Asia"},
+    {"Asia/Aqtobe",                 "West Asia"},
+    {"Asia/Oral",                   "West Asia"},
+    {"Asia/Ashgabat",               "West Asia"},
+    {"Asia/Dushanbe",               "West Asia"},
+    {"Etc/GMT-5",                   "West Asia"},
+    {"Antarctica/Mawson",           "West Asia"},
+    {"Indian/Kerguelen",            "West Asia"},
+    {"Indian/Maldives",             "West Asia"},
 
-    /* S (GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi */
+    /* (UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi */
     {"Asia/Calcutta",               "India"}, 
 
-    /* S (GMT+05:30) Sri Jayawardenepura */
+    /* (UTC+05:30) Sri Jayawardenepura */
     {"Asia/Colombo",                "Sri Lanka"}, 
 
-    /* S (GMT+05:45) Kathmandu */
+    /* (UTC+05:45) Kathmandu */
     {"Asia/Katmandu",               "Nepal"},
 
-    /* D (GMT+06:00) Almaty, Novosibirsk */ /* No DST in Almaty */
-    {"Asia/Novosibirsk",            "N. Central Asia"}, 
-
-    /* S (GMT+06:00) Astana, Dhaka */
-    {"Asia/Dhaka",                  "Central Asia"},
+    /* (UTC+06:00) Astana */
     {"Asia/Almaty",                 "Central Asia"},
     {"Asia/Qyzylorda",              "Central Asia"},
+    {"Asia/Bishkek",                "Central Asia"},
+    {"Etc/GMT-6",                   "Central Asia"},
+    {"Antarctica/Vostok",           "Central Asia"},
+    {"Indian/Chagos",               "Central Asia"},
 
-    /* S (GMT+06:30) Yangon (Rangoon) */
+    /* (UTC+06:00) Dhaka */
+    {"Asia/Dhaka",                  "Bangladesh"},
+    {"Asia/Thimphu",                "Bangladesh"},
+
+    /* (UTC+06:00) Ekaterinburg */
+    {"Asia/Yekaterinburg",          "Ekaterinburg"},
+
+    /* (UTC+06:30) Yangon (Rangoon) */
     {"Asia/Rangoon",                "Myanmar"},
+    {"Indian/Cocos",                "Myanmar"},
 
-    /* D (GMT+07:00) Krasnoyarsk */
-    {"Asia/Krasnoyarsk",            "North Asia"},
-
-    /* S (GMT+07:00) Bangkok, Hanoi, Jakarta */
+    /* (UTC+07:00) Bangkok, Hanoi, Jakarta */
     {"Asia/Bangkok",                "SE Asia"},
-    {"Asia/Saigon",                 "SE Asia"},
     {"Asia/Jakarta",                "SE Asia"},
+    {"Asia/Pontianak",              "SE Asia"},
+    {"Asia/Saigon",                 "SE Asia"},
+    {"Asia/Phnom_Penh",             "SE Asia"},
+    {"Asia/Vientiane",              "SE Asia"},
+    {"Etc/GMT-7",                   "SE Asia"},
+    {"Antarctica/Davis",            "SE Asia"},
+    {"Asia/Hovd",                   "SE Asia"},
+    {"Indian/Christmas",            "SE Asia"},
 
-    /* D (GMT+08:00) Irkutsk, Ulaan Bataar */ /* Ulaan Bataar does not use DST */
-    {"Asia/Irkutsk",                "North Asia East"},
+    /* (UTC+07:00) Novosibirsk */
+    {"Asia/Novosibirsk",            "N. Central Asia"},
+    {"Asia/Novokuznetsk",           "N. Central Asia"},
+    {"Asia/Omsk",                   "N. Central Asia"},
 
-    /* D (GMT+08:00) Perth */
-    {"Australia/Perth",             "W. Australia"},
-
-    /* S (GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi */
+    /* (UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi */
     {"Asia/Shanghai",               "China"},
     {"Asia/Chongqing",              "China"},
     {"Asia/Hong_Kong",              "China"},
     {"Asia/Urumqi",                 "China"},
+    {"Asia/Harbin",                 "China"},
+    {"Asia/Kashgar",                "China"},
+    {"Asia/Macau",                  "China"},
 
-    /* S (GMT+08:00) Taipei */
-    {"Asia/Taipei",                 "Taipei"},
+    /* (UTC+08:00) Krasnoyarsk */
+    {"Asia/Krasnoyarsk",            "North Asia"},
 
-    /* S (GMT+08:00) Kuala Lumpur, Singapore */
+    /* (UTC+08:00) Kuala Lumpur, Singapore */
     {"Asia/Singapore",              "Singapore"},
     {"Asia/Kuala_Lumpur",           "Singapore"},
+    {"Asia/Kuching",                "Singapore"},
+    {"Asia/Makassar",               "Singapore"},
+    {"Asia/Manila",                 "Singapore"},
+    {"Asia/Brunei",                 "Singapore"},
+    {"Etc/GMT-8",                   "Singapore"},
 
-    /* D (GMT+09:00) Yakutsk */
-    {"Asia/Yakutsk",                "Yakutsk"}, 
+    /* (UTC+08:00) Perth */
+    {"Australia/Perth",             "W. Australia"},
 
-    /* S (GMT+09:00) Osaka, Sapporo, Tokyo */
+    /* (UTC+08:00) Taipei */
+    {"Asia/Taipei",                 "Taipei"},
+
+    /* (UTC+08:00) Ulaanbaatar */
+    {"Asia/Ulaanbaatar",            "Ulaanbaatar"},
+    {"Asia/Choibalsan",             "Ulaanbaatar"},
+
+    /* (UTC+09:00) Irkutsk */
+    {"Asia/Irkutsk",                "North Asia East"},
+
+    /* (UTC+09:00) Osaka, Sapporo, Tokyo */
     {"Asia/Tokyo",                  "Tokyo"},
+    {"Etc/GMT-9",                   "Tokyo"},
+    {"Asia/Dili",                   "Tokyo"},
+    {"Asia/Jayapura",               "Tokyo"},
+    {"Pacific/Palau",               "Tokyo"},
 
-    /* S (GMT+09:00) Seoul */
+    /* (UTC+09:00) Seoul */
     {"Asia/Seoul",                  "Korea"},
 
-    /* D (GMT+09:30) Adelaide */
+    /* (UTC+09:30) Adelaide */
     {"Australia/Adelaide",          "Cen. Australia"},
+    {"Australia/Broken_Hill",       "Cen. Australia"},
 
-    /* S (GMT+09:30) Darwin */
+    /* (UTC+09:30) Darwin */
     {"Australia/Darwin",            "AUS Central"},
 
-    /* D (GMT+10:00) Canberra, Melbourne, Sydney */
+    /* (UTC+10:00) Brisbane */
+    {"Australia/Brisbane",          "E. Australia"},
+    {"Australia/Lindeman",          "E. Australia"},
+
+    /* (UTC+10:00) Canberra, Melbourne, Sydney */
     {"Australia/Sydney",            "AUS Eastern"},
     {"Australia/Melbourne",         "AUS Eastern"},
 
-    /* D (GMT+10:00) Hobart */
-    {"Australia/Hobart",            "Tasmania"},
-
-    /* D (GMT+10:00) Vladivostok */
-    {"Asia/Vladivostok",            "Vladivostok"},
-
-    /* S (GMT+10:00) Brisbane */
-    {"Australia/Brisbane",          "E. Australia"},
-
-    /* S (GMT+10:00) Guam, Port Moresby */
+    /* (UTC+10:00) Guam, Port Moresby */
     {"Pacific/Port_Moresby",        "West Pacific"},
     {"Pacific/Guam",                "West Pacific"},
+    {"Pacific/Saipan",              "West Pacific"},
+    {"Pacific/Truk",                "West Pacific"},
+    {"Etc/GMT-10",                  "West Pacific"},
+    {"Antarctica/DumontDUrville",   "West Pacific"},
 
-    /* S (GMT+11:00) Magadan, Solomon Is., New Caledonia */ /* Magadan uses DST */
+    /* (UTC+10:00) Hobart */
+    {"Australia/Hobart",            "Tasmania"},
+    {"Australia/Currie",            "Tasmania"},
+
+    /* (UTC+10:00) Yakutsk */
+    {"Asia/Yakutsk",                "Yakutsk"}, 
+
+    /* (UTC+11:00) Solomon Is., New Caledonia */
     {"Pacific/Guadalcanal",         "Central Pacific"},
     {"Pacific/Noumea",              "Central Pacific"},
+    {"Pacific/Efate",               "Central Pacific"},
+    {"Pacific/Kosrae",              "Central Pacific"},
+    {"Pacific/Ponape",              "Central Pacific"},
+    {"Etc/GMT-11",                  "Central Pacific"},
+    {"Antarctica/Macquarie",        "Central Pacific"},
 
-    /* D (GMT+12:00) Auckland, Wellington */
+    /* (UTC+11:00) Vladivostok */
+    {"Asia/Vladivostok",            "Vladivostok"},
+    {"Asia/Sakhalin",               "Vladivostok"},
+
+    /* (UTC+12:00) Auckland, Wellington */
     {"Pacific/Auckland",            "New Zealand"},
+    {"Antarctica/McMurdo",          "New Zealand"},
+    {"Antarctica/South_Pole",       "New Zealand"},
 
-    /* S (GMT+12:00) Fiji, Kamchatka, Marshall Is. */
+    /* (UTC+12:00) Coordinated Universal Time+12 */
+    {"Etc/GMT-12",                  "UTC+12"},
+    {"Pacific/Funafuti",            "UTC+12"},
+    {"Pacific/Kwajalein",           "UTC+12"},
+    {"Pacific/Majuro",              "UTC+12"},
+    {"Pacific/Nauru",               "UTC+12"},
+    {"Pacific/Tarawa",              "UTC+12"},
+    {"Pacific/Wake",                "UTC+12"},
+    {"Pacific/Wallis",              "UTC+12"},
+
+    /* (UTC+12:00) Fiji */
     {"Pacific/Fiji",                "Fiji"},
-    {"Pacific/Majuro",              "Fiji"},
-    {"Pacific/Kwajalein",           "Fiji"},
 
-    /* S (GMT+13:00) Nuku'alofa */
+    /* (UTC+12:00) Magadan */
+    {"Asia/Magadan",                "Magadan"},
+    {"Asia/Anadyr",                 "Magadan"},
+    {"Asia/Kamchatka",              "Magadan"},
+
+    /* (UTC+13:00) Nuku'alofa */
     {"Pacific/Tongatapu",           "Tonga"},
+    {"Pacific/Enderbury",           "Tonga"},
+    {"Etc/GMT-13",                  "Tonga"},
+
+    /* (UTC+13:00) Samoa */
+    {"Pacific/Apia",                "Samoa"},
 
     NULL,                           NULL
 };
