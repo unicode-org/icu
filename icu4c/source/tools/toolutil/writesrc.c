@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2011, International Business Machines
+*   Copyright (C) 2005-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -71,22 +71,8 @@ usrc_createWithHeader(const char *path, const char *filename,
 }
 
 U_CAPI FILE * U_EXPORT2
-usrc_create(const char *path, const char *filename) {
-    const char *header=
-        "/*\n"
-        " * Copyright (C) 1999-%s, International Business Machines\n"
-        " * Corporation and others.  All Rights Reserved.\n"
-        " *\n"
-        " * file name: %s\n"
-        " *\n"
-        " * machine-generated on: %s\n"
-        " */\n\n";
-    return usrc_createWithHeader(path, filename, NULL, header);
-}
-
-U_CAPI FILE * U_EXPORT2
-usrc_createFromGenerator(const char *path, const char *filename, const char *generator) {
-    const char *header=
+usrc_create(const char *path, const char *filename, const char *generator) {
+    static const char *header=
         "/*\n"
         " * Copyright (C) 1999-%s, International Business Machines\n"
         " * Corporation and others.  All Rights Reserved.\n"
@@ -100,7 +86,7 @@ usrc_createFromGenerator(const char *path, const char *filename, const char *gen
 
 U_CAPI FILE * U_EXPORT2
 usrc_createTextData(const char *path, const char *filename, const char *generator) {
-    const char *header=
+    static const char *header=
         "# Copyright (C) 1999-%s, International Business Machines\n"
         "# Corporation and others.  All Rights Reserved.\n"
         "#\n"
