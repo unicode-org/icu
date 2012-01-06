@@ -24,7 +24,9 @@
 /** Additions to the uchar.h enum UProperty. */
 enum {
     /** Name_Alias */
-    PPUCD_NAME_ALIAS=UCHAR_STRING_LIMIT
+    PPUCD_NAME_ALIAS=UCHAR_STRING_LIMIT,
+    PPUCD_CONDITIONAL_CASE_MAPPINGS,
+    PPUCD_TURKIC_CASE_FOLDING
 };
 
 U_NAMESPACE_BEGIN
@@ -47,11 +49,12 @@ struct U_TOOLUTIL_API UniProps {
     int32_t intProps[UCHAR_INT_LIMIT-UCHAR_INT_START];
     UVersionInfo age;
     UChar32 bmg;
+    UChar32 scf, slc, stc, suc;
     int32_t digitValue;
     const char *numericValue;
     const char *name;
     const char *nameAlias;
-    UnicodeString cf;
+    UnicodeString cf, lc, tc, uc;
     UnicodeSet scx;
 };
 
