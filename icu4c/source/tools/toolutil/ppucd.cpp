@@ -42,6 +42,7 @@ PropertyNames::getPropertyValueEnum(int32_t property, const char *name) const {
 UniProps::UniProps()
         : start(U_SENTINEL), end(U_SENTINEL),
           bmg(U_SENTINEL),
+          scf(U_SENTINEL), slc(U_SENTINEL), stc(U_SENTINEL), suc(U_SENTINEL),
           digitValue(-1), numericValue(NULL),
           name(NULL), nameAlias(NULL) {
     memset(binProps, 0, sizeof(binProps));
@@ -258,7 +259,9 @@ static const struct {
     const char *name;
     int32_t prop;
 } ppucdProperties[]={
-    { "Name_Alias", PPUCD_NAME_ALIAS }
+    { "Name_Alias", PPUCD_NAME_ALIAS },
+    { "Conditional_Case_Mappings", PPUCD_CONDITIONAL_CASE_MAPPINGS },
+    { "Turkic_Case_Folding", PPUCD_TURKIC_CASE_FOLDING }
 };
 
 // Returns TRUE for "ok to continue parsing fields".
@@ -345,20 +348,32 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
         case UCHAR_BIDI_MIRRORING_GLYPH:
             props.bmg=U_SENTINEL;
             break;
+        case UCHAR_SIMPLE_CASE_FOLDING:
+            props.scf=U_SENTINEL;
+            break;
+        case UCHAR_SIMPLE_LOWERCASE_MAPPING:
+            props.slc=U_SENTINEL;
+            break;
+        case UCHAR_SIMPLE_TITLECASE_MAPPING:
+            props.stc=U_SENTINEL;
+            break;
+        case UCHAR_SIMPLE_UPPERCASE_MAPPING:
+            props.suc=U_SENTINEL;
+            break;
         case UCHAR_CASE_FOLDING:
             props.cf.remove();
             break;
+        case UCHAR_LOWERCASE_MAPPING:
+            props.lc.remove();
+            break;
+        case UCHAR_TITLECASE_MAPPING:
+            props.tc.remove();
+            break;
+        case UCHAR_UPPERCASE_MAPPING:
+            props.uc.remove();
+            break;
         case UCHAR_SCRIPT_EXTENSIONS:
             props.scx.clear();
-            break;
-        case UCHAR_LOWERCASE_MAPPING:
-        case UCHAR_SIMPLE_CASE_FOLDING:
-        case UCHAR_SIMPLE_LOWERCASE_MAPPING:
-        case UCHAR_SIMPLE_TITLECASE_MAPPING:
-        case UCHAR_SIMPLE_UPPERCASE_MAPPING:
-        case UCHAR_TITLECASE_MAPPING:
-        case UCHAR_UPPERCASE_MAPPING:
-            // Ignore unhandled properties.
             break;
         default:
             fprintf(stderr,
@@ -387,11 +402,36 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
         case UCHAR_BIDI_MIRRORING_GLYPH:
             props.bmg=parseCodePoint(v, errorCode);
             break;
+        case UCHAR_SIMPLE_CASE_FOLDING:
+            props.scf=parseCodePoint(v, errorCode);
+            break;
+        case UCHAR_SIMPLE_LOWERCASE_MAPPING:
+            props.slc=parseCodePoint(v, errorCode);
+            break;
+        case UCHAR_SIMPLE_TITLECASE_MAPPING:
+            props.stc=parseCodePoint(v, errorCode);
+            break;
+        case UCHAR_SIMPLE_UPPERCASE_MAPPING:
+            props.suc=parseCodePoint(v, errorCode);
+            break;
         case UCHAR_CASE_FOLDING:
             parseString(v, props.cf, errorCode);
             break;
+        case UCHAR_LOWERCASE_MAPPING:
+            parseString(v, props.lc, errorCode);
+            break;
+        case UCHAR_TITLECASE_MAPPING:
+            parseString(v, props.tc, errorCode);
+            break;
+        case UCHAR_UPPERCASE_MAPPING:
+            parseString(v, props.uc, errorCode);
+            break;
         case PPUCD_NAME_ALIAS:
             props.nameAlias=v;
+            break;
+        case PPUCD_CONDITIONAL_CASE_MAPPINGS:
+        case PPUCD_TURKIC_CASE_FOLDING:
+            // No need to parse their values: They are hardcoded in the runtime library.
             break;
         case UCHAR_SCRIPT_EXTENSIONS:
             parseScriptExtensions(v, props.scx, errorCode);
