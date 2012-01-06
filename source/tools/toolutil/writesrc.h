@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2011, International Business Machines
+*   Copyright (C) 2005-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,17 +25,10 @@
 
 /**
  * Creates a source text file and writes a header comment with the ICU copyright.
- * Writes a C/Java-style comment with the generation date.
- */
-U_CAPI FILE * U_EXPORT2
-usrc_create(const char *path, const char *filename);
-
-/**
- * Creates a source text file and writes a header comment with the ICU copyright.
  * Writes a C/Java-style comment with the generator name.
  */
 U_CAPI FILE * U_EXPORT2
-usrc_createFromGenerator(const char *path, const char *filename, const char *generator);
+usrc_create(const char *path, const char *filename, const char *generator);
 
 /**
  * Creates a source text file and writes a header comment with the ICU copyright.
