@@ -1127,61 +1127,46 @@ uprv_detectWindowsTimeZone() {
     }
 
     if (firstMatch != lastMatch) {
+        UErrorCode status = U_ZERO_ERROR;
+        UChar apiStdName[32];
         char stdName[32];
         DWORD stdNameSize;
         char stdRegName[64];
         DWORD stdRegNameSize;
 
         /* Offset+Rules lookup yielded >= 2 matches.  Try to match the
-           localized display name.  Get the name from the registry
-           (not the API). This avoids conversion issues.  Use the
-           standard name, since Windows modifies the daylight name to
-           match the standard name if there is no DST. */
-        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
-                              CURRENT_ZONE_REGKEY,
-                              0,
-                              KEY_QUERY_VALUE,
-                              &hkey) == ERROR_SUCCESS)
-        {
-            stdNameSize = sizeof(stdName);
-            result = RegQueryValueExA(hkey,
-                                     STANDARD_NAME_REGKEY,
-                                     NULL,
-                                     NULL,
-                                     (LPBYTE)stdName,
-                                     &stdNameSize);
+           localized display name. */
+        u_strFromWCS(apiStdName, 32, &stdNameSize, apiTZI.StandardName, -1, &status);
+        stdNameSize++;
+        u_austrncpy(stdName, apiStdName, stdNameSize);
+        
+        /*
+         * Scan through the Windows time zone data in the registry
+         * again (just the range of zones with matching TZIs) and
+         * look for a standard display name match.
+         */
+        for (j = firstMatch; j <= lastMatch; j += 1) {
+            stdRegNameSize = sizeof(stdRegName);
+            result = openTZRegKey(&hkey, ZONE_MAP[j].winid);
+
+            if (result == ERROR_SUCCESS) {
+                result = RegQueryValueExA(hkey,
+                                         STD_REGKEY,
+                                         NULL,
+                                         NULL,
+                                         (LPBYTE)stdRegName,
+                                         &stdRegNameSize);
+            }
+
             RegCloseKey(hkey);
 
-            /*
-             * Scan through the Windows time zone data in the registry
-             * again (just the range of zones with matching TZIs) and
-             * look for a standard display name match.
-             */
-            for (j = firstMatch; j <= lastMatch; j += 1) {
-                stdRegNameSize = sizeof(stdRegName);
-                result = openTZRegKey(&hkey, ZONE_MAP[j].winid);
-
-                if (result == ERROR_SUCCESS) {
-                    result = RegQueryValueExA(hkey,
-                                             STD_REGKEY,
-                                             NULL,
-                                             NULL,
-                                             (LPBYTE)stdRegName,
-                                             &stdRegNameSize);
-                }
-
-                RegCloseKey(hkey);
-
-                if (result == ERROR_SUCCESS &&
-                    stdRegNameSize == stdNameSize &&
-                    uprv_memcmp(stdName, stdRegName, stdNameSize) == 0)
-                {
-                    firstMatch = j; /* record the match */
-                    break;
-                }
+            if (result == ERROR_SUCCESS &&
+                stdRegNameSize == stdNameSize &&
+                uprv_memcmp(stdName, stdRegName, stdNameSize) == 0)
+            {
+                firstMatch = j; /* record the match */
+                break;
             }
-        } else {
-            RegCloseKey(hkey); /* should never get here */
         }
     }
 
