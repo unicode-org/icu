@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3269,13 +3269,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         acit = cdf.formatToCharacterIterator(nonLeapMonthDate);
         Set keys = acit.getAllAttributeKeys();
         if (keys.contains(ChineseDateFormat.Field.IS_LEAP_MONTH)) {
-            errln("FAIL: IS_LEAP_MONTH attribute must not present for Chinese calendar date "
+            errln("FAIL: separate IS_LEAP_MONTH field should not be present for a Chinese calendar non-leap date"
                     + cdf.format(nonLeapMonthDate));
         }
         acit = cdf.formatToCharacterIterator(leapMonthDate);
         keys = acit.getAllAttributeKeys();
-        if (!keys.contains(ChineseDateFormat.Field.IS_LEAP_MONTH)) {
-            errln("FAIL: IS_LEAP_MONTH attribute must present for Chinese calendar date "
+        if (keys.contains(ChineseDateFormat.Field.IS_LEAP_MONTH)) {
+            errln("FAIL: separate IS_LEAP_MONTH field should no longer be present for a Chinese calendar leap date"
                     + cdf.format(leapMonthDate));
         }
     }
@@ -3855,6 +3855,113 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             if (pos.getIndex() != data.resPos) {
                 errln("FAIL: Parsing [" + data.input + "] with pattern [" + data.pattern + "] returns position - "
                         + pos.getIndex() + ", expected - " + data.resPos);
+            }
+        }
+    }
+
+    public void TestChineseDateFormatSymbols() {
+        class ChineseDateFormatSymbolItem {
+            public ULocale locale;
+            String marker;
+            public ChineseDateFormatSymbolItem(ULocale loc, String mrk) {
+                locale = loc;
+                marker = mrk;
+            }
+        };
+        final ChineseDateFormatSymbolItem[] items = {
+            new ChineseDateFormatSymbolItem( ULocale.ENGLISH, "bis" ),
+            new ChineseDateFormatSymbolItem( ULocale.SIMPLIFIED_CHINESE, "\u95F0" ),
+            new ChineseDateFormatSymbolItem( ULocale.TRADITIONAL_CHINESE, "\u95F0" ), // update this when we integrate new CLDR data
+        };
+        ChineseCalendar cal = new ChineseCalendar();
+        for ( ChineseDateFormatSymbolItem item: items ) {
+            ChineseDateFormatSymbols cdfSymbols = new ChineseDateFormatSymbols(cal, item.locale);
+            if ( !cdfSymbols.getLeapMonth(0).contentEquals("") || !cdfSymbols.getLeapMonth(1).contentEquals(item.marker) ) {
+                errln("FAIL: isLeapMonth [0],[1] for locale " + item.locale + "; expected \"\", \"" + item.marker + "\"; got \"" + cdfSymbols.getLeapMonth(0) + "\", \"" + cdfSymbols.getLeapMonth(1) + "\"");
+            }
+        }
+    }
+
+    public void TestMonthPatterns() {
+        class ChineseCalTestDate {
+            public int year;
+            public int month; // here 1-based
+            public int isLeapMonth;
+            public int day;
+             // Simple constructor
+            public ChineseCalTestDate(int y, int m, int il, int d) {
+                year = y;
+                month = m;
+                isLeapMonth = il;
+                day = d;
+            }
+        };
+        final ChineseCalTestDate[] dates = {
+            //                      yr mo lp da
+            new ChineseCalTestDate( 29, 4, 0, 2 ), // (in chinese era 78) gregorian 2012-4-22
+            new ChineseCalTestDate( 29, 4, 1, 2 ), // (in chinese era 78) gregorian 2012-5-22
+            new ChineseCalTestDate( 29, 5, 0, 2 ), // (in chinese era 78) gregorian 2012-6-20
+        };
+        class MonthPatternItem {
+            public String locale;
+            public int style;
+            public String[] dateString;
+             // Simple constructor
+            public MonthPatternItem(String loc, int styl, String dateStr0, String dateStr1, String dateStr2) {
+                locale = loc;
+                style = styl;
+                dateString = new String[3];
+                dateString[0] = dateStr0;
+                dateString[1] = dateStr1;
+                dateString[2] = dateStr2;
+            }
+        };
+        final MonthPatternItem[] items = {
+            new MonthPatternItem( "root@calendar=chinese",    DateFormat.LONG,  "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "root@calendar=chinese",    DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "root@calendar=chinese",    -1,               "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "root@calendar=chinese",    -2,               "78x29-4-2",             "78x29-4bis-2",             "78x29-5-2" ),
+            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "en@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
+            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-\u95F04-2",             "29-5-2" ),
+            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
+            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.SHORT, "29-4-2",                "29-\u95F04-2",             "29-5-2" ),
+            new MonthPatternItem( "fr@calendar=chinese",      DateFormat.LONG,  "2 s\u00ECyu\u00E8 29",  "2 s\u00ECyu\u00E8bis 29",  "2 w\u01D4yu\u00E8 29" ),
+            new MonthPatternItem( "fr@calendar=chinese",      DateFormat.SHORT, "2/4/29",                "2/4bis/29",                "2/5/29" ),
+        };
+        //                                style -1   style -2
+        final String[] customPatterns = { "y-Ml-d",  "G'x'y-Ml-d" }; // previously G and l for chinese calendar only handled by ChineseDateFormat object
+        Calendar rootChineseCalendar = Calendar.getInstance(new ULocale("root@calendar=chinese"));
+        for (MonthPatternItem item: items) {
+            ULocale locale = new ULocale(item.locale);
+            DateFormat dfmt = (item.style >= 0)? DateFormat.getDateInstance(item.style, locale): new SimpleDateFormat(customPatterns[-item.style - 1], locale);
+            int idate = 0;
+            for (ChineseCalTestDate date: dates) {
+                rootChineseCalendar.set( date.year, date.month-1, date.day );
+                rootChineseCalendar.set( Calendar.IS_LEAP_MONTH, date.isLeapMonth );
+                StringBuffer result = new StringBuffer();
+                FieldPosition fpos = new FieldPosition(0);
+                dfmt.format(rootChineseCalendar, result, fpos);
+                if (result.toString().compareTo(item.dateString[idate]) != 0) {
+                    errln("FAIL: Chinese calendar format for locale " + item.locale +  ", style " + item.style +
+                            ", expected \"" + item.dateString[idate] + "\", got \"" + result + "\"");
+                } else {
+                    // formatted OK, try parse
+                    ParsePosition ppos = new ParsePosition(0);
+                    dfmt.parse(result.toString(), rootChineseCalendar, ppos);
+                    int era = rootChineseCalendar.get(Calendar.ERA);
+                    int year = rootChineseCalendar.get(Calendar.YEAR);
+                    int month = rootChineseCalendar.get(Calendar.MONTH) + 1;
+                    int isLeapMonth = rootChineseCalendar.get(Calendar.IS_LEAP_MONTH);
+                    int day = rootChineseCalendar.get(Calendar.DATE);
+                    if ( ppos.getIndex() < result.length() || year != date.year || month != date.month || isLeapMonth != date.isLeapMonth || day != date.day) {
+                        errln("FAIL: Chinese calendar parse for locale " + item.locale +  ", style " + item.style +
+                                ", string \"" + result + "\", expected " + date.year+"-"+date.month+"("+date.isLeapMonth+")-"+date.day +
+                                ", got pos " + ppos.getIndex() + " era("+era+")-"+year+"-"+month+"("+isLeapMonth+")-"+day );
+                    }
+                }
+                idate++;
             }
         }
     }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -483,7 +483,7 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Creates an instance of SimpleDateForamt for the given format configuration
+     * Creates an instance of SimpleDateFormat for the given format configuration
      * @param formatConfig the format configuration
      * @return A SimpleDateFormat instance
      * @internal
@@ -894,9 +894,13 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         if (patternCharIndex == -1) {
-            throw new IllegalArgumentException("Illegal pattern character " +
-                                               "'" + ch + "' in \"" +
-                                               pattern + '"');
+            if (ch == 'l') { // (SMALL LETTER L) deprecated placeholder for leap month marker, ignore
+                return;
+            } else {
+                throw new IllegalArgumentException("Illegal pattern character " +
+                                                   "'" + ch + "' in \"" +
+                                                   pattern + '"');
+            }
         }
 
         final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
@@ -906,12 +910,17 @@ public class SimpleDateFormat extends DateFormat {
 
         switch (patternCharIndex) {
         case 0: // 'G' - ERA
-            if (count == 5) {
-                safeAppend(formatData.narrowEras, value, buf);
-            } else if (count == 4) {
-                safeAppend(formatData.eraNames, value, buf);
+            if ( cal.getType().equals("chinese")) {
+                // moved from ChineseDateFormat
+                zeroPaddingNumber(currentNumberFormat, buf, value, 1, 9);
             } else {
-                safeAppend(formatData.eras, value, buf);
+                if (count == 5) {
+                    safeAppend(formatData.narrowEras, value, buf);
+                } else if (count == 4) {
+                    safeAppend(formatData.eraNames, value, buf);
+                } else {
+                    safeAppend(formatData.eras, value, buf);
+                }
             }
             break;
         case 1: // 'y' - YEAR
@@ -928,6 +937,7 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
         case 2: // 'M' - MONTH
+        case 26: // 'L' - STANDALONE MONTH
             if ( cal.getType().equals("hebrew")) {
                 boolean isLeap = HebrewCalendar.isLeapYear(cal.get(Calendar.YEAR));
                 if (isLeap && value == 6 && count >= 3 ) {
@@ -937,14 +947,33 @@ public class SimpleDateFormat extends DateFormat {
                     value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
                 }
             }
+            int isLeapMonth = (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT)?
+                     cal.get(Calendar.IS_LEAP_MONTH): 0;
+            // should consolidate the next section by using arrays of pointers & counts for the right symbols...
             if (count == 5) {
-                safeAppend(formatData.narrowMonths, value, buf);
+                if (patternCharIndex == 2) {
+                    safeAppendWithMonthPattern(formatData.narrowMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_NARROW]: null);
+                } else {
+                    safeAppendWithMonthPattern(formatData.standaloneNarrowMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW]: null);
+                }
             } else if (count == 4) {
-                safeAppend(formatData.months, value, buf);
+                if (patternCharIndex == 2) {
+                    safeAppendWithMonthPattern(formatData.months, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]: null);
+                } else {
+                    safeAppendWithMonthPattern(formatData.standaloneMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]: null);
+                }
             } else if (count == 3) {
-                safeAppend(formatData.shortMonths, value, buf);
+                if (patternCharIndex == 2) {
+                    safeAppendWithMonthPattern(formatData.shortMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV]: null);
+                } else {
+                    safeAppendWithMonthPattern(formatData.standaloneShortMonths, value, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV]: null);
+                }
             } else {
-                zeroPaddingNumber(currentNumberFormat,buf, value+1, count, maxIntCount);
+                StringBuffer monthNumber = new StringBuffer();
+                zeroPaddingNumber(currentNumberFormat, monthNumber, value+1, count, maxIntCount);
+                String[] monthNumberStrings = new String[1];
+                monthNumberStrings[0] = monthNumber.toString();
+                safeAppendWithMonthPattern(monthNumberStrings, 0, buf, (isLeapMonth!=0)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_NUMERIC]: null);
             }
             break;
         case 4: // 'k' - HOUR_OF_DAY (1..24)
@@ -1052,17 +1081,6 @@ public class SimpleDateFormat extends DateFormat {
                 safeAppend(formatData.standaloneShortWeekdays, value, buf);
             }
             break;
-        case 26: // 'L' - STANDALONE MONTH
-            if (count == 5) {
-                safeAppend(formatData.standaloneNarrowMonths, value, buf);
-            } else if (count == 4) {
-                safeAppend(formatData.standaloneMonths, value, buf);
-            } else if (count == 3) {
-                safeAppend(formatData.standaloneShortMonths, value, buf);
-            } else {
-                zeroPaddingNumber(currentNumberFormat,buf, value+1, count, maxIntCount);
-            }
-            break;
         case 27: // 'Q' - QUARTER
             if (count >= 4) {
                 safeAppend(formatData.quarters, value/3, buf);
@@ -1126,6 +1144,16 @@ public class SimpleDateFormat extends DateFormat {
     private static void safeAppend(String[] array, int value, StringBuffer appendTo) {
         if (array != null && value >= 0 && value < array.length) {
             appendTo.append(array[value]);
+        }
+    }
+
+    private static void safeAppendWithMonthPattern(String[] array, int value, StringBuffer appendTo, String monthPattern) {
+        if (array != null && value >= 0 && value < array.length) {
+            if (monthPattern == null) {
+                appendTo.append(array[value]);
+            } else {
+                appendTo.append(MessageFormat.format(monthPattern, array[value]));
+            }
         }
     }
 
@@ -1380,6 +1408,11 @@ public class SimpleDateFormat extends DateFormat {
         int numericFieldLength = 0;
         // start index of numeric text run in the input text
         int numericStartPos = 0;
+        
+        MessageFormat numericLeapMonthFormatter = null;
+        if (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT) {
+            numericLeapMonthFormatter = new MessageFormat(formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_NUMERIC], locale);
+        }
 
         Object[] items = getPatternItems();
         int i = 0;
@@ -1416,7 +1449,7 @@ public class SimpleDateFormat extends DateFormat {
 
                     // Parse a numeric field
                     pos = subParse(text, pos, field.type, len,
-                            true, false, ambiguousYear, cal);
+                            true, false, ambiguousYear, cal, numericLeapMonthFormatter);
 
                     if (pos < 0) {
                         // If the parse fails anywhere in the numeric run, back up to the
@@ -1437,13 +1470,13 @@ public class SimpleDateFormat extends DateFormat {
                         continue;
                     }
 
-                } else {
+                } else if (field.type != 'l') { // (SMALL LETTER L) obsolete pattern char just gets ignored
                     // Handle a non-numeric field or a non-abutting numeric field
                     numericFieldStart = -1;
 
                     int s = pos;
                     pos = subParse(text, pos, field.type, field.length,
-                            false, true, ambiguousYear, cal);
+                            false, true, ambiguousYear, cal, numericLeapMonthFormatter);
                     
                     if (pos < 0) {
                         if (pos == ISOSpecialEra) {
@@ -1713,6 +1746,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param start where to start parsing.
      * @param field the date field being parsed.
      * @param data the string array to parsed.
+     * @param cal
      * @return the new start position if matching succeeded; a negative
      * number indicating matching failure, otherwise.  As a side effect,
      * sets the <code>cal</code> field <code>field</code> to the index
@@ -1720,6 +1754,30 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 2.0
      */
     protected int matchString(String text, int start, int field, String[] data, Calendar cal)
+    {
+        return matchString(text, start, field, data, null, cal);
+    }
+
+    /**
+     * Attempt to match the text at a given position against an array of
+     * strings.  Since multiple strings in the array may match (for
+     * example, if the array contains "a", "ab", and "abc", all will match
+     * the input string "abcd") the longest match is returned.  As a side
+     * effect, the given field of <code>cal</code> is set to the index
+     * of the best match, if there is one.
+     * @param text the time text being parsed.
+     * @param start where to start parsing.
+     * @param field the date field being parsed.
+     * @param data the string array to parsed.
+     * @param monthPattern leap month pattern, or null if none.
+     * @param cal
+     * @return the new start position if matching succeeded; a negative
+     * number indicating matching failure, otherwise.  As a side effect,
+     * sets the <code>cal</code> field <code>field</code> to the index
+     * of the best match, if matching succeeded.
+     * @draft ICU 49
+     */
+    protected int matchString(String text, int start, int field, String[] data, String monthPattern, Calendar cal)
     {
         int i = 0;
         int count = data.length;
@@ -1731,6 +1789,8 @@ public class SimpleDateFormat extends DateFormat {
         // We keep track of the longest match, and return that.  Note that this
         // unfortunately requires us to test all array elements.
         int bestMatchLength = 0, bestMatch = -1;
+        int isLeapMonth = 0;
+
         for (; i<count; ++i)
             {
                 int length = data[i].length();
@@ -1741,11 +1801,24 @@ public class SimpleDateFormat extends DateFormat {
                     {
                         bestMatch = i;
                         bestMatchLength = length;
+                        isLeapMonth = 0;
                     }
+                if (monthPattern != null) {
+                    String leapMonthName = MessageFormat.format(monthPattern, data[i]);
+                    length = leapMonthName.length();
+                    if (length > bestMatchLength &&
+                        text.regionMatches(true, start, leapMonthName, 0, length))
+                        {
+                            bestMatch = i;
+                            bestMatchLength = length;
+                            isLeapMonth = 1;
+                        }
+                 }
             }
         if (bestMatch >= 0)
             {
                 cal.set(field, bestMatch);
+                cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
                 return start + bestMatchLength;
             }
         return -start;
@@ -1810,6 +1883,7 @@ public class SimpleDateFormat extends DateFormat {
      * and we should use the count to know when to stop parsing.
      * @param ambiguousYear return parameter; upon return, if ambiguousYear[0]
      * is true, then a two-digit year was parsed and may need to be readjusted.
+     * @param cal
      * @return the new start position if matching succeeded; a negative
      * number indicating matching failure, otherwise.  As a side effect,
      * set the appropriate field of <code>cal</code> with the parsed
@@ -1819,6 +1893,34 @@ public class SimpleDateFormat extends DateFormat {
     protected int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean allowNegative,
                            boolean[] ambiguousYear, Calendar cal)
+    {
+        return subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal, null);
+    }
+
+    /**
+     * Protected method that converts one field of the input string into a
+     * numeric field value in <code>cal</code>.  Returns -start (for
+     * ParsePosition) if failed.  Subclasses may override this method to
+     * modify or add parsing capabilities.
+     * @param text the time text to be parsed.
+     * @param start where to start parsing.
+     * @param ch the pattern character for the date field text to be parsed.
+     * @param count the count of a pattern character.
+     * @param obeyCount if true, then the next field directly abuts this one,
+     * and we should use the count to know when to stop parsing.
+     * @param ambiguousYear return parameter; upon return, if ambiguousYear[0]
+     * is true, then a two-digit year was parsed and may need to be readjusted.
+     * @param cal
+     * @param numericLeapMonthFormatter if non-null, used to parse numeric leap months. 
+     * @return the new start position if matching succeeded; a negative
+     * number indicating matching failure, otherwise.  As a side effect,
+     * set the appropriate field of <code>cal</code> with the parsed
+     * value.
+     * @draft ICU 49
+     */
+    protected int subParse(String text, int start, char ch, int count,
+                           boolean obeyCount, boolean allowNegative,
+                           boolean[] ambiguousYear, Calendar cal, MessageFormat numericLeapMonthFormatter)
     {
         Number number = null;
         NumberFormat currentNumberFormat = null;
@@ -1839,6 +1941,10 @@ public class SimpleDateFormat extends DateFormat {
         currentNumberFormat = getNumberFormat(ch);
 
         int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
+        
+        if (numericLeapMonthFormatter != null) {
+            numericLeapMonthFormatter.setFormatByArgumentIndex(0, currentNumberFormat);
+        }
 
         // If there are any spaces here, skip over them.  If we hit the end
         // of the string, then fail.
@@ -1858,36 +1964,63 @@ public class SimpleDateFormat extends DateFormat {
         // a number value.  We handle further, more generic cases below.  We need
         // to handle some of them here because some fields require extra processing on
         // the parsed value.
-        if (patternCharIndex == 4 /*HOUR_OF_DAY1_FIELD*/ ||
-            patternCharIndex == 15 /*HOUR1_FIELD*/ ||
-            (patternCharIndex == 2 /*MONTH_FIELD*/ && count <= 2) ||
-            patternCharIndex == 1 ||
-            patternCharIndex == 8)
+        if (patternCharIndex == 4 /*'k' HOUR_OF_DAY1_FIELD*/ ||
+            patternCharIndex == 15 /*'h' HOUR1_FIELD*/ ||
+            (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2) ||
+            (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ && count <= 2) ||
+            patternCharIndex == 1 /*'y' YEAR */ ||
+            (patternCharIndex == 0 /*'G' ERA */ && cal.getType().equals("chinese")) ||
+            patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */ )
             {
                 // It would be good to unify this with the obeyCount logic below,
                 // but that's going to be difficult.
-                if (obeyCount) {
-                        if ((start+count) > text.length()) return -start;
+                
+                boolean parsedNumericLeapMonth = false;
+                if (numericLeapMonthFormatter != null && (patternCharIndex == 2 || patternCharIndex == 26)) {
+                    // First see if we can parse month number with leap month pattern
+                    Object[] args = numericLeapMonthFormatter.parse(text, pos);
+                    if (args != null && pos.getIndex() > start && (args[0] instanceof Number)) {
+                        parsedNumericLeapMonth = true;
+                        number = (Number)args[0];
+                        cal.set(Calendar.IS_LEAP_MONTH, 1);
+                    } else {
+                        pos.setIndex(start);
+                        cal.set(Calendar.IS_LEAP_MONTH, 0);
+                   }
+                }
+                
+                if (!parsedNumericLeapMonth) {
+                    if (obeyCount) {
+                        if ((start+count) > text.length()) {
+                            return -start;
+                        }
                         number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
-                } else {
-                    number = parseInt(text, pos, allowNegative,currentNumberFormat);
+                    } else {
+                        number = parseInt(text, pos, allowNegative,currentNumberFormat);
+                    }
+                    if (number == null) {
+                        return -start;
+                    }
                 }
-                if (number == null) {
-                    return -start;
-                }
+
                 value = number.intValue();
             }
 
         switch (patternCharIndex)
             {
             case 0: // 'G' - ERA
+                if ( cal.getType().equals("chinese") ) {
+                    // numeric era handling moved from ChineseDateFormat
+                    cal.set(Calendar.ERA, value);
+                    return pos.getIndex();
+                }
                 int ps = 0;
                 if (count == 5) {
-                    ps = matchString(text, start, Calendar.ERA, formatData.narrowEras, cal);
+                    ps = matchString(text, start, Calendar.ERA, formatData.narrowEras, null, cal);
                 } else if (count == 4) {
-                    ps = matchString(text, start, Calendar.ERA, formatData.eraNames, cal);
+                    ps = matchString(text, start, Calendar.ERA, formatData.eraNames, null, cal);
                 } else {
-                    ps = matchString(text, start, Calendar.ERA, formatData.eras, cal);
+                    ps = matchString(text, start, Calendar.ERA, formatData.eras, null, cal);
                 }
 
                 // check return position, if it equals -start, then matchString error
@@ -1906,7 +2039,8 @@ public class SimpleDateFormat extends DateFormat {
                 // century, for parsed strings from "00" to "99".  Any other string
                 // is treated literally:  "2250", "-1", "1", "002".
                 /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
-                if (count == 2 && (pos.getIndex() - start) == 2
+                /* Skip this for Chinese calendar, moved from ChineseDateFormat */
+                if (count == 2 && (pos.getIndex() - start) == 2 && !cal.getType().equals("chinese")
                     && UCharacter.isDigit(text.charAt(start))
                     && UCharacter.isDigit(text.charAt(start+1)))
                     {
@@ -1934,9 +2068,10 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 return pos.getIndex();
             case 2: // 'M' - MONTH
-                if (count <= 2) { // i.e., M or MM.
+            case 26: // 'L' - STAND_ALONE_MONTH
+                if (count <= 2) { // i.e., M/MM, L/LL
                     // Don't want to parse the month if it is a string
-                    // while pattern uses numeric style: M or MM.
+                    // while pattern uses numeric style: M/MM, L/LL.
                     // [We computed 'value' above.]
                     cal.set(Calendar.MONTH, value - 1);
                     // When parsing month numbers from the Hebrew Calendar, we might need
@@ -1954,36 +2089,23 @@ public class SimpleDateFormat extends DateFormat {
                     }
                     return pos.getIndex();
                 } else {
-                    // count >= 3 // i.e., MMM or MMMM
+                    // count >= 3 // i.e., MMM/MMMM or LLL/LLLL
                     // Want to be able to parse both short and long forms.
+                    boolean haveMonthPat = (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT);
                     // Try count == 4 first:
-                    int newStart = matchString(text, start, Calendar.MONTH,
-                                               formatData.months, cal);
+                    int newStart = (patternCharIndex == 2)?
+                            matchString(text, start, Calendar.MONTH, formatData.months,
+                                    (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]: null, cal):
+                            matchString(text, start, Calendar.MONTH, formatData.standaloneMonths,
+                                    (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]: null, cal);
                     if (newStart > 0) {
                         return newStart;
                     } else { // count == 4 failed, now try count == 3
-                        return matchString(text, start, Calendar.MONTH,
-                                           formatData.shortMonths, cal);
-                    }
-                }
-            case 26: // 'L' - STAND_ALONE_MONTH
-                if (count <= 2) { // i.e., M or MM.
-                    // Don't want to parse the month if it is a string
-                    // while pattern uses numeric style: M or MM.
-                    // [We computed 'value' above.]
-                    cal.set(Calendar.MONTH, value - 1);
-                    return pos.getIndex();
-                } else {
-                    // count >= 3 // i.e., MMM or MMMM
-                    // Want to be able to parse both short and long forms.
-                    // Try count == 4 first:
-                    int newStart = matchString(text, start, Calendar.MONTH,
-                                               formatData.standaloneMonths, cal);
-                    if (newStart > 0) {
-                        return newStart;
-                    } else { // count == 4 failed, now try count == 3
-                        return matchString(text, start, Calendar.MONTH,
-                                           formatData.standaloneShortMonths, cal);
+                        return (patternCharIndex == 2)?
+                                matchString(text, start, Calendar.MONTH, formatData.shortMonths,
+                                        (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV]: null, cal):
+                                matchString(text, start, Calendar.MONTH, formatData.standaloneShortMonths,
+                                        (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV]: null, cal);
                     }
                 }
             case 4: // 'k' - HOUR_OF_DAY (1..24)
@@ -2015,28 +2137,28 @@ public class SimpleDateFormat extends DateFormat {
                 // Want to be able to parse both short and long forms.
                 // Try count == 4 (EEEE) first:
                 int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
-                                           formatData.weekdays, cal);
+                                           formatData.weekdays, null, cal);
                 if (newStart > 0) {
                     return newStart;
                 } else { // EEEE failed, now try EEE
                     return matchString(text, start, Calendar.DAY_OF_WEEK,
-                                       formatData.shortWeekdays, cal);
+                                       formatData.shortWeekdays, null, cal);
                 }
             }
             case 25: { // 'c' - STAND_ALONE_DAY_OF_WEEK
                 // Want to be able to parse both short and long forms.
                 // Try count == 4 (cccc) first:
                 int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
-                                           formatData.standaloneWeekdays, cal);
+                                           formatData.standaloneWeekdays, null, cal);
                 if (newStart > 0) {
                     return newStart;
                 } else { // cccc failed, now try ccc
                     return matchString(text, start, Calendar.DAY_OF_WEEK,
-                                       formatData.standaloneShortWeekdays, cal);
+                                       formatData.standaloneShortWeekdays, null, cal);
                 }
             }
             case 14: // 'a' - AM_PM
-                return matchString(text, start, Calendar.AM_PM, formatData.ampms, cal);
+                return matchString(text, start, Calendar.AM_PM, formatData.ampms, null, cal);
             case 15: // 'h' - HOUR (1..12)
                 // [We computed 'value' above.]
                 if (value == cal.getLeastMaximum(Calendar.HOUR)+1) {
