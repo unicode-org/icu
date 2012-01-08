@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and
+ * Copyright (C) 2000-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -121,19 +121,12 @@ public class ChineseDateFormat extends SimpleDateFormat {
                              FieldPosition pos,
                              Calendar cal) {
 
-        switch (ch) {
-        case 'G': // 'G' - ERA
-            zeroPaddingNumber(numberFormat,buf, cal.get(Calendar.ERA), 1, 9);
-            break;
-        case 'l': // 'l' - IS_LEAP_MONTH
-            buf.append(((ChineseDateFormatSymbols) getSymbols()).
-                       getLeapMonth(cal.get(ChineseCalendar.IS_LEAP_MONTH)));
-            break;
-        default:
-            super.subFormat(buf, ch, count, beginOffset, pos, cal);
-            break;
-        }
+        // Logic to handle 'G' for chinese calendar is moved into SimpleDateFormat,
+        // and obsolete pattern char 'l' is now ignored in SimpleDateFormat, so we
+        // just use its implementation
+        super.subFormat(buf, ch, count, beginOffset, pos, cal);
 
+        // The following is no longer an issue for this subclass...
         // TODO: add code to set FieldPosition for 'G' and 'l' fields. This
         // is a DESIGN FLAW -- subclasses shouldn't have to duplicate the
         // code that handles this at the end of SimpleDateFormat.subFormat.
@@ -147,52 +140,13 @@ public class ChineseDateFormat extends SimpleDateFormat {
      */
     protected int subParse(String text, int start, char ch, int count, boolean obeyCount, boolean allowNegative,
             boolean[] ambiguousYear, Calendar cal) {
-        if (ch != 'G' && ch != 'l' && ch != 'y') {
-            return super.subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal);
-        }
-
-        // Skip whitespace
-        start = PatternProps.skipWhiteSpace(text, start);
-
-        ParsePosition pos = new ParsePosition(start);
-
-        switch (ch) {
-        case 'G': // 'G' - ERA
-        case 'y': // 'y' - YEAR, but without the 2-digit Y2K adjustment
-        {
-            Number number = null;
-            if (obeyCount) {
-                if ((start + count) > text.length()) {
-                    return -start;
-                }
-                number = numberFormat.parse(text.substring(0, start + count), pos);
-            } else {
-                number = numberFormat.parse(text, pos);
-            }
-            if (number == null) {
-                return -start;
-            }
-            int value = number.intValue();
-            cal.set(ch == 'G' ? Calendar.ERA : Calendar.YEAR, value);
-            return pos.getIndex();
-        }
-        case 'l': // 'l' - IS_LEAP_MONTH
-        {
-            ChineseDateFormatSymbols symbols = (ChineseDateFormatSymbols) getSymbols();
-            int result = matchString(text, start, ChineseCalendar.IS_LEAP_MONTH, symbols.isLeapMonth, cal);
-            // Treat the absence of any matching string as setting
-            // IS_LEAP_MONTH to false.
-            if (result < 0) {
-                cal.set(ChineseCalendar.IS_LEAP_MONTH, 0);
-                result = start;
-            }
-            return result;
-        }
-            ///CLOVER:OFF
-        default:
-            return 0; // This can never happen
-            ///CLOVER:ON
-        }
+        // Logic to handle numeric 'G' eras for chinese calendar, and to skip special 2-digit year
+        // handling for chinese calendar, is moved into SimpleDateFormat, so delete here.
+        // Obsolete pattern char 'l' is now ignored for parsing in SimpleDateFormat, no handling
+        // needed here.
+        // So just use SimpleDateFormat implementation for this.
+        // just use its implementation
+        return super.subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal);
     }
 
     /**
@@ -201,9 +155,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * @stable ICU 3.8
      */
     protected DateFormat.Field patternCharToDateFormatField(char ch) {
-        if (ch == 'l') {
-            return ChineseDateFormat.Field.IS_LEAP_MONTH;
-        }
+        // no longer any field corresponding to pattern char 'l'
         return super.patternCharToDateFormatField(ch);
     }
 
@@ -256,6 +208,8 @@ public class ChineseDateFormat extends SimpleDateFormat {
          * @stable ICU 3.8
          */
         public static DateFormat.Field ofCalendarField(int calendarField) {
+            // Should we remove the following, since there is no longer a specific
+            // date format field for leap month (since 'l' pattern char is obsolete)?
             if (calendarField == ChineseCalendar.IS_LEAP_MONTH) {
                 return IS_LEAP_MONTH;
             }

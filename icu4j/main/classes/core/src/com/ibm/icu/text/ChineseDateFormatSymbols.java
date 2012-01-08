@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and
+ * Copyright (C) 2000-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ****************************************************************************
  */
@@ -95,7 +95,12 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      */
     protected void initializeData(ULocale loc, CalendarData calData) {
         super.initializeData(loc, calData);
-        isLeapMonth = calData.getStringArray("isLeapMonth");
+        // The old way, obsolete:
+        //isLeapMonth = calData.getStringArray("isLeapMonth");
+        // The new way to fake this for backward compatibility (no longer used to format/parse):
+        isLeapMonth = new String[2];
+        isLeapMonth[0] = "";
+        isLeapMonth[1] = (leapMonthPatterns != null)? leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE].replace("{0}", ""): "";
     }
 
     void initializeData(DateFormatSymbols dfs) {

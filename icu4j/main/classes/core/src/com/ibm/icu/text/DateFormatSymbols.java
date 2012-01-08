@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -125,7 +125,55 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public static final int DT_WIDTH_COUNT = 3;
 
-    /**
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_FORMAT_WIDE = 0;
+
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV = 1;
+
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_FORMAT_NARROW = 2;
+
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE = 3;
+
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV = 4;
+
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW = 5;
+
+     /**
+     * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_LEAP_MONTH_PATTERN_NUMERIC = 6;
+
+     /**
+     * {@icu} Somewhat temporary constant for month pattern count, adequate for Chinese calendar.
+     * @internal
+     */
+    static final int DT_MONTH_PATTERN_COUNT = 7;
+
+   /**
      * Constructs a DateFormatSymbols object by loading format data from
      * resources for the default <code>FORMAT</code> locale.
      *
@@ -409,6 +457,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String standaloneQuarters[] = null;
+
+    /**
+     * All leap month patterns, for example "{0}bis".
+     * An array of DT_MONTH_PATTERN_COUNT strings, indexed by the DT_LEAP_MONTH_PATTERN_XXX value.
+     * @serial
+     */
+    String leapMonthPatterns[] = null;
 
     /**
      * Localized names of time zones in this locale.  This is a
@@ -1067,6 +1122,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.quarters = dfs.quarters;
         this.standaloneShortQuarters = dfs.standaloneShortQuarters;
         this.standaloneQuarters = dfs.standaloneQuarters;
+        this.leapMonthPatterns = dfs.leapMonthPatterns;
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
@@ -1154,6 +1210,26 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
         standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
+
+        // The code for getting individual symbols in the leapMonthSymbols array is here
+        // rather than in CalendarData because it depends on DateFormatSymbols constants...
+        ICUResourceBundle monthPatternsBundle = null;
+        try {
+           monthPatternsBundle = calData.get("monthPatterns");
+        }
+        catch (MissingResourceException e) {
+            monthPatternsBundle = null; // probably redundant
+        }
+        if (monthPatternsBundle != null) {
+            leapMonthPatterns = new String[DT_MONTH_PATTERN_COUNT];
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE] = calData.get("monthPatterns", "wide").get("leap").getString();
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV] = calData.get("monthPatterns", "abbreviated").get("leap").getString();
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_NARROW] = calData.get("monthPatterns", "narrow").get("leap").getString();
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE] = calData.get("monthPatterns", "stand-alone", "wide").get("leap").getString();
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV] = calData.get("monthPatterns", "stand-alone", "abbreviated").get("leap").getString();
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW] = calData.get("monthPatterns", "stand-alone", "narrow").get("leap").getString();
+            leapMonthPatterns[DT_LEAP_MONTH_PATTERN_NUMERIC] = calData.get("monthPatterns", "numeric", "all").get("leap").getString();
+        }
 
         requestedLocale = desiredLocale;
 
