@@ -2060,7 +2060,7 @@ public class FormatTests
             // marker for getLeapMonth(0) does not change and is empty, while
             // the marker for getLeapMonth(1) is non-empty in both versions:
             return cdfs_a.getLeapMonth(0).equals(cdfs_b.getLeapMonth(0)) &&
-                   cdfs_a.getLeapMonth(0).isEmpty() &&
+                   cdfs_a.getLeapMonth(0).length() == 0 &&
                    cdfs_a.getLeapMonth(1).length() > 0 &&
                    cdfs_b.getLeapMonth(1).length() > 0;
         }
