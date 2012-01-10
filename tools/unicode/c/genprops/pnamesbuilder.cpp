@@ -279,7 +279,7 @@ public:
             indexes[i]=0;
         }
 
-        if(beVerbose) {
+        if(!beQuiet) {
             puts("* pnames.icu stats *");
             printf("length of all value maps:  %6ld\n", (long)valueMaps.size());
             printf("length of all BytesTries:  %6ld\n", (long)bytesTries.length());
@@ -487,11 +487,11 @@ PNamesBuilderImpl::writeBinaryData(const char *path, UBool withCopyright, UError
 void
 PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    FILE *f=usrc_createFromGenerator(path, "propname_data.h",
-                                     "icu/tools/unicode/c/genprops/pnamesbuilder.cpp");
+    FILE *f=usrc_create(path, "propname_data.h",
+                        "icu/tools/unicode/c/genprops/pnamesbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;
-        return;  // usrc_create() reported an error.
+        return;
     }
 
     fputs("#ifndef INCLUDED_FROM_PROPNAME_CPP\n"

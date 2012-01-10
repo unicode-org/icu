@@ -704,7 +704,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|
         ((int32_t)U_DT_COUNT-1);
 
-    if(beVerbose) {
+    if(!beQuiet) {
         puts("* uprops.icu stats *");
         printf("trie size in bytes:                    %5u\n", (int)trieSize);
         printf("size in bytes of additional props trie:%5u\n", (int)props2TrieSize);
@@ -723,8 +723,8 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
-    FILE *f=usrc_createFromGenerator(path, "uchar_props_data.h",
-                                     "icu/tools/unicode/c/genprops/corepropsbuilder.cpp");
+    FILE *f=usrc_create(path, "uchar_props_data.h",
+                        "icu/tools/unicode/c/genprops/corepropsbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
@@ -802,7 +802,8 @@ CorePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
     }
 
     if(dataLength!=(long)totalSize) {
-        fprintf(stderr, "genprops: data length %ld != calculated size %ld\n",
+        fprintf(stderr,
+                "udata_finish(uprops.icu) reports %ld bytes written but should be %ld\n",
                 dataLength, (long)totalSize);
         errorCode=U_INTERNAL_PROGRAM_ERROR;
     }

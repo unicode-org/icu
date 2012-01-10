@@ -7,6 +7,6 @@
 # edited by: Stuart G. Gill
 add_executable(genprops genprops.cpp
                pnamesbuilder.cpp corepropsbuilder.cpp
-               bidipropsbuilder.cpp
+               bidipropsbuilder.cpp casepropsbuilder.cpp
                namespropsbuilder.cpp)
 target_link_libraries(genprops icuuc icutu)

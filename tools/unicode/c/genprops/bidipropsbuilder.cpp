@@ -421,7 +421,7 @@ BiDiPropsBuilder::build(UErrorCode &errorCode) {
         4*mirrorTop+
         (jgLimit-jgStart);
 
-    if(beVerbose) {
+    if(!beQuiet) {
         puts("* ubidi.icu stats *");
         printf("trie size in bytes:                    %5d\n", (int)trieSize);
         printf("size in bytes of mirroring table:      %5d\n", (int)(4*mirrorTop));
@@ -439,8 +439,8 @@ void
 BiDiPropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
-    FILE *f=usrc_createFromGenerator(path, "ubidi_props_data.h",
-                                     "icu/tools/unicode/c/genprops/bidipropsbuilder.cpp");
+    FILE *f=usrc_create(path, "ubidi_props_data.h",
+                        "icu/tools/unicode/c/genprops/bidipropsbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
@@ -503,13 +503,14 @@ BiDiPropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
 
     long dataLength=udata_finish(pData, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops: error %d writing the output file\n", errorCode);
+        fprintf(stderr, "genprops error: bidipropsbuilder %d writing the output file\n", errorCode);
         return;
     }
 
     if(dataLength!=indexes[UBIDI_IX_LENGTH]) {
-        fprintf(stderr, "genprops: data length %ld != calculated size %d\n",
-            dataLength, (int)indexes[UBIDI_IX_LENGTH]);
+        fprintf(stderr,
+                "udata_finish(ubidi.icu) reports %ld bytes written but should be %ld\n",
+                dataLength, (long)indexes[UBIDI_IX_LENGTH]);
         errorCode=U_INTERNAL_PROGRAM_ERROR;
     }
 }

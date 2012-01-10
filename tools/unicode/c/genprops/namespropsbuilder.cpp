@@ -144,6 +144,8 @@
 
 /* generator data ----------------------------------------------------------- */
 
+U_NAMESPACE_USE
+
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
     sizeof(UDataInfo),
@@ -516,13 +518,11 @@ compress(UErrorCode &errorCode) {
         for(i=0, wordNumber=0; wordNumber<(int16_t)wordCount; ++i) {
             if(tokens[i]!=-1) {
                 tokens[i]=wordNumber;
-#ifdef DEBUG_NAMES
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
                             (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
-#endif
                 ++wordNumber;
             }
         }
@@ -572,13 +572,11 @@ compress(UErrorCode &errorCode) {
 
         /* set token 0 to word 0 */
         tokens[0]=0;
-#ifdef DEBUG_NAMES
         if(beVerbose) {
             printf("tokens[0x000]: word%8ld \"%.*s\"\n",
                     (long)words[0].weight,
                     words[0].length, words[0].s);
         }
-#endif
         wordNumber=1;
 
         /* set the lead byte tokens */
@@ -591,13 +589,11 @@ compress(UErrorCode &errorCode) {
             /* if store10Names then the parser set tokens[NAME_SEPARATOR_CHAR]=-1 */
             if(tokens[i]!=-1) {
                 tokens[i]=wordNumber;
-#ifdef DEBUG_NAMES
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
                             (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
-#endif
                 ++wordNumber;
             }
         }
@@ -608,13 +604,11 @@ compress(UErrorCode &errorCode) {
                 tokens[i]=-1; /* do not use NAME_SEPARATOR_CHAR as a second token byte */
             } else {
                 tokens[i]=wordNumber;
-#ifdef DEBUG_NAMES
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
                             (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
-#endif
                 ++wordNumber;
             }
         }
