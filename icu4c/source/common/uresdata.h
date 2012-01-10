@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 1999-2011, International Business Machines                   *
+* Copyright (C) 1999-2012, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -21,6 +21,7 @@
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
 #include "unicode/ures.h"
+#include "putilimp.h"
 #include "udataswp.h"
 
 /**
