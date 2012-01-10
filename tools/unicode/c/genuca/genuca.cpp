@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -33,6 +33,7 @@
 #include "unicode/uscript.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
+#include "charstr.h"
 #include "ucol_bld.h"
 #include "ucol_imp.h"
 #include "genuca.h"
@@ -78,7 +79,7 @@ int ReorderIndexComparer(const void *a, const void *b) {
 /*
  * Global - verbosity
  */
-UBool VERBOSE = FALSE;
+UBool beVerbose = FALSE;
 
 static UVersionInfo UCAVersion;
 
@@ -245,8 +246,8 @@ static void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
   }
-  if(VERBOSE && isContinuation(element->CEs[1])) {
-    //fprintf(stdout, "+");
+  if(beVerbose && isContinuation(element->CEs[1])) {
+    //printf("+");
   }
   inversePos++;
   inverseTable[inversePos][0] = element->CEs[0];
@@ -269,8 +270,8 @@ static void insertInverse(UCAElements *element, uint32_t position, UErrorCode *s
     return;
   }
 
-  if(VERBOSE && isContinuation(element->CEs[1])) {
-    //fprintf(stdout, "+");
+  if(beVerbose && isContinuation(element->CEs[1])) {
+    //printf("+");
   }
   if(position <= inversePos) {
     /*move stuff around */
@@ -386,7 +387,7 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
     addNewInverse(element, status);
   } else if(compareCEs(inverseTable[inversePos], element->CEs) > 0) {
     while((compResult = compareCEs(inverseTable[--position], element->CEs)) > 0);
-    if(VERBOSE) { fprintf(stdout, "p:%u ", (int)position); }
+    if(beVerbose) { printf("p:%u ", (int)position); }
     if(compResult == 0) {
       addToExistingInverse(element, position, status);
     } else {
@@ -398,7 +399,7 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
     addNewInverse(element, status);
   }
   element->CEs[0] = saveElement;
-  if(VERBOSE) { fprintf(stdout, "+"); }
+  if(beVerbose) { printf("+"); }
   return inversePos;
 }
 
@@ -469,8 +470,8 @@ static void writeOutInverseData(InverseUCATableHeader *data,
     }
 
     /* write the data to the file */
-    if (VERBOSE) {
-        fprintf(stdout, "Writing out inverse UCA table: %s%c%s.%s\n", outputDir, U_FILE_SEP_CHAR,
+    if (beVerbose) {
+        printf("Writing out inverse UCA table: %s%c%s.%s\n", outputDir, U_FILE_SEP_CHAR,
                                                                 INVC_DATA_NAME,
                                                                 INVC_DATA_TYPE);
     }
@@ -691,10 +692,10 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
               }
             } else if (what_to_do == READUCAVERSION) { //vt[cnt].what_to_do == READUCAVERSION
               u_versionFromString(UCAVersion, buffer+vtLen);
-              if(VERBOSE) {
+              if(beVerbose) {
                 char uca[U_MAX_VERSION_STRING_LENGTH];
                 u_versionToString(UCAVersion, uca);
-                fprintf(stdout, "UCA version %s\n", uca);
+                printf("UCA version %s\n", uca);
               }
               UVersionInfo UCDVersion;
               u_getUnicodeVersion(UCDVersion);
@@ -712,7 +713,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                 skipWhiteSpace(&pointer, status);
 
                 uint16_t leadByte = (hex2num(*pointer++) * 16) + hex2num(*pointer++);
-                //fprintf(stdout, "~~~~ processing lead byte = %02x\n", leadByte);
+                //printf("~~~~ processing lead byte = %02x\n", leadByte);
                 if (leadByte >= leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH) {
                     fprintf(stderr, "Lead byte larger than allocated table!");
                     // set status and return
@@ -734,18 +735,18 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                         continue;  // Ignore "TERMINATOR" etc.
                     }
                     if (reorderCode < 0) {
-                        fprintf(stdout, "Syntax error: unable to parse reorder code from '%s'\n", scriptName);
+                        printf("Syntax error: unable to parse reorder code from '%s'\n", scriptName);
                         *status = U_INVALID_FORMAT_ERROR;
                         return NULL;
                     }
                     if (reorderCodeArrayCount >= LENGTHOF(reorderCodeArray)) {
-                        fprintf(stdout, "reorder code array count is greater than allocated size!\n");
+                        printf("reorder code array count is greater than allocated size!\n");
                         *status = U_INTERNAL_PROGRAM_ERROR;
                         return NULL;
                     }
                     reorderCodeArray[reorderCodeArrayCount++] = reorderCode;
                 }
-                //fprintf(stdout, "reorderCodeArrayCount = %d\n", reorderCodeArrayCount);
+                //printf("reorderCodeArrayCount = %d\n", reorderCodeArrayCount);
                 switch (reorderCodeArrayCount) {
                     case 0:
                         leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX[leadByte] = 0;
@@ -774,33 +775,33 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                 uint32_t scriptNameLength = readElement(&pointer, scriptName, '\t', status);
                 int32_t reorderCode = getReorderCode(scriptName);
                 if (reorderCode >= 0) {
-                    //fprintf(stdout, "^^^ processing reorder code = %04x (%s)\n", reorderCode, scriptName);
+                    //printf("^^^ processing reorder code = %04x (%s)\n", reorderCode, scriptName);
                     skipWhiteSpace(&pointer, status);
 
                     int32_t elementLength = 0;
                     char leadByteString[100];
                     while ((elementLength = readElement(&pointer, leadByteString, '=', status)) == 2) {
-                        //fprintf(stdout, "\tleadByteArrayCount = %d, elementLength = %d, leadByteString = %s\n", leadByteArrayCount, elementLength, leadByteString);
+                        //printf("\tleadByteArrayCount = %d, elementLength = %d, leadByteString = %s\n", leadByteArrayCount, elementLength, leadByteString);
                         uint32_t leadByte = (hex2num(leadByteString[0]) * 16) + hex2num(leadByteString[1]);
                         leadByteArray[leadByteArrayCount++] = (uint16_t) leadByte;
                         skipUntilWhiteSpace(&pointer, status);
                     }
 
                     if (leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT >= leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_LENGTH) {
-                        //fprintf(stdout, "\tError condition\n");
-                        //fprintf(stdout, "\tindex count = %d, total index size = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT, sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX) / sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]));
+                        //printf("\tError condition\n");
+                        //printf("\tindex count = %d, total index size = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT, sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX) / sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]));
                         // Error condition
                         *status = U_INTERNAL_PROGRAM_ERROR;
                         return NULL;
                     }
                     leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].reorderCode = reorderCode;
 
-                    //fprintf(stdout, "\tlead byte count = %d\n", leadByteArrayCount);
-                    //fprintf(stdout, "\tlead byte array = ");
+                    //printf("\tlead byte count = %d\n", leadByteArrayCount);
+                    //printf("\tlead byte array = ");
                     //for (int i = 0; i < leadByteArrayCount; i++) {
-                    //    fprintf(stdout, "%02x, ", leadByteArray[i]);
+                    //    printf("%02x, ", leadByteArray[i]);
                     //}
-                    //fprintf(stdout, "\n");
+                    //printf("\n");
 
                     switch (leadByteArrayCount) {
                         case 0:
@@ -808,24 +809,24 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                             break;
                         case 1:
                             // TODO = move 0x8000 into defined constant
-                            //fprintf(stdout, "\t+++++ lead byte = &x\n", leadByteArray[0]);
+                            //printf("\t+++++ lead byte = &x\n", leadByteArray[0]);
                             leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].offset = 0x8000 | leadByteArray[0];
                             break;
                         default:
-                            //fprintf(stdout, "\t+++++ lead bytes written to data block - %d\n", itemsToDataBlock++);
-                            //fprintf(stdout, "\tlead bytes = ");
+                            //printf("\t+++++ lead bytes written to data block - %d\n", itemsToDataBlock++);
+                            //printf("\tlead bytes = ");
                             //for (int i = 0; i < leadByteArrayCount; i++) {
-                            //    fprintf(stdout, "%02x, ", leadByteArray[i]);
+                            //    printf("%02x, ", leadByteArray[i]);
                             //}
-                            //fprintf(stdout, "\n");
-                            //fprintf(stdout, "\tBEFORE data bytes = ");
+                            //printf("\n");
+                            //printf("\tBEFORE data bytes = ");
                             //for (int i = 0; i < leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET; i++) {
-                            //    fprintf(stdout, "%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
+                            //    printf("%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
                             //}
-                            //fprintf(stdout, "\n");
-                            //fprintf(stdout, "\tdata offset = %d, data length = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_LENGTH);
+                            //printf("\n");
+                            //printf("\tdata offset = %d, data length = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_LENGTH);
                             if ((leadByteArrayCount + leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET) > leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_LENGTH) {
-                                //fprintf(stdout, "\tError condition\n");
+                                //printf("\tError condition\n");
                                 // Error condition
                                 *status = U_INTERNAL_PROGRAM_ERROR;
                                 return NULL;
@@ -836,23 +837,23 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                             memcpy(&leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET],
                                 leadByteArray, leadByteArrayCount * sizeof(leadByteArray[0]));
                             scriptDataWritten += leadByteArrayCount;
-                            //fprintf(stdout, "\tlead byte data written = %d\n", scriptDataWritten);
-                            //fprintf(stdout, "\tcurrentIndex.reorderCode = %04x, currentIndex.offset = %04x\n", 
+                            //printf("\tlead byte data written = %d\n", scriptDataWritten);
+                            //printf("\tcurrentIndex.reorderCode = %04x, currentIndex.offset = %04x\n", 
                             //    leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT.reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT.offset);
                             leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET += leadByteArrayCount;
-                            //fprintf(stdout, "\tdata offset = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
-                            //fprintf(stdout, "\tAFTER data bytes = ");
+                            //printf("\tdata offset = %d\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
+                            //printf("\tAFTER data bytes = ");
                             //for (int i = 0; i < leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET; i++) {
-                            //    fprintf(stdout, "%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
+                            //    printf("%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
                             //}
-                            //fprintf(stdout, "\n");
+                            //printf("\n");
                     }
                     //if (reorderCode >= 0x1000) {
-                     //   fprintf(stdout, "@@@@ reorderCode = %x, offset = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].offset);
+                     //   printf("@@@@ reorderCode = %x, offset = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT].offset);
                      //   for (int i = 0; i < leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET; i++) {
-                    //        fprintf(stdout, "%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
+                    //        printf("%02x, ", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[i]);
                      //   }
-                    //    fprintf(stdout, "\n");
+                    //    printf("\n");
                    // }
                     leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT++;
                 }
@@ -1052,14 +1053,14 @@ void writeOutData(UCATableHeader *data,
       data->size += paddedsize((noOfcontractions*MAX_UCA_CONTRACTION_LENGTH*U_SIZEOF_UCHAR));
     }
     data->scriptToLeadByte = data->size;
-    //fprintf(stdout, "@@@@ script to lead byte offset = 0x%x (%d)\n", data->size, data->size);
+    //printf("@@@@ script to lead byte offset = 0x%x (%d)\n", data->size, data->size);
     data->size +=
         sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT) +                                                       // index table header
         leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT * sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]) +    // index table
         sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET) +                                                       // data table header
         leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET * sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA[0]);        // data table
     data->leadByteToScript = data->size;
-    //fprintf(stdout, "@@@@ lead byte to script offset = 0x%x (%d)\n", data->size, data->size);
+    //printf("@@@@ lead byte to script offset = 0x%x (%d)\n", data->size, data->size);
     data->size +=
         sizeof(leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH) +                                                      // index table header
         leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH * sizeof(leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX[0]) +   // index table
@@ -1082,8 +1083,8 @@ void writeOutData(UCATableHeader *data,
     }
 
     /* write the data to the file */
-    if (VERBOSE) {
-        fprintf(stdout, "Writing out UCA table: %s%c%s.%s\n", outputDir,
+    if (beVerbose) {
+        printf("Writing out UCA table: %s%c%s.%s\n", outputDir,
                                                         U_FILE_SEP_CHAR,
                                                         U_ICUDATA_NAME "_" UCA_DATA_NAME,
                                                         UCA_DATA_TYPE);
@@ -1093,13 +1094,13 @@ void writeOutData(UCATableHeader *data,
     // output the constants here
     udata_writeBlock(pData, consts, sizeof(UCAConstants));
 
-    if (VERBOSE) {
-        fprintf(stdout, "first tertiary ignorable = %x %x\n", consts->UCA_FIRST_TERTIARY_IGNORABLE[0], consts->UCA_FIRST_TERTIARY_IGNORABLE[1]);
-        fprintf(stdout, "last tertiary ignorable = %x %x\n", consts->UCA_LAST_TERTIARY_IGNORABLE[0], consts->UCA_LAST_TERTIARY_IGNORABLE[1]);
-        fprintf(stdout, "first secondary ignorable = %x %x\n", consts->UCA_FIRST_SECONDARY_IGNORABLE[0], consts->UCA_FIRST_SECONDARY_IGNORABLE[1]);
-        fprintf(stdout, "contractionUCACombosSize = %d\n", data->contractionUCACombosSize);
-        fprintf(stdout, "contractionSize = %d\n", data->contractionSize);
-        fprintf(stdout, "number of UCA contractions = %d\n", noOfcontractions);
+    if (beVerbose) {
+        printf("first tertiary ignorable = %x %x\n", consts->UCA_FIRST_TERTIARY_IGNORABLE[0], consts->UCA_FIRST_TERTIARY_IGNORABLE[1]);
+        printf("last tertiary ignorable = %x %x\n", consts->UCA_LAST_TERTIARY_IGNORABLE[0], consts->UCA_LAST_TERTIARY_IGNORABLE[1]);
+        printf("first secondary ignorable = %x %x\n", consts->UCA_FIRST_SECONDARY_IGNORABLE[0], consts->UCA_FIRST_SECONDARY_IGNORABLE[1]);
+        printf("contractionUCACombosSize = %d\n", data->contractionUCACombosSize);
+        printf("contractionSize = %d\n", data->contractionSize);
+        printf("number of UCA contractions = %d\n", noOfcontractions);
     }
     
     if(noOfcontractions != 0) {
@@ -1108,31 +1109,31 @@ void writeOutData(UCATableHeader *data,
     }
 
     // output the script to lead bytes table here
-    if (VERBOSE) {
-        fprintf(stdout, "Writing Script to Lead Byte Data\n");
-        fprintf(stdout, "\tindex table size = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT);
-        fprintf(stdout, "\tdata block size = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
+    if (beVerbose) {
+        printf("Writing Script to Lead Byte Data\n");
+        printf("\tindex table size = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT);
+        printf("\tdata block size = %x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
     }
     udata_write16(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT);
     udata_write16(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET);
-//     fprintf(stdout, "#### Script to Lead Byte Index Before Sort\n");
+//     printf("#### Script to Lead Byte Index Before Sort\n");
 //     for (int reorderCodeIndex = 0; reorderCodeIndex < leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT; reorderCodeIndex++) {
-//         fprintf(stdout, "\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
+//         printf("\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
 //     }
     qsort(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT, sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]), ReorderIndexComparer);
     udata_writeBlock(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT * sizeof(leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[0]));
-//     fprintf(stdout, "#### Script to Lead Byte Index After Sort\n");
+//     printf("#### Script to Lead Byte Index After Sort\n");
 //     for (int reorderCodeIndex = 0; reorderCodeIndex < leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX_COUNT; reorderCodeIndex++) {
-//         fprintf(stdout, "\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
+//         printf("\t%04x = %04x\n", leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].reorderCode, leadByteConstants->SCRIPT_TO_LEAD_BYTES_INDEX[reorderCodeIndex].offset);
 //     }
     
     // write out the script to lead bytes data block
     udata_writeBlock(pData, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA, leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA_OFFSET * sizeof(*leadByteConstants->SCRIPT_TO_LEAD_BYTES_DATA));
     
-    if (VERBOSE) {
-        fprintf(stdout, "Writing Lead Byte To Script Data\n");
-        fprintf(stdout, "\tindex table size = %x\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH);
-        fprintf(stdout, "\tdata block size = %x\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_DATA_OFFSET);
+    if (beVerbose) {
+        printf("Writing Lead Byte To Script Data\n");
+        printf("\tindex table size = %x\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH);
+        printf("\tdata block size = %x\n", leadByteConstants->LEAD_BYTE_TO_SCRIPTS_DATA_OFFSET);
     }
     // output the header info
     udata_write16(pData, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH);
@@ -1142,7 +1143,7 @@ void writeOutData(UCATableHeader *data,
     udata_writeBlock(pData, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX, 
         leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH * sizeof(leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX)[0]);
 //     for (int leadByte = 0; leadByte < leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH; leadByte++) {
-//         fprintf(stdout, "\t%02x = %04x\n", leadByte, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX[leadByte]);
+//         printf("\t%02x = %04x\n", leadByte, leadByteConstants->LEAD_BYTE_TO_SCRIPTS_INDEX[leadByte]);
 //     }
 
     // output the data
@@ -1233,7 +1234,7 @@ write_uca_table(const char *filename,
     };
 #endif
 
-    //fprintf(stdout, "Allocating LeadByteConstants\n");
+    //printf("Allocating LeadByteConstants\n");
     LeadByteConstants leadByteConstants;
     uprv_memset(&leadByteConstants, 0x00, sizeof(LeadByteConstants));
     
@@ -1243,7 +1244,7 @@ write_uca_table(const char *filename,
     leadByteConstants.SCRIPT_TO_LEAD_BYTES_DATA_LENGTH = 1024;
     leadByteConstants.SCRIPT_TO_LEAD_BYTES_DATA = (uint16_t*) uprv_malloc(leadByteConstants.SCRIPT_TO_LEAD_BYTES_DATA_LENGTH * sizeof(uint16_t));
     uprv_memset(leadByteConstants.SCRIPT_TO_LEAD_BYTES_DATA, 0x00, leadByteConstants.SCRIPT_TO_LEAD_BYTES_DATA_LENGTH * sizeof(uint16_t));
-    //fprintf(stdout, "\tFinished Allocating LeadByteConstants\n");
+    //printf("\tFinished Allocating LeadByteConstants\n");
     
     leadByteConstants.LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH = 256;
     leadByteConstants.LEAD_BYTE_TO_SCRIPTS_INDEX = (uint16_t*) uprv_malloc(leadByteConstants.LEAD_BYTE_TO_SCRIPTS_INDEX_LENGTH * sizeof(uint16_t));
@@ -1310,8 +1311,8 @@ write_uca_table(const char *filename,
         }
 
         line++;
-        if(VERBOSE) {
-          fprintf(stdout, "%u ", (int)line);
+        if(beVerbose) {
+          printf("%u ", (int)line);
         }
         element = readAnElement(data, t, &consts, &leadByteConstants, status);
         if(element != NULL) {
@@ -1410,14 +1411,14 @@ write_uca_table(const char *filename,
         uint32_t trieWord = utrie_get32(t->mapping, 0xDC01, NULL);
     }*/
 
-    if (VERBOSE) {
-        fprintf(stdout, "\nLines read: %u\n", (int)line);
-        fprintf(stdout, "Surrogate count: %i\n", (int)surrogateCount);
-        fprintf(stdout, "Raw data breakdown:\n");
-        /*fprintf(stdout, "Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);*/
-        fprintf(stdout, "Number of contractions: %u\n", (int)noOfContractions);
-        fprintf(stdout, "Contraction image size: %u\n", (int)t->image->contractionSize);
-        fprintf(stdout, "Expansions size: %i\n", (int)t->expansions->position);
+    if (beVerbose) {
+        printf("\nLines read: %u\n", (int)line);
+        printf("Surrogate count: %i\n", (int)surrogateCount);
+        printf("Raw data breakdown:\n");
+        /*printf("Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);*/
+        printf("Number of contractions: %u\n", (int)noOfContractions);
+        printf("Contraction image size: %u\n", (int)t->image->contractionSize);
+        printf("Expansions size: %i\n", (int)t->expansions->position);
     }
 
 
@@ -1438,12 +1439,12 @@ write_uca_table(const char *filename,
     /* test */
     UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
 
-    if (VERBOSE) {
-        fprintf(stdout, "Compacted data breakdown:\n");
-        /*fprintf(stdout, "Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);*/
-        fprintf(stdout, "Number of contractions: %u\n", (int)noOfContractions);
-        fprintf(stdout, "Contraction image size: %u\n", (int)t->image->contractionSize);
-        fprintf(stdout, "Expansions size: %i\n", (int)t->expansions->position);
+    if (beVerbose) {
+        printf("Compacted data breakdown:\n");
+        /*printf("Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);*/
+        printf("Number of contractions: %u\n", (int)noOfContractions);
+        printf("Contraction image size: %u\n", (int)t->image->contractionSize);
+        printf("Expansions size: %i\n", (int)t->expansions->position);
     }
 
     if(U_FAILURE(*status)) {
@@ -1492,114 +1493,105 @@ write_uca_table(const char *filename,
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
+enum {
+    HELP_H,
+    HELP_QUESTION_MARK,
+    COPYRIGHT,
+    VERSION,
+    VERBOSE,
+    ICUDATADIR
+};
+
+/* Keep these values in sync with the above enums */
 static UOption options[]={
-    UOPTION_HELP_H,              /* 0  Numbers for those who*/ 
-    UOPTION_HELP_QUESTION_MARK,  /* 1   can't count. */
-    UOPTION_COPYRIGHT,           /* 2 */
-    UOPTION_VERSION,             /* 3 */
-    UOPTION_DESTDIR,             /* 4 */
-    UOPTION_SOURCEDIR,           /* 5 */
-    UOPTION_VERBOSE,             /* 6 */
-    UOPTION_ICUDATADIR           /* 7 */
-    /* weiv can't count :))))) */
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_COPYRIGHT,
+    UOPTION_VERSION,
+    UOPTION_VERBOSE,
+    UOPTION_ICUDATADIR
 };
 
 int main(int argc, char* argv[]) {
-    UErrorCode status = U_ZERO_ERROR;
-    const char* destdir = NULL;
-    const char* srcDir = NULL;
-    char filename[300];
-    char *basename = NULL;
-    const char *copyright = NULL;
     uprv_memset(&UCAVersion, 0, 4);
 
     U_MAIN_INIT_ARGS(argc, argv);
-
-    /* preset then read command line options */
-    options[4].value=u_getDataDirectory();
-    options[5].value="";
-    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+    argc=u_parseArgs(argc, argv, LENGTHOF(options), options);
 
     /* error handling, printing usage message */
     if(argc<0) {
         fprintf(stderr,
             "error in command line argument \"%s\"\n",
             argv[-argc]);
-    } else if(argc<2) {
-        argc=-1;
     }
-    if(options[0].doesOccur || options[1].doesOccur) {
+    if(argc<2 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
         fprintf(stderr,
-            "usage: %s [-options] file\n"
+            "usage: %s [-options] path/to/ICU/src/root\n"
             "\tRead in UCA collation text data and write out the binary collation data\n"
             "options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-V or --version     show a version message\n"
             "\t-c or --copyright   include a copyright notice\n"
-            "\t-d or --destdir     destination directory, followed by the path\n"
-            "\t-s or --sourcedir   source directory, followed by the path\n"
             "\t-v or --verbose     turn on verbose output\n"
             "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
             "\t                    followed by path, defaults to %s\n",
             argv[0], u_getDataDirectory());
-        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+        return argc<2 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
-    if(options[3].doesOccur) {
-        fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
+    if(options[VERSION].doesOccur) {
+        printf("genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
 #if UCONFIG_NO_COLLATION
             0, 0
 #else
             UCA_FORMAT_VERSION_0, UCA_FORMAT_VERSION_1
 #endif
             );
-        fprintf(stdout, U_COPYRIGHT_STRING"\n");
+        printf(U_COPYRIGHT_STRING"\n");
         exit(0);
     }
 
     /* get the options values */
-    destdir = options[4].value;
-    srcDir = options[5].value;
-    VERBOSE = options[6].doesOccur;
+    beVerbose = options[VERBOSE].doesOccur;
 
-    if (options[2].doesOccur) {
+    const char *copyright = NULL;
+    if (options[COPYRIGHT].doesOccur) {
         copyright = U_COPYRIGHT_STRING;
     }
 
-    if (options[7].doesOccur) {
-        u_setDataDirectory(options[7].value);
+    if (options[ICUDATADIR].doesOccur) {
+        u_setDataDirectory(options[ICUDATADIR].value);
     }
     /* Initialize ICU */
-    u_init(&status);
-    if (U_FAILURE(status) && status != U_FILE_ACCESS_ERROR) {
+    IcuToolErrorCode errorCode("genuca");
+    u_init(errorCode);
+    if (errorCode.isFailure() && errorCode.get() != U_FILE_ACCESS_ERROR) {
         fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
-            argv[0], u_errorName(status));
-        exit(1);
+            argv[0], errorCode.errorName());
+        exit(errorCode.reset());
     }
-    status = U_ZERO_ERROR;
+    errorCode.reset();
 
+    CharString icuSrcRoot(argv[1], errorCode);
 
-    /* prepare the filename beginning with the source dir */
-    uprv_strcpy(filename, srcDir);
-    basename=filename+uprv_strlen(filename);
+    CharString icuSourceData(icuSrcRoot, errorCode);
+    icuSourceData.appendPathPart("source", errorCode);
+    icuSourceData.appendPathPart("data", errorCode);
 
-    if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
-        *basename++ = U_FILE_SEP_CHAR;
+    CharString srcDir(icuSourceData, errorCode);
+    srcDir.appendPathPart("unidata", errorCode);
+
+    CharString destDir(icuSourceData, errorCode);
+    destDir.appendPathPart("in", errorCode);
+    destDir.appendPathPart("coll", errorCode);
+
+    CharString ucaFile(srcDir, errorCode);
+    ucaFile.appendPathPart("FractionalUCA.txt", errorCode);
+
+    if(errorCode.isFailure()) {
+        fprintf(stderr, "genuca: unable to build file paths - %s\n",
+                errorCode.errorName());
+        return errorCode.reset();
     }
-
-    if(argc < 0) { 
-      uprv_strcpy(basename, "FractionalUCA.txt");
-    } else {
-      argv++;
-      uprv_strcpy(basename, getLongPathname(*argv));
-    }
-
-#if 0
-    if(u_getCombiningClass(0x0053) == 0)
-    {
-        fprintf(stderr, "SEVERE ERROR: Normalization data is not functioning! Bailing out.  Was not able to load unorm.dat.\n");
-        exit(1);
-    }
-#endif 
 
 #if UCONFIG_NO_COLLATION
 
@@ -1608,23 +1600,23 @@ int main(int argc, char* argv[]) {
     
     msg = "genuca writes dummy " UCA_DATA_NAME "." UCA_DATA_TYPE " because of UCONFIG_NO_COLLATION, see uconfig.h";
     fprintf(stderr, "%s\n", msg);
-    pData = udata_create(destdir, UCA_DATA_TYPE, UCA_DATA_NAME, &dummyDataInfo,
-                         NULL, &status);
+    pData = udata_create(destDir.data(), UCA_DATA_TYPE, UCA_DATA_NAME, &dummyDataInfo,
+                         NULL, errorCode);
     udata_writeBlock(pData, msg, strlen(msg));
-    udata_finish(pData, &status);
+    udata_finish(pData, errorCode);
 
     msg = "genuca writes dummy " INVC_DATA_NAME "." INVC_DATA_TYPE " because of UCONFIG_NO_COLLATION, see uconfig.h";
     fprintf(stderr, "%s\n", msg);
-    pData = udata_create(destdir, INVC_DATA_TYPE, INVC_DATA_NAME, &dummyDataInfo,
-                         NULL, &status);
+    pData = udata_create(destDir.data(), INVC_DATA_TYPE, INVC_DATA_NAME, &dummyDataInfo,
+                         NULL, errorCode);
     udata_writeBlock(pData, msg, strlen(msg));
-    udata_finish(pData, &status);
+    udata_finish(pData, errorCode);
 
-    return (int)status;
+    return errorCode.reset();
 
 #else
 
-    return write_uca_table(filename, destdir, copyright, &status);
+    return write_uca_table(ucaFile.data(), destDir.data(), copyright, errorCode);
 
 #endif
 }
