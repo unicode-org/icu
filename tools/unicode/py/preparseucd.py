@@ -1216,6 +1216,7 @@ _strip_re = re.compile("([0-9a-fA-F]+.+?) *#.*")
 _code_point_re = re.compile("\s*([0-9a-fA-F]+)\s*;")
 
 def CopyAndStripWithOptionalMerge(s, t, do_merge):
+  # TODO: We do not seem to need the do_merge argument and logic any more.
   # TODO: With Python 2.7+, combine the two with statements into one.
   with open(s, "r") as in_file:
     with open(t, "w") as out_file:
@@ -1320,38 +1321,38 @@ def DontCopy(s, t):
 # An explicit order number is set only for files that must be parsed
 # before others.
 _files = {
-  "BidiMirroring.txt": (CopyOnly, ParseBidiMirroring),
+  "BidiMirroring.txt": (DontCopy, ParseBidiMirroring),
   "BidiTest.txt": (CopyOnly, "testdata"),
-  "Blocks.txt": (CopyOnly, ParseBlocks),
+  "Blocks.txt": (DontCopy, ParseBlocks),
   "CaseFolding.txt": (CopyOnly, ParseCaseFolding),
-  "DerivedAge.txt": (CopyOnly, ParseDerivedAge),
-  "DerivedBidiClass.txt": (CopyOnly, ParseDerivedBidiClass),
+  "DerivedAge.txt": (DontCopy, ParseDerivedAge),
+  "DerivedBidiClass.txt": (DontCopy, ParseDerivedBidiClass),
   "DerivedCoreProperties.txt": (CopyAndStrip, ParseNamedProperties),
-  "DerivedJoiningGroup.txt": (CopyOnly, ParseDerivedJoiningGroup),
-  "DerivedJoiningType.txt": (CopyOnly, ParseDerivedJoiningType),
+  "DerivedJoiningGroup.txt": (DontCopy, ParseDerivedJoiningGroup),
+  "DerivedJoiningType.txt": (DontCopy, ParseDerivedJoiningType),
   "DerivedNormalizationProps.txt": (CopyAndStrip, ParseNamedProperties),
-  "DerivedNumericValues.txt": (CopyOnly, ParseDerivedNumericValues),
-  "EastAsianWidth.txt": (CopyAndStripAndMerge, ParseEastAsianWidth),
-  "GraphemeBreakProperty.txt": (CopyAndStrip, ParseGraphemeBreakProperty),
+  "DerivedNumericValues.txt": (DontCopy, ParseDerivedNumericValues),
+  "EastAsianWidth.txt": (DontCopy, ParseEastAsianWidth),
+  "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
   "GraphemeBreakTest.txt": (PrependBOM, "testdata"),
   "IndicMatraCategory.txt": (DontCopy, ParseIndicMatraCategory),
   "IndicSyllabicCategory.txt": (DontCopy, ParseIndicSyllabicCategory),
-  "LineBreak.txt": (CopyAndStripAndMerge, ParseLineBreak),
+  "LineBreak.txt": (DontCopy, ParseLineBreak),
   "LineBreakTest.txt": (PrependBOM, "testdata"),
-  "NameAliases.txt": (CopyOnly, ParseNameAliases),
+  "NameAliases.txt": (DontCopy, ParseNameAliases),
   "NamesList.txt": (DontCopy, ParseNamesList),
   "NormalizationCorrections.txt": (CopyOnly,),  # Only used in gensprep.
   "NormalizationTest.txt": (CopyAndStrip,),
-  "PropertyAliases.txt": (CopyOnly, ParsePropertyAliases, 0),
-  "PropertyValueAliases.txt": (CopyOnly, ParsePropertyValueAliases, 1),
-  "PropList.txt": (CopyAndStrip, ParseNamedProperties),
-  "SentenceBreakProperty.txt": (CopyAndStrip, ParseSentenceBreak),
+  "PropertyAliases.txt": (DontCopy, ParsePropertyAliases, 0),
+  "PropertyValueAliases.txt": (DontCopy, ParsePropertyValueAliases, 1),
+  "PropList.txt": (DontCopy, ParseNamedProperties),
+  "SentenceBreakProperty.txt": (DontCopy, ParseSentenceBreak),
   "SentenceBreakTest.txt": (PrependBOM, "testdata"),
-  "Scripts.txt": (CopyAndStrip, ParseScripts),
-  "ScriptExtensions.txt": (CopyOnly, ParseScriptExtensions),
+  "Scripts.txt": (DontCopy, ParseScripts),
+  "ScriptExtensions.txt": (DontCopy, ParseScriptExtensions),
   "SpecialCasing.txt": (CopyOnly, ParseSpecialCasing),
   "UnicodeData.txt": (CopyOnly, ParseUnicodeData, 2),
-  "WordBreakProperty.txt": (CopyAndStrip, ParseWordBreak),
+  "WordBreakProperty.txt": (DontCopy, ParseWordBreak),
   "WordBreakTest.txt": (PrependBOM, "testdata")
 }
 
