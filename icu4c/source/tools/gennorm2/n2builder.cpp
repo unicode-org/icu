@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -193,7 +193,19 @@ Normalizer2DataBuilder::~Normalizer2DataBuilder() {
 
 void
 Normalizer2DataBuilder::setUnicodeVersion(const char *v) {
-    u_versionFromString(unicodeVersion, v);
+    UVersionInfo nullVersion={ 0, 0, 0, 0 };
+    UVersionInfo version;
+    u_versionFromString(version, v);
+    if( 0!=memcmp(version, unicodeVersion, U_MAX_VERSION_LENGTH) &&
+        0!=memcmp(nullVersion, unicodeVersion, U_MAX_VERSION_LENGTH)
+    ) {
+        char buffer[U_MAX_VERSION_STRING_LENGTH];
+        u_versionToString(unicodeVersion, buffer);
+        fprintf(stderr, "gennorm2 error: multiple inconsistent Unicode version numbers %s vs. %s\n",
+                buffer, v);
+        exit(U_ILLEGAL_ARGUMENT_ERROR);
+    }
+    memcpy(unicodeVersion, version, U_MAX_VERSION_LENGTH);
 }
 
 Norm *Normalizer2DataBuilder::allocNorm() {
@@ -1177,6 +1189,10 @@ void Normalizer2DataBuilder::writeBinaryFile(const char *filename) {
         printf("minMaybeYes:                       0x%04x\n", (int)indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]);
     }
 
+    UVersionInfo nullVersion={ 0, 0, 0, 0 };
+    if(0==memcmp(nullVersion, unicodeVersion, 4)) {
+        u_versionFromString(unicodeVersion, U_UNICODE_VERSION);
+    }
     memcpy(dataInfo.dataVersion, unicodeVersion, 4);
     UNewDataMemory *pData=
         udata_create(NULL, NULL, filename, &dataInfo,
