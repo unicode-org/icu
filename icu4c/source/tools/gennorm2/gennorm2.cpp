@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -80,7 +80,6 @@ main(int argc, char* argv[]) {
 
     /* preset then read command line options */
     options[SOURCEDIR].value="";
-    options[UNICODE_VERSION].value=U_UNICODE_VERSION;
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[HELP_H]), options);
 
     /* error handling, printing usage message */
@@ -145,7 +144,9 @@ main(int argc, char* argv[]) {
     LocalPointer<Normalizer2DataBuilder> builder(new Normalizer2DataBuilder(errorCode));
     errorCode.assertSuccess();
 
-    builder->setUnicodeVersion(options[UNICODE_VERSION].value);
+    if(options[UNICODE_VERSION].doesOccur) {
+        builder->setUnicodeVersion(options[UNICODE_VERSION].value);
+    }
 
     if(options[OPT_FAST].doesOccur) {
         builder->setOptimization(Normalizer2DataBuilder::OPTIMIZE_FAST);
@@ -198,6 +199,11 @@ void parseFile(FILE *f, Normalizer2DataBuilder &builder) {
             continue;  // skip empty and comment-only lines
         }
         if(line[0]=='*') {
+            const char *s=u_skipWhitespace(line+1);
+            if(0==strncmp(s, "Unicode", 7)) {
+                s=u_skipWhitespace(s+7);
+                builder.setUnicodeVersion(s);
+            }
             continue;  // reserved syntax
         }
         const char *delimiter;
