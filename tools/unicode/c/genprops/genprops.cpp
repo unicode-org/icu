@@ -103,6 +103,7 @@ main(int argc, char* argv[]) {
     LocalPointer<PNamesBuilder> pnamesBuilder(createPNamesBuilder(errorCode));
     LocalPointer<PropsBuilder> corePropsBuilder(createCorePropsBuilder(errorCode));
     LocalPointer<PropsBuilder> bidiPropsBuilder(createBiDiPropsBuilder(errorCode));
+    LocalPointer<PropsBuilder> casePropsBuilder(createCasePropsBuilder(errorCode));
     LocalPointer<PropsBuilder> namesPropsBuilder(createNamesPropsBuilder(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsBuilders - %s\n", errorCode.errorName());
@@ -144,11 +145,13 @@ main(int argc, char* argv[]) {
             const UniProps *props=ppucd.getProps(newValues, errorCode);
             corePropsBuilder->setProps(*props, newValues, errorCode);
             bidiPropsBuilder->setProps(*props, newValues, errorCode);
+            casePropsBuilder->setProps(*props, newValues, errorCode);
             namesPropsBuilder->setProps(*props, newValues, errorCode);
         } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
             corePropsBuilder->setUnicodeVersion(version);
             bidiPropsBuilder->setUnicodeVersion(version);
+            casePropsBuilder->setUnicodeVersion(version);
             namesPropsBuilder->setUnicodeVersion(version);
         } else if(lineType==PreparsedUCD::ALG_NAMES_RANGE_LINE) {
             UChar32 start, end;
@@ -168,6 +171,7 @@ main(int argc, char* argv[]) {
 
     corePropsBuilder->build(errorCode);
     bidiPropsBuilder->build(errorCode);
+    casePropsBuilder->build(errorCode);
     namesPropsBuilder->build(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
@@ -190,6 +194,8 @@ main(int argc, char* argv[]) {
     corePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     bidiPropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
     bidiPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    casePropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
+    casePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     namesPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
