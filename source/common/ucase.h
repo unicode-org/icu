@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
+#include "putilimp.h"
 #include "uset_imp.h"
 #include "udataswp.h"
 
@@ -295,7 +296,11 @@ enum {
 #define UCASE_MAX_DELTA     0x1ff
 #define UCASE_MIN_DELTA     (-UCASE_MAX_DELTA-1)
 
-#define UCASE_GET_DELTA(props) ((int16_t)(props)>>UCASE_DELTA_SHIFT)
+#if U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC
+#   define UCASE_GET_DELTA(props) ((int16_t)(props)>>UCASE_DELTA_SHIFT)
+#else
+#   define UCASE_GET_DELTA(props) (int16_t)(((props)&0x8000) ? (((props)>>UCASE_DELTA_SHIFT)|0xfc00) : ((uint16_t)(props)>>UCASE_DELTA_SHIFT))
+#endif
 
 /* case-ignorable uses one of the delta bits, see gencase/store.c */
 #define UCASE_CASE_IGNORABLE 0x40
