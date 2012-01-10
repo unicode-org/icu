@@ -1,6 +1,6 @@
 #!/usr/bin/python2.6
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2011 International Business Machines
+# Copyright (c) 2009-2012 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #   file name:  preparseucd.py
@@ -1200,8 +1200,8 @@ def WriteNorm2TextFile(path, filename, with_compat):
 #
 """)
     type = "NFKC" if with_compat else "NFC"
-    out_file.write("# Complete data for Unicode " + type + " normalization.\n")
-    out_file.write("# Unicode " + _ucd_version + "\n\n")
+    out_file.write("# Complete data for Unicode " + type + " normalization.\n\n")
+    out_file.write("* Unicode " + _ucd_version + "\n\n")
     WriteAllCC(out_file)
     WriteAllMappings(out_file, with_compat)
 
