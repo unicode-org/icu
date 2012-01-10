@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,6 +25,7 @@
 #include "cmemory.h"
 #include "mutex.h"
 #include "normalizer2impl.h"
+#include "putilimp.h"
 #include "uassert.h"
 #include "uset_imp.h"
 #include "utrie2.h"
