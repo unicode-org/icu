@@ -302,7 +302,7 @@ enum {
 #   define UCASE_GET_DELTA(props) (int16_t)(((props)&0x8000) ? (((props)>>UCASE_DELTA_SHIFT)|0xfc00) : ((uint16_t)(props)>>UCASE_DELTA_SHIFT))
 #endif
 
-/* case-ignorable uses one of the delta bits, see gencase/store.c */
+/* case-ignorable uses one of the delta bits, see genprops/casepropsbuilder.cpp */
 #define UCASE_CASE_IGNORABLE 0x40
 
 /* exception: bits 15..4 are an unsigned 12-bit index into the exceptions array */
