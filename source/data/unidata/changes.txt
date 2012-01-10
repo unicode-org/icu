@@ -1,4 +1,4 @@
-﻿* Copyright (C) 2004-2011, International Business Machines
+﻿* Copyright (C) 2004-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *
 *   file name:  changes.txt
@@ -10,6 +10,39 @@
 *   created by: Markus W. Scherer
 *
 * change log for Unicode updates
+
+---------------------------------------------------------------------------- ***
+
+Future Unicode update
+
+Tools simplified since the Unicode 6.1 update. See
+- http://site.icu-project.org/design/props/ppucd
+- http://bugs.icu-project.org/trac/wiki/Markus/ReviewTicket8972
+
+* Unicode version numbers
+- icutools/unicode/makedefs.sh was deleted, so one fewer places for version & path updates
+
+* file preparation
+- ucdcopy.py and genpname/preparse.pl replaced by preparseucd.py:
+- ~/svn.icu/tools/trunk/src/unicode$ py/preparseucd.py ~/uni61/20111205mod/ucd ~/svn.icu/trunk/src ~/svn.icu/tools/trunk/src
+
+* generate core properties data files (makeprops.sh was deleted)
+- ~/svn.icu/tools/trunk/dbg/unicode$ c/genprops/genprops ~/svn.icu/trunk/src
+
+* generate normalization data files
+- ~/svn.icu/trunk/dbg$ export LD_LIBRARY_PATH=~/svn.icu/trunk/dbg/lib
+- ~/svn.icu/trunk/dbg$ SRC_DATA_IN=~/svn.icu/trunk/src/source/data/in
+- ~/svn.icu/trunk/dbg$ UNIDATA=~/svn.icu/trunk/src/source/data/unidata
+- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfc.nrm     -s $UNIDATA/norm2 nfc.txt
+- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc.nrm    -s $UNIDATA/norm2 nfkc.txt
+- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc_cf.nrm -s $UNIDATA/norm2 nfkc.txt nfkc_cf.txt
+- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/uts46.nrm   -s $UNIDATA/norm2 nfc.txt uts46.txt
+
+* build ICU (make install)
+* build Unicode tools using CMake+make
+
+* new way to call genuca (makeuca.sh was deleted)
+- ~/svn.icu/tools/trunk/dbg/unicode$ c/genuca/genuca -i ~/svn.icu/trunk/dbg/data/out/build/icudt49l ~/svn.icu/trunk/src
 
 ---------------------------------------------------------------------------- ***
 
