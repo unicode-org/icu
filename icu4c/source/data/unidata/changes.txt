@@ -20,11 +20,24 @@ Tools simplified since the Unicode 6.1 update. See
 - http://bugs.icu-project.org/trac/wiki/Markus/ReviewTicket8972
 
 * Unicode version numbers
-- icutools/unicode/makedefs.sh was deleted, so one fewer places for version & path updates
+- icutools/unicode/makedefs.sh was deleted, so one fewer place for version & path updates
 
 * file preparation
 - ucdcopy.py and genpname/preparse.pl replaced by preparseucd.py:
 - ~/svn.icu/tools/trunk/src/unicode$ py/preparseucd.py ~/uni61/20111205mod/ucd ~/svn.icu/trunk/src ~/svn.icu/tools/trunk/src
+- This writes files (especially ppucd.txt) to the ICU4C unidata and testdata subfolders.
+- Check test file diffs for previously commented-out, known-failing data lines;
+  probably need to keep those commented out.
+
+* PropertyValueAliases.txt changes
+- Script codes that are in ISO 15924 but not in Unicode are now listed in
+  preparseucd.py, in the _scripts_only_in_iso15924 variable.
+  If there are new ISO codes, then add them.
+  If Unicode adds some of them, then remove them from the .py variable.
+
+* UnicodeData.txt changes
+- No more manual changes for CJK ranges for algorithmic names;
+  those are now written to ppucd.txt and genprops reads them from there.
 
 * generate core properties data files (makeprops.sh was deleted)
 - ~/svn.icu/tools/trunk/dbg/unicode$ c/genprops/genprops ~/svn.icu/trunk/src
