@@ -50,8 +50,8 @@ Tools simplified since the Unicode 6.1 update. See
 - ~/svn.icu/trunk/dbg$ SRC_DATA_IN=~/svn.icu/trunk/src/source/data/in
 - ~/svn.icu/trunk/dbg$ UNIDATA=~/svn.icu/trunk/src/source/data/unidata
 - ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfc.nrm     -s $UNIDATA/norm2 nfc.txt
-- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc.nrm    -s $UNIDATA/norm2 nfkc.txt
-- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc_cf.nrm -s $UNIDATA/norm2 nfkc.txt nfkc_cf.txt
+- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc.nrm    -s $UNIDATA/norm2 nfc.txt nfkc.txt
+- ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/nfkc_cf.nrm -s $UNIDATA/norm2 nfc.txt nfkc.txt nfkc_cf.txt
 - ~/svn.icu/trunk/dbg$ bin/gennorm2 -o $SRC_DATA_IN/uts46.nrm   -s $UNIDATA/norm2 nfc.txt uts46.txt
 
 * build ICU (make install)
