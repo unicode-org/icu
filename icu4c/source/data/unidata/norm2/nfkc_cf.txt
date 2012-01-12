@@ -10,7 +10,7 @@
 # This file contains the Unicode NFKC_CF mappings,
 # extracted from the UCD file DerivedNormalizationProps.txt,
 # and reformatted into syntax for the gennorm2 Normalizer2 data generator tool.
-# Use this file as the second gennorm2 input file after nfkc.txt.
+# Use this file as the third gennorm2 input file after nfc.txt and nfkc.txt.
 
 * Unicode 6.1.0
 
