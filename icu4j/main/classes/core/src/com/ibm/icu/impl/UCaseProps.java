@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -96,7 +96,7 @@ public final class UCaseProps {
     private final static class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==2;
+            return version[0]==3;
         }
     }
 
@@ -470,16 +470,7 @@ public final class UCaseProps {
 
     /** @return same as ucase_getType() and set bit 2 if c is case-ignorable */
     public final int getTypeOrIgnorable(int c) {
-        int props=trie.get(c);
-        int type=getTypeFromProps(props);
-        if(propsHasException(props)) {
-            if((exceptions[getExceptionsOffset(props)]&EXC_CASE_IGNORABLE)!=0) {
-                type|=4;
-            }
-        } else if(type==NONE && (props&CASE_IGNORABLE)!=0) {
-            type|=4;
-        }
-        return type;
+        return getTypeAndIgnorableFromProps(trie.get(c));
     }
 
     /** @return NO_DOT, SOFT_DOTTED, ABOVE, OTHER_ACCENT */
@@ -1356,32 +1347,34 @@ public final class UCaseProps {
         return props&TYPE_MASK;
     }
 
-    private static final int SENSITIVE=     4;
-    private static final int EXCEPTION=     8;
+    private static final int getTypeAndIgnorableFromProps(int props) {
+        return props&7;
+    }
 
-    private static final int DOT_MASK=      0x30;
+    //private static final int IGNORABLE=   4;
+    private static final int SENSITIVE=     8;
+    private static final int EXCEPTION=     0x10;
+
+    private static final int DOT_MASK=      0x60;
     //private static final int NO_DOT=        0;      /* normal characters with cc=0 */
-    private static final int SOFT_DOTTED=   0x10;   /* soft-dotted characters with cc=0 */
-    private static final int ABOVE=         0x20;   /* "above" accents with cc=230 */
-    private static final int OTHER_ACCENT=  0x30;   /* other accent character (0<cc!=230) */
+    private static final int SOFT_DOTTED=   0x20;   /* soft-dotted characters with cc=0 */
+    private static final int ABOVE=         0x40;   /* "above" accents with cc=230 */
+    private static final int OTHER_ACCENT=  0x60;   /* other accent character (0<cc!=230) */
 
-    /* no exception: bits 15..6 are a 10-bit signed case mapping delta */
-    private static final int DELTA_SHIFT=   6;
-    //private static final int DELTA_MASK=    0xffc0;
-    //private static final int MAX_DELTA=     0x1ff;
+    /* no exception: bits 15..7 are a 9-bit signed case mapping delta */
+    private static final int DELTA_SHIFT=   7;
+    //private static final int DELTA_MASK=    0xff80;
+    //private static final int MAX_DELTA=     0xff;
     //private static final int MIN_DELTA=     (-MAX_DELTA-1);
 
     private static final int getDelta(int props) {
         return (short)props>>DELTA_SHIFT;
     }
 
-    /* case-ignorable uses one of the delta bits, see gencase/store.c */
-    private static final int CASE_IGNORABLE=0x40;
-
-    /* exception: bits 15..4 are an unsigned 12-bit index into the exceptions array */
-    private static final int EXC_SHIFT=     4;
-    //private static final int EXC_MASK=      0xfff0;
-    //private static final int MAX_EXCEPTIONS=0x1000;
+    /* exception: bits 15..5 are an unsigned 11-bit index into the exceptions array */
+    private static final int EXC_SHIFT=     5;
+    //private static final int EXC_MASK=      0xffe0;
+    //private static final int MAX_EXCEPTIONS=((EXC_MASK>>EXC_SHIFT)+1);
 
     /* definitions for 16-bit main exceptions word ------------------------------ */
 
@@ -1399,12 +1392,10 @@ public final class UCaseProps {
     /* each slot is 2 uint16_t instead of 1 */
     private static final int EXC_DOUBLE_SLOTS=          0x100;
 
-    /* reserved: exception bits 10..9 */
-
-    private static final int EXC_CASE_IGNORABLE=        0x800;
+    /* reserved: exception bits 11..9 */
 
     /* EXC_DOT_MASK=DOT_MASK<<EXC_DOT_SHIFT */
-    private static final int EXC_DOT_SHIFT=8;
+    private static final int EXC_DOT_SHIFT=7;
 
     /* normally stored in the main word, but pushed out for larger exception indexes */
     //private static final int EXC_DOT_MASK=              0x3000;
