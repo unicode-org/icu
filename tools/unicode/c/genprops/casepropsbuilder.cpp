@@ -47,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 2.0 .
+The following is a description of format version 3.0 .
 
 Format version 1.1 adds data for case closure.
 
@@ -55,6 +55,11 @@ Format version 1.2 adds an exception bit for case-ignorable. Needed because
 the Cased and Case_Ignorable properties are not disjoint.
 
 Format version 2.0 changes from UTrie to UTrie2.
+
+Format version 3.0 (ICU 49) shuffles the trie bits to simplify some builder and runtime code.
+It moves the Case_Ignorable flag from sometimes-trie-bit 6, sometimes-exception-bit 11
+to always-trie-bit 2 and adjusts the higher trie bits accordingly.
+Exception index reduced from 12 bits to 11, simple case mapping delta reduced from 10 bits to 9.
 
 The file contains the following structures:
 
@@ -82,26 +87,29 @@ The file contains the following structures:
 Trie data word:
 Bits
 if(exception) {
-    15..4   unsigned exception index
+    15..5   unsigned exception index
 } else {
     if(not uncased) {
-        15..6   signed delta to simple case mapping code point
+        15..7   signed delta to simple case mapping code point
                 (add delta to input code point)
     } else {
-            6   the code point is case-ignorable
-                (U+0307 is also case-ignorable but has an exception)
+        15..7   reserved, 0
     }
-     5..4   0 normal character with cc=0
+     6..5   0 normal character with cc=0
             1 soft-dotted character
             2 cc=230
             3 other cc
+            The runtime code relies on these two bits to be adjacent with this encoding.
 }
-    3   exception
-    2   case sensitive
+    4   exception
+    3   case-sensitive
+    2   case-ignorable
  1..0   0 uncased
         1 lowercase
         2 uppercase
         3 titlecase
+        The runtime code relies on the case-ignorable and case type bits 2..0
+        to be the lowest bits with this encoding.
 
 
 Exceptions:
@@ -116,14 +124,15 @@ excWord: (see UCASE_EXC_...)
 Bits
     15  conditional case folding
     14  conditional special casing
-13..12  same as non-exception trie data bits 5..4
+13..12  same as non-exception trie data bits 6..5
         moved here because the exception index needs more bits than the delta
         0 normal character with cc=0
         1 soft-dotted character
         2 cc=230
         3 other cc
-11      case-ignorable (used when the character is cased or has another exception)
-        (new in formatVersion 1.2/ICU 4.4)
+11      reserved
+        (was used in formatVersion 1.2..2.0:
+         case-ignorable (used when the character is cased or has another exception))
 10.. 9  reserved
      8  if set, then for each optional-value slot there are 2 uint16_t values
         (high and low parts of 32-bit values)
@@ -203,12 +212,9 @@ static UDataInfo dataInfo={
 
     /* dataFormat="cAsE" */
     { UCASE_FMT_0, UCASE_FMT_1, UCASE_FMT_2, UCASE_FMT_3 },
-    { 2, 0, 0, 0 },                             /* formatVersion */
+    { 3, 0, 0, 0 },                             /* formatVersion */
     { 6, 0, 0, 0 }                              /* dataVersion */
 };
-
-// Temporary Case_Ignorable bit before final encoding.
-#define UGENCASE_IGNORABLE     0x00010000
 
 #define UGENCASE_EXC_SHIFT     20
 #define UGENCASE_EXC_MASK      0xfff00000
@@ -451,7 +457,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     }
 
     if(props.binProps[UCHAR_CASE_IGNORABLE]) {
-        value|=UGENCASE_IGNORABLE;
+        value|=UCASE_IGNORABLE;
     }
 
     if((hasMapping || (value&UCASE_EXCEPTION)) && start!=end) {
@@ -860,10 +866,6 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
     /* copy and shift the soft-dotted bits */
     UChar excWord=(UChar)((value&UCASE_DOT_MASK)<<UCASE_EXC_DOT_SHIFT);
 
-    if(value&UGENCASE_IGNORABLE) {
-        excWord|=UCASE_EXC_CASE_IGNORABLE;
-    }
-
     UniProps &p=ep.props;
 
     /* set the bits for conditional mappings */
@@ -1020,29 +1022,9 @@ CasePropsBuilder::makeExceptions(UErrorCode &errorCode) {
      */
     for(UChar32 c=0; c<=0x10ffff; ++c) {
         uint32_t value=utrie2_get32(pTrie, c);
-        if(value&(UGENCASE_IGNORABLE|UCASE_EXCEPTION)) {
-            /*
-             * If the character is cased or has another exception,
-             * then we store the case-ignorable flag as an exception bit.
-             */
-            if( (value&UCASE_EXCEPTION)==0 &&
-                (value&UGENCASE_IGNORABLE) && (value&UCASE_TYPE_MASK)!=UCASE_NONE
-            ) {
-                // Case_Ignorable and Cased and no exception:
-                // Create ExcProps for the Case_Ignorable flag.
-                value=makeExcProps(c, value, errorCode);  // sets UCASE_EXCEPTION
-            }
-            if(value&UCASE_EXCEPTION) {
-                int32_t excIndex=makeException(c, value, *excProps[value>>UGENCASE_EXC_SHIFT], errorCode);
-                value=(value&~(UGENCASE_EXC_MASK|UCASE_EXC_MASK))|((uint32_t)excIndex<<UCASE_EXC_SHIFT);
-            } else /* Case_Ignorable and un-Cased and no exception */ {
-                /*
-                 * We use one of the delta/exception bits for
-                 * the case-ignorable flag for uncased characters.
-                 * There is no delta for uncased characters.
-                 */
-                value|=UCASE_CASE_IGNORABLE;
-            }
+        if(value&UCASE_EXCEPTION) {
+            int32_t excIndex=makeException(c, value, *excProps[value>>UGENCASE_EXC_SHIFT], errorCode);
+            value=(value&~(UGENCASE_EXC_MASK|UCASE_EXC_MASK))|((uint32_t)excIndex<<UCASE_EXC_SHIFT);
             utrie2_set32(pTrie, c, value, &errorCode);
         }
     }
