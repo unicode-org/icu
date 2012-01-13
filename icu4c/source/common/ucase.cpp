@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -403,16 +403,7 @@ ucase_getType(const UCaseProps *csp, UChar32 c) {
 U_CAPI int32_t U_EXPORT2
 ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c) {
     uint16_t props=UTRIE2_GET16(&csp->trie, c);
-    int32_t type=UCASE_GET_TYPE(props);
-    if(props&UCASE_EXCEPTION) {
-        const uint16_t *pe=GET_EXCEPTIONS(csp, props);
-        if(*pe&UCASE_EXC_CASE_IGNORABLE) {
-            type|=4;
-        }
-    } else if(type==UCASE_NONE && (props&UCASE_CASE_IGNORABLE)) {
-        type|=4;
-    }
-    return type;
+    return UCASE_GET_TYPE_AND_IGNORABLE(props);
 }
 
 /** @return UCASE_NO_DOT, UCASE_SOFT_DOTTED, UCASE_ABOVE, UCASE_OTHER_ACCENT */
