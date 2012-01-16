@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2012, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -173,15 +173,15 @@ public class Utils {
     return new String(buf, x, w-x);
   }
 
-  public static void main(String[] args) {
-    for (int i = 0; i < args.length; ++i) {
-      String arg = args[i];
-      System.out.print(arg);
-      System.out.print(" > ");
-      long n = Long.parseLong(arg);
-      System.out.println(chineseNumber(n, ChineseDigits.DEBUG));
-    }
-  }
+//  public static void main(String[] args) {
+//    for (int i = 0; i < args.length; ++i) {
+//      String arg = args[i];
+//      System.out.print(arg);
+//      System.out.print(" > ");
+//      long n = Long.parseLong(arg);
+//      System.out.println(chineseNumber(n, ChineseDigits.DEBUG));
+//    }
+//  }
 
   public static class ChineseDigits {
     final char[] digits;

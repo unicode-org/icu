@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -33,18 +33,27 @@ class BreakDictionary {
     //=================================================================================
     // testing and debugging
     //=================================================================================
-    ///CLOVER:OFF
-    //The main method looks like it was useful once but now seems worthless. It is not used by any method or class.
-    public static void main(String args[])
-            throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        String filename = args[0];
 
-        BreakDictionary dictionary = new BreakDictionary(new FileInputStream(filename));
+//    public static void main(String... args) {
+//        String inFile = args[0];
+//        String outFile = args.length >= 2 ? args[1] : null;
+//        try {
+//            writeToFile(inFile, outFile);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    ///CLOVER:OFF
+    static void writeToFile(String inFile, String outFile)
+            throws FileNotFoundException, UnsupportedEncodingException, IOException {
+
+        BreakDictionary dictionary = new BreakDictionary(new FileInputStream(inFile));
 
         PrintWriter out = null;
 
-        if(args.length >= 2) {
-            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UnicodeLittle"));
+        if(outFile != null) {
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UnicodeLittle"));
         }
 
         dictionary.printWordList("", 0, out);
