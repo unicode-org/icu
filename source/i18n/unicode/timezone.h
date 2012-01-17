@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 1997-2011, International Business Machines Corporation
+* Copyright (c) 1997-2012, International Business Machines Corporation
 * and others. All Rights Reserved.
 **************************************************************************
 *
@@ -618,6 +618,24 @@ public:
      * The default implementation of this method returns <code>TRUE</code>
      * when the time zone uses daylight savings time in the current
      * (Gregorian) calendar year.
+     * <p>In Java 7, <code>observesDaylightTime()</code> was added in
+     * addition to <code>useDaylightTime()</code>. In Java, <code>useDaylightTime()</code>
+     * only checks if daylight saving time is observed by the last known
+     * rule. This specification might not be what most users would expect
+     * if daylight saving time is currently observed, but not scheduled
+     * in future. In this case, Java's <code>userDaylightTime()</code> returns
+     * <code>false</code>. To resolve the issue, Java 7 added <code>observesDaylightTime()</code>,
+     * which takes the current rule into account. The method <code>observesDaylightTime()</code>
+     * was added in ICU4J for supporting API signature compatibility with JDK.
+     * In general, ICU4C also provides JDK compatible methods, but the current
+     * implementation <code>userDaylightTime()</code> serves the purpose
+     * (takes the current rule into account), <code>observesDaylightTime()</code>
+     * is not added in ICU4C. In addition to <code>useDaylightTime()</code>, ICU4C
+     * <code>BasicTimeZone</code> class (Note that <code>TimeZone::createTimeZone(const UnicodeString &ID)</code>
+     * always returns a <code>BasicTimeZone</code>) provides a series of methods allowing
+     * historic and future time zone rule iteration, so you can check if daylight saving
+     * time is observed or not within a given period.
+     * 
      * @stable ICU 2.0
      */
     virtual UBool useDaylightTime(void) const = 0;
