@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -997,14 +997,14 @@ _appendSymbol(UnicodeString& dst,
 
 static inline void
 _appendSymbolWithMonthPattern(UnicodeString& dst, int32_t value, const UnicodeString* symbols, int32_t symbolsCount,
-              int32_t isLeapMonth, const UnicodeString& monthPattern, UErrorCode& status) {
+              const UnicodeString* monthPattern, UErrorCode& status) {
     U_ASSERT(0 <= value && value < symbolsCount);
     if (0 <= value && value < symbolsCount) {
-        if (isLeapMonth == 0) {
+        if (monthPattern == NULL) {
             dst += symbols[value];
         } else {
             Formattable monthName((const UnicodeString&)(symbols[value]));
-            MessageFormat::format(monthPattern, &monthName, 1, dst, status);
+            MessageFormat::format(*monthPattern, &monthName, 1, dst, status);
         }
     }
 }
@@ -1549,7 +1549,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     int32_t beginOffset = appendTo.length();
     NumberFormat *currentNumberFormat;
 
-    UBool isHebrewCalendar = !strcmp(cal.getType(),"hebrew");
+    UBool isHebrewCalendar = (uprv_strcmp(cal.getType(),"hebrew") == 0);
+    UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0);
 
     // if the pattern character is unrecognized, signal an error and dump out
     if (patternCharPtr == NULL)
@@ -1566,7 +1567,6 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     if (U_FAILURE(status)) {
         return;
     }
-    int32_t isLeapMonth = 0;
 
     currentNumberFormat = getNumberFormatByIndex(patternCharIndex);
     switch (patternCharIndex) {
@@ -1574,12 +1574,17 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for any "G" symbol, write out the appropriate era string
     // "GGGG" is wide era name, "GGGGG" is narrow era name, anything else is abbreviated name
     case UDAT_ERA_FIELD:
-        if (count == 5)
-           _appendSymbol(appendTo, value, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount);
-        else if (count == 4)
-           _appendSymbol(appendTo, value, fSymbols->fEraNames, fSymbols->fEraNamesCount);
-        else
-           _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
+        if (isChineseCalendar) {
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, 1, 9); // as in ICU4J
+        } else {
+            if (count == 5) {
+                _appendSymbol(appendTo, value, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount);
+            } else if (count == 4) {
+                _appendSymbol(appendTo, value, fSymbols->fEraNames, fSymbols->fEraNamesCount);
+            } else {
+                _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
+            }
+        }
         break;
 
     // OLD: for "yyyy", write out the whole year; for "yy", write out the last 2 digits
@@ -1611,38 +1616,40 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
            if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6 && count < 3 )
                value--; // Adjust the month number down 1 in Hebrew non-leap years, i.e. Adar is 6, not 7.
         }
-        isLeapMonth = (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount)?
-                    cal.get(UCAL_IS_LEAP_MONTH, status): 0;
-        // should consolidate the next section by using arrays of pointers & counts for the right symbols...
-        if (count == 5) {
-            if (patternCharIndex == UDAT_MONTH_FIELD) {
-                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fNarrowMonths, fSymbols->fNarrowMonthsCount,
-                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatNarrow], status);
+        {
+            int32_t isLeapMonth = (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount)?
+                        cal.get(UCAL_IS_LEAP_MONTH, status): 0;
+            // should consolidate the next section by using arrays of pointers & counts for the right symbols...
+            if (count == 5) {
+                if (patternCharIndex == UDAT_MONTH_FIELD) {
+                    _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fNarrowMonths, fSymbols->fNarrowMonthsCount,
+                            (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatNarrow]): NULL, status);
+                } else {
+                    _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneNarrowMonths, fSymbols->fStandaloneNarrowMonthsCount,
+                            (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneNarrow]): NULL, status);
+                }
+            } else if (count == 4) {
+                if (patternCharIndex == UDAT_MONTH_FIELD) {
+                    _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fMonths, fSymbols->fMonthsCount,
+                            (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide]): NULL, status);
+                } else {
+                    _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount,
+                            (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide]): NULL, status);
+                }
+            } else if (count == 3) {
+                if (patternCharIndex == UDAT_MONTH_FIELD) {
+                    _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fShortMonths, fSymbols->fShortMonthsCount,
+                            (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev]): NULL, status);
+                } else {
+                    _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount,
+                            (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev]): NULL, status);
+                }
             } else {
-                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneNarrowMonths, fSymbols->fStandaloneNarrowMonthsCount,
-                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneNarrow], status);
+                UnicodeString monthNumber;
+                zeroPaddingNumber(currentNumberFormat,monthNumber, value + 1, count, maxIntCount);
+                _appendSymbolWithMonthPattern(appendTo, 0, &monthNumber, 1,
+                        (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternNumeric]): NULL, status);
             }
-        } else if (count == 4) {
-            if (patternCharIndex == UDAT_MONTH_FIELD) {
-                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fMonths, fSymbols->fMonthsCount,
-                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide], status);
-            } else {
-                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount,
-                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide], status);
-            }
-        } else if (count == 3) {
-            if (patternCharIndex == UDAT_MONTH_FIELD) {
-                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fShortMonths, fSymbols->fShortMonthsCount,
-                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev], status);
-            } else {
-                _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount,
-                        isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev], status);
-            }
-        } else {
-            UnicodeString monthNumber;
-            zeroPaddingNumber(currentNumberFormat,monthNumber, value + 1, count, maxIntCount);
-            _appendSymbolWithMonthPattern(appendTo, 0, &monthNumber, 1,
-                    isLeapMonth, fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternNumeric], status);
         }
         break;
 
@@ -2547,7 +2554,7 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
         else {
             cal.set(field, bestMatch);
         }
-        if (isLeapMonth) {
+        if (monthPattern != NULL) {
             cal.set(UCAL_IS_LEAP_MONTH, isLeapMonth);
         }
 
@@ -2631,6 +2638,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     if (numericLeapMonthFormatter != NULL) {
         numericLeapMonthFormatter->setFormats((const Format **)&currentNumberFormat, 1);
     }
+    UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0);
 
     // If there are any spaces here, skip over them.  If we hit the end
     // of the string, then fail.
@@ -2662,6 +2670,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         (patternCharIndex == UDAT_STANDALONE_QUARTER_FIELD && count <= 2) || // q
         patternCharIndex == UDAT_YEAR_FIELD ||                               // y
         patternCharIndex == UDAT_YEAR_WOY_FIELD ||                           // Y
+        (patternCharIndex == UDAT_ERA_FIELD && isChineseCalendar) ||         // G
         patternCharIndex == UDAT_FRACTIONAL_SECOND_FIELD)                    // S
     {
         int32_t parseStart = pos.getIndex();
@@ -2676,9 +2685,11 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if (args != NULL && argCount == 1 && pos.getIndex() > parseStart && args[0].isNumeric()) {
                 parsedNumericLeapMonth = TRUE;
                 number.setLong(args[0].getLong());
+                cal.set(UCAL_IS_LEAP_MONTH, 1);
                 delete[] args;
             } else {
                 pos.setIndex(parseStart);
+                cal.set(UCAL_IS_LEAP_MONTH, 0);
             }
         }
 
@@ -2758,6 +2769,10 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     switch (patternCharIndex) {
     case UDAT_ERA_FIELD:
+        if (isChineseCalendar) {
+            cal.set(UCAL_ERA, value);
+            return pos.getIndex();
+        }
         if (count == 5) {
             ps = matchString(text, start, UCAL_ERA, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount, NULL, cal);
         } else if (count == 4) {
@@ -2781,7 +2796,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // we made adjustments to place the 2-digit year in the proper
         // century, for parsed strings from "00" to "99".  Any other string
         // is treated literally:  "2250", "-1", "1", "002".
-        if ((pos.getIndex() - start) == 2
+        if ((pos.getIndex() - start) == 2 && !isChineseCalendar
             && u_isdigit(text.charAt(start))
             && u_isdigit(text.charAt(start+1)))
         {
@@ -2830,6 +2845,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         return pos.getIndex();
 
     case UDAT_MONTH_FIELD:
+    case UDAT_STANDALONE_MONTH_FIELD:
         if (gotNumber) // i.e., M or MM.
         {
             // When parsing month numbers from the Hebrew Calendar, we might need to adjust the month depending on whether
@@ -2849,62 +2865,41 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 }
             } else {
                 // Don't want to parse the month if it is a string
-                // while pattern uses numeric style: M or MM.
+                // while pattern uses numeric style: M/MM, L/LL
                 // [We computed 'value' above.]
                 cal.set(UCAL_MONTH, value - 1);
             }
             return pos.getIndex();
         } else {
-            // count >= 3 // i.e., MMM or MMMM
+            // count >= 3 // i.e., MMM/MMMM, LLL/LLLL
             // Want to be able to parse both short and long forms.
             // Try count == 4 first:
             UnicodeString * wideMonthPat = NULL;
             UnicodeString * shortMonthPat = NULL;
             if (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount) {
-                wideMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide];
-                shortMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev];
+                if (patternCharIndex==UDAT_MONTH_FIELD) {
+                    wideMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide];
+                    shortMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev];
+                } else {
+                    wideMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide];
+                    shortMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev];
+                }
             }
             int32_t newStart = 0;
-
-            if ((newStart = matchString(text, start, UCAL_MONTH, // try MMMM
-                                      fSymbols->fMonths, fSymbols->fMonthsCount, wideMonthPat, cal)) > 0)
-                return newStart;
-            else if ((newStart = matchString(text, start, UCAL_MONTH, // try MMM
-                                          fSymbols->fShortMonths, fSymbols->fShortMonthsCount, shortMonthPat, cal)) > 0)
-                return newStart;
-            else if (!lenient) // currently we do not try to parse MMMMM: #8860
-                return newStart;
-            // else we allowing parsing as number, below
-        }
-        break;
-
-    case UDAT_STANDALONE_MONTH_FIELD:
-        if (gotNumber) // i.e., L or LL.
-        {
-            // Don't want to parse the month if it is a string
-            // while pattern uses numeric style: M or MM.
-            // [We computed 'value' above.]
-            cal.set(UCAL_MONTH, value - 1);
-            return pos.getIndex();
-        } else {
-            // count >= 3 // i.e., LLL or LLLL
-            // Want to be able to parse both short and long forms.
-            // Try count == 4 first:
-            UnicodeString * wideMonthPat = NULL;
-            UnicodeString * shortMonthPat = NULL;
-            if (fSymbols->fLeapMonthPatterns != NULL && fSymbols->fLeapMonthPatternsCount >= DateFormatSymbols::kMonthPatternsCount) {
-                wideMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide];
-                shortMonthPat = &fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev];
+            if (patternCharIndex==UDAT_MONTH_FIELD) {
+                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fMonths, fSymbols->fMonthsCount, wideMonthPat, cal); // try MMMM
+                if (newStart > 0) {
+                    return newStart;
+                }
+                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fShortMonths, fSymbols->fShortMonthsCount, shortMonthPat, cal); // try MMM
+            } else {
+                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, wideMonthPat, cal); // try LLLL
+                if (newStart > 0) {
+                    return newStart;
+                }
+                newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, shortMonthPat, cal); // try LLL
             }
-            int32_t newStart = 0;
-
-            if ((newStart = matchString(text, start, UCAL_MONTH,
-                                      fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, wideMonthPat, cal)) > 0)
-                return newStart;
-            else if ((newStart = matchString(text, start, UCAL_MONTH,
-                                          fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, shortMonthPat, cal)) > 0)
-                return newStart;
-            else if (!lenient) // currently we do not try to parse LLLLL: #8860
+            if (newStart > 0 || !lenient)  // currently we do not try to parse MMMMM/LLLLL: #8860
                 return newStart;
             // else we allowing parsing as number, below
         }
