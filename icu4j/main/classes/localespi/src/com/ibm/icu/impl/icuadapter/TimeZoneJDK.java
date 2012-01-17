@@ -41,7 +41,7 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     }
 
     private TimeZoneJDK(TimeZone jdkTz) {
-        fJdkTz = jdkTz;
+        fJdkTz = (TimeZone)jdkTz.clone();
     }
     
     public static com.ibm.icu.util.TimeZone wrap(TimeZone jdkTz) {
@@ -52,16 +52,17 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     }
     
     public TimeZone unwrap() {
-        return fJdkTz;
+        return (TimeZone)fJdkTz.clone();
     }
 
     @Override
     public Object clone() {
-        TimeZoneJDK other = (TimeZoneJDK)super.clone();
-        other.fJdkTz = (TimeZone)fJdkTz.clone();
-        return other;
+        if (isFrozen()) {
+            return this;
+        }
+        return cloneAsThawed();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof TimeZoneJDK) {
@@ -172,11 +173,17 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
     @Override
     public void setID(String ID) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen TimeZoneJDK instance.");
+        }
         fJdkTz.setID(ID);
     }
 
     @Override
     public void setRawOffset(int offsetMillis) {
+        if (isFrozen()) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen TimeZoneJDK instance.");
+        }
         fJdkTz.setRawOffset(offsetMillis);
     }
 
@@ -198,4 +205,28 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
         }
         return super.observesDaylightTime();
     }
+
+    // Freezable stuffs
+    private transient boolean fIsFrozen = false;
+
+    @Override
+    public boolean isFrozen() {
+        return fIsFrozen;
+    }
+
+    @Override
+    public com.ibm.icu.util.TimeZone freeze() {
+        fIsFrozen = true;
+        return this;
+    }
+
+    @Override
+    public com.ibm.icu.util.TimeZone cloneAsThawed() {
+        TimeZoneJDK tz = (TimeZoneJDK)super.cloneAsThawed();
+        tz.fJdkTz = (TimeZone)fJdkTz.clone();
+        tz.fJdkCal = (java.util.GregorianCalendar)fJdkCal.clone();
+        tz.fIsFrozen = false;
+        return tz;
+    }
+
 }
