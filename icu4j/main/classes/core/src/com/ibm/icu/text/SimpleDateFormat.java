@@ -73,6 +73,7 @@ import com.ibm.icu.util.ULocale.Category;
  * y&#x2020;       year                    (Number)            1996
  * Y*       year (week of year)     (Number)            1997
  * u*       extended year           (Number)            4601
+ * U*       cyclic year name        (Text)              ren-chen
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
  * h        hour in am/pm (1~12)    (Number)            12
@@ -270,7 +271,7 @@ public class SimpleDateFormat extends DateFormat {
     //       A   B   C   D    E   F   G    H   I   J   K   L    M   N   O
         -1, 40, -1, -1, 20,  30, 30,  0,  50, -1, -1, 50, 20,  20, -1, -1,
     //   P   Q   R    S   T   U  V   W   X   Y  Z
-        -1, 20, -1,  80, -1, -1, 0, 30, -1, 10, 0, -1, -1, -1, -1, -1,
+        -1, 20, -1,  80, -1, 10, 0, 30, -1, 10, 0, -1, -1, -1, -1, -1,
     //       a   b   c   d    e   f  g   h   i   j    k   l    m   n   o
         -1, 40, -1, 30,  30, 30, -1, 0, 50, -1, -1,  50, -1,  60, -1, -1,
     //   p   q   r    s   t   u  v   w   x    y  z
@@ -761,7 +762,7 @@ public class SimpleDateFormat extends DateFormat {
     //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 22, -1, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, -1,
     //   P   Q   R   S   T   U   V   W   X   Y   Z
-        -1, 27, -1,  8, -1, -1, 29, 13, -1, 18, 23, -1, -1, -1, -1, -1,
+        -1, 27, -1,  8, -1, 30, 29, 13, -1, 18, 23, -1, -1, -1, -1, -1,
     //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 14, -1, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
@@ -784,6 +785,7 @@ public class SimpleDateFormat extends DateFormat {
         /*L*/   Calendar.MONTH,
         /*Qq*/  Calendar.MONTH, Calendar.MONTH,
         /*V*/   Calendar.ZONE_OFFSET,
+        /*U*/   Calendar.YEAR,
     };
 
     // Map pattern character index to DateFormat field number
@@ -801,6 +803,7 @@ public class SimpleDateFormat extends DateFormat {
         /*L*/   DateFormat.STANDALONE_MONTH_FIELD,
         /*Qq*/  DateFormat.QUARTER_FIELD, DateFormat.STANDALONE_QUARTER_FIELD,
         /*V*/   DateFormat.TIMEZONE_SPECIAL_FIELD,
+        /*U*/   DateFormat.YEAR_NAME_FIELD,
     };
 
     // Map pattern character index to DateFormat.Field
@@ -818,6 +821,7 @@ public class SimpleDateFormat extends DateFormat {
         /*L*/   DateFormat.Field.MONTH,
         /*Qq*/  DateFormat.Field.QUARTER, DateFormat.Field.QUARTER,
         /*V*/   DateFormat.Field.TIME_ZONE,
+        /*U*/   DateFormat.Field.YEAR,
     };
 
     /**
@@ -935,6 +939,9 @@ public class SimpleDateFormat extends DateFormat {
             } else { //count = 1 or count > 2
                 zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
             }
+            break;
+        case 30: // 'U' - YEAR_NAME_FIELD
+            safeAppend(formatData.shortYearNames, value-1, buf);
             break;
         case 2: // 'M' - MONTH
         case 26: // 'L' - STANDALONE MONTH
@@ -1817,8 +1824,13 @@ public class SimpleDateFormat extends DateFormat {
             }
         if (bestMatch >= 0)
             {
+                if (field == Calendar.YEAR) {
+                    bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
+                }
                 cal.set(field, bestMatch);
-                cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
+                if (monthPattern != null) {
+                    cal.set(Calendar.IS_LEAP_MONTH, isLeapMonth);
+                }
                 return start + bestMatchLength;
             }
         return -start;
@@ -2067,6 +2079,8 @@ public class SimpleDateFormat extends DateFormat {
                     DelayedHebrewMonthCheck = false;
                 }
                 return pos.getIndex();
+            case 30: // 'U' - YEAR_NAME_FIELD
+                return matchString(text, start, Calendar.YEAR, formatData.shortYearNames, null, cal);
             case 2: // 'M' - MONTH
             case 26: // 'L' - STAND_ALONE_MONTH
                 if (count <= 2) { // i.e., M/MM, L/LL

@@ -299,17 +299,17 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
              "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "", "", "", "", "", "","","","","","",
+            "Wednesday", "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "", "", "", "", "", "","","","","","","",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "",
-            "mercredi", "", "", "", "", "", "", "", "heure avanc\u00E9e du Pacifique", "", "", "", "", "", "", "","","","","","",
+            "mercredi", "", "", "", "", "", "", "", "heure avanc\u00E9e du Pacifique", "", "", "", "", "", "", "","","","","","","",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8","3","3","PDT",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8","3","3","PDT","",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
             "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997",
-            "Wednesday", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter","United States Time (Los Angeles)",
+            "Wednesday", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter","United States Time (Los Angeles)","",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -412,7 +412,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
-    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqV";
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVU";
 
     /**
      * A list of the DateFormat.Field.
@@ -449,6 +449,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat.Field.QUARTER,       // Q
         DateFormat.Field.QUARTER,       // q
         DateFormat.Field.TIME_ZONE,     // V
+        DateFormat.Field.YEAR,          // U
     };
 
     /**
@@ -486,6 +487,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "QUARTER_FIELD",
         "STAND_ALONE_QUARTER_FIELD",
         "TIMEZONE_SPECIAL_FIELD",
+        "YEAR_NAME_FIELD",
     };
 
     /**
@@ -3884,12 +3886,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void TestMonthPatterns() {
         class ChineseCalTestDate {
+            public int era;
             public int year;
             public int month; // here 1-based
             public int isLeapMonth;
             public int day;
              // Simple constructor
-            public ChineseCalTestDate(int y, int m, int il, int d) {
+            public ChineseCalTestDate(int e, int y, int m, int il, int d) {
+                era = e;
                 year = y;
                 month = m;
                 isLeapMonth = il;
@@ -3897,10 +3901,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         };
         final ChineseCalTestDate[] dates = {
-            //                      yr mo lp da
-            new ChineseCalTestDate( 29, 4, 0, 2 ), // (in chinese era 78) gregorian 2012-4-22
-            new ChineseCalTestDate( 29, 4, 1, 2 ), // (in chinese era 78) gregorian 2012-5-22
-            new ChineseCalTestDate( 29, 5, 0, 2 ), // (in chinese era 78) gregorian 2012-6-20
+            //                      era yr mo lp da
+            new ChineseCalTestDate( 78, 29, 4, 0, 2 ), // (in chinese era 78) gregorian 2012-4-22
+            new ChineseCalTestDate( 78, 29, 4, 1, 2 ), // (in chinese era 78) gregorian 2012-5-22
+            new ChineseCalTestDate( 78, 29, 5, 0, 2 ), // (in chinese era 78) gregorian 2012-6-20
         };
         class MonthPatternItem {
             public String locale;
@@ -3921,23 +3925,37 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "root@calendar=chinese",    DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -1,               "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -2,               "78x29-4-2",             "78x29-4bis-2",             "78x29-5-2" ),
+            new MonthPatternItem( "root@calendar=chinese",    -3,               "ren-chen-4-2",          "ren-chen-4bis-2",          "ren-chen-5-2" ),
+            new MonthPatternItem( "root@calendar=chinese",    -4,               "ren-chen 4 2",          "ren-chen 4bis 2",          "ren-chen 5 2" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
-            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
+            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
             new MonthPatternItem( "zh@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-\u95F04-2",             "29-5-2" ),
-            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5", "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
+            new MonthPatternItem( "zh@calendar=chinese",      -3,               "\u58EC\u8FB0-4-2",
+                                                                                "\u58EC\u8FB0-\u95F04-2",
+                                                                                "\u58EC\u8FB0-5-2" ),
+            new MonthPatternItem( "zh@calendar=chinese",      -4,               "\u58EC\u8FB0 \u56DB\u6708 2",
+                                                                                "\u58EC\u8FB0 \u95F0\u56DB\u6708 2",
+                                                                                "\u58EC\u8FB0 \u4E94\u6708 2" ),
+            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
             new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.SHORT, "29-4-2",                "29-\u95F04-2",             "29-5-2" ),
             new MonthPatternItem( "fr@calendar=chinese",      DateFormat.LONG,  "2 s\u00ECyu\u00E8 29",  "2 s\u00ECyu\u00E8bis 29",  "2 w\u01D4yu\u00E8 29" ),
             new MonthPatternItem( "fr@calendar=chinese",      DateFormat.SHORT, "2/4/29",                "2/4bis/29",                "2/5/29" ),
         };
-        //                                style -1   style -2
-        final String[] customPatterns = { "y-Ml-d",  "G'x'y-Ml-d" }; // previously G and l for chinese calendar only handled by ChineseDateFormat object
+        //                         style: -1        -2            -3       -4
+        final String[] customPatterns = { "y-Ml-d", "G'x'y-Ml-d", "U-M-d", "U MMM d" }; // previously G and l for chinese cal only handled by ChineseDateFormat
         Calendar rootChineseCalendar = Calendar.getInstance(new ULocale("root@calendar=chinese"));
         for (MonthPatternItem item: items) {
             ULocale locale = new ULocale(item.locale);
             DateFormat dfmt = (item.style >= 0)? DateFormat.getDateInstance(item.style, locale): new SimpleDateFormat(customPatterns[-item.style - 1], locale);
             int idate = 0;
             for (ChineseCalTestDate date: dates) {
+                rootChineseCalendar.clear();
+                rootChineseCalendar.set( Calendar.ERA, date.era );
                 rootChineseCalendar.set( date.year, date.month-1, date.day );
                 rootChineseCalendar.set( Calendar.IS_LEAP_MONTH, date.isLeapMonth );
                 StringBuffer result = new StringBuffer();
@@ -3949,6 +3967,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 } else {
                     // formatted OK, try parse
                     ParsePosition ppos = new ParsePosition(0);
+                    // ensure we are really parsing the fields we should be
+                    rootChineseCalendar.set( Calendar.YEAR, 1 );
+                    rootChineseCalendar.set( Calendar.MONTH, 0 );
+                    rootChineseCalendar.set( Calendar.IS_LEAP_MONTH, 0 );
+                    rootChineseCalendar.set( Calendar.DATE, 1 );
+                    //
                     dfmt.parse(result.toString(), rootChineseCalendar, ppos);
                     int era = rootChineseCalendar.get(Calendar.ERA);
                     int year = rootChineseCalendar.get(Calendar.YEAR);

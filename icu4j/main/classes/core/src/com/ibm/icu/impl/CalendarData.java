@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -101,7 +101,30 @@ public class CalendarData {
         }       
     }
     
-    public String[] getStringArray(String key) {
+     /**
+     * Load data for calendar. Note, this object owns the resources...
+     * data is located in:   "calendar/key/set/contextKey/subKey"
+     * for example,  calendar/cyclicNameSets/years/format/abbreviated
+     *
+     * @param key Resource key to data
+     * @param set Resource key to data
+     * @param contextKey Resource key to data
+     * @param subKey Resource key to data
+     * @internal
+     */
+    public ICUResourceBundle get(String key, String set, String contextKey, String subKey) {
+        try {
+            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/" + set + "/" + contextKey + "/" + subKey);
+        } catch(MissingResourceException m) {
+            if(fFallbackType != null) {
+                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/" + set + "/" + contextKey + "/" + subKey);
+            }
+            throw m;
+            
+        }       
+    }
+    
+   public String[] getStringArray(String key) {
         return get(key).getStringArray();
     }
 

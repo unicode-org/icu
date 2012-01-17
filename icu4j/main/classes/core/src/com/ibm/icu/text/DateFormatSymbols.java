@@ -465,7 +465,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     String leapMonthPatterns[] = null;
 
-    /**
+     /**
+     * (Format) Short cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai".
+     * An array of (normally) 60 strings, corresponding to cyclic years 1-60 (in Calendar YEAR field).
+     * @serial
+     */
+    String shortYearNames[] = null;
+
+   /**
      * Localized names of time zones in this locale.  This is a
      * two-dimensional array of strings of size <em>n</em> by <em>m</em>,
      * where <em>m</em> is at least 5 and up to 7.  Each of the <em>n</em> rows is an
@@ -504,7 +511,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
      * All locales use the same unlocalized pattern characters.
      */
-    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqV";
+    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVU";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
@@ -1123,6 +1130,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.standaloneShortQuarters = dfs.standaloneShortQuarters;
         this.standaloneQuarters = dfs.standaloneQuarters;
         this.leapMonthPatterns = dfs.leapMonthPatterns;
+        this.shortYearNames = dfs.shortYearNames;
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
@@ -1229,6 +1237,17 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             leapMonthPatterns[DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV] = calData.get("monthPatterns", "stand-alone", "abbreviated").get("leap").getString();
             leapMonthPatterns[DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW] = calData.get("monthPatterns", "stand-alone", "narrow").get("leap").getString();
             leapMonthPatterns[DT_LEAP_MONTH_PATTERN_NUMERIC] = calData.get("monthPatterns", "numeric", "all").get("leap").getString();
+        }
+        
+        ICUResourceBundle cyclicNameSetsBundle = null;
+        try {
+           cyclicNameSetsBundle = calData.get("cyclicNameSets");
+        }
+        catch (MissingResourceException e) {
+            cyclicNameSetsBundle = null; // probably redundant
+        }
+        if (cyclicNameSetsBundle != null) {
+            shortYearNames = calData.get("cyclicNameSets", "years", "format", "abbreviated").getStringArray();
         }
 
         requestedLocale = desiredLocale;
