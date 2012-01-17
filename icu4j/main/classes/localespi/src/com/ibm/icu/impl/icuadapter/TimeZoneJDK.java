@@ -1,11 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl.icuadapter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,6 +28,17 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
     private TimeZone fJdkTz;
     private transient Calendar fJdkCal;
+    private static Method mObservesDaylightTime;
+
+    static {
+        try {
+            mObservesDaylightTime = TimeZone.class.getMethod("observesDaylightTime", (Class[]) null);
+        } catch (NoSuchMethodException e) {
+            // Java 6 or older
+        } catch (SecurityException e) {
+            // not visible
+        }
+    }
 
     private TimeZoneJDK(TimeZone jdkTz) {
         fJdkTz = jdkTz;
@@ -170,5 +183,19 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     @Override
     public boolean useDaylightTime() {
         return fJdkTz.useDaylightTime();
+    }
+
+    @Override
+    public boolean observesDaylightTime() {
+        if (mObservesDaylightTime != null) {
+            // Java 7+
+            try {
+                return (Boolean)mObservesDaylightTime.invoke(fJdkTz, (Object[]) null);
+            } catch (IllegalAccessException e) {
+            } catch (IllegalArgumentException e) {
+            } catch (InvocationTargetException e) {
+            }
+        }
+        return super.observesDaylightTime();
     }
 }

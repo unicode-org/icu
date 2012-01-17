@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2011, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2012, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -334,6 +334,35 @@ public class OlsonTimeZone extends BasicTimeZone {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.ibm.icu.util.TimeZone#observesDaylightTime()
+     */
+    @Override
+    public boolean observesDaylightTime() {
+        long current = System.currentTimeMillis();
+
+        if (finalZone != null && current >= finalStartMillis) {
+            if (finalZone.useDaylightTime()) {
+                return true;
+            }
+        }
+
+        // Return TRUE if DST is observed at any future time
+        long currentSec = Grego.floorDivide(current, Grego.MILLIS_PER_SECOND);
+        int trsIdx = transitionCount - 1;
+        if (dstOffsetAt(trsIdx) != 0) {
+            return true;
+        }
+        while (trsIdx >= 0) {
+            if (transitionTimes64[trsIdx] <= currentSec) {
+                break;
+            }
+            if (dstOffsetAt(trsIdx - 1) != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * TimeZone API
      * Returns the amount of time to be added to local standard time

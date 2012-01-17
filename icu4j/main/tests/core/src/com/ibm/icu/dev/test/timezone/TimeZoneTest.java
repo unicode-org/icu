@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,6 +22,7 @@ import java.util.Set;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateTimeRule;
 import com.ibm.icu.util.GregorianCalendar;
@@ -31,6 +32,8 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeArrayTimeZoneRule;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
+import com.ibm.icu.util.TimeZoneRule;
+import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VTimeZone;
@@ -2083,6 +2086,102 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+
+    public void TestObservesDaylightTime() {
+        boolean observesDaylight;
+        long current = System.currentTimeMillis();
+
+        String[] tzids = TimeZone.getAvailableIDs();
+        for (String tzid : tzids) {
+            // OlsonTimeZone
+            TimeZone tz = TimeZone.getTimeZone(tzid, TimeZone.TIMEZONE_ICU);
+            observesDaylight = tz.observesDaylightTime();
+            if (observesDaylight != isDaylightTimeAvailable(tz, current)) {
+                errln("Fail: [OlsonTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + tzid);
+            }
+
+            // RuleBasedTimeZone
+            RuleBasedTimeZone rbtz = createRBTZ((BasicTimeZone)tz, current);
+            boolean observesDaylightRBTZ = rbtz.observesDaylightTime();
+            if (observesDaylightRBTZ != isDaylightTimeAvailable(rbtz, current)) {
+                errln("Fail: [RuleBasedTimeZone] observesDaylightTime() returned " + observesDaylightRBTZ + " for " + rbtz.getID());
+            } else if (observesDaylight != observesDaylightRBTZ) {
+                errln("Fail: RuleBasedTimeZone " + rbtz.getID() + " returns " + observesDaylightRBTZ + ", but different from match OlsonTimeZone");
+            }
+
+            // JavaTimeZone
+            tz = TimeZone.getTimeZone(tzid, TimeZone.TIMEZONE_JDK);
+            observesDaylight = tz.observesDaylightTime();
+            if (observesDaylight != isDaylightTimeAvailable(tz, current)) {
+                errln("Fail: [JavaTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + tzid);
+            }
+
+            // VTimeZone
+            tz = VTimeZone.getTimeZone(tzid);
+            observesDaylight = tz.observesDaylightTime();
+            if (observesDaylight != isDaylightTimeAvailable(tz, current)) {
+                errln("Fail: [VTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + tzid);
+            }
+        }
+
+        // SimpleTimeZone
+        SimpleTimeZone[] stzs = {
+            new SimpleTimeZone(0, "STZ0"),
+            new SimpleTimeZone(-5*60*60*1000, "STZ-5D", Calendar.MARCH, 2, Calendar.SUNDAY, 2*60*60*1000,
+                    Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2*60*60*1000),
+        };
+        for (SimpleTimeZone stz : stzs) {
+            observesDaylight = stz.observesDaylightTime();
+            if (observesDaylight != isDaylightTimeAvailable(stz, current)) {
+                errln("Fail: [SimpleTimeZone] observesDaylightTime() returned " + observesDaylight + " for " + stz.getID());
+            }
+        }
+    }
+
+    private static boolean isDaylightTimeAvailable(TimeZone tz, long start) {
+        if (tz.inDaylightTime(new Date(start))) {
+            return true;
+        }
+
+        long date;
+        if (tz instanceof BasicTimeZone) {
+            BasicTimeZone btz = (BasicTimeZone)tz;
+            // check future transitions, up to 100
+            date = start;
+            for (int i = 0; i < 100; i++) {
+                TimeZoneTransition tzt = btz.getNextTransition(date, false);
+                if (tzt == null) {
+                    // no more transitions
+                    break;
+                }
+                if (tzt.getTo().getDSTSavings() != 0) {
+                    return true;
+                }
+                date = tzt.getTime();
+            }
+        } else {
+            // check future times by incrementing 30 days, up to 200 times (about 16 years)
+            final long inc = 30L * 24 * 60 * 60 * 1000;
+            int[] offsets = new int[2];
+            date = start + inc;
+            for (int i = 0; i < 200; i++, date += inc) {
+                tz.getOffset(date, false, offsets);
+                if (offsets[1] != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static RuleBasedTimeZone createRBTZ(BasicTimeZone btz, long start) {
+        TimeZoneRule[] rules = btz.getTimeZoneRules(start);
+        RuleBasedTimeZone rbtz = new RuleBasedTimeZone("RBTZ:btz.getID()", (InitialTimeZoneRule)rules[0]);
+        for (int i = 1; i < rules.length; i++) {
+            rbtz.addTransitionRule(rules[i]);
+        }
+        return rbtz;
+     }
 }
 
 //eof

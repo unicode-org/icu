@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -138,6 +138,16 @@ public class VTimeZone extends BasicTimeZone {
     @Override
     public boolean useDaylightTime() {
         return tz.useDaylightTime();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public boolean observesDaylightTime() {
+        return tz.observesDaylightTime();
     }
 
     /**

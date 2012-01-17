@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -185,6 +185,51 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         TimeZoneTransition tt = getNextTransition(now, false);
         if (tt != null && tt.getTo().getDSTSavings() != 0) {
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public boolean observesDaylightTime() {
+        long time = System.currentTimeMillis();
+
+        // Check if daylight saving time is observed now.
+        int[] offsets = new int[2];
+        getOffset(time, false, offsets);
+        if (offsets[1] != 0) {
+            return true;
+        }
+
+        // If DST is not used now, check if DST is used after each transition.
+        BitSet checkFinals = finalRules == null ? null : new BitSet(finalRules.length);
+        while (true) {
+            TimeZoneTransition tt = getNextTransition(time, false);
+            if (tt == null) {
+                // no more transition
+                break;
+            }
+            TimeZoneRule toRule = tt.getTo();
+            if (toRule.getDSTSavings() != 0) {
+                return true;
+            }
+            if (checkFinals != null) {
+                // final rules exist - check if we saw all of them
+                for (int i = 0; i < finalRules.length; i++) {
+                    if (finalRules[i].equals(toRule)) {
+                        checkFinals.set(i);
+                    }
+                }
+                if (checkFinals.cardinality() == finalRules.length) {
+                    // already saw all final rules
+                    break;
+                }
+            }
+            time = tt.getTime();
         }
         return false;
     }
