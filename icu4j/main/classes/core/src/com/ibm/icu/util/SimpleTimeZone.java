@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -953,6 +953,15 @@ public class SimpleTimeZone extends BasicTimeZone {
      */
     @Override
     public boolean useDaylightTime(){
+        return useDaylight;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean observesDaylightTime() {
         return useDaylight;
     }
 
