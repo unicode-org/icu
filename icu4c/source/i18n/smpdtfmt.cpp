@@ -122,8 +122,9 @@ static const UDateFormatField kDateFields[] = {
     UDAT_STANDALONE_DAY_FIELD,
     UDAT_STANDALONE_MONTH_FIELD,
     UDAT_QUARTER_FIELD,
-    UDAT_STANDALONE_QUARTER_FIELD };
-static const int8_t kDateFieldsCount = 13;
+    UDAT_STANDALONE_QUARTER_FIELD,
+    UDAT_YEAR_NAME_FIELD };
+static const int8_t kDateFieldsCount = 15;
 
 static const UDateFormatField kTimeFields[] = {
     UDAT_HOUR_OF_DAY1_FIELD,
@@ -199,6 +200,7 @@ static const int32_t gFieldRangeBias[] = {
     -1,  // 'Q' - UDAT_QUARTER_FIELD (1-4?)
     -1,  // 'q' - UDAT_STANDALONE_QUARTER_FIELD
     -1   // 'V' - UDAT_TIMEZONE_SPECIAL_FIELD
+    -1,  // 'U' - UDAT_YEAR_NAME_FIELD
 };
 
 static UMTX LOCK;
@@ -931,7 +933,7 @@ SimpleDateFormat::fgPatternCharToLevel[] = {
     //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
         -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1, -1,
     //   P   Q   R   S   T   U   V   W   X   Y   Z
-        -1, 20, -1, 80, -1, -1,  0, 30, -1, 10,  0, -1, -1, -1, -1, -1,
+        -1, 20, -1, 80, -1, 10,  0, 30, -1, 10,  0, -1, -1, -1, -1, -1,
     //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
@@ -957,6 +959,7 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*Q*/   UCAL_MONTH,
     /*q*/   UCAL_MONTH,
     /*V*/   UCAL_ZONE_OFFSET,
+    /*U*/   UCAL_YEAR,
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -976,6 +979,7 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     /*Q*/   UDAT_QUARTER_FIELD,
     /*q*/   UDAT_STANDALONE_QUARTER_FIELD,
     /*V*/   UDAT_TIMEZONE_SPECIAL_FIELD,
+    /*U*/   UDAT_YEAR_NAME_FIELD,
 };
 
 //----------------------------------------------------------------------
@@ -1601,6 +1605,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             zeroPaddingNumber(currentNumberFormat, appendTo, value, 2, 2);
         else
             zeroPaddingNumber(currentNumberFormat, appendTo, value, count, maxIntCount);
+        break;
+
+    case UDAT_YEAR_NAME_FIELD:
+        // the Calendar YEAR field runs 1 through 60 for cyclic years
+        _appendSymbol(appendTo, value - 1, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount);
         break;
 
     // for "MMMM"/"LLLL", write out the whole month name, for "MMM"/"LLL", write out the month
@@ -2552,6 +2561,9 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
             cal.set(field,6);
         }
         else {
+            if (field == UCAL_YEAR) {
+                bestMatch++; // only get here for cyclic year names, which match 1-based years 1-60
+            }
             cal.set(field, bestMatch);
         }
         if (monthPattern != NULL) {
@@ -2843,6 +2855,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         }
         cal.set(UCAL_YEAR_WOY, value);
         return pos.getIndex();
+
+    case UDAT_YEAR_NAME_FIELD:
+        return matchString(text, start, UCAL_YEAR, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount, NULL, cal);
 
     case UDAT_MONTH_FIELD:
     case UDAT_STANDALONE_MONTH_FIELD:

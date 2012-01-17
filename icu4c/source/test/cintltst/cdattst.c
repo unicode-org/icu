@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -620,7 +620,7 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
     VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
     VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
-    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqV");
+    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqVU");
 
 
     if(result != NULL) {

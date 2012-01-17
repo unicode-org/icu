@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -47,17 +47,17 @@
  * resource data.
  */
 
-#define PATTERN_CHARS_LEN 30
+#define PATTERN_CHARS_LEN 31
 
 /**
  * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All
  * locales use the same these unlocalized pattern characters.
  */
 static const UChar gPatternChars[] = {
-    // GyMdkHmsSEDFwWahKzYeugAZvcLQqV
+    // GyMdkHmsSEDFwWahKzYeugAZvcLQqVU
     0x47, 0x79, 0x4D, 0x64, 0x6B, 0x48, 0x6D, 0x73, 0x53, 0x45,
     0x44, 0x46, 0x77, 0x57, 0x61, 0x68, 0x4B, 0x7A, 0x59, 0x65,
-    0x75, 0x67, 0x41, 0x5A, 0x76, 0x63, 0x4c, 0x51, 0x71, 0x56, 0
+    0x75, 0x67, 0x41, 0x5A, 0x76, 0x63, 0x4c, 0x51, 0x71, 0x56, 0x55, 0
 };
 
 /* length of an array */
@@ -180,6 +180,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
  * with a locale and calendar
  */
 static const char gErasTag[]="eras";
+static const char gCyclicNameSetsTag[]="cyclicNameSets";
+static const char gNameSetYearsTag[]="years";
 static const char gMonthNamesTag[]="monthNames";
 static const char gMonthPatternsTag[]="monthPatterns";
 static const char gDayNamesTag[]="dayNames";
@@ -188,6 +190,7 @@ static const char gNamesAbbrTag[]="abbreviated";
 static const char gNamesNarrowTag[]="narrow";
 static const char gNamesAllTag[]="all";
 static const char gNamesLeapTag[]="leap";
+static const char gNamesFormatTag[]="format";
 static const char gNamesStandaloneTag[]="stand-alone";
 static const char gNamesNumericTag[]="numeric";
 static const char gAmPmMarkersTag[]="AmPmMarkers";
@@ -335,7 +338,18 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     assignArray(fShortQuarters, fShortQuartersCount, other.fShortQuarters, other.fShortQuartersCount);
     assignArray(fStandaloneQuarters, fStandaloneQuartersCount, other.fStandaloneQuarters, other.fStandaloneQuartersCount);
     assignArray(fStandaloneShortQuarters, fStandaloneShortQuartersCount, other.fStandaloneShortQuarters, other.fStandaloneShortQuartersCount);
-    assignArray(fLeapMonthPatterns, fLeapMonthPatternsCount, other.fLeapMonthPatterns, other.fLeapMonthPatternsCount);
+    if (other.fLeapMonthPatterns != NULL) {
+        assignArray(fLeapMonthPatterns, fLeapMonthPatternsCount, other.fLeapMonthPatterns, other.fLeapMonthPatternsCount);
+    } else {
+        fLeapMonthPatterns = NULL;
+        fLeapMonthPatternsCount = 0;
+    }
+    if (other.fShortYearNames != NULL) {
+        assignArray(fShortYearNames, fShortYearNamesCount, other.fShortYearNames, other.fShortYearNamesCount);
+    } else {
+        fShortYearNames = NULL;
+        fShortYearNamesCount = 0;
+    }
     fGmtZero = other.fGmtZero;
     fGmtFormat = other.fGmtFormat;
     assignArray(fGmtHourFormats, fGmtHourFormatsCount, other.fGmtHourFormats, other.fGmtHourFormatsCount);
@@ -397,6 +411,7 @@ void DateFormatSymbols::dispose()
     if (fStandaloneQuarters)       delete[] fStandaloneQuarters;
     if (fStandaloneShortQuarters)  delete[] fStandaloneShortQuarters;
     if (fLeapMonthPatterns)        delete[] fLeapMonthPatterns;
+    if (fShortYearNames)           delete[] fShortYearNames;
     if (fGmtHourFormats)           delete[] fGmtHourFormats;
 
     disposeZoneStrings();
@@ -465,6 +480,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fStandaloneQuartersCount == other.fStandaloneQuartersCount &&
         fStandaloneShortQuartersCount == other.fStandaloneShortQuartersCount &&
         fLeapMonthPatternsCount == other.fLeapMonthPatternsCount &&
+        fShortYearNamesCount == other.fShortYearNamesCount &&
         fGmtHourFormatsCount == other.fGmtHourFormatsCount &&
         fGmtZero == other.fGmtZero &&
         fGmtFormat == other.fGmtFormat)
@@ -491,6 +507,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             arrayCompare(fStandaloneQuarters, other.fStandaloneQuarters, fStandaloneQuartersCount) &&
             arrayCompare(fStandaloneShortQuarters, other.fStandaloneShortQuarters, fStandaloneShortQuartersCount) &&
             arrayCompare(fLeapMonthPatterns, other.fLeapMonthPatterns, fLeapMonthPatternsCount) &&
+            arrayCompare(fShortYearNames, other.fShortYearNames, fShortYearNamesCount) &&
             arrayCompare(fGmtHourFormats, other.fGmtHourFormats, fGmtHourFormatsCount))
         {
             // Compare the contents of fZoneStrings
@@ -1286,6 +1303,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fStandaloneShortQuartersCount = 0;
     fLeapMonthPatterns = NULL;
     fLeapMonthPatternsCount = 0;
+    fShortYearNames = NULL;
+    fShortYearNamesCount = 0;
     fGmtHourFormats = NULL;
     fGmtHourFormatsCount = 0;
     fZoneStringsRowCount = 0;
@@ -1349,6 +1368,24 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
                 delete[] fLeapMonthPatterns;
                 fLeapMonthPatterns = NULL;
             }
+        }
+    }
+
+    UErrorCode cyclicNamesStatus = U_ZERO_ERROR;
+    UResourceBundle *cyclicNameSets= calData.getByKey(gCyclicNameSetsTag, cyclicNamesStatus);
+    if (U_SUCCESS(cyclicNamesStatus) && cyclicNameSets != NULL) {
+        UResourceBundle *nameSetYears = ures_getByKeyWithFallback(cyclicNameSets, gNameSetYearsTag, NULL, &cyclicNamesStatus);
+        if (U_SUCCESS(cyclicNamesStatus)) {
+            UResourceBundle *nameSetYearsFmt = ures_getByKeyWithFallback(nameSetYears, gNamesFormatTag, NULL, &cyclicNamesStatus);
+            if (U_SUCCESS(cyclicNamesStatus)) {
+                UResourceBundle *nameSetYearsFmtAbbrev = ures_getByKeyWithFallback(nameSetYearsFmt, gNamesAbbrTag, NULL, &cyclicNamesStatus);
+                if (U_SUCCESS(cyclicNamesStatus)) {
+                    initField(&fShortYearNames, fShortYearNamesCount, nameSetYearsFmtAbbrev, cyclicNamesStatus);
+                    ures_close(nameSetYearsFmtAbbrev);
+                }
+                ures_close(nameSetYearsFmt);
+            }
+            ures_close(nameSetYears);
         }
     }
 
