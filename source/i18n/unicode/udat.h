@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines
+ * Copyright (C) 1996-2012, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -484,6 +484,15 @@ typedef enum UDateFormatField {
      */
     UDAT_TIMEZONE_SPECIAL_FIELD = 29,
 
+    /**
+     * FieldPosition selector for "U" field alignment,
+     * corresponding to cyclic year names. This is implemented
+     * using the {@link #UCAL_YEAR} field. This displays
+     * the cyclic year name, if available.
+     * @draft ICU 49
+     */
+    UDAT_YEAR_NAME_FIELD = 30,
+
    /**
      * Number of FieldPosition and UFieldPosition selectors for
      * DateFormat and UDateFormat.
@@ -492,7 +501,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @stable ICU 3.0
      */
-    UDAT_FIELD_COUNT = 30
+    UDAT_FIELD_COUNT = 31
 
 } UDateFormatField;
 

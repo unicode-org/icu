@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -73,7 +73,8 @@ static UCalendarDateFields gDateFieldMapping[] = {
     UCAL_MONTH,                // UDAT_QUARTER_FIELD = 27
     UCAL_MONTH,                // UDAT_STANDALONE_QUARTER_FIELD = 28
     UCAL_ZONE_OFFSET,          // UDAT_TIMEZONE_SPECIAL_FIELD = 29
-    UCAL_FIELD_COUNT,          // UDAT_FIELD_COUNT = 30
+    UCAL_YEAR,                 // UDAT_YEAR_NAME_FIELD = 30
+    UCAL_FIELD_COUNT,          // UDAT_FIELD_COUNT = 31
     // UCAL_IS_LEAP_MONTH is not the target of a mapping
 };
 
