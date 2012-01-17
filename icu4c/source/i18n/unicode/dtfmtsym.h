@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -637,6 +637,12 @@ private:
      */
     UnicodeString  *fLeapMonthPatterns;
     int32_t         fLeapMonthPatternsCount;
+
+    /**
+     * (Format) Short cyclic year names, for example: "jia-zi", "yi-chou", ... "gui-hai"
+     */
+    UnicodeString*  fShortYearNames;
+    int32_t         fShortYearNamesCount;
 
     /**
      * Localized names of time zones in this locale.  This is a
