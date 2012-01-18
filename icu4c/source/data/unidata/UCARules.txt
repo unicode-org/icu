@@ -1,7 +1,7 @@
 ﻿# File:        UCA_Rules_SHORT.txt
 # UCA Version: 6.1.0
 # UCD Version: 6.1.0
-# Generated:   2011-12-06, 23:22:20 GMT [MD]
+# Generated:   2012-01-03, 21:53:25 GMT [MD]
 # For a description of the format and usage, see CollationAuxiliary.html
 
 & [last tertiary ignorable]
@@ -106,7 +106,7 @@
     =	 '\u0601'
     =	 '\u0602'
     =	 '\u0603'
-    =	 ؄
+    =	 '\u0604'
     =	 ؐ
     =	 ؑ
     =	 ؒ
@@ -168,8 +168,8 @@
     =	 ྆
     =	 ྇
     =	 ࿆
-    =	 '\u17B4'
-    =	 '\u17B5'
+    =	 ឴
+    =	 ឵
     =	 ៓
     =	 ᠊
     =	 ᠋
@@ -11767,6 +11767,7 @@
  <	 ⴹ
  <	 ⴺ
  <	 ⴻ
+ <	 ⵦ
  <	 ⴼ
  <	 ⴽ
  <	 ⴾ
@@ -11781,7 +11782,6 @@
  <	 ⵇ
  <	 ⵈ
  <	 ⵉ
- <	 ⵦ
  <	 ⵊ
  <	 ⵋ
  <	 ⵌ
