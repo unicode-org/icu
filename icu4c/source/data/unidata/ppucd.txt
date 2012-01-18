@@ -988,7 +988,7 @@ value;WB;NL;Newline
 value;WB;NU;Numeric
 value;WB;XX;Other
 
-defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bmg=<code point>;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;gcm=Cn;hst=NA;InMC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<slc>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<stc>;uc=<suc>;WB=XX
+defaults;0000..10FFFF;age=NA;bc=L;blk=NB;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;gcm=Cn;hst=NA;InMC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<slc>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<stc>;uc=<suc>;WB=XX
 
 block;0000..007F;age=1.1;blk=ASCII;ea=Na;gc=Cc;Gr_Base;lb=AL;sc=Zyyy
 # 0000..007F C0 Controls and Basic Latin (Basic Latin)
@@ -1010,14 +1010,14 @@ cp;000D;bc=B;ea=N;GCB=CR;-Gr_Base;lb=CR;Name_Alias=control=CARRIAGE RETURN,abbre
 cp;000E;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=SHIFT OUT,control=LOCKING-SHIFT ONE,abbreviation=SO
 cp;000F;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=SHIFT IN,control=LOCKING-SHIFT ZERO,abbreviation=SI
 cp;0010;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=DATA LINK ESCAPE,abbreviation=DLE
-cp;0011;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=DEVICE CONTROL ONE,abbreviation=DC1,abbreviation=ETB,abbreviation=CAN
+cp;0011;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=DEVICE CONTROL ONE,abbreviation=DC1
 cp;0012;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=DEVICE CONTROL TWO,abbreviation=DC2
 cp;0013;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=DEVICE CONTROL THREE,abbreviation=DC3
 cp;0014;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=DEVICE CONTROL FOUR,abbreviation=DC4
 cp;0015;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=NEGATIVE ACKNOWLEDGE,abbreviation=NAK
 cp;0016;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=SYNCHRONOUS IDLE,abbreviation=SYN
-cp;0017;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=END OF TRANSMISSION BLOCK
-cp;0018;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=CANCEL
+cp;0017;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=END OF TRANSMISSION BLOCK,abbreviation=ETB
+cp;0018;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=CANCEL,abbreviation=CAN
 cp;0019;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=END OF MEDIUM,abbreviation=EOM
 cp;001A;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=SUBSTITUTE,abbreviation=SUB
 cp;001B;bc=BN;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=ESCAPE,abbreviation=ESC

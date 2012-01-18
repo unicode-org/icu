@@ -24,7 +24,7 @@ Tools simplified since the Unicode 6.1 update. See
 
 * file preparation
 - ucdcopy.py and genpname/preparse.pl replaced by preparseucd.py:
-- ~/svn.icu/tools/trunk/src/unicode$ py/preparseucd.py ~/uni61/20111205mod/ucd ~/svn.icu/trunk/src ~/svn.icu/tools/trunk/src
+- ~/svn.icu/tools/trunk/src/unicode$ py/preparseucd.py ~/uni61/20120118/ucd ~/svn.icu/trunk/src ~/svn.icu/tools/trunk/src
 - This writes files (especially ppucd.txt) to the ICU4C unidata and testdata subfolders.
 - Check test file diffs for previously commented-out, known-failing data lines;
   probably need to keep those commented out.
@@ -269,13 +269,13 @@ Unicode 6.1 update
 * UCA
 
 - get output from Mark's tools; look in
-    http://www.unicode.org/Public/UCA/6.1.0/
+    http://www.unicode.org/Public/UCA/6.1.0/CollationAuxiliary-<dev. version>.txt
 - update source/data/unidata/FractionalUCA.txt with FractionalUCA_SHORT.txt
 - update source/data/unidata/UCARules.txt with UCA_Rules_SHORT.txt
   (note removing the underscore before "Rules")
 - update (ICU)/source/test/testdata/CollationTest_*.txt
   and (ICU4J)/main/tests/collate/src/com/ibm/icu/dev/data/CollationTest_*.txt
-  with output from Mark's Unicode tools
+  with output from Mark's Unicode tools (..._CLDR_..._SHORT.txt)
 - check test file diffs for previously commented-out, known-failing data lines;
   probably need to keep those commented out
 - check FractionalUCA.txt for manual changes of lead bytes from IMPLICIT to Hani
@@ -285,7 +285,7 @@ Unicode 6.1 update
 - refresh ICU4J collation data:
   (subset of instructions above for properties data refresh, except copies all coll/*)
     ~/svn.icu/trunk/bld$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt49b/coll
+    ~/svn.icu/trunk/bld$ mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt49b/coll
     ~/svn.icu/trunk/bld/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt49b/coll/* /tmp/icu4j/com/ibm/icu/impl/data/icudt49b/coll
     ~/svn.icu/trunk/bld/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt49b
 - run all tests with the *_SHORT.txt or the full files (the full ones have comments, useful for debugging)
