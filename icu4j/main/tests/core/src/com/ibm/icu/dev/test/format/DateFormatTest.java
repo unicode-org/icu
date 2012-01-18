@@ -3873,7 +3873,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final ChineseDateFormatSymbolItem[] items = {
             new ChineseDateFormatSymbolItem( ULocale.ENGLISH, "bis" ),
             new ChineseDateFormatSymbolItem( ULocale.SIMPLIFIED_CHINESE, "\u95F0" ),
-            new ChineseDateFormatSymbolItem( ULocale.TRADITIONAL_CHINESE, "\u95F0" ), // update this when we integrate new CLDR data
+            new ChineseDateFormatSymbolItem( ULocale.TRADITIONAL_CHINESE, "\u958F" ),
         };
         ChineseCalendar cal = new ChineseCalendar();
         for ( ChineseDateFormatSymbolItem item: items ) {
@@ -3921,30 +3921,30 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         };
         final MonthPatternItem[] items = {
-            new MonthPatternItem( "root@calendar=chinese",    DateFormat.LONG,  "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "root@calendar=chinese",    DateFormat.LONG,  "ren-chen 4 2",          "ren-chen 4bis 2",          "ren-chen 5 2" ),
             new MonthPatternItem( "root@calendar=chinese",    DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -1,               "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -2,               "78x29-4-2",             "78x29-4bis-2",             "78x29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -3,               "ren-chen-4-2",          "ren-chen-4bis-2",          "ren-chen-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -4,               "ren-chen 4 2",          "ren-chen 4bis 2",          "ren-chen 5 2" ),
-            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "29-4-2",                "29-4bis-2",                "29-5-2" ),
+            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "ren-chen 4 2",          "ren-chen 4bis 2",          "ren-chen 5 2" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
-            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5",
-                                                                                "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5",
-                                                                                "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
-            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-\u95F04-2",             "29-5-2" ),
+            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u58EC\u8FB0\u5E74\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u58EC\u8FB0\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u58EC\u8FB0\u5E74\u4E94\u6708\u4E8C\u65E5" ),
+            new MonthPatternItem( "zh@calendar=chinese",      DateFormat.SHORT, "\u58EC\u8FB0-4-2",      "\u58EC\u8FB0-\u95F04-2",   "\u58EC\u8FB0-5-2" ),
             new MonthPatternItem( "zh@calendar=chinese",      -3,               "\u58EC\u8FB0-4-2",
                                                                                 "\u58EC\u8FB0-\u95F04-2",
                                                                                 "\u58EC\u8FB0-5-2" ),
             new MonthPatternItem( "zh@calendar=chinese",      -4,               "\u58EC\u8FB0 \u56DB\u6708 2",
                                                                                 "\u58EC\u8FB0 \u95F0\u56DB\u6708 2",
                                                                                 "\u58EC\u8FB0 \u4E94\u6708 2" ),
-            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.LONG,  "\u4E8C\u4E5D\u5E74\u56DB\u6708\u4E8C\u65E5",
-                                                                                "\u4E8C\u4E5D\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5",
-                                                                                "\u4E8C\u4E5D\u5E74\u4E94\u6708\u4E8C\u65E5" ),
-            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.SHORT, "29-4-2",                "29-\u95F04-2",             "29-5-2" ),
-            new MonthPatternItem( "fr@calendar=chinese",      DateFormat.LONG,  "2 s\u00ECyu\u00E8 29",  "2 s\u00ECyu\u00E8bis 29",  "2 w\u01D4yu\u00E8 29" ),
-            new MonthPatternItem( "fr@calendar=chinese",      DateFormat.SHORT, "2/4/29",                "2/4bis/29",                "2/5/29" ),
+            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.LONG,  "\u58EC\u8FB0\u5E74\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u58EC\u8FB0\u5E74\u958F\u56DB\u6708\u4E8C\u65E5",
+                                                                                "\u58EC\u8FB0\u5E74\u4E94\u6708\u4E8C\u65E5" ),
+            new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.SHORT, "\u58EC\u8FB0-4-2",            "\u58EC\u8FB0-\u958F4-2",         "\u58EC\u8FB0-5-2" ),
+            new MonthPatternItem( "fr@calendar=chinese",      DateFormat.LONG,  "2 s\u00ECyu\u00E8 ren-chen",  "2 s\u00ECyu\u00E8bis ren-chen",  "2 w\u01D4yu\u00E8 ren-chen" ),
+            new MonthPatternItem( "fr@calendar=chinese",      DateFormat.SHORT, "2/4/29",                      "2/4bis/29",                      "2/5/29" ),
         };
         //                         style: -1        -2            -3       -4
         final String[] customPatterns = { "y-Ml-d", "G'x'y-Ml-d", "U-M-d", "U MMM d" }; // previously G and l for chinese cal only handled by ChineseDateFormat
