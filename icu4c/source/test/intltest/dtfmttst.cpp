@@ -3390,20 +3390,12 @@ void DateFormatTest::Test6726(void)
     strs = fmts->format(dt, strs);
 
 
-/* Locale data is not yet updated
-    if (strf.charAt(13) == UChar(0x20)) {
-        errln((UnicodeString)"FAIL: Improper formatted date: " + strf);
-    }
-    if (strl.charAt(10) == UChar(0x20)) {
-        errln((UnicodeString)"FAIL: Improper formatted date: " + strl);
-    }
-*/
     logln("strm.charAt(10)=%04X wanted 0x20\n", strm.charAt(10));
     if (strm.charAt(10) != UChar(0x0020)) {
       errln((UnicodeString)"FAIL: Improper formatted date: " + strm );
     }
     logln("strs.charAt(10)=%04X wanted 0x20\n", strs.charAt(8));
-    if (strs.charAt(8)  != UChar(0x0020)) {
+    if (strs.charAt(10)  != UChar(0x0020)) {
         errln((UnicodeString)"FAIL: Improper formatted date: " + strs);
     }
 
@@ -3738,31 +3730,35 @@ void DateFormatTest::TestMonthPatterns()
 
     const MonthPatternItem items[] = {
         // locale                     date style;           expected formats for the 3 dates above
-        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
+        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("ren-chen 4 2"),  UnicodeString("ren-chen 4bis 2"),       UnicodeString("ren-chen 5 2") } },
         { "root@calendar=chinese",    DateFormat::kShort, { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
         { "root@calendar=chinese",    -1,                 { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
         { "root@calendar=chinese",    -2,                 { UnicodeString("78x29-4-2"),     UnicodeString("78x29-4bis-2"),          UnicodeString("78x29-5-2") } },
         { "root@calendar=chinese",    -3,                 { UnicodeString("ren-chen-4-2"),  UnicodeString("ren-chen-4bis-2"),       UnicodeString("ren-chen-5-2") } },
         { "root@calendar=chinese",    -4,                 { UnicodeString("ren-chen 4 2"),  UnicodeString("ren-chen 4bis 2"),       UnicodeString("ren-chen 5 2") } },
-        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
+        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("ren-chen 4 2"),  UnicodeString("ren-chen 4bis 2"),       UnicodeString("ren-chen 5 2") } },
         { "en@calendar=chinese",      DateFormat::kShort, { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
-        { "zh@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"),
-                                                            CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"),
-                                                            CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
-        { "zh@calendar=chinese",      DateFormat::kShort, { UnicodeString("29-4-2"),        CharsToUnicodeString("29-\\u95F04-2"),  UnicodeString("29-5-2") } },
+        { "zh@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
+        { "zh@calendar=chinese",      DateFormat::kShort, { CharsToUnicodeString("\\u58EC\\u8FB0-4-2"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0-\\u95F04-2"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0-5-2") } },
         { "zh@calendar=chinese",      -3,                 { CharsToUnicodeString("\\u58EC\\u8FB0-4-2"),
                                                             CharsToUnicodeString("\\u58EC\\u8FB0-\\u95F04-2"),
                                                             CharsToUnicodeString("\\u58EC\\u8FB0-5-2") } },
         { "zh@calendar=chinese",      -4,                 { CharsToUnicodeString("\\u58EC\\u8FB0 \\u56DB\\u6708 2"),
                                                             CharsToUnicodeString("\\u58EC\\u8FB0 \\u95F0\\u56DB\\u6708 2"),
                                                             CharsToUnicodeString("\\u58EC\\u8FB0 \\u4E94\\u6708 2") } },
-        { "zh_Hant@calendar=chinese", DateFormat::kLong,  { CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"),
-                                                            CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"),
-                                                            CharsToUnicodeString("\\u4E8C\\u4E5D\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
-        { "zh_Hant@calendar=chinese", DateFormat::kShort, { UnicodeString("29-4-2"),        CharsToUnicodeString("29-\\u95F04-2"),  UnicodeString("29-5-2") } },
-        { "fr@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("2 s\\u00ECyu\\u00E8 29"),
-                                                            CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis 29"),
-                                                            CharsToUnicodeString("2 w\\u01D4yu\\u00E8 29") } },
+        { "zh_Hant@calendar=chinese", DateFormat::kLong,  { CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u958F\\u56DB\\u6708\\u4E8C\\u65E5"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
+        { "zh_Hant@calendar=chinese", DateFormat::kShort, { CharsToUnicodeString("\\u58EC\\u8FB0-4-2"),
+        													CharsToUnicodeString("\\u58EC\\u8FB0-\\u958F4-2"),
+        													CharsToUnicodeString("\\u58EC\\u8FB0-5-2") } },
+        { "fr@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("2 s\\u00ECyu\\u00E8 ren-chen"),
+                                                            CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis ren-chen"),
+                                                            CharsToUnicodeString("2 w\\u01D4yu\\u00E8 ren-chen") } },
         { "fr@calendar=chinese",      DateFormat::kShort, { UnicodeString("2/4/29"),        UnicodeString("2/4bis/29"),             UnicodeString("2/5/29") } },
         // terminator
         { NULL,                       0,                  { UnicodeString(""), UnicodeString(""), UnicodeString("") } }
