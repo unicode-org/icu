@@ -1,5 +1,5 @@
 # DerivedCoreProperties-6.1.0.txt
-# Date: 2011-11-27, 05:10:20 GMT [MD]
+# Date: 2011-12-11, 18:26:55 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2011 Unicode, Inc.
@@ -8352,7 +8352,7 @@ E0100..E01EF  ; XID_Continue
 #  + Variation_Selector
 #  - White_Space
 #  - FFF9..FFFB (Annotation Characters)
-#  - 0600..0603, 06DD, 070F, 110BD (exceptional Cf characters that should be visible)
+#  - 0600..0604, 06DD, 070F, 110BD (exceptional Cf characters that should be visible)
 
 00AD          ; Default_Ignorable_Code_Point
 034F          ; Default_Ignorable_Code_Point
