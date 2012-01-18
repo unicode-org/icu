@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -85,7 +85,7 @@ zh_Hant{
             }
         }
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.63.67"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -149,18 +149,18 @@ zh_Hant{
                 "ah:mm:ss",
                 "ah:mm",
                 {
-                    "y年MMMd日EEEE",
+                    "U年MMMd日EEEE",
                     "hanidec",
                 }
                 {
-                    "y年MMMd日",
+                    "U年MMMd日",
                     "hanidec",
                 }
                 {
-                    "y年MMMd日",
+                    "U年MMMd日",
                     "hanidec",
                 }
-                "yy-M-d",
+                "U-M-d",
                 "{1} {0}",
                 "{1}{0}",
                 "{1}{0}",
@@ -174,13 +174,13 @@ zh_Hant{
                 MMMEd{"M月d日E"}
                 MMMd{"M月d日"}
                 d{"d日"}
-                y{"y年"}
-                yM{"y年M月"}
-                yMEd{"y年M月d日，E"}
-                yMMM{"y年M月"}
-                yMMMEd{"y年M月d日EEE"}
-                yMMMd{"y年M月d日"}
-                yMd{"y年M月d日"}
+                y{"U年"}
+                yM{"U年M月"}
+                yMEd{"U年M月d日，E"}
+                yMMM{"U年M月"}
+                yMMMEd{"U年M月d日EEE"}
+                yMMMd{"U年M月d日"}
+                yMd{"U年M月d日"}
             }
             cyclicNameSets{
                 dayParts{
@@ -305,7 +305,7 @@ zh_Hant{
                 }
                 stand-alone{
                     narrow{
-                        "正",
+                        "一",
                         "二",
                         "三",
                         "四",
@@ -323,17 +323,17 @@ zh_Hant{
             monthPatterns{
                 format{
                     wide{
-                        leap{"闰{0}"}
+                        leap{"閏{0}"}
                     }
                 }
                 numeric{
                     all{
-                        leap{"闰{0}"}
+                        leap{"閏{0}"}
                     }
                 }
                 stand-alone{
                     narrow{
-                        leap{"闰{0}"}
+                        leap{"閏{0}"}
                     }
                 }
             }

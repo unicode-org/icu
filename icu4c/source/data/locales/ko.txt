@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -61,7 +61,7 @@ ko{
             }
         }
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.63.64"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -80,6 +80,7 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
+                EEEEd{"d일 EEEE"}
                 EEEd{"d일 (EEE)"}
                 Gy{"G y년"}
                 H{"H시"}
@@ -87,6 +88,7 @@ ko{
                 Hm{"HH:mm"}
                 Hms{"H시 m분 s초"}
                 M{"M월"}
+                MEEEEd{"M. d. EEEE"}
                 MEd{"M. d. (E)"}
                 MMM{"LLL"}
                 MMMEd{"MMM d일 (E)"}
@@ -126,15 +128,83 @@ ko{
                 "a h시 m분 s초 z",
                 "a h:mm:ss",
                 "a h:mm",
-                "y-M-d EEEE",
-                "y-M-d",
-                "y-M-d",
-                "y-M-d",
+                "U년 M월 d일 EEEE",
+                "U년 M월 d일",
+                "y. M. d.",
+                "y. M. d.",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            cyclicNameSets{
+                years{
+                    format{
+                        abbreviated{
+                            "갑자",
+                            "을축",
+                            "병인",
+                            "정묘",
+                            "무진",
+                            "기사",
+                            "경오",
+                            "신미",
+                            "임신",
+                            "계유",
+                            "갑술",
+                            "을해",
+                            "병자",
+                            "정축",
+                            "무인",
+                            "기묘",
+                            "경진",
+                            "신사",
+                            "임오",
+                            "계미",
+                            "갑신",
+                            "을유",
+                            "병술",
+                            "정해",
+                            "무자",
+                            "기축",
+                            "경인",
+                            "신묘",
+                            "임진",
+                            "계사",
+                            "갑오",
+                            "을미",
+                            "병신",
+                            "정유",
+                            "무술",
+                            "기해",
+                            "경자",
+                            "신축",
+                            "임인",
+                            "계묘",
+                            "갑진",
+                            "을사",
+                            "병오",
+                            "정미",
+                            "무신",
+                            "기유",
+                            "경술",
+                            "신해",
+                            "임자",
+                            "계축",
+                            "갑인",
+                            "을묘",
+                            "병진",
+                            "정사",
+                            "무오",
+                            "기미",
+                            "경신",
+                            "신유",
+                            "임술",
+                            "계해",
+                        }
+                    }
+                }
             }
         }
         gregorian{
@@ -158,12 +228,14 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
+                EEEEd{"d일 EEEE"}
                 EEEd{"d일 (EEE)"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
                 Hms{"H시 m분 s초"}
                 M{"M월"}
+                MEEEEd{"M. d. EEEE"}
                 MEd{"M. d. (E)"}
                 MMM{"LLL"}
                 MMMEd{"MMM d일 (E)"}
@@ -472,6 +544,7 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
+                EEEEd{"d일 EEEE"}
                 EEEd{"d일 (EEE)"}
                 Gy{"G yy년"}
                 H{"H시"}
@@ -479,6 +552,7 @@ ko{
                 Hm{"HH:mm"}
                 Hms{"H시 m분 s초"}
                 M{"M월"}
+                MEEEEd{"M. d. EEEE"}
                 MEd{"M. d. (E)"}
                 MMM{"LLL"}
                 MMMEd{"MMM d일 (E)"}
@@ -764,12 +838,14 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
+                EEEEd{"d일 EEEE"}
                 EEEd{"d일 (EEE)"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
                 Hms{"H시 m분 s초"}
                 M{"M월"}
+                MEEEEd{"M. d. EEEE"}
                 MEd{"M. d. (E)"}
                 MMM{"LLL"}
                 MMMEd{"MMM d일 (E)"}

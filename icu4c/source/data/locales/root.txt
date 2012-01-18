@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -73,7 +73,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.62.84"}
+    Version{"2.0.63.66"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -151,9 +151,9 @@ root{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, y-M-d",
-                "y-M-d",
-                "y-M-d",
+                "EEEE, U MMMM dd",
+                "U MMMM d",
+                "U MMM d",
                 "y-M-d",
                 "{1} {0}",
                 "{1} {0}",
@@ -258,10 +258,6 @@ root{
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
-            isLeapMonth{
-                "",
-                "*",
-            }
             monthNames{
                 default{"format"}
                 format{
@@ -318,7 +314,7 @@ root{
                 stand-alone{
                     abbreviated:alias{"/LOCALE/calendar/chinese/monthPatterns/format/abbreviated"}
                     narrow{
-                        leap{"{0}bis"}
+                        leap{"{0}b"}
                     }
                     wide:alias{"/LOCALE/calendar/chinese/monthPatterns/format/wide"}
                 }
