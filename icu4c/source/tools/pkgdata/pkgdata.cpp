@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2011, International Business Machines
+ *   Copyright (C) 2000-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.cpp
@@ -80,6 +80,11 @@ static int32_t initializePkgDataFlags(UPKGOptions *o);
 
 static int32_t pkg_getOptionsFromICUConfig(UBool verbose, UOption *option);
 static int runCommand(const char* command, UBool specialHandling=FALSE);
+
+#define IN_COMMON_MODE(mode) (mode == 'a' || mode == 'c')
+#define IN_DLL_MODE(mode)    (mode == 'd' || mode == 'l')
+#define IN_STATIC_MODE(mode) (mode == 's')
+#define IN_FILES_MODE(mode)  (mode == 'f')
 
 enum {
     NAME,
@@ -193,7 +198,7 @@ enum {
     LIB_FILE_VERSION_TMP,
 #if U_PLATFORM == U_PF_CYGWIN
     LIB_FILE_CYGWIN,
-	LIB_FILE_CYGWIN_VERSION,
+    LIB_FILE_CYGWIN_VERSION,
 #endif
     LIB_FILENAMES_SIZE
 };
@@ -510,11 +515,6 @@ normal_command_mode:
 #define LN_CMD "ln -s"
 #define RM_CMD "rm -f"
 
-#define MODE_COMMON 'c'
-#define MODE_STATIC 's'
-#define MODE_DLL    'd'
-#define MODE_FILES  'f'
-
 static int32_t pkg_executeOptions(UPKGOptions *o) {
     int32_t result = 0;
 
@@ -527,7 +527,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 
     initializePkgDataFlags(o);
 
-    if (mode == MODE_FILES) {
+    if (IN_FILES_MODE(mode)) {
         /* Copy the raw data to the installation directory. */
         if (o->install != NULL) {
             uprv_strcpy(targetDir, o->install);
@@ -542,7 +542,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             result = pkg_installFileMode(targetDir, o->srcDir, o->fileListFiles->str);
         }
         return result;
-    } else /* if (mode == MODE_COMMON || mode == MODE_STATIC || mode == MODE_DLL) */ {
+    } else /* if (IN_COMMON_MODE(mode) || IN_DLL_MODE(mode) || IN_STATIC_MODE(mode)) */ {
         UBool noVersion = FALSE;
 
         uprv_strcpy(targetDir, o->targetDir);
@@ -567,28 +567,35 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             return result;
         }
 
-        if (mode == MODE_COMMON) {
+        if (IN_COMMON_MODE(mode)) {
             char targetFileNamePath[LARGE_BUFFER_MAX_SIZE] = "";
 
             uprv_strcpy(targetFileNamePath, targetDir);
             uprv_strcat(targetFileNamePath, datFileName);
 
-            if (T_FileStream_file_exists(targetFileNamePath)) {
-                if ((result = remove(targetFileNamePath)) != 0) {
-                    fprintf(stderr, "Unable to remove old dat file: %s\n", targetFileNamePath);
+            /* Move the dat file created to the target directory. */
+            if (uprv_strcmp(datFileNamePath, targetFileNamePath) != 0) {
+                if (T_FileStream_file_exists(targetFileNamePath)) {
+                    if ((result = remove(targetFileNamePath)) != 0) {
+                        fprintf(stderr, "Unable to remove old dat file: %s\n",
+                                targetFileNamePath);
+                        return result;
+                    }
+                }
+
+                result = rename(datFileNamePath, targetFileNamePath);
+
+                if (o->verbose) {
+                    fprintf(stdout, "# Moving package file to %s ..\n",
+                            targetFileNamePath);
+                }
+                if (result != 0) {
+                    fprintf(
+                            stderr,
+                            "Unable to move dat file (%s) to target location (%s).\n",
+                            datFileNamePath, targetFileNamePath);
                     return result;
                 }
-            }
-
-            /* Move the dat file created to the target directory. */
-            result = rename(datFileNamePath, targetFileNamePath);
-
-            if(o->verbose) {
-              fprintf(stdout, "# Moving package file to %s ..\n", targetFileNamePath);
-            }
-            if (result != 0) {
-                fprintf(stderr, "Unable to move dat file (%s) to target location (%s).\n", datFileNamePath, targetFileNamePath);
-                return result;
             }
 
             if (o->install != NULL) {
@@ -596,7 +603,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
 
             return result;
-        } else /* if (mode == MODE_STATIC || mode == MODE_DLL) */ {
+        } else /* if (IN_STATIC_MODE(mode) || IN_DLL_MODE(mode)) */ {
             char gencFilePath[SMALL_BUFFER_MAX_SIZE] = "";
             char version_major[10] = "";
             UBool reverseExt = FALSE;
@@ -613,7 +620,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
             } else {
                 noVersion = TRUE;
-                if (mode == MODE_DLL) {
+                if (IN_DLL_MODE(mode)) {
                     fprintf(stdout, "Warning: Providing a revision number with the -r option is recommended when packaging data in the current mode.\n");
                 }
             }
@@ -629,7 +636,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             /* Using the base libName and version number, generate the library file names. */
             createFileNames(o, mode, version_major, o->version == NULL ? "" : o->version, o->libName, reverseExt, noVersion);
 
-            if ((o->version!=NULL || (mode==MODE_STATIC)) && o->rebuild == FALSE) {
+            if ((o->version!=NULL || IN_STATIC_MODE(mode)) && o->rebuild == FALSE) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
                 sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION]);
                 if (T_FileStream_file_exists(checkLibFile)) {
@@ -676,7 +683,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     if (result != 0) {
                         fprintf(stderr, "Error generating assembly code for data.\n");
                         return result;
-                    } else if (mode == MODE_STATIC) {
+                    } else if (IN_STATIC_MODE(mode)) {
                       if(o->install != NULL) {
                         if(o->verbose) {
                           fprintf(stdout, "# Installing static library into %s\n", o->install);
@@ -722,7 +729,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
             }
 #if !U_PLATFORM_USES_ONLY_WIN32_API
-            if(mode != MODE_STATIC) {
+            if(!IN_STATIC_MODE(mode)) {
                 /* Certain platforms uses archive library. (e.g. AIX) */
                 if(o->verbose) {
                   fprintf(stdout, "# Creating data archive library file ..\n");
@@ -742,7 +749,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     }
                 }
 #endif
-            } /* !MODE_STATIC */
+            } /* !IN_STATIC_MODE */
 #endif
 
 #if !U_PLATFORM_USES_ONLY_WIN32_API
@@ -904,7 +911,7 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         uprv_strcpy(libFileNames[LIB_FILE_VERSION_TMP], libFileNames[LIB_FILE_VERSION_MAJOR]);
 #endif
 
-        if(mode == MODE_STATIC) {
+        if(IN_STATIC_MODE(mode)) {
             sprintf(libFileNames[LIB_FILE_VERSION], "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]);
             libFileNames[LIB_FILE_VERSION_MAJOR][0]=0;
             if(o->verbose) {
@@ -1190,7 +1197,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
         cmd = command;
     }
 
-    if (mode == MODE_STATIC) {
+    if (IN_STATIC_MODE(mode)) {
         if (cmd == NULL) {
             length = uprv_strlen(pkgDataFlags[AR]) + uprv_strlen(pkgDataFlags[ARFLAGS]) + uprv_strlen(targetDir) +
                      uprv_strlen(libFileNames[LIB_FILE_VERSION]) + uprv_strlen(objectFile) + uprv_strlen(pkgDataFlags[RANLIB]) + BUFFER_PADDING_SIZE;
@@ -1216,7 +1223,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
         
             result = runCommand(cmd);
         }
-    } else /* if (mode == MODE_DLL) */ {
+    } else /* if (IN_DLL_MODE(mode)) */ {
         if (cmd == NULL) {
             length = uprv_strlen(pkgDataFlags[GENLIB]) + uprv_strlen(pkgDataFlags[LDICUDTFLAGS]) +
                      ((uprv_strlen(targetDir) + uprv_strlen(libFileNames[LIB_FILE_VERSION_TMP])) * 2) +
@@ -1532,7 +1539,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, UPKGOptions *o) {
     int32_t result = 0;
     char cmd[LARGE_BUFFER_MAX_SIZE];
-    if (mode == MODE_STATIC) {
+    if (IN_STATIC_MODE(mode)) {
         char staticLibFilePath[SMALL_BUFFER_MAX_SIZE] = "";
 
         uprv_strcpy(staticLibFilePath, o->tmpDir);
@@ -1545,7 +1552,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
                 LIB_CMD,
                 staticLibFilePath,
                 gencFilePath);
-    } else if (mode == MODE_DLL) {
+    } else if (IN_DLL_MODE(mode)) {
         char dllFilePath[SMALL_BUFFER_MAX_SIZE] = "";
         char libFilePath[SMALL_BUFFER_MAX_SIZE] = "";
         char resFilePath[SMALL_BUFFER_MAX_SIZE] = "";
