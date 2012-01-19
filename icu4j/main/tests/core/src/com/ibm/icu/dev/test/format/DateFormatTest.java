@@ -305,11 +305,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "mercredi", "", "", "", "", "", "", "", "heure avanc\u00E9e du Pacifique", "", "", "", "", "", "", "","","","","","","",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8","3","3","PDT","",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8","3","3","PDT","1997",
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
             "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997",
-            "Wednesday", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter","United States Time (Los Angeles)","",
+            "Wednesday", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter","United States Time (Los Angeles)","1997",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -3927,6 +3927,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "root@calendar=chinese",    -2,               "78x29-4-2",             "78x29-4bis-2",             "78x29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -3,               "ren-chen-4-2",          "ren-chen-4bis-2",          "ren-chen-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -4,               "ren-chen 4 2",          "ren-chen 4bis 2",          "ren-chen 5 2" ),
+            new MonthPatternItem( "en@calendar=gregorian",    -3,               "2012-4-22",             "2012-5-22",                "2012-6-20" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "ren-chen 4 2",          "ren-chen 4bis 2",          "ren-chen 5 2" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.SHORT, "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u58EC\u8FB0\u5E74\u56DB\u6708\u4E8C\u65E5",
@@ -3964,7 +3965,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 if (result.toString().compareTo(item.dateString[idate]) != 0) {
                     errln("FAIL: Chinese calendar format for locale " + item.locale +  ", style " + item.style +
                             ", expected \"" + item.dateString[idate] + "\", got \"" + result + "\"");
-                } else {
+                } else if (item.locale.indexOf("calendar=chinese") >= 0) {
                     // formatted OK, try parse
                     ParsePosition ppos = new ParsePosition(0);
                     // ensure we are really parsing the fields we should be
