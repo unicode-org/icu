@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 2008-2011, International Business Machines Corporation
+* Copyright (C) 2008-2012, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   file name:  uspoof.h
@@ -28,8 +28,6 @@
 #if U_SHOW_CPLUSPLUS_API
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
-
-U_NAMESPACE_USE
 #endif
 
 
@@ -495,7 +493,7 @@ uspoof_getAllowedChars(const USpoofChecker *sc, UErrorCode *status);
  * @stable ICU 4.2
  */
 U_STABLE void U_EXPORT2
-uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const UnicodeSet *chars, UErrorCode *status);
+uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const icu::UnicodeSet *chars, UErrorCode *status);
 
 
 /**
@@ -518,7 +516,7 @@ uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const UnicodeSet *chars, UErrorCo
  *                 the USPOOF_CHAR_LIMIT test.
  * @stable ICU 4.2
  */
-U_STABLE const UnicodeSet * U_EXPORT2
+U_STABLE const icu::UnicodeSet * U_EXPORT2
 uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
 #endif
 
@@ -849,11 +847,11 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
   *                
   * @stable ICU 4.2
   */   
-U_STABLE UnicodeString & U_EXPORT2
+U_STABLE icu::UnicodeString & U_EXPORT2
 uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
                                 uint32_t type,
-                                const UnicodeString &s,
-                                UnicodeString &dest,
+                                const icu::UnicodeString &s,
+                                icu::UnicodeString &dest,
                                 UErrorCode *status);
 #endif   /* U_SHOW_CPLUSPLUS_API */
 
