@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -258,6 +258,12 @@ ucal_setGregorianChange(UCalendar *cal, UDate date, UErrorCode *pErrorCode) {
     // Not if(gregocal == NULL) {
     // because we really want to work only with a GregorianCalendar, not with
     // its subclasses like BuddhistCalendar.
+    if (cpp_cal == NULL) {
+        // We normally don't check "this" pointers for NULL, but this here avoids
+        // compiler-generated exception-throwing code in case cal == NULL.
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     if(typeid(*cpp_cal) != typeid(GregorianCalendar)) {
         *pErrorCode = U_UNSUPPORTED_ERROR;
         return;
@@ -274,6 +280,12 @@ ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode) {
     const GregorianCalendar *gregocal = dynamic_cast<const GregorianCalendar *>(cpp_cal);
     // Not if(gregocal == NULL) {
     // see comments in ucal_setGregorianChange().
+    if (cpp_cal == NULL) {
+        // We normally don't check "this" pointers for NULL, but this here avoids
+        // compiler-generated exception-throwing code in case cal == NULL.
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return (UDate)0;
+    }
     if(typeid(*cpp_cal) != typeid(GregorianCalendar)) {
         *pErrorCode = U_UNSUPPORTED_ERROR;
         return (UDate)0;
