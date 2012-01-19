@@ -927,6 +927,12 @@ public class SimpleDateFormat extends DateFormat {
                 }
             }
             break;
+        case 30: // 'U' - YEAR_NAME_FIELD
+            if (formatData.shortYearNames != null && value <= formatData.shortYearNames.length) {
+                safeAppend(formatData.shortYearNames, value-1, buf);
+                break;
+            }
+            // else fall through to numeric year handling, do not break here 
         case 1: // 'y' - YEAR
             /* According to the specification, if the number of pattern letters ('y') is 2,
              * the year is truncated to 2 digits; otherwise it is interpreted as a number.
@@ -939,9 +945,6 @@ public class SimpleDateFormat extends DateFormat {
             } else { //count = 1 or count > 2
                 zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
             }
-            break;
-        case 30: // 'U' - YEAR_NAME_FIELD
-            safeAppend(formatData.shortYearNames, value-1, buf);
             break;
         case 2: // 'M' - MONTH
         case 26: // 'L' - STANDALONE MONTH
