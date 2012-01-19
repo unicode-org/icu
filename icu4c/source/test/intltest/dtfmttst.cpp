@@ -3819,7 +3819,7 @@ void DateFormatTest::TestMonthPatterns()
                 }
                 delete dmft;
             } else {
-                errln(UnicodeString("FAIL: Unable to create DateFormat for Chinese calendar"));
+                dataerrln("FAIL: Unable to create DateFormat for Chinese calendar- %s", u_errorName(status));
             }
         }
         delete rootChineseCalendar;
