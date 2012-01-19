@@ -1591,7 +1591,15 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
         break;
 
-    // OLD: for "yyyy", write out the whole year; for "yy", write out the last 2 digits
+     case UDAT_YEAR_NAME_FIELD:
+		if (fSymbols->fShortYearNames != NULL && value <= fSymbols->fShortYearNamesCount) {
+            // the Calendar YEAR field runs 1 through 60 for cyclic years
+            _appendSymbol(appendTo, value - 1, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount);
+            break;
+		}
+        // else fall through to numeric year handling, do not break here
+
+   // OLD: for "yyyy", write out the whole year; for "yy", write out the last 2 digits
     // NEW: UTS#35:
 //Year         y     yy     yyy     yyyy     yyyyy
 //AD 1         1     01     001     0001     00001
@@ -1605,11 +1613,6 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             zeroPaddingNumber(currentNumberFormat, appendTo, value, 2, 2);
         else
             zeroPaddingNumber(currentNumberFormat, appendTo, value, count, maxIntCount);
-        break;
-
-    case UDAT_YEAR_NAME_FIELD:
-        // the Calendar YEAR field runs 1 through 60 for cyclic years
-        _appendSymbol(appendTo, value - 1, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount);
         break;
 
     // for "MMMM"/"LLLL", write out the whole month name, for "MMM"/"LLL", write out the month
