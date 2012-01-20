@@ -728,6 +728,11 @@ icu4j/tools/build/icu4j48.api2.gz -text
 icu4j/tools/build/manifest.stub -text
 icu4j/tools/misc/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/misc/manifest.stub -text
+tools/currency/.classpath -text
+tools/currency/.project -text
+tools/currency/.settings/org.eclipse.core.resources.prefs -text
+tools/currency/.settings/org.eclipse.jdt.core.prefs -text
+tools/currency/.settings/org.eclipse.jdt.ui.prefs -text
 tools/multi/c/Makefile-c.inc -text
 tools/multi/c/patch/3_0 -text
 tools/multi/c/patch/3_2 -text
