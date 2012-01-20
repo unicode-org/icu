@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2011, International Business Machines Corporation 
+* Copyright (C) 1998-2012, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -19,7 +19,6 @@
 #include "itrbbi.h"
 #include "rbbiapts.h"
 #include "rbbitst.h"
-#include "dicttest.h"
 
 #define TESTCLASS(n,classname)        \
     case n:                           \
@@ -39,7 +38,6 @@ void IntlTestRBBI::runIndexedTest( int32_t index, UBool exec, const char* &name,
     switch (index) {
         TESTCLASS(0, RBBIAPITest);
         TESTCLASS(1, RBBITest);
-        TESTCLASS(2, DictionaryWordTest);
         default: name=""; break;
     }
 }
