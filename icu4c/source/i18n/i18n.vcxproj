@@ -372,6 +372,7 @@
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="regexcmp.cpp" />
+    <ClCompile Include="regeximp.cpp" />
     <ClCompile Include="regexst.cpp" />
     <ClCompile Include="regextxt.cpp" />
     <ClCompile Include="rematch.cpp" />

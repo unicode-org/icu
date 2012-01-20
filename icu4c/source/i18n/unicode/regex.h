@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -53,24 +53,20 @@
 
 #include "unicode/uregex.h"
 
+// Forward Declarations
+
 U_NAMESPACE_BEGIN
 
-
-// Forward Declarations...
-
-class RegexMatcher;
-class RegexPattern;
-class UVector;
-class UVector32;
-class UVector64;
-class UnicodeSet;
-struct REStackFrame;
 struct Regex8BitSet;
-class  RuleBasedBreakIterator;
 class  RegexCImpl;
-
-
-
+class  RegexMatcher;
+class  RegexPattern;
+struct REStackFrame;
+class  RuleBasedBreakIterator;
+class  UnicodeSet;
+class  UVector;
+class  UVector32;
+class  UVector64;
 
 /**
  *   RBBIPatternDump   Debug function, displays the compiled form of a pattern.
@@ -1315,9 +1311,9 @@ public:
 
 
     /**
-      * Return TRUE if the most recent matching operation touched the
-      *  end of the text being processed.  In this case, additional input text could
-      *  change the results of that match.
+      * Return TRUE if the most recent matching operation attempted to access
+      *  additional input beyond the available input text.
+      *  In this case, additional input text could change the results of the match.
       *
       *  hitEnd() is defined for both successful and unsuccessful matches.
       *  In either case hitEnd() will return TRUE if if the end of the text was
@@ -1859,8 +1855,6 @@ private:
                                            //   reported, or that permanently disables this matcher.
 
     RuleBasedBreakIterator  *fWordBreakItr;
-
-
 };
 
 U_NAMESPACE_END
