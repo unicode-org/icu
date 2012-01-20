@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -116,7 +116,6 @@
 #define bms_open U_ICU_ENTRY_POINT_RENAME(bms_open)
 #define bms_search U_ICU_ENTRY_POINT_RENAME(bms_search)
 #define bms_setTargetString U_ICU_ENTRY_POINT_RENAME(bms_setTargetString)
-#define buildWSConfusableData U_ICU_ENTRY_POINT_RENAME(buildWSConfusableData)
 #define cmemory_cleanup U_ICU_ENTRY_POINT_RENAME(cmemory_cleanup)
 #define cmemory_inUse U_ICU_ENTRY_POINT_RENAME(cmemory_inUse)
 #define d2utable U_ICU_ENTRY_POINT_RENAME(d2utable)

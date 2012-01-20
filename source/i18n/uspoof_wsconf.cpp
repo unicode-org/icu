@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2008-2011, International Business Machines
+*   Copyright (C) 2008-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -86,6 +86,8 @@ static void extractGroup(
 }
 
 
+
+U_NAMESPACE_BEGIN
 
 //  Build the Whole Script Confusable data
 //
@@ -409,7 +411,7 @@ cleanup:
     return;
 }
 
-
+U_NAMESPACE_END
 
 
 
