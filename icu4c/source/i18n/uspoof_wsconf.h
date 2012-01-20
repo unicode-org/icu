@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2008-2009, International Business Machines
+*   Copyright (C) 2008-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -59,11 +59,11 @@ class BuilderScriptSet: public UMemory {
     ~BuilderScriptSet();
 };
 
-U_NAMESPACE_END
 
 void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
           int32_t confusablesWSLen, UParseError *pe, UErrorCode &status); 
 
+U_NAMESPACE_END
 
 #endif // !UCONFIG_NO_REGULAR_EXPRESSIONS 
 #endif // !UCONFIG_NO_NORMALIZATION 
