@@ -1,7 +1,7 @@
 //
 //  regexcmp.h
 //
-//  Copyright (C) 2002-2010, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2012, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexCompile
@@ -100,11 +100,9 @@ private:
                                int32_t LoopOp);
     UBool       compileInlineInterval();             // Generate inline code for a {min,max} quantifier
     void        literalChar(UChar32 c);              // Compile a literal char
-    void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
+    void        fixLiterals(UBool split=FALSE);      // Generate code for pending literal characters.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the
                                                      //   generated code at the specified location.
-    void        emitONE_CHAR(UChar32 c);             // Emit a ONE_CHAR op into the compiled code,
-                                                     //   taking case mode into account.
     int32_t     minMatchLength(int32_t start,
                                int32_t end);
     int32_t     maxMatchLength(int32_t start,
@@ -162,10 +160,11 @@ private:
                                                      //   until last flag is scanned.
     UBool                         fSetModeFlag;      // true for (?ismx, false for (?-ismx
 
-
-    int32_t                       fStringOpStart;    // While a literal string is being scanned
-                                                     //   holds the start index within RegexPattern.
-                                                     //   fLiteralText where the string is being stored.
+    UnicodeString                 fLiteralChars;     // Literal chars or strings from the pattern are accumulated here.
+                                                     //   Once completed, meaning that some non-literal pattern
+                                                     //   construct is encountered, the appropriate opcodes
+                                                     //   to match the literal will be generated, and this
+                                                     //   string will be cleared.
 
     int64_t                       fPatternLength;    // Length of the input pattern string.
     
