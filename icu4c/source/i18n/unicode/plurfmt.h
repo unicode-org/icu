@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2011, International Business Machines Corporation and
+* Copyright (C) 2007-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -486,6 +486,7 @@ public:
       */
     class U_I18N_API PluralSelector : public UMemory {
       public:
+        virtual ~PluralSelector();
         /**
          * Given a number, returns the appropriate PluralFormat keyword.
          *
