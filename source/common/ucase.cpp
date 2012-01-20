@@ -18,6 +18,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "unicode/uset.h"
 #include "unicode/udata.h" /* UDataInfo */
 #include "unicode/utf16.h"
@@ -391,6 +392,40 @@ ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length
 
     return FALSE; /* string not found */
 }
+
+U_NAMESPACE_BEGIN
+
+FullCaseFoldingIterator::FullCaseFoldingIterator()
+        : unfold(reinterpret_cast<const UChar *>(ucase_props_singleton.unfold)),
+          unfoldRows(unfold[UCASE_UNFOLD_ROWS]),
+          unfoldRowWidth(unfold[UCASE_UNFOLD_ROW_WIDTH]),
+          unfoldStringWidth(unfold[UCASE_UNFOLD_STRING_WIDTH]),
+          currentRow(0),
+          rowCpIndex(unfoldStringWidth) {
+    unfold+=unfoldRowWidth;
+}
+
+UChar32
+FullCaseFoldingIterator::next(UnicodeString &full) {
+    // Advance past the last-delivered code point.
+    const UChar *p=unfold+(currentRow*unfoldRowWidth);
+    if(rowCpIndex>=unfoldRowWidth || p[rowCpIndex]==0) {
+        ++currentRow;
+        p+=unfoldRowWidth;
+        rowCpIndex=unfoldStringWidth;
+    }
+    if(currentRow>=unfoldRows) { return U_SENTINEL; }
+    // Set "full" to the NUL-terminated string in the first unfold column.
+    int32_t length=unfoldStringWidth;
+    while(length>0 && p[length-1]==0) { --length; }
+    full.setTo(FALSE, p, length);
+    // Return the code point.
+    UChar32 c;
+    U16_NEXT_UNSAFE(p, rowCpIndex, c);
+    return c;
+}
+
+U_NAMESPACE_END
 
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -94,7 +94,7 @@ class StringCaseTest: public IntlTest {
 public:
     StringCaseTest() {}
     virtual ~StringCaseTest();
-    
+
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 
     void TestCaseConversion();
@@ -104,6 +104,7 @@ public:
                         int32_t whichCase,
                         void *iter, const char *localeID, uint32_t options);
     void TestCasing();
+    void TestFullCaseFoldingIterator();
 };
 
 #endif

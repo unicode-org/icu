@@ -25,12 +25,22 @@
 #include "uset_imp.h"
 #include "udataswp.h"
 
-U_CDECL_BEGIN
+#ifdef __cplusplus
+U_NAMESPACE_BEGIN
+
+class UnicodeString;
+
+U_NAMESPACE_END
+#endif
 
 /* library API -------------------------------------------------------------- */
 
+U_CDECL_BEGIN
+
 struct UCaseProps;
 typedef struct UCaseProps UCaseProps;
+
+U_CDECL_END
 
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getSingleton(void);
@@ -112,6 +122,36 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa);
 U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa);
 
+#ifdef __cplusplus
+U_NAMESPACE_BEGIN
+
+/**
+ * Iterator over characters with more than one code point in the full default Case_Folding.
+ */
+class U_COMMON_API FullCaseFoldingIterator {
+public:
+    /** Constructor. */
+    FullCaseFoldingIterator();
+    /**
+     * Returns the next (cp, full) pair where "full" is cp's full default Case_Folding.
+     * Returns a negative cp value at the end of the iteration.
+     */
+    UChar32 next(UnicodeString &full);
+private:
+    FullCaseFoldingIterator(const FullCaseFoldingIterator &);  // no copy
+    FullCaseFoldingIterator &operator=(const FullCaseFoldingIterator &);  // no assignment
+
+    const UChar *unfold;
+    int32_t unfoldRows;
+    int32_t unfoldRowWidth;
+    int32_t unfoldStringWidth;
+    int32_t currentRow;
+    int32_t rowCpIndex;
+};
+
+U_NAMESPACE_END
+#endif
+
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2
 ucase_getType(const UCaseProps *csp, UChar32 c);
@@ -127,6 +167,8 @@ U_CAPI UBool U_EXPORT2
 ucase_isCaseSensitive(const UCaseProps *csp, UChar32 c);
 
 /* string case mapping functions */
+
+U_CDECL_BEGIN
 
 /**
  * Iterator function for string case mappings, which need to look at the
@@ -161,6 +203,8 @@ struct UCaseContext {
     int8_t b1, b2, b3;
 };
 typedef struct UCaseContext UCaseContext;
+
+U_CDECL_END
 
 #define UCASECONTEXT_INITIALIZER { NULL,  0, 0, 0,  0, 0,  0,  0, 0, 0 }
 
@@ -361,7 +405,5 @@ enum {
     UCASE_UNFOLD_ROW_WIDTH,
     UCASE_UNFOLD_STRING_WIDTH
 };
-
-U_CDECL_END
 
 #endif

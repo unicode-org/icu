@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,6 +23,7 @@
 #include "unicode/ubrk.h"
 #include "unicode/unistr.h"
 #include "unicode/ucasemap.h"
+#include "ucase.h"
 #include "ustrtest.h"
 #include "unicode/tstdtmod.h"
 
@@ -32,20 +33,16 @@ StringCaseTest::~StringCaseTest() {}
 
 void
 StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) logln("TestSuite StringCaseTest: ");
-    switch (index) {
-        case 0: name = "TestCaseConversion"; if (exec) TestCaseConversion(); break;
-        case 1: 
-#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
-            name = "TestCasing";
-            if(exec) TestCasing();
-#else
-            name = "skip";
-#endif
-            break;
-
-        default: name = ""; break; //needed to end loop
+    if(exec) {
+        logln("TestSuite StringCaseTest: ");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestCaseConversion);
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
+    TESTCASE_AUTO(TestCasing);
+#endif
+    TESTCASE_AUTO(TestFullCaseFoldingIterator);
+    TESTCASE_AUTO_END;
 }
 
 void
@@ -539,4 +536,40 @@ StringCaseTest::TestCasing() {
         dataerrln("UnicodeString::toTitle(NULL) failed.");
     }
 #endif
+}
+
+void
+StringCaseTest::TestFullCaseFoldingIterator() {
+    UnicodeString ffi=UNICODE_STRING_SIMPLE("ffi");
+    UnicodeString ss=UNICODE_STRING_SIMPLE("ss");
+    FullCaseFoldingIterator iter;
+    int32_t count=0;
+    int32_t countSpecific=0;
+    UChar32 c;
+    UnicodeString full;
+    while((c=iter.next(full))>=0) {
+        ++count;
+        // Check that the full Case_Folding has more than 1 code point.
+        if(!full.hasMoreChar32Than(0, 0x7fffffff, 1)) {
+            errln("error: FullCaseFoldingIterator.next()=U+%04lX full Case_Folding has at most 1 code point", (long)c);
+            continue;
+        }
+        // Check that full == Case_Folding(c).
+        UnicodeString cf(c);
+        cf.foldCase();
+        if(full!=cf) {
+            errln("error: FullCaseFoldingIterator.next()=U+%04lX full Case_Folding != cf(c)", (long)c);
+            continue;
+        }
+        // Spot-check a couple of specific cases.
+        if((full==ffi && c==0xfb03) || (full==ss && (c==0xdf || c==0x1e9e))) {
+            ++countSpecific;
+        }
+    }
+    if(countSpecific!=3) {
+        errln("error: FullCaseFoldingIterator did not yield exactly the expected specific cases");
+    }
+    if(count<70) {
+        errln("error: FullCaseFoldingIterator yielded only %d (cp, full) pairs", (int)count);
+    }
 }
