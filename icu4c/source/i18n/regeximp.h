@@ -1,5 +1,5 @@
 //
-//   Copyright (C) 2002-2010 International Business Machines Corporation
+//   Copyright (C) 2002-2012 International Business Machines Corporation
 //   and others. All rights reserved.
 //
 //   file:  regeximp.h
@@ -12,11 +12,21 @@
 #ifndef _REGEXIMP_H
 #define _REGEXIMP_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "unicode/uniset.h"
+#include "unicode/utext.h"
+
 #include "cmemory.h"
+#include "ucase.h"
 
 U_NAMESPACE_BEGIN
 
-#ifdef REGEX_DEBUG   /* For debugging, define REGEX_DEBUG in regex.h, not here in this file. */
+// For debugging, define REGEX_DEBUG 
+// To define with configure,
+//   ./runConfigureICU --enable-debug --disable-release Linux CPPFLAGS="-DREGEX_DEBUG"
+
+#ifdef REGEX_DEBUG   
 //
 //  debugging options.  Enable one or more of the three #defines immediately following
 //
@@ -351,6 +361,61 @@ inline void Regex8BitSet::init(const UnicodeSet *s) {
 inline void Regex8BitSet::operator = (const Regex8BitSet &s) {
    uprv_memcpy(d, s.d, sizeof(d));
 }
+
+
+//  Case folded UText Iterator helper class.
+//  Wraps a UText, provides a case-folded enumeration over its contents.
+//  Used in implementing case insensitive matching constructs.
+//  Implementation in rematch.cpp
+
+class CaseFoldingUTextIterator: public UMemory {
+      public:
+        CaseFoldingUTextIterator(UText &text);
+        ~CaseFoldingUTextIterator();
+
+        UChar32 next();           // Next case folded character 
+
+        UBool   inExpansion();    // True if last char returned from next() and the 
+                                  //  next to be returned both originated from a string
+                                  //  folding of the same code point from the orignal UText.
+      private:
+        UText             &fUText;
+        const  UCaseProps *fcsp;
+        const  UChar      *fFoldChars;
+        int32_t            fFoldLength;
+        int32_t            fFoldIndex;
+
+};
+
+
+// Case folded UChar * string iterator.
+//  Wraps a UChar  *, provides a case-folded enumeration over its contents.
+//  Used in implementing case insensitive matching constructs.
+//  Implementation in rematch.cpp
+
+class CaseFoldingUCharIterator: public UMemory {
+      public:
+        CaseFoldingUCharIterator(const UChar *chars, int64_t start, int64_t limit);
+        ~CaseFoldingUCharIterator();
+
+        UChar32 next();           // Next case folded character 
+
+        UBool   inExpansion();    // True if last char returned from next() and the 
+                                  //  next to be returned both originated from a string
+                                  //  folding of the same code point from the orignal UText.
+
+        int64_t  getIndex();      // Return the current input buffer index.
+
+      private:
+        const  UChar      *fChars;
+        int64_t            fIndex;
+        int64_t            fLimit;
+        const  UCaseProps *fcsp;
+        const  UChar      *fFoldChars;
+        int32_t            fFoldLength;
+        int32_t            fFoldIndex;
+
+};
 
 U_NAMESPACE_END
 #endif
