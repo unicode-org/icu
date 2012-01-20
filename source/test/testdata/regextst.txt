@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2011 International Business Machines
+﻿# Copyright (c) 2001-2012 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:
@@ -13,8 +13,8 @@
 #               <tagged string> = text, with the start and end of each
 #                                 capture group tagged with <n>...</n>.  The overall match,
 #                                 if any, is group 0, as in <0>matched text</0>
-#
 #                                  A region can be specified with <r>...</r> tags.
+#                                 Standard ICU unescape will be applied, allowing \u, \U, etc. to appear.
 #
 #               <flags>         = any combination of
 #                                   i      case insensitive match
@@ -117,6 +117,24 @@
 "xyz$"                  yz     "<0>xyz</0>"
 
 #
+#  HitEnd 
+#
+"abcd"                  Lz      "a"
+"abcd"                  Lz      "ab"
+"abcd"                  Lz      "abc"
+"abcd"                  LZ      "<0>abcd</0>"
+"abcd"                  LZ      "<0>abcd</0>e"
+"abcd"                  LZ      "abcx"
+"abcd"                  LZ      "abx"
+"abcd"                  Lzi     "a"
+"abcd"                  Lzi     "ab"
+"abcd"                  Lzi     "abc"
+"abcd"                  LZi     "<0>abcd</0>"
+"abcd"                  LZi     "<0>abcd</0>e"
+"abcd"                  LZi     "abcx"
+"abcd"                  LZi     "abx"
+
+#
 #  All Unicode line endings recognized.
 #     0a, 0b, 0c, 0d, 0x85, 0x2028, 0x2029
 #     Multi-line and non-multiline mode take different paths, so repeated tests.
@@ -176,6 +194,7 @@
 "(hello)|(goodbye)"            "<0><2>goodbye</2></0>"
 "abc( +(  inner(X?) +)  xyz)"  "leading cruft <0>abc<1>     <2>  inner<3></3>    </2>  xyz</1></0> cruft"
 "\s*([ixsmdt]*)([:letter:]*)"  "<0>   <1>d</1><2></2></0>  "
+"(a|b)c*d"                     "a<0><1>b</1>cd</0>"
 
 # Non-capturing parens (?: stuff).   Groups, but does not capture.
 "(?:abc)*(tail)"               "<0>abcabcabc<1>tail</1></0>"
@@ -452,6 +471,40 @@
 "ab(?:c|(d?))(\1)"             "<0>ab<1></1><2></2></0>e"
 "ab(?:c|(d?))(\1)"             "<0>ab<1></1><2></2></0>"
 
+# Back References that hit/don't hit end
+"(abcd) \1"                z   "abcd abc"
+"(abcd) \1"                Z   "<0><1>abcd</1> abcd</0>"
+"(abcd) \1"                Z   "<0><1>abcd</1> abcd</0> "
+
+# Case Insensitve back references that hit/don't hit end.
+"(abcd) \1"                zi  "abcd abc"
+"(abcd) \1"                Zi  "<0><1>abcd</1> ABCD</0>"
+"(abcd) \1"                Zi  "<0><1>abcd</1> ABCD</0> "
+
+# Back references that hit/don't hit boundary limits.
+
+"(abcd) \1"                z   "<r>abcd abc</r>d "
+"(abcd) \1"                Z   "<r><0><1>abcd</1> abcd</0></r> "
+"(abcd) \1"                Z   "<r><0><1>abcd</1> abcd</0> </r>"
+
+"(abcd) \1"                zi  "<r>abcd abc</r>d "
+"(abcd) \1"                Zi  "<r><0><1>abcd</1> abcd</0></r> "
+"(abcd) \1"                Zi  "<r><0><1>abcd</1> abcd</0> </r>"
+
+# Back reference that fails match near the end of input without actually hitting the end.
+"(abcd) \1"                ZL  "abcd abd"
+"(abcd) \1"                ZLi "abcd abd"
+
+# Back reference to a zero-length match.  They are always a successful match.
+"ab(x?)cd(\1)ef"               "<0>ab<1></1>cd<2></2>ef</0>"
+"ab(x?)cd(\1)ef"            i  "<0>ab<1></1>cd<2></2>ef</0>"
+
+# Back refs to capture groups that didn't participate in the match.
+"ab(?:(c)|(d))\1"              "abde"
+"ab(?:(c)|(d))\1"              "<0>ab<1>c</1>c</0>e"
+"ab(?:(c)|(d))\1"            i "abde"
+"ab(?:(c)|(d))\1"            i "<0>ab<1>c</1>c</0>e"
+
 # Case Insensitive
 "aBc"                    i      "<0>ABC</0>"
 "a[^bc]d"                i      "ABD"
@@ -602,6 +655,7 @@
 "\ud800\udc00*"                   "<0>\U00010000\U00010000\U00010000</0>\U00010001"
 "\ud800\ud800\udc00"              "<0>\ud800\U00010000</0>\U00010000\U00010000\U00010001"
 "(\ud800)(\udc00)"                "\U00010000"
+"\U00010001+"                     "<0>\U00010001\U00010001</0>\udc01"
 
 #
 # hitEnd with find()
@@ -1029,6 +1083,41 @@
 #    Bug 8666.  Assertion failure on match, bad operand to JMP_SAV_X opcode.
 #
 "((.??)+|A)*"                     "<0><1><2></2></1></0>AAAAABBBBBCCCCCDDDDEEEEE"
+
+#
+#    Bug 8826.  Incorrect results with case insensitive matches.
+#
+"AS(X)"                         i "aßx"
+"AS.*"                          i "aßx"           # Expansion of sharp s can't split between pattern terms.
+"ASßS"                          i "<0>aßß</0>"    # All one literal string, does match.
+"ASß{1}S"                       i "aßß"           # Pattern with terms, no match.
+"aßx"                           i "<0>assx</0>"
+"aßx"                           i "<0>ASSX</0>"
+"aßx"                           i "<0>aßx</0>"
+"ASS(.)"                        i "<0>aß<1>x</1></0>"
+
+# Case Insensitive, probe some corner cases.
+"ass+"                          i "aß"            # Second 's' in pattern is qualified, can't combine with first.
+"as+"                           i "aß"
+"aßs"                           i "as"            # Can't match half of a ß
+"aß+"                           i "<0>assssssss</0>s"
+"aß+"                           i "<0>assßSssSSS</0>s"
+"a(ß?)+"                        i "<0>assssssss<1></1></0>s"
+"a(ß?)+"                        i "<0>a<1></1></0>zzzzzzzzs"
+
+"\U00010400"                    i "<0>\U00010428</0>"   # case folded supplemental code point.
+
+"sstuff"                        i "<0>ßtuff</0>"    # exercise optimizations on what chars can start a match.
+"sstuff"                        i "s<0>ßtuff</0>"    # exercise optimizations on what chars can start a match.
+"ßtuff"                         i "s<0>sstuff</0>"
+"ßtuff"                         i "s<0>Sstuff</0>"
+
+"a(..)\1"                       i "<0>A<1>bc</1>BC</0>def"
+"(ß)\1"                         i "aa<0><1>ss</1>ß</0>zz"          # Case insensitive back reference
+"..(.)\1"                       i "<0>aa<1>ß</1>ss</0>"
+"ab(..)\1"                      i "xx<0>ab<1>ss</1>ß</0>ss" 
+
+" (ss) ((\1.*)|(.*))"           i "<0> <1>ss</1> <2><4>sß</4></2></0>"       # The back reference 'ss' must not match in 'sß'
 
 #  Random debugging, Temporary
 #

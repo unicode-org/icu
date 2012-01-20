@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2011, International Business Machines Corporation and
+ * Copyright (c) 2002-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -555,8 +555,13 @@ void RegexTest::Basic() {
         // REGEX_TESTLM("a\N{LATIN SMALL LETTER B}c", "abc", FALSE, FALSE);
         UParseError pe;
         UErrorCode  status = U_ZERO_ERROR;
-        RegexPattern::compile("^(?:a?b?)*$", 0, pe, status);
-        // REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
+        RegexPattern *pattern;
+        pattern = RegexPattern::compile("aßx", UREGEX_CASE_INSENSITIVE, pe, status);
+        RegexPatternDump(pattern);
+        RegexMatcher *m = pattern->matcher("aßxzzz", status);
+        UBool result = m->find();
+        printf("result = %d\n", result);
+        // REGEX_FIND("", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
         // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
     exit(1);

@@ -330,6 +330,9 @@
     <ClCompile Include="regexcmp.cpp">
       <Filter>regex</Filter>
     </ClCompile>
+    <ClCompile Include="regeximp.cpp">
+      <Filter>regex</Filter>
+    </ClCompile>
     <ClCompile Include="regexst.cpp">
       <Filter>regex</Filter>
     </ClCompile>
