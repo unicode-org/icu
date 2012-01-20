@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2011, International Business Machines Corporation and
+* Copyright (C) 2009-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -434,6 +434,8 @@ int32_t PluralFormat::findSubMessage(const MessagePattern& pattern, int32_t part
     } while(++partIndex<count);
     return msgStart;
 }
+
+PluralFormat::PluralSelector::~PluralSelector() {}
 
 PluralFormat::PluralSelectorAdapter::~PluralSelectorAdapter() {
     delete pluralRules;
