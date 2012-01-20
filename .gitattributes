@@ -4421,6 +4421,7 @@ tools/currency/.project -text
 tools/currency/.settings/org.eclipse.core.resources.prefs -text
 tools/currency/.settings/org.eclipse.jdt.core.prefs -text
 tools/currency/.settings/org.eclipse.jdt.ui.prefs -text
+tools/currency/build.xml svneol=native#text/xml
 tools/currency/src/com/ibm/icu/dev/tool/currency/CurrencyDataEntry.java svneol=native#text/plain%3Bcharset%3Dutf-8
 tools/currency/src/com/ibm/icu/dev/tool/currency/CurrencyDataParser.java svneol=native#text/plain%3Bcharset%3Dutf-8
 tools/currency/src/com/ibm/icu/dev/tool/currency/Main.java svneol=native#text/plain%3Bcharset%3Dutf-8
