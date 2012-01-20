@@ -444,9 +444,6 @@
     <ClCompile Include="alphaindextst.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="dicttest.cpp">
-      <Filter>break iteration</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -814,9 +811,6 @@
     </ClInclude>
     <ClInclude Include="alphaindextst.h">
       <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="dicttest.h">
-      <Filter>break iteration</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
