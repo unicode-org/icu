@@ -63,6 +63,7 @@
 #include "uspoof_impl.h"
 #endif
 
+U_NAMESPACE_USE
 
 /* definitions */
 
