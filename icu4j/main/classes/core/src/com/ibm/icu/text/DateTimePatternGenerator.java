@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Comparator;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -553,6 +554,20 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
     }
 
+    /**
+     * Same as getSkeleton, but allows duplicates
+     * and returns a string using canonical pattern chars
+     * 
+     * @param pattern Input pattern, such as "ccc, d LLL"
+     * @return skeleton, such as "MMMEd"
+     * @internal
+     */
+    public String getCanonicalSkeletonAllowingDuplicates(String pattern) {
+        synchronized (this) { // synchronized since a getter must be thread-safe
+            current.set(pattern, fp, true);
+            return current.toCanonicalString();
+        }
+    }
 
     /**
      * Utility to return a unique base skeleton from a given pattern. This is
@@ -1441,7 +1456,18 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-    * Used by CLDR tooling
+    * Used by CLDR tooling; not in ICU4C
+    * Note this will not work correctly with normal skeletons unless
+    * the TreeSet in getSet below is initialized with the
+    * comparator SkeletonFieldComparator, since fields that should be related
+    * in the two skeletons being compared - like EEE and ccc, or y and U - will
+    * not be sorted in the same relative place as each other when iterating
+    * over both TreeSets being compared when using TreeSet's "natural" code
+    * point ordering. However if comparing canonical skeletons from
+    * getCanonicalSkeletonAllowingDuplicates it will be OK regardless,
+    * since in these skeletons all fields are normalized to the canonical
+    * pattern char for those fields: M or L to M, E or c to E, y or U to y, etc.
+    * so corresponding fields will short in the same way for both TreeMaps.
     * @internal
     * @deprecated This API is ICU internal only.
     */
@@ -1467,9 +1493,28 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return true;
     }
 
+/*
+    // Ensure that the TreeSet from getSet is sorted by the index of
+    // each field in types[][], so skeletonsAreSimilar checks fields
+    // that are comparable.
+    private class SkeletonFieldComparator implements Comparator<String> {
+        public int compare(String string1, String string2) {
+            int index1 = getCanonicalIndex(string1, true);
+            int index2 = getCanonicalIndex(string2, true);
+            if (index1 < index2)
+                return (index1 >= 0)? -1: 1;
+            if (index2 < index1)
+                return (index2 >= 0)? 1: -1;
+            // index1 == index2
+            if (index1 < 0)
+                return string1.compareTo(string2);
+            return 0;
+        }
+    }
+*/
     private TreeSet<String> getSet(String id) {
         final List<Object> items = fp.set(id).getItems();
-        TreeSet<String> result = new TreeSet<String>();
+        TreeSet<String> result = new TreeSet<String>(/*new SkeletonFieldComparator()*/);
         for (Object obj : items) {
             final String item = obj.toString();
             if (item.startsWith("G") || item.startsWith("a")) {
@@ -1950,6 +1995,28 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < TYPE_LIMIT; ++i) {
                 if (original[i].length() != 0) result.append(original[i]);
+            }
+            return result.toString();
+        }
+
+        // returns a string like toString but using the canonical character for most types,
+        // e.g. M for M or L, E for E or c, y for y or U, etc. The hour field is canonicalized
+        // to 'H' (for 24-hour types) or 'h' (for 12-hour types)
+        public String toCanonicalString() {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < TYPE_LIMIT; ++i) {
+                if (original[i].length() != 0) {
+                    // append a string of the same length using the canonical character
+                	for (int j = 0; j < types.length; ++j) {
+                	    int[] row = types[j];
+                	    if (row[1] == i) {
+                	        char originalChar = original[i].charAt(0);
+                	        char repeatChar = (originalChar=='h' || originalChar=='K')? 'h': (char)row[0];
+                	        result.append(Utility.repeat(String.valueOf(repeatChar), original[i].length()));
+                	        break;
+                	    }
+                	}
+                }
             }
             return result.toString();
         }
