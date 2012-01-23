@@ -618,7 +618,19 @@ udat_format(    const    UDateFormat*    format,
 
 /**
 * Parse a string into an date/time using a UDateFormat.
-* The date will be parsed using the conventions specified in {@link #udat_open }
+* The date will be parsed using the conventions specified in {@link #udat_open }.
+* <P>
+* Note that the normal date formats associated with some calendars - such
+* as the Chinese lunar calendar - do not specify enough fields to enable
+* dates to be parsed unambiguously. In the case of the Chinese lunar
+* calendar, while the year within the current 60-year cycle is specified,
+* the number of such cycles since the start date of the calendar (in the
+* UCAL_ERA field of the UCalendar object) is not normally part of the format,
+* and parsing may assume the wrong era. For cases such as this it is
+* recommended that clients parse using udat_parseCalendar with the UCalendar
+* passed in set to the current date, or to a date within the era/cycle that
+* should be assumed if absent in the format.
+*
 * @param format The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -630,17 +642,25 @@ udat_format(    const    UDateFormat*    format,
 * @stable ICU 2.0
 */
 U_STABLE UDate U_EXPORT2 
-udat_parse(    const    UDateFormat*    format,
-            const    UChar*          text,
+udat_parse(const    UDateFormat*    format,
+           const    UChar*          text,
                     int32_t         textLength,
                     int32_t         *parsePos,
                     UErrorCode      *status);
 
 /**
 * Parse a string into an date/time using a UDateFormat.
-* The date will be parsed using the conventions specified in {@link #udat_open }
+* The date will be parsed using the conventions specified in {@link #udat_open }.
 * @param format The formatter to use.
-* @param calendar The calendar in which to store the parsed data.
+* @param calendar A calendar set on input to the date and time to be used for
+*                 missing values in the date/time string being parsed, and set
+*                 on output to the parsed date/time. When the calendar type is
+*                 different from the internal calendar held by the UDateFormat
+*                 instance, the internal calendar will be cloned to a work
+*                 calendar set to the same milliseconds and time zone as this
+*                 calendar parameter, field values will be parsed based on the
+*                 work calendar, then the result (milliseconds and time zone)
+*                 will be set in this calendar.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
 * @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
