@@ -3793,7 +3793,7 @@ void DateFormatTest::TestMonthPatterns()
                         if ( result.compare(itemPtr->dateString[idate]) != 0 ) {
                             errln( UnicodeString("FAIL: Chinese calendar format for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
                                     ", expected \"" + itemPtr->dateString[idate] + "\", got \"" + result + "\"");
-                        } else if (uprv_strstr(itemPtr->locale, "calendar=chinese") != NULL) {
+                        } else {
                             // formatted OK, try parse
                             ParsePosition ppos(0);
                             // ensure we are really parsing the fields we should be

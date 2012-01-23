@@ -2685,6 +2685,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         (patternCharIndex == UDAT_STANDALONE_QUARTER_FIELD && count <= 2) || // q
         patternCharIndex == UDAT_YEAR_FIELD ||                               // y
         patternCharIndex == UDAT_YEAR_WOY_FIELD ||                           // Y
+        patternCharIndex == UDAT_YEAR_NAME_FIELD ||                          // U (falls back to numeric)
         (patternCharIndex == UDAT_ERA_FIELD && isChineseCalendar) ||         // G
         patternCharIndex == UDAT_FRACTIONAL_SECOND_FIELD)                    // S
     {
@@ -2785,6 +2786,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     switch (patternCharIndex) {
     case UDAT_ERA_FIELD:
         if (isChineseCalendar) {
+            if (!gotNumber) {
+                return -start;
+            }
             cal.set(UCAL_ERA, value);
             return pos.getIndex();
         }
@@ -2860,7 +2864,17 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         return pos.getIndex();
 
     case UDAT_YEAR_NAME_FIELD:
-        return matchString(text, start, UCAL_YEAR, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount, NULL, cal);
+        if (fSymbols->fShortYearNames != NULL) {
+            int32_t newStart = matchString(text, start, UCAL_YEAR, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount, NULL, cal);
+            if (newStart > 0) {
+                return newStart;
+            }
+        }
+        if (gotNumber && (lenient || value > fSymbols->fShortYearNamesCount)) {
+            cal.set(UCAL_YEAR, value);
+            return pos.getIndex();
+        }
+        return -start;
 
     case UDAT_MONTH_FIELD:
     case UDAT_STANDALONE_MONTH_FIELD:
