@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2011 International Business Machines Corporation and     *
+* Copyright (C) 2001-2012 International Business Machines Corporation and     *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -867,12 +867,17 @@ public final class UScript {
      * ISO 15924 script code
      * @stable ICU 49
      */
-    public static final int KHOJKI = 156;/* Khoj */
+    public static final int ANATOLIAN_HIEROGLYPHS = 156;/* Hluw */
     /**
      * ISO 15924 script code
      * @stable ICU 49
      */
-    public static final int TIRHUTA = 157;/* Tirh */
+    public static final int KHOJKI = 157;/* Khoj */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 49
+     */
+    public static final int TIRHUTA = 158;/* Tirh */
 
     /**
      * One higher than the last ISO 15924 script code integer.
@@ -880,7 +885,7 @@ public final class UScript {
      * for which integer constants are added above.
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 158;
+    public static final int CODE_LIMIT   = 159;
 
     private static final String kLocaleScript = "LocaleScript";
     
