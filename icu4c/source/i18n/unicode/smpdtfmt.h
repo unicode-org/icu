@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2011, International Business Machines Corporation and
+* Copyright (C) 1997-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -72,6 +72,7 @@ class TimeZoneFormat;
  * y        year                    (Number)            1996
  * Y        year (week of year)     (Number)            1997
  * u        extended year           (Number)            4601
+ * U        cyclic year name        (Text & Number)     ren-chen & 29
  * Q        Quarter                 (Text & Number)     Q2 & 02
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
@@ -529,10 +530,18 @@ public:
      * this object's format method but can still be parsed as a date, then the
      * parse succeeds. Clients may insist on strict adherence to the format by
      * calling setLenient(false).
+     * @see DateFormat::setLenient(boolean)
      *
      * @param text  The date/time string to be parsed
-     * @param cal   a Calendar set to the date and time to be formatted
-     *              into a date/time string.
+     * @param cal   A Calendar set on input to the date and time to be used for
+     *              missing values in the date/time string being parsed, and set
+     *              on output to the parsed date/time. When the calendar type is
+     *              different from the internal calendar held by this SimpleDateFormat
+     *              instance, the internal calendar will be cloned to a work
+     *              calendar set to the same milliseconds and time zone as the
+     *              cal parameter, field values will be parsed based on the work
+     *              calendar, then the result (milliseconds and time zone) will
+     *              be set in this calendar.
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
@@ -552,8 +561,19 @@ public:
      * this object's format method but can still be parsed as a date, then the
      * parse succeeds. Clients may insist on strict adherence to the format by
      * calling setLenient(false).
-     *
      * @see DateFormat::setLenient(boolean)
+     * <P>
+     * Note that the normal date formats associated with some calendars - such
+     * as the Chinese lunar calendar - do not specify enough fields to enable
+     * dates to be parsed unambiguously. In the case of the Chinese lunar
+     * calendar, while the year within the current 60-year cycle is specified,
+     * the number of such cycles since the start date of the calendar (in the
+     * ERA field of the Calendar object) is not normally part of the format,
+     * and parsing may assume the wrong era. For cases such as this it is
+     * recommended that clients parse using the method
+     * parse(const UnicodeString&, Calendar& cal, ParsePosition&)
+     * with the Calendar passed in set to the current date, or to a date
+     * within the era/cycle that should be assumed if absent in the format.
      *
      * @param text  The date/time string to be parsed
      * @param pos   On input, the position at which to start parsing; on
@@ -574,8 +594,26 @@ public:
      * doesn't return any information about how much of the string was consumed
      * by the parsing.  If you need that information, use the version of
      * parse() that takes a ParsePosition.
+     * <P>
+     * By default, parsing is lenient: If the input is not in the form used by
+     * this object's format method but can still be parsed as a date, then the
+     * parse succeeds. Clients may insist on strict adherence to the format by
+     * calling setLenient(false).
+     * @see DateFormat::setLenient(boolean)
+     * <P>
+     * Note that the normal date formats associated with some calendars - such
+     * as the Chinese lunar calendar - do not specify enough fields to enable
+     * dates to be parsed unambiguously. In the case of the Chinese lunar
+     * calendar, while the year within the current 60-year cycle is specified,
+     * the number of such cycles since the start date of the calendar (in the
+     * ERA field of the Calendar object) is not normally part of the format,
+     * and parsing may assume the wrong era. For cases such as this it is
+     * recommended that clients parse using the method
+     * parse(const UnicodeString&, Calendar& cal, ParsePosition&)
+     * with the Calendar passed in set to the current date, or to a date
+     * within the era/cycle that should be assumed if absent in the format.
      *
-     * @param text  The date/time string to be parsed
+     * @param text  The date/time string to be parsed into a UDate value.
      * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
      *              an error value if there was a parse error.
      * @return      A valid UDate if the input could be parsed.
