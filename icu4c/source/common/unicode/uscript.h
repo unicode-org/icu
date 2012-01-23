@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2011, International Business Machines
+ *   Copyright (C) 1997-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -390,14 +390,16 @@ typedef enum UScriptCode {
       USCRIPT_WOLEAI                        = 155,/* Wole */
 
       /** @stable ICU 49 */
-      USCRIPT_KHOJKI                        = 156,/* Khoj */
+      USCRIPT_ANATOLIAN_HIEROGLYPHS         = 156,/* Hluw */
       /** @stable ICU 49 */
-      USCRIPT_TIRHUTA                       = 157,/* Tirh */
+      USCRIPT_KHOJKI                        = 157,/* Khoj */
+      /** @stable ICU 49 */
+      USCRIPT_TIRHUTA                       = 158,/* Tirh */
 
       /* Private use codes from Qaaa - Qabx are not supported */
 
       /** @stable ICU 2.2 */
-      USCRIPT_CODE_LIMIT    = 158
+      USCRIPT_CODE_LIMIT    = 159
 } UScriptCode;
 
 /**
