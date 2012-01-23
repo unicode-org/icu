@@ -809,6 +809,7 @@ value;sc;Hans;Hans
 value;sc;Hant;Hant
 value;sc;Hebr;Hebrew
 value;sc;Hira;Hiragana
+value;sc;Hluw;Hluw
 value;sc;Hmng;Hmng
 value;sc;Hrkt;Katakana_Or_Hiragana
 value;sc;Hung;Hung

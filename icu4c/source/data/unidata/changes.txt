@@ -142,6 +142,8 @@ Unicode 6.1 update
   (added 2011-06-21)
   Khoj        322     Khojki
   Tirh        326     Tirhuta
+    and another one added 2011-12-09
+  Hluw        080     Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs)
   -> uscript.h
   -> com.ibm.icu.lang.UScript
     find     USCRIPT_([^ ]+) *= ([0-9]+),(.+)

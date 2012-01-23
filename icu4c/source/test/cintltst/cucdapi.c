@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2011, International Business Machines
+ * Copyright (c) 1997-2012, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -323,7 +323,7 @@ void TestUScriptCodeAPI(){
             /* new in ICU 4.8 */
             "Afak", "Jurc", "Mroo", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tang", "Wole",
             /* new in ICU 49 */
-            "Khoj", "Tirh",
+            "Hluw", "Khoj", "Tirh",
         };
         static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -345,7 +345,7 @@ void TestUScriptCodeAPI(){
             /* new in ICU 4.8 */
             "Afak", "Jurc", "Mroo", "Nshu", "Shrd", "Sora", "Takr", "Tang", "Wole",
             /* new in ICU 49 */
-            "Khoj", "Tirh",
+            "Hluw", "Khoj", "Tirh",
         };
         int32_t j = 0;
         if(LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
