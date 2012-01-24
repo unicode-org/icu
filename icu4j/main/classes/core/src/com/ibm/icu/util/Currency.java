@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -763,7 +763,7 @@ public class Currency extends MeasureUnit implements Serializable {
             CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
             // Filter out non-tender currencies which have "from" date set to 9999-12-31
             // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
-            CurrencyFilter filter = CurrencyFilter.onRange(null, new Date(253373299200000L));
+            CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
             all = Collections.unmodifiableList(info.currencies(filter));
             ALL_CODES = new SoftReference<List<String>>(all);
         }
@@ -811,7 +811,7 @@ public class Currency extends MeasureUnit implements Serializable {
         // When asActiveOnly is true, check if the currency is currently
         // active or not.
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        List<String> allActive = info.currencies(CurrencyFilter.onRange(from, to));
+        List<String> allActive = info.currencies(CurrencyFilter.onDateRange(from, to));
         return allActive.contains(code);
     }
 }
