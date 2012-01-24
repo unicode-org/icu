@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -36,8 +36,8 @@ public class CurrencyMetaInfo {
     /**
      * Returns true if there is data for the currency meta info.
      * @return true if there is actual data
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static boolean hasData() {
         return hasData;
@@ -165,12 +165,12 @@ public class CurrencyMetaInfo {
          * @param to date before which a currency must have been in use, or if equal to from,
          * the date on which a currency must have been in use
          * @return a filter
-         * @see #withRange(Date, Date)
+         * @see #withDateRange(Date, Date)
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public static CurrencyFilter onRange(Date from, Date to) {
-            return ALL.withRange(from, to);
+        public static CurrencyFilter onDateRange(Date from, Date to) {
+            return ALL.withDateRange(from, to);
         }
 
         /**
@@ -216,11 +216,11 @@ public class CurrencyMetaInfo {
          * @param from date on or after which the currency must have been in use
          * @param to date before which the currency must have been in use
          * @return the filter
-         * @see #onRange(Date, Date)
+         * @see #onDateRange(Date, Date)
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public CurrencyFilter withRange(Date from, Date to) {
+        public CurrencyFilter withDateRange(Date from, Date to) {
             return new CurrencyFilter(this.region, this.currency, from, to);
         }
 
@@ -297,13 +297,13 @@ public class CurrencyMetaInfo {
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public final byte fractionDigits;
+        public final int fractionDigits;
         /**
          * Rounding increment used when displaying this currency.
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public final byte roundingIncrement;
+        public final int roundingIncrement;
 
         /**
          * Constructor for CurrencyDigits.
@@ -313,8 +313,8 @@ public class CurrencyMetaInfo {
          * @provisional This API might change or be removed in a future release.
          */
         public CurrencyDigits(int fractionDigits, int roundingIncrement) {
-            this.fractionDigits = (byte) fractionDigits;
-            this.roundingIncrement = (byte) roundingIncrement;
+            this.fractionDigits = fractionDigits;
+            this.roundingIncrement = roundingIncrement;
         }
 
         /**
@@ -372,7 +372,7 @@ public class CurrencyMetaInfo {
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
-        public final short priority;
+        public final int priority;
 
         /**
          * Constructs a currency info.
@@ -389,7 +389,7 @@ public class CurrencyMetaInfo {
             this.code = code;
             this.from = from;
             this.to = to;
-            this.priority = (short) priority;
+            this.priority = priority;
         }
 
         /**
@@ -406,7 +406,7 @@ public class CurrencyMetaInfo {
 ///CLOVER:OFF
     /**
      * Returns the list of CurrencyInfos matching the provided filter.  Results
-     * are ordered by country code,  then by highest to lowest priority (0 is highest).
+     * are ordered by country code, then by highest to lowest priority (0 is highest).
      * The returned list is unmodifiable.
      * @param filter the filter to control which currency info to return
      * @return the matching information
@@ -429,7 +429,7 @@ public class CurrencyMetaInfo {
      */
     public List<String> currencies(CurrencyFilter filter) {
         return Collections.emptyList();
-   }
+    }
 
     /**
      * Returns the list of region codes matching the provided filter.
