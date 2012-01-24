@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2011, International Business Machines
+ * Copyright (c) 2002-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -207,6 +207,26 @@ public class CurrencyTest extends TestFmwk {
         if (!CurrencyDisplayNames.hasData()) {
             errln("hasData() should return true.");
         }
+        
+        CurrencyDisplayNames cdn = CurrencyDisplayNames.getInstance(ULocale.GERMANY);
+        assertEquals("de_USD_name", "US-Dollar", cdn.getName("USD"));
+        assertEquals("de_USD_symbol", "$", cdn.getSymbol("USD"));
+        assertEquals("de_USD_plural_other", "US-Dollar", cdn.getPluralName("USD", "other"));
+        
+        cdn = CurrencyDisplayNames.getInstance(ULocale.forLanguageTag("en-US"));
+        assertEquals("en-US_USD_name", "US Dollar", cdn.getName("USD"));
+        assertEquals("en-US_USD_symbol", "$", cdn.getSymbol("USD"));
+        assertEquals("en-US_USD_plural_one", "US dollar", cdn.getPluralName("USD", "one"));
+        assertEquals("en-US_USD_plural_other", "US dollars", cdn.getPluralName("USD", "other"));
+        
+        assertEquals("en-US_FOO_name", "FOO", cdn.getName("FOO"));
+        assertEquals("en-US_FOO_symbol", "FOO", cdn.getSymbol("FOO"));
+        assertEquals("en-US_FOO_plural_other", "FOO", cdn.getPluralName("FOO", "other"));
+        
+        assertEquals("en-US bundle", "en", cdn.getULocale().toString());
+        
+        cdn = CurrencyDisplayNames.getInstance(ULocale.forLanguageTag("zz-Gggg-YY"));
+        assertEquals("random bundle", "en", cdn.getULocale().toString());
     }
     
     // Provide better code coverage for the CurrencyData class
@@ -259,7 +279,7 @@ public class CurrencyTest extends TestFmwk {
             return;
         }
         
-        if (info_fallback.getLocale() != ULocale.ROOT) {
+        if (info_fallback.getULocale() != ULocale.ROOT) {
             errln("Error calling getLocale().");
             return;
         }
