@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -57,7 +57,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
        }
 
         @Override
-        public ULocale getLocale() {
+        public ULocale getULocale() {
             return rb.getULocale();
         }
 

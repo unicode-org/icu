@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -124,7 +124,7 @@ public class CurrencyData {
         }
 
         @Override
-        public ULocale getLocale() {
+        public ULocale getULocale() {
             return ULocale.ROOT;
         }
 
