@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -97,31 +97,41 @@ public class PluralRulesLoader {
      * resource in plurals.res.
      */
     private void checkBuildRulesIdMaps() {
-        if (localeIdToRulesId == null) {
+        boolean haveMap;
+        synchronized (this) {
+            haveMap = localeIdToRulesId != null;
+        }
+        if (!haveMap) {
+            Map<String, String> tempLocaleIdToRulesId;
+            Map<String, ULocale> tempRulesIdToEquivalentULocale;
             try {
                 UResourceBundle pluralb = getPluralBundle();
                 UResourceBundle localeb = pluralb.get("locales");
-                localeIdToRulesId = new TreeMap<String, String>(); // sort for
-                                                                   // convenience
-                                                                   // of
-                                                                   // getAvailableULocales
-                rulesIdToEquivalentULocale = new HashMap<String, ULocale>(); // not
-                                                                             // visible
+                
+                // sort for convenience of getAvailableULocales
+                tempLocaleIdToRulesId = new TreeMap<String, String>();
+                // not visible
+                tempRulesIdToEquivalentULocale = new HashMap<String, ULocale>();
+                
                 for (int i = 0; i < localeb.getSize(); ++i) {
                     UResourceBundle b = localeb.get(i);
                     String id = b.getKey();
                     String value = b.getString().intern();
-                    localeIdToRulesId.put(id, value);
+                    tempLocaleIdToRulesId.put(id, value);
 
-                    if (!rulesIdToEquivalentULocale.containsKey(value)) {
-                        rulesIdToEquivalentULocale.put(value, new ULocale(id));
+                    if (!tempRulesIdToEquivalentULocale.containsKey(value)) {
+                        tempRulesIdToEquivalentULocale.put(value, new ULocale(id));
                     }
                 }
             } catch (MissingResourceException e) {
-                localeIdToRulesId = Collections.emptyMap(); // dummy so we don't
-                                                            // try again, can
-                                                            // read
-                rulesIdToEquivalentULocale = Collections.emptyMap();
+                // dummy so we don't try again
+                tempLocaleIdToRulesId = Collections.emptyMap();
+                tempRulesIdToEquivalentULocale = Collections.emptyMap();
+            }
+            
+            synchronized(this) {
+                localeIdToRulesId = tempLocaleIdToRulesId;
+                rulesIdToEquivalentULocale = tempRulesIdToEquivalentULocale;
             }
         }
     }
@@ -150,7 +160,11 @@ public class PluralRulesLoader {
      * return null.
      */
     public PluralRules getRulesForRulesId(String rulesId) {
-        PluralRules rules = rulesIdToRules.get(rulesId);
+        // synchronize on the map.  release the lock temporarily while we build the rules.
+        PluralRules rules;
+        synchronized (rulesIdToRules) {
+            rules = rulesIdToRules.get(rulesId);
+        }
         if (rules == null) {
             try {
                 UResourceBundle pluralb = getPluralBundle();
@@ -171,7 +185,9 @@ public class PluralRulesLoader {
             } catch (ParseException e) {
             } catch (MissingResourceException e) {
             }
-            rulesIdToRules.put(rulesId, rules); // put even if null
+            synchronized (rulesIdToRules) {
+                rulesIdToRules.put(rulesId, rules); // put even if null
+            }
         }
         return rules;
     }
