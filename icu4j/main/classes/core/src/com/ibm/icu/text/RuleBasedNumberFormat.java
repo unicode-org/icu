@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1375,6 +1375,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
             return defaultRuleSet.getName();
         }
         return "";
+    }
+    
+    /**
+     * Sets the decimal format symbols used by this formatter. The formatter uses a copy of the
+     * provided symbols.
+     * 
+     * @param newSymbols desired DecimalFormatSymbols
+     * @see DecimalFormatSymbols
+     * @draft ICU 49
+     */
+    public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
+        decimalFormatSymbols = (DecimalFormatSymbols) newSymbols.clone();
     }
 
     //-----------------------------------------------------------------------
