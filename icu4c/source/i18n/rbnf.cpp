@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation
+* Copyright (C) 1997-2012, International Business Machines Corporation
 * and others. All Rights Reserved.
 *******************************************************************************
 */
@@ -1614,6 +1614,28 @@ RuleBasedNumberFormat::getDecimalFormatSymbols() const
         }
     }
     return decimalFormatSymbols;
+}
+
+// De-owning the current localized symbols and adopt the new symbols.
+void
+RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt)
+{
+    if (symbolsToAdopt == NULL) {
+        return; // do not allow caller to set decimalFormatSymbols to NULL
+    }
+
+    if (decimalFormatSymbols != NULL) {
+        delete decimalFormatSymbols;
+    }
+
+    decimalFormatSymbols = symbolsToAdopt;
+}
+
+// Setting the symbols is equlivalent to adopting a newly created localized symbols.
+void
+RuleBasedNumberFormat::setDecimalFormatSymbols(const DecimalFormatSymbols& symbols)
+{
+    adoptDecimalFormatSymbols(new DecimalFormatSymbols(symbols));
 }
 
 U_NAMESPACE_END
