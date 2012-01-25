@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and others.
+* Copyright (C) 1997-2012, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -963,6 +963,27 @@ public:
      * @stable ICU 2.8
      */
     virtual UClassID getDynamicClassID(void) const;
+
+    /**
+     * Sets the decimal format symbols, which is generally not changed
+     * by the programmer or user. The formatter takes ownership of
+     * symbolsToAdopt; the client must not delete it.
+     *
+     * @param symbolsToAdopt DecimalFormatSymbols to be adopted.
+     * @draft ICU 49
+     */
+    virtual void adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt);
+
+    /**
+     * Sets the decimal format symbols, which is generally not changed
+     * by the programmer or user. A clone of the symbols is created and
+     * the symbols is _not_ adopted; the client is still responsible for
+     * deleting it.
+     *
+     * @param symbols DecimalFormatSymbols.
+     * @draft ICU 49
+     */
+    virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
 
 private:
     RuleBasedNumberFormat(); // default constructor not implemented
