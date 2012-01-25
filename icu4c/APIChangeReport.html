@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html><!--
-	 Copyright (C)  2011, International Business Machines Corporation, All Rights Reserved. 
+	 Copyright (C)  2012, International Business Machines Corporation, All Rights Reserved. 
 	-->
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4C API Comparison: 4.8 with 49 (m2) r31099</title>
+<title>ICU4C API Comparison: 4.8 with 49 (m2) r31266M</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="#_top"></a>
-<h1>ICU4C API Comparison: 4.8 with 49 (m2) (r31099)</h1>
+<h1>ICU4C API Comparison: 4.8 with 49 (m2) (r31266M)</h1>
 <div id="toc">
 <ul>
 <li>
@@ -561,6 +561,10 @@
 <td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_USRDATA_NAME</td><td class="">Internal<br>.</td><td>None<br>
 <span class=""><span></span></span></td>
 </tr>
+<tr class="row0">
+<td class="file">uversion.h</td><td class="proto">void u_versionToString(UVersionInfo, char*)</td><td class="stabchange">Stable<br>2.4</td><td>None<br>
+<span class=""><span></span></span></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -672,6 +676,22 @@
 <tr class="row1">
 <td class="file">choicfmt.h</td><td class="proto">void ChoiceFormat::setChoices(const double*, const UnicodeString*, int32_t)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
 <span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UCharNameChoice::U_UNICODE_10_CHAR_NAME</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_ISO_COMMENT</td><td class="stabchange">Stable<br>2.4</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_UNICODE_1_NAME</td><td class="stabchange">Stable<br>2.4</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">int32_t u_getISOComment(UChar32, char*, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
 </tr>
 </table>
 <P></P>
@@ -847,6 +867,22 @@
 <tr class="row1">
 <td class="file">plurrule.h</td><td class="proto">UnicodeString PluralRules::getKeywordOther() const</td><td class="">Internal<br>4.0</td><td>Stable<br>
 <span class=""><span>4.0</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UCharNameChoice::U_UNICODE_10_CHAR_NAME</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_ISO_COMMENT</td><td class="stabchange">Stable<br>2.4</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_UNICODE_1_NAME</td><td class="stabchange">Stable<br>2.4</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto">int32_t u_getISOComment(UChar32, char*, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class="verchange"><span>49</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">uconfig.h</td><td class="proto"><tt>#define</tt> ICU_USE_THREADS</td><td class="">
@@ -1136,20 +1172,30 @@
 <span class=""><span>2.0</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KHOJKI</td><td class="">None<br>
+<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ANATOLIAN_HIEROGLYPHS</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>49</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TIRHUTA</td><td class="">None<br>
+<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KHOJKI</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>49</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
+<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TIRHUTA</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>49</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
 <td class="file">uset.h</td><td class="proto"><tt>enum</tt> (anonymous)::USET_SERIALIZED_STATIC_ARRAY_CAPACITY</td><td class="">Internal<br>.</td><td>Stable<br>
 <span class="verchange"><span>2.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uversion.h</td><td class="proto">void u_versionToString(const UVersionInfo, char*)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.4</span></span></td>
 </tr>
 </table>
 <P></P>
@@ -1519,6 +1565,16 @@
 <span class=""><span>49</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">rbnf.h</td><td class="proto">void RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols*)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>49</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">rbnf.h</td><td class="proto">void RuleBasedNumberFormat::setDecimalFormatSymbols(const DecimalFormatSymbols&amp;)</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>49</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">timezone.h</td><td class="proto"><tt>static</tt> const TimeZone&amp; TimeZone::getUnknown()</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
@@ -1604,31 +1660,36 @@
 <span class=""><span>49</span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatField::UDAT_YEAR_NAME_FIELD</td><td class="">None<br>
+</td><td>Draft<br>
+<span class=""><span>49</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">uidna.h</td><td class="proto"><tt>enum</tt> (anonymous)::UIDNA_CHECK_CONTEXTO</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">uidna.h</td><td class="proto"><tt>enum</tt> (anonymous)::UIDNA_ERROR_CONTEXTO_DIGITS</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">uidna.h</td><td class="proto"><tt>enum</tt> (anonymous)::UIDNA_ERROR_CONTEXTO_PUNCTUATION</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unistr.h</td><td class="proto"><tt>#define</tt> UNISTR_FROM_CHAR_EXPLICIT</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unistr.h</td><td class="proto"><tt>#define</tt> UNISTR_FROM_STRING_EXPLICIT</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unistr.h</td><td class="proto"><tt>#define</tt> U_STRING_CASE_MAPPER_DEFINED</td><td class="">None<br>
 </td><td>
 <br>
@@ -1636,65 +1697,70 @@
 <br>
 <b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unistr.h</td><td class="proto">UNISTR_FROM_CHAR_EXPLICIT UnicodeString::UnicodeString(UChar)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unistr.h</td><td class="proto">UNISTR_FROM_CHAR_EXPLICIT UnicodeString::UnicodeString(UChar32)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unistr.h</td><td class="proto">UNISTR_FROM_STRING_EXPLICIT UnicodeString::UnicodeString(const UChar*)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unistr.h</td><td class="proto">UNISTR_FROM_STRING_EXPLICIT UnicodeString::UnicodeString(const char*)</td><td class="">None<br>
 </td><td>Stable<br>
 <span class=""><span>2.0</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unorm2.h</td><td class="proto">UChar32 unorm2_composePair(const UNormalizer2*, UChar32, UChar32)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFCInstance(UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFDInstance(UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFKCCasefoldInstance(UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFKCInstance(UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">const UNormalizer2* unorm2_getNFKDInstance(UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unorm2.h</td><td class="proto">int32_t unorm2_getRawDecomposition(const UNormalizer2*, UChar32, UChar*, int32_t, UErrorCode*)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unorm2.h</td><td class="proto">uint8_t unorm2_getCombiningClass(const UNormalizer2*, UChar32)</td><td class="">None<br>
 </td><td>Draft<br>
 <span class=""><span>49</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_ANATOLIAN_HIEROGLYPHS</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>49</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
 <td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_KHOJKI</td><td class="">None<br>
@@ -1730,6 +1796,11 @@
 <td class="file">uvernum.h</td><td class="proto"><tt>#define</tt> U_DEF_ICU_ENTRY_POINT_RENAME</td><td class="">None<br>
 </td><td>Internal<br>
 <span class=""><span>.</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uversion.h</td><td class="proto">void u_versionToString(const UVersionInfo, char*)</td><td class="">None<br>
+</td><td>Stable<br>
+<span class=""><span>2.4</span></span></td>
 </tr>
 </table>
 <P></P>
@@ -2912,7 +2983,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI (r30028:30786M) tool on Mon Dec 12 14:57:40 PST 2011<br>Copyright (C) 2011, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI (r) tool on Wed Jan 25 15:28:19 PST 2012<br>Copyright (C) 2012, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
