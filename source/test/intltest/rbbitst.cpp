@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2011, International Business Machines Corporation and
+ * Copyright (c) 1999-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -23,7 +23,9 @@
 #include "unicode/ucnv.h"
 #include "unicode/schriter.h"
 #include "unicode/uniset.h"
-#include "unicode/regex.h"        // TODO: make conditional on regexp being built.
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+#include "unicode/regex.h"
+#endif
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 #include "intltest.h"
@@ -47,6 +49,13 @@
 // runIndexedTest
 //---------------------------------------------
 
+
+//  Note:  Before adding new tests to this file, check whether the desired test data can 
+//         simply be added to the file testdata/rbbitest.txt.  In most cases it can,
+//         it's much less work than writing a new test, diagnostic output in the event of failures
+//         is good, and the test data file will is shared with ICU4J, so eventually the test
+//         will run there as well, without additional effort.
+
 void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* params )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
@@ -60,8 +69,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             break;
 #endif
 
-        case 1: name = "TestJapaneseLineBreak";
-            if(exec) TestJapaneseLineBreak();                  break;
+        case 1: name = "skip";
+            break;
         case 2: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
  
@@ -84,12 +93,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 #if !UCONFIG_NO_FILE_IO
         case 7: name = "TestEndBehaviour";
             if(exec) TestEndBehaviour();                       break;
-        case 8: name = "TestMixedThaiLineBreak";
-             if(exec) TestMixedThaiLineBreak();                break;
-        case 9: name = "TestThaiLineBreak";
-             if(exec) TestThaiLineBreak();                     break;
-        case 10: name = "TestMaiyamok";
-             if(exec) TestMaiyamok();                          break;
+        case 8: case 9: case 10: name = "skip";
+             break;
         case 11: name = "TestWordBreaks";
              if(exec) TestWordBreaks();                        break;
         case 12: name = "TestWordBoundary";
@@ -107,22 +112,22 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILE_IO
         case 16:  name = "TestMonkey";
-             if(exec)  TestMonkey(params);                      break;
+            if(exec)  TestMonkey(params);                      break;
 #else
         case 16:
-              name = "skip";                                    break;
+             name = "skip";                                    break;
 #endif
 
 #if !UCONFIG_NO_FILE_IO
         case 17: name = "TestBug3818";
             if(exec) TestBug3818();                            break;
-        case 18: name = "TestJapaneseWordBreak";
-            if(exec) TestJapaneseWordBreak();                  break;
 #else
-        case 17: case 18: name = "skip";
+        case 17: name = "skip";
             break;
 #endif
 
+        case 18: name = "skip";
+            break;
         case 19: name = "TestDebug";
             if(exec) TestDebug();                              break;
         case 20: name = "TestTrieDict";
@@ -131,12 +136,13 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 #if !UCONFIG_NO_FILE_IO
         case 21: name = "TestBug5775";
             if (exec) TestBug5775();                           break;
-        case 22: name = "TestTailoredBreaks";
-            if (exec) TestTailoredBreaks();                    break;
 #else
-        case 21: case 22: name = "skip";
+        case 21: name = "skip";
             break;
 #endif
+
+        case 22: name = "skip";
+            break;
         case 23: name = "TestDictRules";
             if (exec) TestDictRules();                         break;
         case 24: name = "TestBug5532";
@@ -287,31 +293,6 @@ void BITestData::clearResults() {
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//    Cannned Test Characters
-//
-//-----------------------------------------------------------------------------------
-
-static const UChar cannedTestArray[] = {
-    0x0001, 0x0002, 0x0003, 0x0004, 0x0020, 0x0021, '\\', 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0028, 0x0029, 0x002b, 0x002d, 0x0030, 0x0031,
-    0x0032, 0x0033, 0x0034, 0x003c, 0x003d, 0x003e, 0x0041, 0x0042, 0x0043, 0x0044, 0x0045, 0x005b, 0x005d, 0x005e, 0x005f, 0x0060, 0x0061, 0x0062, 0x0063, 0x0064, 0x0065, 0x007b,
-    0x007d, 0x007c, 0x002c, 0x00a0, 0x00a2,
-    0x00a3, 0x00a4, 0x00a5, 0x00a6, 0x00a7, 0x00a8, 0x00a9, 0x00ab, 0x00ad, 0x00ae, 0x00af, 0x00b0, 0x00b2, 0x00b3,
-    0x00b4, 0x00b9, 0x00bb, 0x00bc, 0x00bd, 0x02b0, 0x02b1, 0x02b2, 0x02b3, 0x02b4, 0x0300, 0x0301, 0x0302, 0x0303,
-    0x0304, 0x05d0, 0x05d1, 0x05d2, 0x05d3, 0x05d4, 0x0903, 0x093e, 0x093f, 0x0940, 0x0949, 0x0f3a, 0x0f3b, 0x2000,
-    0x2001, 0x2002, 0x200c, 0x200d, 0x200e, 0x200f, 0x2010, 0x2011, 0x2012, 0x2028, 0x2029, 0x202a, 0x203e, 0x203f,
-    0x2040, 0x20dd, 0x20de, 0x20df, 0x20e0, 0x2160, 0x2161, 0x2162, 0x2163, 0x2164, 0x0000
-};
-
-static UnicodeString* cannedTestChars = 0;
-
-#define  halfNA     "\\u0928\\u094d\\u200d"
-#define  halfSA     "\\u0938\\u094d\\u200d"
-#define  halfCHA    "\\u091a\\u094d\\u200d"
-#define  halfKA     "\\u0915\\u094d\\u200d"
-#define  deadTA     "\\u0924\\u094d"
-
 //--------------------------------------------------------------------------------------
 //
 //    RBBITest    constructor and destructor
@@ -319,43 +300,11 @@ static UnicodeString* cannedTestChars = 0;
 //--------------------------------------------------------------------------------------
 
 RBBITest::RBBITest() {
-    UnicodeString temp(cannedTestArray);
-    cannedTestChars = new UnicodeString();
-    *cannedTestChars += (UChar)0x0000;
-    *cannedTestChars += temp;
 }
 
 
 RBBITest::~RBBITest() {
-    delete cannedTestChars;
 }
-
-
-static const int T_NUMBER = 100;
-static const int T_LETTER = 200;
-static const int T_H_OR_K = 300;
-static const int T_IDEO   = 400;
-
-
-
-
-
-
-//--------------------------------------------------------------------
-//Testing the BreakIterator for devanagari script
-//--------------------------------------------------------------------
-
-#define deadRA   "\\u0930\\u094d"         /*deadform RA = devanagari RA + virama*/
-#define deadPHA  "\\u092b\\u094d"         /*deadform PHA = devanagari PHA + virama*/
-#define deadTTHA "\\u0920\\u094d"
-#define deadPA   "\\u092a\\u094d"
-#define deadSA   "\\u0938\\u094d"
-#define visarga  "\\u0903"                /*devanagari visarga looks like a english colon*/
-
-
-
-
-
 
 //-----------------------------------------------------------------------------------
 //
@@ -449,127 +398,6 @@ static void printStringBreaks(UnicodeString ustr, int expected[],
     }
 }
 
-void RBBITest::TestThaiLineBreak() {
-    UErrorCode status = U_ZERO_ERROR;
-    BITestData thaiLineSelection(status);
-
-    // \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
-    // represents elided letters at the end of a long word.  It should be bound to
-    // the end of the word and not treated as an independent punctuation mark.
-
-
-    ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e08\\u0e30", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e14\\u0e21", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e08\\u0e49\\u0e32", 0, status);
-//        ADD_DATACHUNK(thaiLineSelection, "\\u0e2b\\u0e19\\u0e49\\u0e32", 0, status);
-//        ADD_DATACHUNK(thaiLineSelection, "\\u0e17\\u0e35\\u0e48", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48", 0, status);
-    // the commented-out lines (I think) are the preferred result; this line is what our current dictionary is giving us
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e2d\\u0e2d\\u0e01", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e21\\u0e32", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e23\\u0e48\\u0e07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e15\\u0e47\\u0e21", 0, status);
-
-    // the one time where the paiyannoi occurs somewhere other than at the end
-    // of a word is in the Thai abbrevation for "etc.", which both begins and
-    // ends with a paiyannoi
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e2f\\u0e25\\u0e2f", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e17\\u0e35\\u0e48", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e31\\u0e49\\u0e19", 0, status);
-
-    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(
-        Locale("th"), status);
-    if (U_FAILURE(status))
-    {
-        errcheckln(status, "Failed to create the BreakIterator for Thai locale in TestThaiLineBreak. - %s", u_errorName(status));
-        return;
-    }
-
-    generalIteratorTest(*e, thaiLineSelection);
-    delete e;
-}
-
-
-
-void RBBITest::TestMixedThaiLineBreak()
-{
-    UErrorCode   status = U_ZERO_ERROR;
-    BITestData   thaiLineSelection(status);
-
-    ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
-
-
-    // @suwit -- Test Arabic numerals, Thai numerals, Punctuation and English characters
-    // start
-
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E1B\\u0E35", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E1E\\u0E38\\u0E17\\u0E18\\u0E28\\u0E31\\u0E01\\u0E23\\u0E32\\u0E0A ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "2545 ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E40\\u0E1B\\u0E47\\u0E19", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E1B\\u0E35", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E09\\u0E25\\u0E2D\\u0E07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E04\\u0E23\\u0E1A", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E23\\u0E2D\\u0E1A ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\"\\u0E52\\u0E52\\u0E50 ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E1b\\u0E35\" ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E02\\u0E2d\\u0E07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E01\\u0E23\\u0E38\\u0E07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E23\\u0E31\\u0E15\\u0E19\\u0E42\\u0E01\\u0E2A\\u0E34\\u0E19\\u0E17\\u0E23\\u0E4C ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "(\\u0E01\\u0E23\\u0E38\\u0E07\\u0E40\\u0E17\\u0E1e\\u0E2F", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0E2B\\u0E23\\u0E37\\u0E2D ", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "Bangkok)", 0, status);
-
-    // @suwit - end of changes
-
-
-    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale("th"), status);
-    if (U_FAILURE(status))
-    {
-        errcheckln(status, "Failed to create the BreakIterator for Thai locale in TestMixedThaiLineBreak. - %s", u_errorName(status));
-        return;
-    }
-
-
-    generalIteratorTest(*e, thaiLineSelection);
-    delete e;
-}
-
-
-void RBBITest::TestMaiyamok()
-{
-    UErrorCode status = U_ZERO_ERROR;
-    BITestData   thaiLineSelection(status);
-    ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
-    // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
-    // word".  Instead of appearing as a word unto itself, however, it's kept together
-    // with the word before it
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e1b\\u0e46", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e21\\u0e32\\u0e46", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e01\\u0e23\\u0e38\\u0e07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e17\\u0e1e", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e25\\u0e30", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e03\\u0e35", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e22\\u0e07", 0, status);
-    ADD_DATACHUNK(thaiLineSelection, "\\u0e43\\u0e2b\\u0e21\\u0e48", 0, status);
-
-    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(
-        Locale("th"), status);
-
-    if (U_FAILURE(status))
-    {
-        errcheckln(status, "Failed to create the BreakIterator for Thai locale in TestMaiyamok. - %s", u_errorName(status));
-        return;
-    }
-    generalIteratorTest(*e, thaiLineSelection);
-    delete e;
-}
-
-
 
 void RBBITest::TestBug3818() {
     UErrorCode  status = U_ZERO_ERROR;
@@ -600,30 +428,6 @@ void RBBITest::TestBug3818() {
     delete bi;
 }
 
-
-void RBBITest::TestJapaneseWordBreak() {
-    UErrorCode status = U_ZERO_ERROR;
-    BITestData   japaneseWordSelection(status);
-
-    ADD_DATACHUNK(japaneseWordSelection, NULL, 0, status);           // Break at start of data
-    ADD_DATACHUNK(japaneseWordSelection, "\\u4ECA\\u65E5", 400, status); //2
-    ADD_DATACHUNK(japaneseWordSelection, "\\u306F\\u3044\\u3044", 300, status); //5
-    ADD_DATACHUNK(japaneseWordSelection, "\\u5929\\u6C17", 400, status); //7
-    ADD_DATACHUNK(japaneseWordSelection, "\\u3067\\u3059\\u306D", 300, status); //10
-    ADD_DATACHUNK(japaneseWordSelection, "\\u3002", 0, status); //11
-    ADD_DATACHUNK(japaneseWordSelection, "\\u000D\\u000A", 0, status); //12
-
-    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(
-        Locale("ja"), status);
-    if (U_FAILURE(status))
-    {
-        errcheckln(status, "Failed to create the BreakIterator for Japanese locale in TestJapaneseWordBreak.");
-        return;
-    }
-
-    generalIteratorTest(*e, japaneseWordSelection);
-    delete e;
-}
 
 void RBBITest::TestTrieDict() {
     UErrorCode      status  = U_ZERO_ERROR;
@@ -1240,77 +1044,6 @@ void RBBITest::TestBug5775() {
 
 
 
-/**
- * Test Japanese Line Break
- * @bug 4095322
- */
-void RBBITest::TestJapaneseLineBreak()
-{
-#if 0
-    // Test needs updating some more...   Dump it for now.
-
-
-    // Change for Unicode TR 14:  Punctuation characters with categories Pi and Pf do not count
-    //        as opening and closing punctuation for line breaking.
-    //        Also, \u30fc and \u30fe are not counted as hyphens.   Remove these chars
-    //        from these tests.    6-13-2002
-    //
-    UErrorCode status = U_ZERO_ERROR;
-    UnicodeString testString = CharsToUnicodeString("\\u4e00x\\u4e8c");
-    UnicodeString precedingChars = CharsToUnicodeString(
-        //"([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
-        "([{$\\u00a5\\u00a3\\u00a4\\u201a\\u201e");
-    UnicodeString followingChars = CharsToUnicodeString(
-        // ")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc"
-        ")]}!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7"
-        // ":;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034"
-        ":;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u00b0\\u2032\\u2033\\u2034"
-        "\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
-    BreakIterator *iter = BreakIterator::createLineInstance(Locale::getJapan(), status);
-
-    int32_t i;
-    if (U_FAILURE(status))
-    {
-        errln("Failed to create the BreakIterator for Japanese locale in TestJapaneseLineBreak.\n");
-        return;
-    }
-
-    for (i = 0; i < precedingChars.length(); i++) {
-        testString.setCharAt(1, precedingChars[i]);
-        iter->setText(testString);
-        int32_t j = iter->first();
-        if (j != 0)
-            errln("ja line break failure: failed to start at 0");
-        j = iter->next();
-        if (j != 1)
-            errln("ja line break failure: failed to stop before '" + UCharToUnicodeString(precedingChars[i])
-                        + "' (" + ((int)(precedingChars[i])) + ")");
-        j = iter->next();
-        if (j != 3)
-            errln("ja line break failure: failed to skip position after '" + UCharToUnicodeString(precedingChars[i])
-                        + "' (" + ((int)(precedingChars[i])) + ")");
-    }
-
-    for (i = 0; i < followingChars.length(); i++) {
-        testString.setCharAt(1, followingChars[i]);
-        iter->setText(testString);
-        int j = iter->first();
-        if (j != 0)
-            errln("ja line break failure: failed to start at 0");
-        j = iter->next();
-        if (j != 2)
-            errln("ja line break failure: failed to skip position before '" + UCharToUnicodeString(followingChars[i])
-                        + "' (" + ((int)(followingChars[i])) + ")");
-        j = iter->next();
-        if (j != 3)
-            errln("ja line break failure: failed to stop after '" + UCharToUnicodeString(followingChars[i])
-                        + "' (" + ((int)(followingChars[i])) + ")");
-    }
-    delete iter;
-#endif
-}
-
-
 //------------------------------------------------------------------------------
 //
 //   RBBITest::Extended    Run  RBBI Tests from an external test data file
@@ -1803,144 +1536,6 @@ end_test:
     delete tp.srcCol;
     delete [] testFile;
 #endif
-}
-
-// UBreakIteratorType UBRK_WORD, Locale "en_US_POSIX"
-// Words don't include colon or period (cldrbug #1969).
-static const char    posxWordText[]     = "Can't have breaks in xx:yy or struct.field for CS-types.";
-static const int32_t posxWordTOffsets[] = { 5, 6, 10, 11, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 36, 37, 42, 43, 46, 47, 49, 50, 55, 56 };
-static const int32_t posxWordROffsets[] = { 5, 6, 10, 11, 17, 18, 20, 21,         26, 27, 29, 30,         42, 43, 46, 47, 49, 50, 55, 56 };
-
-// UBreakIteratorType UBRK_WORD, Locale "ja"
-// Don't break in runs of hiragana or runs of ideograph, where the latter includes \u3005 \u3007 \u303B (cldrbug #2009).
-static const char    jaWordText[]     = "\\u79C1\\u9054\\u306B\\u4E00\\u3007\\u3007\\u3007\\u306E\\u30B3\\u30F3\\u30D4\\u30E5\\u30FC\\u30BF"
-                                        "\\u304C\\u3042\\u308B\\u3002\\u5948\\u3005\\u306F\\u30EF\\u30FC\\u30C9\\u3067\\u3042\\u308B\\u3002";
-static const int32_t jaWordTOffsets[] = {    2, 3,          7, 8, 14,         17, 18,     20, 21, 24,         27, 28 };
-static const int32_t jaWordROffsets[] = { 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28 };
-
-// UBreakIteratorType UBRK_SENTENCE, Locale "el"
-// Add break after Greek question mark (cldrbug #2069).
-static const char    elSentText[]     = "\\u0391\\u03B2, \\u03B3\\u03B4; \\u0395 \\u03B6\\u03B7\\u037E \\u0398 \\u03B9\\u03BA. "
-                                        "\\u039B\\u03BC \\u03BD\\u03BE! \\u039F\\u03C0, \\u03A1\\u03C2? \\u03A3";
-static const int32_t elSentTOffsets[] = { 8, 14, 20, 27, 35, 36 };
-static const int32_t elSentROffsets[] = {        20, 27, 35, 36 };
-
-// UBreakIteratorType UBRK_CHARACTER, Locale "th"
-// Clusters should not include spacing Thai/Lao vowels (prefix or postfix), except for [SARA] AM (cldrbug #2161).
-static const char    thCharText[]     = "\\u0E01\\u0E23\\u0E30\\u0E17\\u0E48\\u0E2D\\u0E21\\u0E23\\u0E08\\u0E19\\u0E32 "
-                                        "(\\u0E2A\\u0E38\\u0E0A\\u0E32\\u0E15\\u0E34-\\u0E08\\u0E38\\u0E11\\u0E32\\u0E21\\u0E32\\u0E28) "
-                                        "\\u0E40\\u0E14\\u0E47\\u0E01\\u0E21\\u0E35\\u0E1B\\u0E31\\u0E0D\\u0E2B\\u0E32 ";
-static const int32_t thCharTOffsets[] = { 1, 2, 3, 5, 6, 7, 8, 9, 10, 11,
-                                          12, 13, 15, 16, 17, 19, 20, 22, 23, 24, 25, 26, 27, 28,
-                                          29, 30, 32, 33, 35, 37, 38, 39, 40, 41 };
-/* As of Unicode 6.1 root should have same behavior as th for this
-static const int32_t thCharROffsets[] = { 1,    3, 5, 6, 7, 8, 9,     11,
-                                          12, 13, 15,     17, 19, 20, 22,     24,     26, 27, 28,
-                                          29,     32, 33, 35, 37, 38,     40, 41 };
-*/
-
-typedef struct {
-    UBreakIteratorType  type;
-    const char *        locale;
-    const char *        escapedText;
-    const int32_t *     tailoredOffsets;
-    int32_t             tailoredOffsetsCount;
-    const int32_t *     rootOffsets;
-    int32_t             rootOffsetsCount;
-} TailoredBreakItem;
-
-#define ARRAY_PTR_LEN(array) (array),(sizeof(array)/sizeof(array[0]))
-
-static const TailoredBreakItem tbItems[] = {
-    { UBRK_WORD,      "en_US_POSIX", posxWordText, ARRAY_PTR_LEN(posxWordTOffsets), ARRAY_PTR_LEN(posxWordROffsets) },
-    { UBRK_WORD,      "ja",          jaWordText,   ARRAY_PTR_LEN(jaWordTOffsets),   ARRAY_PTR_LEN(jaWordROffsets)   },
-    { UBRK_SENTENCE,  "el",          elSentText,   ARRAY_PTR_LEN(elSentTOffsets),   ARRAY_PTR_LEN(elSentROffsets)   },
-    { UBRK_CHARACTER, "th",          thCharText,   ARRAY_PTR_LEN(thCharTOffsets),   ARRAY_PTR_LEN(thCharTOffsets)   },
-    { UBRK_CHARACTER, NULL,          NULL,         NULL,0,                          NULL,0                          } // terminator
-};
-
-static void formatOffsets(char* buffer, int32_t buflen, int32_t count, const int32_t* offsets) {
-    while (count-- > 0) {
-        int writeCount;
-        sprintf(buffer, /* buflen, */ " %d%n", *offsets++, &writeCount); /* wants to be snprintf */
-        buffer += writeCount;
-        buflen -= writeCount;
-    }
-}
-
-enum { kMaxOffsetCount = 128 };
-
-void RBBITest::TBTest(BreakIterator* brkitr, int type, const char *locale, const char* escapedText, const int32_t *expectOffsets, int32_t expectOffsetsCount) {
-    brkitr->setText( CharsToUnicodeString(escapedText) );
-    int32_t foundOffsets[kMaxOffsetCount];
-    int32_t offset, foundOffsetsCount = 0;
-    // do forwards iteration test
-    while ( foundOffsetsCount < kMaxOffsetCount && (offset = brkitr->next()) != BreakIterator::DONE ) {
-        foundOffsets[foundOffsetsCount++] = offset;
-    }
-    if ( foundOffsetsCount != expectOffsetsCount || memcmp(expectOffsets, foundOffsets, foundOffsetsCount*sizeof(foundOffsets[0])) != 0 ) {
-        // log error for forwards test
-        char formatExpect[512], formatFound[512];
-        formatOffsets(formatExpect, sizeof(formatExpect), expectOffsetsCount, expectOffsets);
-        formatOffsets(formatFound, sizeof(formatFound), foundOffsetsCount, foundOffsets);
-        errln("For type %d %-5s, text \"%.16s\"...; expect %d offsets:%s; found %d offsets fwd:%s\n",
-                type, locale, escapedText, expectOffsetsCount, formatExpect, foundOffsetsCount, formatFound);
-    } else {
-        // do backwards iteration test
-        --foundOffsetsCount; // back off one from the end offset 
-        while ( foundOffsetsCount > 0 ) {
-            offset = brkitr->previous();
-            if ( offset != foundOffsets[--foundOffsetsCount] ) {
-                // log error for backwards test
-                char formatExpect[512];
-                formatOffsets(formatExpect, sizeof(formatExpect), expectOffsetsCount, expectOffsets);
-                errln("For type %d %-5s, text \"%.16s\"...; expect %d offsets:%s; found rev offset %d where expect %d\n",
-                        type, locale, escapedText, expectOffsetsCount, formatExpect, offset, foundOffsets[foundOffsetsCount]);
-                break;
-            }
-        }
-    }
-}
-
-void RBBITest::TestTailoredBreaks() {
-    const TailoredBreakItem * tbItemPtr;
-    Locale rootLocale = Locale("root");
-    for (tbItemPtr = tbItems; tbItemPtr->escapedText != NULL; ++tbItemPtr) {
-        Locale testLocale = Locale(tbItemPtr->locale);
-        BreakIterator * tailoredBrkiter = NULL;
-        BreakIterator * rootBrkiter = NULL;
-        UErrorCode status = U_ZERO_ERROR;
-        switch (tbItemPtr->type) {
-            case UBRK_CHARACTER:
-                tailoredBrkiter = BreakIterator::createCharacterInstance(testLocale, status);
-                rootBrkiter = BreakIterator::createCharacterInstance(rootLocale, status);
-                break;
-            case UBRK_WORD:
-                tailoredBrkiter = BreakIterator::createWordInstance(testLocale, status);
-                rootBrkiter = BreakIterator::createWordInstance(rootLocale, status);
-                break;
-            case UBRK_LINE:
-                tailoredBrkiter = BreakIterator::createLineInstance(testLocale, status);
-                rootBrkiter = BreakIterator::createLineInstance(rootLocale, status);
-                break;
-            case UBRK_SENTENCE:
-                tailoredBrkiter = BreakIterator::createSentenceInstance(testLocale, status);
-                rootBrkiter = BreakIterator::createSentenceInstance(rootLocale, status);
-                break;
-            default:
-                status = U_UNSUPPORTED_ERROR;
-                break;
-        }
-        if (U_FAILURE(status)) {
-            errcheckln(status, "BreakIterator create failed for type %d, locales root or %s - Error: %s", (int)(tbItemPtr->type), tbItemPtr->locale, u_errorName(status));
-            continue;
-        }
-        TBTest(tailoredBrkiter, (int)(tbItemPtr->type), tbItemPtr->locale, tbItemPtr->escapedText, tbItemPtr->tailoredOffsets, tbItemPtr->tailoredOffsetsCount);
-        TBTest(rootBrkiter,     (int)(tbItemPtr->type), "root",            tbItemPtr->escapedText, tbItemPtr->rootOffsets,     tbItemPtr->rootOffsetsCount);
-
-        delete rootBrkiter;
-        delete tailoredBrkiter;
-    }
 }
 
 
