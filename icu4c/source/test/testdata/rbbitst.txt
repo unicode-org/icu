@@ -20,7 +20,16 @@
 #      \         Escape.  Normal ICU unescape applied.  
 #      \ at end of line  ->  Line Continuation.  Remove both the backslash and the new line
 #   
+# In ICU4C, this test data is run by intltest, rbbi/RBBITest/TestExtended.
+# In ICU4J, this test data is run by com.ibm.icu.dev.test.rbbi.RBBITestExtended
 #
+# There are two copies of this file in the source repository,
+#   [ICU4C]   source/test/testdata/rbbitst.txt
+#   [ICU4J]   main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt
+#
+# ICU4C's copy is the master.  If any changes are made to ICU4J's copy, make sure they
+#  are merged back into ICU4C's copy of the file, lest they get overwritten later.
+# TODO:  figure out how to have a single copy of the file for use by both C and Java.
 
 
 #   Temp debugging tests 
@@ -213,6 +222,9 @@
 # Jitterbug 5276 - treat Japanese half width voicing marks as Grapheme Extend
 #
 <data>•A\uff9e\uff9fBC<200> •1\uff9e\uff9f23<100></data>
+
+# User guide example:
+<data>•Parlez<200>-•vous<200> •français<200> •?•</data>
 
 ########################################################################################
 #
@@ -453,6 +465,9 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 <data>•  •\uF8FF\u2028<100>\uF8FF•</data>
 <data>•   \u200B\u2028<100>\u200B•</data>
 
+# User Guide example
+
+<data>•Parlez-•vous •français ?•</data>
 
 #
 #  Old Line Break Test data.  Orginally located in RBBITest::TestDefaultRuleBasedLineIteration()
@@ -573,6 +588,71 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 \u0020•\u0E1B\u0E34\u0E49\u0E48•\u0E07\u0E2D•\u0E22\u0E39\u0E48•\
 \u0E43\u0E19•\u0E16\u0E49\u0E33•</data>
 
+# Data originally from intltest RBBITest::TestThaiLineBreak()
+#
+#  \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
+#  represents elided letters at the end of a long word.  It should be bound to
+#  the end of the word and not treated as an independent punctuation mark.
+#
+#  the one time where the paiyannoi occurs somewhere other than at the end
+#  of a word is in the Thai abbrevation for "etc.", which both begins and
+#  ends with a paiyannoi
+#
+<line>
+<data>•\u0e2a\u0e16\u0e32\u0e19\u0e35\u0e2f•\
+\u0e08\u0e30•\
+\u0e23\u0e30\u0e14\u0e21•\
+\u0e40\u0e08\u0e49\u0e32•\
+\u0e2b\u0e19\u0e49\u0e32\u0e17\u0e35\u0e48•\
+\u0e2d\u0e2d\u0e01•\
+\u0e21\u0e32•\
+\u0e40\u0e23\u0e48\u0e07•\
+\u0e23\u0e30\u0e1a\u0e32\u0e22•\
+\u0e2d\u0e22\u0e48\u0e32\u0e07•\
+\u0e40\u0e15\u0e47\u0e21•\
+\u0e2f\u0e25\u0e2f•\
+\u0e17\u0e35\u0e48•\
+\u0e19\u0e31\u0e49\u0e19•</data>
+
+# Data originally from RBBITest::TestMixedThaiLineBreak()
+#   @suwit -- Test Arabic numerals, Thai numerals, Punctuation and English characters start
+#
+<line>
+<data>•\u0E1B\u0E35•\
+\u0E1E\u0E38\u0E17\u0E18\u0E28\u0E31\u0E01\u0E23\u0E32\u0E0A •\
+2545 •\
+\u0E40\u0E1B\u0E47\u0E19•\
+\u0E1B\u0E35•\
+\u0E09\u0E25\u0E2D\u0E07•\
+\u0E04\u0E23\u0E1A•\
+\u0E23\u0E2D\u0E1A •\
+\"\u0E52\u0E52\u0E50 •\
+\u0E1b\u0E35\" •\
+\u0E02\u0E2d\u0E07•\
+\u0E01\u0E23\u0E38\u0E07•\
+\u0E23\u0E31\u0E15\u0E19\u0E42\u0E01\u0E2A\u0E34\u0E19\u0E17\u0E23\u0E4C •\
+(\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F•\
+\u0E2B\u0E23\u0E37\u0E2D •\
+Bangkok)•</data>
+
+# Data originally from RBBITest::TestMaiyamok()
+#   The Thai maiyamok character is a shorthand symbol that means "repeat the previous
+#   word".  Instead of appearing as a word unto itself, however, it's kept together
+#   with the word before it.
+#
+<line>
+<data>•\u0e44\u0e1b\u0e46•\
+\u0e21\u0e32\u0e46•\
+\u0e23\u0e30\u0e2b\u0e27\u0e48\u0e32\u0e07•\
+\u0e01\u0e23\u0e38\u0e07•\
+\u0e40\u0e17\u0e1e•\
+\u0e41\u0e25\u0e30•\
+\u0e40\u0e03\u0e35•\
+\u0e22\u0e07•\
+\u0e43\u0e2b\u0e21\u0e48•</data>
+
+
+
 ##########################################################################################
 #
 #   Khmer Tests
@@ -623,6 +703,11 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 สร้าง<200>บ้าน<200>ต้อง<200>ขน<200>มา<200>ด้วย<200>เกวียน<200>เป็น<200>ระยะ<200>ทาง<200>หลาย<200>\
 ไมล์<200></data>
 
+####################################################################################
+#
+#  Tailored (locale specific) breaking.
+#
+####################################################################################
 
 # Japanese line break tailoring test
 
@@ -632,4 +717,70 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 <locale en>
 <line>
 <data>•\u3041\u3043\u3045\u31f1•</data>
+
+# The following data was originally in RBBITest::TestJapaneseWordBreak()
+<locale ja>
+<word>
+<data>•\u4ECA\u65E5<400>\u306F\u3044\u3044<300>\u5929\u6C17<400>\u3067\u3059\u306D<300>\u3002•\u000D\u000A•</data>
+
+# UBreakIteratorType UBRK_WORD, Locale "ja"
+# Don't break in runs of hiragana or runs of ideograph, where the latter includes \u3005 \u3007 \u303B (cldrbug #2009).
+# \u79C1\u9054\u306B\u4E00\u3007\u3007\u3007\u306E\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u304C\u3042\u308B\u3002\u5948\u3005\u306F\u30EF\u30FC\u30C9\u3067\u3042\u308B\u3002
+
+<locale ja>
+<word>
+<data>•私達<400>に<300>一〇〇〇<400>の<300>コンピュータ<300>がある<300>。<0>奈々<400>は<300>ワード<300>である<300>。•</data>
+
+<locale root>
+<word>
+<data>•私<400>達<400>に<300>一<400>〇<400>〇<400>〇<400>の<300>コンピュータ<300>が<300>あ<300>る<300>。<0>奈<400>々<200>は<300>ワード<300>で<300>あ<300>る<300>。•</data>
+
+# UBreakIteratorType UBRK_SENTENCE, Locale "el"
+# Add break after Greek question mark (cldrbug #2069).
+# "\u0391\u03B2, \u03B3\u03B4; \u0395 \u03B6\u03B7\u037E \u0398 \u03B9\u03BA. "
+# "\u039B\u03BC \u03BD\u03BE! \u039F\u03C0, \u03A1\u03C2? \u03A3"
+# which is "Αβ, γδ; Ε ζη; Θ ικ. Λμ νξ! Οπ, Ρς? Σ"
+
+<locale root>
+<sent>
+<data>•Αβ, γδ; Ε ζη; Θ ικ. •Λμ νξ! •Οπ, Ρς? •Σ<100></data>
+
+<locale el>
+<sent>
+<data>•Αβ, γδ; •Ε ζη; •Θ ικ. •Λμ νξ! •Οπ, Ρς? •Σ<100></data>
+
+#  UBreakIteratorType UBRK_WORD, Locale "en_US_POSIX"
+#  Words don't include colon or period (cldrbug #1969).
+
+<locale en_US>
+<word>
+<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
+•for<200> •CS<200>-•types<200>.•</data>
+
+<locale en_US_POSIX>
+<word>
+<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct<200>.•field<200> \
+•for<200> •CS<200>-•types<200>.•</data>
+
+
+# UBreakIteratorType UBRK_CHARACTER, Locale "th"
+# Clusters should not include spacing Thai/Lao vowels (prefix or postfix), except for [SARA] AM (cldrbug #2161).
+# Update:  As of Unicode 6.1 root has same behavior as th for this.
+#
+# "\u0E01\u0E23\u0E30\u0E17\u0E48\u0E2D\u0E21\u0E23\u0E08\u0E19\u0E32 "
+# "(\u0E2A\u0E38\u0E0A\u0E32\u0E15\u0E34-\u0E08\u0E38\u0E11\u0E32\u0E21\u0E32\u0E28) "
+# "\u0E40\u0E14\u0E47\u0E01\u0E21\u0E35\u0E1B\u0E31\u0E0D\u0E2B\u0E32 "
+# which is "กระท่อมรจนา (สุชาติ-จุฑามาศ) เด็กมีปัญหา "
+
+<locale th>
+<char>
+<data>•\u0E01•\u0E23•\u0E30•\u0E17\u0E48•\u0E2D•\u0E21•\u0E23•\u0E08•\u0E19•\u0E32• •\
+(•\u0E2A\u0E38•\u0E0A•\u0E32•\u0E15\u0E34•-•\u0E08\u0E38•\u0E11•\u0E32•\u0E21•\u0E32•\u0E28•)• •\
+\u0E40•\u0E14\u0E47•\u0E01•\u0E21\u0E35•\u0E1B\u0E31•\u0E0D•\u0E2B•\u0E32• •</data>
+
+<locale root>
+<char>
+<data>•\u0E01•\u0E23•\u0E30•\u0E17\u0E48•\u0E2D•\u0E21•\u0E23•\u0E08•\u0E19•\u0E32• •\
+(•\u0E2A\u0E38•\u0E0A•\u0E32•\u0E15\u0E34•-•\u0E08\u0E38•\u0E11•\u0E32•\u0E21•\u0E32•\u0E28•)• •\
+\u0E40•\u0E14\u0E47•\u0E01•\u0E21\u0E35•\u0E1B\u0E31•\u0E0D•\u0E2B•\u0E32• •</data>
 
