@@ -784,3 +784,20 @@ Bangkok)•</data>
 (•\u0E2A\u0E38•\u0E0A•\u0E32•\u0E15\u0E34•-•\u0E08\u0E38•\u0E11•\u0E32•\u0E21•\u0E32•\u0E28•)• •\
 \u0E40•\u0E14\u0E47•\u0E01•\u0E21\u0E35•\u0E1B\u0E31•\u0E0D•\u0E2B•\u0E32• •</data>
 
+# Finnish line breaking
+#
+# These rules deal with hyphens when there is a space on the leading side. 
+# There should be a break opportunity between the space and the hyphen, and not after the hyphen.
+# See CLDR ticket 3029.
+# See ICU ticket 8151 
+
+<locale root>
+<line>
+<data>•abc •- •def    •abc •-•def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐•def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+
+<locale fi>
+<line>
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+
