@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,12 +31,15 @@
 #define _BUFFER_CAPACITY_MULTIPLIER 2
 
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
+// TODO: We should use CharString for char buffers and UnicodeString for UChar buffers.
+// Then we could change this to work only with wchar_t buffers.
 static inline UBool 
 u_growAnyBufferFromStatic(void *context,
                        void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length, int32_t size) {
-
-    void *newBuffer=uprv_malloc(reqCapacity*size);
+    // Use char* not void* to avoid the compiler's strict-aliasing assumptions
+    // and related warnings.
+    char *newBuffer=(char *)uprv_malloc(reqCapacity*size);
     if(newBuffer!=NULL) {
         if(length>0) {
             uprv_memcpy(newBuffer, *pBuffer, length*size);
@@ -47,7 +50,7 @@ u_growAnyBufferFromStatic(void *context,
     }
 
     /* release the old pBuffer if it was not statically allocated */
-    if(*pBuffer!=(void *)context) {
+    if(*pBuffer!=(char *)context) {
         uprv_free(*pBuffer);
     }
 
@@ -102,8 +105,12 @@ _strToWCS(wchar_t *dest,
             tempBuf = saveBuf;
             
             /* we dont have enough room on the stack grow the buffer */
-            if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
-                (_BUFFER_CAPACITY_MULTIPLIER * (srcLength)), count,sizeof(char))){
+            int32_t newCapacity = 2 * srcLength;
+            if(newCapacity <= tempBufCapacity) {
+                newCapacity = _BUFFER_CAPACITY_MULTIPLIER * tempBufCapacity;
+            }
+            if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity,
+                    newCapacity, count, 1)) {
                 goto cleanup;
             }
           
@@ -125,7 +132,7 @@ _strToWCS(wchar_t *dest,
         tempBuf = saveBuf;
         /* we dont have enough room on the stack grow the buffer */
         if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
-            tempBufCapacity-count+1, count,sizeof(char))){
+                count+1, count, 1)) {
             goto cleanup;
         }              
        saveBuf = tempBuf;
