@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2011, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
+* Copyright (C) 1999-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
 ******************************************************************************
 *
 * File unistr.cpp
@@ -211,7 +211,11 @@ UnicodeString::UnicodeString(UChar32 ch)
   int32_t i = 0;
   UBool isError = FALSE;
   U16_APPEND(fUnion.fStackBuffer, i, US_STACKBUF_SIZE, ch, isError);
-  fShortLength = (int8_t)i;
+  // We test isError so that the compiler does not complain that we don't.
+  // If isError then i==0 which is what we want anyway.
+  if(!isError) {
+    fShortLength = (int8_t)i;
+  }
 }
 
 UnicodeString::UnicodeString(const UChar *text)
@@ -1244,7 +1248,9 @@ UnicodeString::replace(int32_t start,
   int32_t count = 0;
   UBool isError = FALSE;
   U16_APPEND(buffer, count, U16_MAX_LENGTH, srcChar, isError);
-  return doReplace(start, _length, buffer, 0, count);
+  // We test isError so that the compiler does not complain that we don't.
+  // If isError then count==0 which turns the doReplace() into a no-op anyway.
+  return isError ? *this : doReplace(start, _length, buffer, 0, count);
 }
 
 UnicodeString&
@@ -1253,7 +1259,9 @@ UnicodeString::append(UChar32 srcChar) {
   int32_t _length = 0;
   UBool isError = FALSE;
   U16_APPEND(buffer, _length, U16_MAX_LENGTH, srcChar, isError);
-  return doReplace(length(), 0, buffer, 0, _length);
+  // We test isError so that the compiler does not complain that we don't.
+  // If isError then _length==0 which turns the doReplace() into a no-op anyway.
+  return isError ? *this : doReplace(length(), 0, buffer, 0, _length);
 }
 
 UnicodeString&
