@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -225,8 +225,7 @@ public abstract class Normalizer2 {
      * @param src source string
      * @param dest destination Appendable; gets normalized src appended
      * @return dest
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public abstract Appendable normalize(CharSequence src, Appendable dest);
 
@@ -263,8 +262,7 @@ public abstract class Normalizer2 {
      * This function is independent of the mode of the Normalizer2.
      * @param c code point
      * @return c's decomposition mapping, if any; otherwise null
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public abstract String getDecomposition(int c);
 

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2011, International Business Machines Corporation and   *
+* Copyright (C) 2003-2012, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -2799,8 +2799,7 @@ public final class ULocale implements Serializable {
      * @see #getExtension(char)
      * @see Builder#setExtension(char, String)
      *
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final char PRIVATE_USE_EXTENSION = 'x';
 
@@ -2810,8 +2809,7 @@ public final class ULocale implements Serializable {
      * @see #getExtension(char)
      * @see Builder#setExtension(char, String)
      *
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final char UNICODE_LOCALE_EXTENSION = 'u';
 
@@ -2829,8 +2827,7 @@ public final class ULocale implements Serializable {
      * @see #PRIVATE_USE_EXTENSION
      * @see #UNICODE_LOCALE_EXTENSION
      *
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public String getExtension(char key) {
         if (!LocaleExtensions.isValidKey(key)) {
@@ -2846,8 +2843,7 @@ public final class ULocale implements Serializable {
      *
      * @return the set of extension keys, or the empty set if this locale has
      * no extensions
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public Set<Character> getExtensionKeys() {
         return extensions().getKeys();
@@ -2859,8 +2855,7 @@ public final class ULocale implements Serializable {
      * returned set is unmodifiable.
      *
      * @return The set of attributes.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public Set<String> getUnicodeLocaleAttributes() {
         return extensions().getUnicodeLocaleAttributes();
@@ -2879,8 +2874,7 @@ public final class ULocale implements Serializable {
      * @throws IllegalArgumentException if the key is not well-formed
      * @throws NullPointerException if <code>key</code> is null
      * 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public String getUnicodeLocaleType(String key) {
         if (!LocaleExtensions.isValidUnicodeLocaleKey(key)) {
@@ -2896,8 +2890,7 @@ public final class ULocale implements Serializable {
      * @return The set of Unicode locale keys, or the empty set if this locale has
      * no Unicode locale keywords.
      * 
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public Set<String> getUnicodeLocaleKeys() {
         return extensions().getUnicodeLocaleKeys();
@@ -2956,8 +2949,7 @@ public final class ULocale implements Serializable {
      * @return a BCP47 language tag representing the locale
      * @see #forLanguageTag(String)
      *
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public String toLanguageTag() {
         BaseLocale base = base();
@@ -3127,8 +3119,7 @@ public final class ULocale implements Serializable {
      * @see #toLanguageTag()
      * @see ULocale.Builder#setLanguageTag(String)
      *
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static ULocale forLanguageTag(String languageTag) {
         LanguageTag tag = LanguageTag.parse(languageTag, null);
@@ -3170,8 +3161,7 @@ public final class ULocale implements Serializable {
      *
      * @see ULocale#toLanguageTag()
      *
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.2
      */
     public static final class Builder {
 
@@ -3182,8 +3172,7 @@ public final class ULocale implements Serializable {
          * fields, extensions, and private use information is the
          * empty string.
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder() {
             _locbld = new InternalLocaleBuilder();
@@ -3204,8 +3193,7 @@ public final class ULocale implements Serializable {
          * any ill-formed fields.
          * @throws NullPointerException if <code>locale</code> is null.
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setLocale(ULocale locale) {
             try {
@@ -3233,8 +3221,7 @@ public final class ULocale implements Serializable {
          * @throws IllformedLocaleException if <code>languageTag</code> is ill-formed
          * @see ULocale#forLanguageTag(String)
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setLanguageTag(String languageTag) {
             ParseStatus sts = new ParseStatus();
@@ -3260,8 +3247,7 @@ public final class ULocale implements Serializable {
          * @return This builder.
          * @throws IllformedLocaleException if <code>language</code> is ill-formed
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setLanguage(String language) {
             try {
@@ -3283,8 +3269,7 @@ public final class ULocale implements Serializable {
          * @return This builder.
          * @throws IllformedLocaleException if <code>script</code> is ill-formed
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setScript(String script) {
             try {
@@ -3310,8 +3295,7 @@ public final class ULocale implements Serializable {
          * @return This builder.
          * @throws IllformedLocaleException if <code>region</code> is ill-formed
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setRegion(String region) {
             try {
@@ -3338,8 +3322,7 @@ public final class ULocale implements Serializable {
          * @return This builder.
          * @throws IllformedLocaleException if <code>variant</code> is ill-formed
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setVariant(String variant) {
             try {
@@ -3372,8 +3355,7 @@ public final class ULocale implements Serializable {
          * or <code>value</code> is ill-formed
          * @see #setUnicodeLocaleKeyword(String, String)
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder setExtension(char key, String value) {
             try {
@@ -3404,8 +3386,7 @@ public final class ULocale implements Serializable {
          * @throws NullPointerException if <code>key</code> is null
          * @see #setExtension(char, String)
          *
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public Builder setUnicodeLocaleKeyword(String key, String type) {
             try {
@@ -3427,8 +3408,7 @@ public final class ULocale implements Serializable {
          * @throws IllformedLocaleException if <code>attribute</code> is ill-formed
          * @see #setExtension(char, String)
          *
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.6
          */
         public Builder addUnicodeLocaleAttribute(String attribute) {
             try {
@@ -3452,8 +3432,7 @@ public final class ULocale implements Serializable {
          * @throws IllformedLocaleException if <code>attribute</code> is ill-formed
          * @see #setExtension(char, String)
          *
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.6
          */
         public Builder removeUnicodeLocaleAttribute(String attribute) {
             try {
@@ -3469,8 +3448,7 @@ public final class ULocale implements Serializable {
          *
          * @return this builder
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder clear() {
             _locbld.clear();
@@ -3484,8 +3462,7 @@ public final class ULocale implements Serializable {
          * @return this builder
          * @see #setExtension(char, String)
          *
-         * @draft ICU 4.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.2
          */
         public Builder clearExtensions() {
             _locbld.clearExtensions();
@@ -3498,8 +3475,7 @@ public final class ULocale implements Serializable {
          *
          * @return a new Locale
          *
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public ULocale build() {
             return getInstance(_locbld.getBaseLocale(), _locbld.getLocaleExtensions());

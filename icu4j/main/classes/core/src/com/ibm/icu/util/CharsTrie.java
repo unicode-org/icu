@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jan06
@@ -24,8 +24,7 @@ import com.ibm.icu.util.BytesTrie.Result;
  *
  * <p>This class is not intended for public subclassing.
  *
- * @draft ICU 4.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.8
  * @author Markus W. Scherer
  */
 public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
@@ -42,8 +41,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      *
      * @param trieChars CharSequence that contains the serialized trie.
      * @param offset Root offset of the trie in the CharSequence.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrie(CharSequence trieChars, int offset) {
         chars_=trieChars;
@@ -55,8 +53,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Clones this trie reader object and its state,
      * but not the char array which will be shared.
      * @return A shallow clone of this trie.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -66,8 +63,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     /**
      * Resets this trie to its initial state.
      * @return this
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrie reset() {
         pos_=root_;
@@ -78,14 +74,12 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     /**
      * CharsTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static final class State {
         /**
          * Constructs an empty State.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public State() {}
         private CharSequence chars;
@@ -99,8 +93,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @param state The State object to hold the trie's state.
      * @return this
      * @see #resetToState
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrie saveState(State state) /*const*/ {
         state.chars=chars_;
@@ -118,8 +111,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      *         or the state of a different trie
      * @see #saveState
      * @see #reset
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrie resetToState(State state) {
         if(chars_==state.chars && chars_!=null && root_==state.root) {
@@ -135,8 +127,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Determines whether the string so far matches, whether it has a value,
      * and whether another input char can continue a matching string.
      * @return The match/value Result.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Result current() /*const*/ {
         int pos=pos_;
@@ -154,8 +145,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Equivalent to reset().next(inUnit).
      * @param inUnit Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Result first(int inUnit) {
         remainingMatchLength_=-1;
@@ -168,8 +158,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Equivalent to reset().nextForCodePoint(cp).
      * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Result firstForCodePoint(int cp) {
         return cp<=0xffff ?
@@ -183,8 +172,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Traverses the trie from the current state for this input char.
      * @param inUnit Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Result next(int inUnit) {
         int pos=pos_;
@@ -213,8 +201,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * one or two UTF-16 code units for this input code point.
      * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Result nextForCodePoint(int cp) {
         return cp<=0xffff ?
@@ -238,8 +225,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @param sIndex The start index of the string in s.
      * @param sLimit The (exclusive) end index of the string in s.
      * @return The match/value Result.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Result next(CharSequence s, int sIndex, int sLimit) {
         if(sIndex>=sLimit) {
@@ -324,8 +310,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      *
      * Do not call getValue() after Result.NO_MATCH or Result.NO_VALUE!
      * @return The value for the string so far.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public int getValue() /*const*/ {
         int pos=pos_;
@@ -341,8 +326,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @return The unique value in bits 32..1 with bit 0 set,
      *         if all strings reachable from the current state
      *         map to the same value; otherwise returns 0.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public long getUniqueValue() /*const*/ {
         int pos=pos_;
@@ -361,8 +345,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @param out Each next char is appended to this object.
      *            (Only uses the out.append(c) method.)
      * @return The number of chars which continue the string from here.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public int getNextChars(Appendable out) /*const*/ {
         int pos=pos_;
@@ -398,8 +381,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     /**
      * Iterates from the current state of this trie.
      * @return A new CharsTrie.Iterator.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Iterator iterator() {
         return new Iterator(chars_, pos_, remainingMatchLength_, 0);
@@ -410,8 +392,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @param maxStringLength If 0, the iterator returns full strings.
      *                        Otherwise, the iterator returns strings with this maximum length.
      * @return A new CharsTrie.Iterator.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Iterator iterator(int maxStringLength) {
         return new Iterator(chars_, pos_, remainingMatchLength_, maxStringLength);
@@ -424,8 +405,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @param maxStringLength If 0, the iterator returns full strings.
      *                        Otherwise, the iterator returns strings with this maximum length.
      * @return A new CharsTrie.Iterator.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static Iterator iterator(CharSequence trieChars, int offset, int maxStringLength) {
         return new Iterator(trieChars, offset, -1, maxStringLength);
@@ -433,20 +413,17 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
 
     /**
      * Return value type for the Iterator.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static final class Entry {
         /**
          * The string.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public CharSequence chars;
         /**
          * The value associated with the string.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public int value;
 
@@ -456,8 +433,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
 
     /**
      * Iterator for all of the (string, value) pairs in a CharsTrie.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static final class Iterator implements java.util.Iterator<Entry> {
         private Iterator(CharSequence trieChars, int offset, int remainingMatchLength, int maxStringLength) {
@@ -481,8 +457,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
         /**
          * Resets this iterator to its initial state.
          * @return this
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public Iterator reset() {
             pos_=initialPos_;
@@ -501,8 +476,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
 
         /**
          * @return true if there are more elements.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public boolean hasNext() /*const*/ { return pos_>=0 || !stack_.isEmpty(); }
 
@@ -515,8 +489,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
          * a real value of -1.
          * @return An Entry with the string and value of the next element.
          * @throws NoSuchElementException - iteration has no more elements.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public Entry next() {
             int pos=pos_;
@@ -601,8 +574,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
         /**
          * Iterator.remove() is not supported.
          * @throws UnsupportedOperationException (always)
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public void remove() {
             throw new UnsupportedOperationException();

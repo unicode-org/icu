@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -21,7 +21,6 @@ public final class ICUDataVersion {
      * This function retrieves the data version from icuver and returns a VersionInfo object with that version information.
      *
      * @return Current icu data version
-     * @draft ICU 49
      */
     public static VersionInfo getDataVersion() {
         UResourceBundle icudatares = null;

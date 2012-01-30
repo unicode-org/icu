@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -76,7 +76,7 @@ public class NumberingSystem {
      * systems, the string contains the name of the RBNF ruleset in the locale's
      * NumberingSystemRules section that will be used to format numbers using
      * this numbering system.
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
    
     private static NumberingSystem getInstance(String name_in, int radix_in, boolean isAlgorithmic_in, String desc_in ) {
@@ -277,7 +277,7 @@ public class NumberingSystem {
 
     /**
      * Returns the string representing the name of the numbering system.
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
     public String getName() {
         return name;

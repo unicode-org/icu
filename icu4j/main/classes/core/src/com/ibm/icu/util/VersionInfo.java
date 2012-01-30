@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -530,8 +530,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Main method prints out ICU version information
      * @param args arguments (currently not used)
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static void main(String[] args) {
         String icuApiVer;

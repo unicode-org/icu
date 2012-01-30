@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, International Business Machines Corporation and         *
+ * Copyright (C) 2011-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,21 +9,18 @@ package com.ibm.icu.util;
 /**
  * Simple struct-like class for output parameters.
  * @param <T> The type of the parameter.
- * @draft ICU 4.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.8
  */
 public class Output<T> {
     /**
      * The value field
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public T value;
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public String toString() {
         return value == null ? "null" : value.toString();
@@ -31,8 +28,7 @@ public class Output<T> {
 
     /**
      * Constructs an empty <code>Output</code>
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Output() {
         
@@ -41,8 +37,7 @@ public class Output<T> {
     /**
      * Constructs an <code>Output</code> withe the given value.
      * @param value the initial value
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Output(T value) {
         this.value = value;

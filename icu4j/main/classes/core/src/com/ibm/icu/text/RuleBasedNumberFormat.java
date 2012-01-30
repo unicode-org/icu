@@ -1288,8 +1288,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param scannerProvider the provider
      * @see #setLenientParseMode
      * @see #getLenientScannerProvider
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public void setLenientScannerProvider(RbnfLenientScannerProvider scannerProvider) {
         this.scannerProvider = scannerProvider;
@@ -1301,8 +1300,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * it was successful.  Otherwise this returns false.
      *
      * @see #setLenientScannerProvider
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public RbnfLenientScannerProvider getLenientScannerProvider() {
         // there's a potential race condition if two threads try to set/get the scanner at

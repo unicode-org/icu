@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -289,7 +289,7 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * Determines whether the object has been frozen or not.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public boolean isFrozen() {
         return frozenLock != null;
@@ -298,7 +298,7 @@ public final class RuleBasedCollator extends Collator {
     /**
      * Freezes the collator.
      * @return the collator itself.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public Collator freeze() {
         if (!isFrozen()) {
@@ -309,7 +309,7 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * Provides for the clone operation. Any clone is initially unfrozen.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public RuleBasedCollator cloneAsThawed() {
         RuleBasedCollator clone = null;
@@ -787,7 +787,7 @@ public final class RuleBasedCollator extends Collator {
      * @throws IllegalArgumentException if the reordering codes are malformed in any way (e.g. duplicates, multiple reset codes, overlapping equivalent scripts)
      * @see #getReorderCodes
      * @see #getEquivalentReorderCodes
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */ 
     public void setReorderCodes(int... order) {
         if (isFrozen()) {
@@ -1228,7 +1228,7 @@ public final class RuleBasedCollator extends Collator {
      * if none are set then returns an empty array
      * @see #setReorderCodes
      * @see #getEquivalentReorderCodes
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */ 
     public int[] getReorderCodes() {
         if (m_reorderCodes_ != null) {
@@ -1246,7 +1246,7 @@ public final class RuleBasedCollator extends Collator {
      * @return the set of all reorder codes in the same group as the given reorder code.
      * @see #setReorderCodes
      * @see #getReorderCodes
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public static int[] getEquivalentReorderCodes(int reorderCode) {
         Set<Integer> equivalentCodesSet = new HashSet<Integer>();

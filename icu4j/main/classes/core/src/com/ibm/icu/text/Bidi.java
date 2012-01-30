@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -565,8 +565,7 @@ public class Bidi {
      * <p>As return value for <code>getBaseDirection()</code>, it means
      *    that the source string is missing or empty, or contains neither
      *    left-to-right nor right-to-left characters.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static final byte NEUTRAL = 3;
 
@@ -3049,8 +3048,7 @@ public class Bidi {
      *        this parameter can be <code>null</code>.
      *
      * @see #setPara
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public void setContext(String prologue, String epilogue) {
         this.prologue = prologue != null && prologue.length() > 0 ? prologue : null;
@@ -5051,8 +5049,7 @@ public class Bidi {
      * @see #LTR
      * @see #RTL
      * @see #NEUTRAL
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static byte getBaseDirection(CharSequence paragraph) {
         if (paragraph == null || paragraph.length() == 0) {

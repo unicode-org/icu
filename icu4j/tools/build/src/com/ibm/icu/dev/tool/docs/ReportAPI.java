@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2011, International Business Machines Corporation and    *
+* Copyright (C) 2004-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -223,7 +223,7 @@ public class ReportAPI {
             } else {
                 int change = statusChange(a, r);
                 if (change > 0) {
-                    if (r.isStable()) {
+                    if (a.isStable()) {
                         promotedStable.add(a);
                     } else {
                         promotedDraft.add(a);

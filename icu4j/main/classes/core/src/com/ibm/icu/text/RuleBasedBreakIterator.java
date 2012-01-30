@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2011 International Business Machines Corporation and          *
+ * Copyright (C) 2005-2012 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -50,7 +50,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @param is an input stream supplying the compiled binary rules.
      * @throws IOException if there is an error while reading the rules from the InputStream.
      * @see    #compileRules(String, OutputStream)
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
         RuleBasedBreakIterator  This = new RuleBasedBreakIterator();
@@ -336,7 +336,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @param ruleBinary  An output stream to receive the compiled rules.
      * @throws IOException If there is an error writing the output.
      * @see #getInstanceFromCompiledRules(InputStream)
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public static void compileRules(String rules, OutputStream ruleBinary) throws IOException {
         RBBIRuleBuilder.compileRules(rules, ruleBinary);

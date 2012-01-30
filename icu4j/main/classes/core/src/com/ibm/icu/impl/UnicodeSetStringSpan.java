@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2009-2011, International Business Machines
+ *   Copyright (C) 2009-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -312,7 +312,6 @@ public class UnicodeSetStringSpan {
      * @param start The start index that the span begins
      * @param spanCondition The span condition
      * @return the length of the span
-     * @draft ICU 4.4
      */
     public synchronized int span(CharSequence s, int start, int length, SpanCondition spanCondition) {
         if (spanCondition == SpanCondition.NOT_CONTAINED) {
@@ -481,7 +480,6 @@ public class UnicodeSetStringSpan {
      * @param s The string to be spanned
      * @param spanCondition The span condition
      * @return The string index which starts the span (i.e. inclusive).
-     * @draft ICU 4.4
      */
     public synchronized int spanBack(CharSequence s, int length, SpanCondition spanCondition) {
         if (spanCondition == SpanCondition.NOT_CONTAINED) {

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2011, International Business Machines
+* Copyright (c) 2004-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -469,8 +469,7 @@ public class MessageFormat extends UFormat {
      * @param aposMode the new ApostropheMode
      * @throws IllegalArgumentException if the pattern is invalid
      * @see MessagePattern.ApostropheMode
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public void applyPattern(String pattern, MessagePattern.ApostropheMode aposMode) {
         if (msgPattern == null) {
@@ -484,8 +483,7 @@ public class MessageFormat extends UFormat {
     /**
      * {@icu}
      * @return this instance's ApostropheMode.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public MessagePattern.ApostropheMode getApostropheMode() {
         if (msgPattern == null) {
@@ -830,8 +828,7 @@ public class MessageFormat extends UFormat {
      * {@icu} Returns the top-level argument names. For more details, see
      * {@link #setFormatByArgumentName(String, Format)}.
      * @return a Set of argument names
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Set<String> getArgumentNames() {
         Set<String> result = new HashSet<String>();
@@ -846,8 +843,7 @@ public class MessageFormat extends UFormat {
      * For more details, see {@link #setFormatByArgumentName(String, Format)}.
      * @param argumentName The name of the desired argument.
      * @return the Format associated with the name, or null if there isn't one.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Format getFormatByArgumentName(String argumentName) {
         if (cachedFormatters == null) {
