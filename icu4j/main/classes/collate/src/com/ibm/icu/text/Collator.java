@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
+* Copyright (C) 1996-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -234,65 +234,65 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see #getReorderCodes
      * @see #setReorderCodes
      * @see #getEquivalentReorderCodes
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public static interface ReorderCodes {
         /**
          * A special reordering code that is used to specify the default reordering codes for a locale.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int DEFAULT          = 1;
         /**
          * A special reordering code that is used to specify no reordering codes.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int NONE          = UScript.UNKNOWN;
         /**
          * A special reordering code that is used to specify all other codes used for reordering except 
          * for the codes listed as ReorderingCodes and those listed explicitly in a reordering.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int OTHERS          = UScript.UNKNOWN;
         /**
          * Characters with the space property.
          * This is equivalent to the rule value "space".
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int SPACE          = 0x1000;
         /**
          * The first entry in the enumeration of reordering groups. This is intended for use in
          * range checking and enumeration of the reorder codes.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int FIRST          = SPACE;
         /**
          * Characters with the punctuation property.
          * This is equivalent to the rule value "punct".
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int PUNCTUATION    = 0x1001;
         /**
          * Characters with the symbol property.
          * This is equivalent to the rule value "symbol".
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int SYMBOL         = 0x1002;
         /**
          * Characters with the currency property.
          * This is equivalent to the rule value "currency".
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int CURRENCY       = 0x1003;
         /**
          * Characters with the digit property.
          * This is equivalent to the rule value "digit".
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int DIGIT          = 0x1004;
         /**
          * The limit of the reorder codes. This is intended for use in range checking 
          * and enumeration of the reorder codes.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         public final static int LIMIT          = 0x1005;        
     }
@@ -436,7 +436,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see #getEquivalentReorderCodes
      * @see Collator.ReorderCodes
      * @see UScript
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */ 
     public void setReorderCodes(int... order) 
     { 
@@ -1130,7 +1130,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see #getEquivalentReorderCodes
      * @see Collator.ReorderCodes
      * @see UScript
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */ 
     public int[] getReorderCodes() 
     { 
@@ -1147,7 +1147,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see #getReorderCodes
      * @see Collator.ReorderCodes
      * @see UScript
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public static int[] getEquivalentReorderCodes(int reorderCode)
     { 
@@ -1159,7 +1159,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     
     /**
      * Determines whether the object has been frozen or not.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public boolean isFrozen() {
         return false;
@@ -1168,7 +1168,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     /**
      * Freezes the collaotr.
      * @return the collator itself.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public Collator freeze() {
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
@@ -1176,7 +1176,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
 
     /**
      * Provides for the clone operation. Any clone is initially unfrozen.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     public Collator cloneAsThawed() {
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");

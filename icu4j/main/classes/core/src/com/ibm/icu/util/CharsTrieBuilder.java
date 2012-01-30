@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jan07
@@ -17,15 +17,13 @@ import java.nio.CharBuffer;
  *
  * <p>This class is not intended for public subclassing.
  *
- * @draft ICU 4.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.8
  * @author Markus W. Scherer
  */
 public final class CharsTrieBuilder extends StringTrieBuilder {
     /**
      * Constructs an empty builder.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrieBuilder() {}
 
@@ -37,8 +35,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * @param s The input string.
      * @param value The value associated with this char sequence.
      * @return this
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrieBuilder add(CharSequence s, int value) {
         addImpl(s, value);
@@ -54,8 +51,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A new CharsTrie for the add()ed data.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrie build(StringTrieBuilder.Option buildOption) {
         return new CharsTrie(buildCharSequence(buildOption), 0);
@@ -70,8 +66,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * After clear() has been called, a new array will be used.
      * @param buildOption Build option, see StringTrieBuilder.Option.
      * @return A CharSequence with the char-serialized CharsTrie for the add()ed data.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharSequence buildCharSequence(StringTrieBuilder.Option buildOption) {
         buildChars(buildOption);
@@ -90,8 +85,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * Removes all (string, value) pairs.
      * New data can then be add()ed and a new trie can be built.
      * @return this
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public CharsTrieBuilder clear() {
         clearImpl();

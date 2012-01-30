@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -919,8 +919,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     /**
      * Returns the maxCharsPerByte value for the Charset that created this encoder.
      * @return maxCharsPerByte
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public final float maxCharsPerByte() {
         return ((CharsetICU)(this.charset())).maxCharsPerByte;

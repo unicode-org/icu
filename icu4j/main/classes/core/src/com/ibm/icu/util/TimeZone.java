@@ -227,8 +227,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * {@icu} The time zone ID reserved for unknown time zone.
      * @see #getTimeZone(String)
      * 
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static final String UNKNOWN_ZONE_ID = "Etc/Unknown";
 
@@ -263,27 +262,26 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * {@icu} System time zone type constants used by filtering zones in
      * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
      *
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public enum SystemTimeZoneType {
         /**
          * Any system zones.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          * @provisional This API might change or be removed in a future release.
          */
         ANY,
 
         /**
          * Canonical system zones.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          * @provisional This API might change or be removed in a future release.
          */
         CANONICAL,
 
         /**
          * Canonical system zones associated with actual locations.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          * @provisional This API might change or be removed in a future release.
          */
         CANONICAL_LOCATION,
@@ -823,8 +821,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return an immutable set of system time zone IDs.
      * @see SystemTimeZoneType
      * 
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */ 
     public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
             String region, Integer rawOffset) {
@@ -1107,8 +1104,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @throws IllegalArgumentException if <code>id</code> is not a known system ID. 
      * @see #getAvailableIDs(String) 
      * 
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */ 
     public static String getRegion(String id) {
         String region = null;

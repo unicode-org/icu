@@ -788,8 +788,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @return true if the given ISO 4217 3-letter code is supported on the specified date range.
      * @throws IllegalArgumentException when <code>to</code> is before <code>from</code>.
      * 
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static boolean isAvailable(String code, Date from, Date to) {
         if (!isAlpha3Code(code)) {

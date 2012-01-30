@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2011, International Business Machines
+ * Copyright (C) 2000-2012, International Business Machines
  * Corporation and others. All Rights Reserved.
  *********************************************************************
  */
@@ -233,8 +233,7 @@ public class ChineseCalendar extends Calendar {
      *                  time field. 
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
      * @see Category#FORMAT
-     * @draft ICU 4.6 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date) 
     { 
@@ -273,9 +272,8 @@ public class ChineseCalendar extends Calendar {
      * @param second the value used to set the {@link #SECOND SECOND} time field 
      *              in the calendar.
      * @see Category#FORMAT
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
-     */ 
+     * @stable ICU 4.6
+     */
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date, int hour, 
                            int minute, int second) 
     { 

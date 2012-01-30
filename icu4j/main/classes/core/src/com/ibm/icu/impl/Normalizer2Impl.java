@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -352,7 +352,6 @@ public final class Normalizer2Impl {
          * is it a lead surrogate?
          * @param c code unit or code point
          * @return true or false
-         * @draft ICU 4.6
          */
         public static boolean isSurrogateLead(int c) { return (c&0x400)==0; }
         /**
@@ -360,7 +359,6 @@ public final class Normalizer2Impl {
          * @param s1 first sequence
          * @param s2 second sequence
          * @return true if s1 contains the same text as s2
-         * @draft ICU 4.6
          */
         public static boolean equal(CharSequence s1,  CharSequence s2) {
             if(s1==s2) {
@@ -387,7 +385,6 @@ public final class Normalizer2Impl {
          * @param limit2 limit offset in second sequence
          * @return true if s1.subSequence(start1, limit1) contains the same text
          *              as s2.subSequence(start2, limit2)
-         * @draft ICU 4.6
          */
         public static boolean equal(CharSequence s1, int start1, int limit1,
                                     CharSequence s2, int start2, int limit2) {

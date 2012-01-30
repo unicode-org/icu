@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -448,14 +448,26 @@ class APIInfo {
         for (int i = (withStatus ? STA : VIS) ; i < CAT; ++i) { // include status
             String s = get(i, false);
             if (s != null && s.length() > 0) {
-                if (html && s.indexOf("internal") != -1) {
-                    buf.append("<span style='color:red'>");
-                    buf.append(s);
-                    buf.append("</span>");
-                } else {
-                    buf.append(s);
-                    buf.append(' ');
+                if (html) {
+                    s = s.trim();
+                    if (i == STA) {
+                        String color = null;
+                        if (s.startsWith("(internal)")) {
+                            color = "red";
+                        } else if (s.startsWith("(draft)")) {
+                            color = "orange";
+                        } else if (s.startsWith("(stable)")) {
+                            color = "green";
+                        } else if (s.startsWith("(deprecated)")) {
+                            color = "gray";
+                        }
+                        if (color != null) {
+                            s = "<span style='color:" + color + "'>" + s + "</span>";
+                        }
+                    }
                 }
+                buf.append(s);
+                buf.append(' ');
             }
         }
 

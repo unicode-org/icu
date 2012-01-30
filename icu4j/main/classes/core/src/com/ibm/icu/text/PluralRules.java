@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -144,8 +144,7 @@ public class PluralRules implements Serializable {
     /**
      * Value returned by {@link #getUniqueKeywordValue} when there is no
      * unique value to return.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static final double NO_UNIQUE_VALUE = -0.00123456777;
 
@@ -865,8 +864,7 @@ public class PluralRules implements Serializable {
      *
      * @param keyword the keyword to check for a unique value
      * @return The unique value for the keyword, or NO_UNIQUE_VALUE.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public double getUniqueKeywordValue(String keyword) {
         Collection<Double> values = getAllKeywordValues(keyword);
@@ -883,8 +881,7 @@ public class PluralRules implements Serializable {
      * @param keyword the keyword
      * @return the values that trigger this keyword, or null.  The returned collection
      * is immutable. It will be empty if the keyword is not defined.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Collection<Double> getAllKeywordValues(String keyword) {
         if (!keywords.contains(keyword)) {
@@ -912,8 +909,7 @@ public class PluralRules implements Serializable {
      *
      * @param keyword the keyword to test
      * @return a list of values matching the keyword.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Collection<Double> getSamples(String keyword) {
         if (!keywords.contains(keyword)) {

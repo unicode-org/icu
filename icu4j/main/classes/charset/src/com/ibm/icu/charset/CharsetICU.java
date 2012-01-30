@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2011, International Business Machines Corporation and    *
+* Copyright (C) 2006-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -379,8 +379,7 @@ public abstract class CharsetICU extends Charset{
         * Note: This method is not intended to be used to determine whether the charset has a
         * fixed ratio of bytes to Unicode codes units for any particular Unicode encoding form.
         * @return true if the converter is fixed-width
-        * @draft ICU 4.8
-        * @provisional This API might change or be removed in a future release.
+        * @stable ICU 4.8
         */
        public boolean isFixedWidth() {
            if (this instanceof CharsetASCII || this instanceof CharsetUTF32) {

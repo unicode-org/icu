@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -50,8 +50,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
     }
     /**
      * {@inheritDoc}
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     @Override
     public Appendable normalize(CharSequence src, Appendable dest) {
@@ -81,8 +80,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     @Override
     public String getDecomposition(int c) {

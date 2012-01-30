@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2011, Google Inc, International Business Machines Corporation
+ * Copyright (C) 2008-2012, Google Inc, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -122,8 +122,7 @@ import com.ibm.icu.util.ULocale;
  * sorting would be "de@kn-true".
  * 
  * @author markdavis
- * @draft ICU 4.6
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.8
  */
 public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
@@ -179,8 +178,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param locale
      *            The locale for the index.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex(ULocale locale) {
         this(locale, null, null);
@@ -191,8 +189,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param locale
      *            The locale for the index.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex(Locale locale) {
         this(ULocale.forLocale(locale));
@@ -263,8 +260,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Add more index characters (aside from what are in the locale)
      * @param additions additional characters to add to the index, such as A-Z.
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> addLabels(UnicodeSet additions) {
         initialLabels.addAll(additions);
@@ -276,8 +272,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Add more index characters (aside from what are in the locale)
      * @param additions additional characters to add to the index, such as those in Swedish.
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> addLabels(ULocale... additions) {
         for (ULocale addition : additions) {
@@ -291,8 +286,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Add more index characters (aside from what are in the locale)
      * @param additions additional characters to add to the index, such as those in Swedish.
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> addLabels(Locale... additions) {
         for (Locale addition : additions) {
@@ -306,8 +300,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Set the overflow label
      * @param overflowLabel see class description
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> setOverflowLabel(String overflowLabel) {
         this.overflowLabel = overflowLabel;
@@ -318,8 +311,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Get the default label used in the IndexCharacters' locale for underflow, eg the last item in: X Y Z ...
      * 
      * @return underflow label
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public String getUnderflowLabel() {
         return underflowLabel; // TODO get localized version
@@ -330,8 +322,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Set the underflowLabel label
      * @param underflowLabel see class description
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> setUnderflowLabel(String underflowLabel) {
         this.underflowLabel = underflowLabel;
@@ -342,8 +333,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Get the default label used in the IndexCharacters' locale for overflow, eg the first item in: ... A B C
      * 
      * @return overflow label
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public String getOverflowLabel() {
         return overflowLabel; // TODO get localized version
@@ -354,8 +344,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Set the inflowLabel label
      * @param inflowLabel see class description
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> setInflowLabel(String inflowLabel) {
         this.inflowLabel = inflowLabel;
@@ -367,8 +356,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * for Latin and Greek are used: X Y Z ... &#x0391; &#x0392; &#x0393;.
      * 
      * @return inflow label
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public String getInflowLabel() {
         return inflowLabel; // TODO get localized version
@@ -379,8 +367,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Get the limit on the number of labels in the index. The number of buckets can be slightly larger: see getBucketCount().
      * 
      * @return maxLabelCount maximum number of labels.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public int getMaxLabelCount() {
         return maxLabelCount;
@@ -393,8 +380,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @return maxLabelCount label Set the maximum number of labels. Currently, if the number is exceeded, then every
      *         nth item is removed to bring the count down. A more sophisticated mechanism may be available in the
      *         future.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> setMaxLabelCount(int maxLabelCount) {
         this.maxLabelCount = maxLabelCount;
@@ -568,8 +554,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Get the labels.
      * 
      * @return A collection listing the labels, after processing.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public List<String> getBucketLabels() {
         if (buckets == null) {
@@ -590,8 +575,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * synchronizing.</i></b>
      * 
      * @return a clone of the collator used internally
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public RuleBasedCollator getCollator() {
         if (collatorExternal == null) {
@@ -615,8 +599,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @param data
      *            Data, such as an address or link
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> addRecord(CharSequence name, V data) {
         // TODO instead of invalidating, just add to unprocessed list.
@@ -638,8 +621,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @param name
      *            Name, such as a name
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public int getBucketIndex(CharSequence name) {
         if (buckets == null) {
@@ -699,8 +681,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Clear the index.
      * 
      * @return this, for chaining
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public AlphabeticIndex<V> clearRecords() {
         buckets = null;
@@ -712,8 +693,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Return the number of buckets in the index. This will be the same as the number of labels, plus buckets for the underflow, overflow, and inflow(s).
      * 
      * @return number of buckets
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public int getBucketCount() {
         if (buckets == null) {
@@ -726,8 +706,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Return the number of records in the index: that is, the total number of distinct <name,data> pairs added with addRecord(...), over all the buckets.
      * 
      * @return total number of records in buckets
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public int getRecordCount() {
         return inputList.size();
@@ -737,8 +716,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Return an iterator over the buckets.
      * 
      * @return iterator over buckets.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public Iterator<Bucket<V>> iterator() {
         if (buckets == null) {
@@ -754,8 +732,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param inputList
      *            List of strings to be sorted and bucketed according to the labels.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     private void initBuckets() {
         buckets = new BucketList();
@@ -940,8 +917,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * A record to be sorted into buckets with getIndexBucketCharacters.
      * 
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static class Record<V> {
         //private Bucket<V> rebucket = null; // special hack for Pinyin
@@ -959,8 +935,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * Get the name
          * 
          * @return the name
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public CharSequence getName() {
             return name;
@@ -970,8 +945,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * Get the data
          * 
          * @return the data
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public V getData() {
             return data;
@@ -979,8 +953,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         /**
          * Standard toString()
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public String toString() {
             return name + "=" + data 
@@ -997,8 +970,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * 
      * @param <V>
      *            Data type
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.8
      */
     public static class Bucket<V> implements Iterable<Record<V>> {
         private final String label;
@@ -1009,8 +981,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         /**
          * Type of the label
          * 
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public enum LabelType {
             NORMAL, UNDERFLOW, INFLOW, OVERFLOW
@@ -1023,8 +994,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          *            label for the bucket
          * @param labelType
          *            is an underflow, overflow, or inflow bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         private Bucket(String label, String lowerBoundary, LabelType labelType) {
             //            String hackLabel = HACK_TRADITIONAL.get(label);
@@ -1044,8 +1014,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * Get the label
          * 
          * @return label for the bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public String getLabel() {
             return label;
@@ -1055,8 +1024,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * Is a normal, underflow, overflow, or inflow bucket
          * 
          * @return is an underflow, overflow, or inflow bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public LabelType getLabelType() {
             return labelType;
@@ -1066,8 +1034,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
          * Get the number of records in the bucket.
          * 
          * @return number of records in bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public int size() {
             return records.size();
@@ -1075,8 +1042,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         /**
          * Iterator over the records in the bucket
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         public Iterator<Record<V>> iterator() {
             return records.iterator();
@@ -1084,8 +1050,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         /**
          * Standard toString()
-         * @draft ICU 4.6
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.8
          */
         @Override
         public String toString() {
