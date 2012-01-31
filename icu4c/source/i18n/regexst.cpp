@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2004-2010, International Business Machines Corporation and others.
+//  Copyright (C) 2004-2012, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains class RegexStaticSets
@@ -79,8 +79,10 @@ static const UChar gIsWordPattern[] = {
           0x5c, 0x70, 0x7b, 0x4d, 0x7d,
 //          \     p     {    N     d     }                         Digit_Numeric
           0x5c, 0x70, 0x7b, 0x4e, 0x64, 0x7d,
-//          \     p     {    P     c     }      ]                  Connector_Punctuation
-          0x5c, 0x70, 0x7b, 0x50, 0x63, 0x7d, 0x5d, 0};
+//          \     p     {    P     c     }                         Connector_Punctuation
+          0x5c, 0x70, 0x7b, 0x50, 0x63, 0x7d,
+//          \     u     2    0     0     c      \     u     2    0     0     d     ]
+          0x5c, 0x75, 0x32, 0x30, 0x30, 0x63, 0x5c, 0x75, 0x32, 0x30, 0x30, 0x64, 0x5d, 0};
 
 
 //

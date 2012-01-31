@@ -1119,6 +1119,14 @@
 
 " (ss) ((\1.*)|(.*))"           i "<0> <1>ss</1> <2><4>sß</4></2></0>"       # The back reference 'ss' must not match in 'sß'
 
+# Bug 9057
+#   \u200c and \u200d should be word characters.
+#
+"\w+"                             "  <0>abc\u200cdef\u200dghi</0>   "
+"\w+"                           i "  <0>abc\u200cdef\u200dghi</0>   "
+"[\w]+"                           "  <0>abc\u200cdef\u200dghi</0>   "
+"[\w]+"                         i "  <0>abc\u200cdef\u200dghi</0>   "
+
 #  Random debugging, Temporary
 #
 #"^(?:a?b?)*$"	                  "a--"
