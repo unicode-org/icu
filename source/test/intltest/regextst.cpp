@@ -223,6 +223,23 @@ if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=
 
 #define REGEX_ASSERT_UNISTR(ustr,inv) {if (!(ustr==inv)) {errln("%s:%d: RegexTest failure: REGEX_ASSERT_UNISTR(%s,%s) failed \n", __FILE__, __LINE__, extractToAssertBuf(ustr),inv);};}
 
+
+static UBool testUTextEqual(UText *uta, UText *utb) {
+    UChar32 ca = 0;
+    UChar32 cb = 0;
+    utext_setNativeIndex(uta, 0);
+    utext_setNativeIndex(utb, 0);
+    do {
+        ca = utext_next32(uta);
+        cb = utext_next32(utb);
+        if (ca != cb) {
+            break;
+        }
+    } while (ca != U_SENTINEL);
+    return ca == cb;
+}
+
+
 /**
  * @param expected expected text in UTF-8 (not platform) codepage
  */
@@ -239,7 +256,7 @@ void RegexTest::assertUText(const char *expected, UText *actual, const char *fil
       return;
     }
     utext_setNativeIndex(actual, 0);
-    if (utext_compare(&expectedText, -1, actual, -1) != 0) {
+    if (!testUTextEqual(&expectedText, actual)) {
         char buf[201 /*21*/];
         char expectedBuf[201];
         utextToPrintable(buf, sizeof(buf)/sizeof(buf[0]), actual);
@@ -261,7 +278,7 @@ void RegexTest::assertUTextInvariant(const char *expected, UText *actual, const 
       return;
     }
     utext_setNativeIndex(actual, 0);
-    if (utext_compare(&expectedText, -1, actual, -1) != 0) {
+    if (!testUTextEqual(&expectedText, actual)) {
         char buf[201 /*21*/];
         char expectedBuf[201];
         utextToPrintable(buf, sizeof(buf)/sizeof(buf[0]), actual);
@@ -4920,14 +4937,14 @@ void RegexTest::PreAllocatedUTextCAPI () {
         REGEX_ASSERT(resultText == &bufferText);
         utext_setNativeIndex(resultText, 0);
         utext_setNativeIndex(&text1, 0);
-        REGEX_ASSERT(utext_compare(resultText, -1, &text1, -1) == 0);
+        REGEX_ASSERT(testUTextEqual(resultText, &text1));
         
         resultText = uregex_getUText(re, &bufferText, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(resultText == &bufferText);
         utext_setNativeIndex(resultText, 0);
         utext_setNativeIndex(&text1, 0);
-        REGEX_ASSERT(utext_compare(resultText, -1, &text1, -1) == 0);
+        REGEX_ASSERT(testUTextEqual(resultText, &text1));
 
         /* Then set a UChar * */
         uregex_setText(re, text2Chars, 7, &status);
@@ -4936,7 +4953,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
         REGEX_ASSERT(resultText == &bufferText);
         utext_setNativeIndex(resultText, 0);
         utext_setNativeIndex(&text2, 0);
-        REGEX_ASSERT(utext_compare(resultText, -1, &text2, -1) == 0);
+        REGEX_ASSERT(testUTextEqual(resultText, &text2));
         
         uregex_close(re);
         utext_close(&text1);

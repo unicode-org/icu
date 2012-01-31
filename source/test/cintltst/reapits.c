@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2011, International Business Machines Corporation and
+ * Copyright (c) 2004-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -90,12 +90,30 @@ static void test_assert_string(const char *expected, const UChar *actual, UBool 
 #define TEST_ASSERT_STRING(expected, actual, nulTerm) test_assert_string(expected, actual, nulTerm, __FILE__, __LINE__)
              
 
+static UBool equals_utf8_utext(const char *utf8, UText *utext) {
+    int32_t u8i = 0;
+    UChar32 u8c = 0;
+    UChar32 utc = 0;
+    UBool   stringsEqual = TRUE;
+    utext_setNativeIndex(utext, 0);
+    for (;;) {
+        U8_NEXT_UNSAFE(utf8, u8i, u8c);
+        utc = utext_next32(utext);
+        if (u8c == 0 && utc == U_SENTINEL) {
+            break;
+        }
+        if (u8c != utc || u8c == 0) {
+            stringsEqual = FALSE;
+            break;
+        }
+    }
+    return stringsEqual;
+}
+
+
 static void test_assert_utext(const char *expected, UText *actual, const char *file, int line) {
-    UErrorCode status = U_ZERO_ERROR;
-    UText expectedText = UTEXT_INITIALIZER;
-    utext_openUTF8(&expectedText, expected, -1, &status);
     utext_setNativeIndex(actual, 0);
-    if (utext_compare(&expectedText, -1, actual, -1) != 0) {
+    if (!equals_utf8_utext(expected, actual)) {
         UChar32 c;
         log_err("Failure at file %s, line %d, expected \"%s\", got \"", file, line, expected);
         c = utext_next32From(actual, 0);
@@ -109,11 +127,30 @@ static void test_assert_utext(const char *expected, UText *actual, const char *f
         }
         log_err("\"\n");
     }
-    utext_close(&expectedText);
 }
 
+/*
+ * TEST_ASSERT_UTEXT(const char *expected, const UText *actual)
+ *     Note:  Expected is a UTF-8 encoded string, _not_ the system code page.
+ */
 #define TEST_ASSERT_UTEXT(expected, actual) test_assert_utext(expected, actual, __FILE__, __LINE__)
 
+static UBool testUTextEqual(UText *uta, UText *utb) {
+    UChar32 ca = 0;
+    UChar32 cb = 0;
+    utext_setNativeIndex(uta, 0);
+    utext_setNativeIndex(utb, 0);
+    do {
+        ca = utext_next32(uta);
+        cb = utext_next32(utb);
+        if (ca != cb) {
+            break;
+        }
+    } while (ca != U_SENTINEL);
+    return ca == cb;
+}
+
+    
 
 
 static void TestRegexCAPI(void);
@@ -1578,7 +1615,7 @@ static void TestUTextAPI(void) {
         TEST_ASSERT(resultText != &text1);
         utext_setNativeIndex(resultText, 0);
         utext_setNativeIndex(&text1, 0);
-        TEST_ASSERT(utext_compare(resultText, -1, &text1, -1) == 0);
+        TEST_ASSERT(testUTextEqual(resultText, &text1));
         utext_close(resultText);
         
         result = uregex_getText(re, &textLength, &status); /* flattens UText into buffer */
@@ -1588,7 +1625,7 @@ static void TestUTextAPI(void) {
         TEST_ASSERT(resultText != &text1);
         utext_setNativeIndex(resultText, 0);
         utext_setNativeIndex(&text1, 0);
-        TEST_ASSERT(utext_compare(resultText, -1, &text1, -1) == 0);
+        TEST_ASSERT(testUTextEqual(resultText, &text1));
         utext_close(resultText);
 
         /* Then set a UChar * */
@@ -1597,7 +1634,7 @@ static void TestUTextAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         utext_setNativeIndex(resultText, 0);
         utext_setNativeIndex(&text2, 0);
-        TEST_ASSERT(utext_compare(resultText, -1, &text2, -1) == 0);
+        TEST_ASSERT(testUTextEqual(resultText, &text2));
         utext_close(resultText);
         result = uregex_getText(re, &textLength, &status);
         TEST_ASSERT(textLength == 7);
