@@ -72,7 +72,7 @@ class TimeZoneFormat;
  * y        year                    (Number)            1996
  * Y        year (week of year)     (Number)            1997
  * u        extended year           (Number)            4601
- * U        cyclic year name        (Text & Number)     ren-chen & 29
+ * U        cyclic year name        (Text,NumFallback)  ren-chen (29)
  * Q        Quarter                 (Text & Number)     Q2 & 02
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
@@ -120,6 +120,9 @@ class TimeZoneFormat;
  * <P>
  * (Text & Number): 3 or over, use text, otherwise use number.  (e.g., "M" produces "1",
  * "MM" produces "01", "MMM" produces "Jan", and "MMMM" produces "January".)
+ * <P>
+ * (Text,NumFallback): Behaves like Text if there is supporting data, like
+ * Number otherwise.
  * <P>
  * Any characters in the pattern that are not in the ranges of ['a'..'z'] and
  * ['A'..'Z'] will be treated as quoted text. For instance, characters
