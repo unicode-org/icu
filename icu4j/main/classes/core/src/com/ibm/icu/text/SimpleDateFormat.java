@@ -73,7 +73,7 @@ import com.ibm.icu.util.ULocale.Category;
  * y&#x2020;       year                    (Number)            1996
  * Y*       year (week of year)     (Number)            1997
  * u*       extended year           (Number)            4601
- * U*       cyclic year name        (Text)              ren-chen
+ * U*       cyclic year name        (Text,NumFallback)  ren-chen (29)
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
  * h        hour in am/pm (1~12)    (Number)            12
@@ -123,6 +123,9 @@ import com.ibm.icu.util.ULocale.Category;
  * Unlike other fields, fractional seconds are padded on the right with zero.
  * <p>
  * <strong>(Text & Number)</strong>: 3 or over, use text, otherwise use number.
+ * <p>
+ * <strong>(Text,NumFallback)</strong>: Behaves like Text if there is supporting
+ * data, like Number otherwise.
  * <p>
  * Any characters in the pattern that are not in the ranges of ['a'..'z']
  * and ['A'..'Z'] will be treated as quoted text. For instance, characters
