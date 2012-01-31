@@ -3965,7 +3965,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 if (result.toString().compareTo(item.dateString[idate]) != 0) {
                     errln("FAIL: Chinese calendar format for locale " + item.locale +  ", style " + item.style +
                             ", expected \"" + item.dateString[idate] + "\", got \"" + result + "\"");
-                } else if (item.locale.indexOf("calendar=chinese") >= 0) {
+                } else {
                     // formatted OK, try parse
                     ParsePosition ppos = new ParsePosition(0);
                     // ensure we are really parsing the fields we should be

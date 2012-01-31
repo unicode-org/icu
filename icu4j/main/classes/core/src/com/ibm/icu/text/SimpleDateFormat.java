@@ -1942,6 +1942,7 @@ public class SimpleDateFormat extends DateFormat {
         int value = 0;
         int i;
         ParsePosition pos = new ParsePosition(0);
+        boolean lenient = isLenient();
 
         //int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);c
         int patternCharIndex = -1;
@@ -1984,6 +1985,7 @@ public class SimpleDateFormat extends DateFormat {
             (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2) ||
             (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ && count <= 2) ||
             patternCharIndex == 1 /*'y' YEAR */ ||
+            patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */ ||
             (patternCharIndex == 0 /*'G' ERA */ && cal.getType().equals("chinese")) ||
             patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */ )
             {
@@ -2013,19 +2015,22 @@ public class SimpleDateFormat extends DateFormat {
                     } else {
                         number = parseInt(text, pos, allowNegative,currentNumberFormat);
                     }
-                    if (number == null) {
+                    if (number == null && patternCharIndex != 30) {
                         return -start;
                     }
                 }
 
-                value = number.intValue();
+                if (number != null) {
+                    value = number.intValue();
+                }
             }
 
         switch (patternCharIndex)
             {
             case 0: // 'G' - ERA
                 if ( cal.getType().equals("chinese") ) {
-                    // numeric era handling moved from ChineseDateFormat
+                    // Numeric era handling moved from ChineseDateFormat,
+                    // If we didn't have a number, already returned -start above
                     cal.set(Calendar.ERA, value);
                     return pos.getIndex();
                 }
@@ -2083,7 +2088,17 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 return pos.getIndex();
             case 30: // 'U' - YEAR_NAME_FIELD
-                return matchString(text, start, Calendar.YEAR, formatData.shortYearNames, null, cal);
+                if (formatData.shortYearNames != null) {
+                    int newStart = matchString(text, start, Calendar.YEAR, formatData.shortYearNames, null, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    }
+                }
+                if ( number != null && (lenient || formatData.shortYearNames == null || value > formatData.shortYearNames.length) ) {
+                    cal.set(Calendar.YEAR, value);
+                    return pos.getIndex();
+                }
+                return -start;
             case 2: // 'M' - MONTH
             case 26: // 'L' - STAND_ALONE_MONTH
                 if (count <= 2) { // i.e., M/MM, L/LL
