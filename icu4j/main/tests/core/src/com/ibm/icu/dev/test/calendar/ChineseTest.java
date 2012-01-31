@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and
+ * Copyright (C) 2000-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -250,6 +250,13 @@ public class ChineseTest extends CalendarTest {
 
     /**
      * Test formatting.
+     * Q: Why is this in Calendar tests instead of Format tests?
+     * Note: This test assumes that Chinese calendar formatted dates can be parsed
+     * unambiguously to recover the original Date that was formatted. This is not
+     * currently true since Chinese calendar formatted dates do not include an era.
+     * To address this will require formatting/parsing of fields from some other
+     * associated calendar, as per ICU ticket #9043. This test should be timebombed
+     * until that ticket is addressed.
      */
     public void TestFormat() {
         ChineseCalendar cal = new ChineseCalendar();
@@ -259,8 +266,8 @@ public class ChineseTest extends CalendarTest {
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
         
-        // time bomb test until Chinese calendar is fixed in ICU4J to use monthPatterns, etc.
-        if (VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(49,0,2)) <= 0) {
+        // time bomb test until ticket #9043 fixes the ambiguous era problem.
+        if (VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(50,0,2)) <= 0) {
             return;
         }
         
