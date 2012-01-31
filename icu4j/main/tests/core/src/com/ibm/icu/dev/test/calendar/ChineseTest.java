@@ -266,11 +266,6 @@ public class ChineseTest extends CalendarTest {
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
         
-        // time bomb test until ticket #9043 fixes the ambiguous era problem.
-        if (VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(50,0,2)) <= 0) {
-            return;
-        }
-        
         Date[] DATA = new Date[2];
         tempcal.set(2001, Calendar.MAY, 22);
         DATA[0] = tempcal.getTime();
@@ -284,6 +279,8 @@ public class ChineseTest extends CalendarTest {
                 Date e = fmt.parse(s);
                 if (e.equals(DATA[i])) {
                     logln("Ok: " + DATA[i] + " -> " + s + " -> " + e);
+                } else if (isICUVersionBefore(50, 1)) { // until ticket #9043 fixes the ambiguous era problem
+                    logln("Ambiguous parse fails: " + DATA[i] + " -> " + s + " -> " + e);
                 } else {
                     errln("FAIL: " + DATA[i] + " -> " + s + " -> " + e);
                 }
