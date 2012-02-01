@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Comparator;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -561,6 +560,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param pattern Input pattern, such as "ccc, d LLL"
      * @return skeleton, such as "MMMEd"
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getCanonicalSkeletonAllowingDuplicates(String pattern) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -1456,18 +1456,18 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-    * Used by CLDR tooling; not in ICU4C
-    * Note this will not work correctly with normal skeletons unless
-    * the TreeSet in getSet below is initialized with the
-    * comparator SkeletonFieldComparator, since fields that should be related
-    * in the two skeletons being compared - like EEE and ccc, or y and U - will
-    * not be sorted in the same relative place as each other when iterating
-    * over both TreeSets being compared when using TreeSet's "natural" code
-    * point ordering. However if comparing canonical skeletons from
-    * getCanonicalSkeletonAllowingDuplicates it will be OK regardless,
-    * since in these skeletons all fields are normalized to the canonical
-    * pattern char for those fields: M or L to M, E or c to E, y or U to y, etc.
-    * so corresponding fields will short in the same way for both TreeMaps.
+    * Used by CLDR tooling; not in ICU4C.
+    * Note, this will not work correctly with normal skeletons, since fields
+    * that should be related in the two skeletons being compared - like EEE and
+    * ccc, or y and U - will not be sorted in the same relative place as each
+    * other when iterating over both TreeSets being compare, using TreeSet's
+    * "natural" code point ordering (this could be addressed by initializing
+    * the TreeSet with a comparator that compares fields first by their index
+    * from getCanonicalIndex()). However if comparing canonical skeletons from
+    * getCanonicalSkeletonAllowingDuplicates it will be OK regardless, since
+    * in these skeletons all fields are normalized to the canonical pattern
+    * char for those fields - M or L to M, E or c to E, y or U to y, etc. -
+    * so corresponding fields will sort in the same way for both TreeMaps.
     * @internal
     * @deprecated This API is ICU internal only.
     */
@@ -1493,28 +1493,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return true;
     }
 
-/*
-    // Ensure that the TreeSet from getSet is sorted by the index of
-    // each field in types[][], so skeletonsAreSimilar checks fields
-    // that are comparable.
-    private class SkeletonFieldComparator implements Comparator<String> {
-        public int compare(String string1, String string2) {
-            int index1 = getCanonicalIndex(string1, true);
-            int index2 = getCanonicalIndex(string2, true);
-            if (index1 < index2)
-                return (index1 >= 0)? -1: 1;
-            if (index2 < index1)
-                return (index2 >= 0)? 1: -1;
-            // index1 == index2
-            if (index1 < 0)
-                return string1.compareTo(string2);
-            return 0;
-        }
-    }
-*/
     private TreeSet<String> getSet(String id) {
         final List<Object> items = fp.set(id).getItems();
-        TreeSet<String> result = new TreeSet<String>(/*new SkeletonFieldComparator()*/);
+        TreeSet<String> result = new TreeSet<String>();
         for (Object obj : items) {
             final String item = obj.toString();
             if (item.startsWith("G") || item.startsWith("a")) {
