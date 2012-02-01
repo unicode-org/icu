@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2011, International Business Machines
+//   Copyright (C) 2003-2012, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -979,6 +979,13 @@ conversion:table(nofallback) {
           "\u00a3I\u00a3\u00a4",
           :intvector{ 1,5,7,9 },
           :int{0}, :int{0}, "", ".", :bin{""}
+        }
+        {
+          "x11-compound-text",
+          :bin{ 1e6ddc9b26bc10801bbcad50a040fc },
+          "\u001e\u006d\u00dc\u009b\u0026\u00bc\u0010\u0080\ufffd\u00bc\u00ad\u0050\u00a0\u0040\u00fc",
+          :intvector{ },
+          :int{1}, :int{0}, "", "?", :bin{""}
         }
       }
     }

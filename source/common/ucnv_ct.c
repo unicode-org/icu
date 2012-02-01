@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_ct.c
@@ -504,6 +504,9 @@ UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
                     *err = U_ZERO_ERROR;
                     break;
                 } else if (tmpState == INVALID) {
+                    if (args->converter->toULength == 0) {
+                        mySource++; /* skip over the 0x1b byte */
+                    }
                     *err = U_ILLEGAL_CHAR_FOUND;
                     break;
                 }
