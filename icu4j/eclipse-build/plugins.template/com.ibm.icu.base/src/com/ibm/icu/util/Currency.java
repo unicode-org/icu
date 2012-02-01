@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -417,6 +417,32 @@ public class Currency implements Serializable {
     public final ULocale getLocale(ULocale.Type type) {
         throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
     }
+
+    /**
+     * Queries if the given ISO 4217 3-letter code is available on the specified date range.
+     * <p>
+     * Note: For checking availability of a currency on a specific date, specify the date on both <code>from</code> and
+     * <code>to</code>. When both <code>from</code> and <code>to</code> are null, this method checks if the specified
+     * currency is available all time.
+     * 
+     * @param code
+     *            The ISO 4217 3-letter code.
+     * @param from
+     *            The lower bound of the date range, inclusive. When <code>from</code> is null, check the availability
+     *            of the currency any date before <code>to</code>
+     * @param to
+     *            The upper bound of the date range, inclusive. When <code>to</code> is null, check the availability of
+     *            the currency any date after <code>from</code>
+     * @return true if the given ISO 4217 3-letter code is supported on the specified date range.
+     * @throws IllegalArgumentException when <code>to</code> is before <code>from</code>.
+     * 
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static boolean isAvailable(String code, Date from, Date to) {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+
 }
 
 //eof

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2011, International Business Machines
+* Copyright (c) 2004-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -543,6 +543,36 @@ public class MessageFormat extends UFormat {
     }
 
     /**
+     * {@icu} Sets the ApostropheMode and the pattern used by this message format.
+     * Parses the pattern and caches Format objects for simple argument types.
+     * Patterns and their interpretation are specified in the
+     * <a href="#patterns">class description</a>.
+     * <p>
+     * This method is best used only once on a given object to avoid confusion about the mode,
+     * and after constructing the object with an empty pattern string to minimize overhead.
+     *
+     * @param pattern the pattern for this message format
+     * @param aposMode the new ApostropheMode
+     * @throws IllegalArgumentException if the pattern is invalid
+     * @see MessagePattern.ApostropheMode
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void applyPattern(String pattern, MessagePattern.ApostropheMode aposMode) {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+
+    /**
+     * {@icu}
+     * @return this instance's ApostropheMode.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public MessagePattern.ApostropheMode getApostropheMode() {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+    
+    /**
      * Returns a pattern representing the current state of the message format.
      * The string is constructed from internal information and therefore
      * does not necessarily equal the previously applied pattern.
@@ -778,16 +808,28 @@ public class MessageFormat extends UFormat {
     }
 
     /**
-     * {@icu} Returns the formats according to their argument names. For more details, see
-     * {@link #setFormatByArgumentName(String, Format)}.
-     * @return format associated with the name, or null if there isn't one.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * {@icu} Returns the first top-level format associated with the given argument name.
+     * For more details, see {@link #setFormatByArgumentName(String, Format)}.
+     * @param argumentName The name of the desired argument.
+     * @return the Format associated with the name, or null if there isn't one.
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Format getFormatByArgumentName(String argumentName) {
         throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
     }
 
+    /**
+     * {@icu} Returns the top-level argument names. For more details, see
+     * {@link #setFormatByArgumentName(String, Format)}.
+     * @return a Set of argument names
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Set<String> getArgumentNames() {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+    
     /**
      * Formats an array of objects and appends the <code>MessageFormat</code>'s
      * pattern, with format elements replaced by the formatted objects, to the

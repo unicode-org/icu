@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
+* Copyright (C) 1996-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -330,6 +330,33 @@ public class Collator implements Comparator<Object>, Cloneable
         return new Collator((java.text.Collator)collator.clone());
     }
 
+    // Freezable interface implementation -------------------------------------------------
+    
+    /**
+     * Determines whether the object has been frozen or not.
+     * @draft ICU 4.8
+     */
+    public boolean isFrozen() {
+        return false;
+    }
+
+    /**
+     * Freezes the collator.
+     * @return the collator itself.
+     * @draft ICU 4.8
+     */
+    public Collator freeze() {
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
+    }
+
+    /**
+     * Provides for the clone operation. Any clone is initially unfrozen.
+     * @draft ICU 4.8
+     */
+    public Collator cloneAsThawed() {
+        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
+    }
+    
     // begin registry stuff
 
     /**
@@ -883,6 +910,51 @@ public class Collator implements Comparator<Object>, Cloneable
     public VersionInfo getUCAVersion() {
         throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
     }
+
+    /**  
+     * Retrieves the reordering codes for this collator.
+     * These reordering codes are a combination of UScript codes and ReorderCodes.
+     * @return a copy of the reordering codes for this collator; 
+     * if none are set then returns an empty array
+     * @see #setReorderCodes
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
+     */ 
+    public int[] getReorderCodes() 
+    { 
+        throw new UnsupportedOperationException(); 
+    }   
+
+    /** 
+     * Sets the reordering codes for this collator.
+     * Reordering codes allow the collation ordering for groups of characters to be changed.
+     * The reordering codes are a combination of UScript  codes and ReorderCodes.
+     * These allow the ordering of characters belonging to these groups to be changed as a group.  
+     * @param order the reordering codes to apply to this collator; if this is null or an empty array
+     * then this clears any existing reordering
+     * @see #getReorderCodes
+     * @see #getEquivalentReorderCodes
+     * @draft ICU 4.8
+     */ 
+    public void setReorderCodes(int... order) 
+    { 
+        throw new UnsupportedOperationException(); 
+    } 
+
+    /**
+     * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
+     * codes are grouped and must reorder together.
+     * 
+     * @param reorderCode code for which equivalents to be retrieved
+     * @return the set of all reorder codes in the same group as the given reorder code.
+     * @see #setReorderCodes
+     * @see #getReorderCodes
+     * @draft ICU 4.8
+     */
+    public static int[] getEquivalentReorderCodes(int reorderCode)
+    { 
+        throw new UnsupportedOperationException(); 
+    }   
 
     /**
      * {@icu} Returns the locale that was used to create this object, or null.
