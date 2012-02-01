@@ -69,6 +69,7 @@ eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.ui.pre
 eclipse-build/plugins.template/com.ibm.icu.base/META-INF/MANIFEST.MF -text
 eclipse-build/plugins.template/com.ibm.icu.base/build.properties -text
 eclipse-build/plugins.template/com.ibm.icu.base/plugin.properties -text
+eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/MessagePattern.java -text
 eclipse-build/plugins.template/com.ibm.icu.tests/.settings/org.eclipse.core.resources.prefs -text
 eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
 eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text

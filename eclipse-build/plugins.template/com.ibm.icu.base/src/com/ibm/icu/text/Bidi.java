@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -2583,4 +2583,99 @@ public class Bidi {
     {
         throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
     }
+
+    /**
+     * Get the base direction of the text provided according to the Unicode
+     * Bidirectional Algorithm. The base direction is derived from the first
+     * character in the string with bidirectional character type L, R, or AL.
+     * If the first such character has type L, LTR is returned. If the first
+     * such character has type R or AL, RTL is returned. If the string does
+     * not contain any character of these types, then NEUTRAL is returned.
+     * This is a lightweight function for use when only the base direction is
+     * needed and no further bidi processing of the text is needed.
+     * @param paragraph the text whose paragraph level direction is needed.
+     * @return LTR, RTL, NEUTRAL
+     * @see #LTR
+     * @see #RTL
+     * @see #NEUTRAL
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static byte getBaseDirection(CharSequence paragraph) {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+
+    /**
+     * Set the context before a call to setPara().<p>
+     *
+     * setPara() computes the left-right directionality for a given piece
+     * of text which is supplied as one of its arguments. Sometimes this piece
+     * of text (the "main text") should be considered in context, because text
+     * appearing before ("prologue") and/or after ("epilogue") the main text
+     * may affect the result of this computation.<p>
+     *
+     * This function specifies the prologue and/or the epilogue for the next
+     * call to setPara(). If successive calls to setPara()
+     * all need specification of a context, setContext() must be called
+     * before each call to setPara(). In other words, a context is not
+     * "remembered" after the following successful call to setPara().<p>
+     *
+     * If a call to setPara() specifies DEFAULT_LTR or
+     * DEFAULT_RTL as paraLevel and is preceded by a call to
+     * setContext() which specifies a prologue, the paragraph level will
+     * be computed taking in consideration the text in the prologue.<p>
+     *
+     * When setPara() is called without a previous call to
+     * setContext, the main text is handled as if preceded and followed
+     * by strong directional characters at the current paragraph level.
+     * Calling setContext() with specification of a prologue will change
+     * this behavior by handling the main text as if preceded by the last
+     * strong character appearing in the prologue, if any.
+     * Calling setContext() with specification of an epilogue will change
+     * the behavior of setPara() by handling the main text as if followed
+     * by the first strong character or digit appearing in the epilogue, if any.<p>
+     *
+     * Note 1: if <code>setContext</code> is called repeatedly without
+     *         calling <code>setPara</code>, the earlier calls have no effect,
+     *         only the last call will be remembered for the next call to
+     *         <code>setPara</code>.<p>
+     *
+     * Note 2: calling <code>setContext(null, null)</code>
+     *         cancels any previous setting of non-empty prologue or epilogue.
+     *         The next call to <code>setPara()</code> will process no
+     *         prologue or epilogue.<p>
+     *
+     * Note 3: users must be aware that even after setting the context
+     *         before a call to setPara() to perform e.g. a logical to visual
+     *         transformation, the resulting string may not be identical to what it
+     *         would have been if all the text, including prologue and epilogue, had
+     *         been processed together.<br>
+     * Example (upper case letters represent RTL characters):<br>
+     * &nbsp;&nbsp;prologue = "<code>abc DE</code>"<br>
+     * &nbsp;&nbsp;epilogue = none<br>
+     * &nbsp;&nbsp;main text = "<code>FGH xyz</code>"<br>
+     * &nbsp;&nbsp;paraLevel = LTR<br>
+     * &nbsp;&nbsp;display without prologue = "<code>HGF xyz</code>"
+     *             ("HGF" is adjacent to "xyz")<br>
+     * &nbsp;&nbsp;display with prologue = "<code>abc HGFED xyz</code>"
+     *             ("HGF" is not adjacent to "xyz")<br>
+     *
+     * @param prologue is the text which precedes the text that
+     *        will be specified in a coming call to setPara().
+     *        If there is no prologue to consider,
+     *        this parameter can be <code>null</code>.
+     *
+     * @param epilogue is the text which follows the text that
+     *        will be specified in a coming call to setPara().
+     *        If there is no epilogue to consider,
+     *        this parameter can be <code>null</code>.
+     *
+     * @see #setPara
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setContext(String prologue, String epilogue) {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+
 }
