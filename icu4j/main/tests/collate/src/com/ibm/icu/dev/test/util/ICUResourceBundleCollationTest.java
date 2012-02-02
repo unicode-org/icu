@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2009, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -57,10 +57,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
            "t",     "zh_Hans_CN@collation=gb2312han",   "zh@collation=gb2312han",
            "t",     "zh@collation=big5han",             "zh@collation=big5han",
            "t",     "zh@collation=gb2312han",           "zh@collation=gb2312han",
-           "t",     "hi_IN@collation=direct",           "hi@collation=direct",
            "t",     "hi@collation=standard",            "hi",
-           "t",     "hi@collation=direct",              "hi@collation=direct",
-           "f",     "hi_AU@collation=direct;currency=CHF;calendar=buddhist",    "hi@collation=direct",
            "f",     "hi_AU@collation=standard;currency=CHF;calendar=buddhist",  "hi",
            "t",     "de_DE@collation=pinyin",           "de", /* bug 4582 tests */
            "f",     "de_DE_BONN@collation=pinyin",      "de",

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2011, International Business Machines
+* Copyright (c) 2004-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1238,7 +1238,7 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("pinyin", "Pinyin Sort Order");
         h[0].put("traditional", "Traditional Sort Order");
         h[0].put("stroke", "Stroke Order");
-        h[0].put("direct", "Direct Sort Order");
+        h[0].put("direct", "direct"); // Direct sort order is deprecated in CLDR
         h[0].put("japanese", "Japanese Calendar");
         h[0].put("buddhist", "Buddhist Calendar");
         h[0].put("islamic", "Islamic Calendar");
@@ -1251,7 +1251,7 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("collation", "\u5BF9\u7167");
         h[1].put("calendar", "\u65E5\u5386");
         h[1].put("currency", "\u8D27\u5E01");
-        h[1].put("direct", "\u76F4\u63A5\u6392\u5E8F\u987A\u5E8F");
+        h[1].put("direct", "direct"); // Direct sort order is deprecated in CLDR
         h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u987A\u5E8F");
         h[1].put("pinyin", "\u62FC\u97F3\u987a\u5e8f");
         h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");
@@ -1857,7 +1857,7 @@ public class ULocaleTest extends TestFmwk {
                 "kpe"
             }, {
                 "ku",
-                "ku_Arab_IQ",
+                "ku_Latn_TR",
                 "ku"
             }, {
                 "ky",
