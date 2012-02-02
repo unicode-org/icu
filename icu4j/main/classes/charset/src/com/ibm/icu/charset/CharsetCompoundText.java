@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010-2011, International Business Machines Corporation and         *
+ * Copyright (C) 2010-2012, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -535,6 +535,9 @@ class CharsetCompoundText extends CharsetICU {
                         }
                         if (tmpState < 0) {
                             err = CoderResult.malformedForLength(1);
+                            if (this.toULength == 0) {
+                                source.get(); /* skip over the 0x1b byte */
+                            }
                             break;
                         }
                         
