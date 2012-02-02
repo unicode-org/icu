@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/am.xml
@@ -266,7 +266,6 @@ am{
         collation{
             big5han{"የባህላዊ ቻይንኛ የድርድር ቅደም ተከተል - ትልቅ5"}
             dictionary{"የመዝገበ ቃላት የድርድር ቅደም ተከተል"}
-            direct{"ቀጥታ የድርድር ቅደም ተከተል"}
             ducet{"የነባሪ ዩኒኮድ የድርድር ቅደም ተከተል"}
             gb2312han{"ቀለል ያሉ ቻይንኛ የድርድር ቅደም ተከተል- GB2312"}
             phonebook{"የስልክ ደብተር ድርድር ቅደም ተከተል"}
@@ -315,7 +314,7 @@ am{
             tibt{"የቲቤታን አሃዞች"}
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.50"}
     localeDisplayPattern{
         separator{","}
     }

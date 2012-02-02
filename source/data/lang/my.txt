@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/my.xml
@@ -206,7 +206,6 @@ my{
             japanese{"ဂျပန် ပြက္ခဒိန်"}
         }
         collation{
-            direct{"တိုက်ရိုက်အစဉ်"}
             phonebook{"ဖုန်းစာအုပ် အစီအစဉ်"}
         }
     }
@@ -223,7 +222,7 @@ my{
         REVISED{"ပြန်လည်စီစစ်ထားသော ရေးထုံး"}
         SCOTLAND{"စကော့ စံ အင်္ဂလိပ်"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"ဘာသာစကား - {0}"}
         script{"စာ - {0}"}

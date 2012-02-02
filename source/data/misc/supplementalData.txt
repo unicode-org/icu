@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -370,6 +370,11 @@ supplementalData:table(nofallback){
             "BTN",
         }
         {
+            "BU",
+            "104",
+            "BUR",
+        }
+        {
             "BV",
             "074",
             "BVT",
@@ -453,6 +458,11 @@ supplementalData:table(nofallback){
             "CR",
             "188",
             "CRI",
+        }
+        {
+            "CS",
+            "891",
+            "SCG",
         }
         {
             "CU",
@@ -1415,6 +1425,11 @@ supplementalData:table(nofallback){
             "TON",
         }
         {
+            "TP",
+            "626",
+            "TMP",
+        }
+        {
             "TR",
             "792",
             "TUR",
@@ -1660,6 +1675,11 @@ supplementalData:table(nofallback){
             "MYT",
         }
         {
+            "YU",
+            "891",
+            "YUG",
+        }
+        {
             "ZA",
             "710",
             "ZAF",
@@ -1668,6 +1688,11 @@ supplementalData:table(nofallback){
             "ZM",
             "894",
             "ZMB",
+        }
+        {
+            "ZR",
+            "180",
+            "ZAR",
         }
         {
             "ZW",
@@ -1758,6 +1783,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ae{
+            secondary{
+                scripts{
+                    "Avst",
+                }
+            }
+        }
         af{
             primary{
                 scripts{
@@ -1766,6 +1798,13 @@ supplementalData:table(nofallback){
                 territories{
                     "NA",
                     "ZA",
+                }
+            }
+        }
+        agq{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -1892,6 +1931,14 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "IR",
+                    "SS",
+                }
+            }
+        }
+        arc{
+            secondary{
+                scripts{
+                    "Armi",
                 }
             }
         }
@@ -1925,6 +1972,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "IN",
+                }
+            }
+        }
+        asa{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -2039,6 +2093,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bax{
+            secondary{
+                scripts{
+                    "Bamu",
+                }
+            }
+        }
         bbc{
             primary{
                 scripts{
@@ -2104,6 +2165,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bez{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         bfq{
             primary{
                 scripts{
@@ -2151,6 +2219,7 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{
                     "Deva",
+                    "Kthi",
                 }
             }
         }
@@ -2262,6 +2331,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        blt{
+            secondary{
+                scripts{
+                    "Tavt",
+                }
+            }
+        }
         bm{
             primary{
                 scripts{
@@ -2308,6 +2384,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bqv{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         br{
             primary{
                 scripts{
@@ -2335,6 +2418,11 @@ supplementalData:table(nofallback){
             }
         }
         brx{
+            primary{
+                scripts{
+                    "Deva",
+                }
+            }
             secondary{
                 territories{
                     "IN",
@@ -2450,6 +2538,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        cay{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         cch{
             primary{
                 scripts{
@@ -2494,6 +2589,11 @@ supplementalData:table(nofallback){
             }
         }
         cgg{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "UG",
@@ -2572,18 +2672,6 @@ supplementalData:table(nofallback){
         cja{
             primary{
                 scripts{
-                    "Cham",
-                }
-            }
-            secondary{
-                scripts{
-                    "Deva",
-                }
-            }
-        }
-        cjm{
-            primary{
-                scripts{
                     "Arab",
                 }
             }
@@ -2593,10 +2681,34 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        cjm{
+            primary{
+                scripts{
+                    "Cham",
+                }
+            }
+            secondary{
+                scripts{
+                    "Arab",
+                }
+            }
+        }
         cjs{
             primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        ckb{
+            primary{
+                scripts{
+                    "Arab",
+                }
+            }
+            secondary{
+                territories{
+                    "IR",
                 }
             }
         }
@@ -2674,6 +2786,9 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+                territories{
+                    "PL",
+                }
             }
         }
         cu{
@@ -2736,6 +2851,13 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        dav{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -2819,6 +2941,11 @@ supplementalData:table(nofallback){
             }
         }
         dje{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "NE",
@@ -2868,6 +2995,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        dyo{
+            primary{
+                scripts{
+                    "Arab",
+                }
+            }
+            secondary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         dyu{
             primary{
                 scripts{
@@ -2887,6 +3026,13 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BT",
+                }
+            }
+        }
+        ebu{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -2913,10 +3059,24 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        egy{
+            secondary{
+                scripts{
+                    "Egyp",
+                }
+            }
+        }
         eka{
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+        }
+        eky{
+            primary{
+                scripts{
+                    "Kali",
                 }
             }
         }
@@ -3014,6 +3174,7 @@ supplementalData:table(nofallback){
                     "SG",
                     "SH",
                     "SL",
+                    "SS",
                     "SZ",
                     "TC",
                     "TK",
@@ -3040,6 +3201,7 @@ supplementalData:table(nofallback){
                     "Shaw",
                 }
                 territories{
+                    "AC",
                     "BE",
                     "DE",
                     "ES",
@@ -3227,10 +3389,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Tglg",
                 }
-                territories{
-                    "PH",
-                    "US",
-                }
             }
         }
         fiu{
@@ -3328,7 +3486,6 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
-                    "AC",
                     "GB",
                     "TF",
                     "US",
@@ -3604,9 +3761,8 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
-                    "CH",
-                    "FR",
                     "LI",
+                    "CH",
                 }
             }
         }
@@ -3623,6 +3779,11 @@ supplementalData:table(nofallback){
             }
         }
         guz{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "KE",
@@ -3633,6 +3794,9 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+                territories{
+                    "IM",
                 }
             }
         }
@@ -3951,6 +4115,27 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ike{
+            secondary{
+                territories{
+                    "CA",
+                }
+            }
+        }
+        ikt{
+            secondary{
+                territories{
+                    "CA",
+                }
+            }
+        }
+        iku{
+            secondary{
+                territories{
+                    "CA",
+                }
+            }
+        }
         ilo{
             primary{
                 scripts{
@@ -4031,6 +4216,13 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "JP",
+                }
+            }
+        }
+        jmc{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -4145,6 +4337,11 @@ supplementalData:table(nofallback){
             }
         }
         kde{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "TZ",
@@ -4159,6 +4356,11 @@ supplementalData:table(nofallback){
             }
         }
         kea{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "CV",
@@ -4224,6 +4426,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "IN",
+                }
+            }
+        }
+        khq{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -4297,6 +4506,11 @@ supplementalData:table(nofallback){
             }
         }
         kln{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "KE",
@@ -4322,6 +4536,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "AO",
+                }
+            }
+        }
+        kmr{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -4477,6 +4698,20 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ksb{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
+        ksf{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         ksh{
             primary{
                 scripts{
@@ -4487,17 +4722,16 @@ supplementalData:table(nofallback){
         ku{
             primary{
                 scripts{
+                    "Latn",
                     "Arab",
                     "Cyrl",
-                    "Latn",
                 }
             }
             secondary{
                 territories{
-                    "IQ",
-                    "IR",
-                    "SY",
                     "TR",
+                    "IQ",
+                    "SY",
                 }
             }
         }
@@ -4558,6 +4792,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        kyu{
+            primary{
+                scripts{
+                    "Kali",
+                }
+            }
+        }
         la{
             primary{
                 scripts{
@@ -4579,6 +4820,13 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Hebr",
+                }
+            }
+        }
+        lag{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -4694,6 +4942,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "ID",
+                }
+            }
+        }
+        lki{
+            primary{
+                scripts{
+                    "Arab",
                 }
             }
         }
@@ -4830,6 +5085,11 @@ supplementalData:table(nofallback){
             }
         }
         luy{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "KE",
@@ -4968,6 +5228,11 @@ supplementalData:table(nofallback){
             }
         }
         mer{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "KE",
@@ -5000,6 +5265,13 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "MG",
+                }
+            }
+        }
+        mgh{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5188,6 +5460,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        mua{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         mup{
             secondary{
                 territories{
@@ -5243,6 +5522,20 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        myx{
+            secondary{
+                territories{
+                    "UG",
+                }
+            }
+        }
+        myz{
+            secondary{
+                scripts{
+                    "Mand",
+                }
+            }
+        }
         na{
             primary{
                 scripts{
@@ -5262,6 +5555,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "IT",
+                }
+            }
+        }
+        naq{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5376,11 +5676,17 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "AN",
                     "AW",
                     "BE",
                     "NL",
                     "SR",
+                }
+            }
+        }
+        nmg{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5403,6 +5709,9 @@ supplementalData:table(nofallback){
         }
         nod{
             secondary{
+                scripts{
+                    "Lana",
+                }
                 territories{
                     "TH",
                 }
@@ -5446,6 +5755,13 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "ZA",
+                }
+            }
+        }
+        nus{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5588,6 +5904,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        otk{
+            secondary{
+                scripts{
+                    "Orkh",
+                }
+            }
+        }
         pa{
             primary{
                 scripts{
@@ -5616,6 +5939,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        pal{
+            secondary{
+                scripts{
+                    "Phli",
+                }
+            }
+        }
         pam{
             primary{
                 scripts{
@@ -5632,9 +5962,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "AN",
                 }
             }
             secondary{
@@ -5704,6 +6031,7 @@ supplementalData:table(nofallback){
         pra{
             secondary{
                 scripts{
+                    "Brah",
                     "Khar",
                 }
             }
@@ -5805,6 +6133,9 @@ supplementalData:table(nofallback){
         }
         rej{
             secondary{
+                scripts{
+                    "Rjng",
+                }
                 territories{
                     "ID",
                 }
@@ -5879,6 +6210,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        rof{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         rom{
             primary{
                 scripts{
@@ -5926,6 +6264,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        rwk{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         sa{
             secondary{
                 scripts{
@@ -5964,6 +6309,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        saq{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         sas{
             primary{
                 scripts{
@@ -5991,6 +6343,20 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "IN",
+                }
+            }
+        }
+        saz{
+            primary{
+                scripts{
+                    "Saur",
+                }
+            }
+        }
+        sbp{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -6046,6 +6412,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        sdh{
+            primary{
+                scripts{
+                    "Arab",
+                }
+            }
+            secondary{
+                territories{
+                    "IR",
+                }
+            }
+        }
         se{
             primary{
                 scripts{
@@ -6061,7 +6439,19 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        see{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         seh{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "MZ",
@@ -6072,6 +6462,13 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        ses{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -6093,8 +6490,23 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        sh{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         shi{
+            primary{
+                scripts{
+                    "Arab",
+                }
+            }
             secondary{
+                scripts{
+                    "Tfng",
+                }
                 territories{
                     "MA",
                 }
@@ -6332,6 +6744,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ssy{
+            primary{
+                scripts{
+                    "Ethi",
+                }
+            }
+        }
         st{
             primary{
                 scripts{
@@ -6426,6 +6845,13 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "YT",
+                }
+            }
+        }
+        swc{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -6538,6 +6964,11 @@ supplementalData:table(nofallback){
             }
         }
         teo{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "UG",
@@ -6646,6 +7077,19 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "TK",
+                }
+            }
+        }
+        tl{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "PH",
+                    "US",
                 }
             }
         }
@@ -6839,6 +7283,20 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        tw{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
+        twq{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         ty{
             primary{
                 scripts{
@@ -6867,8 +7325,6 @@ supplementalData:table(nofallback){
                     "Latn",
                     "Tfng",
                 }
-            }
-            secondary{
                 territories{
                     "MA",
                 }
@@ -7078,7 +7534,21 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        vun{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         wa{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
+        wae{
             primary{
                 scripts{
                     "Latn",
@@ -7166,6 +7636,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        xcr{
+            secondary{
+                scripts{
+                    "Cari",
+                }
+            }
+        }
         xh{
             primary{
                 scripts{
@@ -7173,6 +7650,20 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "ZA",
+                }
+            }
+        }
+        xlc{
+            secondary{
+                scripts{
+                    "Lyci",
+                }
+            }
+        }
+        xld{
+            secondary{
+                scripts{
+                    "Lydi",
                 }
             }
         }
@@ -7184,9 +7675,28 @@ supplementalData:table(nofallback){
             }
         }
         xog{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "UG",
+                }
+            }
+        }
+        xpr{
+            secondary{
+                scripts{
+                    "Prti",
+                }
+            }
+        }
+        xsa{
+            secondary{
+                scripts{
+                    "Sarb",
                 }
             }
         }
@@ -7222,6 +7732,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        yav{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         yi{
             primary{
                 scripts{
@@ -7243,6 +7760,13 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        yue{
+            primary{
+                scripts{
+                    "Hans",
                 }
             }
         }

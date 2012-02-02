@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cs.xml
@@ -160,7 +160,7 @@ cs{
             "bolivijský mvdol",
         }
         BRL{
-            "BR$",
+            "R$",
             "brazilský real",
         }
         BSD{
@@ -2323,5 +2323,5 @@ cs{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.64.72"}
 }

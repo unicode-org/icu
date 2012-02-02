@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ksb.xml
@@ -29,7 +29,6 @@ ksb{
         BA{"Bosnia na Hezegovina"}
         BB{"Babadosi"}
         BD{"Bangladeshi"}
-        BE{""}
         BF{"Bukinafaso"}
         BG{"Bulgalia"}
         BH{"Bahaleni"}
@@ -238,5 +237,5 @@ ksb{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.64.50"}
 }

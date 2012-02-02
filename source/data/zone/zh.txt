@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh.xml
  */
 zh{
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1223,6 +1223,7 @@ zh{
         }
         "meta:Acre"{
             ld{"阿克里夏令时间"}
+            lg{"阿克里时间"}
             ls{"阿克里标准时间"}
         }
         "meta:Afghanistan"{
@@ -1235,15 +1236,16 @@ zh{
             ls{"东部非洲标准时间"}
         }
         "meta:Africa_Southern"{
-            lg{"非洲南部时间"}
-            ls{"南部非洲标准时间"}
+            ls{"南部非洲准时间"}
         }
         "meta:Africa_Western"{
             ld{"西部非洲夏令时间"}
+            lg{"西部非洲时间"}
             ls{"西部非洲标准时间"}
         }
         "meta:Aktyubinsk"{
             ld{"阿尔卑斯夏令时间"}
+            lg{"阿尔卑斯时间"}
             ls{"阿尔卑斯标准时间"}
         }
         "meta:Alaska"{
@@ -1258,6 +1260,7 @@ zh{
         }
         "meta:Almaty"{
             ld{"阿拉木图夏令时间"}
+            lg{"阿拉木图时间"}
             ls{"阿拉木图标准时间"}
         }
         "meta:Amazon"{
@@ -1292,10 +1295,12 @@ zh{
         }
         "meta:Aqtau"{
             ld{"阿克图夏令时间"}
+            lg{"阿克图时间"}
             ls{"阿克图标准时间"}
         }
         "meta:Aqtobe"{
             ld{"阿克托别夏令时间"}
+            lg{"阿克托别时间"}
             ls{"阿克托别标准时间"}
         }
         "meta:Arabian"{
@@ -1315,10 +1320,12 @@ zh{
         }
         "meta:Armenia"{
             ld{"亚美尼亚夏令时间"}
+            lg{"亚美尼亚时间"}
             ls{"亚美尼亚标准时间"}
         }
         "meta:Ashkhabad"{
             ld{"阿什哈巴德夏令时间"}
+            lg{"阿什哈巴德时间"}
             ls{"阿什哈巴德标准时间"}
         }
         "meta:Atlantic"{
@@ -1348,18 +1355,22 @@ zh{
         }
         "meta:Azerbaijan"{
             ld{"阿塞拜疆夏令时间"}
+            lg{"阿塞拜疆时间"}
             ls{"阿塞拜疆标准时间"}
         }
         "meta:Azores"{
             ld{"亚述尔群岛夏令时间"}
-            ls{"亚述尔群岛时间"}
+            lg{"亚述尔群岛时间"}
+            ls{"亚述尔群岛标准时间"}
         }
         "meta:Baku"{
             ld{"巴库夏令时间"}
+            lg{"巴库时间"}
             ls{"巴库标准时间"}
         }
         "meta:Bangladesh"{
             ld{"孟加拉夏令时间"}
+            lg{"孟加拉时间"}
             ls{"孟加拉标准时间"}
         }
         "meta:Bering"{
@@ -1375,6 +1386,7 @@ zh{
         }
         "meta:Borneo"{
             ld{"婆罗洲夏令时间"}
+            lg{"婆罗洲时间"}
             ls{"婆罗洲标准时间"}
         }
         "meta:Brasilia"{
@@ -1387,21 +1399,23 @@ zh{
         }
         "meta:Cape_Verde"{
             ld{"佛得角夏令时间"}
-            ls{"佛得角时间"}
+            lg{"佛得角时间"}
+            ls{"佛得角标准时间"}
         }
         "meta:Chamorro"{
-            lg{"查莫罗时间"}
-            ls{"查莫罗标准时区"}
+            ls{"查莫罗时间"}
         }
         "meta:Changbai"{
             ls{"长白山时间"}
         }
         "meta:Chatham"{
             ld{"查坦夏令时间"}
+            lg{"查坦时间"}
             ls{"查坦标准时间"}
         }
         "meta:Chile"{
             ld{"智利夏令时间"}
+            lg{"智利时间"}
             ls{"智利标准时间"}
         }
         "meta:China"{
@@ -1422,10 +1436,12 @@ zh{
         }
         "meta:Colombia"{
             ld{"哥伦比亚夏令时间"}
+            lg{"哥伦比亚时间"}
             ls{"哥伦比亚时间"}
         }
         "meta:Cook"{
             ld{"库克群岛仲夏时间"}
+            lg{"库克群岛时间"}
             ls{"库克群岛时间"}
         }
         "meta:Cuba"{
@@ -1444,6 +1460,7 @@ zh{
         }
         "meta:Dushanbe"{
             ld{"杜尚别夏令时间"}
+            lg{"杜尚别时间"}
             ls{"杜尚别标准时间"}
         }
         "meta:Dutch_Guiana"{
@@ -1454,30 +1471,36 @@ zh{
         }
         "meta:Easter"{
             ld{"复活岛夏令时间"}
-            ls{"复活节岛时间"}
+            lg{"复活岛时间"}
+            ls{"复活岛标准时间"}
         }
         "meta:Ecuador"{
             ls{"厄瓜多尔标准时间"}
         }
         "meta:Europe_Central"{
             ld{"中欧夏令时间"}
+            lg{"中欧时间"}
             ls{"中欧标准时间"}
         }
         "meta:Europe_Eastern"{
             ld{"东欧夏令时间"}
+            lg{"东欧时间"}
             ls{"东欧标准时间"}
         }
         "meta:Europe_Western"{
             ld{"欧洲西部夏令时间"}
-            ls{"欧洲西部时间"}
+            lg{"欧洲西部时间"}
+            ls{"欧洲西部标准时间"}
         }
         "meta:Falkland"{
             ld{"福克兰群岛夏令时间"}
-            ls{"福克兰群岛时间"}
+            lg{"福克兰群岛时间"}
+            ls{"福克兰群岛标准时间"}
         }
         "meta:Fiji"{
             ld{"斐济夏令时间"}
-            ls{"斐济时间"}
+            lg{"斐济时间"}
+            ls{"斐济标准时间"}
         }
         "meta:French_Guiana"{
             ls{"法属圭亚那时间"}
@@ -1487,6 +1510,7 @@ zh{
         }
         "meta:Frunze"{
             ld{"伏龙芝夏令时间"}
+            lg{"伏龙芝时间"}
             ls{"伏龙芝标准时间"}
         }
         "meta:GMT"{
@@ -1501,6 +1525,7 @@ zh{
         }
         "meta:Georgia"{
             ld{"格鲁吉亚夏令时间"}
+            lg{"格鲁吉亚时间"}
             ls{"格鲁吉亚标准时间"}
         }
         "meta:Gilbert_Islands"{
@@ -1508,14 +1533,17 @@ zh{
         }
         "meta:Greenland_Central"{
             ld{"格林兰中部夏令时间"}
+            lg{"格林兰中部时间"}
             ls{"格林兰中部标准时间"}
         }
         "meta:Greenland_Eastern"{
             ld{"格林兰东部夏令时间"}
+            lg{"格林兰东部时间"}
             ls{"格林兰东部标准时间"}
         }
         "meta:Greenland_Western"{
             ld{"格林兰西部夏令时间"}
+            lg{"格林兰西部时间"}
             ls{"格林兰西部标准时间"}
         }
         "meta:Guam"{
@@ -1528,17 +1556,19 @@ zh{
             ls{"盖亚那时间"}
         }
         "meta:Hawaii_Aleutian"{
-            lg{"夏威夷阿留申时间"}
+            ld{"夏威夷—阿留申夏令时间"}
+            lg{"夏威夷—阿留申时间"}
             ls{"夏威夷—阿留申标准时间"}
         }
         "meta:Hong_Kong"{
             ld{"香港夏令时间"}
-            ls{"香港时间"}
+            lg{"香港时间"}
+            ls{"香港标准时间"}
         }
         "meta:Hovd"{
             ld{"科布多夏令时间"}
             lg{"科布多时间"}
-            ls{"科布多时间"}
+            ls{"科布多标准时间"}
         }
         "meta:India"{
             ls{"印度标准时间"}
@@ -1550,25 +1580,23 @@ zh{
             ls{"印度支那时间"}
         }
         "meta:Indonesia_Central"{
-            lg{"印度尼西亚中部时间"}
-            ls{"印度尼西亚中部标准时间"}
+            ls{"印度尼西亚中部时间"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"印度尼西亚东部时间"}
-            ls{"印度尼西亚东部标准时间"}
+            ls{"印度尼西亚东部时间"}
         }
         "meta:Indonesia_Western"{
-            lg{"印度尼西亚西部时间"}
-            ls{"印度尼西亚西部标准时间"}
+            ls{"印度尼西亚西部时间"}
         }
         "meta:Iran"{
             ld{"伊朗夏令时间"}
+            lg{"伊朗时间"}
             ls{"伊朗标准时间"}
         }
         "meta:Irkutsk"{
             ld{"伊尔库茨克夏令时间"}
             lg{"伊尔库茨克时间"}
-            ls{"伊尔库茨克时间"}
+            ls{"伊尔库茨克标准时间"}
         }
         "meta:Israel"{
             ld{"以色列夏令时间"}
@@ -1582,8 +1610,8 @@ zh{
         }
         "meta:Kamchatka"{
             ld{"彼得罗巴甫洛夫斯克-堪察加夏令时"}
-            lg{"堪察加时间"}
-            ls{"彼得罗巴甫洛夫斯克-堪察加时间"}
+            lg{"彼得罗巴甫洛夫斯克-堪察加时间"}
+            ls{"彼得罗巴甫洛夫斯克-堪察加标准时间"}
         }
         "meta:Karachi"{
             ls{"卡拉奇标准时间"}
@@ -1592,17 +1620,14 @@ zh{
             ls{"喀什标准时间"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"哈萨克斯坦东部夏令时"}
-            lg{"哈萨克斯坦东部时间"}
-            ls{"哈萨克斯坦东部标准时间"}
+            ls{"哈萨克斯坦东部时间"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"哈萨克斯坦西部夏令时"}
-            lg{"哈萨克斯坦西部时间"}
-            ls{"哈萨克斯坦西部标准时间"}
+            ls{"哈萨克斯坦西部时间"}
         }
         "meta:Kizilorda"{
             ld{"克孜勒奥尔达夏令时间"}
+            lg{"克孜勒奥尔达时间"}
             ls{"克孜勒奥尔达标准时间"}
         }
         "meta:Korea"{
@@ -1616,11 +1641,12 @@ zh{
         "meta:Krasnoyarsk"{
             ld{"克拉斯诺亚尔斯克夏令时间"}
             lg{"克拉斯诺亚尔斯克时间"}
-            ls{"克拉斯诺亚尔斯克时间"}
+            ls{"克拉斯诺亚尔斯克标准时间"}
         }
         "meta:Kuybyshev"{
             ld{"古比雪夫夏令时间"}
-            ls{"古比雪夫时间"}
+            lg{"古比雪夫时间"}
+            ls{"古比雪夫标准时间"}
         }
         "meta:Kwajalein"{
             ls{"夸贾林时间"}
@@ -1641,15 +1667,16 @@ zh{
         }
         "meta:Macau"{
             ld{"澳门夏令时间"}
+            lg{"澳门时间"}
             ls{"澳门标准时间"}
         }
         "meta:Macquarie"{
-            lg{"麦加利时间"}
+            ls{"麦加利时间"}
         }
         "meta:Magadan"{
             ld{"马加丹夏令时间"}
             lg{"马加丹时间"}
-            ls{"马加丹时间"}
+            ls{"马加丹标准时间"}
         }
         "meta:Malaya"{
             ls{"马来亚标准时间"}
@@ -1668,14 +1695,15 @@ zh{
         }
         "meta:Mauritius"{
             ld{"毛里求斯夏令时间"}
-            ls{"毛里求斯时间"}
+            lg{"毛里求斯时间"}
+            ls{"毛里求斯标准时间"}
         }
         "meta:Mawson"{
             ls{"莫森时间"}
         }
         "meta:Mongolia"{
             ld{"乌兰巴托夏令时间"}
-            lg{"蒙古时间"}
+            lg{"乌兰巴托时间"}
             ls{"乌兰巴托标准时间"}
         }
         "meta:Moscow"{
@@ -1694,7 +1722,8 @@ zh{
         }
         "meta:New_Caledonia"{
             ld{"新喀里多尼亚夏令时间"}
-            ls{"新喀里多尼亚时间"}
+            lg{"新喀里多尼亚时间"}
+            ls{"新喀里多尼亚标准时间"}
         }
         "meta:New_Zealand"{
             ld{"新西兰夏令时间"}
@@ -1714,8 +1743,8 @@ zh{
         }
         "meta:Noronha"{
             ld{"费尔南多-迪诺罗尼亚岛夏令时间"}
-            lg{"诺罗尼亚时间"}
-            ls{"费尔南多-迪诺罗尼亚岛时间"}
+            lg{"费尔南多-迪诺罗尼亚岛时间"}
+            ls{"费尔南多-迪诺罗尼亚岛标准时间"}
         }
         "meta:North_Mariana"{
             ls{"北马里亚纳群岛时间"}
@@ -1723,15 +1752,16 @@ zh{
         "meta:Novosibirsk"{
             ld{"新西伯利亚夏令时间"}
             lg{"新西伯利亚时间"}
-            ls{"新西伯利亚时间"}
+            ls{"新西伯利亚标准时间"}
         }
         "meta:Omsk"{
             ld{"鄂木斯克夏令时间"}
             lg{"鄂木斯克时间"}
-            ls{"鄂木斯克时间"}
+            ls{"鄂木斯克标准时间"}
         }
         "meta:Pakistan"{
             ld{"巴基斯坦夏令时间"}
+            lg{"巴基斯坦时间"}
             ls{"巴基斯坦标准时间"}
         }
         "meta:Palau"{
@@ -1742,15 +1772,18 @@ zh{
         }
         "meta:Paraguay"{
             ld{"巴拉圭夏令时间"}
-            ls{"巴拉圭时间"}
+            lg{"巴拉圭时间"}
+            ls{"巴拉圭标准时间"}
         }
         "meta:Peru"{
             ld{"秘鲁夏令时间"}
+            lg{"秘鲁时间"}
             ls{"秘鲁时间"}
         }
         "meta:Philippines"{
             ld{"菲律宾夏令时间"}
-            ls{"菲律宾时间"}
+            lg{"菲律宾时间"}
+            ls{"菲律宾标准时间"}
         }
         "meta:Phoenix_Islands"{
             ls{"凤凰岛时间"}
@@ -1768,6 +1801,7 @@ zh{
         }
         "meta:Qyzylorda"{
             ld{"克孜勒奥尔达夏令时间"}
+            lg{"克孜勒奥尔达时间"}
             ls{"克孜勒奥尔达标准时间"}
         }
         "meta:Reunion"{
@@ -1779,15 +1813,16 @@ zh{
         "meta:Sakhalin"{
             ld{"库页岛夏令时间"}
             lg{"库页岛时间"}
-            ls{"库页岛时间"}
+            ls{"库页岛标准时间"}
         }
         "meta:Samara"{
             ld{"萨马拉夏令时间"}
             lg{"萨马拉时间"}
-            ls{"萨马拉时间"}
+            ls{"萨马拉标准时间"}
         }
         "meta:Samarkand"{
             ld{"撒马尔罕夏令时间"}
+            lg{"撒马尔罕时间"}
             ls{"撒马尔罕标准时间"}
         }
         "meta:Samoa"{
@@ -1798,7 +1833,8 @@ zh{
         }
         "meta:Shevchenko"{
             ld{"舍甫琴科夏令时间"}
-            ls{"舍甫琴科时间"}
+            lg{"舍甫琴科时间"}
+            ls{"舍甫琴科标准时间"}
         }
         "meta:Singapore"{
             ls{"新加坡标准时间"}
@@ -1814,6 +1850,7 @@ zh{
         }
         "meta:Sverdlovsk"{
             ld{"斯维尔德洛夫斯克夏令时间"}
+            lg{"斯维尔德洛夫斯克时间"}
             ls{"斯维尔德洛夫斯克标准时间"}
         }
         "meta:Syowa"{
@@ -1832,10 +1869,12 @@ zh{
         }
         "meta:Tashkent"{
             ld{"塔什干夏令时间"}
+            lg{"塔什干时间"}
             ls{"塔什干标准时间"}
         }
         "meta:Tbilisi"{
             ld{"第比利斯夏令时间"}
+            lg{"第比利斯时间"}
             ls{"第比利斯标准时间"}
         }
         "meta:Tokelau"{
@@ -1843,17 +1882,20 @@ zh{
         }
         "meta:Tonga"{
             ld{"汤加夏令时间"}
-            ls{"汤加时间"}
+            lg{"汤加时间"}
+            ls{"汤加标准时间"}
         }
         "meta:Truk"{
             ls{"特鲁克时间"}
         }
         "meta:Turkey"{
             ld{"土耳其夏令时间"}
-            ls{"土耳其时间"}
+            lg{"土耳其时间"}
+            ls{"土耳其标准时间"}
         }
         "meta:Turkmenistan"{
             ld{"土库曼斯坦夏令时间"}
+            lg{"土库曼斯坦时间"}
             ls{"土库曼斯坦标准时间"}
         }
         "meta:Tuvalu"{
@@ -1861,6 +1903,7 @@ zh{
         }
         "meta:Uralsk"{
             ld{"乌拉尔斯克夏令时间"}
+            lg{"乌拉尔斯克时间"}
             ls{"乌拉尔斯克标准时间"}
         }
         "meta:Uruguay"{
@@ -1872,11 +1915,13 @@ zh{
         }
         "meta:Uzbekistan"{
             ld{"乌兹别克斯坦夏令时间"}
+            lg{"乌兹别克斯坦时间"}
             ls{"乌兹别克斯坦标准时间"}
         }
         "meta:Vanuatu"{
             ld{"瓦努阿图夏令时间"}
-            ls{"瓦努阿图时间"}
+            lg{"瓦努阿图时间"}
+            ls{"瓦努阿图标准时间"}
         }
         "meta:Venezuela"{
             ls{"委内瑞拉时间"}
@@ -1884,12 +1929,12 @@ zh{
         "meta:Vladivostok"{
             ld{"海参崴夏令时间"}
             lg{"海参崴时间"}
-            ls{"海参崴时间"}
+            ls{"海参崴标准时间"}
         }
         "meta:Volgograd"{
             ld{"伏尔加格勒夏令时间"}
             lg{"伏尔加格勒时间"}
-            ls{"伏尔加格勒时间"}
+            ls{"伏尔加格勒标准时间"}
         }
         "meta:Vostok"{
             ls{"沃斯托克时间"}
@@ -1903,7 +1948,7 @@ zh{
         "meta:Yakutsk"{
             ld{"雅库茨克夏令时间"}
             lg{"雅库茨克时间"}
-            ls{"雅库茨克时间"}
+            ls{"雅库茨克标准时间"}
         }
         "meta:Yekaterinburg"{
             ld{"叶卡捷琳堡夏令时间"}
@@ -1912,6 +1957,7 @@ zh{
         }
         "meta:Yerevan"{
             ld{"埃里温夏令时间"}
+            lg{"埃里温时间"}
             ls{"埃里温标准时间"}
         }
         "meta:Yukon"{

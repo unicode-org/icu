@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kea.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kea.xml
  */
 kea{
-    Version{"2.0.59.32"}
+    Version{"2.0.64.50"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"Sidadi Diskonxedu"}
@@ -22,12 +22,12 @@ kea{
             ls{"Ora di Afrika Oriental"}
         }
         "meta:Africa_Southern"{
-            lg{"Ora di Sul di Afrika"}
-            ls{"Ora Padrãu di Sul di Afrika"}
+            ls{"Ora di Sul di Afrika"}
         }
         "meta:Africa_Western"{
             ld{"Ora di Verão di Afrika Osidental"}
-            ls{"Ora di Afrika Osidental"}
+            lg{"Ora di Afrika Osidental"}
+            ls{"Ora Padrãu di Afrika Osidental"}
         }
         "meta:Atlantic"{
             ld{"Ora di Verãu di Atlantiku"}
@@ -56,15 +56,18 @@ kea{
         }
         "meta:Europe_Central"{
             ld{"Ora di Verãu di Europa Sentral"}
-            ls{"Ora di Europa Sentral"}
+            lg{"Ora di Europa Sentral"}
+            ls{"Ora Padrãu di Europa Sentral"}
         }
         "meta:Europe_Eastern"{
             ld{"Ora di Verãu di Europa Oriental"}
-            ls{"Ora di Europa Oriental"}
+            lg{"Ora di Europa Oriental"}
+            ls{"Ora Padrãu di Europa Oriental"}
         }
         "meta:Europe_Western"{
             ld{"Ora di Verãu di Europa Osidental"}
-            ls{"Ora di Europa Osidental"}
+            lg{"Ora di Europa Osidental"}
+            ls{"Ora Padrãu di Europa Osidental"}
         }
         fallbackRegionFormat{"Ora di {1} ({0})"}
         regionFormat{"Ora di {0}"}

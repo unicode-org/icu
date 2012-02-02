@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_419.xml
 // *
 // ***************************************************************************
 es_419{
-    Version{"2.0.61.44"}
+    Version{"2.0.63.70"}
     zoneStrings{
         "meta:America_Central"{
             sd{"CDT"}
@@ -28,40 +28,6 @@ es_419{
             sd{"PDT"}
             sg{"PT"}
             ss{"PST"}
-        }
-        "meta:Anadyr"{
-            ld{"Hora de Verano de Anadyr"}
-        }
-        "meta:Argentina_Western"{
-            ld{"Hora de verano en el oeste de Argentina"}
-            lg{"Hora del Oeste de Argentina"}
-        }
-        "meta:Indonesia_Central"{
-            lg{"Hora central de Indonesia"}
-        }
-        "meta:Indonesia_Eastern"{
-            lg{"Hora del Este de Indonesia"}
-        }
-        "meta:Indonesia_Western"{
-            lg{"Indonesia, hora del oeste"}
-        }
-        "meta:Kamchatka"{
-            ld{"Hora de verano de Petropávlovsk-Kamchatski"}
-            ls{"Hora de Petropávlovsk-Kamchatski"}
-        }
-        "meta:Kazakhstan_Eastern"{
-            ld{"Hora de verano en el este de Kazajistán"}
-            lg{"Hora del Este de Kazajistán"}
-        }
-        "meta:Kazakhstan_Western"{
-            ld{"Hora de Verano en el oeste de Kazajistán"}
-            lg{"Hora del Oeste de Kazajistán"}
-        }
-        "meta:Omsk"{
-            ld{"Hora de Verano de Omsk"}
-        }
-        "meta:Sakhalin"{
-            ld{"Hora de Verano de Sajalín"}
         }
     }
 }

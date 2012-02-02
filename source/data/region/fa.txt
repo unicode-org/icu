@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fa.xml
@@ -33,7 +33,6 @@ fa{
         054{"ملانزی"}
         057{"ناحیهٔ میکرونزی"}
         061{"پلی‌نزی"}
-        062{"جنوب آسیا و آسیای میانه"}
         142{"آسیا"}
         143{"آسیای مرکزی"}
         145{"غرب آسیا"}
@@ -41,7 +40,6 @@ fa{
         151{"شرق اروپا"}
         154{"شمال اروپا"}
         155{"غرب اروپا"}
-        172{"کشورهای مستقل مشترک‌المنافع"}
         419{"امریکای لاتین"}
         AC{"جزایر آسنسیون"}
         AD{"آندورا"}
@@ -300,5 +298,5 @@ fa{
         ZW{"زیمبابوه"}
         ZZ{"ناحیهٔ نامشخص"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bn.xml
@@ -683,7 +683,6 @@ bn{
         collation{
             big5han{"প্রথাগত চীনা সজ্জাক্রম - বিগ৫"}
             dictionary{"অভিধান বাছাই বিন্যাস"}
-            direct{"প্রত্যক্ষ সজ্জাক্রম"}
             ducet{"ডিফল্ট ইউনিকোড বাছাই বিন্যাস"}
             gb2312han{"সাধারণ চীনা সজ্জাক্রম - জিবি২৩১২"}
             phonebook{"ফোনবুক সজ্জাক্রম"}
@@ -732,7 +731,7 @@ bn{
             tibt{"তিব্বতি সংখ্যা"}
         }
     }
-    Version{"2.0.62.77"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"ভাষা: {0}"}
         script{"লিপি: {0}"}

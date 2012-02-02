@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/am.xml
@@ -88,7 +88,7 @@ am{
             "የቦሊቪያ ቦሊቪያኖ",
         }
         BRL{
-            "BR$",
+            "R$",
             "የብራዚል ሪል",
         }
         BSD{
@@ -648,5 +648,5 @@ am{
             "የዚምቧቡዌ ዶላር",
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.50"}
 }

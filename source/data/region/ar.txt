@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ar.xml
@@ -33,7 +33,6 @@ ar{
         054{"ميلانيزيا"}
         057{"الجزر الميكرونيزية"}
         061{"بولينيزيا"}
-        062{"جنوب وسط آسيا"}
         142{"آسيا"}
         143{"وسط آسيا"}
         145{"غرب آسيا"}
@@ -41,7 +40,6 @@ ar{
         151{"شرق أوروبا"}
         154{"شمال أوروبا"}
         155{"غرب أوروبا"}
-        172{"كومنولث الدول المستقلة"}
         419{"أمريكا اللاتينية"}
         AC{"جزيرة أسينشيون"}
         AD{"أندورا"}
@@ -300,5 +298,5 @@ ar{
         ZW{"زيمبابوي"}
         ZZ{"منطقة غير معروفة"}
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hans_MO.xml
@@ -78,7 +78,7 @@ zh_Hans_MO{
         SAAHO{"萨霍文"}
         WADEGILE{"韦氏拼音罗马字"}
     }
-    Version{"2.0.58.84"}
+    Version{"2.0.64.65"}
     codePatterns{
         script{"语系：{0}"}
         territory{"地区：{0}"}

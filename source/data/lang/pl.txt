@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -679,7 +679,6 @@ pl{
         collation{
             big5han{"chiński tradycyjny porządek sortowania - Big5"}
             dictionary{"sortowanie słownikowe"}
-            direct{"bezpośredni porządek sortowania"}
             ducet{"Domyślna kolejność sortowania Unicode"}
             gb2312han{"chiński uproszczony porządek sortowania - GB2312"}
             phonebook{"porządek sortowania książki telefonicznej"}
@@ -761,7 +760,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

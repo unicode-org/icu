@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ur.xml
@@ -247,7 +247,6 @@ ur{
         collation{
             big5han{"روایتی چینی کی چھٹنی کی ترتیب - Big5"}
             dictionary{"لغت کی چھٹنی کی ترتیب"}
-            direct{"راست چھٹنی کی ترتیب"}
             ducet{"ڈیفالٹ یونیکوڈ کی چھٹنی کی ترتیب"}
             gb2312han{"آسان چینی کی چھٹنی کی ترتیب - GB2312"}
             phonebook{"فون بک کی چھٹنی کی ترتیب"}
@@ -296,7 +295,7 @@ ur{
             tibt{"تبتی اعداد"}
         }
     }
-    Version{"2.0.62.70"}
+    Version{"2.0.64.44"}
     localeDisplayPattern{
         separator{"،"}
     }

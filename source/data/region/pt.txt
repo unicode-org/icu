@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt.xml
@@ -33,7 +33,6 @@ pt{
         054{"Melanésia"}
         057{"Região da Micronésia"}
         061{"Polinésia"}
-        062{"Ásia Centro-Meridional"}
         142{"Ásia"}
         143{"Ásia Central"}
         145{"Ásia Ocidental"}
@@ -41,7 +40,6 @@ pt{
         151{"Europa Oriental"}
         154{"Europa Setentrional"}
         155{"Europa Ocidental"}
-        172{"Comunidade dos Estados Independentes"}
         419{"América Latina"}
         AC{"Ilha de Ascensão"}
         AD{"Andorra"}
@@ -300,5 +298,5 @@ pt{
         ZW{"Zimbábue"}
         ZZ{"Região desconhecida ou inválida"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
 }

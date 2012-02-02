@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
@@ -18,7 +18,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -67,15 +67,20 @@ pt_PT{
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
                 MMMEd{"E, d/MM"}
+                MMMMEd{"E, d 'de' MMMM"}
+                MMMMd{"d 'de' MMMM"}
                 MMMd{"d/MM"}
                 ms{"mm:ss"}
                 yMMM{"MM/y"}
-                yMMMEd{"EEE, d/MM/y"}
+                yMMMEd{"E, d/MM/y"}
+                yMMMM{"MMMM 'de' y"}
+                yMMMMEd{"E, d 'de' MMMM 'de' y"}
+                yMMMMd{"d 'de' MMMM 'de' y"}
                 yMMMd{"d/MM/y"}
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
                 yyMMM{"MM/yy"}
-                yyMMMEEEd{"EEE, d/MM/yy"}
+                yyMMMEd{"E, d/MM/yy"}
                 yyMMMd{"d/MM/yy"}
                 yyQ{"QQQ 'de' yy"}
             }
@@ -255,6 +260,12 @@ pt_PT{
                 yyQ{"QQQ 'de' yy G"}
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
     }
     measurementSystemNames{
         US{"Estados Unidos"}

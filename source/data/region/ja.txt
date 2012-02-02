@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ja.xml
@@ -33,7 +33,6 @@ ja{
         054{"メラネシア"}
         057{"ミクロネシア"}
         061{"ポリネシア"}
-        062{"南中央アジア"}
         142{"アジア"}
         143{"中央アジア"}
         145{"西アジア"}
@@ -41,9 +40,7 @@ ja{
         151{"東ヨーロッパ"}
         154{"北ヨーロッパ"}
         155{"西ヨーロッパ"}
-        172{"独立国家共同体"}
         419{"ラテンアメリカ"}
-        830{"チャネル諸島"}
         AC{"アセンション島"}
         AD{"アンドラ"}
         AE{"アラブ首長国連邦"}
@@ -301,5 +298,5 @@ ja{
         ZW{"ジンバブエ"}
         ZZ{"不明な地域"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
 }

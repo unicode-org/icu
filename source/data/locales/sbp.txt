@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sbp.xml
@@ -29,7 +29,7 @@ sbp{
             }
         }
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -52,7 +52,7 @@ sbp{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -67,9 +67,9 @@ sbp{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE, M/d/y"}
+                yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, MMM d, y"}
+                yMMMEd{"E, MMM d, y"}
                 yMMMd{"MMM d y"}
                 yMd{"M/d/y"}
                 yQ{"Q y"}
@@ -163,13 +163,13 @@ sbp{
                     abbreviated{
                         "Mup",
                         "Mwi",
-                        "Mus",
+                        "Msh",
                         "Mun",
-                        "Mus",
+                        "Mag",
                         "Muj",
-                        "Mus",
-                        "Mup",
-                        "Mun",
+                        "Msp",
+                        "Mpg",
+                        "Mye",
                         "Mok",
                         "Mus",
                         "Muh",
@@ -209,9 +209,9 @@ sbp{
         }
     }
     delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"'"}
-        quotationStart{"'"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
 }

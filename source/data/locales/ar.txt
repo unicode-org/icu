@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ar.xml
@@ -37,10 +37,6 @@ ar{
         }
         default{"arab"}
         latn{
-            patterns{
-                currencyFormat{"¤ #,##0.00;¤ #,##0.00-"}
-                decimalFormat{"#,##0.###;#,##0.###-"}
-            }
             symbols{
                 decimal{","}
                 exponential{"E"}
@@ -55,7 +51,7 @@ ar{
             }
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -88,9 +84,9 @@ ar{
                 ms{"mm:ss"}
                 y{"y G"}
                 yM{"M‏/y G"}
-                yMEd{"EEE، d/‏M/‏y G"}
+                yMEd{"E، d/‏M/‏y G"}
                 yMMM{"MMM y G"}
-                yMMMEd{"EEE، d MMM، y G"}
+                yMMMEd{"E، d MMM، y G"}
                 yMMMM{"MMMM y G"}
                 yMMMd{"d MMM، y G"}
                 yMd{"d/‏M/‏y G"}
@@ -184,9 +180,9 @@ ar{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M‏/yyyy"}
-                yMEd{"EEE، d/‏M/‏yyyy"}
+                yMEd{"E، d/‏M/‏yyyy"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE، d MMM، y"}
+                yMMMEd{"E، d MMM، y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM، y"}
                 yMd{"d‏/M‏/yyyy"}
@@ -490,14 +486,14 @@ ar{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E، d-M"}
                 MMM{"LLL"}
-                MMMEd{"E d MMM"}
+                MMMEd{"E، d MMM"}
                 MMMMEd{"E، d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
@@ -509,9 +505,9 @@ ar{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M‏/yyyy"}
-                yMEd{"EEE، d/‏M/‏yyyy"}
+                yMEd{"E، d/‏M/‏yyyy"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE، d MMM y"}
+                yMMMEd{"E، d MMM y"}
                 yMMMM{"MMMM y"}
                 yQQQ{"y QQQ"}
             }
@@ -632,7 +628,7 @@ ar{
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 M{"L"}
-                MEd{"EEE، d‏/M"}
+                MEd{"E، d‏/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
@@ -645,10 +641,10 @@ ar{
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M‏/y G"}
-                yyyyMEd{"EEE، d‏/M‏/y G"}
+                yyyyMEd{"E، d‏/M‏/y G"}
                 yyyyMM{"MM‏/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE، d MMM، y G"}
+                yyyyMMMEd{"E، d MMM، y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMd{"d‏/M‏/y G"}
             }
@@ -939,7 +935,7 @@ ar{
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 M{"L"}
-                MEd{"EEE، d‏/M"}
+                MEd{"E، d‏/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
@@ -952,10 +948,10 @@ ar{
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M‏/y G"}
-                yyyyMEd{"EEE، d‏/M‏/y G"}
+                yyyyMEd{"E، d‏/M‏/y G"}
                 yyyyMM{"MM‏/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE، d MMM، y G"}
+                yyyyMMMEd{"E، d MMM، y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM، y G"}
                 yyyyMd{"d‏/M‏/y G"}
@@ -969,10 +965,10 @@ ar{
         }
     }
     delimiters{
-        alternateQuotationEnd{"’"}
-        alternateQuotationStart{"‘"}
-        quotationEnd{"”"}
-        quotationStart{"“"}
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"’"}
+        quotationEnd{"“"}
+        quotationStart{"”"}
     }
     layout{
         characters{"right-to-left"}

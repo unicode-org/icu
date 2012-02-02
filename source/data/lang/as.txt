@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/as.xml
@@ -35,7 +35,6 @@ as{
         }
         collation{
             big5han{"পৰম্পৰাগত চীনা শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম - Big5"}
-            direct{"পোনপটীয়াকৈ শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
             gb2312han{"সৰল চীনা শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম - GB2312"}
             phonebook{"টেলিফোন বহিৰ মতেশৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
             pinyin{"পিন্‌য়িন শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
@@ -43,5 +42,5 @@ as{
             traditional{"পৰম্পৰাগতভাবে শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.44"}
 }

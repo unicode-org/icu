@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/vi.xml
@@ -249,7 +249,6 @@ vi{
         collation{
             big5han{"Thứ tự sắp xếp theo tiếng Trung phồn thể - Big5"}
             dictionary{"Thứ tự sắp xếp theo từ điển"}
-            direct{"Thứ tự sắp xếp trực tiếp"}
             ducet{"Thứ tự sắp xếp unicode mặc định"}
             gb2312han{"Thứ tự sắp xếp theo tiếng Trung giản thể - GB2312"}
             phonebook{"Thứ tự sắp xếp theo danh bạ điện thoại"}
@@ -298,7 +297,7 @@ vi{
             tibt{"Chữ số Tây Tạng"}
         }
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

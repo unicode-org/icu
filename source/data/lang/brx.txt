@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/brx.xml
@@ -650,7 +650,6 @@ brx{
         }
         collation{
             big5han{"पारम्पारिक चीनी वर्गीकरण बीग फ़ाईव"}
-            direct{"प्रत्यक्ष वर्गीकरण"}
             gb2312han{"सरलीकृत चीनी वर्गीकरण जीबी2312"}
             phonebook{"दूरभाष निर्देशिका वर्गीकरण"}
             pinyin{"पिनयीन वर्गीकरण"}
@@ -669,11 +668,7 @@ brx{
         BOONT{"बुन्तलींग"}
         FONIPA{"आईपीए फ़ोनेटीक्स"}
         FONUPA{"युपीए फ़ोनेटीक्स"}
-        GAULISH{"गौलीश"}
-        GUOYU{"मांडारीन या मानक चीनी भाषा"}
-        HAKKA{"हाका"}
         LIPAW{"रेज़ीयन की लीपोवाज़ डायलेक्ट"}
-        LOJBAN{"लौजबान"}
         MONOTON{"एकस्वरीय"}
         NEDIS{"नाटीसोन डायलेक्ट"}
         NJIVA{"ग्नीवा या न्जीवा डायलेक्ट"}
@@ -687,9 +682,8 @@ brx{
         SCOUSE{"स्काउज़"}
         SOLBA{"श्टोलविज़्ज़ा या सोलबीका डायलेक्ट"}
         TARASK{"तारास्कीएवीचा वर्तनी"}
-        XIANG{"ज़ीयाँग हुनानी"}
     }
-    Version{"2.0.62.77"}
+    Version{"2.0.64.72"}
     codePatterns{
         script{"देवनागरी: {0}"}
         territory{"क्षेत्र:भारत {0}"}

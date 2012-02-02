@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv.xml
@@ -705,7 +705,6 @@ sv{
         collation{
             big5han{"big5-sorteringsordning"}
             dictionary{"ordbokssorteringsordning"}
-            direct{"direkt sorteringsordning"}
             ducet{"grundläggande Unicode-sorteringsordning"}
             gb2312han{"gb2312-sorteringsordning"}
             phonebook{"telefonkatalogssorteringsordning"}
@@ -811,7 +810,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

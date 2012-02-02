@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nus.xml
@@ -32,7 +32,7 @@ nus{
             }
         }
     }
-    Version{"2.0.58.44"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -55,7 +55,7 @@ nus{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -70,9 +70,9 @@ nus{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE، d/M/y"}
+                yMEd{"E، d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE، d MMM y"}
+                yMMMEd{"E، d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQ{"Q y"}
@@ -130,9 +130,6 @@ nus{
                         "1"{"Ruun"}
                     }
                 }
-                dayperiod{
-                    dn{""}
-                }
                 era{
                     dn{"Gua̱a̱th Ruëc"}
                 }
@@ -157,9 +154,6 @@ nus{
                 year{
                     dn{"Ruɔ̱n"}
                 }
-                zone{
-                    dn{""}
-                }
             }
             monthNames{
                 format{
@@ -167,7 +161,7 @@ nus{
                         "Tiop",
                         "Pɛt",
                         "Duɔ̱ɔ̱",
-                        "Dua",
+                        "Guak",
                         "Duä",
                         "Kor",
                         "Pay",
@@ -175,7 +169,7 @@ nus{
                         "Tɛɛ",
                         "Laa",
                         "Kur",
-                        "Tiop",
+                        "Tid",
                     }
                     wide{
                         "Tiop thar pɛt",

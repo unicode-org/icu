@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/he.xml
@@ -43,7 +43,7 @@ he{
             }
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -66,7 +66,6 @@ he{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE ה-d"}
                 Ed{"E ה-d"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -87,9 +86,9 @@ he{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M.yyyy"}
-                yMEd{"EEE, d.M.yyyy"}
+                yMEd{"E, d.M.yyyy"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d בMMM y"}
+                yMMMEd{"E, d בMMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d בMMM y"}
                 yMd{"d.M.yyyy"}
@@ -392,11 +391,11 @@ he{
                     "hebr",
                 }
                 {
-                    "dd/MM/yyyy",
+                    "dd MM yyyy",
                     "hebr",
                 }
                 {
-                    "dd/MM/yy",
+                    "dd MM yy",
                     "hebr",
                 }
                 "{1} {0}",
@@ -406,6 +405,7 @@ he{
                 "{1} {0}",
             }
             availableFormats{
+                MMMEd{"E, d בMMM"}
                 MMMMEd{"E, d בMMMM"}
             }
             eras{
@@ -491,7 +491,7 @@ he{
                 Md{"d/M"}
                 h{"h a"}
                 yM{"M/yyyy"}
-                yMEd{"EEE, d.M.yyyy"}
+                yMEd{"E, d.M.yyyy"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
             }
@@ -763,10 +763,10 @@ he{
         }
     }
     delimiters{
-        alternateQuotationEnd{"\""}
-        alternateQuotationStart{"\""}
-        quotationEnd{"”"}
-        quotationStart{"“"}
+        alternateQuotationEnd{"'"}
+        alternateQuotationStart{"'"}
+        quotationEnd{"\""}
+        quotationStart{"\""}
     }
     layout{
         characters{"right-to-left"}

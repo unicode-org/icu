@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ne.xml
@@ -170,7 +170,6 @@ ne{
         }
         collation{
             big5han{"परम्परागत चिनिँया क्रमबद्धता पद्दति - बिग फाइभ"}
-            direct{"प्रत्यक्ष क्रमबद्धता पद्दति"}
             gb2312han{"सरलिकृत चिनियाँ क्रमबद्धता पद्दति-गीबीटुथ्रीवानटु"}
             phonebook{"टेलिफोन पुस्तिका क्रमबद्धतापद्दति"}
             pinyin{"पिनयिन क्रमबद्धता पद्दति"}
@@ -182,5 +181,5 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
 }

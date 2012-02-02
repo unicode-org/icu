@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/tr.xml
@@ -33,7 +33,6 @@ tr{
         054{"Melanezya"}
         057{"Mikronezya"}
         061{"Polinezya"}
-        062{"Güney Orta Asya"}
         142{"Asya"}
         143{"Orta Asya"}
         145{"Batı Asya"}
@@ -41,9 +40,7 @@ tr{
         151{"Doğu Avrupa"}
         154{"Kuzey Avrupa"}
         155{"Batı Avrupa"}
-        172{"Bağımsız Devletler Topluluğu"}
         419{"Latin Amerika"}
-        830{"Kanal Adaları"}
         AC{"Ascension Adası"}
         AD{"Andorra"}
         AE{"Birleşik Arap Emirlikleri"}
@@ -301,5 +298,5 @@ tr{
         ZW{"Zimbabve"}
         ZZ{"Bilinmeyen Bölge"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.64.72"}
 }

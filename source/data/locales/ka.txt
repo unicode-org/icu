@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ka.xml
@@ -45,15 +45,15 @@ ka{
             }
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     calendar{
         gregorian{
             availableFormats{
                 MMMd{"d MMM"}
                 Md{"d.M."}
                 yM{"M.y"}
-                yMEd{"EEE, d.M.y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMEd{"E, d.M.y"}
+                yMMMEd{"E, d MMM y"}
             }
             dayNames{
                 format{
@@ -280,10 +280,10 @@ ka{
         }
     }
     delimiters{
-        alternateQuotationEnd{"’"}
-        alternateQuotationStart{"‘"}
-        quotationEnd{"”"}
-        quotationStart{"“"}
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"‚"}
+        quotationEnd{"“"}
+        quotationStart{"„"}
     }
     listPattern{
         standard{

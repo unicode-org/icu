@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.62.55"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1223,6 +1223,7 @@ ko{
         }
         "meta:Acre"{
             ld{"아크레 하계 표준시"}
+            lg{"아크레 시간"}
             ls{"아크레 표준시"}
         }
         "meta:Africa_Central"{
@@ -1232,16 +1233,16 @@ ko{
             ls{"동아프리카 시간"}
         }
         "meta:Africa_Southern"{
-            lg{"남아프리카 시간"}
-            ls{"남아프리카 표준시"}
+            ls{"남아프리카 시간"}
         }
         "meta:Africa_Western"{
             ld{"서아프리카 하계 표준시"}
-            ls{"서아프리카 시간"}
+            lg{"서아프리카 시간"}
+            ls{"서아프리카 표준시"}
         }
         "meta:Alaska"{
             ld{"알래스카 하계 표준시"}
-            lg{"알래스카 표준시"}
+            lg{"알래스카 시간"}
             ls{"알래스카 표준시"}
         }
         "meta:Alaska_Hawaii"{
@@ -1256,27 +1257,27 @@ ko{
         }
         "meta:America_Central"{
             ld{"미 중부 하계 표준시"}
-            lg{"중부 표준시"}
-            ls{"중부 표준시"}
+            lg{"미 중부 시간"}
+            ls{"미 중부 표준시"}
         }
         "meta:America_Eastern"{
             ld{"미 동부 하계 표준시"}
-            lg{"동부 표준시"}
-            ls{"동부 표준시"}
+            lg{"미 동부 시간"}
+            ls{"미 동부 표준시"}
         }
         "meta:America_Mountain"{
             ld{"미 산지 하계 표준시"}
-            lg{"산지 표준시"}
-            ls{"산악 표준시"}
+            lg{"미 산지 시간"}
+            ls{"미 산악 표준시"}
         }
         "meta:America_Pacific"{
             ld{"미 태평양 하계 표준시"}
-            lg{"태평양 표준시"}
-            ls{"태평양 표준시"}
+            lg{"미 태평양 시간"}
+            ls{"미 태평양 표준시"}
         }
         "meta:Anadyr"{
             ld{"아나디리 서머 타임"}
-            lg{"아나디리 표준시"}
+            lg{"아나디리 시간"}
             ls{"아나디리 표준시"}
         }
         "meta:Arabian"{
@@ -1296,11 +1297,12 @@ ko{
         }
         "meta:Armenia"{
             ld{"아르메니아 하계 표준시"}
+            lg{"아르메니아 시간"}
             ls{"아르메니아 표준시"}
         }
         "meta:Atlantic"{
             ld{"미 대서양 하계 표준시"}
-            lg{"대서양 표준시"}
+            lg{"대서양 시간"}
             ls{"대서양 표준시"}
         }
         "meta:Australia_Central"{
@@ -1325,14 +1327,17 @@ ko{
         }
         "meta:Azerbaijan"{
             ld{"아제르바이잔 하계 표준시"}
+            lg{"아제르바이잔 시간"}
             ls{"아제르바이잔 표준시"}
         }
         "meta:Azores"{
             ld{"아조레스 하계 표준시"}
+            lg{"아조레스 시간"}
             ls{"아조레스 표준시"}
         }
         "meta:Bangladesh"{
             ld{"방글라데시 하계 표준시"}
+            lg{"방글라데시 시간"}
             ls{"방글라데시 표준시"}
         }
         "meta:Bhutan"{
@@ -1351,18 +1356,20 @@ ko{
         }
         "meta:Cape_Verde"{
             ld{"카보 베르데 하계 표준시"}
+            lg{"카보 베르데 시간"}
             ls{"카보 베르데 표준시"}
         }
         "meta:Chamorro"{
-            lg{"차모로 시간"}
-            ls{"차모로 표준시"}
+            ls{"차모로 시간"}
         }
         "meta:Chatham"{
             ld{"채텀 하계 표준시"}
+            lg{"채텀 시간"}
             ls{"채텀 표준시"}
         }
         "meta:Chile"{
             ld{"칠레 하계 표준시"}
+            lg{"칠레 시간"}
             ls{"칠레 표준시"}
         }
         "meta:China"{
@@ -1383,10 +1390,12 @@ ko{
         }
         "meta:Colombia"{
             ld{"콜롬비아 하계 표준시"}
+            lg{"콜롬비아 시간"}
             ls{"콜롬비아 표준시"}
         }
         "meta:Cook"{
             ld{"쿡제도 하계 표준시"}
+            lg{"쿡제도 시간"}
             ls{"쿡제도 표준시"}
         }
         "meta:Cuba"{
@@ -1405,6 +1414,7 @@ ko{
         }
         "meta:Easter"{
             ld{"이스터섬 하계 표준시"}
+            lg{"이스터섬 시간"}
             ls{"이스터섬 표준시"}
         }
         "meta:Ecuador"{
@@ -1412,22 +1422,27 @@ ko{
         }
         "meta:Europe_Central"{
             ld{"중부유럽 하계 표준시"}
+            lg{"중부유럽 시간"}
             ls{"중부유럽 표준시"}
         }
         "meta:Europe_Eastern"{
             ld{"동부유럽 하계 표준시"}
+            lg{"동부유럽 시간"}
             ls{"동부유럽 표준시"}
         }
         "meta:Europe_Western"{
             ld{"서부 유럽 하계 표준시"}
-            ls{"서부 유럽 시간"}
+            lg{"서부 유럽 시간"}
+            ls{"서부 유럽 표준시"}
         }
         "meta:Falkland"{
             ld{"포클랜드 하계 표준시"}
+            lg{"포클랜드 시간"}
             ls{"포클랜드 표준시"}
         }
         "meta:Fiji"{
             ld{"피지 하계 표준시"}
+            lg{"피지 시간"}
             ls{"피지 표준시"}
         }
         "meta:French_Guiana"{
@@ -1444,26 +1459,33 @@ ko{
         }
         "meta:Georgia"{
             ld{"그루지아 하계 표준시"}
+            lg{"그루지아 시간"}
             ls{"그루지아 표준시"}
         }
         "meta:Greenland_Central"{
             ld{"그린란드 중부 하계 표준시"}
+            lg{"그린란드 중부 시간"}
             ls{"그린란드 중부 표준시"}
         }
         "meta:Greenland_Eastern"{
             ld{"그린란드 동부 하계 표준시"}
+            lg{"그린란드 동부 시간"}
             ls{"그린란드 동부 표준시"}
         }
         "meta:Greenland_Western"{
             ld{"그린란드 서부 하계 표준시"}
+            lg{"그린란드 서부 시간"}
             ls{"그린란드 서부 표준시"}
         }
         "meta:Hawaii_Aleutian"{
-            lg{"하와이 알류샨 표준시"}
+            ld{"하와이 알류샨 하계 표준시"}
+            lg{"하와이 알류샨 시간"}
+            ls{"하와이 알류샨 표준시"}
         }
         "meta:Hong_Kong"{
             ld{"홍콩 하계 표준시"}
-            ls{"홍콩 시간"}
+            lg{"홍콩 시간"}
+            ls{"홍콩 표준시"}
         }
         "meta:Hovd"{
             ld{"호브드 하계 표준시"}
@@ -1480,19 +1502,17 @@ ko{
             ls{"인도차이나 시간"}
         }
         "meta:Indonesia_Central"{
-            lg{"인도네시아 중부 시간"}
-            ls{"인도네시아 중부 표준시"}
+            ls{"인도네시아 중부 시간"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"인도네시아 동부 시간"}
-            ls{"동인도네시아 시간"}
+            ls{"인도네시아 동부 시간"}
         }
         "meta:Indonesia_Western"{
-            lg{"인도네시아 서부 시간"}
-            ls{"서인도네시아 시간"}
+            ls{"인도네시아 서부 시간"}
         }
         "meta:Iran"{
             ld{"이란 하계 표준시"}
+            lg{"이란 시간"}
             ls{"이란 표준시"}
         }
         "meta:Irkutsk"{
@@ -1512,16 +1532,14 @@ ko{
         }
         "meta:Kamchatka"{
             ld{"페트로파블롭스크-캄차츠키 서머 타임"}
-            lg{"캄차카 표준시"}
+            lg{"페트로파블롭스크-캄차츠키 시간"}
             ls{"페트로파블롭스크-캄차츠키 표준시"}
         }
         "meta:Kazakhstan_Eastern"{
-            lg{"동부 카자흐스탄 표준시"}
-            ls{"동부 카자흐스탄 표준시"}
+            ls{"동부 카자흐스탄 시간"}
         }
         "meta:Kazakhstan_Western"{
-            lg{"서부 카자흐스탄 표준시"}
-            ls{"서부 카자흐스탄 표준시"}
+            ls{"서부 카자흐스탄 시간"}
         }
         "meta:Korea"{
             ld{"한국 하계 표준시"}
@@ -1542,7 +1560,7 @@ ko{
             ls{"로드 하우 표준시"}
         }
         "meta:Macquarie"{
-            lg{"맥쿼리 표준시"}
+            ls{"맥쿼리 표준시"}
         }
         "meta:Magadan"{
             ld{"마가단 하계 표준시"}
@@ -1557,6 +1575,7 @@ ko{
         }
         "meta:Mauritius"{
             ld{"모리셔스 하계 표준시"}
+            lg{"모리셔스 시간"}
             ls{"모리셔스 표준시"}
         }
         "meta:Mawson"{
@@ -1564,7 +1583,7 @@ ko{
         }
         "meta:Mongolia"{
             ld{"울란바토르 하계 표준시"}
-            lg{"몽골 표준시"}
+            lg{"울란바토르 시간"}
             ls{"울란바토르 표준시"}
         }
         "meta:Moscow"{
@@ -1585,7 +1604,7 @@ ko{
         }
         "meta:Newfoundland"{
             ld{"뉴펀들랜드 하계 표준시"}
-            lg{"뉴펀들랜드 표준시"}
+            lg{"뉴펀들랜드 시간"}
             ls{"뉴펀들랜드 표준시"}
         }
         "meta:Noronha"{
@@ -1605,18 +1624,22 @@ ko{
         }
         "meta:Pakistan"{
             ld{"파키스탄 하계 표준시"}
+            lg{"파키스탄 시간"}
             ls{"파키스탄 표준시"}
         }
         "meta:Paraguay"{
             ld{"파라과이 하계 표준시"}
+            lg{"파라과이 시간"}
             ls{"파라과이 표준시"}
         }
         "meta:Peru"{
             ld{"페루 하계 표준시"}
+            lg{"페루 시간"}
             ls{"페루 표준시"}
         }
         "meta:Philippines"{
             ld{"필리핀 하계 표준시"}
+            lg{"필리핀 시간"}
             ls{"필리핀 표준시"}
         }
         "meta:Pierre_Miquelon"{
@@ -1637,7 +1660,7 @@ ko{
         }
         "meta:Samara"{
             ld{"사마라 서머 타임"}
-            lg{"사마라 표준시"}
+            lg{"사마라 시간"}
             ls{"사마라 표준시"}
         }
         "meta:Seychelles"{
@@ -1665,14 +1688,17 @@ ko{
         }
         "meta:Turkmenistan"{
             ld{"투르크메니스탄 하계 표준시"}
+            lg{"투르크메니스탄 시간"}
             ls{"투르크메니스탄 표준시"}
         }
         "meta:Uruguay"{
             ld{"우루과이 하계 표준시"}
+            lg{"우루과이 시간"}
             ls{"우루과이 표준시"}
         }
         "meta:Uzbekistan"{
             ld{"우즈베키스탄 하계 표준시"}
+            lg{"우즈베키스탄 시간"}
             ls{"우즈베키스탄 표준시"}
         }
         "meta:Venezuela"{

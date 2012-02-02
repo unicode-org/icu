@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/da.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    Version{"2.0.61.44"}
+    Version{"2.0.65.32"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Ababa"}
@@ -131,28 +131,30 @@ da{
         }
         "meta:Acre"{
             ld{"Acre-sommertid"}
-            ls{"Acre-tid"}
+            lg{"Acre-tid"}
+            ls{"Acre-normaltid"}
         }
         "meta:Afghanistan"{
             ls{"Afghansk tid"}
         }
         "meta:Africa_Central"{
-            ls{"Centralafrikansk normaltid"}
+            ls{"Centralafrikansk tid"}
         }
         "meta:Africa_Eastern"{
-            ls{"Østafrikansk normaltid"}
+            ls{"Østafrikansk tid"}
         }
         "meta:Africa_Southern"{
-            lg{"Sydafrikansk tid"}
-            ls{"Sydafrikansk normaltid"}
+            ls{"Sydafrikansk tid"}
         }
         "meta:Africa_Western"{
             ld{"Vestafrikansk sommertid"}
+            lg{"Vestafrikansk tid"}
             ls{"Vestafrikansk normaltid"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinsk-sommertid"}
-            ls{"Aktyubinsk-tid"}
+            lg{"Aktyubinsk-tid"}
+            ls{"Aktyubinsk-normaltid"}
         }
         "meta:Alaska"{
             ld{"Alaska-sommertid"}
@@ -166,7 +168,8 @@ da{
         }
         "meta:Almaty"{
             ld{"Almaty-sommertid"}
-            ls{"Almaty-tid"}
+            lg{"Almaty-tid"}
+            ls{"Almaty-normaltid"}
         }
         "meta:Amazon"{
             ld{"Amazonas-sommertid"}
@@ -195,16 +198,18 @@ da{
         }
         "meta:Anadyr"{
             ld{"Anadyr-sommertid"}
-            lg{"Sibirisk (Anadyr) tid"}
-            ls{"Anadyr-tid"}
+            lg{"Anadyr-tid"}
+            ls{"Anadyr-normaltid"}
         }
         "meta:Aqtau"{
             ld{"Aqtau-sommertid"}
-            ls{"Aqtau-tid"}
+            lg{"Aqtau-tid"}
+            ls{"Aqtau-normaltid"}
         }
         "meta:Aqtobe"{
             ld{"Aqtobe-sommertid"}
-            ls{"Aqtobe-tid"}
+            lg{"Aqtobe-tid"}
+            ls{"Aqtobe-normaltid"}
         }
         "meta:Arabian"{
             ld{"Arabisk sommertid"}
@@ -223,11 +228,13 @@ da{
         }
         "meta:Armenia"{
             ld{"Armensk sommertid"}
-            ls{"Armensk tid"}
+            lg{"Armensk tid"}
+            ls{"Armensk normaltid"}
         }
         "meta:Ashkhabad"{
             ld{"Ashkhabad-sommertid"}
-            ls{"Ashkhabad-tid"}
+            lg{"Ashkhabad-tid"}
+            ls{"Ashkhabad-normaltid"}
         }
         "meta:Atlantic"{
             ld{"Atlantic-sommertid"}
@@ -256,18 +263,22 @@ da{
         }
         "meta:Azerbaijan"{
             ld{"Aserbajdsjansk sommertid"}
+            lg{"Aserbajdsjansk tid"}
             ls{"Aserbajdsjansk normaltid"}
         }
         "meta:Azores"{
             ld{"Azorerne-sommertid"}
+            lg{"Azorerne-tid"}
             ls{"Azorerne-normaltid"}
         }
         "meta:Baku"{
             ld{"Baku-sommertid"}
-            ls{"Baku-tid"}
+            lg{"Baku-tid"}
+            ls{"Baku-normaltid"}
         }
         "meta:Bangladesh"{
             ld{"Bangladeshisk sommertid"}
+            lg{"Bangladeshisk tid"}
             ls{"Bangladeshisk normaltid"}
         }
         "meta:Bering"{
@@ -276,41 +287,44 @@ da{
             ls{"Bering-normaltid"}
         }
         "meta:Bhutan"{
-            ls{"Bhutanesisk normaltid"}
+            ls{"Bhutanesisk tid"}
         }
         "meta:Bolivia"{
             ls{"Boliviansk tid"}
         }
         "meta:Borneo"{
             ld{"Borneo-sommertid"}
-            ls{"Borneo-tid"}
+            lg{"Borneo-tid"}
+            ls{"Borneo-normaltid"}
         }
         "meta:Brasilia"{
             ld{"Brasiliansk sommertid"}
-            lg{"Brasiliansk (Brasilia) tid"}
-            ls{"Brasiliansk tid"}
+            lg{"Brasiliansk tid"}
+            ls{"Brasiliansk normaltid"}
         }
         "meta:Brunei"{
-            ls{"Brunei Darussalam-normaltid"}
+            ls{"Brunei Darussalam-tid"}
         }
         "meta:Cape_Verde"{
             ld{"Kapverdisk sommertid"}
+            lg{"Kapverdisk tid"}
             ls{"Kapverdisk normaltid"}
         }
         "meta:Chamorro"{
-            lg{"Chamorro-tid"}
-            ls{"Chamorro-normaltid"}
+            ls{"Chamorro-tid"}
         }
         "meta:Changbai"{
             ls{"Changbai-tid"}
         }
         "meta:Chatham"{
             ld{"Chatham-sommertid"}
+            lg{"Chatham-tid"}
             ls{"Chatham-normaltid"}
         }
         "meta:Chile"{
             ld{"Chilensk sommertid"}
-            ls{"Chilensk tid"}
+            lg{"Chilensk tid"}
+            ls{"Chilensk normaltid"}
         }
         "meta:China"{
             ld{"Kinesisk sommertid"}
@@ -319,7 +333,7 @@ da{
         }
         "meta:Choibalsan"{
             ld{"Choibalsan-sommertid"}
-            lg{"Mongolsk (Choibalsan) tid"}
+            lg{"Choibalsan-tid"}
             ls{"Choibalsan-normaltid"}
         }
         "meta:Christmas"{
@@ -330,10 +344,12 @@ da{
         }
         "meta:Colombia"{
             ld{"Colombiansk sommertid"}
-            ls{"Colombiansk tid"}
+            lg{"Colombiansk tid"}
+            ls{"Colombiansk normaltid"}
         }
         "meta:Cook"{
             ld{"Cookøerne-sommertid"}
+            lg{"Cookøerne-tid"}
             ls{"Cookøerne-normaltid"}
         }
         "meta:Cuba"{
@@ -352,7 +368,8 @@ da{
         }
         "meta:Dushanbe"{
             ld{"Dushanbe-sommertid"}
-            ls{"Dushanbe-tid"}
+            lg{"Dushanbe-tid"}
+            ls{"Dushanbe-normaltid"}
         }
         "meta:Dutch_Guiana"{
             ls{"Hollandsk Guiana-tid"}
@@ -362,6 +379,7 @@ da{
         }
         "meta:Easter"{
             ld{"Påskeøen-sommertid"}
+            lg{"Påskeøen-tid"}
             ls{"Påskeøen-normaltid"}
         }
         "meta:Ecuador"{
@@ -393,52 +411,56 @@ da{
         }
         "meta:Falkland"{
             ld{"Falklandsøerne-sommertid"}
+            lg{"Falklandsøerne-tid"}
             ls{"Falklandsøerne-normaltid"}
         }
         "meta:Fiji"{
             ld{"Fijiansk sommertid"}
+            lg{"Fijiansk tid"}
             ls{"Fijiansk normaltid"}
         }
         "meta:French_Guiana"{
             ls{"Fransk Guiana-tid"}
         }
         "meta:French_Southern"{
-            ls{"Franske Sydlige og Antarktiske Territorier-normaltid"}
+            ls{"Franske Sydlige og Antarktiske Territorier-tid"}
         }
         "meta:Frunze"{
             ld{"Frunze-sommertid"}
-            ls{"Frunze-tid"}
-        }
-        "meta:GMT"{
-            ls{"Greenwich Mean Time"}
+            lg{"Frunze-tid"}
+            ls{"Frunze-normaltid"}
         }
         "meta:Galapagos"{
-            ls{"Galapagos-normaltid"}
+            ls{"Galapagos-tid"}
         }
         "meta:Gambier"{
             ls{"Gambier-tid"}
         }
         "meta:Georgia"{
             ld{"Georgiansk sommertid"}
+            lg{"Georgiansk tid"}
             ls{"Georgiansk normaltid"}
         }
         "meta:Gilbert_Islands"{
-            ls{"Gilbertøerne-normaltid"}
+            ls{"Gilbertøerne-tid"}
         }
         "meta:Greenland_Central"{
             ld{"Centralgrønlandsk sommertid"}
-            ls{"Centralgrønlandsk tid"}
+            lg{"Centralgrønlandsk tid"}
+            ls{"Centralgrønlandsk normaltid"}
         }
         "meta:Greenland_Eastern"{
             ld{"Østgrønlandsk sommertid"}
-            ls{"Østgrønlandsk tid"}
+            lg{"Østgrønlandsk tid"}
+            ls{"Østgrønlandsk normaltid"}
         }
         "meta:Greenland_Western"{
             ld{"Vestgrønlandsk sommertid"}
-            ls{"Vestgrønlandsk tid"}
+            lg{"Vestgrønlandsk tid"}
+            ls{"Vestgrønlandsk normaltid"}
         }
         "meta:Guam"{
-            ls{"Guam, normaltid"}
+            ls{"Guam-normaltid"}
         }
         "meta:Gulf"{
             ls{"Golflandene-normaltid"}
@@ -447,16 +469,18 @@ da{
             ls{"Guyana-tid"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Hawaii-Aleutian-sommertid"}
             lg{"Hawaii-Aleutian-tid"}
             ls{"Hawaii-Aleutian-normaltid"}
         }
         "meta:Hong_Kong"{
             ld{"Hongkong-sommertid"}
+            lg{"Hongkong-tid"}
             ls{"Hongkong-normaltid"}
         }
         "meta:Hovd"{
             ld{"Hovd-sommertid"}
-            lg{"Mongolsk (Hovd) tid"}
+            lg{"Hovd-tid"}
             ls{"Hovd-normaltid"}
         }
         "meta:India"{
@@ -469,25 +493,23 @@ da{
             ls{"Indokinesisk normaltid"}
         }
         "meta:Indonesia_Central"{
-            lg{"Indonesisk centraltid"}
-            ls{"Centralindonesisk normaltid"}
+            ls{"Centralindonesisk tid"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Indonesisk tid (øst)"}
-            ls{"Østindonesisk normaltid"}
+            ls{"Østindonesisk tid"}
         }
         "meta:Indonesia_Western"{
-            lg{"Indonesisk tid (vest)"}
-            ls{"Vestindonesisk normaltid"}
+            ls{"Vestindonesisk tid"}
         }
         "meta:Iran"{
             ld{"Iransk sommertid"}
+            lg{"Iransk tid"}
             ls{"Iransk normaltid"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk-sommertid"}
-            lg{"Russisk (Irkutsk) tid"}
-            ls{"Irkutsk"}
+            lg{"Irkutsk-tid"}
+            ls{"Irkutsk-normaltid"}
         }
         "meta:Israel"{
             ld{"Israelsk sommertid"}
@@ -500,29 +522,26 @@ da{
             ls{"Japansk normaltid"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovsk-Kamchatski, sommertid"}
-            lg{"Russisk (Kamchatka) tid"}
-            ls{"Petropavlovsk-Kamchatski"}
+            ld{"Petropavlovsk-Kamchatski sommertid"}
+            lg{"Petropavlovsk-Kamchatski tid"}
+            ls{"Petropavlovsk-Kamchatski normaltid"}
         }
         "meta:Karachi"{
-            ls{"Karachi"}
+            ls{"Karachi-tid"}
         }
         "meta:Kashgar"{
-            ls{"Kashgar"}
+            ls{"Kashgar-tid"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Kazakhstansk sommertid (øst)"}
-            lg{"Østkasakhstansk tid"}
-            ls{"Østkasakhstansk normaltid"}
+            ls{"Østkasakhstansk tid"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Kasakhisk sommertid (vest)"}
-            lg{"Vestkasakhstansk tid"}
-            ls{"Vestkasakhstansk normaltid"}
+            ls{"Vestkasakhstansk tid"}
         }
         "meta:Kizilorda"{
-            ld{"Kizilorda, sommertid"}
-            ls{"Kizilorda"}
+            ld{"Kizilorda-sommertid"}
+            lg{"Kizilorda-tid"}
+            ls{"Kizilorda-normaltid"}
         }
         "meta:Korea"{
             ld{"Koreansk sommertid"}
@@ -530,30 +549,32 @@ da{
             ls{"Koreansk normaltid"}
         }
         "meta:Kosrae"{
-            ls{"Kosrae-normaltid"}
+            ls{"Kosrae-tid"}
         }
         "meta:Krasnoyarsk"{
             ld{"Krasnoyarsk-sommertid"}
-            lg{"Russisk (Krasnoyarsk) tid"}
+            lg{"Krasnoyarsk-tid"}
             ls{"Krasnoyarsk-normaltid"}
         }
         "meta:Kuybyshev"{
-            ls{"Kuybyshev"}
+            ld{"Kuybyshev-sommertid"}
+            lg{"Kuybyshev-tid"}
+            ls{"Kuybyshev-normaltid"}
         }
         "meta:Kwajalein"{
-            ls{"Kwajalein"}
+            ls{"Kwajalein-tid"}
         }
         "meta:Kyrgystan"{
-            ls{"Kirgisisk normaltid"}
+            ls{"Kirgisisk tid"}
         }
         "meta:Lanka"{
-            ls{"Langa"}
+            ls{"Langa tid"}
         }
         "meta:Line_Islands"{
-            ls{"Linjeøerne-normaltid"}
+            ls{"Linjeøerne-tid"}
         }
         "meta:Long_Shu"{
-            ls{"Long-Shu"}
+            ls{"Long-Shu-tid"}
         }
         "meta:Lord_Howe"{
             ld{"Lord Howe-sommertid"}
@@ -561,34 +582,36 @@ da{
             ls{"Lord Howe-normaltid"}
         }
         "meta:Macau"{
-            ld{"Macao, sommertid"}
-            ls{"Macao"}
+            ld{"Macao-sommertid"}
+            lg{"Macao-tid"}
+            ls{"Macao-normaltid"}
         }
         "meta:Macquarie"{
-            lg{"Australsk (Macquarie) tid"}
+            ls{"Macquarie tid"}
         }
         "meta:Magadan"{
             ld{"Magadan-sommertid"}
-            lg{"Russisk (Magadan) tid"}
+            lg{"Magadan-tid"}
             ls{"Magadan-normaltid"}
         }
         "meta:Malaya"{
-            ls{"Malaja"}
+            ls{"Malaja-tid"}
         }
         "meta:Malaysia"{
-            ls{"Malaysisk normaltid"}
+            ls{"Malaysisk tid"}
         }
         "meta:Maldives"{
-            ls{"Maldivisk normaltid"}
+            ls{"Maldivisk tid"}
         }
         "meta:Marquesas"{
-            ls{"Marquesas-normaltid"}
+            ls{"Marquesas-tid"}
         }
         "meta:Marshall_Islands"{
-            ls{"Marshalløerne-normaltid"}
+            ls{"Marshalløerne-tid"}
         }
         "meta:Mauritius"{
             ld{"Mauritius-sommertid"}
+            lg{"Mauritius-tid"}
             ls{"Mauritius-normaltid"}
         }
         "meta:Mawson"{
@@ -596,7 +619,7 @@ da{
         }
         "meta:Mongolia"{
             ld{"Ulan Bator-sommertid"}
-            lg{"Mongolsk tid"}
+            lg{"Ulan Bator-tid"}
             ls{"Ulan Bator-normaltid"}
         }
         "meta:Moscow"{
@@ -605,16 +628,17 @@ da{
             ls{"Moskovitisk normaltid"}
         }
         "meta:Myanmar"{
-            ls{"Myanmarsk normaltid"}
+            ls{"Myanmarsk tid"}
         }
         "meta:Nauru"{
-            ls{"Nauru-normaltid"}
+            ls{"Nauru-tid"}
         }
         "meta:Nepal"{
-            ls{"Nepalesisk normaltid"}
+            ls{"Nepalesisk tid"}
         }
         "meta:New_Caledonia"{
             ld{"Nykaledonsk sommertid"}
+            lg{"Nykaledonsk tid"}
             ls{"Nykaledonsk normaltid"}
         }
         "meta:New_Zealand"{
@@ -628,53 +652,57 @@ da{
             ls{"Newfoundlandsk normaltid"}
         }
         "meta:Niue"{
-            ls{"Niue-normaltid"}
+            ls{"Niue-tid"}
         }
         "meta:Norfolk"{
-            ls{"Norfolkøen-normaltid"}
+            ls{"Norfolkøen-tid"}
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha-sommertid"}
-            lg{"Brasiliansk (Noronha) tid"}
-            ls{"Fernando de Noronha-tid"}
+            lg{"Fernando de Noronha-tid"}
+            ls{"Fernando de Noronha-normaltid"}
         }
         "meta:North_Mariana"{
-            ls{"Nordmarianerne"}
+            ls{"Nordmarianerne-tid"}
         }
         "meta:Novosibirsk"{
             ld{"Novosibirsk sommertid"}
-            lg{"Russisk (Novosibirsk) tid"}
+            lg{"Novosibirsk tid"}
             ls{"Novosibirsk normaltid"}
         }
         "meta:Omsk"{
             ld{"Omsk-sommertid"}
-            lg{"Russisk (Omsk) tid"}
+            lg{"Omsk-tid"}
             ls{"Omsk-normaltid"}
         }
         "meta:Pakistan"{
             ld{"Pakistansk sommertid"}
+            lg{"Pakistansk tid"}
             ls{"Pakistansk normaltid"}
         }
         "meta:Palau"{
             ls{"Palau-normaltid"}
         }
         "meta:Papua_New_Guinea"{
-            ls{"Papua Ny Guinea-normaltid"}
+            ls{"Papua Ny Guinea-tid"}
         }
         "meta:Paraguay"{
             ld{"Paraguayansk sommertid"}
-            ls{"Paraguayansk tid"}
+            lg{"Paraguayansk tid"}
+            ls{"Paraguayansk normaltid"}
         }
         "meta:Peru"{
             ld{"Peruviansk sommertid"}
-            ls{"Peruviansk tid"}
+            lg{"Peruviansk tid"}
+            ls{"Peruviansk normaltid"}
         }
         "meta:Philippines"{
             ld{"Filippinsk sommertid"}
+            lg{"Filippinsk tid"}
             ls{"Filippinsk normaltid"}
         }
         "meta:Phoenix_Islands"{
-            ls{"Phoenixøen-normaltid"}
+            ls{"Phoenixøen-tid"}
         }
         "meta:Pierre_Miquelon"{
             ld{"Pierre- og Miquelon-sommertid"}
@@ -682,66 +710,70 @@ da{
             ls{"Pierre- og Miquelon-normaltid"}
         }
         "meta:Pitcairn"{
-            ls{"Pitcairn-normaltid"}
+            ls{"Pitcairn-tid"}
         }
         "meta:Ponape"{
-            ls{"Ponape-normaltid"}
+            ls{"Ponape-tid"}
         }
         "meta:Qyzylorda"{
-            ld{"Qyzylorda, sommertid"}
-            ls{"Qyzylorda"}
+            ld{"Qyzylorda-sommertid"}
+            lg{"Qyzylorda-tid"}
+            ls{"Qyzylorda-normaltid"}
         }
         "meta:Reunion"{
-            ls{"Reunion-normaltid"}
+            ls{"Reunion-tid"}
         }
         "meta:Rothera"{
             ls{"Rothera-tid"}
         }
         "meta:Sakhalin"{
             ld{"Sakhalin-sommertid"}
-            lg{"Russisk (Sakhalin) tid"}
+            lg{"Sakhalin-tid"}
             ls{"Sakhalin-normaltid"}
         }
         "meta:Samara"{
-            ld{"Samara, sommertid"}
-            lg{"Russisk (Samara) tid"}
-            ls{"Samara"}
+            ld{"Samara-sommertid"}
+            lg{"Samara-tid"}
+            ls{"Samara-normaltid"}
         }
         "meta:Samarkand"{
-            ld{"Samarkand, sommertid"}
-            ls{"Samarkand"}
+            ld{"Samarkand-sommertid"}
+            lg{"Samarkand-tid"}
+            ls{"Samarkand-normaltid"}
         }
         "meta:Samoa"{
             ls{"Samoa-normaltid"}
         }
         "meta:Seychelles"{
-            ls{"Seychellisk normaltid"}
+            ls{"Seychellisk tid"}
         }
         "meta:Shevchenko"{
-            ld{"Shevchenko, sommertid"}
-            ls{"Shevchenko"}
+            ld{"Shevchenko-sommertid"}
+            lg{"Shevchenko-tid"}
+            ls{"Shevchenko-normaltid"}
         }
         "meta:Singapore"{
             ls{"Singaporeansk normaltid"}
         }
         "meta:Solomon"{
-            ls{"Salomonøerne-normaltid"}
+            ls{"Salomonøerne-tid"}
         }
         "meta:South_Georgia"{
-            ls{"South Georgia-normaltid"}
+            ls{"South Georgia-tid"}
         }
         "meta:Suriname"{
             ls{"Surinam-tid"}
         }
         "meta:Sverdlovsk"{
-            ld{"Sverdlovsk, sommertid"}
-            ls{"Sverdlovsk"}
+            ld{"Sverdlovsk-sommertid"}
+            lg{"Sverdlovsk-tid"}
+            ls{"Sverdlovsk-normaltid"}
         }
         "meta:Syowa"{
             ls{"Syowa-tid"}
         }
         "meta:Tahiti"{
-            ls{"Tahitisk normaltid"}
+            ls{"Tahitisk tid"}
         }
         "meta:Taipei"{
             ld{"Taipei-sommertid"}
@@ -749,50 +781,63 @@ da{
             ls{"Taipei-normaltid"}
         }
         "meta:Tajikistan"{
-            ls{"Tadsjikisk normaltid"}
+            ls{"Tadsjikisk tid"}
         }
         "meta:Tashkent"{
-            ld{"Tashkent, sommertid"}
-            ls{"Tashkent"}
+            ld{"Tashkent-sommertid"}
+            lg{"Tashkent-tid"}
+            ls{"Tashkent-normaltid"}
         }
         "meta:Tbilisi"{
-            ld{"Tbilisi, sommertid"}
-            ls{"Tbilisi"}
+            ld{"Tbilisi-sommertid"}
+            lg{"Tbilisi-tid"}
+            ls{"Tbilisi-normaltid"}
         }
         "meta:Tokelau"{
-            ls{"Tokelau-normaltid"}
+            ls{"Tokelau-tid"}
         }
         "meta:Tonga"{
             ld{"Tongansk sommertid"}
+            lg{"Tongansk tid"}
             ls{"Tongansk normaltid"}
         }
         "meta:Truk"{
-            ls{"Truk-normaltid"}
+            ls{"Truk-tid"}
+        }
+        "meta:Turkey"{
+            ld{"Tyrkisk sommertid"}
+            lg{"Tyrkisk tid"}
+            ls{"Tyrkisk normaltid"}
         }
         "meta:Turkmenistan"{
             ld{"Turkmensk sommertid"}
+            lg{"Turkmensk tid"}
             ls{"Turkmensk normaltid"}
         }
         "meta:Tuvalu"{
-            ls{"Tuvalu-normaltid"}
+            ls{"Tuvalu-tid"}
         }
         "meta:Uralsk"{
-            ld{"Ural'sk, sommertid"}
-            ls{"Ural'sk"}
+            ld{"Ural'sk-sommertid"}
+            lg{"Ural'sk-tid"}
+            ls{"Ural'sk-normaltid"}
         }
         "meta:Uruguay"{
             ld{"Uruguayansk sommertid"}
-            ls{"Uruguayansk tid"}
+            lg{"Uruguayansk tid"}
+            ls{"Uruguayansk normaltid"}
         }
         "meta:Urumqi"{
-            ls{"Urumqi"}
+            ls{"Urumqi-tid"}
         }
         "meta:Uzbekistan"{
             ld{"Usbekisk sommertid"}
+            lg{"Usbekisk tid"}
             ls{"Usbekisk normaltid"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatu-sommertid"}
+            lg{"Vanuatu-tid"}
             ls{"Vanuatu-normaltid"}
         }
         "meta:Venezuela"{
@@ -800,36 +845,37 @@ da{
         }
         "meta:Vladivostok"{
             ld{"Vladivostok-sommertid"}
-            lg{"Russisk (Vladivostok) tid"}
+            lg{"Vladivostok-tid"}
             ls{"Vladivostok-normaltid"}
         }
         "meta:Volgograd"{
             ld{"Volgograd-sommertid"}
-            lg{"Russisk (Volgograd) tid"}
+            lg{"Volgograd-tid"}
             ls{"Volgograd-normaltid"}
         }
         "meta:Vostok"{
             ls{"Vostok-tid"}
         }
         "meta:Wake"{
-            ls{"Wakeøen-normaltid"}
+            ls{"Wakeøen-tid"}
         }
         "meta:Wallis"{
-            ls{"Wallis og Futuna-normaltid"}
+            ls{"Wallis og Futuna-tid"}
         }
         "meta:Yakutsk"{
             ld{"Yakutsk-sommertid"}
-            lg{"Russisk (Yakutsk) tid"}
+            lg{"Yakutsk-tid"}
             ls{"Yakutsk-normaltid"}
         }
         "meta:Yekaterinburg"{
             ld{"Yekaterinburgsk sommertid"}
-            lg{"Russisk (Yekaterinburg) tid"}
+            lg{"Yekaterinburgsk tid"}
             ls{"Yekaterinburgsk normaltid"}
         }
         "meta:Yerevan"{
-            ld{"Yerevan, sommertid"}
-            ls{"Yerevan"}
+            ld{"Yerevan-sommertid"}
+            lg{"Yerevan-tid"}
+            ls{"Yerevan-normaltid"}
         }
         "meta:Yukon"{
             ld{"Yukon-sommertid"}

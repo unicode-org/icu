@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gl.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gl.xml
  */
 gl{
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Xibutí"}
@@ -195,7 +195,9 @@ gl{
             ls{"Horario estándar de Alasca"}
         }
         "meta:Amazon"{
+            ld{"Horario de verán do Amazonas"}
             lg{"Horario do Amazonas"}
+            ls{"Horario estándar do Amazonas"}
         }
         "meta:America_Central"{
             ld{"Horario de verán da zona central"}
@@ -220,17 +222,17 @@ gl{
         "meta:Anadyr"{
             ld{"Horario de verán de Anadir"}
             lg{"Horario de Anadir"}
-            ls{"Horario de Anadir"}
+            ls{"Horario estándar de Anadir"}
         }
         "meta:Argentina"{
             ld{"Horario de verán de Arxentina"}
             lg{"Horario de Arxentina"}
-            ls{"Horario de Arxentina"}
+            ls{"Horario estándar de Arxentina"}
         }
         "meta:Argentina_Western"{
             ld{"Horario de verán de Arxentina Occidental"}
             lg{"Horario de Arxentina Occidental"}
-            ls{"Horario de Arxentina Occidental"}
+            ls{"Horario estándar de Arxentina Occidental"}
         }
         "meta:Atlantic"{
             ld{"Horario de verán do Atlántico"}
@@ -260,69 +262,70 @@ gl{
         "meta:Brasilia"{
             ld{"Horario de verán de Brasilia"}
             lg{"Horario de Brasilia"}
-            ls{"Horario de Brasilia"}
+            ls{"Horario estándar de Brasilia"}
         }
         "meta:Choibalsan"{
             ld{"Horario de verán de Choibalsan"}
             lg{"Horario de Choibalsan"}
-            ls{"Horario de Choibalsan"}
+            ls{"Horario estándar de Choibalsan"}
         }
         "meta:Europe_Central"{
-            ld{"Horario de verán Europeo Central"}
-            ls{"Horario Europeo Central"}
+            ld{"Horario de verán de Europeo Central"}
+            lg{"Horario de Europeo Central"}
+            ls{"Horario estándar de Europeo Central"}
         }
         "meta:Europe_Eastern"{
-            ld{"Horario de verán Europeo Oriental"}
-            ls{"Horario Europeo Oriental"}
+            ld{"Horario de verán de Europeo Oriental"}
+            lg{"Horario de Europeo Oriental"}
+            ls{"Horario estándar de Europeo Oriental"}
         }
         "meta:Europe_Western"{
-            ld{"Horario de verán Europeo Occidental"}
-            ls{"Horario Europeo Occidental"}
+            ld{"Horario de verán de Europeo Occidental"}
+            lg{"Horario de Europeo Occidental"}
+            ls{"Horario estándar de Europeo Occidental"}
         }
         "meta:GMT"{
             ls{"Horario medio de Greenwich"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Horario de verán de Hawai-Aleutianas"}
             lg{"Horario de Hawai-Aleutianas"}
+            ls{"Horario estándar de Hawai-Aleutianas"}
         }
         "meta:Hovd"{
             ld{"Horario de verán de Hovd"}
             lg{"Horario de Hovd"}
-            ls{"Horario de Hovd"}
+            ls{"Horario estándar de Hovd"}
         }
         "meta:Indonesia_Central"{
-            lg{"Hora central de Indonesia"}
+            ls{"Hora central de Indonesia"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Horario de Indonesia Oriental"}
+            ls{"Horario de Indonesia Oriental"}
         }
         "meta:Indonesia_Western"{
-            lg{"Horario de Indonesia Occidental"}
+            ls{"Horario de Indonesia Occidental"}
         }
         "meta:Irkutsk"{
             ld{"Horario de verán de Irkutsk"}
             lg{"Horario de Irkutsk"}
-            ls{"Horario de Irkutsk"}
+            ls{"Horario estándar de Irkutsk"}
         }
         "meta:Kamchatka"{
             ld{"Horario de verán de Petropávlovsk-Kamchatski"}
-            lg{"Horario de Kamchatka"}
-            ls{"Horario de Petropávlovsk-Kamchatski"}
+            lg{"Horario de Petropávlovsk-Kamchatski"}
+            ls{"Horario estándar de Petropávlovsk-Kamchatski"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Horario de verán do Casaquistán Oriental"}
-            lg{"Horario do Casaquistán Oriental"}
-            ls{"Horario estándar de Casaquistán Oriental"}
+            ls{"Horario do Casaquistán Oriental"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Horario de verán de Casaquistán Occidental"}
-            lg{"Horario de Casaquistán Occidental"}
-            ls{"Horario estándar de Casaquistán Occidental"}
+            ls{"Horario de Casaquistán Occidental"}
         }
         "meta:Krasnoyarsk"{
             ld{"Horario de verán de Krasnoyarsk"}
             lg{"Horario de Krasnoyarsk"}
-            ls{"Horario de Krasnoyarsk"}
+            ls{"Horario estándar de Krasnoyarsk"}
         }
         "meta:Lord_Howe"{
             ld{"Horario de verán de Lord Howe"}
@@ -330,17 +333,17 @@ gl{
             ls{"Horario estándar de Lord Howe"}
         }
         "meta:Macquarie"{
-            lg{"Horario de Macquarie"}
+            ls{"Horario de Macquarie"}
         }
         "meta:Magadan"{
             ld{"Horario de verán de Magadán"}
             lg{"Horario de Magadán"}
-            ls{"Horario de Magadán"}
+            ls{"Horario estándar de Magadán"}
         }
         "meta:Mongolia"{
             ld{"Horario de verán de Ulán Bátor"}
-            lg{"Horario de Mongolia"}
-            ls{"Horario de Ulán Bátor"}
+            lg{"Horario de Ulán Bátor"}
+            ls{"Horario estándar de Ulán Bátor"}
         }
         "meta:Moscow"{
             ld{"Horario de verán de Moscova"}
@@ -354,48 +357,48 @@ gl{
         }
         "meta:Noronha"{
             ld{"Horario de verán de Fernando de Noronha"}
-            lg{"Horario de Noronha"}
-            ls{"Horario de Fernando de Noronha"}
+            lg{"Horario de Fernando de Noronha"}
+            ls{"Horario estándar de Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
             ld{"Horario de verán de Novosibirsk"}
             lg{"Horario de Novosibirsk"}
-            ls{"Horario de Novosibirsk"}
+            ls{"Horario estándar de Novosibirsk"}
         }
         "meta:Omsk"{
             ld{"Horario de verán de Omsk"}
             lg{"Horario de Omsk"}
-            ls{"Horario de Omsk"}
+            ls{"Horario estándar de Omsk"}
         }
         "meta:Sakhalin"{
             ld{"Horario de verán de Sakhalin"}
             lg{"Horario de Sakhalin"}
-            ls{"Horario de Sakhalin"}
+            ls{"Horario estándar de Sakhalin"}
         }
         "meta:Samara"{
             ld{"Horario de verán de Samara"}
             lg{"Horario de Samara"}
-            ls{"Horario de Samara"}
+            ls{"Horario estándar de Samara"}
         }
         "meta:Vladivostok"{
             ld{"Horario de verán de Vladivostok"}
             lg{"Horario de Vladivostok"}
-            ls{"Horario de Vladivostok"}
+            ls{"Horario estándar de Vladivostok"}
         }
         "meta:Volgograd"{
             ld{"Horario de verán de Volgogrado"}
             lg{"Horario de Volgogrado"}
-            ls{"Horario de Volgogrado"}
+            ls{"Horario estándar de Volgogrado"}
         }
         "meta:Yakutsk"{
             ld{"Horario de verán de Yakutsk"}
             lg{"Horario de Iakutsk"}
-            ls{"Horario de Iakutsk"}
+            ls{"Horario estándar de Iakutsk"}
         }
         "meta:Yekaterinburg"{
             ld{"Horario de verán de Ekaterimburgo"}
             lg{"Horario de Ekaterimburgo"}
-            ls{"Horario de Ekaterimburgo"}
+            ls{"Horario estándar de Ekaterimburgo"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Horario de {1} ({0})"}

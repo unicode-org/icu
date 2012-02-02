@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/az.xml
@@ -35,7 +35,7 @@ az{
             }
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -55,10 +55,10 @@ az{
             }
             availableFormats{
                 MMM{"LLL"}
-                MMMEd{"EEE, d, MMM"}
+                MMMEd{"E, d, MMM"}
                 MMMd{"d MMM"}
                 yMMM{"MMM, y"}
-                yMMMEd{"EEE, d, MMM, y"}
+                yMMMEd{"E, d, MMM, y"}
                 yMMMd{"d MMM, y"}
             }
             dayNames{
@@ -192,10 +192,10 @@ az{
         }
     }
     delimiters{
-        alternateQuotationEnd{"’"}
-        alternateQuotationStart{"‘"}
-        quotationEnd{"”"}
-        quotationStart{"“"}
+        alternateQuotationEnd{"›"}
+        alternateQuotationStart{"‹"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
     }
     measurementSystemNames{
         US{"ABŞ"}

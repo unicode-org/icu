@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.62.77"}
+    Version{"2.0.64.95"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -50,7 +50,7 @@ en{
         "meta:Acre"{
             ld{"Acre Summer Time"}
             lg{"Acre Time"}
-            ls{"Acre Time"}
+            ls{"Acre Standard Time"}
         }
         "meta:Afghanistan"{
             ls{"Afghanistan Time"}
@@ -775,7 +775,7 @@ en{
         "meta:Vanuatu"{
             ld{"Vanuatu Summer Time"}
             lg{"Vanuatu Time"}
-            ls{"Vanuatu Time"}
+            ls{"Vanuatu Standard Time"}
         }
         "meta:Venezuela"{
             ls{"Venezuela Time"}

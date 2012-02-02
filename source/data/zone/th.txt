@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/th.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/th.xml
  */
 th{
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"อาบีจาน"}
@@ -1226,9 +1226,6 @@ th{
             lg{"เวลาอะแลสกา"}
             ls{"เวลามาตรฐานอะแลสกา"}
         }
-        "meta:Amazon"{
-            lg{"เวลาอะเมซอน"}
-        }
         "meta:America_Central"{
             ld{"เวลาออมแสงทางตอนกลาง"}
             lg{"เวลาตอนกลาง"}
@@ -1292,7 +1289,7 @@ th{
         "meta:Brasilia"{
             ld{"เวลาฤดูร้อนบราซิเลีย"}
             lg{"เวลาบราซีเลีย"}
-            ls{"เวลาบราซิเลีย"}
+            ls{"เวลามาตรฐาบราซิเลีย"}
         }
         "meta:Choibalsan"{
             ld{"เวลาฤดูร้อนชอยปาลชาน"}
@@ -1301,18 +1298,18 @@ th{
         }
         "meta:Europe_Central"{
             ld{"เวลาฤดูร้อนยุโรปกลาง"}
+            lg{"เวลายุโรปกลาง"}
             ls{"เวลายุโรปกลาง"}
         }
         "meta:Europe_Eastern"{
             ld{"เวลาฤดูร้อนยุโรปตะวันออก"}
+            lg{"เวลายุโรปตะวันออก"}
             ls{"เวลายุโรปตะวันออก"}
         }
         "meta:Europe_Western"{
             ld{"เวลาฤดูร้อนยุโรปตะวันตก"}
+            lg{"เวลายุโรปตะวันตก"}
             ls{"เวลายุโรปตะวันตก"}
-        }
-        "meta:Hawaii_Aleutian"{
-            lg{"เวลาฮาวาย-อาลิวเชียน"}
         }
         "meta:Hovd"{
             ld{"เวลาฤดูร้อนฮอฟด์"}
@@ -1321,15 +1318,6 @@ th{
         }
         "meta:Indian_Ocean"{
             ls{"เวลามหาสมุทรอินเดีย"}
-        }
-        "meta:Indonesia_Central"{
-            lg{"เวลาตอนกลางของอินโดนีเชีย"}
-        }
-        "meta:Indonesia_Eastern"{
-            lg{"เวลาตะวันออกของอินโดนีเชีย"}
-        }
-        "meta:Indonesia_Western"{
-            lg{"เวลาตะวันตกของอินโดนีเชีย"}
         }
         "meta:Irkutsk"{
             ld{"เวลาฤดูร้อนอีร์คุตสค์"}
@@ -1342,14 +1330,10 @@ th{
             ls{"เวลาเปโตรปัฟลอฟสค์-คัมชัตสกี"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"เวลาฤดูร้อนทางตะวันออกของคาซัคสถาน"}
-            lg{"เวลาคาซัคสถานตะวันออก"}
-            ls{"เวลามาตรฐานคาซัคสถานตะวันออก"}
+            ls{"เวลานคาซัคสถานตะวันออก"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"เวลาฤดูร้อนทางตะวันตกของคาซัคสถาน"}
-            lg{"เวลาคาซัคสถานตะวันตก"}
-            ls{"เวลามาตรฐานคาซัคสถานตะวันตก"}
+            ls{"เวลานคาซัคสถานตะวันตก"}
         }
         "meta:Krasnoyarsk"{
             ld{"เวลาฤดูร้อนครัสโนยาสค์"}
@@ -1362,7 +1346,7 @@ th{
             ls{"เวลามาตรฐานลอร์ดโฮว์"}
         }
         "meta:Macquarie"{
-            lg{"เวลาแมกควอรี"}
+            ls{"เวลาแมกควอรี"}
         }
         "meta:Magadan"{
             ld{"เวลาฤดูร้อนมากาดาน"}
@@ -1378,9 +1362,6 @@ th{
             ld{"เวลาฤดูร้อนมอสโก"}
             lg{"เวลามอสโก"}
             ls{"เวลามาตรฐานมอสโก"}
-        }
-        "meta:New_Zealand"{
-            ld{"เวลาออมแสงนิวซีแลนด์"}
         }
         "meta:Newfoundland"{
             ld{"เวลาออมแสงนิวฟันด์แลนด์"}

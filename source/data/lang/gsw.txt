@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gsw.xml
@@ -661,7 +661,6 @@ gsw{
         }
         collation{
             big5han{"Tradizionells Chineesisch - Big5"}
-            direct{"Diräkti Sortiir-Regle"}
             gb2312han{"Veräifachts Chineesisch - GB2312"}
             phonebook{"Telifonbuech-Sortiirregle"}
             pinyin{"Pinyin-Sortiirregle"}
@@ -696,7 +695,7 @@ gsw{
         SOLBA{"Solbica-Mundart"}
         TARASK{"Taraskievica-Rächtschriibig"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Schpraach: {0}"}
         script{"Schrift: {0}"}

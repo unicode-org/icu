@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/uk.xml
@@ -694,7 +694,6 @@ uk{
         collation{
             big5han{"Китайський традиційний"}
             dictionary{"Порядок сортування: за словником"}
-            direct{"Прямий порядок"}
             ducet{"Порядок сортування: Unicode за умовчанням"}
             gb2312han{"Китайський спрощений"}
             phonebook{"Телефонна книга"}
@@ -773,7 +772,7 @@ uk{
         VALENCIA{"Валенсійська"}
         WADEGILE{"Романізація Вейда-Джайлза"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Мова з кодом {0}"}
         script{"Скрипт із кодом {0}"}

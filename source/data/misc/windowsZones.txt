@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/windowsZones.xml
@@ -32,9 +32,6 @@ windowsZones:table(nofallback){
         Argentina Standard Time{
             001{"America/Buenos_Aires"}
         }
-        Armenian Standard Time{
-            001{"Asia/Yerevan"}
-        }
         Atlantic Standard Time{
             001{"America/Halifax"}
         }
@@ -43,6 +40,9 @@ windowsZones:table(nofallback){
         }
         Azores Standard Time{
             001{"Atlantic/Azores"}
+        }
+        Bahia Standard Time{
+            001{"America/Bahia"}
         }
         Bangladesh Standard Time{
             001{"Asia/Dhaka"}
@@ -96,7 +96,7 @@ windowsZones:table(nofallback){
             001{"Australia/Brisbane"}
         }
         E. Europe Standard Time{
-            001{"Europe/Minsk"}
+            001{"Asia/Nicosia"}
         }
         E. South America Standard Time{
             001{"America/Sao_Paulo"}
@@ -120,7 +120,7 @@ windowsZones:table(nofallback){
             001{"Europe/London"}
         }
         GTB Standard Time{
-            001{"Europe/Istanbul"}
+            001{"Europe/Bucharest"}
         }
         Georgian Standard Time{
             001{"Asia/Tbilisi"}
@@ -146,8 +146,8 @@ windowsZones:table(nofallback){
         Jordan Standard Time{
             001{"Asia/Amman"}
         }
-        Kamchatka Standard Time{
-            001{"Asia/Kamchatka"}
+        Kaliningrad Standard Time{
+            001{"Europe/Kaliningrad"}
         }
         Korea Standard Time{
             001{"Asia/Seoul"}
@@ -157,15 +157,6 @@ windowsZones:table(nofallback){
         }
         Mauritius Standard Time{
             001{"Indian/Mauritius"}
-        }
-        Mexico Standard Time{
-            001{"America/Mexico_City"}
-        }
-        Mexico Standard Time 2{
-            001{"America/Chihuahua"}
-        }
-        Mid-Atlantic Standard Time{
-            001{"Etc/GMT+2"}
         }
         Middle East Standard Time{
             001{"Asia/Beirut"}
@@ -265,6 +256,9 @@ windowsZones:table(nofallback){
         }
         Tonga Standard Time{
             001{"Pacific/Tongatapu"}
+        }
+        Turkey Standard Time{
+            001{"Europe/Istanbul"}
         }
         US Eastern Standard Time{
             001{"America/Indianapolis"}

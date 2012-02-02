@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cs.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/cs.xml
  */
 cs{
-    Version{"2.0.62.55"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -1158,7 +1158,9 @@ cs{
             ls{"Aljašský standardní čas"}
         }
         "meta:Amazon"{
+            ld{"Amazonský letní čas"}
             lg{"Amazonský čas"}
+            ls{"Amazonský standardní čas"}
         }
         "meta:America_Central"{
             ld{"Centrální letní čas"}
@@ -1172,28 +1174,28 @@ cs{
         }
         "meta:America_Mountain"{
             ld{"Horský letní čas"}
-            lg{"Horské časové pásmo"}
+            lg{"Horský čas"}
             ls{"Horský standardní čas"}
         }
         "meta:America_Pacific"{
             ld{"Pacifický letní čas"}
-            lg{"Tichomořský čas"}
+            lg{"Pacifický čas"}
             ls{"Pacifický standardní čas"}
         }
         "meta:Anadyr"{
             ld{"Anadyrský letní čas"}
             lg{"Anadyrský čas"}
-            ls{"Anadyrský čas"}
+            ls{"Anadyrský standardní čas"}
         }
         "meta:Argentina"{
             ld{"Argentinský letní čas"}
             lg{"Argentinský čas"}
-            ls{"Argentinský čas"}
+            ls{"Argentinský standardní čas"}
         }
         "meta:Argentina_Western"{
             ld{"Západoargentinský letní čas"}
             lg{"Západoargentinský čas"}
-            ls{"Západoargentinský čas"}
+            ls{"Západoargentinský standardní čas"}
         }
         "meta:Atlantic"{
             ld{"Atlantický letní čas"}
@@ -1221,36 +1223,42 @@ cs{
             ls{"Západoaustralský standardní čas"}
         }
         "meta:Brasilia"{
-            ld{"Brasilia – letní čas"}
-            lg{"Čas města Brasilia"}
-            ls{"Čas města Brasilia"}
+            ld{"Brasilia letní čas"}
+            lg{"Brasilia čas"}
+            ls{"Brasilia standardní čas"}
         }
         "meta:China"{
+            ld{"Čínský letní čas"}
+            lg{"Čínský čas"}
             ls{"Čínský standardní čas"}
         }
         "meta:Choibalsan"{
             ld{"Čojbalsanský letní čas"}
             lg{"Čojbalsanský čas"}
-            ls{"Čojbalsanský čas"}
+            ls{"Čojbalsanský standardní čas"}
         }
         "meta:Europe_Central"{
             ld{"Středoevropský letní čas"}
+            lg{"Středoevropský čas"}
             ls{"Středoevropský standardní čas"}
         }
         "meta:Europe_Eastern"{
             ld{"Východoevropský letní čas"}
+            lg{"Východoevropský čas"}
             ls{"Východoevropský standardní čas"}
         }
         "meta:GMT"{
             ls{"Greenwichský střední čas"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Havajsko-aleutský letní čas"}
             lg{"Havajsko-aleutský čas"}
+            ls{"Havajsko-aleutský standardní čas"}
         }
         "meta:Hovd"{
             ld{"Hovdský letní čas"}
             lg{"Hovdský čas"}
-            ls{"Hovdský čas"}
+            ls{"Hovdský standardní čas"}
         }
         "meta:Indonesia_Central"{
             lg{"Středoindonéský čas"}
@@ -1264,35 +1272,33 @@ cs{
         "meta:Irkutsk"{
             ld{"Irkutský letní čas"}
             lg{"Irkutský čas"}
-            ls{"Irkutský čas"}
+            ls{"Irkutský standardní čas"}
         }
         "meta:Israel"{
             ld{"Izraelský letní čas"}
+            lg{"Izraelský čas"}
             ls{"Izraelský standardní čas"}
         }
         "meta:Japan"{
             ld{"Japonský letní čas"}
+            lg{"Japonský čas"}
             ls{"Japonský standardní čas"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovsk-kamčatský – letní čas"}
+            ld{"Petropavlovsk-kamčatský letní čas"}
             lg{"Kamčatský čas"}
-            ls{"Petropavlovsk-kamčatský čas"}
+            ls{"Petropavlovsk-kamčatský standardní čas"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Východokazachstánský letní čas"}
-            lg{"Východokazachstánský čas"}
-            ls{"Východokazachstánský standardní čas"}
+            ls{"Východokazachstánský čas"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Západokazachstánský letní čas"}
-            lg{"Západokazachstánský čas"}
-            ls{"Západokazachstánský standardní čas"}
+            ls{"Západokazachstánský čas"}
         }
         "meta:Krasnoyarsk"{
             ld{"Krasnojarský letní čas"}
             lg{"Krasnojarský čas"}
-            ls{"Krasnojarský čas"}
+            ls{"Krasnojarský standardní čas"}
         }
         "meta:Lord_Howe"{
             ld{"Letní čas na Ostrově lorda Howa"}
@@ -1305,12 +1311,12 @@ cs{
         "meta:Magadan"{
             ld{"Magadanský letní čas"}
             lg{"Magadanský čas"}
-            ls{"Magadanský čas"}
+            ls{"Magadanský standardní čas"}
         }
         "meta:Mongolia"{
             ld{"Ulánbátarský letní čas"}
-            lg{"Mongolský čas"}
-            ls{"Ulánbátarský čas"}
+            lg{"Ulánbátarský čas"}
+            ls{"Ulánbátarský standardní čas"}
         }
         "meta:Moscow"{
             ld{"Moskevský letní čas"}
@@ -1324,48 +1330,48 @@ cs{
         }
         "meta:Noronha"{
             ld{"Letní čas na ostrově Fernando de Noronha"}
-            lg{"Noronhský čas"}
-            ls{"Čas na ostrově Fernando de Noronha"}
+            lg{"Čas na ostrově Fernando de Noronha"}
+            ls{"Standardní čas na ostrově Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
             ld{"Novosibirský letní čas"}
             lg{"Novosibirský čas"}
-            ls{"Novosibirský čas"}
+            ls{"Novosibirský standardní čas"}
         }
         "meta:Omsk"{
             ld{"Omský letní čas"}
             lg{"Omský čas"}
-            ls{"Omský čas"}
+            ls{"Omský standardní čas"}
         }
         "meta:Sakhalin"{
             ld{"Sachalinský letní čas"}
             lg{"Sachalinský čas"}
-            ls{"Sachalinský čas"}
+            ls{"Sachalinský standardní čas"}
         }
         "meta:Samara"{
             ld{"Samarský letní čas"}
             lg{"Samarský čas"}
-            ls{"Samarský čas"}
+            ls{"Samarský standardní čas"}
         }
         "meta:Vladivostok"{
             ld{"Vladivostocký letní čas"}
             lg{"Vladivostocký čas"}
-            ls{"Vladivostocký čas"}
+            ls{"Vladivostocký standardní čas"}
         }
         "meta:Volgograd"{
             ld{"Volgogradský letní čas"}
             lg{"Volgogradský čas"}
-            ls{"Volgogradský čas"}
+            ls{"Volgogradský standardní čas"}
         }
         "meta:Yakutsk"{
             ld{"Jakutský letní čas"}
             lg{"Jakutský čas"}
-            ls{"Jakutský čas"}
+            ls{"Jakutský standardní čas"}
         }
         "meta:Yekaterinburg"{
             ld{"Jekatěrinburgský letní čas"}
             lg{"Jekatěrinburgský čas"}
-            ls{"Jekatěrinburgský čas"}
+            ls{"Jekatěrinburgský standardní čas"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Časové pásmo {1} ({0})"}

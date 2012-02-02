@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/eu.xml
@@ -245,7 +245,6 @@ eu{
         collation{
             big5han{"Txinera tradizionalaren alfabetoa-Big5"}
             dictionary{"Hurrenkera alfabetikoa"}
-            direct{"Zuzena"}
             ducet{"Unicode hurrenkera lehenetsia"}
             gb2312han{"Txinera sinplifikatuaren alfabetoa -GB2312"}
             phonebook{"Telefonoen zerrenda"}
@@ -301,7 +300,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.92"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

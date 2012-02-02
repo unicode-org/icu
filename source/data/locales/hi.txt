@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hi.xml
@@ -47,7 +47,7 @@ hi{
             }
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     calendar{
         ethiopic{
             monthNames{
@@ -107,14 +107,14 @@ hi{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M-y"}
-                yMEd{"EEE, d/M/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
                 yQ{"y Q"}
                 yQQQ{"QQQ y"}
-                yyMMMEEEd{"EEE, d MMM yy"}
+                yyMMMEd{"E, d MMM yy"}
                 yyMMMd{"d MMM, yy"}
                 yyMMdd{"dd-MM-yy"}
                 yyQ{"Q yy"}
@@ -863,10 +863,10 @@ hi{
         }
     }
     delimiters{
-        alternateQuotationEnd{"\""}
-        alternateQuotationStart{"\""}
-        quotationEnd{"'"}
-        quotationStart{"'"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
     listPattern{
         standard{

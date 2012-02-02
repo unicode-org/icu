@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -33,7 +33,6 @@ pl{
         054{"Melanezja"}
         057{"Mikronezja"}
         061{"Polinezja"}
-        062{"Azja Południowo-Środkowa"}
         142{"Azja"}
         143{"Azja Środkowa"}
         145{"Azja Zachodnia"}
@@ -41,9 +40,7 @@ pl{
         151{"Europa Wschodnia"}
         154{"Europa Północna"}
         155{"Europa Zachodnia"}
-        172{"Wspólnota Niezależnych Państw"}
         419{"Ameryka Łacińska"}
-        830{"Wyspy Normandzkie"}
         AC{"Wyspa Wniebowstąpienia"}
         AD{"Andora"}
         AE{"Zjednoczone Emiraty Arabskie"}
@@ -301,5 +298,5 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany lub nieprawidłowy region"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
 }

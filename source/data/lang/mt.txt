@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mt.xml
@@ -516,7 +516,6 @@ mt{
         }
         collation{
             big5han{"Ordni Ċiniż Tradizzjonali (Big5)"}
-            direct{"Ordni Diretta"}
             gb2312han{"Ordni Ċiniż Sempliċi (GB2312)"}
             phonebook{"Ordni Telefonika"}
             pinyin{"Ordni tal-Pinjin"}
@@ -527,7 +526,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skritt: {0}"}

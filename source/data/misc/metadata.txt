@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalMetadata.xml
@@ -33,8 +33,7 @@ metadata:table(nofallback){
         bcl{"bik"}
         bel{"be"}
         ben{"bn"}
-        bh{"bho"}
-        bih{"bho"}
+        bih{"bh"}
         bis{"bi"}
         bod{"bo"}
         bos{"bs"}
@@ -751,7 +750,7 @@ metadata:table(nofallback){
         520{"NR"}
         524{"NP"}
         528{"NL"}
-        532{"AN"}
+        532{"CW SX BQ"}
         533{"AW"}
         536{"SA IQ"}
         540{"NC"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/be.xml
@@ -31,7 +31,7 @@ be{
             }
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -50,14 +50,14 @@ be{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d"}
+                Ed{"E, d"}
                 Gy{"G y"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
                 M{"L"}
                 MEd{"E, d.M"}
                 MMM{"LLL"}
-                MMMEd{"EEE, d MMM"}
+                MMMEd{"E, d MMM"}
                 MMMd{"d MMM"}
                 Md{"d.M"}
                 d{"d"}
@@ -65,9 +65,9 @@ be{
                 hms{"h.mm.ss a"}
                 y{"G y"}
                 yM{"M.yy"}
-                yMEd{"EEE, d.M.yy"}
+                yMEd{"E, d.M.yy"}
                 yMMM{"MMM y G"}
-                yMMMEd{"EEE, d MMM y G"}
+                yMMMEd{"E, d MMM y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d.M.yy"}
             }
@@ -108,9 +108,9 @@ be{
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"MM/yyyy"}
-                yMEd{"EEE, dd/MM/yyyy"}
+                yMEd{"E, dd/MM/yyyy"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d.M.yy"}
@@ -308,10 +308,10 @@ be{
         }
     }
     delimiters{
-        alternateQuotationEnd{"»"}
-        alternateQuotationStart{"«"}
-        quotationEnd{"”"}
-        quotationStart{"„"}
+        alternateQuotationEnd{"›"}
+        alternateQuotationStart{"‹"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
     }
     measurementSystemNames{
         US{"ЗША"}

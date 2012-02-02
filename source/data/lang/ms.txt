@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ms.xml
@@ -241,7 +241,6 @@ ms{
         collation{
             big5han{"Aturan Isih Cina Tradisional - Big5"}
             dictionary{"Aturan Isih Kamus"}
-            direct{"Aturan Isih Langsung"}
             ducet{"Aturan Isih Unikod Lalai"}
             gb2312han{"Aturan Isih Bahasa Cina Ringkas - GB2312"}
             phonebook{"Aturan Isih Buku Telefon"}
@@ -290,7 +289,7 @@ ms{
             tibt{"Digit Tibet"}
         }
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.64.57"}
     localeDisplayPattern{
         separator{","}
     }

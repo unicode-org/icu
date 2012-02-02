@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nn.xml
@@ -692,7 +692,6 @@ nn{
         }
         collation{
             big5han{"tradisjonell kinesisk sortering"}
-            direct{"direkte sortering"}
             ducet{"grunnleggjande Unicode-sorteringsrekkjefølgje"}
             gb2312han{"forenkla kinesisk sortering"}
             phonebook{"telefonkatalogsortering"}
@@ -731,7 +730,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}
