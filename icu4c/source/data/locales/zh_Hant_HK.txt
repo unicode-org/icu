@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant_HK.xml
@@ -14,7 +14,7 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.64.50"}
     calendar{
         buddhist{
             availableFormats{
@@ -39,7 +39,7 @@ zh_Hant_HK{
                 "{1}{0}",
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 MEd{"E, M-d"}
                 Md{"M-d"}
             }

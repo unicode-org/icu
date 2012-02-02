@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/it.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/it.xml
  */
 it{
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -457,20 +457,22 @@ it{
             ls{"Ora dell'Africa orientale"}
         }
         "meta:Africa_Southern"{
-            lg{"Ora Sudafrica"}
             ls{"Ora standard Sudafrica"}
         }
         "meta:Africa_Western"{
-            ld{"Ora estiva dell'Africa occidentale"}
-            ls{"Ora dell'Africa occidentale"}
+            ld{"Ora legale dell'Africa occidentale"}
+            lg{"Ora dell'Africa occidentale"}
+            ls{"Ora standard dell'Africa occidentale"}
         }
         "meta:Alaska"{
-            ld{"Ora Legale Alaska"}
+            ld{"Ora legale Alaska"}
             lg{"Ora dell'Alaska"}
-            ls{"Ora Standard Alaska"}
+            ls{"Ora standard Alaska"}
         }
         "meta:Amazon"{
+            ld{"Ora legale dell'Amazzonia"}
             lg{"Ora dell'Amazzonia"}
+            ls{"Ora standard dell'Amazzonia"}
         }
         "meta:America_Central"{
             ld{"Ora legale centrale USA"}
@@ -495,17 +497,17 @@ it{
         "meta:Anadyr"{
             ld{"Ora legale di Anadyr"}
             lg{"Ora di Anadyr"}
-            ls{"Ora di Anadyr"}
+            ls{"Ora standard di Anadyr"}
         }
         "meta:Argentina"{
             ld{"Ora legale dell'Argentina"}
             lg{"Ora dell'Argentina"}
-            ls{"Ora dell'Argentina"}
+            ls{"Ora standard dell'Argentina"}
         }
         "meta:Argentina_Western"{
-            ld{"Ora legale dell'Argentina (occidentale)"}
-            lg{"Ora dell'Argentina (occidentale)"}
-            ls{"Ora dell'Argentina occidentale"}
+            ld{"Ora legale dell'Argentina occidentale"}
+            lg{"Ora dell'Argentina occidentale"}
+            ls{"Ora standard dell'Argentina occidentale"}
         }
         "meta:Atlantic"{
             ld{"Ora legale dell'Atlantico"}
@@ -513,41 +515,43 @@ it{
             ls{"Ora standard dell'Atlantico"}
         }
         "meta:Australia_Central"{
-            ld{"Ora legale dell'Australia (centrale)"}
+            ld{"Ora legale dell'Australia centrale"}
             lg{"Ora dell'Australia centrale"}
-            ls{"Ora standard dell'Australia (centrale)"}
+            ls{"Ora standard dell'Australia centrale"}
         }
         "meta:Australia_CentralWestern"{
-            ld{"Ora legale dell'Australia (centroccidentale)"}
-            lg{"Ora dell'Australia (centroccidentale)"}
-            ls{"Ora standard dell'Australia (centroccidentale)"}
+            ld{"Ora legale dell'Australia centroccidentale"}
+            lg{"Ora dell'Australia centroccidentale"}
+            ls{"Ora standard dell'Australia centroccidentale"}
         }
         "meta:Australia_Eastern"{
-            ld{"Ora legale dell'Australia (orientale)"}
+            ld{"Ora legale dell'Australia orientale"}
             lg{"Ora dell'Australia orientale"}
-            ls{"Ora standard dell'Australia (orientale)"}
+            ls{"Ora standard dell'Australia orientale"}
         }
         "meta:Australia_Western"{
-            ld{"Ora legale dell'Australia (occidentale)"}
+            ld{"Ora legale dell'Australia occidentale"}
             lg{"Ora dell'Australia occidentale"}
-            ls{"Ora standard dell'Australia (occidentale)"}
+            ls{"Ora standard dell'Australia occidentale"}
         }
         "meta:Brasilia"{
             ld{"Ora legale di Brasilia"}
             lg{"Ora di Brasilia"}
-            ls{"Ora di Brasilia"}
+            ls{"Ora standard di Brasilia"}
         }
         "meta:China"{
-            ld{"Ora Legale Cina"}
-            ls{"Ora Standard Cina"}
+            ld{"Ora legale di Cina"}
+            lg{"Ora di Cina"}
+            ls{"Ora standard di Cina"}
         }
         "meta:Choibalsan"{
             ld{"Ora legale di Choibalsan"}
             lg{"Ora di Choibalsan"}
-            ls{"Ora di Choibalsan"}
+            ls{"Ora standard di Choibalsan"}
         }
         "meta:Europe_Central"{
             ld{"Ora Legale Europa Centrale"}
+            lg{"Ora Europa Centrale"}
             ls{"Ora Standard Europa Centrale"}
             sd{"CEST"}
             sg{"CET"}
@@ -555,70 +559,69 @@ it{
         }
         "meta:Europe_Eastern"{
             ld{"Ora Legale Europa Orientale"}
+            lg{"Ora Europa Orientale"}
             ls{"Ora Standard Europa Orientale"}
             sd{"EEST"}
             sg{"EET"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
-            ls{"Ora Europa occidentale"}
+            ld{"Ora Legale Europa occidentale"}
+            lg{"Ora Europa occidentale"}
+            ls{"Ora Standard Europa occidentale"}
             sd{"WEST"}
             sg{"WET"}
             ss{"WET"}
         }
-        "meta:Hawaii"{
-            ld{"Ora Legale Hawaii"}
-            ls{"Ora Standard Hawaii"}
-        }
         "meta:Hawaii_Aleutian"{
+            ld{"Ora legale delle isole Aleutine, Hawaii"}
             lg{"Ora delle isole Aleutine, Hawaii"}
+            ls{"Ora standard delle isole Aleutine, Hawaii"}
         }
         "meta:Hovd"{
             ld{"Ora legale di Hovd"}
             lg{"Ora di Hovd"}
-            ls{"Ora di Hovd"}
+            ls{"Ora standard di Hovd"}
         }
         "meta:Indonesia_Central"{
-            lg{"Ora dell'Indonesia (centrale)"}
+            ls{"Ora dell'Indonesia centrale"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Ora dell'Indonesia (orientale)"}
+            ls{"Ora dell'Indonesia orientale"}
         }
         "meta:Indonesia_Western"{
-            lg{"Ora dell'Indonesia (occidentale)"}
+            ls{"Ora dell'Indonesia occidentale"}
         }
         "meta:Irkutsk"{
             ld{"Ora legale di Irkutsk"}
             lg{"Ora di Irkutsk"}
-            ls{"Ora di Irkutsk"}
+            ls{"Ora standard di Irkutsk"}
         }
         "meta:Israel"{
             ld{"Ora Legale Israele"}
+            lg{"Ora Israele"}
             ls{"Ora Standard Israele"}
         }
         "meta:Japan"{
             ld{"Ora Legale Giappone"}
+            lg{"Ora Giappone"}
             ls{"Ora Standard Giappone"}
         }
         "meta:Kamchatka"{
             ld{"Ora legale di Petropavlovsk-Kamchatski"}
-            lg{"Ora di Kamchatka"}
-            ls{"Ora di Petropavlovsk-Kamchatski"}
+            lg{"Ora di Petropavlovsk-Kamchatski"}
+            ls{"Ora standard di Petropavlovsk-Kamchatski"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Ora legale del Kazakistan (orientale)"}
-            lg{"Ora del Kazakistan orientale"}
-            ls{"Ora standard del Kazakistan orientale"}
+            ls{"Ora del Kazakistan orientale"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Ora legale del Kazakistan (occidentale)"}
-            lg{"Ora del Kazakistan occidentale"}
-            ls{"Ora standard del Kazakistan occidentale"}
+            ls{"Ora del Kazakistan occidentale"}
         }
         "meta:Krasnoyarsk"{
             ld{"Ora legale di Krasnoyarsk"}
             lg{"Ora di Krasnoyarsk"}
-            ls{"Ora di Krasnoyarsk"}
+            ls{"Ora standard di Krasnoyarsk"}
         }
         "meta:Lord_Howe"{
             ld{"Ora legale di Lord Howe"}
@@ -626,17 +629,17 @@ it{
             ls{"Ora standard di Lord Howe"}
         }
         "meta:Macquarie"{
-            lg{"Ora di Macquarie"}
+            ls{"Ora di Macquarie"}
         }
         "meta:Magadan"{
             ld{"Ora legale di Magadan"}
             lg{"Ora di Magadan"}
-            ls{"Ora di Magadan"}
+            ls{"Ora standard di Magadan"}
         }
         "meta:Mongolia"{
             ld{"Ora legale di Ulan Bator"}
-            lg{"Ora della Mongolia"}
-            ls{"Ora di Ulan Bator"}
+            lg{"Ora di Ulan Bator"}
+            ls{"Ora standard di Ulan Bator"}
         }
         "meta:Moscow"{
             ld{"Ora legale di Mosca"}
@@ -650,48 +653,48 @@ it{
         }
         "meta:Noronha"{
             ld{"Ora legale di Fernando de Noronha"}
-            lg{"Ora di Noronha"}
-            ls{"Ora di Fernando de Noronha"}
+            lg{"Ora di Fernando de Noronha"}
+            ls{"Ora standard di Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
             ld{"Ora legale di Novosibirsk"}
             lg{"Ora di Novosibirsk"}
-            ls{"Ora di Novosibirsk"}
+            ls{"Ora standard di Novosibirsk"}
         }
         "meta:Omsk"{
             ld{"Ora legale di Omsk"}
             lg{"Ora di Omsk"}
-            ls{"Ora di Omsk"}
+            ls{"Ora standard di Omsk"}
         }
         "meta:Sakhalin"{
             ld{"Ora legale di Sakhalin"}
             lg{"Ora di Sakhalin"}
-            ls{"Ora di Sakhalin"}
+            ls{"Ora standard di Sakhalin"}
         }
         "meta:Samara"{
             ld{"Ora legale di Samara"}
             lg{"Ora di Samara"}
-            ls{"Ora di Samara"}
+            ls{"Ora standard di Samara"}
         }
         "meta:Vladivostok"{
             ld{"Ora legale di Vladivostok"}
             lg{"Ora di Vladivostok"}
-            ls{"Ora di Vladivostok"}
+            ls{"Ora standard di Vladivostok"}
         }
         "meta:Volgograd"{
             ld{"Ora legale di Volgograd"}
             lg{"Ora di Volgograd"}
-            ls{"Ora di Volgograd"}
+            ls{"Ora standard di Volgograd"}
         }
         "meta:Yakutsk"{
             ld{"Ora legale di Yakutsk"}
             lg{"Ora di Yakutsk"}
-            ls{"Ora di Yakutsk"}
+            ls{"Ora standard di Yakutsk"}
         }
         "meta:Yekaterinburg"{
             ld{"Ora legale di Ekaterinburg"}
             lg{"Ora di Ekaterinburg"}
-            ls{"Ora di Ekaterinburg"}
+            ls{"Ora standard di Ekaterinburg"}
         }
         fallbackRegionFormat{"Ora {1} ({0})"}
         gmtFormat{"GMT{0}"}

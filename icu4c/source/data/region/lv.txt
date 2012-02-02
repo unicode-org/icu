@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lv.xml
@@ -33,7 +33,6 @@ lv{
         054{"Melanēzija"}
         057{"Mikronēzijas reģions"}
         061{"Polinēzija"}
-        062{"Centrāldienvidāzija"}
         142{"Āzija"}
         143{"Centrālāzija"}
         145{"Rietumāzija"}
@@ -41,7 +40,6 @@ lv{
         151{"Austrumeiropa"}
         154{"Ziemeļeiropa"}
         155{"Rietumeiropa"}
-        172{"Neatkarīgo Valstu Savienība"}
         419{"Latīņamerika"}
         AC{"Debesbraukšanas sala"}
         AD{"Andora"}
@@ -300,5 +298,5 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms vai nederīgs reģions"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
 }

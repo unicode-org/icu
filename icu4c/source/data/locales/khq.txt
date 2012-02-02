@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/khq.xml
@@ -26,7 +26,7 @@ khq{
             }
         }
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -52,7 +52,7 @@ khq{
                 M{"M"}
                 MMM{"MMM"}
                 MMMEd{"E d MMM"}
-                MMMMEd{"EEE d MMMM"}
+                MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMMdd{"dd MMM"}
@@ -62,15 +62,15 @@ khq{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE d/M/y"}
+                yMEd{"E d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE d MMM y"}
+                yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
                 yQ{"'T'Q y"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
+                yyMMMEd{"E d MMM yy"}
                 yyMMMd{"d MMM yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -81,8 +81,8 @@ khq{
                         "Ati",
                         "Ata",
                         "Ala",
-                        "Ala",
-                        "Ala",
+                        "Alm",
+                        "Alj",
                         "Ass",
                     }
                     wide{
@@ -215,7 +215,7 @@ khq{
                     }
                     wide{
                         "Arrubu 1",
-                        "Arrubu 3",
+                        "Arrubu 2",
                         "Arrubu 3",
                         "Arrubu 4",
                     }
@@ -224,8 +224,8 @@ khq{
         }
     }
     delimiters{
-        alternateQuotationEnd{"»"}
-        alternateQuotationStart{"«"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
     }

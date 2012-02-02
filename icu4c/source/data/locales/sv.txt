@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv.xml
@@ -14,7 +14,7 @@ sv{
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o p q r s t u v w x y z å ä ö]"}
     ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Å Ä Ö]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / \& # † ‡ ′ ″ §]"}
+    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] § @ * / \& # † ‡ ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -40,7 +40,7 @@ sv{
             }
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -59,7 +59,7 @@ sv{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -67,7 +67,6 @@ sv{
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEEEd{"EEE d MMMM"}
                 MMMMEd{"E d:'e' MMMM"}
                 MMMMd{"d:'e' MMMM"}
                 MMMd{"d MMM"}
@@ -80,9 +79,9 @@ sv{
                 ms{"mm:ss"}
                 y{"y G"}
                 yM{"G yyyy-MM"}
-                yMEd{"EEE, G yyyy-MM-dd"}
+                yMEd{"E, G yyyy-MM-dd"}
                 yMMM{"MMM y G"}
-                yMMMEd{"EEE d MMM y G"}
+                yMMMEd{"E d MMM y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"G yyyy-MM-dd"}
                 yQ{"G yyyy Q"}
@@ -252,14 +251,13 @@ sv{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEEEd{"EEE d MMMM"}
                 MMMMEd{"E d:'e' MMMM"}
                 MMMMd{"d:'e' MMMM"}
                 MMMd{"d MMM"}
@@ -272,9 +270,9 @@ sv{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"yyyy-MM"}
-                yMEd{"EEE, yyyy-MM-dd"}
+                yMEd{"E, yyyy-MM-dd"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE d MMM y"}
+                yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"yyyy-MM-dd"}
                 yQ{"yyyy Q"}
@@ -731,14 +729,13 @@ sv{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEEEd{"EEE d MMMM"}
                 MMMMEd{"E d:'e' MMMM"}
                 MMMMd{"d:'e' MMMM"}
                 MMMd{"d MMM"}
@@ -754,10 +751,10 @@ sv{
                 yyQ{"Q yy G"}
                 yyyy{"y G"}
                 yyyyM{"G y-MM"}
-                yyyyMEd{"EEE, G y-MM-dd"}
+                yyyyMEd{"E, G y-MM-dd"}
                 yyyyMM{"G y-MM"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE d MMM y G"}
+                yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"G y-MM-dd"}
                 yyyyQ{"G y Q"}
@@ -816,7 +813,7 @@ sv{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -824,7 +821,6 @@ sv{
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEEEd{"EEE d MMMM"}
                 MMMMEd{"E d:'e' MMMM"}
                 MMMMd{"d:'e' MMMM"}
                 MMMd{"d MMM"}
@@ -841,10 +837,10 @@ sv{
                 yyQ{"Q yy G"}
                 yyyy{"y G"}
                 yyyyM{"G y-MM"}
-                yyyyMEd{"EEE, G y-MM-dd"}
+                yyyyMEd{"E, G y-MM-dd"}
                 yyyyMM{"G y-MM"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE d MMM y G"}
+                yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"G y-MM-dd"}
                 yyyyQ{"G y Q"}
@@ -933,7 +929,7 @@ sv{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -941,7 +937,6 @@ sv{
                 MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
-                MMMMEEEd{"EEE d MMMM"}
                 MMMMEd{"E d:'e' MMMM"}
                 MMMMd{"d:'e' MMMM"}
                 MMMd{"d MMM"}
@@ -958,10 +953,10 @@ sv{
                 yyQ{"Q yy G"}
                 yyyy{"y G"}
                 yyyyM{"G y-MM"}
-                yyyyMEd{"EEE, G y-MM-dd"}
+                yyyyMEd{"E, G y-MM-dd"}
                 yyyyMM{"G y-MM"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE d MMM y G"}
+                yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"G y-MM-dd"}
                 yyyyQ{"G y Q"}

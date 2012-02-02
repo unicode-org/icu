@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sl.xml
@@ -658,7 +658,6 @@ sl{
         collation{
             big5han{"razvrščanje po sistemu tradicionalne kitajščine - Big5"}
             dictionary{"Vrstni red razvrščanja v slovarju"}
-            direct{"neposredno razvrščanje"}
             ducet{"Privzeto razvrščanje Unicode"}
             gb2312han{"razvrščanje po sistemu poenostavljene kitajščine - GB2312"}
             phonebook{"razvrščanje po abecedi"}
@@ -737,7 +736,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Jezik: {0}"}
         territory{"Regija: {0}"}

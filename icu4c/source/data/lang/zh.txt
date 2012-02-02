@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -667,7 +667,6 @@ zh{
         collation{
             big5han{"繁体中文(Big5)"}
             dictionary{"字典排序顺序"}
-            direct{"直接排序顺序"}
             ducet{"默认 Unicode 排序顺序"}
             gb2312han{"简体中文(GB2312)"}
             phonebook{"电话簿顺序"}
@@ -756,7 +755,7 @@ zh{
         VALENCIA{"瓦伦西亚文"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

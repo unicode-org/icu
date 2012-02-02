@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ja.xml
@@ -671,7 +671,6 @@ ja{
         collation{
             big5han{"繁体字中国語順[Big5]"}
             dictionary{"辞書順"}
-            direct{"直接著録"}
             ducet{"ユニコード照合順"}
             gb2312han{"簡体字中国語順[GB2312]"}
             phonebook{"電話帳順"}
@@ -724,7 +723,7 @@ ja{
         1606NICT{"後期中世フランス語[〜1606]"}
         1694ACAD{"初期現代フランス語"}
         1901{"伝統的ドイツ語正書法[1901]"}
-        1996{"ドイツ語正書法（1996）"}
+        1996{"ドイツ語正書法[1996]"}
         AREVELA{"東アルメニア文語"}
         AREVMDA{"西アルメニア文語"}
         BOONT{"ブーントリング"}
@@ -742,7 +741,7 @@ ja{
         VALENCIA{"バレンシア方言"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

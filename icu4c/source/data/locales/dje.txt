@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/dje.xml
@@ -29,7 +29,7 @@ dje{
             }
         }
     }
-    Version{"2.0.58.28"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -52,11 +52,11 @@ dje{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"EEE d/M"}
+                MEd{"E d/M"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMd{"d MMM"}
@@ -67,9 +67,9 @@ dje{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE d/M/y"}
+                yMEd{"E d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE d MMM y"}
+                yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQ{"Q y"}
@@ -82,8 +82,8 @@ dje{
                         "Ati",
                         "Ata",
                         "Ala",
-                        "Ala",
-                        "Ala",
+                        "Alm",
+                        "Alz",
                         "Asi",
                     }
                     wide{
@@ -91,8 +91,8 @@ dje{
                         "Atinni",
                         "Atalaata",
                         "Alarba",
-                        "Alarba",
-                        "Alarba",
+                        "Alhamisi",
+                        "Alzuma",
                         "Asibti",
                     }
                 }
@@ -102,8 +102,8 @@ dje{
                         "T",
                         "T",
                         "L",
-                        "L",
-                        "L",
+                        "M",
+                        "Z",
                         "S",
                     }
                 }
@@ -225,8 +225,8 @@ dje{
         }
     }
     delimiters{
-        alternateQuotationEnd{"»"}
-        alternateQuotationStart{"«"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
     }

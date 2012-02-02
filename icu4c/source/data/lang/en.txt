@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -119,6 +119,7 @@ en{
         chp{"Chipewyan"}
         chr{"Cherokee"}
         chy{"Cheyenne"}
+        ckb{"Sorani Kurdish"}
         cmc{"Chamic Language"}
         co{"Corsican"}
         cop{"Coptic"}
@@ -752,9 +753,7 @@ en{
         collation{
             big5han{"Traditional Chinese Sort Order - Big5"}
             dictionary{"Dictionary Sort Order"}
-            direct{"Direct Sort Order"}
             ducet{"Default Unicode Sort Order"}
-            eor{"European Ordering Rules"}
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
             pinyin{"Pinyin Sort Order"}
@@ -770,7 +769,9 @@ en{
             arabext{"Extended Arabic-Indic Digits"}
             armn{"Armenian Numerals"}
             armnlow{"Armenian Lowercase Numerals"}
+            bali{"Balinese Digits"}
             beng{"Bengali Digits"}
+            cham{"Cham Digits"}
             deva{"Devanagari Digits"}
             ethi{"Ethiopic Numerals"}
             finance{"Financial Numerals"}
@@ -786,25 +787,39 @@ en{
             hant{"Traditional Chinese Numerals"}
             hantfin{"Traditional Chinese Financial Numerals"}
             hebr{"Hebrew Numerals"}
+            java{"Javanese Digits"}
             jpan{"Japanese Numerals"}
             jpanfin{"Japanese Financial Numerals"}
+            kali{"Kayah Li Digits"}
             khmr{"Khmer Digits"}
             knda{"Kannada Digits"}
+            lana{"Tai Tham Hora Digits"}
+            lanatham{"Tai Tham Tham Digits"}
             laoo{"Lao Digits"}
             latn{"Western Digits"}
+            lepc{"Lepcha Digits"}
+            limb{"Limbu Digits"}
             mlym{"Malayalam Digits"}
             mong{"Mongolian Digits"}
+            mtei{"Meetei Mayek Digits"}
             mymr{"Myanmar Digits"}
+            mymrshan{"Myanmar Shan Digits"}
             native{"Native Digits"}
+            nkoo{"N'Ko Digits"}
+            olck{"Ol Chiki Digits"}
             orya{"Oriya Digits"}
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
+            saur{"Saurashtra Digits"}
+            sund{"Sundanese Digits"}
+            talu{"New Tai Lue Digits"}
             taml{"Traditional Tamil Numerals"}
             tamldec{"Tamil Digits"}
             telu{"Telugu Digits"}
             thai{"Thai Digits"}
             tibt{"Tibetan Digits"}
             traditional{"Traditional Numerals"}
+            vaii{"Vai Digits"}
         }
     }
     Variants{
@@ -848,7 +863,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.62.77"}
+    Version{"2.0.64.95"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

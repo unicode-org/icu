@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/az.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seuta"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/km.xml
@@ -82,7 +82,6 @@ km{
         qu{"ភាសាកេទ្ជូអា"}
         rn{"ភាសារូន្ឌី"}
         ro{"ភាសារូម៉ានី"}
-        ru{"ភាសាรัរូស្ស៉ី"}
         sa{"ភាសាសំស្ក្រឹត"}
         sd{"ភាសាស៉ីន្ដី"}
         sk{"ភាសាស្លូវ៉ាគី"}
@@ -112,5 +111,5 @@ km{
         zh{"ភាសាចិន"}
         zu{"ភាសាហ្ស៉ូលូ"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.59"}
 }

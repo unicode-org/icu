@@ -73,7 +73,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.63.66"}
+    Version{"2.0.64.57"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -106,7 +106,7 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 Gy{"G y"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -124,9 +124,9 @@ root{
                 ms{"mm:ss"}
                 y{"G y"}
                 yM{"GGGGG yyyy-MM"}
-                yMEd{"EEE, GGGGG yyyy-MM-dd"}
+                yMEd{"E, GGGGG yyyy-MM-dd"}
                 yMMM{"G y MMM"}
-                yMMMEd{"EEE, G y MMM d"}
+                yMMMEd{"E, G y MMM d"}
                 yMMMd{"G y MMM d"}
                 yMd{"GGGGG yyyy-MM-dd"}
                 yQ{"GGGGG yyyy Q"}
@@ -491,7 +491,7 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -508,9 +508,9 @@ root{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"y-M"}
-                yMEd{"EEE, y-M-d"}
+                yMEd{"E, y-M-d"}
                 yMMM{"y MMM"}
-                yMMMEd{"EEE, y MMM d"}
+                yMMMEd{"E, y MMM d"}
                 yMMMd{"y MMM d"}
                 yMd{"y-M-d"}
                 yQ{"y Q"}
@@ -972,7 +972,7 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 Gy{"G y"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -991,9 +991,9 @@ root{
                 y{"G y"}
                 yyyy{"G y"}
                 yyyyM{"GGGGG yy-MM"}
-                yyyyMEd{"EEE, GGGGG yy-MM-dd"}
+                yyyyMEd{"E, GGGGG yy-MM-dd"}
                 yyyyMMM{"G y MMM"}
-                yyyyMMMEd{"EEE, G y MMM d"}
+                yyyyMMMEd{"E, G y MMM d"}
                 yyyyMMMd{"G y MMM d"}
                 yyyyMd{"GGGGG yy-MM-dd"}
                 yyyyQ{"GGGGG yy Q"}
@@ -1548,7 +1548,7 @@ root{
                 "EEEE, G y MMMM dd",
                 "G y MMMM d",
                 "G y MMM d",
-                "GGGGG yy-MM-dd",
+                "GGGGG yyy-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1569,7 +1569,7 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 Gy{"G y"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -1587,13 +1587,13 @@ root{
                 ms{"mm:ss"}
                 y{"G y"}
                 yyyy{"G y"}
-                yyyyM{"GGGGG yy-MM"}
-                yyyyMEd{"EEE, GGGGG yy-MM-dd"}
+                yyyyM{"GGGGG yyy-MM"}
+                yyyyMEd{"E, GGGGG yyy-MM-dd"}
                 yyyyMMM{"G y MMM"}
-                yyyyMMMEd{"EEE, G y MMM d"}
+                yyyyMMMEd{"E, G y MMM d"}
                 yyyyMMMd{"G y MMM d"}
-                yyyyMd{"GGGGG yy-MM-dd"}
-                yyyyQ{"GGGGG yy Q"}
+                yyyyMd{"GGGGG yyy-MM-dd"}
+                yyyyQ{"GGGGG yyy Q"}
                 yyyyQQQ{"G y QQQ"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}

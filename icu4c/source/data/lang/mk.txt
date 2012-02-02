@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mk.xml
@@ -583,7 +583,6 @@ mk{
         }
         collation{
             big5han{"Традиционално кинеско сортирање"}
-            direct{"Директно сортирање"}
             gb2312han{"Поедноставено кинеско сортирање"}
             phonebook{"Азбучен редослед"}
             pinyin{"Сортирање Pinyin"}
@@ -598,7 +597,7 @@ mk{
         PINYIN{"Пинјин романизација"}
         WADEGILE{"Вејд-Џајлс романизација"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Јазик: {0}"}
         script{"Писмо: {0}"}

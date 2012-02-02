@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ro.xml
@@ -367,7 +367,6 @@ ro{
         collation{
             big5han{"sortare pentru chineza tradițională - Big5"}
             dictionary{"Ordine de sortare a dicţionarului"}
-            direct{"sortare directă"}
             ducet{"Ordine de sortare Unicode implicită"}
             gb2312han{"sortare pentru chineza simplificată - GB2312"}
             phonebook{"sortare după cartea de telefon"}
@@ -420,7 +419,7 @@ ro{
         PINYIN{"pinyin"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

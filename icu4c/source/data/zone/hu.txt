@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hu.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1163,34 +1163,30 @@ hu{
         }
         "meta:Acre"{
             ld{"Acre nyári idő"}
-            ls{"Acre idő"}
+            lg{"Acre idő"}
+            ls{"Acre zónaidő"}
         }
         "meta:Afghanistan"{
             ls{"Afganisztáni idő"}
         }
         "meta:Africa_Central"{
-            lg{"Mozambiki idő"}
             ls{"Közép-afrikai idő"}
         }
         "meta:Africa_Eastern"{
-            lg{"Kenyai idő"}
             ls{"Kelet-afrikai idő"}
         }
-        "meta:Africa_FarWestern"{
-            lg{"Nyugat-szaharai idő"}
-        }
         "meta:Africa_Southern"{
-            lg{"Dél-afrikai idő"}
-            ls{"Dél-afrikai szabvány idő"}
+            ls{"Dél-afrikai idő"}
         }
         "meta:Africa_Western"{
             ld{"Nyugat-afrikai nyári idő"}
-            lg{"Nigériai idő"}
-            ls{"Nyugat-afrikai idő"}
+            lg{"Nyugat-afrikai idő"}
+            ls{"Nyugat-afrikai zónaidő"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinszki nyári idő"}
-            ls{"Aktyubinszki idő"}
+            lg{"Aktyubinszki idő"}
+            ls{"Aktyubinszki zónaidő"}
         }
         "meta:Alaska"{
             ld{"Alaszkai nyári idő"}
@@ -1204,12 +1200,13 @@ hu{
         }
         "meta:Almaty"{
             ld{"Almati nyári idő"}
-            ls{"Almati idő"}
+            lg{"Almati idő"}
+            ls{"Almati zónaidő"}
         }
         "meta:Amazon"{
             ld{"Amazóniai nyári idő"}
-            lg{"Amazonasi idő"}
-            ls{"Amazóniai idő"}
+            lg{"Amazóniai idő"}
+            ls{"Amazóniai zónaidő"}
         }
         "meta:America_Central"{
             ld{"Középső államokbeli nyári idő"}
@@ -1234,15 +1231,17 @@ hu{
         "meta:Anadyr"{
             ld{"Anadíri nyári idő"}
             lg{"Anadiri idő"}
-            ls{"Anadíri idő"}
+            ls{"Anadíri zónaidő"}
         }
         "meta:Aqtau"{
             ld{"Aqtaui nyári idő"}
-            ls{"Aqtaui idő"}
+            lg{"Aqtaui idő"}
+            ls{"Aqtaui zónaidő"}
         }
         "meta:Aqtobe"{
             ld{"Aqtobei nyári idő"}
-            ls{"Aqtobei idő"}
+            lg{"Aqtobei idő"}
+            ls{"Aqtobei zónaidő"}
         }
         "meta:Arabian"{
             ld{"Arab nyári idő"}
@@ -1252,20 +1251,22 @@ hu{
         "meta:Argentina"{
             ld{"Argentínai nyári idő"}
             lg{"Argentínai idő"}
-            ls{"Argentína idő"}
+            ls{"Argentína zónaidő"}
         }
         "meta:Argentina_Western"{
-            ld{"Argentín nyugati nyári idő"}
-            lg{"Argentin nyugati idő"}
-            ls{"Nyugat-Argentína idő"}
+            ld{"Nyugat-Argentína nyári idő"}
+            lg{"Nyugat-Argentína idő"}
+            ls{"Nyugat-Argentína zónaidő"}
         }
         "meta:Armenia"{
             ld{"Örmény nyári idő"}
-            ls{"Örmény idő"}
+            lg{"Örmény idő"}
+            ls{"Örmény zónaidő"}
         }
         "meta:Ashkhabad"{
             ld{"Ashabadi nyári idő"}
-            ls{"Ashabadi idő"}
+            lg{"Ashabadi idő"}
+            ls{"Ashabadi zónaidő"}
         }
         "meta:Atlantic"{
             ld{"Atlanti-óceáni nyári idő"}
@@ -1294,23 +1295,27 @@ hu{
         }
         "meta:Azerbaijan"{
             ld{"Azerbajdzsáni nyári idő"}
-            ls{"Azerbajdzsáni idő"}
+            lg{"Azerbajdzsáni idő"}
+            ls{"Azerbajdzsáni zónaidő"}
         }
         "meta:Azores"{
             ld{"Azori nyári idő"}
-            ls{"Azori idő"}
+            lg{"Azori idő"}
+            ls{"Azori zónaidő"}
         }
         "meta:Baku"{
             ld{"Bakui nyári idő"}
-            ls{"Bakui idő"}
+            lg{"Bakui idő"}
+            ls{"Bakui zónaidő"}
         }
         "meta:Bangladesh"{
-            ld{"Bangladeshi nyári idő"}
-            ls{"Bangladesi idő"}
+            ld{"Bangladesi nyári idő"}
+            lg{"Bangladesi idő"}
+            ls{"Bangladesi zónaidő"}
         }
         "meta:Bering"{
             ld{"Beringi nyári idő"}
-            lg{"Bering idő"}
+            lg{"Beringi idő"}
             ls{"Beringi zónaidő"}
         }
         "meta:Bhutan"{
@@ -1321,34 +1326,37 @@ hu{
         }
         "meta:Borneo"{
             ld{"Borneói nyári idő"}
-            ls{"Borneói idő"}
+            lg{"Borneói idő"}
+            ls{"Borneói zónaidő"}
         }
         "meta:Brasilia"{
             ld{"Brazíliai nyári idő"}
-            lg{"Brazíliaváros"}
-            ls{"Brazíliai idő"}
+            lg{"Brazíliai idő"}
+            ls{"Brazíliai zónaidő"}
         }
         "meta:Brunei"{
             ls{"Brunei Darussalam-i idő"}
         }
         "meta:Cape_Verde"{
             ld{"Zöld-foki-szigeteki nyári idő"}
-            ls{"Zöld-foki-szigeteki idő"}
+            lg{"Zöld-foki-szigeteki idő"}
+            ls{"Zöld-foki-szigeteki zónaidő"}
         }
         "meta:Chamorro"{
-            lg{"Chamorroi idő"}
-            ls{"Chamorroi zónaidő"}
+            ls{"Chamorroi idő"}
         }
         "meta:Changbai"{
             ls{"Changbai idő"}
         }
         "meta:Chatham"{
             ld{"Chathami nyári idő"}
+            lg{"Chathami idő"}
             ls{"Chathami zónaidő"}
         }
         "meta:Chile"{
             ld{"Chilei nyári idő"}
-            ls{"Chilei idő"}
+            lg{"Chilei idő"}
+            ls{"Chilei zónaidő"}
         }
         "meta:China"{
             ld{"Kínai nyári idő"}
@@ -1358,7 +1366,7 @@ hu{
         "meta:Choibalsan"{
             ld{"Csojbalszani nyári idő"}
             lg{"Csojbalszani idő"}
-            ls{"Csojbalszani idő"}
+            ls{"Csojbalszani zónaidő"}
         }
         "meta:Christmas"{
             ls{"Karácsony-szigeti idő"}
@@ -1368,11 +1376,13 @@ hu{
         }
         "meta:Colombia"{
             ld{"Kolumbiai nyári idő"}
-            ls{"Kolumbiai idő"}
+            lg{"Kolumbiai idő"}
+            ls{"Kolumbiai zónaidő"}
         }
         "meta:Cook"{
             ld{"Cook-szigeteki fél nyári idő"}
-            ls{"Cook-szigeteki idő"}
+            lg{"Cook-szigeteki idő"}
+            ls{"Cook-szigeteki zónaidő"}
         }
         "meta:Cuba"{
             ld{"Kubai nyári idő"}
@@ -1390,7 +1400,8 @@ hu{
         }
         "meta:Dushanbe"{
             ld{"Dusanbei nyári idő"}
-            ls{"Dusanbei idő"}
+            lg{"Dusanbei idő"}
+            ls{"Dusanbei zónaidő"}
         }
         "meta:Dutch_Guiana"{
             ls{"Holland-guianai idő"}
@@ -1400,39 +1411,45 @@ hu{
         }
         "meta:Easter"{
             ld{"Húsvét-szigeteki nyári idő"}
-            ls{"Húsvét-szigeteki idő"}
+            lg{"Húsvét-szigeteki idő"}
+            ls{"Húsvét-szigeteki zónaidő"}
         }
         "meta:Ecuador"{
             ls{"Ecuadori idő"}
         }
         "meta:Europe_Central"{
             ld{"Közép-európai nyári idő"}
-            ls{"Közép-európai idő"}
+            lg{"Közép-európai idő"}
+            ls{"Közép-európai zónaidő"}
             sd{"CEST"}
             sg{"CET"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Kelet-európai nyári idő"}
-            ls{"Kelet-európai idő"}
+            lg{"Kelet-európai idő"}
+            ls{"Kelet-európai zónaidő"}
             sd{"EEST"}
             sg{"EET"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Nyugat-európai nyári idő"}
-            ls{"Nyugat-európai idő"}
+            lg{"Nyugat-európai idő"}
+            ls{"Nyugat-európai zónaidő"}
             sd{"WEST"}
             sg{"WET"}
             ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland-szigeteki nyári idő"}
-            ls{"Falkland-szigeteki idő"}
+            lg{"Falkland-szigeteki idő"}
+            ls{"Falkland-szigeteki zónaidő"}
         }
         "meta:Fiji"{
             ld{"Fidzsi nyári idő"}
-            ls{"Fidzsi idő"}
+            lg{"Fidzsi idő"}
+            ls{"Fidzsi zónaidő"}
         }
         "meta:French_Guiana"{
             ls{"Francia-guianai idő"}
@@ -1442,7 +1459,8 @@ hu{
         }
         "meta:Frunze"{
             ld{"Frunzei nyári idő"}
-            ls{"Frunzei idő"}
+            lg{"Frunzei idő"}
+            ls{"Frunzei zónaidő"}
         }
         "meta:GMT"{
             ls{"Greenwichi középidő"}
@@ -1456,45 +1474,50 @@ hu{
         }
         "meta:Georgia"{
             ld{"Grúz nyári idő"}
-            ls{"Grúz idő"}
+            lg{"Grúz idő"}
+            ls{"Grúz zónaidő"}
         }
         "meta:Gilbert_Islands"{
             ls{"Gilbert-szigeteki idő"}
         }
         "meta:Greenland_Central"{
             ld{"Közép-grönlandi nyári idő"}
-            ls{"Közép-grönlandi idő"}
+            lg{"Közép-grönlandi idő"}
+            ls{"Közép-grönlandi zónaidő"}
         }
         "meta:Greenland_Eastern"{
             ld{"Kelet-grönlandi nyári idő"}
-            ls{"Kelet-grönlandi idő"}
+            lg{"Kelet-grönlandi idő"}
+            ls{"Kelet-grönlandi zónaidő"}
         }
         "meta:Greenland_Western"{
             ld{"Nyugat-grönlandi nyári idő"}
-            ls{"Nyugat-grönlandi idő"}
+            lg{"Nyugat-grönlandi idő"}
+            ls{"Nyugat-grönlandi zónaidő"}
         }
         "meta:Guam"{
             ls{"Guami zónaidő"}
         }
         "meta:Gulf"{
-            lg{"Arab-öbölbeli idő"}
             ls{"Öbölbeli zónaidő"}
         }
         "meta:Guyana"{
             ls{"Guyanai idő"}
         }
         "meta:Hawaii_Aleutian"{
-            lg{"Hawaii-Aleut idő"}
+            ld{"Hawaii-aleuti nyári idő"}
+            lg{"Hawaii-aleuti idő"}
             ls{"Hawaii-aleuti zónaidő"}
         }
         "meta:Hong_Kong"{
             ld{"Hongkongi nyári idő"}
-            ls{"Hongkongi idő"}
+            lg{"Hongkongi idő"}
+            ls{"Hongkongi zónaidő"}
         }
         "meta:Hovd"{
             ld{"Hovdi nyári idő"}
             lg{"Hovdi idő"}
-            ls{"Hovdi idő"}
+            ls{"Hovdi zónaidő"}
         }
         "meta:India"{
             ls{"Indiai zónaidő"}
@@ -1506,25 +1529,23 @@ hu{
             ls{"Indokínai idő"}
         }
         "meta:Indonesia_Central"{
-            lg{"Indonéziai középidő"}
             ls{"Közép-indonéziai idő"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Indonéziai keleti idő"}
             ls{"Kelet-indonéziai idő"}
         }
         "meta:Indonesia_Western"{
-            lg{"Indonéziai nyugati idő"}
             ls{"Nyugat-indonéziai idő"}
         }
         "meta:Iran"{
             ld{"Iráni nyári idő"}
+            lg{"Iráni idő"}
             ls{"Iráni zónaidő"}
         }
         "meta:Irkutsk"{
             ld{"Irkutszki nyári idő"}
             lg{"Irkutszki idő"}
-            ls{"Irkutszki idő"}
+            ls{"Irkutszki zónaidő"}
         }
         "meta:Israel"{
             ld{"Izraeli nyári idő"}
@@ -1538,8 +1559,8 @@ hu{
         }
         "meta:Kamchatka"{
             ld{"Petropavlovszk-kamcsatkai nyári idő"}
-            lg{"Kamcsatkai idő"}
-            ls{"Petropavlovszk-kamcsatkai idő"}
+            lg{"Petropavlovszk-kamcsatkai idő"}
+            ls{"Petropavlovszk-kamcsatkai zónaidő"}
         }
         "meta:Karachi"{
             ls{"Karacsi idő"}
@@ -1548,18 +1569,15 @@ hu{
             ls{"Kasgár idő"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Kazah keleti nyári idő"}
-            lg{"Kelet-kazahsztáni idő"}
-            ls{"Kelet-kazahsztáni zónaidő"}
+            ls{"Kelet-kazahsztáni idő"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Kazah nyugati nyári idő"}
-            lg{"Nyugat-kazahsztáni idő"}
-            ls{"Nyugat-kazahsztáni zónaidő"}
+            ls{"Nyugat-kazahsztáni idő"}
         }
         "meta:Kizilorda"{
             ld{"Kizilordai nyári idő"}
-            ls{"Kizilordai idő"}
+            lg{"Kizilordai idő"}
+            ls{"Kizilordai zónaidő"}
         }
         "meta:Korea"{
             ld{"Koreai nyári idő"}
@@ -1572,11 +1590,12 @@ hu{
         "meta:Krasnoyarsk"{
             ld{"Krasznojarszki nyári idő"}
             lg{"Krasznojarszki idő"}
-            ls{"Krasznojarszki idő"}
+            ls{"Krasznojarszki zónaidő"}
         }
         "meta:Kuybyshev"{
             ld{"Kujbisevi nyári idő"}
-            ls{"Kujbisevi idő"}
+            lg{"Kujbisevi idő"}
+            ls{"Kujbisevi zónaidő"}
         }
         "meta:Kwajalein"{
             ls{"Kwajaleini idő"}
@@ -1586,9 +1605,6 @@ hu{
         }
         "meta:Lanka"{
             ls{"Lankai idő"}
-        }
-        "meta:Liberia"{
-            lg{"Libériai idő"}
         }
         "meta:Line_Islands"{
             ls{"Line-szigeteki idő"}
@@ -1603,15 +1619,16 @@ hu{
         }
         "meta:Macau"{
             ld{"Macaui nyári idő"}
-            ls{"Macaui idő"}
+            lg{"Macaui idő"}
+            ls{"Macaui zónaidő"}
         }
         "meta:Macquarie"{
-            lg{"Macquarie-i idő"}
+            ls{"Macquarie-i idő"}
         }
         "meta:Magadan"{
             ld{"Magadáni nyári idő"}
             lg{"Magadani idő"}
-            ls{"Magadáni idő"}
+            ls{"Magadáni zónaidő"}
         }
         "meta:Malaya"{
             ls{"Malayai idő"}
@@ -1630,15 +1647,16 @@ hu{
         }
         "meta:Mauritius"{
             ld{"Mauritiusi nyári idő"}
-            ls{"Mauritiusi idő"}
+            lg{"Mauritiusi idő"}
+            ls{"Mauritiusi zónaidő"}
         }
         "meta:Mawson"{
             ls{"Mawsoni idő"}
         }
         "meta:Mongolia"{
             ld{"Ulánbátori nyári idő"}
-            lg{"Mongóliai idő"}
-            ls{"Ulánbátori idő"}
+            lg{"Ulánbátori idő"}
+            ls{"Ulánbátori zónaidő"}
         }
         "meta:Moscow"{
             ld{"Moszkvai nyári idő"}
@@ -1656,7 +1674,8 @@ hu{
         }
         "meta:New_Caledonia"{
             ld{"Új-kaledóniai nyári idő"}
-            ls{"Új-kaledóniai idő"}
+            lg{"Új-kaledóniai idő"}
+            ls{"Új-kaledóniai zónaidő"}
         }
         "meta:New_Zealand"{
             ld{"Új-zélandi nyári idő"}
@@ -1676,8 +1695,8 @@ hu{
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha-i nyári idő"}
-            lg{"Noronhai idő"}
-            ls{"Fernando de Noronha-i idő"}
+            lg{"Fernando de Noronha-i idő"}
+            ls{"Fernando de Noronha-i zónaidő"}
         }
         "meta:North_Mariana"{
             ls{"Észak-mariana-szigeteki idő"}
@@ -1685,16 +1704,17 @@ hu{
         "meta:Novosibirsk"{
             ld{"Novoszibirszki nyári idő"}
             lg{"Novoszibirszki idő"}
-            ls{"Novoszibirzski idő"}
+            ls{"Novoszibirzski zónaidő"}
         }
         "meta:Omsk"{
             ld{"Omszki nyári idő"}
             lg{"Omszki idő"}
-            ls{"Omszki idő"}
+            ls{"Omszki zónaidő"}
         }
         "meta:Pakistan"{
             ld{"Pakisztáni nyári idő"}
-            ls{"Pakisztáni idő"}
+            lg{"Pakisztáni idő"}
+            ls{"Pakisztáni zónaidő"}
         }
         "meta:Palau"{
             ls{"Palaui idő"}
@@ -1704,15 +1724,18 @@ hu{
         }
         "meta:Paraguay"{
             ld{"Paraguayi nyári idő"}
-            ls{"Paraguayi idő"}
+            lg{"Paraguayi idő"}
+            ls{"Paraguayi zónaidő"}
         }
         "meta:Peru"{
             ld{"Perui nyári idő"}
-            ls{"Perui idő"}
+            lg{"Perui idő"}
+            ls{"Perui zónaidő"}
         }
         "meta:Philippines"{
             ld{"Fülöp-szigeteki nyári idő"}
-            ls{"Fülöp-szigeteki idő"}
+            lg{"Fülöp-szigeteki idő"}
+            ls{"Fülöp-szigeteki zónaidő"}
         }
         "meta:Phoenix_Islands"{
             ls{"Phoenix-szigeteki idő"}
@@ -1730,7 +1753,8 @@ hu{
         }
         "meta:Qyzylorda"{
             ld{"Qyzylordai nyári idő"}
-            ls{"Qyzylordai idő"}
+            lg{"Qyzylordai idő"}
+            ls{"Qyzylordai zónaidő"}
         }
         "meta:Reunion"{
             ls{"Réunioni idő"}
@@ -1739,18 +1763,19 @@ hu{
             ls{"Rotherai idő"}
         }
         "meta:Sakhalin"{
-            ld{"Sakhalin nyári idő"}
+            ld{"Sakhalini nyári idő"}
             lg{"Szahalini idő"}
-            ls{"Sakhalin idő"}
+            ls{"Sakhalini zónaidő"}
         }
         "meta:Samara"{
             ld{"Szamarai nyári idő"}
             lg{"Szamarai idő"}
-            ls{"Szamarai idő"}
+            ls{"Szamarai zónaidő"}
         }
         "meta:Samarkand"{
             ld{"Szamarkandi nyári idő"}
-            ls{"Szamarkandi idő"}
+            lg{"Szamarkandi idő"}
+            ls{"Szamarkandi zónaidő"}
         }
         "meta:Samoa"{
             ls{"Szamoai zónaidő"}
@@ -1760,7 +1785,8 @@ hu{
         }
         "meta:Shevchenko"{
             ld{"Sevcsenkói nyári idő"}
-            ls{"Sevcsenkói idő"}
+            lg{"Sevcsenkói idő"}
+            ls{"Sevcsenkói zónaidő"}
         }
         "meta:Singapore"{
             ls{"Szingapúri zónaidő"}
@@ -1776,7 +1802,8 @@ hu{
         }
         "meta:Sverdlovsk"{
             ld{"Szverdlovszki nyári idő"}
-            ls{"Szverdlovszki idő"}
+            lg{"Szverdlovszki idő"}
+            ls{"Szverdlovszki zónaidő"}
         }
         "meta:Syowa"{
             ls{"Syowai idő"}
@@ -1789,52 +1816,60 @@ hu{
         }
         "meta:Tashkent"{
             ld{"Taskenti nyári idő"}
-            ls{"Taskenti idő"}
+            lg{"Taskenti idő"}
+            ls{"Taskenti zónaidő"}
         }
         "meta:Tbilisi"{
             ld{"Tbiliszi nyári idő"}
-            ls{"Tbiliszi idő"}
+            lg{"Tbiliszi idő"}
+            ls{"Tbiliszi zónaidő"}
         }
         "meta:Tokelau"{
             ls{"Tokelaui idő"}
         }
         "meta:Tonga"{
             ld{"Tongai nyári idő"}
-            ls{"Tongai idő"}
+            lg{"Tongai idő"}
+            ls{"Tongai zónaidő"}
         }
         "meta:Truk"{
             ls{"Truki idő"}
         }
         "meta:Turkey"{
             ld{"Törökországi nyári idő"}
-            lg{"Török idő"}
-            ls{"Törökországi idő"}
+            lg{"Törökországi idő"}
+            ls{"Törökországi zónaidő"}
         }
         "meta:Turkmenistan"{
             ld{"Türkmenisztáni nyári idő"}
-            ls{"Türkmenisztáni idő"}
+            lg{"Türkmenisztáni idő"}
+            ls{"Türkmenisztáni zónaidő"}
         }
         "meta:Tuvalu"{
             ls{"Tuvalui idő"}
         }
         "meta:Uralsk"{
             ld{"Uráli nyári idő"}
-            ls{"Uráli idő"}
+            lg{"Uráli idő"}
+            ls{"Uráli zónaidő"}
         }
         "meta:Uruguay"{
             ld{"Uruguayi nyári idő"}
-            ls{"Uruguayi idő"}
+            lg{"Uruguayi idő"}
+            ls{"Uruguayi zónaidő"}
         }
         "meta:Urumqi"{
             ls{"Urumqi idő"}
         }
         "meta:Uzbekistan"{
             ld{"Üzbegisztáni nyári idő"}
-            ls{"Üzbegisztáni idő"}
+            lg{"Üzbegisztáni idő"}
+            ls{"Üzbegisztáni zónaidő"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatui nyári idő"}
-            ls{"Vanuatui idő"}
+            lg{"Vanuatui idő"}
+            ls{"Vanuatui zónaidő"}
         }
         "meta:Venezuela"{
             ls{"Venezuelai idő"}
@@ -1842,12 +1877,12 @@ hu{
         "meta:Vladivostok"{
             ld{"Vlagyivosztoki nyári idő"}
             lg{"Vlagyivosztoki idő"}
-            ls{"Vlagyivosztoki idő"}
+            ls{"Vlagyivosztoki zónaidő"}
         }
         "meta:Volgograd"{
             ld{"Volgográdi nyári idő"}
             lg{"Volgográdi idő"}
-            ls{"Volgográdi idő"}
+            ls{"Volgográdi zónaidő"}
         }
         "meta:Vostok"{
             ls{"Vosztoki idő"}
@@ -1861,16 +1896,17 @@ hu{
         "meta:Yakutsk"{
             ld{"Jakutszki nyári idő"}
             lg{"Jakutszki idő"}
-            ls{"Jakutszki idő"}
+            ls{"Jakutszki zónaidő"}
         }
         "meta:Yekaterinburg"{
             ld{"Jekatyerinburgi nyári idő"}
             lg{"Jekatyerinburgi idő"}
-            ls{"Jekatyerinburgi idő"}
+            ls{"Jekatyerinburgi zónaidő"}
         }
         "meta:Yerevan"{
             ld{"Jereváni nyári idő"}
-            ls{"Jereváni idő"}
+            lg{"Jereváni idő"}
+            ls{"Jereváni zónaidő"}
         }
         "meta:Yukon"{
             ld{"Yukoni nyári idő"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
@@ -116,7 +116,6 @@ pt_PT{
         }
         collation{
             dictionary{"Ordenação do Dicionário"}
-            direct{"Ordem Directa"}
             ducet{"Ordenação Unicode Predefinida"}
             phonebook{"Ordem da Lista Telefónica"}
             pinyin{"Ordem do Chinês Simplificado Pinyin"}
@@ -178,5 +177,5 @@ pt_PT{
         SOLBA{"dialecto stolvizza/solbica"}
         WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.65"}
 }

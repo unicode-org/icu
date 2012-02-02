@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -33,7 +33,6 @@ zh_Hant{
         054{"美拉尼西亞"}
         057{"密克羅尼西亞"}
         061{"玻里尼西亞"}
-        062{"中南亞"}
         142{"亞洲"}
         143{"中亞"}
         145{"西亞"}
@@ -41,9 +40,7 @@ zh_Hant{
         151{"東歐"}
         154{"北歐"}
         155{"西歐"}
-        172{"獨立國協"}
         419{"拉丁美洲"}
-        830{"海峽群島"}
         AC{"阿森松島"}
         AD{"安道爾"}
         AE{"阿拉伯聯合大公國"}
@@ -301,5 +298,5 @@ zh_Hant{
         ZW{"辛巴威"}
         ZZ{"未確定的區域"}
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
 }

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2008-2011, International Business Machines Corporation and
+ * Copyright (c) 2008-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -126,7 +126,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("58:59"),                               // 11: mmss
         UnicodeString("Januar 1999"),                         // 12: yyyyMMMM
         UnicodeString("Mi., 13. Jan"),                        // 13: MMMEd -> EEE, d. MMM
-        UnicodeString("Mi. 13."),                             // 14: Ed   -> EEE d.
+        UnicodeString("Mi., 13."),                            // 14: Ed   -> EEE d.
         UnicodeString("23:58:59,123"),                        // 15: jmmssSSS -> "HH:mm:ss,SSS"
 
         // fi                                                 // 3 fi
@@ -234,16 +234,16 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("58:59"),                                           // 11: mmss  ->
         CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // 12: yyyyMMMM  -> Gy\u5E74M\u670
         CharsToUnicodeString("1\\u670813\\u65E5\\u9031\\u4E09"),          // 13: MMMEd -> M\u6708d\u65E5EEE
-        CharsToUnicodeString("13\\u65E5(\\u9031\\u4E09)"),                // 14: Ed    -> d\u65E5(EEE)
+        CharsToUnicodeString("13\\u65E5\\uff08\\u9031\\u4E09\\uff09"),    // 14: Ed    -> d\u65E5\\uff08EEEi\\uff09
         CharsToUnicodeString("\\u4E0B\\u534811:58:59.123"),               // 15: jmmssSSS -> "ah:mm:ss.SSS"
 
         // ru                                                             // 9 ru
-        UnicodeString("1.1999"),                                          // 00: yM    -> M.y
+        UnicodeString("01.1999"),                                         // 00: yM    -> MM.y
         CharsToUnicodeString("\\u042F\\u043D\\u0432. 1999"),              // 01: yMMM  -> LLL y
-        UnicodeString("13.1.1999"),                                       // 02: yMd   -> d.M.y
-        CharsToUnicodeString("13 \\u044F\\u043D\\u0432 1999\\u00A0\\u0433."), // 03: yMMMd -> d MMM y
+        UnicodeString("13.01.1999"),                                      // 02: yMd   -> d.MM.y
+        CharsToUnicodeString("13 \\u044F\\u043D\\u0432. 1999\\u00A0\\u0433."), // 03: yMMMd -> d MMM y
         UnicodeString("13.1"),                                            // 04: Md    -> d.M
-        CharsToUnicodeString("13 \\u044F\\u043D\\u0432"),                 // 05: MMMd  -> d MMM
+        CharsToUnicodeString("13 \\u044F\\u043D\\u0432."),                // 05: MMMd  -> d MMM
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432\\u0430\\u0440\\u044F"), // 06: MMMMd  -> d MMMM
         CharsToUnicodeString("1999 1-\\u0439 \\u043A\\u0432."),           // 07: yQQQ  -> y QQQ
         CharsToUnicodeString("11:58 \\u043F\\u043E\\u0441\\u043B\\u0435 \\u043F\\u043E\\u043B\\u0443\\u0434\\u043D\\u044F"),                                        // 07: hhmm  -> hh:mm a
@@ -251,7 +251,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                                           // 10: jjmm  -> HH:mm
         UnicodeString("58:59"),                                           // 11: mmss  -> mm:ss
         CharsToUnicodeString("\\u042F\\u043D\\u0432\\u0430\\u0440\\u044C 1999"), // 12: yyyyMMMM -> LLLL y
-        CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432"), // 13: MMMEd -> ccc, d MMM
+        CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432."), // 13: MMMEd -> ccc, d MMM
         CharsToUnicodeString("\\u0421\\u0440, 13"),                       // 14: Ed    -> EEE, d
         UnicodeString("23:58:59,123"),                                    // 15: jmmssSSS -> "H:mm:ss,SSS"
 
@@ -441,7 +441,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     format->applyPattern(newPattern);
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Frankreich Zeit");
+    expectedResult=CharsToUnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Mitteleurop\\u00E4ische Zeit");
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test modify the timezone!");
         errln(UnicodeString(" Got: ")+ dateReturned + UnicodeString(" Expected: ") + expectedResult);

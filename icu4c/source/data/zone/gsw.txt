@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gsw.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gsw.xml
  */
 gsw{
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -275,7 +275,8 @@ gsw{
         }
         "meta:Acre"{
             ld{"Acre-Summerziit"}
-            ls{"Acre-Ziit"}
+            lg{"Acre-Ziit"}
+            ls{"Acre-Schtandardziit"}
         }
         "meta:Afghanistan"{
             ls{"Afghanischtan-Ziit"}
@@ -287,53 +288,66 @@ gsw{
             ls{"Oschtafrikanischi Ziit"}
         }
         "meta:Africa_Southern"{
-            lg{"Süüdafrikanischi Ziit"}
-            ls{"Süüdafrikanischi Schtandardziit"}
+            ls{"Süüdafrikanischi ziit"}
         }
         "meta:Africa_Western"{
             ld{"Weschtafrikanischi Summerziit"}
-            ls{"Weschtafrikanischi Ziit"}
+            lg{"Weschtafrikanischi Ziit"}
+            ls{"Weschtafrikanischi Schtandardziit"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinsk-Summerziit"}
-            ls{"Aktyubinsk-Ziit"}
+            lg{"Aktyubinsk-Ziit"}
+            ls{"Aktyubinsk-Schtandardziit"}
         }
         "meta:Alaska"{
+            ld{"Alaska-Summerziit"}
             lg{"Alaska-Ziit"}
             ls{"Alaska-Schtandardziit"}
         }
         "meta:Alaska_Hawaii"{
+            ld{"Alaska-Hawaii-Summerziit"}
             lg{"Alaska-Hawaii-Ziit"}
             ls{"Alaska-Hawaii-Schtandardziit"}
         }
         "meta:Almaty"{
             ld{"Almaty-Summerziit"}
-            ls{"Almaty-Ziit"}
+            lg{"Almaty-Ziit"}
+            ls{"Almaty-Schtandardziit"}
         }
         "meta:Amazon"{
             ld{"Amazonas-Summerziit"}
+            lg{"Amazonas-Ziit"}
+            ls{"Amazonas-Schtandardziit"}
         }
         "meta:Europe_Central"{
             ld{"Mitteleuropäischi Summerziit"}
-            ls{"Mitteleuropäischi Ziit"}
+            lg{"Mitteleuropäischi Ziit"}
+            ls{"Mitteleuropäischi Schtandardziit"}
             sd{"MESZ"}
+            sg{"MEZ"}
             ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Oschteuropäischi Summerziit"}
-            ls{"Oschteuropäischi Ziit"}
+            lg{"Oschteuropäischi Ziit"}
+            ls{"Oschteuropäischi Schtandardziit"}
             sd{"OESZ"}
+            sg{"OEZ"}
             ss{"OEZ"}
         }
         "meta:Europe_Western"{
             ld{"Weschteuropäischi Summerziit"}
-            ls{"Weschteuropäischi Ziit"}
+            lg{"Weschteuropäischi Ziit"}
+            ls{"Weschteuropäischi Schtandardziit"}
             sd{"WESZ"}
+            sg{"WEZ"}
             ss{"WEZ"}
         }
         "meta:Moscow"{
             ld{"Moskauer Summerziit"}
-            ls{"Moskauer Ziit"}
+            lg{"Moskauer Ziit"}
+            ls{"Moskauer Schtandardziit"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

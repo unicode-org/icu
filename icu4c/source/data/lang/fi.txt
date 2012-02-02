@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -694,7 +694,6 @@ fi{
         collation{
             big5han{"perinteinen kiinalainen järjestys Big5"}
             dictionary{"sanakirjajärjestys"}
-            direct{"suora järjestys"}
             ducet{"Unicoden oletusjärjestys"}
             gb2312han{"yksinkertaistettu kiinalainen järjestys GB2312"}
             phonebook{"puhelinluettelojärjestys"}
@@ -801,7 +800,7 @@ fi{
         VALLADER{"reoromaanin vallader-muoto"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
     }
-    Version{"2.0.62.84"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

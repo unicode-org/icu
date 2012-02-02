@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nl.xml
@@ -33,7 +33,6 @@ nl{
         054{"Melanesië"}
         057{"Micronesische regio"}
         061{"Polynesië"}
-        062{"Zuidelijk Centraal-Azië"}
         142{"Azië"}
         143{"Centraal-Azië"}
         145{"West-Azië"}
@@ -41,9 +40,7 @@ nl{
         151{"Oost-Europa"}
         154{"Noord-Europa"}
         155{"West-Europa"}
-        172{"Gemenebest van Onafhankelijke Staten"}
         419{"Latijns-Amerika"}
-        830{"Kanaaleilanden"}
         AC{"Ascension"}
         AD{"Andorra"}
         AE{"Verenigde Arabische Emiraten"}
@@ -99,6 +96,7 @@ nl{
         CS{"Servië en Montenegro"}
         CU{"Cuba"}
         CV{"Kaapverdië"}
+        CW{"Curaçao"}
         CX{"Christmaseiland"}
         CY{"Cyprus"}
         CZ{"Tsjechië"}
@@ -260,6 +258,7 @@ nl{
         SR{"Suriname"}
         ST{"Sao Tomé en Principe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syrië"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -301,5 +300,5 @@ nl{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend of onjuist gebied"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -33,7 +33,6 @@ zh{
         054{"美拉尼西亚"}
         057{"密克罗尼西亚"}
         061{"玻利尼西亚"}
-        062{"中南亚"}
         142{"亚洲"}
         143{"中亚"}
         145{"西亚"}
@@ -41,9 +40,7 @@ zh{
         151{"东欧"}
         154{"北欧"}
         155{"西欧"}
-        172{"独联体"}
         419{"拉丁美洲"}
-        830{"海峡群岛"}
         AC{"阿森松岛"}
         AD{"安道尔"}
         AE{"阿拉伯联合酋长国"}
@@ -301,5 +298,5 @@ zh{
         ZW{"津巴布韦"}
         ZZ{"未知地区"}
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
 }

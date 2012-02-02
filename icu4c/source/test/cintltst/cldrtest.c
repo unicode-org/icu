@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -911,7 +911,7 @@ static void VerifyTranslation(void) {
         else if (getTestOption(QUICK_OPTION) && exemplarLen > 2048) {
             log_verbose("skipping test for %s\n", currLoc);
         }
-        else if (uprv_strncmp(currLoc,"bem",3) == 0) {
+        else if (uprv_strncmp(currLoc,"bem",3) == 0 || uprv_strncmp(currLoc,"nl",2) == 0) {
             log_verbose("skipping test for %s, some month and country names known to use aux exemplars\n", currLoc);
         }
         else {

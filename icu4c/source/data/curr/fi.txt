@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -192,7 +192,7 @@ fi{
             "Brasilian cruzeiro (1990–1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "Brasilian real",
         }
         BRN{
@@ -2354,5 +2354,5 @@ fi{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.62.84"}
+    Version{"2.0.64.72"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mt.xml
@@ -38,9 +38,7 @@ mt{
         151{"Ewropa tal-Lvant"}
         154{"Ewropa ta’ Fuq"}
         155{"Ewropa tal-Punent"}
-        172{"Commonwealth tal-Istati Independenti"}
         419{"Amerika Latina"}
-        830{"Gżejjer tal-Kanal Ingliż"}
         AD{"Andorra"}
         AE{"Emirati Għarab Maqgħuda"}
         AF{"Afganistan"}
@@ -285,5 +283,5 @@ mt{
         ZW{"Żimbabwe"}
         ZZ{"Reġjun Mhux Magħruf jew Mhux Validu"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
 }

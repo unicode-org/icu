@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nb.xml
@@ -39,7 +39,7 @@ nb{
             }
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -58,7 +58,7 @@ nb{
                 "{0} {1}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"E d."}
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -75,9 +75,9 @@ nb{
                 ms{"mm.ss"}
                 y{"y G"}
                 yM{"M y G"}
-                yMEd{"EEE d.M.y G"}
+                yMEd{"E d.M.y G"}
                 yMMM{"MMM y G"}
-                yMMMEd{"EEE d. MMM y G"}
+                yMMMEd{"E d. MMM y G"}
                 yMMMd{"d. MMM y G"}
                 yMd{"d.M.y G"}
                 yQ{"Q y G"}
@@ -110,7 +110,7 @@ nb{
                 "{0} {1}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"E d."}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -126,9 +126,9 @@ nb{
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"M y"}
-                yMEd{"EEE d.M.yyyy"}
+                yMEd{"E d.M.yyyy"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE d. MMM y"}
+                yMMMEd{"E d. MMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.yyyy"}
                 yQ{"Q yyyy"}
@@ -501,7 +501,7 @@ nb{
                 "{0} {1}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"E d."}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -521,9 +521,9 @@ nb{
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M y G"}
-                yyyyMEd{"EEE d.M.y G"}
+                yyyyMEd{"E d.M.y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE d. MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d.M.y G"}
@@ -548,7 +548,7 @@ nb{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"E d."}
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -570,9 +570,9 @@ nb{
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M y G"}
-                yyyyMEd{"EEE d.M.y G"}
+                yyyyMEd{"E d.M.y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE d. MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d.M.y G"}
@@ -597,7 +597,7 @@ nb{
                 "{0} {1}",
             }
             availableFormats{
-                EEEd{"EEE d."}
+                Ed{"E d."}
                 Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -619,9 +619,9 @@ nb{
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M y G"}
-                yyyyMEd{"EEE d.M.y G"}
+                yyyyMEd{"E d.M.y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE d. MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d.M.y G"}
@@ -633,8 +633,8 @@ nb{
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}
-        quotationEnd{"”"}
-        quotationStart{"“"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
     }
     listPattern{
         standard{

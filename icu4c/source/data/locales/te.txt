@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/te.xml
@@ -36,7 +36,7 @@ te{
             }
         }
     }
-    Version{"2.0.62.68"}
+    Version{"2.0.64.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -59,7 +59,7 @@ te{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
+                Ed{"E d"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
@@ -67,9 +67,9 @@ te{
                 MMdd{"dd-MM"}
                 Md{"d/M"}
                 yM{"M/y"}
-                yMEd{"EEE, d/M/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d, MMM y"}
+                yMMMEd{"E, d, MMM y"}
                 yMMMd{"d, MMM y"}
                 yMd{"d/M/y"}
                 yQ{"Q y"}

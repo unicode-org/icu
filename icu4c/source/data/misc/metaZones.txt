@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/metaZones.xml
@@ -139,6 +139,7 @@ metaZones:table(nofallback){
             AW{"America/Aruba"}
             BB{"America/Barbados"}
             BM{"Atlantic/Bermuda"}
+            BQ{"America/Kralendijk"}
             DM{"America/Dominica"}
             GD{"America/Grenada"}
             GL{"America/Thule"}
@@ -149,6 +150,7 @@ metaZones:table(nofallback){
             MQ{"America/Martinique"}
             MS{"America/Montserrat"}
             PR{"America/Puerto_Rico"}
+            SX{"America/Lower_Princes"}
             TT{"America/Port_of_Spain"}
             VC{"America/St_Vincent"}
             VG{"America/Tortola"}
@@ -1842,6 +1844,11 @@ metaZones:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Kralendijk"{
+            {
+                "Atlantic",
+            }
+        }
         "America:La_Paz"{
             {
                 "Bolivia",
@@ -1872,6 +1879,11 @@ metaZones:table(nofallback){
                 "America_Eastern",
                 "1974-10-27 07:00",
                 "9999-12-31 23:59",
+            }
+        }
+        "America:Lower_Princes"{
+            {
+                "Atlantic",
             }
         }
         "America:Maceio"{

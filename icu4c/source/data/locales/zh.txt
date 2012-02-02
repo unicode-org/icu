@@ -87,7 +87,7 @@ zh{
             }
         }
     }
-    Version{"2.0.63.60"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -106,7 +106,7 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日EEE"}
+                Ed{"d日E"}
                 Gy{"Gy年"}
                 H{"H时"}
                 M{"M月"}
@@ -120,16 +120,16 @@ zh{
                 hms{"ah:mm:ss"}
                 y{"Gy年"}
                 yM{"Gy年M月"}
-                yMEd{"Gy/M/dEEE"}
+                yMEd{"Gy/M/dE"}
                 yMMM{"Gy年M月"}
-                yMMMEd{"Gy年M月d日EEE"}
+                yMMMEd{"Gy年M月d日E"}
                 yQ{"Gy年第Q季度"}
                 yQQQ{"Gy年第Q季度"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy-M"}
-                yyyyMEd{"Gy-M-dEEE"}
+                yyyyMEd{"Gy-M-dE"}
                 yyyyMMM{"Gy年M月"}
-                yyyyMMMEd{"Gy年M月d日EEE"}
+                yyyyMMMEd{"Gy年M月d日E"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy-M-d"}
                 yyyyQ{"Gy年QQQ"}
@@ -167,7 +167,7 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日EEE"}
+                Ed{"d日E"}
                 M{"M月"}
                 MEd{"M-dE"}
                 MMMEd{"M月d日E"}
@@ -177,7 +177,7 @@ zh{
                 yM{"U年M月"}
                 yMEd{"U年M月d日，E"}
                 yMMM{"U年M月"}
-                yMMMEd{"U年M月d日EEE"}
+                yMMMEd{"U年M月d日E"}
                 yMMMd{"U年M月d日"}
                 yMd{"U年M月d日"}
             }
@@ -494,7 +494,6 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日EEE"}
                 Ed{"d日E"}
                 H{"H时"}
                 Hm{"H:mm"}
@@ -516,7 +515,7 @@ zh{
                 yM{"yyyy-M"}
                 yMEd{"y年M月d日，E"}
                 yMMM{"y年M月"}
-                yMMMEd{"y年M月d日EEE"}
+                yMMMEd{"y年M月d日E"}
                 yMMMd{"y年M月d日"}
                 yMd{"y年M月d日"}
                 yQ{"y年QQQ"}
@@ -1016,7 +1015,6 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日EEE"}
                 Ed{"d日E"}
                 H{"H时"}
                 Hm{"H:mm"}
@@ -1036,9 +1034,9 @@ zh{
                 ms{"mm:ss"}
                 y{"y年"}
                 yM{"y年M月"}
-                yMEd{"y/M/dEEE"}
+                yMEd{"y/M/dE"}
                 yMMM{"y年M月"}
-                yMMMEd{"y年M月d日EEE"}
+                yMMMEd{"y年M月d日E"}
                 yQ{"y年第Q季度"}
                 yQQQ{"y年第Q季度"}
                 yyyy{"GGGyy年"}
@@ -1119,7 +1117,6 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日EEE"}
                 Ed{"d日E"}
                 Gy{"Gy年"}
                 H{"H时"}
@@ -1136,7 +1133,7 @@ zh{
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy-MM"}
-                yyyyMEd{"Gy-M-d（EEE）"}
+                yyyyMEd{"Gy-M-d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日E"}
                 yyyyMMMd{"Gy年M月d日"}
@@ -1465,7 +1462,6 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日EEE"}
                 Ed{"d日E"}
                 Gy{"Gy年"}
                 H{"H时"}
@@ -1482,10 +1478,10 @@ zh{
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy-M"}
-                yyyyMEd{"Gy-M-d（EEE）"}
+                yyyyMEd{"Gy-M-d（E）"}
                 yyyyMM{"Gy-MM"}
                 yyyyMMM{"Gy年M月"}
-                yyyyMMMEd{"Gy年M月d日EEE"}
+                yyyyMMMEd{"Gy年M月d日E"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy-M-d"}
                 yyyyQ{"Gy年第Q季度"}

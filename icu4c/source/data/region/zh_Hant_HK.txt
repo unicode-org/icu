@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant_HK.xml
@@ -13,5 +13,5 @@ zh_Hant_HK{
         029{"加勒比"}
         EA{"瑟塔與梅利拉"}
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.64.50"}
 }

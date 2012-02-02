@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hans_SG.xml
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"2.0.62.55"}
+    Version{"2.0.64.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -26,7 +26,7 @@ zh_Hans_SG{
                 "{1} {0}",
             }
             availableFormats{
-                yMEd{"Gy年M月d日，EEE"}
+                yMEd{"Gy年M月d日，E"}
             }
         }
         gregorian{
@@ -191,7 +191,7 @@ zh_Hans_SG{
             availableFormats{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                yMEd{"y年M月d日，EEE"}
+                yMEd{"y年M月d日，E"}
             }
         }
         japanese{

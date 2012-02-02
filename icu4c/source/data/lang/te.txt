@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/te.xml
@@ -685,7 +685,6 @@ te{
         collation{
             big5han{"సాంప్రదాయ చైనీయుల క్రమబద్ధీకరణ క్రమం - Big5"}
             dictionary{"నిఘంటువు క్రమబద్ధీకరణ క్రమం"}
-            direct{"ప్రత్యక్ష క్రమబద్ధీకరణ క్రమం"}
             ducet{"డిఫాల్ట్ యూనీకోడ్ క్రమబద్ధీకరణ క్రమం"}
             gb2312han{"సరళీకృతం చెయ్యబడిన క్రమబద్ధీకరణ క్రమం - GB2312"}
             phonebook{"ఫోన్‌బుక్ క్రమబద్ధీకరణ క్రమం"}
@@ -741,7 +740,7 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"2.0.62.68"}
+    Version{"2.0.64.72"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{","}

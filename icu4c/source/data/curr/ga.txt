@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ga.xml
@@ -160,7 +160,7 @@ ga{
             "Cruzeiro Brasaíleach (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "Real Brasaíleach",
         }
         BRN{
@@ -984,5 +984,5 @@ ga{
             "Dollar Siombábach",
         }
     }
-    Version{"2.0.59.32"}
+    Version{"2.0.64.72"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lt.xml
@@ -682,7 +682,6 @@ lt{
         collation{
             big5han{"Įprasta kiniška rūšiavimo tvarka - Big5"}
             dictionary{"Žodyno rūšiavimo tvarka"}
-            direct{"Tiesioginė rūšiavimo tvarka"}
             ducet{"Numatytojo unikodo rūšiavimo tvarka"}
             gb2312han{"Supaprastinta kiniška rūšiavimo tvarka - GB2312"}
             phonebook{"Telefonų knygos rūšiavimo tvarka"}
@@ -766,7 +765,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}
