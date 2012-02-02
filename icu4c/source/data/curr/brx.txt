@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/brx.xml
@@ -164,7 +164,7 @@ brx{
             "ब्रज़ीली क्रुज़ेरो (190-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "ब्रज़ीली रेयाल",
         }
         BRN{
@@ -1076,5 +1076,5 @@ brx{
             "ज़ीम्बाबवेई डॉलर",
         }
     }
-    Version{"2.0.62.77"}
+    Version{"2.0.64.72"}
 }

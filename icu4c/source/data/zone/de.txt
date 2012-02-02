@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/de.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -287,7 +287,8 @@ de{
         }
         "meta:Acre"{
             ld{"Acre-Sommerzeit"}
-            ls{"Acre-Zeit"}
+            lg{"Acre-Zeit"}
+            ls{"Acre-Winterzeit"}
         }
         "meta:Afghanistan"{
             ls{"Afghanistan-Zeit"}
@@ -299,16 +300,17 @@ de{
             ls{"Ostafrikanische Zeit"}
         }
         "meta:Africa_Southern"{
-            lg{"Südafrikanische Zeit"}
-            ls{"Südafrikanische Winterzeit"}
+            ls{"Südafrikanische Zeit"}
         }
         "meta:Africa_Western"{
             ld{"Westafrikanische Sommerzeit"}
+            lg{"Westafrikanische Zeit"}
             ls{"Westafrikanische Winterzeit"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinsk-Sommerzeit"}
-            ls{"Aktyubinsk-Zeit"}
+            lg{"Aktyubinsk-Zeit"}
+            ls{"Aktyubinsk-Winterzeit"}
         }
         "meta:Alaska"{
             ld{"Alaska Sommerzeit"}
@@ -316,12 +318,14 @@ de{
             ls{"Alaska Winterzeit"}
         }
         "meta:Alaska_Hawaii"{
+            ld{"Alaska-Hawaii-Sommerzeit"}
             lg{"Alaska-Hawaii-Zeit"}
             ls{"Alaska-Hawaii-Winterzeit"}
         }
         "meta:Almaty"{
             ld{"Almaty-Sommerzeit"}
-            ls{"Almaty-Zeit"}
+            lg{"Almaty-Zeit"}
+            ls{"Almaty-Winterzeit"}
         }
         "meta:Amazon"{
             ld{"Amazonas Sommerzeit"}
@@ -395,7 +399,8 @@ de{
         }
         "meta:Azores"{
             ld{"Azoren-Sommerzeit"}
-            ls{"Azoren-Zeit"}
+            lg{"Azoren-Zeit"}
+            ls{"Azoren-Winterzeit"}
         }
         "meta:Brasilia"{
             ld{"Brasilianische Sommerzeit"}
@@ -404,17 +409,20 @@ de{
         }
         "meta:Cape_Verde"{
             ld{"Kap-Verde-Sommerzeit"}
-            ls{"Kap-Verde-Zeit"}
+            lg{"Kap-Verde-Zeit"}
+            ls{"Kap-Verde-Winterzeit"}
         }
         "meta:Chamorro"{
-            lg{"Chamorro-Zeit"}
-            ls{"Chamorro-Winterzeit"}
+            ls{"Chamorro-Zeit"}
         }
         "meta:Chatham"{
             ld{"Chatham-Sommerzeit"}
+            lg{"Chatham-Zeit"}
             ls{"Chatham-Winterzeit"}
         }
         "meta:China"{
+            ld{"Chinesische Sommerzeit"}
+            lg{"Chinesische Zeit"}
             ls{"Chinesische Winterzeit"}
         }
         "meta:Choibalsan"{
@@ -430,7 +438,8 @@ de{
         }
         "meta:Cook"{
             ld{"Cookinseln-Sommerzeit"}
-            ls{"Cookinseln-Zeit"}
+            lg{"Cookinseln-Zeit"}
+            ls{"Cookinseln-Winterzeit"}
         }
         "meta:Davis"{
             ls{"Davis-Zeit"}
@@ -440,36 +449,42 @@ de{
         }
         "meta:Easter"{
             ld{"Osterinsel-Sommerzeit"}
-            ls{"Osterinsel-Zeit"}
+            lg{"Osterinsel-Zeit"}
+            ls{"Osterinsel-Winterzeit"}
         }
         "meta:Europe_Central"{
             ld{"Mitteleuropäische Sommerzeit"}
-            ls{"Mitteleuropäische Zeit"}
+            lg{"Mitteleuropäische Zeit"}
+            ls{"Mitteleuropäische Winterzeit"}
             sd{"MESZ"}
             sg{"MEZ"}
             ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Osteuropäische Sommerzeit"}
-            ls{"Osteuropäische Zeit"}
+            lg{"Osteuropäische Zeit"}
+            ls{"Osteuropäische Winterzeit"}
             sd{"OESZ"}
             sg{"OEZ"}
             ss{"OEZ"}
         }
         "meta:Europe_Western"{
             ld{"Westeuropäische Sommerzeit"}
-            ls{"Westeuropäische Zeit"}
+            lg{"Westeuropäische Zeit"}
+            ls{"Westeuropäische Winterzeit"}
             sd{"WESZ"}
             sg{"WEZ"}
             ss{"WEZ"}
         }
         "meta:Falkland"{
             ld{"Falklandinseln-Sommerzeit"}
-            ls{"Falklandinseln-Zeit"}
+            lg{"Falklandinseln-Zeit"}
+            ls{"Falklandinseln-Winterzeit"}
         }
         "meta:Fiji"{
             ld{"Fidschi-Sommerzeit"}
-            ls{"Fidschi-Zeit"}
+            lg{"Fidschi-Zeit"}
+            ls{"Fidschi-Winterzeit"}
         }
         "meta:French_Southern"{
             ls{"Französische Süd- und Antarktisgebiete-Zeit"}
@@ -487,15 +502,17 @@ de{
             ls{"Gilbert-Inseln-Zeit"}
         }
         "meta:Guam"{
-            ls{"Guam-Winterzeit"}
+            ls{"Guam-Zeit"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Hawaii-Aleuten-Sommerzeit"}
             lg{"Hawaii-Aleuten-Zeit"}
             ls{"Hawaii-Aleuten-Winterzeit"}
         }
         "meta:Hong_Kong"{
             ld{"Hong-Kong-Sommerzeit"}
-            ls{"Hong-Kong-Zeit"}
+            lg{"Hong-Kong-Zeit"}
+            ls{"Hong-Kong-Winterzeit"}
         }
         "meta:Hovd"{
             ld{"Hovd-Sommerzeit"}
@@ -509,19 +526,16 @@ de{
             ls{"Indischer Ozean-Zeit"}
         }
         "meta:Indochina"{
-            ls{"Indochinesische Winterzeit"}
+            ls{"Indochinesische Zeit"}
         }
         "meta:Indonesia_Central"{
-            lg{"Zentralindonesische Zeit"}
-            ls{"Zentralindonesische Winterzeit"}
+            ls{"Zentralindonesische Zeit"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Ostindonesische Zeit"}
-            ls{"Ostindonesische Winterzeit"}
+            ls{"Ostindonesische Zeit"}
         }
         "meta:Indonesia_Western"{
-            lg{"Westindonesische Zeit"}
-            ls{"Westindonesische Winterzeit"}
+            ls{"Westindonesische Zeit"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk-Sommerzeit"}
@@ -530,9 +544,12 @@ de{
         }
         "meta:Israel"{
             ld{"Israelische Sommerzeit"}
+            lg{"Israelische Zeit"}
             ls{"Israelische Winterzeit"}
         }
         "meta:Japan"{
+            ld{"Japanische Sommerzeit"}
+            lg{"Japanische Zeit"}
             ls{"Japanische Winterzeit"}
         }
         "meta:Kamchatka"{
@@ -541,14 +558,14 @@ de{
             ls{"Kamtschatka-Winterzeit"}
         }
         "meta:Kazakhstan_Eastern"{
-            lg{"Ostkasachstanische Zeit"}
-            ls{"Ostkasachstanische Winterzeit"}
+            ls{"Ostkasachstanische Zeit"}
         }
         "meta:Kazakhstan_Western"{
-            lg{"Westkasachstanische Zeit"}
-            ls{"Westkasachstanische Winterzeit"}
+            ls{"Westkasachstanische Zeit"}
         }
         "meta:Korea"{
+            ld{"Koreanische Sommerzeit"}
+            lg{"Koreanische Zeit"}
             ls{"Koreanische Winterzeit"}
         }
         "meta:Kosrae"{
@@ -561,7 +578,8 @@ de{
         }
         "meta:Kuybyshev"{
             ld{"Kuibyschew-Sommerzeit"}
-            ls{"Kuibyschew-Zeit"}
+            lg{"Kuibyschew-Zeit"}
+            ls{"Kuibyschew-Winterzeit"}
         }
         "meta:Line_Islands"{
             ls{"Zentralpolynesische Sporaden-Zeit"}
@@ -584,7 +602,8 @@ de{
         }
         "meta:Mauritius"{
             ld{"Mauritius-Sommerzeit"}
-            ls{"Mauritius-Zeit"}
+            lg{"Mauritius-Zeit"}
+            ls{"Mauritius-Winterzeit"}
         }
         "meta:Mawson"{
             ls{"Mawson-Zeit"}
@@ -651,7 +670,8 @@ de{
         }
         "meta:Turkey"{
             ld{"Türkische Sommerzeit"}
-            ls{"Türkische Zeit"}
+            lg{"Türkische Zeit"}
+            ls{"Türkische Winterzeit"}
         }
         "meta:Vladivostok"{
             ld{"Wladiwostok-Sommerzeit"}

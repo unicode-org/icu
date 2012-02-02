@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/id.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    AuxExemplarCharacters{"[]"}
+    AuxExemplarCharacters{"[å q x z]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
@@ -28,7 +28,7 @@ id{
             }
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.59"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -55,16 +55,16 @@ id{
                 MMMd{"d MMM"}
                 Md{"d-M"}
                 yM{"M/y G"}
-                yMEd{"EEE, d/M/y G"}
+                yMEd{"E, d/M/y G"}
                 yMMM{"MMM y G"}
-                yMMMEd{"EEE, d MMM y G"}
+                yMMMEd{"E, d MMM y G"}
                 yMMMd{"d MMM y G"}
             }
         }
         gregorian{
             AmPmMarkers{
-                "pagi",
-                "malam",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "H:mm:ss zzzz",
@@ -82,7 +82,6 @@ id{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
@@ -91,9 +90,9 @@ id{
                 MMMd{"d MMM"}
                 Md{"d/M"}
                 yM{"M/y"}
-                yMEd{"EEE, d/M/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQ{"Q y"}
@@ -350,7 +349,6 @@ id{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d-M"}
                 MMMEd{"E, d MMM"}
@@ -359,13 +357,13 @@ id{
                 MMMd{"d MMM"}
                 Md{"d-M"}
                 yM{"M/y"}
-                yMEd{"EEE, d/M/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yyyyM{"M/y G"}
-                yyyyMEd{"EEE, d/M/y G"}
+                yyyyMEd{"E, d/M/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE, d MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
             }
             monthNames{
@@ -448,7 +446,6 @@ id{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d-M"}
                 MMMEd{"E, d MMM"}
@@ -457,9 +454,9 @@ id{
                 MMMd{"d MMM"}
                 Md{"d-M"}
                 yyyyM{"M/y G"}
-                yyyyMEd{"EEE, d/M/y G"}
+                yyyyMEd{"E, d/M/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE, d MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
             }
         }
@@ -480,7 +477,6 @@ id{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
                 Ed{"E, d"}
                 MEd{"E, d-M"}
                 MMMEd{"E, d MMM"}
@@ -489,9 +485,9 @@ id{
                 MMMd{"d MMM"}
                 Md{"d-M"}
                 yyyyM{"M/y G"}
-                yyyyMEd{"EEE, d/M/y G"}
+                yyyyMEd{"E, d/M/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"EEE, d MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
             }
             eras{

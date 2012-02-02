@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ro.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
-    Version{"2.0.59.53"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1139,7 +1139,8 @@ ro{
         }
         "meta:Acre"{
             ld{"Ora de vară Acre"}
-            ls{"Ora Acre"}
+            lg{"Ora Acre"}
+            ls{"Ora standard Acre"}
         }
         "meta:Afghanistan"{
             ls{"Ora Afganistanului"}
@@ -1151,27 +1152,27 @@ ro{
             ls{"Ora Africii Orientale"}
         }
         "meta:Africa_Southern"{
-            lg{"Ora Africii Meridionale"}
-            ls{"Ora Standard a Africii Meridionale"}
+            ls{"Ora Africii Meridionale"}
         }
         "meta:Africa_Western"{
             ld{"Ora de vară a Africii Occidentale"}
-            ls{"Ora Africii Occidentale"}
+            lg{"Ora Africii Occidentale"}
+            ls{"Ora standard Africii Occidentale"}
         }
         "meta:Alaska"{
-            ld{"Ora de vară în zona Alaska"}
-            lg{"Ora zonei Alaska"}
-            ls{"Ora standard în zona Alaska"}
+            ld{"Ora de vară Alaska"}
+            lg{"Ora Alaska"}
+            ls{"Ora standard Alaska"}
         }
         "meta:Alaska_Hawaii"{
-            ld{"Ora de vară în zona Alaska-Hawaii"}
-            lg{"Ora zonei Alaska-Hawaii"}
-            ls{"Ora standard în zona Alaska-Hawaii"}
+            ld{"Ora de vară Alaska-Hawaii"}
+            lg{"Ora Alaska-Hawaii"}
+            ls{"Ora standard Alaska-Hawaii"}
         }
         "meta:Amazon"{
             ld{"Ora de vară Amazon"}
-            lg{"Ora din Amazonia"}
-            ls{"Ora Amazon"}
+            lg{"Ora Amazon"}
+            ls{"Ora standard Amazon"}
         }
         "meta:America_Central"{
             ld{"Ora de vară centrală"}
@@ -1195,8 +1196,8 @@ ro{
         }
         "meta:Anadyr"{
             ld{"Ora de vară din Anadyr"}
-            lg{"Ora din Anadyer"}
-            ls{"Ora din Anadyr"}
+            lg{"Ora din Anadyr"}
+            ls{"Ora standard din Anadyr"}
         }
         "meta:Arabian"{
             ld{"Ora de vară arabă"}
@@ -1205,8 +1206,8 @@ ro{
         }
         "meta:Argentina"{
             ld{"Ora de vară a Argentinei"}
-            lg{"Ora din Argentina"}
-            ls{"Ora Argentinei"}
+            lg{"Ora Argentinei"}
+            ls{"Ora standard Argentinei"}
         }
         "meta:Argentina_Western"{
             ld{"Ora de vară vestică din Argentina"}
@@ -1215,11 +1216,12 @@ ro{
         }
         "meta:Armenia"{
             ld{"Ora de vară a Armeniei"}
-            ls{"Ora Armeniei"}
+            lg{"Ora Armeniei"}
+            ls{"Ora standard Armeniei"}
         }
         "meta:Atlantic"{
             ld{"Ora de vară în zona Atlantic"}
-            lg{"Ora zonei Atlantic"}
+            lg{"Ora Atlantic"}
             ls{"Ora standard în zona Atlantic"}
         }
         "meta:Australia_Central"{
@@ -1244,11 +1246,13 @@ ro{
         }
         "meta:Azerbaijan"{
             ld{"Ora de vară a Azerbaidjanului"}
-            ls{"Ora Azerbaidjanului"}
+            lg{"Ora Azerbaidjanului"}
+            ls{"Ora standard a Azerbaidjanului"}
         }
         "meta:Bangladesh"{
             ld{"Ora de vară din Bangladesh"}
-            ls{"Ora din Bangladesh"}
+            lg{"Ora din Bangladesh"}
+            ls{"Ora standard din Bangladesh"}
         }
         "meta:Bering"{
             ld{"Ora de vară Bering"}
@@ -1263,15 +1267,16 @@ ro{
         }
         "meta:Brasilia"{
             ld{"Ora de vară a Brasiliei"}
-            lg{"Ora din Brasilia"}
-            ls{"Ora Brasiliei"}
+            lg{"Ora Brasiliei"}
+            ls{"Ora standard a Brasiliei"}
         }
         "meta:Brunei"{
             ls{"Ora Brunei Darussalam"}
         }
         "meta:Chile"{
             ld{"Ora de vară din Chile"}
-            ls{"Ora din Chile"}
+            lg{"Ora din Chile"}
+            ls{"Ora standard din Chile"}
         }
         "meta:China"{
             ld{"Ora de vară a Chinei"}
@@ -1281,11 +1286,12 @@ ro{
         "meta:Choibalsan"{
             ld{"Ora de vară din Choibalsan"}
             lg{"Ora din Choibalsan"}
-            ls{"Ora din Choibalsan"}
+            ls{"Ora standard din Choibalsan"}
         }
         "meta:Colombia"{
             ld{"Ora de vară a Columbiei"}
-            ls{"Ora Columbiei"}
+            lg{"Ora Columbiei"}
+            ls{"Ora standard a Columbiei"}
         }
         "meta:Cuba"{
             ld{"Ora de vară a Cubei"}
@@ -1306,41 +1312,54 @@ ro{
         }
         "meta:Europe_Central"{
             ld{"Ora de vară a Europei Centrale"}
-            ls{"Ora Europei Centrale"}
+            lg{"Ora Europei Centrale"}
+            ls{"Ora standard a Europei Centrale"}
         }
         "meta:Europe_Eastern"{
             ld{"Ora de vară a Europei de Est"}
-            ls{"Ora Europei de Est"}
+            lg{"Ora Europei de Est"}
+            ls{"Ora standard a Europei de Est"}
         }
         "meta:Europe_Western"{
             ld{"Ora de vară a Europei Occidentale"}
-            ls{"Ora Europei Occidentale"}
+            lg{"Ora Europei Occidentale"}
+            ls{"Ora standard a Europei Occidentale"}
         }
         "meta:French_Guiana"{
             ls{"Ora Guianei Franceze"}
         }
         "meta:Georgia"{
             ld{"Ora de vară a Georgiei"}
-            ls{"Ora Georgiei"}
+            lg{"Ora Georgiei"}
+            ls{"Ora standard a Georgiei"}
+        }
+        "meta:Greenland_Central"{
+            ld{"Ora de vară a Groenlandei centrale"}
+            lg{"Ora Groenlandei centrale"}
+            ls{"Ora standard a Groenlandei centrale"}
         }
         "meta:Greenland_Eastern"{
             ld{"Ora de vară a Groenlandei orientale"}
-            ls{"Ora Groenlandei orientale"}
+            lg{"Ora Groenlandei orientale"}
+            ls{"Ora standard a Groenlandei orientale"}
         }
         "meta:Greenland_Western"{
             ld{"Ora de vară a Groenlandei occidentale"}
-            ls{"Ora Groenlandei occidentale"}
+            lg{"Ora Groenlandei occidentale"}
+            ls{"Ora standard a Groenlandei occidentale"}
         }
         "meta:Guyana"{
             ls{"Ora Guianei"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Ora de vară a insulelor Aleutine şi a Hawaiului"}
             lg{"Ora insulelor Aleutine şi a Hawaiului"}
+            ls{"Ora standard a insulelor Aleutine şi a Hawaiului"}
         }
         "meta:Hovd"{
             ld{"Ora de vară din Hovd"}
             lg{"Ora din Hovd"}
-            ls{"Ora din Hovd"}
+            ls{"Ora standard din Hovd"}
         }
         "meta:India"{
             ls{"Ora standard a Indiei"}
@@ -1349,48 +1368,49 @@ ro{
             ls{"Ora Oceanului Indian"}
         }
         "meta:Indonesia_Central"{
-            lg{"Ora regiunii centrale din Indonezia"}
+            ls{"Ora regiunii centrale din Indonezia"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Ora regiunii estice din Indonezia"}
+            ls{"Ora regiunii estice din Indonezia"}
         }
         "meta:Indonesia_Western"{
-            lg{"Ora regiunii vestice din Indonezia"}
+            ls{"Ora regiunii vestice din Indonezia"}
         }
         "meta:Irkutsk"{
             ld{"Ora de vară din Irkutsk"}
             lg{"Ora din Irkutsk"}
-            ls{"Ora din Irkutsk"}
+            ls{"Ora standard din Irkutsk"}
         }
         "meta:Israel"{
             ld{"Ora de vară a Israelului"}
+            lg{"Ora Israelului"}
             ls{"Ora standard a Israelului"}
         }
         "meta:Japan"{
+            ld{"Ora de vară a Japoniei"}
+            lg{"Ora Japoniei"}
             ls{"Ora standard a Japoniei"}
         }
         "meta:Kamchatka"{
             ld{"Ora de vară din Petropavlovsk-Kamciaţki"}
-            lg{"Ora din Kamchatka"}
-            ls{"Ora din Petropavlovsk-Kamciaţki"}
+            lg{"Ora din Petropavlovsk-Kamciaţki"}
+            ls{"Ora standard din Petropavlovsk-Kamciaţki"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Ora de vară estică din Kazahstan"}
-            lg{"Ora regiunii vestice din Kazahstan"}
-            ls{"Ora standard estică din Kazahstan"}
+            ls{"Ora estică din Kazahstan"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Ora de vară vestică din Kazahstan"}
-            lg{"Ora vestică din Kazahstan"}
-            ls{"Ora standard vestică din Kazahstan"}
+            ls{"Ora vestică din Kazahstan"}
         }
         "meta:Korea"{
+            ld{"Ora de vară a Coreei"}
+            lg{"Ora Coreei"}
             ls{"Ora standard a Coreei"}
         }
         "meta:Krasnoyarsk"{
             ld{"Ora de vară din Krasnoiarsk"}
             lg{"Ora din Krasnoiarsk"}
-            ls{"Ora din Krasnoiarsk"}
+            ls{"Ora standard din Krasnoiarsk"}
         }
         "meta:Lord_Howe"{
             ld{"Ora de vară Lord Howe"}
@@ -1398,20 +1418,20 @@ ro{
             ls{"Ora standard Lord Howe"}
         }
         "meta:Macquarie"{
-            lg{"Ora din Macquarie"}
+            ls{"Ora din Macquarie"}
         }
         "meta:Magadan"{
             ld{"Ora de vară din Magadan"}
             lg{"Ora din Magadan"}
-            ls{"Ora din Magadan"}
+            ls{"Ora standard din Magadan"}
         }
         "meta:Mawson"{
             ls{"Ora Mawson"}
         }
         "meta:Mongolia"{
             ld{"Ora de vară din Ulan Bator"}
-            lg{"Ora din Mongolia"}
-            ls{"Ora din Ulan Bator"}
+            lg{"Ora Ulan Bator"}
+            ls{"Ora standard din Ulan Bator"}
         }
         "meta:Moscow"{
             ld{"Ora de vară din Moscova"}
@@ -1425,31 +1445,33 @@ ro{
         }
         "meta:Noronha"{
             ld{"Ora de vară din Fernando de Noronha"}
-            lg{"Ora din Noronha"}
-            ls{"Ora din Fernando de Noronha"}
+            lg{"Ora din Fernando de Noronha"}
+            ls{"Ora standard din Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
             ld{"Ora de vară din Novosibirsk"}
             lg{"Ora din Novosibirsk"}
-            ls{"Ora din Novosibirsk"}
+            ls{"Ora standard din Novosibirsk"}
         }
         "meta:Omsk"{
             ld{"Ora de vară din Omsk"}
             lg{"Ora din Omsk"}
-            ls{"Ora din Omsk"}
+            ls{"Ora standard din Omsk"}
         }
         "meta:Paraguay"{
-            ld{"Ora de vară a statului Paraguay"}
-            ls{"Ora statului Paraguay"}
+            ld{"Ora de vară a Paraguay"}
+            lg{"Ora Paraguay"}
+            ls{"Ora standard a Paraguay"}
         }
         "meta:Peru"{
             ld{"Ora de vară din Peru"}
-            ls{"Ora din Peru"}
+            lg{"Ora din Peru"}
+            ls{"Ora standard din Peru"}
         }
         "meta:Pierre_Miquelon"{
             ld{"Ora de vară Pierre și Miquelon"}
             lg{"Ora Pierre și Miquelon"}
-            ls{"Ora Pierre și Miquelon"}
+            ls{"Ora standard Pierre și Miquelon"}
         }
         "meta:Rothera"{
             ls{"Ora Rothera"}
@@ -1457,12 +1479,12 @@ ro{
         "meta:Sakhalin"{
             ld{"Ora de vară din Sahalin"}
             lg{"Ora din Sahalin"}
-            ls{"Ora din Sahalinului"}
+            ls{"Ora standard din Sahalin"}
         }
         "meta:Samara"{
             ld{"Ora de vară din Samara"}
             lg{"Ora din Samara"}
-            ls{"Ora din Samara"}
+            ls{"Ora standard din Samara"}
         }
         "meta:Suriname"{
             ls{"Ora Surinamului"}
@@ -1472,7 +1494,8 @@ ro{
         }
         "meta:Uruguay"{
             ld{"Ora de vară a statului Uruguay"}
-            ls{"Ora statului Uruguay"}
+            lg{"Ora statului Uruguay"}
+            ls{"Ora standard a statului Uruguay"}
         }
         "meta:Venezuela"{
             ls{"Ora Venezuelei"}
@@ -1480,12 +1503,12 @@ ro{
         "meta:Vladivostok"{
             ld{"Ora de vară din Vladivostok"}
             lg{"Ora din Vladivostok"}
-            ls{"Ora din Vladivostok"}
+            ls{"Ora standard din Vladivostok"}
         }
         "meta:Volgograd"{
             ld{"Ora de vară din Volgograd"}
             lg{"Ora din Volgograd"}
-            ls{"Ora din Volgograd"}
+            ls{"Ora standard din Volgograd"}
         }
         "meta:Vostok"{
             ls{"Ora Vostok"}
@@ -1493,12 +1516,12 @@ ro{
         "meta:Yakutsk"{
             ld{"Ora de vară din Yakutsk"}
             lg{"Ora din Yakutsk"}
-            ls{"Ora din Yakutsk"}
+            ls{"Ora standard din Yakutsk"}
         }
         "meta:Yekaterinburg"{
             ld{"Ora de vară din Ekaterinburg"}
             lg{"Ora din Ekaterinburg"}
-            ls{"Ora din Ekaterinburg"}
+            ls{"Ora standard din Ekaterinburg"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Ora din {1} ({0})"}

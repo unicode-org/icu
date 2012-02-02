@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/az.xml
@@ -31,7 +31,6 @@ az{
         054{"Melanesya"}
         057{"Mikronesiya reqionu"}
         061{"Polineziya"}
-        062{"Cənub Orta Asiya"}
         142{"Aziya"}
         143{"Orta Aziya"}
         145{"Qərb Asiya"}
@@ -290,5 +289,5 @@ az{
         ZW{"Zimbabve"}
         ZZ{"bilinmir"}
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
 }

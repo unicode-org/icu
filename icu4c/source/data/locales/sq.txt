@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sq.xml
@@ -33,7 +33,7 @@ sq{
             }
         }
     }
-    Version{"2.0.62.69"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -74,9 +74,9 @@ sq{
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"M.yyyy"}
-                yMEd{"EEE, d.M.yyyy"}
+                yMEd{"E, d.M.yyyy"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yyyyMMMM{"MMMM y"}
             }
@@ -184,6 +184,12 @@ sq{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"‚"}
+        quotationEnd{"“"}
+        quotationStart{"„"}
     }
     units{
         day{

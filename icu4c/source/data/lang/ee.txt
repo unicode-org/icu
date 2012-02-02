@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ee.xml
@@ -250,7 +250,6 @@ ee{
         collation{
             big5han{"blema chinatɔwo ƒe ɖoɖomɔ nu"}
             dictionary{"nuɖoɖo ɖe nyagɔmeɖegbalẽ ƒe ɖoɖomɔ nu"}
-            direct{"nuɖoɖo ɖe ɖoɖomɔ nu"}
             ducet{"nuɖoɖo ɖe unicode ƒe ɖoɖo nu"}
             gb2312han{"chinagbe yeye ƒe ɖoɖomɔ nu"}
             phonebook{"fonegbalẽ me ɖoɖomɔ nu"}
@@ -299,7 +298,7 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"2.0.61.87"}
+    Version{"2.0.64.50"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

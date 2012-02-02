@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fr_CA.xml
 // *
 // ***************************************************************************
 fr_CA{
-    Version{"2.0.61.44"}
+    Version{"2.0.64.92"}
     zoneStrings{
         "America:Cayman"{
             ec{"Îles Caïmans"}
@@ -77,59 +77,10 @@ fr_CA{
             sg{"HP"}
             ss{"HNP"}
         }
-        "meta:Choibalsan"{
-            ld{"Heure avancée de Choibalsan"}
-        }
-        "meta:Lord_Howe"{
-            ld{"Heure avancée de l'île Lord Howe"}
-            lg{"Heure de l'île Lord Howe"}
-            ls{"Heure normale de l'île Lord Howe"}
-        }
-        "meta:Macquarie"{
-            lg{"Heure de l'Île Macquarie"}
-        }
-        "meta:Magadan"{
-            ld{"Heure avancée de Magadan"}
-        }
-        "meta:Mongolia"{
-            ld{"Heure avancée d'Oulan-Bator"}
-            ls{"Heure d'Oulan-Bator"}
-        }
         "meta:Newfoundland"{
             sd{"HAT"}
             sg{"HT"}
             ss{"HNT"}
-        }
-        "meta:Noronha"{
-            ld{"Heure avancée de Fernando de Noronha"}
-            lg{"Heure de Fernando de Noronha"}
-        }
-        "meta:Novosibirsk"{
-            ld{"Heure d'été de Novosibirsk"}
-            lg{"Heure de Novosibirsk"}
-            ls{"Heure de Novosibirsk"}
-        }
-        "meta:Omsk"{
-            ld{"Heure avancée d'Omsk"}
-            lg{"Heure d'Omsk"}
-        }
-        "meta:Sakhalin"{
-            ld{"Heure avancée de Sakhaline"}
-            lg{"Heure de Sakhaline"}
-            ls{"Heure de Sakhaline"}
-        }
-        "meta:Vladivostok"{
-            ld{"Heure avancée de Vladivostok"}
-        }
-        "meta:Yakutsk"{
-            ld{"Heure d'été de Yakutsk"}
-            lg{"Heure de Yakutsk"}
-            ls{"Heure de Yakutsk"}
-        }
-        "meta:Yekaterinburg"{
-            ld{"Heure avancée d'Iekaterinbourg"}
-            lg{"Heure de Iekaterinbourg"}
-            ls{"Heure de Iekaterinbourg"}
         }
         fallbackRegionFormat{"Heure de {1} ({0})"}
         regionFormat{"Heure de {0}"}

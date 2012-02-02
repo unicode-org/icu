@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zu.xml
@@ -297,5 +297,5 @@ zu{
         ZW{"i-Zimbabwe"}
         ZZ{"Isifunda esingaziwa"}
     }
-    Version{"2.0.59.53"}
+    Version{"2.0.64.50"}
 }

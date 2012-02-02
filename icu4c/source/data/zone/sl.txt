@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sl.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -328,20 +328,22 @@ sl{
             ls{"Vzhodnoafriški čas"}
         }
         "meta:Africa_Southern"{
-            lg{"Južnoafriški čas"}
-            ls{"Južnoafriški standardni čas"}
+            ls{"Južnoafriški čas"}
         }
         "meta:Africa_Western"{
             ld{"Zahodnoafriški poletni čas"}
-            ls{"Zahodnoafriški čas"}
+            lg{"Zahodnoafriški čas"}
+            ls{"Zahodnoafriški standardni čas"}
         }
         "meta:Alaska"{
-            ld{"Aljaska – dnevni čas"}
+            ld{"Aljaški poletni čas"}
             lg{"Aljaški čas"}
             ls{"Aljaški standardni čas"}
         }
         "meta:Amazon"{
+            ld{"Amazonski poletni čas"}
             lg{"Amazonski čas"}
+            ls{"Amazonski standardni čas"}
         }
         "meta:America_Central"{
             ld{"Centralni poletni čas"}
@@ -364,9 +366,9 @@ sl{
             ls{"Pacifiški standardni čas"}
         }
         "meta:Anadyr"{
-            ld{"Anadir – poletni čas"}
+            ld{"Anadirski poletni čas"}
             lg{"Anadirski čas"}
-            ls{"Anadirski čas"}
+            ls{"Anadirski standardni čas"}
         }
         "meta:Arabian"{
             ld{"Arabski poletni čas"}
@@ -376,12 +378,12 @@ sl{
         "meta:Argentina"{
             ld{"Argentinski poletni čas"}
             lg{"Argentinski čas"}
-            ls{"Argentinski čas"}
+            ls{"Argentinski standardni čas"}
         }
         "meta:Argentina_Western"{
             ld{"Argentinski zahodni poletni čas"}
             lg{"Argentinski zahodni čas"}
-            ls{"Zahodnoargentinski čas"}
+            ls{"Argentinski zahodni standardni čas"}
         }
         "meta:Atlantic"{
             ld{"Atlantski poletni čas"}
@@ -396,7 +398,7 @@ sl{
         "meta:Australia_CentralWestern"{
             ld{"Avstralski centralni zahodni poletni čas"}
             lg{"Avstralski centralni zahodni čas"}
-            ls{"Avstralski centralni zahodni standardničas"}
+            ls{"Avstralski centralni zahodni standardni čas"}
         }
         "meta:Australia_Eastern"{
             ld{"Avstralski vzhodni poletni čas"}
@@ -410,32 +412,38 @@ sl{
         }
         "meta:Azores"{
             ld{"Azorski poletni čas"}
-            ls{"Azorski čas"}
+            lg{"Azorski čas"}
+            ls{"Azorski standardni čas"}
         }
         "meta:Brasilia"{
-            ld{"Brasilia – poletni čas"}
+            ld{"Brasilski poletni čas"}
             lg{"Brasilski čas"}
-            ls{"Brasilski čas"}
+            ls{"Brasilski standardni čas"}
         }
         "meta:Cape_Verde"{
             ld{"Kapverdski poletni čas"}
-            ls{"Kapverdski čas"}
+            lg{"Kapverdski čas"}
+            ls{"Kapverdski standardni čas"}
         }
         "meta:Chile"{
             ld{"Čilski poletni čas"}
-            ls{"Čilski čas"}
+            lg{"Čilski čas"}
+            ls{"Čilski standardni čas"}
         }
         "meta:China"{
+            ld{"Kitajski poletni čas"}
+            lg{"Kitajski čas"}
             ls{"Kitajski standardni čas"}
         }
         "meta:Choibalsan"{
-            ld{"Čojbalsan – poletni čas"}
+            ld{"Čojbalsanski poletni čas"}
             lg{"Čojbalsanski čas"}
-            ls{"Čojbalsanski čas"}
+            ls{"Čojbalsanski standardni čas"}
         }
         "meta:Colombia"{
             ld{"Kolumbijski poletni čas"}
-            ls{"Kolumbijski čas"}
+            lg{"Kolumbijski čas"}
+            ls{"Kolumbijski standardni čas"}
         }
         "meta:Cuba"{
             ld{"Kubanski poletni čas"}
@@ -444,73 +452,79 @@ sl{
         }
         "meta:Europe_Central"{
             ld{"Srednjeevropski poletni čas"}
-            ls{"Srednjeevropski čas"}
+            lg{"Srednjeevropski čas"}
+            ls{"Srednjeevropski standardni čas"}
         }
         "meta:Europe_Eastern"{
             ld{"Vzhodnoevropski poletni čas"}
-            ls{"Vzhodnoevropski čas"}
+            lg{"Vzhodnoevropski čas"}
+            ls{"Vzhodnoevropski standardni čas"}
         }
         "meta:Europe_Western"{
             ld{"Zahodnoevropski poletni čas"}
-            ls{"Zahodnoevropski čas"}
+            lg{"Zahodnoevropski čas"}
+            ls{"Zahodnoevropski standardni čas"}
         }
         "meta:GMT"{
             ls{"Greenwiški srednji čas"}
         }
         "meta:Hawaii_Aleutian"{
+            ld{"Havajski aleutski poletni čas"}
             lg{"Havajski aleutski čas"}
+            ls{"Havajski aleutski standardni čas"}
         }
         "meta:Hovd"{
-            ld{"Hovd – poletni čas"}
+            ld{"Hovdski poletni čas"}
             lg{"Hovdski čas"}
-            ls{"Hovdski čas"}
+            ls{"Hovdski standardni čas"}
         }
         "meta:India"{
             ls{"Indijski standardni čas"}
         }
         "meta:Indonesia_Central"{
-            lg{"Indonezijski osrednji čas"}
+            ls{"Indonezijski osrednji čas"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Indonezijski vzhodni čas"}
+            ls{"Indonezijski vzhodni čas"}
         }
         "meta:Indonesia_Western"{
-            lg{"Indonezijski zahodni čas"}
+            ls{"Indonezijski zahodni čas"}
         }
         "meta:Irkutsk"{
-            ld{"Irkutsk – poletni čas"}
+            ld{"Irkutški poletni čas"}
             lg{"Irkutški čas"}
-            ls{"Irkutški čas"}
+            ls{"Irkutški standardni čas"}
         }
         "meta:Israel"{
             ld{"Izraelski poletni čas"}
+            lg{"Izraelski čas"}
             ls{"Izraelski standardni čas"}
         }
         "meta:Japan"{
+            ld{"Japonski poletni čas"}
+            lg{"Japonski čas"}
             ls{"Japonski standardni čas"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovsk-Kamčatski – poletni čas"}
-            lg{"Kamčatski čas"}
-            ls{"Petropavlovsk-Kamčatski čas"}
+            ld{"Petropavlovsk-Kamčatski poletni čas"}
+            lg{"Petropavlovsk-Kamčatski čas"}
+            ls{"Petropavlovsk-Kamčatski standardni čas"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Kazahstanski vzhodni poletni čas"}
-            lg{"Vzhodni kazahstanski čas"}
-            ls{"Vzhodni kazahstanski standardni čas"}
+            ls{"Vzhodni kazahstanski čas"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Kazahstanski zahodni poletni čas"}
-            lg{"Zahodni kazahstanski čas"}
-            ls{"Zahodni kazahstanski standardni čas"}
+            ls{"Zahodni kazahstanski čas"}
         }
         "meta:Korea"{
+            ld{"Korejski poletni čas"}
+            lg{"Korejski čas"}
             ls{"Korejski standardni čas"}
         }
         "meta:Krasnoyarsk"{
-            ld{"Krasnojarsk – poletni čas"}
+            ld{"Krasnojarški poletni čas"}
             lg{"Krasnojarški čas"}
-            ls{"Krasnojarški čas"}
+            ls{"Krasnojarški standardni čas"}
         }
         "meta:Lord_Howe"{
             ld{"Poletni čas otoka Lord Howe"}
@@ -518,17 +532,17 @@ sl{
             ls{"Standardni čas otoka Lord Howe"}
         }
         "meta:Macquarie"{
-            lg{"Macquarieski čas"}
+            ls{"Macquarieski čas"}
         }
         "meta:Magadan"{
-            ld{"Magadan – poletni čas"}
+            ld{"Magadanski poletni čas"}
             lg{"Magadanski čas"}
-            ls{"Magadanski čas"}
+            ls{"Magadanski standardni čas"}
         }
         "meta:Mongolia"{
-            ld{"Ulan Bator – poletni čas"}
-            lg{"Mongolski čas"}
-            ls{"Ulanbatorski čas"}
+            ld{"Ulanbatorski poletni čas"}
+            lg{"Ulanbatorski čas"}
+            ls{"Ulanbatorski standardni čas"}
         }
         "meta:Moscow"{
             ld{"Moskovski poletni čas"}
@@ -536,58 +550,59 @@ sl{
             ls{"Moskovski standardni čas"}
         }
         "meta:Newfoundland"{
-            ld{"Novofundlandski dnevni čas"}
+            ld{"Novofundlandski poletni čas"}
             lg{"Novofundlandski čas"}
             ls{"Novofundlandski standardni čas"}
         }
         "meta:Noronha"{
-            ld{"Fernando de Noronha – poletni čas"}
-            lg{"Noronški čas"}
-            ls{"Fernando de Noronški čas"}
+            ld{"Fernando de Noronški poletni čas"}
+            lg{"Fernando de Noronški čas"}
+            ls{"Fernando de Noronški standardni čas"}
         }
         "meta:Novosibirsk"{
-            ld{"Novosibirsk – poletni čas"}
+            ld{"Novosibirški poletni čas"}
             lg{"Novosibirški čas"}
-            ls{"Novosibirški čas"}
+            ls{"Novosibirški standardni čas"}
         }
         "meta:Omsk"{
-            ld{"Omsk – poletni čas"}
+            ld{"Omški poletni čas"}
             lg{"Omški čas"}
-            ls{"Omški čas"}
+            ls{"Omški standardni čas"}
         }
         "meta:Sakhalin"{
-            ld{"Sahalin – poletni čas"}
+            ld{"Sahalinski poletni čas"}
             lg{"Sahalinski čas"}
-            ls{"Sahalinski čas"}
+            ls{"Sahalinski standardni čas"}
         }
         "meta:Samara"{
             ld{"Samarski poletni čas"}
             lg{"Samarski čas"}
-            ls{"Samarski čas"}
+            ls{"Samarski standardni čas"}
         }
         "meta:Turkey"{
             ld{"Turški poletni čas"}
-            ls{"Turški čas"}
+            lg{"Turški čas"}
+            ls{"Turški standardni čas"}
         }
         "meta:Vladivostok"{
-            ld{"Vladivostok – poletni čas"}
+            ld{"Vladivostoški poletni čas"}
             lg{"Vladivostoški čas"}
-            ls{"Vladivostoški čas"}
+            ls{"Vladivostoški standardni čas"}
         }
         "meta:Volgograd"{
             ld{"Volgograjski poletni čas"}
-            lg{"Volgograški čas"}
-            ls{"Volgograjski čas"}
+            lg{"Volgograjski čas"}
+            ls{"Volgograjski standardni čas"}
         }
         "meta:Yakutsk"{
-            ld{"Jakutsk – poletni čas"}
+            ld{"Jakutski poletni čas"}
             lg{"Jakutski čas"}
-            ls{"Jakutski čas"}
+            ls{"Jakutski standardni čas"}
         }
         "meta:Yekaterinburg"{
-            ld{"Jekaterinburg – poletni čas"}
+            ld{"Jekaterinburški poletni čas"}
             lg{"Jekaterinburški čas"}
-            ls{"Jekaterinburški čas"}
+            ls{"Jekaterinburški standardni čas"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1} čas ({0})"}

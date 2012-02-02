@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/seh.xml
@@ -29,7 +29,7 @@ seh{
             }
         }
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -52,10 +52,10 @@ seh{
                 HHmmss{"HH:mm:ss"}
                 Hm{"H:mm"}
                 M{"L"}
-                MEd{"EEE, dd/MM"}
+                MEd{"E, dd/MM"}
                 MMM{"LLL"}
-                MMMEd{"EEE, d MMM"}
-                MMMMEd{"EEE, d MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd/MM"}
@@ -65,15 +65,15 @@ seh{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"MM/y"}
-                yMEd{"EEE, dd/MM/y"}
+                yMEd{"E, dd/MM/y"}
                 yMMM{"MMM 'de' y"}
-                yMMMEd{"EEE, d 'de' MMM 'de' y"}
+                yMMMEd{"E, d 'de' MMM 'de' y"}
                 yMMMM{"MMMM 'de' y"}
                 yQ{"y Q"}
                 yQQQ{"y QQQ"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
-                yyMMMEEEd{"EEE, d 'de' MMM 'de' yy"}
+                yyMMMEd{"E, d 'de' MMM 'de' yy"}
                 yyMMMd{"d 'de' MMM 'de' yy"}
                 yyQ{"Q yy"}
             }
@@ -199,9 +199,9 @@ seh{
         }
     }
     delimiters{
-        alternateQuotationEnd{"'"}
-        alternateQuotationStart{"'"}
-        quotationEnd{"'"}
-        quotationStart{"'"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
 }

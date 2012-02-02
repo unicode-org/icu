@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_NZ.xml
@@ -8,14 +8,7 @@
 // ***************************************************************************
 en_NZ{
     %%Parent{"en_GB"}
-    NumberElements{
-        latn{
-            patterns{
-                currencyFormat{"¤#,##0.00"}
-            }
-        }
-    }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.65"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,7 +32,7 @@ en_NZ{
                 MMMd{"d MMM"}
                 Md{"d/M"}
                 yMEd{"E, dd/MM/yyyy"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/MM/yy"}
                 yyyyMM{"MM/yyyy"}

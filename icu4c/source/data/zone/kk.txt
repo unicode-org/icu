@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kk.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kk.xml
  */
 kk{
-    Version{"2.0.61.44"}
+    Version{"2.0.63.98"}
     zoneStrings{
         "Asia:Almaty"{
             ec{"Алматы"}
@@ -37,12 +37,12 @@ kk{
             ls{"Шығыс Африка уақыты"}
         }
         "meta:Africa_Southern"{
-            lg{"Оңтүстік Африка уақыты"}
-            ls{"Оңтүстік Африка стандарт уақыты"}
+            ls{"Оңтүстік Африка уақыты"}
         }
         "meta:Africa_Western"{
             ld{"Батыс Африка жаздық уақыты"}
-            ls{"Батыс Африка уақыты"}
+            lg{"Батыс Африка уақыты"}
+            ls{"Батыс Африка стандарт уақыты"}
         }
         "meta:Atlantic"{
             ld{"Атлантикалық жаздық уақыт"}
@@ -71,18 +71,21 @@ kk{
         }
         "meta:Europe_Central"{
             ld{"Орталық Еуропа жаздық уақыты"}
-            ls{"Орталық Еуропа уақыты"}
+            lg{"Орталық Еуропа уақыты"}
+            ls{"Орталық Еуропа стандарт уақыты"}
         }
         "meta:Europe_Eastern"{
             ld{"Шығыс Еуропа жаздық уақыты"}
-            ls{"Шығыс Еуропа уақыты"}
+            lg{"Шығыс Еуропа уақыты"}
+            ls{"Шығыс Еуропа стандарт уақыты"}
             sd{"EEST"}
             sg{"EET"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Батыс Еуропа жаздық уақыты"}
-            ls{"Батыс Еуропа уақыты"}
+            lg{"Батыс Еуропа уақыты"}
+            ls{"Батыс Еуропа стандарт уақыты"}
         }
         fallbackRegionFormat{"{1} Уақыт ({0})"}
         regionFormat{"{0} уақыт"}

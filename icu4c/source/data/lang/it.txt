@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/it.xml
@@ -666,7 +666,6 @@ it{
         collation{
             big5han{"cinese tradizionale"}
             dictionary{"Ordinamento dizionario"}
-            direct{"ordine diretto"}
             ducet{"Ordinamento Unicode predefinito"}
             gb2312han{"cinese semplificato"}
             phonebook{"ordine elenco telefonico"}
@@ -731,7 +730,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

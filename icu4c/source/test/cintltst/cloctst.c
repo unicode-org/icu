@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -3450,7 +3450,7 @@ const char* const full_data[][3] = {
     "kpe"
   }, {
     "ku",
-    "ku_Arab_IQ",
+    "ku_Latn_TR",
     "ku"
   }, {
     "ky",

@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2011, International Business Machines Corporation and
+ * Copyright (c) 2001-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -7117,7 +7117,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPrivateUseCharactersInRange);
     TEST(TestInvalidListsAndRanges);
     TEST(TestImportRulesDeWithPhonebook);
-    TEST(TestImportRulesFiWithEor);
+    /* TEST(TestImportRulesFiWithEor); EOR rules removed from CLDR 21 */
     /* TEST(TestImportRulesCJKWithUnihan); */
     TEST(TestImport);
     TEST(TestImportWithType);

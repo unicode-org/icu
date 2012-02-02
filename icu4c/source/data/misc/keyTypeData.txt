@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/bcp47/*.xml
@@ -17,6 +17,7 @@ keyTypeData:table(nofallback){
         collation{"co"}
         colnormalization{"kk"}
         colnumeric{"kn"}
+        colreorder{"kr"}
         colstrength{"ks"}
         currency{"cu"}
         numbers{"nu"}

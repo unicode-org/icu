@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fil.xml
@@ -249,7 +249,6 @@ fil{
         collation{
             big5han{"Pagkakasunod-sunod ng Pag-uuri ng Tradisyunal na Chinese - Big5"}
             dictionary{"Pagkakasunud-sunod ng Pag-uuri ng Diksyunaryo"}
-            direct{"Direktang Pagkakasunod-sunod ng Pag-uuri"}
             ducet{"Default na Pagkakasunud-sunod ng Pag-uuri ng Unicode"}
             gb2312han{"Pagkakasunud-sunod ng Pag-uuri ng Pinasimpleng Chinese - GB2312"}
             phonebook{"Pagkakasunud-sunod ng Pag-uuri ng Phonebook"}
@@ -302,7 +301,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.59.68"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

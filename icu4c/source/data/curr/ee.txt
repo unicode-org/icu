@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ee.xml
@@ -192,7 +192,7 @@ ee{
             "braziliaga cruzeiro xoxotɔ gbãtɔ (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "brazilga real",
         }
         BRN{
@@ -2297,5 +2297,5 @@ ee{
     CurrencyUnitPatterns{
         other{"{1} {0}"}
     }
-    Version{"2.0.61.87"}
+    Version{"2.0.64.50"}
 }

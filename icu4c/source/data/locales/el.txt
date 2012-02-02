@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/el.xml
@@ -14,7 +14,7 @@ el{
     ExemplarCharacters{"[α ά β γ δ ε έ ζ η ή θ ι ί ϊ ΐ κ λ μ ν ξ ο ό π ρ σ ς τ υ ύ ϋ ΰ φ χ ψ ω ώ]"}
     ExemplarCharactersCurrency{"[α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω]"}
     ExemplarCharactersIndex{"[Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! . … \" ( ) \[ \] @ * / \\ \& §]"}
+    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! . … \" ( ) \[ \] § @ * / \\ \&]"}
     LocaleScript{
         "Grek",
     }
@@ -40,7 +40,7 @@ el{
             }
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -61,16 +61,16 @@ el{
             availableFormats{
                 Ed{"E d"}
                 Gy{"y G"}
-                MEd{"EEE, d/M"}
+                MEd{"E, d/M"}
                 MMM{"LLL"}
-                MMMEd{"EEE, d MMM"}
+                MMMEd{"E, d MMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
                 y{"y G"}
                 yM{"M/y"}
-                yMEd{"EEE, d/M/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"LLL, y G"}
-                yMMMEd{"EEE, d MMM, y G"}
+                yMMMEd{"E, d MMM, y G"}
                 yMMMd{"d MMM, y G"}
                 yMd{"d/M/y"}
             }
@@ -96,7 +96,6 @@ el{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE d"}
                 Ed{"E d"}
                 H{"HH"}
                 HHmm{"HH:mm"}
@@ -120,9 +119,9 @@ el{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/yyyy"}
-                yMEd{"EEE, d/M/yyyy"}
+                yMEd{"E, d/M/yyyy"}
                 yMMM{"LLL y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
                 yQ{"y Q"}
@@ -535,9 +534,9 @@ el{
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
-                yyyyMEd{"EEE, d/M/y G"}
+                yyyyMEd{"E, d/M/y G"}
                 yyyyMMM{"LLL, y G"}
-                yyyyMMMEd{"EEE, d MMM, y G"}
+                yyyyMMMEd{"E, d MMM, y G"}
                 yyyyMMMd{"d MMM, y G"}
                 yyyyMd{"d/M/y G"}
                 yyyyQ{"y G Q"}
@@ -552,8 +551,8 @@ el{
         }
     }
     delimiters{
-        alternateQuotationEnd{"’"}
-        alternateQuotationStart{"‘"}
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
     }

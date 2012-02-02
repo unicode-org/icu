@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant_HK.xml
 // *
 // ***************************************************************************
 zh_Hant_HK{
-    Version{"2.0.62.55"}
+    Version{"2.0.64.50"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比贊"}
@@ -134,33 +134,6 @@ zh_Hant_HK{
         }
         "Pacific:Tongatapu"{
             ec{"湯加塔布"}
-        }
-        "meta:Hawaii_Aleutian"{
-            lg{"夏威夷阿留申時間"}
-        }
-        "meta:Irkutsk"{
-            lg{"伊爾庫茨克時間"}
-        }
-        "meta:Kamchatka"{
-            lg{"堪察加時間"}
-        }
-        "meta:Kazakhstan_Eastern"{
-            ld{"哈薩克斯坦東部夏令時間"}
-        }
-        "meta:Kazakhstan_Western"{
-            ld{"哈薩克斯坦西部夏令時間"}
-        }
-        "meta:Macquarie"{
-            lg{"麥格理時間"}
-        }
-        "meta:Noronha"{
-            lg{"諾羅尼亞時間"}
-        }
-        "meta:Omsk"{
-            lg{"鄂木斯克時間"}
-        }
-        "meta:Sakhalin"{
-            lg{"薩哈林時間"}
         }
     }
 }

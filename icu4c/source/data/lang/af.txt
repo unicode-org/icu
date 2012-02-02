@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/af.xml
@@ -253,7 +253,6 @@ af{
         collation{
             big5han{"Tradisionele Chinese sorteervolgorde - Groot5"}
             dictionary{"Woordeboek-sorteervolgorde"}
-            direct{"Direkte sorteervolgorde"}
             ducet{"Verstek Unicode-sorteervolgorde"}
             gb2312han{"Vereenvoudigde Chinese sorteervolgorde - GB2312"}
             phonebook{"Foonboek-sorteervolgorde"}
@@ -302,7 +301,7 @@ af{
             tibt{"Tibettaanse syfers"}
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ml.xml
@@ -683,7 +683,6 @@ ml{
         collation{
             big5han{"പരമ്പരാഗത ചൈനീസ് ക്രമീകരണം - ബിഗ്5"}
             dictionary{"നിഘണ്ടു അടുക്കല്‍ ക്രമം"}
-            direct{"പ്രത്യക്ഷക്രമീകരണം"}
             ducet{"സ്ഥിരസ്ഥിതി യൂണീകോഡ് അടുക്കല്‍ ക്രമം"}
             gb2312han{"ലളിതമായ ചൈനീസ് ക്രമീകരണം - ജീബി2312"}
             phonebook{"ഫോണ്‍ബുക്കിലെ ക്രമീകരണം"}
@@ -744,7 +743,7 @@ ml{
         POSIX{"കമ്പ്യൂട്ടര്‍"}
         REVISED{"പരിഷ്ക്കരിച്ച ലിപി"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"ഭാഷ: {0}"}
         script{"ലിപി: {0}"}

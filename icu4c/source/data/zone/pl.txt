@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pl.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidżan"}
@@ -1189,60 +1189,62 @@ pl{
             ls{"Czas wschodnioafrykański"}
         }
         "meta:Africa_Southern"{
-            lg{"Czas południowoafrykański"}
             ls{"Czas południowoafrykański"}
         }
         "meta:Africa_Western"{
-            ld{"Letni czas zachodnioafrykański"}
-            ls{"Czas zachodnioafrykański"}
+            ld{"Czas zachodnioafrykański letni"}
+            lg{"Czas zachodnioafrykański"}
+            ls{"Czas standardowy zachodnioafrykański"}
         }
         "meta:Alaska"{
-            ld{"Alaska (czas letni)"}
-            lg{"Alaska"}
-            ls{"Alaska (czas standardowy)"}
+            ld{"Czas Alaska letni"}
+            lg{"Czas Alaska"}
+            ls{"Czas standardowy Alaska"}
         }
         "meta:Amazon"{
+            ld{"Czas amazoński letni"}
             lg{"Czas amazoński"}
+            ls{"Czas standardowy amazoński"}
         }
         "meta:America_Central"{
             ld{"Czas środkowoamerykański letni"}
             lg{"Czas środkowoamerykański"}
-            ls{"Środkowy czas standardowy"}
+            ls{"Czas standardowy środkowoamerykański"}
         }
         "meta:America_Eastern"{
             ld{"Czas wschodnioamerykański letni"}
             lg{"Czas wschodnioamerykański"}
-            ls{"Wschodni czas standardowy"}
+            ls{"Czas standardowy wschodnioamerykański"}
         }
         "meta:America_Mountain"{
             ld{"Czas górski letni"}
             lg{"Czas górski"}
-            ls{"Górski czas standardowy"}
+            ls{"Czas standardowy górski"}
         }
         "meta:America_Pacific"{
             ld{"Czas pacyficzny letni"}
             lg{"Czas pacyficzny"}
-            ls{"Czas pacyficzny standardowy"}
+            ls{"Czas standardowy pacyficzny"}
         }
         "meta:Anadyr"{
-            ld{"Anadyr (czas letni)"}
-            lg{"Anadyr"}
-            ls{"Anadyr"}
+            ld{"Czas Anadyr letni"}
+            lg{"Czas Anadyr"}
+            ls{"Czas standardowy Anadyr"}
         }
         "meta:Argentina"{
-            ld{"Argentyna (czas letni)"}
-            lg{"Argentyna"}
-            ls{"Argentyna"}
+            ld{"Czas Argentyna letni"}
+            lg{"Czas Argentyna"}
+            ls{"Czas standardowy Argentyna"}
         }
         "meta:Argentina_Western"{
-            ld{"Argentyna (czas zachodni letni)"}
-            lg{"Argentyna (czas zachodni)"}
-            ls{"Argentyna Zachodnia"}
+            ld{"Czas zachodniej Argentyna letni"}
+            lg{"Czas zachodniej Argentyna"}
+            ls{"Czas standardowy zachodniej Argentyna"}
         }
         "meta:Atlantic"{
             ld{"Czas atlantycki letni"}
             lg{"Czas atlantycki"}
-            ls{"Czas atlantycki standardowy"}
+            ls{"Czas standardowy atlantycki"}
         }
         "meta:Australia_Central"{
             ld{"Czas środkowoaustralijski letni"}
@@ -1265,153 +1267,154 @@ pl{
             ls{"Czas standardowy zachodnioaustralijski"}
         }
         "meta:Brasilia"{
-            ld{"Brazylia (czas letni)"}
-            lg{"Brazylia"}
-            ls{"Brazylia"}
+            ld{"Czas Brazylia letni"}
+            lg{"Czas Brazylia"}
+            ls{"Czas standardowy Brazylia"}
         }
         "meta:Choibalsan"{
-            ld{"Czojbalsan (czas letni)"}
-            lg{"Czojbalsan"}
-            ls{"Czojbalsan"}
+            ld{"Czas Czojbalsan letni"}
+            lg{"Czas Czojbalsan"}
+            ls{"Czas standardowy Czojbalsan"}
         }
         "meta:Europe_Central"{
             ld{"Czas środkowoeuropejski letni"}
-            ls{"Czas środkowoeuropejski"}
+            lg{"Czas środkowoeuropejski"}
+            ls{"Czas standardowy środkowoeuropejski"}
             sd{"CEST"}
             sg{"CET"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Czas wschodnioeuropejski letni"}
-            ls{"Czas wschodnioeuropejski"}
+            lg{"Czas wschodnioeuropejski"}
+            ls{"Czas standardowy wschodnioeuropejski"}
             sd{"EEST"}
             sg{"EET"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Czas zachodnioeuropejski letni"}
-            ls{"Czas zachodnioeuropejski"}
+            lg{"Czas zachodnioeuropejski"}
+            ls{"Czas standardowy zachodnioeuropejski"}
             sd{"WEST"}
             sg{"WET"}
             ss{"WET"}
         }
         "meta:Hawaii_Aleutian"{
-            lg{"Hawaje (czas aleucki)"}
+            ld{"Czas Hawaje-aleucki letni"}
+            lg{"Czas Hawaje-aleucki"}
+            ls{"Czas standardowy Hawaje-aleucki"}
         }
         "meta:Hovd"{
-            ld{"Kobdo (czas letni)"}
-            lg{"Kobdo"}
-            ls{"Kobdo"}
+            ld{"Czas Kobdo letni"}
+            lg{"Czas Kobdo"}
+            ls{"Czas standardowy Kobdo"}
         }
         "meta:Indian_Ocean"{
             ls{"Czas strefy oceanu indyjskiego"}
         }
         "meta:Indonesia_Central"{
-            lg{"Indonezja (czas środkowy)"}
+            ls{"Czas środkowa Indonezja"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Indonezja (czas wschodni)"}
+            ls{"Czas wschodnia Indonezja"}
         }
         "meta:Indonesia_Western"{
-            lg{"Indonezja (czas zachodni)"}
+            ls{"Czas zachodniej Indonezja"}
         }
         "meta:Irkutsk"{
-            ld{"Irkuck (czas letni)"}
-            lg{"Irkuck"}
-            ls{"Irkuck"}
+            ld{"Czas Irkuck letni"}
+            lg{"Czas Irkuck"}
+            ls{"Czas standardowy Irkuck"}
         }
         "meta:Kamchatka"{
-            ld{"Pietropawłowsk Kamczacki (czas letni)"}
-            lg{"Kamczatka"}
-            ls{"Pietropawłowsk Kamczacki"}
+            ld{"Czas Pietropawłowsk Kamczacki letni"}
+            lg{"Czas Pietropawłowsk Kamczacki"}
+            ls{"Czas standardowy Pietropawłowsk Kamczacki"}
         }
         "meta:Kazakhstan_Eastern"{
-            ld{"Kazachstan (czas wschodni letni)"}
-            lg{"Kazachstan Wschodni"}
-            ls{"Kazachstan Wschodni (czas standardowy)"}
+            ls{"Czas Kazachstan Wschodni"}
         }
         "meta:Kazakhstan_Western"{
-            ld{"Kazachstan (czas zachodni letni)"}
-            lg{"Kazachstan Zachodni"}
-            ls{"Kazachstan Zachodni (czas standardowy)"}
+            ls{"Czas Kazachstan Zachodni"}
         }
         "meta:Krasnoyarsk"{
-            ld{"Krasnojarsk (czas letni)"}
-            lg{"Krasnojarsk"}
-            ls{"Krasnojarsk"}
+            ld{"Czas Krasnojarsk letni"}
+            lg{"Czas Krasnojarsk"}
+            ls{"Czas standardowy Krasnojarsk"}
         }
         "meta:Lord_Howe"{
-            ld{"Lord Howe (czas letni)"}
-            lg{"Lord Howe"}
-            ls{"Lord Howe (czas standardowy)"}
+            ld{"Czas Lord Howe letni"}
+            lg{"Czas Lord Howe"}
+            ls{"Czas standardowy Lord Howe"}
         }
         "meta:Macquarie"{
-            lg{"Macquarie"}
+            lg{"Czas Macquarie"}
         }
         "meta:Magadan"{
-            ld{"Magadan (czas letni)"}
-            lg{"Magadan"}
-            ls{"Magadan"}
+            ld{"Czas Magadan letni"}
+            lg{"Czas Magadan"}
+            ls{"Czas standardowy Magadan"}
         }
         "meta:Mongolia"{
-            ld{"Ułan Bator (czas letni)"}
-            lg{"Mongolia"}
-            ls{"Ułan Bator"}
+            ld{"Czas Ułan Bator letni"}
+            lg{"Czas Ułan Bator"}
+            ls{"Czas standardowy Ułan Bator"}
         }
         "meta:Moscow"{
-            ld{"Moskwa (czas letni)"}
+            ld{"Czas moskiewski letni"}
             lg{"Czas moskiewski"}
-            ls{"Moskwa (czas standardowy)"}
+            ls{"Czas standardowy moskiewski"}
         }
         "meta:Newfoundland"{
-            ld{"Nowa Funlandia (czas letni)"}
-            lg{"Nowa Funlandia"}
-            ls{"Nowa Funlandia (czas standardowy)"}
+            ld{"Czas Nowa Funlandia letni"}
+            lg{"Czas Nowa Funlandia"}
+            ls{"Czas standardowy Nowa Funlandia"}
         }
         "meta:Noronha"{
-            ld{"Fernando de Noronha (czas letni)"}
-            lg{"Noronha"}
-            ls{"Fernando de Noronha"}
+            ld{"Czas Fernando de Noronha letni"}
+            lg{"Czas Fernando de Noronha"}
+            ls{"Czas standardowy Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
-            ld{"Nowosybirsk (czas letni)"}
-            lg{"Nowosybirsk"}
-            ls{"Nowosybirsk"}
+            ld{"Czas Nowosybirsk letni"}
+            lg{"Czas Nowosybirsk"}
+            ls{"Czas standardowy Nowosybirsk"}
         }
         "meta:Omsk"{
-            ld{"Omsk (czas letni)"}
-            lg{"Omsk"}
-            ls{"Omsk"}
+            ld{"Czas Omsk letni"}
+            lg{"Czas Omsk"}
+            ls{"Czas standardowy Omsk"}
         }
         "meta:Sakhalin"{
-            ld{"Sachalin (czas letni)"}
-            lg{"Sachalin"}
-            ls{"Sachalin"}
+            ld{"Czas Sachalin letni"}
+            lg{"Czas Sachalin"}
+            ls{"Czas standardowy Sachalin"}
         }
         "meta:Samara"{
-            ld{"Samara (czas letni)"}
-            lg{"Samara"}
-            ls{"Samara"}
+            ld{"Czas Samara letni"}
+            lg{"Czas Samara"}
+            ls{"Czas standardowy Samara"}
         }
         "meta:Vladivostok"{
-            ld{"Władywostok (czas letni)"}
-            lg{"Władywostok"}
-            ls{"Władywostok"}
+            ld{"Czas Władywostok letni"}
+            lg{"Czas Władywostok"}
+            ls{"Czas standardowy Władywostok"}
         }
         "meta:Volgograd"{
-            ld{"Wołgograd (czas letni)"}
-            lg{"Wołgograd"}
-            ls{"Wołgograd"}
+            ld{"Czas Wołgograd letni"}
+            lg{"Czas Wołgograd"}
+            ls{"Czas standardowy Wołgograd"}
         }
         "meta:Yakutsk"{
-            ld{"Jakuck (czas letni)"}
-            lg{"Jakuck"}
-            ls{"Jakuck"}
+            ld{"Czas Jakuck letni"}
+            lg{"Czas Jakuck"}
+            ls{"Czas standardowy Jakuck"}
         }
         "meta:Yekaterinburg"{
-            ld{"Jekaterynburg (czas letni)"}
-            lg{"Jekaterynburg"}
-            ls{"Jekaterynburg"}
+            ld{"Czas Jekaterynburg letni"}
+            lg{"Czas Jekaterynburg"}
+            ls{"Czas standardowy Jekaterynburg"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Czas: {1} ({0})"}

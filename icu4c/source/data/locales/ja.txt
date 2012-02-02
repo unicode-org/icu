@@ -89,7 +89,7 @@ ja{
             }
         }
     }
-    Version{"2.0.63.66"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -168,7 +168,7 @@ ja{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日(E)"}
+                Ed{"d日(E)"}
                 M{"MMM"}
                 MEd{"M-d(E)"}
                 MMMEd{"M月d日(E)"}
@@ -495,7 +495,7 @@ ja{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d日(E)"}
+                Ed{"d日(E)"}
                 GGGGyMd{"GGGGy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
@@ -637,13 +637,13 @@ ja{
                     m{"H時mm分～H時mm分"}
                 }
                 Hmv{
-                    H{"H時mm分～H時mm分v"}
-                    a{"H時mm分～H時mm分（v）"}
-                    m{"H時mm分～H時mm分v"}
+                    H{"H時mm分～H時mm分(v)"}
+                    a{"H時mm分～H時mm分(v)"}
+                    m{"H時mm分～H時mm分(v)"}
                 }
                 Hv{
-                    H{"H時～H時v"}
-                    a{"H時～H時（v）"}
+                    H{"H時～H時(v)"}
+                    a{"H時～H時(v)"}
                 }
                 M{
                     M{"M月～M月"}
@@ -684,13 +684,13 @@ ja{
                     m{"aK時mm分～K時mm分"}
                 }
                 hmv{
-                    a{"aK時mm分～aK時mm分（v）"}
-                    h{"aK時mm分～K時mm分v"}
-                    m{"aK時mm分～K時mm分v"}
+                    a{"aK時mm分～aK時mm分(v)"}
+                    h{"aK時mm分～K時mm分(v)"}
+                    m{"aK時mm分～K時mm分(v)"}
                 }
                 hv{
-                    a{"aK時～aK時（v）"}
-                    h{"aK時～K時v"}
+                    a{"aK時～aK時(v)"}
+                    h{"aK時～K時(v)"}
                 }
                 y{
                     y{"y年～y年"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bg.xml
@@ -674,7 +674,6 @@ bg{
         collation{
             big5han{"Традиционен китайски (Big5)"}
             dictionary{"Речников ред на сортиране"}
-            direct{"Директно"}
             ducet{"Стандартен ред на сортиране в Уникод"}
             gb2312han{"Опростен китайски (GB2312)"}
             phonebook{"Азбучен ред"}
@@ -754,7 +753,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

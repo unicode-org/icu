@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/th.xml
@@ -164,7 +164,7 @@ th{
             "ครูเซโรบราซิล (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "เรียลบราซิล",
         }
         BRN{
@@ -1099,5 +1099,5 @@ th{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
 }

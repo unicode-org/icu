@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/xog.xml
@@ -22,7 +22,7 @@ xog{
             }
         }
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -60,9 +60,9 @@ xog{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE, M/d/y"}
+                yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, MMM d, y"}
+                yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
                 yQ{"Q y"}
                 yQQQ{"QQQ y"}
@@ -217,9 +217,9 @@ xog{
         }
     }
     delimiters{
-        alternateQuotationEnd{"„"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"'"}
-        quotationStart{"'"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
 }

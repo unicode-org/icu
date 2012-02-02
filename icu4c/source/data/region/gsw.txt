@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gsw.xml
@@ -33,7 +33,6 @@ gsw{
         054{"Melaneesie"}
         057{"Mikroneesischs Inselgebiet"}
         061{"Polineesie"}
-        062{"Süüd-Zentraalaasie"}
         142{"Aasie"}
         143{"Zentraalaasie"}
         145{"Weschtaasie"}
@@ -41,9 +40,7 @@ gsw{
         151{"Oschteuroopa"}
         154{"Nordeuroopa"}
         155{"Weschteuroopa"}
-        172{"Gmäinschaft vo Unabhängige Schtaate"}
         419{"Latiinameerika"}
-        830{"Kanaalinsle"}
         AD{"Andorra"}
         AE{"Veräinigti Arabischi Emiräät"}
         AF{"Afganischtan"}
@@ -295,5 +292,5 @@ gsw{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti oder ungültigi Regioon"}
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
 }

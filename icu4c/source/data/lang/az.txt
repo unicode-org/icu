@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/az.xml
@@ -653,7 +653,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"2.0.62.33"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Yazı: {0}"}

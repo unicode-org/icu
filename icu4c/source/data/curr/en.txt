@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -192,7 +192,7 @@ en{
             "Brazilian Cruzeiro (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "Brazilian Real",
         }
         BRN{
@@ -911,6 +911,10 @@ en{
             "SRG",
             "Surinamese Guilder",
         }
+        SSP{
+            "SSP" /** ===  */,
+            "South Sudanese Pound",
+        }
         STD{
             "STD",
             "São Tomé and Príncipe Dobra",
@@ -1119,9 +1123,17 @@ en{
             "XRE",
             "RINET Funds",
         }
+        XSU{
+            "XSU" /** ===  */,
+            "Sucre",
+        }
         XTS{
             "XTS",
             "Testing Currency Code",
+        }
+        XUA{
+            "XUA" /** ===  */,
+            "ADB Unit of Account",
         }
         XXX{
             "XXX",
@@ -2085,6 +2097,10 @@ en{
             one{"Surinamese guilder"}
             other{"Surinamese guilders"}
         }
+        SSP{
+            one{"South Sudanese pound"}
+            other{"South Sudanese pounds"}
+        }
         STD{
             one{"São Tomé and Príncipe dobra"}
             other{"São Tomé and Príncipe dobras"}
@@ -2288,8 +2304,16 @@ en{
         XRE{
             one{"RINET Funds"}
         }
+        XSU{
+            one{"Sucre"}
+            other{"Sucres"}
+        }
         XTS{
             one{"Testing Currency Code"}
+        }
+        XUA{
+            one{"ADB unit of account"}
+            other{"ADB units of account"}
         }
         XXX{
             one{"unknown currency"}
@@ -2355,5 +2379,5 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.62.77"}
+    Version{"2.0.64.95"}
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hr.xml
@@ -33,7 +33,6 @@ hr{
         054{"Melanezija"}
         057{"Mikronezki oblast"}
         061{"Polinezija"}
-        062{"Južno-centralna Azija"}
         142{"Azija"}
         143{"Srednja Azija"}
         145{"Zapadna Azija"}
@@ -41,9 +40,7 @@ hr{
         151{"Istočna Europa"}
         154{"Sjeverna Europa"}
         155{"Zapadna Europa"}
-        172{"Zajednica nezavisnih država"}
         419{"Latinska Amerika"}
-        830{"Kanalski otoci"}
         AC{"Otok Ascension"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
@@ -301,5 +298,5 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.64.72"}
 }

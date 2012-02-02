@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fa.xml
@@ -642,7 +642,6 @@ fa{
         collation{
             big5han{"ترتیب چینی سنتی - Big5"}
             dictionary{"ترتیب فرهنگ لغت"}
-            direct{"ترتیب مستقیم"}
             ducet{"ترتیب پیش‌فرض یونی‌کد"}
             gb2312han{"ترتیب چینی ساده‌شده - GB2312"}
             phonebook{"ترتیب دفتر تلفن"}
@@ -701,7 +700,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"زبان: {0}"}
         script{"خط: {0}"}

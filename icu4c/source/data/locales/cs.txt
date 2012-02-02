@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cs.xml
@@ -42,7 +42,7 @@ cs{
             }
         }
     }
-    Version{"2.0.62.55"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -61,7 +61,7 @@ cs{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d."}
+                Ed{"E, d."}
                 MEd{"E, d. M."}
                 MMMEd{"E, d. M."}
                 MMMd{"d. M."}
@@ -69,9 +69,9 @@ cs{
                 d{"d."}
                 y{"y G"}
                 yM{"LLLL y GGGGG"}
-                yMEd{"EEE, d. M. y GGGGG"}
+                yMEd{"E, d. M. y GGGGG"}
                 yMMM{"LLLL y G"}
-                yMMMEd{"EEE, d. M. y G"}
+                yMMMEd{"E, d. M. y G"}
                 yQ{"Q., y GGGGG"}
                 yQQQ{"QQQ, y G"}
             }
@@ -105,7 +105,7 @@ cs{
                 "H:mm",
                 "EEEE, d. MMMM y",
                 "d. MMMM y",
-                "d.M.yyyy",
+                "d. M. yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -114,21 +114,21 @@ cs{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d."}
+                Ed{"E, d."}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                MEd{"E, d.M"}
+                MEd{"E, d. M."}
                 MMMEd{"E, d. MMM"}
                 MMMd{"d. MMM"}
-                Md{"d.M"}
+                Md{"d. M."}
                 d{"d."}
                 yM{"M.y"}
-                yMEd{"EEE, d.M.y"}
+                yMEd{"E, d. M. y"}
                 yMMM{"LLL y"}
-                yMMMEd{"EEE, d. MMM y"}
+                yMMMEd{"E, d. MMM y"}
                 yMMMd{"d. MMM y"}
-                yMd{"d.M.y"}
+                yMd{"d. M. y"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
@@ -488,16 +488,16 @@ cs{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d."}
+                Ed{"E, d."}
                 MEd{"E, d. M."}
                 MMMEd{"E, d. MMM."}
                 MMMd{"d. MMM."}
                 Md{"d. M."}
                 d{"d."}
                 yM{"MM/y"}
-                yMEd{"EEE, d. M. y"}
+                yMEd{"E, d. M. y"}
                 yMMM{"LLL y"}
-                yMMMEd{"EEE, d. MMM y"}
+                yMMMEd{"E, d. MMM y"}
             }
         }
         japanese{
@@ -517,7 +517,7 @@ cs{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d."}
+                Ed{"E, d."}
                 MEd{"E, d. M."}
                 MMMEd{"E, d. M."}
                 MMMd{"d. M."}
@@ -543,7 +543,7 @@ cs{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d."}
+                Ed{"E, d."}
                 MEd{"E, d. M."}
                 MMMEd{"E, d. M."}
                 MMMd{"d. M."}
@@ -557,6 +557,28 @@ cs{
                     "R.O.C.",
                 }
             }
+        }
+    }
+    contextTransforms{
+        day-format-except-narrow:intvector{
+            1,
+            0,
+        }
+        day-standalone-except-narrow:intvector{
+            1,
+            0,
+        }
+        languages:intvector{
+            1,
+            1,
+        }
+        month-format-except-narrow:intvector{
+            1,
+            0,
+        }
+        month-standalone-except-narrow:intvector{
+            1,
+            0,
         }
     }
     delimiters{

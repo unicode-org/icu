@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mr.xml
@@ -685,7 +685,6 @@ mr{
         collation{
             big5han{"पारंपारिक चीनी अनुक्रम - Big5"}
             dictionary{"शब्दकोश अनुक्रम"}
-            direct{"थेट अनुक्रम"}
             ducet{"डीफॉल्ट यूनिकोड अनुक्रम"}
             gb2312han{"सरलीकृत चीनी अनुक्रम - GB2312"}
             phonebook{"फोनबुक अनुक्रम"}
@@ -738,7 +737,7 @@ mr{
         PINYIN{"पिनयिन रोमनायझेशन"}
         WADEGILE{"वादे-गिलेस रोमनायझेशन"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     localeDisplayPattern{
         separator{","}
     }

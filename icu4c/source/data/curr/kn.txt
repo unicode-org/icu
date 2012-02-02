@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kn.xml
@@ -88,7 +88,7 @@ kn{
             "ಬೊಲಿವಿಯಾದ ಬೊಲಿವಿಯಾನೊ",
         }
         BRL{
-            "BR$",
+            "R$",
             "ಬ್ರೆಜಿಲ್‌ನ ರಿಯಾಲ್‌",
         }
         BSD{
@@ -632,5 +632,5 @@ kn{
             "ಜಾಂಬಿಯಾ ಕ್ವಾಚ",
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
 }

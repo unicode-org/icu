@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mg.xml
@@ -23,7 +23,7 @@ mg{
             }
         }
     }
-    Version{"2.0.58.12"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -43,10 +43,10 @@ mg{
             }
             availableFormats{
                 M{"M"}
-                MEd{"EEE d/M"}
+                MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d MMM"}
-                MMMMEd{"EEE d MMMM"}
+                MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMMdd{"dd MMM"}
@@ -56,15 +56,15 @@ mg{
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"EEE d/M/y"}
+                yMEd{"E d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE d MMM y"}
+                yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
                 yQ{"Q y"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
+                yyMMMEd{"E d MMM yy"}
                 yyMMMd{"d MMM yy"}
             }
             dayNames{

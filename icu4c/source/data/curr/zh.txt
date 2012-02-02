@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -160,7 +160,7 @@ zh{
             "巴西克鲁塞罗 (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "巴西雷亚尔",
         }
         BRN{
@@ -877,7 +877,7 @@ zh{
         }
         TRL{
             "TRL",
-            "土耳其里拉(1922-2005)",
+            "土耳其里拉 (1922-2005)",
         }
         TRY{
             "TRY",
@@ -1080,5 +1080,5 @@ zh{
             "津巴布韦元 (2009)",
         }
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
 }

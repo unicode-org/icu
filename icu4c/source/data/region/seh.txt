@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/seh.xml
@@ -12,7 +12,7 @@
 seh{
     Countries{
         AD{"Andorra"}
-        AE{"Reino Unido"}
+        AE{"Emirados Árabes Unidos"}
         AF{"Afeganistão"}
         AG{"Antígua e Barbuda"}
         AI{"Anguilla"}
@@ -79,7 +79,7 @@ seh{
         FM{"Micronésia"}
         FR{"França"}
         GA{"Gabão"}
-        GB{"Uruguai"}
+        GB{"Reino Unido"}
         GD{"Granada"}
         GE{"Geórgia"}
         GF{"Guiana Francesa"}
@@ -203,39 +203,39 @@ seh{
         SV{"El Salvador"}
         SY{"Síria"}
         SZ{"Suazilândia"}
-        TC{"Tuvalu"}
+        TC{"Ilhas Turks e Caicos"}
         TD{"Chade"}
-        TG{"Tokelau"}
-        TH{"Togo"}
+        TG{"Togo"}
+        TH{"Tailândia"}
         TJ{"Tadjiquistão"}
-        TK{"Tonga"}
+        TK{"Tokelau"}
         TL{"Timor Leste"}
-        TM{"Ilhas Turks e Caicos"}
-        TN{"Turquia"}
-        TO{"Trinidad e Tobago"}
-        TR{"Turcomenistão"}
-        TT{"Tunísia"}
-        TV{"Ilhas Virgens dos EUA"}
+        TM{"Turcomenistão"}
+        TN{"Tunísia"}
+        TO{"Tonga"}
+        TR{"Turquia"}
+        TT{"Trinidad e Tobago"}
+        TV{"Tuvalu"}
         TW{"Taiwan"}
-        TZ{"Tailândia"}
-        UA{"Emirados Árabes Unidos"}
-        UG{"Ucrânia"}
-        US{"Uzbequistão"}
-        UY{"Estados Unidos"}
-        UZ{"Vanuatu"}
-        VA{"Venezuela"}
+        UA{"Ucrânia"}
+        UG{"Uganda"}
+        US{"Estados Unidos"}
+        UY{"Uruguai"}
+        UZ{"Uzbequistão"}
+        VA{"Vaticano"}
         VC{"São Vicente e Granadinas"}
-        VE{"Vietnã"}
+        VE{"Venezuela"}
         VG{"Ilhas Virgens Britânicas"}
-        VI{"Uganda"}
-        VN{"Wallis e Futuna"}
-        VU{"Vaticano"}
-        WF{"Iêmen"}
+        VI{"Ilhas Virgens dos EUA"}
+        VN{"Vietnã"}
+        VU{"Vanuatu"}
+        WF{"Wallis e Futuna"}
         WS{"Samoa"}
-        YE{"Zâmbia"}
+        YE{"Iêmen"}
         YT{"Mayotte"}
         ZA{"África do Sul"}
-        ZM{"Zimbábue"}
+        ZM{"Zâmbia"}
+        ZW{"Zimbábue"}
     }
-    Version{"2.0.57.99"}
+    Version{"2.0.64.50"}
 }

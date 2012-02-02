@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hu.xml
@@ -20,7 +20,7 @@ hu{
         "[A Á B C {CS} D {DZ} {DZS} E É F G {GY} H I Í J K L {LY} M N {NY} O Ó Ö Ő P "
         "Q R S {SZ} T {TY} U Ú Ü Ű V W X Y Z {ZS}]"
     }
-    ExemplarCharactersPunctuation{"[\- – , ; \: ! ? . … ' ’ \" ” „ « » ( ) \[ \] \{ \} 〈 〉 @ * / \& # ⸓ § ~]"}
+    ExemplarCharactersPunctuation{"[\- – , ; \: ! ? . … ' ’ \" ” „ « » ( ) \[ \] \{ \} 〈 〉 § @ * / \& # ⸓ ~]"}
     LocaleScript{
         "Latn",
     }
@@ -45,7 +45,7 @@ hu{
             }
         }
     }
-    Version{"2.0.61.44"}
+    Version{"2.0.64.72"}
     calendar{
         buddhist{
             availableFormats{
@@ -824,7 +824,7 @@ hu{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"d EEE"}
+                Ed{"d E"}
                 H{"HH"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -1000,8 +1000,8 @@ hu{
         }
     }
     delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"„"}
+        alternateQuotationEnd{"«"}
+        alternateQuotationStart{"»"}
         quotationEnd{"”"}
         quotationStart{"„"}
     }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kea.xml
@@ -27,7 +27,7 @@ kea{
             }
         }
     }
-    Version{"2.0.59.32"}
+    Version{"2.0.64.50"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -50,15 +50,15 @@ kea{
                 "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d"}
+                Ed{"E, d"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
                 M{"L"}
                 MEd{"E, dd/MM"}
                 MMM{"LLL"}
-                MMMEd{"EEE, d MMM"}
-                MMMMEd{"EEE, d 'di' MMMM"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d 'di' MMMM"}
                 MMMMd{"d 'di' MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd/MM"}
@@ -68,15 +68,15 @@ kea{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"MM/y"}
-                yMEd{"EEE, dd/MM/y"}
+                yMEd{"E, dd/MM/y"}
                 yMMM{"MMM 'di' y"}
-                yMMMEd{"EEE, d 'di' MMM 'di' y"}
+                yMMMEd{"E, d 'di' MMM 'di' y"}
                 yMMMM{"MMMM 'di' y"}
                 yQ{"Q y"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
-                yyMMMEEEd{"EEE, d 'de' MMM 'de' yy"}
+                yyMMMEd{"E, d 'de' MMM 'de' yy"}
                 yyMMMd{"d 'de' MMM 'de' yy"}
                 yyQ{"Q yy"}
                 yyyyMM{"MM/yyyy"}
@@ -371,8 +371,8 @@ kea{
         }
     }
     delimiters{
-        alternateQuotationEnd{"»"}
-        alternateQuotationStart{"«"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
     }

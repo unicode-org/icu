@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -153,7 +153,7 @@ zh_Hant{
         }
         BRB{
             "BRB",
-            "巴西克魯薩多農瓦（1967-1986）",
+            "巴西克魯薩多農瓦 (1967-1986)",
         }
         BRC{
             "BRC",
@@ -164,7 +164,7 @@ zh_Hant{
             "巴西克魯賽羅 (1990-1993)",
         }
         BRL{
-            "BR$",
+            "R$",
             "巴西里拉",
         }
         BRN{
@@ -1048,5 +1048,5 @@ zh_Hant{
             "辛巴威元 (2009)",
         }
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
 }

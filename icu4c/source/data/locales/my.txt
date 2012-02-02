@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/my.xml
@@ -42,7 +42,7 @@ my{
             }
         }
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -65,15 +65,15 @@ my{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"EEE, d"}
+                Ed{"E, d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"EEE, M/d"}
+                MEd{"E, M/d"}
                 MMM{"LLL"}
-                MMMEd{"EEE, MMM d"}
-                MMMMEd{"EEE, MMMM d"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
                 Md{"M/d"}
@@ -81,9 +81,9 @@ my{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"yy/M"}
-                yMEd{"EEE, yy/M/d"}
+                yMEd{"E, yy/M/d"}
                 yMMM{"y MMM"}
-                yMMMEd{"EEE, y MMM d"}
+                yMMMEd{"E, y MMM d"}
                 yMMMM{"y MMMM"}
                 yQQQ{"y QQQ"}
                 yyQ{"Q yy"}

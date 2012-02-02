@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gu.xml
@@ -684,7 +684,6 @@ gu{
         collation{
             big5han{"પરંપરાગત ચાઇનિઝ સોર્ટ ક્રમબદ્ધ"}
             dictionary{"શબ્દકોશ અનુક્મ"}
-            direct{"ડાઇરેક્ટ અનુક્મ"}
             ducet{"ડિફોલ્ટ યુનિકોડ અનુક્મ"}
             gb2312han{"સરળિકૃત ચાઇનીઝ સોર્ટ ક્રમબદ્ધ-GB2312"}
             phonebook{"ફોનબુક અનુક્મ"}
@@ -737,7 +736,7 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     localeDisplayPattern{
         separator{","}
     }

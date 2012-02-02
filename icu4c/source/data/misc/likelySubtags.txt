@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/likelySubtags.xml
@@ -45,6 +45,10 @@ likelySubtags:table(nofallback){
     ch{"ch_Latn_GU"}
     chk{"chk_Latn_FM"}
     chr{"chr_Cher_US"}
+    ckb{"ckb_Arab_IQ"}
+    ckb_Arab{"ckb_Arab_IQ"}
+    ckb_IQ{"ckb_Arab_IQ"}
+    ckb_IR{"ckb_Arab_IR"}
     cs{"cs_Latn_CZ"}
     cy{"cy_Latn_GB"}
     da{"da_Latn_DK"}
@@ -133,11 +137,13 @@ likelySubtags:table(nofallback){
     ksb{"ksb_Latn_TZ"}
     ksf{"ksf_Latn_CM"}
     ksh{"ksh_Latn_DE"}
-    ku{"ku_Arab_IQ"}
+    ku{"ku_Latn_TR"}
+    ku_Arab{"ku_Arab_IQ"}
     ku_Latn{"ku_Latn_TR"}
     ku_SY{"ku_Latn_SY"}
     ku_TR{"ku_Latn_TR"}
     kum{"kum_Cyrl_RU"}
+    kv{"kv_Cyrl_RU"}
     kw{"kw_Latn_GB"}
     ky{"ky_Cyrl_KG"}
     la{"la_Latn_VA"}
@@ -521,6 +527,7 @@ likelySubtags:table(nofallback){
     xog{"xog_Latn_UG"}
     yap{"yap_Latn_FM"}
     yav{"yav_Latn_CM"}
+    yi{"yi_Hebr_IL"}
     yo{"yo_Latn_NG"}
     za{"za_Latn_CN"}
     zh{"zh_Hans_CN"}

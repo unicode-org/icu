@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -488,7 +488,7 @@ zh_Hant{
         und{"不確定語言"}
         ur{"烏爾都文"}
         uz{"烏茲別克文"}
-        vai{"越南文 (Vai)"}
+        vai{"越南文（Vai）"}
         ve{"溫達文"}
         vi{"越南文"}
         vo{"沃拉普克文"}
@@ -665,7 +665,6 @@ zh_Hant{
         collation{
             big5han{"繁體中文排序 (Big5)"}
             dictionary{"字典排序"}
-            direct{"直接排序"}
             ducet{"預設 Unicode 排序"}
             gb2312han{"簡體中文排序 (GB2312)"}
             phonebook{"電話簿排序"}
@@ -726,7 +725,7 @@ zh_Hant{
         REVISED{"已修訂的拼字學"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.62.76"}
+    Version{"2.0.64.72"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

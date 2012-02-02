@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ne.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ne.xml
  */
 ne{
-    Version{"2.0.61.77"}
+    Version{"2.0.64.72"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"सेउटा"}
@@ -529,7 +529,6 @@ ne{
             ec{"वेक"}
         }
         "meta:Africa_Central"{
-            lg{"मोजाम्बिक समय["}
             ls{"केन्द्रीय अफ्रिकी समय"}
         }
     }
