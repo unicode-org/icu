@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2011, International Business Machines
+* Copyright (c) 2002-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -53,7 +53,7 @@ static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
 
 static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 
-#define ISO_COUNTRY_CODE_LENGTH 3
+#define ISO_CURRENCY_CODE_LENGTH 3
 
 //------------------------------------------------------------
 // Resource tags
@@ -141,8 +141,8 @@ deleteIsoCodeEntry(void *obj) {
  */
 static inline char*
 myUCharsToChars(char* resultOfLen4, const UChar* currency) {
-    u_UCharsToChars(currency, resultOfLen4, ISO_COUNTRY_CODE_LENGTH);
-    resultOfLen4[ISO_COUNTRY_CODE_LENGTH] = 0;
+    u_UCharsToChars(currency, resultOfLen4, ISO_CURRENCY_CODE_LENGTH);
+    resultOfLen4[ISO_CURRENCY_CODE_LENGTH] = 0;
     return resultOfLen4;
 }
 
@@ -175,7 +175,7 @@ _findMetaData(const UChar* currency, UErrorCode& ec) {
     }
 
     // Look up our currency, or if that's not available, then DEFAULT
-    char buf[ISO_COUNTRY_CODE_LENGTH+1];
+    char buf[ISO_CURRENCY_CODE_LENGTH+1];
     UErrorCode ec2 = U_ZERO_ERROR; // local error code: soft failure
     UResourceBundle* rb = ures_getByKey(currencyMeta, myUCharsToChars(buf, currency), NULL, &ec2);
       if (U_FAILURE(ec2)) {
@@ -254,7 +254,7 @@ static CReg* gCRegHead = 0;
 
 struct CReg : public icu::UMemory {
     CReg *next;
-    UChar iso[ISO_COUNTRY_CODE_LENGTH+1];
+    UChar iso[ISO_CURRENCY_CODE_LENGTH+1];
     char  id[ULOC_FULLNAME_CAPACITY];
 
     CReg(const UChar* _iso, const char* _id)
@@ -266,8 +266,8 @@ struct CReg : public icu::UMemory {
         }
         uprv_strncpy(id, _id, len);
         id[len] = 0;
-        uprv_memcpy(iso, _iso, ISO_COUNTRY_CODE_LENGTH * sizeof(const UChar));
-        iso[ISO_COUNTRY_CODE_LENGTH] = 0;
+        uprv_memcpy(iso, _iso, ISO_CURRENCY_CODE_LENGTH * sizeof(const UChar));
+        iso[ISO_CURRENCY_CODE_LENGTH] = 0;
     }
 
     static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
@@ -559,7 +559,7 @@ ucurr_getName(const UChar* currency,
         return 0;
     }
 
-    char buf[ISO_COUNTRY_CODE_LENGTH+1];
+    char buf[ISO_CURRENCY_CODE_LENGTH+1];
     myUCharsToChars(buf, currency);
     
     /* Normalize the keyword value to uppercase */
@@ -604,7 +604,7 @@ ucurr_getName(const UChar* currency,
     }
 
     // If we fail to find a match, use the ISO 4217 code
-    *len = u_strlen(currency); // Should == ISO_COUNTRY_CODE_LENGTH, but maybe not...?
+    *len = u_strlen(currency); // Should == ISO_CURRENCY_CODE_LENGTH, but maybe not...?
     *ec = U_USING_DEFAULT_WARNING;
     return currency;
 }
@@ -642,7 +642,7 @@ ucurr_getPluralName(const UChar* currency,
         return 0;
     }
 
-    char buf[ISO_COUNTRY_CODE_LENGTH+1];
+    char buf[ISO_CURRENCY_CODE_LENGTH+1];
     myUCharsToChars(buf, currency);
 
     const UChar* s = NULL;
@@ -680,7 +680,7 @@ ucurr_getPluralName(const UChar* currency,
     }
 
     // If we fail to find a match, use the ISO 4217 code
-    *len = u_strlen(currency); // Should == ISO_COUNTRY_CODE_LENGTH, but maybe not...?
+    *len = u_strlen(currency); // Should == ISO_CURRENCY_CODE_LENGTH, but maybe not...?
     *ec = U_USING_DEFAULT_WARNING;
     return currency;
 }
@@ -2415,6 +2415,29 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
     return en;
 }
 
+
+U_CAPI int32_t U_EXPORT2
+ucurr_getNumericCode(const UChar* currency) {
+    int32_t code = 0;
+    if (currency && u_strlen(currency) == ISO_CURRENCY_CODE_LENGTH) {
+        UErrorCode status = U_ZERO_ERROR;
+
+        UResourceBundle *bundle = ures_openDirect(0, "currencyNumericCodes", &status);
+        ures_getByKey(bundle, "codeMap", bundle, &status);
+        if (U_SUCCESS(status)) {
+            char alphaCode[ISO_CURRENCY_CODE_LENGTH+1];
+            myUCharsToChars(alphaCode, currency);
+            T_CString_toUpperCase(alphaCode);
+            ures_getByKey(bundle, alphaCode, bundle, &status);
+            int tmpCode = ures_getInt(bundle, &status);
+            if (U_SUCCESS(status)) {
+                code = tmpCode;
+            }
+        }
+        ures_close(bundle);
+    }
+    return code;
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
