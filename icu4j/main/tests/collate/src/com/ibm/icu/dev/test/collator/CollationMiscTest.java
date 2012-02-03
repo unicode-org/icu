@@ -1,7 +1,7 @@
 
  /*
  *******************************************************************************
- * Copyright (C) 2002-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3564,6 +3564,27 @@ public class CollationMiscTest extends TestFmwk {
 
         /* Test collation reordering API */
         doTestOneReorderingAPITestCase(privateUseCharacterStrings, apiRules);
+    }
+    
+    public void TestHaniReorderWithOtherRules()
+    {
+        String[] strRules = {
+            "[reorder Hani]  &b<a"
+        };
+
+        OneTestCase[] privateUseCharacterStrings = {
+            new OneTestCase("\u4e00", "\u0041", -1),
+            new OneTestCase("\u4e00", "\u0060", 1),
+            new OneTestCase("\uD86D, 0xDF40", "\u0041", -1),
+            new OneTestCase("\uD86D, 0xDF40", "\u0060", 1),
+            new OneTestCase("\u4e00", "\uD86D\uDF40", -1),
+            new OneTestCase("\ufa27", "\u0041", -1),
+            new OneTestCase("\uD869\uDF00", "\u0041", -1),
+            new OneTestCase("b", "a", -1),
+        };
+        
+        /* Test rules creation */
+        doTestCollation(privateUseCharacterStrings, strRules);
     }
     
     public void TestMultipleReorder()
