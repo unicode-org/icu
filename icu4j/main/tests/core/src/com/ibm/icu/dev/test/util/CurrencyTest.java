@@ -522,4 +522,70 @@ public class CurrencyTest extends TestFmwk {
             logln("IllegalArgumentException, because lower range is after upper range");
         }
     }
+
+    /**
+     * Test case for getAvailableCurrencies()
+     */
+    public void TestGetAvailableCurrencies() {
+        Set<Currency> avail1 = Currency.getAvailableCurrencies();
+
+        // returned set must be modifiable - add one more currency
+        avail1.add(Currency.getInstance("ZZZ"));    // ZZZ is not defined by ISO 4217
+
+        Set<Currency> avail2 = Currency.getAvailableCurrencies();
+        assertTrue("avail1 does not contain all currencies in avail2", avail1.containsAll(avail2));
+        assertTrue("avail1 must have one more currency", (avail1.size() - avail2.size() == 1));
+    }
+
+    /**
+     * Test case for getNumericCode()
+     */
+    public void TestGetNumericCode() {
+        final Object[][] NUMCODE_TESTDATA = {
+            {"USD", 840},
+            {"Usd", 840},   /* mixed casing */
+            {"EUR", 978},
+            {"JPY", 392},
+            {"XFU", 0},     /* XFU: no numeric code */
+            {"ZZZ", 0},     /* ZZZ: undefined ISO currency code */
+        };
+
+        for (Object[] data : NUMCODE_TESTDATA) {
+            Currency cur = Currency.getInstance((String)data[0]);
+            int numCode = cur.getNumericCode();
+            int expected = ((Integer)data[1]).intValue();
+            if (numCode != expected) {
+                errln("FAIL: getNumericCode returned " + numCode + " for "
+                        + cur.getCurrencyCode() + " - expected: " + expected);
+            }
+        }
+    }
+
+    /**
+     * Test case for getDisplayName()
+     */
+    public void TestGetDisplayName() {
+        final String[][] DISPNAME_TESTDATA = {
+            {"USD", "US Dollar"},
+            {"EUR", "Euro"},
+            {"JPY", "Japanese Yen"},
+        };
+
+        Locale defLocale = Locale.getDefault();
+        Locale jaJP = new Locale("ja", "JP");
+        Locale root = new Locale("");
+
+        for (String[] data : DISPNAME_TESTDATA) {
+            Currency cur = Currency.getInstance(data[0]);
+            assertEquals("getDisplayName() for " + data[0], data[1], cur.getDisplayName());
+            assertEquals("getDisplayName() for " + data[0] + " in locale " + defLocale, data[1], cur.getDisplayName(defLocale));
+
+            // ICU has localized display name for ja
+            assertNotEquals("getDisplayName() for " + data[0] + " in locale " + jaJP, data[1], cur.getDisplayName(jaJP));
+
+            // root locale does not have any localized display names,
+            // so the currency code itself should be returned
+            assertEquals("getDisplayName() for " + data[0] + " in locale " + root, data[0], cur.getDisplayName(root));
+        }
+    }
 }
