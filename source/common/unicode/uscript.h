@@ -477,7 +477,14 @@ uscript_hasScript(UChar32 c, UScriptCode sc);
 
 /**
  * Writes code point c's Script_Extensions as a list of UScriptCode values
- * to the output scripts array.
+ * to the output scripts array and returns the number of script codes.
+ * - If c does have Script_Extensions, then the Script property value
+ *   (normally Common or Inherited) is not included.
+ * - If c does not have Script_Extensions, then the one Script code is written to the output array.
+ * - If c is not a valid code point, then the one USCRIPT_UNKNOWN code is written.
+ * In other words, if the return value is 1,
+ * then the output array contains exactly c's single Script code.
+ * If the return value is n>=2, then the output array contains c's n Script_Extensions script codes.
  *
  * Some characters are commonly used in multiple scripts.
  * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
@@ -495,9 +502,9 @@ uscript_hasScript(UChar32 c, UScriptCode sc);
  *                  pass the U_SUCCESS() test, or else the function returns
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
- * @return number of script codes in c's Script_Extensions,
+ * @return number of script codes in c's Script_Extensions, or 1 for the single Script value,
  *         written to scripts unless U_BUFFER_OVERFLOW_ERROR indicates insufficient capacity
- * @draft ICU 4.6
+ * @draft ICU 49
  */
 U_DRAFT int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
