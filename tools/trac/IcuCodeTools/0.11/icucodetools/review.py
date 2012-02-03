@@ -1,4 +1,4 @@
-# Copyright (C) 2007-2010 International Business Machines Corporation and Others. All Rights Reserved.
+# Copyright (C) 2007-2012 International Business Machines Corporation and Others. All Rights Reserved.
 
 # Review module.
 # TODO: refactor ticket manipulation items into ticketmgr.
@@ -38,7 +38,13 @@ class ReviewModule(Component):
 
     # ITemplateProvider methods
     def get_templates_dirs(self):
-        return [resource_filename(__name__, 'templates')]
+            try:
+        	return [resource_filename(__name__, 'templates')]
+            except Exception, e: 
+                self.log.warning('Could not get template dir: %s: %s' %
+                                 (type(e), e))
+		return ""
+
 
     def get_htdocs_dirs(self):
         return [('icucodetools', resource_filename(__name__, 'htdocs'))]
