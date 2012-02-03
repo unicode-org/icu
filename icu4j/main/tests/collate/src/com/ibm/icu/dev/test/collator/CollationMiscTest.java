@@ -3552,8 +3552,8 @@ public class CollationMiscTest extends TestFmwk {
         OneTestCase[] privateUseCharacterStrings = {
             new OneTestCase("\u4e00", "\u0041", -1),
             new OneTestCase("\u4e00", "\u0060", 1),
-            new OneTestCase("\uD86D, 0xDF40", "\u0041", -1),
-            new OneTestCase("\uD86D, 0xDF40", "\u0060", 1),
+            new OneTestCase("\uD86D\uDF40", "\u0041", -1),
+            new OneTestCase("\uD86D\uDF40", "\u0060", 1),
             new OneTestCase("\u4e00", "\uD86D\uDF40", -1),
             new OneTestCase("\ufa27", "\u0041", -1),
             new OneTestCase("\uD869\uDF00", "\u0041", -1),
@@ -3575,8 +3575,8 @@ public class CollationMiscTest extends TestFmwk {
         OneTestCase[] privateUseCharacterStrings = {
             new OneTestCase("\u4e00", "\u0041", -1),
             new OneTestCase("\u4e00", "\u0060", 1),
-            new OneTestCase("\uD86D, 0xDF40", "\u0041", -1),
-            new OneTestCase("\uD86D, 0xDF40", "\u0060", 1),
+            new OneTestCase("\uD86D\uDF40", "\u0041", -1),
+            new OneTestCase("\uD86D\uDF40", "\u0060", 1),
             new OneTestCase("\u4e00", "\uD86D\uDF40", -1),
             new OneTestCase("\ufa27", "\u0041", -1),
             new OneTestCase("\uD869\uDF00", "\u0041", -1),
