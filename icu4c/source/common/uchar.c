@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -569,6 +569,10 @@ uscript_hasScript(UChar32 c, UScriptCode sc) {
     if(sc==script) {
         return TRUE;
     }
+    if(sc>0x7fff) {
+        /* Guard against bogus input that would make us go past the Script_Extensions terminator. */
+        return FALSE;
+    }
     while(sc>*scx) {
         ++scx;
     }
@@ -592,14 +596,19 @@ uscript_getScriptExtensions(UChar32 c,
     }
     scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
-        return 0;
+        if(capacity==0) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        } else {
+            scripts[0]=(UScriptCode)scriptX;
+        }
+        return 1;
     }
 
-    length=0;
     scx=scriptExtensions+(scriptX&UPROPS_SCRIPT_MASK);
     if(scriptX>=UPROPS_SCRIPT_X_WITH_OTHER) {
         scx=scriptExtensions+scx[1];
     }
+    length=0;
     do {
         sx=*scx++;
         if(length<capacity) {

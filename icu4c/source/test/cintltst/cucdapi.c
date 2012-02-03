@@ -434,6 +434,10 @@ void TestHasScript() {
     ) {
         log_err("uscript_hasScript(U+FDF2, ...) is wrong\n");
     }
+    if(uscript_hasScript(0x0640, 0xaffe)) {
+        /* An unguarded implementation might go into an infinite loop. */
+        log_err("uscript_hasScript(U+0640, bogus 0xaffe) is wrong\n");
+    }
 }
 
 void TestGetScriptExtensions() {
@@ -472,14 +476,36 @@ void TestGetScriptExtensions() {
         log_err("uscript_getScriptExtensions(U+0640, capacity=1: preflighting)=%d != 3 - %s\n",
               (int)length, u_errorName(errorCode));
     }
+    /* U+063F has only a Script code, no Script_Extensions. */
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x063f, scripts, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=1) {
+        log_err("uscript_getScriptExtensions(U+063F, capacity=0)=%d != 1 - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+
+    /* invalid code points */
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(-1, scripts, LENGTHOF(scripts), &errorCode);
+    if(U_FAILURE(errorCode) || length!=1 || scripts[0]!=USCRIPT_UNKNOWN) {
+        log_err("uscript_getScriptExtensions(-1)=%d does not return {UNKNOWN} - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    length=uscript_getScriptExtensions(0x110000, scripts, LENGTHOF(scripts), &errorCode);
+    if(U_FAILURE(errorCode) || length!=1 || scripts[0]!=USCRIPT_UNKNOWN) {
+        log_err("uscript_getScriptExtensions(0x110000)=%d does not return {UNKNOWN} - %s\n",
+              (int)length, u_errorName(errorCode));
+    }
 
     /* normal usage */
     errorCode=U_ZERO_ERROR;
-    length=uscript_getScriptExtensions(0x063f, scripts, 0, &errorCode);
-    if(U_FAILURE(errorCode) || length!=0) {
-        log_err("uscript_getScriptExtensions(U+063F, capacity=0)=%d != 0 - %s\n",
+    length=uscript_getScriptExtensions(0x063f, scripts, 1, &errorCode);
+    if(U_FAILURE(errorCode) || length!=1 || scripts[0]!=USCRIPT_ARABIC) {
+        log_err("uscript_getScriptExtensions(U+063F, capacity=1)=%d does not return {ARABIC} - %s\n",
               (int)length, u_errorName(errorCode));
     }
+    errorCode=U_ZERO_ERROR;
     length=uscript_getScriptExtensions(0x0640, scripts, LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=3 ||
        scripts[0]!=USCRIPT_ARABIC || scripts[1]!=USCRIPT_SYRIAC || scripts[2]!=USCRIPT_MANDAIC
@@ -487,11 +513,13 @@ void TestGetScriptExtensions() {
         log_err("uscript_getScriptExtensions(U+0640)=%d failed - %s\n",
               (int)length, u_errorName(errorCode));
     }
+    errorCode=U_ZERO_ERROR;
     length=uscript_getScriptExtensions(0xfdf2, scripts, LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=2 || scripts[0]!=USCRIPT_ARABIC || scripts[1]!=USCRIPT_THAANA) {
         log_err("uscript_getScriptExtensions(U+FDF2)=%d failed - %s\n",
               (int)length, u_errorName(errorCode));
     }
+    errorCode=U_ZERO_ERROR;
     length=uscript_getScriptExtensions(0xff65, scripts, LENGTHOF(scripts), &errorCode);
     if(U_FAILURE(errorCode) || length!=6 || scripts[0]!=USCRIPT_BOPOMOFO || scripts[5]!=USCRIPT_YI) {
         log_err("uscript_getScriptExtensions(U+FF65)=%d failed - %s\n",
