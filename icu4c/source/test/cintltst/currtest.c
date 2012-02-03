@@ -252,7 +252,7 @@ static void TestNumericCode(void) {
         u_charsToUChars(NUMCODE_TESTDATA[i].alphaCode, code, sizeof(code)/sizeof(code[0]));
         numCode = ucurr_getNumericCode(code);
         if (numCode != NUMCODE_TESTDATA[i].numericCode) {
-            log_err("Error: ucurr_getNumericCode returned %d for currency %s, expected - %d\n",
+            log_data_err("Error: ucurr_getNumericCode returned %d for currency %s, expected - %d\n",
                 numCode, NUMCODE_TESTDATA[i].alphaCode, NUMCODE_TESTDATA[i].numericCode);
         }
     }
