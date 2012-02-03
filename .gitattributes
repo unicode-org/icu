@@ -3008,6 +3008,7 @@ icu4j/main/classes/collate/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/collate/collate-build.launch -text
+icu4j/main/classes/collate/src/com/ibm/icu/impl/ImplicitCEGenerator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/collate/src/com/ibm/icu/text/AlphabeticIndex.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/collate/src/com/ibm/icu/text/CollationElementIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/collate/src/com/ibm/icu/text/CollationKey.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3058,7 +3059,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/ICUResourceTableAccess.java svneol=
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUService.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/IDNA2003.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/IllegalIcuArgumentException.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/ImplicitCEGenerator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/IntTrie.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/IntTrieBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/InvalidFormatException.java svneol=native#text/plain%3Bcharset%3Dutf-8
