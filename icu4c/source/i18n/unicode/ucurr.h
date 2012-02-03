@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2011, International Business Machines
+* Copyright (c) 2002-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -344,6 +344,19 @@ ucurr_getKeywordValuesForLocale(const char* key,
                                 const char* locale,
                                 UBool commonlyUsed,
                                 UErrorCode* status);
+
+
+/**
+ * Returns the ISO 4217 numeric code for the currency.
+ * <p>Note: If the ISO 4217 numeric code is not assigned for the currency or
+ * the currency is unknown, this function returns 0.
+ *
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @return The ISO 4217 numeric code of the currency
+ * @draft ICU 49
+ */
+U_DRAFT int32_t U_EXPORT2
+ucurr_getNumericCode(const UChar* currency);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
