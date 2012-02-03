@@ -1062,6 +1062,11 @@ public final class UScript {
         if(sc==script) {
             return true;
         }
+        if(sc>0x7fff) {
+            // Guard against bogus input that would
+            // make us go past the Script_Extensions terminator.
+            return false;
+        }
         while(sc>scriptExtensions[scx]) {
             ++scx;
         }
@@ -1070,24 +1075,39 @@ public final class UScript {
 
     /**
      * Sets code point c's Script_Extensions as script code integers into the output BitSet.
+     * <ul>
+     * <li>If c does have Script_Extensions, then the return value is
+     * the negative number of Script_Extensions codes (= -set.cardinality());
+     * in this case, the Script property value
+     * (normally Common or Inherited) is not included in the set.
+     * <li>If c does not have Script_Extensions, then the one Script code is put into the set
+     * and also returned.
+     * <li>If c is not a valid code point, then the one {@link #UNKNOWN} code is put into the set
+     * and also returned.
+     * </ul>
+     * In other words, if the return value is non-negative, it is c's single Script code
+     * and the set contains exactly this Script code.
+     * If the return value is -n, then the set contains c's n>=2 Script_Extensions script codes.
      *
-     * Some characters are commonly used in multiple scripts.
+     * <p>Some characters are commonly used in multiple scripts.
      * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
      *
-     * The Script_Extensions property is provisional. It may be modified or removed
+     * <p>The Script_Extensions property is provisional. It may be modified or removed
      * in future versions of the Unicode Standard, and thus in ICU.
      * @param c code point
      * @param set set of script code integers; will be cleared, then bits are set
      *            corresponding to c's Script_Extensions
-     * @return set
-     * @draft ICU 4.6
+     * @return negative number of script codes in c's Script_Extensions,
+     *         or the non-negative single Script value
+     * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
-    public static final BitSet getScriptExtensions(int c, BitSet set) {
+    public static final int getScriptExtensions(int c, BitSet set) {
         set.clear();
         int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
         if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
-            return set;
+            set.set(scriptX);
+            return scriptX;
         }
 
         char[] scriptExtensions=UCharacterProperty.INSTANCE.m_scriptExtensions_;
@@ -1095,12 +1115,15 @@ public final class UScript {
         if(scriptX>=UCharacterProperty.SCRIPT_X_WITH_OTHER) {
             scx=scriptExtensions[scx+1];
         }
+        int length=0;
         int sx;
         do {
             sx=scriptExtensions[scx++];
             set.set(sx&0x7fff);
+            ++length;
         } while(sx<0x8000);
-        return set;
+        // length==set.cardinality()
+        return -length;
     }
 
     /**
