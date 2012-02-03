@@ -435,7 +435,7 @@ ucol_openRulesForImport( const UChar        *rules,
     }
 
      /* if we have a set of rules, let's make something of it */
-    if(src.resultLen > 0 || src.removeSet != NULL || src.reorderCodesLength > 0) {
+    if(src.resultLen > 0 || src.removeSet != NULL) {
         /* also, if we wanted to remove some contractions, we should make a tailoring */
         table = ucol_assembleTailoringTable(&src, status);
         if(U_SUCCESS(*status)) {
@@ -451,7 +451,6 @@ ucol_openRulesForImport( const UChar        *rules,
             if (U_FAILURE(*status)) {
                 goto cleanup;
             }
-            ucol_setReorderCodesFromParser(result, &src, status);
             result->hasRealData = TRUE;
             result->freeImageOnClose = TRUE;
         }
@@ -476,6 +475,8 @@ ucol_openRulesForImport( const UChar        *rules,
         result->hasRealData = FALSE;
         result->freeImageOnClose = FALSE;
     }
+
+    ucol_setReorderCodesFromParser(result, &src, status);
 
     if(U_SUCCESS(*status)) {
         UChar *newRules;
