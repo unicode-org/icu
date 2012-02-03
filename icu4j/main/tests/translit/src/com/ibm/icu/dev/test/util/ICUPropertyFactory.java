@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -452,15 +452,10 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
     }
 
     static BitSet BITSET = new BitSet();
-    /**
-     * @param codePoint
-     * @return
-     */
     public static synchronized String getStringScriptExtensions(int codePoint) {
-        UScript.getScriptExtensions(codePoint, BITSET);
-        if (BITSET.cardinality() == 0) {
-            int scriptCode = UScript.getScript(codePoint);
-            return UScript.getName(scriptCode);
+        int result = UScript.getScriptExtensions(codePoint, BITSET);
+        if (result >= 0) {
+            return UScript.getName(result);
         }
         TreeMap<String,String> sorted = new TreeMap<String,String>();
         for (int scriptCode = BITSET.nextSetBit(0); scriptCode >= 0; scriptCode = BITSET.nextSetBit(scriptCode+1)) {
