@@ -12,10 +12,13 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUDebug;
@@ -165,6 +168,26 @@ public class Currency extends MeasureUnit implements Serializable {
             return null;
         }
         return list.toArray(new String[list.size()]);
+    }
+
+    /**
+     * Returns the set of available currencies. The returned set of currencies contains all of the
+     * available currencies, including obsolete ones. The result set can be modified without
+     * affecting the available currencies in the runtime.
+     * 
+     * @return The set of available currencies. The returned set could be empty if there is no
+     * currency data available.
+     * 
+     * @stable ICU 49
+     */
+    public static Set<Currency> getAvailableCurrencies() {
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        List<String> list = info.currencies(CurrencyFilter.all());
+        HashSet<Currency> resultSet = new HashSet<Currency>(list.size());
+        for (String code : list) {
+            resultSet.add(new Currency(code));
+        }
+        return resultSet;
     }
 
     private static final String EUR_STR = "EUR";
@@ -401,6 +424,29 @@ public class Currency extends MeasureUnit implements Serializable {
     }
 
     /**
+     * Returns the ISO 4217 numeric code for this currency object.
+     * <p>Note: If the ISO 4217 numeric code is not assigned for the currency or
+     * the currency is unknown, this method returns 0.</p>
+     * @return The ISO 4217 numeric code of this currency.
+     * @stable ICU 49
+     */
+    public int getNumericCode() {
+        int code = 0;
+        try {
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_BASE_NAME,
+                    "currencyNumericCodes",
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle codeMap = bundle.get("codeMap");
+            UResourceBundle numCode = codeMap.get(isoCode);
+            code = numCode.getInt();
+        } catch (MissingResourceException e) {
+            // fall through
+        }
+        return code;
+    }
+
+    /**
      * Convenience and compatibility override of getName that
      * requests the symbol name for the default <code>DISPLAY</code> locale.
      * @see #getName
@@ -531,6 +577,41 @@ public class Currency extends MeasureUnit implements Serializable {
         
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
         return names.getPluralName(isoCode, pluralCount);
+    }
+
+    /**
+     * Returns the display name for this currency in the default locale.
+     * If the resource data for the default locale contains no entry for this currency,
+     * then the ISO 4217 code is returned.
+     * <p>
+     * Note: This method was added for JDK compatibility support and equivalent to
+     * <code>getName(Locale.getDefault(), LONG_NAME, null)</code>.
+     * 
+     * @return The display name of this currency
+     * @see #getDisplayName(Locale)
+     * @see #getName(Locale, int, boolean[])
+     * @stable ICU 49
+     */
+    public String getDisplayName() {
+        return getName(Locale.getDefault(), LONG_NAME, null);
+    }
+
+    /**
+     * Returns the display name for this currency in the given locale.
+     * If the resource data for the given locale contains no entry for this currency,
+     * then the ISO 4217 code is returned.
+     * <p>
+     * Note: This method was added for JDK compatibility support and equivalent to
+     * <code>getName(locale, LONG_NAME, null)</code>.
+     * 
+     * @param locale locale in which to display currency
+     * @return The display name of this currency for the specified locale
+     * @see #getDisplayName(Locale)
+     * @see #getName(Locale, int, boolean[])
+     * @stable ICU 49
+     */
+    public String getDisplayName(Locale locale) {
+        return getName(locale, LONG_NAME, null);
     }
 
     /**
