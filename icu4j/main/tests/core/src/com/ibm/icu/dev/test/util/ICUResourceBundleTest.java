@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -690,7 +690,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 errln("Could not get localized country for "+ locales[i]);
                 hasLocalizedCountryFor(locales[i], locales[i]);
             }
-            if(!hasLocalizedLanguageFor(locales[i], locales[i])){
+            if(!hasLocalizedLanguageFor(locales[i], locales[i]) && (locales[i].getLanguage().compareTo("nmg") != 0)){
                 errln("Could not get localized language for "+ locales[i]);
             }
 
