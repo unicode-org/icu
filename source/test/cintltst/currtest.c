@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2005-2009, International Business Machines Corporation and
+ * Copyright (c) 2005-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #include "unicode/utypes.h"
@@ -227,6 +227,37 @@ static void TestPrefixSuffix(void) {
     unum_close(parser);
 }
 
+typedef struct {
+    const char* alphaCode;
+    int32_t     numericCode;
+} NumCodeTestEntry;
+
+static const NumCodeTestEntry NUMCODE_TESTDATA[] = {
+    {"USD", 840},
+    {"Usd", 840},   /* mixed casing */
+    {"EUR", 978},
+    {"JPY", 392},
+    {"XFU", 0},     /* XFU: no numeric code  */
+    {"ZZZ", 0},     /* ZZZ: undefined ISO currency code */
+    {"bogus", 0},   /* bogus code */
+    {0, 0},
+};
+
+static void TestNumericCode(void) {
+    UChar code[4];
+    int32_t i;
+    int32_t numCode;
+
+    for (i = 0; NUMCODE_TESTDATA[i].alphaCode; i++) {
+        u_charsToUChars(NUMCODE_TESTDATA[i].alphaCode, code, sizeof(code)/sizeof(code[0]));
+        numCode = ucurr_getNumericCode(code);
+        if (numCode != NUMCODE_TESTDATA[i].numericCode) {
+            log_err("Error: ucurr_getNumericCode returned %d for currency %s, expected - %d\n",
+                numCode, NUMCODE_TESTDATA[i].alphaCode, NUMCODE_TESTDATA[i].numericCode);
+        }
+    }
+}
+
 void addCurrencyTest(TestNode** root);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/currtest/" #x)
@@ -238,6 +269,7 @@ void addCurrencyTest(TestNode** root)
     TESTCASE(TestEnumListCount);
     TESTCASE(TestFractionDigitOverride);
     TESTCASE(TestPrefixSuffix);
+    TESTCASE(TestNumericCode);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
