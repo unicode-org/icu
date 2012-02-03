@@ -937,6 +937,7 @@ public class SimpleDateFormat extends DateFormat {
             }
             // else fall through to numeric year handling, do not break here 
         case 1: // 'y' - YEAR
+        case 18: // 'Y' - YEAR_WOY
             /* According to the specification, if the number of pattern letters ('y') is 2,
              * the year is truncated to 2 digits; otherwise it is interpreted as a number.
              * But the original code process 'y', 'yy', 'yyy' in the same way. and process
@@ -1132,7 +1133,6 @@ public class SimpleDateFormat extends DateFormat {
             // case 12: // 'w' - WEEK_OF_YEAR
             // case 13: // 'W' - WEEK_OF_MONTH
             // case 16: // 'K' - HOUR (0..11)
-            // case 18: // 'Y' - YEAR_WOY
             // case 20: // 'u' - EXTENDED_YEAR
             // case 21: // 'g' - JULIAN_DAY
             // case 22: // 'A' - MILLISECONDS_IN_DAY
@@ -1987,7 +1987,7 @@ public class SimpleDateFormat extends DateFormat {
             patternCharIndex == 15 /*'h' HOUR1_FIELD*/ ||
             (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2) ||
             (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ && count <= 2) ||
-            patternCharIndex == 1 /*'y' YEAR */ ||
+            patternCharIndex == 1 /*'y' YEAR */ || patternCharIndex == 18 /*'Y' YEAR_WOY */ ||
             patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */ ||
             (patternCharIndex == 0 /*'G' ERA */ && cal.getType().equals("chinese")) ||
             patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */ )
@@ -2055,6 +2055,7 @@ public class SimpleDateFormat extends DateFormat {
                 return ps;  
                 
             case 1: // 'y' - YEAR
+            case 18: // 'Y' - YEAR_WOY
                 // If there are 3 or more YEAR pattern characters, this indicates
                 // that the year value is to be treated literally, without any
                 // two-digit year adjustments (e.g., from "01" to 2001).  Otherwise
@@ -2080,7 +2081,7 @@ public class SimpleDateFormat extends DateFormat {
                         value += (getDefaultCenturyStartYear()/100)*100 +
                             (value < ambiguousTwoDigitYear ? 100 : 0);
                     }
-                cal.set(Calendar.YEAR, value);
+                cal.set(field, value);
 
                 // Delayed checking for adjustment of Hebrew month numbers in non-leap years.
                 if (DelayedHebrewMonthCheck) {
@@ -2319,7 +2320,6 @@ public class SimpleDateFormat extends DateFormat {
                 // case 12: // 'w' - WEEK_OF_YEAR
                 // case 13: // 'W' - WEEK_OF_MONTH
                 // case 16: // 'K' - HOUR (0..11)
-                // case 18: // 'Y' - YEAR_WOY
                 // case 19: // 'e' - DOW_LOCAL
                 // case 20: // 'u' - EXTENDED_YEAR
                 // case 21: // 'g' - JULIAN_DAY

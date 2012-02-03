@@ -3990,6 +3990,33 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestTwoDigitWOY() { // See ICU Ticket #8514
+        String dateText = new String("98MON01");
+        
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYEEEww");
+        simpleDateFormat.set2DigitYearStart(new GregorianCalendar(1999,0,1).getTime());
+        
+        Calendar cal = new GregorianCalendar();
+        cal.clear();
+        cal.setFirstDayOfWeek(Calendar.SUNDAY);
+        cal.setMinimalDaysInFirstWeek(4);
+        
+        ParsePosition pp = new ParsePosition(0);
+        
+        simpleDateFormat.parse(dateText, cal, pp);
+
+        if (pp.getErrorIndex() >= 0) {
+            errln("FAIL: Error in parsing two digit WOY");
+        }
+
+        simpleDateFormat.applyPattern("Y");
+
+        String result = simpleDateFormat.format(cal.getTime());
+        if ( !result.equals("2098") ) {
+            errln("FAIL: Unexpected result in two digit WOY parse.  Expected 2098, got " + result);
+        }
+    }
 }
 
 
