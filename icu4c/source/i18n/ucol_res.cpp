@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_res.cpp
@@ -434,7 +434,8 @@ ucol_openRulesForImport( const UChar        *rules,
         goto cleanup;
     }
 
-    if(src.resultLen > 0 || src.removeSet != NULL) { /* we have a set of rules, let's make something of it */
+     /* if we have a set of rules, let's make something of it */
+    if(src.resultLen > 0 || src.removeSet != NULL || src.reorderCodesLength > 0) {
         /* also, if we wanted to remove some contractions, we should make a tailoring */
         table = ucol_assembleTailoringTable(&src, status);
         if(U_SUCCESS(*status)) {
@@ -450,6 +451,7 @@ ucol_openRulesForImport( const UChar        *rules,
             if (U_FAILURE(*status)) {
                 goto cleanup;
             }
+            ucol_setReorderCodesFromParser(result, &src, status);
             result->hasRealData = TRUE;
             result->freeImageOnClose = TRUE;
         }
@@ -470,7 +472,6 @@ ucol_openRulesForImport( const UChar        *rules,
         }
         uprv_memcpy(opts, src.opts, sizeof(UColOptionSet));
         ucol_setOptionsFromHeader(result, opts, status);
-        ucol_setReorderCodesFromParser(result, &src, status);
         result->freeOptionsOnClose = TRUE;
         result->hasRealData = FALSE;
         result->freeImageOnClose = FALSE;
