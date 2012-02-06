@@ -130,8 +130,10 @@ public class PluralRulesLoader {
             }
             
             synchronized(this) {
-                localeIdToRulesId = tempLocaleIdToRulesId;
-                rulesIdToEquivalentULocale = tempRulesIdToEquivalentULocale;
+                if (localeIdToRulesId == null) {
+                    localeIdToRulesId = tempLocaleIdToRulesId;
+                    rulesIdToEquivalentULocale = tempRulesIdToEquivalentULocale;
+                }
             }
         }
     }
@@ -161,11 +163,15 @@ public class PluralRulesLoader {
      */
     public PluralRules getRulesForRulesId(String rulesId) {
         // synchronize on the map.  release the lock temporarily while we build the rules.
-        PluralRules rules;
+        PluralRules rules = null;
+        boolean hasRules;  // Separate boolean because stored rules can be null.
         synchronized (rulesIdToRules) {
-            rules = rulesIdToRules.get(rulesId);
+            hasRules = rulesIdToRules.containsKey(rulesId);
+            if (hasRules) {
+                rules = rulesIdToRules.get(rulesId);  // can be null
+            }
         }
-        if (rules == null) {
+        if (!hasRules) {
             try {
                 UResourceBundle pluralb = getPluralBundle();
                 UResourceBundle rulesb = pluralb.get("rules");
@@ -186,7 +192,11 @@ public class PluralRulesLoader {
             } catch (MissingResourceException e) {
             }
             synchronized (rulesIdToRules) {
-                rulesIdToRules.put(rulesId, rules); // put even if null
+                if (rulesIdToRules.containsKey(rulesId)) {
+                    rules = rulesIdToRules.get(rulesId);
+                } else {
+                    rulesIdToRules.put(rulesId, rules);  // can be null
+                }
             }
         }
         return rules;
