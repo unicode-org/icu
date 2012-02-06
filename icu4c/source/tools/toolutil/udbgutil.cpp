@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007-2011, International Business Machines Corporation and
+ * Copyright (c) 2007-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -529,7 +529,7 @@ U_CAPI int32_t udbg_getSystemParameterValueByIndex(int32_t i, char *buffer, int3
   if(i>=0 && i< (int32_t)U_SYSPARAM_COUNT) {
     return systemParams[i].paramFunction(&(systemParams[i]),buffer,bufferCapacity,status);
   } else {
-    return NULL;
+    return 0;
   }
 }
 

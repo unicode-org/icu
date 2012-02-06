@@ -639,8 +639,7 @@ ucal_getKeywordValuesForLocale(const char * /* key */, const char* locale, UBool
     prefRegionLength = uloc_getCountry(locale, prefRegion, sizeof(prefRegion), status);
     if (prefRegionLength == 0) {
         char loc[ULOC_FULLNAME_CAPACITY] = "";
-        int32_t locLength = 0;
-        locLength = uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
+        uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
         
         prefRegionLength = uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
     }

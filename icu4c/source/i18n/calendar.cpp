@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -247,8 +247,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     regionLen = uloc_getCountry(canonicalName, region, sizeof(region) - 1, &status);
     if (regionLen == 0) {
         char fullLoc[256];
-        int32_t fullLocLen = 0;
-        fullLocLen = uloc_addLikelySubtags(locid, fullLoc, sizeof(fullLoc) - 1, &status);
+        uloc_addLikelySubtags(locid, fullLoc, sizeof(fullLoc) - 1, &status);
         regionLen = uloc_getCountry(fullLoc, region, sizeof(region) - 1, &status);
     }
     if (U_FAILURE(status)) {

@@ -750,7 +750,7 @@ udata_swap(const UDataSwapper *ds,
            UErrorCode *pErrorCode) {
     char dataFormatChars[4];
     const UDataInfo *pInfo;
-    int32_t headerSize, i, swappedLength;
+    int32_t i, swappedLength;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
@@ -763,7 +763,7 @@ udata_swap(const UDataSwapper *ds,
      * information. Otherwise we would have to pass some of the information
      * and not be able to use the UDataSwapFn signature.
      */
-    headerSize=udata_swapDataHeader(ds, inData, -1, NULL, pErrorCode);
+    udata_swapDataHeader(ds, inData, -1, NULL, pErrorCode);
 
     /*
      * If we wanted udata_swap() to also handle non-loadable data like a UTrie,

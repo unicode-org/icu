@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2010 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
  *
  */
 
@@ -300,7 +300,7 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
 {
     LEUnicode *outChars = NULL;
     LEGlyphStorage fakeGlyphStorage;
-    le_int32 outCharCount, outGlyphCount, fakeGlyphCount;
+    le_int32 outCharCount, outGlyphCount;
 
     if (LE_FAILURE(success)) {
         return 0;
@@ -318,11 +318,13 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
     }
 
     if (outChars != NULL) {
-        fakeGlyphCount = glyphProcessing(outChars, 0, outCharCount, outCharCount, rightToLeft, fakeGlyphStorage, success);
+        // le_int32 fakeGlyphCount = 
+        glyphProcessing(outChars, 0, outCharCount, outCharCount, rightToLeft, fakeGlyphStorage, success);
         LE_DELETE_ARRAY(outChars); // FIXME: a subclass may have allocated this, in which case this delete might not work...
         //adjustGlyphs(outChars, 0, outCharCount, rightToLeft, fakeGlyphs, fakeGlyphCount);
     } else {
-        fakeGlyphCount = glyphProcessing(chars, offset, count, max, rightToLeft, fakeGlyphStorage, success);
+        // le_int32 fakeGlyphCount =
+        glyphProcessing(chars, offset, count, max, rightToLeft, fakeGlyphStorage, success);
         //adjustGlyphs(chars, offset, count, rightToLeft, fakeGlyphs, fakeGlyphCount);
     }
 

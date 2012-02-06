@@ -1,6 +1,6 @@
 /*
 / *
- * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
  *
  */
 
@@ -1199,7 +1199,6 @@ void IndicReordering::getDynamicProperties( DynamicProperties *, const IndicClas
 
 
     LEUnicode currentChar;
-    LEUnicode virama;
     LEUnicode workChars[2];
     LEGlyphStorage workGlyphs;
 
@@ -1207,14 +1206,17 @@ void IndicReordering::getDynamicProperties( DynamicProperties *, const IndicClas
 
     //le_int32 offset = 0;
 
+#if 0
+// TODO:  Should this section of code have actually been doing something?
     // First find the relevant virama for the script we are dealing with
-
+    LEUnicode virama;
     for ( currentChar = classTable->firstChar ; currentChar <= classTable->lastChar ; currentChar++ ) {
         if ( classTable->isVirama(currentChar)) {
             virama = currentChar;
             break;
         }
     }
+#endif
 
     for ( currentChar = classTable->firstChar ; currentChar <= classTable->lastChar ; currentChar++ ) {
         if ( classTable->isConsonant(currentChar)) {

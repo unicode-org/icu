@@ -106,7 +106,10 @@ PreparsedUCD::readLine(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NO_LINE; }
     // Select the next available line buffer.
     while(!isLineBufferAvailable(lineIndex)) {
-        lineIndex= (lineIndex==kNumLineBuffers-1) ? lineIndex=0 : lineIndex+1;
+        ++lineIndex;
+        if (lineIndex == kNumLineBuffers) {
+            lineIndex = 0;
+        }
     }
     char *line=lines[lineIndex];
     *line=0;

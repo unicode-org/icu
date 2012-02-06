@@ -406,7 +406,6 @@ void
 DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& status) {
     UnicodeString dfPattern;
     UnicodeString conflictingString;
-    UDateTimePatternConflict conflictingStatus;
     DateFormat* df;
 
     if (U_FAILURE(status)) {
@@ -419,7 +418,7 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
         df = DateFormat::createDateInstance(style, locale);
         SimpleDateFormat* sdf;
         if (df != NULL && (sdf = dynamic_cast<SimpleDateFormat*>(df)) != NULL) {
-            conflictingStatus = addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
+            addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
         }
         // TODO Maybe we should return an error when the date format isn't simple.
         delete df;
@@ -429,7 +428,7 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
 
         df = DateFormat::createTimeInstance(style, locale);
         if (df != NULL && (sdf = dynamic_cast<SimpleDateFormat*>(df)) != NULL) {
-            conflictingStatus = addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
+            addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
             // HACK for hh:ss
             if ( i==DateFormat::kMedium ) {
                 hackPattern = dfPattern;
@@ -445,7 +444,6 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
 
 void
 DateTimePatternGenerator::hackTimes(const UnicodeString& hackPattern, UErrorCode& status)  {
-    UDateTimePatternConflict conflictingStatus;
     UnicodeString conflictingString;
 
     fp->set(hackPattern);
@@ -476,7 +474,7 @@ DateTimePatternGenerator::hackTimes(const UnicodeString& hackPattern, UErrorCode
                             break;
                         }
                         mmss+= field;
-                        conflictingStatus = addPattern(mmss, FALSE, conflictingString, status);
+                        addPattern(mmss, FALSE, conflictingString, status);
                         break;
                     }
                     else {
@@ -500,7 +498,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
     UResourceBundle *patBundle, *fieldBundle, *fBundle;
     UnicodeString rbPattern, value, field;
     UnicodeString conflictingPattern;
-    UDateTimePatternConflict conflictingStatus;
     const char *key=NULL;
     int32_t i;
 
@@ -633,7 +630,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
             setAvailableFormat(retKey, err);
             // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
             // but not a previous availableFormats entry:
-            conflictingStatus = addPatternWithSkeleton(format, &retKey, TRUE, conflictingPattern, err);
+            addPatternWithSkeleton(format, &retKey, TRUE, conflictingPattern, err);
         }
 #if defined(U_USE_ASCII_BUNDLE_ITERATOR)
         ures_a_close(&aiter);
@@ -676,7 +673,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
                     setAvailableFormat(retKey, err);
                     // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
                     // but not a previous availableFormats entry:
-                    conflictingStatus = addPatternWithSkeleton(format, &retKey, TRUE, conflictingPattern, err);
+                    addPatternWithSkeleton(format, &retKey, TRUE, conflictingPattern, err);
                 }
             }
 #if defined(U_USE_ASCII_BUNDLE_ITERATOR)
@@ -821,11 +818,10 @@ DateTimePatternGenerator::getDecimal() const {
 void
 DateTimePatternGenerator::addCanonicalItems() {
     UnicodeString  conflictingPattern;
-    UDateTimePatternConflict conflictingStatus;
     UErrorCode status = U_ZERO_ERROR;
 
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; i++) {
-        conflictingStatus = addPattern(UnicodeString(Canonical_Items[i]), FALSE, conflictingPattern, status);
+        addPattern(UnicodeString(Canonical_Items[i]), FALSE, conflictingPattern, status);
     }
 }
 

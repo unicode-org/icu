@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2011, International Business Machines Corporation and
+* Copyright (C) 2010-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -262,7 +262,6 @@ UBool NumberingSystem::isValidDigitString(const UnicodeString& str) {
 
     StringCharacterIterator it(str);
     UChar32 c;
-    UChar32 prev = 0;
     int32_t i = 0;
 
     for ( it.setToStart(); it.hasNext(); ) {
@@ -271,7 +270,6 @@ UBool NumberingSystem::isValidDigitString(const UnicodeString& str) {
           return FALSE;
        }
        i++;
-       prev = c;
     }
     return TRUE;   
 }

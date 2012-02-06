@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -5180,7 +5180,7 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
 
     uint32_t stage2Entry;
     uint32_t asciiRoundtrips;
-    uint16_t value, minValue;
+    uint16_t value;
     UBool hasSupplementary;
 
     /* set up the local pointers */
@@ -5200,13 +5200,6 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
     }
     asciiRoundtrips=cnv->sharedData->mbcs.asciiRoundtrips;
 
-    if(cnv->useFallback) {
-        /* use all roundtrip and fallback results */
-        minValue=0x800;
-    } else {
-        /* use only roundtrips and fallbacks from private-use characters */
-        minValue=0xc00;
-    }
     hasSupplementary=(UBool)(cnv->sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY);
 
     /* get the converter state from the UTF-8 UConverter */

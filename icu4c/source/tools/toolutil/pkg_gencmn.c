@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008-2011, International Business Machines
+ *   Copyright (C) 2008-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -523,6 +523,8 @@ pathToFullPath(const char *path, const char *source) {
         fullPath[0] = 0;
     }
     n = (int32_t)uprv_strlen(fullPath);
+    fullPath[n] = 0;       /* Suppress compiler warning for unused variable n    */
+                           /*  when conditional code below is not compiled.      */
     uprv_strcat(fullPath, path);
 
 #if (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
