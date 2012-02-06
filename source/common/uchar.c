@@ -550,7 +550,6 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
 
 U_DRAFT UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc) {
-    UScriptCode script;
     const uint16_t *scx;
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
@@ -558,16 +557,8 @@ uscript_hasScript(UChar32 c, UScriptCode sc) {
     }
 
     scx=scriptExtensions+(scriptX&UPROPS_SCRIPT_MASK);
-    if(scriptX<UPROPS_SCRIPT_X_WITH_INHERITED) {
-        script=USCRIPT_COMMON;
-    } else if(scriptX<UPROPS_SCRIPT_X_WITH_OTHER) {
-        script=USCRIPT_INHERITED;
-    } else {
-        script=(UScriptCode)scx[0];
+    if(scriptX>=UPROPS_SCRIPT_X_WITH_OTHER) {
         scx=scriptExtensions+scx[1];
-    }
-    if(sc==script) {
-        return TRUE;
     }
     if(sc>0x7fff) {
         /* Guard against bogus input that would make us go past the Script_Extensions terminator. */

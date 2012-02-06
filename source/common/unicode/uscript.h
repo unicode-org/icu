@@ -458,9 +458,9 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
 #ifndef U_HIDE_DRAFT_API
 /**
- * Is code point c used in script sc?
- * That is, does code point c have the Script property value sc,
- * or do code point c's Script_Extensions include script code sc?
+ * Do the Script_Extensions of code point c contain script sc?
+ * If c does not have explicit Script_Extensions, then this tests whether
+ * c has the Script property value sc.
  *
  * Some characters are commonly used in multiple scripts.
  * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
@@ -469,7 +469,7 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
  * in future versions of the Unicode Standard, and thus in ICU.
  * @param c code point
  * @param sc script code
- * @return TRUE if Script(c)==sc or sc is in Script_Extensions(c)
+ * @return TRUE if sc is in Script_Extensions(c)
  * @draft ICU 4.6
  */
 U_DRAFT UBool U_EXPORT2
