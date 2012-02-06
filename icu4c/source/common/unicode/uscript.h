@@ -470,7 +470,7 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
  * @param c code point
  * @param sc script code
  * @return TRUE if sc is in Script_Extensions(c)
- * @draft ICU 4.6
+ * @draft ICU 49
  */
 U_DRAFT UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc);
