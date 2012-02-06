@@ -1027,18 +1027,18 @@ public final class UScript {
     }
 
     /**
-     * Is code point c used in script sc?
-     * That is, does code point c have the Script property value sc,
-     * or do code point c's Script_Extensions include script code sc?
+     * Do the Script_Extensions of code point c contain script sc?
+     * If c does not have explicit Script_Extensions, then this tests whether
+     * c has the Script property value sc.
      *
-     * Some characters are commonly used in multiple scripts.
+     * <p>Some characters are commonly used in multiple scripts.
      * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
      *
-     * The Script_Extensions property is provisional. It may be modified or removed
+     * <p>The Script_Extensions property is provisional. It may be modified or removed
      * in future versions of the Unicode Standard, and thus in ICU.
      * @param c code point
      * @param sc script code
-     * @return true if Script(c)==sc or sc is in Script_Extensions(c)
+     * @return true if sc is in Script_Extensions(c)
      * @draft ICU 4.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -1050,17 +1050,8 @@ public final class UScript {
 
         char[] scriptExtensions=UCharacterProperty.INSTANCE.m_scriptExtensions_;
         int scx=scriptX&UCharacterProperty.SCRIPT_MASK_;  // index into scriptExtensions
-        int script;
-        if(scriptX<UCharacterProperty.SCRIPT_X_WITH_INHERITED) {
-            script=UScript.COMMON;
-        } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_OTHER) {
-            script=UScript.INHERITED;
-        } else {
-            script=scriptExtensions[scx];
+        if(scriptX>=UCharacterProperty.SCRIPT_X_WITH_OTHER) {
             scx=scriptExtensions[scx+1];
-        }
-        if(sc==script) {
-            return true;
         }
         if(sc>0x7fff) {
             // Guard against bogus input that would

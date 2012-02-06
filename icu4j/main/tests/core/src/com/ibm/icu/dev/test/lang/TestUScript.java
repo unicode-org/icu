@@ -341,7 +341,7 @@ public class TestUScript extends TestFmwk {
             errln("UScript.hasScript(U+063F, ...) is wrong");
         }
         if(!(
-            UScript.hasScript(0x0640, UScript.COMMON) &&  /* main Script value */
+            !UScript.hasScript(0x0640, UScript.COMMON) &&  /* main Script value */
             UScript.hasScript(0x0640, UScript.ARABIC) &&
             UScript.hasScript(0x0640, UScript.SYRIAC) &&
             !UScript.hasScript(0x0640, UScript.THAANA))
@@ -349,7 +349,7 @@ public class TestUScript extends TestFmwk {
             errln("UScript.hasScript(U+0640, ...) is wrong");
         }
         if(!(
-            UScript.hasScript(0x0650, UScript.INHERITED) &&  /* main Script value */
+            !UScript.hasScript(0x0650, UScript.INHERITED) &&  /* main Script value */
             UScript.hasScript(0x0650, UScript.ARABIC) &&
             UScript.hasScript(0x0650, UScript.SYRIAC) &&
             !UScript.hasScript(0x0650, UScript.THAANA))
@@ -357,7 +357,7 @@ public class TestUScript extends TestFmwk {
             errln("UScript.hasScript(U+0650, ...) is wrong");
         }
         if(!(
-            UScript.hasScript(0x0660, UScript.COMMON) &&  /* main Script value */
+            !UScript.hasScript(0x0660, UScript.COMMON) &&  /* main Script value */
             UScript.hasScript(0x0660, UScript.ARABIC) &&
             !UScript.hasScript(0x0660, UScript.SYRIAC) &&
             UScript.hasScript(0x0660, UScript.THAANA))
