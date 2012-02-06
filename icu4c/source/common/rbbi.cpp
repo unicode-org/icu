@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2011 International Business Machines Corporation
+*   Copyright (C) 1999-2012 International Business Machines Corporation
 *   and others. All rights reserved.
 ***************************************************************************
 */
@@ -988,7 +988,7 @@ enum RBBIRunMode {
 //-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     int32_t             state;
-    int16_t             category        = 0;
+    uint16_t            category        = 0;
     RBBIRunMode         mode;
     
     RBBIStateTableRow  *row;
@@ -1205,7 +1205,7 @@ continueOn:
 //-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable) {
     int32_t             state;
-    int16_t             category        = 0;
+    uint16_t            category        = 0;
     RBBIRunMode         mode;
     RBBIStateTableRow  *row;
     UChar32             c;

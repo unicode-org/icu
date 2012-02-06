@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -551,11 +551,9 @@ storeRange(uint32_t start, uint32_t end, UStringPrepType type,UErrorCode* status
 /* folding value: just store the offset (16 bits) if there is any non-0 entry */
 static uint32_t U_CALLCONV
 getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
-    uint32_t foldedValue, value;
+    uint32_t value;
     UChar32 limit=0;
     UBool inBlockZero;
-
-    foldedValue=0;
 
     limit=start+0x400;
     while(start<limit) {

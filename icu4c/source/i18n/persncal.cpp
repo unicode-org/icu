@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation
+ * Copyright (C) 2003-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -86,11 +86,10 @@ jalali_to_julian(int year, int month, int day)
 
 static void julian_to_jalali (int32_t daysNo, int *h_y, int *h_m, int *h_d) 
 {
-    int year=0, month=0, day=0,scalarDays=0;
+    int year=0, month=0, day=0;
     int i;
 
     daysNo+=856493;
-    scalarDays=daysNo;
     year=(daysNo/1029983)*2820;
     daysNo=daysNo%1029983;
 

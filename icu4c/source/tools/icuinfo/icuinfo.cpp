@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -62,11 +62,8 @@ void cmd_millis()
   printf("Milliseconds since Epoch: %.0f\n", uprv_getUTCtime());
 }
 
-void cmd_version(UBool noLoad, UErrorCode &errorCode)
+void cmd_version(UBool /* noLoad */, UErrorCode &errorCode)
 {
-  char str[2000];
-    UVersionInfo icu;
-    
 
     do_init();
 
