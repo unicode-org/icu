@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2000-2011, International Business Machines
+ *   Copyright (C) 2000-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -913,8 +913,8 @@ expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UE
             if( countl>0 && isLamAlefChar(dest[i])) {
                 tempbuffer[j] = LAM_CHAR;
                 /* to ensure the array index is within the range */
-                U_ASSERT(dest[i]-0xFEF5 >= 0
-                    && dest[i]-0xFEF5 < sizeof(convertLamAlef)/sizeof(convertLamAlef[0]));
+                U_ASSERT(dest[i] >= 0xFEF5u
+                    && dest[i]-0xFEF5u < sizeof(convertLamAlef)/sizeof(convertLamAlef[0]));
                 tempbuffer[j-1] = convertLamAlef[ dest[i] - 0xFEF5 ];
                 j--;
                 countl--;
@@ -1306,8 +1306,8 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                         tashkeelFound  = 1;
                     } else {
                         /* to ensure the array index is within the range */
-                        U_ASSERT(dest[i]-0x064B >= 0
-                            && dest[i]-0x064B < sizeof(IrrelevantPos)/sizeof(IrrelevantPos[0]));
+                        U_ASSERT(dest[i] >= 0x064Bu
+                            && dest[i]-0x064Bu < sizeof(IrrelevantPos)/sizeof(IrrelevantPos[0]));
                         dest[i] =  0xFE70 + IrrelevantPos[(dest[i] - 0x064B)] + Shape;
                     }
                 }else if ((currLink & APRESENT) > 0) {

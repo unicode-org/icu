@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -595,7 +595,6 @@ createLikelySubtagsString(
      **/
     char tagBuffer[ULOC_FULLNAME_CAPACITY];
     char likelySubtagsBuffer[ULOC_FULLNAME_CAPACITY];
-    int32_t tagBufferLength = 0;
 
     if(U_FAILURE(*err)) {
         goto error;
@@ -608,7 +607,7 @@ createLikelySubtagsString(
 
         const char* likelySubtags = NULL;
 
-        tagBufferLength = createTagString(
+        createTagString(
             lang,
             langLength,
             script,
@@ -661,7 +660,7 @@ createLikelySubtagsString(
 
         const char* likelySubtags = NULL;
 
-        tagBufferLength = createTagString(
+        createTagString(
             lang,
             langLength,
             script,

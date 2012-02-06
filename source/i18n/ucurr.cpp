@@ -2000,14 +2000,13 @@ ucurr_countCurrencies(const char* locale,
                  UErrorCode* ec)
 {
     int32_t currCount = 0;
-    int32_t resLen = 0;
 
     if (ec != NULL && U_SUCCESS(*ec)) 
     {
         // local variables
         UErrorCode localStatus = U_ZERO_ERROR;
         char id[ULOC_FULLNAME_CAPACITY];
-        resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
+        uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
         // get country or country_variant in `id'
         /*uint32_t variantType =*/ idForLocale(locale, id, sizeof(id), ec);
 
@@ -2274,8 +2273,7 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
     prefRegionLength = uloc_getCountry(locale, prefRegion, sizeof(prefRegion), status);
     if (prefRegionLength == 0) {
         char loc[ULOC_FULLNAME_CAPACITY] = "";
-        int32_t locLength = 0;
-        locLength = uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
+        uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
         
         prefRegionLength = uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
     }

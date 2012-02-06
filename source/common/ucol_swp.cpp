@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2011, International Business Machines
+*   Copyright (C) 2003-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -106,7 +106,6 @@ utrie_swap(const UDataSwapper *ds,
 U_CAPI UBool U_EXPORT2
 ucol_looksLikeCollationBinary(const UDataSwapper *ds,
                               const void *inData, int32_t length) {
-    const uint8_t *inBytes;
     const UCATableHeader *inHeader;
     UCATableHeader header;
 
@@ -114,7 +113,6 @@ ucol_looksLikeCollationBinary(const UDataSwapper *ds,
         return FALSE;
     }
 
-    inBytes=(const uint8_t *)inData;
     inHeader=(const UCATableHeader *)inData;
 
     /*

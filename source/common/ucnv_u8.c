@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u8.c
@@ -752,7 +752,7 @@ static void
 ucnv_UTF8FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                   UConverterToUnicodeArgs *pToUArgs,
                   UErrorCode *pErrorCode) {
-    UConverter *utf8, *cnv;
+    UConverter *utf8;
     const uint8_t *source, *sourceLimit;
     uint8_t *target;
     int32_t targetCapacity;
@@ -765,7 +765,6 @@ ucnv_UTF8FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
 
     /* set up the local pointers */
     utf8=pToUArgs->converter;
-    cnv=pFromUArgs->converter;
     source=(uint8_t *)pToUArgs->source;
     sourceLimit=(uint8_t *)pToUArgs->sourceLimit;
     target=(uint8_t *)pFromUArgs->target;

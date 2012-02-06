@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -2022,7 +2022,6 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     ExtensionListEntry *pExtension;
     AttributeListEntry *pAttribute;
     char *pExtValueSubtag, *pExtValueSubtagEnd;
-    char *pAttrValue;
     int32_t i;
     UBool isLDMLExtension, reqLDMLType, privateuseVar = FALSE;
 
@@ -2099,7 +2098,6 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     pExtValueSubtag = NULL;
     pExtValueSubtagEnd = NULL;
     pAttribute = NULL;
-    pAttrValue = NULL;
     isLDMLExtension = FALSE;
     reqLDMLType = FALSE;
 

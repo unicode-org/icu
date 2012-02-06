@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -834,7 +834,6 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
     enum   ETokenType  token;
     char               subtag[1024];
     UVersionInfo       version;
-    UBool              override = FALSE;
     uint32_t           line;
     GenrbData genrbdata;
     /* '{' . (name resource)* '}' */
@@ -901,12 +900,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
         }
         else if (uprv_strcmp(subtag, "Override") == 0)
         {
-            override = FALSE;
-
-            if (u_strncmp(member->u.fString.fChars, trueValue, u_strlen(trueValue)) == 0)
-            {
-                override = TRUE;
-            }
+            // UBool override = (u_strncmp(member->u.fString.fChars, trueValue, u_strlen(trueValue)) == 0);
             table_add(result, member, line, status);
 
         }
@@ -1591,7 +1585,6 @@ parseImport(ParseState* state, char *tag, uint32_t startline, const struct UStri
     char             *filename;
     uint32_t          line;
     char     *fullname = NULL;
-    int32_t numRead = 0;
     filename = getInvariantString(state, &line, NULL, status);
 
     if (U_FAILURE(*status))
@@ -1686,7 +1679,7 @@ parseImport(ParseState* state, char *tag, uint32_t startline, const struct UStri
         return NULL;
     }
 
-    numRead = T_FileStream_read  (file, data, len);
+    /* int32_t numRead = */ T_FileStream_read  (file, data, len);
     T_FileStream_close (file);
 
     result = bin_open(state->bundle, tag, len, data, fullname, comment, status);

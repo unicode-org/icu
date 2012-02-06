@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and   *
+* Copyright (C) 1997-2012, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -323,7 +323,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
     /*UBool isAlias = FALSE;*/
-    UHashTok hashkey;
+    /*UHashTok hashkey; */
 
     if(U_FAILURE(*status)) {
         return NULL;
@@ -342,7 +342,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     find.fPath = (char *)path;
 
     /* calculate the hash value of the entry */
-    hashkey.pointer = (void *)&find;
+    /*hashkey.pointer = (void *)&find;*/
     /*hashValue = hashEntry(hashkey);*/
 
     /* check to see if we already have this entry */

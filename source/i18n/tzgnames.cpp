@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011, International Business Machines Corporation and
+* Copyright (C) 2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -869,7 +869,7 @@ TimeZoneGenericNames::findBestMatch(const UnicodeString& text, int32_t start, ui
     int32_t bestMatchLen = 0;
     UTimeZoneTimeType bestMatchTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
     UnicodeString bestMatchTzID;
-    UBool isLongStandard = FALSE;   // workaround - see the comments below
+    // UBool isLongStandard = FALSE;   // workaround - see the comments below
     UBool isStandard = FALSE;       // TODO: Temporary hack (on hack) for short standard name/location name conflict (found in zh_Hant), should be removed after CLDR 21m1 integration
 
     if (tznamesMatches != NULL) {
@@ -888,7 +888,7 @@ TimeZoneGenericNames::findBestMatch(const UnicodeString& text, int32_t start, ui
                 UTimeZoneNameType nameType = tznamesMatches->getNameType(i);
                 switch (nameType) {
                 case UTZNM_LONG_STANDARD:
-                    isLongStandard = TRUE;
+                    // isLongStandard = TRUE;
                 case UTZNM_SHORT_STANDARD:  // this one is never used for generic, but just in case
                     isStandard = TRUE;      // TODO: Remove this later, see the comments above.
                     bestMatchTimeType = UTZFMT_TIME_TYPE_STANDARD;

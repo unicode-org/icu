@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -806,13 +806,12 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
         const UHashElement *e = NULL;
         UCAElements *element = NULL;
         UChar NFCbuf[256];
-        uint32_t NFCbufLen = 0;
         while((e = uhash_nextElement(t->prefixLookup, &i)) != NULL) {
             element = (UCAElements *)e->value.pointer;
             // codepoints here are in the NFD form. We need to add the
             // first code point of the NFC form to unsafe, because
             // strcoll needs to backup over them.
-            NFCbufLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0,
+            unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0,
                 NFCbuf, 256, status);
             unsafeCPSet(t->unsafeCP, NFCbuf[0]);
         }
@@ -1873,7 +1872,7 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
     UChar  comp[256];
     CompData precomp[256];   // precomposed array
     int32_t  precompLen = 0; // count for precomp
-    int32_t i, len, decompLen, curClass, replacedPos;
+    int32_t i, len, decompLen, replacedPos;
     tempTailorContext c;
 
     if ( cmLookup == NULL ) {
@@ -1903,7 +1902,7 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
             // Save the current precomposed char and its class to find any
             // other combining mark combinations.
             precomp[precompLen].cp=comp[0];
-            curClass = precomp[precompLen].cClass =
+            precomp[precompLen].cClass =
                        index[nfcImpl->getFCD16(decomp[1]) & 0xff];
             precompLen++;
             replacedPos=0;
