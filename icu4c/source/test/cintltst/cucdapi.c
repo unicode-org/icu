@@ -403,7 +403,7 @@ void TestHasScript() {
         log_err("uscript_hasScript(U+063F, ...) is wrong\n");
     }
     if(!(
-        uscript_hasScript(0x0640, USCRIPT_COMMON) &&  /* main Script value */
+        !uscript_hasScript(0x0640, USCRIPT_COMMON) &&  /* main Script value */
         uscript_hasScript(0x0640, USCRIPT_ARABIC) &&
         uscript_hasScript(0x0640, USCRIPT_SYRIAC) &&
         !uscript_hasScript(0x0640, USCRIPT_THAANA))
@@ -411,7 +411,7 @@ void TestHasScript() {
         log_err("uscript_hasScript(U+0640, ...) is wrong\n");
     }
     if(!(
-        uscript_hasScript(0x0650, USCRIPT_INHERITED) &&  /* main Script value */
+        !uscript_hasScript(0x0650, USCRIPT_INHERITED) &&  /* main Script value */
         uscript_hasScript(0x0650, USCRIPT_ARABIC) &&
         uscript_hasScript(0x0650, USCRIPT_SYRIAC) &&
         !uscript_hasScript(0x0650, USCRIPT_THAANA))
@@ -419,7 +419,7 @@ void TestHasScript() {
         log_err("uscript_hasScript(U+0650, ...) is wrong\n");
     }
     if(!(
-        uscript_hasScript(0x0660, USCRIPT_COMMON) &&  /* main Script value */
+        !uscript_hasScript(0x0660, USCRIPT_COMMON) &&  /* main Script value */
         uscript_hasScript(0x0660, USCRIPT_ARABIC) &&
         !uscript_hasScript(0x0660, USCRIPT_SYRIAC) &&
         uscript_hasScript(0x0660, USCRIPT_THAANA))
