@@ -1039,7 +1039,7 @@ public final class UScript {
      * @param c code point
      * @param sc script code
      * @return true if sc is in Script_Extensions(c)
-     * @draft ICU 4.6
+     * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
     public static final boolean hasScript(int c, int sc) {
