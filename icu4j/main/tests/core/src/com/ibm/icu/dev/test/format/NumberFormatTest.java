@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1373,7 +1373,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect3(fmt2,5678.0,"\u05d4\u05f3\u05ea\u05e8\u05e2\u05f4\u05d7");
         expect2(fmt3,1234.567,"\u06f1\u066c\u06f2\u06f3\u06f4\u066b\u06f5\u06f6\u06f7");
         expect2(fmt4,1234.567,"\u0967,\u0968\u0969\u096a.\u096b\u096c\u096d");
-        expect2(fmt5,1234.567,"\u0661\u066c\u0662\u0663\u0664\u066b\u0665\u0666\u0667");
+        expect2(fmt5,1234.567,"\u0661\u0662\u0663\u0664\u066b\u0665\u0666\u0667");
         expect2(fmt6,1234.567,"1.234,567");
         expect2(fmt7,1234.567, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03");
 
