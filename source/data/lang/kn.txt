@@ -731,7 +731,7 @@ kn{
             tibt{"ಟಿಬೇಟ್‌ನ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     localeDisplayPattern{
         separator{","}
     }

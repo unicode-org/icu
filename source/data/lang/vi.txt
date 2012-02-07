@@ -297,7 +297,7 @@ vi{
             tibt{"Chữ số Tây Tạng"}
         }
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

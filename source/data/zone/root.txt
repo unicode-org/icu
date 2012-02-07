@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
-    Version{"2.0.64.57"}
+    Version{"2.0.65.46"}
     zoneStrings{
         ""{
             ec{""}

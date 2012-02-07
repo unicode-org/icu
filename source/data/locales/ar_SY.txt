@@ -15,7 +15,7 @@ ar_SY{
             }
         }
     }
-    Version{"2.0.56.95"}
+    Version{"2.0.65.46"}
     calendar{
         gregorian{
             monthNames{

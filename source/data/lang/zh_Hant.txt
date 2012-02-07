@@ -725,7 +725,7 @@ zh_Hant{
         REVISED{"已修訂的拼字學"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -1930,7 +1930,7 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
         "x-crazy_ZZ_MY_SPECIAL_ADMINISTRATION_REGION_NEEDS_A_SPECIAL_VARIANT_WITH_A_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_LONG_NAME"
     }; // expect U_USING_DEFAULT_WARNING for both
 
-    int i;
+    unsigned int i;
     for (i = 0; i < sizeof(badLocales) / sizeof(char*); i++) {
         const char *localeName = badLocales[i];
         Locale locBad(localeName);
@@ -3002,7 +3002,7 @@ void NumberFormatTest::TestNumberingSystems() {
         expect2(*fmt1, 1234.567, CharsToUnicodeString("\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57"));
         expect3(*fmt2, 5678.0, CharsToUnicodeString("\\u05D4\\u05F3\\u05EA\\u05E8\\u05E2\\u05F4\\u05D7"));
         expect2(*fmt3, 1234.567, CharsToUnicodeString("\\u06F1\\u066c\\u06F2\\u06F3\\u06F4\\u066b\\u06F5\\u06F6\\u06F7"));
-        expect2(*fmt5, 1234.567, CharsToUnicodeString("\\u0661\\u066c\\u0662\\u0663\\u0664\\u066b\\u0665\\u0666\\u0667"));
+        expect2(*fmt5, 1234.567, CharsToUnicodeString("\\u0661\\u0662\\u0663\\u0664\\u066b\\u0665\\u0666\\u0667"));
         expect2(*fmt6, 1234.567, CharsToUnicodeString("1.234,567"));
         expect2(*fmt7, 1234.567, CharsToUnicodeString("\\u4e00,\\u4e8c\\u4e09\\u56db.\\u4e94\\u516d\\u4e03"));
     }

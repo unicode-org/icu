@@ -288,7 +288,7 @@ zu{
             tibt{"i-Tibetan Digits"}
         }
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.65.46"}
     localeDisplayPattern{
         separator{","}
     }

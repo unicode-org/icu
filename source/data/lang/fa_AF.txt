@@ -31,5 +31,5 @@ fa_AF{
     Scripts{
         Mong{"مغلی"}
     }
-    Version{"2.0.64.66"}
+    Version{"2.0.65.46"}
 }

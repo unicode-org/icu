@@ -17,5 +17,5 @@ en_HK{
             "US Dollar",
         }
     }
-    Version{"2.0.64.65"}
+    Version{"2.0.65.46"}
 }

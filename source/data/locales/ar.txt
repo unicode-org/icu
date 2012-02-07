@@ -22,6 +22,10 @@ ar{
     }
     NumberElements{
         arab{
+            patterns{
+                currencyFormat{"¤ #0.00;¤ #0.00-"}
+                decimalFormat{"#0.###;#0.###-"}
+            }
             symbols{
                 decimal{"٫"}
                 exponential{"اس"}
@@ -37,6 +41,10 @@ ar{
         }
         default{"arab"}
         latn{
+            patterns{
+                currencyFormat{"¤ #,##0.00;¤ #,##0.00-"}
+                decimalFormat{"#,##0.###;#,##0.###-"}
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}

@@ -111,5 +111,5 @@ yo{
         zh{"Èdè Mandari"}
         zu{"Èdè Ṣulu"}
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.65.46"}
 }

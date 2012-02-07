@@ -45,7 +45,7 @@ hu{
             }
         }
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     calendar{
         buddhist{
             availableFormats{

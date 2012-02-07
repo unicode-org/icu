@@ -298,5 +298,5 @@ sl{
         ZW{"Zimbabve"}
         ZZ{"Neznano ali neveljavno območje"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
 }

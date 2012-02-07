@@ -13,5 +13,5 @@ af_NA{
             "Namibiese dollar",
         }
     }
-    Version{"2.0.58.6"}
+    Version{"2.0.65.46"}
 }
