@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 4.8 with ICU4J 49.0.2</title>
+<!-- Copyright 2011, IBM, All Rights Reserved. -->
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 4.8 with ICU4J 49.0.2</h1>
+
+<hr/>
+<h2>Removed from ICU4J 4.8</h2>
+<p>(no API removed)</p>
+
+<hr/>
+<h2>Deprecated or Obsoleted in ICU4J 49.0.2</h2>
+<p>(no API obsoleted)</p>
+
+<hr/>
+<h2>Changed in ICU4J 49.0.2 (old, new)</h2>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>    (stable)     public abstract class <i>TimeZone</i> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable</br>
+(stable)     public abstract class <i>TimeZone</i> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable, com.ibm.icu.util.Freezable</li>
+</ul>
+
+
+<hr/>
+<h2>Promoted to stable in ICU4J 49.0.2</h2>
+<p>(no API promoted to stable)</p>
+
+<hr/>
+<h2>Added in ICU4J 49.0.2</h2>
+
+<h3>Package com.ibm.icu.charset</h3>
+<ul>
+CharsetEncoderICU
+<ul>
+<li>(draft)      public static int <i>getMaxBytesForString</i>(int, int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter.JoiningGroup
+<ul>
+<li>(stable)     public static final int ROHINGYA_YEH</li>
+</ul>
+UCharacter.LineBreak
+<ul>
+<li>(stable)     public static final int CONDITIONAL_JAPANESE_STARTER</li>
+<li>(stable)     public static final int HEBREW_LETTER</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li>(stable)     public static final UCharacter.UnicodeBlock ARABIC_EXTENDED_A</li>
+<li>(stable)     public static final int ARABIC_EXTENDED_A_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS</li>
+<li>(stable)     public static final int ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock CHAKMA</li>
+<li>(stable)     public static final int CHAKMA_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock MEETEI_MAYEK_EXTENSIONS</li>
+<li>(stable)     public static final int MEETEI_MAYEK_EXTENSIONS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock MEROITIC_CURSIVE</li>
+<li>(stable)     public static final int MEROITIC_CURSIVE_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock MEROITIC_HIEROGLYPHS</li>
+<li>(stable)     public static final int MEROITIC_HIEROGLYPHS_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock MIAO</li>
+<li>(stable)     public static final int MIAO_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock SHARADA</li>
+<li>(stable)     public static final int SHARADA_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock SORA_SOMPENG</li>
+<li>(stable)     public static final int SORA_SOMPENG_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock SUNDANESE_SUPPLEMENT</li>
+<li>(stable)     public static final int SUNDANESE_SUPPLEMENT_ID</li>
+<li>(stable)     public static final UCharacter.UnicodeBlock TAKRI</li>
+<li>(stable)     public static final int TAKRI_ID</li>
+</ul>
+UScript
+<ul>
+<li>(stable)     public static final int KHOJKI</li>
+<li>(stable)     public static final int TIRHUTA</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(draft)      public final class <i>MessagePatternUtil</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.ArgNode</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.ComplexArgStyleNode</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.MessageContentsNode</i></li>
+<li>(draft)      public static final class <i>MessagePatternUtil.MessageContentsNode.Type</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.MessageNode</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.Node</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.TextNode</i></li>
+<li>(draft)      public static class <i>MessagePatternUtil.VariantNode</i></li>
+<li>(draft)      public class <i>TimeZoneFormat</i></li>
+<li>(draft)      public static final class <i>TimeZoneFormat.GMTOffsetPatternType</i></li>
+<li>(draft)      public static final class <i>TimeZoneFormat.Style</i></li>
+<li>(draft)      public static final class <i>TimeZoneFormat.TimeType</i></li>
+<li>(draft)      public abstract class <i>TimeZoneNames</i></li>
+<li>(draft)      public static class <i>TimeZoneNames.MatchInfo</i></li>
+<li>(draft)      public static final class <i>TimeZoneNames.NameType</i></li>
+FilteredNormalizer2
+<ul>
+<li>(draft)      public int <i>composePair</i>(int, int)</li>
+<li>(draft)      public int <i>getCombiningClass</i>(int)</li>
+<li>(draft)      public java.lang.String <i>getRawDecomposition</i>(int)</li>
+</ul>
+IDNA
+<ul>
+<li>(draft)      public static final int CHECK_CONTEXTO</li>
+</ul>
+Normalizer2
+<ul>
+<li>(draft)      public int <i>composePair</i>(int, int)</li>
+<li>(draft)      public int <i>getCombiningClass</i>(int)</li>
+<li>(draft)      public static Normalizer2 <i>getNFCInstance</i>()</li>
+<li>(draft)      public static Normalizer2 <i>getNFDInstance</i>()</li>
+<li>(draft)      public static Normalizer2 <i>getNFKCCasefoldInstance</i>()</li>
+<li>(draft)      public static Normalizer2 <i>getNFKCInstance</i>()</li>
+<li>(draft)      public static Normalizer2 <i>getNFKDInstance</i>()</li>
+<li>(draft)      public java.lang.String <i>getRawDecomposition</i>(int)</li>
+</ul>
+SimpleDateFormat
+<ul>
+<li>(draft)      public TimeZoneFormat <i>getTimeZoneFormat</i>()</li>
+<li>(draft)      public void <i>setTimeZoneFormat</i>(TimeZoneFormat)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(stable)     public static final class <i>ULocale.Category</i></li>
+LocaleData
+<ul>
+<li>(draft)      public static final int ES_PUNCTUATION</li>
+</ul>
+RuleBasedTimeZone
+<ul>
+<li>(draft)      public TimeZone <i>cloneAsThawed</i>()</li>
+<li>(draft)      public TimeZone <i>freeze</i>()</li>
+<li>(draft)      public boolean <i>isFrozen</i>()</li>
+</ul>
+SimpleTimeZone
+<ul>
+<li>(draft)      public TimeZone <i>cloneAsThawed</i>()</li>
+<li>(draft)      public TimeZone <i>freeze</i>()</li>
+<li>(draft)      public boolean <i>isFrozen</i>()</li>
+</ul>
+TimeZone
+<ul>
+<li>(draft)      public static final TimeZone GMT_ZONE</li>
+<li>(draft)      public static final TimeZone UNKNOWN_ZONE</li>
+<li>(draft)      public TimeZone <i>cloneAsThawed</i>()</li>
+<li>(draft)      public TimeZone <i>freeze</i>()</li>
+<li>(draft)      public static TimeZone <i>getFrozenTimeZone</i>(java.lang.String)</li>
+<li>(draft)      public boolean <i>isFrozen</i>()</li>
+</ul>
+ULocale
+<ul>
+<li>(stable)     public static ULocale <i>getDefault</i>(ULocale.Category)</li>
+<li>(stable)     public static synchronized void <i>setDefault</i>(ULocale.Category, ULocale)</li>
+</ul>
+VTimeZone
+<ul>
+<li>(draft)      public TimeZone <i>cloneAsThawed</i>()</li>
+<li>(draft)      public TimeZone <i>freeze</i>()</li>
+<li>(draft)      public boolean <i>isFrozen</i>()</li>
+</ul>
+VersionInfo
+<ul>
+<li>(stable)     public static final VersionInfo UNICODE_6_1</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Dec 13 10:15:50 EST 2011<br/>Copyright (C) 2011, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
