@@ -744,5 +744,5 @@ id{
             "Dolar Zimbabwe (2009)",
         }
     }
-    Version{"2.0.64.59"}
+    Version{"2.0.65.46"}
 }

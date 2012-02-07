@@ -187,7 +187,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"Мова: {0}"}
         script{"Пісьмо: {0}"}

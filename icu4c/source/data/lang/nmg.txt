@@ -57,5 +57,5 @@ nmg{
         zh{"Kiɛl bó chinois"}
         zu{"Zulu"}
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.65.46"}
 }

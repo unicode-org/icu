@@ -298,5 +298,5 @@ hu{
         ZW{"Zimbabwe"}
         ZZ{"Ismeretlen vagy érvénytelen körzet"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
 }

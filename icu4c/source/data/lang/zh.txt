@@ -755,7 +755,7 @@ zh{
         VALENCIA{"瓦伦西亚文"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"语言：{0}"}
         script{"脚本：{0}"}

@@ -763,7 +763,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

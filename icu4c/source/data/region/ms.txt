@@ -298,5 +298,5 @@ ms{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
     }
-    Version{"2.0.64.57"}
+    Version{"2.0.65.46"}
 }

@@ -14,7 +14,7 @@ en_BW{
             }
         }
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.65.46"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -625,7 +625,7 @@ is{
             tibt{"Tíbeskir tölustafir"}
         }
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

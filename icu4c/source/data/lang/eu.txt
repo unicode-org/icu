@@ -300,7 +300,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.64.92"}
+    Version{"2.0.65.46"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -730,7 +730,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{", "}

@@ -17,5 +17,5 @@ en_TT{
             "US Dollar",
         }
     }
-    Version{"2.0.41.23"}
+    Version{"2.0.65.46"}
 }
