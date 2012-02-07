@@ -298,5 +298,5 @@ pt{
         ZW{"Zimbábue"}
         ZZ{"Região desconhecida ou inválida"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
 }

@@ -298,5 +298,5 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
-    Version{"2.0.64.92"}
+    Version{"2.0.65.46"}
 }

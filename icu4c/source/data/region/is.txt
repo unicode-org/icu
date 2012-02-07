@@ -298,5 +298,5 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt eða ógilt svæði"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
 }

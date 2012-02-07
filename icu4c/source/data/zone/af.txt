@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/af.xml
  */
 af{
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     zoneStrings{
         "America:Mexico_City"{
             ec{"Meksiko"}

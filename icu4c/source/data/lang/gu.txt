@@ -736,7 +736,7 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
     localeDisplayPattern{
         separator{","}
     }

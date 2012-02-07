@@ -13,5 +13,5 @@ es_PY{
             "guaraní paraguayo",
         }
     }
-    Version{"2.0.57.66"}
+    Version{"2.0.65.46"}
 }

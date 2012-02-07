@@ -18,7 +18,7 @@ de_CH{
             }
         }
     }
-    Version{"2.0.57.19"}
+    Version{"2.0.65.46"}
     delimiters{
         alternateQuotationEnd{"›"}
         alternateQuotationStart{"‹"}

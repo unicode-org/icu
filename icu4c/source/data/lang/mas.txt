@@ -57,5 +57,5 @@ mas{
         zh{"nkʉtʉ́k ɔ́ɔ̄ lchina"}
         zu{"nkʉtʉ́k ɔ́ɔ̄ lzulu"}
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.65.46"}
 }

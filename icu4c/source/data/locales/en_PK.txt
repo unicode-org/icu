@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_PK{
     %%Parent{"en_GB"}
-    Version{"2.0.61.44"}
+    Version{"2.0.65.46"}
     calendar{
         gregorian{
             DateTimePatterns{

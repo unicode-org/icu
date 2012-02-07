@@ -22,5 +22,5 @@ bo{
     Scripts{
         Tibt{"བོད་ཡིག་"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.65.46"}
 }

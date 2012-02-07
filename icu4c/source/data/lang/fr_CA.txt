@@ -58,5 +58,5 @@ fr_CA{
             tibt{"Chiffres tibétains"}
         }
     }
-    Version{"2.0.64.92"}
+    Version{"2.0.65.46"}
 }

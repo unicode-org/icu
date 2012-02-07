@@ -13,5 +13,5 @@ hy{
     Languages{
         hy{"Հայերէն"}
     }
-    Version{"2.0.61.77"}
+    Version{"2.0.65.46"}
 }

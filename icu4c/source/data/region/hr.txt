@@ -298,5 +298,5 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.65.46"}
 }
