@@ -31,7 +31,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         if (!withFallback) {
             int status = rb.getLoadingStatus();
             if (status == ICUResourceBundle.FROM_DEFAULT || status == ICUResourceBundle.FROM_ROOT) {
-                return CurrencyData.DefaultInfo.getWithFallback(false);
+                return null;
             }
         }
         return new ICUCurrencyDisplayInfo(rb, withFallback);
