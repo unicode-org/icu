@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Created-By: 1.0 (IBM Corporation)
+Extension-Name: com.ibm.icu.dev.tool.ime.translit
+Implementation-Vendor: IBM Corporation
+Implementation-Version: 1.0
+Implementation-Title: ICU Transliterator IME
+Specification-Vendor: IBM
+Specification-Version: 1.0
+Specification-Title: ICU Transliterator IME
+
+Name: com/ibm/icu/dev/tool/ime/translit
