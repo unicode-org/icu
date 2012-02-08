@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.ibm.icu.text.CurrencyMetaInfo;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * ICU's currency meta info data.
@@ -119,16 +122,16 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
             }
 
             if ((needed & Date) != 0) {
-                from = getDate(r.at("from"), Long.MIN_VALUE);
-                to = getDate(r.at("to"), Long.MAX_VALUE);
+                from = getDate(r.at("from"), Long.MIN_VALUE, false);
+                to = getDate(r.at("to"), Long.MAX_VALUE, true);
                 // In the data, to is always > from.  This means that when we have a range
                 // from == to, the comparisons below will always do the right thing, despite
                 // the range being technically empty.  It really should be [from, from+1) but
                 // this way we don't need to fiddle with it.
-                if (filter.from >= to) {
+                if (filter.from > to) {
                     continue;
                 }
-                if (filter.to <= from) {
+                if (filter.to < from) {
                     continue;
                 }
             }
@@ -139,12 +142,35 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
     }
 
     private static final long MASK = 4294967295L;
-    private long getDate(ICUResourceBundle b, long defaultValue) {
+    private long getDate(ICUResourceBundle b, long defaultValue, boolean endOfDay) {
         if (b == null) {
             return defaultValue;
         }
         int[] values = b.getIntVector();
-        return ((long) values[0] << 32) | ((long) values[1] & MASK);
+        long time = ((long) values[0] << 32) | (((long) values[1]) & MASK);
+        
+        // TODO: remove once errors in CLDR data are fixed.  Or push this into ICU data generation.
+        // The CLDR data parses month as minutes.  We should be getting minutes = 0, so if we detect
+        // that the minute value is nonzero, this means we have bad data and the minute value is really
+        // the month value.
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+        cal.setTimeInMillis(time);
+        int minute = cal.get(Calendar.MINUTE);
+        if (minute != 0) {
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.MONTH, minute - 1); // months are 1-based
+            time = cal.getTimeInMillis();
+        }
+        // TODO: generate in CLDR data rather than here, remove endOfDay flag.
+        if (endOfDay) {
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            time = cal.getTimeInMillis();
+        }
+        return time;
     }
 
     // Utility, just because I don't like the n^2 behavior of using list.contains to build a

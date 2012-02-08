@@ -11,11 +11,10 @@
 
 package com.ibm.icu.dev.test.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -23,8 +22,14 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
+import com.ibm.icu.text.CurrencyMetaInfo.CurrencyFilter;
+import com.ibm.icu.text.CurrencyMetaInfo.CurrencyInfo;
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -208,10 +213,13 @@ public class CurrencyTest extends TestFmwk {
             errln("hasData() should return true.");
         }
         
+        // with substitute
         CurrencyDisplayNames cdn = CurrencyDisplayNames.getInstance(ULocale.GERMANY);
         assertEquals("de_USD_name", "US-Dollar", cdn.getName("USD"));
         assertEquals("de_USD_symbol", "$", cdn.getSymbol("USD"));
         assertEquals("de_USD_plural_other", "US-Dollar", cdn.getPluralName("USD", "other"));
+        // unknown plural category, substitute "other"
+        assertEquals("de_USD_plural_foo", "US-Dollar", cdn.getPluralName("USD", "foo"));
         
         cdn = CurrencyDisplayNames.getInstance(ULocale.forLanguageTag("en-US"));
         assertEquals("en-US_USD_name", "US Dollar", cdn.getName("USD"));
@@ -226,7 +234,33 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("en-US bundle", "en", cdn.getULocale().toString());
         
         cdn = CurrencyDisplayNames.getInstance(ULocale.forLanguageTag("zz-Gggg-YY"));
-        assertEquals("random bundle", "en", cdn.getULocale().toString());
+        assertEquals("bundle from current locale", "en", cdn.getULocale().toString());
+        
+        // with no substitute
+        cdn = CurrencyDisplayNames.getInstance(ULocale.GERMANY, true);
+        assertNotNull("have currency data for Germany", cdn);
+        
+        // known currency, behavior unchanged
+        assertEquals("de_USD_name", "US-Dollar", cdn.getName("USD"));
+        assertEquals("de_USD_symbol", "$", cdn.getSymbol("USD"));
+        assertEquals("de_USD_plural_other", "US-Dollar", cdn.getPluralName("USD", "other"));
+        
+        // known currency but unknown plural category
+        assertNull("de_USD_plural_foo", cdn.getPluralName("USD", "foo"));
+        
+        // unknown currency, get null
+        assertNull("de_FOO_name", cdn.getName("FOO"));
+        assertNull("de_FOO_symbol", cdn.getSymbol("FOO"));
+        assertNull("de_FOO_plural_other", cdn.getPluralName("FOO", "other"));
+        assertNull("de_FOO_plural_foo", cdn.getPluralName("FOO", "foo"));
+        
+        // unknown locale with no substitute
+        cdn = CurrencyDisplayNames.getInstance(ULocale.forLanguageTag("zz-Gggg-YY"), true);
+        String ln = "";
+        if (cdn != null) {
+            ln = " (" + cdn.getULocale().toString() + ")";
+        }
+        assertNull("no fallback from unknown locale" + ln , cdn);
     }
     
     // Provide better code coverage for the CurrencyData class
@@ -288,6 +322,60 @@ public class CurrencyTest extends TestFmwk {
             errln("Error calling getFormatInfo().");
             return;
         }
+    }
+    
+    // Add a real test of CurrencyMetaInfo, the below one looks like code to exercise coverage only.
+    public void testCurrencyMetaInfoRanges() {
+        CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance(true);
+        assertNotNull("have metainfo", metainfo);
+    
+        CurrencyFilter filter = CurrencyFilter.onRegion("DE"); // must be capitalized
+        List<CurrencyInfo> currenciesInGermany = metainfo.currencyInfo(filter);
+        logln("currencies: " + currenciesInGermany.size());
+        DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
+        fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date demLastDate = new Date(Long.MAX_VALUE);
+        Date eurFirstDate = new Date(Long.MIN_VALUE);
+        for (CurrencyInfo info : currenciesInGermany) {
+            logln(info.toString());
+            logln("from: " + fmt.format(info.from)+ Long.toHexString(info.from));
+            logln("  to: " + fmt.format(info.to) + Long.toHexString(info.to));
+            if (info.code.equals("DEM")) {
+                demLastDate = new Date(info.to);
+            } else if (info.code.equals("EUR")) {
+                eurFirstDate = new Date(info.from);
+            }
+        }
+        
+        // the Euro and Deutschmark overlapped for several years
+        assertEquals("DEM available at last date", 2, metainfo.currencyInfo(filter.withDate(demLastDate)).size());
+        
+        // demLastDate + 1 millisecond is not the start of the last day, we consider it the next day, so...
+        Date demLastDatePlus1ms = new Date(demLastDate.getTime() + 1);
+        assertEquals("DEM not available after very start of last date", 1, metainfo.currencyInfo(filter.withDate(demLastDatePlus1ms)).size());
+        
+        // both available for start of euro
+        assertEquals("EUR available on start of first date", 2, metainfo.currencyInfo(filter.withDate(eurFirstDate)).size());
+        
+        // but not one millisecond before the start of the first day
+        Date eurFirstDateMinus1ms = new Date(eurFirstDate.getTime() - 1);
+        assertEquals("EUR not avilable before very start of first date", 1, metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
+
+        // end time is last millisecond of day
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+        cal.setTime(demLastDate);
+        assertEquals("hour is 23", 23, cal.get(GregorianCalendar.HOUR_OF_DAY));
+        assertEquals("minute is 59", 59, cal.get(GregorianCalendar.MINUTE));
+        assertEquals("second is 59", 59, cal.get(GregorianCalendar.SECOND));
+        assertEquals("millisecond is 999", 999, cal.get(GregorianCalendar.MILLISECOND));
+        
+        // start time is first millisecond of day
+        cal.setTime(eurFirstDate);
+        assertEquals("hour is 0", 0, cal.get(GregorianCalendar.HOUR_OF_DAY));
+        assertEquals("minute is 0", 0, cal.get(GregorianCalendar.MINUTE));
+        assertEquals("second is 0", 0, cal.get(GregorianCalendar.SECOND));
+        assertEquals("millisecond is 0", 0, cal.get(GregorianCalendar.MILLISECOND));
     }
     
     // Provide better code coverage for the CurrencyMetaInfo class

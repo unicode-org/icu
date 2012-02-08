@@ -13,9 +13,21 @@ import java.util.List;
 
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * Provides information about currencies that is not specific to a locale.
+ * 
+ * A note about currency dates.  The CLDR data provides data to the day,
+ * inclusive.  The date information used by CurrencyInfo and CurrencyFilter
+ * is represented by milliseconds, which is overly precise.  These values
+ * represent the CLDR data by using the millisecond value at the very start 
+ * of a day to represent that day.  Thus you must be careful when converting
+ * these values to and from actual times.  For example, if you construct
+ * a time representing 12 noon GMT, and query the currencies available at that
+ * time, you will not return a currency whose last day of availablilty was on
+ * that day, since the time you provided is after the start of the day.
+ * 
  * @draft ICU 4.4
  * @provisional This API might change or be removed in a future release.
  */
@@ -31,6 +43,18 @@ public class CurrencyMetaInfo {
      */
     public static CurrencyMetaInfo getInstance() {
         return impl;
+    }
+
+    /**
+     * Returns the unique instance of the currency meta info, or null if 
+     * noSubstitute is true and there is no data to support this API.
+     * @param noSubstitute true if no substitute data should be used
+     * @return the meta info, or null
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static CurrencyMetaInfo getInstance(boolean noSubstitute) {
+        return hasData ? impl : null;
     }
 
     /**
@@ -72,14 +96,14 @@ public class CurrencyMetaInfo {
         public final String currency;
 
         /**
-         * The from date to filter on (milliseconds).  Accepts any currency on or after this date.
+         * The from date to filter on (as milliseconds).  Accepts any currency on or after this date.
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
         public final long from;
 
         /**
-         * The to date to filter on (milliseconds).  Accepts any currency on or before this date.
+         * The to date to filter on (as milliseconds).  Accepts any currency on or before this date.
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
@@ -350,16 +374,19 @@ public class CurrencyMetaInfo {
         public final String code;
 
         /**
-         * Date on which the currency was first officially used in the region.  If there is no
-         * date, this is Long.MIN_VALUE;
+         * Date on which the currency was first officially used in the region.  
+         * This is midnight at the start of the first day on which the currency was used, GMT. 
+         * If there is no date, this is Long.MIN_VALUE;
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
         public final long from;
 
         /**
-         * Date at which the currency stopped being officially used in the region.  If there is
-         * no date, this is Long.MAX_VALUE;
+         * Date at which the currency stopped being officially used in the region.
+         * This is midnight at the start of the last day on which the currency was used, GMT.
+         * If there is no date, this is Long.MAX_VALUE.
+         * 
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
          */
@@ -376,10 +403,11 @@ public class CurrencyMetaInfo {
 
         /**
          * Constructs a currency info.
+         * 
          * @param region region code
          * @param code currency code
-         * @param from start date in milliseconds
-         * @param to end date in milliseconds
+         * @param from start date in milliseconds.  This is midnight at the start of the first day on which the currency was used, GMT.
+         * @param to end date in milliseconds.  This is midnight at the start of the last day on which the currency was used, GMT.
          * @param priority priority value, 0 is highest priority, increasing values are lower
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.
@@ -482,6 +510,7 @@ public class CurrencyMetaInfo {
             return null;
         }
         GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeZone(TimeZone.getTimeZone("GMT"));
         gc.setTimeInMillis(date);
         return "" + gc.get(Calendar.YEAR) + '-' + (gc.get(Calendar.MONTH) + 1) + '-' +
                 gc.get(Calendar.DAY_OF_MONTH);
