@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and others.
+* Copyright (C) 1997-2012, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -173,29 +173,44 @@ public:
      * support identification of all number format fields, not just those
      * pertaining to alignment.
      *
+     * These constants are provided for backwards compatibility only.
+     * Please use the C style constants defined in the header file unum.h.
+     *
      * @see FieldPosition
      * @stable ICU 2.0
      */
     enum EAlignmentFields {
-        kIntegerField,
-        kFractionField,
-        kDecimalSeparatorField,
-        kExponentSymbolField,
-        kExponentSignField,
-        kExponentField,
-        kGroupingSeparatorField,
-        kCurrencyField,
-        kPercentField,
-        kPermillField,
-        kSignField,
+        /** @stable ICU 2.0 */
+        kIntegerField = UNUM_INTEGER_FIELD,
+        /** @stable ICU 2.0 */
+        kFractionField = UNUM_FRACTION_FIELD,
+        /** @stable ICU 2.0 */
+        kDecimalSeparatorField = UNUM_DECIMAL_SEPARATOR_FIELD,
+        /** @stable ICU 2.0 */
+        kExponentSymbolField = UNUM_EXPONENT_SYMBOL_FIELD,
+        /** @stable ICU 2.0 */
+        kExponentSignField = UNUM_EXPONENT_SIGN_FIELD,
+        /** @stable ICU 2.0 */
+        kExponentField = UNUM_EXPONENT_FIELD,
+        /** @stable ICU 2.0 */
+        kGroupingSeparatorField = UNUM_GROUPING_SEPARATOR_FIELD,
+        /** @stable ICU 2.0 */
+        kCurrencyField = UNUM_CURRENCY_FIELD,
+        /** @stable ICU 2.0 */
+        kPercentField = UNUM_PERCENT_FIELD,
+        /** @stable ICU 2.0 */
+        kPermillField = UNUM_PERMILL_FIELD,
+        /** @stable ICU 2.0 */
+        kSignField = UNUM_SIGN_FIELD,
 
     /**
      * These constants are provided for backwards compatibility only.
-     * Please use the C++ style constants defined above.
-     * @stable ICU 2.0
+     * Please use the constants defined in the header file unum.h.
      */
-        INTEGER_FIELD        = kIntegerField,
-        FRACTION_FIELD        = kFractionField
+        /** @stable ICU 2.0 */
+        INTEGER_FIELD        = UNUM_INTEGER_FIELD,
+        /** @stable ICU 2.0 */
+        FRACTION_FIELD       = UNUM_FRACTION_FIELD
     };
 
     /**
