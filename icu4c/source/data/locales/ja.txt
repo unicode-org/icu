@@ -75,6 +75,7 @@ ja{
     }
     NumberElements{
         default{"latn"}
+        finance{"jpanfin"}
         latn{
             patterns{
                 currencyFormat{"¤#,##0.00"}
@@ -88,6 +89,8 @@ ja{
                 nan{"NaN（非数）"}
             }
         }
+        native{"latn"}
+        traditional{"jpan"}
     }
     Version{"2.0.65.46"}
     calendar{

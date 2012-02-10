@@ -39,6 +39,8 @@ el{
                 plusSign{"+"}
             }
         }
+        native{"latn"}
+        traditional{"grek"}
     }
     Version{"2.0.65.46"}
     calendar{

@@ -35,6 +35,7 @@ te{
                 exponential{"తూ"}
             }
         }
+        native{"telu"}
     }
     Version{"2.0.65.46"}
     calendar{

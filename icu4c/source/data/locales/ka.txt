@@ -44,6 +44,8 @@ ka{
                 plusSign{"+"}
             }
         }
+        native{"latn"}
+        traditional{"geor"}
     }
     Version{"2.0.65.46"}
     calendar{

@@ -58,6 +58,7 @@ ar{
                 plusSign{"+"}
             }
         }
+        native{"arab"}
     }
     Version{"2.0.64.72"}
     calendar{

@@ -32,6 +32,8 @@ ti{
                 currencyFormat{"¤#,##0.00"}
             }
         }
+        native{"latn"}
+        traditional{"ethi"}
     }
     Version{"2.0.65.46"}
     calendar{
