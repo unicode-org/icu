@@ -6125,11 +6125,11 @@ void NumberFormatTest::TestFormatAttributes() {
   
   {
     int32_t expected[] = {
-      NumberFormat::kCurrencyField, 0, 1,
-      NumberFormat::kGroupingSeparatorField, 3, 4,
-      NumberFormat::kIntegerField, 1, 7,
-      NumberFormat::kDecimalSeparatorField, 7, 8,
-      NumberFormat::kFractionField, 8, 10,
+      UNUM_CURRENCY_FIELD, 0, 1,
+      UNUM_GROUPING_SEPARATOR_FIELD, 3, 4,
+      UNUM_INTEGER_FIELD, 1, 7,
+      UNUM_DECIMAL_SEPARATOR_FIELD, 7, 8,
+      UNUM_FRACTION_FIELD, 8, 10,
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
 
@@ -6139,16 +6139,16 @@ void NumberFormatTest::TestFormatAttributes() {
     expectPositions(posIter, expected, tupleCount, result);
   }
   {
-    FieldPosition fp(NumberFormat::kIntegerField);
+    FieldPosition fp(UNUM_INTEGER_FIELD);
     UnicodeString result;
     decFmt->format(val, result, fp);
-    expectPosition(fp, NumberFormat::kIntegerField, 1, 7, result);
+    expectPosition(fp, UNUM_INTEGER_FIELD, 1, 7, result);
   }
   {
-    FieldPosition fp(NumberFormat::kFractionField);
+    FieldPosition fp(UNUM_FRACTION_FIELD);
     UnicodeString result;
     decFmt->format(val, result, fp);
-    expectPosition(fp, NumberFormat::kFractionField, 8, 10, result);
+    expectPosition(fp, UNUM_FRACTION_FIELD, 8, 10, result);
   }
   delete decFmt;
 
@@ -6156,13 +6156,13 @@ void NumberFormatTest::TestFormatAttributes() {
   val = -0.0000123;
   {
     int32_t expected[] = {
-      NumberFormat::kSignField, 0, 1,
-      NumberFormat::kIntegerField, 1, 2,
-      NumberFormat::kDecimalSeparatorField, 2, 3,
-      NumberFormat::kFractionField, 3, 5,
-      NumberFormat::kExponentSymbolField, 5, 6,
-      NumberFormat::kExponentSignField, 6, 7,
-      NumberFormat::kExponentField, 7, 8
+      UNUM_SIGN_FIELD, 0, 1,
+      UNUM_INTEGER_FIELD, 1, 2,
+      UNUM_DECIMAL_SEPARATOR_FIELD, 2, 3,
+      UNUM_FRACTION_FIELD, 3, 5,
+      UNUM_EXPONENT_SYMBOL_FIELD, 5, 6,
+      UNUM_EXPONENT_SIGN_FIELD, 6, 7,
+      UNUM_EXPONENT_FIELD, 7, 8
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
 
@@ -6172,16 +6172,16 @@ void NumberFormatTest::TestFormatAttributes() {
     expectPositions(posIter, expected, tupleCount, result);
   }
   {
-    FieldPosition fp(NumberFormat::kIntegerField);
+    FieldPosition fp(UNUM_INTEGER_FIELD);
     UnicodeString result;
     decFmt->format(val, result, fp);
-    expectPosition(fp, NumberFormat::kIntegerField, 1, 2, result);
+    expectPosition(fp, UNUM_INTEGER_FIELD, 1, 2, result);
   }
   {
-    FieldPosition fp(NumberFormat::kFractionField);
+    FieldPosition fp(UNUM_FRACTION_FIELD);
     UnicodeString result;
     decFmt->format(val, result, fp);
-    expectPosition(fp, NumberFormat::kFractionField, 3, 5, result);
+    expectPosition(fp, UNUM_FRACTION_FIELD, 3, 5, result);
   }
   delete decFmt;
 
@@ -6190,17 +6190,17 @@ void NumberFormatTest::TestFormatAttributes() {
 
 const char* attrString(int32_t attrId) {
   switch (attrId) {
-    case NumberFormat::kIntegerField: return "integer";
-    case NumberFormat::kFractionField: return "fraction";
-    case NumberFormat::kDecimalSeparatorField: return "decimal separator";
-    case NumberFormat::kExponentSymbolField: return "exponent symbol";
-    case NumberFormat::kExponentSignField: return "exponent sign";
-    case NumberFormat::kExponentField: return "exponent";
-    case NumberFormat::kGroupingSeparatorField: return "grouping separator";
-    case NumberFormat::kCurrencyField: return "currency";
-    case NumberFormat::kPercentField: return "percent";
-    case NumberFormat::kPermillField: return "permille";
-    case NumberFormat::kSignField: return "sign";
+    case UNUM_INTEGER_FIELD: return "integer";
+    case UNUM_FRACTION_FIELD: return "fraction";
+    case UNUM_DECIMAL_SEPARATOR_FIELD: return "decimal separator";
+    case UNUM_EXPONENT_SYMBOL_FIELD: return "exponent symbol";
+    case UNUM_EXPONENT_SIGN_FIELD: return "exponent sign";
+    case UNUM_EXPONENT_FIELD: return "exponent";
+    case UNUM_GROUPING_SEPARATOR_FIELD: return "grouping separator";
+    case UNUM_CURRENCY_FIELD: return "currency";
+    case UNUM_PERCENT_FIELD: return "percent";
+    case UNUM_PERMILL_FIELD: return "permille";
+    case UNUM_SIGN_FIELD: return "sign";
     default: return "";
   }
 }
