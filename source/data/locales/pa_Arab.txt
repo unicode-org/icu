@@ -21,6 +21,7 @@ pa_Arab{
     }
     NumberElements{
         default{"arabext"}
+        native{"arabext"}
     }
     Version{"2.0.61.77"}
     calendar{

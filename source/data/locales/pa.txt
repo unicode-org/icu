@@ -29,6 +29,7 @@ pa{
                 percentFormat{"#,##,##0%"}
             }
         }
+        native{"guru"}
     }
     Version{"2.0.65.46"}
     calendar{

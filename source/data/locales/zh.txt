@@ -74,6 +74,7 @@ zh{
     }
     NumberElements{
         default{"latn"}
+        finance{"hansfin"}
         latn{
             patterns{
                 currencyFormat{"¤#,##0.00"}
@@ -86,6 +87,8 @@ zh{
                 group{","}
             }
         }
+        native{"hanidec"}
+        traditional{"hans"}
     }
     Version{"2.0.65.46"}
     calendar{

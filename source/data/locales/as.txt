@@ -28,6 +28,7 @@ as{
                 percentFormat{"#,##,##0%"}
             }
         }
+        native{"beng"}
     }
     Version{"2.0.65.46"}
     calendar{

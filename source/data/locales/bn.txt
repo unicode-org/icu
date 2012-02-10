@@ -51,6 +51,7 @@ bn{
                 plusSign{"+"}
             }
         }
+        native{"beng"}
     }
     Version{"2.0.65.46"}
     calendar{

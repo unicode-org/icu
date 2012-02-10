@@ -37,6 +37,7 @@ bo{
                 nan{"NaN"}
             }
         }
+        native{"tibt"}
         tibt{
             symbols{
                 nan{"ཨང་མེན་"}

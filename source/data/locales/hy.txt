@@ -30,6 +30,8 @@ hy{
                 group{"."}
             }
         }
+        native{"latn"}
+        traditional{"armn"}
     }
     Version{"2.0.65.46"}
     calendar{

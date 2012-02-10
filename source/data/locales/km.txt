@@ -31,6 +31,7 @@ km{
                 group{"."}
             }
         }
+        native{"khmr"}
     }
     Version{"2.0.65.46"}
     calendar{

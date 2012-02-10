@@ -39,6 +39,7 @@ ur{
                 plusSign{"+"}
             }
         }
+        native{"arabext"}
     }
     Version{"2.0.65.46"}
     calendar{
