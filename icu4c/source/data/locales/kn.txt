@@ -37,6 +37,7 @@ kn{
                 nan{"ಸಂಖ್ಯೆಯಲ್ಲ"}
             }
         }
+        native{"knda"}
     }
     Version{"2.0.65.46"}
     calendar{

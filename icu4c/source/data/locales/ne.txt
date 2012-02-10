@@ -29,6 +29,7 @@ ne{
                 minusSign{"-"}
             }
         }
+        native{"deva"}
     }
     Version{"2.0.64.72"}
     calendar{

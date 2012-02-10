@@ -36,6 +36,7 @@ or{
                 group{","}
             }
         }
+        native{"orya"}
     }
     Version{"2.0.65.46"}
     calendar{

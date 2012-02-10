@@ -46,6 +46,7 @@ ml{
                 plusSign{"+"}
             }
         }
+        native{"mlym"}
     }
     Version{"2.0.65.46"}
     calendar{

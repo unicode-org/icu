@@ -46,6 +46,7 @@ hi{
                 plusSign{"+"}
             }
         }
+        native{"deva"}
     }
     Version{"2.0.65.46"}
     calendar{

@@ -37,6 +37,7 @@ gu{
                 nan{"સંખ્યા નથીં"}
             }
         }
+        native{"gujr"}
     }
     Version{"2.0.65.46"}
     calendar{

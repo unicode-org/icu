@@ -29,6 +29,7 @@ vai{
                 group{","}
             }
         }
+        native{"vaii"}
     }
     Version{"2.0.65.46"}
     calendar{

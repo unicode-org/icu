@@ -36,6 +36,8 @@ ta{
                 nan{"எண் இல்லை"}
             }
         }
+        native{"tamldec"}
+        traditional{"taml"}
     }
     Version{"2.0.65.46"}
     calendar{
