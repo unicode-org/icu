@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and others.
+* Copyright (C) 1997-2012, International Business Machines Corporation and others.
 * All Rights Reserved.
 * Modification History:
 *
@@ -266,7 +266,41 @@ enum UCurrencySpacing {
     UNUM_CURRENCY_SPACING_COUNT
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @draft ICU 4.8 */
+
 /* #endif  U_HIDE_DRAFT_API */
+
+/**
+ * FieldPosition and UFieldPosition selectors for format fields
+ * defined by NumberFormat and UNumberFormat.
+ * @stable ICU 49
+ */
+typedef enum UNumberFormatFields {
+    /** @stable ICU 49 */
+    UNUM_INTEGER_FIELD,
+    /** @stable ICU 49 */
+    UNUM_FRACTION_FIELD,
+    /** @stable ICU 49 */
+    UNUM_DECIMAL_SEPARATOR_FIELD,
+    /** @stable ICU 49 */
+    UNUM_EXPONENT_SYMBOL_FIELD,
+    /** @stable ICU 49 */
+    UNUM_EXPONENT_SIGN_FIELD,
+    /** @stable ICU 49 */
+    UNUM_EXPONENT_FIELD,
+    /** @stable ICU 49 */
+    UNUM_GROUPING_SEPARATOR_FIELD,
+    /** @stable ICU 49 */
+    UNUM_CURRENCY_FIELD,
+    /** @stable ICU 49 */
+    UNUM_PERCENT_FIELD,
+    /** @stable ICU 49 */
+    UNUM_PERMILL_FIELD,
+    /** @stable ICU 49 */
+    UNUM_SIGN_FIELD,
+    /** @stable ICU 49 */
+    UNUM_FIELD_COUNT
+} UNumberFormatFields;
+
 
 /**
  * Create and return a new UNumberFormat for formatting and parsing

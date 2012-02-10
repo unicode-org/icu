@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -257,7 +257,7 @@ static void TestNumberFormat()
 
     log_verbose("\nTesting unum_format() \n");
     resultlength=0;
-    pos1.field = 0; /* Integer Section */
+    pos1.field = UNUM_INTEGER_FIELD;
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
@@ -290,7 +290,7 @@ free(result);
     log_verbose("\nTesting unum_formatDouble()\n");
     u_uastrcpy(temp1, "($10,456.37)");
     resultlength=0;
-    pos2.field = 1; /* Fractional Section */
+    pos2.field = UNUM_FRACTION_FIELD;
     resultlengthneeded=unum_formatDouble(cur_def, d, NULL, resultlength, &pos2, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
@@ -348,7 +348,7 @@ free(result);
     temp1[0] = 0xA5; /* Yen sign */
     u_uastrcpy(temp, "JPY");
     resultlength=0;
-    pos2.field = 0; /* integer part */
+    pos2.field = UNUM_INTEGER_FIELD;
     resultlengthneeded=unum_formatDoubleCurrency(cur_def, a, temp, NULL, resultlength, &pos2, &status);
     if (status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
@@ -867,8 +867,7 @@ free(result);
 
         /* Format with a FieldPosition parameter */
 
-        fieldPos.field = 2;   /* Ticket 8034 - need enum constants for the field values. */
-                              /*  2 =  kDecimalSeparatorField   */
+        fieldPos.field = UNUM_DECIMAL_SEPARATOR_FIELD;
         resultSize = unum_formatDecimal(fmt, numInitial, -1, dest, DESTCAPACITY, &fieldPos, &status);
         if (U_FAILURE(status)) {
             log_err("File %s, Line %d, status = %s\n", __FILE__, __LINE__, u_errorName(status));
@@ -1326,7 +1325,7 @@ free(result);
 /*        u_uastrcpy(temp1, "(xxxxxxx10,456.37)"); */
         u_uastrcpy(temp1, "xxxxx(10,456.37)");
         resultlength=0;
-        pos1.field = 1; /* Fraction field */
+        pos1.field = UNUM_FRACTION_FIELD;
         resultlengthneeded=unum_formatDouble(pattern, d, NULL, resultlength, &pos1, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
