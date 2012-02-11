@@ -665,6 +665,12 @@
 "abc"                       3z    "aa>abc  abcab"
 
 #
+# \ escaping
+#
+"abc\jkl"                         "<0>abcjkl</0>"    # escape of a non-special letter is just itself.
+"abc[ \j]kl"                      "<0>abcjkl</0>"
+
+#
 # Bug xxxx
 #
 "(?:\-|(\-?\d+\d\d\d))?(?:\-|\-(\d\d))?(?:\-|\-(\d\d))?(T)?(?:(\d\d):(\d\d):(\d\d)(\.\d+)?)?(?:(?:((?:\+|\-)\d\d):(\d\d))|(Z))?"   MG  "<0>-1234-21-31T41:51:61.789+71:81</0>"
