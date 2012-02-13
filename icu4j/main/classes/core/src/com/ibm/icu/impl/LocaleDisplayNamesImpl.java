@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,6 +22,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final DataTable regionData;
     private final Appender appender;
     private final MessageFormat format;
+    private final MessageFormat keyTypeFormat;
 
     private static final Cache cache = new Cache();
 
@@ -53,6 +54,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             pattern = "{0} ({1})";
         }
         this.format = new MessageFormat(pattern);
+        
+        String keyTypePattern = langData.get("localeDisplayPattern", "keyTypePattern");
+        if ("keyTypePattern".equals(keyTypePattern)) {
+            keyTypePattern = "{0}={1}";
+        }
+        this.keyTypeFormat = new MessageFormat(keyTypePattern);
     }
 
     @Override
@@ -158,9 +165,19 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             while (keys.hasNext()) {
                 String key = keys.next();
                 String value = locale.getKeywordValue(key);
-                appender.append(keyDisplayName(key), buf)
-                    .append("=")
-                    .append(keyValueDisplayName(key, value));
+                String keyDisplayName = keyDisplayName(key);
+                String valueDisplayName = keyValueDisplayName(key, value);
+                if (!valueDisplayName.equals(value)) {
+                    appender.append(valueDisplayName, buf);
+                } else if (!key.equals(keyDisplayName)) {
+                    String keyValue = keyTypeFormat.format(
+                        new String[] { keyDisplayName, valueDisplayName });
+                    appender.append(keyValue, buf);
+                } else {
+                    appender.append(keyDisplayName, buf)
+                        .append("=")
+                        .append(valueDisplayName);
+                }
             }
         }
 
@@ -192,7 +209,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     @Override
     public String scriptDisplayName(String script) {
         String str = langData.get("Scripts%stand-alone", script);
-        if ( str.equals(script) ) {
+        if (str.equals(script) ) {
             return langData.get("Scripts", script);
         } else {
             return str;
