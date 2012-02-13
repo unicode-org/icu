@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -4720,9 +4720,7 @@ public class DecimalFormat extends NumberFormat {
             roundingDoubleReciprocal = 0.0d;
         } else {
             roundingDouble = roundingIncrementICU.doubleValue();
-            setRoundingDoubleReciprocal(
-                BigDecimal.ONE.divide(roundingIncrementICU, BigDecimal.ROUND_HALF_EVEN)
-                    .doubleValue());
+            setRoundingDoubleReciprocal(1.0d / roundingDouble);
         }
     }
 
