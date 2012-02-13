@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -183,5 +183,15 @@ public class TestLocaleNamePackaging extends TestFmwk {
                ? "en (United Kingdom)"
                : "en (GB)");
         assertEquals("dialect 2", target, dn.localeDisplayName("en_GB"));
+    }
+    
+    public void testLocaleKeywords() {
+        LocaleDisplayNames dn = LocaleDisplayNames.getInstance(ULocale.US,
+                DialectHandling.DIALECT_NAMES);
+        String name = dn.localeDisplayName("de@collation=phonebook");
+        String target = LocaleDisplayNamesImpl.haveData(LANG) ? 
+                "German (Phonebook Sort Order)" : "de (collation=phonebook)";
+        assertEquals("collation", target, name);
+        
     }
 }
