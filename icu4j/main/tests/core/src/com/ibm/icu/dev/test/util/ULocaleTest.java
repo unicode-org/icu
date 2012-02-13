@@ -10,6 +10,8 @@
 */
 package com.ibm.icu.dev.test.util;
 
+import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.LANG;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -21,11 +23,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.LocaleDisplayNamesImpl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -1226,6 +1231,49 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
+    
+    public void TestDisplayWithKeyword() {
+        // Note, this test depends on locale display data for the U.S. and Taiwan.
+        // If the data changes (in particular, the keyTypePattern may change for Taiwan),
+        // this test will break.
+        LocaleDisplayNames dn = LocaleDisplayNames.getInstance(ULocale.US,
+                DialectHandling.DIALECT_NAMES);
+        LocaleDisplayNames tdn = LocaleDisplayNames.getInstance(ULocale.TAIWAN,
+                DialectHandling.DIALECT_NAMES);
+        String name = dn.localeDisplayName("de@collation=phonebook");
+        String target = "German (Phonebook Sort Order)";
+        assertEquals("collation", target, name);
+        
+        name = tdn.localeDisplayName("de@collation=phonebook");
+        target = "德文（電話簿排序）"; // \u5FB7\u6587\uFF08\u96FB\u8A71\u7C3F\u6392\u5E8F\uFF09
+        assertEquals("collation", target, name);
+
+        name = dn.localeDisplayName("de@currency=XYZ");
+        target = "German (Currency: XYZ)";
+        assertEquals("currency", target, name);
+        
+        name = tdn.localeDisplayName("de@currency=XYZ");
+        target = "德文（貨幣: XYZ）";  // \u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
+        assertEquals("currency", target, name);
+        
+        name = dn.localeDisplayName("de@foo=bar");
+        target = "German (foo=bar)";
+        assertEquals("foo", target, name);
+        
+        name = tdn.localeDisplayName("de@foo=bar");
+        target = "德文（foo=bar）"; // \u5FB7\u6587\uFF08foo=bar\uFF09
+        assertEquals("foo", target, name);
+        
+        ULocale locale = ULocale.forLanguageTag("de-x-foobar");
+        name = dn.localeDisplayName(locale);
+        target = "German (Private-Use: foobar)";
+        assertEquals("foobar", target, name);
+
+        name = tdn.localeDisplayName(locale);
+        target = "德文（私人使用: foobar）"; // \u5FB7\u6587\uFF08\u79C1\u4EBA\u4F7F\u7528: foobar\uFF09
+        assertEquals("foobar", target, name);
+}
+    
     private void initHashtable() {
         h[0] = new HashMap<String, String>();
         h[1] = new HashMap<String, String>();
