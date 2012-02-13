@@ -1736,6 +1736,50 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestRoundingPattern() {
+        class TestRoundingPatternItem {
+            String     pattern;
+            double     roundingIncrement;
+            double     testCase;
+            String     expected;
+            
+            TestRoundingPatternItem(String pattern, double roundingIncrement, double testCase, String expected) {
+                this.pattern = pattern;
+                this.roundingIncrement = roundingIncrement;
+                this.testCase = testCase;
+                this.expected = expected;
+            }
+        };
+        
+        TestRoundingPatternItem []tests = {
+                new TestRoundingPatternItem("##0.65", 0.65, 1.234, "1.30"),
+                new TestRoundingPatternItem("#50", 50.0, 1230, "1250")
+        };
+        
+        DecimalFormat df = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
+        String result;
+        BigDecimal bd;
+        for (int i = 0; i < tests.length; i++) {
+            df.applyPattern(tests[i].pattern);
+            
+            result = df.format(tests[i].testCase);
+            
+            if (!tests[i].expected.equals(result)) {
+                errln("String Pattern Rounding Test Failed: Pattern: \"" + tests[i].pattern + "\" Number: " + tests[i].testCase + " - Got: " + result + " Expected: " + tests[i].expected);
+            }
+            
+            bd = new BigDecimal(tests[i].roundingIncrement);
+            
+            df.setRoundingIncrement(bd);
+            
+            result = df.format(tests[i].testCase);
+            
+            if (!tests[i].expected.equals(result)) {
+                errln("BigDecimal Rounding Test Failed: Pattern: \"" + tests[i].pattern + "\" Number: " + tests[i].testCase + " - Got: " + result + " Expected: " + tests[i].expected);
+            }
+        }
+    }
 
     public void TestBigDecimalRounding() {
 	String figure = "50.000000004"; 
