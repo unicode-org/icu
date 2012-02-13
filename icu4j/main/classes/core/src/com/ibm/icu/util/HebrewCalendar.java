@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.util;
@@ -855,8 +855,7 @@ public class HebrewCalendar extends Calendar {
     }
 
     /**
-     * Return the current Calendar type.
-     * @return type of calendar
+     * {@inheritDoc}
      * @stable ICU 3.8
      */
     public String getType() {

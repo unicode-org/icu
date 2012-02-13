@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -256,7 +256,6 @@ public final class EthiopicCalendar extends CECalendar
 
     /**
      * {@inheritDoc}
-     * @return type of calendar
      * @stable ICU 3.8
      */
     public String getType() {
