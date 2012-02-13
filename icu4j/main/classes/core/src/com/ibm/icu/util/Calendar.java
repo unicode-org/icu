@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -5568,9 +5568,14 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * {@icu} Returns the current Calendar type.  Note, in 3.0 this function will return
-     * 'gregorian' in Calendar to emulate legacy behavior
-     * @return type of calendar (gregorian, etc)
+     * {@icu} Returns the calendar type name string for this Calendar object.
+     * The returned string is the legacy ICU calendar attribute value,
+     * for example, "gregorian" or "japanese".
+     *
+     * <p>See type="old type name" for the calendar attribute of locale IDs
+     * at http://www.unicode.org/reports/tr35/#Key_Type_Definitions
+     *
+     * @return legacy calendar type name string
      * @stable ICU 3.8
      */
     public String getType() {

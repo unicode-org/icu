@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2011, International Business Machines
+ * Copyright (C) 1996-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -884,8 +884,7 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * Return the current Calendar type.
-     * @return type of calendar
+     * {@inheritDoc}
      * @stable ICU 3.8
      */
     public String getType() {
