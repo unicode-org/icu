@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -4053,13 +4053,13 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
                     if (ch == sigDigit) {
                         ++sigDigitCount;
                     } else {
-                        ++zeroDigitCount;
                         if (ch != zeroDigit && roundingPos < 0) {
                             roundingPos = digitLeftCount + zeroDigitCount;
                         }
                         if (roundingPos >= 0) {
                             roundingInc.append((char)(ch - zeroDigit + '0'));
                         }
+                        ++zeroDigitCount;
                     }
                     if (groupingCount >= 0 && decimalPos < 0) {
                         ++groupingCount;
