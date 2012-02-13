@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -1195,12 +1195,36 @@ public:
     virtual UClassID getDynamicClassID(void) const = 0;
 
     /**
-     * Returns the resource key string used for this calendar type.
-     * For example, prepending "Eras_" to this string could return "Eras_japanese"
-     * or "Eras_gregorian".
+     * Returns the calendar type name string for this Calendar object.
+     * The returned string is the legacy ICU calendar attribute value,
+     * for example, "gregorian" or "japanese".
      *
-     * @returns static string, for example, "gregorian" or "japanese"
-     * @internal
+     * See type="old type name" for the calendar attribute of locale IDs
+     * at http://www.unicode.org/reports/tr35/#Key_Type_Definitions
+     *
+     * Sample code for getting the LDML/BCP 47 calendar key value:
+     * \code
+     * const char *calType = cal->getType();
+     * if (0 == strcmp(calType, "unknown")) {
+     *     // deal with unknown calendar type
+     * } else {
+     *     string localeID("root@calendar=");
+     *     localeID.append(calType);
+     *     char langTag[100];
+     *     UErrorCode errorCode = U_ZERO_ERROR;
+     *     int32_t length = uloc_toLanguageTag(localeID.c_str(), langTag, (int32_t)sizeof(langTag), TRUE, &errorCode);
+     *     if (U_FAILURE(errorCode)) {
+     *         // deal with errors & overflow
+     *     }
+     *     string lang(langTag, length);
+     *     size_t caPos = lang.find("-ca-");
+     *     lang.erase(0, caPos + 4);
+     *     // lang now contains the LDML calendar type
+     * }
+     * \endcode
+     *
+     * @return legacy calendar type name string
+     * @draft ICU 49
      */
     virtual const char * getType() const = 0;
 
