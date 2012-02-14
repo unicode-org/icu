@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -169,6 +169,7 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const cha
         CASE(59,Test4243108);
         CASE(60,TestJ691);
         CASE(61,Test8199);
+        CASE(62,Test9109);
 
         default: name = ""; break;
     }
@@ -2826,5 +2827,29 @@ void NumberFormatRegressionTest::Test8199(void) {
     delete nf;
 }
 
+void NumberFormatRegressionTest::Test9109(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Formattable val;
+    ParsePosition pos;
+    DecimalFormat fmt("+##", status);
+    fmt.setLenient(TRUE);
+
+    if (U_FAILURE(status)) {
+        errln("Failed to create DecimalFormat with pattern '+##'");
+    }
+
+    UnicodeString text("123");
+    int32_t expected = 123;
+    int32_t expos = 3;
+
+    fmt.parse(text, val, pos);
+    if (pos.getErrorIndex() >= 0) {
+        errln(UnicodeString("Parse failure at ") + pos.getErrorIndex());
+    } else if (val.getLong() != 123) {
+        errln(UnicodeString("Incorrect parse result: ") + val.getLong() + " expected: " + expected);
+    } else if (pos.getIndex() != 3) {
+        errln(UnicodeString("Incorrect parse position: ") + pos.getIndex() + " expected: " + expos);
+    }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

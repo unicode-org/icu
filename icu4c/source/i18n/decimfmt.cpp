@@ -1617,8 +1617,8 @@ void DecimalFormat::parse(const UnicodeString& text,
                           Formattable& result,
                           ParsePosition& parsePosition,
                           UBool parseCurrency) const {
-    int32_t backup;
-    int32_t i = backup = parsePosition.getIndex();
+    int32_t startIdx, backup;
+    int32_t i = startIdx = backup = parsePosition.getIndex();
 
     // clear any old contents in the result.  In particular, clears any DigitList
     //   that it may be holding.
@@ -1677,7 +1677,7 @@ void DecimalFormat::parse(const UnicodeString& text,
                       fPosPrefixPattern, fPosSuffixPattern,
                       FALSE, UCURR_SYMBOL_NAME,
                       parsePosition, *digits, status, currency)) {
-            parsePosition.setIndex(backup);
+            parsePosition.setIndex(startIdx);
             delete digits;
             return;
         }
@@ -1899,6 +1899,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     } else if (strictParse){
         parsePosition.setErrorIndex(position);
         return FALSE;
+    } else {
+        // Temporary set positive. This might be changed after checking suffix
+        parsedNum.append('+', err);
     }
 
     // Match padding before prefix
