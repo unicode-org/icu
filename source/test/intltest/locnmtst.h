@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2010, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 2010-2012, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ********************************************************************/
 
 #include "intltest.h"
@@ -29,5 +29,8 @@ public:
     void TestUldnWithKeywordsAndEverything(void);
     void TestUldnComponents(void);
     void TestRootEtc(void);
+    void TestKeywords(void);
+    void TestUntranslatedKeywords(void);
+    void TestPrivateUse(void);
 #endif
 };

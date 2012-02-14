@@ -1,6 +1,6 @@
 /*********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2010-2011, International Business Machines Corporation and
+ * Copyright (c) 2010-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************/
 
@@ -73,6 +73,9 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
 	TESTCASE(5, TestUldnWithKeywordsAndEverything);
 	TESTCASE(6, TestUldnComponents);
 	TESTCASE(7, TestRootEtc);
+        TESTCASE(8, TestKeywords);
+        TESTCASE(9, TestUntranslatedKeywords);
+        TESTCASE(10, TestPrivateUse);
 #endif
         default:
 	  name = "";
@@ -102,7 +105,37 @@ void LocaleDisplayNamesTest::TestWithKeywordsAndEverything() {
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
   const char *target = "English (Traditional, United States, VALLEY, "
-    "Calendar=Gregorian Calendar, Sort Order=Phonebook Sort Order)";
+    "Gregorian Calendar, Phonebook Sort Order)";
+  ldn->localeDisplayName(locname, temp);
+  delete ldn;
+  test_assert_equal(target, temp);
+}
+
+void LocaleDisplayNamesTest::TestKeywords() {
+  UnicodeString temp;
+  LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
+  const char *locname = "de@currency=XYZ";
+  const char *target = "German (Currency: XYZ)";
+  ldn->localeDisplayName(locname, temp);
+  delete ldn;
+  test_assert_equal(target, temp);
+}
+
+void LocaleDisplayNamesTest::TestUntranslatedKeywords() {
+  UnicodeString temp;
+  LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
+  const char *locname = "de@foo=bar";
+  const char *target = "German (foo=bar)";
+  ldn->localeDisplayName(locname, temp);
+  delete ldn;
+  test_assert_equal(target, temp);
+}
+
+void LocaleDisplayNamesTest::TestPrivateUse() {
+  UnicodeString temp;
+  LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
+  const char *locname = "de@x=foobar";
+  const char *target = "German (Private-Use: foobar)";
   ldn->localeDisplayName(locname, temp);
   delete ldn;
   test_assert_equal(target, temp);
@@ -149,7 +182,7 @@ void LocaleDisplayNamesTest::TestUldnWithKeywordsAndEverything() {
   UChar result[150];
   const char *locname = "en_Hant_US_VALLEY@calendar=gregorian;collation=phonebook";
   const char *target = "English (Traditional, United States, VALLEY, "
-    "Calendar=Gregorian Calendar, Sort Order=Phonebook Sort Order)";
+    "Gregorian Calendar, Phonebook Sort Order)";
   ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_STANDARD_NAMES, &status);
   int32_t len = uldn_localeDisplayName(ldn, locname, result, kMaxResultSize, &status);
   uldn_close(ldn);
@@ -224,7 +257,7 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "@collation=phonebook";
-  const char *target = "Root (Sort Order=Phonebook Sort Order)";
+  const char *target = "Root (Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   test_assert_equal(target, temp);
 
@@ -238,4 +271,3 @@ void LocaleDisplayNamesTest::TestRootEtc() {
 }
 
 #endif   /*  UCONFIG_NO_FORMATTING */
-
