@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2011, International Business Machines Corporation and
+* Copyright (C) 2010-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -272,6 +272,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
   ICUDataTable regionData;
   UnicodeString sep;
   MessageFormat *format;
+  MessageFormat *keyTypeFormat;
 
 public:
   // constructor
@@ -312,6 +313,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
   , langData(U_ICUDATA_LANG, locale)
   , regionData(U_ICUDATA_REGION, locale)
   , format(NULL)
+  , keyTypeFormat(NULL)
 {
   LocaleDisplayNamesImpl *nonConstThis = (LocaleDisplayNamesImpl *)this;
   nonConstThis->locale = langData.getLocale() == Locale::getRoot()
@@ -330,6 +332,13 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
   }
   UErrorCode status = U_ZERO_ERROR;
   format = new MessageFormat(pattern, status);
+
+  UnicodeString ktPattern;
+  langData.get("localeDisplayPattern", "keyTypePattern", ktPattern);
+  if (ktPattern.isBogus()) {
+    ktPattern = UnicodeString("{0}={1}");
+  }
+  keyTypeFormat = new MessageFormat(ktPattern, status);
 }
 
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
@@ -419,9 +428,25 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
     const char* key;
     while ((key = e->next((int32_t *)0, status)) != NULL) {
       locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
-      appendWithSep(resultRemainder, keyDisplayName(key, temp))
+      keyDisplayName(key, temp);
+      keyValueDisplayName(key, value, temp2);
+      if (temp2 != UnicodeString(value, -1, US_INV)) {
+        appendWithSep(resultRemainder, temp2);
+      } else if (temp != UnicodeString(key, -1, US_INV)) {
+        UnicodeString temp3;
+        Formattable data[] = {
+          temp,
+          temp2
+        };
+        FieldPosition fpos;
+        status = U_ZERO_ERROR;
+        keyTypeFormat->format(data, 2, temp3, fpos, status);
+        appendWithSep(resultRemainder, temp3);
+      } else {
+        appendWithSep(resultRemainder, temp)
           .append((UChar)0x3d /* = */)
-          .append(keyValueDisplayName(key, value, temp2));
+          .append(temp2);
+      }
     }
     delete e;
   }
