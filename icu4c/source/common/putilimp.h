@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -543,6 +543,7 @@ U_INTERNAL UVoidFunction* U_EXPORT2 uprv_dlsym_func( void *lib, const char *symb
  */
 /* U_INTERNAL void * U_EXPORT2 uprv_dlsym_data( void *lib, const char *symbolName, UErrorCode *status); */
 
+#endif
 
 /**
  * Define malloc and related functions
@@ -560,7 +561,5 @@ U_INTERNAL UVoidFunction* U_EXPORT2 uprv_dlsym_func( void *lib, const char *symb
 # define uprv_default_free(x) free(x)
 #endif
 
-
-#endif
 
 #endif
