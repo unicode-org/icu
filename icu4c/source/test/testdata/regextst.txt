@@ -234,6 +234,7 @@
 ".*?\b(.).*"                   "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>"
 "\ba\b"                        "-<0>a</0>"
 "\by\b"                        "xy"
+"[ \b]"                        "<0>b</0>"     # in a set, \b is a literal b.
 
 # Finds first chars of up to 5 words
 "(?:.*?\b(\w))?(?:.*?\b(\w))?(?:.*?\b(\w))?(?:.*?\b(\w))?(?:.*?\b(\w))?"   "<0><1>T</1>the <2>q</2>ick <3>b</3>rown <4>f</4></0>ox"
@@ -280,8 +281,6 @@
 "hel\Qlo, worl\Ed"             "<0>hello, world</0>"
 "\Q$*^^(*)?\A\E(a*)"           "<0>$*^^(*)?\\A<1>aaaaaaaaaaaaaaa</1></0>"
 "[abc\Q]\r\E]+"                "<0>aaaccc]]]\\\\\\</0>\r..."   # \Q ... \E escape in a [set]
-
-"[ \b]"                        "<0>b</0>"
 
 # \S and \s  space characters
 "\s+"                          "not_space<0> \t \r \n \u3000 \u2004 \u2028 \u2029</0>xyz"
