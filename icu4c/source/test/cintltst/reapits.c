@@ -215,7 +215,7 @@ static void TestRegexCAPI(void) {
     /* Open with all flag values set */
     status = U_ZERO_ERROR;
     re = uregex_open(pat, -1, 
-        UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE | UREGEX_UWORD,
+        UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE | UREGEX_UWORD | UREGEX_LITERAL,
         0, &status);
     TEST_ASSERT_SUCCESS(status);
     uregex_close(re);
