@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uregex.h
@@ -64,13 +64,12 @@ typedef enum URegexpFlag{
     
     /**  If set, treat the entire pattern as a literal string.  
       *  Metacharacters or escape sequences in the input sequence will be given 
-      *  no special meaning. Not implemented yet as of ICU 4.4.
+      *  no special meaning. 
       *
-      *  The flags CASE_INSENSITIVE and UNICODE_CASE retain their impact
+      *  The flag UREGEX_CASE_INSENSITIVE retains its impact
       *  on matching when used in conjunction with this flag.
       *  The other flags become superfluous.
-      *  TODO:  say which escapes are still handled; anything Java does
-      *         early (\\u) we should still do.
+      *
       * @stable ICU 4.0
       */
     UREGEX_LITERAL = 16,
