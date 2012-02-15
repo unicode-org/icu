@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -706,7 +706,7 @@ _getKeywords(const char *localeID,
                 pos++;
             } else {
                 i = (int32_t)uprv_strlen(equalSign);
-                while(equalSign[i-1] == ' ') {
+                while(i && equalSign[i-1] == ' ') {
                     i--;
                 }
                 keywordList[numKeywords].valueLen = i;
