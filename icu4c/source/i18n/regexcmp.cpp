@@ -106,7 +106,7 @@ void    RegexCompile::compile(
                          UParseError &pp,            // Error position info
                          UErrorCode &e)              // Error Code
 {
-	fRXPat->fPatternString = new UnicodeString(pat);
+    fRXPat->fPatternString = new UnicodeString(pat);
     UText patternText = UTEXT_INITIALIZER;
     utext_openConstUnicodeString(&patternText, fRXPat->fPatternString, &e);
     
@@ -147,6 +147,12 @@ void    RegexCompile::compile(
     fPatternLength = utext_nativeLength(pat);
     uint16_t                state = 1;
     const RegexTableEl      *tableEl;
+
+    // UREGEX_LITERAL force entire pattern to be treated as a literal string.
+    if (fModeFlags & UREGEX_LITERAL) {
+        fQuoteMode = TRUE;
+    }
+
     nextChar(fC);                        // Fetch the first char from the pattern string.
 
     //
@@ -3652,10 +3658,11 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
 
     if (fQuoteMode) {
         c.fQuoted = TRUE;
-        if ((c.fChar==chBackSlash && peekCharLL()==chE) || c.fChar == (UChar32)-1) {
+        if ((c.fChar==chBackSlash && peekCharLL()==chE && ((fModeFlags & UREGEX_LITERAL) == 0)) || 
+            c.fChar == (UChar32)-1) {
             fQuoteMode = FALSE;  //  Exit quote mode,
-            nextCharLL();       // discard the E
-            nextChar(c);        // recurse to get the real next char
+            nextCharLL();        // discard the E
+            nextChar(c);         // recurse to get the real next char
         }
     }
     else if (fInBackslashQuote) {

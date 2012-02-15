@@ -30,8 +30,6 @@ U_NAMESPACE_BEGIN
 //
 //--------------------------------------------------------------------------
 RegexPattern::RegexPattern() {
-    UErrorCode status = U_ZERO_ERROR;
-
     // Init all of this instances data.
     init();
 }
@@ -287,7 +285,7 @@ RegexPattern::compile(const UnicodeString &regex,
         return NULL;
     }
     
-    if ((flags & (UREGEX_CANON_EQ | UREGEX_LITERAL)) != 0) {
+    if ((flags & UREGEX_CANON_EQ) != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }
@@ -338,7 +336,7 @@ RegexPattern::compile(UText                *regex,
         return NULL;
     }
 
-    if ((flags & (UREGEX_CANON_EQ | UREGEX_LITERAL)) != 0) {
+    if ((flags & UREGEX_CANON_EQ) != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }

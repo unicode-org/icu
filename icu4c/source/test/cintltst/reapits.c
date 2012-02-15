@@ -228,7 +228,7 @@ static void TestRegexCAPI(void) {
 
     /* Open with an unimplemented flag */
     status = U_ZERO_ERROR;
-    re = uregex_open(pat, -1, UREGEX_LITERAL, 0, &status);
+    re = uregex_open(pat, -1, UREGEX_CANON_EQ, 0, &status);
     TEST_ASSERT(status == U_REGEX_UNIMPLEMENTED);
     uregex_close(re);
 
