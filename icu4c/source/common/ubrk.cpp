@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 */
@@ -166,6 +166,12 @@ ubrk_setText(UBreakIterator* bi,
              int32_t         textLength,
              UErrorCode*     status)
 {
+    if (bi == NULL) {
+        if (U_SUCCESS(*status)) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return;
+    }
     BreakIterator *brit = (BreakIterator *)bi;
     UText  ut = UTEXT_INITIALIZER;
     utext_openUChars(&ut, text, textLength, status);
@@ -181,6 +187,12 @@ ubrk_setUText(UBreakIterator *bi,
              UText          *text,
              UErrorCode     *status)
 {
+    if (bi == NULL) {
+        if (U_SUCCESS(*status)) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return;
+    }
     RuleBasedBreakIterator *brit = (RuleBasedBreakIterator *)bi;
     brit->RuleBasedBreakIterator::setText(text, *status);
 }
