@@ -23,6 +23,7 @@
 #                                   m      multi-line mode.  
 #                                            ($ and ^ match at embedded new-lines)
 #                                   D      Unix Lines mode (only recognize 0x0a as new-line)
+#                                   Q      UREGEX_LITERAL flag.  Entire pattern is literal string.
 #                                   v      If icu configured without break iteration, this
 #                                          regex test pattern should not compile.
 #                                   e      set the UREGEX_ERROR_ON_UNKNOWN_ESCAPES flag
@@ -281,6 +282,11 @@
 "hel\Qlo, worl\Ed"             "<0>hello, world</0>"
 "\Q$*^^(*)?\A\E(a*)"           "<0>$*^^(*)?\\A<1>aaaaaaaaaaaaaaa</1></0>"
 "[abc\Q]\r\E]+"                "<0>aaaccc]]]\\\\\\</0>\r..."   # \Q ... \E escape in a [set]
+
+# UREGEX_LITERAL - entire pattern is a literal string, no escapes recognized.
+#                  Note that data strings in test cases still get escape processing.
+"abc\an\r\E\\abcd\u0031bye"     Q  "lead<0>abc\\an\\r\\E\\\\abcd\\u0031bye</0>extra"
+"case insensitive \\ (l)iteral" Qi "stuff!! <0>cAsE InSenSiTiVE \\\\ (L)ITeral</0>"
 
 # \S and \s  space characters
 "\s+"                          "not_space<0> \t \r \n \u3000 \u2004 \u2028 \u2029</0>xyz"
