@@ -110,47 +110,75 @@ public class NumberingSystem {
      * @stable ICU 4.2
      */
     public static NumberingSystem getInstance(ULocale locale) {
-
-        NumberingSystem ns;
-        String defaultNumberingSystem;
         
+        final String[] OTHER_NS_KEYWORDS = { "native", "traditional", "finance" };
+ 
+        NumberingSystem ns;
+        Boolean nsResolved = true;
+
         // Check for @numbers
         String numbersKeyword = locale.getKeywordValue("numbers");
-        if (numbersKeyword != null) {
+        if (numbersKeyword != null ) {
+            for ( String keyword : OTHER_NS_KEYWORDS ) {
+                if ( numbersKeyword.equals(keyword)) {
+                    nsResolved = false;
+                    break;
+                }
+            }
+        } else {
+            numbersKeyword = "default";
+            nsResolved = false;
+        }
+
+        if (nsResolved) {
             ns = getInstanceByName(numbersKeyword);
             if ( ns != null ) {
                 return ns;
+            } else { // if @numbers keyword points to a bogus numbering system name, we return the default for the locale
+                numbersKeyword = "default";
+                nsResolved = false;
             }
         }
-
-        // Get the numbering system from the cache
+        
+        // Attempt to get the numbering system from the cache
         String baseName = locale.getBaseName();
-        ns = cachedLocaleData.get(baseName);
+        ns = cachedLocaleData.get(baseName+"@numbers="+numbersKeyword);
         if (ns != null ) {
             return ns;
         }
         
         // Cache miss, create new instance
-        try {
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
-            rb = rb.getWithFallback("NumberElements");
-            defaultNumberingSystem = rb.getStringWithFallback("default");
-        } catch (MissingResourceException ex) {
-            ns = new NumberingSystem();
-            cachedLocaleData.put(baseName, ns);
-            return ns;
+
+        String originalNumbersKeyword = numbersKeyword;
+        String resolvedNumberingSystem = null;
+        while (!nsResolved) {           
+            try {
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+                rb = rb.getWithFallback("NumberElements");
+                resolvedNumberingSystem = rb.getStringWithFallback(numbersKeyword);
+                nsResolved = true;
+            } catch (MissingResourceException ex) { // Fall back behavior as defined in TR35
+                 if (numbersKeyword.equals("native") || numbersKeyword.equals("finance")) {
+                     numbersKeyword = "default";
+                 } else if (numbersKeyword.equals("traditional")) {
+                     numbersKeyword = "native";
+                 } else {
+                     nsResolved = true;
+                 }
+            }  
         }
 
-        ns = getInstanceByName(defaultNumberingSystem);
-        if ( ns != null ) {
-           cachedLocaleData.put(baseName, ns);
-           return ns;
+        if (resolvedNumberingSystem != null) {
+            ns = getInstanceByName(resolvedNumberingSystem);
         }
-
-        ns = new NumberingSystem();
-        cachedLocaleData.put(baseName, ns);
-        return ns;        
         
+        if ( ns == null ) {
+            ns = new NumberingSystem();
+        }
+
+        cachedLocaleData.put(baseName+"@numbers="+originalNumbersKeyword, ns);
+        return ns;
+    
     }
 
     /**
