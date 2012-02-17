@@ -602,11 +602,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     private static final boolean DEBUG  =  ICUDebug.enabled("rbnf");
 
-    // Temporary workaround - when noParse is true, do noting in parse.
-    // TODO: We need a real fix - see #6895/#6896
-    private boolean noParse;
-    private static final String[] NO_SPELLOUT_PARSE_LANGUAGES = { "ga" };
-
     //-----------------------------------------------------------------------
     // constructors
     //-----------------------------------------------------------------------
@@ -791,17 +786,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         init(description, localizations);
 
-        //TODO: we need a real fix - see #6895 / #6896
-        noParse = false;
-        if (locnames[format-1].equals("SpelloutLocalizations")) {
-            String lang = locale.getLanguage();
-            for (int i = 0; i < NO_SPELLOUT_PARSE_LANGUAGES.length; i++) {
-                if (NO_SPELLOUT_PARSE_LANGUAGES[i].equals(lang)) {
-                    noParse = true;
-                    break;
-                }
-            }
-        }
     }
 
     private static final String[] rulenames = {
@@ -1195,12 +1179,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     public Number parse(String text, ParsePosition parsePosition) {
 
-        //TODO: We need a real fix.  See #6895 / #6896
-        if (noParse) {
-            // skip parsing
-            return Long.valueOf(0);
-        }
-
         // parsePosition tells us where to start parsing.  We copy the
         // text in the string from here to the end inro a new string,
         // and create a new ParsePosition and result variable to use
@@ -1219,7 +1197,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // one consumes the most characters: that's the one that determines
         // the result we return
         for (int i = ruleSets.length - 1; i >= 0; i--) {
-            // skip private rule sets
+            // skip private or unparseable rule sets
             if (!ruleSets[i].isPublic() || !ruleSets[i].isParseable()) {
                 continue;
             }
