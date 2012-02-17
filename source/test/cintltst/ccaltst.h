@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -64,6 +64,10 @@
      * Test weekend-related APIs
      */
     static void TestWeekend(void);
+    /**
+     * Test ambiguous wall time
+     */
+    static void TestAmbiguousWallTime(void);
 
 /*Internal functions used*/
     /**

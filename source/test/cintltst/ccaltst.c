@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2011, International Business Machines
+ * Copyright (c) 1997-2012, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -49,6 +49,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestGetKeywordValuesForLocale, "tsformat/ccaltst/TestGetKeywordValuesForLocale");
     addTest(root, &TestWeekend, "tsformat/ccaltst/TestWeekend");
     addTest(root, &TestFieldDifference, "tsformat/ccaltst/TestFieldDifference");
+    addTest(root, &TestAmbiguousWallTime, "tsformat/ccaltst/TestAmbiguousWallTime");
 }
 
 /* "GMT" */
@@ -1781,6 +1782,106 @@ void TestFieldDifference() {
             ucal_close(ucal);
         }
     }
+}
+
+void TestAmbiguousWallTime() {
+    UErrorCode status = U_ZERO_ERROR;
+    UChar tzID[32];
+    UCalendar* ucal;
+    UDate t, expected;
+
+    u_uastrcpy(tzID, "America/New_York");
+    ucal = ucal_open(tzID, -1, NULL, UCAL_DEFAULT, &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Failed to create a calendar");
+        return;
+    }
+
+    if (ucal_getAttribute(ucal, UCAL_REPEATED_WALL_TIME) != UCAL_WALLTIME_LAST) {
+        log_err("FAIL: Default UCAL_REPEATED_WALL_TIME value is not UCAL_WALLTIME_LAST");
+    }
+
+    if (ucal_getAttribute(ucal, UCAL_SKIPPED_WALL_TIME) != UCAL_WALLTIME_LAST) {
+        log_err("FAIL: Default UCAL_SKIPPED_WALL_TIME value is not UCAL_WALLTIME_LAST");
+    }
+
+    /* UCAL_WALLTIME_FIRST on US fall transition */
+    ucal_setAttribute(ucal, UCAL_REPEATED_WALL_TIME, UCAL_WALLTIME_FIRST);
+    ucal_clear(ucal);
+    ucal_setDateTime(ucal, 2011, 11-1, 6, 1, 30, 0, &status);
+    t = ucal_getMillis(ucal, &status);
+    expected = 1320557400000.0; /* 2011-11-06T05:30:00Z */
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Calculating time 2011-11-06 01:30:00 with UCAL_WALLTIME_FIRST - %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else if (t != expected) {
+        log_err("FAIL: 2011-11-06 01:30:00 with UCAL_WALLTIME_FIRST - got: %f, expected: %f\n", t, expected);
+    }
+
+    /* UCAL_WALLTIME_LAST on US fall transition */
+    ucal_setAttribute(ucal, UCAL_REPEATED_WALL_TIME, UCAL_WALLTIME_LAST);
+    ucal_clear(ucal);
+    ucal_setDateTime(ucal, 2011, 11-1, 6, 1, 30, 0, &status);
+    t = ucal_getMillis(ucal, &status);
+    expected = 1320561000000.0; /* 2011-11-06T06:30:00Z */
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Calculating time 2011-11-06 01:30:00 with UCAL_WALLTIME_LAST - %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else if (t != expected) {
+        log_err("FAIL: 2011-11-06 01:30:00 with UCAL_WALLTIME_LAST - got: %f, expected: %f\n", t, expected);
+    }
+
+    /* UCAL_WALLTIME_FIRST on US spring transition */
+    ucal_setAttribute(ucal, UCAL_SKIPPED_WALL_TIME, UCAL_WALLTIME_FIRST);
+    ucal_clear(ucal);
+    ucal_setDateTime(ucal, 2011, 3-1, 13, 2, 30, 0, &status);
+    t = ucal_getMillis(ucal, &status);
+    expected = 1299997800000.0; /* 2011-03-13T06:30:00Z */
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Calculating time 2011-03-13 02:30:00 with UCAL_WALLTIME_FIRST - %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else if (t != expected) {
+        log_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_FIRST - got: %f, expected: %f\n", t, expected);
+    }
+
+    /* UCAL_WALLTIME_LAST on US spring transition */
+    ucal_setAttribute(ucal, UCAL_SKIPPED_WALL_TIME, UCAL_WALLTIME_LAST);
+    ucal_clear(ucal);
+    ucal_setDateTime(ucal, 2011, 3-1, 13, 2, 30, 0, &status);
+    t = ucal_getMillis(ucal, &status);
+    expected = 1300001400000.0; /* 2011-03-13T07:30:00Z */
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Calculating time 2011-03-13 02:30:00 with UCAL_WALLTIME_LAST - %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else if (t != expected) {
+        log_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_LAST - got: %f, expected: %f\n", t, expected);
+    }
+
+    /* UCAL_WALLTIME_NEXT_VALID on US spring transition */
+    ucal_setAttribute(ucal, UCAL_SKIPPED_WALL_TIME, UCAL_WALLTIME_NEXT_VALID);
+    ucal_clear(ucal);
+    ucal_setDateTime(ucal, 2011, 3-1, 13, 2, 30, 0, &status);
+    t = ucal_getMillis(ucal, &status);
+    expected = 1299999600000.0; /* 2011-03-13T07:00:00Z */
+    if (U_FAILURE(status)) {
+        log_err("FAIL: Calculating time 2011-03-13 02:30:00 with UCAL_WALLTIME_NEXT_VALID - %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else if (t != expected) {
+        log_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_NEXT_VALID - got: %f, expected: %f\n", t, expected);
+    }
+
+    /* non-lenient on US spring transition */
+    ucal_setAttribute(ucal, UCAL_LENIENT, 0);
+    ucal_clear(ucal);
+    ucal_setDateTime(ucal, 2011, 3-1, 13, 2, 30, 0, &status);
+    t = ucal_getMillis(ucal, &status);
+    if (U_SUCCESS(status)) {
+        /* must return error */
+        log_err("FAIL: Non-lenient did not fail with 2011-03-13 02:30:00\n");
+        status = U_ZERO_ERROR;
+    }
+
+    ucal_close(ucal);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
