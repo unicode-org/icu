@@ -522,7 +522,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * The formatter's rule sets.
      */
     private transient NFRuleSet[] ruleSets = null;
-
+    
+    /**
+     * The formatter's rule sets' descriptions.
+     */
+    private transient String[] ruleSetDescriptions = null;
+    
     /**
      * A pointer to the formatter's default rule set.  This is always included
      * in ruleSets.
@@ -1384,7 +1389,17 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @draft ICU 49
      */
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
-        decimalFormatSymbols = (DecimalFormatSymbols) newSymbols.clone();
+        if (newSymbols != null) {
+            decimalFormatSymbols = (DecimalFormatSymbols) newSymbols.clone();
+            if (decimalFormat != null) {
+                decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
+            }
+            
+            // Apply the new decimalFormatSymbols by reparsing the rulesets
+            for (int i = 0; i < ruleSets.length; i++) {
+                ruleSets[i].parseRules(ruleSetDescriptions[i], this);
+            }
+        }
     }
 
     //-----------------------------------------------------------------------
@@ -1437,6 +1452,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
     DecimalFormat getDecimalFormat() {
         if (decimalFormat == null) {
             decimalFormat = (DecimalFormat)NumberFormat.getInstance(locale);
+            
+            if (decimalFormatSymbols != null) {
+                decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
+            }
         }
         return decimalFormat;
     }
@@ -1534,7 +1553,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // the rest of the descriptions and finish initializing everything
         // because we have to know the names and locations of all the rule
         // sets before we can actually set everything up
-        String[] ruleSetDescriptions = new String[numRuleSets];
+        ruleSetDescriptions = new String[numRuleSets];
 
         int curRuleSet = 0;
         int start = 0;
@@ -1583,11 +1602,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
 
         // finally, we can go back through the temporary descriptions
-        // list and finish seting up the substructure (and we throw
-        // away the temporary descriptions as we go)
+        // list and finish seting up the substructure
         for (int i = 0; i < ruleSets.length; i++) {
             ruleSets[i].parseRules(ruleSetDescriptions[i], this);
-            ruleSetDescriptions[i] = null;
         }
 
         // Now that the rules are initialized, the 'real' default rule
