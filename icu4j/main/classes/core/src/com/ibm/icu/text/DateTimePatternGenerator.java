@@ -1704,8 +1704,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     // - "field" is the field from the found pattern.
                     //
                     // The adjusted field should consist of characters from the originally requested
-                    // skeleton, except in the case of HOUR or MONTH or WEEKDAY, in which case it should
-                    // consist of characters from the found pattern.
+                    // skeleton, except in the case of HOUR or MONTH or WEEKDAY or YEAR, in which case it
+                    // should consist of characters from the found pattern.
                     //
                     // The length of the adjusted field (adjFieldLen) should match that in the originally
                     // requested skeleton, except that in the following cases the length of the adjusted field
@@ -1743,7 +1743,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             adjFieldLen = fieldBuilder.length();
                         }
                     }
-                    char c = (type != HOUR && type != MONTH && type != WEEKDAY)? reqField.charAt(0): fieldBuilder.charAt(0);
+                    char c = (type != HOUR && type != MONTH && type != WEEKDAY && type != YEAR)? reqField.charAt(0): fieldBuilder.charAt(0);
                     fieldBuilder = new StringBuilder();
                     for (int i = adjFieldLen; i > 0; --i) fieldBuilder.append(c);
                 }
