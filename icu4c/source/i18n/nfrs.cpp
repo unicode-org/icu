@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.cpp
@@ -113,12 +113,18 @@ static const UChar gPercentPercent[] =
     0x25, 0x25, 0
 }; /* "%%" */
 
+static const UChar gNoparse[] =
+{
+    0x40, 0x6E, 0x6F, 0x70, 0x61, 0x72, 0x73, 0x65, 0
+}; /* "@noparse" */
+
 NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& status)
   : name()
   , rules(0)
   , negativeNumberRule(NULL)
   , fIsFractionRuleSet(FALSE)
   , fIsPublic(FALSE)
+  , fIsParseable(TRUE)
   , fRecursionCount(0)
 {
     for (int i = 0; i < 3; ++i) {
@@ -162,6 +168,11 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
     }
 
     fIsPublic = name.indexOf(gPercentPercent, 2, 0) != 0;
+
+    if ( name.endsWith(gNoparse,8) ) {
+        fIsParseable = FALSE;
+        name.truncate(name.length()-8); // remove the @noparse from the name
+    }
 
     // all of the other members of NFRuleSet are initialized
     // by parseRules()

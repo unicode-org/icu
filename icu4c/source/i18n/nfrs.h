@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.h
@@ -41,13 +41,7 @@ class NFRuleSet : public UMemory {
 
   UBool isPublic() const { return fIsPublic; }
 
-  UBool isParseable() const { 
-      UnicodeString prefixpart = UNICODE_STRING_SIMPLE("-prefixpart");
-      UnicodeString postfix = UNICODE_STRING_SIMPLE("-postfix");
-      UnicodeString postfx = UNICODE_STRING_SIMPLE("-postfx");
-
-      return ( name.indexOf(prefixpart) == -1 && name.indexOf(postfix) == -1 && name.indexOf(postfx) == -1 );
-  }
+  UBool isParseable() const { return fIsParseable; }
 
   UBool isFractionRuleSet() const { return fIsFractionRuleSet; }
 
@@ -73,6 +67,7 @@ class NFRuleSet : public UMemory {
   NFRule *fractionRules[3];
   UBool fIsFractionRuleSet;
   UBool fIsPublic;
+  UBool fIsParseable;
   int32_t fRecursionCount;
 
   NFRuleSet(const NFRuleSet &other); // forbid copying of this class
