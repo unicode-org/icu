@@ -6567,7 +6567,8 @@ NumberFormatTest::Test9087(void)
     
     if ( u_strcmp(infstr, outputbuf)) {
         errln((UnicodeString)"FAIL: unexpected result for infinity - expected " + infstr + " got " + outputbuf);
-    };
+    }
 
+    unum_close(fmt);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
