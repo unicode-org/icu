@@ -48,6 +48,7 @@ class ICUServiceFactory;
  */
 typedef int32_t UFieldResolutionTable[12][8];
 
+class BasicTimeZone;
 /**
  * <code>Calendar</code> is an abstract base class for converting between
  * a <code>UDate</code> object and a set of integer fields such as
@@ -820,6 +821,74 @@ public:
      * @stable ICU 2.0
      */
     UBool isLenient(void) const;
+
+    /**
+     * Sets the behavior for handling wall time repeating multiple times
+     * at negative time zone offset transitions. For example, 1:30 AM on
+     * November 6, 2011 in US Eastern time (Ameirca/New_York) occurs twice;
+     * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>UCAL_WALLTIME_FIRST</code>
+     * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
+     * (first occurrence). When <code>UCAL_WALLTIME_LAST</code> is used, it will be
+     * interpreted as 1:30 AM EST (last occurrence). The default value is
+     * <code>UCAL_WALLTIME_LAST</code>.
+     * <p>
+     * <b>Note:</b>When <code>UCAL_WALLTIME_NEXT_VALID</code> is not a valid
+     * option for this. When the argument is neither <code>UCAL_WALLTIME_FIRST</code>
+     * nor <code>UCAL_WALLTIME_LAST</code>, this method has no effect and will keep
+     * the current setting.
+     * 
+     * @param option the behavior for handling repeating wall time, either
+     * <code>UCAL_WALLTIME_FIRST</code> or <code>UCAL_WALLTIME_LAST</code>.
+     * @see #getRepeatedWallTimeOption
+     * @draft ICU 49
+     */
+    void setRepeatedWallTimeOption(UCalendarWallTimeOption option);
+
+    /**
+     * Gets the behavior for handling wall time repeating multiple times
+     * at negative time zone offset transitions.
+     * 
+     * @return the behavior for handling repeating wall time, either
+     * <code>UCAL_WALLTIME_FIRST</code> or <code>UCAL_WALLTIME_LAST</code>.
+     * @see #setRepeatedWallTimeOption
+     * @draft ICU 49
+     */
+    UCalendarWallTimeOption getRepeatedWallTimeOption(void) const;
+
+    /**
+     * Sets the behavior for handling skipped wall time at positive time zone offset
+     * transitions. For example, 2:30 AM on March 13, 2011 in US Eastern time (America/New_York)
+     * does not exist because the wall time jump from 1:59 AM EST to 3:00 AM EDT. When
+     * <code>UCAL_WALLTIME_FIRST</code> is used, 2:30 AM is interpreted as 30 minutes before 3:00 AM
+     * EDT, therefore, it will be resolved as 1:30 AM EST. When <code>UCAL_WALLTIME_LAST</code>
+     * is used, 2:30 AM is interpreted as 31 minutes after 1:59 AM EST, therefore, it will be
+     * resolved as 3:30 AM EDT. When <code>UCAL_WALLTIME_NEXT_VALID</code> is used, 2:30 AM will
+     * be resolved as next valid wall time, that is 3:00 AM EDT. The default value is
+     * <code>UCAL_WALLTIME_LAST</code>.
+     * <p>
+     * <b>Note:</b>This option is effective only when this calendar is lenient.
+     * When the calendar is strict, such non-existing wall time will cause an error.
+     * 
+     * @param option the behavior for handling skipped wall time at positive time zone
+     * offset transitions, one of <code>UCAL_WALLTIME_FIRST</code>, <code>UCAL_WALLTIME_LAST</code> and
+     * <code>UCAL_WALLTIME_NEXT_VALID</code>.
+     * @see #getSkippedWallTimeOption
+     * 
+     * @draft ICU 49
+     */
+    void setSkippedWallTimeOption(UCalendarWallTimeOption option);
+
+    /**
+     * Gets the behavior for handling skipped wall time at positive time zone offset
+     * transitions.
+     * 
+     * @return the behavior for handling skipped wall time, one of
+     * <code>UCAL_WALLTIME_FIRST</code>, <code>UCAL_WALLTIME_LAST</code>
+     * and <code>UCAL_WALLTIME_NEXT_VALID</code>.
+     * @see #setSkippedWallTimeOption
+     * @draft ICU 49
+     */
+    UCalendarWallTimeOption getSkippedWallTimeOption(void) const;
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -2011,6 +2080,18 @@ private:
     TimeZone*   fZone;
 
     /**
+     * Option for rpeated wall time
+     * @see #setRepeatedWallTimeOption
+     */
+    UCalendarWallTimeOption fRepeatedWallTime;
+
+    /**
+     * Option for skipped wall time
+     * @see #setSkippedWallTimeOption
+     */
+    UCalendarWallTimeOption fSkippedWallTime;
+
+    /**
      * Both firstDayOfWeek and minimalDaysInFirstWeek are locale-dependent. They are
      * used to figure out the week count for a specific date for a given locale. These
      * must be set when a Calendar is constructed. For example, in US locale,
@@ -2261,6 +2342,13 @@ private:
      */
     const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
 #endif  /* U_HIDE_INTERNAL_API */
+
+private:
+    /**
+     * Cast TimeZone used by this object to BasicTimeZone, or NULL if the TimeZone
+     * is not an instance of BasicTimeZone.
+     */
+    BasicTimeZone* getBasicTimeZone() const;
 };
 
 // -------------------------------------

@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -242,6 +242,27 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("TestISO8601---"); logln("");
             TestISO8601();
+          }
+          break;
+        case 27:
+          name = "TestAmbiguousWallTimeAPIs";
+          if(exec) {
+            logln("TestAmbiguousWallTimeAPIs---"); logln("");
+            TestAmbiguousWallTimeAPIs();
+          }
+          break;
+        case 28:
+          name = "TestRepeatedWallTime";
+          if(exec) {
+            logln("TestRepeatedWallTime---"); logln("");
+            TestRepeatedWallTime();
+          }
+          break;
+        case 29:
+          name = "TestSkippedWallTime";
+          if(exec) {
+            logln("TestSkippedWallTime---"); logln("");
+            TestSkippedWallTime();
           }
           break;
         default: name = ""; break;
@@ -2255,6 +2276,377 @@ void CalendarTest::TestISO8601() {
         delete cal;
     }
 
+}
+
+void
+CalendarTest::TestAmbiguousWallTimeAPIs(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar* cal = Calendar::createInstance(status);
+    if (U_FAILURE(status)) {
+        errln("Fail: Error creating a calendar instance.");
+        return;
+    }
+
+    if (cal->getRepeatedWallTimeOption() != UCAL_WALLTIME_LAST) {
+        errln("Fail: Default repeted time option is not UCAL_WALLTIME_LAST");
+    }
+    if (cal->getSkippedWallTimeOption() != UCAL_WALLTIME_LAST) {
+        errln("Fail: Default skipped time option is not UCAL_WALLTIME_LAST");
+    }
+
+    Calendar* cal2 = cal->clone();
+
+    if (*cal != *cal2) {
+        errln("Fail: Cloned calendar != the original");
+    }
+    if (!cal->equals(*cal2, status)) {
+        errln("Fail: The time of cloned calendar is not equal to the original");
+    } else if (U_FAILURE(status)) {
+        errln("Fail: Error equals");
+    }
+    status = U_ZERO_ERROR;
+
+    cal2->setRepeatedWallTimeOption(UCAL_WALLTIME_FIRST);
+    cal2->setSkippedWallTimeOption(UCAL_WALLTIME_FIRST);
+
+    if (*cal == *cal2) {
+        errln("Fail: Cloned and modified calendar == the original");
+    }
+    if (!cal->equals(*cal2, status)) {
+        errln("Fail: The time of cloned calendar is not equal to the original after changing wall time options");
+    } else if (U_FAILURE(status)) {
+        errln("Fail: Error equals after changing wall time options");
+    }
+    status = U_ZERO_ERROR;
+
+    if (cal2->getRepeatedWallTimeOption() != UCAL_WALLTIME_FIRST) {
+        errln("Fail: Repeted time option is not UCAL_WALLTIME_FIRST");
+    }
+    if (cal2->getSkippedWallTimeOption() != UCAL_WALLTIME_FIRST) {
+        errln("Fail: Skipped time option is not UCAL_WALLTIME_FIRST");
+    }
+
+    cal2->setRepeatedWallTimeOption(UCAL_WALLTIME_NEXT_VALID);
+    if (cal2->getRepeatedWallTimeOption() != UCAL_WALLTIME_FIRST) {
+        errln("Fail: Repeated wall time option was updated other than UCAL_WALLTIME_FIRST");
+    }
+
+    delete cal;
+    delete cal2;
+}
+
+class CalFields {
+public:
+    CalFields(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t min, int32_t sec);
+    CalFields(const Calendar& cal, UErrorCode& status);
+    void setTo(Calendar& cal) const;
+    char* toString(char* buf, int32_t len) const;
+    UBool operator==(const CalFields& rhs) const;
+    UBool operator!=(const CalFields& rhs) const;
+
+private:
+    int32_t year;
+    int32_t month;
+    int32_t day;
+    int32_t hour;
+    int32_t min;
+    int32_t sec;
+};
+
+CalFields::CalFields(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t min, int32_t sec)
+    : year(year), month(month), day(day), hour(hour), min(min), sec(sec) {
+}
+
+CalFields::CalFields(const Calendar& cal, UErrorCode& status) {
+    year = cal.get(UCAL_YEAR, status);
+    month = cal.get(UCAL_MONTH, status) + 1;
+    day = cal.get(UCAL_DAY_OF_MONTH, status);
+    hour = cal.get(UCAL_HOUR_OF_DAY, status);
+    min = cal.get(UCAL_MINUTE, status);
+    sec = cal.get(UCAL_SECOND, status);
+}
+
+void
+CalFields::setTo(Calendar& cal) const {
+    cal.clear();
+    cal.set(year, month - 1, day, hour, min, sec);
+}
+
+char*
+CalFields::toString(char* buf, int32_t len) const {
+    char local[32];
+    sprintf(local, "%04d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, min, sec);
+    uprv_strncpy(buf, local, len - 1);
+    buf[len - 1] = 0;
+    return buf;
+}
+
+UBool
+CalFields::operator==(const CalFields& rhs) const {
+    return year == rhs.year
+        && month == rhs.month
+        && day == rhs.day
+        && hour == rhs.hour
+        && min == rhs.min
+        && sec == rhs.sec;
+}
+
+UBool
+CalFields::operator!=(const CalFields& rhs) const {
+    return !(*this == rhs);
+}
+
+typedef struct {
+    const char*     tzid;
+    const CalFields in;
+    const CalFields expLastGMT;
+    const CalFields expFirstGMT;
+} RepeatedWallTimeTestData;
+
+static const RepeatedWallTimeTestData RPDATA[] =
+{
+    // Time zone            Input wall time                 WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT
+    {"America/New_York",    CalFields(2011,11,6,0,59,59),   CalFields(2011,11,6,4,59,59),   CalFields(2011,11,6,4,59,59)},
+    {"America/New_York",    CalFields(2011,11,6,1,0,0),     CalFields(2011,11,6,6,0,0),     CalFields(2011,11,6,5,0,0)},
+    {"America/New_York",    CalFields(2011,11,6,1,0,1),     CalFields(2011,11,6,6,0,1),     CalFields(2011,11,6,5,0,1)},
+    {"America/New_York",    CalFields(2011,11,6,1,30,0),    CalFields(2011,11,6,6,30,0),    CalFields(2011,11,6,5,30,0)},
+    {"America/New_York",    CalFields(2011,11,6,1,59,59),   CalFields(2011,11,6,6,59,59),   CalFields(2011,11,6,5,59,59)},
+    {"America/New_York",    CalFields(2011,11,6,2,0,0),     CalFields(2011,11,6,7,0,0),     CalFields(2011,11,6,7,0,0)},
+    {"America/New_York",    CalFields(2011,11,6,2,0,1),     CalFields(2011,11,6,7,0,1),     CalFields(2011,11,6,7,0,1)},
+
+    {"Australia/Lord_Howe", CalFields(2011,4,3,1,29,59),    CalFields(2011,4,2,14,29,59),   CalFields(2011,4,2,14,29,59)},
+    {"Australia/Lord_Howe", CalFields(2011,4,3,1,30,0),     CalFields(2011,4,2,15,0,0),     CalFields(2011,4,2,14,30,0)},
+    {"Australia/Lord_Howe", CalFields(2011,4,3,1,45,0),     CalFields(2011,4,2,15,15,0),    CalFields(2011,4,2,14,45,0)},
+    {"Australia/Lord_Howe", CalFields(2011,4,3,1,59,59),    CalFields(2011,4,2,15,29,59),   CalFields(2011,4,2,14,59,59)},
+    {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,0),      CalFields(2011,4,2,15,30,0),    CalFields(2011,4,2,15,30,0)},
+    {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,1),      CalFields(2011,4,2,15,30,1),    CalFields(2011,4,2,15,30,1)},
+
+    {NULL,                  CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),          CalFields(0,0,0,0,0,0)}
+};
+
+void CalendarTest::TestRepeatedWallTime(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar calGMT((const TimeZone&)*TimeZone::getGMT(), status);
+    GregorianCalendar calDefault(status);
+    GregorianCalendar calLast(status);
+    GregorianCalendar calFirst(status);
+
+    if (U_FAILURE(status)) {
+        errln("Fail: Failed to create a calendar object.");
+        return;
+    }
+
+    calLast.setRepeatedWallTimeOption(UCAL_WALLTIME_LAST);
+    calFirst.setRepeatedWallTimeOption(UCAL_WALLTIME_FIRST);
+
+    for (int32_t i = 0; RPDATA[i].tzid != NULL; i++) {
+        char buf[32];
+        TimeZone *tz = TimeZone::createTimeZone(RPDATA[i].tzid);
+
+        // UCAL_WALLTIME_LAST
+        status = U_ZERO_ERROR;
+        calLast.setTimeZone(*tz);
+        RPDATA[i].in.setTo(calLast);
+        calGMT.setTime(calLast.getTime(status), status);
+        CalFields outLastGMT(calGMT, status);
+        if (U_FAILURE(status)) {
+            errln(UnicodeString("Fail: Failed to get/set time calLast/calGMT (UCAL_WALLTIME_LAST) - ")
+                + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "]");
+        } else {
+            if (outLastGMT != RPDATA[i].expLastGMT) {
+                errln(UnicodeString("Fail: UCAL_WALLTIME_LAST ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
+                    + outLastGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + RPDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
+            }
+        }
+
+        // default
+        status = U_ZERO_ERROR;
+        calDefault.setTimeZone(*tz);
+        RPDATA[i].in.setTo(calDefault);
+        calGMT.setTime(calDefault.getTime(status), status);
+        CalFields outDefGMT(calGMT, status);
+        if (U_FAILURE(status)) {
+            errln(UnicodeString("Fail: Failed to get/set time calLast/calGMT (default) - ")
+                + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "]");
+        } else {
+            if (outDefGMT != RPDATA[i].expLastGMT) {
+                errln(UnicodeString("Fail: (default) ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
+                    + outDefGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + RPDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
+            }
+        }
+
+        // UCAL_WALLTIME_FIRST
+        status = U_ZERO_ERROR;
+        calFirst.setTimeZone(*tz);
+        RPDATA[i].in.setTo(calFirst);
+        calGMT.setTime(calFirst.getTime(status), status);
+        CalFields outFirstGMT(calGMT, status);
+        if (U_FAILURE(status)) {
+            errln(UnicodeString("Fail: Failed to get/set time calLast/calGMT (UCAL_WALLTIME_FIRST) - ")
+                + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "]");
+        } else {
+            if (outFirstGMT != RPDATA[i].expFirstGMT) {
+                errln(UnicodeString("Fail: UCAL_WALLTIME_FIRST ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
+                    + outFirstGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + RPDATA[i].expFirstGMT.toString(buf, sizeof(buf)) + "[GMT]");
+            }
+        }
+        delete tz;
+    }
+}
+
+typedef struct {
+    const char*     tzid;
+    const CalFields in;
+    UBool           isValid;
+    const CalFields expLastGMT;
+    const CalFields expFirstGMT;
+    const CalFields expNextAvailGMT;
+} SkippedWallTimeTestData;
+
+static SkippedWallTimeTestData SKDATA[] =
+{
+     // Time zone           Input wall time                 valid?  WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT           WALLTIME_NEXT_VALID in GMT
+    {"America/New_York",    CalFields(2011,3,13,1,59,59),   TRUE,   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59)},
+    {"America/New_York",    CalFields(2011,3,13,2,0,0),     FALSE,  CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,6,0,0),     CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,2,1,0),     FALSE,  CalFields(2011,3,13,7,1,0),     CalFields(2011,3,13,6,1,0),     CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,2,30,0),    FALSE,  CalFields(2011,3,13,7,30,0),    CalFields(2011,3,13,6,30,0),    CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,2,59,59),   FALSE,  CalFields(2011,3,13,7,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,3,0,0),     TRUE,   CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0)},
+
+    {"Pacific/Apia",        CalFields(2011,12,29,23,59,59), TRUE,   CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59)},
+    {"Pacific/Apia",        CalFields(2011,12,30,0,0,0),    FALSE,  CalFields(2011,12,30,10,0,0),   CalFields(2011,12,29,10,0,0),   CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,30,12,0,0),   FALSE,  CalFields(2011,12,30,22,0,0),   CalFields(2011,12,29,22,0,0),   CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,30,23,59,59), FALSE,  CalFields(2011,12,31,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,31,0,0,0),    TRUE,   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0)},
+
+    {NULL,                  CalFields(0,0,0,0,0,0),         TRUE,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
+};
+
+
+void CalendarTest::TestSkippedWallTime(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar calGMT((const TimeZone&)*TimeZone::getGMT(), status);
+    GregorianCalendar calDefault(status);
+    GregorianCalendar calLast(status);
+    GregorianCalendar calFirst(status);
+    GregorianCalendar calNextAvail(status);
+
+    if (U_FAILURE(status)) {
+        errln("Fail: Failed to create a calendar object.");
+        return;
+    }
+
+    calLast.setSkippedWallTimeOption(UCAL_WALLTIME_LAST);
+    calFirst.setSkippedWallTimeOption(UCAL_WALLTIME_FIRST);
+    calNextAvail.setSkippedWallTimeOption(UCAL_WALLTIME_NEXT_VALID);
+
+    for (int32_t i = 0; SKDATA[i].tzid != NULL; i++) {
+        UDate d;
+        char buf[32];
+        TimeZone *tz = TimeZone::createTimeZone(SKDATA[i].tzid);
+
+        for (int32_t j = 0; j < 2; j++) {
+            UBool bLenient = (j == 0);
+
+            // UCAL_WALLTIME_LAST
+            status = U_ZERO_ERROR;
+            calLast.setLenient(bLenient);
+            calLast.setTimeZone(*tz);
+            SKDATA[i].in.setTo(calLast);
+            d = calLast.getTime(status);
+            if (bLenient || SKDATA[i].isValid) {
+                calGMT.setTime(d, status);
+                CalFields outLastGMT(calGMT, status);
+                if (U_FAILURE(status)) {
+                    errln(UnicodeString("Fail: Failed to get/set time calLast/calGMT (UCAL_WALLTIME_LAST) - ")
+                        + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+                } else {
+                    if (outLastGMT != SKDATA[i].expLastGMT) {
+                        errln(UnicodeString("Fail: UCAL_WALLTIME_LAST ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                            + outLastGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
+                    }
+                }
+            } else if (U_SUCCESS(status)) {
+                // strict, invalid wall time - must report an error
+                errln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_LAST)") +
+                    + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+            }
+
+            // default
+            status = U_ZERO_ERROR;
+            calDefault.setLenient(bLenient);
+            calDefault.setTimeZone(*tz);
+            SKDATA[i].in.setTo(calDefault);
+            d = calDefault.getTime(status);
+            if (bLenient || SKDATA[i].isValid) {
+                calGMT.setTime(d, status);
+                CalFields outDefGMT(calGMT, status);
+                if (U_FAILURE(status)) {
+                    errln(UnicodeString("Fail: Failed to get/set time calDefault/calGMT (default) - ")
+                        + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+                } else {
+                    if (outDefGMT != SKDATA[i].expLastGMT) {
+                        errln(UnicodeString("Fail: (default) ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                            + outDefGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
+                    }
+                }
+            } else if (U_SUCCESS(status)) {
+                // strict, invalid wall time - must report an error
+                errln(UnicodeString("Fail: An error expected (default)") +
+                    + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+            }
+
+            // UCAL_WALLTIME_FIRST
+            status = U_ZERO_ERROR;
+            calFirst.setLenient(bLenient);
+            calFirst.setTimeZone(*tz);
+            SKDATA[i].in.setTo(calFirst);
+            d = calFirst.getTime(status);
+            if (bLenient || SKDATA[i].isValid) {
+                calGMT.setTime(d, status);
+                CalFields outFirstGMT(calGMT, status);
+                if (U_FAILURE(status)) {
+                    errln(UnicodeString("Fail: Failed to get/set time calFirst/calGMT (UCAL_WALLTIME_FIRST) - ")
+                        + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+                } else {
+                    if (outFirstGMT != SKDATA[i].expFirstGMT) {
+                        errln(UnicodeString("Fail: UCAL_WALLTIME_FIRST ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                            + outFirstGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expFirstGMT.toString(buf, sizeof(buf)) + "[GMT]");
+                    }
+                }
+            } else if (U_SUCCESS(status)) {
+                // strict, invalid wall time - must report an error
+                errln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_FIRST)") +
+                    + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+            }
+
+            // UCAL_WALLTIME_NEXT_VALID
+            status = U_ZERO_ERROR;
+            calNextAvail.setLenient(bLenient);
+            calNextAvail.setTimeZone(*tz);
+            SKDATA[i].in.setTo(calNextAvail);
+            d = calNextAvail.getTime(status);
+            if (bLenient || SKDATA[i].isValid) {
+                calGMT.setTime(d, status);
+                CalFields outNextAvailGMT(calGMT, status);
+                if (U_FAILURE(status)) {
+                    errln(UnicodeString("Fail: Failed to get/set time calNextAvail/calGMT (UCAL_WALLTIME_NEXT_VALID) - ")
+                        + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+                } else {
+                    if (outNextAvailGMT != SKDATA[i].expNextAvailGMT) {
+                        errln(UnicodeString("Fail: UCAL_WALLTIME_NEXT_VALID ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                            + outNextAvailGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expNextAvailGMT.toString(buf, sizeof(buf)) + "[GMT]");
+                    }
+                }
+            } else if (U_SUCCESS(status)) {
+                // strict, invalid wall time - must report an error
+                errln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_NEXT_VALID)") +
+                    + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
+            }
+        }
+
+        delete tz;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

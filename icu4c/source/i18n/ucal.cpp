@@ -308,6 +308,12 @@ ucal_getAttribute(    const    UCalendar*              cal,
   case UCAL_MINIMAL_DAYS_IN_FIRST_WEEK:
       return ((Calendar*)cal)->getMinimalDaysInFirstWeek();
 
+  case UCAL_REPEATED_WALL_TIME:
+      return ((Calendar*)cal)->getRepeatedWallTimeOption();
+
+  case UCAL_SKIPPED_WALL_TIME:
+      return ((Calendar*)cal)->getSkippedWallTimeOption();
+
   default:
       break;
     }
@@ -331,6 +337,14 @@ ucal_setAttribute(      UCalendar*              cal,
 
   case UCAL_MINIMAL_DAYS_IN_FIRST_WEEK:
       ((Calendar*)cal)->setMinimalDaysInFirstWeek((uint8_t)newValue);
+      break;
+
+  case UCAL_REPEATED_WALL_TIME:
+      ((Calendar*)cal)->setRepeatedWallTimeOption((UCalendarWallTimeOption)newValue);
+      break;
+
+  case UCAL_SKIPPED_WALL_TIME:
+      ((Calendar*)cal)->setSkippedWallTimeOption((UCalendarWallTimeOption)newValue);
       break;
     }
 }
