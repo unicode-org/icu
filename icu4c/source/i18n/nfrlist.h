@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrlist.h
@@ -81,6 +81,19 @@ public:
         fCount = 0;
         fCapacity = 0;
         return result;
+    }
+    void deleteAll() {
+        NFRule** tmp = NULL;
+        int32_t size = fCount;
+        if (size > 0) {
+            tmp = release();
+            for (int32_t i = 0; i < size; i++) {
+                delete tmp[i];
+            }
+            if (tmp) {
+                uprv_free(tmp);
+            }
+        }
     }
 
 private:
