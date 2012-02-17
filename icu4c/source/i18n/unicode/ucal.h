@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -851,16 +851,67 @@ ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode);
  * @stable ICU 2.0
  */
 enum UCalendarAttribute {
-    /** Lenient parsing */
+  /**
+   * Lenient parsing
+   * @stable ICU 2.0
+   */
   UCAL_LENIENT,
-  /** First day of week */
+  /**
+   * First day of week
+   * @stable ICU 2.0
+   */
   UCAL_FIRST_DAY_OF_WEEK,
-  /** Minimum number of days in first week */
-  UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
+  /**
+   * Minimum number of days in first week
+   * @stable ICU 2.0
+   */
+  UCAL_MINIMAL_DAYS_IN_FIRST_WEEK,
+  /**
+   * The behavior for handling wall time repeating multiple times
+   * at negative time zone offset transitions
+   * @draft ICU 49
+   */
+  UCAL_REPEATED_WALL_TIME,
+  /**
+   * The behavior for handling skipped wall time at positive time
+   * zone offset transitions.
+   * @draft ICU 49
+   */
+  UCAL_SKIPPED_WALL_TIME
 };
 
 /** @stable ICU 2.0 */
 typedef enum UCalendarAttribute UCalendarAttribute;
+
+/**
+ * Options for handling ambiguous wall time at time zone
+ * offset transitions.
+ * @draft ICU 49
+ */
+enum UCalendarWallTimeOption {
+    /**
+     * An ambiguous wall time to be interpreted as the latest.
+     * This option is valid for UCAL_REPEATED_WALL_TIME and
+     * UCAL_SKIPPED_WALL_TIME.
+     * @draft ICU 49
+     */
+    UCAL_WALLTIME_LAST,
+    /**
+     * An ambiguous wall time to be interpreted as the earliest.
+     * This option is valid for UCAL_REPEATED_WALL_TIME and
+     * UCAL_SKIPPED_WALL_TIME.
+     * @draft ICU 49
+     */
+    UCAL_WALLTIME_FIRST,
+    /**
+     * An ambiguous wall time to be interpreted as the next valid
+     * wall time. This option is valid for UCAL_SKIPPED_WALL_TIME.
+     * @draft ICU 49
+     */
+    UCAL_WALLTIME_NEXT_VALID
+};
+/** @draft ICU 49 */
+typedef enum UCalendarWallTimeOption UCalendarWallTimeOption;
 
 /**
  * Get a numeric attribute associated with a UCalendar.
@@ -868,7 +919,7 @@ typedef enum UCalendarAttribute UCalendarAttribute;
  * of days in the first week of the month.
  * @param cal The UCalendar to query.
  * @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
- * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
+ * UCAL_MINIMAL_DAYS_IN_FIRST_WEEK, UCAL_REPEATED_WALL_TIME or UCAL_SKIPPED_WALL_TIME
  * @return The value of attr.
  * @see ucal_setAttribute
  * @stable ICU 2.0
@@ -883,7 +934,7 @@ ucal_getAttribute(const UCalendar*    cal,
  * of days in the first week of the month.
  * @param cal The UCalendar to set.
  * @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
- * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
+ * UCAL_MINIMAL_DAYS_IN_FIRST_WEEK, UCAL_REPEATED_WALL_TIME or UCAL_SKIPPED_WALL_TIME
  * @param newValue The new value of attr.
  * @see ucal_getAttribute
  * @stable ICU 2.0

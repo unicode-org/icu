@@ -31,6 +31,10 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/gregocal.h"
+#include "unicode/basictz.h"
+#include "unicode/simpletz.h"
+#include "unicode/rbtz.h"
+#include "unicode/vtzone.h"
 #include "gregoimp.h"
 #include "buddhcal.h"
 #include "taiwncal.h"
@@ -51,6 +55,7 @@
 #include "uresimp.h"
 #include "ustrenum.h"
 #include "uassert.h"
+#include "olsontz.h"
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = NULL;
@@ -665,7 +670,9 @@ fAreFieldsVirtuallySet(FALSE),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(TRUE),
-fZone(0)
+fZone(0),
+fRepeatedWallTime(UCAL_WALLTIME_LAST),
+fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
     clear();
     fZone = TimeZone::createDefault();
@@ -686,7 +693,9 @@ fAreFieldsVirtuallySet(FALSE),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(TRUE),
-fZone(0)
+fZone(0),
+fRepeatedWallTime(UCAL_WALLTIME_LAST),
+fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
     if(zone == 0) {
 #if defined (U_DEBUG_CAL)
@@ -714,7 +723,9 @@ fAreFieldsVirtuallySet(FALSE),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(TRUE),
-fZone(0)
+fZone(0),
+fRepeatedWallTime(UCAL_WALLTIME_LAST),
+fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
     clear();
     fZone = zone.clone();
@@ -755,6 +766,8 @@ Calendar::operator=(const Calendar &right)
         fAreFieldsSet            = right.fAreFieldsSet;
         fAreFieldsVirtuallySet   = right.fAreFieldsVirtuallySet;
         fLenient                 = right.fLenient;
+        fRepeatedWallTime        = right.fRepeatedWallTime;
+        fSkippedWallTime         = right.fSkippedWallTime;
         if (fZone != NULL) {
             delete fZone;
         }
@@ -936,6 +949,8 @@ Calendar::isEquivalentTo(const Calendar& other) const
 {
     return typeid(*this) == typeid(other) &&
         fLenient                == other.fLenient &&
+        fRepeatedWallTime       == other.fRepeatedWallTime &&
+        fSkippedWallTime        == other.fSkippedWallTime &&
         fFirstDayOfWeek         == other.fFirstDayOfWeek &&
         fMinimalDaysInFirstWeek == other.fMinimalDaysInFirstWeek &&
         fWeekendOnset           == other.fWeekendOnset &&
@@ -2095,6 +2110,40 @@ Calendar::isLenient() const
 // -------------------------------------
 
 void
+Calendar::setRepeatedWallTimeOption(UCalendarWallTimeOption option)
+{
+    if (option == UCAL_WALLTIME_LAST || option == UCAL_WALLTIME_FIRST) {
+        fRepeatedWallTime = option;
+    }
+}
+
+// -------------------------------------
+
+UCalendarWallTimeOption
+Calendar::getRepeatedWallTimeOption(void) const
+{
+    return fRepeatedWallTime;
+}
+
+// -------------------------------------
+
+void
+Calendar::setSkippedWallTimeOption(UCalendarWallTimeOption option)
+{
+    fSkippedWallTime = option;
+}
+
+// -------------------------------------
+
+UCalendarWallTimeOption
+Calendar::getSkippedWallTimeOption(void) const
+{
+    return fSkippedWallTime;
+}
+
+// -------------------------------------
+
+void
 Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value)
 {
     if (fFirstDayOfWeek != value &&
@@ -2589,33 +2638,97 @@ void Calendar::computeTime(UErrorCode& status) {
     // is legacy behavior.  Without this, clear(MONTH) has no effect,
     // since the internally set JULIAN_DAY is used.
     if (fStamp[UCAL_MILLISECONDS_IN_DAY] >= ((int32_t)kMinimumUserStamp) &&
-        newestStamp(UCAL_AM_PM, UCAL_MILLISECOND, kUnset) <= fStamp[UCAL_MILLISECONDS_IN_DAY]) {
-            millisInDay = internalGet(UCAL_MILLISECONDS_IN_DAY);
-        } else {
-            millisInDay = computeMillisInDay();
-        }
+            newestStamp(UCAL_AM_PM, UCAL_MILLISECOND, kUnset) <= fStamp[UCAL_MILLISECONDS_IN_DAY]) {
+        millisInDay = internalGet(UCAL_MILLISECONDS_IN_DAY);
+    } else {
+        millisInDay = computeMillisInDay();
+    }
 
+    UDate t = 0;
+    if (fStamp[UCAL_ZONE_OFFSET] >= ((int32_t)kMinimumUserStamp) || fStamp[UCAL_DST_OFFSET] >= ((int32_t)kMinimumUserStamp)) {
+        t = millis + millisInDay - (internalGet(UCAL_ZONE_OFFSET) + internalGet(UCAL_DST_OFFSET));
+    } else {
         // Compute the time zone offset and DST offset.  There are two potential
         // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
         // for discussion purposes here.
-        // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
-        //    can be in standard or in DST depending.  However, 2:00 am is an invalid
-        //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
-        //    We assume standard time, that is, 2:30 am is interpreted as 3:30 am DST.
-        // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
-        //    can be in standard or DST.  Both are valid representations (the rep
-        //    jumps from 1:59:59 DST to 1:00:00 Std).
-        //    Again, we assume standard time, that is, 1:30 am is interpreted as 1:30 am Std.
+        //
+        // 1. The positive offset change such as transition into DST.
+        //    Here, a designated time of 2:00 am - 2:59 am does not actually exist.
+        //    For this case, skippedWallTime option specifies the behavior.
+        //    For example, 2:30 am is interpreted as;
+        //      - WALLTIME_LAST(default): 3:30 am (DST) (interpreting 2:30 am as 31 minutes after 1:59 am (STD))
+        //      - WALLTIME_FIRST: 1:30 am (STD) (interpreting 2:30 am as 30 minutes before 3:00 am (DST))
+        //      - WALLTIME_NEXT_VALID: 3:00 am (DST) (next valid time after 2:30 am on a wall clock)
+        // 2. The negative offset change such as transition out of DST.
+        //    Here, a designated time of 1:00 am - 1:59 am can be in standard or DST.  Both are valid
+        //    representations (the rep jumps from 1:59:59 DST to 1:00:00 Std).
+        //    For this case, repeatedWallTime option specifies the behavior.
+        //    For example, 1:30 am is interpreted as;
+        //      - WALLTIME_LAST(default): 1:30 am (STD) - latter occurrence
+        //      - WALLTIME_FIRST: 1:30 am (DST) - former occurrence
+        //
+        // In addition to above, when calendar is strict (not default), wall time falls into
+        // the skipped time range will be processed as an error case.
+        //
+        // These special cases are mostly handled in #computeZoneOffset(long), except WALLTIME_NEXT_VALID
+        // at positive offset change. The protected method computeZoneOffset(long) is exposed to Calendar
+        // subclass implementations and marked as @stable. Strictly speaking, WALLTIME_NEXT_VALID
+        // should be also handled in the same place, but we cannot change the code flow without deprecating
+        // the protected method.
+        //
         // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
         // or DST_OFFSET fields; then we use those fields.
-        if (fStamp[UCAL_ZONE_OFFSET] >= ((int32_t)kMinimumUserStamp) ||
-            fStamp[UCAL_DST_OFFSET] >= ((int32_t)kMinimumUserStamp)) {
-                millisInDay -= internalGet(UCAL_ZONE_OFFSET) + internalGet(UCAL_DST_OFFSET);
-            } else {
-                millisInDay -= computeZoneOffset(millis, millisInDay,status);
-            }
 
-            internalSetTime(millis + millisInDay);
+        if (!isLenient() || fSkippedWallTime == UCAL_WALLTIME_NEXT_VALID) {
+            // When strict, invalidate a wall time falls into a skipped wall time range.
+            // When lenient and skipped wall time option is WALLTIME_NEXT_VALID,
+            // the result time will be adjusted to the next valid time (on wall clock).
+            int32_t zoneOffset = computeZoneOffset(millis, millisInDay, status);
+            UDate tmpTime = millis + millisInDay - zoneOffset;
+
+            int32_t raw, dst;
+            fZone->getOffset(tmpTime, FALSE, raw, dst, status);
+
+            if (U_SUCCESS(status)) {
+                // zoneOffset != (raw + dst) only when the given wall time fall into
+                // a skipped wall time range caused by positive zone offset transition.
+                if (zoneOffset != (raw + dst)) {
+                    if (!isLenient()) {
+                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                    } else {
+                        U_ASSERT(fSkippedWallTime == UCAL_WALLTIME_NEXT_VALID);
+                        // Adjust time to the next valid wall clock time.
+                        // At this point, tmpTime is on or after the zone offset transition causing
+                        // the skipped time range.
+
+                        BasicTimeZone *btz = getBasicTimeZone();
+                        if (btz) {
+                            TimeZoneTransition transition;
+                            UBool hasTransition = btz->getPreviousTransition(tmpTime, TRUE, transition);
+                            if (hasTransition) {
+                                t = transition.getTime();
+                            } else {
+                                // Could not find any transitions.
+                                // Note: This should never happen.
+                                status = U_INTERNAL_PROGRAM_ERROR;
+                            }
+                        } else {
+                            // If not BasicTimeZone, return unsupported error for now.
+                            // TODO: We may support non-BasicTimeZone in future.
+                            status = U_UNSUPPORTED_ERROR;
+                        }
+                    }
+                } else {
+                    t = tmpTime;
+                }
+            }
+        } else {
+            t = millis + millisInDay - computeZoneOffset(millis, millisInDay, status);
+        }
+    }
+    if (U_SUCCESS(status)) {
+        internalSetTime(t);
+    }
 }
 
 /**
@@ -2672,12 +2785,49 @@ int32_t Calendar::computeMillisInDay() {
 */
 int32_t Calendar::computeZoneOffset(double millis, int32_t millisInDay, UErrorCode &ec) {
     int32_t rawOffset, dstOffset;
-    getTimeZone().getOffset(millis+millisInDay, TRUE, rawOffset, dstOffset, ec);
+    UDate wall = millis + millisInDay;
+    BasicTimeZone* btz = getBasicTimeZone();
+    if (btz) {
+        int duplicatedTimeOpt = (fRepeatedWallTime == UCAL_WALLTIME_FIRST) ? BasicTimeZone::kFormer : BasicTimeZone::kLatter;
+        int nonExistingTimeOpt = (fSkippedWallTime == UCAL_WALLTIME_FIRST) ? BasicTimeZone::kLatter : BasicTimeZone::kFormer;
+        btz->getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, ec);
+    } else {
+        const TimeZone& tz = getTimeZone();
+        // By default, TimeZone::getOffset behaves UCAL_WALLTIME_LAST for both.
+        tz.getOffset(wall, TRUE, rawOffset, dstOffset, ec);
+
+        UBool sawRecentNegativeShift = FALSE;
+        if (fRepeatedWallTime == UCAL_WALLTIME_FIRST) {
+            // Check if the given wall time falls into repeated time range
+            UDate tgmt = wall - (rawOffset + dstOffset);
+
+            // Any negative zone transition within last 6 hours?
+            // Note: The maximum historic negative zone transition is -3 hours in the tz database.
+            // 6 hour window would be sufficient for this purpose.
+            int32_t tmpRaw, tmpDst;
+            tz.getOffset(tgmt - 6*60*60*1000, FALSE, tmpRaw, tmpDst, ec);
+            int32_t offsetDelta = (rawOffset + dstOffset) - (tmpRaw + tmpDst);
+
+            U_ASSERT(offsetDelta < -6*60*60*1000);
+            if (offsetDelta < 0) {
+                sawRecentNegativeShift = TRUE;
+                // Negative shift within last 6 hours. When UCAL_WALLTIME_FIRST is used and the given wall time falls
+                // into the repeated time range, use offsets before the transition.
+                // Note: If it does not fall into the repeated time range, offsets remain unchanged below.
+                tz.getOffset(wall + offsetDelta, TRUE, rawOffset, dstOffset, ec);
+            }
+        }
+        if (!sawRecentNegativeShift && fSkippedWallTime == UCAL_WALLTIME_FIRST) {
+            // When skipped wall time option is WALLTIME_FIRST,
+            // recalculate offsets from the resolved time (non-wall).
+            // When the given wall time falls into skipped wall time,
+            // the offsets will be based on the zone offsets AFTER
+            // the transition (which means, earliest possibe interpretation).
+            UDate tgmt = wall - (rawOffset + dstOffset);
+            tz.getOffset(tgmt, FALSE, rawOffset, dstOffset, ec);
+        }
+    }
     return rawOffset + dstOffset;
-    // Note: Because we pass in wall millisInDay, rather than
-    // standard millisInDay, we interpret "1:00 am" on the day
-    // of cessation of DST as "1:00 am Std" (assuming the time
-    // of cessation is 2:00 am).
 }
 
 int32_t Calendar::computeJulianDay() 
@@ -3418,6 +3568,17 @@ void
 Calendar::internalSet(EDateFields field, int32_t value)
 {
     internalSet((UCalendarDateFields) field, value);
+}
+
+BasicTimeZone*
+Calendar::getBasicTimeZone(void) const {
+    if (dynamic_cast<const OlsonTimeZone *>(fZone) != NULL
+        || dynamic_cast<const SimpleTimeZone *>(fZone) != NULL
+        || dynamic_cast<const RuleBasedTimeZone *>(fZone) != NULL
+        || dynamic_cast<const VTimeZone *>(fZone) != NULL) {
+        return (BasicTimeZone*)fZone;
+    }
+    return NULL;
 }
 
 U_NAMESPACE_END
