@@ -33,7 +33,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
-#define MAX_LOCALE   10  
+#define MAX_LOCALE   11  
 
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
@@ -71,6 +71,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         {"zh", "Hans", "CN", ""},               // 7
         {"zh", "TW", "", "calendar=roc"},       // 8
         {"ru", "", "", ""},                     // 9
+        {"zh", "", "", "calendar=chinese"},    // 10
      };
     
     // For Weds, Jan 13, 1999, 23:58:59
@@ -254,6 +255,24 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         CharsToUnicodeString("\\u0421\\u0440, 13 \\u044F\\u043D\\u0432."), // 13: MMMEd -> ccc, d MMM
         CharsToUnicodeString("\\u0421\\u0440, 13"),                       // 14: Ed    -> EEE, d
         UnicodeString("23:58:59,123"),                                    // 15: jmmssSSS -> "H:mm:ss,SSS"
+
+        // zh@calendar=chinese                                            // 10 zh@calendar=chinese
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E7411\\u6708"),           // 00: yM
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u6708"),  // 01: yMMM
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E7411\\u670826\\u65E5"),  // 02: yMd
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u670826\\u65E5"),  // 03: yMMMd
+        UnicodeString("11-26"),                                           // 04: Md
+        CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5"),           // 05: MMMd
+        CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5"),           // 06: MMMMd
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E744\\u5B63"),            // 07: yQQQ
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 08: hhmm
+        UnicodeString("23:58"),                                           // 09: HHmm
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 10: jjmm
+        UnicodeString("58:59"),                                           // 11: mmss
+        CharsToUnicodeString("\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u6708"), // 12: yyyyMMMM
+        CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5\\u5468\\u4E09"), // 13: MMMEd
+        CharsToUnicodeString("26\\u65E5\\u5468\\u4E09"),                  // 14: Ed    -> d\u65E5EEE
+        CharsToUnicodeString("\\u4E0B\\u534811:58:59.123"),               // 15: jmmssSS
 
         UnicodeString(),
     };

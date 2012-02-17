@@ -1030,8 +1030,8 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     //
                     // The adjusted field should consist of characters from the originally requested
                     // skeleton, except in the case of UDATPG_HOUR_FIELD or UDATPG_MONTH_FIELD or
-                    // UDATPG_WEEKDAY_FIELD, in which case it should consist of characters from the
-                    // found pattern.
+                    // UDATPG_WEEKDAY_FIELD or UDATPG_YEAR_FIELD, in which case it should consist
+                    // of characters from the  found pattern.
                     //
                     // The length of the adjusted field (adjFieldLen) should match that in the originally
                     // requested skeleton, except that in the following cases the length of the adjusted field
@@ -1064,7 +1064,8 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                             adjFieldLen = field.length();
                         }
                     }
-                    UChar c = (typeValue!= UDATPG_HOUR_FIELD && typeValue!= UDATPG_MONTH_FIELD && typeValue!= UDATPG_WEEKDAY_FIELD)?
+                    UChar c = (typeValue!= UDATPG_HOUR_FIELD && typeValue!= UDATPG_MONTH_FIELD &&
+                               typeValue!= UDATPG_WEEKDAY_FIELD && typeValue!= UDATPG_YEAR_FIELD)?
                         reqField.charAt(0): field.charAt(0);
                     field.remove();
                     for (int32_t i=adjFieldLen; i>0; --i) {
