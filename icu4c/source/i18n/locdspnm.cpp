@@ -343,6 +343,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
 
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
   delete format;
+  delete keyTypeFormat;
 }
 
 const Locale&
