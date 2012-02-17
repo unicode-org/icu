@@ -6562,7 +6562,7 @@ NumberFormatTest::Test9087(void)
     unum_setAttribute(fmt,UNUM_ROUNDING_MODE,UNUM_ROUND_HALFEVEN);
     unum_setDoubleAttribute(fmt,UNUM_ROUNDING_INCREMENT,0);
 
-    UFieldPosition position;
+    UFieldPosition position = { 0, 0, 0};
     unum_formatDouble(fmt,inf,outputbuf,50,&position,&status);
     
     if ( u_strcmp(infstr, outputbuf)) {
