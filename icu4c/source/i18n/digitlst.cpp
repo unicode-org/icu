@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -754,7 +754,17 @@ DigitList::set(double source)
 
     // Generate a representation of the form /[+-][0-9].[0-9]+e[+-][0-9]+/
     // Can also generate /[+-]nan/ or /[+-]inf/
-    sprintf(rep, "%+1.*e", MAX_DBL_DIGITS - 1, source);
+    // TODO: Use something other than sprintf() here, since it's behavior is somewhat platform specific.
+    //       That is why infinity is special cased here.
+    if (uprv_isInfinite(source)) {
+        if (uprv_isNegativeInfinity(source)) {
+            uprv_strcpy(rep,"-inf"); // Handle negative infinity
+        } else {
+            uprv_strcpy(rep,"inf");
+        }
+    } else {
+        sprintf(rep, "%+1.*e", MAX_DBL_DIGITS - 1, source);
+    }
     U_ASSERT(uprv_strlen(rep) < sizeof(rep));
 
     // uprv_decNumberFromString() will parse the string expecting '.' as a
