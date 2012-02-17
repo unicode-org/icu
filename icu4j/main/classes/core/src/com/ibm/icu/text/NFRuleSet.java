@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -59,6 +59,11 @@ final class NFRuleSet {
     private boolean isFractionRuleSet = false;
     
     /**
+     * True if the rule set is parseable.  
+     */
+    private boolean isParseable = true;
+    
+    /**
      * Used to limit recursion for bad rule sets.
      */
     private int recursionCount = 0;
@@ -114,6 +119,11 @@ final class NFRuleSet {
             throw new IllegalArgumentException("Empty rule set description");
         }
 
+        if ( name.endsWith("@noparse")) {
+            name = name.substring(0,name.length()-8); // Remove the @noparse from the name
+            isParseable = false;
+        }
+        
         // all of the other members of NFRuleSet are initialized
         // by parseRules()
     }
@@ -385,14 +395,7 @@ final class NFRuleSet {
      * @return true if the rule set can be used for parsing.
      */
     public boolean isParseable() {
-        //TODO:
-        //  In CLDR 1.7, we have no distinction between
-        //  parseable/unparseable.  Rules which have one of
-        //  3 suffixes below are know as unparseable for now.
-        //  We should add the information in CLDR data.
-        return !(name.endsWith("-prefixpart")
-                || name.endsWith("-postfixpart")
-                || name.endsWith("-postfx"));
+        return (isParseable);
     }
 
     //-----------------------------------------------------------------------
