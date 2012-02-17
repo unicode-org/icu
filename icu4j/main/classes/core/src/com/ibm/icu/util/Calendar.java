@@ -1146,6 +1146,42 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     public static final int WEEKEND_CEASE = 3;
 
     /**
+     * {@icu}Option used by {@link #setRepeatedWallTimeOption(int)} and
+     * {@link #setSkippedWallTimeOption(int)} specifying an ambiguous wall time
+     * to be interpreted as the latest.
+     * @see #setRepeatedWallTimeOption(int)
+     * @see #getRepeatedWallTimeOption()
+     * @see #setSkippedWallTimeOption(int)
+     * @see #getSkippedWallTimeOption()
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int WALLTIME_LAST = 0;
+
+    /**
+     * {@icu}Option used by {@link #setRepeatedWallTimeOption(int)} and
+     * {@link #setSkippedWallTimeOption(int)} specifying an ambiguous wall time
+     * to be interpreted as the earliest.
+     * @see #setRepeatedWallTimeOption(int)
+     * @see #getRepeatedWallTimeOption()
+     * @see #setSkippedWallTimeOption(int)
+     * @see #getSkippedWallTimeOption()
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int WALLTIME_FIRST = 1;
+
+    /**
+     * {@icu}Option used by {@link #setSkippedWallTimeOption(int)} specifying an
+     * ambiguous wall time to be interpreted as the next valid wall time.
+     * @see #setSkippedWallTimeOption(int)
+     * @see #getSkippedWallTimeOption()
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int WALLTIME_NEXT_VALID = 2;
+
+    /**
      * The number of milliseconds in one second.
      * @stable ICU 2.0
      */
@@ -1371,6 +1407,16 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * is taken from locale resource data.
      */
     private int weekendCeaseMillis;
+
+    /**
+     * Option used when the specified wall time occurs multiple times.
+     */
+    private int repeatedWallTime = WALLTIME_LAST;
+
+    /**
+     * Option used when the specified wall time does not exist.
+     */
+    private int skippedWallTime = WALLTIME_LAST;
 
     /**
      * Cache to hold the firstDayOfWeek and minimalDaysInFirstWeek
@@ -2253,7 +2299,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             isLenient() == other.isLenient() &&
             getFirstDayOfWeek() == other.getFirstDayOfWeek() &&
             getMinimalDaysInFirstWeek() == other.getMinimalDaysInFirstWeek() &&
-            getTimeZone().equals(other.getTimeZone());
+            getTimeZone().equals(other.getTimeZone()) &&
+            getRepeatedWallTimeOption() == other.getRepeatedWallTimeOption() &&
+            getSkippedWallTimeOption() == other.getSkippedWallTimeOption();
     }
 
     /**
@@ -2270,7 +2318,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         return (lenient ? 1 : 0)
             | (firstDayOfWeek << 1)
             | (minimalDaysInFirstWeek << 4)
-            | (zone.hashCode() << 7);
+            | (repeatedWallTime << 7)
+            | (skippedWallTime << 9)
+            | (zone.hashCode() << 11);
     }
 
     /**
@@ -3820,6 +3870,107 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
+     * {@icu}Sets the behavior for handling wall time repeating multiple times
+     * at negative time zone offset transitions. For example, 1:30 AM on
+     * November 6, 2011 in US Eastern time (Ameirca/New_York) occurs twice;
+     * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>WALLTIME_FIRST</code>
+     * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
+     * (first occurrence). When <code>WALLTIME_LAST</code> is used, it will be
+     * interpreted as 1:30 AM EST (last occurrence). The default value is
+     * <code>WALLTIME_LAST</code>.
+     * 
+     * @param option the behavior for handling repeating wall time, either
+     * <code>WALLTIME_FIRST</code> or <code>WALLTIME_LAST</code>.
+     * @throws IllegalArgumentException when <code>option</code> is neither
+     * <code>WALLTIME_FIRST</code> nor <code>WALLTIME_LAST</code>.
+     * 
+     * @see #getRepeatedWallTimeOption()
+     * @see #WALLTIME_FIRST
+     * @see #WALLTIME_LAST
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setRepeatedWallTimeOption(int option) {
+        if (option != WALLTIME_LAST && option != WALLTIME_FIRST) {
+            throw new IllegalArgumentException("Illegal repeated wall time option - " + option);
+        }
+        repeatedWallTime = option;
+    }
+
+    /**
+     * {@icu}Gets the behavior for handling wall time repeating multiple times
+     * at negative time zone offset transitions.
+     * 
+     * @return the behavior for handling repeating wall time, either
+     * <code>WALLTIME_FIRST</code> or <code>WALLTIME_LAST</code>.
+     * 
+     * @see #setRepeatedWallTimeOption(int)
+     * @see #WALLTIME_FIRST
+     * @see #WALLTIME_LAST
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getRepeatedWallTimeOption() {
+        return repeatedWallTime;
+    }
+
+    /**
+     * {@icu}Sets the behavior for handling skipped wall time at positive time zone offset
+     * transitions. For example, 2:30 AM on March 13, 2011 in US Eastern time (America/New_York)
+     * does not exist because the wall time jump from 1:59 AM EST to 3:00 AM EDT. When
+     * <code>WALLTIME_FIRST</code> is used, 2:30 AM is interpreted as 30 minutes before 3:00 AM
+     * EDT, therefore, it will be resolved as 1:30 AM EST. When <code>WALLTIME_LAST</code>
+     * is used, 2:30 AM is interpreted as 31 minutes after 1:59 AM EST, therefore, it will be
+     * resolved as 3:30 AM EDT. When <code>WALLTIME_NEXT_VALID</code> is used, 2:30 AM will
+     * be resolved as next valid wall time, that is 3:00 AM EDT. The default value is
+     * <code>WALLTIME_LAST</code>.
+     * <p>
+     * <b>Note:</b>This option is effective only when this calendar is {@link #isLenient() lenient}.
+     * When the calendar is strict, such non-existing wall time will cause an exception.
+     * 
+     * @param option the behavior for handling skipped wall time at positive time zone
+     * offset transitions, one of <code>WALLTIME_FIRST</code>, <code>WALLTIME_LAST</code> and
+     * <code>WALLTIME_NEXT_VALID</code>.
+     * @throws IllegalArgumentException when <code>option</code> is not any of
+     * <code>WALLTIME_FIRST</code>, <code>WALLTIME_LAST</code> and <code>WALLTIME_NEXT_VALID</code>.
+     * 
+     * @see #getSkippedWallTimeOption()
+     * @see #WALLTIME_FIRST
+     * @see #WALLTIME_LAST
+     * @see #WALLTIME_NEXT_VALID
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setSkippedWallTimeOption(int option) {
+        if (option != WALLTIME_LAST && option != WALLTIME_FIRST && option != WALLTIME_NEXT_VALID) {
+            throw new IllegalArgumentException("Illegal skipped wall time option - " + option);
+        }
+        skippedWallTime = option;
+    }
+
+    /**
+     * {@icu}Gets the behavior for handling skipped wall time at positive time zone offset
+     * transitions.
+     * 
+     * @return the behavior for handling skipped wall time, one of
+     * <code>WALLTIME_FIRST</code>, <code>WALLTIME_LAST</code> and <code>WALLTIME_NEXT_VALID</code>.
+     * 
+     * @see #setSkippedWallTimeOption(int)
+     * @see #WALLTIME_FIRST
+     * @see #WALLTIME_LAST
+     * @see #WALLTIME_NEXT_VALID
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getSkippedWallTimeOption() {
+        return skippedWallTime;
+    }
+
+    /**
      * Sets what the first day of the week is; e.g., Sunday in US,
      * Monday in France.
      * @param value the given first day of the week.
@@ -4249,6 +4400,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         buffer.append(firstDayOfWeek);
         buffer.append(",minimalDaysInFirstWeek=");
         buffer.append(minimalDaysInFirstWeek);
+        buffer.append(",repeatedWallTime=");
+        buffer.append(repeatedWallTime);
+        buffer.append(",skippedWallTime=");
+        buffer.append(skippedWallTime);
         for (int i=0; i<fields.length; ++i) {
             buffer.append(',').append(fieldName(i)).append('=');
             buffer.append(isSet(i) ? String.valueOf(fields[i]) : "?");
@@ -4854,30 +5009,178 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             millisInDay = computeMillisInDay();
         }
 
-        // Compute the time zone offset and DST offset.  There are two potential
-        // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
-        // for discussion purposes here.
-        // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
-        //    can be in standard or in DST depending.  However, 2:00 am is an invalid
-        //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
-        //    We assume standard time, that is, 2:30 am is interpreted as 3:30 am DST.
-        // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
-        //    can be in standard or DST.  Both are valid representations (the rep
-        //    jumps from 1:59:59 DST to 1:00:00 Std).
-        //    Again, we assume standard time, that is, 1:30 am is interpreted as 1:30 am Std.
-        // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
-        // or DST_OFFSET fields; then we use those fields.
         if (stamp[ZONE_OFFSET] >= MINIMUM_USER_STAMP ||
             stamp[DST_OFFSET] >= MINIMUM_USER_STAMP) {
-            millisInDay -= internalGet(ZONE_OFFSET) + internalGet(DST_OFFSET);
+            time = millis + millisInDay - (internalGet(ZONE_OFFSET) + internalGet(DST_OFFSET));
         } else {
-            millisInDay -= computeZoneOffset(millis, millisInDay);
-        }
+            // Compute the time zone offset and DST offset.  There are two potential
+            // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
+            // for discussion purposes here.
+            //
+            // 1. The positive offset change such as transition into DST.
+            //    Here, a designated time of 2:00 am - 2:59 am does not actually exist.
+            //    For this case, skippedWallTime option specifies the behavior.
+            //    For example, 2:30 am is interpreted as;
+            //      - WALLTIME_LAST(default): 3:30 am (DST) (interpreting 2:30 am as 31 minutes after 1:59 am (STD))
+            //      - WALLTIME_FIRST: 1:30 am (STD) (interpreting 2:30 am as 30 minutes before 3:00 am (DST))
+            //      - WALLTIME_NEXT_VALID: 3:00 am (DST) (next valid time after 2:30 am on a wall clock)
+            // 2. The negative offset change such as transition out of DST.
+            //    Here, a designated time of 1:00 am - 1:59 am can be in standard or DST.  Both are valid
+            //    representations (the rep jumps from 1:59:59 DST to 1:00:00 Std).
+            //    For this case, repeatedWallTime option specifies the behavior.
+            //    For example, 1:30 am is interpreted as;
+            //      - WALLTIME_LAST(default): 1:30 am (STD) - latter occurrence
+            //      - WALLTIME_FIRST: 1:30 am (DST) - former occurrence
+            //
+            // In addition to above, when calendar is strict (not default), wall time falls into
+            // the skipped time range will be processed as an error case.
+            //
+            // These special cases are mostly handled in #computeZoneOffset(long), except WALLTIME_NEXT_VALID
+            // at positive offset change. The protected method computeZoneOffset(long) is exposed to Calendar
+            // subclass implementations and marked as @stable. Strictly speaking, WALLTIME_NEXT_VALID
+            // should be also handled in the same place, but we cannot change the code flow without deprecating
+            // the protected method.
+            //
+            // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
+            // or DST_OFFSET fields; then we use those fields.
 
-        time = millis + millisInDay;
+            if (!lenient || skippedWallTime == WALLTIME_NEXT_VALID) {
+                // When strict, invalidate a wall time falls into a skipped wall time range.
+                // When lenient and skipped wall time option is WALLTIME_NEXT_VALID,
+                // the result time will be adjusted to the next valid time (on wall clock).
+                int zoneOffset = computeZoneOffset(millis, millisInDay);
+                long tmpTime = millis + millisInDay - zoneOffset;
+
+                int zoneOffset1 = zone.getOffset(tmpTime);
+
+                // zoneOffset != zoneOffset1 only when the given wall time fall into
+                // a skipped wall time range caused by positive zone offset transition.
+                if (zoneOffset != zoneOffset1) {
+                    if (!lenient) {
+                        throw new IllegalArgumentException("The specified wall time does not exist due to time zone offset transition.");
+                    }
+
+                    assert skippedWallTime == WALLTIME_NEXT_VALID : skippedWallTime;
+                    // Adjust time to the next valid wall clock time.
+                    // At this point, tmpTime is on or after the zone offset transition causing
+                    // the skipped time range.
+                    if (zone instanceof BasicTimeZone) {
+                        TimeZoneTransition transition = ((BasicTimeZone)zone).getPreviousTransition(tmpTime, true);
+                        if (transition == null) {
+                            // Could not find any transitions
+                            throw new RuntimeException("Could not locate previous zone transition");
+                        }
+                        time = transition.getTime();
+                    } else {
+                        // Usually, it is enough to check past one hour because such transition is most
+                        // likely +1 hour shift. However, there is an example jumped +24 hour in the tz database.
+                        Long transitionT = getPreviousZoneTransitionTime(zone, tmpTime, 2*60*60*1000); // check last 2 hours
+                        if (transitionT == null) {
+                            transitionT = getPreviousZoneTransitionTime(zone, tmpTime, 30*60*60*1000); // try last 30 hours
+                            if (transitionT == null) {
+                                // Could not find any transitions in last 30 hours...
+                                throw new RuntimeException("Could not locate previous zone transition within 30 hours from " + tmpTime);
+                            }
+                        }
+                        time = transitionT.longValue();
+                    }
+                } else {
+                    time = tmpTime;
+                }
+            } else {
+                time = millis + millisInDay - computeZoneOffset(millis, millisInDay);
+            }
+        }
     }
 
-    /**
+   /**
+    * Find the previous zone transition within the specified duration.
+    * Note: This method should not be used when TimeZone is a BasicTimeZone.
+    * {@link BasicTimeZone#getPreviousTransition(long, boolean)} is much more efficient.
+    * @param tz The time zone.
+    * @param base The base time, inclusive.
+    * @param duration The range of time evaluated.
+    * @return The time of the previous zone transition, or null if not available.
+    */
+   private Long getPreviousZoneTransitionTime(TimeZone tz, long base, long duration) {
+       assert duration > 0;
+
+       long upper = base;
+       long lower = base - duration - 1;
+       int offsetU = tz.getOffset(upper);
+       int offsetL = tz.getOffset(lower);
+       if (offsetU == offsetL) {
+           return null;
+       }
+       return findPreviousZoneTransitionTime(tz, offsetU, upper, lower);
+   }
+
+   /**
+    * The time units used by {@link #findPreviousZoneTransitionTime(TimeZone, int, long, long)}
+    * for optimizing transition time binary search.
+    */
+   private static final int[] FIND_ZONE_TRANSITION_TIME_UNITS = {
+       60*60*1000, // 1 hour
+       30*60*1000, // 30 minutes
+       60*1000,    // 1 minute
+       1000,       // 1 second
+   };
+
+   /**
+    * Implementing binary search for zone transtion detection, used by {@link #getPreviousZoneTransitionTime(TimeZone, long, long)}
+    * @param tz The time zone.
+    * @param upperOffset The zone offset at <code>upper</code>
+    * @param upper The upper bound, inclusive.
+    * @param lower The lower bound, exclusive.
+    * @return The time of the previous zone transition, or null if not available.
+    */
+   private Long findPreviousZoneTransitionTime(TimeZone tz, int upperOffset, long upper, long lower) {
+       boolean onUnitTime = false;
+       long mid = 0;
+
+       for (int unit : FIND_ZONE_TRANSITION_TIME_UNITS) {
+           long lunits = lower/unit;
+           long uunits = upper/unit;
+           if (uunits > lunits) {
+               mid = ((lunits + uunits + 1) >>> 1) * unit;
+               onUnitTime = true;
+               break;
+           }
+       }
+
+       int midOffset;
+       if (!onUnitTime) {
+           mid = (upper + lower) >>> 1;
+       }
+
+       if (onUnitTime) {
+           if (mid != upper) {
+               midOffset  = tz.getOffset(mid);
+               if (midOffset != upperOffset) {
+                   return findPreviousZoneTransitionTime(tz, upperOffset, upper, mid);
+               }
+               upper = mid;
+           }
+           // check mid-1
+           mid--;
+       } else {
+           mid = (upper + lower) >>> 1;
+       }
+
+       if (mid == lower) {
+           return Long.valueOf(upper);
+       }
+       midOffset = tz.getOffset(mid);
+       if (midOffset != upperOffset) {
+           if (onUnitTime) {
+               return Long.valueOf(upper);
+           }
+           return findPreviousZoneTransitionTime(tz, upperOffset, upper, mid);
+       }
+       return findPreviousZoneTransitionTime(tz, upperOffset, mid, lower);
+   }
+
+   /**
      * Compute the milliseconds in the day from the fields.  This is a
      * value from 0 to 23:59:59.999 inclusive, unless fields are out of
      * range, in which case it can be an arbitrary value.  This value
@@ -4931,14 +5234,47 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @stable ICU 2.0
      */
     protected int computeZoneOffset(long millis, int millisInDay) {
-        int offsets[] = new int[2];
-        zone.getOffset(millis + millisInDay, true, offsets);
-        return offsets[0] + offsets[1];
+        int[] offsets = new int[2];
+        long wall = millis + millisInDay;
+        if (zone instanceof BasicTimeZone) {
+            int duplicatedTimeOpt = (repeatedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LOCAL_FORMER : BasicTimeZone.LOCAL_LATTER;
+            int nonExistingTimeOpt = (skippedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LOCAL_LATTER : BasicTimeZone.LOCAL_FORMER;
+            ((BasicTimeZone)zone).getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
+        } else {
+            // By default, TimeZone#getOffset behaves WALLTIME_LAST for both.
+            zone.getOffset(wall, true, offsets);
 
-        // Note: Because we pass in wall millisInDay, rather than
-        // standard millisInDay, we interpret "1:00 am" on the day
-        // of cessation of DST as "1:00 am Std" (assuming the time
-        // of cessation is 2:00 am).
+            boolean sawRecentNegativeShift = false;
+            if (repeatedWallTime == WALLTIME_FIRST) {
+                // Check if the given wall time falls into repeated time range
+                long tgmt = wall - (offsets[0] + offsets[1]);
+
+                // Any negative zone transition within last 6 hours?
+                // Note: The maximum historic negative zone transition is -3 hours in the tz database.
+                // 6 hour window would be sufficient for this purpose.
+                int offsetBefore6 = zone.getOffset(tgmt - 6*60*60*1000);
+                int offsetDelta = (offsets[0] + offsets[1]) - offsetBefore6;
+
+                assert offsetDelta < -6*60*60*1000 : offsetDelta;
+                if (offsetDelta < 0) {
+                    sawRecentNegativeShift = true;
+                    // Negative shift within last 6 hours. When WALLTIME_FIRST is used and the given wall time falls
+                    // into the repeated time range, use offsets before the transition.
+                    // Note: If it does not fall into the repeated time range, offsets remain unchanged below.
+                    zone.getOffset(wall + offsetDelta, true, offsets);
+                }
+            }
+            if (!sawRecentNegativeShift && skippedWallTime == WALLTIME_FIRST) {
+                // When skipped wall time option is WALLTIME_FIRST,
+                // recalculate offsets from the resolved time (non-wall).
+                // When the given wall time falls into skipped wall time,
+                // the offsets will be based on the zone offsets AFTER
+                // the transition (which means, earliest possibe interpretation).
+                long tgmt = wall - (offsets[0] + offsets[1]);
+                zone.getOffset(tgmt, false, offsets);
+            }
+        }
+        return offsets[0] + offsets[1];
     }
 
     /**
