@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,7 @@ import java.util.Random;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * This does not test lenient parse mode, since testing the default implementation
@@ -1275,6 +1276,31 @@ public class RbnfTest extends TestFmwk {
                 errln("RBNFChinesePostProcessor was not suppose to return an exception " +
                         "when being formatted with parameters 0.0 and " + ruleNames[i]);
             }
+        }
+    }
+    
+    public void TestSetDecimalFormatSymbols() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL);
+        
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.ENGLISH);
+        
+        double number = 1001;
+        
+        char newSeparator = '&';
+        String[] expected = { "1,001st", "1&001st" };
+        
+        String result = rbnf.format(number);
+        if (!result.equals(expected[0])) {
+            errln("Format Error - Got: " + result + " Expected: " + expected[0]);
+        }
+        
+        /* Set new symbol for testing */
+        dfs.setGroupingSeparator('&');
+        rbnf.setDecimalFormatSymbols(dfs);
+        
+        result = rbnf.format(number);
+        if (!result.equals(expected[1])) {
+            errln("Format Error - Got: " + result + " Expected: " + expected[1]);
         }
     }
 }
