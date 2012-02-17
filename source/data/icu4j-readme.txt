@@ -1,5 +1,5 @@
 ********************************************************************************
-* Copyright (C) 2008-2011, International Business Machines Corporation         *
+* Copyright (C) 2008-2012, International Business Machines Corporation         *
 * and others. All Rights Reserved.                                             *
 *                                                                              *
 * 6/26/08 - Created by Brian Rower - heavy copying from ICU4J readme & others  *
@@ -55,8 +55,8 @@ icutzdata.jar in $icu4j_root/main/shared/data.
 
 *Java*
 
-3. After the ICU4C-side steps above, build the core-data and core-test-data targets of the
-        ICU4J ant build to unpack the jar files  with the following commands:
+3. After the ICU4C-side steps above, build the main target of the
+        ICU4J ant build to unpack the jar files with the following commands:
 
         cd $icu4j_root
-        ant core-data core-test-data
+        ant main
