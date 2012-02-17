@@ -190,6 +190,9 @@ NFRuleSet::parseRules(UnicodeString& description, const RuleBasedNumberFormat* o
         return;
     }
 
+    // ensure we are starting with an empty rule list
+    rules.deleteAll();
+
     // dlf - the original code kept a separate description array for no reason,
     // so I got rid of it.  The loop was too complex so I simplified it.
 
@@ -235,24 +238,36 @@ NFRuleSet::parseRules(UnicodeString& description, const RuleBasedNumberFormat* o
             // if it's the negative-number rule, copy it into its own
             // data member and delete it from the list
         case NFRule::kNegativeNumberRule:
+            if (negativeNumberRule) {
+                delete negativeNumberRule;
+            }
             negativeNumberRule = rules.remove(i);
             break;
 
             // if it's the improper fraction rule, copy it into the
             // correct element of fractionRules
         case NFRule::kImproperFractionRule:
+            if (fractionRules[0]) {
+                delete fractionRules[0];
+            }
             fractionRules[0] = rules.remove(i);
             break;
 
             // if it's the proper fraction rule, copy it into the
             // correct element of fractionRules
         case NFRule::kProperFractionRule:
+            if (fractionRules[1]) {
+                delete fractionRules[1];
+            }
             fractionRules[1] = rules.remove(i);
             break;
 
             // if it's the master rule, copy it into the
             // correct element of fractionRules
         case NFRule::kMasterRule:
+            if (fractionRules[2]) {
+                delete fractionRules[2];
+            }
             fractionRules[2] = rules.remove(i);
             break;
 

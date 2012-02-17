@@ -649,6 +649,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
                                              const UnicodeString& locs,
                                              const Locale& alocale, UParseError& perror, UErrorCode& status)
   : ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(alocale)
   , collator(NULL)
@@ -665,6 +667,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
                                              const UnicodeString& locs,
                                              UParseError& perror, UErrorCode& status)
   : ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(Locale::getDefault())
   , collator(NULL)
@@ -681,6 +685,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
                                              LocalizationInfo* info,
                                              const Locale& alocale, UParseError& perror, UErrorCode& status)
   : ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(alocale)
   , collator(NULL)
@@ -696,6 +702,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
                          UParseError& perror, 
                          UErrorCode& status) 
   : ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(Locale::getDefault())
   , collator(NULL)
@@ -712,6 +720,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
                          UParseError& perror, 
                          UErrorCode& status) 
   : ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(aLocale)
   , collator(NULL)
@@ -725,6 +735,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& alocale, UErrorCode& status)
   : ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(alocale)
   , collator(NULL)
@@ -783,6 +795,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
   : NumberFormat(rhs)
   , ruleSets(NULL)
+  , ruleSetDescriptions(NULL)
+  , numRuleSets(0)
   , defaultRuleSet(NULL)
   , locale(rhs.locale)
   , collator(NULL)
@@ -1324,7 +1338,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // pre-flight parsing the description and count the number of
     // rule sets (";%" marks the end of one rule set and the beginning
     // of the next)
-    int numRuleSets = 0;
+    numRuleSets = 0;
     for (int32_t p = description.indexOf(gSemiPercent, 2, 0); p != -1; p = description.indexOf(gSemiPercent, 2, p)) {
         ++numRuleSets;
         ++p;
@@ -1354,7 +1368,8 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    UnicodeString* ruleSetDescriptions = new UnicodeString[numRuleSets];
+
+    ruleSetDescriptions = new UnicodeString[numRuleSets];
     if (ruleSetDescriptions == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -1368,7 +1383,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
             if (ruleSets[curRuleSet] == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
-                goto cleanup;
+                return;
             }
             ++curRuleSet;
             start = p + 1;
@@ -1377,7 +1392,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
         if (ruleSets[curRuleSet] == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            goto cleanup;
+            return;
         }
     }
 
@@ -1424,9 +1439,6 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     } else {
         defaultRuleSet = getDefaultRuleSet();
     }
-
-cleanup:
-    delete[] ruleSetDescriptions;
 }
 
 void
@@ -1479,6 +1491,10 @@ RuleBasedNumberFormat::dispose()
         }
         uprv_free(ruleSets);
         ruleSets = NULL;
+    }
+
+    if (ruleSetDescriptions) {
+        delete [] ruleSetDescriptions;
     }
 
 #if !UCONFIG_NO_COLLATION
@@ -1594,6 +1610,15 @@ RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsTo
     }
 
     decimalFormatSymbols = symbolsToAdopt;
+
+    {
+        // Apply the new decimalFormatSymbols by reparsing the rulesets
+        UErrorCode status = U_ZERO_ERROR;
+
+        for (int32_t i = 0; i < numRuleSets; i++) {
+            ruleSets[i]->parseRules(ruleSetDescriptions[i], this, status);
+        }
+    }
 }
 
 // Setting the symbols is equlivalent to adopting a newly created localized symbols.
