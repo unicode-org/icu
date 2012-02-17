@@ -1011,6 +1011,8 @@ private:
 
 private:
     NFRuleSet **ruleSets;
+    UnicodeString* ruleSetDescriptions;
+    int32_t numRuleSets;
     NFRuleSet *defaultRuleSet;
     Locale locale;
     Collator* collator;
