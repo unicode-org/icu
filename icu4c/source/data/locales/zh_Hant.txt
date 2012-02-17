@@ -88,7 +88,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.65.81"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -162,7 +162,7 @@ zh_Hant{
                     "U年MMMd日",
                     "hanidec",
                 }
-                "U-M-d",
+                "U/M/d",
                 "{1} {0}",
                 "{1}{0}",
                 "{1}{0}",
@@ -171,18 +171,21 @@ zh_Hant{
             }
             availableFormats{
                 Ed{"d日E"}
-                M{"M月"}
-                MEd{"M-dE"}
-                MMMEd{"M月d日E"}
-                MMMd{"M月d日"}
+                M{"MMM"}
+                MEd{"M/dE"}
+                MMMEd{"MMMd日E"}
+                MMMd{"MMMd日"}
+                Md{"M/d"}
                 d{"d日"}
                 y{"U年"}
                 yM{"U年M月"}
                 yMEd{"U年M月d日，E"}
-                yMMM{"U年M月"}
-                yMMMEd{"U年M月d日E"}
-                yMMMd{"U年M月d日"}
+                yMMM{"U年MMM"}
+                yMMMEd{"U年MMMd日E"}
+                yMMMd{"U年MMMd日"}
                 yMd{"U年M月d日"}
+                yQ{"U年QQQ"}
+                yQQQ{"U年QQQ"}
             }
             cyclicNameSets{
                 dayParts{
@@ -286,6 +289,99 @@ zh_Hant{
                             "豬",
                         }
                     }
+                }
+            }
+            intervalFormats{
+                Hmv{
+                    H{"HH:mm–HH:mm [v]"}
+                    a{"HH:mm–HH:mm [v]"}
+                    m{"HH:mm–HH:mm [v]"}
+                }
+                Hv{
+                    H{"HH–HH [v]"}
+                    a{"HH–HH [v]"}
+                }
+                M{
+                    M{"M月至M月"}
+                }
+                MEd{
+                    M{"M/dE至M/dE"}
+                    d{"M/dE至M/dE"}
+                }
+                MMM{
+                    M{"LLL至LLL"}
+                }
+                MMMEd{
+                    M{"MMMd日E至MMMd日E"}
+                    d{"MMMd日E至d日E"}
+                }
+                MMMM{
+                    M{"LLLL至LLLL"}
+                }
+                MMMd{
+                    M{"MMMd日至MMMd日"}
+                    d{"MMMd日至d日"}
+                }
+                Md{
+                    M{"M/d至M/d"}
+                    d{"M/d至M/d"}
+                }
+                d{
+                    d{"d日至d日"}
+                }
+                fallback{"{0}至{1}"}
+                h{
+                    a{"ah時至ah時"}
+                    h{"ah時至h時"}
+                }
+                hm{
+                    a{"ah:mm至ah:mm"}
+                    h{"ah:mm至h:mm"}
+                    m{"ah:mm至h:mm"}
+                }
+                hmv{
+                    a{"ah:mm至ah:mm [v]"}
+                    h{"ah:mm至h:mm [v]"}
+                    m{"ah:mm至h:mm [v]"}
+                }
+                hv{
+                    a{"ah時至ah時 [v]"}
+                    h{"ah時至h時 [v]"}
+                }
+                y{
+                    y{"U至U"}
+                }
+                yM{
+                    M{"U/M至U/M"}
+                    y{"U/M至U/M"}
+                }
+                yMEd{
+                    M{"U/M/dE至U/M/dE"}
+                    d{"U/M/dE至U/M/dE"}
+                    y{"U/M/dE至U/M/dE"}
+                }
+                yMMM{
+                    M{"U年MMM至MMM"}
+                    y{"U年MMM至U年MMM"}
+                }
+                yMMMEd{
+                    M{"U年MMMd日E至MMMd日E"}
+                    d{"U年MMMd日E至d日E"}
+                    y{"U年MMMd日E至U年MMMd日E"}
+                }
+                yMMMM{
+                    M{"U年MMMM至MMMM"}
+                    y{"U年MMMM至U年MMMM"}
+                }
+                yMMMd{
+                    M{"U年MMMd日至MMMd日"}
+                    d{"U年MMMd日至d日"}
+                    y{"U年MMMd日至U年MMMd日"}
+                }
+                yMd{
+                    M{"U/M/d至U/M/d"}
+                    d{"U/M/d至U/M/d"}
+                    y{"U/M/d至U/M/d"}
                 }
             }
             monthNames{

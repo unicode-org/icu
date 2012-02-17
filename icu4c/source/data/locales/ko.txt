@@ -61,7 +61,7 @@ ko{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.65.81"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -111,7 +111,7 @@ ko{
                 yMd{"G y. M. d."}
                 yQ{"G y년 Q분기"}
                 yQQQ{"G y년 QQQ"}
-                yyMM{"G YY. M."}
+                yyMM{"G yy. M."}
                 yyMMM{"G y년 MMM"}
                 yyQ{"G y년 Q분기"}
                 yyyyMM{"G y. MM"}
@@ -137,6 +137,33 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                EEEEd{"d일 EEEE"}
+                Ed{"d일 (E)"}
+                H{"H시"}
+                Hms{"H시 m분 s초"}
+                M{"M월"}
+                MEEEEd{"M. d. EEEE"}
+                MEd{"M. d. (E)"}
+                MMM{"LLL"}
+                MMMEd{"MMM d일 (E)"}
+                MMMd{"MMM d일"}
+                Md{"M. d."}
+                d{"d일"}
+                h{"a h시"}
+                hm{"a h:mm"}
+                hms{"a h:mm:ss"}
+                y{"U년"}
+                yM{"U. M."}
+                yMEd{"U. M. d. (E)"}
+                yMMM{"U년 MMM"}
+                yMMMEEEEd{"U년 MMM d일 EEEE"}
+                yMMMEd{"U년 MMM d일 (E)"}
+                yMMMd{"U년 MMM d일"}
+                yMd{"U. M. d."}
+                yQ{"U년 Q분기"}
+                yQQQ{"U년 QQQ"}
             }
             cyclicNameSets{
                 years{
@@ -566,7 +593,7 @@ ko{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"G yy년"}
-                yyMM{"G YY. M."}
+                yyMM{"G yy. M."}
                 yyMMM{"G yy년 MMM"}
                 yyQ{"G yy년 Q분기"}
                 yyyy{"G yy년"}
@@ -858,7 +885,7 @@ ko{
                 hms{"a h:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                yyMM{"G YY. M."}
+                yyMM{"G yy. M."}
                 yyMMM{"G yy년 MMM"}
                 yyQ{"G y년 Q분기"}
                 yyyy{"G yy년"}
