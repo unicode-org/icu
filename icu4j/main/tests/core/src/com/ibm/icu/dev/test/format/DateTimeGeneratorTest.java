@@ -438,6 +438,24 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMEd", "\u0421\u0440, 13 \u044F\u043D\u0432."},
         new String[] {"Ed", "\u0421\u0440, 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},
+
+        new ULocale("zh@calendar=chinese"),
+        new String[] {"yM", "\u620A\u5BC5\u5E7411\u6708"},
+        new String[] {"yMMM", "\u620A\u5BC5\u5E74\u5341\u4E00\u6708"},
+        new String[] {"yMd", "\u620A\u5BC5\u5E7411\u670826\u65E5"},
+        new String[] {"yMMMd", "\u620A\u5BC5\u5E74\u5341\u4E00\u670826\u65E5"},
+        new String[] {"Md", "11-26"},
+        new String[] {"MMMd", "\u5341\u4E00\u670826\u65E5"},
+        new String[] {"MMMMd", "\u5341\u4E00\u670826\u65E5"},
+        new String[] {"yQQQ", "\u620A\u5BC5\u5E744\u5B63"},
+        new String[] {"hhmm", "\u4E0B\u534811:58"},
+        new String[] {"HHmm", "23:58"},
+        new String[] {"jjmm", "\u4E0B\u534811:58"},
+        new String[] {"mmss", "58:59"},
+        new String[] {"yyyyMMMM", "\u620A\u5BC5\u5E74\u5341\u4E00\u6708"},
+        new String[] {"MMMEd", "\u5341\u4E00\u670826\u65E5\u5468\u4E09"},
+        new String[] {"Ed", "26\u65E5\u5468\u4E09"},
+        new String[] {"jmmssSSS", "\u4E0B\u534811:58:59.123"},
     };
     
     public void DayMonthTest() {
