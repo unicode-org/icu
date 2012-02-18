@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -760,6 +760,16 @@ RuleBasedCollator::checkOwned() {
         isWriteThroughAlias = FALSE;
     }
 }
+
+
+int32_t U_EXPORT2 RuleBasedCollator::internalGetShortDefinitionString(const char *locale,
+                                                                      char *buffer,
+                                                                      int32_t capacity,
+                                                                      UErrorCode &status) {
+  /* simply delegate */
+  return ucol_getShortDefinitionString(ucollator, locale, buffer, capacity, &status);
+}
+
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedCollator)
 

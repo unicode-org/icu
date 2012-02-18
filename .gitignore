@@ -21,6 +21,7 @@ icu4c/source/common/*.plg
 icu4c/source/common/*.vcxproj.user
 icu4c/source/common/Debug
 icu4c/source/common/Makefile
+icu4c/source/common/Makefile.local
 icu4c/source/common/Release
 icu4c/source/common/common.res
 icu4c/source/common/common.vcproj.*.*.user

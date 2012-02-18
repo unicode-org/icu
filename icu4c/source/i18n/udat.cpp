@@ -23,6 +23,7 @@
 #include "unicode/ustring.h"
 #include "cpputils.h"
 #include "reldtfmt.h"
+#include "umutex.h"
 
 U_NAMESPACE_USE
 
@@ -83,6 +84,40 @@ udat_toCalendarDateField(UDateFormatField field) {
   return gDateFieldMapping[field];
 }
 
+/* For now- one opener. */
+static UDateFormatOpener gOpener = NULL;
+
+U_INTERNAL void U_EXPORT2
+udat_registerOpener(UDateFormatOpener opener, UErrorCode *status)
+{
+  if(U_FAILURE(*status)) return;
+  umtx_lock(NULL);
+  if(gOpener==NULL) {
+    gOpener = opener;
+  } else {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+  }
+  umtx_unlock(NULL);
+}
+
+U_INTERNAL UDateFormatOpener U_EXPORT2
+udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status)
+{
+  if(U_FAILURE(*status)) return NULL;
+  UDateFormatOpener oldOpener = NULL;
+  umtx_lock(NULL);
+  if(gOpener==NULL || gOpener!=opener) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+  } else {
+    oldOpener=gOpener;
+    gOpener=NULL;
+  }
+  umtx_unlock(NULL);
+  return oldOpener;
+}
+
+
+
 U_CAPI UDateFormat* U_EXPORT2
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
@@ -96,6 +131,12 @@ udat_open(UDateFormatStyle  timeStyle,
     DateFormat *fmt;
     if(U_FAILURE(*status)) {
         return 0;
+    }
+    if(gOpener!=NULL) { // if it's registered
+      fmt = (DateFormat*) (*gOpener)(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status);
+      if(fmt!=NULL) {
+        return (UDateFormat*)fmt;
+      } // else fall through.
     }
     if(timeStyle != UDAT_IGNORE) {
         if(locale == 0) {
