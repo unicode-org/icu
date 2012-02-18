@@ -93,7 +93,8 @@ import com.ibm.icu.util.ULocale.Category;
  * z        time zone               (Text)              PST
  * zzzz     time zone               (Text)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
- * ZZZZ     time zone (RFC 822)     (Text & Number)     GMT-08:00
+ * ZZZZ     time zone (GMT offset)  (Text & Number)     GMT-08:00
+ * ZZZZZ    time zone (ISO 8601)    (Text & Number)     -08:00 & Z (UTC)
  * v        time zone (generic)     (Text)              PT
  * vvvv     time zone (generic)     (Text)              Pacific Time
  * V        time zone (abreviation) (Text)              PST
@@ -1061,6 +1062,9 @@ public class SimpleDateFormat extends DateFormat {
             if (count < 4) {
                 // RFC822 format
                 result = tzFormat().format(Style.RFC822, tz, date);
+            } else if (count == 5) {
+                // ISO 8601 extended format
+                result = tzFormat().format(Style.ISO8601, tz, date);
             } else {
                 // long form, localized GMT pattern
                 result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
@@ -2221,7 +2225,7 @@ public class SimpleDateFormat extends DateFormat {
             case 23: // 'Z' - TIMEZONE_RFC
             {
                 Output<TimeType> tzTimeType = new Output<TimeType>();
-                Style style = (count < 4) ? Style.RFC822 : Style.LOCALIZED_GMT;
+                Style style = (count < 4) ? Style.RFC822 : ((count == 5) ? Style.ISO8601 : Style.LOCALIZED_GMT);
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
                     if (tzTimeType.value == TimeType.STANDARD) {

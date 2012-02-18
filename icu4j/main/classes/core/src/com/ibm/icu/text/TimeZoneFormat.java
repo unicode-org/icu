@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, International Business Machines Corporation and         *
+ * Copyright (C) 2011-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -76,43 +76,55 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        GENERIC_LOCATION,
+        GENERIC_LOCATION (0x0001),
         /**
          * Generic long non-location format, such as "Eastern Time".
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        GENERIC_LONG,
+        GENERIC_LONG (0x0002),
         /**
          * Generic short non-location format, such as "ET".
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        GENERIC_SHORT,
+        GENERIC_SHORT (0x0004),
         /**
          * Specific long format, such as "Eastern Standard Time".
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        SPECIFIC_LONG,
+        SPECIFIC_LONG (0x0008),
         /**
          * Specific short format, such as "EST", "PDT".
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        SPECIFIC_SHORT,
+        SPECIFIC_SHORT (0x0010),
         /**
          * RFC822 format, such as "-0500"
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        RFC822,
+        RFC822 (0x0020),
         /**
          * Localized GMT offset format, such as "GMT-05:00", "UTC+0100"
          * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
-        LOCALIZED_GMT,
+        LOCALIZED_GMT (0x0040),
+        /**
+         * ISO 8601 format (extended), such as "-05:00", "Z"(UTC)
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
+         */
+        ISO8601 (0x0080);
+
+        final int flag;
+    
+        private Style(int flag) {
+            this.flag = flag;
+        }
     }
 
     /**
@@ -200,6 +212,22 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         DAYLIGHT;
     }
 
+    /**
+     * Parse option enum, used for specifying optional parse behavior.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum ParseOption {
+        /**
+         * When a time zone display name is not found within a set of display names
+         * used for the specified style, look for the name from display names used
+         * by other styles.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
+         */
+        ALL_STYLES;
+    }    
+
     /*
      * fields to be serialized
      */
@@ -235,7 +263,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     private static final String DEFAULT_GMT_ZERO = "GMT";
     private static final String[] DEFAULT_GMT_DIGITS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     private static final char DEFAULT_GMT_OFFSET_SEP = ':';
-    private static final String RFC822_DIGITS = "0123456789";
+    private static final String ASCII_DIGITS = "0123456789";
+    private static final String ISO8601_UTC = "Z";
 
     // Order of GMT offset pattern parsing, *_HMS must be evaluated first
     // because *_HM is most likely a substring of *_HMS 
@@ -252,6 +281,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     private static final int MILLIS_PER_HOUR = 60 * 60 * 1000;
     private static final int MILLIS_PER_MINUTE = 60 * 1000;
     private static final int MILLIS_PER_SECOND = 1000;
+
+    private static final int UNKNOWN_OFFSET = Integer.MAX_VALUE;
 
     private static TimeZoneFormatCache _tzfCache = new TimeZoneFormatCache();
 
@@ -436,7 +467,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Returns the offset pattern used for localized GMT format.
      * 
      * @param type the offset pattern enum
-     * @return the offset pattern enum.
      * @see #setGMTOffsetPattern(GMTOffsetPatternType, String)
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
@@ -448,7 +478,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Sets the offset pattern for the given offset type.
      * 
-     * @param type the offset pettern.
+     * @param type the offset pattern.
      * @param pattern the pattern string.
      * @return this object.
      * @throws IllegalArgumentException when the pattern string does not have required time field letters.
@@ -529,7 +559,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     }
 
     /**
-     * Returns the localized GMT format string for GMT(UTC) itself (GMT offset is 0).
+     * Sets the localized GMT format string for GMT(UTC) itself (GMT offset is 0).
      * 
      * @param gmtZeroFormat the localized GMT format string for GMT(UTC).
      * @return this object.
@@ -553,86 +583,70 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     }
 
     /**
-     * Returns <code>true</code> when this <code>TimeZoneFormat</code> is configured for parsing
-     * display names including names that are only used by other styles by
-     * {@link #parse(Style, String, ParsePosition, Output)}.
-     * <p><b>Note</b>: An instance created by {@link #getInstance(ULocale)} is configured NOT
-     * parsing all styles (<code>false</code>).
+     * Sets the default parse options.
+     * <p>
+     * <b>Note:</b> By default, an instance of <code>TimeZoneFormat></code>
+     * created by {#link {@link #getInstance(ULocale)} has no parse options set.
      * 
-     * @return <code>true</code> when this instance is configure for parsing all available names.
-     * @see #setParseAllStyles(boolean)
+     * @param options the default parse options.
+     * @return this object.
+     * @see ParseOption
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
-    public boolean isParseAllStyles() {
-        return _parseAllStyles;
+    public TimeZoneFormat setDefaultParseOptions(EnumSet<ParseOption> options) {
+        // Currently, only ALL_STYLES is supported
+        _parseAllStyles = options.contains(ParseOption.ALL_STYLES);
+        return this;
     }
 
     /**
-     * Sets if {@link #parse(Style, String, ParsePosition, Output)} to parse display
-     * names including names that are only used by other styles.
-     * 
-     * @param parseAllStyles <code>true</code> to parse all available names.
-     * @return this object.
-     * @throws UnsupportedOperationException when this object is frozen.
-     * @see #isParseAllStyles()
+     * Returns the default parse options used by this <code>TimeZoneFormat</code> instance.
+     * @return the default parse options.
+     * @see ParseOption
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
-    public TimeZoneFormat setParseAllStyles(boolean parseAllStyles) {
-        if (isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to modify frozen object");
+    public EnumSet<ParseOption> getDefaultParseOptions() {
+        if (_parseAllStyles) {
+            return EnumSet.of(ParseOption.ALL_STYLES);
         }
-        _parseAllStyles = parseAllStyles;
-        return this;
+        return EnumSet.noneOf(ParseOption.class);
     }
 
     /**
      * Returns the RFC822 style time zone string for the given offset.
      * For example, "-0800".
      * 
-     * @param offset the offset for GMT(UTC) in milliseconds.
+     * @param offset the offset from GMT(UTC) in milliseconds.
      * @return the RFC822 style GMT(UTC) offset format.
      * @see #parseOffsetRFC822(String, ParsePosition)
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
     public final String formatOffsetRFC822(int offset) {
-        StringBuilder buf = new StringBuilder();
-        char sign = '+';
-        if (offset < 0) {
-            sign = '-';
-            offset = -offset;
-        }
-        buf.append(sign);
+        // Note: OffsetFields.HMS as maxFields is an ICU extension. RFC822 specification
+        // defines exactly 4 digits for the offset field in HHss format.
+        return formatOffsetWithASCIIDigits(offset, null, OffsetFields.HM, OffsetFields.HMS);
+    }
 
-        int offsetH = offset / MILLIS_PER_HOUR;
-        offset = offset % MILLIS_PER_HOUR;
-        int offsetM = offset / MILLIS_PER_MINUTE;
-        offset = offset % MILLIS_PER_MINUTE;
-        int offsetS = offset / MILLIS_PER_SECOND;
-
-        assert(offsetH >= 0 && offsetH < 100);
-        assert(offsetM >= 0 && offsetM < 60);
-        assert(offsetS >= 0 && offsetS < 60);
-
-        int num = 0, denom = 0;
-        if (offsetS == 0) {
-            offset = offsetH * 100 + offsetM; // HHmm
-            num = offset % 10000;
-            denom = 1000;
-        } else {
-            offset = offsetH * 10000 + offsetM * 100 + offsetS; //HHmmss
-            num = offset % 1000000;
-            denom = 100000;
+    /**
+     * Returns the ISO 8601 style (extended format) time zone string for the given offset.
+     * For example, "-08:00" and "Z"
+     * 
+     * @param offset the offset from GMT(UTC) in milliseconds.
+     * @return the ISO 8601 style GMT(UTC) offset format.
+     * @see #parseOffsetISO8601(String, ParsePosition)
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final String formatOffsetISO8601(int offset) {
+        if (offset == 0) {
+            return ISO8601_UTC;
         }
-        while (denom >= 1) {
-            char digit = (char)((num / denom) + '0');
-            buf.append(digit);
-            num = num % denom;
-            denom /= 10;
-        }
-        return buf.toString();
+        // Note: OffsetFields.HMS as maxFields is an ICU extension. ISO 8601 specification does
+        // not support second field.
+        return formatOffsetWithASCIIDigits(offset, ':', OffsetFields.HM, OffsetFields.HMS);
     }
 
     /**
@@ -777,6 +791,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             result = formatSpecific(tz, NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT, date, timeType);
             break;
         case RFC822:
+        case ISO8601:
         case LOCALIZED_GMT:
             // will be handled below
             break;
@@ -785,12 +800,16 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         if (result == null) {
             int[] offsets = {0, 0};
             tz.getOffset(date, false, offsets);
-            if (style == Style.RFC822) {
-                // RFC822 was requested
+            switch (style) {
+            case RFC822:
                 result = formatOffsetRFC822(offsets[0] + offsets[1]);
-            } else {
-                // LOCALIZED_GMT was requested, or fallback for other types
+                break;
+            case ISO8601:
+                result = formatOffsetISO8601(offsets[0] + offsets[1]);
+                break;
+            default: // Other than RFC822/ISO8601, including fallback from SPECIFIC_XXX/GENERIC_XXX
                 result = formatOffsetLocalizedGMT(offsets[0] + offsets[1]);
+                break;
             }
             // time type
             if (timeType != null) {
@@ -820,9 +839,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      */
     public final int parseOffsetRFC822(String text, ParsePosition pos) {
         int start = pos.getIndex();
-
-        if (start + 2 >= text.length()) {
-            // minimum 2 characters
+        if (start >= text.length()) {
             pos.setErrorIndex(start);
             return 0;
         }
@@ -838,69 +855,37 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             pos.setErrorIndex(start);
             return 0;
         }
+
         // Parse digits
-        // Possible format (excluding sign char) are:
-        // HHmmss
-        // HmmSS
-        // HHmm
-        // Hmm
-        // HH
-        // H
-        int idx = start + 1;
-        int numDigits = 0;
-        int[] digits = new int[6];
-        while (numDigits < digits.length && idx < text.length()) {
-            int digit = RFC822_DIGITS.indexOf(text.charAt(idx));
-            if (digit < 0) {
-                break;
-            }
-            digits[numDigits] = digit;
-            numDigits++;
-            idx++;
-        }
+        pos.setIndex(start + 1);
+        int offset = parseContiguousAsciiDigitOffset(text, pos, OffsetFields.H, OffsetFields.HMS, false);
 
-        if (numDigits == 0) {
-            // Not an RFC822 offset string
+        if (pos.getErrorIndex() != -1) {
+            pos.setIndex(start);    // reset
             pos.setErrorIndex(start);
             return 0;
         }
 
-        int hour = 0, min = 0, sec = 0;
-        switch (numDigits) {
-        case 1: //H
-            hour = digits[0];
-            break;
-        case 2: //HH
-            hour = digits[0] * 10 + digits[1];
-            break;
-        case 3: //Hmm
-            hour = digits[0];
-            min = digits[1] * 10 + digits[2];
-            break;
-        case 4: //HHmm
-            hour = digits[0] * 10 + digits[1];
-            min = digits[2] * 10 + digits[3];
-            break;
-        case 5: //Hmmss
-            hour = digits[0];
-            min = digits[1] * 10 + digits[2];
-            sec = digits[3] * 10 + digits[4];
-            break;
-        case 6: //HHmmss
-            hour = digits[0] * 10 + digits[1];
-            min = digits[2] * 10 + digits[3];
-            sec = digits[4] * 10 + digits[5];
-            break;
-        }
+        return sign * offset;
+    }
 
-        if (hour > MAX_OFFSET_HOUR || min > MAX_OFFSET_MINUTE || sec > MAX_OFFSET_SECOND) {
-            // Invalid value range
-            pos.setErrorIndex(start);
-            return 0;
-        }
-
-        pos.setIndex(start + 1 + numDigits);
-        return ((((hour * 60) + min) * 60) + sec) * 1000 * sign;
+    /**
+     * Returns offset from GMT(UTC) in milliseconds for the given ISO 8601 style
+     * (extended format) time zone string. When the given string is not an ISO 8601 time
+     * zone string, this method sets the current position as the error index
+     * to <code>ParsePosition pos</code> and returns 0.
+     * 
+     * @param text the text contains ISO 8601 style time zone string (e.g. "-08:00", "Z")
+     * at the position.
+     * @param pos the position.
+     * @return the offset from GMT(UTC) in milliseconds for the given ISO 8601 style
+     * time zone string.
+     * @see #formatOffsetISO8601(int)
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final int parseOffsetISO8601(String text, ParsePosition pos) {
+        return parseOffsetISO8601(text, pos, false, null);
     }
 
     /**
@@ -923,168 +908,38 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Returns a <code>TimeZone</code> by parsing the time zone string according to
-     * the given parse position.
-     * 
-     * <p><b>Note</b>: By default, this method supports 1) RFC822 style time zone format,
-     * 2) Localized GMT offset format and 3) all display names that are used for the
-     * given <code>style</code>. If you want to parse all display names including names that are
-     * only used for styles other than the specified <code>style</code>, then you should
-     * set true to {@link #setParseAllStyles(boolean)}.
-     * 
+     * the specified parse position, the style and the parse options.
+     * <p>
+     * <b>Note:</b>When the input text does not match the specified style, this method
+     * evaluate the input using the following order and return the longest match.
+     * <ol>
+     *   <li>ISO 8601 style time zone format</li>
+     *   <li>RFC822 style time zone format</li>
+     *   <li>Localized GMT offset format</li>
+     *   <li>Time zone display names available for the given <code>style</code> argument</li>
+     *   <li>When {@link ParseOption#ALL_STYLES} is enabled in the parse options, all time zone
+     *   display names other than the <code>style</code></li>
+     * </ol>
      * @param text the text contains a time zone string at the position.
      * @param style the format style
      * @param pos the position.
+     * @param options the parse options to be used, or null to use the default parse options.
      * @param timeType The output argument for receiving the time type (standard/daylight/unknown),
      * or specify null if the information is not necessary.
      * @return A <code>TimeZone</code>, or null if the input could not be parsed.
      * @see Style
-     * @see #format(Style, TimeZone, long, Output)
-     * @see #setParseAllStyles(boolean)
+     * @see ParseOption
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
-    public TimeZone parse(Style style, String text, ParsePosition pos, Output<TimeType> timeType) {
-        return parse(style, text, pos, _parseAllStyles, timeType);
-    }
-
-    /**
-     * Returns a <code>TimeZone</code> by parsing the time zone string according to
-     * the given parse position.
-     * 
-     * <p><b>Note</b>: This method is equivalent to <code>parse(Style.GENERIC_LOCATION,
-     * text, pos, null)</code> with {@link #setParseAllStyles(boolean) setParseAllStyles(true)}.
-     * 
-     * @param text the text contains a time zone string at the position.
-     * @param pos the position.
-     * @return A <code>TimeZone</code>, or null if the input could not be parsed.
-     * @see #parse(Style, String, ParsePosition, Output)
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public final TimeZone parse(String text, ParsePosition pos) {
-        return parse(Style.GENERIC_LOCATION, text, pos, true, null);
-    }
-
-    /**
-     * Returns a <code>TimeZone</code> for the given text.
-     * @param text the time zone string
-     * @return A <code>TimeZone</code>.
-     * @throws ParseException when the input could not be parsed as a time zone string.
-     * @see #parse(String, ParsePosition)
-     * @see #parse(Style, String, ParsePosition, Output)
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public final TimeZone parse(String text) throws ParseException {
-        ParsePosition pos = new ParsePosition(0);
-        TimeZone tz = parse(text, pos);
-        if (pos.getErrorIndex() >= 0) {
-            throw new ParseException("Unparseable time zone: \"" + text + "\"" , 0);
-        }
-        assert(tz != null);
-        return tz;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-        TimeZone tz = null;
-        long date = System.currentTimeMillis();
-
-        if (obj instanceof TimeZone) {
-            tz = (TimeZone)obj;
-        } else if (obj instanceof Calendar) {
-            tz = ((Calendar)obj).getTimeZone();
-            date = ((Calendar)obj).getTimeInMillis();
+    public TimeZone parseX(Style style, String text, ParsePosition pos, EnumSet<ParseOption> options, Output<TimeType> timeType) {
+        boolean parseAllStyles;
+        if (options == null) {
+            parseAllStyles = _parseAllStyles;
         } else {
-            throw new IllegalArgumentException("Cannot format given Object (" +
-                    obj.getClass().getName() + ") as a time zone");
+            parseAllStyles = options.contains(ParseOption.ALL_STYLES);
         }
-        assert(tz != null);
-        String result = formatOffsetLocalizedGMT(tz.getOffset(date));
-        toAppendTo.append(result);
 
-        if (pos.getFieldAttribute() == DateFormat.Field.TIME_ZONE
-                || pos.getField() == DateFormat.TIMEZONE_FIELD) {
-            pos.setBeginIndex(0);
-            pos.setEndIndex(result.length());
-        }
-        return toAppendTo;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
-        StringBuffer toAppendTo = new StringBuffer();
-        FieldPosition pos = new FieldPosition(0);
-        toAppendTo = format(obj, toAppendTo, pos);
-
-        // supporting only DateFormat.Field.TIME_ZONE
-        AttributedString as = new AttributedString(toAppendTo.toString());
-        as.addAttribute(DateFormat.Field.TIME_ZONE, DateFormat.Field.TIME_ZONE);
-
-        return as.getIterator();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public Object parseObject(String source, ParsePosition pos) {
-        return parse(source, pos);
-    }
-
-
-    /**
-     * Private method returning the time zone's specific format string.
-     * 
-     * @param tz the time zone
-     * @param stdType the name type used for standard time
-     * @param dstType the name type used for daylight time
-     * @param date the date
-     * @param timeType when null, actual time type is set
-     * @return the time zone's specific format name string
-     */
-    private String formatSpecific(TimeZone tz, NameType stdType, NameType dstType, long date, Output<TimeType> timeType) {
-        assert(stdType == NameType.LONG_STANDARD || stdType == NameType.SHORT_STANDARD);
-        assert(dstType == NameType.LONG_DAYLIGHT || dstType == NameType.SHORT_DAYLIGHT);
-
-        boolean isDaylight = tz.inDaylightTime(new Date(date));
-        String name = isDaylight?
-                getTimeZoneNames().getDisplayName(ZoneMeta.getCanonicalCLDRID(tz), dstType, date) :
-                getTimeZoneNames().getDisplayName(ZoneMeta.getCanonicalCLDRID(tz), stdType, date);
-
-        if (name != null && timeType != null) {
-            timeType.value = isDaylight ? TimeType.DAYLIGHT : TimeType.STANDARD;
-        }
-        return name;
-    }
-
-    /**
-     * Private method implementing the parse logic
-     * 
-     * @param style the preferred style.
-     * @param text the input text.
-     * @param pos the parse position.
-     * @param parseAllStyles true if parse other names when a match is not found within names
-     * used by the preferred style.
-     * @param timeType receiving parsed time type (unknown/standard/daylight). If not necessary, specify null.
-     * @return the result time zone
-     */
-    private TimeZone parse(Style style, String text, ParsePosition pos, boolean parseAllStyles, Output<TimeType> timeType) {
         if (timeType != null) {
             timeType.value = TimeType.UNKNOWN;
         }
@@ -1098,14 +953,15 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             pos.setIndex(tmpPos.getIndex());
             return getTimeZoneForOffset(offset);
         }
+
         // try Localized GMT
         int gmtZeroLen = 0;
         tmpPos.setErrorIndex(-1);
         tmpPos.setIndex(pos.getIndex());
-        boolean[] isGMTZero = {false};
-        offset = parseOffsetLocalizedGMT(text, tmpPos, isGMTZero);
+        Output<Boolean> hasDigitOffset = new Output<Boolean>(false);
+        offset = parseOffsetLocalizedGMT(text, tmpPos, hasDigitOffset);
         if (tmpPos.getErrorIndex() < 0) {
-            if (!isGMTZero[0] || style == Style.LOCALIZED_GMT || style == Style.RFC822 || tmpPos.getIndex() == text.length()) {
+            if (hasDigitOffset.value || style == Style.LOCALIZED_GMT || style == Style.RFC822 || tmpPos.getIndex() == text.length()) {
                 // When GMT zero format was detected, we won't try other styles if;
                 //   1) LOCALIZED_GMT or RFC822 was requested.
                 //   2) The input text was fully consumed.
@@ -1248,6 +1104,420 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
         pos.setErrorIndex(startIdx);
         return null;
+    }
+
+    public TimeZone parse(Style style, String text, ParsePosition pos, EnumSet<ParseOption> options, Output<TimeType> timeType) {
+        if (timeType == null) {
+            timeType = new Output<TimeType>(TimeType.UNKNOWN);
+        } else {
+            timeType.value = TimeType.UNKNOWN;
+        }
+
+        int startIdx = pos.getIndex();
+        int maxPos = text.length();
+        int offset;
+
+        boolean fallbackLocalizedGMT = false;
+        if (style == Style.SPECIFIC_LONG || style == Style.SPECIFIC_SHORT
+                || style == Style.GENERIC_LONG || style == Style.GENERIC_SHORT || style == Style.GENERIC_LOCATION) {
+            // above styles may use localized gmt format as fallback
+            fallbackLocalizedGMT = true;
+        }
+
+        int evaluated = 0;  // bit flags representing already evaluated styles
+        ParsePosition tmpPos = new ParsePosition(startIdx);
+
+        int parsedOffset = UNKNOWN_OFFSET;  // stores successfully parsed offset for later use
+        int parsedPos = -1;                 // stores successfully parsed offset position for later use
+
+        // Try localized GMT format first if necessary
+        if (fallbackLocalizedGMT) {
+            Output<Boolean> hasDigitOffset = new Output<Boolean>(false);
+            offset = parseOffsetLocalizedGMT(text, tmpPos, hasDigitOffset);
+            if (tmpPos.getErrorIndex() == -1) {
+                // Even when the input text was successfully parsed as a localized GMT format text,
+                // we may still need to evaluate the specified style if -
+                //   1) GMT zero format was used, and
+                //   2) The input text was not completely processed
+                if (tmpPos.getIndex() == maxPos || hasDigitOffset.value) {
+                    pos.setIndex(tmpPos.getIndex());
+                    return getTimeZoneForOffset(offset);
+                }
+                parsedOffset = offset;
+                parsedPos = tmpPos.getIndex();
+            }
+            evaluated |= Style.LOCALIZED_GMT.flag;
+
+            tmpPos.setIndex(startIdx);
+            tmpPos.setErrorIndex(-1);
+        }
+
+        // Try the specified style
+        switch (style) {
+            case RFC822:
+            {
+                offset = parseOffsetRFC822(text, tmpPos);
+                if (tmpPos.getErrorIndex() == -1) {
+                    pos.setIndex(tmpPos.getIndex());
+                    return getTimeZoneForOffset(offset);
+                }
+                break;
+            }
+            case LOCALIZED_GMT:
+            {
+                offset = parseOffsetLocalizedGMT(text, tmpPos);
+                if (tmpPos.getErrorIndex() == -1) {
+                    pos.setIndex(tmpPos.getIndex());
+                    return getTimeZoneForOffset(offset);
+                }
+                break;
+            }
+            case ISO8601:
+            {
+                offset = parseOffsetISO8601(text, tmpPos);
+                if (tmpPos.getErrorIndex() == -1) {
+                    pos.setIndex(tmpPos.getIndex());
+                    return getTimeZoneForOffset(offset);
+                }
+                // Note: ISO 8601 parser also support basic format (without ':'),
+                // which is same with RFC 822 format.
+                evaluated |= Style.RFC822.flag;
+                break;
+            }
+            case SPECIFIC_LONG:
+            case SPECIFIC_SHORT:
+            {
+                // Specific styles
+                EnumSet<NameType> nameTypes = null;
+                switch (style) {
+                case SPECIFIC_LONG:
+                    nameTypes = EnumSet.of(NameType.LONG_STANDARD, NameType.LONG_DAYLIGHT);
+                    break;
+                case SPECIFIC_SHORT:
+                    nameTypes = EnumSet.of(NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT);
+                    break;
+                }
+                Collection<MatchInfo> specificMatches = _tznames.find(text, startIdx, nameTypes);
+                if (specificMatches != null) {
+                    MatchInfo specificMatch = null;
+                    for (MatchInfo match : specificMatches) {
+                        if (startIdx + match.matchLength() > parsedPos) {
+                            specificMatch = match;
+                            parsedPos = startIdx + match.matchLength();
+                        }
+                    }
+                    if (specificMatch != null) {
+                        timeType.value = getTimeType(specificMatch.nameType());
+                        pos.setIndex(parsedPos);
+                        return TimeZone.getTimeZone(getTimeZoneID(specificMatch.tzID(), specificMatch.mzID()));
+                    }
+                }
+                break;
+            }
+            case GENERIC_LONG:
+            case GENERIC_SHORT:
+            case GENERIC_LOCATION:
+            {
+                EnumSet<GenericNameType> genericNameTypes = null;
+                switch (style) {
+                case GENERIC_LOCATION:
+                    genericNameTypes = EnumSet.of(GenericNameType.LOCATION);
+                    break;
+                case GENERIC_LONG:
+                    genericNameTypes = EnumSet.of(GenericNameType.LONG, GenericNameType.LOCATION);
+                    break;
+                case GENERIC_SHORT:
+                    genericNameTypes = EnumSet.of(GenericNameType.SHORT, GenericNameType.LOCATION);
+                    break;
+                }
+                GenericMatchInfo bestGeneric = getTimeZoneGenericNames().findBestMatch(text, startIdx, genericNameTypes);
+                if (bestGeneric != null && (startIdx + bestGeneric.matchLength() > parsedPos)) {
+                    timeType.value = bestGeneric.timeType();
+                    pos.setIndex(startIdx + bestGeneric.matchLength());
+                    return TimeZone.getTimeZone(bestGeneric.tzID());
+                }
+                break;
+            }
+        }
+        evaluated |= style.flag;
+
+        if (parsedPos > startIdx) {
+            // When the specified style is one of SPECIFIC_XXX or GENERIC_XXX, we tried to parse the input
+            // as localized GMT format earlier. If parsedOffset is positive, it means it was successfully
+            // parsed as localized GMT format, but offset digits were not detected (more specifically, GMT
+            // zero format). Then, it tried to find a match within the set of display names, but could not
+            // find a match. At this point, we can safely assume the input text contains the localized
+            // GMT format.
+            assert parsedOffset != UNKNOWN_OFFSET;
+            pos.setIndex(parsedPos);
+            return getTimeZoneForOffset(parsedOffset);
+        }
+
+
+        // Failed to parse the input text as the time zone format in the specified style.
+        // Check the longest match among other styles below.
+        assert parsedPos < 0;
+        assert parsedOffset == UNKNOWN_OFFSET;
+        tmpPos.setIndex(startIdx);
+        tmpPos.setErrorIndex(-1);
+
+        // ISO 8601
+        if ((evaluated & Style.ISO8601.flag) == 0) {
+            Output<Boolean> hasDigitOffset = new Output<Boolean>(false);
+            offset = parseOffsetISO8601(text, tmpPos, false, hasDigitOffset);
+            if (tmpPos.getErrorIndex() == -1) {
+                if (tmpPos.getIndex() == maxPos || hasDigitOffset.value) {
+                    pos.setIndex(tmpPos.getIndex());
+                    return getTimeZoneForOffset(offset);
+                }
+                // Note: When ISO 8601 format contains offset digits, it should not
+                // collide with other formats (except RFC 822, which is compatible with
+                // ISO 8601 basic format). However, ISO 8601 UTC format "Z" (single letter)
+                // may collide with other names. In this case, we need to evaluate other
+                // names.
+                parsedOffset = offset;
+                parsedPos = tmpPos.getIndex();
+                assert parsedPos == startIdx + 1;   // only when "Z" is used
+            }
+            tmpPos.setIndex(startIdx);
+            tmpPos.setErrorIndex(-1);
+        }
+
+        // RFC 822
+        // Note: ISO 8601 parser supports RFC 822 format. So we do not need to parse
+        // it as RFC 822 here. This might be changed in future when we support
+        // strict format option for ISO 8601 or RFC 822. 
+//        if ((evaluated & Style.RFC822.flag) == 0) {
+//            offset = parseOffsetRFC822(text, tmpPos);
+//            if (tmpPos.getErrorIndex() == -1) {
+//                pos.setIndex(tmpPos.getIndex());
+//                return getTimeZoneForOffset(offset);
+//            }
+//            tmpPos.setIndex(startIdx);
+//            tmpPos.setErrorIndex(-1);
+//        }
+
+        // Localized GMT format
+        if ((evaluated & Style.LOCALIZED_GMT.flag) == 0) {
+            Output<Boolean> hasDigitOffset = new Output<Boolean>(false);
+            offset = parseOffsetLocalizedGMT(text, tmpPos, hasDigitOffset);
+            if (tmpPos.getErrorIndex() == -1) {
+                if (tmpPos.getIndex() == maxPos || hasDigitOffset.value) {
+                    pos.setIndex(tmpPos.getIndex());
+                    return getTimeZoneForOffset(offset);
+                }
+                // Evaluate other names - see the comment earlier in this method.
+                parsedOffset = offset;
+                parsedPos = tmpPos.getIndex();
+            }
+        }
+
+        // When ParseOption.ALL_STYLES is available, we also try to look all possible display names.
+        // For example, when style is GENERIC_LONG, "EST" (SPECIFIC_SHORT) is never
+        // used for America/New_York. With parseAllStyles true, this code parses "EST"
+        // as America/New_York.
+
+        // Note: Adding all possible names into the trie used by the implementation is quite heavy operation,
+        // which we want to avoid normally (note that we cache the trie, so this is applicable to the
+        // first time only as long as the cache does not expire).
+
+        boolean parseAllStyles = (options == null) ?
+                getDefaultParseOptions().contains(ParseOption.ALL_STYLES)
+                : options.contains(ParseOption.ALL_STYLES);
+
+        if (parseAllStyles) {
+            // Try all specific names first
+            Collection<MatchInfo> specificMatches = _tznames.find(text, startIdx, ALL_SPECIFIC_NAME_TYPES);
+            MatchInfo specificMatch = null;
+            if (specificMatches != null) {
+                for (MatchInfo match : specificMatches) {
+                    if (startIdx + match.matchLength() > parsedPos) {
+                        specificMatch = match;
+                        parsedPos = startIdx + match.matchLength();
+                    }
+                }
+            }
+
+            GenericMatchInfo genericMatch = null;
+            if (parsedPos < maxPos) {
+                // Try generic names
+                genericMatch = getTimeZoneGenericNames().findBestMatch(text, startIdx, ALL_GENERIC_NAME_TYPES);
+            }
+
+            // Pick up better match
+            if (genericMatch != null && (startIdx + genericMatch.matchLength() > parsedPos)) {
+                // use this one
+                parsedPos = startIdx + genericMatch.matchLength();
+                timeType.value = genericMatch.timeType();
+                pos.setIndex(parsedPos);
+                return TimeZone.getTimeZone(genericMatch.tzID());
+            } else if (specificMatch != null){
+                timeType.value = getTimeType(specificMatch.nameType());
+                pos.setIndex(parsedPos);
+                return TimeZone.getTimeZone(getTimeZoneID(specificMatch.tzID(), specificMatch.mzID()));
+            }
+        }
+
+        if (parsedPos > startIdx) {
+            // Parsed successfully as one of 'offset' format
+            assert parsedOffset != UNKNOWN_OFFSET;
+            pos.setIndex(parsedPos);
+            return getTimeZoneForOffset(parsedOffset);
+        }
+
+        pos.setErrorIndex(startIdx);
+        return null;
+    }
+
+    /**
+     * Returns a <code>TimeZone</code> by parsing the time zone string according to
+     * the parse position, the style and the default parse options.
+     * <p>
+     * <b>Note</b>: This method is equivalent to {@link #parse(Style, String, ParsePosition, EnumSet, Output)
+     * parse(style, text, pos, null, timeType)}.
+     * 
+     * @param text the text contains a time zone string at the position.
+     * @param style the format style
+     * @param pos the position.
+     * @param timeType The output argument for receiving the time type (standard/daylight/unknown),
+     * or specify null if the information is not necessary.
+     * @return A <code>TimeZone</code>, or null if the input could not be parsed.
+     * @see Style
+     * @see #parse(Style, String, ParsePosition, EnumSet, Output)
+     * @see #format(Style, TimeZone, long, Output)
+     * @see #setDefaultParseOptions(EnumSet)
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public TimeZone parse(Style style, String text, ParsePosition pos, Output<TimeType> timeType) {
+        return parse(style, text, pos, null, timeType);
+    }
+
+    /**
+     * Returns a <code>TimeZone</code> by parsing the time zone string according to
+     * the given parse position.
+     * <p>
+     * <b>Note</b>: This method is equivalent to {@link #parse(Style, String, ParsePosition, EnumSet, Output)
+     * parse(Style.GENERIC_LOCATION, text, pos, EnumSet.of(ParseOption.ALL_STYLES), timeType)}.
+     * 
+     * @param text the text contains a time zone string at the position.
+     * @param pos the position.
+     * @return A <code>TimeZone</code>, or null if the input could not be parsed.
+     * @see #parse(Style, String, ParsePosition, EnumSet, Output)
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final TimeZone parse(String text, ParsePosition pos) {
+        return parse(Style.GENERIC_LOCATION, text, pos, EnumSet.of(ParseOption.ALL_STYLES), null);
+    }
+
+    /**
+     * Returns a <code>TimeZone</code> for the given text.
+     * <p>
+     * <b>Note</b>: The behavior of this method is equivalent to {@link #parse(String, ParsePosition)}.
+     * @param text the time zone string
+     * @return A <code>TimeZone</code>.
+     * @throws ParseException when the input could not be parsed as a time zone string.
+     * @see #parse(String, ParsePosition)
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final TimeZone parse(String text) throws ParseException {
+        ParsePosition pos = new ParsePosition(0);
+        TimeZone tz = parse(text, pos);
+        if (pos.getErrorIndex() >= 0) {
+            throw new ParseException("Unparseable time zone: \"" + text + "\"" , 0);
+        }
+        assert(tz != null);
+        return tz;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+        TimeZone tz = null;
+        long date = System.currentTimeMillis();
+
+        if (obj instanceof TimeZone) {
+            tz = (TimeZone)obj;
+        } else if (obj instanceof Calendar) {
+            tz = ((Calendar)obj).getTimeZone();
+            date = ((Calendar)obj).getTimeInMillis();
+        } else {
+            throw new IllegalArgumentException("Cannot format given Object (" +
+                    obj.getClass().getName() + ") as a time zone");
+        }
+        assert(tz != null);
+        String result = formatOffsetLocalizedGMT(tz.getOffset(date));
+        toAppendTo.append(result);
+
+        if (pos.getFieldAttribute() == DateFormat.Field.TIME_ZONE
+                || pos.getField() == DateFormat.TIMEZONE_FIELD) {
+            pos.setBeginIndex(0);
+            pos.setEndIndex(result.length());
+        }
+        return toAppendTo;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
+        StringBuffer toAppendTo = new StringBuffer();
+        FieldPosition pos = new FieldPosition(0);
+        toAppendTo = format(obj, toAppendTo, pos);
+
+        // supporting only DateFormat.Field.TIME_ZONE
+        AttributedString as = new AttributedString(toAppendTo.toString());
+        as.addAttribute(DateFormat.Field.TIME_ZONE, DateFormat.Field.TIME_ZONE);
+
+        return as.getIterator();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public Object parseObject(String source, ParsePosition pos) {
+        return parse(source, pos);
+    }
+
+
+    /**
+     * Private method returning the time zone's specific format string.
+     * 
+     * @param tz the time zone
+     * @param stdType the name type used for standard time
+     * @param dstType the name type used for daylight time
+     * @param date the date
+     * @param timeType when null, actual time type is set
+     * @return the time zone's specific format name string
+     */
+    private String formatSpecific(TimeZone tz, NameType stdType, NameType dstType, long date, Output<TimeType> timeType) {
+        assert(stdType == NameType.LONG_STANDARD || stdType == NameType.SHORT_STANDARD);
+        assert(dstType == NameType.LONG_DAYLIGHT || dstType == NameType.SHORT_DAYLIGHT);
+
+        boolean isDaylight = tz.inDaylightTime(new Date(date));
+        String name = isDaylight?
+                getTimeZoneNames().getDisplayName(ZoneMeta.getCanonicalCLDRID(tz), dstType, date) :
+                getTimeZoneNames().getDisplayName(ZoneMeta.getCanonicalCLDRID(tz), stdType, date);
+
+        if (name != null && timeType != null) {
+            timeType.value = isDaylight ? TimeType.DAYLIGHT : TimeType.STANDARD;
+        }
+        return name;
     }
 
     /**
@@ -1593,20 +1863,18 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * 
      * @param text the text contains a localized GMT offset string at the position.
      * @param pos the position.
-     * @param isGMTZero receiving if the GMT zero format was detected. Note that
-     * the string with offset digits is not a GMT zero format. For example, when "GMT+00:00"
-     * is found, this method won't set true to isGMTZero[0].
+     * @param hasDigitOffset receiving if the parsed zone string contains offset digits.
      * @return the offset from GMT(UTC) in milliseconds for the given localized GMT
      * offset format string.
      */
-    private int parseOffsetLocalizedGMT(String text, ParsePosition pos, boolean[] isGMTZero) {
+    private int parseOffsetLocalizedGMT(String text, ParsePosition pos, Output<Boolean> hasDigitOffset) {
         int start = pos.getIndex();
         int idx = start;
         boolean parsed = false;
         int offset = 0;
 
-        if (isGMTZero != null && isGMTZero.length > 0) {
-            isGMTZero[0] = false;
+        if (hasDigitOffset != null) {
+            hasDigitOffset.value = false;
         }
 
         do {
@@ -1640,7 +1908,9 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         } while (false);
 
         if (parsed) {
-            pos.setIndex(idx);
+            if (hasDigitOffset != null) {
+                hasDigitOffset.value = true;
+            }            pos.setIndex(idx);
             return offset;
         }
 
@@ -1648,16 +1918,15 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         int[] parsedLength = {0};
         offset = parseDefaultGMT(text, start, parsedLength);
         if (parsedLength[0] > 0) {
-            pos.setIndex(start + parsedLength[0]);
+            if (hasDigitOffset != null) {
+                hasDigitOffset.value = true;
+            }            pos.setIndex(start + parsedLength[0]);
             return offset;
         }
 
         // Check if this is a GMT zero format
         if (text.regionMatches(true, start, _gmtZeroFormat, 0, _gmtZeroFormat.length())) {
             pos.setIndex(start + _gmtZeroFormat.length());
-            if (isGMTZero != null && isGMTZero.length > 0) {
-                isGMTZero[0] = true;
-            }
             return 0;
         }
 
@@ -1665,9 +1934,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         for (String defGMTZero : ALT_GMT_STRINGS) {
             if (text.regionMatches(true, start, defGMTZero, 0, defGMTZero.length())) {
                 pos.setIndex(start + defGMTZero.length());
-                if (isGMTZero != null && isGMTZero.length > 0) {
-                    isGMTZero[0] = true;
-                }
                 return 0;
             }
         }
@@ -2025,6 +2291,340 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         return codePoints;
     }
 
+
+    /**
+     * Returns offset from GMT(UTC) in milliseconds for the given ISO 8601 style
+     * (extended format) time zone string. When the given string is not an ISO 8601 time
+     * zone string, this method sets the current position as the error index
+     * to <code>ParsePosition pos</code> and returns 0.
+     * 
+     * @param text the text contains ISO 8601 style time zone string (e.g. "-08:00", "Z")
+     * at the position.
+     * @param pos the position.
+     * @param extendedOnly <code>true</code> if parsing the text as ISO 8601 extended offset format (e.g. "-08:00"),
+     *                     or <code>false</code> to evaluate the text as basic format.
+     * @param hasDigitOffset receiving if the parsed zone string contains offset digits.
+     * @return the offset from GMT(UTC) in milliseconds for the given ISO 8601 style
+     * time zone string.
+     */
+    private int parseOffsetISO8601(String text, ParsePosition pos, boolean extendedOnly, Output<Boolean> hasDigitOffset) {
+        if (hasDigitOffset != null) {
+            hasDigitOffset.value = false;
+        }
+        int start = pos.getIndex();
+        if (start >= text.length()) {
+            pos.setErrorIndex(start);
+            return 0;
+        }
+
+        char firstChar = text.charAt(start);
+        if (Character.toUpperCase(firstChar) == ISO8601_UTC.charAt(0)) {
+            // "Z" - indicates UTC
+            pos.setIndex(start + 1);
+            return 0;
+        }
+
+        int sign;
+        if (firstChar == '+') {
+            sign = 1;
+        } else if (firstChar == '-') {
+            sign = -1;
+        } else {
+            // Not an ISO 8601 offset string
+            pos.setErrorIndex(start);
+            return 0;
+        }
+        ParsePosition posOffset = new ParsePosition(start + 1);
+        int offset = parseAsciiDigitOffsetWithSeparators(text, posOffset, ':', OffsetFields.H, OffsetFields.HMS, false);
+        if (posOffset.getErrorIndex() == -1 && !extendedOnly) {
+            // If the text is successfully parsed as extended format with the options above, it can be also parsed
+            // as basic format. For example, "0230" can be parsed as offset 2:00 (only first digits are valid for
+            // extended format), but it can be parsed as offset 2:30 with basic format. We use longer result.
+            ParsePosition posBasic = new ParsePosition(start + 1);
+            int tmpOffset = parseContiguousAsciiDigitOffset(text, posBasic, OffsetFields.H, OffsetFields.HMS, false);
+            if (posBasic.getErrorIndex() == -1 && posBasic.getIndex() > posOffset.getIndex()) {
+                offset = tmpOffset;
+                posOffset.setIndex(posBasic.getIndex());
+            }
+        }
+
+        if (posOffset.getErrorIndex() != -1) {
+            pos.setErrorIndex(start);
+            return 0;
+        }
+
+        pos.setIndex(posOffset.getIndex());
+        if (hasDigitOffset != null) {
+            hasDigitOffset.value = true;
+        }
+        return sign * offset;
+    }
+
+    /**
+     * Numeric offset field combinations
+     */
+    private enum OffsetFields {
+        H, HM, HMS
+    }
+
+    /**
+     * Format offset using ASCII digits
+     * @param offset The offset
+     * @param sep The field separator character or null if not required
+     * @param minFields The minimum fields
+     * @param maxFields The maximum fields
+     * @return The offset string
+     */
+    private static String formatOffsetWithASCIIDigits(int offset, Character sep, OffsetFields minFields, OffsetFields maxFields) {
+        assert maxFields.ordinal() >= minFields.ordinal();
+
+        StringBuilder buf = new StringBuilder();
+        char sign = '+';
+        if (offset < 0) {
+            sign = '-';
+            offset = -offset;
+        }
+        buf.append(sign);
+
+        int[] fields = new int[3];
+        fields[0] = offset / MILLIS_PER_HOUR;
+        offset = offset % MILLIS_PER_HOUR;
+        fields[1] = offset / MILLIS_PER_MINUTE;
+        offset = offset % MILLIS_PER_MINUTE;
+        fields[2] = offset / MILLIS_PER_SECOND;
+
+        assert(fields[0] >= 0 && fields[0] < 100);
+        assert(fields[1] >= 0 && fields[1] < 60);
+        assert(fields[2] >= 0 && fields[2] < 60);
+
+        int lastIdx = maxFields.ordinal();
+        while (lastIdx > minFields.ordinal()) {
+            if (fields[lastIdx] != 0) {
+                break;
+            }
+            lastIdx--;
+        }
+
+        for (int idx = 0; idx <= lastIdx; idx++) {
+            if (sep != null && idx != 0) {
+                buf.append(sep);
+            }
+            if (fields[idx] < 10) {
+                buf.append('0');
+            }
+            buf.append(fields[idx]);
+        }
+        return buf.toString();
+    }
+
+    /**
+     * Parse offset represented by contiguous ASCII digits
+     * <p>
+     * Note: This method expects the input position is already at the start of
+     * ASCII digits and does not parse sign (+/-).
+     * 
+     * @param text The text contains a sequence of ASCII digits
+     * @param pos The parse position
+     * @param minFields The minimum Fields to be parsed
+     * @param maxFields The maximum Fields to be parsed
+     * @param fixedHourWitdh true if hour field must be width of 2
+     * @return Parsed offset, 0 or positive number.
+     */
+    private int parseContiguousAsciiDigitOffset(String text, ParsePosition pos,
+            OffsetFields minFields, OffsetFields maxFields, boolean fixedHourWitdh) {
+        int start = pos.getIndex();
+
+        int minDigits = 2 * (minFields.ordinal() + 1) - (fixedHourWitdh ? 0 : 1);
+        int maxDigits = 2 * (maxFields.ordinal() + 1);
+
+        int[] digits = new int[maxDigits];
+        int numDigits = 0;
+        int idx = start;
+        while (numDigits < digits.length && idx < text.length()) {
+            int digit = ASCII_DIGITS.indexOf(text.charAt(idx));
+            if (digit < 0) {
+                break;
+            }
+            digits[numDigits] = digit;
+            numDigits++;
+            idx++;
+        }
+
+        if (fixedHourWitdh && (numDigits % 2 != 0)) {
+            // Fixed digits, so the number of digits must be even number. Truncating.
+            numDigits--;
+        }
+
+        if (numDigits < minDigits) {
+            pos.setErrorIndex(start);
+            return 0;
+        }
+
+        int hour = 0, min = 0, sec = 0;
+        boolean bParsed = false;
+        while (numDigits >= minDigits) {
+            switch (numDigits) {
+            case 1: //H
+                hour = digits[0];
+                break;
+            case 2: //HH
+                hour = digits[0] * 10 + digits[1];
+                break;
+            case 3: //Hmm
+                hour = digits[0];
+                min = digits[1] * 10 + digits[2];
+                break;
+            case 4: //HHmm
+                hour = digits[0] * 10 + digits[1];
+                min = digits[2] * 10 + digits[3];
+                break;
+            case 5: //Hmmss
+                hour = digits[0];
+                min = digits[1] * 10 + digits[2];
+                sec = digits[3] * 10 + digits[4];
+                break;
+            case 6: //HHmmss
+                hour = digits[0] * 10 + digits[1];
+                min = digits[2] * 10 + digits[3];
+                sec = digits[4] * 10 + digits[5];
+                break;
+            }
+
+            if (hour <= MAX_OFFSET_HOUR && min <= MAX_OFFSET_MINUTE && sec <= MAX_OFFSET_SECOND) {
+                // Successfully parsed
+                bParsed = true;
+                break;
+            }
+
+            // Truncating
+            numDigits -= (fixedHourWitdh ? 2 : 1);
+            hour = min = sec = 0;
+        }
+
+        if (!bParsed) {
+            pos.setErrorIndex(start);
+            return 0;
+        }
+        pos.setIndex(start + numDigits);
+        return ((((hour * 60) + min) * 60) + sec) * 1000;
+    }
+
+    /**
+     * Parse offset represented by ASCII digits and separators.
+     * <p>
+     * Note: This method expects the input position is already at the start of
+     * ASCII digits and does not parse sign (+/-).
+     * 
+     * @param text The text
+     * @param pos The parse position
+     * @param sep The separator character
+     * @param minFields The minimum Fields to be parsed
+     * @param maxFields The maximum Fields to be parsed
+     * @param fixedHourWitdh true if hour field must be width of 2
+     * @return Parsed offset, 0 or positive number.
+     */
+    private int parseAsciiDigitOffsetWithSeparators(String text, ParsePosition pos,
+            char sep, OffsetFields minFields, OffsetFields maxFields, boolean fixedHourWidth) {
+        int start = pos.getIndex();
+        int[] fieldVal = {0, 0, 0};
+        int[] fieldLen = {0, -1, -1};
+        for (int idx = start, fieldIdx = 0; idx < text.length() && fieldIdx <= maxFields.ordinal(); idx++) {
+            char c = text.charAt(idx);
+            if (c == sep) {
+                if (fieldLen[fieldIdx] < 0) {
+                    // next field - expected
+                    fieldLen[fieldIdx] = 0;
+                } else if (fieldIdx == 0 && !fixedHourWidth) {
+                    // 1 digit hour, move to next field
+                    fieldIdx++;
+                    fieldLen[fieldIdx] = 0;
+                } else {
+                    // otherwise, premature field
+                    break;
+                }
+                continue;
+            }
+            int digit = ASCII_DIGITS.indexOf(c);
+            if (digit < 0) {
+                // not a digit
+                break;
+            }
+            fieldVal[fieldIdx] = fieldVal[fieldIdx] * 10 + digit;
+            fieldLen[fieldIdx]++;
+            if (fieldLen[fieldIdx] >= 2) {
+                // parsed 2 digits, move to next field
+                fieldIdx++;
+            }
+        }
+
+        int offset = 0;
+        int parsedLen = 0;
+        OffsetFields parsedFields = null;
+        do {
+            // hour
+            if (fieldLen[0] == 0 || (fieldLen[0] == 1 && fixedHourWidth)) {
+                break;
+            }
+            if (fieldVal[0] > MAX_OFFSET_HOUR) {
+                if (fixedHourWidth) {
+                    break;
+                }
+                offset = (fieldVal[0] / 10) * MILLIS_PER_HOUR;
+                parsedFields = OffsetFields.H;
+                parsedLen = 1;
+                break;
+            }
+            offset = fieldVal[0] * MILLIS_PER_HOUR;
+            parsedLen = fieldLen[0];
+            parsedFields = OffsetFields.H;
+
+            // minute
+            if (fieldLen[1] != 2 || fieldVal[1] > MAX_OFFSET_MINUTE) {
+                break;
+            }
+            offset += fieldVal[1] * MILLIS_PER_MINUTE;
+            parsedLen += (1 + fieldLen[1]);
+            parsedFields = OffsetFields.HM;
+
+            // second
+            if (fieldLen[2] != 2 || fieldVal[2] > MAX_OFFSET_SECOND) {
+                break;
+            }
+            offset += fieldVal[2] * MILLIS_PER_SECOND;
+            parsedLen += (1 + fieldLen[2]);
+            parsedFields = OffsetFields.HMS;
+        } while (false);
+
+        if (parsedFields == null || parsedFields.ordinal() < minFields.ordinal()) {
+            pos.setErrorIndex(start);
+            return 0;
+        }
+
+        pos.setIndex(start + parsedLen);
+        return offset;
+    }
+
+
+    /**
+     * Implements <code>TimeZoneFormat</code> object cache
+     */
+    private static class TimeZoneFormatCache extends SoftCache<ULocale, TimeZoneFormat, ULocale> {
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
+         */
+        @Override
+        protected TimeZoneFormat createInstance(ULocale key, ULocale data) {
+            TimeZoneFormat fmt = new TimeZoneFormat(data);
+            fmt.freeze();
+            return fmt;
+        }
+    }
+
+    // ----------------------------------
+    // Serialization stuff
+    //-----------------------------------
+
     /**
      * @serialField _locale ULocale The locale of this TimeZoneFormat object.
      * @serialField _tznames TimeZoneNames The time zone name data.
@@ -2144,21 +2744,9 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     }
 
-    /**
-     * Implements <code>TimeZoneFormat</code> object cache
-     */
-    private static class TimeZoneFormatCache extends SoftCache<ULocale, TimeZoneFormat, ULocale> {
-
-        /* (non-Javadoc)
-         * @see com.ibm.icu.impl.CacheBase#createInstance(java.lang.Object, java.lang.Object)
-         */
-        @Override
-        protected TimeZoneFormat createInstance(ULocale key, ULocale data) {
-            TimeZoneFormat fmt = new TimeZoneFormat(data);
-            fmt.freeze();
-            return fmt;
-        }
-    }
+    // ----------------------------------
+    // Freezable stuff
+    //-----------------------------------
 
     /**
      * {@inheritDoc}

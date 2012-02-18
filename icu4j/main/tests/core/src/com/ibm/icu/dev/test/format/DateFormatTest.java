@@ -18,6 +18,7 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -33,6 +34,7 @@ import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.TimeZoneFormat;
+import com.ibm.icu.text.TimeZoneFormat.ParseOption;
 import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
@@ -568,9 +570,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         final SimpleDateFormat univ = new SimpleDateFormat("yyyy MM dd HH:mm zzz", en);
 
-        // To allow cross pattern parsing, we need setParseAllStyles(true) since 4.8
+     // To allow cross pattern parsing, we need to set ParseOption.ALL_STYLES
         TimeZoneFormat tzfmt = univ.getTimeZoneFormat().cloneAsThawed();
-        tzfmt.setParseAllStyles(true);
+        tzfmt.setDefaultParseOptions(EnumSet.of(ParseOption.ALL_STYLES));
         tzfmt.freeze();
         univ.setTimeZoneFormat(tzfmt);
         for (SimpleDateFormat sdf : formats) {
@@ -680,6 +682,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     private static final String[][] fallbackTests  = {
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-08:00", "-8:00" },
+        { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZZ", "-08:00", "-8:00" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "z", "PST", "America/Los_Angeles" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "V", "PST", "America/Los_Angeles" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "zzzz", "Pacific Standard Time", "America/Los_Angeles" },
@@ -2905,6 +2908,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "V HH:mm:ss",       "UT+0130 10:20:30",     "10:20:30 +0130",
             "V HH:mm:ss",       "UTC+0130 10:20:30",    "10:20:30 +0130",
             "HH mm Z ss",       "10 20 GMT-1100 30",    "10:20:30 -1100",
+            "HH:mm:ssZZZZZ",    "14:25:45Z",            "14:25:45 +0000",
+            "HH:mm:ssZZZZZ",    "15:00:00-08:00",       "15:00:00 -0800",
         };
         expectParse(DATA, new Locale("en", "", ""));
     }
@@ -3090,7 +3095,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             if (parseAllTZStyles) {
                 TimeZoneFormat tzfmt = fmt.getTimeZoneFormat().cloneAsThawed();
-                tzfmt.setParseAllStyles(true).freeze();
+                tzfmt.setDefaultParseOptions(EnumSet.of(ParseOption.ALL_STYLES)).freeze();
                 fmt.setTimeZoneFormat(tzfmt);
             }
 
