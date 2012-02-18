@@ -1022,6 +1022,34 @@ udat_applyPatternRelative(UDateFormat *format,
                           UErrorCode  *status);
 #endif  /* U_HIDE_INTERNAL_API */
 
+/**
+ * @internal
+ * @see udat_open
+ */
+typedef UDateFormat* (U_EXPORT2 *UDateFormatOpener) (UDateFormatStyle  timeStyle,
+                                                    UDateFormatStyle  dateStyle,
+                                                    const char        *locale,
+                                                    const UChar       *tzID,
+                                                    int32_t           tzIDLength,
+                                                    const UChar       *pattern,
+                                                    int32_t           patternLength,
+                                                    UErrorCode        *status);
+
+/**
+ * Register a provider factory
+ * @internal ICU 49
+ */
+U_INTERNAL void U_EXPORT2
+udat_registerOpener(UDateFormatOpener opener, UErrorCode *status);
+
+/**
+ * Un-Register a provider factory
+ * @internal ICU 49
+ */
+U_INTERNAL UDateFormatOpener U_EXPORT2
+udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status);
+
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

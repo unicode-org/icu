@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1016,6 +1016,7 @@ struct UCollator {
     int32_t* reorderCodes;
     int32_t reorderCodesLength;
     uint8_t* leadBytePermutationTable;
+    void  *delegate;  /* if non-null: C++ object to delegate all API calls to. */
 };
 
 U_CDECL_END
