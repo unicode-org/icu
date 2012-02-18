@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2011, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2012, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -10,13 +10,18 @@ package com.ibm.icu.dev.test.format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.TimeZoneFormat;
+import com.ibm.icu.text.TimeZoneFormat.ParseOption;
+import com.ibm.icu.text.TimeZoneFormat.Style;
+import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
@@ -29,7 +34,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         new TimeZoneFormatTest().run(args);
     }
 
-    private static final String[] PATTERNS = {"z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV"};
+    private static final String[] PATTERNS = {"z", "zzzz", "Z", "ZZZZ", "ZZZZZ", "v", "vvvv", "V", "VVVV"};
     boolean REALLY_VERBOSE_LOG = false;
 
     /*
@@ -144,15 +149,20 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 }
                             }
                         } else {
-                            // Check if localized GMT format or RFC format is used.
-                            int numDigits = 0;
-                            for (int n = 0; n < tzstr.length(); n++) {
-                                if (UCharacter.isDigit(tzstr.charAt(n))) {
-                                    numDigits++;
+                            boolean isOffsetFormat = (PATTERNS[patidx].charAt(0) == 'Z');
+
+                            if (!isOffsetFormat) {
+                                // Check if localized GMT format is used as a fallback of name styles
+                                int numDigits = 0;
+                                for (int n = 0; n < tzstr.length(); n++) {
+                                    if (UCharacter.isDigit(tzstr.charAt(n))) {
+                                        numDigits++;
+                                    }
                                 }
+                                isOffsetFormat = (numDigits >= 3);
                             }
 
-                            if (tzstr.equals(localGMTString) || numDigits >= 3) {
+                            if (isOffsetFormat || tzstr.equals(localGMTString)) {
                                 // Localized GMT or RFC: total offset (raw + dst) must be preserved.
                                 int inOffset = inOffsets[0] + inOffsets[1];
                                 int outOffset = outOffsets[0] + outOffsets[1];
@@ -219,9 +229,9 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final long END_TIME = cal.getTimeInMillis();
 
         // Whether each pattern is ambiguous at DST->STD local time overlap
-        final boolean[] AMBIGUOUS_DST_DECESSION = {false, false, false, false, true, true, false, true};
+        final boolean[] AMBIGUOUS_DST_DECESSION = {false, false, false, false, false, true, true, false, true};
         // Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
-        final boolean[] AMBIGUOUS_NEGATIVE_SHIFT = {true, true, false, false, true, true, true, true};
+        final boolean[] AMBIGUOUS_NEGATIVE_SHIFT = {true, true, false, false, false, true, true, true, true};
 
         final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
@@ -359,5 +369,62 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         logln("Total: " + total + "ms");
         logln("Iteration: " + testCounts);
+    }
+
+    public void TestParse() {
+        final Object[][] DATA = {
+        //   text                   inpos       locale      style                   parseAll?   expected            outpos      time type
+            {"Z",                   0,          "en_US",    Style.ISO8601,          false,      "Etc/GMT",          1,          TimeType.UNKNOWN},
+            {"Z",                   0,          "en_US",    Style.SPECIFIC_LONG,    false,      "Etc/GMT",          1,          TimeType.UNKNOWN},
+            {"Zambia time",         0,          "en_US",    Style.ISO8601,          true,       "Etc/GMT",          1,          TimeType.UNKNOWN},
+            {"Zambia time",         0,          "en_US",    Style.GENERIC_LOCATION, false,      "Africa/Lusaka",    11,         TimeType.UNKNOWN},
+            {"Zambia time",         0,          "en_US",    Style.RFC822,           true,       "Africa/Lusaka",    11,         TimeType.UNKNOWN},
+            {"+00:00",              0,          "en_US",    Style.ISO8601,          false,      "Etc/GMT",          6,          TimeType.UNKNOWN},
+            {"-01:30:45",           0,          "en_US",    Style.ISO8601,          false,      "GMT-01:30:45",     9,          TimeType.UNKNOWN},
+            {"-7",                  0,          "en_US",    Style.RFC822,           false,      "GMT-07:00",        2,          TimeType.UNKNOWN},
+            {"-2222",               0,          "en_US",    Style.RFC822,           false,      "GMT-22:22",        5,          TimeType.UNKNOWN},
+            {"-3333",               0,          "en_US",    Style.RFC822,           false,      "GMT-03:33",        4,          TimeType.UNKNOWN},
+            {"XXX+01:30YYY",        3,          "en_US",    Style.LOCALIZED_GMT,    false,      "GMT+01:30",        9,          TimeType.UNKNOWN},
+            {"GMT0",                0,          "en_US",    Style.SPECIFIC_SHORT,   false,      "Etc/GMT",          3,          TimeType.UNKNOWN},
+            {"EST",                 0,          "en_US",    Style.SPECIFIC_SHORT,   false,      "America/New_York", 3,          TimeType.STANDARD},
+            {"ESTx",                0,          "en_US",    Style.SPECIFIC_SHORT,   false,      "America/New_York", 3,          TimeType.STANDARD},
+            {"EDTx",                0,          "en_US",    Style.SPECIFIC_SHORT,   false,      "America/New_York", 3,          TimeType.DAYLIGHT},
+            {"EST",                 0,          "en_US",    Style.SPECIFIC_LONG,    false,      "",                 0,          TimeType.UNKNOWN},
+            {"EST",                 0,          "en_US",    Style.SPECIFIC_LONG,    true,       "America/New_York", 3,          TimeType.STANDARD},
+            {"EST",                 0,          "en_CA",    Style.SPECIFIC_SHORT,   false,      "America/Toronto",  3,          TimeType.STANDARD},
+        };
+
+        for (Object[] test : DATA) {
+            String text = (String)test[0];
+            int inPos = (Integer)test[1];
+            ULocale loc = new ULocale((String)test[2]);
+            Style style = (Style)test[3];
+            EnumSet<ParseOption> options = (Boolean)test[4] ? EnumSet.of(ParseOption.ALL_STYLES) : null;
+            String expID = (String)test[5];
+            int expPos = (Integer)test[6];
+            TimeType expType = (TimeType)test[7];
+
+            TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(loc);
+            Output<TimeType> timeType = new Output<TimeType>(TimeType.UNKNOWN);
+            ParsePosition pos = new ParsePosition(inPos);
+            TimeZone tz = tzfmt.parse(style, text, pos, options, timeType);
+
+            String errMsg = null;
+            if (tz == null) {
+                if (expID.length() != 0) {
+                    errMsg = "Parse failure - expected: " + expID;
+                }
+            } else if (!tz.getID().equals(expID)) {
+                errMsg = "Time zone ID: " + tz.getID() + " - expected: " + expID;
+            } else if (pos.getIndex() != expPos) {
+                errMsg = "Parsed pos: " + pos.getIndex() + " - expected: " + expPos;
+            } else if (timeType.value != expType) {
+                errMsg = "Time type: " + timeType + " - expected: " + expType;
+            }
+
+            if (errMsg != null) {
+                errln("Fail: " + errMsg + " [text=" + text + ", pos=" + inPos + ", style=" + style + "]");
+            }
+        }
     }
 }
