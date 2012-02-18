@@ -1,7 +1,9 @@
 #!/bin/cat
-# Copyright (c) 2009-2011 IBM Corp. and Others. All Rights Reserved
+# Copyright (c) 2009-2012 IBM Corp. and Others. All Rights Reserved
 
 # ICU Provider Feature. - $Id$
+
+* Note, as of ICU49 this is a technology preview.
 
 BUILDING:
 
@@ -11,7 +13,7 @@ http://source.icu-project.org/repos/icu/icu/branches/srl/ucol8157 at
 this writing.
 
 1b. Download one or more ICUs (.tgz) you wish to have AVAILABLE (via
-the provider interface).  As of this writing, 49, 4.6.x, 4.4.x, 4.2.0.1, 3.8.1, 3.6, 3.4.1, and 3.2.1 have been tested.
+the provider interface).  As of this writing, 49, 4.8.1.1, 4.6.x, 4.4.x, 4.2.0.1, 3.8.1, 3.6, 3.4.1, and 3.2.1 have been tested.
 
    Note that the MAJOR+MINOR version numbers must not conflict between the TARGET  and AVAILABLE ICUs. Only one ICU of each major+minor is allowed. 
    So, only one 4.4.X, one 3.8.X, etc.  This is due to ICU binary compatibility rules.
@@ -71,5 +73,7 @@ Collators opened with an id such as that shown in 'make info', such as  'en_US@p
 
 Date Formats opened (udat_open) will also load a different date
 format, but only through 'udat_open'.
+
+
 
 

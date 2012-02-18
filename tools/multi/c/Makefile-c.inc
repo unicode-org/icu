@@ -1,8 +1,9 @@
-# Copyright (c) 2008-2010 IBM Corp. and Others. All Rights Reserved
+# Copyright (c) 2008-2012 IBM Corp. and Others. All Rights Reserved
 
 include $(MULTICU_ROOT)/common/Makefile-multi.inc
 
 C_GOOD:=$(shell [ -d $(C_INS) ] && (cd $(C_INS) ; ls -d */$(S_INS) 2>/dev/null | cut -d/ -f1))
+C_REL:=$(shell [ -d $(C_INS) ] && (cd $(C_INS) ; ls -d r*/$(S_INS) 2>/dev/null | cut -d/ -f1))
 
 C_CLEAN_TARGET=$(C_GOOD:%=$(C_INS)/%/bin/$(TARGET))
 
@@ -10,7 +11,7 @@ SOURCES=$(C_SOURCES) $(CXX_SOURCES)
 C_OBJECTS=$(C_SOURCES:%.c=%.o)
 CXX_OBJECTS=$(CXX_SOURCES:%.cpp=%.o)
 OBJECTS=$(C_OBJECTS) $(CXX_OBJECTS)
-DEBUGOPT=-g
+#DEBUGOPT=-g
 
 # list of ICUs to be built	
 ICU_TARBALLS=$(shell cd $(ICUS) ; ls icu4c-*-src.tgz)
