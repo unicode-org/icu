@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2011, International Business Machines Corporation and    *
+* Copyright (C) 2009-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -216,6 +216,13 @@ void AlphabeticIndex::buildIndex(UErrorCode &status) {
         } else {
             labelSet.add(item);
         }
+    }
+
+    // If we have no labels, hard-code a fallback default set of [A-Z]
+    // This case can occur with locales that don't have exemplar character data, including root.
+    // A no-labels situation will cause other problems; it needs to be avoided.
+    if (labelSet.isEmpty()) {
+        labelSet.add((UChar32)0x41, (UChar32)0x5A);
     }
 
     // Move the set of Labels from the set into a vector, and sort

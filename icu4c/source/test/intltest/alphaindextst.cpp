@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2011, International Business Machines Corporation and
+ * Copyright (c) 2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //
@@ -41,6 +41,10 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
 
         case 2: name = "HackPinyinTest";
             if (exec) HackPinyinTest();
+            break;
+
+        case 3: name = "TestBug9009";
+            if (exec) TestBug9009();
             break;
 
         default: name = "";
@@ -416,4 +420,16 @@ void AlphabeticIndexTest::HackPinyinTest() {
     TEST_ASSERT(bucketCount > 25);
     TEST_ASSERT(filledBucketCount > 15);
 }
+
+
+void AlphabeticIndexTest::TestBug9009() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale loc("root");
+    AlphabeticIndex aindex(loc, status);
+    TEST_CHECK_STATUS; 
+    aindex.nextBucket(status);  // Crash here before bug was fixed.
+    TEST_CHECK_STATUS; 
+}
+    
+
 #endif
