@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2011, International Business Machines Corporation and
+ * Copyright (c) 2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //
@@ -23,6 +23,7 @@ public:
     virtual void APITest();
     virtual void ManyLocalesTest();
     virtual void HackPinyinTest();
+    virtual void TestBug9009();
 };
 
 #endif
