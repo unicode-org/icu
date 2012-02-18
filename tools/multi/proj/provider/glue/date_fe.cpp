@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,7 +31,14 @@
 #endif
 
 #define GLUE_VER(x) class GLUE_SYM_V( DateFormat, x ) : public DateFormat {  \
-  public:  static DateFormat *create(const Locale &loc, const char *ver); \
+  public:  static DateFormat *create(UDateFormatStyle  timeStyle, \
+                                                    UDateFormatStyle  dateStyle, \
+                                                    const char        *locale, \
+                                                    const UChar       *tzID, \
+                                                    int32_t           tzIDLength, \
+                                                    const UChar       *pattern,  \
+                                                    int32_t           patternLength,  \
+                                                      UErrorCode        *status, const Locale &loc, const char *ver); \
   private: UDateFormat *_this; GLUE_SYM_V( DateFormat, x ) ( UDateFormat* tn ); \
     virtual ~ GLUE_SYM_V ( DateFormat, x) ();                             \
   public:                                                               \
@@ -75,24 +82,25 @@ GLUE_SYM ( DateFormat ) :: ~ GLUE_SYM(DateFormat) () {
 }
 
 DateFormat *
-GLUE_SYM ( DateFormat ) :: create(const Locale &loc, const char */*ver*/) {
-  // TODO: save 'ver' off.
-    UErrorCode status = U_ZERO_ERROR;
-    char locBuf[200];
-    char kwvBuf[200];
-    // int32_t len = loc.getKeywordValue("collation", kwvBuf, 200, status);
-    //strcpy(locBuf,loc.getBaseName());
-    // if(len>0) {
-    //     strcat(locBuf,"@collator=");
-    //     strcat(locBuf,kwvBuf);
-    // }
-    UDateFormat * uc =  OICU_udat_open( UDAT_FULL, UDAT_FULL, loc.getName(),
-                                        NULL,
-                                        -1,
-                                        NULL,
-                                        -1,
-                                        &status);
-    if(U_FAILURE(status)) return NULL; // TODO: ERR?
+GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
+                                                    UDateFormatStyle  dateStyle,
+                                                    const char        *locale,
+                                                    const UChar       *tzID,
+                                                    int32_t           tzIDLength,
+                                                    const UChar       *pattern,
+                                                    int32_t           patternLength,
+                                                    UErrorCode        *status,
+                                                    const Locale &loc, const char */*ver*/) {
+  // TODO: save version
+  char locBuf[200];
+  char kwvBuf[200];
+  UDateFormat * uc =  OICU_udat_open( timeStyle, dateStyle, locale,
+                                      tzID,
+                                      tzIDLength,
+                                      pattern,
+                                      patternLength,
+                                      status);
+    if(U_FAILURE(*status)) return NULL; // TODO: ERR?
     DateFormat *c =  new GLUE_SYM( DateFormat ) ( uc );
 #if DATE_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " udat_open=%s ->> %p\n", loc.getName(), (void*)c);
@@ -186,7 +194,14 @@ static
 
 class VersionDateFormatFactory : public UObject  {
 public:
-  virtual DateFormat *createFormat(const Locale &loc);
+  virtual DateFormat *createFormat(UDateFormatStyle  timeStyle,
+                                   UDateFormatStyle  dateStyle,
+                                   const char        *locale,
+                                   const UChar       *tzID,
+                                   int32_t           tzIDLength,
+                                   const UChar       *pattern,
+                                   int32_t           patternLength,
+                                   UErrorCode        *status);
   virtual const UnicodeString *getSupportedIDs(int32_t &count, UErrorCode &status);
   virtual void* getDynamicClassID() const; 
   static void* getStaticClassID() ; 
@@ -194,17 +209,24 @@ public:
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION( VersionDateFormatFactory )
 
-DateFormat *VersionDateFormatFactory::createFormat(const Locale &loc) {
+DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
+                                                    UDateFormatStyle  dateStyle,
+                                                    const char        *locale,
+                                                    const UChar       *tzID,
+                                                    int32_t           tzIDLength,
+                                                    const UChar       *pattern,
+                                                    int32_t           patternLength,
+                                                       UErrorCode        *status) {
+    Locale loc(locale);
     // pull off provider #
     char provider[200];
-    UErrorCode status = U_ZERO_ERROR;
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:CC %s\n", loc.getName());
 #endif
-    int32_t len = loc.getKeywordValue("sp", provider, 200, status);
-    if(U_FAILURE(status)||len==0) return NULL;
+    int32_t len = loc.getKeywordValue("sp", provider, 200, *status);
+    if(U_FAILURE(*status)||len==0) return NULL;
 #if DATE_FE_DEBUG
-    fprintf(stderr,  "VCF:KWV> %s/%d\n", u_errorName(status), len);
+    fprintf(stderr,  "VCF:KWV> %s/%d\n", u_errorName(*status), len);
 #endif
     provider[len]=0;
 #if DATE_FE_DEBUG
@@ -219,7 +241,7 @@ DateFormat *VersionDateFormatFactory::createFormat(const Locale &loc) {
 #if defined(GLUE_VER)
 #undef GLUE_VER
 #endif
-#define GLUE_VER(x) /*printf("%c/%c|%c/%c\n", icuver[0],(#x)[0],icuver[1],(#x)[2]);*/  if(icuver[0]== (#x)[0] && icuver[1]==(#x)[2]) { DateFormat *c = glue ## DateFormat ## x :: create(loc, icuver); /*fprintf(stderr, "VCF::CC %s -> %p\n", loc.getName(), c);*/ return c; }
+#define GLUE_VER(x) /*printf("%c/%c|%c/%c\n", icuver[0],(#x)[0],icuver[1],(#x)[2]);*/  if(icuver[0]== (#x)[0] && icuver[1]==(#x)[2]) { DateFormat *c = glue ## DateFormat ## x :: create(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status,loc,icuver); /*fprintf(stderr, "VCF::CC %s -> %p\n", loc.getName(), c);*/ return c; }
 #include "icuglue/glver.h"
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:CC %s failed\n", loc.getName());
@@ -288,8 +310,7 @@ extern "C" UDateFormat *versionDateFormatOpener(UDateFormatStyle  timeStyle,
                                                     const UChar       *pattern,
                                                     int32_t           patternLength,
                                                        UErrorCode        *status) {
-  Locale loc(locale);
-  DateFormat *df = vdf.createFormat(loc);
+  DateFormat *df = vdf.createFormat(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status);
   // printf("Hey! I got: %s -> %p\n", locale, df);
   return (UDateFormat*)df;
 }

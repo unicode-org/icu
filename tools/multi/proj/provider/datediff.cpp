@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -42,67 +42,70 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
     UErrorCode status = U_ZERO_ERROR;
     int diffs = 0;
     int gbaddiffs =0;
+    UDateFormatStyle styles[] = { UDAT_FULL, UDAT_SHORT };
     setup(status);
     if(U_FAILURE(status)) return 1;
 
     int expected = PROVIDER_COUNT;
 
-    for(int l=0;l<LOCALE_COUNT;l++) {
+    for(int s=0;s<sizeof(styles)/sizeof(styles[0]);s++) {
+      for(int l=0;l<LOCALE_COUNT;l++) {
         printf("\n");
         UChar oldChars[200];
         int32_t oldLen = -1;
         for(int v=0;v<=expected;v++) {
-
-            // Construct the locale ID
-            char locID[200];
-            strcpy(locID, locale[l]);
-            if((v!=expected)) { // -1 = no version
-                strcat(locID, "@sp=icu");
-                strcat(locID, provider_version[v]);
-            }
-            
-            printf("%18s : ", locID);
-            
-            UErrorCode subStatus = U_ZERO_ERROR;
-            UChar outchars[200];
-
-            UDateFormat *dat = udat_open(UDAT_FULL, UDAT_FULL, locID, NULL, -1, NULL, 0, &subStatus);
-
-            if(U_FAILURE(subStatus)) {
-                printf("ERR: %s\n", u_errorName(subStatus));
-                continue;
-            }
-
-            int32_t len = udat_format(dat, stuff, outchars, 200, NULL, &subStatus); 
-
-            //printf("\n");
-            char utf8[200];
-            u_strToUTF8(utf8, 200, NULL, outchars, len, &subStatus);
-            if(oldLen!=len || memcmp(outchars,oldChars,len*sizeof(outchars[0]))) {
-              putchar ('!');
-              diffs++;
-            } else {
-              putchar ('=');
-            }
-            printf(" %s ", utf8); 
-
-            // for(int i=0;i<len;i++) {
-	    //   if((i<oldLen)&&(outchars[i]!=oldChars[i])) {
-            //       diffs++;
-            //       printf("*", oldChars[i]);
-            //     } else {
-            //       printf(" ");
-            //     }
-            //   //                printf("U+%04X", (outchars[i]));
-            // }
-            putchar('\n');
-            udat_close(dat);
-
-            oldLen = len;
-            memcpy(oldChars, outchars, len*sizeof(oldChars[0]));
+          
+          // Construct the locale ID
+          char locID[200];
+          strcpy(locID, locale[l]);
+          if((v!=expected)) { // -1 = no version
+            strcat(locID, "@sp=icu");
+            strcat(locID, provider_version[v]);
+          }
+          
+          printf("%18s : ", locID);
+          
+          UErrorCode subStatus = U_ZERO_ERROR;
+          UChar outchars[200];
+          
+          UDateFormat *dat = udat_open(styles[s],styles[s], locID, NULL, -1, NULL, 0, &subStatus);
+          
+          if(U_FAILURE(subStatus)) {
+            printf("ERR: %s\n", u_errorName(subStatus));
+            continue;
+          }
+          
+          int32_t len = udat_format(dat, stuff, outchars, 200, NULL, &subStatus); 
+          
+          //printf("\n");
+          char utf8[200];
+          u_strToUTF8(utf8, 200, NULL, outchars, len, &subStatus);
+          if(oldLen!=len || memcmp(outchars,oldChars,len*sizeof(outchars[0]))) {
+            putchar ('!');
+            diffs++;
+          } else {
+            putchar ('=');
+          }
+          printf(" %s ", utf8); 
+          
+          // for(int i=0;i<len;i++) {
+          //   if((i<oldLen)&&(outchars[i]!=oldChars[i])) {
+          //       diffs++;
+          //       printf("*", oldChars[i]);
+          //     } else {
+          //       printf(" ");
+          //     }
+          //   //                printf("U+%04X", (outchars[i]));
+          // }
+          putchar('\n');
+          udat_close(dat);
+          
+          oldLen = len;
+          memcpy(oldChars, outchars, len*sizeof(oldChars[0]));
         }
+      }
     }
-
+      
     if(diffs==0) {
       printf("ERROR: 0 differences found between platforms.. are the platforms installed? Try 'icuinfo -L'\n");
       return 1;
