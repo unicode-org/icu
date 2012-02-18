@@ -756,7 +756,7 @@ ucol_openAvailableLocales(UErrorCode *status) {
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    StringEnumeration *s = Collator::getAvailableLocales();
+    StringEnumeration *s = icu::Collator::getAvailableLocales();
     if (s == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -949,6 +949,9 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
     UTRACE_ENTRY(UTRACE_UCOL_GETLOCALE);
     UTRACE_DATA1(UTRACE_INFO, "coll=%p", coll);
 
+    if(coll->delegate!=NULL) {
+      return ((const Collator*)coll->delegate)->getLocale(type, *status).getName();
+    }
     switch(type) {
     case ULOC_ACTUAL_LOCALE:
         result = coll->actualLocale;

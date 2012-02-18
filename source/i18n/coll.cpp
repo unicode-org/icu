@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ******************************************************************************
  */
@@ -250,6 +250,17 @@ Collator::createUCollator(const char *loc,
                 result = rbc->ucollator;
                 rbc->ucollator = NULL; // to prevent free on delete
             }
+        } else {
+          // should go in a function- ucol_initDelegate(delegate)
+          result = (UCollator *)uprv_malloc(sizeof(UCollator));
+          if(result == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+          } else {
+            uprv_memset(result, 0, sizeof(UCollator));
+            result->delegate = col;
+            result->freeOnClose = TRUE; // do free on close.
+            col = NULL; // to prevent free on delete.
+          }
         }
         delete col;
     }
@@ -326,6 +337,7 @@ Collator* U_EXPORT2 Collator::createInstance(const Locale& desiredLocale,
         Locale actualLoc;
         Collator *result =
             (Collator*)gService->get(desiredLocale, &actualLoc, status);
+
         // Ugly Hack Alert! If the returned locale is empty (not root,
         // but empty -- getName() == "") then that means the service
         // returned a default object, not a "real" service object.  In
@@ -874,6 +886,16 @@ Collator::getEquivalentReorderCodes(int32_t /* reorderCode */,
         status = U_UNSUPPORTED_ERROR;
     }
     return 0;
+}
+
+int32_t U_EXPORT2 Collator::internalGetShortDefinitionString(const char */*locale*/,
+                                                             char */*buffer*/,
+                                                             int32_t /*capacity*/,
+                                                             UErrorCode &status) {
+  if(U_SUCCESS(status)) {
+    status = U_UNSUPPORTED_ERROR; /* Shouldn't happen, internal function */
+  }
+  return 0;
 }
 
 // UCollator private data members ----------------------------------------
