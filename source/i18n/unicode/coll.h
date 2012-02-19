@@ -1049,6 +1049,7 @@ public:
 #endif  /* U_HIDE_INTERNAL_API */
 #endif
 
+#ifndef U_HIDE_INTERNAL_API
     /** Get the short definition string for a collator. This internal API harvests the collator's
      *  locale and the attribute set and produces a string that can be used for opening 
      *  a collator with the same properties using the ucol_openFromShortString API.
@@ -1076,6 +1077,7 @@ public:
                                                      char *buffer,
                                                      int32_t capacity,
                                                      UErrorCode &status) const;
+#endif
 
 private:
     /**
