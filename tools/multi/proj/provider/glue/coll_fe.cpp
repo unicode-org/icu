@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -55,7 +55,7 @@
     virtual int32_t getSortKey(const UChar*, int32_t, uint8_t*, int32_t) const; \
   public: static int32_t countAvailable();                              \
   public: static int32_t appendAvailable(UnicodeString* strs, int32_t i, int32_t count); \
-  public: virtual int32_t internalGetShortDefinitionString(const char *locale, char *buffer, int32_t capacity, UErrorCode &status); \
+  public: virtual int32_t internalGetShortDefinitionString(const char *locale, char *buffer, int32_t capacity, UErrorCode &status) const; \
   };
 
 /** ==================================== The following code runs inside the 'target' version (i.e. old ICU) ========== **/
@@ -279,7 +279,7 @@ int32_t GLUE_SYM ( Collator ) :: getSortKey(const UChar*s, int32_t l, uint8_t*d,
     return OICU_ucol_getSortKey(_this, s,l,d,b);
 }
 
-int32_t GLUE_SYM (Collator ) ::  internalGetShortDefinitionString(const char *locale, char *buffer, int32_t capacity, UErrorCode &status) {
+int32_t GLUE_SYM (Collator ) ::  internalGetShortDefinitionString(const char *locale, char *buffer, int32_t capacity, UErrorCode &status) const {
   if(U_FAILURE(status)) return 0;
   int32_t intRes = OICU_ucol_getShortDefinitionString(_this, locale, buffer, capacity, &status);
   int32_t newRes = (intRes += 7); /* _PICU38 */
