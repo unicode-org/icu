@@ -1639,7 +1639,7 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public Number parse(String text, ParsePosition parsePosition) {
-        return (Number) parse(text, parsePosition, false);
+        return (Number) parse(text, parsePosition, null);
     }
 
     /**
@@ -1649,15 +1649,16 @@ public class DecimalFormat extends NumberFormat {
      * code. This method will fail if this format is not a currency format, that is, if it
      * does not contain the currency pattern symbol (U+00A4) in its prefix or suffix.
      *
-     * @param text the string to parse
+     * @param text the text to parse
      * @param pos input-output position; on input, the position within text to match; must
      *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
      *  matched character. If the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
-     * @internal
+     * @draft ICU 49
      */
-    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
-        return (CurrencyAmount) parse(text, pos, true);
+    public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {
+        Currency[] currency = new Currency[1];
+        return (CurrencyAmount) parse(text.toString(), pos, currency);
     }
 
     /**
@@ -1668,11 +1669,11 @@ public class DecimalFormat extends NumberFormat {
      * match; must have 0 <= pos.getIndex() < text.length(); on output, the position after
      * the last matched character. If the parse fails, the position in unchanged upon
      * output.
-     * @param parseCurrency if true, a CurrencyAmount is parsed and returned; otherwise a
+     * @param currency if non-null, a CurrencyAmount is parsed and returned; otherwise a
      * Number is parsed and returned
      * @return a Number or CurrencyAmount or null
      */
-    private Object parse(String text, ParsePosition parsePosition, boolean parseCurrency) {
+    private Object parse(String text, ParsePosition parsePosition, Currency[] currency) {
         int backup;
         int i = backup = parsePosition.getIndex();
 
@@ -1698,9 +1699,8 @@ public class DecimalFormat extends NumberFormat {
         i = backup;
 
         boolean[] status = new boolean[STATUS_LENGTH];
-        Currency[] currency = parseCurrency ? new Currency[1] : null;
         if (currencySignCount > 0) {
-            if (!parseForCurrency(text, parsePosition, parseCurrency, currency, status)) {
+            if (!parseForCurrency(text, parsePosition, currency, status)) {
                 return null;
             }
         } else {
@@ -1773,10 +1773,10 @@ public class DecimalFormat extends NumberFormat {
         }
 
         // Assemble into CurrencyAmount if necessary
-        return parseCurrency ? (Object) new CurrencyAmount(n, currency[0]) : (Object) n;
+        return (currency != null) ? (Object) new CurrencyAmount(n, currency[0]) : (Object) n;
     }
 
-    private boolean parseForCurrency(String text, ParsePosition parsePosition, boolean parseCurrency,
+    private boolean parseForCurrency(String text, ParsePosition parsePosition,
             Currency[] currency, boolean[] status) {
         int origPos = parsePosition.getIndex();
         if (!isReadyForParsing) {
