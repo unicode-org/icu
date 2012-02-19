@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -623,27 +623,29 @@ NumberFormat::parse(const UnicodeString& text,
     }
 }
 
-Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
-                                         Formattable& result,
-                                         ParsePosition& pos) const {
+CurrencyAmount* NumberFormat::parseCurrency(const UnicodeString& text,
+                                            ParsePosition& pos) const {
     // Default implementation only -- subclasses should override
+    CurrencyAmount* currAmt = NULL;
+    Formattable parseResult;
     int32_t start = pos.getIndex();
-    parse(text, result, pos);
-    if (pos.getIndex() != start) {
+    parse(text, parseResult, pos);
+    if (pos.getIndex() != start && pos.getErrorIndex() == -1) {
         UChar curr[4];
         UErrorCode ec = U_ZERO_ERROR;
         getEffectiveCurrency(curr, ec);
         if (U_SUCCESS(ec)) {
-            Formattable n(result);
-            CurrencyAmount *tempCurAmnt = new CurrencyAmount(n, curr, ec);  // Use for null testing.
-            if (U_FAILURE(ec) || tempCurAmnt == NULL) {
+            currAmt = new CurrencyAmount(parseResult, curr, ec);
+            if (U_FAILURE(ec) || currAmt == NULL) {
                 pos.setIndex(start); // indicate failure
-            } else {
-            	result.adoptObject(tempCurAmnt);
+                if ( currAmt != NULL ) {
+                    delete currAmt;
+                    currAmt = NULL;
+                }
             }
         }
     }
-    return result;
+    return currAmt;
 }
 
 // -------------------------------------
