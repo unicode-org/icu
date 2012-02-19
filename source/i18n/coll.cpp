@@ -888,10 +888,11 @@ Collator::getEquivalentReorderCodes(int32_t /* reorderCode */,
     return 0;
 }
 
-int32_t U_EXPORT2 Collator::internalGetShortDefinitionString(const char */*locale*/,
+int32_t U_EXPORT2
+Collator::internalGetShortDefinitionString(const char */*locale*/,
                                                              char */*buffer*/,
                                                              int32_t /*capacity*/,
-                                                             UErrorCode &status) {
+                                                             UErrorCode &status) const {
   if(U_SUCCESS(status)) {
     status = U_UNSUPPORTED_ERROR; /* Shouldn't happen, internal function */
   }
