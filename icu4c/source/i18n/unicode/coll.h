@@ -1075,7 +1075,7 @@ public:
     virtual int32_t internalGetShortDefinitionString(const char *locale,
                                                      char *buffer,
                                                      int32_t capacity,
-                                                     UErrorCode &status);
+                                                     UErrorCode &status) const;
 
 private:
     /**
