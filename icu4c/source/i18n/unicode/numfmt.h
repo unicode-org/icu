@@ -36,6 +36,7 @@
 #include "unicode/unum.h" // UNumberFormatStyle
 #include "unicode/locid.h"
 #include "unicode/stringpiece.h"
+#include "unicode/curramt.h"
 
 class NumberFormatTest;
 
@@ -569,6 +570,7 @@ public:
                         Formattable& result,
                         UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -579,18 +581,18 @@ public:
      * (U+00A4) in its prefix or suffix.
      *
      * @param text the string to parse
-     * @param result output parameter to receive result. This will have
-     * its currency set to the parsed ISO currency code.
-     * @param pos input-output position; on input, the position within
-     * text to match; must have 0 <= pos.getIndex() < text.length();
-     * on output, the position after the last matched character. If
-     * the parse fails, the position in unchanged upon output.
-     * @return a reference to result
-     * @internal
+     * @param pos  input-output position; on input, the position within text
+     *             to match; must have 0 <= pos.getIndex() < text.length();
+     *             on output, the position after the last matched character.
+     *             If the parse fails, the position in unchanged upon output.
+     * @return     if parse succeeds, a pointer to a newly-created CurrencyAmount
+     *             object (owned by the caller) containing information about
+     *             the parsed currency; if parse fails, this is NULL.
+     * @draft ICU 49
      */
-    virtual Formattable& parseCurrency(const UnicodeString& text,
-                                       Formattable& result,
-                                       ParsePosition& pos) const;
+    virtual CurrencyAmount* parseCurrency(const UnicodeString& text,
+                                          ParsePosition& pos) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Return true if this format will parse numbers as integers
@@ -1060,7 +1062,7 @@ NumberFormat::isParseIntegerOnly() const
 inline UBool
 NumberFormat::isLenient() const
 {
-	return fLenient;
+    return fLenient;
 }
 
 inline UnicodeString&

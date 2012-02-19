@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2010, International Business Machines
+* Copyright (c) 2004-2012 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -16,6 +16,7 @@
 
 #include "currfmt.h"
 #include "unicode/numfmt.h"
+#include "unicode/curramt.h"
 
 U_NAMESPACE_BEGIN
 
@@ -62,7 +63,10 @@ void CurrencyFormat::parseObject(const UnicodeString& source,
                                  Formattable& result,
                                  ParsePosition& pos) const
 {
-    fmt->parseCurrency(source, result, pos);
+    CurrencyAmount* currAmt = fmt->parseCurrency(source, pos);
+    if (currAmt != NULL) {
+        result.adoptObject(currAmt);
+    }
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CurrencyFormat)

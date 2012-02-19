@@ -159,9 +159,11 @@ NumberFormatTest::TestAPI(void)
     }
 
     ParsePosition ppos;
-    test->parseCurrency("",bla,ppos);
-    if(U_FAILURE(status)) {
-        errln("Problems accessing the parseCurrency function for NumberFormat");
+    CurrencyAmount* currAmt = test->parseCurrency("",ppos);
+    // old test for (U_FAILURE(status)) was bogus here, method does not set status!
+    if (currAmt != NULL) {
+        errln("Parsed empty string as currency");
+        delete currAmt;
     }
 
     delete test;
@@ -854,10 +856,10 @@ NumberFormatTest::TestParse(void)
 // -------------------------------------
 
 static const char *lenientAffixTestCases[] = {
-		"(1)",
-		"( 1)",
-		"(1 )",
-		"( 1 )"
+        "(1)",
+        "( 1)",
+        "(1 )",
+        "( 1 )"
 };
 
 static const char *lenientMinusTestCases[] = {
@@ -867,33 +869,33 @@ static const char *lenientMinusTestCases[] = {
 };
 
 static const char *lenientCurrencyTestCases[] = {
-		"$1,000",
-		"$ 1,000",
-		"$1000",
-		"$ 1000",
-		"$1 000.00",
-		"$ 1 000.00",
-		"$ 1\\u00A0000.00",
-		"1000.00"
+        "$1,000",
+        "$ 1,000",
+        "$1000",
+        "$ 1000",
+        "$1 000.00",
+        "$ 1 000.00",
+        "$ 1\\u00A0000.00",
+        "1000.00"
 };
 
 static const char *lenientNegativeCurrencyTestCases[] = {
-		"($1,000)",
-		"($ 1,000)",
-		"($1000)",
-		"($ 1000)",
-		"($1 000.00)",
-		"($ 1 000.00)",
-		"( $ 1,000.00 )",
-		"($ 1\\u00A0000.00)",
-		"(1000.00)"
+        "($1,000)",
+        "($ 1,000)",
+        "($1000)",
+        "($ 1000)",
+        "($1 000.00)",
+        "($ 1 000.00)",
+        "( $ 1,000.00 )",
+        "($ 1\\u00A0000.00)",
+        "(1000.00)"
 };
 
 static const char *lenientPercentTestCases[] = {
-		"25%",
-		" 25%",
-		" 25 %",
-		"25 %",
+        "25%",
+        " 25%",
+        " 25 %",
+    	"25 %",
 		"25\\u00A0%",
 		"25"
 };
@@ -4064,7 +4066,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "Latvian Lats1.00",
         "Latvian Ruble1.00",
         "Latvian lats1.00",
-        "Latvian lati.00",
+        "Latvian lati1.00",
         "Latvian ruble1.00",
         "Latvian rubles1.00",
         "Lebanese Pound1.00",
@@ -6015,14 +6017,16 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
       if (numFmt != NULL && U_SUCCESS(status)) {
-          Formattable parseResult;
           ParsePosition parsePos;
-          numFmt->parseCurrency(formatted, parseResult, parsePos);
-          if (parsePos.getIndex() == 0 ||
-              (parseResult.getType() == Formattable::kDouble &&
-               parseResult.getDouble() != 1.0)) {
-              errln("wrong parsing, " + formatted);
-              errln("data: " + formatted);
+          CurrencyAmount* currAmt = numFmt->parseCurrency(formatted, parsePos);
+          if (currAmt != NULL) {
+              double doubleVal = currAmt->getNumber().getDouble(status);
+              if ( doubleVal != 1.0 ) {
+                  errln("Parsed as currency value other than 1.0: " + formatted + " -> " + doubleVal);
+              }
+              delete currAmt;
+          } else {
+              errln("Failed to parse as currency: " + formatted);
           }
       } else {
           dataerrln("Unable to create NumberFormat. - %s", u_errorName(status));
@@ -6037,14 +6041,12 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
       if (numFmt != NULL && U_SUCCESS(status)) {
-          Formattable parseResult;
           ParsePosition parsePos;
-          numFmt->parseCurrency(formatted, parseResult, parsePos);
-          if (parsePos.getIndex() > 0 ||
-              (parseResult.getType() == Formattable::kDouble &&
-               parseResult.getDouble() == 1.0)) {
-              errln("parsed but should not be: " + formatted);
-              errln("data: " + formatted);
+          CurrencyAmount* currAmt = numFmt->parseCurrency(formatted, parsePos);
+          if (currAmt != NULL) {
+              double doubleVal = currAmt->getNumber().getDouble(status);
+              errln("Parsed as currency, should not have: " + formatted + " -> " + doubleVal);
+              delete currAmt;
           }
       } else {
           dataerrln("Unable to create NumberFormat. - %s", u_errorName(status));

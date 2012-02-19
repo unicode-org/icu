@@ -1591,32 +1591,48 @@ void
 DecimalFormat::parse(const UnicodeString& text,
                      Formattable& result,
                      ParsePosition& parsePosition) const {
-    parse(text, result, parsePosition, FALSE);
+    parse(text, result, parsePosition, NULL);
 }
 
-Formattable& DecimalFormat::parseCurrency(const UnicodeString& text,
-                                          Formattable& result,
-                                          ParsePosition& pos) const {
-    parse(text, result, pos, TRUE);
-    return result;
+CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text,
+                                             ParsePosition& pos) const {
+    CurrencyAmount* currAmt = NULL;
+    Formattable parseResult;
+    int32_t start = pos.getIndex();
+    UChar curbuf[4];
+    parse(text, parseResult, pos, curbuf);
+    if (pos.getIndex() != start && pos.getErrorIndex() == -1) {
+        UErrorCode ec = U_ZERO_ERROR;
+        currAmt = new CurrencyAmount(parseResult, curbuf, ec);
+        if (U_FAILURE(ec) || currAmt == NULL) {
+            pos.setIndex(start); // indicate failure
+            if ( currAmt != NULL ) {
+                delete currAmt;
+                currAmt = NULL;
+            }
+        }
+    }
+    return currAmt;
 }
 
 /**
- * Parses the given text as either a number or a currency amount.
+ * Parses the given text as a number, optionally providing a currency amount.
  * @param text the string to parse
- * @param result output parameter for the result
+ * @param result output parameter for the numeric result.
  * @param parsePosition input-output position; on input, the
  * position within text to match; must have 0 <= pos.getIndex() <
  * text.length(); on output, the position after the last matched
  * character. If the parse fails, the position in unchanged upon
  * output.
- * @param parseCurrency if true, a currency amount is parsed;
- * otherwise a Number is parsed
+ * @param currency if non-NULL, it should point to a 4-UChar buffer.
+ * In this case the text is parsed as a currency format, and the
+ * ISO 4217 code for the parsed currency is put into the buffer.
+ * Otherwise the text is parsed as a non-currency format.
  */
 void DecimalFormat::parse(const UnicodeString& text,
                           Formattable& result,
                           ParsePosition& parsePosition,
-                          UBool parseCurrency) const {
+                          UChar* currency) const {
     int32_t startIdx, backup;
     int32_t i = startIdx = backup = parsePosition.getIndex();
 
@@ -1658,8 +1674,6 @@ void DecimalFormat::parse(const UnicodeString& text,
 
     // status is used to record whether a number is infinite.
     UBool status[fgStatusLength];
-    UChar curbuf[4];
-    UChar* currency = parseCurrency ? curbuf : NULL;
     DigitList *digits = new DigitList;
     if (digits == NULL) {
         return;    // no way to report error from here.
@@ -1704,13 +1718,6 @@ void DecimalFormat::parse(const UnicodeString& text,
             digits->setPositive(TRUE);
         }
         result.adoptDigitList(digits);
-    }
-
-    if (parseCurrency) {
-        UErrorCode ec = U_ZERO_ERROR;
-        Formattable n(result);
-        result.adoptObject(new CurrencyAmount(n, curbuf, ec));
-        U_ASSERT(U_SUCCESS(ec)); // should always succeed
     }
 }
 
