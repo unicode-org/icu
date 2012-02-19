@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2010, International Business Machines
+* Copyright (c) 2004-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -57,6 +57,6 @@ class CurrencyFormat extends MeasureFormat {
      * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
      */
     public Object parseObject(String source, ParsePosition pos) {
-        return fmt.parseCurrency(source, pos);
+        return fmt.parseCurrency((CharSequence)source, pos);
     }
 }

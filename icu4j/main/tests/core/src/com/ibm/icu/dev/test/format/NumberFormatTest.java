@@ -659,7 +659,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
             
             parsePos.setIndex(0);
-            CurrencyAmount currAmt = fmt.parseCurrency(currStr, parsePos);
+            CurrencyAmount currAmt = fmt.parseCurrency((CharSequence)currStr, parsePos);
             if ( parsePos.getIndex() != item.getCurExpectPos() || (currAmt != null && (currAmt.getNumber().intValue() != item.getCurExpectVal() ||
                     currAmt.getCurrency().getCurrencyCode().compareTo(item.getCurExpectCurr()) != 0)) ) {
                 if (currAmt != null) {
