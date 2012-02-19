@@ -765,7 +765,7 @@ RuleBasedCollator::checkOwned() {
 int32_t U_EXPORT2 RuleBasedCollator::internalGetShortDefinitionString(const char *locale,
                                                                       char *buffer,
                                                                       int32_t capacity,
-                                                                      UErrorCode &status) {
+                                                                      UErrorCode &status) const {
   /* simply delegate */
   return ucol_getShortDefinitionString(ucollator, locale, buffer, capacity, &status);
 }
