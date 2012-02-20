@@ -6550,7 +6550,8 @@ NumberFormatTest::Test9087(void)
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat* fmt = unum_open(UNUM_PATTERN_DECIMAL,pattern,1,NULL,NULL,&status);
     if ( U_FAILURE(status) ) {
-        errln("FAIL: error in unum_open()");
+        dataerrln("FAIL: error in unum_open() - %s", u_errorName(status));
+        return;
     }
 
     unum_setSymbol(fmt,UNUM_INFINITY_SYMBOL,infstr,3,&status);

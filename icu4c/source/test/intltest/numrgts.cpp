@@ -2835,7 +2835,7 @@ void NumberFormatRegressionTest::Test9109(void) {
     fmt.setLenient(TRUE);
 
     if (U_FAILURE(status)) {
-        errln("Failed to create DecimalFormat with pattern '+##'");
+        dataerrln("Failed to create DecimalFormat with pattern '+##' - %s", u_errorName(status));
     }
 
     UnicodeString text("123");

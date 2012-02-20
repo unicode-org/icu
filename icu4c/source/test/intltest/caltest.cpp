@@ -2454,7 +2454,7 @@ void CalendarTest::TestRepeatedWallTime(void) {
                 + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "]");
         } else {
             if (outLastGMT != RPDATA[i].expLastGMT) {
-                errln(UnicodeString("Fail: UCAL_WALLTIME_LAST ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
+                dataerrln(UnicodeString("Fail: UCAL_WALLTIME_LAST ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
                     + outLastGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + RPDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
             }
         }
@@ -2470,7 +2470,7 @@ void CalendarTest::TestRepeatedWallTime(void) {
                 + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "]");
         } else {
             if (outDefGMT != RPDATA[i].expLastGMT) {
-                errln(UnicodeString("Fail: (default) ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
+                dataerrln(UnicodeString("Fail: (default) ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
                     + outDefGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + RPDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
             }
         }
@@ -2486,7 +2486,7 @@ void CalendarTest::TestRepeatedWallTime(void) {
                 + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "]");
         } else {
             if (outFirstGMT != RPDATA[i].expFirstGMT) {
-                errln(UnicodeString("Fail: UCAL_WALLTIME_FIRST ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
+                dataerrln(UnicodeString("Fail: UCAL_WALLTIME_FIRST ") + RPDATA[i].in.toString(buf, sizeof(buf)) + "[" + RPDATA[i].tzid + "] is parsed as "
                     + outFirstGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + RPDATA[i].expFirstGMT.toString(buf, sizeof(buf)) + "[GMT]");
             }
         }
@@ -2562,13 +2562,13 @@ void CalendarTest::TestSkippedWallTime(void) {
                         + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
                 } else {
                     if (outLastGMT != SKDATA[i].expLastGMT) {
-                        errln(UnicodeString("Fail: UCAL_WALLTIME_LAST ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                        dataerrln(UnicodeString("Fail: UCAL_WALLTIME_LAST ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
                             + outLastGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
                     }
                 }
             } else if (U_SUCCESS(status)) {
                 // strict, invalid wall time - must report an error
-                errln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_LAST)") +
+                dataerrln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_LAST)") +
                     + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
             }
 
@@ -2586,13 +2586,13 @@ void CalendarTest::TestSkippedWallTime(void) {
                         + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
                 } else {
                     if (outDefGMT != SKDATA[i].expLastGMT) {
-                        errln(UnicodeString("Fail: (default) ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                        dataerrln(UnicodeString("Fail: (default) ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
                             + outDefGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expLastGMT.toString(buf, sizeof(buf)) + "[GMT]");
                     }
                 }
             } else if (U_SUCCESS(status)) {
                 // strict, invalid wall time - must report an error
-                errln(UnicodeString("Fail: An error expected (default)") +
+                dataerrln(UnicodeString("Fail: An error expected (default)") +
                     + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
             }
 
@@ -2610,13 +2610,13 @@ void CalendarTest::TestSkippedWallTime(void) {
                         + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
                 } else {
                     if (outFirstGMT != SKDATA[i].expFirstGMT) {
-                        errln(UnicodeString("Fail: UCAL_WALLTIME_FIRST ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                        dataerrln(UnicodeString("Fail: UCAL_WALLTIME_FIRST ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
                             + outFirstGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expFirstGMT.toString(buf, sizeof(buf)) + "[GMT]");
                     }
                 }
             } else if (U_SUCCESS(status)) {
                 // strict, invalid wall time - must report an error
-                errln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_FIRST)") +
+                dataerrln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_FIRST)") +
                     + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
             }
 
@@ -2634,13 +2634,13 @@ void CalendarTest::TestSkippedWallTime(void) {
                         + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
                 } else {
                     if (outNextAvailGMT != SKDATA[i].expNextAvailGMT) {
-                        errln(UnicodeString("Fail: UCAL_WALLTIME_NEXT_VALID ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
+                        dataerrln(UnicodeString("Fail: UCAL_WALLTIME_NEXT_VALID ") + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "] is parsed as "
                             + outNextAvailGMT.toString(buf, sizeof(buf)) + "[GMT]. Expected: " + SKDATA[i].expNextAvailGMT.toString(buf, sizeof(buf)) + "[GMT]");
                     }
                 }
             } else if (U_SUCCESS(status)) {
                 // strict, invalid wall time - must report an error
-                errln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_NEXT_VALID)") +
+                dataerrln(UnicodeString("Fail: An error expected (UCAL_WALLTIME_NEXT_VALID)") +
                     + SKDATA[i].in.toString(buf, sizeof(buf)) + "[" + SKDATA[i].tzid + "]");
             }
         }
