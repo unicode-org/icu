@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008-2011, International Business Machines Corporation and
+* Copyright (C) 2008-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -27,14 +27,12 @@
 
 #include "unicode/format.h"
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Value returned by PluralRules::getUniqueKeywordValue() when there is no
  * unique value to return.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 #define UPLRULES_NO_UNIQUE_VALUE ((double)-0.00123456777)
-#endif  /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_BEGIN
 
@@ -235,7 +233,6 @@ public:
      */
     StringEnumeration* getKeywords(UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns a unique value for this keyword if it exists, else the constant
      * UPLRULES_NO_UNIQUE_VALUE.
@@ -244,7 +241,7 @@ public:
      * @return        The unique value that generates the keyword, or
      *                UPLRULES_NO_UNIQUE_VALUE if the keyword is undefined or there is no
      *                unique value that generates this keyword.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     double getUniqueKeywordValue(const UnicodeString& keyword);
 
@@ -264,7 +261,7 @@ public:
      * @return             The count of values available, or -1.  This count
      *                     can be larger than destCapacity, but no more than
      *                     destCapacity values will be written.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     int32_t getAllKeywordValues(const UnicodeString &keyword,
                                 double *dest, int32_t destCapacity,
@@ -286,12 +283,11 @@ public:
      *                     only destCapacity are written, and destCapacity is returned as the count,
      *                     rather than setting a U_BUFFER_OVERFLOW_ERROR.
      *                     (The actual number of keyword values could be unlimited.)
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     int32_t getSamples(const UnicodeString &keyword,
                        double *dest, int32_t destCapacity,
                        UErrorCode& status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns TRUE if the given keyword is defined in this

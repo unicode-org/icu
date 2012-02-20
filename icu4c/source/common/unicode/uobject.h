@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -36,7 +36,7 @@
  *         constructor is still called, and if the constructor references member 
  *         data, (which it typically does), the result is a segmentation violation.
  *
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 #ifndef U_NO_THROW
 #define U_NO_THROW throw()

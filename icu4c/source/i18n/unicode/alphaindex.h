@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2011 International Business Machines
+*   Copyright (C) 2011-2012 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,28 +22,26 @@
  * \brief C++ API: Index Characters
  */
 
-#ifndef U_HIDE_DRAFT_API
-
 U_CDECL_BEGIN
 
 /**
  * Constants for Alphabetic Index Label Types.
  * The form of these enum constants anticipates having a plain C API
  * for Alphabetic Indexes that will also use them.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 typedef enum UAlphabeticIndexLabelType {
     /**
      *  Normal Label, typically the starting letter of the names
      *  in the bucket with this label.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     U_ALPHAINDEX_NORMAL    = 0,
 
     /**
      * Undeflow Label.  The bucket with this label contains names
      * in scripts that sort before any of the bucket labels in this index.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     U_ALPHAINDEX_UNDERFLOW = 1,
 
@@ -53,14 +51,14 @@ typedef enum UAlphabeticIndexLabelType {
      * Inflow labels are created when an index contains normal labels for
      * multiple scripts, and skips other scripts that sort between some of the
      * included scripts.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     U_ALPHAINDEX_INFLOW    = 2,
 
     /**
      * Overflow Label. Te bucket with this label contains names in scripts
      * that sort after all of the bucket labels in this index.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     U_ALPHAINDEX_OVERFLOW  = 3
 } UAlphabeticIndexLabelType;
@@ -160,7 +158,7 @@ class UVector;
  *     sorting would be "de@kn-true".
  * </ul>
  *
- * @draft ICU 4.8 This API might change or be removed in a future release.
+ * @stable ICU 4.8
  */
 
 
@@ -178,7 +176,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param locale the desired locale.
      * @param status Error code, will be set with the reason if the construction
      *               of the AlphabeticIndex object fails.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
      AlphabeticIndex(const Locale &locale, UErrorCode &status);
 
@@ -192,7 +190,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param status Error code, will be set with the reason if the 
      *               operation fails.
      * @return this, for chaining
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
      virtual AlphabeticIndex &addLabels(const UnicodeSet &additions, UErrorCode &status);
 
@@ -207,13 +205,13 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param status Error code, will be set with the reason if the 
      *               operation fails.
      * @return this, for chaining
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
      virtual AlphabeticIndex &addLabels(const Locale &locale, UErrorCode &status);
 
      /**
       * Destructor
-      * @draft ICU 4.8
+      * @stable ICU 4.8
       */
      virtual ~AlphabeticIndex();
 
@@ -228,7 +226,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * or other non-const methods called, a cloned copy must be made first.
      *
      * @return The collator
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual const RuleBasedCollator &getCollator() const;
 
@@ -239,7 +237,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *     X Y Z ... &#x0391; &#x0392; &#x0393;.
      *
      * @return inflow label
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual const UnicodeString &getInflowLabel() const;
 
@@ -252,7 +250,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param inflowLabel the new Inflow label.
      * @param status Error code, will be set with the reason if the operation fails.
      * @return this
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &setInflowLabel(const UnicodeString &inflowLabel, UErrorCode &status);
 
@@ -263,7 +261,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * and that would not otherwise have an appropriate label.
      *
      * @return the overflow label
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual const UnicodeString &getOverflowLabel() const;
 
@@ -275,7 +273,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param overflowLabel the new overflow label.
      * @param status Error code, will be set with the reason if the operation fails.
      * @return this
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &setOverflowLabel(const UnicodeString &overflowLabel, UErrorCode &status);
 
@@ -284,7 +282,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * and that would not otherwise have an appropriate label.
      *
      * @return underflow label
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual const UnicodeString &getUnderflowLabel() const;
 
@@ -295,7 +293,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param underflowLabel the new underflow label.
      * @param status Error code, will be set with the reason if the operation fails.
      * @return this
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &setUnderflowLabel(const UnicodeString &underflowLabel, UErrorCode &status);
 
@@ -305,7 +303,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * The number does not include over, under and inflow labels.
      *
      * @return maxLabelCount maximum number of labels.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual int32_t getMaxLabelCount() const;
 
@@ -319,7 +317,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param maxLabelCount the maximum number of labels.
      * @param status error code
      * @return This, for chaining
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &setMaxLabelCount(int32_t maxLabelCount, UErrorCode &status);
 
@@ -354,7 +352,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *             data pointer the name will be available for each Record.
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return        This, for chaining.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &addRecord(const UnicodeString &name, const void *data, UErrorCode &status);
 
@@ -364,7 +362,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return        This, for chaining.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &clearRecords(UErrorCode &status);
 
@@ -375,7 +373,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return        The number of labels in this index, including any under, over or
      *                in-flow labels.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual int32_t  getBucketCount(UErrorCode &status);
 
@@ -386,7 +384,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return        The number of records in this index, that is, the total number
      *                of (name, data) items added with addRecord().
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual int32_t  getRecordCount(UErrorCode &status);
 
@@ -401,7 +399,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * @param itemName  The name whose bucket position in the index is to be determined.
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return The bucket number for this name.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      *
      */
     virtual int32_t  getBucketIndex(const UnicodeString &itemName, UErrorCode &status);
@@ -411,7 +409,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *   Get the zero based index of the current Bucket from an iteration
      *   over the Buckets of this index.  Return -1 if no iteration is in process.
      *   @return  the index of the current Bucket
-     *   @draft ICU 4.8
+     *   @stable ICU 4.8
      */
     virtual int32_t  getBucketIndex() const;
 
@@ -425,7 +423,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *   an enumeration of its contents are in process.
      *
      *   @return TRUE if success, FALSE if at end of iteration
-     *   @draft ICU 4.8
+     *   @stable ICU 4.8
      */
     virtual UBool nextBucket(UErrorCode &status);
 
@@ -435,7 +433,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *   or after the last, return an empty string.
      *
      *   @return the bucket label.
-     *   @draft ICU 4.8
+     *   @stable ICU 4.8
      */
     virtual const UnicodeString &getBucketLabel() const;
 
@@ -444,7 +442,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *  iteration over Buckets.)
      *
      * @return the label type.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UAlphabeticIndexLabelType getBucketLabelType() const;
 
@@ -454,7 +452,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
       * last, return 0.
       *
       *  @return the number of Records.
-      *  @draft ICU 4.8
+      *  @stable ICU 4.8
       */
     virtual int32_t getBucketRecordCount() const;
 
@@ -465,7 +463,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *
      * @param status  Error code, will be set with the reason if the operation fails.
      * @return        this, for chaining.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual AlphabeticIndex &resetBucketIterator(UErrorCode &status);
 
@@ -478,7 +476,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      *   U_ENUM_OUT_OF_SYNC_ERROR will be reported if the index is modified while
      *   an enumeration of its contents are in process.
      *   @return TRUE if successful, FALSE when the iteration advances past the last item.
-     *   @draft ICU 4.8
+     *   @stable ICU 4.8
      */
     virtual UBool nextRecord(UErrorCode &status);
 
@@ -488,7 +486,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * or after the last.
      *
      *  @return The name of the current index item.
-     *  @draft ICU 4.8
+     *  @stable ICU 4.8
      */
     virtual const UnicodeString &getRecordName() const;
 
@@ -499,7 +497,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * or after the last.
      *
      *  @return The current Record's data pointer.
-     *  @draft ICU 4.8
+     *  @stable ICU 4.8
      */
     virtual const void *getRecordData() const;
 
@@ -508,7 +506,7 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * Reset the Record iterator position to before the first Record in the current Bucket.
      *
      *  @return This, for chaining.
-     *  @draft ICU 4.8
+     *  @stable ICU 4.8
      */
     virtual AlphabeticIndex &resetRecordIterator();
 
@@ -725,6 +723,5 @@ private:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif /* UCONFIG_NO_COLLATION / UCONFIG_NO_NORMALIZATION */
 #endif

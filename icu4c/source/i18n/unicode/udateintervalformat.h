@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-* Copyright (C) 2010-2011, International Business Machines
+* Copyright (C) 2010-2012, International Business Machines
 * Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
@@ -11,7 +11,6 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/umisc.h"
 #include "unicode/localpointer.h"
@@ -75,10 +74,10 @@
 
 /**
  * Opaque UDateIntervalFormat object for use in C programs.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 struct UDateIntervalFormat;
-typedef struct UDateIntervalFormat UDateIntervalFormat;  /**< C typedef for struct UDateIntervalFormat. @draft ICU 4.8 */
+typedef struct UDateIntervalFormat UDateIntervalFormat;  /**< C typedef for struct UDateIntervalFormat. @stable ICU 4.8 */
 
 /**
  * Open a new UDateIntervalFormat object using the predefined rules for a
@@ -102,7 +101,7 @@ typedef struct UDateIntervalFormat UDateIntervalFormat;  /**< C typedef for stru
  * @return
  *            A pointer to a UDateIntervalFormat object for the specified locale,
  *            or NULL if an error occurred.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DRAFT UDateIntervalFormat* U_EXPORT2
 udtitvfmt_open(const char*  locale,
@@ -116,7 +115,7 @@ udtitvfmt_open(const char*  locale,
  * Close a UDateIntervalFormat object. Once closed it may no longer be used.
  * @param formatter
  *            The UDateIntervalFormat object to close.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DRAFT void U_EXPORT2
 udtitvfmt_close(UDateIntervalFormat *formatter);
@@ -133,7 +132,7 @@ U_NAMESPACE_BEGIN
  *
  * @see LocalPointerBase
  * @see LocalPointer
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUDateIntervalFormatPointer, UDateIntervalFormat, udtitvfmt_close);
 
@@ -166,7 +165,7 @@ U_NAMESPACE_END
  * @return
  *            The total buffer size needed; if greater than resultLength, the
  *            output was truncated.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DRAFT int32_t U_EXPORT2
 udtitvfmt_format(const UDateIntervalFormat* formatter,
@@ -177,7 +176,6 @@ udtitvfmt_format(const UDateIntervalFormat* formatter,
                 UFieldPosition* position,
                 UErrorCode*     status);
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

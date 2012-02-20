@@ -1,5 +1,5 @@
 /********************************************************************************
-* Copyright (C) 2008-2011, International Business Machines Corporation and
+* Copyright (C) 2008-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -492,7 +492,7 @@ public:
     /**
      * Returns a reference to the TimeZone used by this DateIntervalFormat's calendar.
      * @return the time zone associated with the calendar of DateIntervalFormat.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual const TimeZone& getTimeZone(void) const;
 
@@ -500,14 +500,14 @@ public:
      * Sets the time zone for the calendar used by this DateIntervalFormat object. The
      * caller no longer owns the TimeZone object and should not delete it after this call.
      * @param zoneToAdopt the TimeZone to be adopted.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual void adoptTimeZone(TimeZone* zoneToAdopt);
 
     /**
      * Sets the time zone for the calendar used by this DateIntervalFormat object.
      * @param zone the new time zone.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual void setTimeZone(const TimeZone& zone);
 

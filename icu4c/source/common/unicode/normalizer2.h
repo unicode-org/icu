@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -261,7 +261,7 @@ public:
      * @param decomposition String object which will be set to c's
      *                      decomposition mapping, if there is one.
      * @return TRUE if c has a decomposition, otherwise FALSE
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
     virtual UBool
     getDecomposition(UChar32 c, UnicodeString &decomposition) const = 0;
@@ -528,7 +528,7 @@ public:
      * @param decomposition String object which will be set to c's
      *                      decomposition mapping, if there is one.
      * @return TRUE if c has a decomposition, otherwise FALSE
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
     virtual UBool
     getDecomposition(UChar32 c, UnicodeString &decomposition) const;

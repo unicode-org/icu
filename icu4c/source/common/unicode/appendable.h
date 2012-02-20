@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  appendable.h
@@ -23,8 +23,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 U_NAMESPACE_BEGIN
 
 class UnicodeString;
@@ -46,13 +44,13 @@ class UnicodeString;
  * the implementation must prevent unexpected behavior (e.g., crashes)
  * from further calls and should make the error condition available separately
  * (e.g., store a UErrorCode, make/keep a UnicodeString bogus).
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 class U_COMMON_API Appendable : public UObject {
 public:
     /**
      * Destructor.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     ~Appendable();
 
@@ -60,7 +58,7 @@ public:
      * Appends a 16-bit code unit.
      * @param c code unit
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool appendCodeUnit(UChar c) = 0;
 
@@ -69,7 +67,7 @@ public:
      * The default implementation calls appendCodeUnit(UChar) once or twice.
      * @param c code point 0..0x10ffff
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool appendCodePoint(UChar32 c);
 
@@ -79,7 +77,7 @@ public:
      * @param s string, must not be NULL if length!=0
      * @param length string length, or -1 if NUL-terminated
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool appendString(const UChar *s, int32_t length);
 
@@ -90,7 +88,7 @@ public:
      * The default implementation does nothing. (It always returns TRUE.)
      * @param appendCapacity estimated number of UChars that will be appended
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool reserveAppendCapacity(int32_t appendCapacity);
 
@@ -136,7 +134,7 @@ public:
      * @param resultCapacity pointer to an integer which will be set to the
      *                       capacity of the returned buffer
      * @return a buffer with *resultCapacity>=minCapacity
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UChar *getAppendBuffer(int32_t minCapacity,
                                    int32_t desiredCapacityHint,
@@ -152,20 +150,20 @@ private:
  * An Appendable implementation which writes to a UnicodeString.
  *
  * This class is not intended for public subclassing.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 class U_COMMON_API UnicodeStringAppendable : public Appendable {
 public:
     /**
      * Aliases the UnicodeString (keeps its reference) for writing.
      * @param s The UnicodeString to which this Appendable will write.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     explicit UnicodeStringAppendable(UnicodeString &s) : str(s) {}
 
     /**
      * Destructor.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     ~UnicodeStringAppendable();
 
@@ -173,7 +171,7 @@ public:
      * Appends a 16-bit code unit to the string.
      * @param c code unit
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool appendCodeUnit(UChar c);
 
@@ -181,7 +179,7 @@ public:
      * Appends a code point to the string.
      * @param c code point 0..0x10ffff
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool appendCodePoint(UChar32 c);
 
@@ -190,7 +188,7 @@ public:
      * @param s string, must not be NULL if length!=0
      * @param length string length, or -1 if NUL-terminated
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool appendString(const UChar *s, int32_t length);
 
@@ -199,7 +197,7 @@ public:
      * appendCapacity UChars.
      * @param appendCapacity estimated number of UChars that will be appended
      * @return TRUE if the operation succeeded
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool reserveAppendCapacity(int32_t appendCapacity);
 
@@ -222,7 +220,7 @@ public:
      * @param resultCapacity pointer to an integer which will be set to the
      *                       capacity of the returned buffer
      * @return a buffer with *resultCapacity>=minCapacity
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UChar *getAppendBuffer(int32_t minCapacity,
                                    int32_t desiredCapacityHint,
@@ -235,5 +233,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif  // __APPENDABLE_H__

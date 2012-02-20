@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -264,7 +264,7 @@ typedef int8_t UBool;
  * but allows direct string type compatibility with platforms with
  * 16-bit wchar_t types.
  *
- * @draft ICU 4.4
+ * @stable ICU 4.4
  */
 
 /* Define UChar to be compatible with char16_t or wchar_t if possible. */

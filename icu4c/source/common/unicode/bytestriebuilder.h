@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  bytestriebuilder.h
@@ -20,8 +20,6 @@
 #include "unicode/stringpiece.h"
 #include "unicode/stringtriebuilder.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 U_NAMESPACE_BEGIN
 
 class BytesTrieElement;
@@ -31,20 +29,20 @@ class CharString;
  * Builder class for BytesTrie.
  *
  * This class is not intended for public subclassing.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 class U_COMMON_API BytesTrieBuilder : public StringTrieBuilder {
 public:
     /**
      * Constructs an empty builder.
      * @param errorCode Standard ICU error code.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     BytesTrieBuilder(UErrorCode &errorCode);
 
     /**
      * Destructor.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual ~BytesTrieBuilder();
 
@@ -60,7 +58,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return *this
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     BytesTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
 
@@ -77,7 +75,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return A new BytesTrie for the add()ed data.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     BytesTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
@@ -98,7 +96,7 @@ public:
      *                  immediately. Check for U_FAILURE() on output or use with
      *                  function chaining. (See User Guide for details.)
      * @return A StringPiece which refers to the byte-serialized BytesTrie for the add()ed data.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     StringPiece buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
 
@@ -106,7 +104,7 @@ public:
      * Removes all (byte sequence, value) pairs.
      * New data can then be add()ed and a new trie can be built.
      * @return *this
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     BytesTrieBuilder &clear();
 
@@ -171,5 +169,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif  // __BYTESTRIEBUILDER_H__
