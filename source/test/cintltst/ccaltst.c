@@ -1815,7 +1815,7 @@ void TestAmbiguousWallTime() {
         log_err("FAIL: Calculating time 2011-11-06 01:30:00 with UCAL_WALLTIME_FIRST - %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else if (t != expected) {
-        log_err("FAIL: 2011-11-06 01:30:00 with UCAL_WALLTIME_FIRST - got: %f, expected: %f\n", t, expected);
+        log_data_err("FAIL: 2011-11-06 01:30:00 with UCAL_WALLTIME_FIRST - got: %f, expected: %f\n", t, expected);
     }
 
     /* UCAL_WALLTIME_LAST on US fall transition */
@@ -1828,7 +1828,7 @@ void TestAmbiguousWallTime() {
         log_err("FAIL: Calculating time 2011-11-06 01:30:00 with UCAL_WALLTIME_LAST - %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else if (t != expected) {
-        log_err("FAIL: 2011-11-06 01:30:00 with UCAL_WALLTIME_LAST - got: %f, expected: %f\n", t, expected);
+        log_data_err("FAIL: 2011-11-06 01:30:00 with UCAL_WALLTIME_LAST - got: %f, expected: %f\n", t, expected);
     }
 
     /* UCAL_WALLTIME_FIRST on US spring transition */
@@ -1841,7 +1841,7 @@ void TestAmbiguousWallTime() {
         log_err("FAIL: Calculating time 2011-03-13 02:30:00 with UCAL_WALLTIME_FIRST - %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else if (t != expected) {
-        log_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_FIRST - got: %f, expected: %f\n", t, expected);
+        log_data_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_FIRST - got: %f, expected: %f\n", t, expected);
     }
 
     /* UCAL_WALLTIME_LAST on US spring transition */
@@ -1854,7 +1854,7 @@ void TestAmbiguousWallTime() {
         log_err("FAIL: Calculating time 2011-03-13 02:30:00 with UCAL_WALLTIME_LAST - %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else if (t != expected) {
-        log_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_LAST - got: %f, expected: %f\n", t, expected);
+        log_data_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_LAST - got: %f, expected: %f\n", t, expected);
     }
 
     /* UCAL_WALLTIME_NEXT_VALID on US spring transition */
@@ -1867,7 +1867,7 @@ void TestAmbiguousWallTime() {
         log_err("FAIL: Calculating time 2011-03-13 02:30:00 with UCAL_WALLTIME_NEXT_VALID - %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else if (t != expected) {
-        log_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_NEXT_VALID - got: %f, expected: %f\n", t, expected);
+        log_data_err("FAIL: 2011-03-13 02:30:00 with UCAL_WALLTIME_NEXT_VALID - got: %f, expected: %f\n", t, expected);
     }
 
     /* non-lenient on US spring transition */
@@ -1877,7 +1877,7 @@ void TestAmbiguousWallTime() {
     t = ucal_getMillis(ucal, &status);
     if (U_SUCCESS(status)) {
         /* must return error */
-        log_err("FAIL: Non-lenient did not fail with 2011-03-13 02:30:00\n");
+        log_data_err("FAIL: Non-lenient did not fail with 2011-03-13 02:30:00\n");
         status = U_ZERO_ERROR;
     }
 
