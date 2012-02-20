@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -263,7 +263,6 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
       * Get pattern string for 'CurrencySpacing' that can be applied to
       * currency format.
@@ -278,7 +277,7 @@ public:
       * @return pattern string for currencyMatch, surroundingMatch or spaceInsert.
       *     Return empty string if there is no data for this locale and its parent
       *     locales.
-      * @draft ICU 4.8
+      * @stable ICU 4.8
       */
      const UnicodeString& getPatternForCurrencySpacing(UCurrencySpacing type,
                                                  UBool beforeCurrency,
@@ -291,12 +290,11 @@ public:
        * @param beforeCurrency : true if the pattern is for before currency symbol.
        *                         false if the pattern is for after currency symbol.
        * @param pattern : pattern string to override current setting.
-       * @draft ICU 4.8
+       * @stable ICU 4.8
        */
      void setPatternForCurrencySpacing(UCurrencySpacing type,
                                        UBool beforeCurrency,
                                        const UnicodeString& pattern);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

@@ -610,7 +610,7 @@ public:
      * @see Collator#setReorderCodes
      * @see UScriptCode
      * @see UColReorderCode
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */
      virtual int32_t U_EXPORT2 getReorderCodes(int32_t *dest,
                                     int32_t destCapacity,
@@ -628,7 +628,7 @@ public:
      * @see Collator#getEquivalentReorderCodes
      * @see UScriptCode
      * @see UColReorderCode
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */
      virtual void U_EXPORT2 setReorderCodes(const int32_t* reorderCodes,
                                 int32_t reorderCodesLength,
@@ -650,7 +650,7 @@ public:
      * @see Collator#setReorderCodes
      * @see UScriptCode
      * @see UColReorderCode
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */
     static int32_t U_EXPORT2 getEquivalentReorderCodes(int32_t reorderCode,
                                 int32_t* dest,

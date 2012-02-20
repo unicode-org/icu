@@ -185,7 +185,6 @@ public:
         UParseError          &pe,
         UErrorCode           &status);
 
-#ifndef U_HIDE_DRAFT_API
    /**
     * Compiles the regular expression in string form into a RegexPattern
     * object.  These compile methods, rather than the constructors, are the usual
@@ -210,12 +209,11 @@ public:
     * @param status A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 4.6
+    * @stable ICU 4.6
     */
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         UParseError          &pe,
         UErrorCode           &status);
-#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Compiles the regular expression in string form into a RegexPattern
@@ -246,7 +244,6 @@ public:
         UParseError          &pe,
         UErrorCode           &status);
 
-#ifndef U_HIDE_DRAFT_API
    /**
     * Compiles the regular expression in string form into a RegexPattern
     * object using the specified match mode flags.  These compile methods,
@@ -271,13 +268,12 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 4.6
+    * @stable ICU 4.6
     */
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         uint32_t             flags,
         UParseError          &pe,
         UErrorCode           &status);
-#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Compiles the regular expression in string form into a RegexPattern
@@ -305,7 +301,6 @@ public:
         uint32_t             flags,
         UErrorCode           &status);
 
-#ifndef U_HIDE_DRAFT_API
    /**
     * Compiles the regular expression in string form into a RegexPattern
     * object using the specified match mode flags.  These compile methods,
@@ -328,12 +323,11 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 4.6
+    * @stable ICU 4.6
     */
     static RegexPattern * U_EXPORT2 compile( UText *regex,
         uint32_t             flags,
         UErrorCode           &status);
-#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Get the match mode flags that were used when compiling this pattern.
@@ -414,7 +408,6 @@ public:
               UParseError     &pe,
               UErrorCode      &status);
 
-#ifndef U_HIDE_DRAFT_API
    /**
     * Test whether a string matches a regular expression.  This convenience function
     * both compiles the regular expression and applies it in a single operation.
@@ -427,13 +420,12 @@ public:
     * @param status A reference to a UErrorCode to receive any errors.
     * @return True if the regular expression exactly matches the full input string.
     *
-    * @draft ICU 4.6
+    * @stable ICU 4.6
     */
     static UBool U_EXPORT2 matches(UText *regex,
         UText           *input,
         UParseError     &pe,
         UErrorCode      &status);
-#endif  /* U_HIDE_DRAFT_API */
 
    /**
     * Returns the regular expression from which this pattern was compiled. This method will work
@@ -454,7 +446,7 @@ public:
     * UText, and that UText was modified, the returned UText may no longer reflect the RegexPattern
     * object.
     *
-    * @draft ICU 4.6
+    * @stable ICU 4.6
     */
     virtual UText *patternText(UErrorCode      &status) const;
 
@@ -539,7 +531,7 @@ public:
      * @param status  A reference to a UErrorCode to receive any errors.
      * @return        The number of destination strings used.  
      *
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
     virtual int32_t  split(UText *input,
         UText            *dest[],
@@ -657,7 +649,6 @@ public:
       */
     RegexMatcher(const UnicodeString &regexp, uint32_t flags, UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
       * Construct a RegexMatcher for a regular expression.
       * This is a convenience method that avoids the need to explicitly create
@@ -671,10 +662,9 @@ public:
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
       *
-      *  @draft ICU 4.6
+      *  @stable ICU 4.6
       */
     RegexMatcher(UText *regexp, uint32_t flags, UErrorCode &status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
       * Construct a RegexMatcher for a regular expression.
@@ -700,7 +690,6 @@ public:
     RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
         uint32_t flags, UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
       * Construct a RegexMatcher for a regular expression.
       * This is a convenience method that avoids the need to explicitly create
@@ -720,11 +709,10 @@ public:
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
       *
-      *  @draft ICU 4.6
+      *  @stable ICU 4.6
       */
     RegexMatcher(UText *regexp, UText *input,
         uint32_t flags, UErrorCode &status);
-#endif  /* U_HIDE_DRAFT_API */
 
 private:
     /**
@@ -881,7 +869,7 @@ public:
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number.
     *   @return dest if non-NULL, a shallow copy of the input text otherwise
     *
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual UText *group(UText *dest, int64_t &group_len, UErrorCode &status) const; 
 
@@ -898,7 +886,7 @@ public:
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number.
     *   @return dest if non-NULL, a shallow copy of the input text otherwise
     *
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual UText *group(int32_t groupNum, UText *dest, int64_t &group_len, UErrorCode &status) const;
 
@@ -934,7 +922,7 @@ public:
     *   during the previous match operation.
     *    @param   status      a reference to a UErrorCode to receive any errors.
     *    @return              The (native) position in the input string of the start of the last match.
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual int64_t start64(UErrorCode &status) const;
 
@@ -965,7 +953,7 @@ public:
     *                        attempted or the last match failed, and
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number.
     *    @return the (native) start position of substring matched by the specified group.
-    *    @draft ICU 4.6
+    *    @stable ICU 4.6
     */
     virtual int64_t start64(int32_t group, UErrorCode &status) const;
 
@@ -996,7 +984,7 @@ public:
     *                        The index value returned is a native index, corresponding to
     *                        code units for the underlying encoding type, for example,
     *                        a byte index for UTF-8.
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual int64_t end64(UErrorCode &status) const;
 
@@ -1035,7 +1023,7 @@ public:
     *              The index value returned is a native index, corresponding to
     *              code units for the underlying encoding type, for example,
     *              a byte index for UTF8.
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual int64_t end64(int32_t group, UErrorCode &status) const;
 
@@ -1100,7 +1088,7 @@ public:
     *                until after regexp operations on it are done.
     *   @return this RegexMatcher.
     *
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual RegexMatcher &reset(UText *input);
 
@@ -1127,7 +1115,7 @@ public:
     * @param input      The new (moved) text string.
     * @param status     Receives errors detected by this function.
     *
-    * @draft ICU 4.8 
+    * @stable ICU 4.8 
     */
     virtual RegexMatcher &refreshInputText(UText *input, UErrorCode &status);
 
@@ -1163,7 +1151,7 @@ public:
     *   a UnicodeString.
     *   @return the input text
     *
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual UText *inputText() const;
     
@@ -1175,7 +1163,7 @@ public:
     *   @param status error code
     *   @return dest if non-NULL, a shallow copy of the input text otherwise
     *
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual UText *getInput(UText *dest, UErrorCode &status) const;
     
@@ -1209,7 +1197,7 @@ public:
      * @param status A reference to a UErrorCode to receive any errors.
      *                If startIndex is not within the specified region bounds, 
      *                U_INDEX_OUTOFBOUNDS_ERROR is returned.
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
      virtual RegexMatcher &region(int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode &status);
 
@@ -1229,7 +1217,7 @@ public:
      * regionEnd (exclusive).
      *
      * @return The starting (native) index of this matcher's region.
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
      virtual int64_t regionStart64() const;
 
@@ -1250,7 +1238,7 @@ public:
      * (inclusive) and regionEnd (exclusive).
      *
      * @return The ending point (native) of this matcher's region.
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
       virtual int64_t regionEnd64() const;
 
@@ -1381,7 +1369,7 @@ public:
     *    @return              a string containing the results of the find and replace.
     *                          If a pre-allocated UText was provided, it will always be used and returned.
     *
-    *    @draft ICU 4.6
+    *    @stable ICU 4.6
     */
     virtual UText *replaceAll(UText *replacement, UText *dest, UErrorCode &status);
     
@@ -1431,7 +1419,7 @@ public:
     *    @return              a string containing the results of the find and replace.
     *                          If a pre-allocated UText was provided, it will always be used and returned.
     *
-    *    @draft ICU 4.6
+    *    @stable ICU 4.6
     */
     virtual UText *replaceFirst(UText *replacement, UText *dest, UErrorCode &status);
     
@@ -1492,7 +1480,7 @@ public:
     *
     *   @return  this  RegexMatcher
     *
-    *   @draft ICU 4.6
+    *   @stable ICU 4.6
     */
     virtual RegexMatcher &appendReplacement(UText *dest,
         UText *replacement, UErrorCode &status);
@@ -1522,7 +1510,7 @@ public:
     *  @param status error cod
     *  @return  the destination string.
     *
-    *  @draft ICU 4.6
+    *  @stable ICU 4.6
     */
     virtual UText *appendTail(UText *dest, UErrorCode &status);
 
@@ -1577,7 +1565,7 @@ public:
      * @param status  A reference to a UErrorCode to receive any errors.
      * @return        The number of fields into which the input string was split.
      *
-     * @draft ICU 4.6
+     * @stable ICU 4.6
      */
     virtual int32_t  split(UText *input,
         UText           *dest[],
@@ -1692,7 +1680,7 @@ public:
     *                         time the callback function is set will be saved
     *                         and passed to the callback each time that it is called.
     *    @param   status      A reference to a UErrorCode to receive any errors.
-    *    @draft ICU 4.6
+    *    @stable ICU 4.6
     */
     virtual void setFindProgressCallback(URegexFindProgressCallback      *callback,
                                               const void                              *context,
@@ -1707,7 +1695,7 @@ public:
     *    @param   context     Out parameter, receives the user context pointer that
     *                         was set when uregex_setFindProgressCallback() was called.
     *    @param   status      A reference to a UErrorCode to receive any errors.
-    *    @draft ICU 4.6
+    *    @stable ICU 4.6
     */
     virtual void getFindProgressCallback(URegexFindProgressCallback      *&callback,
                                               const void                      *&context,

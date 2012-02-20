@@ -621,7 +621,7 @@ public:
      *
      * @param enable <code>TRUE</code> if lenient parsing should be used,
      *               <code>FALSE</code> otherwise.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual void setLenient(UBool enable);
 
@@ -631,7 +631,7 @@ public:
      * @return <code>TRUE</code> if lenient parsing is enabled,
      *         <code>FALSE</code> otherwise.
      * @see #setLenient
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual UBool isLenient(void) const;
 
@@ -656,19 +656,17 @@ public:
     static NumberFormat* U_EXPORT2 createInstance(const Locale& inLocale,
                                         UErrorCode&);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Creates the specified decimal format style of the desired locale.
      * @param desiredLocale    the given locale.
      * @param style            the given style.
      * @param errorCode        Output param filled with success/failure status.
      * @return                 A new NumberFormat instance.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     static NumberFormat* U_EXPORT2 createInstance(const Locale& desiredLocale,
                                                   UNumberFormatStyle style,
                                                   UErrorCode& errorCode);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a currency format for the current default locale.

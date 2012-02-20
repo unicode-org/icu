@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2011, International Business Machines Corporation and others.
+* Copyright (c) 1996-2012, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -133,7 +133,6 @@ typedef enum {
 
 } UColAttributeValue;
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Enum containing the codes for reordering segments of the collation table that are not script
  * codes. These reordering codes are to be used in conjunction with the script codes.
@@ -141,71 +140,70 @@ typedef enum {
  * @see ucol_setReorderCodes
  * @see ucol_getEquivalentReorderCodes
  * @see UScriptCode
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
  typedef enum {
    /**
     * A special reordering code that is used to specify the default
     * reordering codes for a locale.
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */   
     UCOL_REORDER_CODE_DEFAULT       = -1,
    /**
     * A special reordering code that is used to specify no reordering codes.
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */   
     UCOL_REORDER_CODE_NONE          = USCRIPT_UNKNOWN,
    /**
     * A special reordering code that is used to specify all other codes used for
     * reordering except for the codes lised as UColReorderCode values and those
     * listed explicitly in a reordering.
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */   
     UCOL_REORDER_CODE_OTHERS        = USCRIPT_UNKNOWN,
    /**
     * Characters with the space property.
     * This is equivalent to the rule value "space".
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_SPACE         = 0x1000,
    /**
     * The first entry in the enumeration of reordering groups. This is intended for use in
     * range checking and enumeration of the reorder codes.
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_FIRST         = UCOL_REORDER_CODE_SPACE,
    /**
     * Characters with the punctuation property.
     * This is equivalent to the rule value "punct".
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_PUNCTUATION   = 0x1001,
    /**
     * Characters with the symbol property.
     * This is equivalent to the rule value "symbol".
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_SYMBOL        = 0x1002,
    /**
     * Characters with the currency property.
     * This is equivalent to the rule value "currency".
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_CURRENCY      = 0x1003,
    /**
     * Characters with the digit property.
     * This is equivalent to the rule value "digit".
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_DIGIT         = 0x1004,
    /**
     * The limit of the reorder codes. This is intended for use in range checking 
     * and enumeration of the reorder codes.
-    * @draft ICU 4.8
+    * @stable ICU 4.8
     */    
     UCOL_REORDER_CODE_LIMIT         = 0x1005
 } UColReorderCode;
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Base letter represents a primary difference.  Set comparison
@@ -598,7 +596,6 @@ U_STABLE void U_EXPORT2
 ucol_setStrength(UCollator *coll,
                  UCollationStrength strength);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Retrieves the reordering codes for this collator.
  * These reordering codes are a combination of UScript codes and UColReorderCode entries.
@@ -613,7 +610,7 @@ ucol_setStrength(UCollator *coll,
  * @see ucol_getEquivalentReorderCodes
  * @see UScriptCode
  * @see UColReorderCode
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DRAFT int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator* coll,
@@ -653,7 +650,7 @@ ucol_getReorderCodes(const UCollator* coll,
  * @see ucol_getEquivalentReorderCodes
  * @see UScriptCode
  * @see UColReorderCode
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */ 
 U_DRAFT void U_EXPORT2 
 ucol_setReorderCodes(UCollator* coll,
@@ -675,14 +672,13 @@ ucol_setReorderCodes(UCollator* coll,
  * @see ucol_getReorderCodes
  * @see UScriptCode
  * @see UColReorderCode
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DRAFT int32_t U_EXPORT2 
 ucol_getEquivalentReorderCodes(int32_t reorderCode,
                     int32_t* dest,
                     int32_t destCapacity,
                     UErrorCode *pErrorCode);
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Get the display name for a UCollator.

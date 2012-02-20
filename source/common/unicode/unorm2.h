@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -329,7 +329,6 @@ unorm2_append(const UNormalizer2 *norm2,
               const UChar *second, int32_t secondLength,
               UErrorCode *pErrorCode);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Gets the decomposition mapping of c.
  * Roughly equivalent to normalizing the String form of c
@@ -347,13 +346,14 @@ unorm2_append(const UNormalizer2 *norm2,
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
  * @return the non-negative length of c's decomposition, if there is one; otherwise a negative value
- * @draft ICU 4.6
+ * @stable ICU 4.6
  */
 U_DRAFT int32_t U_EXPORT2
 unorm2_getDecomposition(const UNormalizer2 *norm2,
                         UChar32 c, UChar *decomposition, int32_t capacity,
                         UErrorCode *pErrorCode);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Gets the raw decomposition mapping of c.
  *

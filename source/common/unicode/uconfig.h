@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2011, International Business Machines
+*   Copyright (C) 2002-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -346,7 +346,7 @@
  * Determines the default UMessagePatternApostropheMode.
  * See the documentation for that enum.
  *
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 #ifndef UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE
 #   define UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE UMSGPAT_APOS_DOUBLE_OPTIONAL
