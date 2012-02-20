@@ -1912,7 +1912,7 @@ IntlTestRBNF::TestSetDecimalFormatSymbols() {
 
     RuleBasedNumberFormat rbnf(URBNF_ORDINAL, Locale::getEnglish(), status);
     if (U_FAILURE(status)) {
-        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        dataerrln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
         return;
     }
 
