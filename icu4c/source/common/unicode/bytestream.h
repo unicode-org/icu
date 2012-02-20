@@ -1,4 +1,4 @@
-// Copyright (C) 2009-2011, International Business Machines
+// Copyright (C) 2009-2012, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2007 Google Inc. All Rights Reserved.
@@ -160,7 +160,7 @@ public:
    * Resets the state to NumberOfBytesWritten()=NumberOfBytesAppended()=0
    * and Overflowed()=FALSE.
    * @return *this
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   virtual CheckedArrayByteSink& Reset();
   /**
@@ -201,16 +201,14 @@ public:
    * @stable ICU 4.2
    */
   UBool Overflowed() const { return overflowed_; }
-#ifndef U_HIDE_DRAFT_API
   /**
    * Returns the number of bytes appended to the sink.
    * If Overflowed() then NumberOfBytesAppended()>NumberOfBytesWritten()
    * else they return the same number.
    * @return number of bytes written to the buffer
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   int32_t NumberOfBytesAppended() const { return appended_; }
-#endif  /* U_HIDE_DRAFT_API */
 private:
   char* outbuf_;
   const int32_t capacity_;

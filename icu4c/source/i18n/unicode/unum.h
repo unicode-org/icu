@@ -183,24 +183,22 @@ typedef enum UNumberFormatStyle {
      * @stable ICU 3.0
      */
     UNUM_PATTERN_RULEBASED,
-#ifndef U_HIDE_DRAFT_API
     /**
      * Currency format with an ISO currency code, e.g., "USD1.00".
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UNUM_CURRENCY_ISO,
     /**
      * Currency format with a pluralized currency name,
      * e.g., "1.00 US dollar" and "3.00 US dollars".
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UNUM_CURRENCY_PLURAL,
     /**
      * One more than the highest number format style constant.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UNUM_FORMAT_STYLE_COUNT,
-#endif  /* U_HIDE_DRAFT_API */
     /**
      * Default format
      * @stable ICU 2.0
@@ -235,13 +233,11 @@ typedef enum UNumberFormatRoundingMode {
 #endif  /* U_HIDE_DEPRECATED_API */
     UNUM_ROUND_HALFDOWN,
     UNUM_ROUND_HALFUP,
-#ifndef U_HIDE_DRAFT_API
     /** 
       * ROUND_UNNECESSARY reports an error if formatted result is not exact.
-      * @draft ICU 4.8
+      * @stable ICU 4.8
       */
     UNUM_ROUND_UNNECESSARY
-#endif  /* U_HIDE_DRAFT_API */
 } UNumberFormatRoundingMode;
 
 /** The possible number format pad positions. 
@@ -254,20 +250,22 @@ typedef enum UNumberFormatPadPosition {
     UNUM_PAD_AFTER_SUFFIX
 } UNumberFormatPadPosition;
 
-/* #ifndef U_HIDE_DRAFT_API:  can't hide- used in dcfmtshm.h for size of DecimalFormatSymbols */
 /**
  * Constants for specifying currency spacing
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 enum UCurrencySpacing {
+    /** @stable ICU 4.8 */
     UNUM_CURRENCY_MATCH,
+    /** @stable ICU 4.8 */
     UNUM_CURRENCY_SURROUNDING_MATCH,
+    /** @stable ICU 4.8 */
     UNUM_CURRENCY_INSERT,
+    /** @stable ICU 4.8 */
     UNUM_CURRENCY_SPACING_COUNT
 };
-typedef enum UCurrencySpacing UCurrencySpacing; /**< @draft ICU 4.8 */
+typedef enum UCurrencySpacing UCurrencySpacing; /**< @stable ICU 4.8 */
 
-/* #endif  U_HIDE_DRAFT_API */
 
 /**
  * FieldPosition and UFieldPosition selectors for format fields
@@ -992,44 +990,42 @@ typedef enum UNumberFormatSymbol {
    * @stable ICU 3.6
    */
   UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL = 17,
-#ifndef U_HIDE_DRAFT_API
   /** One
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_ONE_DIGIT_SYMBOL = 18,
   /** Two
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_TWO_DIGIT_SYMBOL = 19,
   /** Three
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_THREE_DIGIT_SYMBOL = 20,
   /** Four
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_FOUR_DIGIT_SYMBOL = 21,
   /** Five
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_FIVE_DIGIT_SYMBOL = 22,
   /** Six
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_SIX_DIGIT_SYMBOL = 23,
   /** Seven
-    * @draft ICU 4.6
+    * @stable ICU 4.6
    */
   UNUM_SEVEN_DIGIT_SYMBOL = 24,
   /** Eight
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_EIGHT_DIGIT_SYMBOL = 25,
   /** Nine
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   UNUM_NINE_DIGIT_SYMBOL = 26,
-#endif  /* U_HIDE_DRAFT_API */
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT = 27
 } UNumberFormatSymbol;

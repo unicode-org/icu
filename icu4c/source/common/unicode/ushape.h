@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -451,7 +451,6 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  */
 #define U_SHAPE_SPACES_RELATIVE_TO_TEXT_MASK      0x4000000
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * If this option is used, shaping will use the new Unicode code point for TAIL (i.e. 0xFE73). 
  * If this option is not specified (Default), old unofficial Unicode TAIL code point is used (i.e. 0x200B)
@@ -462,15 +461,14 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Shaping Mode: Only shaping.
  * De-shaping Mode: N/A.
  * Affects: All Seen options
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 #define U_SHAPE_TAIL_NEW_UNICODE        0x8000000
 
 /**
  * Bit mask for new Unicode Tail option 
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 #define U_SHAPE_TAIL_TYPE_MASK          0x8000000
-#endif  /* U_HIDE_DRAFT_API */
 
 #endif

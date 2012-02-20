@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -286,14 +286,12 @@
  */
 #define ULOC_KEYWORD_SEPARATOR '@'
 
-#ifndef U_HIDE_DRAFT_API
 /**
   * Unicode code point for '@' separating keywords from the locale string.
   * @see ULOC_KEYWORD_SEPARATOR
-  * @draft ICU 4.6
+  * @stable ICU 4.6
   */
 #define ULOC_KEYWORD_SEPARATOR_UNICODE 0x40
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Invariant character for assigning value to a keyword
@@ -301,14 +299,12 @@
  */
 #define ULOC_KEYWORD_ASSIGN '='
 
-#ifndef U_HIDE_DRAFT_API
 /**
   * Unicode code point for '=' for assigning value to a keyword.
   * @see ULOC_KEYWORD_ASSIGN
-  * @draft ICU 4.6 
+  * @stable ICU 4.6 
   */
 #define ULOC_KEYWORD_ASSIGN_UNICODE 0x3D
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Invariant character separating keywords
@@ -316,14 +312,12 @@
  */
 #define ULOC_KEYWORD_ITEM_SEPARATOR ';'
 
-#ifndef U_HIDE_DRAFT_API
 /**
   * Unicode code point for ';' separating keywords
   * @see ULOC_KEYWORD_ITEM_SEPARATOR
-  * @draft ICU 4.6
+  * @stable ICU 4.6
   */
 #define ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE 0x3B
-#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Constants for *_getLocale()
@@ -1072,7 +1066,6 @@ uloc_minimizeSubtags(const char*    localeID,
          int32_t minimizedLocaleIDCapacity,
          UErrorCode* err);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Returns a locale ID for the specified BCP47 language tag string.
  * If the specified language tag contains any ill-formed subtags,
@@ -1094,7 +1087,7 @@ uloc_minimizeSubtags(const char*    localeID,
  * @param err       error information if receiving the locald ID
  *                  failed.
  * @return          the length of the locale ID.
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_forLanguageTag(const char* langtag,
@@ -1122,7 +1115,7 @@ uloc_forLanguageTag(const char* langtag,
  * @param err       error information if receiving the language
  *                  tag failed.
  * @return          The length of the BCP47 language tag.
- * @draft ICU 4.2
+ * @stable ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_toLanguageTag(const char* localeID,
@@ -1130,6 +1123,5 @@ uloc_toLanguageTag(const char* localeID,
                    int32_t langtagCapacity,
                    UBool strict,
                    UErrorCode* err);
-#endif  /* U_HIDE_DRAFT_API */
 
 #endif /*_ULOC*/

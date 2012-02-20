@@ -174,7 +174,6 @@ public:
      */
     static TimeZone* U_EXPORT2 createTimeZone(const UnicodeString& ID);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns an enumeration over system time zone IDs with the given
      * filter conditions.
@@ -188,14 +187,13 @@ public:
      * @param ec            Output param to filled in with a success or
      *                      an error.
      * @return an enumeration object, owned by the caller.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     static StringEnumeration* U_EXPORT2 createTimeZoneIDEnumeration(
         USystemTimeZoneType zoneType,
         const char* region,
         const int32_t* rawOffset,
         UErrorCode& ec);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns an enumeration over all recognized time zone IDs. (i.e.,
@@ -712,7 +710,6 @@ public:
      */
     virtual int32_t getDSTSavings() const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the region code associated with the given
      * system time zone ID. The region code is either ISO 3166
@@ -728,11 +725,10 @@ public:
      *                      is not a known system time zone ID,
      *                      U_ILLEGAL_ARGUMENT_ERROR is set.
      * @return The length of the output region code.
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */ 
     static int32_t U_EXPORT2 getRegion(const UnicodeString& id, 
         char *region, int32_t capacity, UErrorCode& status); 
-#endif  /* U_HIDE_DRAFT_API */
 
 protected:
 

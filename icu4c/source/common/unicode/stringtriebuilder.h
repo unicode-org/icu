@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  stringtriebuilder.h
@@ -18,20 +18,18 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 // Forward declaration.
 struct UHashtable;
 typedef struct UHashtable UHashtable;
 
 /**
  * Build options for BytesTrieBuilder and CharsTrieBuilder.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 enum UStringTrieBuildOption {
     /**
      * Builds a trie quickly.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     USTRINGTRIE_BUILD_FAST,
     /**
@@ -42,7 +40,7 @@ enum UStringTrieBuildOption {
      * This option can be effective when many integer values are the same
      * and string/byte sequence suffixes can be shared.
      * Runtime speed is not expected to improve.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     USTRINGTRIE_BUILD_SMALL
 };
@@ -53,7 +51,7 @@ U_NAMESPACE_BEGIN
  * Base class for string trie builder classes.
  *
  * This class is not intended for public subclassing.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 class U_COMMON_API StringTrieBuilder : public UObject {
 public:
@@ -389,5 +387,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif  // __STRINGTRIEBUILDER_H__

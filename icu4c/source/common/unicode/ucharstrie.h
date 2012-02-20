@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucharstrie.h
@@ -26,8 +26,6 @@
 #include "unicode/uobject.h"
 #include "unicode/ustringtrie.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 U_NAMESPACE_BEGIN
 
 class Appendable;
@@ -45,7 +43,7 @@ class UVector32;
  * There is no assignment operator.
  *
  * This class is not intended for public subclassing.
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 class U_COMMON_API UCharsTrie : public UMemory {
 public:
@@ -61,7 +59,7 @@ public:
      * the UCharsTrie object is in use.
      *
      * @param trieUChars The UChar array that contains the serialized trie.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UCharsTrie(const UChar *trieUChars)
             : ownedArray_(NULL), uchars_(trieUChars),
@@ -69,7 +67,7 @@ public:
 
     /**
      * Destructor.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     ~UCharsTrie();
 
@@ -77,7 +75,7 @@ public:
      * Copy constructor, copies the other trie reader object and its state,
      * but not the UChar array which will be shared. (Shallow copy.)
      * @param other Another UCharsTrie object.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UCharsTrie(const UCharsTrie &other)
             : ownedArray_(NULL), uchars_(other.uchars_),
@@ -86,7 +84,7 @@ public:
     /**
      * Resets this trie to its initial state.
      * @return *this
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UCharsTrie &reset() {
         pos_=uchars_;
@@ -97,13 +95,13 @@ public:
     /**
      * UCharsTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     class State : public UMemory {
     public:
         /**
          * Constructs an empty State.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         State() { uchars=NULL; }
     private:
@@ -119,7 +117,7 @@ public:
      * @param state The State object to hold the trie's state.
      * @return *this
      * @see resetToState
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     const UCharsTrie &saveState(State &state) const {
         state.uchars=uchars_;
@@ -136,7 +134,7 @@ public:
      * @return *this
      * @see saveState
      * @see reset
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UCharsTrie &resetToState(const State &state) {
         if(uchars_==state.uchars && uchars_!=NULL) {
@@ -150,7 +148,7 @@ public:
      * Determines whether the string so far matches, whether it has a value,
      * and whether another input UChar can continue a matching string.
      * @return The match/value Result.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UStringTrieResult current() const;
 
@@ -159,7 +157,7 @@ public:
      * Equivalent to reset().next(uchar).
      * @param uchar Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     inline UStringTrieResult first(int32_t uchar) {
         remainingMatchLength_=-1;
@@ -172,7 +170,7 @@ public:
      * Equivalent to reset().nextForCodePoint(cp).
      * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UStringTrieResult firstForCodePoint(UChar32 cp);
 
@@ -180,7 +178,7 @@ public:
      * Traverses the trie from the current state for this input UChar.
      * @param uchar Input char value. Values below 0 and above 0xffff will never match.
      * @return The match/value Result.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UStringTrieResult next(int32_t uchar);
 
@@ -189,7 +187,7 @@ public:
      * one or two UTF-16 code units for this input code point.
      * @param cp A Unicode code point 0..0x10ffff.
      * @return The match/value Result.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UStringTrieResult nextForCodePoint(UChar32 cp);
 
@@ -206,7 +204,7 @@ public:
      * @param s A string. Can be NULL if length is 0.
      * @param length The length of the string. Can be -1 if NUL-terminated.
      * @return The match/value Result.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UStringTrieResult next(const UChar *s, int32_t length);
 
@@ -217,7 +215,7 @@ public:
      *
      * Do not call getValue() after USTRINGTRIE_NO_MATCH or USTRINGTRIE_NO_VALUE!
      * @return The value for the string so far.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     inline int32_t getValue() const {
         const UChar *pos=pos_;
@@ -234,7 +232,7 @@ public:
      *                    (output-only)
      * @return TRUE if all strings reachable from the current state
      *         map to the same value.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     inline UBool hasUniqueValue(int32_t &uniqueValue) const {
         const UChar *pos=pos_;
@@ -247,13 +245,13 @@ public:
      * That is, each UChar c for which it would be next(c)!=USTRINGTRIE_NO_MATCH now.
      * @param out Each next UChar is appended to this object.
      * @return the number of UChars which continue the string from here
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     int32_t getNextUChars(Appendable &out) const;
 
     /**
      * Iterator for all of the (string, value) pairs in a UCharsTrie.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     class U_COMMON_API Iterator : public UMemory {
     public:
@@ -266,7 +264,7 @@ public:
          *                  pass the U_SUCCESS() test, or else the function returns
          *                  immediately. Check for U_FAILURE() on output or use with
          *                  function chaining. (See User Guide for details.)
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         Iterator(const UChar *trieUChars, int32_t maxStringLength, UErrorCode &errorCode);
 
@@ -279,26 +277,26 @@ public:
          *                  pass the U_SUCCESS() test, or else the function returns
          *                  immediately. Check for U_FAILURE() on output or use with
          *                  function chaining. (See User Guide for details.)
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         Iterator(const UCharsTrie &trie, int32_t maxStringLength, UErrorCode &errorCode);
 
         /**
          * Destructor.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         ~Iterator();
 
         /**
          * Resets this iterator to its initial state.
          * @return *this
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         Iterator &reset();
 
         /**
          * @return TRUE if there are more elements.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         UBool hasNext() const;
 
@@ -314,18 +312,18 @@ public:
          *                  immediately. Check for U_FAILURE() on output or use with
          *                  function chaining. (See User Guide for details.)
          * @return TRUE if there is another element.
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         UBool next(UErrorCode &errorCode);
 
         /**
          * @return The string for the last successful next().
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         const UnicodeString &getString() const { return str_; }
         /**
          * @return The value for the last successful next().
-         * @draft ICU 4.8
+         * @stable ICU 4.8
          */
         int32_t getValue() const { return value_; }
 
@@ -575,5 +573,4 @@ private:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif  // __UCHARSTRIE_H__

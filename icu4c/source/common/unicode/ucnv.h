@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -2004,7 +2004,6 @@ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status);
 U_STABLE int32_t U_EXPORT2
 ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Returns whether or not the charset of the converter has a fixed number of bytes
  * per charset character.
@@ -2018,11 +2017,10 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
  * @param cnv       The converter to be tested
  * @param status    ICU error code in/out paramter
  * @return TRUE if the converter is fixed-width
- * @draft ICU 4.8
+ * @stable ICU 4.8
  */
 U_DRAFT UBool U_EXPORT2
 ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status);
-#endif  /* U_HIDE_DRAFT_API */
 
 #endif
 

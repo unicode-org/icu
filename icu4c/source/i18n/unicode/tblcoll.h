@@ -677,7 +677,7 @@ public:
      * @see ucol_setReorderCodes
      * @see Collator#getEquivalentReorderCodes
      * @see Collator#setReorderCodes
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */
      virtual int32_t U_EXPORT2 getReorderCodes(int32_t *dest,
                                     int32_t destCapacity,
@@ -691,13 +691,12 @@ public:
      * @param status error code
      * @see Collator#getReorderCodes
      * @see Collator#getEquivalentReorderCodes
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */
      virtual void U_EXPORT2 setReorderCodes(const int32_t* reorderCodes,
                                 int32_t reorderCodesLength,
                                 UErrorCode& status) ;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Retrieves the reorder codes that are grouped with the given reorder code. Some reorder
      * codes will be grouped and must reorder together.
@@ -712,13 +711,12 @@ public:
      * @see ucol_setReorderCodes
      * @see Collator#getReorderCodes
      * @see Collator#setReorderCodes
-     * @draft ICU 4.8 
+     * @stable ICU 4.8 
      */
     static int32_t U_EXPORT2 getEquivalentReorderCodes(int32_t reorderCode,
                                 int32_t* dest,
                                 int32_t destCapacity,
                                 UErrorCode& status);
-#endif  /* U_HIDE_DRAFT_API */
 
 private:
 

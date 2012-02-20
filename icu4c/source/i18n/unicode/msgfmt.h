@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2007-2011, International Business Machines Corporation and
+* Copyright (C) 2007-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 *
@@ -463,22 +463,20 @@ public:
      *                   Can be NULL.
      * @param status    Input/output error code.  If the
      *                  pattern cannot be parsed, set to failure code.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual void applyPattern(const UnicodeString& pattern,
                               UMessagePatternApostropheMode aposMode,
                               UParseError* parseError,
                               UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * @return this instance's UMessagePatternApostropheMode.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     UMessagePatternApostropheMode getApostropheMode() const {
         return msgPattern.getApostropheMode();
     }
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a pattern that can be used to recreate this object.

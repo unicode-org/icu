@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2011 International Business Machines Corporation   *
+*   Copyright (C) 1999-2012 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 
@@ -241,7 +241,6 @@ public:
                              UParseError           &parseError,
                              UErrorCode            &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Contruct a RuleBasedBreakIterator from a set of precompiled binary rules.
      * Binary rules are obtained from RulesBasedBreakIterator::getBinaryRules().
@@ -263,12 +262,11 @@ public:
      *   corresponds to the length value produced by getBinaryRules().
      * @param status Information on any errors encountered, including invalid
      *   binary rules.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     RuleBasedBreakIterator(const uint8_t *compiledRules,
                            uint32_t       ruleLength,
                            UErrorCode    &status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * This constructor uses the udata interface to create a BreakIterator
@@ -629,7 +627,7 @@ public:
      * @return   A pointer to the binary (compiled) rule data.  The storage
      *           belongs to the RulesBasedBreakIterator object, not the
      *           caller, and must not be modified or deleted.
-     * @draft ICU 4.8
+     * @stable ICU 4.8
      */
     virtual const uint8_t *getBinaryRules(uint32_t &length);
 
