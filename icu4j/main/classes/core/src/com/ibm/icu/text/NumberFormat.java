@@ -713,6 +713,46 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(inLocale, SCIENTIFICSTYLE);
     }
 
+    /**
+     * Style parameter for CompactDecimalFormat.
+     * @internal
+     */
+    public enum CompactStyle {
+        /**
+         * Short version, like "1.2T"
+         */
+        SHORT, 
+        /**
+         * Longer version, like "1.2 trillion", if available. May return same result as SHORT if not.
+         */
+        LONG
+    }
+
+    /**
+     * Create a CompactDecimalFormat appropriate for a locale (Mockup for what would be in NumberFormat). The result may
+     * be affected by the number system in the locale, such as ar-u-nu-latn.
+     * 
+     * @param locale the desired locale
+     * @param style the compact style 
+     * @internal
+     */
+    public static final CompactDecimalFormat getCompactDecimalInstance(ULocale locale, CompactStyle style) {
+        return new CompactDecimalFormat(locale, style);
+    }
+
+    /**
+     * Create a CompactDecimalFormat appropriate for a locale (Mockup for what would be in NumberFormat). The result may
+     * be affected by the number system in the locale, such as ar-u-nu-latn.
+     * 
+     * @param locale the desired locale
+     * @param style the compact style 
+     * @internal
+     */
+    public static final CompactDecimalFormat getCompactDecimalInstance(Locale locale, CompactStyle style) {
+        return new CompactDecimalFormat(ULocale.forLocale(locale), style);
+    }
+
+
     // ===== Factory stuff =====
     /**
      * A NumberFormatFactory is used to register new number formats.  The factory
