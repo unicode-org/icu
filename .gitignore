@@ -922,6 +922,7 @@ icu4c/source/tools/tzcode/zic
 icu4c/source/tools/tzcode/zone.tab
 icu4c/source/tools/tzcode/zoneinfo
 icu4c/source/tools/tzcode/zoneinfo.txt
+icu4c/source/uconfig.h.prepend
 icu4j/*.jar
 icu4j/.project
 icu4j/demos/out
