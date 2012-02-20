@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2011, International Business Machines
+ * Copyright (c) 2002-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -199,9 +199,12 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
     }
 
     public Set<V> values() {
-        Set<V> result = newSet();
-        for (K key : data.keySet()) {
-            result.addAll(data.get(key));
+        return values(new LinkedHashSet());
+    }
+
+    public <C extends Collection<V>> C values(C result) {
+        for (Entry<K, Set<V>> keyValue : data.entrySet()) {
+            result.addAll(keyValue.getValue());
         }
         return result;
     }
