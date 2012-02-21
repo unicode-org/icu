@@ -2,7 +2,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2011, International Business Machines Corporation and others.
+# Copyright (C) 2000-2012, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -265,6 +265,7 @@ LIBICUIO	= $(LLIBDIR) $(ICULIBS_IO)
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)$(LIBDIR):$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 # prefer stubdata
 PKGDATA_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$(LIBRARY_PATH_PREFIX)$(LIBDIR):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER) $(PKGDATA_INVOKE_OPTS)
+INSTALLED_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
 
 # Platform-specific setup
 include @platform_make_fragment@
