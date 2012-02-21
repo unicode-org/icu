@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, International Business Machines Corporation and         *
+ * Copyright (C) 2011-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,7 +18,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "tznames.h"
+#include "unicode/tznames.h"
 #include "unicode/ures.h"
 #include "unicode/locid.h"
 #include "uhash.h"
@@ -168,6 +168,9 @@ public:
 
     virtual ~TimeZoneNamesImpl();
 
+    virtual UBool operator==(const TimeZoneNames& other) const;
+    virtual TimeZoneNames* clone() const;
+
     StringEnumeration* getAvailableMetaZoneIDs(UErrorCode& status) const;
     StringEnumeration* getAvailableMetaZoneIDs(const UnicodeString& tzID, UErrorCode& status) const;
 
@@ -179,7 +182,7 @@ public:
 
     UnicodeString& getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const;
 
-    TimeZoneNameMatchInfo* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const;
+    TimeZoneNames::MatchInfoCollection* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const;
 
 private:
 

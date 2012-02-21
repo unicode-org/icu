@@ -714,30 +714,6 @@ private:
     Locale                  fZSFLocale;         // Locale used for getting ZoneStringFormat
 
     /**
-     * String used for localized GMT. For example, "GMT"
-     */
-    UnicodeString fGmtZero;
-
-    /**
-     * Pattern string used for localized time zone GMT format.  For example, "GMT{0}"
-     */
-    UnicodeString   fGmtFormat;
-
-    /**
-     * Pattern strings used for formatting zone offset in a localized time zone GMT string.
-     */
-    UnicodeString  *fGmtHourFormats;
-    int32_t         fGmtHourFormatsCount; 
-
-    enum GMTHourType {
-        GMT_NEGATIVE_HMS = 0,
-        GMT_NEGATIVE_HM,
-        GMT_POSITIVE_HMS,
-        GMT_POSITIVE_HM,
-        GMT_HOUR_COUNT
-    };
-
-    /**
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
     UnicodeString   fLocalPatternChars;

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2011, International Business Machines                   *
+* Copyright (C) 2001-2012, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -33,7 +33,7 @@ typedef enum ECleanupI18NType {
     UCLN_I18N_HEBREW_CALENDAR,
     UCLN_I18N_ASTRO_CALENDAR,
     UCLN_I18N_CALENDAR,
-    UCLN_I18N_TIMEZONEFORMAT,
+    UCLN_I18N_TIMEZONEGENERICNAMES,
     UCLN_I18N_TIMEZONENAMES,
     UCLN_I18N_ZONEMETA,
     UCLN_I18N_TIMEZONE,

@@ -768,13 +768,7 @@
     <ClInclude Include="uspoof_wsconf.h">
       <Filter>spoof</Filter>
     </ClInclude>
-    <ClInclude Include="tzfmt.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="tzgnames.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
-    <ClInclude Include="tznames.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="tznames_impl.h">
@@ -1000,6 +994,12 @@
     <CustomBuild Include="unicode\currpinf.h" />
     <CustomBuild Include="unicode\alphaindex.h">
       <Filter>collation</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\tzfmt.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\tznames.h">
+      <Filter>formatting</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

@@ -45,6 +45,7 @@
 #include "unicode/basictz.h"
 #include "unicode/simpletz.h"
 #include "unicode/rbtz.h"
+#include "unicode/tzfmt.h"
 #include "unicode/utf16.h"
 #include "unicode/vtzone.h"
 #include "olsontz.h"
@@ -56,7 +57,6 @@
 #include "uassert.h"
 #include "cmemory.h"
 #include "umutex.h"
-#include "tzfmt.h"
 #include <float.h>
 #include "smpdtfst.h"
 
@@ -212,15 +212,6 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)
 SimpleDateFormat::~SimpleDateFormat()
 {
     delete fSymbols;
-    if (fGMTFormatters) {
-        for (int32_t i = 0; i < kNumGMTFormatters; i++) {
-            if (fGMTFormatters[i]) {
-                delete fGMTFormatters[i];
-            }
-        }
-        uprv_free(fGMTFormatters);
-
-    }
     if (fNumberFormatters) {
         uprv_free(fNumberFormatters);
     }
@@ -242,7 +233,6 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
   :   fLocale(Locale::getDefault()),
       fSymbols(NULL),
       fTimeZoneFormat(NULL),
-      fGMTFormatters(NULL),
       fNumberFormatters(NULL),
       fOverrideList(NULL),
       fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -259,7 +249,6 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(Locale::getDefault()),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -280,7 +269,6 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(Locale::getDefault()),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -303,7 +291,6 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(locale),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -326,7 +313,6 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(locale),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -352,7 +338,6 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(Locale::getDefault()),
     fSymbols(symbolsToAdopt),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -375,7 +360,6 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(Locale::getDefault()),
     fSymbols(new DateFormatSymbols(symbols)),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -399,7 +383,6 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
 :   fLocale(locale),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -423,7 +406,6 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fLocale(locale),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -458,7 +440,6 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
-    fGMTFormatters(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
     fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
@@ -1042,374 +1023,7 @@ _appendSymbolWithMonthPattern(UnicodeString& dst, int32_t value, const UnicodeSt
     }
 }
 
-//---------------------------------------------------------------------
-void
-SimpleDateFormat::appendGMT(NumberFormat *currentNumberFormat,UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const{
-    int32_t offset = cal.get(UCAL_ZONE_OFFSET, status) + cal.get(UCAL_DST_OFFSET, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (offset == 0) {
-        // use GMT zero format
-        appendTo += fSymbols->fGmtZero;
-    } else {
-        if (isDefaultGMTFormat()) {
-            formatGMTDefault(currentNumberFormat,appendTo, offset);
-        } else {
-            ((SimpleDateFormat*)this)->initGMTFormatters(status);
-            if (U_SUCCESS(status)) {
-                int32_t type;
-                if (offset < 0) {
-                    offset = -offset;
-                    type = (offset % U_MILLIS_PER_MINUTE) == 0 ? kGMTNegativeHM : kGMTNegativeHMS;
-                } else {
-                    type = (offset % U_MILLIS_PER_MINUTE) == 0 ? kGMTPositiveHM : kGMTPositiveHMS;
-                }
-                Formattable param(offset, Formattable::kIsDate);
-                FieldPosition fpos(0);
-                fGMTFormatters[type]->format(&param, 1, appendTo, fpos, status);
-            }
-        }
-    }
-}
-
-int32_t
-SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const {
-    if (!isDefaultGMTFormat()) {
-        int32_t start = pos.getIndex();
-
-        // Quick check
-        UBool prefixMatch = FALSE;
-        int32_t prefixLen = fSymbols->fGmtFormat.indexOf((UChar)0x007B /* '{' */);
-        if (prefixLen > 0 && text.compare(start, prefixLen, fSymbols->fGmtFormat, 0, prefixLen) == 0) {
-            prefixMatch = TRUE;
-        }
-        if (prefixMatch) {
-            // Prefix matched
-            UErrorCode status = U_ZERO_ERROR;
-            ((SimpleDateFormat*)this)->initGMTFormatters(status);
-            if (U_SUCCESS(status)) {
-                Formattable parsed;
-                int32_t parsedCount;
-
-                // Try negative Hms
-                fGMTFormatters[kGMTNegativeHMS]->parseObject(text, parsed, pos);
-                if (pos.getErrorIndex() == -1 &&
-                    (pos.getIndex() - start) >= fGMTFormatHmsMinLen[kGMTNegativeHMSMinLenIdx]) {
-                    parsed.getArray(parsedCount);
-                    if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
-                        return (int32_t)(-1 * (int64_t)parsed[0].getDate());
-                    }
-                }
-
-                // Reset ParsePosition
-                pos.setIndex(start);
-                pos.setErrorIndex(-1);
-
-                // Try positive Hms
-                fGMTFormatters[kGMTPositiveHMS]->parseObject(text, parsed, pos);
-                if (pos.getErrorIndex() == -1 &&
-                    (pos.getIndex() - start) >= fGMTFormatHmsMinLen[kGMTPositiveHMSMinLenIdx]) {
-                    parsed.getArray(parsedCount);
-                    if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
-                        return (int32_t)((int64_t)parsed[0].getDate());
-                    }
-                }
-
-                // Reset ParsePosition
-                pos.setIndex(start);
-                pos.setErrorIndex(-1);
-
-                // Try negative Hm
-                fGMTFormatters[kGMTNegativeHM]->parseObject(text, parsed, pos);
-                if (pos.getErrorIndex() == -1 && pos.getIndex() > start) {
-                    parsed.getArray(parsedCount);
-                    if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
-                        return (int32_t)(-1 * (int64_t)parsed[0].getDate());
-                    }
-                }
-
-                // Reset ParsePosition
-                pos.setIndex(start);
-                pos.setErrorIndex(-1);
-
-                // Try positive Hm
-                fGMTFormatters[kGMTPositiveHM]->parseObject(text, parsed, pos);
-                if (pos.getErrorIndex() == -1 && pos.getIndex() > start) {
-                    parsed.getArray(parsedCount);
-                    if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
-                        return (int32_t)((int64_t)parsed[0].getDate());
-                    }
-                }
-
-                // Reset ParsePosition
-                pos.setIndex(start);
-                pos.setErrorIndex(-1);
-            }
-            // fall through to the default GMT parsing method
-        }
-    }
-    return parseGMTDefault(text, pos);
-}
-
-void
-SimpleDateFormat::formatGMTDefault(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t offset) const {
-    if (offset < 0) {
-        appendTo.append(gGmtMinus, 4);
-        offset = -offset; // suppress the '-' sign for text display.
-    }else{
-        appendTo.append(gGmtPlus, 4);
-    }
-
-    offset /= U_MILLIS_PER_SECOND; // now in seconds
-    int32_t sec = offset % 60;
-    offset /= 60;
-    int32_t min = offset % 60;
-    int32_t hour = offset / 60;
-
-
-    zeroPaddingNumber(currentNumberFormat,appendTo, hour, 2, 2);
-    appendTo += (UChar)0x003A /*':'*/;
-    zeroPaddingNumber(currentNumberFormat,appendTo, min, 2, 2);
-    if (sec != 0) {
-        appendTo += (UChar)0x003A /*':'*/;
-        zeroPaddingNumber(currentNumberFormat,appendTo, sec, 2, 2);
-    }
-}
-
-int32_t
-SimpleDateFormat::parseGMTDefault(const UnicodeString &text, ParsePosition &pos) const {
-    int32_t start = pos.getIndex();
-    NumberFormat *currentNumberFormat = getNumberFormatByIndex(UDAT_TIMEZONE_RFC_FIELD);
-
-    if (start + kUtLen + 1 >= text.length()) {
-        pos.setErrorIndex(start);
-        return 0;
-    }
-
-    int32_t cur = start;
-    // "GMT"
-    if (text.compare(start, kGmtLen, gGmt) == 0) {
-        cur += kGmtLen;
-    } else if (text.compare(start, kUtLen, gUt) == 0) {
-        cur += kUtLen;
-    } else {
-        pos.setErrorIndex(start);
-        return 0;
-    }
-    // Sign
-    UBool negative = FALSE;
-    if (text.charAt(cur) == (UChar)0x002D /* minus */) {
-        negative = TRUE;
-    } else if (text.charAt(cur) != (UChar)0x002B /* plus */) {
-        pos.setErrorIndex(cur);
-        return 0;
-    }
-    cur++;
-
-    // Numbers
-    int32_t numLen;
-    pos.setIndex(cur);
-
-    Formattable number;
-    parseInt(text, number, 6, pos, FALSE,currentNumberFormat);
-    numLen = pos.getIndex() - cur;
-
-    if (numLen <= 0) {
-        pos.setIndex(start);
-        pos.setErrorIndex(cur);
-        return 0;
-    }
-
-    int32_t numVal = number.getLong();
-
-    int32_t hour = 0;
-    int32_t min = 0;
-    int32_t sec = 0;
-
-    if (numLen <= 2) {
-        // H[H][:mm[:ss]]
-        hour = numVal;
-        cur += numLen;
-        if (cur + 2 < text.length() && text.charAt(cur) == (UChar)0x003A /* colon */) {
-            cur++;
-            pos.setIndex(cur);
-            parseInt(text, number, 2, pos, FALSE,currentNumberFormat);
-            numLen = pos.getIndex() - cur;
-            if (numLen == 2) {
-                // got minute field
-                min = number.getLong();
-                cur += numLen;
-                if (cur + 2 < text.length() && text.charAt(cur) == (UChar)0x003A /* colon */) {
-                    cur++;
-                    pos.setIndex(cur);
-                    parseInt(text, number, 2, pos, FALSE,currentNumberFormat);
-                    numLen = pos.getIndex() - cur;
-                    if (numLen == 2) {
-                        // got second field
-                        sec = number.getLong();
-                    } else {
-                        // reset position
-                        pos.setIndex(cur - 1);
-                        pos.setErrorIndex(-1);
-                    }
-                }
-            } else {
-                // reset postion
-                pos.setIndex(cur - 1);
-                pos.setErrorIndex(-1);
-            }
-        }
-    } else if (numLen == 3 || numLen == 4) {
-        // Hmm or HHmm
-        hour = numVal / 100;
-        min = numVal % 100;
-    } else if (numLen == 5 || numLen == 6) {
-        // Hmmss or HHmmss
-        hour = numVal / 10000;
-        min = (numVal % 10000) / 100;
-        sec = numVal % 100;
-    } else {
-        // HHmmss followed by bogus numbers
-        pos.setIndex(cur + 6);
-
-        int32_t shift = numLen - 6;
-        while (shift > 0) {
-            numVal /= 10;
-            shift--;
-        }
-        hour = numVal / 10000;
-        min = (numVal % 10000) / 100;
-        sec = numVal % 100;
-    }
-
-    int32_t offset = ((hour*60 + min)*60 + sec)*1000;
-    if (negative) {
-        offset = -offset;
-    }
-    return offset;
-}
-
-UBool
-SimpleDateFormat::isDefaultGMTFormat() const {
-    // GMT pattern
-    if (fSymbols->fGmtFormat.length() == 0) {
-        // No GMT pattern is set
-        return TRUE;
-    } else if (fSymbols->fGmtFormat.compare(gDefGmtPat, kGmtPatLen) != 0) {
-        return FALSE;
-    }
-    // Hour patterns
-    if (fSymbols->fGmtHourFormats == NULL || fSymbols->fGmtHourFormatsCount != DateFormatSymbols::GMT_HOUR_COUNT) {
-        // No Hour pattern is set
-        return TRUE;
-    } else if ((fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_NEGATIVE_HMS].compare(gDefGmtNegHmsPat, kNegHmsLen) != 0)
-        || (fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_NEGATIVE_HM].compare(gDefGmtNegHmPat, kNegHmLen) != 0)
-        || (fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_POSITIVE_HMS].compare(gDefGmtPosHmsPat, kPosHmsLen) != 0)
-        || (fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_POSITIVE_HM].compare(gDefGmtPosHmPat, kPosHmLen) != 0)) {
-        return FALSE;
-    }
-    return TRUE;
-}
-
-void
-SimpleDateFormat::formatRFC822TZ(UnicodeString &appendTo, int32_t offset) const {
-    UChar sign = 0x002B /* '+' */;
-    if (offset < 0) {
-        offset = -offset;
-        sign = 0x002D /* '-' */;
-    }
-    appendTo.append(sign);
-
-    int32_t offsetH = offset / U_MILLIS_PER_HOUR;
-    offset = offset % U_MILLIS_PER_HOUR;
-    int32_t offsetM = offset / U_MILLIS_PER_MINUTE;
-    offset = offset % U_MILLIS_PER_MINUTE;
-    int32_t offsetS = offset / U_MILLIS_PER_SECOND;
-
-    int32_t num = 0, denom = 0;
-    if (offsetS == 0) {
-        offset = offsetH*100 + offsetM; // HHmm
-        num = offset % 10000;
-        denom = 1000;
-    } else {
-        offset = offsetH*10000 + offsetM*100 + offsetS; // HHmmss
-        num = offset % 1000000;
-        denom = 100000;
-    }
-    while (denom >= 1) {
-        UChar digit = (UChar)0x0030 + (num / denom);
-        appendTo.append(digit);
-        num = num % denom;
-        denom /= 10;
-    }
-}
-
-void
-SimpleDateFormat::initGMTFormatters(UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    umtx_lock(&LOCK);
-    if (fGMTFormatters == NULL) {
-        fGMTFormatters = (MessageFormat**)uprv_malloc(kNumGMTFormatters * sizeof(MessageFormat*));
-        if (fGMTFormatters) {
-            for (int32_t i = 0; i < kNumGMTFormatters; i++) {
-                const UnicodeString *hourPattern = NULL; //initialized it to avoid warning
-                switch (i) {
-                    case kGMTNegativeHMS:
-                        hourPattern = &(fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_NEGATIVE_HMS]);
-                        break;
-                    case kGMTNegativeHM:
-                        hourPattern = &(fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_NEGATIVE_HM]);
-                        break;
-                    case kGMTPositiveHMS:
-                        hourPattern = &(fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_POSITIVE_HMS]);
-                        break;
-                    case kGMTPositiveHM:
-                        hourPattern = &(fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_POSITIVE_HM]);
-                        break;
-                }
-                fGMTFormatters[i] = new MessageFormat(fSymbols->fGmtFormat, status);
-                GregorianCalendar *gcal = new GregorianCalendar(TimeZone::createTimeZone(UnicodeString(gEtcUTC)), status);
-                if (U_FAILURE(status)) {
-                    break;
-                }
-                SimpleDateFormat *sdf = (SimpleDateFormat*)this->clone();
-                sdf->adoptCalendar(gcal);
-                sdf->applyPattern(*hourPattern);
-                
-                // This prevents an hours format pattern like "-HH:mm:ss" from matching
-                // in a string like "GMT-07:00 10:08:11 PM"
-                sdf->setLenient(FALSE);
-                
-                fGMTFormatters[i]->adoptFormat(0, sdf);
-
-                // For parsing, we only allow Hms patterns to be equal or longer
-                // than its length with fixed minutes/seconds digits.
-                // See #6880
-                if (i == kGMTNegativeHMS || i == kGMTPositiveHMS) {
-                    UnicodeString tmp;
-                    Formattable tmpParam(60*60*1000, Formattable::kIsDate);
-                    FieldPosition fpos(0);
-                    fGMTFormatters[i]->format(&tmpParam, 1, tmp, fpos, status);
-                    if (U_FAILURE(status)) {
-                        break;
-                    }
-                    if (i == kGMTNegativeHMS) {
-                        fGMTFormatHmsMinLen[kGMTNegativeHMSMinLenIdx] = tmp.length();
-                    } else {
-                        fGMTFormatHmsMinLen[kGMTPositiveHMSMinLenIdx] = tmp.length();
-                    }
-                }
-            }
-        } else {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-    }
-    umtx_unlock(&LOCK);
-}
-
+//----------------------------------------------------------------------
 void
 SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) {
     if (U_FAILURE(status)) {
@@ -1627,11 +1241,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         break;
 
      case UDAT_YEAR_NAME_FIELD:
-		if (fSymbols->fShortYearNames != NULL && value <= fSymbols->fShortYearNamesCount) {
+        if (fSymbols->fShortYearNames != NULL && value <= fSymbols->fShortYearNamesCount) {
             // the Calendar YEAR field runs 1 through 60 for cyclic years
             _appendSymbol(appendTo, value - 1, fSymbols->fShortYearNames, fSymbols->fShortYearNamesCount);
             break;
-		}
+        }
         // else fall through to numeric year handling, do not break here
 
    // OLD: for "yyyy", write out the whole year; for "yy", write out the last 2 digits
@@ -1817,12 +1431,24 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_TIMEZONE_FIELD:
     case UDAT_TIMEZONE_GENERIC_FIELD:
     case UDAT_TIMEZONE_SPECIAL_FIELD:
+    case UDAT_TIMEZONE_RFC_FIELD: // 'Z' - TIMEZONE_RFC
         {
             UnicodeString zoneString;
             const TimeZone& tz = cal.getTimeZone();
             UDate date = cal.getTime(status);
             if (U_SUCCESS(status)) {
-                if (patternCharIndex == UDAT_TIMEZONE_FIELD) {
+                if (patternCharIndex == UDAT_TIMEZONE_RFC_FIELD) {
+                    if (count < 4) {
+                        // "Z"
+                        tzFormat()->format(UTZFMT_STYLE_RFC822, tz, date, zoneString);
+                    } else if (count == 5) {
+                        // "ZZZZZ"
+                        tzFormat()->format(UTZFMT_STYLE_ISO8601, tz, date, zoneString);
+                    } else {
+                        // "ZZ", "ZZZ", "ZZZZ"
+                        tzFormat()->format(UTZFMT_STYLE_LOCALIZED_GMT, tz, date, zoneString);
+                    }
+                } else if (patternCharIndex == UDAT_TIMEZONE_FIELD) {
                     if (count < 4) {
                         // "z", "zz", "zzz"
                         tzFormat()->format(UTZFMT_STYLE_SPECIFIC_SHORT, tz, date, zoneString);
@@ -1849,27 +1475,12 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                         capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneShort;
                     } else if (count == 4) {
                         // "VVVV"
-                        tzFormat()->format(UTZFMT_STYLE_LOCATION, tz, date, zoneString);
+                        tzFormat()->format(UTZFMT_STYLE_GENERIC_LOCATION, tz, date, zoneString);
                         capContextUsageType = DateFormatSymbols::kCapContextUsageZoneLong;
                     }
                 }
             }
-            if (zoneString.isEmpty()) {
-                appendGMT(currentNumberFormat,appendTo, cal, status);
-            } else {
-                appendTo += zoneString;
-            }
-        }
-        break;
-
-    case UDAT_TIMEZONE_RFC_FIELD: // 'Z' - TIMEZONE_RFC
-        if (count < 4) {
-            // RFC822 format, must use ASCII digits
-            value = (cal.get(UCAL_ZONE_OFFSET, status) + cal.get(UCAL_DST_OFFSET, status));
-            formatRFC822TZ(appendTo, value);
-        } else {
-            // long form, localized GMT pattern
-            appendGMT(currentNumberFormat,appendTo, cal, status);
+            appendTo += zoneString;
         }
         break;
 
@@ -1987,7 +1598,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     UBool lenient = isLenient();
 
     // hack, reset tztype, cast away const
-    ((SimpleDateFormat*)this)->tztype = TZTYPE_UNK;
+    ((SimpleDateFormat*)this)->tztype = UTZFMT_TIME_TYPE_UNKNOWN;
 
     // For parsing abutting numeric fields. 'abutPat' is the
     // offset into 'pattern' of the first of 2 or more abutting
@@ -2189,7 +1800,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     // when the two-digit year is equal to the start year, and thus might fall at the
     // front or the back of the default century.  This only works because we adjust
     // the year correctly to start with in other cases -- see subParse().
-    if (ambiguousYear[0] || tztype != TZTYPE_UNK) // If this is true then the two-digit year == the default start year
+    if (ambiguousYear[0] || tztype != UTZFMT_TIME_TYPE_UNKNOWN) // If this is true then the two-digit year == the default start year
     {
         // We need a copy of the fields, and we need to avoid triggering a call to
         // complete(), which will recalculate the fields.  Since we can't access
@@ -2212,7 +1823,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             delete copy;
         }
 
-        if (tztype != TZTYPE_UNK) {
+        if (tztype != UTZFMT_TIME_TYPE_UNKNOWN) {
             copy = cal.clone();
             // Check for failed cloning.
             if (copy == NULL) {
@@ -2238,7 +1849,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // matches the rule used by the parsed time zone.
             int32_t raw, dst;
             if (btz != NULL) {
-                if (tztype == TZTYPE_STD) {
+                if (tztype == UTZFMT_TIME_TYPE_STANDARD) {
                     btz->getOffsetFromLocal(localMillis,
                         BasicTimeZone::kStandard, BasicTimeZone::kStandard, raw, dst, status);
                 } else {
@@ -2253,7 +1864,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             // Now, compare the results with parsed type, either standard or daylight saving time
             int32_t resolvedSavings = dst;
-            if (tztype == TZTYPE_STD) {
+            if (tztype == UTZFMT_TIME_TYPE_STANDARD) {
                 if (dst != 0) {
                     // Override DST_OFFSET = 0 in the result calendar
                     resolvedSavings = 0;
@@ -3166,178 +2777,51 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         break;
 
     case UDAT_TIMEZONE_FIELD:
-    case UDAT_TIMEZONE_RFC_FIELD:
-    case UDAT_TIMEZONE_GENERIC_FIELD:
-    case UDAT_TIMEZONE_SPECIAL_FIELD:
         {
-            int32_t offset = 0;
-            UBool parsed = FALSE;
-
-            // Step 1
-            // Check if this is a long GMT offset string (either localized or default)
-            offset = parseGMT(text, pos);
-            if (pos.getIndex() - start > 0) {
-                parsed = TRUE;
-            }
-            if (!parsed) {
-                // Step 2
-                // Check if this is an RFC822 time zone offset.
-                // ICU supports the standard RFC822 format [+|-]HHmm
-                // and its extended form [+|-]HHmmSS.
-                do {
-                    int32_t sign = 0;
-                    UChar signChar = text.charAt(start);
-                    if (signChar == (UChar)0x002B /* '+' */) {
-                        sign = 1;
-                    } else if (signChar == (UChar)0x002D /* '-' */) {
-                        sign = -1;
-                    } else {
-                        // Not an RFC822 offset string
-                        break;
-                    }
-
-                    // Parse digits
-                    int32_t orgPos = start + 1;
-                    pos.setIndex(orgPos);
-                    parseInt(text, number, 6, pos, FALSE,currentNumberFormat);
-                    int32_t numLen = pos.getIndex() - orgPos;
-                    if (numLen <= 0) {
-                        break;
-                    }
-
-                    // Followings are possible format (excluding sign char)
-                    // HHmmSS
-                    // HmmSS
-                    // HHmm
-                    // Hmm
-                    // HH
-                    // H
-                    int32_t val = number.getLong();
-                    int32_t hour = 0, min = 0, sec = 0;
-                    switch(numLen) {
-                    case 1: // H
-                    case 2: // HH
-                        hour = val;
-                        break;
-                    case 3: // Hmm
-                    case 4: // HHmm
-                        hour = val / 100;
-                        min = val % 100;
-                        break;
-                    case 5: // Hmmss
-                    case 6: // HHmmss
-                        hour = val / 10000;
-                        min = (val % 10000) / 100;
-                        sec = val % 100;
-                        break;
-                    }
-                    if (hour > 23 || min > 59 || sec > 59) {
-                        // Invalid value range
-                        break;
-                    }
-                    offset = (((hour * 60) + min) * 60 + sec) * 1000 * sign;
-                    parsed = TRUE;
-                } while (FALSE);
-
-                if (!parsed) {
-                    // Failed to parse.  Reset the position.
-                    pos.setIndex(start);
-                }
-            }
-
-            if (parsed) {
-                // offset was successfully parsed as either a long GMT string or RFC822 zone offset
-                // string.  Create normalized zone ID for the offset.
-
-                UnicodeString tzID(gGmt);
-                formatRFC822TZ(tzID, offset);
-                //TimeZone *customTZ = TimeZone::createTimeZone(tzID);
-                TimeZone *customTZ = new SimpleTimeZone(offset, tzID);    // faster than TimeZone::createTimeZone
-                cal.adoptTimeZone(customTZ);
-
+            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_SPECIFIC_SHORT : UTZFMT_STYLE_SPECIFIC_LONG;
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            if (tz != NULL) {
+                ((SimpleDateFormat*)this)->tztype = tzTimeType;
+                cal.adoptTimeZone(tz);
                 return pos.getIndex();
             }
-
-            // Step 3
-            // Is this standalone Localized GMT zero or GMT/UT/UTC?
-            int32_t gmtLen = 0;
-            if (text.compare(start, fSymbols->fGmtZero.length(), fSymbols->fGmtZero) == 0) {
-                gmtLen = fSymbols->fGmtZero.length();
-            } else if (text.compare(start, kGmtLen, gGmt) == 0) {
-                gmtLen = kGmtLen;
-            } else if (text.compare(start, kUtcLen, gUtc) == 0) {
-                gmtLen = kUtcLen;
-            } else if (text.compare(start, kUtLen, gUt) == 0) {
-                gmtLen = kUtLen;
-            }
-            // If we parse the string to the end, we can exit here.
-            // If any characters follow, we still need to proceed to the
-            // next step. Otherwise, all time zone names starting with GMT/UT/UTC
-            // (for example, "UTT") will fail.
-            if (gmtLen > 0 && ((text.length() - start) == gmtLen)) {
-                TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING("Etc/GMT", 7));
+        }
+        break;
+    case UDAT_TIMEZONE_RFC_FIELD:
+        {
+            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_RFC822 : ((count == 5) ? UTZFMT_STYLE_ISO8601: UTZFMT_STYLE_LOCALIZED_GMT);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            if (tz != NULL) {
+                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
-                return start + gmtLen;
+                return pos.getIndex();
             }
-
-            // Step 4
-            // At this point, check for named time zones by looking through
-            // the locale data.
-            if (patternCharIndex != UDAT_TIMEZONE_RFC_FIELD) {
-                UTimeZoneTimeType parsedTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
-                ParsePosition tmpPos(start);
-                UnicodeString parsedID;
-
-                switch (patternCharIndex) {
-                case UDAT_TIMEZONE_FIELD:
-                    if (count < 4) {
-                        tzFormat()->parse(UTZFMT_STYLE_SPECIFIC_SHORT, text, tmpPos, parsedID, &parsedTimeType);
-                    } else {
-                        tzFormat()->parse(UTZFMT_STYLE_SPECIFIC_LONG, text, tmpPos, parsedID, &parsedTimeType);
-                    }
-                    break;
-                case UDAT_TIMEZONE_GENERIC_FIELD:
-                    if (count < 4) {
-                        tzFormat()->parse(UTZFMT_STYLE_GENERIC_SHORT, text, tmpPos, parsedID, &parsedTimeType);
-                    } else {
-                        tzFormat()->parse(UTZFMT_STYLE_GENERIC_LONG, text, tmpPos, parsedID, &parsedTimeType);
-                    }
-                    break;
-                case UDAT_TIMEZONE_SPECIAL_FIELD:
-                    if (count < 4) {
-                        tzFormat()->parse(UTZFMT_STYLE_SPECIFIC_SHORT, text, tmpPos, parsedID, &parsedTimeType);
-                    } else {
-                        tzFormat()->parse(UTZFMT_STYLE_LOCATION, text, tmpPos, parsedID, &parsedTimeType);
-                    }
-                    break;
-                default:
-                    break;
-                }
-                if (tmpPos.getErrorIndex() < 0) {
-                    if (parsedTimeType == UTZFMT_TIME_TYPE_STANDARD) {
-                        ((SimpleDateFormat*)this)->tztype = TZTYPE_STD;
-                    } else if (parsedTimeType == UTZFMT_TIME_TYPE_DAYLIGHT) {
-                        ((SimpleDateFormat*)this)->tztype = TZTYPE_DST;
-                    }
-
-                    UnicodeString current;
-                    cal.getTimeZone().getID(current);
-                    if (parsedID != current) {
-                        TimeZone *tz = TimeZone::createTimeZone(parsedID);
-                        cal.adoptTimeZone(tz);
-                    }
-                    return tmpPos.getIndex();
-                }
-            }
-            // Step 5
-            // If we saw standalone GMT zero pattern, then use GMT.
-            if (gmtLen > 0) {
-                TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING("Etc/GMT", 7));
+            return -start;
+        }
+    case UDAT_TIMEZONE_GENERIC_FIELD:
+        {
+            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_GENERIC_SHORT : UTZFMT_STYLE_GENERIC_LONG;
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            if (tz != NULL) {
+                ((SimpleDateFormat*)this)->tztype = tzTimeType;
                 cal.adoptTimeZone(tz);
-                return start + gmtLen;
+                return pos.getIndex();
             }
-
-            // complete failure
+            return -start;
+        }
+    case UDAT_TIMEZONE_SPECIAL_FIELD:
+        {
+            UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_SPECIFIC_SHORT : UTZFMT_STYLE_GENERIC_LOCATION;
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, &tzTimeType);
+            if (tz != NULL) {
+                ((SimpleDateFormat*)this)->tztype = tzTimeType;
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
             return -start;
         }
 
@@ -3579,6 +3063,27 @@ SimpleDateFormat::setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols
     fSymbols = new DateFormatSymbols(newFormatSymbols);
 }
 
+//----------------------------------------------------------------------
+const TimeZoneFormat*
+SimpleDateFormat::getTimeZoneFormat(void) const {
+    return (const TimeZoneFormat*)tzFormat();
+}
+
+//----------------------------------------------------------------------
+void
+SimpleDateFormat::adoptTimeZoneFormat(TimeZoneFormat* timeZoneFormatToAdopt)
+{
+    delete fTimeZoneFormat;
+    fTimeZoneFormat = timeZoneFormatToAdopt;
+}
+
+//----------------------------------------------------------------------
+void
+SimpleDateFormat::setTimeZoneFormat(const TimeZoneFormat& newTimeZoneFormat)
+{
+    delete fTimeZoneFormat;
+    fTimeZoneFormat = new TimeZoneFormat(newTimeZoneFormat);
+}
 
 //----------------------------------------------------------------------
 
@@ -3845,6 +3350,7 @@ SimpleDateFormat::tzFormat() const {
     }
     return fTimeZoneFormat;
 }
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
