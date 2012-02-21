@@ -363,3 +363,11 @@ releaseDist: install
 	@echo -n "CXX Compiler: " >> $(DESTDIR)/readme.txt
 	@echo `./config/icu-config --noverify --cxx` >> $(DESTDIR)/readme.txt
 endif
+
+check-installed-icu: install
+	@echo "Testing ICU installed in $(prefix)"
+	$(INSTALLED_INVOKE) $(bindir)/icuinfo$(EXEEXT)
+	$(INSTALLED_INVOKE) $(bindir)/uconv$(EXEEXT) -V
+	$(INSTALLED_INVOKE) $(bindir)/genrb$(EXEEXT) -V
+	$(INSTALLED_INVOKE) $(bindir)/gencnval$(EXEEXT) -h
+	@echo INSTALLED ICU IN "$(prefix)" OK!
