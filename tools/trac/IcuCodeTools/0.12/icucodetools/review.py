@@ -44,7 +44,13 @@ class ReviewModule(Component):
 
     # ITemplateProvider methods
     def get_templates_dirs(self):
-        return [resource_filename(__name__, 'templates')]
+            try:
+        	return [resource_filename(__name__, 'templates')]
+            except Exception, e: 
+                self.log.warning('Could not get template dir: %s: %s' %
+                                 (type(e), e))
+		return ""
+
 
     def get_htdocs_dirs(self):
         return [('icucodetools', resource_filename(__name__, 'htdocs'))]
