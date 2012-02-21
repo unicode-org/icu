@@ -17,12 +17,13 @@
 
     <div id="content" class="icucodereview">
 
+
  <h1>Ticket <a href='${href.ticket(ticket_id)}'>#${ticket_id}</a></h1>
 
 <py:if test="revcount">
 
   <h2>${revcount} Changesets</h2>
-  <table class='icureview'>
+  <table id='changesettable' class='icureview'>
     <thead>
       <tr>
 	<th>r</th>
@@ -39,8 +40,8 @@
 	  <td>
 	    <!-- sections -->
 	    <py:for each="branch in rev.branches">
-	      <b>
-		<a href="#${branch}">${branch}</a> 
+	      <b class='branchlist'>
+		<a class='branch-unknown' href="#${branch}">${branch}</a> 
 	      </b>
 	    </py:for>
 	  </td>
@@ -69,11 +70,6 @@
         <a href="${href.browser(branch.name)}">${branch.name}</a> &mdash; (${branch.len} files changed)
   </h3>
 </a>
-
-<style type='text/css'>
-
-
-</style>
 
 <blockquote>
 
