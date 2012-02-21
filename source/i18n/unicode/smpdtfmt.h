@@ -94,6 +94,7 @@ class TimeZoneFormat;
  * zzzz     time zone               (Text)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
  * ZZZZ     time zone (RFC 822)     (Text & Number)     GMT-08:00
+ * ZZZZZ    time zone (ISO 8601)    (Text & Number)     -08:00 & Z
  * v        time zone (generic)     (Text)              PT
  * vvvv     time zone (generic)     (Text)              Pacific Time
  * V        time zone (abreviation) (Text)              PST
@@ -833,6 +834,31 @@ public:
 
 #ifndef U_HIDE_INTERNAL_API
     /**
+     * Sets the TimeZoneFormat to be used by this date/time formatter.
+     * The caller should not delete the TimeZoneFormat object after
+     * it is adopted by this call.
+     * @param timeZoneFormatToAdopt The TimeZoneFormat object to be adopted.
+     * @internal ICU 49 technology preview
+     */
+    virtual void adoptTimeZoneFormat(TimeZoneFormat* timeZoneFormatToAdopt);
+
+    /**
+     * Sets the TimeZoneFormat to be used by this date/time formatter.
+     * @param newTimeZoneFormat The TimeZoneFormat object to copy.
+     * @internal ICU 49 technology preview
+     */
+    virtual void setTimeZoneFormat(const TimeZoneFormat& newTimeZoneFormat);
+
+    /**
+     * Gets the time zone format object associated with this date/time formatter.
+     * @return the time zone format associated with this date/time formatter.
+     * @internal ICU 49 technology preview
+     */
+    virtual const TimeZoneFormat* getTimeZoneFormat(void) const;
+#endif  /* U_HIDE_INTERNAL_API */
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
      * This is for ICU internal use only. Please do not use.
      * Check whether the 'field' is smaller than all the fields covered in
      * pattern, return TRUE if it is. The sequence of calendar field,
@@ -1128,22 +1154,6 @@ private:
     int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos) const;
 
     /**
-     * Private methods for formatting/parsing GMT string
-     */
-    void appendGMT(NumberFormat *currentNumberFormat,UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
-    void formatGMTDefault(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t offset) const;
-    int32_t parseGMT(const UnicodeString &text, ParsePosition &pos) const;
-    int32_t parseGMTDefault(const UnicodeString &text, ParsePosition &pos) const;
-    UBool isDefaultGMTFormat() const;
-
-    void formatRFC822TZ(UnicodeString &appendTo, int32_t offset) const;
-
-    /**
-     * Initialize MessageFormat instances used for GMT formatting/parsing
-     */
-    void initGMTFormatters(UErrorCode &status);
-
-    /**
      * Initialize NumberFormat instances used for numbering system overrides.
      */
     void initNumberFormatters(const Locale &locale,UErrorCode &status);
@@ -1229,47 +1239,13 @@ private:
      */
     /*transient*/ int32_t   fDefaultCenturyStartYear;
 
-    enum ParsedTZType {
-        TZTYPE_UNK,
-        TZTYPE_STD,
-        TZTYPE_DST
-    };
-
-    ParsedTZType tztype; // here to avoid api change
+    int32_t tztype; // here to avoid api change
 
     typedef struct NSOverride {
         NumberFormat *nf;
         int32_t hash;
         NSOverride *next;
     } NSOverride;
-
-    /*
-     * MessageFormat instances used for localized GMT format
-     */
-    enum {
-        kGMTNegativeHMS = 0,
-        kGMTNegativeHM,
-        kGMTPositiveHMS,
-        kGMTPositiveHM,
-
-        kNumGMTFormatters
-    };
-    enum {
-        kGMTNegativeHMSMinLenIdx = 0,
-        kGMTPositiveHMSMinLenIdx,
-
-        kNumGMTFormatMinLengths
-    };
-
-    MessageFormat   **fGMTFormatters;
-    // If a GMT hour format has a second field, we need to make sure
-    // the length of input localized GMT string must match the expected
-    // length.  Otherwise, sub DateForamt handling offset format may
-    // unexpectedly success parsing input GMT string without second field.
-    // See #6880 about this issue.
-    // TODO: SimpleDateFormat should provide an option to invalidate
-    //
-    int32_t         fGMTFormatHmsMinLen[kNumGMTFormatMinLengths];
 
     NumberFormat    **fNumberFormatters;
 

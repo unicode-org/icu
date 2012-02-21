@@ -2291,6 +2291,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
     const char *fallbackTests[][6]  = {
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-08:00", "-8:00" },
+        { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZZ", "-08:00", "-8:00" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "z", "PST", "America/Los_Angeles" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "V", "PST", "America/Los_Angeles" },
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "zzzz", "Pacific Standard Time", "America/Los_Angeles" },
@@ -3423,8 +3424,10 @@ void DateFormatTest::TestGMTParsing() {
         "HH:mm:ss zzzz",    "10:20:30 UTC",         "10:20:30 +0000",   // standalone "UTC"
         "ZZZZ HH:mm:ss",    "UT 10:20:30",          "10:20:30 +0000",
         "V HH:mm:ss",       "UT+0130 10:20:30",     "10:20:30 +0130",
-        "V HH:mm:ss",       "UTC+0130 10:20:30",    NULL,               // UTC+0130 is not a supported pattern
+        "V HH:mm:ss",       "UTC+0130 10:20:30",    "10:20:30 +0130",
         "HH mm Z ss",       "10 20 GMT-1100 30",    "10:20:30 -1100",
+        "HH:mm:ssZZZZZ",    "14:25:45Z",            "14:25:45 +0000",
+        "HH:mm:ssZZZZZ",    "15:00:00-08:00",       "15:00:00 -0800",
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
     expectParse(DATA, DATA_len, Locale("en"));
