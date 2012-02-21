@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2007-2010 IBM and Others. All Rights Reserved.
+# Copyright (C) 2007-2012 IBM and Others. All Rights Reserved.
 # All rights reserved.
 #
 
@@ -21,7 +21,7 @@ setup(
             'htdocs/css/*.css',
             'templates/*.html',
 ##            'htdocs/img/*.png',
-#            'htdocs/js/*.js',
+           'htdocs/js/*.js',
         ]
     },
     entry_points = {
