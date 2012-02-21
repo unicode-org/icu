@@ -4457,6 +4457,7 @@ tools/scripts/icurun -text
 tools/trac/IcuCodeTools/0.11/icucodetools/__init__.py -text
 tools/trac/IcuCodeTools/0.11/icucodetools/dcut.py -text
 tools/trac/IcuCodeTools/0.11/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css
+tools/trac/IcuCodeTools/0.11/icucodetools/htdocs/js/review.js -text
 tools/trac/IcuCodeTools/0.11/icucodetools/review.py -text
 tools/trac/IcuCodeTools/0.11/icucodetools/templates/nothing.html -text svneol=unset#text/html
 tools/trac/IcuCodeTools/0.11/icucodetools/templates/review.html -text svneol=unset#text/html
