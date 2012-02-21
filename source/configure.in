@@ -442,6 +442,16 @@ AC_SUBST(ENABLE_RPATH)
 
 
 AC_LANG_PUSH([C++])
+AC_MSG_CHECKING([[if we have a C++ compiler]])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx_okay=yes],[cxx_okay=no])
+if test $cxx_okay = yes
+then
+	AC_MSG_RESULT([[Good]])
+else
+	AC_MSG_RESULT([[no]])
+	AC_MSG_ERROR([[C++ compiler $CXX does not work or no compiler found]])
+fi
+
 AC_MSG_CHECKING([[if #include <string> works]])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string>]], [[]])], [ac_cv_header_stdstring=yes], [ac_cv_header_stdstring=no])
 AC_MSG_RESULT($ac_cv_header_stdstring)
