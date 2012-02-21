@@ -248,6 +248,8 @@ icu4j/main/classes/core/manifest.stub -text
 icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormat.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormatData.java -text
 icu4j/main/classes/core/src/com/ibm/icu/util/GenderInfo.java -text
+icu4j/main/classes/core/src/com/ibm/icu/util/ListFormat.java -text
+icu4j/main/classes/core/src/com/ibm/icu/util/ListFormatData.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
@@ -679,6 +681,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm.icu.util.VTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/GenderInfoTest.java -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/ListFormatTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.32.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.16.tri2 -text
