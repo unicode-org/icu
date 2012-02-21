@@ -21,6 +21,7 @@
 
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
+#include "unicode/udatpg.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
@@ -34,6 +35,7 @@
 static void TestExtremeDates(void);
 static void TestAllLocales(void);
 static void TestRelativeCrash(void);
+static void TestContext(void);
 
 #define LEN(a) (sizeof(a)/sizeof(a[0]))
 
@@ -50,6 +52,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestExtremeDates);
     TESTCASE(TestAllLocales);
     TESTCASE(TestRelativeCrash);
+    TESTCASE(TestContext);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -1230,6 +1233,89 @@ static void TestRelativeCrash(void) {
         udat_close(icudf);
     } else {
          log_data_err("FAIL: err calling udat_open() ->%s (Are you missing data?)\n", u_errorName(status));
+    }
+}
+
+static const UChar skeleton_yMMMM[] = { 0x79,0x4D,0x4D,0x4D,0x4D,0 }; /* "yMMMM"; fr maps to "MMMM y", cs maps to "LLLL y" */
+static const UChar july2008_frDefault[] = { 0x6A,0x75,0x69,0x6C,0x6C,0x65,0x74,0x20,0x32,0x30,0x30,0x38,0 }; /* "juillet 2008" */
+static const UChar july2008_frTitle[] = { 0x4A,0x75,0x69,0x6C,0x6C,0x65,0x74,0x20,0x32,0x30,0x30,0x38,0 };  /* "Juillet 2008" sentence-begin, standalone */
+static const UChar july2008_csDefault[] = { 0x10D,0x65,0x72,0x76,0x65,0x6E,0x65,0x63,0x20,0x32,0x30,0x30,0x38,0 }; /* "c(hacek)ervenec 2008" */
+static const UChar july2008_csTitle[] = { 0x10C,0x65,0x72,0x76,0x65,0x6E,0x65,0x63,0x20,0x32,0x30,0x30,0x38,0 }; /* "C(hacek)ervenec 2008" sentence-begin, uiListOrMenu */
+
+typedef struct {
+    const char * locale;
+    const UChar * skeleton;
+    UDateFormatContextValue capitalizationContext;
+    const UChar * expectedFormat;
+} TestContextItem;
+
+static const TestContextItem textContextItems[] = {
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_UNKNOWN,          july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE, july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, july2008_frTitle },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_UI_LIST_OR_MENU,  july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_STANDALONE,       july2008_frTitle },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_UNKNOWN,          july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE, july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_UI_LIST_OR_MENU,  july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_STANDALONE,       july2008_csDefault },
+    { NULL, NULL, 0, NULL }
+};
+
+static const UDate july022008 = 1215000001979.0;
+enum { kUbufMax = 64, kBbufMax = 3*kUbufMax };
+
+static void TestContext(void) {
+    const TestContextItem* textContextItemPtr = textContextItems;
+    for (; textContextItemPtr->locale != NULL; ++textContextItemPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        UDateFormat* udfmt = udat_open(UDAT_NONE, UDAT_MEDIUM, textContextItemPtr->locale, NULL, 0, NULL, 0, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("FAIL: udat_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+        } else {
+            UDateTimePatternGenerator* udtpg = udatpg_open(textContextItemPtr->locale, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: udatpg_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+            } else {
+                UChar ubuf[kUbufMax];
+                int32_t len = udatpg_getBestPattern(udtpg, textContextItemPtr->skeleton, -1, ubuf, kUbufMax, &status);
+                if ( U_FAILURE(status) ) {
+                    log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+                } else {
+                    udat_applyPattern(udfmt, FALSE, ubuf, len);
+                    udat_setDefaultContext(udfmt, UDAT_CAPITALIZATION, textContextItemPtr->capitalizationContext, &status);
+                    if ( U_FAILURE(status) ) {
+                        log_err("FAIL: udat_setDefaultContext for locale %s, capitalizationContext %d, status %s\n",
+                                textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
+                    } else {
+                        int32_t getContext;
+                        len = udat_format(udfmt, july022008, ubuf, kUbufMax, NULL, &status);
+                        if ( U_FAILURE(status) ) {
+                            log_err("FAIL: udat_format for locale %s, capitalizationContext %d, status %s\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
+                            status = U_ZERO_ERROR;
+                        } else if (u_strncmp(ubuf, textContextItemPtr->expectedFormat, kUbufMax) != 0) {
+                            char bbuf1[kBbufMax];
+                            char bbuf2[kBbufMax];
+                            log_err("FAIL: udat_format for locale %s, capitalizationContext %d, expected %s, got %s\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext,
+                                    u_austrncpy(bbuf1,textContextItemPtr->expectedFormat,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
+                        }
+                        getContext = udat_getDefaultContext(udfmt, UDAT_CAPITALIZATION, &status);
+                        if ( U_FAILURE(status) ) {
+                            log_err("FAIL: udat_getDefaultContext for locale %s, capitalizationContext %d, status %s\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
+                        } else if (getContext != (int)textContextItemPtr->capitalizationContext) {
+                            log_err("FAIL: udat_getDefaultContext for locale %s, capitalizationContext %d, got context %d\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, getContext );
+                        }
+                    }
+                }
+                udatpg_close(udtpg);
+            }
+            udat_close(udfmt);
+        }
     }
 }
 
