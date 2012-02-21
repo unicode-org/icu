@@ -88,9 +88,11 @@ U_CDECL_END
 /** 
  * fldName was removed as a duplicate implementation. 
  * use  udbg_ services instead, 
- * which depend on include files and library from ../tools/ctestfw
+ * which depend on include files and library from ../tools/toolutil, the following circular link:
+ *   CPPFLAGS+=-I$(top_srcdir)/tools/toolutil
+ *   LIBS+=$(LIBICUTOOLUTIL)
  */
-#include "unicode/udbgutil.h"
+#include "udbgutil.h"
 #include <stdio.h>
 
 /**
@@ -1860,9 +1862,17 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
     case UCAL_EXTENDED_YEAR:
     case UCAL_YEAR_WOY:
     case UCAL_MONTH:
+      {
+        UBool oldLenient = isLenient();
+        setLenient(TRUE);
         set(field, get(field, status) + amount);
         pinField(UCAL_DAY_OF_MONTH, status);
-        return;
+        if(oldLenient==FALSE) {
+          complete(status); /* force recalculate */
+          setLenient(oldLenient);
+        }
+      }
+      return;
 
     case UCAL_WEEK_OF_YEAR:
     case UCAL_WEEK_OF_MONTH:
