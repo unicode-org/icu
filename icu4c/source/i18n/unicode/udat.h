@@ -172,6 +172,58 @@ typedef enum UDateFormatStyle {
 
 } UDateFormatStyle;
 
+/* Cannot use #ifndef U_HIDE_DRAFT_API for UDateFormatContextType and UDateFormatContextValue
+ * since a SimpleDateFormat virtual method & data member depends on them */
+/** Date format context types
+ *  @draft ICU 49
+ */
+typedef enum UDateFormatContextType {
+    /**
+     * Type (key) for specifying the capitalization context for which a date
+     * is to be formatted (possible values are in UDateFormatContextValue).
+     * @draft ICU 49
+     */
+    UDAT_CAPITALIZATION = 1
+} UDateFormatContextType;
+
+/** Values for date format context types
+ *  @draft ICU 49
+ */
+typedef enum UDateFormatContextValue {
+    /** Values for type (key) UDAT_CAPITALIZATION */
+    /**
+     * UDAT_CAPITALIZATION value if the capitalization context for which a date
+     * (or date symbol) is to be formatted is unknown (this is the default if
+     * no UDAT_CAPITALIZATION value is explicitly specified).
+     * @draft ICU 49
+     */
+    UDAT_CAPITALIZATION_UNKNOWN = 0,
+    /**
+     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
+     * with capitalization appropriate for the middle of a sentence.
+     * @draft ICU 49
+     */
+    UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE = 1,
+    /**
+     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
+     * with capitalization appropriate for the beginning of a sentence.
+     * @draft ICU 49
+     */
+    UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE = 2,
+    /**
+     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
+     * with capitalization appropriate for a user-interface list or menu item.
+     * @draft ICU 49
+     */
+    UDAT_CAPITALIZATION_UI_LIST_OR_MENU = 3,
+    /**
+     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
+     * with capitalization appropriate for stand-alone usage such as an
+     * isolated name on a calendar page.
+     * @draft ICU 49
+     */
+    UDAT_CAPITALIZATION_STANDALONE = 4
+} UDateFormatContextValue;
 
 /**
  * @{
@@ -965,6 +1017,36 @@ U_STABLE const char* U_EXPORT2
 udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Set the formatter's default value for a particular context type,
+ * such as UDAT_CAPITALIZATION.
+ * @param fmt The formatter for which to set a context type's default value.
+ * @param type The context type for which the default value should be set.
+ * @param value The default value to set for the specified context type.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @draft ICU 49
+ */
+U_DRAFT void U_EXPORT2
+udat_setDefaultContext(UDateFormat* fmt,
+                       UDateFormatContextType type, UDateFormatContextValue value,
+                       UErrorCode* status);
+
+/**
+ * Get the formatter's default value for a particular context type,
+ * such as UDAT_CAPITALIZATION.
+ * @param fmt The formatter from which to get a context type's default value.
+ * @param type The context type for which the default value should be obtained.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The current default value for the specified context type.
+ * @draft ICU 49
+ */
+U_DRAFT int32_t U_EXPORT2
+udat_getDefaultContext(UDateFormat* fmt,
+                       UDateFormatContextType type,
+                       UErrorCode* status);
+#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
 /**

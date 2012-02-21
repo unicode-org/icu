@@ -398,6 +398,38 @@ public:
                                     UnicodeString& appendTo,
                                     FieldPosition& pos) const;
 
+/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /**
+     * Format a date or time, which is the standard millis since 24:00 GMT, Jan
+     * 1, 1970. Overrides DateFormat pure virtual method.
+     * <P>
+     * Example: using the US locale: "yyyy.MM.dd e 'at' HH:mm:ss zzz" ->>
+     * 1996.07.10 AD at 15:08:56 PDT
+     *
+     * @param cal       Calendar set to the date and time to be formatted
+     *                  into a date/time string.
+     * @param types     Array of UDateFormatContextTypes for which the corresponding
+     *                  value specified in the next parameter should override the
+     *                  formatter's default value for this call (this does not
+     *                  change the default value).
+     * @param values    Array of UDateFormatContextValues corresponding 1-1 to the
+     *                  UDateFormatContextTypes in the previous parameter.
+     * @param typesAndValuesCount Number of elements in the types and values
+     *                  arrays.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       The formatting position. On input: an alignment field,
+     *                  if desired. On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @draft ICU 49
+     */
+    virtual UnicodeString& format(  Calendar& cal,
+                                    const UDateFormatContextType* types,
+                                    const UDateFormatContextValue* values,
+                                    int32_t typesAndValuesCount,
+                                    UnicodeString& appendTo,
+                                    FieldPosition& pos) const;
+
     /**
      * Format a date or time, which is the standard millis since 24:00 GMT, Jan
      * 1, 1970. Overrides DateFormat pure virtual method.
@@ -772,6 +804,33 @@ public:
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
+/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /**
+     * Set the formatter's default value for a particular context type,
+     * such as UDAT_CAPITALIZATION.
+     * @param type The context type for which the default value should be set.
+     * @param value The default value to set for the specified context type.
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function. 
+     * @draft ICU 49
+     */
+    virtual void setDefaultContext(UDateFormatContextType type, UDateFormatContextValue value, 
+                                   UErrorCode& status);
+
+/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /**
+     * Get the formatter's default value for a particular context type,
+     * such as UDAT_CAPITALIZATION.
+     * @param type The context type for which the default value should be obtained.
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function. 
+     * @return The current default value for the specified context type.
+     * @draft ICU 49
+     */
+    virtual int32_t getDefaultContext(UDateFormatContextType type, UErrorCode& status) const;
+
 #ifndef U_HIDE_INTERNAL_API
     /**
      * This is for ICU internal use only. Please do not use.
@@ -841,8 +900,8 @@ private:
     /**
      * Hook called by format(... FieldPosition& ...) and format(...FieldPositionIterator&...)
      */
-    UnicodeString& _format(Calendar& cal, UnicodeString& appendTo, FieldPositionHandler& handler,
-           UErrorCode& status) const;
+    UnicodeString& _format(Calendar& cal, UDateFormatContextValue capitalizationContext,
+                           UnicodeString& appendTo, FieldPositionHandler& handler, UErrorCode& status) const;
 
     /**
      * Called by format() to format a single field.
@@ -853,6 +912,8 @@ private:
      * @param count     Number of characters in the current pattern symbol (e.g.,
      *                  "yyyy" in the pattern would result in a call to this function
      *                  with ch equal to 'y' and count equal to 4)
+     * @param capitalizationContext Capitalization context for this date format.
+     * @param fieldNum  Zero-based numbering of current field within the overall format.
      * @param handler   Records information about field positions.
      * @param cal       Calendar to use
      * @param status    Receives a status code, which will be U_ZERO_ERROR if the operation
@@ -861,6 +922,8 @@ private:
     void subFormat(UnicodeString &appendTo,
                    UChar ch,
                    int32_t count,
+                   UDateFormatContextValue capitalizationContext,
+                   int32_t fieldNum,
                    FieldPositionHandler& handler,
                    Calendar& cal,
                    UErrorCode& status) const; // in case of illegal argument
@@ -1213,6 +1276,8 @@ private:
     NSOverride      *fOverrideList;
 
     UBool fHaveDefaultCentury;
+
+    UDateFormatContextValue fDefaultCapitalizationContext;
 };
 
 inline UDate
