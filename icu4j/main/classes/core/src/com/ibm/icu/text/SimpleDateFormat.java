@@ -351,8 +351,7 @@ public class SimpleDateFormat extends DateFormat {
 
     // We need to preserve time zone type when parsing specific
     // time zone text (xxx Standard Time vs xxx Daylight Time)
-    private static final int TZTYPE_UNK = 0, TZTYPE_STD = 1, TZTYPE_DST = 2;
-    private transient int tztype = TZTYPE_UNK;
+    private transient TimeType tztype = TimeType.UNKNOWN;
 
     private static final int millisPerHour = 60 * 60 * 1000;
 
@@ -1416,7 +1415,7 @@ public class SimpleDateFormat extends DateFormat {
         int start = pos;
 
         // Reset tztype
-        tztype = TZTYPE_UNK;
+        tztype = TimeType.UNKNOWN;
         boolean[] ambiguousYear = { false };
 
         // item index for the first numeric field within a contiguous numeric run
@@ -1606,7 +1605,7 @@ public class SimpleDateFormat extends DateFormat {
         // front or the back of the default century.  This only works because we adjust
         // the year correctly to start with in other cases -- see subParse().
         try {
-            if (ambiguousYear[0] || tztype != TZTYPE_UNK) {
+            if (ambiguousYear[0] || tztype != TimeType.UNKNOWN) {
                 // We need a copy of the fields, and we need to avoid triggering a call to
                 // complete(), which will recalculate the fields.  Since we can't access
                 // the fields[] array in Calendar, we clone the entire object.  This will
@@ -1620,7 +1619,7 @@ public class SimpleDateFormat extends DateFormat {
                         cal.set(Calendar.YEAR, getDefaultCenturyStartYear() + 100);
                     }
                 }
-                if (tztype != TZTYPE_UNK) {
+                if (tztype != TimeType.UNKNOWN) {
                     copy = (Calendar)cal.clone();
                     TimeZone tz = copy.getTimeZone();
                     BasicTimeZone btz = null;
@@ -1637,7 +1636,7 @@ public class SimpleDateFormat extends DateFormat {
                     // matches the rule used by the parsed time zone.
                     int[] offsets = new int[2];
                     if (btz != null) {
-                        if (tztype == TZTYPE_STD) {
+                        if (tztype == TimeType.STANDARD) {
                             btz.getOffsetFromLocal(localMillis,
                                     BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
                         } else {
@@ -1649,8 +1648,8 @@ public class SimpleDateFormat extends DateFormat {
                         // but following code work in most case.
                         tz.getOffset(localMillis, true, offsets);
 
-                        if (tztype == TZTYPE_STD && offsets[1] != 0
-                            || tztype == TZTYPE_DST && offsets[1] == 0) {
+                        if (tztype == TimeType.STANDARD && offsets[1] != 0
+                            || tztype == TimeType.DAYLIGHT && offsets[1] == 0) {
                             // Roll back one day and try it again.
                             // Note: This code assumes 1. timezone transition only happens
                             // once within 24 hours at max
@@ -1663,7 +1662,7 @@ public class SimpleDateFormat extends DateFormat {
                     // Now, compare the results with parsed type, either standard or
                     // daylight saving time
                     int resolvedSavings = offsets[1];
-                    if (tztype == TZTYPE_STD) {
+                    if (tztype == TimeType.STANDARD) {
                         if (offsets[1] != 0) {
                             // Override DST_OFFSET = 0 in the result calendar
                             resolvedSavings = 0;
@@ -2212,11 +2211,7 @@ public class SimpleDateFormat extends DateFormat {
                 Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.SPECIFIC_LONG;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    if (tzTimeType.value == TimeType.STANDARD) {
-                        tztype = TZTYPE_STD;
-                    } else if (tzTimeType.value == TimeType.DAYLIGHT) {
-                        tztype = TZTYPE_DST;
-                    }
+                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -2228,11 +2223,7 @@ public class SimpleDateFormat extends DateFormat {
                 Style style = (count < 4) ? Style.RFC822 : ((count == 5) ? Style.ISO8601 : Style.LOCALIZED_GMT);
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    if (tzTimeType.value == TimeType.STANDARD) {
-                        tztype = TZTYPE_STD;
-                    } else if (tzTimeType.value == TimeType.DAYLIGHT) {
-                        tztype = TZTYPE_DST;
-                    }
+                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                     }
@@ -2245,11 +2236,7 @@ public class SimpleDateFormat extends DateFormat {
                 Style style = (count < 4) ? Style.GENERIC_SHORT : Style.GENERIC_LONG;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    if (tzTimeType.value == TimeType.STANDARD) {
-                        tztype = TZTYPE_STD;
-                    } else if (tzTimeType.value == TimeType.DAYLIGHT) {
-                        tztype = TZTYPE_DST;
-                    }
+                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
@@ -2262,11 +2249,7 @@ public class SimpleDateFormat extends DateFormat {
                 Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.GENERIC_LOCATION;
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
-                    if (tzTimeType.value == TimeType.STANDARD) {
-                        tztype = TZTYPE_STD;
-                    } else if (tzTimeType.value == TimeType.DAYLIGHT) {
-                        tztype = TZTYPE_DST;
-                }
+                    tztype = tzTimeType.value;
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
