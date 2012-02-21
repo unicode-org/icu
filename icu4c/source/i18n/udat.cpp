@@ -941,6 +941,32 @@ udat_getLocaleByType(const UDateFormat *fmt,
     return ((Format*)fmt)->getLocaleID(type, *status);
 }
 
+
+U_CAPI void U_EXPORT2
+udat_setDefaultContext(UDateFormat* fmt,
+                       UDateFormatContextType type, UDateFormatContextValue value,
+                       UErrorCode* status)
+{
+    verifyIsSimpleDateFormat(fmt, status);
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    ((SimpleDateFormat*)fmt)->setDefaultContext(type, value, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+udat_getDefaultContext(UDateFormat* fmt,
+                       UDateFormatContextType type,
+                       UErrorCode* status)
+{
+    verifyIsSimpleDateFormat(fmt, status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return ((SimpleDateFormat*)fmt)->getDefaultContext(type, *status);
+}
+
+
 /**
  * Verify that fmt is a RelativeDateFormat. Invalid error if not.
  * @param fmt the UDateFormat, definitely a DateFormat, maybe something else

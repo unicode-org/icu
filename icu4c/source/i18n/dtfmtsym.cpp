@@ -203,6 +203,8 @@ static const char gHourFormatTag[]="hourFormat";
 
 static const char gLocalPatternCharsTag[]="localPatternChars";
 
+static const char gContextTransformsTag[]="contextTransforms";
+
 static UMTX LOCK;
 
 /**
@@ -370,6 +372,8 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
 
     // fastCopyFrom() - see assignArray comments
     fLocalPatternChars.fastCopyFrom(other.fLocalPatternChars);
+    
+    uprv_memcpy(fCapitalization, other.fCapitalization, sizeof(fCapitalization));
 }
 
 /**
@@ -483,7 +487,8 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fShortYearNamesCount == other.fShortYearNamesCount &&
         fGmtHourFormatsCount == other.fGmtHourFormatsCount &&
         fGmtZero == other.fGmtZero &&
-        fGmtFormat == other.fGmtFormat)
+        fGmtFormat == other.fGmtFormat &&
+        (uprv_memcmp(fCapitalization, other.fCapitalization, sizeof(fCapitalization))==0))
     {
         // Now compare the arrays themselves
         if (arrayCompare(fEras, other.fEras, fErasCount) &&
@@ -1254,6 +1259,29 @@ initLeapMonthPattern(UnicodeString *field, int32_t index, const UResourceBundle 
     status = U_ZERO_ERROR;
 }
 
+typedef struct {
+    const char * usageTypeName;
+    DateFormatSymbols::ECapitalizationContextUsageType usageTypeEnumValue;
+} ContextUsageTypeNameToEnumValue;
+
+static const ContextUsageTypeNameToEnumValue contextUsageTypeMap[] = {
+   // Entries must be sorted by usageTypeName; entry with NULL name terminates list.
+    { "day-format-except-narrow", DateFormatSymbols::kCapContextUsageDayFormat },
+    { "day-narrow",     DateFormatSymbols::kCapContextUsageDayNarrow },
+    { "day-standalone-except-narrow", DateFormatSymbols::kCapContextUsageDayStandalone },
+    { "era-abbr",       DateFormatSymbols::kCapContextUsageEraAbbrev },
+    { "era-name",       DateFormatSymbols::kCapContextUsageEraWide },
+    { "era-narrow",     DateFormatSymbols::kCapContextUsageEraNarrow },
+    { "metazone-long",  DateFormatSymbols::kCapContextUsageMetazoneLong },
+    { "metazone-short", DateFormatSymbols::kCapContextUsageMetazoneShort },
+    { "month-format-except-narrow", DateFormatSymbols::kCapContextUsageMonthFormat },
+    { "month-narrow",   DateFormatSymbols::kCapContextUsageMonthNarrow },
+    { "month-standalone-except-narrow", DateFormatSymbols::kCapContextUsageMonthStandalone },
+    { "zone-long",      DateFormatSymbols::kCapContextUsageZoneLong },
+    { "zone-short",     DateFormatSymbols::kCapContextUsageZoneShort },
+    { NULL, (DateFormatSymbols::ECapitalizationContextUsageType)0 },
+};
+
 void
 DateFormatSymbols::initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData)
 {
@@ -1311,6 +1339,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fZoneStringsColCount = 0;
     fZoneStrings = NULL;
     fLocaleZoneStrings = NULL;
+    uprv_memset(fCapitalization, 0, sizeof(fCapitalization));
 
     // We need to preserve the requested locale for
     // lazy ZoneStringFormat instantiation.  ZoneStringFormat
@@ -1350,19 +1379,19 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
        narrowEras = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
     }
 
-    UErrorCode monthPatternStatus = U_ZERO_ERROR;
-    UResourceBundle *monthPatterns = calData.getByKey(gMonthPatternsTag, monthPatternStatus);
-    if (U_SUCCESS(monthPatternStatus) && monthPatterns != NULL) {
+    UErrorCode tempStatus = U_ZERO_ERROR;
+    UResourceBundle *monthPatterns = calData.getByKey(gMonthPatternsTag, tempStatus);
+    if (U_SUCCESS(tempStatus) && monthPatterns != NULL) {
         fLeapMonthPatterns = newUnicodeStringArray(kMonthPatternsCount);
         if (fLeapMonthPatterns) {
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatWide, calData.getByKey2(gMonthPatternsTag, gNamesWideTag, monthPatternStatus), monthPatternStatus);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatAbbrev, calData.getByKey2(gMonthPatternsTag, gNamesAbbrTag, monthPatternStatus), monthPatternStatus);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatNarrow, calData.getByKey2(gMonthPatternsTag, gNamesNarrowTag, monthPatternStatus), monthPatternStatus);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneWide, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesWideTag, monthPatternStatus), monthPatternStatus);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneAbbrev, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesAbbrTag, monthPatternStatus), monthPatternStatus);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneNarrow, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesNarrowTag, monthPatternStatus), monthPatternStatus);
-            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternNumeric, calData.getByKey3(gMonthPatternsTag, gNamesNumericTag, gNamesAllTag, monthPatternStatus), monthPatternStatus);
-            if (U_SUCCESS(monthPatternStatus)) {
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatWide, calData.getByKey2(gMonthPatternsTag, gNamesWideTag, tempStatus), tempStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatAbbrev, calData.getByKey2(gMonthPatternsTag, gNamesAbbrTag, tempStatus), tempStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternFormatNarrow, calData.getByKey2(gMonthPatternsTag, gNamesNarrowTag, tempStatus), tempStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneWide, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesWideTag, tempStatus), tempStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneAbbrev, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesAbbrTag, tempStatus), tempStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternStandaloneNarrow, calData.getByKey3(gMonthPatternsTag, gNamesStandaloneTag, gNamesNarrowTag, tempStatus), tempStatus);
+            initLeapMonthPattern(fLeapMonthPatterns, kLeapMonthPatternNumeric, calData.getByKey3(gMonthPatternsTag, gNamesNumericTag, gNamesAllTag, tempStatus), tempStatus);
+            if (U_SUCCESS(tempStatus)) {
                 fLeapMonthPatternsCount = kMonthPatternsCount;
             } else {
                 delete[] fLeapMonthPatterns;
@@ -1371,22 +1400,53 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         }
     }
 
-    UErrorCode cyclicNamesStatus = U_ZERO_ERROR;
-    UResourceBundle *cyclicNameSets= calData.getByKey(gCyclicNameSetsTag, cyclicNamesStatus);
-    if (U_SUCCESS(cyclicNamesStatus) && cyclicNameSets != NULL) {
-        UResourceBundle *nameSetYears = ures_getByKeyWithFallback(cyclicNameSets, gNameSetYearsTag, NULL, &cyclicNamesStatus);
-        if (U_SUCCESS(cyclicNamesStatus)) {
-            UResourceBundle *nameSetYearsFmt = ures_getByKeyWithFallback(nameSetYears, gNamesFormatTag, NULL, &cyclicNamesStatus);
-            if (U_SUCCESS(cyclicNamesStatus)) {
-                UResourceBundle *nameSetYearsFmtAbbrev = ures_getByKeyWithFallback(nameSetYearsFmt, gNamesAbbrTag, NULL, &cyclicNamesStatus);
-                if (U_SUCCESS(cyclicNamesStatus)) {
-                    initField(&fShortYearNames, fShortYearNamesCount, nameSetYearsFmtAbbrev, cyclicNamesStatus);
+    tempStatus = U_ZERO_ERROR;
+    UResourceBundle *cyclicNameSets= calData.getByKey(gCyclicNameSetsTag, tempStatus);
+    if (U_SUCCESS(tempStatus) && cyclicNameSets != NULL) {
+        UResourceBundle *nameSetYears = ures_getByKeyWithFallback(cyclicNameSets, gNameSetYearsTag, NULL, &tempStatus);
+        if (U_SUCCESS(tempStatus)) {
+            UResourceBundle *nameSetYearsFmt = ures_getByKeyWithFallback(nameSetYears, gNamesFormatTag, NULL, &tempStatus);
+            if (U_SUCCESS(tempStatus)) {
+                UResourceBundle *nameSetYearsFmtAbbrev = ures_getByKeyWithFallback(nameSetYearsFmt, gNamesAbbrTag, NULL, &tempStatus);
+                if (U_SUCCESS(tempStatus)) {
+                    initField(&fShortYearNames, fShortYearNamesCount, nameSetYearsFmtAbbrev, tempStatus);
                     ures_close(nameSetYearsFmtAbbrev);
                 }
                 ures_close(nameSetYearsFmt);
             }
             ures_close(nameSetYears);
         }
+    }
+
+    tempStatus = U_ZERO_ERROR;
+    UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &tempStatus);
+    if (U_SUCCESS(tempStatus)) {
+        UResourceBundle *contextTransforms = ures_getByKeyWithFallback(localeBundle, gContextTransformsTag, NULL, &tempStatus);
+        if (U_SUCCESS(tempStatus)) {
+            UResourceBundle *contextTransformUsage;
+            while ( (contextTransformUsage = ures_getNextResource(contextTransforms, NULL, &tempStatus)) != NULL ) {
+                const int32_t * intVector = ures_getIntVector(contextTransformUsage, &len, &status);
+                if (U_SUCCESS(tempStatus) && intVector != NULL && len >= 2) {
+                	const char* usageType = ures_getKey(contextTransformUsage);
+                	if (usageType != NULL) {
+                	    const ContextUsageTypeNameToEnumValue * typeMapPtr = contextUsageTypeMap;
+                	    int32_t compResult = 0;
+                	    // linear search; list is short and we cannot be sure that bsearch is available
+                	    while ( typeMapPtr->usageTypeName != NULL && (compResult = uprv_strcmp(usageType, typeMapPtr->usageTypeName)) > 0 ) {
+                	        ++typeMapPtr;
+                	    }
+                	    if (typeMapPtr->usageTypeName != NULL && compResult == 0) {
+                	        fCapitalization[typeMapPtr->usageTypeEnumValue][0] = intVector[0];
+                	        fCapitalization[typeMapPtr->usageTypeEnumValue][1] = intVector[1];
+                	    }
+                	}
+                }
+                tempStatus = U_ZERO_ERROR;
+                ures_close(contextTransformUsage);
+            }
+            ures_close(contextTransforms);
+        }
+        ures_close(localeBundle);
     }
 
     UResourceBundle *lsweekdaysData = NULL; // Data closed by calData
