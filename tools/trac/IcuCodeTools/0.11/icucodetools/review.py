@@ -10,7 +10,7 @@ from trac.core import ComponentManager
 from trac.core import TracError
 from trac.util import Markup
 from trac.web import IRequestHandler
-from trac.web.chrome import add_stylesheet, ITemplateProvider, add_ctxtnav
+from trac.web.chrome import add_stylesheet, add_script, ITemplateProvider, add_ctxtnav
 from trac.versioncontrol import Changeset
 from trac.web.api import IRequestFilter
 from trac.wiki import wiki_to_html, wiki_to_oneliner, IWikiSyntaxProvider
@@ -326,5 +326,6 @@ class ReviewModule(Component):
         
         content_type = "text/html"
         add_stylesheet(req, 'icucodetools/css/icuxtn.css')
+        add_script(req, 'icucodetools/js/review.js')
         return 'review.html', data, content_type
 
