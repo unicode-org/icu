@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
  
@@ -16,6 +16,7 @@
 #include "unicode/strenum.h"
 #include "cmemory.h"
 #include "caltest.h"
+#include "unicode/localpointer.h"
 
 #include <float.h>
 
@@ -85,6 +86,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(46,TestT6745);
         CASE(47,TestT8057);
         CASE(48,TestT8596);
+        CASE(49,Test9019);
     default: name = ""; break;
     }
 }
@@ -192,6 +194,33 @@ CalendarRegressionTest::test4028518()
     printdate(cal2, "cal2 should be unmodified:") ;
     delete cal1;
     delete cal2;
+}
+
+
+void
+CalendarRegressionTest::Test9019()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<GregorianCalendar> cal1(new GregorianCalendar(status));
+    LocalPointer<GregorianCalendar> cal2(new GregorianCalendar(status));
+    if(U_FAILURE(status)) {
+      dataerrln("Error creating Calendar: %s", u_errorName(status));
+      return;
+    }
+    failure(status, "new GregorianCalendar");
+    cal1->set(2011,UCAL_MAY,06);
+    cal2->set(2012,UCAL_JANUARY,06);
+    printdate(cal1.getAlias(), "cal1: ") ;
+    cal1->setLenient(FALSE);
+    cal1->add(UCAL_MONTH,8,status);
+    failure(status, "->add(UCAL_MONTH,8)");
+    printdate(cal1.getAlias(), "cal1 (lenient) after adding 8 months:") ;
+    printdate(cal2.getAlias(), "cal2 (expected date):") ;
+    
+    if(!cal1->equals(*cal2,status)) {
+      errln("Error: cal1 != cal2.\n");
+    }
+    failure(status, "equals");
 }
 
 void 
