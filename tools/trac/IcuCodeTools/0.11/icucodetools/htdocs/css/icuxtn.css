@@ -1,4 +1,6 @@
-/* Copyright (C) 2010 International Business Machines Corporation and Others. All Rights Reserved. */
+/* @override http://bugs.icu-project.org/trac/chrome/icucodetools/css/icuxtn.css */
+
+/* Copyright (C) 2010-2012 International Business Machines Corporation and Others. All Rights Reserved. */
 
 /* @override http://unicode.org/cldr/trac/chrome/icucodetools/css/icuxtn.css */
 
@@ -27,4 +29,25 @@ table.icureview td.overall  {
 	font-style: italic;
 	text-align: right;
 }
+
+.branch-unknown {
+	font-weight: normal;
+	font-style:  italic;
+}
+.branch-tags {
+	font-weight: bold;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color:  white;
+	background-color: navy;
+	padding:  1px;
+}
+.branch-branches {
+	font-weight: normal;
+	color:  #353;
+}
+
+.branch-trunk {
+	font-weight: bold;
+}
+
 
