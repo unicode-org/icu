@@ -2,7 +2,7 @@
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--
-# Copyright (C) 2007-2010 IBM and Others. All Rights Reserved
+# Copyright (C) 2007-2012 IBM and Others. All Rights Reserved
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
@@ -21,13 +21,37 @@
 
 <py:if test="revcount">
 
-<h2>${revcount} Changesets</h2>
-<ul>
-<py:for each="rev in revisions">
-    <li><a href="${href.changeset(rev.num)}">r${rev.num}</a> &mdash; ${rev.comment}</li>
-</py:for>
-</ul>
-
+  <h2>${revcount} Changesets</h2>
+  <table class='icureview'>
+    <thead>
+      <tr>
+	<th>r</th>
+	<th>section(s)</th>
+	<th>comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <py:for each="rev in revisions">
+	<tr>
+	  <th>
+	    <a href="${href.changeset(rev.num)}">r${rev.num}</a>
+	  </th>
+	  <td>
+	    <!-- sections -->
+	    <py:for each="branch in rev.branches">
+	      <b>
+		<a href="#${branch}">${branch}</a> 
+	      </b>
+	    </py:for>
+	  </td>
+	  <td>
+	    ${rev.comment}
+	  </td>
+	</tr>
+      </py:for>
+    </tbody>
+  </table>
+  
 <py:if test="branchcount > 1">
 <h2>Files</h2>
 <h3>Jump to Sections</h3>
