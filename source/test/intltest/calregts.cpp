@@ -203,6 +203,10 @@ CalendarRegressionTest::Test9019()
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<GregorianCalendar> cal1(new GregorianCalendar(status));
     LocalPointer<GregorianCalendar> cal2(new GregorianCalendar(status));
+    cal1->set(UCAL_HOUR, 1);
+    cal2->set(UCAL_HOUR,2);
+    cal1->clear();
+    cal2->clear();
     if(U_FAILURE(status)) {
       dataerrln("Error creating Calendar: %s", u_errorName(status));
       return;
