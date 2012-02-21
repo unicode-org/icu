@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2011, International Business Machines Corporation and    *
+* Copyright (C) 2007-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -14,6 +14,7 @@
 #include "unicode/timezone.h"
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
+#include "unicode/simpletz.h"
 
 #include "umutex.h"
 #include "uvector.h"
@@ -131,6 +132,8 @@ static const UChar gDefaultFrom[] = {0x31, 0x39, 0x37, 0x30, 0x2D, 0x30, 0x31, 0
                                      0x20, 0x30, 0x30, 0x3A, 0x30, 0x30, 0x00}; // "1970-01-01 00:00"
 static const UChar gDefaultTo[]   = {0x39, 0x39, 0x39, 0x39, 0x2D, 0x31, 0x32, 0x2D, 0x33, 0x31,
                                      0x20, 0x32, 0x33, 0x3A, 0x35, 0x39, 0x00}; // "9999-12-31 23:59"
+
+static const UChar gCustomTzPrefix[]    = {0x47, 0x4D, 0x54, 0};    // "GMT"
 
 #define ASCII_DIGIT(c) (((c)>=0x30 && (c)<=0x39) ? (c)-0x30 : -1)
 
@@ -841,6 +844,54 @@ const UChar*
 ZoneMeta::findTimeZoneID(const UnicodeString& tzid) {
     return TimeZone::findID(tzid);
 }
+
+
+TimeZone*
+ZoneMeta::createCustomTimeZone(int32_t offset) {
+    UBool negative = FALSE;
+    int32_t tmp = offset;
+    if (offset < 0) {
+        negative = TRUE;
+        tmp = -offset;
+    }
+    int32_t hour, min, sec;
+
+    tmp /= 1000;
+    sec = tmp % 60;
+    tmp /= 60;
+    min = tmp % 60;
+    hour = tmp / 60;
+
+    UnicodeString zid;
+    formatCustomID(hour, min, sec, negative, zid);
+    return new SimpleTimeZone(offset, zid);
+}
+
+UnicodeString&
+ZoneMeta::formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative, UnicodeString& id) {
+    // Create normalized time zone ID - GMT[+|-]HH:mm[:ss]
+    id.setTo(gCustomTzPrefix, -1);
+    if (hour != 0 || min != 0) {
+        if (negative) {
+            id.append(0x2D);    // '-'
+        } else {
+            id.append(0x2B);    // '+'
+        }
+        // Always use US-ASCII digits
+        id.append(0x30 + (hour%100)/10);
+        id.append(0x30 + (hour%10));
+        id.append(0x3A);    // ':'
+        id.append(0x30 + (min%100)/10);
+        id.append(0x30 + (min%10));
+        if (sec != 0) {
+            id.append(0x3A);    // ':'
+            id.append(0x30 + (sec%100)/10);
+            id.append(0x30 + (sec%10));
+        }
+    }
+    return id;
+}
+
 
 U_NAMESPACE_END
 

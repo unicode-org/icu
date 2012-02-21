@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2011, International Business Machines Corporation and    *
+* Copyright (C) 2007-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -87,10 +87,18 @@ public:
      */
     static const UChar* U_EXPORT2 findMetaZoneID(const UnicodeString& mzid);
 
+    /**
+     * Creates a custom zone for the offset
+     * @param offset GMT offset in milliseconds
+     * @return A custom TimeZone for the offset with normalized time zone id
+     */
+    static TimeZone* createCustomTimeZone(int32_t offset);
+
 private:
     ZoneMeta(); // Prevent construction.
     static UVector* createMetazoneMappings(const UnicodeString &tzid);
     static void initAvailableMetaZoneIDs();
+    static UnicodeString& formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative, UnicodeString& id);
 };
 
 U_NAMESPACE_END
