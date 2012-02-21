@@ -35,10 +35,19 @@ public class GenderInfo {
      * @param uLocale desired locale
      * @internal
      */
-    public GenderInfo(ULocale uLocale) {
-        ULocale language = new ULocale(uLocale.getLanguage());  // in the hard coded data, the language is sufficient. Will change with RB.
-        ListGenderStyle tempStyle = localeToListGender.get(language);
-        style = tempStyle == null ? ListGenderStyle.NEUTRAL : tempStyle;
+    public static GenderInfo getInstance(ULocale uLocale) {
+        // These can be cached, since they are read-only
+        // poor-man's locale lookup, for hardcoded data
+        while (true) {
+            GenderInfo data = localeToListGender.get(uLocale);
+            if (data != null) {
+                return data;
+            }
+            uLocale = uLocale.getFallback();
+            if (uLocale == null) {
+                return neutral;
+            }
+        }
     }
 
     /**
@@ -46,8 +55,8 @@ public class GenderInfo {
      * @param locale desired locale
      * @internal
      */
-    public GenderInfo(Locale locale) {
-        this(ULocale.forLocale(locale));
+    public static GenderInfo getInstance(Locale locale) {
+        return getInstance(ULocale.forLocale(locale));
     }
 
     /**
@@ -74,9 +83,9 @@ public class GenderInfo {
      * @param newULocaleToListGender replacement data, copied internally for safety.
      * @internal
      */
-    public static void setLocaleMapping(Map<ULocale,ListGenderStyle> newULocaleToListGender) {
+    public static void setLocaleMapping(Map<ULocale,GenderInfo> newULocaleToListGender) {
         localeToListGender.clear();
-        for (Entry<ULocale, ListGenderStyle> entry : newULocaleToListGender.entrySet()) {
+        for (Entry<ULocale, GenderInfo> entry : newULocaleToListGender.entrySet()) {
             localeToListGender.put(entry.getKey(), entry.getValue());
         }
     }
@@ -138,17 +147,30 @@ public class GenderInfo {
             return Gender.OTHER; 
         }
     }
+    
+    /**
+     * Only for testing and use with CLDR.
+     * @param genderStyle gender style
+     * @internal
+     */
+    public GenderInfo(ListGenderStyle genderStyle) {
+        style = genderStyle;
+    }
+    
+    private static GenderInfo neutral = new GenderInfo(ListGenderStyle.NEUTRAL);
 
     // TODO Get this data from a resource bundle generated from CLDR. 
     // For now, hard coded.
 
-    private static Map<ULocale,ListGenderStyle> localeToListGender = new HashMap<ULocale,ListGenderStyle>();
+    private static Map<ULocale,GenderInfo> localeToListGender = new HashMap<ULocale,GenderInfo>();
     static {
+        GenderInfo taints = new GenderInfo(ListGenderStyle.MALE_TAINTS);
         for (String locale : Arrays.asList("ar", "ca", "cs", "hr", "es", "fr", "he", "hi", "it", "lt", "lv", "mr", "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sr", "uk", "ur", "zh")) {
-            localeToListGender.put(new ULocale(locale), ListGenderStyle.MALE_TAINTS);
+            localeToListGender.put(new ULocale(locale), taints);
         }
+        GenderInfo mixed = new GenderInfo(ListGenderStyle.MIXED_NEUTRAL);
         for (String locale : Arrays.asList("el", "is")) {
-            localeToListGender.put(new ULocale(locale), ListGenderStyle.MIXED_NEUTRAL);
+            localeToListGender.put(new ULocale(locale), mixed);
         }
     }
 }

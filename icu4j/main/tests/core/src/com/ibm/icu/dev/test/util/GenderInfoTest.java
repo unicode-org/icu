@@ -19,9 +19,9 @@ public class GenderInfoTest extends TestFmwk {
         new GenderInfoTest().run(args);
     }
 
-    public static GenderInfo NEUTRAL_LOCALE = new GenderInfo(ULocale.ENGLISH);
-    public static GenderInfo MIXED_NEUTRAL_LOCALE = new GenderInfo(new ULocale("is"));
-    public static GenderInfo MALE_TAINTS_LOCALE = new GenderInfo(ULocale.FRANCE);
+    public static GenderInfo NEUTRAL_LOCALE = GenderInfo.getInstance(ULocale.ENGLISH);
+    public static GenderInfo MIXED_NEUTRAL_LOCALE = GenderInfo.getInstance(new ULocale("is"));
+    public static GenderInfo MALE_TAINTS_LOCALE = GenderInfo.getInstance(ULocale.FRENCH);
 
     public void TestEmpty() {
         check(Gender.OTHER, Gender.OTHER);
@@ -46,5 +46,10 @@ public class GenderInfoTest extends TestFmwk {
         assertEquals("neutral " + mixed0, Gender.OTHER, NEUTRAL_LOCALE.getListGender(mixed0));
         assertEquals("mixed neutral " + mixed0, mixed, MIXED_NEUTRAL_LOCALE.getListGender(mixed0));
         assertEquals("male taints " + mixed0, taints, MALE_TAINTS_LOCALE.getListGender(mixed0));
+    }
+    
+    public void TestFallback() {
+        assertEquals("Strange locale = root", GenderInfo.getInstance(ULocale.ROOT), GenderInfo.getInstance(new ULocale("xxx")));
+        assertEquals("Strange locale = root", GenderInfo.getInstance(ULocale.FRANCE), GenderInfo.getInstance(ULocale.CANADA_FRENCH));
     }
 }
