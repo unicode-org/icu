@@ -479,7 +479,7 @@ public:
      */
      virtual UClassID getDynamicClassID() const;
 
-#if defined(__xlC__)
+#if defined(__xlC__) || (U_PLATFORM == U_PF_OS390) || (U_PLATFORM ==U_PF_OS400) 
 // Work around a compiler bug on xlC 11.1 on AIX 7.1 that would
 // prevent PluralSelectorAdapter from implementing private PluralSelector.
 // xlC error message:
