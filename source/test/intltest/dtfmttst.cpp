@@ -85,9 +85,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(45,TestStandAloneGMTParse);
         TESTCASE(46,TestParsePosition);
         TESTCASE(47,TestMonthPatterns);
+        TESTCASE(48,TestContext);
         /*
-        TESTCASE(48,TestRelativeError);
-        TESTCASE(49,TestRelativeOther);
+        TESTCASE(49,TestRelativeError);
+        TESTCASE(50,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3755,8 +3756,8 @@ void DateFormatTest::TestMonthPatterns()
                                                             CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u958F\\u56DB\\u6708\\u4E8C\\u65E5"),
                                                             CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u4E94\\u6708\\u4E8C\\u65E5") } },
         { "zh_Hant@calendar=chinese", DateFormat::kShort, { CharsToUnicodeString("\\u58EC\\u8FB0/4/2"),
-        													CharsToUnicodeString("\\u58EC\\u8FB0/\\u958F4/2"),
-        													CharsToUnicodeString("\\u58EC\\u8FB0/5/2") } },
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0/\\u958F4/2"),
+                                                            CharsToUnicodeString("\\u58EC\\u8FB0/5/2") } },
         { "fr@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("2 s\\u00ECyu\\u00E8 ren-chen"),
                                                             CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis ren-chen"),
                                                             CharsToUnicodeString("2 w\\u01D4yu\\u00E8 ren-chen") } },
@@ -3825,6 +3826,66 @@ void DateFormatTest::TestMonthPatterns()
         delete rootChineseCalendar;
     } else {
         errln(UnicodeString("FAIL: Unable to create Calendar for root@calendar=chinese"));
+    }
+}
+
+typedef struct {
+    const char * locale;
+    UnicodeString pattern;
+    UDateFormatContextValue capitalizationContext;
+    UnicodeString expectedFormat;
+} TestContextItem;
+
+void DateFormatTest::TestContext()
+{
+    const UDate july022008 = 1215000001979.0;
+    const TestContextItem items[] = {
+        //locale              pattern    capitalizationContext                      expected formatted date
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_UNKNOWN,               UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE,    UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, UnicodeString("Juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_UI_LIST_OR_MENU,       UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_STANDALONE,            UnicodeString("Juillet 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_UNKNOWN,               CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE,    CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, CharsToUnicodeString("\\u010Cervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_UI_LIST_OR_MENU,       CharsToUnicodeString("\\u010Cervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
+        // terminator
+        { NULL, UnicodeString(""),       (UDateFormatContextValue)0, UnicodeString("") }
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar* cal = Calendar::createInstance(status);
+    if (U_FAILURE(status)) {
+        dataerrln(UnicodeString("FAIL: Unable to create Calendar for default timezone and locale."));
+    } else {
+        cal->setTime(july022008, status);
+        const TestContextItem * itemPtr;
+        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+           Locale locale = Locale::createFromName(itemPtr->locale);
+           status = U_ZERO_ERROR;
+           SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
+           if (U_FAILURE(status)) {
+                dataerrln(UnicodeString("FAIL: Unable to create SimpleDateFormat for specified pattern with locale ") + UnicodeString(itemPtr->locale));
+           } else {
+               UDateFormatContextType contextType = UDAT_CAPITALIZATION;
+               UDateFormatContextValue contextValue = itemPtr->capitalizationContext;
+               UnicodeString result;
+               FieldPosition pos(0);
+               sdmft->format(*cal, &contextType, &contextValue, 1, result, pos);
+               if (result.compare(itemPtr->expectedFormat) != 0) {
+                   errln(UnicodeString("FAIL: format for locale ") + UnicodeString(itemPtr->locale) +
+                           ", capitalizationContext " + (int)itemPtr->capitalizationContext +
+                           ", expected " + itemPtr->expectedFormat + ", got " + result);
+               }
+           }
+           if (sdmft) {
+               delete sdmft;
+           }
+        }
+    }
+    if (cal) {
+        delete cal;
     }
 }
 
