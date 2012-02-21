@@ -32,6 +32,12 @@ class ReviewModule(Component):
     voteable_paths = ListOption('icucodetools', 'paths', '/ticket*',
         doc='List of URL paths to show reviews on. Globs are supported.')
 
+    #  search for earliest match, and how many segments to include following
+    #    trunk
+    #    branches/maint/maint-4-8
+    #    tags/release-2-0
+    branchList = [['trunk',0],['branches',2],['tags',1]]
+
     # IPermissionRequestor methods
     def get_permission_actions(self):
         return ['ICUREVIEW_VIEW']
@@ -104,6 +110,26 @@ class ReviewModule(Component):
         if match:
             req.args['ticket'] = match.group(1)
             return True
+
+    def pathToBranchName(self, path):
+        #return '/'.join(path.split('/')[0:2])
+        windex = None
+        win = None
+        for branch in self.branchList:
+            if(path == branch[0]):  # catch changes to just 'trunk'
+                idx = 0
+            else:
+                idx = path.find(branch[0]+'/')
+            if(idx > -1 and (windex == None or windex > idx)):
+                windex = idx
+                win = branch
+        if windex == None:
+            segments = path.split('/')
+            return '/'.join(segments[0:2])
+        else:
+            #print "found %s foll %s @ %d" % (win[0],win[1],windex)
+            segments = path[windex:].split('/')
+            return path[:windex] + ('/'.join(segments[0:win[1]+1])) # use specified # of following segments
 
     def changeToRange(self, c_new, change):
         # q: (u'trunk/Locale.java', 'file', 'add', None, u'-1')  from r3
@@ -216,6 +242,7 @@ class ReviewModule(Component):
             revision['rev'] =  tag.a(rev, req.href.changeset(rev))
             revision['num'] =  rev
             revision['comment'] =  message #wiki_to_oneliner( message, self.env, db, shorten=False )
+            rbranches = revision['branches'] = []
             for chg in chgset.get_changes():
                 path = chg[0]
                 if path in files:
@@ -224,6 +251,9 @@ class ReviewModule(Component):
                     item = []
                     files[path] = item;
                 item.append(self.changeToRange(rev,chg))
+                branch_name = self.pathToBranchName(path)
+                if branch_name not in rbranches:
+                    rbranches.append(branch_name)
             revisions.append(revision)
         data['revisions'] = revisions
         
@@ -259,7 +289,7 @@ class ReviewModule(Component):
             sera = sera+1
             file_data = {}
             file_data['name'] = Markup('<a href="%s">%s</a>' % (req.href.browser(file),file))
-            branch_name = '/'.join(file.split('/')[0:2])
+            branch_name = self.pathToBranchName(file)
             #print "branch is: (%s)" % (branch_name)
             branches_data = branches.get(branch_name, {})
             files_data = branches_data.get('files',[])
@@ -285,8 +315,6 @@ class ReviewModule(Component):
             branches_data['len'] = len(files_data)
             branches_data['name'] = branch_name
             branches[branch_name] = branches_data
-        #data['files'] = files_data
-        #data['branches'] = branches
 
         # .. convert dict to array.
         branch_list = []
